@@ -225,9 +225,10 @@ goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
     return false;
   }
 
-  // Saves Ctrl or Alt + key for IE7, which won't fire keypress.
-  if (goog.userAgent.IE &&
-      !opt_shiftKey &&
+  // Saves Ctrl or Alt + key for IE and WebKit 525+, which won't fire keypress.
+  // Non-IE browsers and WebKit prior to 525 won't get this far so no need to
+  // check the user agent.
+  if (!opt_shiftKey &&
       (opt_heldKeyCode == goog.events.KeyCodes.CTRL ||
        opt_heldKeyCode == goog.events.KeyCodes.ALT)) {
     return false;
@@ -269,6 +270,11 @@ goog.events.KeyCodes.isCharacterKey = function(keyCode) {
 
   if (keyCode >= goog.events.KeyCodes.A &&
       keyCode <= goog.events.KeyCodes.Z) {
+    return true;
+  }
+
+  // Safari sends zero key code for non-latin characters.
+  if (goog.userAgent.WEBKIT && keyCode == 0) {
     return true;
   }
 

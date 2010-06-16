@@ -14,11 +14,13 @@ See the COPYING file for details.
   goog.require('goog.dom.browserrange');
   goog.require('goog.dom.Range');
 
+  goog.require('goog.userAgent');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
 <body>
   <div id="test1">Text</div><div id="test2">abc<br id="br">def</div>
+  <div id="cetest" contentEditable="true"><div>abc<br id="br2"/></div></div>
   <div id="empty"></div>
   <div id="removeTest"><div>Text that<br>will be deleted</div></div>
   <div id="outer">outer<div id="inner">inner</div>outer2</div>
@@ -28,12 +30,38 @@ See the COPYING file for details.
 <script>
   var test1 = goog.dom.getElement('test1');
   var test2 = goog.dom.getElement('test2');
+  var cetest = goog.dom.getElement('cetest');
   var empty = goog.dom.getElement('empty');
   var dynamic = goog.dom.getElement('dynamic');
 
   function testCreate() {
     assertNotNull('Browser range object can be created for node',
         goog.dom.browserrange.createRangeFromNodeContents(test1));
+  }
+
+  function testRangeEndPoints() {
+    var container = cetest.firstChild;
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        container, 2, container, 2);
+    range.select();
+
+    var selRange = goog.dom.Range.createFromWindow();
+    var startNode = selRange.getStartNode();
+    var endNode = selRange.getEndNode();
+    var startOffset = selRange.getStartOffset();
+    var endOffset = selRange.getEndOffset();
+    if (goog.userAgent.WEBKIT) {
+      assertEquals('Start node should have text: abc',
+          'abc', startNode.nodeValue);
+      assertEquals('End node should have text: abc', 'abc', endNode.nodeValue);
+      assertEquals('Start offset should be 3', 3, startOffset);
+      assertEquals('End offset should be 3', 3, endOffset);
+    } else {
+      assertEquals('Start node should be the first div', container, startNode);
+      assertEquals('End node should be the first div', container, endNode);
+      assertEquals('Start offset should be 2', 2, startOffset);
+      assertEquals('End offset should be 2', 2, endOffset);
+    }
   }
 
   function normalizeHtml(str) {
@@ -243,14 +271,6 @@ See the COPYING file for details.
     var expectedStartOffset = 1;
     var expectedEndNode = a;
     var expectedEndOffset = 1;
-    if (goog.userAgent.IE) {
-      // In case of IE, the startNode and endNode is the #text node in the DIV.
-      // Accordingly the startOffset and endOffset also changes.
-      expectedStartNode = a.lastChild;
-      expectedStartOffset = expectedStartNode.length;
-      expectedEndNode = a.lastChild;
-      expectedEndOffset = expectedEndNode.length;
-    }
     assertEquals('startNode is wrong', expectedStartNode, range.getStartNode());
     assertEquals('startOffset is wrong',
         expectedStartOffset, range.getStartOffset());
@@ -260,39 +280,143 @@ See the COPYING file for details.
 
   function testRangeEndingWithBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
+    var spanElem = goog.dom.getElement('a');
     var range = goog.dom.browserrange.createRangeFromNodes(
-        goog.dom.getElement('a'), 0, goog.dom.getElement('a'), 2);
+        spanElem, 0, spanElem, 2);
     var htmlText = range.getValidHtml().toLowerCase();
     assertContains('Should include BR in HTML.', 'br', htmlText);
     assertEquals('Should have correct text.', '123', range.getText());
+
+    range.select();
+
+    var selRange = goog.dom.Range.createFromWindow();
+    var startNode = selRange.getStartNode();
+    if (goog.userAgent.GECKO) {
+      assertEquals('Start node should be span', spanElem, startNode);
+    } else {
+      assertEquals('Startnode should have text:123',
+          '123', startNode.nodeValue);
+    }
+    assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
+    var endNode = selRange.getEndNode();
+    assertEquals('Endnode should be span', spanElem, endNode);
+    assertEquals('Endoffset should be 2', 2, selRange.getEndOffset());
+  }
+
+  function testRangeEndingWithBR2() {
+    dynamic.innerHTML = '<span id="a">123<br></span>';
+    var spanElem = goog.dom.getElement('a');
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        spanElem, 0, spanElem, 2);
+    var htmlText = range.getValidHtml().toLowerCase();
+    assertContains('Should include BR in HTML.', 'br', htmlText);
+    assertEquals('Should have correct text.', '123', range.getText());
+
+    range.select();
+
+    var selRange = goog.dom.Range.createFromWindow();
+    var startNode = selRange.getStartNode();
+    if (goog.userAgent.GECKO) {
+      assertEquals('Start node should be span', spanElem, startNode);
+    } else {
+      assertEquals('Start node should have text:123',
+          '123', startNode.nodeValue);
+    }
+    assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
+    var endNode = selRange.getEndNode();
+    if (goog.userAgent.WEBKIT) {
+      assertEquals('Endnode should have text', '123', endNode.nodeValue);
+      assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
+    } else {
+      assertEquals('Endnode should be span', spanElem, endNode);
+      assertEquals('Endoffset should be 2', 2, selRange.getEndOffset());
+    }
   }
 
   function testRangeEndingBeforeBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
+    var spanElem = goog.dom.getElement('a');
     var range = goog.dom.browserrange.createRangeFromNodes(
-        goog.dom.getElement('a'), 0, goog.dom.getElement('a'), 1);
+        spanElem, 0, spanElem, 1);
     var htmlText = range.getValidHtml().toLowerCase();
     assertNotContains('Should not include BR in HTML.', 'br', htmlText);
     assertEquals('Should have correct text.', '123', range.getText());
+    range.select();
+
+    var selRange = goog.dom.Range.createFromWindow();
+    var startNode = selRange.getStartNode();
+    if (goog.userAgent.GECKO) {
+      assertEquals('Start node should be span', spanElem, startNode);
+    } else {
+      assertEquals('Startnode should have text:123',
+          '123', startNode.nodeValue);
+    }
+    assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
+    var endNode = selRange.getEndNode();
+    if (goog.userAgent.GECKO) {
+      assertEquals('Endnode should be span', spanElem, endNode);
+      assertEquals('Endoffset should be 1', 1, selRange.getEndOffset());
+    } else {
+      assertEquals('Endnode should have text:123', '123', endNode.nodeValue);
+      assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
+    }
   }
 
   function testRangeStartingWithBR() {
     dynamic.innerHTML = '<span id="a">123<br>456</span>';
+    var spanElem = goog.dom.getElement('a');
     var range = goog.dom.browserrange.createRangeFromNodes(
-        goog.dom.getElement('a'), 1, goog.dom.getElement('a'), 3);
+        spanElem, 1, spanElem, 3);
     var htmlText = range.getValidHtml().toLowerCase();
     assertContains('Should include BR in HTML.', 'br', htmlText);
     // Firefox returns '456' as the range text while IE returns '\r\n456'.
     // Therefore skipping the text check.
+
+    range.select();
+    var selRange = goog.dom.Range.createFromWindow();
+    var startNode = selRange.getStartNode();
+    assertEquals('Start node should be span', spanElem, startNode);
+    assertEquals('Startoffset should be 1', 1, selRange.getStartOffset());
+    var endNode = selRange.getEndNode();
+    if (goog.userAgent.GECKO) {
+      assertEquals('Endnode should be span', spanElem, endNode);
+      assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
+    } else {
+      assertEquals('Endnode should have text:456', '456', endNode.nodeValue);
+      assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
+    }
   }
 
-  function testRangeStargingAfterBR() {
-    dynamic.innerHTML = '<span id="a">123<br>456</span>';
+  function testRangeStartingAfterBR() {
+    dynamic.innerHTML = '<span id="a">123<br>4567</span>';
+    var spanElem = goog.dom.getElement('a');
     var range = goog.dom.browserrange.createRangeFromNodes(
-        goog.dom.getElement('a'), 2, goog.dom.getElement('a'), 3);
+        spanElem, 2, spanElem, 3);
     var htmlText = range.getValidHtml().toLowerCase();
     assertNotContains('Should not include BR in HTML.', 'br', htmlText);
-    assertEquals('Should have correct text.', '456', range.getText());
+    assertEquals('Should have correct text.', '4567', range.getText());
+
+    range.select();
+
+    var selRange = goog.dom.Range.createFromWindow();
+    var startNode = selRange.getStartNode();
+    if (goog.userAgent.GECKO) {
+      assertEquals('Start node should be span', spanElem, startNode);
+      assertEquals('Startoffset should be 2', 2, selRange.getStartOffset());
+    } else {
+      assertEquals('Startnode should have text:4567',
+          '4567', startNode.nodeValue);
+      assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
+    }
+    var endNode = selRange.getEndNode();
+    if (goog.userAgent.GECKO) {
+      assertEquals('Endnode should be span', spanElem, endNode);
+      assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
+    } else {
+      assertEquals('Endnode should have text:4567', '4567', endNode.nodeValue);
+      assertEquals('Endoffset should be 4', 4, selRange.getEndOffset());
+    }
+
   }
 
   function testCollapsedRangeBeforeBR() {

@@ -10,6 +10,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.testing.MockClock</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.functions');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
 </script>
@@ -28,7 +29,7 @@ See the COPYING file for details.
     assertEquals(2, clock.getTimeoutsMade());
     clock.uninstall();
     assertEquals(window.setTimeout, originalTimeout);
-    assertFalse(clock.installed_);
+    assertNull(clock.replacer_);
   }
 
 
@@ -388,6 +389,24 @@ See the COPYING file for details.
         });
     clock.uninstall();
   }
+
+  function testCorrectSetTimeoutIsRestored() {
+    var original = window.setTimeout;
+    var safe = goog.functions.error('should not have been called');
+    try {
+      window.setTimeout = safe;
+      var clock = new goog.testing.MockClock(true);
+      assertNotEquals('setTimeout is replaced', safe, window.setTimeout);
+      clock.uninstall();
+      // NOTE: If this assertion proves to be flaky in IE, the string value of
+      // the two functions have to be compared as described in
+      // goog.testing.TestCase#finalize.
+      assertEquals('setTimeout is restored', safe, window.setTimeout);
+    } finally {
+      window.setTimeout = original;
+    }
+  }
+
 </script>
 </body>
 </html>

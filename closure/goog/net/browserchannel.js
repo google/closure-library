@@ -30,7 +30,6 @@
  *
  * See goog.net.BrowserChannel.Handler for the handler interface.
  *
- *
 *
  */
 
@@ -51,6 +50,7 @@ goog.require('goog.json');
 goog.require('goog.net.BrowserTestChannel');
 goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
+goog.require('goog.net.XhrIo');
 goog.require('goog.string');
 goog.require('goog.structs.CircularBuffer');
 goog.require('goog.userAgent');

@@ -389,7 +389,7 @@ goog.editor.plugins.EnterHandler.DO_NOT_ENSURE_BLOCK_NODES_ =
 /**
  * Whether this is a node that contains a single BR tag and non-nbsp
  * whitespace.
- * @param {Element} node Node to check.
+ * @param {Node} node Node to check.
  * @return {boolean} Whether this is an element that only contains a BR.
  * @protected
  */
@@ -420,23 +420,8 @@ goog.editor.plugins.EnterHandler.isBrElem = function(node) {
  */
 goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
     opt_keyUp) {
-  // The range's getContainerElement does not work here.  The problem is
-  // that IE seems to be in the middle of adding the element to the dom, and the
-  // current dom is inconsistent.  Specfically, the element's innerHTML,
-  // outerHTML, and childNode's say the element is empty (innerHTML = "",
-  // childNodes.length = 0, outerHTML = "<DIV</DIV>"), but the text range and
-  // the element's parent's innerHTML and outerHTML show an &nsbp; in the
-  // element. This leads to getParentContainer calculating the wrong container
-  // here.
-  // TODO(robbyw): Determine the reason this causes IE to work.
-  var container, range;
-  if (goog.userAgent.IE) {
-    range = this.fieldObject.getRange().getBrowserRangeObject();
-    container = range.parentElement();
-  } else {
-    range = this.fieldObject.getRange();
-    container = range.getContainer();
-  }
+  var range = this.fieldObject.getRange();
+  var container = range.getContainer();
   var field = this.fieldObject.getElement();
 
   var paragraph;
@@ -449,9 +434,9 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
     // instead of done before and saved in a variable, so that it can be
     // short-circuited and avoid a weird IE edge case.
     if (nodeName == tag ||
-        (goog.editor.plugins.EnterHandler.DO_NOT_ENSURE_BLOCK_NODES_[nodeName]
-         && !(opt_keyUp &&
-              goog.editor.plugins.EnterHandler.isBrElem(container)))) {
+        (goog.editor.plugins.EnterHandler.
+            DO_NOT_ENSURE_BLOCK_NODES_[nodeName] && !(opt_keyUp &&
+                goog.editor.plugins.EnterHandler.isBrElem(container)))) {
       // Opera can create a <p> inside of a <div> in some situations,
       // such as when breaking out of a list that is contained in a <div>.
       if (goog.userAgent.OPERA && paragraph) {
@@ -487,6 +472,7 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
     // at such a boundary.  The second check, parent3 != range.parentElement()
     // weeds out some cases where the elements are siblings instead of cousins.
     var needsHelp = false;
+    range = range.getBrowserRangeObject();
     var range2 = range.duplicate();
     range2.moveEnd('character', 1);
     // In whitebox mode, when the cursor is at the end of the field, trying to

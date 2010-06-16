@@ -223,17 +223,17 @@ goog.editor.Plugin.Op = {
  */
 goog.editor.Plugin.OPCODE = goog.object.transpose(
     goog.reflect.object(goog.editor.Plugin, {
-       handleKeyDown: goog.editor.Plugin.Op.KEYDOWN,
-       handleKeyPress: goog.editor.Plugin.Op.KEYPRESS,
-       handleKeyUp: goog.editor.Plugin.Op.KEYUP,
-       handleSelectionChange: goog.editor.Plugin.Op.SELECTION,
-       handleKeyboardShortcut: goog.editor.Plugin.Op.SHORTCUT,
-       execCommand: goog.editor.Plugin.Op.EXEC_COMMAND,
-       queryCommandValue: goog.editor.Plugin.Op.QUERY_COMMAND,
-       prepareContentsHtml: goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML,
-       cleanContentsHtml: goog.editor.Plugin.Op.CLEAN_CONTENTS_HTML,
-       cleanContentsDom: goog.editor.Plugin.Op.CLEAN_CONTENTS_DOM
-}));
+      handleKeyDown: goog.editor.Plugin.Op.KEYDOWN,
+      handleKeyPress: goog.editor.Plugin.Op.KEYPRESS,
+      handleKeyUp: goog.editor.Plugin.Op.KEYUP,
+      handleSelectionChange: goog.editor.Plugin.Op.SELECTION,
+      handleKeyboardShortcut: goog.editor.Plugin.Op.SHORTCUT,
+      execCommand: goog.editor.Plugin.Op.EXEC_COMMAND,
+      queryCommandValue: goog.editor.Plugin.Op.QUERY_COMMAND,
+      prepareContentsHtml: goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML,
+      cleanContentsHtml: goog.editor.Plugin.Op.CLEAN_CONTENTS_HTML,
+      cleanContentsDom: goog.editor.Plugin.Op.CLEAN_CONTENTS_DOM
+    }));
 
 
 /**

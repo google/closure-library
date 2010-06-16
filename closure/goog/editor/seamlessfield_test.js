@@ -95,9 +95,13 @@ function testFieldWithOverflow() {
 function testFieldWithOverflowAndPadding() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
     var blendedField = initSeamlessField(
-      ['1', '2', '3', '4', '5', '6', '7'].join('<p/>'),
-      {'overflow': 'auto', 'position': 'relative', 'height': '20px',
-       'padding': '2px 3px'});
+        ['1', '2', '3', '4', '5', '6', '7'].join('<p/>'),
+        {
+          'overflow': 'auto',
+          'position': 'relative',
+          'height': '20px',
+          'padding': '2px 3px'
+        });
     var blendedIframe = createSeamlessIframe();
     assertAttachSeamlessIframeSizesCorrectly(blendedField, blendedIframe);
     assertEquals(24, fieldElem.offsetHeight);
@@ -110,7 +114,7 @@ function testIframeHeightGrowsOnWrap() {
     var blendedField;
     try {
       blendedField = initSeamlessField('',
-        {'border': '1px solid black', 'height': '20px'});
+          {'border': '1px solid black', 'height': '20px'});
       blendedField.makeEditable();
       blendedField.setHtml(false, 'Content that should wrap after resize.');
 
@@ -196,13 +200,13 @@ function testSetMinHeight() {
       // Need to process timeouts set by load handlers.
       clock.tick(1000);
 
-      var normalHeight = goog.style.getSize(iframe).height
+      var normalHeight = goog.style.getSize(iframe).height;
 
       var delayedChangeCalled = false;
       goog.events.listen(field, goog.editor.Field.EventType.DELAYEDCHANGE,
           function() {
             delayedChangeCalled = true;
-          })
+          });
 
       // Test that min height is obeyed.
       field.setMinHeight(30);

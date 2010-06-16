@@ -408,6 +408,15 @@ goog.ui.AutoComplete.prototype.selectHilited = function() {
 
 
 /**
+ * Returns whether or not the autocomplete is open and has a highlighted row.
+ * @return {boolean} Whether an autocomplete row is highlighted.
+ */
+goog.ui.AutoComplete.prototype.hasHighlight = function() {
+  return this.isOpen() && this.getIndexOfId(this.hiliteId_) != -1;
+};
+
+
+/**
  * Clears out the token, rows, and hilite, and calls
  * <code>renderer.dismiss()</code>
  */

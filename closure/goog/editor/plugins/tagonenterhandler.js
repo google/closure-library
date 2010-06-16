@@ -115,11 +115,11 @@ goog.editor.plugins.TagOnEnterHandler.prototype.handleBackspaceInternal =
 /** @inheritDoc */
 goog.editor.plugins.TagOnEnterHandler.prototype.processParagraphTagsInternal =
     function(e, split) {
-      if ((goog.userAgent.OPERA || goog.userAgent.IE) &&
-          this.tag_ != goog.dom.TagName.P) {
-        this.ensureBlockIeOpera(this.tag_);
-      }
-    };
+  if ((goog.userAgent.OPERA || goog.userAgent.IE) &&
+      this.tag_ != goog.dom.TagName.P) {
+    this.ensureBlockIeOpera(this.tag_);
+  }
+};
 
 
 /** @inheritDoc */
@@ -256,11 +256,12 @@ goog.editor.plugins.TagOnEnterHandler.prototype.
     var li = goog.dom.getAncestorByTagNameAndClass(
         range && range.getContainerElement(), goog.dom.TagName.LI);
   }
-  var elementAfterCursor = (li &&
+  var isEmptyLi = (li &&
       li.innerHTML.match(
-          goog.editor.plugins.TagOnEnterHandler.emptyLiRegExp_)) ?
-              this.breakOutOfEmptyListItemGecko_(li) :
-              this.handleRegularEnterGecko_();
+          goog.editor.plugins.TagOnEnterHandler.emptyLiRegExp_));
+  var elementAfterCursor = isEmptyLi ?
+      this.breakOutOfEmptyListItemGecko_(li) :
+      this.handleRegularEnterGecko_();
 
   // Move the cursor in front of "nodeAfterCursor", and make sure it
   // is visible
@@ -316,7 +317,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.breakOutOfEmptyListItemGecko_ =
 
   // TODO(robbyw): Should we apply the list or list item styles to the new node?
   var newNode = goog.dom.getDomHelper(li).createElement(
-      inSubList ? goog.dom.TagName.LI : this.tag_)
+      inSubList ? goog.dom.TagName.LI : this.tag_);
 
   if (!li.previousSibling) {
     goog.dom.insertSiblingBefore(newNode, listNode);
@@ -522,7 +523,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.handleRegularEnterGecko_ =
       // Otherwise, we take the second half of the splitted text and break
       // it out of the anchor.
       var anchorToRemove = goog.editor.node.isEmpty(leftAnchor, false) ?
-                           leftAnchor : rightAnchor;
+          leftAnchor : rightAnchor;
       goog.dom.flattenElement(/** @type {Element} */ (anchorToRemove));
     }
   }

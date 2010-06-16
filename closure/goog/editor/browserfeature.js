@@ -114,7 +114,7 @@ goog.editor.BrowserFeature = {
   // document element. With contentEditable, the field itself is focusable,
   // which means that it will fire key events.
   USE_DOCUMENT_FOR_KEY_EVENTS: goog.userAgent.GECKO &&
-       !goog.editor.defines.USE_CONTENTEDITABLE_IN_FIREFOX_3,
+      !goog.editor.defines.USE_CONTENTEDITABLE_IN_FIREFOX_3,
 
   // Whether this browser shows non-standard attributes in innerHTML.
   SHOWS_CUSTOM_ATTRS_IN_INNER_HTML: goog.userAgent.IE,
@@ -123,7 +123,7 @@ goog.editor.BrowserFeature = {
   // (If so, we need to insert some space characters into nodes that
   //  shouldn't be collapsed)
   COLLAPSES_EMPTY_NODES:
-    goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
+      goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
 
   // Whether we must convert <strong> and <em> tags to <b>, <i>.
   CONVERT_TO_B_AND_I_TAGS: goog.userAgent.GECKO || goog.userAgent.OPERA,
@@ -146,8 +146,9 @@ goog.editor.BrowserFeature = {
   FOLLOWS_EDITABLE_LINKS: goog.userAgent.WEBKIT,
 
   // Whether this browser has document.activeElement available.
-  HAS_ACTIVE_ELEMENT: goog.userAgent.IE || goog.userAgent.OPERA ||
-                      goog.userAgent.GECKO && goog.userAgent.isVersion('1.9'),
+  HAS_ACTIVE_ELEMENT:
+      goog.userAgent.IE || goog.userAgent.OPERA ||
+      goog.userAgent.GECKO && goog.userAgent.isVersion('1.9'),
 
   // Whether this browser supports the setCapture method on DOM elements.
   HAS_SET_CAPTURE: goog.userAgent.IE,
@@ -197,14 +198,14 @@ goog.editor.BrowserFeature = {
   // Whether this browser converts spaces to non-breaking spaces when calling
   // execCommand's RemoveFormat.
   // See: https://bugs.webkit.org/show_bug.cgi?id=14062
-  ADDS_NBSPS_IN_REMOVE_FORMAT: goog.userAgent.WEBKIT &&
-                               !goog.userAgent.isVersion('531'),
+  ADDS_NBSPS_IN_REMOVE_FORMAT:
+      goog.userAgent.WEBKIT && !goog.userAgent.isVersion('531'),
 
   // Whether the browser will get stuck inside a link.  That is, if your cursor
   // is after a link and you type, does your text go inside the link tag.
   // Bug: http://bugs.webkit.org/show_bug.cgi?id=17697
-  GETS_STUCK_IN_LINKS: goog.userAgent.WEBKIT &&
-                       !goog.userAgent.isVersion('528'),
+  GETS_STUCK_IN_LINKS:
+      goog.userAgent.WEBKIT && !goog.userAgent.isVersion('528'),
 
   // Whether the browser corrupts empty text nodes in Node#normalize,
   // removing them from the Document instead of merging them.

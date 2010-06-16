@@ -18,6 +18,7 @@ See the COPYING file for details.
     goog.require('goog.testing.ExpectedFailures');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.object');
     goog.require('goog.ui.Control');
     goog.require('goog.ui.ControlRenderer');
     goog.require('goog.ui.Textarea');
@@ -193,6 +194,11 @@ See the COPYING file for details.
       textarea.setContent('');
       assertEquals('With no content, offsetHeight should go back to 50, ' +
           'the minHeight.', 50, textarea.getElement().offsetHeight);
+
+      // Force the mouseUp listener to test that it doesn't reset minHeight.
+      textarea.mouseUpListener_({});
+      assertEquals('After a mouseup which is not a resize, minHeight should ' +
+          'still be 50',  50, textarea.minHeight_);
 
       textarea.setMinHeight(0);
       assertTrue('After setting minHeight to 0, offsetHeight should ' +

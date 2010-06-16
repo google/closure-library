@@ -155,10 +155,10 @@ goog.editor.plugins.UndoRedo.prototype.setUndoRedoManager = function(manager) {
   this.undoManager_ = manager;
   this.managerStateChangeKey_ = /** @type {number} */ (
       goog.events.listen(this.undoManager_,
-        goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE,
-        this.dispatchCommandValueChange_,
-        false,
-        this));
+          goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE,
+          this.dispatchCommandValueChange_,
+          false,
+          this));
 };
 
 
@@ -957,7 +957,7 @@ goog.editor.plugins.UndoRedo.CursorPosition_.prototype.getRange_ =
   // Create a collapsed selection at the start of the contentEditable region,
   // which the offsets were calculated relative to before.  Note that we force
   // a text range here so we can use moveToElementText.
-  var sel = baseNode.ownerDocument.body.createTextRange()
+  var sel = baseNode.ownerDocument.body.createTextRange();
   sel.moveToElementText(baseNode);
   sel.collapse(true);
   sel.moveEnd('character', this.endOffset_);

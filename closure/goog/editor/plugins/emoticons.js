@@ -65,9 +65,10 @@ goog.editor.plugins.Emoticons.prototype.isSupportedCommand = function(
 goog.editor.plugins.Emoticons.prototype.execCommandInternal = function(
     command, emoji) {
   var dom = this.getFieldDomHelper();
-  var img = dom.createDom(goog.dom.TagName.IMG,
-      {'src': emoji.getUrl(),
-       'style': 'margin:0 0.2ex;vertical-align:middle'});
+  var img = dom.createDom(goog.dom.TagName.IMG, {
+    'src': emoji.getUrl(),
+    'style': 'margin:0 0.2ex;vertical-align:middle'
+  });
   img.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, emoji.getId());
 
   this.fieldObject.getRange().replaceContentsWithNode(img);

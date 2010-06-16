@@ -206,7 +206,7 @@ goog.editor.range.selectionPreservingNormalize = function(node) {
   var doc = goog.dom.getOwnerDocument(node);
   var selection = goog.dom.Range.createFromWindow(goog.dom.getWindow(doc));
   var normalizedRange =
-      goog.editor.range.rangePreservingNormalize_(node, selection);
+      goog.editor.range.rangePreservingNormalize(node, selection);
   if (normalizedRange) {
     normalizedRange.select();
   }
@@ -245,9 +245,8 @@ goog.editor.range.normalizeNodeIe_ = function(node) {
 /**
  * Normalizes the given node.
  * @param {Node} node The node to normalize.
- * @private
  */
-goog.editor.range.normalizeNode_ = function(node) {
+goog.editor.range.normalizeNode = function(node) {
   if (goog.userAgent.IE) {
     goog.editor.range.normalizeNodeIe_(node);
   } else {
@@ -264,9 +263,8 @@ goog.editor.range.normalizeNode_ = function(node) {
  * @param {Node} node The node to normalize.
  * @param {goog.dom.AbstractRange?} range The range to normalize.
  * @return {goog.dom.AbstractRange?} The range, adjusted for normalization.
- * @private
  */
-goog.editor.range.rangePreservingNormalize_ = function(node, range) {
+goog.editor.range.rangePreservingNormalize = function(node, range) {
   if (range) {
     var rangeFactory = goog.editor.range.normalize(range);
     // WebKit has broken selection affinity, so carets tend to jump out of the
@@ -279,10 +277,10 @@ goog.editor.range.rangePreservingNormalize_ = function(node, range) {
   }
 
   if (container) {
-    goog.editor.range.normalizeNode_(
+    goog.editor.range.normalizeNode(
         goog.dom.findCommonAncestor(container, node));
   } else if (node) {
-    goog.editor.range.normalizeNode_(node);
+    goog.editor.range.normalizeNode(node);
   }
 
   if (rangeFactory) {
@@ -597,7 +595,7 @@ goog.editor.range.NormalizedCaretRange_.prototype.removeCarets =
   goog.editor.range.NormalizedCaretRange_.superClass_.removeCarets.call(this);
 
   if (opt_range) {
-    return goog.editor.range.rangePreservingNormalize_(node, opt_range);
+    return goog.editor.range.rangePreservingNormalize(node, opt_range);
   } else if (node) {
     goog.editor.range.selectionPreservingNormalize(node);
   }

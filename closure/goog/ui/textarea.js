@@ -215,7 +215,7 @@ goog.ui.Textarea.prototype.setMaxHeight = function(height) {
  *     string by the browser when setting textarea.value.
  */
 goog.ui.Textarea.prototype.setValue = function(value) {
-  this.setContent(value);
+  this.setContent(/** @type {goog.ui.ControlContent} */ (value));
 };
 
 
@@ -317,8 +317,10 @@ goog.ui.Textarea.prototype.getHeight_ = function() {
  * @private
  */
 goog.ui.Textarea.prototype.setHeight_ = function(height) {
-  this.height_ = height;
-  this.getElement().style.height = height + 'px';
+  if (this.height_ != height) {
+    this.height_ = height;
+    this.getElement().style.height = height + 'px';
+  }
 };
 
 
@@ -513,9 +515,18 @@ goog.ui.Textarea.prototype.shrink_ = function() {
  * @private
  */
 goog.ui.Textarea.prototype.mouseUpListener_ = function(e) {
-  var mouseUpHeight = this.getHeight_();
-  if (mouseUpHeight != this.height_) {
-    this.minHeight_ = mouseUpHeight;
-    this.height_ = mouseUpHeight;
+  var textarea = this.getElement();
+  var height = textarea.offsetHeight;
+  if (goog.ui.Textarea.NEEDS_PADDING_FIX_) {
+    var paddingBox = goog.style.getPaddingBox(textarea);
+    var borderBox = goog.style.getBorderBox(textarea);
+    var paddingBorderBoxHeight = paddingBox.top + paddingBox.bottom +
+        borderBox.top + borderBox.bottom;
+    height -= paddingBorderBoxHeight;
+  }
+
+  if (height != this.height_) {
+    this.minHeight_ = height;
+    this.height_ = height;
   }
 };

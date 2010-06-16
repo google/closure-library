@@ -233,7 +233,7 @@ goog.editor.SeamlessField.prototype.getIframeBodyHeightGecko_ = function() {
 goog.editor.SeamlessField.getScrollbarThickness_ = function() {
   if (!goog.editor.SeamlessField.scrollbarThickness_) {
     var div = goog.dom.createDom('div',
-      {'style': 'overflow:scroll;position:absolute;visibility:hidden;'});
+        {'style': 'overflow:scroll;position:absolute;visibility:hidden;'});
     goog.dom.appendChild(goog.dom.getDocument().body, div);
     goog.editor.SeamlessField.scrollbarThickness_ =
         div.offsetWidth - div.clientWidth;

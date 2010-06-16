@@ -107,7 +107,7 @@ goog.editor.plugins.RemoveFormatting.prototype.getTrogClassId = function() {
 goog.editor.plugins.RemoveFormatting.prototype.isSupportedCommand = function(
     command) {
   return command ==
-       goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND;
+      goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND;
 };
 
 
@@ -477,12 +477,12 @@ goog.editor.plugins.RemoveFormatting.prototype.convertSelectedHtmlText_ =
     // in the selection, but have the same visible selection. Stop expanding
     // if we reach the top level field.
     var expandedRange = goog.editor.range.expand(range,
-          this.fieldObject.getElement());
+        this.fieldObject.getElement());
 
     var startInTable = goog.editor.plugins.RemoveFormatting.getTableAncestor_(
-          expandedRange.getStartNode());
+        expandedRange.getStartNode());
     var endInTable = goog.editor.plugins.RemoveFormatting.getTableAncestor_(
-          expandedRange.getEndNode());
+        expandedRange.getEndNode());
 
     if (startInTable || endInTable) {
       if (startInTable == endInTable) {
@@ -612,12 +612,14 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
         continue;
       }
 
+      // TODO(user): Handle case 'EMBED' and case 'OBJECT'.
       switch (nodeName) {
         case '#text':
           // Note that IE does not preserve whitespace in the dom
           // values, even in a pre tag, so this is useless for IE.
-          var nodeValue = preTagLevel > 0 ? node.nodeValue :
-                          goog.string.stripNewlines(node.nodeValue);
+          var nodeValue = preTagLevel > 0 ?
+              node.nodeValue :
+              goog.string.stripNewlines(node.nodeValue);
           nodeValue = goog.string.htmlEscape(nodeValue);
           sb.push(nodeValue);
           continue;
@@ -665,8 +667,6 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           sb.push(node.src);
           sb.push("'>");
           continue;
-
-        // TODO(user): case 'EMBED': case 'OBJECT'
 
         case goog.dom.TagName.TD:
           // Don't add a space for the first TD, we only want spaces to

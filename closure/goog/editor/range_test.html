@@ -448,7 +448,7 @@ function testNormalizeOnDivWithEmptyTextNodes() {
 
   // Cannot use document.body.normalize() as it fails to normalize the div
   // (in IE) if it has nothing but empty text nodes.
-  var newRange = goog.editor.range.rangePreservingNormalize_(emptyDiv, range);
+  var newRange = goog.editor.range.rangePreservingNormalize(emptyDiv, range);
 
   if (goog.userAgent.GECKO &&
       goog.string.compareVersions(goog.userAgent.VERSION, '1.9') == -1) {
@@ -567,7 +567,7 @@ function testRangePreservingNormalize() {
 
   var range = goog.dom.Range.createFromNodes(def, 3, jkl, 4);
   var oldRangeDescription = goog.testing.dom.exposeRange(range);
-  range = goog.editor.range.rangePreservingNormalize_(parent, range);
+  range = goog.editor.range.rangePreservingNormalize(parent, range);
 
   // Check that everything was normalized ok.
   assertEquals("def should have 1 child; range is " +
@@ -588,7 +588,7 @@ function testRangePreservingNormalizeWhereEndNodePreviousSiblingIsSplit() {
   fragmentText(parent.firstChild);
 
   var range = goog.dom.Range.createFromNodes(parent, 3, br, 0);
-  range = goog.editor.range.rangePreservingNormalize_(parent, range);
+  range = goog.editor.range.rangePreservingNormalize(parent, range);
 
   // Code used to throw an error here.
 
@@ -603,7 +603,7 @@ function testRangePreservingNormalizeWhereStartNodePreviousSiblingIsSplit() {
   fragmentText(parent.lastChild);
 
   var range = goog.dom.Range.createFromNodes(br, 0, parent, 9);
-  range = goog.editor.range.rangePreservingNormalize_(parent, range);
+  range = goog.editor.range.rangePreservingNormalize(parent, range);
 
   // Code used to throw an error here.
 
@@ -820,7 +820,7 @@ function testIntersectsTag() {
 function testNormalizeNode() {
   var div = goog.dom.createDom('DIV', null, 'a', 'b', 'c');
   assertEquals(3, div.childNodes.length);
-  goog.editor.range.normalizeNode_(div);
+  goog.editor.range.normalizeNode(div);
   assertEquals(1, div.childNodes.length);
   assertEquals('abc', div.firstChild.nodeValue);
 
@@ -832,7 +832,7 @@ function testNormalizeNode() {
       'c');
   assertEquals(5, div.childNodes.length);
   assertEquals(2, div.firstChild.childNodes.length);
-  goog.editor.range.normalizeNode_(div);
+  goog.editor.range.normalizeNode(div);
   if (goog.userAgent.GECKO && !goog.userAgent.isVersion(1.9) ||
       goog.userAgent.WEBKIT && !goog.userAgent.isVersion(526)) {
     // Old Gecko and Webkit versions don't delete the empty node.

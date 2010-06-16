@@ -199,10 +199,15 @@ goog.dom.browserrange.IeRange.createFromNodeContents = function(node) {
  */
 goog.dom.browserrange.IeRange.createFromNodes = function(startNode,
     startOffset, endNode, endOffset) {
-  return new goog.dom.browserrange.IeRange(
+  var range = new goog.dom.browserrange.IeRange(
       goog.dom.browserrange.IeRange.getBrowserRangeForNodes_(startNode,
           startOffset, endNode, endOffset),
       goog.dom.getOwnerDocument(startNode));
+  range.startNode_ = startNode;
+  range.startOffset_ = startOffset;
+  range.endNode_ = endNode;
+  range.endOffset_ = endOffset;
+  return range;
 };
 
 
@@ -234,6 +239,22 @@ goog.dom.browserrange.IeRange.prototype.startNode_ = null;
 goog.dom.browserrange.IeRange.prototype.endNode_ = null;
 
 
+/**
+ * Lazy cache of the offset in startNode_ where this range starts.
+ * @type {number}
+ * @private
+ */
+goog.dom.browserrange.IeRange.prototype.startOffset_ = -1;
+
+
+/**
+ * Lazy cache of the offset in endNode_ where this range ends.
+ * @type {number}
+ * @private
+ */
+goog.dom.browserrange.IeRange.prototype.endOffset_ = -1;
+
+
 
 /**
  * @return {goog.dom.browserrange.IeRange} A clone of this range.
@@ -260,10 +281,27 @@ goog.dom.browserrange.IeRange.prototype.getBrowserRange = function() {
  */
 goog.dom.browserrange.IeRange.prototype.clearCachedValues_ = function() {
   this.parentNode_ = this.startNode_ = this.endNode_ = null;
+  this.startOffset_ = this.endOffset_ = -1;
 };
 
 
-/** @inheritDoc */
+/**
+ * Tests whether the given node can contain a range end point.
+ * @param {Node} node The node to check.
+ * @return {boolean} Whether the given node can contain a range end point.
+ */
+goog.dom.browserrange.IeRange.prototype.canContainRangeEndpoint_ = function(
+    node) {
+  // NOTE(user, bloom): This is not complete, as divs with style -
+  // 'display:inline-block' or 'position:absolute' can also not contain range
+  // endpoints. A more complete check is to see if that element can be partially
+  // selected (can be container) or not.
+  return goog.dom.canHaveChildren(node) ||
+      node.nodeType == goog.dom.NodeType.TEXT;
+};
+
+
+  /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.getContainer = function() {
   if (!this.parentNode_) {
     var selectText = this.range_.text;
@@ -272,14 +310,23 @@ goog.dom.browserrange.IeRange.prototype.getContainer = function() {
     // parent container of only the real contents.  This is to get around IE's
     // inconsistency where it selects the spaces after a word when you double
     // click, but leaves out the spaces during execCommands.
-    // NOTE: this relies on the fact that 'foo'.charAt(-1) == ''
     var range = this.range_.duplicate();
-    for (var i = 1; selectText.charAt(selectText.length - i) == ' '; i++) {
-      range.moveEnd('character', -1);
+    // We can't use goog.string.trimRight, as that will remove other whitespace
+    // too.
+    var rightTrimmedSelectText = selectText.replace(/ +$/, '');
+    var numSpacesAtEnd = selectText.length - rightTrimmedSelectText.length;
+    if (numSpacesAtEnd) {
+      range.moveEnd('character', -numSpacesAtEnd);
     }
 
     // Get the parent node.  This should be the end, but alas, it is not.
     var parent = range.parentElement();
+
+    var htmlText = range.htmlText;
+    var htmlTextLen = goog.string.stripNewlines(htmlText).length;
+    if (this.isCollapsed() && htmlTextLen > 0) {
+      return (this.parentNode_ = parent);
+    }
 
     // Deal with selection bug where IE thinks one of the selection's children
     // is actually the selection's parent. Relies on the assumption that the
@@ -288,9 +335,7 @@ goog.dom.browserrange.IeRange.prototype.getContainer = function() {
 
     // Also note IE will sometimes insert \r and \n whitespace, which should be
     // disregarded. Otherwise the loop may run too long and return wrong parent
-    var htmlText = goog.string.stripNewlines(range.htmlText);
-    while (htmlText.length >
-           goog.string.stripNewlines(parent.outerHTML).length) {
+    while (htmlTextLen > goog.string.stripNewlines(parent.outerHTML).length) {
       parent = parent.parentNode;
     }
 
@@ -299,9 +344,9 @@ goog.dom.browserrange.IeRange.prototype.getContainer = function() {
     while (parent.childNodes.length == 1 &&
            parent.innerText == goog.dom.browserrange.IeRange.getNodeText_(
                parent.firstChild)) {
-      // It doesn't make sense for an image to be returned as a container,
-      // so check if the child is an image and return the parent instead.
-      if (parent.firstChild.tagName == 'IMG') {
+      // A container should be an element which can have children or a text
+      // node. Elements like IMG, BR, etc. can not be containers.
+      if (!this.canContainRangeEndpoint_(parent.firstChild)) {
         break;
       }
       parent = parent.firstChild;
@@ -333,8 +378,25 @@ goog.dom.browserrange.IeRange.prototype.findDeepestContainer_ = function(node) {
     var child = childNodes[i];
 
     if (child.nodeType == goog.dom.NodeType.ELEMENT) {
-      if (this.range_.inRange(
-          goog.dom.browserrange.IeRange.getBrowserRangeForNode_(child))) {
+      var childRange =
+          goog.dom.browserrange.IeRange.getBrowserRangeForNode_(child);
+      var start = goog.dom.RangeEndpoint.START;
+      var end = goog.dom.RangeEndpoint.END;
+      // During editing, IE introduces magic &nbsp; nodes, in particular when
+      // user hits enter, and a new p node is introduced with caret inside it.
+      // At this point,
+      //     nodeRange.htmlText => '<P>&nbsp;</P>';
+      // while,
+      //     node.outerHTML is '<P></P>'
+      // Somehow at this point the caret range (created using window selection),
+      // is not shown to be inside in the P node, that is native inRange
+      // returns false. So for those cases, we refer to end point comparison.
+      // Also, since this range is collapsed, comparing start points alone
+      // suffices.
+      var inChildRange = this.range_.inRange(childRange) ||
+          (this.isCollapsed() && (childRange.htmlText != child.outerHTML) &&
+           this.compareBrowserRangeEndpoints(childRange, start, start) >= 0);
+      if (inChildRange) {
         return this.findDeepestContainer_(child);
       }
     }
@@ -346,27 +408,52 @@ goog.dom.browserrange.IeRange.prototype.findDeepestContainer_ = function(node) {
 
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.getStartNode = function() {
-  return this.startNode_ ||
-      (this.startNode_ = this.getEndpointNode_(goog.dom.RangeEndpoint.START));
+  if (!this.startNode_) {
+    this.startNode_ = this.getEndpointNode_(goog.dom.RangeEndpoint.START);
+    if (this.isCollapsed()) {
+      this.endNode_ = this.startNode_;
+    }
+  }
+  return this.startNode_;
 };
 
 
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.getStartOffset = function() {
-  return this.getOffset_(goog.dom.RangeEndpoint.START);
+  if (this.startOffset_ < 0) {
+    this.startOffset_ = this.getOffset_(goog.dom.RangeEndpoint.START);
+    if (this.isCollapsed()) {
+      this.endOffset_ = this.startOffset_;
+    }
+  }
+  return this.startOffset_;
 };
 
 
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.getEndNode = function() {
-  return this.endNode_ ||
-      (this.endNode_ = this.getEndpointNode_(goog.dom.RangeEndpoint.END));
+  if (this.isCollapsed()) {
+    return this.getStartNode();
+  }
+  if (!this.endNode_) {
+    this.endNode_ = this.getEndpointNode_(goog.dom.RangeEndpoint.END);
+  }
+  return this.endNode_;
 };
 
 
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.getEndOffset = function() {
-  return this.getOffset_(goog.dom.RangeEndpoint.END);
+  if (this.isCollapsed()) {
+    return this.getStartOffset();
+  }
+  if (this.endOffset_ < 0) {
+    this.endOffset_ = this.getOffset_(goog.dom.RangeEndpoint.END);
+    if (this.isCollapsed()) {
+      this.startOffset_ = this.endOffset_;
+    }
+  }
+  return this.endOffset_;
 };
 
 
@@ -396,30 +483,52 @@ goog.dom.browserrange.IeRange.prototype.getEndpointNode_ = function(endpoint,
 
   // If we're at a leaf in the DOM, we're done.
   if (!node || !node.firstChild) {
-    // Special case to ensure we match W3c behavior at BR edges.
-    if (endpoint == goog.dom.RangeEndpoint.END && node.previousSibling &&
-        node.previousSibling.tagName == goog.dom.TagName.BR &&
-        this.getOffset_(endpoint, node) == 0) {
-      node = node.previousSibling;
-    }
-
-    // To be consistent with other browsers, don't return BRs.
-    return node.tagName == 'BR' ? node.parentNode : node;
+    return node;
   }
 
-  // Find the first/last child that overlaps the selection
-  var child = endpoint == goog.dom.RangeEndpoint.START ?
-      node.firstChild : node.lastChild;
+  var start = goog.dom.RangeEndpoint.START, end = goog.dom.RangeEndpoint.END;
+  var isStartEndpoint = endpoint == start;
 
+  // Find the first/last child that overlaps the selection
+  var child = isStartEndpoint ? node.firstChild : node.lastChild;
+  var i = 0;
   while (child) {
-    if (this.containsNode(child, true)) {
-      // If this child overlaps the selection, recurse down to find the
-      // first/last child the next level down that overlaps the selection.
+    var childRange = goog.dom.browserrange.createRangeFromNodeContents(child);
+    var ieRange = childRange.getBrowserRange();
+    if (this.isCollapsed()) {
+      if (!this.canContainRangeEndpoint_(child)) {
+        // In case of collapsed range, getEndNode calls out to getStartNode.
+        // The following handles a scenario like <div><BR>[caret]<BR></div>,
+        // where point should be (div, 1).
+        if (this.compareBrowserRangeEndpoints(ieRange, start, start) == 0) {
+          this.startOffset_ = this.endOffset_ = i;
+          return node;
+        }
+      } else if (childRange.containsRange(this)) {
+        return this.getEndpointNode_(endpoint, child);
+      }
+    } else if (this.containsRange(childRange)) {
+      // This is an element which is selected in entirety.
+      if (!this.canContainRangeEndpoint_(child)) {
+        // Container can't be any deeper, so current node is the container.
+        if (isStartEndpoint) {
+          this.startOffset_ = i;
+        } else {
+          this.endOffset_ = node.childNodes.length - i;
+        }
+        return node;
+      }
+      return this.getEndpointNode_(endpoint, child);
+    } else if (this.compareBrowserRangeEndpoints(ieRange, start, end) < 0 &&
+               this.compareBrowserRangeEndpoints(ieRange, end, start) > 0 ) {
+      // If this child overlaps the selection partially, recurse down to find
+      // the first/last child the next level down that overlaps the selection
+      // completely. We do not consider edge-adjacency (== 0) as overlap.
       return this.getEndpointNode_(endpoint, child);
     }
 
-    child = endpoint == goog.dom.RangeEndpoint.START ?
-        child.nextSibling : child.previousSibling;
+    child = isStartEndpoint ? child.nextSibling : child.previousSibling;
+    i++;
   }
 
   // None of the children of this node overlapped the selection, that means
@@ -464,30 +573,29 @@ goog.dom.browserrange.IeRange.prototype.compareNodeEndpoints_ =
  */
 goog.dom.browserrange.IeRange.prototype.getOffset_ = function(endpoint,
     opt_container) {
-  var container = opt_container || (endpoint == goog.dom.RangeEndpoint.START ?
-      this.getStartNode() : this.getEndNode());
+  var isStartEndpoint = endpoint == goog.dom.RangeEndpoint.START;
+  var container = opt_container ||
+        (isStartEndpoint ? this.getStartNode() : this.getEndNode());
 
   if (container.nodeType == goog.dom.NodeType.ELEMENT) {
     // Find the first/last child that overlaps the selection
     var children = container.childNodes;
     var len = children.length;
-    var edge = endpoint == goog.dom.RangeEndpoint.START ? 0 : len - 1;
-    var sign = endpoint == goog.dom.RangeEndpoint.START ? 1 : -1;
+    var edge = isStartEndpoint ? 0 : len - 1;
+    var sign = isStartEndpoint ? 1 : - 1;
 
     // We find the index in the child array of the endpoint of the selection.
     for (var i = edge; i >= 0 && i < len; i += sign) {
       var child = children[i];
-
+      // Ignore the child nodes, which could be end point containers.
+      if (this.canContainRangeEndpoint_(child)) {
+        continue;
+      }
       // Stop looping when we reach the edge of the selection.
-      if (this.compareNodeEndpoints_(child, endpoint, endpoint) * sign <= 0) {
-        // Special case to ensure we match W3c behavior at BR edges.
-        if (endpoint == goog.dom.RangeEndpoint.END && child.previousSibling &&
-            child.previousSibling.tagName == goog.dom.TagName.BR &&
-            this.getOffset_(endpoint, child) == 0) {
-          i--;
-        }
-
-        break;
+      var endPointCompare =
+          this.compareNodeEndpoints_(child, endpoint, endpoint);
+      if (endPointCompare == 0) {
+        return isStartEndpoint ? i : i + 1;
       }
     }
 
@@ -504,12 +612,10 @@ goog.dom.browserrange.IeRange.prototype.getOffset_ = function(endpoint,
 
     // Now, intersect our range with the container range - this should give us
     // the part of our selection that is in the container.
-    range.setEndPoint(endpoint == goog.dom.RangeEndpoint.START ? 'EndToEnd' :
-                      'StartToStart', nodeRange);
+    range.setEndPoint(isStartEndpoint ? 'EndToEnd' : 'StartToStart', nodeRange);
 
     var rangeLength = range.text.length;
-    return endpoint == goog.dom.RangeEndpoint.END ? rangeLength :
-           container.length - rangeLength;
+    return isStartEndpoint ? container.length - rangeLength : rangeLength;
   }
 };
 
@@ -544,6 +650,7 @@ goog.dom.browserrange.IeRange.prototype.isRangeInDocument = function() {
 
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.isCollapsed = function() {
+  // Alternative: this.range_.compareEndPoints('StartToEnd', this.range_)
   return this.range_.text == '';
 };
 

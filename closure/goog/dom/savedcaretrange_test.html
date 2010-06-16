@@ -109,10 +109,7 @@ See the COPYING file for details.
     assertHTMLEquals('jkl', jkl.innerHTML);
 
     // def and jkl now contain fragmented text nodes.
-    if (goog.userAgent.IE) {
-      goog.testing.dom.assertRangeEquals(
-          def.firstChild, 1, jkl.childNodes[1], 0, selection);
-    } else if (goog.userAgent.WEBKIT) {
+    if (goog.userAgent.WEBKIT || goog.userAgent.IE) {
       goog.testing.dom.assertRangeEquals(
           def.childNodes[1], 0, jkl.childNodes[0], 2, selection);
     } else if (goog.userAgent.OPERA) {
@@ -217,7 +214,7 @@ See the COPYING file for details.
     range = goog.dom.Range.createFromWindow();
     assertEquals('ghijkl', range.getText().replace(/\s/g, ''));
   }
-  
+
   /**
    * Clear the selection by re-parsing the DOM. Then restore the saved
    * selection.

@@ -410,7 +410,7 @@ goog.editor.Field.prototype.getOriginalElement = function() {
  * @param {Object=} opt_handler Object in whose scope to call the listener.
  */
 goog.editor.Field.prototype.addListener = function(type, listener, opt_capture,
-                                                  opt_handler) {
+                                                   opt_handler) {
   var elem = this.getElement();
   // Opera won't fire events on <body> in whitebox mode because we make
   // <html> contentEditable to work around some visual issues.
@@ -638,9 +638,9 @@ goog.editor.Field.isGeneratingKey_ = function(e, testAllKeys) {
  */
 goog.editor.Field.isSpecialGeneratingKey_ = function(e) {
   var testCtrlKeys = (e.ctrlKey || e.metaKey) &&
-    e.keyCode in goog.editor.Field.CTRL_KEYS_CAUSING_CHANGES_;
+      e.keyCode in goog.editor.Field.CTRL_KEYS_CAUSING_CHANGES_;
   var testRegularKeys = !(e.ctrlKey || e.metaKey) &&
-    e.keyCode in goog.editor.Field.KEYS_CAUSING_CHANGES_;
+      e.keyCode in goog.editor.Field.KEYS_CAUSING_CHANGES_;
 
   return testCtrlKeys || testRegularKeys;
 };
@@ -973,7 +973,7 @@ goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
     // TODO(user): Del at end of field or backspace at beginning should be
     // ignored.
     this.gotGeneratingKey_ = e.charCode ||
-      goog.editor.Field.isGeneratingKey_(e, goog.userAgent.GECKO);
+        goog.editor.Field.isGeneratingKey_(e, goog.userAgent.GECKO);
     if (this.gotGeneratingKey_) {
       this.dispatchBeforeChange();
       // TODO(robbyw): Should we return the value of the above?
@@ -1464,8 +1464,10 @@ goog.editor.Field.prototype.dispatchSelectionChangeEvent = function(opt_e) {
       goog.dom.contains(this.getElement(), rangeContainer);
 
   this.dispatchCommandValueChange();
-  this.dispatchEvent({type: goog.editor.Field.EventType.SELECTIONCHANGE,
-      originalType: opt_e && opt_e.type});
+  this.dispatchEvent({
+    type: goog.editor.Field.EventType.SELECTIONCHANGE,
+    originalType: opt_e && opt_e.type
+  });
 
   this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.SELECTION, opt_e);
 };
@@ -1491,8 +1493,12 @@ goog.editor.Field.prototype.dispatchBeforeChange = function() {
  * @return {boolean} The result of dispatchEvent.
  */
 goog.editor.Field.prototype.dispatchBeforeTab_ = function(e) {
-  return this.dispatchEvent({type: goog.editor.Field.EventType.BEFORETAB,
-      shiftKey: e.shiftKey, altKey: e.altKey, ctrlKey: e.ctrlKey});
+  return this.dispatchEvent({
+    type: goog.editor.Field.EventType.BEFORETAB,
+    shiftKey: e.shiftKey,
+    altKey: e.altKey,
+    ctrlKey: e.ctrlKey
+  });
 };
 
 
@@ -1651,8 +1657,10 @@ goog.editor.Field.prototype.manipulateDom = function(func,
 goog.editor.Field.prototype.dispatchCommandValueChange =
     function(opt_commands) {
   if (opt_commands) {
-    this.dispatchEvent({type: goog.editor.Field.EventType.COMMAND_VALUE_CHANGE,
-                        commands: opt_commands});
+    this.dispatchEvent({
+      type: goog.editor.Field.EventType.COMMAND_VALUE_CHANGE,
+      commands: opt_commands
+    });
   } else {
     this.dispatchEvent(goog.editor.Field.EventType.COMMAND_VALUE_CHANGE);
   }
@@ -1669,7 +1677,7 @@ goog.editor.Field.prototype.dispatchCommandValueChange =
  *      goog.editor.Field.EventType.DELAYEDCHANGE should be fired syncronously.
  */
 goog.editor.Field.prototype.dispatchChange = function(opt_noDelay) {
-  this.startChangeEvents(true, opt_noDelay)
+  this.startChangeEvents(true, opt_noDelay);
 };
 
 
@@ -2392,8 +2400,8 @@ goog.editor.Field.prototype.makeIframeField_ = function(opt_iframeSrc) {
     html = this.reduceOp_(goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML,
         html, styles);
 
-    var iframe = /** @type {HTMLIFrameElement} */
-        (this.originalDomHelper.createDom(goog.dom.TagName.IFRAME,
+    var iframe = /** @type {HTMLIFrameElement} */(
+        this.originalDomHelper.createDom(goog.dom.TagName.IFRAME,
             this.getIframeAttributes()));
 
     // TODO(nicksantos): Figure out if this is ever needed in SAFARI?

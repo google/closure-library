@@ -284,23 +284,23 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
         case goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE:
         case goog.editor.plugins.BasicTextFormatter.COMMAND.BOLD:
         case goog.editor.plugins.BasicTextFormatter.COMMAND.ITALIC:
-         // If we are applying the formatting, then we want to have styleWithCSS
-         // false so that we generate html tags (like <b>).  If we are
-         // unformatting something, we want to have styleWithCSS true so that we
-         // can unformat both html tags and inline styling.
-         // TODO(user): What about WebKit and Opera?
-         styleWithCss = goog.userAgent.GECKO &&
-                        goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
-                        this.queryCommandValue(command);
-         break;
+          // If we are applying the formatting, then we want to have
+          // styleWithCSS false so that we generate html tags (like <b>).  If we
+          // are unformatting something, we want to have styleWithCSS true so
+          // that we can unformat both html tags and inline styling.
+          // TODO(user): What about WebKit and Opera?
+          styleWithCss = goog.userAgent.GECKO &&
+                         goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
+                         this.queryCommandValue(command);
+          break;
 
-        // It is very expensive in FF (order of magnitude difference) to use
-        // font tags instead of styled spans. Whenever possible,
-        // force FF to use spans.
-        // Font size is very expensive too, but FF always uses font tags,
-        // regardless of which styleWithCSS value you use.
         case goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_COLOR:
         case goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_FACE:
+          // It is very expensive in FF (order of magnitude difference) to use
+          // font tags instead of styled spans. Whenever possible,
+          // force FF to use spans.
+          // Font size is very expensive too, but FF always uses font tags,
+          // regardless of which styleWithCSS value you use.
           styleWithCss = goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
                          goog.userAgent.GECKO;
       }
@@ -509,11 +509,11 @@ goog.editor.plugins.BasicTextFormatter.prototype.handleKeyboardShortcut =
     case 'u': // Ctrl+U
       command = goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE;
       break;
-    // TODO(user): This doesn't belong in here.  Clients should handle
-    // this themselves.
-    // Catching control + s prevents the annoying browser save dialog
-    // from appearing.
     case 's': // Ctrl+S
+      // TODO(user): This doesn't belong in here.  Clients should handle
+      // this themselves.
+      // Catching control + s prevents the annoying browser save dialog
+      // from appearing.
       return true;
   }
 
@@ -596,8 +596,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
             // visible line break. Because of this, we have to resort to using a
             // &nbsp; in IE.
             var child = goog.userAgent.IE ?
-                        doc.createTextNode(goog.string.Unicode.NBSP) :
-                        doc.createElement(goog.dom.TagName.BR);
+                doc.createTextNode(goog.string.Unicode.NBSP) :
+                doc.createElement(goog.dom.TagName.BR);
             paragraph.appendChild(child);
           }
           goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_(
@@ -911,8 +911,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
   // image and clicked link, in which case we want to actually use the
   // image as the selection.
   var parent = range && range.getContainerElement();
-  var link = /** @type {Element} */
-      (goog.dom.getAncestorByTagNameAndClass(parent, goog.dom.TagName.A));
+  var link = /** @type {Element} */ (
+      goog.dom.getAncestorByTagNameAndClass(parent, goog.dom.TagName.A));
   if (link && goog.editor.node.isEditable(link)) {
     goog.dom.flattenElement(link);
   } else {
@@ -1348,8 +1348,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.fixIELists_ = function() {
     if (type) {
       var saneTypes =
           (node.tagName == goog.dom.TagName.UL ?
-           goog.editor.plugins.BasicTextFormatter.unorderedListTypes_ :
-           goog.editor.plugins.BasicTextFormatter.orderedListTypes_);
+              goog.editor.plugins.BasicTextFormatter.unorderedListTypes_ :
+              goog.editor.plugins.BasicTextFormatter.orderedListTypes_);
       if (!saneTypes[type]) {
         node.type = '';
       }
@@ -1394,8 +1394,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandSafariFixes_ =
     function(command) {
   // See the comment on brokenExecCommandsSafari_
   var div;
-  if (goog.editor.plugins.BasicTextFormatter.brokenExecCommandsSafari_[
-          command]) {
+  if (goog.editor.plugins.BasicTextFormatter.
+      brokenExecCommandsSafari_[command]) {
     // Add a new div at the end of the field.
     // Safari knows that it would be wrong to apply text-align to the
     // contentEditable element if there are non-empty block nodes in the field,
@@ -1406,8 +1406,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandSafariFixes_ =
     goog.dom.appendChild(this.fieldObject.getElement(), div);
   }
 
-  if (goog.editor.plugins.BasicTextFormatter.hangingExecCommandWebkit_[
-          command]) {
+  if (goog.editor.plugins.BasicTextFormatter.
+      hangingExecCommandWebkit_[command]) {
     // Add a new div at the beginning of the field.
     var field = this.fieldObject.getElement();
     div = this.getFieldDomHelper().createDom(
@@ -1507,7 +1507,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.beforeInsertListGecko_ =
   // only seems to work in Firefox)
   var range = this.getRange_();
   if (range.isCollapsed() &&
-     (range.getContainer().nodeType != goog.dom.NodeType.TEXT)) {
+      (range.getContainer().nodeType != goog.dom.NodeType.TEXT)) {
     var tempTextNode = this.getFieldDomHelper().
         createTextNode(goog.string.Unicode.NBSP);
     range.insertNode(tempTextNode, false);
@@ -1645,8 +1645,8 @@ goog.editor.plugins.BasicTextFormatter.getNodeJustification_ =
   // If there is no alignment, try the inline property,
   // otherwise assume left aligned.
   // TODO: for rtl languages we probably need to assume right.
-  if (!goog.editor.plugins.BasicTextFormatter.SUPPORTED_JUSTIFICATIONS_[
-          value]) {
+  if (!goog.editor.plugins.BasicTextFormatter.
+      SUPPORTED_JUSTIFICATIONS_[value]) {
     value = element.align || 'left';
   }
   return /** @type {string} */ (value);

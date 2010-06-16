@@ -107,6 +107,19 @@ goog.ui.MenuItem.prototype.setCheckable = function(checkable) {
 };
 
 
+/**
+ * Returns the text caption of the component while ignoring accelerators.
+ * @return {?string} Text caption of the component (null if none).
+ */
+goog.ui.MenuItem.prototype.getCaption = function() {
+  return this.getCaptionInternal(function(element) {
+    return goog.dom.classes.has(element,
+        goog.getCssName('goog-menuitem-accel')) ? '' :
+        goog.dom.getTextContent(element);
+ });
+};
+
+
 // Register a decorator factory function for goog.ui.MenuItems.
 goog.ui.registry.setDecoratorByClassName(goog.ui.MenuItemRenderer.CSS_CLASS,
     function() {

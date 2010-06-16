@@ -628,18 +628,30 @@ goog.ui.Control.prototype.setContentInternal = function(content) {
 
 /**
  * Returns the text caption of the component.
+ * @param {function(Node): string} getChildElementContent Function that takes an
+ *     element and returns a string.
  * @return {?string} Text caption of the component (null if none).
  */
-goog.ui.Control.prototype.getCaption = function() {
+goog.ui.Control.prototype.getCaptionInternal =
+    function(getChildElementContent) {
   var content = this.getContent();
   if (!content || goog.isString(content)) {
     return content;
   }
 
   var caption = goog.isArray(content) ?
-      goog.array.map(content, goog.dom.getTextContent).join('') :
+      goog.array.map(content, getChildElementContent).join('') :
       goog.dom.getTextContent(/** @type {!Node} */ (content));
   return caption && goog.string.trim(caption);
+};
+
+
+/**
+ * Returns the text caption of the component.
+ * @return {?string} Text caption of the component (null if none).
+ */
+goog.ui.Control.prototype.getCaption = function() {
+  return this.getCaptionInternal(goog.dom.getTextContent);
 };
 
 

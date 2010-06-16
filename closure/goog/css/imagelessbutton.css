@@ -133,7 +133,9 @@
 
 /* Hover styles. Higher priority to override other border styles. */
 .goog-imageless-button-hover,
-.goog-imageless-button-hover .goog-imageless-button-outer-box {
+.goog-imageless-button-hover .goog-imageless-button-outer-box,
+.goog-imageless-button-focused,
+.goog-imageless-button-focused .goog-imageless-button-outer-box {
   border-color: #000;
 }
 

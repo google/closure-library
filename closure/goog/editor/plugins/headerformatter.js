@@ -20,9 +20,10 @@
 
 goog.provide('goog.editor.plugins.HeaderFormatter');
 
-goog.require('goog.userAgent');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
+goog.require('goog.userAgent');
+
 
 /**
  * Applies header styles to text.
@@ -60,8 +61,8 @@ goog.editor.plugins.HeaderFormatter.HEADER_COMMAND = {
 /**
  * @inheritDoc
  */
-goog.editor.plugins.HeaderFormatter.prototype.handleKeyboardShortcut = function(e,
-    key, isModifierPressed) {
+goog.editor.plugins.HeaderFormatter.prototype.handleKeyboardShortcut = function(
+    e, key, isModifierPressed) {
   if (!isModifierPressed) {
     return false;
   }

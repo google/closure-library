@@ -56,8 +56,8 @@ goog.require('goog.userAgent');
  * @return {?string} Style value, or null if this is not an element node.
  * @private
  */
-goog.editor.style.getComputedOrCascadedStyle_ =
-    function(node, stylePropertyName) {
+goog.editor.style.getComputedOrCascadedStyle_ = function(
+    node, stylePropertyName) {
   if (node.nodeType != goog.dom.NodeType.ELEMENT) {
     // Only element nodes have style.
     return null;

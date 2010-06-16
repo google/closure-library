@@ -315,6 +315,12 @@ See the COPYING file for details.
                  65,
                  keyEvent.charCode);
 
+    fireKeyDown(keyHandler, goog.events.KeyCodes.CTRL);
+    fireKeyDown(keyHandler, goog.events.KeyCodes.A);
+    assertEquals('A with control down should fire a key event',
+                 goog.events.KeyCodes.A,
+                 keyEvent.keyCode);
+
     fireKeyDown(keyHandler, goog.events.KeyCodes.DELETE);
     assertEquals('Delete should fire a key event with the keycode 46',
                  goog.events.KeyCodes.DELETE,
@@ -330,6 +336,18 @@ See the COPYING file for details.
                  keyEvent.keyCode);
     assertEquals('Period should fire a key event with the charcode 46',
                  46,
+                 keyEvent.charCode);
+
+    // Safari sends zero key code for non-latin characters.
+    fireKeyDown(keyHandler, 0, 0);
+    fireKeyPress(keyHandler, 1092, 1092);
+    assertEquals('Cyrillic small letter "Ef" should fire a key event with ' +
+                     'the keycode 0',
+                 0,
+                 keyEvent.keyCode);
+    assertEquals('Cyrillic small letter "Ef" should fire a key event with ' +
+                     'the charcode 1092',
+                 1092,
                  keyEvent.charCode);
   }
 

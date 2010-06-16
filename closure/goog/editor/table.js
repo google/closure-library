@@ -199,9 +199,9 @@ goog.editor.Table.prototype.insertRow = function(opt_rowIndex) {
  */
 goog.editor.Table.prototype.insertColumn = function(opt_colIndex) {
   // TODO(user): set column widths in a way that makes sense.
-  var colIndex = goog.isDefAndNotNull(opt_colIndex) ? opt_colIndex :
-                 (this.rows[0] && this.rows[0].columns.length) ||
-                 0;
+  var colIndex = goog.isDefAndNotNull(opt_colIndex) ?
+      opt_colIndex :
+      (this.rows[0] && this.rows[0].columns.length) || 0;
   var newTds = [];
   for (var rowNum = 0, row; row = this.rows[rowNum]; rowNum++) {
     var existingCell = row.columns[colIndex];
@@ -282,8 +282,8 @@ goog.editor.Table.prototype.removeColumn = function(colIndex) {
  * @return {boolean} Whether or not the merge was possible. If the cells
  *     in the supplied coordinates can't be merged this will return false.
  */
-goog.editor.Table.prototype.mergeCells =
-    function(startRowIndex, startColIndex, endRowIndex, endColIndex) {
+goog.editor.Table.prototype.mergeCells = function(
+    startRowIndex, startColIndex, endRowIndex, endColIndex) {
   // TODO(user): take a single goog.math.Rect parameter instead?
   var cells = [];
   var cell;
@@ -386,8 +386,8 @@ goog.editor.Table.prototype.splitCell = function(rowIndex, colIndex) {
  * @param {number} rowIndex Row in which to insert the element.
  * @param {number} colIndex Column in which to insert the element.
  */
-goog.editor.Table.prototype.insertCellElement =
-    function(td, rowIndex, colIndex) {
+goog.editor.Table.prototype.insertCellElement = function(
+    td, rowIndex, colIndex) {
   var row = this.rows[rowIndex];
   var nextSiblingElement = null;
   for (var i = colIndex, cell; cell = row.columns[i]; i += cell.colSpan) {
@@ -522,8 +522,8 @@ goog.editor.Table.DEFAULT_BORDER_COLOR = '#888';
  *    properties, used to set the inital style of the table.
  * @return {Element} a table element.
  */
-goog.editor.Table.createDomTable =
-    function(doc, columns, rows, opt_tableStyle) {
+goog.editor.Table.createDomTable = function(
+    doc, columns, rows, opt_tableStyle) {
   // TODO(user): define formatting properties as constants,
   // make separate formatTable() function
   var style = {

@@ -85,7 +85,6 @@
     // Create the first programmatically.
     var t1 = new goog.ui.Textarea('Hi there, I am a programmatic textarea.');
     t1.render(goog.dom.getElement('t1'));
-    t1.setDispatchTransitionEvents(EVENTS, true);
     goog.events.listen(goog.dom.getElement('t1_enable'),
         goog.events.EventType.CLICK,
         function(e) {

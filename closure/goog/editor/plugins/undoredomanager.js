@@ -230,8 +230,8 @@ goog.editor.plugins.UndoRedoManager.prototype.shiftState_ = function(
 
     this.addAction_({
       type: fromStack == this.undoStack_ ?
-            goog.editor.plugins.UndoRedoManager.EventType.BEFORE_UNDO :
-            goog.editor.plugins.UndoRedoManager.EventType.BEFORE_REDO,
+          goog.editor.plugins.UndoRedoManager.EventType.BEFORE_UNDO :
+          goog.editor.plugins.UndoRedoManager.EventType.BEFORE_REDO,
       func: fromStack == this.undoStack_ ? state.undo : state.redo,
       state: state
     });

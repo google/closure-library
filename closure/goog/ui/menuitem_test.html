@@ -27,11 +27,11 @@ Author: attila@google.com (Attila Bodis)
   <script>
     var sandbox = goog.dom.getElement('sandbox');
     var item;
-  
+
     function setUp() {
       item = new goog.ui.MenuItem('Item');
     }
-    
+
     function tearDown() {
       item.dispose();
       goog.dom.removeChildren(sandbox);
@@ -281,6 +281,19 @@ Author: attila@google.com (Attila Bodis)
       assertNull('getCaption() must return null', item.getCaption());
       assertTrue('Item must still have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
+    }
+
+    function testGetSetCaptionForItemWithAccelerators() {
+      var contentArr = [];
+      contentArr.push(goog.dom.createDom('span',
+          goog.getCssName('goog-menuitem-accel'), 'Ctrl+1'));
+      contentArr.push(goog.dom.createTextNode('Hello'));
+      item.setCaption(contentArr);
+      assertEquals('getCaption() must not return the accelerator', 'Hello',
+          item.getCaption());
+
+      item.setCaption(null);
+      assertNull('getCaption() must return null', item.getCaption());
     }
 
     function testRender() {

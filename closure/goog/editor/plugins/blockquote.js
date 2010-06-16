@@ -123,7 +123,7 @@ goog.editor.plugins.Blockquote.prototype.isSilentCommand = goog.functions.TRUE;
 goog.editor.plugins.Blockquote.isBlockquote = function(node, isAlreadySetup,
     requiresClassnameToSplit, classname) {
   if (node.tagName != goog.dom.TagName.BLOCKQUOTE) {
-     return false;
+    return false;
   }
   if (!requiresClassnameToSplit) {
     return isAlreadySetup;
