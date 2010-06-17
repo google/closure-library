@@ -28,9 +28,9 @@ goog.require('goog.asserts');
 
 
 /**
- * @type {Array|NodeList|Arguments|{length: number}}
+ * @typedef {Array|NodeList|Arguments|{length: number}}
  */
-goog.array.ArrayLike = goog.typedef;
+goog.array.ArrayLike;
 
 
 /**

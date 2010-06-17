@@ -826,13 +826,13 @@ goog.ui.editor.DefaultToolbar.buttons_ = {};
 
 
 /**
- * @type {{command: string, tooltip: ?string,
+ * @typedef {{command: string, tooltip: ?string,
  *   caption: ?goog.ui.ControlContent, classes: ?string,
  *   factory: ?function(string, string, goog.ui.ControlContent, ?string,
  *       goog.ui.ButtonRenderer, goog.dom.DomHelper):goog.ui.Button,
  *   queryable:?boolean}}
  */
-goog.ui.editor.ButtonDescriptor = goog.typedef;
+goog.ui.editor.ButtonDescriptor;
 
 
 /**

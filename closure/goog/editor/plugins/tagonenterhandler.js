@@ -251,9 +251,10 @@ goog.editor.plugins.TagOnEnterHandler.prototype.
   //    create two elements. FF just inserts a BR.
   //   -Hitting enter inside an empty list-item doesn't create a block
   //    tag. It just splits the list and puts your cursor in the middle.
+  var li = null;
   if (wasCollapsed) {
     // Only break out of lists for collapsed selections.
-    var li = goog.dom.getAncestorByTagNameAndClass(
+    li = goog.dom.getAncestorByTagNameAndClass(
         range && range.getContainerElement(), goog.dom.TagName.LI);
   }
   var isEmptyLi = (li &&

@@ -53,6 +53,14 @@ goog.inherits(goog.ui.PopupColorPicker, goog.ui.Component);
 
 
 /**
+ * Whether the color picker is initialized.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.PopupColorPicker.prototype.initialized_ = false;
+
+
+/**
  * Instance of a color picker control.
  * @type {goog.ui.ColorPicker}
  * @private
@@ -138,6 +146,7 @@ goog.ui.PopupColorPicker.prototype.disposeInternal = function() {
   goog.ui.PopupColorPicker.superClass_.disposeInternal.call(this);
   this.colorPicker_ = null;
   this.lastTarget_ = null;
+  this.initialized_ = false;
   if (this.popup_) {
     this.popup_.dispose();
     this.popup_ = null;
@@ -383,14 +392,14 @@ goog.ui.PopupColorPicker.prototype.setPopupCorner = function(corner) {
  * @private
  */
 goog.ui.PopupColorPicker.prototype.show_ = function(e) {
-  if (!this.colorPicker_) {
-    this.colorPicker_ =
+  if (!this.initialized_) {
+    this.colorPicker_ = this.colorPicker_ ||
         goog.ui.ColorPicker.createSimpleColorGrid(this.getDomHelper());
     this.colorPicker_.setFocusable(this.focusable_);
-    this.addChild(this.colorPicker_);
-    this.colorPicker_.render(this.getElement());
+    this.addChild(this.colorPicker_, true);
     this.getHandler().listen(this.colorPicker_,
         goog.ui.ColorPicker.EventType.CHANGE, this.onColorPicked_);
+    this.initialized_ = true;
   }
 
   if (this.popup_.isOrWasRecentlyVisible() && this.toggleMode_ &&

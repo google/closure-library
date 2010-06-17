@@ -18,11 +18,19 @@
  */
 
 goog.provide('goog.proto2.Descriptor');
+goog.provide('goog.proto2.Metadata');
 
 goog.require('goog.array');
 goog.require('goog.object');
 goog.require('goog.proto2.Util');
 
+
+/**
+ * @type {{name: (string|undefined),
+ *         fullName: (string|undefined),
+ *         containingType: (goog.proto2.Message|undefined)}}
+ */
+goog.proto2.Metadata = goog.typedef;
 
 
 /**
@@ -30,17 +38,37 @@ goog.require('goog.proto2.Util');
  *
  * @param {Function} messageType Constructor for the message class that
  *      this descriptor describes.
- * @param {!Object} metadata The metadata about the message that will be used
- *      to construct this descriptor.
+ * @param {!goog.proto2.Metadata} metadata The metadata about the message that
+ *      will be used to construct this descriptor.
  * @param {Array.<goog.proto2.FieldDescriptor>} fields The fields of the
  *      message described by this descriptor.
  *
  * @constructor
  */
 goog.proto2.Descriptor = function(messageType, metadata, fields) {
+
+  /**
+   * @type {Function}
+   * @private
+   */
   this.messageType_ = messageType;
-  this.name_ = metadata.name;
-  this.fullName_ = metadata.fullName;
+
+  /**
+   * @type {?string}
+   * @private
+   */
+  this.name_ = metadata.name || null;
+
+  /**
+   * @type {?string}
+   * @private
+   */
+  this.fullName_ = metadata.fullName || null;
+
+  /**
+   * @type {goog.proto2.Message|undefined}
+   * @private
+   */
   this.containingType_ = metadata.containingType;
 
   /**
@@ -58,9 +86,9 @@ goog.proto2.Descriptor = function(messageType, metadata, fields) {
 
 
 /**
- * Returns the name of the message.
+ * Returns the name of the message, if any.
  *
- * @return {string} The name.
+ * @return {?string} The name.
  */
 goog.proto2.Descriptor.prototype.getName = function() {
   return this.name_;
@@ -68,9 +96,9 @@ goog.proto2.Descriptor.prototype.getName = function() {
 
 
 /**
- * Returns the full name of the message.
+ * Returns the full name of the message, if any.
  *
- * @return {string} The na,e.
+ * @return {?string} The name.
  */
 goog.proto2.Descriptor.prototype.getFullName = function() {
   return this.fullName_;

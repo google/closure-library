@@ -20,9 +20,9 @@ goog.require('goog.testing.stacktrace');
 // reimplement the asserters.
 
 /**
- * @type {Array|NodeList|Arguments|{length: number}}
+ * @typedef {Array|NodeList|Arguments|{length: number}}
  */
-goog.testing.asserts.ArrayLike = goog.typedef;
+goog.testing.asserts.ArrayLike;
 
 var DOUBLE_EQUALITY_PREDICATE = function(var1, var2) {
   return var1 == var2;

@@ -26,9 +26,9 @@ goog.require('goog.array');
 
 
 /**
- * @type {goog.iter.Iterator|{length:number}|{__iterator__}}
+ * @typedef {goog.iter.Iterator|{length:number}|{__iterator__}}
  */
-goog.iter.Iterable = goog.typedef;
+goog.iter.Iterable;
 
 
 // For script engines that already support iterators.

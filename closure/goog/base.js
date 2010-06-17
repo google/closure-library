@@ -1067,6 +1067,8 @@ goog.globalEval = function(script) {
  * definitions with the union of Array and NodeList.
  *
  * Does nothing in uncompiled code.
+ *
+ * @deprecated Please use the {@code @typedef} annotation.
  */
 goog.typedef = true;
 

@@ -485,9 +485,9 @@ goog.uri.utils.assertNoFragmentsOrQueries_ = function(uri) {
  * to a string and URI encoded.  Array values are expanded into multiple
  * &key=value pairs, with each element stringized and URI-encoded.
  *
- * @type {*}
+ * @typedef {*}
  */
-goog.uri.utils.QueryValue = goog.typedef;
+goog.uri.utils.QueryValue;
 
 
 /**
@@ -509,9 +509,9 @@ goog.uri.utils.QueryValue = goog.typedef;
  * ];
  * </pre>
  *
- * @type {!Array.<string|goog.uri.utils.QueryValue>}
+ * @typedef {!Array.<string|goog.uri.utils.QueryValue>}
  */
-goog.uri.utils.QueryArray = goog.typedef;
+goog.uri.utils.QueryArray;
 
 
 /**
