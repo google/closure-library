@@ -1186,3 +1186,35 @@ goog.array.rotate = function(array, n) {
   }
   return array;
 };
+
+
+/**
+ * Creates a new array for which the element at position i is an array of the
+ * ith element of the provided arrays.  The returned array will only be as long 
+ * as the shortest array provided; additional values are ignored.  For example, 
+ * the result of zipping [1, 2] and [3, 4, 5] is [[1,3], [2, 4]].  
+ *
+ * This is similar to the zip() function in Python.  See {@link
+ * http://docs.python.org/library/functions.html#zip}
+ *
+ * @param {...!goog.array.ArrayLike} var_args Arrays to be combined.
+ * @return {!Array.<!Array>} A new array of arrays created from provided arrays.
+ */
+goog.array.zip = function(var_args) {
+  if (!arguments.length) {
+    return [];
+  }
+  var result = [];
+  for (var i = 0; true; i++) {
+    var value = [];
+    for (var j = 0; j < arguments.length; j++) {
+      var arr = arguments[j];
+      // If i is larger than the array length, this is the shortest array.
+      if (i >= arr.length) {
+        return result;
+      }
+      value.push(arr[i]);
+    }
+    result.push(value);
+  }
+};
