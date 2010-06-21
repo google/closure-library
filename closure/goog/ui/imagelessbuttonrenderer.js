@@ -30,6 +30,7 @@ goog.provide('goog.ui.ImagelessButtonRenderer');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.CustomButtonRenderer');
+goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.registry');
 
 
@@ -116,7 +117,7 @@ goog.ui.ImagelessButtonRenderer.prototype.getContentElement = function(
 goog.ui.ImagelessButtonRenderer.prototype.createButton = function(content,
                                                                   dom) {
   var baseClass = this.getCssClass();
-  var inlineBlock = goog.getCssName('goog-inline-block') + ' ';
+  var inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + ' ';
   return dom.createDom('div',
       inlineBlock + goog.getCssName(baseClass, 'outer-box'),
       dom.createDom('div',

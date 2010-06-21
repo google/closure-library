@@ -31,6 +31,7 @@ goog.provide('goog.ui.style.app.ButtonRenderer');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.CustomButtonRenderer');
+goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.registry');
 
 
@@ -117,7 +118,7 @@ goog.ui.style.app.ButtonRenderer.prototype.getContentElement = function(
 goog.ui.style.app.ButtonRenderer.prototype.createButton = function(content,
     dom) {
   var baseClass = this.getStructuralCssClass();
-  var inlineBlock = 'goog-inline-block ';
+  var inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + ' ';
   return dom.createDom('div', inlineBlock + baseClass + '-outer-box',
       dom.createDom('div', inlineBlock + baseClass + '-inner-box',
           dom.createDom('div', baseClass + '-pos',
