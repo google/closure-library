@@ -18,6 +18,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.testing.PerformanceTable');
 goog.require('goog.testing.PerformanceTimer');
+goog.require('goog.testing.TestCase');
 
 
 /**
@@ -35,9 +36,8 @@ goog.testing.benchmark.run_ = function() {
 
   var prefix = 'benchmark';
 
-  // First, get the functions.  Copied from testcase.js.
-  var testSource = typeof goog.global['RuntimeObject'] != 'undefined' ?
-      goog.global['RuntimeObject'](prefix + '*') : goog.global;
+  // First, get the functions.
+  var testSource = goog.testing.TestCase.getGlobals(prefix);
 
   var benchmarks = {};
   var names = [];

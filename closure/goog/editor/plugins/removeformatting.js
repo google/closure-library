@@ -122,6 +122,25 @@ goog.editor.plugins.RemoveFormatting.prototype.execCommandInternal =
 
 
 /**
+ * @inheritDoc
+ */
+goog.editor.plugins.RemoveFormatting.prototype.handleKeyboardShortcut =
+    function(e, key, isModifierPressed) {
+  if (!isModifierPressed) {
+    return false;
+  }
+
+  if (key == ' ') {
+    this.fieldObject.execCommand(
+        goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND);
+    return true;
+  }
+
+  return false;
+}
+
+
+/**
  * Removes formatting from the current selection.  Removes basic formatting
  * (B/I/U) using the browser's execCommand.  Then extracts the html from the
  * selection to convert, calls either a client's specified removeFormattingFunc

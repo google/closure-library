@@ -831,6 +831,26 @@ function testLoadInNonHtmlNotThrows() {
   }
 }
 
+//=== tests for getmsg ===
+function testGetMsgWithDollarSigns() {
+  var msg = goog.getMsg('{$amount} per minute',
+      {amount: '$0.15'});
+  assertEquals('$0.15 per minute', msg);
+  msg = goog.getMsg('{$amount} per minute',
+      {amount: '$0.$1$5'});
+  assertEquals('$0.$1$5 per minute', msg);
+
+  msg = goog.getMsg('This is a {$rate} sale!',
+      {rate: '$$$$$$$$$$10'});
+  assertEquals('This is a $$$$$$$$$$10 sale!', msg);
+  msg = goog.getMsg('{$name}! Hamburgers: {$hCost}, Hotdogs: {$dCost}.',
+      {name: 'Burger Bob',
+       hCost: '$0.50',
+       dCost: '$100'});
+  assertEquals('Burger Bob! Hamburgers: $0.50, Hotdogs: $100.',
+    msg);
+}
+
 
 //=== miscellaneous tests ===
 

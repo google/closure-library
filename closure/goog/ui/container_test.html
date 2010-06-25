@@ -190,18 +190,30 @@ Author:  attila@google.com (Attila Bodis)
       assertTrue('AFTER_SHOW event expected', eventFired);
     }
 
-    function testHideEvent() {
+    function testHideEvents() {
+      var events = [];
       container.decorate(containerElement);
       container.setVisible(true);
       var eventFired = false;
       goog.events.listen(container, goog.ui.Component.EventType.HIDE,
-          function() {
-            assertTrue('Container must be visible when HIDE event is fired',
-                       container.isVisible());
-            eventFired = true;
+          function(e) {
+            assertTrue(
+                'Container must be visible when HIDE event is fired',
+                container.isVisible());
+            events.push(e.type);
+          });
+      goog.events.listen(container, goog.ui.Container.EventType.AFTER_HIDE,
+          function(e) {
+            assertFalse(
+                'Container must not be visible when AFTER_HIDE event is fired',
+                container.isVisible());
+            events.push(e.type);
           });
       container.setVisible(false);
-      assertTrue('HIDE event expected', eventFired);
+      assertArrayEquals('HIDE event followed by AFTER_HIDE expected', [
+            goog.ui.Component.EventType.HIDE,
+            goog.ui.Container.EventType.AFTER_HIDE
+          ], events);
     }
 
     /**
@@ -311,6 +323,60 @@ Author:  attila@google.com (Attila Bodis)
       keyContainer.handleKeyEvent(new goog.events.Event());
       assertEquals('One key events should be handled',
           1, keyContainer.keyEventsHandled);
+    }
+
+    function testOpenFollowsHighlight() {
+      container.decorate(containerElement);
+      container.setOpenFollowsHighlight(true);
+      assertTrue('isOpenFollowsHighlight should return true',
+          container.isOpenFollowsHighlight());
+
+      // Make the children openable.
+      container.forEachChild(function(child) {
+        child.setSupportedState(goog.ui.Component.State.OPENED, true);
+      });
+      // Open child 1 initially.
+      container.getChildAt(1).setOpen(true);
+
+      assertFalse('Child 0 should initially not be highlighted',
+          container.getChildAt(0).isHighlighted());
+      goog.testing.events.fireMouseOverEvent(
+          container.getChildAt(0).getElement(), sandbox);
+      assertTrue('Child 0 should become highlighted after a mouse over',
+          container.getChildAt(0).isHighlighted());
+      assertTrue('Child 0 should become open after higlighted',
+          container.getChildAt(0).isOpen());
+      assertFalse('Child 1 should become closed once 0 is open',
+          container.getChildAt(1).isOpen());
+      assertEquals('OpenItem should be child 0',
+          container.getChildAt(0), container.getOpenItem());
+    }
+
+    function testOpenNotFollowsHighlight() {
+      container.decorate(containerElement);
+      container.setOpenFollowsHighlight(false);
+      assertFalse('isOpenFollowsHighlight should return false',
+          container.isOpenFollowsHighlight());
+
+      // Make the children openable.
+      container.forEachChild(function(child) {
+        child.setSupportedState(goog.ui.Component.State.OPENED, true);
+      });
+      // Open child 1 initially.
+      container.getChildAt(1).setOpen(true);
+
+      assertFalse('Child 0 should initially not be highlighted',
+          container.getChildAt(0).isHighlighted());
+      goog.testing.events.fireMouseOverEvent(
+          container.getChildAt(0).getElement(), sandbox);
+      assertTrue('Child 0 should become highlighted after a mouse over',
+          container.getChildAt(0).isHighlighted());
+      assertFalse('Child 0 should remain closed after higlighted',
+          container.getChildAt(0).isOpen());
+      assertTrue('Child 1 should remain open',
+          container.getChildAt(1).isOpen());
+      assertEquals('OpenItem should be child 1',
+          container.getChildAt(1), container.getOpenItem());
     }
   </script>
 </body>

@@ -96,14 +96,14 @@ goog.editor.ClickToEditWrapper = function(fieldObj) {
     this.enterDocument();
   }
 
-  // Whenever the field is made editable, we need to check if there
-  // are any carets in it, and if so, use them to render the selection.
   this.fieldEventHandler_.
+      // Whenever the field is made editable, we need to check if there
+      // are any carets in it, and if so, use them to render the selection.
       listen(
           this.fieldObj_, goog.editor.Field.EventType.LOAD,
           this.renderSelection_).
-  // Whenever the field is made uneditable, we need to set up
-  // the click-to-edit listeners.
+      // Whenever the field is made uneditable, we need to set up
+      // the click-to-edit listeners.
       listen(
           this.fieldObj_, goog.editor.Field.EventType.UNLOAD,
           this.enterDocument);

@@ -426,12 +426,10 @@ goog.editor.node.getSecondHalfOfNode_ = function(node, startNode, firstChild) {
 /**
  * Appends all of oldNode's children to newNode. This removes all children from
  * oldNode and appends them to newNode. oldNode is left with no children.
- * @param {Node} newNode Node to transfer children to.
+ * @param {!Node} newNode Node to transfer children to.
  * @param {Node} oldNode Node to transfer children from.
+ * @deprecated Use goog.dom.append directly instead.
  */
 goog.editor.node.transferChildren = function(newNode, oldNode) {
-  var child;
-  while (child = oldNode.firstChild) {
-    newNode.appendChild(child);
-  }
+  goog.dom.append(newNode, oldNode.childNodes);
 };

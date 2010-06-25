@@ -81,7 +81,12 @@ goog.ui.Container.EventType = {
    * BEFORE_SHOW event for a long time, and too much code relies on that old
    * behavior to fix it now.
    */
-  AFTER_SHOW: 'aftershow'
+  AFTER_SHOW: 'aftershow',
+
+  /**
+   * Dispatched after a goog.ui.Container becomes invisible. Non-cancellable.
+   */
+  AFTER_HIDE: 'afterhide'
 };
 
 
@@ -182,12 +187,20 @@ goog.ui.Container.prototype.mouseButtonPressed_ = false;
 
 
 /**
- * Whether focus of child componenets should be allowed.  Only effective if
+ * Whether focus of child components should be allowed.  Only effective if
  * focusable_ is set to false.
  * @type {boolean}
  * @private
  */
 goog.ui.Container.prototype.allowFocusableChildren_ = false;
+
+
+/**
+ * Whether highlighting a child component should also open it.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.Container.prototype.openFollowsHighlight_ = true;
 
 
 /**
@@ -487,8 +500,9 @@ goog.ui.Container.prototype.handleHighlightItem = function(e) {
       item.setActive(true);
     }
 
-    // Open follows highlight.
-    if (this.openItem_ && item != this.openItem_) {
+    // Update open item if open item needs follow highlight.
+    if (this.openFollowsHighlight_ &&
+        this.openItem_ && item != this.openItem_) {
       if (item.isSupportedState(goog.ui.Component.State.OPENED)) {
         item.setOpen(true);
       } else {
@@ -960,8 +974,10 @@ goog.ui.Container.prototype.setVisible = function(visible, opt_force) {
         this.renderer_.enableTabIndex(this.getKeyEventTarget(),
             this.enabled_ && this.visible_);
       }
-      if (this.visible_ && !opt_force) {
-        this.dispatchEvent(goog.ui.Container.EventType.AFTER_SHOW);
+      if (!opt_force) {
+        this.dispatchEvent(this.visible_ ?
+            goog.ui.Container.EventType.AFTER_SHOW :
+            goog.ui.Container.EventType.AFTER_HIDE);
       }
     }
 
@@ -1073,6 +1089,23 @@ goog.ui.Container.prototype.isFocusableChildrenAllowed = function() {
  */
 goog.ui.Container.prototype.setFocusableChildrenAllowed = function(focusable) {
   this.allowFocusableChildren_ = focusable;
+};
+
+
+/**
+ * @return {boolean} Whether highlighting a child component should also open it.
+ */
+goog.ui.Container.prototype.isOpenFollowsHighlight = function() {
+  return this.openFollowsHighlight_;
+};
+
+
+/**
+ * Sets whether highlighting a child component should also open it.
+ * @param {boolean} follow Whether highlighting a child component also opens it.
+ */
+goog.ui.Container.prototype.setOpenFollowsHighlight = function(follow) {
+  this.openFollowsHighlight_ = follow;
 };
 
 
@@ -1220,6 +1253,16 @@ goog.ui.Container.prototype.canHighlightItem = function(item) {
  */
 goog.ui.Container.prototype.setHighlightedIndexFromKeyEvent = function(index) {
   this.setHighlightedIndex(index);
+};
+
+
+/**
+ * Returns the currently open (expanded) control in the container (null if
+ * none).
+ * @return {goog.ui.Control?} The currently open control.
+ */
+goog.ui.Container.prototype.getOpenItem = function() {
+  return this.openItem_;
 };
 
 

@@ -535,8 +535,7 @@ goog.ui.Component.prototype.getParent = function() {
 /**
  * Overrides {@link goog.events.EventTarget#setParentEventTarget} to throw an
  * error if the parent component is set, and the argument is not the parent.
- *
- * @param {goog.events.EventTarget} parent Parent EventTarget (null if none).
+ * @override
  */
 goog.ui.Component.prototype.setParentEventTarget = function(parent) {
   if (this.parent_ && this.parent_ != parent) {
@@ -891,7 +890,7 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  *    added; must be between 0 and the current child count (inclusive).
  * @param {boolean=} opt_render If true, the child component will be rendered
  *    into the parent.
- * @return {void}
+ * @return {void} Nada.
  */
 goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
   if (child.inDocument_ && (opt_render || !this.inDocument_)) {

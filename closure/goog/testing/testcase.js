@@ -117,6 +117,11 @@ goog.testing.TestCase = function(opt_name) {
    * @suppress {underscore}
    */
   this.result_ = new goog.testing.TestCase.Result(this);
+
+  // This silences a compiler warning from the legacy property check, which
+  // is deprecated. It idly writes to testRunner properties that are used
+  // in this file.
+  var testRunnerMethods = {isFinished: true, hasErrors: true};
 };
 
 
@@ -521,6 +526,33 @@ goog.testing.TestCase.prototype.orderTests_ = function(tests) {
 
 
 /**
+ * Gets the object with all globals.
+ * @param {string=} opt_prefix An optional prefix. If specified, only get things
+ *     under this prefix.
+ * @return {Object} An object with all globals starting with the prefix.
+ */
+goog.testing.TestCase.prototype.getGlobals = function(opt_prefix) {
+  return goog.testing.TestCase.getGlobals(opt_prefix);
+};
+
+
+/**
+ * Gets the object with all globals.
+ * @param {string=} opt_prefix An optional prefix. If specified, only get things
+ *     under this prefix.
+ * @return {Object} An object with all globals starting with the prefix.
+ */
+goog.testing.TestCase.getGlobals = function(opt_prefix) {
+  // Look in the global scope for most browsers, on IE we use the little known
+  // RuntimeObject which holds references to all globals. We reference this
+  // via goog.global so that there isn't an aliasing that throws an exception
+  // in Firefox.
+  return typeof goog.global['RuntimeObject'] != 'undefined' ?
+      goog.global['RuntimeObject']((opt_prefix || '') + '*') : goog.global;
+};
+
+
+/**
  * Gets called before any tests are executed.  Can be overridden to set up the
  * environment for the whole test case.
  */
@@ -577,13 +609,8 @@ goog.testing.TestCase.prototype.createTestFromAutoDiscoveredFunction =
  * and runTests if they are defined.
  */
 goog.testing.TestCase.prototype.autoDiscoverTests = function() {
-  // Look in the global scope for most browsers, on IE we use the little known
-  // RuntimeObject which holds references to all globals. We reference this
-  // via goog.global so that there isn't an aliasing that throws an exception
-  // in Firefox.
   var prefix = this.getAutoDiscoveryPrefix();
-  var testSource = typeof goog.global['RuntimeObject'] != 'undefined' ?
-      goog.global['RuntimeObject'](prefix + '*') : goog.global;
+  var testSource = this.getGlobals(prefix);
 
   var foundTests = [];
 

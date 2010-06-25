@@ -654,8 +654,8 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
       */
       var rangeStart = goog.editor.style.getContainer(range.getStartNode());
       var redundantContainer = goog.editor.node.getNextSibling(rangeStart);
-      if (redundantContainer) {
-        goog.editor.node.transferChildren(rangeStart, redundantContainer);
+      if (rangeStart && redundantContainer) {
+        goog.dom.append(rangeStart, redundantContainer.childNodes);
         goog.dom.removeNode(redundantContainer);
       }
     }

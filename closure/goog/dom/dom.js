@@ -593,7 +593,7 @@ goog.dom.createDom = function(tagName, opt_attributes, var_args) {
 /**
  * Helper for {@code createDom}.
  * @param {!Document} doc The document to create the DOM in.
- * @param {Arguments} args Argument object passed from the callers. See
+ * @param {!Arguments} args Argument object passed from the callers. See
  *     {@code goog.dom.createDom} for details.
  * @return {!Element} Reference to a DOM node.
  * @private
@@ -636,31 +636,45 @@ goog.dom.createDom_ = function(doc, args) {
   }
 
   if (args.length > 2) {
-    var childHandler = function(child) {
-      // TODO(user): More coercion, ala MochiKit?
-      if (child) {
-        element.appendChild(goog.isString(child) ?
-            doc.createTextNode(child) : child);
-      }
-    };
-
-    for (var i = 2; i < args.length; i++) {
-      var arg = args[i];
-      // TODO(user): Fix isArrayLike to return false for a text node.
-      if (goog.isArrayLike(arg) && !goog.dom.isNodeLike(arg)) {
-        // If the argument is a node list, not a real array, use a clone,
-        // because forEach can't be used to mutate a NodeList.
-        goog.array.forEach(goog.dom.isNodeList(arg) ?
-            goog.array.clone(arg) : arg,
-            childHandler);
-      } else {
-        childHandler(arg);
-      }
-    }
+    goog.dom.append_(doc, element, args, 2);
   }
 
   return element;
 };
+
+
+/**
+ * Appends a node with text or other nodes.
+ * @param {!Document} doc The document to create new nodes in.
+ * @param {!Node} parent The node to append nodes to.
+ * @param {!Arguments} args The values to add. See {@code goog.dom.append}.
+ * @param {number} startIndex The index of the array to start from.
+ * @private
+ */
+goog.dom.append_ = function(doc, parent, args, startIndex) {
+  function childHandler(child) {
+    // TODO(user): More coercion, ala MochiKit?
+    if (child) {
+      parent.appendChild(goog.isString(child) ?
+          doc.createTextNode(child) : child);
+    }
+  }
+
+  for (var i = startIndex; i < args.length; i++) {
+    var arg = args[i];
+    // TODO(user): Fix isArrayLike to return false for a text node.
+    if (goog.isArrayLike(arg) && !goog.dom.isNodeLike(arg)) {
+      // If the argument is a node list, not a real array, use a clone,
+      // because forEach can't be used to mutate a NodeList.
+      goog.array.forEach(goog.dom.isNodeList(arg) ?
+          goog.array.clone(arg) : arg,
+          childHandler);
+    } else {
+      childHandler(arg);
+    }
+  }
+};
+
 
 /**
  * Alias for {@code createDom}.
@@ -853,6 +867,19 @@ goog.dom.canHaveChildren = function(node) {
  */
 goog.dom.appendChild = function(parent, child) {
   parent.appendChild(child);
+};
+
+
+/**
+ * Appends a node with text or other nodes.
+ * @param {!Node} parent The node to append nodes to.
+ * @param {...goog.dom.Appendable} var_args The things to append to the node.
+ *     If this is a Node it is appended as is.
+ *     If this is a string then a text node is appended.
+ *     If this is an array like object then fields 0 to length - 1 are appended.
+ */
+goog.dom.append = function(parent, var_args) {
+  goog.dom.append_(goog.dom.getOwnerDocument(parent), parent, arguments, 1);
 };
 
 
@@ -1846,6 +1873,13 @@ goog.dom.DomHelper.prototype.getDocumentHeight = function() {
 
 
 /**
+ * Typedef for use with goog.dom.createDom and goog.dom.append.
+ * @typedef {Object|string|Array|NodeList}
+ */
+goog.dom.Appendable;
+
+
+/**
  * Returns a dom node with a set of attributes.  This function accepts varargs
  * for subsequent nodes to be added.  Subsequent nodes will be added to the
  * first node as childNodes.
@@ -1864,7 +1898,7 @@ goog.dom.DomHelper.prototype.getDocumentHeight = function() {
  * @param {Object|string=} opt_attributes If object, then a map of name-value
  *     pairs for attributes. If a string, then this is the className of the new
  *     element.
- * @param {...Object|string|Array|NodeList} var_args Further DOM nodes or
+ * @param {...goog.dom.Appendable} var_args Further DOM nodes or
  *     strings for text nodes. If one of the var_args is an array or
  *     NodeList, its elements will be added as childNodes instead.
  * @return {!Element} Reference to a DOM node.
@@ -1882,9 +1916,9 @@ goog.dom.DomHelper.prototype.createDom = function(tagName,
  * @param {Object|string=} opt_attributes If object, then a map of name-value
  *     pairs for attributes. If a string, then this is the className of the new
  *     element.
- * @param {...Object|string|Array|NodeList} var_args Further DOM nodes
- *     or strings for text nodes.  If one of the var_args is an array, its
- *     children will be added as childNodes instead.
+ * @param {...goog.dom.Appendable} var_args Further DOM nodes or strings for
+ *     text nodes.  If one of the var_args is an array, its children will be
+ *     added as childNodes instead.
  * @return {!Element} Reference to a DOM node.
  * @deprecated Use {@link goog.dom.DomHelper.prototype.createDom} instead.
  */
@@ -1992,6 +2026,17 @@ goog.dom.DomHelper.prototype.getDocumentScroll = function() {
  * @param {Node} child Child.
  */
 goog.dom.DomHelper.prototype.appendChild = goog.dom.appendChild;
+
+
+/**
+ * Appends a node with text or other nodes.
+ * @param {!Node} parent The node to append nodes to.
+ * @param {...goog.dom.Appendable} var_args The things to append to the node.
+ *     If this is a Node it is appended as is.
+ *     If this is a string then a text node is appended.
+ *     If this is an array like object then fields 0 to length - 1 are appended.
+ */
+goog.dom.DomHelper.prototype.append = goog.dom.append;
 
 
 /**

@@ -295,7 +295,7 @@ goog.ui.AdvancedTooltip.prototype.maybeHide = function(el) {
  * @protected
  */
 goog.ui.AdvancedTooltip.prototype.handleMouseMove = function(event) {
-  var startTimer = true;
+  var startTimer = this.isVisible();
   if (this.boundingBox_) {
     var scroll = this.getDomHelper().getDocumentScroll();
     var c = new goog.math.Coordinate(event.clientX + scroll.x,

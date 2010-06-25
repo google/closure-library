@@ -11,6 +11,7 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.dom.classes');
     goog.require('goog.debug.DivConsole');
     goog.require('goog.debug.LogManager');
     goog.require('goog.debug.Logger');
@@ -32,6 +33,13 @@ See the COPYING file for details.
       padding: 2px;
       margin: 0;
       border: 1px solid #000;
+    }
+    .drop-shadowed {
+      filter:progid:DXImageTransform.Microsoft.DropShadow(color='#e7e7e7',
+          offX='5',offY='5');
+      box-shadow: 5px 5px 0 #e7e7e7;
+      -moz-box-shadow: 5px 5px 0 #e7e7e7;
+      -webkit-box-shadow: 5px 5px 0 #e7e7e7;
     }
   </style>
 </head>
@@ -195,14 +203,25 @@ See the COPYING file for details.
       assertEquals('With no content, offsetHeight should go back to 50, ' +
           'the minHeight.', 50, textarea.getElement().offsetHeight);
 
-      // Force the mouseUp listener to test that it doesn't reset minHeight.
-      textarea.mouseUpListener_({});
-      assertEquals('After a mouseup which is not a resize, minHeight should ' +
-          'still be 50',  50, textarea.minHeight_);
-
       textarea.setMinHeight(0);
       assertTrue('After setting minHeight to 0, offsetHeight should ' +
           'now be < 50', textarea.getElement().offsetHeight < 50);
+    }
+
+    function testMouseUpListener() {
+      textarea.render(sandbox);
+      textarea.setMinHeight(100);
+      textarea.setMaxHeight(200);
+      textarea.mouseUpListener_({});
+      assertEquals('After a mouseup which is not a resize, minHeight should ' +
+          'still be 100', 100, textarea.minHeight_);
+
+      // We need to test how CSS drop shadows effect this too.
+      goog.dom.classes.add(textarea.getElement(), 'drop-shadowed');
+      textarea.mouseUpListener_({});
+      assertEquals('After a mouseup which is not a resize, minHeight should ' +
+          'still be 100 even with a shadow', 100, textarea.minHeight_);
+
     }
 
     function testMaxHeight() {

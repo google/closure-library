@@ -393,7 +393,8 @@ goog.i18n.DateTimePatterns_af = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -405,7 +406,8 @@ goog.i18n.DateTimePatterns_af_NA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -417,7 +419,8 @@ goog.i18n.DateTimePatterns_af_ZA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -429,7 +432,8 @@ goog.i18n.DateTimePatterns_ak = {
   YEAR_MONTH_ABBR: 'MMM yyyy',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -441,7 +445,8 @@ goog.i18n.DateTimePatterns_ak_GH = {
   YEAR_MONTH_ABBR: 'MMM yyyy',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -453,7 +458,8 @@ goog.i18n.DateTimePatterns_am_ET = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -465,7 +471,8 @@ goog.i18n.DateTimePatterns_ar_AE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -477,7 +484,8 @@ goog.i18n.DateTimePatterns_ar_BH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -489,7 +497,8 @@ goog.i18n.DateTimePatterns_ar_DZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -501,7 +510,8 @@ goog.i18n.DateTimePatterns_ar_EG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -513,7 +523,8 @@ goog.i18n.DateTimePatterns_ar_IQ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -525,7 +536,8 @@ goog.i18n.DateTimePatterns_ar_JO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -537,7 +549,8 @@ goog.i18n.DateTimePatterns_ar_KW = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -549,7 +562,8 @@ goog.i18n.DateTimePatterns_ar_LB = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -561,7 +575,8 @@ goog.i18n.DateTimePatterns_ar_LY = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -573,7 +588,8 @@ goog.i18n.DateTimePatterns_ar_MA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -585,7 +601,8 @@ goog.i18n.DateTimePatterns_ar_OM = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -597,7 +614,8 @@ goog.i18n.DateTimePatterns_ar_QA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -609,7 +627,8 @@ goog.i18n.DateTimePatterns_ar_SA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -621,7 +640,8 @@ goog.i18n.DateTimePatterns_ar_SD = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -633,7 +653,8 @@ goog.i18n.DateTimePatterns_ar_SY = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -645,7 +666,8 @@ goog.i18n.DateTimePatterns_ar_TN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -657,7 +679,8 @@ goog.i18n.DateTimePatterns_ar_YE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -669,7 +692,8 @@ goog.i18n.DateTimePatterns_as = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -681,7 +705,8 @@ goog.i18n.DateTimePatterns_as_IN = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -693,7 +718,8 @@ goog.i18n.DateTimePatterns_asa = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -705,7 +731,8 @@ goog.i18n.DateTimePatterns_asa_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -717,7 +744,8 @@ goog.i18n.DateTimePatterns_az = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -729,7 +757,8 @@ goog.i18n.DateTimePatterns_az_Cyrl = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -741,7 +770,8 @@ goog.i18n.DateTimePatterns_az_Cyrl_AZ = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -753,7 +783,8 @@ goog.i18n.DateTimePatterns_az_Latn = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -765,7 +796,8 @@ goog.i18n.DateTimePatterns_az_Latn_AZ = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -777,7 +809,8 @@ goog.i18n.DateTimePatterns_be = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -789,7 +822,8 @@ goog.i18n.DateTimePatterns_be_BY = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -801,7 +835,8 @@ goog.i18n.DateTimePatterns_bem = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -813,7 +848,8 @@ goog.i18n.DateTimePatterns_bem_ZM = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -825,7 +861,8 @@ goog.i18n.DateTimePatterns_bez = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -837,7 +874,8 @@ goog.i18n.DateTimePatterns_bez_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -849,7 +887,8 @@ goog.i18n.DateTimePatterns_bg_BG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -861,7 +900,8 @@ goog.i18n.DateTimePatterns_bm = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -873,7 +913,8 @@ goog.i18n.DateTimePatterns_bm_ML = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -885,7 +926,8 @@ goog.i18n.DateTimePatterns_bn_BD = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -897,7 +939,8 @@ goog.i18n.DateTimePatterns_bn_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -909,7 +952,8 @@ goog.i18n.DateTimePatterns_bo = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -921,7 +965,8 @@ goog.i18n.DateTimePatterns_bo_CN = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -933,7 +978,8 @@ goog.i18n.DateTimePatterns_bo_IN = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -945,7 +991,8 @@ goog.i18n.DateTimePatterns_ca_ES = {
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -957,7 +1004,8 @@ goog.i18n.DateTimePatterns_cgg = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -969,7 +1017,8 @@ goog.i18n.DateTimePatterns_cgg_UG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -981,7 +1030,8 @@ goog.i18n.DateTimePatterns_chr = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -993,7 +1043,8 @@ goog.i18n.DateTimePatterns_chr_US = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1005,7 +1056,8 @@ goog.i18n.DateTimePatterns_cs_CZ = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1017,7 +1069,8 @@ goog.i18n.DateTimePatterns_cy = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1029,7 +1082,8 @@ goog.i18n.DateTimePatterns_cy_GB = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1041,7 +1095,8 @@ goog.i18n.DateTimePatterns_da_DK = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd.'
 };
 
 
@@ -1053,7 +1108,8 @@ goog.i18n.DateTimePatterns_dav = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1065,7 +1121,8 @@ goog.i18n.DateTimePatterns_dav_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1077,7 +1134,8 @@ goog.i18n.DateTimePatterns_de_BE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1089,7 +1147,8 @@ goog.i18n.DateTimePatterns_de_DE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1101,7 +1160,8 @@ goog.i18n.DateTimePatterns_de_LI = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1113,7 +1173,8 @@ goog.i18n.DateTimePatterns_de_LU = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1125,7 +1186,8 @@ goog.i18n.DateTimePatterns_ebu = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1137,7 +1199,8 @@ goog.i18n.DateTimePatterns_ebu_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1149,7 +1212,8 @@ goog.i18n.DateTimePatterns_ee = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1161,7 +1225,8 @@ goog.i18n.DateTimePatterns_ee_GH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1173,7 +1238,8 @@ goog.i18n.DateTimePatterns_ee_TG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1185,7 +1251,8 @@ goog.i18n.DateTimePatterns_el_CY = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1197,7 +1264,8 @@ goog.i18n.DateTimePatterns_el_GR = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1209,7 +1277,8 @@ goog.i18n.DateTimePatterns_en_BE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1221,7 +1290,8 @@ goog.i18n.DateTimePatterns_en_BW = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1233,7 +1303,8 @@ goog.i18n.DateTimePatterns_en_BZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1245,7 +1316,8 @@ goog.i18n.DateTimePatterns_en_CA = {
   YEAR_MONTH_ABBR: 'MMM-y',
   YEAR_MONTH_FULL: 'MMMM-yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1257,7 +1329,8 @@ goog.i18n.DateTimePatterns_en_HK = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1269,7 +1342,8 @@ goog.i18n.DateTimePatterns_en_JM = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1281,7 +1355,8 @@ goog.i18n.DateTimePatterns_en_MH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1293,7 +1368,8 @@ goog.i18n.DateTimePatterns_en_MT = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1305,7 +1381,8 @@ goog.i18n.DateTimePatterns_en_MU = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1317,7 +1394,8 @@ goog.i18n.DateTimePatterns_en_NA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1329,7 +1407,8 @@ goog.i18n.DateTimePatterns_en_NZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1341,7 +1420,8 @@ goog.i18n.DateTimePatterns_en_PH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1353,7 +1433,8 @@ goog.i18n.DateTimePatterns_en_PK = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1365,7 +1446,8 @@ goog.i18n.DateTimePatterns_en_TT = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1377,7 +1459,8 @@ goog.i18n.DateTimePatterns_en_US_POSIX = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1389,7 +1472,8 @@ goog.i18n.DateTimePatterns_en_VI = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1401,7 +1485,8 @@ goog.i18n.DateTimePatterns_en_ZW = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1413,7 +1498,8 @@ goog.i18n.DateTimePatterns_eo = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1425,7 +1511,8 @@ goog.i18n.DateTimePatterns_es_AR = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1437,7 +1524,8 @@ goog.i18n.DateTimePatterns_es_BO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1449,7 +1537,8 @@ goog.i18n.DateTimePatterns_es_CL = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1461,7 +1550,8 @@ goog.i18n.DateTimePatterns_es_CO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1473,7 +1563,8 @@ goog.i18n.DateTimePatterns_es_CR = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1485,7 +1576,8 @@ goog.i18n.DateTimePatterns_es_DO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1497,7 +1589,8 @@ goog.i18n.DateTimePatterns_es_EC = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1509,7 +1602,8 @@ goog.i18n.DateTimePatterns_es_ES = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1521,7 +1615,8 @@ goog.i18n.DateTimePatterns_es_GQ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1533,7 +1628,8 @@ goog.i18n.DateTimePatterns_es_GT = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1545,7 +1641,8 @@ goog.i18n.DateTimePatterns_es_HN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1557,7 +1654,8 @@ goog.i18n.DateTimePatterns_es_MX = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1569,7 +1667,8 @@ goog.i18n.DateTimePatterns_es_NI = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1581,7 +1680,8 @@ goog.i18n.DateTimePatterns_es_PA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1593,7 +1693,8 @@ goog.i18n.DateTimePatterns_es_PE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1605,7 +1706,8 @@ goog.i18n.DateTimePatterns_es_PR = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1617,7 +1719,8 @@ goog.i18n.DateTimePatterns_es_PY = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1629,7 +1732,8 @@ goog.i18n.DateTimePatterns_es_SV = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1641,7 +1745,8 @@ goog.i18n.DateTimePatterns_es_US = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1653,7 +1758,8 @@ goog.i18n.DateTimePatterns_es_UY = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1665,7 +1771,8 @@ goog.i18n.DateTimePatterns_es_VE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1677,7 +1784,8 @@ goog.i18n.DateTimePatterns_et_EE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1689,7 +1797,8 @@ goog.i18n.DateTimePatterns_eu_ES = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1701,7 +1810,8 @@ goog.i18n.DateTimePatterns_fa_AF = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd LLL',
-  MONTH_DAY_FULL: 'dd LLLL'
+  MONTH_DAY_FULL: 'dd LLLL',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1713,7 +1823,8 @@ goog.i18n.DateTimePatterns_fa_IR = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd LLL',
-  MONTH_DAY_FULL: 'dd LLLL'
+  MONTH_DAY_FULL: 'dd LLLL',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1725,7 +1836,8 @@ goog.i18n.DateTimePatterns_ff = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1737,7 +1849,8 @@ goog.i18n.DateTimePatterns_ff_SN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1749,7 +1862,8 @@ goog.i18n.DateTimePatterns_fi_FI = {
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1761,7 +1875,8 @@ goog.i18n.DateTimePatterns_fil_PH = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1773,7 +1888,8 @@ goog.i18n.DateTimePatterns_fo = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1785,7 +1901,8 @@ goog.i18n.DateTimePatterns_fo_FO = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1797,7 +1914,8 @@ goog.i18n.DateTimePatterns_fr_BE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1809,7 +1927,8 @@ goog.i18n.DateTimePatterns_fr_BL = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1821,7 +1940,8 @@ goog.i18n.DateTimePatterns_fr_CF = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1833,7 +1953,8 @@ goog.i18n.DateTimePatterns_fr_CH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1845,7 +1966,8 @@ goog.i18n.DateTimePatterns_fr_CI = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1857,7 +1979,8 @@ goog.i18n.DateTimePatterns_fr_CM = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1869,7 +1992,8 @@ goog.i18n.DateTimePatterns_fr_FR = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1881,7 +2005,8 @@ goog.i18n.DateTimePatterns_fr_GN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1893,7 +2018,8 @@ goog.i18n.DateTimePatterns_fr_GP = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1905,7 +2031,8 @@ goog.i18n.DateTimePatterns_fr_LU = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1917,7 +2044,8 @@ goog.i18n.DateTimePatterns_fr_MC = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1929,7 +2057,8 @@ goog.i18n.DateTimePatterns_fr_MF = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1941,7 +2070,8 @@ goog.i18n.DateTimePatterns_fr_MG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1953,7 +2083,8 @@ goog.i18n.DateTimePatterns_fr_ML = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1965,7 +2096,8 @@ goog.i18n.DateTimePatterns_fr_MQ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1977,7 +2109,8 @@ goog.i18n.DateTimePatterns_fr_NE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -1989,7 +2122,8 @@ goog.i18n.DateTimePatterns_fr_RE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2001,7 +2135,8 @@ goog.i18n.DateTimePatterns_fr_SN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2013,7 +2148,8 @@ goog.i18n.DateTimePatterns_ga = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2025,7 +2161,8 @@ goog.i18n.DateTimePatterns_ga_IE = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2037,7 +2174,8 @@ goog.i18n.DateTimePatterns_gl_ES = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2049,7 +2187,8 @@ goog.i18n.DateTimePatterns_gsw_CH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2061,7 +2200,8 @@ goog.i18n.DateTimePatterns_gu_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2073,7 +2213,8 @@ goog.i18n.DateTimePatterns_guz = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2085,7 +2226,8 @@ goog.i18n.DateTimePatterns_guz_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2097,7 +2239,8 @@ goog.i18n.DateTimePatterns_gv = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2109,7 +2252,8 @@ goog.i18n.DateTimePatterns_gv_GB = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2121,7 +2265,8 @@ goog.i18n.DateTimePatterns_ha = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2133,7 +2278,8 @@ goog.i18n.DateTimePatterns_ha_Latn = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2145,7 +2291,8 @@ goog.i18n.DateTimePatterns_ha_Latn_GH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2157,7 +2304,8 @@ goog.i18n.DateTimePatterns_ha_Latn_NE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2169,7 +2317,8 @@ goog.i18n.DateTimePatterns_ha_Latn_NG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2181,7 +2330,8 @@ goog.i18n.DateTimePatterns_haw = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2193,7 +2343,8 @@ goog.i18n.DateTimePatterns_haw_US = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2205,7 +2356,8 @@ goog.i18n.DateTimePatterns_he_IL = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd בMMM',
-  MONTH_DAY_FULL: 'dd בMMMM'
+  MONTH_DAY_FULL: 'dd בMMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2217,7 +2369,8 @@ goog.i18n.DateTimePatterns_hi_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2229,7 +2382,8 @@ goog.i18n.DateTimePatterns_hr_HR = {
   YEAR_MONTH_ABBR: 'MMM.y.',
   YEAR_MONTH_FULL: 'MMMM.yyyy.',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd.'
 };
 
 
@@ -2241,7 +2395,8 @@ goog.i18n.DateTimePatterns_hu_HU = {
   YEAR_MONTH_ABBR: 'y. MMM',
   YEAR_MONTH_FULL: 'y. MMMM',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2253,7 +2408,8 @@ goog.i18n.DateTimePatterns_hy = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2265,7 +2421,8 @@ goog.i18n.DateTimePatterns_hy_AM = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2277,7 +2434,8 @@ goog.i18n.DateTimePatterns_id_ID = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2289,7 +2447,8 @@ goog.i18n.DateTimePatterns_ig = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2301,7 +2460,8 @@ goog.i18n.DateTimePatterns_ig_NG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2313,7 +2473,8 @@ goog.i18n.DateTimePatterns_ii = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2325,7 +2486,8 @@ goog.i18n.DateTimePatterns_ii_CN = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2337,7 +2499,8 @@ goog.i18n.DateTimePatterns_is_IS = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2349,7 +2512,8 @@ goog.i18n.DateTimePatterns_it_CH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2361,7 +2525,8 @@ goog.i18n.DateTimePatterns_it_IT = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2373,7 +2538,8 @@ goog.i18n.DateTimePatterns_ja_JP = {
   YEAR_MONTH_ABBR: 'y年M月',
   YEAR_MONTH_FULL: 'yyyy年M月',
   MONTH_DAY_ABBR: 'M月d日',
-  MONTH_DAY_FULL: 'M月dd日'
+  MONTH_DAY_FULL: 'M月dd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -2385,7 +2551,8 @@ goog.i18n.DateTimePatterns_jmc = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2397,7 +2564,8 @@ goog.i18n.DateTimePatterns_jmc_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2409,7 +2577,8 @@ goog.i18n.DateTimePatterns_ka = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2421,7 +2590,8 @@ goog.i18n.DateTimePatterns_ka_GE = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2433,7 +2603,8 @@ goog.i18n.DateTimePatterns_kab = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2445,7 +2616,8 @@ goog.i18n.DateTimePatterns_kab_DZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2457,7 +2629,8 @@ goog.i18n.DateTimePatterns_kam = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2469,7 +2642,8 @@ goog.i18n.DateTimePatterns_kam_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2481,7 +2655,8 @@ goog.i18n.DateTimePatterns_kde = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2493,7 +2668,8 @@ goog.i18n.DateTimePatterns_kde_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2505,7 +2681,8 @@ goog.i18n.DateTimePatterns_kea = {
   YEAR_MONTH_ABBR: 'MMM \'de\' y',
   YEAR_MONTH_FULL: 'MMMM \'de\' yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2517,7 +2694,8 @@ goog.i18n.DateTimePatterns_kea_CV = {
   YEAR_MONTH_ABBR: 'MMM \'de\' y',
   YEAR_MONTH_FULL: 'MMMM \'de\' yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2529,7 +2707,8 @@ goog.i18n.DateTimePatterns_khq = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2541,7 +2720,8 @@ goog.i18n.DateTimePatterns_khq_ML = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2553,7 +2733,8 @@ goog.i18n.DateTimePatterns_ki = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2565,7 +2746,8 @@ goog.i18n.DateTimePatterns_ki_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2577,7 +2759,8 @@ goog.i18n.DateTimePatterns_kk = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2589,7 +2772,8 @@ goog.i18n.DateTimePatterns_kk_Cyrl = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2601,7 +2785,8 @@ goog.i18n.DateTimePatterns_kk_Cyrl_KZ = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2613,7 +2798,8 @@ goog.i18n.DateTimePatterns_kl = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2625,7 +2811,8 @@ goog.i18n.DateTimePatterns_kl_GL = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2637,7 +2824,8 @@ goog.i18n.DateTimePatterns_kln = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2649,7 +2837,8 @@ goog.i18n.DateTimePatterns_kln_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2661,7 +2850,8 @@ goog.i18n.DateTimePatterns_km = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2673,7 +2863,8 @@ goog.i18n.DateTimePatterns_km_KH = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2685,7 +2876,8 @@ goog.i18n.DateTimePatterns_kn_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2697,7 +2889,8 @@ goog.i18n.DateTimePatterns_ko_KR = {
   YEAR_MONTH_ABBR: 'y년 MMM',
   YEAR_MONTH_FULL: 'yyyy년 MMMM',
   MONTH_DAY_ABBR: 'MMM d일',
-  MONTH_DAY_FULL: 'MMMM dd일'
+  MONTH_DAY_FULL: 'MMMM dd일',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2709,7 +2902,8 @@ goog.i18n.DateTimePatterns_kok = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2721,7 +2915,8 @@ goog.i18n.DateTimePatterns_kok_IN = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2733,7 +2928,8 @@ goog.i18n.DateTimePatterns_kw = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2745,7 +2941,8 @@ goog.i18n.DateTimePatterns_kw_GB = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2757,7 +2954,8 @@ goog.i18n.DateTimePatterns_lag = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2769,7 +2967,8 @@ goog.i18n.DateTimePatterns_lag_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2781,7 +2980,8 @@ goog.i18n.DateTimePatterns_lg = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2793,7 +2993,8 @@ goog.i18n.DateTimePatterns_lg_UG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2805,7 +3006,8 @@ goog.i18n.DateTimePatterns_lt_LT = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM-d',
-  MONTH_DAY_FULL: 'MMMM-dd'
+  MONTH_DAY_FULL: 'MMMM-dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2817,7 +3019,8 @@ goog.i18n.DateTimePatterns_luo = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2829,7 +3032,8 @@ goog.i18n.DateTimePatterns_luo_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2841,7 +3045,8 @@ goog.i18n.DateTimePatterns_luy = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2853,7 +3058,8 @@ goog.i18n.DateTimePatterns_luy_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2865,7 +3071,8 @@ goog.i18n.DateTimePatterns_lv_LV = {
   YEAR_MONTH_ABBR: 'yyyy. \'g\'. MMM',
   YEAR_MONTH_FULL: 'yyyy. \'g\'. MMMM',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2877,7 +3084,8 @@ goog.i18n.DateTimePatterns_mas = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2889,7 +3097,8 @@ goog.i18n.DateTimePatterns_mas_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2901,7 +3110,8 @@ goog.i18n.DateTimePatterns_mas_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2913,7 +3123,8 @@ goog.i18n.DateTimePatterns_mer = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2925,7 +3136,8 @@ goog.i18n.DateTimePatterns_mer_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2937,7 +3149,8 @@ goog.i18n.DateTimePatterns_mfe = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2949,7 +3162,8 @@ goog.i18n.DateTimePatterns_mfe_MU = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2961,7 +3175,8 @@ goog.i18n.DateTimePatterns_mg = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2973,7 +3188,8 @@ goog.i18n.DateTimePatterns_mg_MG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2985,7 +3201,8 @@ goog.i18n.DateTimePatterns_mk = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -2997,7 +3214,8 @@ goog.i18n.DateTimePatterns_mk_MK = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3009,7 +3227,8 @@ goog.i18n.DateTimePatterns_ml_IN = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3021,7 +3240,8 @@ goog.i18n.DateTimePatterns_mr_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3033,7 +3253,8 @@ goog.i18n.DateTimePatterns_ms_BN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3045,7 +3266,8 @@ goog.i18n.DateTimePatterns_ms_MY = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3057,7 +3279,8 @@ goog.i18n.DateTimePatterns_mt_MT = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3069,7 +3292,8 @@ goog.i18n.DateTimePatterns_naq = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3081,7 +3305,8 @@ goog.i18n.DateTimePatterns_naq_NA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3093,7 +3318,8 @@ goog.i18n.DateTimePatterns_nb = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd.'
 };
 
 
@@ -3105,7 +3331,8 @@ goog.i18n.DateTimePatterns_nb_NO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd.'
 };
 
 
@@ -3117,7 +3344,8 @@ goog.i18n.DateTimePatterns_nd = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3129,7 +3357,8 @@ goog.i18n.DateTimePatterns_nd_ZW = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3141,7 +3370,8 @@ goog.i18n.DateTimePatterns_ne = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3153,7 +3383,8 @@ goog.i18n.DateTimePatterns_ne_IN = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3165,7 +3396,8 @@ goog.i18n.DateTimePatterns_ne_NP = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3177,7 +3409,8 @@ goog.i18n.DateTimePatterns_nl_BE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3189,7 +3422,8 @@ goog.i18n.DateTimePatterns_nl_NL = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3201,7 +3435,8 @@ goog.i18n.DateTimePatterns_nn = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3213,7 +3448,8 @@ goog.i18n.DateTimePatterns_nn_NO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3225,7 +3461,8 @@ goog.i18n.DateTimePatterns_nyn = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3237,7 +3474,8 @@ goog.i18n.DateTimePatterns_nyn_UG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3249,7 +3487,8 @@ goog.i18n.DateTimePatterns_om = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3261,7 +3500,8 @@ goog.i18n.DateTimePatterns_om_ET = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3273,7 +3513,8 @@ goog.i18n.DateTimePatterns_om_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3285,7 +3526,8 @@ goog.i18n.DateTimePatterns_or_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3297,7 +3539,8 @@ goog.i18n.DateTimePatterns_pa = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3309,7 +3552,8 @@ goog.i18n.DateTimePatterns_pa_Arab = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3321,7 +3565,8 @@ goog.i18n.DateTimePatterns_pa_Arab_PK = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3333,7 +3578,8 @@ goog.i18n.DateTimePatterns_pa_Guru = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3345,7 +3591,8 @@ goog.i18n.DateTimePatterns_pa_Guru_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3357,7 +3604,8 @@ goog.i18n.DateTimePatterns_pl_PL = {
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3369,7 +3617,8 @@ goog.i18n.DateTimePatterns_ps = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3381,7 +3630,8 @@ goog.i18n.DateTimePatterns_ps_AF = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3393,7 +3643,8 @@ goog.i18n.DateTimePatterns_pt_GW = {
   YEAR_MONTH_ABBR: 'MMM \'de\' y',
   YEAR_MONTH_FULL: 'MMMM \'de\' yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3405,7 +3656,8 @@ goog.i18n.DateTimePatterns_pt_MZ = {
   YEAR_MONTH_ABBR: 'MMM \'de\' y',
   YEAR_MONTH_FULL: 'MMMM \'de\' yyyy',
   MONTH_DAY_ABBR: 'd \'de\' MMM',
-  MONTH_DAY_FULL: 'dd \'de\' MMMM'
+  MONTH_DAY_FULL: 'dd \'de\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3417,7 +3669,8 @@ goog.i18n.DateTimePatterns_rm = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3429,7 +3682,8 @@ goog.i18n.DateTimePatterns_rm_CH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3441,7 +3695,8 @@ goog.i18n.DateTimePatterns_ro_MD = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3453,7 +3708,8 @@ goog.i18n.DateTimePatterns_ro_RO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3465,7 +3721,8 @@ goog.i18n.DateTimePatterns_rof = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3477,7 +3734,8 @@ goog.i18n.DateTimePatterns_rof_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3489,7 +3747,8 @@ goog.i18n.DateTimePatterns_ru_MD = {
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3501,7 +3760,8 @@ goog.i18n.DateTimePatterns_ru_RU = {
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3513,7 +3773,8 @@ goog.i18n.DateTimePatterns_ru_UA = {
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3525,7 +3786,8 @@ goog.i18n.DateTimePatterns_rw = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3537,7 +3799,8 @@ goog.i18n.DateTimePatterns_rw_RW = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3549,7 +3812,8 @@ goog.i18n.DateTimePatterns_rwk = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3561,7 +3825,8 @@ goog.i18n.DateTimePatterns_rwk_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3573,7 +3838,8 @@ goog.i18n.DateTimePatterns_saq = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3585,7 +3851,8 @@ goog.i18n.DateTimePatterns_saq_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3597,7 +3864,8 @@ goog.i18n.DateTimePatterns_seh = {
   YEAR_MONTH_ABBR: 'MMM \'de\' y',
   YEAR_MONTH_FULL: 'MMMM \'de\' yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3609,7 +3877,8 @@ goog.i18n.DateTimePatterns_seh_MZ = {
   YEAR_MONTH_ABBR: 'MMM \'de\' y',
   YEAR_MONTH_FULL: 'MMMM \'de\' yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3621,7 +3890,8 @@ goog.i18n.DateTimePatterns_ses = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3633,7 +3903,8 @@ goog.i18n.DateTimePatterns_ses_ML = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3645,7 +3916,8 @@ goog.i18n.DateTimePatterns_sg = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3657,7 +3929,8 @@ goog.i18n.DateTimePatterns_sg_CF = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3669,7 +3942,8 @@ goog.i18n.DateTimePatterns_shi = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3681,7 +3955,8 @@ goog.i18n.DateTimePatterns_shi_Latn = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3693,7 +3968,8 @@ goog.i18n.DateTimePatterns_shi_Latn_MA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3705,7 +3981,8 @@ goog.i18n.DateTimePatterns_shi_Tfng = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3717,7 +3994,8 @@ goog.i18n.DateTimePatterns_shi_Tfng_MA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3729,7 +4007,8 @@ goog.i18n.DateTimePatterns_si = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3741,7 +4020,8 @@ goog.i18n.DateTimePatterns_si_LK = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3753,7 +4033,8 @@ goog.i18n.DateTimePatterns_sk_SK = {
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL yyyy',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd.'
 };
 
 
@@ -3765,7 +4046,8 @@ goog.i18n.DateTimePatterns_sl_SI = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd. MMM',
-  MONTH_DAY_FULL: 'dd. MMMM'
+  MONTH_DAY_FULL: 'dd. MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3777,7 +4059,8 @@ goog.i18n.DateTimePatterns_sn = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3789,7 +4072,8 @@ goog.i18n.DateTimePatterns_sn_ZW = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3801,7 +4085,8 @@ goog.i18n.DateTimePatterns_so = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3813,7 +4098,8 @@ goog.i18n.DateTimePatterns_so_DJ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3825,7 +4111,8 @@ goog.i18n.DateTimePatterns_so_ET = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3837,7 +4124,8 @@ goog.i18n.DateTimePatterns_so_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3849,7 +4137,8 @@ goog.i18n.DateTimePatterns_so_SO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3861,7 +4150,8 @@ goog.i18n.DateTimePatterns_sq_AL = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3873,7 +4163,8 @@ goog.i18n.DateTimePatterns_sr_Cyrl = {
   YEAR_MONTH_ABBR: 'MMM. y',
   YEAR_MONTH_FULL: 'MMMM. yyyy',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3885,7 +4176,8 @@ goog.i18n.DateTimePatterns_sr_Cyrl_BA = {
   YEAR_MONTH_ABBR: 'MMM. y',
   YEAR_MONTH_FULL: 'MMMM. yyyy',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3897,7 +4189,8 @@ goog.i18n.DateTimePatterns_sr_Cyrl_ME = {
   YEAR_MONTH_ABBR: 'MMM. y',
   YEAR_MONTH_FULL: 'MMMM. yyyy',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3909,7 +4202,8 @@ goog.i18n.DateTimePatterns_sr_Cyrl_RS = {
   YEAR_MONTH_ABBR: 'MMM. y',
   YEAR_MONTH_FULL: 'MMMM. yyyy',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3921,7 +4215,8 @@ goog.i18n.DateTimePatterns_sr_Latn = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3933,7 +4228,8 @@ goog.i18n.DateTimePatterns_sr_Latn_BA = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3945,7 +4241,8 @@ goog.i18n.DateTimePatterns_sr_Latn_ME = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3957,7 +4254,8 @@ goog.i18n.DateTimePatterns_sr_Latn_RS = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d.',
-  MONTH_DAY_FULL: 'MMMM dd.'
+  MONTH_DAY_FULL: 'MMMM dd.',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3969,7 +4267,8 @@ goog.i18n.DateTimePatterns_sv_FI = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'd:\'e\' MMM',
-  MONTH_DAY_FULL: 'dd:\'e\' MMMM'
+  MONTH_DAY_FULL: 'dd:\'e\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3981,7 +4280,8 @@ goog.i18n.DateTimePatterns_sv_SE = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'd:\'e\' MMM',
-  MONTH_DAY_FULL: 'dd:\'e\' MMMM'
+  MONTH_DAY_FULL: 'dd:\'e\' MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -3993,7 +4293,8 @@ goog.i18n.DateTimePatterns_sw_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4005,7 +4306,8 @@ goog.i18n.DateTimePatterns_sw_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4017,7 +4319,8 @@ goog.i18n.DateTimePatterns_ta_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4029,7 +4332,8 @@ goog.i18n.DateTimePatterns_ta_LK = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4041,7 +4345,8 @@ goog.i18n.DateTimePatterns_te_IN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4053,7 +4358,8 @@ goog.i18n.DateTimePatterns_teo = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4065,7 +4371,8 @@ goog.i18n.DateTimePatterns_teo_KE = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4077,7 +4384,8 @@ goog.i18n.DateTimePatterns_teo_UG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4089,7 +4397,8 @@ goog.i18n.DateTimePatterns_th_TH = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4101,7 +4410,8 @@ goog.i18n.DateTimePatterns_ti = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4113,7 +4423,8 @@ goog.i18n.DateTimePatterns_ti_ER = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4125,7 +4436,8 @@ goog.i18n.DateTimePatterns_ti_ET = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM y',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4137,7 +4449,8 @@ goog.i18n.DateTimePatterns_tl_PH = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4149,7 +4462,8 @@ goog.i18n.DateTimePatterns_to = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4161,7 +4475,8 @@ goog.i18n.DateTimePatterns_to_TO = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4173,7 +4488,8 @@ goog.i18n.DateTimePatterns_tr_TR = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'dd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4185,7 +4501,8 @@ goog.i18n.DateTimePatterns_tzm = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4197,7 +4514,8 @@ goog.i18n.DateTimePatterns_tzm_Latn = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4209,7 +4527,8 @@ goog.i18n.DateTimePatterns_tzm_Latn_MA = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4221,7 +4540,8 @@ goog.i18n.DateTimePatterns_uk_UA = {
   YEAR_MONTH_ABBR: 'LLL y',
   YEAR_MONTH_FULL: 'LLLL yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4233,7 +4553,8 @@ goog.i18n.DateTimePatterns_ur_IN = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4245,7 +4566,8 @@ goog.i18n.DateTimePatterns_ur_PK = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4257,7 +4579,8 @@ goog.i18n.DateTimePatterns_uz = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4269,7 +4592,8 @@ goog.i18n.DateTimePatterns_uz_Arab = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4281,7 +4605,8 @@ goog.i18n.DateTimePatterns_uz_Arab_AF = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4293,7 +4618,8 @@ goog.i18n.DateTimePatterns_uz_Cyrl = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4305,7 +4631,8 @@ goog.i18n.DateTimePatterns_uz_Cyrl_UZ = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4317,7 +4644,8 @@ goog.i18n.DateTimePatterns_uz_Latn = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4329,7 +4657,8 @@ goog.i18n.DateTimePatterns_uz_Latn_UZ = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4341,7 +4670,8 @@ goog.i18n.DateTimePatterns_vi_VN = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM'
+  MONTH_DAY_FULL: 'dd MMMM',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4353,7 +4683,8 @@ goog.i18n.DateTimePatterns_vun = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4365,7 +4696,8 @@ goog.i18n.DateTimePatterns_vun_TZ = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4377,7 +4709,8 @@ goog.i18n.DateTimePatterns_xog = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4389,7 +4722,8 @@ goog.i18n.DateTimePatterns_xog_UG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4401,7 +4735,8 @@ goog.i18n.DateTimePatterns_yo = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4413,7 +4748,8 @@ goog.i18n.DateTimePatterns_yo_NG = {
   YEAR_MONTH_ABBR: 'MMM y',
   YEAR_MONTH_FULL: 'MMMM yyyy',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4425,7 +4761,8 @@ goog.i18n.DateTimePatterns_zh_Hans = {
   YEAR_MONTH_ABBR: 'y年MMM',
   YEAR_MONTH_FULL: 'yyyy年MMMM',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4437,7 +4774,8 @@ goog.i18n.DateTimePatterns_zh_Hans_CN = {
   YEAR_MONTH_ABBR: 'y年MMM',
   YEAR_MONTH_FULL: 'yyyy年MMMM',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4449,7 +4787,8 @@ goog.i18n.DateTimePatterns_zh_Hans_HK = {
   YEAR_MONTH_ABBR: 'y年MMM',
   YEAR_MONTH_FULL: 'yyyy年MMMM',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4461,7 +4800,8 @@ goog.i18n.DateTimePatterns_zh_Hans_MO = {
   YEAR_MONTH_ABBR: 'y年MMM',
   YEAR_MONTH_FULL: 'yyyy年MMMM',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4473,7 +4813,8 @@ goog.i18n.DateTimePatterns_zh_Hans_SG = {
   YEAR_MONTH_ABBR: 'y年MMM',
   YEAR_MONTH_FULL: 'yyyy年MMMM',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4485,7 +4826,8 @@ goog.i18n.DateTimePatterns_zh_Hant = {
   YEAR_MONTH_ABBR: 'y年M月',
   YEAR_MONTH_FULL: 'yyyy年M月',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4497,7 +4839,8 @@ goog.i18n.DateTimePatterns_zh_Hant_HK = {
   YEAR_MONTH_ABBR: 'y年M月',
   YEAR_MONTH_FULL: 'yyyy年M月',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4509,7 +4852,8 @@ goog.i18n.DateTimePatterns_zh_Hant_MO = {
   YEAR_MONTH_ABBR: 'y年M月',
   YEAR_MONTH_FULL: 'yyyy年M月',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4521,7 +4865,8 @@ goog.i18n.DateTimePatterns_zh_Hant_TW = {
   YEAR_MONTH_ABBR: 'y年M月',
   YEAR_MONTH_FULL: 'yyyy年M月',
   MONTH_DAY_ABBR: 'MMMd日',
-  MONTH_DAY_FULL: 'MMMMdd日'
+  MONTH_DAY_FULL: 'MMMMdd日',
+  DAY_ABBR: 'd日'
 };
 
 
@@ -4533,7 +4878,8 @@ goog.i18n.DateTimePatterns_zu = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 
@@ -4545,7 +4891,8 @@ goog.i18n.DateTimePatterns_zu_ZA = {
   YEAR_MONTH_ABBR: 'y MMM',
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM d',
-  MONTH_DAY_FULL: 'MMMM dd'
+  MONTH_DAY_FULL: 'MMMM dd',
+  DAY_ABBR: 'd'
 };
 
 

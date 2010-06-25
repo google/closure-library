@@ -243,6 +243,8 @@ goog.editor.BrowserFeature = {
 
   // Implements this spec about dragging files from the filesystem to the
   // browser: http://www.whatwg/org/specs/web-apps/current-work/#dnd
-  SUPPORTS_HTML5_FILE_DRAGGING: goog.userAgent.product.CHROME &&
-      goog.userAgent.product.isVersion('4')
+  SUPPORTS_HTML5_FILE_DRAGGING: (goog.userAgent.product.CHROME &&
+                                 goog.userAgent.product.isVersion('4')) ||
+      (goog.userAgent.product.SAFARI && goog.userAgent.product.isVersion('533'))
+
 };

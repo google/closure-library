@@ -1019,3 +1019,36 @@ function testHtmlToDocumentFragment() {
     assertNull(div.parentNode);
   }
 }
+
+function testAppend() {
+  var div = document.createElement('div');
+  var b = document.createElement('b');
+  var c = document.createTextNode('c');
+  goog.dom.append(div, 'a', b, c);
+  assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);
+}
+
+function testAppend2() {
+  var div = myIframeDoc.createElement('div');
+  var b = myIframeDoc.createElement('b');
+  var c = myIframeDoc.createTextNode('c');
+  goog.dom.append(div, 'a', b, c);
+  assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);
+}
+
+function testAppend3() {
+  var div = document.createElement('div');
+  var b = document.createElement('b');
+  var c = document.createTextNode('c');
+  goog.dom.append(div, ['a', b, c]);
+  assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);
+}
+
+function testAppend4() {
+  var div = document.createElement('div');
+  var div2 = document.createElement('div');
+  div2.innerHTML = 'a<b></b>c';
+  goog.dom.append(div, div2.childNodes);
+  assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);
+  assertFalse(div2.hasChildNodes());
+}

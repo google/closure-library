@@ -44,6 +44,7 @@ goog.require('goog.array');
 goog.require('goog.object');
 goog.require('goog.testing.LooseMock');
 goog.require('goog.testing.StrictMock');
+goog.require('goog.testing.TestCase');
 goog.require('goog.testing.mockmatchers');
 
 
@@ -260,8 +261,8 @@ goog.testing.MockClassFactory.PROTOTYPE_FIELDS_ = [
  */
 goog.testing.MockClassFactory.prototype.getClassName_ = function(namespace,
     classToMock) {
-  if (namespace === goog.global && goog.global['RuntimeObject']) {
-    namespace = goog.global['RuntimeObject']('*');
+  if (namespace === goog.global) {
+    namespace = goog.testing.TestCase.getGlobals();
   }
   for (var prop in namespace) {
     if (namespace[prop] === classToMock) {

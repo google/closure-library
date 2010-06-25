@@ -11,12 +11,24 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.array');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
 <script>
+
+var propertyReplacer;
+
+function setUp() {
+}
+
+function tearDown() {
+  if (propertyReplacer) {
+    propertyReplacer.reset();
+  }
+}
 
 function testArrayIndexOf() {
   assertEquals(goog.array.indexOf([0, 1, 2, 3], 1), 1);
@@ -999,6 +1011,31 @@ function testBinarySearch() {
       0, goog.array.binarySearch([0, 0, 1], 0));
   assertEquals('binarySearch should find the index of the first 1',
       1, goog.array.binarySearch([0, 1, 1], 1));
+}
+
+
+function testBinarySearchPerformance() {
+  // Ensure that Array#slice, Function#apply and Function#call are not called
+  // from within binarySearch, since they have performance implications in IE.
+
+  propertyReplacer = new goog.testing.PropertyReplacer();
+  propertyReplacer.replace(Array.prototype, 'slice', function() {
+    fail('Should not call Array#slice from binary search.');
+  });
+  propertyReplacer.replace(Function.prototype, 'apply', function() {
+    fail('Should not call Function#apply from binary search.');
+  });
+  propertyReplacer.replace(Function.prototype, 'call', function() {
+    fail('Should not call Function#call from binary search.');
+  });
+
+  var array = [1, 5, 7, 11, 13, 16, 19, 24, 28, 31, 33, 36, 40, 50, 52, 55];
+  // Test with the default comparison function.
+  goog.array.binarySearch(array, 48);
+  // Test with a custom comparison function.
+  goog.array.binarySearch(array, 13, function(a, b) {
+    return a > b ? 1 : a < b ? -1 : 0;
+  });
 }
 
 

@@ -43,6 +43,7 @@ goog.require('goog.ui.Popup');
 goog.require('goog.ui.PopupBase');
 
 
+
 /**
  * Tooltip widget. Can be attached to one or more elements and is shown, with a
  * slight delay, when the the cursor is over the element or the element gains
@@ -76,14 +77,6 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
   this.cursorPosition = new goog.math.Coordinate(1, 1);
 
   /**
-   * Active element reference. Used by the delayed show functionality to keep
-   * track of the element the mouse is over or the element with focus.
-   * @type {Element}
-   * @private
-   */
-  this.activeEl_ = null;
-
-  /**
    * Elements this widget is attached to.
    * @type {goog.structs.Set}
    * @private
@@ -112,6 +105,16 @@ goog.inherits(goog.ui.Tooltip, goog.ui.Popup);
  */
 goog.ui.Tooltip.activeInstances_ = [];
 
+
+/**
+ * Active element reference. Used by the delayed show functionality to keep
+ * track of the element the mouse is over or the element with focus.
+ * @type {Element}
+ * @private
+ */
+goog.ui.Tooltip.prototype.activeEl_ = null;
+
+
 /**
  * CSS class name for tooltip.
  *
@@ -119,13 +122,16 @@ goog.ui.Tooltip.activeInstances_ = [];
  */
 goog.ui.Tooltip.prototype.className = goog.getCssName('goog-tooltip');
 
+
 /**
- * Delay in milliseconds before tooltip is displayed for an element.
+ * Delay in milliseconds since the last mouseover or mousemove before the
+ * tooltip is displayed for an element.
  *
  * @type {number}
  * @private
  */
 goog.ui.Tooltip.prototype.showDelayMs_ = 500;
+
 
 /**
  * Timer for when to show.
@@ -135,6 +141,7 @@ goog.ui.Tooltip.prototype.showDelayMs_ = 500;
  */
 goog.ui.Tooltip.prototype.showTimer;
 
+
 /**
  * Delay in milliseconds before tooltips are hidden.
  *
@@ -143,6 +150,7 @@ goog.ui.Tooltip.prototype.showTimer;
  */
 goog.ui.Tooltip.prototype.hideDelayMs_ = 0;
 
+
 /**
  * Timer for when to hide.
  *
@@ -150,6 +158,7 @@ goog.ui.Tooltip.prototype.hideDelayMs_ = 0;
  * @protected
  */
 goog.ui.Tooltip.prototype.hideTimer;
+
 
 /**
  * Element that triggered the tooltip.  Note that if a second element triggers
@@ -160,6 +169,7 @@ goog.ui.Tooltip.prototype.hideTimer;
  * @protected
  */
 goog.ui.Tooltip.prototype.anchor;
+
 
 /**
  * Possible states for the tooltip to be in.
@@ -173,6 +183,7 @@ goog.ui.Tooltip.State = {
   UPDATING: 4 // waiting to show new hovercard while old one still showing.
 };
 
+
 /**
  * Whether the anchor has seen the cursor move or has received focus since the
  * tooltip was last shown. Used to ignore mouse over events triggered by view
@@ -182,12 +193,14 @@ goog.ui.Tooltip.State = {
  */
 goog.ui.Tooltip.prototype.seenInteraction_;
 
+
 /**
  * Whether the cursor must have moved before the tooltip will be shown.
  * @type {boolean|undefined}
  * @private
  */
 goog.ui.Tooltip.prototype.requireInteraction_;
+
 
 /**
  * If this tooltip's element contains another tooltip that becomes active, this
@@ -197,6 +210,7 @@ goog.ui.Tooltip.prototype.requireInteraction_;
  * @private
  */
 goog.ui.Tooltip.prototype.childTooltip_;
+
 
 /**
  * If this tooltip is inside another tooltip's element, then it may have

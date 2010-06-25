@@ -1041,8 +1041,7 @@ goog.editor.plugins.BasicTextFormatter.blockquoteHatingCommandsIE_ = {
  * @private
  */
 goog.editor.plugins.BasicTextFormatter.
-    prototype.applySubscriptSuperscriptWorkarounds_ =
-        function(command) {
+    prototype.applySubscriptSuperscriptWorkarounds_ = function(command) {
   if (!this.queryCommandValue(command)) {
     // The current selection doesn't currently have the requested
     // command, so we are applying it as opposed to removing it.

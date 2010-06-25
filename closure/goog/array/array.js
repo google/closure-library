@@ -841,7 +841,6 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
 /**
  * Searches the specified array for the specified target using the binary
  * search algorithm.  If no opt_compareFn is specified, elements are compared
- * using <code>goog.array.defaultCompare</code>, which compares the elements
  * using the built in < and > operators.  This will produce the expected
  * behavior for homogeneous arrays of String(s) and Number(s). The array
  * specified <b>must</b> be sorted in ascending order (as defined by the
@@ -850,6 +849,9 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
  * of these instances may be found.
  *
  * Runtime: O(log n)
+ *
+ * This is almost identical to the implementation of binarySelect below. They
+ * have not been unified for performance reasons.
  *
  * @param {goog.array.ArrayLike} arr The array to be searched.
  * @param {*} target The sought value.
@@ -863,8 +865,35 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
  *     iff target is found.
  */
 goog.array.binarySearch = function(arr, target, opt_compareFn) {
-  return goog.array.binarySelect(arr,
-      goog.partial(opt_compareFn || goog.array.defaultCompare, target));
+  var left = 0;  // inclusive
+  var right = arr.length;  // exclusive
+  var found;
+  while (left < right) {
+    var middle = (left + right) >> 1;
+    var compareResult;
+    var currentValue = arr[middle];
+    if (opt_compareFn) {
+      compareResult = opt_compareFn(target, currentValue);
+    } else {
+      // We assume that if a custom compare function was not provided, then the
+      // target is comparable with the built in < and > operators.
+      var comparableTarget = /** @type {string|number} */ (target);
+      // We inline the logic here rather than calling defaultCompare for
+      // performance reasons.
+      compareResult = comparableTarget > currentValue ? 1 :
+          comparableTarget < currentValue ? -1 : 0;
+    }
+    if (compareResult > 0) {
+      left = middle + 1;
+    } else {
+      right = middle;
+      // We are looking for the lowest index so we can't return immediately.
+      found = !compareResult;
+    }
+  }
+  // left is the index if found, or the insertion point otherwise.
+  // ~left is a shorthand for -left - 1.
+  return found ? left : ~left;
 };
 
 
@@ -1190,9 +1219,9 @@ goog.array.rotate = function(array, n) {
 
 /**
  * Creates a new array for which the element at position i is an array of the
- * ith element of the provided arrays.  The returned array will only be as long 
- * as the shortest array provided; additional values are ignored.  For example, 
- * the result of zipping [1, 2] and [3, 4, 5] is [[1,3], [2, 4]].  
+ * ith element of the provided arrays.  The returned array will only be as long
+ * as the shortest array provided; additional values are ignored.  For example,
+ * the result of zipping [1, 2] and [3, 4, 5] is [[1,3], [2, 4]].
  *
  * This is similar to the zip() function in Python.  See {@link
  * http://docs.python.org/library/functions.html#zip}

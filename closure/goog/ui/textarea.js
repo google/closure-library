@@ -60,16 +60,6 @@ goog.inherits(goog.ui.Textarea, goog.ui.Control);
 
 
 /**
- * When the UA is <= IE7 we need to lose padding & border in getHeight_.
- * This is because -ms-box-sizing (which we set) didn't work until IE8.
- * @type {boolean}
- * @private
- */
-goog.ui.Textarea.NEEDS_PADDING_FIX_ = goog.userAgent.IE &&
-    !goog.userAgent.isVersion('8') && goog.dom.isCss1CompatMode();
-
-
-/**
  * Some UAs will shrink the textarea automatically, some won't.
  * @type {boolean}
  * @private
@@ -114,11 +104,28 @@ goog.ui.Textarea.prototype.minHeight_ = 0;
 
 
 /**
- * Whether or not scrollHeight behavior has been discovered.
+ * Whether or not textarea rendering characteristics have been discovered.
+ * Specifically we determine, at runtime:
+ *    If the padding and border box is included in offsetHeight.
+ *    @see {goog.ui.Textarea.prototype.needsPaddingBorderFix_}
+ *    If the padding and border box is included in scrollHeight.
+ *    @see {goog.ui.Textarea.prototype.scrollHeightIncludesPadding_} and
+ *    @see {goog.ui.Textarea.prototype.scrollHeightIncludesBorder_}
+ * TODO(user): See if we can determine goog.ui.Textarea.NEEDS_HELP_SHRINKING_.
  * @type {boolean}
  * @private
  */
-goog.ui.Textarea.prototype.hasDiscoveredScrollHeightBehavior_ = false;
+goog.ui.Textarea.prototype.hasDiscoveredTextareaCharacteristics_ = false;
+
+
+/**
+ * If a user agent doesn't correctly support the box-sizing:border-box CSS
+ * value then we'll need to adjust our height calculations.
+ * @see {goog.ui.Textarea.prototype.discoverTextareaCharacteristics_}
+ * @type {boolean}
+ * @private
+ */
+goog.ui.Textarea.prototype.needsPaddingBorderFix_ = false;
 
 
 /**
@@ -138,6 +145,20 @@ goog.ui.Textarea.prototype.scrollHeightIncludesBorder_ = false;
 
 
 /**
+ * @return {number} The padding plus the border box height.
+ * @private
+ */
+goog.ui.Textarea.prototype.getPaddingBorderBoxHeight_ = function() {
+  var textarea = this.getElement();
+  var paddingBox = goog.style.getPaddingBox(textarea);
+  var borderBox = goog.style.getBorderBox(textarea);
+  var paddingBorderBoxHeight = paddingBox.top + paddingBox.bottom +
+      borderBox.top + borderBox.bottom;
+  return paddingBorderBoxHeight;
+};
+
+
+/**
  * @return {number} The minHeight value.
  */
 goog.ui.Textarea.prototype.getMinHeight = function() {
@@ -152,12 +173,8 @@ goog.ui.Textarea.prototype.getMinHeight = function() {
 goog.ui.Textarea.prototype.getMinHeight_ = function() {
   var minHeight = this.minHeight_;
   var textarea = this.getElement();
-  if (minHeight && textarea && goog.ui.Textarea.NEEDS_PADDING_FIX_) {
-    var paddingBox = goog.style.getPaddingBox(textarea);
-    var borderBox = goog.style.getBorderBox(textarea);
-    var paddingBorderBoxHeight = paddingBox.top + paddingBox.bottom +
-        borderBox.top + borderBox.bottom;
-    minHeight -= paddingBorderBoxHeight;
+  if (minHeight && textarea && this.needsPaddingBorderFix_) {
+    minHeight -= this.getPaddingBorderBoxHeight_();
   }
   return minHeight;
 };
@@ -188,12 +205,8 @@ goog.ui.Textarea.prototype.getMaxHeight = function() {
 goog.ui.Textarea.prototype.getMaxHeight_ = function() {
   var maxHeight = this.maxHeight_;
   var textarea = this.getElement();
-  if (maxHeight && textarea && goog.ui.Textarea.NEEDS_PADDING_FIX_) {
-    var paddingBox = goog.style.getPaddingBox(textarea);
-    var borderBox = goog.style.getBorderBox(textarea);
-    var paddingBorderBoxHeight = paddingBox.top + paddingBox.bottom +
-        borderBox.top + borderBox.bottom;
-    maxHeight -= paddingBorderBoxHeight;
+  if (maxHeight && textarea && this.needsPaddingBorderFix_) {
+    maxHeight -= this.getPaddingBorderBoxHeight_();
   }
   return maxHeight;
 };
@@ -215,7 +228,7 @@ goog.ui.Textarea.prototype.setMaxHeight = function(height) {
  *     string by the browser when setting textarea.value.
  */
 goog.ui.Textarea.prototype.setValue = function(value) {
-  this.setContent(/** @type {goog.ui.ControlContent} */ (value));
+  this.setContent(String(value));
 };
 
 
@@ -284,17 +297,13 @@ goog.ui.Textarea.prototype.enterDocument = function() {
  * @private
  */
 goog.ui.Textarea.prototype.getHeight_ = function() {
-  this.discoverScrollHeightBehavior_();
+  this.discoverTextareaCharacteristics_();
   var textarea = this.getElement();
   // Accounts for a possible (though unlikely) horizontal scrollbar.
   var height = this.getElement().scrollHeight +
       this.getHorizontalScrollBarHeight_();
-  if (goog.ui.Textarea.NEEDS_PADDING_FIX_) {
-    var paddingBox = goog.style.getPaddingBox(textarea);
-    var borderBox = goog.style.getBorderBox(textarea);
-    var paddingBorderBoxHeight = paddingBox.top + paddingBox.bottom +
-        borderBox.top + borderBox.bottom;
-    height -= paddingBorderBoxHeight;
+  if (this.needsPaddingBorderFix_) {
+    height -= this.getPaddingBorderBoxHeight_();
   } else {
     if (!this.scrollHeightIncludesPadding_) {
       var paddingBox = goog.style.getPaddingBox(textarea);
@@ -365,14 +374,15 @@ goog.ui.Textarea.prototype.getHorizontalScrollBarHeight_ =
 /**
  * In order to assess the correct height for a textarea, we need to know
  * whether the scrollHeight (the full height of the text) property includes
- * the values for padding and borders. Instead of hardcoding a list of
- * currently known behaviors and testing for quirksmode, we do
- * a runtime check out of the flow. The performance impact should be very
- * small.
+ * the values for padding and borders. We can also test whether the
+ * box-sizing: border-box setting is working and then tweak accordingly.
+ * Instead of hardcoding a list of currently known behaviors and testing
+ * for quirksmode, we do a runtime check out of the flow. The performance
+ * impact should be very small.
  * @private
  */
-goog.ui.Textarea.prototype.discoverScrollHeightBehavior_ = function() {
-  if (!this.hasDiscoveredScrollHeightBehavior_) {
+goog.ui.Textarea.prototype.discoverTextareaCharacteristics_ = function() {
+  if (!this.hasDiscoveredTextareaCharacteristics_) {
     var textarea = /** @type {!Element} */ (this.getElement().cloneNode(false));
     // We need to overwrite/write box model specific styles that might
     // affect height.
@@ -398,8 +408,15 @@ goog.ui.Textarea.prototype.discoverScrollHeightBehavior_ = function() {
     var borderScrollHeight = textarea.scrollHeight;
     this.scrollHeightIncludesBorder_ = borderScrollHeight > initialScrollHeight;
 
+    // Tests if border-box sizing is working or not.
+    textarea.style.height = '100px';
+    var offsetHeightAtHeight100 = textarea.offsetHeight;
+    if (offsetHeightAtHeight100 != 100) {
+      this.needsPaddingBorderFix_ = true;
+    }
+
     goog.dom.removeNode(textarea);
-    this.hasDiscoveredScrollHeightBehavior_ = true;
+    this.hasDiscoveredTextareaCharacteristics_ = true;
   }
 };
 
@@ -510,19 +527,29 @@ goog.ui.Textarea.prototype.shrink_ = function() {
 /**
  * We use this listener to check if the textarea has been natively resized
  * and if so we reset minHeight so that we don't ever shrink smaller than
- * the user's manually set height.
+ * the user's manually set height. Note that we cannot check size on mousedown
+ * and then just compare here because we cannot capture mousedown on
+ * the textarea resizer, while mouseup fires reliably.
  * @param {goog.events.BrowserEvent} e The mousedown event.
  * @private
  */
 goog.ui.Textarea.prototype.mouseUpListener_ = function(e) {
   var textarea = this.getElement();
   var height = textarea.offsetHeight;
-  if (goog.ui.Textarea.NEEDS_PADDING_FIX_) {
-    var paddingBox = goog.style.getPaddingBox(textarea);
-    var borderBox = goog.style.getBorderBox(textarea);
-    var paddingBorderBoxHeight = paddingBox.top + paddingBox.bottom +
-        borderBox.top + borderBox.bottom;
+  if (this.needsPaddingBorderFix_) {
+    var paddingBorderBoxHeight =
+        this.getPaddingBorderBoxHeight_();
     height -= paddingBorderBoxHeight;
+  }
+
+  // This solves for when the MSIE DropShadow filter is enabled,
+  // as it affects the offsetHeight value, even with MsBoxSizing:border-box.
+  if (textarea['filters'] && textarea['filters'].length) {
+    var dropShadow =
+        textarea.filters.item('DXImageTransform.Microsoft.DropShadow');
+    if (dropShadow) {
+      height -= dropShadow.offX;
+    }
   }
 
   if (height != this.height_) {

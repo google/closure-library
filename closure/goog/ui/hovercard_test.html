@@ -41,7 +41,7 @@ See the COPYING file for details.
     it's a div</div>
   <script type="text/javascript">
 
-    var timer;
+    var timer = new goog.testing.MockClock();
     var card;
 
     // Variables for mocks
@@ -63,6 +63,7 @@ See the COPYING file for details.
     var offAnchor;
 
     function setUp() {
+      timer.install();
       triggeredElement = null;
       cancelledElement = null;
       showDelay = null;
@@ -74,7 +75,6 @@ See the COPYING file for details.
 
     function initCard(opt_isAnchor, opt_checkChildren, opt_maxSearchSteps) {
       var isAnchor = opt_isAnchor || {SPAN: 'email'};
-      timer = new goog.testing.MockClock(true);
       card = new goog.ui.HoverCard(isAnchor, opt_checkChildren);
       card.setText('Test hovercard');
 
@@ -116,22 +116,8 @@ See the COPYING file for details.
     }
 
     function tearDown() {
-      goog.events.unlisten(card, goog.ui.HoverCard.EventType.TRIGGER,
-                           onTrigger);
-      goog.events.unlisten(card, goog.ui.HoverCard.EventType.CANCEL_TRIGGER,
-                           onCancel);
-      goog.events.unlisten(card, goog.ui.HoverCard.EventType.BEFORE_SHOW,
-                           onBeforeShow);
-
-      card.onHide_();
-
-      // Ensure all attached elements have been detached.
-      assertTrue(card.elements_.isEmpty());
-
       card.dispose();
-      card = null;
-      timer.dispose();
-      timer = null;
+      timer.uninstall();
     }
 
     /**
@@ -319,7 +305,7 @@ See the COPYING file for details.
       triggeredElement = null;
       goog.testing.events.fireMouseOverEvent(child, james);
       assertNull("Shouldn't retrigger card", triggeredElement);
-      timer.tick(251);
+      timer.tick(250);
       assertTrue('Card should show with original delay', card.isVisible());
 
       hideDelay = 300;

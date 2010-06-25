@@ -163,13 +163,34 @@ goog.testing.events.fireDoubleClickSequence = function(
  */
 goog.testing.events.fireKeySequence = function(
     target, keyCode, opt_eventProperties) {
+  return goog.testing.events.fireNonAsciiKeySequence(target, keyCode, keyCode,
+                                                     opt_eventProperties);
+};
+
+
+/**
+ * Simulates a complete keystroke (keydown, keypress, and keyup) when typing
+ * a non-ASCII character. Same as fireKeySequence, the keypress will not fire
+ * if preventDefault is called on the keydown.
+ *
+ * @param {EventTarget} target The target for the event.
+ * @param {number} keyCode The keycode of the keydown and keyup events.
+ * @param {number} keyPressKeyCode The keycode of the keypress event.
+ * @param {Object=} opt_eventProperties Event properties to be mixed into the
+ *     BrowserEvent.
+ * @return {boolean} The returnValue of the sequence: false if preventDefault()
+ *     was called on any of the events, true otherwise.
+ */
+goog.testing.events.fireNonAsciiKeySequence = function(
+    target, keyCode, keyPressKeyCode, opt_eventProperties) {
   var keydown =
       new goog.testing.events.Event(goog.events.EventType.KEYDOWN, target);
   var keyup =
       new goog.testing.events.Event(goog.events.EventType.KEYUP, target);
   var keypress =
       new goog.testing.events.Event(goog.events.EventType.KEYPRESS, target);
-  keydown.keyCode = keyup.keyCode = keypress.keyCode = keyCode;
+  keydown.keyCode = keyup.keyCode = keyCode;
+  keypress.keyCode = keyPressKeyCode;
 
   if (opt_eventProperties) {
     goog.object.extend(keydown, opt_eventProperties);
