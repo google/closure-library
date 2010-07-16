@@ -37,10 +37,11 @@ goog.require('goog.module.ModuleLoadCallback');
  * @param {Array.<string>} deps Ids of the modules that must be loaded before
  *     this one. The ids must be in dependency order (i.e. if the ith module
  *     depends on the jth module, then i > j).
+ * @param {string} id The module's ID.
  * @constructor
  * @extends {goog.Disposable}
  */
-goog.module.ModuleInfo = function(deps) {
+goog.module.ModuleInfo = function(deps, id) {
   goog.Disposable.call(this);
 
   /**
@@ -49,6 +50,13 @@ goog.module.ModuleInfo = function(deps) {
    * @private
    */
   this.deps_ = deps;
+
+  /**
+   * The module's ID.
+   * @type {string}
+   * @private
+   */
+  this.id_ = id;
 
   /**
    * Callbacks to execute once this module is loaded.
@@ -107,6 +115,15 @@ goog.module.ModuleInfo.prototype.module_ = null;
  */
 goog.module.ModuleInfo.prototype.getDependencies = function() {
   return this.deps_;
+};
+
+
+/**
+ * Gets the ID of this module.
+ * @return {string} The ID.
+ */
+goog.module.ModuleInfo.prototype.getId = function() {
+  return this.id_;
 };
 
 

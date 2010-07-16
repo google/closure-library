@@ -238,8 +238,7 @@ goog.ds.FastDataNode.prototype.getChildNode = function(name, opt_create) {
  * invalid. You should not use these child nodes but instead obtain a new
  * instance by calling getChildNode.
  *
- * @param {string} name Name of child node.
- * @param {Object} value Value of child node.
+ * @override
  */
 goog.ds.FastDataNode.prototype.setChildNode = function(name, value) {
   if (value != null) {
@@ -249,6 +248,7 @@ goog.ds.FastDataNode.prototype.setChildNode = function(name, value) {
   }
   goog.ds.DataManager.getInstance().fireDataChange(this.getDataPath() +
       goog.ds.STR_PATH_SEPARATOR + name);
+  return null;
 };
 
 
@@ -386,10 +386,11 @@ goog.ds.FastDataNode.prototype.setNode = function(name, value) {
 
 /**
  * Removes a child node.
- * @param {string} name Name of child node to remove.
+ * @override
  */
 goog.ds.FastDataNode.prototype.removeNode = function(name) {
   delete this[name];
+  return false;
 };
 
 
@@ -599,8 +600,7 @@ goog.ds.FastListNode.prototype.getKeyAsNumber_ = function(key) {
  * invalid. You should not use these child nodes but instead obtain a new
  * instance by calling getChildNode.
  *
- * @param {string} key Name of child node.
- * @param {Object} value Value of child node.
+ * @override
  */
 goog.ds.FastListNode.prototype.setChildNode = function(key, value) {
   var count = this.values_.length;
@@ -629,6 +629,7 @@ goog.ds.FastListNode.prototype.setChildNode = function(key, value) {
   if (this.values_.length != count) {
     this.listSizeChanged_();
   }
+  return null;
 };
 
 
@@ -738,7 +739,7 @@ goog.ds.FastListNode.prototype.setNode = function(name, value) {
 
 /**
  * Removes a child node.
- * @param {string} name Name of child node to remove.
+ * @override
  */
 goog.ds.FastListNode.prototype.removeNode = function(name) {
   var index = this.getKeyAsNumber_(name);
@@ -765,6 +766,7 @@ goog.ds.FastListNode.prototype.removeNode = function(name) {
         '[' + index + ']');
     this.listSizeChanged_();
   }
+  return false;
 };
 
 

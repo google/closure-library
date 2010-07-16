@@ -150,11 +150,11 @@ goog.dom.$ = goog.dom.getElement;
  * need is particular tags belonging to a single class, this function
  * is fast and sleek.
  *
- * @see goog.dom.query
+ * @see {goog.dom.query}
  *
  * @param {?string=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
- * @param {Element=} opt_el Optional element to look in.
+ * @param {Document|Element=} opt_el Optional element to look in.
  * @return { {length: number} } Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  */
@@ -165,11 +165,66 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
 
 
 /**
+ * Returns an array of all the elements with the provided className.
+ * @see {goog.dom.query}
+ * @param {!string} className the name of the class to look for.
+ * @param {Document|Element=} opt_el Optional element to look in.
+ * @return { {length: number} } The items found with the class name provided.
+ */
+goog.dom.getElementsByClass = function(className, opt_el) {
+  var parent = opt_el || document;
+  if (goog.dom.canUseQuerySelector_(parent)) {
+    return parent.querySelectorAll('.' + className);
+  } else if (parent.getElementsByClassName) {
+    return parent.getElementsByClassName(className);
+  }
+  return goog.dom.getElementsByTagNameAndClass_(
+      document, '*', className, opt_el);
+};
+
+
+/**
+ * Returns an array of all the elements with the provided className.
+ * @see {goog.dom.query}
+ * @param {!string} className the name of the class to look for.
+ * @param {Element|Document=} opt_el Optional element to look in.
+ * @return {Element} The first item with the class name provided.
+ */
+goog.dom.getElementByClass = function(className, opt_el) {
+  var parent = opt_el || document;
+  var retVal = null;
+  if (goog.dom.canUseQuerySelector_(parent)) {
+    retVal = parent.querySelector('.' + className);
+  } else {
+    retVal = goog.dom.getElementsByClass(className, opt_el)[0];
+  }
+  return retVal || null;
+};
+
+
+/**
+ * Prefer the standardized (http://www.w3.org/TR/selectors-api/), native and
+ * fast W3C Selectors API. However, the version of WebKit that shipped with
+ * Safari 3.1 and Chrome has a bug where it will not correctly match mixed-
+ * case class name selectors in quirks mode.
+ * @param {!Element|Document} parent The parent document object.
+ * @return {boolean} whether or not we can use parent.querySelector* APIs.
+ * @private
+ */
+goog.dom.canUseQuerySelector_ = function(parent) {
+  return parent.querySelectorAll &&
+         parent.querySelector &&
+         (!goog.userAgent.WEBKIT || goog.dom.isCss1CompatMode_(document) ||
+          goog.userAgent.isVersion('528'));
+};
+
+
+/**
  * Helper for {@code getElementsByTagNameAndClass}.
  * @param {!Document} doc The document to get the elements in.
  * @param {?string=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
- * @param {Element=} opt_el Optional element to look in.
+ * @param {Document|Element=} opt_el Optional element to look in.
  * @return { {length: number} } Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  * @private
@@ -179,14 +234,8 @@ goog.dom.getElementsByTagNameAndClass_ = function(doc, opt_tag, opt_class,
   var parent = opt_el || doc;
   var tagName = (opt_tag && opt_tag != '*') ? opt_tag.toUpperCase() : '';
 
-  // Prefer the standardized (http://www.w3.org/TR/selectors-api/), native and
-  // fast W3C Selectors API. However, the version of WebKit that shipped with
-  // Safari 3.1 and Chrome has a bug where it will not correctly match mixed-
-  // case class name selectors in quirks mode.
-  if (parent.querySelectorAll &&
-      (tagName || opt_class) &&
-      (!goog.userAgent.WEBKIT || goog.dom.isCss1CompatMode_(doc) ||
-       goog.userAgent.isVersion('528'))) {
+  if (goog.dom.canUseQuerySelector_(parent) &&
+      (tagName || opt_class)) {
     var query = tagName + (opt_class ? '.' + opt_class : '');
     return parent.querySelectorAll(query);
   }
@@ -1823,6 +1872,32 @@ goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(opt_tag,
                                                                      opt_el) {
   return goog.dom.getElementsByTagNameAndClass_(this.document_, opt_tag,
                                                 opt_class, opt_el);
+};
+
+
+/**
+ * Returns an array of all the elements with the provided className.
+ * @see {goog.dom.query}
+ * @param {!string} className the name of the class to look for.
+ * @param {Element|Document=} opt_el Optional element to look in.
+ * @return { {length: number} } The items found with the class name provided.
+ */
+goog.dom.DomHelper.prototype.getElementsByClass = function(className, opt_el) {
+  var doc = opt_el || this.document_;
+  return goog.dom.getElementsByClass(className, doc);
+};
+
+
+/**
+ * Returns the first element we find matching the provided class name.
+ * @see {goog.dom.query}
+ * @param {!string} className the name of the class to look for.
+ * @param {Element|Document=} opt_el Optional element to look in.
+ * @return {Element} The first item found with the class name provided.
+ */
+goog.dom.DomHelper.prototype.getElementByClass = function(className, opt_el) {
+  var doc = opt_el || this.document_;
+  return goog.dom.getElementByClass(className, doc);
 };
 
 

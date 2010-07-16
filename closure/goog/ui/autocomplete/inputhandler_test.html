@@ -27,6 +27,8 @@ See the COPYING file for details.
     goog.events.EventTarget.call(this);
     this.setAttributeNS = function() {};
     this.setAttribute = function(key, value) { this[key] = value; };
+    this.focus = function() {}
+    this.blur = function() {}
     this.ownerDocument = document;
   }
   goog.inherits(MockElement, goog.events.EventTarget);
@@ -50,6 +52,7 @@ See the COPYING file for details.
     goog.ui.AutoComplete.InputHandler.call(this);
 
     this.ac_ = new MockAutoCompleter();
+    this.cursorPosition_ = 0;
 
     this.attachInput(mockElement);
   }
@@ -78,6 +81,14 @@ See the COPYING file for details.
     }
     e = new goog.events.BrowserEvent(e);
     mockElement.dispatchEvent(e);
+  };
+
+  MockInputHandler.prototype.setCursorPosition = function(cursorPosition) {
+    this.cursorPosition_ = cursorPosition;
+  };
+
+  MockInputHandler.prototype.getCursorPosition = function() {
+    return this.cursorPosition_;
   };
 
   // Variables used by all test
@@ -456,6 +467,22 @@ See the COPYING file for details.
     ih.update();
     assertFalse('update should not call setToken on selectRow',
                 mockAutoCompleter.setTokenWasCalled);
+  }
+
+  function testSetTokenText() {
+
+    var ih = new MockInputHandler();
+
+    // Set up our input handler with the necessary mocks
+    var mockAutoCompleter = new MockAutoCompleter();
+    ih.ac_ = mockAutoCompleter;
+    ih.activeElement_ = mockElement;
+    mockElement.value = 'bob, wal, joey';
+    ih.setCursorPosition(8);
+
+    ih.setTokenText('waldo', true /* multi-row */);
+
+    assertEquals('bob, waldo, joey', mockElement.value);
   }
 
   function testGetThrottleTime() {

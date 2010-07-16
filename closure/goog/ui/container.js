@@ -25,6 +25,7 @@
 // TODO(user):  Maybe pull common stuff all the way up into Component...?
 
 goog.provide('goog.ui.Container');
+goog.provide('goog.ui.Container.EventType');
 goog.provide('goog.ui.Container.Orientation');
 
 goog.require('goog.dom');
@@ -884,21 +885,23 @@ goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
  * @return {goog.ui.Control} The removed control, if any.
  */
 goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {
-  // TODO(user): Fix implementation so that it works if control is a string.
+  control = goog.isString(control) ? this.getChild(control) : control;
 
-  var index = this.indexOfChild(/** @type {goog.ui.Control} */ (control));
-  if (index != -1) {
-    if (index == this.highlightedIndex_) {
-      control.setHighlighted(false);
-    } else if (index < this.highlightedIndex_) {
-      this.highlightedIndex_--;
+  if (control) {
+    var index = this.indexOfChild(control);
+    if (index != -1) {
+      if (index == this.highlightedIndex_) {
+        control.setHighlighted(false);
+      } else if (index < this.highlightedIndex_) {
+        this.highlightedIndex_--;
+      }
     }
-  }
 
-  // Remove the mapping from the child element ID map.
-  var childElem = control.getElement();
-  if (childElem && childElem.id) {
-    goog.object.remove(this.childElementIdMap_, childElem.id);
+    // Remove the mapping from the child element ID map.
+    var childElem = control.getElement();
+    if (childElem && childElem.id) {
+      goog.object.remove(this.childElementIdMap_, childElem.id);
+    }
   }
 
   control = /** @type {goog.ui.Control} */ (

@@ -79,9 +79,23 @@ See the COPYING file for details.
           <span id="checkedItems" style="color: #800">Bold</span><br>
           <div id="menu4"></div>
         </td>
-        <td colspan="2" width="66%">
+        <td width="33%">
           Here's a BiDi menu with checkbox items.<br>
           <div id="menu5" dir="rtl"></div>
+        </td>
+        <td width="33%">
+          Here's a menu with an explicit content container.<br>
+          <div id="menu6" class="goog-menu">
+            <div style="background: #ccc; border-right: 15px solid #888;">
+              <div class="goog-menu-content">
+                <div class="goog-menuitem">Red</div>
+                <div class="goog-menuitem">Black</div>
+                <div class="goog-menuitem">Blue</div>
+              </div>
+            </div>
+            <hr>
+            <div class="goog-menuitem">White</div>
+          </div>
         </td>
       </tr>
     </tbody>
@@ -192,6 +206,10 @@ See the COPYING file for details.
     baz.setEnabled(false);
     menu5.render(goog.dom.getElement('menu5'));
     goog.events.listen(menu5, EVENTS, logEvent);
+    
+    var menu6 = new goog.ui.Menu();
+    menu6.decorate(goog.dom.getElement('menu6'));
+    goog.events.listen(menu6, EVENTS, logEvent);
 
     goog.dom.setTextContent(goog.dom.getElement('perf'),
         (goog.now() - timer) + 'ms');

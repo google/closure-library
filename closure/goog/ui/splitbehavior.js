@@ -136,7 +136,7 @@ goog.ui.SplitBehavior.CSS_CLASS = goog.getCssName('goog-split-behavior');
  * @enum {function(goog.ui.Control,Event)}
  */
 goog.ui.SplitBehavior.DefaultHandlers = {
-  NONE: goog.nullFunction(),
+  NONE: goog.nullFunction,
   CAPTION: function(targetControl, e) {
     var item = (/** @type {goog.ui.MenuItem} */e.target);
     var value = (/** @type {string} */((item && item.getValue()) || ''));

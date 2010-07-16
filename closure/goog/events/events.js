@@ -612,7 +612,7 @@ goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
  *     the requested type and/or capture phase.
  */
 goog.events.hasListener = function(obj, opt_type, opt_capture) {
-  var objUid = goog.getUid(obj)
+  var objUid = goog.getUid(obj);
   var listeners = goog.events.sources_[objUid];
 
   if (listeners) {
@@ -621,7 +621,7 @@ goog.events.hasListener = function(obj, opt_type, opt_capture) {
 
     if (hasType && hasCapture) {
       // Lookup in the listener tree whether the specified listener exists.
-      var map = goog.events.listenerTree_[opt_type]
+      var map = goog.events.listenerTree_[opt_type];
       return !!map && !!map[opt_capture] && objUid in map[opt_capture];
 
     } else if (!(hasType || hasCapture)) {
@@ -631,8 +631,8 @@ goog.events.hasListener = function(obj, opt_type, opt_capture) {
     } else {
       // Iterate through the listeners for the event target to find a match.
       return goog.array.some(listeners, function(listener) {
-          return (hasType && listener.type == opt_type) ||
-            (hasCapture && listener.capture == opt_capture);
+        return (hasType && listener.type == opt_type) ||
+               (hasCapture && listener.capture == opt_capture);
       });
     }
   }
@@ -693,6 +693,7 @@ goog.events.EventType = {
   CHANGE: 'change',
   SELECT: 'select',
   SUBMIT: 'submit',
+  INPUT: 'input',
 
   // Drag and drop
   DRAGSTART: 'dragstart',
@@ -704,14 +705,17 @@ goog.events.EventType = {
   // Misc
   CONTEXTMENU: 'contextmenu',
   ERROR: 'error',
-  HASHCHANGE: 'hashchange',
   HELP: 'help',
   LOAD: 'load',
   LOSECAPTURE: 'losecapture',
   READYSTATECHANGE: 'readystatechange',
   RESIZE: 'resize',
   SCROLL: 'scroll',
-  UNLOAD: 'unload'
+  UNLOAD: 'unload',
+
+  // HTML 5 History events
+  HASHCHANGE: 'hashchange',
+  POPSTATE: 'popstate'
 };
 
 

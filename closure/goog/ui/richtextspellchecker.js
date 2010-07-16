@@ -144,10 +144,10 @@ goog.ui.RichTextSpellChecker.prototype.decorateInternal = function(element) {
   if (element.contentDocument || element.contentWindow) {
     var doc = element.contentDocument || element.contentWindow.document;
     this.rootNode_ = doc.body;
-    this.editorDom_ = new goog.dom.getDomHelper(doc);
+    this.editorDom_ = goog.dom.getDomHelper(doc);
   } else {
     this.rootNode_ = element;
-    this.editorDom_ = new goog.dom.getDomHelper(element);
+    this.editorDom_ = goog.dom.getDomHelper(element);
   }
 };
 

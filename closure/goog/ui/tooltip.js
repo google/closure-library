@@ -600,6 +600,18 @@ goog.ui.Tooltip.prototype.hasActiveChild = function() {
 
 
 /**
+ * Saves the current mouse cursor position to {@code this.cursorPosition}.
+ * @param {goog.events.BrowserEvent} event MOUSEOVER or MOUSEMOVE event.
+ * @private
+ */
+goog.ui.Tooltip.prototype.saveCursorPosition_ = function(event) {
+  var scroll = this.dom_.getDocumentScroll();
+  this.cursorPosition.x = event.clientX + scroll.x;
+  this.cursorPosition.y = event.clientY + scroll.y;
+};
+
+
+/**
  * Handler for mouse over events.
  *
  * @param {goog.events.BrowserEvent} event Event object.
@@ -613,6 +625,7 @@ goog.ui.Tooltip.prototype.handleMouseOver = function(event) {
     this.anchor = el;
     this.startShowTimer(/** @type {Element} */ (el));
     this.checkForParentTooltip_();
+    this.saveCursorPosition_(event);
   }
 };
 
@@ -651,9 +664,7 @@ goog.ui.Tooltip.prototype.getAnchorFromElement = function(el) {
  * @protected
  */
 goog.ui.Tooltip.prototype.handleMouseMove = function(event) {
-  var scroll = this.dom_.getDocumentScroll();
-  this.cursorPosition.x = event.clientX + scroll.x;
-  this.cursorPosition.y = event.clientY + scroll.y;
+  this.saveCursorPosition_(event);
   this.seenInteraction_ = true;
 };
 

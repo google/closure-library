@@ -169,6 +169,8 @@ goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.history.Event');
+goog.require('goog.history.EventType');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
@@ -188,7 +190,7 @@ goog.require('goog.userAgent');
  * <pre>
  * // Instantiate history to use the address bar for state.
  * var h = new goog.History();
- * goog.events.listen(h, goog.History.EventType.NAVIGATE, navCallback);
+ * goog.events.listen(h, goog.history.EventType.NAVIGATE, navCallback);
  * h.setEnabled(true);
  *
  * // Any changes to the location hash will call the following function.
@@ -477,7 +479,7 @@ goog.History.prototype.setEnabled = function(enable) {
       this.eventHandler_.listen(
           this.window_, goog.events.EventType.HASHCHANGE, this.onHashChange_);
       this.enabled_ = true;
-      this.dispatchEvent(new goog.History.Event(this.getToken()));
+      this.dispatchEvent(new goog.history.Event(this.getToken()));
     } else if (!goog.userAgent.IE || this.documentLoaded) {
       // Start dispatching history events if all necessary loading has
       // completed (always true for browsers other than IE.)
@@ -492,7 +494,7 @@ goog.History.prototype.setEnabled = function(enable) {
       }
 
       this.timer_.start();
-      this.dispatchEvent(new goog.History.Event(this.getToken()));
+      this.dispatchEvent(new goog.history.Event(this.getToken()));
     }
 
   } else {
@@ -653,7 +655,7 @@ goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
       // set a suspendToken so that polling doesn't trigger a 'back'.
       this.setIframeToken_(token, replace);
       this.lockedToken_ = this.lastToken_ = this.hiddenInput_.value = token;
-      this.dispatchEvent(new goog.History.Event(token));
+      this.dispatchEvent(new goog.history.Event(token));
     }
   }
 };
@@ -856,7 +858,7 @@ goog.History.prototype.update_ = function(token) {
     this.setIframeToken_(token);
   }
 
-  this.dispatchEvent(new goog.History.Event(this.getToken()));
+  this.dispatchEvent(new goog.history.Event(this.getToken()));
 };
 
 
@@ -953,25 +955,16 @@ goog.History.PollingType = {
 /**
  * Constant for the history change event type.
  * @enum {string}
+ * @deprecated Use goog.history.EventType
  */
-goog.History.EventType = {
-  NAVIGATE: 'navigate'
-};
+goog.History.EventType = goog.history.EventType;
 
 
 /**
- * Event object dispatched after navigation events.
+ * Constant for the history change event type.
  * @param {string} token The string identifying the new history state.
- * @constructor
  * @extends {goog.events.Event}
+ * @constructor
+ * @deprecated Use goog.history.Event
  */
-goog.History.Event = function(token) {
-  goog.events.Event.call(this, goog.History.EventType.NAVIGATE);
-
-  /**
-   * The current history state.
-   * @type {string}
-   */
-  this.token = token;
-};
-goog.inherits(goog.History.Event, goog.events.Event);
+goog.History.Event = goog.history.Event;

@@ -34,6 +34,13 @@
       #t4 {
         padding-bottom: 3em;
       }
+      #t3 {
+        filter:progid:DXImageTransform.Microsoft.DropShadow(color='#e7e7e7',
+            offX='2',offY='2');
+        box-shadow: 2px 2px 0 #e7e7e7;
+        -moz-box-shadow: 2px 2px 0 #e7e7e7;
+        -webkit-box-shadow: 2px 2px 0 #e7e7e7;
+      }
     </style>
   </head>
   <body>
@@ -48,12 +55,12 @@
     <label>
       Enable textarea:<input type="checkbox" id="t1_enable" checked="checked">
     </label>
-    <br/>
-    <br/>
+    <br>
+    <br>
     <textarea id="t2" disabled>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean sollicitudin ultrices urna. Proin vehicula mauris ac est. Ut scelerisque, risus ut facilisis dictum, est massa lacinia lorem, in fermentum purus ligula quis nunc. Duis porttitor euismod risus. Nam hendrerit lacus vehicula augue. Duis ante. Aliquam tempor adipiscing sem. Duis eget pede. Vivamus facilisis luctus purus. Sed lacus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis tristique, turpis ac nonummy sagittis, leo erat fermentum leo, in pulvinar sapien dui at dolor. </textarea>
-    <br/>
+    <br>
     <label>Enable textarea:<input type="checkbox" id="t2_enable"></label>
-    <br/>
+    <br>
   </fieldset>
 
   <fieldset>
@@ -61,10 +68,10 @@
       This is a textarea with a minHeight set to 200px.
     </legend>
     <textarea id="t3">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean sollicitudin ultrices urna. Proin vehicula mauris ac est. Ut scelerisque, risus ut facilisis dictum, est massa lacinia lorem, in fermentum purus ligula quis nunc.</textarea>
-    <br/>
+    <br>
     <label>minHeight set:<input type="checkbox" id="t3_toggle"
       checked></label>
-    <br/>
+    <br>
   </fieldset>
 
   <fieldset>

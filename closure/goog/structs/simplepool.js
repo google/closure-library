@@ -116,7 +116,7 @@ goog.structs.SimplePool.prototype.setDisposeObjectFn = function(
 /**
  * Gets a new object from the the pool, if there is one available, otherwise
  * returns null.
- * @return {Object} An object from the pool or a new one if necessary.
+ * @return {*} An object from the pool or a new one if necessary.
  */
 goog.structs.SimplePool.prototype.getObject = function() {
   if (this.freeQueue_.length) {
@@ -129,7 +129,7 @@ goog.structs.SimplePool.prototype.getObject = function() {
 /**
  * Releases the space in the pool held by a given object -- i.e., remove it from
  * the pool and frees up its space.
- * @param {Object} obj The object to release.
+ * @param {*} obj The object to release.
  */
 goog.structs.SimplePool.prototype.releaseObject = function(obj) {
   if (this.freeQueue_.length < this.maxCount_) {
@@ -158,7 +158,7 @@ goog.structs.SimplePool.prototype.createInitial_ = function(initialCount) {
 /**
  * Should be overriden by sub-classes to return an instance of the object type
  * that is expected in the pool.
- * @return {Object} The created object.
+ * @return {*} The created object.
  */
 goog.structs.SimplePool.prototype.createObject = function() {
   if (this.createObjectFn_) {
@@ -173,12 +173,12 @@ goog.structs.SimplePool.prototype.createObject = function() {
  * Should be overriden to dispose of an object. Default implementation is to
  * remove all of the object's members, which should render it useless. Calls the
  *  object's dispose method, if available.
- * @param {Object} obj The object to dispose.
+ * @param {*} obj The object to dispose.
  */
 goog.structs.SimplePool.prototype.disposeObject = function(obj) {
   if (this.disposeObjectFn_) {
     this.disposeObjectFn_(obj);
-  } else {
+  } else if (goog.isObject(obj)) {
     if (goog.isFunction(obj.dispose)) {
       obj.dispose();
     } else {

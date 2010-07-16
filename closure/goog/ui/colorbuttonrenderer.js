@@ -21,6 +21,7 @@
 goog.provide('goog.ui.ColorButtonRenderer');
 
 goog.require('goog.dom.classes');
+goog.require('goog.functions');
 goog.require('goog.ui.ColorMenuButtonRenderer');
 
 
@@ -38,7 +39,7 @@ goog.ui.ColorButtonRenderer = function() {
    * @inheritDoc
    */
   // TODO(user): enable disabling the dropdown in goog.ui.ColorMenuButton
-  this.createDropdown = goog.nullFunction;
+  this.createDropdown = goog.functions.NULL;
 
 };
 goog.inherits(goog.ui.ColorButtonRenderer, goog.ui.ColorMenuButtonRenderer);

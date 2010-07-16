@@ -55,7 +55,7 @@ goog.addSingletonGetter(goog.ui.style.app.ButtonRenderer);
  * by this renderer.
  * @type {string}
  */
-goog.ui.style.app.ButtonRenderer.CSS_CLASS = 'goog-button';
+goog.ui.style.app.ButtonRenderer.CSS_CLASS = goog.getCssName('goog-button');
 
 
 /**
@@ -138,22 +138,26 @@ goog.ui.style.app.ButtonRenderer.prototype.createButton = function(content,
  */
 goog.ui.style.app.ButtonRenderer.prototype.hasBoxStructure = function(
     button, element) {
+  // TODO(nicksantos): should this use goog.dom.classes?
   var outer = button.getDomHelper().getFirstElementChild(element);
   if (outer &&
-      outer.className.indexOf('goog-button-base-outer-box') != -1) {
+      outer.className.indexOf(
+          goog.getCssName('goog-button-base-outer-box')) != -1) {
     var inner = button.getDomHelper().getFirstElementChild(outer);
     if (inner &&
-        inner.className.indexOf('goog-button-base-inner-box') != -1) {
+        inner.className.indexOf(
+            goog.getCssName('goog-button-base-inner-box')) != -1) {
       var pos = button.getDomHelper().getFirstElementChild(inner);
       if (pos &&
-          pos.className.indexOf('goog-button-base-pos') != -1) {
+          pos.className.indexOf(
+              goog.getCssName('goog-button-base-pos')) != -1) {
         var shadow = button.getDomHelper().getFirstElementChild(pos);
         if (shadow && shadow.className.indexOf(
-            'goog-button-base-top-shadow') != -1) {
+                goog.getCssName('goog-button-base-top-shadow')) != -1) {
           var content = button.getDomHelper().getNextElementSibling(shadow);
           if (content &&
               content.className.indexOf(
-              'goog-button-base-content') != -1) {
+                  goog.getCssName('goog-button-base-content')) != -1) {
             // We have a proper box structure.
             return true;
           }
@@ -174,7 +178,7 @@ goog.ui.style.app.ButtonRenderer.prototype.getCssClass = function() {
 /** @inheritDoc */
 goog.ui.style.app.ButtonRenderer.prototype.getStructuralCssClass = function() {
   // TODO(user): extract to a constant.
-  return 'goog-button-base';
+  return goog.getCssName('goog-button-base');
 };
 
 

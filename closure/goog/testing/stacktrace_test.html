@@ -15,6 +15,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.PropertyReplacer');
+  goog.require('goog.testing.StrictMock');
   goog.require('goog.testing.asserts');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.stacktrace');
@@ -150,7 +151,19 @@ function testFollowCallChain() {
     return goog.testing.stacktrace.followCallChain_();
   };
 
-  var frames = func(undefined, null, false, 0, '', {}, goog.nullFunction);
+  // Created a fake type with a toString method.
+  function LocalType() {};
+  LocalType.prototype.toString = function() {
+    return 'sg';
+  };
+
+  // Create a mock with no expectations.
+  var mock = new goog.testing.StrictMock(LocalType);
+
+  mock.$replay();
+
+  var frames = func(undefined, null, false, 0, '', {}, goog.nullFunction,
+      mock, new LocalType);
 
   // Opera before version 10 doesn't support the caller attribute. In that
   // browser followCallChain_() returns empty stack trace.
@@ -166,12 +179,15 @@ function testFollowCallChain() {
     assertEquals('innermost function is anonymous', '', frames[0].getName());
     // There are white space differences how browsers convert functions to
     // strings.
-    var expected = '(undefined,null,false,0,"",[objectObject],function(){})';
+    var expected = '(undefined,null,false,0,"",[objectObject],function(){},' +
+        'goog.testing.Mock,sg)';
     assertEquals('arguments of the innermost function (ignoring whitespaces)',
         expected, frames[0].args_.replace(/\s/g, ''));
     assertEquals('test function name', 'testFollowCallChain',
         frames[1].getName());
   }
+
+  mock.$verify();
 }
 
 </script>

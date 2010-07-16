@@ -416,8 +416,8 @@ Author: marcosalmeida@google.com (Marcos Almeida)
     var urlInput = getUrlInput();
     urlInput.value = text;
     // Fire event so that dialog behaves like when user types.
-    goog.testing.events.fireBrowserEvent(new goog.events.Event('input',
-                                                               urlInput));
+    dialog.urlInputHandler_.dispatchEvent(
+        goog.events.InputHandler.EventType.INPUT);
   }
 
   function getEmailInput() {
@@ -432,8 +432,8 @@ Author: marcosalmeida@google.com (Marcos Almeida)
     var emailInput = getEmailInput();
     emailInput.value = text;
     // Fire event so that dialog behaves like when user types.
-    goog.testing.events.fireBrowserEvent(new goog.events.Event('input',
-                                                               emailInput));
+    dialog.emailInputHandler_.dispatchEvent(
+        goog.events.InputHandler.EventType.INPUT);
   }
 
 </script>

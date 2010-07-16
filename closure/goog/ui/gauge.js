@@ -27,6 +27,7 @@ goog.provide('goog.ui.GaugeColoredRange');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.fx.Animation');
+goog.require('goog.fx.easing');
 goog.require('goog.graphics');
 goog.require('goog.graphics.Font');
 goog.require('goog.graphics.SolidFill');

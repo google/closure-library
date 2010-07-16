@@ -13,6 +13,7 @@ Usage: depswriter.py [path/to/js1.js [path/to/js2.js] ...]
 import logging
 import optparse
 import os
+import posixpath
 import shlex
 import sys
 
@@ -87,10 +88,21 @@ def _GetOptionsParser():
                     'the file in the generated deps file (if either contains '
                     'a space, surround with whitespace). This flag may be '
                     'specifified multiple times.')
-
-
   return parser
 
+
+def _NormalizePathSeparators(path):
+  """Replaces OS-specific path separators with POSIX-style slashes.
+
+  Args:
+    path: str, A file path.
+
+  Returns:
+    str, The path with any OS-specific path separators (such as backslash on
+      Windows) replaced with URL-compatible forward slashes. A no-op on systems
+      that use POSIX paths.
+  """
+  return path.replace(os.sep, posixpath.sep)
 
 
 def _GetRelativePathToSourceDict(root, prefix=''):
@@ -111,7 +123,7 @@ def _GetRelativePathToSourceDict(root, prefix=''):
 
   path_to_source = {}
   for path in treescan.ScanTreeForJsFiles('.'):
-    prefixed_path = os.path.join(prefix, path)
+    prefixed_path = _NormalizePathSeparators(os.path.join(prefix, path))
     path_to_source[prefixed_path] = source.Source(source.GetFileContents(path))
 
   os.chdir(start_wd)
@@ -122,6 +134,8 @@ def _GetRelativePathToSourceDict(root, prefix=''):
 def _GetPair(s):
   """Return a string as a shell-parsed tuple.  Two values expected."""
   try:
+    # shlex uses '\' as an escape character, so they must be escaped.
+    s = s.replace('\\', '\\\\')
     first, second = shlex.split(s)
     return (first, second)
   except:

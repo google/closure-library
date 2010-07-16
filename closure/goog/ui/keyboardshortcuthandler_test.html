@@ -50,6 +50,13 @@ See the COPYING file for details.
           opt_element || targetDiv, keycode, opt_extraProperties);
     }
 
+    function fireAltGraphKey(keycode, keyPressKeyCode, opt_extraProperties,
+                             opt_element) {
+      return goog.testing.events.fireNonAsciiKeySequence(
+          opt_element || targetDiv, keycode, keyPressKeyCode,
+          opt_extraProperties);
+    }
+
     function setUp() {
       targetDiv = goog.dom.getElement('targetDiv');
       handler = new goog.ui.KeyboardShortcutHandler(
@@ -552,6 +559,84 @@ See the COPYING file for details.
       fireEnterSpaceXF1AltY(goog.dom.getElement('targetTextArea'));
 
       listener.$verify();
+    }
+
+    function testAltGraphKeyOnUSLayout() {
+      // Windows does not assign printable characters to any ctrl+alt keys of
+      // the US layout. This test verifies we fire shortcut events when typing
+      // ctrl+alt keys on the US layout.
+      listener.shortcutFired('letterOne');
+      listener.shortcutFired('letterTwo');
+      listener.shortcutFired('letterThree');
+      listener.shortcutFired('letterFour');
+      listener.shortcutFired('letterFive');
+      if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+        listener.$replay();
+
+        handler.registerShortcut('letterOne', 'ctrl+alt+1');
+        handler.registerShortcut('letterTwo', 'ctrl+alt+2');
+        handler.registerShortcut('letterThree', 'ctrl+alt+3');
+        handler.registerShortcut('letterFour', 'ctrl+alt+4');
+        handler.registerShortcut('letterFive', 'ctrl+alt+5');
+
+        // Send key events on the English (United States) layout.
+        fireAltGraphKey(KeyCodes.ONE, 0, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.TWO, 0, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.THREE, 0, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.FOUR, 0, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.FIVE, 0, {ctrlKey: true, altKey: true});
+
+        listener.$verify()
+      }
+    }
+
+    function testAltGraphKeyOnFrenchLayout() {
+      // Windows assigns printable characters to ctrl+alt+[2-5] keys of the
+      // French layout. This test verifies we fire shortcut events only when
+      // we type ctrl+alt+1 keys on the French layout.
+      listener.shortcutFired('letterOne');
+      if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+        listener.$replay();
+
+        handler.registerShortcut('letterOne', 'ctrl+alt+1');
+        handler.registerShortcut('letterTwo', 'ctrl+alt+2');
+        handler.registerShortcut('letterThree', 'ctrl+alt+3');
+        handler.registerShortcut('letterFour', 'ctrl+alt+4');
+        handler.registerShortcut('letterFive', 'ctrl+alt+5');
+
+        // Send key events on the French (France) layout.
+        fireAltGraphKey(KeyCodes.ONE, 0, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.TWO, 0x0303, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.THREE, 0x0023, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.FOUR, 0x007b, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.FIVE, 0x205b, {ctrlKey: true, altKey: true});
+
+        listener.$verify()
+      }
+    }
+
+    function testAltGraphKeyOnSpanishLayout() {
+      // Windows assigns printable characters to ctrl+alt+[1-5] keys of the
+      // Spanish layout. This test verifies we do not fire shortcut events at
+      // all when typing ctrl+alt+[1-5] keys on the Spanish layout.
+      if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+        listener.$replay();
+
+        handler.registerShortcut('letterOne', 'ctrl+alt+1');
+        handler.registerShortcut('letterTwo', 'ctrl+alt+2');
+        handler.registerShortcut('letterThree', 'ctrl+alt+3');
+        handler.registerShortcut('letterFour', 'ctrl+alt+4');
+        handler.registerShortcut('letterFive', 'ctrl+alt+5');
+
+        // Send key events on the Spanish (Spain) layout.
+        fireAltGraphKey(KeyCodes.ONE, 0x007c, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.TWO, 0x0040, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.THREE, 0x0023, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.FOUR, 0x0303, {ctrlKey: true, altKey: true});
+        fireAltGraphKey(KeyCodes.FIVE, 0x20ac, {ctrlKey: true, altKey: true});
+
+        listener.$verify()
+      }
     }
 
   </script>

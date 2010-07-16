@@ -80,6 +80,26 @@ goog.module.ModuleManager = function() {
    * @private
    */
   this.callbackMap_ = {};
+
+  /**
+   * Module info for the base module (the one that contains the module
+   * manager code), which we set as the loading module so one can
+   * register initialization callbacks in the base module.
+   *
+   * The base module is considered loaded when #setAllModuleInfo is called or
+   * #setModuleContext is called, whichever comes first.
+   *
+   * @type {goog.module.ModuleInfo}
+   * @private
+   */
+  this.baseModuleInfo_ = new goog.module.ModuleInfo([], '');
+
+  /**
+   * The module that is currently loading, or null if not loading anything.
+   * @type {goog.module.ModuleInfo}
+   * @private
+   */
+  this.currentlyLoadingModule_ = this.baseModuleInfo_;
 };
 goog.inherits(goog.module.ModuleManager, goog.Disposable);
 goog.addSingletonGetter(goog.module.ModuleManager);
@@ -220,8 +240,9 @@ goog.module.ModuleManager.prototype.setBatchModeEnabled = function(
  */
 goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
   for (var id in infoMap) {
-    this.moduleInfoMap_[id] = new goog.module.ModuleInfo(infoMap[id]);
+    this.moduleInfoMap_[id] = new goog.module.ModuleInfo(infoMap[id], id);
   }
+  this.maybeFinishBaseLoad_();
 };
 
 
@@ -284,6 +305,7 @@ goog.module.ModuleManager.prototype.getModuleContext = function() {
  */
 goog.module.ModuleManager.prototype.setModuleContext = function(context) {
   this.moduleContext_ = context;
+  this.maybeFinishBaseLoad_();
 };
 
 
@@ -486,6 +508,18 @@ goog.module.ModuleManager.prototype.getNotYetLoadedTransitiveDepIds_ =
 
 
 /**
+ * If we are still loading the base module, consider the load complete.
+ * @private
+ */
+goog.module.ModuleManager.prototype.maybeFinishBaseLoad_ = function() {
+  if (this.currentlyLoadingModule_ == this.baseModuleInfo_) {
+    this.currentlyLoadingModule_ = null;
+    this.baseModuleInfo_.onLoad(goog.bind(this.getModuleContext, this));
+  }
+};
+
+
+/**
  * Records that a module was loaded. Also initiates loading the next module if
  * any module requests are queued. This method is called by code that is
  * generated and appended to each dynamic module's code at compilation time.
@@ -639,10 +673,11 @@ goog.module.ModuleManager.prototype.beforeLoadModuleCode = function(id) {
       'Module Load');
   if (this.currentlyLoadingModule_) {
     this.logger_.severe('beforeLoadModuleCode called with module "' + id +
-                        '" while module "' + this.currentlyLoadingModule_ +
+                        '" while module "' +
+                        this.currentlyLoadingModule_.getId() +
                         '" is loading');
   }
-  this.currentlyLoadingModule_ = id;
+  this.currentlyLoadingModule_ = this.getModuleInfo(id);
 };
 
 
@@ -651,10 +686,12 @@ goog.module.ModuleManager.prototype.beforeLoadModuleCode = function(id) {
  * @param {string} id Identifier of the module.
  */
 goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {
-  if (id != this.currentlyLoadingModule_) {
+  if (!this.currentlyLoadingModule_ ||
+      id != this.currentlyLoadingModule_.getId()) {
     this.logger_.severe('afterLoadModuleCode called with module "' + id +
                         '" while loading module "' +
-                        this.currentlyLoadingModule_ + '"');
+                        (this.currentlyLoadingModule_ &&
+                         this.currentlyLoadingModule_.getId()) + '"');
 
   }
   this.currentlyLoadingModule_ = null;
@@ -669,6 +706,11 @@ goog.module.ModuleManager.prototype.afterLoadModuleCode = function(id) {
  * inline, but ensures that all the code from the currently loading module
  * has been loaded. This makes it cleaner and more robust than calling the
  * function inline.
+ *
+ * If this function is called from the base module (the one that contains
+ * the module manager code), the callback is held until #setAllModuleInfo
+ * is called, or until #setModuleContext is called, whichever happens first.
+ *
  * @param {Function} fn A callback function that takes a single argument
  *    which is the module context.
  * @param {Object=} opt_handler Optional handler under whose scope to execute
@@ -678,10 +720,9 @@ goog.module.ModuleManager.prototype.registerInitializationCallback = function(
     fn, opt_handler) {
   if (!this.currentlyLoadingModule_) {
     this.logger_.severe('No module is currently loading');
-    return;
+  } else {
+    this.currentlyLoadingModule_.registerEarlyCallback(fn, opt_handler);
   }
-  this.getModuleInfo(this.currentlyLoadingModule_).registerEarlyCallback(
-      fn, opt_handler);
 };
 
 
@@ -696,7 +737,7 @@ goog.module.ModuleManager.prototype.setModuleConstructor = function(fn) {
     this.logger_.severe('No module is currently loading');
     return;
   }
-  this.getModuleInfo(this.currentlyLoadingModule_).setModuleConstructor(fn);
+  this.currentlyLoadingModule_.setModuleConstructor(fn);
 };
 
 

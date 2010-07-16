@@ -475,15 +475,29 @@ goog.ui.AutoComplete.InputHandler.prototype.detachInputs = function(var_args) {
  */
 goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
                                                                  opt_multi) {
+  this.setTokenText(row.toString(), opt_multi);
+  return false;
+};
+
+
+/**
+ * Sets the text of the current token without updating the autocomplete
+ * choices.
+ * @param {string} tokenText The text for the current token.
+ * @param {boolean=} opt_multi Should this be treated as a single or multi-token
+ *     auto-complete?  Overrides previous setting of opt_multi on constructor.
+ * @protected
+ */
+goog.ui.AutoComplete.InputHandler.prototype.setTokenText = function(tokenText,
+                                                                    opt_multi) {
   if (goog.isDef(opt_multi) ? opt_multi : this.multi_) {
     var index = this.getTokenIndex_(this.getValue(), this.getCursorPosition());
 
     // Break up the current input string.
     var entries = this.splitInput_(this.getValue());
 
-
     // Get the new value, ignoring whitespace associated with the entry.
-    var replaceValue = row.toString();
+    var replaceValue = tokenText;
 
     // Only add punctuation if there isn't already a separator available.
     if (!this.separatorCheck_.test(replaceValue)) {
@@ -497,7 +511,9 @@ goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
       if (index != 0 && !goog.string.isEmpty(entries[index - 1])) {
         replaceValue = ' ' + replaceValue;
       }
-      if (index < entries.length && !goog.string.isEmpty(entries[index + 1])) {
+      // Add a space only if it's the last token; otherwise, we assume the
+      // next token already has the proper spacing.
+      if (index == entries.length - 1) {
         replaceValue = replaceValue + ' ';
       }
     }
@@ -534,11 +550,11 @@ goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
       this.setCursorPosition(pos);
     }
   } else {
-    this.setValue(row.toString());
+    this.setValue(tokenText);
   }
 
+  // Avoid triggering an autocomplete just because the value changed.
   this.rowJustSelected_ = true;
-  return false;
 };
 
 
@@ -764,6 +780,7 @@ goog.ui.AutoComplete.InputHandler.prototype.handleKeyEvent = function(e) {
       this.update();
       if (this.ac_.selectHilited()) {
         e.preventDefault();
+        e.stopPropagation();
         return true;
       }
       break;

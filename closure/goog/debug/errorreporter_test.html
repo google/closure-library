@@ -70,6 +70,28 @@ See the COPYING file for details.
     assertEquals('trace=trace', MockXhrIo.lastContent);
   }
 
+  function testsendErrorReportWithCustomSender() {
+    var uri = null;
+    var method = null;
+    var content = null;
+    var headers = null;
+    function mockXhrSender(uriIn, methodIn, contentIn, headersIn) {
+      uri = uriIn;
+      method = methodIn;
+      content = contentIn;
+      headers = headersIn;
+    }
+
+    var er = new goog.debug.ErrorReporter('/log');
+    er.setXhrSender(mockXhrSender);
+    er.sendErrorReport('message', 'filename.js', 123, 'trace');
+
+    assertEquals('/log?script=filename.js&error=message&line=123', uri);
+    assertEquals('POST', method);
+    assertEquals('trace=trace', content);
+    assertUndefined(headers);
+  }
+
   function testsendErrorReport_noTrace() {
     new goog.debug.ErrorReporter('/log').sendErrorReport(
         'message', 'filename.js', 123);

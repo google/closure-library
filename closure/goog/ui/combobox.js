@@ -52,6 +52,7 @@ goog.ui.ComboBox = function(opt_domHelper, opt_menu) {
   goog.ui.Component.call(this, opt_domHelper);
 
   this.labelInput_ = new goog.ui.LabelInput();
+  this.enabled_ = true;
 
   // TODO(user): Allow lazy creation of menus/menu items
   this.menu_ = opt_menu || new goog.ui.Menu(this.getDomHelper());
@@ -74,6 +75,14 @@ goog.ui.ComboBox.BLUR_DISMISS_TIMER_MS = 250;
  */
 goog.ui.ComboBox.prototype.logger_ =
     goog.debug.Logger.getLogger('goog.ui.ComboBox');
+
+
+/**
+ * Whether the combo box is enabled.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.ComboBox.prototype.enabled_;
 
 
 /**
@@ -204,6 +213,19 @@ goog.ui.ComboBox.prototype.createDom = function() {
   if (!this.menu_.isInDocument()) {
     this.addChild(this.menu_, true);
   }
+};
+
+
+/**
+ * Enables/Disables the combo box.
+ * @param {boolean} enabled Whether to enable (true) or disable (false) the
+ *     combo box.
+ */
+goog.ui.ComboBox.prototype.setEnabled = function(enabled) {
+  this.enabled_ = enabled;
+  this.labelInput_.setEnabled(enabled);
+  goog.dom.classes.enable(this.getElement(),
+      goog.getCssName('goog-combobox-disabled'), !enabled);
 };
 
 
@@ -567,8 +589,9 @@ goog.ui.ComboBox.prototype.clearDismissTimer_ = function() {
  */
 goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
   // We only want this event on the element itself or the input or the button.
-  if (e.target == this.getElement() || e.target == this.input_ ||
-      goog.dom.contains(this.button_, e.target)) {
+  if (this.enabled_ &&
+      (e.target == this.getElement() || e.target == this.input_ ||
+       goog.dom.contains(this.button_, e.target))) {
     if (this.menu_.isVisible()) {
       this.logger_.fine('Menu is visible, dismissing');
       this.dismiss();

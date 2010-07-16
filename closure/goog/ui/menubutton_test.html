@@ -31,6 +31,7 @@ See the COPYING file for details.
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
   goog.require('goog.ui.Menu');
   goog.require('goog.ui.MenuButton');
 </script>
@@ -268,10 +269,12 @@ function testSpaceFireOnKeyUp() {
   menuButton.decorate(node);
 
   e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY, menuButton);
+  e.preventDefault = goog.testing.recordFunction();
   e.keyCode = goog.events.KeyCodes.SPACE;
   menuButton.handleKeyEvent(e);
   assertFalse('Menu must not have been triggered by Space keypress',
       menuButton.isOpen());
+  assertNotNull('Page scrolling is prevented', e.preventDefault.getLastCall());
 
   e = new goog.events.Event(goog.events.EventType.KEYUP, menuButton);
   e.keyCode = goog.events.KeyCodes.SPACE;

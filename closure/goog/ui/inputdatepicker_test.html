@@ -13,7 +13,6 @@ Author: bolinfest@google.com (Michael Bolin)
   <title>Closure Unit Tests - goog.ui.InputDatePicker</title>
   <script src="../base.js"></script>
   <script>
-    goog.require('goog.locale.formatting');
     goog.require('goog.ui.InputDatePicker');
     goog.require('goog.testing.jsunit');
   </script>
@@ -88,24 +87,6 @@ Author: bolinfest@google.com (Michael Bolin)
     popupDatePicker = inputDatePicker.popupDatePicker_;
   }
 
-
-  function test_ItWorksWithOldI10nLibrary() {
-    var oldDateTimeFormatter = goog.locale.getDateTimeFormatter('MM/dd/yyyy');
-    var oldDateTimeParser = goog.locale.getDateTimeParser('MM/dd/yyyy');
-
-    inputDatePicker = new goog.ui.InputDatePicker(
-        oldDateTimeFormatter,
-        oldDateTimeParser);
-    inputDatePicker.render(goog.dom.getElement('renderElement'));
-
-    inputDatePicker.createDom();
-    inputDatePicker.setInputValue('8/9/2009');
-
-    var parsedDate = inputDatePicker.getInputValueAsDate_();
-    assertEquals(2009, parsedDate.getYear());
-    assertEquals(7, parsedDate.getMonth()); // Months start from 0
-    assertEquals(9, parsedDate.getDate());
-  }
 
   function test_ItParsesDataCorrectly() {
     inputDatePicker = new goog.ui.InputDatePicker(

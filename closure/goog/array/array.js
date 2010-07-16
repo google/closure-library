@@ -841,6 +841,7 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
 /**
  * Searches the specified array for the specified target using the binary
  * search algorithm.  If no opt_compareFn is specified, elements are compared
+ * using <code>goog.array.defaultCompare</code>, which compares the elements
  * using the built in < and > operators.  This will produce the expected
  * behavior for homogeneous arrays of String(s) and Number(s). The array
  * specified <b>must</b> be sorted in ascending order (as defined by the
@@ -849,9 +850,6 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
  * of these instances may be found.
  *
  * Runtime: O(log n)
- *
- * This is almost identical to the implementation of binarySelect below. They
- * have not been unified for performance reasons.
  *
  * @param {goog.array.ArrayLike} arr The array to be searched.
  * @param {*} target The sought value.
@@ -865,35 +863,9 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
  *     iff target is found.
  */
 goog.array.binarySearch = function(arr, target, opt_compareFn) {
-  var left = 0;  // inclusive
-  var right = arr.length;  // exclusive
-  var found;
-  while (left < right) {
-    var middle = (left + right) >> 1;
-    var compareResult;
-    var currentValue = arr[middle];
-    if (opt_compareFn) {
-      compareResult = opt_compareFn(target, currentValue);
-    } else {
-      // We assume that if a custom compare function was not provided, then the
-      // target is comparable with the built in < and > operators.
-      var comparableTarget = /** @type {string|number} */ (target);
-      // We inline the logic here rather than calling defaultCompare for
-      // performance reasons.
-      compareResult = comparableTarget > currentValue ? 1 :
-          comparableTarget < currentValue ? -1 : 0;
-    }
-    if (compareResult > 0) {
-      left = middle + 1;
-    } else {
-      right = middle;
-      // We are looking for the lowest index so we can't return immediately.
-      found = !compareResult;
-    }
-  }
-  // left is the index if found, or the insertion point otherwise.
-  // ~left is a shorthand for -left - 1.
-  return found ? left : ~left;
+  return goog.array.binarySearch_(arr,
+      opt_compareFn || goog.array.defaultCompare, false /* isEvaluator */,
+      target);
 };
 
 
@@ -920,18 +892,57 @@ goog.array.binarySearch = function(arr, target, opt_compareFn) {
  *     iff a match is found.
  */
 goog.array.binarySelect = function(arr, evaluator, opt_obj) {
+  return goog.array.binarySearch_(arr, evaluator, true /* isEvaluator */,
+      undefined /* opt_target */, opt_obj);
+};
+
+
+/**
+ * Implementation of a binary search algorithm which knows how to use both
+ * comparison functions and evaluators. If an evaluator is provided, will call
+ * the evaluator with the given optional data object, conforming to the
+ * interface defined in binarySelect. Otherwise, if a comparison function is
+ * provided, will call the comparison function against the given data object.
+ *
+ * This implementation purposefully does not use goog.bind or goog.partial for
+ * performance reasons.
+ *
+ * Runtime: O(log n)
+ *
+ * @param {goog.array.ArrayLike} arr The array to be searched.
+ * @param {Function} compareFn Either an evaluator or a comparison function,
+ *     as defined by binarySearch and binarySelect above.
+ * @param {boolean} isEvaluator Whether the function is an evaluator or a
+ *     comparison function.
+ * @param {*=} opt_target If the function is a comparison function, then this is
+ *     the target to binary search for.
+ * @param {Object=} opt_selfObj If the function is an evaluator, this is an
+  *    optional this object for the evaluator.
+ * @return {number} Lowest index of the target value if found, otherwise
+ *     (-(insertion point) - 1). The insertion point is where the value should
+ *     be inserted into arr to preserve the sorted property.  Return value >= 0
+ *     iff target is found.
+ * @private
+ */
+goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
+    opt_selfObj) {
   var left = 0;  // inclusive
   var right = arr.length;  // exclusive
   var found;
   while (left < right) {
     var middle = (left + right) >> 1;
-    var evalResult = evaluator.call(opt_obj, arr[middle], middle, arr);
-    if (evalResult > 0) {
+    var compareResult;
+    if (isEvaluator) {
+      compareResult = compareFn.call(opt_selfObj, arr[middle], middle, arr);
+    } else {
+      compareResult = compareFn(opt_target, arr[middle]);
+    }
+    if (compareResult > 0) {
       left = middle + 1;
     } else {
       right = middle;
       // We are looking for the lowest index so we can't return immediately.
-      found = !evalResult;
+      found = !compareResult;
     }
   }
   // left is the index if found, or the insertion point otherwise.
@@ -945,7 +956,9 @@ goog.array.binarySelect = function(arr, evaluator, opt_obj) {
  * specified, elements are compared using
  * <code>goog.array.defaultCompare</code>, which compares the elements using
  * the built in < and > operators.  This will produce the expected behavior
- * for homogeneous arrays of String(s) and Number(s).
+ * for homogeneous arrays of String(s) and Number(s), unlike the native sort,
+ * but will give unpredictable results for heterogenous lists of strings and
+ * numbers with different numbers of digits.
  *
  * This sort is not guaranteed to be stable.
  *

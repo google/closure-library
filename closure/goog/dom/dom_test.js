@@ -96,6 +96,24 @@ function testGetElementsByTagNameAndClass() {
       goog.dom.getElementsByTagNameAndClass);
 }
 
+function testGetElementsByClass() {
+  assertEquals(3, goog.dom.getElementsByClass('test1').length);
+  assertEquals(1, goog.dom.getElementsByClass('test2').length);
+  assertEquals(0, goog.dom.getElementsByClass('nonexistant').length);
+
+  var container = goog.dom.getElement('span-container');
+  assertEquals(3, goog.dom.getElementsByClass('test1', container).length);
+}
+
+function testGetElementByClass() {
+  assertNotNull(goog.dom.getElementByClass('test1'));
+  assertNotNull(goog.dom.getElementByClass('test2'));
+  // assertNull(goog.dom.getElementByClass('nonexistant'));
+
+  var container = goog.dom.getElement('span-container');
+  assertNotNull(goog.dom.getElementByClass('test1', container));
+}
+
 function testSetProperties() {
   var attrs = { 'name': 'test3', 'title': 'A title', 'random': 'woop' };
   var el = $('testEl');

@@ -49,10 +49,10 @@ Author: jananir@google.com (Janani Ravi) (Modified for Closure)
     return {
       loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
           opt_timeoutFn) {
-        moduleMgr.beforeLoadModuleCode(ids[0]);
         setTimeout(goog.bind(this.onLoad, this, ids.concat(), 0), 5);
       },
       onLoad: function(ids, idxLoaded) {
+        moduleMgr.beforeLoadModuleCode(ids[0]);
         moduleMgr.setLoaded(ids[idxLoaded]);
         moduleMgr.afterLoadModuleCode(ids[idxLoaded]);
         var idx = idxLoaded + 1;
@@ -67,8 +67,8 @@ Author: jananir@google.com (Janani Ravi) (Modified for Closure)
     return {
       loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
           opt_timeoutFn) {
-        moduleMgr.beforeLoadModuleCode(ids[0]);
         setTimeout(function() {
+          moduleMgr.beforeLoadModuleCode(ids[0]);
           moduleMgr.setLoaded(ids[0]);
           moduleMgr.afterLoadModuleCode(ids[0]);
           if (opt_successFn) {
@@ -1129,9 +1129,9 @@ Author: jananir@google.com (Janani Ravi) (Modified for Closure)
     return {
       loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
           opt_timeoutFn) {
-        moduleMgr.beforeLoadModuleCode(ids[0]);
-        moduleMgr.setModuleConstructor(info[ids[0]].ctor);
         setTimeout(function() {
+          moduleMgr.beforeLoadModuleCode(ids[0]);
+          moduleMgr.setModuleConstructor(info[ids[0]].ctor);
           moduleMgr.setLoaded(ids[0]);
           moduleMgr.afterLoadModuleCode(ids[0]);
           if (opt_successFn) {
@@ -1139,6 +1139,30 @@ Author: jananir@google.com (Janani Ravi) (Modified for Closure)
           }
         }, 5);
       }};
+  }
+
+  function testInitCallbackInBaseModule() {
+    var mm = new goog.module.ModuleManager();
+    var called = false;
+    var context;
+    mm.registerInitializationCallback(function(mcontext) {
+      called = true;
+      context = mcontext;
+    });
+    mm.setAllModuleInfo({'a': [], 'b': ['a']});
+    assertTrue('Base initialization not called', called);
+    assertNull('Context should still be null', context);
+
+    var mm = new goog.module.ModuleManager();
+    called = false;
+    mm.registerInitializationCallback(function(mcontext) {
+      called = true;
+      context = mcontext;
+    });
+    var appContext = {};
+    mm.setModuleContext(appContext);
+    assertTrue('Base initialization not called after setModuleContext', called);
+    assertEquals('Did not receive module context', appContext, context);
   }
 
 </script>

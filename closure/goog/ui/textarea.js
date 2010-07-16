@@ -145,15 +145,32 @@ goog.ui.Textarea.prototype.scrollHeightIncludesBorder_ = false;
 
 
 /**
+ * For storing the padding box size during enterDocument, to prevent possible
+ * measurement differences that can happen after text zooming.
+ * Note: runtime padding changes will cause problems with this.
+ * @type {goog.math.Box}
+ * @private
+ */
+goog.ui.Textarea.prototype.paddingBox_;
+
+
+/**
+ * For storing the border box size during enterDocument, to prevent possible
+ * measurement differences that can happen after text zooming.
+ * Note: runtime border width changes will cause problems with this.
+ * @type {goog.math.Box}
+ * @private
+ */
+goog.ui.Textarea.prototype.borderBox_;
+
+
+/**
  * @return {number} The padding plus the border box height.
  * @private
  */
 goog.ui.Textarea.prototype.getPaddingBorderBoxHeight_ = function() {
-  var textarea = this.getElement();
-  var paddingBox = goog.style.getPaddingBox(textarea);
-  var borderBox = goog.style.getBorderBox(textarea);
-  var paddingBorderBoxHeight = paddingBox.top + paddingBox.bottom +
-      borderBox.top + borderBox.bottom;
+  var paddingBorderBoxHeight = this.paddingBox_.top + this.paddingBox_.bottom +
+      this.borderBox_.top + this.borderBox_.bottom;
   return paddingBorderBoxHeight;
 };
 
@@ -279,6 +296,9 @@ goog.ui.Textarea.prototype.enterDocument = function() {
     'WebkitBoxSizing': 'border-box',
     'MozBoxSizing': 'border-box'});
 
+  this.paddingBox_ = goog.style.getPaddingBox(textarea);
+  this.borderBox_ = goog.style.getBorderBox(textarea);
+
   this.getHandler().
       listen(textarea, goog.events.EventType.SCROLL, this.grow_).
       listen(textarea, goog.events.EventType.FOCUS, this.grow_).
@@ -306,7 +326,7 @@ goog.ui.Textarea.prototype.getHeight_ = function() {
     height -= this.getPaddingBorderBoxHeight_();
   } else {
     if (!this.scrollHeightIncludesPadding_) {
-      var paddingBox = goog.style.getPaddingBox(textarea);
+      var paddingBox = this.paddingBox_;
       var paddingBoxHeight = paddingBox.top + paddingBox.bottom;
       height += paddingBoxHeight;
     }
@@ -357,7 +377,7 @@ goog.ui.Textarea.prototype.getHorizontalScrollBarHeight_ =
   var textarea = this.getElement();
   var height = textarea.offsetHeight - textarea.clientHeight;
   if (!this.scrollHeightIncludesPadding_) {
-    var paddingBox = goog.style.getPaddingBox(textarea);
+    var paddingBox = this.paddingBox_;
     var paddingBoxHeight = paddingBox.top + paddingBox.bottom;
     height -= paddingBoxHeight;
   }
@@ -498,7 +518,7 @@ goog.ui.Textarea.prototype.shrink_ = function() {
       if (!(minHeight && currentHeight <= minHeight) &&
           !(maxHeight && currentHeight >= maxHeight)) {
         // Nudge the padding by 1px.
-        var paddingBox = goog.style.getPaddingBox(textarea);
+        var paddingBox = this.paddingBox_;
         textarea.style.paddingBottom = paddingBox.bottom + 1 + 'px';
         var heightAfterNudge = this.getHeight_();
         // If the one px of padding had no effect, then we can shrink.
@@ -536,11 +556,6 @@ goog.ui.Textarea.prototype.shrink_ = function() {
 goog.ui.Textarea.prototype.mouseUpListener_ = function(e) {
   var textarea = this.getElement();
   var height = textarea.offsetHeight;
-  if (this.needsPaddingBorderFix_) {
-    var paddingBorderBoxHeight =
-        this.getPaddingBorderBoxHeight_();
-    height -= paddingBorderBoxHeight;
-  }
 
   // This solves for when the MSIE DropShadow filter is enabled,
   // as it affects the offsetHeight value, even with MsBoxSizing:border-box.

@@ -256,11 +256,12 @@ goog.ui.ContainerRenderer.prototype.setStateFromClassName = function(container,
  * @param {goog.ui.Container} container Container whose children are to be
  *     discovered.
  * @param {Element} element Element whose children are to be decorated.
+ * @param {Element=} opt_firstChild the first child to be decorated.
  */
 goog.ui.ContainerRenderer.prototype.decorateChildren = function(container,
-    element) {
+    element, opt_firstChild) {
   if (element) {
-    var node = element.firstChild, next;
+    var node = opt_firstChild || element.firstChild, next;
     // Tag soup HTML may result in a DOM where siblings have different parents.
     while (node && node.parentNode == element) {
       // Get the next sibling here, since the node may be replaced or removed.

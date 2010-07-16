@@ -203,9 +203,15 @@ See the COPYING file for details.
       assertEquals('With no content, offsetHeight should go back to 50, ' +
           'the minHeight.', 50, textarea.getElement().offsetHeight);
 
-      textarea.setMinHeight(0);
-      assertTrue('After setting minHeight to 0, offsetHeight should ' +
-          'now be < 50', textarea.getElement().offsetHeight < 50);
+      expectedFailures.expectFailureFor(isMacSafari3());
+      try {
+        textarea.setMinHeight(0);
+        assertTrue('After setting minHeight to 0, offsetHeight should ' +
+            'now be < 50, but it is ' + textarea.getElement().offsetHeight,
+            textarea.getElement().offsetHeight < 50);
+      } catch (e) {
+        expectedFailures.handleException(e);
+      }
     }
 
     function testMouseUpListener() {

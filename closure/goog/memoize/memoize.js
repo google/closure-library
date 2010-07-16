@@ -40,18 +40,24 @@ goog.memoize = function(f, opt_serializer) {
   var serializer = opt_serializer || goog.memoize.simpleSerializer;
 
   return function() {
-    // Maps the serialized list of args to the corresponding return value.
-    var cache = this[goog.memoize.CACHE_PROPERTY_];
-    if (!cache) {
-      cache = this[goog.memoize.CACHE_PROPERTY_] = {};
+    if (goog.memoize.ENABLE_MEMOIZE) {
+      // Maps the serialized list of args to the corresponding return value.
+      var cache = this[goog.memoize.CACHE_PROPERTY_] ||
+          (this[goog.memoize.CACHE_PROPERTY_] = {});
+      var key = serializer(functionUid, arguments);
+      return cache.hasOwnProperty(key) ? cache[key] :
+          (cache[key] = f.apply(this, arguments));
+    } else {
+      return f.apply(this, arguments);
     }
-    var key = serializer(functionUid, arguments);
-    if (!(key in cache)) {
-      cache[key] = f.apply(this, arguments);
-    }
-    return cache[key];
   };
 };
+
+
+/**
+ * @define {boolean} Flag to disable memoization in unit tests.
+ */
+goog.memoize.ENABLE_MEMOIZE = true;
 
 
 /**

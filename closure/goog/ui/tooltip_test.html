@@ -88,16 +88,19 @@ See the COPYING file for details.
       var hoverTarget = dom.getElement('hovertarget');
       var elsewhere = dom.getElement('notpopup');
       var element = tt.getElement();
+      var position = new goog.math.Coordinate(5, 5);
       assertNotNull('Tooltip should have non-null element', element);
       assertEquals('Initial state should be inactive',
                    goog.ui.Tooltip.State.INACTIVE, tt.getState());
       tt.attach(hoverTarget);
       tt.setShowDelayMs(100);
       tt.setHideDelayMs(50);
-      goog.testing.events.fireMouseOverEvent(hoverTarget, elsewhere);
+      goog.testing.events.fireMouseOverEvent(hoverTarget, elsewhere, position);
       assertEquals(goog.ui.Tooltip.State.WAITING_TO_SHOW, tt.getState());
       clock.tick(101);
       assertEquals('visible', tt.getElement().style.visibility);
+      assertEquals('tooltip y position (10px margin below the cursor)', '15px',
+          tt.getElement().style.top);
       assertEquals(goog.ui.Tooltip.State.SHOWING, tt.getState());
       assertEquals(goog.ui.PopupBase.EventType.SHOW, eventQueue.dequeue().type);
       assertTrue(eventQueue.isEmpty());

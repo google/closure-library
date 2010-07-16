@@ -364,6 +364,20 @@ goog.structs.Map.prototype.transpose = function() {
 
 
 /**
+ * @return {!Object} Object representation of the map.
+ */
+goog.structs.Map.prototype.toObject = function() {
+  this.cleanupKeysArray_();
+  var obj = {};
+  for (var i = 0; i < this.keys_.length; i++) {
+    var key = this.keys_[i];
+    obj[key] = this.map_[key];
+  }
+  return obj;
+};
+
+
+/**
  * Returns an iterator that iterates over the keys in the map.  Removal of keys
  * while iterating might have undesired side effects.
  * @return {!goog.iter.Iterator} An iterator over the keys in the map.

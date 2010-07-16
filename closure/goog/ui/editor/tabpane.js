@@ -24,6 +24,7 @@ goog.provide('goog.ui.editor.TabPane');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.Control');
 goog.require('goog.ui.Tab');
 goog.require('goog.ui.TabBar');
 

@@ -231,7 +231,13 @@ goog.testing.stacktrace.followCallChain_ = function() {
         if (goog.isString(arg)) {
           argsBuilder.push('"', arg, '"');
         } else {
-          argsBuilder.push(String(arg));
+          // Some args are mocks, and we don't want to fail from them not having
+          // expected a call to toString, so instead insert a static string.
+          if (arg && arg['$replay']) {
+            argsBuilder.push('goog.testing.Mock');
+          } else {
+            argsBuilder.push(String(arg));
+          }
         }
       }
     } else {

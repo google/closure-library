@@ -347,6 +347,9 @@ function testSetters() {
       'https://%E1%B8%A1oogle.com:443/search%20path/?q=query#fragmento',
       uri.setPath('/search path/').toString());
   assertEquals(
+      'https://%E1%B8%A1oogle.com:443/search%20path/?q=query#fragmento',
+      uri.setPath('search path/').toString());
+  assertEquals(
       'https://%E1%B8%A1oogle.com:443/search%20path/?q=some%20stuff&lang=en' +
       '#fragmento', uri.setParameterValues('q', 'some stuff')
                        .setParameterValues('lang', 'en').toString());

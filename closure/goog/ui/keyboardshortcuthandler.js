@@ -201,6 +201,19 @@ goog.ui.KeyboardShortcutHandler.prototype.metaKeyRecentlyReleased_;
 
 
 /**
+ * Whether a key event is a printable-key event. Windows uses ctrl+alt
+ * (alt-graph) keys to type characters on European keyboards. For such keys, we
+ * cannot identify whether these keys are used for typing characters when
+ * receiving keydown events. Therefore, we set this flag when we receive their
+ * respective keypress events and fire shortcut events only when we do not
+ * receive them.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.prototype.isPrintableKey_;
+
+
+/**
  * Static method for getting the key code for a given key.
  * @param {string} name Name of key.
  * @return {number} The key code.
@@ -574,6 +587,19 @@ goog.ui.KeyboardShortcutHandler.prototype.initializeKeyListener =
     goog.events.listen(this.keyTarget_, goog.events.EventType.KEYUP,
         this.handleMacGeckoKeyUp_, false, this);
   }
+
+  // Windows uses ctrl+alt keys (a.k.a. alt-graph keys) for typing characters
+  // on European keyboards (e.g. ctrl+alt+e for an an euro sign.) Unfortunately,
+  // Windows browsers except Firefox does not have any methods except listening
+  // keypress and keyup events to identify if ctrl+alt keys are really used for
+  // inputting characters. Therefore, we listen to these events and prevent
+  // firing shortcut-key events if ctrl+alt keys are used for typing characters.
+  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+    goog.events.listen(this.keyTarget_, goog.events.EventType.KEYPRESS,
+                       this.handleWindowsKeyPress_, false, this);
+    goog.events.listen(this.keyTarget_, goog.events.EventType.KEYUP,
+                       this.handleWindowsKeyUp_, false, this);
+  }
 };
 
 
@@ -611,6 +637,53 @@ goog.ui.KeyboardShortcutHandler.prototype.handleMacGeckoKeyUp_ = function(e) {
 
 
 /**
+ * Returns whether this event is possibly used for typing a printable character.
+ * Windows uses ctrl+alt (a.k.a. alt-graph) keys for typing characters on
+ * European keyboards. Since only Firefox provides a method that can identify
+ * whether ctrl+alt keys are used for typing characters, we need to check
+ * whether Windows sends a keypress event to prevent firing shortcut event if
+ * this event is used for typing characters.
+ * @param {goog.events.BrowserEvent} e The key event.
+ * @return {boolean} Whether this event is a possible printable-key event.
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.prototype.isPossiblePrintableKey_ =
+    function(e) {
+  return goog.userAgent.WINDOWS && !goog.userAgent.GECKO &&
+      e.ctrlKey && e.altKey && !e.shiftKey;
+};
+
+/**
+ * Handler for when a keypress event is fired on Windows.
+ * @param {goog.events.BrowserEvent} e The key event.
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.prototype.handleWindowsKeyPress_ = function(e) {
+  // When this keypress event consists of a printable character, set the flag to
+  // prevent firing shortcut key events when we receive the succeeding keyup
+  // event. We accept all Unicode characters except control ones since this
+  // keyCode may be a non-ASCII character.
+  if (e.keyCode > 0x20 && this.isPossiblePrintableKey_(e)) {
+    this.isPrintableKey_ = true;
+  }
+};
+
+
+/**
+ * Handler for when a keyup event is fired on Windows.
+ * @param {goog.events.BrowserEvent} e The key event.
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.prototype.handleWindowsKeyUp_ = function(e) {
+  // For possible printable-key events, try firing a shortcut-key event only
+  // when this event is not used for typing a character.
+  if (!this.isPrintableKey_ && this.isPossiblePrintableKey_(e)) {
+    this.handleKeyDown_(e);
+  }
+};
+
+
+/**
  * Removes the listener that was added by link {@link #initializeKeyListener}.
  * @protected
  */
@@ -621,6 +694,12 @@ goog.ui.KeyboardShortcutHandler.prototype.clearKeyListener = function() {
       goog.userAgent.GECKO && goog.userAgent.isVersion('1.8')) {
     goog.events.unlisten(this.keyTarget_, goog.events.EventType.KEYUP,
         this.handleMacGeckoKeyUp_, false, this);
+  }
+  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+    goog.events.unlisten(this.keyTarget_, goog.events.EventType.KEYPRESS,
+        this.handleWindowsKeyPress_, false, this);
+    goog.events.unlisten(this.keyTarget_, goog.events.EventType.KEYUP,
+        this.handleWindowsKeyUp_, false, this);
   }
   this.keyTarget_ = null;
 };
@@ -729,6 +808,14 @@ goog.ui.KeyboardShortcutHandler.makeKey_ = function(keyCode, modifiers) {
  */
 goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   if (!this.isValidShortcut_(event)) {
+    return;
+  }
+  // For possible printable-key events, we cannot identify whether the events
+  // are used for typing characters until we receive respective keyup events.
+  // Therefore, we handle this event when we receive a succeeding keyup event
+  // to verify this event is not used for typing characters.
+  if (event.type == 'keydown' && this.isPossiblePrintableKey_(event)) {
+    this.isPrintableKey_ = false;
     return;
   }
   var modifiers =

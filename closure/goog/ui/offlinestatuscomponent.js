@@ -427,7 +427,7 @@ goog.ui.OfflineStatusComponent.prototype.getStatusClassName_ = function(
  * status card.
  * @param {goog.events.BrowserEvent} e The event.
  * @private
- * @return {boolean} Always false to prevent the anchor navigation.
+ * @return {boolean|undefined} Always false to prevent the anchor navigation.
  */
 goog.ui.OfflineStatusComponent.prototype.handleClick_ = function(e) {
   this.performAction();

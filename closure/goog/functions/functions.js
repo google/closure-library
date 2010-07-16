@@ -50,6 +50,13 @@ goog.functions.TRUE = goog.functions.constant(true);
 
 
 /**
+ * Always returns NULL.
+ * @type {function(...): null}
+ */
+goog.functions.NULL = goog.functions.constant(null);
+
+
+/**
  * A simple function that returns the first argument of whatever is passed
  * into it.
  * @param {*=} opt_returnValue The single value that will be returned.

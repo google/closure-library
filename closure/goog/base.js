@@ -301,7 +301,7 @@ goog.global.CLOSURE_NO_DEPS;
 
 /**
  * Null function used for default values of callbacks, etc.
- * @type {!Function}
+ * @return {void}
  */
 goog.nullFunction = function() {};
 

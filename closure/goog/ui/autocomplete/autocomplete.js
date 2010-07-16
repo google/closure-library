@@ -211,7 +211,7 @@ goog.ui.AutoComplete.prototype.handleEvent = function(e) {
   if (e.target == this.renderer_) {
     switch (e.type) {
       case goog.ui.AutoComplete.EventType.HILITE:
-        this.hiliteId(e.row);
+        this.hiliteId(/** @type {number} */ (e.row));
         break;
 
       case goog.ui.AutoComplete.EventType.SELECT:

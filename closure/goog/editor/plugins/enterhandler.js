@@ -240,16 +240,13 @@ goog.editor.plugins.EnterHandler.prototype.deleteBrGecko = function(e) {
 };
 
 
-/**
- * Handle keypress events.
- * @param {goog.events.BrowserEvent} e The key event.
- */
+/** @inheritDoc */
 goog.editor.plugins.EnterHandler.prototype.handleKeyPress = function(e) {
   // If a dialog doesn't have selectable field, Gecko grabs the event and
   // performs actions in editor window. This solves that problem and allows
   // the event to be passed on to proper handlers.
   if (goog.userAgent.GECKO && this.fieldObject.inModalMode()) {
-    return;
+    return false;
   }
 
   // Firefox will allow the first node in an iframe to be deleted
@@ -292,21 +289,21 @@ goog.editor.plugins.EnterHandler.prototype.handleKeyPress = function(e) {
   } else if (goog.userAgent.GECKO && e.keyCode == goog.events.KeyCodes.DELETE) {
     this.handleDeleteGecko(e);
   }
+
+  return false;
 };
 
 
-/**
- * Handle keyup events.
- * @param {goog.events.Event} e The key event.
- */
+/** @override */
 goog.editor.plugins.EnterHandler.prototype.handleKeyUp = function(e) {
   // If a dialog doesn't have selectable field, Gecko grabs the event and
   // performs actions in editor window. This solves that problem and allows
   // the event to be passed on to proper handlers.
   if (goog.userAgent.GECKO && this.fieldObject.inModalMode()) {
-    return;
+    return false;
   }
   this.handleKeyUpInternal(e);
+  return false;
 };
 
 

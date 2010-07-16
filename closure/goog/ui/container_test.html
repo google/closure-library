@@ -19,6 +19,7 @@ Author:  attila@google.com (Attila Bodis)
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Container');
+    goog.require('goog.ui.Container.EventType');
     goog.require('goog.ui.Control');
   </script>
 </head>
@@ -377,6 +378,50 @@ Author:  attila@google.com (Attila Bodis)
           container.getChildAt(1).isOpen());
       assertEquals('OpenItem should be child 1',
           container.getChildAt(1), container.getOpenItem());
+    }
+
+    function testRemoveChild() {
+      goog.dom.removeChildren(containerElement);
+      container.decorate(containerElement);
+
+      var a = new goog.ui.Control('A');
+      var b = new goog.ui.Control('B');
+      var c = new goog.ui.Control('C');
+
+      a.setId('a');
+      b.setId('b');
+      c.setId('c');
+
+      container.addChild(a, true);
+      container.addChild(b, true);
+      container.addChild(c, true);
+
+      container.setHighlightedIndex(2);
+
+      assertEquals('Parent must remove and return child by ID', b,
+          container.removeChild('b'));
+      assertNull('Parent must no longer contain this child',
+          container.getChild('b'));
+      assertEquals('Highlighted index must be decreased', 1,
+          container.getHighlightedIndex());
+      assertTrue('The removed control must handle its own mouse events',
+          b.isHandleMouseEvents());
+
+      assertEquals('Parent must remove and return child', c,
+          container.removeChild(c));
+      assertNull('Parent must no longer contain this child',
+          container.getChild('c'));
+      assertFalse('This child must no longer be highlighted',
+          c.isHighlighted());
+      assertTrue('The removed control must handle its own mouse events',
+          c.isHandleMouseEvents());
+
+      assertEquals('Parent must remove and return child by index', a,
+          container.removeChildAt(0));
+      assertNull('Parent must no longer contain this child',
+          container.getChild('a'));
+      assertTrue('The removed control must handle its own mouse events',
+          a.isHandleMouseEvents());
     }
   </script>
 </body>

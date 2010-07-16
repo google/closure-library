@@ -792,18 +792,19 @@ goog.net.IframeIo.prototype.setTimeoutInterval = function(ms) {
 /**
  * Override of dispatchEvent, we ensure that the xhrMonitor is listening for
  * XmlHttpRequests that may be initiated as a result of the event.
- * @param {goog.events.Event|string} e Event to dispatch.
+ * @override
  */
 goog.net.IframeIo.prototype.dispatchEvent = function(e) {
   if (this.iframe_) {
     goog.net.xhrMonitor.pushContext(this.iframe_);
   }
   try {
-    goog.net.IframeIo.superClass_.dispatchEvent.call(this, e);
+    return goog.net.IframeIo.superClass_.dispatchEvent.call(this, e);
   } finally {
     if (this.iframe_) {
       goog.net.xhrMonitor.popContext();
     }
+    return true;
   }
 };
 

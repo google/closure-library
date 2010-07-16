@@ -127,6 +127,30 @@ function testClearCache() {
   assertEquals('Expected cleared memoization cache', 2, computed);
 }
 
+function testDisableMemoize() {
+  var computed = 0;
+  var identity = goog.memoize(function(x) {
+    computed++;
+    return x;
+  });
+
+  assertEquals('return value on first call', 1, identity(1));
+  assertEquals('return value on second call (memoized)', 1, identity(1));
+  assertEquals('computed once', 1, computed);
+
+  goog.memoize.ENABLE_MEMOIZE = false;
+
+  try {
+    assertEquals('return value after disabled memoization', 1, identity(1));
+    assertEquals('computed again', 2, computed);
+  } finally {
+    goog.memoize.ENABLE_MEMOIZE = true;
+  }
+
+  assertEquals('return value after reenabled memoization', 1, identity(1));
+  assertEquals('not computed again', 2, computed);
+}
+
 </script>
 </body>
 </html>

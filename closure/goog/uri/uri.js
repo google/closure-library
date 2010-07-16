@@ -210,6 +210,9 @@ goog.Uri.prototype.toString = function() {
   }
 
   if (this.path_) {
+    if (this.hasDomain() && this.path_.charAt(0) != '/') {
+      out.push('/');
+    }
     out.push(goog.Uri.encodeSpecialChars_(
         this.path_, goog.Uri.reDisallowedInPath_));
   }

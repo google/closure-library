@@ -58,6 +58,17 @@ function testHoverBehavior() {
   assertEquals(-1, menu.getHighlightedIndex());
 }
 
+function testIndirectionDecoration() {
+  menu.decorate(goog.dom.getElement('complexMenu'));
+  
+  goog.testing.events.fireMouseOverEvent(goog.dom.getElement('complexItem3'),
+      document.body);
+  assertEquals(2, menu.getHighlightedIndex());
+  
+  menu.exitDocument();
+  assertEquals(-1, menu.getHighlightedIndex());
+}
+
 </script>
 
 <p>
@@ -68,6 +79,18 @@ function testHoverBehavior() {
   <div id='menuItem2' class="goog-menuitem">Quarterly Update.pdf</div>
   <div id='menuItem3' class="goog-menuitem">Enemies List.txt</div>
 </div>
+
+<p>
+  Here's a menu which has been rendered with an explicit content node:
+</p>
+<div id="complexMenu" class="goog-menu">
+  <div style="border:1px solid black;">
+    <div class="goog-menu-content">
+      <div id='complexItem1' class="goog-menuitem">Drizzle</div>
+      <div id='complexItem2' class="goog-menuitem">Rain</div>
+      <div id='complexItem3' class="goog-menuitem">Deluge</div>
+    </div>
+  </div>
 </div>
 
 </body>

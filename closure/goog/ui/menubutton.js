@@ -273,9 +273,13 @@ goog.ui.MenuButton.prototype.containsElement = function(element) {
 /** @inheritDoc */
 goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
   // Handle SPACE on keyup and all other keys on keypress.
-  var eventType = e.keyCode == goog.events.KeyCodes.SPACE ?
-      goog.events.EventType.KEYUP : goog.events.KeyHandler.EventType.KEY;
-  if (e.type != eventType) {
+  if (e.keyCode == goog.events.KeyCodes.SPACE) {
+    // Prevent page scrolling in Chrome.
+    e.preventDefault();
+    if (e.type != goog.events.EventType.KEYUP) {
+      return false;
+    }
+  } else if (e.type != goog.events.KeyHandler.EventType.KEY) {
     return false;
   }
 

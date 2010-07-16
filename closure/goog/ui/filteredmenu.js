@@ -536,43 +536,20 @@ goog.ui.FilteredMenu.prototype.getFilterInputElement = function() {
 /** @inheritDoc */
 goog.ui.FilteredMenu.prototype.decorateInternal = function(element) {
   this.setElementInternal(element);
+  
+  // Decorate the menu content.
+  this.decorateContent(element);
 
-  // Filter element.
+  // Locate internally managed elements.
   var el = this.getDomHelper().getElementsByTagNameAndClass('div',
       goog.getCssName(this.getRenderer().getCssClass(), 'filter'), element)[0];
   this.labelEl_ = goog.dom.getFirstElementChild(el);
   this.filterInput_ = goog.dom.getNextElementSibling(this.labelEl_);
+  this.contentElement_ = goog.dom.getNextElementSibling(el);
 
-  // Content element.
-  el = goog.dom.getNextElementSibling(el);
-  this.contentElement_ = el && goog.dom.classes.has(el,
-      goog.getCssName(this.getRenderer().getCssClass(), 'content')) ? el : null;
-
-  if (this.contentElement_) {
-    this.decorateChildren_(goog.dom.getFirstElementChild(this.contentElement_));
-  }
-  this.decorateChildren_(goog.dom.getNextElementSibling(el));
+  // Decorate additional menu items (like 'apply').
+  this.getRenderer().decorateChildren(this, el.parentNode,
+      this.contentElement_);
 
   this.initFilterInput_();
-};
-
-
-/**
- * Decorates child nodes.
- * @param {Element} firstChild First child to decorate.
- * @private
- */
-goog.ui.FilteredMenu.prototype.decorateChildren_ = function(firstChild) {
-  var childElem = firstChild;
-  while (childElem) {
-    // Get the next sibling here, in case decorate() creates or removes nodes.
-    var nextChild = goog.dom.getNextElementSibling(childElem);
-    var child = this.getRenderer().getDecoratorForChild(childElem);
-    if (child) {
-      child.setElementInternal(childElem);
-      this.addChild(child);
-      child.decorate(childElem);
-    }
-    childElem = nextChild;
-  }
 };

@@ -30,7 +30,8 @@ goog.require('goog.Disposable');
  *
  * @param {string} type Event Type.
  * @param {Object=} opt_target Reference to the object that is the target of
- *     this event.
+ *     this event. It has to implement the {@code EventTarget} interface
+ *     declared at {@link http://developer.mozilla.org/en/DOM/EventTarget}.
  * @constructor
  * @extends {goog.Disposable}
  */

@@ -21,6 +21,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.dom');
   goog.require('goog.dom.TagName');
+  goog.require('goog.dom.classes');
   goog.require('goog.events');
   goog.require('goog.events.KeyCodes');
   goog.require('goog.testing.events');
@@ -150,6 +151,55 @@ function testRecomputeVisibleCountAfterChangingItems() {
   comboBox.removeItemAt(0);  // Red
   assertEquals('No items should be displayed',
       0, comboBox.getNumberOfVisibleItems_());  
+}
+
+function testSetEnabled() {
+  // By default, everything should be enabled.
+  assertFalse('Text input should initially not be disabled', input.disabled);
+  assertFalse('Text input should initially not look disabled',
+      goog.dom.classes.has(input,
+      goog.getCssName(goog.ui.LabelInput.prototype.LABEL_CLASS_NAME,
+          'disabled')));
+  assertFalse('Combo box should initially not look disabled',
+      goog.dom.classes.has(comboBox.getElement(),
+      goog.getCssName('goog-combobox-disabled')));
+  goog.testing.events.fireClickSequence(comboBox.getElement());
+  assertTrue('Menu initially becomes visible after click',
+      comboBox.getMenu().isVisible());
+  goog.testing.events.fireClickSequence(document);
+  assertFalse('Menu initially becomes invisible after document click',
+      comboBox.getMenu().isVisible());
+
+  comboBox.setEnabled(false);
+  assertTrue('Text input should be disabled after being disabled',
+      input.disabled);
+  assertTrue('Text input should appear disabled after being disabled',
+      goog.dom.classes.has(input,
+      goog.getCssName(goog.ui.LabelInput.prototype.LABEL_CLASS_NAME,
+          'disabled')));
+  assertTrue('Combo box should appear disabled after being disabled',
+      goog.dom.classes.has(comboBox.getElement(),
+      goog.getCssName('goog-combobox-disabled')));
+  goog.testing.events.fireClickSequence(comboBox.getElement());
+  assertFalse('Menu should not become visible after click if disabled',
+      comboBox.getMenu().isVisible());
+
+  comboBox.setEnabled(true);
+  assertFalse('Text input should not be disabled after being re-enabled',
+      input.disabled);
+  assertFalse('Text input should not appear disabled after being re-enabled',
+      goog.dom.classes.has(input,
+      goog.getCssName(goog.ui.LabelInput.prototype.LABEL_CLASS_NAME,
+          'disabled')));
+  assertFalse('Combo box should not appear disabled after being re-enabled',
+      goog.dom.classes.has(comboBox.getElement(),
+      goog.getCssName('goog-combobox-disabled')));
+  goog.testing.events.fireClickSequence(comboBox.getElement());
+  assertTrue('Menu becomes visible after click when re-enabled',
+      comboBox.getMenu().isVisible());
+  goog.testing.events.fireClickSequence(document);
+  assertFalse('Menu becomes invisible after document click when re-enabled',
+      comboBox.getMenu().isVisible());
 }
 
 </script>

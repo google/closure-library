@@ -383,3 +383,26 @@ goog.ui.Menu.prototype.canHighlightItem = function(item) {
   return (this.allowHighlightDisabled_ || item.isEnabled()) &&
       item.isVisible() && item.isSupportedState(goog.ui.Component.State.HOVER);
 };
+
+
+/** @inheritDoc */
+goog.ui.Menu.prototype.decorateInternal = function(element) {
+  this.decorateContent(element);
+  goog.ui.Menu.superClass_.decorateInternal.call(this, element);
+};
+
+
+/**
+ * Decorate menu items located in any descendent node which as been explicitly
+ * marked as a 'content' node.
+ * @param {Element} element Element to decorate.
+ * @protected
+ */
+goog.ui.Menu.prototype.decorateContent = function(element) {
+  var renderer = this.getRenderer();
+  var contentElements = this.getDomHelper().getElementsByTagNameAndClass('div',
+      goog.getCssName(renderer.getCssClass(), 'content'), element);
+  for (var el, i = 0; el = contentElements[i]; i++) {
+    renderer.decorateChildren(this, el);
+  }
+}

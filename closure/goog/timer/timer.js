@@ -242,13 +242,18 @@ goog.Timer.TICK = 'tick';
 
 
 /**
- * Calls the given function once, after the optional pause
+ * Calls the given function once, after the optional pause.
+ *
+ * The function is always called asynchronously, even if the delay is 0. This
+ * is a common trick to schedule a function to run after a batch of browser
+ * event processing.
+ *
  * @param {Function} listener Function or object that has a handleEvent method.
- * @param {number=} opt_interval Number of ms between ticks (Default: 1ms).
+ * @param {number=} opt_delay Milliseconds to wait; default is 0.
  * @param {Object=} opt_handler Object in whose scope to call the listener.
  * @return {number} A handle to the timer ID.
  */
-goog.Timer.callOnce = function(listener, opt_interval, opt_handler) {
+goog.Timer.callOnce = function(listener, opt_delay, opt_handler) {
   if (goog.isFunction(listener)) {
     if (opt_handler) {
       listener = goog.bind(listener, opt_handler);
@@ -260,14 +265,14 @@ goog.Timer.callOnce = function(listener, opt_interval, opt_handler) {
    throw Error('Invalid listener argument');
   }
 
-  if (opt_interval > goog.Timer.MAX_TIMEOUT_) {
+  if (opt_delay > goog.Timer.MAX_TIMEOUT_) {
     // Timeouts greater than MAX_INT return immediately due to integer
     // overflow in many browsers.  Since MAX_INT is 24.8 days, just don't
     // schedule anything at all.
     return -1;
   } else {
     return goog.Timer.defaultTimerObject.setTimeout(
-        listener, opt_interval || 0);
+        listener, opt_delay || 0);
   }
 };
 

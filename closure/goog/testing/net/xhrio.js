@@ -28,6 +28,7 @@ goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XmlHttp');
+goog.require('goog.structs.Map');
 
 
 
@@ -41,6 +42,13 @@ goog.require('goog.net.XmlHttp');
  */
 goog.testing.net.XhrIo = function(opt_testQueue) {
   goog.events.EventTarget.call(this);
+
+  /**
+   * Map of default headers to add to every request, use:
+   * XhrIo.headers.set(name, value)
+   * @type {goog.structs.Map}
+   */
+  this.headers = new goog.structs.Map();
 
   /**
    * Queue of events write to.

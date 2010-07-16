@@ -451,9 +451,13 @@ goog.editor.plugins.BasicTextFormatter.prototype.cleanContentsDom =
       image.removeAttribute('tabIndexSet');
       goog.removeUid(image);
 
+      // Declare oldTypeIndex for the compiler. The associated plugin may not be
+      // included in the compiled bundle.
+      /** @type {string} */ image.oldTabIndex;
+
       // oldTabIndex will only be set if
-      // goog.editor.BrowserFeature.TABS_THROUGH_IMAGES is true
-      // and we're on P-on-enter mode.
+      // goog.editor.BrowserFeature.TABS_THROUGH_IMAGES is true and we're in
+      // P-on-enter mode.
       if (image.oldTabIndex) {
         image.tabIndex = image.oldTabIndex;
       }

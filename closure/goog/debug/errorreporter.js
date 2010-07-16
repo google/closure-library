@@ -21,7 +21,7 @@
  */
 
 goog.provide('goog.debug.ErrorReporter');
-goog.provide('goog.debug.ErrorReporter.ExceptionEvent')
+goog.provide('goog.debug.ErrorReporter.ExceptionEvent');
 
 goog.require('goog.debug');
 goog.require('goog.debug.ErrorHandler');
@@ -53,6 +53,13 @@ goog.debug.ErrorReporter = function(handlerUrl, opt_contextProvider) {
    * @private
    */
   this.contextProvider_ = opt_contextProvider || null;
+
+  /**
+   * XHR sender.
+   * @type {function(string, string, string, (Object|goog.structs.Map)=)}
+   * @private
+   */
+  this.xhrSender_ = goog.debug.ErrorReporter.defaultXhrSender;
 
   /**
    * The URL at which all errors caught by this handler will be logged.
@@ -139,10 +146,24 @@ goog.debug.ErrorReporter.logger_ =
  *     context object before submission to the server.
  * @return {goog.debug.ErrorReporter} The error reporter.
  */
-goog.debug.ErrorReporter.install = function(loggingUrl,
-    opt_contextProvider) {
+goog.debug.ErrorReporter.install = function(loggingUrl, opt_contextProvider) {
   var instance = new goog.debug.ErrorReporter(loggingUrl, opt_contextProvider);
   return instance;
+};
+
+
+/**
+ * Default implemntation of XHR sender interface.
+ *
+ * @param {string} uri URI to make request to.
+ * @param {string} method Send method.
+ * @param {string} content Post data.
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
+ *     request.
+ */
+goog.debug.ErrorReporter.defaultXhrSender = function(uri, method, content,
+    opt_headers) {
+  goog.net.XhrIo.send(uri, null, method, content, opt_headers);
 };
 
 
@@ -174,6 +195,18 @@ goog.debug.ErrorReporter.prototype.protectAdditionalEntryPoint = function(fn,
 goog.debug.ErrorReporter.prototype.setLoggingHeaders =
     function(loggingHeaders) {
   this.extraHeaders_ = loggingHeaders;
+};
+
+/**
+ * Set the function used to send error reports to the server.
+ * @param {function(string, string, string, (Object|goog.structs.Map)=)}
+ *     xhrSender If provided, this will be used to send a report to the
+ *     server instead of the default method. The function will be given the URI,
+ *     HTTP method request content, and (optionally) request headers to be
+ *     added.
+ */
+goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
+  this.xhrSender_ = xhrSender;
 };
 
 
@@ -274,8 +307,7 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
     var queryData = goog.uri.utils.buildQueryDataFromMap(queryMap);
 
     // Send the request with the contents of the error.
-    goog.net.XhrIo.send(requestUrl, null, 'POST',
-        queryData, this.extraHeaders_);
+    this.xhrSender_(requestUrl, 'POST', queryData, this.extraHeaders_);
   } catch (e) {
     var logMessage = goog.string.buildString(
         'Error occurred in sending an error report.\n\n',

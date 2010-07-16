@@ -375,6 +375,21 @@ function testTranspose() {
       goog.iter.join(transposed, ''));
 }
 
+function testToObject() {
+  Object.prototype.b = 0;
+  try {
+    var map = new goog.structs.Map();
+    map.set('a', 0);
+    var obj = map.toObject();
+    assertTrue('object representation has key "a"', obj.hasOwnProperty('a'));
+    assertFalse('object representation does not have key "b"',
+        obj.hasOwnProperty('b'));
+    assertEquals('value for key "a"', 0, obj['a']);
+  } finally {
+    delete Object.prototype.b;
+  }
+}
+
 function testEqualsWithSameObject() {
   var map1 = getMap();
   assertTrue('maps are the same object', map1.equals(map1));
