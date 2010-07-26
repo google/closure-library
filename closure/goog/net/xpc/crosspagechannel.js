@@ -483,8 +483,9 @@ goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
 goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(serviceName,
                                                             payload) {
 
-  // transport service?
-  if (!serviceName ||
+  if (this.isDisposed()) {
+    goog.net.xpc.logger.warning('CrossPageChannel::deliver_(): Disposed.');
+  } else if (!serviceName ||
       serviceName == goog.net.xpc.TRANSPORT_SERVICE_) {
     this.transport_.transportServiceHandler(payload);
   } else {
@@ -546,8 +547,7 @@ goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
   this.peerWindowObject_ = null;
   this.iframeElement_ = null;
   delete this.services_;
-
-  goog.net.xpc.channels_[this.name] = null;
+  delete goog.net.xpc.channels_[this.name];
 };
 
 

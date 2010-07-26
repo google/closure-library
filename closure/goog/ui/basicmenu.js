@@ -661,7 +661,9 @@ goog.ui.BasicMenu.prototype.onKeyDown = function(e) {
 
 /**
  * Called after the menu is shown.
- * @private
+ * @protected
+ * @suppress {underscore}
+ * @override
  */
 goog.ui.BasicMenu.prototype.onShow_ = function() {
   goog.ui.BasicMenu.superClass_.onShow_.call(this);

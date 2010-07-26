@@ -205,7 +205,7 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorAfterBr() {
       '<blockquote id="quote" class="tr_bq">one<br>' +
       'two<br></blockquote>');
   var dom = field1.getEditableDomHelper();
-  goog.dom.Range.createCaret(dom.$('quote'), 2).select();
+  goog.dom.Range.createCaret(dom.getElement('quote'), 2).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
   var elem = field1.getElement();
@@ -238,7 +238,7 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorBeforeBr() {
       '<blockquote id="quote" class="tr_bq">one<br>' +
       'two<br></blockquote>');
   var dom = field1.getEditableDomHelper();
-  var cursor = dom.$('quote').firstChild;
+  var cursor = dom.getElement('quote').firstChild;
   goog.dom.Range.createCaret(cursor, 3).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
@@ -250,7 +250,7 @@ function testEnterInBlockquoteRemovesUnnecessaryBrWithCursorBeforeBr() {
   // change.
   field1.setHtml(false,
       '<blockquote id="quote" class="tr_bq">one<b>two</b><br>');
-  cursor = dom.$('quote').firstChild;
+  cursor = dom.getElement('quote').firstChild;
   goog.dom.Range.createCaret(cursor, 3).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
@@ -304,7 +304,7 @@ function testEnterInBlockquoteRemovesExtraNodes() {
       '<div>b</div>' +
       '</blockquote>');
   var dom = field1.getEditableDomHelper();
-  goog.dom.Range.createCaret(dom.$('cursor').firstChild, 3).select();
+  goog.dom.Range.createCaret(dom.getElement('cursor').firstChild, 3).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
   var elem = field1.getElement();
@@ -317,7 +317,7 @@ function testEnterInBlockquoteRemovesExtraNodes() {
       '<div><span>a</span><div id="cursor">one</div><div>two</div></div>' +
       '<div><span>c</span></div>' +
       '</blockquote>');
-  goog.dom.Range.createCaret(dom.$('cursor').firstChild, 3).select();
+  goog.dom.Range.createCaret(dom.getElement('cursor').firstChild, 3).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
   secondBlockquote = dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem)[1];
@@ -331,7 +331,7 @@ function testEnterInBlockquoteRemovesExtraNodes() {
       '<div>one</div><div>two</div>' +
       '</blockquote>');
   goog.dom.Range.createCaret(
-      dom.$('quote').firstChild.firstChild, 1).select();
+      dom.getElement('quote').firstChild.firstChild, 1).select();
   goog.testing.events.fireKeySequence(field1.getElement(),
                                       goog.events.KeyCodes.ENTER);
   var blockquotes = dom.getElementsByTagNameAndClass('BLOCKQUOTE', null, elem);
@@ -351,7 +351,7 @@ function testEnterInList() {
     // Opera doesn't actually place the selection in the empty span
     // unless we add a text node first.
     var dom = field1.getEditableDomHelper();
-    dom.$('field1cursor').appendChild(dom.createTextNode(''));
+    dom.getElement('field1cursor').appendChild(dom.createTextNode(''));
   }
   var prevented = !selectNodeAndHitEnter(field1, 'field1cursor');
   assertFalse('<enter> in a list should not be prevented', prevented);
@@ -364,7 +364,7 @@ function testEnterAtEndOfBlockInWebkit() {
     field1.setHtml(false,
         '<blockquote>hi!<span id="field1cursor"></span></blockquote>');
 
-    var cursor = field1.getEditableDomHelper().$('field1cursor');
+    var cursor = field1.getEditableDomHelper().getElement('field1cursor');
     goog.editor.range.placeCursorNextTo(cursor, false);
     goog.dom.removeNode(cursor);
 
@@ -592,7 +592,7 @@ function testCollapsedSelectionKeepsBrOpera() {
  */
 function selectNodeAndHitEnter(field, id) {
   var dom = field.getEditableDomHelper();
-  var cursor = dom.$(id);
+  var cursor = dom.getElement(id);
   goog.dom.Range.createFromNodeContents(cursor).select();
   return goog.testing.events.fireKeySequence(
       cursor, goog.events.KeyCodes.ENTER);

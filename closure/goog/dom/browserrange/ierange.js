@@ -792,7 +792,7 @@ goog.dom.browserrange.IeRange.pasteElement_ = function(range, element,
   // a clone of the element argument.  We want to return a reference to the
   // clone, not the original.  However we need to remove the temporary ID
   // first.
-  element = opt_domHelper.$(id);
+  element = opt_domHelper.getElement(id);
 
   // If element is null here, we failed.
   if (element) {

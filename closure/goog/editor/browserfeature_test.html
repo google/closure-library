@@ -75,7 +75,7 @@ function testLeavesPWhenRemovingLists() {
 
 function testActiveElement() {
   var root = goog.dom.getElement('root');
-  var div = goog.dom.$dom('div');
+  var div = goog.dom.createElement('div');
   root.appendChild(div);
   div.tabIndex = 0;
   div.focus();

@@ -34,8 +34,8 @@ function setUp() {
   doc = goog.dom.getFrameContentDocument(frame);
   dom = goog.dom.getDomHelper(doc);
   viewportSize = dom.getViewportSize();
-  anchor = dom.$('anchor');
-  popup = dom.$('popup');
+  anchor = dom.getElement('anchor');
+  popup = dom.getElement('popup');
   goog.style.setSize(popup, 20, 20);
 }
 

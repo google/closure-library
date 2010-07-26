@@ -27,10 +27,10 @@
   }
 
   function setUpNonEmptyTests() {
-    childNode1 = goog.dom.$dom(goog.dom.TagName.DIV);
-    childNode2 = goog.dom.$dom(goog.dom.TagName.DIV);
-    childNode3 = goog.dom.$dom(goog.dom.TagName.DIV);
-    parentNode = goog.dom.$dom(goog.dom.TagName.DIV,
+    childNode1 = goog.dom.createElement(goog.dom.TagName.DIV);
+    childNode2 = goog.dom.createElement(goog.dom.TagName.DIV);
+    childNode3 = goog.dom.createElement(goog.dom.TagName.DIV);
+    parentNode = goog.dom.createDom(goog.dom.TagName.DIV,
         null,
         childNode1,
         childNode2,
@@ -40,10 +40,10 @@
     childNode1.appendChild(goog.dom.createTextNode('One'));
     childNode1.appendChild(goog.dom.createTextNode(''));
 
-    childNode2.appendChild(goog.dom.$dom(goog.dom.TagName.BR));
+    childNode2.appendChild(goog.dom.createElement(goog.dom.TagName.BR));
     childNode2.appendChild(goog.dom.createTextNode('TwoA'));
     childNode2.appendChild(goog.dom.createTextNode('TwoB'));
-    childNode2.appendChild(goog.dom.$dom(goog.dom.TagName.BR));
+    childNode2.appendChild(goog.dom.createElement(goog.dom.TagName.BR));
 
     childNode3.appendChild(goog.dom.createTextNode(''));
     childNode3.appendChild(goog.dom.createTextNode('Three'));
@@ -133,11 +133,11 @@
     // Create the following structure: <[01]><[]><[23]>
     // Where <> delimits spans, [] delimits text nodes, 01 and 23 are text.
     // We will test all 10 positions in between 0 and 2. All should pass.
-    first = goog.dom.$dom(goog.dom.TagName.SPAN, null, '01');
-    middle = goog.dom.$dom(goog.dom.TagName.SPAN);
+    first = goog.dom.createDom(goog.dom.TagName.SPAN, null, '01');
+    middle = goog.dom.createElement(goog.dom.TagName.SPAN);
     var emptyTextNode = goog.dom.createTextNode('');
     goog.dom.appendChild(middle, emptyTextNode);
-    last = goog.dom.$dom(goog.dom.TagName.SPAN, null, '23');
+    last = goog.dom.createDom(goog.dom.TagName.SPAN, null, '23');
     goog.dom.appendChild(root, first);
     goog.dom.appendChild(root, middle);
     goog.dom.appendChild(root, last);

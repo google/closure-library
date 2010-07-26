@@ -184,7 +184,7 @@ goog.dom.getElementsByClass = function(className, opt_el) {
 
 
 /**
- * Returns an array of all the elements with the provided className.
+ * Returns the first element with the provided className.
  * @see {goog.dom.query}
  * @param {!string} className the name of the class to look for.
  * @param {Element|Document=} opt_el Optional element to look in.
@@ -627,9 +627,10 @@ goog.dom.getWindow_ = function(doc) {
  * would return a div with two child paragraphs
  *
  * @param {string} tagName Tag to create.
- * @param {Object|string=} opt_attributes If object, then a map of name-value
- *     pairs for attributes. If a string, then this is the className of the new
- *     element.
+ * @param {Object|Array.<string>|string=} opt_attributes If object, then a map
+ *     of name-value pairs for attributes. If a string, then this is the
+ *     className of the new element. If an array, the elements will be joined
+ *     together as the className of the new element.
  * @param {...Object|string|Array|NodeList} var_args Further DOM nodes or
  *     strings for text nodes. If one of the var_args is an array or NodeList,i
  *     its elements will be added as childNodes instead.
@@ -679,6 +680,8 @@ goog.dom.createDom_ = function(doc, args) {
   if (attributes) {
     if (goog.isString(attributes)) {
       element.className = attributes;
+    } else if (goog.isArray(attributes)) {
+      goog.dom.classes.add.apply(null, [element].concat(attributes));
     } else {
       goog.dom.setProperties(element, attributes);
     }
@@ -1863,7 +1866,7 @@ goog.dom.DomHelper.prototype.$ = goog.dom.DomHelper.prototype.getElement;
  *
  * @param {?string=} opt_tag Element tag name or * for all tags.
  * @param {?string=} opt_class Optional class name.
- * @param {Element=} opt_el Optional element to look in.
+ * @param {Document|Element=} opt_el Optional element to look in.
  * @return { {length: number} } Array-like list of elements (only a length
  *     property and numerical indices are guaranteed to exist).
  */

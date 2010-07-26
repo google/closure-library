@@ -79,7 +79,7 @@ See the COPYING file for details.
               <tr><td>Y:</td>
                   <td><input type="text" id="ycoord" value="100"/></td>
               </tr>
-              <tr><td>Corner orientation(1-4):</td>
+              <tr><td>Corner orientation(0-3):</td>
                   <td><input type="text" id="corner" value="1"/></td>
               </tr>
               <tr><td>Auto-hide (true or false):</td>
@@ -187,7 +187,7 @@ See the COPYING file for details.
           parseInt(corner.value) == NaN ||
           parseInt(timeout.value) == NaN ||
           (autoHide.value != "true" && autoHide.value != "false") ||
-          (corner.value < 1 || corner.value > 4)) {
+          (corner.value < 0 || corner.value > 3)) {
         alert('Incorrect input!');
         return;
       }

@@ -474,7 +474,9 @@ goog.ui.Tooltip.prototype.onBeforeShow = function() {
 /**
  * Called after the popup is hidden.
  *
- * @private
+ * @protected
+ * @suppress {underscore}
+ * @override
  */
 goog.ui.Tooltip.prototype.onHide_ = function() {
   goog.array.remove(goog.ui.Tooltip.activeInstances_, this);

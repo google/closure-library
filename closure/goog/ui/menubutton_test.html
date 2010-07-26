@@ -191,7 +191,7 @@ function testOpenedMenuPositionCorrection() {
 
   var button = new goog.ui.MenuButton();
   iframeWindow.scrollTo(0, 0);
-  var node = iframeDom.$('demoMenuButton');
+  var node = iframeDom.getElement('demoMenuButton');
   button.decorate(node);
   var mockTimer = new goog.Timer();
   // Don't start the timer.  We manually dispatch the Tick event.
@@ -210,7 +210,7 @@ function testOpenedMenuPositionCorrection() {
   button.setOpen(true);
 
   // Confirm the menu position
-  var menuNode = iframeDom.$('demoMenu');
+  var menuNode = iframeDom.getElement('demoMenu');
   assertRoughlyEquals(menuNode.offsetTop, node.offsetTop + node.offsetHeight,
       20);
   assertRoughlyEquals(menuNode.offsetLeft, node.offsetLeft, 20);
@@ -221,9 +221,9 @@ function testOpenedMenuPositionCorrection() {
   assertFalse('positionMenu() shouldn\'t be called.', positionMenuCalled);
 
   // Move the menu button by DOM structure change
-  var p1 = iframeDom.$dom('p', null, iframeDom.createTextNode('foo'));
-  var p2 = iframeDom.$dom('p', null, iframeDom.createTextNode('foo'));
-  var p3 = iframeDom.$dom('p', null, iframeDom.createTextNode('foo'));
+  var p1 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
+  var p2 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
+  var p3 = iframeDom.createDom('p', null, iframeDom.createTextNode('foo'));
   iframeDom.insertSiblingBefore(p1, node);
   iframeDom.insertSiblingBefore(p2, node);
   iframeDom.insertSiblingBefore(p3, node);
@@ -243,7 +243,7 @@ function testOpenedMenuPositionCorrection() {
 
   // Make the frame page scrollable.
   var viewportHeight = iframeDom.getViewportSize().height;
-  var footer = iframeDom.$('footer');
+  var footer = iframeDom.getElement('footer');
   goog.style.setSize(footer, 1, viewportHeight * 2);
   // Change the viewport offset.
   iframeWindow.scrollTo(0, viewportHeight);

@@ -55,7 +55,7 @@ Author: marcosalmeida@google.com (Marcos Almeida)
   var linkObj;
 
   function setUp() {
-    anchorElem = goog.dom.$dom(goog.dom.TagName.A);
+    anchorElem = goog.dom.createElement(goog.dom.TagName.A);
     anchorElem.href = 'http://www.google.com/';
     anchorElem.innerHTML = 'anchor text';
     goog.dom.appendChild(goog.dom.getDocument().body, anchorElem);
@@ -297,7 +297,8 @@ Author: marcosalmeida@google.com (Marcos Almeida)
     plugin.fieldObject.dispatchSelectionChangeEvent();
 
     plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
-    goog.dom.$(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'Abc';
+    goog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'Abc';
     goog.testing.events.fireClickSequence(plugin.dialog_.getOkButtonElement());
 
     // In IE the unit test somehow doesn't cause a browser focus event, so we
@@ -322,8 +323,10 @@ Author: marcosalmeida@google.com (Marcos Almeida)
     helper.select(anchorElem, 0, elem.firstChild, 1);
 
     plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
-    goog.dom.$(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'foo';
-    goog.dom.$(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
+    goog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'foo';
+    goog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
     var okButton = plugin.dialog_.getOkButtonElement();
     okButton.disabled = false;
     goog.testing.events.fireClickSequence(okButton);

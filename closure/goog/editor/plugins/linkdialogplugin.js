@@ -110,7 +110,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.setEmailWarning = function(
 /**
  * Handles execCommand by opening the dialog.
  * @param {string} command The command to execute.
- * @param {*} opt_arg {@link A goog.editor.Link} object representing the link
+ * @param {*=} opt_arg {@link A goog.editor.Link} object representing the link
  *     being edited.
  * @return {*} Always returns true, indicating the dialog was shown.
  * @protected

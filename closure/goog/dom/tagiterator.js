@@ -118,9 +118,9 @@ goog.dom.TagIterator.prototype.node = null;
 
 /**
  * The type of this position.
- * @type {goog.dom.TagWalkType?}
+ * @type {goog.dom.TagWalkType}
  */
-goog.dom.TagIterator.prototype.tagType = null;
+goog.dom.TagIterator.prototype.tagType = goog.dom.TagWalkType.OTHER;
 
 
 /**

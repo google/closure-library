@@ -92,7 +92,7 @@ goog.dom.SavedCaretRange.prototype.toAbstractRange = function() {
  * @return {Element} The start or end caret in the given document.
  */
 goog.dom.SavedCaretRange.prototype.getCaret = function(start) {
-  return this.dom_.$(start ? this.startCaretId_ : this.endCaretId_);
+  return this.dom_.getElement(start ? this.startCaretId_ : this.endCaretId_);
 };
 
 

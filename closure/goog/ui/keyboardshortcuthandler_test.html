@@ -639,6 +639,37 @@ See the COPYING file for details.
       }
     }
 
+    function testNumpadKeyShortcuts() {
+      var testCases = [
+        ['letterNumpad0', 'num-0', KeyCodes.NUM_ZERO],
+        ['letterNumpad1', 'num-1', KeyCodes.NUM_ONE],
+        ['letterNumpad2', 'num-2', KeyCodes.NUM_TWO],
+        ['letterNumpad3', 'num-3', KeyCodes.NUM_THREE],
+        ['letterNumpad4', 'num-4', KeyCodes.NUM_FOUR],
+        ['letterNumpad5', 'num-5', KeyCodes.NUM_FIVE],
+        ['letterNumpad6', 'num-6', KeyCodes.NUM_SIX],
+        ['letterNumpad7', 'num-7', KeyCodes.NUM_SEVEN],
+        ['letterNumpad8', 'num-8', KeyCodes.NUM_EIGHT],
+        ['letterNumpad9', 'num-9', KeyCodes.NUM_NINE],
+        ['letterNumpadMultiply', 'num-multiply', KeyCodes.NUM_MULTIPLY],
+        ['letterNumpadPlus', 'num-plus', KeyCodes.NUM_PLUS],
+        ['letterNumpadMinus', 'num-minus', KeyCodes.NUM_MINUS],
+        ['letterNumpadPERIOD', 'num-period', KeyCodes.NUM_PERIOD],
+        ['letterNumpadDIVISION', 'num-division', KeyCodes.NUM_DIVISION]
+      ];
+      for (var i = 0; i < testCases.length; ++i) {
+        listener.shortcutFired(testCases[i][0]);
+      }
+      listener.$replay();
+
+      // Register shortcuts for numpad keys and send numpad-key events.
+      for (var i = 0; i < testCases.length; ++i) {
+        handler.registerShortcut(testCases[i][0], testCases[i][1]);
+        fire(testCases[i][2]);
+      }
+      listener.$verify()
+    }
+
   </script>
 </body>
 </html>

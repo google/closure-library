@@ -337,7 +337,7 @@ function assertPreparedContents(expected, original, opt_tag) {
  * @return {boolean} Whether preventDefault was called on the event.
  */
 function selectNodeAndHitEnter(field, id) {
-  var cursor = field.getEditableDomHelper().$(id);
+  var cursor = field.getEditableDomHelper().getElement(id);
   goog.dom.Range.createFromNodeContents(cursor).select();
   return goog.testing.events.fireKeySequence(
       cursor, goog.events.KeyCodes.ENTER);

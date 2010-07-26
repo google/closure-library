@@ -151,33 +151,34 @@ goog.ui.AttachableMenu.prototype.setSelectedItem = function(elt) {
 
   this.selectedElement_ = elt;
 
+  var el = this.getElement();
   if (this.selectedElement_) {
     goog.dom.classes.add(this.selectedElement_, this.selectedItemClassName_);
 
     if (elt.id) {
       // Update activedescendant to reflect the new selection. ARIA roles for
-      
+      // menu and menuitem can be set statically (thru Soy templates, for
       // example) whereas this needs to be updated as the selection changes.
-      goog.dom.a11y.setState(this.element_,
+      goog.dom.a11y.setState(el,
           goog.dom.a11y.State.ACTIVEDESCENDANT,
           elt.id);
     }
 
     var top = this.selectedElement_.offsetTop;
     var height = this.selectedElement_.offsetHeight;
-    var scrollTop = this.element_.scrollTop;
-    var scrollHeight = this.element_.offsetHeight;
+    var scrollTop = el.scrollTop;
+    var scrollHeight = el.offsetHeight;
 
     // If the menu is scrollable this scrolls the selected item into view
     // (this has no effect when the menu doesn't scroll)
     if (top < scrollTop) {
-      this.element_.scrollTop = top;
+      el.scrollTop = top;
     } else if (top + height > scrollTop + scrollHeight) {
-      this.element_.scrollTop = top + height - scrollHeight;
+      el.scrollTop = top + height - scrollHeight;
     }
   } else {
     // Clear off activedescendant to reflect no selection.
-    goog.dom.a11y.setState(this.element_,
+    goog.dom.a11y.setState(el,
         goog.dom.a11y.State.ACTIVEDESCENDANT,
         '');
   }
@@ -188,16 +189,18 @@ goog.ui.AttachableMenu.prototype.setSelectedItem = function(elt) {
 goog.ui.AttachableMenu.prototype.showPopupElement = function() {
   // The scroll position cannot be set for hidden (display: none) elements in
   // gecko browsers.
-  goog.style.showElement(/** @type {Element} */ (this.element_), true);
-  this.element_.scrollTop = 0;
-  this.element_.style.visibility = 'visible';
+  var el = /** @type {Element} */ (this.getElement());
+  goog.style.showElement(el, true);
+  el.scrollTop = 0;
+  el.style.visibility = 'visible';
 };
 
 
 /**
  * Called after the menu is shown.
- *
- * @private
+ * @protected
+ * @suppress {underscore}
+ * @override
  */
 goog.ui.AttachableMenu.prototype.onShow_ = function() {
   goog.ui.AttachableMenu.superClass_.onShow_.call(this);
@@ -206,8 +209,9 @@ goog.ui.AttachableMenu.prototype.onShow_ = function() {
   // first child makes the scroll behavior better, and the key handling still
   // works. In FF, focusing the first child causes us to lose key events, so we
   // still focus the menu.
-  goog.userAgent.IE ? this.element_.firstChild.focus() :
-    this.element_.focus();
+  var el = this.getElement();
+  goog.userAgent.IE ? el.firstChild.focus() :
+      el.focus();
 };
 
 
@@ -220,7 +224,7 @@ goog.ui.AttachableMenu.prototype.onShow_ = function() {
  */
 goog.ui.AttachableMenu.prototype.getNextPrevItem = function(prev) {
   // first find the index of the next element
-  var elements = this.element_.getElementsByTagName('*');
+  var elements = this.getElement().getElementsByTagName('*');
   var elementCount = elements.length;
   var index;
   // if there is a selected element, find its index and then inc/dec by one
@@ -372,7 +376,7 @@ goog.ui.AttachableMenu.prototype.onKeyDown = function(e) {
  */
 goog.ui.AttachableMenu.prototype.selectByName_ =
     function(prefix, opt_direction, opt_skip) {
-  var elements = this.element_.getElementsByTagName('*');
+  var elements = this.getElement().getElementsByTagName('*');
   var elementCount = elements.length;
   var index;
 

@@ -602,6 +602,15 @@ goog.ui.tree.BaseNode.prototype.getExpanded = function() {
 
 
 /**
+ * Sets the node to be expanded internally, without state change events.
+ * @param {boolean} expanded Whether to expand or close the node.
+ */
+goog.ui.tree.BaseNode.prototype.setExpandedInternal = function(expanded) {
+  this.expanded_ = expanded;
+};
+
+
+/**
  * Sets the node to be expanded.
  * @param {boolean} expanded Whether to expand or close the node.
  */
@@ -1251,7 +1260,8 @@ goog.ui.tree.BaseNode.prototype.onMouseDown = function(e) {
 /**
  * Handles a click event.
  * @param {!goog.events.BrowserEvent} e The browser event.
- * @private
+ * @protected
+ * @suppress {underscore}
  */
 goog.ui.tree.BaseNode.prototype.onClick_ = goog.events.Event.preventDefault;
 
@@ -1259,7 +1269,8 @@ goog.ui.tree.BaseNode.prototype.onClick_ = goog.events.Event.preventDefault;
 /**
  * Handles a double click event.
  * @param {!goog.events.BrowserEvent} e The browser event.
- * @private
+ * @protected
+ * @suppress {underscore}
  */
 goog.ui.tree.BaseNode.prototype.onDoubleClick_ = function(e) {
   var el = e.target;

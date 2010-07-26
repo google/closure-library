@@ -39,7 +39,7 @@ goog.net.XmlHttpFactory.prototype.cachedOptions_ = null;
 
 
 /**
- * @return {!goog.net.XmlHttp} A new XMLHttpRequest instance.
+ * @return {!(XMLHttpRequest|GearsHttpRequest)} A new XMLHttpRequest instance.
  */
 goog.net.XmlHttpFactory.prototype.createInstance = goog.abstractMethod;
 

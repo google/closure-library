@@ -31,7 +31,7 @@ var CLOCK;
 var HTML;
 
 function setUp() {
-  HTML = goog.dom.$('root').innerHTML;
+  HTML = goog.dom.getElement('root').innerHTML;
   CLOCK = new goog.testing.MockClock(true);
 
   // The following 3 lines are to get around an IE bug where it says
@@ -60,13 +60,13 @@ function tearDown() {
 
   CLOCK.dispose();
 
-  goog.dom.$('root').innerHTML = HTML;
+  goog.dom.getElement('root').innerHTML = HTML;
 }
 
 function testClickToEdit(opt_isBlended) {
   setUpField(opt_isBlended);
 
-  var text = goog.dom.$('testField').firstChild;
+  var text = goog.dom.getElement('testField').firstChild;
   goog.dom.Range.createFromNodes(text, 4, text, 8).select();
 
   goog.testing.events.fireClickSequence(text.parentNode);
@@ -102,8 +102,8 @@ function testClickToEditWithAnchor(opt_isBlended) {
   }
   setUpField(opt_isBlended);
 
-  goog.dom.$('testAnchor').focus();
-  goog.testing.events.fireClickSequence(goog.dom.$('testAnchor'));
+  goog.dom.getElement('testAnchor').focus();
+  goog.testing.events.fireClickSequence(goog.dom.getElement('testAnchor'));
 
   CLOCK.tick(1);
   assertTrue('Field should be editable', FIELD.isLoaded());
@@ -115,7 +115,7 @@ function testClickToEditWithAnchor(opt_isBlended) {
   // in different places.
   var body = FIELD.getElement();
   var text = body.firstChild;
-  var link = dom.$$('A', null, body)[0].firstChild;
+  var link = dom.getElementsByTagNameAndClass('A', null, body)[0].firstChild;
   var isIEorWebkit = goog.userAgent.WEBKIT || goog.userAgent.IE;
   assertEquals('Wrong start node',
       isIEorWebkit ? text : link, selection.getStartNode());

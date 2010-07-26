@@ -40,7 +40,7 @@ See the COPYING file for details.
 <script>
 
 var testHelper;
-var fieldDiv = goog.dom.$('field');
+var fieldDiv = goog.dom.getElement('field');
 var bubble;
 var link;
 var link2;
@@ -101,7 +101,7 @@ function prepareTargetWithGivenDirection(dir, opt_preferTopPosition) {
 /**
  * This is a helper function for getting the expected position of the bubble.
  * (align to the right or the left of the target element).  Align left by
- * default and align right if opt_alignRight is true. The expected Y is 
+ * default and align right if opt_alignRight is true. The expected Y is
  * unaffected by alignment.
  *
  * @param {boolean} opt_alignRight Sets the expected alignment to be right.
@@ -110,7 +110,7 @@ function getExpectedBubblePositionWithGivenAlignment(opt_alignRight) {
   var targetPosition = goog.style.getFramedPageOffset(link, window);
   var targetWidth = link.offsetWidth;
   var bubbleSize = goog.style.getSize(bubble.bubbleContainer_);
-  var expectedBubbleX = opt_alignRight ? 
+  var expectedBubbleX = opt_alignRight ?
       targetPosition.x + targetWidth - bubbleSize.width : targetPosition.x;
   var expectedBubbleY = link.offsetHeight + targetPosition.y +
       goog.ui.editor.Bubble.VERTICAL_CLEARANCE_;

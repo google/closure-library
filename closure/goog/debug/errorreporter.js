@@ -43,10 +43,15 @@ goog.require('goog.uri.utils');
  *     opt_contextProvider When a report is to be sent to the server,
  *     this method will be called, and given an opportunity to modify the
  *     context object before submission to the server.
+ * @param {boolean=} opt_noAutoProtect Whether to automatically add handlers for
+ *     onerror and to protect entry points.  If apps have other error reporting
+ *     facilities, it may make sense for them to set these up themselves and use
+ *     the ErrorReporter just for transmission of reports.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.debug.ErrorReporter = function(handlerUrl, opt_contextProvider) {
+goog.debug.ErrorReporter = function(
+    handlerUrl, opt_contextProvider, opt_noAutoProtect) {
   /**
    * Context provider, if one was provided.
    * @type {?function(!Error, !Object.<string, string>)}
@@ -69,7 +74,9 @@ goog.debug.ErrorReporter = function(handlerUrl, opt_contextProvider) {
    */
   this.handlerUrl_ = handlerUrl;
 
-  this.setup_();
+  if (!opt_noAutoProtect) {
+    this.setup_();
+  }
 };
 goog.inherits(goog.debug.ErrorReporter, goog.events.EventTarget);
 
@@ -144,10 +151,16 @@ goog.debug.ErrorReporter.logger_ =
  *     opt_contextProvider When a report is to be sent to the server,
  *     this method will be called, and given an opportunity to modify the
  *     context object before submission to the server.
+ * @param {boolean=} opt_noAutoProtect Whether to automatically add handlers for
+ *     onerror and to protect entry points.  If apps have other error reporting
+ *     facilities, it may make sense for them to set these up themselves and use
+ *     the ErrorReporter just for transmission of reports.
  * @return {goog.debug.ErrorReporter} The error reporter.
  */
-goog.debug.ErrorReporter.install = function(loggingUrl, opt_contextProvider) {
-  var instance = new goog.debug.ErrorReporter(loggingUrl, opt_contextProvider);
+goog.debug.ErrorReporter.install = function(
+    loggingUrl, opt_contextProvider, opt_noAutoProtect) {
+  var instance = new goog.debug.ErrorReporter(
+      loggingUrl, opt_contextProvider, opt_noAutoProtect);
   return instance;
 };
 

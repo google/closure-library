@@ -30,6 +30,7 @@ goog.require('goog.iter');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.AutoComplete');
+goog.require('goog.ui.IdGenerator');
 goog.require('goog.userAgent');
 
 
@@ -211,14 +212,6 @@ goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
 
 
 /**
- * Next unique instance ID of a renderer.
- * @type {number}
- * @private
- */
-goog.ui.AutoComplete.Renderer.nextId_ = 0;
-
-
-/**
  * The delay before mouseover events are registered, in milliseconds
  * @type {number}
  */
@@ -391,7 +384,7 @@ goog.ui.AutoComplete.Renderer.prototype.maybeCreateElement_ = function() {
     this.setMenuClasses_(el);
     goog.dom.a11y.setRole(el, goog.dom.a11y.Role.LISTBOX);
 
-    var id = el.id = 'goog-acr-' + goog.ui.AutoComplete.Renderer.nextId_++;
+    var id = el.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
 
     // Set ARIA roles and states for the target input box.
     if (this.target_) {
@@ -726,7 +719,7 @@ goog.ui.AutoComplete.Renderer.prototype.renderRowHtml = function(row, token) {
   // Create and return the node
   var node = this.dom_.createDom('div', {
     className: this.rowClassName,
-    id: 'goog-acri-' + goog.ui.AutoComplete.Renderer.nextId_++
+    id: goog.ui.IdGenerator.getInstance().getNextUniqueId()
   });
   goog.dom.a11y.setRole(node, goog.dom.a11y.Role.OPTION);
   if (this.customRenderer_ && this.customRenderer_.renderRow) {

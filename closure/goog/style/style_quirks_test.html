@@ -443,8 +443,6 @@ Test-visible
 
 <script>
 
-var $ = goog.dom.$;
-
 function setUpPage() {
   var viewportSize = goog.dom.getViewportSize();
   // When the window is too short or not wide enough, some tests, especially
@@ -463,13 +461,13 @@ function setUp() {
 }
 
 function testSetStyle() {
-  var el = $('span1');
+  var el = goog.dom.getElement('span1');
   goog.style.setStyle(el, 'textDecoration', 'underline');
   assertEquals('Should be underline', 'underline', el.style.textDecoration);
 }
 
 function testSetStyleMap() {
-  var el = $('span6');
+  var el = goog.dom.getElement('span6');
 
   var styles = {
     'background-color': 'blue',
@@ -491,13 +489,13 @@ function testSetStyleMap() {
 }
 
 function testSetStyleWithNonCamelizedString() {
-  var el = $('span5');
+  var el = goog.dom.getElement('span5');
   goog.style.setStyle(el, 'text-decoration', 'underline');
   assertEquals('Should be underline', 'underline', el.style.textDecoration);
 }
 
 function testGetStyle() {
-  var el = $('styleTest3');
+  var el = goog.dom.getElement('styleTest3');
   goog.style.setStyle(el, 'width', '80px');
   goog.style.setStyle(el, 'textDecoration', 'underline');
 
@@ -507,10 +505,10 @@ function testGetStyle() {
 }
 
 function testGetBackgroundColor() {
-  var dest = $('bgcolorDest');
+  var dest = goog.dom.getElement('bgcolorDest');
 
-  for (var i = 0; $('bgcolorTest' + i); i++) {
-    var src = $('bgcolorTest' + i);
+  for (var i = 0; goog.dom.getElement('bgcolorTest' + i); i++) {
+    var src = goog.dom.getElement('bgcolorTest' + i);
     var bgColor = goog.style.getBackgroundColor(src);
 
     dest.style.backgroundColor = bgColor;
@@ -549,7 +547,7 @@ function testTotoSelectorCase() {
 }
 
 function testSetPosition() {
-  var el = $('testEl');
+  var el = goog.dom.getElement('testEl');
 
   goog.style.setPosition(el, 100, 100);
   assertEquals('100px', el.style.left);
@@ -815,7 +813,7 @@ function testGetPositionTolerantToNoDocumentElementBorder() {
 }
 
 function testSetSize() {
-  var el = $('testEl');
+  var el = goog.dom.getElement('testEl');
 
   goog.style.setSize(el, 100, 100);
   assertEquals('100px', el.style.width);
@@ -847,7 +845,7 @@ function testSetSize() {
 }
 
 function testSetWidthAndHeight() {
-  var el = $('testEl');
+  var el = goog.dom.getElement('testEl');
 
   // Replicate all of the setSize tests above.
 
@@ -897,7 +895,7 @@ function testSetWidthAndHeight() {
 }
 
 function testGetSize() {
-  var el = $('testEl');
+  var el = goog.dom.getElement('testEl');
   goog.style.setSize(el, 100, 100);
 
   var dims = goog.style.getSize(el);
@@ -909,28 +907,28 @@ function testGetSize() {
   assertEquals(100, dims.width);
   assertEquals(100, dims.height);
 
-  el = $('testEl5');
+  el = goog.dom.getElement('testEl5');
   goog.style.setSize(el, 100, 100);
   dims = goog.style.getSize(el);
   assertEquals(100, dims.width);
   assertEquals(100, dims.height);
 
-  el = $('span0');
+  el = goog.dom.getElement('span0');
   dims = goog.style.getSize(el);
   assertNotEquals(0, dims.width);
   assertNotEquals(0, dims.height);
 
-  el = $('table1');
+  el = goog.dom.getElement('table1');
   dims = goog.style.getSize(el);
   assertNotEquals(0, dims.width);
   assertNotEquals(0, dims.height);
 
-  el = $('td1');
+  el = goog.dom.getElement('td1');
   dims = goog.style.getSize(el);
   assertNotEquals(0, dims.width);
   assertNotEquals(0, dims.height);
 
-  el = $('li1');
+  el = goog.dom.getElement('li1');
   dims = goog.style.getSize(el);
   assertNotEquals(0, dims.width);
   assertNotEquals(0, dims.height);
@@ -947,13 +945,13 @@ function testGetSize() {
 }
 
 function testGetSizeInlineBlock() {
-  var el = $('height-test-inner');
+  var el = goog.dom.getElement('height-test-inner');
   var dims = goog.style.getSize(el);
   assertNotEquals(0, dims.height);
 }
 
 function testGetBounds() {
-  var el = $('testEl');
+  var el = goog.dom.getElement('testEl');
 
   var dims = goog.style.getSize(el);
   var pos = goog.style.getPageOffset(el);
@@ -968,7 +966,7 @@ function testGetBounds() {
 }
 
 function testInstallStyles() {
-  var el = $('installTest0');
+  var el = goog.dom.getElement('installTest0');
   var originalBackground = goog.style.getBackgroundColor(el);
 
   // Uses background-color because it's easy to get the computed value
@@ -982,7 +980,7 @@ function testInstallStyles() {
 }
 
 function testSetStyles() {
-  var el = $('installTest1');
+  var el = goog.dom.getElement('installTest1');
 
   // Change to pink
   var ss = goog.style.installStyles(
@@ -1002,22 +1000,22 @@ function assertColorRgbEquals(expected, actual) {
 }
 
 function testIsRightToLeft() {
-  assertFalse(goog.style.isRightToLeft($('rtl1')));
-  assertTrue(goog.style.isRightToLeft($('rtl2')));
-  assertFalse(goog.style.isRightToLeft($('rtl3')));
-  assertFalse(goog.style.isRightToLeft($('rtl4')));
-  assertTrue(goog.style.isRightToLeft($('rtl5')));
-  assertFalse(goog.style.isRightToLeft($('rtl6')));
-  assertTrue(goog.style.isRightToLeft($('rtl7')));
-  assertFalse(goog.style.isRightToLeft($('rtl8')));
-  assertTrue(goog.style.isRightToLeft($('rtl9')));
-  assertFalse(goog.style.isRightToLeft($('rtl10')));
+  assertFalse(goog.style.isRightToLeft(goog.dom.getElement('rtl1')));
+  assertTrue(goog.style.isRightToLeft(goog.dom.getElement('rtl2')));
+  assertFalse(goog.style.isRightToLeft(goog.dom.getElement('rtl3')));
+  assertFalse(goog.style.isRightToLeft(goog.dom.getElement('rtl4')));
+  assertTrue(goog.style.isRightToLeft(goog.dom.getElement('rtl5')));
+  assertFalse(goog.style.isRightToLeft(goog.dom.getElement('rtl6')));
+  assertTrue(goog.style.isRightToLeft(goog.dom.getElement('rtl7')));
+  assertFalse(goog.style.isRightToLeft(goog.dom.getElement('rtl8')));
+  assertTrue(goog.style.isRightToLeft(goog.dom.getElement('rtl9')));
+  assertFalse(goog.style.isRightToLeft(goog.dom.getElement('rtl10')));
 }
 
 function testPosWithAbsoluteAndScroll() {
-  var el = $('pos-scroll-abs')
-  var el1 = $('pos-scroll-abs-1');
-  var el2 = $('pos-scroll-abs-2');
+  var el = goog.dom.getElement('pos-scroll-abs')
+  var el1 = goog.dom.getElement('pos-scroll-abs-1');
+  var el2 = goog.dom.getElement('pos-scroll-abs-2');
 
   el1.scrollTop = 200;
   var pos = goog.style.getPageOffset(el2);
@@ -1031,7 +1029,7 @@ function testPosWithAbsoluteAndScroll() {
 
 function testPosWithAbsoluteAndWindowScroll() {
   window.scrollBy(0, 200);
-  var el = $('abs-upper-left');
+  var el = goog.dom.getElement('abs-upper-left');
   var pos = goog.style.getPageOffset(el);
   assertEquals('Top should be about 0', 0, pos.y);
 }
@@ -1040,20 +1038,20 @@ function testGetBorderBoxSize() {
   // Strict mode
   var getBorderBoxSize = goog.style.getBorderBoxSize;
 
-  var el = $('size-a');
+  var el = goog.dom.getElement('size-a');
   var rect = getBorderBoxSize(el);
   assertEquals('width:100px', 100, rect.width);
   assertEquals('height:100px', 100, rect.height);
 
   // with border: 10px
-  el = $('size-b');
+  el = goog.dom.getElement('size-b');
   rect = getBorderBoxSize(el);
   assertEquals('width:100px;border:10px', isBorderBox ? 100 : 120, rect.width);
   assertEquals('height:100px;border:10px', isBorderBox ? 100 : 120,
                rect.height);
 
   // with border: 10px; padding: 10px
-  el = $('size-c');
+  el = goog.dom.getElement('size-c');
   rect = getBorderBoxSize(el);
   assertEquals('width:100px;border:10px;padding:10px',
                isBorderBox ? 100 : 140, rect.width);
@@ -1062,7 +1060,7 @@ function testGetBorderBoxSize() {
 
   // size, padding and borders are all in non pixel units
   // all we test here is that we get a number out
-  el = $('size-d');
+  el = goog.dom.getElement('size-d');
   rect = getBorderBoxSize(el);
   assertEquals('number', typeof rect.width);
   assertEquals('number', typeof rect.height);
@@ -1074,13 +1072,13 @@ function testGetContentBoxSize() {
   // Strict mode
   var getContentBoxSize = goog.style.getContentBoxSize;
 
-  var el = $('size-a');
+  var el = goog.dom.getElement('size-a');
   var rect = getContentBoxSize(el);
   assertEquals('width:100px', 100, rect.width);
   assertEquals('height:100px', 100, rect.height);
 
   // with border: 10px
-  el = $('size-b');
+  el = goog.dom.getElement('size-b');
   rect = getContentBoxSize(el);
   assertEquals('width:100px;border:10px',
                isBorderBox ? 80 : 100, rect.width);
@@ -1088,7 +1086,7 @@ function testGetContentBoxSize() {
                isBorderBox ? 80 : 100, rect.height);
 
   // with border: 10px; padding: 10px
-  el = $('size-c');
+  el = goog.dom.getElement('size-c');
   rect = getContentBoxSize(el);
   assertEquals('width:100px;border:10px;padding:10px',
                isBorderBox ? 60 : 100, rect.width);
@@ -1099,14 +1097,14 @@ function testGetContentBoxSize() {
   // aren't explicitly set, but the default of 'auto'.
   // 'size-f' has no margin, border, or padding, so offsetWidth/Height
   // should match the content box size
-  el = $('size-f');
+  el = goog.dom.getElement('size-f');
   rect = getContentBoxSize(el);
   assertEquals(el.offsetWidth, rect.width);
   assertEquals(el.offsetHeight, rect.height);
 
   // size, padding and borders are all in non pixel units
   // all we test here is that we get a number out
-  el = $('size-d');
+  el = goog.dom.getElement('size-d');
   rect = getContentBoxSize(el);
   assertEquals('number', typeof rect.width);
   assertEquals('number', typeof rect.height);
@@ -1116,7 +1114,7 @@ function testGetContentBoxSize() {
 
 function testSetBorderBoxSize() {
   // Strict mode
-  var el = $('size-e');
+  var el = goog.dom.getElement('size-e');
   var Size = goog.math.Size;
   var setBorderBoxSize = goog.style.setBorderBoxSize;
 
@@ -1161,7 +1159,7 @@ function testSetBorderBoxSize() {
 
 function testSetContentBoxSize() {
   // Strict mode
-  var el = $('size-e');
+  var el = goog.dom.getElement('size-e');
   var Size = goog.math.Size;
   var setContentBoxSize = goog.style.setContentBoxSize;
 
@@ -1207,7 +1205,7 @@ function testSetContentBoxSize() {
 
 function testGetPaddingBox() {
   // Strict mode
-  var el = $('size-e');
+  var el = goog.dom.getElement('size-e');
   var Size = goog.math.Size;
   var getPaddingBox = goog.style.getPaddingBox;
 
@@ -1254,7 +1252,7 @@ function testGetPaddingBox() {
 
 function testGetMarginBox() {
   // Strict mode
-  var el = $('size-e');
+  var el = goog.dom.getElement('size-e');
   var Size = goog.math.Size;
   var getMarginBox = goog.style.getMarginBox;
 
@@ -1321,7 +1319,7 @@ function testGetMarginBox() {
 
 function testGetBorderBox() {
   // Strict mode
-  var el = $('size-e');
+  var el = goog.dom.getElement('size-e');
   var Size = goog.math.Size;
   var getBorderBox = goog.style.getBorderBox;
 
@@ -1385,53 +1383,53 @@ function testGetFontFamily() {
   //   Times
   //   Helvetica
 
-  var tmpFont = goog.style.getFontFamily($('font-tag'));
+  var tmpFont = goog.style.getFontFamily(goog.dom.getElement('font-tag'));
   assertTrue('FontFamily should be detectable when set via <font face>',
              'Times' == tmpFont || 'Times New Roman' == tmpFont);
-  tmpFont = goog.style.getFontFamily($('small-text'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('small-text'));
   assertTrue('Multiword fonts should be reported with quotes stripped.',
              'Comic Sans MS' == tmpFont ||
                  'Century Schoolbook L' == tmpFont);
   // Firefox fails this test & retuns a generic 'monospace' instead of the
   // actually displayed font (e.g., "Times New").
-  //tmpFont = goog.style.getFontFamily($('pre-font'));
+  //tmpFont = goog.style.getFontFamily(goog.dom.getElement('pre-font'));
   //assertEquals('<pre> tags should use a fixed-width font',
   //             'Times New',
   //             tmpFont);
-  tmpFont = goog.style.getFontFamily($('inherit-font'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('inherit-font'));
   assertEquals('Explicitly inherited fonts should be detectable',
                'Helvetica',
                tmpFont);
-  tmpFont = goog.style.getFontFamily($('times-font-family'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('times-font-family'));
   assertEquals('Font-family set via style attribute should be detected',
                'Times',
                tmpFont);
-  tmpFont = goog.style.getFontFamily($('bold-font'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('bold-font'));
   assertEquals('Implicitly inherited font should be detected',
                'Helvetica',
                tmpFont);
-  tmpFont = goog.style.getFontFamily($('css-html-tag-redefinition'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('css-html-tag-redefinition'));
   assertEquals('HTML tag CSS rewrites should be detected',
                'Times',
                tmpFont);
-  tmpFont = goog.style.getFontFamily($('no-text-font-styles'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('no-text-font-styles'));
   assertEquals('Font family should exist even with no text',
                'Helvetica',
                tmpFont);
-  tmpFont = goog.style.getFontFamily($('icon-font'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('icon-font'));
   assertNotEquals('icon is a special font-family value',
                   'icon',
                   tmpFont.toLowerCase());
-  tmpFont = goog.style.getFontFamily($('font-style-badfont'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('font-style-badfont'));
   // Firefox fails this test and reports the specified "badFont", which is
   // obviously not displayed.
   //assertEquals('Invalid fonts should not be returned',
   //             'Helvetica',
   //             tmpFont);
-  tmpFont = goog.style.getFontFamily($('img-font-test'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('img-font-test'));
   assertTrue('Even img tags should inherit the document body\'s font',
              tmpFont != '');
-  tmpFont = goog.style.getFontFamily($('nested-font'));
+  tmpFont = goog.style.getFontFamily(goog.dom.getElement('nested-font'));
   assertEquals('An element with nested content should be unaffected.',
                'Arial',
                tmpFont);
@@ -1440,32 +1438,40 @@ function testGetFontFamily() {
 function testGetFontSize() {
   assertEquals('Font size should be determined even without any text',
                30,
-               goog.style.getFontSize($('no-text-font-styles')));
+               goog.style.getFontSize(
+                   goog.dom.getElement('no-text-font-styles')));
   assertEquals('A 5em font should be 5x larger than its parent.',
                150,
-               goog.style.getFontSize($('css-html-tag-redefinition')));
+               goog.style.getFontSize(
+                   goog.dom.getElement('css-html-tag-redefinition')));
   assertTrue('Setting font size=-1 should result in a positive font size.',
-             goog.style.getFontSize($('font-tag')) > 0);
+             goog.style.getFontSize(goog.dom.getElement('font-tag')) > 0);
   assertEquals('Inheriting a 50% font-size should have no additional effect',
-               goog.style.getFontSize($('font-style-badfont')),
-               goog.style.getFontSize($('inherit-50pct-font')));
+               goog.style.getFontSize(
+                   goog.dom.getElement('font-style-badfont')),
+               goog.style.getFontSize(
+                   goog.dom.getElement('inherit-50pct-font')));
   assertTrue('In pretty much any display, 3in should be > 8px',
-             goog.style.getFontSize($('times-font-family')) >
-                 goog.style.getFontSize($('no-text-font-styles')));
+             goog.style.getFontSize(goog.dom.getElement('times-font-family')) >
+                 goog.style.getFontSize(
+                     goog.dom.getElement('no-text-font-styles')));
   assertTrue('With no applied styles, font-size should still be defined.',
-             goog.style.getFontSize($('no-font-style')) > 0);
+             goog.style.getFontSize(goog.dom.getElement('no-font-style')) > 0);
   assertEquals('50% of 30px is 15',
                15,
-               goog.style.getFontSize($('font-style-badfont')));
+               goog.style.getFontSize(
+                   goog.dom.getElement('font-style-badfont')));
   assertTrue('x-small text should be smaller than small text',
-             goog.style.getFontSize($('x-small-text')) <
-                 goog.style.getFontSize($('small-text')));
+             goog.style.getFontSize(goog.dom.getElement('x-small-text')) <
+                 goog.style.getFontSize(goog.dom.getElement('small-text')));
   // IE fails this test, the decimal portion of px lengths isn't reported
   // by getCascadedStyle. Firefox passes, but only because it ignores the
   // decimals altogether.
   //assertEquals('12.5px should be the same as 0.5em nested in a 25px node.',
-  //             goog.style.getFontSize($('font-size-12-point-5-px')),
-  //             goog.style.getFontSize($('font-size-50-pct-of-25-px')));
+  //             goog.style.getFontSize(
+  //                 goog.dom.getElement('font-size-12-point-5-px')),
+  //             goog.style.getFontSize(
+  //                 goog.dom.getElement('font-size-50-pct-of-25-px')));
 }
 
 function testGetLengthUnits() {
@@ -1475,13 +1481,13 @@ function testGetLengthUnits() {
 }
 
 function testGetFloat() {
-  assertEquals('', goog.style.getFloat($('no-float')));
-  assertEquals('none', goog.style.getFloat($('float-none')));
-  assertEquals('left', goog.style.getFloat($('float-left')));
+  assertEquals('', goog.style.getFloat(goog.dom.getElement('no-float')));
+  assertEquals('none', goog.style.getFloat(goog.dom.getElement('float-none')));
+  assertEquals('left', goog.style.getFloat(goog.dom.getElement('float-left')));
 }
 
 function testSetFloat() {
-  var el = $('float-test');
+  var el = goog.dom.getElement('float-test');
 
   goog.style.setFloat(el, 'left');
   assertEquals('left', goog.style.getFloat(el));
@@ -1497,7 +1503,7 @@ function testSetFloat() {
 }
 
 function testIsElementShown() {
-  var el = $('testEl');
+  var el = goog.dom.getElement('testEl');
 
   goog.style.showElement(el, false);
   assertFalse(goog.style.isElementShown(el));
@@ -1550,7 +1556,7 @@ function testGetOpacity() {
   }
 
   assertEquals('', goog.style.getOpacity(el4));
-  assertEquals('', goog.style.getOpacity($('test-opacity')));
+  assertEquals('', goog.style.getOpacity(goog.dom.getElement('test-opacity')));
 }
 
 function testSetOpacity() {
@@ -1598,7 +1604,7 @@ function testSetOpacity() {
 
 function testFramedPageOffset() {
   // Set up a complicated iframe ancestor chain.
-  var iframe = goog.dom.$('test-frame-offset');
+  var iframe = goog.dom.getElement('test-frame-offset');
   var iframeDoc = goog.dom.getFrameContentDocument(iframe);
   var iframeWindow = goog.dom.getWindow(iframeDoc);
 
@@ -1682,7 +1688,7 @@ function testTranslateRectForAnotherFrame() {
   assertEquals(3, rect.width);
   assertEquals(4, rect.height);
 
-  var iframe = $('test-translate-frame-standard');
+  var iframe = goog.dom.getElement('test-translate-frame-standard');
   var iframeDoc = goog.dom.getFrameContentDocument(iframe);
   var iframeDom = goog.dom.getDomHelper(iframeDoc);
   // Cannot rely on iframe starting at origin.
@@ -1703,7 +1709,7 @@ function testTranslateRectForAnotherFrame() {
   assertEquals(3, rect.width);
   assertEquals(4, rect.height);
 
-  iframe = $('test-translate-frame-quirk');
+  iframe = goog.dom.getElement('test-translate-frame-quirk');
   iframeDoc = goog.dom.getFrameContentDocument(iframe);
   iframeDom = goog.dom.getDomHelper(iframeDoc);
   // Cannot rely on iframe starting at origin.
@@ -1726,8 +1732,8 @@ function testTranslateRectForAnotherFrame() {
 };
 
 function testGetVisibleRectForElement() {
-  var container = goog.dom.$('test-visible');
-  var el = goog.dom.$('test-visible-el');
+  var container = goog.dom.getElement('test-visible');
+  var el = goog.dom.getElement('test-visible-el');
   var dom = goog.dom.getDomHelper(el);
   var winScroll = dom.getDocumentScroll();
   var winSize = dom.getViewportSize();
@@ -1779,44 +1785,48 @@ function testGetVisibleRectForElement() {
 };
 
 function testScrollIntoContainerView() {
-  var container = goog.dom.$('scrollable-container');
+  var container = goog.dom.getElement('scrollable-container');
 
   // Scroll the minimum amount to make the elements visible.
-  goog.style.scrollIntoContainerView(goog.dom.$('item7'), container);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item7'), container);
   assertEquals('scroll to item7', 79, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item8'), container);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item8'), container);
   assertEquals('scroll to item8', 100, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item7'), container);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item7'), container);
   assertEquals('item7 still visible', 100, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item1'), container);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item1'), container);
   assertEquals('scroll to item1', 17, container.scrollTop);
 
   // Center the element in the first argument.
-  goog.style.scrollIntoContainerView(goog.dom.$('item1'), container, true);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item1'), container,
+                                     true);
   assertEquals('center item1', 0, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item4'), container, true);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item4'), container,
+                                     true);
   assertEquals('center item4', 48, container.scrollTop);
 
   // The element is higher than the container.
-  goog.dom.$('item3').style.height = '140px';
-  goog.style.scrollIntoContainerView(goog.dom.$('item3'), container);
+  goog.dom.getElement('item3').style.height = '140px';
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item3'), container);
   assertEquals('show item3 with increased height', 59, container.scrollTop);
-  goog.style.scrollIntoContainerView(goog.dom.$('item3'), container, true);
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item3'), container,
+                                                         true);
   assertEquals('center item3 with increased height', 87, container.scrollTop);
-  goog.dom.$('item3').style.height = '';
+  goog.dom.getElement('item3').style.height = '';
 
   // Scroll to non-integer position.
-  goog.dom.$('item4').style.height = '21px';
-  goog.style.scrollIntoContainerView(goog.dom.$('item4'), container, true);
+  goog.dom.getElement('item4').style.height = '21px';
+  goog.style.scrollIntoContainerView(goog.dom.getElement('item4'), container,
+                                     true);
   assertEquals('scroll position is rounded down', 48, container.scrollTop);
-  goog.dom.$('item4').style.height = '';
+  goog.dom.getElement('item4').style.height = '';
 }
 
 function testScrollBarWidth() {
   var width = goog.style.getScrollbarWidth();
   assertTrue(width > 0);
 
-  var outer = goog.dom.$('test-scrollbarwidth');
+  var outer = goog.dom.getElement('test-scrollbarwidth');
   var inner = goog.dom.getElementsByTagNameAndClass('div', null, outer)[0];
   assertTrue('should have a scroll bar', hasVerticalScroll(outer));
   assertTrue('should have a scroll bar', hasHorizontalScroll(outer));
@@ -1846,7 +1856,7 @@ function hasVerticalScroll(el) {
 }
 
 function hasHorizontalScroll(el) {
-  return el.clientHeight != 0 && el.offsetHeight - el.clientHeight  > 0;
+  return el.clientHeight != 0 && el.offsetHeight - el.clientHeight > 0;
 }
 </script>
 

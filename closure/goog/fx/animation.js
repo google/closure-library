@@ -289,6 +289,16 @@ goog.fx.Animation.prototype.lastFrame = null;
 
 
 /**
+ * Gets the animation state.
+ * @return {goog.fx.Animation.State} The current state.
+ * @protected
+ */
+goog.fx.Animation.prototype.getStateInternal = function() {
+  return this.state_;
+};
+
+
+/**
  * Starts or resumes an animation.
  * @param {boolean=} opt_restart Whether to restart the
  *     animation from the beginning if it has been paused.

@@ -289,6 +289,14 @@ function testCreateDomWithTypeAttribute() {
   assertEquals('Button has correct id', 'cool-button', el.id);
 }
 
+function testCreateDomWithClassList() {
+  var el = goog.dom.createDom('div', ['foo', 'bar']);
+  assertEquals('foo bar', el.className);
+
+  el = goog.dom.createDom('div', ['foo', 'foo']);
+  assertEquals('foo', el.className);
+}
+
 function testContains() {
   assertTrue('HTML should contain BODY', goog.dom.contains(
       document.documentElement, document.body));

@@ -319,6 +319,45 @@ function testDateToIsoString() {
 }
 
 
+function testRfc822StringToDate() {
+  var date = goog.date.DateTime.fromRfc822String('October 2, 2002 8:00:00');
+  assertNotNull(date);
+  assertEquals(2002, date.getFullYear());
+  assertEquals(9, date.getMonth());
+  assertEquals(2, date.getDate());
+  assertEquals(8, date.getHours());
+  assertEquals(0, date.getMinutes());
+  assertEquals(0, date.getSeconds());
+  assertEquals(0, date.getMilliseconds());
+  assertEquals(new Date(2002, 9, 2, 8).getTime(), date.getTime());
+
+  var date = goog.date.DateTime.fromRfc822String(
+      'Sat, 02 Oct 2010 08:00:00 UTC');
+  assertEquals(2010, date.getFullYear());
+  assertEquals(9, date.getUTCMonth());
+  assertEquals(2, date.getUTCDate());
+  assertEquals(8, date.getUTCHours());
+  assertEquals(0, date.getUTCMinutes());
+  assertEquals(0, date.getUTCSeconds());
+  assertEquals(0, date.getUTCMilliseconds());
+
+  var date = goog.date.DateTime.fromRfc822String('');
+  assertEquals(null, date);
+
+  var date = goog.date.DateTime.fromRfc822String('Invalid Date String');
+  assertEquals(null, date);
+
+  var date = goog.date.DateTime.fromRfc822String('Sat, 02 Oct 2010');
+  assertEquals(2010, date.getFullYear());
+  assertEquals(9, date.getMonth());
+  assertEquals(2, date.getDate());
+  assertEquals(0, date.getHours());
+  assertEquals(0, date.getMinutes());
+  assertEquals(0, date.getSeconds());
+  assertEquals(0, date.getMilliseconds());
+  assertEquals(new Date(2010, 9, 2).getTime(), date.getTime());
+}
+
 function testIsoStringToDate() {
   var iso = '20060210T000000Z';
   var date = goog.date.fromIsoString(iso);
@@ -781,6 +820,16 @@ function testDateTimeConstructor() {
   assertEquals(0, date.getSeconds());
   assertEquals(0, date.getMilliseconds());
   assertEquals(new Date(2001, 2, 3, 4).getTime(), date.getTime());
+
+  var date = new goog.date.DateTime(new Date('October 2, 2002 8:00:00'));
+  assertEquals(2002, date.getFullYear());
+  assertEquals(9, date.getMonth());
+  assertEquals(2, date.getDate());
+  assertEquals(8, date.getHours());
+  assertEquals(0, date.getMinutes());
+  assertEquals(0, date.getSeconds());
+  assertEquals(0, date.getMilliseconds());
+  assertEquals(new Date(2002, 9, 2, 8).getTime(), date.getTime());
 }
 
 

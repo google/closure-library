@@ -97,7 +97,12 @@ goog.testing.jsunit.AUTO_RUN_ONLOAD = true;
 
     // Add an error handler to report errors that may occur during
     // initialization of the page.
+    var onerror = window.onerror;
     window.onerror = function(error, url, line) {
+      // Call any existing onerror handlers.
+      if (onerror) {
+        onerror();
+      }
       if (typeof error == 'object') {
         // Webkit started passing an event object as the only argument to
         // window.onerror.  It doesn't contain an error message, url or line
@@ -118,7 +123,12 @@ goog.testing.jsunit.AUTO_RUN_ONLOAD = true;
     // scope. If this code is being parsed by JsTestC, we let it disable the
     // onload handler to avoid running the test in JsTestC.
     if (goog.testing.jsunit.AUTO_RUN_ONLOAD) {
+      var onload = window.onload;
       window.onload = function() {
+        // Call any existing onload handlers.
+        if (onload) {
+          onload();
+        }
         // Wait 500ms longer so that we don't interfere with Selenium.
         realTimeout(function() {
           if (!tr.initialized) {

@@ -158,9 +158,9 @@ goog.dom.classes.swap = function(element, fromClass, toClass) {
 
 
 /**
- * Adds zero or more classes to and element and and removes zero or more as a
- * single operation. Unlike calling {@link goog.dom.classes.add} and
- * {@link goog.dom.classes.remove} separately this is more efficient as it only
+ * Adds zero or more classes to an element and removes zero or more as a single
+ * operation. Unlike calling {@link goog.dom.classes.add} and
+ * {@link goog.dom.classes.remove} separately, this is more efficient as it only
  * parses the class property once.
  *
  * If a class is in both the remove and add lists, it will be added. Thus,

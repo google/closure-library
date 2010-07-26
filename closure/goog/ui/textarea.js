@@ -561,9 +561,9 @@ goog.ui.Textarea.prototype.mouseUpListener_ = function(e) {
   // as it affects the offsetHeight value, even with MsBoxSizing:border-box.
   if (textarea['filters'] && textarea['filters'].length) {
     var dropShadow =
-        textarea.filters.item('DXImageTransform.Microsoft.DropShadow');
+        textarea['filters']['item']('DXImageTransform.Microsoft.DropShadow');
     if (dropShadow) {
-      height -= dropShadow.offX;
+      height -= dropShadow['offX'];
     }
   }
 

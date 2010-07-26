@@ -38,7 +38,7 @@ goog.require('goog.history.EventType');
  * An implementation compatible with goog.History that uses the HTML5
  * history APIs.
  *
- * @param {Window} opt_win The window to listen/dispatch history events on.
+ * @param {Window=} opt_win The window to listen/dispatch history events on.
  * @constructor
  * @extends {goog.events.EventTarget}
  */

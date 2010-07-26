@@ -578,8 +578,8 @@ goog.ui.PopupBase.prototype.onBeforeShow = function() {
 /**
  * Called after the popup is shown. Derived classes can override to hook this
  * event but should make sure to call the parent class method.
- *
- * @private
+ * @protected
+ * @suppress {underscore}
  */
 goog.ui.PopupBase.prototype.onShow_ = function() {
   this.lastShowTime_ = goog.now();
@@ -607,7 +607,8 @@ goog.ui.PopupBase.prototype.onBeforeHide_ = function(opt_target) {
  * Called after the popup is hidden. Derived classes can override to hook this
  * event but should make sure to call the parent class method.
  * @param {Object=} opt_target Target of the event causing the hide.
- * @private
+ * @protected
+ * @suppress {underscore}
  */
 goog.ui.PopupBase.prototype.onHide_ = function(opt_target) {
   this.lastHideTime_ = goog.now();

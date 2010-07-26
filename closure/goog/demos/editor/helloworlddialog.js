@@ -128,14 +128,14 @@ goog.demos.editor.HelloWorldDialog.prototype.input_;
 goog.demos.editor.HelloWorldDialog.prototype.createContent_ = function() {
   /** @desc Sample hello world message to prepopulate the dialog with. */
   var MSG_HELLO_WORLD_DIALOG_SAMPLE = goog.getMsg('Hello, world!');
-  this.input_ = this.dom.$dom(goog.dom.TagName.INPUT,
+  this.input_ = this.dom.createDom(goog.dom.TagName.INPUT,
       {size: 25, value: MSG_HELLO_WORLD_DIALOG_SAMPLE});
   /** @desc Prompt telling the user to enter a hello world message. */
   var MSG_HELLO_WORLD_DIALOG_PROMPT =
       goog.getMsg('Enter your Hello World message');
-  return this.dom.$dom(goog.dom.TagName.DIV,
-                       null,
-                       [MSG_HELLO_WORLD_DIALOG_PROMPT, this.input_]);
+  return this.dom.createDom(goog.dom.TagName.DIV,
+                            null,
+                            [MSG_HELLO_WORLD_DIALOG_PROMPT, this.input_]);
 };
 
 /**

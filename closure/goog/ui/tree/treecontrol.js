@@ -57,6 +57,10 @@ goog.require('goog.userAgent');
 goog.ui.tree.TreeControl = function(html, opt_config, opt_domHelper) {
   goog.ui.tree.BaseNode.call(this, html, opt_config, opt_domHelper);
 
+  // The root is open and selected by default.
+  this.setExpandedInternal(true);
+  this.setSelectedInternal(true);
+
   this.selectedItem_ = this;
 
   /**
@@ -102,22 +106,6 @@ goog.ui.tree.TreeControl.prototype.focusHandler_ = null;
  */
 goog.ui.tree.TreeControl.prototype.logger_ =
     goog.debug.Logger.getLogger('goog.ui.tree.TreeControl');
-
-
-/**
- * Whether the tree node is open. The root is opened by default.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.expanded_ = true;
-
-
-/**
- * Whether the tree item is selected. The root is selected by default.
- * @type {boolean}
- * @private
- */
-goog.ui.tree.TreeControl.prototype.selected_ = true;
 
 
 /**

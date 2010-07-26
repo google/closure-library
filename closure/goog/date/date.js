@@ -1257,6 +1257,18 @@ goog.inherits(goog.date.DateTime, goog.date.Date);
 
 
 /**
+ * Creates a DateTime from a datetime string expressed in RFC 822 format.
+ *
+ * @param {string} formatted A date or datetime expressed in RFC 822 format.
+ * @return {goog.date.DateTime} Parsed date or null if parse fails.
+ */
+goog.date.DateTime.fromRfc822String = function(formatted) {
+  var date = new Date(formatted);
+  return !isNaN(date.getTime()) ? new goog.date.DateTime(date) : null;
+};
+
+
+/**
  * Returns the hours part of the datetime.
  *
  * @return {number} An integer between 0 and 23, representing the hour.

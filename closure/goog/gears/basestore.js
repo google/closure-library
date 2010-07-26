@@ -97,6 +97,16 @@ goog.gears.BaseStore.prototype.schema = [];
 
 
 /**
+ * Gets the underlying database.
+ * @return {goog.gears.Database}
+ * @protected
+ */
+goog.gears.BaseStore.prototype.getDatabaseInternal = function() {
+  return this.database_;
+};
+
+
+/**
  * Updates the tables for the message store in the case where
  * they are out of date.
  *

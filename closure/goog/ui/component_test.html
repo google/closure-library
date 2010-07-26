@@ -682,10 +682,10 @@ Author: attila@google.com (Attila Bodis)
       var b = new goog.ui.Component();
       var c = new goog.ui.Component();
       var d = new goog.ui.Component();
-      a.setElementInternal(goog.dom.$dom('a'));
-      b.setElementInternal(goog.dom.$dom('b'));
-      c.setElementInternal(goog.dom.$dom('c'));
-      d.setElementInternal(goog.dom.$dom('d'));
+      a.setElementInternal(goog.dom.createElement('a'));
+      b.setElementInternal(goog.dom.createElement('b'));
+      c.setElementInternal(goog.dom.createElement('c'));
+      d.setElementInternal(goog.dom.createElement('d'));
 
       a.setId('a');
       b.setId('b');

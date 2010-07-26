@@ -474,8 +474,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.cleanContentsHtml =
   if (goog.editor.BrowserFeature.MOVES_STYLE_TO_HEAD) {
     // Safari creates a new <head> element for <style> tags, so prepend their
     // contents to the output.
-    var heads = this.fieldObject.getEditableDomHelper().$$(
-        goog.dom.TagName.HEAD);
+    var heads = this.fieldObject.getEditableDomHelper().
+        getElementsByTagNameAndClass(goog.dom.TagName.HEAD);
     var stylesHtmlArr = [];
 
     // i starts at 1 so we don't copy in the original, legitimate <head>.

@@ -312,7 +312,7 @@ goog.events.BrowserEvent.prototype.isButton = function(button) {
  * @inheritDoc
  */
 goog.events.BrowserEvent.prototype.stopPropagation = function() {
-  this.propagationStopped_ = true;
+  goog.events.BrowserEvent.superClass_.stopPropagation.call(this);
   if (this.event_.stopPropagation) {
     this.event_.stopPropagation();
   } else {
@@ -328,14 +328,14 @@ goog.events.BrowserEvent.prototype.stopPropagation = function() {
  * @private
  */
 goog.events.BrowserEvent.IE7_SET_KEY_CODE_TO_PREVENT_DEFAULT_ =
-    goog.userAgent.IE && !goog.userAgent.isVersion('8')
+    goog.userAgent.IE && !goog.userAgent.isVersion('8');
 
 
 /**
  * @inheritDoc
  */
 goog.events.BrowserEvent.prototype.preventDefault = function() {
-  this.returnValue_ = false;
+  goog.events.BrowserEvent.superClass_.preventDefault.call(this);
   var be = this.event_;
   if (!be.preventDefault) {
     be.returnValue = false;

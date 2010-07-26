@@ -50,7 +50,7 @@ goog.ui.MenuBase = function(opt_element) {
    * @type {goog.events.KeyHandler}
    * @private
    */
-  this.keyHandler_ = new goog.events.KeyHandler(this.element_);
+  this.keyHandler_ = new goog.events.KeyHandler(this.getElement());
 };
 goog.inherits(goog.ui.MenuBase, goog.ui.Popup);
 
@@ -79,20 +79,23 @@ goog.ui.MenuBase.prototype.disposeInternal = function() {
  * Called after the menu is shown. Derived classes can override to hook this
  * event but should make sure to call the parent class method.
  *
- * @private
+ * @protected
+ * @suppress {underscore}
+ * @override
  */
 goog.ui.MenuBase.prototype.onShow_ = function() {
   goog.ui.MenuBase.superClass_.onShow_.call(this);
 
   // register common event handlers for derived classes
+  var el = this.getElement();
   this.eventHandler_.listen(
-      this.element_, goog.events.EventType.MOUSEOVER, this.onMouseOver);
+      el, goog.events.EventType.MOUSEOVER, this.onMouseOver);
   this.eventHandler_.listen(
-      this.element_, goog.events.EventType.MOUSEOUT, this.onMouseOut);
+      el, goog.events.EventType.MOUSEOUT, this.onMouseOut);
   this.eventHandler_.listen(
-      this.element_, goog.events.EventType.MOUSEDOWN, this.onMouseDown);
+      el, goog.events.EventType.MOUSEDOWN, this.onMouseDown);
   this.eventHandler_.listen(
-      this.element_, goog.events.EventType.MOUSEUP, this.onMouseUp);
+      el, goog.events.EventType.MOUSEUP, this.onMouseUp);
 
   this.eventHandler_.listen(
       this.keyHandler_,
@@ -104,7 +107,9 @@ goog.ui.MenuBase.prototype.onShow_ = function() {
  * Called after the menu is hidden. Derived classes can override to hook this
  * event but should make sure to call the parent class method.
  * @param {Object=} opt_target Target of the event causing the hide.
- * @private
+ * @protected
+ * @suppress {underscore}
+ * @override
  */
 goog.ui.MenuBase.prototype.onHide_ = function(opt_target) {
   goog.ui.MenuBase.superClass_.onHide_.call(this, opt_target);

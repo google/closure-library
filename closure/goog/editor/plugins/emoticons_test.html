@@ -46,7 +46,8 @@ function runEmojiTestWithPlugin(plugin) {
   field.execCommand(goog.editor.plugins.Emoticons.COMMAND, emoji);
 
   // The url may be relative or absolute.
-  var imgs = field.getEditableDomHelper().$$(goog.dom.TagName.IMG);
+  var imgs = field.getEditableDomHelper().
+      getElementsByTagNameAndClass(goog.dom.TagName.IMG);
   assertEquals(1, imgs.length);
 
   var img = imgs[0];

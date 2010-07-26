@@ -57,7 +57,7 @@ Author: marcosalmeida@google.com (Marcos Almeida)
   var ANCHOR_MAILTO = 'mailto:' + ANCHOR_EMAIL;
 
   function setUp() {
-    anchorElem = goog.dom.$dom(goog.dom.TagName.A);
+    anchorElem = goog.dom.createElement(goog.dom.TagName.A);
     goog.dom.appendChild(goog.dom.getDocument().body, anchorElem);
 
     mockCtrl = new goog.testing.MockControl();
@@ -167,7 +167,7 @@ Author: marcosalmeida@google.com (Marcos Almeida)
    * testShowForNewLink().
    */
   function testShowForNewLinkWithDiffAppWindow() {
-    testShowForNewLink(goog.dom.$('appWindowIframe').contentDocument);
+    testShowForNewLink(goog.dom.getElement('appWindowIframe').contentDocument);
   }
 
   /**
@@ -389,7 +389,7 @@ Author: marcosalmeida@google.com (Marcos Almeida)
   }
 
   function getDisplayInput() {
-    return dialog.dom.$(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY);
+    return dialog.dom.getElement(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY);
   }
 
   function getDisplayInputText() {
@@ -405,7 +405,7 @@ Author: marcosalmeida@google.com (Marcos Almeida)
   }
 
   function getUrlInput() {
-    return dialog.dom.$(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT);
+    return dialog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT);
   }
 
   function getUrlInputText() {
@@ -421,7 +421,8 @@ Author: marcosalmeida@google.com (Marcos Almeida)
   }
 
   function getEmailInput() {
-    return dialog.dom.$(goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_INPUT);
+    return dialog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_INPUT);
   }
 
   function getEmailInputText() {
