@@ -71,8 +71,7 @@ goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
  */
 goog.array.indexOf = goog.array.ARRAY_PROTOTYPE_.indexOf ?
     function(arr, obj, opt_fromIndex) {
-      goog.asserts.assert(arr || goog.isString(arr));
-      goog.asserts.assertNumber(arr.length);
+      goog.asserts.assert(arr.length != null);
 
       return goog.array.ARRAY_PROTOTYPE_.indexOf.call(arr, obj, opt_fromIndex);
     } :
@@ -111,8 +110,7 @@ goog.array.indexOf = goog.array.ARRAY_PROTOTYPE_.indexOf ?
  */
 goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
     function(arr, obj, opt_fromIndex) {
-      goog.asserts.assert(arr || goog.isString(arr));
-      goog.asserts.assertNumber(arr.length);
+      goog.asserts.assert(arr.length != null);
 
       // Firefox treats undefined and null as 0 in the fromIndex argument which
       // leads it to always return -1
@@ -160,8 +158,7 @@ goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
  */
 goog.array.forEach = goog.array.ARRAY_PROTOTYPE_.forEach ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr || goog.isString(arr));
-      goog.asserts.assertNumber(arr.length);
+      goog.asserts.assert(arr.length != null);
 
       goog.array.ARRAY_PROTOTYPE_.forEach.call(arr, f, opt_obj);
     } :
@@ -216,8 +213,7 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
  */
 goog.array.filter = goog.array.ARRAY_PROTOTYPE_.filter ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr || goog.isString(arr));
-      goog.asserts.assertNumber(arr.length);
+      goog.asserts.assert(arr.length != null);
 
       return goog.array.ARRAY_PROTOTYPE_.filter.call(arr, f, opt_obj);
     } :
@@ -254,8 +250,7 @@ goog.array.filter = goog.array.ARRAY_PROTOTYPE_.filter ?
  */
 goog.array.map = goog.array.ARRAY_PROTOTYPE_.map ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr || goog.isString(arr));
-      goog.asserts.assertNumber(arr.length);
+      goog.asserts.assert(arr.length != null);
 
       return goog.array.ARRAY_PROTOTYPE_.map.call(arr, f, opt_obj);
     } :
@@ -365,8 +360,7 @@ goog.array.reduceRight = function(arr, f, val, opt_obj) {
  */
 goog.array.some = goog.array.ARRAY_PROTOTYPE_.some ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr || goog.isString(arr));
-      goog.asserts.assertNumber(arr.length);
+      goog.asserts.assert(arr.length != null);
 
       return goog.array.ARRAY_PROTOTYPE_.some.call(arr, f, opt_obj);
     } :
@@ -399,8 +393,7 @@ goog.array.some = goog.array.ARRAY_PROTOTYPE_.some ?
  */
 goog.array.every = goog.array.ARRAY_PROTOTYPE_.every ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr || goog.isString(arr));
-      goog.asserts.assertNumber(arr.length);
+      goog.asserts.assert(arr.length != null);
 
       return goog.array.ARRAY_PROTOTYPE_.every.call(arr, f, opt_obj);
     } :
@@ -611,8 +604,7 @@ goog.array.remove = function(arr, obj) {
  * @return {boolean} True if an element was removed.
  */
 goog.array.removeAt = function(arr, i) {
-  goog.asserts.assert(arr || goog.isString(arr));
-  goog.asserts.assertNumber(arr.length);
+  goog.asserts.assert(arr.length != null);
 
   // use generic form of splice
   // splice returns the removed items and if successful the length of that
@@ -772,8 +764,7 @@ goog.array.extend = function(arr1, var_args) {
  * @return {!Array} the removed elements.
  */
 goog.array.splice = function(arr, index, howMany, var_args) {
-  goog.asserts.assert(arr || goog.isString(arr));
-  goog.asserts.assertNumber(arr.length);
+  goog.asserts.assert(arr.length != null);
 
   return goog.array.ARRAY_PROTOTYPE_.splice.apply(
       arr, goog.array.slice(arguments, 1));
@@ -792,8 +783,7 @@ goog.array.splice = function(arr, index, howMany, var_args) {
  *     array.
  */
 goog.array.slice = function(arr, start, opt_end) {
-  goog.asserts.assert(arr || goog.isString(arr));
-  goog.asserts.assertNumber(arr.length);
+  goog.asserts.assert(arr.length != null);
 
   // passing 1 arg to slice is not the same as passing 2 where the second is
   // null or undefined (in that case the second argument is treated as 0).
@@ -972,8 +962,7 @@ goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
  */
 goog.array.sort = function(arr, opt_compareFn) {
   // TODO(user): Update type annotation since null is not accepted.
-  goog.asserts.assert(arr || goog.isString(arr));
-  goog.asserts.assertNumber(arr.length);
+  goog.asserts.assert(arr.length != null);
 
   goog.array.ARRAY_PROTOTYPE_.sort.call(
       arr, opt_compareFn || goog.array.defaultCompare);
@@ -1215,8 +1204,7 @@ goog.array.flatten = function(var_args) {
  * @return {!Array.<*>} The array.
  */
 goog.array.rotate = function(array, n) {
-  goog.asserts.assert(array || goog.isString(array));
-  goog.asserts.assertNumber(array.length);
+  goog.asserts.assert(array.length != null);
 
   if (array.length) {
     n %= array.length;

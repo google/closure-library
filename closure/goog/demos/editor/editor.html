@@ -18,6 +18,7 @@ Author: jparent@google.com (Julie Parent)
     goog.require('goog.editor.plugins.BasicTextFormatter');
     goog.require('goog.editor.plugins.EnterHandler');
     goog.require('goog.editor.plugins.HeaderFormatter');
+    goog.require('goog.editor.plugins.LinkBubble');
     goog.require('goog.editor.plugins.LinkDialogPlugin');
     goog.require('goog.editor.plugins.ListTabHandler');
     goog.require('goog.editor.plugins.LoremIpsum');
@@ -43,6 +44,7 @@ Author: jparent@google.com (Julie Parent)
   <link rel="stylesheet" href="../../css/palette.css" />
   <link rel="stylesheet" href="../../css/colorpalette.css" />
 
+  <link rel="stylesheet" href="../../css/editor/bubble.css" />
   <link rel="stylesheet" href="../../css/editor/dialog.css" />
   <link rel="stylesheet" href="../../css/editor/linkdialog.css" />
   <link rel="stylesheet" href="../../css/editortoolbar.css" />
@@ -93,6 +95,7 @@ hooked up to a toolbar.</p>
       new goog.editor.plugins.LoremIpsum('Click here to edit'));
   myField.registerPlugin(
       new goog.editor.plugins.LinkDialogPlugin());
+  myField.registerPlugin(new goog.editor.plugins.LinkBubble());
 
   // Specify the buttons to add to the toolbar, using built in default buttons.
   var buttons = [

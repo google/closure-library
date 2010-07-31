@@ -58,11 +58,9 @@ goog.module.ModuleLoadCallback = function(fn, opt_handler) {
  *
  * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
  *     protect the entry point.
- * @param {boolean=} opt_tracers Whether to install tracers around the browser
- *     event entry point.
  */
 goog.module.ModuleLoadCallback.protectModuleLoadSequence = function(
-    errorHandler, opt_tracers) {
+    errorHandler) {
   // NOTE(nicksantos): I do like being able to protect different entry
   // points with different error handlers (so, in this case, goog.module
   // goog.events and goog.net all have different functions for registering
@@ -71,7 +69,7 @@ goog.module.ModuleLoadCallback.protectModuleLoadSequence = function(
   // for all entry points that need to be protected.
   goog.module.ModuleLoadCallback.prototype.execute =
       errorHandler.protectEntryPoint(
-          goog.module.ModuleLoadCallback.prototype.execute, opt_tracers);
+          goog.module.ModuleLoadCallback.prototype.execute);
 };
 
 

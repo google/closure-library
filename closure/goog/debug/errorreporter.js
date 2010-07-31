@@ -187,14 +187,12 @@ goog.debug.ErrorReporter.defaultXhrSender = function(uri, method, content,
  * exceptions in that case.
  *
  * @param {Function} fn An entry point function to be protected.
- * @param {boolean=} opt_tracers Whether to install tracers around the fn.
  * @return {Function} A protected wrapper function that calls the entry point
  *     function or null if the entry point could not be protected.
  */
-goog.debug.ErrorReporter.prototype.protectAdditionalEntryPoint = function(fn,
-    opt_tracers) {
+goog.debug.ErrorReporter.prototype.protectAdditionalEntryPoint = function(fn) {
   if (this.errorHandler_) {
-    return this.errorHandler_.protectEntryPoint(fn, opt_tracers);
+    return this.errorHandler_.protectEntryPoint(fn);
   }
   return null;
 };
@@ -240,8 +238,7 @@ goog.debug.ErrorReporter.prototype.setup_ = function() {
 
     this.errorHandler_.protectWindowSetTimeout();
     this.errorHandler_.protectWindowSetInterval();
-    goog.events.protectBrowserEventEntryPoint(this.errorHandler_);
-    goog.net.XhrIo.protectEntryPoints(this.errorHandler_);
+    goog.debug.entryPointRegistry.monitorAll(this.errorHandler_);
   }
 };
 

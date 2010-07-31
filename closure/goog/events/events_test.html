@@ -10,16 +10,24 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.events</title>
   <script src="../base.js"></script>
 <script>
+  goog.require('goog.debug.EntryPointMonitor');
+  goog.require('goog.debug.ErrorHandler');
   goog.require('goog.events');
   goog.require('goog.events.EventTarget');
-  goog.require('goog.debug.ErrorHandler');
+  goog.require('goog.functions');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
+
+
 </script>
 </head>
 <body>
 <script>
+  var originalHandleBrowserEvent = goog.events.handleBrowserEvent_;
 
   function tearDown() {
+    goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
+    goog.events.pools.setProxyCallbackFunction(originalHandleBrowserEvent);
     goog.events.removeAll();
   }
 
@@ -337,6 +345,16 @@ See the COPYING file for details.
     assertEquals(20, count);
   }
 
+  function testEntryPointRegistry() {
+    var monitor = new goog.debug.EntryPointMonitor();
+    var replacement = function() {};
+    monitor.wrap = goog.testing.recordFunction(
+        goog.functions.constant(replacement));
+
+    goog.debug.entryPointRegistry.monitorAll(monitor);
+    assertTrue(monitor.wrap.getCallCount() >= 1);
+    assertEquals(replacement, goog.events.handleBrowserEvent_);
+  }
 </script>
 </body>
 </html>

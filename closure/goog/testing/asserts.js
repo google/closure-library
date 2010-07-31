@@ -28,9 +28,6 @@ var DOUBLE_EQUALITY_PREDICATE = function(var1, var2) {
   return var1 == var2;
 };
 var JSUNIT_UNDEFINED_VALUE;
-var TRIPLE_EQUALITY_PREDICATE = function(var1, var2) {
-  return var1 === var2;
-};
 var TO_STRING_EQUALITY_PREDICATE = function(var1, var2) {
   return var1.toString() === var2.toString();
 };
@@ -39,7 +36,9 @@ var PRIMITIVE_EQUALITY_PREDICATES = {
   'String': DOUBLE_EQUALITY_PREDICATE,
   'Number': DOUBLE_EQUALITY_PREDICATE,
   'Boolean': DOUBLE_EQUALITY_PREDICATE,
-  'Date': TRIPLE_EQUALITY_PREDICATE,
+  'Date': function(date1, date2) {
+    return date1.getTime() == date2.getTime();
+  },
   'RegExp': TO_STRING_EQUALITY_PREDICATE,
   'Function': TO_STRING_EQUALITY_PREDICATE
 };

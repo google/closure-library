@@ -23,6 +23,8 @@ goog.provide('goog.ui.media.MediaModel.MimeType');
 goog.provide('goog.ui.media.MediaModel.Player');
 goog.provide('goog.ui.media.MediaModel.Thumbnail');
 
+goog.require('goog.array');
+
 
 /**
  * An base data value class for all media data models.
@@ -303,6 +305,22 @@ goog.ui.media.MediaModel.prototype.getCategories = function() {
 goog.ui.media.MediaModel.prototype.setCategories = function(categories) {
   this.categories_ = categories;
   return this;
+};
+
+
+/** Finds the first category with the given scheme
+ * @param {string} scheme The scheme to search for.
+ * @return {goog.ui.media.MediaModel.Category} The category that has the
+ *     given scheme. May be null.
+ */
+goog.ui.media.MediaModel.prototype.findCategoryWithScheme = function(scheme) {
+  if (!this.categories_) {
+    return null;
+  }
+  var category = goog.array.find(this.categories_, function(category) {
+    return category ? (scheme == category.getScheme()) : false;
+  });
+  return /** @type {goog.ui.media.MediaModel.Category}*/ (category);
 };
 
 

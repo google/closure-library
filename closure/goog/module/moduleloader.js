@@ -69,15 +69,8 @@ goog.module.ModuleLoader.prototype.loadModulesInternal = function(
 
   // In prod, we don't load via a script tag because it is difficult to
   // determine if the script has been loaded and to handle errors conditions.
-  if (this.getDebugMode() && goog.userAgent.GECKO) {
-    // In debug mode on FF, we do not load via an XHR + eval as the script will
-    // not show in firebug.
-    for (var i = 0; i < uris.length; i++) {
-      var scriptElt = goog.dom.createElement('script');
-      scriptElt.src = uris[i];
-      scriptElt.type = 'text/javascript';
-      document.documentElement.appendChild(scriptElt);
-    }
+  if (this.getDebugMode()) {
+    this.loadModulesInDebugMode_(uris);
   } else {
     var bulkLoader = new goog.net.BulkLoader(uris);
     var eventHandler = this.eventHandler_;
@@ -97,6 +90,62 @@ goog.module.ModuleLoader.prototype.loadModulesInternal = function(
     // TODO(user): Need to handle timeouts in the module loading code.
 
     bulkLoader.load();
+  }
+};
+
+
+/**
+ * Loads and evaluates the JavaScript files at the specified URIs, in order.
+ * This method uses &lt;script> tags rather than XHRs to load the files. This
+ * makes it possible to debug and inspect stack traces more easily. It's also
+ * possible to use it to load JavaScript files that are hosted on another
+ * domain.
+ * @param {Array.<string>} uris The URIs to load.
+ * @private
+ */
+goog.module.ModuleLoader.prototype.loadModulesInDebugMode_ = function(uris) {
+  if (!uris.length) {
+    return;
+  }
+
+  var createScript = function(uri) {
+    var scriptEl = goog.dom.createElement('script');
+    scriptEl.src = uri;
+    scriptEl.type = 'text/javascript';
+    return scriptEl;
+  };
+
+  var documentElement = document.documentElement;
+  if (goog.userAgent.GECKO) {
+    // For <script> tags that are loaded in this manner, Gecko ensures that
+    // tag order is consistent with evaluation order. Unfortunately, other
+    // browsers do not make that guarantee. So the other browsers need a slower
+    // and more complex implementation.
+    for (var i = 0; i < uris.length; i++) {
+      var scriptEl = createScript(uris[i]);
+      documentElement.appendChild(scriptEl);
+    }
+  } else {
+    var popAndLoadNextScript = function() {
+      var uri = uris.shift();
+      var scriptEl = createScript(uri);
+      if (uris.length) {
+        if (goog.userAgent.IE) {
+          scriptEl.onreadystatechange = function() {
+            if (!this.readyState || this.readyState == 'loaded' ||
+                this.readyState == 'complete') {
+              // Guard against redundant state changes.
+              scriptEl.onreadystatechange = goog.nullFunction;
+              popAndLoadNextScript();
+            }
+          };
+        } else {
+          scriptEl.onload = popAndLoadNextScript;
+        }
+      }
+      documentElement.appendChild(scriptEl);
+    };
+    popAndLoadNextScript();
   }
 };
 

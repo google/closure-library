@@ -436,6 +436,13 @@ See the COPYING file for details.
     });
   }
 
+  function testAssertObjectEqualsWithDates() {
+    var date = new Date(2010, 0, 1);
+    var dateWithMilliseconds = new Date(2010, 0, 1, 0, 0, 0, 1);
+    assertObjectEquals(new Date(2010, 0, 1), date);
+    assertThrows(goog.partial(assertObjectEquals, date, dateWithMilliseconds));
+  }
+
   function testAssertSameElementsOnArray() {
     assertSameElements([1, 2], [2, 1]);
     assertSameElements('Good assertion', [1, 2], [2, 1]);

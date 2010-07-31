@@ -14,12 +14,16 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.debug.ErrorHandler');
+  goog.require('goog.functions');
   goog.require('goog.net.WrapperXmlHttpFactory');
   goog.require('goog.net.XhrIo');
   goog.require('goog.string');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.net.XhrIo');
+  goog.require('goog.testing.recordFunction');
+
+
 </script>
 <script>
 
@@ -72,6 +76,8 @@ goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(
 
 
 var clock;
+var originalEntryPoint =
+    goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_;
 
 function setUp() {
   clock = new goog.testing.MockClock(true);
@@ -79,6 +85,7 @@ function setUp() {
 
 function tearDown() {
   clock.dispose();
+  goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ = originalEntryPoint;
 }
 
 
@@ -217,6 +224,19 @@ function testGoogTestingNetXhrIoIsInSync() {
   };
 
   goog.object.every(xhrIo, propertyComparator, testingXhrIo);
+}
+
+function testEntryPointRegistry() {
+  var monitor = new goog.debug.EntryPointMonitor();
+  var replacement = function() {};
+  monitor.wrap = goog.testing.recordFunction(
+      goog.functions.constant(replacement));
+
+  goog.debug.entryPointRegistry.monitorAll(monitor);
+  assertTrue(monitor.wrap.getCallCount() >= 1);
+  assertEquals(
+      replacement,
+      goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_);
 }
 
 </script>

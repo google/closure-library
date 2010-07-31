@@ -42,6 +42,7 @@ goog.provide('goog.net.XhrIo');
 
 goog.require('goog.Timer');
 goog.require('goog.debug.Logger');
+goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.debug.errorHandlerWeakDep');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json');
@@ -178,15 +179,11 @@ goog.net.XhrIo.cleanup = function() {
  *
  * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
  *     protect the entry point(s).
- * @param {boolean=} opt_tracers Whether to install tracers around the entry
- *     point.
  */
-goog.net.XhrIo.protectEntryPoints = function(
-    errorHandler, opt_tracers) {
+goog.net.XhrIo.protectEntryPoints = function(errorHandler) {
   goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ =
       errorHandler.protectEntryPoint(
-          goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_,
-          opt_tracers);
+          goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_);
 };
 
 
@@ -905,3 +902,15 @@ goog.net.XhrIo.prototype.formatMsg_ = function(msg) {
   return msg + ' [' + this.lastMethod_ + ' ' + this.lastUri_ + ' ' +
       this.getStatus() + ']';
 };
+
+
+// Register the xhr handler as an entry point, so that
+// it can be monitored for exception handling, etc.
+goog.debug.entryPointRegistry.register(
+    /**
+     * @param {goog.debug.EntryPointMonitor} monitor The monitor.
+     */
+    function(monitor) {
+      goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ =
+          monitor.wrap(goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_);
+    });

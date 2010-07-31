@@ -289,6 +289,7 @@ goog.dom.browserrange.IeRange.prototype.clearCachedValues_ = function() {
  * Tests whether the given node can contain a range end point.
  * @param {Node} node The node to check.
  * @return {boolean} Whether the given node can contain a range end point.
+ * @private
  */
 goog.dom.browserrange.IeRange.prototype.canContainRangeEndpoint_ = function(
     node) {
@@ -301,7 +302,7 @@ goog.dom.browserrange.IeRange.prototype.canContainRangeEndpoint_ = function(
 };
 
 
-  /** @inheritDoc */
+/** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.getContainer = function() {
   if (!this.parentNode_) {
     var selectText = this.range_.text;
@@ -520,7 +521,7 @@ goog.dom.browserrange.IeRange.prototype.getEndpointNode_ = function(endpoint,
       }
       return this.getEndpointNode_(endpoint, child);
     } else if (this.compareBrowserRangeEndpoints(ieRange, start, end) < 0 &&
-               this.compareBrowserRangeEndpoints(ieRange, end, start) > 0 ) {
+               this.compareBrowserRangeEndpoints(ieRange, end, start) > 0) {
       // If this child overlaps the selection partially, recurse down to find
       // the first/last child the next level down that overlaps the selection
       // completely. We do not consider edge-adjacency (== 0) as overlap.
@@ -575,7 +576,7 @@ goog.dom.browserrange.IeRange.prototype.getOffset_ = function(endpoint,
     opt_container) {
   var isStartEndpoint = endpoint == goog.dom.RangeEndpoint.START;
   var container = opt_container ||
-        (isStartEndpoint ? this.getStartNode() : this.getEndNode());
+      (isStartEndpoint ? this.getStartNode() : this.getEndNode());
 
   if (container.nodeType == goog.dom.NodeType.ELEMENT) {
     // Find the first/last child that overlaps the selection

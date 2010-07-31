@@ -60,6 +60,7 @@ goog.provide('goog.events');
 goog.provide('goog.events.EventType');
 
 goog.require('goog.array');
+goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.debug.errorHandlerWeakDep');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
@@ -67,7 +68,6 @@ goog.require('goog.events.EventWrapper');
 goog.require('goog.events.pools');
 goog.require('goog.object');
 goog.require('goog.userAgent');
-
 
 
 /**
@@ -935,13 +935,10 @@ goog.events.dispatchEvent = function(src, e) {
  *
  * @param {goog.debug.ErrorHandler} errorHandler Error handler with which to
  *     protect the entry point.
- * @param {boolean=} opt_tracers Whether to install tracers around the browser
- *     event entry point.
  */
-goog.events.protectBrowserEventEntryPoint = function(
-    errorHandler, opt_tracers) {
+goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
   goog.events.handleBrowserEvent_ = errorHandler.protectEntryPoint(
-      goog.events.handleBrowserEvent_, opt_tracers);
+      goog.events.handleBrowserEvent_);
   goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
 };
 
@@ -1152,3 +1149,17 @@ goog.events.synthesizeEventPropagation_ = function() {
   }
   return goog.events.requiresSyntheticEventPropagation_;
 };
+
+
+// Register the browser event handler as an entry point, so that
+// it can be monitored for exception handling, etc.
+goog.debug.entryPointRegistry.register(
+    /**
+     * @param {goog.debug.EntryPointMonitor} monitor The monitor.
+     */
+    function(monitor) {
+      goog.events.handleBrowserEvent_ = monitor.wrap(
+          goog.events.handleBrowserEvent_);
+      goog.events.pools.setProxyCallbackFunction(
+          goog.events.handleBrowserEvent_);
+    });

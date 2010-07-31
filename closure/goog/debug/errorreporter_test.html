@@ -24,6 +24,8 @@ See the COPYING file for details.
 <script type="text/javascript">
   MockXhrIo = function() {};
 
+  MockXhrIo.prototype.onReadyStateChangeEntryPoint_ = function() {};
+
   MockXhrIo.protectEntryPoints = function() {};
 
   MockXhrIo.lastUrl = null;

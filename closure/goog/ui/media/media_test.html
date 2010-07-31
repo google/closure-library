@@ -128,6 +128,20 @@ See the COPYING file for details.
         incompleteModel.getDescription());
     assertArrayEquals([], incompleteModel.getThumbnails());
   }
+
+  function testMediaModelFindCategoryWithScheme() {
+    assertNull(model.findCategoryWithScheme('no such scheme'));
+
+    model.setCategories([
+        new goog.ui.media.MediaModel.Category('scheme-a', 'value-a'),
+        new goog.ui.media.MediaModel.Category('scheme-b', 'value-b')
+    ]);
+    assertNull(model.findCategoryWithScheme('no such scheme'));
+    assertEquals('value-a',
+        model.findCategoryWithScheme('scheme-a').getValue());
+    assertEquals('value-b',
+        model.findCategoryWithScheme('scheme-b').getValue());
+  }
 </script>
 </body>
 </html>
