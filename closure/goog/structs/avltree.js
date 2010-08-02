@@ -20,7 +20,7 @@
  * This file provides the implementation of an AVL-Tree datastructure. The tree
  * maintains a set of unique values in a sorted order. The values can be
  * accessed efficiently in their sorted order since the tree enforces an O(logn)
- * maximum height.
+ * maximum height. See http://en.wikipedia.org/wiki/Avl_tree for more detail.
  *
  * The big-O notation for all operations are below:
  * <pre>
