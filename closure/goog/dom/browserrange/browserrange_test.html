@@ -15,7 +15,6 @@ See the COPYING file for details.
   goog.require('goog.dom.Range');
 
   goog.require('goog.userAgent');
-  goog.require('goog.testing.dom');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -26,7 +25,6 @@ See the COPYING file for details.
   <div id="removeTest"><div>Text that<br>will be deleted</div></div>
   <div id="outer">outer<div id="inner">inner</div>outer2</div>
   <div id="dynamic"></div>
-  <div id="onlybr"><br/></div>
 
 
 <script>
@@ -35,8 +33,6 @@ See the COPYING file for details.
   var cetest = goog.dom.getElement('cetest');
   var empty = goog.dom.getElement('empty');
   var dynamic = goog.dom.getElement('dynamic');
-  var onlybrdiv = goog.dom.getElement('onlybr');
-
 
   function testCreate() {
     assertNotNull('Browser range object can be created for node',
@@ -66,11 +62,6 @@ See the COPYING file for details.
       assertEquals('Start offset should be 2', 2, startOffset);
       assertEquals('End offset should be 2', 2, endOffset);
     }
-  }
-
-  function testCreateFromNodeContents() {
-    var range = goog.dom.Range.createFromNodeContents(onlybrdiv);
-    goog.testing.dom.assertRangeEquals(onlybrdiv, 0, onlybrdiv, 1, range);
   }
 
   function normalizeHtml(str) {
@@ -161,7 +152,7 @@ See the COPYING file for details.
     assertEquals('Should contain correct html fragment', 'Part1Part2',
         range.getHtmlFragment());
     assertEquals('Should contain correct valid html',
-        'part1part2',
+        '<div id=dynamic>part1part2</div>',
         normalizeHtml(range.getValidHtml()));
 
   }
@@ -192,14 +183,6 @@ See the COPYING file for details.
     assertFalse('Div range is not collapsed', range.isCollapsed());
   }
 
-  function testEmptyNodeHtmlInsert() {
-    var range = goog.dom.browserrange.createRangeFromNodeContents(empty);
-    var html = '<b>hello</b>';
-    range.insertNode(goog.dom.htmlToDocumentFragment(html));
-    assertEquals('Html is not inserted correctly', html,
-      normalizeHtml(empty.innerHTML));
-    goog.dom.removeChildren(empty);
-  }
 
   function testEmptyNode() {
     var range = goog.dom.browserrange.createRangeFromNodeContents(empty);

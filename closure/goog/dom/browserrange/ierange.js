@@ -85,15 +85,6 @@ goog.dom.browserrange.IeRange.getBrowserRangeForNode_ = function(node) {
   if (node.nodeType == goog.dom.NodeType.ELEMENT) {
     // Elements are easy.
     nodeRange.moveToElementText(node);
-    // Note(user) : If there are no child nodes of the element, the
-    // range.htmlText includes the element's outerHTML. The range created above
-    // is not collapsed, and should be collapsed explicitly.
-    // Example : node = <div></div>
-    // But if the node is sth like <br>, it shouldnt be collapsed.
-    if (goog.dom.browserrange.canContainRangeEndpoint(node) &&
-        !node.childNodes.length) {
-      nodeRange.collapse(false);
-    }
   } else {
     // Text nodes are hard.
     // Compute the offset from the nearest element related position.
@@ -152,24 +143,9 @@ goog.dom.browserrange.IeRange.getBrowserRangeForNodes_ = function(startNode,
   }
   var leftRange = goog.dom.browserrange.IeRange.
       getBrowserRangeForNode_(startNode);
-
-  // This happens only when startNode is a text node.
   if (startOffset) {
     leftRange.move('character', startOffset);
   }
-
-
-  // The range movements in IE are still an approximation to the standard W3C
-  // behavior, and IE has its trickery when it comes to htmlText and text
-  // properties of the range. So we short-circuit computation whenever we can.
-  if (startNode == endNode && startOffset == endOffset) {
-    leftRange.collapse(true);
-    return leftRange;
-  }
-
-  // This can happen only when the startNode is an element, and there is no node
-  // at the given offset. We start at the last point inside the startNode in
-  // that case.
   if (collapse) {
     leftRange.collapse(false);
   }
@@ -208,34 +184,7 @@ goog.dom.browserrange.IeRange.createFromNodeContents = function(node) {
   var range = new goog.dom.browserrange.IeRange(
       goog.dom.browserrange.IeRange.getBrowserRangeForNode_(node),
       goog.dom.getOwnerDocument(node));
-
-  if (!goog.dom.browserrange.canContainRangeEndpoint(node)) {
-    range.startNode_ = range.endNode_ = range.parentNode_ = node.parentNode;
-    range.startOffset_ = goog.array.indexOf(range.parentNode_.childNodes, node);
-    range.endOffset_ = range.startOffset_ + 1;
-  } else {
-    // Note(user) : Emulate the behavior of W3CRange - Go to deepest possible
-    // range containers on both edges. It seems W3CRange did this to match the
-    // IE behavior, and now it is a circle. Changing W3CRange may break clients
-    // in all sorts of ways.
-    var tempNode, leaf = node;
-    while ((tempNode = leaf.firstChild) &&
-           goog.dom.browserrange.canContainRangeEndpoint(tempNode)) {
-      leaf = tempNode;
-    }
-    range.startNode_ = leaf;
-    range.startOffset_ = 0;
-
-    leaf = node;
-    while ((tempNode = leaf.lastChild) &&
-           goog.dom.browserrange.canContainRangeEndpoint(tempNode)) {
-      leaf = tempNode;
-    }
-    range.endNode_ = leaf;
-    range.endOffset_ = leaf.nodeType == goog.dom.NodeType.ELEMENT ?
-                       leaf.childNodes.length : leaf.length;
-    range.parentNode_ = node;
-  }
+  range.parentNode_ = node;
   return range;
 };
 
@@ -336,6 +285,23 @@ goog.dom.browserrange.IeRange.prototype.clearCachedValues_ = function() {
 };
 
 
+/**
+ * Tests whether the given node can contain a range end point.
+ * @param {Node} node The node to check.
+ * @return {boolean} Whether the given node can contain a range end point.
+ * @private
+ */
+goog.dom.browserrange.IeRange.prototype.canContainRangeEndpoint_ = function(
+    node) {
+  // NOTE(user, bloom): This is not complete, as divs with style -
+  // 'display:inline-block' or 'position:absolute' can also not contain range
+  // endpoints. A more complete check is to see if that element can be partially
+  // selected (can be container) or not.
+  return goog.dom.canHaveChildren(node) ||
+      node.nodeType == goog.dom.NodeType.TEXT;
+};
+
+
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.getContainer = function() {
   if (!this.parentNode_) {
@@ -381,7 +347,7 @@ goog.dom.browserrange.IeRange.prototype.getContainer = function() {
                parent.firstChild)) {
       // A container should be an element which can have children or a text
       // node. Elements like IMG, BR, etc. can not be containers.
-      if (!goog.dom.browserrange.canContainRangeEndpoint(parent.firstChild)) {
+      if (!this.canContainRangeEndpoint_(parent.firstChild)) {
         break;
       }
       parent = parent.firstChild;
@@ -412,8 +378,7 @@ goog.dom.browserrange.IeRange.prototype.findDeepestContainer_ = function(node) {
   for (var i = 0, len = childNodes.length; i < len; i++) {
     var child = childNodes[i];
 
-    if ((child.nodeType == goog.dom.NodeType.ELEMENT) &&
-        goog.dom.browserrange.canContainRangeEndpoint(child)) {
+    if (child.nodeType == goog.dom.NodeType.ELEMENT) {
       var childRange =
           goog.dom.browserrange.IeRange.getBrowserRangeForNode_(child);
       var start = goog.dom.RangeEndpoint.START;
@@ -494,8 +459,8 @@ goog.dom.browserrange.IeRange.prototype.getEndOffset = function() {
 
 
 /** @inheritDoc */
-goog.dom.browserrange.IeRange.prototype.compareBrowserRangeEndpoints = function(
-    range, thisEndpoint, otherEndpoint) {
+goog.dom.browserrange.IeRange.prototype.compareBrowserRangeEndpoints =
+    function(range, thisEndpoint, otherEndpoint) {
   return this.range_.compareEndPoints(
       (thisEndpoint == goog.dom.RangeEndpoint.START ? 'Start' : 'End') +
       'To' +
@@ -532,7 +497,7 @@ goog.dom.browserrange.IeRange.prototype.getEndpointNode_ = function(endpoint,
     var childRange = goog.dom.browserrange.createRangeFromNodeContents(child);
     var ieRange = childRange.getBrowserRange();
     if (this.isCollapsed()) {
-      if (!goog.dom.browserrange.canContainRangeEndpoint(child)) {
+      if (!this.canContainRangeEndpoint_(child)) {
         // In case of collapsed range, getEndNode calls out to getStartNode.
         // The following handles a scenario like <div><BR>[caret]<BR></div>,
         // where point should be (div, 1).
@@ -545,7 +510,7 @@ goog.dom.browserrange.IeRange.prototype.getEndpointNode_ = function(endpoint,
       }
     } else if (this.containsRange(childRange)) {
       // This is an element which is selected in entirety.
-      if (!goog.dom.browserrange.canContainRangeEndpoint(child)) {
+      if (!this.canContainRangeEndpoint_(child)) {
         // Container can't be any deeper, so current node is the container.
         if (isStartEndpoint) {
           this.startOffset_ = i;
@@ -624,7 +589,7 @@ goog.dom.browserrange.IeRange.prototype.getOffset_ = function(endpoint,
     for (var i = edge; i >= 0 && i < len; i += sign) {
       var child = children[i];
       // Ignore the child nodes, which could be end point containers.
-      if (goog.dom.browserrange.canContainRangeEndpoint(child)) {
+      if (this.canContainRangeEndpoint_(child)) {
         continue;
       }
       // Stop looping when we reach the edge of the selection.
@@ -686,10 +651,8 @@ goog.dom.browserrange.IeRange.prototype.isRangeInDocument = function() {
 
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.isCollapsed = function() {
-  // Note(user) : The earlier implementation used (range.text == ''), but this
-  // fails when (range.htmlText == '<br>')
-  // Alternative: this.range_.htmlText == '';
-  return this.range_.compareEndPoints('StartToEnd', this.range_) == 0;
+  // Alternative: this.range_.compareEndPoints('StartToEnd', this.range_)
+  return this.range_.text == '';
 };
 
 
@@ -930,9 +893,7 @@ goog.dom.browserrange.IeRange.prototype.collapse = function(toStart) {
 
   if (toStart) {
     this.endNode_ = this.startNode_;
-    this.endOffset_ = this.startOffset_;
   } else {
     this.startNode_ = this.endNode_;
-    this.startOffset_ = this.endOffset_;
   }
 };

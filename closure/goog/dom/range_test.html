@@ -633,13 +633,8 @@ See the COPYING file for details.
     var range = goog.dom.Range.createFromWindow();
     assertFalse('Should not contain whole <br>',
         range.containsNode(br, false));
-    if (goog.userAgent.IE) {
-      assertTrue('Range over <br> is adjacent to the immediate range before it',
-          range.containsNode(br, true));
-    } else {
-      assertFalse('Should not contain partial <br>',
-          range.containsNode(br, true));
-    }
+    assertFalse('Should not contain partial <br>',
+        range.containsNode(br, true));
 
     assertEquals(offset, range.getStartOffset());
     assertEquals(text, range.getStartNode());
@@ -655,13 +650,8 @@ See the COPYING file for details.
     var range = goog.dom.Range.createFromWindow();
     assertFalse('Should not contain whole <br>',
         range.containsNode(br, false));
-    if (goog.userAgent.IE) {
-      assertTrue('Range over <br> is adjacent to the immediate range after it',
-          range.containsNode(br, true));
-    } else {
-      assertFalse('Should not contain partial <br>',
-          range.containsNode(br, true));
-    }
+    assertFalse('Should not contain partial <br>',
+        range.containsNode(br, true));
 
     if (goog.userAgent.WEBKIT &&
         !goog.userAgent.isVersion('528') /* Safari 3 */) {
@@ -681,7 +671,7 @@ See the COPYING file for details.
     assertEquals(0, caret.getStartOffset());
 
     var range = goog.dom.Range.createFromWindow();
-    assertTrue('Range over <br> is adjacent to the immediate range before it',
+    assertFalse('Should not contain partial <br>',
         range.containsNode(br, true));
     assertFalse('Should not contain whole <br>',
         range.containsNode(br, false));
