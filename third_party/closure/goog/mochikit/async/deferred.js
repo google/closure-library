@@ -26,6 +26,7 @@ goog.provide('goog.async.Deferred.AlreadyCalledError');
 goog.provide('goog.async.Deferred.CancelledError');
 
 goog.require('goog.Timer');
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
 
@@ -348,7 +349,12 @@ goog.async.Deferred.prototype.fire_ = function() {
         fired = 1;
         res = ex;
 
-        if (!chain.length) {
+        var errbackExists = goog.array.some(chain, function(chainRow) {
+          // The errback is the second element in the array.
+          return goog.isFunction(chainRow[1]);
+        });
+
+        if (!errbackExists) {
           // If an error is thrown with no additional errbacks in the queue,
           // prepare to rethrow the error.
           unhandledException = true;

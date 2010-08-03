@@ -401,6 +401,22 @@ function testSynchronousErrorCancelling() {
   d.addCallback(assertEqualsCallback('Callback should fire', 1));
 }
 
+function testThrownErrorWithNoErrbacks() {
+  var d = new Deferred();
+  d.addCallback(function() {
+    throw Error('foo');
+  });
+  d.addCallback(goog.nullFunction);
+
+  function assertCallback() {
+    d.callback(1);
+    mockClock.tick(); // Should cause error because throwing is delayed.
+  }
+
+  assertThrows('A thrown error should be rethrown if there is no ' +
+               'errback to catch it.', assertCallback);
+}
+
 </script>
 </body>
 </html>
