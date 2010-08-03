@@ -112,14 +112,15 @@ function testMaxMatches() {
   ac.setToken('');
 }
 
-/**
- * Try using next and prev to navigate past the ends
- */
-function testHiliteNextPrev() {
-  function checkHilitedIndex(index) {
-    assertEquals(index, rend.getHilitedRowIndex());
-  }
+function checkHilitedIndex(renderer, index) {
+  assertEquals(index, renderer.getHilitedRowIndex());
+}
 
+/**
+ * Try using next and prev to navigate past the ends with default behavior of
+ * allowFreeSelect_ and wrap_.
+ */
+function testHiliteNextPrev_default() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
@@ -137,26 +138,239 @@ function testHiliteNextPrev() {
     ac.setToken('the');
     assertEquals(4, rend.getRenderedRows().length);
     // check to see if we can select the last of the 4 items
-    checkHilitedIndex(0);
+    checkHilitedIndex(rend, 0);
     ac.hiliteNext();
-    checkHilitedIndex(1);
+    checkHilitedIndex(rend, 1);
     ac.hiliteNext();
-    checkHilitedIndex(2);
+    checkHilitedIndex(rend, 2);
     ac.hiliteNext();
-    checkHilitedIndex(3);
+    checkHilitedIndex(rend, 3);
     // try going over the edge
     ac.hiliteNext();
-    checkHilitedIndex(3);
+    checkHilitedIndex(rend, 3);
 
     // go back down
     ac.hilitePrev();
-    checkHilitedIndex(2);
+    checkHilitedIndex(rend, 2);
     ac.hilitePrev();
-    checkHilitedIndex(1);
+    checkHilitedIndex(rend, 1);
     ac.hilitePrev();
-    checkHilitedIndex(0);
+    checkHilitedIndex(rend, 0);
     ac.hilitePrev();
-    checkHilitedIndex(0);
+    checkHilitedIndex(rend, 0);
+  }
+}
+
+/**
+ * Try using next and prev to navigate past the ends with wrap_ off and
+ * allowFreeSelect_ on.
+ */
+function testHiliteNextPrev_allowFreeSelect() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setAllowFreeSelect(true);
+
+  // make sure 'next' and 'prev' don't explode before any token is set
+  ac.hiliteNext();
+  ac.hilitePrev();
+  ac.setMaxMatches(4);
+  assertEquals(0, rend.getRenderedRows().length);
+
+  // check a few times
+  for (var i = 0; i < 3; ++i) {
+    ac.setToken('');
+    ac.setToken('the');
+    assertEquals(4, rend.getRenderedRows().length);
+    // check to see if we can select the last of the 4 items
+    checkHilitedIndex(rend, 0);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 1);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 2);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 3);
+    // try going over the edge. Since allowFreeSelect is on, this will
+    // deselect the last row.
+    ac.hiliteNext();
+    checkHilitedIndex(rend, -1);
+
+    // go back down the list
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 0);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 1);
+
+    // go back up the list.
+    ac.hilitePrev();
+    checkHilitedIndex(rend, 0);
+    // go back above the first, deselects first.
+    ac.hilitePrev();
+    checkHilitedIndex(rend, -1);
+  }
+}
+
+/**
+ * Try using next and prev to navigate past the ends with wrap_ on
+ * allowFreeSelect_ off.
+ */
+function testHiliteNextPrev_wrap() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setWrap(true);
+
+  // make sure 'next' and 'prev' don't explode before any token is set
+  ac.hiliteNext();
+  ac.hilitePrev();
+  ac.setMaxMatches(4);
+  assertEquals(0, rend.getRenderedRows().length);
+
+  // check a few times
+  for (var i = 0; i < 3; ++i) {
+    ac.setToken('');
+    ac.setToken('the');
+    assertEquals(4, rend.getRenderedRows().length);
+    // check to see if we can select the last of the 4 items
+    checkHilitedIndex(rend, 0);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 1);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 2);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 3);
+    // try going over the edge. Since wrap is on, this will go back to 0.
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 0);
+
+    // go back down the list
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 1);
+
+    // go back up the list.
+    ac.hilitePrev();
+    checkHilitedIndex(rend, 0);
+    // go back above the first, selects last.
+    ac.hilitePrev();
+    checkHilitedIndex(rend, 3);
+  }
+}
+
+/**
+ * Try using next and prev to navigate past the ends with wrap_ on
+ * allowFreeSelect_ on.
+ */
+function testHiliteNextPrev_wrapAndAllowFreeSelect() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setWrap(true);
+  ac.setAllowFreeSelect(true);
+
+  // make sure 'next' and 'prev' don't explode before any token is set
+  ac.hiliteNext();
+  ac.hilitePrev();
+  ac.setMaxMatches(4);
+  assertEquals(0, rend.getRenderedRows().length);
+
+  // check a few times
+  for (var i = 0; i < 3; ++i) {
+    ac.setToken('');
+    ac.setToken('the');
+    assertEquals(4, rend.getRenderedRows().length);
+    // check to see if we can select the last of the 4 items
+    checkHilitedIndex(rend, 0);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 1);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 2);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 3);
+    // try going over the edge. Since free select is on, this should go
+    // to -1.
+    ac.hiliteNext();
+    checkHilitedIndex(rend, -1);
+
+    // go back down the list
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 0);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 1);
+
+    // go back up the list.
+    ac.hilitePrev();
+    checkHilitedIndex(rend, 0);
+    // go back above the first, free select.
+    ac.hilitePrev();
+    checkHilitedIndex(rend, -1);
+    // wrap to last
+    ac.hilitePrev();
+    checkHilitedIndex(rend, 3);
+  }
+}
+
+/**
+ * Try using next and prev to navigate past the ends with wrap_ on
+ * allowFreeSelect_ on AND turn autoHilite_ off.
+ */
+function testHiliteNextPrev_wrapAndAllowFreeSelectNoAutoHilite() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setWrap(true);
+  ac.setAllowFreeSelect(true);
+  ac.setAutoHilite(false);
+
+  // make sure 'next' and 'prev' don't explode before any token is set
+  ac.hiliteNext();
+  ac.hilitePrev();
+  ac.setMaxMatches(4);
+  assertEquals(0, rend.getRenderedRows().length);
+
+  // check a few times
+  for (var i = 0; i < 3; ++i) {
+    ac.setToken('');
+    ac.setToken('the');
+    assertEquals(4, rend.getRenderedRows().length);
+    // check to see if we can select the last of the 4 items.
+    // Initially nothing should be selected since autoHilite_ is off.
+    checkHilitedIndex(rend, -1);
+    ac.hilitePrev();
+    checkHilitedIndex(rend, 3);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, -1);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 0);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 1);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 2);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 3);
+    // try going over the edge. Since free select is on, this should go
+    // to -1.
+    ac.hiliteNext();
+    checkHilitedIndex(rend, -1);
+
+    // go back down the list
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 0);
+    ac.hiliteNext();
+    checkHilitedIndex(rend, 1);
+
+    // go back up the list.
+    ac.hilitePrev();
+    checkHilitedIndex(rend, 0);
+    // go back above the first, free select.
+    ac.hilitePrev();
+    checkHilitedIndex(rend, -1);
+    // wrap to last
+    ac.hilitePrev();
+    checkHilitedIndex(rend, 3);
   }
 }
 

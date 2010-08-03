@@ -158,6 +158,16 @@ goog.ui.AutoComplete.prototype.allowFreeSelect_ = false;
 
 
 /**
+ * True iff item selection should wrap around from last to first. If
+ *     allowFreeSelect_ is on in conjunction, there is a step of free selection
+ *     before wrapping.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.AutoComplete.prototype.wrap_ = false;
+
+
+/**
  * Whether completion from suggestion triggers fetching new suggestion.
  * @type {boolean}
  * @private
@@ -252,12 +262,22 @@ goog.ui.AutoComplete.prototype.setAutoHilite = function(autoHilite) {
 
 
 /**
- * Sets whether or not the up arrow can unhilite all rows.
+ * Sets whether or not the up/down arrow can unhilite all rows.
  *
  * @param {boolean} allowFreeSelect true iff the up arrow can unhilite all rows.
  */
 goog.ui.AutoComplete.prototype.setAllowFreeSelect = function(allowFreeSelect) {
   this.allowFreeSelect_ = allowFreeSelect;
+};
+
+
+/**
+ * Sets whether or not selections can wrap around the edges.
+ *
+ * @param {boolean} wrap true iff sections should wrap around the edges.
+ */
+goog.ui.AutoComplete.prototype.setWrap = function(wrap) {
+  this.wrap_ = wrap;
 };
 
 
@@ -333,13 +353,21 @@ goog.ui.AutoComplete.prototype.isOpen = function() {
  * @return {boolean} Returns true on a successful hilite.
  */
 goog.ui.AutoComplete.prototype.hiliteNext = function() {
-  if (this.hiliteId_ >= this.firstRowId_ &&
-      this.hiliteId_ < this.firstRowId_ + this.rows_.length - 1) {
+  var lastId = this.firstRowId_ + this.rows_.length - 1;
+  if (this.hiliteId_ >= this.firstRowId_ && this.hiliteId_ < lastId) {
     this.hiliteId(this.hiliteId_ + 1);
     return true;
   } else if (this.hiliteId_ == -1) {
     this.hiliteId(this.firstRowId_);
     return true;
+  } else if (this.hiliteId_ == lastId) {
+    if (this.allowFreeSelect_) {
+      this.hiliteId(-1);
+      return false;
+    } else if (this.wrap_) {
+      this.hiliteId(this.firstRowId_);
+      return true;
+    }
   }
   return false;
 };
@@ -357,6 +385,12 @@ goog.ui.AutoComplete.prototype.hilitePrev = function() {
     return true;
   } else if (this.allowFreeSelect_ && this.hiliteId_ == this.firstRowId_) {
     this.hiliteId(-1);
+    return false;
+  } else if (this.wrap_ &&
+        (this.hiliteId_ == -1 || this.hiliteId_ == this.firstRowId_)) {
+    var lastId = this.firstRowId_ + this.rows_.length - 1;
+    this.hiliteId(lastId);
+    return true;
   }
   return false;
 };
