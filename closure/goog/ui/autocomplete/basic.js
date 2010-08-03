@@ -34,7 +34,7 @@ goog.require('goog.ui.AutoComplete.Renderer');
  * @param {Array} data Data array.
  * @param {Element} input Input element or text area.
  * @param {boolean=} opt_multi Whether to allow multiple entries separated with
- * semi-colons or colons.
+ * semi-colons or commas.
  * @param {boolean=} opt_useSimilar use similar matches. e.g. "gost" => "ghost".
  * @constructor
  * @extends {goog.ui.AutoComplete}
