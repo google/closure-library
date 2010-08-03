@@ -132,3 +132,18 @@ goog.dom.browserrange.createRangeFromNodes = function(startNode, startOffset,
         startOffset, endNode, endOffset);
   }
 };
+
+
+/**
+ * Tests whether the given node can contain a range end point.
+ * @param {Node} node The node to check.
+ * @return {boolean} Whether the given node can contain a range end point.
+ */
+goog.dom.browserrange.canContainRangeEndpoint = function(node) {
+  // NOTE(user, bloom): This is not complete, as divs with style -
+  // 'display:inline-block' or 'position:absolute' can also not contain range
+  // endpoints. A more complete check is to see if that element can be partially
+  // selected (can be container) or not.
+  return goog.dom.canHaveChildren(node) ||
+      node.nodeType == goog.dom.NodeType.TEXT;
+};
