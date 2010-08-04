@@ -12,6 +12,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.dom')
   goog.require('goog.events.KeyEvent');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -538,6 +539,28 @@ See the COPYING file for details.
     assertEquals('keycode should be -1', -1, keyHandler.keyCode_);
   }
 
+  function testCapturePhase() {
+    var gotInCapturePhase;
+    var gotInBubblePhase;
+
+    var target = goog.dom.createDom('div');
+    goog.events.listen(
+        new goog.events.KeyHandler(target, false /* bubble */),
+        goog.events.KeyHandler.EventType.KEY,
+        function() {
+          gotInBubblePhase = true;
+          assertTrue(gotInCapturePhase);
+        });
+    goog.events.listen(
+        new goog.events.KeyHandler(target, true /* capture */),
+        goog.events.KeyHandler.EventType.KEY,
+        function() {
+          gotInCapturePhase = true;
+        });
+
+    goog.testing.events.fireKeySequence(target, goog.events.KeyCodes.ESC);
+    assertTrue(gotInBubblePhase);
+  }
 
   function fireKeyDown(keyHandler, keyCode, opt_charCode, opt_keyIdentifier,
       opt_ctrlKey, opt_altKey, opt_shiftKey) {
