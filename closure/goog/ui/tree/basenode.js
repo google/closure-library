@@ -834,7 +834,7 @@ goog.ui.tree.BaseNode.prototype.getRowHtml = function() {
 goog.ui.tree.BaseNode.prototype.getRowClassName = function() {
   var selectedClass;
   if (this.isSelected()) {
-    selectedClass = ' selected';
+    selectedClass = ' ' + this.config_.cssSelectedRow;
   } else {
     selectedClass = '';
   }

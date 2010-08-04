@@ -655,5 +655,6 @@ goog.ui.tree.TreeControl.defaultConfig = {
   cssCollapsedFolderIcon: goog.getCssName('goog-tree-collapsed-folder-icon'),
   cssFileIcon: goog.getCssName('goog-tree-file-icon'),
   cssExpandedRootIcon: goog.getCssName('goog-tree-expanded-folder-icon'),
-  cssCollapsedRootIcon: goog.getCssName('goog-tree-collapsed-folder-icon')
+  cssCollapsedRootIcon: goog.getCssName('goog-tree-collapsed-folder-icon'),
+  cssSelectedRow: 'selected'
 };
