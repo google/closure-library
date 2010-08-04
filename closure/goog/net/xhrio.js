@@ -908,9 +908,10 @@ goog.net.XhrIo.prototype.formatMsg_ = function(msg) {
 // it can be monitored for exception handling, etc.
 goog.debug.entryPointRegistry.register(
     /**
-     * @param {goog.debug.EntryPointMonitor} monitor The monitor.
+     * @param {function(!Function): !Function} transformer The transforming
+     *     function.
      */
-    function(monitor) {
+    function(transformer) {
       goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ =
-          monitor.wrap(goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_);
+          transformer(goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_);
     });

@@ -1155,10 +1155,11 @@ goog.events.synthesizeEventPropagation_ = function() {
 // it can be monitored for exception handling, etc.
 goog.debug.entryPointRegistry.register(
     /**
-     * @param {goog.debug.EntryPointMonitor} monitor The monitor.
+     * @param {function(!Function): !Function} transformer The transforming
+     *     function.
      */
-    function(monitor) {
-      goog.events.handleBrowserEvent_ = monitor.wrap(
+    function(transformer) {
+      goog.events.handleBrowserEvent_ = transformer(
           goog.events.handleBrowserEvent_);
       goog.events.pools.setProxyCallbackFunction(
           goog.events.handleBrowserEvent_);

@@ -42,7 +42,7 @@ goog.debug.EntryPointMonitor.prototype.wrap;
 
 /**
  * An array of entry point callbacks.
- * @type {!Array.<function(goog.debug.EntryPointMonitor)>}
+ * @type {!Array.<function(!Function)>}
  * @private
  */
 goog.debug.entryPointRegistry.refList_ = [];
@@ -50,10 +50,10 @@ goog.debug.entryPointRegistry.refList_ = [];
 
 /**
  * Register an entry point with this module.
- * @param {function(goog.debug.EntryPointMonitor)} callback A callback function.
+ * @param {function(!Function)} callback A callback function.
  *     When a client requests instrumentation, this callback will be called
- *     with an EntryPointMonitor. The callback is responsible for wrapping
- *     the relevant entry point.
+ *     with a trnasforming function. The callback is responsible for wrapping
+ *     the relevant entry point with the transforming function.
  */
 goog.debug.entryPointRegistry.register = function(callback) {
   // Don't use push(), so that this can be compiled out.
@@ -67,7 +67,8 @@ goog.debug.entryPointRegistry.register = function(callback) {
  * @param {goog.debug.EntryPointMonitor} monitor An entry point monitor.
  */
 goog.debug.entryPointRegistry.monitorAll = function(monitor) {
+  var transformer = goog.bind(monitor.wrap, monitor);
   for (var i = 0; i < goog.debug.entryPointRegistry.refList_.length; i++) {
-    goog.debug.entryPointRegistry.refList_[i](monitor);
+    goog.debug.entryPointRegistry.refList_[i](transformer);
   }
 };
