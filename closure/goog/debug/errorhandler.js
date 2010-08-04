@@ -31,8 +31,16 @@ goog.require('goog.debug.Trace');
  * statement. If an exception is thrown, the given error handler function will
  * be called.
  *
+ * When this object is disposed, it will stop handling exceptions and tracing.
+ * It will also try to restore window.setTimeout and window.setInterval
+ * if it wrapped them. Notice that in the general case, it is not technically
+ * possible to remove the wrapper, because functions have no knowledge of
+ * what they have been assigned to. So the app is responsible for other
+ * forms of unwrapping.
+ *
  * @param {Function} handler Handler for exceptions.
  * @constructor
+ * @extends {goog.Disposable}
  * @implements {goog.debug.EntryPointMonitor}
  */
 goog.debug.ErrorHandler = function(handler) {
@@ -43,6 +51,7 @@ goog.debug.ErrorHandler = function(handler) {
    */
   this.errorHandlerFn_ = handler;
 };
+goog.inherits(goog.debug.ErrorHandler, goog.Disposable);
 
 
 /**
@@ -63,9 +72,15 @@ goog.debug.ErrorHandler.prototype.setAddTracersToProtectedFunctions =
 };
 
 
-/** @override */
+/** @inheritDoc */
 goog.debug.ErrorHandler.prototype.wrap = function(fn) {
   return this.protectEntryPoint(fn);
+};
+
+
+/** @inheritDoc */
+goog.debug.ErrorHandler.prototype.unwrap = function(fn) {
+  return fn[this.getFunctionIndex_(false)] || fn;
 };
 
 
@@ -87,6 +102,18 @@ goog.debug.ErrorHandler.prototype.getStackTraceHolder_ = function(stackTrace) {
 
 
 /**
+ * Get the index for a function. Used for internal indexing.
+ * @param {boolean} wrapper True for the wrapper; false for the wrapped.
+ * @return {string} The index where we should store the function in its
+ *     wrapper/wrapped function.
+ * @private
+ */
+goog.debug.ErrorHandler.prototype.getFunctionIndex_ = function(wrapper) {
+  return (wrapper ? '__wrapper_' : '__protected_') + goog.getUid(this) + '__';
+};
+
+
+/**
  * Installs exception protection for an entry point function. When an exception
  * is thrown from a protected function, a handler will be invoked to handle it.
  *
@@ -95,11 +122,10 @@ goog.debug.ErrorHandler.prototype.getStackTraceHolder_ = function(stackTrace) {
  *     function.
  */
 goog.debug.ErrorHandler.prototype.protectEntryPoint = function(fn) {
-  var protectedFnName =
-      '__protected_' + goog.getUid(this) + '_' +
-      this.addTracersToProtectedFunctions_ + '__';
+  var protectedFnName = this.getFunctionIndex_(true);
   if (!fn[protectedFnName]) {
-    fn[protectedFnName] = this.getProtectedFunction(fn);
+    var wrapper = fn[protectedFnName] = this.getProtectedFunction(fn);
+    wrapper[this.getFunctionIndex_(false)] = fn;
   }
   return fn[protectedFnName];
 };
@@ -111,7 +137,7 @@ goog.debug.ErrorHandler.prototype.protectEntryPoint = function(fn) {
  * not already exist for the given function.  Can be overriden by subclasses
  * that may want to implement different error handling, or add additional
  * entry point hooks.
- * @param {Function} fn An entry point function to be protected.
+ * @param {!Function} fn An entry point function to be protected.
  * @return {!Function} protected wrapper function.
  * @protected
  */
@@ -121,10 +147,14 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
   if (tracers) {
     var stackTrace = goog.debug.getStacktraceSimple(15);
   }
-  return function() {
+  var result = function() {
+    if (that.isDisposed()) {
+      return fn.apply(this, arguments);
+    }
+
     if (tracers) {
       var tracer = goog.debug.Trace.startTracer('protectedEntryPoint: ' +
-        that.getStackTraceHolder_(stackTrace));
+          that.getStackTraceHolder_(stackTrace));
     }
     try {
       return fn.apply(this, arguments);
@@ -137,6 +167,8 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
       }
     }
   };
+  result[this.getFunctionIndex_(false)] = fn;
+  return result;
 };
 
 
@@ -158,6 +190,7 @@ goog.debug.ErrorHandler.prototype.protectWindowSetTimeout =
       return originalSetTimeout(fn, time);
     }
   };
+  win.setTimeout[this.getFunctionIndex_(false)] = originalSetTimeout;
 };
 
 
@@ -179,4 +212,16 @@ goog.debug.ErrorHandler.prototype.protectWindowSetInterval =
       return originalSetInterval(fn, time);
     }
   };
+  win.setInterval[this.getFunctionIndex_(false)] = originalSetInterval;
+};
+
+
+/** @inheritDoc */
+goog.debug.ErrorHandler.prototype.disposeInternal = function() {
+  // Try to unwrap window.setTimeout and window.setInterval.
+  var win = goog.getObjectByName('window');
+  win.setTimeout = this.unwrap(win.setTimeout);
+  win.setInterval = this.unwrap(win.setInterval);
+
+  goog.base(this, 'disposeInternal');
 };

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2010 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+-->
+<!--
+  Author: nicksantos@google.com (Nick Santos)
+-->
+<head>
+<title>Closure Unit Tests - goog.debug.entryPointRegistry</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.debug.ErrorHandler');
+  goog.require('goog.debug.entryPointRegistry');
+</script>
+</head>
+<body>
+<script>
+
+var lastError;
+var errorHandler;
+
+function setUp() {
+  lastError = null;
+  errorHandler = new goog.debug.ErrorHandler(function(ex) {
+    lastError = ex;
+  });
+  goog.debug.entryPointRegistry.refList_ = [];
+}
+
+function testMonitorAndUnmonitor() {
+  var errorString = 'Hello!';
+  var errorFn = function() {
+    throw {message: errorString};
+  };
+
+  goog.debug.entryPointRegistry.register(function(transformer) {
+    errorFn = transformer(errorFn);
+  });
+
+  goog.debug.entryPointRegistry.monitorAll(errorHandler);
+
+  try {
+    errorFn();
+    fail('expected error');
+  } catch (e) {
+    assertEquals('Hello!', e.message);
+    assertEquals('Hello!', lastError.message);
+  }
+
+  errorString = 'Goodbye!';
+  goog.debug.entryPointRegistry.unmonitorAllIfPossible(errorHandler);
+
+  try {
+    errorFn();
+    fail('expected error');
+  } catch (e) {
+    assertEquals('Goodbye!', e.message);
+    assertEquals('Hello!', lastError.message);
+  }
+}
+
+</script>
+</body>
+</html>

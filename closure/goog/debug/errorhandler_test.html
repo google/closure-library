@@ -65,7 +65,10 @@ See the COPYING file for details.
   function tearDown() {
     goog.getObjectByName = oldGetObjectByName;
     fakeWin = null;
+
+    goog.dispose(errorHandler);
     errorHandler = null;
+
     delete badTimer['__protected__'];
   }
 
@@ -104,6 +107,32 @@ See the COPYING file for details.
     assertTrue('fake setInterval not called', !!fakeWin.setInterval.called);
     assertTrue('"this" not passed to original setTimeout',
                fakeWin.setInterval.that === fakeWin);
+  }
+
+  function testDisposal() {
+    fakeWin = goog.getObjectByName('window');
+    var originalSetTimeout = fakeWin.setTimeout;
+    var originalSetInterval = fakeWin.setInterval;
+
+    errorHandler.protectWindowSetTimeout();
+    errorHandler.protectWindowSetInterval();
+
+    assertNotEquals(originalSetTimeout, fakeWin.setTimeout);
+    assertNotEquals(originalSetInterval, fakeWin.setInterval);
+
+    errorHandler.dispose();
+
+    assertEquals(originalSetTimeout, fakeWin.setTimeout);
+    assertEquals(originalSetInterval, fakeWin.setInterval);
+  }
+
+  function testUnwrap() {
+    var fn = function() {};
+    var wrappedFn = errorHandler.wrap(fn);
+    assertNotEquals(wrappedFn, fn);
+
+    assertEquals(fn, errorHandler.unwrap(fn));
+    assertEquals(fn, errorHandler.unwrap(wrappedFn));
   }
 
 </script>
