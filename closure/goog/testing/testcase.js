@@ -590,6 +590,24 @@ goog.testing.TestCase.prototype.getAutoDiscoveryPrefix = function() {
 
 
 /**
+ * @return {number} Time since the last batch of tests was started.
+ * @protected
+ */
+goog.testing.TestCase.prototype.getBatchTime = function() {
+  return this.batchTime_;
+};
+
+
+/**
+ * @param {number} batchTime Time since the last batch of tests was started.
+ * @protected
+ */
+goog.testing.TestCase.prototype.setBatchTime = function(batchTime) {
+  this.batchTime_ = batchTime;
+};
+
+
+/**
  * Creates a {@code goog.testing.TestCase.Test} from an auto-discovered
  *     function.
  * @param {string} name The name of the function.
