@@ -58,6 +58,7 @@ function setUp() {
     // Pointless assertion to verify that setUp methods can contain waits.
     assertEquals(count, testCase.getCount());
   }, 0);
+
   clock.reset();
 }
 
@@ -299,20 +300,22 @@ function testOutOfOrderWaits() {
 }
 
 
-
 /*
  * Any of the test functions below (except the condition check passed into
  * waitForCondition) can raise an assertion successfully. Any level of nested
  * test steps should be possible, in any configuration.
  */
 
-var testObj = {
-  lock: true,
-  et: new goog.events.EventTarget(),
-  steps: 0
-}
+var testObj;
+
 
 function testCrazyNestedWaitFunction() {
+  testObj = {
+    lock: true,
+    et: new goog.events.EventTarget(),
+    steps: 0
+  }
+
   waitForTimeout(handleTimeout, 10);
   waitForEvent(testObj.et, 'test', handleEvent);
   waitForCondition(condition, handleCondition, 1);
