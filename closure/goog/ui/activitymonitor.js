@@ -182,6 +182,9 @@ goog.ui.ActivityMonitor.prototype.addDocument = function(doc) {
  * @param {Document} doc Document to monitor.
  */
 goog.ui.ActivityMonitor.prototype.removeDocument = function(doc) {
+  if (this.isDisposed()) {
+    return;
+  }
   goog.array.remove(this.documents_, doc);
   this.eventHandler_.unlisten(
       doc, goog.ui.ActivityMonitor.userEventTypesDocuments_,
