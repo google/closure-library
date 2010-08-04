@@ -402,10 +402,9 @@ goog.History.prototype.lastToken_ = null;
 
 
 /**
- * Whether the browser supports HTML5 history  management.
+ * Whether the browser supports HTML5 history management.
  * {@link http://www.w3.org/TR/html5/history.html}.
  * @type {boolean}
- * @protected
  */
 goog.History.HAS_ONHASHCHANGE =
     goog.userAgent.IE && document.documentMode >= 8 ||
@@ -727,11 +726,11 @@ goog.History.prototype.setIframeToken_ = function(token,
       var doc = goog.dom.getFrameContentDocument(this.iframe_);
 
       doc.open('text/html', opt_replace ? 'replace' : undefined);
-      doc.write(
-          goog.string.subs(goog.History.IFRAME_SOURCE_TEMPLATE_,
-                           goog.string.htmlEscape((/** @type {string} */
-                               opt_title || this.window_.document.title)),
-                               token));
+      doc.write(goog.string.subs(
+          goog.History.IFRAME_SOURCE_TEMPLATE_,
+          goog.string.htmlEscape(
+              /** @type {string} */ (opt_title || this.window_.document.title)),
+          token));
       doc.close();
     } else {
       var url = this.iframeSrc_ + '#' + token;
@@ -790,7 +789,7 @@ goog.History.prototype.getIframeToken_ = function() {
         // state, and (c) the token is still in the history and
         // accesible on forward/back.
         if (!this.longerPolling_) {
-          this.setLongerPolling_(true)
+          this.setLongerPolling_(true);
         }
 
         return null;
@@ -901,9 +900,11 @@ goog.History.prototype.operaDefibrillator_ = function() {
  * @type {Array.<string>}
  * @private
  */
-goog.History.INPUT_EVENTS_ = [goog.events.EventType.MOUSEDOWN,
-                              goog.events.EventType.KEYDOWN,
-                              goog.events.EventType.MOUSEMOVE];
+goog.History.INPUT_EVENTS_ = [
+  goog.events.EventType.MOUSEDOWN,
+  goog.events.EventType.KEYDOWN,
+  goog.events.EventType.MOUSEMOVE
+];
 
 
 /**
@@ -955,7 +956,7 @@ goog.History.PollingType = {
 /**
  * Constant for the history change event type.
  * @enum {string}
- * @deprecated Use goog.history.EventType
+ * @deprecated Use goog.history.EventType.
  */
 goog.History.EventType = goog.history.EventType;
 
@@ -965,6 +966,6 @@ goog.History.EventType = goog.history.EventType;
  * @param {string} token The string identifying the new history state.
  * @extends {goog.events.Event}
  * @constructor
- * @deprecated Use goog.history.Event
+ * @deprecated Use goog.history.Event.
  */
 goog.History.Event = goog.history.Event;
