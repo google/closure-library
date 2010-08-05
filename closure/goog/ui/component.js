@@ -334,11 +334,11 @@ goog.ui.Component.prototype.id_ = null;
 /**
  * DomHelper used to interact with the document, allowing components to be
  * created in a different window.
- * @type {!goog.dom.DomHelper}
+ * @type {goog.dom.DomHelper?}
  * @protected
  * @suppress {underscore}
  */
-goog.ui.Component.prototype.dom_;
+goog.ui.Component.prototype.dom_ = null;
 
 
 /**
@@ -547,7 +547,7 @@ goog.ui.Component.prototype.setParentEventTarget = function(parent) {
 
 /**
  * Returns the dom helper that is being used on this component.
- * @return {!goog.dom.DomHelper} The dom helper used on this component.
+ * @return {goog.dom.DomHelper} The dom helper used on this component.
  */
 goog.ui.Component.prototype.getDomHelper = function() {
   return this.dom_;
@@ -780,7 +780,6 @@ goog.ui.Component.prototype.disposeInternal = function() {
   this.element_ = null;
   this.model_ = null;
   this.parent_ = null;
-  delete this.dom_;
 };
 
 
