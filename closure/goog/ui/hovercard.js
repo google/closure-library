@@ -207,7 +207,7 @@ goog.ui.HoverCard.prototype.triggerForElement = function(anchorElement,
                                                          opt_pos, opt_data) {
   if (anchorElement == this.currentAnchor_) {
     // Element is already showing, just make sure it doesn't hide.
-    this.clearHideTimer_();
+    this.clearHideTimer();
     return;
   }
   if (anchorElement == this.anchor) {
@@ -222,7 +222,7 @@ goog.ui.HoverCard.prototype.triggerForElement = function(anchorElement,
   var triggerEvent = new goog.ui.HoverCard.TriggerEvent(
       goog.ui.HoverCard.EventType.TRIGGER, this, anchorElement, opt_data);
 
-  if (!this.elements_.contains(anchorElement)) {
+  if (!this.getElements().contains(anchorElement)) {
     this.attach(anchorElement);
     this.tempAttachedAnchors_.push(anchorElement);
   }
