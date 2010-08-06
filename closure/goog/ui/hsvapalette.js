@@ -19,7 +19,7 @@
  * field show up.
  *
 *
-*
+ * @author chrisn@google.com (Chris Nokleberg)
  * @see ../demos/hsvapalette.html
  */
 

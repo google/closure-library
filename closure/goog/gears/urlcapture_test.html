@@ -55,6 +55,10 @@ function newStubResourceStore() {
     capturedUrls.push(newUrl);
   };
 
+  result.copy = function(oldUrl, newUrl) {
+    capturedUrls.push(newUrl);
+  };
+
   result.remove = function(url) {
     goog.array.remove(capturedUrls, url);
   };
@@ -177,7 +181,7 @@ function testEmptyCapture() {
 }
 
 /**
- * Tets successful capture.
+ * Test successful capture.
  */
 function testCaptureUrlSuccess() {
   // Create stubs and mocks.
@@ -214,7 +218,7 @@ function testCaptureUrlSuccess() {
 }
 
 /**
- * Tets successful capture.
+ * Test unsuccessful capture.
  */
 function testCaptureUrlFail() {
   // Create stubs and mocks.
@@ -290,7 +294,7 @@ function testAbortCapture() {
 }
 
 /**
- * Test remove captured URL.
+ * Test removing captured URL.
  */
 function testRemoveUrl() {
   // Create stubs and mocks.
@@ -320,7 +324,7 @@ function testRemoveUrl() {
 }
 
 /**
- * Test remove captured URL.
+ * Test renaming captured URL.
  */
 function testRenameUrl() {
   // Create stubs and mocks.
@@ -345,9 +349,40 @@ function testRenameUrl() {
   stubResourceStore.callbacks[id](url, true, id);
   assertIsCaptured([url], [renamedUrl], uut);
 
-  // Remove URL.
+  // Rename URL.
   uut.rename(url, renamedUrl);
   assertIsCaptured([renamedUrl], [url], uut);
+}
+
+/**
+ * Test copying captured URL.
+ */
+function testCopyUrl() {
+  // Create stubs and mocks.
+  var stubResourceStore = newStubResourceStore();
+  var mockLocalServer = newMockLocalServerCreateStore(stubResourceStore);
+
+  // Create url capturer.
+  var uut = new goog.gears.UrlCapture(STORE_NAME, COOKIE_NAME, mockLocalServer);
+
+  // Throw exception for removing with no URL.
+  assertThrows('should fail for no URL', function() { uut.copy(); });
+  assertThrows('should fail for null URL', function() { uut.copy(null); });
+
+  // Start capture.
+  var url = '/foo.html';
+  var copiedUrl = '/renamed.html';
+  var id = uut.capture([url]);
+  mockLocalServer.$verify();
+  assertIsCaptured([], [url, copiedUrl], uut);
+
+  // Callback capture success.
+  stubResourceStore.callbacks[id](url, true, id);
+  assertIsCaptured([url], [copiedUrl], uut);
+
+  // Copy URL.
+  uut.copy(url, copiedUrl);
+  assertIsCaptured([url, copiedUrl], [], uut);
 }
 
 </script>

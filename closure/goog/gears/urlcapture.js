@@ -174,6 +174,16 @@ goog.gears.UrlCapture.prototype.rename = function(srcUri, dstUri) {
 
 
 /**
+ * Copies a Url that's been captured.
+ * @param {string|goog.Uri} srcUri The source Uri.
+ * @param {string|goog.Uri} dstUri The destination Uri.
+ */
+goog.gears.UrlCapture.prototype.copy = function(srcUri, dstUri) {
+  this.getResourceStore_()['copy'](srcUri.toString(), dstUri.toString());
+};
+
+
+/**
  * Starts the capture of the given URLs. Returns immediately, and fires events
  * on success and error.
  * @param {Array.<string|goog.Uri>} uris URIs to capture.
