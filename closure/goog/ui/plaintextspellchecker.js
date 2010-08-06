@@ -516,11 +516,11 @@ goog.ui.PlainTextSpellChecker.prototype.positionOverlay_ = function() {
 
 /** @inheritDoc */
 goog.ui.PlainTextSpellChecker.prototype.disposeInternal = function() {
-  goog.ui.PlainTextSpellChecker.superClass_.disposeInternal.call(this);
   this.getDomHelper().removeNode(this.overlay_);
   delete this.overlay_;
   delete this.boundContinueAsyncFn_;
   delete this.endOfLineMatcher_;
+  goog.ui.PlainTextSpellChecker.superClass_.disposeInternal.call(this);
 };
 
 
