@@ -3059,14 +3059,14 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_11_17_STROKE_RADICALS = [
  * @type {Array.<string>}
  */
 goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_OTHER = [
-  goog.i18n.CharPickerData.MSG_CP_CJK_STROKES,
-  goog.i18n.CharPickerData.MSG_CP_IDEOGRAPHIC_DESCRIPTION,
   goog.i18n.CharPickerData.MSG_CP_NUMERICS,
-  goog.i18n.CharPickerData.MSG_CP_PINYIN,
   goog.i18n.CharPickerData.MSG_CP_PUNCTUATION,
   goog.i18n.CharPickerData.MSG_CP_COMPATIBILITY,
   goog.i18n.CharPickerData.MSG_CP_LESS_COMMON + ' - ' +
-      goog.i18n.CharPickerData.MSG_CP_NUMERICS
+      goog.i18n.CharPickerData.MSG_CP_NUMERICS,
+  goog.i18n.CharPickerData.MSG_CP_PINYIN,
+  goog.i18n.CharPickerData.MSG_CP_IDEOGRAPHIC_DESCRIPTION,
+  goog.i18n.CharPickerData.MSG_CP_CJK_STROKES
 ];
 
 
