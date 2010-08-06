@@ -248,10 +248,10 @@ goog.style.setPosition = function(el, arg1, opt_arg2) {
   }
 
   // Round to the nearest pixel for buggy sub-pixel support.
-  goog.style.setPixelStyleProperty_('left', buggyGeckoSubPixelPos, el,
-                                    /** @type {number|string} */ (x));
-  goog.style.setPixelStyleProperty_('top', buggyGeckoSubPixelPos, el,
-                                    /** @type {number|string} */ (y));
+  el.style.left = goog.style.getPixelStyleValue_(
+      /** @type {number|string} */ (x), buggyGeckoSubPixelPos);
+  el.style.top = goog.style.getPixelStyleValue_(
+      /** @type {number|string} */ (y), buggyGeckoSubPixelPos);
 };
 
 
@@ -802,24 +802,22 @@ goog.style.setSize = function(element, w, opt_h) {
 
 
 /**
- * Helper function to sets a dimension or position style property of an element.
- * Parameter order is to allow the first two parameters to be bound.
+ * Helper function to create a string to be set into a pixel-value style
+ * property of an element. Can round to the nearest integer value.
  *
- * @param {string} property Property name of style to modify ('width', 'height',
- *     'left', 'top', etc).
+ * @param {string|number} value The style value to be used. If a number,
+ *     'px' will be appended, otherwise the value will be applied directly.
  * @param {boolean} round Whether to round the nearest integer (if property
  *     is a number).
- * @param {Element} element Element to set the size of.
- * @param {string|number} value The value to set.  If a number, 'px' will be
- *     appended, otherwise the value will be applied directly.
+ * @return {string} The string value for the property.
  * @private
  */
-goog.style.setPixelStyleProperty_ = function(property, round, element, value) {
+goog.style.getPixelStyleValue_ = function(value, round) {
   if (typeof value == 'number') {
     value = (round ? Math.round(value) : value) + 'px';
   }
 
-  element.style[property] = /** @type {string} */(value);
+  return value;
 };
 
 
@@ -829,18 +827,21 @@ goog.style.setPixelStyleProperty_ = function(property, round, element, value) {
  * @param {string|number} height The height value to set.  If a number, 'px'
  *     will be appended, otherwise the value will be applied directly.
  */
-goog.style.setHeight = goog.partial(
-    goog.style.setPixelStyleProperty_, 'height', true);
+goog.style.setHeight = function(element, height) {
+  element.style.height = goog.style.getPixelStyleValue_(height, true);
+};
 
 
 /**
  * Set the width of an element.  Sets the element's style property.
  * @param {Element} element Element to set the height of.
- * @param {string|number} height The height value to set.  If a number, 'px'
+ * @param {string|number} width The width value to set.  If a number, 'px'
  *     will be appended, otherwise the value will be applied directly.
  */
-goog.style.setWidth = goog.partial(
-    goog.style.setPixelStyleProperty_, 'width', true);
+goog.style.setWidth = function(element, width) {
+  element.style.width = goog.style.getPixelStyleValue_(width, true);
+};
+
 
 
 /**
