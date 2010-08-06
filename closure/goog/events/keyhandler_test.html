@@ -317,8 +317,18 @@ See the COPYING file for details.
                  keyEvent.charCode);
 
     fireKeyDown(keyHandler, goog.events.KeyCodes.CTRL);
-    fireKeyDown(keyHandler, goog.events.KeyCodes.A);
+    fireKeyDown(keyHandler, goog.events.KeyCodes.A, null, null, true /*ctrl*/);
     assertEquals('A with control down should fire a key event',
+                 goog.events.KeyCodes.A,
+                 keyEvent.keyCode);
+
+    // Test that Alt-Tab outside the window doesn't break things.
+    fireKeyDown(keyHandler, goog.events.KeyCodes.ALT);
+    keyEvent.keyCode = -1;  // Reset the event.
+    fireKeyDown(keyHandler, goog.events.KeyCodes.A);
+    assertEquals('Should not have dispatched an Alt-A', -1, keyEvent.keyCode);
+    fireKeyPress(keyHandler, 65, 65);
+    assertEquals('Alt should be ignored since it isn\'t currently depressed',
                  goog.events.KeyCodes.A,
                  keyEvent.keyCode);
 
