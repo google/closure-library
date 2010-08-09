@@ -16,8 +16,8 @@
  * @fileoverview A class for representing items in menus.
  * @see goog.ui.Menu
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.ui.MenuItem');

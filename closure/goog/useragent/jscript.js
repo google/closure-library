@@ -15,7 +15,7 @@
 /**
  * @fileoverview Detection of JScript version.
  *
-*
+ *
  */
 
 

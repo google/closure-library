@@ -53,7 +53,7 @@
  * }
  * </pre>
  *
-*
+ *
  */
 
 goog.provide('goog.events.EventHandler');

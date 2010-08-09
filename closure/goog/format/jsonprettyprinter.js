@@ -16,7 +16,7 @@
  * @fileoverview Creates a string of a JSON object, properly indented for
  * display.
  *
-*
+ *
  */
 
 goog.provide('goog.format.JsonPrettyPrinter');

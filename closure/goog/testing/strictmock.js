@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview This file defines a strict mock implementation.
-*
+ *
  */
 
 goog.provide('goog.testing.StrictMock');

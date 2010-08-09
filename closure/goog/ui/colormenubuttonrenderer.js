@@ -16,7 +16,7 @@
  * @fileoverview Renderer for {@link goog.ui.ColorMenuButton}s.
  *
  * @author robbyw@google.com (Robby Walker)
-*
+ *
  */
 
 goog.provide('goog.ui.ColorMenuButtonRenderer');

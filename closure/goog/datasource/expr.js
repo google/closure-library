@@ -29,7 +29,7 @@
  *    provided as a flag for client code which may ignore depending on usage
  * - If expression has [INDEX], will use getChildNodes().getByIndex(INDEX)
  *
-*
+ *
  */
 
 

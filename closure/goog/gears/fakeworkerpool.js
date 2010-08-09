@@ -16,7 +16,7 @@
  * @fileoverview This implementation of goog.gears.WorkerPool uses
  * a fake worker pool (FakeWorkerPool_) that is implemented as an iframe in the
  * current document.
-*
+ *
  */
 
 goog.provide('goog.gears.FakeWorkerPool');

@@ -15,8 +15,8 @@
 /**
  * @fileoverview Simple wrapper around a Gears ManagedResourceStore.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.gears.ManagedResourceStore');

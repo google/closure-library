@@ -15,8 +15,8 @@
 /**
  * @fileoverview Factory functions for creating a default editing toolbar.
  *
-*
-*
+ *
+ *
  * @see ../../demos/editor/editor.html
  */
 

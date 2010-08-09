@@ -16,8 +16,8 @@
  * @fileoverview Generic factory functions for creating the building blocks for
  * an editor toolbar.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.ui.editor.ToolbarFactory');

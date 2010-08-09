@@ -28,7 +28,7 @@
  * CrossPageChannel abstracts the underlying transport mechanism to
  * provide a common interface in all browsers.
  *
-*
+ *
  */
 
 /*

@@ -17,7 +17,7 @@
  * detailed information such as a progress bar the indicates the status of
  * syncing and allows you to perform actions (such as manually go offline).
  *
-*
+ *
  * @see ../demos/offline.html
  */
 

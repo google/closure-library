@@ -17,7 +17,7 @@
  * less general than goog.ui.ColorPicker and presents a default set of colors
  * that CCC apps currently use in their color pickers.
  *
-*
+ *
  * @see ../demos/popupcolorpicker.html
  */
 

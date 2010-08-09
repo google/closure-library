@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Base class for all Protocol Buffer 2 serializers.
-*
+ *
  */
 
 goog.provide('goog.proto2.Serializer');

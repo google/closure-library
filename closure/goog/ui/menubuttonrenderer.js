@@ -15,7 +15,7 @@
 /**
  * @fileoverview Renderer for {@link goog.ui.MenuButton}s and subclasses.
  *
-*
+ *
  */
 
 goog.provide('goog.ui.MenuButtonRenderer');

@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Protocol Buffer (Message) Descriptor class.
-*
+ *
  */
 
 goog.provide('goog.proto2.Descriptor');

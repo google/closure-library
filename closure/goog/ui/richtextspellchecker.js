@@ -15,8 +15,8 @@
 /**
  * @fileoverview Rich text spell checker implementation.
  *
-*
-*
+ *
+ *
  * @see ../demos/richtextspellchecker.html
  */
 

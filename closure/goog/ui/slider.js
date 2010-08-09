@@ -29,7 +29,7 @@
  * var slider = new goog.ui.Slider;
  * slider.decorate(document.getElementById('slider'));
  *
-*
+ *
  * @see ../demos/slider.html
  */
 

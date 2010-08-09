@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Utility for fast string concatenation.
-*
+ *
  */
 
 goog.provide('goog.string.StringBuffer');

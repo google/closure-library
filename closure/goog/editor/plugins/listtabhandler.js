@@ -17,7 +17,7 @@
  * outdent.
  *
  * @author robbyw@google.com (Robby Walker)
-*
+ *
  */
 
 goog.provide('goog.editor.plugins.ListTabHandler');

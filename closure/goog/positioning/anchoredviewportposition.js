@@ -15,7 +15,7 @@
 /**
  * @fileoverview Anchored viewport positioning class.
  *
-*
+ *
  */
 
 goog.provide('goog.positioning.AnchoredViewportPosition');

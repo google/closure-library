@@ -15,9 +15,9 @@
 /**
  * @fileoverview A singleton object for managing Javascript code modules.
  *
-*
-*
-*
+ *
+ *
+ *
  */
 
 goog.provide('goog.module.ModuleManager');

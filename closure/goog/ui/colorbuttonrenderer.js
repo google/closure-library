@@ -15,7 +15,7 @@
 /**
  * @fileoverview Renderer for {@link goog.ui.ColorButton}s.
  *
-*
+ *
  */
 
 goog.provide('goog.ui.ColorButtonRenderer');

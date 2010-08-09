@@ -15,9 +15,9 @@
 /**
  * @fileoverview A utility class for representing three-dimensional points.
  *
-*
+ *
  * Based heavily on coordinate.js by:
-*
+ *
  */
 
 goog.provide('goog.math.Coordinate3');

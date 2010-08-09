@@ -37,7 +37,7 @@
  * TODO(user): Rename all references of "item" to child since menu is
  * essentially very generic and could, in theory, host a date or color picker.
  *
-*
+ *
  * @see ../demos/menu.html
  * @see ../demos/menus.html
  */

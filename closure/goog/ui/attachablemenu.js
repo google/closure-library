@@ -15,7 +15,7 @@
 /**
  * @fileoverview Definition of the AttachableMenu class.
  *
-*
+ *
  */
 
 goog.provide('goog.ui.AttachableMenu');

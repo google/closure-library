@@ -15,8 +15,8 @@
 /**
  * @fileoverview Definition of the Popup class.
  *
-*
-*
+ *
+ *
  * @see ../demos/popup.html
  */
 

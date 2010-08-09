@@ -19,7 +19,7 @@
  * modifications to support native (when available) textarea resizing and
  * minHeight and maxHeight enforcement.
  *
-*
+ *
  * @see ../demos/textarea.html
  */
 

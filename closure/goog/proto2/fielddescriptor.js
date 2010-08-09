@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Protocol Buffer Field Descriptor class.
-*
+ *
  */
 
 goog.provide('goog.proto2.FieldDescriptor');

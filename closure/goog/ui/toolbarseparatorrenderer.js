@@ -15,7 +15,7 @@
 /**
  * @fileoverview Renderer for toolbar separators.
  *
-*
+ *
  */
 
 goog.provide('goog.ui.ToolbarSeparatorRenderer');

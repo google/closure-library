@@ -15,7 +15,7 @@
 /**
  * @fileoverview Error handling utilities.
  *
-*
+ *
  */
 
 goog.provide('goog.debug.ErrorHandler');

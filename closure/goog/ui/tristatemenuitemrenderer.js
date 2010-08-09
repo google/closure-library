@@ -15,7 +15,7 @@
 /**
  * @fileoverview Renderer for {@link goog.ui.TriStateMenuItem}s.
  *
-*
+ *
  */
 
 goog.provide('goog.ui.TriStateMenuItemRenderer');

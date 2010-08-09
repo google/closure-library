@@ -16,7 +16,7 @@
  * @fileoverview Provides a base class for custom Error objects such that the
  * stack is corectly maintained.
  *
-*
+ *
  */
 
 goog.provide('goog.debug.Error');

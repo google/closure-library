@@ -16,8 +16,8 @@
  * @fileoverview
  * XML utilities.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.dom.xml');

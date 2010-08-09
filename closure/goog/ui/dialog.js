@@ -19,7 +19,7 @@
  *   * Standardize CSS class names with other components
  *   * Add functionality to "host" other components in content area
  *   * Abstract out ButtonSet and make it more general
-*
+ *
  * @see ../demos/dialog.html
  */
 

@@ -33,7 +33,7 @@
  * FastDataNodes can be constructed from JSON-like objects via the function
  * goog.ds.FastDataNode.fromJs.
 
-*
+ *
  */
 
 goog.provide('goog.ds.AbstractFastDataNode');

@@ -16,7 +16,7 @@
  * @fileoverview Iframe shims, to protect controls on the underlying page
  * from bleeding through popups.
  *
-*
+ *
  * @author nicksantos@google.com (Nick Santos) (Ported to Closure)
  */
 

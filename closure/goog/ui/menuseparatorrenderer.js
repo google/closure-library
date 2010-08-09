@@ -15,7 +15,7 @@
 /**
  * @fileoverview Renderer for {@link goog.ui.MenuSeparator}s.
  *
-*
+ *
  */
 
 goog.provide('goog.ui.MenuSeparatorRenderer');

@@ -17,7 +17,7 @@
  * Generic name used for a font family would be locale dependant. For example,
  * for 'zh'(Chinese) users, the name for Serif family would be in Chinese.
  * Further documentation at: http://go/genericfontnames.
-*
+ *
  */
 
 goog.provide('goog.locale.genericFontNames');

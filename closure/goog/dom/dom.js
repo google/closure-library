@@ -20,8 +20,8 @@
  * to a different document object.  This is useful if you are working with
  * frames or multiple windows.
  *
-*
-*
+ *
+ *
  */
 
 

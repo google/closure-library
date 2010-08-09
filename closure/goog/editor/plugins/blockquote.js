@@ -15,8 +15,8 @@
 /**
  * @fileoverview goog.editor plugin to handle splitting block quotes.
  *
-*
-*
+ *
+ *
  * @author robbyw@google.com (Robby Walker)
  */
 

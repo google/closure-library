@@ -40,7 +40,7 @@
  * Children normally render into the document lazily, at the first
  * moment when all ancestors are expanded.
  *
-*
+ *
  * @see ../demos/drilldownrow.html
  */
 

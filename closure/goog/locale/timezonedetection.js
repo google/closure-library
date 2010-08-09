@@ -16,7 +16,7 @@
  * @fileoverview Functions for detecting user's time zone.
  * This work is based on Charlie Luo and Hong Yan's time zone detection work
  * for CBG.
-*
+ *
  */
 goog.provide('goog.locale.timeZoneDetection');
 

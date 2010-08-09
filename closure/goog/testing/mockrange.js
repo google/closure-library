@@ -15,7 +15,7 @@
 /**
  * @fileoverview LooseMock of goog.dom.AbstractRange.
  *
-*
+ *
  */
 
 goog.provide('goog.testing.MockRange');

@@ -15,7 +15,7 @@
 /**
  * @fileoverview TabPane widget implementation.
  *
-*
+ *
  */
 
 goog.provide('goog.ui.TabPane');

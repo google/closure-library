@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Native browser textarea renderer for {@link goog.ui.Textarea}s.
-*
+ *
  */
 
 goog.provide('goog.ui.TextareaRenderer');

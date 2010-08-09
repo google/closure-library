@@ -24,7 +24,7 @@
  * this file must be included at page rendering time and cannot be imported
  * later as part of a dynamically loaded module.
  *
-*
+ *
  * @see ../demos/useragent.html
  */
 
