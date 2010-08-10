@@ -416,8 +416,8 @@ goog.ui.AutoComplete.InputHandler.prototype.setCursorPosition = function(pos) {
 goog.ui.AutoComplete.InputHandler.prototype.attachInput = function(el) {
   goog.dom.a11y.setState(el, 'haspopup', true);
 
-  this.eh_.listen(el, goog.events.EventType.FOCUS, this.onFocus_);
-  this.eh_.listen(el, goog.events.EventType.BLUR, this.onBlur_);
+  this.eh_.listen(el, goog.events.EventType.FOCUS, this.handleFocus);
+  this.eh_.listen(el, goog.events.EventType.BLUR, this.handleBlur);
 
   if (!this.activeElement_) {
     this.activateHandler_.listen(
@@ -432,10 +432,10 @@ goog.ui.AutoComplete.InputHandler.prototype.attachInput = function(el) {
  */
 goog.ui.AutoComplete.InputHandler.prototype.detachInput = function(el) {
   if (el == this.activeElement_) {
-    this.onBlur_();
+    this.handleBlur();
   }
-  this.eh_.unlisten(el, goog.events.EventType.FOCUS, this.onFocus_);
-  this.eh_.unlisten(el, goog.events.EventType.BLUR, this.onBlur_);
+  this.eh_.unlisten(el, goog.events.EventType.FOCUS, this.handleFocus);
+  this.eh_.unlisten(el, goog.events.EventType.BLUR, this.handleBlur);
 
   if (!this.activeElement_) {
     this.activateHandler_.unlisten(
@@ -902,9 +902,9 @@ goog.ui.AutoComplete.InputHandler.prototype.removeKeyEvents_ = function() {
 /**
  * Handles an element getting focus.
  * @param {goog.events.Event} e Browser event object.
- * @private
+ * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.onFocus_ = function(e) {
+goog.ui.AutoComplete.InputHandler.prototype.handleFocus = function(e) {
   this.activateHandler_.removeAll();
 
   if (this.ac_) {
@@ -928,9 +928,9 @@ goog.ui.AutoComplete.InputHandler.prototype.onFocus_ = function(e) {
 /**
  * Handles an element blurring.
  * @param {goog.events.Event=} opt_e Browser event object.
- * @private
+ * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.onBlur_ = function(opt_e) {
+goog.ui.AutoComplete.InputHandler.prototype.handleBlur = function(opt_e) {
   // it's possible that a blur event could fire when there's no active element,
   // in the case where attachInput was called on an input that already had
   // the focus
@@ -970,7 +970,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onTick_ = function(e) {
  */
 goog.ui.AutoComplete.InputHandler.prototype.onKeyDownOnInactiveElement_ =
     function(e) {
-  this.onFocus_(e);
+  this.handleFocus(e);
 };
 
 
