@@ -22,6 +22,7 @@ goog.provide('goog.ui.media.MediaModel.Category');
 goog.provide('goog.ui.media.MediaModel.Credit');
 goog.provide('goog.ui.media.MediaModel.Credit.Role');
 goog.provide('goog.ui.media.MediaModel.Credit.Scheme');
+goog.provide('goog.ui.media.MediaModel.Medium');
 goog.provide('goog.ui.media.MediaModel.MimeType');
 goog.provide('goog.ui.media.MediaModel.Player');
 goog.provide('goog.ui.media.MediaModel.Thumbnail');
