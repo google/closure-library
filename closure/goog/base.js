@@ -799,15 +799,10 @@ goog.isObject = function(val) {
 goog.getUid = function(obj) {
   // TODO(user): Make the type stricter, do not accept null.
 
-  // In IE, DOM nodes do not extend Object so they do not have this method.
-  // we need to check hasOwnProperty because the proto might have this set.
-  if (obj.hasOwnProperty && obj.hasOwnProperty(goog.UID_PROPERTY_)) {
-    return obj[goog.UID_PROPERTY_];
-  }
-  if (!obj[goog.UID_PROPERTY_]) {
-    obj[goog.UID_PROPERTY_] = ++goog.uidCounter_;
-  }
-  return obj[goog.UID_PROPERTY_];
+  // In IE, DOM nodes do not extend Object so they do not have hasOwnProperty
+  // method.
+  return Object.prototype.hasOwnProperty.call(obj, goog.UID_PROPERTY_) ?
+      obj[goog.UID_PROPERTY_] : (obj[goog.UID_PROPERTY_] = ++goog.uidCounter_);
 };
 
 
