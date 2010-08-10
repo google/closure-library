@@ -212,15 +212,25 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
     selectedElement = /** @type {Element} */ (opt_e.target);
   } else {
     var range = this.fieldObject.getRange();
-    // Sometimes in IE, the range will be collapsed, but think the end node
-    // and start node are different (although in the same visible position). In
-    // this case, favor the position IE thinks is the start node.
-    var startNode = range && range.getStartNode();
-    if (goog.userAgent.IE && range && range.isCollapsed() &&
-        startNode != range.getEndNode()) {
-      range = goog.dom.Range.createCaret(startNode, range.getStartOffset());
+    if (range) {
+      var startNode = range.getStartNode();
+      var endNode = range.getEndNode();
+      var startOffset = range.getStartOffset();
+      var endOffset = range.getEndOffset();
+      // Sometimes in IE, the range will be collapsed, but think the end node
+      // and start node are different (although in the same visible position).
+      // In this case, favor the position IE thinks is the start node.
+      if (goog.userAgent.IE && range.isCollapsed() && startNode != endNode) {
+        range = goog.dom.Range.createCaret(startNode, startOffset);
+      }
+      if (startNode == endNode && startOffset == endOffset - 1) {
+        var element = startNode.childNodes[startOffset];
+        if (element.nodeType == goog.dom.NodeType.ELEMENT) {
+          selectedElement = element;
+        }
+      }
     }
-    selectedElement = range && range.getContainerElement();
+    selectedElement = selectedElement || range && range.getContainerElement();
   }
   return this.handleSelectionChangeInternal_(selectedElement);
 };
