@@ -19,6 +19,9 @@
 
 goog.provide('goog.ui.media.MediaModel');
 goog.provide('goog.ui.media.MediaModel.Category');
+goog.provide('goog.ui.media.MediaModel.Credit');
+goog.provide('goog.ui.media.MediaModel.Credit.Role');
+goog.provide('goog.ui.media.MediaModel.Credit.Scheme');
 goog.provide('goog.ui.media.MediaModel.MimeType');
 goog.provide('goog.ui.media.MediaModel.Player');
 goog.provide('goog.ui.media.MediaModel.Thumbnail');
@@ -48,13 +51,15 @@ goog.require('goog.array');
  * @param {string=} opt_description An optional description of the media.
  * @param {goog.ui.media.MediaModel.MimeType=} opt_type The type of the media.
  * @param {goog.ui.media.MediaModel.Medium=} opt_medium The medium of the media.
+ * @param {number=} opt_duration The duration of the media in seconds.
  * @constructor
  */
 goog.ui.media.MediaModel = function(opt_url,
                                     opt_caption,
                                     opt_description,
                                     opt_type,
-                                    opt_medium) {
+                                    opt_medium,
+                                    opt_duration) {
   /**
    * The URL of the media.
    * @type {string|undefined}
@@ -91,6 +96,13 @@ goog.ui.media.MediaModel = function(opt_url,
   this.medium_ = opt_medium;
 
   /**
+   * The duration of the media in seconds.
+   * @type {number|undefined}
+   * @private
+   */
+  this.duration_ = opt_duration;
+
+  /**
    * A list of thumbnails representations of the media (eg different sizes of
    * the same photo, etc).
    * @type {Array.<goog.ui.media.MediaModel.Thumbnail>}
@@ -104,6 +116,13 @@ goog.ui.media.MediaModel = function(opt_url,
    * @private
    */
   this.categories_ = [];
+
+  /**
+   * The list of credits that pertain to this media object.
+   * @type {Array.<goog.ui.media.MediaModel.Credit>}
+   * @private
+   */
+  this.credits_ = [];
 };
 
 
@@ -267,6 +286,26 @@ goog.ui.media.MediaModel.prototype.setThumbnails = function(thumbnails) {
 
 
 /**
+ * Gets the duration of the media.
+ * @return {number|undefined} The duration in seconds.
+ */
+goog.ui.media.MediaModel.prototype.getDuration = function() {
+  return this.duration_;
+};
+
+
+/**
+ * Sets duration of the media.
+ * @param {number} duration The duration of the media, in seconds.
+ * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ */
+goog.ui.media.MediaModel.prototype.setDuration = function(duration) {
+  this.duration_ = duration;
+  return this;
+};
+
+
+/**
  * Gets the player data.
  * @return {goog.ui.media.MediaModel.Player|undefined} The media player data.
  */
@@ -308,7 +347,8 @@ goog.ui.media.MediaModel.prototype.setCategories = function(categories) {
 };
 
 
-/** Finds the first category with the given scheme
+/**
+ * Finds the first category with the given scheme.
  * @param {string} scheme The scheme to search for.
  * @return {goog.ui.media.MediaModel.Category} The category that has the
  *     given scheme. May be null.
@@ -320,7 +360,45 @@ goog.ui.media.MediaModel.prototype.findCategoryWithScheme = function(scheme) {
   var category = goog.array.find(this.categories_, function(category) {
     return category ? (scheme == category.getScheme()) : false;
   });
-  return /** @type {goog.ui.media.MediaModel.Category}*/ (category);
+  return /** @type {goog.ui.media.MediaModel.Category} */ (category);
+};
+
+
+/**
+ * Gets the credits of the media.
+ * @return {Array.<goog.ui.media.MediaModel.Credit>} The credits of the media.
+ */
+goog.ui.media.MediaModel.prototype.getCredits = function() {
+  return this.credits_;
+};
+
+
+/**
+ * Sets the credits of the media
+ * @param {Array.<goog.ui.media.MediaModel.Credit>} credits The credits of the
+ *     media.
+ * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ */
+goog.ui.media.MediaModel.prototype.setCredits = function(credits) {
+  this.credits_ = credits;
+  return this;
+};
+
+
+/**
+ * Finds the first credit with the given role.
+ * @param {string} role The role to search for.
+ * @return {goog.ui.media.MediaModel.Credit} The credit object that has the
+ *     given role. May be null.
+ */
+goog.ui.media.MediaModel.prototype.findCreditWithRole = function(role) {
+  if (!this.credits_) {
+    return null;
+  }
+  var credit = goog.array.find(this.credits_, function(credit) {
+    return role == credit.getRole();
+  });
+  return /** @type {goog.ui.media.MediaModel.Credit} */ (credit);
 };
 
 
@@ -577,5 +655,123 @@ goog.ui.media.MediaModel.Category.prototype.getLabel = function() {
  */
 goog.ui.media.MediaModel.Category.prototype.setLabel = function(label) {
   this.label_ = label;
+  return this;
+};
+
+
+
+/**
+ * Indicates an entity that has contributed to a media object. Based on
+ * 'media.credit' in the rss spec.
+ * @param {string} value The name of the entity being credited.
+ * @param {goog.ui.media.MediaModel.Credit.Role=} opt_role The role the entity
+ *     played.
+ * @param {goog.ui.media.MediaModel.Credit.Scheme=} opt_scheme The URI that
+ *     identifies the role scheme.
+ * @constructor
+ */
+goog.ui.media.MediaModel.Credit = function(value, opt_role, opt_scheme) {
+  /**
+   * The name of entity being credited.
+   * @type {string}
+   * @private
+   */
+  this.value_ = value;
+
+  /**
+   * The role the entity played.
+   * @type {goog.ui.media.MediaModel.Credit.Role|undefined}
+   * @private
+   */
+  this.role_ = opt_role;
+
+  /**
+   * The URI that identifies the role scheme
+   * @type {goog.ui.media.MediaModel.Credit.Scheme|undefined}
+   * @private
+   */
+  this.scheme_ = opt_scheme;
+};
+
+
+/**
+ * The types of known roles.
+ * @enum {string}
+ */
+goog.ui.media.MediaModel.Credit.Role = {
+  UPLOADER: 'uploader',
+  OWNER: 'owner'
+};
+
+
+/**
+ * The types of known schemes.
+ * @enum {string}
+ */
+goog.ui.media.MediaModel.Credit.Scheme = {
+  EUROPEAN_BROADCASTING: 'urn:ebu',
+  YAHOO: 'urn:yvs',
+  YOUTUBE: 'urn:youtube'
+};
+
+
+/**
+ * Gets the name of the entity being credited.
+ * @return {string} The name of the entity.
+ */
+goog.ui.media.MediaModel.Credit.prototype.getValue = function() {
+  return this.value_;
+};
+
+
+/**
+ * Sets the value of the credit object.
+ * @param {string} value The value.
+ * @return {goog.ui.media.MediaModel.Credit} The object itself.
+ */
+goog.ui.media.MediaModel.Credit.prototype.setValue = function(value) {
+  this.value_ = value;
+  return this;
+};
+
+
+/**
+ * Gets the role of the entity being credited.
+ * @return {goog.ui.media.MediaModel.Credit.Role|undefined} The role of the
+ *     entity.
+ */
+goog.ui.media.MediaModel.Credit.prototype.getRole = function() {
+  return this.role_;
+};
+
+
+/**
+ * Sets the role of the credit object.
+ * @param {goog.ui.media.MediaModel.Credit.Role} role The role.
+ * @return {goog.ui.media.MediaModel.Credit} The object itself.
+ */
+goog.ui.media.MediaModel.Credit.prototype.setRole = function(role) {
+  this.role_ = role;
+  return this;
+};
+
+
+/**
+ * Gets the scheme of the credit object.
+ * @return {goog.ui.media.MediaModel.Credit.Scheme|undefined} The URI that
+ *     identifies the role scheme.
+ */
+goog.ui.media.MediaModel.Credit.prototype.getScheme = function() {
+  return this.scheme_;
+};
+
+
+/**
+ * Sets the scheme of the credit object.
+ * @param {goog.ui.media.MediaModel.Credit.Scheme} scheme The scheme.
+ * @return {goog.ui.media.MediaModel.Credit} The object itself.
+ */
+goog.ui.media.MediaModel.Credit.prototype.setScheme = function(scheme) {
+  this.scheme_ = scheme;
   return this;
 };

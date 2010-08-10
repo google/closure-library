@@ -142,6 +142,20 @@ See the COPYING file for details.
     assertEquals('value-b',
         model.findCategoryWithScheme('scheme-b').getValue());
   }
+
+  function testMediaModelFindCreditWithRole() {
+    assertNull(model.findCreditWithRole('no such role'));
+
+    model.setCredits([
+        new goog.ui.media.MediaModel.Credit('value-a', 'role-a'),
+        new goog.ui.media.MediaModel.Credit('value-b', 'role-b')
+    ]);
+    assertNull(model.findCreditWithRole('no such role'));
+    assertEquals('value-a',
+        model.findCreditWithRole('role-a').getValue());
+    assertEquals('value-b',
+        model.findCreditWithRole('role-b').getValue());
+  }
 </script>
 </body>
 </html>
