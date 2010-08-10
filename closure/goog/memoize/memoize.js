@@ -18,7 +18,7 @@
  *
  * @see http://en.wikipedia.org/wiki/Memoization
  *
- *
+*
  */
 
 goog.provide('goog.memoize');

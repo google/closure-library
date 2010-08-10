@@ -28,7 +28,7 @@
  * would be fully visible again, the element snaps back into place, replacing
  * the placeholder.
  *
- *
+*
  * @see ../demos/scrollfloater.html
  *
  * Adapted from http://go/elementfloater.js

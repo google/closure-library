@@ -15,7 +15,7 @@
 /**
  * @fileoverview Event types for goog.history.
  *
- *
+*
  */
 
 

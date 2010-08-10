@@ -15,7 +15,7 @@
 /**
  * @fileoverview Utility class that monitors viewport size changes.
  *
- *
+*
  * @see ../demos/viewportsizemonitor.html
  */
 

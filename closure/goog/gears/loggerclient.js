@@ -17,7 +17,7 @@
  * goog.debug.Logger objects and sends a LOGGER command to the main thread
  * instead.
  *
- *
+*
  */
 
 goog.provide('goog.gears.LoggerClient');

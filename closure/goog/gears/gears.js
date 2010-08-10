@@ -14,8 +14,8 @@
 
 /**
  * @fileoverview This file contains functions for using Gears.
- *
- *
+*
+*
  */
 
 // TODO(user): The Gears team is planning to inject the Gears factory as

@@ -15,8 +15,8 @@
 /**
  * @fileoverview A toolbar toggle button control.
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.ui.ToolbarToggleButton');

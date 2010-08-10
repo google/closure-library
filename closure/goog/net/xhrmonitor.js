@@ -29,7 +29,7 @@
  *
  * This class's methods are no-ops for non-Gecko browsers.
  *
- *
+*
  */
 
 goog.provide('goog.net.xhrMonitor');

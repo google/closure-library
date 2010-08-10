@@ -16,9 +16,9 @@
  * @fileoverview Defines a 3-element vector class that can be used for
  * coordinate math, useful for animation systems and point manipulation.
  *
- *
+*
  * Based heavily on code originally by:
- *
+*
  */
 
 

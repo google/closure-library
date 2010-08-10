@@ -21,7 +21,7 @@
  *
  * Based on goog.ui.ColorPicker (colorpicker.js).
  *
- *
+*
  * @see ../../demos/popupemojipicker.html
  */
 

@@ -14,9 +14,9 @@
 
 /**
  * @fileoverview Utilities for manipulating objects/maps/hashes.
- *
- *
- *
+*
+*
+*
  */
 
 goog.provide('goog.object');

@@ -28,8 +28,8 @@
  * Note: For converting between strings and byte arrays, goog.crypt.base64 may
  * be useful.
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.crypt.Arc4');

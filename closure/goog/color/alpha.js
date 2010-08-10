@@ -15,7 +15,7 @@
 /**
  * @fileoverview Utilities related to alpha/transparent colors and alpha color
  * conversion.
- *
+*
  */
 
 goog.provide('goog.color.alpha');

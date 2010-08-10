@@ -15,7 +15,7 @@
 /**
  * @fileoverview Character counter widget implementation.
  *
- *
+*
  * @see ../demos/charcounter.html
  */
 

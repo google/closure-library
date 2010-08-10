@@ -16,7 +16,7 @@
 /**
  * @fileoverview Component for generating chart PNGs using Google Chart Server.
  *
- *
+*
  * @see ../demos/serverchart.html
  */
 

@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Utility methods for Protocol Buffer 2 implementation.
- *
+*
  */
 
 goog.provide('goog.proto2.Util');

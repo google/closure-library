@@ -15,7 +15,7 @@
 /**
  * @fileoverview Behavior for combining two controls.
  *
- *
+*
  * @see ../demos/split.html
  */
 

@@ -15,7 +15,7 @@
 /**
  * @fileoverview Animated zippy widget implementation.
  *
- *
+*
  * @see ../demos/zippy.html
  */
 

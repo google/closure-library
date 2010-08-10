@@ -20,7 +20,7 @@
  * This is a pretty hacky implementation, aimed at making debugging of large
  * applications more manageable.
  *
- *
+*
  * @see ../demos/debug.html
  */
 

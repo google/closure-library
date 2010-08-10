@@ -15,7 +15,7 @@
 /**
  * @fileoverview Emoji Palette renderer implementation.
  *
- *
+*
  */
 
 goog.provide('goog.ui.emoji.EmojiPaletteRenderer');

@@ -15,7 +15,7 @@
 /**
  * @fileoverview This represents a Gears worker (background process).
  *
- *
+*
  */
 
 goog.provide('goog.gears.Worker');

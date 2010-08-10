@@ -18,7 +18,7 @@
  *
  * See the unit tests for usage.
  *
- *
+*
  */
 
 goog.provide('goog.testing');

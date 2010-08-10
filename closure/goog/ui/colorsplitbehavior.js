@@ -15,7 +15,7 @@
 /**
  * @fileoverview Behavior for combining a color button and a menu.
  *
- *
+*
  * @see ../demos/split.html
  */
 

@@ -19,8 +19,8 @@
  *
  *   <http://go/js_modules_design>
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.module');

@@ -26,7 +26,7 @@
  * (except for the interface they expose). This therefore provides a safe
  * method of transport.
  *
- *
+*
  *
  * Initially based on FrameElementTransport which shares some similarities
  * to this method.

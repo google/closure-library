@@ -15,8 +15,8 @@
 /**
  * @fileoverview Client positioning class.
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.positioning.ClientPosition');

@@ -21,8 +21,8 @@
  * Based on the Custom Buttons 3.1 visual specification, see
  * http://go/custombuttons
  *
- *
- *
+*
+*
  * @see ../demos/imagelessmenubutton.html
  */
 

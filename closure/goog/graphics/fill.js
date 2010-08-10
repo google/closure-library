@@ -15,7 +15,7 @@
 
 /**
  * @fileoverview Represents a fill goog.graphics.
- *
+*
  */
 
 

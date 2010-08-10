@@ -19,7 +19,7 @@
  * For the specific case of 64-bit integers, use goog.math.Long, which is more
  * efficient.
  *
- *
+*
  */
 
 goog.provide('goog.math.Integer')

@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Scroll behavior that can be added onto a container.
- *
+*
  */
 
 goog.provide('goog.ui.ContainerScroller');

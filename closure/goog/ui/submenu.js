@@ -16,8 +16,8 @@
  * @fileoverview A class representing menu items that open a submenu.
  * @see goog.ui.Menu
  *
- *
- *
+*
+*
  * @see ../demos/submenus.html
  * @see ../demos/submenus2.html
  */

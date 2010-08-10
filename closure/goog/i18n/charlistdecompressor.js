@@ -31,7 +31,7 @@
  * Following python script can be used to compress character lists taken
  * standard input: http://go/charlistcompressor.py
  *
- *
+*
  */
 
 goog.provide('goog.i18n.CharListDecompressor');

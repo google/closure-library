@@ -15,7 +15,7 @@
 /**
  * @fileoverview Definition of the goog.ui.ItemEvent class.
  *
- *
+*
  */
 
 goog.provide('goog.ui.ItemEvent');

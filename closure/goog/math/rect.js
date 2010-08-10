@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview A utility class for representing rectangles.
- *
+*
  */
 
 

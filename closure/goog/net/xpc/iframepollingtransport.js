@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Contains the iframe polling transport.
- *
+*
  */
 
 

@@ -15,7 +15,7 @@
 /**
  * @fileoverview Testing utilities for editor specific DOM related tests.
  *
- *
+*
  */
 
 goog.provide('goog.testing.editor.dom');

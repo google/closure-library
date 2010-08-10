@@ -30,7 +30,7 @@
  *
  * See goog.net.BrowserChannel.Handler for the handler interface.
  *
- *
+*
  */
 
 

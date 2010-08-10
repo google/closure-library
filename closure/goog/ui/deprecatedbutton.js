@@ -15,7 +15,7 @@
 /**
  * @fileoverview Deprecated button class; use {@link goog.ui.Button} instead.
  *
- *
+*
  */
 
 goog.provide('goog.ui.DeprecatedButton');

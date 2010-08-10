@@ -17,8 +17,8 @@
  * @fileoverview A thin wrapper around the DOM element returned from
  * the different draw methods of the graphics implementation, and
  * all interfaces that the various element types support.
- *
- *
+*
+*
  */
 
 

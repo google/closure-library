@@ -15,8 +15,8 @@
 /**
  * @fileoverview Plain text spell checker implementation.
  *
- *
- *
+*
+*
  * @see ../demos/plaintextspellchecker.html
  */
 

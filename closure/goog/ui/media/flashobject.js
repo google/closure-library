@@ -38,8 +38,8 @@
  * subclasses goog.ui.media.FlashObject to provide all the goodness of
  * http://go/browserinterface.as
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.ui.media.FlashObject');

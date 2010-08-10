@@ -36,8 +36,8 @@
  * - decorateInternal
  * - getCssClass
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.ui.SliderBase');

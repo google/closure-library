@@ -16,7 +16,7 @@
  * @fileoverview Contains application code for the XPC demo.
  * This script is used in both the container page and the iframe.
  *
- *
+*
  */
 
 goog.require('goog.Uri');

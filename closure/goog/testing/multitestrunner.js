@@ -18,7 +18,7 @@
  * results aggregated.  The main usecase for the MultiTestRunner is to allow
  * the testing of all tests in a project locally.
  *
- *
+*
  */
 
 goog.provide('goog.testing.MultiTestRunner');

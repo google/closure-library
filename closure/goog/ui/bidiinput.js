@@ -17,7 +17,7 @@
  * detection. The input element directionality is automatically set according
  * to the contents (value) of the element.
  *
- *
+*
  * @see ../demos/bidiinput.html
  */
 

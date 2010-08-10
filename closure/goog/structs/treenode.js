@@ -16,7 +16,7 @@
  * @fileoverview Generic tree node data structure with arbitrary number of child
  * nodes.
  *
- *
+*
  */
 
 goog.provide('goog.structs.TreeNode');

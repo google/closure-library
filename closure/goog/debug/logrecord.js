@@ -17,7 +17,7 @@
  * dependencies this file has on other closure classes as any dependency it
  * takes won't be able to use the logging infrastructure.
  *
- *
+*
  */
 
 goog.provide('goog.debug.LogRecord');

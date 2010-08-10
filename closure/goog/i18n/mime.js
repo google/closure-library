@@ -15,7 +15,7 @@
 /**
  * @fileoverview Functions for encoding strings according to MIME
  * standards, especially RFC 1522.
- *
+*
  */
 goog.provide('goog.i18n.mime');
 goog.provide('goog.i18n.mime.encode');

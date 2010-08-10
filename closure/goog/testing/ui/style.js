@@ -16,7 +16,7 @@
  * @fileoverview Tools for testing Closure renderers against static markup
  * spec pages.
  *
- *
+*
  */
 
 goog.provide('goog.testing.ui.style');

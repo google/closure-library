@@ -16,7 +16,7 @@
  * @fileoverview A color palette with a button for adding additional colors
  * manually.
  *
- *
+*
  */
 
 goog.provide('goog.ui.CustomColorPalette');

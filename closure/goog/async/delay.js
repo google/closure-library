@@ -17,7 +17,7 @@
  * invoked after a delay, especially when that delay is frequently restarted.
  * Examples include delaying before displaying a tooltip, menu hysteresis,
  * idle timers, etc.
- *
+*
  * @see ../demos/timers.html
  */
 

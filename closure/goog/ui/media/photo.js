@@ -50,7 +50,7 @@
  *   photo.setSelected(true);
  * </pre>
  *
- *
+*
  */
 
 goog.provide('goog.ui.media.Photo');

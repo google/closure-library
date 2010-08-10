@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Namespace with crypto related helper functions.
- *
+*
  */
 
 goog.provide('goog.crypt');

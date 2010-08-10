@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Wrapper class for handling XmlHttpRequests.
- *
+*
  */
 
 

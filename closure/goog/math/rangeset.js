@@ -21,7 +21,7 @@
  * This may be used, for example, to track the availability of sparse elements
  * in an array without iterating over the entire array.
  *
- *
+*
  */
 
 goog.provide('goog.math.RangeSet');

@@ -39,8 +39,8 @@
  * key and character code use {@link goog.events.KeyHandler}.
  * </pre>
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.events.BrowserEvent');

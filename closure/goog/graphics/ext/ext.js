@@ -15,7 +15,7 @@
 
 /**
  * @fileoverview Extended graphics namespace.
- *
+*
  */
 
 

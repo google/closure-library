@@ -19,7 +19,7 @@
  * using CSS background tiling instead of as a grid of nodes.
  *
  * @author robbyw@google.com (Robby Walker)
- *
+*
  */
 
 goog.provide('goog.ui.DimensionPickerRenderer');

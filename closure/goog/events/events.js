@@ -34,10 +34,10 @@
  * goog.events.removeAll();
  * </pre>
  *
- *
- *
+*
+*
  *                                            in IE and event object patching]
- *
+*
  *
  * @supported IE6+, FF1.5+, WebKit, Opera.
  * @see ../demos/events.html

@@ -14,8 +14,8 @@
 
 /**
  * @fileoverview Utilities related to color and color conversion.
- *
- *
+*
+*
  */
 
 goog.provide('goog.color');

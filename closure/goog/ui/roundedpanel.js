@@ -15,7 +15,7 @@
 /**
  * @fileoverview Class definition for a rounded corner panel.
  * @supported IE 6.0+, Safari 2.0+, Firefox 1.5+, Opera 9.2+.
- *
+*
  * @see ../demos/roundedpanel.html
  */
 

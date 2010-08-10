@@ -15,8 +15,8 @@
 /**
  * @fileoverview  Topic-based publish/subscribe channel implementation.
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.pubsub.PubSub');

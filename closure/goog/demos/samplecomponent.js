@@ -15,7 +15,7 @@
 /**
  * @fileoverview A simple, sample component.
  *
- *
+*
  */
 goog.provide('goog.demos.SampleComponent');
 

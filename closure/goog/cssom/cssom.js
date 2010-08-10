@@ -24,7 +24,7 @@
  *     regardless of whether or not the media is correct or not. Firefox at
  *     least supports CSSRule.type to figure out if it's a media type and then
  *     we could do something interesting, but IE offers no way for us to tell.
- *
+*
  */
 
 goog.provide('goog.cssom');

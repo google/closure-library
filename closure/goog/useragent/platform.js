@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Utilities for getting details about the user's platform.
- *
+*
  */
 
 goog.provide('goog.userAgent.platform');

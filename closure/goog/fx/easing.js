@@ -15,8 +15,8 @@
 /**
  * @fileoverview Easing functions for animations.
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.fx.easing');

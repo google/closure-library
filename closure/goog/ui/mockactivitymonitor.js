@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Definition of goog.ui.MockActivityMonitor.
- *
+*
  */
 
 goog.provide('goog.ui.MockActivityMonitor');

@@ -15,10 +15,10 @@
 /**
  * @fileoverview Defines the goog.module.ModuleInfo class.
  *
- *
- *
- *
- *
+*
+*
+*
+*
  */
 
 goog.provide('goog.module.ModuleInfo');

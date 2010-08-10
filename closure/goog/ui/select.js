@@ -17,7 +17,7 @@
  * with semantics similar to the native HTML <code>&lt;select&gt;</code>
  * element.
  *
- *
+*
  * @see ../demos/select.html
  */
 

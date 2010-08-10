@@ -15,7 +15,7 @@
 /**
  * @fileoverview Definition the goog.debug.RelativeTimeProvider class.
  *
- *
+*
  */
 
 goog.provide('goog.debug.RelativeTimeProvider');

@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Mock of IframeIo for unit testing.
- *
+*
  */
 
 goog.provide('goog.net.MockIFrameIo');

@@ -15,7 +15,7 @@
 /**
  * @fileoverview Provides a function that decorates an element based on its CSS
  * class name.
- *
+*
  */
 
 goog.provide('goog.ui.decorate');

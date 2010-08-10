@@ -15,7 +15,7 @@
 /**
  * @fileoverview Abstract base class for positioning implementations.
  *
- *
+*
  */
 
 goog.provide('goog.positioning.AbstractPosition');

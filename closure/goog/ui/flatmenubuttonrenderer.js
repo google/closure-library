@@ -18,7 +18,7 @@
  * {@link goog.ui.CustomButtonRenderer}. This creates a simpler menu button
  * that will look more like a traditional <select> menu.
  *
- *
+*
  */
 
 goog.provide('goog.ui.FlatMenuButtonRenderer');

@@ -34,7 +34,7 @@
  * large) will have many (empty) spots and thus, are inefficient.
  *
  *
- *
+*
  */
 
 goog.provide('goog.proto2.PbLiteSerializer');

@@ -16,7 +16,7 @@
  * @fileoverview Factory class to create a simple autocomplete that will match
  * from an array of data.
  *
- *
+*
  * @see ../../demos/autocomplete-basic.html
  */
 

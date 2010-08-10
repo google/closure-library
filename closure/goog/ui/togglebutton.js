@@ -16,7 +16,7 @@
  * @fileoverview A toggle button control.  Extends {@link goog.ui.Button} by
  * providing checkbox-like semantics.
  *
- *
+*
  */
 
 goog.provide('goog.ui.ToggleButton');

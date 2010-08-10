@@ -15,8 +15,8 @@
 
 /**
  * @fileoverview Represents a path used with a Graphics implementation.
- *
- *
+*
+*
  */
 
 goog.provide('goog.graphics.Path');

@@ -17,7 +17,7 @@
  * goog.net.XmlHttp factory (and, therefore, goog.net.XhrIo) to work using
  * the HttpRequest object Gears provides.
  *
- *
+*
  */
 
 

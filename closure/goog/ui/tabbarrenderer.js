@@ -16,8 +16,8 @@
  * @fileoverview Default renderer for {@link goog.ui.TabBar}s.  Based on the
  * original {@code TabPane} code.
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.ui.TabBarRenderer');

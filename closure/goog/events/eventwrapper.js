@@ -15,7 +15,7 @@
 /**
  * @fileoverview Definition of the goog.events.EventWrapper interface.
  *
- *
+*
  */
 
 goog.provide('goog.events.EventWrapper');

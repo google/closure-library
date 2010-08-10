@@ -15,7 +15,7 @@
 /**
  * @fileoverview A toolbar-style renderer for {@link goog.ui.ColorMenuButton}.
  *
- *
+*
  */
 
 goog.provide('goog.ui.ToolbarColorMenuButtonRenderer');

@@ -20,7 +20,7 @@
  * for type-inference. For example, <code>goog.asserts.assert(foo)</code>
  * will restrict <code>foo</code> to a truthy value.
  *
- *
+*
  * @author agrieve@google.com (Andrew Grieve)
  */
 

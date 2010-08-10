@@ -15,7 +15,7 @@
 /**
  * @fileoverview Tristate checkbox widget.
  *
- *
+*
  * @see ../demos/checkbox.html
  */
 

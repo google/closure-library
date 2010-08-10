@@ -19,7 +19,7 @@
  * the rounded corners. See com.google.javascript.closure.RoundedCornerServlet
  * for sample usage.
  *
- *
+*
  */
 
 goog.provide('goog.ui.RoundedCorners');

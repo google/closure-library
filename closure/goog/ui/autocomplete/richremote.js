@@ -28,7 +28,7 @@
  * and the select method is called by the RichInputHandler when the rich row is
  * selected.
  *
- *
+*
  * @see ../../demos/autocompleterichremote.html
  */
 

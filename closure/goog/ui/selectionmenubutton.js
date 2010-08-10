@@ -20,7 +20,7 @@
  * The checkbox content fires the action events associated with the 'select all'
  * and 'select none' menu items.
  *
- *
+*
  * @see ../demos/selectionmenubutton.html
  */
 

@@ -16,7 +16,7 @@
  * @fileoverview Defines the goog.dom.TagName enum.  This enumerates
  * all html tag names specified by the W3C HTML 4.01 Specification.
  * Reference http://www.w3.org/TR/html401/index/elements.html.
- *
+*
  */
 goog.provide('goog.dom.TagName');
 

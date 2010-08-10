@@ -14,8 +14,8 @@
 
 /**
  * @fileoverview A class that can be used to listen to font size changes.
- *
- *
+*
+*
  */
 
 goog.provide('goog.dom.FontSizeMonitor');

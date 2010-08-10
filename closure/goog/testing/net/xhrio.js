@@ -14,8 +14,8 @@
 
 /**
  * @fileoverview Mock of XhrIo for unit testing.
- *
- *
+*
+*
  */
 
 goog.provide('goog.testing.net.XhrIo');

@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Protocol Buffer Message base class.
- *
+*
  */
 
 goog.provide('goog.proto2.Message');

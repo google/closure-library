@@ -15,8 +15,8 @@
 /**
  * @fileoverview Class to support scrollable containers for drag and drop.
  *
- *
- *
+*
+*
  */
 
 goog.provide('goog.fx.DragScrollSupport');
