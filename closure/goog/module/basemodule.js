@@ -17,9 +17,9 @@
  * code to be modularized, giving the benefits of lazy loading and loading on
  * demand.
  *
-*
-*
-*
+ *
+ *
+ *
  */
 
 goog.provide('goog.module.BaseModule');

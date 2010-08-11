@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Action event wrapper implementation.
-*
+ *
  */
 
 goog.provide('goog.events.actionEventWrapper');

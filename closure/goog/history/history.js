@@ -48,7 +48,7 @@
  * history states for going backward. Unfortunately, replacing the location
  * does not seem to help, the history states are created anyway.
  *
-*
+ *
  * @see ../demos/history1.html
  * @see ../demos/history2.html
  */

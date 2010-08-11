@@ -15,8 +15,8 @@
 /**
  * @fileoverview Provides functions to parse and pretty-print HTML strings.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.format.HtmlPrettyPrinter');

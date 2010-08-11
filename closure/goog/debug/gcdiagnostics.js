@@ -15,8 +15,8 @@
 /**
  * @fileoverview Definition of the GcDiagnostics class.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.debug.GcDiagnostics');

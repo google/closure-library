@@ -24,7 +24,7 @@
  * Implements DataNode to provide the top element in a data registry
  * Prepends '$' to top level data names in path to denote they are root object
  *
-*
+ *
  */
 goog.provide('goog.ds.DataManager');
 

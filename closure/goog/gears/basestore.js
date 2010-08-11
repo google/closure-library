@@ -18,8 +18,8 @@
  * the basic structure for creating, updating and removing the store, as well
  * as versioning. It also provides ways to interconnect stores.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.gears.BaseStore');

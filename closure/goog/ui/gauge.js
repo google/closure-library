@@ -15,7 +15,7 @@
 
 /**
  * @fileoverview Gauge UI component, using browser vector graphics.
-*
+ *
  * @see ../demos/gauge.html
  */
 

@@ -23,9 +23,9 @@
  *
  * Tested and verified to work in Gecko 1.9.2+ and WebKit 528+.
  *
-*
-*
-*
+ *
+ *
+ *
  * @see ../demos/css3menubutton.html
  */
 

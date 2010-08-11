@@ -15,7 +15,7 @@
 
 /**
  * @fileoverview Represents a stroke object for goog.graphics.
-*
+ *
  */
 
 

@@ -20,9 +20,9 @@
  * palette. Without the styles from the demo css file, only a hex color label
  * and input field show up.
  *
-*
-*
-*
+ *
+ *
+ *
  * @see ../demos/hsvpalette.html
  */
 

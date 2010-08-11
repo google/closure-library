@@ -15,8 +15,8 @@
 /**
  * @fileoverview Functions and objects for date representation and manipulation.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.date');

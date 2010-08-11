@@ -18,7 +18,7 @@
  * See http://www.cit.gu.edu.au/~anthony/info/C/RandomNumbers and
  * http://www.erikoest.dk/rng.htm.
  *
-*
+ *
  */
 
 goog.provide('goog.testing.PseudoRandom');

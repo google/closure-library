@@ -26,7 +26,7 @@
  * to have an id, so that the user of this object can know which event is for
  * which request.
  *
-*
+ *
  */
 
 goog.provide('goog.net.XhrManager');

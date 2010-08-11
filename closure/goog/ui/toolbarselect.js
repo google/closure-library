@@ -15,8 +15,8 @@
 /**
  * @fileoverview A toolbar select control.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.ui.ToolbarSelect');

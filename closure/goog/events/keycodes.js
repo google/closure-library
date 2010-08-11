@@ -15,7 +15,7 @@
 /**
  * @fileoverview Constant declarations for common key codes.
  *
-*
+ *
  * @see ../demos/keyhandler.html
  */
 

@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Protocol buffer serializer.
-*
+ *
  */
 
 goog.provide('goog.proto');

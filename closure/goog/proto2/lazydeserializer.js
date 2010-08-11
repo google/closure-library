@@ -19,7 +19,7 @@
  *   of the data must be an object or array that can be indexed by the tag
  *   number.
  *
-*
+ *
  */
 
 goog.provide('goog.proto2.LazyDeserializer');

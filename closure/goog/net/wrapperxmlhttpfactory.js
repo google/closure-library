@@ -15,7 +15,7 @@
 /**
  * @fileoverview Implementation of XmlHttpFactory which allows construction from
  * simple factory methods.
-*
+ *
  */
 
 goog.provide('goog.net.WrapperXmlHttpFactory');

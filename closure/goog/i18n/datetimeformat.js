@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Functions for dealing with date/time formatting.
-*
+ *
  */
 
 

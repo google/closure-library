@@ -18,7 +18,7 @@
  * of {@link goog.ui.MenuItem}.
  * TODO(user):  If the renderer framework works well, pull it into Component.
  *
-*
+ *
  * @see ../demos/control.html
  */
 

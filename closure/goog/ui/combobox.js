@@ -16,7 +16,7 @@
  * @fileoverview A combo box control that allows user input with
  * auto-suggestion from a limited set of options.
  *
-*
+ *
  * @see ../demos/combobox.html
  */
 

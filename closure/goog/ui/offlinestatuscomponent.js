@@ -16,7 +16,7 @@
  * @fileoverview A component that displays the offline status of an app.
  * Currently, it is used to show an icon with a tootip for the status.
  *
-*
+ *
  * @see ../demos/offline.html
  */
 

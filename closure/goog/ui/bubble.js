@@ -15,7 +15,7 @@
 /**
  * @fileoverview Definition of the Bubble class.
  *
-*
+ *
  *
  * @see ../demos/bubble.html
  *

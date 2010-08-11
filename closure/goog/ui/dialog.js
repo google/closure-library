@@ -19,7 +19,7 @@
  *   * Standardize CSS class names with other components
  *   * Add functionality to "host" other components in content area
  *   * Abstract out ButtonSet and make it more general
-*
+ *
  * @see ../demos/dialog.html
  */
 
@@ -268,7 +268,7 @@ goog.ui.Dialog.prototype.buttonEl_ = null;
 
 /**
  * Sets the title.
- * @param {string} title Title HTML (escaped).
+ * @param {string} title The title text.
  */
 goog.ui.Dialog.prototype.setTitle = function(title) {
   this.title_ = title;

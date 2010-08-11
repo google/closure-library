@@ -15,8 +15,8 @@
 /**
  * @fileoverview A toolbar separator control.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.ui.ToolbarSeparator');

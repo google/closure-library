@@ -15,8 +15,8 @@
 /**
  * @fileoverview Definition of the goog.async.Throttle class.
  *
-*
-*
+ *
+ *
  * @see ../demos/timers.html
  */
 

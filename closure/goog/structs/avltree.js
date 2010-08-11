@@ -15,7 +15,7 @@
 /**
  * @fileoverview Datastructure: AvlTree.
  *
-*
+ *
  *
  * This file provides the implementation of an AVL-Tree datastructure. The tree
  * maintains a set of unique values in a sorted order. The values can be

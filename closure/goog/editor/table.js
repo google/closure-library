@@ -21,7 +21,7 @@
  * and merging and splitting cells.
  *
  * @supported IE6+, WebKit 525+, Firefox 2+.
-*
+ *
  */
 
 goog.provide('goog.editor.Table');

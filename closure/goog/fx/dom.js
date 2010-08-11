@@ -15,7 +15,7 @@
 /**
  * @fileoverview Predefined DHTML animations such as slide, resize and fade.
  *
-*
+ *
  * @see ../demos/effects.html
  */
 

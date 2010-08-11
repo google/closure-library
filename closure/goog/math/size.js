@@ -14,8 +14,8 @@
 
 /**
  * @fileoverview A utility class for representing two-dimensional sizes.
-*
-*
+ *
+ *
  */
 
 

@@ -33,7 +33,7 @@
  *   Have the exceptions for LooseMock show the number of expected/actual calls
  *   loose and strict mocks share a lot of code - move it to the base class
  *
-*
+ *
  */
 
 goog.provide('goog.testing.Mock');

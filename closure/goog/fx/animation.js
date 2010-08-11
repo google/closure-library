@@ -15,10 +15,10 @@
 /**
  * @fileoverview Classes for doing animations and visual effects.
  *
-*
+ *
  * (Based loosly on my animation code for 13thparallel.org, with extra
  * inspiration from the DojoToolkit's modifications to my code)
-*
+ *
  */
 
 goog.provide('goog.fx.Animation');

@@ -14,8 +14,8 @@
 
 /**
  * @fileoverview Class for representing matrices and static helper functions.
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.math.Matrix');

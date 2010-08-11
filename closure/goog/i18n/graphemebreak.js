@@ -16,7 +16,7 @@
  * @fileoverview Detect Grapheme Cluster Break in a pair of codepoints. Follows
  * Unicode 5.1 UAX#29.
  *
-*
+ *
  */
 
 goog.provide('goog.i18n.GraphemeBreak');

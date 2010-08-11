@@ -18,7 +18,7 @@
  *
  * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
  *
-*
+ *
  */
 
 

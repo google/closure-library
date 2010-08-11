@@ -15,7 +15,7 @@
 
 /**
  * @fileoverview Represents a solid color fill goog.graphics.
-*
+ *
  */
 
 
