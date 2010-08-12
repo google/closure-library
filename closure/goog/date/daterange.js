@@ -40,14 +40,14 @@ goog.date.DateRange = function(startDate, endDate) {
    * @type {goog.date.Date}
    * @private
    */
-   this.startDate_ = new goog.date.Date(startDate);
+  this.startDate_ = new goog.date.Date(startDate);
 
   /**
    * The end date.
    * @type {goog.date.Date}
    * @private
    */
-   this.endDate_ = new goog.date.Date(endDate);
+  this.endDate_ = new goog.date.Date(endDate);
 };
 
 

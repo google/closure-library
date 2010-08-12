@@ -734,8 +734,8 @@ goog.array.extend = function(arr1, var_args) {
             arr2.hasOwnProperty('callee')) {
       arr1.push.apply(arr1, arr2);
 
-    // Otherwise loop over arr2 to prevent copying the object.
     } else if (isArrayLike) {
+      // Otherwise loop over arr2 to prevent copying the object.
       var len1 = arr1.length;
       var len2 = arr2.length;
       for (var j = 0; j < len2; j++) {

@@ -251,7 +251,7 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.writeToArray = function(array) {
       matchesAnchorTag = matchesAnchorTag ||
           goog.cssom.iframe.style.selectorPartAnchorRegex_.test(
               selectorParts[partCount - 1].inputString_);
-      }
+    }
   }
   var declarationText = this.declarationText;
   if (matchesAnchorTag) {
@@ -526,7 +526,7 @@ goog.cssom.iframe.style.NodeAncestry_ = function(node) {
     }
     nodeInfo.classNames = classNamesLookup;
     nodes.unshift(nodeInfo);
-  } while (node = node.parentNode)
+  } while (node = node.parentNode);
 
   /**
    * Array of nodes in order of hierarchy from the top of the document
@@ -677,19 +677,19 @@ goog.cssom.iframe.style.inheritedProperties_ = [
  * @private
  */
 goog.cssom.iframe.style.textProperties_ = [
-    'font-family',
-    'font-size',
-    'font-weight',
-    'font-variant',
-    'font-style',
-    'color',
-    'text-align',
-    'text-decoration',
-    'text-indent',
-    'text-transform',
-    'letter-spacing',
-    'white-space',
-    'word-spacing'
+  'font-family',
+  'font-size',
+  'font-weight',
+  'font-variant',
+  'font-style',
+  'color',
+  'text-align',
+  'text-decoration',
+  'text-indent',
+  'text-transform',
+  'letter-spacing',
+  'white-space',
+  'word-spacing'
 ];
 
 
@@ -765,8 +765,8 @@ goog.cssom.iframe.style.getElementContext = function(
           // New CSS selector: body ul
           selectorCopy = new goog.cssom.iframe.style.CssSelector_();
           selectorCopy.parts = [
-              bodySelectorPart,
-              selectorParts[lastSelectorPartIndex]
+            bodySelectorPart,
+            selectorParts[lastSelectorPartIndex]
           ];
           selectors.push(selectorCopy);
         }
@@ -822,7 +822,7 @@ goog.cssom.iframe.style.getElementContext = function(
     var bgProperties =
         goog.cssom.iframe.style.getBackgroundContext(element);
     bodyProperties['background-color'] = bgProperties['backgroundColor'];
-    var elementBgImage = computedStyle['backgroundImage']
+    var elementBgImage = computedStyle['backgroundImage'];
     if (!elementBgImage || elementBgImage == 'none') {
       bodyProperties['background-image'] = bgProperties['backgroundImage'];
       bodyProperties['background-repeat'] = bgProperties['backgroundRepeat'];
@@ -897,7 +897,7 @@ goog.cssom.iframe.style.getBackgroundXYValues_ = function(styleObject) {
   // WebKit has both.
   if (styleObject['backgroundPositionY']) {
     return [styleObject['backgroundPositionX'],
-            styleObject['backgroundPositionY']]
+            styleObject['backgroundPositionY']];
   } else {
     return (styleObject['backgroundPosition'] || '0 0').split(' ');
   }

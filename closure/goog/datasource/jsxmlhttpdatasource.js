@@ -164,7 +164,7 @@ goog.ds.JsXmlHttpDataSource.prototype.completed_ = function(e) {
     }
     if (this.endText_) {
       var endpos = text.lastIndexOf(this.endText_);
-      text = text.substring(0, endpos)
+      text = text.substring(0, endpos);
     }
 
     // Eval result
@@ -180,8 +180,8 @@ goog.ds.JsXmlHttpDataSource.prototype.completed_ = function(e) {
       goog.ds.logger.severe('Failed to parse data: ' + ex.message);
     }
 
-    // Call on a timer to avoid threading issues on IE
-    goog.global.setTimeout(goog.bind(this.success_, this), 0)
+    // Call on a timer to avoid threading issues on IE.
+    goog.global.setTimeout(goog.bind(this.success_, this), 0);
   } else {
     goog.ds.logger.info('Data retrieve failed for DataSource ' +
         this.getDataName());

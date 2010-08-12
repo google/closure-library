@@ -920,8 +920,8 @@ goog.date.Date.prototype.getNumberOfDaysInMonth = function() {
  */
 goog.date.Date.prototype.getWeekNumber = function() {
   return goog.date.getWeekNumber(
-    this.getFullYear(), this.getMonth(), this.getDate(),
-    this.firstWeekCutOffDay_, this.firstDayOfWeek_);
+      this.getFullYear(), this.getMonth(), this.getDate(),
+      this.firstWeekCutOffDay_, this.firstDayOfWeek_);
 };
 
 

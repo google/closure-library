@@ -157,7 +157,7 @@ goog.debug.Formatter.getTwoDigitString_ = function(n) {
  * @private
  */
 goog.debug.Formatter.getRelativeTime_ = function(logRecord,
-                                                  relativeTimeStart) {
+                                                 relativeTimeStart) {
   var ms = logRecord.getMillis() - relativeTimeStart;
   var sec = ms / 1000;
   var str = sec.toFixed(3);

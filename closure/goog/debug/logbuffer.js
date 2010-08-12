@@ -46,9 +46,9 @@ goog.debug.LogBuffer = function() {
  */
 goog.debug.LogBuffer.getInstance = function() {
   if (!goog.debug.LogBuffer.instance_) {
-  // This function is written with the return statement after the assignment to
-  // avoid the jscompiler StripCode bug described in http://b/issue?id=2608064
-  // After that bug is fixed this can be refactored.
+    // This function is written with the return statement after the assignment
+    // to avoid the jscompiler StripCode bug described in http://b/2608064.
+    // After that bug is fixed this can be refactored.
     goog.debug.LogBuffer.instance_ = new goog.debug.LogBuffer();
   }
   return goog.debug.LogBuffer.instance_;

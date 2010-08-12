@@ -174,17 +174,17 @@ goog.debug.Trace_.EventType = {
   /**
    * Start event type
    */
-  START : 0,
+  START: 0,
 
   /**
    * Stop event type
    */
-  STOP : 1,
+  STOP: 1,
 
   /**
    * Comment event type
    */
-  COMMENT : 2
+  COMMENT: 2
 };
 
 
@@ -250,7 +250,7 @@ goog.debug.Trace_.Event_ = function() {
  * @return {string} The formatted tracer string.
  */
 goog.debug.Trace_.Event_.prototype.toTraceString = function(startTime, prevTime,
-      indent) {
+    indent) {
   var sb = [];
 
   if (prevTime == -1) {

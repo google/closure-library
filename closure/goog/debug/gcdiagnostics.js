@@ -43,7 +43,7 @@ goog.debug.GcDiagnostics_ = function() {};
  * Install the GcDiagnostics tool.
  */
 goog.debug.GcDiagnostics_.prototype.install = function() {
- if (goog.userAgent.IE) {
+  if (goog.userAgent.IE) {
     /** @preserveTry */
     try {
       var l2Helper = new ActiveXObject('L2.NativeHelper');
@@ -114,9 +114,9 @@ goog.debug.GcDiagnostics_.prototype.stop = function() {
 
       var msRounded = Math.round(msElapsed * 10) / 10;
       var s = 'GC ' + i + ': ' + msRounded + ' ms, ' +
-            'numVValAlloc=' + trace['numVValAlloc'] + ', ' +
-            'numVarAlloc=' + trace['numVarAlloc'] + ', ' +
-            'numBytesSysAlloc=' + trace['numBytesSysAlloc'];
+          'numVValAlloc=' + trace['numVValAlloc'] + ', ' +
+          'numVarAlloc=' + trace['numVarAlloc'] + ', ' +
+          'numBytesSysAlloc=' + trace['numBytesSysAlloc'];
       if (goog.debug.Trace) {
         goog.debug.Trace.addComment(s, null, msStart);
       }
@@ -136,4 +136,4 @@ goog.debug.GcDiagnostics_.prototype.stop = function() {
  * Singleton GcDiagnostics object
  * @type {goog.debug.GcDiagnostics_}
  */
- goog.debug.GcDiagnostics = new goog.debug.GcDiagnostics_();
+goog.debug.GcDiagnostics = new goog.debug.GcDiagnostics_();

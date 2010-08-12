@@ -250,7 +250,7 @@ goog.date.relative.formatDay = function(dateMs) {
 goog.date.relative.getDateString = function(
     date, opt_shortTimeMsg, opt_fullDateMsg) {
   return goog.date.relative.getDateString_(
-      date, goog.date.relative.format, opt_shortTimeMsg, opt_fullDateMsg)
+      date, goog.date.relative.format, opt_shortTimeMsg, opt_fullDateMsg);
 };
 
 
@@ -273,7 +273,7 @@ goog.date.relative.getDateString = function(
 goog.date.relative.getPastDateString = function(
     date, opt_shortTimeMsg, opt_fullDateMsg) {
   return goog.date.relative.getDateString_(
-      date, goog.date.relative.formatPast, opt_shortTimeMsg, opt_fullDateMsg)
+      date, goog.date.relative.formatPast, opt_shortTimeMsg, opt_fullDateMsg);
 };
 
 
@@ -333,10 +333,10 @@ goog.date.relative.getMessage_ = function(delta, future, unit) {
     var MSG_MINUTES_AGO_SINGULAR =
         goog.getMsg('{$num} minute ago', {'num' : delta});
 
-      /**
-       * @desc Relative date indicating how many minutes ago something happened
-       * (plural).
-       */
+    /**
+     * @desc Relative date indicating how many minutes ago something happened
+     * (plural).
+     */
     var MSG_MINUTES_AGO_PLURAL =
         goog.getMsg('{$num} minutes ago', {'num' : delta});
 
@@ -350,10 +350,10 @@ goog.date.relative.getMessage_ = function(delta, future, unit) {
     var MSG_IN_MINUTES_SINGULAR =
         goog.getMsg('in {$num} minute', {'num' : delta});
 
-      /**
-       * @desc Relative date indicating in how many minutes something happens
-       * (plural).
-       */
+    /**
+     * @desc Relative date indicating in how many minutes something happens
+     * (plural).
+     */
     var MSG_IN_MINUTES_PLURAL =
         goog.getMsg('in {$num} minutes', {'num' : delta});
 
