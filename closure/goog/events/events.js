@@ -694,6 +694,7 @@ goog.events.EventType = {
   SELECT: 'select',
   SUBMIT: 'submit',
   INPUT: 'input',
+  PROPERTYCHANGE: 'propertychange', // IE only
 
   // Drag and drop
   DRAGSTART: 'dragstart',
