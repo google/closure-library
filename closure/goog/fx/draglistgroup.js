@@ -92,6 +92,15 @@ goog.fx.DragListGroup = function() {
    */
   this.isInitialized_ = false;
 
+  /**
+   * Whether the currDragItem is always displayed. By default the list
+   * collapses, the currDragItem's display is set to none, when we do not
+   * hover over a draglist.
+   * @type {boolean}
+   * @private
+   */
+  this.isCurrDragItemAlwaysDisplayed_ = false;
+
 };
 goog.inherits(goog.fx.DragListGroup, goog.events.EventTarget);
 
@@ -211,6 +220,14 @@ goog.fx.DragListGroup.prototype.draggerEl_;
  */
 goog.fx.DragListGroup.prototype.dragger_;
 
+
+/**
+ * Sets the property of the currDragItem that it is always displayed in the
+ * list.
+ */
+goog.fx.DragListGroup.prototype.setIsCurrDragItemAlwaysDisplayed = function() {
+  this.isCurrDragItemAlwaysDisplayed_ = true;
+};
 
 
 /**
@@ -528,8 +545,11 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     }
 
   } else {
-    // Not hovering over a drag list, so remove the item altogether.
-    this.currDragItem_.style.display = 'none';
+    // Not hovering over a drag list, so remove the item altogether unless
+    // specified otherwise by the user.
+    if (!this.isCurrDragItemAlwaysDisplayed_) {
+      this.currDragItem_.style.display = 'none';
+    }
     // Remove hover classes (if any) from all drag lists.
     for (var i = 0, n = this.dragLists_.length; i < n; i++) {
       var dragList = this.dragLists_[i];
