@@ -36,8 +36,8 @@ goog.require('goog.dom.pattern.MatchType');
  * @extends {goog.dom.pattern.AbstractPattern}
  */
 goog.dom.pattern.Repeat = function(pattern,
-                                    opt_minimum,
-                                    opt_maximum) {
+                                   opt_minimum,
+                                   opt_maximum) {
   this.pattern_ = pattern;
   this.minimum_ = opt_minimum || 0;
   this.maximum_ = opt_maximum || null;

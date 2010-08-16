@@ -62,9 +62,9 @@ goog.require('goog.userAgent');
  * @extends {goog.events.Event}
  */
 goog.events.BrowserEvent = function(opt_e, opt_currentTarget) {
- if (opt_e) {
-   this.init(opt_e, opt_currentTarget);
- }
+  if (opt_e) {
+    this.init(opt_e, opt_currentTarget);
+  }
 };
 goog.inherits(goog.events.BrowserEvent, goog.events.Event);
 

@@ -197,9 +197,9 @@ goog.fx.Animation.cycleAnimations_ = function() {
 
   goog.fx.Animation.globalTimer_ =
       goog.object.isEmpty(goog.fx.Animation.activeAnimations_) ?
-        null :
-        goog.Timer.defaultTimerObject.setTimeout(
-            goog.fx.Animation.cycleAnimations_, goog.fx.Animation.TIMEOUT);
+          null :
+          goog.Timer.defaultTimerObject.setTimeout(
+              goog.fx.Animation.cycleAnimations_, goog.fx.Animation.TIMEOUT);
 };
 
 

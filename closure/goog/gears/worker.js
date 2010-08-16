@@ -91,7 +91,7 @@ goog.gears.Worker.prototype.id_ = null;
  */
 goog.gears.Worker.prototype.init = function(id) {
   if (this.id_ != null) {
-    throw Error('Can only set the worker id once')
+    throw Error('Can only set the worker id once');
   }
 
   this.id_ = id;

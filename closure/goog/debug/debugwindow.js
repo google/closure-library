@@ -366,7 +366,7 @@ goog.debug.DebugWindow.prototype.writeBufferToLog_ = function() {
   if (this.win_) {
     var body = this.win_.document.body;
     var scroll = body &&
-               body.scrollHeight - (body.scrollTop + body.clientHeight) <= 100;
+        body.scrollHeight - (body.scrollTop + body.clientHeight) <= 100;
 
     this.win_.document.write(this.outputBuffer_.join(''));
     this.outputBuffer_.length = 0;
@@ -487,7 +487,7 @@ goog.debug.DebugWindow.prototype.writeInitialDocument_ = function() {
 goog.debug.DebugWindow.prototype.setCookie_ = function(key, value) {
   key += this.identifier_;
   document.cookie = key + '=' + encodeURIComponent(value) + ';expires=' +
-    (new Date(goog.now() + goog.debug.DebugWindow.COOKIE_TIME)).toUTCString();
+      (new Date(goog.now() + goog.debug.DebugWindow.COOKIE_TIME)).toUTCString();
 };
 
 
@@ -513,7 +513,7 @@ goog.debug.DebugWindow.prototype.getCookie_ = function(key, opt_default) {
  * @private
  */
 goog.debug.DebugWindow.getCookieValue_ = function(
-      identifier, key, opt_default) {
+    identifier, key, opt_default) {
   var fullKey = key + identifier;
   var cookie = String(document.cookie);
   var start = cookie.indexOf(fullKey + '=');
@@ -546,7 +546,7 @@ goog.debug.DebugWindow.prototype.saveWindowPositionSize_ = function() {
   }
   var x = this.win_.screenX || this.win_.screenLeft || 0;
   var y = this.win_.screenY || this.win_.screenTop || 0;
-  var w = this.win_.outerWidth || 800
+  var w = this.win_.outerWidth || 800;
   var h = this.win_.outerHeight || 500;
   this.setCookie_('dbg', x + ',' + y + ',' + w + ',' + h);
 };

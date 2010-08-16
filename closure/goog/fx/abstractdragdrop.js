@@ -1290,15 +1290,15 @@ goog.fx.DragDropItem.prototype.mouseMove_ = function(event) {
       Math.abs(event.clientY - this.startPosition_.y);
 
   if (distance > goog.fx.AbstractDragDrop.initDragDistanceThreshold) {
-      var currentDragElement = this.currentDragElement_;
-      goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEMOVE,
-                           this.mouseMove_, false, this);
-      goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEOUT,
-                           this.mouseMove_, false, this);
-      goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEUP,
-                           this.mouseUp_, false, this);
+    var currentDragElement = this.currentDragElement_;
+    goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEMOVE,
+                         this.mouseMove_, false, this);
+    goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEOUT,
+                         this.mouseMove_, false, this);
+    goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEUP,
+                         this.mouseUp_, false, this);
 
-      this.parent_.startDrag(event, this);
+    this.parent_.startDrag(event, this);
   }
 };
 

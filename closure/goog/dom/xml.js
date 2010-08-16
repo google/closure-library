@@ -53,7 +53,7 @@ goog.dom.xml.createDocument = function(opt_rootTagName, opt_namespaceUri) {
   if (document.implementation && document.implementation.createDocument) {
     return document.implementation.createDocument(opt_namespaceUri || '',
                                                   opt_rootTagName || '',
-                                                  null)
+                                                  null);
   } else if (typeof ActiveXObject != 'undefined') {
     var doc = goog.dom.xml.createMsXmlDocument_();
     if (doc) {

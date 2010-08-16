@@ -121,9 +121,7 @@ goog.editor.plugins.RemoveFormatting.prototype.execCommandInternal =
 };
 
 
-/**
- * @inheritDoc
- */
+/** @inheritDoc */
 goog.editor.plugins.RemoveFormatting.prototype.handleKeyboardShortcut =
     function(e, key, isModifierPressed) {
   if (!isModifierPressed) {
@@ -137,7 +135,7 @@ goog.editor.plugins.RemoveFormatting.prototype.handleKeyboardShortcut =
   }
 
   return false;
-}
+};
 
 
 /**

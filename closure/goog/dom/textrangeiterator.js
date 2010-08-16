@@ -87,7 +87,7 @@ goog.dom.TextRangeIterator = function(startNode, startOffset, endNode,
 
   if (goNext) {
     try {
-      this.next()
+      this.next();
     } catch (e) {
       if (e != goog.iter.StopIteration) {
         throw e;

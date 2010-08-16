@@ -100,7 +100,7 @@ goog.gears.ManagedResourceStore.UpdateStatus = {
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.logger_ =
-  goog.debug.Logger.getLogger('goog.gears.ManagedResourceStore');
+    goog.debug.Logger.getLogger('goog.gears.ManagedResourceStore');
 
 
 /**

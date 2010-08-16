@@ -45,7 +45,7 @@ goog.gears.LogStore = function(database, opt_tableName) {
    * @type {string}
    */
   var tableName = opt_tableName || goog.gears.LogStore.DEFAULT_TABLE_NAME_;
-  this.tableName_ = tableName
+  this.tableName_ = tableName;
 
   // Override BaseStore schema attribute.
   this.schema = [
@@ -53,21 +53,21 @@ goog.gears.LogStore = function(database, opt_tableName) {
       type: goog.gears.BaseStore.SchemaType.TABLE,
       name: tableName,
       columns: [
-         // Unique ID.
-         'id INTEGER PRIMARY KEY AUTOINCREMENT',
-         // Timestamp.
-         'millis BIGINT',
-         // #goog.debug.Logger.Level value.
-         'level INTEGER',
-         // Message.
-         'msg TEXT',
-         // Name of logger object.
-         'logger TEXT',
-         // Serialized error object.
-         'exception TEXT',
-         // Full exception text.
-         'exceptionText TEXT'
-       ]
+        // Unique ID.
+        'id INTEGER PRIMARY KEY AUTOINCREMENT',
+        // Timestamp.
+        'millis BIGINT',
+        // #goog.debug.Logger.Level value.
+        'level INTEGER',
+        // Message.
+        'msg TEXT',
+        // Name of logger object.
+        'logger TEXT',
+        // Serialized error object.
+        'exception TEXT',
+        // Full exception text.
+        'exceptionText TEXT'
+      ]
     },
     {
       type: goog.gears.BaseStore.SchemaType.INDEX,

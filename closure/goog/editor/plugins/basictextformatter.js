@@ -563,7 +563,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
   goog.editor.plugins.BasicTextFormatter.BR_REGEXP_.lastIndex = 0;
   // Only mess with the HTML/selection if it contains a BR.
   if (goog.editor.plugins.BasicTextFormatter.BR_REGEXP_.test(
-          parent.innerHTML)) {
+      parent.innerHTML)) {
     // Insert temporary markers to remember the selection.
     var savedRange = range.saveUsingCarets();
 
@@ -592,7 +592,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
         if (paragraph.getAttribute(attribute) == value) {
           paragraph.removeAttribute(attribute);
           if (goog.string.isBreakingWhitespace(
-                  goog.dom.getTextContent(paragraph))) {
+              goog.dom.getTextContent(paragraph))) {
             // Prevent the empty blocks from collapsing.
             // A <BR> is preferable because it doesn't result in any text being
             // added to the "blank" line. In IE, however, it is possible to

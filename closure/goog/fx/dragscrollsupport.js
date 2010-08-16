@@ -168,7 +168,7 @@ goog.fx.DragScrollSupport.prototype.constrainBounds_ = function(bounds) {
   var verticalMargin = this.verticalMargin_;
   if (verticalMargin) {
     verticalMargin = verticalMargin > quarterHeight ?
-          quarterHeight : verticalMargin;
+        quarterHeight : verticalMargin;
     bounds.top += verticalMargin;
     bounds.height -= 2 * verticalMargin;
   }
@@ -185,7 +185,7 @@ goog.fx.DragScrollSupport.prototype.constrainBounds_ = function(bounds) {
 goog.fx.DragScrollSupport.prototype.setupListeners_ = function(
     externalMouseMoveTracking) {
   if (!externalMouseMoveTracking) {
-  // Track mouse pointer position to determine scroll direction.
+    // Track mouse pointer position to determine scroll direction.
     this.eventHandler_.listen(goog.dom.getOwnerDocument(this.containerNode_),
         goog.events.EventType.MOUSEMOVE, this.onMouseMove);
   }

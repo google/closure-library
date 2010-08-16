@@ -197,7 +197,7 @@ goog.fx.dom.Swipe.prototype.updateStyle = function() {
   var x = this.coords[0];
   var y = this.coords[1];
   this.clip_(Math.round(x), Math.round(y), this.maxWidth_, this.maxHeight_);
-  this.element.style.width = Math.round(x) + 'px'
+  this.element.style.width = Math.round(x) + 'px';
   this.element.style.marginLeft = Math.round(x) - this.maxWidth_ + 'px';
   this.element.style.marginTop = Math.round(y) - this.maxHeight_ + 'px';
 };
@@ -282,7 +282,7 @@ goog.inherits(goog.fx.dom.Resize, goog.fx.dom.PredefinedEffect);
  * @override
  */
 goog.fx.dom.Resize.prototype.updateStyle = function() {
-  this.element.style.width = Math.round(this.coords[0]) + 'px'
+  this.element.style.width = Math.round(this.coords[0]) + 'px';
   this.element.style.height = Math.round(this.coords[1]) + 'px';
 };
 
