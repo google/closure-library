@@ -132,6 +132,27 @@ function testSyncSendFailure() {
 }
 
 
+function testSendFromListener() {
+  MockXmlHttp.syncSend = true;
+  var count = 0;
+
+  var x = new goog.net.XhrIo;
+  goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
+    count++;
+
+    assertThrows(function () {
+      x.send('url2');
+    });
+  });
+
+  x.send('url');
+
+  clock.tick(1); // callOnce(f, 0, ...)
+
+  assertEquals('Complete should have been called once', 1, count);
+}
+
+
 function testProtectEntryPointCalledOnAsyncSend() {
   MockXmlHttp.syncSend = false;
 
