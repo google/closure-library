@@ -324,17 +324,24 @@ Author: marcosalmeida@google.com (Marcos Almeida)
       // TODO(robbyw): Figure out why this is flaky and fix it.
       return;
     }
-    var size = goog.dom.getViewportSize(window);
-    var width = Math.max(size.width - 50, 50);
-    var height = Math.max(size.height - 50, 50);
 
-    mockWindowOpen(ANCHOR_URL, '_blank', 'width=' + width + ',height=' +
-        height + ',toolbar=1,scrollbars=1,location=1,statusbar=0,' +
-        'menubar=1,resizable=1');
+    var width, height;
+    mockWindowOpen(ANCHOR_URL, '_blank',
+        new goog.testing.mockmatchers.ArgumentMatcher(function(str) {
+          return str == 'width=' + width + ',height=' + height +
+                        ',toolbar=1,scrollbars=1,location=1,statusbar=0,' +
+                        'menubar=1,resizable=1'
+        }, "3rd arg: (string) window.open() options"));
 
     mockCtrl.$replayAll();
     setUpAnchor(ANCHOR_URL, ANCHOR_TEXT);
     createAndShow();
+
+    // Measure viewport after opening dialog because that might cause scrollbars
+    // to appear and reduce the viewport size.
+    var size = goog.dom.getViewportSize(window);
+    width = Math.max(size.width - 50, 50);
+    height = Math.max(size.height - 50, 50);
 
     var testLink = goog.testing.dom.findTextNode(
         goog.ui.editor.messages.MSG_TEST_THIS_LINK,
