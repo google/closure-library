@@ -500,6 +500,13 @@ function testConstructorUid() {
       typeof subClassUid == 'number');
   assertNotEquals('Unique IDs of BaseClass and SubClass must differ',
       baseClassUid, subClassUid);
+  assertNotEquals('Unique IDs of BaseClass and SubClass instances must differ',
+      goog.getUid(new BaseClass), goog.getUid(new SubClass));
+
+  assertEquals('Unique IDs of BaseClass.prototype and SubClass.prototype ' +
+      'should differ, but to keep the implementation simple, we do not ' +
+      'handle this edge case.',
+      goog.getUid(BaseClass.prototype), goog.getUid(SubClass.prototype));
 }
 
 /**
@@ -516,6 +523,15 @@ function testUidNotUndefinedOnReusedElement() {
   div.innerHTML = '<form id="form"></form>';
   var span2 = div.getElementsByTagName('FORM')[0];
   assertNotUndefined(goog.getUid(span2));
+}
+
+function testWindowUid() {
+  var uid = goog.getUid(window);
+  assertTrue('window unique id is a number', goog.isNumber(uid));
+  assertEquals('returns the same id second time', uid, goog.getUid(window));
+  goog.removeUid(window);
+  assertNotEquals('generates new id after the old one is removed',
+      goog.getUid(window));
 }
 
 //=== tests for clone method ===

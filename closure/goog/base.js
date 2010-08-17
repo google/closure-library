@@ -791,7 +791,8 @@ goog.isObject = function(val) {
  * calls with the same object as a parameter returns the same value. The unique
  * ID is guaranteed to be unique across the current session amongst objects that
  * are passed into {@code getUid}. There is no guarantee that the ID is unique
- * or consistent across sessions.
+ * or consistent across sessions. It is unsafe to generate unique ID for
+ * function prototypes.
  *
  * @param {Object} obj The object to get the unique ID for.
  * @return {number} The unique ID for the object.
@@ -799,10 +800,11 @@ goog.isObject = function(val) {
 goog.getUid = function(obj) {
   // TODO(user): Make the type stricter, do not accept null.
 
-  // In IE, DOM nodes do not extend Object so they do not have hasOwnProperty
-  // method.
-  return Object.prototype.hasOwnProperty.call(obj, goog.UID_PROPERTY_) ?
-      obj[goog.UID_PROPERTY_] : (obj[goog.UID_PROPERTY_] = ++goog.uidCounter_);
+  // In Opera window.hasOwnProperty exists but always returns false so we avoid
+  // using it. As a consequence the unique ID generated for BaseClass.prototype
+  // and SubClass.prototype will be the same.
+  return obj[goog.UID_PROPERTY_] ||
+      (obj[goog.UID_PROPERTY_] = ++goog.uidCounter_);
 };
 
 
