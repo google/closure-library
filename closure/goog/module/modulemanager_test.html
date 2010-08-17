@@ -1164,6 +1164,26 @@ Author: jananir@google.com (Janani Ravi) (Modified for Closure)
     assertTrue('Base initialization not called after setModuleContext', called);
     assertEquals('Did not receive module context', appContext, context);
   }
+  
+  function testSetAllModuleInfoString() {
+    var info = 'base/one:0/two:0/three:0,1,2/four:0,3/five:';
+    var mm = new goog.module.ModuleManager();
+    mm.setAllModuleInfoString(info);
+
+    assertNotNull('Base should exist', mm.getModuleInfo('base'));
+    assertNotNull('One should exist', mm.getModuleInfo('one'));
+    assertNotNull('Two should exist', mm.getModuleInfo('two'));
+    assertNotNull('Three should exist', mm.getModuleInfo('three'));
+    assertNotNull('Four should exist', mm.getModuleInfo('four'));
+    assertNotNull('Five should exist', mm.getModuleInfo('five'));
+
+    assertArrayEquals(['base', 'one', 'two'],
+        mm.getModuleInfo('three').getDependencies());
+    assertArrayEquals(['base', 'three'],
+        mm.getModuleInfo('four').getDependencies());
+    assertArrayEquals([],
+        mm.getModuleInfo('five').getDependencies());
+  }
 
 </script>
 </body>
