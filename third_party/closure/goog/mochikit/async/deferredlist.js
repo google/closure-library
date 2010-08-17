@@ -167,6 +167,16 @@ goog.async.DeferredList.prototype.handleCallback_ = function(index,
 };
 
 
+/** @inheritDoc */
+goog.async.DeferredList.prototype.errback = function(res) {
+  goog.async.DeferredList.superClass_.errback.call(this, res);
+  // On error, cancel any pending requests.
+  goog.array.forEach(this.list_, function(item) {
+    item.cancel();
+  });
+};
+
+
 /**
  * Creates a <code>DeferredList</code> that gathers results from multiple
  * <code>Deferred</code> inputs. If all inputs succeed, the callback is fired
