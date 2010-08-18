@@ -39,6 +39,7 @@ See the COPYING file for details.
 <body>
 <iframe id="iframe1" src="menubutton_test_frame.html" width="400" height="400">
 </iframe>
+<div id="positionElement" style="position: absolute; left: 205px"></div>
 <script>
 
 var menuButton;
@@ -259,6 +260,27 @@ function testOpenedMenuPositionCorrection() {
   iframeDom.removeNode(p3);
   replacer.reset();
   button.dispose();
+}
+
+/**
+ * Use a different button to position the menu and make sure it does so
+ * correctly.
+ */
+function testAlternatePositioningElement() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+
+  var posElement = goog.dom.getElement('positionElement');
+  menuButton.setPositionElement(posElement);
+
+  // Show the menu.
+  menuButton.setOpen(true);
+
+  // Confirm the menu position
+  var menuNode = menuButton.getMenu().getElement();
+  assertRoughlyEquals(menuNode.offsetTop, posElement.offsetTop
+      + posElement.offsetHeight, 20);
+  assertRoughlyEquals(menuNode.offsetLeft, posElement.offsetLeft, 20);
 }
 
 /**

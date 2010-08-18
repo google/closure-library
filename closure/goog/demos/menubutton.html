@@ -16,6 +16,7 @@ See the COPYING file for details.
     goog.require('goog.debug.DivConsole');
     goog.require('goog.debug.Logger');
     goog.require('goog.debug.LogManager');
+    goog.require('goog.ui.CustomButton');
     goog.require('goog.ui.Menu');
     goog.require('goog.ui.MenuButton');
     goog.require('goog.ui.MenuItem');
@@ -23,6 +24,7 @@ See the COPYING file for details.
     goog.require('goog.ui.decorate');
   </script>
   <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="../css/custombutton.css">
   <link rel="stylesheet" href="../css/menu.css">
   <link rel="stylesheet" href="../css/menuitem.css">
   <link rel="stylesheet" href="../css/menuseparator.css">
@@ -39,7 +41,7 @@ See the COPYING file for details.
     }
 
     /* "Format" icon. */
-    .format-icon{
+    .format-icon {
       background-position: -64px;
     }
   </style>
@@ -115,6 +117,17 @@ See the COPYING file for details.
                 </tr>
               </tbody>
             </table>
+            <label>
+            </label>
+            <br>
+          </fieldset>
+          <fieldset>
+            <legend>
+              This <strong>MenuButton</strong> accompanies a
+              <strong>CustomButton</strong> to form a combo button:
+              &nbsp;
+            </legend>
+            <div id="comboButtons"></div>
             <label>
             </label>
             <br>
@@ -270,6 +283,32 @@ See the COPYING file for details.
         });
 
     goog.events.listen(formatButton, EVENTS, logEvent);
+
+
+    // Create a combo button with a custom button and a menu button.
+    // Create a sample menu.
+    var cbb1 = new goog.ui.CustomButton('Add to Family');
+    cbb1.render(goog.dom.getElement('comboButtons'));
+    cbb1.addClassName('goog-custom-button-collapse-right');
+    var cbm1 = new goog.ui.Menu();
+    cbm1.setId('ComboMenu');
+    goog.array.forEach(['Friends', 'Family', 'Coworkers'],
+        function(label) {
+          var item = new goog.ui.MenuItem(label);
+          item.setId(label);
+          item.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
+          cbm1.addItem(item);
+        });
+    var cb1 = new goog.ui.Button('Take action', cbm1);
+    var cbmb1 = new goog.ui.MenuButton(null, cbm1);
+    cbmb1.setPositionElement(cbb1.getElement());
+    cbmb1.addClassName('goog-menu-button-collapse-left');
+    cbmb1.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
+    cbmb1.setId('ComboMenuButton');
+    cbmb1.render(goog.dom.getElement('comboButtons'));
+    cbmb1.setTooltip('Combo button');
+    goog.events.listen(cbmb1, EVENTS, logEvent);
+
 
     goog.dom.setTextContent(goog.dom.getElement('perf'),
         (goog.now() - timer) + 'ms');

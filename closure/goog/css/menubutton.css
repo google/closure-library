@@ -138,7 +138,7 @@
 
 /* Dropdown arrow style. */
 .goog-menu-button-dropdown {
-  height: 16px;
+  height: 15px;
   width: 7px;
   /* Client apps may override the URL at which they serve the sprite. */
   background: url(https://ssl.gstatic.com/editor/editortoolbar.png) no-repeat -388px 0;
