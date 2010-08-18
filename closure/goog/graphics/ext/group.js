@@ -178,7 +178,7 @@ goog.graphics.ext.Group.prototype.growToFit_ = function(element) {
     transformed = true;
   }
 
-  var y = element.getMaxY()
+  var y = element.getMaxY();
   if (y > this.getHeight()) {
     this.setMinHeight(y);
     transformed = true;

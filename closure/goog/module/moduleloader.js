@@ -159,7 +159,7 @@ goog.module.ModuleLoader.prototype.loadModulesInDebugMode_ = function(uris) {
  * @param {function(?number)} errorFn The callback for error.
  */
 goog.module.ModuleLoader.prototype.handleSuccess = function(
-  bulkLoader, moduleIds, successFn, errorFn) {
+    bulkLoader, moduleIds, successFn, errorFn) {
   var jsCode = bulkLoader.getResponseTexts().join('\n');
 
   this.handleRequestSuccess(jsCode, moduleIds, successFn, errorFn);

@@ -328,7 +328,7 @@ goog.math.Matrix.prototype.getReducedRowEchelonForm = function() {
     // Scan each column starting from this row on down for a non-zero value
     var i = row;
     while (result.array_[i][col] == 0) {
-      i++
+      i++;
       if (i == result.size_.height) {
         i = row;
         col++;

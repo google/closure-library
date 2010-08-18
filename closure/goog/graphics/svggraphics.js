@@ -195,9 +195,13 @@ goog.graphics.SvgGraphics.prototype.setElementFill = function(element, fill) {
 
     if (!id) { // No def for this yet, create it
       // Create the gradient def entry (only linear gradient are supported)
-      var gradient = this.createSvgElement_('linearGradient',
-          {'x1': fill.getX1(), 'y1': fill.getY1(), 'x2': fill.getX2(),
-           'y2': fill.getY2(), 'gradientUnits': 'userSpaceOnUse'});
+      var gradient = this.createSvgElement_('linearGradient', {
+        'x1': fill.getX1(),
+        'y1': fill.getY1(),
+        'x2': fill.getX2(),
+        'y2': fill.getY2(),
+        'gradientUnits': 'userSpaceOnUse'
+      });
 
       var stop1 = this.createSvgElement_('stop',
           {'offset': '0%', 'style': 'stop-color:' + fill.getColor1()});
@@ -275,8 +279,11 @@ goog.graphics.SvgGraphics.prototype.setElementTransform = function(element, x,
  */
 goog.graphics.SvgGraphics.prototype.createDom = function() {
   // Set up the standard attributes.
-  var attributes = {'width': this.width, 'height': this.height,
-      'overflow': 'hidden'};
+  var attributes = {
+    'width': this.width,
+    'height': this.height,
+    'overflow': 'hidden'
+  };
 
   var svgElement = this.createSvgElement_('svg', attributes);
 
@@ -505,9 +512,14 @@ goog.graphics.SvgGraphics.prototype.drawRect = function(x, y, width, height,
  */
 goog.graphics.SvgGraphics.prototype.drawImage = function(x, y, width, height,
     src, opt_group) {
-  var element = this.createSvgElement_('image',
-      {'x': x, 'y': y, 'width': width, 'height': height,
-          'image-rendering': 'optimizeQuality', 'preserveAspectRatio': 'none'});
+  var element = this.createSvgElement_('image', {
+    'x': x,
+    'y': y,
+    'width': width,
+    'height': height,
+    'image-rendering': 'optimizeQuality',
+    'preserveAspectRatio': 'none'
+  });
   element.setAttributeNS('http://www.w3.org/1999/xlink', 'href', src);
   var wrapper = new goog.graphics.SvgImageElement(element, this);
   this.append_(wrapper, opt_group);

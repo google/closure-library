@@ -20,7 +20,7 @@
  *
  */
 
-goog.provide('goog.math.Long')
+goog.provide('goog.math.Long');
 
 
 /**
@@ -111,8 +111,8 @@ goog.math.Long.fromNumber = function(value) {
     return goog.math.Long.fromNumber(-value).negate();
   } else {
     return new goog.math.Long(
-               (value % goog.math.Long.TWO_PWR_32_DBL_) | 0,
-               (value / goog.math.Long.TWO_PWR_32_DBL_) | 0);
+        (value % goog.math.Long.TWO_PWR_32_DBL_) | 0,
+        (value / goog.math.Long.TWO_PWR_32_DBL_) | 0);
   }
 };
 
@@ -730,8 +730,8 @@ goog.math.Long.prototype.shiftLeft = function(numBits) {
     if (numBits < 32) {
       var high = this.high_;
       return goog.math.Long.fromBits(
-                 low << numBits,
-                 (high << numBits) | (low >>> (32 - numBits)));
+          low << numBits,
+          (high << numBits) | (low >>> (32 - numBits)));
     } else {
       return goog.math.Long.fromBits(0, low << (numBits - 32));
     }
@@ -753,12 +753,12 @@ goog.math.Long.prototype.shiftRight = function(numBits) {
     if (numBits < 32) {
       var low = this.low_;
       return goog.math.Long.fromBits(
-                 (low >>> numBits) | (high << (32 - numBits)),
-                 high >> numBits);
+          (low >>> numBits) | (high << (32 - numBits)),
+          high >> numBits);
     } else {
       return goog.math.Long.fromBits(
-                 high >> (numBits - 32),
-                 high >= 0 ? 0 : -1);
+          high >> (numBits - 32),
+          high >= 0 ? 0 : -1);
     }
   }
 };
@@ -780,8 +780,8 @@ goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
     if (numBits < 32) {
       var low = this.low_;
       return goog.math.Long.fromBits(
-                 (low >>> numBits) | (high << (32 - numBits)),
-                 high >>> numBits);
+          (low >>> numBits) | (high << (32 - numBits)),
+          high >>> numBits);
     } else if (numBits == 32) {
       return goog.math.Long.fromBits(high, 0);
     } else {

@@ -468,8 +468,8 @@ goog.graphics.VmlGraphics.prototype.createDom = function() {
   var pixelHeight = this.height;
   var divElement = this.dom_.createDom('div', {
     'style': 'overflow:hidden;position:relative;width:' +
-             goog.graphics.VmlGraphics.toCssSize(pixelWidth) + ';height:' +
-             goog.graphics.VmlGraphics.toCssSize(pixelHeight)
+        goog.graphics.VmlGraphics.toCssSize(pixelWidth) + ';height:' +
+        goog.graphics.VmlGraphics.toCssSize(pixelHeight)
   });
 
   this.setElementInternal(divElement);

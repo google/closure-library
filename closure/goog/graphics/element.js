@@ -120,7 +120,7 @@ goog.graphics.Element.prototype.setTransformation = function(x, y, rotate,
  */
 goog.graphics.Element.prototype.getTransform = function() {
   return this.transform_ ? this.transform_.clone() :
-    new goog.graphics.AffineTransform();
+      new goog.graphics.AffineTransform();
 };
 
 

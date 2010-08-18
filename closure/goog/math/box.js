@@ -187,7 +187,7 @@ goog.math.Box.contains = function(box, other) {
 
   if (other instanceof goog.math.Box) {
     return other.left >= box.left && other.right <= box.right &&
-      other.top >= box.top && other.bottom <= box.bottom;
+        other.top >= box.top && other.bottom <= box.bottom;
   }
 
   // other is a Coordinate.

@@ -490,8 +490,8 @@ goog.graphics.CanvasTextElement = function(graphics, text, x1, y1, x2, y2,
    * @type {Element}
    * @private
    */
-  this.element_ = goog.dom.createDom('DIV', {'style':
-    'display:table;position:absolute;padding:0;margin:0;border:0'
+  this.element_ = goog.dom.createDom('DIV', {
+    'style': 'display:table;position:absolute;padding:0;margin:0;border:0'
   });
 
   /**
@@ -499,8 +499,8 @@ goog.graphics.CanvasTextElement = function(graphics, text, x1, y1, x2, y2,
    * @type {Element}
    * @private
    */
-  this.innerElement_ = goog.dom.createDom('DIV', {'style':
-    'display:table-cell;padding: 0;margin: 0;border: 0'
+  this.innerElement_ = goog.dom.createDom('DIV', {
+    'style': 'display:table-cell;padding: 0;margin: 0;border: 0'
   });
 
   this.updateStyle_();

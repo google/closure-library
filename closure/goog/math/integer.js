@@ -22,7 +22,7 @@
  *
  */
 
-goog.provide('goog.math.Integer')
+goog.provide('goog.math.Integer');
 
 
 /**

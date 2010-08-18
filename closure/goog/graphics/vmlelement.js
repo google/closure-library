@@ -41,7 +41,7 @@ goog.require('goog.graphics.TextElement');
  * Returns the VML element corresponding to this object.  This method is added
  * to several classes below.  Note that the return value of this method may
  * change frequently in IE8, so it should not be cached externally.
- * @return {Element} The VML element corresponding to this object
+ * @return {Element} The VML element corresponding to this object.
  * @this {goog.graphics.VmlGroupElement|goog.graphics.VmlEllipseElement|
  *     goog.graphics.VmlRectElement|goog.graphics.VmlPathElement|
  *     goog.graphics.VmlTextElement|goog.graphics.VmlImageElement}

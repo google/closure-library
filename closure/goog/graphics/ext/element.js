@@ -808,7 +808,7 @@ goog.graphics.ext.Element.Position_.prototype.getValue_ = function(v,
   var containerSize;
   if (opt_forMaximum) {
     containerSize = goog.graphics.ext.coordinates.computeValue(
-        this.size_ || 0, 0, scale)
+        this.size_ || 0, 0, scale);
   } else {
     var parent = this.element_.getParent();
     containerSize = this.horizontal_ ? parent.getWidth() : parent.getHeight();

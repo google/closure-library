@@ -158,7 +158,7 @@ goog.module.BaseModuleLoader.prototype.evaluateCode = function(
  * @param {function(?number)} errorFn The callback for error.
  */
 goog.module.BaseModuleLoader.prototype.handleRequestSuccess = function(
-  jsCode, moduleIds, successFn, errorFn) {
+    jsCode, moduleIds, successFn, errorFn) {
   this.logger.info('Code loaded for module(s): ' + moduleIds);
 
   var success = this.evaluateCode(moduleIds, jsCode);
