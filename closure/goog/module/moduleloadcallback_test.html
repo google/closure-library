@@ -17,6 +17,7 @@ Author: nicksantos@google.com (Nick Santos)
 <script>
 
 goog.require('goog.debug.ErrorHandler');
+goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.functions');
 goog.require('goog.module.ModuleLoadCallback');
 goog.require('goog.testing.jsunit');
@@ -35,7 +36,7 @@ function testProtectEntryPoint() {
 
   var errorFn = goog.testing.recordFunction();
   var errorHandler = new goog.debug.ErrorHandler(errorFn);
-  goog.module.ModuleLoadCallback.protectModuleLoadSequence(errorHandler);
+  goog.debug.entryPointRegistry.monitorAll(errorHandler);
 
   assertEquals(0, errorFn.getCallCount());
   assertThrows(goog.bind(callback1.execute, callback1));
