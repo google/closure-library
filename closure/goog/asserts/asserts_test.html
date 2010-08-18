@@ -112,6 +112,19 @@ function testArray() {
                 'Assertion failed: ouch 1');
 }
 
+function testBoolean() {
+  assertEquals(true, goog.asserts.assertBoolean(true));
+  assertEquals(false, goog.asserts.assertBoolean(false));
+  assertThrows(goog.partial(goog.asserts.assertBoolean, null));
+  assertThrows(goog.partial(goog.asserts.assertBoolean, 'foo'));
+
+  // Test error messages.
+  doTestMessage(goog.partial(goog.asserts.assertBoolean, null),
+                'Assertion failed: Expected boolean but got null.');
+  doTestMessage(goog.partial(goog.asserts.assertBoolean, null, 'ouch %s', 1),
+                'Assertion failed: ouch 1');
+}
+
 function testInstanceof() {
   /** @constructor */
   var F = function() {};
