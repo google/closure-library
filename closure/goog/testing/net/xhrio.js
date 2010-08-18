@@ -168,6 +168,14 @@ goog.testing.net.XhrIo.prototype.lastError_ = '';
 
 
 /**
+ * The response object.
+ * @type {string|Document}
+ * @private
+ */
+goog.testing.net.XhrIo.prototype.response_ = '';
+
+
+/**
  * Mock ready state.
  * @type {number}
  * @private
@@ -300,13 +308,13 @@ goog.testing.net.XhrIo.prototype.simulateReadyStateChange =
 /**
  * Simulates receiving a response.
  * @param {number} statusCode Simulated status code.
- * @param {string|Document} response Simulated response.
+ * @param {string|Document|null} response Simulated response.
  * @param {Object=} opt_headers Simulated response headers.
  */
 goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
     response, opt_headers) {
   this.statusCode_ = statusCode;
-  this.response_ = response;
+  this.response_ = response || '';
   this.responseHeaders_ = opt_headers || {};
   this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
 
