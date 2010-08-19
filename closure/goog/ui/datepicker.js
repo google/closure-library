@@ -1056,7 +1056,12 @@ goog.ui.DatePicker.prototype.createButton_ = function(parentNode, label,
   el.className = classes.join(' ');
   el.appendChild(dom.createTextNode(label));
   parentNode.appendChild(el);
-  this.getHandler().listen(el, goog.events.EventType.CLICK, method);
+  this.getHandler().listen(el, goog.events.EventType.CLICK, function(e) {
+    // Since this is a button, the default action is to submit a form if the
+    // node is added inside a form.  Prevent this.
+    e.preventDefault();
+    method.call(this);
+  });
 
   return el;
 };
@@ -1208,8 +1213,8 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
     // weeks are always shown as no month has less than 28 days).
     if (y >= 4) {
       goog.style.showElement(this.elTable_[y + 1][0].parentNode,
-                            this.grid_[y][0].getMonth() == month ||
-                                this.showFixedNumWeeks_);
+                             this.grid_[y][0].getMonth() == month ||
+                                 this.showFixedNumWeeks_);
     }
   }
 };
