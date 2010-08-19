@@ -17,6 +17,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.testing.ContinuationTestCase');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase.Test');
 goog.require('goog.testing.jsunit');
 </script>
@@ -42,6 +43,7 @@ if (typeof G_testRunner != 'undefined') {
 
 var clock = new goog.testing.MockClock();
 var count = 0;
+var stubs = new goog.testing.PropertyReplacer();
 
 
 function setUpPage() {
@@ -69,7 +71,7 @@ function setUp() {
  */
 function tearDown() {
   clock.uninstall();
-  reassignStepTimeouts();
+  stubs.reset();
 
   waitForTimeout(function() {
     // Pointless assertion to verify that tearDown methods can contain waits.
@@ -84,23 +86,16 @@ function tearDown() {
  */
 function installMockClock() {
   clock.install();
-  reassignStepTimeouts();
+
+  // Overwrite the "protected" setTimeout and clearTimeout with the versions
+  // replaced by MockClock. Normal tests should never do this, but we need to
+  // test the ContinuationTest itself.
+  stubs.set(goog.testing.ContinuationTestCase.Step, 'protectedClearTimeout_',
+            window.clearTimeout);
+  stubs.set(goog.testing.ContinuationTestCase.Step, 'protectedSetTimeout_',
+            window.setTimeout);
 }
 
-
-/**
- * Overwrites the normally protected setTimeout and clearTimeout methods with
- * the current window.setTimeout and window.clearTimeout. This is used both to
- * replace the methods with MockClock versions, and to restore the regular
- * versions after the MockClock is uninstalled.
- */
-function reassignStepTimeouts() {
-  // Not that well protected, were they.
-  goog.testing.ContinuationTestCase.Step.protectedClearTimeout_ =
-      window.clearTimeout;
-  goog.testing.ContinuationTestCase.Step.protectedSetTimeout_ =
-      window.setTimeout;
-}
 
 /**
  * @return {goog.testing.ContinuationTestCase.Step} A generic step in a
