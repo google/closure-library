@@ -59,7 +59,7 @@ function setUp() {
   testHelper = new goog.testing.editor.TestHelper(fieldDiv);
   testHelper.setUpEditableElement();
 
-  bubble = new goog.ui.editor.Bubble(document.body, window, 999);
+  bubble = new goog.ui.editor.Bubble(document.body, 999);
 
   fieldDiv.innerHTML = '<a href="http://www.google.com">Google</a>' +
       '<a href="http://www.google.com">Google2</a>';
