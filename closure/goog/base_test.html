@@ -85,6 +85,8 @@ function testProvide() {
   // ensure that providing 'goog.test.name' doesn't throw an exception
   goog.provide('goog.test');
   goog.provide('goog.test.name');
+
+  delete goog.test;
 }
 
 function testProvideStrictness() {
@@ -93,6 +95,9 @@ function testProvideStrictness() {
 
   window['goog']['xyz'] = 'Bob';
   assertProvideFails('goog.xyz');
+
+  delete goog.xy;
+  delete goog.xyz;
 }
 
 function assertProvideFails(namespace) {
@@ -124,15 +129,18 @@ function testExportSymbol() {
   assertTrue(typeof nodots == 'undefined');
   goog.exportSymbol('nodots', date);
   assertEquals(date, nodots);
+  nodots = undefined;
 
   assertTrue(typeof gotcher == 'undefined');
   goog.exportSymbol('gotcher.dots.right.Here', date);
   assertEquals(date, gotcher.dots.right.Here);
+  gotcher = undefined;
 
   goog.provide('an.existing.path');
   assertNotNull(an.existing.path);
   goog.exportSymbol('an.existing.path', date);
   assertEquals(date, an.existing.path);
+  an = undefined;
 
   var foo = {foo: 'foo'};
   var bar = {bar: 'bar'};
@@ -150,6 +158,7 @@ function testExportSymbol() {
   assertEquals(fooBar, win.one.two.four);
   assertTrue('four' in win.one.two);
   assertFalse('four' in one.two);
+  one = undefined;
 }
 
 goog.exportSymbol('exceptionTest', function() {
@@ -889,8 +898,8 @@ function testPropertyIsEnumerable_() {
   assertTrue('Properties on the instance should be enumerable',
              goog.propertyIsEnumerable_(a, 'y'))
 
-  // TODO(user): This test failed on the farm in FF3 Linux and I no one was
-  // able to reproduce locally. Error:
+  // TODO(user): This test failed on the farm in FF3 Linux and no one was able to
+  // reproduce locally. Error:
   // Permission denied to get property Window.document
   // For now get the Closure build green by skipping for FF3, and look into
   // what is causing this to be a problem for the tests running on the farm.
@@ -906,7 +915,7 @@ function testPropertyIsEnumerable_() {
     // TODO(user): Find a way to test this behavior even when pop ups are
     // blocked, i.e., when childWindow doesn't exist. Using an iframe doesn't
     // seem to have the same problem.
-    if (childWindow) {
+    if (childWindow && childWindow.document) {
       var doc = childWindow.document;
       doc.open();
       doc.write('<script>' +
@@ -987,7 +996,10 @@ function testAddDependency() {
   // this used to throw an exception
   goog.require('testDep.foo');
 
-  assert(goog.isObject(testDep.bar));
+  assertTrue(goog.isObject(testDep.bar));
+
+  // Unset provided namespace so the test can be re-run.
+  testDep = undefined;
 }
 
 function testBaseMethod() {
