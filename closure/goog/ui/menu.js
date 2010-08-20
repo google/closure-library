@@ -405,4 +405,4 @@ goog.ui.Menu.prototype.decorateContent = function(element) {
   for (var el, i = 0; el = contentElements[i]; i++) {
     renderer.decorateChildren(this, el);
   }
-}
+};

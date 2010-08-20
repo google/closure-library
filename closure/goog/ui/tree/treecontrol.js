@@ -74,7 +74,7 @@ goog.ui.tree.TreeControl = function(html, opt_config, opt_domHelper) {
     /** @preserveTry */
     try {
       // works since IE6SP1
-      document.execCommand('BackgroundImageCache', false, true)
+      document.execCommand('BackgroundImageCache', false, true);
     } catch (e) {
       this.logger_.warning('Failed to enable background image cache');
     }

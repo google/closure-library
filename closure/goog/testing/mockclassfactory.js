@@ -518,7 +518,7 @@ goog.testing.MockClassFactory.prototype.getStaticMock_ = function(namespace,
           isStrict);
       return mock;
     } else {
-      var mock = this.mockClassRecords_[className].getStaticMock()
+      var mock = this.mockClassRecords_[className].getStaticMock();
       var mockIsStrict = mock instanceof goog.testing.StrictMock;
 
       if (mockIsStrict != isStrict) {

@@ -536,7 +536,7 @@ goog.ui.FilteredMenu.prototype.getFilterInputElement = function() {
 /** @inheritDoc */
 goog.ui.FilteredMenu.prototype.decorateInternal = function(element) {
   this.setElementInternal(element);
-  
+
   // Decorate the menu content.
   this.decorateContent(element);
 

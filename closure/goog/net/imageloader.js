@@ -190,7 +190,7 @@ goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
   // Add natural width/height properties for non-Gecko browsers.
   if (typeof image.naturalWidth == 'undefined') {
     if (evt.type == goog.events.EventType.LOAD) {
-      image.naturalWidth = image.width
+      image.naturalWidth = image.width;
       image.naturalHeight = image.height;
     } else {
       // This implies that the image fails to be loaded.

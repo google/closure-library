@@ -410,7 +410,7 @@ goog.testing.AsyncTestCase.prototype.runTests = function() {
  */
 goog.testing.AsyncTestCase.prototype.cycleTests = function() {
   // We are an entry point, so we pump.
-  this.saveMessage('Start')
+  this.saveMessage('Start');
   this.setNextStep_(this.doIteration_, 'doIteration');
   this.pump_();
 };

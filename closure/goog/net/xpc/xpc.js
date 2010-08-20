@@ -49,11 +49,11 @@ goog.require('goog.debug.Logger');
  * @enum {number}
  */
 goog.net.xpc.TransportTypes = {
-  NATIVE_MESSAGING : 1,
-  FRAME_ELEMENT_METHOD : 2,
-  IFRAME_RELAY : 3,
-  IFRAME_POLLING : 4,
-  FLASH : 5,
+  NATIVE_MESSAGING: 1,
+  FRAME_ELEMENT_METHOD: 2,
+  IFRAME_RELAY: 3,
+  IFRAME_POLLING: 4,
+  FLASH: 5,
   NIX: 6
 };
 
@@ -86,51 +86,51 @@ goog.net.xpc.CfgFields = {
    * the same channel name.  If not present, a channel name is
    * generated (which then has to transferred to the peer somehow).
    */
-  CHANNEL_NAME : 'cn',
+  CHANNEL_NAME: 'cn',
   /**
    * Authorization token. If set, NIX will use this authorization token
    * to validate the setup.
    */
-  AUTH_TOKEN : 'at',
+  AUTH_TOKEN: 'at',
   /**
    * Remote party's authorization token. If set, NIX will validate this
    * authorization token against that sent by the other party.
    */
-  REMOTE_AUTH_TOKEN : 'rat',
+  REMOTE_AUTH_TOKEN: 'rat',
   /**
    * The URI of the peer page.
    */
-  PEER_URI : 'pu',
+  PEER_URI: 'pu',
   /**
    * Ifame-ID identifier.
    * The id of the iframe element the peer-document lives in.
    */
-  IFRAME_ID : 'ifrid',
+  IFRAME_ID: 'ifrid',
   /**
    * Transport type identifier.
    * The transport type to use. Possible values are entries from
    * goog.net.xpc.TransportTypes. If not present, the transport is
    * determined automatically based on the useragent's capabilities.
    */
-  TRANSPORT : 'tp',
+  TRANSPORT: 'tp',
   /**
    * Local relay URI identifier (IframeRelayTransport-specific).
    * The URI (can't contain a fragment identifier) used by the peer to
    * relay data through.
    */
-  LOCAL_RELAY_URI : 'lru',
+  LOCAL_RELAY_URI: 'lru',
   /**
    * Peer relay URI identifier (IframeRelayTransport-specific).
    * The URI (can't contain a fragment identifier) used to relay data
    * to the peer.
    */
-  PEER_RELAY_URI : 'pru',
+  PEER_RELAY_URI: 'pru',
   /**
    * Local poll URI identifier (IframePollingTransport-specific).
    * The URI  (can't contain a fragment identifier)which is polled
    * to receive data from the peer.
    */
-  LOCAL_POLL_URI : 'lpu',
+  LOCAL_POLL_URI: 'lpu',
   /**
    * Local poll URI identifier (IframePollingTransport-specific).
    * The URI (can't contain a fragment identifier) used to send data
@@ -150,9 +150,9 @@ goog.net.xpc.CfgFields = {
  * @enum {number}
  */
 goog.net.xpc.ChannelStates = {
-  NOT_CONNECTED : 1,
-  CONNECTED : 2,
-  CLOSED : 3
+  NOT_CONNECTED: 1,
+  CONNECTED: 2,
+  CLOSED: 3
 };
 
 

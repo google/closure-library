@@ -205,9 +205,9 @@ goog.ui.Zippy.prototype.isExpanded = function() {
 goog.ui.Zippy.prototype.updateHeaderClassName_ = function(expanded) {
   if (this.elHeader_) {
     goog.dom.classes.enable(this.elHeader_,
-        goog.getCssName('goog-zippy-expanded'), expanded)
+        goog.getCssName('goog-zippy-expanded'), expanded);
     goog.dom.classes.enable(this.elHeader_,
-        goog.getCssName('goog-zippy-collapsed'), !expanded)
+        goog.getCssName('goog-zippy-collapsed'), !expanded);
   }
 };
 

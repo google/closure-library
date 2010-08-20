@@ -498,7 +498,7 @@ goog.ui.KeyboardShortcutHandler.prototype.setGlobalKeys = function(keys) {
  *     regard as shortcuts, even if entered in a textarea or input field.
  */
 goog.ui.KeyboardShortcutHandler.prototype.getGlobalKeys = function() {
-  return goog.object.getKeys(this.globalKeys_)
+  return goog.object.getKeys(this.globalKeys_);
 };
 
 

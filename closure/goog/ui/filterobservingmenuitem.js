@@ -60,7 +60,7 @@ goog.ui.FilterObservingMenuItem.prototype.observer_ = null;
 
 /** @inheritDoc */
 goog.ui.FilterObservingMenuItem.prototype.enterDocument = function() {
-  goog.ui.FilterObservingMenuItem.superClass_.enterDocument.call(this)
+  goog.ui.FilterObservingMenuItem.superClass_.enterDocument.call(this);
   this.callObserver();
 };
 

@@ -75,7 +75,7 @@ goog.testing.events.EventObserver.prototype.handleEvent = function(e) {
 goog.testing.events.EventObserver.prototype.getEvents = function(opt_type) {
   var events = goog.array.clone(this.events_);
 
-  if (opt_type){
+  if (opt_type) {
     events = goog.array.filter(events, function(event) {
       return event.type == opt_type;
     });

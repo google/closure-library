@@ -248,7 +248,7 @@ goog.structs.QuadTree.prototype.traverse_ = function(node, fn) {
       this.traverse_(node.se, fn);
       this.traverse_(node.sw, fn);
       this.traverse_(node.nw, fn);
-      break
+      break;
   }
 };
 

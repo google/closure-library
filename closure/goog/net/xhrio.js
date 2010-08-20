@@ -513,7 +513,7 @@ goog.net.XhrIo.prototype.error_ = function(errorCode, err) {
   this.lastError_ = err;
   this.lastErrorCode_ = errorCode;
   this.dispatchErrors_();
-  this.cleanUpXhr_()
+  this.cleanUpXhr_();
 };
 
 

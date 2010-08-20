@@ -171,7 +171,7 @@ goog.ui.CharCounter.prototype.checkLength_ = function() {
   // field if the maximum length is changed.
   if (count > this.maxLength_) {
 
-    var scrollTop = this.elInput_.scrollTop
+    var scrollTop = this.elInput_.scrollTop;
     var scrollLeft = this.elInput_.scrollLeft;
 
     this.elInput_.value = this.elInput_.value.substring(0, this.maxLength_);

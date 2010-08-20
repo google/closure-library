@@ -329,7 +329,7 @@ goog.net.NetworkTester.prototype.onResult = function(succeeded) {
   this.cleanupCallbacks_();
 
   if (succeeded) {
-    this.running_ = false
+    this.running_ = false;
     this.callback_.call(this.handler_, true);
   } else {
     if (this.attempt_ <= this.retries_) {
@@ -340,7 +340,7 @@ goog.net.NetworkTester.prototype.onResult = function(succeeded) {
         this.startNextAttempt_();
       }
     } else {
-      this.running_ = false
+      this.running_ = false;
       this.callback_.call(this.handler_, false);
     }
   }

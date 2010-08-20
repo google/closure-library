@@ -82,7 +82,7 @@ goog.ds.Expr.prototype.setSource_ = function(expr, opt_parts,
     if (goog.string.endsWith(expr, '()')) {
       if (goog.string.endsWith(expr, goog.ds.Expr.String_.NAME_EXPR) ||
           goog.string.endsWith(expr, goog.ds.Expr.String_.COUNT_EXPR) ||
-          goog.string.endsWith(expr, goog.ds.Expr.String_.POSITION_EXPR)){
+          goog.string.endsWith(expr, goog.ds.Expr.String_.POSITION_EXPR)) {
         var lastPos = expr.lastIndexOf(goog.ds.Expr.String_.SEPARATOR);
         if (lastPos != -1) {
           this.exprFn_ = expr.substring(lastPos + 1);

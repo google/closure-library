@@ -560,7 +560,7 @@ goog.ui.CharPicker.prototype.handleOkClick_ = function(opt_event) {
 goog.ui.CharPicker.prototype.handleEnter_ = function(e) {
   if (e.keyCode == goog.events.KeyCodes.ENTER) {
     return this.handleOkClick_() ?
-        this.dispatchEvent(goog.ui.Component.EventType.ACTION): false;
+        this.dispatchEvent(goog.ui.Component.EventType.ACTION) : false;
   }
 };
 
@@ -697,7 +697,7 @@ goog.ui.CharPicker.prototype.modifyGridWithItems_ = function(grid, items,
     this.modifyCharNode_(grid.getChildAt(buttonpos), items[itempos]);
   }
 
-  for (;buttonpos < grid.buttoncount; buttonpos++) {
+  for (; buttonpos < grid.buttoncount; buttonpos++) {
     grid.getChildAt(buttonpos).setVisible(false);
   }
   var first = grid.getChildAt(0);

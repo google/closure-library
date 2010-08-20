@@ -527,7 +527,7 @@ goog.net.BrowserChannel.TimingEvent = function(target, size, rtt, retries) {
   /**
    * @type {number}
    */
-  this.rtt = rtt
+  this.rtt = rtt;
 
   /**
    * @type {number}
@@ -1612,7 +1612,7 @@ goog.net.BrowserChannel.prototype.handleBackchannelMissing_ = function() {
   // As long as the back channel was started before the POST was sent,
   // we should retry the backchannel. We give a slight buffer of RTT_ESTIMATE
   // so as not to excessively retry the backchannel
-  this.channelDebug_.debug('Server claims our backchannel is missing.')
+  this.channelDebug_.debug('Server claims our backchannel is missing.');
   if (this.backChannelTimerId_) {
     this.channelDebug_.debug('But we are currently starting the request.');
     return;
@@ -1676,7 +1676,7 @@ goog.net.BrowserChannel.prototype.onBackChannelDead_ = function() {
  */
 goog.net.BrowserChannel.prototype.clearDeadBackchannelTimer_ = function() {
   if (goog.isDefAndNotNull(this.deadBackChannelTimerId_)) {
-    goog.global.clearTimeout(this.deadBackChannelTimerId_)
+    goog.global.clearTimeout(this.deadBackChannelTimerId_);
     this.deadBackChannelTimerId_ = null;
   }
 };
@@ -2189,7 +2189,7 @@ goog.net.BrowserChannel.LogSaver.formatter_ = new goog.debug.TextFormatter();
  * @return {boolean} Whether saving is enabled or disabled.
  */
 goog.net.BrowserChannel.LogSaver.isEnabled = function() {
-  return goog.net.BrowserChannel.LogSaver.enabled_
+  return goog.net.BrowserChannel.LogSaver.enabled_;
 };
 
 

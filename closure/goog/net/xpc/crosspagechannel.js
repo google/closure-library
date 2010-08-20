@@ -237,7 +237,7 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
     peerCfg[goog.net.xpc.CfgFields.PEER_RELAY_URI] =
         this.cfg_[goog.net.xpc.CfgFields.LOCAL_RELAY_URI];
   }
-  if (this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI]){
+  if (this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI]) {
     peerCfg[goog.net.xpc.CfgFields.PEER_POLL_URI] =
         this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI];
   }

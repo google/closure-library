@@ -28,7 +28,7 @@ goog.provide('goog.i18n.CharPickerData');
  * Object holding two level character organization and character listing.
  * @constructor
  */
-goog.i18n.CharPickerData = function(){};
+goog.i18n.CharPickerData = function() {};
 
 
 /**

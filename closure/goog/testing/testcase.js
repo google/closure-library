@@ -414,7 +414,7 @@ goog.testing.TestCase.prototype.isInsideMultiTestRunner = function() {
 
 /**
  * Logs an object to the console, if available.
- * @param {*} val The value to log. Will be ToString'd
+ * @param {*} val The value to log. Will be ToString'd.
  */
 goog.testing.TestCase.prototype.log = function(val) {
   if (!this.isInsideMultiTestRunner() && window.console) {
@@ -675,7 +675,7 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
  * time has execeeded {@link #MAX_RUN_TIME}.
  */
 goog.testing.TestCase.prototype.cycleTests = function() {
-  this.saveMessage('Start')
+  this.saveMessage('Start');
   this.batchTime_ = this.now_();
   var nextTest;
   while ((nextTest = this.next()) && this.running) {

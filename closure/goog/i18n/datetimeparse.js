@@ -880,7 +880,7 @@ goog.i18n.DateTimeParse.prototype.matchString_ = function(text, pos, data) {
  * @constructor
  * @private
  */
-goog.i18n.DateTimeParse.MyDate_ = function(){};
+goog.i18n.DateTimeParse.MyDate_ = function() {};
 
 /**
  * The date's era.

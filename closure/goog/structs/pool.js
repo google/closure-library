@@ -206,7 +206,7 @@ goog.structs.Pool.prototype.removeFreeObject_ = function() {
  * @param {Object} obj The object to add to collection of free objects.
  */
 goog.structs.Pool.prototype.addFreeObject = function(obj) {
-  this.inUseSet_.remove(obj)
+  this.inUseSet_.remove(obj);
   if (this.objectCanBeReused(obj) && this.getCount() < this.maxCount_) {
     this.freeQueue_.enqueue(obj);
   } else {

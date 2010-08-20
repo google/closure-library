@@ -1102,7 +1102,7 @@ goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
  */
 goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
   var keys = goog.structs.getKeys(map);
-  if (typeof keys == 'undefined'){
+  if (typeof keys == 'undefined') {
     throw Error('Keys are undefined');
   }
   return goog.Uri.QueryData.createFromKeysValues(

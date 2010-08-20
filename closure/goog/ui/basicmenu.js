@@ -149,10 +149,10 @@ goog.ui.BasicMenu.prototype.setZIndex = function(zIndex) {
 goog.ui.BasicMenu.prototype.add = function(item) {
   var el = this.getElement();
   if (!el) {
-    throw Error('setElement() called before create()')
+    throw Error('setElement() called before create()');
   }
   if (item.getMenu()) {
-    throw Error('Menu item already added to a menu')
+    throw Error('Menu item already added to a menu');
   }
 
   item.setMenu_(this);
@@ -169,10 +169,10 @@ goog.ui.BasicMenu.prototype.add = function(item) {
 goog.ui.BasicMenu.prototype.insertAt = function(item, index) {
   var el = this.getElement();
   if (!el) {
-    throw Error('setElement() called before create()')
+    throw Error('setElement() called before create()');
   }
   if (item.getMenu()) {
-    throw Error('Menu item already added to a menu')
+    throw Error('Menu item already added to a menu');
   }
 
   item.setMenu_(this);
@@ -602,7 +602,7 @@ goog.ui.BasicMenu.prototype.onMouseUp = function(e) {
  * @private
  */
 goog.ui.BasicMenu.prototype.onResize_ = function() {
-  if (!this.isDisposed() && this.isVisible()){
+  if (!this.isDisposed() && this.isVisible()) {
     this.reposition();
   }
 };

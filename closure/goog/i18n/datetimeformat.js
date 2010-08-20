@@ -146,9 +146,9 @@ goog.i18n.DateTimeFormat.TOKENS_ = [
  * @private
  */
 goog.i18n.DateTimeFormat.PartTypes_ = {
-  QUOTED_STRING : 0,
-  FIELD : 1,
-  LITERAL : 2
+  QUOTED_STRING: 0,
+  FIELD: 1,
+  LITERAL: 2
 };
 
 
@@ -246,7 +246,7 @@ goog.i18n.DateTimeFormat.prototype.applyStandardPattern_ =
     pattern = goog.i18n.DateTimeSymbols.DATEFORMATS[formatType];
   } else if (formatType < 8) {
     pattern = goog.i18n.DateTimeSymbols.TIMEFORMATS[formatType - 4];
-  } else if (formatType < 12){
+  } else if (formatType < 12) {
     pattern = goog.i18n.DateTimeSymbols.DATEFORMATS[formatType - 8] +
               ' ' + goog.i18n.DateTimeSymbols.TIMEFORMATS[formatType - 8];
   } else {

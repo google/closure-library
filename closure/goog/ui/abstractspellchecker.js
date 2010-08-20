@@ -1038,10 +1038,10 @@ goog.ui.AbstractSpellChecker.AsyncResult = {
    * Caller must reschedule operation and call continueAsyncProcessing on the
    * new stack frame.
    */
-  PENDING : 1,
+  PENDING: 1,
   /**
    * Current element has been fully processed. Caller can call
    * processTextAsync or finishAsyncProcessing.
    */
-  DONE : 2
+  DONE: 2
 };

@@ -142,13 +142,13 @@ goog.ui.SplitBehavior.DefaultHandlers = {
     var value = (/** @type {string} */((item && item.getValue()) || ''));
     var button = (/** @type {goog.ui.Button} */targetControl);
     button.setCaption && button.setCaption(value);
-    button.setValue && button.setValue(value)
+    button.setValue && button.setValue(value);
   },
   VALUE: function(targetControl, e) {
     var item = (/** @type {goog.ui.MenuItem} */e.target);
     var value = (/** @type {string} */(item && item.getValue()) || '');
     var button = (/** @type {goog.ui.Button} */targetControl);
-    button.setValue && button.setValue(value)
+    button.setValue && button.setValue(value);
   }
 };
 

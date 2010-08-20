@@ -28,7 +28,7 @@
 goog.provide('goog.ui.IdleTimer');
 goog.require('goog.Timer');
 goog.require('goog.events');
-goog.require('goog.events.EventTarget')
+goog.require('goog.events.EventTarget');
 goog.require('goog.structs.Set');
 goog.require('goog.ui.ActivityMonitor');
 

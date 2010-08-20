@@ -233,7 +233,7 @@ goog.ui.media.PicasaAlbumModel = function(userId,
   };
 
   var player = new goog.ui.media.MediaModel.Player(
-      'http://picasaweb.google.com/s/c/bin/slideshow.swf', flashVars)
+      'http://picasaweb.google.com/s/c/bin/slideshow.swf', flashVars);
 
   this.setPlayer(player);
 };

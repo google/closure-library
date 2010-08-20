@@ -872,7 +872,7 @@ goog.ui.AutoComplete.InputHandler.prototype.addKeyEvents_ = function() {
   // IE also needs a keypress to check if the user typed a separator
   if (goog.userAgent.IE) {
     this.eh_.listen(this.activeElement_,
-        goog.events.EventType.KEYPRESS, this.onIeKeyPress_)
+        goog.events.EventType.KEYPRESS, this.onIeKeyPress_);
   }
 };
 
@@ -890,7 +890,7 @@ goog.ui.AutoComplete.InputHandler.prototype.removeKeyEvents_ = function() {
 
   if (goog.userAgent.IE) {
     this.eh_.unlisten(this.activeElement_,
-        goog.events.EventType.KEYPRESS, this.onIeKeyPress_)
+        goog.events.EventType.KEYPRESS, this.onIeKeyPress_);
   }
 
   if (this.waitingForIme_) {
@@ -1087,7 +1087,7 @@ goog.ui.AutoComplete.InputHandler.prototype.update = function(opt_force) {
  * @protected
  */
 goog.ui.AutoComplete.InputHandler.prototype.parseToken = function() {
-  return this.parseToken_()
+  return this.parseToken_();
 };
 
 

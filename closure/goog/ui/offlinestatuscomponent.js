@@ -461,7 +461,7 @@ goog.ui.OfflineStatusComponent.prototype.performEnableAction = function() {
   if (dialog) {
     if (!dialog.isInDocument()) {
       this.addChild(dialog);
-      dialog.render(this.getDomHelper().getDocument().body)
+      dialog.render(this.getDomHelper().getDocument().body);
     }
     dialog.setVisible(true);
   }

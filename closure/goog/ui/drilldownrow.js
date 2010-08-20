@@ -153,7 +153,7 @@ goog.ui.DrilldownRow.sampleProperties = {
     });
     handler.listen(row, 'mouseout', function() {
       goog.dom.classes.remove(row, goog.getCssName('goog-drilldown-hover'));
-    })
+    });
   }
 };
 

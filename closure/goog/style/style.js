@@ -588,7 +588,7 @@ goog.style.getPageOffset = function(el) {
         break;
       }
       parent = parent.offsetParent;
-    } while (parent && parent != el)
+    } while (parent && parent != el);
 
     // Opera & (safari absolute) incorrectly account for body offsetTop.
     if (goog.userAgent.OPERA || (goog.userAgent.WEBKIT &&
