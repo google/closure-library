@@ -365,13 +365,10 @@ goog.testing.mockmatchers.flexibleArrayMatcher =
     var isamatch = a === b ||
         a instanceof goog.testing.mockmatchers.ArgumentMatcher &&
         a.matches(b, opt_expectation);
+    var failureMessage = null;
     if (!isamatch) {
-      try {
-        assertObjectEquals(a, b);
-        isamatch = true;
-      } catch (ex) {
-        isamatch = false;
-      }
+      failureMessage = goog.testing.asserts.findDifferences(a, b);
+      isamatch = !failureMessage;
     }
     if (!isamatch && opt_expectation) {
       // If the error count changed, the match sent out an error
@@ -380,17 +377,12 @@ goog.testing.mockmatchers.flexibleArrayMatcher =
       if (errCount == opt_expectation.getErrorMessageCount()) {
         // Use the _displayStringForValue() from assert.js
         // for consistency...
-        //
-        // TODO(user): Would be nice to expand this if
-        // we have an object or array miscompare so that
-        // the object properties (array values) were shown.
-        // This is done in assert.js, but would need to refactor
-        // assert.js to make the code that does it visible to this
-        // routine.
-        opt_expectation.addErrorMessage('Expected: ' +
-            _displayStringForValue(a) + ' but was: ' +
-            _displayStringForValue(b));
+        if (!failureMessage) {
+          failureMessage = 'Expected: ' + _displayStringForValue(a) +
+              ' but was: ' + _displayStringForValue(b);
         }
+        opt_expectation.addErrorMessage(failureMessage);
+      }
     }
     return isamatch;
   });

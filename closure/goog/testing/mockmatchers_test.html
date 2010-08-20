@@ -341,7 +341,9 @@ See the COPYING file for details.
     // And test we report errors back up via the opt_expectation
     assertFalse(matchers.flexibleArrayMatcher(a2, a3, mockExpect));
     assertEquals(1, mockExpect.errorMessages.length);
-    assertEquals("Expected: <anything> (String) but was: <12345> (Number)",
+    assertEquals(
+        'Expected <anything> (String) but was <12345> (Number)\n' +
+        '    expected <anything> (String) but was <12345> (Number)',
         mockExpect.errorMessages[0]);
 
     // And test we report errors found via the matcher
@@ -352,7 +354,9 @@ See the COPYING file for details.
     assertFalse(matchers.flexibleArrayMatcher(a1, a3, mockExpect));
     // Old error is still there
     assertEquals(2, mockExpect.errorMessages.length);
-    assertEquals("Expected: <anything> (String) but was: <12345> (Number)",
+    assertEquals(
+        'Expected <anything> (String) but was <12345> (Number)\n' +
+        '    expected <anything> (String) but was <12345> (Number)',
         mockExpect.errorMessages[0]);
     // plus the new error...
     assertEquals("Expected: isString but was: <null>",

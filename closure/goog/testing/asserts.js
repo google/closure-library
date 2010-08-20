@@ -55,6 +55,10 @@ function _trueTypeOf(something) {
       case 'number':
         break;
       case 'object':
+        if (something == null) {
+          result = 'null';
+          break;
+        }
       case 'function':
         switch (something.constructor) {
           case new String('').constructor:
@@ -351,32 +355,14 @@ function assertNotNaN(a, opt_b) {
 }
 
 /**
- * Notes:
- * Object equality has some nasty browser quirks, and this implementation is
- * not 100% correct. For example,
- *
- * <code>
- * var a = [0, 1, 2];
- * var b = [0, 1, 2];
- * delete a[1];
- * b[1] = undefined;
- * assertObjectEquals(a, b); // should fail, but currently passes
- * </code>
- *
- * See asserts_test.html for more interesting edge cases.
- *
- * @param {*} a
- * @param {*} b
- * @param {*=} opt_c
+ * Determines if two items of any type match, and formulates an error message
+ * if not.
+ * @param {*} expected Expected argument to match.
+ * @param {*} actual Argument as a result of performing the test.
+ * @return {?string} Null on success, error message on failure.
  */
-function assertObjectEquals(a, b, opt_c) {
-  _validateArguments(2, arguments);
-  var v1 = nonCommentArg(1, 2, arguments);
-  var v2 = nonCommentArg(2, 2, arguments);
-  var failureMessage = commentArg(2, arguments) ? commentArg(2, arguments) : '';
-  // start with an empty string here so the join in the final assertion
-  // puts the first failure on a new line in the output
-  var failures = [''];
+goog.testing.asserts.findDifferences = function(expected, actual) {
+  var failures = [];
 
   function innerAssert(var1, var2, path) {
     if (var1 === var2) {
@@ -394,7 +380,10 @@ function assertObjectEquals(a, b, opt_c) {
           failures.push(path + ' expected ' + _displayStringForValue(var1) +
                         ' but was ' + _displayStringForValue(var2));
         }
-      } else if (!isArray || var1.length === var2.length) {
+      } else if (isArray && var1.length != var2.length) {
+        failures.push(path + ' expected ' + var1.length + '-element array ' +
+                      'but got a ' + var2.length + '-element array');
+      } else {
         var childPath = path + (isArray ? '[%s]' : (path ? '.%s' : '%s'));
 
         // if an object has an __iterator__ property, we have no way of
@@ -445,9 +434,6 @@ function assertObjectEquals(a, b, opt_c) {
                           'know how to handle. please add an equals method');
           }
         }
-      } else {
-        failures.push(path + ' expected ' + var1.length + '-element array ' +
-                      'but got a ' + var2.length + '-element array');
       }
     } else {
       failures.push(path + ' expected ' + _displayStringForValue(var1) +
@@ -455,11 +441,39 @@ function assertObjectEquals(a, b, opt_c) {
     }
   }
 
-  innerAssert(v1, v2, '');
-  _assert(failureMessage, failures.length == 1,
-          'Expected ' + _displayStringForValue(v1) + ' but was ' +
-          _displayStringForValue(v2) +
-          failures.join('\n   '));
+  innerAssert(expected, actual, '');
+  return failures.length == 0 ? null :
+      'Expected ' + _displayStringForValue(expected) + ' but was ' +
+      _displayStringForValue(actual) + '\n   ' + failures.join('\n   ');
+};
+
+/**
+ * Notes:
+ * Object equality has some nasty browser quirks, and this implementation is
+ * not 100% correct. For example,
+ *
+ * <code>
+ * var a = [0, 1, 2];
+ * var b = [0, 1, 2];
+ * delete a[1];
+ * b[1] = undefined;
+ * assertObjectEquals(a, b); // should fail, but currently passes
+ * </code>
+ *
+ * See asserts_test.html for more interesting edge cases.
+ *
+ * @param {*} a
+ * @param {*} b
+ * @param {*=} opt_c
+ */
+function assertObjectEquals(a, b, opt_c) {
+  _validateArguments(2, arguments);
+  var v1 = nonCommentArg(1, 2, arguments);
+  var v2 = nonCommentArg(2, 2, arguments);
+  var failureMessage = commentArg(2, arguments) ? commentArg(2, arguments) : '';
+  var differences = goog.testing.asserts.findDifferences(v1, v2);
+
+  _assert(failureMessage, !differences, differences);
 }
 
 /**

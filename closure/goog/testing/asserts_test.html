@@ -769,6 +769,38 @@ See the COPYING file for details.
     });
   }
 
+  function testFindDifferences_equal() {
+    assertNull(goog.testing.asserts.findDifferences(true, true));
+    assertNull(goog.testing.asserts.findDifferences(null, null));
+    assertNull(goog.testing.asserts.findDifferences(undefined, undefined));
+    assertNull(goog.testing.asserts.findDifferences(1, 1));
+    assertNull(goog.testing.asserts.findDifferences([1, 'a'], [1, 'a']));
+    assertNull(goog.testing.asserts.findDifferences(
+        [[1, 2], [3, 4]], [[1, 2], [3, 4]]));
+    assertNull(goog.testing.asserts.findDifferences(
+        [{a: 1, b: 2}], [{b: 2, a: 1}]));
+    assertNull(goog.testing.asserts.findDifferences(null, null));
+    assertNull(goog.testing.asserts.findDifferences(undefined, undefined));
+  }
+
+  function testFindDifferences_unequal() {
+    assertNotNull(goog.testing.asserts.findDifferences(true, false));
+    assertNotNull(goog.testing.asserts.findDifferences(
+        [{a: 1, b: 2}], [{a: 2, b: 1}]));
+    assertNotNull(goog.testing.asserts.findDifferences(
+        [{a: 1}], [{a: 1, b: [2]}]));
+    assertNotNull(goog.testing.asserts.findDifferences(
+        [{a: 1, b: [2]}], [{a: 1}]));
+  }
+
+  function testFindDifferences_objectsAndNull() {
+    assertNotNull(goog.testing.asserts.findDifferences({a: 1}, null));
+    assertNotNull(goog.testing.asserts.findDifferences(null, {a: 1}));
+    assertNotNull(goog.testing.asserts.findDifferences(null, []));
+    assertNotNull(goog.testing.asserts.findDifferences([], null));
+    assertNotNull(goog.testing.asserts.findDifferences([], undefined));
+  }
+
 </script>
 </body>
 </html>
