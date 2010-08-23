@@ -172,12 +172,49 @@ goog.format.EmailAddress.prototype.toString = function() {
 
 
 /**
+ * Determines is the current object is a valid email address.
+ * @return {boolean} Whether the email address is valid.
+ */
+goog.format.EmailAddress.prototype.isValid = function() {
+  return goog.format.EmailAddress.isValidAddrSpec(this.address_);
+};
+
+
+/**
+ * Checks if the provided string is a valid email address. Supports both
+ * simple email addresses (address specs) and addresses that contain display
+ * names.
+ * @param {string} str The email address to check.
+ * @return {boolean} Whether the provided string is a valid address.
+ */
+goog.format.EmailAddress.isValidAddress = function(str) {
+  return goog.format.EmailAddress.parse(str).isValid();
+};
+
+
+/**
+ * Checks if the provided string is a valid address spec (local@domain.com).
+ * @param {string} str The email address to check.
+ * @return {boolean} Whether the provided string is a valid address spec.
+ */
+goog.format.EmailAddress.isValidAddrSpec = function(str) {
+  // This is a fairly naive implementation, but it covers 99% of use cases.
+  // For example, having two dots in a row isn't valid, but I don't think we
+  // need that level of validation.  Also, things like [a@b]@c.com is valid, but
+  // I don't think anyone would accept it.
+  var filter = /^[+a-zA-Z0-9_.-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z0-9]{2,6}$/;
+  return filter.test(str);
+};
+
+
+/**
  * Parse an email address of the form "name" &lt;address&gt; into
  * an email address.
  * @param {string} addr The address string.
  * @return {goog.format.EmailAddress} The parsed address.
  */
 goog.format.EmailAddress.parse = function(addr) {
+  // TODO(ecattell): Strip bidi markers.
   var name = '';
   var address = '';
   for (var i = 0; i < addr.length;) {
