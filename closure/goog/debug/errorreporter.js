@@ -255,14 +255,6 @@ goog.debug.ErrorReporter.prototype.handleException = function(e,
     opt_context) {
   var error = (/** @type {!Error} */ goog.debug.normalizeErrorObject(e));
 
-  // Make sure when handling exceptions that the error file name contains only
-  // the basename (e.g. "file.js"). goog.debug.catchErrors does this stripping,
-  // but goog.debug.ErrorHandler.protectEntryPoint does not.
-  var baseName = String(error.fileName).split(/[\/\\]/).pop();
-
-  // Strip the query part of the URL.
-  baseName = String(baseName).split('?', 2)[0];
-
   // Construct the context, possibly from the one provided in the argument, and
   // pass it to the context provider if there is one.
   var context = opt_context ? goog.object.clone(opt_context) : {};
@@ -274,8 +266,8 @@ goog.debug.ErrorReporter.prototype.handleException = function(e,
           'exception: ' + err.message);
     }
   }
-  this.sendErrorReport(error.message, baseName, error.lineNumber, error.stack,
-      context);
+  this.sendErrorReport(error.message, error.fileName, error.lineNumber,
+      error.stack, context);
 
   try {
     this.dispatchEvent(

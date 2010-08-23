@@ -38,6 +38,8 @@ See the COPYING file for details.
   };
 
   var stubs = new goog.testing.PropertyReplacer();
+  var url = "http://www.your.tst/more/bogus.js";
+  var encodedUrl = "http%3A%2F%2Fwww.your.tst%2Fmore%2Fbogus.js";
 
   function setUp() {
     stubs.set(goog.net, 'XhrIo', MockXhrIo);
@@ -112,8 +114,7 @@ See the COPYING file for details.
 
     goog.debug.ErrorReporter.install("/errorreporter");
 
-    var errorFunction = goog.partial(
-        throwAnErrorWith, "http://www.my.tst/some/bogus.js", 5, "Hello :)");
+    var errorFunction = goog.partial(throwAnErrorWith, url, 5, "Hello :)");
 
     try {
       goog.global.setTimeout(errorFunction, 0);
@@ -122,7 +123,7 @@ See the COPYING file for details.
     }
 
     assertEquals(
-        "/errorreporter?script=bogus.js&error=Hello%20%3A)&line=5",
+        "/errorreporter?script=" + encodedUrl + "&error=Hello%20%3A)&line=5",
         MockXhrIo.lastUrl);
     assertEquals("trace=Not%20available", MockXhrIo.lastContent);
   }
@@ -134,9 +135,9 @@ See the COPYING file for details.
     stubs.set(goog.global, 'onerror', null);
 
     var errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
-    goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
+    goog.global.onerror("Goodbye :(", url, 22);
     assertEquals(
-        "/errorreporter?script=bogus.js&error=Goodbye%20%3A(&line=22",
+        "/errorreporter?script=" + encodedUrl + "&error=Goodbye%20%3A(&line=22",
         MockXhrIo.lastUrl);
     assertEquals("trace=Not%20available", MockXhrIo.lastContent);
   }
@@ -167,8 +168,7 @@ See the COPYING file for details.
         "([object Object])@http://a.b.c:813/a/f.js:37";
 
 
-    var errorFunction = goog.partial(
-        throwAnErrorWith, "http://www.my.tst/some/bogus.js", 5, "Hello :)",
+    var errorFunction = goog.partial(throwAnErrorWith, url, 5, "Hello :)",
         trace);
 
     try {
@@ -178,7 +178,7 @@ See the COPYING file for details.
     }
 
     assertEquals(
-        "/errorreporter?script=bogus.js&error=Hello%20%3A)&line=5",
+        "/errorreporter?script=" + encodedUrl + "&error=Hello%20%3A)&line=5",
         MockXhrIo.lastUrl);
     assertEquals("trace=" +
         "Error(%22Something%20Wrong%22)%40%3A0%0A" +
