@@ -272,7 +272,7 @@ goog.ui.FilteredMenu.prototype.setFilter = function(str) {
  */
 goog.ui.FilteredMenu.prototype.getFilter = function() {
   return this.filterInput_ && goog.isString(this.filterInput_.value) ?
-    this.filterInput_.value : '';
+      this.filterInput_.value : '';
 };
 
 
@@ -325,8 +325,8 @@ goog.ui.FilteredMenu.prototype.getAllowMultiple = function() {
 /**
  * Sets whether the specified child should be affected (shown/hidden) by the
  * filter criteria.
- * @param {goog.ui.MenuItem} child Menu item to change.
- * @param {boolean} persistent Whether the menu item should be persistent.
+ * @param {goog.ui.Component} child Child to change.
+ * @param {boolean} persistent Whether the child should be persistent.
  */
 goog.ui.FilteredMenu.prototype.setPersistentVisibility = function(child,
                                                                   persistent) {
@@ -410,7 +410,7 @@ goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
 
     if (matches) {
       str = matches.length > 2 ? goog.string.trim(matches[2]) : '';
-   }
+    }
   }
 
   var matcher = new RegExp('(^|[- ,_/.:])' +
