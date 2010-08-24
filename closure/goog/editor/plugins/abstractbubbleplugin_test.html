@@ -184,6 +184,24 @@ function testNoTwoBubblesOpenAtSameTime() {
   assertEquals(link2, bubblePlugin.targetElement_);
   FIELDMOCK.$verify();
 }
+
+/**
+ * Regression test for @bug 2945341.
+ */
+function testSelectOneTextCharacterNoError() {
+  FIELDMOCK.$replay();
+  bubblePlugin.getBubbleTargetFromSelection = function(selectedElement) {
+    return selectedElement;
+  };
+  bubblePlugin.createBubbleContents = goog.nullFunction;
+  // Select first char of first link's text node.
+  testHelper.select(link.firstChild, 0, link.firstChild, 1);
+  // This should execute without js errors.
+  bubblePlugin.handleSelectionChange();
+  assertTrue("Bubble should have been opened", bubblePlugin.isVisible());
+  FIELDMOCK.$verify();
+}
+
 </script>
 </body>
 </html>

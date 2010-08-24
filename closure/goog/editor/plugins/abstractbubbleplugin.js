@@ -21,6 +21,8 @@
 goog.provide('goog.editor.plugins.AbstractBubblePlugin');
 
 goog.require('goog.dom');
+goog.require('goog.dom.NodeType');
+goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.style');
@@ -223,7 +225,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
       if (goog.userAgent.IE && range.isCollapsed() && startNode != endNode) {
         range = goog.dom.Range.createCaret(startNode, startOffset);
       }
-      if (startNode == endNode && startOffset == endOffset - 1) {
+      if (startNode.nodeType == goog.dom.NodeType.ELEMENT &&
+          startNode == endNode && startOffset == endOffset - 1) {
         var element = startNode.childNodes[startOffset];
         if (element.nodeType == goog.dom.NodeType.ELEMENT) {
           selectedElement = element;
