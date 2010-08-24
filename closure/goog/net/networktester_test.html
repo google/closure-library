@@ -19,6 +19,15 @@ See the COPYING file for details.
 <body>
 
 <script>
+  var clock;
+
+  function setUp() {
+    clock = new goog.testing.MockClock(true);
+  }
+
+  function tearDown() {
+    clock.dispose();
+  }
 
   function testSuccess() {
     // set up the tster
@@ -75,8 +84,6 @@ See the COPYING file for details.
   }
 
   function testTimeout() {
-    var clock = new goog.testing.MockClock(true);
-
     // set up the tester
     var handler = new Handler();
     var tester = new goog.net.NetworkTester(handler.callback, handler);
@@ -92,13 +99,9 @@ See the COPYING file for details.
     clock.tick(10000);
     assertFalse(handler.dequeue());
     assertFalse(tester.isRunning());
-
-    clock.dispose();
   }
 
   function testRetries() {
-    var clock = new goog.testing.MockClock(true);
-
     // set up the tester
     var handler = new Handler();
     var tester = new goog.net.NetworkTester(handler.callback, handler);
@@ -123,13 +126,9 @@ See the COPYING file for details.
     image.onload.call(null);
     assertTrue(handler.dequeue());
     assertFalse(tester.isRunning());
-
-    clock.dispose();
   }
 
   function testPauseBetweenRetries() {
-    var clock = new goog.testing.MockClock(true);
-
     // set up the tester
     var handler = new Handler();
     var tester = new goog.net.NetworkTester(handler.callback, handler);
@@ -159,8 +158,6 @@ See the COPYING file for details.
     image.onload.call(null);
     assertTrue(handler.dequeue());
     assertFalse(tester.isRunning());
-
-    clock.dispose();
   }
 
   function testNonDefaultUri() {
@@ -172,7 +169,6 @@ See the COPYING file for details.
   }
 
   function testOffline() {
-    var clock = new goog.testing.MockClock(true);
 
     // set up the tester
     var handler = new Handler();
@@ -195,7 +191,6 @@ See the COPYING file for details.
     } finally {
       // Clean up!
       goog.net.NetworkTester.getNavigatorOffline_ = orgGetNavigatorOffline;
-      clock.dispose();
     }
   }
 
