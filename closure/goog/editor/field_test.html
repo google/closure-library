@@ -885,6 +885,7 @@ function testPlaceCursorAtStartNonImportantTextNode() {
 // Tests related to change/delayed change events.
 
 function testClearDelayedChange() {
+  var clock = new goog.testing.MockClock(true);
   var editableField = new goog.editor.Field('testField', document);
   editableField.makeEditable();
 
@@ -914,6 +915,7 @@ function testClearDelayedChange() {
     }
     assertFalse(editableField.delayedChangeTimer_.isActive());
   }
+  clock.dispose();
 }
 
 function testHandleChange() {
