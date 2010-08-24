@@ -218,7 +218,10 @@ goog.history.Html5History.prototype.getUrl_ = function(token) {
   if (this.useFragment_) {
     return '#' + token;
   } else {
-    return this.pathPrefix_ + token;
+    // Paths need to be absolute to maintain correct nesting, so we prepend the
+    // known path prefix.  We also preserve the query string, since this is
+    // usually what is intended.
+    return this.pathPrefix_ + token + this.window_.location.search;
   }
 };
 
