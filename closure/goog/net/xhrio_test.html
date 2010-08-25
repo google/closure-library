@@ -132,6 +132,63 @@ function testSyncSendFailure() {
 }
 
 
+function testSendFromListener() {
+  MockXmlHttp.syncSend = true;
+  var count = 0;
+
+  var x = new goog.net.XhrIo;
+  goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
+    count++;
+    
+    var thrown = false;
+    try {
+      x.send('url2');
+    } catch(e) {
+      thrown = true;
+      assertEquals(e.message,
+          '[goog.net.XhrIo] Object is active with another request');
+    }
+    assertTrue(thrown);
+  });
+
+  x.send('url');
+
+  clock.tick(1); // callOnce(f, 0, ...)
+
+  assertEquals('Complete should have been called once', 1, count);
+}
+
+
+function testStatesDuringEvents() {
+  MockXmlHttp.syncSend = true;
+
+  var x = new goog.net.XhrIo;
+  var readyState = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
+  goog.events.listen(x, goog.net.EventType.READY_STATE_CHANGE, function(e) {
+    readyState++;
+    assertObjectEquals(e.target, x);
+    assertEquals(x.getReadyState(), readyState);
+    assertTrue(x.isActive());
+  });
+  goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
+    assertObjectEquals(e.target, x);
+    assertTrue(x.isActive());
+  });
+  goog.events.listen(x, goog.net.EventType.SUCCESS, function(e) {
+    assertObjectEquals(e.target, x);
+    assertTrue(x.isActive());
+  });
+  goog.events.listen(x, goog.net.EventType.READY, function(e) {
+    assertObjectEquals(e.target, x);
+    assertFalse(x.isActive());
+  });
+
+  x.send('url');
+
+  clock.tick(1); // callOnce(f, 0, ...)
+}
+
+
 function testProtectEntryPointCalledOnAsyncSend() {
   MockXmlHttp.syncSend = false;
 
