@@ -1099,7 +1099,7 @@ goog.ui.DatePicker.prototype.createButton_ = function(parentNode, label,
     // Since this is a button, the default action is to submit a form if the
     // node is added inside a form.  Prevent this.
     e.preventDefault();
-    method.call(this);
+    method.call(this, e);
   });
 
   return el;
