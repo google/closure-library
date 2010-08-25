@@ -10,6 +10,8 @@ goog.provide('goog.ui.CookieEditor');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.net.cookies');
+goog.require('goog.string');
+goog.require('goog.style');
 goog.require('goog.ui.Component');
 
 
@@ -51,6 +53,14 @@ goog.ui.CookieEditor.prototype.clearButtonElem_;
 
 
 /**
+ * Invalid value warning text.
+ * @type {HTMLSpanElement}
+ * @private
+ */
+goog.ui.CookieEditor.prototype.valueWarningElem_;
+
+
+/**
  * Update button.
  * @type {HTMLButtonElement}
  * @private
@@ -64,6 +74,7 @@ goog.ui.CookieEditor.prototype.updateButtonElem_;
  * @param {string} cookieKey Cookie key.
  */
 goog.ui.CookieEditor.prototype.selectCookie = function(cookieKey) {
+  goog.asserts.assert(goog.net.cookies.isValidName(cookieKey));
   this.cookieKey_ = cookieKey;
   if (this.textAreaElem_) {
     this.textAreaElem_.value = goog.net.cookies.get(cookieKey) || '';
@@ -87,8 +98,14 @@ goog.ui.CookieEditor.prototype.createDom = function() {
   var value = this.cookieKey_ && goog.net.cookies.get(this.cookieKey_);
   this.textAreaElem_ = /** @type {HTMLTextAreaElement} */ (goog.dom.createDom(
       goog.dom.TagName.TEXTAREA, /* attibutes */ null, value || ''));
+  this.valueWarningElem_ = /** @type {HTMLSpanElement} */ (goog.dom.createDom(
+      goog.dom.TagName.SPAN, /* attibutes */ {
+        'style': 'display:none;color:red'
+      }, 'Invalid cookie value.'));
   this.setElementInternal(goog.dom.createDom(goog.dom.TagName.DIV,
       /* attibutes */ null,
+      this.valueWarningElem_,
+      goog.dom.createDom(goog.dom.TagName.BR),
       this.textAreaElem_,
       goog.dom.createDom(goog.dom.TagName.BR),
       this.clearButtonElem_,
@@ -128,8 +145,17 @@ goog.ui.CookieEditor.prototype.handleClear_ = function(e) {
  */
 goog.ui.CookieEditor.prototype.handleUpdate_ = function(e) {
   if (this.cookieKey_) {
-    // TODO(user): handle line breaks and semicolons
-    goog.net.cookies.set(this.cookieKey_, this.textAreaElem_.value);
+    var value = this.textAreaElem_.value;
+    if (value) {
+      // Strip line breaks.
+      value = goog.string.stripNewlines(value);
+    }
+    if (goog.net.cookies.isValidValue(value)) {
+      goog.net.cookies.set(this.cookieKey_, value);
+      goog.style.showElement(this.valueWarningElem_, false);
+    } else {
+      goog.style.showElement(this.valueWarningElem_, true);
+    }
   }
 };
 
@@ -140,4 +166,5 @@ goog.ui.CookieEditor.prototype.disposeInternal = function() {
   this.cookieKey_ = null;
   this.textAreaElem_ = null;
   this.updateButtonElem_ = null;
+  this.valueWarningElem_ = null;
 };

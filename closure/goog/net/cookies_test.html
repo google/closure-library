@@ -76,33 +76,12 @@ function testCount() {
   assertEquals(baseCount + 0, cookies.getCount());
 }
 
-function assertThrows(f, args, opt_this) {
-  try {
-    f.apply(opt_this, args);
-  } catch (ex) {
-    return;
-  }
-  fail('An exception was not thrown');
-}
-
 function testSet() {
   cookies.set('testa', 'testb');
   assertEquals('testb', cookies.get('testa'));
   cookies.remove('testa');
   assertEquals(undefined, cookies.get('testa'));
   // check for invalid characters in name and value
-}
-
-function testSetInvalidName() {
-  assertThrows(cookies.set, ['foo=bar', 'test']);
-  assertThrows(cookies.set, ['foo;bar', 'test']);
-}
-
-function testSetInvalidValue() {
-  assertThrows(cookies.set, ['testa', ';']);
-  assertThrows(cookies.set, ['testb', 'a;']);
-  assertThrows(cookies.set, ['testc', ';a']);
-  assertThrows(cookies.set, ['testd', 'a;a']);
 }
 
 function testGetKeys() {
@@ -190,6 +169,44 @@ function testStrangeValue() {
 
   assertEquals(value, cookies.get('testa'));
   assertEquals(value2, cookies.get('testb'));
+}
+
+function assertValidName(name) {
+  assertTrue(name + ' should be valid', goog.net.cookies.isValidName(name));
+}
+
+function assertInvalidName(name) {
+  assertFalse(name + ' should be invalid', goog.net.cookies.isValidName(name));
+  assertThrows(function() {
+    goog.net.cookies.set(name, 'value');
+  });
+}
+
+function assertValidValue(val) {
+  assertTrue(val + ' should be valid', goog.net.cookies.isValidValue(val));
+}
+
+function assertInvalidValue(val) {
+  assertFalse(val + ' should be invalid', goog.net.cookies.isValidValue(val));
+  assertThrows(function() {
+    goog.net.cookies.set('name', val);
+  });
+}
+
+function testValidName() {
+  assertValidName('foo');
+  assertInvalidName('foo bar');
+  assertInvalidName('foo=bar');
+  assertInvalidName('foo;bar');
+  assertInvalidName('foo\nbar');
+}
+
+function testValidValue() {
+  assertValidValue('foo');
+  assertValidValue('foo bar');
+  assertValidValue('foo=bar');
+  assertInvalidValue('foo;bar');
+  assertInvalidValue('foo\nbar');
 }
 
 // TODO(user): Test path, domain and maxAge.

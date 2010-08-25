@@ -76,6 +76,48 @@ goog.net.cookies.isEnabled = function() {
 
 
 /**
+ * We do not allow '=', ';', or white space in the name.
+ *
+ * NOTE: The following are allowed by this method, but should be avoided for
+ * cookies handled by the server.
+ * - any name starting with '$'
+ * - 'Comment'
+ * - 'Domain'
+ * - 'Expires'
+ * - 'Max-Age'
+ * - 'Path'
+ * - 'Secure'
+ * - 'Version'
+ *
+ * @param {string} name Cookie name.
+ * @return {boolean} Whether name is valid.
+ *
+ * @see <a href="http://tools.ietf.org/html/rfc2109">RFC 2109</a>
+ * @see <a href="http://tools.ietf.org/html/rfc2965">RFC 2965</a>
+ */
+goog.net.cookies.isValidName = function(name) {
+  return !(/[;=\s]/.test(name));
+};
+
+
+/**
+ * We do not allow ';' or line break in the value.
+ *
+ * Spec does not mention any illegal characters, but in practice semi-colons
+ * break parsing and line breaks truncate the name.
+ *
+ * @param {string} value Cookie value.
+ * @return {boolean} Whether value is valid.
+ *
+ * @see <a href="http://tools.ietf.org/html/rfc2109">RFC 2109</a>
+ * @see <a href="http://tools.ietf.org/html/rfc2965">RFC 2965</a>
+ */
+goog.net.cookies.isValidValue = function(value) {
+  return !(/[;\r\n]/.test(value));
+};
+
+
+/**
  * Sets a cookie.  The max_age can be -1 to set a session cookie. To remove and
  * expire cookies, use remove() instead.
  *
@@ -83,8 +125,8 @@ goog.net.cookies.isEnabled = function() {
  * up to the callers of {@code get} and {@code set} (as well as all the other
  * methods) to handle any possible encoding and decoding.
  *
- * @throws {!Error} If the {@code name} contains either ";" or "=".
- * @throws {!Error} If the {@code value} contains ";"".
+ * @throws {!Error} If the {@code name} fails #goog.net.cookies.isValidName.
+ * @throws {!Error} If the {@code value} fails #goog.net.cookies.isValidValue.
  *
  * @param {string} name  The cookie name.
  * @param {string} value  The cookie value.
@@ -99,12 +141,10 @@ goog.net.cookies.isEnabled = function() {
  *     name).
  */
 goog.net.cookies.set = function(name, value, opt_maxAge, opt_path, opt_domain) {
-  // we do not allow '=' or ';' in the name
-  if (/[;=]/.test(name)) {
+  if (!goog.net.cookies.isValidName(name)) {
     throw Error('Invalid cookie name "' + name + '"');
   }
-  // we do not allow ';' in value
-  if (/;/.test(value)) {
+  if (!goog.net.cookies.isValidValue(value)) {
     throw Error('Invalid cookie value "' + value + '"');
   }
 

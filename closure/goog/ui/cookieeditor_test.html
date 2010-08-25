@@ -11,6 +11,7 @@
   goog.require('goog.dom.TagName');
   goog.require('goog.events.Event');
   goog.require('goog.events.EventType');
+  goog.require('goog.net.cookies');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.CookieEditor');
@@ -20,9 +21,6 @@
 <script>
   var COOKIE_KEY = 'my_fabulous_cookie';
   var COOKIE_VALUES;
-
-  goog.net = {};
-  goog.net.cookies = {};
 
   goog.net.cookies.get = function(key) {
     return COOKIE_VALUES[key];
@@ -74,8 +72,15 @@
     // Render editor.
     var editor = newCookieEditor();
 
-    // Change value.
-    var newValue = 'my fabulous value';
+    // Invalid value.
+    var newValue = 'my bad value;';
+    editor.textAreaElem_.value = newValue;
+    goog.testing.events.fireBrowserEvent(new goog.events.Event(
+        goog.events.EventType.CLICK, editor.updateButtonElem_));
+    assertTrue('unexpected cookie value', !goog.net.cookies.get(COOKIE_KEY));
+
+    // Valid value.
+    newValue = 'my fabulous value';
     editor.textAreaElem_.value = newValue;
     goog.testing.events.fireBrowserEvent(new goog.events.Event(
         goog.events.EventType.CLICK, editor.updateButtonElem_));
