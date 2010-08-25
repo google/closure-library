@@ -319,7 +319,7 @@ goog.async.Deferred.prototype.fire_ = function() {
     // It is possible to add errbacks after the Deferred has fired. If a new
     // errback is added immediately after the Deferred encountered an unhandled
     // error, but before that error is rethrown, cancel the rethrow.
-    window.clearTimeout(this.unhandledExceptionTimeoutId_);
+    goog.global.clearTimeout(this.unhandledExceptionTimeoutId_);
     delete this.unhandledExceptionTimeoutId_;
   }
 
@@ -372,7 +372,7 @@ goog.async.Deferred.prototype.fire_ = function() {
     // Rethrow the unhandled error after a timeout. Execution will continue, but
     // the error will be seen by global handlers and the user. The rethrow will
     // be canceled if another errback is appended before the timeout executes.
-    this.unhandledExceptionTimeoutId_ = window.setTimeout(function() {
+    this.unhandledExceptionTimeoutId_ = goog.global.setTimeout(function() {
       throw res;
     }, 0);
   }
