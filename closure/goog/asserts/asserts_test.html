@@ -60,7 +60,9 @@ function testNumber() {
       goog.partial(goog.asserts.assertNumber, null));
   // Test error messages.
   doTestMessage(goog.partial(goog.asserts.assertNumber, null),
-                'Assertion failed: Expected number but got null.');
+                'Assertion failed: Expected number but got null: null.');
+  doTestMessage(goog.partial(goog.asserts.assertNumber, '1234'),
+                'Assertion failed: Expected number but got string: 1234.');
   doTestMessage(goog.partial(goog.asserts.assertNumber, null, 'ouch %s', 1),
                 'Assertion failed: ouch 1');
 }
@@ -71,7 +73,9 @@ function testString() {
       goog.partial(goog.asserts.assertString, null));
   // Test error messages.
   doTestMessage(goog.partial(goog.asserts.assertString, null),
-                'Assertion failed: Expected string but got null.');
+                'Assertion failed: Expected string but got null: null.');
+  doTestMessage(goog.partial(goog.asserts.assertString, 1234),
+                'Assertion failed: Expected string but got number: 1234.');
   doTestMessage(goog.partial(goog.asserts.assertString, null, 'ouch %s', 1),
                 'Assertion failed: ouch 1');
 }
@@ -83,7 +87,9 @@ function testFunction() {
       goog.partial(goog.asserts.assertFunction, null));
   // Test error messages.
   doTestMessage(goog.partial(goog.asserts.assertFunction, null),
-                'Assertion failed: Expected function but got null.');
+                'Assertion failed: Expected function but got null: null.');
+  doTestMessage(goog.partial(goog.asserts.assertFunction, 1234),
+                'Assertion failed: Expected function but got number: 1234.');
   doTestMessage(goog.partial(goog.asserts.assertFunction, null, 'ouch %s', 1),
                 'Assertion failed: ouch 1');
 }
@@ -95,7 +101,9 @@ function testObject() {
       goog.partial(goog.asserts.assertObject, null));
   // Test error messages.
   doTestMessage(goog.partial(goog.asserts.assertObject, null),
-                'Assertion failed: Expected object but got null.');
+                'Assertion failed: Expected object but got null: null.');
+  doTestMessage(goog.partial(goog.asserts.assertObject, 1234),
+                'Assertion failed: Expected object but got number: 1234.');
   doTestMessage(goog.partial(goog.asserts.assertObject, null, 'ouch %s', 1),
                 'Assertion failed: ouch 1');
 }
@@ -107,7 +115,9 @@ function testArray() {
       goog.partial(goog.asserts.assertArray, {}));
   // Test error messages.
   doTestMessage(goog.partial(goog.asserts.assertArray, null),
-                'Assertion failed: Expected array but got null.');
+                'Assertion failed: Expected array but got null: null.');
+  doTestMessage(goog.partial(goog.asserts.assertArray, 1234),
+                'Assertion failed: Expected array but got number: 1234.');
   doTestMessage(goog.partial(goog.asserts.assertArray, null, 'ouch %s', 1),
                 'Assertion failed: ouch 1');
 }
@@ -120,7 +130,9 @@ function testBoolean() {
 
   // Test error messages.
   doTestMessage(goog.partial(goog.asserts.assertBoolean, null),
-                'Assertion failed: Expected boolean but got null.');
+                'Assertion failed: Expected boolean but got null: null.');
+  doTestMessage(goog.partial(goog.asserts.assertBoolean, 1234),
+                'Assertion failed: Expected boolean but got number: 1234.');
   doTestMessage(goog.partial(goog.asserts.assertBoolean, null, 'ouch %s', 1),
                 'Assertion failed: ouch 1');
 }
