@@ -203,14 +203,6 @@ goog.testing.net.XhrIo.prototype.timeoutId_ = null;
 
 
 /**
- * Whether there's currently an underlying XHR object.
- * @type {boolean}
- * @private
- */
-goog.testing.net.XhrIo.prototype.xhr_ = false;
-
-
-/**
  * Returns the number of milliseconds after which an incomplete request will be
  * aborted, or 0 if no timeout is set.
  * @return {number} Timeout interval in milliseconds.
@@ -252,7 +244,6 @@ goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
     this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
     this.dispatchEvent(goog.net.EventType.COMPLETE);
     this.dispatchEvent(goog.net.EventType.ABORT);
-    this.simulateReady();
   }
 };
 
@@ -267,7 +258,7 @@ goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
  */
 goog.testing.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
                                                  opt_headers) {
-  if (this.xhr_) {
+  if (this.active_) {
     throw Error('[goog.net.XhrIo] Object is active with another request');
   }
 
@@ -276,10 +267,9 @@ goog.testing.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   if (this.testQueue_) {
     this.testQueue_.enqueue(['s', url, opt_method, opt_content, opt_headers]);
   }
-  this.xhr_ = true;
-  this.active_ = true;
   this.readyState_ = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
   this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.LOADING);
+  this.active_ = true;
 };
 
 
@@ -335,7 +325,6 @@ goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
     this.lastError_ = this.getStatusText() + ' [' + this.getStatus() + ']';
     this.dispatchEvent(goog.net.EventType.ERROR);
   }
-  this.simulateReady();
 };
 
 
@@ -343,8 +332,6 @@ goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
  * Simulates the Xhr is ready for the next request.
  */
 goog.testing.net.XhrIo.prototype.simulateReady = function() {
-  this.active_ = false;
-  this.xhr_ = false;
   this.dispatchEvent(goog.net.EventType.READY);
 };
 
@@ -353,7 +340,7 @@ goog.testing.net.XhrIo.prototype.simulateReady = function() {
  * @return {boolean} Whether there is an active request.
  */
 goog.testing.net.XhrIo.prototype.isActive = function() {
-  return !!this.xhr_;
+  return this.active_;
 };
 
 

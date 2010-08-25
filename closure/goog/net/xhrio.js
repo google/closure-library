@@ -21,10 +21,9 @@
  * ensure no leaks.
  *
  * XhrIo is event based, it dispatches events when a request finishes, fails or
- * succeeds or when the ready-state changes. The ready-state or timeout event
- * fires first, followed by a generic completed event. Then the abort, error,
- * or success event is fired as appropriate. Lastly, the ready event will fire
- * to indicate that the object may be used to make another request.
+ * succeeds or when the ready-state changes. The ready-state event fires first,
+ * followed by a generic completed event, and lastly the error or success event
+ * is fired as appropriate.
  *
  * The error event may also be called before completed and
  * ready-state-change if the XmlHttpRequest.open() or .send() methods throw.
@@ -166,7 +165,7 @@ goog.net.XhrIo.send = function(url, opt_callback, opt_method, opt_content,
 goog.net.XhrIo.cleanup = function() {
   var instances = goog.net.XhrIo.sendInstances_;
   while (instances.length) {
-    instances.pop().dispose();
+     instances.pop().dispose();
   }
 };
 
@@ -346,8 +345,8 @@ goog.net.XhrIo.prototype.setTimeoutInterval = function(ms) {
  *     request.
  */
 goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
-                                         opt_headers) {
-  if (this.xhr_) {
+                                           opt_headers) {
+  if (this.active_) {
     throw Error('[goog.net.XhrIo] Object is active with another request');
   }
 
@@ -684,7 +683,7 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
     var xhr = this.xhr_;
     var clearedOnReadyStateChange =
         this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
-            goog.nullFunction : null;
+              goog.nullFunction : null;
     this.xhr_ = null;
     this.xhrOptions_ = null;
 
@@ -724,7 +723,7 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
  * @return {boolean} Whether there is an active request.
  */
 goog.net.XhrIo.prototype.isActive = function() {
-  return !!this.xhr_;
+  return this.active_;
 };
 
 
@@ -888,7 +887,7 @@ goog.net.XhrIo.prototype.getLastErrorCode = function() {
  */
 goog.net.XhrIo.prototype.getLastError = function() {
   return goog.isString(this.lastError_) ? this.lastError_ :
-      String(this.lastError_);
+    String(this.lastError_);
 };
 
 
