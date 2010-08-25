@@ -38,15 +38,15 @@ goog.provide('goog.i18n.pluralRules');
 
 /**
  * Plural pattern keyword
- * enum {number}
+ * enum {string}
  */
 goog.i18n.pluralRules.Keyword = {
-  ZERO: 0,
-  ONE: 1,
-  TWO: 2,
-  FEW: 3,
-  MANY: 4,
-  OTHER: 5
+  ZERO: 'zero',
+  ONE: 'one',
+  TWO: 'two',
+  FEW: 'few',
+  MANY: 'many',
+  OTHER: 'other'
 };
 
 

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2010 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by an Apache 2.0 License.
+See the COPYING file for details.
+-->
+<head>
+<title>Closure Unit Tests - goog.i18n.MessageFormat</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.i18n.MessageFormat');
+  goog.require('goog.i18n.NumberFormatSymbols');
+  goog.require('goog.i18n.NumberFormatSymbols_en');
+  goog.require('goog.i18n.NumberFormatSymbols_hr');
+  goog.require('goog.i18n.pluralRules');
+  goog.require('goog.testing.PropertyReplacer');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+// Testing stubs that autoreset after each test run.
+var stubs = new goog.testing.PropertyReplacer();
+
+function tearDown() {
+  stubs.reset();
+}
+
+function testEmptyPattern() {
+  var fmt = new goog.i18n.MessageFormat('');
+  assertEquals('', fmt.format([]));
+}
+
+function testMissingLeftCurlyBrace() {
+  try {
+    var fmt = new goog.i18n.MessageFormat('\'\'{}}');
+  } catch (err) {
+    assertEquals('Assertion failed: No matching { for }.', err.message);
+  }
+}
+
+function testTooManyLeftCurlyBraces() {
+  try {
+    var fmt = new goog.i18n.MessageFormat('{} {');
+  } catch (err) {
+    assertEquals('Assertion failed: There are mismatched { or } ' +
+                 'in the pattern.', err.message);
+  }
+}
+
+function testSimpleReplacement() {
+  var fmt = new goog.i18n.MessageFormat('New York in {0} is nice.');
+  assertEquals('New York in the Summer is nice.', fmt.format(['the Summer']));
+}
+
+function testSimpleSelect() {
+  var fmt = new goog.i18n.MessageFormat('{0, select, male {His} female {Her}' +
+      ' other {Its}} bicycle is {0, select, male {blue} female {red} other' +
+      ' {green}}.');
+
+  assertEquals('His bicycle is blue.', fmt.format(['male']));
+  assertEquals('Her bicycle is red.', fmt.format(['female']));
+  assertEquals('Its bicycle is green.', fmt.format(['other']));
+  assertEquals('Its bicycle is green.', fmt.format(['whatever']));
+}
+
+function testSimplePlural() {
+  var fmt = new goog.i18n.MessageFormat('I see {0, plural, offset:1 ' +
+      '=0 {no one at all} =1 {{1}} one {{1} and one other person} ' +
+      'other {{1} and # other people}} in {2}.');
+
+  assertEquals('I see no one at all in Belgrade.',
+               fmt.format([0, '', 'Belgrade']));
+  assertEquals('I see Markus in Berlin.',
+               fmt.format([1, 'Markus', 'Berlin']));
+  assertEquals('I see Mark and one other person in Athens.',
+               fmt.format([2, 'Mark', 'Athens']));
+  assertEquals('I see Cibu and 99 other people in the cubes.',
+               fmt.format([100, 'Cibu', 'the cubes']));
+}
+
+function testSimplePluralNoOffset() {
+  var fmt = new goog.i18n.MessageFormat('I see {0, plural, ' +
+      '=0 {no one at all} =1 {{1}} one {{1} and one other person} ' +
+      'other {{1} and # other people}} in {2}.');
+
+  assertEquals('I see no one at all in Belgrade.',
+               fmt.format([0, '', 'Belgrade']));
+  assertEquals('I see Markus in Berlin.',
+               fmt.format([1, 'Markus', 'Berlin']));
+  assertEquals('I see Mark and 2 other people in Athens.',
+               fmt.format([2, 'Mark', 'Athens']));
+  assertEquals('I see Cibu and 100 other people in the cubes.',
+               fmt.format([100, 'Cibu', 'the cubes']));
+}
+
+function testSelectNestedInPlural() {
+  var fmt = new goog.i18n.MessageFormat('{2, plural, ' +
+      'one {{0, select, ' +
+      '  female {{1} added you to her circle} ' +
+      '  other  {{1} added you to his circle}}} ' +
+      'other {{0, select, ' +
+      '  female {{1} added you to her # circles} ' +
+      '  other  {{1} added you to his # circles}}}}');
+
+  assertEquals('Jelena added you to her circle',
+               fmt.format(['female', 'Jelena', 1]));
+  assertEquals('Milan added you to his 1,234 circles',
+               fmt.format(['male', 'Milan', 1234]));
+}
+
+function testLiterals() {
+  var fmt = new goog.i18n.MessageFormat("Anna''s house" +
+      " 'has {0} and # in the roof' and {0} cows.");
+  assertEquals("Anna's house has {0} and # in the roof and 5 cows.",
+               fmt.format(['5']));
+}
+
+function testSerbianSimpleSelect() {
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.hrSelect_);
+
+  var fmt = new goog.i18n.MessageFormat('{0, select, ' +
+      'female {Njen} other {Njegov}} bicikl je {0, select, female {crven} ' +
+      'other {plav}}.');
+
+  assertEquals('Njegov bicikl je plav.', fmt.format(['male']));
+  assertEquals('Njen bicikl je crven.', fmt.format(['female']));
+}
+
+function testSerbianSimplePlural() {
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.hrSelect_);
+
+  var fmt = new goog.i18n.MessageFormat('Ja {0, plural, offset:1 ' +
+      '=0 {ne vidim nikoga} ' +
+      '=1 {vidim {1}} ' +
+      'one {vidim {1} i jos # osobu} ' +
+      'few {vidim {1} i jos # osobe} ' +
+      'many {vidim {1} i jos # osoba} ' +
+      'other {{1} i jos # osoba}} ' +
+      'u {2}.');
+
+  assertEquals('Ja ne vidim nikoga u Beogradu.',
+               fmt.format([0, '', 'Beogradu']));
+  assertEquals('Ja vidim Markusa u Berlinu.',
+               fmt.format([1, 'Markusa', 'Berlinu']));
+  assertEquals('Ja vidim Marka i jos 1 osobu u Atini.',
+               fmt.format([2, 'Marka', 'Atini']));
+  assertEquals('Ja vidim Petra i jos 3 osobe u muzeju.',
+               fmt.format([4, 'Petra', 'muzeju']));
+  assertEquals('Ja vidim Cibua i jos 99 osoba u bazenu.',
+               fmt.format([100, 'Cibua', 'bazenu']));
+}
+
+function testSerbianSimplePluralNoOffset() {
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.hrSelect_);
+
+  var fmt = new goog.i18n.MessageFormat('Ja {0, plural, ' +
+      '=0 {ne vidim nikoga} ' +
+      '=1 {vidim {1}} ' +
+      'one {vidim {1} i jos # osobu} ' +
+      'few {vidim {1} i jos # osobe} ' +
+      'many {vidim {1} i jos # osoba} ' +
+      'other {{1} i jos # osoba}} ' +
+      'u {2}.');
+
+  assertEquals('Ja ne vidim nikoga u Beogradu.',
+               fmt.format([0, '', 'Beogradu']));
+  assertEquals('Ja vidim Markusa u Berlinu.',
+               fmt.format([1, 'Markusa', 'Berlinu']));
+  assertEquals('Ja vidim Marka i jos 21 osobu u Atini.',
+               fmt.format([21, 'Marka', 'Atini']));
+  assertEquals('Ja vidim Petra i jos 3 osobe u muzeju.',
+               fmt.format([3, 'Petra', 'muzeju']));
+  assertEquals('Ja vidim Cibua i jos 100 osoba u bazenu.',
+               fmt.format([100, 'Cibua', 'bazenu']));
+}
+
+function testSerbianSelectNestedInPlural() {
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.hrSelect_);
+  stubs.set(goog.i18n, 'NumberFormatSymbols', goog.i18n.NumberFormatSymbols_hr);
+
+  var fmt = new goog.i18n.MessageFormat('{2, plural, ' +
+      'one {{0, select, ' +
+      '  female {{1} vas je dodala u njen # kruzok} ' +
+      '  other  {{1} vas je dodao u njegov # kruzok}}} ' +
+      'few {{0, select, ' +
+      '  female {{1} vas je dodala u njena # kruzoka} ' +
+      '  other  {{1} vas je dodao u njegova # kruzoka}}} ' +
+      'many {{0, select, ' +
+      '  female {{1} vas je dodala u njenih # kruzoka} ' +
+      '  other  {{1} vas je dodao u njegovih # kruzoka}}} ' +
+      'other {{0, select, ' +
+      '  female {{1} vas je dodala u njenih # kruzoka} ' +
+      '  other  {{1} vas je dodao u njegovih # kruzoka}}}}');
+
+  assertEquals('Jelena vas je dodala u njen 21 kruzok',
+               fmt.format(['female', 'Jelena', 21]));
+  assertEquals('Jelena vas je dodala u njena 3 kruzoka',
+               fmt.format(['female', 'Jelena', 3]));
+  assertEquals('Jelena vas je dodala u njenih 5 kruzoka',
+               fmt.format(['female', 'Jelena', 5]));
+  assertEquals('Milan vas je dodao u njegovih 1.235 kruzoka',
+               fmt.format(['male', 'Milan', 1235]));
+}
+
+function testPoundShowsNumberMinusOffsetInAllCases() {
+  var fmt = new goog.i18n.MessageFormat('{0, plural, offset:1 ' +
+      '=0 {#} =1 {#} =2 {#}one {#} other {#}}');
+
+  assertEquals('-1', fmt.format([0]));
+  assertEquals('0', fmt.format([1]));
+  assertEquals('1', fmt.format([2]));
+  assertEquals('20', fmt.format([21]));
+}
+
+</script>
+</body>
+</html>
