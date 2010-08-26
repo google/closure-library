@@ -116,6 +116,21 @@ function checkHilitedIndex(renderer, index) {
   assertEquals(index, renderer.getHilitedRowIndex());
 }
 
+function testGetRowCount() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  assertEquals(0, ac.getRowCount());
+
+  ac.setToken('Zaphod');
+  assertEquals(1, ac.getRowCount());
+
+  ac.setMaxMatches(2);
+  ac.setToken('the');
+  assertEquals(2, ac.getRowCount());
+}
+
 /**
  * Try using next and prev to navigate past the ends with default behavior of
  * allowFreeSelect_ and wrap_.

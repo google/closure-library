@@ -77,10 +77,10 @@ goog.ui.AutoComplete = function(matcher, renderer, selectionHandler) {
    */
   this.renderer_ = renderer;
   goog.events.listen(renderer, [
-      goog.ui.AutoComplete.EventType.HILITE,
-      goog.ui.AutoComplete.EventType.SELECT,
-      goog.ui.AutoComplete.EventType.CANCEL_DISMISS,
-      goog.ui.AutoComplete.EventType.DISMISS], this);
+    goog.ui.AutoComplete.EventType.HILITE,
+    goog.ui.AutoComplete.EventType.SELECT,
+    goog.ui.AutoComplete.EventType.CANCEL_DISMISS,
+    goog.ui.AutoComplete.EventType.DISMISS], this);
 
   /**
    * Currently typed token which will be used for completion.
@@ -347,6 +347,14 @@ goog.ui.AutoComplete.prototype.isOpen = function() {
 
 
 /**
+ * @return {number} Number of rows in the autocomplete.
+ */
+goog.ui.AutoComplete.prototype.getRowCount = function() {
+  return this.rows_.length;
+};
+
+
+/**
  * Moves the hilite to the next row, or does nothing if we're already at the
  * end of the current set of matches.  Calls renderer.hiliteId() when there's
  * something to do.
@@ -387,7 +395,7 @@ goog.ui.AutoComplete.prototype.hilitePrev = function() {
     this.hiliteId(-1);
     return false;
   } else if (this.wrap_ &&
-        (this.hiliteId_ == -1 || this.hiliteId_ == this.firstRowId_)) {
+      (this.hiliteId_ == -1 || this.hiliteId_ == this.firstRowId_)) {
     var lastId = this.firstRowId_ + this.rows_.length - 1;
     this.hiliteId(lastId);
     return true;
