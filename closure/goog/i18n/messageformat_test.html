@@ -138,11 +138,41 @@ function testSelectNestedInPlural() {
                            'CIRCLES': 1234}));
 }
 
-function testLiterals() {
-  var fmt = new goog.i18n.MessageFormat("Anna''s house" +
-      " 'has {0} and # in the roof' and {NUM_COWS} cows.");
+function testLiteralOpenCurlyBrace() {
+  var fmt = new goog.i18n.MessageFormat("Anna's house" +
+      " has '{0} and # in the roof' and {NUM_COWS} cows.");
   assertEquals("Anna's house has {0} and # in the roof and 5 cows.",
                fmt.format({'NUM_COWS': '5'}));
+}
+
+function testLiteralClosedCurlyBrace() {
+  var fmt = new goog.i18n.MessageFormat("Anna's house" +
+      " has '{'0'} and # in the roof' and {NUM_COWS} cows.");
+  assertEquals("Anna's house has {0} and # in the roof and 5 cows.",
+               fmt.format({'NUM_COWS': '5'}));
+}
+
+function testLiteralPoundSign() {
+  var fmt = new goog.i18n.MessageFormat("Anna's house" +
+      " has '{0}' and '# in the roof' and {NUM_COWS} cows.");
+  assertEquals("Anna's house has {0} and # in the roof and 5 cows.",
+               fmt.format({'NUM_COWS': '5'}));
+}
+
+function testNoLiteralsForSingleQuotes() {
+  var fmt = new goog.i18n.MessageFormat("Anna's house" +
+      " 'has {NUM_COWS} cows'.");
+  assertEquals("Anna's house 'has 5 cows'.", fmt.format({'NUM_COWS': '5'}));
+}
+
+function testConsecutiveSingleQuotesAreReplacedWithOneSingleQuote() {
+  var fmt = new goog.i18n.MessageFormat("Anna''s house a'{''''b");
+  assertEquals("Anna's house a{''b", fmt.format({}));
+}
+
+function testConsecutiveSingleQuotesBeforeSpecialCharDontCreateLiteral() {
+  var fmt = new goog.i18n.MessageFormat("a''{NUM_COWS}'b");
+  assertEquals("a'5'b", fmt.format({'NUM_COWS': '5'}));
 }
 
 function testSerbianSimpleSelect() {

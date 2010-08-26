@@ -98,17 +98,6 @@ goog.i18n.MessageFormat.LITERAL_PLACEHOLDER_ = '\uFDDF_';
 
 
 /**
- * Special case for quote literal.
- * _GooG_MeSsAgE_FoRMaT_LiTeRaL_x_ for parsing purposes, and recovered during
- * format phase.
- * @type {string}
- * @private
- */
-goog.i18n.MessageFormat.QUOTE_LITERAL_PLACEHOLDER_ =
-    goog.i18n.MessageFormat.LITERAL_PLACEHOLDER_ + '0_';
-
-
-/**
  * Marks a string and block during parsing.
  * @enum {number}
  * @private
@@ -180,12 +169,7 @@ goog.i18n.MessageFormat.prototype.format = function(namedParameters) {
     return literal;
   });
 
-  var regexPlaceholder = new RegExp(
-      '(' + goog.i18n.MessageFormat.QUOTE_LITERAL_PLACEHOLDER_ + ')', 'g');
-
-  return message.replace(regexPlaceholder, function(item) {
-    return literals[item];
-  });
+  return message;
 };
 
 
@@ -307,29 +291,30 @@ goog.i18n.MessageFormat.prototype.parsePattern_ = function(pattern) {
 
 
 /**
- * Replaces '' and string literals with literal placeholders.
+ * Replaces string literals with literal placeholders.
+ * Literals are string of the form '}...', '{...' and '#...' where ... is
+ * set of characters not containing '. Double single quotes are replaced with
+ * single quote only - '' -> '.
  * Builds a dictionary so we can recover literals during format phase.
  * @param {string} pattern Pattern to clean up.
  * @return {string} Pattern with literals replaced with placeholders.
  * @private
  */
 goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
-  this.literals_[goog.i18n.MessageFormat.QUOTE_LITERAL_PLACEHOLDER_] = "'";
-
-  // Replace all '' with LITERAL_PLACEHOLDER_0_.
-  pattern = pattern.replace(
-      /''/g, goog.i18n.MessageFormat.QUOTE_LITERAL_PLACEHOLDER_);
-
-  // Replace the rest of '...' strings with placeholders.
-  var literalCount = 1;
+  // Replace the literals with placeholders.
+  var literalCount = 0;
   var literals = this.literals_;
-  pattern = pattern.replace(/\'.*?\'/g, function(literal) {
-    var literalKey = goog.i18n.MessageFormat.LITERAL_PLACEHOLDER_ +
-        literalCount + '_';
-    // Remove ' before saving.
-    literals[literalKey] = literal.replace(/\'/g, '');
-    literalCount++;
-    return literalKey;
+  var literalRegex = /(?:\'\')|(?:\'([{}#].*?)\')/g;
+  pattern = pattern.replace(literalRegex, function(match, text) {
+    if (match == "''") {
+      return "'";
+    } else {
+      var literalKey = goog.i18n.MessageFormat.LITERAL_PLACEHOLDER_ +
+          literalCount + '_';
+      literals[literalKey] = text;
+      literalCount++;
+      return literalKey;
+    }
   });
 
   return pattern;
