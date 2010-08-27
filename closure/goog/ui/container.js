@@ -255,9 +255,9 @@ goog.ui.Container.prototype.setKeyEventTarget = function(element) {
       this.enableFocusHandling_(true);
     }
   } else {
-   throw Error('Can\'t set key event target for container ' +
-       'that doesn\'t support keyboard focus!');
- }
+    throw Error('Can\'t set key event target for container ' +
+        'that doesn\'t support keyboard focus!');
+  }
 };
 
 
@@ -526,7 +526,7 @@ goog.ui.Container.prototype.handleUnHighlightItem = function(e) {
     this.highlightedIndex_ = -1;
   }
   goog.dom.a11y.setState(this.getElement(),
-       goog.dom.a11y.State.ACTIVEDESCENDANT, '');
+      goog.dom.a11y.State.ACTIVEDESCENDANT, '');
 };
 
 
@@ -710,6 +710,11 @@ goog.ui.Container.prototype.handleKeyEventInternal = function(e) {
       typeof this.openItem_.handleKeyEvent == 'function' &&
       this.openItem_.handleKeyEvent(e)) {
     return true;
+  }
+
+  // Do not handle the key event if any modifier key is pressed.
+  if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) {
+    return false;
   }
 
   // Either nothing is highlighted, or the highlighted control didn't handle

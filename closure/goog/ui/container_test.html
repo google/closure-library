@@ -312,7 +312,6 @@ Author:  attila@google.com (Attila Bodis)
       keyContainer.handleKeyEvent(new goog.events.Event());
       assertEquals('One key event should be handled',
           1, keyContainer.keyEventsHandled);
-
     }
 
     function testHandleKeyEvent_alwaysHandlesWithKeyEventTarget() {
@@ -324,6 +323,29 @@ Author:  attila@google.com (Attila Bodis)
       keyContainer.handleKeyEvent(new goog.events.Event());
       assertEquals('One key events should be handled',
           1, keyContainer.keyEventsHandled);
+    }
+
+    function testHandleKeyEventInternal_onlyHandlesUnmodified() {
+      container.setKeyEventTarget(sandbox);
+      var event = new goog.events.KeyEvent(
+          goog.events.KeyCodes.ESC, 0, false, null);
+
+      var propertyNames = [
+        'shiftKey',
+        'altKey',
+        'ctrlKey',
+        'metaKey'
+      ];
+
+      // Verify that the event is not handled whenever a modifier key is true.
+      for (var i = 0, propertyName; propertyName = propertyNames[i]; i++) {
+        assertTrue('Event should be handled when modifer key is not pressed.',
+            container.handleKeyEventInternal(event));
+        event[propertyName] = true;
+        assertFalse('Event should not be handled when modifer key is pressed.',
+            container.handleKeyEventInternal(event));
+        event[propertyName] = false;
+      }
     }
 
     function testOpenFollowsHighlight() {
