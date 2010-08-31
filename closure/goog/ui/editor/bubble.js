@@ -341,6 +341,8 @@ goog.ui.editor.Bubble.prototype.handlePopupHide = function() {
 
   // Update the state to reflect no panels.
   this.panels_ = {};
+  goog.dom.classes.remove(this.bubbleContainer_,
+      goog.getCssName('tr_multi_bubble'));
 
   this.eventHandler_.removeAll();
   this.dispatchEvent(goog.ui.Component.EventType.HIDE);
