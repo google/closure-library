@@ -114,7 +114,7 @@ goog.history.Html5History.prototype.setEnabled = function(enable) {
   this.enabled_ = enable;
 
   if (enable) {
-    this.dispatchEvent(new goog.history.Event(this.getToken()));
+    this.dispatchEvent(new goog.history.Event(this.getToken(), false));
   }
 };
 
@@ -143,7 +143,7 @@ goog.history.Html5History.prototype.setToken = function(token, opt_title) {
   // Per externs/gecko_dom.js document.title can be null.
   this.window_.history.pushState(null,
       opt_title || this.window_.document.title || '', this.getUrl_(token));
-  this.dispatchEvent(new goog.history.Event(token));
+  this.dispatchEvent(new goog.history.Event(token, false));
 };
 
 
@@ -157,7 +157,7 @@ goog.history.Html5History.prototype.replaceToken = function(token, opt_title) {
   // Per externs/gecko_dom.js document.title can be null.
   this.window_.history.replaceState(null,
       opt_title || this.window_.document.title || '', this.getUrl_(token));
-  this.dispatchEvent(new goog.history.Event(token));
+  this.dispatchEvent(new goog.history.Event(token, false));
 };
 
 
@@ -233,6 +233,6 @@ goog.history.Html5History.prototype.getUrl_ = function(token) {
  */
 goog.history.Html5History.prototype.onHistoryEvent_ = function(e) {
   if (this.enabled_) {
-    this.dispatchEvent(new goog.history.Event(this.getToken()));
+    this.dispatchEvent(new goog.history.Event(this.getToken(), true));
   }
 };
