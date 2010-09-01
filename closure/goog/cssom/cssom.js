@@ -94,7 +94,10 @@ goog.cssom.getCssRulesFromStyleSheet = function(styleSheet) {
   } catch (e) {
     // This can happen if we try to access the CSSOM before it's "ready".
     if (e.code == 15) {
-      // Wow, dunno what to do here.
+      // Firefox throws an NS_ERROR_DOM_INVALID_ACCESS_ERR error if a stylesheet
+      // is read before it has been fully parsed. Let the caller know which
+      // stylesheet failed.
+      e.styleSheet = styleSheet;
       throw e;
     }
   }
