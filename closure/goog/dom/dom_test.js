@@ -1041,7 +1041,7 @@ function testHtmlToDocumentFragment() {
   var div = goog.dom.htmlToDocumentFragment('<div>3</div>');
   assertEquals('DIV', div.tagName);
 
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersion('9')) {
     // Removing an Element from a DOM tree in IE sets its parentNode to a new
     // DocumentFragment. Bizarre!
     assertEquals(goog.dom.NodeType.DOCUMENT_FRAGMENT,
