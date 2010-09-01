@@ -632,7 +632,10 @@ goog.ui.Container.prototype.getOwnerControl = function(node) {
   // looking up the owner.
   if (this.childElementIdMap_) {
     var elem = this.getElement();
-    while (node && node.parentNode && node != elem) {
+    // See http://b/2964418 . IE9 appears to evaluate '!=' incorrectly, so
+    // using '!==' instead.
+    // TODO(user): Possibly revert this change if/when IE9 fixes the issue.
+    while (node && node !== elem) {
       var id = node.id;
       if (id in this.childElementIdMap_) {
         return this.childElementIdMap_[id];
