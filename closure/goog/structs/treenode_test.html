@@ -95,6 +95,14 @@ function testGetChildAt() {
   assertNull('no children', node2.getChildAt(0));
 }
 
+function testGetChildCount() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  node1.addChild(node2);
+  assertEquals('child count of root node', 1, node1.getChildCount());
+  assertEquals('child count of leaf node', 0, node2.getChildCount());
+}
+
 function testGetDepth() {
   var node1 = new goog.structs.TreeNode(1, null);
   var node2 = new goog.structs.TreeNode(2, null);
