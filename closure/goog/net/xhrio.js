@@ -820,21 +820,39 @@ goog.net.XhrIo.prototype.getLastUri = function() {
 
 /**
  * Get the response text from the Xhr object
- * Will only return correct result when called from the context of a callback
- * @return {string} Result from the server.
+ * Will only return correct result when called from the context of a callback.
+ * @return {string} Result from the server, or '' if no result available.
  */
 goog.net.XhrIo.prototype.getResponseText = function() {
-  return this.xhr_ ? this.xhr_.responseText : '';
+  /** @preserveTry */
+  try {
+    return this.xhr_ ? this.xhr_.responseText : '';
+  } catch (e) {
+    // http://www.w3.org/TR/XMLHttpRequest/#the-responsetext-attribute
+    // states that responseText should return '' (and responseXML null)
+    // when the state is not LOADING or DONE. Instead, IE and Gears can
+    // throw unexpected exceptions, eg, when a request is aborted or no
+    // data is available yet.
+    this.logger_.fine('Can not get responseText: ' + e.message);
+    return '';
+  }
 };
 
 
 /**
  * Get the response XML from the Xhr object
- * Will only return correct result when called from the context of a callback
- * @return {Document} The DOM Document representing the XML file.
+ * Will only return correct result when called from the context of a callback.
+ * @return {Document} The DOM Document representing the XML file, or null
+ * if no result available.
  */
 goog.net.XhrIo.prototype.getResponseXml = function() {
-  return this.xhr_ ? this.xhr_.responseXML : null;
+  /** @preserveTry */
+  try {
+    return this.xhr_ ? this.xhr_.responseXML : null;
+  } catch (e) {
+    this.logger_.fine('Can not get responseXML: ' + e.message);
+    return null;
+  }
 };
 
 
