@@ -16,12 +16,10 @@ See the COPYING file for details.
   goog.require('goog.date.DateTime');
   goog.require('goog.date.Interval');
   goog.require('goog.i18n.DateTimeSymbols');
-  goog.require('goog.math');
   goog.require('goog.testing.jsunit');
   goog.require('goog.userAgent');
   goog.require('goog.userAgent.platform');
   goog.require('goog.userAgent.product');
-  goog.require('goog.userAgent.product.isVersion');
 </script>
 </head>
 <body>
@@ -589,12 +587,12 @@ function test_setIso8601TimeOnly_() {
   assertEquals('Got 18 hours from ' + iso, 18, d.getHours());
   assertEquals('Got 46 minutes from ' + iso, 46, d.getMinutes());
   assertEquals('Got 39 seconds from ' + iso, 39, d.getSeconds());
-  if (!goog.math.isInt(d.getMilliseconds())) {
-    // Both Safari 3.1 and WebKit in some versions return floating-point values.
+  if (goog.userAgent.WEBKIT && goog.userAgent.MAC) {
+    // Both Safari 3.1 and WebKit (on Mac) return floating-point values.
     assertRoughlyEquals('Got roughly 994.2 milliseconds from ' + iso, 994.2,
         d.getMilliseconds(), 0.01);
   } else {
-    // Other browsers return integers.
+    // Other browsers, including WebKit on Windows, return integers.
     assertEquals('Got 994 milliseconds from ' + iso, 994, d.getMilliseconds());
   }
 
@@ -604,12 +602,12 @@ function test_setIso8601TimeOnly_() {
   assertEquals('Got 18 hours from ' + iso, 18, d.getHours());
   assertEquals('Got 46 minutes from ' + iso, 46, d.getMinutes());
   assertEquals('Got 39 seconds from ' + iso, 39, d.getSeconds());
-  if (!goog.math.isInt(d.getMilliseconds())) {
-    // Both Safari 3.1 and WebKit in some versions return floating-point values.
+  if (goog.userAgent.WEBKIT && goog.userAgent.MAC) {
+    // Both Safari 3.1 and WebKit (on Mac) return floating-point values.
     assertRoughlyEquals('Got roughly 994.2 milliseconds from ' + iso, 994.2,
         d.getMilliseconds(), 0.01);
   } else {
-    // Other browsers return integers.
+    // Other browsers, including WebKit on Windows, return integers.
     assertEquals('Got 994 milliseconds from ' + iso, 994, d.getMilliseconds());
   }
 
@@ -630,20 +628,6 @@ function test_setIso8601TimeOnly_() {
   iso = '16:46:39-07:00';
   assertTrue('parsed ' + iso, goog.date.setIso8601TimeOnly_(d, iso));
   assertEquals('Got a 23-hour GMT offset from ' + iso, 23, d.getUTCHours());
-}
-
-
-function testBrowserVersionMillisecondPrecision() {
-  var d = new goog.date.DateTime(0, 0);
-  var iso = '184639.9942';
-  assertTrue('parsed ' + iso, goog.date.setIso8601TimeOnly_(d, iso));
-  // TODO(user): Use isVersion instead.
-  if (goog.userAgent.WEBKIT && (goog.userAgent.MAC || goog.userAgent.WINDOWS)) {
-    assertRoughlyEquals('Got roughly 994.2 milliseconds from ' + iso, 994.2,
-        d.getMilliseconds(), 0.01);
-  } else {
-    assertEquals('Got 994 milliseconds from ' + iso, 994, d.getMilliseconds());
-  }
 }
 
 
