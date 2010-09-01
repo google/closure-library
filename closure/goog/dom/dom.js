@@ -35,6 +35,7 @@ goog.provide('goog.dom.DomHelper');
 goog.provide('goog.dom.NodeType');
 
 goog.require('goog.array');
+goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.math.Coordinate');
@@ -655,8 +656,8 @@ goog.dom.createDom_ = function(doc, args) {
   // Internet Explorer is dumb: http://msdn.microsoft.com/workshop/author/
   //                            dhtml/reference/properties/name_2.asp
   // Also does not allow setting of 'type' attribute on 'input' or 'button'.
-  if (goog.userAgent.IE && !goog.userAgent.isVersion('9.0') &&
-      attributes && (attributes.name || attributes.type)) {
+  if (!goog.dom.BrowserFeature.CAN_ADD_NAME_OR_TYPE_ATTRIBUTES && attributes &&
+      (attributes.name || attributes.type)) {
     var tagNameArr = ['<', tagName];
     if (attributes.name) {
       tagNameArr.push(' name="', goog.string.htmlEscape(attributes.name),

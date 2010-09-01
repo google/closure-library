@@ -46,6 +46,7 @@
 goog.provide('goog.events.BrowserEvent');
 goog.provide('goog.events.BrowserEvent.MouseButton');
 
+goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
 goog.require('goog.userAgent');
 
@@ -295,7 +296,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
  * @return {boolean} True if button was pressed.
  */
 goog.events.BrowserEvent.prototype.isButton = function(button) {
-  if (goog.userAgent.IE) {
+  if (!goog.events.BrowserFeature.HAS_W3C_BUTTON) {
     if (this.type == 'click') {
       return button == goog.events.BrowserEvent.MouseButton.LEFT;
     } else {
@@ -322,16 +323,6 @@ goog.events.BrowserEvent.prototype.stopPropagation = function() {
 
 
 /**
- * To prevent default in some IE versions for certain keydown events, we need
- * set the keyCode to -1.
- * @type {boolean}
- * @private
- */
-goog.events.BrowserEvent.IE_SET_KEY_CODE_TO_PREVENT_DEFAULT_ =
-    goog.userAgent.IE && !goog.userAgent.isVersion('9');
-
-
-/**
  * @inheritDoc
  */
 goog.events.BrowserEvent.prototype.preventDefault = function() {
@@ -339,7 +330,7 @@ goog.events.BrowserEvent.prototype.preventDefault = function() {
   var be = this.event_;
   if (!be.preventDefault) {
     be.returnValue = false;
-    if (goog.events.BrowserEvent.IE_SET_KEY_CODE_TO_PREVENT_DEFAULT_) {
+    if (goog.events.BrowserFeature.SET_KEY_CODE_TO_PREVENT_DEFAULT) {
       /** @preserveTry */
       try {
         // Most keys can be prevented using returnValue. Some special keys
