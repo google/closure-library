@@ -764,6 +764,8 @@ function testGetTextContent() {
   t(' \n&shy;<b>abcde &shy; </b>   \n\n\n&shy;', 'abcde ');
   t(' \n&shy;\n\n&shy;\na   ', 'a ');
   t(' \n<wbr></wbr><b>abcde <wbr></wbr> </b>   \n\n\n<wbr></wbr>', 'abcde ');
+  t('a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b',
+      goog.userAgent.IE ? 'a     b' : 'a\xA0\xA0\xA0\xA0\xA0b');
 }
 
 function testGetNodeTextLength() {
@@ -904,9 +906,6 @@ function testCanHaveChildren() {
     var expected = true;
     switch (tag) {
       case goog.dom.TagName.BASE:
-        // Before version 8, IE incorrectly reports that BASE can have children.
-        expected = goog.userAgent.IE && !goog.userAgent.isVersion('8');
-        break;
       case goog.dom.TagName.APPLET:
       case goog.dom.TagName.AREA:
       case goog.dom.TagName.BR:
@@ -928,9 +927,15 @@ function testCanHaveChildren() {
         expected = false;
         break;
     }
-    var node = goog.dom.createDom(tag);
+    var node = goog.dom.createDom(tag)
     assertEquals(tag + ' should ' + (expected ? '' : 'not ') +
         'have children', expected, goog.dom.canHaveChildren(node));
+
+    // Make sure we can _actually_ add a child if we identify the node as
+    // allowing children.
+    if (goog.dom.canHaveChildren(node)) {
+      node.appendChild(goog.dom.createDom('div', null, 'foo'));
+    }
   }
 }
 

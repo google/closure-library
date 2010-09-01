@@ -219,7 +219,7 @@ goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
   // Decorate the element's children, if applicable.  This should happen after
   // the container's own state has been initialized, since how children are
   // decorated may depend on the state of the container.
-  this.decorateChildren(container, element);
+  this.decorateChildren(container, this.getContentElement(element));
 
   return element;
 };
@@ -372,10 +372,10 @@ goog.ui.ContainerRenderer.prototype.getClassNames = function(container) {
   var isHorizontal =
       container.getOrientation() == goog.ui.Container.Orientation.HORIZONTAL;
   var classNames = [
-      baseClass,
-      (isHorizontal ?
-          goog.getCssName(baseClass, 'horizontal') :
-          goog.getCssName(baseClass, 'vertical'))
+    baseClass,
+    (isHorizontal ?
+        goog.getCssName(baseClass, 'horizontal') :
+        goog.getCssName(baseClass, 'vertical'))
   ];
   if (!container.isEnabled()) {
     classNames.push(goog.getCssName(baseClass, 'disabled'));

@@ -655,7 +655,8 @@ goog.dom.createDom_ = function(doc, args) {
   // Internet Explorer is dumb: http://msdn.microsoft.com/workshop/author/
   //                            dhtml/reference/properties/name_2.asp
   // Also does not allow setting of 'type' attribute on 'input' or 'button'.
-  if (goog.userAgent.IE && attributes && (attributes.name || attributes.type)) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersion('9.0') &&
+      attributes && (attributes.name || attributes.type)) {
     var tagNameArr = ['<', tagName];
     if (attributes.name) {
       tagNameArr.push(' name="', goog.string.htmlEscape(attributes.name),
@@ -874,17 +875,32 @@ goog.dom.isCss1CompatMode_ = function(doc) {
 
 
 /**
- * Determines if the given node can contain children.
+ * Determines if the given node can contain children, intended to be used for
+ * HTML generation.
+ *
+ * IE natively supports node.canHaveChildren but has inconsistent behavior.
+ * Prior to IE8 the base tag allows children and in IE9 all nodes return true
+ * for canHaveChildren.
+ *
+ * In practice all non-IE browsers allow you to add children to any node, but
+ * the behavior is inconsistent:
+ *
+ * <pre>
+ *   var a = document.createElement('br');
+ *   a.appendChild(document.createTextNode('foo'));
+ *   a.appendChild(document.createTextNode('bar'));
+ *   console.log(a.childNodes.length);  // 2
+ *   console.log(a.innerHTML);  // Chrome: "", IE9: "foobar", FF3.5: "foobar"
+ * </pre>
+ *
+ * TODO(user): Rename shouldAllowChildren() ?
+ *
  * @param {Node} node The node to check.
  * @return {boolean} Whether the node can contain children.
  */
 goog.dom.canHaveChildren = function(node) {
   if (node.nodeType != goog.dom.NodeType.ELEMENT) {
     return false;
-  }
-  if ('canHaveChildren' in node) {
-    // IE supports this natively.
-    return node.canHaveChildren;
   }
   switch (node.tagName) {
     case goog.dom.TagName.APPLET:
@@ -1573,9 +1589,13 @@ goog.dom.getTextContent = function(node) {
   }
 
   // Strip &shy; entities. goog.format.insertWordBreaks inserts them in Opera.
-  textContent = textContent.replace(/\xAD/g, '');
+  textContent = textContent.replace(/ \xAD /g, ' ').replace(/\xAD/g, '');
 
-  textContent = textContent.replace(/ +/g, ' ');
+  // Skip this replacement on IE, which automatically turns &nbsp; into ' '
+  // and / +/ into ' ' when reading innerText.
+  if (!goog.userAgent.IE) {
+    textContent = textContent.replace(/ +/g, ' ');
+  }
   if (textContent != ' ') {
     textContent = textContent.replace(/^\s*/, '');
   }
