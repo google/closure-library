@@ -20,6 +20,17 @@
  * for type-inference. For example, <code>goog.asserts.assert(foo)</code>
  * will restrict <code>foo</code> to a truthy value.
  *
+ * The compiler has an option to disable asserts. So code like:
+ * <code>
+ * var x = goog.asserts.assert(foo()); goog.asserts.assert(bar());
+ * </code>
+ * will be transformed into:
+ * <code>
+ * var x = foo();
+ * </code>
+ * The compiler will leave in foo() (because its return value is used),
+ * but it will remove bar() because it assumes it does not have side-effects.
+ *
  *
  * @author agrieve@google.com (Andrew Grieve)
  */
@@ -29,11 +40,6 @@ goog.provide('goog.asserts.AssertionError');
 
 goog.require('goog.debug.Error');
 goog.require('goog.string');
-
-// TODO(nicksantos): Add return values for all these functions, so that they
-// can be chained like:
-// eatNumber(goog.asserts.isNumber(foo));
-// for more lisp-y asserts.
 
 /**
  * @define {boolean} Whether to strip out asserts or to leave them in.
@@ -103,6 +109,7 @@ goog.asserts.doAssertFailure_ =
  * @param {*} condition The condition to check.
  * @param {string=} opt_message Error message in case of failure.
  * @param {...*} var_args The items to substitute into the failure message.
+ * @return {*} The value of the condition.
  * @throws {goog.asserts.AssertionError} When the condition evaluates to false.
  */
 goog.asserts.assert = function(condition, opt_message, var_args) {
@@ -110,6 +117,7 @@ goog.asserts.assert = function(condition, opt_message, var_args) {
     goog.asserts.doAssertFailure_('', null, opt_message,
         Array.prototype.slice.call(arguments, 2));
   }
+  return condition;
 };
 
 
