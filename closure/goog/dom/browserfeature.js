@@ -34,5 +34,11 @@ goog.dom.BrowserFeature = {
    * created. False in Internet Explorer prior to version 9.
    */
   CAN_ADD_NAME_OR_TYPE_ATTRIBUTES: !goog.userAgent.IE ||
-      goog.userAgent.isVersion('9')
+      goog.userAgent.isVersion('9'),
+
+  /**
+   * Opera, Safari 3, and Internet Explorer 9 all support innerText but they
+   * include text nodes in script and style tags.
+   */
+  CAN_USE_INNER_TEXT: goog.userAgent.IE && !goog.userAgent.isVersion('9')
 };

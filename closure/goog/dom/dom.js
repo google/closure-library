@@ -1577,9 +1577,9 @@ goog.dom.setFocusableTabIndex = function(element, enable) {
  */
 goog.dom.getTextContent = function(node) {
   var textContent;
-  // Note(user): Both Opera and Safara 3 supports innerText but they include
+  // Note(user): IE9, Opera, and Safara 3 support innerText but they include
   // text nodes in script tags. So we revert to use a user agent test here.
-  if (goog.userAgent.IE && ('innerText' in node)) {
+  if (goog.dom.BrowserFeature.CAN_USE_INNER_TEXT && ('innerText' in node)) {
     textContent = goog.string.canonicalizeNewlines(node.innerText);
     // Unfortunately .innerText() returns text with &shy; symbols
     // We need to filter it out and then remove duplicate whitespaces
