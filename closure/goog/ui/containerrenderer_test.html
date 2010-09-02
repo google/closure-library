@@ -39,26 +39,6 @@ Author:  attila@google.com (Attila Bodis)
       sandbox.appendChild(goog.dom.createDom('span', {
         id: 'noTabIndex'
       }, 'Test'));
-      sandbox.appendChild(goog.dom.createDom('span', {
-        id: 'tabIndexNegative2',
-        tabIndex: -2
-      }, 'Test'));
-      sandbox.appendChild(goog.dom.createDom('span', {
-        id: 'tabIndexNegative1',
-        tabIndex: -1
-      }, 'Test'));
-      sandbox.appendChild(goog.dom.createDom('span', {
-        id: 'tabIndex0',
-        tabIndex: 0
-      }, 'Test'));
-      sandbox.appendChild(goog.dom.createDom('span', {
-        id: 'tabIndex1',
-        tabIndex: 1
-      }, 'Test'));
-      sandbox.appendChild(goog.dom.createDom('span', {
-        id: 'tabIndex2',
-        tabIndex: 2
-      }, 'Test'));
       sandbox.appendChild(goog.dom.createDom('div', {
         id: 'container',
         'class': 'goog-container-horizontal'
@@ -97,36 +77,10 @@ Author:  attila@google.com (Attila Bodis)
       assertUndefined('ARIA role must be undefined', renderer.getAriaRole());
     }
 
-    function testHasTabIndex() {
-      assertFalse('hasTabIndex() must return false for null argument',
-          renderer.hasTabIndex(null));
-      assertFalse('hasTabIndex() must return false for no tab index',
-          renderer.hasTabIndex(goog.dom.getElement('noTabIndex')));
-      assertFalse('hasTabIndex() must return false for tab index -2',
-          renderer.hasTabIndex(goog.dom.getElement('tabIndexNegative2')));
-      assertFalse('hasTabIndex() must return false for tab index -1',
-          renderer.hasTabIndex(goog.dom.getElement('tabIndexNegative1')));
-
-      // WebKit on Mac doesn't support tabIndex for arbitrary DOM elements
-      // until version 527 or later.
-      expectedFailures.expectFailureFor(goog.userAgent.WEBKIT &&
-          goog.userAgent.MAC && !goog.userAgent.isVersion('527'));
-      try {
-        assertTrue('hasTabIndex() must return true for tab index 0',
-            renderer.hasTabIndex(goog.dom.getElement('tabIndex0')));
-        assertTrue('hasTabIndex() must return true for tab index 1',
-            renderer.hasTabIndex(goog.dom.getElement('tabIndex1')));
-        assertTrue('hasTabIndex() must return true for tab index 2',
-            renderer.hasTabIndex(goog.dom.getElement('tabIndex2')));
-      } catch (e) {
-        expectedFailures.handleException(e);
-      }
-    }
-
     function testEnableTabIndex() {
       var container = goog.dom.getElement('container');
       assertFalse('Container must not have any tab index',
-          renderer.hasTabIndex(container));
+          goog.dom.isFocusableTabIndex(container));
 
       // WebKit on Mac doesn't support tabIndex for arbitrary DOM elements
       // until version 527 or later.
@@ -135,12 +89,12 @@ Author:  attila@google.com (Attila Bodis)
       try {
         renderer.enableTabIndex(container, true);
         assertTrue('Container must have a tab index',
-            renderer.hasTabIndex(container));
+            goog.dom.isFocusableTabIndex(container));
         assertEquals('Container\'s tab index must be 0', 0, container.tabIndex);
 
         renderer.enableTabIndex(container, false);
         assertFalse('Container must not have a tab index',
-            renderer.hasTabIndex(container));
+            goog.dom.isFocusableTabIndex(container));
         assertEquals('Container\'s tab index must be -1', -1,
             container.tabIndex);
       } catch (e) {

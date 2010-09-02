@@ -116,22 +116,8 @@ goog.ui.ContainerRenderer.prototype.getAriaRole = function() {
  * @param {Element} element Element to check.
  * @return {boolean} Whether the element has a tab index.
  */
-goog.ui.ContainerRenderer.prototype.hasTabIndex = function(element) {
-  if (element) {
-    // IE returns a value of 0 for an unset tabIndex.  Therefore, we must use
-    // getAttributeNode('tabIndex'), which returns an object with a 'specified'
-    // property if tabIndex is specified.  For more info, see
-    // http://fluidproject.org/blog/2008/01/09/getting-setting-and-removing-tabindex-values-with-javascript/
-    var attrNode = element.getAttributeNode('tabindex');
-    if (attrNode && attrNode.specified) {
-      // TabIndex is specified.
-      var index = element.tabIndex;
-      return goog.isNumber(index) && index >= 0;
-    }
-  }
-  // Either the element is null, or tabIndex is not specified.
-  return false;
-};
+// TODO(nicksantos): This function shouldn't exist. remove it.
+goog.ui.ContainerRenderer.prototype.hasTabIndex = goog.nullFunction;
 
 
 /**

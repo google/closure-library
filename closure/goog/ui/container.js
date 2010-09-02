@@ -570,7 +570,7 @@ goog.ui.Container.prototype.handleMouseDown = function(e) {
   }
 
   var keyTarget = this.getKeyEventTarget();
-  if (this.renderer_.hasTabIndex(keyTarget)) {
+  if (keyTarget && goog.dom.isFocusableTabIndex(keyTarget)) {
     // The container is configured to receive keyboard focus.
     keyTarget.focus();
   } else {
