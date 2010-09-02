@@ -405,7 +405,7 @@ goog.gears.Database.prototype.queryObject_ = function(sql,
  * containing the result.
  *
  * @param {string} sql The SQL statement.
- * @param {...Object} var_args Query params. An array or multiple arguments.
+ * @param {...*} var_args Query params. An array or multiple arguments.
  * @return {Array} An array of arrays containing the results of the query.
  */
 goog.gears.Database.prototype.queryArrays = function(sql, var_args) {
@@ -437,7 +437,7 @@ goog.gears.Database.prototype.queryObjectArray = function(sql, var_args) {
  * column.
  *
  * @param {string} sql SQL statement.
- * @param {...Object} var_args query params. An array or multiple arguments.
+ * @param {...*} var_args query params. An array or multiple arguments.
  * @return {Array} The values in the first column.
  */
 goog.gears.Database.prototype.queryValueArray = function(sql, var_args) {
@@ -485,7 +485,7 @@ goog.gears.Database.prototype.queryObject = function(sql, var_args) {
  * This calls query on the database and returns the first row as an array
  *
  * @param {string} sql SQL statement.
- * @param {...Object} var_args query params. An array or multiple arguments.
+ * @param {...*} var_args query params. An array or multiple arguments.
  * @return {Array} The first row as an array.
  */
 goog.gears.Database.prototype.queryArray = function(sql, var_args) {
@@ -505,7 +505,7 @@ goog.gears.Database.prototype.queryArray = function(sql, var_args) {
  * @param {Function} f Function to call for each value.
  * @param {Object=} opt_this If present f will be called using this object as
  *                          'this'.
- * @param {...Object} var_args query params. An array or multiple arguments.
+ * @param {...*} var_args query params. An array or multiple arguments.
  */
 goog.gears.Database.prototype.forEachValue = function(sql,
     f, opt_this, var_args) {
