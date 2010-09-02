@@ -21,6 +21,11 @@ See the COPYING file for details.
 
 <script>
 
+var documentMode;
+goog.userAgent.getDocumentMode_ = function() {
+  return documentMode;
+};
+
 
 var propertyReplacer = new goog.testing.PropertyReplacer();
 
@@ -55,6 +60,7 @@ function reinitializeUserAgent() {
 }
 
 function tearDown() {
+  documentMode = undefined;
   propertyReplacer.reset();
 }
 
@@ -66,6 +72,7 @@ function tearDown() {
  * @param {string} opt_vendor Navigator vendor string.
  */
 function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
+  //alert('mocking');
   var mockGlobal = {
     'navigator': {
       'userAgent': uaString,
@@ -140,13 +147,6 @@ function testCompare() {
 }
 
 function testGecko() {
-  var assertGecko = function(uaString, expectedVersion) {
-    assertUserAgent([UserAgents.GECKO], uaString, 'Gecko');
-    assertEquals('User agent ' + uaString + ' should have had version ' +
-        expectedVersion + ' but had ' + goog.userAgent.VERSION,
-        expectedVersion,
-        goog.userAgent.VERSION);
-  };
   assertGecko('Mozilla/5.0 (Windows; U; Windows NT 5.1; nl-NL; rv:1.7.5)' +
       'Gecko/20041202 Gecko/1.0', '1.7.5');
   assertGecko('Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.7.6)' +
@@ -193,13 +193,6 @@ function testGecko() {
 }
 
 function testIe() {
-  var assertIe = function(uaString, expectedVersion) {
-    assertUserAgent([UserAgents.IE], uaString);
-    assertEquals('User agent ' + uaString + ' should have had version ' +
-        expectedVersion + ' but had ' + goog.userAgent.VERSION,
-        expectedVersion,
-        goog.userAgent.VERSION);
-  };
   assertIe('Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)', '5.01');
   assertIe('Mozilla/4.0 (compatible; MSIE 5.17; Mac_PowerPC)', '5.17');
   assertIe('Mozilla/4.0 (compatible; MSIE 5.23; Mac_PowerPC)', '5.23');
@@ -215,6 +208,18 @@ function testIe() {
   assertIe('Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 6.0)', '7.0b');
   assertIe('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1;' +
       'Arcor 5.005; .NET CLR 1.0.3705; .NET CLR 1.1.4322)', '7.0');
+}
+
+function testIeDocumentModeOverride() {
+  documentMode = 9;
+  assertIe('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0',
+           '9');
+  assertIe('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/5.0',
+           '9');
+
+  documentMode = 8;
+  assertIe('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/5.0',
+          '8.0');
 }
 
 function testOpera() {
@@ -262,6 +267,22 @@ function testNoNavigator() {
       goog.userAgent.PLATFORM);
   assertEquals('Version should be the empty string', '',
       goog.userAgent.VERSION);
+}
+
+function assertIe(uaString, expectedVersion) {
+  assertUserAgent([UserAgents.IE], uaString);
+  assertEquals('User agent ' + uaString + ' should have had version ' +
+      expectedVersion + ' but had ' + goog.userAgent.VERSION,
+      expectedVersion,
+      goog.userAgent.VERSION);
+}
+
+function assertGecko(uaString, expectedVersion) {
+  assertUserAgent([UserAgents.GECKO], uaString, 'Gecko');
+  assertEquals('User agent ' + uaString + ' should have had version ' +
+      expectedVersion + ' but had ' + goog.userAgent.VERSION,
+      expectedVersion,
+     goog.userAgent.VERSION);
 }
 
 </script>
