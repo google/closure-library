@@ -111,16 +111,6 @@ goog.ui.ContainerRenderer.prototype.getAriaRole = function() {
 
 
 /**
- * Returns true if the element has a valid tab index (defined as >= 0), false
- * otherwise.  Only elements with a valid tab index can receive focus.
- * @param {Element} element Element to check.
- * @return {boolean} Whether the element has a tab index.
- */
-// TODO(nicksantos): This function shouldn't exist. remove it.
-goog.ui.ContainerRenderer.prototype.hasTabIndex = goog.nullFunction;
-
-
-/**
  * Enables or disables the tab index of the element.  Only elements with a
  * valid tab index can receive focus.
  * @param {Element} element Element whose tab index is to be changed.
