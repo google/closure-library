@@ -555,7 +555,6 @@ goog.ui.Tooltip.prototype.getElements = function() {
 
 /**
  * @return {Element} Active element reference.
- * @protected
  */
 goog.ui.Tooltip.prototype.getActiveElement = function() {
   return this.activeEl_;
