@@ -40,5 +40,12 @@ goog.dom.BrowserFeature = {
    * Opera, Safari 3, and Internet Explorer 9 all support innerText but they
    * include text nodes in script and style tags.
    */
-  CAN_USE_INNER_TEXT: goog.userAgent.IE && !goog.userAgent.isVersion('9')
+  CAN_USE_INNER_TEXT: goog.userAgent.IE && !goog.userAgent.isVersion('9'),
+
+  /**
+   * Whether NoScope elements need a scoped element written before them in
+   * innerHTML.
+   * MSDN: http://msdn.microsoft.com/en-us/library/ms533897(VS.85).aspx#1
+   */
+  INNER_HTML_NEEDS_SCOPED_ELEMENT: goog.userAgent.IE
 };
