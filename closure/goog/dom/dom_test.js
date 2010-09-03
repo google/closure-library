@@ -24,6 +24,8 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
+goog.require('goog.userAgent.product.isVersion');
 
 var $ = goog.dom.getElement;
 
@@ -170,8 +172,9 @@ function testGetDocumentHeightInIframe() {
   var doc = goog.dom.getDomHelper(myIframeDoc).getDocument();
   var height = goog.dom.getDomHelper(myIframeDoc).getDocumentHeight();
 
-  // Broken in webkit quirks mode.
-  if (goog.dom.isCss1CompatMode_(doc) || !goog.userAgent.WEBKIT) {
+  // Broken in webkit quirks mode and in IE8
+  if ((goog.dom.isCss1CompatMode_(doc) || !goog.userAgent.WEBKIT ) &&
+      !isIE8()) {
     assertEquals('height should be 65', 42 + 23, height);
   }
 }
@@ -1085,4 +1088,12 @@ function testAppend4() {
   goog.dom.append(div, div2.childNodes);
   assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);
   assertFalse(div2.hasChildNodes());
+}
+
+/**
+ * @return {boolean} Returns true if the userAgent is IE8.
+ */
+function isIE8() {
+  return goog.userAgent.IE && goog.userAgent.product.isVersion('8') &&
+      !goog.userAgent.product.isVersion('9');
 }
