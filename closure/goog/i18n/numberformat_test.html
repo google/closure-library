@@ -15,11 +15,21 @@ See the COPYING file for details.
   goog.require('goog.i18n.NumberFormat');
   goog.require('goog.i18n.NumberFormatSymbols');
   goog.require('goog.i18n.NumberFormatSymbols_fr');
+  goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent');
+  goog.require('goog.userAgent.product');
+  goog.require('goog.userAgent.product.isVersion');
 </script>
 </head>
 <body>
 <script>
+
+var expectedFailures = new goog.testing.ExpectedFailures();
+
+function tearDown() {
+  expectedFailures.handleTearDown();
+}
 
 function veryBigNumberCompare(str1, str2) {
   return str1.length == str2.length &&
@@ -415,7 +425,13 @@ function testExponential() {
 
   fmt = new goog.i18n.NumberFormat('##0.####E0');
   str = fmt.format(789.12345e-9);
-  assertEquals('789.1235E-9', str);
+  // Certain Firefox 3.6 versions fail
+  expectedFailures.expectFailureFor(isFirefox36Linux());
+  try {
+    assertEquals('789.1235E-9', str);
+  } catch (e) {
+    expectedFailures.handleException(e);
+  }
   fmt = new goog.i18n.NumberFormat('##0.####E0');
   str = fmt.format(780.e-9);
   assertEquals('780E-9', str);
@@ -535,7 +551,6 @@ function testLocaleSwitch() {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
 }
 
-
 function testFrenchParse() {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fr;
   var fmt = new goog.i18n.NumberFormat('0.0000');
@@ -573,6 +588,15 @@ function testFailParseShouldThrow() {
   fmt = new goog.i18n.NumberFormat('x0.000');
   value = fmt.parse('y3');
   assertNaN(value);
+}
+
+/**
+ * @return {boolean} Whether we're on Linux Firefox 3.6.
+ */
+function isFirefox36Linux() {
+  return goog.userAgent.product.FIREFOX && goog.userAgent.LINUX &&
+      goog.userAgent.product.isVersion('3.6') &&
+      !goog.userAgent.product.isVersion('3.7');
 }
 
 </script>
