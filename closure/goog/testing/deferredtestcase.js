@@ -61,6 +61,7 @@
 
 goog.provide('goog.testing.DeferredTestCase');
 
+goog.require('goog.async.Deferred');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.TestCase');
 
@@ -95,11 +96,10 @@ goog.testing.DeferredTestCase.createAndInstall = function(opt_name) {
  * Handler for when the test produces an error.
  * @param {Error|string} err The error object.
  * @protected
- * @return {Error} The error object.
+ * @throws Always throws a ControlBreakingException.
  */
 goog.testing.DeferredTestCase.prototype.onError = function(err) {
   this.doAsyncError(err);
-  return err;
 };
 
 
