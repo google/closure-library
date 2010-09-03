@@ -249,9 +249,9 @@ goog.testing.AsyncTestCase.prototype.cleanedUp_ = false;
 /**
  * The currently active test.
  * @type {goog.testing.TestCase.Test|undefined}
- * @private
+ * @protected
  */
-goog.testing.AsyncTestCase.prototype.activeTest_;
+goog.testing.AsyncTestCase.prototype.activeTest;
 
 
 /**
@@ -291,6 +291,23 @@ goog.testing.AsyncTestCase.prototype.numControlExceptionsExpected_ = 0;
 
 
 /**
+ * Initializes the given test case with the global test runner 'G_testRunner'.
+ * @param {goog.testing.TestCase} testCase The test case to install.
+ * @param {string=} opt_name A descriptive name for the test case.
+ */
+goog.testing.AsyncTestCase.initializeTestRunner = function(testCase, opt_name) {
+  testCase.autoDiscoverTests();
+  var gTestRunner = goog.global['G_testRunner'];
+  if (gTestRunner) {
+    gTestRunner.initialize(testCase);
+  } else {
+    throw Error('G_testRunner is undefined. Please ensure goog.testing.jsunit' +
+        'is included.');
+  }
+};
+
+
+/**
  * Preferred way of creating an AsyncTestCase. Creates one and initializes it
  * with the G_testRunner.
  * @param {string=} opt_name A descriptive name for the test case.
@@ -298,14 +315,7 @@ goog.testing.AsyncTestCase.prototype.numControlExceptionsExpected_ = 0;
  */
 goog.testing.AsyncTestCase.createAndInstall = function(opt_name) {
   var asyncTestCase = new goog.testing.AsyncTestCase(opt_name);
-  asyncTestCase.autoDiscoverTests();
-  var gTestRunner = goog.global['G_testRunner'];
-  if (gTestRunner) {
-    gTestRunner.initialize(asyncTestCase);
-  } else {
-    throw Error('G_testRunner is undefined. Please ensure goog.testing.jsunit' +
-        'is included.');
-  }
+  goog.testing.AsyncTestCase.initializeTestRunner(asyncTestCase, opt_name);
   return asyncTestCase;
 };
 
@@ -361,8 +371,8 @@ goog.testing.AsyncTestCase.prototype.doAsyncError = function(opt_e) {
   // helpful name based on the step we're currently on.
   var fakeTestObj = new goog.testing.TestCase.Test(this.curStepName_,
                                                    goog.nullFunction);
-  if (this.activeTest_) {
-    fakeTestObj.name = this.activeTest_.name + ' [' + fakeTestObj.name + ']';
+  if (this.activeTest) {
+    fakeTestObj.name = this.activeTest.name + ' [' + fakeTestObj.name + ']';
   }
 
   // Note: if the test has an error, and then tearDown has an error, they will
@@ -492,7 +502,7 @@ goog.testing.AsyncTestCase.prototype.doAsyncErrorTearDown_ = function() {
     // setUpPage() or in setUp()/test*()/tearDown().
     var stepFuncAfterError = this.nextStepFunc_;
     var stepNameAfterError = 'TestCase.execute (after error)';
-    if (this.activeTest_) {
+    if (this.activeTest) {
       stepFuncAfterError = this.doIteration_;
       stepNameAfterError = 'doIteration (after error)';
     }
@@ -746,8 +756,8 @@ goog.testing.AsyncTestCase.prototype.doSetUpPage_ = function() {
  * @private
  */
 goog.testing.AsyncTestCase.prototype.doIteration_ = function() {
-  this.activeTest_ = this.next();
-  if (this.activeTest_ && this.running) {
+  this.activeTest = this.next();
+  if (this.activeTest && this.running) {
     this.result_.runCount++;
     this.setNextStep_(this.doSetUp_, 'setUp');
   } else {
@@ -762,9 +772,9 @@ goog.testing.AsyncTestCase.prototype.doIteration_ = function() {
  * @private
  */
 goog.testing.AsyncTestCase.prototype.doSetUp_ = function() {
-  this.log('Running test: ' + this.activeTest_.name);
+  this.log('Running test: ' + this.activeTest.name);
   this.cleanedUp_ = false;
-  this.setNextStep_(this.doExecute_, this.activeTest_.name);
+  this.setNextStep_(this.doExecute_, this.activeTest.name);
   this.setUp();
 };
 
@@ -775,7 +785,7 @@ goog.testing.AsyncTestCase.prototype.doSetUp_ = function() {
  */
 goog.testing.AsyncTestCase.prototype.doExecute_ = function() {
   this.setNextStep_(this.doTearDown_, 'tearDown');
-  this.activeTest_.execute();
+  this.activeTest.execute();
 };
 
 
@@ -796,5 +806,5 @@ goog.testing.AsyncTestCase.prototype.doTearDown_ = function() {
  */
 goog.testing.AsyncTestCase.prototype.doNext_ = function() {
   this.setNextStep_(this.doIteration_, 'doIteration');
-  this.doSuccess(/** @type {goog.testing.TestCase.Test} */(this.activeTest_));
+  this.doSuccess(/** @type {goog.testing.TestCase.Test} */(this.activeTest));
 };
