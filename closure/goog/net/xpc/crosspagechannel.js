@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview Provides the class CrossDomainChannel, the main class in
+ * @fileoverview Provides the class CrossPageChannel, the main class in
  * goog.net.xpc.
  *
  *
@@ -26,7 +26,9 @@ goog.provide('goog.net.xpc.CrossPageChannel.Role');
 goog.require('goog.Disposable');
 goog.require('goog.Uri');
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.json');
+goog.require('goog.messaging.MessageChannel'); // interface
 goog.require('goog.net.xpc');
 goog.require('goog.net.xpc.FrameElementMethodTransport');
 goog.require('goog.net.xpc.IframePollingTransport');
@@ -44,6 +46,7 @@ goog.require('goog.userAgent');
  *
  * @param {Object} cfg Channel configuration object.
  * @constructor
+ * @implements {goog.messaging.MessageChannel}
  * @extends {goog.Disposable}
  */
 goog.net.xpc.CrossPageChannel = function(cfg) {
@@ -445,6 +448,19 @@ goog.net.xpc.CrossPageChannel.prototype.registerService = function(
 
 
 /**
+ * Registers a service to handle any messages that aren't handled by any other
+ * services.
+ *
+ * @param {function(string, (string|Object))} callback The callback responsible
+ *     for processing incoming messages that aren't processed by other services.
+ */
+goog.net.xpc.CrossPageChannel.prototype.registerDefaultService = function(
+    callback) {
+  this.defaultService_ = callback;
+};
+
+
+/**
  * Sends a msg over the channel.
  *
  * @param {string} serviceName The name of the service this message
@@ -503,6 +519,8 @@ goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(serviceName,
           }
         }
         service.callback(payload);
+      } else if (this.defaultService_) {
+        this.defaultService_.callback(payload);
       } else {
         goog.net.xpc.logger.info('CrossPageChannel::deliver_(): ' +
                                  'No such service: "' + serviceName + '" ' +

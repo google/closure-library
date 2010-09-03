@@ -197,6 +197,7 @@ goog.addDependency('gears/multipartformdata.js', ['goog.gears.MultipartFormData'
 goog.addDependency('gears/statustype.js', ['goog.gears.StatusType'], []);
 goog.addDependency('gears/urlcapture.js', ['goog.gears.UrlCapture', 'goog.gears.UrlCapture.Event', 'goog.gears.UrlCapture.EventType'], ['goog.Uri', 'goog.debug.Logger', 'goog.events.Event', 'goog.events.EventTarget', 'goog.gears']);
 goog.addDependency('gears/worker.js', ['goog.gears.Worker', 'goog.gears.Worker.EventType', 'goog.gears.WorkerEvent'], ['goog.events.Event', 'goog.events.EventTarget']);
+goog.addDependency('gears/workerchannel.js', ['goog.gears.WorkerChannel'], ['goog.Disposable', 'goog.debug', 'goog.debug.Logger', 'goog.events', 'goog.gears.Worker', 'goog.gears.Worker.EventType', 'goog.gears.WorkerEvent', 'goog.json', 'goog.messaging.MessageChannel']);
 goog.addDependency('gears/workerpool.js', ['goog.gears.WorkerPool', 'goog.gears.WorkerPool.Event', 'goog.gears.WorkerPool.EventType'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.gears', 'goog.gears.Worker']);
 goog.addDependency('graphics/abstractgraphics.js', ['goog.graphics.AbstractGraphics'], ['goog.graphics.Path', 'goog.math.Coordinate', 'goog.math.Size', 'goog.style', 'goog.ui.Component']);
 goog.addDependency('graphics/affinetransform.js', ['goog.graphics.AffineTransform'], ['goog.math']);
@@ -285,6 +286,8 @@ goog.addDependency('math/size.js', ['goog.math.Size'], []);
 goog.addDependency('math/vec2.js', ['goog.math.Vec2'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency('math/vec3.js', ['goog.math.Vec3'], ['goog.math', 'goog.math.Coordinate3']);
 goog.addDependency('memoize/memoize.js', ['goog.memoize'], []);
+goog.addDependency('messaging/messagechannel.js', ['goog.messaging.MessageChannel'], []);
+goog.addDependency('messaging/messaging.js', ['goog.messaging'], ['goog.messaging.MessageChannel']);
 goog.addDependency('module/abstractmoduleloader.js', ['goog.module.AbstractModuleLoader'], []);
 goog.addDependency('module/basemodule.js', ['goog.module.BaseModule'], ['goog.Disposable']);
 goog.addDependency('module/basemoduleloader.js', ['goog.module.BaseModuleLoader'], ['goog.Disposable', 'goog.debug.Logger', 'goog.module.AbstractModuleLoader']);
@@ -325,7 +328,7 @@ goog.addDependency('net/xhrmanager.js', ['goog.net.XhrManager', 'goog.net.XhrMan
 goog.addDependency('net/xhrmonitor.js', ['goog.net.xhrMonitor'], ['goog.array', 'goog.debug.Logger', 'goog.userAgent']);
 goog.addDependency('net/xmlhttp.js', ['goog.net.DefaultXmlHttpFactory', 'goog.net.XmlHttp', 'goog.net.XmlHttp.OptionType', 'goog.net.XmlHttp.ReadyState'], ['goog.net.WrapperXmlHttpFactory', 'goog.net.XmlHttpFactory']);
 goog.addDependency('net/xmlhttpfactory.js', ['goog.net.XmlHttpFactory'], []);
-goog.addDependency('net/xpc/crosspagechannel.js', ['goog.net.xpc.CrossPageChannel', 'goog.net.xpc.CrossPageChannel.Role'], ['goog.Disposable', 'goog.Uri', 'goog.dom', 'goog.json', 'goog.net.xpc', 'goog.net.xpc.FrameElementMethodTransport', 'goog.net.xpc.IframePollingTransport', 'goog.net.xpc.IframeRelayTransport', 'goog.net.xpc.NativeMessagingTransport', 'goog.net.xpc.NixTransport', 'goog.net.xpc.Transport', 'goog.userAgent']);
+goog.addDependency('net/xpc/crosspagechannel.js', ['goog.net.xpc.CrossPageChannel', 'goog.net.xpc.CrossPageChannel.Role'], ['goog.Disposable', 'goog.Uri', 'goog.dom', 'goog.events', 'goog.json', 'goog.messaging.MessageChannel', 'goog.net.xpc', 'goog.net.xpc.FrameElementMethodTransport', 'goog.net.xpc.IframePollingTransport', 'goog.net.xpc.IframeRelayTransport', 'goog.net.xpc.NativeMessagingTransport', 'goog.net.xpc.NixTransport', 'goog.net.xpc.Transport', 'goog.userAgent']);
 goog.addDependency('net/xpc/frameelementmethodtransport.js', ['goog.net.xpc.FrameElementMethodTransport'], ['goog.net.xpc', 'goog.net.xpc.Transport']);
 goog.addDependency('net/xpc/iframepollingtransport.js', ['goog.net.xpc.IframePollingTransport', 'goog.net.xpc.IframePollingTransport.Receiver', 'goog.net.xpc.IframePollingTransport.Sender'], ['goog.array', 'goog.dom', 'goog.net.xpc', 'goog.net.xpc.Transport', 'goog.userAgent']);
 goog.addDependency('net/xpc/iframerelaytransport.js', ['goog.net.xpc.IframeRelayTransport'], ['goog.dom', 'goog.events', 'goog.net.xpc', 'goog.net.xpc.Transport', 'goog.userAgent']);
@@ -399,6 +402,7 @@ goog.addDependency('testing/functionmock.js', ['goog.testing', 'goog.testing.Fun
 goog.addDependency('testing/graphics.js', ['goog.testing.graphics'], ['goog.graphics.Path.Segment', 'goog.testing.asserts']);
 goog.addDependency('testing/jsunit.js', ['goog.testing.jsunit'], ['goog.testing.TestCase', 'goog.testing.TestRunner']);
 goog.addDependency('testing/loosemock.js', ['goog.testing.LooseExpectationCollection', 'goog.testing.LooseMock'], ['goog.array', 'goog.structs.Map', 'goog.testing.Mock']);
+goog.addDependency('testing/messaging/mockmessagechannel.js', ['goog.testing.messaging.MockMessageChannel'], ['goog.messaging.MessageChannel', 'goog.testing.asserts']);
 goog.addDependency('testing/mock.js', ['goog.testing.Mock', 'goog.testing.MockExpectation'], ['goog.array', 'goog.testing.JsUnitException', 'goog.testing.mockmatchers']);
 goog.addDependency('testing/mockclassfactory.js', ['goog.testing.MockClassFactory', 'goog.testing.MockClassRecord'], ['goog.array', 'goog.object', 'goog.testing.LooseMock', 'goog.testing.StrictMock', 'goog.testing.TestCase', 'goog.testing.mockmatchers']);
 goog.addDependency('testing/mockclock.js', ['goog.testing.MockClock'], ['goog.Disposable', 'goog.testing.PropertyReplacer']);
