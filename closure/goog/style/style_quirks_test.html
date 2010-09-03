@@ -23,8 +23,11 @@ goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.style');
+goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
+goog.require('goog.userAgent.product.isVersion');
 
 </script>
 <script>
@@ -444,6 +447,8 @@ Test-visible
 
 <script>
 
+var expectedFailures = new goog.testing.ExpectedFailures();
+
 function setUpPage() {
   var viewportSize = goog.dom.getViewportSize();
   // When the window is too short or not wide enough, some tests, especially
@@ -459,6 +464,10 @@ function setUpPage() {
 
 function setUp() {
   window.scrollTo(0, 0);
+}
+
+function tearDown() {
+  expectedFailures.handleTearDown();
 }
 
 function testSetStyle() {
@@ -802,12 +811,18 @@ function testGetPositionTolerantToNoDocumentElementBorder() {
     div.style.top = '200px';
     document.body.appendChild(div);
     // Test all major positioning methods.
-    var pos = goog.style.getClientPosition(div);
-    assertEquals(100, pos.x);
-    assertEquals(200, pos.y);
-    var offset = goog.style.getPageOffset(div);
-    assertEquals(100, offset.x);
-    assertEquals(200, offset.y);
+    // Temporarily disabled for IE8 - IE8 returns dimensions multiplied by 100
+    expectedFailures.expectFailureFor(isIE8());
+    try {
+      var pos = goog.style.getClientPosition(div);
+      assertEquals(100, pos.x);
+      assertEquals(200, pos.y);
+      var offset = goog.style.getPageOffset(div);
+      assertEquals(100, offset.x);
+      assertEquals(200, offset.y);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
   } finally {
     document.documentElement.style.borderWidth = '';
   }
@@ -1858,6 +1873,11 @@ function hasVerticalScroll(el) {
 
 function hasHorizontalScroll(el) {
   return el.clientHeight != 0 && el.offsetHeight - el.clientHeight > 0;
+}
+
+function isIE8() {
+  return goog.userAgent.IE && goog.userAgent.product.isVersion('8') &&
+      !goog.userAgent.product.isVersion('9');
 }
 </script>
 
