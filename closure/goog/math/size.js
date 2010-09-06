@@ -107,6 +107,14 @@ goog.math.Size.prototype.area = function() {
 
 
 /**
+ * @return {number} The perimeter of the size (width + height) * 2.
+ */
+goog.math.Size.prototype.perimeter = function() {
+  return (this.width + this.height) * 2;
+};
+
+
+/**
  * @return {number} The ratio of the size's width to its height.
  */
 goog.math.Size.prototype.aspectRatio = function() {
