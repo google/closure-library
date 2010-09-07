@@ -166,6 +166,17 @@ See the COPYING file for details.
       assertEquals(goog.ui.Tooltip.State.INACTIVE, tt.getState());
       assertEquals(goog.ui.PopupBase.EventType.HIDE, eventQueue.dequeue().type);
       assertTrue(eventQueue.isEmpty());
+      clock.tick(200);
+
+      // Move from element to second, but detach second before it shows.
+      goog.testing.events.fireMouseOutEvent(element, secondTarget);
+      goog.testing.events.fireMouseOverEvent(secondTarget, element);
+      assertEquals(goog.ui.Tooltip.State.WAITING_TO_SHOW, tt.getState());
+      tt.detach(secondTarget);
+      clock.tick(200);
+      assertEquals(goog.ui.Tooltip.State.INACTIVE, tt.getState());
+      assertEquals('Anchor should be second target', secondTarget, tt.anchor);
+      assertTrue(eventQueue.isEmpty());
     }
 
     function testRequireInteraction() {

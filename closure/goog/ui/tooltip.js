@@ -529,7 +529,9 @@ goog.ui.Tooltip.prototype.onHide_ = function() {
  *     at.
  */
 goog.ui.Tooltip.prototype.maybeShow = function(el, opt_pos) {
-  if (this.anchor == el) {
+  // Assert that the mouse is still over the same element, and that we have not
+  // detached from the anchor in the meantime.
+  if (this.anchor == el && this.elements_.contains(this.anchor)) {
     if (this.seenInteraction_ || !this.requireInteraction_) {
       // If it is currently showing, then hide it, and abort if it doesn't hide.
       this.setVisible(false);
