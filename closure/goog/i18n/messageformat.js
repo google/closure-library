@@ -60,16 +60,16 @@ goog.require('goog.i18n.pluralRules');
  */
 goog.i18n.MessageFormat = function(pattern) {
   /**
-   * All encountered literals during parse stage. Keys are in form of
-   * \uFDDF_x_ where x is a number, starting with 0 for double quote literal.
-   * @type {Object}
+   * All encountered literals during parse stage. Indices tell us the order of
+   * replacement.
+   * @type {!Array}
    * @private
    */
-  this.literals_ = {};
+  this.literals_ = [];
 
   /**
    * Input pattern gets parsed into objects for faster formatting.
-   * @type {Array.<Object>}
+   * @type {!Array.<!Object>}
    * @private
    */
   this.parsedPattern_ = [];
@@ -131,12 +131,19 @@ goog.i18n.MessageFormat.OTHER_ = 'other';
 
 
 /**
- * Regular expression for looking for placeholders in the message.
+ * Regular expression for looking for string literals.
  * @type {RegExp}
  * @private
  */
-goog.i18n.MessageFormat.REGEX_PLACEHOLDER_ = new RegExp(
-    '(' + goog.i18n.MessageFormat.LITERAL_PLACEHOLDER_ + '\\d+_)', 'g');
+goog.i18n.MessageFormat.REGEX_LITERAL_ = new RegExp("'([{}#].*?)'", 'g');
+
+
+/**
+ * Regular expression for looking for '' in the message.
+ * @type {RegExp}
+ * @private
+ */
+goog.i18n.MessageFormat.REGEX_DOUBLE_APOSTROPHE_ = new RegExp("''", 'g');
 
 
 /**
@@ -160,14 +167,10 @@ goog.i18n.MessageFormat.prototype.format = function(namedParameters) {
 
   goog.asserts.assert(message.search('#') == -1, 'Not all # were replaced.');
 
-  var literals = this.literals_;
-
-  message = message.replace(goog.i18n.MessageFormat.REGEX_PLACEHOLDER_,
-                            function(item) {
-    var literal = literals[item];
-    goog.asserts.assertString(literal, 'Undefined literal.');
-    return literal;
-  });
+  while (this.literals_.length > 0) {
+    message = message.replace(this.buildPlaceholder_(this.literals_),
+                              this.literals_.pop());
+  }
 
   return message;
 };
@@ -277,12 +280,6 @@ goog.i18n.MessageFormat.prototype.formatPluralBlock_ = function(
  */
 goog.i18n.MessageFormat.prototype.parsePattern_ = function(pattern) {
   if (pattern) {
-    // Make sure developer didn't use literal placeholder in the source.
-    var regexPlaceholder = new RegExp(
-        goog.i18n.MessageFormat.LITERAL_PLACEHOLDER_);
-    goog.asserts.assert(pattern.search(regexPlaceholder) == -1,
-        'Reserved placeholder in the message.');
-
     pattern = this.insertPlaceholders_(pattern);
 
     this.parsedPattern_ = this.parseBlock_(pattern);
@@ -293,28 +290,28 @@ goog.i18n.MessageFormat.prototype.parsePattern_ = function(pattern) {
 /**
  * Replaces string literals with literal placeholders.
  * Literals are string of the form '}...', '{...' and '#...' where ... is
- * set of characters not containing '. Double single quotes are replaced with
- * single quote only - '' -> '.
+ * set of characters not containing '
  * Builds a dictionary so we can recover literals during format phase.
  * @param {string} pattern Pattern to clean up.
  * @return {string} Pattern with literals replaced with placeholders.
  * @private
  */
 goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
-  // Replace the literals with placeholders.
-  var literalCount = 0;
   var literals = this.literals_;
-  var literalRegex = /(?:\'\')|(?:\'([{}#].*?)\')/g;
-  pattern = pattern.replace(literalRegex, function(match, text) {
-    if (match == "''") {
-      return "'";
-    } else {
-      var literalKey = goog.i18n.MessageFormat.LITERAL_PLACEHOLDER_ +
-          literalCount + '_';
-      literals[literalKey] = text;
-      literalCount++;
-      return literalKey;
-    }
+  var buildPlaceholder = this.buildPlaceholder_;
+
+  // First replace '' with single quote placeholder since they can be found
+  // inside other literals.
+  pattern = pattern.replace(goog.i18n.MessageFormat.REGEX_DOUBLE_APOSTROPHE_,
+                            function() {
+    literals.push("'");
+    return buildPlaceholder(literals);
+  });
+
+  pattern = pattern.replace(goog.i18n.MessageFormat.REGEX_LITERAL_,
+                            function(match, text) {
+    literals.push(text);
+    return buildPlaceholder(literals);
   });
 
   return pattern;
@@ -411,7 +408,7 @@ goog.i18n.MessageFormat.prototype.parseBlockType_ = function(pattern) {
 /**
  * Parses generic block.
  * @param {string} pattern Content of the block to parse.
- * @return {Array.<Object>} Subblocks marked as strings, select...
+ * @return {!Array.<!Object>} Subblocks marked as strings, select...
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseBlock_ = function(pattern) {
@@ -461,9 +458,9 @@ goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
   var argumentIndex = '';
   var replaceRegex = /\s*(\w+)\s*,\s*select\s*,/;
   pattern = pattern.replace(replaceRegex, function(string, name) {
-      argumentIndex = name;
-      return '';
-    });
+    argumentIndex = name;
+    return '';
+  });
   var result = {};
   result.argumentIndex = argumentIndex;
 
@@ -539,4 +536,18 @@ goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
                            'Missing other key in select statement.');
 
   return result;
+};
+
+
+/**
+ * Builds a placeholder from the last index of the array.
+ * @param {!Array} literals All literals encountered during parse.
+ * @return {string} \uFDDF_ + last index + _.
+ * @private
+ */
+goog.i18n.MessageFormat.prototype.buildPlaceholder_ = function(literals) {
+  goog.asserts.assert(literals.length > 0, 'Literal array is empty.');
+
+  var index = (literals.length - 1).toString(10);
+  return goog.i18n.MessageFormat.LITERAL_PLACEHOLDER_ + index + '_';
 };

@@ -167,7 +167,7 @@ function testNoLiteralsForSingleQuotes() {
 }
 
 function testConsecutiveSingleQuotesAreReplacedWithOneSingleQuote() {
-  var fmt = new goog.i18n.MessageFormat("Anna''s house a'{''''b");
+  var fmt = new goog.i18n.MessageFormat("Anna''s house a'{''''b'");
   assertEquals("Anna's house a{''b", fmt.format({}));
 }
 
