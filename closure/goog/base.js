@@ -34,8 +34,10 @@ var COMPILED = false;
  * Base namespace for the Closure library.  Checks to see goog is
  * already defined in the current scope before assigning to prevent
  * clobbering if base.js is loaded more than once.
+ *
+ * @const
  */
-var goog = goog || {}; // Check to see if already defined in current scope
+var goog = goog || {};
 
 
 /**
@@ -372,8 +374,9 @@ if (!COMPILED) {
     pathToNames: {}, // 1 to many
     nameToPath: {}, // 1 to 1
     requires: {}, // 1 to many
-    visited: {}, // used when resolving dependencies to prevent us from
-                 // visiting the file twice
+    // used when resolving dependencies to prevent us from
+    // visiting the file twice
+    visited: {},
     written: {} // used to keep track of script files we have written
   };
 
