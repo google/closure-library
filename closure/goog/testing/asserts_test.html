@@ -444,6 +444,19 @@ See the COPYING file for details.
     assertThrows(goog.partial(assertObjectEquals, date, dateWithMilliseconds));
   }
 
+  function testAssertObjectEqualsSparseArrays() {
+    var arr1 = [,2,,4,,];
+    var arr2 = [1,2,3,4,5];
+
+    assertThrows('Sparse arrays should not be equal', function() {
+      assertObjectEquals(arr1, arr2);
+    });
+
+    assertThrows('Sparse arrays should not be equal', function() {
+      assertObjectEquals(arr2, arr1);
+    });
+  }
+
   function testAssertSameElementsOnArray() {
     assertSameElements([1, 2], [2, 1]);
     assertSameElements('Good assertion', [1, 2], [2, 1]);

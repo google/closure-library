@@ -402,16 +402,15 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
                             ' not present in actual ' + (path || typeOfVar2));
             }
           }
-          if (!isArray) {
-            // make sure there aren't properties in var2 that are missing
-            // from var1. if there are, then by definition they don't
-            // match.
-            for (var prop in var2) {
-              if (!(prop in var1)) {
-                failures.push('property ' + prop +
-                              ' not present in expected ' +
-                              (path || typeOfVar1));
-              }
+          // make sure there aren't properties in var2 that are missing
+          // from var1. if there are, then by definition they don't
+          // match. do this even for arrays, since if var1 is a sparse
+          // array, its missing indices won't have been visited yet.
+          for (var prop in var2) {
+            if (!(prop in var1)) {
+              failures.push('property ' + prop +
+                            ' not present in expected ' +
+                            (path || typeOfVar1));
             }
           }
         } else {
