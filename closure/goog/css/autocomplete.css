@@ -32,7 +32,6 @@
 .ac-row {
   cursor: pointer;
   padding: .4em;
-  white-space: nowrap;
 }
 
 .ac-highlighted {
