@@ -56,6 +56,16 @@ function testTextModifyingKeys() {
   }
 }
 
+function testPhantomKey() {
+  // KeyCode 255 deserves its own test to make sure this does not regress,
+  // because it's so weird. See the comments in the KeyCode enum.
+  var fakeEvent = new goog.events.BrowserEvent('keydown');
+  fakeEvent.keyCode = goog.events.KeyCodes.PHANTOM;
+  assertFalse('Expected phantom key to not modify text',
+      KeyCodes.isTextModifyingKeyEvent(fakeEvent));
+  assertFalse(KeyCodes.isCharacterKey(fakeEvent));
+}
+
 </script>
 
 </body>
