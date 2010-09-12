@@ -661,7 +661,7 @@ function testHandledSelectionChange() {
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
-  mockPlugin1.handleSelectionChange(e).$returns(true);
+  mockPlugin1.handleSelectionChange(e, undefined).$returns(true);
   mockPlugin1.$replay();
 
   var mockPlugin2 = new goog.testing.LooseMock(plugin);
@@ -692,14 +692,14 @@ function testNotHandledSelectionChange() {
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
-  mockPlugin1.handleSelectionChange(e).$returns(false);
+  mockPlugin1.handleSelectionChange(e, undefined).$returns(false);
   mockPlugin1.$replay();
 
   var mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
-  mockPlugin2.handleSelectionChange(e).$returns(true);
+  mockPlugin2.handleSelectionChange(e, undefined).$returns(true);
   mockPlugin2.$replay();
 
   editableField.registerPlugin(mockPlugin1);
@@ -736,6 +736,63 @@ function testSelectionChange() {
   editableField.placeCursorAtStart();
   assertEquals('Selection change should fire', 2,
       selectionChanges.getCallCount());
+
+  clock.dispose();
+  editableField.dispose();
+}
+
+function testSelectionChangeOnMouseUp() {
+  var fakeEvent =
+      new goog.events.BrowserEvent({type: 'mouseup', target: 'fakeTarget'});
+  var editableField = new goog.editor.Field('testField', document);
+  var clock = new goog.testing.MockClock(true);
+  var selectionChanges = goog.testing.recordFunction();
+  goog.events.listen(editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
+      selectionChanges);
+
+  var plugin = new TestPlugin();
+  plugin.handleSelectionChange = goog.testing.recordFunction();
+  editableField.registerPlugin(plugin);
+
+  editableField.makeEditable();
+
+  // Emulate a mouseup event, this should result in an immediate
+  // SELECTIONCHANGE, plus a second one in IE after a short timeout.
+  editableField.handleMouseUp_(fakeEvent);
+  assertEquals('Selection change should fire immediately', 1,
+      selectionChanges.getCallCount());
+  assertEquals('Plugin should have handled selection change immediately', 1,
+      plugin.handleSelectionChange.getCallCount());
+  assertEquals('Plugin should have received original browser event to handle',
+      fakeEvent, plugin.handleSelectionChange.getLastCall().getArguments()[0]);
+
+  // Pretend another plugin fired a SELECTIONCHANGE in the meantime.
+  editableField.dispatchSelectionChangeEvent();
+  assertEquals('Second selection change should fire immediately', 2,
+      selectionChanges.getCallCount());
+  assertEquals('Plugin should have handled second selection change immediately',
+       2,  plugin.handleSelectionChange.getCallCount());
+  var args = plugin.handleSelectionChange.getLastCall().getArguments();
+  assertTrue('Plugin should not have received data from extra firing',
+      args.length == 0 ||
+      !args[0] && (args.length == 1 || !args[1]));
+
+  // Now check for the extra call in IE.
+  clock.tick(1000);
+  if (goog.userAgent.IE) {
+    assertEquals('Additional selection change should fire within 1s', 3,
+        selectionChanges.getCallCount());
+    assertEquals('Plugin should have handled selection change within 1s', 3,
+        plugin.handleSelectionChange.getCallCount());
+    assertEquals('Plugin should have received target of original browser event',
+        fakeEvent.target,
+        plugin.handleSelectionChange.getLastCall().getArguments().pop());
+  } else {
+    assertEquals('No additional selection change should fire', 2,
+        selectionChanges.getCallCount());
+    assertEquals('Plugin should not have handled selection change again', 2,
+        plugin.handleSelectionChange.getCallCount());
+  }
 
   clock.dispose();
   editableField.dispose();

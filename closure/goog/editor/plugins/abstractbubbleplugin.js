@@ -203,15 +203,15 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleKeyUp = function(e) {
 /**
  * Pops up a property bubble for the given selection if appropriate and closes
  * open property bubbles if no longer needed.  This should not be overridden.
- * @param {goog.events.Event=} opt_e Optional selectionchange event that
- *     initiated this handler.
- * @return {boolean} Whether we handled the selection change.
+ * @inheritDoc
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
-    function(opt_e) {
+    function(opt_e, opt_target) {
   var selectedElement;
   if (opt_e) {
     selectedElement = /** @type {Element} */ (opt_e.target);
+  } else if (opt_target) {
+    selectedElement = /** @type {Element} */ (opt_target);
   } else {
     var range = this.fieldObject.getRange();
     if (range) {

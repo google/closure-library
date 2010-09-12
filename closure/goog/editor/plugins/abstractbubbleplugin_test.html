@@ -19,6 +19,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.dom');
   goog.require('goog.dom.TagName');
+  goog.require('goog.functions');
   goog.require('goog.editor.plugins.AbstractBubblePlugin');
   goog.require('goog.events.BrowserEvent');
   goog.require('goog.events.EventType');
@@ -170,9 +171,7 @@ function testNoTwoBubblesOpenAtSameTime() {
     numTimesCloseCalled++;
     origClose();
   };
-  bubblePlugin.getBubbleTargetFromSelection = function(selectedElement) {
-    return selectedElement;
-  };
+  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
   bubblePlugin.createBubbleContents = goog.nullFunction;
 
   bubblePlugin.handleSelectionChangeInternal_(link);
@@ -186,14 +185,34 @@ function testNoTwoBubblesOpenAtSameTime() {
   FIELDMOCK.$verify();
 }
 
+function testHandleSelectionChangeWithEvent() {
+  FIELDMOCK.$replay();
+  var fakeEvent =
+      new goog.events.BrowserEvent({type: 'mouseup', target: link});
+  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
+  bubblePlugin.createBubbleContents = goog.nullFunction;
+  bubblePlugin.handleSelectionChange(fakeEvent);
+  assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
+  assertEquals('Bubble target should be provided event\'s target',
+               link, bubblePlugin.targetElement_);
+}
+
+function testHandleSelectionChangeWithTarget() {
+  FIELDMOCK.$replay();
+  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
+  bubblePlugin.createBubbleContents = goog.nullFunction;
+  bubblePlugin.handleSelectionChange(undefined, link2);
+  assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
+  assertEquals('Bubble target should be provided target',
+               link2, bubblePlugin.targetElement_);
+}
+
 /**
  * Regression test for @bug 2945341.
  */
 function testSelectOneTextCharacterNoError() {
   FIELDMOCK.$replay();
-  bubblePlugin.getBubbleTargetFromSelection = function(selectedElement) {
-    return selectedElement;
-  };
+  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
   bubblePlugin.createBubbleContents = goog.nullFunction;
   // Select first char of first link's text node.
   testHelper.select(link.firstChild, 0, link.firstChild, 1);
