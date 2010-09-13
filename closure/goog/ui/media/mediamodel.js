@@ -53,6 +53,8 @@ goog.require('goog.array');
  * @param {goog.ui.media.MediaModel.MimeType=} opt_type The type of the media.
  * @param {goog.ui.media.MediaModel.Medium=} opt_medium The medium of the media.
  * @param {number=} opt_duration The duration of the media in seconds.
+ * @param {number=} opt_width The width of the media in pixels.
+ * @param {number=} opt_height The height of the media in pixels.
  * @constructor
  */
 goog.ui.media.MediaModel = function(opt_url,
@@ -60,7 +62,9 @@ goog.ui.media.MediaModel = function(opt_url,
                                     opt_description,
                                     opt_type,
                                     opt_medium,
-                                    opt_duration) {
+                                    opt_duration,
+                                    opt_width,
+                                    opt_height) {
   /**
    * The URL of the media.
    * @type {string|undefined}
@@ -102,6 +106,20 @@ goog.ui.media.MediaModel = function(opt_url,
    * @private
    */
   this.duration_ = opt_duration;
+
+  /**
+   * The width of the media in pixels.
+   * @type {number|undefined}
+   * @private
+   */
+  this.width_ = opt_width;
+
+  /**
+   * The height of the media in pixels.
+   * @type {number|undefined}
+   * @private
+   */
+  this.height_ = opt_height;
 
   /**
    * A list of thumbnails representations of the media (eg different sizes of
@@ -302,6 +320,46 @@ goog.ui.media.MediaModel.prototype.getDuration = function() {
  */
 goog.ui.media.MediaModel.prototype.setDuration = function(duration) {
   this.duration_ = duration;
+  return this;
+};
+
+
+/**
+ * Gets the width of the media in pixels.
+ * @return {number|undefined} The width in pixels.
+ */
+goog.ui.media.MediaModel.prototype.getWidth = function() {
+  return this.width_;
+};
+
+
+/**
+ * Sets the width of the media.
+ * @param {number} width The width of the media, in pixels.
+ * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ */
+goog.ui.media.MediaModel.prototype.setWidth = function(width) {
+  this.width_ = width;
+  return this;
+};
+
+
+/**
+ * Gets the height of the media in pixels.
+ * @return {number|undefined} The height in pixels.
+ */
+goog.ui.media.MediaModel.prototype.getHeight = function() {
+  return this.height_;
+};
+
+
+/**
+ * Sets the height of the media.
+ * @param {number} height The height of the media, in pixels.
+ * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ */
+goog.ui.media.MediaModel.prototype.setHeight = function(height) {
+  this.height_ = height;
   return this;
 };
 
