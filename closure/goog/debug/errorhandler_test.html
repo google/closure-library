@@ -15,8 +15,9 @@ See the COPYING file for details.
 <!-- These paths should be relative to the test -->
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.testing.jsunit');
   goog.require('goog.debug.ErrorHandler');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent');
 </script>
 </head>
 <body>
@@ -42,20 +43,33 @@ See the COPYING file for details.
             setTimeout: function(fn, time) {
               fakeWin.setTimeout.called = true;
               fakeWin.setTimeout.that = this;
-              fn();
+              if (goog.isString(fn)) {
+                eval(fn);
+              } else {
+                fn();
+              }
             },
             setInterval: function(fn, time) {
               fakeWin.setInterval.called = true;
               fakeWin.setInterval.that = this;
-              fn();
+              if (goog.isString(fn)) {
+                eval(fn);
+              } else {
+                fn();
+              }
             }
           };
         }
         return fakeWin;
       } else {
         return oldGetObjectByName(name);
-      };
-    }
+      }
+    };
+
+    // To keep the string tests synchronous, we use a real eval.
+    goog.globalEval = function(str) {
+      goog.global.eval(str);
+    };
 
     // just record the exception in the error handler when it happens
     errorHandler = new goog.debug.ErrorHandler(function(ex) {
@@ -91,6 +105,23 @@ See the COPYING file for details.
                fakeWin.setTimeout.that === fakeWin);
   }
 
+  function testWrapSetTimeoutWithString() {
+    errorHandler.protectWindowSetTimeout();
+
+    var caught;
+
+    try {
+      fakeWin.setTimeout('throw "string die"', 3);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertTrue('exception not thrown', !!caught);
+
+    // We do not attempt to wrap strings in an error handler. We only
+    // try to guarantee that they're called correctly.
+    assertUndefined(errorHandler.ex);
+    assertEquals('string die', caught);
+  }
 
   function testWrapSetInterval() {
     errorHandler.protectWindowSetInterval();
@@ -106,8 +137,26 @@ See the COPYING file for details.
     assertEquals('exception not caught by error handler',
                  caught, errorHandler.ex);
     assertTrue('fake setInterval not called', !!fakeWin.setInterval.called);
-    assertTrue('"this" not passed to original setTimeout',
+    assertTrue('"this" not passed to original setInterval',
                fakeWin.setInterval.that === fakeWin);
+  }
+
+  function testWrapSetIntervalWithString() {
+    errorHandler.protectWindowSetInterval();
+
+    var caught;
+
+    try {
+      fakeWin.setInterval('throw "string die"', 3);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertTrue('exception not thrown', !!caught);
+
+    // We do not attempt to wrap strings in an error handler. We only
+    // try to guarantee that they're called correctly.
+    assertUndefined(errorHandler.ex);
+    assertEquals('string die', caught);
   }
 
   function testDisposal() {
