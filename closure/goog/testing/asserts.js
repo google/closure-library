@@ -394,7 +394,12 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
         // goog.structs.Map, at least on systems that support iteration.
         if (!var1['__iterator__']) {
           for (var prop in var1) {
-            if (isArray || prop in var2) {
+            if (isArray && goog.testing.asserts.isArrayIndexProp_(prop)) {
+              // Skip array indices for now. We'll handle them later.
+              continue;
+            }
+
+            if (prop in var2) {
               innerAssert(var1[prop], var2[prop],
                           childPath.replace('%s', prop));
             } else {
@@ -404,13 +409,34 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
           }
           // make sure there aren't properties in var2 that are missing
           // from var1. if there are, then by definition they don't
-          // match. do this even for arrays, since if var1 is a sparse
-          // array, its missing indices won't have been visited yet.
+          // match.
           for (var prop in var2) {
+            if (isArray && goog.testing.asserts.isArrayIndexProp_(prop)) {
+              // Skip array indices for now. We'll handle them later.
+              continue;
+            }
+
             if (!(prop in var1)) {
               failures.push('property ' + prop +
                             ' not present in expected ' +
                             (path || typeOfVar1));
+            }
+          }
+
+          // Handle array indices by iterating from 0 to arr.length.
+          //
+          // Although all browsers allow holes in arrays, browsers
+          // are inconsistent in what they consider a hole. For example,
+          // "[0,undefined,2]" has a hole on IE but not on Firefox.
+          //
+          // Because our style guide bans for...in iteration over arrays,
+          // we assume that most users don't care about holes in arrays,
+          // and that it is ok to say that a hole is equivalent to a slot
+          // populated with 'undefined'.
+          if (isArray) {
+            for (prop = 0; prop < var1.length; prop++) {
+              innerAssert(var1[prop], var2[prop],
+                          childPath.replace('%s', String(prop)));
             }
           }
         } else {
@@ -759,6 +785,17 @@ goog.testing.asserts.raiseException_ = function(comment, opt_message) {
   }
 
   throw new goog.testing.JsUnitException(comment, opt_message);
+};
+
+
+/**
+ * Helper function for assertObjectEquals. Tells us if a given property
+ * name is an array index.
+ * @param {string} prop
+ * @return {boolean}
+ */
+goog.testing.asserts.isArrayIndexProp_ = function(prop) {
+  return (prop | 0) == prop;
 };
 
 

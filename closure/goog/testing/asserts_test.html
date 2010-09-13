@@ -457,6 +457,39 @@ See the COPYING file for details.
     });
   }
 
+  function testAssertObjectEqualsSparseArrays2() {
+    // On IE6-8, the expression "1 in [4,undefined]" evaluates to false,
+    // but true on other browsers. FML. This test verifies a regression
+    // where IE reported that arr4 was not equal to arr1 or arr2.
+    var arr1 = [1,,3];
+    var arr2 = [1,undefined,3];
+    var arr3 = goog.array.clone(arr1);
+    var arr4 = [];
+    arr4.push(1, undefined, 3);
+
+    // Assert that all those arrays are equivalent pairwise.
+    var arrays = [arr1, arr2, arr3, arr4];
+    for (var i = 0; i < arrays.length; i++) {
+      for (var j = 0; j < arrays.length; j++) {
+        assertArrayEquals(arrays[i], arrays[j]);
+      }
+    }
+  }
+
+  function testAssertObjectEqualsArraysWithExtraProps() {
+    var arr1 = [1];
+    var arr2 = [1];
+    arr2.foo = 3;
+
+    assertThrows('Aarrays should not be equal', function() {
+      assertObjectEquals(arr1, arr2);
+    });
+
+    assertThrows('Arrays should not be equal', function() {
+      assertObjectEquals(arr2, arr1);
+    });
+  }
+
   function testAssertSameElementsOnArray() {
     assertSameElements([1, 2], [2, 1]);
     assertSameElements('Good assertion', [1, 2], [2, 1]);
