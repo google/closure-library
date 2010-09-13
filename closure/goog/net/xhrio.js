@@ -338,7 +338,7 @@ goog.net.XhrIo.prototype.setTimeoutInterval = function(ms) {
 
 /**
  * Instance send that actually uses XMLHttpRequest to make a server call.
- * @param {string|goog.Uri} url Uri to make request too.
+ * @param {string|goog.Uri} url Uri to make request to.
  * @param {string=} opt_method Send method, default: GET.
  * @param {string|GearsBlob=} opt_content Post data. This can be a Gears blob
  *     if the underlying HTTP request object is a Gears HTTP request.
