@@ -80,7 +80,7 @@ See the COPYING file for details.
 
   function setTextHelper(field) {
     // Test one line string only
-    field.select();
+    select(field);
     assertEquals('', goog.dom.selection.getText(field));
 
     goog.dom.selection.setText(field, 'Get Behind Me Satan');
@@ -91,7 +91,7 @@ See the COPYING file for details.
    * Tests the setText routine for textarea with multiple lines of text.
    */
   function testSetTextMultipleLines() {
-    textarea.select();
+    select(textarea);
     assertEquals('', goog.dom.selection.getText(textarea));
     var message = goog.userAgent.IE ?
                   'Get Behind Me\r\nSatan' :
@@ -125,14 +125,14 @@ See the COPYING file for details.
   }
 
   function setCursorHelper(field) {
-    field.select();
+    select(field);
     // try to set the cursor beyond the length of the content
     goog.dom.selection.setStart(field, 5);
     goog.dom.selection.setEnd(field, 15);
     assertEquals(0, goog.dom.selection.getStart(field));
     assertEquals(0, goog.dom.selection.getEnd(field));
 
-    field.select();
+    select(field);
     var message = 'Get Behind Me Satan';
     goog.dom.selection.setText(field, message);
     goog.dom.selection.setStart(field, 5);
@@ -160,7 +160,7 @@ See the COPYING file for details.
   }
 
   function getAndSetSelectedTextHelper(field) {
-    field.select();
+    select(field);
     goog.dom.selection.setText(field, 'Get Behind Me Satan');
 
     // select 'Behind'
@@ -195,7 +195,7 @@ See the COPYING file for details.
    * containing line breaks.
    */
   function testSetAndGetCursorWithLineBreaks() {
-    textarea.select();
+    select(textarea);
     var newline = goog.userAgent.IE ? '\r\n' : '\n';
     var message = 'Hello' + newline + 'World';
     goog.dom.selection.setText(textarea, message);
@@ -314,6 +314,15 @@ See the COPYING file for details.
     goog.dom.selection.setEnd(textarea, end);
     assertEquals(start, goog.dom.selection.getStart(textarea));
     assertEquals(end, goog.dom.selection.getEnd(textarea));
+  }
+
+  /**
+   * Helper function to focus and select a field. In IE8, selected
+   * fields need focus.
+   */
+  function select(field) {
+    field.focus();
+    field.select();
   }
 </script>
 </body>
