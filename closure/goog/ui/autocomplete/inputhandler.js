@@ -135,7 +135,7 @@ goog.ui.AutoComplete.InputHandler = function(opt_separators, opt_literals,
    * @type {string}
    * @private
    */
-   this.literals_ = opt_literals || '';
+  this.literals_ = opt_literals || '';
 
   /**
    * Whether this input accepts multiple values
@@ -789,6 +789,8 @@ goog.ui.AutoComplete.InputHandler.prototype.handleKeyEvent = function(e) {
     case goog.events.KeyCodes.ESC:
       if (this.ac_.isOpen()) {
         this.ac_.dismiss();
+        e.preventDefault();
+        e.stopPropagation();
         return true;
       }
       break;
