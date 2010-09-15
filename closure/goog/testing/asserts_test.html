@@ -18,122 +18,93 @@ See the COPYING file for details.
   goog.require('goog.structs.Set');
   goog.require('goog.testing.asserts');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.testing.asserts');
 </script>
 </head>
 <body>
 <script>
 
-  /**
-   * Asserts that the given callback function results in a JsUnitException when
-   * called, and that the resulting failure message matches the given expected
-   * message.
-   * @param {function() : void} callback Function to be run expected to result
-   *     in a JsUnitException (usually contains a call to an assert).
-   * @param {string} opt_expectedMessage Failure message expected to be given
-   *     with the exception.
-   */
-  function assertFailure(callback, opt_expectedMessage) {
-    var failed = false;
-    try {
-      callback();
-    } catch (ex) {
-      if (!ex.isJsUnitException) {
-        fail('Expected a JsUnitException');
-      }
-      if (typeof opt_expectedMessage != 'undefined' &&
-          ex.message != opt_expectedMessage) {
-        fail('Expected message [' + opt_expectedMessage + '] but got [' +
-            ex.message + ']');
-      }
-      failed = true;
-    }
-    if (!failed) {
-      fail('Expected a failure: ' + opt_expectedMessage);
-    }
-  }
-
-  function assertError(expectedDescription, callback) {
-    var failed = false;
-    try {
-      callback();
-    } catch (ex) {
-      if (ex.isJsUnitException) {
-        fail('Did not expect a JsUnitException');
-      }
-      if (ex.description != expectedDescription) {
-        fail('Expected description [' + expectedDescription + '] but got [' +
-            ex.description + ']');
-      }
-      failed = true;
-    }
-    if (!failed) {
-      fail('Expected an error: ' + expectedDescription);
-    }
-  }
-
   function testAssertTrue() {
     assertTrue(true);
     assertTrue('Good assertion', true);
-    assertFailure(function() { assertTrue(false); },
+    assertThrowsJsUnitException(
+        function() { assertTrue(false); },
         'Call to assertTrue(boolean) with false');
-    assertFailure(function() { assertTrue('Should be true', false); },
+    assertThrowsJsUnitException(
+        function() { assertTrue('Should be true', false); },
         'Should be true\nCall to assertTrue(boolean) with false');
-    assertFailure(function() { assertTrue(null); },
+    assertThrowsJsUnitException(
+        function() { assertTrue(null); },
         'Bad argument to assertTrue(boolean)');
-    assertFailure(function() { assertTrue(undefined); },
+    assertThrowsJsUnitException(
+        function() { assertTrue(undefined); },
         'Bad argument to assertTrue(boolean)');
   }
 
   function testAssertFalse() {
     assertFalse(false);
     assertFalse('Good assertion', false);
-    assertFailure(function() { assertFalse(true); },
+    assertThrowsJsUnitException(
+        function() { assertFalse(true); },
         'Call to assertFalse(boolean) with true');
-    assertFailure(function() { assertFalse('Should be false', true); },
+    assertThrowsJsUnitException(
+        function() { assertFalse('Should be false', true); },
         'Should be false\nCall to assertFalse(boolean) with true');
-    assertFailure(function() { assertFalse(null); },
+    assertThrowsJsUnitException(
+        function() { assertFalse(null); },
         'Bad argument to assertFalse(boolean)');
-    assertFailure(function() { assertFalse(undefined); },
+    assertThrowsJsUnitException(
+        function() { assertFalse(undefined); },
         'Bad argument to assertFalse(boolean)');
   }
 
   function testAssertEqualsWithString() {
     assertEquals('a', 'a');
     assertEquals('Good assertion', 'a', 'a');
-    assertFailure(function() { assertEquals('a', 'b'); },
+    assertThrowsJsUnitException(
+        function() { assertEquals('a', 'b'); },
         'Expected <a> (String) but was <b> (String)');
-    assertFailure(function() { assertEquals('Bad assertion', 'a', 'b'); },
+    assertThrowsJsUnitException(
+        function() { assertEquals('Bad assertion', 'a', 'b'); },
         'Bad assertion\nExpected <a> (String) but was <b> (String)');
   }
 
   function testAssertEqualsWithInteger() {
     assertEquals(1, 1);
     assertEquals('Good assertion', 1, 1);
-    assertFailure(function() { assertEquals(1, 2); },
+    assertThrowsJsUnitException(
+        function() { assertEquals(1, 2); },
         'Expected <1> (Number) but was <2> (Number)');
-    assertFailure(function() { assertEquals('Bad assertion', 1, 2); },
+    assertThrowsJsUnitException(
+        function() { assertEquals('Bad assertion', 1, 2); },
         'Bad assertion\nExpected <1> (Number) but was <2> (Number)');
   }
 
   function testAssertNotEquals() {
     assertNotEquals('a', 'b');
     assertNotEquals('a', 'a', 'b');
-    assertFailure(function() { assertNotEquals('a', 'a'); },
+    assertThrowsJsUnitException(
+        function() { assertNotEquals('a', 'a'); },
         'Expected not to be <a> (String)');
-    assertFailure(function() { assertNotEquals('a', 'a', 'a'); },
+    assertThrowsJsUnitException(
+        function() { assertNotEquals('a', 'a', 'a'); },
         'a\nExpected not to be <a> (String)');
   }
 
   function testAssertNull() {
     assertNull(null);
     assertNull('Good assertion', null);
-    assertFailure(function() { assertNull(true); },
+    assertThrowsJsUnitException(
+        function() { assertNull(true); },
         'Expected <null> but was <true> (Boolean)');
-    assertFailure(function() { assertNull('Should be null', false); },
+    assertThrowsJsUnitException(
+        function() { assertNull('Should be null', false); },
         'Should be null\nExpected <null> but was <false> (Boolean)');
-    assertFailure(function() { assertNull(undefined); },
+    assertThrowsJsUnitException(
+        function() { assertNull(undefined); },
         'Expected <null> but was <undefined>');
-    assertFailure(function() { assertNull(1); },
+    assertThrowsJsUnitException(
+        function() { assertNull(1); },
         'Expected <null> but was <1> (Number)');
   }
 
@@ -144,22 +115,28 @@ See the COPYING file for details.
     assertNotNull(undefined);
     assertNotNull(1);
     assertNotNull('a');
-    assertFailure(function() { assertNotNull(null); },
+    assertThrowsJsUnitException(
+        function() { assertNotNull(null); },
         'Expected not to be <null>');
-    assertFailure(function() { assertNotNull('Should not be null', null); },
+    assertThrowsJsUnitException(
+        function() { assertNotNull('Should not be null', null); },
         'Should not be null\nExpected not to be <null>');
   }
 
   function testAssertUndefined() {
     assertUndefined(undefined);
     assertUndefined('Good assertion', undefined);
-    assertFailure(function() { assertUndefined(true); },
+    assertThrowsJsUnitException(
+        function() { assertUndefined(true); },
         'Expected <undefined> but was <true> (Boolean)');
-    assertFailure(function() { assertUndefined('Should be undefined', false); },
+    assertThrowsJsUnitException(
+        function() { assertUndefined('Should be undefined', false); },
         'Should be undefined\nExpected <undefined> but was <false> (Boolean)');
-    assertFailure(function() { assertUndefined(null); },
+    assertThrowsJsUnitException(
+        function() { assertUndefined(null); },
         'Expected <undefined> but was <null>');
-    assertFailure(function() { assertUndefined(1); },
+    assertThrowsJsUnitException(
+        function() { assertUndefined(1); },
         'Expected <undefined> but was <1> (Number)');
   }
 
@@ -170,12 +147,12 @@ See the COPYING file for details.
     assertNotUndefined(null);
     assertNotUndefined(1);
     assertNotUndefined('a');
-    assertFailure(function() { assertNotUndefined(undefined); },
+    assertThrowsJsUnitException(
+        function() { assertNotUndefined(undefined); },
                   'Expected not to be <undefined>');
-    assertFailure(function() {
-                    assertNotUndefined('Should not be undefined', undefined);
-                  },
-                  'Should not be undefined\nExpected not to be <undefined>');
+    assertThrowsJsUnitException(
+        function() { assertNotUndefined('Should not be undefined', undefined); },
+        'Should not be undefined\nExpected not to be <undefined>');
   }
 
   function testAssertNotNullNorUndefined() {
@@ -185,16 +162,16 @@ See the COPYING file for details.
     assertNotNullNorUndefined(1);
     assertNotNullNorUndefined(0);
     assertNotNullNorUndefined('a');
-    assertFailure(function() {
+    assertThrowsJsUnitException(function() {
       assertNotNullNorUndefined(undefined);
     }, 'Expected not to be <undefined>');
-    assertFailure(function() {
+    assertThrowsJsUnitException(function() {
       assertNotNullNorUndefined('Should not be undefined', undefined);
     }, 'Should not be undefined\nExpected not to be <undefined>');
-    assertFailure(function() {
+    assertThrowsJsUnitException(function() {
       assertNotNullNorUndefined(null);
     }, 'Expected not to be <null>');
-    assertFailure(function() {
+    assertThrowsJsUnitException(function() {
       assertNotNullNorUndefined('Should not be null', null);
     }, 'Should not be null\nExpected not to be <null>');
   }
@@ -209,67 +186,59 @@ See the COPYING file for details.
     assertNonEmptyString('undefined');
     assertNonEmptyString('\n');
     assertNonEmptyString(' ');
-    assertFailure(function() {
-                    assertNonEmptyString('');
-                  },
-                  'Expected non-empty string but was <> (String)');
-    assertFailure(function() {
-                    assertNonEmptyString('Should be non-empty string', '');
-                  },
-                  'Should be non-empty string\n' +
-                  'Expected non-empty string but was <> (String)');
-    assertFailure(function() {
-                    assertNonEmptyString(true);
-                  },
-                  'Expected non-empty string but was <true> (Boolean)');
-    assertFailure(function() {
-                    assertNonEmptyString(false);
-                  },
-                  'Expected non-empty string but was <false> (Boolean)');
-    assertFailure(function() {
-                    assertNonEmptyString(1);
-                  },
-                  'Expected non-empty string but was <1> (Number)');
-    assertFailure(function() {
-                    assertNonEmptyString(null);
-                  },
-                  'Expected non-empty string but was <null>');
-    assertFailure(function() {
-                    assertNonEmptyString(undefined);
-                  },
-                  'Expected non-empty string but was <undefined>');
-    assertFailure(function() {
-                    assertNonEmptyString(['hello']);
-                  },
-                  'Expected non-empty string but was <hello> (Array)');
-    // Different browsers rturn different values/types in the failure message
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString(''); },
+        'Expected non-empty string but was <> (String)');
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString('Should be non-empty string', ''); },
+        'Should be non-empty string\n' +
+          'Expected non-empty string but was <> (String)');
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString(true); },
+        'Expected non-empty string but was <true> (Boolean)');
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString(false); },
+        'Expected non-empty string but was <false> (Boolean)');
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString(1); },
+        'Expected non-empty string but was <1> (Number)');
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString(null); },
+        'Expected non-empty string but was <null>');
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString(undefined); },
+        'Expected non-empty string but was <undefined>');
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString(['hello']); },
+        'Expected non-empty string but was <hello> (Array)');
+    // Different browsers return different values/types in the failure message
     // so don't bother checking if the message is exactly as expected.
-    assertFailure(function() {
-                    assertNonEmptyString(goog.dom.createTextNode('hello'));
-                  });
+    assertThrowsJsUnitException(
+        function() { assertNonEmptyString(goog.dom.createTextNode('hello')); });
   }
 
   function testAssertNaN() {
     assertNaN(NaN);
     assertNaN('Good assertion', NaN);
-    assertFailure(function() { assertNaN(1); },
-        'Expected NaN');
-    assertFailure(function() { assertNaN('Should be NaN', 1); },
+    assertThrowsJsUnitException(
+        function() { assertNaN(1); }, 'Expected NaN');
+    assertThrowsJsUnitException(
+        function() { assertNaN('Should be NaN', 1); },
         'Should be NaN\nExpected NaN');
-    assertFailure(function() { assertNaN(true); },
-        'Expected NaN');
-    assertFailure(function() { assertNaN(false); },
-        'Expected NaN');
-    assertFailure(function() { assertNaN(null); },
-        'Expected NaN');
-    assertFailure(function() { assertNaN(''); },
-        'Expected NaN');
+    assertThrowsJsUnitException(
+        function() { assertNaN(true); }, 'Expected NaN');
+    assertThrowsJsUnitException(
+        function() { assertNaN(false); }, 'Expected NaN');
+    assertThrowsJsUnitException(
+        function() { assertNaN(null); }, 'Expected NaN');
+    assertThrowsJsUnitException(
+        function() { assertNaN(''); }, 'Expected NaN');
 
     // TODO(user): These assertions fail. We should decide on the
     // semantics of assertNaN
-    //assertFailure(function() { assertNaN(undefined); },
+    //assertThrowsJsUnitException(function() { assertNaN(undefined); },
     //    'Expected NaN');
-    //assertFailure(function() { assertNaN('a'); },
+    //assertThrowsJsUnitException(function() { assertNaN('a'); },
     //    'Expected NaN');
   }
 
@@ -286,9 +255,11 @@ See the COPYING file for details.
     //assertNotNaN(undefined);
     //assertNotNaN('a');
 
-    assertFailure(function() { assertNotNaN(Number.NaN); },
+    assertThrowsJsUnitException(
+        function() { assertNotNaN(Number.NaN); },
         'Expected not NaN');
-    assertFailure(function() { assertNotNaN('Should not be NaN', Number.NaN); },
+    assertThrowsJsUnitException(
+        function() { assertNotNaN('Should not be NaN', Number.NaN); },
         'Should not be NaN\nExpected not NaN');
   }
 
@@ -494,27 +465,27 @@ See the COPYING file for details.
     assertSameElements([1, 2], [2, 1]);
     assertSameElements('Good assertion', [1, 2], [2, 1]);
     assertSameElements('Good assertion with duplicates', [1, 1, 2], [2, 1, 1]);
-    assertFailure(
+    assertThrowsJsUnitException(
         function() {
           assertSameElements([1, 2], [1]);
         },
         'Expected 2 elements: [1,2], got 1 elements: [1]');
-    assertFailure(
+    assertThrowsJsUnitException(
         function() {
           assertSameElements('Should match', [1, 2], [1]);
         },
         'Should match\nExpected 2 elements: [1,2], got 1 elements: [1]');
-    assertFailure(
+    assertThrowsJsUnitException(
         function() {
           assertSameElements([1, 2], [1, 3]);
         },
         'Expected [1,2], got [1,3]');
-    assertFailure(
+    assertThrowsJsUnitException(
         function() {
           assertSameElements('Should match', [1, 2], [1, 3]);
         },
         'Should match\nExpected [1,2], got [1,3]');
-    assertFailure(
+    assertThrowsJsUnitException(
         function() {
           assertSameElements([1, 1, 2], [2, 2, 1]);
         },
@@ -523,7 +494,7 @@ See the COPYING file for details.
 
   function testAssertSameElementsOnArrayLike() {
     assertSameElements({0: 0, 1: 1, length: 2}, {length: 2, 1: 1, 0: 0});
-    assertFailure(
+    assertThrowsJsUnitException(
         function() {
           assertSameElements({0: 0, 1: 1, length: 2}, {0: 0, length: 1});
         },
@@ -531,7 +502,7 @@ See the COPYING file for details.
   }
 
   function testAssertSameElementsWithBadArguments() {
-    assertFailure(
+    assertThrowsJsUnitException(
         function() {
           assertSameElements([], new goog.structs.Set());
         },
@@ -563,36 +534,40 @@ See the COPYING file for details.
     assertEvaluatesToTrue(true);
     assertEvaluatesToTrue('', true);
     assertEvaluatesToTrue('Good assertion', true);
-    assertFailure(function() { assertEvaluatesToTrue(false); },
+    assertThrowsJsUnitException(
+        function() { assertEvaluatesToTrue(false); },
         'Expected to evaluate to true');
-    assertFailure(function() {assertEvaluatesToTrue('Should be true', false); },
+    assertThrowsJsUnitException(
+        function() {assertEvaluatesToTrue('Should be true', false); },
         'Should be true\nExpected to evaluate to true');
     for (var i = 0; i < implicitlyTrue.length; i++) {
       assertEvaluatesToTrue(String('Test ' + implicitlyTrue[i] +
           ' [' + i + ']'), implicitlyTrue[i]);
     }
     for (var i = 0; i < implicitlyFalse.length; i++) {
-      assertFailure(function() { assertEvaluatesToTrue(implicitlyFalse[i]); },
-        'Expected to evaluate to true');
+      assertThrowsJsUnitException(
+          function() { assertEvaluatesToTrue(implicitlyFalse[i]); },
+          'Expected to evaluate to true');
     }
   }
 
   function testAssertEvaluatesToFalse() {
     assertEvaluatesToFalse(false);
     assertEvaluatesToFalse('Good assertion', false);
-    assertFailure(function() { assertEvaluatesToFalse(true); },
+    assertThrowsJsUnitException(
+        function() { assertEvaluatesToFalse(true); },
         'Expected to evaluate to false');
-    assertFailure(function() {
-                    assertEvaluatesToFalse('Should be false', true);
-                  },
-                  'Should be false\nExpected to evaluate to false');
+    assertThrowsJsUnitException(
+        function() { assertEvaluatesToFalse('Should be false', true); },
+        'Should be false\nExpected to evaluate to false');
     for (var i = 0; i < implicitlyFalse.length; i++) {
       assertEvaluatesToFalse(String('Test ' + implicitlyFalse[i] +
           ' [' + i + ']'), implicitlyFalse[i]);
     }
     for (var i = 0; i < implicitlyTrue.length; i++) {
-      assertFailure(function() { assertEvaluatesToFalse(implicitlyTrue[i]); },
-        'Expected to evaluate to false');
+      assertThrowsJsUnitException(
+          function() { assertEvaluatesToFalse(implicitlyTrue[i]); },
+          'Expected to evaluate to false');
     }
   }
 
@@ -605,31 +580,32 @@ See the COPYING file for details.
     assertHashEquals('Good assertion', {a: 1, b: 2}, {b: 2, a: 1});
     assertHashEquals({a: undefined}, {a: undefined});
     // Missing key.
-    assertFailure(function() { assertHashEquals({a: 1, b: 2}, {a: 1}); },
+    assertThrowsJsUnitException(
+        function() { assertHashEquals({a: 1, b: 2}, {a: 1}); },
         'Expected hash had key b that was not found');
-    assertFailure(function() {
-                    assertHashEquals('Should match', {a: 1, b: 2}, {a: 1});
-                  },
-                  'Should match\nExpected hash had key b that was not found');
-    assertFailure(function() { assertHashEquals({a: undefined}, {}); },
+    assertThrowsJsUnitException(
+        function() { assertHashEquals('Should match', {a: 1, b: 2}, {a: 1}); },
+        'Should match\nExpected hash had key b that was not found');
+    assertThrowsJsUnitException(
+        function() { assertHashEquals({a: undefined}, {}); },
         'Expected hash had key a that was not found');
     // Not equal key.
-    assertFailure(function() { assertHashEquals({a: 1}, {a: 5}); },
+    assertThrowsJsUnitException(
+        function() { assertHashEquals({a: 1}, {a: 5}); },
         'Value for key a mismatch - expected = 1, actual = 5');
-    assertFailure(function() {
-                    assertHashEquals('Should match', {a: 1}, {a: 5});
-                  },
-                  'Should match\nValue for key a mismatch - expected = 1, ' +
-                  'actual = 5');
-    assertFailure(function() { assertHashEquals({a: undefined}, {a: 1})},
+    assertThrowsJsUnitException(
+        function() { assertHashEquals('Should match', {a: 1}, {a: 5}); },
+        'Should match\nValue for key a mismatch - expected = 1, actual = 5');
+    assertThrowsJsUnitException(
+        function() { assertHashEquals({a: undefined}, {a: 1})},
         'Value for key a mismatch - expected = undefined, actual = 1');
     // Extra key.
-    assertFailure(function() { assertHashEquals({a: 1}, {a: 1, b: 1}); },
+    assertThrowsJsUnitException(
+        function() { assertHashEquals({a: 1}, {a: 1, b: 1}); },
         'Actual hash had key b that was not expected');
-    assertFailure(function() {
-                    assertHashEquals('Should match', {a: 1}, {a: 1, b: 1});
-                  },
-                  'Should match\nActual hash had key b that was not expected');
+    assertThrowsJsUnitException(
+        function() { assertHashEquals('Should match', {a: 1}, {a: 1, b: 1}); },
+        'Should match\nActual hash had key b that was not expected');
   }
 
   function testAssertRoughlyEquals() {
@@ -637,29 +613,29 @@ See the COPYING file for details.
     assertRoughlyEquals('Good assertion', 1, 1, 0);
     assertRoughlyEquals(1, 1.1, 0.11);
     assertRoughlyEquals(1.1, 1, 0.11);
-    assertFailure(function() { assertRoughlyEquals(1, 1.1, 0.05); },
+    assertThrowsJsUnitException(
+        function() { assertRoughlyEquals(1, 1.1, 0.05); },
         'Expected 1, but got 1.1 which was more than 0.05 away');
-    assertFailure(function() {
-                    assertRoughlyEquals('Close enough', 1, 1.1, 0.05);
-                  },
-                  'Close enough\nExpected 1, but got 1.1 which was more ' +
-                  'than 0.05 away');
+    assertThrowsJsUnitException(
+        function() { assertRoughlyEquals('Close enough', 1, 1.1, 0.05); },
+        'Close enough\nExpected 1, but got 1.1 which was more than 0.05 away');
   }
 
   function testAssertContains() {
     var a = [1, 2, 3];
     assertContains(1, [1, 2, 3]);
     assertContains('Should contain', 1, [1, 2, 3]);
-    assertFailure(function() { assertContains(4, [1, 2, 3]); },
+    assertThrowsJsUnitException(
+        function() { assertContains(4, [1, 2, 3]); },
         'Expected \'1,2,3\' to contain \'4\'');
-    assertFailure(function() {
-                    assertContains('Should contain', 4, [1, 2, 3]);
-                  },
-                  'Should contain\nExpected \'1,2,3\' to contain \'4\'');
+    assertThrowsJsUnitException(
+        function() { assertContains('Should contain', 4, [1, 2, 3]); },
+        'Should contain\nExpected \'1,2,3\' to contain \'4\'');
     // assertContains uses ===.
     var o = new Object();
     assertContains(o, [o, 2, 3]);
-    assertFailure(function() { assertContains(o, [1, 2, 3]); },
+    assertThrowsJsUnitException(
+        function() { assertContains(o, [1, 2, 3]); },
         'Expected \'1,2,3\' to contain \'[object Object]\'');
   }
 
@@ -667,16 +643,17 @@ See the COPYING file for details.
     var a = [1, 2, 3];
     assertNotContains(4, [1, 2, 3]);
     assertNotContains('Should not contain', 4, [1, 2, 3]);
-    assertFailure(function() { assertNotContains(1, [1, 2, 3]); },
+    assertThrowsJsUnitException(
+        function() { assertNotContains(1, [1, 2, 3]); },
         'Expected \'1,2,3\' not to contain \'1\'');
-    assertFailure(function() {
-                    assertNotContains('Should not contain', 1, [1, 2, 3]);
-                  },
-                  "Should not contain\nExpected '1,2,3' not to contain '1'");
+    assertThrowsJsUnitException(
+        function() { assertNotContains('Should not contain', 1, [1, 2, 3]); },
+        "Should not contain\nExpected '1,2,3' not to contain '1'");
     // assertNotContains uses ===.
     var o = new Object();
     assertNotContains({}, [o, 2, 3]);
-    assertFailure(function() { assertNotContains(o, [o, 2, 3]); },
+    assertThrowsJsUnitException(
+        function() { assertNotContains(o, [o, 2, 3]); },
         'Expected \'[object Object],2,3\' not to contain \'[object Object]\'');
   }
 

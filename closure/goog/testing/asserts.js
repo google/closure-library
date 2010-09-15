@@ -211,6 +211,35 @@ function assertNotThrows(a, opt_b) {
 }
 
 /**
+ * Asserts that the given callback function results in a JsUnitException when
+ * called, and that the resulting failure message matches the given expected
+ * message.
+ * @param {function() : void} callback Function to be run expected to result
+ *     in a JsUnitException (usually contains a call to an assert).
+ * @param {string} opt_expectedMessage Failure message expected to be given
+ *     with the exception.
+ */
+function assertThrowsJsUnitException(callback, opt_expectedMessage) {
+  var failed = false;
+  try {
+    goog.testing.asserts.callWithoutLogging(callback);
+  } catch (ex) {
+    if (!ex.isJsUnitException) {
+      fail('Expected a JsUnitException');
+    }
+    if (typeof opt_expectedMessage != 'undefined' &&
+        ex.message != opt_expectedMessage) {
+      fail('Expected message [' + opt_expectedMessage + '] but got [' +
+          ex.message + ']');
+    }
+    failed = true;
+  }
+  if (!failed) {
+    fail('Expected a failure: ' + opt_expectedMessage);
+  }
+}
+
+/**
  * @param {*} a
  * @param {*=} opt_b
  */
@@ -353,6 +382,24 @@ function assertNotNaN(a, opt_b) {
   var aVar = nonCommentArg(1, 1, arguments);
   _assert(commentArg(1, arguments), !isNaN(aVar), 'Expected not NaN');
 }
+
+/**
+ * Runs a function in an environment where test failures are not logged. This is
+ * useful for testing test code, where failures can be a normal part of a test.
+ * @param {function() : void} fn Function to run without logging failures.
+ */
+goog.testing.asserts.callWithoutLogging = function(fn) {
+  var testRunner = goog.global['G_testRunner'];
+  var oldLogTestFailure = testRunner['logTestFailure'];
+  try {
+    // Any failures in the callback shouldn't be recorded.
+    testRunner['logTestFailure'] = undefined;
+    fn();
+  } finally {
+    testRunner['logTestFailure'] = oldLogTestFailure;
+  }
+};
+
 
 /**
  * Determines if two items of any type match, and formulates an error message
