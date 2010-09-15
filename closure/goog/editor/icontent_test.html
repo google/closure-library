@@ -183,7 +183,11 @@ function assertBodyCorrect(body, id, bodyHTML, opt_rtl) {
   }
   assert(goog.dom.classes.has(body, 'editable'));
   assertEquals('true', String(body.getAttribute('g_editable')));
-  assertEquals('true', String(body.getAttribute('hideFocus')));
+  assertEquals('true',
+      // IE has bugs with getAttribute('hideFocus'), and
+      // Webkit has bugs with normal .hideFocus access.
+      String(goog.userAgent.IE ? body.hideFocus :
+          body.getAttribute('hideFocus')));
   assertEquals(id, body.id);
 }
 
