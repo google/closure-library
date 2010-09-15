@@ -41,6 +41,7 @@ goog.dom.TagName = {
   BODY: 'BODY',
   BR: 'BR',
   BUTTON: 'BUTTON',
+  CANVAS: 'CANVAS',
   CAPTION: 'CAPTION',
   CENTER: 'CENTER',
   CITE: 'CITE',
