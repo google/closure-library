@@ -703,6 +703,12 @@ goog.events.EventType = {
   DRAGLEAVE: 'dragleave',
   DROP: 'drop',
 
+  // WebKit touch events.
+  TOUCHSTART: 'touchstart',
+  TOUCHMOVE: 'touchmove',
+  TOUCHEND: 'touchend',
+  TOUCHCANCEL: 'touchcancel',
+
   // Misc
   CONTEXTMENU: 'contextmenu',
   ERROR: 'error',
