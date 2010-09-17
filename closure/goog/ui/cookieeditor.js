@@ -9,6 +9,7 @@ goog.provide('goog.ui.CookieEditor');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.events.EventType');
 goog.require('goog.net.cookies');
 goog.require('goog.string');
 goog.require('goog.style');

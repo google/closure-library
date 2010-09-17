@@ -27,6 +27,7 @@ goog.require('goog.Timer');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
+goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyNames');
 goog.require('goog.object');

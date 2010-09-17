@@ -24,6 +24,7 @@
 goog.provide('goog.ui.FilteredMenu');
 
 goog.require('goog.dom');
+goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.string');

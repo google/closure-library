@@ -28,6 +28,7 @@ goog.provide('goog.ui.HsvaPalette');
 goog.require('goog.array');
 goog.require('goog.color');
 goog.require('goog.color.alpha');
+goog.require('goog.events.EventType');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.HsvPalette');
 

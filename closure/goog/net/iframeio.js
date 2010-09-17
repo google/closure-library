@@ -143,6 +143,7 @@ goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
+goog.require('goog.events.EventType');
 goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');

@@ -28,6 +28,7 @@ goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.Event');
+goog.require('goog.events.EventType');
 goog.require('goog.math.Box');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AbsolutePosition');

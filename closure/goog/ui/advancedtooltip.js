@@ -21,6 +21,7 @@
 
 goog.provide('goog.ui.AdvancedTooltip');
 
+goog.require('goog.events.EventType');
 goog.require('goog.math.Coordinate');
 goog.require('goog.ui.Tooltip');
 goog.require('goog.userAgent');

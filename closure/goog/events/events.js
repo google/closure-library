@@ -57,7 +57,6 @@
 
 
 goog.provide('goog.events');
-goog.provide('goog.events.EventType');
 
 goog.require('goog.array');
 goog.require('goog.debug.entryPointRegistry');
@@ -656,73 +655,6 @@ goog.events.expose = function(e) {
     }
   }
   return str.join('\n');
-};
-
-
-/**
- * Constants for event names.
- * @enum {string}
- */
-// TODO(user): Move to its own file.
-goog.events.EventType = {
-  // Mouse events
-  CLICK: 'click',
-  DBLCLICK: 'dblclick',
-  MOUSEDOWN: 'mousedown',
-  MOUSEUP: 'mouseup',
-  MOUSEOVER: 'mouseover',
-  MOUSEOUT: 'mouseout',
-  MOUSEMOVE: 'mousemove',
-  SELECTSTART: 'selectstart', // IE, Safari, Chrome
-
-  // Key events
-  KEYPRESS: 'keypress',
-  KEYDOWN: 'keydown',
-  KEYUP: 'keyup',
-
-  // Focus
-  BLUR: 'blur',
-  FOCUS: 'focus',
-  DEACTIVATE: 'deactivate', // IE only
-  // TODO(user): Test these. I experienced problems with DOMFocusIn, the event
-  // just wasn't firing.
-  FOCUSIN: goog.userAgent.IE ? 'focusin' : 'DOMFocusIn',
-  FOCUSOUT: goog.userAgent.IE ? 'focusout' : 'DOMFocusOut',
-
-  // Forms
-  CHANGE: 'change',
-  SELECT: 'select',
-  SUBMIT: 'submit',
-  INPUT: 'input',
-  PROPERTYCHANGE: 'propertychange', // IE only
-
-  // Drag and drop
-  DRAGSTART: 'dragstart',
-  DRAGENTER: 'dragenter',
-  DRAGOVER: 'dragover',
-  DRAGLEAVE: 'dragleave',
-  DROP: 'drop',
-
-  // WebKit touch events.
-  TOUCHSTART: 'touchstart',
-  TOUCHMOVE: 'touchmove',
-  TOUCHEND: 'touchend',
-  TOUCHCANCEL: 'touchcancel',
-
-  // Misc
-  CONTEXTMENU: 'contextmenu',
-  ERROR: 'error',
-  HELP: 'help',
-  LOAD: 'load',
-  LOSECAPTURE: 'losecapture',
-  READYSTATECHANGE: 'readystatechange',
-  RESIZE: 'resize',
-  SCROLL: 'scroll',
-  UNLOAD: 'unload',
-
-  // HTML 5 History events
-  HASHCHANGE: 'hashchange',
-  POPSTATE: 'popstate'
 };
 
 

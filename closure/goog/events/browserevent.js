@@ -48,6 +48,7 @@ goog.provide('goog.events.BrowserEvent.MouseButton');
 
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
+goog.require('goog.events.EventType');
 goog.require('goog.userAgent');
 
 
@@ -250,9 +251,9 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
     }
     // TODO(user): Use goog.events.EventType when it has been refactored into its
     // own file.
-  } else if (type == 'mouseover') {
+  } else if (type == goog.events.EventType.MOUSEOVER) {
     relatedTarget = e.fromElement;
-  } else if (type == 'mouseout') {
+  } else if (type == goog.events.EventType.MOUSEOUT) {
     relatedTarget = e.toElement;
   }
 

@@ -26,6 +26,7 @@ goog.provide('goog.graphics.VmlGraphics');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventType');
 goog.require('goog.graphics.AbstractGraphics');
 goog.require('goog.graphics.Font');
 goog.require('goog.graphics.LinearGradient');

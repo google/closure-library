@@ -31,6 +31,7 @@ goog.provide('goog.ui.BasicMenu.Separator');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
+goog.require('goog.events.EventType');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');

@@ -37,6 +37,7 @@ goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.dom.iframe');
 goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('goog.events.FocusHandler');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.fx.Dragger');

@@ -26,6 +26,7 @@ goog.provide('goog.ui.HoverCard.TriggerEvent');
 
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('goog.ui.AdvancedTooltip');
 
 

@@ -27,6 +27,7 @@
 goog.provide('goog.ui.SelectionMenuButton');
 goog.provide('goog.ui.SelectionMenuButton.SelectionState');
 
+goog.require('goog.events.EventType');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButton');

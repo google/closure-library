@@ -24,6 +24,7 @@ goog.provide('goog.graphics.CanvasGraphics');
 
 
 goog.require('goog.dom');
+goog.require('goog.events.EventType');
 goog.require('goog.graphics.AbstractGraphics');
 goog.require('goog.graphics.CanvasEllipseElement');
 goog.require('goog.graphics.CanvasGroupElement');

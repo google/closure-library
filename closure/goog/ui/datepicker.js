@@ -31,6 +31,7 @@ goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.Event');
+goog.require('goog.events.EventType');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.i18n.DateTimeFormat');

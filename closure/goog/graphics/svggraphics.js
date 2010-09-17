@@ -24,6 +24,7 @@ goog.provide('goog.graphics.SvgGraphics');
 goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventType');
 goog.require('goog.graphics.AbstractGraphics');
 goog.require('goog.graphics.Font');
 goog.require('goog.graphics.LinearGradient');

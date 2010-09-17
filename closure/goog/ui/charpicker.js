@@ -24,6 +24,7 @@ goog.provide('goog.ui.CharPicker');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
 goog.require('goog.i18n.CharListDecompressor');
 goog.require('goog.i18n.uChar');

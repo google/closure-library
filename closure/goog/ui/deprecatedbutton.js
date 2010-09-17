@@ -24,6 +24,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
+goog.require('goog.events.EventType');
 
 /**
  * Default implementation of a button. Uses the default browser-style button.

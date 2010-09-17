@@ -26,6 +26,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventTarget');
+goog.require('goog.events.EventType');
 goog.require('goog.iter');
 goog.require('goog.string');
 goog.require('goog.style');
