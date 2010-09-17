@@ -584,15 +584,21 @@ goog.string.unescapeEntities = function(str) {
  * @return {string} The unescaped {@code str} string.
  */
 goog.string.unescapeEntitiesUsingDom_ = function(str) {
-  var el = goog.global['document']['createElement']('a');
-  el['innerHTML'] = str;
+  // Use a DIV as FF3 generates bogus markup for A > PRE.
+  var el = goog.global['document']['createElement']('div');
+  // Wrap in PRE to preserve whitespace in IE.
+  // The PRE must be part of the innerHTML markup,
+  // just setting innerHTML on a PRE element does not work.
+  el['innerHTML'] = '<pre>' + str + '</pre>';
   // Accesing the function directly triggers some virus scanners.
-  if (el[goog.string.NORMALIZE_FN_]) {
-    el[goog.string.NORMALIZE_FN_]();
+  if (el['firstChild'][goog.string.NORMALIZE_FN_]) {
+    el['firstChild'][goog.string.NORMALIZE_FN_]();
   }
-  str = el['firstChild']['nodeValue'];
+  str = el['firstChild']['firstChild']['nodeValue'];
   el['innerHTML'] = '';
-  return str;
+  // IE will also return non-standard newlines for TextNode.nodeValue,
+  // switching \r and \n, so canonicalize them before returning.
+  return goog.string.canonicalizeNewlines(str);
 };
 
 

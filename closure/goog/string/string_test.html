@@ -469,6 +469,23 @@ function testXssUnescapePureXmlEntities() {
                globalXssVar);
 }
 
+
+function testUnescapeEntitiesPreservesWhitespace() {
+  // This tests that whitespace is preserved (primarily for IE)
+  var test = 'Testing\n\twhitespace\n    preservation';
+  var expected = test;
+
+  assertEquals('Testing unescapeEntities', expected,
+               goog.string.unescapeEntities(test));
+
+  // Now with entities
+  test += ' &amp;';
+  expected += ' &';
+  assertEquals('Testing unescapeEntities', expected,
+               goog.string.unescapeEntities(test));
+}
+
+
 // === tests for goog.string.whitespaceEscape ===
 function testWhiteSpaceEscape() {
   assertEquals('Should be the same',
