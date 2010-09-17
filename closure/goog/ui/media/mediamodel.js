@@ -195,7 +195,7 @@ goog.ui.media.MediaModel.prototype.getUrl = function() {
 /**
  * Sets the URL of this media.
  * @param {string} url The URL of the media.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setUrl = function(url) {
   this.url_ = url;
@@ -215,7 +215,7 @@ goog.ui.media.MediaModel.prototype.getCaption = function() {
 /**
  * Sets the caption of this media.
  * @param {string} caption The caption of the media.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setCaption = function(caption) {
   this.caption_ = caption;
@@ -235,7 +235,7 @@ goog.ui.media.MediaModel.prototype.getType = function() {
 /**
  * Sets the media mime type.
  * @param {goog.ui.media.MediaModel.MimeType} type The media mime type.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setType = function(type) {
   this.type_ = type;
@@ -255,7 +255,7 @@ goog.ui.media.MediaModel.prototype.getMedium = function() {
 /**
  * Sets the media medium.
  * @param {goog.ui.media.MediaModel.Medium} medium The media medium.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setMedium = function(medium) {
   this.medium_ = medium;
@@ -275,7 +275,7 @@ goog.ui.media.MediaModel.prototype.getDescription = function() {
 /**
  * Sets the description of this media.
  * @param {string} description The description of the media.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setDescription = function(description) {
   this.description_ = description;
@@ -296,7 +296,7 @@ goog.ui.media.MediaModel.prototype.getThumbnails = function() {
  * Sets the thumbnail list.
  * @param {Array.<goog.ui.media.MediaModel.Thumbnail>} thumbnails The list of
  *     thumbnail.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setThumbnails = function(thumbnails) {
   this.thumbnails_ = thumbnails;
@@ -316,7 +316,7 @@ goog.ui.media.MediaModel.prototype.getDuration = function() {
 /**
  * Sets duration of the media.
  * @param {number} duration The duration of the media, in seconds.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setDuration = function(duration) {
   this.duration_ = duration;
@@ -336,7 +336,7 @@ goog.ui.media.MediaModel.prototype.getWidth = function() {
 /**
  * Sets the width of the media.
  * @param {number} width The width of the media, in pixels.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setWidth = function(width) {
   this.width_ = width;
@@ -356,7 +356,7 @@ goog.ui.media.MediaModel.prototype.getHeight = function() {
 /**
  * Sets the height of the media.
  * @param {number} height The height of the media, in pixels.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setHeight = function(height) {
   this.height_ = height;
@@ -376,7 +376,7 @@ goog.ui.media.MediaModel.prototype.getPlayer = function() {
 /**
  * Sets the player data.
  * @param {goog.ui.media.MediaModel.Player} player The media player data.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setPlayer = function(player) {
   this.player_ = player;
@@ -398,7 +398,7 @@ goog.ui.media.MediaModel.prototype.getCategories = function() {
  * Sets the categories of the media
  * @param {Array.<goog.ui.media.MediaModel.Category>} categories The categories
  *     of the media.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setCategories = function(categories) {
   this.categories_ = categories;
@@ -436,7 +436,7 @@ goog.ui.media.MediaModel.prototype.getCredits = function() {
  * Sets the credits of the media
  * @param {Array.<goog.ui.media.MediaModel.Credit>} credits The credits of the
  *     media.
- * @return {goog.ui.media.MediaModel} The object itself, used for chaining.
+ * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
 goog.ui.media.MediaModel.prototype.setCredits = function(credits) {
   this.credits_ = credits;
