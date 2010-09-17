@@ -503,10 +503,8 @@ See the COPYING file for details.
    */
   function testInsertNodeNonElement() {
     dynamic.innerHTML = 'beforeafter';
-    var range = goog.dom.browserrange.createRangeFromNodes(dynamic.firstChild,
-                                                           6,
-                                                           dynamic.firstChild,
-                                                           6);
+    var range = goog.dom.browserrange.createRangeFromNodes(
+            dynamic.firstChild, 6, dynamic.firstChild, 6);
     var newNode = goog.dom.createTextNode('INSERTED');
     var inserted = range.insertNode(newNode, false);
 
@@ -524,6 +522,32 @@ See the COPYING file for details.
     goog.dom.browserrange.createRangeFromNodes(test2, 0, test2, 1).select();
     assertEquals('The old selection must be replaced with the new one',
                  'abc', goog.dom.Range.createFromWindow().getText());
+  }
+
+  // Following testcase is special for IE. The comparison of ranges created in
+  // testcases with a range over empty span using native inRange fails. So the
+  // fallback mechanism is needed.
+  function testGetContainerInTextNodesAroundEmptySpan() {
+      dynamic.innerHTML = 'abc<span></span>def';
+      var abc = dynamic.firstChild;
+      var def = dynamic.lastChild;
+
+      var range;
+      range = goog.dom.browserrange.createRangeFromNodes(abc, 1, abc, 1);
+      assertEquals('textNode abc should be the range container',
+              abc, range.getContainer());
+      assertEquals('textNode abc should be the range start node',
+              abc, range.getStartNode());
+      assertEquals('textNode abc should be the range end node',
+              abc, range.getEndNode());
+
+      range = goog.dom.browserrange.createRangeFromNodes(def, 1, def, 1);
+      assertEquals('textNode def should be the range container',
+              def, range.getContainer());
+      assertEquals('textNode def should be the range start node',
+              def, range.getStartNode());
+      assertEquals('textNode def should be the range end node',
+              def, range.getEndNode());
   }
 
 </script>
