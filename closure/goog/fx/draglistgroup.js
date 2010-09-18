@@ -43,8 +43,8 @@ goog.require('goog.style');
  *
  * Example usage:
  *   var dragListGroup = new goog.fx.DragListGroup();
- *   dragListGroup.setDragItemHandleHoverClass(className1);
- *   dragListGroup.setDraggerElClass(className2);
+ *   dragListGroup.setDragItemHandleHoverClass(className1, className2);
+ *   dragListGroup.setDraggerElClass(className3);
  *   dragListGroup.addDragList(vertList, goog.fx.DragListDirection.DOWN);
  *   dragListGroup.addDragList(horizList, goog.fx.DragListDirection.RIGHT);
  *   dragListGroup.init();
@@ -135,30 +135,30 @@ goog.fx.DragListGroup.EventType = {
 // The next 4 are user-supplied CSS classes.
 
 /**
- * The user-supplied CSS class to add to a drag item on hover (not during a
+ * The user-supplied CSS classes to add to a drag item on hover (not during a
  * drag action).
- * @type {string|undefined}
+ * @type {Array|undefined}
  * @private
  */
-goog.fx.DragListGroup.prototype.dragItemHoverClass_;
+goog.fx.DragListGroup.prototype.dragItemHoverClasses_;
 
 
 /**
- * The user-supplied CSS class to add to a drag item handle on hover (not
+ * The user-supplied CSS classes to add to a drag item handle on hover (not
  * during a drag action).
- * @type {string|undefined}
+ * @type {Array|undefined}
  * @private
  */
-goog.fx.DragListGroup.prototype.dragItemHandleHoverClass_;
+goog.fx.DragListGroup.prototype.dragItemHandleHoverClasses_;
 
 
 /**
- * The user-supplied CSS class to add to the current drag item (during a
- * drag action).
- * @type {string|undefined}
+ * The user-supplied CSS classes to add to the current drag item (during a drag
+ * action).
+ * @type {Array|undefined}
  * @private
  */
-goog.fx.DragListGroup.prototype.currDragItemClass_;
+goog.fx.DragListGroup.prototype.currDragItemClasses_;
 
 
 /**
@@ -282,24 +282,23 @@ goog.fx.DragListGroup.prototype.setFunctionToGetHandleForDragItem = function(
 /**
  * Sets a user-supplied CSS class to add to a drag item on hover (not during a
  * drag action).
- * @param {string} dragItemHoverClass The CSS class.
+ * @param {...!string} var_args The CSS class or classes.
  */
-goog.fx.DragListGroup.prototype.setDragItemHoverClass = function(
-    dragItemHoverClass) {
+goog.fx.DragListGroup.prototype.setDragItemHoverClass = function(var_args) {
   this.assertNotInitialized_();
-  this.dragItemHoverClass_ = dragItemHoverClass;
+  this.dragItemHoverClasses_ = goog.array.slice(arguments, 0);
 };
 
 
 /**
  * Sets a user-supplied CSS class to add to a drag item handle on hover (not
  * during a drag action).
- * @param {string} dragItemHandleHoverClass The CSS class.
+ * @param {...!string} var_args The CSS class or classes.
  */
 goog.fx.DragListGroup.prototype.setDragItemHandleHoverClass = function(
-    dragItemHandleHoverClass) {
+    var_args) {
   this.assertNotInitialized_();
-  this.dragItemHandleHoverClass_ = dragItemHandleHoverClass;
+  this.dragItemHandleHoverClasses_ = goog.array.slice(arguments, 0);
 };
 
 
@@ -312,12 +311,11 @@ goog.fx.DragListGroup.prototype.setDragItemHandleHoverClass = function(
  * If this class is set by the user, then the default behavior does not happen
  * (unless, of course, the class also contains visibility:hidden).
  *
- * @param {string} currDragItemClass The CSS class.
+ * @param {...!string} var_args The CSS class or classes.
  */
-goog.fx.DragListGroup.prototype.setCurrDragItemClass = function(
-    currDragItemClass) {
+goog.fx.DragListGroup.prototype.setCurrDragItemClass = function(var_args) {
   this.assertNotInitialized_();
-  this.currDragItemClass_ = currDragItemClass;
+  this.currDragItemClasses_ = goog.array.slice(arguments, 0);
 };
 
 
@@ -351,7 +349,7 @@ goog.fx.DragListGroup.prototype.init = function() {
       var uid = goog.getUid(dragItemHandle);
       this.dragItemForHandle_[uid] = dragItem;
 
-      if (this.dragItemHoverClass_) {
+      if (this.dragItemHoverClasses_) {
         this.eventHandler_.listen(
             dragItem, goog.events.EventType.MOUSEOVER,
             this.handleDragItemMouseover_);
@@ -359,7 +357,7 @@ goog.fx.DragListGroup.prototype.init = function() {
             dragItem, goog.events.EventType.MOUSEOUT,
             this.handleDragItemMouseout_);
       }
-      if (this.dragItemHandleHoverClass_) {
+      if (this.dragItemHandleHoverClasses_) {
         this.eventHandler_.listen(
             dragItemHandle, goog.events.EventType.MOUSEOVER,
             this.handleDragItemHandleMouseover_);
@@ -436,8 +434,9 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
 
   // If there's a CSS class specified for the current drag item, add it.
   // Otherwise, make the actual current drag item hidden (takes up space).
-  if (this.currDragItemClass_) {
-    goog.dom.classes.add(currDragItem, this.currDragItemClass_);
+  if (this.currDragItemClasses_) {
+    goog.dom.classes.add.apply(null,
+        goog.array.concat(currDragItem, this.currDragItemClasses_));
   } else {
     currDragItem.style.visibility = 'hidden';
   }
@@ -603,8 +602,9 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
 
   // If there's a CSS class specified for the current drag item, remove it.
   // Otherwise, make the current drag item visible (instead of empty space).
-  if (this.currDragItemClass_) {
-    goog.dom.classes.remove(this.currDragItem_, this.currDragItemClass_);
+  if (this.currDragItemClasses_) {
+    goog.dom.classes.remove.apply(null,
+        goog.array.concat(this.currDragItem_, this.currDragItemClasses_));
   } else {
     this.currDragItem_.style.visibility = 'visible';
   }
@@ -676,8 +676,9 @@ goog.fx.DragListGroup.prototype.getHandleForDragItem_ = function(dragItem) {
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragItemMouseover_ = function(e) {
-  goog.dom.classes.add(/** @type {Element} */ (e.currentTarget),
-      this.dragItemHoverClass_);
+  goog.dom.classes.add.apply(null,
+      goog.array.concat(/** @type {Element} */ (e.currentTarget),
+                        this.dragItemHoverClasses_));
 };
 
 
@@ -687,8 +688,9 @@ goog.fx.DragListGroup.prototype.handleDragItemMouseover_ = function(e) {
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragItemMouseout_ = function(e) {
-  goog.dom.classes.remove(/** @type {Element} */ (e.currentTarget),
-      this.dragItemHoverClass_);
+  goog.dom.classes.remove.apply(null,
+      goog.array.concat(/** @type {Element} */ (e.currentTarget),
+                        this.dragItemHoverClasses_));
 };
 
 
@@ -698,8 +700,9 @@ goog.fx.DragListGroup.prototype.handleDragItemMouseout_ = function(e) {
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragItemHandleMouseover_ = function(e) {
-  goog.dom.classes.add(/** @type {Element} */ (e.currentTarget),
-      this.dragItemHandleHoverClass_);
+  goog.dom.classes.add.apply(null,
+      goog.array.concat(/** @type {Element} */ (e.currentTarget),
+                        this.dragItemHandleHoverClasses_));
 };
 
 
@@ -709,8 +712,9 @@ goog.fx.DragListGroup.prototype.handleDragItemHandleMouseover_ = function(e) {
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragItemHandleMouseout_ = function(e) {
-  goog.dom.classes.remove(/** @type {Element} */ (e.currentTarget),
-      this.dragItemHandleHoverClass_);
+  goog.dom.classes.remove.apply(null,
+      goog.array.concat(/** @type {Element} */ (e.currentTarget),
+                        this.dragItemHandleHoverClasses_));
 };
 
 
