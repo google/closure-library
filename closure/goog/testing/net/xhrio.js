@@ -28,6 +28,7 @@ goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XmlHttp');
+goog.require('goog.object');
 goog.require('goog.structs.Map');
 
 
@@ -490,4 +491,24 @@ goog.testing.net.XhrIo.prototype.getResponseXml = function() {
  */
 goog.testing.net.XhrIo.prototype.getResponseHeader = function(key) {
   return this.isComplete() ? this.responseHeaders_[key] : undefined;
+};
+
+
+/**
+ * Gets the text of all the headers in the response.
+ * Will only return correct result when called from the context of a callback
+ * and the request has completed
+ * @return {string} The string containing all the response headers.
+ */
+goog.testing.net.XhrIo.prototype.getAllResponseHeaders = function() {
+  if (!this.isComplete()) {
+    return '';
+  }
+
+  var headers = [];
+  goog.object.forEach(this.responseHeaders_, function(value, name) {
+    headers.push(name + ': ' + value);
+  });
+
+  return headers.join('\n');
 };

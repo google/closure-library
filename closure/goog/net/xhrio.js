@@ -892,6 +892,18 @@ goog.net.XhrIo.prototype.getResponseHeader = function(key) {
 
 
 /**
+ * Gets the text of all the headers in the response.
+ * Will only return correct result when called from the context of a callback
+ * and the request has completed.
+ * @return {string} The value of the response headers or empty string.
+ */
+goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
+  return this.xhr_ && this.isComplete() ?
+      this.xhr_.getAllResponseHeaders() : '';
+};
+
+
+/**
  * Get the last error message
  * @return {goog.net.ErrorCode} Last error code.
  */
