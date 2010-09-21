@@ -425,8 +425,9 @@ function testExponential() {
 
   fmt = new goog.i18n.NumberFormat('##0.####E0');
   str = fmt.format(789.12345e-9);
-  // Certain Firefox 3.6 versions fail
-  expectedFailures.expectFailureFor(isFirefox36Linux());
+  // Firefox 3.6.3 Linux is known to fail here with a rounding error.
+  // fmt.format will return '789.1234E-9'.
+  expectedFailures.expectFailureFor(isFirefox363Linux());
   try {
     assertEquals('789.1235E-9', str);
   } catch (e) {
@@ -591,12 +592,12 @@ function testFailParseShouldThrow() {
 }
 
 /**
- * @return {boolean} Whether we're on Linux Firefox 3.6.
+ * @return {boolean} Whether we're on Linux Firefox 3.6.3.
  */
-function isFirefox36Linux() {
+function isFirefox363Linux() {
   return goog.userAgent.product.FIREFOX && goog.userAgent.LINUX &&
-      goog.userAgent.product.isVersion('3.6') &&
-      !goog.userAgent.product.isVersion('3.7');
+      goog.userAgent.product.isVersion('3.6.3') &&
+      !goog.userAgent.product.isVersion('3.6.4');
 }
 
 </script>
