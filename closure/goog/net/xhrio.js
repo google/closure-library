@@ -538,7 +538,7 @@ goog.net.XhrIo.prototype.dispatchErrors_ = function() {
  *     defaults to ABORT.
  */
 goog.net.XhrIo.prototype.abort = function(opt_failureCode) {
-  if (this.xhr_) {
+  if (this.xhr_ && this.active_) {
     this.logger_.fine(this.formatMsg_('Aborting'));
     this.active_ = false;
     this.inAbort_ = true;
