@@ -205,7 +205,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
  */
 goog.net.xpc.NativeMessagingTransport.prototype.connectWithRetries_ =
     function() {
-  if (this.channel_.isConnected()) {
+  if (this.channel_.isConnected() || this.isDisposed()) {
     return;
   }
   this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
