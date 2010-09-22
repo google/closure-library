@@ -589,12 +589,15 @@ goog.string.unescapeEntitiesUsingDom_ = function(str) {
   // Wrap in PRE to preserve whitespace in IE.
   // The PRE must be part of the innerHTML markup,
   // just setting innerHTML on a PRE element does not work.
-  el['innerHTML'] = '<pre>' + str + '</pre>';
+  // Also include a leading character since conforming HTML5
+  // UAs will strip leading newlines inside a PRE element.
+  el['innerHTML'] = '<pre>x' + str + '</pre>';
   // Accesing the function directly triggers some virus scanners.
   if (el['firstChild'][goog.string.NORMALIZE_FN_]) {
     el['firstChild'][goog.string.NORMALIZE_FN_]();
   }
-  str = el['firstChild']['firstChild']['nodeValue'];
+  // Remove the leading character we added.
+  str = el['firstChild']['firstChild']['nodeValue'].slice(1);
   el['innerHTML'] = '';
   // IE will also return non-standard newlines for TextNode.nodeValue,
   // switching \r and \n, so canonicalize them before returning.

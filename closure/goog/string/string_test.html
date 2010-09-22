@@ -472,15 +472,16 @@ function testXssUnescapePureXmlEntities() {
 
 function testUnescapeEntitiesPreservesWhitespace() {
   // This tests that whitespace is preserved (primarily for IE)
-  var test = 'Testing\n\twhitespace\n    preservation';
+  // Also make sure leading and trailing whitespace are preserved.
+  var test = '\nTesting\n\twhitespace\n    preservation\n';
   var expected = test;
 
   assertEquals('Testing unescapeEntities', expected,
                goog.string.unescapeEntities(test));
 
   // Now with entities
-  test += ' &amp;';
-  expected += ' &';
+  test += ' &amp;&nbsp;\n';
+  expected += ' &\u00A0\n';
   assertEquals('Testing unescapeEntities', expected,
                goog.string.unescapeEntities(test));
 }
