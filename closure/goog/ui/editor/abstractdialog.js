@@ -376,10 +376,12 @@ goog.ui.editor.AbstractDialog.prototype.handleOk = function(e) {
 /**
  * Handles the event dispatched by the wrapped dialog control when the user
  * clicks the Cancel button. Simply dispatches a CANCEL event.
+ * @return {boolean} Returns false if any of the handlers called prefentDefault
+ *     on the event or returned false themselves.
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.handleCancel = function() {
-  this.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.CANCEL);
+  return this.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.CANCEL);
 };
 
 
