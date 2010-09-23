@@ -15,47 +15,61 @@ See the COPYING file for details.
 <!-- These paths should be relative to the test -->
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.testing.jsunit');
   goog.require('goog.debug.ErrorHandler');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent');
 </script>
 </head>
 <body>
 <script>
 
   var oldGetObjectByName;
-  var fakeWin;
+
+  // provide our own window that implements our instrumented and
+  // immediate-call versions of setTimeout and setInterval
+  var fakeWin = {};
+
   var errorHandler;
 
   function badTimer() {
     arguments.callee.called = true;
-    throw "die die die";
+    throw 'die die die';
   }
 
   function setUp() {
+    // On IE, globalEval happens async. So make it synchronous.
+    goog.globalEval = function(str) {
+      eval(str);
+    };
+
     oldGetObjectByName = goog.getObjectByName;
     goog.getObjectByName = function(name) {
       if (name == 'window') {
-        // provide our own window that implements our instrumented and
-        // immediate-call versions of setTimeout and setInterval
-        if (!fakeWin) {
-          fakeWin = {
-            setTimeout: function(fn, time) {
-              fakeWin.setTimeout.called = true;
-              fakeWin.setTimeout.that = this;
-              fn();
-            },
-            setInterval: function(fn, time) {
-              fakeWin.setInterval.called = true;
-              fakeWin.setInterval.that = this;
-              fn();
-            }
-          };
-        }
         return fakeWin;
       } else {
         return oldGetObjectByName(name);
-      };
-    }
+      }
+    };
+
+    fakeWin.setTimeout = function(fn, time) {
+      fakeWin.setTimeout.called = true;
+      fakeWin.setTimeout.that = this;
+      if (goog.isString(fn)) {
+        eval(fn);
+      } else {
+        fn();
+      }
+    };
+
+    fakeWin.setInterval = function(fn, time) {
+      fakeWin.setInterval.called = true;
+      fakeWin.setInterval.that = this;
+      if (goog.isString(fn)) {
+        eval(fn);
+      } else {
+        fn();
+      }
+    };
 
     // just record the exception in the error handler when it happens
     errorHandler = new goog.debug.ErrorHandler(function(ex) {
@@ -64,11 +78,10 @@ See the COPYING file for details.
   }
 
   function tearDown() {
-    goog.getObjectByName = oldGetObjectByName;
-    fakeWin = null;
-
     goog.dispose(errorHandler);
     errorHandler = null;
+
+    goog.getObjectByName = oldGetObjectByName;
 
     delete badTimer['__protected__'];
   }
@@ -83,14 +96,21 @@ See the COPYING file for details.
     } catch (ex) {
       caught = ex;
     }
-    assertTrue('exception not thrown', !!caught);
-    assertEquals('exception not caught by error handler',
-                 caught, errorHandler.ex);
-    assertTrue('fake setTimeout not called', !!fakeWin.setTimeout.called);
-    assertTrue('"this" not passed to original setTimeout',
-               fakeWin.setTimeout.that === fakeWin);
+    assertSetTimeoutError(caught);
   }
 
+  function testWrapSetTimeoutWithString() {
+    errorHandler.protectWindowSetTimeout();
+
+    var caught;
+
+    try {
+      fakeWin.setTimeout('badTimer()', 3);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertSetTimeoutError(caught);
+  }
 
   function testWrapSetInterval() {
     errorHandler.protectWindowSetInterval();
@@ -102,12 +122,20 @@ See the COPYING file for details.
     } catch (ex) {
       caught = ex;
     }
-    assertTrue('exception not thrown', !!caught);
-    assertEquals('exception not caught by error handler',
-                 caught, errorHandler.ex);
-    assertTrue('fake setInterval not called', !!fakeWin.setInterval.called);
-    assertTrue('"this" not passed to original setTimeout',
-               fakeWin.setInterval.that === fakeWin);
+    assertSetIntervalError(caught);
+  }
+
+  function testWrapSetIntervalWithString() {
+    errorHandler.protectWindowSetInterval();
+
+    var caught;
+
+    try {
+      fakeWin.setInterval('badTimer()', 3);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertSetIntervalError(caught);
   }
 
   function testDisposal() {
@@ -134,6 +162,24 @@ See the COPYING file for details.
 
     assertEquals(fn, errorHandler.unwrap(fn));
     assertEquals(fn, errorHandler.unwrap(wrappedFn));
+  }
+
+  function assertSetTimeoutError(caught) {
+    assertMethodCalledHelper('setTimeout', caught);
+  }
+
+  function assertSetIntervalError(caught) {
+    assertMethodCalledHelper('setInterval', caught);
+  }
+
+  function assertMethodCalledHelper(method, caught) {
+    assertTrue('exception not thrown', !!caught);
+    assertEquals('exception not caught by error handler',
+        caught, errorHandler.ex);
+    assertTrue('fake ' + method + ' not called',
+        !!fakeWin[method].called);
+    assertTrue('"this" not passed to original ' + method,
+        fakeWin[method].that === fakeWin);
   }
 
 </script>

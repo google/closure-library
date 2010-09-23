@@ -177,20 +177,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
  */
 goog.debug.ErrorHandler.prototype.protectWindowSetTimeout =
     function() {
-  var win = goog.getObjectByName('window');
-  var originalSetTimeout = win.setTimeout;
-  var that = this;
-  win.setTimeout = function(fn, time) {
-    // IE doesn't support .call for setTimeout, but it also doesn't care
-    // what "this" is, so we can just call the original function directly
-    fn = that.protectEntryPoint(fn);
-    if (originalSetTimeout.call) {
-      return originalSetTimeout.call(this, fn, time);
-    } else {
-      return originalSetTimeout(fn, time);
-    }
-  };
-  win.setTimeout[this.getFunctionIndex_(false)] = originalSetTimeout;
+  this.protectWindowFunctionsHelper_('setTimeout');
 };
 
 
@@ -199,20 +186,39 @@ goog.debug.ErrorHandler.prototype.protectWindowSetTimeout =
  */
 goog.debug.ErrorHandler.prototype.protectWindowSetInterval =
     function() {
+  this.protectWindowFunctionsHelper_('setInterval');
+};
+
+
+/**
+ * Helper function for protecting setTimeout/setInterval.
+ * @param {string} fnName The name of the function we're protecting. Must
+ *     be setTimeout or setInterval.
+ * @private
+ */
+goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ =
+    function(fnName) {
   var win = goog.getObjectByName('window');
-  var originalSetInterval = win.setInterval;
+  var originalFn = win[fnName];
   var that = this;
-  win.setInterval = function(fn, time) {
-    // IE doesn't support .call for setInterval, but it also doesn't care
-    // what "this" is, so we can just call the original function directly
+  win[fnName] = function(fn, time) {
+    // Don't try to protect strings. In theory, we could try to globalEval
+    // the string, but this seems to lead to permission errors on IE6.
+    if (goog.isString(fn)) {
+      fn = goog.partial(goog.globalEval, fn);
+    }
     fn = that.protectEntryPoint(fn);
-    if (originalSetInterval.call) {
-      return originalSetInterval.call(this, fn, time);
+
+    // IE doesn't support .call for setInterval/setTimeout, but it
+    // also doesn't care what "this" is, so we can just call the
+    // original function directly
+    if (originalFn.call) {
+      return originalFn.call(this, fn, time);
     } else {
-      return originalSetInterval(fn, time);
+      return originalFn(fn, time);
     }
   };
-  win.setInterval[this.getFunctionIndex_(false)] = originalSetInterval;
+  win[fnName][this.getFunctionIndex_(false)] = originalFn;
 };
 
 
