@@ -25,6 +25,7 @@ Author: attila@google.com (Attila Bodis)
     goog.require('goog.testing.ui.rendererasserts');
     goog.require('goog.ui.Button');
     goog.require('goog.ui.ButtonRenderer');
+    goog.require('goog.ui.ButtonSide');
   </script>
 </head>
 <body>
@@ -138,13 +139,13 @@ Author: attila@google.com (Attila Bodis)
     }
     
     function testCollapse() {
-      buttonRenderer.setCollapsed(button, goog.ui.Button.Side.START);
+      buttonRenderer.setCollapsed(button, goog.ui.ButtonSide.START);
       assertSameElements('Button should have class to collapse start',
           ['goog-button-collapse-left'], button.getExtraClassNames());
-      buttonRenderer.setCollapsed(button, goog.ui.Button.Side.END);
+      buttonRenderer.setCollapsed(button, goog.ui.ButtonSide.END);
       assertSameElements('Button should have class to collapse end',
           ['goog-button-collapse-right'], button.getExtraClassNames());
-      buttonRenderer.setCollapsed(button, goog.ui.Button.Side.BOTH);
+      buttonRenderer.setCollapsed(button, goog.ui.ButtonSide.BOTH);
       assertSameElements('Button should have classes to collapse both',
           ['goog-button-collapse-left', 'goog-button-collapse-right'],
           button.getExtraClassNames());
@@ -152,20 +153,20 @@ Author: attila@google.com (Attila Bodis)
     
     function testCollapseRtl() {
       button.setRightToLeft(true);
-      buttonRenderer.setCollapsed(button, goog.ui.Button.Side.START);
+      buttonRenderer.setCollapsed(button, goog.ui.ButtonSide.START);
       assertSameElements('Button should have class to collapse start',
           ['goog-button-collapse-right'], button.getExtraClassNames());
-      buttonRenderer.setCollapsed(button, goog.ui.Button.Side.END);
+      buttonRenderer.setCollapsed(button, goog.ui.ButtonSide.END);
       assertSameElements('Button should have class to collapse end',
           ['goog-button-collapse-left'], button.getExtraClassNames());
-      buttonRenderer.setCollapsed(button, goog.ui.Button.Side.BOTH);
+      buttonRenderer.setCollapsed(button, goog.ui.ButtonSide.BOTH);
       assertSameElements('Button should have classes to collapse both',
           ['goog-button-collapse-left', 'goog-button-collapse-right'],
           button.getExtraClassNames());
     }
     
     function testCollapseWithStructuralClass() {
-      testRenderer.setCollapsed(button, goog.ui.Button.Side.BOTH);
+      testRenderer.setCollapsed(button, goog.ui.ButtonSide.BOTH);
       assertSameElements('Should use structural class for collapse classes',
           ['goog-base-collapse-left', 'goog-base-collapse-right'],
           button.getExtraClassNames());

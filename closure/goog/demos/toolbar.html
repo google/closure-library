@@ -20,6 +20,7 @@ See the COPYING file for details.
     goog.require('goog.object');
     goog.require('goog.style');
     goog.require('goog.ui.Button');
+    goog.require('goog.ui.ButtonSide');
     goog.require('goog.ui.Component.EventType');
     goog.require('goog.ui.Component.State');
     goog.require('goog.ui.Menu');
@@ -566,13 +567,13 @@ See the COPYING file for details.
     toggleButton.setChecked(true);
     t1.addChild(toggleButton, true);
     var btnLeft = new goog.ui.ToolbarButton('Left');
-    btnLeft.setCollapsed(goog.ui.Button.Side.END);
+    btnLeft.setCollapsed(goog.ui.ButtonSide.END);
     t1.addChild(btnLeft, true);
     var btnCenter = new goog.ui.ToolbarButton('Center');
-    btnCenter.setCollapsed(goog.ui.Button.Side.END | goog.ui.Button.Side.START);
+    btnCenter.setCollapsed(goog.ui.ButtonSide.END | goog.ui.ButtonSide.START);
     t1.addChild(btnCenter, true);
     var btnRight = new goog.ui.ToolbarButton('Right');
-    btnRight.setCollapsed(goog.ui.Button.Side.START);
+    btnRight.setCollapsed(goog.ui.ButtonSide.START);
     t1.addChild(btnRight, true);
     t1.render(goog.dom.getElement('t1'));
     showPerf('perf1', timer);
@@ -615,10 +616,10 @@ See the COPYING file for details.
 
     // The setCollapsed method needs to be called after the toolbar is rendered
     // for it to pick up the directionality of the toolbar.
-    btnLeftRtl.setCollapsed(goog.ui.Button.Side.END);
+    btnLeftRtl.setCollapsed(goog.ui.ButtonSide.END);
     btnCenterRtl.setCollapsed(
-        goog.ui.Button.Side.END | goog.ui.Button.Side.START);
-    btnRightRtl.setCollapsed(goog.ui.Button.Side.START);
+        goog.ui.ButtonSide.END | goog.ui.ButtonSide.START);
+    btnRightRtl.setCollapsed(goog.ui.ButtonSide.START);
 
     // Hook up checkboxes.
     goog.events.listen(goog.dom.getElement('t1rtl_show'),

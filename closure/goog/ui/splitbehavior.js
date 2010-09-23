@@ -32,7 +32,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.string');
-goog.require('goog.ui.Button.Side');
+goog.require('goog.ui.ButtonSide');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Component.Error');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
@@ -333,8 +333,8 @@ goog.ui.SplitBehavior.prototype.decorateChildren_ = function(
 goog.ui.SplitBehavior.prototype.collapseSides_ = function(first, second) {
   if (goog.isFunction(first.setCollapsed) &&
       goog.isFunction(second.setCollapsed)) {
-    first.setCollapsed(goog.ui.Button.Side.END);
-    second.setCollapsed(goog.ui.Button.Side.START);
+    first.setCollapsed(goog.ui.ButtonSide.END);
+    second.setCollapsed(goog.ui.ButtonSide.START);
   }
 };
 
