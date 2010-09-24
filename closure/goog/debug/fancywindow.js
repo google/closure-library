@@ -59,7 +59,7 @@ goog.inherits(goog.debug.FancyWindow, goog.debug.DebugWindow);
  */
 goog.debug.FancyWindow.prototype.writeBufferToLog_ = function(html) {
   this.lastCall_ = goog.now();
-  if (this.win_) {
+  if (this.hasActiveWindow()) {
     var logel = this.dh_.getElement('log');
 
     // Work out if scrolling is needed before we add the content
@@ -87,7 +87,7 @@ goog.debug.FancyWindow.prototype.writeBufferToLog_ = function(html) {
  * @suppress {underscore}
  */
 goog.debug.FancyWindow.prototype.writeInitialDocument_ = function() {
-  if (!this.win_) {
+  if (!this.hasActiveWindow()) {
     return;
   }
 

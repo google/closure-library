@@ -294,13 +294,21 @@ goog.debug.DebugWindow.prototype.addSeparator = function() {
 
 
 /**
+ * @return {boolean} Whether there is an active window.
+ */
+goog.debug.DebugWindow.prototype.hasActiveWindow = function() {
+  return !!this.win_ && !this.win_.closed;
+};
+
+
+/**
  * Clears the contents of the debug window
  * @protected
  * @suppress {underscore}
  */
 goog.debug.DebugWindow.prototype.clear_ = function() {
   this.savedMessages_.clear();
-  if (this.win_) {
+  if (this.hasActiveWindow()) {
     this.writeInitialDocument_();
   }
 };
@@ -363,7 +371,7 @@ goog.debug.DebugWindow.prototype.writeToLog_ = function(html) {
  */
 goog.debug.DebugWindow.prototype.writeBufferToLog_ = function() {
   this.lastCall_ = goog.now();
-  if (this.win_) {
+  if (this.hasActiveWindow()) {
     var body = this.win_.document.body;
     var scroll = body &&
         body.scrollHeight - (body.scrollTop + body.clientHeight) <= 100;
@@ -396,7 +404,7 @@ goog.debug.DebugWindow.prototype.writeSavedMessages_ = function() {
  * @private
  */
 goog.debug.DebugWindow.prototype.openWindow_ = function() {
-  if ((this.win_ && !this.win_.closed) || this.winOpening_) {
+  if (this.hasActiveWindow() || this.winOpening_) {
     return;
   }
 
@@ -461,7 +469,7 @@ goog.debug.DebugWindow.prototype.getStyleRules = function() {
  * @suppress {underscore}
  */
 goog.debug.DebugWindow.prototype.writeInitialDocument_ = function() {
-  if (!this.win_) {
+  if (this.hasActiveWindow()) {
     return;
   }
 
@@ -541,7 +549,7 @@ goog.debug.DebugWindow.isEnabled = function(identifier) {
  * @private
  */
 goog.debug.DebugWindow.prototype.saveWindowPositionSize_ = function() {
-  if (!this.win_ || this.win_.closed) {
+  if (!this.hasActiveWindow()) {
     return;
   }
   var x = this.win_.screenX || this.win_.screenLeft || 0;
