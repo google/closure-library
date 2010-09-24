@@ -11,6 +11,7 @@ See the COPYING file for details.
 <script src="closure/goog/base.js"></script>
 <script src="alltests.js"></script>
 <script>
+goog.require('goog.userAgent.product');
 goog.require('goog.testing.MultiTestRunner');
 </script>
 <link rel="stylesheet" href="closure/goog/css/multitestrunner.css" type="text/css">
@@ -37,9 +38,27 @@ a {
 a:hover {
   text-decoration: underline;
 }
+.warning {
+  font-size: 14px;
+  font-weight: bold;
+  width: 80%;
+}
 </style>
 </head>
 <body>
+
+<script>
+  if (goog.userAgent.product.CHROME &&
+      window.location.toString().indexOf('file:') == 0) {
+    document.write(
+        '<div class="warning">' +
+        'WARNING: Due to Chrome\'s security restrictions ' +
+        'this test will not be able to load files off your local disk ' +
+        'unless you start Chrome with:<br>' +
+        '<code>--allow-file-access-from-files</code></div><br>');
+  }
+</script>
+
 <h1>Closure - All JsUnit Tests</h1>
 <p id="header">
   <a href="http://wiki/Main/ClosureUnitTests">Closure JS Testing HOWTO</a>
