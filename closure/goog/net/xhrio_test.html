@@ -240,15 +240,6 @@ function testDisposeInternalDoesNotAbortXhrRequestObjectWhenActiveIsFalse() {
   assertFalse(abortCalled);
 }
 
-function testCallingAbortFromWithinAbortCallbackDoesntLoop() {
-  var x = new goog.net.XhrIo;
-  goog.events.listen(x, goog.net.EventType.ABORT, function(e) {
-    x.abort(); // Shouldn't get a stack overflow
-  });
-  x.send('url');
-  x.abort();
-}
-
 function testFactoryInjection() {
   var xhr = new MockXmlHttp();
   var optionsFactoryCalled = 0;
