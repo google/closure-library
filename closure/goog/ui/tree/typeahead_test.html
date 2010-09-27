@@ -101,6 +101,34 @@ function testJumpTo() {
   selectedItem = tree.getSelectedItem();
   assertTrue(handled && selectedItem.html_ == 'eve3');
 };
+
+
+/**
+ * Test handleTypeAheadChar functionality.
+ */
+function testHandleTypeAheadChar() {
+  var tree = makeATree();
+  var typeAhead = tree.typeAhead_;
+  var e = new Object();
+
+  // Period character('.'): keyCode = 190, charCode = 46
+  // String.fromCharCode(190) = '3/4'  <-- incorrect
+  // String.fromCharCode(46) = '.'  <-- correct
+  e.keyCode = goog.events.KeyCodes.PERIOD;
+  e.charCode = 46;
+  e.preventDefault = function() {};
+  typeAhead.handleTypeAheadChar(e);
+  assertEquals('.', typeAhead.buffer_);
+
+  // charCode not supplied.
+  // This is expected to work only for alpha-num characters.
+  e.keyCode = goog.events.KeyCodes.A;
+  e.charCode = undefined;
+  typeAhead.buffer_ = '';
+  typeAhead.handleTypeAheadChar(e);
+  assertEquals('a', typeAhead.buffer_);
+}
+
 </script>
 </body>
 </html>
