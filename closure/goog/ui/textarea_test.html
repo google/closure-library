@@ -76,12 +76,12 @@ See the COPYING file for details.
     }
 
     /**
-     * @return {boolean} Whether we're on Linux Firefox 3.6.
+     * @return {boolean} Whether we're on Linux Firefox 3.6.3.
      */
-    function isLinuxFirefox36() {
+    function isLinuxFirefox363() {
       return goog.userAgent.product.FIREFOX && goog.userAgent.LINUX &&
-          goog.userAgent.product.isVersion('3.6') &&
-          !goog.userAgent.product.isVersion('3.7');
+          goog.userAgent.product.isVersion('3.6.3') &&
+          !goog.userAgent.product.isVersion('3.6.4');
     }
 
     /**
@@ -276,8 +276,8 @@ See the COPYING file for details.
 
 
       var height = textarea.getHeight_();
-      // For some reason Mac Safari 3 has 136 and Linux FF36 has 146 here.
-      expectedFailures.expectFailureFor(isMacSafari3() || isLinuxFirefox36());
+      // For some reason Mac Safari 3 has 136 and Linux FF 3.6.3 has 146 here.
+      expectedFailures.expectFailureFor(isMacSafari3() || isLinuxFirefox363());
       try {
         assertTrue('With lots of content, getHeight_() should be > 150 ' +
           '(it is ' + height + ')', height > 150);
