@@ -140,6 +140,10 @@ goog.history.Html5History.prototype.getToken = function() {
  * @param {string=} opt_title Optional title to associate with history entry.
  */
 goog.history.Html5History.prototype.setToken = function(token, opt_title) {
+  if (token == this.getToken()) {
+    return;
+  }
+
   // Per externs/gecko_dom.js document.title can be null.
   this.window_.history.pushState(null,
       opt_title || this.window_.document.title || '', this.getUrl_(token));
