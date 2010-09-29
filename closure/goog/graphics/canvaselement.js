@@ -181,7 +181,9 @@ goog.inherits(goog.graphics.CanvasEllipseElement, goog.graphics.EllipseElement);
  */
 goog.graphics.CanvasEllipseElement.prototype.setUpPath_ = function() {
   this.path_.clear();
-  this.path_.arc(this.cx_, this.cy_, this.rx_, this.ry_, 0, 360, false);
+  this.path_.moveTo(this.cx_ + goog.math.angleDx(0, this.rx_),
+                    this.cy_ + goog.math.angleDy(0, this.ry_));
+  this.path_.arcTo(this.rx_, this.ry_, 0, 360);
   this.path_.close();
 };
 
@@ -528,7 +530,7 @@ goog.graphics.CanvasTextElement.prototype.setText = function(text) {
  * @param {goog.graphics.Fill} fill The fill object.
  */
 goog.graphics.CanvasTextElement.prototype.setFill = function(fill) {
-  this.fill_ = fill;
+  this.fill = fill;
   if (this.element_) {
     this.element_.style.color = fill.getColor() || fill.getColor1();
   }
