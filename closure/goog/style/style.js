@@ -1597,7 +1597,17 @@ goog.style.getFontFamily = function(el) {
   if (doc.body.createTextRange) {
     var range = doc.body.createTextRange();
     range.moveToElementText(el);
-    font = range.queryCommandValue('FontName');
+    /** @preserveTry */
+    try {
+      font = range.queryCommandValue('FontName');
+    } catch (e) {
+      // This is a workaround for a awkward exception.
+      // On some IE, there is an exception coming from it.
+      // The error description from this exception is:
+      // This window has already been registered as a drop target
+      // This is bogus description, likely due to a bug in ie.
+      font = '';
+    }
   }
   if (!font) {
     // Note if for some reason IE can't derive FontName with a TextRange, we
