@@ -19,6 +19,7 @@ Author: attila@google.com (Attila Bodis)
     goog.require('goog.events.EventType');
     goog.require('goog.events.KeyCodes');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.ui.Component');
     goog.require('goog.ui.Component.EventType');
     goog.require('goog.ui.Container.Orientation');
     goog.require('goog.ui.Tab');
@@ -49,7 +50,7 @@ Author: attila@google.com (Attila Bodis)
     function setUp() {
       tabBar = new goog.ui.TabBar();
     }
-    
+
     function tearDown() {
       tabBar.dispose();
       goog.dom.removeChildren(sandbox);
@@ -581,6 +582,30 @@ Author: attila@google.com (Attila Bodis)
         goog.ui.Component.EventType.SELECT,
         goog.ui.Component.EventType.UNSELECT
       ], countEvent);
+    }
+
+    function testExitAndEnterDocument() {
+      var component = new goog.ui.Component();
+      component.render(sandbox);
+
+      var tab1 = new goog.ui.Tab('tab1');
+      var tab2 = new goog.ui.Tab('tab2');
+      var tab3 = new goog.ui.Tab('tab3');
+      tabBar.addChild(tab1, true);
+      tabBar.addChild(tab2, true);
+      tabBar.addChild(tab3, true);
+
+      component.addChild(tabBar, true);
+      tab2.setSelected(true);
+      assertEquals(tabBar.getSelectedTab(), tab2);
+
+      component.removeChild(tabBar, true);
+      tab1.setSelected(true);
+      assertEquals(tabBar.getSelectedTab(), tab2);
+
+      component.addChild(tabBar, true);
+      tab3.setSelected(true);
+      assertEquals(tabBar.getSelectedTab(), tab3);
     }
   </script>
 </body>
