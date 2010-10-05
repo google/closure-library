@@ -362,7 +362,6 @@ function testEncodeOptimizationRegex() {
   assertEquals(-1, "%".search(goog.string.encodeUriRegExp_));
   assertEquals(-1, "@".search(goog.string.encodeUriRegExp_));
   assertEquals(-1, "/".search(goog.string.encodeUriRegExp_));
-  assertEquals(-1, "' onclick='alert(42)".search(goog.string.encodeUriRegExp_));
 }
 
 
@@ -381,8 +380,8 @@ function testNewLineToBr() {
 
 // === tests for goog.string.htmlEscape and .unescapeEntities ===
 function testHtmlEscapeAndUnescapeEntities() {
-  var text = '"x1 < x2 && y2\' > y1"';
-  var html = '&quot;x1 &lt; x2 &amp;&amp; y2&#39; &gt; y1&quot;';
+  var text = '"x1 < x2 && y2 > y1"';
+  var html = '&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;';
 
   assertEquals('Testing htmlEscape', goog.string.htmlEscape(text), html);
   assertEquals('Testing htmlEscape', goog.string.htmlEscape(text, false), html);
@@ -399,8 +398,8 @@ function testHtmlEscapeAndUnescapeEntities() {
 }
 
 function testHtmlEscapeAndUnescapeEntitiesUsingDom() {
-  var text = '"x1 < x2 && y2\' > y1"';
-  var html = '&quot;x1 &lt; x2 &amp;&amp; y2&#39; &gt; y1&quot;';
+  var text = '"x1 < x2 && y2 > y1"';
+  var html = '&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;';
 
   assertEquals('Testing unescapeEntities',
                goog.string.unescapeEntitiesUsingDom_(html), text);
@@ -413,8 +412,8 @@ function testHtmlEscapeAndUnescapeEntitiesUsingDom() {
 }
 
 function testHtmlEscapeAndUnescapePureXmlEntities_() {
-  var text = '"x1 < x2 && y2\' > y1"';
-  var html = '&quot;x1 &lt; x2 &amp;&amp; y2&#39; &gt; y1&quot;';
+  var text = '"x1 < x2 && y2 > y1"';
+  var html = '&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;';
 
   assertEquals('Testing unescapePureXmlEntities_',
                goog.string.unescapePureXmlEntities_(html), text);

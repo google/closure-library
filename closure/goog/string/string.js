@@ -169,7 +169,8 @@ goog.string.isAlpha = function(str) {
 
 /**
  * Checks if a string contains only numbers.
- * @param {*} str string to check. If not a string, it will be cast to one.
+ * @param {*} str string to check. If not a string, it will be
+ *     casted to one.
  * @return {boolean} True if {@code str} is numeric.
  */
 goog.string.isNumeric = function(str) {
@@ -403,8 +404,6 @@ goog.string.encodeUriRegExp_ = /^[a-zA-Z0-9\-_.!~*'()]*$/;
  * @return {string} An encoded copy of {@code str} that is safe for urls.
  *     Note that '#', ':', and other characters used to delimit portions
  *     of URLs *will* be encoded.
- *     If the produced URL is to be embedded in a single quoted attribute
- *     value, then the result has to be further encoded.
  */
 goog.string.urlEncode = function(str) {
   str = String(str);
@@ -442,9 +441,8 @@ goog.string.newLineToBr = function(str, opt_xml) {
 
 
 /**
- * Escape ASCII quotes ({@code "} and {@code '}) and HTML specials
- * ('&', '<', and '>') so that a string can be included in a quoted HTML
- * attribute value.
+ * Escape double quote '"' characters in addition to '&', '<', and '>' so that a
+ * string can be included in an HTML tag attribute value within double quotes.
  *
  * It should be noted that > doesn't need to be escaped for the HTML or XML to
  * be valid, but it has been decided to escape it for consistency with other
@@ -462,7 +460,7 @@ goog.string.newLineToBr = function(str, opt_xml) {
  * characters and indexOf() is much cheaper than replace().
  * The worst case does suffer slightly from the additional calls, therefore the
  * opt_isLikelyToContainHtmlChars option has been included for situations
- * where all 5 HTML entities are very likely to be present and need escaping.
+ * where all 4 HTML entities are very likely to be present and need escaping.
  *
  * Some benchmarks (times tended to fluctuate +-0.05ms):
  *                                     FireFox                     IE6
@@ -488,13 +486,12 @@ goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
     return str.replace(goog.string.amperRe_, '&amp;')
           .replace(goog.string.ltRe_, '&lt;')
           .replace(goog.string.gtRe_, '&gt;')
-          .replace(goog.string.quotRe_, '&quot;')
-          .replace(goog.string.aposRe_, '&#39;');
+          .replace(goog.string.quotRe_, '&quot;');
 
   } else {
     // quick test helps in the case when there are no chars to replace, in
     // worst case this makes barely a difference to the time taken
-    if (!goog.string.allHtmlRe_.test(str)) return str;
+    if (!goog.string.allRe_.test(str)) return str;
 
     // str.indexOf is faster than regex.test in this case
     if (str.indexOf('&') != -1) {
@@ -508,9 +505,6 @@ goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
     }
     if (str.indexOf('"') != -1) {
       str = str.replace(goog.string.quotRe_, '&quot;');
-    }
-    if (str.indexOf('\'') != -1) {
-      str = str.replace(goog.string.aposRe_, '&#39;');
     }
     return str;
   }
@@ -550,19 +544,11 @@ goog.string.quotRe_ = /\"/g;
 
 
 /**
- * Regular expression that matches a single quote, for use in escaping.
+ * Regular expression that matches any character that needs to be escaped.
  * @type {RegExp}
  * @private
  */
-goog.string.aposRe_ = /'/g;
-
-
-/**
- * Regular expression that matches HTML special characters.
- * @type {RegExp}
- * @private
- */
-goog.string.allHtmlRe_ = /[&<>\"']/;
+goog.string.allRe_ = /[&<>\"]/;
 
 
 /**
@@ -761,7 +747,7 @@ goog.string.truncateMiddle = function(str, chars,
  */
 goog.string.specialEscapeChars_ = {
   '\0': '\\0',
-  '\b': '\\x08',  // '\b' Has a different meaning in regexps.
+  '\b': '\\b',
   '\f': '\\f',
   '\n': '\\n',
   '\r': '\\r',
@@ -775,7 +761,7 @@ goog.string.specialEscapeChars_ = {
 /**
  * Character mappings used internally for goog.string.escapeChar.
  * @private
- * @type {Object.<string, string>}
+ * @type {Object}
  */
 goog.string.jsEscapeCache_ = {
   '\'': '\\\''
@@ -783,11 +769,9 @@ goog.string.jsEscapeCache_ = {
 
 
 /**
- * Encloses a string in double quotes and escapes characters so that the string
- * can be embedded in JS source.
- *
+ * Encloses a string in double quotes and escapes characters so that the
+ * string is a valid JS string.
  * @param {string} s The string to quote.
- *     If not a string, it will be cast to one.
  * @return {string} A copy of {@code s} surrounded by double quotes.
  */
 goog.string.quote = function(s) {
@@ -809,10 +793,9 @@ goog.string.quote = function(s) {
 
 
 /**
- * Given plain text, returns the escaped JS string body which needs to be
- * surrounded in quotes.
- * @param {string} str Plain text.
- * @return {string} An unquoted portion of a JS string literal.
+ * Takes a string and returns the escaped string for that character.
+ * @param {string} str The string to escape.
+ * @return {string} An escaped string representing {@code str}.
  */
 goog.string.escapeString = function(str) {
   var sb = [];
@@ -912,11 +895,11 @@ goog.string.removeAt = function(s, index, stringLength) {
 
 
 /**
- * Removes the first occurrence of a substring from a string.
- * @param {string} s The base string from which to remove.
- * @param {string} ss The string to remove.
- * @return {string} A copy of {@code s} with {@code ss} removed or the full
- *     string if nothing is removed.
+ *  Removes the first occurrence of a substring from a string.
+ *  @param {string} s The base string from which to remove.
+ *  @param {string} ss The string to remove.
+ *  @return {string} A copy of {@code s} with {@code ss} removed or the full
+ *      string if nothing is removed.
  */
 goog.string.remove = function(s, ss) {
   var re = new RegExp(goog.string.regExpEscape(ss), '');
@@ -925,11 +908,11 @@ goog.string.remove = function(s, ss) {
 
 
 /**
- * Removes all occurrences of a substring from a string.
- * @param {string} s The base string from which to remove.
- * @param {string} ss The string to remove.
- * @return {string} A copy of {@code s} with {@code ss} removed or the full
- *     string if nothing is removed.
+ *  Removes all occurrences of a substring from a string.
+ *  @param {string} s The base string from which to remove.
+ *  @param {string} ss The string to remove.
+ *  @return {string} A copy of {@code s} with {@code ss} removed or the full
+ *      string if nothing is removed.
  */
 goog.string.removeAll = function(s, ss) {
   var re = new RegExp(goog.string.regExpEscape(ss), 'g');
@@ -939,11 +922,12 @@ goog.string.removeAll = function(s, ss) {
 
 /**
  * Escapes characters in the string that are not safe to use in a RegExp.
- * @param {*} s The string to escape. If not a string, it will be cast to one.
+ * @param {*} s The string to escape. If not a string, it will be casted
+ *     to one.
  * @return {string} A RegExp safe, escaped copy of {@code s}.
  */
 goog.string.regExpEscape = function(s) {
-  return String(s).replace(/[-()\[\]{}+?*.$\^|,:#<!\\]/g, '\\$&').
+  return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
       replace(/\x08/g, '\\x08');
 };
 
@@ -1006,7 +990,7 @@ goog.string.makeSafe = function(obj) {
  * buildString(null, undefined) -> ''
  * </pre>
  * @param {...*} var_args A list of strings to concatenate. If not a string,
- *     it will be cast to one.
+ *     it will be casted to one.
  * @return {string} The concatenation of {@code var_args}.
  */
 goog.string.buildString = function(var_args) {
@@ -1165,7 +1149,6 @@ goog.string.createUniqueString = function() {
  *
  * @param {string} str The string to convert.
  * @return {number} The number the supplied string represents, or NaN.
- *     {@code null} coerces to 0.
  */
 goog.string.toNumber = function(str) {
   var num = Number(str);
