@@ -417,6 +417,23 @@ function testThrownErrorWithNoErrbacks() {
                'errback to catch it.', assertCallback);
 }
 
+function testThrownErrorCallbacksDoNotCancel() {
+  var d = new Deferred();
+  d.addCallback(function() {
+    throw Error('foo');
+  });
+
+  function assertCallback() {
+    d.callback(1);
+    // Add another callback after the fact.  Note this is not an errback!
+    d.addCallback(neverHappen);
+    mockClock.tick(); // Should cause error because throwing is delayed.
+  }
+
+  assertThrows('A thrown error should be rethrown if there is no ' +
+               'errback to catch it.', assertCallback);
+}
+
 </script>
 </body>
 </html>

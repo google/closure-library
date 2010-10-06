@@ -311,11 +311,22 @@ goog.async.Deferred.prototype.hasFired = function() {
 
 
 /**
+ * @return {boolean} Whether an errback has been registered.
+ */
+goog.async.Deferred.prototype.hasErrback_ = function() {
+  return goog.array.some(this.chain_, function(chainRow) {
+    // The errback is the second element in the array.
+    return goog.isFunction(chainRow[1]);
+  });
+};
+
+/**
  * Exhaust the callback sequence when a result.
  * @private
  */
 goog.async.Deferred.prototype.fire_ = function() {
-  if (this.unhandledExceptionTimeoutId_ && this.fired_ != 0) {
+  if (this.unhandledExceptionTimeoutId_ && this.fired_ != 0 &&
+      this.hasErrback_()) {
     // It is possible to add errbacks after the Deferred has fired. If a new
     // errback is added immediately after the Deferred encountered an unhandled
     // error, but before that error is rethrown, cancel the rethrow.
@@ -348,12 +359,7 @@ goog.async.Deferred.prototype.fire_ = function() {
         fired = 1;
         res = ex;
 
-        var errbackExists = goog.array.some(chain, function(chainRow) {
-          // The errback is the second element in the array.
-          return goog.isFunction(chainRow[1]);
-        });
-
-        if (!errbackExists) {
+        if (!this.hasErrback_()) {
           // If an error is thrown with no additional errbacks in the queue,
           // prepare to rethrow the error.
           unhandledException = true;
