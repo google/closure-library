@@ -2068,7 +2068,7 @@ goog.net.BrowserChannel.prototype.createXhrIo = function(hostPrefix) {
  * @return {boolean} Whether the channel is currently active.
  */
 goog.net.BrowserChannel.prototype.isActive = function() {
-  return this.handler_.isActive(this);
+  return !!this.handler_ && this.handler_.isActive(this);
 };
 
 
