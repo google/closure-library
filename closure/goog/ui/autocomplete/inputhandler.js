@@ -776,12 +776,16 @@ goog.ui.AutoComplete.InputHandler.prototype.handleKeyEvent = function(e) {
 
     // On enter, just select the highlighted row.
     case goog.events.KeyCodes.ENTER:
-      // Ensure the menu is up to date before completing.
-      this.update();
-      if (this.ac_.selectHilited()) {
-        e.preventDefault();
-        e.stopPropagation();
-        return true;
+      if (this.ac_.isOpen()) {
+        // Ensure the menu is up to date before completing.
+        this.update();
+        if (this.ac_.selectHilited()) {
+          e.preventDefault();
+          e.stopPropagation();
+          return true;
+        }
+      } else {
+        this.ac_.dismiss();
       }
       break;
 

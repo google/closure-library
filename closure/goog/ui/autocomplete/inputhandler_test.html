@@ -15,6 +15,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.events.KeyCodes');
+  goog.require('goog.functions');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.MockClock');
   goog.require('goog.ui.AutoComplete.InputHandler');
@@ -37,12 +38,19 @@ See the COPYING file for details.
 
   function MockAutoCompleter() {
     this.setTokenWasCalled = false;
+    this.selectHilitedWasCalled = false;
+    this.dismissWasCalled = false;
     this.getTarget = function() { return mockElement };
     this.setTarget = function() { };
     this.setToken = function() { this.setTokenWasCalled = true; };
-    this.selectHilited = function() { };
+    this.selectHilited = function() {
+      this.selectHilitedWasCalled = true;
+      return true; // Success.
+    };
     this.cancelDelayedDismiss = function() { };
     this.dismissOnDelay = function() {};
+    this.dismiss = function() { this.dismissWasCalled = true; };
+    this.isOpen = goog.functions.TRUE;
   }
 
   /**
@@ -496,6 +504,21 @@ See the COPYING file for details.
     var ih = new goog.ui.AutoComplete.InputHandler();
     ih.setUpdateDuringTyping(false);
     assertFalse('update during typing set+get', ih.getUpdateDuringTyping());
+  }
+
+  function testEnterToSelect() {
+    mh.fireEvent('focus', '');
+    mh.fireKeyEvents(goog.events.KeyCodes.ENTER, true, true, true);
+    assertTrue('Should hilite', mh.ac_.selectHilitedWasCalled);
+    assertFalse('Should NOT be dismissed', mh.ac_.dismissWasCalled);
+  }
+
+  function testEnterDoesNotSelectWhenClosed() {
+    mh.fireEvent('focus', '');
+    mh.ac_.isOpen = goog.functions.FALSE;
+    mh.fireKeyEvents(goog.events.KeyCodes.ENTER, true, true, true);
+    assertFalse('Should NOT hilite', mh.ac_.selectHilitedWasCalled);
+    assertTrue('Should be dismissed', mh.ac_.dismissWasCalled);
   }
 
 </script>
