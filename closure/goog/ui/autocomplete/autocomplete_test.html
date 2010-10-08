@@ -391,6 +391,31 @@ function testHiliteNextPrev_wrapAndAllowFreeSelectNoAutoHilite() {
 }
 
 /**
+ * Checks that autohilite is disabled when there is no token; this allows the
+ * user to tab out of an empty autocomplete.
+ */
+function testNoAutoHiliteWhenTokenIsEmpty() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setWrap(true);
+  ac.setAllowFreeSelect(true);
+  ac.setAutoHilite(true);
+  ac.setMaxMatches(4);
+
+  ac.setToken('');
+  assertEquals(4, rend.getRenderedRows().length);
+  // No token; nothing should be hilited.
+  checkHilitedIndex(rend, -1);
+
+  ac.setToken('the');
+  assertEquals(4, rend.getRenderedRows().length);
+  // Now there is a token, so the first row should be highlighted.
+  checkHilitedIndex(rend, 0);
+}
+
+/**
  * Hilite using ids, the way mouse-based hiliting would work.
  */
 function testHiliteId() {
