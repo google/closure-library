@@ -31,8 +31,8 @@ goog.require('goog.iter.StopIteration');
 /**
  * Constructs a date range.
  * @constructor
- * @param {Date} startDate The start date of the range.
- * @param {Date} endDate The end date of the range.
+ * @param {goog.date.DateLike} startDate The start date of the range.
+ * @param {goog.date.DateLike} endDate The end date of the range.
  */
 goog.date.DateRange = function(startDate, endDate) {
   /**
@@ -112,7 +112,7 @@ goog.date.DateRange.equals = function(a, b) {
 /**
  * Calculates a date that is a number of days after a date. Does not modify its
  * input.
- * @param {Date} date The input date.
+ * @param {goog.date.DateLike} date The input date.
  * @param {number} offset Number of days.
  * @return {goog.date.Date} The date that is |offset| days after |date|.
  * @private
@@ -127,7 +127,7 @@ goog.date.DateRange.offsetInDays_ = function(date, offset) {
 /**
  * Calculates the Monday before a date. If the input is a Monday, returns the
  * input. Does not modify its input.
- * @param {Date} date The input date.
+ * @param {goog.date.DateLike} date The input date.
  * @return {goog.date.Date} If |date| is a Monday, return |date|; otherwise
  *     return the Monday before |date|.
  * @private
@@ -143,7 +143,7 @@ goog.date.DateRange.currentOrLastMonday_ = function(date) {
 /**
  * Calculates a date that is a number of months after the first day in the
  * month that contains its input. Does not modify its input.
- * @param {Date} date The input date.
+ * @param {goog.date.DateLike} date The input date.
  * @param {number} offset Number of months.
  * @return {goog.date.Date} The date that is |offset| months after the first
  *     day in the month that contains |date|.
@@ -159,7 +159,8 @@ goog.date.DateRange.offsetInMonths_ = function(date, offset) {
 
 /**
  * Returns the range from yesterday to yesterday.
- * @param {Date=} opt_today The date to consider today. Defaults to today.
+ * @param {goog.date.DateLike=} opt_today The date to consider today.
+ *     Defaults to today.
  * @return {goog.date.DateRange} The range that includes only yesterday.
  */
 goog.date.DateRange.yesterday = function(opt_today) {

@@ -221,8 +221,7 @@ goog.i18n.DateTimeParse.prototype.applyPattern_ = function(pattern) {
  *     pattern string stored in locale repository.
  * @private
  */
-goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType)
-{
+goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType) {
   var pattern;
   // formatType constants are in consecutive numbers. So it can be used to
   // index array in following way.
@@ -248,7 +247,7 @@ goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType)
  * Parse the given string and fill info into date object. This version does
  * not validate the input.
  * @param {string} text The string being parsed.
- * @param {Date} date The Date object to hold the parsed date.
+ * @param {goog.date.DateLike} date The Date object to hold the parsed date.
  * @param {number=} opt_start The position from where parse should begin.
  * @return {number} How many characters parser advanced.
  */
@@ -262,7 +261,7 @@ goog.i18n.DateTimeParse.prototype.parse = function(text, date, opt_start) {
  * Parse the given string and fill info into date object. This version will
  * validate the input and make sure it is a validate date/time.
  * @param {string} text The string being parsed.
- * @param {Date} date The Date object to hold the parsed date.
+ * @param {goog.date.DateLike} date The Date object to hold the parsed date.
  * @param {number=} opt_start The position from where parse should begin.
  * @return {number} How many characters parser advanced.
  */
@@ -276,7 +275,7 @@ goog.i18n.DateTimeParse.prototype.strictParse =
 /**
  * Parse the given string and fill info into date object.
  * @param {string} text The string being parsed.
- * @param {Date} date The Date object to hold the parsed date.
+ * @param {goog.date.DateLike} date The Date object to hold the parsed date.
  * @param {number} start The position from where parse should begin.
  * @param {boolean} validation If true, input string need to be a valid
  *     date/time string.
@@ -962,15 +961,14 @@ goog.i18n.DateTimeParse.MyDate_.prototype.dayOfWeek;
  * @return {number} disambiguated year.
  * @private
  */
-goog.i18n.DateTimeParse.MyDate_.prototype.setTwoDigitYear_ = function(year)
-{
+goog.i18n.DateTimeParse.MyDate_.prototype.setTwoDigitYear_ = function(year) {
   var now = new Date();
   var defaultCenturyStartYear =
       now.getFullYear() - goog.i18n.DateTimeParse.ambiguousYearCenturyStart;
   var ambiguousTwoDigitYear = defaultCenturyStartYear % 100;
   this.ambiguousYear = (year == ambiguousTwoDigitYear);
   year += Math.floor(defaultCenturyStartYear / 100) * 100 +
-            (year < ambiguousTwoDigitYear ? 100 : 0);
+      (year < ambiguousTwoDigitYear ? 100 : 0);
   return this.year = year;
 };
 
@@ -979,7 +977,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.setTwoDigitYear_ = function(year)
  * Based on the fields set, fill a Date object. For those fields that not
  * set, use the passed in date object's value.
  *
- * @param {Date} date Date object to be filled.
+ * @param {goog.date.DateLike} date Date object to be filled.
  * @param {boolean} validation If true, input string will be checked to make
  *     sure it is valid.
  *
@@ -1004,8 +1002,9 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ =
   // to Feb, because there is no Feb 30, JS adjust it to Mar 2. So Feb 12 will
   // become  Mar 12.
   var orgDate = date.getDate();
-  date.setDate(1); // every month has a 1st day, this can actually be anything
-                   // less than 29.
+
+  // Every month has a 1st day, this can actually be anything less than 29.
+  date.setDate(1);
 
   if (this.month != undefined) {
     date.setMonth(this.month);

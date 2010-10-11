@@ -27,6 +27,7 @@ goog.provide('goog.date.month');
 goog.provide('goog.date.weekDay');
 
 goog.require('goog.asserts');
+goog.require('goog.date.DateLike');
 goog.require('goog.string');
 
 
@@ -690,7 +691,9 @@ goog.date.Interval.prototype.add = function(interval) {
  *
  * Implements most methods of the native js Date object (except the time related
  * ones, {@see goog.date.DateTime}) and can be used interchangeably with it just
- * as if goog.date.Date was a subclass of Date.
+ * as if goog.date.Date was a synonym of Date. To make this more transparent,
+ * Closure APIs should accept goog.date.DateLike instead of the real Date
+ * object.
  *
  * To allow goog.date.Date objects to be passed as arguments to methods
  * expecting Date objects this class is marked as extending the built in Date
@@ -702,7 +705,7 @@ goog.date.Interval.prototype.add = function(interval) {
  * @param {number=} opt_month Month, 0 = Jan, 11 = Dec.
  * @param {number=} opt_date Date of month, 1 - 31.
  * @constructor
- * @extends {Date}
+ * @extends {Date} TODO(nicksantos): Delete this line. it's a lie.
  * @see goog.date.DateTime
  */
 goog.date.Date = function(opt_year, opt_month, opt_date) {
