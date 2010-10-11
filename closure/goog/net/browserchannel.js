@@ -35,6 +35,7 @@
 
 
 goog.provide('goog.net.BrowserChannel');
+goog.provide('goog.net.BrowserChannel.Error');
 goog.provide('goog.net.BrowserChannel.Handler');
 goog.provide('goog.net.BrowserChannel.LogSaver');
 goog.provide('goog.net.BrowserChannel.QueuedMap');
