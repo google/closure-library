@@ -115,7 +115,11 @@ goog.module.ModuleLoader.prototype.loadModulesInDebugMode_ = function(uris) {
     return scriptEl;
   };
 
-  var documentElement = document.documentElement;
+  // If IE6 or 7 is still parsing the document, appending to the document
+  // element will lead to an operation aborted alert. If possible, try to find
+  // a head element to append on to make this a bit more idiot-proof.
+  var scriptParent = document.getElementsByTagName('head')[0] ||
+      document.documentElement;
   if (goog.userAgent.GECKO) {
     // For <script> tags that are loaded in this manner, Gecko ensures that
     // tag order is consistent with evaluation order. Unfortunately, other
@@ -123,7 +127,7 @@ goog.module.ModuleLoader.prototype.loadModulesInDebugMode_ = function(uris) {
     // and more complex implementation.
     for (var i = 0; i < uris.length; i++) {
       var scriptEl = createScript(uris[i]);
-      documentElement.appendChild(scriptEl);
+      scriptParent.appendChild(scriptEl);
     }
   } else {
     var popAndLoadNextScript = function() {
@@ -143,7 +147,7 @@ goog.module.ModuleLoader.prototype.loadModulesInDebugMode_ = function(uris) {
           scriptEl.onload = popAndLoadNextScript;
         }
       }
-      documentElement.appendChild(scriptEl);
+      scriptParent.appendChild(scriptEl);
     };
     popAndLoadNextScript();
   }
