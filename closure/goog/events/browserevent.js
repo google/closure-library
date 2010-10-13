@@ -34,7 +34,6 @@
  * - altKey         {boolean}   Was alt key depressed
  * - shiftKey       {boolean}   Was shift key depressed
  * - metaKey        {boolean}   Was meta key depressed
- * - state          {string}    History state object
  *
  * NOTE: The keyCode member contains the raw browser keyCode. For normalized
  * key and character code use {@link goog.events.KeyHandler}.
@@ -210,14 +209,6 @@ goog.events.BrowserEvent.prototype.metaKey = false;
 
 
 /**
- * History state object, only set for PopState events where it's a copy of the
- * state object provided to pushState or replaceState.
- * @type {Object}
- */
-goog.events.BrowserEvent.prototype.state;
-
-
-/**
  * Whether the default platform modifier key was pressed at time of event.
  * (This is control for all platforms except Mac, where it's Meta.
  * @type {boolean}
@@ -284,7 +275,6 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   this.shiftKey = e.shiftKey;
   this.metaKey = e.metaKey;
   this.platformModifierKey = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
-  this.state = e.state;
   this.event_ = e;
   delete this.returnValue_;
   delete this.propagationStopped_;

@@ -437,20 +437,6 @@ goog.testing.events.fireContextMenuSequence = function(target, opt_coords) {
 
 
 /**
- * Simulates a popstate event on the given target.
- * @param {EventTarget} target The target for the event.
- * @param {Object} state History state object.
- * @return {boolean} The returnValue of the event: false if preventDefault() was
- *     called on it, true otherwise.
- */
-goog.testing.events.firePopStateEvent = function(target, state) {
-  var e = new goog.testing.events.Event(goog.events.EventType.POPSTATE, target);
-  e.state = state;
-  return goog.testing.events.fireBrowserEvent(e);
-};
-
-
-/**
  * Simulates an event's capturing and bubbling phases.
  * @param {Event} event A simulated native event. It will be wrapped in a
  *     normalized BrowserEvent and dispatched to Closure listeners on all
