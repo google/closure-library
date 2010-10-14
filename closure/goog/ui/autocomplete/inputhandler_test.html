@@ -16,6 +16,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.events.KeyCodes');
   goog.require('goog.functions');
+  goog.require('goog.object');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.MockClock');
   goog.require('goog.ui.AutoComplete.InputHandler');
@@ -73,20 +74,25 @@ See the COPYING file for details.
   };
 
   /** Simulates key events. */
-  MockInputHandler.prototype.fireKeyEvents = function(keyCode, down, press, up) {
-    if (down) this.fireEvent('keydown', keyCode);
-    if (press) this.fireEvent('keypress', keyCode);
-    if (up) this.fireEvent('keyup', keyCode);
+  MockInputHandler.prototype.fireKeyEvents = function(
+      keyCode, down, press, up, opt_properties) {
+    if (down) this.fireEvent('keydown', keyCode, opt_properties);
+    if (press) this.fireEvent('keypress', keyCode, opt_properties);
+    if (up) this.fireEvent('keyup', keyCode, opt_properties);
   };
 
   /** Simulates an event. */
-  MockInputHandler.prototype.fireEvent = function(type, keyCode) {
+  MockInputHandler.prototype.fireEvent = function(
+      type, keyCode, opt_properties) {
     var e = {};
     e.type = type;
     e.keyCode = keyCode;
     e.preventDefault = function() {};
     if (!goog.userAgent.IE) {
       e.which = type == 'keydown' ? keyCode : 0;
+    }
+    if (opt_properties) {
+      goog.object.extend(e, opt_properties);
     }
     e = new goog.events.BrowserEvent(e);
     mockElement.dispatchEvent(e);
@@ -517,6 +523,30 @@ See the COPYING file for details.
     mh.fireEvent('focus', '');
     mh.ac_.isOpen = goog.functions.FALSE;
     mh.fireKeyEvents(goog.events.KeyCodes.ENTER, true, true, true);
+    assertFalse('Should NOT hilite', mh.ac_.selectHilitedWasCalled);
+    assertTrue('Should be dismissed', mh.ac_.dismissWasCalled);
+  }
+
+  function testTabToSelect() {
+    mh.fireEvent('focus', '');
+    mh.fireKeyEvents(goog.events.KeyCodes.TAB, true, true, true);
+    assertTrue('Should hilite', mh.ac_.selectHilitedWasCalled);
+    assertFalse('Should NOT be dismissed', mh.ac_.dismissWasCalled);
+  }
+
+  function testTabDoesNotSelectWhenClosed() {
+    mh.fireEvent('focus', '');
+    mh.ac_.isOpen = goog.functions.FALSE;
+    mh.fireKeyEvents(goog.events.KeyCodes.TAB, true, true, true);
+    assertFalse('Should NOT hilite', mh.ac_.selectHilitedWasCalled);
+    assertTrue('Should be dismissed', mh.ac_.dismissWasCalled);
+  }
+
+  function testShiftTabDoesNotSelect() {
+    mh.fireEvent('focus', '');
+    mh.ac_.isOpen = goog.functions.TRUE;
+    mh.fireKeyEvents(goog.events.KeyCodes.TAB, true, true, true,
+        {shiftKey: true});
     assertFalse('Should NOT hilite', mh.ac_.selectHilitedWasCalled);
     assertTrue('Should be dismissed', mh.ac_.dismissWasCalled);
   }

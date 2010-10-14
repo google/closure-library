@@ -762,7 +762,7 @@ goog.ui.AutoComplete.InputHandler.prototype.handleKeyEvent = function(e) {
     // action is also prevented if the input is a multi input, to prevent the
     // user tabbing out of the field.
     case goog.events.KeyCodes.TAB:
-      if (this.ac_.isOpen()) {
+      if (this.ac_.isOpen() && !e.shiftKey) {
         // Ensure the menu is up to date before completing.
         this.update();
         if (this.ac_.selectHilited() && this.preventDefaultOnTab_) {
