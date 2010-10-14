@@ -547,7 +547,7 @@ goog.events.getListeners = function(obj, type, capture) {
  * @param {?string} type Event type.
  * @param {boolean} capture Capture phase?.
  * @return {Array.<goog.events.Listener>?} Array of listener objects.
- *     Returns null if object has no lsiteners of that type.
+ *     Returns null if object has no listeners of that type.
  * @private
  */
 goog.events.getListeners_ = function(obj, type, capture) {
