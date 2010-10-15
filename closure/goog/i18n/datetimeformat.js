@@ -24,6 +24,7 @@
 goog.provide('goog.i18n.DateTimeFormat');
 
 goog.require('goog.asserts');
+goog.require('goog.date.DateLike');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.TimeZone');
 goog.require('goog.string');

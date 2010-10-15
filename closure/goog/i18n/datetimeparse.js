@@ -22,8 +22,10 @@
  */
 goog.provide('goog.i18n.DateTimeParse');
 
+goog.require('goog.date.DateLike');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
+
 
 /**
  * DateTimeParse is for parsing date in a locale-sensitive manner. It allows

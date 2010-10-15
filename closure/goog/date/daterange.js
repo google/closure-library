@@ -24,9 +24,11 @@ goog.provide('goog.date.DateRange.Iterator');
 goog.provide('goog.date.DateRange.StandardDateRangeKeys');
 
 goog.require('goog.date.Date');
+goog.require('goog.date.DateLike');
 goog.require('goog.date.Interval');
 goog.require('goog.iter.Iterator');
 goog.require('goog.iter.StopIteration');
+
 
 /**
  * Constructs a date range.
