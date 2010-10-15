@@ -22,29 +22,31 @@ See the COPYING file for details.
   <div id="content">
     <table id="sortable">
       <thead>
-        <tr><th>alpha</th><th>number</th></tr>
+        <tr><th>alpha</th><th>number</th><th>not sortable</th></tr>
       </thead>
       <tbody>
-        <tr><td>C</td><td>10</td></tr>
-        <tr><td>A</td><td>10</td></tr>
-        <tr><td>C</td><td>17</td></tr>
-        <tr><td>B</td><td>0</td></tr>
-        <tr><td>C</td><td>3</td></tr>
+        <tr><td>C</td><td>10</td><td></td></tr>
+        <tr><td>A</td><td>10</td><td></td></tr>
+        <tr><td>C</td><td>17</td><td></td></tr>
+        <tr><td>B</td><td>0</td><td></td></tr>
+        <tr><td>C</td><td>3</td><td></td></tr>
       </tbody>
     </table>
   </div>
   <script>
     var oldHtml = goog.dom.getElement('content').innerHTML;
-    var alphaHeader, numberHeader, table, tableSorter;
+    var alphaHeader, numberHeader, notSortableHeader, table, tableSorter;
 
     function setUp() {
       goog.dom.getElement('content').innerHTML = oldHtml;
       table = goog.dom.getElement('sortable');
       alphaHeader = table.getElementsByTagName('TH')[0];
       numberHeader = table.getElementsByTagName('TH')[1];
+      notSortableHeader = table.getElementsByTagName('TH')[2];
 
       tableSorter = new goog.ui.TableSorter();
       tableSorter.setSortFunction(0, goog.ui.TableSorter.alphaSort);
+          tableSorter.setSortFunction(2, goog.ui.TableSorter.noSort);
       tableSorter.decorate(table);
     }
 
@@ -103,11 +105,20 @@ See the COPYING file for details.
       assertFalse(tableSorter.isSortReversed());
     }
 
+    function testNotSortableUnchanged() {
+      goog.testing.events.fireClickEvent(notSortableHeader);
+      assertEquals(0, goog.dom.classes.get(notSortableHeader).length);
+      assertEquals(-1, tableSorter.getSortColumn());
+    }
+
     function assertOrder(arr) {
-      var actual = goog.array.map(table.getElementsByTagName('TD'),
-          function(td) {
-            return goog.dom.getTextContent(td);
-          });
+      var actual = [];
+      goog.array.forEach(table.getElementsByTagName('TD'), function(td, idx) {
+        var txt = goog.dom.getTextContent(td);
+        if (txt) {
+          actual.push(txt);
+        }
+      });
       assertArrayEquals(arr, actual);
     }
 
