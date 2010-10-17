@@ -157,9 +157,9 @@ goog.cssom.getAllCssStyleSheets = function(opt_styleSheet,
     }
   }
 
-  // This is a CSSStyleSheet.
-  if ((styleSheet.type || styleSheet.rules) && (!styleSheet.disabled ||
-      includeDisabled)) {
+  // This is a CSSStyleSheet. (IE uses .rules, W3c and Opera cssRules.)
+  if ((styleSheet.type || styleSheet.rules || styleSheet.cssRules) &&
+      (!styleSheet.disabled || includeDisabled)) {
     styleSheetsOutput.push(styleSheet);
   }
 
