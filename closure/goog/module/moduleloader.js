@@ -13,7 +13,18 @@
 // limitations under the License.
 
 /**
- * @fileoverview The module loader which uses the BulkLoader to load the URIs.
+ * @fileoverview The module loader for loading modules across the network.
+ *
+ * Webkit and IE do not guarantee that scripts appended to the document
+ * are executed in the order they are added. For production mode, we use
+ * XHRs to load scripts, because they do not have this problem and they
+ * have superior mechanisms for handling failure. However, XHR-evaled
+ * scripts are harder to debug.
+ *
+ * In debugging mode, we use normal script tags. In order to make this work
+ * in WebKit and IE, we load the scripts in serial: we do not execute
+ * script B to the document until we are certain that script A is
+ * finished loading.
  *
  *
  */
@@ -44,6 +55,13 @@ goog.module.ModuleLoader = function() {
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
+
+  /**
+   * Scripts waiting to be loaded. Only used in debug mode.
+   * @type {Array.<string>}
+   * @private
+   */
+  this.scriptsToLoadDebugMode_ = [];
 };
 goog.inherits(goog.module.ModuleLoader, goog.module.BaseModuleLoader);
 
@@ -67,8 +85,6 @@ goog.module.ModuleLoader.prototype.loadModulesInternal = function(
   }
   this.logger.info('loadModules ids:' + ids + ' uris:' + uris);
 
-  // In prod, we don't load via a script tag because it is difficult to
-  // determine if the script has been loaded and to handle errors conditions.
   if (this.getDebugMode()) {
     this.loadModulesInDebugMode_(uris);
   } else {
@@ -95,6 +111,20 @@ goog.module.ModuleLoader.prototype.loadModulesInternal = function(
 
 
 /**
+ * Create a script tag.
+ * @param {string} uri The uri of the script.
+ * @return {Element} The new tag.
+ * @private
+ */
+goog.module.ModuleLoader.prototype.createScriptElement_ = function(uri) {
+  var scriptEl = goog.dom.createElement('script');
+  scriptEl.src = uri;
+  scriptEl.type = 'text/javascript';
+  return scriptEl;
+};
+
+
+/**
  * Loads and evaluates the JavaScript files at the specified URIs, in order.
  * This method uses &lt;script> tags rather than XHRs to load the files. This
  * makes it possible to debug and inspect stack traces more easily. It's also
@@ -104,16 +134,17 @@ goog.module.ModuleLoader.prototype.loadModulesInternal = function(
  * @private
  */
 goog.module.ModuleLoader.prototype.loadModulesInDebugMode_ = function(uris) {
+  // Loading the scripts in serial introduces asynchronosity into the module
+  // loading flow. In production mode, we can guarantee that scripts will
+  // be loaded synchronously one after another, but that doesn't hold true
+  // in debug mode. So in debug mode, there are race conditions where
+  // module A can kick off the load sequence for module B, even though
+  // module A's scripts haven't all been loaded yet.
+  //
+  // To work around this issue, all module loads share a queue.
   if (!uris.length) {
     return;
   }
-
-  var createScript = function(uri) {
-    var scriptEl = goog.dom.createElement('script');
-    scriptEl.src = uri;
-    scriptEl.type = 'text/javascript';
-    return scriptEl;
-  };
 
   // If IE6 or 7 is still parsing the document, appending to the document
   // element will lead to an operation aborted alert. If possible, try to find
@@ -126,13 +157,24 @@ goog.module.ModuleLoader.prototype.loadModulesInDebugMode_ = function(uris) {
     // browsers do not make that guarantee. So the other browsers need a slower
     // and more complex implementation.
     for (var i = 0; i < uris.length; i++) {
-      var scriptEl = createScript(uris[i]);
+      var scriptEl = this.createScriptElement_(uris[i]);
       scriptParent.appendChild(scriptEl);
     }
   } else {
+    var isAnotherModuleLoading = this.scriptsToLoadDebugMode_.length;
+    goog.array.extend(this.scriptsToLoadDebugMode_, uris);
+    if (isAnotherModuleLoading) {
+      // The module loader is still loading some other module's code.
+      // In order to prevent the race condition noted above, we just add
+      // these URIs to the end of the other module's queue and return.
+      return;
+    }
+
+    var moduleLoader = this;
+    uris = this.scriptsToLoadDebugMode_;
     var popAndLoadNextScript = function() {
       var uri = uris.shift();
-      var scriptEl = createScript(uri);
+      var scriptEl = moduleLoader.createScriptElement_(uri);
       if (uris.length) {
         if (goog.userAgent.IE) {
           scriptEl.onreadystatechange = function() {
