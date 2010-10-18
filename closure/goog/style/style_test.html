@@ -477,7 +477,6 @@ Test-visible
 Test-visible
 </div>
 
-<div id="msFilter" style="-ms-filter:'alpha(opacity=0)'">A div</div>
 <script>
 
 var $ = goog.dom.getElement;
@@ -616,36 +615,6 @@ function testGetBackgroundColor() {
       assertFalse('Should be able to parse color "' + bgColor + '"', i < 5);
     }
   }
-}
-
-function testGetStyleForMsFilterReturnsEmptyStringOnNonIE8() {
-  var e = goog.dom.getElement('msFilter');
-  if (!(goog.userAgent.IE && goog.userAgent.isVersion(8))) {
-    // -ms-filters make sense only on IE.
-    assertEquals('', goog.style.getStyle(e, 'filter'));
-  } else {
-    assertEquals('alpha(opacity=0)', goog.style.getStyle(e, 'filter'));
-  }
-}
-
-function testGetStyleForOtherAttributeReturnsEmptyString() {
-  var e = goog.dom.getElement('msFilter');
-  assertEquals('', goog.style.getStyle(e, 'border'));
-}
-
-function testGetComputedStyleForMsFilterReturnsEmptyStringOnNonIE8() {
-  var e = goog.dom.getElement('msFilter');
-  if (!(goog.userAgent.IE && goog.userAgent.isVersion(8))) {
-    // -ms-filters make sense only on IE.
-    assertEquals('', goog.style.getComputedStyle(e, 'filter'));
-  } else {
-    assertEquals('alpha(opacity=0)', goog.style.getStyle(e, 'filter'));
-  }
-}
-
-function testGetComputedStyleForOtherAttributeReturnsEmptyString() {
-  var e = goog.dom.getElement('msFilter');
-  assertEquals('', goog.style.getComputedStyle(e, 'border'));
 }
 
 function testToCamelCase() {

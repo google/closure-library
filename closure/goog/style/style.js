@@ -86,9 +86,7 @@ goog.style.setStyle_ = function(element, value, style) {
  * @return {string} Style value.
  */
 goog.style.getStyle = function(element, style) {
-  // element.style[..] is undefined for browser specific styles
-  // as 'filter'.
-  return element.style[goog.style.toCamelCase(style)] || '';
+  return element.style[goog.style.toCamelCase(style)];
 };
 
 
@@ -105,9 +103,7 @@ goog.style.getComputedStyle = function(element, style) {
   if (doc.defaultView && doc.defaultView.getComputedStyle) {
     var styles = doc.defaultView.getComputedStyle(element, '');
     if (styles) {
-      // element.style[..] is undefined for browser specific styles
-      // as 'filter'.
-      return styles[style] || '';
+      return styles[style];
     }
   }
 
