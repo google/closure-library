@@ -16,7 +16,6 @@
  * @fileoverview Mock MessageChannel implementation that can receive fake
  * messages and test that the right messages are sent.
  *
- *
  */
 
 

@@ -24,7 +24,6 @@
  * against extremely large deltas, use the setMaxDeltaX and setMaxDeltaY APIs
  * to set maximum values that make sense for your application.
  *
- *
  * @see ../demos/mousewheelhandler.html
  */
 

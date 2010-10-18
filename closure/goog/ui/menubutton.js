@@ -15,7 +15,6 @@
 /**
  * @fileoverview A menu button control.
  *
- *
  * @see ../demos/menubutton.html
  */
 

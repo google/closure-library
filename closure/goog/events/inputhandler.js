@@ -31,7 +31,6 @@
  *     trigger in emulation mode if text was modified by context menu commands
  *     such as 'Undo' and 'Delete'.
  * </ul>
- *
  * @see ../demos/inputhandler.html
  */
 

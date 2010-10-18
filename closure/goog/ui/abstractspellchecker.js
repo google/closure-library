@@ -31,8 +31,6 @@
  * so often so that the calling function could reschedule its execution on a
  * different stack (for example by calling setInterval(0)).
  *
- *
- *
  */
 
 goog.provide('goog.ui.AbstractSpellChecker');

@@ -15,7 +15,6 @@
 /**
  * @fileoverview Support class for spell checker components.
  *
- *
  */
 
 goog.provide('goog.spell.SpellCheck');

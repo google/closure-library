@@ -15,7 +15,6 @@
 /**
  * @fileoverview Default renderer for {@link goog.ui.Button}s.
  *
- *
  */
 
 goog.provide('goog.ui.ButtonRenderer');

@@ -15,7 +15,6 @@
 /**
  * @fileoverview Advanced tooltip widget implementation.
  *
- *
  * @see ../demos/advancedtooltip.html
  */
 

@@ -16,7 +16,7 @@
  * @fileoverview A plugin for the LinkDialog.
  *
  * @author nicksantos@google.com (Nick Santos)
- *
+ * @author marcosalmeida@google.com (Marcos Almeida)
  * @author robbyw@google.com (Robby Walker)
  */
 

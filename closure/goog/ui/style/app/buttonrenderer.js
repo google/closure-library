@@ -23,7 +23,6 @@
  * Based on the Custom Buttons 3.1 visual specification, see
  * http://go/custombuttons
  *
- *
  */
 
 goog.provide('goog.ui.style.app.ButtonRenderer');

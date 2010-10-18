@@ -29,7 +29,6 @@
  * @supported IE5, IE6, IE7, Safari3.0, Chrome, FF2.0 (linux) and FF3.0 and
  * Opera (mac and windows).
  *
- *
  * @see ../demos/pastehandler.html
  */
 

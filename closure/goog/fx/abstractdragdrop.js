@@ -18,7 +18,6 @@
  * Provides functionality for implementing drag and drop classes. Also provides
  * support classes and events.
  *
- *
  */
 
 goog.provide('goog.fx.AbstractDragDrop');

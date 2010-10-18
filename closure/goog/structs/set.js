@@ -16,8 +16,6 @@
  * @fileoverview Datastructure: Set.
  *
  *
- *
- *
  * This class implements a set data structure. Adding and removing is O(1). It
  * supports both object and primitive values. Be careful because you can add
  * both 1 and new Number(1), because these are not the same. You can even add

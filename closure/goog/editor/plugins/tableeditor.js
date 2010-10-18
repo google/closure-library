@@ -15,7 +15,6 @@
 /**
  * @fileoverview Plugin that enables table editing.
  *
- *
  */
 
 goog.provide('goog.editor.plugins.TableEditor');

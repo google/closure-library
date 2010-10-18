@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Class that can be used to determine when an iframe is loaded.
- *
- *
  */
 
 goog.provide('goog.net.IframeLoadMonitor');

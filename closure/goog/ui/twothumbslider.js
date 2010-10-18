@@ -34,7 +34,6 @@
  *
  * TODO(user): add a11y once we know what this element is
  *
- *
  * @see ../demos/twothumbslider.html
  */
 

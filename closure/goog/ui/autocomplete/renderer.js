@@ -16,7 +16,6 @@
  * @fileoverview Class for rendering the results of an auto complete and
  * allow the user to select an row.
  *
- *
  */
 
 goog.provide('goog.ui.AutoComplete.Renderer');

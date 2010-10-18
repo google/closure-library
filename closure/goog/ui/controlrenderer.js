@@ -16,7 +16,6 @@
  * @fileoverview Base class for control renderers.
  * TODO(user):  If the renderer framework works well, pull it into Component.
  *
- *
  */
 
 goog.provide('goog.ui.ControlRenderer');

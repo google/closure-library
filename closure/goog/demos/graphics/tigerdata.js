@@ -15,7 +15,6 @@
 /**
  * @fileoverview This data is generated from an SVG image of a tiger.
  *
- *
  */
 
 

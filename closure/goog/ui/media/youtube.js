@@ -60,7 +60,6 @@
  * </pre>
  *
  *
- *
  * @supported IE6, FF2+, Safari. Requires flash to actually work.
  *
  * TODO(user): test on other browsers

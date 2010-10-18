@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Low level handling of XMLHttpRequest.
- *
- *
  */
 
 goog.provide('goog.net.DefaultXmlHttpFactory');

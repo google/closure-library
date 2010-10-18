@@ -89,7 +89,6 @@
  * TODO(user): implement, as needed, the Media specific state changes UI, such
  * as minimize/maximize buttons, expand/close buttons, etc.
  *
- *
  */
 
 goog.provide('goog.ui.media.Media');

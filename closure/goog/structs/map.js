@@ -16,8 +16,6 @@
  * @fileoverview Datastructure: Hash Map.
  *
  *
- *
- *
  * This file contains an implementation of a Map structure. It implements a lot
  * of the methods used in goog.structs so those functions work on hashes.  For
  * convenience with common usage the methods accept any type for the key, though

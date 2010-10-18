@@ -22,7 +22,6 @@
  * <code>goog.dom.a11y.setNoBrowserCheck</code> with true to turn on ARIA
  * support for all browsers.
  *
- *
  */
 goog.provide('goog.dom.a11y');
 goog.provide('goog.dom.a11y.Role');

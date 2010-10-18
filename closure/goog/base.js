@@ -19,8 +19,6 @@
  * global <code>CLOSURE_NO_DEPS</code> is set to true.  This allows projects to
  * include their own deps file(s) from different locations.
  *
- *
- *
  */
 
 /**
@@ -256,7 +254,6 @@ goog.addDependency = function(relPath, provides, requires) {
 };
 
 
-
 /**
  * Implements a system for the dynamic resolution of dependencies
  * that works in parallel with the BUILD system. Note that all calls
@@ -286,9 +283,7 @@ goog.require = function(rule) {
         goog.global.console['error'](errorMessage);
       }
 
-      
         throw Error(errorMessage);
-        
     }
   }
 };
@@ -1332,6 +1327,5 @@ goog.base = function(me, opt_methodName, var_args) {
 goog.scope = function(fn) {
   fn.call(goog.global);
 };
-
 
 

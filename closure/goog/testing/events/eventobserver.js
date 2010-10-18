@@ -29,7 +29,6 @@
  * assertEquals(2, observer.getEvents('submit').length);
  * </pre>
  *
- *
  */
 
 goog.provide('goog.testing.events.EventObserver');

@@ -27,7 +27,6 @@
  * method of transport.
  *
  *
- *
  * Initially based on FrameElementTransport which shares some similarities
  * to this method.
  */

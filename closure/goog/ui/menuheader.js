@@ -16,7 +16,6 @@
  * @fileoverview A class for representing menu headers.
  * @see goog.ui.Menu
  *
- *
  */
 
 goog.provide('goog.ui.MenuHeader');

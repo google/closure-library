@@ -15,7 +15,6 @@
 /**
  * @fileoverview Tools for parsing and pretty printing error stack traces.
  *
- *
  */
 
 goog.provide('goog.testing.stacktrace');

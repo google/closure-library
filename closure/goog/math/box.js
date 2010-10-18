@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview A utility class for representing a numeric box.
- *
  */
 
 

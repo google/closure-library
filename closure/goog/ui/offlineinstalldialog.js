@@ -17,7 +17,6 @@
  * show information on how to install Gears if Gears is not already installed,
  * or will offer the option to enable the application for Gears support.
  *
- *
  * @see ../demos/offline.html
  */
 

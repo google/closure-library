@@ -18,7 +18,6 @@
  * Drag and drop implementation for sources/targets consisting of multiple
  * elements.
  *
- *
  * @see ../demos/dragdrop.html
  */
 

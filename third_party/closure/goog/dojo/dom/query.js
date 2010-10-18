@@ -64,8 +64,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *        future queries using the same selector evaluate against the DOM branch
  *        too.
  *    5.) matched nodes are pruned to ensure they are unique
- *
- *
  */
 
 goog.provide('goog.dom.query');
@@ -1306,7 +1304,7 @@ goog.dom.query = (function() {
       //    need to tighten up browser rules on ':contains' and '|=' to
       //    figure out which aren't good
       (query.indexOf(':contains') == -1) &&
-      (query.indexOf('|=') == -1) 
+      (query.indexOf('|=') == -1)
     );
 
     // TODO:

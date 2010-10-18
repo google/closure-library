@@ -16,7 +16,6 @@
  * @fileoverview Datastructure: Trie.
  *
  *
- *
  * This file provides the implementation of a trie data structure.  A trie is a
  * data structure that stores key/value pairs in a prefix tree.  See:
  *     http://en.wikipedia.org/wiki/Trie

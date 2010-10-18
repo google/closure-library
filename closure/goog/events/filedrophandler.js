@@ -16,7 +16,6 @@
  * @fileoverview Provides a files drag and drop event detector. It works on
  * HTML5 browsers.
  *
- *
  * @see ../demos/filedrophandler.html
  */
 

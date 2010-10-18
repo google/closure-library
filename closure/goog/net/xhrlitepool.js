@@ -17,7 +17,6 @@
  * XhrLite objects to be grouped together and requests will use next available
  * XhrLite object.
  *
- *
  */
 
 goog.provide('goog.net.XhrLitePool');

@@ -52,7 +52,6 @@
  * </pre>
  *
  *
- *
  * @supported IE6, FF2+, Safari. Requires flash to actually work.
  *
  * TODO(user): Support non flash users. Maybe show a link to the Flick set,

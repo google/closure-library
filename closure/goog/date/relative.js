@@ -16,7 +16,6 @@
  * @fileoverview Functions for formatting relative dates.  Such as "3 days ago"
  * "3 hours ago", "14 minutes ago", "12 days ago", "Today", "Yesterday".
  *
- *
  */
 
 goog.provide('goog.date.relative');

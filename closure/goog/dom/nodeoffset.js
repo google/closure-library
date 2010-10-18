@@ -17,9 +17,6 @@
  * that works on any similar DOM structure regardless of whether it is the same
  * actual nodes.
  *
- *
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.dom.NodeOffset');

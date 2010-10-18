@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview This file implements a store for goog.debug.Logger data.
- *
  */
 
 goog.provide('goog.gears.LogStore');

@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Python style iteration utilities.
- *
  */
 
 

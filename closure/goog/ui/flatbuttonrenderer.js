@@ -16,7 +16,6 @@
  * @fileoverview Similiar functionality of {@link goog.ui.ButtonRenderer},
  * but uses a <div> element instead of a <button> or <input> element.
  *
- *
  */
 
 goog.provide('goog.ui.FlatButtonRenderer');

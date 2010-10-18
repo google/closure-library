@@ -19,7 +19,6 @@
  * Implements a buffer with a maximum size. New entries override the oldest
  * entries when the maximum size has been reached.
  *
- *
  */
 
 

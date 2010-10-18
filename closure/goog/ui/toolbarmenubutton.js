@@ -15,8 +15,6 @@
 /**
  * @fileoverview A toolbar menu button control.
  *
- *
- *
  */
 
 goog.provide('goog.ui.ToolbarMenuButton');

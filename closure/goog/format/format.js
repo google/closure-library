@@ -15,7 +15,6 @@
 /**
  * @fileoverview Provides utility functions for formatting strings, numbers etc.
  *
- *
  */
 
 goog.provide('goog.format');

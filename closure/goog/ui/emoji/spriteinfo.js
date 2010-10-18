@@ -19,7 +19,6 @@
  * @see ../demos/popupemojipicker.html or emojipicker_test.html for examples
  * of how to use this class.
  *
- *
  */
 goog.provide('goog.ui.emoji.SpriteInfo');
 

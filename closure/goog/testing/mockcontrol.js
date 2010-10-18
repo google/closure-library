@@ -24,7 +24,6 @@
  * controlled mocks for common mocks: StrictMock, LooseMock,
  * FunctionMock, MethodMock, and GlobalFunctionMock.
  *
- *
  */
 
 

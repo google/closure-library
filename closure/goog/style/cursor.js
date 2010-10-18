@@ -16,8 +16,6 @@
  * @fileoverview Functions to create special cursor styles, like "draggable"
  * (open hand) or "dragging" (closed hand).
  *
- *
- *
  */
 
 goog.provide('goog.style.cursor');

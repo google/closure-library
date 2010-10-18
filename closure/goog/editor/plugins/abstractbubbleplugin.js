@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Base class for bubble plugins.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.editor.plugins.AbstractBubblePlugin');

@@ -50,7 +50,6 @@ import os.path
 import re
 import sys
 
-
 REQUIRES_RE = re.compile(r"goog.require\('([^']*)'\)")
 
 # Edit this manually if you want something to "always" be aliased.
@@ -189,7 +188,6 @@ def TransformFileAt(path):
   f = open(path)
   lines = Transform(f.readlines())
   if lines:
-
     f = open(path, 'w')
     for l in lines:
       f.write(l)

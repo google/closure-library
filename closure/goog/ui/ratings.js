@@ -26,7 +26,6 @@
  * 0 = Clear (if supported)
  * 1 - 9 = nth star
  *
- *
  * @see ../demos/ratings.html
  */
 

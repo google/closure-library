@@ -15,7 +15,6 @@
 /**
  * @fileoverview Renderer for {@link goog.ui.Toolbar}s.
  *
- *
  */
 
 goog.provide('goog.ui.ToolbarRenderer');

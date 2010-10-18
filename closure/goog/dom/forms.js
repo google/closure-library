@@ -15,9 +15,6 @@
 /**
  * @fileoverview Utilities for manipulating a form and elements.
  *
- *
- *
- *
  */
 
 goog.provide('goog.dom.forms');

@@ -17,8 +17,6 @@
  *
  * {@see goog.testing.benchmark} for an easy way to use this functionality.
  *
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.testing.PerformanceTable');

@@ -16,7 +16,6 @@
  * @fileoverview Date range data structure. Based loosely on
  * com.google.common.util.DateRange.
  *
- *
  */
 
 goog.provide('goog.date.DateRange');

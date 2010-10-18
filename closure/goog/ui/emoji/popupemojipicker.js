@@ -24,7 +24,6 @@
  *
  * Based on goog.ui.PopupColorPicker (popupcolorpicker.js).
  *
- *
  * @see ../../demos/popupemojipicker.html
  */
 

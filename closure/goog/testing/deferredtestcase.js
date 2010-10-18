@@ -56,7 +56,6 @@
  *
  * @see.goog.async.Deferred
  * @see goog.testing.AsyncTestCase
- *
  */
 
 goog.provide('goog.testing.DeferredTestCase');

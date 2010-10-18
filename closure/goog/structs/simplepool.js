@@ -16,8 +16,6 @@
  * @fileoverview Datastructure: Pool.
  *
  *
- *
- *
  * A generic class for handling pools of objects that is more efficient than
  * goog.structs.Pool because it doesn't maintain a list of objects that are in
  * use. See constructor comment.

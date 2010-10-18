@@ -15,7 +15,6 @@
 /**
  * @fileoverview Renderer for {@link goog.ui.Palette}s.
  *
- *
  */
 
 goog.provide('goog.ui.PaletteRenderer');

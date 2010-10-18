@@ -15,8 +15,6 @@
 /**
  * @fileoverview A class for managing the editor toolbar.
  *
- *
- *
  * @see ../../demos/editor/editor.html
  */
 

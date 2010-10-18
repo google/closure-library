@@ -62,7 +62,6 @@
  * <h5>System Requirements</h5>
  * Tested on IE6, IE7, Firefox 2.0 and Safari nightly r23841.
  *
- *
  */
 
 goog.provide('goog.net.CrossDomainRpc');

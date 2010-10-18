@@ -15,10 +15,6 @@
 /**
  * @fileoverview Utilities for element styles.
  *
- *
- *
- *
- *
  * @see ../demos/inline_block_quirks.html
  * @see ../demos/inline_block_standards.html
  * @see ../demos/style_viewport.html

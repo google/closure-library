@@ -15,11 +15,6 @@
 /**
  * @fileoverview The base class for module loading.
  *
- *
- *
- *
- *
- *
  */
 
 goog.provide('goog.module.BaseModuleLoader');

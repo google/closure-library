@@ -16,8 +16,6 @@
  * @fileoverview Event Types.
  *
  *
- *
- *
  */
 
 

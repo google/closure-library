@@ -15,7 +15,6 @@
 /**
  * @fileoverview Generic keyboard shortcut handler.
  *
- *
  * @see ../demos/keyboardshortcuts.html
  */
 

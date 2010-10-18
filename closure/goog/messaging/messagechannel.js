@@ -15,7 +15,6 @@
 /**
  * @fileoverview An interface for asynchronous message-passing channels.
  *
- *
  */
 
 

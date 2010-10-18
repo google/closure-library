@@ -86,9 +86,6 @@
  * and behavior above so that we can avoid regressions. Contact mpd or yuzo
  * if you have questions or concerns.
  *
- *
- *
- *
  */
 
 

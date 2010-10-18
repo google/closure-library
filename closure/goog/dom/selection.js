@@ -16,8 +16,6 @@
  * @fileoverview Utilities for working with selections in input boxes and text
  * areas.
  *
- *
- *
  * @see ../demos/dom_selection.html
  */
 

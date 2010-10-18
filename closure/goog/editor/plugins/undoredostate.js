@@ -17,7 +17,6 @@
  * redo action for a particular state change. To be used by
  * {@link goog.editor.plugins.UndoRedoManager}.
  *
- *
  */
 
 

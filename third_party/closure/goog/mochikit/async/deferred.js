@@ -17,8 +17,6 @@
  *
  * Based on the Dojo code which in turn is based on the MochiKit code.
  *
- *
- *
  */
 
 goog.provide('goog.async.Deferred');

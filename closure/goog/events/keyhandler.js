@@ -99,8 +99,6 @@
  * p:     undefined      80 undefined
  * P:     undefined      80 undefined
  *
- *
- *
  * @see ../demos/keyhandler.html
  */
 

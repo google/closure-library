@@ -16,7 +16,6 @@
  * @fileoverview Data structure for set of strings.
  *
  *
- *
  * This class implements a set data structure for strings. Adding and removing
  * is O(1). It doesn't contain any bloat from {@link goog.structs.Set}, i.e.
  * it isn't optimized for IE6 garbage collector (see the description of

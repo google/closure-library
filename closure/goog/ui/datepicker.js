@@ -15,7 +15,6 @@
 /**
  * @fileoverview Date picker implementation.
  *
- *
  * @see ../demos/datepicker.html
  */
 

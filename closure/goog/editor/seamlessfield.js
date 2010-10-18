@@ -19,9 +19,6 @@
  * This is a goog.editor.Field, but with blending and sizing capabilities,
  * and avoids using an iframe whenever possible.
  *
- *
- * @author nicksantos@google.com (Nick Santos)
- *
  * @see ../demos/editor/seamlessfield.html
  */
 

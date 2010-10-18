@@ -16,7 +16,6 @@
  * @fileoverview Contains the class which uses native messaging
  * facilities for cross domain communication.
  *
- *
  */
 
 

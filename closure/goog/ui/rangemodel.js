@@ -23,7 +23,6 @@
  *
  * Based on http://webfx.eae.net/dhtml/slider/js/range.js
  *
- *
  */
 
 goog.provide('goog.ui.RangeModel');

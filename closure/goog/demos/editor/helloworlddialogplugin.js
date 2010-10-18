@@ -15,7 +15,6 @@
 /**
  * @fileoverview An example of how to write a dialog plugin.
  *
- *
  */
 
 goog.provide('goog.demos.editor.HelloWorldDialogPlugin');

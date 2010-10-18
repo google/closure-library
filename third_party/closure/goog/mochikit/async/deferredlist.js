@@ -17,7 +17,6 @@
  *
  * See: http://twistedmatrix.com/projects/core/documentation/howto/defer.html
  *
- *
  */
 
 goog.provide('goog.async.DeferredList');

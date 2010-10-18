@@ -15,8 +15,6 @@
 /**
  * @fileoverview A toolbar color menu button control.
  *
- *
- *
  */
 
 goog.provide('goog.ui.ToolbarColorMenuButton');

@@ -130,7 +130,6 @@
  * io.sendFromForm(...);
  * </pre>
  *
- *
  */
 
 goog.provide('goog.net.IframeIo');

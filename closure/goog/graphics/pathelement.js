@@ -15,8 +15,6 @@
 
 /**
  * @fileoverview A thin wrapper around the DOM element for paths.
- *
- *
  */
 
 

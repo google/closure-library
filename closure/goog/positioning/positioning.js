@@ -15,8 +15,6 @@
 /**
  * @fileoverview Common positioning code.
  *
- *
- *
  */
 
 goog.provide('goog.positioning');

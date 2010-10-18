@@ -16,8 +16,6 @@
 /**
  * @fileoverview Thin wrappers around the DOM element returned from
  * the different draw methods of the graphics. This is the SVG implementation.
- *
- *
  */
 
 goog.provide('goog.graphics.SvgEllipseElement');

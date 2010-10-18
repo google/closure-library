@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Global renderer and decorator registry.
- *
  */
 
 goog.provide('goog.ui.registry');

@@ -15,7 +15,6 @@
 /**
  * @fileoverview Base class for container renderers.
  *
- *
  */
 
 goog.provide('goog.ui.ContainerRenderer');

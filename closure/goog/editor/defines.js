@@ -15,7 +15,6 @@
 /**
  * @fileoverview Text editor constants for compile time feature selection.
  *
- *
  */
 
 goog.provide('goog.editor.defines');

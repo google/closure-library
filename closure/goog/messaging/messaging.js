@@ -15,7 +15,6 @@
 /**
  * @fileoverview Functions for manipulating message channels.
  *
- *
  */
 
 goog.provide('goog.messaging');

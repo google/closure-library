@@ -4,7 +4,6 @@
  * @fileoverview A generator of lorem ipsum text based on the python
  * implementation at http://code.google.com/p/lorem-ipsum-generator/.
  *
- *
  */
 
 goog.provide('goog.text.LoremIpsum');

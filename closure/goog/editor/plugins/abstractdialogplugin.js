@@ -17,7 +17,7 @@
  * Trogedit dialog has its own plugin.
  *
  * @author nicksantos@google.com (Nick Santos)
- *
+ * @author marcosalmeida@google.com (Marcos Almeida)
  */
 
 goog.provide('goog.editor.plugins.AbstractDialogPlugin');

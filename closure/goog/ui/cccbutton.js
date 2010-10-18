@@ -17,7 +17,6 @@
  * {@link goog.ui.CustomButtonRenderer} to create CCC-style buttons.  See
  * closure/demos/button.html for an example.
  *
- *
  */
 
 goog.provide('goog.ui.CccButton');

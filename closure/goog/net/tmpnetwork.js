@@ -48,7 +48,6 @@ goog.net.HTTP_STATUS_CACHED_ = 304;
 goog.net.GOOGLECOM_TIMEOUT = 10000;
 
 
-
 goog.net.testGoogleCom = function(callback, opt_imageUri) {
   // We need to add a 'rand' to make sure the response is not fulfilled
   // by browser cache.

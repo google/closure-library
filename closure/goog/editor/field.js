@@ -18,9 +18,6 @@
  * iframe to contain the editable area, never inherits the style of the
  * surrounding page, and is always a fixed height.
  *
- *
- * @author nicksantos@google.com (Nick Santos)
- *
  * @see ../demos/editor/editor.html
  * @see ../demos/editor/field_basic.html
  */

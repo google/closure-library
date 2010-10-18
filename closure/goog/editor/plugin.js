@@ -16,7 +16,6 @@
 /**
  * @fileoverview Abstract API for TrogEdit plugins.
  *
- *
  * @see ../demos/editor/editor.html
  */
 

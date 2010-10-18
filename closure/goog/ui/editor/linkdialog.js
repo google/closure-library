@@ -15,11 +15,6 @@
 /**
  * @fileoverview A dialog for editing/creating a link.
  *
- *
- *
- *
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.ui.editor.LinkDialog');

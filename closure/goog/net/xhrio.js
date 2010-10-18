@@ -35,7 +35,6 @@
  *
  * TODO(user): Error cases aren't playing nicely in Safari.
  *
- *
  */
 
 

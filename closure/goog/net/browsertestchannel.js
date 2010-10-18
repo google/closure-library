@@ -20,7 +20,6 @@
  * has been blocked by a network administrator. This class is part of the
  * BrowserChannel implementation and is not for use by normal application code.
  *
- *
  */
 
 /**

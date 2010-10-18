@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Utility functions for supporting Bidi issues.
- *
- *
  */
 
 

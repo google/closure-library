@@ -18,7 +18,6 @@
  * sublist is the name of a client-side javascript function that converts the
  * remaining sublist elements into rich rows.
  *
- *
  */
 
 goog.provide('goog.ui.AutoComplete.RichRemoteArrayMatcher');

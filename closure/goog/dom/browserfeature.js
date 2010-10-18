@@ -15,7 +15,6 @@
 /**
  * @fileoverview Browser capability checks for the dom package.
  *
- *
  */
 
 

@@ -19,7 +19,6 @@
  * You should never need to throw goog.debug.Error(msg) directly, Error(msg) is
  * sufficient.
  *
- *
  */
 
 goog.provide('goog.debug.Error');

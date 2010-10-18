@@ -29,7 +29,6 @@
  *    ACTION,
  *    this.onAction_);<code>
  *
- *
  */
 
 goog.provide('goog.events.ActionEvent');

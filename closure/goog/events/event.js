@@ -15,7 +15,6 @@
 /**
  * @fileoverview A base class for event objects.
  *
- *
  */
 
 

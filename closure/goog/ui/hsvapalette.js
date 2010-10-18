@@ -18,8 +18,6 @@
  * Without the styles from the demo css file, only a hex color label and input
  * field show up.
  *
- *
- * @author chrisn@google.com (Chris Nokleberg)
  * @see ../demos/hsvapalette.html
  */
 

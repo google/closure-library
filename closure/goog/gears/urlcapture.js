@@ -16,7 +16,6 @@
  * @fileoverview Interface for capturing URLs to a ResourceStore on the
  * LocalServer.
  *
- *
  */
 
 

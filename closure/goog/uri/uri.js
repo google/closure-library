@@ -27,10 +27,6 @@
  * internal representation is now of un-encoded parts, this will change the
  * behavior slightly.
  *
- *
- *
- *
- *
  */
 
 goog.provide('goog.Uri');

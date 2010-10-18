@@ -15,7 +15,6 @@
 /**
  * @fileoverview Base class for bubble plugins.
  *
- *
  */
 
 goog.provide('goog.editor.plugins.LinkBubble');

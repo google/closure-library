@@ -15,7 +15,6 @@
 /**
  * @fileoverview Interface for a factory for creating XMLHttpRequest objects
  * and metadata about them.
- *
  */
 
 goog.provide('goog.net.XmlHttpFactory');

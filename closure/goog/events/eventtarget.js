@@ -15,8 +15,6 @@
 /**
  * @fileoverview Implementation of EventTarget as defined by W3C DOM 2/3.
  *
- *
- *
  * @see ../demos/eventtarget.html
  */
 

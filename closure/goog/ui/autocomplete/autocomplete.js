@@ -15,7 +15,6 @@
 /**
  * @fileoverview Gmail-like AutoComplete logic.
  *
- *
  * @see ../../demos/autocomplete-basic.html
  */
 

@@ -16,7 +16,6 @@
  * @fileoverview Provides the class CrossPageChannel, the main class in
  * goog.net.xpc.
  *
- *
  * @see ../../demos/xpc/index.html
  */
 

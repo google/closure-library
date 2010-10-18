@@ -15,7 +15,6 @@
 /**
  * @fileoverview Progressive Emoji Palette renderer implementation.
  *
- *
  */
 
 goog.provide('goog.ui.emoji.ProgressiveEmojiPaletteRenderer');

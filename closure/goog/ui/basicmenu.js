@@ -20,8 +20,6 @@
  * goog.ui.PopupMenu, and if you need submenus goog.ui.SubMenu.
  *
  *
- *
- *
  */
 
 goog.provide('goog.ui.BasicMenu');

@@ -15,7 +15,6 @@
 /**
  * @fileoverview Definition of the Tracer class and associated classes.
  *
- *
  * @see ../demos/tracer.html
  */
 

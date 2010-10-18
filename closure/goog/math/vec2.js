@@ -20,7 +20,6 @@
  * Coordinate is required. Where appropriate, Vec2 functions accept both Vec2
  * and Coordinate objects as input.
  *
- *
  */
 
 goog.provide('goog.math.Vec2');

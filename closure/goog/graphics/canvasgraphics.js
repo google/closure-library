@@ -16,7 +16,7 @@
 /**
  * @fileoverview CanvasGraphics sub class that uses the canvas tag for drawing.
  * @author robbyw@google.com (Robby Walker)
- *
+ * @author wcrosby@google.com (Wayne Crosby)
  */
 
 

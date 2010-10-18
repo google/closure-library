@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Additional mathematical functions.
- *
  */
 
 goog.provide('goog.math');

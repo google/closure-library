@@ -16,7 +16,6 @@
  * @fileoverview Utility for formatting text for display in a potentially
  * opposite-directionality context without garbling.
  * Mostly a port of http://go/formatter.cc.
- *
  */
 
 

@@ -16,8 +16,6 @@
  * @fileoverview Datastructure: Pool.
  *
  *
- *
- *
  * A generic class for handling pools of objects.
  * When an object is released, it is attempted to be reused.
  */

@@ -17,7 +17,6 @@
  * a utility for tracing and debugging the BrowserChannel requests.
  *
  * TODO(user) - allow client to specify a custom redaction policy
- *
  */
 
 /**

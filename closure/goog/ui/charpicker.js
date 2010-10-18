@@ -15,7 +15,6 @@
 /**
  * @fileoverview Character Picker widget for picking any Unicode character.
  *
- *
  * @see ../demos/charpicker.html
  */
 

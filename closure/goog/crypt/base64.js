@@ -17,8 +17,6 @@
  * work with decoded values in arrays of bytes. By "byte" I mean a number
  * in [0, 255].
  *
- *
- *
  */
 
 goog.provide('goog.crypt.base64');

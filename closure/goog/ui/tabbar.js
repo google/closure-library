@@ -15,7 +15,6 @@
 /**
  * @fileoverview Tab bar UI component.
  *
- *
  * @see ../demos/tabbar.html
  */
 

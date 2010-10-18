@@ -15,7 +15,6 @@
 /**
  * @fileoverview Implementation of a progress bar.
  *
- *
  * @see ../demos/progressbar.html
  */
 

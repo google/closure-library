@@ -26,7 +26,6 @@
  * script B to the document until we are certain that script A is
  * finished loading.
  *
- *
  */
 
 goog.provide('goog.module.ModuleLoader');

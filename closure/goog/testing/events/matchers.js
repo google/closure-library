@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Mock matchers for event related arguments.
- *
  */
 
 goog.provide('goog.testing.events.EventMatcher');

@@ -15,7 +15,6 @@
 /**
  * @fileoverview A toolbar menu button renderer.
  *
- *
  */
 
 goog.provide('goog.ui.ToolbarMenuButtonRenderer');

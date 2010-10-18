@@ -16,7 +16,7 @@
  * @fileoverview Detects images dragged and dropped on to the window.
  *
  * @author robbyw@google.com (Robby Walker)
- *
+ * @author wcrosby@google.com (Wayne Crosby)
  */
 
 goog.provide('goog.ui.DragDropDetector');

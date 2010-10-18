@@ -15,7 +15,6 @@
 
 /**
  * @fileoverview Graphics utility functions and factory methods.
- *
  */
 
 

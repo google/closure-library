@@ -15,7 +15,6 @@
 /**
  * @fileoverview Message/plural format library with locale support.
  *
- *
  * Message format grammar:
  *
  * messageFormatPattern := string ( "{" messageFormatElement "}" string )*

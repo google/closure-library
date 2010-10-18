@@ -15,7 +15,6 @@
 /**
  * @fileoverview DHTML prompt to replace javascript's prompt().
  *
- *
  * @see ../demos/prompt.html
  */
 

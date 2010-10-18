@@ -16,7 +16,6 @@
  * @fileoverview A DragListGroup is a class representing a group of one or more
  * "drag lists" with items that can be dragged within them and between them.
  *
- *
  * @see ../demos/draglistgroup.html
  */
 

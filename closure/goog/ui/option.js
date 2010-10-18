@@ -15,7 +15,6 @@
 /**
  * @fileoverview A menu item class that supports selection state.
  *
- *
  */
 
 goog.provide('goog.ui.Option');

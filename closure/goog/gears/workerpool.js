@@ -16,7 +16,6 @@
  * @fileoverview This file implements a wrapper around the Gears WorkerPool
  * with some extra features.
  *
- *
  */
 
 goog.provide('goog.gears.WorkerPool');

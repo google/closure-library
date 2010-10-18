@@ -17,7 +17,6 @@
  *
  * Provides extensible functionality for drag & drop behaviour.
  *
- *
  * @see ../demos/drag.html
  * @see ../demos/dragger.html
  */

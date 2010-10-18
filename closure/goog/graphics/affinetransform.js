@@ -16,7 +16,6 @@
 /**
  * @fileoverview Provides an object representation of an AffineTransform and
  * methods for working with it.
- *
  */
 
 
