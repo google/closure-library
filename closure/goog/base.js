@@ -116,6 +116,21 @@ goog.provide = function(name) {
 };
 
 
+/**
+ * Marks that the current file should only be used for testing, and never for
+ * live code in production.
+ * @param {string} opt_message Optional message to add to the error that's
+ *     raised when used in production code.
+ */
+goog.setTestOnly = function(opt_message) {
+  if (COMPILED && !goog.DEBUG) {
+    opt_message = opt_message || '';
+    throw Error('Importing test-only code into non-debug environment' +
+                opt_message ? ': ' + opt_message : '.');
+  }
+};
+
+
 if (!COMPILED) {
   /**
    * Namespaces implicitly defined by goog.provide. For example,
