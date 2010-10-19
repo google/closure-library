@@ -792,6 +792,35 @@ See the COPYING file for details.
     });
   }
 
+  function testAssertObjectsEqualsDifferentArrays() {
+    assertThrows('Should have thrown because args are different', function() {
+      var a1 = ['className1'];
+      var a2 = ['className2'];
+      assertArrayEquals(a1, a2);
+      assertObjectEquals(a1, a2);
+    });
+  }
+
+  function testAssertObjectsEqualsDifferentTypeSameToString() {
+    assertThrows('Should have thrown because args are different', function() {
+      var a1 = 'className1';
+      var a2 = ['className1'];
+      assertObjectEquals(a1, a2);
+    });
+
+    assertThrows('Should have thrown because args are different', function() {
+      var a1 = ['className1'];
+      var a2 = {'0': 'className1'};
+      assertObjectEquals(a1, a2);
+    });
+
+    assertThrows('Should have thrown because args are different', function() {
+      var a1 = ['className1'];
+      var a2 = [['className1']];
+      assertObjectEquals(a1, a2);
+    });
+  }
+
   function testFindDifferences_equal() {
     assertNull(goog.testing.asserts.findDifferences(true, true));
     assertNull(goog.testing.asserts.findDifferences(null, null));
@@ -822,6 +851,98 @@ See the COPYING file for details.
     assertNotNull(goog.testing.asserts.findDifferences(null, []));
     assertNotNull(goog.testing.asserts.findDifferences([], null));
     assertNotNull(goog.testing.asserts.findDifferences([], undefined));
+  }
+
+  function testFindDifferences_basicCycle() {
+    var a = {};
+    var b = {};
+    a.self = a;
+    b.self = b;
+    assertNull(goog.testing.asserts.findDifferences(a, b));
+
+    a.unique = 1;
+    assertNotNull(goog.testing.asserts.findDifferences(a, b));
+  }
+
+  function testFindDifferences_crossedCycle() {
+    var a = {};
+    var b = {};
+    a.self = b;
+    b.self = a;
+    assertNull(goog.testing.asserts.findDifferences(a, b));
+
+    a.unique = 1;
+    assertNotNull(goog.testing.asserts.findDifferences(a, b));
+  }
+
+  function testFindDifferences_asymmetricCycle() {
+    var a = {};
+    var b = {};
+    var c = {};
+    var d = {};
+    var e = {};
+    a.self = b;
+    b.self = a;
+    c.self = d;
+    d.self = e;
+    e.self = c;
+    assertNotNull(goog.testing.asserts.findDifferences(a, c));
+  }
+
+  function testFindDifferences_basicCycleArray() {
+    var a = [];
+    var b = [];
+    a[0] = a;
+    b[0] = b;
+    assertNull(goog.testing.asserts.findDifferences(a, b));
+
+    a[1] = 1;
+    assertNotNull(goog.testing.asserts.findDifferences(a, b));
+  }
+
+  function testFindDifferences_crossedCycleArray() {
+    var a = [];
+    var b = [];
+    a[0] = b;
+    b[0] = a;
+    assertNull(goog.testing.asserts.findDifferences(a, b));
+
+    a[1] = 1;
+    assertNotNull(goog.testing.asserts.findDifferences(a, b));
+  }
+
+  function testFindDifferences_asymmetricCycleArray() {
+    var a = [];
+    var b = [];
+    var c = [];
+    var d = [];
+    var e = [];
+    a[0] = b;
+    b[0] = a;
+    c[0] = d;
+    d[0] = e;
+    e[0] = c;
+    assertNotNull(goog.testing.asserts.findDifferences(a, c));
+  }
+
+  function testFindDifferences_binaryTree() {
+    function createBinTree(depth, root) {
+      if (depth == 0) {
+        return {root: root};
+      } else {
+        var node = {};
+        node.left = createBinTree(depth-1, root || node);
+        node.right = createBinTree(depth-1, root || node);
+        return node;
+      }
+    }
+
+    // TODO(user,user): This test does not terminate with the current
+    // algorithm. Can be enabled when (if) the algorithm is improved.
+    //assertNull(goog.testing.asserts.findDifferences(
+    //    createBinTree(5, null), createBinTree(5, null)));
+    assertNotNull(goog.testing.asserts.findDifferences(
+        createBinTree(4, null), createBinTree(5, null)));
   }
 
 </script>
