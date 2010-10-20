@@ -45,10 +45,14 @@ goog.require('goog.net.xpc.Transport');
  *
  * @param {goog.net.xpc.CrossPageChannel} channel The channel this transport
  *     belongs to.
+ * @param {goog.dom.DomHelper} opt_domHelper The dom helper to use for finding
+ *     the correct window.
  * @constructor
  * @extends {goog.net.xpc.Transport}
  */
-goog.net.xpc.NixTransport = function(channel) {
+goog.net.xpc.NixTransport = function(channel, opt_domHelper) {
+  goog.base(this, opt_domHelper);
+
   /**
    * The channel this transport belongs to.
    * @type {goog.net.xpc.CrossPageChannel}
@@ -73,7 +77,7 @@ goog.net.xpc.NixTransport = function(channel) {
       channel[goog.net.xpc.CfgFields.REMOTE_AUTH_TOKEN] || '';
 
   // Conduct the setup work for NIX in general, if need be.
-  goog.net.xpc.NixTransport.conductGlobalSetup_();
+  goog.net.xpc.NixTransport.conductGlobalSetup_(this.getWindow());
 
   // Setup aliases so that VBScript can call these methods
   // on the transport class, even if they are renamed during
@@ -137,8 +141,8 @@ goog.net.xpc.NixTransport.NIX_ID_FIELD = 'GCXPC____NIXVBS_container';
  * proceeding.
  * @private
  */
-goog.net.xpc.NixTransport.conductGlobalSetup_ = function() {
-  if (window['nix_setup_complete']) {
+goog.net.xpc.NixTransport.conductGlobalSetup_ = function(listenWindow) {
+  if (listenWindow['nix_setup_complete']) {
     return;
   }
 
@@ -219,8 +223,8 @@ goog.net.xpc.NixTransport.conductGlobalSetup_ = function() {
     'End Function';
 
   try {
-    window.execScript(vbscript, 'vbscript');
-    window['nix_setup_complete'] = true;
+    listenWindow.execScript(vbscript, 'vbscript');
+    listenWindow['nix_setup_complete'] = true;
   }
   catch (e) {
     goog.net.xpc.logger.severe(
@@ -293,7 +297,8 @@ goog.net.xpc.NixTransport.prototype.attemptOuterSetup_ = function() {
     // Attempt to place the NIX wrapper object into the inner
     // frame's opener property.
     innerFrame.contentWindow.opener =
-      window[goog.net.xpc.NixTransport.NIX_GET_WRAPPER](this, this.authToken_);
+      this.getWindow()[goog.net.xpc.NixTransport.NIX_GET_WRAPPER]
+        (this, this.authToken_);
     this.localSetupCompleted_ = true;
   }
   catch (e) {
@@ -303,7 +308,7 @@ goog.net.xpc.NixTransport.prototype.attemptOuterSetup_ = function() {
 
   // If the retry is necessary, reattempt this setup.
   if (!this.localSetupCompleted_) {
-    window.setTimeout(goog.bind(this.attemptOuterSetup_, this), 100);
+    this.getWindow().setTimeout(goog.bind(this.attemptOuterSetup_, this), 100);
   }
 };
 
@@ -325,7 +330,7 @@ goog.net.xpc.NixTransport.prototype.attemptInnerSetup_ = function() {
   }
 
   try {
-    var opener = window.opener;
+    var opener = this.getWindow().opener;
 
     // Ensure that the object contained inside the opener
     // property is in fact a NIX wrapper.
@@ -343,7 +348,7 @@ goog.net.xpc.NixTransport.prototype.attemptInnerSetup_ = function() {
       // Complete the construction of the channel by sending our own
       // wrapper to the container via the channel they gave us.
       this.nixChannel_['CreateChannel'](
-        window[goog.net.xpc.NixTransport.NIX_GET_WRAPPER](this,
+        this.getWindow()[goog.net.xpc.NixTransport.NIX_GET_WRAPPER](this,
                                                           this.authToken_));
 
       this.localSetupCompleted_ = true;
@@ -360,7 +365,7 @@ goog.net.xpc.NixTransport.prototype.attemptInnerSetup_ = function() {
 
   // If the retry is necessary, reattempt this setup.
   if (!this.localSetupCompleted_) {
-    window.setTimeout(goog.bind(this.attemptInnerSetup_, this), 100);
+    this.getWindow().setTimeout(goog.bind(this.attemptInnerSetup_, this), 100);
   }
 };
 
@@ -409,7 +414,7 @@ goog.net.xpc.NixTransport.prototype.handleMessage_ =
     this.channel_.deliver_(serviceName, payload);
   }
 
-  window.setTimeout(goog.bind(deliveryHandler, this), 1);
+  this.getWindow().setTimeout(goog.bind(deliveryHandler, this), 1);
 };
 
 

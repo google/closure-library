@@ -81,6 +81,17 @@ function testCreateIframeRandomId() {
 }
 
 
+function testCreateIframeWithDom() {
+  driver.createPeerIframe(goog.dom.getDomHelper());
+
+  asyncTestCase.waitForAsync('iframe load');
+  window.setTimeout(function() {
+    asyncTestCase.continueTesting();
+    driver.checkPeerIframe();
+  }, IFRAME_LOAD_WAIT_MS);
+}
+
+
 function testCreateIframeAsynchronousConnect() {
   driver.createPeerIframe('new_iframe');
 
@@ -167,8 +178,10 @@ Driver.prototype.getInnerPeer_ = function() {
  * Creates the channel.
  * @param {string} opt_iframeId If present, the ID of the iframe to use,
  *     otherwise, tells the channel to generate an iframe ID.
+ * @param {goog.dom.DomHelper} opt_domHelper The optional dom helper to use
+ *     for determining which window to use.
  */
-Driver.prototype.createChannel = function(opt_iframeId) {
+Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper) {
   var cfg = {};
   if (opt_iframeId) {
     this.iframeId_ = opt_iframeId;
@@ -179,7 +192,7 @@ Driver.prototype.createChannel = function(opt_iframeId) {
   cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
 
-  this.channel_ = new goog.net.xpc.CrossPageChannel(cfg);
+  this.channel_ = new goog.net.xpc.CrossPageChannel(cfg, opt_domHelper);
   this.channel_.registerService('msg', goog.bind(this.msgHandler_, this));
   this.cfg_ = cfg;
 };
@@ -189,8 +202,10 @@ Driver.prototype.createChannel = function(opt_iframeId) {
  * Creates the peer iframe.
  * @param {string} opt_iframeId If present, the ID of the iframe to create,
  *     otherwise, generates an iframe ID.
+ * @param {goog.dom.DomHelper} opt_domHelper The dom helper to use for
+ *     finding the elements in the iframe.
  */
-Driver.prototype.createPeerIframe = function(opt_iframeId) {
+Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper) {
   var expectedIframeId;
 
   if (opt_iframeId) {
@@ -205,7 +220,7 @@ Driver.prototype.createPeerIframe = function(opt_iframeId) {
   assertNull('element[id=' + expectedIframeId + '] exists',
       goog.dom.getElement(expectedIframeId));
 
-  this.createChannel(opt_iframeId);
+  this.createChannel(opt_iframeId, opt_domHelper);
   this.iframe_ = this.channel_.createPeerIframe(document.body);
 
   assertEquals(expectedIframeId, this.iframe_.id);

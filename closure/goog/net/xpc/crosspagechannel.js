@@ -44,11 +44,13 @@ goog.require('goog.userAgent');
  * Provides asynchronous messaging.
  *
  * @param {Object} cfg Channel configuration object.
+ * @param {goog.dom.DomHelper} opt_domHelper The optional dom helper to
+ *     use for looking up elements in the dom.
  * @constructor
  * @implements {goog.messaging.MessageChannel}
  * @extends {goog.Disposable}
  */
-goog.net.xpc.CrossPageChannel = function(cfg) {
+goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
   goog.Disposable.call(this);
 
   /**
@@ -72,6 +74,13 @@ goog.net.xpc.CrossPageChannel = function(cfg) {
    * @private
    */
   this.services_ = {};
+
+  /**
+   * The dom helper to use for accessing the dom.
+   * @type {goog.dom.DomHelper}
+   * @private
+   */
+  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper();
 
   goog.net.xpc.channels_[this.name] = this;
 
@@ -183,19 +192,23 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
     case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
       this.transport_ = new goog.net.xpc.NativeMessagingTransport(
           this,
-          this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME]);
+          this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME],
+          this.domHelper_);
       break;
     case goog.net.xpc.TransportTypes.NIX:
-      this.transport_ = new goog.net.xpc.NixTransport(this);
+      this.transport_ = new goog.net.xpc.NixTransport(this, this.domHelper_);
       break;
     case goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD:
-      this.transport_ = new goog.net.xpc.FrameElementMethodTransport(this);
+      this.transport_ =
+          new goog.net.xpc.FrameElementMethodTransport(this, this.domHelper_);
       break;
     case goog.net.xpc.TransportTypes.IFRAME_RELAY:
-      this.transport_ = new goog.net.xpc.IframeRelayTransport(this);
+      this.transport_ =
+          new goog.net.xpc.IframeRelayTransport(this, this.domHelper_);
       break;
     case goog.net.xpc.TransportTypes.IFRAME_POLLING:
-      this.transport_ = new goog.net.xpc.IframePollingTransport(this);
+      this.transport_ =
+          new goog.net.xpc.IframePollingTransport(this, this.domHelper_);
       break;
   }
 
@@ -360,7 +373,7 @@ goog.net.xpc.CrossPageChannel.prototype.connect = function(opt_connectCb) {
 
   goog.net.xpc.logger.info('connect()');
   if (this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]) {
-    this.iframeElement_ = goog.dom.getElement(
+    this.iframeElement_ = this.domHelper_.getElement(
         this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]);
   }
   if (this.iframeElement_) {

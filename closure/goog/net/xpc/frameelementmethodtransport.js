@@ -36,10 +36,14 @@ goog.require('goog.net.xpc.Transport');
  *
  * @param {goog.net.xpc.CrossPageChannel} channel The channel this transport
  *     belongs to.
+ * @param {goog.dom.DomHelper} opt_domHelper The dom helper to use for finding
+ *     the correct window.
  * @constructor
  * @extends {goog.net.xpc.Transport}
  */
-goog.net.xpc.FrameElementMethodTransport = function(channel) {
+goog.net.xpc.FrameElementMethodTransport = function(channel, opt_domHelper) {
+  goog.base(this, opt_domHelper);
+
   /**
    * The channel this transport belongs to.
    * @type {goog.net.xpc.CrossPageChannel}
@@ -135,7 +139,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetup_ = function() {
   try {
     if (!this.iframeElm_) {
       // throws security exception when called too early
-      this.iframeElm_ = window.frameElement;
+      this.iframeElm_ = this.getWindow().frameElement;
     }
     // check if iframe-element and the gateway-function to the
     // outer-frame are present
@@ -163,7 +167,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetup_ = function() {
     if (!this.attemptSetupCb_) {
       this.attemptSetupCb_ = goog.bind(this.attemptSetup_, this);
     }
-    window.setTimeout(this.attemptSetupCb_, 100);
+    this.getWindow().setTimeout(this.attemptSetupCb_, 100);
   }
 };
 
@@ -201,7 +205,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.incoming_ =
   else {
     this.queue_.push({serviceName: serviceName, payload: payload});
     if (this.queue_.length == 1) {
-      this.timer_ = window.setTimeout(this.deliverQueuedCb_, 1);
+      this.timer_ = this.getWindow().setTimeout(this.deliverQueuedCb_, 1);
     }
   }
 };

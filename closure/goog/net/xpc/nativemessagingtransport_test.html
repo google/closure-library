@@ -20,7 +20,7 @@ See the COPYING file for details.
 <script>
 
 function tearDown() {
-  goog.net.xpc.NativeMessagingTransport.activeCount_ = 0;
+  goog.net.xpc.NativeMessagingTransport.activeCount_ = {};
   goog.events.removeAll(window.postMessage ? window : document, 'message');
 }
 
@@ -31,11 +31,46 @@ function testConstructor() {
 
   var t = new goog.net.xpc.NativeMessagingTransport(null, null);
   assertEquals('*', t.peerHostname_);
+  t.dispose();
+}
+
+
+function testConstructorDom() {
+  var t = new goog.net.xpc.NativeMessagingTransport(
+      null, 'http://g.com:80', goog.dom.getDomHelper());
+  assertEquals('http://g.com:80', t.peerHostname_);
+
+  var t = new goog.net.xpc.NativeMessagingTransport(null, null);
+  assertEquals('*', t.peerHostname_);
+  t.dispose();
 }
 
 
 function testDispose() {
   var xpc = getTestChannel();
+  var listenedObj = window.postMessage ? window : document;
+
+  var t0 = new goog.net.xpc.NativeMessagingTransport(xpc, null);
+  assertEquals(0, goog.events.removeAll(listenedObj, 'message'));
+  t0.dispose();
+  assertEquals(0, goog.events.removeAll(listenedObj, 'message'));
+
+  var t1 = new goog.net.xpc.NativeMessagingTransport(xpc, null);
+  t1.connect();
+  t1.dispose();
+  assertEquals(0, goog.events.removeAll(listenedObj, 'message'));
+
+  var t2 = new goog.net.xpc.NativeMessagingTransport(xpc, null);
+  var t3 = new goog.net.xpc.NativeMessagingTransport(xpc, null);
+  t2.connect();
+  t3.connect();
+  t2.dispose();
+  assertEquals(1, goog.events.removeAll(listenedObj, 'message'));
+}
+
+
+function testDisposeWithDom() {
+  var xpc = getTestChannel(goog.dom.getDomHelper());
   var listenedObj = window.postMessage ? window : document;
 
   var t0 = new goog.net.xpc.NativeMessagingTransport(xpc, null);
@@ -104,6 +139,7 @@ function testSendingMessagesToUnconnectedInnerPeer() {
   assertEquals('Ensure channel name has been updated.',
                'new_channel',
                t.channel_.name);
+  t.dispose();
 }
 
 
@@ -114,10 +150,10 @@ function createMockEvent(data) {
 }
 
 
-function getTestChannel() {
+function getTestChannel(opt_domHelper) {
   var cfg = {};
   cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = 'test_channel';
-  return new goog.net.xpc.CrossPageChannel(cfg);
+  return new goog.net.xpc.CrossPageChannel(cfg, opt_domHelper);
 }
 
 </script>
