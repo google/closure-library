@@ -340,6 +340,31 @@ function testShowSubMenuAfterRemoval() {
   // (No JS error should occur.)
 }
 
+function testSubmenuSelectable() {
+  var submenu = new goog.ui.SubMenu('submenu');
+  submenu.addItem(new goog.ui.MenuItem('submenu item 1'));
+  menu.addItem(submenu);
+  submenu.setSelectable(true);
+
+  var numClicks = 0;
+  var menuClickedFn = function(e) {
+    numClicks++;
+  }
+
+  goog.events.listen(submenu, goog.ui.Component.EventType.ACTION,
+      menuClickedFn);
+  submenu.performActionInternal(null);
+  submenu.performActionInternal(null);
+
+  assertEquals('The submenu should have fired an event', 2, numClicks);
+
+  submenu.setSelectable(false);
+  submenu.performActionInternal(null);
+
+  assertEquals('The submenu should not have fired any further events', 2,
+      numClicks);
+}
+
 /**
  * Asserts that this sub menu renders in the right direction relative to
  * the parent menu.
