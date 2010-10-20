@@ -45,7 +45,7 @@ goog.require('goog.math.Range');
 goog.math.RangeSet = function() {
   /**
    * A sorted list of ranges that represent the values in the set.
-   * @type {Array.<goog.math.Range>}
+   * @type {!Array.<!goog.math.Range>}
    * @private
    */
   this.ranges_ = [];
@@ -77,7 +77,7 @@ goog.math.RangeSet.equals = function(a, b) {
 
 
 /**
- * @return {goog.math.RangeSet} A new RangeSet containing the same values as
+ * @return {!goog.math.RangeSet} A new RangeSet containing the same values as
  *      this one.
  */
 goog.math.RangeSet.prototype.clone = function() {
@@ -221,8 +221,8 @@ goog.math.RangeSet.prototype.containsValue = function(value) {
  * Returns the union of this RangeSet with another.
  *
  * @param {goog.math.RangeSet} set Another RangeSet.
- * @return {goog.math.RangeSet} A new RangeSet containing all values from either
- *     set.
+ * @return {!goog.math.RangeSet} A new RangeSet containing all values from
+ *     either set.
  */
 goog.math.RangeSet.prototype.union = function(set) {
   // TODO(user): A linear-time merge would be preferable if it is ever a
@@ -241,8 +241,8 @@ goog.math.RangeSet.prototype.union = function(set) {
  * Intersects this RangeSet with another.
  *
  * @param {goog.math.RangeSet} set The RangeSet to intersect with.
- * @return {goog.math.RangeSet} A new RangeSet containing all values set in both
- *     this and the input set.
+ * @return {!goog.math.RangeSet} A new RangeSet containing all values set in
+ *     both this and the input set.
  */
 goog.math.RangeSet.prototype.intersection = function(set) {
   if (this.isEmpty() || set.isEmpty()) {
@@ -264,7 +264,7 @@ goog.math.RangeSet.prototype.intersection = function(set) {
  * Creates a subset of this set over the input range.
  *
  * @param {goog.math.Range} range The range to copy into the slice.
- * @return {goog.math.RangeSet} A new RangeSet with a copy of the values in the
+ * @return {!goog.math.RangeSet} A new RangeSet with a copy of the values in the
  *     input range.
  */
 goog.math.RangeSet.prototype.slice = function(range) {
@@ -293,7 +293,7 @@ goog.math.RangeSet.prototype.slice = function(range) {
  * Creates an inverted slice of this set over the input range.
  *
  * @param {goog.math.Range} range The range to copy into the slice.
- * @return {goog.math.RangeSet} A new RangeSet containing inverted values from
+ * @return {!goog.math.RangeSet} A new RangeSet containing inverted values from
  *     the original over the input range.
  */
 goog.math.RangeSet.prototype.inverse = function(range) {
@@ -349,7 +349,7 @@ goog.math.RangeSet.prototype.clear = function() {
  * Returns an iterator that iterates over the ranges in the RangeSet.
  *
  * @param {boolean=} opt_keys Ignored for RangeSets.
- * @return {goog.iter.Iterator} An iterator over the values in the set.
+ * @return {!goog.iter.Iterator} An iterator over the values in the set.
  */
 goog.math.RangeSet.prototype.__iterator__ = function(opt_keys) {
   var i = 0;

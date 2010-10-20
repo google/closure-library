@@ -105,7 +105,7 @@ goog.math.Bezier.KAPPA = 4 * (Math.sqrt(2) - 1) / 3;
 
 
 /**
- * @return {goog.math.Bezier} A copy of this curve.
+ * @return {!goog.math.Bezier} A copy of this curve.
  */
 goog.math.Bezier.prototype.clone = function() {
   return new goog.math.Bezier(this.x0, this.y0, this.x1, this.y1, this.x2,
@@ -148,7 +148,7 @@ goog.math.Bezier.prototype.flip = function() {
 /**
  * Computes the curve at a point between 0 and 1.
  * @param {number} t The point on the curve to find.
- * @return {goog.math.Coordinate} The computed coordinate.
+ * @return {!goog.math.Coordinate} The computed coordinate.
  */
 goog.math.Bezier.prototype.getPoint = function(t) {
   // Special case start and end
