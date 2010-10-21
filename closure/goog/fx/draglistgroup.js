@@ -22,11 +22,13 @@
 
 goog.provide('goog.fx.DragListDirection');
 goog.provide('goog.fx.DragListGroup');
+goog.provide('goog.fx.DragListGroup.EventType');
 goog.provide('goog.fx.DragListGroupEvent');
 
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
+goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -1029,16 +1031,12 @@ goog.fx.DragListGroup.prototype.cloneNode_ = function(sourceEl) {
  *     location of currDragItem.) May be null if not applicable or if
  *     currDragItem would be added to the end of hoverList.
  * @constructor
+ * @extends {goog.events.Event}
  */
 goog.fx.DragListGroupEvent = function(
     type, dragListGroup, event, currDragItem, draggerEl, dragger,
     opt_draggerElCenter, opt_hoverList, opt_hoverNextItem) {
-
-  /**
-   * The event type string.
-   * @type {string}
-   */
-  this.type = type;
+  goog.events.Event.call(this, type);
 
   /**
    * A reference to the associated DragListGroup object.
@@ -1093,3 +1091,4 @@ goog.fx.DragListGroupEvent = function(
    */
   this.hoverNextItem = opt_hoverNextItem;
 };
+goog.inherits(goog.fx.DragListGroupEvent, goog.events.Event);
