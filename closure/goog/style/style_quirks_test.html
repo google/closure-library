@@ -445,6 +445,10 @@ Test-visible
 Test-visible
 </div>
 
+<div id="msFilter" style="-ms-filter:'alpha(opacity=0)'">
+  A div</div>
+<div id="filter" style="filter:alpha(opacity=0)">
+  Another div</div>
 <script>
 
 var expectedFailures = new goog.testing.ExpectedFailures();
@@ -512,6 +516,61 @@ function testGetStyle() {
   assertEquals('80px', goog.style.getStyle(el, 'width'));
   assertEquals('underline', goog.style.getStyle(el, 'textDecoration'));
   assertEquals('underline', goog.style.getStyle(el, 'text-decoration'));
+  // Non set properties are always empty strings.
+  assertEquals('', goog.style.getStyle(el, 'border'));
+}
+
+function testGetStyleMsFilter() {
+  // Element with -ms-filter style set.
+  var e = goog.dom.getElement('msFilter');
+
+  if (goog.userAgent.IE && goog.userAgent.isVersion(8)) {
+    // Only IE8 supports -ms-filter and returns it as value for the "filter"
+    // property. When in compatibility mode, -ms-filter is not supported
+    // and IE8 behaves as IE7 so the other case will apply.
+    assertEquals('alpha(opacity=0)', goog.style.getStyle(e, 'filter'));
+  } else {
+    // Any other browser does not support ms-filter so it returns empty string.
+    assertEquals('', goog.style.getStyle(e, 'filter'));
+  }
+}
+
+function testGetStyleFilter() {
+  // Element with filter style set.
+  var e = goog.dom.getElement('filter');
+
+  if (goog.userAgent.IE) {
+    // Filter supported.
+    assertEquals('alpha(opacity=0)', goog.style.getStyle(e, 'filter'));
+  } else {
+    assertEquals('', goog.style.getStyle(e, 'filter'));
+  }
+}
+
+function testGetComputedStyleMsFilter() {
+  // Element with -ms-filter style set.
+  var e = goog.dom.getElement('msFilter');
+
+  if (goog.userAgent.IE) {
+    // IE always returns empty string for computed styles.
+    assertEquals('', goog.style.getComputedStyle(e, 'filter'));
+  } else {
+    // Non IE returns 'none' for filter as it is a SVG property
+    assertEquals('none', goog.style.getComputedStyle(e, 'filter'));
+  }
+}
+
+function testGetComputedStyleFilter() {
+  // Element with filter style set.
+  var e = goog.dom.getElement('filter');
+
+  if (goog.userAgent.IE) {
+    // IE always returns empty string for computed styles.
+    assertEquals('', goog.style.getComputedStyle(e, 'filter'));
+  } else {
+    // Non IE returns 'none' for filter as it is a SVG property
+    assertEquals('none', goog.style.getComputedStyle(e, 'filter'));
+  }
 }
 
 function testGetBackgroundColor() {

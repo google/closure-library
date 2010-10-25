@@ -77,33 +77,41 @@ goog.style.setStyle_ = function(element, value, style) {
  * explicitly set in script.
  *
  * @param {Element} element Element to get style of.
- * @param {string} style Property to get, css-style (if you have a camel-case
+ * @param {string} property Property to get, css-style (if you have a camel-case
  * property, use element.style[style]).
  * @return {string} Style value.
  */
-goog.style.getStyle = function(element, style) {
-  return element.style[goog.style.toCamelCase(style)];
+goog.style.getStyle = function(element, property) {
+  // element.style is '' for well-known properties which are unset.
+  // For for browser specific styles as 'filter' is undefined
+  // so we need to return '' explicitly to make it consistent across
+  // browsers.
+  return element.style[goog.style.toCamelCase(property)] || '';
 };
 
 
 /**
- * Retrieves a computed style value of a node, or null if the value cannot be
- * computed (which will be the case in Internet Explorer).
+ * Retrieves a computed style value of a node. It returns empty string if the
+ * value cannot be computed (which will be the case in Internet Explorer) or
+ * "none" if the property requested is a SVG one and it has not been
+ * explicitly set (firefox and webkit).
  *
  * @param {Element} element Element to get style of.
- * @param {string} style Property to get (camel-case).
- * @return {?string} Style value.
+ * @param {string} property Property to get (camel-case).
+ * @return {string} Style value.
  */
-goog.style.getComputedStyle = function(element, style) {
+goog.style.getComputedStyle = function(element, property) {
   var doc = goog.dom.getOwnerDocument(element);
   if (doc.defaultView && doc.defaultView.getComputedStyle) {
-    var styles = doc.defaultView.getComputedStyle(element, '');
+    var styles = doc.defaultView.getComputedStyle(element, null);
     if (styles) {
-      return styles[style];
+      // element.style[..] is undefined for browser specific styles
+      // as 'filter'.
+      return styles[property] || styles.getPropertyValue(property);
     }
   }
 
-  return null;
+  return '';
 };
 
 
