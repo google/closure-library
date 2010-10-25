@@ -241,7 +241,7 @@ goog.async.Deferred.prototype.assertNotDeferred_ = function(obj) {
  * is available.
  * @param {!Function} cb The function to be called on a successful result.
  * @param {Object=} opt_scope An optional scope to call the callback in.
- * @return {!goog.async.Deferred} The deferred object itself.
+ * @return {!goog.async.Deferred} The deferred object for chaining.
  */
 goog.async.Deferred.prototype.addCallback = function(cb, opt_scope) {
   return this.addCallbacks(cb, null, opt_scope);
@@ -252,7 +252,7 @@ goog.async.Deferred.prototype.addCallback = function(cb, opt_scope) {
  * Register a callback function, to be called if this operation fails.
  * @param {!Function} eb The function to be called on an unsuccessful result.
  * @param {Object=} opt_scope An optional scope to call the errback in.
- * @return {!goog.async.Deferred} The deferred object itself.
+ * @return {!goog.async.Deferred} The deferred object for chaining.
  */
 goog.async.Deferred.prototype.addErrback = function(eb, opt_scope) {
   return this.addCallbacks(null, eb, opt_scope);
@@ -264,7 +264,7 @@ goog.async.Deferred.prototype.addErrback = function(eb, opt_scope) {
  * @param {Function} cb The function to be called on a successful result.
  * @param {Function} eb The function to be called on an unsuccessful result.
  * @param {Object=} opt_scope An optional scope to call the callbacks in.
- * @return {!goog.async.Deferred} The deferred object itself.
+ * @return {!goog.async.Deferred} The deferred object for chaining.
  */
 goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
   goog.asserts.assert(!this.chained_, 'Chained Deferreds can not be re-used');
@@ -278,8 +278,12 @@ goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
 
 /**
  * Adds another deferred to the end of this deferred's processing chain.
+ *
+ * Use this when you want otherDeferred to be called at the end of
+ * thisDeferred's previous callbacks.
+ *
  * @param {!goog.async.Deferred} otherDeferred The Deferred to chain.
- * @return {!goog.async.Deferred} The deferred object itself.
+ * @return {!goog.async.Deferred} The deferred object for chaining.
  */
 goog.async.Deferred.prototype.chainDeferred = function(otherDeferred) {
   this.addCallbacks(
@@ -289,10 +293,30 @@ goog.async.Deferred.prototype.chainDeferred = function(otherDeferred) {
 
 
 /**
+ * Makes thisDeferred wait for otherDeferred to be called, and it's preceding
+ * callbacks to be executed, before continuing with the callback sequence.
+ *
+ * This is equivalent to adding a callback that returns otherDeferred, but
+ * allows otherDeferred to continue to be used.
+ *
+ * @param {!goog.async.Deferred} otherDeferred The Deferred to wait for.
+ * @return {!goog.async.Deferred} The deferred object for chaining.
+ */
+goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
+  this.addCallback(function() {
+    var d = new goog.async.Deferred();
+    otherDeferred.chainDeferred(d);
+    return d;
+  });
+  return this;
+};
+
+
+/**
  * Registers a function as both callback and errback.
  * @param {!Function} f The function to be called on any result.
  * @param {Object=} opt_scope An optional scope to call the callbacks in.
- * @return {!goog.async.Deferred} The deferred object itself.
+ * @return {!goog.async.Deferred} The deferred object for chaining.
  */
 goog.async.Deferred.prototype.addBoth = function(f, opt_scope) {
   return this.addCallbacks(f, f, opt_scope);

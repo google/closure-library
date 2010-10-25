@@ -433,6 +433,89 @@ function testThrownErrorCallbacksDoNotCancel() {
                'errback to catch it.', assertCallback);
 }
 
+function testAwaitDeferred() {
+
+  var results = [];
+
+  function fn(x) {
+    return function() {
+      results.push(x);
+    };
+  }
+
+  var d2 = new Deferred();
+  d2.addCallback(fn('b'));
+
+  // d1 -> a -> (wait for d2) -> c
+  var d1 = new Deferred();
+  d1.addCallback(fn('a'));
+  d1.awaitDeferred(d2);
+  d1.addCallback(fn('c'));
+
+  // calls 'a' then yields for d2.
+  d1.callback(null);
+
+  // will get called after d2.
+  d1.addCallback(fn('d'));
+
+  assertEquals('a', results.join(''));
+
+  // d3 -> w -> (wait for d2) -> x
+  var d3 = new Deferred();
+  d3.addCallback(fn('w'));
+  d3.awaitDeferred(d2);
+  d3.addCallback(fn('x'));
+
+  // calls 'w', then yeilds for d2.
+  d3.callback();
+
+
+  // will get called after d2.
+  d3.addCallback(fn('y'));
+
+  assertEquals('aw', results.join(''));
+
+  // d1 calls 'd', d3 calls 'y'
+  d2.callback(null);
+
+  assertEquals('awbcdxy', results.join(''));
+
+  // d3 and d2 already called, so 'z' called immediately.
+  d3.addCallback(fn('z'));
+
+  assertEquals('awbcdxyz', results.join(''));
+}
+
+function testAwaitDeferredWithErrors() {
+  var results = [];
+
+  function fn(x) {
+    return function(e) {
+      results.push(x);
+    };
+  }
+
+  var d2 = new Deferred();
+  d2.addErrback(fn('a'));
+
+  var d1 = new Deferred();
+  d1.awaitDeferred(d2);
+  d1.addCallback(fn('x'));
+  d1.addErrback(fn('b'));
+  d1.callback(null);
+
+  assertEquals('', results.join(''));
+
+  d2.addCallback(fn('z'));
+  d2.addErrback(fn('c'));
+  d2.errback(null);
+
+  // First errback added to d2 prints 'a'.
+  // Next 'd' was chained, so execute its err backs, printing 'b'.
+  // Finally 'c' was added last by d2's errback.
+  assertEquals('abc', results.join(''));
+}
+
 </script>
 </body>
 </html>
