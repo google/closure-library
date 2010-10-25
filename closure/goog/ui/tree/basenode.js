@@ -490,13 +490,15 @@ goog.ui.tree.BaseNode.prototype.getChildAt;
 
 
 /**
- * Returns the children of this node. The caller must not modify the returned
- * collection.
+ * Returns the children of this node.
  * @return {!Array.<!goog.ui.tree.BaseNode>} The children.
  */
 goog.ui.tree.BaseNode.prototype.getChildren = function() {
-  // TODO: This breaks encapsulation, as children_ is private in the superclass.
-  return this.children_ || goog.ui.tree.BaseNode.EMPTY_CHILDREN_;
+  var children = [];
+  this.forEachChild(function(child) {
+    children.push(child);
+  });
+  return children;
 };
 
 

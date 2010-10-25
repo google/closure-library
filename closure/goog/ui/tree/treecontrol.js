@@ -218,7 +218,7 @@ goog.ui.tree.TreeControl.prototype.getExpanded = function() {
 /** @inheritDoc */
 goog.ui.tree.TreeControl.prototype.setExpanded = function(expanded) {
   if (!this.showRootNode_) {
-    this.expanded_ = expanded;
+    this.setExpandedInternal(expanded);
   } else {
     goog.ui.tree.TreeControl.superClass_.setExpanded.call(this, expanded);
   }
