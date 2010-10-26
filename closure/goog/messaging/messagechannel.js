@@ -32,7 +32,7 @@ goog.messaging.MessageChannel = function() {};
  * Initiates the channel connection. When this method is called, all the
  * information needed to connect the channel has to be available.
  *
- * @param {Function} opt_connectCb Called when the channel has been connected
+ * @param {Function=} opt_connectCb Called when the channel has been connected
  *     and is ready to use.
  */
 goog.messaging.MessageChannel.prototype.connect = function(opt_connectCb) {};
@@ -51,7 +51,7 @@ goog.messaging.MessageChannel.prototype.isConnected = function() {};
  * @param {function((string|Object))} callback The callback to process the
  *     incoming messages. Passed the payload. If opt_jsonEncoded is set, the
  *     payload is decoded and passed as an object.
- * @param {boolean} opt_jsonEncoded If true, incoming messages for this service
+ * @param {boolean=} opt_jsonEncoded If true, incoming messages for this service
  *     are expected to contain a JSON-encoded object and will be deserialized
  *     automatically. It's the responsibility of implementors of this class to
  *     perform the deserialization.

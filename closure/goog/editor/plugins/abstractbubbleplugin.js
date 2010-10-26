@@ -470,9 +470,9 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.createLinkOption = function(
  * wires up a listener for the CLICK event or the link.
  * @param {string} linkId The id of the link.
  * @param {string} linkText Text of the link.
- * @param {Function} opt_onClick Optional function to call when the link is
+ * @param {Function=} opt_onClick Optional function to call when the link is
  *     clicked.
- * @param {Element} opt_container If specified, location to insert link. If no
+ * @param {Element=} opt_container If specified, location to insert link. If no
  *     container is specified, the old link is removed and replaced.
  * @return {Element} The link element.
  * @protected
@@ -494,7 +494,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.createLink = function(
  * @param {boolean} isAnchor Set to true to create an actual anchor tag
  *     instead of a span.  Actual links are right clickable (e.g. to open in
  *     a new window) and also update window status on hover.
- * @param {Element} opt_container If specified, location to insert link. If no
+ * @param {Element=} opt_container If specified, location to insert link. If no
  *     container is specified, the old link is removed and replaced.
  * @return {Element} The link element.
  * @protected
@@ -516,7 +516,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.createLinkHelper = function(
  * the old link with this id and replaces it with the new link
  * @param {Element} link Html element to insert.
  * @param {string} linkId Id of the link.
- * @param {Element} opt_container If specified, location to insert link.
+ * @param {Element=} opt_container If specified, location to insert link.
  * @protected
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.setupLink = function(

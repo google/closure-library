@@ -36,7 +36,7 @@ goog.require('goog.net.xpc.Transport');
  *
  * @param {goog.net.xpc.CrossPageChannel} channel The channel this transport
  *     belongs to.
- * @param {goog.dom.DomHelper} opt_domHelper The dom helper to use for finding
+ * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for finding
  *     the correct window.
  * @constructor
  * @extends {goog.net.xpc.Transport}

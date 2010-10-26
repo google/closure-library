@@ -177,9 +177,9 @@ Driver.prototype.getInnerPeer_ = function() {
 
 /**
  * Creates the channel.
- * @param {string} opt_iframeId If present, the ID of the iframe to use,
+ * @param {string=} opt_iframeId If present, the ID of the iframe to use,
  *     otherwise, tells the channel to generate an iframe ID.
- * @param {goog.dom.DomHelper} opt_domHelper The optional dom helper to use
+ * @param {goog.dom.DomHelper=} opt_domHelper The optional dom helper to use
  *     for determining which window to use.
  */
 Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper) {
@@ -201,9 +201,9 @@ Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper) {
 
 /**
  * Creates the peer iframe.
- * @param {string} opt_iframeId If present, the ID of the iframe to create,
+ * @param {string=} opt_iframeId If present, the ID of the iframe to create,
  *     otherwise, generates an iframe ID.
- * @param {goog.dom.DomHelper} opt_domHelper The dom helper to use for
+ * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for
  *     finding the elements in the iframe.
  */
 Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper) {

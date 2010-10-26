@@ -44,7 +44,7 @@ goog.require('goog.userAgent');
  * Provides asynchronous messaging.
  *
  * @param {Object} cfg Channel configuration object.
- * @param {goog.dom.DomHelper} opt_domHelper The optional dom helper to
+ * @param {goog.dom.DomHelper=} opt_domHelper The optional dom helper to
  *     use for looking up elements in the dom.
  * @constructor
  * @implements {goog.messaging.MessageChannel}

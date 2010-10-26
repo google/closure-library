@@ -216,7 +216,7 @@ function assertNotThrows(a, opt_b) {
  * message.
  * @param {function() : void} callback Function to be run expected to result
  *     in a JsUnitException (usually contains a call to an assert).
- * @param {string} opt_expectedMessage Failure message expected to be given
+ * @param {string=} opt_expectedMessage Failure message expected to be given
  *     with the exception.
  */
 function assertThrowsJsUnitException(callback, opt_expectedMessage) {

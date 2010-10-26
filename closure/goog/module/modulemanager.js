@@ -247,7 +247,7 @@ goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
 /**
  * Sets the module info for all modules. Should only be called once.
  *
- * @param {string} opt_info A string representation of the module dependency
+ * @param {string=} opt_info A string representation of the module dependency
  *      graph, in the form: module1:dep1,dep2/module2:dep1,dep2 etc.
  *     Where depX is the base-36 encoded position of the dep in the module list.
  */

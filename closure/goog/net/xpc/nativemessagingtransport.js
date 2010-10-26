@@ -36,7 +36,7 @@ goog.require('goog.net.xpc.Transport');
  *     transport belongs to.
  * @param {string} peerHostname The hostname (protocol, domain, and port) of the
  *     peer.
- * @param {goog.dom.DomHelper} opt_domHelper The dom helper to use for
+ * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for
  *     finding the correct window/document.
  * @constructor
  * @extends {goog.net.xpc.Transport}

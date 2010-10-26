@@ -168,7 +168,7 @@ function testBlendedStandardsGrowingMatchesComparisonDiv() {
  * @param {Element} body The actual body element
  * @param {string} id The expected id
  * @param {string} bodyHTML The expected innerHTML
- * @param {boolean} opt_rtl If true, expect RTL directionality
+ * @param {boolean=} opt_rtl If true, expect RTL directionality
  */
 function assertBodyCorrect(body, id, bodyHTML, opt_rtl) {
   assertEquals(bodyHTML, body.innerHTML);

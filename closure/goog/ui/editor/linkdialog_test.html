@@ -109,8 +109,8 @@ See the COPYING file for details.
 
   /**
    * Creates and shows the dialog to be tested.
-   * @param {Document} opt_document Document to render the dialog into. Defaults
-   *     to the main window's document.
+   * @param {Document=} opt_document Document to render the dialog into.
+   *     Defaults to the main window's document.
    */
   function createAndShow(opt_document) {
     dialog = new goog.ui.editor.LinkDialog(new goog.dom.DomHelper(opt_document),
@@ -136,8 +136,8 @@ See the COPYING file for details.
   /**
    * Tests that when you show the dialog for a new link, the input fields are
    * empty, the web tab is selected and focus is in the url input field.
-   * @param {Document} opt_document Document to render the dialog into. Defaults
-   *     to the main window's document.
+   * @param {Document=} opt_document Document to render the dialog into.
+   *     Defaults to the main window's document.
    */
   function testShowForNewLink(opt_document) {
     mockCtrl.$replayAll();

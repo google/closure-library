@@ -25,7 +25,7 @@ goog.require('goog.net.xpc');
 
 /**
  * The base class for transports.
- * @param {goog.dom.DomHelper} opt_domHelper The dom helper to use for
+ * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for
  *     finding the window objects.
  * @constructor
  * @extends {goog.Disposable};

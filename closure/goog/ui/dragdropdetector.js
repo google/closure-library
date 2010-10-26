@@ -39,9 +39,9 @@ goog.require('goog.userAgent');
 
 /**
  * Creates a new drag and drop detector.
- * @param {string} opt_filePath The URL of the page to use for the detector.  It
- *     should contain the same contents as dragdropdetector_target.html in the
- *     demos directory.
+ * @param {string=} opt_filePath The URL of the page to use for the detector.
+ *     It should contain the same contents as dragdropdetector_target.html in
+ *     the demos directory.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
