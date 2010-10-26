@@ -499,7 +499,8 @@ goog.ui.SubMenu.prototype.positionSubMenu_ = function() {
 
 /**
  * Adds a new menu item at the end of the menu.
- * @param {goog.ui.MenuItem} item Menu item to add to the menu.
+ * @param {goog.ui.MenuHeader|goog.ui.MenuItem|goog.ui.MenuSeparator} item Menu
+ *     item to add to the menu.
  */
 goog.ui.SubMenu.prototype.addItem = function(item) {
   this.getMenu().addChild(item, true);
@@ -508,7 +509,8 @@ goog.ui.SubMenu.prototype.addItem = function(item) {
 
 /**
  * Adds a new menu item at a specific index in the menu.
- * @param {goog.ui.MenuItem} item Menu item to add to the menu.
+ * @param {goog.ui.MenuHeader|goog.ui.MenuItem|goog.ui.MenuSeparator} item Menu
+ *     item to add to the menu.
  * @param {number} n Index at which to insert the menu item.
  */
 goog.ui.SubMenu.prototype.addItemAt = function(item, n) {
