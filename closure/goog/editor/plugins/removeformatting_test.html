@@ -42,6 +42,16 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   var FORMATTER;
   var testHelper;
 
+  // Extra html to add to test html to make sure removeformatting is actually
+  // getting called when you're testing if it leaves certain styles alone
+  // (instead of not even running at all due to some other bug). However, adding
+  // this extra text into the node to be selected screws up IE.
+  // (e.g. <a><img></a><b>t</b> --> <a></a><a><img></a>t )
+  // TODO(marcosalmeida): Remove this special casing once http://b/3131117 is
+  // fixed.
+  var controlHtml = false&&goog.userAgent.IE ? '' : '<u>control</u>';
+  var controlCleanHtml = false&&goog.userAgent.IE ? '' : 'control';
+
   var expectedFailures = new goog.testing.ExpectedFailures();
 
   function setUp() {
@@ -423,6 +433,103 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
       FORMATTER.removeFormatting_();
       assertHTMLEquals("<b>bo</b>ldita<b><i>lic</i></b>",
           div.innerHTML);
+      FIELDMOCK.$verify();
+    });
+  }
+
+  /**
+   * @bug 3075557
+   */
+  function testRemoveFormattingLinkedImageBorderZero() {
+    var testHtml = '<a href="http://www.google.com/">' +
+        '<img src="http://www.google.com/images/logo.gif" border="0"></a>';
+    var div =  document.getElementById('html');
+    div.innerHTML = testHtml + controlHtml;
+    goog.dom.Range.createFromNodeContents(div).select();
+    FORMATTER.removeFormatting_();
+    
+    expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
+        'WebKit removes the image entirely, see ' +
+        'https://bugs.webkit.org/show_bug.cgi?id=13125 .');
+
+    expectedFailures.run(function() {
+      assertHTMLEquals(
+          'Image\'s border=0 should not be removed during remove formatting',
+          testHtml + controlCleanHtml, div.innerHTML);
+      FIELDMOCK.$verify();
+    });
+  }
+
+  /**
+   * @bug 3075557
+   */
+  function testRemoveFormattingLinkedImageBorderNonzero() {
+    var testHtml = '<a href="http://www.google.com/">' +
+        '<img src="http://www.google.com/images/logo.gif" border="1"></a>';
+    var div =  document.getElementById('html');
+    div.innerHTML = testHtml + controlHtml;
+    goog.dom.Range.createFromNodeContents(div).select();
+    FORMATTER.removeFormatting_();
+
+    expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
+        'WebKit removes the image entirely, see ' +
+        'https://bugs.webkit.org/show_bug.cgi?id=13125 .');
+
+    expectedFailures.run(function() {
+      assertHTMLEquals(
+          'Image\'s border should be removed during remove formatting' +
+          ' if non-zero',
+          testHtml.replace(' border="1"', '') + controlCleanHtml,
+          div.innerHTML);
+      FIELDMOCK.$verify();
+    });
+  }
+
+  /**
+   * @bug 3075557
+   */
+  function testRemoveFormattingUnlinkedImage() {
+    var testHtml =
+        '<img src="http://www.google.com/images/logo.gif" border="0">';
+    var div =  document.getElementById('html');
+    div.innerHTML = testHtml + controlHtml;
+    goog.dom.Range.createFromNodeContents(div).select();
+    FORMATTER.removeFormatting_();
+
+    expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
+        'WebKit removes the image entirely, see ' +
+        'https://bugs.webkit.org/show_bug.cgi?id=13125 .');
+
+    expectedFailures.run(function() {
+      assertHTMLEquals(
+          'Image\'s border=0 should not be removed during remove formatting' +
+          ' even if not wrapped by a link',
+          testHtml + controlCleanHtml, div.innerHTML);
+      FIELDMOCK.$verify();
+    });
+  }
+
+  /**
+   * @bug 3075557
+   */
+  function testRemoveFormattingLinkedImageDeep() {
+    var testHtml = '<a href="http://www.google.com/"><b>hello' +
+        '<img src="http://www.google.com/images/logo.gif" border="0">' +
+        'world</b></a>';
+    var div =  document.getElementById('html');
+    div.innerHTML = testHtml + controlHtml;
+    goog.dom.Range.createFromNodeContents(div).select();
+    FORMATTER.removeFormatting_();
+
+    expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
+        'WebKit removes the image entirely, see ' +
+        'https://bugs.webkit.org/show_bug.cgi?id=13125 .');
+
+    expectedFailures.run(function() {
+      assertHTMLEquals(
+          'Image\'s border=0 should not be removed during remove formatting' +
+          ' even if deep inside anchor tag',
+          testHtml.replace(/<\/?b>/g, '') + controlCleanHtml, div.innerHTML);
       FIELDMOCK.$verify();
     });
   }
