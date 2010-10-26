@@ -171,7 +171,7 @@ goog.net.xpc.SETUP = 'SETUP';
 
 
 /**
- * Transport signaling message: setup acknoledgement.
+ * Transport signaling message: setup acknowledgement.
  * @private
  */
 goog.net.xpc.SETUP_ACK_ = 'SETUP_ACK';
