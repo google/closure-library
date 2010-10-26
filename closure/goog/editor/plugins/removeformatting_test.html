@@ -49,8 +49,8 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   // (e.g. <a><img></a><b>t</b> --> <a></a><a><img></a>t )
   // TODO(marcosalmeida): Remove this special casing once http://b/3131117 is
   // fixed.
-  var controlHtml = false&&goog.userAgent.IE ? '' : '<u>control</u>';
-  var controlCleanHtml = false&&goog.userAgent.IE ? '' : 'control';
+  var controlHtml = goog.userAgent.IE ? '' : '<u>control</u>';
+  var controlCleanHtml = goog.userAgent.IE ? '' : 'control';
 
   var expectedFailures = new goog.testing.ExpectedFailures();
 
