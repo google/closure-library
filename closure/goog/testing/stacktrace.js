@@ -102,6 +102,18 @@ goog.testing.stacktrace.MAX_DEPTH_ = 20;
 
 
 /**
+ * Maximum length of a string that can be matched with a RegExp on
+ * Firefox 3x. Exceeding this approximate length will cause string.match
+ * to exceed Firefox's stack quota. This situation can be encountered
+ * when goog.globalEval is invoked with a long argument; such as
+ * when loading a module.
+ * @type {number}
+ * @private
+ */
+goog.testing.stacktrace.MAX_FIREFOX_FRAMESTRING_LENGTH_ = 500000;
+
+
+/**
  * RegExp pattern for JavaScript identifiers. We don't support Unicode
  * identifiers defined in ECMAScript v3.
  * @type {string}
@@ -276,6 +288,11 @@ goog.testing.stacktrace.parseStackFrame_ = function(frameStr) {
         '', m[4] || m[5] || '');
   }
 
+  if (frameStr.length >
+      goog.testing.stacktrace.MAX_FIREFOX_FRAMESTRING_LENGTH_) {
+    return goog.testing.stacktrace.parseLongFirefoxFrame_(frameStr);
+  }
+
   m = frameStr.match(goog.testing.stacktrace.FIREFOX_STACK_FRAME_REGEXP_);
   if (m) {
     return new goog.testing.stacktrace.Frame('', m[1] || '', '', m[2] || '',
@@ -283,6 +300,33 @@ goog.testing.stacktrace.parseStackFrame_ = function(frameStr) {
   }
 
   return null;
+};
+
+
+/**
+ * Parses a long firefox stack frame.
+ * @param {string} frameStr The stack frame as string.
+ * @return {!goog.testing.stacktrace.Frame} Stack frame object.
+ * @private
+ */
+goog.testing.stacktrace.parseLongFirefoxFrame_ = function(frameStr) {
+  var firstParen = frameStr.indexOf('(');
+  var lastAmpersand = frameStr.lastIndexOf('@');
+  var lastColon = frameStr.lastIndexOf(':');
+  var functionName = '';
+  if ((firstParen >= 0) && (firstParen < lastAmpersand)) {
+    functionName = frameStr.substring(0, firstParen);
+  }
+  var loc = '';
+  if ((lastAmpersand >= 0) && (lastAmpersand + 1 < lastColon)) {
+    loc = frameStr.substring(lastAmpersand + 1);
+  }
+  var args = '';
+  if ((firstParen >= 0 && lastAmpersand > 0) &&
+      (firstParen < lastAmpersand)) {
+    args = frameStr.substring(firstParen, lastAmpersand);
+  }
+  return new goog.testing.stacktrace.Frame('', functionName, '', args, loc);
 };
 
 

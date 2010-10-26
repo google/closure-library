@@ -13,6 +13,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.testing.stacktrace</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.string');
   goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.StrictMock');
@@ -86,11 +87,16 @@ function testParseStackFrameInChrome() {
   assertObjectEquals('eval', expected, frame);
 }
 
+// All test strings are parsed with the conventional and long
+// frame algorithms.
 function testParseStackFrameInFirefox() {
   var frameString = 'Error("Assertion failed")@:0';
   var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
   var expected = new goog.testing.stacktrace.Frame('', 'Error', '',
       '("Assertion failed")', '');
+  assertObjectEquals('function name + arguments', expected, frame);
+
+  frame = goog.testing.stacktrace.parseLongFirefoxFrame_(frameString);
   assertObjectEquals('function name + arguments', expected, frame);
 
   frameString = '()@file:///foo:42';
@@ -99,10 +105,16 @@ function testParseStackFrameInFirefox() {
       'file:///foo:42');
   assertObjectEquals('anonymous function', expected, frame);
 
+  frame = goog.testing.stacktrace.parseLongFirefoxFrame_(frameString);
+  assertObjectEquals('anonymous function', expected, frame);
+
   frameString = '@javascript:alert(0)';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
   expected = new goog.testing.stacktrace.Frame('', '', '', '',
       'javascript:alert(0)');
+  assertObjectEquals('anonymous function', expected, frame);
+
+  frame = goog.testing.stacktrace.parseLongFirefoxFrame_(frameString);
   assertObjectEquals('anonymous function', expected, frame);
 }
 
@@ -188,6 +200,28 @@ function testFollowCallChain() {
   }
 
   mock.$verify();
+}
+
+// Create a stack trace string with one modest record and one long record,
+// Verify that all frames are parsed. The length of the long arg is set
+// to blow Firefox 3x's stack if put through a RegExp.
+function testParsingLongStackTrace() {
+  var longArg = goog.string.buildString(
+      '(', goog.string.repeat('x', 1000000), ')');
+  var stackTrace = goog.string.buildString(
+      'shortFrame()@:0\n',
+      'longFrame',
+      longArg,
+      '@http://google.com/somescript:0\n');
+  var frames = goog.testing.stacktrace.parse_(stackTrace);
+  assertEquals('number of returned frames', 2, frames.length);
+  var expected = new goog.testing.stacktrace.Frame(
+      '', 'shortFrame', '', '()', '');
+  assertObjectEquals('short frame', expected, frames[0]);
+
+  expected = new goog.testing.stacktrace.Frame(
+      '', 'longFrame', '', longArg, 'http://google.com/somescript:0');
+  assertObjectEquals('exception name only', expected, frames[1]);
 }
 
 </script>
