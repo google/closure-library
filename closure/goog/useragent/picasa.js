@@ -58,7 +58,7 @@ goog.userAgent.picasa.IE_HAS_PICASA_ = 'hasPicasa';
     // and escaped with a backslash, make a string in a way that
     // avoids problems.
 
-    document.write(google.string.subs(
+    document.write(goog.string.subs(
         '<!--[if gte Picasa 2]>' +
         '<%s>' +
         'this.%s=true;' +
