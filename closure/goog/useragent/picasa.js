@@ -53,12 +53,18 @@ goog.userAgent.picasa.IE_HAS_PICASA_ = 'hasPicasa';
     // check must pollute the global namespace.
     goog.global[goog.userAgent.picasa.IE_HAS_PICASA_] = hasPicasa;
 
-    document.write(
-      '<!--[if gte Picasa 2]>' +
-      '<script type="text/javascript">' +
-        'this.' + goog.userAgent.picasa.IE_HAS_PICASA_ + '=true;' +
-      '</script>' +
-      '<![endif]-->');
+    // NOTE(user): Some browsers do not like seeing
+    // slash-script anywhere in the text even if it's inside a string
+    // and escaped with a backslash, make a string in a way that
+    // avoids problems.
+
+    document.write(google.string.subs(
+        '<!--[if gte Picasa 2]>' +
+        '<%s>' +
+        'this.%s=true;' +
+        '</%s>' +
+        '<![endif]-->',
+        'script', goog.userAgent.picasa.IE_HAS_PICASA_, 'script'));
 
     hasPicasa = goog.global[goog.userAgent.picasa.IE_HAS_PICASA_];
 
