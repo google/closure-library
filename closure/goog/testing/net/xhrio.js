@@ -28,6 +28,7 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.structs.Map');
+goog.require('goog.uri.utils');
 
 
 
@@ -370,8 +371,7 @@ goog.testing.net.XhrIo.prototype.isComplete = function() {
  * @return {boolean} Whether the request compeleted successfully.
  */
 goog.testing.net.XhrIo.prototype.isSuccess = function() {
-  switch (this.statusCode_) {
-    case 0:         // Used for local XHR requests
+  switch (this.getStatus()) {
     case 200:       // HTTP Success
     case 204:       // HTTP Success - no content
     case 304:       // HTTP Cache
