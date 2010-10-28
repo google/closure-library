@@ -289,6 +289,7 @@ goog.addDependency('math/size.js', ['goog.math.Size'], []);
 goog.addDependency('math/vec2.js', ['goog.math.Vec2'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency('math/vec3.js', ['goog.math.Vec3'], ['goog.math', 'goog.math.Coordinate3']);
 goog.addDependency('memoize/memoize.js', ['goog.memoize'], []);
+goog.addDependency('messaging/bufferedchannel.js', ['goog.messaging.BufferedChannel', 'goog.messaging.BufferedChannel.ReservedServiceNameError'], ['goog.Timer', 'goog.Uri', 'goog.debug.Error', 'goog.debug.Logger', 'goog.events', 'goog.messaging.MessageChannel']);
 goog.addDependency('messaging/messagechannel.js', ['goog.messaging.MessageChannel'], []);
 goog.addDependency('messaging/messaging.js', ['goog.messaging'], ['goog.messaging.MessageChannel']);
 goog.addDependency('module/abstractmoduleloader.js', ['goog.module.AbstractModuleLoader'], []);
