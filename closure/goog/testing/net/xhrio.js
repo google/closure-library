@@ -326,13 +326,14 @@ goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
   this.statusCode_ = statusCode;
   this.response_ = response || '';
   this.responseHeaders_ = opt_headers || {};
-  this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
 
   if (this.isSuccess()) {
+    this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
     this.dispatchEvent(goog.net.EventType.SUCCESS);
   } else {
     this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
     this.lastError_ = this.getStatusText() + ' [' + this.getStatus() + ']';
+    this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
     this.dispatchEvent(goog.net.EventType.ERROR);
   }
   this.simulateReady();
