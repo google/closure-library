@@ -366,6 +366,7 @@ goog.addDependency('proto2/util.js', ['goog.proto2.Util'], ['goog.asserts']);
 goog.addDependency('pubsub/pubsub.js', ['goog.pubsub.PubSub'], ['goog.Disposable', 'goog.array']);
 goog.addDependency('reflect/reflect.js', ['goog.reflect'], []);
 goog.addDependency('spell/spellcheck.js', ['goog.spell.SpellCheck', 'goog.spell.SpellCheck.WordChangedEvent'], ['goog.Timer', 'goog.events.EventTarget', 'goog.structs.Set']);
+goog.addDependency('string/path.js', ['goog.string.path'], ['goog.array', 'goog.string']);
 goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], []);
 goog.addDependency('string/stringbuffer.js', ['goog.string.StringBuffer'], ['goog.userAgent.jscript']);
 goog.addDependency('string/stringformat.js', ['goog.string.format'], ['goog.string']);
