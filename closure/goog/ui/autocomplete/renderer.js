@@ -384,7 +384,7 @@ goog.ui.AutoComplete.Renderer.prototype.maybeCreateElement_ = function() {
     this.setMenuClasses_(el);
     goog.dom.a11y.setRole(el, goog.dom.a11y.Role.LISTBOX);
 
-    var id = el.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
+    el.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
 
     // Set ARIA roles and states for the target input box.
     if (this.target_) {

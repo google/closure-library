@@ -183,7 +183,6 @@ goog.editor.range.selectNodeStart = function(node) {
  * @return {goog.dom.AbstractRange} The newly selected range.
  */
 goog.editor.range.placeCursorNextTo = function(node, toLeft) {
-  var dh = goog.dom.getDomHelper(node);
   var parent = node.parentNode;
   var offset = goog.array.indexOf(parent.childNodes, node) +
       (toLeft ? 0 : 1);

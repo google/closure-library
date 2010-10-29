@@ -813,7 +813,6 @@ goog.ui.tree.BaseNode.prototype.getPixelIndent_ = function() {
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getRowHtml = function() {
-  var tree = this.getTree();
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="', this.getRowClassName(), '" style="padding-',
       this.isRightToLeft() ? 'right:' : 'left:',
@@ -847,7 +846,6 @@ goog.ui.tree.BaseNode.prototype.getRowClassName = function() {
  */
 goog.ui.tree.BaseNode.prototype.getLabelHtml = function() {
   var toolTip = this.getToolTip();
-  var tree = this.getTree();
   var sb = new goog.string.StringBuffer();
   sb.append('<span class="', this.config_.cssItemLabel, '"',
       (toolTip ? ' title="' + goog.string.htmlEscape(toolTip) + '"' : ''),
