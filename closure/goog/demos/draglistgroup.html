@@ -34,7 +34,8 @@ See the COPYING file for details.
     .horiz1_class,
     .horiz2_class,
     .horiz3_class,
-    .horiz4_class {
+    .horiz4_class,
+    .horiz5_class {
       padding: 8px 12px;
       /* box_height + 2 * (padding + border + margin) =
          50 + 2 * (5 + 2 + 4) = 72px */
@@ -45,11 +46,18 @@ See the COPYING file for details.
     .horiz2_class { float: left; }
     .horiz3_class { float: right; }
     .horiz4_class { float: right; }
+    .horiz5_class { float: left; }
 
     .horiz1_class div { float: left; }
     .horiz2_class div { float: right; }
     .horiz3_class div { float: right; }
     .horiz4_class div { float: left; }
+    .horiz5_class div { float: left; }
+
+    .horiz5_class {
+      width: 288px;
+      height: 216px;
+    }
 
     .vert_table td {
       vertical-align: top;
@@ -140,7 +148,7 @@ See the COPYING file for details.
 <body>
 
   <h1>goog.fx.DragListGroup</h1>
-  <h2>You can drag any square into any of the 6 lists.</h2>
+  <h2>You can drag any square into any of the first 6 lists.</h2>
   <hr class="hr_clear">
 
   <h4>Horizonal list 1 (grows right):</h4>
@@ -209,6 +217,20 @@ See the COPYING file for details.
   <hr class="hr_clear">
 
 
+  <h4>Horizontal list 5 (grows right, has multiple rows):</h4>
+  <div id="horiz5_div" class="horiz5_class">
+    <div class="blue_box">11</div>
+    <div class="blue_box">22</div>
+    <div class="blue_box">33</div>
+    <div class="blue_box">44</div>
+    <div class="blue_box">55</div>
+    <div class="blue_box">66</div>
+    <div class="blue_box">77</div>
+    <div class="blue_box">88</div>
+    <div class="blue_box">99</div>
+    <div class="blue_box">00</div>
+  </div>
+  <hr class="hr_clear">
   <script>
 
   var $ = goog.dom.getElement;
@@ -227,6 +249,13 @@ See the COPYING file for details.
 
   dlg.init();
 
+  var dlg2 = new goog.fx.DragListGroup();
+  dlg2.setDragItemHoverClass('cursor_move');
+  dlg2.setDraggerElClass('cursor_move opacity_40');
+  dlg2.setCurrDragItemClass('opacity_40');
+  dlg2.setIsCurrDragItemAlwaysDisplayed();
+  dlg2.addDragList($('horiz5_div'), goog.fx.DragListDirection.RIGHT_2D);
+  dlg2.init();
   </script>
 </body>
 </html>

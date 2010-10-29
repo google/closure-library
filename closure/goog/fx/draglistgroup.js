@@ -115,7 +115,9 @@ goog.fx.DragListDirection = {
   DOWN: 0,  // common
   UP: 1,  // very rare
   RIGHT: 2,  // common
-  LEFT: 3  // uncommon (except perhaps for right-to-left interfaces)
+  LEFT: 3,  // uncommon (except perhaps for right-to-left interfaces)
+  RIGHT_2D: 4, // common + handles multiple lines if items are wrapped
+  LEFT_2D: 5 // for rtl languages
 };
 
 
@@ -823,6 +825,8 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
   var relevantCoord;
   var getRelevantBoundFn;
   var isBeforeFn;
+  var pickClosestRow = false;
+  var distanceToClosestRow = undefined;
   switch (hoverList.dlgGrowthDirection_) {
     case goog.fx.DragListDirection.DOWN:
       // "Before" means draggerElCenter.y is less than item's bottom y-value.
@@ -836,12 +840,16 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
       getRelevantBoundFn = goog.fx.DragListGroup.getTopBound_;
       isBeforeFn = goog.fx.DragListGroup.isGreaterThan_;
       break;
+    case goog.fx.DragListDirection.RIGHT_2D:
+      pickClosestRow = true;
     case goog.fx.DragListDirection.RIGHT:
       // "Before" means draggerElCenter.x is less than item's right x-value.
       relevantCoord = draggerElCenter.x;
       getRelevantBoundFn = goog.fx.DragListGroup.getRightBound_;
       isBeforeFn = goog.fx.DragListGroup.isLessThan_;
       break;
+    case goog.fx.DragListDirection.LEFT_2D:
+      pickClosestRow = true;
     case goog.fx.DragListDirection.LEFT:
       // "Before" means draggerElCenter.x is greater than item's left x-value.
       relevantCoord = draggerElCenter.x;
@@ -865,17 +873,67 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
     }
 
     var relevantBound = getRelevantBoundFn(item.dlgBounds_);
-    if (isBeforeFn(relevantCoord, relevantBound) &&
+    // When the hoverlist is broken into multiple rows (i.e., in the case of
+    // LEFT_2D and RIGHT_2D) it is no longer enough to only look at the
+    // x-coordinate alone in order to find the {@earliestAfterItem} in the
+    // hoverlist. Make sure it is chosen from the row closest to the
+    // {@code draggerElCenter}.
+    if (pickClosestRow) {
+      var distanceToRow = goog.fx.DragListGroup.verticalDistanceFromItem_(item,
+          draggerElCenter);
+      // Initialize the distance to the closest row to the current value if
+      // undefined.
+      if (!goog.isDef(distanceToClosestRow)) {
+        distanceToClosestRow = distanceToRow;
+      }
+      if (isBeforeFn(relevantCoord, relevantBound) &&
+          (earliestAfterItemRelevantBound == undefined ||
+           (distanceToRow < distanceToClosestRow) ||
+           ((distanceToRow == distanceToClosestRow) &&
+            (isBeforeFn(relevantBound, earliestAfterItemRelevantBound) ||
+            relevantBound == earliestAfterItemRelevantBound)))) {
+        earliestAfterItem = item;
+        earliestAfterItemRelevantBound = relevantBound;
+      }
+      // Update distance to closest row.
+      if (distanceToRow < distanceToClosestRow) {
+        distanceToClosestRow = distanceToRow;
+      }
+    } else if (isBeforeFn(relevantCoord, relevantBound) &&
         (earliestAfterItemRelevantBound == undefined ||
          isBeforeFn(relevantBound, earliestAfterItemRelevantBound))) {
       earliestAfterItem = item;
       earliestAfterItemRelevantBound = relevantBound;
     }
   }
-
-  return earliestAfterItem;
+  // If we ended up picking an element that is not in the closest row it can
+  // only happen if we should have picked the last one in which case there is
+  // no consecutive element.
+  if (!goog.isNull(earliestAfterItem) &&
+      goog.fx.DragListGroup.verticalDistanceFromItem_(
+          earliestAfterItem, draggerElCenter) > distanceToClosestRow) {
+    return null;
+  } else {
+    return earliestAfterItem;
+  }
 };
 
+/**
+ * Private helper for getHoverNextItem().
+ * Given an item and a target determine the vertical distance from the item's
+ * center to the target.
+ * @param {Element} item The item to measure the distance from.
+ * @param {goog.math.Coordinate} target The (x,y) coordinate of the target
+ *     to measure the distance to.
+ * @return {number} The vertical distance between the center of the item and
+ *     the target.
+ * @private
+ */
+goog.fx.DragListGroup.verticalDistanceFromItem_ = function(item, target) {
+  var itemBounds = item.dlgBounds_;
+  var itemCenterY = itemBounds.top + (itemBounds.height - 1) / 2;
+  return Math.abs(target.y - itemCenterY);
+};
 
 /**
  * Private helper for getHoverNextItem_().
