@@ -32,6 +32,7 @@ goog.provide('goog.testing.MockControl');
 goog.require('goog.array');
 goog.require('goog.testing');
 goog.require('goog.testing.LooseMock');
+goog.require('goog.testing.MockInterface');
 goog.require('goog.testing.StrictMock');
 
 
@@ -43,7 +44,7 @@ goog.require('goog.testing.StrictMock');
 goog.testing.MockControl = function() {
   /**
    * The list of mocks being controlled.
-   * @type {Array.<goog.testing.Mock>}
+   * @type {Array.<goog.testing.MockInterface>}
    * @private
    */
   this.mocks_ = [];
@@ -52,8 +53,9 @@ goog.testing.MockControl = function() {
 
 /**
  * Takes control of this mock.
- * @param {goog.testing.Mock} mock Mock to be controlled.
- * @return {goog.testing.Mock} The same mock passed in, for convenience.
+ * @param {goog.testing.MockInterface} mock Mock to be controlled.
+ * @return {goog.testing.MockInterface} The same mock passed in,
+ *     for convenience.
  */
 goog.testing.MockControl.prototype.addMock = function(mock) {
   this.mocks_.push(mock);
@@ -152,7 +154,7 @@ goog.testing.MockControl.prototype.createLooseMock = function(
  * FunctionMock constructor.
  * @param {string=} opt_functionName The optional name of the function to mock
  *     set to '[anonymous mocked function]' if not passed in.
- * @return {goog.testing.FunctionMock} The mocked function.
+ * @return {goog.testing.MockInterface} The mocked function.
  */
 goog.testing.MockControl.prototype.createFunctionMock = function(
     opt_functionName) {
@@ -167,7 +169,7 @@ goog.testing.MockControl.prototype.createFunctionMock = function(
  * MethodMock constructor.
  * @param {Object} scope The scope of the method to be mocked out.
  * @param {string} functionName The name of the function we're going to mock.
- * @return {goog.testing.MethodMock} The mocked method.
+ * @return {goog.testing.MockInterface} The mocked method.
  */
 goog.testing.MockControl.prototype.createMethodMock = function(
     scope, functionName) {

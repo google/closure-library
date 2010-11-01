@@ -40,7 +40,9 @@ goog.provide('goog.testing.MockExpectation');
 
 goog.require('goog.array');
 goog.require('goog.testing.JsUnitException');
+goog.require('goog.testing.MockInterface');
 goog.require('goog.testing.mockmatchers');
+
 
 /**
  * This is a class that represents an expectation.
@@ -156,6 +158,7 @@ goog.testing.MockExpectation.prototype.getErrorMessageCount = function() {
  * @param {boolean=} opt_createProxy An optional argument denoting that
  *     a proxy for the target mock should be created.
  * @constructor
+ * @implements {goog.testing.MockInterface}
  */
 goog.testing.Mock = function(objectToMock, opt_mockStaticMethods,
     opt_createProxy) {
