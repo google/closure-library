@@ -471,6 +471,11 @@ goog.ui.Component.prototype.getElement = function() {
 /**
  * Sets the component's root element to the given element.  Considered
  * protected and final.
+ *
+ * This should generally only be called during createDom. Setting the element
+ * does not actually change which element is rendered, only the element that is
+ * associated with this UI component.
+ *
  * @param {Element} element Root element for the component.
  * @protected
  */
