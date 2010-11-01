@@ -537,7 +537,7 @@ goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(id, tooltip,
       goog.getCssName('goog-menu-noaccel'));
   // How to update this button's state.
   button.updateFromValue = function(value) {
-    // Webkit returns a string like '32px' instead of the equivalent
+    // Webkit pre-534.7 returns a string like '32px' instead of the equivalent
     // integer, so normalize that first.
     // NOTE(user): Gecko returns "6" so can't just normalize all
     // strings, only ones ending in "px".
