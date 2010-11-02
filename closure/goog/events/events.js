@@ -126,14 +126,6 @@ goog.events.requiresSyntheticEventPropagation_;
 
 
 /**
- * Return value for marking an event in IE.
- * @type {string}
- * @private
- */
-goog.events.RETURN_VALUE_ = 'marked_closure';
-
-
-/**
  * Adds an event listener for a specific event on a DOM Node or an object that
  * has implemented {@link goog.events.EventTarget}. A listener can only be
  * added once to an object and if it is added again the key for the listener
@@ -1036,8 +1028,9 @@ goog.events.markIeEvent_ = function(e) {
     }
   }
 
-  if (useReturnValue || e.returnValue != goog.events.RETURN_VALUE_) {
-    e.returnValue = goog.events.RETURN_VALUE_;
+  if (useReturnValue ||
+      /** @type {boolean|undefined} */ (e.returnValue) == undefined) {
+    e.returnValue = true;
   }
 };
 
@@ -1051,7 +1044,7 @@ goog.events.markIeEvent_ = function(e) {
  * @notypecheck TODO(nicksantos): Fix this.
  */
 goog.events.isMarkedIeEvent_ = function(e) {
-  return e.keyCode < 0 || e.returnValue == goog.events.RETURN_VALUE_;
+  return e.keyCode < 0 || e.returnValue != undefined;
 };
 
 
