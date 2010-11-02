@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+<html>
 <!--
   All Rights Reserved.
 
   @author tildahl@google.com (Michael Tildahl)
   @author robbyw@google.com (Robby Walker)
 -->
-<html>
+
 <!--
 Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
@@ -34,7 +35,7 @@ See the COPYING file for details.
 </script>
 <link rel="stylesheet" type="text/css" href="../../css/editor/bubble.css">
 </head>
-<body>
+<body style='width:640px;height:480px;'>
 
 <div id="field"></div>
 
@@ -50,9 +51,12 @@ var panelId;
 function setUpPage() {
   var viewportSize = goog.dom.getViewportSize();
   // Some tests depends on enough size of viewport.
-  if (viewportSize.width < 600 || viewportSize.height < 440) {
+  if (viewportSize.width < 800 || viewportSize.height < 600) {
     window.moveTo(0, 0);
-    window.resizeTo(640, 480);
+    window.resizeTo(800, 600);
+    goog.dom.getViewportSize = function() {
+      return {width: 800, height: 600};
+    };
   }
 };
 
