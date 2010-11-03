@@ -645,3 +645,5 @@ goog.addDependency('../../third_party/closure/goog/loremipsum/text/loremipsum.js
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CancelledError'], ['goog.array', 'goog.asserts', 'goog.debug.Error']);
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist.js', ['goog.async.DeferredList'], ['goog.array', 'goog.async.Deferred']);
 goog.addDependency('../../third_party/closure/goog/osapi/osapi.js', ['goog.osapi'], []);
+goog.addDependency('../../third_party/closure/goog/silverlight/silverlight.js', ['goog.silverlight'], []);
+goog.addDependency('../../third_party/closure/goog/silverlight/supporteduseragent.js', ['goog.silverlight.supportedUserAgent'], []);
