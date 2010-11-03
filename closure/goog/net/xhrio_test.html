@@ -358,6 +358,28 @@ function testSendFileUriZeroStatusSuccess() {
 }
 
 
+function testSendDummyUriZeroStatusSuccess() {
+  MockXmlHttp.syncSend = true;
+  var count = 0;
+
+  var x = new goog.net.XhrIo;
+  goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
+    assertFalse('Should not fire complete from inside send', inSend);
+    assertTrue('Should not be succesful', e.target.isSuccess());
+    count++;
+  });
+
+  var inSend = true;
+  x.send(goog.Uri.parse('dummy:///foo'));
+  lastMockXmlHttp.status = 0;
+  inSend = false;
+
+  clock.tick(1); // callOnce(f, 0, ...)
+
+  assertEquals('Complete should have been called once', 1, count);
+}
+
+
 function testSendFileUpperUriZeroStatusSuccess() {
   MockXmlHttp.syncSend = true;
   var count = 0;
