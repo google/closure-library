@@ -116,6 +116,7 @@ goog.messaging.BufferedChannel.prototype.beginPolling_ = function() {
  * peer ready notification loop.  When this method is called, all the
  * information needed to connect the channel must be available.
  *
+ * @override
  * @see goog.messaging.MessageChannel.connect
  */
 goog.messaging.BufferedChannel.prototype.connect = function(opt_connectCb) {
@@ -127,7 +128,7 @@ goog.messaging.BufferedChannel.prototype.connect = function(opt_connectCb) {
 /**
  * @return {boolean} Whether or not the channel is connected.  Note that this
  *     conveys no information about the status of the channel's peer.
- *
+ * @override
  * @see goog.messaging.MessageChannel.isConnected
  */
 goog.messaging.BufferedChannel.prototype.isConnected = function() {
@@ -186,7 +187,7 @@ goog.messaging.BufferedChannel.prototype.poll_ = function() {
  * @param {function((string|Object))} callback The callback to process the
  *     incoming messages. Passed the payload. If opt_jsonEncoded is set, the
  *     payload is decoded and passed as an object.
- * @param {boolean} opt_jsonEncoded If true, incoming messages for this service
+ * @param {boolean=} opt_jsonEncoded If true, incoming messages for this service
  *     are expected to contain a JSON-encoded object and will be deserialized
  *     automatically. It's the responsibility of implementors of this class to
  *     perform the deserialization.
