@@ -180,8 +180,8 @@ goog.date.getNumberOfDaysInMonth = function(year, month) {
 
 /**
  * Returns true if the 2 dates are in the same day.
- * @param {Date} date The time to check.
- * @param {Date=} opt_now The current time.
+ * @param {goog.date.DateLike} date The time to check.
+ * @param {goog.date.DateLike=} opt_now The current time.
  * @return {boolean} Whether the dates are on the same day.
  */
 goog.date.isSameDay = function(date, opt_now) {
@@ -193,8 +193,8 @@ goog.date.isSameDay = function(date, opt_now) {
 
 /**
  * Returns true if the 2 dates are in the same month.
- * @param {Date} date The time to check.
- * @param {Date=} opt_now The current time.
+ * @param {goog.date.DateLike} date The time to check.
+ * @param {goog.date.DateLike=} opt_now The current time.
  * @return {boolean} Whether the dates are in the same calendar month.
  */
 goog.date.isSameMonth = function(date, opt_now) {
@@ -206,8 +206,8 @@ goog.date.isSameMonth = function(date, opt_now) {
 
 /**
  * Returns true if the 2 dates are in the same year.
- * @param {Date} date The time to check.
- * @param {Date=} opt_now The current time.
+ * @param {goog.date.DateLike} date The time to check.
+ * @param {goog.date.DateLike=} opt_now The current time.
  * @return {boolean} Whether the dates are in the same calendar year.
  */
 goog.date.isSameYear = function(date, opt_now) {
