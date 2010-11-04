@@ -19,7 +19,6 @@
  */
 
 goog.provide('goog.messaging.BufferedChannel');
-goog.provide('goog.messaging.BufferedChannel.ReservedServiceNameError');
 
 goog.require('goog.Timer');
 goog.require('goog.Uri');
