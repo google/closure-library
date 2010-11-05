@@ -67,9 +67,11 @@ iframeElement.parentNode.removeChild(iframeElement);
 <script>
 
 var stubs = new goog.testing.PropertyReplacer();
+var originalGoogBind = goog.bind;
 
 function tearDown() {
   stubs.reset();
+  goog.bind = originalGoogBind;
 }
 
 function testLibrary() {
@@ -681,6 +683,34 @@ function testBindWithCall() {
   var b = goog.bind(f, obj);
   b.call(null);
   b.call(obj2);
+}
+
+function testBindJs() {
+  assertEquals(1, goog.bindJs_(add, {valueOf: function() { return 1; }})());
+  assertEquals(3, goog.bindJs_(add, null, 1, 2)());
+}
+
+function testBindNative() {
+  if (Function.prototype.bind &&
+      Function.prototype.bind.toString().indexOf('native code') != -1) {
+    assertEquals(
+        1, goog.bindNative_(add, {valueOf: function() { return 1; }})());
+    assertEquals(3, goog.bindNative_(add, null, 1, 2)());
+  }
+}
+
+function testBindDefault() {
+  assertEquals(
+      1, goog.bind(add, {valueOf: function() { return 1; }})());
+  assertEquals(3, goog.bind(add, null, 1, 2)());
+}
+
+function add(var_args) {
+  var sum = Number(this) || 0;
+  for (var i = 0; i < arguments.length; i++) {
+    sum += arguments[i];
+  }
+  return sum;
 }
 
 function testPartial() {
