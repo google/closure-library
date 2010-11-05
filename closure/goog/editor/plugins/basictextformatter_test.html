@@ -20,6 +20,7 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.dom.Range');
   goog.require('goog.editor.plugins.BasicTextFormatter');
+  goog.require('goog.object');
   goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.editor.FieldMock');
@@ -28,7 +29,7 @@ See the COPYING file for details.
   goog.require('goog.userAgent');
 </script>
 </head>
-<body>
+<body style="font-size:16px">
 <!-- This has to be created here so it is loaded when we need it -->
 <iframe id="iframe"></iframe>
 
@@ -472,6 +473,7 @@ See the COPYING file for details.
   }
 
   var isFontSizeTest = false;
+  var defaultFontSizeMap;
 
   function setUpFontSizeTests() {
     isFontSizeTest = true;
@@ -480,12 +482,57 @@ See the COPYING file for details.
     HELPER = new goog.testing.editor.TestHelper(ROOT);
     HELPER.setUpEditableElement();
     FIELDMOCK.getElement().$returns(ROOT).$anyTimes();
+
+    // Map representing the sizes of the text in the HTML snippet used in these
+    // tests. The key is the exact text content of each text node, and the value
+    // is the initial size of the font in pixels. Since tests may cause a text
+    // node to be split in two, this also contains keys that initially don't
+    // match any text node, but may match one later if an existing node is
+    // split. The value for these keys is null, signifying no text node should
+    // exist with that content.
+    defaultFontSizeMap = {
+      '1': 16,
+      '2': null,
+      '23': 2,
+      '3': null,
+      '4': 16,
+      '5': null,
+      '56': 5,
+      '6': null,
+      '7': 16
+    };
+    assertFontSizes('Assertion failed on default font sizes!', {});
   }
 
   function tearDownFontSizeTests() {
     if (isFontSizeTest) {
       tearDownHelper();
       isFontSizeTest = false;
+    }
+  }
+
+  /**
+   * Asserts that the text nodes set up by setUpFontSizeTests() have had their
+   * font sizes changed as described by sizeChangesMap.
+   * @param {string} msg Assertion error message.
+   * @param {Object.<string, number|null>} sizeChangesMap Maps the text content
+   *     of a text node to be measured to its expected font size in pixels, or
+   *     null if that text node should not be present in the document (i.e.
+   *     because it was split into two). Only the text nodes that have changed
+   *     from their default need to be specified.
+   */
+  function assertFontSizes(msg, sizeChangesMap) {
+    goog.object.extend(defaultFontSizeMap, sizeChangesMap);
+    for (var k in defaultFontSizeMap) {
+      var node = HELPER.findTextNode(k);
+      var expected = defaultFontSizeMap[k];
+      if (expected) {
+        assertNotNull(msg + ' [couldn\'t find text node "' + k + '"]', node);
+        assertEquals(msg + ' [incorrect font size for "' + k + '"]',
+                     expected, goog.style.getFontSize(node.parentNode));
+      } else {
+        assertNull(msg + ' [unexpected text node "' + k + '"]', node);
+      }
     }
   }
 
@@ -501,17 +548,15 @@ See the COPYING file for details.
     HELPER.select('1', 0, '4', 1); // Selects 1234.
     FORMATTER.execCommandInternal(
         goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_SIZE, 6);
-    var span = HELPER.findTextNode('23').parentNode;
+
+    assertFontSizes('New font size should override existing font size',
+                    {'1': 32, '23': 32, '4': 32});
 
     if (goog.editor.BrowserFeature.DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR) {
-      assertEquals('Old manually set font size should be gone',
-          '', span.style.fontSize);
+      var span = HELPER.findTextNode('23').parentNode;
       assertFalse('Style attribute should be gone',
           span.getAttributeNode('style') != null &&
           span.getAttributeNode('style').specified);
-    } else {
-      assertCSSValueEquals('Old manually set font size should be changed',
-          'font-size', 'xx-large', span.style.fontSize);
     }
 
     FIELDMOCK.$verify();
@@ -531,31 +576,22 @@ See the COPYING file for details.
     var span = HELPER.findTextNode('23').parentNode;
     var span2 = HELPER.findTextNode('56').parentNode;
 
+    assertFontSizes(
+        'New font size should override existing font size in all spans',
+        {'23': 32, '4': 32, '56': 32});
+    var whiteSpace = goog.userAgent.IE ?
+                     goog.style.getCascadedStyle(span2, 'whiteSpace') :
+                     goog.style.getComputedStyle(span2, 'whiteSpace');
+    assertEquals('Whitespace style in last span should have been left',
+                 'pre', whiteSpace);
+
     if (goog.editor.BrowserFeature.DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR) {
-      assertEquals('Old manually set font size should be gone from first span',
-          '', span.style.fontSize);
       assertFalse('Style attribute should be gone from first span',
           span.getAttributeNode('style') != null &&
           span.getAttributeNode('style').specified);
-      assertEquals('Old manually set font size should be gone from last span',
-          '', span2.style.fontSize);
       assertTrue('Style attribute should not be gone from last span',
           span2.getAttributeNode('style') != null &&
           span2.getAttributeNode('style').specified);
-      assertEquals('Whitespace style in last span should have been left',
-          'pre', span2.style.whiteSpace);
-    } else {
-      assertCSSValueEquals(
-          'Old manually set font size should be changed in first span',
-          'font-size', 'xx-large', span.style.fontSize);
-      assertCSSValueEquals(
-          'Old manually set font size should be changed in last span',
-          'font-size', 'xx-large', span2.style.fontSize);
-      // Webkit creates a new span inside the existing span, sets the font
-      // size in the inner span, removes it from the outer span, and leaves the
-      // pre style in the outer span. Weird but works...
-      assertEquals('Whitespace style in last span should have been left',
-          'pre', span2.parentNode.style.whiteSpace);
     }
 
     FIELDMOCK.$verify();
@@ -572,8 +608,10 @@ See the COPYING file for details.
     HELPER.select('23', 1, '4', 1); // Selects 34 (half of span with font size).
     FORMATTER.execCommandInternal(
         goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_SIZE, 6);
-    assertEquals('Old manually set font size should still be there',
-        '2px', HELPER.findTextNode('2').parentNode.style.fontSize);
+
+    assertFontSizes(
+        'New font size shouldn\'t override existing font size before selection',
+        {'2': 2, '23': null, '3': 32, '4': 32});
 
     FIELDMOCK.$verify();
   }
@@ -590,17 +628,11 @@ See the COPYING file for details.
     HELPER.select('23', 1, '56', 2); // Selects 3456.
     FORMATTER.execCommandInternal(
         goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_SIZE, 6);
-    assertEquals('Old manually set font size should still be in first span',
-        '2px', HELPER.findTextNode('2').parentNode.style.fontSize);
-    var span2 = HELPER.findTextNode('56').parentNode;
-    if (goog.editor.BrowserFeature.DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR) {
-      assertEquals('Old manually set font size should be gone from last span',
-          '', span2.style.fontSize);
-    } else {
-      assertCSSValueEquals(
-          'Old manually set font size should be changed in last span',
-          'font-size', 'xx-large', span2.style.fontSize);
-    }
+
+    assertFontSizes(
+        'New font size shouldn\'t override existing font size before ' +
+        'selection, but still override existing font size in last span',
+        {'2': 2, '23': null, '3': 32, '4': 32, '56': 32});
 
     FIELDMOCK.$verify();
   }
