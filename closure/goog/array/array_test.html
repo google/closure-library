@@ -1406,6 +1406,23 @@ function validateObjectArray(expected, actual) {
   }
 }
 
+function testIsSorted() {
+  assertTrue(goog.array.isSorted([1, 2, 3]));
+  assertTrue(goog.array.isSorted([1, 2, 2]));
+  assertFalse(goog.array.isSorted([1, 2, 1]));
+
+  assertTrue(goog.array.isSorted([1, 2, 3], null, true));
+  assertFalse(goog.array.isSorted([1, 2, 2], null, true));
+  assertFalse(goog.array.isSorted([1, 2, 1], null, true));
+
+  function compare(a, b) {
+    return b - a;
+  }
+
+  assertFalse(goog.array.isSorted([1, 2, 3], compare));
+  assertTrue(goog.array.isSorted([3, 2, 2], compare));
+}
+
 function assertRotated(expect, array, rotate) {
   assertArrayEquals(expect, goog.array.rotate(array, rotate));
 }
