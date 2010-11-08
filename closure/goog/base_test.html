@@ -1072,6 +1072,28 @@ function testBaseMethod() {
   assertEquals(9, d.foo(1, 0));
 }
 
+function testBaseMethodAndBaseCtor() {
+  // This will fail on FF4.0 if the following bug is not fixed:
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=586482
+  function A(x, y) {
+    this.foo(x, y);
+  }
+  A.prototype.foo = function(x, y) {
+    this.bar = x + y;
+  };
+
+  function B(x, y) {
+    goog.base(this, x, y);
+  }
+  goog.inherits(B, A);
+  B.prototype.foo = function(x, y) {
+    goog.base(this, 'foo', x, y);
+    this.bar = this.bar * 2;
+  };
+
+  assertEquals(14, new B(3, 4).bar);
+}
+
 function testBaseClass() {
   function A(x, y) {
     this.foo = x + y;
