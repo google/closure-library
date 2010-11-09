@@ -37,6 +37,7 @@ goog.require('goog.testing.StrictMock');
  * @param {string=} opt_functionName the optional name of the function to mock
  *     set to '[anonymous mocked function]' if not passed in.
  * @return {goog.testing.MockInterface}
+ * @suppress {missingProperties} Mocks do not fit in the type system well.
  */
 goog.testing.FunctionMock = function(opt_functionName) {
   var fn = function() {

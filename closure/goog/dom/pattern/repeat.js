@@ -109,6 +109,7 @@ goog.dom.pattern.Repeat.prototype.matches;
  *     matches, <code>BACKTRACK_MATCH</code> if the pattern does not match
  *     but already had accumulated matches, <code>MATCHING</code> if the pattern
  *     starts a match, and <code>NO_MATCH</code> if the pattern does not match.
+ * @suppress {missingProperties} See the broken line below.
  */
 goog.dom.pattern.Repeat.prototype.matchToken = function(token, type) {
   // Reset if we're starting a new match
@@ -152,6 +153,9 @@ goog.dom.pattern.Repeat.prototype.matchToken = function(token, type) {
       // TODO(robbyw): Backtrack further if necessary.
       this.count++;
 
+      // NOTE(nicksantos): This line of code is broken. this.patterns_ doesn't
+      // exist, and this.currentPosition_ doesn't exit. When this is fixed,
+      // remove the missingProperties suppression above.
       if (this.currentPosition_ == this.patterns_.length) {
         this.needsReset_ = true;
         return goog.dom.pattern.MatchType.BACKTRACK_MATCH;

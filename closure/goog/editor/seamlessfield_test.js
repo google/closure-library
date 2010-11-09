@@ -16,6 +16,8 @@
  * @fileoverview Trogedit unit tests for goog.editor.SeamlessField.
  *
  * @author nicksantos@google.com (Nick Santos)
+ * @suppress {missingProperties} There are many mocks in this unit test,
+ *     and the mocks don't fit well in the type system.
  */
 
 goog.provide('goog.editor.seamlessfield_test');
