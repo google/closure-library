@@ -157,7 +157,7 @@ goog.gears.WorkerChannel.prototype.registerDefaultService =
  */
 goog.gears.WorkerChannel.prototype.send =
     function(serviceName, payload) {
-  var message = {serviceName: serviceName, payload: payload};
+  var message = {'serviceName': serviceName, 'payload': payload};
   message[goog.gears.WorkerChannel.FLAG] = true;
   this.worker_.sendMessage(message);
 };
@@ -193,9 +193,16 @@ goog.gears.WorkerChannel.prototype.deliver_ = function(e) {
   if (service) {
     // Even though our payloads can be objects, we want to respect the
     // jsonEncoded flag for compatibility's sake.
-    var payload = body.payload;
+    var payload = body['payload'];
     if (service.jsonEncoded && goog.isString(payload)) {
-      payload = goog.json.parse(payload);
+      try {
+        payload = goog.json.parse(payload);
+      } catch (err) {
+        this.logger.warning(
+            'Expected JSON payload for ' + body['serviceName'] + ', was "' +
+            payload + '"');
+        return;
+      }
     } else if (!service.jsonEncoded && !goog.isString(payload)) {
       payload = goog.json.serialize(payload);
     }
@@ -217,31 +224,31 @@ goog.gears.WorkerChannel.prototype.deliver_ = function(e) {
  * @private
  */
 goog.gears.WorkerChannel.prototype.serviceForMessage_ = function(body) {
-  if (!body.serviceName) {
+  if (!('serviceName' in body)) {
     this.logger.warning('GearsWorkerChannel::deliver_(): ' +
                         'Message object doesn\'t contain service name: ' +
                         goog.debug.deepExpose(body));
     return null;
   }
 
-  if (!body.payload) {
+  if (!('payload' in body)) {
     this.logger.warning('GearsWorkerChannel::deliver_(): ' +
                         'Message object doesn\'t contain payload: ' +
                         goog.debug.deepExpose(body));
     return null;
   }
 
-  var service = this.services_[body.serviceName];
+  var service = this.services_[body['serviceName']];
   if (!service) {
     if (this.defaultService_) {
-      var callback = goog.partial(this.defaultService_, body.serviceName);
-      var jsonEncoded = goog.isObject(body.payload);
+      var callback = goog.partial(this.defaultService_, body['serviceName']);
+      var jsonEncoded = goog.isObject(body['payload']);
       return {callback: callback, jsonEncoded: jsonEncoded};
     }
 
     this.logger.warning('GearsWorkerChannel::deliver_(): ' +
-                        'Unknown service name "' + body.serviceName + '" ' +
-                        '(payload: ' + goog.debug.deepExpose(body.payload) +
+                        'Unknown service name "' + body['serviceName'] + '" ' +
+                        '(payload: ' + goog.debug.deepExpose(body['payload']) +
                         ')');
     return null;
   }

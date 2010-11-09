@@ -16,6 +16,7 @@ goog.require('goog.Disposable');
 goog.require('goog.debug.Logger');
 goog.require('goog.events.EventHandler');
 goog.require('goog.messaging.MessageChannel'); // interface
+goog.require('goog.object');
 
 
 /**
@@ -69,7 +70,8 @@ goog.messaging.MultiChannel.prototype.logger_ =
  * channel.
  * @param {string} name The name of the virtual channel. Must be unique for this
  *     MultiChannel. Cannot contain colons.
- * @return {goog.messaging.MultiChannel.VirtualChannel} The new virtual channel.
+ * @return {!goog.messaging.MultiChannel.VirtualChannel} The new virtual
+ *     channel.
  */
 goog.messaging.MultiChannel.prototype.createVirtualChannel = function(name) {
   if (name.indexOf(':') != -1) {
