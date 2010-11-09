@@ -263,7 +263,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.send =
  * called when this channel is disposed.
  *
  * @param {function()} callback The callback to wrap.
- * @param {*} var_args Other arguments, passed to the callback.
+ * @param {...*} var_args Other arguments, passed to the callback.
  * @private
  */
 goog.messaging.MultiChannel.VirtualChannel.prototype.doCallback_ =
