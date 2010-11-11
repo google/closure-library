@@ -173,7 +173,7 @@ goog.messaging.BufferedChannel.prototype.onTick_ = function(unusedEvent) {
   try {
     this.messageChannel_.send(
         goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_,
-        /* payload */ null);
+        /* payload */ '');
   } catch (e) {
     this.timer_.stop();  // So we don't keep calling send and re-throwing.
     throw e;
@@ -197,7 +197,7 @@ goog.messaging.BufferedChannel.prototype.peerReady_;
  * Registers a service to be called when a message is received.
  *
  * @param {string} serviceName The name of the service.
- * @param {function((string|Object))} callback The callback to process the
+ * @param {function((string|!Object))} callback The callback to process the
  *     incoming messages. Passed the payload. If opt_jsonEncoded is set, the
  *     payload is decoded and passed as an object.
  * @param {boolean=} opt_jsonEncoded If true, incoming messages for this service
@@ -231,7 +231,7 @@ goog.messaging.BufferedChannel.prototype.registerDefaultService = function(
  *
  * @param {string} serviceName The name of the service this message should be
  *     delivered to.
- * @param {string|Object} payload The value of the message.  If this is an
+ * @param {string|!Object} payload The value of the message. If this is an
  *     Object, it is serialized to JSON before sending.  It's the responsibility
  *     of implementors of this class to perform the serialization.
  * @see goog.net.xpc.BufferedChannel.send

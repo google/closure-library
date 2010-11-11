@@ -439,16 +439,7 @@ goog.net.xpc.CrossPageChannel.prototype.notifyTransportError_ = function() {
 };
 
 
-/**
- * Registers a service.
- *
- * @param {string} serviceName The name of the service.
- * @param {Function} callback The callback responsible to process incoming
- *     messages.
- * @param {boolean=} opt_jsonEncoded If true, incoming messages for this
- *     service are expected to contain a JSON-encoded object and will be
- *     deserialized automatically.
- */
+/** @inheritDoc */
 goog.net.xpc.CrossPageChannel.prototype.registerService = function(
     serviceName, callback, opt_jsonEncoded) {
   this.services_[serviceName] = {
@@ -459,27 +450,14 @@ goog.net.xpc.CrossPageChannel.prototype.registerService = function(
 };
 
 
-/**
- * Registers a service to handle any messages that aren't handled by any other
- * services.
- *
- * @param {function(string, (string|Object))} callback The callback responsible
- *     for processing incoming messages that aren't processed by other services.
- */
+/** @inheritDoc */
 goog.net.xpc.CrossPageChannel.prototype.registerDefaultService = function(
     callback) {
   this.defaultService_ = callback;
 };
 
 
-/**
- * Sends a msg over the channel.
- *
- * @param {string} serviceName The name of the service this message
- *     should be delivered to.
- * @param {string|Object} payload The payload. If this is an object, it is
- *     serialized to JSON before sending.
- */
+/** @inheritDoc */
 goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
   if (!this.isConnected()) {
     goog.net.xpc.logger.severe('Can\'t send. Channel not connected.');

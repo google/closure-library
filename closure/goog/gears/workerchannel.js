@@ -95,7 +95,7 @@ goog.gears.WorkerChannel.prototype.peerOrigin;
 /**
  * The default service to be run when no other services match.
  *
- * @type {?function(string, (string|Object))}
+ * @type {?function(string, (string|!Object))}
  * @private
  */
 goog.gears.WorkerChannel.prototype.defaultService_;

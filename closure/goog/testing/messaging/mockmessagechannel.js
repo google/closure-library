@@ -36,7 +36,7 @@ goog.require('goog.testing.asserts');
 goog.testing.messaging.MockMessageChannel = function(mockControl) {
   /**
    * Services to call when receiving messages.
-   * @type {Object.<string, function((string|Object))>}
+   * @type {Object.<string, function((string|!Object))>}
    * @private
    */
   this.services_ = {};
@@ -53,7 +53,7 @@ goog.testing.messaging.MockMessageChannel = function(mockControl) {
 
 /**
  * Service to call when no other service matches.
- * @type {function(string, (string|Object))}
+ * @type {function(string, (string|!Object))}
  * @private
  */
 goog.testing.messaging.MockMessageChannel.prototype.defaultService_;
@@ -82,7 +82,7 @@ goog.testing.messaging.MockMessageChannel.prototype.isConnected = function() {
  * A mock send function. Actually an instance of
  * {@link goog.testing.FunctionMock}.
  * @param {string} serviceName The name of the remote service to run.
- * @param {string|Object} payload The payload to send to the remote page.
+ * @param {string|!Object} payload The payload to send to the remote page.
  */
 goog.testing.messaging.MockMessageChannel.prototype.send = function(
     serviceName, payload) {};
@@ -117,7 +117,7 @@ goog.testing.messaging.MockMessageChannel.prototype.dispose = function() {
 /**
  * Mocks the receipt of a message. Passes the payload the appropriate service.
  * @param {string} serviceName The service to run.
- * @param {string|Object} payload The argument to pass to the service.
+ * @param {string|!Object} payload The argument to pass to the service.
  */
 goog.testing.messaging.MockMessageChannel.prototype.receive = function(
     serviceName, payload) {

@@ -116,7 +116,7 @@ function testSendExceptionsInOnTickStopsTimerAndReraises() {
   var errorMessage = 'errorMessage';
   channel.messageChannel_.send(
       goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_,
-      /* payload */ null).$throws(Error(errorMessage));
+      /* payload */ '').$throws(Error(errorMessage));
   channel.timer_.enabled = true;
 
   mockControl.$replayAll();
@@ -157,10 +157,10 @@ function testBidirectionalCommunicationBuffersUntilReadyPingsSucceed() {
   var mockChannel2 = new goog.testing.messaging.MockMessageChannel(mockControl);
   var bufferedChannel1 = new goog.messaging.BufferedChannel(mockChannel1);
   var bufferedChannel2 = new goog.messaging.BufferedChannel(mockChannel2);
-  mockChannel1.send('setPeerReady_', null).$does(function() {
+  mockChannel1.send('setPeerReady_', '').$does(function() {
     bufferedChannel1.setPeerReady_();
   });
-  mockChannel2.send('setPeerReady_', null).$does(function() {
+  mockChannel2.send('setPeerReady_', '').$does(function() {
     bufferedChannel2.setPeerReady_();
   });
   mockChannel1.send(messages[0].serviceName, messages[0].payload);
