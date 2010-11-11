@@ -1484,6 +1484,37 @@ function testZip() {
   assertArrayEquals([], a3);
 }
 
+function testShuffle() {
+  // Test array. This array should have unique values for the purposes of this
+  // test case.
+  var testArray = [1, 2, 3, 4, 5];
+  var testArrayCopy = goog.array.clone(testArray);
+
+  // Custom random function, which always returns a value approaching 1,
+  // resulting in a "shuffle" that preserves the order of original array
+  // (for array sizes that we work with here).
+  var noChangeShuffleFunction = function() {
+    return .999999;
+  };
+  goog.array.shuffle(testArray, noChangeShuffleFunction);
+  assertArrayEquals(testArrayCopy, testArray);
+
+  // Custom random function, which always returns 0, resulting in a
+  // deterministic "shuffle" that is predictable but differs from the
+  // original order of the array.
+  var testShuffleFunction = function() {
+    return 0;
+  };
+  goog.array.shuffle(testArray, testShuffleFunction);
+  assertArrayEquals([2, 3, 4, 5, 1], testArray);
+
+  // Test the use of a real random function (no optional RNG is specified).
+  goog.array.shuffle(testArray);
+
+  // Ensure the shuffled array comprises the same elements (without regard to
+  // order).
+  assertSameElements(testArrayCopy, testArray);
+}
 </script>
 </body>
 </html>

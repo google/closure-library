@@ -1264,3 +1264,30 @@ goog.array.zip = function(var_args) {
     result.push(value);
   }
 };
+
+
+/**
+ * Shuffles the values in the specified array using the Fisher-Yates in-place
+ * shuffle (also known as the Knuth Shuffle). By default, calls Math.random()
+ * and so resets the state of that random number generator. Similarly, may reset
+ * the state of the any other specified random number generator.
+ *
+ * Runtime: O(n)
+ *
+ * @param {!Array} arr The array to be shuffled.
+ * @param {Function=} opt_randFn Optional random function to use for shuffling.
+ *     Takes no arguments, and returns a random number on the interval [0, 1).
+ *     Defaults to Math.random() using JavaScript's built-in Math library.
+ */
+goog.array.shuffle = function(arr, opt_randFn) {
+  var randFn = opt_randFn || Math.random;
+
+  for (var i = arr.length - 1; i > 0; i--) {
+    // Choose a random array index in [0, i] (inclusive with i).
+    var j = Math.floor(randFn() * (i + 1));
+
+    var tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+};
