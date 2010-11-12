@@ -21,6 +21,7 @@
  * Namespace for i18n date/time formatting functions
  */
 goog.provide('goog.i18n.DateTimeFormat');
+goog.provide('goog.i18n.DateTimeFormat.Format');
 
 goog.require('goog.asserts');
 goog.require('goog.date.DateLike');
