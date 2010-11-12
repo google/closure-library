@@ -696,6 +696,10 @@ function testBindNative() {
     assertEquals(
         1, goog.bindNative_(add, {valueOf: function() { return 1; }})());
     assertEquals(3, goog.bindNative_(add, null, 1, 2)());
+
+    assertThrows(function() {
+      goog.bindNative_(null, null);
+    });
   }
 }
 
