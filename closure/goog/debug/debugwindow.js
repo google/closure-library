@@ -132,6 +132,7 @@ goog.debug.DebugWindow.COOKIE_TIME = 30 * 24 * 60 * 60 * 1000; // 30-days
  */
 goog.debug.DebugWindow.prototype.welcomeMessage = 'LOGGING';
 
+
 /**
  * Reference to debug window
  * @type {Window}
@@ -140,12 +141,14 @@ goog.debug.DebugWindow.prototype.welcomeMessage = 'LOGGING';
  */
 goog.debug.DebugWindow.prototype.win_ = null;
 
+
 /**
  * In the process of opening the window
  * @type {boolean}
  * @private
  */
 goog.debug.DebugWindow.prototype.winOpening_ = false;
+
 
 /**
  * Whether we are currently capturing logger output.
@@ -344,6 +347,7 @@ goog.debug.DebugWindow.prototype.write_ = function(html) {
   }
 };
 
+
 /**
  * Write to the buffer.  If a message hasn't been sent for more than 750ms just
  * write, otherwise delay for a minimum of 250ms.
@@ -493,7 +497,8 @@ goog.debug.DebugWindow.prototype.writeInitialDocument_ = function() {
  */
 goog.debug.DebugWindow.prototype.setCookie_ = function(key, value) {
   key += this.identifier_;
-  document.cookie = key + '=' + encodeURIComponent(value) + ';expires=' +
+  document.cookie = key + '=' + encodeURIComponent(value) +
+      ';path=/;expires=' +
       (new Date(goog.now() + goog.debug.DebugWindow.COOKIE_TIME)).toUTCString();
 };
 
