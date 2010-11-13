@@ -23,7 +23,7 @@ var cookies = goog.net.cookies;
 var baseCount = 0;
 
 function checkForCookies() {
-  if (!goog.net.cookies.isEnabled()) {
+  if (!cookies.isEnabled()) {
     var message = 'Cookies must be enabled to run this test.';
     if (location.protocol == 'file:') {
       message += '\nNote that cookies for local files are disabled in some ' +
@@ -172,25 +172,64 @@ function testStrangeValue() {
   assertEquals(value2, cookies.get('testb'));
 }
 
+function testSetCookiePath() {
+  assertEquals('foo=bar;path=/xyz',
+      mockSetCookie('foo', 'bar', -1, '/xyz'));
+}
+
+function testSetCookieDomain() {
+  assertEquals('foo=bar;domain=google.com',
+      mockSetCookie('foo', 'bar', -1, null, 'google.com'));
+}
+
+function testSetCookieSecure() {
+  assertEquals('foo=bar;secure',
+      mockSetCookie('foo', 'bar', -1, null, null, true));
+}
+
+function testSetCookieMaxAgeZero() {
+  var result = mockSetCookie('foo', 'bar', 0);
+  var pattern = /foo=bar;expires=Sun, 0?1 Feb 1970 08:00:00 (GMT|UTC)/;
+  if (!result.match(pattern)) {
+    fail('expected match against ' + pattern + ' got ' + result);
+  }
+}
+
+// TODO(chrisn): Testing max age > 0 requires a mock clock.
+
+function mockSetCookie(var_args) {
+  var setCookie = cookies.setCookie_;
+  try {
+    var result;
+    cookies.setCookie_ = function(arg) {
+      result = arg;
+    };
+    cookies.set.apply(null, arguments);
+    return result;
+  } finally {
+    cookies.setCookie_ = setCookie;
+  }
+}
+
 function assertValidName(name) {
-  assertTrue(name + ' should be valid', goog.net.cookies.isValidName(name));
+  assertTrue(name + ' should be valid', cookies.isValidName(name));
 }
 
 function assertInvalidName(name) {
-  assertFalse(name + ' should be invalid', goog.net.cookies.isValidName(name));
+  assertFalse(name + ' should be invalid', cookies.isValidName(name));
   assertThrows(function() {
-    goog.net.cookies.set(name, 'value');
+    cookies.set(name, 'value');
   });
 }
 
 function assertValidValue(val) {
-  assertTrue(val + ' should be valid', goog.net.cookies.isValidValue(val));
+  assertTrue(val + ' should be valid', cookies.isValidValue(val));
 }
 
 function assertInvalidValue(val) {
-  assertFalse(val + ' should be invalid', goog.net.cookies.isValidValue(val));
+  assertFalse(val + ' should be invalid', cookies.isValidValue(val));
   assertThrows(function() {
-    goog.net.cookies.set('name', val);
+    cookies.set('name', val);
   });
 }
 
@@ -209,10 +248,6 @@ function testValidValue() {
   assertInvalidValue('foo;bar');
   assertInvalidValue('foo\nbar');
 }
-
-// TODO(user): Test path, domain and maxAge.
-//            However the document.cookie string is magical which makes this
-//            very hard to test
 
 </script>
 </body>

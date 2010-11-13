@@ -138,8 +138,11 @@ goog.net.cookies.isValidValue = function(value) {
  *     a domain attribute (browser will use the full request host name). If not
  *     provided, the default is null (i.e. let browser use full request host
  *     name).
+ * @param {boolean=} opt_secure Whether the cookie should only be sent over
+ *     a secure channel.
  */
-goog.net.cookies.set = function(name, value, opt_maxAge, opt_path, opt_domain) {
+goog.net.cookies.set = function(
+    name, value, opt_maxAge, opt_path, opt_domain, opt_secure) {
   if (!goog.net.cookies.isValidName(name)) {
     throw Error('Invalid cookie name "' + name + '"');
   }
@@ -153,6 +156,7 @@ goog.net.cookies.set = function(name, value, opt_maxAge, opt_path, opt_domain) {
 
   var domainStr = opt_domain ? ';domain=' + opt_domain : '';
   var pathStr = opt_path ? ';path=' + opt_path : '';
+  var secureStr = opt_secure ? ';secure' : '';
 
   var expiresStr;
 
@@ -177,7 +181,7 @@ goog.net.cookies.set = function(name, value, opt_maxAge, opt_path, opt_domain) {
   }
 
   goog.net.cookies.setCookie_(name + '=' + value + domainStr + pathStr +
-                              expiresStr);
+                              expiresStr + secureStr);
 };
 
 
@@ -297,6 +301,7 @@ goog.net.cookies.clear = function() {
     goog.net.cookies.remove(keys[i]);
   }
 };
+
 
 /**
  * Private helper function to allow testing cookies without depending on the
