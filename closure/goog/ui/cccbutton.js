@@ -30,6 +30,7 @@ goog.require('goog.ui.DeprecatedButton');
 goog.require('goog.userAgent');
 
 
+
 /**
  * CCC-style implementation of a button.
  * The Html structure of the button is:
@@ -248,6 +249,7 @@ goog.ui.CccButton.prototype.isValidButtonChildHelper_ = function(element, tag) {
   }
   return false;
 };
+
 
 /**
  * Decorates the element for the UI component.

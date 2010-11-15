@@ -31,6 +31,7 @@ goog.require('goog.editor.node');
 goog.require('goog.functions');
 
 
+
 /**
  * Plugin to handle splitting block quotes.  This plugin does nothing on its
  * own and should be used in conjunction with EnterHandler or one of its

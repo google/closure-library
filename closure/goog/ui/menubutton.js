@@ -41,6 +41,7 @@ goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * A menu button control.  Extends {@link goog.ui.Button} by composing a button
  * with a dropdown arrow and a popup menu.

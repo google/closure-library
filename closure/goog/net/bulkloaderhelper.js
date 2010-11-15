@@ -25,6 +25,7 @@ goog.require('goog.Disposable');
 goog.require('goog.debug.Logger');
 
 
+
 /**
  * Helper class used to load multiple URIs.
  * @param {Array.<string|goog.Uri>} uris The URIs to load.

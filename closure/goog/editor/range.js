@@ -460,6 +460,7 @@ goog.editor.range.intersectsTag = function(range, tagName) {
 };
 
 
+
 /**
  * One endpoint of a range, represented as a Node and and offset.
  * @param {Node} node The node containing the point.
@@ -540,7 +541,6 @@ goog.editor.range.Point.getPointAtEndOfNode = function(node) {
 };
 
 
-
 /**
  * Saves the range by inserting carets into the HTML.
  *
@@ -555,6 +555,7 @@ goog.editor.range.Point.getPointAtEndOfNode = function(node) {
 goog.editor.range.saveUsingNormalizedCarets = function(range) {
   return new goog.editor.range.NormalizedCaretRange_(range);
 };
+
 
 
 /**

@@ -26,6 +26,7 @@ goog.require('goog.ui.ItemEvent');
 goog.require('goog.ui.MenuBase');
 
 
+
 /**
  * An implementation of a menu that can attach itself to DOM element that
  * are annotated appropriately.
@@ -63,12 +64,14 @@ goog.ui.AttachableMenu.prototype.selectedElement_ = null;
  */
 goog.ui.AttachableMenu.prototype.itemClassName_ = 'menu-item';
 
+
 /**
  * Class name to append to a menu item's class when it's selected
  * @type {string}
  * @private
  */
 goog.ui.AttachableMenu.prototype.selectedItemClassName_ = 'menu-item-selected';
+
 
 /**
  * Keep track of when the last key was pressed so that a keydown-scroll doesn't
@@ -104,6 +107,7 @@ goog.ui.AttachableMenu.prototype.getItemClassName = function() {
 goog.ui.AttachableMenu.prototype.setItemClassName = function(name) {
   this.itemClassName_ = name;
 };
+
 
 /**
  * Sets the class name to use for selected menu items
@@ -362,6 +366,7 @@ goog.ui.AttachableMenu.prototype.onKeyDown = function(e) {
 
   this.dispatchEvent(e);
 };
+
 
 /**
  * Find an item that has the given prefix and select it.

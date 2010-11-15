@@ -27,6 +27,7 @@ goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Flat renderer for {@link goog.ui.Button}s.  Flat buttons can contain
  * almost arbitrary HTML content, will flow like inline elements, but can be

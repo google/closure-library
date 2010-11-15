@@ -26,6 +26,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.ui.Component.EventType');
 
 
+
 /**
  * A class for managing the editor toolbar.  Acts as a bridge between
  * a {@link goog.editor.Field} and a {@link goog.ui.Toolbar}.

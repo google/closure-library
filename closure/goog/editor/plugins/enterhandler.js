@@ -35,6 +35,7 @@ goog.require('goog.string');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Plugin to handle enter keys. This does all the crazy to normalize (as much as
  * is reasonable) what happens when you hit enter. This also handles the

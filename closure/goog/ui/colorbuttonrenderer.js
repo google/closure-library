@@ -24,6 +24,7 @@ goog.require('goog.functions');
 goog.require('goog.ui.ColorMenuButtonRenderer');
 
 
+
 /**
  * Renderer for {@link goog.ui.ColorButton}s.
  * Uses {@link goog.ui.ColorMenuButton}s but disables the dropdown.

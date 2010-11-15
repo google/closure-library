@@ -48,6 +48,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Class for showing simple dialog boxes.
  * The Html structure of the dialog box is:
@@ -104,6 +105,7 @@ goog.inherits(goog.ui.Dialog, goog.ui.Component);
  */
 goog.ui.Dialog.prototype.focusHandler_ = null;
 
+
 /**
  * Whether the escape key closes this dialog.
  * @type {boolean}
@@ -118,6 +120,7 @@ goog.ui.Dialog.prototype.escapeToCancel_ = true;
  * @private
  */
 goog.ui.Dialog.prototype.hasTitleCloseButton_ = true;
+
 
 /**
  * Whether the dialog should use an iframe as the background element to work
@@ -231,7 +234,6 @@ goog.ui.Dialog.prototype.titleEl_ = null;
  * @private
  */
 goog.ui.Dialog.prototype.titleTextEl_ = null;
-
 
 
 /**
@@ -1162,6 +1164,7 @@ goog.ui.Dialog.prototype.onButtonClick_ = function(e) {
   }
 };
 
+
 /**
  * Finds the parent button of an element (or null if there was no button
  * parent).
@@ -1299,6 +1302,7 @@ goog.ui.Dialog.prototype.focusElement_ = function() {
 };
 
 
+
 /**
  * Dialog event class.
  * @param {string} key Key identifier for the button.
@@ -1340,6 +1344,7 @@ goog.ui.Dialog.EventType = {
    */
   AFTER_HIDE: 'afterhide'
 };
+
 
 
 /**

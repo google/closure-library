@@ -22,6 +22,7 @@ goog.require('goog.array');
 goog.require('goog.testing.Mock');
 
 
+
 /**
  * This is a mock that verifies that methods are called in the order that they
  * are specified during the recording phase. Since it verifies order, it

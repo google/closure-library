@@ -676,6 +676,7 @@ goog.ui.tree.BaseNode.prototype.toggle = function() {
   this.setExpanded(!this.getExpanded());
 };
 
+
 /**
  * Expands the node.
  */
@@ -690,7 +691,6 @@ goog.ui.tree.BaseNode.prototype.expand = function() {
 goog.ui.tree.BaseNode.prototype.collapse = function() {
   this.setExpanded(false);
 };
-
 
 
 /**

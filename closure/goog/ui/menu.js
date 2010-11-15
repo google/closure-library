@@ -60,6 +60,7 @@ goog.require('goog.ui.MenuSeparator');
 // classes before goog.ui.Menu.
 
 
+
 // TODO(robbyw): Reverse constructor argument order for consistency.
 /**
  * A basic menu class.

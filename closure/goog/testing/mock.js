@@ -44,6 +44,7 @@ goog.require('goog.testing.MockInterface');
 goog.require('goog.testing.mockmatchers');
 
 
+
 /**
  * This is a class that represents an expectation.
  * @param {string} name The name of the method for this expectation.
@@ -147,6 +148,7 @@ goog.testing.MockExpectation.prototype.getErrorMessage = function() {
 goog.testing.MockExpectation.prototype.getErrorMessageCount = function() {
   return this.errorMessages.length;
 };
+
 
 
 /**

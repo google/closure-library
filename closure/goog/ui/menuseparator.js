@@ -25,6 +25,7 @@ goog.require('goog.ui.Separator');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Class representing a menu separator.  A menu separator extends {@link
  * goog.ui.Separator} by always setting its renderer to {@link

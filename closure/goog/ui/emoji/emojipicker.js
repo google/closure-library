@@ -37,6 +37,7 @@ goog.require('goog.ui.emoji.EmojiPaletteRenderer');
 goog.require('goog.ui.emoji.ProgressiveEmojiPaletteRenderer');
 
 
+
 /**
  * Creates a new, empty emoji picker. An emoji picker is a grid of emoji, each
  * cell of the grid containing a single emoji. The picker may contain multiple

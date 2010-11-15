@@ -25,6 +25,7 @@ goog.provide('goog.locale');
 
 goog.require('goog.locale.nativeNameConstants');
 
+
 /**
  * Set currnet locale to the specified one.
  * @param {string} localeName Locale name string. We are following the usage

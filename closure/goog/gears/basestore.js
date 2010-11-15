@@ -26,6 +26,7 @@ goog.provide('goog.gears.BaseStore.SchemaType');
 goog.require('goog.Disposable');
 
 
+
 /**
  * This class implements the common store functionality
  *
@@ -502,7 +503,6 @@ goog.gears.BaseStore.prototype.disposeInternal = function() {
   goog.gears.BaseStore.superClass_.disposeInternal.call(this);
   this.database_ = null;
 };
-
 
 
 /**

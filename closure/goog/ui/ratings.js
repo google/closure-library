@@ -38,6 +38,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 
 
+
 /**
  * A UI Control used for rating things, i.e. videos on Google Video.
  * @param {Array.<string>=} opt_ratings Ratings. Default: [1,2,3,4,5].
@@ -72,6 +73,7 @@ goog.inherits(goog.ui.Ratings, goog.ui.Component);
  */
 goog.ui.Ratings.CSS_CLASS = goog.getCssName('goog-ratings');
 
+
 /**
  * The last index to be highlighted
  * @type {number}
@@ -95,6 +97,7 @@ goog.ui.Ratings.prototype.selectedIndex_ = -1;
  */
 goog.ui.Ratings.prototype.attachedFormField_ = null;
 
+
 /**
  * Enums for Ratings event type.
  * @enum {string}
@@ -105,6 +108,7 @@ goog.ui.Ratings.EventType = {
   HIGHLIGHT: 'highlight',
   UNHIGHLIGHT: 'unhighlight'
 };
+
 
 /**
  * Decorate a HTML structure already in the document.  Expects the structure:

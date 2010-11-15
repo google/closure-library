@@ -24,6 +24,7 @@ goog.provide('goog.graphics.SolidFill');
 goog.require('goog.graphics.Fill');
 
 
+
 /**
  * Creates an immutable solid color fill object.
  *

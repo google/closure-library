@@ -34,6 +34,7 @@ goog.require('goog.array');
 goog.require('goog.debug.Logger');
 
 
+
 /**
  * Interface for node in rich data tree.
  *
@@ -51,6 +52,7 @@ goog.ds.DataNode = function() {};
  * @return {Object} The value of the node, or null if no value.
  */
 goog.ds.DataNode.prototype.get = goog.nullFunction;
+
 
 /**
  * Set the value of the node
@@ -150,6 +152,7 @@ goog.ds.LoadState = {
   FAILED: 'FAILED',
   NOT_LOADED: 'NOT_LOADED'
 };
+
 
 
 /**

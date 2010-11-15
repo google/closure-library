@@ -173,7 +173,7 @@ function testGetDocumentHeightInIframe() {
   var height = goog.dom.getDomHelper(myIframeDoc).getDocumentHeight();
 
   // Broken in webkit quirks mode and in IE8
-  if ((goog.dom.isCss1CompatMode_(doc) || !goog.userAgent.WEBKIT ) &&
+  if ((goog.dom.isCss1CompatMode_(doc) || !goog.userAgent.WEBKIT) &&
       !isIE8()) {
     assertEquals('height should be 65', 42 + 23, height);
   }
@@ -930,7 +930,7 @@ function testCanHaveChildren() {
         expected = false;
         break;
     }
-    var node = goog.dom.createDom(tag)
+    var node = goog.dom.createDom(tag);
     assertEquals(tag + ' should ' + (expected ? '' : 'not ') +
         'have children', expected, goog.dom.canHaveChildren(node));
 
@@ -1089,6 +1089,7 @@ function testAppend4() {
   assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);
   assertFalse(div2.hasChildNodes());
 }
+
 
 /**
  * @return {boolean} Returns true if the userAgent is IE8.

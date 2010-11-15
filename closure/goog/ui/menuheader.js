@@ -26,6 +26,7 @@ goog.require('goog.ui.MenuHeaderRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Class representing a menu header.
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to

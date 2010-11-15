@@ -25,6 +25,7 @@ goog.provide('goog.ui.FilterObservingMenuItemRenderer');
 goog.require('goog.ui.MenuItemRenderer');
 
 
+
 /**
  * Default renderer for {@link goog.ui.FilterObservingMenuItem}s. Each item has
  * the following structure:

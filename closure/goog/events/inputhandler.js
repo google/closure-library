@@ -47,6 +47,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.userAgent');
 
 
+
 /**
  * This event handler will dispatch events when the user types into a text
  * input, password input or a textarea
@@ -102,6 +103,7 @@ goog.inherits(goog.events.InputHandler, goog.events.EventTarget);
 goog.events.InputHandler.EventType = {
   INPUT: 'input'
 };
+
 
 /**
  * Id of a timer used to postpone firing input event in emulation mode.

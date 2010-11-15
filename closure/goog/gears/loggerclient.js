@@ -26,6 +26,7 @@ goog.require('goog.debug');
 goog.require('goog.debug.Logger');
 
 
+
 /**
  * Singleton class that overrides the goog.debug.Logger to send log commands
  * to the main thread.

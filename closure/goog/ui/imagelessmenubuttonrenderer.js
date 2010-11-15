@@ -35,6 +35,7 @@ goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Custom renderer for {@link goog.ui.MenuButton}s. Imageless buttons can
  * contain almost arbitrary HTML content, will flow like inline elements, but
@@ -47,6 +48,7 @@ goog.ui.ImagelessMenuButtonRenderer = function() {
   goog.ui.MenuButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.ImagelessMenuButtonRenderer, goog.ui.MenuButtonRenderer);
+
 
 /**
  * The singleton instance of this renderer class.

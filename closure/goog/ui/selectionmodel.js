@@ -28,6 +28,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 
 
+
 /**
  * Single-selection model.  Dispatches a {@link goog.events.EventType.SELECT}
  * event when a selection is made.

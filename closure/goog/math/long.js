@@ -22,6 +22,7 @@
 goog.provide('goog.math.Long');
 
 
+
 /**
  * Constructs a 64-bit two's-complement integer, given its low and high 32-bit
  * values as *signed* integers.  See the from* functions below for more
@@ -183,11 +184,13 @@ goog.math.Long.fromString = function(str, opt_radix) {
  */
 goog.math.Long.TWO_PWR_16_DBL_ = 1 << 16;
 
+
 /**
  * @type {number}
  * @private
  */
 goog.math.Long.TWO_PWR_24_DBL_ = 1 << 24;
+
 
 /**
  * @type {number}
@@ -196,12 +199,14 @@ goog.math.Long.TWO_PWR_24_DBL_ = 1 << 24;
 goog.math.Long.TWO_PWR_32_DBL_ =
     goog.math.Long.TWO_PWR_16_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
 
+
 /**
  * @type {number}
  * @private
  */
 goog.math.Long.TWO_PWR_31_DBL_ =
     goog.math.Long.TWO_PWR_32_DBL_ / 2;
+
 
 /**
  * @type {number}
@@ -210,12 +215,14 @@ goog.math.Long.TWO_PWR_31_DBL_ =
 goog.math.Long.TWO_PWR_48_DBL_ =
     goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
 
+
 /**
  * @type {number}
  * @private
  */
 goog.math.Long.TWO_PWR_64_DBL_ =
     goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_32_DBL_;
+
 
 /**
  * @type {number}
@@ -228,15 +235,19 @@ goog.math.Long.TWO_PWR_63_DBL_ =
 /** @type {!goog.math.Long} */
 goog.math.Long.ZERO = goog.math.Long.fromInt(0);
 
+
 /** @type {!goog.math.Long} */
 goog.math.Long.ONE = goog.math.Long.fromInt(1);
+
 
 /** @type {!goog.math.Long} */
 goog.math.Long.NEG_ONE = goog.math.Long.fromInt(-1);
 
+
 /** @type {!goog.math.Long} */
 goog.math.Long.MAX_VALUE =
     goog.math.Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
+
 
 /** @type {!goog.math.Long} */
 goog.math.Long.MIN_VALUE = goog.math.Long.fromBits(0, 0x80000000 | 0);

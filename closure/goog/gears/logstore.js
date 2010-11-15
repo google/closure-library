@@ -29,6 +29,7 @@ goog.require('goog.gears.BaseStore.SchemaType');
 goog.require('goog.json');
 
 
+
 /**
  * Implements a store for goog.debug.Logger data.
  * @param {goog.gears.Database} database Database.

@@ -25,6 +25,7 @@ goog.require('goog.crypt');
 
 // Static lookup maps, lazily populated by init_()
 
+
 /**
  * Maps bytes to characters.
  * @type {Object}

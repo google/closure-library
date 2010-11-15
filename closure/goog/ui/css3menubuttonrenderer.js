@@ -37,6 +37,7 @@ goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Custom renderer for {@link goog.ui.MenuButton}s. Css3 buttons can contain
  * almost arbitrary HTML content, will flow like inline elements, but can be
@@ -117,7 +118,6 @@ goog.ui.Css3MenuButtonRenderer.prototype.createButton = function(content, dom) {
       dom.createDom('div', [goog.getCssName(baseClass, 'dropdown'),
                             goog.getCssName('goog-inline-block')]));
 };
-
 
 
 /**

@@ -33,6 +33,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Component.State');
 
 
+
 /**
  * Create a new, empty color picker.
  *

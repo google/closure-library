@@ -29,6 +29,7 @@ goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Default renderer for {@link goog.ui.Palette}s.  Renders the palette as an
  * HTML table wrapped in a DIV, with one palette item per cell:

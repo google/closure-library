@@ -24,6 +24,7 @@ goog.require('goog.proto2.Message');
 goog.require('goog.proto2.Util');
 
 
+
 /**
  * Abstract base class for PB2 serializers. A serializer is a class which
  * implements the serialization and deserialization of a Protocol Buffer Message

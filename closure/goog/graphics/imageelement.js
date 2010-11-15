@@ -23,6 +23,7 @@ goog.provide('goog.graphics.ImageElement');
 goog.require('goog.graphics.Element');
 
 
+
 /**
  * Interface for a graphics image element.
  * You should not construct objects from this constructor. Instead,

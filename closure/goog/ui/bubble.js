@@ -40,6 +40,7 @@ goog.require('goog.ui.Popup');
 goog.require('goog.ui.Popup.AnchoredPosition');
 
 
+
 /**
  * The Bubble provides a general purpose bubble implementation that can be
  * anchored to a particular element and displayed for a period of time.
@@ -99,6 +100,7 @@ goog.ui.Bubble = function(message, opt_config, opt_domHelper) {
 };
 goog.inherits(goog.ui.Bubble, goog.ui.Component);
 
+
 /**
  * In milliseconds, timeout after which the button auto-hides. Null means
  * infinite.
@@ -107,6 +109,7 @@ goog.inherits(goog.ui.Bubble, goog.ui.Component);
  */
 goog.ui.Bubble.prototype.timeout_ = null;
 
+
 /**
  * Key returned by the bubble timer.
  * @type {number}
@@ -114,12 +117,14 @@ goog.ui.Bubble.prototype.timeout_ = null;
  */
 goog.ui.Bubble.prototype.timerId_ = 0;
 
+
 /**
  * Key returned by the listen function for the close button.
  * @type {?number}
  * @private
  */
 goog.ui.Bubble.prototype.listener_ = null;
+
 
 /**
  * Key returned by the listen function for the close button.

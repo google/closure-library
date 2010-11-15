@@ -22,6 +22,7 @@ goog.require('goog.Uri');
 goog.require('goog.debug.Logger');
 
 
+
 /**
  * Creates an instance of goog.net.NetworkTester which can be used to test
  * for internet connectivity by seeing if an image can be loaded from

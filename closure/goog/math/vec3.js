@@ -26,6 +26,7 @@ goog.require('goog.math');
 goog.require('goog.math.Coordinate3');
 
 
+
 /**
  * Class for a three-dimensional vector object and assorted functions useful for
  * manipulation.

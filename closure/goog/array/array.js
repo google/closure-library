@@ -23,7 +23,6 @@ goog.provide('goog.array');
 goog.require('goog.asserts');
 
 
-
 /**
  * @typedef {Array|NodeList|Arguments|{length: number}}
  */

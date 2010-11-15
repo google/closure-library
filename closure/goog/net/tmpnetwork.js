@@ -17,6 +17,7 @@
  * for browserchannel which will be moved at a later date.
  */
 
+
 /**
  * Namespace for BrowserChannel
  */
@@ -40,6 +41,7 @@ goog.net.HTTP_STATUS_OK_ = 200;
  * @private
  */
 goog.net.HTTP_STATUS_CACHED_ = 304;
+
 
 /**
  * Default timeout to allow for google.com pings.

@@ -184,7 +184,6 @@ goog.ui.OfflineStatusComponent.prototype.getStatus = function() {
 };
 
 
-
 /**
  * Sets the status of the offline component of the app.
  * @param {goog.gears.StatusType} status The offline

@@ -35,6 +35,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 
 
+
 /**
  * Encapsulates undo/redo logic using a custom undo stack (i.e. not browser
  * built-in). Browser built-in undo stacks are too flaky (e.g. IE's gets
@@ -644,6 +645,7 @@ goog.editor.plugins.UndoRedo.prototype.updateCurrentState_ = function(
 };
 
 
+
 /**
  * This object encapsulates the state of an editable field.
  *
@@ -776,6 +778,7 @@ goog.editor.plugins.UndoRedo.UndoState_.prototype.equals = function(rhs) {
       this.undoContent_ == rhs.undoContent_ &&
       this.redoContent_ == rhs.redoContent_;
 };
+
 
 
 /**

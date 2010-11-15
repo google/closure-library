@@ -33,6 +33,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 
 
+
 /**
  * Once initialized with a document, the activity monitor can be queried for
  * the current idle time.
@@ -265,6 +266,7 @@ goog.ui.ActivityMonitor.prototype.getIdleTime = function(opt_now) {
   var now = opt_now || goog.now();
   return now - this.lastEventTime_;
 };
+
 
 /**
  * Returns the type of the last user event.

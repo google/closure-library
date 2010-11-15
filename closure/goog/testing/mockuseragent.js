@@ -24,6 +24,7 @@ goog.require('goog.Disposable');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Class for unit testing code that uses goog.userAgent.
  *

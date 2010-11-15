@@ -39,6 +39,7 @@ goog.require('goog.array');
 goog.require('goog.i18n.uChar');
 
 
+
 /**
  * Class to decompress base88 compressed character list.
  * @constructor

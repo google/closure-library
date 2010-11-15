@@ -23,6 +23,7 @@ goog.provide('goog.testing.style.layoutasserts');
 goog.require('goog.style');
 goog.require('goog.testing.asserts');
 
+
 /**
  * Asserts that an element has:
  *   1 - a CSS rendering the makes the element visible.

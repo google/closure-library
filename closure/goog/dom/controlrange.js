@@ -36,6 +36,7 @@ goog.require('goog.iter.StopIteration');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Create a new control selection with no properties.  Do not use this
  * constructor: use one of the goog.dom.Range.createFrom* methods instead.
@@ -345,6 +346,7 @@ goog.dom.ControlRange.prototype.collapse = function(toAnchor) {
 // SAVED RANGE OBJECTS
 
 
+
 /**
  * A SavedRange implementation using DOM endpoints.
  * @param {goog.dom.ControlRange} range The range to save.
@@ -385,6 +387,7 @@ goog.dom.DomSavedControlRange_.prototype.disposeInternal = function() {
 
 
 // RANGE ITERATION
+
 
 
 /**

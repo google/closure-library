@@ -21,7 +21,6 @@ goog.provide('goog.json');
 goog.provide('goog.json.Serializer');
 
 
-
 /**
  * Tests if a string is an invalid JSON string. This only ensures that we are
  * not using any invalid characters
@@ -104,6 +103,7 @@ goog.json.parse = function(s) {
 goog.json.unsafeParse = function(s) {
   return eval('(' + s + ')');
 };
+
 
 /**
  * Serializes an object or a value to a JSON string.

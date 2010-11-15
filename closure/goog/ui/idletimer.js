@@ -32,6 +32,7 @@ goog.require('goog.structs.Set');
 goog.require('goog.ui.ActivityMonitor');
 
 
+
 /**
  * Event target that will give notification of state changes between active and
  * idle. This class is designed to require few resources while the user is

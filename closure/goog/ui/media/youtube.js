@@ -80,6 +80,7 @@ goog.require('goog.ui.media.MediaModel.Thumbnail');
 goog.require('goog.ui.media.MediaRenderer');
 
 
+
 /**
  * Subclasses a goog.ui.media.MediaRenderer to provide a Youtube specific media
  * renderer.
@@ -192,6 +193,7 @@ goog.ui.media.Youtube.prototype.setState = function(control, state, enable) {
 goog.ui.media.Youtube.prototype.getCssClass = function() {
   return goog.ui.media.Youtube.CSS_CLASS;
 };
+
 
 
 /**

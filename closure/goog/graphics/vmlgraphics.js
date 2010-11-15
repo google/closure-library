@@ -40,6 +40,7 @@ goog.require('goog.math.Size');
 goog.require('goog.string');
 
 
+
 /**
  * A Graphics implementation for drawing using VML.
  * @param {string|number} width The (non-zero) width in pixels.  Strings
@@ -64,6 +65,7 @@ goog.graphics.VmlGraphics = function(width, height,
   this.handler_ = new goog.events.EventHandler(this);
 };
 goog.inherits(goog.graphics.VmlGraphics, goog.graphics.AbstractGraphics);
+
 
 /**
  * The prefix to use for VML elements
@@ -116,6 +118,7 @@ goog.graphics.VmlGraphics.toCssSize = function(size) {
   return goog.isString(size) && goog.string.endsWith(size, '%') ?
          size : parseFloat(size.toString()) + 'px';
 };
+
 
 /**
  * Multiplies positioning coordinates by COORD_MULTIPLIER to allow sub-pixel

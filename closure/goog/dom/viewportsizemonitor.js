@@ -28,6 +28,7 @@ goog.require('goog.math.Size');
 goog.require('goog.userAgent');
 
 
+
 /**
  * This class can be used to monitor changes in the viewport size.  Instances
  * dispatch a {@link goog.events.EventType.RESIZE} event when the viewport size

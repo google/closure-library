@@ -24,6 +24,7 @@ goog.require('goog.debug.LogManager');
 goog.require('goog.style');
 
 
+
 /**
  * A class for visualising logger calls in a div element.
  * @param {Element} element The element to append to.

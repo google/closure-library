@@ -24,6 +24,7 @@ goog.require('goog.editor.Plugin');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Applies header styles to text.
  * @constructor
@@ -44,6 +45,7 @@ goog.editor.plugins.HeaderFormatter.prototype.getTrogClassId = function() {
 // here for headers.  I'm not doing this now because it depends on the
 // switch statements in basictextformatter and we'll need to abstract that out
 // in order to seperate out any of the functions from basictextformatter.
+
 
 /**
  * Commands that can be passed as the optional argument to execCommand.

@@ -27,6 +27,7 @@ goog.require('goog.json.Serializer');
 goog.require('goog.string');
 
 
+
 /**
  * Object that can serialize objects or values to a protocol buffer string.
  * @constructor

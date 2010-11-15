@@ -34,6 +34,8 @@ goog.require('goog.ui.Dialog.EventType');
 
 // *** Public interface ***************************************************** //
 
+
+
 /**
  * Creates an object that represents a dialog box.
  * @param {goog.dom.DomHelper} domHelper DomHelper to be used to create the
@@ -63,6 +65,7 @@ goog.ui.editor.AbstractDialog.prototype.show = function() {
   this.dialogInternal_.setVisible(true);
 };
 
+
 /**
  * Hides the dialog, causing AFTER_HIDE to fire.
  */
@@ -73,6 +76,7 @@ goog.ui.editor.AbstractDialog.prototype.hide = function() {
     this.dialogInternal_.setVisible(false);
   }
 };
+
 
 /**
  * @return {boolean} Whether the dialog is open.
@@ -102,6 +106,7 @@ goog.ui.editor.AbstractDialog.prototype.processOkAndClose = function() {
 
 // *** Dialog events ******************************************************** //
 
+
 /**
  * Event type constants for events the dialog fires.
  * @enum {string}
@@ -119,6 +124,8 @@ goog.ui.editor.AbstractDialog.EventType = {
 
 // *** Inner helper class *************************************************** //
 
+
+
 /**
  * A builder class for the dialog control. All methods except build return this.
  * @param {goog.ui.editor.AbstractDialog} editorDialog Editor dialog object
@@ -135,6 +142,7 @@ goog.ui.editor.AbstractDialog.Builder = function(editorDialog) {
   this.addClassName(goog.getCssName('tr-dialog'));
 };
 
+
 /**
  * Sets the title of the dialog.
  * @param {string} title Title HTML (escaped).
@@ -144,6 +152,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.setTitle = function(title) {
   this.wrappedDialog_.setTitle(title);
   return this;
 };
+
 
 /**
  * Adds an OK button to the dialog. Clicking this button will cause {@link
@@ -163,6 +172,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addOkButton =
   return this;
 };
 
+
 /**
  * Adds a Cancel button to the dialog. Clicking this button will cause {@link
  * handleCancel} to run, subsequently dispatching a CANCEL event.
@@ -180,6 +190,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addCancelButton =
                                         this.editorDialog_);
   return this;
 };
+
 
 /**
  * Adds a custom button to the dialog.
@@ -202,6 +213,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addButton =
   return this;
 };
 
+
 /**
  * Puts a CSS class on the dialog's main element.
  * @param {string} className The class to add.
@@ -213,6 +225,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addClassName =
   return this;
 };
 
+
 /**
  * Sets the content element of the dialog.
  * @param {Element} contentElem An element for the main body.
@@ -223,6 +236,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.setContent =
   goog.dom.appendChild(this.wrappedDialog_.getContentElement(), contentElem);
   return this;
 };
+
 
 /**
  * Builds the wrapped dialog control. May only be called once, after which
@@ -256,12 +270,14 @@ goog.ui.editor.AbstractDialog.Builder.prototype.build = function() {
   return dialog;
 };
 
+
 /**
  * Editor dialog that will wrap the wrapped dialog this builder will create.
  * @type {goog.ui.editor.AbstractDialog}
  * @private
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.editorDialog_;
+
 
 /**
  * wrapped dialog control being built by this builder.
@@ -270,12 +286,14 @@ goog.ui.editor.AbstractDialog.Builder.prototype.editorDialog_;
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.wrappedDialog_;
 
+
 /**
  * Set of buttons to be added to the wrapped dialog control.
  * @type {goog.ui.Dialog.ButtonSet}
  * @private
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.buttonSet_;
+
 
 /**
  * Map from keys that will be returned in the wrapped dialog SELECT events to
@@ -287,6 +305,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.buttonHandlers_;
 
 
 // *** Protected interface ************************************************** //
+
 
 /**
  * The DOM helper for the parent document.
@@ -305,6 +324,7 @@ goog.ui.editor.AbstractDialog.prototype.dom;
 goog.ui.editor.AbstractDialog.prototype.createDialogControl =
     goog.abstractMethod;
 
+
 /**
  * Returns the HTML Button element for the OK button in this dialog.
  * @return {Element} The button element if found, else null.
@@ -314,6 +334,7 @@ goog.ui.editor.AbstractDialog.prototype.getOkButtonElement = function() {
   return this.getButtonElement(goog.ui.Dialog.DefaultButtonKeys.OK);
 };
 
+
 /**
  * Returns the HTML Button element for the Cancel button in this dialog.
  * @return {Element} The button element if found, else null.
@@ -322,6 +343,7 @@ goog.ui.editor.AbstractDialog.prototype.getOkButtonElement = function() {
 goog.ui.editor.AbstractDialog.prototype.getCancelButtonElement = function() {
   return this.getButtonElement(goog.ui.Dialog.DefaultButtonKeys.CANCEL);
 };
+
 
 /**
  * Returns the HTML Button element for the button added to this dialog with
@@ -348,6 +370,7 @@ goog.ui.editor.AbstractDialog.prototype.getButtonElement = function(buttonId) {
  */
 goog.ui.editor.AbstractDialog.prototype.createOkEvent = goog.abstractMethod;
 
+
 /**
  * Handles the event dispatched by the wrapped dialog control when the user
  * clicks the OK button. Attempts to create the OK event object and dispatches
@@ -367,6 +390,7 @@ goog.ui.editor.AbstractDialog.prototype.handleOk = function(e) {
     return false;
   }
 };
+
 
 /**
  * Handles the event dispatched by the wrapped dialog control when the user
@@ -399,6 +423,7 @@ goog.ui.editor.AbstractDialog.prototype.disposeInternal = function() {
 
 
 // *** Private implementation *********************************************** //
+
 
 /**
  * The wrapped dialog widget.

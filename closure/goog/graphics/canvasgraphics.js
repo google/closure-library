@@ -39,6 +39,7 @@ goog.require('goog.graphics.Stroke');
 goog.require('goog.math.Size');
 
 
+
 /**
  * A Graphics implementation for drawing using canvas.
  * @param {string|number} width The (non-zero) width in pixels.  Strings
@@ -158,6 +159,7 @@ goog.graphics.CanvasGraphics.prototype.createDom = function() {
 
   this.updateSize();
 };
+
 
 /**
  * Clears the drawing context object in response to actions that make the old

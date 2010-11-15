@@ -41,6 +41,7 @@ goog.require('goog.ui.PopupBase.EventType');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Property bubble UI element.
  * @param {Element} parent The parent element for this bubble.
@@ -463,6 +464,7 @@ goog.ui.editor.Bubble.prototype.positionAtAnchor_ = function(
       targetElement, targetCorner, this.bubbleContainer_,
       bubbleCorner, null, goog.ui.editor.Bubble.MARGIN_BOX_, overflow);
 };
+
 
 
 /**

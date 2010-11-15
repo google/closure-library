@@ -38,6 +38,7 @@ goog.require('goog.ui.Component.EventType');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Creates an HSV palette. Allows a user to select the hue, saturation and
  * value/brightness.

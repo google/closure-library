@@ -30,6 +30,7 @@ goog.require('goog.messaging.MessageChannel'); // interface
 goog.require('goog.object');
 
 
+
 /**
  * Creates a new MultiChannel wrapping a single MessageChannel. The
  * underlying channel shouldn't have any other listeners registered, but it
@@ -157,6 +158,7 @@ goog.messaging.MultiChannel.prototype.disposeInternal = function() {
   delete this.virtualChannels_;
   delete this.underlyingChannel_;
 };
+
 
 
 /**

@@ -31,6 +31,7 @@ goog.require('goog.editor.range');
 goog.require('goog.string');
 
 
+
 /**
  * A plugin to handle removing formatting from selected text.
  * @constructor
@@ -686,10 +687,10 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           // border=0 is a common way to not show a blue border around an image
           // that is wrapped by a link. If we remove that, the blue border will
           // show up, which to the user looks like adding format, not removing.
-          if (node.border == "0") {
+          if (node.border == '0') {
             sb.push(" border='0'");
           }
-          sb.push(">");
+          sb.push('>');
           continue;
 
         case goog.dom.TagName.TD:

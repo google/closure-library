@@ -37,6 +37,7 @@ goog.require('goog.ui.Popup');
 goog.require('goog.ui.emoji.EmojiPicker');
 
 
+
 /**
  * Constructs a popup emoji picker widget.
  *

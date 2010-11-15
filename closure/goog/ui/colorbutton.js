@@ -25,6 +25,7 @@ goog.require('goog.ui.ColorButtonRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * A color button control.  Identical to {@link goog.ui.Button}, except it
  * defaults its renderer to {@link goog.ui.ColorButtonRenderer}.

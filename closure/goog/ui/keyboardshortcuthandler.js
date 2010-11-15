@@ -32,6 +32,7 @@ goog.require('goog.events.KeyNames');
 goog.require('goog.object');
 
 
+
 /**
  * Component for handling keyboard shortcuts. A shortcut is registered and bound
  * to a specific identifier. Once the shortcut is triggered an event is fired
@@ -653,6 +654,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isPossiblePrintableKey_ =
       e.ctrlKey && e.altKey && !e.shiftKey;
 };
 
+
 /**
  * Handler for when a keypress event is fired on Windows.
  * @param {goog.events.BrowserEvent} e The key event.
@@ -954,6 +956,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
   // Don't allow any additional shortcut keys for textareas or selects.
   return false;
 };
+
 
 
 /**

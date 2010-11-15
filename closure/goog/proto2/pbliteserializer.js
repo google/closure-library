@@ -135,6 +135,7 @@ goog.proto2.PbLiteSerializer.prototype.getSerializedValue =
                                                                    arguments);
 };
 
+
 /** @inheritDoc */
 goog.proto2.PbLiteSerializer.prototype.getDeserializedValue =
   function(field, value) {

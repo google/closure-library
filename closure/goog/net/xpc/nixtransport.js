@@ -92,6 +92,7 @@ goog.inherits(goog.net.xpc.NixTransport, goog.net.xpc.Transport);
 // reason, so we need to make these names quite unique, as they will go into
 // the global namespace.
 
+
 /**
  * Global name of the Wrapper VBScript class.
  * Note that this class will be stored in the *global*
@@ -110,12 +111,14 @@ goog.net.xpc.NixTransport.NIX_WRAPPER = 'GCXPC____NIXVBS_wrapper';
  */
 goog.net.xpc.NixTransport.NIX_GET_WRAPPER = 'GCXPC____NIXVBS_get_wrapper';
 
+
 /**
  * The name of the handle message method used by the wrapper class
  * when calling the transport.
  * @type {string}
  */
 goog.net.xpc.NixTransport.NIX_HANDLE_MESSAGE = 'GCXPC____NIXJS_handle_message';
+
 
 /**
  * The name of the create channel method used by the wrapper class
@@ -124,6 +127,7 @@ goog.net.xpc.NixTransport.NIX_HANDLE_MESSAGE = 'GCXPC____NIXJS_handle_message';
  */
 goog.net.xpc.NixTransport.NIX_CREATE_CHANNEL = 'GCXPC____NIXJS_create_channel';
 
+
 /**
  * A "unique" identifier that is stored in the wrapper
  * class so that the wrapper can be distinguished from
@@ -131,6 +135,7 @@ goog.net.xpc.NixTransport.NIX_CREATE_CHANNEL = 'GCXPC____NIXJS_create_channel';
  * @type {string}
  */
 goog.net.xpc.NixTransport.NIX_ID_FIELD = 'GCXPC____NIXVBS_container';
+
 
 /**
  * Conducts the global setup work for the NIX transport method.
@@ -232,6 +237,7 @@ goog.net.xpc.NixTransport.conductGlobalSetup_ = function(listenWindow) {
   }
 };
 
+
 /**
  * The transport type.
  * @type {number}
@@ -249,6 +255,7 @@ goog.net.xpc.NixTransport.prototype.transportType =
  * @private
  */
 goog.net.xpc.NixTransport.prototype.localSetupCompleted_ = false;
+
 
 /**
  * The NIX channel used to talk to the other page. This
@@ -312,6 +319,7 @@ goog.net.xpc.NixTransport.prototype.attemptOuterSetup_ = function() {
   }
 };
 
+
 /**
  * Attempts to setup the channel from the perspective
  * of the inner (read: iframe) page. This method
@@ -369,6 +377,7 @@ goog.net.xpc.NixTransport.prototype.attemptInnerSetup_ = function() {
   }
 };
 
+
 /**
  * Internal method called by the inner page, via the
  * NIX wrapper, to complete the setup of the channel.
@@ -398,6 +407,7 @@ goog.net.xpc.NixTransport.prototype.createChannel_ = function(channel) {
    // and ready to use.
    this.channel_.notifyConnected_();
 };
+
 
 /**
  * Internal method called by the other page, via the NIX wrapper,

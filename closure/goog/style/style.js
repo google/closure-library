@@ -847,7 +847,6 @@ goog.style.setWidth = function(element, width) {
 };
 
 
-
 /**
  * Gets the height and width of an element, even if its display is none.
  * Specifically, this returns the height and width of the border box,

@@ -25,6 +25,7 @@ goog.provide('goog.editor.plugins.UndoRedoState');
 goog.require('goog.events.EventTarget');
 
 
+
 /**
  * Represents an undo and redo action for a particular state transition.
  *

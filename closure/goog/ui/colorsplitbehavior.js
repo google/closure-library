@@ -25,6 +25,7 @@ goog.require('goog.ui.ColorMenuButton');
 goog.require('goog.ui.SplitBehavior');
 
 
+
 /**
  * Constructs a ColorSplitBehavior for combining a color button and a menu.
  * To use this, provide a goog.ui.ColorButton which will be attached with

@@ -23,6 +23,7 @@ goog.provide('goog.events.EventType');
 
 goog.require('goog.userAgent');
 
+
 /**
  * Constants for event names.
  * @enum {string}

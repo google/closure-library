@@ -33,6 +33,7 @@ goog.locale.timeZoneDetection.TZ_POKE_POINTS_ = [
   1146380000, 1152489600, 1159800000, 1159500000, 1162095000, 1162075000,
   1162105500];
 
+
 /**
  * Calculates time zone fingerprint by poking time zone offsets for 13
  * preselected time points.
@@ -57,6 +58,7 @@ goog.locale.timeZoneDetection.getFingerprint = function(date) {
   }
   return isComplex ? hash : /** @type {number} */ (stdOffset);
 };
+
 
 /**
  * Detects browser's time zone setting. If user's country is known, a better
@@ -85,6 +87,7 @@ goog.locale.timeZoneDetection.detectTimeZone = function(opt_country, opt_date) {
   }
   return '';
 };
+
 
 /**
  * Returns an array of time zones that are consistent with user's platform

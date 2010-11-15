@@ -105,6 +105,7 @@ goog.ds.AbstractFastDataNode.prototype.getDataPath = function() {
 };
 
 
+
 /**
  * Creates a new fast data node, using the properties of root.
  * @param {Object} root JSON-like object to initialize data node from.
@@ -308,6 +309,7 @@ goog.ds.FastDataNode.prototype.clone = function() {
  * Implementation of goog.ds.DataNodeList for FastDataNode.
  */
 
+
 /**
  * Adds a child to this data node.
  * @param {goog.ds.DataNode} value Child node to add.
@@ -391,6 +393,7 @@ goog.ds.FastDataNode.prototype.removeNode = function(name) {
   delete this[name];
   return false;
 };
+
 
 
 /**
@@ -671,6 +674,7 @@ goog.ds.FastListNode.prototype.getJsObject = function() {
 /*
  * Implementation of goog.ds.DataNodeList for FastListNode.
  */
+
 
 /**
  * Adds a child to this data node

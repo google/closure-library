@@ -288,6 +288,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   delete this.propagationStopped_;
 };
 
+
 /**
  * Tests to see which button was pressed during the event. This is really only
  * useful in IE and Gecko browsers. And in IE, it's only useful for

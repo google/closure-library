@@ -21,7 +21,6 @@ goog.provide('goog.ui.registry');
 goog.require('goog.dom.classes');
 
 
-
 /**
  * Given a {@link goog.ui.Component} constructor, returns an instance of its
  * default renderer.  If the default renderer is a singleton, returns the

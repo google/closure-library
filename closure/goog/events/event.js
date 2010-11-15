@@ -23,6 +23,7 @@ goog.provide('goog.events.Event');
 goog.require('goog.Disposable');
 
 
+
 /**
  * A base class for event objects, so that they can support preventDefault and
  * stopPropagation.

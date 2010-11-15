@@ -43,6 +43,8 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.userAgent');
 
+
+
 /**
  * A wrapper around an element that you want to listen to ACTION events on.
  * @param {Element|Document} element The element or document to listen on.
@@ -75,6 +77,7 @@ goog.events.ActionHandler.EventType = {
   ACTION: 'action',
   BEFOREACTION: 'beforeaction'
 };
+
 
 /**
  * Key event type to listen for.

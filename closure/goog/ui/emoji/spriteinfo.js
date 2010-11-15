@@ -23,6 +23,7 @@
 goog.provide('goog.ui.emoji.SpriteInfo');
 
 
+
 /**
  * Creates a SpriteInfo object with the specified properties. If the image is
  * sprited via CSS, then only the first parameter needs a value. If the image

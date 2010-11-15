@@ -29,6 +29,7 @@ goog.require('goog.gears');
 goog.require('goog.string');
 
 
+
 /**
  * Creates a ManagedResourceStore with the specified name and update.  This
  * follows the Closure event model so the COMPLETE event will fire both for

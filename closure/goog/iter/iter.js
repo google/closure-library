@@ -84,7 +84,6 @@ goog.iter.Iterator.prototype.__iterator__ = function(opt_keys) {
 };
 
 
-
 /**
  * Returns an iterator that knows how to iterate over the values in the object.
  * @param {goog.iter.Iterable} iterable  If the object is an iterator it

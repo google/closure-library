@@ -27,6 +27,7 @@ goog.require('goog.Disposable');
 goog.require('goog.testing.PropertyReplacer');
 
 
+
 /**
  * Class for unit testing code that uses setTimeout and clearTimeout.
  * @param {boolean=} opt_autoInstall Install the MockClock at construction time.

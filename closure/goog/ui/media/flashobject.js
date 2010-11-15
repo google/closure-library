@@ -56,6 +56,7 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.flash');
 
 
+
 /**
  * A very simple flash wrapper, that allows you to create flash object
  * programmatically, instead of embedding your own HTML. It extends
@@ -138,6 +139,7 @@ goog.ui.media.FlashObject.Wmodes = {
   WINDOW: 'window'
 };
 
+
 /**
  * The different levels of allowScriptAccess.
  *
@@ -163,6 +165,7 @@ goog.ui.media.FlashObject.ScriptAccessLevel = {
    */
   NEVER: 'never'
 };
+
 
 /**
  * The component CSS namespace.

@@ -21,6 +21,7 @@
 goog.provide('goog.graphics.Stroke');
 
 
+
 /**
  * Creates an immutable stroke object.
  *

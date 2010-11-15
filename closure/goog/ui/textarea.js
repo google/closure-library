@@ -34,6 +34,7 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
 
+
 /**
  * A textarea control to handle growing/shrinking with textarea.value.
  *
@@ -99,7 +100,6 @@ goog.ui.Textarea.prototype.maxHeight_ = 0;
  * @private
  */
 goog.ui.Textarea.prototype.minHeight_ = 0;
-
 
 
 /**

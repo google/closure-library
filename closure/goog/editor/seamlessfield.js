@@ -42,6 +42,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.style');
 
 
+
 /**
  * This class encapsulates an editable field that blends in with the
  * surrounding page.
@@ -67,6 +68,7 @@ goog.editor.SeamlessField.prototype.logger =
     goog.debug.Logger.getLogger('goog.editor.SeamlessField');
 
 // Functions dealing with field sizing.
+
 
 /**
  * Sets the min height of this editable field's iframe. Only used in growing
@@ -240,7 +242,6 @@ goog.editor.SeamlessField.getScrollbarThickness_ = function() {
 };
 
 
-
 /**
  * Sizes the iframe to its container div's width. The width of the div
  * is controlled by its containing context, not by its contents.
@@ -324,6 +325,7 @@ goog.editor.SeamlessField.prototype.releaseSizeIframeLockGecko_ = function() {
 
 
 // Functions dealing with blending in with the surrounding page.
+
 
 /**
  * String containing the css rules that, if applied to a document's body,
@@ -409,6 +411,7 @@ goog.editor.SeamlessField.prototype.inheritBlendedCSS = function() {
 
 
 // Overridden methods.
+
 
 /** @inheritDoc */
 goog.editor.SeamlessField.prototype.usesIframe = function() {

@@ -24,6 +24,7 @@ goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.debug.errorHandlerWeakDep');
 
 
+
 /**
  * Class used to encapsulate the callbacks to be called when a module loads.
  * @param {Function} fn Callback function.

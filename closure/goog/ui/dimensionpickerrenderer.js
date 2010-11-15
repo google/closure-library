@@ -32,6 +32,7 @@ goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Default renderer for {@link goog.ui.DimensionPicker}s.  Renders the
  * palette as two divs, one with the un-highlighted background, and one with the
@@ -338,6 +339,7 @@ goog.ui.DimensionPickerRenderer.prototype.positionMouseCatcher = function(
 goog.ui.DimensionPickerRenderer.prototype.getCssClass = function() {
   return goog.ui.DimensionPickerRenderer.CSS_CLASS;
 };
+
 
 /**
  * This function adjusts the positioning from 'left' and 'top' to 'right' and

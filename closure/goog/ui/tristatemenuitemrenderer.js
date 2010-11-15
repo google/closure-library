@@ -23,6 +23,7 @@ goog.require('goog.dom.classes');
 goog.require('goog.ui.MenuItemRenderer');
 
 
+
 /**
  * Default renderer for {@link goog.ui.TriStateMenuItemRenderer}s. Each item has
  * the following structure:

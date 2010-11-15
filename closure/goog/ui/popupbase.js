@@ -31,6 +31,7 @@ goog.require('goog.style');
 goog.require('goog.userAgent');
 
 
+
 /**
  * The PopupBase class provides functionality for showing and hiding a generic
  * container element. It also provides the option for hiding the popup element
@@ -56,6 +57,7 @@ goog.ui.PopupBase = function(opt_element, opt_type) {
 };
 goog.inherits(goog.ui.PopupBase, goog.events.EventTarget);
 
+
 /**
  * Constants for type of Popup
  * @enum {string}
@@ -65,12 +67,14 @@ goog.ui.PopupBase.Type = {
   MOVE_OFFSCREEN: 'move_offscreen'
 };
 
+
 /**
  * The popup dom element that this Popup wraps.
  * @type {Element}
  * @private
  */
 goog.ui.PopupBase.prototype.element_ = null;
+
 
 /**
  * Whether the Popup dismisses itself it the user clicks outside of it or the
@@ -79,6 +83,7 @@ goog.ui.PopupBase.prototype.element_ = null;
  * @private
  */
 goog.ui.PopupBase.prototype.autoHide_ = true;
+
 
 /**
  * Clicks outside the popup but inside this element will cause the popup to
@@ -90,12 +95,14 @@ goog.ui.PopupBase.prototype.autoHide_ = true;
  */
 goog.ui.PopupBase.prototype.autoHideRegion_ = null;
 
+
 /**
  * Whether the popup is currently being shown.
  * @type {boolean}
  * @private
  */
 goog.ui.PopupBase.prototype.isVisible_ = false;
+
 
 /**
  * Whether the popup should hide itself asynchrously. This was added because
@@ -107,12 +114,14 @@ goog.ui.PopupBase.prototype.isVisible_ = false;
  */
 goog.ui.PopupBase.prototype.shouldHideAsync_ = false;
 
+
 /**
  * The time when the popup was last shown.
  * @type {number}
  * @private
  */
 goog.ui.PopupBase.prototype.lastShowTime_ = -1;
+
 
 /**
  * The time when the popup was last hidden.
@@ -121,12 +130,14 @@ goog.ui.PopupBase.prototype.lastShowTime_ = -1;
  */
 goog.ui.PopupBase.prototype.lastHideTime_ = -1;
 
+
 /**
  * Whether to hide when the escape key is pressed.
  * @type {boolean}
  * @private
  */
 goog.ui.PopupBase.prototype.hideOnEscape_ = false;
+
 
 /**
  * Whether to enable cross-iframe dismissal.
@@ -135,12 +146,14 @@ goog.ui.PopupBase.prototype.hideOnEscape_ = false;
  */
 goog.ui.PopupBase.prototype.enableCrossIframeDismissal_ = true;
 
+
 /**
  * The type of popup
  * @type {goog.ui.PopupBase.Type}
  * @private
  */
 goog.ui.PopupBase.prototype.type_ = goog.ui.PopupBase.Type.TOGGLE_DISPLAY;
+
 
 /**
  * Constants for event type fired by Popup
@@ -171,6 +184,7 @@ goog.ui.PopupBase.EventType = {
  * @type {number}
  */
 goog.ui.PopupBase.DEBOUNCE_DELAY_MS = 150;
+
 
 /**
  * @return {goog.ui.PopupBase.Type} The type of popup this is.
@@ -339,6 +353,7 @@ goog.ui.PopupBase.prototype.ensureNotVisible_ = function() {
     throw Error('Can not change this state of the popup while showing.');
   }
 };
+
 
 /**
  * Returns whether the popup is currently visible.

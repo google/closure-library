@@ -100,6 +100,7 @@ goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlRenderer');
 
 
+
 /**
  * Provides the control mechanism of media types.
  *
@@ -153,6 +154,7 @@ goog.ui.media.Media.prototype.setDataModel = function(dataModel) {
 goog.ui.media.Media.prototype.getDataModel = function() {
   return this.dataModel_;
 };
+
 
 
 /**

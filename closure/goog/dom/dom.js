@@ -461,6 +461,7 @@ goog.dom.getDocumentHeight = function() {
   return goog.dom.getDocumentHeight_(window);
 };
 
+
 /**
  * Calculates the height of the document of the given window.
  *
@@ -638,6 +639,7 @@ goog.dom.getWindow_ = function(doc) {
 goog.dom.createDom = function(tagName, opt_attributes, var_args) {
   return goog.dom.createDom_(document, arguments);
 };
+
 
 /**
  * Helper for {@code createDom}.
@@ -1812,6 +1814,7 @@ goog.dom.getAncestor = function(
   // Reached the root of the DOM without a match
   return null;
 };
+
 
 
 /**

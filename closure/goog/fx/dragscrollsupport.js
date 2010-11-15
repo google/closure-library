@@ -28,6 +28,7 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 
 
+
 /**
  * A scroll support class. Currently this class will automatically scroll
  * a scrollable container node and scroll it by a fixed amount at a timed

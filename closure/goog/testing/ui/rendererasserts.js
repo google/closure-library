@@ -22,7 +22,6 @@ goog.provide('goog.testing.ui.rendererasserts');
 goog.require('goog.testing.asserts');
 
 
-
 /**
  * Assert that a control renderer constructor doesn't call getCssClass.
  *

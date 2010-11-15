@@ -39,10 +39,12 @@ goog.provide('goog.asserts.AssertionError');
 goog.require('goog.debug.Error');
 goog.require('goog.string');
 
+
 /**
  * @define {boolean} Whether to strip out asserts or to leave them in.
  */
 goog.asserts.ENABLE_ASSERTS = goog.DEBUG;
+
 
 
 /**

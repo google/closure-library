@@ -110,7 +110,6 @@ goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
 };
 
 
-
 /**
  * Disposes of the specified goog.testing.net.XhrIo created by
  * {@link goog.testing.net.XhrIo.send} and removes it from

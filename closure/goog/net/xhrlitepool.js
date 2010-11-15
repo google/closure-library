@@ -24,6 +24,7 @@ goog.provide('goog.net.XhrLitePool');
 goog.require('goog.net.XhrIoPool');
 
 
+
 /**
  * A pool of XhrLite objects.
  * @param {goog.structs.Map=} opt_headers Map of default headers to add to every

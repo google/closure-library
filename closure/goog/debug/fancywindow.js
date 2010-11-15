@@ -35,6 +35,7 @@ goog.require('goog.object');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Provides a Fancy extension to the DebugWindow class.  Allows filtering based
  * on loggers and levels.

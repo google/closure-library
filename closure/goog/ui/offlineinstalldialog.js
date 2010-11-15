@@ -40,6 +40,7 @@ goog.require('goog.ui.Dialog.EventType');
 goog.require('goog.window');
 
 
+
 /**
  * An offline install dialog.
  * @param {string=} opt_class CSS class name for the dialog element, also used
@@ -574,6 +575,8 @@ goog.ui.OfflineInstallDialogScreen.prototype.handleSelect = function(e) {
 
 // Classes for some of the standard screens
 
+
+
 /**
  * This screen is shown to users that do have Gears installed but have
  * not enabled the current application for offline access.
@@ -979,6 +982,7 @@ goog.ui.OfflineInstallDialog.UpgradeScreen.prototype.setUpgradeDescription =
 };
 
 
+
 /**
  * This screen is shown to users after the window to the Gears download page has
  * been opened.
@@ -1033,6 +1037,7 @@ goog.ui.OfflineInstallDialog.InstallingGearsScreen.prototype.getButtonSet =
   }
   return this.buttonSet_;
 };
+
 
 /**
  * Gets the content for the dialog when the user is suposed to be installing

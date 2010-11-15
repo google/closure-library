@@ -26,6 +26,7 @@ goog.provide('goog.dom.browserrange.OperaRange');
 goog.require('goog.dom.browserrange.W3cRange');
 
 
+
 /**
  * The constructor for Opera specific browser ranges.
  * @param {Range} range The range object.

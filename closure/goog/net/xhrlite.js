@@ -22,6 +22,7 @@ goog.provide('goog.net.XhrLite');
 goog.require('goog.net.XhrIo');
 
 
+
 /**
  * Basic class for handling XmlHttpRequests.
  * @deprecated Use goog.net.XhrIo instead.
@@ -30,6 +31,7 @@ goog.require('goog.net.XhrIo');
 goog.net.XhrLite = goog.net.XhrIo;
 
 // Statics are needed to avoid code removal.
+
 
 /**
  * Static send that creates a short lived instance of XhrIo to send the

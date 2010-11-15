@@ -29,6 +29,7 @@ goog.require('goog.editor.node');
 goog.require('goog.functions');
 
 
+
 /**
  * A plugin that manages lorem ipsum state of editable fields.
  * @param {string} message The lorem ipsum message.
@@ -47,13 +48,16 @@ goog.editor.plugins.LoremIpsum = function(message) {
 };
 goog.inherits(goog.editor.plugins.LoremIpsum, goog.editor.Plugin);
 
+
 /** @inheritDoc */
 goog.editor.plugins.LoremIpsum.prototype.getTrogClassId =
     goog.functions.constant('LoremIpsum');
 
+
 /** @inheritDoc */
 goog.editor.plugins.LoremIpsum.prototype.activeOnUneditableFields =
     goog.functions.TRUE;
+
 
 /**
  * Whether the field is currently filled with lorem ipsum text.
@@ -61,6 +65,7 @@ goog.editor.plugins.LoremIpsum.prototype.activeOnUneditableFields =
  * @private
  */
 goog.editor.plugins.LoremIpsum.prototype.usingLorem_ = false;
+
 
 /**
  * Handles queryCommandValue.
@@ -70,6 +75,7 @@ goog.editor.plugins.LoremIpsum.prototype.usingLorem_ = false;
 goog.editor.plugins.LoremIpsum.prototype.queryCommandValue = function(command) {
   return command == goog.editor.Command.USING_LOREM && this.usingLorem_;
 };
+
 
 /**
  * Handles execCommand.
@@ -87,6 +93,7 @@ goog.editor.plugins.LoremIpsum.prototype.execCommand = function(command,
   }
 };
 
+
 /** @inheritDoc */
 goog.editor.plugins.LoremIpsum.prototype.isSupportedCommand =
     function(command) {
@@ -94,6 +101,7 @@ goog.editor.plugins.LoremIpsum.prototype.isSupportedCommand =
       command == goog.editor.Command.UPDATE_LOREM ||
       command == goog.editor.Command.USING_LOREM;
 };
+
 
 /**
  * Set the lorem ipsum text in a goog.editor.Field if needed.
@@ -130,6 +138,7 @@ goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
     }
   }
 };
+
 
 /**
  * Clear an EditableField's lorem ipsum and put in initial text if needed.

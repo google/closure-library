@@ -31,7 +31,6 @@ goog.require('goog.math.Size');
 goog.require('goog.style');
 
 
-
 /**
  * Enum for representing an element corner for positioning the popup.
  *

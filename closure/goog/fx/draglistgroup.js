@@ -38,6 +38,7 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 
 
+
 /**
  * A class representing a group of one or more "drag lists" with items that can
  * be dragged within them and between them.
@@ -106,7 +107,6 @@ goog.fx.DragListGroup = function() {
 goog.inherits(goog.fx.DragListGroup, goog.events.EventTarget);
 
 
-
 /**
  * Enum to indicate the direction that a drag list grows.
  * @enum {number}
@@ -136,6 +136,7 @@ goog.fx.DragListGroup.EventType = {
 
 
 // The next 4 are user-supplied CSS classes.
+
 
 /**
  * The user-supplied CSS classes to add to a drag item on hover (not during a
@@ -174,6 +175,7 @@ goog.fx.DragListGroup.prototype.draggerElClass_;
 
 
 // The next 5 are info applicable during a drag action.
+
 
 /**
  * The current drag item being moved.
@@ -401,7 +403,6 @@ goog.fx.DragListGroup.prototype.disposeInternal = function() {
 
   goog.fx.DragListGroup.superClass_.disposeInternal.call(this);
 };
-
 
 
 /**
@@ -644,7 +645,6 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
 
   return true;
 };
-
 
 
 /**
@@ -918,6 +918,7 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
   }
 };
 
+
 /**
  * Private helper for getHoverNextItem().
  * Given an item and a target determine the vertical distance from the item's
@@ -935,6 +936,7 @@ goog.fx.DragListGroup.verticalDistanceFromItem_ = function(item, target) {
   return Math.abs(target.y - itemCenterY);
 };
 
+
 /**
  * Private helper for getHoverNextItem_().
  * Given the bounds of an item, computes the item's bottom y-value.
@@ -945,6 +947,7 @@ goog.fx.DragListGroup.verticalDistanceFromItem_ = function(item, target) {
 goog.fx.DragListGroup.getBottomBound_ = function(itemBounds) {
   return itemBounds.top + itemBounds.height - 1;
 };
+
 
 /**
  * Private helper for getHoverNextItem_().
@@ -957,6 +960,7 @@ goog.fx.DragListGroup.getTopBound_ = function(itemBounds) {
   return itemBounds.top || 0;
 };
 
+
 /**
  * Private helper for getHoverNextItem_().
  * Given the bounds of an item, computes the item's right x-value.
@@ -967,6 +971,7 @@ goog.fx.DragListGroup.getTopBound_ = function(itemBounds) {
 goog.fx.DragListGroup.getRightBound_ = function(itemBounds) {
   return itemBounds.left + itemBounds.width - 1;
 };
+
 
 /**
  * Private helper for getHoverNextItem_().
@@ -979,6 +984,7 @@ goog.fx.DragListGroup.getLeftBound_ = function(itemBounds) {
   return itemBounds.left || 0;
 };
 
+
 /**
  * Private helper for getHoverNextItem_().
  * @param {number} a Number to compare.
@@ -989,6 +995,7 @@ goog.fx.DragListGroup.getLeftBound_ = function(itemBounds) {
 goog.fx.DragListGroup.isLessThan_ = function(a, b) {
   return a < b;
 };
+
 
 /**
  * Private helper for getHoverNextItem_().

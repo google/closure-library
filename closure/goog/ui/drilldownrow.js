@@ -66,6 +66,7 @@ goog.require('goog.events');
 goog.require('goog.ui.Component');
 
 
+
 /**
  * Builds a DrilldownRow component, which can overlay a tree
  * structure onto sections of an HTML table.
@@ -160,6 +161,7 @@ goog.ui.DrilldownRow.sampleProperties = {
 //
 // Implementations of Component methods.
 //
+
 
 /**
  * The base class method calls its superclass method and this
@@ -381,6 +383,7 @@ goog.ui.DrilldownRow.decorate = function(selfObj) {
 //
 // Private methods
 //
+
 
 /**
  * Turn display of a DrilldownRow on or off.  If the DrilldownRow has not

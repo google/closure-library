@@ -20,6 +20,7 @@
 goog.provide('goog.testing.MockInterface');
 
 
+
 /** @interface */
 goog.testing.MockInterface = function() {};
 

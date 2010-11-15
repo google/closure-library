@@ -24,6 +24,7 @@ goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Class representing a checkbox menu item.  This is just a convenience class
  * that extends {@link goog.ui.MenuItem} by making it checkable.

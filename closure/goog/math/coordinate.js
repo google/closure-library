@@ -20,6 +20,7 @@
 goog.provide('goog.math.Coordinate');
 
 
+
 /**
  * Class for representing coordinates and positions.
  * @param {number=} opt_x Left, defaults to 0.

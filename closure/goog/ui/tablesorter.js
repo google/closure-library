@@ -32,6 +32,7 @@ goog.require('goog.functions');
 goog.require('goog.ui.Component');
 
 
+
 /**
  * A table sorter allows for sorting of a table by column.  This component can
  * be used to decorate an already existing TABLE element with sorting

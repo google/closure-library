@@ -38,6 +38,7 @@ goog.require('goog.math.Size');
 goog.require('goog.userAgent');
 
 
+
 /**
  * A Graphics implementation for drawing using SVG.
  * @param {string|number} width The width in pixels.  Strings

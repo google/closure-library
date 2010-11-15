@@ -43,6 +43,7 @@ goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.Tooltip.ElementTooltipPosition');
 
 
+
 /**
  * Character Picker Class. This widget can be used to pick any Unicode
  * character by traversing a category-subcategory structure or by inputing its

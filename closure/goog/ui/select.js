@@ -30,6 +30,7 @@ goog.require('goog.ui.SelectionModel');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * A selection control.  Extends {@link goog.ui.MenuButton} by composing a
  * menu with a selection model, and automatically updating the button's caption

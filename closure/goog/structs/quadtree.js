@@ -456,6 +456,7 @@ goog.structs.QuadTree.NodeType = {
 };
 
 
+
 /**
  * Constructs a new quad tree node.
  * @param {number} x X-coordiate of node.
@@ -539,6 +540,7 @@ goog.structs.QuadTree.Node.prototype.se = null;
  * @type {goog.structs.QuadTree.Point?}
  */
 goog.structs.QuadTree.Node.prototype.point = null;
+
 
 
 /**

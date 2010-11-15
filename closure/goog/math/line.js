@@ -25,6 +25,7 @@ goog.require('goog.math');
 goog.require('goog.math.Coordinate');
 
 
+
 /**
  * Object representing a line.
  * @param {number} x0 X coordinate of the start point.

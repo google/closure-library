@@ -32,6 +32,7 @@ goog.require('goog.string');
 goog.require('goog.uri.utils');
 
 
+
 /**
  * Constructs an error reporter. Internal Use Only. To install an error
  * reporter see the {@see #install} method below.
@@ -77,6 +78,7 @@ goog.debug.ErrorReporter = function(
   }
 };
 goog.inherits(goog.debug.ErrorReporter, goog.events.EventTarget);
+
 
 
 /**
@@ -205,6 +207,7 @@ goog.debug.ErrorReporter.prototype.setLoggingHeaders =
     function(loggingHeaders) {
   this.extraHeaders_ = loggingHeaders;
 };
+
 
 /**
  * Set the function used to send error reports to the server.

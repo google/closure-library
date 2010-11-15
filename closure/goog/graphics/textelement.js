@@ -23,6 +23,7 @@ goog.provide('goog.graphics.TextElement');
 goog.require('goog.graphics.StrokeAndFillElement');
 
 
+
 /**
  * Interface for a graphics text element.
  * You should not construct objects from this constructor. The graphics

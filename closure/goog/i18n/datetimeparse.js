@@ -16,6 +16,7 @@
  * @fileoverview Date/Time parsing library with locale support.
  */
 
+
 /**
  * Namespace for locale date/time parsing functions
  */
@@ -118,6 +119,7 @@ goog.require('goog.i18n.DateTimeSymbols');
  *
  * <p> Now timezone parsing only support GMT:hhmm, GMT:+hhmm, GMT:-hhmm
  */
+
 
 
 /**
@@ -874,6 +876,7 @@ goog.i18n.DateTimeParse.prototype.matchString_ = function(text, pos, data) {
 };
 
 
+
 /**
  * This class hold the intermediate parsing result. After all fields are
  * consumed, final result will be resolved from this class.
@@ -882,11 +885,13 @@ goog.i18n.DateTimeParse.prototype.matchString_ = function(text, pos, data) {
  */
 goog.i18n.DateTimeParse.MyDate_ = function() {};
 
+
 /**
  * The date's era.
  * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.era;
+
 
 /**
  * The date's year.
@@ -894,11 +899,13 @@ goog.i18n.DateTimeParse.MyDate_.prototype.era;
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.year;
 
+
 /**
  * The date's month.
  * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.month;
+
 
 /**
  * The date's day of month.
@@ -906,11 +913,13 @@ goog.i18n.DateTimeParse.MyDate_.prototype.month;
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.day;
 
+
 /**
  * The date's hour.
  * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.hours;
+
 
 /**
  * The date's before/afternoon denominator.
@@ -918,11 +927,13 @@ goog.i18n.DateTimeParse.MyDate_.prototype.hours;
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.ampm;
 
+
 /**
  * The date's minutes.
  * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.minutes;
+
 
 /**
  * The date's seconds.
@@ -930,11 +941,13 @@ goog.i18n.DateTimeParse.MyDate_.prototype.minutes;
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.seconds;
 
+
 /**
  * The date's milliseconds.
  * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.milliseconds;
+
 
 /**
  * The date's timezone offset.
@@ -942,11 +955,13 @@ goog.i18n.DateTimeParse.MyDate_.prototype.milliseconds;
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.tzOffset;
 
+
 /**
  * The date's day of week. Sunday is 0, Saturday is 6.
  * @type {?number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.dayOfWeek;
+
 
 /**
  * 2 digit year special handling. Assuming for example that the

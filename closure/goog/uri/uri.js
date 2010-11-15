@@ -40,6 +40,7 @@ goog.require('goog.uri.utils');
 goog.require('goog.uri.utils.ComponentIndex');
 
 
+
 /**
  * This class contains setters and getters for the parts of the URI.
  * The <code>getXyz</code>/<code>setXyz</code> methods return the decoded part
@@ -1012,7 +1013,6 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
          pieces1[goog.uri.utils.ComponentIndex.PORT] ==
              pieces2[goog.uri.utils.ComponentIndex.PORT];
 };
-
 
 
 

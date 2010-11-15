@@ -29,6 +29,7 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.string.format');
 
 
+
 /**
  * Formats a JSON object as a string, properly indented for display.  Supports
  * displaying the string as text or html.  Users can also specify their own
@@ -246,6 +247,7 @@ goog.format.JsonPrettyPrinter.prototype.printSpaces_ = function(indent,
 };
 
 
+
 /**
  * A container for the delimiting characters used to display the JSON string
  * to a text display.  Each delimiter is a publicly accessible property of
@@ -352,6 +354,7 @@ goog.format.JsonPrettyPrinter.TextDelimiters.prototype.postValue = '';
  * @type {number}
  */
 goog.format.JsonPrettyPrinter.TextDelimiters.prototype.indent = 2;
+
 
 
 /**

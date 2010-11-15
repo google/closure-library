@@ -20,7 +20,6 @@
 goog.provide('goog.fx.easing');
 
 
-
 /**
  * Ease in - Start slow and speed up.
  * @param {number} t Input between 0 and 1.
@@ -29,6 +28,7 @@ goog.provide('goog.fx.easing');
 goog.fx.easing.easeIn = function(t) {
   return t * t * t;
 };
+
 
 /**
  * Ease out - Start fastest and slows to a stop.

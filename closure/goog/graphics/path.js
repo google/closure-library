@@ -24,6 +24,7 @@ goog.require('goog.array');
 goog.require('goog.math');
 
 
+
 /**
  * Creates a path object. A path is a sequence of segments and may be open or
  * closed. Path uses the EVEN-ODD fill rule for determining the interior of the

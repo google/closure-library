@@ -25,7 +25,6 @@ goog.require('goog.net.WrapperXmlHttpFactory');
 goog.require('goog.net.XmlHttpFactory');
 
 
-
 /**
  * Static class for creating XMLHttpRequest objects.
  * @return {!(XMLHttpRequest|GearsHttpRequest)} A new XMLHttpRequest object.
@@ -127,6 +126,7 @@ goog.net.XmlHttp.setFactory = function(factory, optionsFactory) {
 goog.net.XmlHttp.setGlobalFactory = function(factory) {
   goog.net.XmlHttp.factory_ = factory;
 };
+
 
 
 /**

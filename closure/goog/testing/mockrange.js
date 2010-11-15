@@ -40,6 +40,8 @@ goog.inherits(goog.testing.MockRange, goog.testing.LooseMock);
 
 // *** Private helper class ************************************************* //
 
+
+
 /**
  * Concrete subclass of goog.dom.AbstractRange that simply sets the abstract
  * method __iterator__ to undefined so that javascript defaults to iterating

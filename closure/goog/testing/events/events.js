@@ -45,6 +45,7 @@ goog.require('goog.object');
 goog.require('goog.userAgent');
 
 
+
 /**
  * goog.events.BrowserEvent expects an Event so we provide one for JSCompiler.
  *
@@ -225,6 +226,7 @@ goog.testing.events.isBrokenGeckoMacActionKey_ = function(e) {
        e.keyCode == goog.events.KeyCodes.X ||
        e.keyCode == goog.events.KeyCodes.V) && e.metaKey;
 };
+
 
 /**
  * Simulates a mouseover event on the given target.

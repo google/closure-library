@@ -26,6 +26,7 @@ goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.SpriteInfo');
 
 
+
 /**
  * Renders an emoji palette.
  *
@@ -49,7 +50,6 @@ goog.inherits(goog.ui.emoji.EmojiPaletteRenderer, goog.ui.PaletteRenderer);
  * @private
  */
 goog.ui.emoji.EmojiPaletteRenderer.cellId_ = 0;
-
 
 
 /**

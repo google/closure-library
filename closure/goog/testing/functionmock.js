@@ -51,7 +51,6 @@ goog.testing.FunctionMock = function(opt_functionName) {
 };
 
 
-
 /**
  * Mocks an existing function. Creates a goog.testing.FunctionMock
  * and registers it in the given scope with the name specified by functionName.
@@ -81,7 +80,6 @@ goog.testing.MethodMock = function(scope, functionName) {
 goog.testing.MethodMock.$tearDown = function() {
   this.$propertyReplacer_.reset();
 };
-
 
 
 /**

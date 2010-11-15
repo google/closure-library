@@ -23,6 +23,7 @@ goog.provide('goog.graphics.EllipseElement');
 goog.require('goog.graphics.StrokeAndFillElement');
 
 
+
 /**
  * Interface for a graphics ellipse element.
  * You should not construct objects from this constructor. The graphics

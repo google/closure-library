@@ -147,6 +147,7 @@ goog.ui.editor.ToolbarFactory.getPxFromLegacySize = function(fontSize) {
   return goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_[fontSize] || 10;
 };
 
+
 /**
  * Converts a pixel font size specification into an equivalent legacy size.
  * For example, {@code font-size: 32px;} is {@code &lt;font size="6"&gt;}, etc.
@@ -162,6 +163,7 @@ goog.ui.editor.ToolbarFactory.getLegacySizeFromPx = function(px) {
   return goog.array.lastIndexOf(
       goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_, px);
 };
+
 
 /**
  * Map of legacy font sizes (0-7) to equivalent pixel sizes.

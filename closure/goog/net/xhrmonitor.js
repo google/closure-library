@@ -38,6 +38,7 @@ goog.require('goog.debug.Logger');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Class used for singleton goog.net.xhrMonitor which can be used for monitoring
  * whether there any XmlHttpRequests have been opened in a given execution

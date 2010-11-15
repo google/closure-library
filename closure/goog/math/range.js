@@ -20,6 +20,7 @@
 goog.provide('goog.math.Range');
 
 
+
 /**
  * A number range.
  * @param {number} a One end of the range.

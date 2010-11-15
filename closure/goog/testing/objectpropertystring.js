@@ -20,6 +20,8 @@
 
 goog.provide('goog.testing.ObjectPropertyString');
 
+
+
 /**
  * Object to pass a property name as a string literal and its containing object
  * when the JSCompiler is rewriting these names. This should only be used in

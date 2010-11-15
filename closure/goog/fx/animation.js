@@ -453,7 +453,6 @@ goog.fx.Animation.prototype.onAnimate = function() {
 };
 
 
-
 /**
  * Dispatches the BEGIN event. Sub classes should override this instead
  * of listening to the event.
@@ -512,6 +511,7 @@ goog.fx.Animation.prototype.onPause = function() {
 goog.fx.Animation.prototype.onPlay = function() {
   this.dispatchAnimationEvent_(goog.fx.Animation.EventType.PLAY);
 };
+
 
 /**
  * Dispatches the RESUME event. Sub classes should override this instead

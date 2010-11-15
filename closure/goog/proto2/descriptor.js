@@ -32,6 +32,7 @@ goog.require('goog.proto2.Util');
 goog.proto2.Metadata = goog.typedef;
 
 
+
 /**
  * A class which describes a Protocol Buffer 2 Message.
  *

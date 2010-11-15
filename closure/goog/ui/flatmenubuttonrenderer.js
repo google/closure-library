@@ -32,6 +32,7 @@ goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Flat Menu Button renderer. Creates a simpler version of
  * {@link goog.ui.MenuButton} that doesn't look like a button and
@@ -175,7 +176,6 @@ goog.ui.FlatMenuButtonRenderer.prototype.createDropdown = function(dom) {
       goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
       goog.getCssName(this.getCssClass(), 'dropdown'), '\u00A0');
 };
-
 
 
 /**

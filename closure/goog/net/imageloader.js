@@ -28,6 +28,8 @@ goog.require('goog.net.EventType');
 goog.require('goog.object');
 goog.require('goog.userAgent');
 
+
+
 /**
  * Image loader utility class.  Raises a {@link goog.events.EventType.LOAD}
  * event for each image loaded, with an {@link Image} object as the target of

@@ -73,6 +73,7 @@ goog.require('goog.ui.media.MediaModel.Player');
 goog.require('goog.ui.media.MediaRenderer');
 
 
+
 /**
  * Subclasses a goog.ui.media.MediaRenderer to provide a Picasa specific media
  * renderer.
@@ -172,6 +173,7 @@ goog.ui.media.PicasaAlbum.prototype.createDom = function(control) {
 goog.ui.media.PicasaAlbum.prototype.getCssClass = function() {
   return goog.ui.media.PicasaAlbum.CSS_CLASS;
 };
+
 
 
 /**

@@ -41,6 +41,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 
 
+
 /**
  * This creates the label input object.
  * @param {string=} opt_label The text to show as the label.
@@ -131,6 +132,7 @@ goog.ui.LabelInput.prototype.exitDocument = function() {
 
   this.getElement().labelInput_ = null;
 };
+
 
 /**
  * Attaches the events we need to listen to.
@@ -264,7 +266,6 @@ goog.ui.LabelInput.prototype.handleEscapeKeys_ = function(e) {
     e.preventDefault();
   }
 };
-
 
 
 /**

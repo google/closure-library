@@ -30,6 +30,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.userAgent');
 
 
+
 /**
  * This event handler allows you to catch focus events when descendants gain or
  * loses focus.

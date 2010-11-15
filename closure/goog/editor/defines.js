@@ -20,7 +20,6 @@
 goog.provide('goog.editor.defines');
 
 
-
 /**
  * @define {boolean} Use contentEditable in FF.
  * There are a number of known bugs when the only content in your field is

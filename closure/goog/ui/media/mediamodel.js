@@ -30,6 +30,7 @@ goog.provide('goog.ui.media.MediaModel.Thumbnail');
 goog.require('goog.array');
 
 
+
 /**
  * An base data value class for all media data models.
  *
@@ -461,6 +462,7 @@ goog.ui.media.MediaModel.prototype.findCreditWithRole = function(role) {
 };
 
 
+
 /**
  * Constructs a thumbnail containing details of the thumbnail's image URL and
  * optionally its size.
@@ -525,6 +527,7 @@ goog.ui.media.MediaModel.Thumbnail.prototype.setSize = function(size) {
   this.size_ = size;
   return this;
 };
+
 
 
 /**
@@ -620,6 +623,7 @@ goog.ui.media.MediaModel.Player.prototype.setSize = function(size) {
   this.size_ = size;
   return this;
 };
+
 
 
 /**

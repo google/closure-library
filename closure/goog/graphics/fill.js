@@ -21,6 +21,7 @@
 goog.provide('goog.graphics.Fill');
 
 
+
 /**
  * Creates a fill object
  * @constructor

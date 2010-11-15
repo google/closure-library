@@ -28,6 +28,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.string');
 
 
+
 /**
  * A struct for holding context about saved selections.
  * This can be used to preserve the selection and restore while the DOM is

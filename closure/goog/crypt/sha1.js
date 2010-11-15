@@ -26,6 +26,8 @@
 
 goog.provide('goog.crypt.Sha1');
 
+
+
 /**
  * SHA-1 cryptographic hash constructor.
  *

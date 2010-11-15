@@ -31,6 +31,7 @@ goog.require('goog.object');
 goog.require('goog.structs');
 
 
+
 /**
  * Class for Hash Map datastructure.
  * @param {*=} opt_map Map or Object to initialize the map with.
@@ -92,6 +93,7 @@ goog.structs.Map.prototype.count_ = 0;
  * @type {number}
  */
 goog.structs.Map.prototype.version_ = 0;
+
 
 /**
  * @return {number} The number of key-value pairs in the map.
@@ -211,6 +213,7 @@ goog.structs.Map.prototype.clear = function() {
   this.count_ = 0;
   this.version_ = 0;
 };
+
 
 /**
  * Removes a key-value pair based on the key. This is O(logN) amortized due to

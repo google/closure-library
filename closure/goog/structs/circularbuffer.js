@@ -25,6 +25,7 @@
 goog.provide('goog.structs.CircularBuffer');
 
 
+
 /**
  * Class for CircularBuffer.
  * @param {number=} opt_maxSize The maximum size of the buffer.

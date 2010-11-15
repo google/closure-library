@@ -44,6 +44,7 @@ goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Base class for UI controls.  Extends {@link goog.ui.Component} by adding
  * the following:

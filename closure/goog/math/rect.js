@@ -22,6 +22,8 @@ goog.provide('goog.math.Rect');
 goog.require('goog.math.Box');
 goog.require('goog.math.Size');
 
+
+
 /**
  * Class for representing rectangular regions.
  * @param {number} x Left.
@@ -303,6 +305,7 @@ goog.math.Rect.boundingRect = function(a, b) {
 
   return clone;
 };
+
 
 /**
  * Tests whether this rectangle entirely contains another rectangle or

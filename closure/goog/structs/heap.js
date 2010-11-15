@@ -39,6 +39,7 @@ goog.require('goog.array');
 goog.require('goog.structs.Node');
 
 
+
 /**
  * Class for a Heap datastructure.
  *

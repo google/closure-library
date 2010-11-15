@@ -27,6 +27,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.InputHandler');
 
 
+
 /**
  * CharCounter widget. Counts the number of characters in a input field or a
  * text box and displays the number of additional characters that may be

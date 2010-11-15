@@ -46,6 +46,7 @@ goog.provide('goog.structs.AvlTree.Node');
 goog.require('goog.structs');
 
 
+
 /**
  * Constructs an AVL-Tree, which uses the specified comparator to order its
  * values. The values can be accessed efficiently in their sorted order since
@@ -691,7 +692,6 @@ goog.structs.AvlTree.prototype.getMaxNode_ = function(opt_rootNode) {
 
   return maxNode;
 };
-
 
 
 

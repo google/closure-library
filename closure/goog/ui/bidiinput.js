@@ -30,6 +30,7 @@ goog.require('goog.i18n.bidi');
 goog.require('goog.ui.Component');
 
 
+
 /**
  * Default implementation of BidiInput.
  *

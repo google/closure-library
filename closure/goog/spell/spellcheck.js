@@ -25,6 +25,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.structs.Set');
 
 
+
 /**
  * Support class for spell checker components. Provides basic functionality
  * such as word lookup and caching.
@@ -59,6 +60,7 @@ goog.spell.SpellCheck = function(opt_lookupFunction, opt_language) {
 };
 goog.inherits(goog.spell.SpellCheck, goog.events.EventTarget);
 
+
 /**
  * Delay, in ms, to wait for additional words to be entered before a lookup
  * operation is triggered.
@@ -67,6 +69,7 @@ goog.inherits(goog.spell.SpellCheck, goog.events.EventTarget);
  * @private
  */
 goog.spell.SpellCheck.LOOKUP_DELAY_ = 100;
+
 
 /**
  * Constants for event names
@@ -90,6 +93,7 @@ goog.spell.SpellCheck.EventType = {
   WORD_CHANGED: 'wordchanged'
 };
 
+
 /**
  * Cache. Shared across all spell checker instances. Map with langauge as the
  * key and a cache for that language as the value.
@@ -99,12 +103,14 @@ goog.spell.SpellCheck.EventType = {
  */
 goog.spell.SpellCheck.cache_ = {};
 
+
 /**
  * Content Language.
  * @type {string}
  * @private
  */
 goog.spell.SpellCheck.prototype.language_ = '';
+
 
 /**
  * Cache for set language. Reference to the element corresponding to the set
@@ -115,6 +121,7 @@ goog.spell.SpellCheck.prototype.language_ = '';
  */
 goog.spell.SpellCheck.prototype.cache_;
 
+
 /**
  * Id for timer processing the pending queue.
  *
@@ -123,6 +130,7 @@ goog.spell.SpellCheck.prototype.cache_;
  */
 goog.spell.SpellCheck.prototype.queueTimer_ = 0;
 
+
 /**
  * Whether a lookup operation is in progress.
  *
@@ -130,6 +138,7 @@ goog.spell.SpellCheck.prototype.queueTimer_ = 0;
  * @private
  */
 goog.spell.SpellCheck.prototype.lookupInProgress_ = false;
+
 
 /**
  * Codes representing the status of an individual word.
@@ -144,6 +153,7 @@ goog.spell.SpellCheck.WordStatus = {
   CORRECTED: 4 // Temporary status, not stored in cache
 };
 
+
 /**
  * Fields for word array in cache.
  *
@@ -154,6 +164,7 @@ goog.spell.SpellCheck.CacheIndex = {
   SUGGESTIONS: 1
 };
 
+
 /**
  * Regular expression for identifying word boundaries.
  *
@@ -162,6 +173,7 @@ goog.spell.SpellCheck.CacheIndex = {
 goog.spell.SpellCheck.WORD_BOUNDARY_CHARS =
     '\t\r\n\u00A0 !\"#$%&()*+,\-.\/:;<=>?@\[\\\]^_`{|}~';
 
+
 /**
  * Regular expression for identifying word boundaries.
  *
@@ -169,6 +181,7 @@ goog.spell.SpellCheck.WORD_BOUNDARY_CHARS =
  */
 goog.spell.SpellCheck.WORD_BOUNDARY_REGEX = new RegExp(
     '[' + goog.spell.SpellCheck.WORD_BOUNDARY_CHARS + ']');
+
 
 /**
  * Regular expression for splitting a string into individual words and blocks of

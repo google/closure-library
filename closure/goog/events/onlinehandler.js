@@ -39,6 +39,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Basic object for detecting whether the online state changes.
  * @constructor

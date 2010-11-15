@@ -21,6 +21,7 @@ goog.provide('goog.dom.forms');
 
 goog.require('goog.structs.Map');
 
+
 /**
  * Returns form data as a map of name to value arrays. This doesn't
  * support file inputs.

@@ -47,6 +47,7 @@ goog.require('goog.testing.TestCase');
 goog.require('goog.testing.mockmatchers');
 
 
+
 /**
  * A record that represents all the data associated with a mock replacement of
  * a given class.
@@ -203,6 +204,7 @@ goog.testing.MockClassRecord.prototype.reset = function() {
 };
 
 
+
 /**
  * A factory used to create new mock class instances.  It is able to generate
  * both static and loose mocks.  The MockClassFactory is a singleton since it
@@ -282,7 +284,6 @@ goog.testing.MockClassFactory.prototype.getClassName_ = function(namespace,
 goog.testing.MockClassFactory.prototype.classHasMock_ = function(className) {
   return !!this.mockClassRecords_[className];
 };
-
 
 
 /**

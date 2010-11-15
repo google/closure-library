@@ -27,6 +27,7 @@ goog.require('goog.positioning.Overflow');
 goog.require('goog.positioning.OverflowStatus');
 
 
+
 /**
  * Encapsulates a popup position where the popup is anchored at a corner of
  * an element. The corners are swapped if dictated by the viewport. For instance

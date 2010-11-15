@@ -27,6 +27,7 @@ goog.require('goog.proto2.Serializer');
 goog.require('goog.proto2.Util');
 
 
+
 /**
  * Base class for all lazy deserializers.
  *

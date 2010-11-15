@@ -36,6 +36,7 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.userAgent');
 
 
+
 /**
  * The constructor for abstract ranges.  Don't call this from subclasses.
  * @constructor
@@ -84,6 +85,7 @@ goog.dom.browserrange.AbstractRange.prototype.getStartNode =
  */
 goog.dom.browserrange.AbstractRange.prototype.getStartOffset =
     goog.abstractMethod;
+
 
 /**
  * Returns the node the range ends in.

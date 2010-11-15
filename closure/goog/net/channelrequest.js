@@ -23,6 +23,7 @@
  *
  */
 
+
 /**
  * Namespace for BrowserChannel
  */
@@ -35,6 +36,8 @@ goog.require('goog.net.XmlHttp');
 goog.require('goog.net.tmpnetwork');
 goog.require('goog.object');
 goog.require('goog.userAgent');
+
+
 
 /**
  * Creates a ChannelRequest object which encapsulates a request to the server.
@@ -1043,6 +1046,7 @@ goog.net.ChannelRequest.prototype.getSuccess = function() {
   return this.successful_;
 };
 
+
 /**
  * If the request was not successful, returns the reason.
  *
@@ -1052,6 +1056,7 @@ goog.net.ChannelRequest.prototype.getLastError = function() {
   return this.lastError_;
 };
 
+
 /**
  * Returns the status code of the last request.
  * @return {number} The status code of the last request.
@@ -1059,6 +1064,7 @@ goog.net.ChannelRequest.prototype.getLastError = function() {
 goog.net.ChannelRequest.prototype.getLastStatusCode = function() {
   return this.lastStatusCode_;
 };
+
 
 /**
  * Returns the session id for this channel.
@@ -1068,6 +1074,7 @@ goog.net.ChannelRequest.prototype.getLastStatusCode = function() {
 goog.net.ChannelRequest.prototype.getSessionId = function() {
   return this.sid_;
 };
+
 
 /**
  * Returns the request id for this request. Each request has a unique request

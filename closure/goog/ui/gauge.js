@@ -34,6 +34,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.GaugeTheme');
 
 
+
 /**
  * Information on how to decorate a range in the gauge.
  * This is an internal-only class.
@@ -64,6 +65,7 @@ goog.ui.GaugeColoredRange = function(fromValue, toValue, backgroundColor) {
    */
   this.backgroundColor = backgroundColor;
 };
+
 
 
 /**

@@ -27,6 +27,7 @@ goog.require('goog.structs.Map');
 goog.require('goog.structs.SimplePool');
 
 
+
 /**
  * Class used for singleton goog.debug.Trace.  Used for timing slow points in
  * the code. Based on the java Tracer class but optimized for javascript.
@@ -149,6 +150,7 @@ goog.debug.Trace_ = function() {
   this.defaultThreshold_ = 3;
 };
 
+
 /**
  * Logger for the tracer
  * @type {goog.debug.Logger}
@@ -185,6 +187,7 @@ goog.debug.Trace_.EventType = {
    */
   COMMENT: 2
 };
+
 
 
 /**
@@ -226,6 +229,7 @@ goog.debug.Trace_.Stat_.prototype.toString = function() {
   }
   return sb.join('');
 };
+
 
 
 /**
@@ -310,6 +314,7 @@ goog.debug.Trace_.prototype.initCurrentTrace = function(defaultThreshold) {
   this.reset(defaultThreshold);
 };
 
+
 /**
  * Clears the current trace
  */
@@ -354,7 +359,6 @@ goog.debug.Trace_.prototype.reset = function(defaultThreshold) {
   }
   this.stats_.clear();
 };
-
 
 
 /**
@@ -495,6 +499,7 @@ goog.debug.Trace_.prototype.stopTracer = function(id, opt_silenceThreshold) {
   return elapsed;
 };
 
+
 /**
  * Sets the ActiveX object that can be used to get GC tracing in IE6.
  * @param {Object} gcTracer GCTracer ActiveX object.
@@ -588,6 +593,7 @@ goog.debug.Trace_.prototype.getStat_ = function(type) {
   }
   return /** @type {goog.debug.Trace_.Stat_} */(stat);
 };
+
 
 /**
  * Returns a formatted string for the current trace
@@ -707,6 +713,7 @@ goog.debug.Trace_.longToPaddedString_ = function(v) {
   if (v < 10) space = '   ';
   return space + v;
 };
+
 
 /**
  * Return the sec.ms part of time (if time = "20:06:11.566",  "11.566

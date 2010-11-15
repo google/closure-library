@@ -39,6 +39,7 @@ goog.require('goog.ui.editor.messages');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Functions to style text (e.g. underline, make bold, etc.)
  * @constructor
@@ -529,6 +530,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.handleKeyboardShortcut =
 
 // Helpers for execCommand
 
+
 /**
  * Regular expression to match BRs in HTML. Saves the BRs' attributes in $1 for
  * use with replace(). In non-IE browsers, does not match BRs adjacent to an
@@ -540,6 +542,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.handleKeyboardShortcut =
 goog.editor.plugins.BasicTextFormatter.BR_REGEXP_ =
     goog.userAgent.IE ? /<br([^\/>]*)\/?>/gi :
                         /<br([^\/>]*)\/?>(?!<\/(div|p)>)/gi;
+
 
 /**
  * Convert BRs in the selection to divs.
@@ -999,6 +1002,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
 
 //---------------------------------------------------------------------
 // browser fixes
+
 
 /**
  * The following execCommands are "broken" in some way - in IE they allow
@@ -1564,6 +1568,7 @@ goog.editor.plugins.BasicTextFormatter.SUPPORTED_JUSTIFICATIONS_ = {
   'right': 1,
   'left': 1
 };
+
 
 /**
  * Returns true if the current justification matches the justification

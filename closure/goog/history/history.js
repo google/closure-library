@@ -174,6 +174,7 @@ goog.require('goog.string');
 goog.require('goog.userAgent');
 
 
+
 /**
  * A history management object. Can be instantiated in user-visible mode (uses
  * the address fragment to manage state) or in hidden mode. This object should
@@ -930,6 +931,7 @@ goog.History.IFRAME_SOURCE_TEMPLATE_ = '<title>%s</title><body>%s</body>';
 goog.History.IFRAME_TEMPLATE_ =
     '<iframe id="%s" style="display:none" %s></iframe>';
 
+
 /**
  * HTML template for an invisible named input element.
  * @type {string}
@@ -964,6 +966,7 @@ goog.History.PollingType = {
  * @deprecated Use goog.history.EventType.
  */
 goog.History.EventType = goog.history.EventType;
+
 
 
 /**

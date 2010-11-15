@@ -40,6 +40,7 @@ goog.debug.LogBuffer = function() {
   this.clear();
 };
 
+
 /**
  * A static method that always returns the same instance of LogBuffer.
  * @return {!goog.debug.LogBuffer} The LogBuffer singleton instance.
@@ -53,6 +54,7 @@ goog.debug.LogBuffer.getInstance = function() {
   }
   return goog.debug.LogBuffer.instance_;
 };
+
 
 /**
  * @define {number} The number of log records to buffer. 0 means disable

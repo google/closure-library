@@ -30,6 +30,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.gears');
 
 
+
 /**
  * Class capture URLs to a ResourceStore on the LocalServer.
  * @constructor
@@ -329,6 +330,7 @@ goog.gears.UrlCapture.prototype.usesGoogUri_ = function(captureId) {
   }
   return false;
 };
+
 
 
 /**

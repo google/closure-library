@@ -28,6 +28,7 @@ goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.ControlRenderer');
 
 
+
 /**
  * Default renderer for {@link goog.ui.MenuItem}s.  Each item has the following
  * structure:
@@ -155,6 +156,7 @@ goog.ui.MenuItemRenderer.prototype.decorate = function(item, element) {
   return goog.ui.MenuItemRenderer.superClass_.decorate.call(this, item,
       element);
 };
+
 
 /**
  * Takes a menu item's root element, and sets its content to the given text

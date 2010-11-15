@@ -71,7 +71,6 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
 goog.inherits(goog.ui.editor.LinkDialog, goog.ui.editor.AbstractDialog);
 
 
-
 /**
  * Events specific to the link dialog.
  * @enum {string}
@@ -105,6 +104,7 @@ goog.ui.editor.LinkDialog.OkEvent = function(linkText, linkUrl) {
   this.linkUrl = linkUrl;
 };
 goog.inherits(goog.ui.editor.LinkDialog.OkEvent, goog.events.Event);
+
 
 
 /**
@@ -191,6 +191,7 @@ goog.ui.editor.LinkDialog.prototype.setStopReferrerLeaks = function(stop) {
 
 // *** Protected interface ************************************************** //
 
+
 /** @inheritDoc */
 goog.ui.editor.LinkDialog.prototype.createDialogControl = function() {
   this.textToDisplayDiv_ = /** @type {HTMLDivElement} */(
@@ -255,6 +256,7 @@ goog.ui.editor.LinkDialog.prototype.disposeInternal = function() {
 
 
 // *** Private implementation *********************************************** //
+
 
 /**
  * The link being modified by this dialog.

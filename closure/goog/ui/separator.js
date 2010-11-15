@@ -27,6 +27,7 @@ goog.require('goog.ui.MenuSeparatorRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Class representing a separator.  Although it extends {@link goog.ui.Control},
  * the Separator class doesn't allocate any event handlers, nor does it change

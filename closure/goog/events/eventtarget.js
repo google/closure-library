@@ -18,6 +18,7 @@
  * @see ../demos/eventtarget.html
  */
 
+
 /**
  * Namespace for events
  */
@@ -25,6 +26,7 @@ goog.provide('goog.events.EventTarget');
 
 goog.require('goog.Disposable');
 goog.require('goog.events');
+
 
 
 /**

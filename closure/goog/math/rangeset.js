@@ -31,6 +31,7 @@ goog.require('goog.iter.StopIteration');
 goog.require('goog.math.Range');
 
 
+
 /**
  * Constructs a new RangeSet, which can store numeric ranges.
  *

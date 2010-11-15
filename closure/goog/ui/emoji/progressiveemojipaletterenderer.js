@@ -22,6 +22,7 @@ goog.provide('goog.ui.emoji.ProgressiveEmojiPaletteRenderer');
 goog.require('goog.ui.emoji.EmojiPaletteRenderer');
 
 
+
 /**
  * Progressively renders an emoji palette. The progressive renderer tries to
  * use img tags instead of background-image for sprited emoji, since most

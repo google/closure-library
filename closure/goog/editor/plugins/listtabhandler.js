@@ -27,6 +27,7 @@ goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractTabHandler');
 
 
+
 /**
  * Plugin to handle tab keys in lists to indent and outdent.
  * @constructor

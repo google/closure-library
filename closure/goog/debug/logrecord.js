@@ -21,6 +21,8 @@
 
 goog.provide('goog.debug.LogRecord');
 
+
+
 /**
  * LogRecord objects are used to pass logging requests between
  * the logging framework and individual log Handlers.
@@ -69,7 +71,6 @@ goog.debug.LogRecord.prototype.msg_;
  * @private
  */
 goog.debug.LogRecord.prototype.loggerName_;
-
 
 
 /**

@@ -32,6 +32,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 
 
+
 /**
  * A files drag and drop event detector. Gets an {@code element} as parameter
  * and fires {@code goog.events.FileDropHandler.EventType.DROP} event when files

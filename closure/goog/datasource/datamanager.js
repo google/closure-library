@@ -35,6 +35,7 @@ goog.require('goog.structs');
 goog.require('goog.structs.Map');
 
 
+
 /**
  * Create a DataManger
  * @extends {goog.ds.DataNode}
@@ -487,6 +488,7 @@ goog.ds.DataManager.prototype.getListenerCount = function() {
   });
   return count;
 };
+
 
 /**
  * Disables the sending of all data events during the execution of the given

@@ -34,6 +34,7 @@ goog.require('goog.ui.IdGenerator');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Class for rendering the results of an auto-complete in a drop down list.
  *

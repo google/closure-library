@@ -22,6 +22,7 @@
 goog.provide('goog.graphics.Font');
 
 
+
 /**
  * This class represents a font to be used with a renderer.
  * @param {number} size  The font size.

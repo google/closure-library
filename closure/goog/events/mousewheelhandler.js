@@ -38,6 +38,7 @@ goog.require('goog.math');
 goog.require('goog.userAgent');
 
 
+
 /**
  * This event handler allows you to catch mouse wheel events in a consistent
  * manner.
@@ -191,6 +192,7 @@ goog.events.MouseWheelHandler.prototype.disposeInternal = function() {
   goog.events.unlistenByKey(this.listenKey_);
   delete this.listenKey_;
 };
+
 
 
 /**

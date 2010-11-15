@@ -21,6 +21,7 @@
 goog.provide('goog.math.Coordinate3');
 
 
+
 /**
  * Class for representing coordinates and positions in 3 dimensions.
  *

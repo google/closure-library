@@ -157,7 +157,6 @@ goog.gears.Worker.prototype.disposeInternal = function() {
 };
 
 
-
 /**
  * Enum for event types fired by the worker.
  * @enum {string}

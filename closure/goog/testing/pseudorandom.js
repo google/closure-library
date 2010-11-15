@@ -25,6 +25,7 @@ goog.provide('goog.testing.PseudoRandom');
 goog.require('goog.Disposable');
 
 
+
 /**
  * Class for unit testing code that uses Math.random. Generates deterministic
  * random numbers.
@@ -51,6 +52,7 @@ goog.testing.PseudoRandom = function(opt_seed, opt_install) {
   }
 };
 goog.inherits(goog.testing.PseudoRandom, goog.Disposable);
+
 
 /**
  * Helps create a unique seed.

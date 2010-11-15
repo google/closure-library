@@ -64,6 +64,7 @@ goog.require('goog.object');
 goog.require('goog.structs.SimplePool');
 
 
+
 /**
  * Super class for objects that want to easily manage a number of event
  * listeners.  It allows a short cut to listen and also provides a quick way

@@ -33,6 +33,7 @@ goog.require('goog.ui.editor.messages');
 goog.require('goog.window');
 
 
+
 /**
  * Property bubble plugin for links.
  * @param {...!goog.editor.plugins.LinkBubble.Action} var_args List of
@@ -433,6 +434,7 @@ goog.editor.plugins.LinkBubble.prototype.getTestLinkAction_ = function() {
   var targetUrl = this.getTargetUrl();
   return this.testLinkUrlFn_ ? this.testLinkUrlFn_(targetUrl) : targetUrl;
 };
+
 
 
 /**

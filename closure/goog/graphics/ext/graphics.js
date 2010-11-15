@@ -25,6 +25,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.graphics.ext.Group');
 
 
+
 /**
  * Wrapper for a graphics surface.
  * @param {string|number} width The width in pixels.  Strings

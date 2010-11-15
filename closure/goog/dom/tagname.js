@@ -19,6 +19,7 @@
  */
 goog.provide('goog.dom.TagName');
 
+
 /**
  * Enum of all html tag names specified by the W3C HTML 4.01 Specification.
  * Reference http://www.w3.org/TR/html401/index/elements.html

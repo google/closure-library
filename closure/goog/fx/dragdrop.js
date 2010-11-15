@@ -27,6 +27,7 @@ goog.require('goog.fx.AbstractDragDrop');
 goog.require('goog.fx.DragDropItem');
 
 
+
 /**
  * Drag/drop implementation for creating drag sources/drop targets consisting of
  * a single HTML Element.

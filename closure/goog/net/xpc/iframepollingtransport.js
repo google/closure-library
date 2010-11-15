@@ -28,6 +28,7 @@ goog.require('goog.net.xpc.Transport');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Iframe polling transport. Uses hidden iframes to transfer data
  * in the fragment identifier of the URL. The peer polls the iframe's location
@@ -772,7 +773,6 @@ goog.net.xpc.IframePollingTransport.Sender.prototype.send = function(payload) {
   // where we need to capture responses quickly.
   goog.net.xpc.IframePollingTransport.startRcvTimer_();
 };
-
 
 
 

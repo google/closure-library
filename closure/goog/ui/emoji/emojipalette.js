@@ -34,6 +34,7 @@ goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.EmojiPaletteRenderer');
 
 
+
 /**
  * A page of emoji to be displayed in an EmojiPicker.
  *

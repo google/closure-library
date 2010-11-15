@@ -19,6 +19,7 @@ goog.require('goog.testing.stacktrace');
 // TODO(user): Copied from JsUnit with some small modifications, we should
 // reimplement the asserters.
 
+
 /**
  * @typedef {Array|NodeList|Arguments|{length: number}}
  */
@@ -143,6 +144,7 @@ function _assert(comment, booleanValue, failureMessage) {
   }
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -156,6 +158,7 @@ function assert(a, opt_b) {
       'Bad argument to assert(boolean)');
   _assert(comment, booleanValue, 'Call to assert(boolean) with false');
 }
+
 
 /**
  * Asserts that the function throws an error.
@@ -189,6 +192,7 @@ function assertThrows(a, opt_b) {
       'No exception thrown from function passed to assertThrows');
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -209,6 +213,7 @@ function assertNotThrows(a, opt_b) {
       'A non expected exception was thrown from function passed to ' +
       'assertNotThrows');
 }
+
 
 /**
  * Asserts that the given callback function results in a JsUnitException when
@@ -239,6 +244,7 @@ function assertThrowsJsUnitException(callback, opt_expectedMessage) {
   }
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -252,6 +258,7 @@ function assertTrue(a, opt_b) {
       'Bad argument to assertTrue(boolean)');
   _assert(comment, booleanValue, 'Call to assertTrue(boolean) with false');
 }
+
 
 /**
  * @param {*} a
@@ -267,6 +274,7 @@ function assertFalse(a, opt_b) {
   _assert(comment, !booleanValue, 'Call to assertFalse(boolean) with true');
 }
 
+
 /**
  * @param {*} a
  * @param {*} b
@@ -281,6 +289,7 @@ function assertEquals(a, b, opt_c) {
           _displayStringForValue(var2));
 }
 
+
 /**
  * @param {*} a
  * @param {*} b
@@ -294,6 +303,7 @@ function assertNotEquals(a, b, opt_c) {
       'Expected not to be ' + _displayStringForValue(var2));
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -306,6 +316,7 @@ function assertNull(a, opt_b) {
       _displayStringForValue(aVar));
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -316,6 +327,7 @@ function assertNotNull(a, opt_b) {
   _assert(commentArg(1, arguments), aVar !== null,
       'Expected not to be ' + _displayStringForValue(null));
 }
+
 
 /**
  * @param {*} a
@@ -329,6 +341,7 @@ function assertUndefined(a, opt_b) {
       ' but was ' + _displayStringForValue(aVar));
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -340,6 +353,7 @@ function assertNotUndefined(a, opt_b) {
       'Expected not to be ' + _displayStringForValue(JSUNIT_UNDEFINED_VALUE));
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -349,6 +363,7 @@ function assertNotNullNorUndefined(a, opt_b) {
   assertNotNull.apply(null, arguments);
   assertNotUndefined.apply(null, arguments);
 }
+
 
 /**
  * @param {*} a
@@ -363,6 +378,7 @@ function assertNonEmptyString(a, opt_b) {
       'Expected non-empty string but was ' + _displayStringForValue(aVar));
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -373,6 +389,7 @@ function assertNaN(a, opt_b) {
   _assert(commentArg(1, arguments), isNaN(aVar), 'Expected NaN');
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -382,6 +399,7 @@ function assertNotNaN(a, opt_b) {
   var aVar = nonCommentArg(1, 1, arguments);
   _assert(commentArg(1, arguments), !isNaN(aVar), 'Expected not NaN');
 }
+
 
 /**
  * Runs a function in an environment where test failures are not logged. This is
@@ -555,6 +573,7 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
       _displayStringForValue(actual) + '\n   ' + failures.join('\n   ');
 };
 
+
 /**
  * Notes:
  * Object equality has some nasty browser quirks, and this implementation is
@@ -584,6 +603,7 @@ function assertObjectEquals(a, b, opt_c) {
   _assert(failureMessage, !differences, differences);
 }
 
+
 /**
  * @param {*} a
  * @param {*} b
@@ -607,6 +627,7 @@ function assertArrayEquals(a, b, opt_c) {
 
   assertObjectEquals.apply(null, arguments);
 }
+
 
 /**
  * Compares two array-like objects without taking their order into account.
@@ -644,6 +665,7 @@ function assertSameElements(a, b, opt_c) {
   }
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -656,6 +678,7 @@ function assertEvaluatesToTrue(a, opt_b) {
   }
 }
 
+
 /**
  * @param {*} a
  * @param {*=} opt_b
@@ -667,6 +690,7 @@ function assertEvaluatesToFalse(a, opt_b) {
     _assert(commentArg(1, arguments), false, 'Expected to evaluate to false');
   }
 }
+
 
 /**
  * @param {*} a
@@ -684,6 +708,7 @@ function assertHTMLEquals(a, b, opt_c) {
           'Expected ' + _displayStringForValue(var1Standardized) + ' but was ' +
           _displayStringForValue(var2Standardized));
 }
+
 
 /**
  * Compares two CSS property values to make sure that they represent the same
@@ -714,6 +739,7 @@ function assertCSSValueEquals(a, b, c, opt_d) {
           ' but was ' + _displayStringForValue(actualValueStandardized));
 }
 
+
 /**
  * @param {*} a
  * @param {*} b
@@ -737,6 +763,7 @@ function assertHashEquals(a, b, opt_c) {
   }
 }
 
+
 /**
  * @param {*} a
  * @param {*} b
@@ -753,6 +780,7 @@ function assertRoughlyEquals(a, b, c, opt_d) {
       ' which was more than ' + tolerance + ' away');
 }
 
+
 /**
  * @param {*} a
  * @param {*} b
@@ -766,6 +794,7 @@ function assertContains(a, b, opt_c) {
       goog.testing.asserts.contains_(container, contained),
       'Expected \'' + container + '\' to contain \'' + contained + '\'');
 }
+
 
 /**
  * @param {*} a
@@ -781,6 +810,7 @@ function assertNotContains(a, b, opt_c) {
       'Expected \'' + container + '\' not to contain \'' + contained + '\'');
 }
 
+
 /**
  * Converts an array like object to array or clones it if it's already array.
  * @param {goog.testing.asserts.ArrayLike} arrayLike The collection.
@@ -794,6 +824,7 @@ goog.testing.asserts.toArray_ = function(arrayLike) {
   }
   return ret;
 };
+
 
 /**
  * Finds the position of the first occurrence of an element in a container.
@@ -816,6 +847,7 @@ goog.testing.asserts.indexOf_ = function(container, contained) {
     return -1;
   }
 };
+
 
 /**
  * Tells whether the array contains the given element.
@@ -840,6 +872,7 @@ function standardizeHTML(html) {
   // Trim whitespace from result (without relying on goog.string)
   return translator.innerHTML.replace(/^\s+|\s+$/g, '');
 }
+
 
 /**
  * Standardizes a CSS value for a given property by applying it to an element
@@ -882,6 +915,7 @@ goog.testing.asserts.isArrayIndexProp_ = function(prop) {
 };
 
 
+
 /**
  * @param {string} comment A summary for the exception.
  * @param {?string=} opt_message A description of the exception.
@@ -897,6 +931,7 @@ goog.testing.JsUnitException = function(comment, opt_message) {
   this.comment = comment || null;
   this.jsUnitMessage = opt_message || '';
 };
+
 
 /** @inheritDoc */
 goog.testing.JsUnitException.prototype.toString = function() {

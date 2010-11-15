@@ -22,6 +22,7 @@ goog.require('goog.proto2.Util');
 goog.require('goog.string');
 
 
+
 /**
  * A class which describes a field in a Protocol Buffer 2 Message.
  *

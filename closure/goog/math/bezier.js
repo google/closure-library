@@ -33,6 +33,7 @@ goog.require('goog.math');
 goog.require('goog.math.Coordinate');
 
 
+
 /**
  * Object representing a cubic bezier curve.
  * @param {number} x0 X coordinate of the start point.

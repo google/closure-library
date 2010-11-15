@@ -24,6 +24,7 @@ goog.require('goog.object');
 goog.require('goog.string.StringBuffer');
 
 
+
 /**
  * This class formats HTML to be more human-readable.
  * TODO(user): Add hierarchical indentation.
@@ -184,6 +185,7 @@ goog.format.HtmlPrettyPrinter.EMPTY_TAGS_ = goog.object.createSet(
     'hr',
     'isindex');
 
+
 /**
  * Breaks up HTML so it's easily readable by the user.
  * @param {string} html The HTML text to pretty print.
@@ -308,6 +310,7 @@ goog.format.HtmlPrettyPrinter.prototype.format = function(html) {
 
   return result;
 };
+
 
 
 /**

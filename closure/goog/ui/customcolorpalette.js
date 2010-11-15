@@ -25,6 +25,7 @@ goog.require('goog.dom');
 goog.require('goog.ui.ColorPalette');
 
 
+
 /**
  * A custom color palette is a grid of color swatches and a button that allows
  * the user to add additional colors to the palette

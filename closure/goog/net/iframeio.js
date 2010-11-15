@@ -152,6 +152,7 @@ goog.require('goog.structs');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Class for managing requests via iFrames.
  * @constructor
@@ -1315,6 +1316,7 @@ goog.net.IframeIo.prototype.testForFirefoxSilentError_ = function() {
         goog.Timer.callOnce(this.testForFirefoxSilentError_, 250, this);
   }
 };
+
 
 
 /**

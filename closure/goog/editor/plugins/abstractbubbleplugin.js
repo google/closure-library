@@ -34,6 +34,7 @@ goog.require('goog.ui.editor.Bubble');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Base class for bubble plugins. This is used for to connect user behavior
  * in the editor to a goog.ui.editor.Bubble UI element that allows

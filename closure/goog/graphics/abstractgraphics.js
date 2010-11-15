@@ -27,6 +27,7 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 
 
+
 /**
  * Base class for the different graphics. You should never construct objects
  * of this class. Instead us goog.graphics.createGraphics

@@ -38,6 +38,7 @@ goog.require('goog.math.Rect');
 goog.require('goog.userAgent');
 
 
+
 /**
  * A class that allows mouse based dragging (moving) of an element
  *
@@ -595,6 +596,7 @@ goog.fx.Dragger.prototype.defaultAction = function(x, y) {
   this.target.style.left = x + 'px';
   this.target.style.top = y + 'px';
 };
+
 
 
 /**

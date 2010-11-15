@@ -28,6 +28,7 @@ goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Class representing a filter observing menu item.
  *

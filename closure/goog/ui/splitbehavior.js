@@ -39,6 +39,7 @@ goog.require('goog.ui.decorate');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * Creates a behavior for combining two controls. The behavior is triggered
  * by a given event type which applies the behavior handler.

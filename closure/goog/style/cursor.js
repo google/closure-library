@@ -22,6 +22,7 @@ goog.provide('goog.style.cursor');
 
 goog.require('goog.userAgent');
 
+
 /**
  * The file name for the open-hand (draggable) cursor.
  * @type {string}

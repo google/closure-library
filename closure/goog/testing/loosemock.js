@@ -24,6 +24,7 @@ goog.require('goog.structs.Map');
 goog.require('goog.testing.Mock');
 
 
+
 /**
  * This class is an ordered collection of expectations for one method. Since
  * the loose mock does most of its verification at the time of $verify, this

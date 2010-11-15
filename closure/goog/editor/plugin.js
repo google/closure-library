@@ -30,6 +30,8 @@ goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.reflect');
 
+
+
 /**
  * Abstract API for trogedit plugins.
  * @constructor
@@ -271,6 +273,7 @@ goog.editor.Plugin.prototype.handleKeyPress;
  *     propagated to other plugins.
  */
 goog.editor.Plugin.prototype.handleKeyUp;
+
 
 /**
  * Handles selection change.

@@ -48,6 +48,8 @@ goog.require('goog.dom');
 //
 // WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
 
+
+
 /**
  * Creates a new cross domain channel that sends data to the specified
  * host URL. By default, if no reply arrives within 5s, the channel

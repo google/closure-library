@@ -32,6 +32,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
 
 
+
 /**
  * Popup color picker widget.
  *

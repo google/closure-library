@@ -51,6 +51,7 @@ goog.graphics.vmlGetElement_ = function() {
 };
 
 
+
 /**
  * Thin wrapper for VML group elements.
  * This is an implementation of the goog.graphics.GroupElement interface.
@@ -111,6 +112,7 @@ goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
     element.coordorigin = '0 0';
   }
 };
+
 
 
 /**
@@ -199,6 +201,7 @@ goog.graphics.VmlEllipseElement.prototype.setRadius = function(rx, ry) {
 };
 
 
+
 /**
  * Thin wrapper for VML rectangle elements.
  * This is an implementation of the goog.graphics.RectElement interface.
@@ -248,6 +251,7 @@ goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
 };
 
 
+
 /**
  * Thin wrapper for VML path elements.
  * This is an implementation of the goog.graphics.PathElement interface.
@@ -283,6 +287,7 @@ goog.graphics.VmlPathElement.prototype.setPath = function(path) {
 };
 
 
+
 /**
  * Thin wrapper for VML text elements.
  * This is an implementation of the goog.graphics.TextElement interface.
@@ -316,6 +321,7 @@ goog.graphics.VmlTextElement.prototype.setText = function(text) {
   goog.graphics.VmlGraphics.setAttribute(this.getElement().childNodes[1],
       'string', text);
 };
+
 
 
 /**

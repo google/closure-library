@@ -28,6 +28,7 @@ goog.require('goog.ui.Palette');
 goog.require('goog.ui.PaletteRenderer');
 
 
+
 /**
  * A color palette is a grid of color swatches that the user can highlight or
  * select via the keyboard or the mouse.  The selection state of the palette is

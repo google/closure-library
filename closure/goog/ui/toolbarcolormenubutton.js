@@ -25,6 +25,7 @@ goog.require('goog.ui.ToolbarColorMenuButtonRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * A color menu button control for a toolbar.
  *

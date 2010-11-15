@@ -23,6 +23,7 @@ goog.require('goog.net.IframeIo');
 goog.require('goog.net.IframeIo.IncrementalDataEvent');
 
 
+
 /**
  * Mock implenetation of goog.net.IframeIo. This doesn't provide a mock
  * implementation for all cases, but it's not too hard to add them as needed.
@@ -134,6 +135,7 @@ goog.net.MockIFrameIo.prototype.sendFromForm = function(form, opt_uri,
   this.active_ = true;
 };
 
+
 /**
  * Simulates aborting the current Iframe request.
  * @param {goog.net.ErrorCode=} opt_failureCode Optional error code to use -
@@ -150,6 +152,7 @@ goog.net.MockIFrameIo.prototype.abort = function(opt_failureCode) {
     this.simulateReady();
   }
 };
+
 
 /**
  * Simulates receive of incremental data.
@@ -179,6 +182,7 @@ goog.net.MockIFrameIo.prototype.simulateDone = function(errorCode) {
   this.complete_ = true;
   this.dispatchEvent(goog.net.EventType.COMPLETE);
 };
+
 
 /**
  * Simulates the IFrame is ready for the next request.

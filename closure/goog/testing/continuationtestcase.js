@@ -88,6 +88,7 @@ goog.require('goog.testing.TestCase.Test');
 goog.require('goog.testing.asserts');
 
 
+
 /**
  * Constructs a test case that supports tests with continuations. Test functions
  * may issue "wait" commands that suspend the test temporarily and continue once

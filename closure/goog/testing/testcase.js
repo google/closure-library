@@ -864,6 +864,7 @@ goog.testing.TestCase.prototype.logError = function(name, opt_e) {
 };
 
 
+
 /**
  * A class representing a single test function.
  * @param {string} name The test name.
@@ -1011,6 +1012,7 @@ goog.testing.TestCase.Result.prototype.getSummary = function() {
 goog.testing.TestCase.Result.prototype.isStrict = function() {
   return this.testCase_.testRunner_.isStrict();
 };
+
 
 
 /**

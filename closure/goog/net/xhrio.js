@@ -55,6 +55,7 @@ goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 
 
+
 /**
  * Basic class for handling XMLHttpRequests.
  * @param {goog.net.XmlHttpFactory=} opt_xmlHttpFactory Factory to use when
@@ -80,6 +81,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
   this.xmlHttpFactory_ = opt_xmlHttpFactory || null;
 };
 goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
+
 
 /**
  * A reference to the XhrIo logger

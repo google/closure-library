@@ -26,6 +26,7 @@ goog.require('goog.graphics.SolidFill');
 goog.require('goog.graphics.Stroke');
 
 
+
 /**
  * A class for the default color theme for a Gauge.
  * Users can extend this class to provide a custom color theme, and apply the

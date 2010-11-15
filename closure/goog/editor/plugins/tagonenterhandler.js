@@ -35,6 +35,7 @@ goog.require('goog.style');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Plugin to handle enter keys. This subclass normalizes all browsers to use
  * the given block tag on enter.
@@ -696,6 +697,7 @@ goog.editor.plugins.TagOnEnterHandler.joinTextNodes_ = function(node,
   }
   return node;
 };
+
 
 /**
  * Replaces leading or trailing spaces of a text node to a single Nbsp.

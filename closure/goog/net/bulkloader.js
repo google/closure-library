@@ -29,6 +29,7 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
 
 
+
 /**
  * Class used to load multiple URIs.
  * @param {Array.<string|goog.Uri>} uris The URIs to load.

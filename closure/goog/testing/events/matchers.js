@@ -22,6 +22,7 @@ goog.require('goog.events.Event');
 goog.require('goog.testing.mockmatchers.ArgumentMatcher');
 
 
+
 /**
  * A matcher that verifies that an argument is a {@code goog.events.Event} of a
  * particular type.

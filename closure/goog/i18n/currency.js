@@ -210,6 +210,7 @@ goog.i18n.currency.getCurrencyPattern_ = function(patternNum, sign) {
   return strParts.join('');
 };
 
+
 /**
  * Tier 1 currency information.
  * @type {!Object.<!Array>}

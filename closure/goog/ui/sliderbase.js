@@ -66,6 +66,7 @@ goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.RangeModel');
 
 
+
 /**
  * This creates a SliderBase object.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
@@ -979,7 +980,6 @@ goog.ui.SliderBase.prototype.getStep = function() {
 goog.ui.SliderBase.prototype.setStep = function(step) {
   this.rangeModel.setStep(step);
 };
-
 
 
 /**

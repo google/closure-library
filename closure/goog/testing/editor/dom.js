@@ -227,6 +227,7 @@ goog.testing.editor.dom.assertRangeBetweenText = function(before,
   }
 };
 
+
 /**
  * Returns the text that follows the given range, where the term "follows" means
  * "comes immediately before the start of the range" if isBefore is true, and

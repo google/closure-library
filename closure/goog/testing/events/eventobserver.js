@@ -36,6 +36,7 @@ goog.provide('goog.testing.events.EventObserver');
 goog.require('goog.array');
 
 
+
 /**
  * Event observer.  Implements a handleEvent interface so it may be used as
  * a listener in listening functions and methods.

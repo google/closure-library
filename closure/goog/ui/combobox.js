@@ -40,6 +40,7 @@ goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 
 
+
 /**
  * A ComboBox control.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.

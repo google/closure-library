@@ -44,6 +44,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 
 
+
 /**
  * A paste event detector. Gets an {@code element} as parameter and fires
  * {@code goog.events.PasteHandler.EventType.PASTE} events when text is

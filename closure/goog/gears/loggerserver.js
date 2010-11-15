@@ -26,6 +26,7 @@ goog.require('goog.debug.Logger.Level');
 goog.require('goog.gears.Worker.EventType');
 
 
+
 /**
  * Creates an object that listens to incoming LOG commands and forwards them
  * to a goog.debug.Logger

@@ -19,7 +19,6 @@
 goog.provide('goog.crypt');
 
 
-
 /**
  * Turns a string into an array of bytes; a "byte" being a JS number in the
  * range 0-255.

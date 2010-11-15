@@ -21,6 +21,8 @@ goog.provide('goog.ui.MockActivityMonitor');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.ActivityMonitor');
 
+
+
 /**
  * A mock implementation of goog.ui.ActivityMonitor for unit testing. Clients
  * of this class should override goog.now to return a synthetic time from

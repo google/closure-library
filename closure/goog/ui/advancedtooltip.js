@@ -26,6 +26,7 @@ goog.require('goog.ui.Tooltip');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Advanced tooltip widget with cursor tracking abilities. Works like a regular
  * tooltip but can track the cursor position and direction to determine if the

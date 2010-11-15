@@ -25,6 +25,8 @@ goog.provide('goog.ui.AutoComplete.RichRemoteArrayMatcher');
 goog.require('goog.ui.AutoComplete');
 goog.require('goog.ui.AutoComplete.RemoteArrayMatcher');
 
+
+
 /**
  * An array matcher that requests rich matches via ajax and converts them into
  * rich rows.

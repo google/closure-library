@@ -28,6 +28,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.AbstractRange');
 
 
+
 /**
  * Creates a new multi range with no properties.  Do not use this
  * constructor: use one of the goog.dom.Range.createFrom* methods instead.

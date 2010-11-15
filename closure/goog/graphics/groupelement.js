@@ -23,6 +23,7 @@ goog.provide('goog.graphics.GroupElement');
 goog.require('goog.graphics.Element');
 
 
+
 /**
  * Interface for a graphics group element.
  * You should not construct objects from this constructor. The graphics

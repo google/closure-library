@@ -68,6 +68,7 @@ goog.require('goog.ui.media.MediaModel.Player');
 goog.require('goog.ui.media.MediaRenderer');
 
 
+
 /**
  * Subclasses a goog.ui.media.MediaRenderer to provide a Vimeo specific media
  * renderer.
@@ -158,6 +159,7 @@ goog.ui.media.Vimeo.prototype.createDom = function(control) {
 goog.ui.media.Vimeo.prototype.getCssClass = function() {
   return goog.ui.media.Vimeo.CSS_CLASS;
 };
+
 
 
 /**

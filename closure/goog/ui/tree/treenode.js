@@ -25,6 +25,7 @@ goog.provide('goog.ui.tree.TreeNode');
 goog.require('goog.ui.tree.BaseNode');
 
 
+
 /**
  * An single node in the tree.
  * @param {string} html The html content of the node label.

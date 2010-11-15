@@ -22,6 +22,7 @@
 goog.provide('goog.i18n.CharPickerData');
 
 
+
 /**
  * Object holding two level character organization and character listing.
  * @constructor
@@ -3109,7 +3110,6 @@ goog.i18n.CharPickerData.CHARLIST_OF_MISCELLANEOUS = [
 ];
 
 
-
 /**
  * Subcategory names. Each subarray in this array is a list of subcategory
  * names for the corresponding category specified in
@@ -3145,7 +3145,6 @@ goog.i18n.CharPickerData.prototype.subcategories = [
   goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_HAN_OTHER,
   goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_MISCELLANEOUS
 ];
-
 
 
 /**

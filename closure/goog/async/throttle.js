@@ -72,6 +72,7 @@ goog.async.Throttle = function(listener, interval, opt_handler) {
 goog.inherits(goog.async.Throttle, goog.Disposable);
 
 
+
 /**
  * A deprecated alias.
  * @deprecated Use goog.async.Throttle instead.

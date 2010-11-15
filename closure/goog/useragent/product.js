@@ -40,6 +40,7 @@ goog.userAgent.product.ASSUME_CAMINO = false;
  */
 goog.userAgent.product.ASSUME_IPHONE = false;
 
+
 /**
  * @define {boolean} Whether we know at compile-time that the product is an
  *     iPad.
@@ -214,6 +215,7 @@ goog.userAgent.product.CAMINO = goog.userAgent.product.PRODUCT_KNOWN_ ?
 goog.userAgent.product.IPHONE = goog.userAgent.product.PRODUCT_KNOWN_ ?
     goog.userAgent.product.ASSUME_IPHONE :
     goog.userAgent.product.detectedIphone_;
+
 
 /**
  * Whether the code is running on an iPad.

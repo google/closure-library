@@ -26,6 +26,7 @@ goog.provide('goog.module');
 goog.require('goog.array');
 goog.require('goog.module.Loader');
 
+
 /**
  * Wrapper of goog.module.Loader.require() for use in modules.
  * See method goog.module.Loader.require() for

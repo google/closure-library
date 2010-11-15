@@ -31,6 +31,7 @@ goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
 
 
+
 /**
  * The ModuleManager keeps track of all modules in the environment.
  * Since modules may not have their code loaded, we must keep track of them.
@@ -101,6 +102,7 @@ goog.module.ModuleManager = function() {
 };
 goog.inherits(goog.module.ModuleManager, goog.Disposable);
 goog.addSingletonGetter(goog.module.ModuleManager);
+
 
 /**
 * The type of callbacks that can be registered with the module manager,.

@@ -24,6 +24,7 @@ goog.provide('goog.graphics.ext.Group');
 goog.require('goog.graphics.ext.Element');
 
 
+
 /**
  * Wrapper for a graphics group.
  * @param {goog.graphics.ext.Group} group Parent for this element. Can

@@ -27,6 +27,7 @@ goog.require('goog.debug.Logger.Level');
 goog.require('goog.debug.TextFormatter');
 
 
+
 /**
  * Create and install a log handler that logs to window.console if available
  * @constructor

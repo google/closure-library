@@ -21,7 +21,6 @@
 goog.provide('goog.history.EventType');
 
 
-
 /**
  * Event types for goog.history.
  * @enum {string}

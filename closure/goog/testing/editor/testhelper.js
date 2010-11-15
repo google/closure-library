@@ -26,6 +26,7 @@ goog.require('goog.editor.BrowserFeature');
 goog.require('goog.testing.dom');
 
 
+
 /**
  * Create a new test controller.
  * @param {Element} root The root editable element.

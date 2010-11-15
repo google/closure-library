@@ -20,6 +20,7 @@
 goog.provide('goog.ui.emoji.Emoji');
 
 
+
 /**
  * Creates an emoji.
  *

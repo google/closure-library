@@ -24,6 +24,7 @@ goog.require('goog.positioning');
 goog.require('goog.positioning.AbstractPosition');
 
 
+
 /**
  * Encapsulates a popup position where the popup is anchored at a corner of
  * an element.

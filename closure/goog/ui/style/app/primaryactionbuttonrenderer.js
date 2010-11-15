@@ -26,6 +26,7 @@ goog.require('goog.ui.registry');
 goog.require('goog.ui.style.app.ButtonRenderer');
 
 
+
 /**
  * Custom renderer for {@link goog.ui.Button}s. This renderer supports the
  * "primary action" style for buttons.

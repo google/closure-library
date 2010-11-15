@@ -107,6 +107,7 @@ goog.require('goog.testing.TestCase.Test');
 goog.require('goog.testing.asserts');
 
 
+
 /**
  * A test case that is capable of running tests the contain asynchronous logic.
  * @param {string=} opt_name A descriptive name for the test case.
@@ -117,6 +118,7 @@ goog.testing.AsyncTestCase = function(opt_name) {
   goog.testing.TestCase.call(this, opt_name);
 };
 goog.inherits(goog.testing.AsyncTestCase, goog.testing.TestCase);
+
 
 
 /**

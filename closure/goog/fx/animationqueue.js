@@ -29,6 +29,8 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.fx.Animation');
 goog.require('goog.fx.Animation.EventType');
 
+
+
 /**
  * Constructor for AnimationQueue object.
  * @constructor
@@ -231,7 +233,6 @@ goog.inherits(goog.fx.AnimationSerialQueue, goog.fx.AnimationQueue);
  * @private
  */
 goog.fx.AnimationSerialQueue.prototype.counter_ = 0;
-
 
 
 /**

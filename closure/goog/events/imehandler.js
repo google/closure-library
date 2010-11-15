@@ -52,6 +52,7 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
 
+
 /**
  * Dispatches high-level events for IMEs.
  * @param {Element} el The element to listen on.
@@ -114,6 +115,7 @@ goog.events.ImeHandler.EventType = {
   // After the IME closes.
   END: 'endIme'
 };
+
 
 
 /**

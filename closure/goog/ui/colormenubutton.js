@@ -33,6 +33,7 @@ goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * A color menu button control.  Extends {@link goog.ui.MenuButton} by adding
  * an API for getting and setting the currently selected color from a menu of

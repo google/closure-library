@@ -23,6 +23,7 @@ goog.provide('goog.structs.InversionMap');
 goog.require('goog.array');
 
 
+
 /**
  * Maps ranges to values using goog.structs.Inversion.
  * @param {Array.<number>} rangeArray An array of monotonically

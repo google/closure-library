@@ -24,6 +24,8 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.pattern.AbstractPattern');
 goog.require('goog.dom.pattern.MatchType');
 
+
+
 /**
  * Pattern object that matches a repetition of another pattern.
  * @param {goog.dom.pattern.AbstractPattern} pattern The pattern to

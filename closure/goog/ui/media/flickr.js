@@ -70,6 +70,7 @@ goog.require('goog.ui.media.MediaModel.Player');
 goog.require('goog.ui.media.MediaRenderer');
 
 
+
 /**
  * Subclasses a goog.ui.media.MediaRenderer to provide a FlickrSet specific
  * media renderer.
@@ -187,6 +188,7 @@ goog.ui.media.FlickrSet.prototype.createDom = function(control) {
 goog.ui.media.FlickrSet.prototype.getCssClass = function() {
   return goog.ui.media.FlickrSet.CSS_CLASS;
 };
+
 
 
 /**

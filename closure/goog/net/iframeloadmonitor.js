@@ -25,6 +25,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.userAgent');
 
 
+
 /**
  * The correct way to determine whether an iframe has completed loading
  * is different in IE and Firefox.  This class abstracts above these

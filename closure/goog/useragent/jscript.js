@@ -64,6 +64,7 @@ if (!goog.userAgent.jscript.ASSUME_NO_JSCRIPT) {
   goog.userAgent.jscript.init_();
 }
 
+
 /**
  * Whether we detect that the user agent is using Microsoft JScript.
  * @type {boolean}

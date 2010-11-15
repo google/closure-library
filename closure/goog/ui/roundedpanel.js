@@ -111,6 +111,7 @@ goog.ui.RoundedPanel.Classes_ = {
 };
 
 
+
 /**
  * Base class for the hierarchy of RoundedPanel classes. Do not
  * instantiate directly. Instead, call goog.ui.RoundedPanel.create().
@@ -243,6 +244,7 @@ goog.ui.BaseRoundedPanel.prototype.getContentElement = function() {
 };
 
 
+
 /**
  * RoundedPanel class specifically for browsers that support CSS attributes
  * for elements with rounded borders (ex. Safari 3.0+, Firefox 3.0+). Do not
@@ -365,6 +367,7 @@ goog.ui.CssRoundedPanel.prototype.getStyle_ = function(corner) {
       'WebkitBorder' + cssCorner + 'Radius' :
       'MozBorderRadius' + cssCorner;
 };
+
 
 
 /**

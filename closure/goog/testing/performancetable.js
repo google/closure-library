@@ -24,6 +24,8 @@ goog.provide('goog.testing.PerformanceTable');
 goog.require('goog.dom');
 goog.require('goog.testing.PerformanceTimer');
 
+
+
 /**
  * A UI widget that runs performance tests and displays the results.
  * @param {Element} root The element where the table should be attached.

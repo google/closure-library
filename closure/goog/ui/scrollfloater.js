@@ -45,6 +45,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Creates a ScrollFloater; see file overview for details.
  *
@@ -119,6 +120,7 @@ goog.ui.ScrollFloater.prototype.floating_ = false;
  */
 goog.ui.ScrollFloater.prototype.originalOffset_;
 
+
 /**
  * The style properties which are stored when we float an element, so they
  * can be restored when it 'docks' again.
@@ -137,6 +139,7 @@ goog.ui.ScrollFloater.STORED_STYLE_PROPS_ = [
 goog.ui.ScrollFloater.PLACEHOLDER_STYLE_PROPS_ = [
   'position', 'top', 'left', 'display', 'cssFloat',
   'marginTop', 'marginLeft', 'marginRight', 'marginBottom'];
+
 
 /**
  * The class name applied to the floating element.

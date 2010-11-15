@@ -24,6 +24,7 @@ goog.provide('goog.graphics.LinearGradient');
 goog.require('goog.graphics.Fill');
 
 
+
 /**
  * Creates an immutable linear gradient fill object.
  *

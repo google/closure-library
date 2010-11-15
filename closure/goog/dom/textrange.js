@@ -35,6 +35,7 @@ goog.require('goog.string');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Create a new text selection with no properties.  Do not use this constructor:
  * use one of the goog.dom.Range.createFrom* methods instead.
@@ -550,6 +551,7 @@ goog.dom.TextRange.prototype.collapse = function(toAnchor) {
 
 
 // SAVED RANGE OBJECTS
+
 
 
 /**

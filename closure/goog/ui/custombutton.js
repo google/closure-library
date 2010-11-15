@@ -25,6 +25,7 @@ goog.require('goog.ui.CustomButtonRenderer');
 goog.require('goog.ui.registry');
 
 
+
 /**
  * A custom button control.  Identical to {@link goog.ui.Button}, except it
  * defaults its renderer to {@link goog.ui.CustomButtonRenderer}.  One could

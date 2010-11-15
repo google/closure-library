@@ -27,6 +27,8 @@ goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.userAgent');
 
+
+
 /**
  * Renderer for {@link goog.ui.ColorMenuButton}s.
  * @constructor

@@ -19,11 +19,14 @@
 
 goog.provide('goog.module.AbstractModuleLoader');
 
+
+
 /**
  * An interface that loads JavaScript modules.
  * @interface
  */
 goog.module.AbstractModuleLoader = function() {};
+
 
 /**
  * Loads a list of JavaScript modules.

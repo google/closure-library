@@ -36,6 +36,8 @@ goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 
+
+
 /**
  * Abstract class that provides reusable functionality for implementing drag
  * and drop functionality.
@@ -1139,6 +1141,7 @@ goog.fx.DragDropEvent.prototype.disposeInternal = function() {
 };
 
 
+
 /**
  * Class representing a source or target element for drag and drop operations.
  *
@@ -1276,6 +1279,7 @@ goog.fx.DragDropItem.prototype.maybeStartDrag_ = function(event, element) {
 
   event.preventDefault();
 };
+
 
 /**
  * Event handler for mouse move. Starts drag operation if moved more than the

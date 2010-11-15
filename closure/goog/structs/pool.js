@@ -28,6 +28,7 @@ goog.require('goog.structs.Queue');
 goog.require('goog.structs.Set');
 
 
+
 /**
  * A generic pool class. If max is greater than min, an error is thrown.
  * @param {number=} opt_minCount Min. number of objects (Default: 1).

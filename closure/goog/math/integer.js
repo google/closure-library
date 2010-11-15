@@ -24,6 +24,7 @@
 goog.provide('goog.math.Integer');
 
 
+
 /**
  * Constructs a two's-complement integer an array containing bits of the
  * integer in 32-bit (signed) pieces, given in little-endian order (i.e.,

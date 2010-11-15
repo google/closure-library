@@ -23,6 +23,7 @@ goog.provide('goog.graphics.PathElement');
 goog.require('goog.graphics.StrokeAndFillElement');
 
 
+
 /**
  * Interface for a graphics path element.
  * You should not construct objects from this constructor. The graphics

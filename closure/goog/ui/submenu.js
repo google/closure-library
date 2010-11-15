@@ -60,6 +60,7 @@ goog.ui.SubMenu = function(content, opt_model, opt_domHelper, opt_renderer) {
 };
 goog.inherits(goog.ui.SubMenu, goog.ui.MenuItem);
 
+
 /**
  * The delay before opening the sub menu in milliseconds.  (This number is
  * arbitrary, it would be good to get some user studies or a designer to play

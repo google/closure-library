@@ -28,6 +28,7 @@ goog.require('goog.graphics');
 goog.require('goog.graphics.ext.coordinates');
 
 
+
 /**
  * Base class for a wrapper around the goog.graphics wrapper that enables
  * more advanced functionality.
@@ -708,6 +709,7 @@ goog.graphics.ext.Element.PositionType_ = {
   MIDDLE: 1,
   END: 2
 };
+
 
 
 /**

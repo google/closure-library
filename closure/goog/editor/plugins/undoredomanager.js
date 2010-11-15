@@ -26,6 +26,7 @@ goog.require('goog.editor.plugins.UndoRedoState');
 goog.require('goog.events.EventTarget');
 
 
+
 /**
  * Manages undo and redo operations through a series of {@code UndoRedoState}s
  * maintained on undo and redo stacks.
@@ -70,6 +71,7 @@ goog.editor.plugins.UndoRedoManager = function() {
   this.pendingActions_ = [];
 };
 goog.inherits(goog.editor.plugins.UndoRedoManager, goog.events.EventTarget);
+
 
 /**
  * Event types for the events dispatched by undo-redo manager.

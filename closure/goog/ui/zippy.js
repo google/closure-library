@@ -31,6 +31,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.style');
 
 
+
 /**
  * Zippy widget. Expandable/collapsible container, clicking the header toggles
  * the visibility of the content.
@@ -128,6 +129,7 @@ goog.ui.Zippy.Events = {
   TOGGLE: 'toggle'
 };
 
+
 /**
  * Destroys widget and removes all event listeners.
  */
@@ -140,6 +142,7 @@ goog.ui.Zippy.prototype.disposeInternal = function() {
   }
   goog.ui.Zippy.superClass_.disposeInternal.call(this);
 };
+
 
 /**
  * Expands content pane.

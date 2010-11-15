@@ -27,6 +27,7 @@ goog.provide('goog.structs.SimplePool');
 goog.require('goog.Disposable');
 
 
+
 /**
  * A generic pool class. Simpler and more efficient than goog.structs.Pool
  * because it doesn't maintain a list of objects that are in use. This class

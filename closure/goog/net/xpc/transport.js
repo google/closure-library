@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 /**
  * @fileoverview Contains the base class for transports.
  *
@@ -21,6 +22,7 @@ goog.provide('goog.net.xpc.Transport');
 
 goog.require('goog.Disposable');
 goog.require('goog.net.xpc');
+
 
 
 /**
@@ -59,7 +61,7 @@ goog.net.xpc.Transport.prototype.getType = function() {
 
 /**
  * Returns the window associated with this transport instance.
- * @return {Window} The window to use
+ * @return {Window} The window to use.
  */
 goog.net.xpc.Transport.prototype.getWindow = function() {
   return this.domHelper_.getWindow();

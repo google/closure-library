@@ -26,6 +26,7 @@ goog.require('goog.structs');
 goog.require('goog.structs.PriorityPool');
 
 
+
 /**
  * A pool of XhrIo objects.
  * @param {goog.structs.Map=} opt_headers Map of default headers to add to every
@@ -46,6 +47,7 @@ goog.net.XhrIoPool = function(opt_headers, opt_minCount, opt_maxCount) {
   this.headers_ = opt_headers;
 };
 goog.inherits(goog.net.XhrIoPool, goog.structs.PriorityPool);
+
 
 /**
  * Creates an instance of an XhrIo object to use in the pool.

@@ -25,6 +25,7 @@ goog.require('goog.events.EventWrapper');
 goog.require('goog.events.KeyCodes');
 
 
+
 /**
  * Event wrapper for action handling. Fires when an element is activated either
  * by clicking it or by focusing it and pressing Enter.

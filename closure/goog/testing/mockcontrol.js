@@ -36,6 +36,7 @@ goog.require('goog.testing.MockInterface');
 goog.require('goog.testing.StrictMock');
 
 
+
 /**
  * Controls a set of mocks.  Controlled mocks are replayed, verified, and
  * cleaned-up at the same time.

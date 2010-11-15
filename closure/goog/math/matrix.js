@@ -23,6 +23,7 @@ goog.require('goog.math');
 goog.require('goog.math.Size');
 
 
+
 /**
  * Class for representing and manipulating matrices.
  *

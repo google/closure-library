@@ -62,6 +62,7 @@ goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaRenderer');
 
 
+
 /**
  * Subclasses a goog.ui.media.MediaRenderer to provide a Mp3 specific media
  * renderer.
