@@ -124,7 +124,6 @@ goog.ui.editor.ToolbarFactory.addFontSizes = function(button, sizes) {
 goog.ui.editor.ToolbarFactory.addFontSize = function(button, caption, value) {
   // Construct the option, and add it to the button.
   var option = new goog.ui.Option(caption, value, button.dom_);
-  option.setId(caption);
   button.addItem(option);
 
   // Adjust the font size of the menu item and the height of the checkbox
