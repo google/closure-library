@@ -77,6 +77,16 @@ goog.ui.CustomButtonRenderer.prototype.createDom = function(button) {
 
 
 /**
+ * Returns the ARIA role to be applied to custom buttons.
+ * @return {goog.dom.a11y.Role|undefined} ARIA role.
+ * @override
+ */
+goog.ui.CustomButtonRenderer.prototype.getAriaRole = function() {
+  return goog.dom.a11y.Role.BUTTON;
+};
+
+
+/**
  * Takes the button's root element and returns the parent element of the
  * button's contents.  Overrides the superclass implementation by taking
  * the nested DIV structure of custom buttons into account.

@@ -70,6 +70,16 @@ goog.ui.FlatButtonRenderer.prototype.createDom = function(button) {
 
 
 /**
+ * Returns the ARIA role to be applied to flat buttons.
+ * @return {goog.dom.a11y.Role|undefined} ARIA role.
+ * @override
+ */
+goog.ui.FlatButtonRenderer.prototype.getAriaRole = function() {
+  return goog.dom.a11y.Role.BUTTON;
+};
+
+
+/**
  * Returns true if this renderer can decorate the element.  Overrides
  * {@link goog.ui.ButtonRenderer#canDecorate} by returning true if the
  * element is a DIV, false otherwise.
