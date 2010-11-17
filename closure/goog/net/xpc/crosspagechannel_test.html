@@ -194,7 +194,10 @@ Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper) {
   cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
 
   this.channel_ = new goog.net.xpc.CrossPageChannel(cfg, opt_domHelper);
-  this.channel_.registerService('msg', goog.bind(this.msgHandler_, this));
+  // Register using the transport service name to test that it doesn't conflict
+  // with the actual transport service.
+  this.channel_.registerService(goog.net.xpc.TRANSPORT_SERVICE_,
+                                goog.bind(this.msgHandler_, this));
   this.cfg_ = cfg;
 };
 
