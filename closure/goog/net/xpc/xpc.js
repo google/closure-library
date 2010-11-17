@@ -164,15 +164,10 @@ goog.net.xpc.ChannelStates = {
 
 /**
  * The name of the transport service (used for internal signalling).
- *
- * This begins with an % to ensure that it isn't the same as any URL-encoded
- * string. Since XPC URL-encodes user service names, this means it won't cause
- * any collisions.
- *
  * @type {string}
  * @private
  */
-goog.net.xpc.TRANSPORT_SERVICE_ = '%tp';
+goog.net.xpc.TRANSPORT_SERVICE_ = 'tp';
 
 
 /**
