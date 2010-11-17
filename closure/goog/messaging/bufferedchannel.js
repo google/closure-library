@@ -26,7 +26,6 @@ goog.require('goog.debug.Error');
 goog.require('goog.debug.Logger');
 goog.require('goog.events');
 goog.require('goog.messaging.MessageChannel');
-goog.require('goog.messaging.MultiChannel');
 
 
 
@@ -56,30 +55,12 @@ goog.messaging.BufferedChannel = function(messageChannel, opt_interval) {
   this.buffer_ = [];
 
   /**
-   * Channel dispatcher wrapping the underlying delegate channel.
+   * Delegate that we're wrapping.
    *
-   * @type {!goog.messaging.MultiChannel}
+   * @type {goog.messaging.MessageChannel}
    * @private
    */
-  this.multiChannel_ = new goog.messaging.MultiChannel(messageChannel);
-
-  /**
-   * Virtual channel for carrying the user's messages.
-   *
-   * @type {!goog.messaging.MessageChannel}
-   * @private
-   */
-  this.userChannel_ = this.multiChannel_.createVirtualChannel(
-      goog.messaging.BufferedChannel.USER_CHANNEL_NAME_);
-
-  /**
-   * Virtual channel for carrying control messages for BufferedChannel.
-   *
-   * @type {!goog.messaging.MessageChannel}
-   * @private
-   */
-  this.controlChannel_ = this.multiChannel_.createVirtualChannel(
-      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_);
+  this.messageChannel_ = messageChannel;
 
   /**
    * Timer for the peer ready ping loop.
@@ -90,10 +71,7 @@ goog.messaging.BufferedChannel = function(messageChannel, opt_interval) {
   this.timer_ = new goog.Timer(
       opt_interval || goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
 
-  this.timer_.start();
-  goog.events.listen(this.timer_, goog.Timer.TICK, this.onTick_, false, this);
-
-  this.controlChannel_.registerService(
+  this.messageChannel_.registerService(
       goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_,
       goog.bind(this.setPeerReady_, this));
 };
@@ -111,10 +89,10 @@ goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_ = 50;
 
 
 /**
- * The name of the private service which handles peer ready pings.  The
+ * Reserved name of the private service which handles peer ready pings.  The
  * service registered with this name is bound to this.setPeerReady_, an internal
  * part of BufferedChannel's implementation that clients should not send to
- * directly.
+ * directly.  Clients may not register a service with this name.
  *
  * @type {string}
  * @const
@@ -124,37 +102,40 @@ goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_ = 'setPeerReady_';
 
 
 /**
- * The name of the virtual channel along which user messages are sent.
+ * Begins the peer ready notification loop.
  *
- * @type {string}
- * @const
  * @private
  */
-goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ = 'user';
+goog.messaging.BufferedChannel.prototype.beginPolling_ = function() {
+  this.timer_.start();
+  goog.events.listen(this.timer_, goog.Timer.TICK, this.onTick_, false, this);
+};
 
 
 /**
- * The name of the virtual channel along which internal control messages are
- * sent.
+ * Connects the channel, runs the (optional) passed callback, and starts the
+ * peer ready notification loop.  When this method is called, all the
+ * information needed to connect the channel must be available.
  *
- * @type {string}
- * @const
- * @private
+ * @override
+ * @see goog.messaging.MessageChannel.connect
  */
-goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ = 'control';
-
-
-/** @inheritDoc */
 goog.messaging.BufferedChannel.prototype.connect = function(opt_connectCb) {
   if (opt_connectCb) {
     opt_connectCb();
   }
+  this.messageChannel_.connect(goog.bind(this.beginPolling_, this));
 };
 
 
-/** @inheritDoc */
+/**
+ * @return {boolean} Whether or not the channel is connected.  Note that this
+ *     conveys no information about the status of the channel's peer.
+ * @override
+ * @see goog.messaging.MessageChannel.isConnected
+ */
 goog.messaging.BufferedChannel.prototype.isConnected = function() {
-  return true;
+  return this.messageChannel_.isConnected();
 };
 
 
@@ -190,7 +171,7 @@ goog.messaging.BufferedChannel.prototype.onTick_ = function(unusedEvent) {
   // commonly fail to transmit to our peer that we're ready because we received
   // their ready ping between two of ours.
   try {
-    this.controlChannel_.send(
+    this.messageChannel_.send(
         goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_,
         /* payload */ '');
   } catch (e) {
@@ -212,17 +193,35 @@ goog.messaging.BufferedChannel.prototype.onTick_ = function(unusedEvent) {
 goog.messaging.BufferedChannel.prototype.peerReady_;
 
 
-/** @inheritDoc */
+/**
+ * Registers a service to be called when a message is received.
+ *
+ * @param {string} serviceName The name of the service.
+ * @param {function((string|!Object))} callback The callback to process the
+ *     incoming messages. Passed the payload. If opt_jsonEncoded is set, the
+ *     payload is decoded and passed as an object.
+ * @param {boolean=} opt_jsonEncoded If true, incoming messages for this service
+ *     are expected to contain a JSON-encoded object and will be deserialized
+ *     automatically. It's the responsibility of implementors of this class to
+ *     perform the deserialization.
+ * @throws {goog.messaging.BufferedChannel.ReservedServiceNameError} if the
+ *     passed serviceName is reserved for BufferedChannel's use.
+ */
 goog.messaging.BufferedChannel.prototype.registerService = function(
     serviceName, callback, opt_jsonEncoded) {
-  this.userChannel_.registerService(serviceName, callback, opt_jsonEncoded);
+  if (serviceName == goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_) {
+    throw Error(
+        'cannot register service with reserved name ' +
+        goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_);
+  }
+  this.messageChannel_.registerService(serviceName, callback, opt_jsonEncoded);
 };
 
 
 /** @inheritDoc */
 goog.messaging.BufferedChannel.prototype.registerDefaultService = function(
     callback) {
-  this.userChannel_.registerDefaultService(callback);
+  this.messageChannel_.registerDefaultService(callback);
 };
 
 
@@ -239,7 +238,7 @@ goog.messaging.BufferedChannel.prototype.registerDefaultService = function(
  */
 goog.messaging.BufferedChannel.prototype.send = function(serviceName, payload) {
   if (this.isPeerReady()) {
-    this.userChannel_.send(serviceName, payload);
+    this.messageChannel_.send(serviceName, payload);
   } else {
     goog.messaging.BufferedChannel.prototype.logger_.fine(
         'buffering message ' + serviceName);
@@ -263,7 +262,7 @@ goog.messaging.BufferedChannel.prototype.setPeerReady_ = function() {
     var message = this.buffer_[i];
     goog.messaging.BufferedChannel.prototype.logger_.fine(
         'sending buffered message ' + message.serviceName);
-    this.userChannel_.send(message.serviceName, message.payload);
+    this.messageChannel_.send(message.serviceName, message.payload);
   }
   this.buffer_ = null;
 };
@@ -271,7 +270,7 @@ goog.messaging.BufferedChannel.prototype.setPeerReady_ = function() {
 
 /** @inheritDoc */
 goog.messaging.BufferedChannel.prototype.disposeInternal = function() {
-  goog.dispose(this.multiChannel_);
+  goog.dispose(this.messageChannel_);
   goog.dispose(this.timer_);
   goog.base(this, 'disposeInternal');
 };
