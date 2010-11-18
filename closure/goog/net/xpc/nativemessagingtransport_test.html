@@ -132,9 +132,9 @@ function testSendingMessagesToUnconnectedInnerPeer() {
                t.channel_.name);
 
   // Test updating a stale inner peer.
-  var e = createMockEvent('new_channel|tp:SETUP');
+  var e = createMockEvent('new_channel|%tp:SETUP');
   assertTrue(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
-  assertEquals('tp', serviceResult);
+  assertEquals('%tp', serviceResult);
   assertEquals('SETUP', payloadResult);
   assertEquals('Ensure channel name has been updated.',
                'new_channel',
