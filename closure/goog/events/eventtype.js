@@ -15,7 +15,6 @@
 /**
  * @fileoverview Event Types.
  *
- *
  */
 
 
@@ -85,7 +84,9 @@ goog.events.EventType = {
   UNLOAD: 'unload',
 
   // HTML 5 History events
+  // See http://www.w3.org/TR/html5/history.html#event-definitions
   HASHCHANGE: 'hashchange',
+  PAGEHIDE: 'pagehide',
+  PAGESHOW: 'pageshow',
   POPSTATE: 'popstate'
 };
-
