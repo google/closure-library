@@ -237,7 +237,7 @@ goog.text.LoremIpsum.prototype.initializeDictionary_ = function(dictionary) {
 
 /**
  * Picks a random starting chain.
- * @return {string} The starting key.
+ * @return {Array.<string>} The starting key.
  * @private
  */
 goog.text.LoremIpsum.prototype.chooseRandomStart_ = function() {

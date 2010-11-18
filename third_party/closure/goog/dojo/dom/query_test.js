@@ -155,5 +155,6 @@ function testCorrectDocumentInFrame() {
  */
 function assertQuery(expectedNumberOfNodes, var_args) {
   var args = Array.prototype.slice.call(arguments, 1);
-  assertEquals(expectedNumberOfNodes, goog.dom.query.apply(goog.dom, args).length);
+  assertEquals(expectedNumberOfNodes,
+               goog.dom.query.apply(null, args).length);
 }
