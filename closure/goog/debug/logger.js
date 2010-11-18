@@ -626,11 +626,25 @@ goog.debug.Logger.prototype.logRecord = function(logRecord) {
 
 
 /**
+ * Logs the message to speed tracer, if it is available.
+ * {@see http://code.google.com/webtoolkit/speedtracer/logging-api.html}
+ * @param {string} msg The message to log.
+ * @private
+ */
+goog.debug.Logger.prototype.logToSpeedTracer_ = function(msg) {
+  if (goog.global['console'] && goog.global['console']['markTimeline']) {
+    goog.global['console']['markTimeline'](msg);
+  }
+};
+
+
+/**
  * Log a LogRecord.
  * @param {goog.debug.LogRecord} logRecord A log record to log.
  * @private
  */
 goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
+  this.logToSpeedTracer_('log:' + logRecord.getMessage());
   if (goog.debug.Logger.ENABLE_HIERARCHY) {
     var target = this;
     while (target) {
