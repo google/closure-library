@@ -95,13 +95,8 @@ See the COPYING file for details.
 
       button.setSupportedState(goog.ui.Component.State.CHECKED, true);
       var element = buttonRenderer.createDom(button);
-      if (goog.userAgent.GECKO) {
-        assertEquals('button\'s aria-pressed attribute must be false', 'false',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      } else {
-        assertEquals('button\'s aria-pressed attribute must not be set', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      }
+      assertEquals('button\'s aria-pressed attribute must be false', 'false',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
     }
 
     function testDecorate() {
@@ -126,13 +121,8 @@ See the COPYING file for details.
       toggle.setSupportedState(goog.ui.Component.State.CHECKED, true);
       var element = goog.dom.getElement('toggle');
       toggle.decorate(element);
-      if (goog.userAgent.GECKO) {
-        assertEquals('toggle\'s aria-pressed attribute must be false', 'false',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      } else {
-        assertEquals('toggle\'s aria-pressed attribute must not be set', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      }
+      assertEquals('toggle\'s aria-pressed attribute must be false', 'false',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
       toggle.dispose();
     }
     
@@ -174,35 +164,20 @@ See the COPYING file for details.
       var element = buttonRenderer.createDom(button);
       buttonRenderer.updateAriaState(element, goog.ui.Component.State.CHECKED,
           true);
-      if (goog.userAgent.GECKO) {
-        assertEquals('On Gecko, button must have pressed ARIA state', 'true',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      } else {
-        assertEquals('On non-Gecko, control must not have ARIA state', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      }
+      assertEquals('Button must have pressed ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
 
       // Test for updating a state other than CHECKED
       buttonRenderer.updateAriaState(element, goog.ui.Component.State.DISABLED,
           true);
-      if (goog.userAgent.GECKO) {
-        assertEquals('On Gecko, button must have disabled ARIA state', 'true',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
-      } else {
-        assertEquals('On non-Gecko, control must not have ARIA state', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
-      }
+      assertEquals('Button must have disabled ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
 
       buttonRenderer.updateAriaState(element, goog.ui.Component.State.CHECKED,
           false);
-      if (goog.userAgent.GECKO) {
-        assertEquals('On Gecko, control must no longer have pressed ARIA state',
-            'false',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      } else {
-        assertEquals('On non-Gecko, control must not have ARIA state', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      }
+      assertEquals('Control must no longer have pressed ARIA state',
+          'false',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
     }
 
     function testDoesntCallGetCssClassInConstructor() {

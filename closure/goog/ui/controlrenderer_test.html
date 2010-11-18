@@ -371,13 +371,8 @@ See the COPYING file for details.
 
       var bar = goog.dom.getElement('bar');
       testRenderer.setAriaRole(bar);
-      if (goog.userAgent.GECKO) {
-        assertEquals('On Gecko, element must have expected ARIA role',
-            goog.dom.a11y.Role.BUTTON, goog.dom.a11y.getRole(bar));
-      } else {
-        assertEquals('On non-Gecko, element must not have ARIA role', '',
-            goog.dom.a11y.getRole(bar));
-      }
+      assertEquals('Element must have expected ARIA role',
+          goog.dom.a11y.Role.BUTTON, goog.dom.a11y.getRole(bar));
     }
 
     function testSetAllowTextSelection() {
@@ -502,25 +497,15 @@ See the COPYING file for details.
       assertSameElements('Control must have disabled class name',
           ['goog-button', 'goog-base', 'goog-base-disabled'],
           goog.dom.classes.get(element));
-      if (goog.userAgent.GECKO) {
-        assertEquals('On Gecko, control must have disabled ARIA state', 'true',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
-      } else {
-        assertEquals('On non-Gecko, control must not have ARIA state', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
-      }
+      assertEquals('Control must have disabled ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
 
       testRenderer.setState(control, goog.ui.Component.State.DISABLED, false);
       assertSameElements('Control must no longer have disabled class name',
           ['goog-button', 'goog-base'], goog.dom.classes.get(element));
-      if (goog.userAgent.GECKO) {
-        assertEquals('On Gecko, control must not have disabled ARIA state',
-            'false',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
-      } else {
-        assertEquals('On non-Gecko, control must not have ARIA state', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
-      }
+      assertEquals('Control must not have disabled ARIA state',
+          'false',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
 
       testRenderer.setState(control, 0xFFFFFF, true);
       assertSameElements('Class names must be unchanged for invalid state',
@@ -533,25 +518,15 @@ See the COPYING file for details.
 
       controlRenderer.updateAriaState(element, goog.ui.Component.State.ACTIVE,
           true);
-      if (goog.userAgent.GECKO) {
-        assertEquals('On Gecko, control must have pressed ARIA state', 'true',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      } else {
-        assertEquals('On non-Gecko, control must not have ARIA state', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      }
+      assertEquals('Control must have pressed ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
 
       controlRenderer.updateAriaState(element, goog.ui.Component.State.ACTIVE,
           false);
-      if (goog.userAgent.GECKO) {
-        assertEquals('On Gecko, control must no longer have pressed ARIA state',
-            'false',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      } else {
-        assertEquals('On non-Gecko, control must not have ARIA state', '',
-            goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
-      }
-    }
+      assertEquals('Control must no longer have pressed ARIA state',
+          'false',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+  }
 
     function testSetContent() {
       sandbox.innerHTML = 'Hello, world!';

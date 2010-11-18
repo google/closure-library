@@ -511,9 +511,6 @@ function testRolesAndStates() {
   var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setTarget(someDiv);
 
-  // disable browser check so this test can run on all browsers
-  goog.dom.a11y.setNoBrowserCheck(true);
-
   // initially activedescendant is not set
   checkActiveDescendant(null);
 
