@@ -113,6 +113,7 @@ function testBasicButtonBehavior() {
  * Check if the aria-activedescendant property is set correctly.
  */
 function testHighlightItemBehavior() {
+  if (goog.userAgent.GECKO) {
     var node = goog.dom.getElement('demoMenuButton');
     menuButton.decorate(node);
     goog.testing.events.fireClickSequence(node);
@@ -128,6 +129,7 @@ function testHighlightItemBehavior() {
     assertEquals('Second menuitem must be the aria-activedescendant',
         'menuItem2', goog.dom.a11y.getState(menuButton.getElement(),
         goog.dom.a11y.State.ACTIVEDESCENDANT));
+  }
 }
 
 /**
