@@ -74,10 +74,10 @@ function testSimpleSelect() {
 
 function testSimplePlural() {
   var fmt = new goog.i18n.MessageFormat('I see {NUM_PEOPLE, plural, offset:1 ' +
-      '=0 {no one at all} ' +
-      '=1 {{PERSON}} ' +
-      'one {{PERSON} and one other person} ' +
-      'other {{PERSON} and # other people}} in {PLACE}.');
+      '=0 {no one at all in {PLACE}.} ' +
+      '=1 {{PERSON} in {PLACE}.} ' +
+      'one {{PERSON} and one other person in {PLACE}.} ' +
+      'other {{PERSON} and # other people in {PLACE}.}}');
 
   assertEquals('I see no one at all in Belgrade.',
                fmt.format({'NUM_PEOPLE': 0,

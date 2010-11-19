@@ -198,11 +198,11 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
         break;
       case goog.i18n.MessageFormat.BlockType_.SELECT:
         var pattern = parsedPattern[i].value;
-      this.formatSelectBlock_(pattern, namedParameters, result);
+        this.formatSelectBlock_(pattern, namedParameters, result);
         break;
       case goog.i18n.MessageFormat.BlockType_.PLURAL:
         var pattern = parsedPattern[i].value;
-      this.formatPluralBlock_(pattern, namedParameters, result);
+        this.formatPluralBlock_(pattern, namedParameters, result);
         break;
       default:
         goog.asserts.fail('Unrecognized block type.');
@@ -262,10 +262,11 @@ goog.i18n.MessageFormat.prototype.formatPluralBlock_ = function(
         option, 'Invalid option or missing other option for select block.');
   }
 
-  this.formatBlock_(option, namedParameters, result);
-  var localeAwareDiff = this.numberFormatter_.format(diff);
-  var plural = result.pop();
+  var pluralResult = [];
+  this.formatBlock_(option, namedParameters, pluralResult);
+  var plural = pluralResult.join('');
   goog.asserts.assertString(plural, 'Empty block in plural.');
+  var localeAwareDiff = this.numberFormatter_.format(diff);
   result.push(plural.replace(/#/g, function() { return localeAwareDiff }));
 };
 
