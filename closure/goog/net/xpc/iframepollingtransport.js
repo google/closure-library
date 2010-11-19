@@ -593,7 +593,7 @@ goog.net.xpc.IframePollingTransport.prototype.send =
  * Disposes of the transport.
  */
 goog.net.xpc.IframePollingTransport.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.net.xpc.IframePollingTransport.superClass_.disposeInternal.call(this);
 
   var receivers = goog.net.xpc.IframePollingTransport.receivers_;
   goog.array.remove(receivers, this.msgReceiver_);

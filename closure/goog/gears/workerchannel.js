@@ -31,7 +31,7 @@ goog.require('goog.gears.Worker');
 goog.require('goog.gears.Worker.EventType');
 goog.require('goog.gears.WorkerEvent');
 goog.require('goog.json');
-goog.require('goog.messaging.AbstractChannel');
+goog.require('goog.messaging.MessageChannel'); // interface
 
 
 
@@ -41,7 +41,8 @@ goog.require('goog.messaging.AbstractChannel');
  * @param {goog.gears.Worker} worker The Gears worker to communicate with. This
  *     should already be initialized.
  * @constructor
- * @extends {goog.messaging.AbstractChannel}
+ * @extends {goog.Disposable}
+ * @implements {goog.messaging.MessageChannel}
  */
 goog.gears.WorkerChannel = function(worker) {
   goog.base(this);
@@ -53,10 +54,17 @@ goog.gears.WorkerChannel = function(worker) {
    */
   this.worker_ = worker;
 
+  /**
+   * The services registered for this worker channel.
+   * @type {Object.<string, {callback: Function, jsonEncoded: boolean}>}
+   * @private
+   */
+  this.services_ = {};
+
   goog.events.listen(this.worker_, goog.gears.Worker.EventType.MESSAGE,
                      this.deliver_, false, this);
 };
-goog.inherits(goog.gears.WorkerChannel, goog.messaging.AbstractChannel);
+goog.inherits(goog.gears.WorkerChannel, goog.Disposable);
 
 
 /**
@@ -85,12 +93,63 @@ goog.gears.WorkerChannel.prototype.peerOrigin;
 
 
 /**
+ * The default service to be run when no other services match.
+ *
+ * @type {?function(string, (string|!Object))}
+ * @private
+ */
+goog.gears.WorkerChannel.prototype.defaultService_;
+
+
+/**
  * Logger for this class.
  * @type {goog.debug.Logger}
  * @protected
  */
 goog.gears.WorkerChannel.prototype.logger =
     goog.debug.Logger.getLogger('goog.gears.WorkerChannel');
+
+
+/**
+ * Currently a no-op, since the worker is already connected when it's passed in.
+ * @inheritDoc
+ */
+goog.gears.WorkerChannel.prototype.connect = function(opt_connectCb) {
+  if (opt_connectCb) {
+    opt_connectCb();
+  }
+};
+
+
+/**
+ * Currently always returns true, since the worker is already connected when
+ * it's passed in.
+ * @inheritDoc
+ */
+goog.gears.WorkerChannel.prototype.isConnected = function() {
+  return true;
+};
+
+
+/**
+ * @inheritDoc
+ */
+goog.gears.WorkerChannel.prototype.registerService =
+    function(serviceName, callback, opt_jsonEncoded) {
+  this.services_[serviceName] = {
+    callback: callback,
+    jsonEncoded: !!opt_jsonEncoded
+  };
+};
+
+
+/**
+ * @inheritDoc
+ */
+goog.gears.WorkerChannel.prototype.registerDefaultService =
+    function(callback) {
+  this.defaultService_ = callback;
+};
 
 
 /**
@@ -108,7 +167,6 @@ goog.gears.WorkerChannel.prototype.send =
  * @inheritDoc
  */
 goog.gears.WorkerChannel.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
   this.worker_.dispose();
 };
 
@@ -131,8 +189,24 @@ goog.gears.WorkerChannel.prototype.deliver_ = function(e) {
     return;
   }
 
-  if (this.validateMessage_(body)) {
-    this.deliver(body['serviceName'], body['payload']);
+  var service = this.serviceForMessage_(body);
+  if (service) {
+    // Even though our payloads can be objects, we want to respect the
+    // jsonEncoded flag for compatibility's sake.
+    var payload = body['payload'];
+    if (service.jsonEncoded && goog.isString(payload)) {
+      try {
+        payload = goog.json.parse(payload);
+      } catch (err) {
+        this.logger.warning(
+            'Expected JSON payload for ' + body['serviceName'] + ', was "' +
+            payload + '"');
+        return;
+      }
+    } else if (!service.jsonEncoded && !goog.isString(payload)) {
+      payload = goog.json.serialize(payload);
+    }
+    service.callback(payload);
   }
 
   e.preventDefault();
@@ -141,28 +215,45 @@ goog.gears.WorkerChannel.prototype.deliver_ = function(e) {
 
 
 /**
- * Checks whether the message is invalid in some way.
+ * Returns the service registered for the given GearsWorkerChannel message, or
+ * null if the message is invalid in some way.
  *
  * @param {Object} body The contents of the message.
- * @return {boolean} True if the message is valid, false otherwise.
+ * @return {?{callback: Function, jsonEncoded: boolean}} The service registered
+ *     for the message, if the message is valid and such a service exists.
  * @private
  */
-goog.gears.WorkerChannel.prototype.validateMessage_ = function(body) {
+goog.gears.WorkerChannel.prototype.serviceForMessage_ = function(body) {
   if (!('serviceName' in body)) {
     this.logger.warning('GearsWorkerChannel::deliver_(): ' +
                         'Message object doesn\'t contain service name: ' +
                         goog.debug.deepExpose(body));
-    return false;
+    return null;
   }
 
   if (!('payload' in body)) {
     this.logger.warning('GearsWorkerChannel::deliver_(): ' +
                         'Message object doesn\'t contain payload: ' +
                         goog.debug.deepExpose(body));
-    return false;
+    return null;
   }
 
-  return true;
+  var service = this.services_[body['serviceName']];
+  if (!service) {
+    if (this.defaultService_) {
+      var callback = goog.partial(this.defaultService_, body['serviceName']);
+      var jsonEncoded = goog.isObject(body['payload']);
+      return {callback: callback, jsonEncoded: jsonEncoded};
+    }
+
+    this.logger.warning('GearsWorkerChannel::deliver_(): ' +
+                        'Unknown service name "' + body['serviceName'] + '" ' +
+                        '(payload: ' + goog.debug.deepExpose(body['payload']) +
+                        ')');
+    return null;
+  }
+
+  return service;
 };
 
 

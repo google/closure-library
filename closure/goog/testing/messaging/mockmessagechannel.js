@@ -21,7 +21,7 @@
 
 goog.provide('goog.testing.messaging.MockMessageChannel');
 
-goog.require('goog.messaging.AbstractChannel');
+goog.require('goog.messaging.MessageChannel'); // interface
 goog.require('goog.testing.asserts');
 
 
@@ -30,11 +30,16 @@ goog.require('goog.testing.asserts');
  * Class for unit-testing code that communicates over a MessageChannel.
  * @param {goog.testing.MockControl} mockControl The mock control used to create
  *   the method mock for #send.
- * @extends {goog.messaging.AbstractChannel}
+ * @implements {goog.messaging.MessageChannel}
  * @constructor
  */
 goog.testing.messaging.MockMessageChannel = function(mockControl) {
-  goog.base(this);
+  /**
+   * Services to call when receiving messages.
+   * @type {Object.<string, function((string|!Object))>}
+   * @private
+   */
+  this.services_ = {};
 
   /**
    * Whether the channel has been disposed.
@@ -44,8 +49,33 @@ goog.testing.messaging.MockMessageChannel = function(mockControl) {
 
   mockControl.createMethodMock(this, 'send');
 };
-goog.inherits(goog.testing.messaging.MockMessageChannel,
-              goog.messaging.AbstractChannel);
+
+
+/**
+ * Service to call when no other service matches.
+ * @type {function(string, (string|!Object))}
+ * @private
+ */
+goog.testing.messaging.MockMessageChannel.prototype.defaultService_;
+
+
+/**
+ * @inheritDoc
+ */
+goog.testing.messaging.MockMessageChannel.prototype.connect = function(
+    opt_connectCb) {
+  if (opt_connectCb) {
+    opt_connectCb();
+  }
+};
+
+
+/**
+ * @inheritDoc
+ */
+goog.testing.messaging.MockMessageChannel.prototype.isConnected = function() {
+  return true;
+};
 
 
 /**
@@ -56,6 +86,24 @@ goog.inherits(goog.testing.messaging.MockMessageChannel,
  */
 goog.testing.messaging.MockMessageChannel.prototype.send = function(
     serviceName, payload) {};
+
+
+/**
+ * @inheritDoc
+ */
+goog.testing.messaging.MockMessageChannel.prototype.registerService = function(
+    name, callback, isJson) {
+  this.services_[name] = callback;
+};
+
+
+/**
+ * @inheritDoc
+ */
+goog.testing.messaging.MockMessageChannel.prototype.registerDefaultService =
+    function(callback) {
+  this.defaultService_ = callback;
+};
 
 
 /**
@@ -73,5 +121,11 @@ goog.testing.messaging.MockMessageChannel.prototype.dispose = function() {
  */
 goog.testing.messaging.MockMessageChannel.prototype.receive = function(
     serviceName, payload) {
-  this.deliver(serviceName, payload);
+  var callback = this.services_[serviceName];
+  if (!callback && this.defaultService_) {
+    callback = goog.partial(this.defaultService_, serviceName);
+  }
+
+  assertNotNull(callback);
+  callback(payload);
 };

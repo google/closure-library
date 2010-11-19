@@ -449,6 +449,6 @@ goog.net.xpc.NixTransport.prototype.send = function(service, payload) {
  * Disposes of the transport.
  */
 goog.net.xpc.NixTransport.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.net.xpc.NixTransport.superClass_.disposeInternal.call(this);
   this.nixChannel_ = null;
 };

@@ -157,7 +157,7 @@ goog.inherits(Driver, goog.Disposable);
  * Disposes of the channel.
  */
 Driver.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.net.xpc.CrossPageChannel.superClass_.disposeInternal.call(this);
 
   if (this.channel_) {
     this.channel_.dispose();
