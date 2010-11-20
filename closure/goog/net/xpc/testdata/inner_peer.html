@@ -62,9 +62,7 @@ function echoHandler(payload) {
   // can get the connect callback before the child is
   // marked as connected.
   if (isConnected()) {
-    // Send to the transport service name to test that it doesn't conflict with
-    // the actual transport service.
-    window.channel.send(goog.net.xpc.TRANSPORT_SERVICE_, payload);
+    window.channel.send('msg', payload);
   } else {
     window.queuedMessage = payload;
   }
