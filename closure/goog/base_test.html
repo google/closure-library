@@ -1096,6 +1096,8 @@ function testBaseMethodAndBaseCtor() {
   };
 
   assertEquals(14, new B(3, 4).bar);
+  assertEquals(14, new B(3, 4).bar);
+  assertEquals(18, new B(4, 5).bar);
 }
 
 function testBaseClass() {

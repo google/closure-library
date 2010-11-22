@@ -1337,6 +1337,28 @@ goog.inherits = function(childCtor, parentCtor) {
 goog.base = function(me, opt_methodName, var_args) {
   var caller = arguments.callee.caller;
   if (caller.superClass_) {
+    // Firefox 4.0b has a bug in how it handles proto-delegated methods
+    // and arguments.callee.caller. We can solve it by accessing all the
+    // properties of a class.
+    //
+    // There's not an ideal time to do this, so we do it when an instance
+    // of the class calls goog.base for the first time.
+    //
+    // This code should be removed when firefox 4 comes out. If we start
+    // adding hacks for pre-release browsers, there will be no end to it.
+    //
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=586482
+    var checkKey = 'closure_ff4b_hack_';
+    var callerProto = caller.prototype;
+    if (!(checkKey in callerProto)) {
+      for (var key in callerProto) {
+        // Access callerProto[key] to kick FF, but assign it to a variable
+        // to suppress the compiler warning.
+        var dumbAccess = callerProto[key];
+      }
+      callerProto[checkKey] = true;
+    }
+
     // This is a constructor. Call the superclass constructor.
     return caller.superClass_.constructor.apply(
         me, Array.prototype.slice.call(arguments, 1));
