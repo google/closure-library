@@ -114,6 +114,32 @@ function testExistingIframeConnect() {
   driver.connect();
 }
 
+function testEscapeServiceName() {
+  var escape = goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_;
+  assertEquals('Shouldn\'t escape alphanumeric name',
+               'fooBar123', escape('fooBar123'));
+  assertEquals('Shouldn\'t escape most non-alphanumeric characters',
+               '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
+               escape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
+  assertEquals('Should escape %, |, and :',
+               'foo%3ABar%7C123%25', escape('foo:Bar|123%'));
+  assertEquals('Should escape tp', '%25tp', escape('tp'));
+  assertEquals('Should escape %tp', '%25%25tp', escape('%tp'));
+}
+
+function testUnescapeServiceName() {
+  var unescape = goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_;
+  assertEquals('Shouldn\'t modify alphanumeric name',
+               'fooBar123', unescape('fooBar123'));
+  assertEquals('Shouldn\'t modify most non-alphanumeric characters',
+               '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
+               unescape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
+  assertEquals('Should unescape URL-escapes',
+               'foo:Bar|123%', unescape('foo%3ABar%7C123%25'));
+  assertEquals('Should unescape tp', 'tp', unescape('%25tp'));
+  assertEquals('Should unescape %tp', '%tp', unescape('%25%25tp'));
+}
+
 
 /**
  * Driver for the tests for CrossPageChannel.

@@ -475,7 +475,11 @@ goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
   if (goog.isObject(payload)) {
     payload = goog.json.serialize(payload);
   }
-  this.transport_.send(serviceName, payload);
+
+  // Partially URL-encode the service name because some characters (: and |) are
+  // used as delimiters for some transports, and we want to allow those
+  // characters in service names.
+  this.transport_.send(this.escapeServiceName_(serviceName), payload);
 };
 
 
@@ -497,6 +501,7 @@ goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(serviceName,
   } else {
     // only deliver messages if connected
     if (this.isConnected()) {
+      serviceName = this.unescapeServiceName_(serviceName);
       var service = this.services_[serviceName];
       if (service) {
         if (service.jsonEncoded) {
@@ -519,6 +524,44 @@ goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(serviceName,
     } else {
       goog.net.xpc.logger.info('CrossPageChannel::deliver_(): Not connected.');
     }
+  }
+};
+
+
+/**
+ * Escape the user-provided service name for sending across the channel. This
+ * URL-encodes certain special characters so they don't conflict with delimiters
+ * used by some of the transports, and adds a special prefix if the name
+ * conflicts with the reserved transport service name.
+ *
+ * This is the opposite of {@link #unescapeServiceName_}.
+ *
+ * @param {string} name The name of the service to escape.
+ * @return {string} The escaped service name.
+ * @private
+ */
+goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_ = function(name) {
+  if (new RegExp('%*' + goog.net.xpc.TRANSPORT_SERVICE_).test(name)) {
+    name = '%' + name;
+  }
+  return name.replace(/[%:|]/g, encodeURIComponent);
+};
+
+
+/**
+ * Unescape the escaped service name that was sent across the channel. This is
+ * the opposite of {@link #escapeServiceName_}.
+ *
+ * @param {string} name The name of the service to unescape.
+ * @return {string} The unescaped service name.
+ * @private
+ */
+goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_ = function(name) {
+  name = name.replace(/%[0-9a-f]{2}/gi, decodeURIComponent);
+  if (new RegExp('%+' + goog.net.xpc.TRANSPORT_SERVICE_).test(name)) {
+    return name.substring(1);
+  } else {
+    return name;
   }
 };
 
