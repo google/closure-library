@@ -984,12 +984,6 @@ function testPropertyIsEnumerable_() {
 
 function testGetObjectByName() {
   var m = {
-    'undefined': undefined,
-    'null': null,
-    emptyString: '',
-    'false': false,
-    'true': true,
-    zero: 0,
     one: 1,
     two: {
       three: 3,
@@ -1002,12 +996,6 @@ function testGetObjectByName() {
   };
   goog.global.m = m;
 
-  assertNull(goog.getObjectByName('m.undefined'));
-  assertNull(goog.getObjectByName('m.null'));
-  assertEquals(goog.getObjectByName('m.emptyString'), '');
-  assertEquals(goog.getObjectByName('m.false'), false);
-  assertEquals(goog.getObjectByName('m.true'), true);
-  assertEquals(goog.getObjectByName('m.zero'), 0);
   assertEquals(goog.getObjectByName('m.one'), 1);
   assertEquals(goog.getObjectByName('m.two.three'), 3);
   assertEquals(goog.getObjectByName('m.two.four.five'), 5);
