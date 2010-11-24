@@ -488,10 +488,20 @@ goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
  *
  * @param {string} serviceName The name of the port.
  * @param {string} payload The payload.
+ * @param {string=} opt_origin An optional origin for the message, where the
+ *     underlying transport makes that available.  If this is specified, and
+ *     the PEER_HOSTNAME parameter was provided, they must match or the message
+ *     will be rejected.
  * @private
  */
-goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(serviceName,
-                                                            payload) {
+goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(
+    serviceName, payload, opt_origin) {
+  // Check whether the origin of the message is as expected.
+  if (!this.isMessageOriginAcceptable_(opt_origin)) {
+    goog.net.xpc.logger.warning('Message received from unapproved origin "' +
+        opt_origin + '" - rejected.');
+    return;
+  }
 
   if (this.isDisposed()) {
     goog.net.xpc.logger.warning('CrossPageChannel::deliver_(): Disposed.');
@@ -584,6 +594,24 @@ goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
   return window.parent == this.peerWindowObject_ ?
       goog.net.xpc.CrossPageChannel.Role.INNER :
       goog.net.xpc.CrossPageChannel.Role.OUTER;
+};
+
+
+/**
+ * Returns whether an incoming message with the given origin is acceptable.
+ * If an incoming request comes with a specified (non-empty) origin, and the
+ * PEER_HOSTNAME config parameter has also been provided, the two must match,
+ * or the message is unacceptable.
+ * @param {string=} opt_origin The origin associated with the incoming message.
+ * @return {boolean} Whether the message is acceptable.
+ * @private
+ */
+goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable_ = function(
+    opt_origin) {
+  var peerHostname = this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME];
+  return goog.string.isEmptySafe(opt_origin) ||
+      goog.string.isEmptySafe(peerHostname) ||
+      opt_origin == this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME];
 };
 
 
