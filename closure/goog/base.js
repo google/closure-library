@@ -199,7 +199,7 @@ goog.getObjectByName = function(name, opt_obj) {
   var parts = name.split('.');
   var cur = opt_obj || goog.global;
   for (var part; part = parts.shift(); ) {
-    if (cur[part]) {
+    if (goog.isDefAndNotNull(cur[part])) {
       cur = cur[part];
     } else {
       return null;
