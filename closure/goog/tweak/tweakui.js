@@ -526,7 +526,7 @@ goog.tweak.EntriesPanel.prototype.createComboBoxDom_ =
   var values = tweak.getValidValues();
   for (var i = 0, il = values.length; i < il; ++i) {
     var optionElem = dh.createElement('option');
-    optionElem.text = values[i];
+    optionElem.text = String(values[i]);
     selectElem.appendChild(optionElem);
   }
   ret.appendChild(selectElem);
