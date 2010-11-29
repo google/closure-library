@@ -125,6 +125,8 @@ function testEscapeServiceName() {
                'foo%3ABar%7C123%25', escape('foo:Bar|123%'));
   assertEquals('Should escape tp', '%25tp', escape('tp'));
   assertEquals('Should escape %tp', '%25%25tp', escape('%tp'));
+  assertEquals('Should not escape stp', 'stp', escape('stp'));
+  assertEquals('Should not escape s%tp', 's%25tp', escape('s%tp'));
 }
 
 function testUnescapeServiceName() {
@@ -138,6 +140,8 @@ function testUnescapeServiceName() {
                'foo:Bar|123%', unescape('foo%3ABar%7C123%25'));
   assertEquals('Should unescape tp', 'tp', unescape('%25tp'));
   assertEquals('Should unescape %tp', '%tp', unescape('%25%25tp'));
+  assertEquals('Should not escape stp', 'stp', unescape('stp'));
+  assertEquals('Should not escape s%tp', 's%tp', unescape('s%25tp'));
 }
 
 

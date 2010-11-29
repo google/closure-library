@@ -93,6 +93,24 @@ goog.inherits(goog.net.xpc.CrossPageChannel, goog.Disposable);
 
 
 /**
+ * Regexp for escaping service names.
+ * @type {RegExp}
+ * @private
+ */
+goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_ =
+    new RegExp('^%*' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
+
+
+
+/**
+ * Regexp for unescaping service names.
+ * @type {RegExp}
+ * @private
+ */
+goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_UNESCAPE_RE_ =
+    new RegExp('^%+' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
+
+/**
  * The transport.
  * @type {goog.net.xpc.Transport?}
  * @private
@@ -541,7 +559,7 @@ goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(serviceName,
  * @private
  */
 goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_ = function(name) {
-  if (new RegExp('%*' + goog.net.xpc.TRANSPORT_SERVICE_).test(name)) {
+  if (goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_.test(name)) {
     name = '%' + name;
   }
   return name.replace(/[%:|]/g, encodeURIComponent);
@@ -558,7 +576,7 @@ goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_ = function(name) {
  */
 goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_ = function(name) {
   name = name.replace(/%[0-9a-f]{2}/gi, decodeURIComponent);
-  if (new RegExp('%+' + goog.net.xpc.TRANSPORT_SERVICE_).test(name)) {
+  if (goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_UNESCAPE_RE_.test(name)) {
     return name.substring(1);
   } else {
     return name;
