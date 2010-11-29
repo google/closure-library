@@ -255,7 +255,7 @@ goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
  */
 goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
     opt_info) {
-  if (!opt_info) {
+  if (!goog.isDef(opt_info)) {
     // The call to this method is generated in two steps, the argument is added
     // after some of the compilation passes.  This means that the initial code
     // doesn't have any arguments and causes compiler errors.  We make it

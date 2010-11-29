@@ -1184,6 +1184,17 @@ See the COPYING file for details.
         mm.getModuleInfo('five').getDependencies());
   }
 
+  function testSetAllModuleInfoStringWithEmptyString() {
+    var mm = new goog.module.ModuleManager();
+    var called = false;
+    var context;
+    mm.registerInitializationCallback(function(mcontext) {
+      called = true;
+      context = mcontext;
+    });
+    mm.setAllModuleInfoString('');
+    assertTrue('Initialization not called', called);
+  }
 </script>
 </body>
 </html>
