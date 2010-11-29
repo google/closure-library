@@ -19,14 +19,12 @@
  */
 
 goog.provide('proto2.TestAllTypes');
-goog.provide('proto2.TestAllTypes.NestedEnum');
 goog.provide('proto2.TestAllTypes.NestedMessage');
 goog.provide('proto2.TestAllTypes.OptionalGroup');
 goog.provide('proto2.TestAllTypes.RepeatedGroup');
+goog.provide('proto2.TestAllTypes.NestedEnum');
 
 goog.require('goog.proto2.Message');
-
-
 
 /**
  * Message TestAllTypes.
@@ -2150,12 +2148,10 @@ proto2.TestAllTypes.prototype.clearRepeatedNestedEnum = function() {
  * @enum {number}
  */
 proto2.TestAllTypes.NestedEnum = {
-  FOO: 1,
-  BAR: 2,
-  BAZ: 3
+  FOO : 1,
+  BAR : 2,
+  BAZ : 3
 };
-
-
 
 /**
  * Message NestedMessage.
@@ -2165,8 +2161,9 @@ proto2.TestAllTypes.NestedEnum = {
 proto2.TestAllTypes.NestedMessage = function() {
   goog.proto2.Message.apply(this);
 };
-goog.inherits(proto2.TestAllTypes.NestedMessage, goog.proto2.Message);
 
+
+goog.inherits(proto2.TestAllTypes.NestedMessage, goog.proto2.Message);
 
 /**
  * Gets the value of the b field.
@@ -2222,6 +2219,7 @@ proto2.TestAllTypes.NestedMessage.prototype.clearB = function() {
 
 
 
+
 /**
  * Message OptionalGroup.
  * @constructor
@@ -2230,8 +2228,9 @@ proto2.TestAllTypes.NestedMessage.prototype.clearB = function() {
 proto2.TestAllTypes.OptionalGroup = function() {
   goog.proto2.Message.apply(this);
 };
-goog.inherits(proto2.TestAllTypes.OptionalGroup, goog.proto2.Message);
 
+
+goog.inherits(proto2.TestAllTypes.OptionalGroup, goog.proto2.Message);
 
 /**
  * Gets the value of the a field.
@@ -2287,6 +2286,7 @@ proto2.TestAllTypes.OptionalGroup.prototype.clearA = function() {
 
 
 
+
 /**
  * Message RepeatedGroup.
  * @constructor
@@ -2295,8 +2295,9 @@ proto2.TestAllTypes.OptionalGroup.prototype.clearA = function() {
 proto2.TestAllTypes.RepeatedGroup = function() {
   goog.proto2.Message.apply(this);
 };
-goog.inherits(proto2.TestAllTypes.RepeatedGroup, goog.proto2.Message);
 
+
+goog.inherits(proto2.TestAllTypes.RepeatedGroup, goog.proto2.Message);
 
 /**
  * Gets the value of the a field at the index given.
@@ -2446,7 +2447,7 @@ goog.proto2.Message.set$Metadata(proto2.TestAllTypes, {
   '15' : {
     name: 'optional_bytes',
     fieldType: goog.proto2.Message.FieldType.BYTES,
-    defaultValue: 'moo',
+    defaultValue: "moo",
     type: String
   },
   '16' : {
