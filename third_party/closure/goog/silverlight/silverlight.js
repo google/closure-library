@@ -228,25 +228,25 @@ goog.silverlight.startup = function() {
  * goog.silverlight.
  * @param {string} source The source file.
  * @param {Element} parentElement The place to render the tag.
- * @param {string} id A DOM id for the tag.
- * @param {Object} properties Properties for the tag. One of these should
+ * @param {(string|null)=} opt_id A DOM id for the tag.
+ * @param {Object=} opt_properties Properties for the tag. One of these should
  *     be version, to get the correct version of silverlight.
- * @param {Array.<Function>} events An array of functions, keyed by
+ * @param {Array.<Function>=} opt_events An array of functions, keyed by
  *     the name of the event that they should be listening on (e.g.,
  *     "onload"). What a weird API. The keys should be quoted if you're
  *     compiling with property renaming on.
- * @param {*} initParams The initParams property of SilverlightPlugin.
- * @param {Object} userContext Context to fire the events in. doesn't really
- *     work correctly. Use goog.bind instead.
+ * @param {string=} opt_initParams The initParams property of SilverlightPlugin.
+ * @param {Object=} opt_userContext Context to fire the events in. doesn't
+ *     really work correctly. Use goog.bind instead.
  * @return {?string} The html for the object, if no rendering parent
  *     was specified.
  */
 goog.silverlight.createObject =
-    function(source, parentElement, id, properties,
-             events, initParams, userContext) {
+    function(source, parentElement, opt_id, opt_properties,
+             opt_events, opt_initParams, opt_userContext) {
   var slPluginHelper = {};
-  var slProperties = properties;
-  var slEvents = events;
+  var slProperties = opt_properties;
+  var slEvents = opt_events;
 
   slPluginHelper.version = slProperties.version;
   slProperties.source = source;
@@ -254,14 +254,14 @@ goog.silverlight.createObject =
 
   // Rename properties to their tag property names. For backwards compatibility
   // with goog.silverlight.js version 1.0
-  if (initParams)
-    slProperties.initParams = initParams;
+  if (opt_initParams)
+    slProperties.initParams = opt_initParams;
   if (slProperties.isWindowless && !slProperties.windowless)
     slProperties.windowless = slProperties.isWindowless;
   if (slProperties.framerate && !slProperties.maxFramerate)
     slProperties.maxFramerate = slProperties.framerate;
-  if (id && !slProperties.id)
-    slProperties.id = id;
+  if (opt_id && !slProperties.id)
+    slProperties.id = opt_id;
 
   // remove elements which are not to be added to the instantiation tag
   delete slProperties.ignoreBrowserVer;
@@ -286,10 +286,10 @@ goog.silverlight.createObject =
           var onLoadHandler = slEvents[name];
           slEvents[name] = function(sender) {
             return onLoadHandler(
-                document.getElementById(id), userContext, sender);
+                document.getElementById(opt_id), opt_userContext, sender);
           };
         }
-        var handlerName = goog.silverlight.__getHandlerName(slEvents[name]);
+        var handlerName = goog.silverlight.getHandlerName(slEvents[name]);
         if (handlerName != null) {
           slProperties[name] = handlerName;
           slEvents[name] = null;
@@ -523,7 +523,7 @@ goog.silverlight.defaultErrorHandler = function(sender, args) {
  */
 goog.silverlight.__cleanup = function() {
   for (var i = goog.silverlight._silverlightCount - 1; i >= 0; i--) {
-    window['__closure_slEvent' + i] = null;
+    goog.global['__closure_slEvent' + i] = null;
   }
   goog.silverlight._silverlightCount = 0;
   if (window.removeEventListener) {
@@ -543,7 +543,7 @@ goog.silverlight.__cleanup = function() {
  * @param {Function|string} handler A function to export.
  * @return {?string} The name of the handler.
  */
-goog.silverlight.__getHandlerName = function(handler) {
+goog.silverlight.getHandlerName = function(handler) {
   var handlerName = '';
   if (typeof handler == 'string') {
     handlerName = handler;
@@ -558,11 +558,20 @@ goog.silverlight.__getHandlerName = function(handler) {
     var count = goog.silverlight._silverlightCount++;
     handlerName = '__closure_slEvent' + count;
 
-    window[handlerName] = handler;
+    goog.global[handlerName] = handler;
   } else {
     handlerName = null;
   }
   return handlerName;
+};
+
+
+/**
+ * Frees a handler created by getHandlerName.
+ * @param {string} handlerName A handler name.
+ */
+goog.silverlight.disposeHandlerName = function(handlerName) {
+  delete goog.global[handlerName];
 };
 
 
