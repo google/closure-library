@@ -12,6 +12,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.ui.Dialog');
+  goog.require('goog.ui.Dialog.ButtonSet');
   goog.require('goog.dom');
   goog.require('goog.events');
   goog.require('goog.events.EventType');
@@ -322,6 +323,29 @@ See the COPYING file for details.
                    goog.ui.Dialog.DefaultButtonKeys.CANCEL]);
   }
 
+  function testFactoryButtonSets() {
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.createOk());
+    assertButtons([goog.ui.Dialog.DefaultButtonKeys.OK]);
+
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.createOkCancel());
+    assertButtons([goog.ui.Dialog.DefaultButtonKeys.OK,
+                   goog.ui.Dialog.DefaultButtonKeys.CANCEL]);
+
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.createYesNo());
+    assertButtons([goog.ui.Dialog.DefaultButtonKeys.YES,
+                   goog.ui.Dialog.DefaultButtonKeys.NO]);
+
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.createYesNoCancel());
+    assertButtons([goog.ui.Dialog.DefaultButtonKeys.YES,
+                   goog.ui.Dialog.DefaultButtonKeys.NO,
+                   goog.ui.Dialog.DefaultButtonKeys.CANCEL]);
+
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.createContinueSaveCancel());
+    assertButtons([goog.ui.Dialog.DefaultButtonKeys.CONTINUE,
+                   goog.ui.Dialog.DefaultButtonKeys.SAVE,
+                   goog.ui.Dialog.DefaultButtonKeys.CANCEL]);
+  }
+
   function testDefaultButtonClassName() {
     var key = 'someKey';
     var msg = 'someMessage';
@@ -352,6 +376,38 @@ See the COPYING file for details.
         goog.dom.TagName.BUTTON);
     for (var i = 0; i < buttons.length; i++) {
       assertEquals(buttons[i], dialog.getButtonSet().getAllButtons()[i]);
+    }
+  }
+
+  function testSetButtonEnabled() {
+    var buttonSet = goog.ui.Dialog.ButtonSet.createYesNoCancel();
+    dialog.setButtonSet(buttonSet);
+    assertFalse(
+        buttonSet.getButton(goog.ui.Dialog.DefaultButtonKeys.NO).disabled);
+    buttonSet.setButtonEnabled(goog.ui.Dialog.DefaultButtonKeys.NO, false);
+    assertTrue(
+        buttonSet.getButton(goog.ui.Dialog.DefaultButtonKeys.NO).disabled);
+    buttonSet.setButtonEnabled(goog.ui.Dialog.DefaultButtonKeys.NO, true);
+    assertFalse(
+        buttonSet.getButton(goog.ui.Dialog.DefaultButtonKeys.NO).disabled);
+  }
+
+  function testSetAllButtonsEnabled() {
+    var buttonSet = goog.ui.Dialog.ButtonSet.createContinueSaveCancel();
+    dialog.setButtonSet(buttonSet);
+    var buttons = buttonSet.getAllButtons();
+    for (var i = 0; i < buttons.length; i++) {
+      assertFalse(buttons[i].disabled);
+    }
+
+    buttonSet.setAllButtonsEnabled(false);
+    for (var i = 0; i < buttons.length; i++) {
+      assertTrue(buttons[i].disabled);
+    }
+
+    buttonSet.setAllButtonsEnabled(true);
+    for (var i = 0; i < buttons.length; i++) {
+      assertFalse(buttons[i].disabled);
     }
   }
 
