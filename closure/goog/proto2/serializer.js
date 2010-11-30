@@ -59,8 +59,7 @@ goog.proto2.Serializer.prototype.serialize = goog.abstractMethod;
  * @protected
  */
 goog.proto2.Serializer.prototype.getSerializedValue = function(field, value) {
-  if (field.getFieldType() == goog.proto2.Message.FieldType.MESSAGE ||
-      field.getFieldType() == goog.proto2.Message.FieldType.GROUP) {
+  if (field.isCompositeType()) {
     return this.serialize(/** @type {goog.proto2.Message} */ (value));
   } else {
     return value;
@@ -109,10 +108,8 @@ goog.proto2.Serializer.prototype.deserializeTo = goog.abstractMethod;
  * @return {*} The value.
  * @protected
  */
-goog.proto2.Serializer.prototype.getDeserializedValue =
-  function(field, value) {
-  if (field.getFieldType() == goog.proto2.Message.FieldType.MESSAGE ||
-      field.getFieldType() == goog.proto2.Message.FieldType.GROUP) {
+goog.proto2.Serializer.prototype.getDeserializedValue = function(field, value) {
+  if (field.isCompositeType()) {
     return this.deserialize(field.getFieldMessageType(), value);
   } else {
     return value;
