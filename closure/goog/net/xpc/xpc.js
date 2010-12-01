@@ -153,6 +153,19 @@ goog.net.xpc.CfgFields = {
 
 
 /**
+ * Config properties that need to be URL sanitized.
+ * @type {Array}.<string>
+ */
+goog.net.xpc.UriCfgFields = [
+  goog.net.xpc.CfgFields.PEER_URI,
+  goog.net.xpc.CfgFields.LOCAL_RELAY_URI,
+  goog.net.xpc.CfgFields.PEER_RELAY_URI,
+  goog.net.xpc.CfgFields.LOCAL_POLL_URI,
+  goog.net.xpc.CfgFields.PEER_POLL_URI
+];
+
+
+/**
  * @enum {number}
  */
 goog.net.xpc.ChannelStates = {

@@ -53,6 +53,12 @@ goog.require('goog.userAgent');
 goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
   goog.Disposable.call(this);
 
+  for (var i = 0, uriField; uriField = goog.net.xpc.UriCfgFields[i]; i++) {
+    if (uriField in cfg && !/^https?:\/\//.test(cfg[uriField])) {
+      throw Error('URI ' + cfg[uriField] + ' is invalid for field ' + uriField);
+    }
+  }
+
   /**
    * The configuration for this channel.
    * @type {Object}

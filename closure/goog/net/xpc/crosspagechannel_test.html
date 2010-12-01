@@ -251,6 +251,13 @@ Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper) {
   cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = 'test_channel' + uniqueId++;
   cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
+  function resolveUri(fieldName) {
+    cfg[fieldName] =
+        goog.Uri.resolve(window.location.href, cfg[fieldName]).toString();
+  }
+  resolveUri(goog.net.xpc.CfgFields.PEER_URI);
+  resolveUri(goog.net.xpc.CfgFields.LOCAL_POLL_URI);
+  resolveUri(goog.net.xpc.CfgFields.PEER_POLL_URI);
 
   this.channel_ = new goog.net.xpc.CrossPageChannel(cfg, opt_domHelper);
   this.channel_.registerService('msg', goog.bind(this.msgHandler_, this));
