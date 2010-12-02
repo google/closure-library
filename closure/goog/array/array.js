@@ -143,14 +143,14 @@ goog.array.lastIndexOf = goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
  *
  * @param {goog.array.ArrayLike} arr Array or array like object over
  *     which to iterate.
- * @param {Function} f The function to call for every element. This function
- *     takes 3 arguments (the element, the index and the array). The return
- *     value is ignored. The function is called only for indexes of the array
- *     which have assigned values; it is not called for indexes which have
- *     been deleted or which have never been assigned values.
- *
- * @param {Object=} opt_obj The object to be used as the value of 'this'
+ * @param {?function(this: T, ...)} f The function to call for every element.
+ *     This function takes 3 arguments (the element, the index and the array).
+ *     The return value is ignored. The function is called only for indexes of
+ *     the array which have assigned values; it is not called for indexes which
+ *     have been deleted or which have never been assigned values.
+ * @param {T=} opt_obj The object to be used as the value of 'this'
  *     within f.
+ * @template T
  */
 goog.array.forEach = goog.array.ARRAY_PROTOTYPE_.forEach ?
     function(arr, f, opt_obj) {
