@@ -147,10 +147,10 @@ goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.xhrMonitor');
+goog.require('goog.reflect');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.userAgent');
-
 
 
 /**
@@ -1291,9 +1291,7 @@ goog.net.IframeIo.prototype.testForFirefoxSilentError_ = function() {
         // This is a hack to test of the document has loaded with a page that
         // we can't access, such as a network error, that won't report onload
         // or onerror events.
-        // Exporting is really the only foolproof way to do this with
-        // the compiler.
-        doc['closure_export_'] = doc['documentUri'];
+        goog.reflect.sinkValue(doc['documentUri']);
 
         // TODO: Is there a situation when this won't error?
 

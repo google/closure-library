@@ -48,8 +48,8 @@ goog.provide('goog.events.BrowserEvent.MouseButton');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
+goog.require('goog.reflect');
 goog.require('goog.userAgent');
-
 
 
 /**
@@ -251,7 +251,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
     if (goog.userAgent.GECKO) {
       /** @preserveTry */
       try {
-        relatedTarget = relatedTarget.nodeName && relatedTarget;
+        goog.reflect.sinkValue(relatedTarget.nodeName);
       } catch (err) {
         relatedTarget = null;
       }
