@@ -52,7 +52,7 @@ function increment(res) {
 }
 
 function throwStuff(res) {
-  throw Error(res);
+  throw res;
 }
 
 function catchStuff(res) {
@@ -369,8 +369,8 @@ function testUnhandledErrors() {
     mockClock.tick();
     neverHappen();
   } catch (ex) {
-    assertTrue('In debug mode, unhandled exceptions should hit the browser.',
-               ex instanceof Error);
+    assertEquals('In debug mode, unhandled exceptions should hit the browser.',
+                 1, ex);
   }
 
   try {
@@ -398,6 +398,27 @@ function testSynchronousErrorCancelling() {
   }
 
   d.addCallback(assertEqualsCallback('Callback should fire', 1));
+}
+
+function testThrowNonError() {
+  var results = [];
+
+  var d = new Deferred();
+  d.addCallback(function(res) {
+    throw res;
+  });
+  d.addErrback(function(res) {
+    results.push(res);
+    return 6;
+  });
+  d.addCallback(function(res) {
+    results.push(res);
+  });
+
+  d.callback(7);
+  assertArrayEquals(
+      'Errback should have been called with 7, followed by callback with 6.',
+      [7, 6], results);
 }
 
 function testThrownErrorWithNoErrbacks() {
@@ -466,7 +487,7 @@ function testAwaitDeferred() {
   d3.awaitDeferred(d2);
   d3.addCallback(fn('x'));
 
-  // calls 'w', then yeilds for d2.
+  // calls 'w', then yields for d2.
   d3.callback();
 
 
@@ -514,6 +535,33 @@ function testAwaitDeferredWithErrors() {
   // Next 'd' was chained, so execute its err backs, printing 'b'.
   // Finally 'c' was added last by d2's errback.
   assertEquals('abc', results.join(''));
+}
+
+function testIsError() {
+  var d = new Deferred();
+  assertFalse(d.isError(null));
+  assertTrue(d.isError(new Error));
+
+  // Replace default isError to treat null as an error instead.
+  d.isError = goog.isNull;
+  assertTrue(d.isError(null));
+  assertFalse(d.isError(new Error));
+
+  var results = [];
+
+  d.addCallback(function(res) {
+    results.push(1);
+  });
+  d.addErrback(function(res) {
+    results.push(2);
+  });
+
+  d.callback(null);
+  mockClock.tick();
+
+  assertArrayEquals(
+      'Only the errback should have been called.',
+      [2], results);
 }
 
 </script>
