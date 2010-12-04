@@ -306,20 +306,31 @@ goog.fx.AbstractDragDrop.prototype.initItem = function(item) {
 
 
 /**
+ * Called when removing an item. Removes event listeners and classes.
+ *
+ * @param {goog.fx.DragDropItem} item Item to dispose.
+ * @protected
+ */
+goog.fx.AbstractDragDrop.prototype.disposeItem = function(item) {
+  if (this.isSource_) {
+    goog.events.unlisten(item.element, goog.events.EventType.MOUSEDOWN,
+                         item.mouseDown_, false, item);
+    if (this.sourceClass_) {
+      goog.dom.classes.remove(item.element, this.sourceClass_);
+    }
+  }
+  if (this.isTarget_ && this.targetClass_) {
+    goog.dom.classes.remove(item.element, this.targetClass_);
+  }
+};
+
+
+/**
  * Removes all items.
  */
 goog.fx.AbstractDragDrop.prototype.removeItems = function() {
   for (var item, i = 0; item = this.items_[i]; i++) {
-    if (this.isSource_) {
-      goog.events.unlisten(item.element, goog.events.EventType.MOUSEDOWN,
-                           item.mouseDown_, false, item);
-      if (this.sourceClass_) {
-        goog.dom.classes.remove(item.element, this.sourceClass_);
-      }
-    }
-    if (this.isTarget_ && this.targetClass_) {
-      goog.dom.classes.remove(item.element, this.targetClass_);
-    }
+    this.disposeItem(item);
   }
   this.items_.length = 0;
 };
