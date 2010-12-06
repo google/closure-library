@@ -65,18 +65,29 @@ goog.tweak.TweakUi = function(registry, opt_domHelper) {
 
 
 /**
- * The CSS class name for each tweak entry div.
+ * The CSS class name unique to the tweak entry div.
  * @type {string}
+ * @private
  */
-goog.tweak.TweakUi.ENTRY_CSS_CLASS = goog.getCssName('goog-tweak-entry');
+goog.tweak.TweakUi.ENTRY_CSS_CLASS_ = goog.getCssName('goog-tweak-entry');
 
 
 /**
- * ID of the installed stylesheet.
- * @type {string|undefined}
+ * The CSS classes for each tweak entry div.
+ * @type {string}
  * @private
  */
-goog.tweak.TweakUi.styleSheetId_;
+goog.tweak.TweakUi.ENTRY_CSS_CLASSES_ = goog.tweak.TweakUi.ENTRY_CSS_CLASS_ +
+    ' ' + goog.getCssName('goog-inline-block');
+
+
+/**
+ * Marker that the style sheet has already been installed.
+ * @type {string}
+ * @private
+ */
+goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_ =
+    '__closure_tweak_installed_';
 
 
 /**
@@ -84,8 +95,8 @@ goog.tweak.TweakUi.styleSheetId_;
  * @type {string}
  * @private
  */
-goog.tweak.TweakUi.CSS_STYLES_ = '.' + goog.tweak.TweakUi.ENTRY_CSS_CLASS +
-    ',.' + goog.tweak.TweakUi.ENTRY_CSS_CLASS + ' fieldset{' +
+goog.tweak.TweakUi.CSS_STYLES_ = '.' + goog.tweak.TweakUi.ENTRY_CSS_CLASS_ +
+    ',.' + goog.tweak.TweakUi.ENTRY_CSS_CLASS_ + ' fieldset{' +
     // Prefer inline-block but fall back on inline.
     'display:inline;display:inline-block;' +
     // Space things out vertically a little bit so it's not so crowded.
@@ -221,17 +232,14 @@ goog.tweak.TweakUi.prototype.restartWithAppliedTweaks_ = function() {
  * @private
  */
 goog.tweak.TweakUi.prototype.installStyles_ = function() {
-  // Use an ID to install the styles only once per document.
+  // Use an marker to install the styles only once per document.
   // Styles are injected via JS instead of in a separate style sheet so that
   // they are automatically excluded when tweaks are stripped out.
-  if (!goog.tweak.TweakUi.styleSheetId_) {
-    goog.tweak.TweakUi.styleSheetId_ = goog.string.createUniqueString();
-  }
-
-  if (!this.domHelper_.getElement(goog.tweak.TweakUi.styleSheetId_)) {
-    var styleSheetNode = goog.style.installStyles(
-        goog.tweak.TweakUi.CSS_STYLES_, this.domHelper_.getDocument());
-    styleSheetNode.id = goog.tweak.TweakUi.styleSheetId_;
+  var doc = this.domHelper_.getDocument();
+  if (!(goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_ in doc)) {
+    goog.style.installStyles(
+        goog.tweak.TweakUi.CSS_STYLES_, doc);
+    doc[goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_] = true;
   }
 };
 
@@ -283,7 +291,7 @@ goog.tweak.TweakUi.prototype.insertEntry_ = function(entry) {
   } else {
     newEntryList = this.extractTopLevelEntries_();
   }
-  var insertIndex = newEntryList.indexOf(entry);
+  var insertIndex = goog.array.indexOf(newEntryList, entry);
   if (insertIndex != -1) {
     panel.insertEntry(entry, insertIndex);
   }
@@ -417,8 +425,10 @@ goog.tweak.EntriesPanel.prototype.render = function(opt_endElement) {
  */
 goog.tweak.EntriesPanel.prototype.insertEntry = function(entry, index) {
   goog.array.insertAt(this.entries_, entry, index);
-  this.mainPanel_.insertBefore(this.createEntryElem_(entry),
-      this.mainPanel_.childNodes[index]);
+  this.mainPanel_.insertBefore(
+      this.createEntryElem_(entry),
+      // IE doesn't like 'undefined' here.
+      this.mainPanel_.childNodes[index] || null);
 };
 
 
@@ -430,7 +440,7 @@ goog.tweak.EntriesPanel.prototype.insertEntry = function(entry, index) {
  */
 goog.tweak.EntriesPanel.prototype.createEntryElem_ = function(entry) {
   var dh = this.domHelper_;
-  var ret = dh.createDom('div', goog.tweak.TweakUi.ENTRY_CSS_CLASS,
+  var ret = dh.createDom('div', goog.tweak.TweakUi.ENTRY_CSS_CLASSES_,
       dh.createDom('label', {
         // Make the hover text the description.
         title: entry.description,
@@ -500,7 +510,7 @@ goog.tweak.EntriesPanel.prototype.toggleAllDescriptions = function() {
   var show = !this.showAllDescriptionsState_;
   this.showAllDescriptionsState_ = show;
   var entryDivs = this.domHelper_.getElementsByTagNameAndClass('div',
-      goog.tweak.TweakUi.ENTRY_CSS_CLASS, this.rootElem_);
+      goog.tweak.TweakUi.ENTRY_CSS_CLASS_, this.rootElem_);
   for (var i = 0, div; div = entryDivs[i]; i++) {
     this.showDescription_(div, show);
   }
@@ -552,9 +562,9 @@ goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_ =
   var dh = this.domHelper_;
   var ret = dh.getDocument().createDocumentFragment();
   var checkbox = dh.createDom('input', {type: 'checkbox'});
-  checkbox.checked = tweak.getValue();
   ret.appendChild(checkbox);
   ret.appendChild(dh.createTextNode(tweak.label));
+  checkbox.checked = tweak.getValue();
   checkbox.onchange = function() {
     tweak.setValue(checkbox.checked);
   };
