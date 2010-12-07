@@ -290,6 +290,8 @@ goog.addDependency('math/vec2.js', ['goog.math.Vec2'], ['goog.math', 'goog.math.
 goog.addDependency('math/vec3.js', ['goog.math.Vec3'], ['goog.math', 'goog.math.Coordinate3']);
 goog.addDependency('memoize/memoize.js', ['goog.memoize'], []);
 goog.addDependency('messaging/bufferedchannel.js', ['goog.messaging.BufferedChannel'], ['goog.Timer', 'goog.Uri', 'goog.debug.Error', 'goog.debug.Logger', 'goog.events', 'goog.messaging.MessageChannel', 'goog.messaging.MultiChannel']);
+goog.addDependency('messaging/loggerclient.js', ['goog.messaging.LoggerClient'], ['goog.Disposable', 'goog.debug', 'goog.debug.LogManager', 'goog.debug.Logger']);
+goog.addDependency('messaging/loggerserver.js', ['goog.messaging.LoggerServer'], ['goog.Disposable', 'goog.debug.Logger']);
 goog.addDependency('messaging/messagechannel.js', ['goog.messaging.MessageChannel'], []);
 goog.addDependency('messaging/messaging.js', ['goog.messaging'], ['goog.messaging.MessageChannel']);
 goog.addDependency('messaging/multichannel.js', ['goog.messaging.MultiChannel', 'goog.messaging.MultiChannel.VirtualChannel'], ['goog.Disposable', 'goog.debug.Logger', 'goog.events.EventHandler', 'goog.messaging.MessageChannel', 'goog.object']);
