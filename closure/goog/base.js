@@ -313,6 +313,18 @@ goog.global.CLOSURE_NO_DEPS;
 
 
 /**
+ * A function to import a single script. This is meant to be overridden when
+ * Closure is being run in non-HTML contexts, such as web workers. It's defined
+ * in the global scope so that it can be set before base.js is loaded, which
+ * allows deps.js to be imported properly.
+ *
+ * The function is passed the script source, which is a relative URI. It should
+ * return true if the script was imported, false otherwise.
+ */
+goog.global.CLOSURE_IMPORT_SCRIPT;
+
+
+/**
  * Null function used for default values of callbacks, etc.
  * @return {void} Nothing.
  */
@@ -409,14 +421,13 @@ if (!COMPILED) {
    * @private
    */
   goog.findBasePath_ = function() {
-    if (!goog.inHtmlDocument_()) {
-      return;
-    }
-    var doc = goog.global.document;
     if (goog.global.CLOSURE_BASE_PATH) {
       goog.basePath = goog.global.CLOSURE_BASE_PATH;
       return;
+    } else if (!goog.inHtmlDocument_()) {
+      return;
     }
+    var doc = goog.global.document;
     var scripts = doc.getElementsByTagName('script');
     // Search backwards since the current script is in almost all cases the one
     // that has base.js.
@@ -432,25 +443,43 @@ if (!COMPILED) {
 
 
   /**
-   * Writes a script tag if, and only if, that script hasn't already been added
-   * to the document.  (Must be called at execution time)
+   * Imports a script if, and only if, that script hasn't already been imported.
+   * (Must be called at execution time)
    * @param {string} src Script source.
    * @private
    */
-  goog.writeScriptTag_ = function(src) {
-    if (goog.inHtmlDocument_() &&
-        !goog.dependencies_.written[src]) {
+  goog.importScript_ = function(src) {
+    var importScript = goog.global.CLOSURE_IMPORT_SCRIPT ||
+        goog.writeScriptTag_;
+    if (!goog.dependencies_.written[src] && importScript(src)) {
       goog.dependencies_.written[src] = true;
+    }
+  };
+
+
+  /**
+   * The default implementation of the import function. Writes a script tag to
+   * import the script.
+   *
+   * @param {string} src The script source.
+   * @return {boolean} True if the script was imported, false otherwise.
+   * @private
+   */
+  goog.writeScriptTag_ = function(src) {
+    if (goog.inHtmlDocument_()) {
       var doc = goog.global.document;
-      doc.write('<script type="text/javascript" src="' +
-                src + '"></' + 'script>');
+      doc.write(
+          '<script type="text/javascript" src="' + src + '"></' + 'script>');
+      return true;
+    } else {
+      return false;
     }
   };
 
 
   /**
    * Resolves dependencies based on the dependencies added using addDependency
-   * and calls writeScriptTag_ in the correct order.
+   * and calls importScript_ in the correct order.
    * @private
    */
   goog.writeScripts_ = function() {
@@ -503,7 +532,7 @@ if (!COMPILED) {
 
     for (var i = 0; i < scripts.length; i++) {
       if (scripts[i]) {
-        goog.writeScriptTag_(goog.basePath + scripts[i]);
+        goog.importScript_(goog.basePath + scripts[i]);
       } else {
         throw Error('Undefined script input');
       }
@@ -530,7 +559,7 @@ if (!COMPILED) {
 
   // Allow projects to manage the deps files themselves.
   if (!goog.global.CLOSURE_NO_DEPS) {
-    goog.writeScriptTag_(goog.basePath + 'deps.js');
+    goog.importScript_(goog.basePath + 'deps.js');
   }
 }
 
