@@ -564,6 +564,11 @@ goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_ =
   var checkbox = dh.createDom('input', {type: 'checkbox'});
   ret.appendChild(checkbox);
   ret.appendChild(dh.createTextNode(tweak.label));
+
+  // Needed on IE6 to ensure the textbox doesn't get cleared
+  // when added to the DOM.
+  checkbox.defaultChecked = tweak.getValue();
+
   checkbox.checked = tweak.getValue();
   checkbox.onchange = function() {
     tweak.setValue(checkbox.checked);
