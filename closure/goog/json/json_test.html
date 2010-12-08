@@ -13,6 +13,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.json');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent');
 </script>
 </head>
 <body>
@@ -150,6 +151,10 @@ function testObjectSerialize_array() {
 }
 
 function testObjectSerialize_recursion() {
+  if (goog.userAgent.WEBKIT) {
+    return; // this makes safari 4 crash.
+  }
+
   var anObject = {};
   anObject.thisObject = anObject;
   assertThrows('expected recursion exception', function() {
@@ -451,7 +456,7 @@ function testIsValid() {
   assertTrue(goog.json.isValid_('[1\n,2\r,3\u2028\n,4\u2029]'));
   assertTrue(goog.json.isValid_('"\x7f"'));
   // Test tab characters in json.
-  assertTrue(goog.json.isValid_('{"	":"	"}'));
+  assertTrue(goog.json.isValid_('{"\t":"\t"}'));
 }
 
 function testDoNotSerializeProto() {
