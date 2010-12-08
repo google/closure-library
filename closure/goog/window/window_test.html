@@ -34,13 +34,24 @@ See the COPYING file for details.
   var MAX_WIN_LOAD_TRIES = 50; // 50x100ms = 5s waiting for window to load.
   var winLoadCounter;
 
-  // To test goog.window.open we open a new window with this file again. Once
-  // the new window gets to this point in the file it notifies the opener that
-  // it has loaded, so that the opener knows that the new window has been
-  // populated with properties like referrer and location.
-  var newWinLoaded = false;
-  if (window.opener && window.opener.newWinLoaded === false) {
-    window.opener.newWinLoaded = true;
+  /**
+   * Some tests should only run locally, because they will trigger
+   * popup blockers on http urls.
+   */
+  function canOpenPopups() {
+    // TODO(nicksantos): Fix the test runner farm.
+    return window.location.toString().indexOf('file://') == 0;
+  }
+
+  if (canOpenPopups()) {
+    // To test goog.window.open we open a new window with this file again. Once
+    // the new window gets to this point in the file it notifies the opener that
+    // it has loaded, so that the opener knows that the new window has been
+    // populated with properties like referrer and location.
+    var newWinLoaded = false;
+    if (window.opener && window.opener.newWinLoaded === false) {
+      window.opener.newWinLoaded = true;
+    }
   }
 
   function setUp() {
@@ -51,15 +62,6 @@ See the COPYING file for details.
     if (newWin) {
       newWin.close();
     }
-  }
-
-  /**
-   * Some tests should only run locally, because they will trigger
-   * popup blockers on http urls.
-   */
-  function canOpenPopups() {
-    // TODO(nicksantos): Fix the test runner farm.
-    return window.location.toString().indexOf('file://') == 0;
   }
 
   /**
