@@ -379,6 +379,45 @@ goog.proto2.Message.prototype.clone = function() {
 
 
 /**
+ * Fills in the protocol buffer with default values. Any fields that are
+ * already set will not be overridden.
+ * @param {boolean} simpleFieldsToo If true, all fields will be initialized;
+ *     if false, only the nested messages and groups.
+ */
+goog.proto2.Message.prototype.initDefaults = function(simpleFieldsToo) {
+  var fields = this.getDescriptor().getFields();
+  for (var i = 0; i < fields.length; i++) {
+    var field = fields[i];
+    var tag = field.getTag();
+    var isComposite = field.isCompositeType();
+
+    // Initialize missing fields.
+    if (!this.has(field)) {
+      if (field.isRepeated()) {
+        this.values_[tag] = [];
+      } else if (isComposite) {
+        this.values_[tag] = new /** @type {Function} */ (field.getNativeType());
+      } else if (simpleFieldsToo) {
+        this.values_[tag] = field.getDefaultValue();
+      }
+    }
+
+    // Fill in the existing composite fields recursively.
+    if (isComposite) {
+      if (field.isRepeated()) {
+        var values = this.array$Values(tag);
+        for (var j = 0; j < values.length; j++) {
+          values[j].initDefaults(simpleFieldsToo);
+        }
+      } else {
+        this.get$Value(tag).initDefaults(simpleFieldsToo);
+      }
+    }
+  }
+};
+
+
+/**
  * Returns the field in this message by the given tag number. If no
  * such field exists, throws an exception.
  *
