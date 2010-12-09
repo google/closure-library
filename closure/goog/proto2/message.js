@@ -392,10 +392,8 @@ goog.proto2.Message.prototype.initDefaults = function(simpleFieldsToo) {
     var isComposite = field.isCompositeType();
 
     // Initialize missing fields.
-    if (!this.has(field)) {
-      if (field.isRepeated()) {
-        this.values_[tag] = [];
-      } else if (isComposite) {
+    if (!this.has(field) && !field.isRepeated()) {
+      if (isComposite) {
         this.values_[tag] = new /** @type {Function} */ (field.getNativeType());
       } else if (simpleFieldsToo) {
         this.values_[tag] = field.getDefaultValue();

@@ -251,12 +251,9 @@ function testInitDefaultsWithEmptyMessage() {
       new proto2.TestAllTypes.NestedMessage(),
       message.getOptionalNestedMessage());
   assertFalse('nested enum is not set', message.hasOptionalNestedEnum());
-
-  // There is no simple way to test whether a repeated field has been
-  // initialized with an empty array. The only way I found is to check if
-  // repeated...Array() returns the same instance when called twice.
-  assertEquals('repeated int32 field is initialized with empty array',
-      message.repeatedInt32Array(), message.repeatedInt32Array());
+  assertFalse('repeated int32 is not set', message.hasRepeatedInt32());
+  assertFalse('repeated nested message is not set',
+      message.hasRepeatedNestedMessage());
 
   message = new proto2.TestAllTypes();
   message.initDefaults(true);
@@ -319,6 +316,12 @@ function testInitDefaultsTwice() {
   clone.initDefaults(true);
   assertObjectEquals('second call of initDefaults(true) has no effect',
       message, clone);
+}
+
+function testInitDefaultsThenClone() {
+  var message = new proto2.TestAllTypes();
+  message.initDefaults(true);
+  assertObjectEquals('message is cloned properly', message, message.clone());
 }
 
 </script>
