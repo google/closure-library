@@ -27,7 +27,7 @@ goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.json');
-goog.require('goog.messaging.MessageChannel'); // interface
+goog.require('goog.messaging.AbstractChannel');
 goog.require('goog.net.xpc');
 goog.require('goog.net.xpc.FrameElementMethodTransport');
 goog.require('goog.net.xpc.IframePollingTransport');
@@ -47,11 +47,10 @@ goog.require('goog.userAgent');
  * @param {goog.dom.DomHelper=} opt_domHelper The optional dom helper to
  *     use for looking up elements in the dom.
  * @constructor
- * @implements {goog.messaging.MessageChannel}
- * @extends {goog.Disposable}
+ * @extends {goog.messaging.AbstractChannel}
  */
 goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
-  goog.Disposable.call(this);
+  goog.base(this);
 
   for (var i = 0, uriField; uriField = goog.net.xpc.UriCfgFields[i]; i++) {
     if (uriField in cfg && !/^https?:\/\//.test(cfg[uriField])) {
@@ -75,13 +74,6 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
       goog.net.xpc.getRandomString(10);
 
   /**
-   * Object holding the service callbacks.
-   * @type {Object}
-   * @private
-   */
-  this.services_ = {};
-
-  /**
    * The dom helper to use for accessing the dom.
    * @type {goog.dom.DomHelper}
    * @private
@@ -95,7 +87,7 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
 
   goog.net.xpc.logger.info('CrossPageChannel created: ' + this.name);
 };
-goog.inherits(goog.net.xpc.CrossPageChannel, goog.Disposable);
+goog.inherits(goog.net.xpc.CrossPageChannel, goog.messaging.AbstractChannel);
 
 
 /**
@@ -134,6 +126,7 @@ goog.net.xpc.CrossPageChannel.prototype.state_ =
 
 
 /**
+ * @override
  * @return {boolean} Whether the channel is connected.
  */
 goog.net.xpc.CrossPageChannel.prototype.isConnected = function() {
@@ -383,6 +376,7 @@ goog.net.xpc.CrossPageChannel.prototype.connectDeferred_ = false;
  * Initiates connecting the channel. When this method is called, all the
  * information needed to connect the channel has to be available.
  *
+ * @override
  * @param {Function=} opt_connectCb The function to be called when the
  * channel has been connected and is ready to be used.
  */
@@ -464,24 +458,6 @@ goog.net.xpc.CrossPageChannel.prototype.notifyTransportError_ = function() {
 
 
 /** @inheritDoc */
-goog.net.xpc.CrossPageChannel.prototype.registerService = function(
-    serviceName, callback, opt_jsonEncoded) {
-  this.services_[serviceName] = {
-    name: serviceName,
-    callback: callback,
-    jsonEncoded: !!opt_jsonEncoded
-  };
-};
-
-
-/** @inheritDoc */
-goog.net.xpc.CrossPageChannel.prototype.registerDefaultService = function(
-    callback) {
-  this.defaultService_ = callback;
-};
-
-
-/** @inheritDoc */
 goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
   if (!this.isConnected()) {
     goog.net.xpc.logger.severe('Can\'t send. Channel not connected.');
@@ -535,26 +511,7 @@ goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(
   } else {
     // only deliver messages if connected
     if (this.isConnected()) {
-      serviceName = this.unescapeServiceName_(serviceName);
-      var service = this.services_[serviceName];
-      if (service) {
-        if (service.jsonEncoded) {
-          /** @preserveTry */
-          try {
-            payload = goog.json.parse(payload);
-          } catch (e) {
-            goog.net.xpc.logger.info('Error parsing JSON-encoded payload.');
-            return;
-          }
-        }
-        service.callback(payload);
-      } else if (this.defaultService_) {
-        this.defaultService_.callback(payload);
-      } else {
-        goog.net.xpc.logger.info('CrossPageChannel::deliver_(): ' +
-                                 'No such service: "' + serviceName + '" ' +
-                                 '(payload: ' + payload + ')');
-      }
+      this.deliver(this.unescapeServiceName_(serviceName), payload);
     } else {
       goog.net.xpc.logger.info('CrossPageChannel::deliver_(): Not connected.');
     }
@@ -643,13 +600,12 @@ goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable_ = function(
  * Disposes of the channel.
  */
 goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
-  goog.net.xpc.CrossPageChannel.superClass_.disposeInternal.call(this);
+  goog.base(this, 'disposeInternal');
 
   this.close();
 
   this.peerWindowObject_ = null;
   this.iframeElement_ = null;
-  delete this.services_;
   delete goog.net.xpc.channels_[this.name];
 };
 

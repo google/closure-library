@@ -262,7 +262,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
  * Disposes of the transport.
  */
 goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
-  goog.net.xpc.NativeMessagingTransport.superClass_.disposeInternal.call(this);
+  goog.base(this, 'disposeInternal');
   if (this.initialized_) {
     var listenWindow = this.getWindow();
     var uid = goog.getUid(listenWindow);
