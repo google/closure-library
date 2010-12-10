@@ -53,6 +53,7 @@ var numTimingEvents;
 var lastPostSize;
 var lastPostRtt;
 var lastPostRetryCount;
+var defaultAllowEarlyNonBuffered;
 
 // Set to true to see the channel debug output in the browser window.
 var debug = false;
@@ -174,6 +175,9 @@ function setUpPage() {
 
 
 function setUp() {
+  defaultAllowEarlyNonBuffered =
+      goog.net.BrowserTestChannel.ALLOW_EARLY_NON_BUFFERED_DETECTION;
+
   numTimingEvents = 0;
   lastPostSize = null;
   lastPostRtt = null;
@@ -223,6 +227,8 @@ function setUp() {
 function tearDown() {
   mockClock.dispose();
   debugToWindow('<hr>');
+  goog.net.BrowserTestChannel.ALLOW_EARLY_NO_BUFFER_DETECTION =
+      defaultAllowEarlyNonBuffered;
 }
 
 
@@ -307,12 +313,14 @@ function completeBackTestConnection() {
   browserChannel.connectionTest_.onRequestData(
       browserChannel.connectionTest_,
       '11111');
-  mockClock.tick(201);
-  browserChannel.connectionTest_.onRequestData(
-      browserChannel.connectionTest_,
-      '2');
-  browserChannel.connectionTest_.onRequestComplete(
-      browserChannel.connectionTest_);
+  if (!goog.net.BrowserTestChannel.ALLOW_EARLY_NON_BUFFERED_DETECTION) {
+    mockClock.tick(201);
+    browserChannel.connectionTest_.onRequestData(
+        browserChannel.connectionTest_,
+        '2');
+    browserChannel.connectionTest_.onRequestComplete(
+        browserChannel.connectionTest_);
+  }
   mockClock.tick(0);
 }
 
@@ -1133,6 +1141,13 @@ function testResponseWithEvilData() {
           '=<script>moreEvil()\<\/script>');
   assertEquals(goog.net.BrowserChannel.State.CLOSED,
       browserChannel.getState());
+}
+
+function testAllowEarlyNoBuffering() {
+  goog.net.BrowserTestChannel.ALLOW_EARLY_NON_BUFFERED_DETECTION = true;
+  browserChannel.connect('/test', '/bind', null);
+  mockClock.tick(0);
+  completeTestConnection();
 }
 
 </script>
