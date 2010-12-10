@@ -389,15 +389,15 @@ goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseBlockType_ = function(pattern) {
-  if (/\s*\w+\s*,\s*plural.*/.test(pattern)) {
+  if (/^\s*\w+\s*,\s*plural.*/.test(pattern)) {
     return goog.i18n.MessageFormat.BlockType_.PLURAL;
   }
 
-  if (/\s*\w+\s*,\s*select.*/.test(pattern)) {
+  if (/^\s*\w+\s*,\s*select.*/.test(pattern)) {
     return goog.i18n.MessageFormat.BlockType_.SELECT;
   }
 
-  if (/\s*\w+\s*/.test(pattern)) {
+  if (/^\s*\w+\s*/.test(pattern)) {
     return goog.i18n.MessageFormat.BlockType_.SIMPLE;
   }
 

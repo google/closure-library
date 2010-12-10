@@ -139,6 +139,27 @@ function testSelectNestedInPlural() {
                            'CIRCLES': 1234}));
 }
 
+function testPluralNestedInSelect() {
+  // Added offset just for testing purposes. It doesn't make sense
+  // to have it otherwise.
+  var fmt = new goog.i18n.MessageFormat('{GENDER, select, ' +
+      'female {{NUM_GROUPS, plural, ' +
+      '  one {{WHO} added you to her group} ' +
+      '  other {{WHO} added you to her # groups}}} ' +
+      'other {{NUM_GROUPS, plural, offset:1' +
+      '  one {{WHO} added you to his group} ' +
+      '  other {{WHO} added you to his # groups}}}}');
+
+  assertEquals('Jelena added you to her group',
+               fmt.format({'GENDER': 'female',
+                           'WHO': 'Jelena',
+                           'NUM_GROUPS': 1}));
+  assertEquals('Milan added you to his 1,233 groups',
+               fmt.format({'GENDER': 'male',
+                           'WHO': 'Milan',
+                           'NUM_GROUPS': 1234}));
+}
+
 function testLiteralOpenCurlyBrace() {
   var fmt = new goog.i18n.MessageFormat("Anna's house" +
       " has '{0} and # in the roof' and {NUM_COWS} cows.");
