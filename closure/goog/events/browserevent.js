@@ -52,6 +52,7 @@ goog.require('goog.reflect');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Accepts a browser event object and creates a patched, cross browser event
  * object.
@@ -239,7 +240,10 @@ goog.events.BrowserEvent.prototype.event_ = null;
  */
 goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   var type = this.type = e.type;
-  this.target = e.target || e.srcElement;
+
+  // TODO(nicksantos): Change this.target to type EventTarget.
+  this.target = /** @type {Node} */ (e.target) || e.srcElement;
+
   this.currentTarget = opt_currentTarget;
 
   var relatedTarget = /** @type {Node} */ (e.relatedTarget);
