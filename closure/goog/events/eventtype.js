@@ -94,5 +94,10 @@ goog.events.EventType = {
   HASHCHANGE: 'hashchange',
   PAGEHIDE: 'pagehide',
   PAGESHOW: 'pageshow',
-  POPSTATE: 'popstate'
+  POPSTATE: 'popstate',
+
+  // Copy and Paste
+  COPY: 'copy',
+  PASTE: 'paste',
+  CUT: 'cut'
 };
