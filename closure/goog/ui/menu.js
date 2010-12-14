@@ -242,18 +242,14 @@ goog.ui.Menu.prototype.getItemCount = function() {
 
 
 /**
- * Returns an array containing the menu items contained in the menu.
+ * Returns the menu items contained in the menu.
  * @return {Array.<goog.ui.MenuItem>} An array of menu items.
  * @deprecated Use getChildAt, forEachChild, and getChildCount.
  */
 goog.ui.Menu.prototype.getItems = function() {
   // TODO(user): Remove reference to getItems and instead use getChildAt,
   // forEachChild, and getChildCount
-  var children = [];
-  this.forEachChild(function(child) {
-    children.push(child);
-  });
-  return children;
+  return this.children_ || [];
 };
 
 
