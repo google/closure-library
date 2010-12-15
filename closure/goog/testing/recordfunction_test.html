@@ -44,6 +44,8 @@ function testWithoutArguments() {
   assertEquals('original function', goog.nullFunction, lastCall.getFunction());
   assertEquals('this context', window, lastCall.getThis());
   assertArrayEquals('arguments', [1], lastCall.getArguments());
+  assertEquals('arguments[0]', 1, lastCall.getArgument(0));
+  assertUndefined('arguments[1]', lastCall.getArgument(1));
   assertUndefined('return value', lastCall.getReturnValue());
 }
 
@@ -124,6 +126,20 @@ function testWithClass() {
       ns.TestClass.identity.getCallCount());
   assertArrayEquals('... with argument 1', [1],
       ns.TestClass.identity.getLastCall().getArguments());
+}
+
+function testPopLastCall() {
+  var f = goog.testing.recordFunction();
+  f(0);
+  f(1);
+
+  var firstCall = f.getCalls()[0];
+  var lastCall = f.getCalls()[1];
+  assertEquals('return value of popLastCall', lastCall, f.popLastCall());
+  assertArrayEquals('1 call remains', [firstCall], f.getCalls());
+  assertEquals('next return value of popLastCall', firstCall, f.popLastCall());
+  assertArrayEquals('0 calls remain', [], f.getCalls());
+  assertNull('no more calls to pop', f.popLastCall());
 }
 
 </script>
