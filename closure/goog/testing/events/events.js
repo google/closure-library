@@ -298,7 +298,7 @@ goog.testing.events.fireMouseDownEvent =
 
   var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   button = goog.userAgent.IE ?
-      goog.events.BrowserEvent.IEButtonMap_[button] : button;
+      goog.events.BrowserEvent.IEButtonMap[button] : button;
   return goog.testing.events.fireMouseButtonEvent_(
       goog.events.EventType.MOUSEDOWN, target, button, opt_coords,
       opt_eventProperties);
@@ -320,7 +320,7 @@ goog.testing.events.fireMouseUpEvent =
     function(target, opt_button, opt_coords, opt_eventProperties) {
   var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   button = goog.userAgent.IE ?
-      goog.events.BrowserEvent.IEButtonMap_[button] : button;
+      goog.events.BrowserEvent.IEButtonMap[button] : button;
   return goog.testing.events.fireMouseButtonEvent_(
       goog.events.EventType.MOUSEUP, target, button, opt_coords,
       opt_eventProperties);
@@ -406,7 +406,7 @@ goog.testing.events.fireContextMenuEvent = function(target, opt_coords) {
   var contextmenu =
       new goog.testing.events.Event(goog.events.EventType.CONTEXTMENU, target);
   contextmenu.button = goog.userAgent.IE ?
-      goog.events.BrowserEvent.IEButtonMap_[button] : button;
+      goog.events.BrowserEvent.IEButtonMap[button] : button;
   goog.testing.events.setEventClientXY_(contextmenu, opt_coords);
   return goog.testing.events.fireBrowserEvent(contextmenu);
 };

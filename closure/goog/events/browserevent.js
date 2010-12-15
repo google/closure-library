@@ -85,9 +85,8 @@ goog.events.BrowserEvent.MouseButton = {
 /**
  * Static data for mapping mouse buttons.
  * @type {Array.<number>}
- * @private
  */
-goog.events.BrowserEvent.IEButtonMap_ = [
+goog.events.BrowserEvent.IEButtonMap = [
   1, // LEFT
   4, // MIDDLE
   2  // RIGHT
@@ -315,7 +314,7 @@ goog.events.BrowserEvent.prototype.isButton = function(button) {
       return button == goog.events.BrowserEvent.MouseButton.LEFT;
     } else {
       return !!(this.event_.button &
-          goog.events.BrowserEvent.IEButtonMap_[button]);
+          goog.events.BrowserEvent.IEButtonMap[button]);
     }
   } else {
     return this.event_.button == button;
