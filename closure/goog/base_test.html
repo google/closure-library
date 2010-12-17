@@ -11,6 +11,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.*</title>
 <script src="base.js"></script>
 <script>
+goog.require('goog.functions');
 // Used to test dynamic loading works, see testRequire*
 goog.require('goog.Timer');
 goog.require('goog.testing.jsunit');
@@ -885,6 +886,24 @@ function testLoadInNonHtmlNotThrows() {
     // The goog code which is executed at load.
     goog.findBasePath_();
     goog.writeScriptTag_(goog.basePath + 'deps.js');
+  } finally {
+    // Restore context to respect other tests.
+    goog.global = savedGoogGlobal;
+  }
+}
+
+function testLoadBaseWithQueryParamOk() {
+  var savedGoogGlobal = goog.global;
+  try {
+    goog.global = {};
+    goog.global.document = {
+      write: goog.nullFunction,
+      getElementsByTagName: goog.functions.constant(
+          [{src: '/path/to/base.js?zx=5'}])
+    };
+    assertTrue(goog.inHtmlDocument_());
+    goog.findBasePath_();
+    assertEquals('/path/to/', goog.basePath);
   } finally {
     // Restore context to respect other tests.
     goog.global = savedGoogGlobal;
