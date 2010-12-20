@@ -58,7 +58,7 @@ goog.inherits(goog.proto2.PbLiteSerializer, goog.proto2.LazyDeserializer);
  *
  * @param {goog.proto2.Message} message The message to be serialized.
  *
- * @return {!Array} The serialized form of the message.
+ * @return {Object} The serialized form of the message.
  */
 goog.proto2.PbLiteSerializer.prototype.serialize = function(message) {
   var descriptor = message.getDescriptor();
