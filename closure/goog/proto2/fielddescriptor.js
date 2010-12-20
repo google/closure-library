@@ -61,6 +61,9 @@ goog.proto2.FieldDescriptor = function(messageType, tag, metadata) {
   this.name_ = metadata.name;
 
   /** @type {*} */
+  metadata.repeated;
+
+  /** @type {*} */
   metadata.required;
 
   /**
