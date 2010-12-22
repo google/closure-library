@@ -806,33 +806,37 @@ function testArraySlice() {
   assertArrayEquals('slice, with negative start', [2], a);
 }
 
+function assertRemovedDuplicates(expected, original) {
+  var tempArr = goog.array.clone(original);
+  goog.array.removeDuplicates(tempArr);
+  assertArrayEquals(expected, tempArr);
+}
+
 function testRemoveDuplicates() {
-  var a = [1, 2, 3, 4, 5, 6];
-  var b = [9, 4, 2, 4, 4, 2, 9, 1, 3, 6, 0, -9];
-  var c = ['four', 'one', 'two', 'one', 'three', 'THREE', 'four', 'two'];
+  assertRemovedDuplicates([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]);
+  assertRemovedDuplicates([9, 4, 2, 1, 3, 6, 0, -9],
+                          [9, 4, 2, 4, 4, 2, 9, 1, 3, 6, 0, -9]);
+  assertRemovedDuplicates(['four', 'one', 'two', 'three', 'THREE'],
+      ['four', 'one', 'two', 'one', 'three', 'THREE', 'four', 'two']);
+  assertRemovedDuplicates([], []);
+  assertRemovedDuplicates(
+      ['abc', 'hasOwnProperty', 'toString'],
+      ['abc', 'hasOwnProperty', 'toString', 'abc']);
+
   var o1 = {}, o2 = {}, o3 = {}, o4 = {};
-  var d = [o1, o1, o2, o3, o2, o4];
-  var e = [];
+  assertRemovedDuplicates([o1, o2, o3, o4], [o1, o1, o2, o3, o2, o4]);
 
-  goog.array.removeDuplicates(a);
-  goog.array.removeDuplicates(b);
-  goog.array.removeDuplicates(c, e);
-  goog.array.removeDuplicates(d);
+  // Mixed object types.
+  assertRemovedDuplicates([1, '1', 2, '2'], [1, '1', 2, '2']);
+  assertRemovedDuplicates([true, 'true', false, 'false'],
+                          [true, 'true', false, 'false']);
+  assertRemovedDuplicates(['foo'], [String('foo'), 'foo']);
+  assertRemovedDuplicates([12], [Number(12), 12])
 
-  assertArrayEquals([1, 2, 3, 4, 5, 6], a);
-  assertArrayEquals([9, 4, 2, 1, 3, 6, 0, -9], b);
-  assertArrayEquals([o1, o2, o3, o4], d);
-  assertArrayEquals(
-      ['four', 'one', 'two', 'one', 'three', 'THREE', 'four', 'two'], c);
-  assertArrayEquals(['four', 'one', 'two', 'three', 'THREE'], e);
-}
-
-
-function testRemoveDuplicates2() {
-  var a = ['abc', 'hasOwnProperty', 'toString', 'abc'];
-  goog.array.removeDuplicates(a);
-  assertArraysEqual(['abc', 'hasOwnProperty', 'toString'], a);
-}
+  var obj = {};
+  var uid = goog.getUid(obj);
+  assertRemovedDuplicates([obj, uid], [obj, uid])
+};
 
 function testBinaryInsertRemove() {
   var makeChecker = function(array, fn, opt_compareFn) {
