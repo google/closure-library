@@ -36,6 +36,7 @@ See the COPYING file for details.
   goog.require('goog.testing.recordFunction');
   goog.require('goog.ui.Menu');
   goog.require('goog.ui.MenuButton');
+  goog.require('goog.ui.MenuItem');
 </script>
 </head>
 <body>
@@ -303,7 +304,6 @@ function testSpaceFireOnKeyUp() {
   menuButton.handleKeyEvent(e);
   assertTrue('Menu must have been triggered by Space keyup',
       menuButton.isOpen());
-
   menuButton.getMenu().setHighlightedIndex(0);
   e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY, menuButton);
   e.keyCode = goog.events.KeyCodes.DOWN;
@@ -405,9 +405,20 @@ function testResizeOnItemAddOrRemove() {
   menuButton.addItem(item);
 }
 
-
+/**
+ * Try rendering the menu as a sibling rather than as a child of the dom.
+ */
+function testRenderMenuAsSibling() {
+  menuButton.setRenderMenuAsSibling(true);
+  menuButton.addItem(new goog.ui.MenuItem('Menu item 1'));
+  menuButton.addItem(new goog.ui.MenuItem('Menu item 2'));
+  menuButton.render();
+  menuButton.setOpen(true);
+  assertEquals(
+      menuButton.getElement().parentNode,
+      menuButton.getMenu().getElement().parentNode);
+}
 </script>
-
 <p>
   Here's a menubutton defined in markup:
 </p>
