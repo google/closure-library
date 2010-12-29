@@ -59,12 +59,14 @@ function createRegistryEntries(queryParams) {
 
   goog.tweak.registerNumber('Num', 'The Num', 99);
   goog.tweak.registerNumber('Enum2', 'The enum2', undefined, {
-    validValues: [1, 2, 3]
+    validValues: [1, 2, 3],
+    restartRequired: false
   });
 
   goog.tweak.beginBooleanGroup('BoolGroup', 'The Bool Group');
   goog.tweak.registerBoolean('BoolOne', 'Desc for 1', false, {
-    token: 'B1'
+    token: 'B1',
+    restartRequired: false
   });
   goog.tweak.registerBoolean('BoolTwo', 'Desc for 2', true);
   goog.tweak.endBooleanGroup();

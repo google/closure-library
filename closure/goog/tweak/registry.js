@@ -237,7 +237,7 @@ goog.tweak.Registry.prototype.makeUrlQuery =
   // Add all values that are not set to their defaults.
   var keysAndValues = [];
   for (var i = 0, entry; entry = sortedEntries[i]; ++i) {
-    var encodedValue = entry.getEncodedValue();
+    var encodedValue = entry.getNewValueEncoded();
     if (encodedValue != null) {
       keysAndValues.push(entry.getParamName(), encodedValue);
     }

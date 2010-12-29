@@ -544,8 +544,8 @@ goog.tweak.EntriesPanel.prototype.createComboBoxDom_ =
   // Set the value and add a callback.
   selectElem.value = tweak.getValue();
   selectElem.onchange = onchangeFunc;
-  tweak.addCallback(function(value) {
-    selectElem.value = value;
+  tweak.addCallback(function() {
+    selectElem.value = tweak.getNewValue();
   });
   return ret;
 };
@@ -573,8 +573,8 @@ goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_ =
   checkbox.onchange = function() {
     tweak.setValue(checkbox.checked);
   };
-  tweak.addCallback(function(value) {
-    checkbox.checked = value;
+  tweak.addCallback(function() {
+    checkbox.checked = tweak.getNewValue();
   });
   return ret;
 };
@@ -635,8 +635,8 @@ goog.tweak.EntriesPanel.prototype.createTextBoxDom_ =
     onblur: onchangeFunc
   });
   ret.appendChild(textBox);
-  tweak.addCallback(function(value) {
-    textBox.value = value;
+  tweak.addCallback(function() {
+    textBox.value = tweak.getNewValue();
   });
   return ret;
 };
@@ -687,9 +687,10 @@ goog.tweak.EntriesPanel.prototype.createTweakEntryDom_ = function(entry) {
     return entry.getValidValues() ?
         this.createComboBoxDom_(entry, setValueFunc) :
         this.createTextBoxDom_(entry, setValueFunc);
-  } else if (entry instanceof goog.tweak.ButtonAction) {
-    return this.createButtonActionDom_(entry);
   }
-  goog.asserts.fail('invalid entry: %s', entry);
+  goog.asserts.assertInstanceof(entry, goog.tweak.ButtonAction,
+      'invalid entry: %s', entry);
+  return this.createButtonActionDom_(
+      /** @type {!goog.tweak.ButtonAction} */ (entry));
 };
 

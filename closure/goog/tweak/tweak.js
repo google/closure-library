@@ -124,6 +124,10 @@ goog.tweak.applyConfigParams_ = function(entry, configParams) {
   if (configParams.callback) {
     entry.addCallback(configParams.callback);
     delete configParams.callback;
+    goog.asserts.assert(
+        !entry.isRestartRequired() || (configParams.restartRequired == false),
+        'Tweak %s should set restartRequired: false, when adding a callback.',
+        entry.label);
   }
   if (configParams.token) {
     goog.asserts.assertInstanceof(entry, goog.tweak.BooleanInGroupSetting,

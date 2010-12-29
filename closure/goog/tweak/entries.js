@@ -163,12 +163,11 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
 
   /**
-   * Calls all registered callbacks with the given parameter.
-   * @param {*=} opt_newValue The parameter to pass to the callback.
+   * Calls all registered callbacks.
    */
-  goog.tweak.BaseEntry.prototype.fireCallbacks = function(opt_newValue) {
+  goog.tweak.BaseEntry.prototype.fireCallbacks = function() {
     for (var i = 0, callback; callback = this.callbacks_[i]; ++i) {
-      callback(opt_newValue);
+      callback(this);
     }
   };
 
@@ -253,7 +252,7 @@ if (!goog.tweak.STRIP_TWEAKS) {
    * @return {?string} The encoded value. Null if the value is set to its
    *     default.
    */
-  goog.tweak.BaseSetting.prototype.getEncodedValue = goog.abstractMethod;
+  goog.tweak.BaseSetting.prototype.getNewValueEncoded = goog.abstractMethod;
 
 
   /**
@@ -357,6 +356,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
      * @private
      */
     this.value_;
+
+    /**
+     * The value of the tweak once "Apply Tweaks" is pressed.
+     * @type {*}
+     * @private
+     */
+    this.newValue_;
   };
   goog.inherits(goog.tweak.BasePrimitiveSetting, goog.tweak.BaseSetting);
 
@@ -375,11 +381,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
    * @return {string} The encoded value.
    * @protected
    */
-  goog.tweak.BasePrimitiveSetting.prototype.encodeValue = goog.abstractMethod;
+  goog.tweak.BasePrimitiveSetting.prototype.encodeNewValue =
+      goog.abstractMethod;
 
 
   /**
-   * Returns the value of the setting.
+   * If the setting has the restartRequired option, then returns its inital
+   * value. Otherwise, returns its current value.
    * @return {*} The value.
    */
   goog.tweak.BasePrimitiveSetting.prototype.getValue = function() {
@@ -389,17 +397,39 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
 
   /**
-   * Sets the value of the setting. If there is a callback set, it is called if
-   * the provided value is different from the existing value.
+   * Returns the value of the setting to use once "Apply Tweaks" is clicked.
+   * @return {*} The value.
+   */
+  goog.tweak.BasePrimitiveSetting.prototype.getNewValue = function() {
+    this.ensureInitialized();
+    return this.newValue_;
+  };
+
+
+  /**
+   * Sets the value of the setting. If the setting has the restartRequired
+   * option, then the value will not be changed until the "Apply Tweaks" button
+   * is clicked. If it does not have the option, the value will be update
+   * immediately and all registered callbacks will be called.
    * @param {*} value The value.
    */
   goog.tweak.BasePrimitiveSetting.prototype.setValue = function(value) {
     this.ensureInitialized();
+    var changed = this.newValue_ != value;
+    this.newValue_ = value;
     // Don't fire callbacks if we are currently in the initialize() method.
-    if (!this.isInitializing() && this.value_ != value) {
-      this.fireCallbacks(value);
+    if (this.isInitializing()) {
+      this.value_ = value;
+    } else {
+      if (!this.isRestartRequired()) {
+        // Update the current value only if the tweak has been marked as not
+        // needing a restart.
+        this.value_ = value;
+      }
+      if (changed) {
+        this.fireCallbacks();
+      }
     }
-    this.value_ = value;
   };
 
 
@@ -426,9 +456,9 @@ if (!goog.tweak.STRIP_TWEAKS) {
   /**
    * @inheritDoc
    */
-  goog.tweak.BasePrimitiveSetting.prototype.getEncodedValue = function() {
+  goog.tweak.BasePrimitiveSetting.prototype.getNewValueEncoded = function() {
     this.ensureInitialized();
-    return this.value_ == this.defaultValue_ ? null : this.encodeValue();
+    return this.newValue_ == this.defaultValue_ ? null : this.encodeNewValue();
   };
 
 
@@ -468,6 +498,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * @override
+   * @return {string} The tweaks's new value.
+   */
+  goog.tweak.StringSetting.prototype.getNewValue;
+
+
+  /**
+   * @override
    * @param {string} value The tweaks's value.
    */
   goog.tweak.StringSetting.prototype.setValue;
@@ -490,8 +527,8 @@ if (!goog.tweak.STRIP_TWEAKS) {
   /**
    * @inheritDoc
    */
-  goog.tweak.StringSetting.prototype.encodeValue = function(value) {
-    return this.getValue();
+  goog.tweak.StringSetting.prototype.encodeNewValue = function(value) {
+    return this.getNewValue();
   };
 
 
@@ -583,6 +620,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * @override
+   * @return {number} The tweaks's new value.
+   */
+  goog.tweak.NumericSetting.prototype.getNewValue;
+
+
+  /**
+   * @override
    * @param {number} value The tweaks's value.
    */
   goog.tweak.NumericSetting.prototype.setValue;
@@ -605,8 +649,8 @@ if (!goog.tweak.STRIP_TWEAKS) {
   /**
    * @inheritDoc
    */
-  goog.tweak.NumericSetting.prototype.encodeValue = function() {
-    return '' + this.getValue();
+  goog.tweak.NumericSetting.prototype.encodeNewValue = function() {
+    return '' + this.getNewValue();
   };
 
 
@@ -692,6 +736,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * @override
+   * @return {boolean} The tweaks's new value.
+   */
+  goog.tweak.BooleanSetting.prototype.getNewValue;
+
+
+  /**
+   * @override
    * @param {boolean} value The tweaks's value.
    */
   goog.tweak.BooleanSetting.prototype.setValue;
@@ -714,8 +765,8 @@ if (!goog.tweak.STRIP_TWEAKS) {
   /**
    * @inheritDoc
    */
-  goog.tweak.BooleanSetting.prototype.encodeValue = function() {
-    return this.getValue() ? '1' : '0';
+  goog.tweak.BooleanSetting.prototype.encodeNewValue = function() {
+    return this.getNewValue() ? '1' : '0';
   };
 
 
@@ -908,16 +959,17 @@ if (!goog.tweak.STRIP_TWEAKS) {
   /**
    * @inheritDoc
    */
-  goog.tweak.BooleanGroup.prototype.getEncodedValue = function() {
+  goog.tweak.BooleanGroup.prototype.getNewValueEncoded = function() {
     this.ensureInitialized();
     var nonDefaultValues = [];
     // Sort the keys so that the generate value is stable.
     var keys = goog.object.getKeys(this.entriesByToken_);
     keys.sort();
     for (var i = 0, entry; entry = this.entriesByToken_[keys[i]]; ++i) {
-      var encodedValue = entry.getEncodedValue();
+      var encodedValue = entry.getNewValueEncoded();
       if (encodedValue != null) {
-        nonDefaultValues.push((entry.getValue() ? '' : '-') + entry.getToken());
+        nonDefaultValues.push((entry.getNewValue() ? '' : '-') +
+            entry.getToken());
       }
     }
     return nonDefaultValues.length ? nonDefaultValues.join(',') : null;

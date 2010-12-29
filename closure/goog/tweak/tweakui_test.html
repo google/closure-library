@@ -119,10 +119,10 @@ function testClickBooleanSetting() {
   var input = getEntryInput(boolEntry);
   input.checked = true;
   input.onchange();
-  assertTrue('setting should be true', boolEntry.getValue());
+  assertTrue('setting should be true', boolEntry.getNewValue());
   input.checked = false;
   input.onchange();
-  assertFalse('setting should be false', boolEntry.getValue());
+  assertFalse('setting should be false', boolEntry.getNewValue());
 }
 
 function testToggleDescriptions() {
