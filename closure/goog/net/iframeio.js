@@ -890,6 +890,8 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     // Append a cloned form to the iframe
     var clone = doc.importNode(this.form_, true);
     clone.target = innerFrameName;
+    // Work around crbug.com/66987
+    clone.action = this.form_.action;
     doc.body.appendChild(clone);
 
     // Fix select boxes, importNode won't override the default value

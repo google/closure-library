@@ -1,0 +1,40 @@
+<html>
+<!--
+Copyright 2010 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<script>
+// We use a different base to reproduce the conditions of crbug.com/66987
+var href = window.location.href;
+var newHref = href.replace(/net.*/, '');
+document.write('<base href="' + newHref + '">');
+</script>
+<script src="base.js"></script>
+<script>
+  goog.require('goog.net.IframeIo');
+  goog.require('goog.testing.AsyncTestCase');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+
+function testDifferentBaseUri() {
+  var io = new goog.net.IframeIo();
+  goog.events.listen(io, goog.net.EventType.COMPLETE,
+      function() {
+        assertTrue(-1 != io.getResponseText().indexOf('Closure Library'));
+        asyncTestCase.continueTesting();
+      });
+  io.send('net/iframeio_different_base_test.html');
+  asyncTestCase.waitForAsync('Waiting for iframeIo respons.');
+}
+
+</script>
+</body>
+</html>
