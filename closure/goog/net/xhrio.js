@@ -39,6 +39,7 @@
 
 
 goog.provide('goog.net.XhrIo');
+goog.provide('goog.net.XhrIo.ResponseType');
 
 goog.require('goog.Timer');
 goog.require('goog.debug.Logger');
@@ -81,6 +82,21 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
   this.xmlHttpFactory_ = opt_xmlHttpFactory || null;
 };
 goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
+
+
+/**
+ * Response types that may be requested for XMLHttpRequests.
+ * @enum {string}
+ * @see http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#the-responsetype-attribute
+ */
+goog.net.XhrIo.ResponseType = {
+  DEFAULT: '',
+  TEXT: 'text',
+  DOCUMENT: 'document',
+  // Not supported as of Chrome 10.0.612.1 dev
+  BLOB: 'blob',
+  ARRAY_BUFFER: 'arraybuffer'
+};
 
 
 /**
@@ -325,6 +341,15 @@ goog.net.XhrIo.prototype.timeoutId_ = null;
 
 
 /**
+ * The requested type for the response. The empty string means use the default
+ * XHR behavior.
+ * @type {goog.net.XhrIo.ResponseType}
+ * @private
+ */
+goog.net.XhrIo.prototype.responseType_ = goog.net.XhrIo.ResponseType.DEFAULT;
+
+
+/**
  * Returns the number of milliseconds after which an incomplete request will be
  * aborted, or 0 if no timeout is set.
  * @return {number} Timeout interval in milliseconds.
@@ -342,6 +367,28 @@ goog.net.XhrIo.prototype.getTimeoutInterval = function() {
  */
 goog.net.XhrIo.prototype.setTimeoutInterval = function(ms) {
   this.timeoutInterval_ = Math.max(0, ms);
+};
+
+
+/**
+ * Sets the desired type for the response. At time of writing, this is only
+ * supported in very recent versions of WebKit (10.0.612.1 dev and later).
+ *
+ * If this is used, the response may only be accessed via {@link #getResponse}.
+ *
+ * @param {goog.net.XhrIo.ResponseType} type The desired type for the response.
+ */
+goog.net.XhrIo.prototype.setResponseType = function(type) {
+  this.responseType_ = type;
+};
+
+
+/**
+ * Gets the desired type for the response.
+ * @return {goog.net.XhrIo.ResponseType} The desired type for the response.
+ */
+goog.net.XhrIo.prototype.getResponseType = function() {
+  return this.responseType_;
 };
 
 
@@ -423,6 +470,10 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   goog.structs.forEach(headers, function(value, key) {
     this.xhr_.setRequestHeader(key, value);
   }, this);
+
+  if (this.responseType_) {
+    this.xhr_.responseType = this.responseType_;
+  }
 
   /**
    * Try to send the request, or other wise report an error (404 not found).
@@ -911,6 +962,24 @@ goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
   }
 
   return goog.json.parse(responseText);
+};
+
+
+/**
+ * Get the response as the type specificed by {@link #setResponseType}. At time
+ * of writing, this is only supported in very recent versions of WebKit
+ * (10.0.612.1 dev and later).
+ *
+ * @return {*} The response.
+ */
+goog.net.XhrIo.prototype.getResponse = function() {
+  /** @preserveTry */
+  try {
+    return this.xhr_ && this.xhr_.response;
+  } catch (e) {
+    this.logger_.fine('Can not get response: ' + e.message);
+    return null;
+  }
 };
 
 

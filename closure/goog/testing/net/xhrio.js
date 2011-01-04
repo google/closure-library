@@ -25,6 +25,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
+goog.require('goog.net.XhrIo.ResponseType');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.structs.Map');
@@ -202,6 +203,16 @@ goog.testing.net.XhrIo.prototype.timeoutId_ = null;
 
 
 /**
+ * The requested type for the response. The empty string means use the default
+ * XHR behavior.
+ * @type {goog.net.XhrIo.ResponseType}
+ * @private
+ */
+goog.testing.net.XhrIo.prototype.responseType_ =
+    goog.net.XhrIo.ResponseType.DEFAULT;
+
+
+/**
  * Whether there's currently an underlying XHR object.
  * @type {boolean}
  * @private
@@ -237,6 +248,28 @@ goog.testing.net.XhrIo.prototype.simulateTimeout = function() {
   this.lastErrorCode_ = goog.net.ErrorCode.TIMEOUT;
   this.dispatchEvent(goog.net.EventType.TIMEOUT);
   this.abort(goog.net.ErrorCode.TIMEOUT);
+};
+
+
+/**
+ * Sets the desired type for the response. At time of writing, this is only
+ * supported in very recent versions of WebKit (10.0.612.1 dev and later).
+ *
+ * If this is used, the response may only be accessed via {@link #getResponse}.
+ *
+ * @param {goog.net.XhrIo.ResponseType} type The desired type for the response.
+ */
+goog.testing.net.XhrIo.prototype.setResponseType = function(type) {
+  this.responseType_ = type;
+};
+
+
+/**
+ * Gets the desired type for the response.
+ * @return {goog.net.XhrIo.ResponseType} The desired type for the response.
+ */
+goog.testing.net.XhrIo.prototype.getResponseType = function() {
+  return this.responseType_;
 };
 
 
@@ -477,6 +510,18 @@ goog.testing.net.XhrIo.prototype.getResponseXml = function() {
   // NOTE(user): I haven't found out how to check in Internet Explorer
   // whether the response is XML document, so I do it the other way around.
   return goog.isString(this.response_) ? null : this.response_;
+};
+
+
+/**
+ * Get the response as the type specificed by {@link #setResponseType}. At time
+ * of writing, this is only supported in very recent versions of WebKit
+ * (10.0.612.1 dev and later).
+ *
+ * @return {*} The response.
+ */
+goog.testing.net.XhrIo.prototype.getResponse = function() {
+  return this.response_;
 };
 
 
