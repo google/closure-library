@@ -162,11 +162,6 @@ function testObjectSerialize_recursion() {
   });
 }
 
-function testObjectSerializeWithHasOwnProperty() {
-  var object = {'hasOwnProperty': null};
-  assertEquals('{"hasOwnProperty":null}', goog.json.serialize(object));
-}
-
 // parsing
 
 function testStringParse() {

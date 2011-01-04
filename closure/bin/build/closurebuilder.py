@@ -68,6 +68,7 @@ def _GetOptionsParser():
   parser.add_option('--root',
                     dest='roots',
                     action='append',
+                    default=[],
                     help='The paths that should be traversed to build the '
                     'dependencies.')
   parser.add_option('-o',
