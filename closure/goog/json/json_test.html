@@ -162,6 +162,15 @@ function testObjectSerialize_recursion() {
   });
 }
 
+function testObjectSerializeWithHasOwnProperty() {
+  var object = {'hasOwnProperty': null};
+  if (goog.userAgent.IE && !goog.userAgent.isVersion('9')) {
+    assertEquals('{}', goog.json.serialize(object));
+  } else {
+    assertEquals('{"hasOwnProperty":null}', goog.json.serialize(object));
+  }
+}
+
 // parsing
 
 function testStringParse() {
