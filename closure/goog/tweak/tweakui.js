@@ -537,12 +537,15 @@ goog.tweak.EntriesPanel.prototype.createComboBoxDom_ =
   for (var i = 0, il = values.length; i < il; ++i) {
     var optionElem = dh.createElement('option');
     optionElem.text = String(values[i]);
+    // Setting the option tag's value is required for selectElem.value to work
+    // properly.
+    optionElem.value = String(values[i]);
     selectElem.appendChild(optionElem);
   }
   ret.appendChild(selectElem);
 
   // Set the value and add a callback.
-  selectElem.value = tweak.getValue();
+  selectElem.value = tweak.getNewValue();
   selectElem.onchange = onchangeFunc;
   tweak.addCallback(function() {
     selectElem.value = tweak.getNewValue();
@@ -567,9 +570,9 @@ goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_ =
 
   // Needed on IE6 to ensure the textbox doesn't get cleared
   // when added to the DOM.
-  checkbox.defaultChecked = tweak.getValue();
+  checkbox.defaultChecked = tweak.getNewValue();
 
-  checkbox.checked = tweak.getValue();
+  checkbox.checked = tweak.getNewValue();
   checkbox.onchange = function() {
     tweak.setValue(checkbox.checked);
   };
@@ -627,9 +630,9 @@ goog.tweak.EntriesPanel.prototype.createTextBoxDom_ =
     function(tweak, onchangeFunc) {
   var dh = this.domHelper_;
   var ret = dh.getDocument().createDocumentFragment();
-  ret.appendChild(document.createTextNode(tweak.label + ': '));
+  ret.appendChild(dh.createTextNode(tweak.label + ': '));
   var textBox = dh.createDom('input', {
-    value: tweak.getValue(),
+    value: tweak.getNewValue(),
     // TODO(agrieve): Make size configurable or autogrow.
     size: 5,
     onblur: onchangeFunc
@@ -679,7 +682,7 @@ goog.tweak.EntriesPanel.prototype.createTweakEntryDom_ = function(entry) {
     setValueFunc = function() {
       // Reset the value if it's not a number.
       if (isNaN(this.value)) {
-        this.value = entry.getValue();
+        this.value = entry.getNewValue();
       } else {
         entry.setValue(+this.value);
       }

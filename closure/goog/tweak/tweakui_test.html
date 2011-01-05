@@ -88,7 +88,8 @@ function getEntryDiv(entry) {
 
 function getEntryInput(entry) {
   var div = getEntryDiv(entry);
-  return div.getElementsByTagName('input')[0];
+  return div.getElementsByTagName('input')[0] ||
+      div.getElementsByTagName('select')[0];
 }
 
 function testCreate() {
@@ -103,14 +104,64 @@ function testCreate() {
 }
 
 function testToggleBooleanSetting() {
+  boolEntry.setValue(true);
   createUi(false);
 
-  boolEntry.setValue(true);
   assertTrue('checkbox should be checked',
       getEntryInput(boolEntry).checked);
+
   boolEntry.setValue(false);
   assertFalse('checkbox should not be checked 1',
       getEntryInput(boolEntry).checked);
+}
+
+function testToggleStringSetting() {
+  strEntry.setValue('val1');
+  createUi(false);
+
+  assertEquals('Textbox has wrong value 1',
+      'val1', getEntryInput(strEntry).value);
+
+  strEntry.setValue('val2');
+  assertEquals('Textbox has wrong value 2',
+      'val2', getEntryInput(strEntry).value);
+}
+
+function testToggleStringEnumSetting() {
+  strEnumEntry.setValue('B');
+  createUi(false);
+
+  assertEquals('wrong value 1',
+      'B', getEntryInput(strEnumEntry).value);
+
+  strEnumEntry.setValue('C');
+  assertEquals('wrong value 2',
+      'C', getEntryInput(strEnumEntry).value);
+}
+
+
+function testToggleNumericSetting() {
+  numEntry.setValue(3);
+  createUi(false);
+
+  assertEquals('wrong value 1',
+      '3', getEntryInput(numEntry).value);
+
+  numEntry.setValue(4);
+  assertEquals('wrong value 2',
+      '4', getEntryInput(numEntry).value);
+}
+
+function testToggleNumericEnumSetting() {
+  numEnumEntry.setValue(2);
+  createUi(false);
+
+  assertEquals('wrong value 1',
+      '2', getEntryInput(numEnumEntry).value);
+
+  numEnumEntry.setValue(3);
+  assertEquals('wrong value 2',
+      '3', getEntryInput(numEnumEntry).value);
 }
 
 function testClickBooleanSetting() {

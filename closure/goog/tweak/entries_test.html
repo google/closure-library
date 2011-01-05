@@ -64,10 +64,8 @@ function testGetValue_nonDefaultValues() {
 
   // These do not have the restartRequired option set.
   strEnumEntry.setValue('B');
-  numEnumEntry.setValue(3);
   boolOneEntry.setValue(true);
   assertEquals('wrong value for strEnum', 'B', strEnumEntry.getValue());
-  assertEquals('wrong value for numEnum', 3, numEnumEntry.getValue());
   assertEquals('wrong value for boolOne', true, boolOneEntry.getValue());
 }
 
