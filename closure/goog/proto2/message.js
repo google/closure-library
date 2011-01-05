@@ -351,29 +351,42 @@ goog.proto2.Message.prototype.equals = function(other) {
 
 
 /**
+ * Recursively copies the known fields from the given message to this message.
+ * Removes the fields which are not present in the source message.
+ * @param {!goog.proto2.Message} message The source message.
+ */
+goog.proto2.Message.prototype.copyFrom = function(message) {
+  goog.proto2.Util.assert(this.constructor == message.constructor,
+      'The source message must have the same type.');
+  var fields = this.getDescriptor().getFields();
+
+  for (var i = 0; i < fields.length; i++) {
+    var field = fields[i];
+    delete this.values_[field.getTag()];
+
+    if (message.has(field)) {
+      var isComposite = field.isCompositeType();
+      if (field.isRepeated()) {
+        var values = message.arrayOf(field);
+        for (var j = 0; j < values.length; j++) {
+          this.add(field, isComposite ? values[j].clone() : values[j]);
+        }
+      } else {
+        var value = message.get(field);
+        this.set(field, isComposite ? value.clone() : value);
+      }
+    }
+  }
+};
+
+
+/**
  * @return {!goog.proto2.Message} Recursive clone of the message only including
  *     the known fields.
  */
 goog.proto2.Message.prototype.clone = function() {
   var clone = new this.constructor;
-  var fields = this.getDescriptor().getFields();
-
-  for (var i = 0; i < fields.length; i++) {
-    var field = fields[i];
-    if (this.has(field)) {
-      var isComposite = field.isCompositeType();
-      if (field.isRepeated()) {
-        var values = this.arrayOf(field);
-        for (var j = 0; j < values.length; j++) {
-          clone.add(field, isComposite ? values[j].clone() : values[j]);
-        }
-      } else {
-        var value = this.get(field);
-        clone.set(field, isComposite ? value.clone() : value);
-      }
-    }
-  }
-
+  clone.copyFrom(this);
   return clone;
 };
 
