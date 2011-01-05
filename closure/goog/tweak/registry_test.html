@@ -38,15 +38,15 @@ function tearDown() {
 function testGetBaseEntry() {
   // Initial values
   assertEquals('wrong bool1 object', boolEntry,
-      registry.getBooleanSetting('bool'));
+      registry.getBooleanSetting('Bool'));
   assertEquals('wrong string object', strEntry,
-      registry.getStringSetting('str'));
+      registry.getStringSetting('Str'));
   assertEquals('wrong numeric object', numEntry,
-      registry.getNumericSetting('num'));
+      registry.getNumericSetting('Num'));
   assertEquals('wrong button object', buttonEntry,
-      registry.getEntry('button'));
+      registry.getEntry('Button'));
   assertEquals('wrong button object', boolGroup,
-      registry.getEntry('boolgroup'));
+      registry.getEntry('BoolGroup'));
 }
 
 function testInitializeFromQueryParams() {

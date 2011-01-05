@@ -15,7 +15,7 @@
 /**
  * @fileoverview Definitions for all tweak entries.
  * The class hierarchy is as follows (abstract entries are denoted with a *):
- * BaseEntry(key, label, description) *
+ * BaseEntry(id, description) *
  *   -> ButtonAction(buttons in the UI)
  *   -> BaseSetting(query parameter) *
  *     -> BooleanGroup(child booleans)
@@ -60,26 +60,27 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * Base class for all Registry entries.
-   * @param {string} label The label for the entry.
+   * @param {string} id The ID for the entry. Must contain only letters,
+   *     numbers, underscores and periods.
    * @param {string} description A description of what the entry does.
-   * @param {string=} opt_key The token that uniquely identifies this entry.
-   *     This is the token used to refer to the entry when looking up values.
    * @constructor
    */
-  goog.tweak.BaseEntry = function(label, description, opt_key) {
+  goog.tweak.BaseEntry = function(id, description) {
+    goog.asserts.assert(!/[^A-Za-z0-9._]/.test(id),
+        'Tweak id contains illegal characters: ', id);
+
+    /**
+     * An ID to uniquely identify the entry.
+     * @type {string}
+     * @private
+     */
+    this.id_ = id;
+
     /**
      * A descriptive label for the entry.
      * @type {string}
      */
-    this.label = label;
-
-    /**
-     * The unique string that identifies this entry.
-     * @type {string}
-     * @private
-     */
-    this.key_ = opt_key || label.replace(/[^A-Za-z0-9]+/g, '').toLowerCase();
-    goog.asserts.assert(this.key_, 'Missing key for entry: ' + label);
+    this.label = id;
 
     /**
      * A description of what this entry does.
@@ -115,6 +116,14 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
 
   /**
+   * @return {string} Returns the entry's ID.
+   */
+  goog.tweak.BaseEntry.prototype.getId = function() {
+    return this.id_;
+  };
+
+
+  /**
    * Returns whether a restart is required for changes to the setting to take
    * effect.
    * @return {boolean} The value.
@@ -131,15 +140,6 @@ if (!goog.tweak.STRIP_TWEAKS) {
    */
   goog.tweak.BaseEntry.prototype.setRestartRequired = function(value) {
     this.restartRequired_ = value;
-  };
-
-
-  /**
-   * Returns the unique string that identifies this entry.
-   * @return {string} The key.
-   */
-  goog.tweak.BaseEntry.prototype.getKey = function() {
-    return this.key_;
   };
 
 
@@ -175,13 +175,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
   /**
    * Base class for all tweak entries that are settings. Settings are entries
    * that are associated with a query parameter.
-   * @param {string} label The label for the setting.
+   * @param {string} id The ID for the setting.
    * @param {string} description A description of what the setting does.
    * @constructor
    * @extends {goog.tweak.BaseEntry}
    */
-  goog.tweak.BaseSetting = function(label, description) {
-    goog.tweak.BaseEntry.call(this, label, description);
+  goog.tweak.BaseSetting = function(id, description) {
+    goog.tweak.BaseEntry.call(this, id, description);
 
     /**
      * The value of this setting's query parameter.
@@ -195,7 +195,7 @@ if (!goog.tweak.STRIP_TWEAKS) {
      * @type {?string}
      * @private
      */
-    this.paramName_ = this.getKey();
+    this.paramName_ = this.getId().toLowerCase();
   };
   goog.inherits(goog.tweak.BaseSetting, goog.tweak.BaseEntry);
 
@@ -335,14 +335,14 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * Base class for all settings that wrap primitive values.
-   * @param {string} label The label for the setting.
+   * @param {string} id The ID for the setting.
    * @param {string} description A description of what the setting does.
    * @param {*} defaultValue The default value for this setting.
    * @constructor
    * @extends {goog.tweak.BaseSetting}
    */
-  goog.tweak.BasePrimitiveSetting = function(label, description, defaultValue) {
-    goog.tweak.BaseSetting.call(this, label, description);
+  goog.tweak.BasePrimitiveSetting = function(id, description, defaultValue) {
+    goog.tweak.BaseSetting.call(this, id, description);
     /**
      * The default value of the setting.
      * @type {*}
@@ -464,13 +464,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * A registry setting for string values.
-   * @param {string} label The label for the setting.
+   * @param {string} id The ID for the setting.
    * @param {string} description A description of what the setting does.
    * @constructor
    * @extends {goog.tweak.BasePrimitiveSetting}
    */
-  goog.tweak.StringSetting = function(label, description) {
-    goog.tweak.BasePrimitiveSetting.call(this, label, description, '');
+  goog.tweak.StringSetting = function(id, description) {
+    goog.tweak.BasePrimitiveSetting.call(this, id, description, '');
     /**
      * Valid values for the setting.
      * @type {Array.<string>|undefined}
@@ -576,7 +576,7 @@ if (!goog.tweak.STRIP_TWEAKS) {
           }
         }
         // Warn if the value is not in the list of allowed values.
-        this.logger.warning('Tweak ' + this.label +
+        this.logger.warning('Tweak ' + this.getId() +
             ' has value outside of expected range:' + value);
       }
       this.setValue(value);
@@ -586,13 +586,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * A registry setting for numeric values.
-   * @param {string} label The label for the setting.
+   * @param {string} id The ID for the setting.
    * @param {string} description A description of what the setting does.
    * @constructor
    * @extends {goog.tweak.BasePrimitiveSetting}
    */
-  goog.tweak.NumericSetting = function(label, description) {
-    goog.tweak.BasePrimitiveSetting.call(this, label, description, 0);
+  goog.tweak.NumericSetting = function(id, description) {
+    goog.tweak.BasePrimitiveSetting.call(this, id, description, 0);
     /**
      * Valid values for the setting.
      * @type {Array.<number>|undefined}
@@ -690,12 +690,12 @@ if (!goog.tweak.STRIP_TWEAKS) {
       // Warn if the value is not in the list of allowed values.
       if (this.validValues_ &&
           !goog.array.contains(this.validValues_, coercedValue)) {
-        this.logger.warning('Tweak ' + this.label +
+        this.logger.warning('Tweak ' + this.getId() +
             ' has value outside of expected range: ' + value);
       }
 
       if (isNaN(coercedValue)) {
-        this.logger.warning('Tweak ' + this.label +
+        this.logger.warning('Tweak ' + this.getId() +
             ' has value of NaN, resetting to ' + this.getDefaultValue());
         this.setValue(this.getDefaultValue());
       } else {
@@ -707,13 +707,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * A registry setting that can be either true of false.
-   * @param {string} label The label for the setting.
+   * @param {string} id The ID for the setting.
    * @param {string} description A description of what the setting does.
    * @constructor
    * @extends {goog.tweak.BasePrimitiveSetting}
    */
-  goog.tweak.BooleanSetting = function(label, description) {
-    goog.tweak.BasePrimitiveSetting.call(this, label, description, false);
+  goog.tweak.BooleanSetting = function(id, description) {
+    goog.tweak.BasePrimitiveSetting.call(this, id, description, false);
   };
   goog.inherits(goog.tweak.BooleanSetting, goog.tweak.BasePrimitiveSetting);
 
@@ -786,23 +786,22 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * An entry in a BooleanGroup.
-   * @param {string} label The label for the setting.
+   * @param {string} id The ID for the setting.
    * @param {string} description A description of what the setting does.
    * @param {!goog.tweak.BooleanGroup} group The group that this entry belongs
    *     to.
    * @constructor
    * @extends {goog.tweak.BooleanSetting}
    */
-  goog.tweak.BooleanInGroupSetting = function(label, description, group) {
-    goog.tweak.BooleanSetting.call(this, label, description);
+  goog.tweak.BooleanInGroupSetting = function(id, description, group) {
+    goog.tweak.BooleanSetting.call(this, id, description);
 
     /**
-     * The token to use in the query parameter. Default is the lowercase label
-     * name.
+     * The token to use in the query parameter.
      * @type {string}
      * @private
      */
-    this.token_ = this.getKey();
+    this.token_ = this.getId().toLowerCase();
 
     /**
      * The BooleanGroup that this setting belongs to.
@@ -867,13 +866,13 @@ if (!goog.tweak.STRIP_TWEAKS) {
    * A registry setting that contains a group of boolean subfield, where all
    * entries modify the same query parameter. For example:
    *     ?foo=setting1,-setting2
-   * @param {string} label The label for the setting.
+   * @param {string} id The ID for the setting.
    * @param {string} description A description of what the setting does.
    * @constructor
    * @extends {goog.tweak.BaseSetting}
    */
-  goog.tweak.BooleanGroup = function(label, description) {
-    goog.tweak.BaseSetting.call(this, label, description);
+  goog.tweak.BooleanGroup = function(id, description) {
+    goog.tweak.BaseSetting.call(this, id, description);
 
     /**
      * A map of token->child entry.
@@ -923,8 +922,8 @@ if (!goog.tweak.STRIP_TWEAKS) {
     var token = boolEntry.getToken();
     var lcToken = token.toLowerCase();
     goog.asserts.assert(!this.entriesByToken_[lcToken],
-        'Multiple bools registered with token "' + token +
-        '" in group: ' + this.label);
+        'Multiple bools registered with token "%s" in group: %s', token,
+        this.getId());
     this.entriesByToken_[lcToken] = boolEntry;
 
     // Initialize from query param.
@@ -978,14 +977,14 @@ if (!goog.tweak.STRIP_TWEAKS) {
 
   /**
    * A registry action (a button).
-   * @param {string} label The label for the setting.
+   * @param {string} id The ID for the setting.
    * @param {string} description A description of what the setting does.
    * @param {!Function} callback Function to call when the button is clicked.
    * @constructor
    * @extends {goog.tweak.BaseEntry}
    */
-  goog.tweak.ButtonAction = function(label, description, callback) {
-    goog.tweak.BaseEntry.call(this, label, description);
+  goog.tweak.ButtonAction = function(id, description, callback) {
+    goog.tweak.BaseEntry.call(this, id, description);
     this.addCallback(callback);
     this.setRestartRequired(false);
   };

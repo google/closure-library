@@ -38,7 +38,7 @@ goog.require('goog.uri.utils');
  */
 goog.tweak.Registry = function(opt_queryParams) {
   /**
-   * A map of entry.key -> entry object
+   * A map of entry id -> entry object
    * @type {!Object.<!goog.tweak.BaseEntry>}
    * @private
    */
@@ -99,15 +99,15 @@ goog.tweak.Registry.parseQueryParams = function(opt_queryParams) {
  * @param {goog.tweak.BaseEntry} entry The entry.
  */
 goog.tweak.Registry.prototype.register = function(entry) {
-  var key = entry.getKey();
-  var oldBaseEntry = this.entryMap_[key];
+  var id = entry.getId();
+  var oldBaseEntry = this.entryMap_[id];
   if (oldBaseEntry) {
     if (oldBaseEntry == entry) {
-      this.logger_.warning('Tweak entry registered twice: ' + key);
+      this.logger_.warning('Tweak entry registered twice: ' + id);
       return;
     }
     goog.asserts.fail(
-        'Tweak entry registered twice and with different types: ' + key);
+        'Tweak entry registered twice and with different types: ' + id);
   }
 
   // Set its value from the query params.
@@ -118,7 +118,7 @@ goog.tweak.Registry.prototype.register = function(entry) {
     }
   }
 
-  this.entryMap_[key] = entry;
+  this.entryMap_[id] = entry;
   // Call all listeners.
   for (var i = 0, callback; callback = this.onRegisterListeners_[i]; ++i) {
     callback(entry);
@@ -136,26 +136,25 @@ goog.tweak.Registry.prototype.addOnRegisterListener = function(func) {
 
 
 /**
- * Returns the BaseEntry with the given key. Asserts if it does not exists.
- * @param {string} key The unique string that identifies this entry.
+ * Returns the BaseEntry with the given ID. Asserts if it does not exists.
+ * @param {string} id The unique string that identifies this entry.
  * @return {!goog.tweak.BaseEntry} The entry.
  */
-goog.tweak.Registry.prototype.getEntry = function(key) {
-  key = key.toLowerCase();
-  var ret = this.entryMap_[key];
-  goog.asserts.assert(ret, 'Tweak not registered: ' + key);
+goog.tweak.Registry.prototype.getEntry = function(id) {
+  var ret = this.entryMap_[id];
+  goog.asserts.assert(ret, 'Tweak not registered: ' + id);
   return /** @type {!goog.tweak.BaseEntry} */ (ret);
 };
 
 
 /**
- * Returns the boolean setting with the given key. Asserts if the key does not
+ * Returns the boolean setting with the given ID. Asserts if the ID does not
  * refer to a registered entry or if it refers to one of the wrong type.
- * @param {string} key The unique string that identifies this entry.
+ * @param {string} id The unique string that identifies this entry.
  * @return {!goog.tweak.BooleanSetting} The entry.
  */
-goog.tweak.Registry.prototype.getBooleanSetting = function(key) {
-  var entry = this.getEntry(key);
+goog.tweak.Registry.prototype.getBooleanSetting = function(id) {
+  var entry = this.getEntry(id);
   goog.asserts.assertInstanceof(entry, goog.tweak.BooleanSetting,
       'getBooleanSetting called on wrong type of BaseSetting');
   return /** @type {!goog.tweak.BooleanSetting} */ (entry);
@@ -163,13 +162,13 @@ goog.tweak.Registry.prototype.getBooleanSetting = function(key) {
 
 
 /**
- * Returns the string setting with the given key. Asserts if the key does not
+ * Returns the string setting with the given ID. Asserts if the ID does not
  * refer to a registered entry or if it refers to one of the wrong type.
- * @param {string} key The unique string that identifies this entry.
+ * @param {string} id The unique string that identifies this entry.
  * @return {!goog.tweak.StringSetting} The entry.
  */
-goog.tweak.Registry.prototype.getStringSetting = function(key) {
-  var entry = this.getEntry(key);
+goog.tweak.Registry.prototype.getStringSetting = function(id) {
+  var entry = this.getEntry(id);
   goog.asserts.assertInstanceof(entry, goog.tweak.StringSetting,
       'getStringSetting called on wrong type of BaseSetting');
   return /** @type {!goog.tweak.StringSetting} */ (entry);
@@ -177,13 +176,13 @@ goog.tweak.Registry.prototype.getStringSetting = function(key) {
 
 
 /**
- * Returns the numeric setting with the given key. Asserts if the key does not
+ * Returns the numeric setting with the given ID. Asserts if the ID does not
  * refer to a registered entry or if it refers to one of the wrong type.
- * @param {string} key The unique string that identifies this entry.
+ * @param {string} id The unique string that identifies this entry.
  * @return {!goog.tweak.NumericSetting} The entry.
  */
-goog.tweak.Registry.prototype.getNumericSetting = function(key) {
-  var entry = this.getEntry(key);
+goog.tweak.Registry.prototype.getNumericSetting = function(id) {
+  var entry = this.getEntry(id);
   goog.asserts.assertInstanceof(entry, goog.tweak.NumericSetting,
       'getNumericSetting called on wrong type of BaseSetting');
   return /** @type {!goog.tweak.NumericSetting} */ (entry);
@@ -201,8 +200,8 @@ goog.tweak.Registry.prototype.getNumericSetting = function(key) {
 goog.tweak.Registry.prototype.extractEntries =
     function(excludeChildEntries, excludeNonSettings) {
   var entries = [];
-  for (var key in this.entryMap_) {
-    var entry = this.entryMap_[key];
+  for (var id in this.entryMap_) {
+    var entry = this.entryMap_[id];
     if (entry instanceof goog.tweak.BaseSetting) {
       if (excludeChildEntries && !entry.getParamName()) {
         continue;

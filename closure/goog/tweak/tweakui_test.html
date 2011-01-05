@@ -46,7 +46,7 @@ function tearDownPage() {
   // Add an extra tweak for testing the creation of tweaks after the UI has
   // already been rendered.
   var entryCounter = 0;
-  goog.tweak.registerButton('Create New Tweak', 'Creates a new tweak. Meant ' +
+  goog.tweak.registerButton('CreateNewTweak', 'Creates a new tweak. Meant ' +
       'to simulate a tweak being registered in a lazy-loaded module.',
       function() {
     goog.tweak.registerBoolean('Lazy' + ++entryCounter, 'Lazy-loaded tweak.');
@@ -101,6 +101,11 @@ function testCreate() {
       getEntryInput(boolEntry).checked);
   assertTrue('checkbox should be checked 2',
       getEntryInput(boolEntry2).checked);
+  // Enusre custom labels are being used.
+  var html = document.getElementsByTagName('button')[0].innerHTML;
+  assertTrue('Button label is wrong', html.indexOf('&lt;btn&gt;') > -1);
+  html = getEntryDiv(numEnumEntry).innerHTML;
+  assertTrue('Enum2 label is wrong', html.indexOf('second&amp;') > -1);
 }
 
 function testToggleBooleanSetting() {

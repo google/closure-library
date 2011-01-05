@@ -285,8 +285,8 @@ goog.tweak.TweakUi.prototype.insertEntry_ = function(entry) {
   var newEntryList;
   if (entry instanceof goog.tweak.BooleanInGroupSetting) {
     var group = entry.getGroup();
-    panel = panel.childPanels[group.getKey()];
-    goog.asserts.assert(panel, 'Missing panel for entry %s', entry.label);
+    panel = panel.childPanels[group.getId()];
+    goog.asserts.assert(panel, 'Missing panel for entry %s', entry.getId());
     newEntryList = goog.tweak.TweakUi.extractBooleanGroupEntries_(group);
   } else {
     newEntryList = this.extractTopLevelEntries_();
@@ -358,7 +358,7 @@ goog.tweak.EntriesPanel = function(entries, opt_domHelper) {
     this.domHelper_ = opt_domHelper || goog.dom.getDomHelper();
 
     /**
-     * Map of tweak key -> EntriesPanel for child panels (BooleanGroups).
+     * Map of tweak ID -> EntriesPanel for child panels (BooleanGroups).
      * @type {!Object.<!goog.tweak.EntriesPanel>}
      */
     this.childPanels = {};
@@ -601,7 +601,7 @@ goog.tweak.EntriesPanel.prototype.createBooleanGroupDom_ =
       goog.tweak.TweakUi.extractBooleanGroupEntries_(booleanGroup);
 
   var innerUi = new goog.tweak.EntriesPanel(childEntries, dh);
-  this.childPanels[booleanGroup.getKey()] = innerUi;
+  this.childPanels[booleanGroup.getId()] = innerUi;
 
   var elem = innerUi.render();
   var childrenElem = dh.createDom('fieldset', null,

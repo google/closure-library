@@ -59,7 +59,8 @@ function createRegistryEntries(queryParams) {
 
   goog.tweak.registerNumber('Num', 'The Num', 99);
   goog.tweak.registerNumber('Enum2', 'The enum2', undefined, {
-    validValues: [1, 2, 3]
+    validValues: [1, 2, 3],
+    label: 'Enum the second&'
   });
 
   goog.tweak.beginBooleanGroup('BoolGroup', 'The Bool Group');
@@ -70,7 +71,7 @@ function createRegistryEntries(queryParams) {
   goog.tweak.registerBoolean('BoolTwo', 'Desc for 2', true);
   goog.tweak.endBooleanGroup();
 
-  goog.tweak.registerButton('Button', 'The Btn', goog.nullFunction);
+  goog.tweak.registerButton('Button', 'The Btn', goog.nullFunction, '<btn>');
 
   boolEntry = registry.getEntry('Bool');
   boolEntry2 = registry.getEntry('Bool2');
@@ -84,4 +85,5 @@ function createRegistryEntries(queryParams) {
   boolTwoEntry = registry.getEntry('BoolTwo');
   buttonEntry = registry.getEntry('Button');
 }
+
 
