@@ -102,6 +102,23 @@ function testMakeUrlQuery() {
       registry.makeUrlQuery(''));
 }
 
+function testOverrideDefaultValue_calledBefore() {
+  registry.overrideDefaultValue('b', true);
+  registry.overrideDefaultValue('b', false);
+  goog.tweak.registerBoolean('b', 'b desc');
+  var bEntry = registry.getEntry('b');
+  assertTrue('Default value should be true.', bEntry.getDefaultValue());
+  assertTrue('Value should be true.', bEntry.getValue());
+}
+
+function testOverrideDefaultValue_calledAfter() {
+  var exception = assertThrows('Should assert.', function() {
+    registry.overrideDefaultValue('Bool2', false);
+  });
+  assertTrue('Wrong exception',
+      exception instanceof goog.asserts.AssertionError);
+}
+
 </script>
 </body>
 </html>
