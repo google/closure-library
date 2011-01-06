@@ -61,22 +61,22 @@ function testFields() {
 
   // Check default values.
   assertTrue(0 == message.getOptionalInt32OrDefault());
-  assertTrue(1 == message.getOptionalInt64OrDefault());
+  assertTrue('1' == message.getOptionalInt64OrDefault());
   assertTrue(1.5 == message.getOptionalFloatOrDefault());
   assertTrue("" == message.getOptionalStringOrDefault());
   assertTrue("moo" == message.getOptionalBytesOrDefault());
 
   // Set the fields.
   message.setOptionalInt32(101);
-  message.setOptionalInt64(102);
+  message.setOptionalInt64('102');
   message.setOptionalUint32(103);
-  message.setOptionalUint64(104);
+  message.setOptionalUint64('104');
   message.setOptionalSint32(105);
-  message.setOptionalSint64(106);
+  message.setOptionalSint64('106');
   message.setOptionalFixed32(107);
-  message.setOptionalFixed64(108);
+  message.setOptionalFixed64('108');
   message.setOptionalSfixed32(109);
-  message.setOptionalSfixed64(110);
+  message.setOptionalSfixed64('110');
   message.setOptionalFloat(111.5);
   message.setOptionalDouble(112.5);
   message.setOptionalBool(true);
@@ -137,15 +137,15 @@ function testFields() {
 
   // Ensure that the fields have the values expected.
   assertEquals(101, message.getOptionalInt32());
-  assertEquals(102, message.getOptionalInt64());
+  assertEquals('102', message.getOptionalInt64());
   assertEquals(103, message.getOptionalUint32());
-  assertEquals(104, message.getOptionalUint64());
+  assertEquals('104', message.getOptionalUint64());
   assertEquals(105, message.getOptionalSint32());
-  assertEquals(106, message.getOptionalSint64());
+  assertEquals('106', message.getOptionalSint64());
   assertEquals(107, message.getOptionalFixed32());
-  assertEquals(108, message.getOptionalFixed64());
+  assertEquals('108', message.getOptionalFixed64());
   assertEquals(109, message.getOptionalSfixed32());
-  assertEquals(110, message.getOptionalSfixed64());
+  assertEquals('110', message.getOptionalSfixed64());
   assertEquals(111.5, message.getOptionalFloat());
   assertEquals(112.5, message.getOptionalDouble());
   assertEquals(true, message.getOptionalBool());
@@ -202,15 +202,15 @@ function testRepeated() {
 
   // Set the fields.
   message.addRepeatedInt32(101);
-  message.addRepeatedInt64(102);
+  message.addRepeatedInt64('102');
   message.addRepeatedUint32(103);
-  message.addRepeatedUint64(104);
+  message.addRepeatedUint64('104');
   message.addRepeatedSint32(105);
-  message.addRepeatedSint64(106);
+  message.addRepeatedSint64('106');
   message.addRepeatedFixed32(107);
-  message.addRepeatedFixed64(108);
+  message.addRepeatedFixed64('108');
   message.addRepeatedSfixed32(109);
-  message.addRepeatedSfixed64(110);
+  message.addRepeatedSfixed64('110');
   message.addRepeatedFloat(111.5);
   message.addRepeatedDouble(112.5);
   message.addRepeatedBool(true);
@@ -218,15 +218,15 @@ function testRepeated() {
   message.addRepeatedBytes('abcd');
 
   message.addRepeatedInt32(201);
-  message.addRepeatedInt64(202);
+  message.addRepeatedInt64('202');
   message.addRepeatedUint32(203);
-  message.addRepeatedUint64(204);
+  message.addRepeatedUint64('204');
   message.addRepeatedSint32(205);
-  message.addRepeatedSint64(206);
+  message.addRepeatedSint64('206');
   message.addRepeatedFixed32(207);
-  message.addRepeatedFixed64(208);
+  message.addRepeatedFixed64('208');
   message.addRepeatedSfixed32(209);
-  message.addRepeatedSfixed64(210);
+  message.addRepeatedSfixed64('210');
   message.addRepeatedFloat(211.5);
   message.addRepeatedDouble(212.5);
   message.addRepeatedBool(true);
@@ -297,15 +297,15 @@ function testRepeated() {
 
   // Ensure that the fields have the values expected.
   assertEquals(101, message.getRepeatedInt32(0));
-  assertEquals(102, message.getRepeatedInt64(0));
+  assertEquals('102', message.getRepeatedInt64(0));
   assertEquals(103, message.getRepeatedUint32(0));
-  assertEquals(104, message.getRepeatedUint64(0));
+  assertEquals('104', message.getRepeatedUint64(0));
   assertEquals(105, message.getRepeatedSint32(0));
-  assertEquals(106, message.getRepeatedSint64(0));
+  assertEquals('106', message.getRepeatedSint64(0));
   assertEquals(107, message.getRepeatedFixed32(0));
-  assertEquals(108, message.getRepeatedFixed64(0));
+  assertEquals('108', message.getRepeatedFixed64(0));
   assertEquals(109, message.getRepeatedSfixed32(0));
-  assertEquals(110, message.getRepeatedSfixed64(0));
+  assertEquals('110', message.getRepeatedSfixed64(0));
   assertEquals(111.5, message.getRepeatedFloat(0));
   assertEquals(112.5, message.getRepeatedDouble(0));
   assertEquals(true, message.getRepeatedBool(0));
@@ -317,15 +317,15 @@ function testRepeated() {
                message.getRepeatedNestedEnum(0));
 
   assertEquals(201, message.getRepeatedInt32(1));
-  assertEquals(202, message.getRepeatedInt64(1));
+  assertEquals('202', message.getRepeatedInt64(1));
   assertEquals(203, message.getRepeatedUint32(1));
-  assertEquals(204, message.getRepeatedUint64(1));
+  assertEquals('204', message.getRepeatedUint64(1));
   assertEquals(205, message.getRepeatedSint32(1));
-  assertEquals(206, message.getRepeatedSint64(1));
+  assertEquals('206', message.getRepeatedSint64(1));
   assertEquals(207, message.getRepeatedFixed32(1));
-  assertEquals(208, message.getRepeatedFixed64(1));
+  assertEquals('208', message.getRepeatedFixed64(1));
   assertEquals(209, message.getRepeatedSfixed32(1));
-  assertEquals(210, message.getRepeatedSfixed64(1));
+  assertEquals('210', message.getRepeatedSfixed64(1));
   assertEquals(211.5, message.getRepeatedFloat(1));
   assertEquals(212.5, message.getRepeatedDouble(1));
   assertEquals(true, message.getRepeatedBool(1));
@@ -519,15 +519,15 @@ function testFieldDescriptor() {
   // Check the field native types.
   // Singular.
   assertEquals(Number, fields[0].getNativeType());
-  assertEquals(Number, fields[1].getNativeType());
+  assertEquals(String, fields[1].getNativeType()); // 64 bit values are strings.
   assertEquals(Number, fields[2].getNativeType());
-  assertEquals(Number, fields[3].getNativeType());
+  assertEquals(String, fields[3].getNativeType());
   assertEquals(Number, fields[4].getNativeType());
-  assertEquals(Number, fields[5].getNativeType());
+  assertEquals(String, fields[5].getNativeType());
   assertEquals(Number, fields[6].getNativeType());
-  assertEquals(Number, fields[7].getNativeType());
+  assertEquals(String, fields[7].getNativeType());
   assertEquals(Number, fields[8].getNativeType());
-  assertEquals(Number, fields[9].getNativeType());
+  assertEquals(String, fields[9].getNativeType());
   assertEquals(Number, fields[10].getNativeType());
   assertEquals(Number, fields[11].getNativeType());
 
@@ -542,15 +542,15 @@ function testFieldDescriptor() {
 
   // Repeated.
   assertEquals(Number, fields[18].getNativeType());
-  assertEquals(Number, fields[19].getNativeType());
+  assertEquals(String, fields[19].getNativeType());
   assertEquals(Number, fields[20].getNativeType());
-  assertEquals(Number, fields[21].getNativeType());
+  assertEquals(String, fields[21].getNativeType());
   assertEquals(Number, fields[22].getNativeType());
-  assertEquals(Number, fields[23].getNativeType());
+  assertEquals(String, fields[23].getNativeType());
   assertEquals(Number, fields[24].getNativeType());
-  assertEquals(Number, fields[25].getNativeType());
+  assertEquals(String, fields[25].getNativeType());
   assertEquals(Number, fields[26].getNativeType());
-  assertEquals(Number, fields[27].getNativeType());
+  assertEquals(String, fields[27].getNativeType());
   assertEquals(Number, fields[28].getNativeType());
   assertEquals(Number, fields[29].getNativeType());
 
@@ -611,20 +611,20 @@ function testReflection() {
   var descriptor = message.getDescriptor();
   var optionalInt = descriptor.findFieldByName('optional_int32');
   var optionalString = descriptor.findFieldByName('optional_string');
-  var repeatedInt = descriptor.findFieldByName('repeated_int64');
+  var repeatedInt64 = descriptor.findFieldByName('repeated_int64');
   var optionalWrong = descriptor.findFieldByName('foo_bar');
 
   assertFalse(optionalInt == null);
   assertFalse(optionalString == null);
-  assertFalse(repeatedInt == null);
+  assertFalse(repeatedInt64 == null);
   assertTrue(optionalWrong == null);
 
   // Check to ensure the fields are empty.
   assertFalse(message.has(optionalInt));
   assertFalse(message.has(optionalString));
-  assertFalse(message.has(repeatedInt));
+  assertFalse(message.has(repeatedInt64));
 
-  assertEquals(0, message.arrayOf(repeatedInt).length);
+  assertEquals(0, message.arrayOf(repeatedInt64).length);
 
   // Check default values.
   // Stupid assertion framework does not think 0 == (new Number()),
@@ -637,8 +637,8 @@ function testReflection() {
   // Set some of the fields.
   message.set(optionalString, 'hello!');
 
-  message.add(repeatedInt, 101);
-  message.add(repeatedInt, 102);
+  message.add(repeatedInt64, '101');
+  message.add(repeatedInt64, '102');
 
   // Check the fields.
   assertFalse(message.has(optionalInt));
@@ -646,18 +646,18 @@ function testReflection() {
   assertTrue(message.has(optionalString));
   assertTrue(message.hasOptionalString());
 
-  assertTrue(message.has(repeatedInt));
+  assertTrue(message.has(repeatedInt64));
   assertTrue(message.hasRepeatedInt64());
 
   // Check the values.
   assertEquals('hello!', message.get(optionalString));
   assertEquals('hello!', message.getOptionalString());
 
-  assertEquals(101, message.get(repeatedInt, 0));
-  assertEquals(102, message.get(repeatedInt, 1));
+  assertEquals('101', message.get(repeatedInt64, 0));
+  assertEquals('102', message.get(repeatedInt64, 1));
 
-  assertEquals(101, message.getRepeatedInt64(0));
-  assertEquals(102, message.getRepeatedInt64(1));
+  assertEquals('101', message.getRepeatedInt64(0));
+  assertEquals('102', message.getRepeatedInt64(1));
 
   // Check the count.
   assertEquals(0, message.countOf(optionalInt));
@@ -665,14 +665,17 @@ function testReflection() {
   assertEquals(1, message.countOf(optionalString));
   assertEquals(1, message.optionalStringCount());
 
-  assertEquals(2, message.countOf(repeatedInt));
+  assertEquals(2, message.countOf(repeatedInt64));
   assertEquals(2, message.repeatedInt64Count());
 
   // Check the array.
-  assertEquals(2, message.arrayOf(repeatedInt).length);
+  assertEquals(2, message.arrayOf(repeatedInt64).length);
 
-  assertEquals(message.get(repeatedInt, 0), message.arrayOf(repeatedInt)[0]);
-  assertEquals(message.get(repeatedInt, 1), message.arrayOf(repeatedInt)[1]);
+  assertEquals(message.get(repeatedInt64, 0),
+      message.arrayOf(repeatedInt64)[0]);
+
+  assertEquals(message.get(repeatedInt64, 1),
+      message.arrayOf(repeatedInt64)[1]);
 }
 </script>
 </body>

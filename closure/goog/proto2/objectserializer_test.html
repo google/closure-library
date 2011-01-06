@@ -27,15 +27,15 @@ function testSerialization() {
   // Set the fields.
   // Singular.
   message.setOptionalInt32(101);
-  message.setOptionalInt64(102);
+  message.setOptionalInt64('102');
   message.setOptionalUint32(103);
-  message.setOptionalUint64(104);
+  message.setOptionalUint64('104');
   message.setOptionalSint32(105);
-  message.setOptionalSint64(106);
+  message.setOptionalSint64('106');
   message.setOptionalFixed32(107);
-  message.setOptionalFixed64(108);
+  message.setOptionalFixed64('108');
   message.setOptionalSfixed32(109);
-  message.setOptionalSfixed64(110);
+  message.setOptionalSfixed64('110');
   message.setOptionalFloat(111.5);
   message.setOptionalDouble(112.5);
   message.setOptionalBool(true);
@@ -63,15 +63,15 @@ function testSerialization() {
 
   // Assert that everything serialized properly.
   assertEquals(101, simplified[1]);
-  assertEquals(102, simplified[2]);
+  assertEquals('102', simplified[2]);
   assertEquals(103, simplified[3]);
-  assertEquals(104, simplified[4]);
+  assertEquals('104', simplified[4]);
   assertEquals(105, simplified[5]);
-  assertEquals(106, simplified[6]);
+  assertEquals('106', simplified[6]);
   assertEquals(107, simplified[7]);
-  assertEquals(108, simplified[8]);
+  assertEquals('108', simplified[8]);
   assertEquals(109, simplified[9]);
-  assertEquals(110, simplified[10]);
+  assertEquals('110', simplified[10]);
   assertEquals(111.5, simplified[11]);
   assertEquals(112.5, simplified[12]);
   assertEquals(true, simplified[13]);
@@ -91,15 +91,15 @@ function testSerialization() {
 
   // Assert that everything serialized properly.
   assertEquals(101, simplified['optional_int32']);
-  assertEquals(102, simplified['optional_int64']);
+  assertEquals('102', simplified['optional_int64']);
   assertEquals(103, simplified['optional_uint32']);
-  assertEquals(104, simplified['optional_uint64']);
+  assertEquals('104', simplified['optional_uint64']);
   assertEquals(105, simplified['optional_sint32']);
-  assertEquals(106, simplified['optional_sint64']);
+  assertEquals('106', simplified['optional_sint64']);
   assertEquals(107, simplified['optional_fixed32']);
-  assertEquals(108, simplified['optional_fixed64']);
+  assertEquals('108', simplified['optional_fixed64']);
   assertEquals(109, simplified['optional_sfixed32']);
-  assertEquals(110, simplified['optional_sfixed64']);
+  assertEquals('110', simplified['optional_sfixed64']);
   assertEquals(111.5, simplified['optional_float']);
   assertEquals(112.5, simplified['optional_double']);
   assertEquals(true, simplified['optional_bool']);
@@ -123,7 +123,7 @@ function testSerializationOfUnknown() {
   // Set the fields.
   // Known.
   message.setOptionalInt32(101);
-  message.setOptionalInt64(102);
+  message.setOptionalInt64('102');
   message.addRepeatedInt32(201);
   message.addRepeatedInt32(202);
 
@@ -135,7 +135,7 @@ function testSerializationOfUnknown() {
   var simplified = new goog.proto2.ObjectSerializer().serialize(message);
 
   assertEquals(101, simplified['1']);
-  assertEquals(102, simplified['2']);
+  assertEquals('102', simplified['2']);
 
   assertEquals(201, simplified['31'][0]);
   assertEquals(202, simplified['31'][1]);
@@ -147,7 +147,7 @@ function testSerializationOfUnknown() {
 function testDeserializationOfUnknown() {
   var simplified = {
     1: 101,
-    2: 102,
+    2: '102',
     1000: 103,
     1001: 104
   };
@@ -162,7 +162,7 @@ function testDeserializationOfUnknown() {
   assertTrue(message.hasOptionalInt64());
 
   assertEquals(101, message.getOptionalInt32());
-  assertEquals(102, message.getOptionalInt64());
+  assertEquals('102', message.getOptionalInt64());
 
   var count = 0;
 
@@ -244,15 +244,15 @@ function testDeserializationRepeated() {
 function testDeserialization() {
   var simplified = {
     1: 101,
-    2: 102,
+    2: '102',
     3: 103,
-    4: 104,
+    4: '104',
     5: 105,
-    6: 106,
+    6: '106',
     7: 107,
-    8: 108,
+    8: '108',
     9: 109,
-    10: 110,
+    10: '110',
     11: 111.5,
     12: 112.5,
     13: true,
@@ -309,15 +309,15 @@ function testDeserialization() {
   assertEquals(1, message.optionalNestedEnumCount());
 
   assertEquals(101, message.getOptionalInt32());
-  assertEquals(102, message.getOptionalInt64());
+  assertEquals('102', message.getOptionalInt64());
   assertEquals(103, message.getOptionalUint32());
-  assertEquals(104, message.getOptionalUint64());
+  assertEquals('104', message.getOptionalUint64());
   assertEquals(105, message.getOptionalSint32());
-  assertEquals(106, message.getOptionalSint64());
+  assertEquals('106', message.getOptionalSint64());
   assertEquals(107, message.getOptionalFixed32());
-  assertEquals(108, message.getOptionalFixed64());
+  assertEquals('108', message.getOptionalFixed64());
   assertEquals(109, message.getOptionalSfixed32());
-  assertEquals(110, message.getOptionalSfixed64());
+  assertEquals('110', message.getOptionalSfixed64());
   assertEquals(111.5, message.getOptionalFloat());
   assertEquals(112.5, message.getOptionalDouble());
   assertEquals(true, message.getOptionalBool());

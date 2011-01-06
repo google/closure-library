@@ -27,15 +27,15 @@ function testSerializationAndDeserialization() {
   // Set the fields.
   // Singular.
   message.setOptionalInt32(101);
-  message.setOptionalInt64(102);
+  message.setOptionalInt64('102');
   message.setOptionalUint32(103);
-  message.setOptionalUint64(104);
+  message.setOptionalUint64('104');
   message.setOptionalSint32(105);
-  message.setOptionalSint64(106);
+  message.setOptionalSint64('106');
   message.setOptionalFixed32(107);
-  message.setOptionalFixed64(108);
+  message.setOptionalFixed64('108');
   message.setOptionalSfixed32(109);
-  message.setOptionalSfixed64(110);
+  message.setOptionalSfixed64('110');
   message.setOptionalFloat(111.5);
   message.setOptionalDouble(112.5);
   message.setOptionalBool(true);
@@ -71,15 +71,15 @@ function testSerializationAndDeserialization() {
 
   // Assert that everything serialized properly.
   assertEquals(101, pblite[1]);
-  assertEquals(102, pblite[2]);
+  assertEquals('102', pblite[2]);
   assertEquals(103, pblite[3]);
-  assertEquals(104, pblite[4]);
+  assertEquals('104', pblite[4]);
   assertEquals(105, pblite[5]);
-  assertEquals(106, pblite[6]);
+  assertEquals('106', pblite[6]);
   assertEquals(107, pblite[7]);
-  assertEquals(108, pblite[8]);
+  assertEquals('108', pblite[8]);
   assertEquals(109, pblite[9]);
-  assertEquals(110, pblite[10]);
+  assertEquals('110', pblite[10]);
   assertEquals(111.5, pblite[11]);
   assertEquals(112.5, pblite[12]);
   assertEquals(1, pblite[13]); // true is serialized as 1
@@ -116,15 +116,15 @@ function testDeserializationFromExternalSource() {
   var pblite = [
     , // 0
     101, // 1
-    102, // 2
+    '102', // 2
     103, // 3
-    104, // 4
+    '104', // 4
     105, // 5
-    106, // 6
+    '106', // 6
     107, // 7
-    108, // 8
+    '108', // 8
     109, // 9
-    110, // 10
+    '110', // 10
     111.5, // 11
     112.5, // 12
     1, // 13
@@ -237,15 +237,15 @@ function assertDeserializationMatches(messageCopy) {
   assertEquals(0, messageCopy.repeatedNestedEnumCount());
 
   assertEquals(101, messageCopy.getOptionalInt32());
-  assertEquals(102, messageCopy.getOptionalInt64());
+  assertEquals('102', messageCopy.getOptionalInt64());
   assertEquals(103, messageCopy.getOptionalUint32());
-  assertEquals(104, messageCopy.getOptionalUint64());
+  assertEquals('104', messageCopy.getOptionalUint64());
   assertEquals(105, messageCopy.getOptionalSint32());
-  assertEquals(106, messageCopy.getOptionalSint64());
+  assertEquals('106', messageCopy.getOptionalSint64());
   assertEquals(107, messageCopy.getOptionalFixed32());
-  assertEquals(108, messageCopy.getOptionalFixed64());
+  assertEquals('108', messageCopy.getOptionalFixed64());
   assertEquals(109, messageCopy.getOptionalSfixed32());
-  assertEquals(110, messageCopy.getOptionalSfixed64());
+  assertEquals('110', messageCopy.getOptionalSfixed64());
   assertEquals(111.5, messageCopy.getOptionalFloat());
   assertEquals(112.5, messageCopy.getOptionalDouble());
   assertEquals(true, messageCopy.getOptionalBool());

@@ -77,12 +77,12 @@ function testEqualsWithRepeatedInt32Fields() {
 function testEqualsWithDefaultValue() {
   var message1 = new proto2.TestAllTypes();
   var message2 = new proto2.TestAllTypes();
-  message1.setOptionalInt64(1);
+  message1.setOptionalInt64('1');
 
   assertEquals('message1.getOptionalInt64OrDefault should return 1',
-      1, message1.getOptionalInt64OrDefault());
+      '1', message1.getOptionalInt64OrDefault());
   assertEquals('message2.getOptionalInt64OrDefault should return 1 too',
-      1, message2.getOptionalInt64OrDefault());
+      '1', message2.getOptionalInt64OrDefault());
   assertTrue('message1.hasOptionalInt64() should be true',
       message1.hasOptionalInt64());
   assertFalse('message2.hasOptionalInt64() should be false',
@@ -240,7 +240,7 @@ function testCopyFromFlatMessage() {
 
   var source = new proto2.TestAllTypes();
   source.setOptionalInt32(32);
-  source.setOptionalInt64(64);
+  source.setOptionalInt64('64');
   source.addRepeatedInt32(32);
 
   var target = new proto2.TestAllTypes();
@@ -288,7 +288,7 @@ function testInitDefaultsWithEmptyMessage() {
   assertTrue('int32 field is set', message.hasOptionalInt32());
   assertEquals('value of the int32 field', 0, message.getOptionalInt32());
   assertTrue('int64 [default=1] field is set', message.hasOptionalInt64());
-  assertEquals('value of the int64 field', 1, message.getOptionalInt64());
+  assertEquals('value of the int64 field', '1', message.getOptionalInt64());
   assertTrue('int32 inside nested message is set',
       message.getOptionalNestedMessage().hasB());
   assertEquals('value of the int32 field inside the nested message', 0,
@@ -298,7 +298,7 @@ function testInitDefaultsWithEmptyMessage() {
 function testInitDefaultsWithNonEmptyMessage() {
   var message = new proto2.TestAllTypes();
   message.setOptionalInt32(32);
-  message.setOptionalInt64(64);
+  message.setOptionalInt64('64');
   message.setOptionalgroup(new proto2.TestAllTypes.OptionalGroup());
   var nested1 = new proto2.TestAllTypes.NestedMessage();
   nested1.setB(66);
@@ -311,7 +311,7 @@ function testInitDefaultsWithNonEmptyMessage() {
 
   message.initDefaults(true);
   assertEquals('int32 field is unchanged', 32, message.getOptionalInt32());
-  assertEquals('int64 [default=1] field is unchanged', 64,
+  assertEquals('int64 [default=1] field is unchanged', '64',
       message.getOptionalInt64());
   assertTrue('bool field is initialized', message.hasOptionalBool());
   assertFalse('value of the bool field', message.getOptionalBool());
