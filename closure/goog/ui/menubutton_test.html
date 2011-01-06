@@ -412,7 +412,11 @@ function testRenderMenuAsSibling() {
   menuButton.setRenderMenuAsSibling(true);
   menuButton.addItem(new goog.ui.MenuItem('Menu item 1'));
   menuButton.addItem(new goog.ui.MenuItem('Menu item 2'));
-  menuButton.render();
+  // By default the menu is rendered into the top level dom and the button
+  // is rendered into whatever parent we provide.  If we don't provide a
+  // parent then we aren't really testing anything, since both would be, by
+  // default, rendered into the top level dom, and therefore siblings.
+  menuButton.render(goog.dom.getElement('siblingTest'));
   menuButton.setOpen(true);
   assertEquals(
       menuButton.getElement().parentNode,
@@ -422,6 +426,7 @@ function testRenderMenuAsSibling() {
 <p>
   Here's a menubutton defined in markup:
 </p>
+<div id="siblingTest"></div>
 <div id="demoMenuButton" class="goog-menu-button">
   <div id="demoMenu" class="goog-menu">
     <div id='menuItem1' class="goog-menuitem">Annual Report.pdf</div>

@@ -637,7 +637,7 @@ goog.ui.MenuButton.prototype.setOpen = function(open) {
       if (!this.menu_.isInDocument()) {
         if (this.renderMenuAsSibling_) {
           this.menu_.render(/** @type {?Element} */ (
-              this.getElement().parentNode_));
+              this.getElement().parentNode));
         } else {
           this.menu_.render();
         }
