@@ -43,24 +43,22 @@ goog.proto2.Message = function() {
   // Therefore, we retrieve it via the constructor.
 
   /**
-   * Stores the information (i.e. metadata) about
-   * this message.
-   * @type {goog.proto2.Descriptor}
+   * Stores the information (i.e. metadata) about this message.
+   * @type {!goog.proto2.Descriptor}
    * @private
    */
   this.descriptor_ = this.constructor.descriptor_;
 
   /**
-   * Stores the field information (i.e. metadata)
-   * about this message.
-   * @type {Object}
+   * Stores the field information (i.e. metadata) about this message.
+   * @type {Object.<number, !goog.proto2.FieldDescriptor>}
    * @private
    */
   this.fields_ = this.descriptor_.getFieldsMap();
 
   /**
    * The lazy deserializer for this message instance, if any.
-   * @type {goog.proto2.LazyDeserializer?}
+   * @type {goog.proto2.LazyDeserializer}
    * @private
    */
   this.lazyDeserializer_ = null;
@@ -124,7 +122,7 @@ goog.proto2.Message.prototype.initializeForLazyDeserializer = function(
  * Sets the value of an unknown field, by tag.
  *
  * @param {number} tag The tag of an unknown field (must be >= 1).
- * @param {Object} value The value for that unknown field.
+ * @param {*} value The value for that unknown field.
  */
 goog.proto2.Message.prototype.setUnknown = function(tag, value) {
   goog.proto2.Util.assert(!this.fields_[tag],
@@ -186,7 +184,7 @@ goog.proto2.Message.prototype.has = function(field) {
  * @param {goog.proto2.FieldDescriptor} field The field for which to
  *     return the values.
  *
- * @return {Array.<*>} The values found.
+ * @return {!Array} The values found.
  */
 goog.proto2.Message.prototype.arrayOf = function(field) {
   goog.proto2.Util.assert(
@@ -304,8 +302,9 @@ goog.proto2.Message.prototype.clear = function(field) {
 
 /**
  * Compares this message with another one ignoring the unknown fields.
- * @param {goog.proto2.Message|undefined} other The other message.
- * @return {boolean} Whether they are equal.
+ * @param {*} other The other message.
+ * @return {boolean} Whether they are equal. Returns false if the {@code other}
+ *     argument is a different type of message or not a message.
  */
 goog.proto2.Message.prototype.equals = function(other) {
   if (!other || this.constructor != other.constructor) {
@@ -433,7 +432,7 @@ goog.proto2.Message.prototype.initDefaults = function(simpleFieldsToo) {
  * such field exists, throws an exception.
  *
  * @param {number} tag The field's tag index.
- * @return {goog.proto2.FieldDescriptor} The descriptor for the field.
+ * @return {!goog.proto2.FieldDescriptor} The descriptor for the field.
  * @private
  */
 goog.proto2.Message.prototype.getFieldByTag_ = function(tag) {
@@ -547,7 +546,7 @@ goog.proto2.Message.prototype.get$ValueOrDefault = function(tag, opt_index) {
  *
  * @param {number} tag The field's tag index.
  *
- * @return {Array.<Object>} The values found. If none, returns an empty array.
+ * @return {!Array} The values found. If none, returns an empty array.
  */
 goog.proto2.Message.prototype.array$Values = function(tag) {
   goog.proto2.Util.assert(this.getFieldByTag_(tag).isRepeated(),
@@ -558,13 +557,7 @@ goog.proto2.Message.prototype.array$Values = function(tag) {
   // Ensure that the field is deserialized.
   this.lazyDeserialize_(field);
 
-  var valuesArray = this.values_[tag];
-
-  if (!valuesArray) {
-    return [];
-  }
-
-  return valuesArray;
+  return this.values_[tag] || [];
 };
 
 
@@ -644,7 +637,7 @@ goog.proto2.Message.prototype.add$Value = function(tag, value) {
  * Ensures that the value being assigned to the given field
  * is valid.
  *
- * @param {goog.proto2.FieldDescriptor} field The field being assigned.
+ * @param {!goog.proto2.FieldDescriptor} field The field being assigned.
  * @param {*} value The value being assigned.
  * @private
  */
