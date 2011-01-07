@@ -103,8 +103,8 @@ function testMakeUrlQuery() {
 }
 
 function testOverrideDefaultValue_calledBefore() {
-  registry.overrideDefaultValue('b', true);
   registry.overrideDefaultValue('b', false);
+  registry.overrideDefaultValue('b', true);
   goog.tweak.registerBoolean('b', 'b desc');
   var bEntry = registry.getEntry('b');
   assertTrue('Default value should be true.', bEntry.getDefaultValue());

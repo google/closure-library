@@ -282,9 +282,8 @@ goog.tweak.registerButton = function(id, description, callback, opt_label) {
 
 /**
  * Sets a default value to use for the given tweak instead of the one passed
- * to the register* function. This function may be called multiple times for the
- * same tweak, but only the first call will take effect. This function must be
- * called before the tweak is registered.
+ * to the register* function. This function must be called before the tweak is
+ * registered.
  * @param {string} id The unique string that identifies the entry.
  * @param {string|number|boolean} value The new default value for the tweak.
  */

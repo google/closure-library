@@ -284,9 +284,8 @@ goog.tweak.Registry.prototype.makeUrlQuery =
 
 /**
  * Sets a default value to use for the given tweak instead of the one passed
- * to the register* function. This function may be called multiple times for the
- * same tweak, but only the first call will take effect. This function must be
- * called before the tweak is registered.
+ * to the register* function. This function must be called before the tweak is
+ * registered.
  * @param {string} id The unique string that identifies the entry.
  * @param {string|number|boolean} value The replacement value to be used as the
  *     default value for the setting.
@@ -295,8 +294,6 @@ goog.tweak.Registry.prototype.overrideDefaultValue = function(id, value) {
   goog.asserts.assert(!this.hasEntry(id),
       'goog.tweak.overrideDefaultValue must be called before the tweak is ' +
       'registered. Tweak: %s', id);
-  if (!(id in this.defaultValueOverrides_)) {
-    this.defaultValueOverrides_[id] = value;
-  }
+  this.defaultValueOverrides_[id] = value;
 };
 
