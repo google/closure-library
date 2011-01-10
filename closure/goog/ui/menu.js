@@ -114,6 +114,17 @@ goog.ui.Menu.CSS_CLASS = goog.ui.MenuRenderer.CSS_CLASS;
 
 
 /**
+ * Mousedown event that caused this menu to be made visible. Used to prevent the
+ * consequent mouseup event due to a simple click from activating a menu item
+ * immediately. Considered protected; should only be used within this package
+ * or by subclasses.
+ * @type {goog.events.Event|undefined}
+ * @protected
+ */
+goog.ui.Menu.prototype.openingEvent;
+
+
+/**
  * Whether the menu can move the focus to it's key event target when it is
  * shown.  Default = true
  * @type {boolean}
@@ -329,14 +340,19 @@ goog.ui.Menu.prototype.getAllowHighlightDisabled = function() {
 };
 
 
-/** @inheritDoc */
-goog.ui.Menu.prototype.setVisible = function(show, opt_force) {
+/**
+ * @inheritDoc
+ * @param {goog.events.Event=} opt_e Mousedown event that caused this menu to
+ *     be made visible (ignored if show is false).
+ */
+goog.ui.Menu.prototype.setVisible = function(show, opt_force, opt_e) {
   var visibilityChanged = goog.ui.Menu.superClass_.setVisible.call(this, show,
       opt_force);
   if (visibilityChanged && show && this.isInDocument() &&
       this.allowAutoFocus_) {
     this.getKeyEventTarget().focus();
   }
+  this.openingEvent = show ? opt_e : null;
   return visibilityChanged;
 };
 
