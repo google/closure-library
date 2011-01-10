@@ -119,6 +119,7 @@ goog.ui.Menu.CSS_CLASS = goog.ui.MenuRenderer.CSS_CLASS;
  * immediately. Considered protected; should only be used within this package
  * or by subclasses.
  * @type {goog.events.Event|undefined}
+ * @protected
  */
 goog.ui.Menu.prototype.openingEvent;
 
