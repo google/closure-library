@@ -119,24 +119,6 @@ goog.ui.MenuItem.prototype.getCaption = function() {
 };
 
 
-/** @inheritDoc */
-goog.ui.MenuItem.prototype.handleMouseUp = function(e) {
-  var parentMenu = /** @type {goog.ui.Menu} */ (this.getParent());
-  var oe = parentMenu.openingEvent;
-  if (oe && e.clientX == oe.clientX && e.clientY == oe.clientY) {
-    // This menu was opened by a mousedown and we're handling the consequent
-    // mouseup. The coords haven't changed, meaning this was a simple click, not
-    // a click and drag. Don't do the usual behavior because the menu just
-    // popped up under the mouse and the user didn't mean to activate this item.
-    // But clear out the saved opening event so that if the user clicks again
-    // without moving the mouse activation will work.
-    parentMenu.openingEvent = null;
-  } else {
-    goog.base(this, 'handleMouseUp', e);
-  }
-};
-
-
 // Register a decorator factory function for goog.ui.MenuItems.
 goog.ui.registry.setDecoratorByClassName(goog.ui.MenuItemRenderer.CSS_CLASS,
     function() {
