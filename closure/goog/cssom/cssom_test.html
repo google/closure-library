@@ -14,9 +14,9 @@ See the COPYING file for details.
     <script src="../base.js"></script>
     <script>
       goog.require('goog.array');
+      goog.require('goog.cssom');
       goog.require('goog.testing.jsunit');
       goog.require('goog.userAgent');
-      goog.require('goog.cssom');
     </script>
   </head>
 
@@ -138,7 +138,7 @@ See the COPYING file for details.
           // Opera inserts the CSSRule to the first position. And fixCssText
           // is also needed to clean up whitespace.
           if (goog.userAgent.OPERA) {
-            assertEquals(newCssText + ' ' + cssText, 
+            assertEquals(newCssText + ' ' + cssText,
                          fixCssTextForIe(allCssText));
           } else {
             assertEquals(cssText + ' ' + newCssText,
@@ -259,6 +259,23 @@ See the COPYING file for details.
         var ruleIndex = goog.userAgent.IE ? 1 : 2;
         assertEquals(ruleIndex,
             goog.cssom.getCssRuleIndexInParentStyleSheet(cssRule));
+      }
+
+      function testGetCssRuleIndexInParentStyleSheetNonStyleRule() {
+        // IE's styleSheet.rules only contain CSSStyleRules.
+        if (!goog.userAgent.IE) {
+          var styleSheets = goog.cssom.getAllCssStyleSheets();
+          var styleSheet = styleSheets[3];
+          var newCssRule = '@media print { .css-nonStyle { display: block; } }';
+          goog.cssom.addCssRule(styleSheet, newCssRule);
+          var rules = styleSheet.rules || styleSheet.cssRules;
+          var cssRule = rules[rules.length - 1];
+          assertEquals(goog.cssom.CssRuleType.MEDIA, cssRule.type);
+          // Make sure we don't throw an exception.
+          goog.cssom.getCssRuleIndexInParentStyleSheet(cssRule, styleSheet);
+          // Remove the added rule.
+          goog.cssom.removeCssRule(styleSheet, rules.length - 1);
+        }
       }
 
       // Tests the scenario where we have a known stylesheet and index.
