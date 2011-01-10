@@ -336,6 +336,7 @@ goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
   'width': 'width',
   'usemap': 'useMap',
   'frameborder': 'frameBorder',
+  'maxlength': 'maxLength',
   'type': 'type'
 };
 
