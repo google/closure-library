@@ -86,9 +86,12 @@ function tearDown() {
  * Open the menu and click on the menu item inside.
  */
 function testBasicButtonBehavior() {
+  var coords1 = new goog.math.Coordinate(1, 1);
+  var coords2 = new goog.math.Coordinate(2, 2);
+
   var node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  goog.testing.events.fireClickSequence(node);
+  goog.testing.events.fireClickSequence(node, undefined, coords1);
 
   assertTrue('Menu must open after click', menuButton.isOpen());
 
@@ -102,7 +105,7 @@ function testBasicButtonBehavior() {
     });
 
   var menuItem2 = goog.dom.getElement('menuItem2');
-  goog.testing.events.fireClickSequence(menuItem2);
+  goog.testing.events.fireClickSequence(menuItem2, undefined, coords2);
   assertFalse('Menu must close on clicking when open', menuButton.isOpen());
   assertEquals('Number of menu items clicked should be 1', 1, menuItemClicked);
   assertEquals('menuItem2 should be the last menuitem clicked', menuItem2,
@@ -136,17 +139,20 @@ function testHighlightItemBehavior() {
  * the document once, to test proper setup/teardown behavior of MenuButton.
  */
 function testButtonAfterEnterDocument() {
+  var coords1 = new goog.math.Coordinate(1, 1);
+  var coords2 = new goog.math.Coordinate(2, 2);
+
   var node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
   menuButton.exitDocument();
   menuButton.enterDocument();
 
-  goog.testing.events.fireClickSequence(node);
+  goog.testing.events.fireClickSequence(node, undefined, coords1);
   assertTrue('Menu must open after click', menuButton.isOpen());
 
   var menuItem2 = goog.dom.getElement('menuItem2');
-  goog.testing.events.fireClickSequence(menuItem2);
+  goog.testing.events.fireClickSequence(menuItem2, undefined, coords2);
   assertFalse('Menu must close on clicking when open', menuButton.isOpen());
 }
 
