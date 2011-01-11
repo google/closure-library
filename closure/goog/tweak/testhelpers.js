@@ -39,10 +39,13 @@ var buttonEntry;
  * Creates a registry with some entries in it.
  * @param {string} queryParams The query parameter string to use for the
  *     registry.
+ * @param {!Object.<string|number|boolean>=} opt_compilerOverrides Compiler
+ *     overrides.
  */
-function createRegistryEntries(queryParams) {
+function createRegistryEntries(queryParams, opt_compilerOverrides) {
   // Initialize the registry with the given query string.
-  var registry = new goog.tweak.Registry(queryParams);
+  var registry =
+      new goog.tweak.Registry(queryParams, opt_compilerOverrides || {});
   goog.tweak.registry_ = registry;
 
   goog.tweak.registerBoolean('Bool', 'The bool');

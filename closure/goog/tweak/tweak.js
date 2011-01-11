@@ -33,6 +33,18 @@ goog.require('goog.tweak.StringSetting');
 
 
 /**
+ * Calls to this function are overridden by the compiler by the processTweaks
+ * pass. It returns the overrides to default values for tweaks set by compiler
+ * options.
+ * @return {!Object.<number|string|boolean>} A map of tweakId -> defaultValue.
+ * @private
+ */
+goog.tweak.getCompilerOverrides_ = function() {
+  return {};
+};
+
+
+/**
  * The global reference to the registry, if it exists.
  * @type {goog.tweak.Registry}
  * @private
@@ -56,8 +68,9 @@ goog.tweak.activeBooleanGroup_ = null;
 goog.tweak.getRegistry = function() {
   if (!goog.tweak.STRIP_TWEAKS) {
     if (!goog.tweak.registry_) {
-      goog.tweak.registry_ =
-          new goog.tweak.Registry();
+      var queryString = window.location.search;
+      var overrides = goog.tweak.getCompilerOverrides_();
+      goog.tweak.registry_ = new goog.tweak.Registry(queryString, overrides);
     }
     return goog.tweak.registry_;
   }
