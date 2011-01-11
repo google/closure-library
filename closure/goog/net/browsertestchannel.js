@@ -392,11 +392,7 @@ goog.net.BrowserTestChannel.prototype.onRequestData =
           goog.net.ChannelRequest.Error.BAD_DATA);
       return;
     }
-    if (this.channel_.getAllowHostPrefix()) {
-      this.hostPrefix_ = respArray[0];
-    } else {
-      this.hostPrefix_ = null;
-    }
+    this.hostPrefix_ = this.channel_.correctHostPrefix(respArray[0]);
     this.blockedPrefix_ = respArray[1];
   } else if (this.state_ ==
              goog.net.BrowserTestChannel.State_.CONNECTION_TESTING) {

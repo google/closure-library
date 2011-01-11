@@ -276,11 +276,11 @@ function testFormatArrayOfMaps() {
 }
 
 
-function connect(opt_serverVersion) {
+function connect(opt_serverVersion, opt_hostPrefix) {
   browserChannel.connect('/test', '/bind', null);
   mockClock.tick(0);
   completeTestConnection();
-  completeForwardChannel(opt_serverVersion);
+  completeForwardChannel(opt_serverVersion, opt_hostPrefix);
   completeBackChannel();
 }
 
@@ -325,12 +325,11 @@ function completeBackTestConnection() {
 }
 
 
-function completeForwardChannel(opt_serverVersion) {
-  var responseData = '[[0,["c","1234567890ABCDEF",null]]]'
-  if (opt_serverVersion) {
-    responseData = '[[0,["c","1234567890ABCDEF",null,' + opt_serverVersion
-        + ']]]';
-  }
+function completeForwardChannel(opt_serverVersion, opt_hostPrefix) {
+  var responseData = '[[0,["c","1234567890ABCDEF",' +
+      (opt_hostPrefix ? '"' + opt_hostPrefix + '"' : 'null') +
+      (opt_serverVersion ? ',' + opt_serverVersion : '') +
+      ']]]';
   browserChannel.onRequestData(
       browserChannel.forwardChannelRequest_,
       responseData);
@@ -471,6 +470,27 @@ function testConnect() {
 function testConnect_backChannelEstablished() {
   connect();
   assertHasBackChannel();
+}
+
+function testConnect_withServerHostPrefix() {
+  connect(undefined, 'serverHostPrefix');
+  assertEquals('serverHostPrefix', browserChannel.hostPrefix_);
+}
+
+function testConnect_withClientHostPrefix() {
+  handler.correctHostPrefix = function(hostPrefix) {
+    return 'clientHostPrefix';
+  }
+  connect();
+  assertEquals('clientHostPrefix', browserChannel.hostPrefix_);
+}
+
+function testConnect_overrideServerHostPrefix() {
+  handler.correctHostPrefix = function(hostPrefix) {
+    return 'clientHostPrefix';
+  }
+  connect(undefined, 'serverHostPrefix');
+  assertEquals('clientHostPrefix', browserChannel.hostPrefix_);
 }
 
 function testConnect_withServerVersion() {
