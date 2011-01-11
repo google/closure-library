@@ -275,6 +275,47 @@ See the COPYING file for details.
   }
 
   /**
+   * Tests that multiple callbacks on the same module don't cause
+   * confusion about the active state after the module is finally loaded.
+   */
+  function testUserInitiatedExecOnLoadEventuallyLeavesManagerIdle() {
+    var mm = getModuleManager({'c': [], 'd': []});
+    mm.setLoader(createSuccessfulNonBatchLoader(mm));
+
+    var calledBack1 = false;
+    var calledBack2 = false;
+
+    mm.execOnLoad(
+        'c',
+        function() {
+          calledBack1 = true;
+        },
+        undefined,
+        undefined,
+        true);
+    mm.execOnLoad(
+        'c',
+        function() {
+          calledBack2 = true;
+        },
+        undefined,
+        undefined,
+        true);
+    mm.load('c');
+
+    assertTrue(
+        'Manager should be active while waiting for load', mm.isUserActive());
+
+    clock.tick(5);
+
+    assertTrue('First callback should be called', calledBack1);
+    assertTrue('Second callback should be called', calledBack2);
+    assertFalse(
+        'Manager should be inactive after loading is complete',
+        mm.isUserActive());
+  }
+
+  /**
    * Tests loading a module by requesting a Deferred object.
    */
   function testLoad() {
@@ -1163,7 +1204,7 @@ See the COPYING file for details.
     assertTrue('Base initialization not called after setModuleContext', called);
     assertEquals('Did not receive module context', appContext, context);
   }
-  
+
   function testSetAllModuleInfoString() {
     var info = 'base/one:0/two:0/three:0,1,2/four:0,3/five:';
     var mm = new goog.module.ModuleManager();
