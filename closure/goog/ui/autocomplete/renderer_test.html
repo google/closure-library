@@ -13,14 +13,19 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.ui.AutoComplete.Renderer</title>
 <script src="../../base.js"></script>
 <script>
+  goog.require('goog.dom');
+  goog.require('goog.events');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.AutoComplete.Renderer');
 </script>
 </head>
 <body>
+<div id="someElement">Click target</div>
 <script>
   var renderer;
   var rendRows = [];
+  var someElement = goog.dom.getElement('someElement');
 
   // One-time set up of rows formatted for the renderer.
   var rows = [
@@ -339,6 +344,17 @@ See the COPYING file for details.
     assertPreviousNodeText(boldTagElArray[1], 'anda ');
     assertHighlightedText(boldTagElArray[1], 'Annie A');
     assertLastNodeText(node, 'nderson');
+  }
+
+  function testMousedownToDismiss() {
+    var dismissEvents = 0;
+    goog.events.listen(renderer, goog.ui.AutoComplete.EventType.DISMISS,
+        function() {
+          dismissEvents++;
+        });
+    renderer.redraw();
+    goog.testing.events.fireMouseDownEvent(someElement);
+    assertEquals('1 dismiss event should be fired', 1, dismissEvents);
   }
 
   // ------- Helper functions -------
