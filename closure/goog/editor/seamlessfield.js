@@ -491,6 +491,7 @@ goog.editor.SeamlessField.prototype.dispatchBlur = function() {
       !goog.editor.BrowserFeature.CLEARS_SELECTION_WHEN_FOCUS_LEAVES) {
     var win = this.getEditableDomHelper().getWindow();
     var dragging = false;
+    goog.events.unlistenByKey(this.listenForDragOverEventKey_);
     this.listenForDragOverEventKey_ = goog.events.listenOnce(
         win.document.body, 'dragover',
         function() {
