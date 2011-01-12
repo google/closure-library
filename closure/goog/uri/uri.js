@@ -720,9 +720,11 @@ goog.Uri.prototype.removeParameter = function(key) {
  * enforceReadOnly_ will be called at the start of any function that may modify
  * this Uri.
  * @param {boolean} isReadOnly whether this goog.Uri should be read only.
+ * @return {goog.Uri} Reference to this Uri object.
  */
 goog.Uri.prototype.setReadOnly = function(isReadOnly) {
   this.isReadOnly_ = isReadOnly;
+  return this;
 };
 
 
@@ -750,12 +752,14 @@ goog.Uri.prototype.enforceReadOnly = function() {
  * NOTE: If there are already key/value pairs in the QueryData, and
  * ignoreCase_ is set to false, the keys will all be lower-cased.
  * @param {boolean} ignoreCase whether this goog.Uri should ignore case.
+ * @return {goog.Uri} Reference to this Uri object.
  */
 goog.Uri.prototype.setIgnoreCase = function(ignoreCase) {
   this.ignoreCase_ = ignoreCase;
   if (this.queryData_) {
     this.queryData_.setIgnoreCase(ignoreCase);
   }
+  return this;
 };
 
 

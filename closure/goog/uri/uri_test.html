@@ -461,9 +461,22 @@ function testSetReadOnly() {
   try {
     uri.setParameterValue('cant', 'dothis')
   } catch(e) {
+    assertTrue(e instanceof Error);
     return;
   }
-  assertTrue(false);
+  assertFail();
+}
+
+function testSetReadOnlyChained() {
+  try {
+    new goog.Uri('http://www.google.com/setgmail')
+        .setReadOnly(true)
+        .setParameterValue('cant', 'dothis')
+  } catch(e) {
+    assertTrue(e instanceof Error);
+    return;
+  }
+  assertFail();
 }
 
 function testQueryDataCount() {
