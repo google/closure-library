@@ -17,6 +17,8 @@ See the COPYING file for details.
   goog.require('goog.net.Jsonp');
   goog.require('goog.testing.jsunit');
   goog.require('goog.userAgent');
+  goog.require('goog.testing.recordFunction');
+  goog.require('goog.testing.PropertyReplacer');
 </script>
 </head>
 <body>
@@ -276,6 +278,49 @@ function testCancel() {
   // Make sure cancelling removes the script tag
   checkCleanup();
   timeoutHandler();
+}
+
+function testPayloadParameters() {
+  var checkCleanup = newCleanupGuard();
+
+  var jsonp = new goog.net.Jsonp(fakeUrl);
+  var result = jsonp.send({
+    'foo': 3,
+    'bar': 'baz'
+  });
+
+  var script = goog.dom.getElement(result.id_);
+  assertEquals('Payload parameters should have been added to url.',
+               fakeUrl + '?foo=3&bar=baz',
+               script.src);
+
+  checkCleanup();
+  timeoutHandler();
+}
+
+function testOptionalPayload() {
+  var checkCleanup = newCleanupGuard();
+
+  var errorCallback = goog.testing.recordFunction();
+
+  var stubs = new goog.testing.PropertyReplacer();
+  stubs.set(goog.global, 'setTimeout', function(errorHandler) {
+    errorHandler();
+  });
+
+  var jsonp = new goog.net.Jsonp(fakeUrl);
+  var result = jsonp.send(null, null, errorCallback);
+
+  var script = goog.dom.getElement(result.id_);
+  assertEquals('Parameters should not have been added to url.',
+               fakeUrl, script.src);
+
+  var errorCallbackArguments = errorCallback.getLastCall().getArguments();
+  assertEquals(1, errorCallbackArguments.length);
+  assertNull(errorCallbackArguments[0]);
+
+  checkCleanup();
+  stubs.reset();
 }
 
 </script>

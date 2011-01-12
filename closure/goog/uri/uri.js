@@ -316,7 +316,7 @@ goog.Uri.prototype.resolve = function(relativeUri) {
 
 /**
  * Clones the URI instance.
- * @return {goog.Uri} New instance of the URI objcet.
+ * @return {!goog.Uri} New instance of the URI objcet.
  */
 goog.Uri.prototype.clone = function() {
   return goog.Uri.create(this.scheme_, this.userInfo_, this.domain_,
@@ -442,7 +442,7 @@ goog.Uri.prototype.setPort = function(newPort) {
   if (newPort) {
     newPort = Number(newPort);
     if (isNaN(newPort) || newPort < 0) {
-     throw Error('Bad port number ' + newPort);
+      throw Error('Bad port number ' + newPort);
     }
     this.port_ = newPort;
   } else {
@@ -629,7 +629,7 @@ goog.Uri.prototype.setParameterValues = function(key, values) {
  *     decoded query parameter values.
  */
 goog.Uri.prototype.getParameterValues = function(name) {
-    return this.queryData_.getValues(name);
+  return this.queryData_.getValues(name);
 };
 
 
@@ -801,7 +801,7 @@ goog.Uri.parse = function(uri, opt_ignoreCase) {
  * @param {boolean=} opt_ignoreCase Whether to ignore parameter name case in
  *     #getParameterValue.
  *
- * @return {goog.Uri} The new URI object.
+ * @return {!goog.Uri} The new URI object.
  */
 goog.Uri.create = function(opt_scheme, opt_userInfo, opt_domain, opt_port,
                            opt_path, opt_query, opt_fragment, opt_ignoreCase) {
@@ -1502,12 +1502,12 @@ goog.Uri.QueryData.prototype.invalidateCache_ = function() {
 goog.Uri.QueryData.prototype.filterKeys = function(keys) {
   this.ensureKeyMapInitialized_();
   goog.structs.forEach(this.keyMap_,
-    /** @this {goog.Uri.QueryData} */
-    function(value, key, map) {
-      if (!goog.array.contains(keys, key)) {
-        this.remove(key);
-      }
-    }, this);
+      /** @this {goog.Uri.QueryData} */
+      function(value, key, map) {
+        if (!goog.array.contains(keys, key)) {
+          this.remove(key);
+        }
+      }, this);
   return this;
 };
 
@@ -1559,14 +1559,14 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
     this.ensureKeyMapInitialized_();
     this.invalidateCache_();
     goog.structs.forEach(this.keyMap_,
-      /** @this {goog.Uri.QueryData} */
-      function(value, key, map) {
-        var lowerCase = key.toLowerCase();
-        if (key != lowerCase) {
-          this.remove(key);
-          this.add(lowerCase, value);
-        }
-      }, this);
+        /** @this {goog.Uri.QueryData} */
+        function(value, key, map) {
+          var lowerCase = key.toLowerCase();
+          if (key != lowerCase) {
+            this.remove(key);
+            this.add(lowerCase, value);
+          }
+        }, this);
   }
   this.ignoreCase_ = ignoreCase;
 };
@@ -1583,9 +1583,9 @@ goog.Uri.QueryData.prototype.extend = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {
     var data = arguments[i];
     goog.structs.forEach(data,
-      /** @this {goog.Uri.QueryData} */
-      function(value, key) {
-        this.add(key, value);
-      }, this);
+        /** @this {goog.Uri.QueryData} */
+        function(value, key) {
+          this.add(key, value);
+        }, this);
   }
 };
