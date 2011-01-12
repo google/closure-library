@@ -189,7 +189,8 @@ function testSetCookieSecure() {
 
 function testSetCookieMaxAgeZero() {
   var result = mockSetCookie('foo', 'bar', 0);
-  var pattern = /foo=bar;expires=Sun, 0?1 Feb 1970 08:00:00 (GMT|UTC)/;
+  var pattern = new RegExp(
+      'foo=bar;expires=' + new Date(1970, 1, 1).toUTCString());
   if (!result.match(pattern)) {
     fail('expected match against ' + pattern + ' got ' + result);
   }
@@ -204,7 +205,7 @@ function mockSetCookie(var_args) {
     cookies.setCookie_ = function(arg) {
       result = arg;
     };
-    cookies.set.apply(null, arguments);
+    cookies.set.apply(cookies, arguments);
     return result;
   } finally {
     cookies.setCookie_ = setCookie;
