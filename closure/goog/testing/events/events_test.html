@@ -357,7 +357,9 @@ See the COPYING file for details.
   var CONTEXTMENU_SEQ =
       goog.userAgent.WINDOWS ? ['mousedown', 'mouseup', 'contextmenu'] :
       goog.userAgent.GECKO ? ['mousedown', 'contextmenu', 'mouseup'] :
-      ['mousedown', 'contextmenu'];
+      goog.userAgent.WEBKIT && goog.userAgent.MAC ?
+          ['mousedown', 'contextmenu', 'mouseup', 'click'] :
+      ['mousedown', 'contextmenu', 'mouseup'];
 
   function testContextMenuSequence() {
     assertTrue(goog.testing.events.fireContextMenuSequence(root));
@@ -390,6 +392,14 @@ See the COPYING file for details.
     preventDefaultEventType('contextmenu');
     assertFalse(goog.testing.events.fireContextMenuSequence(root));
     assertEventTypes(CONTEXTMENU_SEQ);
+  }
+
+  function testContextMenuSequenceFakeMacWebkit() {
+    stubs.set(goog.userAgent, 'WINDOWS', false);
+    stubs.set(goog.userAgent, 'MAC', true);
+    stubs.set(goog.userAgent, 'WEBKIT', true);
+    assertTrue(goog.testing.events.fireContextMenuSequence(root));
+    assertEventTypes(['mousedown', 'contextmenu', 'mouseup', 'click']);
   }
 
   /**
