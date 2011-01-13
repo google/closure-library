@@ -56,9 +56,9 @@ function testStartDrag() {
   e.type = goog.events.EventType.MOUSEDOWN;
   e.screenX = 1;
   e.screenY = 2;
-  e.isMouseActionButton().$returns(true);
+  e.isButton(goog.events.BrowserEvent.MouseButton.LEFT).$returns(true);
   e.preventDefault();
-  e.isMouseActionButton().$returns(true);
+  e.isButton(goog.events.BrowserEvent.MouseButton.LEFT).$returns(true);
   e.preventDefault();
   e.$replay();
 
@@ -102,7 +102,7 @@ function testStartDrag_Cancel() {
   e.type = goog.events.EventType.MOUSEDOWN;
   e.screenX = 1;
   e.screenY = 2;
-  e.isMouseActionButton().$returns(true);
+  e.isButton(goog.events.BrowserEvent.MouseButton.LEFT).$returns(true);
   e.$replay();
 
   goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
@@ -133,7 +133,7 @@ function testStartDrag_LeftMouseDownOnly() {
   e.type = goog.events.EventType.MOUSEDOWN;
   e.screenX = 1;
   e.screenY = 2;
-  e.isMouseActionButton().$returns(false);
+  e.isButton(goog.events.BrowserEvent.MouseButton.LEFT).$returns(false);
   e.$replay();
 
   goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
@@ -199,7 +199,7 @@ function testMouseMoved_Cancel() {
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
   e.screenX = 1;
   e.screenY = 2;
-  e.isMouseActionButton().$returns(true).
+  e.isButton(goog.events.BrowserEvent.MouseButton.LEFT).$returns(true).
       $anyTimes();
   e.preventDefault();
   e.$replay();
@@ -289,7 +289,7 @@ function testOnWindowMouseOut() {
     e.type = goog.events.EventType.MOUSEDOWN;
     e.screenX = 1;
     e.screenY = 2;
-    e.isMouseActionButton().$returns(true);
+    e.isButton(goog.events.BrowserEvent.MouseButton.LEFT).$returns(true);
     e.preventDefault();
     e.$replay();
     dragger.startDrag(e);
@@ -355,7 +355,7 @@ function testWindowBlur() {
     e.type = goog.events.EventType.MOUSEDOWN;
     e.screenX = 1;
     e.screenY = 2;
-    e.isMouseActionButton().$returns(true);
+    e.isButton(goog.events.BrowserEvent.MouseButton.LEFT).$returns(true);
     e.preventDefault();
     e.$replay();
     dragger.startDrag(e);
@@ -386,7 +386,7 @@ function testBlur() {
     e.type = goog.events.EventType.MOUSEDOWN;
     e.screenX = 1;
     e.screenY = 2;
-    e.isMouseActionButton().$returns(true);
+    e.isButton(goog.events.BrowserEvent.MouseButton.LEFT).$returns(true);
     e.preventDefault();
     e.$replay();
     dragger.startDrag(e);
