@@ -118,6 +118,7 @@ See the COPYING file for details.
     }
 
     var newWinUrl = decodeURI(newWin.location);
+    newWinUrl = newWinUrl.replace(/%3B/g, ';');
     var expectedUrlSuffix = decodeURI(urlParam);
     assertTrue('New window href should have ended with <' + expectedUrlSuffix +
         '> (after decoding) but was <' + newWinUrl + '>',
@@ -149,6 +150,14 @@ See the COPYING file for details.
   function testOpenEncodedPercentHidingReferrer() {
     // Intent of url is to pass %7E to the server, so it was encoded to %257E .
     doTestOpenWindow(true, '"bogus%257E"');
+  }
+
+  function testOpenSemicolon() {
+      doTestOpenWindow(true,  "beforesemi;aftersemi");
+  }
+
+  function testTwoSemicolons() {
+      doTestOpenWindow(true,  "a;b;c");
   }
 
   function testOpenBlank() {
