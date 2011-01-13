@@ -315,7 +315,7 @@ goog.addDependency('net/bulkloader.js', ['goog.net.BulkLoader'], ['goog.debug.Lo
 goog.addDependency('net/bulkloaderhelper.js', ['goog.net.BulkLoaderHelper'], ['goog.Disposable', 'goog.debug.Logger']);
 goog.addDependency('net/channeldebug.js', ['goog.net.ChannelDebug'], ['goog.debug.Logger', 'goog.json']);
 goog.addDependency('net/channelrequest.js', ['goog.net.ChannelRequest'], ['goog.Timer', 'goog.Uri', 'goog.events.EventHandler', 'goog.net.XhrIo', 'goog.net.XmlHttp', 'goog.net.tmpnetwork', 'goog.object', 'goog.userAgent']);
-goog.addDependency('net/cookies.js', ['goog.net.cookies'], ['goog.userAgent']);
+goog.addDependency('net/cookies.js', ['goog.net.Cookies', 'goog.net.cookies'], ['goog.userAgent']);
 goog.addDependency('net/crossdomainrpc.js', ['goog.net.CrossDomainRpc'], ['goog.Uri.QueryData', 'goog.debug.Logger', 'goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.json', 'goog.net.EventType', 'goog.userAgent']);
 goog.addDependency('net/errorcode.js', ['goog.net.ErrorCode'], []);
 goog.addDependency('net/eventtype.js', ['goog.net.EventType'], []);
