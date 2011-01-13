@@ -323,6 +323,22 @@ goog.events.BrowserEvent.prototype.isButton = function(button) {
 
 
 /**
+ * Whether this has an "action"-producing mouse button.
+ *
+ * By definition, this includes left-click on windows/linux, and left-click
+ * without the ctrl key on Macs.
+ *
+ * @return {boolean} The result.
+ */
+goog.events.BrowserEvent.prototype.isMouseActionButton = function() {
+  // Webkit does not ctrl+click to be a right-click, so we
+  // normalize it to behave like Gecko and Opera.
+  return this.isButton(goog.events.BrowserEvent.MouseButton.LEFT) &&
+      !(goog.userAgent.WEBKIT && goog.userAgent.MAC && this.ctrlKey);
+};
+
+
+/**
  * @inheritDoc
  */
 goog.events.BrowserEvent.prototype.stopPropagation = function() {
