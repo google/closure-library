@@ -875,7 +875,7 @@ goog.events.dispatchEvent = function(src, e) {
 goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
   goog.events.handleBrowserEvent_ = errorHandler.protectEntryPoint(
       goog.events.handleBrowserEvent_);
-  goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
+  goog.events.pools.proxyCallbackFunction = goog.events.handleBrowserEvent_;
 };
 
 
@@ -992,11 +992,6 @@ goog.events.handleBrowserEvent_ = function(key, opt_evt) {
 };
 
 
-// Set the callback for the proxy pool. This is done here to prevent circular
-// dependencies.
-goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
-
-
 /**
  * This is used to mark the IE event object so we do not do the Closure pass
  * twice for a bubbling event.
@@ -1087,6 +1082,11 @@ goog.events.synthesizeEventPropagation_ = function() {
 };
 
 
+// Set the callback for the proxy pool. This is done here to prevent circular
+// dependencies.
+goog.events.pools.proxyCallbackFunction = goog.events.handleBrowserEvent_;
+
+
 // Register the browser event handler as an entry point, so that
 // it can be monitored for exception handling, etc.
 goog.debug.entryPointRegistry.register(
@@ -1097,6 +1097,5 @@ goog.debug.entryPointRegistry.register(
     function(transformer) {
       goog.events.handleBrowserEvent_ = transformer(
           goog.events.handleBrowserEvent_);
-      goog.events.pools.setProxyCallbackFunction(
-          goog.events.handleBrowserEvent_);
+      goog.events.pools.proxyCallbackFunction = goog.events.handleBrowserEvent_;
     });

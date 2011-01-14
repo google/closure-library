@@ -31,12 +31,24 @@ goog.require('goog.structs.SimplePool');
 goog.require('goog.userAgent.jscript');
 
 
+// Note: We use a public property for this instead of a setter so that the
+// compiler is able to strip code referenced by the callback in the
+// smart_name_removal pass.
+/**
+ * This gets set to {@code goog.events.handleBrowserEvent_} by events.js.
+ * @type {function(string, (Event|undefined))}
+ */
+goog.events.pools.proxyCallbackFunction;
+
+
 /**
  * Helper function for returning an object that is used for the lookup trees.
  * This might use an object pool depending on the script engine.
  * @return { {count_: number, remaining_: number} } A new or reused object.
  */
-goog.events.pools.getObject;
+goog.events.pools.getObject = function() {
+  return {count_: 0, remaining_: 0};
+};
 
 
 /**
@@ -45,7 +57,7 @@ goog.events.pools.getObject;
  * object is returned to the pool.
  * @param { {count_: number, remaining_: number} } obj The object to release.
  */
-goog.events.pools.releaseObject;
+goog.events.pools.releaseObject = function(obj) {};
 
 
 /**
@@ -53,7 +65,9 @@ goog.events.pools.releaseObject;
  * This might use an object pool depending on the script engine.
  * @return {Array} A new or reused array.
  */
-goog.events.pools.getArray;
+goog.events.pools.getArray = function() {
+  return [];
+};
 
 
 /**
@@ -62,7 +76,7 @@ goog.events.pools.getArray;
  * array is returned to the pool.
  * @param {Array} arr The array to release.
  */
-goog.events.pools.releaseArray;
+goog.events.pools.releaseArray = function(arr) {};
 
 
 /**
@@ -71,14 +85,14 @@ goog.events.pools.releaseArray;
  * engine.
  * @return {Function} A new or reused function object.
  */
-goog.events.pools.getProxy;
-
-
-/**
- * Sets the callback function to use in the proxy.
- * @param {Function} cb The callback function to use.
- */
-goog.events.pools.setProxyCallbackFunction;
+goog.events.pools.getProxy = function() {
+  // Use a local var f to prevent one allocation.
+  var f = function(eventObject) {
+    return goog.events.pools.proxyCallbackFunction.call(f.src, f.key,
+        eventObject);
+  };
+  return f;
+};
 
 
 /**
@@ -87,7 +101,7 @@ goog.events.pools.setProxyCallbackFunction;
  * function is returned to the pool.
  * @param {Function} f The function to release.
  */
-goog.events.pools.releaseProxy;
+goog.events.pools.releaseProxy = function(f) {};
 
 
 /**
@@ -96,7 +110,9 @@ goog.events.pools.releaseProxy;
  * engine.
  * @return {goog.events.Listener} A new or reused listener object.
  */
-goog.events.pools.getListener;
+goog.events.pools.getListener = function() {
+  return new goog.events.Listener();
+};
 
 
 /**
@@ -105,7 +121,7 @@ goog.events.pools.getListener;
  * listener object is returned to the pool.
  * @param {goog.events.Listener} listener The listener object to release.
  */
-goog.events.pools.releaseListener;
+goog.events.pools.releaseListener = function(listener) {};
 
 
 /**
@@ -114,7 +130,9 @@ goog.events.pools.releaseListener;
  * script engine.
  * @return {!goog.events.BrowserEvent} A new or reused event object.
  */
-goog.events.pools.getEvent;
+goog.events.pools.getEvent = function() {
+  return new goog.events.BrowserEvent();
+};
 
 
 /**
@@ -123,68 +141,19 @@ goog.events.pools.getEvent;
  * browser event object is returned to the pool.
  * @param {goog.events.BrowserEvent} event The event object to release.
  */
-goog.events.pools.releaseEvent;
+goog.events.pools.releaseEvent = function(event) {};
 
 
 (function() {
   var BAD_GC = goog.userAgent.jscript.HAS_JSCRIPT &&
       !goog.userAgent.jscript.isVersion('5.7');
 
-  // These functions are shared between the pools' createObject functions and
-  // the non pooled versions.
-
-  function getObject() {
-    return {count_: 0, remaining_: 0};
-  }
-
-  function getArray() {
-    return [];
-  }
-
-  /**
-   * This gets set to {@code goog.events.handleBrowserEvent_} by events.js.
-   * @type {function(string, (Event|undefined))}
-   */
-  var proxyCallbackFunction;
-
-  goog.events.pools.setProxyCallbackFunction = function(cb) {
-    proxyCallbackFunction = cb;
-  };
-
-  function getProxy() {
-    // Use a local var f to prevent one allocation.
-    var f = function(eventObject) {
-      return proxyCallbackFunction.call(f.src, f.key, eventObject);
-    };
-    return f;
-  }
-
-  function getListener() {
-    return new goog.events.Listener();
-  }
-
-  function getEvent() {
-    return new goog.events.BrowserEvent();
-  }
-
-  if (!BAD_GC) {
-
-    goog.events.pools.getObject = getObject;
-    goog.events.pools.releaseObject = goog.nullFunction;
-
-    goog.events.pools.getArray = getArray;
-    goog.events.pools.releaseArray = goog.nullFunction;
-
-    goog.events.pools.getProxy = getProxy;
-    goog.events.pools.releaseProxy = goog.nullFunction;
-
-    goog.events.pools.getListener = getListener;
-    goog.events.pools.releaseListener = goog.nullFunction;
-
-    goog.events.pools.getEvent = getEvent;
-    goog.events.pools.releaseEvent = goog.nullFunction;
-
-  } else {
+  if (BAD_GC) {
+    var getEvent = goog.events.pools.getEvent;
+    var getListener = goog.events.pools.getListener;
+    var getObject = goog.events.pools.getObject;
+    var getArray = goog.events.pools.getArray;
+    var getProxy = goog.events.pools.getProxy;
 
     goog.events.pools.getObject = function() {
       return objectPool.getObject();

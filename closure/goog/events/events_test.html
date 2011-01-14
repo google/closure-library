@@ -29,7 +29,7 @@ See the COPYING file for details.
 
   function tearDown() {
     goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
-    goog.events.pools.setProxyCallbackFunction(originalHandleBrowserEvent);
+    goog.events.pools.proxyCallbackFunction = originalHandleBrowserEvent;
     goog.events.removeAll();
   }
 
