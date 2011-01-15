@@ -112,11 +112,8 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // request headers.
     newWin = parentWin.open('', target, optionString);
     if (newWin) {
-      var encodedHref = goog.string.htmlEscape(href);
-      // Have to encode semicolon as it is a separator in this case.
-      encodedHref = encodedHref.replace(/;/g, '%3B');
       newWin.document.write('<META HTTP-EQUIV="refresh" content="0; url=' +
-                            encodedHref + '">');
+                            goog.string.htmlEscape(href) + '">');
       newWin.document.close();
     }
   } else {
