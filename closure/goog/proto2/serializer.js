@@ -96,9 +96,9 @@ goog.proto2.Serializer.prototype.deserializeTo = goog.abstractMethod;
 
 
 /**
- * Returns the deserialized form of the given value for the given field
- * if the field is a Message or Group and returns the value unchanged
- * otherwise.
+ * Returns the deserialized form of the given value for the given field if the
+ * field is a Message or Group and returns the value, converted or unchanged,
+ * for primitive field types otherwise.
  *
  * @param {goog.proto2.FieldDescriptor} field The field from which this
  *     value came.
@@ -109,9 +109,40 @@ goog.proto2.Serializer.prototype.deserializeTo = goog.abstractMethod;
  * @protected
  */
 goog.proto2.Serializer.prototype.getDeserializedValue = function(field, value) {
+  // Composite types are deserialized recursively.
   if (field.isCompositeType()) {
     return this.deserialize(field.getFieldMessageType(), value);
-  } else {
+  }
+
+  // Return the raw value if the field does not allow the JSON input to be
+  // converted.
+  if (!field.deserializationConversionPermitted()) {
     return value;
   }
+
+  // Convert to native type of field.  Return the converted value or fall
+  // through to return the raw value.  The JSON encoding of int64 value 123
+  // might be either the number 123 or the string "123".  The field native type
+  // could be either Number or String (depending on field options in the .proto
+  // file).  All four combinations should work correctly.
+  var nativeType = field.getNativeType();
+
+  if (nativeType === String) {
+    // JSON numbers can be converted to strings.
+    if (typeof value === 'number') {
+      return String(value);
+    }
+  } else if (nativeType === Number) {
+    // JSON strings are sometimes used for large integer numeric values.
+    if (typeof value === 'string') {
+      // Validate the string.  If the string is not an integral number, we would
+      // rather have an assertion or error in the caller than a mysterious NaN
+      // value.
+      if (/^-?[0-9]+$/.test(value)) {
+        return Number(value);
+      }
+    }
+  }
+
+  return value;
 };

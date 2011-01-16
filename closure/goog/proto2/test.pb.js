@@ -64,8 +64,7 @@ proto2.TestAllTypes.prototype.setOptionalInt32 = function(value) {
 
 
 /**
- * Returns whether the optional_int32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalInt32 = function() {
   return this.has$Value(1);
@@ -73,8 +72,7 @@ proto2.TestAllTypes.prototype.hasOptionalInt32 = function() {
 
 
 /**
- * Gets the number of values in the optional_int32 field.
- * @return {number}
+ * @return {number} The number of values in the optional_int32 field. 
  */
 proto2.TestAllTypes.prototype.optionalInt32Count = function() {
   return this.count$Values(1);
@@ -117,8 +115,7 @@ proto2.TestAllTypes.prototype.setOptionalInt64 = function(value) {
 
 
 /**
- * Returns whether the optional_int64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalInt64 = function() {
   return this.has$Value(2);
@@ -126,8 +123,7 @@ proto2.TestAllTypes.prototype.hasOptionalInt64 = function() {
 
 
 /**
- * Gets the number of values in the optional_int64 field.
- * @return {number}
+ * @return {number} The number of values in the optional_int64 field. 
  */
 proto2.TestAllTypes.prototype.optionalInt64Count = function() {
   return this.count$Values(2);
@@ -170,8 +166,7 @@ proto2.TestAllTypes.prototype.setOptionalUint32 = function(value) {
 
 
 /**
- * Returns whether the optional_uint32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalUint32 = function() {
   return this.has$Value(3);
@@ -179,8 +174,7 @@ proto2.TestAllTypes.prototype.hasOptionalUint32 = function() {
 
 
 /**
- * Gets the number of values in the optional_uint32 field.
- * @return {number}
+ * @return {number} The number of values in the optional_uint32 field. 
  */
 proto2.TestAllTypes.prototype.optionalUint32Count = function() {
   return this.count$Values(3);
@@ -223,8 +217,7 @@ proto2.TestAllTypes.prototype.setOptionalUint64 = function(value) {
 
 
 /**
- * Returns whether the optional_uint64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalUint64 = function() {
   return this.has$Value(4);
@@ -232,8 +225,7 @@ proto2.TestAllTypes.prototype.hasOptionalUint64 = function() {
 
 
 /**
- * Gets the number of values in the optional_uint64 field.
- * @return {number}
+ * @return {number} The number of values in the optional_uint64 field. 
  */
 proto2.TestAllTypes.prototype.optionalUint64Count = function() {
   return this.count$Values(4);
@@ -276,8 +268,7 @@ proto2.TestAllTypes.prototype.setOptionalSint32 = function(value) {
 
 
 /**
- * Returns whether the optional_sint32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalSint32 = function() {
   return this.has$Value(5);
@@ -285,8 +276,7 @@ proto2.TestAllTypes.prototype.hasOptionalSint32 = function() {
 
 
 /**
- * Gets the number of values in the optional_sint32 field.
- * @return {number}
+ * @return {number} The number of values in the optional_sint32 field. 
  */
 proto2.TestAllTypes.prototype.optionalSint32Count = function() {
   return this.count$Values(5);
@@ -329,8 +319,7 @@ proto2.TestAllTypes.prototype.setOptionalSint64 = function(value) {
 
 
 /**
- * Returns whether the optional_sint64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalSint64 = function() {
   return this.has$Value(6);
@@ -338,8 +327,7 @@ proto2.TestAllTypes.prototype.hasOptionalSint64 = function() {
 
 
 /**
- * Gets the number of values in the optional_sint64 field.
- * @return {number}
+ * @return {number} The number of values in the optional_sint64 field. 
  */
 proto2.TestAllTypes.prototype.optionalSint64Count = function() {
   return this.count$Values(6);
@@ -382,8 +370,7 @@ proto2.TestAllTypes.prototype.setOptionalFixed32 = function(value) {
 
 
 /**
- * Returns whether the optional_fixed32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalFixed32 = function() {
   return this.has$Value(7);
@@ -391,8 +378,7 @@ proto2.TestAllTypes.prototype.hasOptionalFixed32 = function() {
 
 
 /**
- * Gets the number of values in the optional_fixed32 field.
- * @return {number}
+ * @return {number} The number of values in the optional_fixed32 field. 
  */
 proto2.TestAllTypes.prototype.optionalFixed32Count = function() {
   return this.count$Values(7);
@@ -435,8 +421,7 @@ proto2.TestAllTypes.prototype.setOptionalFixed64 = function(value) {
 
 
 /**
- * Returns whether the optional_fixed64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalFixed64 = function() {
   return this.has$Value(8);
@@ -444,8 +429,7 @@ proto2.TestAllTypes.prototype.hasOptionalFixed64 = function() {
 
 
 /**
- * Gets the number of values in the optional_fixed64 field.
- * @return {number}
+ * @return {number} The number of values in the optional_fixed64 field. 
  */
 proto2.TestAllTypes.prototype.optionalFixed64Count = function() {
   return this.count$Values(8);
@@ -488,8 +472,7 @@ proto2.TestAllTypes.prototype.setOptionalSfixed32 = function(value) {
 
 
 /**
- * Returns whether the optional_sfixed32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalSfixed32 = function() {
   return this.has$Value(9);
@@ -497,8 +480,7 @@ proto2.TestAllTypes.prototype.hasOptionalSfixed32 = function() {
 
 
 /**
- * Gets the number of values in the optional_sfixed32 field.
- * @return {number}
+ * @return {number} The number of values in the optional_sfixed32 field. 
  */
 proto2.TestAllTypes.prototype.optionalSfixed32Count = function() {
   return this.count$Values(9);
@@ -541,8 +523,7 @@ proto2.TestAllTypes.prototype.setOptionalSfixed64 = function(value) {
 
 
 /**
- * Returns whether the optional_sfixed64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalSfixed64 = function() {
   return this.has$Value(10);
@@ -550,8 +531,7 @@ proto2.TestAllTypes.prototype.hasOptionalSfixed64 = function() {
 
 
 /**
- * Gets the number of values in the optional_sfixed64 field.
- * @return {number}
+ * @return {number} The number of values in the optional_sfixed64 field. 
  */
 proto2.TestAllTypes.prototype.optionalSfixed64Count = function() {
   return this.count$Values(10);
@@ -594,8 +574,7 @@ proto2.TestAllTypes.prototype.setOptionalFloat = function(value) {
 
 
 /**
- * Returns whether the optional_float field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalFloat = function() {
   return this.has$Value(11);
@@ -603,8 +582,7 @@ proto2.TestAllTypes.prototype.hasOptionalFloat = function() {
 
 
 /**
- * Gets the number of values in the optional_float field.
- * @return {number}
+ * @return {number} The number of values in the optional_float field. 
  */
 proto2.TestAllTypes.prototype.optionalFloatCount = function() {
   return this.count$Values(11);
@@ -647,8 +625,7 @@ proto2.TestAllTypes.prototype.setOptionalDouble = function(value) {
 
 
 /**
- * Returns whether the optional_double field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalDouble = function() {
   return this.has$Value(12);
@@ -656,8 +633,7 @@ proto2.TestAllTypes.prototype.hasOptionalDouble = function() {
 
 
 /**
- * Gets the number of values in the optional_double field.
- * @return {number}
+ * @return {number} The number of values in the optional_double field. 
  */
 proto2.TestAllTypes.prototype.optionalDoubleCount = function() {
   return this.count$Values(12);
@@ -700,8 +676,7 @@ proto2.TestAllTypes.prototype.setOptionalBool = function(value) {
 
 
 /**
- * Returns whether the optional_bool field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalBool = function() {
   return this.has$Value(13);
@@ -709,8 +684,7 @@ proto2.TestAllTypes.prototype.hasOptionalBool = function() {
 
 
 /**
- * Gets the number of values in the optional_bool field.
- * @return {number}
+ * @return {number} The number of values in the optional_bool field. 
  */
 proto2.TestAllTypes.prototype.optionalBoolCount = function() {
   return this.count$Values(13);
@@ -753,8 +727,7 @@ proto2.TestAllTypes.prototype.setOptionalString = function(value) {
 
 
 /**
- * Returns whether the optional_string field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalString = function() {
   return this.has$Value(14);
@@ -762,8 +735,7 @@ proto2.TestAllTypes.prototype.hasOptionalString = function() {
 
 
 /**
- * Gets the number of values in the optional_string field.
- * @return {number}
+ * @return {number} The number of values in the optional_string field. 
  */
 proto2.TestAllTypes.prototype.optionalStringCount = function() {
   return this.count$Values(14);
@@ -806,8 +778,7 @@ proto2.TestAllTypes.prototype.setOptionalBytes = function(value) {
 
 
 /**
- * Returns whether the optional_bytes field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalBytes = function() {
   return this.has$Value(15);
@@ -815,8 +786,7 @@ proto2.TestAllTypes.prototype.hasOptionalBytes = function() {
 
 
 /**
- * Gets the number of values in the optional_bytes field.
- * @return {number}
+ * @return {number} The number of values in the optional_bytes field. 
  */
 proto2.TestAllTypes.prototype.optionalBytesCount = function() {
   return this.count$Values(15);
@@ -859,8 +829,7 @@ proto2.TestAllTypes.prototype.setOptionalgroup = function(value) {
 
 
 /**
- * Returns whether the optionalgroup field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalgroup = function() {
   return this.has$Value(16);
@@ -868,8 +837,7 @@ proto2.TestAllTypes.prototype.hasOptionalgroup = function() {
 
 
 /**
- * Gets the number of values in the optionalgroup field.
- * @return {number}
+ * @return {number} The number of values in the optionalgroup field. 
  */
 proto2.TestAllTypes.prototype.optionalgroupCount = function() {
   return this.count$Values(16);
@@ -912,8 +880,7 @@ proto2.TestAllTypes.prototype.setOptionalNestedMessage = function(value) {
 
 
 /**
- * Returns whether the optional_nested_message field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalNestedMessage = function() {
   return this.has$Value(18);
@@ -921,8 +888,7 @@ proto2.TestAllTypes.prototype.hasOptionalNestedMessage = function() {
 
 
 /**
- * Gets the number of values in the optional_nested_message field.
- * @return {number}
+ * @return {number} The number of values in the optional_nested_message field. 
  */
 proto2.TestAllTypes.prototype.optionalNestedMessageCount = function() {
   return this.count$Values(18);
@@ -965,8 +931,7 @@ proto2.TestAllTypes.prototype.setOptionalNestedEnum = function(value) {
 
 
 /**
- * Returns whether the optional_nested_enum field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasOptionalNestedEnum = function() {
   return this.has$Value(21);
@@ -974,8 +939,7 @@ proto2.TestAllTypes.prototype.hasOptionalNestedEnum = function() {
 
 
 /**
- * Gets the number of values in the optional_nested_enum field.
- * @return {number}
+ * @return {number} The number of values in the optional_nested_enum field. 
  */
 proto2.TestAllTypes.prototype.optionalNestedEnumCount = function() {
   return this.count$Values(21);
@@ -987,6 +951,108 @@ proto2.TestAllTypes.prototype.optionalNestedEnumCount = function() {
  */
 proto2.TestAllTypes.prototype.clearOptionalNestedEnum = function() {
   this.clear$Field(21);
+};
+
+
+/**
+ * Gets the value of the optional_int64_number field.
+ * @return {?number} The value.
+ */
+proto2.TestAllTypes.prototype.getOptionalInt64Number = function() {
+  return /** @type {?number} */ (this.get$Value(50));
+};
+
+
+/**
+ * Gets the value of the optional_int64_number field or the default value if not set.
+ * @return {number} The value.
+ */
+proto2.TestAllTypes.prototype.getOptionalInt64NumberOrDefault = function() {
+  return /** @type {number} */ (this.get$ValueOrDefault(50));
+};
+
+
+/**
+ * Sets the value of the optional_int64_number field.
+ * @param {number} value The value.
+ */
+proto2.TestAllTypes.prototype.setOptionalInt64Number = function(value) {
+  this.set$Value(50, /** @type {Object} */ (value));
+};
+
+
+/**
+ * @return {boolean} Whether the field has a value.
+ */
+proto2.TestAllTypes.prototype.hasOptionalInt64Number = function() {
+  return this.has$Value(50);
+};
+
+
+/**
+ * @return {number} The number of values in the optional_int64_number field. 
+ */
+proto2.TestAllTypes.prototype.optionalInt64NumberCount = function() {
+  return this.count$Values(50);
+};
+
+
+/**
+ * Clears the values in the optional_int64_number field.
+ */
+proto2.TestAllTypes.prototype.clearOptionalInt64Number = function() {
+  this.clear$Field(50);
+};
+
+
+/**
+ * Gets the value of the optional_int64_string field.
+ * @return {?string} The value.
+ */
+proto2.TestAllTypes.prototype.getOptionalInt64String = function() {
+  return /** @type {?string} */ (this.get$Value(51));
+};
+
+
+/**
+ * Gets the value of the optional_int64_string field or the default value if not set.
+ * @return {string} The value.
+ */
+proto2.TestAllTypes.prototype.getOptionalInt64StringOrDefault = function() {
+  return /** @type {string} */ (this.get$ValueOrDefault(51));
+};
+
+
+/**
+ * Sets the value of the optional_int64_string field.
+ * @param {string} value The value.
+ */
+proto2.TestAllTypes.prototype.setOptionalInt64String = function(value) {
+  this.set$Value(51, /** @type {Object} */ (value));
+};
+
+
+/**
+ * @return {boolean} Whether the field has a value.
+ */
+proto2.TestAllTypes.prototype.hasOptionalInt64String = function() {
+  return this.has$Value(51);
+};
+
+
+/**
+ * @return {number} The number of values in the optional_int64_string field. 
+ */
+proto2.TestAllTypes.prototype.optionalInt64StringCount = function() {
+  return this.count$Values(51);
+};
+
+
+/**
+ * Clears the values in the optional_int64_string field.
+ */
+proto2.TestAllTypes.prototype.clearOptionalInt64String = function() {
+  this.clear$Field(51);
 };
 
 
@@ -1029,8 +1095,7 @@ proto2.TestAllTypes.prototype.repeatedInt32Array = function() {
 
 
 /**
- * Returns whether the repeated_int32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedInt32 = function() {
   return this.has$Value(31);
@@ -1038,8 +1103,7 @@ proto2.TestAllTypes.prototype.hasRepeatedInt32 = function() {
 
 
 /**
- * Gets the number of values in the repeated_int32 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_int32 field. 
  */
 proto2.TestAllTypes.prototype.repeatedInt32Count = function() {
   return this.count$Values(31);
@@ -1093,8 +1157,7 @@ proto2.TestAllTypes.prototype.repeatedInt64Array = function() {
 
 
 /**
- * Returns whether the repeated_int64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedInt64 = function() {
   return this.has$Value(32);
@@ -1102,8 +1165,7 @@ proto2.TestAllTypes.prototype.hasRepeatedInt64 = function() {
 
 
 /**
- * Gets the number of values in the repeated_int64 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_int64 field. 
  */
 proto2.TestAllTypes.prototype.repeatedInt64Count = function() {
   return this.count$Values(32);
@@ -1157,8 +1219,7 @@ proto2.TestAllTypes.prototype.repeatedUint32Array = function() {
 
 
 /**
- * Returns whether the repeated_uint32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedUint32 = function() {
   return this.has$Value(33);
@@ -1166,8 +1227,7 @@ proto2.TestAllTypes.prototype.hasRepeatedUint32 = function() {
 
 
 /**
- * Gets the number of values in the repeated_uint32 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_uint32 field. 
  */
 proto2.TestAllTypes.prototype.repeatedUint32Count = function() {
   return this.count$Values(33);
@@ -1221,8 +1281,7 @@ proto2.TestAllTypes.prototype.repeatedUint64Array = function() {
 
 
 /**
- * Returns whether the repeated_uint64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedUint64 = function() {
   return this.has$Value(34);
@@ -1230,8 +1289,7 @@ proto2.TestAllTypes.prototype.hasRepeatedUint64 = function() {
 
 
 /**
- * Gets the number of values in the repeated_uint64 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_uint64 field. 
  */
 proto2.TestAllTypes.prototype.repeatedUint64Count = function() {
   return this.count$Values(34);
@@ -1285,8 +1343,7 @@ proto2.TestAllTypes.prototype.repeatedSint32Array = function() {
 
 
 /**
- * Returns whether the repeated_sint32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedSint32 = function() {
   return this.has$Value(35);
@@ -1294,8 +1351,7 @@ proto2.TestAllTypes.prototype.hasRepeatedSint32 = function() {
 
 
 /**
- * Gets the number of values in the repeated_sint32 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_sint32 field. 
  */
 proto2.TestAllTypes.prototype.repeatedSint32Count = function() {
   return this.count$Values(35);
@@ -1349,8 +1405,7 @@ proto2.TestAllTypes.prototype.repeatedSint64Array = function() {
 
 
 /**
- * Returns whether the repeated_sint64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedSint64 = function() {
   return this.has$Value(36);
@@ -1358,8 +1413,7 @@ proto2.TestAllTypes.prototype.hasRepeatedSint64 = function() {
 
 
 /**
- * Gets the number of values in the repeated_sint64 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_sint64 field. 
  */
 proto2.TestAllTypes.prototype.repeatedSint64Count = function() {
   return this.count$Values(36);
@@ -1413,8 +1467,7 @@ proto2.TestAllTypes.prototype.repeatedFixed32Array = function() {
 
 
 /**
- * Returns whether the repeated_fixed32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedFixed32 = function() {
   return this.has$Value(37);
@@ -1422,8 +1475,7 @@ proto2.TestAllTypes.prototype.hasRepeatedFixed32 = function() {
 
 
 /**
- * Gets the number of values in the repeated_fixed32 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_fixed32 field. 
  */
 proto2.TestAllTypes.prototype.repeatedFixed32Count = function() {
   return this.count$Values(37);
@@ -1477,8 +1529,7 @@ proto2.TestAllTypes.prototype.repeatedFixed64Array = function() {
 
 
 /**
- * Returns whether the repeated_fixed64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedFixed64 = function() {
   return this.has$Value(38);
@@ -1486,8 +1537,7 @@ proto2.TestAllTypes.prototype.hasRepeatedFixed64 = function() {
 
 
 /**
- * Gets the number of values in the repeated_fixed64 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_fixed64 field. 
  */
 proto2.TestAllTypes.prototype.repeatedFixed64Count = function() {
   return this.count$Values(38);
@@ -1541,8 +1591,7 @@ proto2.TestAllTypes.prototype.repeatedSfixed32Array = function() {
 
 
 /**
- * Returns whether the repeated_sfixed32 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedSfixed32 = function() {
   return this.has$Value(39);
@@ -1550,8 +1599,7 @@ proto2.TestAllTypes.prototype.hasRepeatedSfixed32 = function() {
 
 
 /**
- * Gets the number of values in the repeated_sfixed32 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_sfixed32 field. 
  */
 proto2.TestAllTypes.prototype.repeatedSfixed32Count = function() {
   return this.count$Values(39);
@@ -1605,8 +1653,7 @@ proto2.TestAllTypes.prototype.repeatedSfixed64Array = function() {
 
 
 /**
- * Returns whether the repeated_sfixed64 field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedSfixed64 = function() {
   return this.has$Value(40);
@@ -1614,8 +1661,7 @@ proto2.TestAllTypes.prototype.hasRepeatedSfixed64 = function() {
 
 
 /**
- * Gets the number of values in the repeated_sfixed64 field.
- * @return {number}
+ * @return {number} The number of values in the repeated_sfixed64 field. 
  */
 proto2.TestAllTypes.prototype.repeatedSfixed64Count = function() {
   return this.count$Values(40);
@@ -1669,8 +1715,7 @@ proto2.TestAllTypes.prototype.repeatedFloatArray = function() {
 
 
 /**
- * Returns whether the repeated_float field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedFloat = function() {
   return this.has$Value(41);
@@ -1678,8 +1723,7 @@ proto2.TestAllTypes.prototype.hasRepeatedFloat = function() {
 
 
 /**
- * Gets the number of values in the repeated_float field.
- * @return {number}
+ * @return {number} The number of values in the repeated_float field. 
  */
 proto2.TestAllTypes.prototype.repeatedFloatCount = function() {
   return this.count$Values(41);
@@ -1733,8 +1777,7 @@ proto2.TestAllTypes.prototype.repeatedDoubleArray = function() {
 
 
 /**
- * Returns whether the repeated_double field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedDouble = function() {
   return this.has$Value(42);
@@ -1742,8 +1785,7 @@ proto2.TestAllTypes.prototype.hasRepeatedDouble = function() {
 
 
 /**
- * Gets the number of values in the repeated_double field.
- * @return {number}
+ * @return {number} The number of values in the repeated_double field. 
  */
 proto2.TestAllTypes.prototype.repeatedDoubleCount = function() {
   return this.count$Values(42);
@@ -1797,8 +1839,7 @@ proto2.TestAllTypes.prototype.repeatedBoolArray = function() {
 
 
 /**
- * Returns whether the repeated_bool field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedBool = function() {
   return this.has$Value(43);
@@ -1806,8 +1847,7 @@ proto2.TestAllTypes.prototype.hasRepeatedBool = function() {
 
 
 /**
- * Gets the number of values in the repeated_bool field.
- * @return {number}
+ * @return {number} The number of values in the repeated_bool field. 
  */
 proto2.TestAllTypes.prototype.repeatedBoolCount = function() {
   return this.count$Values(43);
@@ -1861,8 +1901,7 @@ proto2.TestAllTypes.prototype.repeatedStringArray = function() {
 
 
 /**
- * Returns whether the repeated_string field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedString = function() {
   return this.has$Value(44);
@@ -1870,8 +1909,7 @@ proto2.TestAllTypes.prototype.hasRepeatedString = function() {
 
 
 /**
- * Gets the number of values in the repeated_string field.
- * @return {number}
+ * @return {number} The number of values in the repeated_string field. 
  */
 proto2.TestAllTypes.prototype.repeatedStringCount = function() {
   return this.count$Values(44);
@@ -1925,8 +1963,7 @@ proto2.TestAllTypes.prototype.repeatedBytesArray = function() {
 
 
 /**
- * Returns whether the repeated_bytes field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedBytes = function() {
   return this.has$Value(45);
@@ -1934,8 +1971,7 @@ proto2.TestAllTypes.prototype.hasRepeatedBytes = function() {
 
 
 /**
- * Gets the number of values in the repeated_bytes field.
- * @return {number}
+ * @return {number} The number of values in the repeated_bytes field. 
  */
 proto2.TestAllTypes.prototype.repeatedBytesCount = function() {
   return this.count$Values(45);
@@ -1989,8 +2025,7 @@ proto2.TestAllTypes.prototype.repeatedgroupArray = function() {
 
 
 /**
- * Returns whether the repeatedgroup field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedgroup = function() {
   return this.has$Value(46);
@@ -1998,8 +2033,7 @@ proto2.TestAllTypes.prototype.hasRepeatedgroup = function() {
 
 
 /**
- * Gets the number of values in the repeatedgroup field.
- * @return {number}
+ * @return {number} The number of values in the repeatedgroup field. 
  */
 proto2.TestAllTypes.prototype.repeatedgroupCount = function() {
   return this.count$Values(46);
@@ -2053,8 +2087,7 @@ proto2.TestAllTypes.prototype.repeatedNestedMessageArray = function() {
 
 
 /**
- * Returns whether the repeated_nested_message field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedNestedMessage = function() {
   return this.has$Value(48);
@@ -2062,8 +2095,7 @@ proto2.TestAllTypes.prototype.hasRepeatedNestedMessage = function() {
 
 
 /**
- * Gets the number of values in the repeated_nested_message field.
- * @return {number}
+ * @return {number} The number of values in the repeated_nested_message field. 
  */
 proto2.TestAllTypes.prototype.repeatedNestedMessageCount = function() {
   return this.count$Values(48);
@@ -2117,8 +2149,7 @@ proto2.TestAllTypes.prototype.repeatedNestedEnumArray = function() {
 
 
 /**
- * Returns whether the repeated_nested_enum field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.prototype.hasRepeatedNestedEnum = function() {
   return this.has$Value(49);
@@ -2126,8 +2157,7 @@ proto2.TestAllTypes.prototype.hasRepeatedNestedEnum = function() {
 
 
 /**
- * Gets the number of values in the repeated_nested_enum field.
- * @return {number}
+ * @return {number} The number of values in the repeated_nested_enum field. 
  */
 proto2.TestAllTypes.prototype.repeatedNestedEnumCount = function() {
   return this.count$Values(49);
@@ -2143,13 +2173,137 @@ proto2.TestAllTypes.prototype.clearRepeatedNestedEnum = function() {
 
 
 /**
+ * Gets the value of the repeated_int64_number field at the index given.
+ * @param {number} index The index to lookup.
+ * @return {?number} The value.
+ */
+proto2.TestAllTypes.prototype.getRepeatedInt64Number = function(index) {
+  return /** @type {?number} */ (this.get$Value(52, index));
+};
+
+
+/**
+ * Gets the value of the repeated_int64_number field at the index given or the default value if not set.
+ * @param {number} index The index to lookup.
+ * @return {number} The value.
+ */
+proto2.TestAllTypes.prototype.getRepeatedInt64NumberOrDefault = function(index) {
+  return /** @type {number} */ (this.get$ValueOrDefault(52, index));
+};
+
+
+/**
+ * Adds a value to the repeated_int64_number field.
+ * @param {number} value The value to add.
+ */
+proto2.TestAllTypes.prototype.addRepeatedInt64Number = function(value) {
+  this.add$Value(52, /** @type {Object} */ (value));
+};
+
+
+/**
+ * Returns the array of values in the repeated_int64_number field.
+ * @return {!Array.<number>} The values in the field.
+ */
+proto2.TestAllTypes.prototype.repeatedInt64NumberArray = function() {
+  return /** @type {!Array.<number>} */ (this.array$Values(52));
+};
+
+
+/**
+ * @return {boolean} Whether the field has a value.
+ */
+proto2.TestAllTypes.prototype.hasRepeatedInt64Number = function() {
+  return this.has$Value(52);
+};
+
+
+/**
+ * @return {number} The number of values in the repeated_int64_number field. 
+ */
+proto2.TestAllTypes.prototype.repeatedInt64NumberCount = function() {
+  return this.count$Values(52);
+};
+
+
+/**
+ * Clears the values in the repeated_int64_number field.
+ */
+proto2.TestAllTypes.prototype.clearRepeatedInt64Number = function() {
+  this.clear$Field(52);
+};
+
+
+/**
+ * Gets the value of the repeated_int64_string field at the index given.
+ * @param {number} index The index to lookup.
+ * @return {?string} The value.
+ */
+proto2.TestAllTypes.prototype.getRepeatedInt64String = function(index) {
+  return /** @type {?string} */ (this.get$Value(53, index));
+};
+
+
+/**
+ * Gets the value of the repeated_int64_string field at the index given or the default value if not set.
+ * @param {number} index The index to lookup.
+ * @return {string} The value.
+ */
+proto2.TestAllTypes.prototype.getRepeatedInt64StringOrDefault = function(index) {
+  return /** @type {string} */ (this.get$ValueOrDefault(53, index));
+};
+
+
+/**
+ * Adds a value to the repeated_int64_string field.
+ * @param {string} value The value to add.
+ */
+proto2.TestAllTypes.prototype.addRepeatedInt64String = function(value) {
+  this.add$Value(53, /** @type {Object} */ (value));
+};
+
+
+/**
+ * Returns the array of values in the repeated_int64_string field.
+ * @return {!Array.<string>} The values in the field.
+ */
+proto2.TestAllTypes.prototype.repeatedInt64StringArray = function() {
+  return /** @type {!Array.<string>} */ (this.array$Values(53));
+};
+
+
+/**
+ * @return {boolean} Whether the field has a value.
+ */
+proto2.TestAllTypes.prototype.hasRepeatedInt64String = function() {
+  return this.has$Value(53);
+};
+
+
+/**
+ * @return {number} The number of values in the repeated_int64_string field. 
+ */
+proto2.TestAllTypes.prototype.repeatedInt64StringCount = function() {
+  return this.count$Values(53);
+};
+
+
+/**
+ * Clears the values in the repeated_int64_string field.
+ */
+proto2.TestAllTypes.prototype.clearRepeatedInt64String = function() {
+  this.clear$Field(53);
+};
+
+
+/**
  * Enumeration NestedEnum.
  * @enum {number}
  */
 proto2.TestAllTypes.NestedEnum = {
-  FOO : 1,
-  BAR : 2,
-  BAZ : 3
+  FOO: 1,
+  BAR: 2,
+  BAZ: 3
 };
 
 /**
@@ -2190,8 +2344,7 @@ proto2.TestAllTypes.NestedMessage.prototype.setB = function(value) {
 
 
 /**
- * Returns whether the b field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.NestedMessage.prototype.hasB = function() {
   return this.has$Value(1);
@@ -2199,8 +2352,7 @@ proto2.TestAllTypes.NestedMessage.prototype.hasB = function() {
 
 
 /**
- * Gets the number of values in the b field.
- * @return {number}
+ * @return {number} The number of values in the b field. 
  */
 proto2.TestAllTypes.NestedMessage.prototype.bCount = function() {
   return this.count$Values(1);
@@ -2213,7 +2365,6 @@ proto2.TestAllTypes.NestedMessage.prototype.bCount = function() {
 proto2.TestAllTypes.NestedMessage.prototype.clearB = function() {
   this.clear$Field(1);
 };
-
 
 
 
@@ -2255,8 +2406,7 @@ proto2.TestAllTypes.OptionalGroup.prototype.setA = function(value) {
 
 
 /**
- * Returns whether the a field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.OptionalGroup.prototype.hasA = function() {
   return this.has$Value(17);
@@ -2264,8 +2414,7 @@ proto2.TestAllTypes.OptionalGroup.prototype.hasA = function() {
 
 
 /**
- * Gets the number of values in the a field.
- * @return {number}
+ * @return {number} The number of values in the a field. 
  */
 proto2.TestAllTypes.OptionalGroup.prototype.aCount = function() {
   return this.count$Values(17);
@@ -2278,7 +2427,6 @@ proto2.TestAllTypes.OptionalGroup.prototype.aCount = function() {
 proto2.TestAllTypes.OptionalGroup.prototype.clearA = function() {
   this.clear$Field(17);
 };
-
 
 
 
@@ -2331,8 +2479,7 @@ proto2.TestAllTypes.RepeatedGroup.prototype.aArray = function() {
 
 
 /**
- * Returns whether the a field has a value.
- * @return {boolean} true if the field has a value.
+ * @return {boolean} Whether the field has a value.
  */
 proto2.TestAllTypes.RepeatedGroup.prototype.hasA = function() {
   return this.has$Value(47);
@@ -2340,8 +2487,7 @@ proto2.TestAllTypes.RepeatedGroup.prototype.hasA = function() {
 
 
 /**
- * Gets the number of values in the a field.
- * @return {number}
+ * @return {number} The number of values in the a field. 
  */
 proto2.TestAllTypes.RepeatedGroup.prototype.aCount = function() {
   return this.count$Values(47);
@@ -2358,215 +2504,237 @@ proto2.TestAllTypes.RepeatedGroup.prototype.clearA = function() {
 
 
 
-
-
 goog.proto2.Message.set$Metadata(proto2.TestAllTypes, {
   0 : {
     name: 'TestAllTypes',
     fullName: 'TestAllTypes'
   },
-  '1' : {
+  1: {
     name: 'optional_int32',
     fieldType: goog.proto2.Message.FieldType.INT32,
     type: Number
   },
-  '2' : {
+  2: {
     name: 'optional_int64',
     fieldType: goog.proto2.Message.FieldType.INT64,
     defaultValue: '1',
     type: String
   },
-  '3' : {
+  3: {
     name: 'optional_uint32',
     fieldType: goog.proto2.Message.FieldType.UINT32,
     type: Number
   },
-  '4' : {
+  4: {
     name: 'optional_uint64',
     fieldType: goog.proto2.Message.FieldType.UINT64,
     type: String
   },
-  '5' : {
+  5: {
     name: 'optional_sint32',
     fieldType: goog.proto2.Message.FieldType.SINT32,
     type: Number
   },
-  '6' : {
+  6: {
     name: 'optional_sint64',
     fieldType: goog.proto2.Message.FieldType.SINT64,
     type: String
   },
-  '7' : {
+  7: {
     name: 'optional_fixed32',
     fieldType: goog.proto2.Message.FieldType.FIXED32,
     type: Number
   },
-  '8' : {
+  8: {
     name: 'optional_fixed64',
     fieldType: goog.proto2.Message.FieldType.FIXED64,
     type: String
   },
-  '9' : {
+  9: {
     name: 'optional_sfixed32',
     fieldType: goog.proto2.Message.FieldType.SFIXED32,
     type: Number
   },
-  '10' : {
+  10: {
     name: 'optional_sfixed64',
     fieldType: goog.proto2.Message.FieldType.SFIXED64,
     type: String
   },
-  '11' : {
+  11: {
     name: 'optional_float',
     fieldType: goog.proto2.Message.FieldType.FLOAT,
     defaultValue: 1.5,
     type: Number
   },
-  '12' : {
+  12: {
     name: 'optional_double',
     fieldType: goog.proto2.Message.FieldType.DOUBLE,
     type: Number
   },
-  '13' : {
+  13: {
     name: 'optional_bool',
     fieldType: goog.proto2.Message.FieldType.BOOL,
     type: Boolean
   },
-  '14' : {
+  14: {
     name: 'optional_string',
     fieldType: goog.proto2.Message.FieldType.STRING,
     type: String
   },
-  '15' : {
+  15: {
     name: 'optional_bytes',
     fieldType: goog.proto2.Message.FieldType.BYTES,
-    defaultValue: "moo",
+    defaultValue: 'moo',
     type: String
   },
-  '16' : {
+  16: {
     name: 'optionalgroup',
     fieldType: goog.proto2.Message.FieldType.GROUP,
     type: proto2.TestAllTypes.OptionalGroup
   },
-  '18' : {
+  18: {
     name: 'optional_nested_message',
     fieldType: goog.proto2.Message.FieldType.MESSAGE,
     type: proto2.TestAllTypes.NestedMessage
   },
-  '21' : {
+  21: {
     name: 'optional_nested_enum',
     fieldType: goog.proto2.Message.FieldType.ENUM,
     defaultValue: proto2.TestAllTypes.NestedEnum.FOO,
     type: proto2.TestAllTypes.NestedEnum
   },
-  '31' : {
+  50: {
+    name: 'optional_int64_number',
+    fieldType: goog.proto2.Message.FieldType.INT64,
+    defaultValue: 1000000000000000001,
+    type: Number
+  },
+  51: {
+    name: 'optional_int64_string',
+    fieldType: goog.proto2.Message.FieldType.INT64,
+    defaultValue: '1000000000000000001',
+    type: String
+  },
+  31: {
     name: 'repeated_int32',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.INT32,
     type: Number
   },
-  '32' : {
+  32: {
     name: 'repeated_int64',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.INT64,
     type: String
   },
-  '33' : {
+  33: {
     name: 'repeated_uint32',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.UINT32,
     type: Number
   },
-  '34' : {
+  34: {
     name: 'repeated_uint64',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.UINT64,
     type: String
   },
-  '35' : {
+  35: {
     name: 'repeated_sint32',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.SINT32,
     type: Number
   },
-  '36' : {
+  36: {
     name: 'repeated_sint64',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.SINT64,
     type: String
   },
-  '37' : {
+  37: {
     name: 'repeated_fixed32',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.FIXED32,
     type: Number
   },
-  '38' : {
+  38: {
     name: 'repeated_fixed64',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.FIXED64,
     type: String
   },
-  '39' : {
+  39: {
     name: 'repeated_sfixed32',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.SFIXED32,
     type: Number
   },
-  '40' : {
+  40: {
     name: 'repeated_sfixed64',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.SFIXED64,
     type: String
   },
-  '41' : {
+  41: {
     name: 'repeated_float',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.FLOAT,
     type: Number
   },
-  '42' : {
+  42: {
     name: 'repeated_double',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.DOUBLE,
     type: Number
   },
-  '43' : {
+  43: {
     name: 'repeated_bool',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.BOOL,
     type: Boolean
   },
-  '44' : {
+  44: {
     name: 'repeated_string',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.STRING,
     type: String
   },
-  '45' : {
+  45: {
     name: 'repeated_bytes',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.BYTES,
     type: String
   },
-  '46' : {
+  46: {
     name: 'repeatedgroup',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.GROUP,
     type: proto2.TestAllTypes.RepeatedGroup
   },
-  '48' : {
+  48: {
     name: 'repeated_nested_message',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.MESSAGE,
     type: proto2.TestAllTypes.NestedMessage
   },
-  '49' : {
+  49: {
     name: 'repeated_nested_enum',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.ENUM,
     defaultValue: proto2.TestAllTypes.NestedEnum.FOO,
     type: proto2.TestAllTypes.NestedEnum
+  },
+  52: {
+    name: 'repeated_int64_number',
+    repeated: true,
+    fieldType: goog.proto2.Message.FieldType.INT64,
+    type: Number
+  },
+  53: {
+    name: 'repeated_int64_string',
+    repeated: true,
+    fieldType: goog.proto2.Message.FieldType.INT64,
+    type: String
   }});
 
 goog.proto2.Message.set$Metadata(proto2.TestAllTypes.NestedMessage, {
@@ -2575,7 +2743,7 @@ goog.proto2.Message.set$Metadata(proto2.TestAllTypes.NestedMessage, {
     containingType: proto2.TestAllTypes,
     fullName: 'TestAllTypes.NestedMessage'
   },
-  '1' : {
+  1: {
     name: 'b',
     fieldType: goog.proto2.Message.FieldType.INT32,
     type: Number
@@ -2587,7 +2755,7 @@ goog.proto2.Message.set$Metadata(proto2.TestAllTypes.OptionalGroup, {
     containingType: proto2.TestAllTypes,
     fullName: 'TestAllTypes.OptionalGroup'
   },
-  '17' : {
+  17: {
     name: 'a',
     fieldType: goog.proto2.Message.FieldType.INT32,
     type: Number
@@ -2599,9 +2767,10 @@ goog.proto2.Message.set$Metadata(proto2.TestAllTypes.RepeatedGroup, {
     containingType: proto2.TestAllTypes,
     fullName: 'TestAllTypes.RepeatedGroup'
   },
-  '47' : {
+  47: {
     name: 'a',
     repeated: true,
     fieldType: goog.proto2.Message.FieldType.INT32,
     type: Number
   }});
+

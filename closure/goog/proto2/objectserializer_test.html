@@ -330,6 +330,96 @@ function testDeserialization() {
     message.getOptionalNestedEnum());
 }
 
+function testDeserializationNumbersOrStrings() {
+  // 64-bit types may have been serialized as numbers or strings.
+  // Deserialization should be able to handle either.
+
+  var simplifiedWithNumbers = {
+    50: 5000,
+    51: 5100,
+    52: [ 5200, 5201 ],
+    53: [ 5300, 5301 ]
+  };
+
+  var simplifiedWithStrings = {
+    50: '5000',
+    51: '5100',
+    52: [ '5200', '5201' ],
+    53: [ '5300', '5301' ]
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message = serializer.deserialize(
+    proto2.TestAllTypes.getDescriptor(), simplifiedWithNumbers);
+
+  assertNotNull(message);
+
+  assertEquals(5000, message.getOptionalInt64Number());
+  assertEquals('5100', message.getOptionalInt64String());
+  assertEquals(5200, message.getRepeatedInt64Number(0));
+  assertEquals(5201, message.getRepeatedInt64Number(1));
+  assertEquals('5300', message.getRepeatedInt64String(0));
+  assertEquals('5301', message.getRepeatedInt64String(1));
+
+  assertArrayEquals([5200, 5201], message.repeatedInt64NumberArray());
+  assertArrayEquals(['5300', '5301'], message.repeatedInt64StringArray());
+
+  message = serializer.deserialize(
+    proto2.TestAllTypes.getDescriptor(), simplifiedWithStrings);
+
+  assertNotNull(message);
+
+  assertEquals(5000, message.getOptionalInt64Number());
+  assertEquals('5100', message.getOptionalInt64String());
+  assertEquals(5200, message.getRepeatedInt64Number(0));
+  assertEquals(5201, message.getRepeatedInt64Number(1));
+  assertEquals('5300', message.getRepeatedInt64String(0));
+  assertEquals('5301', message.getRepeatedInt64String(1));
+
+  assertArrayEquals([5200, 5201], message.repeatedInt64NumberArray());
+  assertArrayEquals(['5300', '5301'], message.repeatedInt64StringArray());
+}
+
+function testDeserializationConversionProhibited() {
+  // 64-bit types may have been serialized as numbers or strings.
+  // But 32-bit types must be serialized as numbers.
+  // Test deserialization fails on 32-bit numbers as strings.
+
+  var simplified = {
+    1: '1000'   // optionalInt32
+  };
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  try {
+    var message = serializer.deserialize(
+        proto2.TestAllTypes.getDescriptor(), simplified);
+    assertFail('Should have an assertion failure in deserialization')
+  } catch (e) {
+  }
+}
+
+function testDefaultValueNumbersOrStrings() {
+  // 64-bit types may have been serialized as numbers or strings.
+  // The default values should have the correct type.
+
+  var serializer = new goog.proto2.ObjectSerializer();
+  var message = serializer.deserialize(proto2.TestAllTypes.getDescriptor(), {});
+
+  assertNotNull(message);
+
+  // Default when using Number is a number, and precision is lost.
+  var value = message.getOptionalInt64NumberOrDefault();
+  assertTrue('Expecting a number', typeof value === 'number');
+  assertEquals(1000000000000000000, value);
+  assertEquals(1000000000000000001, value);
+  assertEquals(1000000000000000002, value);
+  assertEquals('1000000000000000000', String(value));  // Value is rounded!
+
+  // When using a String, the value is preserved.
+  assertEquals('1000000000000000001',
+               message.getOptionalInt64StringOrDefault());
+}
 </script>
 </body>
 </html>

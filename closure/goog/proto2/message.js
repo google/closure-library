@@ -76,6 +76,13 @@ goog.proto2.Message = function() {
  * An enumeration defining the possible field types.
  * Should be a mirror of that defined in descriptor.h.
  *
+ * TODO(user): Remove this alias.  The code generator generates code that
+ * references this enum, so it needs to exist until the code generator is
+ * changed.  The enum was moved to from Message to FieldDescriptor to avoid a
+ * dependency cycle.
+ *
+ * Use goog.proto2.FieldDescriptor.FieldType instead.
+ *
  * @enum {number}
  */
 goog.proto2.Message.FieldType = {
@@ -501,9 +508,8 @@ goog.proto2.Message.prototype.get$Value = function(tag, opt_index) {
   // Ensure that the field is deserialized.
   this.lazyDeserialize_(field);
 
-  var index = opt_index || 0;
-
   if (field.isRepeated()) {
+    var index = opt_index || 0;
     goog.proto2.Util.assert(index < this.count$Values(tag),
                             'Field value count is less than index given');
 
@@ -644,23 +650,23 @@ goog.proto2.Message.prototype.add$Value = function(tag, value) {
 goog.proto2.Message.prototype.checkFieldType_ = function(field, value) {
   goog.proto2.Util.assert(value !== null);
 
-  if (field.getNativeType() == String) {
+  var nativeType = field.getNativeType();
+  if (nativeType === String) {
     goog.proto2.Util.assert(typeof value === 'string',
                             'Expected value of type string');
-  } else if (field.getNativeType() == Boolean) {
+  } else if (nativeType === Boolean) {
     goog.proto2.Util.assert(typeof value === 'boolean',
                             'Expected value of type boolean');
-  } else if (field.getNativeType() == Number) {
+  } else if (nativeType === Number) {
     goog.proto2.Util.assert(typeof value === 'number',
                             'Expected value of type number');
+  } else if (field.getFieldType() ==
+             goog.proto2.FieldDescriptor.FieldType.ENUM) {
+    goog.proto2.Util.assert(typeof value === 'number',
+                            'Expected an enum value, which is a number');
   } else {
-    if (field.getFieldType() == goog.proto2.Message.FieldType.ENUM) {
-      goog.proto2.Util.assert(typeof value === 'number',
-                              'Expected an enum value, which is a number');
-    } else {
-      goog.proto2.Util.assert(value instanceof field.getNativeType(),
-                              'Expected a matching message type');
-    }
+    goog.proto2.Util.assert(value instanceof nativeType,
+                            'Expected a matching message type');
   }
 };
 
