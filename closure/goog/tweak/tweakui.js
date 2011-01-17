@@ -307,62 +307,57 @@ goog.tweak.TweakUi.prototype.insertEntry_ = function(entry) {
  * @constructor
  */
 goog.tweak.EntriesPanel = function(entries, opt_domHelper) {
-  // This if statement works around a bug in JsCompiler that prevents this class
-  // from being stripped.
-  // TODO(agrieve): Isolate this bug.
-  if (!goog.tweak.STRIP_TWEAKS) {
-    /**
-     * The entries to show in the panel.
-     * @type {!Array.<!goog.tweak.BaseEntry>} entries
-     * @private
-     */
-    this.entries_ = entries;
+  /**
+   * The entries to show in the panel.
+   * @type {!Array.<!goog.tweak.BaseEntry>} entries
+   * @private
+   */
+  this.entries_ = entries;
 
-    var self = this;
-    /**
-     * The bound onclick handler for the help question marks.
-     * @this {Element}
-     * @private
-     */
-    this.boundHelpOnClickHandler_ = function() {
-      self.onHelpClick_(this.parentNode);
-    };
+  var self = this;
+  /**
+   * The bound onclick handler for the help question marks.
+   * @this {Element}
+   * @private
+   */
+  this.boundHelpOnClickHandler_ = function() {
+    self.onHelpClick_(this.parentNode);
+  };
 
-    /**
-     * The element that contains the UI.
-     * @type {Element}
-     * @private
-     */
-    this.rootElem_;
+  /**
+   * The element that contains the UI.
+   * @type {Element}
+   * @private
+   */
+  this.rootElem_;
 
-    /**
-     * The element that contains all of the settings and the endElement.
-     * @type {Element}
-     * @private
-     */
-    this.mainPanel_;
+  /**
+   * The element that contains all of the settings and the endElement.
+   * @type {Element}
+   * @private
+   */
+  this.mainPanel_;
 
-    /**
-     * Flips between true/false each time the "Toggle Descriptions" link is
-     * clicked.
-     * @type {boolean}
-     * @private
-     */
-    this.showAllDescriptionsState_;
+  /**
+   * Flips between true/false each time the "Toggle Descriptions" link is
+   * clicked.
+   * @type {boolean}
+   * @private
+   */
+  this.showAllDescriptionsState_;
 
-    /**
-     * The DomHelper to render with.
-     * @type {!goog.dom.DomHelper}
-     * @private
-     */
-    this.domHelper_ = opt_domHelper || goog.dom.getDomHelper();
+  /**
+   * The DomHelper to render with.
+   * @type {!goog.dom.DomHelper}
+   * @private
+   */
+  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper();
 
-    /**
-     * Map of tweak ID -> EntriesPanel for child panels (BooleanGroups).
-     * @type {!Object.<!goog.tweak.EntriesPanel>}
-     */
-    this.childPanels = {};
-  }
+  /**
+   * Map of tweak ID -> EntriesPanel for child panels (BooleanGroups).
+   * @type {!Object.<!goog.tweak.EntriesPanel>}
+   */
+  this.childPanels = {};
 };
 
 
