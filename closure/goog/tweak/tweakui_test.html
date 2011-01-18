@@ -13,6 +13,8 @@ Author: agrieve@google.com (Andrew Grieve)
   <title>Closure Unit Tests - goog.tweak.TweakUi</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.dom');
+    goog.require('goog.string');
     goog.require('goog.testing.jsunit');
     goog.require('goog.tweak.TweakUi');
     goog.require('goog.tweak.testhelpers');
@@ -36,10 +38,17 @@ function setUp() {
 
 function tearDown() {
   goog.tweak.activeBooleanGroup_ = null;
-  root.innerHTML = '';
+  // When debugging a single test, don't clear out the DOM.
+  if (window.location.search.indexOf('runTests') == -1) {
+    root.innerHTML = '';
+  }
 }
 
 function tearDownPage() {
+  // When debugging a single test, don't clear out the DOM.
+  if (window.location.search.indexOf('runTests') != -1) {
+    return;
+  }
   // Create both registries for interactive testing.
   createRegistryEntries('');
   registry = goog.tweak.getRegistry();
@@ -51,12 +60,26 @@ function tearDownPage() {
       function() {
     goog.tweak.registerBoolean('Lazy' + ++entryCounter, 'Lazy-loaded tweak.');
   });
+  goog.tweak.registerButton('CreateNewTweakInNamespace1',
+      'Creates a new tweak within a namespace. Meant to simulate a tweak ' +
+      'being registered in a lazy-loaded module.', function() {
+    goog.tweak.registerString('foo.bar.Lazy' + ++entryCounter,
+        'Lazy-loaded tweak.');
+  });
+  goog.tweak.registerButton('CreateNewTweakInNamespace2',
+      'Creates a new tweak within a namespace. Meant to simulate a tweak ' +
+      'being registered in a lazy-loaded module.', function() {
+    goog.tweak.registerNumber('foo.bar.baz.Lazy' + ++entryCounter, 'Lazy combo',
+        3, {
+      validValues: [1, 2, 3],
+      label: 'Lazy!'
+    });
+  });
 
   var label = document.createElement('h3');
   label.innerHTML = 'TweakUi:';
   root.appendChild(label);
   createUi(false);
-
 
   label = document.createElement('h3');
   label.innerHTML = 'Collapsible:';
@@ -76,14 +99,19 @@ function getAllEntryDivs() {
 }
 
 function getEntryDiv(entry) {
-  // Note: This only works for non-buttons and for the first boolean group
-  // because sub-entries mess it up.
-  var tmpUi = new goog.tweak.TweakUi(registry);
-  var entries = tmpUi.extractTopLevelEntries_();
-  var index = goog.array.indexOf(entries, entry);
-  assertNotEquals('getEntryDiv failed', -1, index);
+  var label = goog.tweak.TweakUi.getNamespacedLabel_(entry);
   var allDivs = getAllEntryDivs();
-  return allDivs[index];
+  var ret;
+  for (var i = 0, div; div = allDivs[i]; i++) {
+    var divText = goog.dom.getTextContent(div);
+    if (goog.string.startsWith(divText, label) &&
+        goog.string.contains(divText, entry.description)) {
+      assertFalse('Found multiple divs matching entry ' + entry.getId(), !!ret);
+      ret = div;
+    }
+  }
+  assertTrue('getEntryDiv failed for ' + entry.getId(), !!ret);
+  return ret;
 }
 
 function getEntryInput(entry) {
@@ -193,6 +221,15 @@ function testToggleDescriptions() {
       heightBefore, root.offsetHeight);
 }
 
+function assertEntryOrder(entryId1, entryId2) {
+  var entry1 = registry.getEntry(entryId1);
+  var entry2 = registry.getEntry(entryId2);
+  var div1 = getEntryDiv(entry1);
+  var div2 = getEntryDiv(entry2);
+  var order = goog.dom.compareNodeOrder(div1, div2);
+  assertTrue(entry1.getId() + ' should be before ' + entry2.getId(), order < 0);
+}
+
 function testAddEntry() {
   createUi(false);
   goog.tweak.registerBoolean('Lazy1', 'Lazy-loaded tweak.');
@@ -201,8 +238,28 @@ function testAddEntry() {
   goog.tweak.beginBooleanGroup('LazyGroup', 'Lazy-loaded tweak.');
   goog.tweak.registerBoolean('Lazy3', 'Lazy-loaded tweak.');
   goog.tweak.endBooleanGroup();
+
   assertEquals('Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT + 4,
       getAllEntryDivs().length);
+  assertEntryOrder('Enum2', 'Lazy1');
+  assertEntryOrder('Lazy1', 'Lazy2');
+  assertEntryOrder('Lazy2', 'Num');
+  assertEntryOrder('BoolGroup', 'Lazy3');
+}
+
+function testAddNamespacedEntries() {
+  createUi(false);
+  goog.tweak.beginBooleanGroup('NS.LazyGroup', 'Lazy-loaded tweak.');
+  goog.tweak.registerBoolean('NS.InGroup', 'Lazy-loaded tweak.');
+  goog.tweak.endBooleanGroup();
+  goog.tweak.registerBoolean('NS.Banana', 'Lazy-loaded tweak.');
+  goog.tweak.registerBoolean('NS.Apple', 'Lazy-loaded tweak.');
+
+  assertEquals('Wrong number of entry divs.', EXPECTED_ENTRIES_COUNT + 5,
+      getAllEntryDivs().length);
+  assertEntryOrder('Enum2', 'NS.Apple');
+  assertEntryOrder('NS.Apple', 'NS.Banana');
+  assertEntryOrder('NS.Banana', 'NS.InGroup');
 }
 
 function testCollapsibleIsLazy() {

@@ -28,6 +28,7 @@ goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.tweak');
 goog.require('goog.ui.Zippy');
+goog.require('goog.userAgent');
 
 
 
@@ -65,6 +66,14 @@ goog.tweak.TweakUi = function(registry, opt_domHelper) {
 
 
 /**
+ * The CSS class name unique to the root tweak panel div.
+ * @type {string}
+ * @private
+ */
+goog.tweak.TweakUi.ROOT_PANEL_CLASS_ = goog.getCssName('goog-tweak-root');
+
+
+/**
  * The CSS class name unique to the tweak entry div.
  * @type {string}
  * @private
@@ -82,6 +91,15 @@ goog.tweak.TweakUi.ENTRY_CSS_CLASSES_ = goog.tweak.TweakUi.ENTRY_CSS_CLASS_ +
 
 
 /**
+ * The CSS classes for each namespace tweak entry div.
+ * @type {string}
+ * @private
+ */
+goog.tweak.TweakUi.ENTRY_GROUP_CSS_CLASSES_ =
+    goog.tweak.TweakUi.ENTRY_CSS_CLASS_;
+
+
+/**
  * Marker that the style sheet has already been installed.
  * @type {string}
  * @private
@@ -95,13 +113,24 @@ goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_ =
  * @type {string}
  * @private
  */
-goog.tweak.TweakUi.CSS_STYLES_ = '.' + goog.tweak.TweakUi.ENTRY_CSS_CLASS_ +
-    ',.' + goog.tweak.TweakUi.ENTRY_CSS_CLASS_ + ' fieldset{' +
-    // Prefer inline-block but fall back on inline.
-    'display:inline;display:inline-block;' +
-    // Space things out vertically a little bit so it's not so crowded.
-    'line-height: 2em;' +
-    '}';
+goog.tweak.TweakUi.CSS_STYLES_ = (function() {
+  var MOBILE = goog.userAgent.MOBILE;
+  var IE = goog.userAgent.IE;
+  var ENTRY_CLASS = '.' + goog.tweak.TweakUi.ENTRY_CSS_CLASS_;
+  var ROOT_PANEL_CLASS = '.' + goog.tweak.TweakUi.ROOT_PANEL_CLASS_;
+  var GOOG_INLINE_BLOCK_CLASS = '.' + goog.getCssName('goog-inline-block');
+  var ret = ROOT_PANEL_CLASS + '{background:#ffc; padding:0 4px}';
+  // Make this work even if the user hasn't included common.css.
+  if (!IE) {
+    ret += GOOG_INLINE_BLOCK_CLASS + '{display:inline-block}';
+  }
+  // Space things out vertically for touch UIs.
+  if (MOBILE) {
+    ret += ROOT_PANEL_CLASS + ',' + ROOT_PANEL_CLASS + ' fieldset{' +
+        'line-height:2em;' + '}';
+  }
+  return ret;
+})();
 
 
 /**
@@ -157,22 +186,34 @@ goog.tweak.TweakUi.createCollapsible = function(opt_domHelper) {
 
 
 /**
- * Compares the given entries. Orders by settings, boolean groups, buttons.
- * Within those groups, it orders alphabetically by label.
+ * Compares the given entries. Orders alphabetically and groups buttons and
+ * expandable groups.
  * @param {goog.tweak.BaseEntry} a The first entry to compare.
  * @param {goog.tweak.BaseEntry} b The second entry to compare.
  * @return {number} Refer to goog.array.defaultCompare.
  * @private
  */
 goog.tweak.TweakUi.entryCompare_ = function(a, b) {
-  var labelCompare = goog.array.defaultCompare(a.label, b.label);
-  var isGroupCompare = goog.array.defaultCompare(
-      a instanceof goog.tweak.BooleanGroup,
-      b instanceof goog.tweak.BooleanGroup);
-  var isButtonCompare = goog.array.defaultCompare(
-      a instanceof goog.tweak.BaseSetting,
-      b instanceof goog.tweak.BaseSetting);
-  return -isButtonCompare || isGroupCompare || labelCompare;
+  return (
+      goog.array.defaultCompare(a instanceof goog.tweak.NamespaceEntry_,
+          b instanceof goog.tweak.NamespaceEntry_) ||
+      goog.array.defaultCompare(a instanceof goog.tweak.BooleanGroup,
+          b instanceof goog.tweak.BooleanGroup) ||
+      goog.array.defaultCompare(a instanceof goog.tweak.ButtonAction,
+          b instanceof goog.tweak.ButtonAction) ||
+      goog.array.defaultCompare(a.label, b.label) ||
+      goog.array.defaultCompare(a.getId(), b.getId()));
+};
+
+
+/**
+ * @param {!goog.tweak.BaseEntry} entry The entry.
+ * @return {boolean} Returns whether the given entry contains sub-entries.
+ * @private
+ */
+goog.tweak.TweakUi.isGroupEntry_ = function(entry) {
+  return entry instanceof goog.tweak.NamespaceEntry_ ||
+      entry instanceof goog.tweak.BooleanGroup;
 };
 
 
@@ -190,15 +231,29 @@ goog.tweak.TweakUi.extractBooleanGroupEntries_ = function(group) {
 
 
 /**
- * Returns the list of entries to render.
- * @return {!Array.<!goog.tweak.BaseEntry>} The sorted top-level entries.
+ * @param {!goog.tweak.BaseEntry} entry The entry.
+ * @return {string} Returns the namespace for the entry, or '' if it is not
+ *     namespaced.
  * @private
  */
-goog.tweak.TweakUi.prototype.extractTopLevelEntries_ = function() {
-  var ret = this.registry_.extractEntries(true /* excludeChildEntries */,
-      false /* excludeNonSettings */);
-  ret.sort(goog.tweak.TweakUi.entryCompare_);
-  return ret;
+goog.tweak.TweakUi.extractNamespace_ = function(entry) {
+  var namespaceMatch = /.+(?=\.)/.exec(entry.getId());
+  return namespaceMatch ? namespaceMatch[0] : '';
+};
+
+
+/**
+ * @param {!goog.tweak.BaseEntry} entry The entry.
+ * @return {string} Returns the part of the label after the last period, unless
+ *     the label has been explicly set (it is different from the ID).
+ * @private
+ */
+goog.tweak.TweakUi.getNamespacedLabel_ = function(entry) {
+  var label = entry.label;
+  if (label == entry.getId()) {
+    label = label.substr(label.lastIndexOf('.') + 1);
+  }
+  return label;
 };
 
 
@@ -256,10 +311,17 @@ goog.tweak.TweakUi.prototype.render = function() {
       'Apply Tweaks');
   submitButton.onclick = goog.bind(this.restartWithAppliedTweaks_, this);
 
-  var topLevelEntries = this.extractTopLevelEntries_();
-  this.entriesPanel_ = new goog.tweak.EntriesPanel(topLevelEntries, dh);
-  this.entriesPanel_.render(submitButton);
-  return this.getRootElement();
+  var rootPanel = new goog.tweak.EntriesPanel([], dh);
+  var rootPanelDiv = rootPanel.render(submitButton);
+  rootPanelDiv.className += ' ' + goog.tweak.TweakUi.ROOT_PANEL_CLASS_;
+  var entries = this.registry_.extractEntries(true /* excludeChildEntries */,
+      false /* excludeNonSettings */);
+  for (var i = 0, entry; entry = entries[i]; i++) {
+    rootPanel.insertEntry(entry);
+  }
+
+  this.entriesPanel_ = rootPanel;
+  return rootPanelDiv;
 };
 
 
@@ -282,19 +344,26 @@ goog.tweak.TweakUi.prototype.onNewRegisteredEntry_ = function(entry) {
  */
 goog.tweak.TweakUi.prototype.insertEntry_ = function(entry) {
   var panel = this.entriesPanel_;
-  var newEntryList;
+  var namespace = goog.tweak.TweakUi.extractNamespace_(entry);
+
+  if (namespace) {
+    // Find the NamespaceEntry that the entry belongs to.
+    var namespaceEntryId = goog.tweak.NamespaceEntry_.ID_PREFIX + namespace;
+    var nsPanel = panel.childPanels[namespaceEntryId];
+    if (nsPanel) {
+      panel = nsPanel;
+    } else {
+      entry = new goog.tweak.NamespaceEntry_(namespace, [entry]);
+    }
+  }
   if (entry instanceof goog.tweak.BooleanInGroupSetting) {
     var group = entry.getGroup();
+    // BooleanGroup entries are always registered before their
+    // BooleanInGroupSettings.
     panel = panel.childPanels[group.getId()];
-    goog.asserts.assert(panel, 'Missing panel for entry %s', entry.getId());
-    newEntryList = goog.tweak.TweakUi.extractBooleanGroupEntries_(group);
-  } else {
-    newEntryList = this.extractTopLevelEntries_();
   }
-  var insertIndex = goog.array.indexOf(newEntryList, entry);
-  if (insertIndex != -1) {
-    panel.insertEntry(entry, insertIndex);
-  }
+  goog.asserts.assert(panel, 'Missing panel for entry %s', entry.getId());
+  panel.insertEntry(entry);
 };
 
 
@@ -389,7 +458,7 @@ goog.tweak.EntriesPanel.prototype.getRootElement = function() {
 goog.tweak.EntriesPanel.prototype.render = function(opt_endElement) {
   var dh = this.domHelper_;
   var entries = this.entries_;
-  var ret = dh.createDom('div', {style: 'background:#ffc;padding:0 4px'});
+  var ret = dh.createDom('div');
 
   var showAllDescriptionsLink = dh.createDom('a', {
     href: 'javascript:;',
@@ -416,27 +485,36 @@ goog.tweak.EntriesPanel.prototype.render = function(opt_endElement) {
 /**
  * Inserts the given entry into the panel.
  * @param {!goog.tweak.BaseEntry} entry The entry to insert.
- * @param {number} index The index to insert it at.
  */
-goog.tweak.EntriesPanel.prototype.insertEntry = function(entry, index) {
-  goog.array.insertAt(this.entries_, entry, index);
+goog.tweak.EntriesPanel.prototype.insertEntry = function(entry) {
+  var insertIndex = -goog.array.binarySearch(this.entries_, entry,
+      goog.tweak.TweakUi.entryCompare_) - 1;
+  goog.asserts.assert(insertIndex >= 0, 'insertEntry failed for %s',
+      entry.getId());
+  goog.array.insertAt(this.entries_, entry, insertIndex);
   this.mainPanel_.insertBefore(
       this.createEntryElem_(entry),
       // IE doesn't like 'undefined' here.
-      this.mainPanel_.childNodes[index] || null);
+      this.mainPanel_.childNodes[insertIndex] || null);
 };
 
 
 /**
  * Creates and returns a form element for the given entry.
- * @param {goog.tweak.BaseEntry} entry The entry.
+ * @param {!goog.tweak.BaseEntry} entry The entry.
  * @return {!Element} The root DOM element for the entry.
  * @private
  */
 goog.tweak.EntriesPanel.prototype.createEntryElem_ = function(entry) {
   var dh = this.domHelper_;
-  var ret = dh.createDom('div', goog.tweak.TweakUi.ENTRY_CSS_CLASSES_,
-      dh.createDom('label', {
+  var isGroupEntry = goog.tweak.TweakUi.isGroupEntry_(entry);
+  var classes = isGroupEntry ? goog.tweak.TweakUi.ENTRY_GROUP_CSS_CLASSES_ :
+      goog.tweak.TweakUi.ENTRY_CSS_CLASSES_;
+  // Containers should not use label tags or else all descendent inputs will be
+  // connected on desktop browsers.
+  var containerNodeName = isGroupEntry ? 'span' : 'label';
+  var ret = dh.createDom('div', classes,
+      dh.createDom(containerNodeName, {
         // Make the hover text the description.
         title: entry.description,
         style: 'color:' + (entry.isRestartRequired() ? '' : 'blue')
@@ -487,10 +565,7 @@ goog.tweak.EntriesPanel.prototype.createHelpElem_ = function(entry) {
   var descriptionElem = ret.lastChild;
   goog.dom.setTextContent(/** @type {Element} */ (descriptionElem),
       entry.description);
-  if (entry.isRestartRequired()) {
-    descriptionElem.innerHTML +=
-        ' <span style="color:red">(requires restart)</span>';
-  } else {
+  if (!entry.isRestartRequired()) {
     descriptionElem.innerHTML +=
         ' <span style="color:blue">(no restart required)</span>';
   }
@@ -516,17 +591,18 @@ goog.tweak.EntriesPanel.prototype.toggleAllDescriptions = function() {
  * Creates the DOM element to control the given enum setting.
  * @param {!goog.tweak.StringSetting|!goog.tweak.NumericSetting} tweak The
  *     setting.
+ * @param {string} label The label for the entry.
  * @param {!Function} onchangeFunc onchange event handler.
  * @return {!DocumentFragment} The DOM element.
  * @private
  */
 goog.tweak.EntriesPanel.prototype.createComboBoxDom_ =
-    function(tweak, onchangeFunc) {
+    function(tweak, label, onchangeFunc) {
   // The markup looks like:
   // Label: <select><option></option></select>
   var dh = this.domHelper_;
   var ret = dh.getDocument().createDocumentFragment();
-  ret.appendChild(dh.createTextNode(tweak.label + ': '));
+  ret.appendChild(dh.createTextNode(label + ': '));
   var selectElem = dh.createElement('select');
   var values = tweak.getValidValues();
   for (var i = 0, il = values.length; i < il; ++i) {
@@ -552,16 +628,17 @@ goog.tweak.EntriesPanel.prototype.createComboBoxDom_ =
 /**
  * Creates the DOM element to control the given boolean setting.
  * @param {!goog.tweak.BooleanSetting} tweak The setting.
+ * @param {string} label The label for the entry.
  * @return {!DocumentFragment} The DOM elements.
  * @private
  */
 goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_ =
-    function(tweak) {
+    function(tweak, label) {
   var dh = this.domHelper_;
   var ret = dh.getDocument().createDocumentFragment();
   var checkbox = dh.createDom('input', {type: 'checkbox'});
   ret.appendChild(checkbox);
-  ret.appendChild(dh.createTextNode(tweak.label));
+  ret.appendChild(dh.createTextNode(label));
 
   // Needed on IE6 to ensure the textbox doesn't get cleared
   // when added to the DOM.
@@ -579,28 +656,32 @@ goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_ =
 
 
 /**
- * Creates the DOM element to control the given boolean group.
- * @param {!goog.tweak.BooleanGroup} booleanGroup The group.
+ * Creates the DOM for a BooleanGroup or NamespaceEntry.
+ * @param {!goog.tweak.BooleanGroup|!goog.tweak.NamespaceEntry_} entry The
+ *     entry.
+ * @param {string} label The label for the entry.
+ * @param {!Array.<goog.tweak.BaseEntry>} childEntries The child entries.
  * @return {!DocumentFragment} The DOM element.
  * @private
  */
-goog.tweak.EntriesPanel.prototype.createBooleanGroupDom_ =
-    function(booleanGroup) {
+goog.tweak.EntriesPanel.prototype.createSubPanelDom_ = function(entry, label,
+    childEntries) {
   var dh = this.domHelper_;
   var toggleLink = dh.createDom('a', {href: 'javascript:;'},
-      booleanGroup.label + ' \xBB');
+      label + ' \xBB');
   var toggleLink2 = dh.createDom('a', {href: 'javascript:;'},
-      '\xAB ' + booleanGroup.label);
-
-  var childEntries =
-      goog.tweak.TweakUi.extractBooleanGroupEntries_(booleanGroup);
+      '\xAB ' + label);
+  toggleLink2.style.marginRight = '10px';
 
   var innerUi = new goog.tweak.EntriesPanel(childEntries, dh);
-  this.childPanels[booleanGroup.getId()] = innerUi;
+  this.childPanels[entry.getId()] = innerUi;
 
   var elem = innerUi.render();
-  var childrenElem = dh.createDom('fieldset', null,
-      dh.createDom('legend', null, toggleLink2),
+  // Move the toggle descriptions link into the legend.
+  var descriptionsLink = elem.firstChild;
+  var childrenElem = dh.createDom('fieldset',
+      goog.getCssName('goog-inline-block'),
+      dh.createDom('legend', null, toggleLink2, descriptionsLink),
       elem);
 
   new goog.ui.Zippy(toggleLink, childrenElem, false /* expanded */,
@@ -617,15 +698,16 @@ goog.tweak.EntriesPanel.prototype.createBooleanGroupDom_ =
  * Creates the DOM element to control the given string setting.
  * @param {!goog.tweak.StringSetting|!goog.tweak.NumericSetting} tweak The
  *     setting.
+ * @param {string} label The label for the entry.
  * @param {!Function} onchangeFunc onchange event handler.
  * @return {!DocumentFragment} The DOM element.
  * @private
  */
 goog.tweak.EntriesPanel.prototype.createTextBoxDom_ =
-    function(tweak, onchangeFunc) {
+    function(tweak, label, onchangeFunc) {
   var dh = this.domHelper_;
   var ret = dh.getDocument().createDocumentFragment();
-  ret.appendChild(dh.createTextNode(tweak.label + ': '));
+  ret.appendChild(dh.createTextNode(label + ': '));
   var textBox = dh.createDom('input', {
     value: tweak.getNewValue(),
     // TODO(agrieve): Make size configurable or autogrow.
@@ -643,14 +725,15 @@ goog.tweak.EntriesPanel.prototype.createTextBoxDom_ =
 /**
  * Creates the DOM element to control the given button action.
  * @param {!goog.tweak.ButtonAction} tweak The action.
+ * @param {string} label The label for the entry.
  * @return {!Element} The DOM element.
  * @private
  */
 goog.tweak.EntriesPanel.prototype.createButtonActionDom_ =
-    function(tweak) {
+    function(tweak, label) {
   return this.domHelper_.createDom('button', {
     onclick: goog.bind(tweak.fireCallbacks, tweak)
-  }, tweak.label);
+  }, label);
 };
 
 
@@ -661,18 +744,20 @@ goog.tweak.EntriesPanel.prototype.createButtonActionDom_ =
  * @private
  */
 goog.tweak.EntriesPanel.prototype.createTweakEntryDom_ = function(entry) {
+  var label = goog.tweak.TweakUi.getNamespacedLabel_(entry);
   if (entry instanceof goog.tweak.BooleanSetting) {
-    return this.createBooleanSettingDom_(entry);
+    return this.createBooleanSettingDom_(entry, label);
   } else if (entry instanceof goog.tweak.BooleanGroup) {
-    return this.createBooleanGroupDom_(entry);
+    var childEntries = goog.tweak.TweakUi.extractBooleanGroupEntries_(entry);
+    return this.createSubPanelDom_(entry, label, childEntries);
   } else if (entry instanceof goog.tweak.StringSetting) {
     /** @this {Element} */
     var setValueFunc = function() {
       entry.setValue(this.value);
     };
     return entry.getValidValues() ?
-        this.createComboBoxDom_(entry, setValueFunc) :
-        this.createTextBoxDom_(entry, setValueFunc);
+        this.createComboBoxDom_(entry, label, setValueFunc) :
+        this.createTextBoxDom_(entry, label, setValueFunc);
   } else if (entry instanceof goog.tweak.NumericSetting) {
     setValueFunc = function() {
       // Reset the value if it's not a number.
@@ -683,12 +768,49 @@ goog.tweak.EntriesPanel.prototype.createTweakEntryDom_ = function(entry) {
       }
     };
     return entry.getValidValues() ?
-        this.createComboBoxDom_(entry, setValueFunc) :
-        this.createTextBoxDom_(entry, setValueFunc);
+        this.createComboBoxDom_(entry, label, setValueFunc) :
+        this.createTextBoxDom_(entry, label, setValueFunc);
+  } else if (entry instanceof goog.tweak.NamespaceEntry_) {
+    return this.createSubPanelDom_(entry, entry.label, entry.entries);
   }
   goog.asserts.assertInstanceof(entry, goog.tweak.ButtonAction,
       'invalid entry: %s', entry);
   return this.createButtonActionDom_(
-      /** @type {!goog.tweak.ButtonAction} */ (entry));
+      /** @type {!goog.tweak.ButtonAction} */ (entry), label);
 };
+
+
+
+/**
+ * Entries used to represent the collapsible namespace links. These entries are
+ * never registered with the TweakRegistry, but are contained within the
+ * collection of entries within TweakPanels.
+ * @param {string} namespace The namespace for the entry.
+ * @param {!Array.<!goog.tweak.BaseEntry>} entries Entries within the namespace.
+ * @constructor
+ * @extends {goog.tweak.BaseEntry}
+ * @private
+ */
+goog.tweak.NamespaceEntry_ = function(namespace, entries) {
+  goog.tweak.BaseEntry.call(this,
+      goog.tweak.NamespaceEntry_.ID_PREFIX + namespace,
+      'Tweaks within the ' + namespace + ' namespace.');
+
+  /**
+   * Entries within this namespace.
+   * @type {!Array.<!goog.tweak.BaseEntry>}
+   */
+  this.entries = entries;
+
+  this.label = namespace;
+};
+goog.inherits(goog.tweak.NamespaceEntry_, goog.tweak.BaseEntry);
+
+
+/**
+ * Prefix for the IDs of namespace entries used to ensure that they do not
+ * conflict with regular entries.
+ * @type {string}
+ */
+goog.tweak.NamespaceEntry_.ID_PREFIX = '!';
 

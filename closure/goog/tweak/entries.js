@@ -56,9 +56,6 @@ goog.require('goog.object');
  * @constructor
  */
 goog.tweak.BaseEntry = function(id, description) {
-  goog.asserts.assert(!/[^A-Za-z0-9._]/.test(id),
-      'Tweak id contains illegal characters: ', id);
-
   /**
    * An ID to uniquely identify the entry.
    * @type {string}
@@ -173,6 +170,10 @@ goog.tweak.BaseEntry.prototype.fireCallbacks = function() {
  */
 goog.tweak.BaseSetting = function(id, description) {
   goog.tweak.BaseEntry.call(this, id, description);
+  // Apply this restriction for settings since they turn in to query
+  // parameters. For buttons, it's not really important.
+  goog.asserts.assert(!/[^A-Za-z0-9._]/.test(id),
+      'Tweak id contains illegal characters: ', id);
 
   /**
    * The value of this setting's query parameter.
