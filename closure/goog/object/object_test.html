@@ -333,6 +333,44 @@ function testCreateSet() {
                      {}, goog.object.createSet([]));
 }
 
+function createTestDeepObject() {
+  var obj = {};
+  obj.a = {};
+  obj.a.b = {};
+  obj.a.b.c = {};
+  obj.a.b.c.fooArr = [5, 6, 7, 8];
+  obj.a.b.c.knownNull = null;
+  return obj;
+}
+
+function testGetValueByKeys() {
+  var obj = createTestDeepObject();
+  assertEquals(obj, goog.object.getValueByKeys(obj));
+  assertEquals(obj.a, goog.object.getValueByKeys(obj, 'a'));
+  assertEquals(obj.a.b, goog.object.getValueByKeys(obj, 'a', 'b'));
+  assertEquals(obj.a.b.c, goog.object.getValueByKeys(obj, 'a', 'b', 'c'));
+  assertEquals(obj.a.b.c.d,
+               goog.object.getValueByKeys(obj, 'a', 'b', 'c', 'd'));
+  assertEquals(8, goog.object.getValueByKeys(obj, 'a', 'b', 'c', 'fooArr', 3));
+  assertNull(goog.object.getValueByKeys(obj, 'a', 'b', 'c', 'knownNull'));
+  assertUndefined(goog.object.getValueByKeys(obj, 'e', 'f', 'g'));
+}
+
+function testGetValueByKeysArraySyntax() {
+  var obj = createTestDeepObject();
+  assertEquals(obj, goog.object.getValueByKeys(obj, []));
+  assertEquals(obj.a, goog.object.getValueByKeys(obj, ['a']));
+
+  assertEquals(obj.a.b, goog.object.getValueByKeys(obj, ['a', 'b']));
+  assertEquals(obj.a.b.c, goog.object.getValueByKeys(obj, ['a', 'b', 'c']));
+  assertEquals(obj.a.b.c.d,
+      goog.object.getValueByKeys(obj, ['a', 'b', 'c', 'd']));
+  assertEquals(8,
+      goog.object.getValueByKeys(obj, ['a', 'b', 'c', 'fooArr', 3]));
+  assertNull(goog.object.getValueByKeys(obj, ['a', 'b', 'c', 'knownNull']));
+  assertUndefined(goog.object.getValueByKeys(obj, 'e', 'f', 'g'));
+}
+
 </script>
 </body>
 </html>
