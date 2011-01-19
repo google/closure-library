@@ -44,7 +44,6 @@
 goog.provide('goog.ui.Menu');
 goog.provide('goog.ui.Menu.EventType');
 
-goog.require('goog.math.Coordinate');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component.EventType');
@@ -112,16 +111,6 @@ goog.ui.Menu.EventType = {
  * @deprecated Use goog.ui.MenuRenderer.CSS_CLASS.
  */
 goog.ui.Menu.CSS_CLASS = goog.ui.MenuRenderer.CSS_CLASS;
-
-
-/**
- * Coordinates of the mousedown event that caused this menu to be made visible.
- * Used to prevent the consequent mouseup event due to a simple click from
- * activating a menu item immediately. Considered protected; should only be used
- * within this package or by subclasses.
- * @type {goog.math.Coordinate|undefined}
- */
-goog.ui.Menu.prototype.openingCoords;
 
 
 /**
@@ -340,22 +329,13 @@ goog.ui.Menu.prototype.getAllowHighlightDisabled = function() {
 };
 
 
-/**
- * @inheritDoc
- * @param {goog.events.Event=} opt_e Mousedown event that caused this menu to
- *     be made visible (ignored if show is false).
- */
-goog.ui.Menu.prototype.setVisible = function(show, opt_force, opt_e) {
+/** @inheritDoc */
+goog.ui.Menu.prototype.setVisible = function(show, opt_force) {
   var visibilityChanged = goog.ui.Menu.superClass_.setVisible.call(this, show,
       opt_force);
   if (visibilityChanged && show && this.isInDocument() &&
       this.allowAutoFocus_) {
     this.getKeyEventTarget().focus();
-  }
-  if (show && opt_e && goog.isNumber(opt_e.clientX)) {
-    this.openingCoords = new goog.math.Coordinate(opt_e.clientX, opt_e.clientY);
-  } else {
-    this.openingCoords = null;
   }
   return visibilityChanged;
 };

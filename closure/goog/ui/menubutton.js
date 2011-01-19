@@ -218,7 +218,7 @@ goog.ui.MenuButton.prototype.handleMouseDown = function(e) {
   goog.ui.MenuButton.superClass_.handleMouseDown.call(this, e);
   if (this.isActive()) {
     // The component was allowed to activate; toggle menu visibility.
-    this.setOpen(!this.isOpen(), e);
+    this.setOpen(!this.isOpen());
     if (this.menu_) {
       this.menu_.setMouseButtonPressed(this.isOpen());
     }
@@ -628,11 +628,9 @@ goog.ui.MenuButton.prototype.hideMenu = function() {
 /**
  * Opens or closes the attached popup menu.
  * @param {boolean} open Whether to open or close the menu.
- * @param {goog.events.Event=} opt_e Mousedown event that caused the menu to
- *     be opened.
  * @override
  */
-goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
+goog.ui.MenuButton.prototype.setOpen = function(open) {
   goog.ui.MenuButton.superClass_.setOpen.call(this, open);
   if (this.menu_ && this.hasState(goog.ui.Component.State.OPENED) == open) {
     if (open) {
@@ -662,7 +660,7 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
         }
       }
     }
-    this.menu_.setVisible(open, false, opt_e);
+    this.menu_.setVisible(open);
     this.attachPopupListeners_(open);
   }
 };
