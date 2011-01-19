@@ -91,19 +91,21 @@ See the COPYING file for details.
     goog.testing.events.fireMouseOverEvent(root, null);
     goog.testing.events.fireMouseOverEvent(root, null, coordinate);
     assertEventTypes(['mouseover', 'mouseover']);
-    assertCoordinates([new goog.math.Coordinate(), coordinate]);
+    assertCoordinates([goog.style.getClientPosition(root), coordinate]);
   }
 
   function testMouseOut() {
     goog.testing.events.fireMouseOutEvent(root, null);
     goog.testing.events.fireMouseOutEvent(root, null, coordinate);
     assertEventTypes(['mouseout', 'mouseout']);
-    assertCoordinates([new goog.math.Coordinate(), coordinate]);
+    assertCoordinates([goog.style.getClientPosition(root), coordinate]);
   }
 
   function testClickSequence() {
     assertTrue(goog.testing.events.fireClickSequence(root));
     assertEventTypes(['mousedown', 'mouseup', 'click']);
+    var rootPosition = goog.style.getClientPosition(root);
+    assertCoordinates([rootPosition, rootPosition, rootPosition]);
   }
 
   function testClickSequenceWithCoordinate() {

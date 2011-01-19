@@ -24,8 +24,10 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.events');
   goog.require('goog.events.Event');
+  goog.require('goog.math');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.ui.Component.EventType');
   goog.require('goog.ui.Menu');
 </script>
 </head>
@@ -46,6 +48,35 @@ function tearDown() {
 
   var element = goog.dom.getElement('demoMenu');
   element.parentNode.replaceChild(clonedMenuDom, element);
+}
+
+/** @bug 1463524 */
+function testMouseupDoesntActivateMenuItemImmediately() {
+  menu.decorate(goog.dom.getElement('demoMenu'));
+
+  var fakeEvent = {clientX: 42, clientY: 42};
+  var itemElem = goog.dom.getElement('menuItem2');
+  var coords = new goog.math.Coordinate(42, 42);
+
+  var menuItem = menu.getChildAt(1);
+  var actionDispatched = false;
+  goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION,
+      function(e) {
+        actionDispatched = true;
+      });
+
+  menu.setVisible(true, false, fakeEvent);
+  // Makes the menu item active so it can be selected on mouseup.
+  menuItem.setActive(true);
+
+  goog.testing.events.fireMouseUpEvent(itemElem, undefined, coords);
+  assertFalse('ACTION should not be dispatched after the initial mouseup',
+              actionDispatched);
+
+  goog.testing.events.fireMouseUpEvent(itemElem, undefined, coords);
+  assertTrue('ACTION should be dispatched after the second mouseup',
+             actionDispatched);
+
 }
 
 function testHoverBehavior() {
