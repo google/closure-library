@@ -71,6 +71,7 @@ var stubs = new goog.testing.PropertyReplacer();
 var originalGoogBind = goog.bind;
 
 function tearDown() {
+  goog.setCssNameMapping(undefined);
   stubs.reset();
   goog.bind = originalGoogBind;
 }
@@ -1047,6 +1048,26 @@ function testGetCssName() {
   assertEquals('classname', goog.getCssName('classname'));
   assertEquals('random-classname', goog.getCssName('random-classname'));
   assertEquals('control-modifier', goog.getCssName('control', 'modifier'));
+
+  goog.setCssNameMapping({
+    'goog': 'a',
+    'disabled': 'b'
+  }, 'BY_PART');
+  var g = goog.getCssName('goog');
+  assertEquals('a', g);
+  assertEquals('a-b', goog.getCssName(g, 'disabled'));
+  assertEquals('a-b', goog.getCssName('goog-disabled'));
+  assertEquals('goog-button', goog.getCssName('goog-button'));
+
+  goog.setCssNameMapping({
+    'goog-button': 'a',
+    'active': 'b'
+  }, 'BY_WHOLE');
+
+  g = goog.getCssName('goog-button');
+  assertEquals('a', g);
+  assertEquals('a-b', goog.getCssName(g, 'active'));
+  assertEquals('goog-disabled', goog.getCssName('goog-disabled'));
 }
 
 function testAddDependency() {
