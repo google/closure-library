@@ -517,11 +517,9 @@ goog.net.XhrIo.prototype.createXhr = function() {
 
 /**
  * Override of dispatchEvent.  We need to keep track if an XMLHttpRequest is
- * being sent from the context of another requests' repsonse.  If it is then, we
+ * being sent from the context of another requests' response.  If it is then, we
  * make the XHR send async.
- * @param {goog.events.Event|string} e Event to dispatch.
- * @return {boolean} Whether the dispatch completed without a handler calling
- *     preventDefault.
+ * @override
  */
 goog.net.XhrIo.prototype.dispatchEvent = function(e) {
   if (this.xhr_) {
