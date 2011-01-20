@@ -10,7 +10,7 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Closure Unit Tests - goog.net.ImageLoader</title>  
+  <title>Closure Unit Tests - goog.net.ImageLoader</title>
   <script src="../base.js"></script>
   <script>
     goog.require('goog.events');
@@ -26,6 +26,12 @@ See the COPYING file for details.
 
 
   var TEST_IMAGES = new goog.structs.Map();
+
+  var TEST_EVENT_TYPES = [
+    goog.events.EventType.LOAD,
+    goog.net.EventType.COMPLETE,
+    goog.net.EventType.ERROR
+  ];
 
   //  TEST_IMAGES.set(FileName, Expected Size (width, height), Expected event)
   var EVENT_TYPE_LOAD = goog.events.EventType.LOAD;
@@ -55,6 +61,13 @@ See the COPYING file for details.
   /** True once the page is ready for the test to be run. */
   imageLoaderTestCase.isReady = false;
 
+  // A regular image loader.
+  imageLoaderTestCase.imageLoader = new goog.net.ImageLoader();
+
+  // An image loader that is used to check whether we can dispose
+  // it safely whenever an event is fired before the COMPLETE event.
+  imageLoaderTestCase.disposalImageLoader = new goog.net.ImageLoader();
+
   /** Sets up the test environment, adds tests and sets up the worker pools. */
   imageLoaderTestCase.setUpTests = function() {
     this.log('Setting tests up');
@@ -64,21 +77,43 @@ See the COPYING file for details.
 
     this.isSetUp = true;
 
-    var imageLoader = new goog.net.ImageLoader();
     var keys = TEST_IMAGES.getKeys();
     for (var i = 0; i < keys.length; i++) {
       this.log('Adding image: ' + keys[i]);
-      imageLoader.addImage('img_' + i, keys[i]);
+      this.imageLoader.addImage('img_' + i, keys[i]);
+      this.disposalImageLoader.addImage('img_' + i, keys[i]);
     }
-    goog.events.listen(imageLoader, goog.events.EventType.LOAD, this);
-    goog.events.listen(imageLoader, goog.net.EventType.COMPLETE, this);
-    goog.events.listen(imageLoader, goog.net.EventType.ERROR, this);
-    imageLoader.start();
+
+    goog.events.listen(this.imageLoader, TEST_EVENT_TYPES,
+        this.handleImageLoaderEvent, false, this);
+
+    goog.events.listen(this.disposalImageLoader, TEST_EVENT_TYPES,
+        this.handleDisposalImageLoaderEvent, false, this);
+
+    this.disposalImageLoader.start();
+  };
+
+  /** Handles any events fired on the disposalImageLoader */
+  imageLoaderTestCase.handleDisposalImageLoaderEvent = function(e) {
+    switch (e.type) {
+      case goog.events.EventType.LOAD:
+      case goog.net.EventType.ERROR:
+        // Make sure that we can dispose this.disposalImageLoader safely.
+        this.disposalImageLoader.dispose();
+
+        // then starts the regular image loader.
+        this.imageLoader.start();
+        break;
+
+      case goog.net.EventType.COMPLETE:
+        throw new Error('disposalImageLoader should have been disposed.');
+        break;
+    }
   };
 
 
   /** Handles any events fired on the imageLoader */
-  imageLoaderTestCase.handleEvent = function(e) {
+  imageLoaderTestCase.handleImageLoaderEvent = function(e) {
     this.log('handleEvent, type: ' + e.type);
 
     switch (e.type) {
