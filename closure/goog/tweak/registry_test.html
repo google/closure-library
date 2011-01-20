@@ -73,6 +73,7 @@ function testInitializeFromQueryParams() {
   assertQuery('?enum=C&boolgroup=-booltwo', false, 'C', '', false, false);
   assertQuery('?enum=C&boolgroup=b1,-booltwo', false, 'C', '', true, false);
   assertQuery('?enum=C&boolgroup=b1', false, 'C', '', true, true);
+  assertQuery('?s=a+b%20c%26', false, 'A', 'a b c&', false, true);
 }
 
 function testMakeUrlQuery() {

@@ -26,6 +26,7 @@ goog.provide('goog.tweak.Registry');
 goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
 goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.tweak.BaseEntry');
 goog.require('goog.uri.utils');
 
@@ -91,20 +92,18 @@ goog.tweak.Registry.prototype.logger_ =
 /**
  * Simple parser for query params. Makes all keys lower-case.
  * @param {string} queryParams The part of the url between the ? and the #.
- *     Uses window.location.search if not given.
  * @return {!Object.<string>} map of key->value.
  */
 goog.tweak.Registry.parseQueryParams = function(queryParams) {
-  // Convert + to a space.
-  queryParams = queryParams.replace(/\+/g, ' ');
   // Strip off the leading ? and split on &.
-  queryParams = queryParams.substr(1).split('&');
+  var parts = queryParams.substr(1).split('&');
   var ret = {};
 
-  for (var i = 0, il = queryParams.length; i < il; ++i) {
-    var entry = queryParams[i].split('=');
+  for (var i = 0, il = parts.length; i < il; ++i) {
+    var entry = parts[i].split('=');
     if (entry[0]) {
-      ret[decodeURIComponent(entry[0]).toLowerCase()] = entry[1] || '';
+      ret[goog.string.urlDecode(entry[0]).toLowerCase()] =
+          goog.string.urlDecode(entry[1] || '');
     }
   }
   return ret;
