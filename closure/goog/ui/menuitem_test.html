@@ -16,6 +16,7 @@ See the COPYING file for details.
     goog.require('goog.dom.classes');
     goog.require('goog.dom');
     goog.require('goog.dom.NodeType');
+    goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Component.State');
     goog.require('goog.ui.MenuItem');
@@ -24,6 +25,7 @@ See the COPYING file for details.
 </head>
 <body>
   <div id="sandbox"></div>
+  <div id="parentComponent"></div>
   <script>
     var sandbox = goog.dom.getElement('sandbox');
     var item;
@@ -457,6 +459,48 @@ See the COPYING file for details.
               item.getElement()).length);
       assertTrue('Item must be checked', item.isChecked());
     }
+
+    /** @bug 1463524 */
+    function testHandleMouseUp() {
+      var COORDS_1 = new goog.math.Coordinate(1, 1);
+      var COORDS_2 = new goog.math.Coordinate(2, 2);
+      item.setActive(true);
+      // Override performActionInternal() for testing purposes.
+      var actionPerformed;
+      item.performActionInternal = function() {
+        actionPerformed = true;
+        return true;
+      };
+      item.render(sandbox);
+
+      // Scenario 1: item has no parent.
+      actionPerformed = false;
+      item.setActive(true);
+      goog.testing.events.fireMouseUpEvent(item.getElement());
+      assertTrue('Action should be performed on mouseup', actionPerformed);
+
+      // Scenario 2: item has a parent.
+      actionPerformed = false;
+      item.setActive(true);
+      var parent = new goog.ui.Component();
+      var parentElem = goog.dom.getElement('parentComponent');
+      parent.render(parentElem);
+      parent.addChild(item);
+      parent.openingCoords = COORDS_1;
+      goog.testing.events.fireMouseUpEvent(
+          item.getElement(), undefined, COORDS_2);
+      assertTrue('Action should be performed on mouseup', actionPerformed);
+
+      // Scenario 3: item has a parent which was opened during mousedown, and
+      // item, and now the mouseup fires at the same coords.
+      actionPerformed = false;
+      item.setActive(true);
+      parent.openingCoords = COORDS_2;
+      goog.testing.events.fireMouseUpEvent(
+          item.getElement(), undefined, COORDS_2);
+      assertFalse('Action should not be performed on mouseup', actionPerformed);
+    }
+
   </script>
 </body>
 </html>
