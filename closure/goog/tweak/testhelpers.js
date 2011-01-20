@@ -76,6 +76,10 @@ function createRegistryEntries(queryParams, opt_compilerOverrides) {
 
   goog.tweak.registerButton('Button', 'The Btn', goog.nullFunction, '<btn>');
 
+  goog.tweak.beginBooleanGroup('foo.bar.BoolGroup', 'Namespaced Bool Group');
+  goog.tweak.registerBoolean('foo.bar.BoolOne', 'Desc for Namespaced 1');
+  goog.tweak.endBooleanGroup();
+
   boolEntry = registry.getEntry('Bool');
   boolEntry2 = registry.getEntry('Bool2');
   strEntry = registry.getEntry('Str');

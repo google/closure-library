@@ -314,13 +314,14 @@ goog.tweak.TweakUi.prototype.render = function() {
   var rootPanel = new goog.tweak.EntriesPanel([], dh);
   var rootPanelDiv = rootPanel.render(submitButton);
   rootPanelDiv.className += ' ' + goog.tweak.TweakUi.ROOT_PANEL_CLASS_;
+  this.entriesPanel_ = rootPanel;
+
   var entries = this.registry_.extractEntries(true /* excludeChildEntries */,
       false /* excludeNonSettings */);
   for (var i = 0, entry; entry = entries[i]; i++) {
-    rootPanel.insertEntry(entry);
+    this.insertEntry_(entry);
   }
 
-  this.entriesPanel_ = rootPanel;
   return rootPanelDiv;
 };
 
