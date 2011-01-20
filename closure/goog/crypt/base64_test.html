@@ -97,13 +97,9 @@ function testWebSafeEncoding() {
   assertEquals("Websafe decoding broken", test, dec);
 
   // Test parsing malformed characters
-  var caught = false;
-  try {
+  assertThrows("Didn't throw on malformed input", function() {
     goog.crypt.base64.decodeStringToByteArray("foooooo+oooo", true /*websafe*/);
-  } catch(e) {
-    caught = true;
-  }
-  assertTrue("Didn't throw on malformed input", caught);
+  });
 }
 </script>
 </body>

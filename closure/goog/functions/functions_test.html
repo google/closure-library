@@ -75,12 +75,9 @@ function testConstant() {
 
 function testThrow() {
   var f = goog.functions.error('x');
-  try {
-    f();
-    fail('A function created by goog.functions.error must throw an error');
-  } catch (e) {
-    assertEquals('x', e.message);
-  }
+  var e = assertThrows(
+      'A function created by goog.functions.error must throw an error', f);
+  assertEquals('x', e.message);
 }
 
 function testCompose() {

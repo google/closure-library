@@ -152,15 +152,10 @@ function testRegexMakesProgress() {
     assertEquals('f o o\n', goog.format.HtmlPrettyPrinter.format('f o o'));
 
     // But not this one.
-    var success = false;
-    try {
-      goog.format.HtmlPrettyPrinter.format(COMPLEX_HTML);
-    } catch (ex) {
-      success = true;
-      assertEquals('Regex failed to make progress through source html.',
-          ex.message);
-    }
-    assertTrue('should have failed for invalid regex - endless loop.', success);
+    var ex = assertThrows('should have failed for invalid regex - endless loop',
+        goog.partial(goog.format.HtmlPrettyPrinter.format, COMPLEX_HTML));
+    assertEquals('Regex failed to make progress through source html.',
+        ex.message);
   } finally {
     goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ = original;
   }
@@ -197,14 +192,9 @@ function testAvoidDataLoss() {
     assertEquals('foo\n', goog.format.HtmlPrettyPrinter.format('foo'));
 
     // But not this one.
-    var success = false;
-    try {
-      goog.format.HtmlPrettyPrinter.format(COMPLEX_HTML);
-    } catch (ex) {
-      success = true;
-      assertEquals('Lost data pretty printing html.', ex.message)
-    }
-    assertTrue('should have failed for invalid regex - data loss.', success);
+    var ex = assertThrows('should have failed for invalid regex - data loss',
+        goog.partial(goog.format.HtmlPrettyPrinter.format, COMPLEX_HTML));
+    assertEquals('Lost data pretty printing html.', ex.message);
   } finally {
     goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ = original;
   }

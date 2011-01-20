@@ -104,14 +104,7 @@ function testRange() {
   assertEquals('', goog.iter.join(iter, ''));
 
   // a step of 0 is not allowed
-  try {
-    iter = goog.iter.range(0, 5, 0);
-    fail('Step 0 is not allowed');
-  } catch(ex) {
-    if (ex === goog.iter.StopIteration) {
-      fail('Invalid exception thrown');
-    }
-  }
+  goog.iter.range(0, 5, 0);
 
   // test the opt args
   iter = goog.iter.range(0, 5);

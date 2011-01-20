@@ -37,11 +37,10 @@ See the COPYING file for details.
     function testMissingClass() {
       var el = goog.dom.getFirstElementChild(
           goog.dom.getElement('missing-class'));
-      try {
+      var e = assertThrows(function() {
         goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
-      } catch (e) {
-        assertContains('all reference classes', e.message);
-      }
+      });
+      assertContains('all reference classes', e.message);
     }
 
     // assertStructureMatchesReference should NOT fail if one of the nodes has
@@ -57,11 +56,10 @@ See the COPYING file for details.
     function testMissingChild() {
       var el = goog.dom.getFirstElementChild(
           goog.dom.getElement('missing-child'));
-      try {
+      var e = assertThrows(function() {
         goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
-      } catch (e) {
-        assertContains('same number of children', e.message);
-      }
+      });
+      assertContains('same number of children', e.message);
     }
 
     // assertStructureMatchesReference should fail if there is an extra child
@@ -69,11 +67,10 @@ See the COPYING file for details.
     function testExtraChild() {
       var el = goog.dom.getFirstElementChild(
           goog.dom.getElement('extra-child'));
-      try {
+      var e = assertThrows(function() {
         goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
-      } catch (e) {
-        assertContains('same number of children', e.message);
-      }
+      });
+      assertContains('same number of children', e.message);
     }
 
   </script>

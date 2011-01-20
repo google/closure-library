@@ -45,24 +45,17 @@ function testMonitorAndUnmonitor() {
 
   goog.debug.entryPointRegistry.monitorAll(errorHandler);
 
-  try {
-    errorFn();
-    fail('expected error');
-  } catch (e) {
-    assertEquals('Hello!', e.message);
-    assertEquals('Hello!', lastError.message);
-  }
+
+  var e = assertThrows('expected error', errorFn);
+  assertEquals('Hello!', e.message);
+  assertEquals('Hello!', lastError.message);
 
   errorString = 'Goodbye!';
   goog.debug.entryPointRegistry.unmonitorAllIfPossible(errorHandler);
 
-  try {
-    errorFn();
-    fail('expected error');
-  } catch (e) {
-    assertEquals('Goodbye!', e.message);
-    assertEquals('Hello!', lastError.message);
-  }
+  e = assertThrows('expected error', errorFn);
+  assertEquals('Goodbye!', e.message);
+  assertEquals('Hello!', lastError.message);
 }
 
 </script>

@@ -1144,13 +1144,12 @@ See the COPYING file for details.
     mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
         mm, createModulesFor('a', 'b')));
     mm.preloadModule('a');
-    try {
+    var e = assertThrows(function() {
       clock.tick(10);
-    } catch (e) {
-      assertContains('Module errback failure', e.message);
-      if (!goog.userAgent.IE) {
-        assertContains('error2', e.message);
-      }
+    });
+    assertContains('Module errback failure', e.message);
+    if (!goog.userAgent.IE) {
+      assertContains('error2', e.message);
     }
 
     assertTrue(mm.getModuleInfo('a').isLoaded());

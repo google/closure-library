@@ -37,20 +37,18 @@ function testEmptyPattern() {
 }
 
 function testMissingLeftCurlyBrace() {
-  try {
-    var fmt = new goog.i18n.MessageFormat('\'\'{}}');
-  } catch (err) {
-    assertEquals('Assertion failed: No matching { for }.', err.message);
-  }
+  var err = assertThrows(function() {
+    new goog.i18n.MessageFormat('\'\'{}}');
+  });
+  assertEquals('Assertion failed: No matching { for }.', err.message);
 }
 
 function testTooManyLeftCurlyBraces() {
-  try {
-    var fmt = new goog.i18n.MessageFormat('{} {');
-  } catch (err) {
-    assertEquals('Assertion failed: There are mismatched { or } ' +
-                 'in the pattern.', err.message);
-  }
+  var err = assertThrows(function() {
+    new goog.i18n.MessageFormat('{} {');
+  });
+  assertEquals('Assertion failed: There are mismatched { or } in the pattern.',
+      err.message);
 }
 
 function testSimpleReplacement() {

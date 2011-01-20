@@ -391,12 +391,10 @@ function testDeserializationConversionProhibited() {
   };
   var serializer = new goog.proto2.ObjectSerializer();
 
-  try {
-    var message = serializer.deserialize(
-        proto2.TestAllTypes.getDescriptor(), simplified);
-    assertFail('Should have an assertion failure in deserialization')
-  } catch (e) {
-  }
+  assertThrows('Should have an assertion failure in deserialization',
+      function() {
+        serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+      });
 }
 
 function testDefaultValueNumbersOrStrings() {

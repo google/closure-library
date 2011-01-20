@@ -38,11 +38,7 @@ function testStringSerialize() {
 
   // unicode
   var str = allChars(0, 10000);
-  try {
-    var a = eval(goog.json.serialize(str));
-  } catch (e) {
-    assertTrue('serialize failed: err ' + e.message, false);
-  }
+  eval(goog.json.serialize(str));
 
   assertEquals('true as a string', goog.json.serialize('true'), '"true"');
   assertEquals('false as a string', goog.json.serialize('false'), '"false"');
@@ -180,13 +176,9 @@ function testStringParse() {
 
   // unicode without the control characters 0x00 - 0x1f, 0x7f - 0x9f
   var str = allChars(0, 1000);
-  try {
-    var jsonString = goog.json.serialize(str);
-    var a = eval(jsonString);
-    assertEquals('unicode string', goog.json.parse(jsonString), a);
-  } catch (e) {
-    assertTrue('serialize failed: err ' + e.message, false);
-  }
+  var jsonString = goog.json.serialize(str);
+  var a = eval(jsonString);
+  assertEquals('unicode string', goog.json.parse(jsonString), a);
 
   assertEquals('true as a string', goog.json.parse('"true"'), 'true');
   assertEquals('false as a string', goog.json.parse('"false"'), 'false');
@@ -201,13 +193,9 @@ function testStringUnsafeParse() {
 
   // unicode
   var str = allChars(0, 1000);
-  try {
-    var jsonString = goog.json.serialize(str);
-    var a = eval(jsonString);
-    assertEquals('unicode string', goog.json.unsafeParse(jsonString), a);
-  } catch (e) {
-    assertTrue('serialize failed: err ' + e.message, false);
-  }
+  var jsonString = goog.json.serialize(str);
+  var a = eval(jsonString);
+  assertEquals('unicode string', goog.json.unsafeParse(jsonString), a);
 
   assertEquals('true as a string', goog.json.unsafeParse('"true"'), 'true');
   assertEquals('false as a string', goog.json.unsafeParse('"false"'), 'false');
@@ -386,12 +374,8 @@ function testObjectUnsafeParse() {
 
 function testForValidJson() {
   function error_(msg, s) {
-    try {
-      goog.json.parse(s);
-      assertTrue(msg + ', Should have raised an exception: ' + s, false);
-    } catch (ex) {
-      // correctly threw
-    }
+    assertThrows(msg + ', Should have raised an exception: ' + s,
+        goog.partial(goog.json.parse, s));
   }
 
   error_('Non closed string', '"dasdas');

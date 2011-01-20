@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+<!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
 <head>
 <!--
 This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
@@ -103,87 +109,75 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   function testAssertHtmlMismatchText() {
     setUpAssertHtmlMatches();
 
-    try {
+    var e = assertThrows('Should fail due to mismatched text', function() {
       goog.testing.dom.assertHtmlContentsMatch(
           '<div style="display: none; font-size: 2em">' +
           '[[IE GECKO]]NonWebKitText<div class="IE"><p class="WEBKIT">' +
           '<span class="GECKO"><br class="GECKO WEBKIT">Bad</span></p></div>' +
           '</div>[[WEBKIT]]Extra',
           root);
-      fail('Should have failed due to mismatched text');
-    } catch (e) {
-      assertContains('Text should match', e.message);
-    }
+    });
+    assertContains('Text should match', e.message);
   }
 
   function testAssertHtmlMismatchTag() {
     setUpAssertHtmlMatches();
 
-    try {
+    var e = assertThrows('Should fail due to mismatched tag', function() {
       goog.testing.dom.assertHtmlContentsMatch(
           '<span style="display: none; font-size: 2em">' +
           '[[IE GECKO]]NonWebKitText<div class="IE"><p class="WEBKIT">' +
           '<span class="GECKO"><br class="GECKO WEBKIT">Text</span></p></div>' +
           '</span>[[WEBKIT]]Extra',
           root);
-      fail('Should have failed due to mismatched tag');
-    } catch (e) {
-      assertContains('Tag names should match', e.message);
-    }
+    });
+    assertContains('Tag names should match', e.message);
   }
 
   function testAssertHtmlMismatchStyle() {
     setUpAssertHtmlMatches();
 
-    try {
+    var e = assertThrows('Should fail due to mismatched style', function() {
       goog.testing.dom.assertHtmlContentsMatch(
           '<div style="display: none; font-size: 3em">' +
           '[[IE GECKO]]NonWebKitText<div class="IE"><p class="WEBKIT">' +
           '<span class="GECKO"><br class="GECKO WEBKIT">Text</span></p></div>' +
           '</div>[[WEBKIT]]Extra',
           root);
-      fail('Should have failed due to mismatched style');
-    } catch (e) {
-      assertContains('Should have same styles', e.message);
-    }
+    });
+    assertContains('Should have same styles', e.message);
   }
 
   function testAssertHtmlMismatchOptionalText() {
     setUpAssertHtmlMatches();
 
-    try {
+    var e = assertThrows('Should fail due to mismatched text', function() {
       goog.testing.dom.assertHtmlContentsMatch(
           '<div style="display: none; font-size: 2em">' +
           '[[IE GECKO]]Bad<div class="IE"><p class="WEBKIT">' +
           '<span class="GECKO"><br class="GECKO WEBKIT">Text</span></p></div>' +
           '</div>[[WEBKIT]]Bad',
           root);
-      fail('Should have failed due to mismatched text');
-    } catch (e) {
-      assertContains('Text should match', e.message);
-    }
+    });
+    assertContains('Text should match', e.message);
   }
 
   function testAssertHtmlMismatchExtraActualAfterText() {
     root.innerHTML = '<div>abc</div>def';
 
-    try {
+    var e = assertThrows('Should fail due to extra actual nodes', function() {
       goog.testing.dom.assertHtmlContentsMatch('<div>abc</div>', root);
-      fail('Should have failed due to extra actual nodes');
-    } catch (e) {
-      assertContains('Finished expected HTML before', e.message);
-    }
+    });
+    assertContains('Finished expected HTML before', e.message);
   }
 
   function testAssertHtmlMismatchExtraActualAfterElement() {
     root.innerHTML = '<br>def';
 
-    try {
+    var e = assertThrows('Should fail due to extra actual nodes', function() {
       goog.testing.dom.assertHtmlContentsMatch('<br>', root);
-      fail('Should have failed due to extra actual nodes');
-    } catch (e) {
-      assertContains('Finished expected HTML before', e.message);
-    }
+    });
+    assertContains('Finished expected HTML before', e.message);
   }
 
   function testAssertHtmlMatchesWithSplitTextNodes() {
@@ -203,40 +197,33 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   function testAssertHtmlMismatchWithDifferentNumberOfAttributes() {
     root.innerHTML = '<div foo="a" bar="b"></div>';
 
-    try {
+    var e = assertThrows(function() {
       goog.testing.dom.assertHtmlContentsMatch(
           '<div foo="a"></div>', root, true);
-      fail();
-    } catch (e) {
-      assertContains('Unexpected attribute with name bar in element',
-          e.message);
-    }
+    });
+    assertContains('Unexpected attribute with name bar in element', e.message);
   }
 
   function testAssertHtmlMismatchWithDifferentAttributeNames() {
     root.innerHTML = '<div foo="a" bar="b"></div>';
 
-    try {
+    var e = assertThrows(function() {
       goog.testing.dom.assertHtmlContentsMatch(
           '<div foo="a" baz="b"></div>', root, true);
-      fail();
-    } catch (e) {
-      assertContains('Expected to find attribute with name baz', e.message);
-    }
+    });
+    assertContains('Expected to find attribute with name baz', e.message);
   }
 
   function testAssertHtmlMismatchWithDifferentClassNames() {
     root.innerHTML = '<div class="className1"></div>';
 
-    try {
+    var e = assertThrows(function() {
       goog.testing.dom.assertHtmlContentsMatch(
           '<div class="className2"></div>', root, true);
-      fail();
-    } catch (e) {
-      assertContains(
-          'Expected class was: className2, but actual class was: className1',
-          e.message);
-    }
+    });
+    assertContains(
+        'Expected class was: className2, but actual class was: className1',
+        e.message);
   }
 
   function testAssertHtmlMatchesWithClassNameAndUserAgentSpecified() {
@@ -259,13 +246,11 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   function testAssertHtmlMismatchWithDifferentAttributeValues() {
     root.innerHTML = '<div foo="b" bar="a"></div>';
 
-    try {
+    var e = assertThrows(function() {
       goog.testing.dom.assertHtmlContentsMatch(
           '<div foo="a" bar="a"></div>', root, true);
-      fail();
-    } catch (e) {
-      assertContains('Expected attribute foo has a different value', e.message);
-    }
+    });
+    assertContains('Expected attribute foo has a different value', e.message);
   }
 
   function testAssertHtmlMatchesWhenStrictAttributesIsFalse() {
@@ -308,33 +293,27 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   function testAssertHtmlMismatchWhenIdIsNotSpecified() {
     root.innerHTML = '<div id="someId"></div>';
 
-    try {
+    var e = assertThrows(function() {
       goog.testing.dom.assertHtmlContentsMatch('<div></div>', root, true);
-      fail();
-    } catch (e) {
-      assertContains('Unexpected attribute with name id in element', e.message);
-    }
+    });
+    assertContains('Unexpected attribute with name id in element', e.message);
   }
 
   function testAssertHtmlMismatchWhenIdIsSpecified() {
     root.innerHTML = '<div></div>';
 
-    try {
+    var e = assertThrows(function() {
       goog.testing.dom.assertHtmlContentsMatch('<div id="someId"></div>', root);
-      fail();
-    } catch (e) {
-      assertContains('Expected to find attribute with name id, in element',
-          e.message);
-    }
+    });
+    assertContains('Expected to find attribute with name id, in element',
+        e.message);
 
-    try {
+    e = assertThrows(function() {
       goog.testing.dom.assertHtmlContentsMatch('<div id="someId"></div>', root,
           true);
-      fail();
-    } catch (e) {
-      assertContains('Expected to find attribute with name id, in element',
-          e.message);
-    }
+    });
+    assertContains('Expected to find attribute with name id, in element',
+        e.message);
   }
 
   function testAssertHtmlMatchesWhenIdIsEmpty() {
@@ -354,14 +333,14 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
     goog.testing.dom.assertHtmlContentsMatch(disabledShortest, root, true);
     goog.testing.dom.assertHtmlContentsMatch(disabledShort, root, true);
     goog.testing.dom.assertHtmlContentsMatch(disabledLong, root, true);
-    try {
+
+
+    var e = assertThrows('Should fail due to mismatched text', function() {
       goog.testing.dom.assertHtmlContentsMatch(enabled, root, true);
-      fail('Should have failed due to mismatched text');  // COV_NF_LINE
-    } catch (e) {
-      // Attribute value mismatch in IE.
-      // Unexpected attribute error in other browsers.
-      assertContains('disabled', e.message);
-    }
+    });
+    // Attribute value mismatch in IE.
+    // Unexpected attribute error in other browsers.
+    assertContains('disabled', e.message);
   }
 
   function testAssertHtmlMatchesWithCheckedAttribute() {
@@ -376,12 +355,10 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
     goog.testing.dom.assertHtmlContentsMatch(checkedLong, root, true);
     if (!goog.userAgent.IE) {
       // CHECKED attribute is ignored because it's among BAD_IE_ATTRIBUTES_.
-      try {
+      var e = assertThrows('Should fail due to mismatched text', function() {
         goog.testing.dom.assertHtmlContentsMatch(unchecked, root, true);
-        fail('Should have failed due to mismatched text');  // COV_NF_LINE
-      } catch (e) {
-        assertContains('Unexpected attribute with name checked', e.message);
-      }
+      });
+      assertContains('Unexpected attribute with name checked', e.message);
     }
   }
 
@@ -451,19 +428,11 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
         '<div style="font-size: 1px; color: red">abc</div>',
         '<div style="color: red;  font-size: 1px;;">abc</div>');
 
-    try {
+    var e = assertThrows('Should fail due to mismatched text', function() {
       goog.testing.dom.assertHtmlMatches('<div>abc</div>', '<div>abd</div>');
-      fail('Should have failed due to mismatched text');
-    } catch (e) {
-      assertContains('Text should match', e.message);
-    }
+    });
+    assertContains('Text should match', e.message);
   }
 </script>
 </body>
 </html>
-<!--
-Copyright 2008 The Closure Library Authors. All Rights Reserved.
-
-Use of this source code is governed by the Apache License, Version 2.0.
-See the COPYING file for details.
--->

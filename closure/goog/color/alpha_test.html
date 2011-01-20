@@ -17,6 +17,7 @@ See the COPYING file for details.
   goog.require('goog.testing.jsunit');
 </script>
 </head>
+<body>
 <script>
 
 function testIsValidAlphaHexColor() {
@@ -85,16 +86,10 @@ function testParse() {
 
   var badColors = ['rgb(01, 1, 23)', '(256, 256, 256)', '#ffeeddaa'];
   for (var i = 0; i < badColors.length; i++) {
-    try {
-      goog.color.parse(badColors[i]);
-      fail("Shouldn't reach here since " + badColors[i] + " is not a valid " +
-           "color string");
-    } catch (e) {
-      if(!e.message) throw e;
-      if(e.message.indexOf("is not a valid color string") == -1) {
-        fail("Error processing " + badColors[i] + " : " + e.message);
-      }
-    }
+    var e = assertThrows(badColors[i] + ' is not a valid color string',
+        goog.partial(goog.color.parse, badColors[i]));
+    assertContains('Error processing ' + badColors[i],
+        'is not a valid color string', e.message);
   }
 }
 
@@ -115,11 +110,10 @@ function testHexToRgba() {
 
   var badColors = ['', '#g00', 'some words'];
   for (var i = 0; i < badColors.length; i++) {
-    try {
-    } catch (e) {
-      assertEquals("'" + badColors[i] + "' is not a valid 8-hex color",
-                   e.message);
-    }
+    var e = assertThrows(
+        goog.partial(goog.color.alpha.hexToRgba, badColors[i]));
+    assertEquals("'" + badColors[i] + "' is not a valid alpha hex color",
+        e.message);
   }
 }
 
@@ -132,14 +126,10 @@ function testHexToRgbaStyle() {
                goog.color.alpha.hexToRgbaStyle('#3CA3'));
   var badHexColors = ['#12345', null, undefined, '#.1234567890'];
   for (var i = 0; i < badHexColors.length; ++i) {
-    try {
-      goog.color.alpha.hexToRgbaStyle(badHexColors[i]);
-      fail("Shouldn't make it here since " + badHexColors[i] + " is an " +
-           "invalid hex color");
-    } catch (e) {
-      assertEquals("'" + badHexColors[i] + "' is not a valid alpha hex color",
-                   e.message);
-    }
+    var e = assertThrows(badHexColors[i] + ' is an invalid hex color',
+        goog.partial(goog.color.alpha.hexToRgbaStyle, badHexColors[i]));
+    assertEquals("'" + badHexColors[i] + "' is not a valid alpha hex color",
+        e.message);
   }
 }
 
@@ -149,13 +139,9 @@ function testRgbaToHex() {
   var badRgba = [[-1, -1, -1, -1], [0, 0, 0, 2], ['a', 'b', 'c', 'd'],
                 [undefined, 5, 5, 5]];
   for (var i = 0; i < badRgba.length; ++i) {
-    try {
-      goog.color.alpha.rgbaArrayToHex(badRgba[i]);
-      fail("Shouldn't make it here since " + badRgba[i] + "is not a valid " +
-           "rgba color");
-    } catch (e) {
-      assertTrue(e.message.indexOf("is not a valid RGBA color") > -1);
-    }
+    var e = assertThrows(badRgba[i] + ' is not a valid rgba color',
+        goog.partial(goog.color.alpha.rgbaArrayToHex, badRgba[i]));
+    assertContains('is not a valid RGBA color', e.message);
   }
 }
 
@@ -244,8 +230,5 @@ function testHslaArrayToRgbaStyle() {
 }
 
 </script>
-
-</head>
-<body>
 </body>
 </html>

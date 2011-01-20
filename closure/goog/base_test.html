@@ -106,14 +106,8 @@ function testProvideStrictness() {
 }
 
 function assertProvideFails(namespace) {
-  var failed = false;
-  try {
-    goog.provide(namespace);
-  } catch (e) {
-    failed = true;
-  }
-  assert('goog.provide should have failed, but succeeded: ' + namespace,
-      failed);
+  assertThrows('goog.provide(' + namespace + ') should have failed',
+      goog.partial(goog.provide, namespace));
 }
 
 function testGlobalize() {
@@ -171,19 +165,9 @@ goog.exportSymbol('exceptionTest', function() {
 });
 
 function testExportSymbolExceptions() {
-  var thrown = false;
-  try {
-    exceptionTest();
-  } catch (e) {
-    thrown = true;
-    if (e.message != 'ERROR') {
-      fail('Unexpected error thrown', e);
-    }
-  }
-
-  if (!thrown) {
-    fail('Exception wasn\'t thrown by exported function');
-  }
+  var e = assertThrows('Exception wasn\'t thrown by exported function',
+      exceptionTest);
+  assertEquals('Unexpected error thrown', 'ERROR', e.message);
 }
 
 //=== tests for Require logic ===
@@ -485,11 +469,8 @@ function testRemoveUidFromPlainObject() {
 
 function testRemoveUidFromObjectWithoutUid() {
   var a = {};
-  try {
-    goog.removeUid(a);
-  } catch (e) {
-    fail('Removing a unique ID should not fail even if it did not exist');
-  }
+  // Removing a unique ID should not fail even if it did not exist
+  goog.removeUid(a);
 }
 
 function testRemoveUidFromNode() {
@@ -961,7 +942,7 @@ function testPropertyIsEnumerable_() {
   if (!(goog.userAgent.GECKO && goog.userAgent.isVersion('1.9'))) {
     var childWindow;
     try {
-       childWindow = window.open('', '_blank');
+      childWindow = window.open('', '_blank');
     } catch (e) {
       // NOTE(user): For some reason this line errors in Safari 3 on the farm,
       // "Undefined value".  This only recently started happening (2008/10/21).

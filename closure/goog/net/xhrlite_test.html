@@ -31,7 +31,7 @@ MockXmlHttp.syncSend = false;
 
 MockXmlHttp.prototype.send = function(opt_data) {
   this.readyState = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
-  
+
   if (MockXmlHttp.syncSend) {
     this.complete();
   }
@@ -138,14 +138,10 @@ function testProtectEntryPointCalledOnAsyncSend() {
   });
 
   x.send('url');
-  var readyStateChangeHandlerError = null;
-  try {
+  assertThrows(function() {
     x.xhr_.complete();
-  } catch (e) {
-    readyStateChangeHandlerError = e;
-  }
+  });
 
-  assertNotNull(readyStateChangeHandlerError);
   assertTrue('Error handler callback should be called on async send.',
       errorHandlerCallbackCalled);
 }

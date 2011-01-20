@@ -198,35 +198,11 @@ function testFlagMinus() {
 }
 
 function testExceptions() {
-  // Testing for exception for too few arguments.
-  var thrown = false;
-  var message = '';
-  var s = '%qwertyuio%';
+  var e = assertThrows(goog.partial(f, '%f%f', 123.456));
+  assertEquals('[goog.string.format] Not enough arguments', e.message);
 
-  try {
-    s = f('%f%f', 123.456);
-  } catch (e) {
-    thrown = true;
-    message=e.message;
-  }
-  assertEquals(s, '%qwertyuio%');
-  assertTrue(thrown);
-  assertEquals(message, '[goog.string.format] Not enough arguments');
-
-  thrown = false;
-  message = '';
-  s = '%qwertyuio%';
-
-  // Testing for exception for too few arguments.
-  try {
-    var s = f();
-  } catch (e) {
-    thrown = true;
-    message=e.message;
-  }
-  assertEquals(s, '%qwertyuio%');
-  assertTrue(thrown);
-  assertEquals(message, '[goog.string.format] Template required');
+  e = assertThrows(f);
+  assertEquals('[goog.string.format] Template required', e.message);
 }
 
 </script>

@@ -458,25 +458,16 @@ function testMakeUnique() {
 function testSetReadOnly() {
   var uri = new goog.Uri('http://www.google.com/setgmail');
   uri.setReadOnly(true);
-  try {
+  assertThrows(function() {
     uri.setParameterValue('cant', 'dothis')
-  } catch(e) {
-    assertTrue(e instanceof Error);
-    return;
-  }
-  assertFail();
+  });
 }
 
 function testSetReadOnlyChained() {
-  try {
-    new goog.Uri('http://www.google.com/setgmail')
-        .setReadOnly(true)
-        .setParameterValue('cant', 'dothis')
-  } catch(e) {
-    assertTrue(e instanceof Error);
-    return;
-  }
-  assertFail();
+  var uri = new goog.Uri('http://www.google.com/setgmail').setReadOnly(true);
+  assertThrows(function() {
+    uri.setParameterValue('cant', 'dothis');
+  });
 }
 
 function testQueryDataCount() {
@@ -709,9 +700,9 @@ function testQueryDataCreateFromMap() {
 
 function testQueryDataCreateFromKeysValues() {
   assertEquals('', String(goog.Uri.QueryData.createFromKeysValues([], [])));
-  assertEquals('a=A&b=B&c=C', String(goog.Uri.QueryData.createFromKeysValues( 
+  assertEquals('a=A&b=B&c=C', String(goog.Uri.QueryData.createFromKeysValues(
       ['a','b','c'],['A','B','C'])));
-  assertEquals('a=A&a=B&a=C', String(goog.Uri.QueryData.createFromKeysValues( 
+  assertEquals('a=A&a=B&a=C', String(goog.Uri.QueryData.createFromKeysValues(
       ['a','a','a'],['A','B','C'])));
 }
 

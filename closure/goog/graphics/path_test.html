@@ -62,13 +62,10 @@ See the COPYING file for details.
 
   function testSimpleLineTo() {
     var path = new goog.graphics.Path();
-    try {
+    var e = assertThrows(function() {
       path.lineTo(30, 50);
-      fail();
-    } catch (e) {
-      // Expected
-      assertEquals('Path cannot start with lineTo', e.message);
-    }
+    });
+    assertEquals('Path cannot start with lineTo', e.message);
     path.moveTo(0, 0);
     path.lineTo(30, 50);
     assertTrue(path.isSimple());
@@ -102,13 +99,10 @@ See the COPYING file for details.
 
   function testSimpleCurveTo() {
     var path = new goog.graphics.Path();
-    try {
+    var e = assertThrows(function() {
       path.curveTo(10, 20, 30, 40, 50, 60);
-      fail();
-    } catch (e) {
-      // Expected
-      assertEquals('Path cannot start with curve', e.message);
-    }
+    });
+    assertEquals('Path cannot start with curve', e.message);
     path.moveTo(0, 0);
     path.curveTo(10, 20, 30, 40, 50, 60);
     assertTrue(path.isSimple());
@@ -325,11 +319,9 @@ See the COPYING file for details.
   function testTransformNonSimple() {
     var path = new goog.graphics.Path();
     path.arc(50, 60, 10, 20, 30, 30, false);
-    try {
+    assertThrows(function() {
       path.transform(new goog.graphics.AffineTransform(1, 0, 0, 1, 10, 20));
-      fail('Expected exception');
-    } catch (expected) {
-    }
+    });
   }
 
 

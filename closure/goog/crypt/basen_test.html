@@ -114,29 +114,24 @@ function testArbitraryBases() {
 }
 
 function testEmptyBases() {
-  try {
+  var e = assertThrows(function() {
     goog.crypt.baseN.recodeString('1230', '', '0123');
-    fail('Exception "Number contains a character not found in base" expected');
-  } catch(e) {
-    assertEquals('Number 1230 contains a character not found in ' +
-                 'base , which is 0', e.message);
-  }
-  try {
+  });
+  assertEquals('Exception message', 'Number 1230 contains a character ' +
+      'not found in base , which is 0', e.message);
+
+  e = assertThrows(function() {
     goog.crypt.baseN.recodeString('1230', '0123', '');
-    fail('Exception "Empty output base" expected');
-  } catch(e) {
-    assertEquals('Empty output base', e.message);
-  }
+  });
+  assertEquals('Exception message', 'Empty output base', e.message);
 }
 
 function testInvalidDigits() {
-  try {
+  var e = assertThrows(function() {
     goog.crypt.baseN.recodeString('123x456', '01234567', '01234567');
-    fail('Exception "Number contains a character not found in base" expected');
-  } catch(e) {
-    assertEquals('Number 123x456 contains a character not found in ' +
-                 'base 01234567, which is x', e.message);
-  }
+  });
+  assertEquals('Exception message', 'Number 123x456 contains a character ' +
+      'not found in base 01234567, which is x', e.message);
 }
 
 function makeHugeBase() {

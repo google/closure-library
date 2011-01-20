@@ -199,17 +199,6 @@ function testInitialItemIsCenteredTopItem() {
   assertEquals(0, container.getElement().scrollTop);
 }
 
-function testFailsInUncompiledModeWhenContainerHasVerticalPadding() {
-  container.getElement().style.paddingTop = '4px';
-  try {
-    scroller = new goog.ui.ContainerScroller(container);
-    fail('Exception should be thrown when container has padding');
-  } catch (ex) {
-    // Should throw an exception in uncompiled mode.
-  }
-  container.getElement().style.paddingTop = '';
-}
-
 function testHidingMenuItemsDoesntAffectContainerScroller() {
   scroller = new goog.ui.ContainerScroller(container);
   container.getElement = function() {

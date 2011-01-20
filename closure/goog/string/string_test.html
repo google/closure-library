@@ -569,31 +569,14 @@ function testTruncateMiddle() {
 // === goog.string.quote ===
 function testQuote() {
   var str = allChars();
-  var a;
-  try {
-    a = eval(goog.string.quote(str));
-  } catch (e) {
-    fail('Quote failed: err ' + e.message);
-  }
-  assertEquals(str, a);
+  assertEquals(str, eval(goog.string.quote(str)));
 
   // empty string
-  str = '';
-  try {
-    a = eval(goog.string.quote(str));
-  } catch (e) {
-    fail('Quote failed: err ' + e.message);
-  }
-  assertEquals(str, a);
+  assertEquals('', eval(goog.string.quote('')));
 
   // unicode
   str = allChars(0, 10000);
-  try {
-    a = eval(goog.string.quote(str));
-  } catch (e) {
-    fail('Quote failed: err ' + e.message);
-  }
-  assertEquals(str, a);
+  assertEquals(str, eval(goog.string.quote(str)));
 }
 
 function testQuoteSpecialChars() {

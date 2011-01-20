@@ -36,15 +36,15 @@ See the COPYING file for details.
       }
       goog.inherits(BadRenderer, goog.ui.ControlRenderer);
 
-      try {
-        goog.testing.ui.rendererasserts.
-            assertNoGetCssClassCallsInConstructor(BadRenderer);
-        fail('Expected assertNoGetCssClassCallsInConstructor to fail.');
-      } catch (ex) {
-        assertTrue('Expected assertNoGetCssClassCallsInConstructor to throw a' +
-            ' jsunit exception', ex.isJsUnitException);
-        assertContains('getCssClass', ex.message);
-      }
+      var ex = assertThrows(
+          'Expected assertNoGetCssClassCallsInConstructor to fail.',
+          function() {
+            goog.testing.ui.rendererasserts.
+                assertNoGetCssClassCallsInConstructor(BadRenderer);
+          });
+      assertTrue('Expected assertNoGetCssClassCallsInConstructor to throw a' +
+          ' jsunit exception', ex.isJsUnitException);
+      assertContains('getCssClass', ex.message);
     }
   </script>
 </body>

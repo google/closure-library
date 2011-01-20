@@ -133,15 +133,11 @@ See the COPYING file for details.
   function testSetFlashVarsWithWrongArgument() {
     control.$replayAll();
 
-    var failed = false;
-    try {
+    assertThrows(function() {
       var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
       flash.setFlashVars('foo=bar');
       flash.dispose();
-    } catch (e) {
-      failed = true;
-    }
-    assertTrue(failed);
+    });
   }
 
   function testSetFlashVarUrlEncoding() {
@@ -163,13 +159,9 @@ See the COPYING file for details.
 
     assertTrue(flash.hasRequiredVersion());
 
-    var failed = false;
-    try {
+    assertThrows(function() {
       flash.render();
-    } catch (e) {
-      failed = true;
-    }
-    assertTrue(failed);
+    });
 
     flash.dispose();
   }

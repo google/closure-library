@@ -235,60 +235,52 @@
 
   function testAssertRangeBetweenTextFail1() {
     setUpAssertRangeBetweenText();
-    try {
-      goog.testing.editor.dom.assertRangeBetweenText('1', '3',
-          createFakeRange(first.firstChild, 2));
-      fail('assertRangeBetweenText should have failed');
-    } catch(e) {
-      assertContains('Assert reason incorrect',
-                     'Expected <3> after range but found <23>',
-                     e.message);
-    }
+    var e = assertThrows('assertRangeBetweenText should have failed',
+        function() {
+          goog.testing.editor.dom.assertRangeBetweenText('1', '3',
+              createFakeRange(first.firstChild, 2));
+        });
+    assertContains('Assert reason incorrect',
+        'Expected <3> after range but found <23>', e.message);
   }
 
   function testAssertRangeBetweenTextFail2() {
     setUpAssertRangeBetweenText();
-    try {
-      goog.testing.editor.dom.assertRangeBetweenText('1', '2',
-          createFakeRange(first.firstChild, 2, last.firstChild, 1));
-      fail('assertRangeBetweenText should have failed');
-    } catch(e) {
-      assertContains('Assert reason incorrect',
-                     'Expected <2> after range but found <3>',
-                     e.message);
-    }
+    var e = assertThrows('assertRangeBetweenText should have failed',
+        function() {
+          goog.testing.editor.dom.assertRangeBetweenText('1', '2',
+              createFakeRange(first.firstChild, 2, last.firstChild, 1));
+        });
+    assertContains('Assert reason incorrect',
+        'Expected <2> after range but found <3>', e.message);
   }
 
   function testAssertRangeBetweenTextBeforeFail() {
     setUpAssertRangeBetweenText();
     // Test that it gives the right message when the cursor is at the beginning
     // of all text but you're expecting something before it.
-    try {
-      goog.testing.editor.dom.assertRangeBetweenText('-1', '0',
-          createFakeRange(first.firstChild, 0),
-          root); // Restrict to root div so it won't find /n's and script.
-      fail('assertRangeBetweenText should have failed');
-    } catch(e) {
-      assertContains('Assert reason incorrect',
-                     'Expected <-1> before range but found nothing',
-                     e.message);
-    }
+    var e = assertThrows('assertRangeBetweenText should have failed',
+        function() {
+          goog.testing.editor.dom.assertRangeBetweenText('-1', '0',
+              createFakeRange(first.firstChild, 0),
+              root); // Restrict to root div so it won't find /n's and script.
+        });
+    assertContains('Assert reason incorrect',
+        'Expected <-1> before range but found nothing', e.message);
   }
 
   function testAssertRangeBetweenTextAfterFail() {
     setUpAssertRangeBetweenText();
     // Test that it gives the right message when the cursor is at the end
     // of all text but you're expecting something after it.
-    try {
-      goog.testing.editor.dom.assertRangeBetweenText('3', '4',
-          createFakeRange(last.firstChild, 2),
-          root); // Restrict to root div so it won't find /n's and script.
-      fail('assertRangeBetweenText should have failed');
-    } catch(e) {
-      assertContains('Assert reason incorrect',
-                     'Expected <4> after range but found nothing',
-                     e.message);
-    }
+    var e = assertThrows('assertRangeBetweenText should have failed',
+        function() {
+          goog.testing.editor.dom.assertRangeBetweenText('3', '4',
+              createFakeRange(last.firstChild, 2),
+              root); // Restrict to root div so it won't find /n's and script.
+        });
+    assertContains('Assert reason incorrect',
+        'Expected <4> after range but found nothing', e.message);
   }
 
 

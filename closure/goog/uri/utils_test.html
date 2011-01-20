@@ -314,14 +314,10 @@ function testAppendParams() {
       utils.appendParams('http://foo.com',
           'q', new HasString('a'), 'r', [new HasString('b')]));
 
-  var failed = false;
-  try {
-    utils.appendParams('http://foo.com', 'a', 1, 'b');
-  } catch (ex) {
-    failed = true;
-  }
-  assertTrue('appendParams should have failed with an odd number of arguments.',
-      failed);
+  assertThrows('appendParams should fail with an odd number of arguments.',
+      function() {
+        utils.appendParams('http://foo.com', 'a', 1, 'b');
+      });
 }
 
 

@@ -199,11 +199,8 @@ function testFromArray() {
   assertEquals('(undefined, undefined, undefined)', h.toString());
 
   var tooLong = [1, 2, 3, 4, 5, 6];
-  try {
-    goog.math.Coordinate3.fromArray(tooLong);
-    fail('An Error should be thrown attempting to convert an invalid type.');
-  } catch (e) {
-  }
+  assertThrows('Error should be thrown attempting to convert an invalid type.',
+      goog.partial(goog.math.Coordinate3.fromArray, tooLong));
 }
 
 </script>

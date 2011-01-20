@@ -132,12 +132,10 @@ See the COPYING file for details.
     node = iterator.next();
     assertEquals(goog.dom.TagName.B, node.tagName);
 
-    try {
+    var ex = assertThrows('Should stop iteration when skipping B', function() {
       iterator.skipTag();
-      fail('Should stop iteration when skipping B');
-    } catch (ex) {
-      assertEquals(goog.iter.StopIteration, ex);
-    }
+    });
+    assertEquals(goog.iter.StopIteration, ex);
   }
 </script>
 </body>

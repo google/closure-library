@@ -232,12 +232,8 @@ See the COPYING file for details.
         callCount++;
       });
 
-      try {
-        fire(KeyCodes.X);
-        fail('Expected exception');
-      } catch (e) {
-        assertContains(e.message, 'x');
-      }
+      var e = assertThrows(goog.partial(fire, KeyCodes.X));
+      assertEquals('x', e.message);
 
       assertEquals(1, callCount);
     }

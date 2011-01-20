@@ -234,13 +234,9 @@ function testInvalidMinMax1() {
   assertEquals(0, p.getInUseCount());
   assertEquals(0, p.getFreeCount());
 
-  try {
+  assertThrows(function() {
     p.setMinimumCount(11);
-  } catch(e) {
-    assertTrue('Excption caught', true);
-    return;
-  }
-  assertTrue('Exception should of been caught', false);
+  });
 }
 
 
@@ -251,25 +247,16 @@ function testInvalidMinMax2() {
   assertEquals(0, p.getInUseCount());
   assertEquals(5, p.getFreeCount());
 
-  try {
+  assertThrows(function() {
     p.setMaximumCount(4);
-  } catch(e) {
-    assertTrue('Excption caught', true);
-    return;
-  }
-  assertTrue('Exception should of been caught', false);
+  });
 }
 
 
 function testInvalidMinMax3() {
-  try {
-    var p = new goog.structs.Pool(10, 1);
-    info('pool made');
-  } catch(e) {
-    assertTrue('Excption caught', true);
-    return;
-  }
-  assertTrue('Exception should of been caught', false);
+  assertThrows(function() {
+    new goog.structs.Pool(10, 1);
+  });
 }
 
 

@@ -172,14 +172,11 @@ function testCanAddElementDuringBeforeShow() {
 
 function testShowWithNoElementThrowsException() {
   popup.setElement(null);
-  try {
+  var e = assertThrows(function() {
     popup.setVisible(true);
-  } catch (e) {
-    assertEquals('Caller must call setElement before trying to show the popup',
-                 e.message);
-    return;
-  }
-  fail('Should have thrown exception');
+  });
+  assertEquals('Caller must call setElement before trying to show the popup',
+      e.message);
 }
 
 // TODO(user): Write better unit tests for click and cross-iframe dismissal.

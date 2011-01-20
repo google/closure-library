@@ -60,30 +60,15 @@ See the COPYING file for details.
   }
 
   function testConstructor() {
-    var failed = false;
-    try {
+    assertThrows(function() {
       new goog.graphics.AffineTransform([0, 0]);
-      failed = true;
-    } catch (e) {
-      // Expected
-    }
-    assertFalse(failed);
-
-    try {
+    });
+    assertThrows(function() {
       new goog.graphics.AffineTransform({});
-      failed = true;
-    } catch (e) {
-      // Expected
-    }
-    assertFalse(failed);
-
-    try {
+    });
+    assertThrows(function() {
       new goog.graphics.AffineTransform(0, 0, 0, 'a', 0, 0);
-      failed = true;
-    } catch (e) {
-      // Expected
-    }
-    assertFalse(failed);
+    });
 
     var tx = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
     assertEquals(1, tx.getScaleX());
@@ -117,20 +102,12 @@ See the COPYING file for details.
 
   function testSetTransform() {
     var tx = new goog.graphics.AffineTransform();
-    var failed = false;
-    try {
+    assertThrows(function() {
       tx.setTransform(1, 2, 3, 4, 6);
-      failed = true;
-    } catch (e) {
-      // expected
-    }
-    try {
+    });
+    assertThrows(function() {
       tx.setTransform('a', 2, 3, 4, 5, 6);
-      failed = true;
-    } catch (e) {
-      // expected
-    }
-    assertFalse(failed);
+    });
 
     tx.setTransform(1, 2, 3, 4, 5, 6);
     assertEquals(1, tx.getScaleX());
@@ -323,7 +300,7 @@ See the COPYING file for details.
 
     tx2 = new goog.graphics.AffineTransform(1, 2, 3, 4, -5, 6);
     assertEqualsMethod(tx1, tx2, false);
-    
+
     tx2 = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, -6);
     assertEqualsMethod(tx1, tx2, false);
   }

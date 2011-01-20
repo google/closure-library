@@ -1161,17 +1161,11 @@ See the COPYING file for details.
             control.dispose();
           });
 
-      var error = false;
-      try {
-        control.performActionInternal();
-        control.setActive(true);
-      } catch (e) {
-        error = true;
-      }
-
-      assertFalse('Control must not throw an exception if disposed of in an ' +
-          'ACTION event handler', error);
-      assertTrue('Control must havbe been disposed of', control.isDisposed());
+      // Control must not throw an exception if disposed of in an ACTION event
+      // handler.
+      control.performActionInternal();
+      control.setActive(true);
+      assertTrue('Control should have been disposed of', control.isDisposed());
     }
 
     /**

@@ -58,40 +58,22 @@ function testTrieFormation() {
 
 function testFailureOfMultipleAdds() {
   var t = new goog.structs.Trie();
-  var sawCorrectError = false;
   t.add('hello', 'testing');
-  try {
+  assertThrows('Error should be thrown when same key added twice.', function() {
     t.add('hello', 'test');
-  } catch (error) {
-    sawCorrectError = true;
-  }
-  if (! sawCorrectError) {
-    fail('Error not thrown when same key added twice.');
-  }
+  });
 
   t = new goog.structs.Trie();
-  sawCorrectError = false;
   t.add('null', null);
-  try {
+  assertThrows('Error should be thrown when same key added twice.', function() {
     t.add('null', 'hi!');
-  } catch (error) {
-    sawCorrectError = true;
-  }
-  if (! sawCorrectError) {
-    fail('Error not thrown when same key added twice.');
-  }
+  });
 
   t = new goog.structs.Trie();
-  sawCorrectError = false;
   t.add('null', 'blah');
-  try {
+  assertThrows('Error should be thrown when same key added twice.', function() {
     t.add('null', null);
-  } catch (error) {
-    sawCorrectError = true;
-  }
-  if (! sawCorrectError) {
-    fail('Error not thrown when same key added twice.');
-  }
+  });
 }
 
 function testTrieClone() {
@@ -223,14 +205,10 @@ function testRemoveKeyException() {
   trie.add('abcz', 'value');
   trie.add('abc', 'value');
 
-  var foundException = false;
-  try {
-    trie.remove('abcdefge');
-  } catch (error) {
-    foundException = true;
-  }
-  assertTrue('Remove should throw an exception on removal of non-existent key',
-      foundException);
+  assertThrows('Remove should throw an error on removal of non-existent key',
+      function() {
+        trie.remove('abcdefge');
+      });
 }
 
 function testTrieIsEmpty() {

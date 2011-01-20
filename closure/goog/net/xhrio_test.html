@@ -409,16 +409,12 @@ function testSendFromListener() {
   var x = new goog.net.XhrIo;
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     count++;
-    
-    var thrown = false;
-    try {
+
+    var e = assertThrows(function() {
       x.send('url2');
-    } catch(e) {
-      thrown = true;
-      assertEquals(e.message,
-          '[goog.net.XhrIo] Object is active with another request');
-    }
-    assertTrue(thrown);
+    });
+    assertEquals('[goog.net.XhrIo] Object is active with another request',
+        e.message);
   });
 
   x.send('url');
@@ -475,14 +471,10 @@ function testProtectEntryPointCalledOnAsyncSend() {
   });
 
   x.send('url');
-  var readyStateChangeHandlerError = null;
-  try {
+  assertThrows(function() {
     lastMockXmlHttp.complete();
-  } catch (e) {
-    readyStateChangeHandlerError = e;
-  }
+  });
 
-  assertNotNull(readyStateChangeHandlerError);
   assertTrue('Error handler callback should be called on async send.',
       errorHandlerCallbackCalled);
 }

@@ -323,12 +323,11 @@ function testMutatedIterator() {
 
   var iter = m.getValueIterator();
   m.set('e', 5);
-  try {
-    iter.next();
-    fail('Expected an exception since the map has changed');
-  } catch(ex) {
-    assertEquals(message, ex.message);
-  }
+  var ex = assertThrows('Expected an exception since the map has changed',
+      function() {
+        iter.next();
+      });
+  assertEquals(message, ex.message);
 
   m = new goog.structs.Map;
   m.set('a', 1);
@@ -338,12 +337,11 @@ function testMutatedIterator() {
 
   iter = m.getValueIterator();
   m.remove('d');
-  try {
-    iter.next();
-    fail('Expected an exception since the map has changed');
-  } catch(ex) {
-    assertEquals(message, ex.message);
-  }
+  var ex = assertThrows('Expected an exception since the map has changed',
+      function() {
+        iter.next();
+      });
+  assertEquals(message, ex.message);
 
   m = new goog.structs.Map;
   m.set('a', 1);
@@ -354,13 +352,8 @@ function testMutatedIterator() {
   iter = m.getValueIterator();
   m.set('d', 5);
   iter.next();
-  try {
-    iter.next();
-    // OK
-  } catch(ex) {
-    fail('Changing an existing value is OK');
-  }
-
+  // Changing an existing value is OK.
+  iter.next();
 };
 
 function testTranspose() {

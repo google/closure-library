@@ -55,13 +55,11 @@ See the COPYING file for details.
 
   function testDoNotPreventException() {
     var ex = 'exception';
-    try {
-      expectedFailures.expectFailureFor(false);
+    expectedFailures.expectFailureFor(false);
+    var e = assertThrows('Should have rethrown exception', function() {
       expectedFailures.handleException(ex);
-      fail('Should have rethrown exception');
-    } catch (e) {
-      assertEquals('Should rethrow same exepction', e, ex);
-    }
+    });
+    assertEquals('Should rethrow same exception', ex, e);
   }
 
   function testExpectedFailureDidNotOccur() {
@@ -95,16 +93,14 @@ See the COPYING file for details.
   function testRunStrict() {
     expectedFailures.expectFailureFor(true);
 
-    try {
+    var ex = assertThrows(function() {
       expectedFailures.run(function() {
         // Doesn't fail!
       });
-
-      fail('Should have thrown exception');
-    } catch (ex) {
-      assertEquals(ex.message, 'Call to fail()\n' +
-          'Expected a test failure in \'testRunStrict\' but the test passed.');
-    }
+    });
+    assertContains(
+        "Expected a test failure in 'testRunStrict' but the test passed.",
+        ex.message);
   }
 
   function testRunLenient() {

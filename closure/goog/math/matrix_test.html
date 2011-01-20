@@ -41,35 +41,25 @@ See the COPYING file for details.
 
 
   function testConstructorWithBadArray() {
-    try {
-      var m1 = new goog.math.Matrix([[1, 2, 3], [1, 2], [1]]);
-    } catch (e) {
-      assertNotNull('1. All arrays should be of equal length', e);
-    }
+    assertThrows('1. All arrays should be of equal length', function() {
+      new goog.math.Matrix([[1, 2, 3], [1, 2], [1]]);
+    });
 
-    try {
-      var m2 = new goog.math.Matrix([[1, 2], [1, 2], [1, 2, 3, 4]]);
-    } catch (e) {
-      assertNotNull('2. All arrays should be of equal length', e);
-    }
+    assertThrows('2. All arrays should be of equal length', function() {
+      new goog.math.Matrix([[1, 2], [1, 2], [1, 2, 3, 4]]);
+    });
 
-    try {
-      var m3 = new goog.math.Matrix([[1, 2], [1, 2], [1, 'a']]);
-    } catch (e) {
-      assertNotNull('3. Arrays should contain only numeric values', e);
-    }
+    assertThrows('3. Arrays should contain only numeric values', function() {
+      new goog.math.Matrix([[1, 2], [1, 2], [1, 'a']]);
+    });
 
-    try {
-      var m4 = new goog.math.Matrix([[1, 2], [1, 2], [1, {a: 3}]]);
-    } catch (e) {
-      assertNotNull('4. Arrays should contain only numeric values', e);
-    }
+    assertThrows('4. Arrays should contain only numeric values', function() {
+      new goog.math.Matrix([[1, 2], [1, 2], [1, {a: 3}]]);
+    });
 
-    try {
-      var m5 = new goog.math.Matrix([[1, 2], [1, 2], [1, [1, 2, 3]]]);
-    } catch (e) {
-      assertNotNull('5. Arrays should contain only numeric values', e);
-    }
+    assertThrows('5. Arrays should contain only numeric values', function() {
+      new goog.math.Matrix([[1, 2], [1, 2], [1, [1, 2, 3]]]);
+    });
   }
 
 
@@ -89,29 +79,21 @@ See the COPYING file for details.
 
 
   function testConstructorWithBadNumbers() {
-    try {
-      var m4 = new goog.math.Matrix(-4, 6);
-    } catch (e) {
-      assertNotNull('1. Negative argument should have errored', e);
-    }
+    assertThrows('1. Negative argument should have errored', function() {
+      new goog.math.Matrix(-4, 6);
+    });
 
-    try {
-      var m5 = new goog.math.Matrix(4, -6);
-    } catch (e) {
-      assertNotNull('2. Negative argument should have errored', e);
-    }
+    assertThrows('2. Negative argument should have errored', function() {
+      new goog.math.Matrix(4, -6);
+    });
 
-    try {
-      var m6 = new goog.math.Matrix(4, 0);
-    } catch (e) {
-      assertNotNull('3. Zero argument should have errored', e);
-    }
+    assertThrows('3. Zero argument should have errored', function() {
+      new goog.math.Matrix(4, 0);
+    });
 
-    try {
-      var m7 = new goog.math.Matrix(0, 1);
-    } catch (e) {
-      assertNotNull('4. Zero argument should have errored', e);
-    }
+    assertThrows('4. Zero argument should have errored', function() {
+      new goog.math.Matrix(0, 1);
+    });
   }
 
 
@@ -304,7 +286,7 @@ See the COPYING file for details.
 
     assertArrayEquals('A(BC) == (AB)C',
                       A.multiply(B.multiply(C)).toArray(),
-                      A.multiply(B).multiply(C).toArray());  
+                      A.multiply(B).multiply(C).toArray());
   }
 
 
@@ -374,7 +356,7 @@ See the COPYING file for details.
 
   function testDeterminant() {
     var m = new goog.math.Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
-    assertEquals(0, m.getDeterminant()); 
+    assertEquals(0, m.getDeterminant());
   }
 
 
@@ -384,10 +366,10 @@ See the COPYING file for details.
                                   [ 0, -1,  2, 0, 0, 1]]);
     var sub1 = [[2, -1, 0], [-1, 2, -1], [0, -1, 2]];
     assertArrayEquals(sub1,
-                      m.getSubmatrixByCoordinates_(0, 0, 2, 2).toArray()); 
+                      m.getSubmatrixByCoordinates_(0, 0, 2, 2).toArray());
 
     var sub2 = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
-    assertArrayEquals(sub2, m.getSubmatrixByCoordinates_(0, 3).toArray()); 
+    assertArrayEquals(sub2, m.getSubmatrixByCoordinates_(0, 3).toArray());
   }
 
 

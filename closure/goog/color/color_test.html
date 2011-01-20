@@ -65,16 +65,8 @@ function testParse() {
 
   var badColors = ['rgb(01, 1, 23)', '(256, 256, 256)', '#ffeeddaa'];
   for (var i = 0; i < badColors.length; i++) {
-    try {
-      goog.color.parse(badColors[i]);
-      fail("Shouldn't reach here since " + badColors[i] + " is not a valid " +
-           "color string");
-    } catch (e) {
-      if(!e.message) throw e;
-      if(e.message.indexOf("is not a valid color string") == -1) {
-        fail("Error processing " + badColors[i] + " : " + e.message);
-      }
-    }
+    var e = assertThrows(goog.partial(goog.color.parse, badColors[i]));
+    assertContains('is not a valid color string', e.message);
   }
 }
 
@@ -95,11 +87,8 @@ function testHexToRgb() {
 
   var badColors = ['', '#g00', 'some words'];
   for (var i = 0; i < badColors.length; i++) {
-    try {
-    } catch (e) {
-      assertEquals("'" + badColors[i] + "' is not a valid hex color",
-                   e.message);
-    }
+    var e = assertThrows(goog.partial(goog.color.hexToRgb, badColors[i]));
+    assertEquals("'" + badColors[i] + "' is not a valid hex color", e.message);
   }
 }
 
@@ -110,14 +99,9 @@ function testHexToRgbStyle() {
   assertEquals('rgb(51,204,170)', goog.color.hexToRgbStyle('#3CA'));
   var badHexColors = ['#1234', null, undefined, '#.1234567890'];
   for (var i = 0; i < badHexColors.length; ++i) {
-    try {
-      goog.color.hexToRgbStyle(badHexColors[i]);
-      fail("Shouldn't make it here since " + badHexColors[i] + " is an " +
-           "invalid hex color");
-    } catch (e) {
-      assertEquals("'" + badHexColors[i] + "' is not a valid hex color",
-                   e.message);
-    }
+    var badHexColor = badHexColors[i];
+    var e = assertThrows(goog.partial(goog.color.hexToRgbStyle, badHexColor));
+    assertEquals("'" + badHexColor + "' is not a valid hex color", e.message);
   }
 }
 
@@ -127,13 +111,8 @@ function testRgbToHex() {
   assertEquals('#af13ff', goog.color.rgbToHex(175, 19, 255));
   var badRgb = [[-1, -1, -1], [256, 0, 0], ['a', 'b', 'c'], [undefined, 5, 5]];
   for (var i = 0; i < badRgb.length; ++i) {
-    try {
-      goog.color.rgbArrayToHex(badRgb[i]);
-      fail("Shouldn't make it here since " + badRgb[i] + "is not a valid " +
-           "rgb color");
-    } catch (e) {
-      assertTrue(e.message.indexOf("is not a valid RGB color") > -1);
-    }
+    var e = assertThrows(goog.partial(goog.color.rgbArrayToHex, badRgb[i]));
+    assertContains('is not a valid RGB color', e.message);
   }
 }
 
