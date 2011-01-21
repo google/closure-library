@@ -24,7 +24,7 @@ goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color']);
 goog.addDependency('color/color.js', ['goog.color'], ['goog.color.names', 'goog.math']);
 goog.addDependency('color/names.js', ['goog.color.names'], []);
 goog.addDependency('crypt/arc4.js', ['goog.crypt.Arc4'], ['goog.asserts']);
-goog.addDependency('crypt/base64.js', ['goog.crypt.base64'], ['goog.crypt']);
+goog.addDependency('crypt/base64.js', ['goog.crypt.base64'], ['goog.crypt', 'goog.userAgent']);
 goog.addDependency('crypt/basen.js', ['goog.crypt.baseN'], []);
 goog.addDependency('crypt/crypt.js', ['goog.crypt'], []);
 goog.addDependency('crypt/hash32.js', ['goog.crypt.hash32'], ['goog.crypt']);
