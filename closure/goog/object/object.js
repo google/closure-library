@@ -334,10 +334,8 @@ goog.object.isEmpty = function(obj) {
  * @param {Object} obj The object to clear.
  */
 goog.object.clear = function(obj) {
-  // Some versions of IE has problems if we delete keys from the beginning
-  var keys = goog.object.getKeys(obj);
-  for (var i = keys.length - 1; i >= 0; i--) {
-    goog.object.remove(obj, keys[i]);
+  for (var i in obj) {
+    delete obj[i];
   }
 };
 
