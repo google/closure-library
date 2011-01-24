@@ -339,6 +339,36 @@ function testMaybeCreateDummyTargetForPosition4() {
 }
 
 
+function testCalculateTargetBox() {
+  var testGroup = new goog.fx.AbstractDragDrop();
+  testGroup.targetList_ = [];
+  goog.array.forEach(targets, function(target) {
+    testGroup.targetList_.push(target);
+    testGroup.calculateTargetBox_(target.box_);
+  });
+  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
+             new goog.math.Box(0, 9, 10, 1)));
+
+  testGroup = new goog.fx.AbstractDragDrop();
+  testGroup.targetList_ = [];
+  goog.array.forEach(targets2, function(target) {
+    testGroup.targetList_.push(target);
+    testGroup.calculateTargetBox_(target.box_);
+  });
+  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
+             new goog.math.Box(10, 50, 80, 10)));
+
+  testGroup = new goog.fx.AbstractDragDrop();
+  testGroup.targetList_ = [];
+  goog.array.forEach(targets3, function(target) {
+    testGroup.targetList_.push(target);
+    testGroup.calculateTargetBox_(target.box_);
+  });
+  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
+             new goog.math.Box(0, 6, 6, 0)));
+}
+
+
 function testIsInside() {
   var add = new goog.fx.AbstractDragDrop();
   // The box in question.

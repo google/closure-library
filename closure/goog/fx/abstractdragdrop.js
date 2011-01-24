@@ -709,10 +709,13 @@ goog.fx.AbstractDragDrop.prototype.containerScrollHandler_ = function(e) {
       container.savedScrollLeft_ = container.element_.scrollLeft;
 
       for (var j = 0, target; target = container.containedTargets_[j]; j++) {
-        target.box_.top += deltaTop;
-        target.box_.left += deltaLeft;
-        target.box_.bottom += deltaTop;
-        target.box_.right += deltaLeft;
+        var box = target.box_;
+        box.top += deltaTop;
+        box.left += deltaLeft;
+        box.bottom += deltaTop;
+        box.right += deltaLeft;
+
+        this.calculateTargetBox_(box);
       }
     }
   }
@@ -834,17 +837,28 @@ goog.fx.AbstractDragDrop.prototype.addDragTarget_ = function(target, item) {
     targetList.push(
         new goog.fx.ActiveDropTarget_(box, target, item, draggableElement));
 
-    // Calculate the outer bounds (the region all targets are inside)
-    if (targetList.length == 1) {
-      this.targetBox_ = new goog.math.Box(box.top, box.right,
-                                          box.bottom, box.left);
-    } else {
-      var tb = this.targetBox_;
-      tb.left = Math.min(box.left, tb.left);
-      tb.right = Math.max(box.right, tb.right);
-      tb.top = Math.min(box.top, tb.top);
-      tb.bottom = Math.max(box.bottom, tb.bottom);
-    }
+    this.calculateTargetBox_(box);
+  }
+};
+
+
+/**
+ * Calculate the outer bounds (the region all targets are inside).
+ *
+ * @param {goog.math.Box} box Box describing the position and dimension
+ *     of a drag target.
+ * @private
+ */
+goog.fx.AbstractDragDrop.prototype.calculateTargetBox_ = function(box) {
+  if (this.targetList_.length == 1) {
+    this.targetBox_ = new goog.math.Box(box.top, box.right,
+                                        box.bottom, box.left);
+  } else {
+    var tb = this.targetBox_;
+    tb.left = Math.min(box.left, tb.left);
+    tb.right = Math.max(box.right, tb.right);
+    tb.top = Math.min(box.top, tb.top);
+    tb.bottom = Math.max(box.bottom, tb.bottom);
   }
 };
 
