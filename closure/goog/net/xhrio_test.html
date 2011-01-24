@@ -17,14 +17,13 @@ See the COPYING file for details.
   goog.require('goog.functions');
   goog.require('goog.net.WrapperXmlHttpFactory');
   goog.require('goog.net.XhrIo');
+  goog.require('goog.object');
   goog.require('goog.string');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.net.XhrIo');
   goog.require('goog.testing.recordFunction');
   goog.require('goog.Uri');
-
-
 </script>
 <script>
 
@@ -565,6 +564,34 @@ function testEntryPointRegistry() {
   assertEquals(
       replacement,
       goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_);
+}
+
+function testSetWithCredentials() {
+  // Test on XHR objects that don't have the withCredentials property (older
+  // browsers).
+  var x = new goog.net.XhrIo;
+  x.setWithCredentials(true);
+  x.send('url');
+  assertFalse(
+      'withCredentials should not be set on an XHR object if the property ' +
+      'does not exist.',
+      goog.object.containsKey(lastMockXmlHttp, 'withCredentials'));
+
+  // Test on XHR objects that have the withCredentials property.
+  MockXmlHttp.prototype.withCredentials = false;
+  x = new goog.net.XhrIo;
+  x.setWithCredentials(true);
+  x.send('url');
+  assertTrue(
+      'withCredentials should be set on an XHR object if the property exists',
+      goog.object.containsKey(lastMockXmlHttp, 'withCredentials'));
+
+  assertTrue(
+      'withCredentials value not set on XHR object',
+      lastMockXmlHttp.withCredentials);
+
+  // Reset the prototype so it does not effect other tests.
+  delete MockXmlHttp.prototype.withCredentials;
 }
 
 </script>

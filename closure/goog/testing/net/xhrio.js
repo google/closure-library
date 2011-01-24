@@ -213,6 +213,20 @@ goog.testing.net.XhrIo.prototype.responseType_ =
 
 
 /**
+ * Whether a "credentialed" request is to be sent (one that is aware of cookies
+ * and authentication) . This is applicable only for cross-domain requests and
+ * more recent browsers that support this part of the HTTP Access Control
+ * standard.
+ *
+ * @see http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#withcredentials
+ *
+ * @type {boolean}
+ * @private
+ */
+goog.testing.net.XhrIo.prototype.withCredentials_ = false;
+
+
+/**
  * Whether there's currently an underlying XHR object.
  * @type {boolean}
  * @private
@@ -270,6 +284,30 @@ goog.testing.net.XhrIo.prototype.setResponseType = function(type) {
  */
 goog.testing.net.XhrIo.prototype.getResponseType = function() {
   return this.responseType_;
+};
+
+
+/**
+ * Sets whether a "credentialed" request that is aware of cookie and
+ * authentication information should be made. This option is only supported by
+ * browsers that support HTTP Access Control. As of this writing, this option
+ * is not supported in IE.
+ *
+ * @param {boolean} withCredentials Whether this should be a "credentialed"
+ *     request.
+ */
+goog.testing.net.XhrIo.prototype.setWithCredentials =
+    function(withCredentials) {
+  this.withCredentials_ = withCredentials;
+};
+
+
+/**
+ * Gets whether a "credentialed" request is to be sent.
+ * @return {boolean} The desired type for the response.
+ */
+goog.testing.net.XhrIo.prototype.getWithCredentials = function() {
+  return this.withCredentials_;
 };
 
 
