@@ -11,7 +11,9 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.format</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.dom');
   goog.require('goog.format');
+  goog.require('goog.string');
   goog.require('goog.testing.jsunit');
   goog.require('goog.style');
 </script>
@@ -204,6 +206,25 @@ function testInsertWordBreaksBasic() {
       hindiInternet + '<wbr>/' + hindiInternet + '<wbr>.' + hindiInternet,
       fn(hindiInternet + '/' + hindiInternet + '.' + hindiInternet, 2));
 }
+
+function testWordBreaksWorking() {
+  var text = goog.string.repeat('test', 20);
+  var textWbr = goog.string.repeat('test' + goog.format.WORD_BREAK_HTML, 20);
+
+  var overflowEl = goog.dom.createDom('div',
+      {'style': 'width: 100px; overflow: hidden; margin 5px'});
+  var wbrEl = goog.dom.createDom('div',
+      {'style': 'width: 100px; overflow: hidden; margin-top: 15px'});
+  goog.dom.appendChild(goog.global.document.body, overflowEl);
+  goog.dom.appendChild(goog.global.document.body, wbrEl);
+
+  overflowEl.innerHTML = text;
+  wbrEl.innerHTML = textWbr;
+
+  assertTrue('Text should overflow', overflowEl.scrollWidth > 100);
+  assertTrue('Text should not overflow', wbrEl.scrollWidth <= 100);
+}
+
 
 </script>
 </body>
