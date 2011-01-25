@@ -309,7 +309,8 @@ See the COPYING file for details.
 
     var selRange = goog.dom.Range.createFromWindow();
     var startNode = selRange.getStartNode();
-    if (goog.userAgent.GECKO) {
+    if (goog.userAgent.GECKO ||
+        (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
       assertEquals('Start node should be span', spanElem, startNode);
     } else {
       assertEquals('Startnode should have text:123',
@@ -334,7 +335,8 @@ See the COPYING file for details.
 
     var selRange = goog.dom.Range.createFromWindow();
     var startNode = selRange.getStartNode();
-    if (goog.userAgent.GECKO) {
+    if (goog.userAgent.GECKO ||
+        (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
       assertEquals('Start node should be span', spanElem, startNode);
     } else {
       assertEquals('Start node should have text:123',
@@ -363,7 +365,8 @@ See the COPYING file for details.
 
     var selRange = goog.dom.Range.createFromWindow();
     var startNode = selRange.getStartNode();
-    if (goog.userAgent.GECKO) {
+    if (goog.userAgent.GECKO ||
+        (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
       assertEquals('Start node should be span', spanElem, startNode);
     } else {
       assertEquals('Startnode should have text:123',
@@ -371,7 +374,8 @@ See the COPYING file for details.
     }
     assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
     var endNode = selRange.getEndNode();
-    if (goog.userAgent.GECKO) {
+    if (goog.userAgent.GECKO ||
+        (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
       assertEquals('Endnode should be span', spanElem, endNode);
       assertEquals('Endoffset should be 1', 1, selRange.getEndOffset());
     } else {
@@ -396,7 +400,8 @@ See the COPYING file for details.
     assertEquals('Start node should be span', spanElem, startNode);
     assertEquals('Startoffset should be 1', 1, selRange.getStartOffset());
     var endNode = selRange.getEndNode();
-    if (goog.userAgent.GECKO) {
+    if (goog.userAgent.GECKO ||
+        (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
       assertEquals('Endnode should be span', spanElem, endNode);
       assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
     } else {
@@ -418,7 +423,8 @@ See the COPYING file for details.
 
     var selRange = goog.dom.Range.createFromWindow();
     var startNode = selRange.getStartNode();
-    if (goog.userAgent.GECKO) {
+    if (goog.userAgent.GECKO ||
+        (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
       assertEquals('Start node should be span', spanElem, startNode);
       assertEquals('Startoffset should be 2', 2, selRange.getStartOffset());
     } else {
@@ -427,7 +433,8 @@ See the COPYING file for details.
       assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
     }
     var endNode = selRange.getEndNode();
-    if (goog.userAgent.GECKO) {
+    if (goog.userAgent.GECKO ||
+        (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
       assertEquals('Endnode should be span', spanElem, endNode);
       assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
     } else {
