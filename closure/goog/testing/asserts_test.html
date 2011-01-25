@@ -18,6 +18,7 @@ See the COPYING file for details.
   goog.require('goog.structs.Set');
   goog.require('goog.testing.asserts');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent');
 </script>
 </head>
 <body>
@@ -943,6 +944,21 @@ See the COPYING file for details.
     //    createBinTree(5, null), createBinTree(5, null)));
     assertNotNull(goog.testing.asserts.findDifferences(
         createBinTree(4, null), createBinTree(5, null)));
+  }
+
+  function testStringForWindowIE() {
+    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+      // NOTE(user): This test sees of we are being affected by a JScript bug
+      // in try/finally handling. This bug only affects the lowest try/finally
+      // block in the stack. Calling this function via VBScript allows
+      // us to run the test synchronously in an empty JS stack.
+      window.execScript('stringForWindowIEHelper()', 'vbscript');
+      assertEquals('<[object]> (Object)', window.stringForWindowIEResult);
+    }
+  }
+
+  function stringForWindowIEHelper() {
+    window.stringForWindowIEResult = _displayStringForValue(window);
   }
 
 </script>
