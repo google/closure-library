@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2011 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+-->
+<head>
+<title>Closure Unit Tests - goog.testing.fs.Entry</title>
+<script src="../../base.js"></script>
+<script src="../../../../third_party/closure/goog/deps.js"></script>
+<script>
+goog.require('goog.fs.Error.ErrorCode');
+goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.fs.FileSystem');
+goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+var fs, file;
+
+function setUp() {
+  fs = new goog.testing.fs.FileSystem();
+  file = fs.getRoot().getDirectorySync('foo').getFileSync('bar');
+}
+
+function testGetName() {
+  assertEquals('bar', file.getName());
+}
+
+function testGetFullPath() {
+  assertEquals('/foo/bar', file.getFullPath());
+  assertEquals('/', fs.getRoot().getFullPath());
+}
+
+function testGetFileSystem() {
+  assertEquals(fs, file.getFileSystem());
+}
+
+function testMoveTo() {
+  file.moveTo(fs.getRoot()).addCallback(function(newFile) {
+    assertTrue(file.deleted);
+    assertFalse(newFile.deleted);
+    assertEquals('/bar', newFile.getFullPath());
+    assertEquals(fs.getRoot(), newFile.parent);
+    assertEquals(newFile, fs.getRoot().getFileSync('bar'));
+    assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('bar'));
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file move');
+}
+
+function testMoveToNewName() {
+  file.moveTo(fs.getRoot(), 'baz').addCallback(function(newFile) {
+    assertTrue(file.deleted);
+    assertFalse(newFile.deleted);
+    assertEquals('/baz', newFile.getFullPath());
+    assertEquals(fs.getRoot(), newFile.parent);
+    assertEquals(newFile, fs.getRoot().getFileSync('baz'));
+    assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('bar'));
+    assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('baz'));
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file move');
+}
+
+function testMoveDeletedFile() {
+  assertFailsWhenDeleted(function() { return file.moveTo(fs.getRoot()); });
+}
+
+function testCopyTo() {
+  file.copyTo(fs.getRoot()).addCallback(function(newFile) {
+    assertFalse(file.deleted);
+    assertFalse(newFile.deleted);
+    assertEquals('/bar', newFile.getFullPath());
+    assertEquals(fs.getRoot(), newFile.parent);
+    assertEquals(newFile, fs.getRoot().getFileSync('bar'));
+    assertEquals(file, fs.getRoot().getDirectorySync('foo').getFileSync('bar'));
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file copy');
+}
+
+function testCopyToNewName() {
+  file.copyTo(fs.getRoot(), 'baz').addCallback(function(newFile) {
+    assertFalse(file.deleted);
+    assertFalse(newFile.deleted);
+    assertEquals('/baz', newFile.getFullPath());
+    assertEquals(fs.getRoot(), newFile.parent);
+    assertEquals(newFile, fs.getRoot().getFileSync('baz'));
+    assertEquals(file, fs.getRoot().getDirectorySync('foo').getFileSync('bar'));
+    assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('baz'));
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file copy');
+}
+
+function testCopyDeletedFile() {
+  assertFailsWhenDeleted(function() { return file.copyTo(fs.getRoot()); });
+}
+
+function testRemove() {
+  file.remove().addCallback(function() {
+    assertTrue(file.deleted);
+    assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('bar'));
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file removal');
+}
+
+function testRemoveDeletedFile() {
+  assertFailsWhenDeleted(function() { return file.remove(); });
+}
+
+function testGetParent() {
+  file.getParent().addCallback(function(p) {
+    assertEquals(file.parent, p);
+    assertEquals(fs.getRoot().getDirectorySync('foo'), p);
+    assertEquals('/foo', p.getFullPath());
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file parent');
+}
+
+function testGetDeletedFileParent() {
+  assertFailsWhenDeleted(function() { return file.getParent(); });
+}
+
+function assertFailsWhenDeleted(fn) {
+  file.remove().addCallback(fn).
+      addCallback(function() { fail('Expected an error'); }).
+      addErrback(function(err) {
+        assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
+        asyncTestCase.continueTesting();
+      });
+  asyncTestCase.waitForAsync('waiting for file operation');
+}
+
+</script>
+</body>
+</html>

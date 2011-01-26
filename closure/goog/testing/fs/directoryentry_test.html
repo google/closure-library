@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2011 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+-->
+<head>
+<title>Closure Unit Tests - goog.testing.fs.DirectoryEntry</title>
+<script src="../../base.js"></script>
+<script src="../../../../third_party/closure/goog/deps.js"></script>
+<script>
+goog.require('goog.fs.DirectoryEntry.Behavior');
+goog.require('goog.fs.Error.ErrorCode');
+goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.fs.FileSystem');
+goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+var fs, dir;
+
+function setUp() {
+  fs = new goog.testing.fs.FileSystem();
+  dir = fs.getRoot().getDirectorySync('foo');
+  dir.getDirectorySync('subdir').getFileSync('subfile');
+  dir.getFileSync('file');
+}
+
+function testIsFile() {
+  assertFalse(dir.isFile());
+}
+
+function testIsDirectory() {
+  assertTrue(dir.isDirectory());
+}
+
+function testRemoveWithChildren() {
+  dir.getFileSync('bar');
+  expectError(dir.remove(), goog.fs.Error.ErrorCode.INVALID_MODIFICATION);
+}
+
+function testRemoveWithoutChildren() {
+  var emptyDir = dir.getDirectorySync('empty');
+  emptyDir.remove().addCallback(function() {
+    assertTrue(emptyDir.deleted);
+    assertFalse(fs.getRoot().hasChild('empty'));
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file removal');
+}
+
+function testGetFile() {
+  dir.getFile('file').addCallback(function(file) {
+    assertEquals(dir.getFileSync('file'), file);
+    assertEquals('file', file.getName());
+    assertEquals('/foo/file', file.getFullPath());
+    assertTrue(file.isFile());
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file');
+}
+
+function testGetFileFromSubdir() {
+  dir.getFile('subdir/subfile').addCallback(function(file) {
+    assertEquals(dir.getDirectorySync('subdir').getFileSync('subfile'), file);
+    assertEquals('subfile', file.getName());
+    assertEquals('/foo/subdir/subfile', file.getFullPath());
+    assertTrue(file.isFile());
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('waiting for file');
+}
+
+function testCreateFile() {
+  dir.getFile('bar', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(function(file) {
+        assertEquals('bar', file.getName());
+        assertEquals('/foo/bar', file.getFullPath());
+        assertEquals(dir, file.parent);
+        assertTrue(file.isFile());
+
+        asyncTestCase.continueTesting();
+      });
+  asyncTestCase.waitForAsync('waiting for file creation');
+}
+
+function testCreateFileThatAlreadyExists() {
+  var existingFile = dir.getFileSync('file');
+  dir.getFile('file', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(function(file) {
+        assertEquals('file', file.getName());
+        assertEquals('/foo/file', file.getFullPath());
+        assertEquals(dir, file.parent);
+        assertEquals(existingFile, file);
+        assertTrue(file.isFile());
+
+        asyncTestCase.continueTesting();
+      });
+  asyncTestCase.waitForAsync('waiting for file creation');
+}
+
+function testCreateFileInSubdir() {
+  dir.getFile('subdir/bar', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(function(file) {
+        assertEquals('bar', file.getName());
+        assertEquals('/foo/subdir/bar', file.getFullPath());
+        assertEquals(dir.getDirectorySync('subdir'), file.parent);
+        assertTrue(file.isFile());
+
+        asyncTestCase.continueTesting();
+      });
+  asyncTestCase.waitForAsync('waiting for file creation');
+}
+
+function testCreateFileExclusive() {
+  dir.getFile('bar', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(function(file) {
+        assertEquals('bar', file.getName());
+        assertEquals('/foo/bar', file.getFullPath());
+        assertEquals(dir, file.parent);
+        assertTrue(file.isFile());
+
+        asyncTestCase.continueTesting();
+      });
+  asyncTestCase.waitForAsync('waiting for file creation');
+}
+
+function testGetNonExistentFile() {
+  expectError(dir.getFile('bar'), goog.fs.Error.ErrorCode.NOT_FOUND);
+}
+
+function testGetNonExistentFileInSubdir() {
+  expectError(dir.getFile('subdir/bar'), goog.fs.Error.ErrorCode.NOT_FOUND);
+}
+
+function testGetFileInNonExistentSubdir() {
+  expectError(dir.getFile('bar/subfile'), goog.fs.Error.ErrorCode.NOT_FOUND);
+}
+
+function testGetFileThatsActuallyADirectory() {
+  expectError(dir.getFile('subdir'), goog.fs.Error.ErrorCode.TYPE_MISMATCH);
+}
+
+function testCreateFileInNonExistentSubdir() {
+  expectError(
+      dir.getFile('bar/newfile', goog.fs.DirectoryEntry.Behavior.CREATE),
+      goog.fs.Error.ErrorCode.NOT_FOUND);
+}
+
+function testCreateFileThatsActuallyADirectory() {
+  expectError(
+      dir.getFile('subdir', goog.fs.DirectoryEntry.Behavior.CREATE),
+      goog.fs.Error.ErrorCode.TYPE_MISMATCH);
+}
+
+function testCreateExclusiveExistingFile() {
+  expectError(
+      dir.getFile('file', goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE),
+      goog.fs.Error.ErrorCode.PATH_EXISTS);
+}
+
+
+function expectError(deferred, code) {
+  deferred.
+      addCallback(function() { fail('Expected an error'); }).
+      addErrback(function(err) {
+        assertEquals(code, err.code);
+        asyncTestCase.continueTesting();
+      });
+  asyncTestCase.waitForAsync('waiting for error');
+}
+
+</script>
+</body>
+</html>

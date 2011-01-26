@@ -18,6 +18,9 @@
  * Their existence also makes it possible to mock the FileSystem API for testing
  * in browsers that don't support it natively.
  *
+ * When adding public functions to anything under this namespace, be sure to add
+ * its mock counterpart to goog.testing.fs.
+ *
  */
 
 goog.provide('goog.fs');

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2011 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+-->
+<head>
+<title>Closure Unit Tests - goog.testing.fs.FileEntry</title>
+<script src="../../base.js"></script>
+<script src="../../../../third_party/closure/goog/deps.js"></script>
+<script>
+goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.fs.FileSystem');
+goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+var fs, file;
+
+function setUp() {
+  fs = new goog.testing.fs.FileSystem();
+  file = fs.getRoot().getDirectorySync('foo').getFileSync('bar');
+}
+
+function testIsFile() {
+  assertTrue(file.isFile());
+}
+
+function testIsDirectory() {
+  assertFalse(file.isDirectory());
+}
+
+function testFile() {
+  file.data = 'hello world';
+  file.file().addCallback(function(f) {
+    assertEquals('bar', f.name);
+    assertEquals('hello world', f.toString());
+
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('testFile');
+}
+
+
+</script>
+</body>
+</html>
