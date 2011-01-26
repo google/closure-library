@@ -11,13 +11,22 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.string</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.functions');
   goog.require('goog.object');
   goog.require('goog.string');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
 <body>
 <script>
+
+var stubs = new goog.testing.PropertyReplacer();
+
+function tearDown() {
+  stubs.reset();
+}
+
 
 //=== tests for goog.string.collapseWhitespace ===
 
@@ -838,6 +847,13 @@ function testToNumber() {
   assertEquals(100, goog.string.toNumber('1e2'));
   assertEquals(0.123, goog.string.toNumber('12.3e-2'));
   assertNaN(goog.string.toNumber('abc'));
+}
+
+function testGetRandomString() {
+  stubs.set(goog, 'now', goog.functions.constant(1295726605874));
+  stubs.set(Math, 'random', goog.functions.constant(0.6679361383522245));
+  assertTrue('String must be alphanumeric',
+             goog.string.isAlphaNumeric(goog.string.getRandomString()));
 }
 </script>
 </body>

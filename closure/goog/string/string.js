@@ -1009,8 +1009,9 @@ goog.string.buildString = function(var_args) {
  * @return {string} A random string, e.g. sn1s7vb4gcic.
  */
 goog.string.getRandomString = function() {
-  return Math.floor(Math.random() * 2147483648).toString(36) +
-         (Math.floor(Math.random() * 2147483648) ^ goog.now()).toString(36);
+  var x = 2147483648;
+  return Math.floor(Math.random() * x).toString(36) +
+         Math.abs(Math.floor(Math.random() * x) ^ goog.now()).toString(36);
 };
 
 
