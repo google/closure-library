@@ -11,26 +11,13 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.format</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.dom');
   goog.require('goog.format');
-  goog.require('goog.string');
   goog.require('goog.testing.jsunit');
   goog.require('goog.style');
 </script>
 </head>
 <body>
 <script>
-
-var wordBreakHtml;
-
-function setUpPage() {
-  wordBreakHtml = goog.format.WORD_BREAK_HTML;
-}
-
-function tearDown() {
-  // set back to the original value (some tests edit this member).
-  goog.format.WORD_BREAK_HTML = wordBreakHtml;
-}
 
 function testFormatFileSize() {
   var fn = goog.format.fileSize;
@@ -183,7 +170,7 @@ function testInsertWordBreaks() {
   assertEquals('Thi<wbr>s is a <a href="">lin<wbr>k</a>.',
                fn('This is a <a href="">link</a>.', 3));
   assertEquals('<abc a="&amp;&amp;&amp;&amp;&amp;">a<wbr>b',
-      fn('<abc a="&amp;&amp;&amp;&amp;&amp;">ab', 1));
+      fn('<abc a="&amp;&amp;&amp;&amp;&amp;">ab', 1));  
 
   assertEquals('ab\u0300<wbr>cd', fn('ab\u0300cd', 2));
   assertEquals('ab\u036F<wbr>cd', fn('ab\u036Fcd', 2));
@@ -194,9 +181,6 @@ function testInsertWordBreaks() {
 }
 
 function testInsertWordBreaksBasic() {
-  // HTML that gets inserted is browser dependent, ensure for the test it is
-  // a constant - browser dependent HTML is for display purposes only.
-  goog.format.WORD_BREAK_HTML = '<wbr>';
   var fn = goog.format.insertWordBreaksBasic;
 
   assertEquals('abcdef', fn('abcdef', 10));
@@ -220,37 +204,6 @@ function testInsertWordBreaksBasic() {
       hindiInternet + '<wbr>/' + hindiInternet + '<wbr>.' + hindiInternet,
       fn(hindiInternet + '/' + hindiInternet + '.' + hindiInternet, 2));
 }
-
-function testWordBreaksWorking() {
-  var text = goog.string.repeat('test', 20);
-  var textWbr = goog.string.repeat('test' + goog.format.WORD_BREAK_HTML, 20);
-
-  var overflowEl = goog.dom.createDom('div',
-      {'style': 'width: 100px; overflow: hidden; margin 5px'});
-  var wbrEl = goog.dom.createDom('div',
-      {'style': 'width: 100px; overflow: hidden; margin-top: 15px'});
-  goog.dom.appendChild(goog.global.document.body, overflowEl);
-  goog.dom.appendChild(goog.global.document.body, wbrEl);
-
-  overflowEl.innerHTML = text;
-  wbrEl.innerHTML = textWbr;
-
-  assertTrue('Text should overflow', overflowEl.scrollWidth > 100);
-  assertTrue('Text should not overflow', wbrEl.scrollWidth <= 100);
-}
-
-function testWordBreaksRemovedFromTextContent() {
-  var expectedText = goog.string.repeat('test', 20);
-  var textWbr = goog.string.repeat('test' + goog.format.WORD_BREAK_HTML, 20);
-
-  var wbrEl = goog.dom.createDom('div', null);
-  wbrEl.innerHTML = textWbr;
-
-  assertEquals('text content should have wbr character removed', expectedText,
-      goog.dom.getTextContent(wbrEl));
-
-}
-
 
 </script>
 </body>
