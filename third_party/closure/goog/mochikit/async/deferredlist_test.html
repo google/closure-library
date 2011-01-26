@@ -123,8 +123,7 @@ function testDeferredList() {
     assertEquals('Unexpected return value for a.', 'A', res[0][1]);
     assertEquals('Unexpected return value for c.', 'C', res[2][1]);
 
-    assertTrue(res[1][1] instanceof Error);
-    assertEquals('B', res[1][1].message);
+    assertEquals('B', res[1][1]);
 
     count++;
   });
@@ -176,8 +175,7 @@ function testFireOnFirstErrback() {
 
   dl.addCallback(neverHappen);
   dl.addErrback(function(res) {
-    assertTrue(res instanceof Error);
-    assertEquals('A', res.message);
+    assertEquals('A', res);
 
     // Return a non-error value to break out of the errback path.
     return true;
@@ -235,8 +233,7 @@ function testNesting() {
   // Concatenates a list of callback or errback results into a single string.
   function combine(res) {
     return goog.array.map(res, function(result) {
-      // Use the Error message if the result was not a success.
-      return result[0] ? result[1] : result[1].message;
+      return result[1];
     }).join('');
   }
 

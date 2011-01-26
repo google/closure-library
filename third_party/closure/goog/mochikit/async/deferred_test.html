@@ -56,11 +56,7 @@ function throwStuff(res) {
 }
 
 function catchStuff(res) {
-  // IE handles numbers passed to the Error object in a non-standard way. Treat
-  // an error number as the message if no message is present.
-  // See http://msdn.microsoft.com/en-us/library/t9zk6eay(VS.71).aspx
-  var message = res.message || res.number;
-  return goog.string.isNumeric(message) ? Number(message) : message;
+  return res;
 }
 
 function returnError(res) {
@@ -537,31 +533,49 @@ function testAwaitDeferredWithErrors() {
   assertEquals('abc', results.join(''));
 }
 
-function testIsError() {
-  var d = new Deferred();
-  assertFalse(d.isError(null));
-  assertTrue(d.isError(new Error));
-
-  // Replace default isError to treat null as an error instead.
-  d.isError = goog.isNull;
-  assertTrue(d.isError(null));
-  assertFalse(d.isError(new Error));
-
+function testNonErrorErrback() {
   var results = [];
 
-  d.addCallback(function(res) {
-    results.push(1);
-  });
-  d.addErrback(function(res) {
-    results.push(2);
+  function fn(x) {
+    return function(e) {
+      results.push(x);
+    };
+  }
+
+  var d = new Deferred();
+  d.addCallback(fn('a'));
+  d.addErrback(fn('b'));
+
+  d.addCallback(fn('c'));
+  d.addErrback(fn('d'));
+
+  d.errback('foo');
+
+  assertEquals('bd', results.join(''));
+}
+
+function testUnequalReturnValueForErrback() {
+  var results = [];
+
+  function fn(x) {
+    return function(e) {
+      results.push(x);
+    };
+  }
+
+  var d = new Deferred();
+  d.addCallback(fn('a'));
+  d.addErrback(function() {
+    results.push('b');
+    return 'bar';
   });
 
-  d.callback(null);
-  mockClock.tick();
+  d.addCallback(fn('c'));
+  d.addErrback(fn('d'));
 
-  assertArrayEquals(
-      'Only the errback should have been called.',
-      [2], results);
+  d.errback('foo');
+
+  assertEquals('bc', results.join(''));
 }
 
 </script>

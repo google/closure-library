@@ -167,11 +167,12 @@ goog.async.Deferred.prototype.unpause_ = function() {
 
 /**
  * Called when a dependent deferred fires.
+ * @param {boolean} isSuccess Whether the result is a success or an error.
  * @param {*} res The result of the dependent deferred.
  * @private
  */
-goog.async.Deferred.prototype.continue_ = function(res) {
-  this.resback_(res);
+goog.async.Deferred.prototype.continue_ = function(isSuccess, res) {
+  this.resback_(isSuccess, res);
   this.unpause_();
 };
 
@@ -179,11 +180,13 @@ goog.async.Deferred.prototype.continue_ = function(res) {
 /**
  * Called when either a success or a failure happens.
  * @param {*} res The result.
+ * @param {boolean} isSuccess Whether the result is a success or an error.
  * @private
  */
-goog.async.Deferred.prototype.resback_ = function(res) {
+goog.async.Deferred.prototype.resback_ = function(isSuccess, res) {
   this.fired_ = true;
   this.result_ = res;
+  this.hadError_ = !isSuccess;
   this.fire_();
 };
 
@@ -211,7 +214,7 @@ goog.async.Deferred.prototype.check_ = function() {
 goog.async.Deferred.prototype.callback = function(result) {
   this.check_();
   this.assertNotDeferred_(result);
-  this.resback_(result);
+  this.resback_(true /* isSuccess */, result);
 };
 
 
@@ -223,8 +226,7 @@ goog.async.Deferred.prototype.callback = function(result) {
 goog.async.Deferred.prototype.errback = function(result) {
   this.check_();
   this.assertNotDeferred_(result);
-  // Ensure we pass along the object as an Error.
-  this.resback_(result instanceof Error ? result : Error(result));
+  this.resback_(false /* isSuccess */, result);
 };
 
 
@@ -377,7 +379,7 @@ goog.async.Deferred.prototype.fire_ = function() {
 
   var res = this.result_;
   var unhandledException = false;
-  var cb;
+  var isChained = false;
 
   while (this.chain_.length && this.paused_ == 0) {
     var chainEntry = this.chain_.shift();
@@ -386,25 +388,22 @@ goog.async.Deferred.prototype.fire_ = function() {
     var errback = chainEntry[1];
     var scope = chainEntry[2];
 
-    if (this.isError(res)) {
-      this.hadError_ = true;
-    }
     var f = this.hadError_ ? errback : callback;
-
     if (f) {
       try {
         var ret = f.call(scope || this.defaultScope_, res);
 
         // If no result, then use previous result.
         if (goog.isDef(ret)) {
+          // Bubble up the error as long as the return value hasn't changed.
+          this.hadError_ = this.hadError_ && (ret == res || this.isError(ret));
           res = ret;
         }
 
         if (res instanceof goog.async.Deferred) {
-          cb = goog.bind(this.continue_, this);
+          isChained = true;
           this.pause_();
         }
-        this.hadError_ = false;
 
       } catch (ex) {
         res = ex;
@@ -421,8 +420,10 @@ goog.async.Deferred.prototype.fire_ = function() {
 
   this.result_ = res;
 
-  if (cb && this.paused_) {
-    res.addBoth(cb);
+  if (isChained && this.paused_) {
+    res.addCallbacks(
+        goog.bind(this.continue_, this, true /* isSuccess */),
+        goog.bind(this.continue_, this, false /* isSuccess */));
     res.chained_ = true;
   }
 
