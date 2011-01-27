@@ -1597,6 +1597,8 @@ goog.dom.getTextContent = function(node) {
 
   // Strip &shy; entities. goog.format.insertWordBreaks inserts them in Opera.
   textContent = textContent.replace(/ \xAD /g, ' ').replace(/\xAD/g, '');
+  // Strip &#8203; entities. goog.format.insertWordBreaks inserts them in IE8.
+  textContent = textContent.replace(/\u200B/g, '');
 
   // Skip this replacement on IE, which automatically turns &nbsp; into ' '
   // and / +/ into ' ' when reading innerText.
