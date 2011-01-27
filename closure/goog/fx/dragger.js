@@ -52,6 +52,7 @@ goog.require('goog.userAgent');
  * @constructor
  */
 goog.fx.Dragger = function(target, opt_handle, opt_limits) {
+  goog.events.EventTarget.call(this);
   this.target = target;
   this.handle = opt_handle || target;
   this.limits = opt_limits || new goog.math.Rect(NaN, NaN, NaN, NaN);
