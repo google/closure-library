@@ -181,6 +181,8 @@ function testUnescapeServiceName() {
  * @extends {goog.Disposable}
  */
 Driver = function() {
+  goog.Disposable.call(this);
+
   /**
    * The peer iframe.
    * @type {!Element}

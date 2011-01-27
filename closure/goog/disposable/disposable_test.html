@@ -64,6 +64,8 @@ See the COPYING file for details.
     }
 
     function tearDown() {
+      goog.Disposable.ENABLE_MONITORING = false;
+      goog.Disposable.instances_ = {};
       d1.dispose();
       d2.dispose();
     }
@@ -142,6 +144,59 @@ See the COPYING file for details.
       function A() {}
       goog.dispose(new A());
     }
+
+    function testMonitoringFailure() {
+      function BadDisposable() {};
+      goog.inherits(BadDisposable, goog.Disposable);
+
+      goog.Disposable.ENABLE_MONITORING = true;
+
+      var badDisposable = new BadDisposable;
+      assertArrayEquals('no disposable objects registered', [],
+          goog.Disposable.getUndisposedObjects());
+      assertThrows('the base ctor should have been called',
+          goog.bind(badDisposable.dispose, badDisposable));
+    }
+
+    function testGetUndisposedObjects() {
+      goog.Disposable.ENABLE_MONITORING = true;
+
+      var d1 = new DisposableTest();
+      var d2 = new DisposableTest();
+      assertSameElements('the undisposed instances', [d1, d2],
+          goog.Disposable.getUndisposedObjects());
+
+      d1.dispose();
+      assertSameElements('1 undisposed instance left', [d2],
+          goog.Disposable.getUndisposedObjects());
+
+      d1.dispose();
+      assertSameElements('second disposal of the same object is no-op', [d2],
+          goog.Disposable.getUndisposedObjects());
+
+      d2.dispose();
+      assertSameElements('all objects have been disposed of', [],
+          goog.Disposable.getUndisposedObjects());
+    }
+
+    function testClearUndisposedObjects() {
+      goog.Disposable.ENABLE_MONITORING = true;
+
+      var d1 = new DisposableTest();
+      var d2 = new DisposableTest();
+      d2.dispose();
+      goog.Disposable.clearUndisposedObjects()
+      assertSameElements('no undisposed object in the registry', [],
+          goog.Disposable.getUndisposedObjects());
+
+      assertThrows('disposal after clearUndisposedObjects()', function() {
+        d1.dispose();
+      });
+
+      // d2 is already disposed of, the redisposal shouldn't throw error.
+      d2.dispose();
+    }
+
   </script>
 </body>
 </html>
