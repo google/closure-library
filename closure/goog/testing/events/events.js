@@ -520,18 +520,16 @@ goog.testing.events.fireBrowserEvent = function(event) {
   for (var j = ancestors.length - 1;
        j >= 0 && !event.propagationStopped_;
        j--) {
-    var browserEvent = new goog.events.BrowserEvent(event, ancestors[j]);
-    goog.events.fireListeners(ancestors[j], event.type, true, browserEvent);
-    browserEvent.dispose();
+    goog.events.fireListeners(ancestors[j], event.type, true,
+        new goog.events.BrowserEvent(event, ancestors[j]));
   }
 
   // dispatch bubbling listeners
   for (var j = 0;
        j < ancestors.length && !event.propagationStopped_;
        j++) {
-    var browserEvent = new goog.events.BrowserEvent(event, ancestors[j]);
-    goog.events.fireListeners(ancestors[j], event.type, false, browserEvent);
-    browserEvent.dispose();
+    goog.events.fireListeners(ancestors[j], event.type, false,
+        new goog.events.BrowserEvent(event, ancestors[j]));
   }
 
   return event.returnValue_;
