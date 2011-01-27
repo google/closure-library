@@ -676,22 +676,6 @@ function testGetBackgroundColor() {
   }
 }
 
-function testToCamelCase() {
-  assertEquals('OneTwoThree', goog.style.toCamelCase('-one-two-three'));
-  assertEquals('oneTwoThree', goog.style.toCamelCase('one-two-three'));
-  assertEquals('oneTwo', goog.style.toCamelCase('one-two'));
-  assertEquals('one', goog.style.toCamelCase('one'));
-  assertEquals('oneTwo', goog.style.toCamelCase('oneTwo'));
-}
-
-function testTotoSelectorCase() {
-  assertEquals('-one-two-three', goog.style.toSelectorCase('OneTwoThree'));
-  assertEquals('one-two-three',goog.style.toSelectorCase('oneTwoThree'));
-  assertEquals('one-two', goog.style.toSelectorCase('oneTwo'));
-  assertEquals('one', goog.style.toSelectorCase('one'));
-  assertEquals('one-two', goog.style.toSelectorCase('one-two'));
-}
-
 function testSetPosition() {
   var el = $('testEl');
 

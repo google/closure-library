@@ -1159,3 +1159,49 @@ goog.string.toNumber = function(str) {
   }
   return num;
 };
+
+
+/**
+ * A memoized cache for goog.string.toCamelCase.
+ * @type {Object.<string>}
+ * @private
+ */
+goog.string.toCamelCaseCache_ = {};
+
+
+/**
+ * Converts a string from selector-case to camelCase (e.g. from
+ * "multi-part-string" to "multiPartString"), useful for converting
+ * CSS selectors and HTML dataset keys to their equivalent JS properties.
+ * @param {string} str The string in selector-case form.
+ * @return {string} The string in camelCase form.
+ */
+goog.string.toCamelCase = function(str) {
+  return goog.string.toCamelCaseCache_[str] ||
+      (goog.string.toCamelCaseCache_[str] =
+          String(str).replace(/\-([a-z])/g, function(all, match) {
+            return match.toUpperCase();
+          }));
+};
+
+
+/**
+ * A memoized cache for goog.string.toSelectorCase.
+ * @type {Object.<string>}
+ * @private
+ */
+goog.string.toSelectorCaseCache_ = {};
+
+
+/**
+ * Converts a string from camelCase to selector-case (e.g. from
+ * "multiPartString" to "multi-part-string"), useful for converting JS
+ * style and dataset properties to equivalent CSS selectors and HTML keys.
+ * @param {string} str The string in camelCase form.
+ * @return {string} The string in selector-case form.
+ */
+goog.string.toSelectorCase = function(str) {
+  return goog.string.toSelectorCaseCache_[str] ||
+      (goog.string.toSelectorCaseCache_[str] =
+          String(str).replace(/([A-Z])/g, '-$1').toLowerCase());
+};

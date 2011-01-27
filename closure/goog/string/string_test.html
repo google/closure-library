@@ -855,6 +855,23 @@ function testGetRandomString() {
   assertTrue('String must be alphanumeric',
              goog.string.isAlphaNumeric(goog.string.getRandomString()));
 }
+
+function testToCamelCase() {
+  assertEquals('OneTwoThree', goog.string.toCamelCase('-one-two-three'));
+  assertEquals('oneTwoThree', goog.string.toCamelCase('one-two-three'));
+  assertEquals('oneTwo', goog.string.toCamelCase('one-two'));
+  assertEquals('one', goog.string.toCamelCase('one'));
+  assertEquals('oneTwo', goog.string.toCamelCase('oneTwo'));
+}
+
+function testToSelectorCase() {
+  assertEquals('-one-two-three', goog.string.toSelectorCase('OneTwoThree'));
+  assertEquals('one-two-three',goog.string.toSelectorCase('oneTwoThree'));
+  assertEquals('one-two', goog.string.toSelectorCase('oneTwo'));
+  assertEquals('one', goog.string.toSelectorCase('one'));
+  assertEquals('one-two', goog.string.toSelectorCase('one-two'));
+}
+
 </script>
 </body>
 </html>
