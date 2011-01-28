@@ -311,12 +311,27 @@ goog.async.Deferred.prototype.chainDeferred = function(otherDeferred) {
  * @return {!goog.async.Deferred} The deferred object for chaining.
  */
 goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
-  this.addCallback(function() {
-    var d = new goog.async.Deferred();
-    otherDeferred.chainDeferred(d);
-    return d;
-  });
-  return this;
+  return this.addCallback(goog.bind(otherDeferred.branch, otherDeferred));
+};
+
+
+/**
+ * Create a branch off this Deferred's callback chain, and return it as a new
+ * Deferred. This means that the return value will have the value at the current
+ * point in the callback chain, regardless of any further callbacks added to
+ * this Deferred.
+ *
+ * Additional callbacks added to the original Deferred will not affect the value
+ * of any branches. All branches at the same stage in the callback chain will
+ * receive the same starting value.
+ *
+ * @return {!goog.async.Deferred} The deferred value at this point in the
+ *     callback chain.
+ */
+goog.async.Deferred.prototype.branch = function() {
+  var d = new goog.async.Deferred();
+  this.chainDeferred(d);
+  return d;
 };
 
 

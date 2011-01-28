@@ -578,6 +578,50 @@ function testUnequalReturnValueForErrback() {
   assertEquals('bc', results.join(''));
 }
 
+function testBranch() {
+  function fn(x) {
+    return function(arr) {
+      return arr.concat(x);
+    };
+  }
+
+  var d = new Deferred();
+  d.addCallback(fn(1));
+  d.addCallback(fn(2));
+  var d2 = d.branch();
+  d.addCallback(fn(3));
+  d2.addCallback(fn(4));
+
+  d.callback([]);
+
+  assertTrue('both deferreds should have fired', d.hasFired());
+  assertTrue('both deferreds should have fired', d2.hasFired());
+  d.addCallback(function(arr) { assertArrayEquals([1, 2, 3], arr); });
+  d2.addCallback(function(arr) { assertArrayEquals([1, 2, 4], arr); });
+}
+
+function testDiamondBranch() {
+  function fn(x) {
+    return function(arr) {
+      return arr.concat(x);
+    };
+  }
+
+  var d = new Deferred();
+  d.addCallback(fn(1));
+
+  var d2 = d.branch();
+  d2.addCallback(fn(2));
+
+  // Chain the branch back to the original. There is no good reason to do this
+  // cever.
+  d.addCallback(function(ret) {return d2;});
+  d.callback([]);
+
+  // But no reason it shouldn't work!
+  d.addCallback(function(arr) { assertArrayEquals([1, 2], arr); });
+}
+
 </script>
 </body>
 </html>
