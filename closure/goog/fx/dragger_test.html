@@ -54,8 +54,8 @@ function testStartDrag() {
 
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
   e.type = goog.events.EventType.MOUSEDOWN;
-  e.screenX = 1;
-  e.screenY = 2;
+  e.clientX = 1;
+  e.clientY = 2;
   e.isMouseActionButton().$returns(true);
   e.preventDefault();
   e.isMouseActionButton().$returns(true);
@@ -71,14 +71,14 @@ function testStartDrag() {
   assertTrue('Start drag with no hysteresis must actually start the drag.',
       dragger.dragging_);
 
-  assertEquals('Dragger startX must match event\'s screenX.',
+  assertEquals('Dragger startX must match event\'s clientX.',
       1, dragger.startX);
-  assertEquals('Dragger screenX must match event\'s screenX',
-      1, dragger.screenX);
-  assertEquals('Dragger startY must match event\'s screenY.',
+  assertEquals('Dragger clientX must match event\'s clientX',
+      1, dragger.clientX);
+  assertEquals('Dragger startY must match event\'s clientY.',
       2, dragger.startY);
-  assertEquals('Dragger screenY must match event\'s screenY',
-      2, dragger.screenY);
+  assertEquals('Dragger clientY must match event\'s clientY',
+      2, dragger.clientY);
   assertEquals('Dragger deltaX must match target\'s offsetLeft',
       10, dragger.deltaX);
   assertEquals('Dragger deltaY must match target\'s offsetTop',
@@ -100,8 +100,8 @@ function testStartDrag_Cancel() {
 
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
   e.type = goog.events.EventType.MOUSEDOWN;
-  e.screenX = 1;
-  e.screenY = 2;
+  e.clientX = 1;
+  e.clientY = 2;
   e.isMouseActionButton().$returns(true);
   e.$replay();
 
@@ -131,8 +131,8 @@ function testStartDrag_LeftMouseDownOnly() {
 
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
   e.type = goog.events.EventType.MOUSEDOWN;
-  e.screenX = 1;
-  e.screenY = 2;
+  e.clientX = 1;
+  e.clientY = 2;
   e.isMouseActionButton().$returns(false);
   e.$replay();
 
@@ -161,8 +161,8 @@ function testStartDrag_MouseMove() {
 
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
   e.type = goog.events.EventType.MOUSEMOVE;
-  e.screenX = 1;
-  e.screenY = 2;
+  e.clientX = 1;
+  e.clientY = 2;
   e.preventDefault();
   e.$replay();
 
@@ -187,7 +187,7 @@ function testStartDrag_MouseMove() {
 /**
  * @bug 1381317 Cancelling start drag didn't end the attempt to drag.
  */
-function testMouseMoved_Cancel() {
+function testHandleMove_Cancel() {
   var dragger = new goog.fx.Dragger(target);
   dragger.setHysteresis(5);
 
@@ -197,8 +197,8 @@ function testMouseMoved_Cancel() {
   });
 
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
-  e.screenX = 1;
-  e.screenY = 2;
+  e.clientX = 1;
+  e.clientY = 2;
   e.isMouseActionButton().$returns(true).
       $anyTimes();
   e.preventDefault();
@@ -213,9 +213,9 @@ function testMouseMoved_Cancel() {
       goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
           !HAS_SET_CAPTURE));
 
-  e.screenX = 10;
-  e.screenY = 10;
-  dragger.mouseMoved_(e);
+  e.clientX = 10;
+  e.clientY = 10;
+  dragger.handleMove_(e);
   assertFalse('Drag must be cancelled.', dragger.dragging_);
   assertFalse('Dragger must unregistered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
@@ -239,8 +239,8 @@ function testIeDragStartCancelling() {
   var dragger = new goog.fx.Dragger(target);
 
   var e = new goog.events.Event(goog.events.EventType.MOUSEDOWN);
-  e.screenX = 1;
-  e.screenY = 2;
+  e.clientX = 1;
+  e.clientY = 2;
   e.button = 1; // IE only constant for left button.
   var be = new goog.events.BrowserEvent(e);
   dragger.startDrag(be);
@@ -258,8 +258,8 @@ function testIeDragStartCancelling() {
   dragger.setCancelIeDragStart(true);
 
   e = new goog.events.Event(goog.events.EventType.MOUSEDOWN);
-  e.screenX = 1;
-  e.screenY = 2;
+  e.clientX = 1;
+  e.clientY = 2;
   e.button = 1; // IE only constant for left button.
   be = new goog.events.BrowserEvent(e);
   dragger.startDrag(be);
@@ -287,8 +287,8 @@ function testOnWindowMouseOut() {
 
     var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
     e.type = goog.events.EventType.MOUSEDOWN;
-    e.screenX = 1;
-    e.screenY = 2;
+    e.clientX = 1;
+    e.clientY = 2;
     e.isMouseActionButton().$returns(true);
     e.preventDefault();
     e.$replay();
@@ -353,8 +353,8 @@ function testWindowBlur() {
 
     var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
     e.type = goog.events.EventType.MOUSEDOWN;
-    e.screenX = 1;
-    e.screenY = 2;
+    e.clientX = 1;
+    e.clientY = 2;
     e.isMouseActionButton().$returns(true);
     e.preventDefault();
     e.$replay();
@@ -384,8 +384,8 @@ function testBlur() {
 
     var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
     e.type = goog.events.EventType.MOUSEDOWN;
-    e.screenX = 1;
-    e.screenY = 2;
+    e.clientX = 1;
+    e.clientY = 2;
     e.isMouseActionButton().$returns(true);
     e.preventDefault();
     e.$replay();
