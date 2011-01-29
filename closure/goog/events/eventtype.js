@@ -99,9 +99,5 @@ goog.events.EventType = {
   // Copy and Paste
   COPY: 'copy',
   PASTE: 'paste',
-  CUT: 'cut',
-
-  // HTML 5 worker events
-  MESSAGE: 'message',
-  CONNECT: 'connect'
+  CUT: 'cut'
 };
