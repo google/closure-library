@@ -722,7 +722,7 @@ goog.style.getRelativePosition = function(a, b) {
 
 /**
  * Returns the position relative to the client viewport.
- * @param {Element|Event|goog.events.Event} el Element or a mouse / touch event.
+ * @param {Element|Event|goog.events.Event} el Element or a mouse event object.
  * @return {!goog.math.Coordinate} The position.
  */
 goog.style.getClientPosition = function(el) {
@@ -740,17 +740,8 @@ goog.style.getClientPosition = function(el) {
       pos.y = pageCoord.y - scrollCoord.y;
     }
   } else {
-    var isAbstractedEvent = goog.isFunction(el.getBrowserEvent);
-    var targetEvent = el;
-
-    if (el.targetTouches) {
-      targetEvent = el.targetTouches[0];
-    } else if (isAbstractedEvent && el.getBrowserEvent().targetTouches) {
-      targetEvent = el.getBrowserEvent().targetTouches[0];
-    }
-
-    pos.x = targetEvent.clientX;
-    pos.y = targetEvent.clientY;
+    pos.x = el.clientX;
+    pos.y = el.clientY;
   }
 
   return pos;
