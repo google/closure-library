@@ -19,6 +19,7 @@ See the COPYING file for details.
 
 goog.require('goog.color');
 goog.require('goog.dom');
+goog.require('goog.events.BrowserEvent');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.style');
@@ -775,6 +776,45 @@ function testGetClientPositionOfOffscreenElement() {
     window.scroll(0, 0);
     document.body.removeChild(div);
   }
+}
+
+function testGetClientPositionEvent() {
+  var mockEvent = {};
+  mockEvent.clientX = 100;
+  mockEvent.clientY = 200;
+  var pos = goog.style.getClientPosition(mockEvent);
+  assertEquals(100, pos.x);
+  assertEquals(200, pos.y);
+}
+
+function testGetClientPositionTouchEvent() {
+  var mockTouchEvent = {};
+  
+  mockTouchEvent.targetTouches = [{}];
+  mockTouchEvent.targetTouches[0].clientX = 100;
+  mockTouchEvent.targetTouches[0].clientY = 200;
+  
+  mockTouchEvent.touches = [{}];
+  mockTouchEvent.touches[0].clientX = 100;
+  mockTouchEvent.touches[0].clientY = 200;
+  
+  var pos = goog.style.getClientPosition(mockTouchEvent);
+  assertEquals(100, pos.x);
+  assertEquals(200, pos.y);
+}
+
+function testGetClientPositionAbstractedTouchEvent() {
+  var e = new goog.events.BrowserEvent();
+  e.event_ = {};
+  e.event_.touches = [{}];
+  e.event_.touches[0].clientX = 100;
+  e.event_.touches[0].clientY = 200;
+  e.event_.targetTouches = [{}];
+  e.event_.targetTouches[0].clientX = 100;
+  e.event_.targetTouches[0].clientY = 200;
+  var pos = goog.style.getClientPosition(e);
+  assertEquals(100, pos.x);
+  assertEquals(200, pos.y);
 }
 
 function testGetPageOffsetAbsPositionedElement() {
