@@ -41,7 +41,9 @@ function testParentDescriptor() {
     fullName: 'this.is.a.parent'
   }, []);
 
-  parentType.descriptor_ = parentDescriptor;
+  parentType.getDescriptor = function() {
+    return parentDescriptor;
+  };
 
   var descriptor = new goog.proto2.Descriptor(messageType, {
     name: 'test',
