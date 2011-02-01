@@ -108,6 +108,8 @@ goog.Disposable.prototype.getDisposed = goog.Disposable.prototype.isDisposed;
  * {@link #disposeInternal}. Classes that extend {@code goog.Disposable} should
  * override {@link #disposeInternal} in order to delete references to COM
  * objects, DOM nodes, and other disposable objects.
+ *
+ * @return {void} Nothing.
  */
 goog.Disposable.prototype.dispose = function() {
   if (!this.disposed_) {
