@@ -13,6 +13,8 @@ See the COPYING file for details.
 <script>
   goog.require('goog.i18n.DateTimeFormat');
   goog.require('goog.i18n.TimeZone');
+  goog.require('goog.i18n.DateTimePatterns');
+  goog.require('goog.i18n.DateTimePatterns_de');
   goog.require('goog.i18n.DateTimeSymbols');
   goog.require('goog.i18n.DateTimeSymbols_de');
   goog.require('goog.testing.jsunit');
@@ -103,6 +105,7 @@ See the COPYING file for details.
   };
 
   var date;
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
 
   function testHHmmss() {
@@ -212,6 +215,13 @@ See the COPYING file for details.
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
     assertEquals('07/27/2006 13:10:10 ' + timezoneStringRFC(date),
         fmt.format(date));
+  }
+
+  function testPatternMonthDayMedium() {
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    var fmt = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_MEDIUM);
+    assertEquals('27. Juli', fmt.format(date));
   }
 
   function testQuote() {
