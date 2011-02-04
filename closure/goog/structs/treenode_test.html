@@ -76,6 +76,17 @@ function testIsLeaf() {
   assertTrue('leaf', node2.isLeaf());
 }
 
+function testIsLastChild() {
+  var node1 = new goog.structs.TreeNode(1, '1');
+  var node2 = new goog.structs.TreeNode(2, '2');
+  var node3 = new goog.structs.TreeNode(3, '3');
+  node1.addChild(node2);
+  node1.addChild(node3);
+  assertFalse('root', node1.isLastChild());
+  assertFalse('first child out of the two', node2.isLastChild());
+  assertTrue('second child out of the two', node3.isLastChild());
+}
+
 function testGetChildren() {
   var node1 = new goog.structs.TreeNode(1, null);
   var node2 = new goog.structs.TreeNode(2, null);
@@ -164,7 +175,7 @@ function testForEachChild() {
     assertArrayEquals('children argument', [node2, node3], children);
   }, thisContext);
   assertArrayEquals('visited nodes', [node2, node3], visitedNodes);
-  assertArrayEquals('index of visited nodes', [0, 1],  indices);
+  assertArrayEquals('index of visited nodes', [0, 1], indices);
 }
 
 function testForEachDescendant() {
