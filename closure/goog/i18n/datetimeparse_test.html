@@ -15,6 +15,7 @@ See the COPYING file for details.
 <meta charset="utf-8"/>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.date.Date');
   goog.require('goog.i18n.DateTimeFormat');
   goog.require('goog.i18n.DateTimeParse');
   goog.require('goog.i18n.DateTimeSymbols');
@@ -353,6 +354,16 @@ function testYearParsing() {
   var parser2 = new goog.i18n.DateTimeParse('yyyyMMdd');
   assertTrue(parser2.parse('20051202', date) > 0);
   assertEquals(2005, date.getFullYear());
+  assertEquals(12 - 1, date.getMonth());
+  assertEquals(02, date.getDate());
+}
+
+function testGoogDateParsing() {
+  var date = new goog.date.Date();
+
+  var parser = new goog.i18n.DateTimeParse('yyMMdd');
+  assertTrue(parser.parse('991202', date) > 0);
+  assertEquals(1999, date.getFullYear());
   assertEquals(12 - 1, date.getMonth());
   assertEquals(02, date.getDate());
 }
