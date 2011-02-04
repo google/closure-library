@@ -170,6 +170,17 @@ function testCreate(expectedArray) {
   assertEquals(instance.bar, 'qux');
 }
 
+function testWithReturnValue() {
+  var obj = {};
+  var f = function(a, b) {
+    assertEquals(obj, this);
+    assertEquals(1, a);
+    assertEquals(2, b);
+  };
+  assertTrue(goog.functions.withReturnValue(f, true).call(obj, 1, 2));
+  assertFalse(goog.functions.withReturnValue(f, false).call(obj, 1, 2));
+}
+
 function makeCallOrderLogger(name, returnValue) {
   return function() {
     callOrder.push(name);
