@@ -653,6 +653,10 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
       this.setActive(false);
       this.menu_.setMouseButtonPressed(false);
 
+      // Clear any remaining a11y state.
+      goog.dom.a11y.setState(this.getElement(),
+          goog.dom.a11y.State.ACTIVEDESCENDANT, '');
+
       // Clear any sizes that might have been stored.
       if (goog.isDefAndNotNull(this.originalSize_)) {
         this.originalSize_ = undefined;
