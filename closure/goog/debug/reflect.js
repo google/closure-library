@@ -94,8 +94,12 @@ goog.debug.reflect.init_ = function() {
   goog.debug.reflect.registerType_('Function', Function);
   goog.debug.reflect.registerType_('Number', Number);
   goog.debug.reflect.registerType_('Object', Object);
-  goog.debug.reflect.registerType_('RegExp', RegExp);
   goog.debug.reflect.registerType_('String', String);
+
+  // The compiler gets upset if we alias regexp directly, because
+  // then it can't optimize regexps as well. Just be sneaky about it,
+  // because this is only for debugging.
+  goog.debug.reflect.registerType_('RegExp', goog.global['RegExp']);
 };
 
 

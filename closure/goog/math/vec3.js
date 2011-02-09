@@ -232,25 +232,6 @@ goog.math.Vec3.squaredDistance = goog.math.Coordinate3.squaredDistance;
 
 
 /**
- * Returns a new 3x1 matrix object from a given coordinate.
- *
- * @param {goog.math.Coordinate3} a The coordinate.
- * @return {!goog.math.Matrix} A new matrix object.
- */
-goog.math.Vec3.toMatrix3x1 = goog.math.Coordinate3.toMatrix3x1;
-
-
-/**
- * Returns a new 4x1 matrix object from a given coordinate.
- *
- * @param {goog.math.Coordinate3} a The coordinate.
- * @return {!goog.math.Matrix} A new matrix object.
- */
-
-goog.math.Vec3.toMatrix4x1 = goog.math.Coordinate3.toMatrix4x1;
-
-
-/**
  * Compares vectors for equality.
  *
  * @param {goog.math.Vec3} a The first vector.
