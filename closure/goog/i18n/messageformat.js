@@ -194,7 +194,10 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
       case goog.i18n.MessageFormat.BlockType_.SIMPLE:
         var value = namedParameters[parsedPattern[i].value];
         goog.asserts.assertString(value, 'Format parameter is undefined.');
-        result.push(value);
+        // Don't push the value yet, it may contain any of # { } in it which
+        // will break formatter. Insert a placeholder and replace at the end.
+        this.literals_.push(value);
+        result.push(this.buildPlaceholder_(this.literals_));
         break;
       case goog.i18n.MessageFormat.BlockType_.SELECT:
         var pattern = parsedPattern[i].value;

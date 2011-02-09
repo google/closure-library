@@ -318,6 +318,17 @@ function testPoundShowsNumberMinusOffsetInAllCases() {
   assertEquals('20', fmt.format({'SOME_NUM': '21'}));
 }
 
+function testSpecialCharactersInParamaterDontChangeFormat() {
+  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, plural,' +
+      'other {# {GROUP}}}');
+
+  // Test pound sign.
+  assertEquals('10 group#1',
+               fmt.format({'SOME_NUM': '10', 'GROUP': 'group#1'}));
+  // Test other special characters in parameters, like { and }.
+  assertEquals('10 } {', fmt.format({'SOME_NUM': '10', 'GROUP': '} {'}));
+}
+
 </script>
 </body>
 </html>
