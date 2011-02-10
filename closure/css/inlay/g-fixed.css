@@ -34,19 +34,34 @@
 /* TODO(ux-webdev): convert this to a straight px value - em assumes reset. */
 .g-doc-1024 {
   width: 73.074em;
-  *width: 71.313em;
   min-width: 950px; /* min-width doesn't work in IE6 */
   margin: 0 auto;
   text-align: left;
 }
+/* IE 6 */
+* html .g-doc-1024 {
+  width: 71.313em;
+}
+/* IE 7 */
+*+html .g-doc-1024 {
+  width: 71.313em;
+}
+
 /* Document container designed for 800x600 */
 /* TODO(ux-webdev): convert this to a straight px value - em assumes reset. */
 .g-doc-800 {
   width: 57.69em;
-  *width: 56.3em;
-  min-width: 750px;  /* min-width doesn't work in IE6 */
+  min-width: 750px; /* min-width doesn't work in IE6 */
   margin: 0 auto;
   text-align: left;
+}
+/* IE 6 */
+* html .g-doc-800 {
+  width: 56.3em;
+}
+/* IE 7 */
+*+html .g-doc-800 {
+  width: 56.3em;
 }
 
 /* 160px */

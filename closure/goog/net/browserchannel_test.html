@@ -637,7 +637,7 @@ function testSetFailFastWhileWaitingForRetry() {
   // Simulate that timing out. We should get a network error in addition to the
   // initial failure.
   gotError = false;
-  mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
   assertTrue(gotError);
 
   // Make sure no more retry timers are firing.
@@ -697,7 +697,7 @@ function testSetFailFastWhileRetryXhrIsInFlight() {
   // We get the error immediately before starting to ping google.com.
   // Simulate that timing out. We should get a network error in addition to the
   gotError = false;
-  mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
   assertTrue(gotError);
 
   // Make sure no more retry timers are firing.
@@ -739,7 +739,7 @@ function testSetFailFastAtRetryCount() {
   // Simulate that timing out. We should get a network error in addition to the
   // initial failure.
   gotError = false;
-  mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
   assertTrue(gotError);
 
   // Make sure no more retry timers are firing.
@@ -761,7 +761,7 @@ function testRequestFailedClosesChannel() {
   assertEquals('Should be closed immediately after request failed.',
       goog.net.BrowserChannel.State.CLOSED, browserChannel.getState());
 
-  mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
 
   assertEquals('Should remain closed after the ping timeout.',
       goog.net.BrowserChannel.State.CLOSED, browserChannel.getState());
@@ -780,7 +780,7 @@ function testStatEventReportedOnlyOnce() {
   assertEquals(goog.net.BrowserChannel.Stat.ERROR_OTHER, lastStatEvent);
 
   numStatEvents = 0;
-  mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
   assertEquals('No new stat events should be reported.', 0, numStatEvents);
 }
 
@@ -796,7 +796,7 @@ function testStatEventReportedOnlyOnce_onNetworkUp() {
       0, numStatEvents);
 
   // Let the ping time out.
-  mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
 
   // Assert we report the correct stat event.
   assertEquals(1, numStatEvents);
@@ -815,7 +815,7 @@ function testStatEventReportedOnlyOnce_onNetworkDown() {
       0, numStatEvents);
 
   // Wait half the ping timeout period, and then fake the network being up.
-  mockClock.tick(goog.net.GOOGLECOM_TIMEOUT / 2);
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT / 2);
   browserChannel.testGoogleComCallback_(true);
 
   // Assert we report the correct stat event.
@@ -942,7 +942,7 @@ function testUndeliveredMaps_onPingTimeout() {
   responseRequestFailed();
 
   // Let the ping time out, unsuccessfully.
-  mockClock.tick(goog.net.GOOGLECOM_TIMEOUT);
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
 
   // Assert channel is closed.
   assertEquals(goog.net.BrowserChannel.State.CLOSED,

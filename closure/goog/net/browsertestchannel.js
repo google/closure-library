@@ -28,8 +28,9 @@
  */
 goog.provide('goog.net.BrowserTestChannel');
 
-goog.require('goog.net.ChannelDebug');
-goog.require('goog.net.ChannelRequest');
+goog.require('goog.json');
+goog.require('goog.net.ChannelRequest.Error');
+goog.require('goog.net.tmpnetwork');
 goog.require('goog.userAgent');
 
 
@@ -275,7 +276,7 @@ goog.net.BrowserTestChannel.prototype.checkBlocked_ = function() {
   var uri = this.channel_.createDataUri(this.blockedPrefix_,
       '/mail/images/cleardot.gif');
   uri.makeUnique();
-  goog.net.testLoadImageWithRetries(uri.toString(),
+  goog.net.tmpnetwork.testLoadImageWithRetries(uri.toString(),
       goog.net.BrowserTestChannel.BLOCKED_TIMEOUT_,
       goog.bind(this.checkBlockedCallback_, this),
       goog.net.BrowserTestChannel.BLOCKED_RETRIES_,
