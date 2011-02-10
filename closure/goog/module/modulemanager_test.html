@@ -763,13 +763,15 @@ See the COPYING file for details.
     assertFalse(
         'module "r" should not be loaded (1)', mm.isModuleLoaded('r'));
 
-    // Failed loads are automatically retried.
-    clock.tick(5);
+    // Failed loads are automatically retried after a backOff.
+    clock.tick(5 + mm.getBackOff_());
     assertTrue('module "q" should be loaded', mm.isModuleLoaded('q'));
     assertFalse(
         'module "p" should not be loaded (2)', mm.isModuleLoaded('p'));
     assertFalse(
         'module "r" should not be loaded (2)', mm.isModuleLoaded('r'));
+
+    // A successful load decrements the backOff.
     clock.tick(5);
     assertTrue('module "p" should be loaded', mm.isModuleLoaded('p'));
     assertFalse(
@@ -802,7 +804,7 @@ See the COPYING file for details.
 
     // Fail twice.
     for (var i = 0; i < 2; i++) {
-      clock.tick(5);
+      clock.tick(5 + mm.getBackOff_());
       assertFalse(
           'module "s" should not be loaded (1)', mm.isModuleLoaded('s'));
       assertFalse(
@@ -810,7 +812,7 @@ See the COPYING file for details.
     }
 
     // Fail a third time and check that the callback is fired.
-    clock.tick(5);
+    clock.tick(5 + mm.getBackOff_());
     assertFalse(
         'module "s" should not be loaded (2)', mm.isModuleLoaded('s'));
     assertTrue(
@@ -827,7 +829,7 @@ See the COPYING file for details.
     // Also reset the failed callback flag and make sure it isn't called
     // again.
     firedLoadFailed = false;
-    clock.tick(10);
+    clock.tick(10 + mm.getBackOff_());
     assertFalse(
         'module "s" should not be loaded (3)', mm.isModuleLoaded('s'));
     assertFalse('No more loads should have been tried', triedLoad);
@@ -1234,6 +1236,17 @@ See the COPYING file for details.
     });
     mm.setAllModuleInfoString('');
     assertTrue('Initialization not called', called);
+  }
+
+  function testBackOffAmounts() {
+    var mm = new goog.module.ModuleManager();
+    assertEquals(0, mm.getBackOff_());
+
+    mm.consecutiveFailures_++;
+    assertEquals(5000, mm.getBackOff_());
+
+    mm.consecutiveFailures_++;
+    assertEquals(20000, mm.getBackOff_());
   }
 </script>
 </body>
