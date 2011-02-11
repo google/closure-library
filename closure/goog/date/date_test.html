@@ -1281,8 +1281,9 @@ function testValueOf() {
 }
 
 function isWinxpSafari4() {
-  return goog.userAgent.product.SAFARI && goog.userAgent.product.isVersion('531') &&
-      !goog.userAgent.product.isVersion('553') &&
+  return goog.userAgent.product.SAFARI &&
+      goog.userAgent.product.isVersion('4') &&
+      !goog.userAgent.product.isVersion('5') &&
       goog.userAgent.WINDOWS &&
       goog.userAgent.platform.isVersion('5.0') &&
       !goog.userAgent.platform.isVersion('6.0');

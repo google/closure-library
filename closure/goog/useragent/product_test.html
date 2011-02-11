@@ -242,17 +242,42 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
 
   function testSafari() {
     var userAgents = [
+      {ua: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; de-de) ' +
+           'AppleWebKit/534.16+ (KHTML, like Gecko) Version/5.0.3 ' +
+           'Safari/533.19.4',
+       versions: [
+         {num: 5, truth: true},
+         {num: '5.0.3', truth: true},
+         {num: '5.0.4', truth: false},
+         {num: '533', truth: false}
+       ]},
       {ua: 'Mozilla/5.0 (Windows; U; Windows NT 6.0; pl-PL) ' +
            'AppleWebKit/525.19 (KHTML, like Gecko) Version/3.1.2 Safari/525.21',
        versions: [
-         {num: 525, truth: true},
-         {num: '532.3', truth: false}
+         {num: 3, truth: true},
+         {num: '3.0', truth: true},
+         {num: '3.1.2', truth: true}
        ]},
       {ua: 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_5_3; en-us) ' +
            'AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.20',
        versions: [
-         {num: '525.21', truth: false},
-         {num: 518, truth: true}
+         {num: 3, truth: true},
+         {num: '3.1.1', truth: true},
+         {num: '3.1.2', truth: false},
+         {num: '525.21', truth: false}
+       ]},
+
+       // Safari 1 and 2 do not report product version numbers in their
+       // user-agent strings. VERSION for these browsers will be set to ''.
+       {ua: 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; ja-jp) ' +
+            'AppleWebKit/418.9.1 (KHTML, like Gecko) Safari/419.3',
+       versions: [
+         {num: 3, truth: false},
+         {num: 2, truth: false},
+         {num: 1, truth: false},
+         {num: 0, truth: true},
+         {num: '0', truth: true},
+         {num: '', truth: true}
        ]}
     ];
     checkEachUserAgentDetected(userAgents, 'SAFARI');
