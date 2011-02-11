@@ -30,9 +30,9 @@ function assertCoordinate3Equals(a, b) {
 
 function testCoordinate3MissingXYZ() {
   var noXYZ = new goog.math.Coordinate3();
-  assertUndefined(noXYZ.x);
-  assertUndefined(noXYZ.y);
-  assertUndefined(noXYZ.z);
+  assertEquals(0, noXYZ.x);
+  assertEquals(0, noXYZ.y);
+  assertEquals(0, noXYZ.z);
   assertCoordinate3Equals(noXYZ, new goog.math.Coordinate3());
 }
 
@@ -40,8 +40,8 @@ function testCoordinate3MissingXYZ() {
 function testCoordinate3MissingYZ() {
   var noYZ = new goog.math.Coordinate3(10);
   assertEquals(10, noYZ.x);
-  assertUndefined(noYZ.y);
-  assertUndefined(noYZ.z);
+  assertEquals(0, noYZ.y);
+  assertEquals(0, noYZ.z);
   assertCoordinate3Equals(noYZ, new goog.math.Coordinate3(10));
 }
 
@@ -50,7 +50,7 @@ function testCoordinate3MissingZ() {
   var noZ = new goog.math.Coordinate3(10, 20);
   assertEquals(10, noZ.x);
   assertEquals(20, noZ.y);
-  assertUndefined(noZ.z);
+  assertEquals(0, noZ.z);
   assertCoordinate3Equals(noZ, new goog.math.Coordinate3(10, 20));
 }
 
@@ -112,21 +112,17 @@ function testCoordinate3Clone() {
 
 
 function testToString() {
-  assertEquals('(undefined, undefined, undefined)', new
+  assertEquals('(0, 0, 0)', new
                goog.math.Coordinate3().toString());
-  assertEquals('(1, undefined, undefined)', new
+  assertEquals('(1, 0, 0)', new
                goog.math.Coordinate3(1).toString());
-  assertEquals('(1, 2, undefined)', new
+  assertEquals('(1, 2, 0)', new
                goog.math.Coordinate3(1, 2).toString());
   assertEquals('(0, 0, 0)', new goog.math.Coordinate3(0, 0, 0).toString());
   assertEquals('(1, 2, 3)', new goog.math.Coordinate3(1, 2, 3).toString());
   assertEquals('(-4, 5, -3)', new goog.math.Coordinate3(-4, 5, -3).toString());
   assertEquals('(11.25, -71.935, 2.8)',
                new goog.math.Coordinate3(11.25, -71.935, 2.8).toString());
-  assertEquals('(1, 2, NaN)', new goog.math.Coordinate3(1, 2, 'a').toString());
-  assertEquals('(NaN, NaN, NaN)',
-               new goog.math.Coordinate3('ten', {woop: 'test'},
-                                         Math.sqrt(-1)).toString());
 }
 
 
@@ -188,15 +184,15 @@ function testFromArray() {
 
   var c = [1, 2];
   var d = goog.math.Coordinate3.fromArray(c);
-  assertEquals('(1, 2, undefined)', d.toString());
+  assertEquals('(1, 2, 0)', d.toString());
 
   var e = [1];
   var f = goog.math.Coordinate3.fromArray(e);
-  assertEquals('(1, undefined, undefined)', f.toString());
+  assertEquals('(1, 0, 0)', f.toString());
 
   var g = [];
   var h = goog.math.Coordinate3.fromArray(g);
-  assertEquals('(undefined, undefined, undefined)', h.toString());
+  assertEquals('(0, 0, 0)', h.toString());
 
   var tooLong = [1, 2, 3, 4, 5, 6];
   assertThrows('Error should be thrown attempting to convert an invalid type.',

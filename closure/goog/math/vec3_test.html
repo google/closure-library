@@ -29,20 +29,10 @@ function assertVec3Equals(a, b) {
 }
 
 function testVec3() {
-  var a = new goog.math.Vec3();
-  assertEquals(0, a.x);
-  assertEquals(0, a.y);
-  assertEquals(0, a.z);
-
-  var b = new goog.math.Vec3(4);
-  assertEquals(4, b.x);
-  assertEquals(0, b.y);
-  assertEquals(0, b.z);
-
-  var c = new goog.math.Vec3(3.14, 2.78, -7.21);
-  assertEquals(3.14, c.x);
-  assertEquals(2.78, c.y);
-  assertEquals(-7.21, c.z);
+  var v = new goog.math.Vec3(3.14, 2.78, -7.21);
+  assertEquals(3.14, v.x);
+  assertEquals(2.78, v.y);
+  assertEquals(-7.21, v.z);
 }
 
 
