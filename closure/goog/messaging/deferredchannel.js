@@ -55,9 +55,9 @@ goog.messaging.DeferredChannel.prototype.isConnected = function() {
 
 /** @inheritDoc */
 goog.messaging.DeferredChannel.prototype.registerService = function(
-    serviceName, callback, opt_jsonEncoded) {
+    serviceName, callback, opt_objectPayload) {
   this.deferred_.addCallback(function(resolved) {
-    resolved.registerService(serviceName, callback, opt_jsonEncoded);
+    resolved.registerService(serviceName, callback, opt_objectPayload);
   });
 };
 
