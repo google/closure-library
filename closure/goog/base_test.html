@@ -1038,7 +1038,7 @@ function testGetCssName() {
   assertEquals('a', g);
   assertEquals('a-b', goog.getCssName(g, 'disabled'));
   assertEquals('a-b', goog.getCssName('goog-disabled'));
-  assertEquals('goog-button', goog.getCssName('goog-button'));
+  assertEquals('a-button', goog.getCssName('goog-button'));
 
   goog.setCssNameMapping({
     'goog-button': 'a',
