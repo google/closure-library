@@ -335,6 +335,7 @@ goog.addDependency('net/cookies.js', ['goog.net.Cookies', 'goog.net.cookies'], [
 goog.addDependency('net/crossdomainrpc.js', ['goog.net.CrossDomainRpc'], ['goog.Uri.QueryData', 'goog.debug.Logger', 'goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.json', 'goog.net.EventType', 'goog.userAgent']);
 goog.addDependency('net/errorcode.js', ['goog.net.ErrorCode'], []);
 goog.addDependency('net/eventtype.js', ['goog.net.EventType'], []);
+goog.addDependency('net/filedownloader.js', ['goog.net.FileDownloader', 'goog.net.FileDownloader.Error', 'goog.net.FileDownloader.Event'], ['goog.Disposable', 'goog.async.Deferred', 'goog.crypt.hash32', 'goog.debug.Error', 'goog.events.EventHandler', 'goog.fs', 'goog.fs.DirectoryEntry.Behavior', 'goog.fs.Error.ErrorCode', 'goog.fs.FileSaver.EventType', 'goog.net.EventType', 'goog.net.XhrIo.ResponseType', 'goog.net.XhrIoPool']);
 goog.addDependency('net/iframeio.js', ['goog.net.IframeIo', 'goog.net.IframeIo.IncrementalDataEvent'], ['goog.Timer', 'goog.Uri', 'goog.debug', 'goog.debug.Logger', 'goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.json', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.xhrMonitor', 'goog.reflect', 'goog.string', 'goog.structs', 'goog.userAgent']);
 goog.addDependency('net/iframeloadmonitor.js', ['goog.net.IframeLoadMonitor'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.userAgent']);
 goog.addDependency('net/imageloader.js', ['goog.net.ImageLoader'], ['goog.dom', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.net.EventType', 'goog.object', 'goog.userAgent']);
@@ -452,6 +453,7 @@ goog.addDependency('testing/mockrange.js', ['goog.testing.MockRange'], ['goog.do
 goog.addDependency('testing/mockuseragent.js', ['goog.testing.MockUserAgent'], ['goog.Disposable', 'goog.userAgent']);
 goog.addDependency('testing/multitestrunner.js', ['goog.testing.MultiTestRunner', 'goog.testing.MultiTestRunner.TestFrame'], ['goog.Timer', 'goog.array', 'goog.dom', 'goog.dom.classes', 'goog.events.EventHandler', 'goog.functions', 'goog.string', 'goog.ui.Component', 'goog.ui.ServerChart', 'goog.ui.ServerChart.ChartType', 'goog.ui.TableSorter']);
 goog.addDependency('testing/net/xhrio.js', ['goog.testing.net.XhrIo'], ['goog.array', 'goog.dom.xml', 'goog.events', 'goog.events.EventTarget', 'goog.json', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.XhrIo.ResponseType', 'goog.net.XmlHttp', 'goog.object', 'goog.structs.Map', 'goog.uri.utils']);
+goog.addDependency('testing/net/xhriopool.js', ['goog.testing.net.XhrIoPool'], ['goog.net.XhrIoPool', 'goog.testing.net.XhrIo']);
 goog.addDependency('testing/objectpropertystring.js', ['goog.testing.ObjectPropertyString'], []);
 goog.addDependency('testing/performancetable.js', ['goog.testing.PerformanceTable'], ['goog.dom', 'goog.testing.PerformanceTimer']);
 goog.addDependency('testing/performancetimer.js', ['goog.testing.PerformanceTimer'], ['goog.array', 'goog.math']);

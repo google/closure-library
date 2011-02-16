@@ -147,7 +147,7 @@ goog.fs.getUrlObject_ = function() {
 /**
  * Concatenates one or more values together and converts them to a Blob.
  *
- * @param {...(string|!Blob)} var_args The values that will make up
+ * @param {...(string|!Blob|!ArrayBuffer)} var_args The values that will make up
  *     the resulting blob.
  * @return {!Blob} The blob.
  */
