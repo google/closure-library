@@ -47,7 +47,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   // (instead of not even running at all due to some other bug). However, adding
   // this extra text into the node to be selected screws up IE.
   // (e.g. <a><img></a><b>t</b> --> <a></a><a><img></a>t )
-  // TODO(marcosalmeida): Remove this special casing once http://b/3131117 is
+  // TODO(user): Remove this special casing once http://b/3131117 is
   // fixed.
   var controlHtml = goog.userAgent.IE ? '' : '<u>control</u>';
   var controlCleanHtml = goog.userAgent.IE ? '' : 'control';
