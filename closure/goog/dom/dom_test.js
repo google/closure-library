@@ -577,6 +577,24 @@ function testGetPreviousElementSibling() {
   assertNull('Previous element sibling of b1 should be null', c);
 }
 
+function testGetChildren() {
+  var p2 = $('p2');
+  var children = goog.dom.getChildren(p2);
+  assertNotNull('Elements array should not be null', children);
+  assertEquals('List of element children should be length two.', 2,
+      children.length);
+
+  var b1 = $('b1');
+  var b2 = $('b2');
+  assertObjectEquals('First element child should be b1.', b1, children[0]);
+  assertObjectEquals('Second element child should be b2.', b2, children[1]);
+
+  var noChildren = goog.dom.getChildren(b1);
+  assertNotNull('Element children array should not be null', noChildren);
+  assertEquals('List of element children should be length zero.', 0,
+      noChildren.length);
+}
+
 function testGetNextNode() {
   var tree = goog.dom.htmlToDocumentFragment(
       '<div>' +

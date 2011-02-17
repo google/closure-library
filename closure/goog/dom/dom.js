@@ -1045,11 +1045,31 @@ goog.dom.flattenElement = function(element) {
 
 
 /**
+ * Returns an array containing just the element children of the given element.
+ * @param {Element} element The element whose element children we want.
+ * @return {Array|NodeList} An array or array-like list of just the element
+ *     children of the given element.
+ */
+goog.dom.getChildren = function(element) {
+  if (goog.dom.BrowserFeature.CAN_USE_CHILDREN_ATTRIBUTE) {
+    return element.children;
+  }
+  // Fall back to manually filtering the element's child nodes.
+  return goog.array.filter(element.childNodes, function(node) {
+    return node.nodeType == goog.dom.NodeType.ELEMENT;
+  });
+};
+
+
+/**
  * Returns the first child node that is an element.
  * @param {Node} node The node to get the first child element of.
  * @return {Element} The first child node of {@code node} that is an element.
  */
 goog.dom.getFirstElementChild = function(node) {
+  if (goog.dom.BrowserFeature.CAN_USE_CHILDREN_ATTRIBUTE) {
+    return node.firstElementChild;
+  }
   return goog.dom.getNextElementNode_(node.firstChild, true);
 };
 
@@ -1060,6 +1080,9 @@ goog.dom.getFirstElementChild = function(node) {
  * @return {Element} The last child node of {@code node} that is an element.
  */
 goog.dom.getLastElementChild = function(node) {
+  if (goog.dom.BrowserFeature.CAN_USE_CHILDREN_ATTRIBUTE) {
+    return node.lastElementChild;
+  }
   return goog.dom.getNextElementNode_(node.lastChild, false);
 };
 
@@ -1070,6 +1093,9 @@ goog.dom.getLastElementChild = function(node) {
  * @return {Element} The next sibling of {@code node} that is an element.
  */
 goog.dom.getNextElementSibling = function(node) {
+  if (goog.dom.BrowserFeature.CAN_USE_CHILDREN_ATTRIBUTE) {
+    return node.nextElementSibling;
+  }
   return goog.dom.getNextElementNode_(node.nextSibling, true);
 };
 
@@ -1081,6 +1107,9 @@ goog.dom.getNextElementSibling = function(node) {
  *     an element.
  */
 goog.dom.getPreviousElementSibling = function(node) {
+  if (goog.dom.BrowserFeature.CAN_USE_CHILDREN_ATTRIBUTE) {
+    return node.previousElementSibling;
+  }
   return goog.dom.getNextElementNode_(node.previousSibling, false);
 };
 
