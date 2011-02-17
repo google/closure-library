@@ -865,14 +865,8 @@ goog.style.setWidth = function(element, width) {
  * @return {!goog.math.Size} Object with width/height properties.
  */
 goog.style.getSize = function(element) {
-  var hasOperaBug = goog.userAgent.OPERA && !goog.userAgent.isVersion('10');
   if (goog.style.getStyle_(element, 'display') != 'none') {
-    if (hasOperaBug) {
-      return new goog.math.Size(element.offsetWidth || element.clientWidth,
-                                element.offsetHeight || element.clientHeight);
-    } else {
-      return new goog.math.Size(element.offsetWidth, element.offsetHeight);
-    }
+    return new goog.math.Size(element.offsetWidth, element.offsetHeight);
   }
 
   var style = element.style;
@@ -884,14 +878,8 @@ goog.style.getSize = function(element) {
   style.position = 'absolute';
   style.display = 'inline';
 
-  var originalWidth, originalHeight;
-  if (hasOperaBug) {
-    originalWidth = element.offsetWidth || element.clientWidth;
-    originalHeight = element.offsetHeight || element.clientHeight;
-  } else {
-    originalWidth = element.offsetWidth;
-    originalHeight = element.offsetHeight;
-  }
+  var originalWidth = element.offsetWidth;
+  var originalHeight = element.offsetHeight;
 
   style.display = originalDisplay;
   style.position = originalPosition;
@@ -1162,8 +1150,6 @@ goog.style.setPreWrap = function(el) {
     style.wordWrap = 'break-word';
   } else if (goog.userAgent.GECKO) {
     style.whiteSpace = '-moz-pre-wrap';
-  } else if (goog.userAgent.OPERA) {
-    style.whiteSpace = '-o-pre-wrap';
   } else {
     style.whiteSpace = 'pre-wrap';
   }
@@ -1395,16 +1381,8 @@ goog.style.setBoxSizingSize_ = function(element, size, boxSizing) {
     style.MozBoxSizing = boxSizing;
   } else if (goog.userAgent.WEBKIT) {
     style.WebkitBoxSizing = boxSizing;
-  } else if (goog.userAgent.OPERA && !goog.userAgent.isVersion('9.50')) {
-    // Opera pre-9.5 does not have CSSStyleDeclaration::boxSizing, but
-    // box-sizing can still be set via CSSStyleDeclaration::setProperty.
-    if (boxSizing) {
-      style.setProperty('box-sizing', boxSizing);
-    } else {
-      style.removeProperty('box-sizing');
-    }
   } else {
-    // Includes IE8
+    // Includes IE8 and Opera 9.50+
     style.boxSizing = boxSizing;
   }
   style.width = size.width + 'px';
@@ -1606,10 +1584,6 @@ goog.style.getFontFamily = function(el) {
     // Note if for some reason IE can't derive FontName with a TextRange, we
     // fallback to using currentStyle
     font = goog.style.getStyle_(el, 'fontFamily');
-    // Opera on Linux provides the font vendor's name in square-brackets.
-    if (goog.userAgent.OPERA && goog.userAgent.LINUX) {
-      font = font.replace(/ \[[^\]]*\]/, '');
-    }
   }
 
   // Firefox returns the applied font-family string (author's list of

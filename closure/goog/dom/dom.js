@@ -441,13 +441,7 @@ goog.dom.getViewportSize_ = function(win) {
     return new goog.math.Size(win.innerWidth, innerHeight);
   }
 
-  var readsFromDocumentElement = goog.dom.isCss1CompatMode_(doc);
-  if (goog.userAgent.OPERA && !goog.userAgent.isVersion('9.50')) {
-    // Older versions of Opera used to read from document.body, but this
-    // changed with 9.5.
-    readsFromDocumentElement = false;
-  }
-  var el = readsFromDocumentElement ? doc.documentElement : doc.body;
+  var el = goog.dom.isCss1CompatMode_(doc) ? doc.documentElement : doc.body;
 
   return new goog.math.Size(el.clientWidth, el.clientHeight);
 };

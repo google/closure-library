@@ -1210,9 +1210,9 @@ function testSetBorderBoxSize() {
     assertEquals('border-box', el.style.MozBoxSizing);
   } else if (goog.userAgent.WEBKIT) {
     assertEquals('border-box', el.style.WebkitBoxSizing);
-  } else if (goog.userAgent.OPERA) {
-    // opera doesnt expose this as a DOM property.
-    assertEquals('border-box', el.style.getPropertyValue('box-sizing'));
+  } else if (goog.userAgent.OPERA ||
+             goog.userAgent.IE && goog.userAgent.isVersion('8')) {
+    assertEquals('border-box', el.style.boxSizing);
   }
 }
 
@@ -1256,9 +1256,9 @@ function testSetContentBoxSize() {
     assertEquals('content-box', el.style.MozBoxSizing);
   } else if (goog.userAgent.WEBKIT) {
     assertEquals('content-box', el.style.WebkitBoxSizing);
-  } else if (goog.userAgent.OPERA) {
-    // opera doesnt expose this as a DOM property.
-    assertEquals('content-box', el.style.getPropertyValue('box-sizing'));
+  } else if (goog.userAgent.OPERA ||
+             goog.userAgent.IE && goog.userAgent.isVersion('8')) {
+    assertEquals('content-box', el.style.boxSizing);
   }
 }
 
