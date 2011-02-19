@@ -134,6 +134,18 @@ function testExpandToInclude() {
   assertEquals(100, box.right);
   assertEquals(100, box.bottom);
 }
+
+function testBoundingBox() {
+  assertObjectEquals(
+      new goog.math.Box(1, 10, 11, 0),
+      goog.math.Box.boundingBox(
+          new goog.math.Coordinate(5, 5),
+          new goog.math.Coordinate(5, 11),
+          new goog.math.Coordinate(0, 5),
+          new goog.math.Coordinate(5, 1),
+          new goog.math.Coordinate(10, 5)));
+}
+
 </script>
 </body>
 </html>
