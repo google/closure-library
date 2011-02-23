@@ -458,7 +458,7 @@ goog.fx.AbstractDragDrop.prototype.endDrag = function(event) {
   if (activeTarget && activeTarget.target_) {
     var clientX = event.clientX;
     var clientY = event.clientY;
-    var scroll = this.getPageScroll_();
+    var scroll = this.getScrollPos();
     var x = clientX + scroll.x;
     var y = clientY + scroll.y;
 
@@ -542,7 +542,7 @@ goog.fx.AbstractDragDrop.prototype.disposeDrag = function() {
 goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
   var x = event.clientX;
   var y = event.clientY;
-  var scroll = this.getPageScroll_();
+  var scroll = this.getScrollPos();
   x += scroll.x;
   y += scroll.y;
 
@@ -1044,12 +1044,12 @@ goog.fx.AbstractDragDrop.prototype.isInside_ = function(x, y, box) {
 
 
 /**
- * Gets the page scroll distance as a coordinate object, using
+ * Gets the scroll distance as a coordinate object, using
  * the window of the current drag element's dom.
  * @return {goog.math.Coordinate} Object with scroll offsets 'x' and 'y'.
- * @private
+ * @protected
  */
-goog.fx.AbstractDragDrop.prototype.getPageScroll_ = function() {
+goog.fx.AbstractDragDrop.prototype.getScrollPos = function() {
   return goog.dom.getDomHelper(this.dragEl_).getDocumentScroll();
 };
 
