@@ -11,6 +11,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.object</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.functions');
   goog.require('goog.object');
   goog.require('goog.testing.jsunit');
 </script>
@@ -128,6 +129,59 @@ function testClone() {
   assertFalse('clone so it should not be empty', goog.object.isEmpty(m2));
   assertTrue("clone so it should contain 'c' key",
              goog.object.containsKey(m2, 'c'));
+}
+
+function testUnsafeClonePrimitive() {
+  assertEquals('cloning a primitive should return an equal primitive',
+      5, goog.object.unsafeClone(5));
+}
+
+function testUnsafeCloneObjectThatHasACloneMethod() {
+  var original = {
+    name: 'original',
+    clone: goog.functions.constant({name: 'clone'})
+  };
+
+  var clone = goog.object.unsafeClone(original);
+  assertEquals('original', original.name);
+  assertEquals('clone', clone.name);
+}
+
+function testUnsafeCloneFlatObject() {
+  var original = {a: 1, b: 2, c: 3};
+  var clone = goog.object.unsafeClone(original);
+  assertNotEquals(original, clone);
+  assertObjectEquals(original, clone);
+}
+
+function testUnsafeCloneDeepObject() {
+  var original = {
+    a: 1,
+    b: {c: 2, d: 3},
+    e: {f: {g: 4, h: 5}}
+  };
+  var clone = goog.object.unsafeClone(original);
+
+  assertNotEquals(original, clone);
+  assertNotEquals(original.b, clone.b);
+  assertNotEquals(original.e, clone.e);
+
+  assertEquals(1, clone.a);
+  assertEquals(2, clone.b.c);
+  assertEquals(3, clone.b.d);
+  assertEquals(4, clone.e.f.g);
+  assertEquals(5, clone.e.f.h);
+}
+
+function testUnsafeCloneFunctions() {
+  var original = {
+    f: goog.functions.constant('hi')
+  };
+  var clone = goog.object.unsafeClone(original);
+
+  assertNotEquals(original, clone);
+  assertEquals('hi', clone.f());
+  assertEquals(original.f, clone.f);
 }
 
 function testForEach() {
