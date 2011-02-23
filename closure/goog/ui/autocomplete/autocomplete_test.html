@@ -17,8 +17,10 @@ See the COPYING file for details.
   goog.require('goog.dom.a11y.Role');
   goog.require('goog.dom.a11y.State');
   goog.require('goog.events.EventTarget');
+  goog.require('goog.events.EventHandler');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.AutoComplete');
+  goog.require('goog.ui.AutoComplete.EventType');
   goog.require('goog.ui.AutoComplete.Renderer');
   goog.require('goog.string');
 </script>
@@ -87,6 +89,17 @@ TestRend.prototype.getHilitedRowDiv = function() {
   return this.rowDivs_[this.hilitedRow_];
 };
 
+
+var handler;
+
+function setUp() {
+  handler = new goog.events.EventHandler();
+}
+
+function tearDown() {
+  handler.dispose();
+}
+
 /**
  * Make sure results are truncated (or not) by setMaxMatches.
  */
@@ -110,6 +123,31 @@ function testMaxMatches() {
   ac.setToken('the');
   assertEquals(4, rend.getRenderedRows().length);
   ac.setToken('');
+}
+
+function testSuggestionsUpdateEvent() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  var updates = 0;
+  handler.listen(ac,
+      goog.ui.AutoComplete.EventType.SUGGESTIONS_UPDATE,
+      function() {
+        updates++;
+      });
+
+  ac.setToken('the');
+  assertEquals(1, updates);
+
+  ac.setToken('beeb');
+  assertEquals(2, updates);
+
+  ac.setToken('ford');
+  assertEquals(3, updates);
+
+  ac.setToken('dent');
+  assertEquals(4, updates);
 }
 
 function checkHilitedIndex(renderer, index) {
