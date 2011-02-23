@@ -25,6 +25,7 @@ goog.provide('goog.fx.DragListGroup');
 goog.provide('goog.fx.DragListGroup.EventType');
 goog.provide('goog.fx.DragListGroupEvent');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
@@ -113,7 +114,6 @@ goog.inherits(goog.fx.DragListGroup, goog.events.EventTarget);
  */
 goog.fx.DragListDirection = {
   DOWN: 0,  // common
-  UP: 1,  // very rare
   RIGHT: 2,  // common
   LEFT: 3,  // uncommon (except perhaps for right-to-left interfaces)
   RIGHT_2D: 4, // common + handles multiple lines if items are wrapped
@@ -244,22 +244,17 @@ goog.fx.DragListGroup.prototype.setIsCurrDragItemAlwaysDisplayed = function() {
  * @param {Element} dragListElement Must be a container for a list of items
  *     that should all be made draggable.
  * @param {goog.fx.DragListDirection} growthDirection The direction that this
- *     drag list grows in (i.e.. if an item is added, the list's bounding box
- *     expands in this direction).
- * @param {boolean=} opt_isDocOrderSameAsGrowthDirection Defaults to true.
- *     Whether or not the ordering of this drag list's items in the document
- *     is the same as the list's growth direction.
+ *     drag list grows in (i.e. if an item is appended to the DOM, the list's
+ *     bounding box expands in this direction).
+ * @param {boolean=} opt_unused Unused argument.
  * @param {string=} opt_dragHoverClass CSS class to apply to this drag list when
  *     the draggerEl hovers over it during a drag action.
  */
 goog.fx.DragListGroup.prototype.addDragList = function(
-    dragListElement, growthDirection, opt_isDocOrderSameAsGrowthDirection,
-    opt_dragHoverClass) {
-  this.assertNotInitialized_();
+    dragListElement, growthDirection, opt_unused, opt_dragHoverClass) {
+  goog.asserts.assert(!this.isInitialized_);
 
   dragListElement.dlgGrowthDirection_ = growthDirection;
-  dragListElement.dlgIsDocOrderSameAsGrowthDirection_ =
-      opt_isDocOrderSameAsGrowthDirection !== false;
   dragListElement.dlgDragHoverClass_ = opt_dragHoverClass;
   this.dragLists_.push(dragListElement);
 };
@@ -279,7 +274,7 @@ goog.fx.DragListGroup.prototype.addDragList = function(
  */
 goog.fx.DragListGroup.prototype.setFunctionToGetHandleForDragItem = function(
     getHandleForDragItemFn) {
-  this.assertNotInitialized_();
+  goog.asserts.assert(!this.isInitialized_);
   this.getHandleForDragItem_ = getHandleForDragItemFn;
 };
 
@@ -290,7 +285,7 @@ goog.fx.DragListGroup.prototype.setFunctionToGetHandleForDragItem = function(
  * @param {...!string} var_args The CSS class or classes.
  */
 goog.fx.DragListGroup.prototype.setDragItemHoverClass = function(var_args) {
-  this.assertNotInitialized_();
+  goog.asserts.assert(!this.isInitialized_);
   this.dragItemHoverClasses_ = goog.array.slice(arguments, 0);
 };
 
@@ -302,7 +297,7 @@ goog.fx.DragListGroup.prototype.setDragItemHoverClass = function(var_args) {
  */
 goog.fx.DragListGroup.prototype.setDragItemHandleHoverClass = function(
     var_args) {
-  this.assertNotInitialized_();
+  goog.asserts.assert(!this.isInitialized_);
   this.dragItemHandleHoverClasses_ = goog.array.slice(arguments, 0);
 };
 
@@ -319,7 +314,7 @@ goog.fx.DragListGroup.prototype.setDragItemHandleHoverClass = function(
  * @param {...!string} var_args The CSS class or classes.
  */
 goog.fx.DragListGroup.prototype.setCurrDragItemClass = function(var_args) {
-  this.assertNotInitialized_();
+  goog.asserts.assert(!this.isInitialized_);
   this.currDragItemClasses_ = goog.array.slice(arguments, 0);
 };
 
@@ -330,7 +325,7 @@ goog.fx.DragListGroup.prototype.setCurrDragItemClass = function(var_args) {
  * @param {string} draggerElClass The CSS class.
  */
 goog.fx.DragListGroup.prototype.setDraggerElClass = function(draggerElClass) {
-  this.assertNotInitialized_();
+  goog.asserts.assert(!this.isInitialized_);
   this.draggerElClass_ = draggerElClass;
 };
 
@@ -346,7 +341,7 @@ goog.fx.DragListGroup.prototype.init = function() {
   for (var i = 0, numLists = this.dragLists_.length; i < numLists; i++) {
     var dragList = this.dragLists_[i];
 
-    var dragItems = this.getItemsInDragList_(dragList);
+    var dragItems = goog.dom.getChildren(dragList);
     for (var j = 0, numItems = dragItems.length; j < numItems; ++j) {
       var dragItem = dragItems[j];
       var dragItemHandle = this.getHandleForDragItem_(dragItem);
@@ -393,7 +388,6 @@ goog.fx.DragListGroup.prototype.disposeInternal = function() {
     // Note: IE doesn't allow 'delete' for fields on HTML elements (because
     // they're not real JS objects in IE), so we just set them to undefined.
     dragList.dlgGrowthDirection_ = undefined;
-    dragList.dlgIsDocOrderSameAsGrowthDirection_ = undefined;
     dragList.dlgDragHoverClass_ = undefined;
   }
 
@@ -409,10 +403,13 @@ goog.fx.DragListGroup.prototype.disposeInternal = function() {
  * Handles the start of a drag action (i.e. MOUSEDOWN on any drag item).
  *
  * @param {goog.events.BrowserEvent} e Event object fired on a drag item handle.
- * @return {boolean} Whether the event was handled.
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
+  if (!e.isMouseActionButton()) {
+    e.preventDefault();
+    return;
+  }
 
   var uid = goog.getUid(/** @type {Node} */ (e.currentTarget));
   var currDragItem = /** @type {Element} */ (this.dragItemForHandle_[uid]);
@@ -422,7 +419,8 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
           goog.fx.DragListGroup.EventType.BEFOREDRAGSTART, this, e,
           currDragItem, null, null));
   if (!rv) {
-    return false;
+    e.preventDefault();
+    return;
   }
 
   this.currDragItem_ = currDragItem;
@@ -503,8 +501,6 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
       new goog.fx.DragListGroupEvent(
           goog.fx.DragListGroup.EventType.DRAGSTART, this, e,
           currDragItem, draggerEl, this.dragger_));
-
-  return true;
 };
 
 
@@ -648,18 +644,6 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
 
 
 /**
- * Asserts that this DragListGroup instance is not yet initialized.
- * @throws {Error} If this DragListGroup is already initialized.
- * @private
- */
-goog.fx.DragListGroup.prototype.assertNotInitialized_ = function() {
-  if (this.isInitialized_) {
-    throw Error('This action is not allowed after calling init().');
-  }
-};
-
-
-/**
  * Default implementation of the function to get the "handle" element for a
  * drag item. By default, we use the whole drag item as the handle. Users can
  * change this by calling setFunctionToGetHandleForDragItem().
@@ -718,26 +702,6 @@ goog.fx.DragListGroup.prototype.handleDragItemHandleMouseout_ = function(e) {
   goog.dom.classes.remove.apply(null,
       goog.array.concat(/** @type {Element} */ (e.currentTarget),
                         this.dragItemHandleHoverClasses_));
-};
-
-
-/**
- * Gets the drag items currently in the given drag list.
- * Note: Any drag item can potentially be moved to any drag list.
- *
- * @param {Element} dragList The drag list to get drag items from.
- * @return {Array.<Element>} The drag items currently in the given drag list.
- * @private
- */
-goog.fx.DragListGroup.prototype.getItemsInDragList_ = function(dragList) {
-  var dragItems = [];
-  var childNodes = dragList.childNodes;
-  for (var i = 0, n = childNodes.length; i < n; i++) {
-    if (childNodes[i].nodeType == goog.dom.NodeType.ELEMENT) {
-      dragItems.push(childNodes[i]);
-    }
-  }
-  return dragItems;
 };
 
 
@@ -834,12 +798,6 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
       getRelevantBoundFn = goog.fx.DragListGroup.getBottomBound_;
       isBeforeFn = goog.fx.DragListGroup.isLessThan_;
       break;
-    case goog.fx.DragListDirection.UP:
-      // "Before" means draggerElCenter.y is greater than item's top y-value.
-      relevantCoord = draggerElCenter.y;
-      getRelevantBoundFn = goog.fx.DragListGroup.getTopBound_;
-      isBeforeFn = goog.fx.DragListGroup.isGreaterThan_;
-      break;
     case goog.fx.DragListDirection.RIGHT_2D:
       pickClosestRow = true;
     case goog.fx.DragListDirection.RIGHT:
@@ -865,7 +823,7 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
   // where "relevant" is determined by the growth direction of hoverList.
   var earliestAfterItemRelevantBound;
 
-  var hoverListItems = this.getItemsInDragList_(hoverList);
+  var hoverListItems = goog.dom.getChildren(hoverList);
   for (var i = 0, n = hoverListItems.length; i < n; i++) {
     var item = hoverListItems[i];
     if (item == this.currDragItem_) {
@@ -951,18 +909,6 @@ goog.fx.DragListGroup.getBottomBound_ = function(itemBounds) {
 
 /**
  * Private helper for getHoverNextItem_().
- * Given the bounds of an item, computes the item's top y-value.
- * @param {goog.math.Rect} itemBounds The bounds of the item.
- * @return {number} The item's top y-value.
- * @private
- */
-goog.fx.DragListGroup.getTopBound_ = function(itemBounds) {
-  return itemBounds.top || 0;
-};
-
-
-/**
- * Private helper for getHoverNextItem_().
  * Given the bounds of an item, computes the item's right x-value.
  * @param {goog.math.Rect} itemBounds The bounds of the item.
  * @return {number} The item's right x-value.
@@ -1019,27 +965,11 @@ goog.fx.DragListGroup.isGreaterThan_ = function(a, b) {
  */
 goog.fx.DragListGroup.prototype.insertCurrDragItem_ = function(
     hoverList, hoverNextItem) {
-
-  if (hoverList.dlgIsDocOrderSameAsGrowthDirection_) {
-    if (this.currDragItem_.parentNode != hoverList ||
-        goog.dom.getNextElementSibling(this.currDragItem_) != hoverNextItem) {
-      // The current drag item is not in the correct location, so we move it.
-      // Note: hoverNextItem may be null, but insertBefore() still works.
-      hoverList.insertBefore(this.currDragItem_, hoverNextItem);
-    }
-
-  } else {
-    // Since the doc order of the items is actually the reverse order of the
-    // drag list's growth direction, we need to insert AFTER the hoverNextItem.
-    if (!hoverNextItem) {
-      // Insert after a non-existent item: actually means insert at beginning.
-      hoverList.insertBefore(this.currDragItem_,
-          goog.dom.getFirstElementChild(hoverList));
-    } else {
-      var actualNextItem = goog.dom.getNextElementSibling(hoverNextItem);
-      // Note: actualNextItem may be null, but insertBefore() still works.
-      hoverList.insertBefore(this.currDragItem_, actualNextItem);
-    }
+  if (this.currDragItem_.parentNode != hoverList ||
+      goog.dom.getNextElementSibling(this.currDragItem_) != hoverNextItem) {
+    // The current drag item is not in the correct location, so we move it.
+    // Note: hoverNextItem may be null, but insertBefore() still works.
+    hoverList.insertBefore(this.currDragItem_, hoverNextItem);
   }
 };
 

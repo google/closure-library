@@ -7,9 +7,11 @@
 <script src="../base.js"></script>
 <script>
   goog.require('goog.dom');
+  goog.require('goog.events.BrowserEvent');
+  goog.require('goog.events.BrowserFeature');
+  goog.require('goog.fx.DragEvent');
   goog.require('goog.fx.DragListGroup');
   goog.require('goog.testing.jsunit');
-  goog.require('goog.testing.StrictMock');
 </script>
 <style>
   .opacity-40 {
@@ -174,8 +176,10 @@
    * the setter method.
    */
   function testAddCurrentDragItemClasses() {
-    var be = new goog.testing.StrictMock(goog.events.BrowserEvent);
-    be.type = goog.events.EventType.MOUSEDOWN;
+    var be = new goog.events.BrowserEvent({
+      type: goog.events.EventType.MOUSEDOWN,
+      button: goog.events.BrowserFeature.HAS_W3C_BUTTON ? 0 : 1
+    });
     event.event_ = be;
 
     dlg.handleDragStart_(event);
@@ -197,15 +201,17 @@
    * method the currDragItem has no CSS classes set in the dispatched event.
    */
   function testRemoveCurrentDragItemClasses() {
-    var be = new goog.testing.StrictMock(goog.events.BrowserEvent);
-    be.type = goog.events.EventType.MOUSEDOWN;
+    var be = new goog.events.BrowserEvent({
+      type: goog.events.EventType.MOUSEDOWN,
+      button: goog.events.BrowserFeature.HAS_W3C_BUTTON ? 0 : 1
+    });
     event.event_ = be;
     dlg.handleDragStart_(event);
 
     // Need to catch the dispatched event because the temporary fields
     // including dlg.currentDragItem_ are cleared after the dragging has ended.
     var currDragItem = goog.dom.createDom(
-        'div', ['cursor_move','blue_bg'], goog.dom.createTextNode('4'));
+        'div', ['cursor_move', 'blue_bg'], goog.dom.createTextNode('4'));
     goog.events.listen(dlg, goog.fx.DragListGroup.EventType.DRAGEND,
         function(e) {currDragItem = dlg.currDragItem_;});
 
