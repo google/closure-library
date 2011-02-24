@@ -31,7 +31,6 @@
 
 goog.provide('goog.ui.LabelInput');
 
-
 goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
@@ -82,7 +81,7 @@ goog.ui.LabelInput.prototype.eventHandler_;
  * @type {boolean}
  * @private
  */
-goog.ui.LabelInput.prototype.hasFocus_;
+goog.ui.LabelInput.prototype.hasFocus_ = false;
 
 
 /**
@@ -144,9 +143,11 @@ goog.ui.LabelInput.prototype.attachEvents_ = function() {
   eh.listen(this.getElement(), goog.events.EventType.BLUR, this.handleBlur_);
 
   if (goog.userAgent.GECKO) {
-    eh.listen(this.getElement(), [goog.events.EventType.KEYPRESS,
-        goog.events.EventType.KEYDOWN, goog.events.EventType.KEYUP],
-        this.handleEscapeKeys_);
+    eh.listen(this.getElement(), [
+      goog.events.EventType.KEYPRESS,
+      goog.events.EventType.KEYDOWN,
+      goog.events.EventType.KEYUP
+    ], this.handleEscapeKeys_);
   }
 
   // IE sets defaultValue upon load so we need to test that as well.
@@ -362,6 +363,27 @@ goog.ui.LabelInput.prototype.getValue = function() {
   }
   return this.hasChanged() ? /** @type {string} */ (this.getElement().value) :
       '';
+};
+
+
+/**
+ * Sets the label text.
+ * @param {string} label The text to show as the label.
+ */
+goog.ui.LabelInput.prototype.setLabel = function(label) {
+  if (this.getElement() && !this.hasChanged()) {
+    this.getElement().value = '';
+  }
+  this.label_ = label;
+  this.restoreLabel_();
+};
+
+
+/**
+ * @return {string} The text to show as the label.
+ */
+goog.ui.LabelInput.prototype.getLabel = function() {
+  return this.label_;
 };
 
 
