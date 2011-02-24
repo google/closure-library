@@ -887,8 +887,10 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
       // The childnodes represent the initial child nodes for the text area
       // appending a text node essentially resets the initial value ready for
       // it to be clones - while maintaining HTML escaping.
-      if (goog.dom.getTextContent(textareas[i]) != textareas[i].value) {
-        goog.dom.setTextContent(textareas[i], textareas[i].value);
+      var value = textareas[i].value;
+      if (goog.dom.getRawTextContent(textareas[i]) != value) {
+        goog.dom.setTextContent(textareas[i], value);
+        textareas[i].value = value;
       }
     }
 
