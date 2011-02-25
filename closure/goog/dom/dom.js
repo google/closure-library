@@ -562,7 +562,9 @@ goog.dom.getDocumentScroll = function() {
  */
 goog.dom.getDocumentScroll_ = function(doc) {
   var el = goog.dom.getDocumentScrollElement_(doc);
-  return new goog.math.Coordinate(el.scrollLeft, el.scrollTop);
+  var win = goog.dom.getWindow_(doc);
+  return new goog.math.Coordinate(win.pageXOffset || el.scrollLeft,
+      win.pageYOffset || el.scrollTop);
 };
 
 

@@ -27,23 +27,46 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
 
+goog.setTestOnly('dom_test');
+
 var $ = goog.dom.getElement;
 
-// Setup for the iframe
-var myIframe = $('myIframe');
-var myIframeDoc = goog.dom.getFrameContentDocument(
-    /** @type {HTMLIFrameElement} */ (myIframe));
+var divForTestingScrolling;
+var myIframe;
+var myIframeDoc;
 
-// Set up document for iframe: total height of elements in document is 65
-// If the elements are not create like below, IE will get a wrong height for
-// the document.
-myIframeDoc.open();
-// Make sure we progate the compat mode
-myIframeDoc.write((goog.dom.isCss1CompatMode() ? '<!DOCTYPE html>' : '') +
-    '<style>body{margin:0;padding:0}</style>' +
-    '<div style="height:42px;font-size:1px;line-height:0;">hello world</div>' +
-    '<div style="height:23px;font-size:1px;line-height:0;">hello world</div>');
-myIframeDoc.close();
+function setUpPage() {
+  divForTestingScrolling = document.createElement('div');
+  divForTestingScrolling.style.width = '5000px';
+  divForTestingScrolling.style.height = '5000px';
+  document.body.appendChild(divForTestingScrolling);
+
+  // Setup for the iframe
+  myIframe = $('myIframe');
+  myIframeDoc = goog.dom.getFrameContentDocument(
+      /** @type {HTMLIFrameElement} */ (myIframe));
+
+  // Set up document for iframe: total height of elements in document is 65
+  // If the elements are not create like below, IE will get a wrong height for
+  // the document.
+  myIframeDoc.open();
+  // Make sure we progate the compat mode
+  myIframeDoc.write((goog.dom.isCss1CompatMode() ? '<!DOCTYPE html>' : '') +
+      '<style>body{margin:0;padding:0}</style>' +
+      '<div style="height:42px;font-size:1px;line-height:0;">' +
+          'hello world</div>' +
+      '<div style="height:23px;font-size:1px;line-height:0;">' +
+          'hello world</div>');
+  myIframeDoc.close();
+}
+
+function tearDownPage() {
+  document.body.removeChild(divForTestingScrolling);
+}
+
+function tearDown() {
+  window.scrollTo(0, 0);
+}
 
 function testDom() {
   assert('Dom library exists', typeof goog.dom != 'undefined');
@@ -1135,6 +1158,31 @@ function testAppend4() {
   goog.dom.append(div, div2.childNodes);
   assertEqualsCaseAndLeadingWhitespaceInsensitive('a<b></b>c', div.innerHTML);
   assertFalse(div2.hasChildNodes());
+}
+
+function testGetDocumentScroll() {
+  // setUpPage added divForTestingScrolling to the DOM. It's not init'd here so
+  // it can be shared amonst other tests.
+  window.scrollTo(100, 100);
+
+  assertEquals(100, goog.dom.getDocumentScroll().x);
+  assertEquals(100, goog.dom.getDocumentScroll().y);
+}
+
+function testGetDocumentScrollOfFixedViewport() {
+  // iOS and perhaps other environments don't actually support scrolling.
+  // Instead, you view the document's fixed layout through a screen viewport.
+  // We need getDocumentScroll to handle this case though.
+  var fakeDocumentScrollElement = {scrollLeft: 0, scrollTop: 0};
+  var fakeDocument = {
+    defaultView: {pageXOffset: 100, pageYOffset: 100},
+    documentElement: fakeDocumentScrollElement,
+    body: fakeDocumentScrollElement
+  };
+  var dh = goog.dom.getDomHelper(document);
+  dh.setDocument(fakeDocument);
+  assertEquals(100, dh.getDocumentScroll().x);
+  assertEquals(100, dh.getDocumentScroll().y);
 }
 
 
