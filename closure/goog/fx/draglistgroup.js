@@ -104,6 +104,14 @@ goog.fx.DragListGroup = function() {
    */
   this.isCurrDragItemAlwaysDisplayed_ = false;
 
+  /**
+   * Whether to update the position of the currDragItem as we drag, i.e.,
+   * insert the currDragItem each time to the position where it would land if
+   * we were to end the drag at that point. Defaults to true.
+   * @type {boolean}
+   * @private
+   */
+  this.updateWhileDragging_ = true;
 };
 goog.inherits(goog.fx.DragListGroup, goog.events.EventTarget);
 
@@ -209,6 +217,17 @@ goog.fx.DragListGroup.prototype.origNextItem_;
 
 
 /**
+ * The current item in the list we are hovering over. We need to remember
+ * this in case we do not update the position of the current drag item while
+ * dragging (see {@code updateWhileDragging_}). In this case the current drag
+ * item will be inserted into the list before this element when the drag ends.
+ * @type {Element}
+ * @private
+ */
+goog.fx.DragListGroup.prototype.currHoverItem_;
+
+
+/**
  * The clone of the current drag item that's actually being dragged around.
  * Note: This is only defined while a drag action is happening.
  * @type {Element}
@@ -232,6 +251,16 @@ goog.fx.DragListGroup.prototype.dragger_;
  */
 goog.fx.DragListGroup.prototype.setIsCurrDragItemAlwaysDisplayed = function() {
   this.isCurrDragItemAlwaysDisplayed_ = true;
+};
+
+
+/**
+ * Sets the private property updateWhileDragging_ to false. This disables the
+ * update of the position of the currDragItem while dragging. It will only be
+ * placed to its new location once the drag ends.
+ */
+goog.fx.DragListGroup.prototype.setNoUpdateWhileDragging = function() {
+  this.updateWhileDragging_ = false;
 };
 
 
@@ -429,6 +458,7 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   // Note: this.origNextItem_ may be null.
   this.origList_ = /** @type {Element} */ (currDragItem.parentNode);
   this.origNextItem_ = goog.dom.getNextElementSibling(currDragItem);
+  this.currHoverItem_ = this.origNextItem_;
 
   // Create a clone for dragging.
   var draggerEl = this.cloneNode_(currDragItem);
@@ -468,11 +498,14 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   draggerEl.halfWidth = draggerElSize.width / 2;
   draggerEl.halfHeight = draggerElSize.height / 2;
 
-  // Record the bounds of all the drag lists and all the other drag items, in
-  // the state where the current drag item is not in any of the lists. (This
-  // caching is for efficiency, so that we don't have to recompute the bounds
-  // on each drag move.)
-  currDragItem.style.display = 'none';
+  // Record the bounds of all the drag lists and all the other drag items. This
+  // caching is for efficiency, so that we don't have to recompute the bounds on
+  // each drag move. Do this in the state where the current drag item is not in
+  // any of the lists, except when update while dragging is disabled, as in this
+  // case the current drag item does not get removed until drag ends.
+  if (this.updateWhileDragging_) {
+    currDragItem.style.display = 'none';
+  }
   for (var i = 0, n = this.dragLists_.length; i < n; i++) {
     var dragList = this.dragLists_[i];
     dragList.dlgBounds_ = goog.style.getBounds(dragList);
@@ -536,7 +569,14 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
   }
 
   if (hoverList) {
-    this.insertCurrDragItem_(hoverList, hoverNextItem);
+    if (this.updateWhileDragging_) {
+      this.insertCurrDragItem_(hoverList, hoverNextItem);
+    } else {
+      // If update while dragging is disabled do not insert
+      // the dragged item, but update the hovered item instead.
+      this.updateCurrHoverItem(hoverNextItem, draggerElCenter);
+    }
+
     this.currDragItem_.style.display = '';
     // Add drag list's hover class (if any).
     if (hoverList.dlgDragHoverClass_) {
@@ -607,6 +647,12 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
         goog.array.concat(this.currDragItem_, this.currDragItemClasses_));
   } else {
     this.currDragItem_.style.visibility = 'visible';
+  }
+
+  // If update while dragging is disabled insert the current drag item into
+  // its intended location.
+  if (!this.updateWhileDragging_) {
+    this.insertCurrHoverItem();
   }
 
   // Remove hover classes (if any) from all drag lists.
@@ -757,6 +803,42 @@ goog.fx.DragListGroup.prototype.getHoverDragList_ = function(draggerElCenter) {
 goog.fx.DragListGroup.prototype.isInRect_ = function(pos, rect) {
   return pos.x > rect.left && pos.x < rect.left + rect.width &&
          pos.y > rect.top && pos.y < rect.top + rect.height;
+};
+
+
+/**
+ * Updates the value of currHoverItem_.
+ *
+ * This method is used for insertion only when updateWhileDragging_ is false.
+ * The below implementation is the basic one. This method can be extended by
+ * a subclass to support changes to hovered item (eg: highlighting). Parametr
+ * opt_draggerElCenter can be used for more sophisticated effects.
+ *
+ * @param {Element} hoverNextItem element of the list that is hovered over.
+ * @param {goog.math.Coordinate} opt_draggerElCenter current position of
+ *     the dragged element.
+ * @protected
+ */
+goog.fx.DragListGroup.prototype.updateCurrHoverItem = function(
+    hoverNextItem, opt_draggerElCenter) {
+  if (goog.isDefAndNotNull(hoverNextItem)) {
+    this.currHoverItem_ = hoverNextItem;
+  }
+};
+
+
+/**
+ * Inserts the currently dragged item in its new place.
+ *
+ * This method is used for insertion only when updateWhileDragging_ is false
+ * (otherwise there is no need for that). In the basic implementation
+ * the element is inserted before the currently hovered over item (this can
+ * be changed by overriding the method in subclasses).
+ *
+ * @protected
+ */
+goog.fx.DragListGroup.prototype.insertCurrHoverItem = function() {
+  this.origList_.insertBefore(this.currDragItem_, this.currHoverItem_);
 };
 
 
