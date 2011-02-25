@@ -115,9 +115,7 @@ goog.require('goog.userAgent');
    * Any legal combination of these selectors will work with
    * `dojo.query()`, including compound selectors ("," delimited).
    * Very complex and useful searches can be constructed with this
-   * palette of selectors and when combined with functions for
-   * maniplation presented by dojo.NodeList, many types of DOM
-   * manipulation operations become very straightforward.
+   * palette of selectors.
    *
    * Unsupported Selectors:
    * ----------------------
@@ -147,11 +145,11 @@ goog.require('goog.userAgent');
    * ---------------------
    *
    * If something other than a String is passed for the query,
-   * `dojo.query` will return a new `dojo.NodeList` constructed from
+   * `dojo.query` will return a new array constructed from
    * that parameter alone and all further processing will stop. This
-   * means that if you have a reference to a node or NodeList, you
-   * can quickly construct a new NodeList from the original by
-   * calling `dojo.query(node)` or `dojo.query(list)`.
+   * means that if you have a reference to a node or array or nodes, you
+   * can quickly construct a new array of nodes from the original by
+   * calling `dojo.query(node)` or `dojo.query(array)`.
    *
    * example:
    *   search the entire document for elements with the class "foo":
@@ -1341,7 +1339,7 @@ goog.dom.query = (function() {
           // IE QSA queries may incorrectly include comment nodes, so we throw
           // the zipping function into 'remove' comments mode instead of the
           // normal 'skip it' which every other QSA-clued browser enjoys
-          // skip expensive duplication checks and just wrap in a NodeList
+          // skip expensive duplication checks and just wrap in an array.
           if (goog.userAgent.IE) {
             r.commentStrip = true;
           } else {
@@ -1469,7 +1467,7 @@ goog.dom.query = (function() {
    * The main executor. Type specification from above.
    * @param {string|Array} query The query.
    * @param {(string|Node)=} root The root.
-   * @return { {length: number} } The elements that matched the query.
+   * @return {!Array} The elements that matched the query.
    */
   var query = function(query, root) {
     // NOTE: elementsById is not currently supported
@@ -1523,7 +1521,7 @@ goog.dom.query = (function() {
     if (r && r.nozip) {
       return r;
     }
-    return _zip(r); // dojo.NodeList
+    return _zip(r);
   }
 
   // FIXME: need to add infrastructure for post-filtering pseudos, ala :last
