@@ -815,7 +815,7 @@ goog.fx.DragListGroup.prototype.isInRect_ = function(pos, rect) {
  * opt_draggerElCenter can be used for more sophisticated effects.
  *
  * @param {Element} hoverNextItem element of the list that is hovered over.
- * @param {goog.math.Coordinate} opt_draggerElCenter current position of
+ * @param {goog.math.Coordinate=} opt_draggerElCenter current position of
  *     the dragged element.
  * @protected
  */
