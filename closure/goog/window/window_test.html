@@ -15,13 +15,34 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.window</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.dom');
+  goog.require('goog.events');
   goog.require('goog.string');
   goog.require('goog.testing.AsyncTestCase');
   goog.require('goog.testing.jsunit');
   goog.require('goog.window');
 </script>
+<style type='text/css'>
+
+.goog-like-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+</style>
 </head>
 <body>
+
+<h4>Some links for testing referrer stripping manually.</h4>
+<div class='goog-like-link'>http://www.google.com/search?q=;</div>
+<div class='goog-like-link'>http://www.google.com/search?q=x&amp;lang=en</div>
+<div class='goog-like-link'>http://www.google.com/search?q=x;lang=en</div>
+<div class='goog-like-link'>http://www.google.com/search?q="</div>
+<div class='goog-like-link'>http://www.google.com/search?q='</div>
+<div class='goog-like-link'>http://www.google.com/search?q=&lt;</div>
+<div class='goog-like-link'>http://www.google.com/search?q=&gt;</div>
+
 <script>
 
   var newWin;
@@ -33,6 +54,19 @@ See the COPYING file for details.
   var WIN_LOAD_TRY_TIMEOUT = 100;
   var MAX_WIN_LOAD_TRIES = 50; // 50x100ms = 5s waiting for window to load.
   var winLoadCounter;
+
+  function setUpPage() {
+    var anchors = goog.dom.getElementsByTagNameAndClass(
+        'div', 'goog-like-link');
+    for (var i = 0; i < anchors.length; i++) {
+      goog.events.listen(
+          anchors[i], 'click',
+          function(e) {
+            goog.window.open(
+                goog.dom.getTextContent(e.target), {'noreferrer': true});
+          });
+    }
+  }
 
   /**
    * Some tests should only run locally, because they will trigger
@@ -118,10 +152,9 @@ See the COPYING file for details.
     }
 
     var newWinUrl = decodeURI(newWin.location);
-    newWinUrl = newWinUrl.replace(/%3B/g, ';');
     var expectedUrlSuffix = decodeURI(urlParam);
     assertTrue('New window href should have ended with <' + expectedUrlSuffix +
-        '> (after decoding) but was <' + newWinUrl + '>',
+        '> but was <' + newWinUrl + '>',
         goog.string.endsWith(newWinUrl, expectedUrlSuffix));
   }
 
@@ -153,15 +186,31 @@ See the COPYING file for details.
   }
 
   function testOpenSemicolon() {
-      doTestOpenWindow(true,  "beforesemi;aftersemi");
+    doTestOpenWindow(true,  "beforesemi;aftersemi");
   }
 
   function testTwoSemicolons() {
-      doTestOpenWindow(true,  "a;b;c");
+    doTestOpenWindow(true,  "a;b;c");
   }
 
-  function testOpenEncoded() {
-      doTestOpenWindow(true,  "this&that");
+  function testOpenAmpersand() {
+    doTestOpenWindow(true,  "this&that");
+  }
+
+  function testOpenSingleQuote() {
+    doTestOpenWindow(true,  "'");
+  }
+
+  function testOpenDoubleQuote() {
+    doTestOpenWindow(true,  '"');
+  }
+
+  function testOpenDoubleQuote() {
+    doTestOpenWindow(true,  '<');
+  }
+
+  function testOpenDoubleQuote() {
+    doTestOpenWindow(true,  '>');
   }
 
   function testOpenBlank() {
@@ -178,6 +227,11 @@ See the COPYING file for details.
           goog.partial(continueTestOpenWindow, false, urlParam));
     }
     setTimeout(continueFn, 100);
+  }
+
+  /** @this {Element} */
+  function stripReferrer() {
+    goog.window.open(this.href, {'noreferrer': true});
   }
 
 </script>
