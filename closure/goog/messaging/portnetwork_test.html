@@ -46,7 +46,8 @@ function testRouteMessageThroughWorkers() {
   master.addPort('worker2', new goog.messaging.PortChannel(
       new Worker('testdata/portnetwork_worker2.js')));
   master.addPort(
-      'frame', new goog.messaging.PortChannel(window.frames['inner'], '*'));
+      'frame', goog.messaging.PortChannel.forEmbeddedWindow(
+          window.frames['inner'], '*'));
 
   master.dial('worker1').registerService('result', function(msg) {
     assertArrayEquals(['main', 'worker2', 'frame', 'worker1'], msg);

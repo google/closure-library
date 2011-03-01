@@ -12,6 +12,7 @@
 self.CLOSURE_BASE_PATH = '../../';
 importScripts('../../bootstrap/webworkers.js');
 importScripts('../../base.js');
+importScripts('../../../../third_party/closure/goog/deps.js');
 
 // The provide is necessary to stop the jscompiler from thinking this is an
 // entry point and adding it into the manifest incorrectly.

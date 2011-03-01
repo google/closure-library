@@ -22,7 +22,7 @@ goog.require('goog.messaging.PortChannel');
 <body>
 <script>
 var caller = new goog.messaging.PortCaller(
-    new goog.messaging.PortChannel(self, '*'));
+    goog.messaging.PortChannel.forGlobalWindow('*'));
 
 caller.dial('worker2').registerService('sendToWorker1', function(msg) {
   msg.push('frame');
