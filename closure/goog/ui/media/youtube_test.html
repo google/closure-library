@@ -16,13 +16,12 @@ See the COPYING file for details.
   goog.require('goog.debug.Logger');
   goog.require('goog.dom');
   goog.require('goog.events');
-  goog.require('goog.testing.jsunit');
   goog.require('goog.testing.LooseMock');
+  goog.require('goog.testing.jsunit');
   goog.require('goog.ui.Component');
   goog.require('goog.ui.Control');
   goog.require('goog.ui.ControlRenderer');
   goog.require('goog.ui.media.FlashObject');
-  goog.require('goog.ui.media.Media');
   goog.require('goog.ui.media.Youtube');
   goog.require('goog.ui.media.YoutubeModel');
 </script>
@@ -51,35 +50,76 @@ See the COPYING file for details.
     var el = goog.dom.getElementsByTagNameAndClass('div',
         goog.ui.media.Youtube.CSS_CLASS, parent);
     assertEquals(1, el.length);
+    assertEquals(YOUTUBE_URL, control.getDataModel().getUrl());
   }
 
   function testParsingUrl() {
-    var model = goog.ui.media.YoutubeModel.newInstance(YOUTUBE_URL);
-    assertEquals('dMH0bHeiRNg', model.getVideoId());
+    // a simple link
+    assertExtractsCorrectly(
+        'uddeBVmKTqE',
+        'http://www.youtube.com/watch?v=uddeBVmKTqE');
+    // a channel link
+    assertExtractsCorrectly(
+        '4Pb9e1uu3EQ',
+        'http://www.youtube.com/watch?v=4Pb9e1uu3EQ&feature=channel');
+    // a UK link
+    assertExtractsCorrectly(
+        'xqWXO87TlH4',
+        'http://uk.youtube.com/watch?gl=GB&hl=en-GB&v=xqWXO87TlH4');
+    // an India link
+    assertExtractsCorrectly(
+        '10FKWOn4qGA',
+        'http://www.youtube.com/watch?gl=IN&hl=en-GB&v=10FKWOn4qGA');
+    // an ad
+    assertExtractsCorrectly(
+        'wk1_kDJhyBk',
+        'http://www.youtube.com/watch?v=wk1_kDJhyBk&feature=yva-video-display');
+    // a related video
+    assertExtractsCorrectly(
+        '7qL2PuLF0SI',
+        'http://www.youtube.com/watch?v=7qL2PuLF0SI&feature=related');
+    // with a timestamp
+    assertExtractsCorrectly(
+        'siJZXtsdfsf',
+        'http://www.youtube.com/watch?v=siJZXtsdfsf#t=2m59s');
+    // with a timestamp and multiple hash params
+    assertExtractsCorrectly(
+        'siJZXtabdef',
+        'http://www.youtube.com/watch?v=siJZXtabdef#t=1m59s&videos=foo');
+    // with a timestamp, multiple regular and hash params
+    assertExtractsCorrectly(
+        'siJZXtabxyz',
+        'http://www.youtube.com/watch?foo=bar&v=siJZXtabxyz&x=y#t=1m30s' +
+            '&videos=bar');
+    // only hash params
+    assertExtractsCorrectly(
+        'MWBpQoPwT3U',
+        'http://www.youtube.com/watch#!playnext=1&playnext_from=TL' +
+            '&videos=RX1XPmgerGo&v=MWBpQoPwT3U');
+    // only hash params
+    assertExtractsCorrectly(
+        'MWBpQoPwT3V',
+        'http://www.youtube.com/watch#!playnext=1&playnext_from=TL' +
+            '&videos=RX1XPmgerGp&v=MWBpQoPwT3V&foo=bar');
+    assertExtractsCorrectly(
+        'jqxENMKaeCU',
+        'http://www.youtube.com/watch#!v=jqxENMKaeCU&feature=related');
+    // Lots of query params, some of them w/ numbers, one of them before the
+    // video ID
+    assertExtractsCorrectly(
+        'qbce2yN81mE',
+        'http://www.youtube.com/watch?usg=AFQjCNFf90T3fekgdVBmPp-Wgya5_CTSaw' +
+            '&v=qbce2yN81mE&source=video&vgc=rss');
+    assertExtractsCorrectly(
+        'Lc-8onVA5Jk',
+        'http://www.youtube.com/watch?v=Lc-8onVA5Jk&feature=dir');
 
-    var model = goog.ui.media.YoutubeModel.newInstance(
-        'http://br.youtube.com/watch?v=dMH0bHeiRNg');
-    assertEquals('dMH0bHeiRNg', model.getVideoId());
-
-    assertEquals('dMH0bHeiRNg', goog.ui.media.YoutubeModel.newInstance(
-        'https://br.youtube.com/watch?v=dMH0bHeiRNg').getVideoId());
-
-    assertEquals('dMH0bHeiRNg', goog.ui.media.YoutubeModel.newInstance(
-        'https://br.youtube.com/watch?v=dMH0bHeiRNg&featured=dir')
-        .getVideoId());
-
-    assertEquals('dMH0bHeiRNg', goog.ui.media.YoutubeModel.newInstance(
-        'https://br.youtube.com/watch?featured=dir&amp;v=dMH0bHeiRNg')
-        .getVideoId());
-
-    assertEquals('qbce2yN81mE', goog.ui.media.YoutubeModel.newInstance(
-        'http://www.youtube.com/watch?usg=AFQjCNFf90gdVBmPp-Wgya5_CTSaw&amp;' +
-        'v=qbce2yN81mE&amp;source=video&amp;vgc=rss').getVideoId());
-
-    assertThrows('youtube parser expects a well formed URL', function() {
-      var videoId = goog.ui.media.YoutubeModel.newInstance(
-          'http://invalidUrl/watch?v=dMH0bHeiRNg').getVideoId();
+    var invalidUrl = 'http://invalidUrl/watch?v=dMH0bHeiRNg';
+    var e = assertThrows('parser expects a well formed URL', function() {
+      goog.ui.media.YoutubeModel.newInstance(invalidUrl);
     });
+    assertEquals(
+        'failed to parse video id from youtube url: ' + invalidUrl, e.message);
   }
 
   function testBuildingUrl() {
@@ -179,6 +219,11 @@ See the COPYING file for details.
     var flash = goog.dom.getElementsByTagNameAndClass('div',
         goog.ui.media.FlashObject.CSS_CLASS, parent);
     assertEquals(1, flash.length);
+  }
+
+  function assertExtractsCorrectly(expectedVideoId, url) {
+    var youtube = goog.ui.media.YoutubeModel.newInstance(url);
+    assertEquals('videoid for ' + url, expectedVideoId, youtube.getVideoId());
   }
 </script>
 </body>
