@@ -15,6 +15,9 @@ See the COPYING file for details.
   <script>
     goog.require('goog.array');
     goog.require('goog.dom');
+    goog.require('goog.dom.a11y');
+    goog.require('goog.dom.a11y.Role');
+    goog.require('goog.dom.a11y.State');
     goog.require('goog.dom.classes');
     goog.require('goog.events.KeyCodes');
     goog.require('goog.testing.asserts');
@@ -172,6 +175,37 @@ See the COPYING file for details.
         goog.ui.Checkbox.State.UNDETERMINED,
         testCheckboxWithState.getChecked());
     testCheckboxWithState.dispose();
+  }
+
+  function testGetAriaRole() {
+    checkbox.createDom();
+
+    assertEquals("Checkbox's ARIA role should be 'checkbox'",
+        goog.dom.a11y.Role.CHECKBOX,
+        goog.dom.a11y.getRole(checkbox.getElement()));
+  }
+
+  function testUpdateAriaState() {
+    checkbox.createDom();
+
+    assertEquals('Checkbox must have default false ARIA state aria-checked',
+        'false', goog.dom.a11y.getState(checkbox.getElement(),
+        goog.dom.a11y.State.CHECKED));
+
+    checkbox.setChecked(goog.ui.Checkbox.State.CHECKED);
+    assertEquals('Checkbox must have true ARIA state aria-checked', 'true',
+        goog.dom.a11y.getState(checkbox.getElement(),
+        goog.dom.a11y.State.CHECKED));
+
+    checkbox.setChecked(goog.ui.Checkbox.State.UNCHECKED);
+    assertEquals('Checkbox must have false ARIA state aria-checked', 'false',
+        goog.dom.a11y.getState(checkbox.getElement(),
+        goog.dom.a11y.State.CHECKED));
+
+    checkbox.setChecked(goog.ui.Checkbox.State.UNDETERMINED);
+    assertEquals('Checkbox must have mixed ARIA state aria-checked', 'mixed',
+        goog.dom.a11y.getState(checkbox.getElement(),
+        goog.dom.a11y.State.CHECKED));
   }
 
   function testSpaceKey() {

@@ -22,6 +22,9 @@ goog.provide('goog.ui.Checkbox');
 goog.provide('goog.ui.Checkbox.State');
 
 goog.require('goog.array');
+goog.require('goog.dom.a11y');
+goog.require('goog.dom.a11y.Role');
+goog.require('goog.dom.a11y.State');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -212,6 +215,9 @@ goog.ui.Checkbox.prototype.decorateInternal = function(element) {
   } else {
     this.updateView();
   }
+
+  // Initialize ARIA role
+  goog.dom.a11y.setRole(element, goog.dom.a11y.Role.CHECKBOX);
 };
 
 
@@ -227,6 +233,7 @@ goog.ui.Checkbox.prototype.enterDocument = function() {
 
 /**
  * Updates the CSS class names after the checked state has changed.
+ * Also updates the ARIA state.
  * @protected
  */
 goog.ui.Checkbox.prototype.updateView = function() {
@@ -245,6 +252,25 @@ goog.ui.Checkbox.prototype.updateView = function() {
       }
     });
     goog.dom.classes.set(el, classesToAssign.join(' '));
+    goog.dom.a11y.setState(el, goog.dom.a11y.State.CHECKED,
+                           this.ariaStateFromCheckState_());
+  }
+};
+
+
+/**
+ * Gets the checkbox's ARIA (accessibility) state from its checked state.
+ * @return {string} The value of goog.dom.a11y.state.PRESSED. Either 'true',
+ *     'false', or 'mixed'.
+ * @private
+ */
+goog.ui.Checkbox.prototype.ariaStateFromCheckState_ = function() {
+  if (this.checked_ == goog.ui.Checkbox.State.UNDETERMINED) {
+    return 'mixed';
+  } else if (this.checked_ == goog.ui.Checkbox.State.CHECKED) {
+    return 'true';
+  } else {
+    return 'false';
   }
 };
 
