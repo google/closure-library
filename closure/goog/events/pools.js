@@ -32,6 +32,12 @@ goog.require('goog.userAgent.jscript');
 
 
 /**
+ * @define {boolean} Whether to always assume the garbage collector is good.
+ */
+goog.events.ASSUME_GOOG_GC = false;
+
+
+/**
  * Helper function for returning an object that is used for the lookup trees.
  * This might use an object pool depending on the script engine.
  * @return { {count_: number, remaining_: number} } A new or reused object.
@@ -127,7 +133,8 @@ goog.events.pools.releaseEvent;
 
 
 (function() {
-  var BAD_GC = goog.userAgent.jscript.HAS_JSCRIPT &&
+  var BAD_GC = !goog.events.ASSUME_GOOG_GC &&
+      goog.userAgent.jscript.HAS_JSCRIPT &&
       !goog.userAgent.jscript.isVersion('5.7');
 
   // These functions are shared between the pools' createObject functions and
