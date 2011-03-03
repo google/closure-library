@@ -34,7 +34,7 @@ goog.require('goog.userAgent.jscript');
 /**
  * @define {boolean} Whether to always assume the garbage collector is good.
  */
-goog.events.ASSUME_GOOG_GC = false;
+goog.events.ASSUME_GOOD_GC = false;
 
 
 /**
@@ -133,7 +133,7 @@ goog.events.pools.releaseEvent;
 
 
 (function() {
-  var BAD_GC = !goog.events.ASSUME_GOOG_GC &&
+  var BAD_GC = !goog.events.ASSUME_GOOD_GC &&
       goog.userAgent.jscript.HAS_JSCRIPT &&
       !goog.userAgent.jscript.isVersion('5.7');
 
