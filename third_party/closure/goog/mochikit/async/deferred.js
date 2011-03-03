@@ -179,8 +179,8 @@ goog.async.Deferred.prototype.continue_ = function(isSuccess, res) {
 
 /**
  * Called when either a success or a failure happens.
- * @param {*} res The result.
  * @param {boolean} isSuccess Whether the result is a success or an error.
+ * @param {*} res The result.
  * @private
  */
 goog.async.Deferred.prototype.resback_ = function(isSuccess, res) {
@@ -369,6 +369,7 @@ goog.async.Deferred.prototype.isError = function(res) {
 
 /**
  * @return {boolean} Whether an errback has been registered.
+ * @private
  */
 goog.async.Deferred.prototype.hasErrback_ = function() {
   return goog.array.some(this.chain_, function(chainRow) {
