@@ -142,13 +142,6 @@ function testGetInitialIframeContent() {
   assertEquals(/contentEditable/i.test(htmlOut), false);
   propertyReplacer.set(goog.editor.BrowserFeature,
       'HAS_CONTENT_EDITABLE', true);
-  propertyReplacer.set(goog.editor.BrowserFeature,
-      'FOCUSES_EDITABLE_BODY_ON_HTML_CLICK', false);
-  htmlOut = goog.editor.icontent.getInitialIframeContent_(
-      info, html, styleInfo);
-  assertEquals(/<html[^>]+?contentEditable/i.test(htmlOut), true);
-  propertyReplacer.set(goog.editor.BrowserFeature,
-      'FOCUSES_EDITABLE_BODY_ON_HTML_CLICK', true);
   htmlOut = goog.editor.icontent.getInitialIframeContent_(
       info, html, styleInfo);
   assertEquals(/<body[^>]+?contentEditable/i.test(htmlOut), true);
