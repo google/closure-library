@@ -101,9 +101,6 @@ goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
   if (opt_callback) {
     goog.events.listen(x, goog.net.EventType.COMPLETE, opt_callback);
   }
-  goog.events.listen(x,
-                     goog.net.EventType.READY,
-                     goog.partial(goog.testing.net.XhrIo.cleanupSend_, x));
   if (opt_timeoutInterval) {
     x.setTimeoutInterval(opt_timeoutInterval);
   }
@@ -318,11 +315,15 @@ goog.testing.net.XhrIo.prototype.getWithCredentials = function() {
  */
 goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
   if (this.active_) {
-    this.active_ = false;
-    this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
-    this.dispatchEvent(goog.net.EventType.COMPLETE);
-    this.dispatchEvent(goog.net.EventType.ABORT);
-    this.simulateReady();
+    try {
+      this.active_ = false;
+      this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
+      this.dispatchEvent(goog.net.EventType.COMPLETE);
+      this.dispatchEvent(goog.net.EventType.ABORT);
+      this.simulateReady();
+    } finally {
+      goog.testing.net.XhrIo.cleanupSend_(this);
+    }
   }
 };
 
@@ -397,16 +398,20 @@ goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
   this.response_ = response || '';
   this.responseHeaders_ = opt_headers || {};
 
-  if (this.isSuccess()) {
-    this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
-    this.dispatchEvent(goog.net.EventType.SUCCESS);
-  } else {
-    this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
-    this.lastError_ = this.getStatusText() + ' [' + this.getStatus() + ']';
-    this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
-    this.dispatchEvent(goog.net.EventType.ERROR);
+  try {
+    if (this.isSuccess()) {
+      this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
+      this.dispatchEvent(goog.net.EventType.SUCCESS);
+    } else {
+      this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
+      this.lastError_ = this.getStatusText() + ' [' + this.getStatus() + ']';
+      this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
+      this.dispatchEvent(goog.net.EventType.ERROR);
+    }
+    this.simulateReady();
+  } finally {
+    goog.testing.net.XhrIo.cleanupSend_(this);
   }
-  this.simulateReady();
 };
 
 
