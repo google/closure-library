@@ -563,7 +563,7 @@ function testTruncate() {
 function testTruncateMiddle() {
   var str = 'abcdefghijklmnopqrstuvwxyz';
   assertEquals('abc...xyz', goog.string.truncateMiddle(str, 6));
-  assertEquals( 'abc...yz', goog.string.truncateMiddle(str, 5));
+  assertEquals('abc...yz', goog.string.truncateMiddle(str, 5));
   assertEquals(str, goog.string.truncateMiddle(str, str.length));
 
   var html = 'true &amp;&amp; false == false';
@@ -572,6 +572,17 @@ function testTruncateMiddle() {
   assertEquals('Should not clip html char',
       'true &amp;&amp;...= false',
        goog.string.truncateMiddle(html, 14, true));
+
+  assertEquals('ab...xyz', goog.string.truncateMiddle(str, 5, null, 3));
+  assertEquals('abcdefg...xyz', goog.string.truncateMiddle(str, 10, null, 3));
+  assertEquals('abcdef...wxyz', goog.string.truncateMiddle(str, 10, null, 4));
+  assertEquals('...yz', goog.string.truncateMiddle(str, 2, null, 3));
+
+  assertEquals('Should clip html char', 'true &amp;&...lse',
+      goog.string.truncateMiddle(html, 14, null, 3));
+  assertEquals('Should not clip html char',
+      'true &amp;&amp; fal...lse',
+       goog.string.truncateMiddle(html, 14, true, 3));
 }
 
 
