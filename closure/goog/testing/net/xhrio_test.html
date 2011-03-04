@@ -53,25 +53,6 @@ function testStaticSend() {
                0, sendInstances.length);
 }
 
-function testStaticSendWithException() {
-  goog.testing.net.XhrIo.send('url', function() {
-    if (!this.isSuccess()) {
-      throw Error('The xhr did not complete successfully!');
-    }
-  });
-  var sendInstances = goog.testing.net.XhrIo.getSendInstances();
-  var xhr = sendInstances[sendInstances.length - 1];
-  try {
-    xhr.simulateResponse(400, '');
-  } catch(e) {
-    // Do nothing with the exception; we just want to make sure
-    // the class cleans itself up properly when an exception is
-    // thrown.
-  }
-  assertEquals('Send instance array not cleaned up properly!',
-               0, sendInstances.length);
-}
-
 function testMultipleSend() {
   var xhr = new goog.testing.net.XhrIo();
   assertFalse('isActive before first request', xhr.isActive());
