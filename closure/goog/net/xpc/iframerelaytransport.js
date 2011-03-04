@@ -234,7 +234,7 @@ goog.net.xpc.IframeRelayTransport.receiveMessage_ =
     if (!fragmentInfo) {
       fragmentInfo =
           goog.net.xpc.IframeRelayTransport.fragmentMap_[messageIdStr] =
-          {fragments : [], received : 0, expected : 0};
+          {fragments: [], received: 0, expected: 0};
     }
 
     if (goog.string.contains(fragmentIdStr, '++')) {
@@ -315,6 +315,7 @@ goog.net.xpc.IframeRelayTransport.prototype.send = function(service, payload) {
  * @param {string} encodedPayload The message content, URI encoded.
  * @param {string=} opt_fragmentIdStr If sending a fragment, a string that
  *     identifies the fragment.
+ * @private
  */
 goog.net.xpc.IframeRelayTransport.prototype.send_ =
     function(service, encodedPayload, opt_fragmentIdStr) {
