@@ -454,9 +454,9 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
   }
 
 
-  if (goog.userAgent.IE) {
-    // IE has a bug where if the cursor is directly before a block node
-    // (e.g., the content is "foo[cursor]<blockquote>bar</blockquote>"),
+  if (goog.userAgent.IE && !goog.userAgent.isVersion(9)) {
+    // IE (before IE9) has a bug where if the cursor is directly before a block
+    // node (e.g., the content is "foo[cursor]<blockquote>bar</blockquote>"),
     // the FormatBlock command actually formats the "bar" instead of the "foo".
     // This is just wrong. To work-around this, we want to move the
     // selection back one character, and then restore it to its prior position.
