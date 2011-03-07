@@ -19,6 +19,7 @@ goog.require('goog.dom');
 goog.require('goog.fs');
 goog.require('goog.fs.DirectoryEntry.Behavior');
 goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -32,6 +33,7 @@ var fsExists = goog.isDef(goog.global.requestFileSystem);
 var deferredFs = fsExists ? goog.fs.getTemporary() : null;
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 var continueTesting = goog.bind(asyncTestCase.continueTesting, asyncTestCase);
+var stubs = new goog.testing.PropertyReplacer();
 
 function setUpPage() {
   if (!fsExists) {
@@ -65,6 +67,28 @@ function tearDown() {
       addCallback(continueTesting);
   asyncTestCase.waitForAsync('removing filesystem');
 }
+
+function testUnavailableTemporaryFilesystem() {
+  stubs.set(goog.global, 'requestFileSystem', null);
+  asyncTestCase.waitForAsync('testUnavailableTemporaryFilesystem');
+
+  goog.fs.getTemporary(1024).addErrback(function(e) {
+    assertEquals('File API unsupported', e.message);
+    continueTesting();
+  });
+}
+
+
+function testUnavailablePersistentFilesystem() {
+  stubs.set(goog.global, 'requestFileSystem', null);
+  asyncTestCase.waitForAsync('testUnavailablePersistentFilesystem');
+
+  goog.fs.getPersistent(2048).addErrback(function(e) {
+    assertEquals('File API unsupported', e.message);
+    continueTesting();
+  });
+}
+
 
 function testWriteFile() {
   if (!fsExists) {
