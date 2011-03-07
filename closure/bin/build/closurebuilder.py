@@ -194,7 +194,7 @@ def main():
 
   # Add scripts specified on the command line.
   for path in args:
-    sources.add(source.Source(_PathSource(path)))
+    sources.add(_PathSource(js_path))
 
   logging.info('%s sources scanned.', len(sources))
 
