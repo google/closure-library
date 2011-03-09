@@ -318,11 +318,14 @@ goog.testing.net.XhrIo.prototype.getWithCredentials = function() {
  */
 goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
   if (this.active_) {
-    this.active_ = false;
-    this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
-    this.dispatchEvent(goog.net.EventType.COMPLETE);
-    this.dispatchEvent(goog.net.EventType.ABORT);
-    this.simulateReady();
+    try {
+      this.active_ = false;
+      this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
+      this.dispatchEvent(goog.net.EventType.COMPLETE);
+      this.dispatchEvent(goog.net.EventType.ABORT);
+    } finally {
+      this.simulateReady();
+    }
   }
 };
 
@@ -397,16 +400,19 @@ goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
   this.response_ = response || '';
   this.responseHeaders_ = opt_headers || {};
 
-  if (this.isSuccess()) {
-    this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
-    this.dispatchEvent(goog.net.EventType.SUCCESS);
-  } else {
-    this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
-    this.lastError_ = this.getStatusText() + ' [' + this.getStatus() + ']';
-    this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
-    this.dispatchEvent(goog.net.EventType.ERROR);
+  try {
+    if (this.isSuccess()) {
+      this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
+      this.dispatchEvent(goog.net.EventType.SUCCESS);
+    } else {
+      this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
+      this.lastError_ = this.getStatusText() + ' [' + this.getStatus() + ']';
+      this.simulateReadyStateChange(goog.net.XmlHttp.ReadyState.COMPLETE);
+      this.dispatchEvent(goog.net.EventType.ERROR);
+    }
+  } finally {
+    this.simulateReady();
   }
-  this.simulateReady();
 };
 
 
