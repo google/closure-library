@@ -59,7 +59,7 @@ goog.fs.Entry = function(fs, entry) {
  * @return {boolean} Whether or not this entry is a file.
  */
 goog.fs.Entry.prototype.isFile = function() {
-  return this.entry_.isFile();
+  return this.entry_.isFile;
 };
 
 
@@ -67,7 +67,7 @@ goog.fs.Entry.prototype.isFile = function() {
  * @return {boolean} Whether or not this entry is a directory.
  */
 goog.fs.Entry.prototype.isDirectory = function() {
-  return this.entry_.isDirectory();
+  return this.entry_.isDirectory;
 };
 
 

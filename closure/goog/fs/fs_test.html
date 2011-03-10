@@ -90,6 +90,32 @@ function testUnavailablePersistentFilesystem() {
 }
 
 
+function testIsFile() {
+  if (!fsExists) {
+    return;
+  }
+
+  loadFile('test', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(function(fileEntry) {
+        assertFalse(fileEntry.isDirectory());
+        assertTrue(fileEntry.isFile());
+      }).addCallback(continueTesting);
+  asyncTestCase.waitForAsync('testIsFile');
+}
+
+function testIsDirectory() {
+  if (!fsExists) {
+    return;
+  }
+
+  loadDirectory('test', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(function(fileEntry) {
+        assertTrue(fileEntry.isDirectory());
+        assertFalse(fileEntry.isFile());
+      }).addCallback(continueTesting);
+  asyncTestCase.waitForAsync('testIsDirectory');
+}
+
 function testWriteFile() {
   if (!fsExists) {
     return;
