@@ -232,6 +232,12 @@ goog.ui.LabelInput.prototype.handleFocus_ = function(e) {
  * @private
  */
 goog.ui.LabelInput.prototype.handleBlur_ = function(e) {
+  // We listen to the click event when we enter focusAndSelect mode so we can
+  // fake an artificial focus when the user clicks on the input box. However,
+  // if the user clicks on something else (and we lose focus), there is no
+  // need for an artificial focus event.
+  this.eventHandler_.unlisten(
+      this.getElement(), goog.events.EventType.CLICK, this.handleFocus_);
   this.ffKeyRestoreValue_ = null;
   this.hasFocus_ = false;
   this.check_();
@@ -422,6 +428,16 @@ goog.ui.LabelInput.prototype.focusAndSelect = function() {
     this.getElement().value = this.label_;
   }
   this.getElement().select();
+
+  // Since the object now has focus, we won't get a focus event when they
+  // click in the input element. The expected behavior when you click on
+  // the default text is that it goes away and allows you to type...so we
+  // have to fire an artificial focus event when we're in focusAndSelect mode.
+  if (this.eventHandler_) {
+    this.eventHandler_.listenOnce(
+        this.getElement(), goog.events.EventType.CLICK, this.handleFocus_);
+  }
+
   // set to false in timer to let IE trigger the focus event
   goog.Timer.callOnce(this.focusAndSelect_, 10, this);
 };
