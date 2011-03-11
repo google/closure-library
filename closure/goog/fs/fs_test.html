@@ -13,6 +13,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script src="../../../third_party/closure/goog/deps.js"></script>
 <script>
+goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.async.DeferredList');
 goog.require('goog.dom');
@@ -242,6 +243,100 @@ function testTruncate() {
   asyncTestCase.waitForAsync('testWriteFile');
 }
 
+
+function testListEmptyDirectory() {
+  if (!fsExists) {
+    return;
+  }
+
+  loadTestDir().
+      addCallback(function(dir) { return dir.listDirectory(); }).
+      addCallback(function(entries) { assertArrayEquals([], entries); }).
+      addCallback(continueTesting);
+  asyncTestCase.waitForAsync('testListEmptyDirectory');
+}
+
+
+function testListDirectory() {
+  if (!fsExists) {
+    return;
+  }
+
+  goog.async.Deferred.succeed().
+      // Create the test directory and test entries.
+      awaitDeferred(
+          loadDirectory('testDir', goog.fs.DirectoryEntry.Behavior.CREATE)).
+      awaitDeferred(
+          loadFile('testFile', goog.fs.DirectoryEntry.Behavior.CREATE)).
+      awaitDeferred(loadTestDir()).
+
+      // Verify the contents of the directory listing.
+      addCallback(function(testDir) { return testDir.listDirectory(); }).
+      addCallback(function(entries) {
+        assertEquals(2, entries.length);
+
+        var dir = goog.array.find(entries, function(entry) {
+          return entry.getName() == 'testDir';
+        });
+        assertNotNull(dir);
+        assertTrue(dir.isDirectory());
+
+        var file = goog.array.find(entries, function(entry) {
+          return entry.getName() == 'testFile';
+        });
+        assertNotNull(file);
+        assertTrue(file.isFile());
+      }).
+      addCallback(continueTesting);
+
+  asyncTestCase.waitForAsync('testListDirectory');
+}
+
+
+function testListBigDirectory() {
+  if (!fsExists) {
+    return;
+  }
+
+  function getFileName(i) {
+    return 'file' + goog.string.padNumber(i, String(count).length);
+  }
+
+  // NOTE: This was intended to verify that the results from repeated
+  // DirectoryReader.readEntries() callbacks are appropriately concatenated.
+  // In current versions of Chrome (March 2011), all results are returned in the
+  // first callback regardless of directory size. The count can be increased in
+  // the future to test batched result lists once they are implemented.
+  var count = 100;
+
+  var expectedNames = [];
+
+  var def = goog.async.Deferred.succeed();
+  for (var i = 0; i < count; i++) {
+    var name = getFileName(i);
+    expectedNames.push(name);
+
+    def.awaitDeferred(
+        loadFile(name, goog.fs.DirectoryEntry.Behavior.CREATE));
+  }
+
+  def.awaitDeferred(loadTestDir()).
+      addCallback(function(testDir) { return testDir.listDirectory(); }).
+      addCallback(function(entries) {
+        assertEquals(count, entries.length);
+
+        assertSameElements(expectedNames,
+                           goog.array.map(entries, function(entry) {
+                             return entry.getName();
+                           }));
+        assertTrue(goog.array.every(entries, function(entry) {
+                     return entry.isFile();
+                   }));
+      }).
+      addCallback(continueTesting);
+
+  asyncTestCase.waitForAsync('testListBigDirectory');
+}
 
 
 function loadTestDir() {

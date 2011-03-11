@@ -109,7 +109,7 @@ goog.fs.Entry.prototype.moveTo = function(parent, opt_newName) {
   var d = new goog.async.Deferred();
   this.entry_.moveTo(
       parent.dir_, opt_newName,
-      goog.bind(function(entry) { d.callback(this.wrapEntry_(entry)); }, this),
+      goog.bind(function(entry) { d.callback(this.wrapEntry(entry)); }, this),
       goog.bind(function(err) {
         var msg = 'moving ' + this.getFullPath() + ' into ' +
             parent.getFullPath() +
@@ -134,7 +134,7 @@ goog.fs.Entry.prototype.copyTo = function(parent, opt_newName) {
   var d = new goog.async.Deferred();
   this.entry_.copyTo(
       parent.dir_, opt_newName,
-      goog.bind(function(entry) { d.callback(this.wrapEntry_(entry)); }, this),
+      goog.bind(function(entry) { d.callback(this.wrapEntry(entry)); }, this),
       goog.bind(function(err) {
         var msg = 'copying ' + this.getFullPath() + ' into ' +
             parent.getFullPath() +
@@ -150,9 +150,9 @@ goog.fs.Entry.prototype.copyTo = function(parent, opt_newName) {
  *
  * @param {!Entry} entry The underlying Entry object.
  * @return {!goog.fs.Entry} The appropriate subclass wrapper.
- * @private
+ * @protected
  */
-goog.fs.Entry.prototype.wrapEntry_ = function(entry) {
+goog.fs.Entry.prototype.wrapEntry = function(entry) {
   return entry.isFile ?
       new goog.fs.FileEntry(this.fs_, /** @type {!FileEntry} */ (entry)) :
       new goog.fs.DirectoryEntry(
@@ -301,6 +301,39 @@ goog.fs.DirectoryEntry.prototype.getDirectory = function(path, opt_behavior) {
         var msg = 'loading directory ' + path + ' from ' + this.getFullPath();
         d.errback(new goog.fs.Error(err.code, msg));
       }, this));
+  return d;
+};
+
+
+/**
+ * Gets a list of all entries in this directory.
+ *
+ * @return {!goog.async.Deferred} The deferred list of {@link goog.fs.Entry}
+ *     results. If an error occurs, the errback is called with a
+ *     {@link goog.fs.Error}.
+ */
+goog.fs.DirectoryEntry.prototype.listDirectory = function() {
+  var d = new goog.async.Deferred();
+  var reader = this.dir_.createReader();
+  var results = [];
+
+  var errorCallback = goog.bind(function(err) {
+    var msg = 'listing directory ' + this.getFullPath();
+    d.errback(new goog.fs.Error(err.code, msg));
+  }, this);
+
+  var successCallback = goog.bind(function(entries) {
+    if (entries.length) {
+      for (var i = 0, entry; entry = entries[i]; i++) {
+        results.push(this.wrapEntry(entry));
+      }
+      reader.readEntries(successCallback, errorCallback);
+    } else {
+      d.callback(results);
+    }
+  }, this);
+
+  reader.readEntries(successCallback, errorCallback);
   return d;
 };
 
