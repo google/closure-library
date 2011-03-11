@@ -818,15 +818,14 @@ goog.ui.SplitPane.prototype.handleDragEnd_ = function(e) {
   // Push iframe overlay down.
   this.iframeOverlay_.style.zIndex =
       goog.ui.SplitPane.IframeOverlayIndex_.HIDDEN;
-  if (this.continuousResize_) {
-    return;
-  }
-  if (this.isVertical()) {
-    var top = this.getRelativeTop_(e.top);
-    this.setFirstComponentSize(top);
-  } else {
-    var left = this.getRelativeLeft_(e.left);
-    this.setFirstComponentSize(left);
+  if (!this.continuousResize_) {
+    if (this.isVertical()) {
+      var top = this.getRelativeTop_(e.top);
+      this.setFirstComponentSize(top);
+    } else {
+      var left = this.getRelativeLeft_(e.left);
+      this.setFirstComponentSize(left);
+    }
   }
 
   this.dispatchEvent(goog.ui.SplitPane.EventType.HANDLE_DRAG_END);

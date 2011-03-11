@@ -17,6 +17,7 @@ See the COPYING file for details.
   goog.require('goog.dom.classes');
   goog.require('goog.math.Size');
   goog.require('goog.style');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.Component');
   goog.require('goog.ui.SplitPane');
@@ -137,6 +138,34 @@ function testOrientationChange() {
   assertEquals(290, secondSize.width);
   assertEquals(300, secondSize.height);
 }
+
+function testDragEndEvent() {
+  splitpane.setInitialSize(200);
+  splitpane.setHandleSize(10);
+  splitpane.render(goog.dom.getElement('sandbox'));
+  var eventFired = false;
+  goog.events.listen(splitpane, goog.ui.SplitPane.EventType.HANDLE_DRAG_END,
+      function() {
+        eventFired = true;
+      });
+
+  var handle = goog.dom.getElementsByTagNameAndClass('div',
+      'goog-splitpane-handle')[0];
+
+  goog.testing.events.fireMouseDownEvent(handle);
+  goog.testing.events.fireMouseMoveEvent(handle);
+  goog.testing.events.fireMouseUpEvent(handle);
+  assertTrue('HANDLE_DRAG_END event expected', eventFired);
+
+  splitpane.setContinuousResize(false);
+  eventFired = false;
+  goog.testing.events.fireMouseDownEvent(handle);
+  goog.testing.events.fireMouseMoveEvent(handle);
+  goog.testing.events.fireMouseUpEvent(handle);
+  assertTrue('HANDLE_DRAG_END event expected', eventFired);
+}
+
+
 
 </script>
 </body>
