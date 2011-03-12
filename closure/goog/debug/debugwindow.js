@@ -134,6 +134,14 @@ goog.debug.DebugWindow.prototype.welcomeMessage = 'LOGGING';
 
 
 /**
+ * Whether to force enable the window on a severe log.
+ * @type {boolean}
+ * @private
+ */
+goog.debug.DebugWindow.prototype.enableOnSevere_ = false;
+
+
+/**
  * Reference to debug window
  * @type {Window}
  * @protected
@@ -240,6 +248,17 @@ goog.debug.DebugWindow.prototype.setEnabled = function(enable) {
 
 
 /**
+ * Sets whether the debug window should be force enabled when a severe log is
+ * encountered.
+ * @param {boolean} enableOnSevere Whether to enable on severe logs..
+ */
+goog.debug.DebugWindow.prototype.setForceEnableOnSevere =
+    function(enableOnSevere) {
+  this.enableOnSevere_ = enableOnSevere;
+};
+
+
+/**
  * Whether we are currently capturing logger output.
  * @return {boolean} whether we are currently capturing logger output.
  */
@@ -323,6 +342,10 @@ goog.debug.DebugWindow.prototype.clear_ = function() {
 goog.debug.DebugWindow.prototype.addLogRecord = function(logRecord) {
   if (this.filteredLoggers_[logRecord.getLoggerName()]) {
     return;
+  }
+  if (this.enableOnSevere_ &&
+      logRecord.getLevel() >= goog.debug.Logger.Level.SEVERE) {
+    this.setEnabled(true);
   }
   var html = this.formatter_.formatRecord(logRecord);
   this.write_(html);
