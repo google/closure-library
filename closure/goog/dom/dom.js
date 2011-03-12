@@ -1053,6 +1053,8 @@ goog.dom.flattenElement = function(element) {
  *     children of the given element.
  */
 goog.dom.getChildren = function(element) {
+  // We check if the children attribute is supported for child elements
+  // since IE8 misuses the attribute by also including comments.
   if (goog.dom.BrowserFeature.CAN_USE_CHILDREN_ATTRIBUTE &&
       element.children != undefined) {
     return element.children;
