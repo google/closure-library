@@ -23,9 +23,11 @@ goog.provide('goog.fs.DirectoryEntry.Behavior');
 goog.provide('goog.fs.Entry');
 goog.provide('goog.fs.FileEntry');
 
+goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileWriter');
+goog.require('goog.string');
 
 
 
@@ -302,6 +304,52 @@ goog.fs.DirectoryEntry.prototype.getDirectory = function(path, opt_behavior) {
         d.errback(new goog.fs.Error(err.code, msg));
       }, this));
   return d;
+};
+
+
+/**
+ * Opens the directory for the specified path, creating the directory and any
+ * intermediate directories as necessary.
+ *
+ * @param {string} path The directory path to create. May be absolute or
+ *     relative to the current directory. The parent directory ".." and current
+ *     directory "." are supported.
+ * @return {!goog.async.Deferred} A deferred {@link goog.fs.DirectoryEntry} for
+ *     the requested path. If an error occurs, the errback is called with a
+ *     {@link goog.fs.Error}.
+ */
+goog.fs.DirectoryEntry.prototype.createPath = function(path) {
+  // If the path begins at the root, reinvoke createPath on the root directory.
+  if (goog.string.startsWith(path, '/')) {
+    var root = this.getFileSystem().getRoot();
+    if (this.getFullPath() != root.getFullPath()) {
+      return root.createPath(path);
+    }
+  }
+
+  // Filter out any empty path components caused by '//' or a leading slash.
+  var parts = goog.array.filter(path.split('/'), goog.identityFunction);
+  var existed = [];
+
+  function getNextDirectory(dir) {
+    if (!parts.length) {
+      return goog.async.Deferred.succeed(dir);
+    }
+
+    var def;
+    var nextDir = parts.shift();
+
+    if (nextDir == '..') {
+      def = dir.getParent();
+    } else if (nextDir == '.') {
+      def = goog.async.Deferred.succeed(dir);
+    } else {
+      def = dir.getDirectory(nextDir, goog.fs.DirectoryEntry.Behavior.CREATE);
+    }
+    return def.addCallback(getNextDirectory);
+  }
+
+  return getNextDirectory(this);
 };
 
 
