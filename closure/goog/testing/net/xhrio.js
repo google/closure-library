@@ -25,6 +25,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
+goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XhrIo.ResponseType');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
@@ -449,9 +450,9 @@ goog.testing.net.XhrIo.prototype.isComplete = function() {
  */
 goog.testing.net.XhrIo.prototype.isSuccess = function() {
   switch (this.getStatus()) {
-    case 200:       // HTTP Success
-    case 204:       // HTTP Success - no content
-    case 304:       // HTTP Cache
+    case goog.net.HttpStatus.OK:
+    case goog.net.HttpStatus.NO_CONTENT:
+    case goog.net.HttpStatus.NOT_MODIFIED:
       return true;
 
     default:

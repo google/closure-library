@@ -49,6 +49,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
+goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.net.xhrMonitor');
 goog.require('goog.object');
@@ -844,9 +845,9 @@ goog.net.XhrIo.prototype.isSuccess = function() {
     case 0:         // Used for local XHR requests
       return !this.isLastUriEffectiveSchemeHttp_();
 
-    case 200:       // Http Success
-    case 204:       // Http Success - no content
-    case 304:       // Http Cache
+    case goog.net.HttpStatus.OK:
+    case goog.net.HttpStatus.NO_CONTENT:
+    case goog.net.HttpStatus.NOT_MODIFIED:
       return true;
 
     default:
