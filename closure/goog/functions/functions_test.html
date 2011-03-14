@@ -156,6 +156,22 @@ function testOr() {
   assertFalse(goog.functions.or(goog.functions.identity)(false));
 }
 
+function testNot() {
+  assertTrue(goog.functions.not(gFalse)());
+  assertCallOrderAndReset(['gFalse']);
+
+  assertTrue(goog.functions.not(goog.functions.identity)(false));
+  assertFalse(goog.functions.not(goog.functions.identity)(true));
+
+  var f = function(a, b) {
+    assertEquals(1, a);
+    assertEquals(2, b);
+    return false;
+  };
+
+  assertTrue(goog.functions.not(f)(1, 2));
+}
+
 function testCreate(expectedArray) {
   var tempConstructor = function(a, b) {
     this.foo = a;
