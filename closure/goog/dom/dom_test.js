@@ -479,6 +479,35 @@ function testReplaceNode() {
   assertNull('badNode should not be in the DOM tree', $('badReplaceNode'));
 }
 
+function testAppendChildAt() {
+  var parent = $('p2');
+  var origNumChildren = parent.childNodes.length;
+
+  var child1 = document.createElement('div');
+  goog.dom.insertChildAt(parent, child1, origNumChildren);
+  assertEquals(origNumChildren + 1, parent.childNodes.length);
+
+  var child2 = document.createElement('div');
+  goog.dom.insertChildAt(parent, child2, origNumChildren + 42);
+  assertEquals(origNumChildren + 2, parent.childNodes.length);
+
+  var child3 = document.createElement('div');
+  goog.dom.insertChildAt(parent, child3, 0);
+  assertEquals(origNumChildren + 3, parent.childNodes.length);
+
+  var child4 = document.createElement('div');
+  goog.dom.insertChildAt(parent, child3, 2);
+  assertEquals(origNumChildren + 3, parent.childNodes.length);
+
+  parent.removeChild(child1);
+  parent.removeChild(child2);
+  parent.removeChild(child3);
+
+  var emptyParentNotInDocument = document.createElement('div');
+  goog.dom.insertChildAt(emptyParentNotInDocument, child1, 0);
+  assertEquals(1, emptyParentNotInDocument.childNodes.length);
+}
+
 function testFlattenElement() {
   var text = document.createTextNode('Text');
   var br = document.createElement('br');
