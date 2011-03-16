@@ -669,6 +669,7 @@ goog.ui.ComboBox.prototype.onInputBlur_ = function(e) {
  * @param {goog.events.KeyEvent} e Key event to handle.
  * @return {boolean} Whether the event was handled by the combo box.
  * @protected
+ * @suppress {visibility} performActionInternal
  */
 goog.ui.ComboBox.prototype.handleKeyEvent = function(e) {
   var isMenuVisible = this.menu_.isVisible();
