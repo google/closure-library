@@ -162,7 +162,7 @@ goog.ui.AnimatedZippy.prototype.setExpanded = function(expanded) {
 goog.ui.AnimatedZippy.prototype.onAnimate_ = function(e) {
   var contentElement = this.getContentElement();
   var h = contentElement.offsetHeight;
-  contentElement.marginTop = (e.y - h) + 'px';
+  contentElement.style.marginTop = (e.y - h) + 'px';
 };
 
 
