@@ -2,10 +2,8 @@
 <script type="text/javascript">
 // Display the current iframe location for debugging purposes.
 function displayLocation() {
-  var s = location.hash.replace('&', '&amp;')
-                       .replace('<', '&lt;')
-                       .replace('>', '&gt;') || 'null';
-  document.body.innerHTML = s;
+  document.body.innerHTML = '';
+  document.body.appendChild(document.createTextNode(location.hash || 'null'));
 }
 
 if (window != window.top) {
