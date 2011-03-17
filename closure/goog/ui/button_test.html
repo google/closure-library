@@ -180,7 +180,7 @@ Author: attila@google.com (Attila Bodis)
 
       dispatchedActionCount = 0;
       button.handleKeyEvent({keyCode: goog.events.KeyCodes.ENTER});
-      assertEquals('Disabled button must have dispatched ACTION on Enter key',
+      assertEquals('Disabled button must not dispatch ACTION on Enter key',
           0, dispatchedActionCount);
 
       dispatchedActionCount = 0;
