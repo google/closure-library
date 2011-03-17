@@ -98,6 +98,9 @@ function testProvideStrictness() {
   goog.provide('goog.xy');
   assertProvideFails('goog.xy');
 
+  goog.provide('goog.xy.z');
+  assertProvideFails('goog.xy');
+
   window['goog']['xyz'] = 'Bob';
   assertProvideFails('goog.xyz');
 

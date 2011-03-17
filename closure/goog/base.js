@@ -104,9 +104,13 @@ goog.provide = function(name) {
     if (goog.getObjectByName(name) && !goog.implicitNamespaces_[name]) {
       throw Error('Namespace "' + name + '" already declared.');
     }
+    delete goog.implicitNamespaces_[name];
 
     var namespace = name;
     while ((namespace = namespace.substring(0, namespace.lastIndexOf('.')))) {
+      if (goog.getObjectByName(namespace)) {
+        break;
+      }
       goog.implicitNamespaces_[namespace] = true;
     }
   }
