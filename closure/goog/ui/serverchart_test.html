@@ -46,6 +46,14 @@ function testMinValue() {
   assertEquals(line.getMinValue(), 1);
 }
 
+function testMargins() {
+  var pie = new goog.ui.ServerChart(goog.ui.ServerChart.ChartType.PIE3D,
+      180, 104);
+  pie.setMargins(1, 2, 3, 4);
+  assertEquals('1,2,3,4',
+      pie.getUri().getParameterValue(goog.ui.ServerChart.UriParam.MARGINS));
+}
+
 function testSetParameterValue() {
   var scatter = new goog.ui.ServerChart(goog.ui.ServerChart.ChartType.SCATTER,
       180, 104);

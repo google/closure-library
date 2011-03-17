@@ -546,36 +546,37 @@ goog.ui.ServerChart.MaximumValue = {
  * @enum {string}
  */
 goog.ui.ServerChart.UriParam = {
-  TYPE: 'cht',
-  SIZE: 'chs',
-  DATA: 'chd',
-  X_LABELS: 'chl',
-  LEFT_Y_LABELS: 'chly',
-  DATA_LABELS: 'chld',
-  RIGHT_LABELS: 'chlr',
-  RIGHT_LABEL_POSITIONS: 'chlrp',
-  MISC_PARAMS: 'chp',
-  DATA_COLORS: 'chco',
-  DATA_SCALING: 'chds',
-  LEGEND_TEXTS: 'chdl',
-  LEGEND_POSITION: 'chdlp',
-  LABEL_COLORS: 'chlc',
-  BAR_HEIGHT: 'chbh',
-  LINE_STYLES: 'chls',
-  GRID: 'chg',
-  X_AXIS_STYLE: 'chx',
-  MARKERS: 'chm',
   BACKGROUND_FILL: 'chf',
+  BAR_HEIGHT: 'chbh',
+  DATA: 'chd',
+  DATA_COLORS: 'chco',
+  DATA_LABELS: 'chld',
+  DATA_SCALING: 'chds',
   DIGITAL_SIGNATURE: 'sig',
-  TITLE: 'chtt',
-  TITLE_FORMAT: 'chts',
+  GEOGRAPHICAL_REGION: 'chtm',
+  GRID: 'chg',
+  LABEL_COLORS: 'chlc',
+  LEFT_Y_LABELS: 'chly',
   LEGEND: 'chdl',
-  MULTI_AXIS_TYPES: 'chxt',
-  MULTI_AXIS_LABEL_TEXT: 'chxl',
+  LEGEND_POSITION: 'chdlp',
+  LEGEND_TEXTS: 'chdl',
+  LINE_STYLES: 'chls',
+  MARGINS: 'chma',
+  MARKERS: 'chm',
+  MISC_PARAMS: 'chp',
   MULTI_AXIS_LABEL_POSITION: 'chxp',
+  MULTI_AXIS_LABEL_TEXT: 'chxl',
   MULTI_AXIS_RANGE: 'chxr',
   MULTI_AXIS_STYLE: 'chxs',
-  GEOGRAPHICAL_REGION: 'chtm'
+  MULTI_AXIS_TYPES: 'chxt',
+  RIGHT_LABELS: 'chlr',
+  RIGHT_LABEL_POSITIONS: 'chlrp',
+  SIZE: 'chs',
+  TITLE: 'chtt',
+  TITLE_FORMAT: 'chts',
+  TYPE: 'cht',
+  X_AXIS_STYLE: 'chx',
+  X_LABELS: 'chl'
 };
 
 
@@ -728,6 +729,22 @@ goog.ui.ServerChart.prototype.setMaxValue = function(maxValue) {
  */
 goog.ui.ServerChart.prototype.getMaxValue = function() {
   return this.maxValue_;
+};
+
+
+/**
+ * Sets the chart margins.
+ *
+ * @param {number} leftMargin The size in pixels of the left margin.
+ * @param {number} rightMargin The size in pixels of the right margin.
+ * @param {number} topMargin The size in pixels of the top margin.
+ * @param {number} bottomMargin The size in pixels of the bottom margin.
+ */
+goog.ui.ServerChart.prototype.setMargins = function(leftMargin, rightMargin,
+    topMargin, bottomMargin) {
+  var margins = [leftMargin, rightMargin, topMargin, bottomMargin].join(',');
+  var UriParam = goog.ui.ServerChart.UriParam;
+  this.uri_.setParameterValue(UriParam.MARGINS, margins);
 };
 
 
