@@ -195,6 +195,15 @@ goog.fx.DragListGroup.prototype.currDragItem_;
 
 
 /**
+ * The drag list that {@code this.currDragItem_} is currently hovering over, or
+ * null if it is not hovering over a list.
+ * @type {Element}
+ * @private
+ */
+goog.fx.DragListGroup.prototype.currHoverList_;
+
+
+/**
  * The original drag list that the current drag item came from. We need to
  * remember this in case the user drops the item outside of any lists, in which
  * case we return the item to its original location.
@@ -429,6 +438,29 @@ goog.fx.DragListGroup.prototype.disposeInternal = function() {
 
 
 /**
+ * Caches the heights of each drag list and drag item, except for the current
+ * drag item.
+ *
+ * @param {Element} currDragItem The item currently being dragged.
+ * @private
+ */
+goog.fx.DragListGroup.prototype.recacheListAndItemBounds_ = function(
+    currDragItem) {
+  for (var i = 0, n = this.dragLists_.length; i < n; i++) {
+    var dragList = this.dragLists_[i];
+    dragList.dlgBounds_ = goog.style.getBounds(dragList);
+  }
+
+  for (var i = 0, n = this.dragItems_.length; i < n; i++) {
+    var dragItem = this.dragItems_[i];
+    if (dragItem != currDragItem) {
+      dragItem.dlgBounds_ = goog.style.getBounds(dragItem);
+    }
+  }
+};
+
+
+/**
  * Handles the start of a drag action (i.e. MOUSEDOWN on any drag item).
  *
  * @param {goog.events.BrowserEvent} e Event object fired on a drag item handle.
@@ -459,6 +491,7 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   this.origList_ = /** @type {Element} */ (currDragItem.parentNode);
   this.origNextItem_ = goog.dom.getNextElementSibling(currDragItem);
   this.currHoverItem_ = this.origNextItem_;
+  this.currHoverList_ = this.origList_;
 
   // Create a clone for dragging.
   var draggerEl = this.cloneNode_(currDragItem);
@@ -506,16 +539,7 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   if (this.updateWhileDragging_) {
     currDragItem.style.display = 'none';
   }
-  for (var i = 0, n = this.dragLists_.length; i < n; i++) {
-    var dragList = this.dragLists_[i];
-    dragList.dlgBounds_ = goog.style.getBounds(dragList);
-  }
-  for (var i = 0, n = this.dragItems_.length; i < n; i++) {
-    var dragItem = this.dragItems_[i];
-    if (dragItem != currDragItem) {
-      dragItem.dlgBounds_ = goog.style.getBounds(dragItem);
-    }
-  }
+  this.recacheListAndItemBounds_(currDragItem);
   currDragItem.style.display = '';
 
   // Create the dragger object.
@@ -576,7 +600,6 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
       // the dragged item, but update the hovered item instead.
       this.updateCurrHoverItem(hoverNextItem, draggerElCenter);
     }
-
     this.currDragItem_.style.display = '';
     // Add drag list's hover class (if any).
     if (hoverList.dlgDragHoverClass_) {
@@ -589,6 +612,7 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     if (!this.isCurrDragItemAlwaysDisplayed_) {
       this.currDragItem_.style.display = 'none';
     }
+
     // Remove hover classes (if any) from all drag lists.
     for (var i = 0, n = this.dragLists_.length; i < n; i++) {
       var dragList = this.dragLists_[i];
@@ -596,6 +620,13 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
         goog.dom.classes.remove(dragList, dragList.dlgDragHoverClass_);
       }
     }
+  }
+
+  // If the current hover list is different than the last, the lists may have
+  // shrunk, so we should recache the bounds.
+  if (hoverList != this.currHoverList_) {
+    this.currHoverList_ = hoverList;
+    this.recacheListAndItemBounds_(this.currDragItem_);
   }
 
   this.dispatchEvent(
@@ -670,6 +701,7 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
 
   // Clear all our temporary fields that are only defined while dragging.
   this.currDragItem_ = null;
+  this.currHoverList_ = null;
   this.origList_ = null;
   this.origNextItem_ = null;
   this.draggerEl_ = null;
