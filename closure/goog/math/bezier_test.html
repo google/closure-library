@@ -64,7 +64,37 @@ See the COPYING file for details.
     assert(goog.math.nearlyEquals(2, input.x3));
     assert(goog.math.nearlyEquals(3, input.y3));    
   }
-  
+
+  function testSolvePositionFromXValue() {
+    var eps = 1e-6;
+    var bezier = new goog.math.Bezier(0, 0, 0.25, 0.1, 0.25, 1, 1, 1);
+    var pt = bezier.getPoint(0.5);
+    assertRoughlyEquals(0.3125, pt.x, eps);
+    assertRoughlyEquals(0.5375, pt.y, eps);
+    assertRoughlyEquals(0.321,
+        bezier.solvePositionFromXValue(bezier.getPoint(0.321).x), eps);
+  }
+
+  function testSolveYValueFromXValue() {
+    var eps = 1e-6;
+    // The following two examples are taken from
+    // http://www.netzgesta.de/dev/cubic-bezier-timing-function.html.
+    // The timing values shown in that page are 1 - <value> so the
+    // bezier curves in this test are constructed with 1 - ctrl points. E.g.
+    // ctrl points (0.25, 0.1, 0.25, 1.0) become (0.75, 0.9, 0.75 0) here.
+    // Default example. 
+    var bezier = new goog.math.Bezier(1, 1, 0.75, 0.9, 0.75, 0, 0, 0);
+    assertRoughlyEquals(0.024374631, bezier.solveYValueFromXValue(0.2), eps);
+    assertRoughlyEquals(0.317459494, bezier.solveYValueFromXValue(0.6), eps);
+    assertRoughlyEquals(0.905205002, bezier.solveYValueFromXValue(0.9), eps);
+
+    // Ease-in example.
+    var bezier2 = new goog.math.Bezier(1, 1, 0.58, 1, 0, 0, 0, 0);
+    assertRoughlyEquals(0.308366667, bezier2.solveYValueFromXValue(0.2), eps);
+    assertRoughlyEquals(0.785139061, bezier2.solveYValueFromXValue(0.6), eps);
+    assertRoughlyEquals(0.982973389, bezier2.solveYValueFromXValue(0.9), eps);
+  }
+ 
 </script>
 </body>
 </html>
