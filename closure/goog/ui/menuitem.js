@@ -109,14 +109,18 @@ goog.ui.MenuItem.prototype.setCheckable = function(checkable) {
 
 /**
  * Returns the text caption of the component while ignoring accelerators.
- * @return {?string} Text caption of the component (null if none).
+ * @override
  */
 goog.ui.MenuItem.prototype.getCaption = function() {
-  return this.getCaptionInternal(function(element) {
-    return goog.dom.classes.has(element,
-        goog.getCssName('goog-menuitem-accel')) ? '' :
-        goog.dom.getTextContent(element);
- });
+  var content = this.getContent();
+  if (goog.isArray(content)) {
+    var acceleratorClass = goog.getCssName('goog-menuitem-accel');
+    return goog.array.map(content, function(node) {
+      return goog.dom.classes.has(node, acceleratorClass) ?
+          '' : goog.dom.getTextContent(node);
+    }).join('');
+  }
+  return goog.ui.MenuItem.superClass_.getCaption.call(this);
 };
 
 

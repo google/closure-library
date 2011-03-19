@@ -703,7 +703,7 @@ See the COPYING file for details.
      * Tests {@link goog.ui.Control#getCaption}.
      */
     function testGetCaption() {
-      assertNull('Empty control\'s caption must be null',
+      assertEquals('Empty control\'s caption must be empty string', '',
           (new goog.ui.Control(null)).getCaption());
 
       assertEquals('Caption must have expected value', 'Hello',

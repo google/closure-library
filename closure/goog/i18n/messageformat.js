@@ -261,8 +261,14 @@ goog.i18n.MessageFormat.prototype.formatPluralBlock_ = function(
     goog.asserts.assertString(item, 'Invalid plural key.');
 
     option = parsedPattern[item];
+
+    // If option is not provided fall back to "other".
+    if (!goog.isDef(option)) {
+      option = parsedPattern[goog.i18n.MessageFormat.OTHER_];
+    }
+
     goog.asserts.assertArray(
-        option, 'Invalid option or missing other option for select block.');
+        option, 'Invalid option or missing other option for plural block.');
   }
 
   var pluralResult = [];
@@ -536,7 +542,7 @@ goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
   }
 
   goog.asserts.assertArray(result[goog.i18n.MessageFormat.OTHER_],
-                           'Missing other key in select statement.');
+                           'Missing other key in plural statement.');
 
   return result;
 };

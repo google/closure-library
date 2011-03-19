@@ -308,6 +308,24 @@ function testSerbianSelectNestedInPlural() {
                            'CIRCLES': 1235}));
 }
 
+function testFallbackToOtherOptionInPlurals() {
+  // Use Arabic plural rules since they have all six cases.
+  // Only locale and numbers matter, the actual language of the message
+  // does not.
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.arSelect_);
+
+  var fmt = new goog.i18n.MessageFormat('{NUM_MINUTES, plural, ' +
+      'other {# minutes}}');
+
+  // These numbers exercise all cases for the arabic plural rules.
+  assertEquals('0 minutes', fmt.format({'NUM_MINUTES': 0}));
+  assertEquals('1 minutes', fmt.format({'NUM_MINUTES': 1}));
+  assertEquals('2 minutes', fmt.format({'NUM_MINUTES': 2}));
+  assertEquals('3 minutes', fmt.format({'NUM_MINUTES': 3}));
+  assertEquals('11 minutes', fmt.format({'NUM_MINUTES': 11}));
+  assertEquals('1.5 minutes', fmt.format({'NUM_MINUTES': 1.5}));
+}
+
 function testPoundShowsNumberMinusOffsetInAllCases() {
   var fmt = new goog.i18n.MessageFormat('{SOME_NUM, plural, offset:1 ' +
       '=0 {#} =1 {#} =2 {#}one {#} other {#}}');

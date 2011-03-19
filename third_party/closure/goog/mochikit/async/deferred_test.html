@@ -622,6 +622,16 @@ function testDiamondBranch() {
   d.addCallback(function(arr) { assertArrayEquals([1, 2], arr); });
 }
 
+function testRepeatedBranch() {
+  var d = new Deferred().addCallback(increment);
+
+  d.branch().
+      addCallback(assertEqualsCallback('branch should be after increment', 2)).
+      addCallback(function(res) {return d.branch();}).
+      addCallback(assertEqualsCallback('second branch should be the same', 2));
+  d.callback(1);
+}
+
 </script>
 </body>
 </html>

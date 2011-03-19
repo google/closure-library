@@ -413,7 +413,7 @@ goog.async.Deferred.prototype.fire_ = function() {
         if (goog.isDef(ret)) {
           // Bubble up the error as long as the return value hasn't changed.
           this.hadError_ = this.hadError_ && (ret == res || this.isError(ret));
-          res = ret;
+          this.result_ = res = ret;
         }
 
         if (res instanceof goog.async.Deferred) {

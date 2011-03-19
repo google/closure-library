@@ -279,8 +279,9 @@ See the COPYING file for details.
       assertTrue('Item must still have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
 
-      item.setCaption(null);
-      assertNull('getCaption() must return null', item.getCaption());
+      item.setCaption('');
+      assertEquals('getCaption() must return empty string', '',
+          item.getCaption());
       assertTrue('Item must still have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
     }
@@ -294,8 +295,9 @@ See the COPYING file for details.
       assertEquals('getCaption() must not return the accelerator', 'Hello',
           item.getCaption());
 
-      item.setCaption(null);
-      assertNull('getCaption() must return null', item.getCaption());
+      item.setCaption('');
+      assertEquals('getCaption() must return empty string', '',
+          item.getCaption());
     }
 
     function testRender() {
