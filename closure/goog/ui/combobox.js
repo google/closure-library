@@ -204,7 +204,7 @@ goog.ui.ComboBox.prototype.createDom = function() {
   this.setElementInternal(this.getDomHelper().createDom('span',
       goog.getCssName('goog-combobox'), this.input_, this.button_));
   if (this.useDropdownArrow_) {
-    this.button_.innerHTML = '&nbsp;&#x25BC;';
+    this.button_.innerHTML = '&#x25BC;';
     goog.style.setUnselectable(this.button_, true /* unselectable */);
   }
   this.input_.setAttribute('label', this.defaultText_);
@@ -620,7 +620,7 @@ goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
  */
 goog.ui.ComboBox.prototype.onDocClicked_ = function(e) {
   if (!goog.dom.contains(
-           this.menu_.getElement(), /** @type {Node} */ (e.target))) {
+      this.menu_.getElement(), /** @type {Node} */ (e.target))) {
     this.logger_.info('onDocClicked_() - dismissing immediately');
     this.dismiss();
   }
@@ -843,11 +843,11 @@ goog.inherits(goog.ui.ComboBoxItem, goog.ui.MenuItem);
 
 
 // Register a decorator factory function for goog.ui.ComboBoxItems.
-goog.ui.registry.setDecoratorByClassName(
-    goog.getCssName('goog-combobox-item'), function() {
-  // ComboBoxItem defaults to using MenuItemRenderer.
-  return new goog.ui.ComboBoxItem(null);
-});
+goog.ui.registry.setDecoratorByClassName(goog.getCssName('goog-combobox-item'),
+    function() {
+      // ComboBoxItem defaults to using MenuItemRenderer.
+      return new goog.ui.ComboBoxItem(null);
+    });
 
 
 /**
@@ -885,8 +885,9 @@ goog.ui.ComboBoxItem.prototype.setFormatFromToken = function(token) {
     var escapedToken = goog.string.regExpEscape(token);
     var caption = this.getCaption();
     if (caption) {
-      this.getElement().innerHTML =
-          caption.replace(new RegExp(escapedToken, 'i'), function(m) {
+      this.getElement().innerHTML = caption.replace(
+          new RegExp(escapedToken, 'i'),
+          function(m) {
             return '<b>' + m + '</b>';
           });
       this.setContentInternal(caption);
