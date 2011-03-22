@@ -423,8 +423,13 @@ goog.ui.Component.prototype.childIndex_ = null;
 
 /**
  * Flag used to keep track of whether a component decorated an already existing
- * element or whether it created the DOM itself.  If an element was decorated
- * dispose will remove the node from the document, it is left up to the app.
+ * element or whether it created the DOM itself.
+ *
+ * If an element is decorated, dispose will leave the node in the document.
+ * It is up to the app to remove the node.
+ *
+ * If an element was rendered, dispose will remove the node automatically.
+ *
  * @type {boolean}
  * @private
  */
