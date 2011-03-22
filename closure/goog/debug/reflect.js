@@ -144,7 +144,7 @@ goog.debug.reflect.typeOf = function(obj) {
   var isActiveXObject = goog.global.ActiveXObject &&
       obj instanceof ActiveXObject;
   var typeString = isActiveXObject ? String(obj) :
-      goog.debug.reflect.toString_.call(obj);
+      goog.debug.reflect.toString_.call(/** @type {Object} */ (obj));
   var match = typeString.match(/^\[object (\w+)\]$/);
   if (match) {
     var name = match[1];
