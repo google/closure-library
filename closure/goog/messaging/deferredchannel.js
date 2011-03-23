@@ -39,6 +39,14 @@ goog.messaging.DeferredChannel = function(deferredChannel) {
 };
 
 
+/**
+ * Cancels the wrapped Deferred.
+ */
+goog.messaging.DeferredChannel.prototype.cancel = function() {
+  this.deferred_.cancel();
+};
+
+
 /** @inheritDoc */
 goog.messaging.DeferredChannel.prototype.connect = function(opt_connectCb) {
   if (opt_connectCb) {

@@ -28,13 +28,15 @@ goog.require('goog.testing.messaging.MockMessageChannel');
 
 var mockControl, asyncMockControl;
 var mockChannel, deferredChannel;
+var cancelled;
 var deferred;
 
 function setUp() {
   mockControl = new goog.testing.MockControl();
   asyncMockControl = new goog.testing.async.MockControl(mockControl);
   mockChannel = new goog.testing.messaging.MockMessageChannel(mockControl);
-  deferred = new goog.async.Deferred();
+  cancelled = false;
+  deferred = new goog.async.Deferred(function() { cancelled = true; });
   deferredChannel = new goog.messaging.DeferredChannel(deferred);
 }
 
@@ -100,6 +102,11 @@ function testDeferredResolvedAfterRegisterDefault() {
       asyncMockControl.asyncAssertEquals('passes on register', 'test', 'val'));
   deferred.callback(mockChannel);
   mockChannel.receive('test', 'val');
+}
+
+function testCancel() {
+  deferredChannel.cancel();
+  assertTrue(cancelled);
 }
 
 </script>
