@@ -446,7 +446,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
     throw Error('[goog.net.XhrIo] Object is active with another request');
   }
 
-  var method = opt_method || 'GET';
+  var method = opt_method ? opt_method.toUpperCase() : 'GET';
 
   this.lastUri_ = url;
   this.lastError_ = '';
