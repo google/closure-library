@@ -632,6 +632,24 @@ function assertArrayEquals(a, b, opt_c) {
 
 
 /**
+ * Compares two objects that can be accessed like an array and assert that
+ * each element is equal.
+ * @param {Object} a1 First object to compare.
+ * @param {Object} a2 Second object to compare.
+ */
+function assertElementsEquals(a1, a2) {
+  if (!a1) {
+    assert(!a2);
+  } else {
+    assertEquals(a1.length, a2.length);
+    for (var i = 0; i < a1.length; ++i) {
+      assertEquals(a1[i], a2[i]);
+    }
+  }
+}
+
+
+/**
  * Compares two array-like objects without taking their order into account.
  * @param {string|goog.testing.asserts.ArrayLike} a Assertion message or the
  *     expected elements.
@@ -960,6 +978,7 @@ goog.exportSymbol('assertNaN', assertNaN);
 goog.exportSymbol('assertNotNaN', assertNotNaN);
 goog.exportSymbol('assertObjectEquals', assertObjectEquals);
 goog.exportSymbol('assertArrayEquals', assertArrayEquals);
+goog.exportSymbol('assertElementsEquals', assertElementsEquals);
 goog.exportSymbol('assertSameElements', assertSameElements);
 goog.exportSymbol('assertEvaluatesToTrue', assertEvaluatesToTrue);
 goog.exportSymbol('assertEvaluatesToFalse', assertEvaluatesToFalse);

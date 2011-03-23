@@ -21,29 +21,27 @@ See the COPYING file for details.
 
   function testConstructor() {
     var v = goog.vec.Vec3.create();
-    assertEquals(0, v[0]);
+    assertElementsEquals(0, v[0]);
     assertEquals(0, v[1]);
     assertEquals(0, v[2]);
 
-    assertTrue(goog.vec.Vec3.equals([0, 0, 0], goog.vec.Vec3.create()));
+    assertElementsEquals([0, 0, 0], goog.vec.Vec3.create());
 
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3],
-        goog.vec.Vec3.createFromValues(1, 2, 3)));
+    assertElementsEquals([1, 2, 3], goog.vec.Vec3.createFromValues(1, 2, 3));
 
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3],
-        goog.vec.Vec3.createFromArray([1, 2, 3])));
+    assertElementsEquals([1, 2, 3], goog.vec.Vec3.createFromArray([1, 2, 3]));
 
     v = goog.vec.Vec3.createFromValues(1, 2, 3);
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], goog.vec.Vec3.clone(v)));
+    assertElementsEquals([1, 2, 3], goog.vec.Vec3.clone(v));
   }
 
   function testSet() {
     var v = goog.vec.Vec3.create();
     goog.vec.Vec3.setFromValues(v, 1, 2, 3);
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], v));
+    assertElementsEquals([1, 2, 3], v);
 
     goog.vec.Vec3.setFromArray(v, [4, 5, 6]);
-    assertTrue(goog.vec.Vec3.equals([4, 5, 6], v));
+    assertElementsEquals([4, 5, 6], v);
   }
 
   function testAdd() {
@@ -52,12 +50,12 @@ See the COPYING file for details.
     var v2 = goog.vec.Vec3.clone(v0);
 
     goog.vec.Vec3.add(v2, v1, v2);
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], v0));
-    assertTrue(goog.vec.Vec3.equals([4, 5, 6], v1));
-    assertTrue(goog.vec.Vec3.equals([5, 7, 9], v2));
+    assertElementsEquals([1, 2, 3], v0);
+    assertElementsEquals([4, 5, 6], v1);
+    assertElementsEquals([5, 7, 9], v2);
 
     goog.vec.Vec3.add(goog.vec.Vec3.add(v0, v1, v2), v0, v2);
-    assertTrue(goog.vec.Vec3.equals([6, 9, 12], v2));
+    assertElementsEquals([6, 9, 12], v2);
   }
 
   function testSubtract() {
@@ -66,20 +64,20 @@ See the COPYING file for details.
     var v2 = goog.vec.Vec3.clone(v0);
 
     goog.vec.Vec3.subtract(v2, v1, v2);
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], v0));
-    assertTrue(goog.vec.Vec3.equals([4, 5, 6], v1));
-    assertTrue(goog.vec.Vec3.equals([-3, -3, -3], v2));
+    assertElementsEquals([1, 2, 3], v0);
+    assertElementsEquals([4, 5, 6], v1);
+    assertElementsEquals([-3, -3, -3], v2);
 
     goog.vec.Vec3.setFromValues(v2, 0, 0, 0);
     goog.vec.Vec3.subtract(v1, v0, v2);
-    assertTrue(goog.vec.Vec3.equals([3, 3, 3], v2));
+    assertElementsEquals([3, 3, 3], v2);
 
     v2 = goog.vec.Vec3.clone(v0);
     goog.vec.Vec3.subtract(v2, v1, v2);
-    assertTrue(goog.vec.Vec3.equals([-3, -3, -3], v2));
+    assertElementsEquals([-3, -3, -3], v2);
 
     goog.vec.Vec3.subtract(goog.vec.Vec3.subtract(v1, v0, v2), v0, v2);
-    assertTrue(goog.vec.Vec3.equals([2, 1, 0], v2));
+    assertElementsEquals([2, 1, 0], v2);
   }
 
   function testNegate() {
@@ -87,11 +85,11 @@ See the COPYING file for details.
     var v1 = goog.vec.Vec3.create();
 
     goog.vec.Vec3.negate(v0, v1);
-    assertTrue(goog.vec.Vec3.equals([-1, -2, -3], v1));
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], v0));
+    assertElementsEquals([-1, -2, -3], v1);
+    assertElementsEquals([1, 2, 3], v0);
 
     goog.vec.Vec3.negate(v0, v0);
-    assertTrue(goog.vec.Vec3.equals([-1, -2, -3], v0));
+    assertElementsEquals([-1, -2, -3], v0);
   }
 
   function testScale() {
@@ -99,12 +97,12 @@ See the COPYING file for details.
     var v1 = goog.vec.Vec3.create();
 
     goog.vec.Vec3.scale(v0, 4, v1);
-    assertTrue(goog.vec.Vec3.equals([4, 8, 12], v1));
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], v0));
+    assertElementsEquals([4, 8, 12], v1);
+    assertElementsEquals([1, 2, 3], v0);
 
     goog.vec.Vec3.setFromArray(v1, v0);
     goog.vec.Vec3.scale(v1, 5, v1);
-    assertTrue(goog.vec.Vec3.equals([5, 10, 15], v1));
+    assertElementsEquals([5, 10, 15], v1);
   }
 
   function testMagnitudeSquared() {
@@ -125,12 +123,12 @@ See the COPYING file for details.
         v0, 1 / goog.vec.Vec3.magnitude(v0), v2);
 
     goog.vec.Vec3.normalize(v0, v1);
-    assertTrue(goog.vec.Vec3.equals(v2, v1));
-    assertTrue(goog.vec.Vec3.equals([2, 3, 4], v0));
+    assertElementsEquals(v2, v1);
+    assertElementsEquals([2, 3, 4], v0);
 
     goog.vec.Vec3.setFromArray(v1, v0);
     goog.vec.Vec3.normalize(v1, v1);
-    assertTrue(goog.vec.Vec3.equals(v2, v1));
+    assertElementsEquals(v2, v1);
   }
 
   function testDot() {
@@ -146,18 +144,18 @@ See the COPYING file for details.
     var crossVec = goog.vec.Vec3.create();
 
     goog.vec.Vec3.cross(v0, v1, crossVec);
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], v0));
-    assertTrue(goog.vec.Vec3.equals([4, 5, 6], v1));
-    assertTrue(goog.vec.Vec3.equals([-3, 6, -3], crossVec));
+    assertElementsEquals([1, 2, 3], v0);
+    assertElementsEquals([4, 5, 6], v1);
+    assertElementsEquals([-3, 6, -3], crossVec);
 
     goog.vec.Vec3.setFromArray(crossVec, v1);
     goog.vec.Vec3.cross(crossVec, v0, crossVec);
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], v0));
-    assertTrue(goog.vec.Vec3.equals([4, 5, 6], v1));
-    assertTrue(goog.vec.Vec3.equals([3, -6, 3], crossVec));
+    assertElementsEquals([1, 2, 3], v0);
+    assertElementsEquals([4, 5, 6], v1);
+    assertElementsEquals([3, -6, 3], crossVec);
 
     goog.vec.Vec3.cross(v0, v0, v0);
-    assertTrue(goog.vec.Vec3.equals([0, 0, 0], v0));
+    assertElementsEquals([0, 0, 0], v0);
   }
 
   function testLerp() {
@@ -166,17 +164,17 @@ See the COPYING file for details.
     var v2 = goog.vec.Vec3.clone(v0);
 
     goog.vec.Vec3.lerp(v2, v1, 0, v2);
-    assertTrue(goog.vec.Vec3.equals([1, 2, 3], v2));
+    assertElementsEquals([1, 2, 3], v2);
     goog.vec.Vec3.lerp(v2, v1, 1, v2);
-    assertTrue(goog.vec.Vec3.equals([10, 20, 30], v2));
+    assertElementsEquals([10, 20, 30], v2);
     goog.vec.Vec3.lerp(v0, v1, .5, v2);
-    assertTrue(goog.vec.Vec3.equals([5.5, 11, 16.5], v2));
+    assertElementsEquals([5.5, 11, 16.5], v2);
   }
 
   function testEquals() {
     var v0 = goog.vec.Vec3.createFromValues(1, 2, 3);
     var v1 = goog.vec.Vec3.clone(v0);
-    assertTrue(goog.vec.Vec3.equals(v0, v1));
+    assertElementsEquals(v0, v1);
 
     v1[0] = 4;
     assertFalse(goog.vec.Vec3.equals(v0, v1));
