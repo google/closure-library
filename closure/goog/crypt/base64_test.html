@@ -46,6 +46,18 @@ function testByteArrayEncoding() {
   }
 }
 
+function testOddLengthByteArrayEncoding() {
+  var buffer = [0, 0, 0];
+  var encodedBuffer = goog.crypt.base64.encodeByteArray(buffer);
+  assertEquals('AAAA', encodedBuffer);
+
+  var decodedBuffer = goog.crypt.base64.decodeStringToByteArray(encodedBuffer);
+  assertEquals(decodedBuffer.length, buffer.length);
+  for (i = 0; i < buffer.length; i++) {
+    assertEquals(buffer[i], decodedBuffer[i]);
+  }
+}
+
 function testShortcutPathEncoding() {
   // Test the higher-level API (tests the btoa/atob shortcut path)
   for (var i = 0; i < tests.length; i += 2) {
@@ -68,7 +80,6 @@ function testMultipleIterations() {
 
     var encoded = goog.crypt.base64.encodeByteArray(input);
     var decoded = goog.crypt.base64.decodeStringToByteArray(encoded);
-    assert("Encoded length not a multiple of 4?", !(encoded.length % 4));
     assertEquals("Decoded length not equal to input length?",
         input.length, decoded.length);
 
