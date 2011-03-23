@@ -95,15 +95,17 @@ goog.inherits(goog.messaging.PortChannel, goog.messaging.AbstractChannel);
  *     http://dev.w3.org/html5/postmsg/#dom-window-postmessage.
  * @param {goog.Timer=} opt_timer The timer that regulates how often the initial
  *     connection message is attempted. This will be automatically disposed once
- *     the connection is established.
- * @return {!goog.messaging.MessageChannel} The PortChannel. Although this may
- *     not actually be an instance of the PortChannel class, it will behave like
- *     one in that MessagePorts may be sent across it.
+ *     the connection is established, or when the connection is cancelled.
+ * @return {!goog.messaging.DeferredChannel} The PortChannel. Although this is
+ *     not actually an instance of the PortChannel class, it will behave like
+ *     one in that MessagePorts may be sent across it. The DeferredChannel may
+ *     be cancelled before a connection is established in order to abort the
+ *     attempt to make a connection.
  */
 goog.messaging.PortChannel.forEmbeddedWindow = function(
     window, peerOrigin, opt_timer) {
-  var deferred = new goog.async.Deferred();
   var timer = opt_timer || new goog.Timer(50);
+  var deferred = new goog.async.Deferred(goog.partial(goog.dispose, timer));
 
   timer.start();
   // Every tick, attempt to set up a connection by sending in one end of an
@@ -119,7 +121,10 @@ goog.messaging.PortChannel.forEmbeddedWindow = function(
     var gotMessage = function(e) {
       channel.port1.removeEventListener(
           goog.events.EventType.MESSAGE, gotMessage, true);
-      deferred.callback(new goog.messaging.PortChannel(channel.port1));
+      // If the connection has been cancelled, don't create the channel.
+      if (!timer.isDisposed()) {
+        deferred.callback(new goog.messaging.PortChannel(channel.port1));
+      }
     };
     channel.port1.start();
     // Don't use goog.events because we don't want any lingering references to

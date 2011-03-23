@@ -259,6 +259,31 @@ function testWindow() {
   });
 }
 
+function testWindowCancelled() {
+  if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
+    return;
+  }
+  withIframe(function() {
+    var iframeChannel = goog.messaging.PortChannel.forEmbeddedWindow(
+        window.frames['inner'], '*');
+    iframeChannel.cancel();
+
+    iframeChannel.registerService('pong', function(msg) {
+      fail('no messages should be received due to cancellation');
+      goog.dispose(iframeChannel);
+      asyncTestCase.continueTesting();
+    });
+
+    iframeChannel.send('ping', 'fizzbang');
+    asyncTestCase.waitForAsync('window response');
+
+    // Leave plenty of time for the connection to be made if the test fails, but
+    // stop the test before the asyncTestCase timeout is hit.
+    setTimeout(goog.bind(asyncTestCase.continueTesting, asyncTestCase),
+               asyncTestCase.stepTimeout / 3);
+  });
+}
+
 function testWindowWontSendToWrongOrigin() {
   if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
     return;
