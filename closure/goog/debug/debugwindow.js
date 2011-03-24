@@ -343,12 +343,12 @@ goog.debug.DebugWindow.prototype.addLogRecord = function(logRecord) {
   if (this.filteredLoggers_[logRecord.getLoggerName()]) {
     return;
   }
-  if (this.enableOnSevere_ &&
-      logRecord.getLevel() >= goog.debug.Logger.Level.SEVERE) {
-    this.setEnabled(true);
-  }
   var html = this.formatter_.formatRecord(logRecord);
   this.write_(html);
+  if (this.enableOnSevere_ &&
+      logRecord.getLevel().value >= goog.debug.Logger.Level.SEVERE.value) {
+    this.setEnabled(true);
+  }
 };
 
 
