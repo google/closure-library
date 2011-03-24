@@ -17,6 +17,7 @@ See the COPYING file for details.
     goog.require('goog.dom.DomHelper');
     goog.require('goog.dom.NodeType');
     goog.require('goog.dom.TagName');
+    goog.require('goog.events.EventTarget');
     goog.require('goog.string.StringBuffer');
     goog.require('goog.testing.PropertyReplacer');
     goog.require('goog.testing.jsunit');
@@ -413,6 +414,18 @@ See the COPYING file for details.
           component.getId() + '.foo', component.makeId('foo'));
       assertEquals('Fragment must have expected value', 'foo',
           component.getFragmentFromId(component.makeId('foo')));
+    }
+
+    function testMakeIdsWithObject() {
+      var EnumDef = {
+        ENUM_1: 'enum 1',
+        ENUM_2: 'enum 2',
+        ENUM_3: 'enum 3'
+      };
+      var ids = component.makeIds(EnumDef);
+      assertEquals(component.makeId(EnumDef.ENUM_1), ids.ENUM_1);
+      assertEquals(component.makeId(EnumDef.ENUM_2), ids.ENUM_2);
+      assertEquals(component.makeId(EnumDef.ENUM_3), ids.ENUM_3);
     }
 
     function testGetElementByFragment() {
