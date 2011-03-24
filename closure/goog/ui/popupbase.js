@@ -463,7 +463,15 @@ goog.ui.PopupBase.prototype.show_ = function() {
       // in an iframe and the deactivate fires within that iframe.
       // The active element in the top-level document will remain the iframe
       // itself.
-      var activeElement = doc.activeElement;
+      var activeElement;
+      /** @preserveTry */
+      try {
+        activeElement = doc.activeElement;
+      } catch (e) {
+        // There is an IE browser bug which can cause just the reading of
+        // document.activeElement to throw an Unspecified Error.  This
+        // may have to do with loading a popup within a hidden iframe.
+      }
       while (activeElement && activeElement.nodeName == 'IFRAME') {
         /** @preserveTry */
         try {
@@ -496,7 +504,7 @@ goog.ui.PopupBase.prototype.show_ = function() {
 
   // Make the popup visible.
   if (this.type_ == goog.ui.PopupBase.Type.TOGGLE_DISPLAY) {
-     this.showPopupElement();
+    this.showPopupElement();
   } else if (this.type_ == goog.ui.PopupBase.Type.MOVE_OFFSCREEN) {
     this.reposition();
   }
