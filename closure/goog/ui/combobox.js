@@ -491,14 +491,23 @@ goog.ui.ComboBox.prototype.getValue = function() {
 
 
 /**
- * @return {string} The token for the current cursor position in the input box,
- *     when multi-input is disabled it will be the full input value.
+ * @return {string} HTML escaped token.
  */
 goog.ui.ComboBox.prototype.getToken = function() {
+  // TODO(user): Remove HTML escaping and fix the existing calls.
+  return goog.string.htmlEscape(this.getTokenText_());
+};
+
+
+/**
+ * @return {string} The token for the current cursor position in the
+ *     input box, when multi-input is disabled it will be the full input value.
+ * @private
+ */
+goog.ui.ComboBox.prototype.getTokenText_ = function() {
   // TODO(user): Implement multi-input such that getToken returns a substring
   // of the whole input delimited by commas.
-  return goog.string.htmlEscape(
-      goog.string.trim(this.labelInput_.getValue().toLowerCase()));
+  return goog.string.trim(this.labelInput_.getValue().toLowerCase());
 };
 
 
@@ -533,7 +542,7 @@ goog.ui.ComboBox.prototype.maybeShowMenu_ = function(showAll) {
     if (showAll) {
       this.logger_.fine('showing menu');
       this.setItemVisibilityFromToken_('');
-      this.setItemHighlightFromToken_(this.getToken());
+      this.setItemHighlightFromToken_(this.getTokenText_());
     }
     // In Safari 2.0, when clicking on the combox box, the blur event is
     // received after the click event that invokes this function. Since we want
@@ -643,7 +652,7 @@ goog.ui.ComboBox.prototype.onMenuSelected_ = function(e) {
       /** @type {goog.events.EventTarget} */ (e.target)))) {
     var value = e.target.getValue();
     this.logger_.fine('Menu selection: ' + value + '. Dismissing menu');
-    this.setValue(goog.string.unescapeEntities(value));
+    this.setValue(value);
     this.dismiss();
   }
   e.stopPropagation();
@@ -728,7 +737,7 @@ goog.ui.ComboBox.prototype.handleKeyEvent = function(e) {
 goog.ui.ComboBox.prototype.onInputChange_ = function(e) {
   // If the key event is text-modifying, update the menu.
   this.logger_.fine('Key is modifying: ' + this.labelInput_.getValue());
-  var token = this.getToken();
+  var token = this.getTokenText_();
   this.setItemVisibilityFromToken_(token);
   this.maybeShowMenu_(false);
   var highlighted = this.menu_.getHighlighted();
@@ -882,15 +891,15 @@ goog.ui.ComboBoxItem.prototype.isSticky = function() {
  */
 goog.ui.ComboBoxItem.prototype.setFormatFromToken = function(token) {
   if (this.isEnabled()) {
-    var escapedToken = goog.string.regExpEscape(token);
     var caption = this.getCaption();
-    if (caption) {
-      this.getElement().innerHTML = caption.replace(
-          new RegExp(escapedToken, 'i'),
-          function(m) {
-            return '<b>' + m + '</b>';
-          });
-      this.setContentInternal(caption);
+    var index = caption.toLowerCase().indexOf(token);
+    if (index >= 0) {
+      var domHelper = this.getDomHelper();
+      this.setContent([
+        domHelper.createTextNode(caption.substr(0, index)),
+        domHelper.createDom('b', null, caption.substr(index, token.length)),
+        domHelper.createTextNode(caption.substr(index + token.length))
+      ]);
     }
   }
 };

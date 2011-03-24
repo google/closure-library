@@ -58,8 +58,8 @@ function setUp() {
   comboBox.setDefaultText('Select a color...');
   comboBox.addItem(new goog.ui.ComboBoxItem('Red'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Maroon'));
-  comboBox.addItem(new goog.ui.ComboBoxItem('Gre&lt;en'));
-  comboBox.addItem(new goog.ui.ComboBoxItem('Blue', 'Blue&gt;Data'));
+  comboBox.addItem(new goog.ui.ComboBoxItem('Gre<en'));
+  comboBox.addItem(new goog.ui.ComboBoxItem('Blue', 'Blue>Data'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Royal Blue'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Yellow'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Magenta'));
@@ -151,7 +151,7 @@ function testRecomputeVisibleCountAfterChangingItems() {
       1, comboBox.getNumberOfVisibleItems_());
   comboBox.removeItemAt(0);  // Red
   assertEquals('No items should be displayed',
-      0, comboBox.getNumberOfVisibleItems_());  
+      0, comboBox.getNumberOfVisibleItems_());
 }
 
 function testSetEnabled() {
@@ -201,6 +201,14 @@ function testSetEnabled() {
   goog.testing.events.fireClickSequence(document);
   assertFalse('Menu becomes invisible after document click when re-enabled',
       comboBox.getMenu().isVisible());
+}
+
+function testSetFormatFromToken() {
+  var item = new goog.ui.ComboBoxItem('ABc');
+  item.setFormatFromToken('b');
+  var div = goog.dom.createDom('div');
+  new goog.ui.ControlRenderer().setContent(div, item.getContent());
+  assertTrue(div.innerHTML == 'A<b>B</b>c' || div.innerHTML == 'A<B>B</B>c');
 }
 
 </script>
