@@ -107,7 +107,10 @@ goog.debug.FancyWindow.prototype.writeInitialDocument_ = function() {
       goog.bind(this.openOptions_, this);
   this.dh_.getElement('closebutton').onclick =
       goog.bind(this.closeOptions_, this);
-  this.dh_.getElement('clearbutton').onclick = goog.bind(this.clear_, this);
+  this.dh_.getElement('clearbutton').onclick =
+      goog.bind(this.clear_, this);
+  this.dh_.getElement('exitbutton').onclick =
+      goog.bind(this.exit_, this);
 
   this.writeSavedMessages_();
 };
@@ -213,6 +216,20 @@ goog.debug.FancyWindow.getLoggers_ = function() {
 
 
 /**
+ * Handles the user clicking the exit button, disabled the debug window and
+ * closes the popup.
+ * @param {Event} e Event object.
+ * @private
+ */
+goog.debug.FancyWindow.prototype.exit_ = function(e) {
+  this.setEnabled(false);
+  if (this.win_) {
+    this.win_.close();
+  }
+};
+
+
+/**
  * @return {string} The style rule text, for inclusion in the initial HTML.
  */
 goog.debug.FancyWindow.prototype.getStyleRules = function() {
@@ -231,6 +248,8 @@ goog.debug.FancyWindow.prototype.getStyleRules = function() {
     '#openbutton,#closebutton{text-decoration:underline;color:#00F;cursor:' +
     'pointer;position:absolute;top:0px;right:5px;font:x-small arial;}' +
     '#clearbutton{text-decoration:underline;color:#00F;cursor:' +
+    'pointer;position:absolute;top:0px;right:80px;font:x-small arial;}' +
+    '#exitbutton{text-decoration:underline;color:#00F;cursor:' +
     'pointer;position:absolute;top:0px;right:50px;font:x-small arial;}' +
     'select{font:x-small arial;margin-right:10px;}' +
     'hr{border:0;height:5px;background-color:#8c8;color:#8c8;}';
@@ -254,6 +273,7 @@ goog.debug.FancyWindow.prototype.getHtml_ = function() {
       '<p><b>Logging: ' + this.identifier_ + '</b></p><p>' +
       this.welcomeMessage + '</p>' +
       '<span id="clearbutton">clear</span>' +
+      '<span id="exitbutton">exit</span>' +
       '<span id="openbutton">options</span>' +
     '</div>' +
     '<div id="options">' +
