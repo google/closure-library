@@ -59,7 +59,7 @@ function setUp() {
   comboBox.addItem(new goog.ui.ComboBoxItem('Red'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Maroon'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Gre<en'));
-  comboBox.addItem(new goog.ui.ComboBoxItem('Blue', 'Blue>Data'));
+  comboBox.addItem(new goog.ui.ComboBoxItem('Blue'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Royal Blue'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Yellow'));
   comboBox.addItem(new goog.ui.ComboBoxItem('Magenta'));
@@ -105,10 +105,11 @@ function testActionSelectsItem() {
   assertEquals('Gre<en', input.value);
 }
 
-function testActionSelectsItemWithData() {
-  comboBox.getMenu().getItemAt(3).dispatchEvent(
-      goog.ui.Component.EventType.ACTION);
-      assertEquals('Blue>Data', input.value);
+function testActionSelectsItemWithModel() {
+  var itemWithModel = new goog.ui.MenuItem('one', 1);
+  comboBox.addItem(itemWithModel);
+  itemWithModel.dispatchEvent(goog.ui.Component.EventType.ACTION);
+  assertEquals('one', comboBox.getValue());
 }
 
 function testRedisplayMenuAfterBackspace() {

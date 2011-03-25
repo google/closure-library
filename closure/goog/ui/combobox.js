@@ -643,16 +643,16 @@ goog.ui.ComboBox.prototype.onDocClicked_ = function(e) {
  */
 goog.ui.ComboBox.prototype.onMenuSelected_ = function(e) {
   this.logger_.info('onMenuSelected_()');
+  var item = /** @type {!goog.ui.MenuItem} */ (e.target);
   // Stop propagation of the original event and redispatch to allow the menu
   // select to be cancelled at this level. i.e. if a menu item should cause
   // some behavior such as a user prompt instead of assigning the caption as
   // the value.
   if (this.dispatchEvent(new goog.ui.ItemEvent(
-      goog.ui.Component.EventType.ACTION, this,
-      /** @type {goog.events.EventTarget} */ (e.target)))) {
-    var value = e.target.getValue();
-    this.logger_.fine('Menu selection: ' + value + '. Dismissing menu');
-    this.setValue(value);
+      goog.ui.Component.EventType.ACTION, this, item))) {
+    var caption = item.getCaption();
+    this.logger_.fine('Menu selection: ' + caption + '. Dismissing menu');
+    this.setValue(caption);
     this.dismiss();
   }
   e.stopPropagation();
