@@ -158,6 +158,28 @@ function testContains() {
   assertFalse('sibling', node3.contains(node4));
 }
 
+function testFindCommonAncestor() {
+  var findCommonAncestor = goog.structs.TreeNode.findCommonAncestor;
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  var node4 = new goog.structs.TreeNode(4, null);
+  var node5 = new goog.structs.TreeNode(5, null);
+  node1.addChild(node2);
+  node2.addChild(node3);
+  node1.addChild(node4);
+
+  assertNull('0 nodes', findCommonAncestor());
+  assertEquals('1 node', node2, findCommonAncestor(node2));
+  assertEquals('same nodes', node3, findCommonAncestor(node3, node3));
+  assertEquals('node and child node', node2, findCommonAncestor(node2, node3));
+  assertEquals('node and parent node', node1, findCommonAncestor(node2, node1));
+  assertEquals('siblings', node1, findCommonAncestor(node2, node4));
+  assertEquals('all nodes', node1,
+      findCommonAncestor(node2, node3, node4, node1));
+  assertNull('disconnected nodes', findCommonAncestor(node3, node5));
+}
+
 function testForEachChild() {
   var node1 = new goog.structs.TreeNode(1, null);
   var node2 = new goog.structs.TreeNode(2, null);
