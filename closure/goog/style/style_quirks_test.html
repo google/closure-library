@@ -449,6 +449,10 @@ Test-visible
   A div</div>
 <div id="filter" style="filter:alpha(opacity=0)">
   Another div</div>
+
+<div id="offset-parent" style="position:relative">
+  <div id="offset-child">child</div>
+</div>
 <script>
 
 var expectedFailures = new goog.testing.ExpectedFailures();
@@ -1908,6 +1912,13 @@ function testScrollBarWidth() {
       (innerAbsoluteWidth + width - 1) + 'px');
   assertTrue('should have a scroll bar', hasVerticalScroll(outer));
   assertTrue('should have a scroll bar', hasHorizontalScroll(outer));
+}
+
+function testOffsetParent() {
+  var $ = goog.dom.getElement;
+  var parent = $('offset-parent');
+  var child = $('offset-child');
+  assertEquals(parent, goog.style.getOffsetParent(child));
 }
 
 function hasVerticalScroll(el) {
