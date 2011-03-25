@@ -490,6 +490,13 @@ function testExponential() {
   assertEquals('1E3', str);
 }
 
+function testPlusSignInExponentPart() {
+  var fmt;
+  fmt = new goog.i18n.NumberFormat('0E+0');
+  str = fmt.format(45678000);
+  assertEquals('5E+7', str);
+}
+
 function testGroupingParse2() {
   var value;
   var fmt;
@@ -599,7 +606,6 @@ function isFirefox363Linux() {
       goog.userAgent.product.isVersion('3.6.3') &&
       !goog.userAgent.product.isVersion('3.6.4');
 }
-
 </script>
 </body>
 </html>
