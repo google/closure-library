@@ -25,7 +25,6 @@ See the COPYING file for details.
   goog.require('goog.dom.classes');
   goog.require('goog.events');
   goog.require('goog.events.KeyCodes');
-  goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.ComboBox');
@@ -115,9 +114,9 @@ function testActionSelectsItemWithModel() {
 
 function testRedisplayMenuAfterBackspace() {
   input.value = 'mx';
-  comboBox.onInputEvent_();
+  comboBox.onInputChange_();
   input.value = 'm';
-  comboBox.onInputEvent_();
+  comboBox.onInputChange_();
   assertEquals('Three items should be displayed',
       3, comboBox.getNumberOfVisibleItems_());
 }
@@ -140,7 +139,7 @@ function testExternallyCreatedMenu() {
 
 function testRecomputeVisibleCountAfterChangingItems() {
   input.value = 'Black';
-  comboBox.onInputEvent_();
+  comboBox.onInputChange_();
   assertEquals('No items should be displayed',
       0, comboBox.getNumberOfVisibleItems_());
   comboBox.addItem(new goog.ui.ComboBoxItem('Black'));
@@ -148,7 +147,7 @@ function testRecomputeVisibleCountAfterChangingItems() {
       1, comboBox.getNumberOfVisibleItems_());
 
   input.value = 'Red';
-  comboBox.onInputEvent_();
+  comboBox.onInputChange_();
   assertEquals('One item should be displayed',
       1, comboBox.getNumberOfVisibleItems_());
   comboBox.removeItemAt(0);  // Red
@@ -211,50 +210,6 @@ function testSetFormatFromToken() {
   var div = goog.dom.createDom('div');
   new goog.ui.ControlRenderer().setContent(div, item.getContent());
   assertTrue(div.innerHTML == 'A<b>B</b>c' || div.innerHTML == 'A<B>B</B>c');
-}
-
-function testSetValue() {
-  var clock = new goog.testing.MockClock(/* autoInstall */ true);
-  input.focus();
-  input.value = 'Black';
-  comboBox.onInputEvent_();
-  assertEquals('No items should be displayed',
-      0, comboBox.getNumberOfVisibleItems_());
-  assertFalse('Menu should be invisible', comboBox.getMenu().isVisible());
-
-  // Programmatic change with the input focus causes the menu visibility to
-  // change if needed.
-  comboBox.setValue('Blue');
-  clock.tick();
-  assertTrue('Menu should be visible', comboBox.getMenu().isVisible());
-  assertEquals('One item should be displayed',
-      1, comboBox.getNumberOfVisibleItems_());
-
-  input.value = 'Black';
-  input.blur();
-  clock.tick(goog.ui.ComboBox.BLUR_DISMISS_TIMER_MS);
-  comboBox.onInputEvent_();
-  assertEquals('No items should be displayed',
-      0, comboBox.getNumberOfVisibleItems_());
-  assertFalse('Menu should be invisible', comboBox.getMenu().isVisible());
-
-  // Programmatic change without the input focus does not pop up the menu,
-  // but still updates the list of visible items within it.
-  comboBox.setValue('Blue');
-  assertFalse('Menu should be invisible', comboBox.getMenu().isVisible());
-  assertEquals('Menu should contain one item',
-      1, comboBox.getNumberOfVisibleItems_());
-
-  // Click on the combobox. The entire menu becomes visible, the last item
-  // (programmatically) set is highlighted.
-  goog.testing.events.fireClickSequence(comboBox.getElement());
-  assertTrue('Menu should be visible', comboBox.getMenu().isVisible());
-  assertEquals('All items should be displayed',
-      comboBox.getMenu().getItemCount(), comboBox.getNumberOfVisibleItems_());
-  assertEquals('The last item set should be highlighted',
-      /* Blue= */ 3, comboBox.getMenu().getHighlightedIndex());
-
-  clock.uninstall();
 }
 
 </script>

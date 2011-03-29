@@ -248,7 +248,7 @@ goog.ui.ComboBox.prototype.enterDocument = function() {
 
   this.inputHandler_ = new goog.events.InputHandler(this.input_);
   handler.listen(this.inputHandler_,
-      goog.events.InputHandler.EventType.INPUT, this.onInputEvent_);
+      goog.events.InputHandler.EventType.INPUT, this.onInputChange_);
 
   handler.listen(this.menu_,
       goog.ui.Component.EventType.ACTION, this.onMenuSelected_);
@@ -477,7 +477,7 @@ goog.ui.ComboBox.prototype.setValue = function(value) {
   this.logger_.info('setValue() - ' + value);
   if (this.labelInput_.getValue() != value) {
     this.labelInput_.setValue(value);
-    this.handleInputChange_();
+    this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
   }
 };
 
@@ -652,10 +652,7 @@ goog.ui.ComboBox.prototype.onMenuSelected_ = function(e) {
       goog.ui.Component.EventType.ACTION, this, item))) {
     var caption = item.getCaption();
     this.logger_.fine('Menu selection: ' + caption + '. Dismissing menu');
-    if (this.labelInput_.getValue() != caption) {
-      this.labelInput_.setValue(caption);
-      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
-    }
+    this.setValue(caption);
     this.dismiss();
   }
   e.stopPropagation();
@@ -737,27 +734,12 @@ goog.ui.ComboBox.prototype.handleKeyEvent = function(e) {
  * @param {goog.events.Event} e The INPUT event to handle.
  * @private
  */
-goog.ui.ComboBox.prototype.onInputEvent_ = function(e) {
+goog.ui.ComboBox.prototype.onInputChange_ = function(e) {
   // If the key event is text-modifying, update the menu.
   this.logger_.fine('Key is modifying: ' + this.labelInput_.getValue());
-  this.handleInputChange_();
-};
-
-
-/**
- * Handles the content of the input box changing, either because of user
- * interaction or programmatic changes.
- * @private
- */
-goog.ui.ComboBox.prototype.handleInputChange_ = function() {
   var token = this.getTokenText_();
   this.setItemVisibilityFromToken_(token);
-  if (this.getDomHelper().getDocument().activeElement == this.input_) {
-    // Do not alter menu visibility unless the user focus is currently on the
-    // combobox (otherwise programmatic changes may cause the menu to become
-    // visible).
-    this.maybeShowMenu_(false);
-  }
+  this.maybeShowMenu_(false);
   var highlighted = this.menu_.getHighlighted();
   if (token == '' || !highlighted || !highlighted.isVisible()) {
     this.setItemHighlightFromToken_(token);
