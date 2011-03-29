@@ -98,6 +98,9 @@ function testProvideStrictness() {
   goog.provide('goog.xy');
   assertProvideFails('goog.xy');
 
+  goog.provide('goog.xy.z');
+  assertProvideFails('goog.xy');
+
   window['goog']['xyz'] = 'Bob';
   assertProvideFails('goog.xyz');
 
@@ -108,6 +111,14 @@ function testProvideStrictness() {
 function assertProvideFails(namespace) {
   assertThrows('goog.provide(' + namespace + ') should have failed',
       goog.partial(goog.provide, namespace));
+}
+
+function testIsProvided() {
+  goog.provide('goog.explicit');
+  assertTrue(goog.isProvided_('goog.explicit'));
+  goog.provide('goog.implicit.explicit');
+  assertFalse(goog.isProvided_('goog.implicit'));
+  assertTrue(goog.isProvided_('goog.implicit.explicit'));
 }
 
 function testGlobalize() {
@@ -177,6 +188,29 @@ function testRequireClosure() {
   assertNotUndefined('goog.events.EventTarget should be available', goog.events.EventTarget);
 }
 
+function testRequireWithExternalDuplicate() {
+  // Do a provide without going via goog.require. Then goog.require it
+  // indirectly and ensure it doesn't cause a duplicate script.
+  goog.addDependency('dup.js', ['dup.base'], []);
+  goog.addDependency('dup-child.js', ['dup.base.child'], ['dup.base']);
+  goog.provide('dup.base');
+  try {
+    goog.global.CLOSURE_IMPORT_SCRIPT = function(src) {
+      if (src == goog.basePath + 'dup.js') {
+        fail('Duplicate script written!');
+      } else if (src == goog.basePath + 'dup-child.js') {
+        // Allow expected script.
+        return true;
+      } else {
+        // Avoid affecting other state.
+        return false;
+      }
+    };
+    goog.require('dup.base.child');
+  } finally {
+    goog.global.CLOSURE_IMPORT_SCRIPT = undefined;
+  }
+}
 
 //=== tests for language enhancements ===
 
