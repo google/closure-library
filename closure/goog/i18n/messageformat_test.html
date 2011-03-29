@@ -347,6 +347,19 @@ function testSpecialCharactersInParamaterDontChangeFormat() {
   assertEquals('10 } {', fmt.format({'SOME_NUM': '10', 'GROUP': '} {'}));
 }
 
+function testMissingOrInvalidPluralParameter() {
+  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, plural,' +
+      'other {result}}');
+
+  // Key name doesn't match A != SOME_NUM.
+  assertEquals('Undefined or invalid parameter - SOME_NUM',
+               fmt.format({A: '10'}));
+
+  // Value is not a number.
+  assertEquals('Undefined or invalid parameter - SOME_NUM',
+               fmt.format({'SOME_NUM': 'Value'}));
+}
+
 </script>
 </body>
 </html>

@@ -250,7 +250,12 @@ goog.i18n.MessageFormat.prototype.formatPluralBlock_ = function(
     parsedPattern, namedParameters, result) {
   var argumentIndex = parsedPattern.argumentIndex;
   var argumentOffset = parsedPattern.argumentOffset;
-  var diff = namedParameters[argumentIndex] - argumentOffset;
+  var pluralValue = +namedParameters[argumentIndex];
+  if (isNaN(pluralValue)) {
+    result.push('Undefined or invalid parameter - ' + argumentIndex);
+    return;
+  }
+  var diff = pluralValue - argumentOffset;
 
   // Check if there is an exact match.
   var option = parsedPattern[namedParameters[argumentIndex]];
