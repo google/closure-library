@@ -12,8 +12,10 @@ See the COPYING file for details.
 var href = window.location.href;
 var newHref = href.replace(/net.*/, '');
 document.write('<base href="' + newHref + '">');
+
+var baseScript = 'base.js';
+document.write('<script src="' + baseScript + '"><\/script>');
 </script>
-<script src="base.js"></script>
 <script>
   goog.require('goog.net.IframeIo');
   goog.require('goog.testing.AsyncTestCase');

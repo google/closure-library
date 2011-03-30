@@ -206,7 +206,10 @@ function testRequireWithExternalDuplicate() {
         return false;
       }
     };
-    goog.require('dup.base.child');
+
+    // To differentiate this call from the real one.
+    var require = goog.require;
+    require('dup.base.child');
   } finally {
     goog.global.CLOSURE_IMPORT_SCRIPT = undefined;
   }
@@ -1095,8 +1098,11 @@ function testAddDependency() {
 
   goog.provide('testDep.bar');
 
+  // To differentiate this call from the real one.
+  var require = goog.require;
+
   // this used to throw an exception
-  goog.require('testDep.foo');
+  require('testDep.foo');
 
   assertTrue(goog.isObject(testDep.bar));
 
