@@ -60,6 +60,17 @@ See the COPYING file for details.
 
     instance.clear();
     assertEquals(0, instance.length);
+
+    // Test some special cases.
+    instance.setItem('emptyString', '');
+    assertEquals('', instance.getItem('emptyString'));
+    instance.setItem('isNull', null);
+    assertEquals('null', instance.getItem('isNull'))
+    instance.setItem('isUndefined', undefined);
+    assertEquals('undefined', instance.getItem('isUndefined'))
+    instance.setItem('', 'empty key');
+    assertEquals('empty key', instance.getItem(''));
+    assertEquals(4, instance.length);
   }
 
 </script>

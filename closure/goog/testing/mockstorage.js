@@ -69,7 +69,7 @@ goog.testing.MockStorage.prototype.setItem = function(key, value) {
 goog.testing.MockStorage.prototype.getItem = function(key) {
   var val = this.store_.get(key);
   // Enforce that getItem returns string values.
-  return val ? String(val) : null;
+  return (val != null) ? /** @type {string} */ (val) : null;
 };
 
 
