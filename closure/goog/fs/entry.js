@@ -16,6 +16,9 @@
  * @fileoverview Wrappers for HTML5 Entry objects. These are all in the same
  * file to avoid circular dependency issues.
  *
+ * When adding or modifying functionality in this namespace, be sure to update
+ * the mock counterparts in goog.testing.fs.
+ *
  */
 
 goog.provide('goog.fs.DirectoryEntry');

@@ -25,6 +25,7 @@ goog.provide('goog.testing.fs.FileEntry');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
+goog.require('goog.fs.DirectoryEntry');
 goog.require('goog.fs.DirectoryEntry.Behavior');
 goog.require('goog.fs.Error');
 goog.require('goog.object');
@@ -494,6 +495,26 @@ goog.testing.fs.DirectoryEntry.prototype.removeRecursively = function() {
     return d;
   });
 };
+
+
+/**
+ * @see {goog.fs.DirectoryEntry#listDirectory}
+ * @return {!goog.async.Deferred}
+ */
+goog.testing.fs.DirectoryEntry.prototype.listDirectory = function() {
+  var msg = 'listing ' + this.getFullPath();
+  return this.checkNotDeleted(msg).addCallback(function() {
+    return goog.object.getValues(this.children);
+  });
+};
+
+
+/**
+ * @see {goog.fs.DirectoryEntry#createPath}
+ * @return {!goog.async.Deferred}
+ */
+goog.testing.fs.DirectoryEntry.prototype.createPath =
+    goog.fs.DirectoryEntry.prototype.createPath;
 
 
 

@@ -201,6 +201,59 @@ function testCreateExclusiveExistingFile() {
       goog.fs.Error.ErrorCode.PATH_EXISTS);
 }
 
+function testListEmptyDirectory() {
+  var emptyDir = fs.getRoot().
+      getDirectorySync('empty', goog.fs.DirectoryEntry.Behavior.CREATE);
+
+  emptyDir.listDirectory().
+      addCallback(function(entryList) {
+        assertSameElements([], entryList);
+        asyncTestCase.continueTesting();
+      });
+  waitForAsync('testListEmptyDirectory');
+}
+
+function testListDirectory() {
+  var root = fs.getRoot();
+  root.getDirectorySync('dir1', goog.fs.DirectoryEntry.Behavior.CREATE);
+  root.getDirectorySync('dir2', goog.fs.DirectoryEntry.Behavior.CREATE);
+  root.getFileSync('file1', goog.fs.DirectoryEntry.Behavior.CREATE);
+  root.getFileSync('file2', goog.fs.DirectoryEntry.Behavior.CREATE);
+
+  fs.getRoot().listDirectory().
+      addCallback(function(entryList) {
+        assertSameElements([
+          'dir1',
+          'dir2',
+          'file1',
+          'file2',
+          'foo'
+        ],
+        goog.array.map(entryList, function(entry) {
+          return entry.getName();
+        }));
+        asyncTestCase.continueTesting();
+      });
+  waitForAsync('testListDirectory');
+}
+
+function testCreatePath() {
+  dir.createPath('baz/bat').
+      addCallback(function(batDir) {
+        assertEquals('/foo/baz/bat', batDir.getFullPath());
+        return batDir.createPath('../zazzle');
+      }).
+      addCallback(function(zazzleDir) {
+        assertEquals('/foo/baz/zazzle', zazzleDir.getFullPath());
+        return zazzleDir.createPath('/elements/actinides/neptunium/');
+      }).
+      addCallback(function(elDir) {
+        assertEquals('/elements/actinides/neptunium', elDir.getFullPath());
+        asyncTestCase.continueTesting();
+      });
+  waitForAsync('testCreatePath');
+}
+
 
 function expectError(deferred, code) {
   deferred.
