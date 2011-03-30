@@ -16,6 +16,7 @@ See the COPYING file for details.
 goog.require('goog.fs.DirectoryEntry.Behavior');
 goog.require('goog.fs.Error.ErrorCode');
 goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
 </script>
@@ -24,13 +25,19 @@ goog.require('goog.testing.jsunit');
 <script>
 
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
-var fs, dir;
+var fs, dir, mockClock;
 
 function setUp() {
+  mockClock = new goog.testing.MockClock(true);
+
   fs = new goog.testing.fs.FileSystem();
-  dir = fs.getRoot().getDirectorySync('foo');
-  dir.getDirectorySync('subdir').getFileSync('subfile');
-  dir.getFileSync('file');
+  dir = fs.getRoot().createDirectorySync('foo');
+  dir.createDirectorySync('subdir').createFileSync('subfile');
+  dir.createFileSync('file');
+}
+
+function tearDown() {
+  mockClock.uninstall();
 }
 
 function testIsFile() {
@@ -42,31 +49,40 @@ function testIsDirectory() {
 }
 
 function testRemoveWithChildren() {
-  dir.getFileSync('bar');
+  dir.getFileSync('bar', goog.fs.DirectoryEntry.Behavior.CREATE);
   expectError(dir.remove(), goog.fs.Error.ErrorCode.INVALID_MODIFICATION);
 }
 
 function testRemoveWithoutChildren() {
-  var emptyDir = dir.getDirectorySync('empty');
+  var emptyDir = dir.getDirectorySync(
+      'empty', goog.fs.DirectoryEntry.Behavior.CREATE);
   emptyDir.remove().addCallback(function() {
     assertTrue(emptyDir.deleted);
     assertFalse(fs.getRoot().hasChild('empty'));
 
     asyncTestCase.continueTesting();
   });
-  asyncTestCase.waitForAsync('waiting for file removal');
+  waitForAsync('waiting for file removal');
 }
 
 function testGetFile() {
-  dir.getFile('file').addCallback(function(file) {
-    assertEquals(dir.getFileSync('file'), file);
-    assertEquals('file', file.getName());
-    assertEquals('/foo/file', file.getFullPath());
-    assertTrue(file.isFile());
+  // Advance the clock by an arbitrary but known amount.
+  mockClock.tick(41);
+  dir.getFile('file').
+      addCallback(function(file) {
+        assertEquals(dir.getFileSync('file'), file);
+        assertEquals('file', file.getName());
+        assertEquals('/foo/file', file.getFullPath());
+        assertTrue(file.isFile())
 
-    asyncTestCase.continueTesting();
-  });
-  asyncTestCase.waitForAsync('waiting for file');
+        return dir.getLastModified();
+      }).
+      addCallback(function(date) {
+        assertEquals('Reading a file should not update the modification date.',
+               0, date.getTime());
+        asyncTestCase.continueTesting();
+      });
+  waitForAsync('waiting for file');
 }
 
 function testGetFileFromSubdir() {
@@ -78,35 +94,51 @@ function testGetFileFromSubdir() {
 
     asyncTestCase.continueTesting();
   });
-  asyncTestCase.waitForAsync('waiting for file');
+  waitForAsync('waiting for file');
 }
 
 function testCreateFile() {
-  dir.getFile('bar', goog.fs.DirectoryEntry.Behavior.CREATE).
+  mockClock.tick(43);
+  dir.getLastModified().
+      addCallback(function(date) { assertEquals(0, date.getTime()); }).
+      addCallback(function() {
+        return dir.getFile('bar', goog.fs.DirectoryEntry.Behavior.CREATE);
+      }).
       addCallback(function(file) {
+        mockClock.tick();
         assertEquals('bar', file.getName());
         assertEquals('/foo/bar', file.getFullPath());
         assertEquals(dir, file.parent);
         assertTrue(file.isFile());
 
+        return dir.getLastModified();
+      }).
+      addCallback(function(date) {
+        assertEquals(43, date.getTime());
         asyncTestCase.continueTesting();
       });
-  asyncTestCase.waitForAsync('waiting for file creation');
+  waitForAsync('waiting for file creation');
 }
 
 function testCreateFileThatAlreadyExists() {
+  mockClock.tick(47);
   var existingFile = dir.getFileSync('file');
   dir.getFile('file', goog.fs.DirectoryEntry.Behavior.CREATE).
       addCallback(function(file) {
+        mockClock.tick();
         assertEquals('file', file.getName());
         assertEquals('/foo/file', file.getFullPath());
         assertEquals(dir, file.parent);
         assertEquals(existingFile, file);
         assertTrue(file.isFile());
 
+        return dir.getLastModified();
+      }).
+      addCallback(function(date) {
+        assertEquals(47, date.getTime());
         asyncTestCase.continueTesting();
       });
-  asyncTestCase.waitForAsync('waiting for file creation');
+  waitForAsync('waiting for file creation');
 }
 
 function testCreateFileInSubdir() {
@@ -119,11 +151,11 @@ function testCreateFileInSubdir() {
 
         asyncTestCase.continueTesting();
       });
-  asyncTestCase.waitForAsync('waiting for file creation');
+  waitForAsync('waiting for file creation');
 }
 
 function testCreateFileExclusive() {
-  dir.getFile('bar', goog.fs.DirectoryEntry.Behavior.CREATE).
+  dir.getFile('bar', goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE).
       addCallback(function(file) {
         assertEquals('bar', file.getName());
         assertEquals('/foo/bar', file.getFullPath());
@@ -132,7 +164,7 @@ function testCreateFileExclusive() {
 
         asyncTestCase.continueTesting();
       });
-  asyncTestCase.waitForAsync('waiting for file creation');
+  waitForAsync('waiting for file creation');
 }
 
 function testGetNonExistentFile() {
@@ -177,7 +209,12 @@ function expectError(deferred, code) {
         assertEquals(code, err.code);
         asyncTestCase.continueTesting();
       });
-  asyncTestCase.waitForAsync('waiting for error');
+  waitForAsync('waiting for error');
+}
+
+function waitForAsync(msg) {
+  asyncTestCase.waitForAsync(msg);
+  mockClock.tick();
 }
 
 </script>

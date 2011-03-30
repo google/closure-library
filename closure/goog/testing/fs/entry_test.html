@@ -13,8 +13,10 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script src="../../../../third_party/closure/goog/deps.js"></script>
 <script>
+goog.require('goog.fs.DirectoryEntry.Behavior');
 goog.require('goog.fs.Error.ErrorCode');
 goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
 </script>
@@ -23,11 +25,19 @@ goog.require('goog.testing.jsunit');
 <script>
 
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
-var fs, file;
+var fs, file, mockClock;
 
 function setUp() {
+  mockClock = new goog.testing.MockClock(true);
+
   fs = new goog.testing.fs.FileSystem();
-  file = fs.getRoot().getDirectorySync('foo').getFileSync('bar');
+  file = fs.getRoot().
+      getDirectorySync('foo', goog.fs.DirectoryEntry.Behavior.CREATE).
+      getFileSync('bar', goog.fs.DirectoryEntry.Behavior.CREATE);
+}
+
+function tearDown() {
+  mockClock.uninstall();
 }
 
 function testGetName() {
@@ -54,22 +64,36 @@ function testMoveTo() {
 
     asyncTestCase.continueTesting();
   });
-  asyncTestCase.waitForAsync('waiting for file move');
+  waitForAsync('waiting for file move');
 }
 
 function testMoveToNewName() {
-  file.moveTo(fs.getRoot(), 'baz').addCallback(function(newFile) {
-    assertTrue(file.deleted);
-    assertFalse(newFile.deleted);
-    assertEquals('/baz', newFile.getFullPath());
-    assertEquals(fs.getRoot(), newFile.parent);
-    assertEquals(newFile, fs.getRoot().getFileSync('baz'));
-    assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('bar'));
-    assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('baz'));
+  // Advance the clock to an arbitrary, known time.
+  mockClock.tick(71);
+  file.moveTo(fs.getRoot(), 'baz').
+      addCallback(function(newFile) {
+        mockClock.tick();
+        assertTrue(file.deleted);
+        assertFalse(newFile.deleted);
+        assertEquals('/baz', newFile.getFullPath());
+        assertEquals(fs.getRoot(), newFile.parent);
+        assertEquals(newFile, fs.getRoot().getFileSync('baz'));
 
-    asyncTestCase.continueTesting();
-  });
-  asyncTestCase.waitForAsync('waiting for file move');
+        var oldParentDir = fs.getRoot().getDirectorySync('foo');
+        assertFalse(oldParentDir.hasChild('bar'));
+        assertFalse(oldParentDir.hasChild('baz'));
+
+        return oldParentDir.getLastModified();
+      }).
+      addCallback(function(lastModifiedDate) {
+        assertEquals(71, lastModifiedDate.getTime());
+        return fs.getRoot().getLastModified();
+      }).
+      addCallback(function(rootLastModifiedDate) {
+        assertEquals(71, rootLastModifiedDate.getTime());
+        asyncTestCase.continueTesting();
+      });
+  waitForAsync('waiting for file move');
 }
 
 function testMoveDeletedFile() {
@@ -77,17 +101,29 @@ function testMoveDeletedFile() {
 }
 
 function testCopyTo() {
-  file.copyTo(fs.getRoot()).addCallback(function(newFile) {
-    assertFalse(file.deleted);
-    assertFalse(newFile.deleted);
-    assertEquals('/bar', newFile.getFullPath());
-    assertEquals(fs.getRoot(), newFile.parent);
-    assertEquals(newFile, fs.getRoot().getFileSync('bar'));
-    assertEquals(file, fs.getRoot().getDirectorySync('foo').getFileSync('bar'));
+  mockClock.tick(61);
+  file.copyTo(fs.getRoot()).
+      addCallback(function(newFile) {
+        assertFalse(file.deleted);
+        assertFalse(newFile.deleted);
+        assertEquals('/bar', newFile.getFullPath());
+        assertEquals(fs.getRoot(), newFile.parent);
+        assertEquals(newFile, fs.getRoot().getFileSync('bar'));
 
-    asyncTestCase.continueTesting();
-  });
-  asyncTestCase.waitForAsync('waiting for file copy');
+        var oldParentDir = fs.getRoot().getDirectorySync('foo');
+        assertEquals(file, oldParentDir.getFileSync('bar'));
+        return oldParentDir.getLastModified();
+      }).
+      addCallback(function(lastModifiedDate) {
+        assertEquals('The original parent directory was not modified.',
+                     0, lastModifiedDate.getTime());
+        return fs.getRoot().getLastModified();
+      }).
+      addCallback(function(rootLastModifiedDate) {
+        assertEquals(61, rootLastModifiedDate.getTime());
+        asyncTestCase.continueTesting();
+      });
+  waitForAsync('waiting for file copy');
 }
 
 function testCopyToNewName() {
@@ -102,7 +138,7 @@ function testCopyToNewName() {
 
     asyncTestCase.continueTesting();
   });
-  asyncTestCase.waitForAsync('waiting for file copy');
+  waitForAsync('waiting for file copy');
 }
 
 function testCopyDeletedFile() {
@@ -110,13 +146,22 @@ function testCopyDeletedFile() {
 }
 
 function testRemove() {
-  file.remove().addCallback(function() {
-    assertTrue(file.deleted);
-    assertFalse(fs.getRoot().getDirectorySync('foo').hasChild('bar'));
+  mockClock.tick(57);
+  file.remove().
+      addCallback(function() {
+        mockClock.tick();
+        var parentDir = fs.getRoot().getDirectorySync('foo');
 
-    asyncTestCase.continueTesting();
-  });
-  asyncTestCase.waitForAsync('waiting for file removal');
+        assertTrue(file.deleted);
+        assertFalse(parentDir.hasChild('bar'));
+
+        return parentDir.getLastModified();
+      }).
+      addCallback(function(date) {
+        assertEquals(57, date.getTime());
+        asyncTestCase.continueTesting();
+      });
+  waitForAsync('waiting for file removal');
 }
 
 function testRemoveDeletedFile() {
@@ -131,12 +176,13 @@ function testGetParent() {
 
     asyncTestCase.continueTesting();
   });
-  asyncTestCase.waitForAsync('waiting for file parent');
+  waitForAsync('waiting for file parent');
 }
 
 function testGetDeletedFileParent() {
   assertFailsWhenDeleted(function() { return file.getParent(); });
 }
+
 
 function assertFailsWhenDeleted(fn) {
   file.remove().addCallback(fn).
@@ -145,7 +191,12 @@ function assertFailsWhenDeleted(fn) {
         assertEquals(goog.fs.Error.ErrorCode.NOT_FOUND, err.code);
         asyncTestCase.continueTesting();
       });
-  asyncTestCase.waitForAsync('waiting for file operation');
+  waitForAsync('waiting for file operation');
+}
+
+function waitForAsync(msg) {
+  asyncTestCase.waitForAsync(msg);
+  mockClock.tick();
 }
 
 </script>

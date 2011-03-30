@@ -48,6 +48,18 @@ function testSlice() {
   assertEquals('text/plain', blob.slice(1, 2, 'text/plain').type);
 }
 
+function testSetDataInternal() {
+  var blob = new goog.testing.fs.Blob();
+
+  blob.setDataInternal('asdf');
+  assertEquals('asdf', blob.toString());
+  assertEquals(4, blob.size);
+
+  blob.setDataInternal('');
+  assertEquals('', blob.toString());
+  assertEquals(0, blob.size);
+}
+
 </script>
 </body>
 </html>

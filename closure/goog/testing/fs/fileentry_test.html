@@ -13,7 +13,9 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script src="../../../../third_party/closure/goog/deps.js"></script>
 <script>
+goog.require('goog.fs.DirectoryEntry.Behavior');
 goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.fs.FileSystem');
 goog.require('goog.testing.jsunit');
 </script>
@@ -22,32 +24,57 @@ goog.require('goog.testing.jsunit');
 <script>
 
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
-var fs, file;
+var fs, file, fileEntry, mockClock, currentTime;
 
 function setUp() {
+  mockClock = new goog.testing.MockClock(true);
+
   fs = new goog.testing.fs.FileSystem();
-  file = fs.getRoot().getDirectorySync('foo').getFileSync('bar');
+  fileEntry = fs.getRoot().createDirectorySync('foo').createFileSync('bar');
+}
+
+function tearDown() {
+  mockClock.uninstall();
 }
 
 function testIsFile() {
-  assertTrue(file.isFile());
+  assertTrue(fileEntry.isFile());
 }
 
 function testIsDirectory() {
-  assertFalse(file.isDirectory());
+  assertFalse(fileEntry.isDirectory());
 }
 
 function testFile() {
-  file.data = 'hello world';
-  file.file().addCallback(function(f) {
-    assertEquals('bar', f.name);
+  var testFile = new goog.testing.fs.FileEntry(fs, fs.getRoot(),
+                                               'test', 'hello world');
+  testFile.file().addCallback(function(f) {
+    assertEquals('test', f.name);
     assertEquals('hello world', f.toString());
 
     asyncTestCase.continueTesting();
   });
-  asyncTestCase.waitForAsync('testFile');
+  waitForAsync('testFile');
 }
 
+function testGetLastModified() {
+  // Advance the clock to a known time.
+  mockClock.tick(53);
+  var testFile = new goog.testing.fs.FileEntry(fs, fs.getRoot(),
+                                               'timeTest', 'hello world');
+  mockClock.tick();
+  testFile.getLastModified().addCallback(function(date) {
+    assertEquals(53, date.getTime());
+    asyncTestCase.continueTesting();
+  });
+  waitForAsync('testGetLastModified');
+}
+
+
+function waitForAsync(msg) {
+  asyncTestCase.waitForAsync(msg);
+  mockClock.tick();
+}
 
 </script>
 </body>

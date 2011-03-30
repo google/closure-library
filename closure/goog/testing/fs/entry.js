@@ -95,7 +95,6 @@ goog.testing.fs.Entry.prototype.getName = function() {
 };
 
 
-
 /**
  * @see {goog.fs.Entry#getFullPath}
  * @return {string}
@@ -117,6 +116,13 @@ goog.testing.fs.Entry.prototype.getFullPath = function() {
 goog.testing.fs.Entry.prototype.getFileSystem = function() {
   return this.fs_;
 };
+
+
+/**
+ * @see {goog.fs.Entry#getLastModified}
+ * @return {!goog.async.Deferred}
+ */
+goog.testing.fs.Entry.prototype.getLastModified = goog.abstractMethod;
 
 
 /**
@@ -151,6 +157,7 @@ goog.testing.fs.Entry.prototype.copyTo = function(parent, opt_newName) {
     var name = opt_newName || this.getName();
     var entry = this.clone();
     parent.children[name] = entry;
+    parent.lastModifiedTimestamp_ = goog.now();
     entry.name_ = name;
     entry.parent = parent;
     return entry;
@@ -172,6 +179,7 @@ goog.testing.fs.Entry.prototype.remove = function() {
   var msg = 'removing ' + this.getFullPath();
   return this.checkNotDeleted(msg).addCallback(function() {
     delete this.parent.children[this.getName()];
+    this.parent.lastModifiedTimestamp_ = goog.now();
     this.deleted = true;
     return;
   });
@@ -235,6 +243,14 @@ goog.testing.fs.DirectoryEntry = function(fs, parent, name, children) {
    * @type {!Object.<!goog.testing.fs.Entry>}
    */
   this.children = children;
+
+  /**
+   * The modification time of the directory. Measured using goog.now, which may
+   * be overridden with mock time providers.
+   * @type {number}
+   * @private
+   */
+  this.lastModifiedTimestamp_ = goog.now();
 };
 goog.inherits(goog.testing.fs.DirectoryEntry, goog.testing.fs.Entry);
 
@@ -248,6 +264,14 @@ goog.testing.fs.DirectoryEntry.prototype.isFile = function() {
 /** @inheritDoc */
 goog.testing.fs.DirectoryEntry.prototype.isDirectory = function() {
   return true;
+};
+
+
+/** @inheritDoc */
+goog.testing.fs.DirectoryEntry.prototype.getLastModified = function() {
+  var msg = 'reading last modified date for ' + this.getFullPath();
+  return this.checkNotDeleted(msg).
+      addCallback(function() {return new Date(this.lastModifiedTimestamp_)});
 };
 
 
@@ -316,16 +340,16 @@ goog.testing.fs.DirectoryEntry.prototype.getDirectory = function(
 
 
 /**
- * Get a file synchronously, without waiting for a Deferred to resolve.
+ * Get a file entry synchronously, without waiting for a Deferred to resolve.
  *
  * @param {string} path The path to the file, relative to this directory.
  * @param {goog.fs.DirectoryEntry.Behavior=} opt_behavior The behavior for
- *     loading the file. Unlike {@link #getFile}, this defaults to CREATE.
+ *     loading the file.
  * @return {!goog.testing.fs.FileEntry} The loaded file.
  */
 goog.testing.fs.DirectoryEntry.prototype.getFileSync = function(
     path, opt_behavior) {
-  opt_behavior = opt_behavior || goog.fs.DirectoryEntry.Behavior.CREATE;
+  opt_behavior = opt_behavior || goog.fs.DirectoryEntry.Behavior.DEFAULT;
   return (/** @type {!goog.testing.fs.FileEntry} */ (this.getEntry_(
       path, opt_behavior, true /* isFile */,
       goog.bind(function(parent, name) {
@@ -336,22 +360,46 @@ goog.testing.fs.DirectoryEntry.prototype.getFileSync = function(
 
 
 /**
+ * Creates a file synchronously. This is a shorthand for getFileSync, useful for
+ * setting up tests.
+ *
+ * @param {string} path The path to the file, relative to this directory.
+ * @return {!goog.testing.fs.FileEntry} The created file.
+ */
+goog.testing.fs.DirectoryEntry.prototype.createFileSync = function(path) {
+  return this.getFileSync(path, goog.fs.DirectoryEntry.Behavior.CREATE);
+};
+
+
+/**
  * Get a directory synchronously, without waiting for a Deferred to resolve.
  *
  * @param {string} path The path to the directory, relative to this one.
  * @param {goog.fs.DirectoryEntry.Behavior=} opt_behavior The behavior for
- *     loading the directory. Unlike {@link #getFile}, this defaults to CREATE.
+ *     loading the directory.
  * @return {!goog.testing.fs.DirectoryEntry} The loaded directory.
  */
 goog.testing.fs.DirectoryEntry.prototype.getDirectorySync = function(
     path, opt_behavior) {
-  opt_behavior = opt_behavior || goog.fs.DirectoryEntry.Behavior.CREATE;
+  opt_behavior = opt_behavior || goog.fs.DirectoryEntry.Behavior.DEFAULT;
   return (/** @type {!goog.testing.fs.DirectoryEntry} */ (this.getEntry_(
       path, opt_behavior, false /* isFile */,
       goog.bind(function(parent, name) {
         return new goog.testing.fs.DirectoryEntry(
             this.getFileSystem(), parent, name, {});
       }, this))));
+};
+
+
+/**
+ * Creates a directory synchronously. This is a shorthand for getFileSync,
+ * useful for setting up tests.
+ *
+ * @param {string} path The path to the directory, relative to this directory.
+ * @return {!goog.testing.fs.DirectoryEntry} The created directory.
+ */
+goog.testing.fs.DirectoryEntry.prototype.createDirectorySync = function(path) {
+  return this.getDirectorySync(path, goog.fs.DirectoryEntry.Behavior.CREATE);
 };
 
 
@@ -382,7 +430,7 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
       throw new goog.fs.Error(
           goog.fs.Error.ErrorCode.NOT_FOUND,
           'loading ' + path + ' from ' + this.getFullPath() + ' (directory ' +
-            dir.getFullPath() + '/' + p + ')');
+          dir.getFullPath() + '/' + p + ')');
     }
     dir = subdir;
   }, this);
@@ -396,9 +444,10 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
     } else {
       goog.asserts.assert(
           behavior == goog.fs.DirectoryEntry.Behavior.CREATE ||
-            behavior == goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE);
+          behavior == goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE);
       entry = createFn(dir, basename);
       dir.children[basename] = entry;
+      this.lastModifiedTimestamp_ = goog.now();
       return entry;
     }
   } else if (behavior == goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE) {
@@ -410,6 +459,9 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
         goog.fs.Error.ErrorCode.TYPE_MISMATCH,
         'loading ' + path + ' from ' + this.getFullPath());
   } else {
+    if (behavior == goog.fs.DirectoryEntry.Behavior.CREATE) {
+      this.lastModifiedTimestamp_ = goog.now();
+    }
     return entry;
   }
 };
@@ -460,10 +512,11 @@ goog.testing.fs.FileEntry = function(fs, parent, name, data) {
   goog.base(this, fs, parent, name);
 
   /**
-   * The data contained in the file.
-   * @type {string}
+   * The internal file blob referenced by this file entry.
+   * @type {!goog.testing.fs.File}
+   * @private
    */
-  this.data = data;
+  this.file_ = new goog.testing.fs.File(name, new Date(goog.now()), data);
 };
 goog.inherits(goog.testing.fs.FileEntry, goog.testing.fs.Entry);
 
@@ -483,7 +536,16 @@ goog.testing.fs.FileEntry.prototype.isDirectory = function() {
 /** @inheritDoc */
 goog.testing.fs.FileEntry.prototype.clone = function() {
   return new goog.testing.fs.FileEntry(
-      this.getFileSystem(), this.parent, this.getName(), this.data);
+      this.getFileSystem(), this.parent,
+      this.getName(), this.fileSync().toString());
+};
+
+
+/** @inheritDoc */
+goog.testing.fs.FileEntry.prototype.getLastModified = function() {
+  return this.file().addCallback(function(file) {
+    return file.lastModifiedDate;
+  });
 };
 
 
@@ -506,6 +568,18 @@ goog.testing.fs.FileEntry.prototype.createWriter = function() {
 goog.testing.fs.FileEntry.prototype.file = function() {
   var msg = 'getting file for ' + this.getFullPath();
   return this.checkNotDeleted(msg).addCallback(function() {
-    return new goog.testing.fs.File(this.getName(), this.data);
+    return this.fileSync();
   });
+};
+
+
+/**
+ * Get the internal file representation synchronously, without waiting for a
+ * Deferred to resolve.
+ *
+ * @return {!goog.testing.fs.File} The internal file blob referenced by this
+ *     FileEntry.
+ */
+goog.testing.fs.FileEntry.prototype.fileSync = function() {
+  return this.file_;
 };

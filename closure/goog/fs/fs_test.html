@@ -243,6 +243,23 @@ function testTruncate() {
   asyncTestCase.waitForAsync('testWriteFile');
 }
 
+function testGetLastModified() {
+  if (!fsExists) {
+    return;
+  }
+  var now = goog.now();
+  loadFile('test', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(function(entry) {
+        return entry.getLastModified();
+      }).addCallback(function(date) {
+        assertRoughlyEquals('Expected the last modified date to be within ' +
+                            'a few milliseconds of the test start time.',
+                            now, date.getTime(), 100);
+      }).addCallback(continueTesting);
+
+  asyncTestCase.waitForAsync('testGetLastModified');
+}
+
 function testCreatePath() {
   if (!fsExists) {
     return;

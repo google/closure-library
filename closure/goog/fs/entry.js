@@ -98,6 +98,25 @@ goog.fs.Entry.prototype.getFileSystem = function() {
 
 
 /**
+ * Retrieves the last modified date for this entry.
+ *
+ * @return {!goog.async.Deferred} The deferred Date for this entry. If an error
+ *     occurs, the errback is called with a {@link goog.fs.Error}.
+ */
+goog.fs.Entry.prototype.getLastModified = function() {
+  var d = new goog.async.Deferred();
+
+  this.entry_.getMetadata(
+      function(metadata) { d.callback(metadata.modificationTime); },
+      goog.bind(function(err) {
+        var msg = 'retrieving last modified date for ' + this.getFullPath();
+        d.errback(new goog.fs.Error(err.code, msg));
+      }, this));
+  return d;
+};
+
+
+/**
  * Move this entry to a new location.
  *
  * @param {!goog.fs.DirectoryEntry} parent The new parent directory.
@@ -123,7 +142,7 @@ goog.fs.Entry.prototype.moveTo = function(parent, opt_newName) {
 
 
 /**
- * copy this entry to a new location.
+ * Copy this entry to a new location.
  *
  * @param {!goog.fs.DirectoryEntry} parent The new parent directory.
  * @param {string=} opt_newName The name of the new entry. If omitted, the new

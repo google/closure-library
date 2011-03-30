@@ -47,8 +47,9 @@ function tearDown() {
 
 function testDownload() {
   downloader.download('/foo/bar').addCallback(function(blob) {
+    var fileEntry = dir.getFileSync('%3fa/%%2Ffoo%2Fbar');
     assertEquals('data', blob.toString());
-    assertEquals('data', dir.getFileSync('%3fa/%%2Ffoo%2Fbar').data);
+    assertEquals('data', fileEntry.fileSync().toString());
     asyncTestCase.continueTesting();
   }).addErrback(function(err) { throw err; });
 
