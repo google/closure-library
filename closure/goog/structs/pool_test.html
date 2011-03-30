@@ -13,6 +13,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.structs');
   goog.require('goog.structs.Pool');
+  goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -257,6 +258,31 @@ function testInvalidMinMax3() {
   assertThrows(function() {
     new goog.structs.Pool(10, 1);
   });
+}
+
+
+function testRateLimiting() {
+  var clock = new goog.testing.MockClock();
+  clock.install();
+
+  var p = new goog.structs.Pool(0, 3);
+  p.setDelay(100);
+
+  assertNotUndefined(p.getObject());
+  assertUndefined(p.getObject());
+
+  clock.tick(100);
+  assertNotUndefined(p.getObject());
+  assertUndefined(p.getObject());
+
+  clock.tick(100);
+  assertNotUndefined(p.getObject());
+  assertUndefined(p.getObject());
+
+  clock.tick(100);
+  assertUndefined(p.getObject());
+
+  goog.dispose(clock);
 }
 
 
