@@ -192,12 +192,8 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
         result.push(parsedPattern[i].value);
         break;
       case goog.i18n.MessageFormat.BlockType_.SIMPLE:
-        var value = namedParameters[parsedPattern[i].value];
-        goog.asserts.assertString(value, 'Format parameter is undefined.');
-        // Don't push the value yet, it may contain any of # { } in it which
-        // will break formatter. Insert a placeholder and replace at the end.
-        this.literals_.push(value);
-        result.push(this.buildPlaceholder_(this.literals_));
+        var pattern = parsedPattern[i].value;
+        this.formatSimplePlaceholder_(pattern, namedParameters, result);
         break;
       case goog.i18n.MessageFormat.BlockType_.SELECT:
         var pattern = parsedPattern[i].value;
@@ -215,6 +211,29 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
 
 
 /**
+ * Formats simple placeholder.
+ * @param {!Object} parsedPattern JSON object containing placeholder info.
+ * @param {!Object} namedParameters Parameters that are used as actual data.
+ * @param {!Array.<!string>} result Each formatting stage appends its product
+ *     to the result.
+ * @private
+ */
+goog.i18n.MessageFormat.prototype.formatSimplePlaceholder_ = function(
+    parsedPattern, namedParameters, result) {
+  var value = namedParameters[parsedPattern];
+  if (!goog.isDef(value)) {
+    result.push('Undefined parameter - ' + parsedPattern);
+    return;
+  }
+
+  // Don't push the value yet, it may contain any of # { } in it which
+  // will break formatter. Insert a placeholder and replace at the end.
+  this.literals_.push(value);
+  result.push(this.buildPlaceholder_(this.literals_));
+};
+
+
+/**
  * Formats select block. Only one option is selected.
  * @param {!Object} parsedPattern JSON object containing select block info.
  * @param {!Object} namedParameters Parameters that either influence
@@ -226,6 +245,11 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
 goog.i18n.MessageFormat.prototype.formatSelectBlock_ = function(
     parsedPattern, namedParameters, result) {
   var argumentIndex = parsedPattern.argumentIndex;
+  if (!goog.isDef(namedParameters[argumentIndex])) {
+    result.push('Undefined parameter - ' + argumentIndex);
+    return;
+  }
+
   var option = parsedPattern[namedParameters[argumentIndex]];
   if (!goog.isDef(option)) {
     option = parsedPattern[goog.i18n.MessageFormat.OTHER_];

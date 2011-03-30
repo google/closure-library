@@ -360,6 +360,23 @@ function testMissingOrInvalidPluralParameter() {
                fmt.format({'SOME_NUM': 'Value'}));
 }
 
+function testMissingSelectParameter() {
+  var fmt = new goog.i18n.MessageFormat('{GENDER, select,' +
+      'other {result}}');
+
+  // Key name doesn't match A != GENDER.
+  assertEquals('Undefined parameter - GENDER',
+               fmt.format({A: 'female'}));
+}
+
+function testMissingSimplePlaceholder() {
+  var fmt = new goog.i18n.MessageFormat('{result}');
+
+  // Key name doesn't match A != result.
+  assertEquals('Undefined parameter - result',
+               fmt.format({A: 'none'}));
+}
+
 </script>
 </body>
 </html>
