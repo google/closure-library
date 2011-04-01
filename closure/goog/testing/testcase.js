@@ -675,16 +675,23 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
 
   this.log(this.getCount() + ' tests auto-discovered');
 
-  // One-lining for readability.
-  if (goog.global['setUp']) this.setUp = goog.global['setUp'];
-  if (goog.global['tearDown']) this.tearDown = goog.global['tearDown'];
-  if (goog.global['setUpPage']) this.setUpPage = goog.global['setUpPage'];
-  if (goog.global['tearDownPage']) {
-    this.tearDownPage = goog.global['tearDownPage'];
+  if (goog.global['setUp']) {
+    this.setUp = goog.bind(goog.global['setUp'], goog.global);
   }
-  if (goog.global['runTests']) this.runTests = goog.global['runTests'];
+  if (goog.global['tearDown']) {
+    this.tearDown = goog.bind(goog.global['tearDown'], goog.global);
+  }
+  if (goog.global['setUpPage']) {
+    this.setUpPage = goog.bind(goog.global['setUpPage'], goog.global);
+  }
+  if (goog.global['tearDownPage']) {
+    this.tearDownPage = goog.bind(goog.global['tearDownPage'], goog.global);
+  }
+  if (goog.global['runTests']) {
+    this.runTests = goog.bind(goog.global['runTests'], goog.global);
+  }
   if (goog.global['shouldRunTests']) {
-      this.shouldRunTests = goog.global['shouldRunTests'];
+    this.shouldRunTests = goog.bind(goog.global['shouldRunTests'], goog.global);
   }
 };
 
