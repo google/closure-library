@@ -29,6 +29,7 @@ goog.require('goog.fs.DirectoryEntry');
 goog.require('goog.fs.DirectoryEntry.Behavior');
 goog.require('goog.fs.Error');
 goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.testing.fs.File');
 goog.require('goog.testing.fs.FileWriter');
 
@@ -421,9 +422,12 @@ goog.testing.fs.DirectoryEntry.prototype.createDirectorySync = function(path) {
  */
 goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
     path, behavior, isFile, createFn) {
-  var components = path.split('/');
-  var basename = components[components.length - 1];
-  var dir = this;
+  // Filter out leading, trailing, and duplicate slashes.
+  var components = goog.array.filter(path.split('/'), goog.identityFunction);
+
+  var basename = /** @type {string} */ (goog.array.peek(components)) || '';
+  var dir = goog.string.startsWith(path, '/') ?
+      this.getFileSystem().getRoot() : this;
 
   goog.array.forEach(components.slice(0, -1), function(p) {
     var subdir = dir.children[p];
@@ -436,7 +440,9 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
     dir = subdir;
   }, this);
 
-  var entry = dir.children[basename];
+  // If there is no basename, the path must resolve to the root directory.
+  var entry = basename ? dir.children[basename] : dir;
+
   if (!entry) {
     if (behavior == goog.fs.DirectoryEntry.Behavior.DEFAULT) {
       throw new goog.fs.Error(

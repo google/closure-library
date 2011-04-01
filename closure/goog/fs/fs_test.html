@@ -365,6 +365,36 @@ function testCreateBadPath() {
   asyncTestCase.waitForAsync('testCreateBadPath');
 }
 
+function testGetAbsolutePaths() {
+  if (!fsExists) {
+    return;
+  }
+
+  loadFile('foo', goog.fs.DirectoryEntry.Behavior.CREATE).
+      awaitDeferred(loadTestDir()).
+      addCallback(function(testDir) {
+        return testDir.getDirectory('/');
+      }).
+      addCallback(function(root) {
+        assertEquals('/', root.getFullPath());
+        return root.getDirectory('/' + TEST_DIR);
+      }).
+      addCallback(function(testDir) {
+        assertEquals('/goog-fs-test-dir', testDir.getFullPath());
+        return testDir.getDirectory('//' + TEST_DIR + '////');
+      }).
+      addCallback(function(testDir) {
+        assertEquals('/goog-fs-test-dir', testDir.getFullPath());
+        return testDir.getDirectory('////');
+      }).
+      addCallback(function(testDir) {
+        assertEquals('/', testDir.getFullPath());
+      }).
+      addBoth(continueTesting);
+  asyncTestCase.waitForAsync('testGetAbsolutePaths');
+}
+
+
 function continueTesting(result) {
   asyncTestCase.continueTesting();
   if (result instanceof Error) {

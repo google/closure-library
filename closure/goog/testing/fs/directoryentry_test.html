@@ -56,12 +56,12 @@ function testRemoveWithChildren() {
 function testRemoveWithoutChildren() {
   var emptyDir = dir.getDirectorySync(
       'empty', goog.fs.DirectoryEntry.Behavior.CREATE);
-  emptyDir.remove().addCallback(function() {
-    assertTrue(emptyDir.deleted);
-    assertFalse(fs.getRoot().hasChild('empty'));
-
-    asyncTestCase.continueTesting();
-  });
+  emptyDir.remove().
+      addCallback(function() {
+        assertTrue(emptyDir.deleted);
+        assertFalse(fs.getRoot().hasChild('empty'));
+      }).
+      addBoth(continueTesting);
   waitForAsync('waiting for file removal');
 }
 
@@ -80,8 +80,8 @@ function testGetFile() {
       addCallback(function(date) {
         assertEquals('Reading a file should not update the modification date.',
                0, date.getTime());
-        asyncTestCase.continueTesting();
-      });
+      }).
+      addBoth(continueTesting);
   waitForAsync('waiting for file');
 }
 
@@ -91,10 +91,30 @@ function testGetFileFromSubdir() {
     assertEquals('subfile', file.getName());
     assertEquals('/foo/subdir/subfile', file.getFullPath());
     assertTrue(file.isFile());
-
-    asyncTestCase.continueTesting();
-  });
+  }).
+      addBoth(continueTesting);
   waitForAsync('waiting for file');
+}
+
+function testGetAbsolutePaths() {
+  fs.getRoot().getFile('/foo/subdir/subfile').
+      addCallback(function(subfile) {
+        assertEquals('/foo/subdir/subfile', subfile.getFullPath());
+        return fs.getRoot().getDirectory('//foo////');
+      }).
+      addCallback(function(foo) {
+        assertEquals('/foo', foo.getFullPath());
+        return foo.getDirectory('/');
+      }).
+      addCallback(function(root) {
+        assertEquals('/', root.getFullPath());
+        return root.getDirectory('/////');
+      }).
+      addCallback(function(root) {
+        assertEquals('/', root.getFullPath());
+      }).
+      addBoth(continueTesting);
+  waitForAsync('testGetAbsolutePaths');
 }
 
 function testCreateFile() {
@@ -115,8 +135,8 @@ function testCreateFile() {
       }).
       addCallback(function(date) {
         assertEquals(43, date.getTime());
-        asyncTestCase.continueTesting();
-      });
+      }).
+      addBoth(continueTesting);
   waitForAsync('waiting for file creation');
 }
 
@@ -136,8 +156,8 @@ function testCreateFileThatAlreadyExists() {
       }).
       addCallback(function(date) {
         assertEquals(47, date.getTime());
-        asyncTestCase.continueTesting();
-      });
+      }).
+      addBoth(continueTesting);
   waitForAsync('waiting for file creation');
 }
 
@@ -148,9 +168,8 @@ function testCreateFileInSubdir() {
         assertEquals('/foo/subdir/bar', file.getFullPath());
         assertEquals(dir.getDirectorySync('subdir'), file.parent);
         assertTrue(file.isFile());
-
-        asyncTestCase.continueTesting();
-      });
+      }).
+      addBoth(continueTesting);
   waitForAsync('waiting for file creation');
 }
 
@@ -161,9 +180,8 @@ function testCreateFileExclusive() {
         assertEquals('/foo/bar', file.getFullPath());
         assertEquals(dir, file.parent);
         assertTrue(file.isFile());
-
-        asyncTestCase.continueTesting();
-      });
+      }).
+      addBoth(continueTesting);
   waitForAsync('waiting for file creation');
 }
 
@@ -208,8 +226,8 @@ function testListEmptyDirectory() {
   emptyDir.listDirectory().
       addCallback(function(entryList) {
         assertSameElements([], entryList);
-        asyncTestCase.continueTesting();
-      });
+      }).
+      addBoth(continueTesting);
   waitForAsync('testListEmptyDirectory');
 }
 
@@ -232,8 +250,8 @@ function testListDirectory() {
         goog.array.map(entryList, function(entry) {
           return entry.getName();
         }));
-        asyncTestCase.continueTesting();
-      });
+      }).
+      addBoth(continueTesting);
   waitForAsync('testListDirectory');
 }
 
@@ -249,11 +267,19 @@ function testCreatePath() {
       }).
       addCallback(function(elDir) {
         assertEquals('/elements/actinides/neptunium', elDir.getFullPath());
-        asyncTestCase.continueTesting();
-      });
+      }).
+      addBoth(continueTesting);
   waitForAsync('testCreatePath');
 }
 
+
+function continueTesting(result) {
+  asyncTestCase.continueTesting();
+  if (result instanceof Error) {
+    throw result;
+  }
+  mockClock.tick();
+}
 
 function expectError(deferred, code) {
   deferred.
