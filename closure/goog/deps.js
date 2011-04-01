@@ -432,7 +432,7 @@ goog.addDependency('testing/events/events.js', ['goog.testing.events', 'goog.tes
 goog.addDependency('testing/events/matchers.js', ['goog.testing.events.EventMatcher'], ['goog.events.Event', 'goog.testing.mockmatchers.ArgumentMatcher']);
 goog.addDependency('testing/expectedfailures.js', ['goog.testing.ExpectedFailures'], ['goog.debug.DivConsole', 'goog.debug.Logger', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.EventType', 'goog.style', 'goog.testing.JsUnitException', 'goog.testing.TestCase', 'goog.testing.asserts']);
 goog.addDependency('testing/fs/blob.js', ['goog.testing.fs.Blob'], []);
-goog.addDependency('testing/fs/entry.js', ['goog.testing.fs.DirectoryEntry', 'goog.testing.fs.Entry', 'goog.testing.fs.FileEntry'], ['goog.Timer', 'goog.array', 'goog.async.Deferred', 'goog.fs.DirectoryEntry.Behavior', 'goog.fs.Error', 'goog.object', 'goog.testing.fs.File', 'goog.testing.fs.FileWriter']);
+goog.addDependency('testing/fs/entry.js', ['goog.testing.fs.DirectoryEntry', 'goog.testing.fs.Entry', 'goog.testing.fs.FileEntry'], ['goog.Timer', 'goog.array', 'goog.async.Deferred', 'goog.fs.DirectoryEntry', 'goog.fs.DirectoryEntry.Behavior', 'goog.fs.Error', 'goog.object', 'goog.testing.fs.File', 'goog.testing.fs.FileWriter']);
 goog.addDependency('testing/fs/file.js', ['goog.testing.fs.File'], ['goog.testing.fs.Blob']);
 goog.addDependency('testing/fs/filesystem.js', ['goog.testing.fs.FileSystem'], ['goog.testing.fs.DirectoryEntry']);
 goog.addDependency('testing/fs/filewriter.js', ['goog.testing.fs.FileWriter', 'goog.testing.fs.FileWriter.ProgressEvent'], ['goog.Timer', 'goog.events.Event', 'goog.events.EventTarget', 'goog.fs.Error', 'goog.fs.FileSaver.EventType', 'goog.fs.FileSaver.ReadyState', 'goog.string', 'goog.testing.fs.File']);
