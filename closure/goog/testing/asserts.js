@@ -634,16 +634,25 @@ function assertArrayEquals(a, b, opt_c) {
 /**
  * Compares two objects that can be accessed like an array and assert that
  * each element is equal.
- * @param {Object} a1 First object to compare.
- * @param {Object} a2 Second object to compare.
+ * @param {string|Object} a Failure message (3 arguments)
+ *     or object #1 (2 arguments).
+ * @param {Object} b Object #1 (2 arguments) or object #2 (3 arguments).
+ * @param {Object} c Object #2 (3 arguments).
  */
-function assertElementsEquals(a1, a2) {
-  if (!a1) {
-    assert(!a2);
+function assertElementsEquals(a, b, c) {
+  _validateArguments(2, arguments);
+
+  var v1 = nonCommentArg(1, 2, arguments);
+  var v2 = nonCommentArg(2, 2, arguments);
+  var failureMessage = commentArg(2, arguments) ? commentArg(2, arguments) : '';
+
+  if (!v1) {
+    assert(failureMessage, !v2);
   } else {
-    assertEquals(a1.length, a2.length);
-    for (var i = 0; i < a1.length; ++i) {
-      assertEquals(a1[i], a2[i]);
+    assertEquals('length mismatch: ' + failureMessage, v1.length, v2.length);
+    for (var i = 0; i < v1.length; ++i) {
+      assertEquals(
+          'mismatch at index ' + i + ': ' + failureMessage, v1[i], v2[i]);
     }
   }
 }

@@ -957,6 +957,18 @@ See the COPYING file for details.
     }
   }
 
+  function testAssertElementsEquals() {
+    assertElementsEquals([1, 2], [1, 2]);
+    assertElementsEquals([1, 2], {0: 1, 1: 2, length: 2});
+    assertElementsEquals('Good assertion', [1, 2], [1, 2]);
+    assertThrowsJsUnitException(
+        function() {
+          assertElementsEquals('Message', [1, 2], [1]);
+        },
+        'length mismatch: Message\n' +
+        'Expected <2> (Number) but was <1> (Number)');
+  }
+
   function stringForWindowIEHelper() {
     window.stringForWindowIEResult = _displayStringForValue(window);
   }
