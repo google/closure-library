@@ -414,6 +414,9 @@ goog.style.getVisibleRectForElement = function(element) {
       visibleRect.bottom = Math.min(visibleRect.bottom,
                                     pos.y + el.clientHeight);
       visibleRect.left = Math.max(visibleRect.left, pos.x);
+      // TODO(user): We may want to check whether the current element is
+      // the document element or the body element, in case somebody sets
+      // overflow on the body element in CSS.
       inContainer = inContainer || el != scrollEl;
     }
   }
