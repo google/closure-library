@@ -903,6 +903,14 @@ goog.ui.SliderBase.prototype.disposeInternal = function() {
     this.mouseWheelHandler_.dispose();
     delete this.mouseWheelHandler_;
   }
+  if (this.valueDragger_) {
+    this.valueDragger_.dispose();
+    delete this.valueDragger_;
+  }
+  if (this.extentDragger_) {
+    this.extentDragger_.dispose();
+    delete this.extentDragger_;
+  }
 };
 
 
