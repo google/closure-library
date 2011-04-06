@@ -13,10 +13,9 @@ See the COPYING file for details.
   <title>Closure Unit Tests - goog.ui.MenuItem</title>
   <script src="../base.js"></script>
   <script>
-    goog.require('goog.array');
+    goog.require('goog.dom.classes');
     goog.require('goog.dom');
     goog.require('goog.dom.NodeType');
-    goog.require('goog.dom.classes');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Component.State');
@@ -138,12 +137,6 @@ See the COPYING file for details.
       assertTrue('Caption must be a string', goog.isString(item.getCaption()));
       assertEquals('Caption must have expected value', 'Foo',
           item.getCaption());
-
-      var arrayContent = goog.array.clone(goog.dom.htmlToDocumentFragment(
-          ' <b> foo</b><i>  bar</i> ').childNodes);
-      item.setContent(arrayContent);
-      assertEquals('whitespaces must be normalized in the caption',
-          'foo bar', item.getCaption());
     }
 
     function testSetSelectable() {
@@ -254,8 +247,8 @@ See the COPYING file for details.
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
 
       item.setContent(goog.dom.createDom('span', 'foo', 'Foo'));
-      assertEquals('getContent() must return element',
-          goog.dom.NodeType.ELEMENT, item.getContent().nodeType);
+      assertEquals('getContent() must return element', goog.dom.NodeType.ELEMENT,
+          item.getContent().nodeType);
       assertTrue('Item must still have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
 

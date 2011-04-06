@@ -20,11 +20,7 @@
 
 goog.provide('goog.ui.MenuItem');
 
-goog.require('goog.array');
-goog.require('goog.dom');
-goog.require('goog.dom.classes');
 goog.require('goog.math.Coordinate');
-goog.require('goog.string');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlContent');
@@ -119,11 +115,10 @@ goog.ui.MenuItem.prototype.getCaption = function() {
   var content = this.getContent();
   if (goog.isArray(content)) {
     var acceleratorClass = goog.getCssName('goog-menuitem-accel');
-    var caption = goog.array.map(content, function(node) {
+    return goog.array.map(content, function(node) {
       return goog.dom.classes.has(node, acceleratorClass) ?
-          '' : goog.dom.getRawTextContent(node);
+          '' : goog.dom.getTextContent(node);
     }).join('');
-    return goog.string.trim(caption.replace(/\s+/g, ' '));
   }
   return goog.ui.MenuItem.superClass_.getCaption.call(this);
 };
