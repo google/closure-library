@@ -26,6 +26,8 @@ goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.fx.dom.FadeInAndShow');
+goog.require('goog.fx.dom.FadeOutAndHide');
 goog.require('goog.iter');
 goog.require('goog.string');
 goog.require('goog.style');
@@ -203,6 +205,14 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
    * @private
    */
    this.topAlign_ = false;
+
+   /**
+    * Duration (in msec) of fade animation when menu is shown/hidden.
+    * Setting to 0 (default) disables animation entirely.
+    * @type {number}
+    * @private
+    */
+   this.menuFadeDuration_ = 0;
 };
 goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
 
@@ -255,6 +265,18 @@ goog.ui.AutoComplete.Renderer.prototype.setHighlightAllTokens =
 
 
 /**
+ * Sets the duration (in msec) of the fade animation when menu is shown/hidden.
+ * Setting to 0 (default) disables animation entirely.
+ * @param {number} duration Duration (in msec) of the fade animation (or 0 for
+ *     no animation).
+ */
+goog.ui.AutoComplete.Renderer.prototype.setMenuFadeDuration =
+    function(duration) {
+  this.menuFadeDuration_ = duration;
+};
+
+
+/**
  * Render the autocomplete UI
  *
  * @param {Array} rows Matching UI rows.
@@ -283,7 +305,12 @@ goog.ui.AutoComplete.Renderer.prototype.dismiss = function() {
   }
   if (this.visible_) {
     this.visible_ = false;
-    goog.style.showElement(this.element_, false);
+    if (this.menuFadeDuration_ > 0) {
+      new goog.fx.dom.FadeOutAndHide(this.element_,
+          this.menuFadeDuration_).play();
+    } else {
+      goog.style.showElement(this.element_, false);
+    }
   }
 };
 
@@ -294,7 +321,12 @@ goog.ui.AutoComplete.Renderer.prototype.dismiss = function() {
 goog.ui.AutoComplete.Renderer.prototype.show = function() {
   if (!this.visible_) {
     this.visible_ = true;
-    goog.style.showElement(this.element_, true);
+    if (this.menuFadeDuration_ > 0) {
+      new goog.fx.dom.FadeInAndShow(this.element_,
+          this.menuFadeDuration_).play();
+    } else {
+      goog.style.showElement(this.element_, true);
+    }
   }
 };
 

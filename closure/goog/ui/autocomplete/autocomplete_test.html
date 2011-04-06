@@ -521,6 +521,36 @@ function testDismiss() {
   ac.dismiss();
 }
 
+function testTriggerSuggestionsOnUpdate() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+
+  var dismissCalled = 0;
+  rend.dismiss = function() {
+    dismissCalled++;
+  };
+
+  var updateCalled = 0;
+  select.update = function(opt_force) {
+    updateCalled++;
+  };
+
+  // Normally, menu is dismissed after selecting row (without updating).
+  ac.setToken('the');
+  ac.selectHilited();
+  assertEquals(1, dismissCalled);
+  assertEquals(0, updateCalled);
+
+  // But not if we re-trigger on update.
+  ac.setTriggerSuggestionsOnUpdate(true);
+  ac.setToken('the');
+  ac.selectHilited();
+  assertEquals(1, dismissCalled);
+  assertEquals(1, updateCalled);
+}
+
 function testDispose() {
   var ds = new MockDS();
   var rend = new TestRend();

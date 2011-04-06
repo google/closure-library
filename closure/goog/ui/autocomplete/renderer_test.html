@@ -15,6 +15,10 @@ See the COPYING file for details.
 <script>
   goog.require('goog.dom');
   goog.require('goog.events');
+  goog.require('goog.fx.dom.FadeInAndShow');
+  goog.require('goog.fx.dom.FadeOutAndHide');
+  goog.require('goog.style');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.AutoComplete.Renderer');
@@ -26,6 +30,8 @@ See the COPYING file for details.
   var renderer;
   var rendRows = [];
   var someElement = goog.dom.getElement('someElement');
+  var propertyReplacer = new goog.testing.PropertyReplacer();
+
 
   // One-time set up of rows formatted for the renderer.
   var rows = [
@@ -47,6 +53,7 @@ See the COPYING file for details.
 
   function tearDown() {
     renderer.dispose();
+    propertyReplacer.reset();
   }
 
   function testBasicStringTokenHighlighting() {
@@ -355,6 +362,55 @@ See the COPYING file for details.
     renderer.redraw();
     goog.testing.events.fireMouseDownEvent(someElement);
     assertEquals('1 dismiss event should be fired', 1, dismissEvents);
+  }
+
+  function testMenuFadeDuration() {
+    var hideCalled = false;
+    var hideAnimCalled = false;
+    var showCalled = false;
+    var showAnimCalled = false;
+
+    propertyReplacer.set(goog.style, 'showElement',  function(el, state) {
+      if (state) {
+        showCalled = true;
+      } else {
+        hideCalled = true;
+      }
+    });
+
+    propertyReplacer.set(goog.fx.dom.FadeInAndShow.prototype, 'play',
+        function() {
+          showAnimCalled = true;
+        });
+
+    propertyReplacer.set(goog.fx.dom.FadeOutAndHide.prototype, 'play',
+        function() {
+          hideAnimCalled = true;
+        });
+
+    // Default behavior does show/hide but not animations.
+
+    renderer.show();
+    assertTrue(showCalled);
+    assertFalse(showAnimCalled);
+
+    renderer.dismiss();
+    assertTrue(hideCalled);
+    assertFalse(hideAnimCalled);
+
+    // But animations can be turned on.
+
+    showCalled = false;
+    hideCalled = false;
+    renderer.setMenuFadeDuration(100);
+
+    renderer.show();
+    assertFalse(showCalled);
+    assertTrue(showAnimCalled);
+
+    renderer.dismiss();
+    assertFalse(hideCalled);
+    assertTrue(hideAnimCalled);
   }
 
   // ------- Helper functions -------

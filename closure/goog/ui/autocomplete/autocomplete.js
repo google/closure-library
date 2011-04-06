@@ -432,7 +432,12 @@ goog.ui.AutoComplete.prototype.selectHilited = function() {
   if (index != -1) {
     var selectedRow = this.rows_[index];
     var suppressUpdate = this.selectionHandler_.selectRow(selectedRow);
-    this.dismiss();
+    if (this.triggerSuggestionsOnUpdate_) {
+      this.token_ = null;
+      this.dismissOnDelay();
+    } else {
+      this.dismiss();
+    }
     if (!suppressUpdate) {
       this.dispatchEvent({
         type: goog.ui.AutoComplete.EventType.UPDATE,
