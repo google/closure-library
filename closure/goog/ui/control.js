@@ -635,14 +635,12 @@ goog.ui.Control.prototype.getCaption = function() {
   if (!content) {
     return '';
   }
-  if (goog.isString(content)) {
-    return content;
-  }
-
-  var caption = goog.isArray(content) ?
-      goog.array.map(content, goog.dom.getTextContent).join('') :
+  var caption =
+      goog.isString(content) ? content :
+      goog.isArray(content) ? goog.array.map(content,
+          goog.dom.getRawTextContent).join('') :
       goog.dom.getTextContent(/** @type {!Node} */ (content));
-  return goog.string.trim(caption);
+  return goog.string.trim(caption.replace(/\s+/g, ' '));
 };
 
 
