@@ -252,6 +252,19 @@ goog.string.normalizeSpaces = function(str) {
 
 
 /**
+ * Removes the breaking spaces from the left and right of the string and
+ * collapses the sequences of breaking spaces in the middle into single spaces.
+ * The original and the result strings render the same way in HTML.
+ * @param {string} str A string in which to collapse spaces.
+ * @return {string} Copy of the string with normalized breaking spaces.
+ */
+goog.string.collapseBreakingSpaces = function(str) {
+  return str.replace(/[\t\r\n ]+/g, ' ').replace(
+      /^[\t\r\n ]+|[\t\r\n ]+$/g, '');
+};
+
+
+/**
  * Trims white spaces to the left and right of a string.
  * @param {string} str The string to trim.
  * @return {string} A trimmed copy of {@code str}.

@@ -16,8 +16,8 @@ See the COPYING file for details.
     goog.require('goog.dom');
     goog.require('goog.dom.classes');
     goog.require('goog.events');
-    goog.require('goog.events.KeyCodes');
     goog.require('goog.events.BrowserEvent.MouseButton');
+    goog.require('goog.events.KeyCodes');
     goog.require('goog.object');
     goog.require('goog.style');
     goog.require('goog.testing.ExpectedFailures');
@@ -604,7 +604,8 @@ See the COPYING file for details.
           control.googUiComponentHandler_);
       assertTrue('Key handler must have been disposed of',
           keyHandler.isDisposed());
-      assertUndefined('Key handler must have been deleted', control.keyHandler_);
+      assertUndefined('Key handler must have been deleted',
+          control.keyHandler_);
       assertNull('Extra class names must have been nulled out',
           control.getExtraClassNames());
     }
@@ -712,6 +713,16 @@ See the COPYING file for details.
       sandbox.innerHTML = '<div id="nodelist">Hello, <b>world</b>!</div>';
       control.decorate(goog.dom.getElement('nodelist'));
       assertEquals('Caption must have expected value', 'Hello, world!',
+          control.getCaption());
+
+      var arrayContent = goog.array.clone(goog.dom.htmlToDocumentFragment(
+          ' <b> foo</b><i>  bar</i> ').childNodes);
+      control.setContent(arrayContent);
+      assertEquals('whitespaces must be normalized in the caption',
+          'foo bar', control.getCaption());
+
+      control.setContent('\xa0foo');
+      assertEquals('indenting spaces must be kept', '\xa0foo',
           control.getCaption());
     }
 
@@ -907,7 +918,8 @@ See the COPYING file for details.
         control.getKeyEventTarget().focus();
         assertEquals('Control must not have dispatched FOCUS', 0,
             getEventCount(control, goog.ui.Component.EventType.FOCUS));
-        assertFalse('Control must not have keyboard focus', control.isFocused());
+        assertFalse('Control must not have keyboard focus',
+            control.isFocused());
         control.setVisible(false);
         assertFalse('Control must be hidden', control.isVisible());
         assertFalse('Control must not have a tab index',
@@ -933,7 +945,8 @@ See the COPYING file for details.
         // Expected to fail on Mac Safari prior to version 527.
         expectedFailures.expectFailureFor(isMacSafari3());
         try {
-          // Mac Safari currently doesn't support tabIndex on arbitrary elements.
+          // Mac Safari currently doesn't support tabIndex on arbitrary
+          // elements.
           assertTrue('Control must have a tab index',
               goog.dom.isFocusableTabIndex(control.getKeyEventTarget()));
         } catch (e) {
@@ -1620,7 +1633,7 @@ See the COPYING file for details.
      * Tests {@link goog.ui.Control#handleKeyEvent}.
      */
     function testHandleKeyEvent() {
-      control.render()
+      control.render();
       control.isVisible = control.isEnabled = function() {
         return true;
       };
