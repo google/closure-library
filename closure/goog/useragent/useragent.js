@@ -468,6 +468,8 @@ goog.userAgent.isVersion = function(version) {
  * Cache for {@link goog.userAgent.isDocumentMode}. 
  * Browsers document mode version number is unlikely to change during a session
  * we cache the results.
+ * @type {Object}
+ * @private
  */
 goog.userAgent.isDocumentModeCache_ = {};
 
