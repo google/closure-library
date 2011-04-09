@@ -11,9 +11,10 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.structs.PriorityPool</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.structs');
   goog.require('goog.structs.PriorityPool');
+  goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.structs');
 </script>
 </head>
 <body>
@@ -470,6 +471,89 @@ function testPriority1() {
   p.releaseObject(o1);
   assertNull(o3);
   assertNotNull(o4);
+}
+
+
+function testRateLimiting() {
+  var clock = new goog.testing.MockClock();
+  clock.install();
+
+  var p = new goog.structs.PriorityPool(0, 4);
+  p.setDelay(100);
+
+  var getCount = 0;
+  var callback = function(obj) {
+    assertNotNull(obj);
+    getCount++;
+  };
+
+  p.getObject(callback);
+  assertEquals(1, getCount);
+
+  p.getObject(callback);
+  assertEquals(1, getCount);
+
+  clock.tick(100);
+  assertEquals(2, getCount);
+
+  p.getObject(callback);
+  p.getObject(callback);
+  assertEquals(2, getCount);
+
+  clock.tick(100);
+  assertEquals(3, getCount);
+
+  clock.tick(100);
+  assertEquals(4, getCount);
+
+  p.getObject(callback);
+  assertEquals(4, getCount);
+
+  clock.tick(100);
+  assertEquals(4, getCount);
+
+  goog.dispose(clock);
+}
+
+
+function testRateLimitingWithChangingDelay() {
+  var clock = new goog.testing.MockClock();
+  clock.install();
+
+  var p = new goog.structs.PriorityPool(0, 3);
+  p.setDelay(100);
+
+  var getCount = 0;
+  var callback = function(obj) {
+    assertNotNull(obj);
+    getCount++;
+  };
+
+  p.getObject(callback);
+  assertEquals(1, getCount);
+
+  p.getObject(callback);
+  assertEquals(1, getCount);
+
+  clock.tick(50);
+  assertEquals(1, getCount);
+
+  p.setDelay(50);
+  assertEquals(2, getCount);
+
+  p.getObject(callback);
+  assertEquals(2, getCount);
+
+  clock.tick(20);
+  assertEquals(2, getCount);
+
+  p.setDelay(40);
+  assertEquals(2, getCount);
+
+  clock.tick(20);
+  assertEquals(3, getCount);
+
+  goog.dispose(clock);
 }
 
 
