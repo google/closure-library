@@ -400,8 +400,12 @@ goog.net.FileDownloader.prototype.getFile_ = function(url, behavior) {
   // distributed roughly evenly throughout the directories due to the hash
   // function, allowing many more than 5000 files to be downloaded.
   //
-  // The leading % ensures that no illegal dirnames are accidentally used.
-  var dirname = '%' + Math.abs(goog.crypt.hash32.encodeString(url)).
+  // The leading ` ensures that no illegal dirnames are accidentally used. % was
+  // previously used, but Chrome has a bug (as of 12.0.725.0 dev) where
+  // filenames are URL-decoded before checking their validity, so filenames
+  // containing e.g. '%3f' (the URL-encoding of :, an invalid character) are
+  // rejected.
+  var dirname = '`' + Math.abs(goog.crypt.hash32.encodeString(url)).
       toString(16).substring(0, 3);
 
   return this.dir_.
@@ -422,8 +426,12 @@ goog.net.FileDownloader.prototype.getFile_ = function(url, behavior) {
  */
 goog.net.FileDownloader.prototype.sanitize_ = function(str) {
   // Add a prefix, since certain prefixes are disallowed for paths. None of the
-  // disallowed prefixes start with '%'.
-  return '%' + str.replace(/[\/\\<>:?*"|]/g, encodeURIComponent);
+  // disallowed prefixes start with '`'. We use ` rather than % for escaping the
+  // filename due to a Chrome bug (as of 12.0.725.0 dev) where filenames are
+  // URL-decoded before checking their validity, so filenames containing e.g.
+  // '%3f' (the URL-encoding of :, an invalid character) are rejected.
+  return '`' + str.replace(/[\/\\<>:?*"|%`]/g, encodeURIComponent).
+      replace(/%/g, '`');
 };
 
 
