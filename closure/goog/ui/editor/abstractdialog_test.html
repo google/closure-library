@@ -27,10 +27,16 @@ See the COPYING file for details.
   goog.require('goog.ui.editor.AbstractDialog');
   goog.require('goog.ui.editor.AbstractDialog.Builder');
   goog.require('goog.ui.editor.AbstractDialog.EventType');
+  goog.require('goog.userAgent');
 </script>
 </head>
 <body>
 <script>
+
+function shouldRunTests() {
+  // Test disabled in IE7 due to flakiness. See b/4269021.
+  return !(goog.userAgent.IE && goog.userAgent.isVersion('7'));
+}
 
 var dialog;
 var builder;
