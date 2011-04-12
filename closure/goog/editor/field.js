@@ -849,7 +849,7 @@ goog.editor.Field.prototype.clearListeners_ = function() {
           this.boundFocusListenerOpera_, false);
       editWindow.removeEventListener(goog.events.EventType.BLUR,
           this.boundBlurListenerOpera_, false);
-    } catch(e) {
+    } catch (e) {
       // The editWindow no longer exists, or has been navigated to a different-
       // origin URL. Either way, the event listeners have already been removed
       // for us.
@@ -2475,7 +2475,6 @@ goog.editor.Field.prototype.makeIframeField_ = function(opt_iframeSrc) {
  *
  * @param {HTMLIFrameElement} iframe The iframe element.
  * @protected
- * @notypecheck
  */
 goog.editor.Field.prototype.attachIframe = function(iframe) {
   var field = this.getOriginalElement();
@@ -2491,7 +2490,6 @@ goog.editor.Field.prototype.attachIframe = function(iframe) {
  * @return {goog.editor.icontent.FieldFormatInfo} The FieldFormatInfo object for
  *     this field's configuration.
  * @protected
- * @notypecheck
  */
 goog.editor.Field.prototype.getFieldFormatInfo = function(extraStyles) {
   var originalElement = this.getOriginalElement();
