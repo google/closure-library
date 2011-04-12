@@ -138,6 +138,31 @@ goog.net.xpc.NixTransport.NIX_ID_FIELD = 'GCXPC____NIXVBS_container';
 
 
 /**
+ * Determines if the installed version of IE supports accessing window.opener
+ * after it has been set to a non-Window/null value. NIX relies on this being
+ * possible.
+ * @return {boolean} Whether window.opener behavior is compatible with NIX.
+ */
+goog.net.xpc.NixTransport.isNixSupported = function() {
+  var isSupported = false;
+  try {
+    var oldOpener = window.opener;
+    // The compiler complains (as it should!) if we set window.opener to
+    // something other than a windo w or null.
+    window.opener = /** @type {Window} */ ({});
+    try {
+      // TODO(nicksantos): Implement goog.reflect.canAccessProperty and use it
+      // here.
+      new Function('a', 'return a')(window.opener);
+      isSupported = true;
+    } catch(e2) { }
+    window.opener = oldOpener;
+  } catch(e) { }
+  return isSupported;
+};
+
+
+/**
  * Conducts the global setup work for the NIX transport method.
  * This function creates and then injects into the page the
  * VBScript code necessary to create the NIX wrapper class.
