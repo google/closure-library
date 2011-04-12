@@ -34,10 +34,20 @@ goog.require('goog.string');
 /**
  * TextFormatSerializer, a serializer which turns Messages into the human
  * readable text format.
+ * @param {boolean=} opt_ignoreMissingFields If true, then fields that cannot be
+ *     found on the proto when parsing the text format will be ignored.
  * @constructor
  * @extends {goog.proto2.Serializer}
  */
-goog.proto2.TextFormatSerializer = function() {};
+goog.proto2.TextFormatSerializer = function(opt_ignoreMissingFields) {
+  /**
+   * Whether to ignore fields not defined on the proto when parsing the text
+   * format.
+   * @type {boolean}
+   * @private
+   */
+  this.ignoreMissingFields_ = !!opt_ignoreMissingFields;
+};
 goog.inherits(goog.proto2.TextFormatSerializer, goog.proto2.Serializer);
 
 
@@ -53,7 +63,7 @@ goog.proto2.TextFormatSerializer.prototype.deserializeTo =
   var descriptor = message.getDescriptor();
   var textData = data.toString();
   var parser = new goog.proto2.TextFormatSerializer.Parser();
-  if (!parser.parse(message, textData)) {
+  if (!parser.parse(message, textData, this.ignoreMissingFields_)) {
     return parser.getError();
   }
 
@@ -400,6 +410,8 @@ goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes = {
   CLOSE_BRACE: /^}/,
   OPEN_TAG: /^</,
   CLOSE_TAG: /^>/,
+  OPEN_LIST: /^\[/,
+  CLOSE_LIST: /^\]/,
   STRING: new RegExp('^"([^"|\\\\]|\\\\.)*"'),
   COLON: /^:/,
   COMMA: /^,/,
@@ -499,6 +511,13 @@ goog.proto2.TextFormatSerializer.Parser = function() {
    * @private
    */
   this.tokenizer_ = null;
+
+  /**
+   * Whether to ignore missing fields in the proto when parsing.
+   * @type {boolean}
+   * @private
+   */
+  this.ignoreMissingFields_ = false;
 };
 
 
@@ -506,12 +525,15 @@ goog.proto2.TextFormatSerializer.Parser = function() {
  * Parses the given data, filling the message as it goes.
  * @param {goog.proto2.Message} message The message to fill.
  * @param {string} data The text format data.
+ * @param {boolean=} opt_ignoreMissingFields If true, fields missing in the
+ *     proto will be ignored.
  * @return {boolean} True on success, false on failure. On failure, the
  *     getError method can be called to get the reason for failure.
  */
 goog.proto2.TextFormatSerializer.Parser.prototype.parse =
-    function(message, data) {
+    function(message, data, opt_ignoreMissingFields) {
   this.error_ = null;
+  this.ignoreMissingFields_ = !!opt_ignoreMissingFields;
   this.tokenizer_ = new goog.proto2.TextFormatSerializer.Tokenizer_(data, true);
   this.tokenizer_.next();
   return this.consumeMessage_(message, '');
@@ -539,7 +561,9 @@ goog.proto2.TextFormatSerializer.Parser.prototype.reportError_ =
 
 /**
  * Attempts to consume the given message.
- * @param {goog.proto2.Message} message The message to consume and fill.
+ * @param {goog.proto2.Message} message The message to consume and fill. If
+ *    null, then the message contents will be consumed without ever being set
+ *    to anything.
  * @param {string} delimiter The delimiter expected at the end of the message.
  * @return {boolean} True on success, false otherwise.
  * @private
@@ -715,8 +739,47 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeNestedMessage_ =
 
 
 /**
+ * Attempts to consume the value of an unknown field. This method uses
+ * heuristics to try to consume just the right tokens.
+ * @return {boolean} True on success, false otherwise.
+ * @private
+ */
+goog.proto2.TextFormatSerializer.Parser.prototype.consumeUnknownFieldValue_ =
+    function() {
+  // : is optional.
+  this.tryConsume_(':');
+
+  // Handle form: [.. , ... , ..]
+  if (this.tryConsume_('[')) {
+    while (true) {
+      this.tokenizer_.next();
+      if (this.tryConsume_(']')) {
+        break;
+      }
+      if (!this.consume_(',')) { return false; }
+    }
+
+    return true;
+  }
+
+  // Handle nested messages/groups.
+  if (this.tryConsume_('<')) {
+    return this.consumeMessage_(null /* unknown */, '>');
+  } else if (this.tryConsume_('{')) {
+    return this.consumeMessage_(null /* unknown */, '}');
+  } else {
+    // Otherwise, consume a single token for the field value.
+    this.tokenizer_.next();
+  }
+
+  return true;
+};
+
+
+/**
  * Attempts to consume a field under a message.
- * @param {goog.proto2.Message} message The parent message.
+ * @param {goog.proto2.Message} message The parent message. If null, then the
+ *     field value will be consumed without being assigned to anything.
  * @return {boolean} True on success, false otherwise.
  * @private
  */
@@ -728,10 +791,18 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeField_ =
     return false;
   }
 
-  var field = message.getDescriptor().findFieldByName(fieldName.toString());
+  var field = null;
+  if (message) {
+    field = message.getDescriptor().findFieldByName(fieldName.toString());
+  }
+
   if (field == null) {
-    this.reportError_('Unknown field: ' + fieldName);
-    return false;
+    if (this.ignoreMissingFields_) {
+      return this.consumeUnknownFieldValue_();
+    } else {
+      this.reportError_('Unknown field: ' + fieldName);
+      return false;
+    }
   }
 
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.MESSAGE ||
