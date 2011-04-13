@@ -142,7 +142,7 @@ function assertTokens(value, tokens, opt_ignoreWhitespace) {
   for (var i = 0; i < tokens.length; ++i) {
     assertToken(tokens[i], tokensFound[i]);
   }
-};
+}
 
 function assertToken(expected, found) {
   assertEquals(expected.type, found.type);
@@ -160,7 +160,7 @@ function testTokenizer() {
       { type: types.WHITESPACE, value: ' '},
       { type: types.CLOSE_BRACE }
   ]);
-};
+}
 
 function testTokenizerNoWhitespace() {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
@@ -169,7 +169,7 @@ function testTokenizerNoWhitespace() {
       { type: types.STRING, value: '"hello world"' },
       { type: types.CLOSE_BRACE }
   ], true);
-};
+}
 
 
 function assertIdentifier(identifier) {
@@ -239,7 +239,7 @@ function testTokenizerSingleTokens() {
   assertComment('# foo bar baz');
   assertComment('# foo ## bar baz');
   assertComment('# foo "bar" baz');
-};
+}
 
 function testSerializationOfStringWithQuotes() {
   var nestedUnknown = new proto2.TestAllTypes();
@@ -278,6 +278,19 @@ function testDeserializationOfList() {
   assertEquals(101, message.getOptionalInt32());
   assertEquals(201, message.getRepeatedInt32(0));
   assertEquals(123.4, message.getOptionalFloat());
+}
+
+function testDeserializationOfZeroFalseAndEmptyString() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 0\n' +
+      'optional_bool: false\n' +
+      'optional_string: ""';
+
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+
+  assertEquals(0, message.getOptionalInt32());
+  assertEquals(false, message.getOptionalBool());
+  assertEquals('', message.getOptionalString());
 }
 
 function testDeserializationSkipUnknown() {

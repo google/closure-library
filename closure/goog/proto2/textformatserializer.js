@@ -598,7 +598,7 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeMessage_ =
 goog.proto2.TextFormatSerializer.Parser.prototype.consumeFieldValue_ =
     function(message, field) {
   var value = this.getFieldValue_(field);
-  if (!value) { return false; }
+  if (goog.isNull(value)) { return false; }
 
   if (field.isRepeated()) {
     message.add(field, value);
