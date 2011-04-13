@@ -19,15 +19,17 @@
  */
 
 goog.provide('goog.ui.Checkbox');
+goog.provide('goog.ui.Checkbox.Css');
 goog.provide('goog.ui.Checkbox.State');
 
 goog.require('goog.array');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
-goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.ui.CheckboxRenderer');
 goog.require('goog.ui.Component.EventType');
+goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Control');
+goog.require('goog.ui.ControlRenderer');
 goog.require('goog.ui.registry');
 
 
@@ -176,7 +178,13 @@ goog.ui.Checkbox.prototype.toggle = function() {
 goog.ui.Checkbox.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   if (this.isHandleMouseEvents()) {
-    this.getHandler().listen(this.label_ || this.getElement(),
+    // Listen to the label, if it was set.
+    if (this.label_) {
+      this.getHandler().listen(this.label_,
+          goog.events.EventType.CLICK, this.handleClickOrSpace_);
+    }
+    // Always listen to the checkbox element.
+    this.getHandler().listen(this.getElement(),
         goog.events.EventType.CLICK, this.handleClickOrSpace_);
   }
 };
@@ -227,7 +235,6 @@ goog.ui.Checkbox.prototype.handleKeyEventInternal = function(e) {
 /**
  * Register this control so it can be created from markup.
  */
-// TODO(user): support setLabel from markup
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.CheckboxRenderer.CSS_CLASS,
     function() {
