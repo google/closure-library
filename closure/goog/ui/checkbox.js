@@ -19,17 +19,14 @@
  */
 
 goog.provide('goog.ui.Checkbox');
-goog.provide('goog.ui.Checkbox.Css');
 goog.provide('goog.ui.Checkbox.State');
 
-goog.require('goog.array');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.ui.CheckboxRenderer');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Control');
-goog.require('goog.ui.ControlRenderer');
 goog.require('goog.ui.registry');
 
 
