@@ -24,6 +24,8 @@ See the COPYING file for details.
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Checkbox');
+    goog.require('goog.ui.CheckboxRenderer');
+    goog.require('goog.ui.ControlRenderer');
     goog.require('goog.ui.decorate');
   </script>
 </head>
@@ -175,6 +177,27 @@ See the COPYING file for details.
         goog.ui.Checkbox.State.UNDETERMINED,
         testCheckboxWithState.getChecked());
     testCheckboxWithState.dispose();
+  }
+
+  function testCustomRenderer() {
+    var cssClass = 'my-custom-checkbox';
+    var renderer = goog.ui.ControlRenderer.getCustomRenderer(
+        goog.ui.CheckboxRenderer, cssClass);
+    var customCheckbox = new goog.ui.Checkbox(
+        undefined, undefined, renderer);
+    customCheckbox.createDom();
+    assertElementsEquals(
+        ['my-custom-checkbox', 'my-custom-checkbox-unchecked'],
+        goog.dom.classes.get(customCheckbox.getElement()));
+    customCheckbox.setChecked(true);
+    assertElementsEquals(
+        ['my-custom-checkbox', 'my-custom-checkbox-checked'],
+        goog.dom.classes.get(customCheckbox.getElement()));
+    customCheckbox.setChecked(null);
+    assertElementsEquals(
+        ['my-custom-checkbox', 'my-custom-checkbox-undetermined'],
+        goog.dom.classes.get(customCheckbox.getElement()));
+    customCheckbox.dispose();
   }
 
   function testGetAriaRole() {
