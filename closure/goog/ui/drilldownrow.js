@@ -210,7 +210,7 @@ goog.ui.DrilldownRow.prototype.addChildAt = function(child, index, opt_render) {
 /** @inheritDoc */
 goog.ui.DrilldownRow.prototype.removeChild = function(child) {
   goog.dom.removeNode(child.getElement());
-  return goog.ui.DrilldownRow.superClass_.removeChild.call(this, child);
+  goog.ui.DrilldownRow.superClass_.removeChild.call(this, child);
 };
 
 
@@ -275,7 +275,11 @@ goog.ui.DrilldownRow.prototype.findIndex = function() {
   if (!parent) {
     throw Error('Component has no parent');
   }
-  return parent.getIndexOfChild(this);
+  for (var i = 0; i < parent.getChildCount(); i++) {
+    if (parent.getChildAt(i) == this) {
+      return i;
+    }
+  }
 };
 
 
