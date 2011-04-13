@@ -55,6 +55,7 @@ goog.require('goog.userAgent');
  */
 goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
     opt_rightAlign, opt_useStandardHighlighting) {
+  goog.events.EventTarget.call(this);
 
   /**
    * Reference to the parent element that will hold the autocomplete elements
@@ -204,7 +205,7 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
    * @type {boolean}
    * @private
    */
-   this.topAlign_ = false;
+  this.topAlign_ = false;
 
    /**
     * Duration (in msec) of fade animation when menu is shown/hidden.
@@ -212,7 +213,7 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
     * @type {number}
     * @private
     */
-   this.menuFadeDuration_ = 0;
+  this.menuFadeDuration_ = 0;
 };
 goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
 
