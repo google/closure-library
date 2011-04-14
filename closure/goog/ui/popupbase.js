@@ -43,6 +43,8 @@ goog.require('goog.userAgent');
  * @param {goog.ui.PopupBase.Type=} opt_type Type of popup.
  */
 goog.ui.PopupBase = function(opt_element, opt_type) {
+  goog.events.EventTarget.call(this);
+
   /**
    * An event handler to manage the events easily
    * @type {goog.events.EventHandler}
