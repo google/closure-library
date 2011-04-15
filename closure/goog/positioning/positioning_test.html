@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<!--
-
--->
 <html>
 <!--
 Copyright 2008 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
+
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -62,6 +60,9 @@ goog.require('goog.userAgent.product');
 </style>
 </head>
 <body>
+
+<div id='offscreen-anchor'
+   style='position: absolute; left: -1000px; top: -1000px'></div>
 
   <div id="ltr" dir="ltr">
     Left to right element.
@@ -144,6 +145,9 @@ var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0;
 
 var expectedFailures = new goog.testing.ExpectedFailures();
 
+var corner = goog.positioning.Corner;
+var overflow = goog.positioning.Overflow;
+
 function setUpPage() {
   var viewportSize = goog.dom.getViewportSize();
   // Some tests need enough size viewport.
@@ -179,7 +183,6 @@ function assertRoundedEquals(a, b, c) {
 function testPositionAtAnchorLeftToRight() {
   var anchor = document.getElementById('anchor1');
   var popup = document.getElementById('popup1');
-  var corner = goog.positioning.Corner;
 
   // Anchor top left to top left.
   goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
@@ -250,13 +253,12 @@ function testPositionAtAnchorLeftToRight() {
 function testPositionAtAnchorWithOffset() {
   var anchor = document.getElementById('anchor1');
   var popup = document.getElementById('popup1');
-  var corner = goog.positioning.Corner;
 
   // Anchor top left to top left with an offset moving the popup away from the
   // anchor.
   goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
                                     popup, corner.TOP_LEFT,
-                                    new goog.math.Coordinate(-15, -20));
+                                    newCoord(-15, -20));
   var anchorRect = goog.style.getBounds(anchor);
   var popupRect = goog.style.getBounds(popup);
   assertRoundedEquals('Left edge of popup should be fifteen pixels from ' +
@@ -271,7 +273,7 @@ function testPositionAtAnchorWithOffset() {
   // anchor.
   goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
                                     popup, corner.TOP_LEFT,
-                                    new goog.math.Coordinate(3, 1));
+                                    newCoord(3, 1));
   anchorRect = goog.style.getBounds(anchor);
   popupRect = goog.style.getBounds(popup);
   assertRoundedEquals('Left edge of popup should be three pixels right of ' +
@@ -288,8 +290,6 @@ function testPositionAtAnchorWithOffset() {
 function testPositionAtAnchorOverflowLeftEdgeRightToLeft() {
   var anchor = document.getElementById('anchor5');
   var popup = document.getElementById('popup5');
-  var corner = goog.positioning.Corner;
-  var overflow = goog.positioning.Overflow;
 
   var status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
                                                  popup, corner.TOP_RIGHT,
@@ -330,7 +330,6 @@ function testPositionAtAnchorOverflowLeftEdgeRightToLeft() {
 function testPositionAtAnchorWithMargin() {
   var anchor = document.getElementById('anchor1');
   var popup = document.getElementById('popup1');
-  var corner = goog.positioning.Corner;
 
   // Anchor top left to top left.
   goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
@@ -371,7 +370,6 @@ function testPositionAtAnchorRightToLeft() {
 
   var anchor = document.getElementById('anchor2');
   var popup = document.getElementById('popup2');
-  var corner = goog.positioning.Corner;
 
   // Anchor top left to top left.
   goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
@@ -405,7 +403,6 @@ function testPositionAtAnchorRightToLeft() {
 function testPositionAtAnchorBodyViewport() {
   var anchor = document.getElementById('anchor1');
   var popup = document.getElementById('popup3');
-  var corner = goog.positioning.Corner;
 
   // Anchor top left to top left.
   goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
@@ -436,8 +433,6 @@ function testPositionAtAnchorBodyViewport() {
 function testPositionAtAnchorOutsideViewport() {
   var anchor = document.getElementById('anchor4');
   var popup = document.getElementById('popup1');
-  var corner = goog.positioning.Corner;
-  var overflow = goog.positioning.Overflow;
 
   var status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
                                                  popup, corner.TOP_RIGHT);
@@ -489,20 +484,20 @@ function testAdjustForViewportFailIgnore() {
   var viewport = new goog.math.Box(100, 200, 200, 100);
   var overflow = goog.positioning.Overflow.IGNORE;
 
-  var pos = new goog.math.Coordinate(150, 150);
-  var size = new goog.math.Size(50, 50);
+  var pos = newCoord(150, 150);
+  var size = newSize(50, 50);
   assertEquals('Viewport overflow should be ignored.',
                goog.positioning.OverflowStatus.NONE,
                f(pos, size, viewport, overflow));
 
-  pos = new goog.math.Coordinate(150, 150);
-  size = new goog.math.Size(100, 50);
+  pos = newCoord(150, 150);
+  size = newSize(100, 50);
   assertEquals('Viewport overflow should be ignored.',
                goog.positioning.OverflowStatus.NONE,
                f(pos, size, viewport, overflow));
 
-  pos = new goog.math.Coordinate(50, 50);
-  size = new goog.math.Size(50, 50);
+  pos = newCoord(50, 50);
+  size = newSize(50, 50);
   assertEquals('Viewport overflow should be ignored.',
                goog.positioning.OverflowStatus.NONE,
                f(pos, size, viewport, overflow));
@@ -515,38 +510,38 @@ function testAdjustForViewportFailXY() {
   var overflow = goog.positioning.Overflow.FAIL_X |
                  goog.positioning.Overflow.FAIL_Y;
 
-  var pos = new goog.math.Coordinate(150, 150);
-  var size = new goog.math.Size(50, 50);
+  var pos = newCoord(150, 150);
+  var size = newSize(50, 50);
   assertEquals('Element should not overflow viewport.',
                goog.positioning.OverflowStatus.NONE,
                f(pos, size, viewport, overflow));
 
-  pos = new goog.math.Coordinate(150, 150);
-  size = new goog.math.Size(100, 50);
+  pos = newCoord(150, 150);
+  size = newSize(100, 50);
   assertEquals('Element should overflow the right edge of viewport.',
                goog.positioning.OverflowStatus.FAILED_RIGHT,
                f(pos, size, viewport, overflow));
 
-  pos = new goog.math.Coordinate(150, 150);
-  size = new goog.math.Size(50, 100);
+  pos = newCoord(150, 150);
+  size = newSize(50, 100);
   assertEquals('Element should overflow the bottom edge of viewport.',
                goog.positioning.OverflowStatus.FAILED_BOTTOM,
                f(pos, size, viewport, overflow));
 
-  pos = new goog.math.Coordinate(50, 150);
-  size = new goog.math.Size(50, 50);
+  pos = newCoord(50, 150);
+  size = newSize(50, 50);
   assertEquals('Element should overflow the left edge of viewport.',
                goog.positioning.OverflowStatus.FAILED_LEFT,
                f(pos, size, viewport, overflow));
 
-  pos = new goog.math.Coordinate(150, 50);
-  size = new goog.math.Size(50, 50);
+  pos = newCoord(150, 50);
+  size = newSize(50, 50);
   assertEquals('Element should overflow the top edge of viewport.',
                goog.positioning.OverflowStatus.FAILED_TOP,
                f(pos, size, viewport, overflow));
 
-  pos = new goog.math.Coordinate(50, 50);
-  size = new goog.math.Size(50, 50);
+  pos = newCoord(50, 50);
+  size = newSize(50, 50);
   assertEquals('Element should overflow the left & top edges of viewport.',
                goog.positioning.OverflowStatus.FAILED_LEFT |
                goog.positioning.OverflowStatus.FAILED_TOP,
@@ -560,16 +555,16 @@ function testAdjustForViewportAdjustXFailY() {
   var overflow = goog.positioning.Overflow.ADJUST_X |
                  goog.positioning.Overflow.FAIL_Y;
 
-  var pos = new goog.math.Coordinate(150, 150);
-  var size = new goog.math.Size(50, 50);
+  var pos = newCoord(150, 150);
+  var size = newSize(50, 50);
   assertEquals('Element should not overflow viewport.',
                goog.positioning.OverflowStatus.NONE,
                f(pos, size, viewport, overflow));
   assertEquals('X Position should not have been changed.', 150, pos.x);
   assertEquals('Y Position should not have been changed.', 150, pos.y);
 
-  pos = new goog.math.Coordinate(150, 150);
-  size = new goog.math.Size(100, 50);
+  pos = newCoord(150, 150);
+  size = newSize(100, 50);
   assertEquals('Element position should be adjusted not to overflow right ' +
                'edge of viewport.',
                goog.positioning.OverflowStatus.ADJUSTED_X,
@@ -577,8 +572,8 @@ function testAdjustForViewportAdjustXFailY() {
   assertEquals('X Position should be adjusted to 100.', 100, pos.x);
   assertEquals('Y Position should not have been changed.', 150, pos.y);
 
-  pos = new goog.math.Coordinate(50, 150);
-  size = new goog.math.Size(100, 50);
+  pos = newCoord(50, 150);
+  size = newSize(100, 50);
   assertEquals('Element position should be adjusted not to overflow left ' +
                'edge of viewport.',
                goog.positioning.OverflowStatus.ADJUSTED_X,
@@ -587,8 +582,8 @@ function testAdjustForViewportAdjustXFailY() {
   assertEquals('Y Position should not have been changed.', 150, pos.y);
 
 
-  pos = new goog.math.Coordinate(50, 50);
-  size = new goog.math.Size(100, 50);
+  pos = newCoord(50, 50);
+  size = newSize(100, 50);
   assertEquals('Element position should be adjusted not to overflow left ' +
                'edge of viewport, should overflow bottom edge.',
                goog.positioning.OverflowStatus.ADJUSTED_X |
@@ -604,24 +599,24 @@ function testAdjustForViewportResizeHeight() {
   var viewport = new goog.math.Box(0, 200, 200, 0);
   var overflow = goog.positioning.Overflow.RESIZE_HEIGHT;
 
-  var pos = new goog.math.Coordinate(150, 150);
-  var size = new goog.math.Size(25, 100);
+  var pos = newCoord(150, 150);
+  var size = newSize(25, 100);
   assertEquals('Viewport height should be resized.',
                goog.positioning.OverflowStatus.HEIGHT_ADJUSTED,
                f(pos, size, viewport, overflow));
   assertEquals('Height should be resized to 50.',
                50, size.height);
 
-  var pos = new goog.math.Coordinate(0, 0);
-  var size = new goog.math.Size(50, 250);
+  var pos = newCoord(0, 0);
+  var size = newSize(50, 250);
   assertEquals('Viewport height should be resized.',
                goog.positioning.OverflowStatus.HEIGHT_ADJUSTED,
                f(pos, size, viewport, overflow));
   assertEquals('Height should be resized to 200.',
                200, size.height);
 
-  pos = new goog.math.Coordinate(150, 150);
-  size = new goog.math.Size(50, 50);
+  pos = newCoord(150, 150);
+  size = newSize(50, 50);
   assertEquals('No Viewport overflow.',
                goog.positioning.OverflowStatus.NONE,
                f(pos, size, viewport, overflow));
@@ -631,7 +626,6 @@ function testAdjustForViewportResizeHeight() {
 function testGetEffectiveCornerLeftToRight() {
   var f = goog.positioning.getEffectiveCorner;
   var el = document.getElementById('ltr');
-  var corner = goog.positioning.Corner;
 
   assertEquals('TOP_LEFT should be unchanged for ltr.',
                corner.TOP_LEFT,
@@ -664,7 +658,6 @@ function testGetEffectiveCornerLeftToRight() {
 function testGetEffectiveCornerRightToLeft() {
   var f = goog.positioning.getEffectiveCorner;
   var el = document.getElementById('rtl');
-  var corner = goog.positioning.Corner;
 
   assertEquals('TOP_LEFT should be unchanged for rtl.',
                corner.TOP_LEFT,
@@ -696,7 +689,6 @@ function testGetEffectiveCornerRightToLeft() {
 
 function testFlipCornerHorizontal() {
   var f = goog.positioning.flipCornerHorizontal;
-  var corner = goog.positioning.Corner;
 
   assertEquals('TOP_LEFT should be flipped to TOP_RIGHT.',
                corner.TOP_RIGHT,
@@ -728,7 +720,6 @@ function testFlipCornerHorizontal() {
 
 function testFlipCornerVertical() {
   var f = goog.positioning.flipCornerVertical;
-  var corner = goog.positioning.Corner;
 
   assertEquals('TOP_LEFT should be flipped to BOTTOM_LEFT.',
                corner.BOTTOM_LEFT,
@@ -760,7 +751,6 @@ function testFlipCornerVertical() {
 
 function testFlipCorner() {
   var f = goog.positioning.flipCorner;
-  var corner = goog.positioning.Corner;
 
   assertEquals('TOP_LEFT should be flipped to BOTTOM_RIGHT.',
                corner.BOTTOM_RIGHT,
@@ -790,7 +780,6 @@ function testFlipCorner() {
 }
 
 function testPositionAtAnchorFrameViewportStandard() {
-  var corner = goog.positioning.Corner;
   var iframe = document.getElementById('iframe-standard');
   var iframeDoc = goog.dom.getFrameContentDocument(iframe);
   assertTrue(new goog.dom.DomHelper(iframeDoc).isCss1CompatMode());
@@ -812,7 +801,6 @@ function testPositionAtAnchorFrameViewportStandard() {
 }
 
 function testPositionAtAnchorFrameViewportQuirk() {
-  var corner = goog.positioning.Corner;
   var iframe = document.getElementById('iframe-quirk');
   var iframeDoc = goog.dom.getFrameContentDocument(iframe);
   assertFalse(new goog.dom.DomHelper(iframeDoc).isCss1CompatMode());
@@ -835,7 +823,6 @@ function testPositionAtAnchorFrameViewportQuirk() {
 }
 
 function testPositionAtAnchorFrameViewportWithPopupInScroller() {
-  var corner = goog.positioning.Corner;
   var iframe = document.getElementById('iframe-standard');
   var iframeDoc = goog.dom.getFrameContentDocument(iframe);
 
@@ -858,7 +845,6 @@ function testPositionAtAnchorFrameViewportWithPopupInScroller() {
 }
 
 function testPositionAtAnchorNestedFrames() {
-  var corner = goog.positioning.Corner;
   var outerIframe = document.getElementById('nested-outer');
   var outerDoc = goog.dom.getFrameContentDocument(outerIframe);
   var popup = outerDoc.getElementById('popup1');
@@ -886,6 +872,45 @@ function testPositionAtAnchorNestedFrames() {
   popupRect = goog.style.getBounds(popup);
   assertRoundedEquals('Top of frame should align with bottom of the popup',
                       innerIframeRect.top, popupRect.top + popupRect.height);
+}
+
+function testPositionAtAnchorOffscreen() {
+  var offset = goog.userAgent.IE && !goog.userAgent.isVersion(8) ? 2 : 0;
+  var anchor = goog.dom.getElement('offscreen-anchor');
+  var popup = goog.dom.getElement('popup3');
+
+  goog.positioning.positionAtAnchor(
+      anchor, corner.TOP_LEFT, popup, corner.TOP_LEFT, null, null,
+      overflow.ADJUST_X | overflow.ADJUST_Y);
+  assertObjectEquals(
+      newCoord(offset, offset), goog.style.getPageOffset(popup));
+
+  goog.positioning.positionAtAnchor(
+      anchor, corner.TOP_LEFT, popup, corner.TOP_LEFT, null, null,
+      overflow.ADJUST_X_EXCEPT_OFFSCREEN | overflow.ADJUST_Y);
+  assertObjectEquals(
+      newCoord(-1000, offset), goog.style.getPageOffset(popup));
+
+  goog.positioning.positionAtAnchor(
+      anchor, corner.TOP_LEFT, popup, corner.TOP_LEFT, null, null,
+      overflow.ADJUST_X | overflow.ADJUST_Y_EXCEPT_OFFSCREEN);
+  assertObjectEquals(
+      newCoord(offset, -1000), goog.style.getPageOffset(popup));
+
+  goog.positioning.positionAtAnchor(
+      anchor, corner.TOP_LEFT, popup, corner.TOP_LEFT, null, null,
+      overflow.ADJUST_X_EXCEPT_OFFSCREEN | overflow.ADJUST_Y_EXCEPT_OFFSCREEN);
+  assertObjectEquals(
+      newCoord(-1000, -1000),
+      goog.style.getPageOffset(popup));
+}
+
+function newCoord(x, y) {
+  return new goog.math.Coordinate(x, y);
+}
+
+function newSize(w, h) {
+  return new goog.math.Size(w, h);
 }
 
 </script>
