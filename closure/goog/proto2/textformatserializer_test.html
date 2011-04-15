@@ -280,6 +280,22 @@ function testDeserializationOfList() {
   assertEquals(123.4, message.getOptionalFloat());
 }
 
+function testDeserializationOfIntegerAsHexadecimalString() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 0x1\n' +
+      'optional_sint32: 0xf\n' +
+      'optional_uint32: 0xffffffff\n' +
+      'repeated_int32: [0x0, 0xff]\n';
+
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+
+  assertEquals(1, message.getOptionalInt32());
+  assertEquals(15, message.getOptionalSint32());
+  assertEquals(4294967295, message.getOptionalUint32());
+  assertEquals(0, message.getRepeatedInt32(0));
+  assertEquals(255, message.getRepeatedInt32(1));
+}
+
 function testDeserializationOfZeroFalseAndEmptyString() {
   var message = new proto2.TestAllTypes();
   var value = 'optional_int32: 0\n' +

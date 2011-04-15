@@ -630,12 +630,20 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
       var num = this.consumeNumber_();
       if (!num) { return null; }
 
-      if (goog.string.endsWith(num, 'f')) {
-        num = num.substring(0, num.length - 1);
+      var numberString = num;
+      var numberBase = 10;
+      if (num.substr(0, 2) == '0x') {
+        // ASCII output can be printed in unsigned hexadecimal format
+        // occasionally. e.g. 0xaed9b43
+        numberString = num.substr(2);
+        numberBase = 16;
+      } else if (goog.string.endsWith(num, 'f')) {
+        numberString = num.substring(0, num.length - 1);
       }
 
-      var actualNumber = parseFloat(num);
-      if (actualNumber.toString() != num) {
+      var actualNumber = numberBase == 10 ?
+          parseFloat(numberString) : parseInt(numberString, numberBase);
+      if (actualNumber.toString(numberBase) != numberString) {
         this.reportError_('Unknown number: ' + num);
         return null;
       }
