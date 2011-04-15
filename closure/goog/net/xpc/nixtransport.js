@@ -35,7 +35,7 @@ goog.provide('goog.net.xpc.NixTransport');
 
 goog.require('goog.net.xpc');
 goog.require('goog.net.xpc.Transport');
-
+goog.require('goog.reflect');
 
 
 /**
@@ -148,14 +148,9 @@ goog.net.xpc.NixTransport.isNixSupported = function() {
   try {
     var oldOpener = window.opener;
     // The compiler complains (as it should!) if we set window.opener to
-    // something other than a windo w or null.
+    // something other than a window or null.
     window.opener = /** @type {Window} */ ({});
-    try {
-      // TODO(nicksantos): Implement goog.reflect.canAccessProperty and use it
-      // here.
-      new Function('a', 'return a')(window.opener);
-      isSupported = true;
-    } catch(e2) { }
+    isSupported = goog.reflect.canAccessProperty(window, 'opener');
     window.opener = oldOpener;
   } catch(e) { }
   return isSupported;
