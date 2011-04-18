@@ -2452,6 +2452,20 @@ goog.dom.DomHelper.prototype.getAncestorByTagNameAndClass =
 
 
 /**
+ * Walks up the DOM hierarchy returning the first ancestor that has the passed
+ * class name. If the passed element matches the specified criteria, the
+ * element itself is returned.
+ * @param {Node} element The DOM node to start with.
+ * @param {?string=} opt_class The class name to match (or null/undefined to
+ *     match any node regardless of class name).
+ * @return {Node} The first ancestor that matches the passed criteria, or
+ *     null if none match.
+ */
+goog.dom.DomHelper.prototype.getAncestorByClass =
+    goog.dom.getAncestorByClass;
+
+
+/**
  * Walks up the DOM hierarchy returning the first ancestor that passes the
  * matcher function.
  * @param {Node} element The DOM node to start with.
