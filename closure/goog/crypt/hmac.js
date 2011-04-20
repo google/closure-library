@@ -25,30 +25,27 @@
 goog.provide('goog.crypt.Hmac');
 
 goog.require('goog.asserts');
+goog.require('goog.crypt.Hash');
 
 
-/**
- * @typedef {{ reset, update, digest }}
- * @private
- */
-goog.crypt.Hmac.HasherType_;
 
 /**
  * @constructor
- * @param {!goog.crypt.Hmac.HasherType_} hasher An object to serve as a hash
-       function. See google3/javascript/sha1.js for example.
+ * @param {!goog.crypt.Hash} hasher An object to serve as a hash function.
  * @param {Array.<number>} key The secret key to use to calculate the hmac.
  *     Should be an array of not more than {@code blockSize} integers in
        {0, 255}.
  * @param {number=} opt_blockSize Optional. The block size {@code hasher} uses.
  *     If not specified, 16.
+ * @extends {goog.crypt.Hash}
  */
 goog.crypt.Hmac = function(hasher, key, opt_blockSize) {
+  goog.base(this);
 
   /**
    * The underlying hasher to calculate hash.
    *
-   * @type {!goog.crypt.Hmac.HasherType_}
+   * @type {!goog.crypt.Hash}
    * @private
    */
   this.hasher_ = hasher;
@@ -79,6 +76,7 @@ goog.crypt.Hmac = function(hasher, key, opt_blockSize) {
 
   this.initialize_(key);
 };
+goog.inherits(goog.crypt.Hmac, goog.crypt.Hash);
 
 
 /**
@@ -123,33 +121,25 @@ goog.crypt.Hmac.prototype.initialize_ = function(key) {
     this.keyO_[i] = keyByte ^ goog.crypt.Hmac.OPAD_;
     this.keyI_[i] = keyByte ^ goog.crypt.Hmac.IPAD_;
   }
+  // Be ready for an immediate update.
+  this.hasher_.update(this.keyI_);
 };
 
 
-/**
- * Resets the HMAC to the state it was in after construction.
- */
+/** @inheritDoc */
 goog.crypt.Hmac.prototype.reset = function() {
   this.hasher_.reset();
   this.hasher_.update(this.keyI_);
 };
 
 
-/**
- * Updates the hash with additional data.
- *
- * @param {Array.<number>} data additional data to add to the digest.
- */
-goog.crypt.Hmac.prototype.update = function(data) {
-  this.hasher_.update(data);
+/** @inheritDoc */
+goog.crypt.Hmac.prototype.update = function(bytes, opt_length) {
+  this.hasher_.update(bytes, opt_length);
 };
 
 
-/**
- * Completes hashing and returns a digest as a byte array.
- *
- * @return {Array} the final digest.
- */
+/** @inheritDoc */
 goog.crypt.Hmac.prototype.digest = function() {
   var temp = this.hasher_.digest();
   this.hasher_.reset();

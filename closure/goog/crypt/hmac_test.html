@@ -11,6 +11,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.crypt.sha1</title>
 <script src='../base.js'></script>
 <script>
+  goog.require('goog.crypt.hash_test');
   goog.require('goog.crypt.Hmac');
   goog.require('goog.crypt.Sha1');
   goog.require('goog.testing.jsunit');
@@ -57,6 +58,11 @@ function getHmac(key, message) {
   var hasher = new goog.crypt.Sha1();
   var hmacer = new goog.crypt.Hmac(hasher, key, 64);
   return bytesToHex(hmacer.getHmac(message));
+}
+
+function testBasicOperations() {
+  var hmac = new goog.crypt.Hmac(new goog.crypt.Sha1(), 'key', 64);
+  goog.crypt.hash_test.runBasicTests(hmac);
 }
 
 function testHmac() {
