@@ -36,7 +36,7 @@ var COMPILED = false;
  *
  * @const
  */
-var goog = goog || {};
+var goog = goog || {}; // Identifies this file as the Closure base.
 
 
 /**

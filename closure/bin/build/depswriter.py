@@ -50,7 +50,16 @@ def MakeDepsFile(source_map):
   # Write in path alphabetical order
   paths = source_map.keys()
   paths.sort()
-  lines = [_GetDepsLine(path, source_map[path]) for path in paths]
+
+  lines = []
+
+  for path in paths:
+    js_source = source_map[path]
+
+    # We don't need to add entries that don't provide anything.
+    if js_source.provides:
+      lines.append(_GetDepsLine(path, js_source))
+
   return ''.join(lines)
 
 

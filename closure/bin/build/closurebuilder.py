@@ -132,27 +132,24 @@ def _GetClosureBaseFile(sources):
   Returns:
     The _PathSource representing the base Closure file.
   """
-  filtered_base_files = filter(_IsClosureBaseFile, sources)
-  if not filtered_base_files:
+  base_files = [
+      js_source for js_source in sources if _IsClosureBaseFile(js_source)]
+
+  if not base_files:
     logging.error('No Closure base.js file found.')
     sys.exit(1)
-  if len(filtered_base_files) > 1:
+  if len(base_files) > 1:
     logging.error('More than one Closure base.js files found at these paths:')
-    for base_file in filtered_base_files:
+    for base_file in base_files:
       logging.error(base_file.GetPath())
     sys.exit(1)
-  return filtered_base_files[0]
+  return base_files[0]
 
 
 def _IsClosureBaseFile(js_source):
   """Returns true if the given _PathSource is the Closure base.js source."""
-  if os.path.basename(js_source.GetPath()) == 'base.js':
-    # Sanity check that this is the Closure base file.  Check that this
-    # is where goog is defined.
-    for line in js_source.GetSource().splitlines():
-      if line.startswith('var goog = goog || {};'):
-        return True
-  return False
+  return (os.path.basename(js_source.GetPath()) == 'base.js' and
+          js_source.provides == set(['goog']))
 
 
 class _PathSource(source.Source):
