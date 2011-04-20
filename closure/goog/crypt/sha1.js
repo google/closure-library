@@ -222,7 +222,7 @@ goog.crypt.Sha1.prototype.digest = function() {
   // Add # bits.
   for (var i = 63; i >= 56; i--) {
     this.buf_[i] = totalBits & 255;
-    totalBits >>>= 8;
+    totalBits /= 256; // Don't use bit-shifting here!
   }
 
   this.compress_(this.buf_);
