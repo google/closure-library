@@ -26,6 +26,8 @@
 
 goog.provide('goog.crypt.Sha1');
 
+goog.require('goog.crypt.Hash');
+
 
 
 /**
@@ -33,8 +35,11 @@ goog.provide('goog.crypt.Sha1');
  *
  * The properties declared here are discussed in the above algorithm document.
  * @constructor
+ * @extends {goog.crypt.Hash}
  */
 goog.crypt.Sha1 = function() {
+  goog.base(this);
+
   /**
    * Holds the previous values of accumulated variables a-e in the compress_
    * function.
@@ -72,11 +77,10 @@ goog.crypt.Sha1 = function() {
 
   this.reset();
 };
+goog.inherits(goog.crypt.Sha1, goog.crypt.Hash);
 
 
-/**
- * Resets the internal accumulator.
- */
+/** @inheritDoc */
 goog.crypt.Sha1.prototype.reset = function() {
   this.chain_[0] = 0x67452301;
   this.chain_[1] = 0xefcdab89;
@@ -165,13 +169,9 @@ goog.crypt.Sha1.prototype.compress_ = function(buf) {
 };
 
 
-/**
- * Adds a byte array to internal accumulator.
- * @param {Array.<number>} bytes to add to digest.
- * @param {number=} opt_length is # of bytes to compress.
- */
+/** @inheritDoc */
 goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
-  if (!opt_length) {
+  if (!goog.isDef(opt_length)) {
     opt_length = bytes.length;
   }
 
@@ -205,9 +205,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
 };
 
 
-/**
- * @return {Array} byte[20] containing finalized hash.
- */
+/** @inheritDoc */
 goog.crypt.Sha1.prototype.digest = function() {
   var digest = [];
   var totalBits = this.total_ * 8;

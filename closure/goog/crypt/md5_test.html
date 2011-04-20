@@ -13,6 +13,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.crypt');
+  goog.require('goog.crypt.hash_test');
   goog.require('goog.crypt.Md5');
   goog.require('goog.testing.jsunit');
 </script>
@@ -21,6 +22,11 @@ See the COPYING file for details.
 <script>
 
 var sixty = '123456789012345678901234567890123456789012345678901234567890';
+
+function testBasicOperations() {
+  var md5 = new goog.crypt.Md5();
+  goog.crypt.hash_test.runBasicTests(md5);
+}
 
 function testHashing() {
   // Empty stream.

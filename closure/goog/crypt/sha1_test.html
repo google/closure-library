@@ -12,6 +12,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.crypt.Sha1');
+  goog.require('goog.crypt.hash_test');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -30,6 +31,11 @@ function bytesToHex(bytes) {
     hexrep[i * 2 + 1] = hexchars.charAt(bytes[i] & 15);
   }
   return hexrep.join('');
+}
+
+function testBasicOperations() {
+  var sha1 = new goog.crypt.Sha1();
+  goog.crypt.hash_test.runBasicTests(sha1);
 }
 
 function testHashing() {

@@ -31,13 +31,18 @@
 
 goog.provide('goog.crypt.Md5');
 
+goog.require('goog.crypt.Hash');
+
 
 
 /**
  * MD5 cryptographic hash constructor.
  * @constructor
+ * @extends {goog.crypt.Hash}
  */
 goog.crypt.Md5 = function() {
+  goog.base(this);
+
   /**
    * Holds the current values of accumulated A-D variables (MD buffer).
    * @type {Array.<number>}
@@ -68,6 +73,7 @@ goog.crypt.Md5 = function() {
 
   this.reset();
 };
+goog.inherits(goog.crypt.Md5, goog.crypt.Hash);
 
 
 /**
@@ -112,9 +118,8 @@ goog.crypt.Md5.T_ = [
 ];
  */
 
-/**
- * Resets the internal accumulator.
- */
+
+/** @inheritDoc */
 goog.crypt.Md5.prototype.reset = function() {
   this.chain_[0] = 0x67452301;
   this.chain_[1] = 0xefcdab89;
@@ -325,13 +330,9 @@ goog.crypt.Md5.prototype.compress_ = function() {
 };
 
 
-/**
- * Adds a byte array to internal accumulator.
- * @param {Array.<number>} bytes to add to digest.
- * @param {number=} opt_length is # of bytes to compress.
- */
+/** @inheritDoc */
 goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
-  if (!opt_length) {
+  if (!goog.isDef(opt_length)) {
     opt_length = bytes.length;
   }
 
@@ -351,9 +352,7 @@ goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
 };
 
 
-/**
- * @return {Array} byte[16] containing the finalized hash.
- */
+/** @inheritDoc */
 goog.crypt.Md5.prototype.digest = function() {
   // This must accommodate at least 1 padding byte (0x80), 8 bytes of
   // total bitlength, and must end at a 64-byte boundary.
