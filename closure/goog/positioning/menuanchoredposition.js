@@ -68,6 +68,11 @@ goog.inherits(goog.positioning.MenuAnchoredPosition,
               goog.positioning.AnchoredViewportPosition);
 
 
+/** @inheritDoc */
+goog.positioning.MenuAnchoredPosition.prototype.canAdjustOffscreen =
+    goog.functions.TRUE;
+
+
 /**
  * Repositions the movable element.
  *
@@ -84,7 +89,7 @@ goog.positioning.MenuAnchoredPosition.prototype.reposition =
   if (this.resize_) {
     goog.positioning.positionAtAnchor(this.element, this.corner,
         movableElement, movableCorner, null, opt_margin,
-        goog.positioning.Overflow.ADJUST_X |
+        goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN |
         goog.positioning.Overflow.RESIZE_HEIGHT, opt_preferredSize);
   } else {
     goog.positioning.MenuAnchoredPosition.superClass_.reposition.call(

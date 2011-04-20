@@ -19,6 +19,7 @@
 
 goog.provide('goog.positioning.AnchoredViewportPosition');
 
+goog.require('goog.functions');
 goog.require('goog.math.Box');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AnchoredPosition');
@@ -66,6 +67,15 @@ goog.inherits(goog.positioning.AnchoredViewportPosition,
 
 
 /**
+ * @return {boolean} Whether "adjust" should mean to adjust an offscreen element
+ *     so that it's onscreen.
+ * @protected
+ */
+goog.positioning.AnchoredViewportPosition.prototype.canAdjustOffscreen =
+    goog.functions.FALSE;
+
+
+/**
  * Repositions the movable element.
  *
  * @param {Element} movableElement Element to position.
@@ -74,6 +84,7 @@ goog.inherits(goog.positioning.AnchoredViewportPosition,
  * @param {goog.math.Box=} opt_margin A margin specified in pixels.
  * @param {goog.math.Size=} opt_preferredSize The preferred size of the
  *     movableElement.
+ * @override
  */
 goog.positioning.AnchoredViewportPosition.prototype.reposition = function(
     movableElement, movableCorner, opt_margin, opt_preferredSize) {
@@ -108,10 +119,14 @@ goog.positioning.AnchoredViewportPosition.prototype.reposition = function(
     if (status & goog.positioning.OverflowStatus.FAILED) {
       // If that also fails adjust the position until it fits.
       if (this.adjust_) {
+        var overflow = this.canAdjustOffscreen() ?
+            (goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN |
+             goog.positioning.Overflow.ADJUST_Y_EXCEPT_OFFSCREEN) :
+            (goog.positioning.Overflow.ADJUST_X |
+             goog.positioning.Overflow.ADJUST_Y);
         goog.positioning.positionAtAnchor(this.element, this.corner,
             movableElement, movableCorner, null, opt_margin,
-            goog.positioning.Overflow.ADJUST_X |
-            goog.positioning.Overflow.ADJUST_Y, opt_preferredSize);
+            overflow, opt_preferredSize);
 
       // Or display it anyway at the preferred position, if the adjust option
       // was not enabled.
