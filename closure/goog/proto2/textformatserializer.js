@@ -412,7 +412,7 @@ goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes = {
   CLOSE_TAG: /^>/,
   OPEN_LIST: /^\[/,
   CLOSE_LIST: /^\]/,
-  STRING: new RegExp('^"([^"|\\\\]|\\\\.)*"'),
+  STRING: new RegExp('^"([^"\\\\]|\\\\.)*"'),
   COLON: /^:/,
   COMMA: /^,/,
   SEMI: /^;/,

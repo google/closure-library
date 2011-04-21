@@ -235,6 +235,11 @@ function testTokenizerSingleTokens() {
   assertString('"hello world"');
   assertString('"hello # world"');
   assertString('"hello #\\" world"');
+  assertString('"|"');
+  assertString('"\\"\\""');
+  assertString('"\\"foo\\""');
+  assertString('"\\"foo\\" and \\"bar\\""');
+  assertString('"foo \\"and\\" bar"');
 
   assertComment('# foo bar baz');
   assertComment('# foo ## bar baz');
