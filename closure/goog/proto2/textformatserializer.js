@@ -611,6 +611,35 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeFieldValue_ =
 
 
 /**
+ * Attempts to convert a string to a number.
+ * @param {string} num in hexadecimal or float format.
+ * @return {?number} The converted number or null on error.
+ * @private
+ */
+goog.proto2.TextFormatSerializer.Parser.prototype.getNumberFromString_ =
+    function(num) {
+  var numberString = num;
+  var numberBase = 10;
+  if (num.substr(0, 2) == '0x') {
+    // ASCII output can be printed in unsigned hexadecimal format
+    // occasionally. e.g. 0xaed9b43
+    numberString = num.substr(2);
+    numberBase = 16;
+  } else if (goog.string.endsWith(num, 'f')) {
+    numberString = num.substring(0, num.length - 1);
+  }
+
+  var actualNumber = numberBase == 10 ?
+      parseFloat(numberString) : parseInt(numberString, numberBase);
+  if (actualNumber.toString(numberBase) != numberString) {
+    this.reportError_('Unknown number: ' + num);
+    return null;
+  }
+  return actualNumber;
+};
+
+
+/**
  * Attempts to parse the given field's value from the stream.
  * @param {goog.proto2.FieldDescriptor} field The field.
  * @return {*} The field's value or null if none.
@@ -630,25 +659,7 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
       var num = this.consumeNumber_();
       if (!num) { return null; }
 
-      var numberString = num;
-      var numberBase = 10;
-      if (num.substr(0, 2) == '0x') {
-        // ASCII output can be printed in unsigned hexadecimal format
-        // occasionally. e.g. 0xaed9b43
-        numberString = num.substr(2);
-        numberBase = 16;
-      } else if (goog.string.endsWith(num, 'f')) {
-        numberString = num.substring(0, num.length - 1);
-      }
-
-      var actualNumber = numberBase == 10 ?
-          parseFloat(numberString) : parseInt(numberString, numberBase);
-      if (actualNumber.toString(numberBase) != numberString) {
-        this.reportError_('Unknown number: ' + num);
-        return null;
-      }
-
-      return actualNumber;
+      return this.getNumberFromString_(num);
 
     case goog.proto2.FieldDescriptor.FieldType.INT64:
     case goog.proto2.FieldDescriptor.FieldType.UINT64:
@@ -658,18 +669,9 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
       var num = this.consumeNumber_();
       if (!num) { return null; }
 
-      if (goog.string.endsWith(num, 'f')) {
-        num = num.substring(0, num.length - 1);
-      }
-
       if (field.getNativeType() == Number) {
         // 64-bit number stored as a number.
-        var actualNumber = parseFloat(num);
-        if (actualNumber.toString() != num) {
-          this.reportError_('Unknown number: ' + num);
-          return null;
-        }
-        return actualNumber;
+        return this.getNumberFromString_(num);
       }
 
       return num; // 64-bit numbers are by default stored as strings.

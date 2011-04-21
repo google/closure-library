@@ -296,6 +296,15 @@ function testDeserializationOfIntegerAsHexadecimalString() {
   assertEquals(255, message.getRepeatedInt32(1));
 }
 
+function testDeserializationOfInt64AsHexadecimalString() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int64: 0xf';
+
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+
+  assertEquals('0xf', message.getOptionalInt64());
+}
+
 function testDeserializationOfZeroFalseAndEmptyString() {
   var message = new proto2.TestAllTypes();
   var value = 'optional_int32: 0\n' +
