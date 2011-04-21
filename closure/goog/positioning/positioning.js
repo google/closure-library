@@ -329,7 +329,7 @@ goog.positioning.positionAtCoordinate = function(absolutePos,
                                                    movableElementCorner);
   var elementSize = goog.style.getSize(movableElement);
   var size = opt_preferredSize ? opt_preferredSize.clone() :
-      elementSize;
+      elementSize.clone();
 
   if (opt_margin || corner != goog.positioning.Corner.TOP_LEFT) {
     if (corner & goog.positioning.CornerBit.RIGHT) {

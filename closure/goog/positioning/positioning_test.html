@@ -623,6 +623,26 @@ function testAdjustForViewportResizeHeight() {
 }
 
 
+function testPositionAtCoordinateResizeHeight() {
+  var f = goog.positioning.positionAtCoordinate;
+  var viewport = new goog.math.Box(0, 50, 50, 0);
+  var overflow = goog.positioning.Overflow.RESIZE_HEIGHT |
+      goog.positioning.Overflow.ADJUST_Y;
+  var popup = document.getElementById('popup1');
+  var corner = goog.positioning.Corner.BOTTOM_LEFT;
+
+  var pos = newCoord(100, 100);
+
+  assertEquals('Viewport height should be resized.',
+               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED |
+               goog.positioning.OverflowStatus.ADJUSTED_Y,
+               f(pos, popup, corner, undefined, viewport, overflow));
+  var bounds = goog.style.getSize(popup);
+  assertEquals('Height should be resized to 52.',
+               52, bounds.height);
+}
+
+
 function testGetEffectiveCornerLeftToRight() {
   var f = goog.positioning.getEffectiveCorner;
   var el = document.getElementById('ltr');
