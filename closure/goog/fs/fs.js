@@ -41,12 +41,15 @@ goog.require('goog.fs.FileSystem');
  * @private
  */
 goog.fs.get_ = function(type, size) {
-  if (!goog.isFunction(goog.global.requestFileSystem)) {
+  var requestFileSystem = goog.global.requestFileSystem ||
+      goog.global.webkitRequestFileSystem;
+
+  if (!goog.isFunction(requestFileSystem)) {
     return goog.async.Deferred.fail(new Error('File API unsupported'));
   }
 
   var d = new goog.async.Deferred();
-  goog.global.requestFileSystem(type, size, function(fs) {
+  requestFileSystem(type, size, function(fs) {
     d.callback(new goog.fs.FileSystem(fs));
   }, function(err) {
     d.errback(new goog.fs.Error(err.code, 'requesting filesystem'));
@@ -162,6 +165,7 @@ goog.fs.getUrlObject_ = function() {
  * @return {!Blob} The blob.
  */
 goog.fs.getBlob = function(var_args) {
+  var BlobBuilder = goog.global.BlobBuilder || goog.global.WebKitBlobBuilder;
   var bb = new BlobBuilder();
   for (var i = 0; i < arguments.length; i++) {
     bb.append(arguments[i]);

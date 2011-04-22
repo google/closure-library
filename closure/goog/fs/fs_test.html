@@ -30,7 +30,8 @@ goog.require('goog.testing.jsunit');
 
 var TEST_DIR = 'goog-fs-test-dir';
 
-var fsExists = goog.isDef(goog.global.requestFileSystem);
+var fsExists = goog.isDef(goog.global.requestFileSystem) ||
+    goog.isDef(goog.global.webkitRequestFileSystem);
 var deferredFs = fsExists ? goog.fs.getTemporary() : null;
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 var stubs = new goog.testing.PropertyReplacer();
@@ -71,6 +72,7 @@ function tearDown() {
 
 function testUnavailableTemporaryFilesystem() {
   stubs.set(goog.global, 'requestFileSystem', null);
+  stubs.set(goog.global, 'webkitRequestFileSystem', null);
   asyncTestCase.waitForAsync('testUnavailableTemporaryFilesystem');
 
   goog.fs.getTemporary(1024).addErrback(function(e) {
@@ -82,6 +84,7 @@ function testUnavailableTemporaryFilesystem() {
 
 function testUnavailablePersistentFilesystem() {
   stubs.set(goog.global, 'requestFileSystem', null);
+  stubs.set(goog.global, 'webkitRequestFileSystem', null);
   asyncTestCase.waitForAsync('testUnavailablePersistentFilesystem');
 
   goog.fs.getPersistent(2048).addErrback(function(e) {
