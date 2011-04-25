@@ -599,6 +599,7 @@ function testTruncateMiddle() {
   assertEquals('abcdefg...xyz', goog.string.truncateMiddle(str, 10, null, 3));
   assertEquals('abcdef...wxyz', goog.string.truncateMiddle(str, 10, null, 4));
   assertEquals('...yz', goog.string.truncateMiddle(str, 2, null, 3));
+  assertEquals(str, goog.string.truncateMiddle(str, 50, null, 3));
 
   assertEquals('Should clip html char', 'true &amp;&...lse',
       goog.string.truncateMiddle(html, 14, null, 3));

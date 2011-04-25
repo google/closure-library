@@ -750,7 +750,7 @@ goog.string.truncateMiddle = function(str, chars,
     str = goog.string.unescapeEntities(str);
   }
 
-  if (opt_trailingChars) {
+  if (opt_trailingChars && str.length > chars) {
     if (opt_trailingChars > chars) {
       opt_trailingChars = chars;
     }
