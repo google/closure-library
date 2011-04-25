@@ -73,5 +73,12 @@ goog.net.HttpStatus = {
   BAD_GATEWAY: 502,
   SERVICE_UNAVAILABLE: 503,
   GATEWAY_TIMEOUT: 504,
-  HTTP_VERSION_NOT_SUPPORTED: 505
+  HTTP_VERSION_NOT_SUPPORTED: 505,
+
+  /*
+   * IE returns this code for 204 due to its use of URLMon, which returns this
+   * code for 'Operation Aborted'. The status text is 'Unknown', the response
+   * headers are ''. Known to occur on IE 6 on XP through IE9 on Win7.
+   */
+  QUIRK_IE_NO_CONTENT: 1223
 };

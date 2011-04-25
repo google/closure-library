@@ -848,6 +848,7 @@ goog.net.XhrIo.prototype.isSuccess = function() {
     case goog.net.HttpStatus.OK:
     case goog.net.HttpStatus.NO_CONTENT:
     case goog.net.HttpStatus.NOT_MODIFIED:
+    case goog.net.HttpStatus.QUIRK_IE_NO_CONTENT:
       return true;
 
     default:
