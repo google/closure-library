@@ -433,6 +433,10 @@ goog.fx.DragListGroup.prototype.disposeInternal = function() {
   this.dragItems_.length = 0;
   this.dragItemForHandle_ = null;
 
+  // In the case where a drag event is currently in-progress and dispose is
+  // called, this cleans up the extra state.
+  this.cleanupDragDom_();
+
   goog.fx.DragListGroup.superClass_.disposeInternal.call(this);
 };
 
@@ -659,40 +663,13 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
     return false;
   }
 
-  // Disposes of the dragger and remove the cloned drag item.
-  this.dragger_.dispose();
-  goog.dom.removeNode(this.draggerEl_);
-
-  // If the current drag item is not in any list, put it back in its original
-  // location.
-  if (this.currDragItem_.style.display == 'none') {
-    // Note: this.origNextItem_ may be null, but insertBefore() still works.
-    this.origList_.insertBefore(this.currDragItem_, this.origNextItem_);
-    this.currDragItem_.style.display = '';
-  }
-
-  // If there's a CSS class specified for the current drag item, remove it.
-  // Otherwise, make the current drag item visible (instead of empty space).
-  if (this.currDragItemClasses_) {
-    goog.dom.classes.remove.apply(null,
-        goog.array.concat(this.currDragItem_, this.currDragItemClasses_));
-  } else {
-    this.currDragItem_.style.visibility = 'visible';
-  }
-
   // If update while dragging is disabled insert the current drag item into
   // its intended location.
   if (!this.updateWhileDragging_) {
     this.insertCurrHoverItem();
   }
 
-  // Remove hover classes (if any) from all drag lists.
-  for (var i = 0, n = this.dragLists_.length; i < n; i++) {
-    var dragList = this.dragLists_[i];
-    if (dragList.dlgDragHoverClass_) {
-      goog.dom.classes.remove(dragList, dragList.dlgDragHoverClass_);
-    }
-  }
+  this.cleanupDragDom_();
 
   this.dispatchEvent(
       new goog.fx.DragListGroupEvent(
@@ -719,6 +696,44 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
 
   return true;
 };
+
+
+/**
+ * Cleans up DOM changes that are made by the {@code handleDrag*} methods.
+ * @private
+ */
+goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
+  // Disposes of the dragger and remove the cloned drag item.
+  goog.dispose(this.dragger_);
+  if (this.draggerEl_) {
+    goog.dom.removeNode(this.draggerEl_);
+  }
+
+  // If the current drag item is not in any list, put it back in its original
+  // location.
+  if (this.currDragItem_ && this.currDragItem_.style.display == 'none') {
+    // Note: this.origNextItem_ may be null, but insertBefore() still works.
+    this.origList_.insertBefore(this.currDragItem_, this.origNextItem_);
+    this.currDragItem_.style.display = '';
+  }
+
+  // If there's a CSS class specified for the current drag item, remove it.
+  // Otherwise, make the current drag item visible (instead of empty space).
+  if (this.currDragItemClasses_ && this.currDragItem_) {
+    goog.dom.classes.remove.apply(null,
+        goog.array.concat(this.currDragItem_, this.currDragItemClasses_));
+  } else if (this.currDragItem_) {
+    this.currDragItem_.style.visibility = 'visible';
+  }
+
+  // Remove hover classes (if any) from all drag lists.
+  for (var i = 0, n = this.dragLists_.length; i < n; i++) {
+    var dragList = this.dragLists_[i];
+    if (dragList.dlgDragHoverClass_) {
+      goog.dom.classes.remove(dragList, dragList.dlgDragHoverClass_);
+    }
+  }
+}
 
 
 /**
