@@ -184,7 +184,7 @@ goog.structs.Set.prototype.intersection = function(col) {
 
 /**
  * Returns an array containing all the elements in this set.
- * @return {Array} An array containing all the elements in this set.
+ * @return {!Array} An array containing all the elements in this set.
  */
 goog.structs.Set.prototype.getValues = function() {
   return this.map_.getValues();
