@@ -64,7 +64,8 @@ function testRepositionWithAdjustAndOnscreenAnchor() {
       onscreenAnchor, corner.TOP_LEFT, true);
   pos.reposition(menu, corner.TOP_LEFT);
 
-  assertEquals(5, menu.offsetTop);
+  var offset = goog.userAgent.IE && !goog.userAgent.isVersion(8) ? 2 : 0;
+  assertEquals(offset, menu.offsetTop);
   assertEquals(5, menu.offsetLeft);
 }
 

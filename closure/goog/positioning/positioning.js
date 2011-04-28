@@ -387,11 +387,11 @@ goog.positioning.adjustForViewport = function(pos, size, viewport, overflow) {
   var ADJUST_Y_EXCEPT_OFFSCREEN =
       goog.positioning.Overflow.ADJUST_Y_EXCEPT_OFFSCREEN;
   if ((overflow & ADJUST_X_EXCEPT_OFFSCREEN) == ADJUST_X_EXCEPT_OFFSCREEN &&
-      (pos.x < viewport.left || pos.x + size.width > viewport.right)) {
+      (pos.x < viewport.left || pos.x >= viewport.right)) {
     overflow &= ~goog.positioning.Overflow.ADJUST_X;
   }
   if ((overflow & ADJUST_Y_EXCEPT_OFFSCREEN) == ADJUST_Y_EXCEPT_OFFSCREEN &&
-      (pos.y < viewport.top || pos.y + size.height > viewport.bottom)) {
+      (pos.y < viewport.top || pos.y >= viewport.bottom)) {
     overflow &= ~goog.positioning.Overflow.ADJUST_Y;
   }
 
