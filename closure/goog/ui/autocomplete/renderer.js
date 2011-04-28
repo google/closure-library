@@ -24,6 +24,7 @@ goog.provide('goog.ui.AutoComplete.Renderer.CustomRenderer');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
+goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.dom.FadeInAndShow');
@@ -815,14 +816,23 @@ goog.ui.AutoComplete.Renderer.prototype.handleMouseDown_ = function(e) {
 };
 
 
+
+
+
 /**
  * Handles the user clicking on the document.
  * @param {Object} e The document click event.
  * @private
  */
 goog.ui.AutoComplete.Renderer.prototype.handleDocumentMousedown_ = function(e) {
-  // Note that clicks inside the input itself are handled here, too, giving the
-  // effect that you can dismiss the autocomplete by re-clicking on the input.
+  // If the user clicks on the input element, we don't want to close the
+  // autocomplete, it makes more sense to just unselect the currently selected
+  // item.
+  if (this.target_ == e.target) {
+    this.hiliteNone();
+    e.stopPropagation();
+    return;
+  }
   this.dispatchEvent(goog.ui.AutoComplete.EventType.DISMISS);
 };
 
