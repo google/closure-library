@@ -26,6 +26,7 @@
 goog.provide('goog.structs.Set');
 
 goog.require('goog.structs');
+goog.require('goog.structs.Collection');
 goog.require('goog.structs.Map');
 
 
@@ -42,6 +43,7 @@ goog.require('goog.structs.Map');
  * identify objects, every object in the set will be mutated.
  * @param {Array|Object=} opt_values Initial values to start with.
  * @constructor
+ * @implements {goog.structs.Collection}
  */
 goog.structs.Set = function(opt_values) {
   this.map_ = new goog.structs.Map;

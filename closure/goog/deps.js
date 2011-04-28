@@ -408,8 +408,9 @@ goog.addDependency('string/path.js', ['goog.string.path'], ['goog.array', 'goog.
 goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], []);
 goog.addDependency('string/stringbuffer.js', ['goog.string.StringBuffer'], ['goog.userAgent.jscript']);
 goog.addDependency('string/stringformat.js', ['goog.string.format'], ['goog.string']);
-goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree', 'goog.structs.AvlTree.Node'], ['goog.structs']);
+goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree', 'goog.structs.AvlTree.Node'], ['goog.structs', 'goog.structs.Collection']);
 goog.addDependency('structs/circularbuffer.js', ['goog.structs.CircularBuffer'], []);
+goog.addDependency('structs/collection.js', ['goog.structs.Collection'], []);
 goog.addDependency('structs/heap.js', ['goog.structs.Heap'], ['goog.array', 'goog.structs.Node']);
 goog.addDependency('structs/inversionmap.js', ['goog.structs.InversionMap'], ['goog.array']);
 goog.addDependency('structs/linkedmap.js', ['goog.structs.LinkedMap'], ['goog.structs.Map']);
@@ -420,7 +421,7 @@ goog.addDependency('structs/prioritypool.js', ['goog.structs.PriorityPool'], ['g
 goog.addDependency('structs/priorityqueue.js', ['goog.structs.PriorityQueue'], ['goog.structs', 'goog.structs.Heap']);
 goog.addDependency('structs/quadtree.js', ['goog.structs.QuadTree', 'goog.structs.QuadTree.Node', 'goog.structs.QuadTree.Point'], ['goog.math.Coordinate']);
 goog.addDependency('structs/queue.js', ['goog.structs.Queue'], ['goog.array']);
-goog.addDependency('structs/set.js', ['goog.structs.Set'], ['goog.structs', 'goog.structs.Map']);
+goog.addDependency('structs/set.js', ['goog.structs.Set'], ['goog.structs', 'goog.structs.Collection', 'goog.structs.Map']);
 goog.addDependency('structs/simplepool.js', ['goog.structs.SimplePool'], ['goog.Disposable']);
 goog.addDependency('structs/stringset.js', ['goog.structs.StringSet'], ['goog.iter']);
 goog.addDependency('structs/structs.js', ['goog.structs'], ['goog.array', 'goog.object']);
@@ -505,7 +506,7 @@ goog.addDependency('ui/autocomplete/basic.js', ['goog.ui.AutoComplete.Basic'], [
 goog.addDependency('ui/autocomplete/inputhandler.js', ['goog.ui.AutoComplete.InputHandler'], ['goog.Disposable', 'goog.Timer', 'goog.dom.a11y', 'goog.dom.selection', 'goog.events', 'goog.events.EventHandler', 'goog.events.KeyCodes', 'goog.events.KeyHandler', 'goog.string', 'goog.ui.AutoComplete']);
 goog.addDependency('ui/autocomplete/remote.js', ['goog.ui.AutoComplete.Remote'], ['goog.ui.AutoComplete', 'goog.ui.AutoComplete.InputHandler', 'goog.ui.AutoComplete.RemoteArrayMatcher', 'goog.ui.AutoComplete.Renderer']);
 goog.addDependency('ui/autocomplete/remotearraymatcher.js', ['goog.ui.AutoComplete.RemoteArrayMatcher'], ['goog.Disposable', 'goog.Uri', 'goog.events', 'goog.json', 'goog.net.XhrIo', 'goog.ui.AutoComplete']);
-goog.addDependency('ui/autocomplete/renderer.js', ['goog.ui.AutoComplete.Renderer', 'goog.ui.AutoComplete.Renderer.CustomRenderer'], ['goog.dom', 'goog.dom.a11y', 'goog.dom.classes', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.fx.dom.FadeInAndShow', 'goog.fx.dom.FadeOutAndHide', 'goog.iter', 'goog.string', 'goog.style', 'goog.ui.AutoComplete', 'goog.ui.IdGenerator', 'goog.userAgent']);
+goog.addDependency('ui/autocomplete/renderer.js', ['goog.ui.AutoComplete.Renderer', 'goog.ui.AutoComplete.Renderer.CustomRenderer'], ['goog.dom', 'goog.dom.a11y', 'goog.dom.classes', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.fx.dom.FadeInAndShow', 'goog.fx.dom.FadeOutAndHide', 'goog.iter', 'goog.string', 'goog.style', 'goog.ui.AutoComplete', 'goog.ui.IdGenerator', 'goog.userAgent']);
 goog.addDependency('ui/autocomplete/richinputhandler.js', ['goog.ui.AutoComplete.RichInputHandler'], ['goog.ui.AutoComplete', 'goog.ui.AutoComplete.InputHandler']);
 goog.addDependency('ui/autocomplete/richremote.js', ['goog.ui.AutoComplete.RichRemote'], ['goog.ui.AutoComplete', 'goog.ui.AutoComplete.Remote', 'goog.ui.AutoComplete.Renderer', 'goog.ui.AutoComplete.RichInputHandler', 'goog.ui.AutoComplete.RichRemoteArrayMatcher']);
 goog.addDependency('ui/autocomplete/richremotearraymatcher.js', ['goog.ui.AutoComplete.RichRemoteArrayMatcher'], ['goog.ui.AutoComplete', 'goog.ui.AutoComplete.RemoteArrayMatcher']);

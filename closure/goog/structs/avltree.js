@@ -44,6 +44,7 @@ goog.provide('goog.structs.AvlTree');
 goog.provide('goog.structs.AvlTree.Node');
 
 goog.require('goog.structs');
+goog.require('goog.structs.Collection');
 
 
 
@@ -54,6 +55,7 @@ goog.require('goog.structs');
  *
  * @param {Function=} opt_comparator Function used to order the tree's nodes.
  * @constructor
+ * @implements {goog.structs.Collection}
  */
 goog.structs.AvlTree = function(opt_comparator) {
   this.comparator_ = opt_comparator ||
