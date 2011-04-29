@@ -20,7 +20,6 @@
 
 goog.provide('goog.net.FileDownloader');
 goog.provide('goog.net.FileDownloader.Error');
-goog.provide('goog.net.FileDownloader.Event');
 
 goog.require('goog.Disposable');
 goog.require('goog.async.Deferred');
