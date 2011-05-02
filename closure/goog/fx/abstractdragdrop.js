@@ -1267,6 +1267,10 @@ goog.fx.DragDropItem.prototype.getDraggableElements = function() {
  * @private
  */
 goog.fx.DragDropItem.prototype.mouseDown_ = function(event) {
+  if (!event.isMouseActionButton()) {
+    return;
+  }
+
   // Get the draggable element for the target.
   var element = this.getDraggableElement(/** @type {Element} */ (event.target));
   if (element) {
