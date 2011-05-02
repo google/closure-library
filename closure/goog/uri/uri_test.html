@@ -824,6 +824,20 @@ function testQueryNotModified() {
   assertEquals('?&=&=&', new goog.Uri('?&=&=&').toString());
 }
 
+function testRelativePathNotUnescapedWithColon() {
+  assertEquals('javascript%3aalert(1)',
+               new goog.Uri('javascript%3aalert(1)').toString());
+}
+
+function testAbsolutePathUnescapedWithColon() {
+  assertEquals('/javascript:alert(1)',
+               new goog.Uri('/javascript%3aalert(1)').toString());
+  assertEquals('http://www.foo.bar/path:with:colon/x',
+               new goog.Uri('http://www.foo.bar/path:with:colon/x').toString());
+  assertEquals('//www.foo.bar/path:with:colon/x',
+               new goog.Uri('//www.foo.bar/path:with:colon/x').toString());
+}
+
 function assertDotRemovedEquals(expected, path) {
   assertEquals(expected, goog.Uri.removeDotSegments(path));
 }
