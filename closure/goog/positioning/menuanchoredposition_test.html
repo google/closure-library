@@ -79,6 +79,16 @@ function testRepositionWithAdjustAndOffscreenAnchor() {
   assertEquals(-1000, menu.offsetLeft);
 }
 
+function testRespositionFailoverEvenWhenResizeHeightIsOn() {
+  var pos = new goog.positioning.MenuAnchoredPosition(
+      onscreenAnchor, corner.TOP_LEFT, true, true);
+  pos.reposition(menu, corner.TOP_RIGHT);
+
+  // The menu should not get positioned offscreen.
+  assertEquals(5, menu.offsetTop);
+  assertEquals(5, menu.offsetLeft);
+}
+
 </script>
 </body>
 </html>

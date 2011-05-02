@@ -67,12 +67,15 @@ goog.inherits(goog.positioning.AnchoredViewportPosition,
 
 
 /**
- * @return {boolean} Whether "adjust" should mean to adjust an offscreen element
- *     so that it's onscreen.
+ * @return {number} A bitmask for the "last resort" overflow. Only takes affect
+ *     when {@code opt_adjusted} in the constructor is enabled.
  * @protected
  */
-goog.positioning.AnchoredViewportPosition.prototype.canAdjustOffscreen =
-    goog.functions.FALSE;
+goog.positioning.AnchoredViewportPosition.prototype.getLastResortOverflow =
+    function() {
+  return goog.positioning.Overflow.ADJUST_X |
+      goog.positioning.Overflow.ADJUST_Y;
+};
 
 
 /**
@@ -119,14 +122,9 @@ goog.positioning.AnchoredViewportPosition.prototype.reposition = function(
     if (status & goog.positioning.OverflowStatus.FAILED) {
       // If that also fails adjust the position until it fits.
       if (this.adjust_) {
-        var overflow = this.canAdjustOffscreen() ?
-            (goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN |
-             goog.positioning.Overflow.ADJUST_Y_EXCEPT_OFFSCREEN) :
-            (goog.positioning.Overflow.ADJUST_X |
-             goog.positioning.Overflow.ADJUST_Y);
         goog.positioning.positionAtAnchor(this.element, this.corner,
             movableElement, movableCorner, null, opt_margin,
-            overflow, opt_preferredSize);
+            this.getLastResortOverflow(), opt_preferredSize);
 
       // Or display it anyway at the preferred position, if the adjust option
       // was not enabled.
