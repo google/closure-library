@@ -28,7 +28,6 @@ goog.require('goog.vec.Vec3');
 goog.require('goog.vec.Vec4');
 
 
-
 /**
  * @typedef {Float32Array}
  */
@@ -747,6 +746,7 @@ goog.vec.Matrix4.determinant = function(mat) {
   return a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0;
 };
 
+
 /**
  * Computes the inverse of mat storing the result into resultMat. If the
  * inverse is defined, this function returns true, false otherwise.
@@ -1067,14 +1067,14 @@ goog.vec.Matrix4.makeFrustum = function(
  * @param {goog.vec.ArrayType} mat The 4x4 (16-element) matrix
  *     array to receive the new translation matrix.
  * @param {number} fovy The field of view along the y (vertical) axis in
- *     degrees.
+ *     radians.
  * @param {number} aspect The x (width) to y (height) aspect ratio.
  * @param {number} near The distance to the near clipping plane.
  * @param {number} far The distance to the far clipping plane.
  */
 goog.vec.Matrix4.makePerspective = function(
     mat, fovy, aspect, near, far) {
-  var angle = fovy / 2 * Math.PI / 180;
+  var angle = fovy / 2;
   var dz = far - near;
   var sinAngle = Math.sin(angle);
   if (dz == 0 || sinAngle == 0 || aspect == 0) return;
@@ -1223,14 +1223,14 @@ goog.vec.Matrix4.toLookAt = function(
  * Constructs a rotation matrix from its Euler angles using the ZXZ convention.
  * Given the euler angles [theta1, theta2, theta3], the rotation is defined as
  * rotation = rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
- * where rotation_x(theta) means rotation around the X axis of theta degrees.
+ * where rotation_x(theta) means rotation around the X axis of theta radians.
  * @param {goog.vec.ArrayType} matrix The rotation matrix.
  * @param {number} theta1 The angle of rotation around the Z axis in radians.
  * @param {number} theta2 The angle of rotation around the X axis in radians.
  * @param {number} theta3 The angle of rotation around the Z axis in radians.
  */
 goog.vec.Matrix4.fromEulerZXZ = function(
-  matrix, theta1, theta2, theta3) {
+    matrix, theta1, theta2, theta3) {
   var c1 = Math.cos(theta1);
   var s1 = Math.sin(theta1);
 
@@ -1274,9 +1274,9 @@ goog.vec.Matrix4.toEulerZXZ = function(matrix, euler) {
   // There is an ambiguity in the sign of s2. We assume the tilt value
   // is between [-pi/2, 0], so s2 is always negative.
   if (s2 > goog.vec.EPSILON) {
-      euler[2] = Math.atan2(-matrix[2], -matrix[6]);
-      euler[1] = Math.atan2(-s2, matrix[10]);
-      euler[0] = Math.atan2(-matrix[8], matrix[9]);
+    euler[2] = Math.atan2(-matrix[2], -matrix[6]);
+    euler[1] = Math.atan2(-s2, matrix[10]);
+    euler[0] = Math.atan2(-matrix[8], matrix[9]);
   } else {
     // There is also an arbitrary choice for roll = 0 or pan = 0 in this case.
     // We assume roll = 0 as some applications do not allow the camera to roll.

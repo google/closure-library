@@ -490,7 +490,7 @@ See the COPYING file for details.
 
   function testMakePerspective() {
     var m0 = goog.vec.Matrix4.create();
-    goog.vec.Matrix4.makePerspective(m0, 90, 2, 0.1, 1.1);
+    goog.vec.Matrix4.makePerspective(m0, 90 * Math.PI / 180, 2, 0.1, 1.1);
     assertElementsRoughlyEqual(
         [0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1.2, -1, 0, 0, -0.22, 0],
         m0, goog.vec.EPSILON);
