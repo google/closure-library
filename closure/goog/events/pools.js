@@ -82,7 +82,7 @@ goog.events.pools.getProxy;
 
 /**
  * Sets the callback function to use in the proxy.
- * @param {Function} cb The callback function to use.
+ * @param {function(string, (Event|undefined))} cb The callback function to use.
  */
 goog.events.pools.setProxyCallbackFunction;
 
@@ -227,7 +227,7 @@ goog.events.pools.releaseEvent;
     };
 
     goog.events.pools.getEvent = function() {
-      return /** @type {goog.events.BrowserEvent} */ (eventPool.getObject());
+      return /** @type {!goog.events.BrowserEvent} */ (eventPool.getObject());
     };
 
     goog.events.pools.releaseEvent = function(obj) {
