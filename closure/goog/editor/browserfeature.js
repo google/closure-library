@@ -248,6 +248,14 @@ goog.editor.BrowserFeature = {
   // browser: http://www.whatwg/org/specs/web-apps/current-work/#dnd
   SUPPORTS_HTML5_FILE_DRAGGING: (goog.userAgent.product.CHROME &&
                                  goog.userAgent.product.isVersion('4')) ||
-      (goog.userAgent.product.SAFARI && goog.userAgent.isVersion('533'))
+      (goog.userAgent.product.SAFARI && goog.userAgent.isVersion('533')),
+
+  // Version of Opera that supports the opera-defaultBlock execCommand to change
+  // the default block inserted when [return] is pressed. Note that this only is
+  // used if the caret is not already in a block that can be repeated.
+  // TODO(user): Link to public documentation of this feature if Opera puts
+  // something up about it.
+  SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND:
+      goog.userAgent.OPERA && goog.userAgent.isVersion('11.10')
 
 };
