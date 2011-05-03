@@ -256,6 +256,8 @@ goog.editor.BrowserFeature = {
   // TODO(user): Link to public documentation of this feature if Opera puts
   // something up about it.
   SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND:
-      goog.userAgent.OPERA && goog.userAgent.isVersion('11.10')
+      goog.userAgent.OPERA && goog.userAgent.isVersion('11.10'),
 
+  SUPPORTS_FILE_PASTING: goog.userAgent.product.CHROME &&
+      goog.userAgent.product.isVersion('12')
 };
