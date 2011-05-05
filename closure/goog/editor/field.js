@@ -175,7 +175,17 @@ goog.editor.Field = function(id, opt_doc) {
   this.loadState_ = goog.editor.Field.LoadState_.UNEDITABLE;
 
   var doc = opt_doc || document;
+
+  /**
+   * @type {!goog.dom.DomHelper}
+   * @protected
+   */
   this.originalDomHelper = goog.dom.getDomHelper(doc);
+
+  /**
+   * @type {Element}
+   * @protected
+   */
   this.originalElement = this.originalDomHelper.getElement(this.id);
 
   // Default to the same window as the field is in.
@@ -1882,7 +1892,7 @@ goog.editor.Field.prototype.isSelectionEditable = function() {
  */
 goog.editor.Field.cancelLinkClick_ = function(e) {
   if (goog.dom.getAncestorByTagNameAndClass(
-          /** @type {Node} */ (e.target), goog.dom.TagName.A)) {
+      /** @type {Node} */ (e.target), goog.dom.TagName.A)) {
     e.preventDefault();
   }
 };
@@ -2271,8 +2281,9 @@ goog.editor.Field.prototype.handleFieldLoad = function() {
   if (goog.userAgent.IE) {
     // This must happen AFTER the browser has realized contentEditable is
     // on.  This does not work if it directly follows the setting of the
-    // contentEditable attribute.  It seems that doing the getElemById
-    // above is enough to force IE to update its state.
+    // contentEditable attribute.  It seems that doing the getElement
+    // is enough to force IE to update its state.
+    this.originalDomHelper.getElement(this.id); // Do not remove!
     goog.dom.Range.clearSelection(this.editableDomHelper.getWindow());
   }
 
