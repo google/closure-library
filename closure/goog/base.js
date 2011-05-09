@@ -79,16 +79,6 @@ goog.LOCALE = 'en';  // default to en
 
 
 /**
- * Indicates whether or not we can call 'eval' directly to eval code in the
- * global scope. Set to a Boolean by the first call to goog.globalEval (which
- * empirically tests whether eval works for globals). @see goog.globalEval
- * @type {?boolean}
- * @private
- */
-goog.evalWorksForGlobals_ = null;
-
-
-/**
  * Creates object stubs for a namespace. When present in a file, goog.provide
  * also indicates that the file defines the indicated object. Calls to
  * goog.provide are resolved by the compiler if --closure_pass is set.
@@ -1170,6 +1160,16 @@ goog.globalEval = function(script) {
     throw Error('goog.globalEval not available');
   }
 };
+
+
+/**
+ * Indicates whether or not we can call 'eval' directly to eval code in the
+ * global scope. Set to a Boolean by the first call to goog.globalEval (which
+ * empirically tests whether eval works for globals). @see goog.globalEval
+ * @type {?boolean}
+ * @private
+ */
+goog.evalWorksForGlobals_ = null;
 
 
 /**
