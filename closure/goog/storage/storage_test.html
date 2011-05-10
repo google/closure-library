@@ -14,7 +14,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.storage.ErrorCode');
   goog.require('goog.storage.Storage');
-  goog.require('goog.storage.mechanism.HTML5LocalStorage');
+  goog.require('goog.storage.mechanism.mechanismfactory');
   goog.require('goog.storage.storage_test');
   goog.require('goog.testing.jsunit');
 </script>
@@ -23,16 +23,16 @@ See the COPYING file for details.
 <script>
 
 function testBasicOperations() {
-  var mechanism = new goog.storage.mechanism.HTML5LocalStorage();
-  if (mechanism.isAvailable()) {
+  var mechanism = new goog.storage.mechanism.mechanismfactory.create('foo');
+  if (mechanism) {
     var storage = new goog.storage.Storage(mechanism);
     goog.storage.storage_test.runBasicTests(storage);
   }
 }
 
 function testMechanismCommunication() {
-  var mechanism = new goog.storage.mechanism.HTML5LocalStorage();
-  if (mechanism.isAvailable()) {
+  var mechanism = new goog.storage.mechanism.mechanismfactory.create('foo');
+  if (mechanism) {
     var storage = new goog.storage.Storage(mechanism);
 
     // Invalid JSON.

@@ -17,15 +17,15 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.prefixedstoragemechanism_test');
+goog.provide('goog.storage.mechanism.prefixedmechanism_test');
 
 goog.require('goog.iter.Iterator');
-goog.require('goog.storage.mechanism.IterableStorageMechanism');
+goog.require('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.testing.asserts');
-goog.setTestOnly('prefixedstoragemechanism_test');
+goog.setTestOnly('prefixedmechanism_test');
 
 
-goog.storage.mechanism.prefixedstoragemechanism_test.runSharingTests = function(
+goog.storage.mechanism.prefixedmechanism_test.runSharingTests = function(
     mechanismA, mechanismB) {
   // Clean up A, should clean up B.
   mechanismA.clear();
@@ -74,8 +74,8 @@ goog.storage.mechanism.prefixedstoragemechanism_test.runSharingTests = function(
 };
 
 
-goog.storage.mechanism.prefixedstoragemechanism_test.runSeparationTests =
-    function(mechanismA, mechanismB) {
+goog.storage.mechanism.prefixedmechanism_test.runSeparationTests = function(
+    mechanismA, mechanismB) {
   // Clean up.
   mechanismA.clear();
   mechanismB.clear();

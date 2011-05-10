@@ -22,14 +22,14 @@ goog.provide('goog.storage.Storage');
 
 goog.require('goog.json');
 goog.require('goog.storage.ErrorCode');
-goog.require('goog.storage.mechanism.StorageMechanism');
+goog.require('goog.storage.mechanism.Mechanism');
 
 
 
 /**
  * The base implementation for all storage APIs.
  *
- * @param {goog.storage.mechanism.StorageMechanism} mechanism Underlying
+ * @param {goog.storage.mechanism.Mechanism} mechanism Underlying
  *     storage mechanism.
  * @constructor
  */
@@ -42,7 +42,7 @@ goog.storage.Storage = function(mechanism) {
 /**
  * The mechanism used to persist key-value pairs.
  *
- * @type {?goog.storage.mechanism.StorageMechanism}
+ * @type {?goog.storage.mechanism.Mechanism}
  * @protected
  */
 goog.storage.Storage.prototype.mechanism = null;

@@ -18,11 +18,11 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.IterableStorageMechanism');
+goog.provide('goog.storage.mechanism.IterableMechanism');
 
 goog.require('goog.asserts');
 goog.require('goog.iter.Iterator');
-goog.require('goog.storage.mechanism.StorageMechanism');
+goog.require('goog.storage.mechanism.Mechanism');
 
 
 
@@ -30,13 +30,13 @@ goog.require('goog.storage.mechanism.StorageMechanism');
  * Interface for all iterable storage mechanisms.
  *
  * @constructor
- * @extends {goog.storage.mechanism.StorageMechanism}
+ * @extends {goog.storage.mechanism.Mechanism}
  */
-goog.storage.mechanism.IterableStorageMechanism = function() {
+goog.storage.mechanism.IterableMechanism = function() {
   goog.base(this);
 };
-goog.inherits(goog.storage.mechanism.IterableStorageMechanism,
-              goog.storage.mechanism.StorageMechanism);
+goog.inherits(goog.storage.mechanism.IterableMechanism,
+              goog.storage.mechanism.Mechanism);
 
 
 /**
@@ -47,8 +47,7 @@ goog.inherits(goog.storage.mechanism.IterableStorageMechanism,
  *
  * @return {number} Number of stored elements.
  */
-goog.storage.mechanism.IterableStorageMechanism.prototype.getCount =
-    function() {
+goog.storage.mechanism.IterableMechanism.prototype.getCount = function() {
   var count = 0;
   goog.iter.forEach(this.__iterator__(true), function(key) {
     goog.asserts.assertString(key);
@@ -66,7 +65,7 @@ goog.storage.mechanism.IterableStorageMechanism.prototype.getCount =
  *     over the values.  The default value is false.
  * @return {goog.iter.Iterator} The iterator.
  */
-goog.storage.mechanism.IterableStorageMechanism.prototype.__iterator__ =
+goog.storage.mechanism.IterableMechanism.prototype.__iterator__ =
     goog.abstractMethod;
 
 
@@ -76,7 +75,7 @@ goog.storage.mechanism.IterableStorageMechanism.prototype.__iterator__ =
  * Could be overridden in a subclass, as the default implementation is not very
  * efficient - it iterates over all keys.
  */
-goog.storage.mechanism.IterableStorageMechanism.prototype.clear = function() {
+goog.storage.mechanism.IterableMechanism.prototype.clear = function() {
   var keys = goog.iter.toArray(this.__iterator__(true));
   var selfObj = this;
   goog.array.forEach(keys, function(key) {

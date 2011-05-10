@@ -17,16 +17,16 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.iterablestoragemechanism_test');
+goog.provide('goog.storage.mechanism.iterablemechanism_test');
 
 goog.require('goog.iter.Iterator');
-goog.require('goog.storage.mechanism.IterableStorageMechanism');
+goog.require('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.testing.asserts');
-goog.setTestOnly('iterablestoragemechanism_test');
+goog.setTestOnly('iterablemechanism_test');
 
 
-goog.storage.mechanism.iterablestoragemechanism_test.runIterableTests =
-    function(mechanism) {
+goog.storage.mechanism.iterablemechanism_test.runIterableTests = function(
+    mechanism) {
   // Clean up and empty checks.
   mechanism.clear();
   assertEquals(0, mechanism.getCount());

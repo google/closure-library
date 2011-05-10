@@ -18,7 +18,7 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.StorageMechanism');
+goog.provide('goog.storage.mechanism.Mechanism');
 
 
 
@@ -27,7 +27,7 @@ goog.provide('goog.storage.mechanism.StorageMechanism');
  *
  * @constructor
  */
-goog.storage.mechanism.StorageMechanism = function() {};
+goog.storage.mechanism.Mechanism = function() {};
 
 
 /**
@@ -36,7 +36,7 @@ goog.storage.mechanism.StorageMechanism = function() {};
  * @param {string} key The key to set.
  * @param {string} value The string to save.
  */
-goog.storage.mechanism.StorageMechanism.prototype.set = goog.abstractMethod;
+goog.storage.mechanism.Mechanism.prototype.set = goog.abstractMethod;
 
 
 /**
@@ -45,7 +45,7 @@ goog.storage.mechanism.StorageMechanism.prototype.set = goog.abstractMethod;
  * @param {string} key The key to get.
  * @return {?string} The corresponding value, null if not found.
  */
-goog.storage.mechanism.StorageMechanism.prototype.get = goog.abstractMethod;
+goog.storage.mechanism.Mechanism.prototype.get = goog.abstractMethod;
 
 
 /**
@@ -53,4 +53,4 @@ goog.storage.mechanism.StorageMechanism.prototype.get = goog.abstractMethod;
  *
  * @param {string} key The key to remove.
  */
-goog.storage.mechanism.StorageMechanism.prototype.remove = goog.abstractMethod;
+goog.storage.mechanism.Mechanism.prototype.remove = goog.abstractMethod;

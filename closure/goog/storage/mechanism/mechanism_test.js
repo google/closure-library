@@ -17,18 +17,17 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.storagemechanism_test');
+goog.provide('goog.storage.mechanism.mechanism_test');
 
 goog.require('goog.storage.mechanism.ErrorCode');
-goog.require('goog.storage.mechanism.StorageMechanism');
+goog.require('goog.storage.mechanism.Mechanism');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
-goog.setTestOnly('storagemechanism_test');
+goog.setTestOnly('mechanism_test');
 
 
-goog.storage.mechanism.storagemechanism_test.runBasicTests = function(
-    mechanism) {
+goog.storage.mechanism.mechanism_test.runBasicTests = function(mechanism) {
   // Clean up.
   mechanism.remove('first');
   mechanism.remove('first');
@@ -96,7 +95,7 @@ goog.storage.mechanism.storagemechanism_test.runBasicTests = function(
 
 
 // This is only suitable for manual testing.
-goog.storage.mechanism.storagemechanism_test.runPersistenceTests = function(
+goog.storage.mechanism.mechanism_test.runPersistenceTests = function(
     mechanism) {
   try {
     assertEquals('hello', mechanism.get('persist'));
@@ -107,7 +106,7 @@ goog.storage.mechanism.storagemechanism_test.runPersistenceTests = function(
 };
 
 
-goog.storage.mechanism.storagemechanism_test.runQuotaTests = function(
+goog.storage.mechanism.mechanism_test.runQuotaTests = function(
     mechanism, atLeastBytes) {
   // This test might crash Safari 4, so it is disabled for this version.
   // It works fine on Safari 3 and Safari 5.

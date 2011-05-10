@@ -23,7 +23,7 @@ goog.require('goog.asserts');
 goog.require('goog.iter.Iterator');
 goog.require('goog.iter.StopIteration');
 goog.require('goog.storage.mechanism.ErrorCode');
-goog.require('goog.storage.mechanism.IterableStorageMechanism');
+goog.require('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.structs.Map');
 goog.require('goog.userAgent');
 
@@ -36,7 +36,7 @@ goog.require('goog.userAgent');
  * @param {string=} opt_storageNodeId The ID of the associated HTML element,
  *     one will be created if not provided.
  * @constructor
- * @extends {goog.storage.mechanism.IterableStorageMechanism}
+ * @extends {goog.storage.mechanism.IterableMechanism}
  */
 goog.storage.mechanism.IEUserData = function(storageKey, opt_storageNodeId) {
   goog.base(this);
@@ -74,7 +74,7 @@ goog.storage.mechanism.IEUserData = function(storageKey, opt_storageNodeId) {
   }
 };
 goog.inherits(goog.storage.mechanism.IEUserData,
-              goog.storage.mechanism.IterableStorageMechanism);
+              goog.storage.mechanism.IterableMechanism);
 
 
 /**

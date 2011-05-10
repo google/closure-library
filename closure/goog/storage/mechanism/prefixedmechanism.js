@@ -18,38 +18,38 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.PrefixedStorageMechanism');
+goog.provide('goog.storage.mechanism.PrefixedMechanism');
 
 goog.require('goog.iter.Iterator');
-goog.require('goog.storage.mechanism.IterableStorageMechanism');
+goog.require('goog.storage.mechanism.IterableMechanism');
 
 
 
 /**
  * Wraps an iterable storage mechanism and creates artificial namespaces.
  *
- * @param {goog.storage.mechanism.IterableStorageMechanism} mechanism Underlying
+ * @param {goog.storage.mechanism.IterableMechanism} mechanism Underlying
  *     iterable storage mechanism.
  * @param {string} prefix Prefix for creating an artificial namespace.
  * @constructor
- * @extends {goog.storage.mechanism.IterableStorageMechanism}
+ * @extends {goog.storage.mechanism.IterableMechanism}
  */
-goog.storage.mechanism.PrefixedStorageMechanism = function(mechanism, prefix) {
+goog.storage.mechanism.PrefixedMechanism = function(mechanism, prefix) {
   goog.base(this);
   this.mechanism_ = mechanism;
   this.prefix_ = prefix + '::';
 };
-goog.inherits(goog.storage.mechanism.PrefixedStorageMechanism,
-              goog.storage.mechanism.IterableStorageMechanism);
+goog.inherits(goog.storage.mechanism.PrefixedMechanism,
+              goog.storage.mechanism.IterableMechanism);
 
 
 /**
  * The mechanism to be prefixed.
  *
- * @type {goog.storage.mechanism.IterableStorageMechanism}
+ * @type {goog.storage.mechanism.IterableMechanism}
  * @private
  */
-goog.storage.mechanism.PrefixedStorageMechanism.prototype.mechanism_ = null;
+goog.storage.mechanism.PrefixedMechanism.prototype.mechanism_ = null;
 
 
 /**
@@ -58,32 +58,30 @@ goog.storage.mechanism.PrefixedStorageMechanism.prototype.mechanism_ = null;
  * @type {string}
  * @private
  */
-goog.storage.mechanism.PrefixedStorageMechanism.prototype.prefix_ = '';
+goog.storage.mechanism.PrefixedMechanism.prototype.prefix_ = '';
 
 
 /** @inheritDoc */
-goog.storage.mechanism.PrefixedStorageMechanism.prototype.set = function(
-    key, value) {
+goog.storage.mechanism.PrefixedMechanism.prototype.set = function(key, value) {
   this.mechanism_.set(this.prefix_ + key, value);
 };
 
 
 /** @inheritDoc */
-goog.storage.mechanism.PrefixedStorageMechanism.prototype.get = function(key) {
+goog.storage.mechanism.PrefixedMechanism.prototype.get = function(key) {
   return this.mechanism_.get(this.prefix_ + key);
 };
 
 
 /** @inheritDoc */
-goog.storage.mechanism.PrefixedStorageMechanism.prototype.remove = function(
-    key) {
+goog.storage.mechanism.PrefixedMechanism.prototype.remove = function(key) {
   this.mechanism_.remove(this.prefix_ + key);
 };
 
 
 /** @inheritDoc */
-goog.storage.mechanism.PrefixedStorageMechanism.prototype.__iterator__ =
-    function(opt_keys) {
+goog.storage.mechanism.PrefixedMechanism.prototype.__iterator__ = function(
+    opt_keys) {
   var subIter = this.mechanism_.__iterator__(true);
   var newIter = new goog.iter.Iterator;
   var selfObj = this;

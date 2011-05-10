@@ -23,7 +23,7 @@ goog.require('goog.asserts');
 goog.require('goog.iter.Iterator');
 goog.require('goog.iter.StopIteration');
 goog.require('goog.storage.mechanism.ErrorCode');
-goog.require('goog.storage.mechanism.IterableStorageMechanism');
+goog.require('goog.storage.mechanism.IterableMechanism');
 
 
 
@@ -31,13 +31,13 @@ goog.require('goog.storage.mechanism.IterableStorageMechanism');
  * Provides a storage mechanism that uses HTML5 local storage.
  *
  * @constructor
- * @extends {goog.storage.mechanism.IterableStorageMechanism}
+ * @extends {goog.storage.mechanism.IterableMechanism}
  */
 goog.storage.mechanism.HTML5LocalStorage = function() {
   goog.base(this);
 };
 goog.inherits(goog.storage.mechanism.HTML5LocalStorage,
-              goog.storage.mechanism.IterableStorageMechanism);
+              goog.storage.mechanism.IterableMechanism);
 
 
 /**
