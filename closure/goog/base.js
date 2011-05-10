@@ -110,18 +110,6 @@ goog.provide = function(name) {
 
 
 /**
- * Check if the given name has been goog.provided. This will return false for
- * names that are available only as implicit namespaces.
- * @param {string} name name of the object to look for.
- * @return {boolean} Whether the name has been provided.
- * @private
- */
-goog.isProvided_ = function(name) {
-  return !goog.implicitNamespaces_[name] && !!goog.getObjectByName(name);
-};
-
-
-/**
  * Marks that the current file should only be used for testing, and never for
  * live code in production.
  * @param {string=} opt_message Optional message to add to the error that's
@@ -137,6 +125,18 @@ goog.setTestOnly = function(opt_message) {
 
 
 if (!COMPILED) {
+
+  /**
+   * Check if the given name has been goog.provided. This will return false for
+   * names that are available only as implicit namespaces.
+   * @param {string} name name of the object to look for.
+   * @return {boolean} Whether the name has been provided.
+   * @private
+   */
+  goog.isProvided_ = function(name) {
+    return !goog.implicitNamespaces_[name] && !!goog.getObjectByName(name);
+  };
+
   /**
    * Namespaces implicitly defined by goog.provide. For example,
    * goog.provide('goog.events.Event') implicitly declares
@@ -261,6 +261,39 @@ goog.addDependency = function(relPath, provides, requires) {
 };
 
 
+
+
+// NOTE(user): The debug DOM loader was included in base.js as an orignal
+// way to do "debug-mode" development.  The dependency system can sometimes
+// be confusing, as can the debug DOM loader's asyncronous nature.
+//
+// With the DOM loader, a call to goog.require() is not blocking -- the
+// script will not load until some point after the current script.  If a
+// namespace is needed at runtime, it needs to be defined in a previous
+// script, or loaded via require() with its registered dependencies.
+// User-defined namespaces may need their own deps file.  See http://go/js_deps,
+// http://go/genjsdeps, or, externally, DepsWriter.
+// http://code.google.com/closure/library/docs/depswriter.html
+//
+// Because of legacy clients, the DOM loader can't be easily removed from
+// base.js.  Work is being done to make it disableable or replaceable for
+// different environments (DOM-less JavaScript interpreters like Rhino or V8,
+// for example). See bootstrap/ for more information.
+
+
+/**
+ * @define {boolean} Whether to enable the debug loader.
+ *
+ * If enabled, a call to goog.require() will attempt to load the namespace by
+ * appending a script tag to the DOM (if the namespace has been registered).
+ *
+ * If disabled, goog.require() will simply assert that the namespace has been
+ * provided (and depend on the fact that some outside tool correctly ordered
+ * the script).
+ */
+goog.ENABLE_DEBUG_LOADER = true;
+
+
 /**
  * Implements a system for the dynamic resolution of dependencies
  * that works in parallel with the BUILD system. Note that all calls
@@ -280,18 +313,24 @@ goog.require = function(rule) {
     if (goog.getObjectByName(rule)) {
       return;
     }
-    var path = goog.getPathFromDeps_(rule);
-    if (path) {
-      goog.included_[path] = true;
-      goog.writeScripts_();
-    } else {
-      var errorMessage = 'goog.require could not find: ' + rule;
-      if (goog.global.console) {
-        goog.global.console['error'](errorMessage);
-      }
 
-        throw Error(errorMessage);
+    if (goog.ENABLE_DEBUG_LOADER) {
+      var path = goog.getPathFromDeps_(rule);
+      if (path) {
+        goog.included_[path] = true;
+        goog.writeScripts_();
+        return;
+      }
     }
+
+    var errorMessage = 'goog.require could not find: ' + rule;
+    if (goog.global.console) {
+      goog.global.console['error'](errorMessage);
+    }
+
+
+      throw Error(errorMessage);
+
   }
 };
 
@@ -383,7 +422,7 @@ goog.addSingletonGetter = function(ctor) {
 };
 
 
-if (!COMPILED) {
+if (!COMPILED && goog.ENABLE_DEBUG_LOADER) {
   /**
    * Object used to keep track of urls that have already been added. This
    * record allows the prevention of circular dependencies.
