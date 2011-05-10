@@ -2,6 +2,8 @@ goog.require('goog.dom');
 goog.require('goog.dom.query');
 goog.require('goog.testing.asserts');  // assertThrows
 
+goog.setTestOnly('query_test');
+
 function testBasicSelectors() {
   assertQuery(4, 'h3');
   assertQuery(1, 'h1:first-child');
