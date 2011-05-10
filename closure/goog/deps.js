@@ -398,8 +398,11 @@ goog.addDependency('spell/spellcheck.js', ['goog.spell.SpellCheck', 'goog.spell.
 goog.addDependency('storage/errorcode.js', ['goog.storage.ErrorCode'], []);
 goog.addDependency('storage/mechanism/errorcode.js', ['goog.storage.mechanism.ErrorCode'], []);
 goog.addDependency('storage/mechanism/html5localstorage.js', ['goog.storage.mechanism.HTML5LocalStorage'], ['goog.asserts', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.storage.mechanism.ErrorCode', 'goog.storage.mechanism.IterableStorageMechanism']);
+goog.addDependency('storage/mechanism/ieuserdata.js', ['goog.storage.mechanism.IEUserData'], ['goog.asserts', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.storage.mechanism.ErrorCode', 'goog.storage.mechanism.IterableStorageMechanism', 'goog.structs.Map', 'goog.userAgent']);
 goog.addDependency('storage/mechanism/iterablestoragemechanism.js', ['goog.storage.mechanism.IterableStorageMechanism'], ['goog.asserts', 'goog.iter.Iterator', 'goog.storage.mechanism.StorageMechanism']);
 goog.addDependency('storage/mechanism/iterablestoragemechanism_test.js', ['goog.storage.mechanism.iterablestoragemechanism_test'], ['goog.iter.Iterator', 'goog.storage.mechanism.IterableStorageMechanism', 'goog.testing.asserts']);
+goog.addDependency('storage/mechanism/prefixedstoragemechanism.js', ['goog.storage.mechanism.PrefixedStorageMechanism'], ['goog.iter.Iterator', 'goog.storage.mechanism.IterableStorageMechanism']);
+goog.addDependency('storage/mechanism/prefixedstoragemechanism_test.js', ['goog.storage.mechanism.prefixedstoragemechanism_test'], ['goog.iter.Iterator', 'goog.storage.mechanism.IterableStorageMechanism', 'goog.testing.asserts']);
 goog.addDependency('storage/mechanism/storagemechanism.js', ['goog.storage.mechanism.StorageMechanism'], []);
 goog.addDependency('storage/mechanism/storagemechanism_test.js', ['goog.storage.mechanism.storagemechanism_test'], ['goog.storage.mechanism.ErrorCode', 'goog.storage.mechanism.StorageMechanism', 'goog.testing.asserts', 'goog.userAgent.product', 'goog.userAgent.product.isVersion']);
 goog.addDependency('storage/storage.js', ['goog.storage.Storage'], ['goog.json', 'goog.storage.ErrorCode', 'goog.storage.mechanism.StorageMechanism']);
