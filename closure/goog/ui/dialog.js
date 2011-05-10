@@ -1776,21 +1776,23 @@ goog.ui.Dialog.ButtonSet.createContinueSaveCancel = function() {
 
 // TODO(user): These shared instances should be phased out.
 (function() {
-  /** @deprecated Use goog.ui.Dialog.ButtonSet#createOk. */
-  goog.ui.Dialog.ButtonSet.OK = goog.ui.Dialog.ButtonSet.createOk();
+  if (typeof document != 'undefined') {
+    /** @deprecated Use goog.ui.Dialog.ButtonSet#createOk. */
+    goog.ui.Dialog.ButtonSet.OK = goog.ui.Dialog.ButtonSet.createOk();
 
-  /** @deprecated Use goog.ui.Dialog.ButtonSet#createOkCancel. */
-  goog.ui.Dialog.ButtonSet.OK_CANCEL =
-      goog.ui.Dialog.ButtonSet.createOkCancel();
+    /** @deprecated Use goog.ui.Dialog.ButtonSet#createOkCancel. */
+    goog.ui.Dialog.ButtonSet.OK_CANCEL =
+        goog.ui.Dialog.ButtonSet.createOkCancel();
 
-  /** @deprecated Use goog.ui.Dialog.ButtonSet#createYesNo. */
-  goog.ui.Dialog.ButtonSet.YES_NO = goog.ui.Dialog.ButtonSet.createYesNo();
+    /** @deprecated Use goog.ui.Dialog.ButtonSet#createYesNo. */
+    goog.ui.Dialog.ButtonSet.YES_NO = goog.ui.Dialog.ButtonSet.createYesNo();
 
-  /** @deprecated Use goog.ui.Dialog.ButtonSet#createYesNoCancel. */
-  goog.ui.Dialog.ButtonSet.YES_NO_CANCEL =
-      goog.ui.Dialog.ButtonSet.createYesNoCancel();
+    /** @deprecated Use goog.ui.Dialog.ButtonSet#createYesNoCancel. */
+    goog.ui.Dialog.ButtonSet.YES_NO_CANCEL =
+        goog.ui.Dialog.ButtonSet.createYesNoCancel();
 
-  /** @deprecated Use goog.ui.Dialog.ButtonSet#createContinueSaveCancel. */
-  goog.ui.Dialog.ButtonSet.CONTINUE_SAVE_CANCEL =
-      goog.ui.Dialog.ButtonSet.createContinueSaveCancel();
+    /** @deprecated Use goog.ui.Dialog.ButtonSet#createContinueSaveCancel. */
+    goog.ui.Dialog.ButtonSet.CONTINUE_SAVE_CANCEL =
+        goog.ui.Dialog.ButtonSet.createContinueSaveCancel();
+  }
 })();
