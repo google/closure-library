@@ -20,6 +20,7 @@
 goog.provide('goog.storage.mechanism.mechanism_test');
 
 goog.require('goog.storage.mechanism.ErrorCode');
+goog.require('goog.storage.mechanism.HTML5LocalStorage');
 goog.require('goog.storage.mechanism.Mechanism');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent.product');
@@ -69,24 +70,42 @@ goog.storage.mechanism.mechanism_test.runBasicTests = function(mechanism) {
   mechanism.set('third', '');
   assertEquals('', mechanism.get('third'));
 
-  // Some weird keys. We don't test the empty key at the moment because it
-  // triggers a bug in Firefox and it is probably too obscure to prepare a
-  // workaround. We leave this commented out till it gets fixed.
-  //mechanism.set('', 'zero');
+  // Some weird keys. We leave out some tests for some browsers where they
+  // trigger browser bugs, and where the keys are too obscure to prepare a
+  // workaround.
   mechanism.set(' ', 'space');
   mechanism.set('=+!@#$%^&*()-_\\|;:\'",./<>?[]{}~`', 'control');
   mechanism.set(
       '\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341', 'ten');
-  //assertEquals('zero', mechanism.get(''));
+  mechanism.set('\0', 'null');
+  mechanism.set('\0\0', 'double null');
+  mechanism.set('\0A', 'null A');
+  mechanism.set('', 'zero');
   assertEquals('space', mechanism.get(' '));
   assertEquals('control', mechanism.get('=+!@#$%^&*()-_\\|;:\'",./<>?[]{}~`'));
   assertEquals('ten', mechanism.get(
       '\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341'));
-  //mechanism.remove('');
+  if (!goog.userAgent.IE ||
+      !mechanism instanceof goog.storage.mechanism.HTML5LocalStorage) {
+    // IE does not properly handle nulls in HTML5 localStorage keys (IE8, IE9).
+    // https://connect.microsoft.com/IE/feedback/details/667799/
+    assertEquals('null', mechanism.get('\0'));
+    assertEquals('double null', mechanism.get('\0\0'));
+    assertEquals('null A', mechanism.get('\0A'));
+  }
+  if (!goog.userAgent.GECKO) {
+    // Firefox does not properly handle the empty key (FF 3.5, 3.6, 4.0).
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=510849
+    assertEquals('zero', mechanism.get(''));
+  }
   mechanism.remove(' ');
   mechanism.remove('=+!@#$%^&*()-_\\|;:\'",./<>?[]{}~`');
   mechanism.remove(
       '\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341');
+  mechanism.remove('\0');
+  mechanism.remove('\0\0');
+  mechanism.remove('\0A');
+  mechanism.remove('');
 
   // Clean up.
   mechanism.remove('third');

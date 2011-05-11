@@ -29,7 +29,7 @@ goog.require('goog.storage.mechanism.Mechanism');
 /**
  * The base implementation for all storage APIs.
  *
- * @param {goog.storage.mechanism.Mechanism} mechanism Underlying
+ * @param {goog.storage.mechanism.Mechanism} mechanism The underlying
  *     storage mechanism.
  * @constructor
  */
@@ -61,14 +61,14 @@ goog.storage.Storage.prototype.serializer_ = null;
  * Set an item in the data storage.
  *
  * @param {string} key The key to set.
- * @param {*} object The value to serialize to a string and save.
+ * @param {*} value The value to serialize to a string and save.
  */
-goog.storage.Storage.prototype.set = function(key, object) {
-  if (!goog.isDef(object)) {
+goog.storage.Storage.prototype.set = function(key, value) {
+  if (!goog.isDef(value)) {
     this.mechanism.remove(key);
     return;
   }
-  this.mechanism.set(key, this.serializer_.serialize(object));
+  this.mechanism.set(key, this.serializer_.serialize(value));
 };
 
 
