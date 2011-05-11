@@ -46,9 +46,30 @@ goog.require('goog.userAgent');
  * @extends {goog.debug.DebugWindow}
  */
 goog.debug.FancyWindow = function(opt_identifier, opt_prefix) {
+  this.readOptionsFromLocalStorage_();
   goog.debug.DebugWindow.call(this, opt_identifier, opt_prefix);
 };
 goog.inherits(goog.debug.FancyWindow, goog.debug.DebugWindow);
+
+
+/**
+ * Constant indicating if we are able to use localStorage to persist filters
+ * @type {boolean}
+ */
+goog.debug.FancyWindow.HAS_LOCAL_STORE = (function() {
+  /** @preserveTry */
+  try {
+    return !!window['localStorage'].getItem;
+  } catch(e) {}
+  return false;
+})();
+
+
+/**
+ * Constant defining the prefix to use when storing log levels
+ * @type {string}
+ */
+goog.debug.FancyWindow.LOCAL_STORE_PREFIX = 'fancywindow.sel.';
 
 
 /**
@@ -167,7 +188,7 @@ goog.debug.FancyWindow.prototype.getDropDown_ = function(id, selected) {
 
 
 /**
- * Show the options menu.
+ * Close the options menu.
  * @return {boolean} The value false.
  * @private
  */
@@ -185,6 +206,7 @@ goog.debug.FancyWindow.prototype.closeOptions_ = function() {
       logger.setLevel(goog.debug.Logger.Level.getPredefinedLevel(level));
     }
   }
+  this.writeOptionsToLocalStorage_();
   return false;
 };
 
@@ -282,4 +304,66 @@ goog.debug.FancyWindow.prototype.getHtml_ = function() {
       '<span id="closebutton">save and close</span>' +
     '</div>' +
     '</body></html>';
+};
+
+
+/**
+ * Helper function to create a list of locally stored keys. Used to avoid
+ * expensive localStorage.getItem() calls.
+ * @return {Object} List of keys.
+ * @private
+ */
+goog.debug.FancyWindow.prototype.getStoredKeys_ = function() {
+  var storedKeys = {};
+  for (var i = 0, len = window.localStorage.length; i < len; i++) {
+    storedKeys[window.localStorage.key(i)] = true;
+  }
+  return storedKeys;
+};
+
+
+/**
+ * Write logger levels to localStorage if possible.
+ * @private
+ */
+goog.debug.FancyWindow.prototype.writeOptionsToLocalStorage_ = function() {
+  if (!goog.debug.FancyWindow.HAS_LOCAL_STORE) {
+    return;
+  }
+  var loggers = goog.debug.FancyWindow.getLoggers_();
+  var storedKeys = goog.debug.FancyWindow.prototype.getStoredKeys_();
+  for (var i = 0; i < loggers.length; i++) {
+    var key = goog.debug.FancyWindow.LOCAL_STORE_PREFIX + loggers[i];
+    var level = goog.debug.Logger.getLogger(loggers[i]).getLevel();
+    if (key in storedKeys) {
+      if (!level) {
+        window.localStorage.removeItem(key);
+      } else if (window.localStorage.getItem(key) != level.name) {
+        window.localStorage.setItem(key, level.name);
+      }
+    } else if (level) {
+      window.localStorage.setItem(key, level.name);
+    }
+  }
+};
+
+
+/**
+ * Sync logger levels with any values stored in localStorage.
+ * @private
+ */
+goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
+  if (!goog.debug.FancyWindow.HAS_LOCAL_STORE) {
+    return;
+  }
+  var storedKeys = goog.debug.FancyWindow.prototype.getStoredKeys_();
+  for (var key in storedKeys) {
+    var loggerName = key.replace(goog.debug.FancyWindow.LOCAL_STORE_PREFIX, '');
+    var logger = goog.debug.Logger.getLogger(loggerName);
+    var curLevel = logger.getLevel();
+    var storedLevel = window.localStorage.getItem(key).toString();
+    if (!curLevel || curLevel.toString() != storedLevel) {
+      logger.setLevel(goog.debug.Logger.Level.getPredefinedLevel(storedLevel));
+    }
+  }
 };
