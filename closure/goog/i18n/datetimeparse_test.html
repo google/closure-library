@@ -507,9 +507,9 @@ function testEnglishDate() {
 
   var parser = new goog.i18n.DateTimeParse('yyyy MMM dd hh:mm');
 
-  // Fails in Safari4 Winxp because of infrastructure issues, temporarily
+  // Fails in Safari4/Chrome Winxp because of infrastructure issues, temporarily
   // disabled. See b/4274778.
-  expectedFailures.expectFailureFor(goog.userAgent.product.SAFARI);
+  expectedFailures.expectFailureFor(goog.userAgent.WEBKIT);
   try {
     assertTrue(parser.parse('2006 Jul 10 15:44', date) > 0);
     assertEquals(2006, date.getFullYear());
@@ -549,9 +549,9 @@ function testChineseDate() {
       goog.i18n.DateTimeFormat.Format.FULL_TIME);
   parser.parse('GMT-07:00\u4E0B\u534803\u65F626\u520628\u79D2', date);
 
-  // Fails in Safari4 Winxp because of infrastructure issues, temporarily
+  // Fails in Safari4/Chrome Winxp because of infrastructure issues, temporarily
   // disabled. See b/4274778.
-  expectedFailures.expectFailureFor(goog.userAgent.product.SAFARI);
+  expectedFailures.expectFailureFor(goog.userAgent.WEBKIT);
   try {
     assertEquals(22, (24 + date.getHours() + date.getTimezoneOffset()/60) % 24);
     assertEquals(26, date.getMinutes());
@@ -649,9 +649,9 @@ function testEnglishQuarter() {
   var date = new Date();
   var parser = new goog.i18n.DateTimeParse('QQQQ yyyy');
 
-  // Fails in Safari4 Winxp because of infrastructure issues, temporarily
+  // Fails in Safari4/Chrome Winxp because of infrastructure issues, temporarily
   // disabled. See b/4274778.
-  expectedFailures.expectFailureFor(goog.userAgent.product.SAFARI);
+  expectedFailures.expectFailureFor(goog.userAgent.WEBKIT);
   try {
     assertTrue(parser.parse('1st quarter 2009', date) > 0);
     assertEquals(2009, date.getFullYear());
@@ -666,9 +666,9 @@ function testEnglishShortQuarter() {
   var date = new Date();
   var parser = new goog.i18n.DateTimeParse('yyyyQQ');
 
-  // Fails in Safari4 Winxp because of infrastructure issues, temporarily
+  // Fails in Safari4/Chrome Winxp because of infrastructure issues, temporarily
   // disabled. See b/4274778.
-  expectedFailures.expectFailureFor(goog.userAgent.product.SAFARI);
+  expectedFailures.expectFailureFor(goog.userAgent.WEBKIT);
   try {
     assertTrue(parser.parse('2006Q2', date) > 0);
     assertEquals(2006, date.getFullYear());
