@@ -2279,11 +2279,11 @@ goog.editor.Field.prototype.makeEditableInternal = function(opt_iframeSrc) {
  */
 goog.editor.Field.prototype.handleFieldLoad = function() {
   if (goog.userAgent.IE) {
-    // This must happen AFTER the browser has realized contentEditable is
-    // on.  This does not work if it directly follows the setting of the
-    // contentEditable attribute.  It seems that doing the getElement
-    // is enough to force IE to update its state.
-    this.originalDomHelper.getElement(this.id); // Do not remove!
+    // This sometimes fails if the selection is invalid. This can happen, for
+    // example, if you attach a CLICK handler to the field that causes the
+    // field to be removed from the DOM and replaced with an editor
+    // -- however, listening to another event like MOUSEDOWN does not have this
+    // issue since no mouse selection has happened at that time.
     goog.dom.Range.clearSelection(this.editableDomHelper.getWindow());
   }
 
