@@ -50,7 +50,7 @@ goog.storage.mechanism.HTML5LocalStorage.prototype.isAvailable = function() {
   /** @preserveTry */
   try {
     // May throw a security exception if localStorage is disabled.
-    return window['localStorage'] !== undefined;
+    return !!window.localStorage.getItem;
   } catch (e) {}
   return false;
 };
