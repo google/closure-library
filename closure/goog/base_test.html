@@ -14,8 +14,9 @@ See the COPYING file for details.
 goog.require('goog.functions');
 // Used to test dynamic loading works, see testRequire*
 goog.require('goog.Timer');
-goog.require('goog.testing.jsunit');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent');
 </script>
 </head>
@@ -1199,6 +1200,32 @@ function testBaseClass() {
   assertEquals(16, (new D(2, 0)).foo);
   assertEquals(7, (new C(1, 0)).foo);
   assertEquals(3, (new B(1, 0)).foo);
+}
+
+function testGoogRequireCheck() {
+  stubs.set(goog, 'ENABLE_DEBUG_LOADER', false);
+  stubs.set(goog, 'useStrictRequires', true);
+  stubs.set(goog, 'implicitNamespaces_', {});
+
+  assertThrows('Requiring non-required namespace should fail',
+    function() {
+      goog.require('far.out');
+    });
+
+  assertUndefined(goog.global.far );
+  assertEvaluatesToFalse(goog.getObjectByName('far.out'));
+  assertObjectEquals({}, goog.implicitNamespaces_);
+  assertFalse(goog.isProvided_('far.out'));
+
+  goog.provide('far.out');
+
+  assertNotUndefined(far.out);
+  assertEvaluatesToTrue(goog.getObjectByName('far.out'));
+  assertObjectEquals({'far': true}, goog.implicitNamespaces_);
+  assertTrue(goog.isProvided_('far.out'));
+
+  stubs.reset();
+  delete far;
 }
 
 </script>

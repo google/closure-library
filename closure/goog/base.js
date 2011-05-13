@@ -79,10 +79,13 @@ goog.LOCALE = 'en';  // default to en
 
 
 /**
- * Creates object stubs for a namespace. When present in a file, goog.provide
- * also indicates that the file defines the indicated object. Calls to
- * goog.provide are resolved by the compiler if --closure_pass is set.
- * @param {string} name name of the object that this file defines.
+ * Creates object stubs for a namespace.  The presence of one or more
+ * goog.provide() calls indicate that the file defines the given
+ * objects/namespaces.  Build tools also scan for provide/require statements
+ * to discern dependencies, build dependency files (see deps.js), etc.
+ * @see goog.require
+ * @param {string} name Namespace provided by this file in the form
+ *     "goog.package.part".
  */
 goog.provide = function(name) {
   if (!COMPILED) {
@@ -299,9 +302,11 @@ goog.ENABLE_DEBUG_LOADER = true;
  * that works in parallel with the BUILD system. Note that all calls
  * to goog.require will be stripped by the JSCompiler when the
  * --closure_pass option is used.
- * @param {string} rule Rule to include, in the form goog.package.part.
+ * @see goog.provide
+ * @param {string} name Namespace to include (as was given in goog.provide())
+ *     in the form "goog.package.part".
  */
-goog.require = function(rule) {
+goog.require = function(name) {
 
   // if the object already exists we do not need do do anything
   // TODO(user): If we start to support require based on file name this has
@@ -310,12 +315,12 @@ goog.require = function(rule) {
   // TODO(user): If we implement dynamic load after page load we should probably
   //            not remove this code for the compiled output
   if (!COMPILED) {
-    if (goog.getObjectByName(rule)) {
+    if (goog.isProvided_(name)) {
       return;
     }
 
     if (goog.ENABLE_DEBUG_LOADER) {
-      var path = goog.getPathFromDeps_(rule);
+      var path = goog.getPathFromDeps_(name);
       if (path) {
         goog.included_[path] = true;
         goog.writeScripts_();
@@ -323,7 +328,7 @@ goog.require = function(rule) {
       }
     }
 
-    var errorMessage = 'goog.require could not find: ' + rule;
+    var errorMessage = 'goog.require could not find: ' + name;
     if (goog.global.console) {
       goog.global.console['error'](errorMessage);
     }
