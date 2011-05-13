@@ -42,56 +42,57 @@ function testHashing() {
 
   // Simple stream.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray('a'));
+  md5.update('a');
   assertEquals('0cc175b9c0f1b6a831c399e269772661',
                goog.crypt.byteArrayToHex(md5.digest()));
 
   // Simple stream with two updates.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray('a'));
-  md5.update(goog.crypt.stringToByteArray('bc'));
+  md5.update([97]);
+  md5.update('bc');
   assertEquals('900150983cd24fb0d6963f7d28e17f72',
                goog.crypt.byteArrayToHex(md5.digest()));
 
   // RFC 1321 standard test.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray('abcdefghijklmnopqrstuvwxyz'));
+  md5.update('abcdefghijklmnopqrstuvwxyz');
   assertEquals('c3fcd3d76192e4007dfb496cca67e13b',
                goog.crypt.byteArrayToHex(md5.digest()));
 
   // RFC 1321 standard test with two updates.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray('message'));
-  md5.update(goog.crypt.stringToByteArray(' digest'));
+  md5.update('message');
+  md5.update([32]);
+  md5.update('digest');
   assertEquals('f96b697d7cb7938d525a2f31aaf161d0',
                goog.crypt.byteArrayToHex(md5.digest()));
 
   // RFC 1321 standard test with three updates.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray('ABCDEFGHIJKLMNOPQRSTUVWXYZ'));
-  md5.update(goog.crypt.stringToByteArray('abcdefghijklmnopqrstuvwxyz'));
-  md5.update(goog.crypt.stringToByteArray('0123456789'));
+  md5.update('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  md5.update('abcdefghijklmnopqrstuvwxyz');
+  md5.update('0123456789');
   assertEquals('d174ab98d277d9f5a5611c2c9f419d9f',
                goog.crypt.byteArrayToHex(md5.digest()));
 
   // Fill a 64-byte block.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray(sixty + '1234'));
-  md5.update(goog.crypt.stringToByteArray('5678901234567890'));
+  md5.update(sixty + '1234');
+  md5.update('5678901234567890');
   assertEquals('57edf4a22be3c955ac49da2e2107b67a',
                goog.crypt.byteArrayToHex(md5.digest()));
 
   // Overflow a 64-byte block.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray(sixty + '12345'));
-  md5.update(goog.crypt.stringToByteArray('678901234567890'));
+  md5.update(sixty + '12345');
+  md5.update('678901234567890');
   assertEquals('57edf4a22be3c955ac49da2e2107b67a',
                goog.crypt.byteArrayToHex(md5.digest()));
 
   // Almost fill a 64-byte block, then overflow.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray(sixty + '123'));
-  md5.update(goog.crypt.stringToByteArray('45678901234567890'));
+  md5.update(sixty + '123');
+  md5.update('45678901234567890');
   assertEquals('57edf4a22be3c955ac49da2e2107b67a',
                goog.crypt.byteArrayToHex(md5.digest()));
 }
@@ -99,15 +100,15 @@ function testHashing() {
 function testPadding() {
   // Padding fits in two 64-byte blocks.
   var md5 = new goog.crypt.Md5();
-  md5.update(goog.crypt.stringToByteArray(sixty));
-  md5.update(goog.crypt.stringToByteArray(sixty.substr(0,59)));
+  md5.update(sixty);
+  md5.update(sixty.substr(0,59));
   assertEquals('6261005311809757906e04c0d670492d',
                goog.crypt.byteArrayToHex(md5.digest()));
 
   // Padding does not fit in two 64-byte blocks.
   md5.reset();
-  md5.update(goog.crypt.stringToByteArray(sixty));
-  md5.update(goog.crypt.stringToByteArray(sixty));
+  md5.update(sixty);
+  md5.update(sixty);
   assertEquals('1d453b96d48d5e0cec4a20a71fecaa81',
                goog.crypt.byteArrayToHex(md5.digest()));
 }
@@ -116,10 +117,10 @@ function testTwoAccumulators() {
   // Two accumulators in parallel.
   var md5_A = new goog.crypt.Md5();
   var md5_B = new goog.crypt.Md5();
-  md5_A.update(goog.crypt.stringToByteArray(sixty));
-  md5_B.update(goog.crypt.stringToByteArray(sixty));
-  md5_A.update(goog.crypt.stringToByteArray(sixty + '1'));
-  md5_B.update(goog.crypt.stringToByteArray(sixty + '2'));
+  md5_A.update(sixty);
+  md5_B.update(sixty);
+  md5_A.update(sixty + '1');
+  md5_B.update(sixty + '2');
   assertEquals('0801d688cc107d4789ec8b9a4519f01f',
                goog.crypt.byteArrayToHex(md5_A.digest()));
   assertEquals('6e1a35ffc185d1e684d6ed281c0d4bd2',

@@ -54,15 +54,30 @@ goog.crypt.hash_test.runBasicTests = function(hash) {
   assertArrayEquals('Updating with an explicit buffer length did not work',
       golden, hash.digest());
 
+  // Test array and string inputs.
+  hash.reset();
+  hash.update([97, 66]);
+  golden = hash.digest();
+  hash.reset();
+  hash.update('aB');
+  assertArrayEquals('String and array inputs should give the same result',
+      golden, hash.digest());
+
   // Empty hash.
   hash.reset();
   var empty = hash.digest();
   assertTrue('Empty hash collided with a non-trivial one',
       !!goog.testing.asserts.findDifferences(golden, empty));
 
-  // Zero-length update.
+  // Zero-length array update.
   hash.reset();
   hash.update([]);
-  assertArrayEquals('Updating with an empty buffer did not give an empty hash',
+  assertArrayEquals('Updating with an empty array did not give an empty hash',
+      empty, hash.digest());
+
+  // Zero-length string update.
+  hash.reset();
+  hash.update('');
+  assertArrayEquals('Updating with an empty string did not give an empty hash',
       empty, hash.digest());
 };

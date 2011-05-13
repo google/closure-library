@@ -132,23 +132,26 @@ goog.crypt.Md5.prototype.reset = function() {
 
 
 /**
- * Internal compress helper function. It takes the block and updates the
- * accumulator.
+ * Internal compress helper function. It takes a block of data (64 bytes)
+ * and updates the accumulator.
+ * @param {Array.<number>} buf Buffer with the block to compress.
+ * @param {number=} opt_offset Offset of the block in the buffer.
  * @private
  */
-goog.crypt.Md5.prototype.compress_ = function() {
+goog.crypt.Md5.prototype.compress_ = function(buf, opt_offset) {
+  if (!opt_offset) {
+    opt_offset = 0;
+  }
+
   // We allocate the array every time, but it's cheap in practice.
   var X = new Array(16);
 
-  // A minor optimization to speed up the access from the loop.
-  var block = this.block_;
-
   // Get 16 little endian words. It is not worth unrolling this for Chrome 11.
-  for (var i = 0; i < 64; i += 4) {
-    X[i / 4] = (block[i]) |
-               (block[i + 1] << 8) |
-               (block[i + 2] << 16) |
-               (block[i + 3] << 24);
+  for (var i = opt_offset; i < opt_offset + 64; i += 4) {
+    X[i / 4] = (buf[i]) |
+               (buf[i + 1] << 8) |
+               (buf[i + 2] << 16) |
+               (buf[i + 3] << 24);
   }
 
   var A = this.chain_[0];
@@ -340,13 +343,30 @@ goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
   // time from inside the loop (~10% speedup was observed on Chrome 11).
   var block = this.block_;
   var blockLength = this.blockLength_;
-  for (var i = 0; i < opt_length; ++i) {
-    block[blockLength++] = bytes[i];
-    if (blockLength == 64) {
-      this.compress_();
-      blockLength = 0;
+  var i = 0;
+
+  // Strangely enough, it is faster to copy the data than to pass over the
+  // buffer and an offset. Copying in a loop is also as fast as array slicing.
+  // This was tested on Chrome 11 and Firefox 3.6. Please do not optimize
+  // the following without careful profiling.
+  if (goog.isString(bytes)) {
+    while (i < opt_length) {
+      block[blockLength++] = bytes.charCodeAt(i++);
+      if (blockLength == 64) {
+        this.compress_(block);
+        blockLength = 0;
+      }
+    }
+  } else {
+    while (i < opt_length) {
+      block[blockLength++] = bytes[i++];
+      if (blockLength == 64) {
+        this.compress_(block);
+        blockLength = 0;
+      }
     }
   }
+
   this.blockLength_ = blockLength;
   this.totalLength_ += opt_length;
 };

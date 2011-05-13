@@ -38,9 +38,9 @@ goog.crypt.Hash.prototype.reset = goog.abstractMethod;
 
 
 /**
- * Adds a byte array to the internal accumulator.
+ * Adds a byte array or a string to the internal accumulator.
  *
- * @param {Array.<number>} bytes Data used for the update.
+ * @param {Array.<number>|Uint8Array|string} bytes Data used for the update.
  * @param {number=} opt_length Number of bytes to use.
  */
 goog.crypt.Hash.prototype.update = goog.abstractMethod;

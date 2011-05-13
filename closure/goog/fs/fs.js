@@ -195,3 +195,51 @@ goog.fs.blobToString = function(blob, opt_encoding) {
   reader.readAsText(blob, opt_encoding);
   return d;
 };
+
+
+/**
+ * Slices the blob. The returned blob contains data from the start byte
+ * (inclusive) till the end byte (exclusive). Negative indices can be used
+ * to count bytes from the end of the blob (-1 == blob.size - 1). Indices
+ * are always clamped to blob range. If end is omitted, all the data till
+ * the end of the blob is taken.
+ *
+ * @param {!Blob} blob The blob to be sliced.
+ * @param {number} start Index of the starting byte.
+ * @param {number=} opt_end Index of the ending byte.
+ * @return {Blob} The blob slice or null if not supported.
+ */
+goog.fs.sliceBlob = function(blob, start, opt_end) {
+  if (!goog.isDef(opt_end)) {
+    opt_end = blob.size;
+  }
+  if (blob.webkitSlice) {
+    // Natively accepts negative indices, clamping to the blob range and
+    // range end is optional. See http://trac.webkit.org/changeset/83873
+    return blob.webkitSlice(start, opt_end);
+  } else if (blob.mozSlice) {
+    // Natively accepts negative indices, clamping to the blob range and
+    // range end is optional. See https://developer.mozilla.org/en/DOM/Blob
+    // and http://hg.mozilla.org/mozilla-central/rev/dae833f4d934
+    return blob.mozSlice(start, opt_end);
+  } else if (blob.slice) {
+    // This is the original specification. Negative indices are not accepted,
+    // only range end is clamped and range end specification is obligatory.
+    // See http://www.w3.org/TR/2009/WD-FileAPI-20091117/, this will be
+    // replaced by http://dev.w3.org/2006/webapi/FileAPI/ in the future.
+    if (start < 0) {
+      start += blob.size;
+    }
+    if (start < 0) {
+      start = 0;
+    }
+    if (opt_end < 0) {
+      opt_end += blob.size;
+    }
+    if (opt_end < start) {
+      opt_end = start;
+    }
+    return blob.slice(start, opt_end - start);
+  }
+  return null;
+};

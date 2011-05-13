@@ -9,18 +9,18 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Performance Tests - goog.crypt.Md5</title>
+<title>Closure Performance Tests - goog.crypt.Sha1</title>
 <link rel="stylesheet" type="text/css" href="../testing/performancetable.css"/>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.crypt.Md5');
+  goog.require('goog.crypt.Sha1');
   goog.require('goog.testing.PerformanceTable');
   goog.require('goog.testing.PseudoRandom');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
 <body>
-<h1>Closure Performance Tests - goog.crypt.Md5</h1>
+<h1>Closure Performance Tests - goog.crypt.Sha1</h1>
 <p>
 <strong>User-agent:</strong>
 <script>document.write(navigator.userAgent);</script>
@@ -43,18 +43,18 @@ function testHashing() {
   randomMock.uninstall();
 
   table.run(function() {
-    var md5 = new goog.crypt.Md5();
-    md5.update(bytes, MESSAGE_LENGTH_SHORT / 2);
-    md5.update(bytes, MESSAGE_LENGTH_SHORT / 2);
-    var hash = md5.digest();
-  }, 'MD5 hash of ' + Math.round(MESSAGE_LENGTH_SHORT/1000000) + ' Mbytes');
+    var sha1 = new goog.crypt.Sha1();
+    sha1.update(bytes, MESSAGE_LENGTH_SHORT / 2);
+    sha1.update(bytes, MESSAGE_LENGTH_SHORT / 2);
+    var hash = sha1.digest();
+  }, 'SHA1 hash of ' + Math.round(MESSAGE_LENGTH_SHORT/1000000) + ' Mbytes');
 
   table.run(function() {
-    var md5 = new goog.crypt.Md5();
-    md5.update(bytes);
-    md5.update(bytes);
-    var hash = md5.digest();
-  }, 'MD5 hash of ' + Math.round(MESSAGE_LENGTH_FULL/1000000) + ' Mbytes');
+    var sha1 = new goog.crypt.Sha1();
+    sha1.update(bytes);
+    sha1.update(bytes);
+    var hash = sha1.digest();
+  }, 'SHA1 hash of ' + Math.round(MESSAGE_LENGTH_FULL/1000000) + ' Mbytes');
 }
 
 </script>
