@@ -1207,9 +1207,11 @@ function testGoogRequireCheck() {
   stubs.set(goog, 'useStrictRequires', true);
   stubs.set(goog, 'implicitNamespaces_', {});
 
+  // Aliased so that build tools do not mistake this for an actual call.
+  var require = goog.require;
   assertThrows('Requiring non-required namespace should fail',
     function() {
-      goog.require('far.out');
+      require('far.out');
     });
 
   assertUndefined(goog.global.far );
