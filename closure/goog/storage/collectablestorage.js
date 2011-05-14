@@ -51,6 +51,7 @@ goog.storage.CollectableStorage.prototype.collect = function(opt_strict) {
   goog.iter.forEach(this.mechanism.__iterator__(true), function(key) {
     // Get the wrapper.
     var wrapper;
+    /** @preserveTry */
     try {
       wrapper = selfObj.getWrapper(key);
     } catch (ex) {
@@ -68,6 +69,7 @@ goog.storage.CollectableStorage.prototype.collect = function(opt_strict) {
     goog.asserts.assert(wrapper);
     // Objects which can't be decoded are removed in strict mode.
     if (opt_strict) {
+      /** @preserveTry */
       try {
         goog.storage.RichStorage.Wrapper.unwrap(wrapper);
       } catch (ex) {
