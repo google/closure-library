@@ -427,6 +427,14 @@ function testHtmlEscapeAndUnescapeEntitiesUsingDom() {
                    goog.string.unescapeEntitiesUsingDom_(html)), html);
 }
 
+function testHtmlUnescapeEntitiesUsingDom_withAmpersands() {
+  var html = '&lt;a&b&gt;';
+  var text = '<a&b>';
+
+  assertEquals('wrong unescaped value',
+      goog.string.unescapeEntitiesUsingDom_(html), text);
+}
+
 function testHtmlEscapeAndUnescapePureXmlEntities_() {
   var text = '"x1 < x2 && y2 > y1"';
   var html = '&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;';
@@ -462,27 +470,12 @@ function testXssUnescapeEntities() {
 
 
 function testXssUnescapeEntitiesUsingDom() {
-  // This tests that we don't have any XSS exploits in unescapeEntitiesUsingDom
-  var test = '&amp;<script defer>globalXssVar=1;</' + 'script>';
-  var expected = '&<script defer>globalXssVar=1;</' + 'script>';
-
-  assertEquals('Testing unescapeEntitiesUsingDom_', expected,
-               goog.string.unescapeEntitiesUsingDom_(test));
-  assertEquals('unescapeEntitiesUsingDom_ is vulnarable to XSS', 0,
-               globalXssVar);
-
-  test = '&amp;<script>globalXssVar=1;</' + 'script>';
-  expected = '&<script>globalXssVar=1;</' + 'script>';
-
-  assertEquals('Testing unescapeEntitiesUsingDom_', expected,
-               goog.string.unescapeEntitiesUsingDom_(test));
-  assertEquals('unescapeEntitiesUsingDom_ is vulnarable to XSS', 0,
-               globalXssVar);
+  // unescapeEntitiesUsingDom_ does not handle XSS issues and
 }
 
 
 function testXssUnescapePureXmlEntities() {
-  // This tests that we don't have any XSS exploits in unescapePureXmlEntities
+  // This tests that we don't have any XSS exploits in unescapeEntities
   var test = '&amp;<script defer>globalXssVar=1;</' + 'script>';
   var expected = '&<script defer>globalXssVar=1;</' + 'script>';
 
