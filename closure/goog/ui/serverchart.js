@@ -52,7 +52,7 @@ goog.require('goog.ui.Component');
  * @param {number=} opt_height The height of the chart.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM Helper.
  * @param {string=} opt_uri Optional uri used to connect to the chart server, if
- *     different than goog.ui.ServerChart.CHART_SERVER_URI.
+ *     different than goog.ui.ServerChart.CHART_SERVER_SCHEME_INDEPENDENT_URI.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -65,7 +65,8 @@ goog.ui.ServerChart = function(type, opt_width, opt_height, opt_domHelper,
    * @type {goog.Uri}
    * @private
    */
-  this.uri_ = new goog.Uri(opt_uri || goog.ui.ServerChart.CHART_SERVER_URI);
+  this.uri_ = new goog.Uri(
+      opt_uri || goog.ui.ServerChart.CHART_SERVER_SCHEME_INDEPENDENT_URI);
 
   /**
    * Encoding method for the URI data format.
@@ -175,17 +176,39 @@ goog.inherits(goog.ui.ServerChart, goog.ui.Component);
 
 
 /**
- * Base URI for the chart renderer.
+ * Base scheme-independent URI for the chart renderer.
  * @type {string}
  */
-goog.ui.ServerChart.CHART_SERVER_URI = 'http://chart.apis.google.com/chart';
+goog.ui.ServerChart.CHART_SERVER_SCHEME_INDEPENDENT_URI =
+    '//chart.googleapis.com/chart';
+
+
+/**
+ * Base HTTP URI for the chart renderer.
+ * @type {string}
+ */
+goog.ui.ServerChart.CHART_SERVER_HTTP_URI =
+    'http://chart.googleapis.com/chart';
 
 
 /**
  * Base HTTPS URI for the chart renderer.
  * @type {string}
  */
-goog.ui.ServerChart.CHART_SERVER_HTTPS_URI = 'https://www.google.com/chart';
+goog.ui.ServerChart.CHART_SERVER_HTTPS_URI =
+    'https://chart.googleapis.com/chart';
+
+
+/**
+ * Base URI for the chart renderer.
+ * @type {string}
+ * @deprecated Use
+ *     {@link goog.ui.ServerChart.CHART_SERVER_SCHEME_INDEPENDENT_URI},
+ *     {@link goog.ui.ServerChart.CHART_SERVER_HTTP_URI} or
+ *     {@link goog.ui.ServerChart.CHART_SERVER_HTTPS_URI} instead.
+ */
+goog.ui.ServerChart.CHART_SERVER_URI =
+    goog.ui.ServerChart.CHART_SERVER_HTTP_URI;
 
 
 /**

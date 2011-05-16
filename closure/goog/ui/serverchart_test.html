@@ -20,6 +20,34 @@ See the COPYING file for details.
 <body>
 <script>
 
+function testSchemeIndependentBarChartRequest() {
+  var bar = new goog.ui.ServerChart(
+      goog.ui.ServerChart.ChartType.BAR,
+      180,
+      104,
+      null);
+  tryToCreateBarChart(bar);
+  var uri = bar.getUri();
+  var schemeIndependentUri = new goog.Uri(
+      goog.ui.ServerChart.CHART_SERVER_SCHEME_INDEPENDENT_URI);
+  assertEquals('', uri.getScheme());
+  assertEquals(schemeIndependentUri.getDomain(), uri.getDomain());
+}
+
+function testHttpBarChartRequest() {
+  var bar = new goog.ui.ServerChart(
+      goog.ui.ServerChart.ChartType.BAR,
+      180,
+      104,
+      null,
+      goog.ui.ServerChart.CHART_SERVER_HTTP_URI);
+  tryToCreateBarChart(bar);
+  var uri = bar.getUri();
+  var httpUri = new goog.Uri(goog.ui.ServerChart.CHART_SERVER_HTTP_URI);
+  assertEquals('http', uri.getScheme());
+  assertEquals(httpUri.getDomain(), uri.getDomain());
+}
+
 function testHttpsBarChartRequest() {
   var bar = new goog.ui.ServerChart(
       goog.ui.ServerChart.ChartType.BAR, 
@@ -536,11 +564,11 @@ function testUriLengthLimit() {
   assertEquals(
       'e:AAHHOOVVccjjqqxx44..AAHHOOVVccjjqqxx44..',
       chart.getUri().getParameterValue(goog.ui.ServerChart.UriParam.DATA));
-  chart.setUriLengthLimit(110);
+  chart.setUriLengthLimit(100);
   assertEquals(
       's:AHOUbipv29AHOUbipv29',
       chart.getUri().getParameterValue(goog.ui.ServerChart.UriParam.DATA));
-  chart.setUriLengthLimit(90);
+  chart.setUriLengthLimit(80);
   assertEquals(null, longUri)
   chart.getUri();
   assertNotEquals(null, longUri);
