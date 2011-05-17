@@ -47,9 +47,9 @@ goog.require('goog.storage.mechanism.IterableMechanism');
  * The values are encrypted using the key, a salt, and the secret, so
  * stream cipher initialization varies for each stored value.
  *
- * @param {goog.storage.mechanism.IterableMechanism} mechanism The underlying
+ * @param {!goog.storage.mechanism.IterableMechanism} mechanism The underlying
  *     storage mechanism.
- * @param {Array.<number>} secret The secret array of bytes used to encrypt
+ * @param {!Array.<number>} secret The secret array of bytes used to encrypt
  *     the storage.
  * @constructor
  * @extends {goog.storage.CollectableStorage}
@@ -73,7 +73,7 @@ goog.storage.EncryptedStorage.SALT_KEY = 'salt';
 /**
  * The secret used to encrypt the storage.
  *
- * @type {?Array.<number>}
+ * @type {Array.<number>}
  * @private
  */
 goog.storage.EncryptedStorage.prototype.secret_ = null;
@@ -97,7 +97,7 @@ goog.storage.EncryptedStorage.prototype.hashKeyWithSecret_ = function(key) {
 /**
  * Encrypts a value using a key, a salt, and the secret.
  *
- * @param {Array.<number>} salt The salt.
+ * @param {!Array.<number>} salt The salt.
  * @param {string} key The key.
  * @param {string} value The cleartext value.
  * @return {string} The encrypted value.
@@ -125,7 +125,7 @@ goog.storage.EncryptedStorage.prototype.encryptValue_ = function(
 /**
  * Decrypts a value using a key, a salt, and the secret.
  *
- * @param {Array.<number>} salt The salt.
+ * @param {!Array.<number>} salt The salt.
  * @param {string} key The key.
  * @param {string} value The encrypted value.
  * @return {string} The decrypted value.

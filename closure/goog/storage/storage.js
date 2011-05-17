@@ -29,7 +29,7 @@ goog.require('goog.storage.mechanism.Mechanism');
 /**
  * The base implementation for all storage APIs.
  *
- * @param {goog.storage.mechanism.Mechanism} mechanism The underlying
+ * @param {!goog.storage.mechanism.Mechanism} mechanism The underlying
  *     storage mechanism.
  * @constructor
  */
@@ -42,7 +42,7 @@ goog.storage.Storage = function(mechanism) {
 /**
  * The mechanism used to persist key-value pairs.
  *
- * @type {?goog.storage.mechanism.Mechanism}
+ * @type {goog.storage.mechanism.Mechanism}
  * @protected
  */
 goog.storage.Storage.prototype.mechanism = null;
@@ -51,7 +51,7 @@ goog.storage.Storage.prototype.mechanism = null;
 /**
  * The JSON serializer used to serialize values.
  *
- * @type {?goog.json.Serializer}
+ * @type {goog.json.Serializer}
  * @private
  */
 goog.storage.Storage.prototype.serializer_ = null;

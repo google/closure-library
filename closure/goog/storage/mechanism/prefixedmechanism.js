@@ -28,7 +28,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
 /**
  * Wraps an iterable storage mechanism and creates artificial namespaces.
  *
- * @param {goog.storage.mechanism.IterableMechanism} mechanism Underlying
+ * @param {!goog.storage.mechanism.IterableMechanism} mechanism Underlying
  *     iterable storage mechanism.
  * @param {string} prefix Prefix for creating an artificial namespace.
  * @constructor

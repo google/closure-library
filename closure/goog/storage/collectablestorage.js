@@ -30,7 +30,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
 /**
  * Provides a storage with expirning keys and a collection method.
  *
- * @param {goog.storage.mechanism.IterableMechanism} mechanism The underlying
+ * @param {!goog.storage.mechanism.IterableMechanism} mechanism The underlying
  *     storage mechanism.
  * @constructor
  * @extends {goog.storage.ExpiringStorage}

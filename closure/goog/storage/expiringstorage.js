@@ -27,7 +27,7 @@ goog.require('goog.storage.mechanism.Mechanism');
 /**
  * Provides a storage with expirning keys.
  *
- * @param {goog.storage.mechanism.Mechanism} mechanism The underlying
+ * @param {!goog.storage.mechanism.Mechanism} mechanism The underlying
  *     storage mechanism.
  * @constructor
  * @extends {goog.storage.RichStorage}
@@ -59,7 +59,7 @@ goog.storage.ExpiringStorage.CREATION_TIME_KEY = 'creation';
 /**
  * Checks if the data item has expired.
  *
- * @param {Object} wrapper The wrapper.
+ * @param {!Object} wrapper The wrapper.
  * @return {boolean} True if the item has expired.
  * @protected
  */
@@ -103,7 +103,7 @@ goog.storage.ExpiringStorage.prototype.set = function(
  *
  * @param {string} key The key to get.
  * @param {boolean=} opt_expired If true, return expired wrappers as well.
- * @return {Object|undefined} The wrapper, or undefined if not found.
+ * @return {(!Object|undefined)} The wrapper, or undefined if not found.
  * @protected
  */
 goog.storage.ExpiringStorage.prototype.getWrapper = function(key, opt_expired) {
