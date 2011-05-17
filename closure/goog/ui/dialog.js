@@ -480,7 +480,7 @@ goog.ui.Dialog.prototype.setDraggable = function(draggable) {
   // this will add the dragger if we've already rendered, and gone through
   // the enterDocument routine, but now want to dynamically add draggability
   if (this.draggable_ && !this.dragger_ && this.getElement()) {
-    this.dragger_ = this.createDraggableTitleDom_();
+    this.dragger_ = this.createDragger();
 
   } else if (!this.draggable_ && this.dragger_) {
     // removes draggable classname post-render
@@ -495,16 +495,16 @@ goog.ui.Dialog.prototype.setDraggable = function(draggable) {
 
 
 /**
- * Creates a dragger on the title element and adds a classname for
- * cursor:move targeting.
- * @return {goog.fx.Dragger} The created dragger instance.
- * @private
+ * Returns a dragger for moving the dialog and adds a class for the move cursor.
+ * Defaults to allow dragging of the title only, but can be overridden if
+ * different drag targets or dragging behavior is desired.
+ * @return {!goog.fx.Dragger} The created dragger instance.
+ * @protected
  */
-goog.ui.Dialog.prototype.createDraggableTitleDom_ = function() {
-  var dragger = new goog.fx.Dragger(this.getElement(), this.titleEl_);
+goog.ui.Dialog.prototype.createDragger = function() {
   goog.dom.classes.add(this.titleEl_,
       goog.getCssName(this.class_, 'title-draggable'));
-  return dragger;
+  return new goog.fx.Dragger(this.getElement(), this.titleEl_);
 };
 
 
@@ -775,7 +775,7 @@ goog.ui.Dialog.prototype.enterDocument = function() {
 
   // Add drag support.
   if (this.draggable_ && !this.dragger_) {
-    this.dragger_ = this.createDraggableTitleDom_();
+    this.dragger_ = this.createDragger();
   }
 
   // Add event listeners to the close box and the button container.
