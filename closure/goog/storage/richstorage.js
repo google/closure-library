@@ -103,7 +103,7 @@ goog.storage.RichStorage.Wrapper.unwrap = function(wrapper) {
  * Convenience method for unwrapping a value. Returns undefined if the
  * wrapper is missing.
  *
- * @param {?Object} wrapper The wrapper.
+ * @param {Object|undefined} wrapper The wrapper.
  * @return {*} The wrapped value or undefined.
  */
 goog.storage.RichStorage.Wrapper.unwrapIfPossible = function(wrapper) {
@@ -131,7 +131,7 @@ goog.storage.RichStorage.prototype.set = function(key, value) {
  * you know what you are doing when using the returned value.
  *
  * @param {string} key The key to get.
- * @return {?Object} The wrapper, or undefined if not found.
+ * @return {Object|undefined} The wrapper, or undefined if not found.
  * @protected
  */
 goog.storage.RichStorage.prototype.getWrapper = function(key) {

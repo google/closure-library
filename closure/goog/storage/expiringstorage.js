@@ -98,15 +98,22 @@ goog.storage.ExpiringStorage.prototype.set = function(
 };
 
 
-/** @inheritDoc */
-goog.storage.ExpiringStorage.prototype.get = function(key) {
-  var wrapper = this.getWrapper(key);
+/**
+ * Get an item wrapper (the item and its metadata) from the storage.
+ *
+ * @param {string} key The key to get.
+ * @param {boolean=} opt_expired If true, return expired wrappers as well.
+ * @return {Object|undefined} The wrapper, or undefined if not found.
+ * @protected
+ */
+goog.storage.ExpiringStorage.prototype.getWrapper = function(key, opt_expired) {
+  var wrapper = goog.base(this, 'getWrapper', key);
   if (!wrapper) {
     return undefined;
   }
-  if (goog.storage.ExpiringStorage.isExpired(wrapper)) {
+  if (!opt_expired && goog.storage.ExpiringStorage.isExpired(wrapper)) {
     goog.storage.ExpiringStorage.prototype.remove.call(this, key);
     return undefined;
   }
-  return goog.storage.RichStorage.Wrapper.unwrap(wrapper);
+  return wrapper;
 };
