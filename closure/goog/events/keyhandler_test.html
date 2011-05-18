@@ -14,6 +14,7 @@ See the COPYING file for details.
   goog.require('goog.dom')
   goog.require('goog.events.KeyEvent');
   goog.require('goog.events.EventType');
+  goog.require('goog.functions');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
 </script>
@@ -22,9 +23,9 @@ See the COPYING file for details.
 <script>
 
   /**
-   * Tests the key handler for the IE behavior.
+   * Tests the key handler for the IE 8 and lower behavior.
    */
-  function testIeStyleKeyHandling() {
+  function testIe8StyleKeyHandling() {
     goog.userAgent.OPERA = false;
     goog.userAgent.IE = true;
     goog.userAgent.GECKO = false;
@@ -33,6 +34,7 @@ See the COPYING file for details.
     goog.userAgent.MAC = false;
     goog.userAgent.WINDOWS = true;
     goog.userAgent.LINUX = false;
+    goog.userAgent.VERSION = 8;
     goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
     var keyEvent, keyHandler = new goog.events.KeyHandler();
@@ -136,6 +138,36 @@ See the COPYING file for details.
     assertTrue('Should have repeat=true on key repeat.',
         keyEvent.repeat);
     assertTrue('Ctrl should be down.', keyEvent.ctrlKey);
+  }
+
+
+  /**
+   * Tests special cases for IE9.
+   */
+  function testIe9StyleKeyHandling() {
+    goog.userAgent.OPERA = false;
+    goog.userAgent.IE = true;
+    goog.userAgent.GECKO = false;
+    goog.userAgent.CAMINO = false;
+    goog.userAgent.WEBKIT = false;
+    goog.userAgent.MAC = false;
+    goog.userAgent.WINDOWS = true;
+    goog.userAgent.LINUX = false;
+    goog.userAgent.VERSION = 9;
+    goog.events.KeyHandler.USES_KEYDOWN_ = true;
+
+    var keyEvent, keyHandler = new goog.events.KeyHandler();
+    goog.events.listen(keyHandler, goog.events.KeyHandler.EventType.KEY,
+        function(e) { keyEvent = e; });
+
+    fireKeyDown(keyHandler, goog.events.KeyCodes.ENTER);
+    fireKeyUp(keyHandler, goog.events.KeyCodes.ENTER);
+    assertEquals('Enter should fire a key event with the keycode 13',
+                 goog.events.KeyCodes.ENTER,
+                 keyEvent.keyCode);
+    assertEquals('Enter should fire a key event with the charcode 0',
+                 0,
+                 keyEvent.charCode);
   }
 
 
