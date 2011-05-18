@@ -43,7 +43,8 @@ function setUp() {
 
 function initImeHandler() {
   goog.events.ImeHandler.USES_COMPOSITION_EVENTS =
-      goog.userAgent.GECKO || goog.userAgent.product.CHROME;
+      goog.userAgent.GECKO ||
+      (goog.userAgent.WEBKIT && goog.userAgent.isVersion(532));
   imeHandler = new goog.events.ImeHandler(sandbox);
   eventsFired = [];
   goog.events.listen(
@@ -112,7 +113,6 @@ function testHandleKeyDown_GeckoCompositionEvents() {
 
   // Set the userAgent used for this test to Firefox.
   setUserAgent('GECKO');
-  setProduct(null);
   stubs.set(goog.userAgent, 'MAC', false);
   initImeHandler();
 
@@ -149,7 +149,7 @@ function testChromeCompositionEventsWindows() {
 
 function runChromeCompositionEvents(platform) {
   setUserAgent('WEBKIT');
-  setProduct('CHROME');
+  setVersion(532);
   stubs.set(goog.userAgent, platform, true);
   initImeHandler();
 
@@ -172,7 +172,6 @@ function runChromeCompositionEvents(platform) {
  */
 function testHandlerKeyDownForIme_imeOnOff() {
   setUserAgent('IE');
-  setProduct(null);
   initImeHandler();
 
   // Send a WIN_IME keyDown event and see whether IME mode turns on.
@@ -202,7 +201,7 @@ function testHandlerKeyDownForIme_imeOnOff() {
  */
 function testHandleKeyUpForSafari() {
   setUserAgent('WEBKIT');
-  setProduct('SAFARI');
+  setVersion(531);
   initImeHandler();
 
   fireImeKeySequence();
@@ -224,7 +223,7 @@ function testScimFiresWinImeKeycodesGeckoLinux() {
 
 function testScimFiresWinImeKeycodesChromeLinux() {
   setUserAgent('WEBKIT');
-  setProduct('CHROME');
+  setVersion(532);
   assertScimInputIgnored();
 }
 
@@ -245,7 +244,6 @@ function assertScimInputIgnored() {
 }
 
 var userAgents = ['IE', 'GECKO', 'WEBKIT'];
-var products = ['SAFARI', 'CHROME'];
 
 function setUserAgent(userAgent) {
   for (var i = 0; i < userAgents.length; i++) {
@@ -253,10 +251,9 @@ function setUserAgent(userAgent) {
   }
 }
 
-function setProduct(product) {
-  for (var i = 0; i < products.length; i++) {
-    stubs.set(goog.userAgent.product, products[i], products[i] == product);
-  }
+function setVersion(version) {
+  goog.userAgent.VERSION = version;
+  goog.userAgent.isVersionCache_ = {};
 }
 
 function assertImeMode() {
