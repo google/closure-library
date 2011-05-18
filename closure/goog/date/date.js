@@ -1225,6 +1225,19 @@ goog.date.Date.prototype.valueOf = function() {
 };
 
 
+/**
+ * Compares two dates.  May be used as a sorting function.
+ * @see goog.array.sort
+ * @param {!goog.date.DateLike} date1 Date to compare.
+ * @param {!goog.date.DateLike} date2 Date to compare.
+ * @return {number} Comparison result. 0 if dates are the same, less than 0 if
+ *     date1 is earlier than date2, greater than 0 if date1 is later than date2.
+ */
+goog.date.Date.compare = function(date1, date2) {
+  return date1.getTime() - date2.getTime();
+};
+
+
 
 /**
  * Class representing a date and time. Defaults to current date and time if none

@@ -11,6 +11,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.date</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.array')
   goog.require('goog.date');
   goog.require('goog.date.Date');
   goog.require('goog.date.DateTime');
@@ -1287,6 +1288,59 @@ function isWinxpSafari4() {
       goog.userAgent.WINDOWS &&
       goog.userAgent.platform.isVersion('5.0') &&
       !goog.userAgent.platform.isVersion('6.0');
+}
+
+function testDateCompare() {
+  // May 16th, 2011, 3:17:36.500
+  var date1 = new goog.date.DateTime(2011,
+      goog.date.month.MAY, 16, 15, 17, 36, 500);
+
+  // May 16th, 2011, 3:17:36.501
+  var date2 = new goog.date.DateTime(2011,
+      goog.date.month.MAY, 16, 15, 17, 36, 501);
+
+  // May 16th, 2011, 3:17:36.501
+  var date3 = new goog.date.DateTime(2011,
+      goog.date.month.MAY, 16, 15, 17, 36, 502);
+
+  assertEquals(0, goog.date.Date.compare(date1.clone(), date1.clone()));
+  assertEquals(-1, goog.date.Date.compare(date1, date2));
+  assertEquals(1, goog.date.Date.compare(date2, date1));
+
+  var dates = [date2, date3, date1];
+  goog.array.sort(dates, goog.date.Date.compare);
+  assertArrayEquals('Dates should be sorted in time.',
+      [date1, date2, date3], dates);
+
+  // Assert a known millisecond difference between two points in time.
+  assertEquals(-19129478,
+    goog.date.Date.compare(
+      new goog.date.DateTime(1982, goog.date.month.MAR, 12, 6, 48, 32, 354),
+      new goog.date.DateTime(1982, goog.date.month.MAR, 12, 12, 07, 21, 832)));
+
+  // Test dates before the year 0.  Dates are Talk Like a Pirate Day, and
+  // Towel Day, 300 B.C. (and before pirates).
+
+  var pirateDay = new goog.date.Date(-300, goog.date.month.SEP, 2);
+  var towelDay = new goog.date.Date(-300, goog.date.month.MAY, 12);
+
+  assertEquals('Dates should be 113 days apart.',
+    113 * 24 * 60 * 60 * 1000,
+    goog.date.Date.compare(pirateDay, towelDay));
+}
+
+function testDateCompareDateLikes() {
+  var nativeDate = new Date(2011, 4, 16, 15, 17, 36, 500);
+  var closureDate = new goog.date.DateTime(2011,
+      goog.date.month.MAY, 16, 15, 17, 36, 500);
+
+  assertEquals(0, goog.date.Date.compare(nativeDate, closureDate));
+
+  nativeDate.setMilliseconds(499);
+  assertEquals(-1, goog.date.Date.compare(nativeDate, closureDate));
+
+  nativeDate.setMilliseconds(501);
+  assertEquals(1, goog.date.Date.compare(nativeDate, closureDate));
 }
 
 </script>
