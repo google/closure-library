@@ -147,10 +147,7 @@ function testSalting() {
     // Same value under two different keys should appear very different,
     // even with the same salt.
     storage.set('one', 'Hello world!');
-    // TODO(user): Remove the check when reseeding is implemented.
-    if (randomMock.seed) {
-      randomMock.seed(0); // Reset the generator so we get the same salt.
-    }
+    randomMock.seed(0); // Reset the generator so we get the same salt.
     storage.set('two', 'Hello world!');
     var golden = getEncryptedData(storage, 'one');
     assertRoughlyEquals('Ciphertext did not change with keys', golden.length,
