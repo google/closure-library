@@ -136,9 +136,10 @@ goog.messaging.AbstractChannel.prototype.deliver = function(
     return;
   }
 
-  payload = this.decodePayload(serviceName, payload, service.objectPayload);
-  if (goog.isDefAndNotNull(payload)) {
-    service.callback(payload);
+  var decodedPayload =
+      this.decodePayload(serviceName, payload, service.objectPayload);
+  if (goog.isDefAndNotNull(decodedPayload)) {
+    service.callback(decodedPayload);
   }
 };
 

@@ -200,10 +200,11 @@ goog.structs.TreeNode.prototype.getRoot = function() {
  * @return {boolean} Whether this node is the ancestor of {@code node}.
  */
 goog.structs.TreeNode.prototype.contains = function(node) {
+  var current = node;
   do {
-    node = node.getParent();
-  } while (node && node != this);
-  return Boolean(node);
+    current = current.getParent();
+  } while (current && current != this);
+  return Boolean(current);
 };
 
 

@@ -232,12 +232,10 @@ goog.string.format.demuxes_['d'] = function(value,
                                             type,
                                             offset,
                                             wholeString) {
-
-  value = parseInt(value, 10);
-  precision = 0;
-
-  return goog.string.format.demuxes_['f'](value, flags, width, dotp, precision,
-                                          type, offset, wholeString);
+  return goog.string.format.demuxes_['f'](
+      parseInt(value, 10) /* value */,
+      flags, width, dotp, 0 /* precision */,
+      type, offset, wholeString);
 };
 
 

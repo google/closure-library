@@ -464,11 +464,12 @@ goog.ui.tree.BaseNode.prototype.setDepth_ = function(depth) {
  *    otherwise.
  */
 goog.ui.tree.BaseNode.prototype.contains = function(node) {
-  while (node) {
-    if (node == this) {
+  var current = node;
+  while (current) {
+    if (current == this) {
       return true;
     }
-    node = node.getParent();
+    current = current.getParent();
   }
   return false;
 };
