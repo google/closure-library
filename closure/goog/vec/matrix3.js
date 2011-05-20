@@ -604,7 +604,7 @@ goog.vec.Matrix3.invert = function(mat0, resultMat) {
   var t10 = a12 * a20 - a10 * a22;
   var t20 = a10 * a21 - a11 * a20;
   var det = a00 * t00 + a01 * t10 + a02 * t20;
-  if (Math.abs(det) <= 1.0e-06) {
+  if (det == 0) {
     return false;
   }
 

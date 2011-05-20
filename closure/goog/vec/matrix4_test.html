@@ -297,6 +297,12 @@ See the COPYING file for details.
         [-0.225, 0.025, 0.025, 0.275, 0.025, 0.025, 0.275, -0.225,
          0.025, 0.275, -0.225, 0.025, 0.275, -0.225, 0.025, 0.025], m0,
          goog.vec.EPSILON);
+
+    goog.vec.Matrix4.makeScale(m0, .01, .01, .01);
+    assertTrue(goog.vec.Matrix4.invert(m0, m0));
+    var m1 = goog.vec.Matrix4.create();
+    goog.vec.Matrix4.makeScale(m1, 100, 100, 100);
+    assertElementsEquals(m1, m0);
   }
 
   function testEquals() {

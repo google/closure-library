@@ -777,7 +777,7 @@ goog.vec.Matrix4.invert = function(mat, resultMat) {
   var b5 = m22 * m33 - m32 * m23;
 
   var det = a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0;
-  if (Math.abs(det) <= goog.vec.EPSILON) {
+  if (det == 0) {
     return false;
   }
 

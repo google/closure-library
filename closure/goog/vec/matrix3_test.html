@@ -215,6 +215,12 @@ See the COPYING file for details.
     goog.vec.Matrix3.setFromValues(m0, 1, 2, 3, 1, 3, 4, 3, 4, 5);
     assertTrue(goog.vec.Matrix3.invert(m0, m0));
     assertElementsEquals([0.5, -1.0, 0.5, -3.5, 2.0, 0.5, 2.5, -1.0, -0.5], m0);
+
+    goog.vec.Matrix3.makeScale(m0, .01, .01, .01);
+    assertTrue(goog.vec.Matrix3.invert(m0, m0));
+    var m1 = goog.vec.Matrix3.create();
+    goog.vec.Matrix3.makeScale(m1, 100, 100, 100);
+    assertElementsEquals(m1, m0);
   }
 
   function testEquals() {
