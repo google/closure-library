@@ -61,7 +61,7 @@ goog.i18n.MessageFormat = function(pattern) {
   /**
    * All encountered literals during parse stage. Indices tell us the order of
    * replacement.
-   * @type {!Array}
+   * @type {!Array.<string>}
    * @private
    */
   this.literals_ = [];
@@ -75,7 +75,7 @@ goog.i18n.MessageFormat = function(pattern) {
 
   /**
    * Locale aware number formatter.
-   * @type {Object}
+   * @type {goog.i18n.NumberFormat}
    * @private
    */
   this.numberFormatter_ = new goog.i18n.NumberFormat(
@@ -176,7 +176,7 @@ goog.i18n.MessageFormat.prototype.format = function(namedParameters) {
 
 
 /**
- * Parse generic block and return a formatted string.
+ * Parses generic block and returns a formatted string.
  * @param {!Array.<!Object>} parsedPattern Holds parsed tree.
  * @param {!Object} namedParameters Parameters that either influence
  *     the formatting or are used as actual data.
@@ -305,7 +305,7 @@ goog.i18n.MessageFormat.prototype.formatPluralBlock_ = function(
   var plural = pluralResult.join('');
   goog.asserts.assertString(plural, 'Empty block in plural.');
   var localeAwareDiff = this.numberFormatter_.format(diff);
-  result.push(plural.replace(/#/g, function() { return localeAwareDiff }));
+  result.push(plural.replace(/#/g, function() { return localeAwareDiff; }));
 };
 
 
@@ -372,7 +372,7 @@ goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
   braces.lastIndex = 0;  // lastIndex doesn't get set to 0 so we have to.
   var match;
 
-  while ((match = braces.exec(pattern))) {
+  while (match = braces.exec(pattern)) {
     var pos = match.index;
     if (match[0] == '}') {
       var brace = braceStack.pop();
