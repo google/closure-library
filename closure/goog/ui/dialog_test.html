@@ -302,6 +302,16 @@ See the COPYING file for details.
     assertTrue(wasCalled);
   }
 
+  function testAfterShowEvent() {
+    dialog.setVisible(false);
+    var wasCalled = false;
+    var callRecorder = function() { wasCalled = true; };
+    goog.events.listen(dialog, goog.ui.Dialog.EventType.AFTER_SHOW,
+        callRecorder);
+    dialog.setVisible(true);
+    assertTrue(wasCalled);
+  }
+
   function testCannedButtonSets() {
     dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
     assertButtons([goog.ui.Dialog.DefaultButtonKeys.OK]);

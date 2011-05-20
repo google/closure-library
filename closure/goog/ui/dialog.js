@@ -880,6 +880,8 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
       this.dispose();
     }
   } else {
+    this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_SHOW);
+
     // NOTE: see bug 1163154 for an example of an edge case where making the
     // dialog visible in response to a KEYDOWN will result in a CLICK event
     // firing on the default button (immediately closing the dialog) if the key
@@ -1344,7 +1346,12 @@ goog.ui.Dialog.EventType = {
   /**
    * Dispatched after the dialog is closed. Not cancelable.
    */
-  AFTER_HIDE: 'afterhide'
+  AFTER_HIDE: 'afterhide',
+
+  /**
+   * Dispatched after the dialog is shown. Not cancelable.
+   */
+  AFTER_SHOW: 'aftershow'
 };
 
 
