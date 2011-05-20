@@ -58,8 +58,7 @@ function hammingDistance(a, b) {
 function testBasicOperations() {
   var mechanism = new goog.storage.mechanism.mechanismfactory.create('test');
   if (mechanism) {
-    var storage = new goog.storage.EncryptedStorage(mechanism,
-        goog.crypt.stringToByteArray('secret'));
+    var storage = new goog.storage.EncryptedStorage(mechanism, 'secret');
     goog.storage.storage_test.runBasicTests(storage);
   }
 }
@@ -68,10 +67,8 @@ function testEncryption() {
   var mechanism = new goog.storage.mechanism.mechanismfactory.create('test');
   if (mechanism) {
     var clock = new goog.testing.MockClock(true);
-    var storage = new goog.storage.EncryptedStorage(mechanism,
-        goog.crypt.stringToByteArray('secret'));
-    var mallory = new goog.storage.EncryptedStorage(mechanism,
-        goog.crypt.stringToByteArray('guess'));
+    var storage = new goog.storage.EncryptedStorage(mechanism, 'secret');
+    var mallory = new goog.storage.EncryptedStorage(mechanism, 'guess');
 
     // Simple Objects.
     storage.set('first', 'Hello world!');
@@ -141,8 +138,7 @@ function testSalting() {
   var mechanism = new goog.storage.mechanism.mechanismfactory.create('test');
   if (mechanism) {
     var randomMock = new goog.testing.PseudoRandom(0, true);
-    var storage = new goog.storage.EncryptedStorage(mechanism,
-        goog.crypt.stringToByteArray('secret'));
+    var storage = new goog.storage.EncryptedStorage(mechanism, 'secret');
 
     // Same value under two different keys should appear very different,
     // even with the same salt.

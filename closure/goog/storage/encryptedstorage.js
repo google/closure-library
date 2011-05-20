@@ -49,14 +49,13 @@ goog.require('goog.storage.mechanism.IterableMechanism');
  *
  * @param {!goog.storage.mechanism.IterableMechanism} mechanism The underlying
  *     storage mechanism.
- * @param {!Array.<number>} secret The secret array of bytes used to encrypt
- *     the storage.
+ * @param {string} secret The secret key used to encrypt the storage.
  * @constructor
  * @extends {goog.storage.CollectableStorage}
  */
 goog.storage.EncryptedStorage = function(mechanism, secret) {
   goog.base(this, mechanism);
-  this.secret_ = secret;
+  this.secret_ = goog.crypt.stringToByteArray(secret);
 };
 goog.inherits(goog.storage.EncryptedStorage, goog.storage.CollectableStorage);
 
@@ -88,7 +87,7 @@ goog.storage.EncryptedStorage.prototype.secret_ = null;
  */
 goog.storage.EncryptedStorage.prototype.hashKeyWithSecret_ = function(key) {
   var sha1 = new goog.crypt.Sha1();
-  sha1.update(key);
+  sha1.update(goog.crypt.stringToByteArray(key));
   sha1.update(this.secret_);
   return goog.crypt.base64.encodeByteArray(sha1.digest(), true);
 };
@@ -109,7 +108,7 @@ goog.storage.EncryptedStorage.prototype.encryptValue_ = function(
     throw Error('Non-empty salt must be provided');
   }
   var sha1 = new goog.crypt.Sha1();
-  sha1.update(key);
+  sha1.update(goog.crypt.stringToByteArray(key));
   sha1.update(salt);
   sha1.update(this.secret_);
   var arc4 = new goog.crypt.Arc4();
