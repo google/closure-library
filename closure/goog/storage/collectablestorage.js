@@ -20,9 +20,12 @@
 
 goog.provide('goog.storage.CollectableStorage');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.iter');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.ExpiringStorage');
+goog.require('goog.storage.RichStorage.Wrapper');
 goog.require('goog.storage.mechanism.IterableMechanism');
 
 

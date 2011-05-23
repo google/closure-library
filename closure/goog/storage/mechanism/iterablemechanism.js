@@ -20,7 +20,9 @@
 
 goog.provide('goog.storage.mechanism.IterableMechanism');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.iter');
 goog.require('goog.iter.Iterator');
 goog.require('goog.storage.mechanism.Mechanism');
 

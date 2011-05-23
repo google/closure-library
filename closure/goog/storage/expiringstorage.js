@@ -20,6 +20,7 @@
 goog.provide('goog.storage.ExpiringStorage');
 
 goog.require('goog.storage.RichStorage');
+goog.require('goog.storage.RichStorage.Wrapper');
 goog.require('goog.storage.mechanism.Mechanism');
 
 

@@ -22,6 +22,7 @@ goog.provide('goog.storage.mechanism.mechanismfactory');
 
 goog.require('goog.storage.mechanism.HTML5LocalStorage');
 goog.require('goog.storage.mechanism.IEUserData');
+goog.require('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.storage.mechanism.PrefixedMechanism');
 
 
@@ -41,7 +42,7 @@ goog.storage.mechanism.mechanismfactory.USER_DATA_SHARED_KEY =
  * and avoid key collisions.
  *
  * @param {string=} opt_namespace Restricts the visibility to given namespace.
- * @return {goog.storage.mechanism.Mechanism} Created mechanism or null.
+ * @return {goog.storage.mechanism.IterableMechanism} Created mechanism or null.
  */
 goog.storage.mechanism.mechanismfactory.create = function(opt_namespace) {
   var storage = new goog.storage.mechanism.HTML5LocalStorage();

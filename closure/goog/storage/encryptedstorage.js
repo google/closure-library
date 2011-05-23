@@ -29,12 +29,12 @@
 
 goog.provide('goog.storage.EncryptedStorage');
 
-goog.require('goog.array');
 goog.require('goog.crypt');
 goog.require('goog.crypt.Arc4');
 goog.require('goog.crypt.Sha1');
 goog.require('goog.crypt.base64');
 goog.require('goog.json');
+goog.require('goog.json.Serializer');
 goog.require('goog.storage.CollectableStorage');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.RichStorage');
@@ -58,6 +58,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
 goog.storage.EncryptedStorage = function(mechanism, secret) {
   goog.base(this, mechanism);
   this.secret_ = goog.crypt.stringToByteArray(secret);
+  this.cleartextSerializer_ = new goog.json.Serializer();
 };
 goog.inherits(goog.storage.EncryptedStorage, goog.storage.CollectableStorage);
 
@@ -78,6 +79,17 @@ goog.storage.EncryptedStorage.SALT_KEY = 'salt';
  * @private
  */
 goog.storage.EncryptedStorage.prototype.secret_ = null;
+
+
+/**
+ * The JSON serializer used to serialize values before encryption. This can
+ * be potentially different from serializing for the storage mechanism (see
+ * goog.storage.Storage), so a separate serializer is kept here.
+ *
+ * @type {goog.json.Serializer}
+ * @private
+ */
+goog.storage.EncryptedStorage.prototype.cleartextSerializer_ = null;
 
 
 /**
@@ -152,7 +164,8 @@ goog.storage.EncryptedStorage.prototype.set = function(
     salt[i] = Math.floor(Math.random() * 0x100);
   }
   var wrapper = new goog.storage.RichStorage.Wrapper(
-      this.encryptValue_(salt, key, this.serializer_.serialize(value)));
+      this.encryptValue_(salt, key,
+                         this.cleartextSerializer_.serialize(value)));
   wrapper[goog.storage.EncryptedStorage.SALT_KEY] = salt;
   goog.base(this, 'set', this.hashKeyWithSecret_(key), wrapper, opt_expiration);
 };
