@@ -37,6 +37,8 @@ goog.require('goog.crypt.base64');
 goog.require('goog.json');
 goog.require('goog.storage.CollectableStorage');
 goog.require('goog.storage.ErrorCode');
+goog.require('goog.storage.RichStorage');
+goog.require('goog.storage.RichStorage.Wrapper');
 goog.require('goog.storage.mechanism.IterableMechanism');
 
 

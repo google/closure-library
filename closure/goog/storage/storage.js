@@ -21,6 +21,7 @@
 goog.provide('goog.storage.Storage');
 
 goog.require('goog.json');
+goog.require('goog.json.Serializer');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.mechanism.Mechanism');
 

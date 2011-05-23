@@ -186,7 +186,7 @@ goog.addDependency('fs/entry.js', ['goog.fs.DirectoryEntry', 'goog.fs.DirectoryE
 goog.addDependency('fs/error.js', ['goog.fs.Error', 'goog.fs.Error.ErrorCode'], ['goog.debug.Error', 'goog.string']);
 goog.addDependency('fs/filesaver.js', ['goog.fs.FileSaver', 'goog.fs.FileSaver.EventType', 'goog.fs.FileSaver.ProgressEvent', 'goog.fs.FileSaver.ReadyState'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.fs.Error']);
 goog.addDependency('fs/filesystem.js', ['goog.fs.FileSystem'], ['goog.fs.DirectoryEntry']);
-goog.addDependency('fs/filewriter.js', ['goog.fs.FileWriter'], ['goog.fs.FileSaver']);
+goog.addDependency('fs/filewriter.js', ['goog.fs.FileWriter'], ['goog.fs.Error', 'goog.fs.FileSaver']);
 goog.addDependency('fs/fs.js', ['goog.fs'], ['goog.async.Deferred', 'goog.events', 'goog.fs.Error', 'goog.fs.FileSystem']);
 goog.addDependency('functions/functions.js', ['goog.functions'], []);
 goog.addDependency('fx/abstractdragdrop.js', ['goog.fx.AbstractDragDrop', 'goog.fx.AbstractDragDrop.EventType', 'goog.fx.DragDropEvent', 'goog.fx.DragDropItem'], ['goog.dom', 'goog.dom.classes', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.fx.Dragger', 'goog.fx.Dragger.EventType', 'goog.math.Box', 'goog.math.Coordinate', 'goog.style']);
@@ -397,7 +397,7 @@ goog.addDependency('pubsub/pubsub.js', ['goog.pubsub.PubSub'], ['goog.Disposable
 goog.addDependency('reflect/reflect.js', ['goog.reflect'], []);
 goog.addDependency('spell/spellcheck.js', ['goog.spell.SpellCheck', 'goog.spell.SpellCheck.WordChangedEvent'], ['goog.Timer', 'goog.events.EventTarget', 'goog.structs.Set']);
 goog.addDependency('storage/collectablestorage.js', ['goog.storage.CollectableStorage'], ['goog.asserts', 'goog.storage.ErrorCode', 'goog.storage.ExpiringStorage', 'goog.storage.mechanism.IterableMechanism']);
-goog.addDependency('storage/encryptedstorage.js', ['goog.storage.EncryptedStorage'], ['goog.array', 'goog.crypt', 'goog.crypt.Arc4', 'goog.crypt.Sha1', 'goog.crypt.base64', 'goog.json', 'goog.storage.CollectableStorage', 'goog.storage.ErrorCode', 'goog.storage.mechanism.IterableMechanism']);
+goog.addDependency('storage/encryptedstorage.js', ['goog.storage.EncryptedStorage'], ['goog.array', 'goog.crypt', 'goog.crypt.Arc4', 'goog.crypt.Sha1', 'goog.crypt.base64', 'goog.json', 'goog.storage.CollectableStorage', 'goog.storage.ErrorCode', 'goog.storage.RichStorage', 'goog.storage.RichStorage.Wrapper', 'goog.storage.mechanism.IterableMechanism']);
 goog.addDependency('storage/errorcode.js', ['goog.storage.ErrorCode'], []);
 goog.addDependency('storage/expiringstorage.js', ['goog.storage.ExpiringStorage'], ['goog.storage.RichStorage', 'goog.storage.mechanism.Mechanism']);
 goog.addDependency('storage/mechanism/errorcode.js', ['goog.storage.mechanism.ErrorCode'], []);
@@ -411,7 +411,7 @@ goog.addDependency('storage/mechanism/mechanismfactory.js', ['goog.storage.mecha
 goog.addDependency('storage/mechanism/prefixedmechanism.js', ['goog.storage.mechanism.PrefixedMechanism'], ['goog.iter.Iterator', 'goog.storage.mechanism.IterableMechanism']);
 goog.addDependency('storage/mechanism/prefixedmechanism_test.js', ['goog.storage.mechanism.prefixedmechanism_test'], ['goog.iter.Iterator', 'goog.storage.mechanism.IterableMechanism', 'goog.testing.asserts']);
 goog.addDependency('storage/richstorage.js', ['goog.storage.RichStorage', 'goog.storage.RichStorage.Wrapper'], ['goog.storage.ErrorCode', 'goog.storage.Storage', 'goog.storage.mechanism.Mechanism']);
-goog.addDependency('storage/storage.js', ['goog.storage.Storage'], ['goog.json', 'goog.storage.ErrorCode', 'goog.storage.mechanism.Mechanism']);
+goog.addDependency('storage/storage.js', ['goog.storage.Storage'], ['goog.json', 'goog.json.Serializer', 'goog.storage.ErrorCode', 'goog.storage.mechanism.Mechanism']);
 goog.addDependency('storage/storage_test.js', ['goog.storage.storage_test'], ['goog.storage.Storage', 'goog.structs.Map', 'goog.testing.asserts']);
 goog.addDependency('string/path.js', ['goog.string.path'], ['goog.array', 'goog.string']);
 goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], []);
