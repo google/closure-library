@@ -30,8 +30,8 @@ goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileWriter');
+goog.require('goog.functions');
 goog.require('goog.string');
-
 
 
 /**
@@ -350,7 +350,7 @@ goog.fs.DirectoryEntry.prototype.createPath = function(path) {
   }
 
   // Filter out any empty path components caused by '//' or a leading slash.
-  var parts = goog.array.filter(path.split('/'), goog.identityFunction);
+  var parts = goog.array.filter(path.split('/'), goog.functions.identity);
   var existed = [];
 
   function getNextDirectory(dir) {
