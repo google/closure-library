@@ -19,13 +19,18 @@ goog.require('goog.style');
 goog.require('goog.testing.jsunit');
 </script>
 </head>
-<body>
+<!-- Force offscreen menus to count as FAIL_X -->
+<body style='overflow: hidden'>
 
 <div id='offscreen-anchor'
    style='position: absolute; left: -1000px; top: -1000px'></div>
 
 <div id='onscreen-anchor'
    style='position: absolute; left: 5px; top: 5px'></div>
+
+<!-- The x and y positon of this anchor will be reset on each setUp -->
+<div id='custom-anchor'
+   style='position: absolute;'></div>
 
 <div id='menu'
    style='position: absolute; left: 20px; top: 20px'>
@@ -37,6 +42,7 @@ Menu Item 3
 <script>
 var offscreenAnchor;
 var onscreenAnchor;
+var customAnchor;
 var menu;
 var corner = goog.positioning.Corner;
 var savedMenuHtml;
@@ -44,6 +50,10 @@ var savedMenuHtml;
 function setUp() {
   offscreenAnchor = goog.dom.getElement('offscreen-anchor');
   onscreenAnchor = goog.dom.getElement('onscreen-anchor');
+  customAnchor = goog.dom.getElement('custom-anchor');
+  customAnchor.style.left = '0';
+  customAnchor.style.top = '0';
+
   menu = goog.dom.getElement('menu');
   savedMenuHtml = menu.innerHTML;
   menu.style.left = '20px';
@@ -87,6 +97,21 @@ function testRespositionFailoverEvenWhenResizeHeightIsOn() {
   // The menu should not get positioned offscreen.
   assertEquals(5, menu.offsetTop);
   assertEquals(5, menu.offsetLeft);
+}
+
+function testRepositionToBottomLeftWhenBottomFailsAndRightFailsAndResizeOn() {
+  var pageSize = goog.dom.getViewportSize();
+  customAnchor.style.left = (pageSize.width - 10) + 'px';
+
+  // Add so many children that it can't possibly fit onscreen.
+  for (var i = 0; i < 200; i++) {
+    menu.appendChild(goog.dom.createDom('div', null, 'New Item ' + i));
+  }
+
+  var pos = new goog.positioning.MenuAnchoredPosition(
+      customAnchor, corner.TOP_LEFT, true, true);
+  pos.reposition(menu, corner.TOP_LEFT);
+  assertEquals(menu.offsetLeft + menu.offsetWidth, customAnchor.offsetLeft);
 }
 
 </script>
