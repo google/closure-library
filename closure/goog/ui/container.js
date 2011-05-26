@@ -364,7 +364,6 @@ goog.ui.Container.prototype.enterDocument = function() {
     }
   }, this);
 
-  // Detect right-to-left direction.
   var elem = this.getElement();
 
   // Call the renderer's initializeDom method to initialize the container's DOM.
