@@ -29,6 +29,7 @@ See the COPYING file for details.
     goog.inherits(DisposableTest, goog.Disposable);
 
     DisposableTest.prototype.disposeInternal = function() {
+      DisposableTest.superClass_.disposeInternal.call(this);
       delete this.element;
     };
 
@@ -197,6 +198,39 @@ See the COPYING file for details.
       d2.dispose();
     }
 
-  </script>
+    function testRegisterDisposable() {
+      var d1 = new DisposableTest();
+      var d2 = new DisposableTest();
+
+      d1.registerDisposable(d2);
+      d1.dispose();
+
+      assertTrue('d2 should be disposed when d1 is disposed', d2.isDisposed());
+    }
+
+    function testDisposeAll() {
+      var d1 = new DisposableTest();
+      var d2 = new DisposableTest();
+
+      goog.disposeAll(d1, d2);
+
+      assertTrue('d1 should be disposed', d1.isDisposed());
+      assertTrue('d2 should be disposed', d2.isDisposed());
+    }
+
+    function testDisposeAllRecursive() {
+      var d1 = new DisposableTest();
+      var d2 = new DisposableTest();
+      var d3 = new DisposableTest();
+      var d4 = new DisposableTest();
+
+      goog.disposeAll(d1, [[d2], d3, d4]);
+
+      assertTrue('d1 should be disposed', d1.isDisposed());
+      assertTrue('d2 should be disposed', d2.isDisposed());
+      assertTrue('d3 should be disposed', d3.isDisposed());
+      assertTrue('d4 should be disposed', d4.isDisposed());
+    }
+    </script>
 </body>
 </html>

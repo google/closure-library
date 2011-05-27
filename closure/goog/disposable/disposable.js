@@ -92,6 +92,14 @@ goog.Disposable.prototype.disposed_ = false;
 
 
 /**
+ * Disposables that should be disposed when this object is disposed.
+ * @type {?Array.<goog.disposable.IDisposable>}
+ * @private
+ */
+goog.Disposable.prototype.dependentDisposables_;
+
+
+/**
  * @return {boolean} Whether the object has been disposed of.
  */
 goog.Disposable.prototype.isDisposed = function() {
@@ -134,6 +142,20 @@ goog.Disposable.prototype.dispose = function() {
 
 
 /**
+ * Associates a disposable object with this object so that they will be disposed
+ * together.
+ * @param {goog.disposable.IDisposable} disposable that will be disposed when
+ *     this object is disposed.
+ */
+goog.Disposable.prototype.registerDisposable = function(disposable) {
+  if (!this.dependentDisposables_) {
+    this.dependentDisposables_ = [];
+  }
+  this.dependentDisposables_.push(disposable);
+};
+
+
+/**
  * Deletes or nulls out any references to COM objects, DOM nodes, or other
  * disposable objects. Classes that extend {@code goog.Disposable} should
  * override this method.  For example:
@@ -154,7 +176,7 @@ goog.Disposable.prototype.dispose = function() {
  * @protected
  */
 goog.Disposable.prototype.disposeInternal = function() {
-  // No-op in the base class.
+  goog.disposeAll(this.dependentDisposables_);
 };
 
 
@@ -166,5 +188,24 @@ goog.Disposable.prototype.disposeInternal = function() {
 goog.dispose = function(obj) {
   if (obj && typeof obj.dispose == 'function') {
     obj.dispose();
+  }
+};
+
+
+/**
+ * Calls {@code dispose} on each member of the list that supports it. (If the
+ * member is an ArrayLike, then {@code goog.disposeAll()} will be called
+ * recursively on each of its members.) If the member is not an object with a
+ * {@code dispose()} method, then it is ignored.
+ * @param {...*} var_args The list.
+ */
+goog.disposeAll = function(var_args) {
+  for (var i = 0, len = arguments.length; i < len; ++i) {
+    var disposable = arguments[i];
+    if (goog.isArrayLike(disposable)) {
+      goog.disposeAll.apply(null, disposable);
+    } else {
+      goog.dispose(disposable);
+    }
   }
 };
