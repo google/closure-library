@@ -35,6 +35,7 @@ goog.require('goog.graphics.SvgPathElement');
 goog.require('goog.graphics.SvgRectElement');
 goog.require('goog.graphics.SvgTextElement');
 goog.require('goog.math.Size');
+goog.require('goog.style');
 goog.require('goog.userAgent');
 
 
@@ -203,8 +204,12 @@ goog.graphics.SvgGraphics.prototype.setElementFill = function(element, fill) {
         'gradientUnits': 'userSpaceOnUse'
       });
 
-      var stop1 = this.createSvgElement_('stop',
-          {'offset': '0%', 'style': 'stop-color:' + fill.getColor1()});
+      var gstyle = 'stop-color:' + fill.getColor1();
+      if (goog.isNumber(fill.getOpacity1())) {
+        gstyle += ';stop-opacity:' + fill.getOpacity1();
+      }
+      var stop1 = this.createSvgElement_(
+          'stop', {'offset': '0%', 'style': gstyle});
       gradient.appendChild(stop1);
 
       // LinearGradients don't have opacity in VML so implement that before
@@ -212,9 +217,12 @@ goog.graphics.SvgGraphics.prototype.setElementFill = function(element, fill) {
       // if (fill.getOpacity() != null) {
       //   gstyles += 'opacity:' + fill.getOpacity() + ';'
       // }
-
-      var stop2 = this.createSvgElement_('stop',
-          {'offset': '100%', 'style': 'stop-color:' + fill.getColor2()});
+      gstyle = 'stop-color:' + fill.getColor2();
+      if (goog.isNumber(fill.getOpacity2())) {
+        gstyle += ';stop-opacity:' + fill.getOpacity2();
+      }
+      var stop2 = this.createSvgElement_(
+          'stop', {'offset': '100%', 'style': gstyle});
       gradient.appendChild(stop2);
 
       // LinearGradients don't have opacity in VML so implement that before
@@ -393,7 +401,7 @@ goog.graphics.SvgGraphics.prototype.updateManualViewBox_ = function() {
  */
 goog.graphics.SvgGraphics.prototype.setSize = function(pixelWidth,
     pixelHeight) {
-  // TODO(user) implement
+  goog.style.setSize(this.getElement(), pixelWidth, pixelHeight);
 };
 
 
