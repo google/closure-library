@@ -93,7 +93,9 @@ goog.editor.BrowserFeature = {
 
   // Whether this browser's "FormatBlock" command may create multiple
   // blockquotes.
-  CREATES_MULTIPLE_BLOCKQUOTES: goog.userAgent.WEBKIT || goog.userAgent.OPERA,
+  CREATES_MULTIPLE_BLOCKQUOTES:
+      (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('534.16')) ||
+      goog.userAgent.OPERA,
 
   // Whether this browser's "FormatBlock" command will wrap blockquotes
   // inside of divs, instead of replacing divs with blockquotes.
