@@ -194,6 +194,15 @@ See the COPYING file for details.
     <div class="blue_box">99</div>
   </div>
   <hr class="hr_clear">
+
+  <h4>The items in this list can be moved around with shift-dragging:</h4>
+  <div id="horiz6_div" class="horiz1_class">
+    <div class="red_box">1</div>
+    <div class="red_box">2</div>
+    <div class="red_box">3</div>
+    <div class="red_box">4</div>
+  </div>
+  <hr class="hr_clear">
   <script>
 
   var $ = goog.dom.getElement;
@@ -217,6 +226,19 @@ See the COPYING file for details.
   dlg2.setIsCurrDragItemAlwaysDisplayed();
   dlg2.addDragList($('horiz5_div'), goog.fx.DragListDirection.RIGHT_2D);
   dlg2.init();
+
+  var dlg3 = new goog.fx.DragListGroup();
+  dlg3.setDragItemHoverClass('cursor_move');
+  dlg3.setDraggerElClass('cursor_move opacity_40');
+  dlg3.addDragList(goog.dom.getElement('horiz6_div'),
+      goog.fx.DragListDirection.RIGHT);
+  goog.events.listen(dlg3, goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+      function(e) {
+        if (!e.event.shiftKey) {
+          e.preventDefault();
+        }
+      });
+  dlg3.init();
   </script>
 </body>
 </html>
