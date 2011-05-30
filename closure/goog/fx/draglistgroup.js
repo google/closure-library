@@ -29,6 +29,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
+goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -549,11 +550,14 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   // Create the dragger object.
   this.dragger_ = new goog.fx.Dragger(draggerEl);
 
-  // Listen to events on the dragger.
-  this.eventHandler_.listen(
-      this.dragger_, goog.fx.Dragger.EventType.DRAG, this.handleDragMove_);
-  this.eventHandler_.listen(
-      this.dragger_, goog.fx.Dragger.EventType.END, this.handleDragEnd_);
+  // Listen to events on the dragger. These handlers will be unregistered at
+  // DRAGEND, when the dragger is disposed of. We can't use eventHandler_,
+  // because it creates new references to the handler functions at each
+  // dragging action, and keeps them until DragListGroup is disposed of.
+  goog.events.listen(this.dragger_, goog.fx.Dragger.EventType.DRAG,
+      this.handleDragMove_, false, this);
+  goog.events.listen(this.dragger_, goog.fx.Dragger.EventType.END,
+      this.handleDragEnd_, false, this);
 
   // Manually start up the dragger.
   this.dragger_.startDrag(e);
@@ -677,12 +681,12 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
           this.currDragItem_, this.draggerEl_, this.dragger_));
 
   // Clear all our temporary fields that are only defined while dragging.
-  this.currDragItem_ = null;
-  this.currHoverList_ = null;
-  this.origList_ = null;
-  this.origNextItem_ = null;
-  this.draggerEl_ = null;
-  this.dragger_ = null;
+  delete this.currDragItem_;
+  delete this.currHoverList_;
+  delete this.origList_;
+  delete this.origNextItem_;
+  delete this.draggerEl_;
+  delete this.dragger_;
 
   // Clear all the bounds info stored on the drag lists and drag elements.
   // Note: IE doesn't allow 'delete' for fields on HTML elements (because
@@ -733,7 +737,7 @@ goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
       goog.dom.classes.remove(dragList, dragList.dlgDragHoverClass_);
     }
   }
-}
+};
 
 
 /**
