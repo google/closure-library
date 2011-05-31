@@ -13,7 +13,8 @@
 // limitations under the License.
 
 /**
- * @fileoverview Implements 4x4 matrices and their related functions which are
+ * @fileoverview WARNING: DEPRECATED.  Use Mat4 instead.
+ * Implements 4x4 matrices and their related functions which are
  * compatible with WebGL. The API is structured to avoid unnecessary memory
  * allocations.  The last parameter will typically be the output vector and
  * an object can be both an input and output parameter to all methods except
@@ -29,7 +30,7 @@ goog.require('goog.vec.Vec4');
 
 
 /**
- * @typedef {Float32Array}
+ * @typedef {goog.vec.ArrayType}
  */
 goog.vec.Matrix4.Type;
 

@@ -29,15 +29,15 @@ goog.require('goog.vec.Vec4');
 
 
 /**
- * @typedef {Float32Array}
+ * @typedef {goog.vec.ArrayType}
  */
 goog.vec.Mat4.Type;
 
 
 /**
  * Creates the array representation of a 4x4 matrix. The use of the array
- * directly eliminates any overhead associated with the class representation
- * defined above. The returned matrix is cleared to all zeros.
+ * directly instead of a class reduces overhead.
+ * The returned matrix is cleared to all zeros.
  *
  * @return {goog.vec.Mat4.Type} The new, sixteen element array.
  */

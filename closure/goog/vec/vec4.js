@@ -28,7 +28,7 @@ goog.require('goog.vec');
 
 
 /**
- * @typedef {Float32Array}
+ * @typedef {goog.vec.ArrayType}
  */
 goog.vec.Vec4.Type;
 
