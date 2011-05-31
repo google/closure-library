@@ -336,7 +336,7 @@ goog.i18n.MessageFormat.prototype.parsePattern_ = function(pattern) {
  */
 goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
   var literals = this.literals_;
-  var buildPlaceholder = this.buildPlaceholder_;
+  var buildPlaceholder = goog.bind(this.buildPlaceholder_, this);
 
   // First replace '' with single quote placeholder since they can be found
   // inside other literals.
