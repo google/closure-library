@@ -42,6 +42,9 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   var FORMATTER;
   var testHelper;
 
+  var WEBKIT_BEFORE_CHROME_8 = goog.userAgent.WEBKIT &&
+      !goog.userAgent.isVersion('534.10');
+
   // Extra html to add to test html to make sure removeformatting is actually
   // getting called when you're testing if it leaves certain styles alone
   // (instead of not even running at all due to some other bug). However, adding
@@ -167,7 +170,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   }
 
   function testLinksAreNotRemoved() {
-    expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
+    expectedFailures.expectFailureFor(WEBKIT_BEFORE_CHROME_8,
         'WebKit\'s removeFormatting command removes links.');
 
     var anchor;
@@ -209,7 +212,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
     FORMATTER.removeFormatting_();
     // Webkit will change all tags to non-formatted ones anyway.
     // Make sure 'Foo' was changed to 'Bar'
-    if (goog.userAgent.WEBKIT) {
+    if (WEBKIT_BEFORE_CHROME_8) {
       assertHTMLEquals('regular cleaner should not have run',
           'StartBar<br>Bar<br>Baz',
           div.innerHTML);
@@ -425,7 +428,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
     goog.dom.Range.createFromNodes(div.firstChild.firstChild, 2,
         div.firstChild.lastChild.firstChild, 3).select();
 
-    expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
+    expectedFailures.expectFailureFor(WEBKIT_BEFORE_CHROME_8,
         'WebKit just gets this all wrong.  Everything stays bold and ' +
         '"lditalic" gets italicised.');
 
@@ -521,7 +524,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
     goog.dom.Range.createFromNodeContents(div).select();
     FORMATTER.removeFormatting_();
 
-    expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
+    expectedFailures.expectFailureFor(WEBKIT_BEFORE_CHROME_8,
         'WebKit removes the image entirely, see ' +
         'https://bugs.webkit.org/show_bug.cgi?id=13125 .');
 
@@ -592,7 +595,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
     // Our workaround for the nbsp bug removes these, but causes worse problems.
     // See bugs.webkit.org/show_bug.cgi?id=29164 for more details.
     expectedFailures.expectFailureFor(
-         goog.userAgent.WEBKIT &&
+         WEBKIT_BEFORE_CHROME_8 &&
          !goog.editor.BrowserFeature.ADDS_NBSPS_IN_REMOVE_FORMAT,
          'Extra apple-style-spans');
 
@@ -783,7 +786,7 @@ function testRandomGoogleNewsSnippetRemoveFormatting() {
   // Select it all.
   goog.dom.Range.createFromNodeContents(div).select();
 
-  expectedFailures.expectFailureFor(goog.userAgent.WEBKIT,
+  expectedFailures.expectFailureFor(WEBKIT_BEFORE_CHROME_8,
       'WebKit barfs apple-style-spans all over the place, and removes links.');
 
   expectedFailures.run(function() {
