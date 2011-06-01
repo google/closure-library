@@ -583,7 +583,11 @@ goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
   var listenerArray = goog.events.getListeners_(src, type, capture);
   if (listenerArray) {
     for (var i = 0; i < listenerArray.length; i++) {
-      if (listenerArray[i].listener == listener &&
+      // If goog.events.unlistenByKey is called during an event dispatch
+      // then the listener array won't get cleaned up and there might be
+      // 'removed' listeners in the list. Ignore those.
+      if (!listenerArray[i].removed &&
+          listenerArray[i].listener == listener &&
           listenerArray[i].capture == capture &&
           listenerArray[i].handler == opt_handler) {
         // We already have this listener. Return its key.

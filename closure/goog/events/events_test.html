@@ -63,6 +63,21 @@ See the COPYING file for details.
     }
   }
 
+  function testSelfRemove() {
+    var et1 = new goog.events.EventTarget();
+    var callback = function() {
+      // This listener removes itself during event dispatching, so it
+      // is marked as 'removed' but not actually removed until after event
+      // dispatching ends.
+      goog.events.removeAll(et1, 'click');
+
+      // Test that goog.events.getListener ignores events marked as 'removed'.
+      assertNull(goog.events.getListener(et1, 'click', callback));
+    };
+    var key = goog.events.listen(et1, 'click', callback);
+    goog.events.dispatchEvent(et1, 'click');
+  }
+
   function testHasListener() {
     var div = document.createElement('div');
     assertFalse(goog.events.hasListener(div));

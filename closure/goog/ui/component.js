@@ -489,30 +489,6 @@ goog.ui.Component.prototype.setElementInternal = function(element) {
 
 
 /**
- * Returns an array of all the elements in this component's DOM with the
- * provided className.
- * @param {string} className The name of the class to look for.
- * @return { {length: number} } The items found with the class name provided.
- */
-goog.ui.Component.prototype.getElementsByClass = function(className) {
-  return this.element_ ?
-      this.dom_.getElementsByClass(className, this.element_) : [];
-};
-
-
-/**
- * Returns the first element in this component's DOM with the provided
- * className.
- * @param {string} className The name of the class to look for.
- * @return {?Element} The first item with the class name provided.
- */
-goog.ui.Component.prototype.getElementByClass = function(className) {
-  return this.element_ ?
-      this.dom_.getElementByClass(className, this.element_) : null;
-};
-
-
-/**
  * Returns the event handler for this component, lazily created the first time
  * this method is called.
  * @return {!goog.events.EventHandler} Event handler for this component.

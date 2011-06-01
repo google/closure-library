@@ -312,34 +312,6 @@ See the COPYING file for details.
           component.getElement());
     }
 
-    function testGetElementAndGetElementsByClass() {
-      sandbox.innerHTML =
-        '<ul id="task-list">' +
-          '<li class="task">Unclog drain' +
-        '</ul>' +
-        '<ul id="completed-tasks">' +
-          '<li id="groceries" class="task">Buy groceries' +
-          '<li class="task">Rotate tires' +
-          '<li class="task">Clean kitchen' +
-        '</ul>' +
-      assertNull(
-          'Should be nothing to return before the component has a DOM',
-          component.getElementByClass('task'));
-      assertEquals('Should return an empty list before the component has a DOM',
-                   0,
-                   component.getElementsByClass('task').length);
-
-      component.decorate(goog.dom.getElement('completed-tasks'));
-      assertEquals(
-          'getElementByClass() should return the first completed task',
-          'groceries',
-          component.getElementByClass('task').id);
-      assertEquals(
-          'getElementsByClass() should return only the completed tasks',
-          3,
-          component.getElementsByClass('task').length);
-    }
-
     function testEnterExitDocument() {
       var c1 = new goog.ui.Component();
       var c2 = new goog.ui.Component();
