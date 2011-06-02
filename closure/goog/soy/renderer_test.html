@@ -36,7 +36,8 @@ function testRenderElement() {
   var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
 
   var renderer = new goog.soy.Renderer(dataSupplier);
-  renderer.renderElement(testDiv, testNs.injectedDataTemplate, {name: 'Value'});
+  renderer.renderElement(
+      testDiv, example.injectedDataTemplate, {name: 'Value'});
   assertEquals('ValueIjValue', elementToInnerHtml(testDiv));
 }
 
@@ -45,7 +46,7 @@ function testRenderElementWithNoTemplateData() {
   var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
 
   var renderer = new goog.soy.Renderer(dataSupplier);
-  renderer.renderElement(testDiv, testNs.noDataTemplate);
+  renderer.renderElement(testDiv, example.noDataTemplate);
   assertEquals('<div>Hello</div>', elementToInnerHtml(testDiv));
 }
 
@@ -53,14 +54,14 @@ function testRenderElementWithNoTemplateData() {
 function testRenderAsFragment() {
   var renderer = new goog.soy.Renderer(dataSupplier);
   var fragment = renderer.renderAsFragment(
-      testNs.injectedDataTemplate, {name: 'Value'});
+      example.injectedDataTemplate, {name: 'Value'});
   assertEquals('ValueIjValue', fragmentToHtml(fragment));
 }
 
 
 function testRenderAsFragmentWithNoTemplateData() {
   var renderer = new goog.soy.Renderer(dataSupplier);
-  var fragment = renderer.renderAsFragment(testNs.noDataTemplate);
+  var fragment = renderer.renderAsFragment(example.noDataTemplate);
   assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
   assertEquals('<div>Hello</div>', fragmentToHtml(fragment));
 }
@@ -69,14 +70,14 @@ function testRenderAsFragmentWithNoTemplateData() {
 function testRenderAsElement() {
   var renderer = new goog.soy.Renderer(dataSupplier);
   var element = renderer.renderAsElement(
-      testNs.injectedDataTemplate, {name: 'Value'});
+      example.injectedDataTemplate, {name: 'Value'});
   assertEquals('ValueIjValue', elementToInnerHtml(element));
 }
 
 
 function testRenderAsElementWithNoTemplateData() {
   var renderer = new goog.soy.Renderer(dataSupplier);
-  var elem = renderer.renderAsElement(testNs.noDataTemplate);
+  var elem = renderer.renderAsElement(example.noDataTemplate);
   assertEquals('Hello', elementToInnerHtml(elem));
 }
 

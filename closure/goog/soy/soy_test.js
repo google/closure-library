@@ -29,24 +29,24 @@ goog.require('goog.userAgent');
 // Fake Soy-generated template functions.
 //
 
-var testNs = {};
+var example = {};
 
 
-testNs.textNodeTemplate = function(opt_data, opt_sb, opt_injectedData) {
+example.textNodeTemplate = function(opt_data, opt_sb, opt_injectedData) {
   assertNotNull(opt_data);
   assertNotUndefined(opt_data);
   return goog.string.htmlEscape(opt_data.name);
 };
 
 
-testNs.singleRootTemplate = function(opt_data, opt_sb, opt_injectedData) {
+example.singleRootTemplate = function(opt_data, opt_sb, opt_injectedData) {
   assertNotNull(opt_data);
   assertNotUndefined(opt_data);
   return '<span>' + goog.string.htmlEscape(opt_data.name) + '</span>';
 };
 
 
-testNs.multiRootTemplate = function(opt_data, opt_sb, opt_injectedData) {
+example.multiRootTemplate = function(opt_data, opt_sb, opt_injectedData) {
   assertNotNull(opt_data);
   assertNotUndefined(opt_data);
   return '<div>Hello</div><div>' + goog.string.htmlEscape(opt_data.name) +
@@ -54,7 +54,7 @@ testNs.multiRootTemplate = function(opt_data, opt_sb, opt_injectedData) {
 };
 
 
-testNs.injectedDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
+example.injectedDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
   assertNotNull(opt_data);
   assertNotUndefined(opt_data);
   return goog.string.htmlEscape(opt_data.name) +
@@ -62,7 +62,7 @@ testNs.injectedDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
 };
 
 
-testNs.noDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
+example.noDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
   assertNotNull(opt_data);
   assertNotUndefined(opt_data);
   return '<div>Hello</div>';

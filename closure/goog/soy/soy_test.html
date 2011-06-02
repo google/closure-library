@@ -27,28 +27,28 @@ See the COPYING file for details.
 
 function testRenderElement() {
   var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
-  goog.soy.renderElement(testDiv, testNs.multiRootTemplate, {name: 'Boo'});
+  goog.soy.renderElement(testDiv, example.multiRootTemplate, {name: 'Boo'});
   assertEquals('<div>Hello</div><div>Boo</div>', elementToInnerHtml(testDiv));
 }
 
 
 function testRenderElementWithNoTemplateData() {
   var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
-  goog.soy.renderElement(testDiv, testNs.noDataTemplate);
+  goog.soy.renderElement(testDiv, example.noDataTemplate);
   assertEquals('<div>Hello</div>', elementToInnerHtml(testDiv));
 }
 
 
 function testRenderAsFragmentTextNode() {
   var fragment = goog.soy.renderAsFragment(
-      testNs.textNodeTemplate, {name: 'Boo'});
+      example.textNodeTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.TEXT, fragment.nodeType);
   assertEquals('Boo', fragmentToHtml(fragment));
 }
 
 
 function testRenderAsFragmentInjectedData() {
-  var fragment = goog.soy.renderAsFragment(testNs.injectedDataTemplate,
+  var fragment = goog.soy.renderAsFragment(example.injectedDataTemplate,
       {name: 'Boo'}, {name: 'ijBoo'});
   assertEquals(goog.dom.NodeType.TEXT, fragment.nodeType);
   assertEquals('BooijBoo', fragmentToHtml(fragment));
@@ -57,7 +57,7 @@ function testRenderAsFragmentInjectedData() {
 
 function testRenderAsFragmentSingleRoot() {
   var fragment = goog.soy.renderAsFragment(
-      testNs.singleRootTemplate, {name: 'Boo'});
+      example.singleRootTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
   assertEquals(goog.dom.TagName.SPAN, fragment.tagName);
   assertEquals('Boo', fragment.innerHTML);
@@ -66,28 +66,28 @@ function testRenderAsFragmentSingleRoot() {
 
 function testRenderAsFragmentMultiRoot() {
   var fragment = goog.soy.renderAsFragment(
-      testNs.multiRootTemplate, {name: 'Boo'});
+      example.multiRootTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.DOCUMENT_FRAGMENT, fragment.nodeType);
   assertEquals('<div>Hello</div><div>Boo</div>', fragmentToHtml(fragment));
 }
 
 
 function testRenderAsFragmentNoData() {
-  var fragment = goog.soy.renderAsFragment(testNs.noDataTemplate);
+  var fragment = goog.soy.renderAsFragment(example.noDataTemplate);
   assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
   assertEquals('<div>Hello</div>', fragmentToHtml(fragment));
 }
 
 
 function testRenderAsElementTextNode() {
-  var elem = goog.soy.renderAsElement(testNs.textNodeTemplate, {name: 'Boo'});
+  var elem = goog.soy.renderAsElement(example.textNodeTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
   assertEquals(goog.dom.TagName.DIV, elem.tagName);
   assertEquals('Boo', elementToInnerHtml(elem));
 }
 
 function testRenderAsElementInjectedData() {
-  var elem = goog.soy.renderAsElement(testNs.injectedDataTemplate,
+  var elem = goog.soy.renderAsElement(example.injectedDataTemplate,
       {name: 'Boo'}, {name: 'ijBoo'});
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
   assertEquals(goog.dom.TagName.DIV, elem.tagName);
@@ -96,7 +96,8 @@ function testRenderAsElementInjectedData() {
 
 
 function testRenderAsElementSingleRoot() {
-  var elem = goog.soy.renderAsElement(testNs.singleRootTemplate, {name: 'Boo'});
+  var elem = goog.soy.renderAsElement(
+      example.singleRootTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
   assertEquals(goog.dom.TagName.SPAN, elem.tagName);
   assertEquals('Boo', elementToInnerHtml(elem));
@@ -104,14 +105,14 @@ function testRenderAsElementSingleRoot() {
 
 
 function testRenderAsElementMultiRoot() {
-  var elem = goog.soy.renderAsElement(testNs.multiRootTemplate, {name: 'Boo'});
+  var elem = goog.soy.renderAsElement(example.multiRootTemplate, {name: 'Boo'});
   assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
   assertEquals(goog.dom.TagName.DIV, elem.tagName);
   assertEquals('<div>Hello</div><div>Boo</div>', elementToInnerHtml(elem));
 }
 
 function testRenderAsElementWithNoData() {
-  var elem = goog.soy.renderAsElement(testNs.noDataTemplate);
+  var elem = goog.soy.renderAsElement(example.noDataTemplate);
   assertEquals('Hello', elementToInnerHtml(elem));
 }
 
