@@ -162,7 +162,7 @@ goog.testing.TestCase.prototype.order = goog.testing.TestCase.Order.SORTED;
 /**
  * Save a reference to window.timeout, so any code that overrides the default
  * behavior (e.g. MockClock) doesn't affect our runner.
- * @type {function(this:Window, (Function|string), number, *=): number}
+ * @type {function((Function|string), number, *=): number}
  * @private
  */
 goog.testing.TestCase.protectedTimeout_ = window.setTimeout;
