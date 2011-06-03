@@ -26,6 +26,7 @@ goog.provide('goog.ui.Component.EventType');
 goog.provide('goog.ui.Component.State');
 
 goog.require('goog.array');
+goog.require('goog.array.ArrayLike');
 goog.require('goog.dom');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -485,6 +486,30 @@ goog.ui.Component.prototype.getElement = function() {
  */
 goog.ui.Component.prototype.setElementInternal = function(element) {
   this.element_ = element;
+};
+
+
+/**
+ * Returns an array of all the elements in this component's DOM with the
+ * provided className.
+ * @param {string} className The name of the class to look for.
+ * @return {!goog.array.ArrayLike} The items found with the class name provided.
+ */
+goog.ui.Component.prototype.getElementsByClass = function(className) {
+  return this.element_ ?
+      this.dom_.getElementsByClass(className, this.element_) : [];
+};
+
+
+/**
+ * Returns the first element in this component's DOM with the provided
+ * className.
+ * @param {string} className The name of the class to look for.
+ * @return {?Element} The first item with the class name provided.
+ */
+goog.ui.Component.prototype.getElementByClass = function(className) {
+  return this.element_ ?
+      this.dom_.getElementByClass(className, this.element_) : null;
 };
 
 
