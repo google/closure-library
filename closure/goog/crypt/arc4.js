@@ -111,16 +111,13 @@ goog.crypt.Arc4.prototype.discard = function(n) {
 
 /**
  * En- or decrypt (same operation for streamciphers like ARC4)
- * @param {Array.<number>} data The data to be xor-ed in place.
+ * @param {Array.<number>|Uint8Array} data The data to be xor-ed in place.
  * @param {number=} opt_length The number of bytes to crypt.
  */
 goog.crypt.Arc4.prototype.crypt = function(data, opt_length) {
   if (!opt_length) {
     opt_length = data.length;
   }
-
-  goog.asserts.assertArray(data, 'Data parameter must be a byte array');
-
   var i = this.index1_;
   var j = this.index2_;
   var state = this.state_;
