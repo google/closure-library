@@ -21,6 +21,7 @@
  * Namespace for locale number format functions
  */
 goog.provide('goog.i18n.NumberFormat');
+goog.provide('goog.i18n.NumberFormat.Format');
 
 goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.currencyCodeMap');
