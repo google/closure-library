@@ -93,7 +93,7 @@ goog.Disposable.prototype.disposed_ = false;
 
 /**
  * Disposables that should be disposed when this object is disposed.
- * @type {?Array.<goog.disposable.IDisposable>}
+ * @type {Array.<goog.disposable.IDisposable>}
  * @private
  */
 goog.Disposable.prototype.dependentDisposables_;
@@ -176,7 +176,9 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
  * @protected
  */
 goog.Disposable.prototype.disposeInternal = function() {
-  goog.disposeAll(this.dependentDisposables_);
+  if (this.dependentDisposables_) {
+    goog.disposeAll.apply(null, this.dependentDisposables_);
+  }
 };
 
 
