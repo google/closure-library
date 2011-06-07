@@ -21,7 +21,9 @@
  * Namespace for locale number format functions
  */
 goog.provide('goog.i18n.NumberFormat');
-goog.provide('goog.i18n.NumberFormat.Format');
+// TODO(user): Re-add this when test failures are sorted out. Required,
+// due to lint warnings whenever the enum is referenced.
+//goog.provide('goog.i18n.NumberFormat.Format');
 
 goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.currencyCodeMap');
