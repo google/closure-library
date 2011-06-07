@@ -613,6 +613,9 @@ goog.proto2.Message.prototype.set$Value = function(tag, value) {
   }
 
   this.values_[tag] = value;
+  if (this.deserializedFields_) {
+    this.deserializedFields_[tag] = true;
+  }
 };
 
 
