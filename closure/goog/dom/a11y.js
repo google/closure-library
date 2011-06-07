@@ -21,6 +21,7 @@
  *
  */
 goog.provide('goog.dom.a11y');
+goog.provide('goog.dom.a11y.LivePriority');
 goog.provide('goog.dom.a11y.Role');
 goog.provide('goog.dom.a11y.State');
 
@@ -357,6 +358,31 @@ goog.dom.a11y.Role = {
 
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
   TREEITEM: 'treeitem'
+};
+
+
+/**
+ * Enumeration of ARIA state values for live regions.
+ *
+ * See http://www.w3.org/TR/wai-aria/states_and_properties#aria-live
+ * for more information.
+ * @enum {string}
+ */
+goog.dom.a11y.LivePriority = {
+  /**
+   * Default value.  Used for live regions that should never be spoken.
+   */
+  OFF: 'off',
+  /**
+   * Spoke only when the user is idle.  Best option in most cases.
+   */
+  POLITE: 'polite',
+  /**
+   * Spoken as soon as possible, which means that the information has a
+   * higher priority than normal, but does not necessarily interrupt
+   * immediately.
+   */
+  ASSERTIVE: 'assertive'
 };
 
 
