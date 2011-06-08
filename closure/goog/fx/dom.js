@@ -549,7 +549,7 @@ goog.fx.dom.bgColorFadeIn = function(element, start, time, opt_eventHandler) {
   var computedBgColor = goog.style.getBackgroundColor(element);
   var end;
 
-  if (computedBgColor != 'transparent' &&
+  if (computedBgColor && computedBgColor != 'transparent' &&
       computedBgColor != 'rgba(0, 0, 0, 0)') {
     end = goog.color.hexToRgb(goog.color.parse(computedBgColor).hex);
   } else {
