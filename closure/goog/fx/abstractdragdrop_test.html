@@ -412,7 +412,6 @@ function testIsInside() {
   add.dispose();
 }
 
-
 function testAddingRemovingScrollableContainers() {
   var group = new goog.fx.AbstractDragDrop();
   var el1 = document.createElement('div');
@@ -459,6 +458,31 @@ function testScrollableContainersCalculation() {
   assertEquals(container, group.targetList_[1].scrollableContainer_);
 }
 
+function testMouseMove_mouseOutBeforeThreshold() {
+  // Setup dragdrop and item
+  var itemEl = document.createElement('div');
+  var add = new goog.fx.AbstractDragDrop();
+  var item = new goog.fx.DragDropItem(itemEl);
+  item.setParent(add);
+  add.items_.push(item);
+
+  // Simulate maybeStartDrag
+  item.startPosition_ = new goog.math.Coordinate(10, 10);
+  add.currentDragElement_ = itemEl;
+
+  // Test
+  var draggedItem = null;
+  add.startDrag = function(event, item) {
+    draggedItem = item;
+  };
+
+  var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
+      'type': goog.events.EventType.MOUSEOUT};
+  item.mouseMove_(event);
+
+  assertEquals("dragStart event fired", item, draggedItem);
+}
+
 
 // Helper function for manual debugging.
 function drawTargets(targets, multiplier) {
@@ -480,3 +504,4 @@ function drawTargets(targets, multiplier) {
 </script>
 </body>
 </html>
+
