@@ -37,6 +37,11 @@ See the COPYING file for details.
 <button onclick="drawTargets(targets2, 1)">draw targets 2</button><br>
 <button onclick="drawTargets(targets3, 10)">draw targets 3</button>
 
+<div id="container1">
+  <div id="child1"></div>
+  <div id="child2"></div>
+</div>
+
 <script>
 
 var targets = [
@@ -405,6 +410,53 @@ function testIsInside() {
       add.isInside_(10, 25, box));
 
   add.dispose();
+}
+
+
+function testAddingRemovingScrollableContainers() {
+  var group = new goog.fx.AbstractDragDrop();
+  var el1 = document.createElement('div');
+  var el2 = document.createElement('div');
+
+  assertEquals(0, group.scrollableContainers_.length);
+
+  group.addScrollableContainer(el1);
+  assertEquals(1, group.scrollableContainers_.length);
+
+  group.addScrollableContainer(el2);
+  assertEquals(2, group.scrollableContainers_.length);
+
+  group.removeAllScrollableContainers();
+  assertEquals(0, group.scrollableContainers_.length);
+}
+
+
+function testScrollableContainersCalculation() {
+  var group = new goog.fx.AbstractDragDrop();
+  var target = new goog.fx.AbstractDragDrop();
+
+  group.addTarget(target);
+  group.addScrollableContainer(document.getElementById('container1'));
+  var container = group.scrollableContainers_[0];
+
+  var item1 = new goog.fx.DragDropItem(document.getElementById('child1'));
+  var item2 = new goog.fx.DragDropItem(document.getElementById('child2'));
+
+  target.items_.push(item1);
+  group.recalculateDragTargets();
+  group.recalculateScrollableContainers();
+
+  assertEquals(1, container.containedTargets_.length);
+  assertEquals(container, group.targetList_[0].scrollableContainer_);
+
+  target.items_.push(item2);
+  group.recalculateDragTargets();
+  assertEquals(1, container.containedTargets_.length);
+  assertNull(group.targetList_[0].scrollableContainer_);
+
+  group.recalculateScrollableContainers();
+  assertEquals(2, container.containedTargets_.length);
+  assertEquals(container, group.targetList_[1].scrollableContainer_);
 }
 
 

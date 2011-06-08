@@ -399,8 +399,9 @@ goog.fx.AbstractDragDrop.prototype.startDrag = function(event, item) {
                      this.suppressSelect_);
 
   this.recalculateDragTargets();
+  this.recalculateScrollableContainers();
   this.activeTarget_ = null;
-  this.initScrollableContainers_();
+  this.initScrollableContainerListeners_();
   this.dragger_.startDrag(event);
 
   event.preventDefault();
@@ -424,6 +425,35 @@ goog.fx.AbstractDragDrop.prototype.recalculateDragTargets = function() {
   }
   if (!this.targetBox_) {
     this.targetBox_ = new goog.math.Box(0, 0, 0, 0);
+  }
+};
+
+
+/**
+ * Recalculates the current scroll positions of scrollable containers and
+ * allocates targets. Call this if the position of a container changed or if
+ * targets are added or removed.
+ */
+goog.fx.AbstractDragDrop.prototype.recalculateScrollableContainers =
+    function() {
+  var container, i, j, target;
+  for (i = 0; container = this.scrollableContainers_[i]; i++) {
+    container.containedTargets_ = [];
+    container.savedScrollLeft_ = container.element_.scrollLeft;
+    container.savedScrollTop_ = container.element_.scrollTop;
+    var pos = goog.style.getPageOffset(container.element_);
+    var size = goog.style.getSize(container.element_);
+    container.box_ = new goog.math.Box(pos.y, pos.x + size.width,
+                                       pos.y + size.height, pos.x);
+  }
+
+  for (i = 0; target = this.targetList_[i]; i++) {
+    for (j = 0; container = this.scrollableContainers_[j]; j++) {
+      if (goog.dom.contains(container.element_, target.element_)) {
+        container.containedTargets_.push(target);
+        target.scrollableContainer_ = container;
+      }
+    }
   }
 };
 
@@ -642,32 +672,16 @@ goog.fx.AbstractDragDrop.prototype.suppressSelect_ = function(event) {
 
 
 /**
- * Stores current scroll positions of containers and allocates targets
- * to the approptiate containers.
+ * Sets up listeners for the scrollable containers that keep track of their
+ * scroll positions.
  * @private
  */
-goog.fx.AbstractDragDrop.prototype.initScrollableContainers_ = function() {
-  var container, i, j, target;
+goog.fx.AbstractDragDrop.prototype.initScrollableContainerListeners_ =
+    function() {
+  var container, i;
   for (i = 0; container = this.scrollableContainers_[i]; i++) {
     goog.events.listen(container.element_, goog.events.EventType.SCROLL,
         this.containerScrollHandler_, false, this);
-    container.containedTargets_ = [];
-    container.savedScrollLeft_ = container.element_.scrollLeft;
-    container.savedScrollTop_ = container.element_.scrollTop;
-    var pos = goog.style.getPageOffset(container.element_);
-    var size = goog.style.getSize(container.element_);
-    container.box_ = new goog.math.Box(pos.y, pos.x + size.width,
-                                       pos.y + size.height, pos.x);
-
-  }
-
-  for (i = 0; target = this.targetList_[i]; i++) {
-    for (j = 0; container = this.scrollableContainers_[j]; j++) {
-      if (goog.dom.contains(container.element_, target.element_)) {
-        container.containedTargets_.push(target);
-        target.scrollableContainer_ = container;
-      }
-    }
   }
 };
 
@@ -692,6 +706,15 @@ goog.fx.AbstractDragDrop.prototype.disposeScrollableContainerListeners_ =
  */
 goog.fx.AbstractDragDrop.prototype.addScrollableContainer = function(element) {
   this.scrollableContainers_.push(new goog.fx.ScrollableContainer_(element));
+};
+
+
+/**
+ * Removes all scrollable containers.
+ */
+goog.fx.AbstractDragDrop.prototype.removeAllScrollableContainers = function() {
+  this.disposeScrollableContainerListeners_();
+  this.scrollableContainers_ = [];
 };
 
 
