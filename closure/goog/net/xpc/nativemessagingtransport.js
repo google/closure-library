@@ -277,4 +277,8 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
           goog.net.xpc.NativeMessagingTransport);
     }
   }
+  // Cleaning up this.send as it is an instance method, created in
+  // goog.net.xpc.NativeMessagingTransport.prototype.send and has a closure over
+  // this.channel_.peerWindowObject_.
+  delete this.send;
 };
