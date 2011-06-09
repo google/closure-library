@@ -111,7 +111,6 @@ goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_ =
     new RegExp('^%*' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
 
 
-
 /**
  * Regexp for unescaping service names.
  * @type {RegExp}
@@ -119,6 +118,7 @@ goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_ =
  */
 goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_UNESCAPE_RE_ =
     new RegExp('^%+' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
+
 
 /**
  * The transport.
@@ -339,8 +339,7 @@ goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
   if (opt_addCfgParam !== false) {
     peerUri.setParameterValue('xpc',
                               goog.json.serialize(
-                                  this.getPeerConfiguration())
-                              );
+                                  this.getPeerConfiguration()));
   }
 
   if (goog.userAgent.GECKO || goog.userAgent.WEBKIT) {
@@ -440,6 +439,7 @@ goog.net.xpc.CrossPageChannel.prototype.close = function() {
   this.state_ = goog.net.xpc.ChannelStates.CLOSED;
   this.transport_.dispose();
   this.transport_ = null;
+  this.connectCb_ = null;
   goog.net.xpc.logger.info('Channel "' + this.name + '" closed');
 };
 
