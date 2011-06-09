@@ -175,13 +175,19 @@ goog.ui.Checkbox.prototype.toggle = function() {
 goog.ui.Checkbox.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   if (this.isHandleMouseEvents()) {
+    var handler = this.getHandler();
     // Listen to the label, if it was set.
     if (this.label_) {
-      this.getHandler().listen(this.label_,
-          goog.events.EventType.CLICK, this.handleClickOrSpace_);
+      handler.listen(this.label_, goog.events.EventType.CLICK,
+          this.handleClickOrSpace_);
+      // Hovering over label activates checkbox hover state.
+      handler.listen(this.label_, goog.events.EventType.MOUSEOVER,
+          goog.partial(this.setState, goog.ui.Component.State.HOVER, true));
+      handler.listen(this.label_, goog.events.EventType.MOUSEOUT,
+          goog.partial(this.setState, goog.ui.Component.State.HOVER, false));
     }
     // Always listen to the checkbox element.
-    this.getHandler().listen(this.getElement(),
+    handler.listen(this.getElement(),
         goog.events.EventType.CLICK, this.handleClickOrSpace_);
   }
 };

@@ -157,6 +157,13 @@ See the COPYING file for details.
       goog.testing.events.fireClickSequence(checkbox.getElement());
       assertFalse('checkbox toggled if it is clicked', checkbox.getChecked());
 
+      goog.testing.events.fireMouseOverEvent(label);
+      assertContains('goog-checkbox-hover',
+          goog.dom.classes.get(checkbox.getElement()));
+      goog.testing.events.fireMouseOutEvent(checkbox.getElement());
+      assertNotContains('goog-checkbox-hover',
+          goog.dom.classes.get(checkbox.getElement()));
+
       checkbox.setLabel(null);
       goog.testing.events.fireClickSequence(label);
       assertFalse('label element deactivated', checkbox.getChecked());
