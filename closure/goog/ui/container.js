@@ -103,7 +103,7 @@ goog.ui.Container.Orientation = {
 
 
 /**
- * Allows an alternative element to be set to recieve key events, otherwise
+ * Allows an alternative element to be set to receive key events, otherwise
  * defers to the renderer's element choice.
  * @type {Element|undefined}
  * @private
@@ -455,6 +455,7 @@ goog.ui.Container.prototype.disposeInternal = function() {
     this.keyHandler_ = null;
   }
 
+  this.keyEventTarget_ = null;
   this.childElementIdMap_ = null;
   this.openItem_ = null;
   this.renderer_ = null;
