@@ -298,7 +298,7 @@ goog.vec.Mat4.setDiagonal = function(mat, vec) {
  *
  * @param {goog.vec.Mat4.Mat4Like} mat The matrix containing the values.
  * @param {goog.vec.Vec4.Vec4Like} vec The vector to receive the values.
- * @param {number} opt_diagonal Which diagonal to get. A value of 0 selects the
+ * @param {number=} opt_diagonal Which diagonal to get. A value of 0 selects the
  *     main diagonal, a positive number selects a super diagonal and a negative
  *     number selects a sub diagonal.
  */
