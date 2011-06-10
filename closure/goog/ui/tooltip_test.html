@@ -16,6 +16,7 @@ See the COPYING file for details.
     goog.require('goog.events.Event');
     goog.require('goog.events.EventHandler');
     goog.require('goog.events.EventType');
+    goog.require('goog.positioning.AbsolutePosition');
     goog.require('goog.style');
     goog.require('goog.ui.Tooltip');
     goog.require('goog.testing.MockClock');
@@ -30,6 +31,22 @@ See the COPYING file for details.
           src="blank_test_helper.html">
   </iframe>
   <script>
+    /**
+     * A subclass of Tooltip that overrides {@code getPositioningStrategy}
+     * for testing purposes.
+     */
+    function TestTooltip(el, text, dom) {
+      goog.ui.Tooltip.call(this, el, text, dom);
+    };
+    goog.inherits(TestTooltip, goog.ui.Tooltip);
+
+
+    /** {@inheritDoc} */
+    TestTooltip.prototype.getPositioningStrategy = function() {
+      return new goog.positioning.AbsolutePosition(13, 17);
+    };
+
+
     var tt, clock, handler, eventQueue, dom;
 
     // Allow positions to be off by one in gecko as it reports scrolling
@@ -345,6 +362,17 @@ See the COPYING file for details.
       tooltip.dispose();
       dom.getDocument().body.style.paddingTop = '';
       scrollEl.scrollTop = 0;
+    }
+
+    function testPositionOverride() {
+      var anchor = dom.getElement('hovertarget');
+      var tooltip = new TestTooltip(anchor, 'foo', dom);
+
+      tooltip.showForElement(anchor);
+
+      assertEquals('Tooltip should be at absolute position', '(13, 17)',
+          goog.style.getPageOffset(tooltip.getElement()).toString());
+      tooltip.dispose();
     }
   </script>
 </body>
