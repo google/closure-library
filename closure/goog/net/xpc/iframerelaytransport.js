@@ -379,9 +379,7 @@ goog.net.xpc.IframeRelayTransport.iframeLoadHandler_ = function() {
 };
 
 
-/**
- * Disposes of the transport.
- */
+/** @inheritDoc */
 goog.net.xpc.IframeRelayTransport.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   if (goog.userAgent.WEBKIT) {

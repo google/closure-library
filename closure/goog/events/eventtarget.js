@@ -188,6 +188,7 @@ goog.events.EventTarget.prototype.dispatchEvent = function(e) {
  *   // Dispose logic for MyClass
  * };
  * </pre>
+ * @override
  * @protected
  */
 goog.events.EventTarget.prototype.disposeInternal = function() {

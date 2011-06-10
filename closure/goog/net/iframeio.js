@@ -608,10 +608,7 @@ goog.net.IframeIo.prototype.abort = function(opt_failureCode) {
 };
 
 
-/**
- * Disposes of the IframeIo object, nullifies all handlers and removes any DOM
- * nodes.
- */
+/** @inheritDoc */
 goog.net.IframeIo.prototype.disposeInternal = function() {
   this.logger_.fine('Disposing iframeIo instance');
 

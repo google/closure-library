@@ -191,6 +191,8 @@ goog.structs.SimplePool.prototype.disposeObject = function(obj) {
 
 /**
  * Disposes of the pool and all objects currently held in the pool.
+ * @override
+ * @protected
  */
 goog.structs.SimplePool.prototype.disposeInternal = function() {
   goog.structs.SimplePool.superClass_.disposeInternal.call(this);

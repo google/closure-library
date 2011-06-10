@@ -790,6 +790,7 @@ goog.ui.Component.prototype.exitDocument = function() {
  * the component's children, if any. Removes the component's DOM from the
  * document unless it was decorated.
  * @override
+ * @protected
  */
 goog.ui.Component.prototype.disposeInternal = function() {
   goog.ui.Component.superClass_.disposeInternal.call(this);

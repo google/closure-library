@@ -490,7 +490,7 @@ function testDisposeInternalDoesNotAbortXhrRequestObjectWhenActiveIsFalse() {
 
   goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
     this.active_ = false;
-    this.disposeInternal();
+    this.dispose();
   }, false, x);
 
   x.send('url');

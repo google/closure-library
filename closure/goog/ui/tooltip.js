@@ -864,9 +864,7 @@ goog.ui.Tooltip.prototype.clearHideTimer = function() {
 };
 
 
-/**
- * Destroys widget and removes all event listeners.
- */
+/** @inheritDoc */
 goog.ui.Tooltip.prototype.disposeInternal = function() {
   this.setVisible(false);
   this.clearShowTimer();

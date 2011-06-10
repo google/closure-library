@@ -239,9 +239,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.send =
 };
 
 
-/**
- * Disposes of the transport.
- */
+/** @inheritDoc */
 goog.net.xpc.FrameElementMethodTransport.prototype.disposeInternal =
     function() {
   goog.net.xpc.FrameElementMethodTransport.superClass_.disposeInternal.call(

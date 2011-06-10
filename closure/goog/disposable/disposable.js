@@ -118,7 +118,7 @@ goog.Disposable.prototype.getDisposed = goog.Disposable.prototype.isDisposed;
  * Disposes of the object. If the object hasn't already been disposed of, calls
  * {@link #disposeInternal}. Classes that extend {@code goog.Disposable} should
  * override {@link #disposeInternal} in order to delete references to COM
- * objects, DOM nodes, and other disposable objects.
+ * objects, DOM nodes, and other disposable objects. Reentrant.
  *
  * @return {void} Nothing.
  */
@@ -158,17 +158,21 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
 /**
  * Deletes or nulls out any references to COM objects, DOM nodes, or other
  * disposable objects. Classes that extend {@code goog.Disposable} should
- * override this method.  For example:
+ * override this method.
+ * Not reentrant. To avoid calling it twice, it must only be called from the
+ * subclass' {@code disposeInternal} method. Everywhere else the public
+ * {@code dispose} method must be used.
+ * For example:
  * <pre>
  *   mypackage.MyClass = function() {
- *     goog.Disposable.call(this);
+ *     goog.base(this);
  *     // Constructor logic specific to MyClass.
  *     ...
  *   };
  *   goog.inherits(mypackage.MyClass, goog.Disposable);
  *
  *   mypackage.MyClass.prototype.disposeInternal = function() {
- *     mypackage.MyClass.superClass_.disposeInternal.call(this);
+ *     goog.base(this, 'disposeInternal');
  *     // Dispose logic specific to MyClass.
  *     ...
  *   };

@@ -222,9 +222,7 @@ goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
 };
 
 
-/**
- * Disposes of the image loader.
- */
+/** @inheritDoc */
 goog.net.ImageLoader.prototype.disposeInternal = function() {
   if (this.images_) {
     delete this.images_;

@@ -186,10 +186,7 @@ goog.ui.HsvaPalette.prototype.createDom = function() {
 };
 
 
-/**
- * Destroys this widget and removes all event listeners.
- * @override
- */
+/** @inheritDoc */
 goog.ui.HsvaPalette.prototype.disposeInternal = function() {
   goog.ui.HsvaPalette.superClass_.disposeInternal.call(this);
 

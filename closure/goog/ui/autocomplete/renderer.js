@@ -543,6 +543,8 @@ goog.ui.AutoComplete.Renderer.prototype.setAutoPosition = function(auto) {
 
 /**
  * Disposes of the renderer and its associated HTML.
+ * @override
+ * @protected
  */
 goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
   goog.ui.AutoComplete.Renderer.superClass_.disposeInternal.call(this);

@@ -104,9 +104,7 @@ goog.gears.WorkerChannel.prototype.send =
 };
 
 
-/**
- * @inheritDoc
- */
+/** @inheritDoc */
 goog.gears.WorkerChannel.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   this.worker_.dispose();

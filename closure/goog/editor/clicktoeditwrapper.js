@@ -135,9 +135,7 @@ goog.editor.ClickToEditWrapper.prototype.getOriginalDomHelper = function() {
 };
 
 
-/**
- * Destroy the wrapper.
- */
+/** @inheritDoc */
 goog.editor.ClickToEditWrapper.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   this.exitDocument();

@@ -875,10 +875,7 @@ goog.editor.Field.prototype.clearListeners_ = function() {
 };
 
 
-/**
- * Removes all listeners and destroys the eventhandler object.
- * @override
- */
+/** @inheritDoc */
 goog.editor.Field.prototype.disposeInternal = function() {
   if (this.isLoading() || this.isLoaded()) {
     this.logger.warning('Disposing a field that is in use.');

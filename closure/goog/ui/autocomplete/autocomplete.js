@@ -507,9 +507,7 @@ goog.ui.AutoComplete.prototype.cancelDelayedDismiss = function() {
 };
 
 
-/**
- * Cleans up the autocomplete object.
- */
+/** @inheritDoc */
 goog.ui.AutoComplete.prototype.disposeInternal = function() {
   goog.ui.AutoComplete.superClass_.disposeInternal.call(this);
   this.renderer_.dispose();

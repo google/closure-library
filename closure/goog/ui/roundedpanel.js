@@ -527,9 +527,7 @@ goog.ui.GraphicsRoundedPanel.prototype.decorateInternal =
 };
 
 
-/**
- * Disposes of resources used by the component.
- */
+/** @inheritDoc */
 goog.ui.GraphicsRoundedPanel.prototype.disposeInternal = function() {
   goog.ui.GraphicsRoundedPanel.superClass_.disposeInternal.call(this);
   this.graphics_.dispose();

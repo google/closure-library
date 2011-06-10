@@ -444,9 +444,7 @@ goog.fx.DragListGroup.prototype.init = function() {
 };
 
 
-/**
- * Disposes of the DragListGroup.
- */
+/** @inheritDoc */
 goog.fx.DragListGroup.prototype.disposeInternal = function() {
   this.eventHandler_.dispose();
 

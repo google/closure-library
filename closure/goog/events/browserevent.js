@@ -397,9 +397,7 @@ goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
 };
 
 
-/**
- * @inheritDoc
- */
+/** @inheritDoc */
 goog.events.BrowserEvent.prototype.disposeInternal = function() {
   goog.events.BrowserEvent.superClass_.disposeInternal.call(this);
   this.event_ = null;

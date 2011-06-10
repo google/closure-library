@@ -423,9 +423,7 @@ goog.History.HASH_ALWAYS_REQUIRED = goog.userAgent.IE;
 goog.History.prototype.lockedToken_ = null;
 
 
-/**
- * Disposes of the object.
- */
+/** @inheritDoc */
 goog.History.prototype.disposeInternal = function() {
   goog.History.superClass_.disposeInternal.call(this);
   this.eventHandler_.dispose();

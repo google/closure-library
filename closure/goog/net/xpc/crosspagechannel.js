@@ -607,9 +607,7 @@ goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable_ = function(
 };
 
 
-/**
- * Disposes of the channel.
- */
+/** @inheritDoc */
 goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
 

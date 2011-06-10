@@ -374,6 +374,8 @@ goog.fx.Animation.prototype.pause = function() {
 /**
  * Disposes of the animation.  Stops an animation, fires a 'destroy' event and
  * then removes all the event handlers to clean up memory.
+ * @override
+ * @protected
  */
 goog.fx.Animation.prototype.disposeInternal = function() {
   if (this.state_ != goog.fx.Animation.State.STOPPED) {

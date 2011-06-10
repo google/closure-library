@@ -1078,9 +1078,7 @@ goog.fx.AbstractDragDrop.prototype.getScrollPos = function() {
 };
 
 
-/**
- * Disposes of the drag and drop object.
- */
+/** @inheritDoc */
 goog.fx.AbstractDragDrop.prototype.disposeInternal = function() {
   goog.fx.AbstractDragDrop.superClass_.disposeInternal.call(this);
   this.removeItems();
@@ -1177,9 +1175,7 @@ goog.fx.DragDropEvent = function(type, source, sourceItem,
 goog.inherits(goog.fx.DragDropEvent, goog.events.Event);
 
 
-/**
- * Disposes of the event.
- */
+/** @inheritDoc */
 goog.fx.DragDropEvent.prototype.disposeInternal = function() {
   goog.fx.DragDropEvent.superClass_.disposeInternal.call(this);
 

@@ -113,13 +113,13 @@ See the COPYING file for details.
   }
 
   function tearDown() {
-    zippy.disposeInternal();
-    fakeZippy1.disposeInternal();
-    fakeZippy2.disposeInternal();
-    contentlessZippy.disposeInternal();
-    headerlessZippy.disposeInternal();
-    lazyZippy.disposeInternal();
-    dualHeaderZippy.disposeInternal();
+    zippy.dispose();
+    fakeZippy1.dispose();
+    fakeZippy2.dispose();
+    contentlessZippy.dispose();
+    headerlessZippy.dispose();
+    lazyZippy.dispose();
+    dualHeaderZippy.dispose();
   }
 
   function testExpandCollapse() {

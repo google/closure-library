@@ -589,9 +589,7 @@ goog.net.xpc.IframePollingTransport.prototype.send =
 };
 
 
-/**
- * Disposes of the transport.
- */
+/** @inheritDoc */
 goog.net.xpc.IframePollingTransport.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
 

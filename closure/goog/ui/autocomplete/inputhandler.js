@@ -555,9 +555,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setTokenText = function(tokenText,
 };
 
 
-/**
- * Disposes of the input handler.
- */
+/** @inheritDoc */
 goog.ui.AutoComplete.InputHandler.prototype.disposeInternal = function() {
   goog.ui.AutoComplete.InputHandler.superClass_.disposeInternal.call(this);
   this.eh_.dispose();

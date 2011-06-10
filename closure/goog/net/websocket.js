@@ -437,9 +437,7 @@ goog.net.WebSocket.prototype.clearReconnectTimer_ = function() {
 };
 
 
-/**
- * @inheritDoc
- */
+/** @inheritDoc */
 goog.net.WebSocket.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   this.close();

@@ -453,9 +453,7 @@ goog.net.XhrManager.prototype.addXhrListener_ = function(xhrIo,
 };
 
 
-/**
- * Disposes of the manager.
- */
+/** @inheritDoc */
 goog.net.XhrManager.prototype.disposeInternal = function() {
   goog.net.XhrManager.superClass_.disposeInternal.call(this);
 
@@ -511,9 +509,7 @@ goog.net.XhrManager.Event = function(type, target, id, xhrIo) {
 goog.inherits(goog.net.XhrManager.Event, goog.events.Event);
 
 
-/**
- * Disposes of the event.
- */
+/** @inheritDoc */
 goog.net.XhrManager.Event.prototype.disposeInternal = function() {
   goog.net.XhrManager.Event.superClass_.disposeInternal.call(this);
   delete this.id;
@@ -753,9 +749,7 @@ goog.net.XhrManager.Request.prototype.getCompleteCallback = function() {
 };
 
 
-/**
- * Disposes of the request.
- */
+/** @inheritDoc */
 goog.net.XhrManager.Request.prototype.disposeInternal = function() {
   goog.net.XhrManager.Request.superClass_.disposeInternal.call(this);
   delete this.xhrEventCallback_;

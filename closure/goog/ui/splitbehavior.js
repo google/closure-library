@@ -285,9 +285,7 @@ goog.ui.SplitBehavior.prototype.setActive = function(activate) {
 };
 
 
-/**
- * Disposes the behavior controls.
- */
+/** @inheritDoc */
 goog.ui.SplitBehavior.prototype.disposeInternal = function() {
   this.setActive(false);
   goog.dispose(this.eventHandler_);

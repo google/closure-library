@@ -170,9 +170,7 @@ goog.structs.PriorityPool.prototype.adjustForMinMax = function() {
 };
 
 
-/**
- * Disposes of the pool.
- */
+/** @inheritDoc */
 goog.structs.PriorityPool.prototype.disposeInternal = function() {
   goog.structs.PriorityPool.superClass_.disposeInternal.call(this);
   goog.global.clearTimeout(this.delayTimeout_);

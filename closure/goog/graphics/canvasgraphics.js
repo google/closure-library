@@ -589,6 +589,8 @@ goog.graphics.CanvasGraphics.prototype.getTextWidth = goog.abstractMethod;
 /**
  * Disposes of the component by removing event handlers, detacing DOM nodes from
  * the document body, and removing references to them.
+ * @override
+ * @protected
  */
 goog.graphics.CanvasGraphics.prototype.disposeInternal = function() {
   this.context_ = null;

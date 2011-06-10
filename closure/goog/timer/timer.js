@@ -223,9 +223,7 @@ goog.Timer.prototype.stop = function() {
 };
 
 
-/**
- * Disposes of the timer.
- */
+/** @inheritDoc */
 goog.Timer.prototype.disposeInternal = function() {
   goog.Timer.superClass_.disposeInternal.call(this);
   this.stop();

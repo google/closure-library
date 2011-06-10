@@ -131,9 +131,7 @@ goog.testing.PseudoRandom.prototype.install = function() {
 };
 
 
-/**
- * Disposes of the MockRandom.
- */
+/** @inheritDoc */
 goog.testing.PseudoRandom.prototype.disposeInternal = function() {
   goog.testing.PseudoRandom.superClass_.disposeInternal.call(this);
   this.uninstall();

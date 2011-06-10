@@ -147,9 +147,7 @@ goog.messaging.MultiChannel.prototype.handleDefault_ = function(
 };
 
 
-/**
- * @inheritDoc
- */
+/** @inheritDoc */
 goog.messaging.MultiChannel.prototype.disposeInternal = function() {
   goog.object.forEach(this.virtualChannels_, function(channel) {
     goog.dispose(channel);
@@ -293,9 +291,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.doCallback_ =
 };
 
 
-/**
- * @inheritDoc
- */
+/** @inheritDoc */
 goog.messaging.MultiChannel.VirtualChannel.prototype.disposeInternal =
     function() {
   this.parent_.virtualChannels_[this.name_] = null;

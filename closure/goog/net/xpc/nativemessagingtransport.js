@@ -258,9 +258,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
 };
 
 
-/**
- * Disposes of the transport.
- */
+/** @inheritDoc */
 goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   if (this.initialized_) {

@@ -214,9 +214,7 @@ Driver = function() {
 goog.inherits(Driver, goog.Disposable);
 
 
-/**
- * Disposes of the channel.
- */
+/** @inheritDoc */
 Driver.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
 

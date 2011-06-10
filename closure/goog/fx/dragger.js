@@ -329,9 +329,7 @@ goog.fx.Dragger.prototype.setEnabled = function(enabled) {
 };
 
 
-/**
- * Tears down the drag object, removes listeners, and nullifies references.
- */
+/** @inheritDoc */
 goog.fx.Dragger.prototype.disposeInternal = function() {
   goog.fx.Dragger.superClass_.disposeInternal.call(this);
 

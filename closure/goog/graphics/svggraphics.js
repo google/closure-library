@@ -783,6 +783,8 @@ goog.graphics.SvgGraphics.prototype.exitDocument = function() {
 /**
  * Disposes of the component by removing event handlers, detacing DOM nodes from
  * the document body, and removing references to them.
+ * @override
+ * @protected
  */
 goog.graphics.SvgGraphics.prototype.disposeInternal = function() {
   delete this.defs_;

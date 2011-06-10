@@ -130,9 +130,7 @@ goog.ui.Zippy.Events = {
 };
 
 
-/**
- * Destroys widget and removes all event listeners.
- */
+/** @inheritDoc */
 goog.ui.Zippy.prototype.disposeInternal = function() {
   if (this.elHeader_) {
     goog.events.removeAll(this.elHeader_);

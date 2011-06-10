@@ -288,6 +288,8 @@ goog.events.EventHandler.prototype.removeAll = function() {
 
 /**
  * Disposes of this EventHandler and remove all listeners that it registered.
+ * @override
+ * @protected
  */
 goog.events.EventHandler.prototype.disposeInternal = function() {
   goog.events.EventHandler.superClass_.disposeInternal.call(this);

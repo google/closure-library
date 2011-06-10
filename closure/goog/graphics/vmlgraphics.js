@@ -863,6 +863,8 @@ goog.graphics.VmlGraphics.prototype.enterDocument = function() {
 /**
  * Disposes of the component by removing event handlers, detacing DOM nodes from
  * the document body, and removing references to them.
+ * @override
+ * @protected
  */
 goog.graphics.VmlGraphics.prototype.disposeInternal = function() {
   this.canvasElement = null;

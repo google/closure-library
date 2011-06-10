@@ -411,9 +411,7 @@ goog.gears.LogStore.prototype.select = function(query) {
 };
 
 
-/**
- * Clean up.
- */
+/** @inheritDoc */
 goog.gears.LogStore.prototype.disposeInternal = function() {
   this.flush();
 

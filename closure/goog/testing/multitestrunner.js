@@ -764,7 +764,7 @@ goog.testing.MultiTestRunner.prototype.finish_ = function() {
 
   // Remove all the test frames
   while (this.getChildCount() > 0) {
-    this.removeChildAt(0, true).disposeInternal();
+    this.removeChildAt(0, true).dispose();
   }
 
   // Compute tests that did not finish before the stop button was hit.
@@ -1280,9 +1280,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.lastStateTime_ = 0;
 goog.testing.MultiTestRunner.TestFrame.prototype.currentState_ = 0;
 
 
-/**
- * Disposes the test frame.
- */
+/** @inheritDoc */
 goog.testing.MultiTestRunner.TestFrame.prototype.disposeInternal = function() {
   goog.testing.MultiTestRunner.TestFrame.superClass_.disposeInternal.call(this);
   this.dom_.removeNode(this.iframeEl_);
