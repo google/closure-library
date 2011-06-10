@@ -31,9 +31,6 @@ See the COPYING file for details.
   var c = document.getElementById('c');
   var d = document.getElementById('d');
 
-  function tearDown() {
-    goog.events.removeAll();
-  }
 
   function testEventHandlerClearsListeners() {
     assertEquals('No event listeners should be registered at the start', 0,
@@ -227,18 +224,6 @@ See the COPYING file for details.
     assertEquals('No event should have been dispatched', 1, events.length);
   }
 
-  function testGetListenerCount() {
-    var eh = new goog.events.EventHandler();
-    assertEquals('0 listeners registered initially', 0, eh.getListenerCount());
-    var target = new goog.events.EventTarget();
-    eh.listen(target, 'click', goog.nullFunction, false);
-    eh.listen(target, 'click', goog.nullFunction, true);
-    assertEquals('2 listeners registered', 2, eh.getListenerCount());
-    eh.unlisten(target, 'click', goog.nullFunction, true);
-    assertEquals('1 listener removed, 1 left', 1, eh.getListenerCount());
-    eh.removeAll();
-    assertEquals('all listeners removed', 0, eh.getListenerCount());
-  }
 
 </script>
 </body>
