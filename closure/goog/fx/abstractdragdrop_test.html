@@ -412,6 +412,7 @@ function testIsInside() {
   add.dispose();
 }
 
+
 function testAddingRemovingScrollableContainers() {
   var group = new goog.fx.AbstractDragDrop();
   var el1 = document.createElement('div');
@@ -457,6 +458,7 @@ function testScrollableContainersCalculation() {
   assertEquals(2, container.containedTargets_.length);
   assertEquals(container, group.targetList_[1].scrollableContainer_);
 }
+
 
 function testMouseMove_mouseOutBeforeThreshold() {
   // Setup dragdrop and item
@@ -504,4 +506,3 @@ function drawTargets(targets, multiplier) {
 </script>
 </body>
 </html>
-
