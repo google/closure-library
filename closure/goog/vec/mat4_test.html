@@ -67,6 +67,48 @@ See the COPYING file for details.
         [4, 0, 0, 0, 0, 5, 0, 0, 0, 0, 6, 0, 0, 0, 0, 7], m0);
   }
 
+  function testGetDiagonal() {
+    var v0 = goog.vec.Vec4.create();
+    var m0 = goog.vec.Mat4.create();
+    goog.vec.Mat4.setFromArray(
+        m0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+
+    goog.vec.Mat4.getDiagonal(m0, v0);
+    assertElementsEquals([0, 5, 10, 15], v0);
+
+    goog.vec.Vec4.setFromArray(v0, [0, 0, 0, 0]);
+    goog.vec.Mat4.getDiagonal(m0, v0, 1);
+    assertElementsEquals([4, 9, 14, 0], v0);
+
+    goog.vec.Vec4.setFromArray(v0, [0, 0, 0, 0]);
+    goog.vec.Mat4.getDiagonal(m0, v0, 2);
+    assertElementsEquals([8, 13, 0, 0], v0);
+
+    goog.vec.Vec4.setFromArray(v0, [0, 0, 0, 0]);
+    goog.vec.Mat4.getDiagonal(m0, v0, 3);
+    assertElementsEquals([12, 0, 0, 0], v0);
+
+    goog.vec.Vec4.setFromArray(v0, [0, 0, 0, 0]);
+    goog.vec.Mat4.getDiagonal(m0, v0, 4);
+    assertElementsEquals([0, 0, 0, 0], v0);
+
+    goog.vec.Vec4.setFromArray(v0, [0, 0, 0, 0]);
+    goog.vec.Mat4.getDiagonal(m0, v0, -1);
+    assertElementsEquals([1, 6, 11, 0], v0);
+
+    goog.vec.Vec4.setFromArray(v0, [0, 0, 0, 0]);
+    goog.vec.Mat4.getDiagonal(m0, v0, -2);
+    assertElementsEquals([2, 7, 0, 0], v0);
+
+    goog.vec.Vec4.setFromArray(v0, [0, 0, 0, 0]);
+    goog.vec.Mat4.getDiagonal(m0, v0, -3);
+    assertElementsEquals([3, 0, 0, 0], v0);
+
+    goog.vec.Vec4.setFromArray(v0, [0, 0, 0, 0]);
+    goog.vec.Mat4.getDiagonal(m0, v0, -4);
+    assertElementsEquals([0, 0, 0, 0], v0);
+  }
+
   function testSetGetColumn() {
     var m0 = goog.vec.Mat4.create();
     goog.vec.Mat4.setColumn(m0, 0, [1, 2, 3, 4]);

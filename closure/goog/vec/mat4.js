@@ -265,8 +265,7 @@ goog.vec.Mat4.setFromRowMajorArray = function(mat, values) {
 /**
  * Sets the diagonal values of the matrix from the given values.
  *
- * @param {goog.vec.Mat4.Mat4Like} mat The matrix to receive the
- *     values.
+ * @param {goog.vec.Mat4.Mat4Like} mat The matrix to receive the values.
  * @param {number} v00 The values for (0, 0).
  * @param {number} v11 The values for (1, 1).
  * @param {number} v22 The values for (2, 2).
@@ -283,10 +282,8 @@ goog.vec.Mat4.setDiagonalValues = function(mat, v00, v11, v22, v33) {
 /**
  * Sets the diagonal values of the matrix from the given vector.
  *
- * @param {goog.vec.Mat4.Mat4Like} mat The matrix to receive the
- *     values.
- * @param {goog.vec.Vec4.Vec4Like} vec The vector containing the
- *     values.
+ * @param {goog.vec.Mat4.Mat4Like} mat The matrix to receive the values.
+ * @param {goog.vec.Vec4.Vec4Like} vec The vector containing the values.
  */
 goog.vec.Mat4.setDiagonal = function(mat, vec) {
   mat[0] = vec[0];
@@ -297,10 +294,34 @@ goog.vec.Mat4.setDiagonal = function(mat, vec) {
 
 
 /**
+ * Gets the diagonal values of the matrix into the given vector.
+ *
+ * @param {goog.vec.Mat4.Mat4Like} mat The matrix containing the values.
+ * @param {goog.vec.Vec4.Vec4Like} vec The vector to receive the values.
+ * @param {number} opt_diagonal Which diagonal to get. A value of 0 selects the
+ *     main diagonal, a positive number selects a super diagonal and a negative
+ *     number selects a sub diagonal.
+ */
+goog.vec.Mat4.getDiagonal = function(mat, vec, opt_diagonal) {
+  if (!opt_diagonal) {
+    // This is the most common case, so we avoid the for loop.
+    vec[0] = mat[0];
+    vec[1] = mat[5];
+    vec[2] = mat[10];
+    vec[3] = mat[15];
+  } else {
+    var offset = opt_diagonal > 0 ? 4 * opt_diagonal : -opt_diagonal;
+    for (var i = 0; i < 4 - Math.abs(opt_diagonal); i++) {
+      vec[i] = mat[offset + 5 * i];
+    }
+  }
+};
+
+
+/**
  * Sets the specified column with the supplied values.
  *
- * @param {goog.vec.Mat4.Mat4Like} mat The matrix to recieve the
- *     values.
+ * @param {goog.vec.Mat4.Mat4Like} mat The matrix to recieve the values.
  * @param {number} column The column index to set the values on.
  * @param {number} v0 The value for row 0.
  * @param {number} v1 The value for row 1.
@@ -319,11 +340,9 @@ goog.vec.Mat4.setColumnValues = function(mat, column, v0, v1, v2, v3) {
 /**
  * Sets the specified column with the value from the supplied vector.
  *
- * @param {goog.vec.Mat4.Mat4Like} mat The matrix to receive the
- *     values.
+ * @param {goog.vec.Mat4.Mat4Like} mat The matrix to receive the values.
  * @param {number} column The column index to set the values on.
- * @param {goog.vec.Vec4.Vec4Like} vec The vector of elements for the
- *     column.
+ * @param {goog.vec.Vec4.Vec4Like} vec The vector of elements for the column.
  */
 goog.vec.Mat4.setColumn = function(mat, column, vec) {
   var i = column * 4;
@@ -622,8 +641,7 @@ goog.vec.Mat4.multScalar = function(mat, scalar, resultMat) {
  * storing the result into resultMat.
  *
  * @param {goog.vec.Mat4.Mat4Like} mat0 The first (left hand) matrix.
- * @param {goog.vec.Mat4.Mat4Like} mat1 The second (right hand)
- *     matrix.
+ * @param {goog.vec.Mat4.Mat4Like} mat1 The second (right hand) matrix.
  * @param {goog.vec.Mat4.Mat4Like} resultMat The matrix to receive
  *     the results (may be either mat0 or mat1).
  * @return {goog.vec.Mat4.Mat4Like} return resultMat so that operations can be
@@ -717,8 +735,7 @@ goog.vec.Mat4.transpose = function(mat, resultMat) {
 /**
  * Computes the determinant of the matrix.
  *
- * @param {goog.vec.Mat4.Mat4Like} mat The matrix to compute the
- *     matrix for.
+ * @param {goog.vec.Mat4.Mat4Like} mat The matrix to compute the matrix for.
  * @return {number} The determinant of the matrix.
  */
 goog.vec.Mat4.determinant = function(mat) {
@@ -877,8 +894,7 @@ goog.vec.Mat4.multVec3NoTranslate = function(mat, vec, resultVec) {
  * vector to a 3 element vector.
  *
  * @param {goog.vec.Mat4.Mat4Like} mat The matrix supplying the transformation.
- * @param {goog.vec.Vec3.Vec3Like} vec The 3 element vector to
- *     transform.
+ * @param {goog.vec.Vec3.Vec3Like} vec The 3 element vector to transform.
  * @param {goog.vec.Vec3.Vec3Like} resultVec The 3 element vector
  *     to receive the results (may be vec).
  * @return {goog.vec.Vec3.Vec3Like} return resultVec so that operations can be
