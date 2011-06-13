@@ -25,10 +25,10 @@ See the COPYING file for details.
   <div id="cetest" contentEditable="true"><div>abc<br id="br2"/></div></div>
   <div id="empty"></div>
   <div id="removeTest"><div>Text that<br>will be deleted</div></div>
+  <div id="removeTestEmptyNode"></div>
   <div id="outer">outer<div id="inner">inner</div>outer2</div>
   <div id="dynamic"></div>
   <div id="onlybr"><br/></div>
-
 
 <script>
   var test1 = goog.dom.getElement('test1');
@@ -240,6 +240,19 @@ See the COPYING file for details.
     assertEquals('Inner div is empty', 0, outer.firstChild.childNodes.length);
   }
 
+
+  function testRemoveContentsEmptyNode() {
+    var outer = goog.dom.getElement('removeTestEmptyNode');
+    var range = goog.dom.browserrange.createRangeFromNodeContents(
+        outer);
+
+    range.removeContents();
+
+    assertEquals('Removed range content should be ""', '', range.getText());
+    assertTrue('Removed range is now collapsed', range.isCollapsed());
+    assertEquals('Outer div should have 0 children now',
+        0, outer.childNodes.length);
+  }
 
   function testCollapse() {
     var range = goog.dom.browserrange.createRangeFromNodeContents(test2);

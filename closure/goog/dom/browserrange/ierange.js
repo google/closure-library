@@ -748,6 +748,8 @@ goog.dom.browserrange.IeRange.prototype.select = function(opt_reverse) {
 
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.removeContents = function() {
+  // NOTE: pasteHTML('') was considered, but it disposes any nodes here so that
+  // any pre-existing references to them may lead to memory corruption.
   if (this.range_.htmlText) {
     // Store some before-removal state.
     var startNode = this.getStartNode();
@@ -780,7 +782,8 @@ goog.dom.browserrange.IeRange.prototype.removeContents = function() {
         if (node == endNode) {
           throw goog.iter.StopIteration;
         }
-      });
+      }, this);
+
       this.collapse(true);
       goog.array.forEach(toDelete, goog.dom.removeNode);
 
