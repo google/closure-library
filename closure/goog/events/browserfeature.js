@@ -29,10 +29,10 @@ goog.require('goog.userAgent');
  */
 goog.events.BrowserFeature = {
   /**
-   * Whether the button attribute of the event is W3C compliant.
-   * False in Internet Explorer prior to version 9.
+   * Whether the button attribute of the event is W3C compliant.  False in
+   * Internet Explorer prior to version 9; document-version dependent.
    */
-  HAS_W3C_BUTTON: !goog.userAgent.IE || goog.userAgent.isVersion('9'),
+  HAS_W3C_BUTTON: !goog.userAgent.IE || goog.userAgent.isDocumentMode(9),
 
   /**
    * To prevent default in IE7 for certain keydown events we need set the

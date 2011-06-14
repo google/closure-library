@@ -22,6 +22,13 @@ See the COPYING file for details.
 <body>
 <script>
 
+  function setUp() {
+    // Have this based on a fictitious DOCUMENT_MODE constant.
+    goog.userAgent.isDocumentMode = function(mode) {
+      return mode <= goog.userAgent.DOCUMENT_MODE;
+    };
+  }
+
   /**
    * Tests the key handler for the IE 8 and lower behavior.
    */
@@ -35,8 +42,32 @@ See the COPYING file for details.
     goog.userAgent.WINDOWS = true;
     goog.userAgent.LINUX = false;
     goog.userAgent.VERSION = 8;
+    goog.userAgent.DOCUMENT_MODE = 8;
     goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
+    assertIe8StyleKeyHandling();
+  }
+
+  /**
+   * Tests the key handler for the IE 8 and lower behavior.
+   */
+  function testIe8StyleKeyHandlingInIe9DocumentMode() {
+    goog.userAgent.OPERA = false;
+    goog.userAgent.IE = true;
+    goog.userAgent.GECKO = false;
+    goog.userAgent.CAMINO = false;
+    goog.userAgent.WEBKIT = false;
+    goog.userAgent.MAC = false;
+    goog.userAgent.WINDOWS = true;
+    goog.userAgent.LINUX = false;
+    goog.userAgent.VERSION = 9; // Try IE9 in IE8 document mode.
+    goog.userAgent.DOCUMENT_MODE = 8;
+    goog.events.KeyHandler.USES_KEYDOWN_ = true;
+
+    assertIe8StyleKeyHandling();
+  }
+
+  function assertIe8StyleKeyHandling() {
     var keyEvent, keyHandler = new goog.events.KeyHandler();
     goog.events.listen(keyHandler, goog.events.KeyHandler.EventType.KEY,
         function(e) { keyEvent = e; });
@@ -154,6 +185,7 @@ See the COPYING file for details.
     goog.userAgent.WINDOWS = true;
     goog.userAgent.LINUX = false;
     goog.userAgent.VERSION = 9;
+    goog.userAgent.DOCUMENT_MODE = 9;
     goog.events.KeyHandler.USES_KEYDOWN_ = true;
 
     var keyEvent, keyHandler = new goog.events.KeyHandler();

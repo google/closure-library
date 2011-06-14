@@ -195,9 +195,9 @@ function testGetDocumentHeightInIframe() {
   var doc = goog.dom.getDomHelper(myIframeDoc).getDocument();
   var height = goog.dom.getDomHelper(myIframeDoc).getDocumentHeight();
 
-  // Broken in webkit quirks mode and in IE8
+  // Broken in webkit quirks mode and in IE8+
   if ((goog.dom.isCss1CompatMode_(doc) || !goog.userAgent.WEBKIT) &&
-      !isIE8()) {
+      !isIE8OrHigher()) {
     assertEquals('height should be 65', 42 + 23, height);
   }
 }
@@ -925,7 +925,8 @@ function testGetTextContent() {
   t(' \n&shy;\n\n&shy;\na   ', 'a ');
   t(' \n<wbr></wbr><b>abcde <wbr></wbr> </b>   \n\n\n<wbr></wbr>', 'abcde ');
   t('a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b',
-      goog.userAgent.IE ? 'a     b' : 'a\xA0\xA0\xA0\xA0\xA0b');
+      goog.dom.BrowserFeature.CAN_USE_INNER_TEXT ?
+      'a     b' : 'a\xA0\xA0\xA0\xA0\xA0b');
 }
 
 function testGetNodeTextLength() {
@@ -1204,7 +1205,7 @@ function testHtmlToDocumentFragment() {
   var script = goog.dom.htmlToDocumentFragment('<script></script>');
   assertEquals('SCRIPT', script.tagName);
 
-  if (goog.userAgent.IE && !goog.userAgent.isVersion('9')) {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) {
     // Removing an Element from a DOM tree in IE sets its parentNode to a new
     // DocumentFragment. Bizarre!
     assertEquals(goog.dom.NodeType.DOCUMENT_FRAGMENT,
@@ -1274,9 +1275,8 @@ function testGetDocumentScrollOfFixedViewport() {
 
 
 /**
- * @return {boolean} Returns true if the userAgent is IE8.
+ * @return {boolean} Returns true if the userAgent is IE8 or higher.
  */
-function isIE8() {
-  return goog.userAgent.IE && goog.userAgent.product.isVersion('8') &&
-      !goog.userAgent.product.isVersion('9');
+function isIE8OrHigher() {
+  return goog.userAgent.IE && goog.userAgent.product.isVersion('8');
 }
