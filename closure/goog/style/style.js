@@ -290,7 +290,7 @@ goog.style.getClientViewportElement = function(opt_node) {
   }
 
   // In old IE versions the document.body represented the viewport
-  if (goog.userAgent.IE && !goog.userAgent.isVersion(9) &&
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9) &&
       !goog.dom.getDomHelper(doc).isCss1CompatMode()) {
     return doc.body;
   }
