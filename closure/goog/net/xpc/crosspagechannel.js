@@ -175,10 +175,13 @@ goog.net.xpc.CrossPageChannel.prototype.setPeerWindowObject =
 
 /**
  * Determine which transport type to use for this channel / useragent.
+ * @param {boolean} opt_enableLegacy Whether to enable legacy transports for
+ *     backwards compatibility.
  * @return {goog.net.xpc.TransportTypes|undefined} The best transport type.
  * @private
  */
-goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
+goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function(
+    opt_enableLegacy) {
   var transportType;
   if (goog.isFunction(document.postMessage) ||
       goog.isFunction(window.postMessage) ||
@@ -186,12 +189,13 @@ goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
       // typeof window.postMessage returns "object"
       (goog.userAgent.IE && window.postMessage)) {
     transportType = goog.net.xpc.TransportTypes.NATIVE_MESSAGING;
-  } else if (goog.userAgent.GECKO) {
+  } else if (goog.userAgent.GECKO && opt_enableLegacy) {
     transportType = goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD;
   } else if (goog.userAgent.IE &&
              this.cfg_[goog.net.xpc.CfgFields.PEER_RELAY_URI]) {
     transportType = goog.net.xpc.TransportTypes.IFRAME_RELAY;
-  } else if (goog.userAgent.IE && goog.net.xpc.NixTransport.isNixSupported()) {
+  } else if (goog.userAgent.IE && opt_enableLegacy &&
+             goog.net.xpc.NixTransport.isNixSupported()) {
     transportType = goog.net.xpc.TransportTypes.NIX;
   } else {
     transportType = goog.net.xpc.TransportTypes.IFRAME_POLLING;
@@ -213,7 +217,7 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
 
   if (!this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
     this.cfg_[goog.net.xpc.CfgFields.TRANSPORT] =
-        this.determineTransportType_();
+        this.determineTransportType_(true);
   }
 
   switch (this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
@@ -271,6 +275,11 @@ goog.net.xpc.CrossPageChannel.prototype.getTransportName = function() {
  *     initialize the channel.
  */
 goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
+  if (!this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
+    this.cfg_[goog.net.xpc.CfgFields.TRANSPORT] =
+        this.determineTransportType_();
+  }
+
   var peerCfg = {};
   peerCfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = this.name;
   peerCfg[goog.net.xpc.CfgFields.TRANSPORT] =
