@@ -101,6 +101,8 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.string');
 goog.require('goog.ui.AutoComplete');
+goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 
 
@@ -192,6 +194,20 @@ goog.ui.AutoComplete.InputHandler = function(opt_separators, opt_literals,
   this.lastKeyCode_ = -1;  // Initialize to a non-existent value.
 };
 goog.inherits(goog.ui.AutoComplete.InputHandler, goog.Disposable);
+
+
+/**
+ * Whether or not we need to pause the execution of the blur handler in order
+ * to allow the execution of the selection handler to run first. This is
+ * currently true when running on IOS version prior to 4.2, since we need
+ * some special logic for these devices to handle bug 4484488.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.AutoComplete.InputHandler.REQUIRES_ASYNC_BLUR_ =
+    (goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
+        // Check the webkit version against the version for iOS 4.2.1.
+        !goog.userAgent.isVersion('533.17.9');
 
 
 /**
@@ -295,6 +311,14 @@ goog.ui.AutoComplete.InputHandler.prototype.separatorUpdates_ = true;
  * @private
  */
 goog.ui.AutoComplete.InputHandler.prototype.separatorSelects_ = true;
+
+
+/**
+ * The id of the currently active timeout, so it can be cleared if required.
+ * @type {?number}
+ * @private
+ */
+goog.ui.AutoComplete.InputHandler.prototype.activeTimeoutId_ = null;
 
 
 /**
@@ -558,6 +582,10 @@ goog.ui.AutoComplete.InputHandler.prototype.setTokenText = function(tokenText,
 /** @inheritDoc */
 goog.ui.AutoComplete.InputHandler.prototype.disposeInternal = function() {
   goog.ui.AutoComplete.InputHandler.superClass_.disposeInternal.call(this);
+  if (this.activeTimeoutId_ != null) {
+    // Need to check against null explicitly because 0 is a valid value.
+    window.clearTimeout(this.activeTimeoutId_);
+  }
   this.eh_.dispose();
   delete this.eh_;
   this.activateHandler_.dispose();
@@ -932,6 +960,27 @@ goog.ui.AutoComplete.InputHandler.prototype.handleFocus = function(e) {
  * @protected
  */
 goog.ui.AutoComplete.InputHandler.prototype.handleBlur = function(opt_e) {
+  // Phones running iOS prior to version 4.2.
+  if (goog.ui.AutoComplete.InputHandler.REQUIRES_ASYNC_BLUR_) {
+    // @bug 4484488 This is required so that the menu works correctly on
+    // iOS prior to version 4.2. Otherwise, the blur action closes the menu
+    // before the menu button click can be processed.
+    // In order to fix the bug, we set a timeout to process the blur event, so
+    // that any pending selection event can be processed first.
+    this.activeTimeoutId_ =
+        window.setTimeout(goog.bind(this.processBlur_, this), 0);
+    return;
+  } else {
+    this.processBlur_();
+  }
+};
+
+
+/**
+ * Helper function that does the logic to handle an element blurring.
+ * @private
+ */
+goog.ui.AutoComplete.InputHandler.prototype.processBlur_ = function() {
   // it's possible that a blur event could fire when there's no active element,
   // in the case where attachInput was called on an input that already had
   // the focus
