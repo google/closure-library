@@ -732,6 +732,11 @@ goog.fx.DragListGroup.prototype.handleDragEnd_ = function(dragEvent) {
     this.insertCurrHoverItem();
   }
 
+  // The DRAGEND handler may need the new order of the list items. Clean up the
+  // garbage.
+  // TODO(user): Regression test.
+  this.cleanupDragDom_();
+
   this.dispatchEvent(
       new goog.fx.DragListGroupEvent(
           goog.fx.DragListGroup.EventType.DRAGEND, this, dragEvent,
