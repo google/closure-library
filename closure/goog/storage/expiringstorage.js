@@ -58,17 +58,38 @@ goog.storage.ExpiringStorage.CREATION_TIME_KEY = 'creation';
 
 
 /**
+ * Returns the wrapper creation time.
+ *
+ * @param {!Object} wrapper The wrapper.
+ * @return {number|undefined} Wrapper creation time.
+ */
+goog.storage.ExpiringStorage.getCreationTime = function(wrapper) {
+  return wrapper[goog.storage.ExpiringStorage.CREATION_TIME_KEY];
+};
+
+
+/**
+ * Returns the wrapper expiration time.
+ *
+ * @param {!Object} wrapper The wrapper.
+ * @return {number|undefined} Wrapper expiration time.
+ */
+goog.storage.ExpiringStorage.getExpirationTime = function(wrapper) {
+  return wrapper[goog.storage.ExpiringStorage.EXPIRATION_TIME_KEY];
+};
+
+
+/**
  * Checks if the data item has expired.
  *
  * @param {!Object} wrapper The wrapper.
  * @return {boolean} True if the item has expired.
- * @protected
  */
 goog.storage.ExpiringStorage.isExpired = function(wrapper) {
-  var creation = wrapper[goog.storage.ExpiringStorage.CREATION_TIME_KEY];
-  var expiration = wrapper[goog.storage.ExpiringStorage.EXPIRATION_TIME_KEY];
-  return expiration && expiration < goog.now() ||
-         creation && creation > goog.now();
+  var creation = goog.storage.ExpiringStorage.getCreationTime(wrapper);
+  var expiration = goog.storage.ExpiringStorage.getExpirationTime(wrapper);
+  return !!expiration && expiration < goog.now() ||
+         !!creation && creation > goog.now();
 };
 
 
@@ -105,7 +126,6 @@ goog.storage.ExpiringStorage.prototype.set = function(
  * @param {string} key The key to get.
  * @param {boolean=} opt_expired If true, return expired wrappers as well.
  * @return {(!Object|undefined)} The wrapper, or undefined if not found.
- * @protected
  */
 goog.storage.ExpiringStorage.prototype.getWrapper = function(key, opt_expired) {
   var wrapper = goog.base(this, 'getWrapper', key);
