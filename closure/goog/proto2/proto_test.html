@@ -51,20 +51,20 @@ function testFields() {
   assertFalse(message.hasOptionalNestedEnum());
 
   // Check non-set values.
-  assertUndefined(message.getOptionalInt32());
-  assertUndefined(message.getOptionalInt64());
-  assertUndefined(message.getOptionalFloat());
-  assertUndefined(message.getOptionalString());
-  assertUndefined(message.getOptionalBytes());
-  assertUndefined(message.getOptionalNestedMessage());
-  assertUndefined(message.getOptionalNestedEnum());
+  assertNull(message.getOptionalInt32());
+  assertNull(message.getOptionalInt64());
+  assertNull(message.getOptionalFloat());
+  assertNull(message.getOptionalString());
+  assertNull(message.getOptionalBytes());
+  assertNull(message.getOptionalNestedMessage());
+  assertNull(message.getOptionalNestedEnum());
 
   // Check default values.
-  assertTrue(0 == message.getOptionalInt32OrDefault());
-  assertTrue('1' == message.getOptionalInt64OrDefault());
-  assertTrue(1.5 == message.getOptionalFloatOrDefault());
-  assertTrue("" == message.getOptionalStringOrDefault());
-  assertTrue("moo" == message.getOptionalBytesOrDefault());
+  assertEquals(0, message.getOptionalInt32OrDefault());
+  assertEquals('1', message.getOptionalInt64OrDefault());
+  assertEquals(1.5, message.getOptionalFloatOrDefault());
+  assertEquals('', message.getOptionalStringOrDefault());
+  assertEquals('moo', message.getOptionalBytesOrDefault());
 
   // Set the fields.
   message.setOptionalInt32(101);
