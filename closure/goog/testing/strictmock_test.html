@@ -298,6 +298,50 @@ See the COPYING file for details.
   }
 
 
+  function testZeroTimes() {
+    mock.a().$times(0);
+    mock.$replay();
+    mock.$verify();
+
+    mock.$reset();
+
+    mock.a().$times(0);
+    mock.$replay();
+    assertThrows(function() {mock.a()});
+  }
+
+
+  function testZeroTimesWithArguments() {
+    mock.a('foo').$times(0);
+    mock.$replay();
+    mock.$verify();
+
+    mock.$reset();
+
+    mock.a('foo').$times(0);
+    mock.$replay();
+    assertThrows(function() {mock.a('foo')});
+  }
+
+
+  function testTooManyCalls() {
+    mock.a().$times(2);
+    mock.$replay();
+    mock.a();
+    mock.a();
+    assertThrows(function() {mock.a()});
+  }
+
+
+  function testTooManyCallsWithArguments() {
+    mock.a('foo').$times(2);
+    mock.$replay();
+    mock.a('foo');
+    mock.a('foo');
+    assertThrows(function() {mock.a('foo')});
+  }
+
+
   function testMultipleSkippedAnyTimes() {
     mock.a().$anyTimes();
     mock.b().$anyTimes();

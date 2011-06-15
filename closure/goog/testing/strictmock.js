@@ -76,7 +76,7 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
     }
 
     this.$expectations_.shift();
-    if (this.$expectations_.length == 0) {
+    if (this.$expectations_.length < 1) {
       // Nothing left, but this may be a failed attempt to call the previous
       // item on the list, which may have been between its min and max.
       this.$throwCallException(name, args, currentExpectation);
@@ -84,10 +84,14 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
     currentExpectation = this.$expectations_[0];
   }
 
+  if (currentExpectation.maxCalls == 0) {
+    this.$throwCallException(name, args);
+  }
+
   currentExpectation.actualCalls++;
   // If we hit the max number of calls for this expectation, we're finished
   // with it.
-  if (currentExpectation.actualCalls >= currentExpectation.maxCalls) {
+  if (currentExpectation.actualCalls == currentExpectation.maxCalls) {
     this.$expectations_.shift();
   }
 
