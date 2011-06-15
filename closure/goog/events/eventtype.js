@@ -97,9 +97,15 @@ goog.events.EventType = {
   POPSTATE: 'popstate',
 
   // Copy and Paste
+  // Support is limited. Make sure it works on your favorite browser
+  // before using.
+  // http://www.quirksmode.org/dom/events/cutcopypaste.html
   COPY: 'copy',
   PASTE: 'paste',
   CUT: 'cut',
+  BEFORECOPY: 'beforecopy',
+  BEFORECUT: 'beforecut',
+  BEFOREPASTE: 'beforepaste',
 
   // HTML 5 worker events
   MESSAGE: 'message',
