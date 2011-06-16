@@ -145,6 +145,73 @@ function testRgbaToHex() {
   }
 }
 
+function testRgbaToRgbaStyle() {
+  var testColors = [[[175, 19, 255, 1], 'rgba(175,19,255,1)'],
+                    [[53, 124, 240, .6], 'rgba(53,124,240,0.6)']];
+
+  for (var i = 0; i < testColors.length; ++i) {
+    var r = goog.color.alpha.rgbaToRgbaStyle(testColors[i][0][0],
+                                             testColors[i][0][1],
+                                             testColors[i][0][2],
+                                             testColors[i][0][3]);
+    assertEquals(testColors[i][1], r);
+  }
+
+  var badColors = [[0, 0, 0, 2]];
+  for (var i = 0; i < badColors.length; ++i) {
+    var e = assertThrows(goog.partial(goog.color.alpha.rgbaToRgbaStyle,
+        badColors[i][0], badColors[i][1], badColors[i][2], badColors[i][3]));
+
+    assertContains('is not a valid RGBA color', e.message);
+  }
+
+  // Loop through all bad color values and ensure they fail in each channel.
+  var badValues = [-1, 300, 'a', undefined, null, NaN];
+  var color = [0, 0, 0, 0];
+  for (var i = 0; i < badValues.length; ++i) {
+    for (var channel = 0; channel < color.length; ++channel) {
+      color[channel] = badValues[i];
+      var e = assertThrows(color + ' is not a valid rgba color',
+          goog.partial(goog.color.alpha.rgbaToRgbaStyle, color));
+      assertContains('is not a valid RGBA color', e.message);
+
+      color[channel] = 0;
+    }
+  }
+}
+
+function testRgbaArrayToRgbaStyle() {
+  var testColors = [[[175, 19, 255, 1], 'rgba(175,19,255,1)'],
+                    [[53, 124, 240, .6], 'rgba(53,124,240,0.6)']];
+
+  for (var i = 0; i < testColors.length; ++i) {
+    var r = goog.color.alpha.rgbaArrayToRgbaStyle(testColors[i][0]);
+    assertEquals(testColors[i][1], r);
+  }
+
+  var badColors = [[0, 0, 0, 2]];
+  for (var i = 0; i < badColors.length; ++i) {
+    var e = assertThrows(goog.partial(goog.color.alpha.rgbaArrayToRgbaStyle,
+        badColors[i]));
+
+    assertContains('is not a valid RGBA color', e.message);
+  }
+
+  // Loop through all bad color values and ensure they fail in each channel.
+  var badValues = [-1, 300, 'a', undefined, null, NaN];
+  var color = [0, 0, 0, 0];
+  for (var i = 0; i < badValues.length; ++i) {
+    for (var channel = 0; channel < color.length; ++channel) {
+      color[channel] = badValues[i];
+      var e = assertThrows(color + ' is not a valid rgba color',
+          goog.partial(goog.color.alpha.rgbaToRgbaStyle, color));
+      assertContains('is not a valid RGBA color', e.message);
+
+      color[channel] = 0;
+    }
+  }
+}
+
 function testRgbaArrayToHsla() {
   var opaqueBlueRgb = [0, 0, 255, 1];
   var opaqueBlueHsl = goog.color.alpha.rgbaArrayToHsla(opaqueBlueRgb);

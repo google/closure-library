@@ -199,6 +199,37 @@ goog.color.alpha.rgbaArrayToHex = function(rgba) {
 
 
 /**
+ * Converts a color from RGBA to an RGBA style string.
+ * @param {number} r Value of red, in [0, 255].
+ * @param {number} g Value of green, in [0, 255].
+ * @param {number} b Value of blue, in [0, 255].
+ * @param {number} a Value of alpha, in [0, 1].
+ * @return {string} An 'rgba(r,g,b,a)' string ready for use in a CSS rule.
+ */
+goog.color.alpha.rgbaToRgbaStyle = function(r, g, b, a) {
+  if (isNaN(r) || r < 0 || r > 255 ||
+      isNaN(g) || g < 0 || g > 255 ||
+      isNaN(b) || b < 0 || b > 255 ||
+      isNaN(a) || a < 0 || a > 1) {
+    throw Error('"(' + r + ',' + g + ',' + b + ',' + a +
+        ')" is not a valid RGBA color');
+  }
+  return goog.color.alpha.rgbaStyle_([r, g, b, a]);
+};
+
+
+/**
+ * Converts a color from RGBA to an RGBA style string.
+ * @param {(Array.<number>|Float32Array)} rgba Array of [r, g, b, a],
+ *     with r, g, b in [0, 255] and a in [0, 1].
+ * @return {string} An 'rgba(r,g,b,a)' string ready for use in a CSS rule.
+ */
+goog.color.alpha.rgbaArrayToRgbaStyle = function(rgba) {
+  return goog.color.alpha.rgbaToRgbaStyle(rgba[0], rgba[1], rgba[2], rgba[3]);
+};
+
+
+/**
  * Converts a color from HSLA to hex representation.
  * @param {Array.<number>} hsla Array of [h, s, l, a], where h is an integer in
  *     [0, 360], s and l are integers in [0, 100], and a is in [0, 1].
