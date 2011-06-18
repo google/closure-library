@@ -449,7 +449,7 @@ goog.ui.LabelInput.prototype.getLabel = function() {
  * @private
  */
 goog.ui.LabelInput.prototype.check_ = function() {
-  if (! this.usePlaceholderText_) {
+  if (!this.usePlaceholderText_) {
     // if we haven't got a form yet try now
     this.attachEventsToForm_();
     goog.dom.a11y.setState(this.getElement(),
@@ -457,6 +457,10 @@ goog.ui.LabelInput.prototype.check_ = function() {
                            this.label_);
   } else if (this.getElement().placeholder != this.label_) {
     this.getElement().placeholder = this.label_;
+  }
+
+  if (this.usePlaceholderText_) {
+    return;
   }
 
   if (!this.hasChanged()) {
@@ -513,8 +517,10 @@ goog.ui.LabelInput.prototype.focusAndSelect = function() {
  */
 goog.ui.LabelInput.prototype.setEnabled = function(enabled) {
   this.getElement().disabled = !enabled;
-  goog.dom.classes.enable(this.getElement(),
-      goog.getCssName(this.LABEL_CLASS_NAME, 'disabled'), !enabled);
+  if (!this.usePlaceholderText_) {
+    goog.dom.classes.enable(this.getElement(),
+        goog.getCssName(this.LABEL_CLASS_NAME, 'disabled'), !enabled);
+  }
 };
 
 
