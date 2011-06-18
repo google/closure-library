@@ -157,12 +157,22 @@ See the COPYING file for details.
       goog.testing.events.fireClickSequence(checkbox.getElement());
       assertFalse('checkbox toggled if it is clicked', checkbox.getChecked());
 
+      checkbox.setEnabled(true);
       goog.testing.events.fireMouseOverEvent(label);
-      assertContains('goog-checkbox-hover',
-          goog.dom.classes.get(checkbox.getElement()));
+      assertContains('checkbox gets hover state on mouse over',
+          'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
       goog.testing.events.fireMouseOutEvent(checkbox.getElement());
-      assertNotContains('goog-checkbox-hover',
-          goog.dom.classes.get(checkbox.getElement()));
+      assertNotContains('checkbox does not have hover state after mouse out',
+          'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+      checkbox.setEnabled(false);
+      goog.testing.events.fireMouseOverEvent(label);
+      assertNotContains(
+          'checkbox does not get hover state on mouse over when disabled',
+          'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+      goog.testing.events.fireMouseOutEvent(checkbox.getElement());
+      assertNotContains('checkbox does not get stuck in hover state',
+          'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+      checkbox.setEnabled(true);
 
       checkbox.setLabel(null);
       goog.testing.events.fireClickSequence(label);

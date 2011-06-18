@@ -182,14 +182,26 @@ goog.ui.Checkbox.prototype.enterDocument = function() {
           this.handleClickOrSpace_);
       // Hovering over label activates checkbox hover state.
       handler.listen(this.label_, goog.events.EventType.MOUSEOVER,
-          goog.partial(this.setState, goog.ui.Component.State.HOVER, true));
+          this.handleMouseEvent_);
       handler.listen(this.label_, goog.events.EventType.MOUSEOUT,
-          goog.partial(this.setState, goog.ui.Component.State.HOVER, false));
+          this.handleMouseEvent_);
     }
     // Always listen to the checkbox element.
     handler.listen(this.getElement(),
         goog.events.EventType.CLICK, this.handleClickOrSpace_);
   }
+};
+
+
+/**
+ * Toggles the hover state of the checkbox when the user hovers over the
+ * associated label.
+ * @param {!goog.events.BrowserEvent} e The event.
+ * @private
+ */
+goog.ui.Checkbox.prototype.handleMouseEvent_ = function(e) {
+  this.setState(goog.ui.Component.State.HOVER,
+      this.isEnabled() && e.type == goog.events.EventType.MOUSEOVER);
 };
 
 
