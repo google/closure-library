@@ -166,12 +166,14 @@ goog.ui.LabelInput.prototype.exitDocument = function() {
  * @private
  */
 goog.ui.LabelInput.prototype.attachEvents_ = function() {
-  if (this.usePlaceholderText_) {
-    return;
-  }
   var eh = new goog.events.EventHandler(this);
   eh.listen(this.getElement(), goog.events.EventType.FOCUS, this.handleFocus_);
   eh.listen(this.getElement(), goog.events.EventType.BLUR, this.handleBlur_);
+
+  if (this.usePlaceholderText_) {
+    this.eventHandler_ = eh;
+    return;
+  }
 
   if (goog.userAgent.GECKO) {
     eh.listen(this.getElement(), [
@@ -273,12 +275,11 @@ goog.ui.LabelInput.prototype.handleBlur_ = function(e) {
   // fake an artificial focus when the user clicks on the input box. However,
   // if the user clicks on something else (and we lose focus), there is no
   // need for an artificial focus event.
-  if (this.usePlaceholderText_) {
-    return;
+  if (!this.usePlaceholderText_) {
+    this.eventHandler_.unlisten(
+        this.getElement(), goog.events.EventType.CLICK, this.handleFocus_);
+    this.ffKeyRestoreValue_ = null;
   }
-  this.eventHandler_.unlisten(
-      this.getElement(), goog.events.EventType.CLICK, this.handleFocus_);
-  this.ffKeyRestoreValue_ = null;
   this.hasFocus_ = false;
   this.check_();
 };
@@ -449,7 +450,7 @@ goog.ui.LabelInput.prototype.getLabel = function() {
  * @private
  */
 goog.ui.LabelInput.prototype.check_ = function() {
-  if (! this.usePlaceholderText_) {
+  if (!this.usePlaceholderText_) {
     // if we haven't got a form yet try now
     this.attachEventsToForm_();
     goog.dom.a11y.setState(this.getElement(),
