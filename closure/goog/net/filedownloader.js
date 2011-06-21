@@ -16,12 +16,28 @@
  * @fileoverview A class for downloading remote files and storing them
  * locally using the HTML5 FileSystem API.
  *
+ * The directory structure is of the form /HASH/URL/BASENAME:
+ *
+ * The HASH portion is a three-character slice of the hash of the URL. Since the
+ * filesystem has a limit of about 5000 files per directory, this should divide
+ * the downloads roughly evenly among about 5000 directories, thus allowing for
+ * at most 5000^2 downloads.
+ *
+ * The URL portion is the (sanitized) full URL used for downloading the file.
+ * This is used to ensure that each file ends up in a different location, even
+ * if the HASH and BASENAME are the same.
+ *
+ * The BASENAME portion is the basename of the URL. It's used for the filename
+ * proper so that the local filesystem: URL will be downloaded to a file with a
+ * recognizable name.
+ *
  */
 
 goog.provide('goog.net.FileDownloader');
 goog.provide('goog.net.FileDownloader.Error');
 
 goog.require('goog.Disposable');
+goog.require('goog.asserts');
 goog.require('goog.async.Deferred');
 goog.require('goog.crypt.hash32');
 goog.require('goog.debug.Error');
@@ -145,8 +161,31 @@ goog.net.FileDownloader.prototype.waitForDownload = function(url) {
  *     error will be passed to the errback.
  */
 goog.net.FileDownloader.prototype.getDownloadedBlob = function(url) {
-  return this.getFile_(url, goog.fs.DirectoryEntry.Behavior.DEFAULT).
+  return this.getFile_(url).
       addCallback(function(fileEntry) { return fileEntry.file(); });
+};
+
+
+/**
+ * Get the local filesystem: URL for a downloaded file. This is different from
+ * the blob: URL that's available from getDownloadedBlob(). If the end user
+ * accesses the filesystem: URL, the resulting file's name will be determined by
+ * the download filename as opposed to an arbitrary GUID. In addition, the
+ * filesystem: URL is connected to a filesystem location, so if the download is
+ * removed then that URL will become invalid.
+ *
+ * Warning: in Chrome 12, some filesystem: URLs are opened inline. This means
+ * that e.g. HTML pages given to the user via filesystem: URLs will be opened
+ * and processed by the browser.
+ *
+ * @param {string} url The URL of the file to get the URL of.
+ * @return {!goog.async.Deferred} The deferred filesystem: URL. The callback
+ *     will be passed the URL. If a file API error occurs while loading the
+ *     blob, that error will be passed to the errback.
+ */
+goog.net.FileDownloader.prototype.getLocalUrl = function(url) {
+  return this.getFile_(url).
+      addCallback(function(fileEntry) { return fileEntry.toUri(); });
 };
 
 
@@ -189,8 +228,8 @@ goog.net.FileDownloader.prototype.isDownloaded = function(url) {
  *     success or on error.
  */
 goog.net.FileDownloader.prototype.remove = function(url) {
-  return this.getFile_(url, goog.fs.DirectoryEntry.Behavior.DEFAULT).
-      addCallback(function(fileEntry) { return fileEntry.remove(); });
+  return this.getDir_(url, goog.fs.DirectoryEntry.Behavior.DEFAULT).
+      addCallback(function(dir) { return dir.removeRecursively(); });
 };
 
 
@@ -207,16 +246,23 @@ goog.net.FileDownloader.prototype.remove = function(url) {
  *
  * @param {string} url The URL at which to set the blob.
  * @param {!Blob} blob The blob to set.
+ * @param {string=} opt_name The name of the file. If this isn't given, it's
+ *     determined from the URL.
  * @return {!goog.async.Deferred} The deferred used for registering callbacks on
  *     success or on error. This can be cancelled just like a {@link #download}
  *     Deferred. The objects passed to the errback will be
  *     {@link goog.net.FileDownloader.Error}s.
  */
-goog.net.FileDownloader.prototype.setBlob = function(url, blob) {
+goog.net.FileDownloader.prototype.setBlob = function(url, blob, opt_name) {
+  var name = this.sanitize_(opt_name || this.urlToName_(url));
   var download = new goog.net.FileDownloader.Download_(url, this);
   this.downloads_[url] = download;
   download.blob = blob;
-  this.getFile_(download.url, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE).
+  this.getDir_(download.url, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE).
+      addCallback(function(dir) {
+        return dir.getFile(
+            name, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE);
+      }).
       addCallback(goog.bind(this.fileSuccess_, this, download)).
       addErrback(goog.bind(this.error_, this, download));
   return download.deferred;
@@ -265,6 +311,8 @@ goog.net.FileDownloader.prototype.xhrSuccess_ = function(download) {
     return;
   }
 
+  var name = this.sanitize_(this.getName_(
+      /** @type {!goog.net.XhrIo} */ (download.xhr)));
   var resp = /** @type {ArrayBuffer} */ (download.xhr.getResponse());
   if (!resp) {
     // This should never happen - it indicates the XHR hasn't completed, has
@@ -278,7 +326,11 @@ goog.net.FileDownloader.prototype.xhrSuccess_ = function(download) {
   download.blob = goog.fs.getBlob(resp);
   delete download.xhr;
 
-  this.getFile_(download.url, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE).
+  this.getDir_(download.url, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE).
+      addCallback(function(dir) {
+        return dir.getFile(
+            name, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE);
+      }).
       addCallback(goog.bind(this.fileSuccess_, this, download)).
       addErrback(goog.bind(this.error_, this, download));
 };
@@ -387,7 +439,8 @@ goog.net.FileDownloader.prototype.cancel_ = function(download) {
 
 
 /**
- * Get the file for a given URL.
+ * Get the directory for a given URL. If the directory already exists when this
+ * is called, it will contain exactly one file: the downloaded file.
  *
  * This not only calls the FileSystem API's getFile method, but attempts to
  * distribute the files so that they don't overload the filesystem. The spec
@@ -397,13 +450,13 @@ goog.net.FileDownloader.prototype.cancel_ = function(download) {
  *
  * All parameters are the same as in the FileSystem API's Entry#getFile method.
  *
- * @param {string} url The URL corresponding to the file to get.
+ * @param {string} url The URL corresponding to the directory to get.
  * @param {goog.fs.DirectoryEntry.Behavior} behavior The behavior to pass to the
  *     underlying method.
- * @return {!goog.async.Deferred} The deferred FileEntry object.
+ * @return {!goog.async.Deferred} The deferred DirectoryEntry object.
  * @private
  */
-goog.net.FileDownloader.prototype.getFile_ = function(url, behavior) {
+goog.net.FileDownloader.prototype.getDir_ = function(url, behavior) {
   // 3 hex digits provide 16**3 = 4096 different possible dirnames, which is
   // less than the maximum of 5000 entries. Downloaded files should be
   // distributed roughly evenly throughout the directories due to the hash
@@ -420,8 +473,32 @@ goog.net.FileDownloader.prototype.getFile_ = function(url, behavior) {
   return this.dir_.
       getDirectory(dirname, goog.fs.DirectoryEntry.Behavior.CREATE).
       addCallback(function(dir) {
-        return dir.getFile(this.sanitize_(url), behavior);
+        return dir.getDirectory(this.sanitize_(url), behavior);
       }, this);
+};
+
+
+/**
+ * Get the file for a given URL. This will only retrieve files that have already
+ * been saved; it shouldn't be used for creating the file in the first place.
+ * This is because the filename isn't necessarily determined by the URL, but by
+ * the headers of the XHR response.
+ *
+ * @param {string} url The URL corresponding to the file to get.
+ * @return {!goog.async.Deferred} The deferred FileEntry object.
+ * @private
+ */
+goog.net.FileDownloader.prototype.getFile_ = function(url) {
+  return this.getDir_(url, goog.fs.DirectoryEntry.Behavior.DEFAULT).
+      addCallback(function(dir) {
+        return dir.listDirectory().addCallback(function(files) {
+          goog.asserts.assert(files.length == 1);
+          // If the filesystem somehow gets corrupted and we end up with an
+          // empty directory here, it makes sense to just return the normal
+          // file-not-found error.
+          return files[0] || dir.getFile('file');
+        });
+      });
 };
 
 
@@ -441,6 +518,43 @@ goog.net.FileDownloader.prototype.sanitize_ = function(str) {
   // '%3f' (the URL-encoding of :, an invalid character) are rejected.
   return '`' + str.replace(/[\/\\<>:?*"|%`]/g, encodeURIComponent).
       replace(/%/g, '`');
+};
+
+
+/**
+ * Gets the filename specified by the XHR. This first attempts to parse the
+ * Content-Disposition header for a filename and, failing that, falls back on
+ * deriving the filename from the URL.
+ *
+ * @param {!goog.net.XhrIo} xhr The XHR containing the response headers.
+ * @return {string} The filename.
+ * @private
+ */
+goog.net.FileDownloader.prototype.getName_ = function(xhr) {
+  var disposition = xhr.getResponseHeader('Content-Disposition');
+  var match = disposition &&
+      disposition.match(/^attachment *; *filename="(.*)"$/i);
+  if (match) {
+    // The Content-Disposition header allows for arbitrary backslash-escaped
+    // characters (usually " and \). We want to unescape them before using them
+    // in the filename.
+    return match[1].replace(/\\(.)/g, '$1');
+  }
+
+  return this.urlToName_(xhr.getLastUri());
+};
+
+
+/**
+ * Extracts the basename from a URL.
+ *
+ * @param {string} url The URL.
+ * @return {string} The basename.
+ * @private
+ */
+goog.net.FileDownloader.prototype.urlToName_ = function(url) {
+  var segments = url.split('/');
+  return segments[segments.length - 1];
 };
 
 
@@ -566,6 +680,13 @@ goog.net.FileDownloader.Download_ = function(url, downloader) {
    * @type {goog.net.XhrIo}
    */
   this.xhr = null;
+
+  /**
+   * The name of the blob being downloaded. Only sey once the XHR has completed,
+   * if it completed successfully.
+   * @type {?string}
+   */
+  this.name = null;
 
   /**
    * The downloaded blob. Only set once the XHR has completed, if it completed

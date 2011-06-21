@@ -47,7 +47,7 @@ function tearDown() {
 
 function testDownload() {
   downloader.download('/foo/bar').addCallback(function(blob) {
-    var fileEntry = dir.getFileSync('`3fa/``2Ffoo`2Fbar');
+    var fileEntry = dir.getFileSync('`3fa/``2Ffoo`2Fbar/`bar');
     assertEquals('data', blob.toString());
     assertEquals('data', fileEntry.fileSync().toString());
     asyncTestCase.continueTesting();
@@ -71,6 +71,29 @@ function testGetDownloadedBlob() {
 
   xhr.simulateResponse(200, 'data');
   asyncTestCase.waitForAsync('testGetDownloadedBlob');
+}
+
+function testGetLocalUrl() {
+  downloader.download('/foo/bar').
+      addCallback(function() { return downloader.getLocalUrl('/foo/bar'); }).
+      addCallback(function(url) { assertMatches(/\/`bar$/, url); }).
+      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
+      addErrback(function(err) { throw err; });
+
+  xhr.simulateResponse(200, 'data');
+  asyncTestCase.waitForAsync('testGetLocalUrl');
+}
+
+function testLocalUrlWithContentDisposition() {
+  downloader.download('/foo/bar').
+      addCallback(function() { return downloader.getLocalUrl('/foo/bar'); }).
+      addCallback(function(url) { assertMatches(/\/`qux`22bap$/, url); }).
+      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
+      addErrback(function(err) { throw err; });
+
+  xhr.simulateResponse(
+      200, 'data', {'Content-Disposition': 'attachment; filename="qux\\"bap"'});
+  asyncTestCase.waitForAsync('testGetLocalUrl');
 }
 
 function testIsDownloaded() {
@@ -124,7 +147,18 @@ function testSetBlob() {
       addCallback(function(blob) {
         assertEquals('data', blob.toString());
       }).
-      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
+      addErrback(function(err) { throw err; });
+
+  asyncTestCase.waitForAsync('testSetBlob');
+}
+
+function testSetBlobWithName() {
+  downloader.setBlob('/foo/bar', goog.testing.fs.getBlob('data'), 'qux').
+      addCallback(function() { return downloader.getLocalUrl('/foo/bar'); }).
+      addCallback(function(url) { assertMatches(/\/`qux$/, url); }).
+      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase)).
+      addErrback(function(err) { throw err; });
 
   asyncTestCase.waitForAsync('testSetBlob');
 }
@@ -303,6 +337,12 @@ function testFailedRemove() {
       });
 
   asyncTestCase.waitForAsync('testFailedRemove');
+}
+
+function assertMatches(expected, actual) {
+  assert(
+      'Expected "' + actual + '" to match ' + expected,
+      expected.test(actual));
 }
 
 </script>
