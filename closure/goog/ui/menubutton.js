@@ -681,7 +681,12 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
       }
     }
     this.menu_.setVisible(open, false, opt_e);
-    this.attachPopupListeners_(open);
+    // In Pivot Tables the menu button somehow gets disposed of during the
+    // setVisible call, causing attachPopupListeners_ to fail.
+    // TODO(user): Debug what happens.
+    if (!this.isDisposed()) {
+      this.attachPopupListeners_(open);
+    }
   }
 };
 
