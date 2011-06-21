@@ -21,11 +21,15 @@ See the COPYING file for details.
 </script>
 </head>
 <body>
+  <div id="sandbox"></div>
   <div id="test1">Text</div><div id="test2">abc<br id="br">def</div>
-  <div id="cetest" contentEditable="true"><div>abc<br id="br2"/></div></div>
+  <div id="cetest" contentEditable="true"><div>abc<br id="br2"></div></div>
   <div id="empty"></div>
   <div id="removeTest"><div>Text that<br>will be deleted</div></div>
   <div id="removeTestEmptyNode"></div>
+  <div id="removeTestSingleNode"><div>Text Text</div></div>
+  <div id="removeTestMidNode"><div>0123456789</div></div>
+  <div id="removeTestMidMultipleNodes"><div>0123456789</div><div>0123456789</div></div>
   <div id="outer">outer<div id="inner">inner</div>outer2</div>
   <div id="dynamic"></div>
   <div id="onlybr"><br/></div>
@@ -253,6 +257,65 @@ See the COPYING file for details.
     assertEquals('Outer div should have 0 children now',
         0, outer.childNodes.length);
   }
+
+
+  function testRemoveContentsSingleNode() {
+    var outer = goog.dom.getElement('removeTestSingleNode');
+    var range = goog.dom.browserrange.createRangeFromNodeContents(
+        outer.firstChild);
+
+    range.removeContents();
+
+    assertEquals('Removed range content should be ""', '', range.getText());
+    assertTrue('Removed range is now collapsed', range.isCollapsed());
+    assertEquals('', goog.dom.getTextContent(outer));
+  }
+
+
+  function testRemoveContentsMidNode() {
+    var outer = goog.dom.getElement('removeTestMidNode');
+    var textNode = outer.firstChild.firstChild;
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        textNode, 1, textNode, 4);
+
+    assertEquals('Previous range content should be "123"', '123',
+        range.getText());
+    range.removeContents();
+
+    assertEquals('Removed range content should be "0456789"', '0456789',
+        goog.dom.getTextContent(outer));
+  }
+
+
+  function testRemoveContentsMidMultipleNodes() {
+    var outer = goog.dom.getElement('removeTestMidMultipleNodes');
+    var firstTextNode = outer.firstChild.firstChild;
+    var lastTextNode = outer.lastChild.firstChild;
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        firstTextNode, 1, lastTextNode, 4);
+
+    assertEquals('Previous range content', '1234567890123',
+        range.getText().replace(/\s/g, ''));
+    range.removeContents();
+
+    assertEquals('Removed range content should be "0456789"', '0456789',
+        goog.dom.getTextContent(outer).replace(/\s/g, ''));
+  }
+
+
+  function testRemoveDivCaretRange() {
+    var outer = goog.dom.getElement('sandbox');
+    outer.innerHTML = '<div>Test1</div><div></div>';
+    var range = goog.dom.browserrange.createRangeFromNodes(
+        outer.lastChild, 0, outer.lastChild, 0);
+
+    range.removeContents();
+    range.insertNode(goog.dom.createDom('span', undefined, 'Hello'), true);
+
+    assertEquals('Resulting contents', 'Test1Hello',
+        goog.dom.getTextContent(outer).replace(/\s/g, ''));
+  }
+
 
   function testCollapse() {
     var range = goog.dom.browserrange.createRangeFromNodeContents(test2);

@@ -748,9 +748,10 @@ goog.dom.browserrange.IeRange.prototype.select = function(opt_reverse) {
 
 /** @inheritDoc */
 goog.dom.browserrange.IeRange.prototype.removeContents = function() {
-  // NOTE: pasteHTML('') was considered, but it disposes any nodes here so that
-  // any pre-existing references to them may lead to memory corruption.
-  if (this.range_.htmlText) {
+  // NOTE: Sometimes htmlText is non-empty, but the range is actually empty.
+  // TODO(user): The htmlText check is probably unnecessary, but I left it in
+  // for paranoia.
+  if (!this.isCollapsed() && this.range_.htmlText) {
     // Store some before-removal state.
     var startNode = this.getStartNode();
     var endNode = this.getEndNode();
@@ -764,36 +765,16 @@ goog.dom.browserrange.IeRange.prototype.removeContents = function() {
     clone.moveStart('character', 1);
     clone.moveStart('character', -1);
 
-    // However, sometimes when the range is empty, moving the start back and
-    // forth ends up changing the range.  This indicates a case we need to
-    // handle manually.
-    if (clone.text != oldText) {
-      // Delete all nodes entirely contained in the range.
-      var iter = new goog.dom.NodeIterator(startNode, false, true);
-      var toDelete = [];
-      goog.iter.forEach(iter, function(node) {
-        // Any text node we encounter here is by definition contained entirely
-        // in the range.
-        if (node.nodeType != goog.dom.NodeType.TEXT &&
-            this.containsNode(node)) {
-          toDelete.push(node);
-          iter.skipTag();
-        }
-        if (node == endNode) {
-          throw goog.iter.StopIteration;
-        }
-      }, this);
-
-      this.collapse(true);
-      goog.array.forEach(toDelete, goog.dom.removeNode);
-
-      this.clearCachedValues_();
-      return;
+    // However, sometimes moving the start back and forth ends up changing the
+    // range.
+    // TODO(user): This condition used to happen for empty ranges, but (1)
+    // never worked, and (2) the isCollapsed call should protect against empty
+    // ranges better than before.  However, this is left for paranoia.
+    if (clone.text == oldText) {
+      this.range_ = clone;
     }
 
-    // Outside of the unfortunate cases where we have to handle deletion
-    // manually, we can use the browser's native deletion code.
-    this.range_ = clone;
+    // Use the browser's native deletion code.
     this.range_.text = '';
     this.clearCachedValues_();
 
