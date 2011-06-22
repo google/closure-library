@@ -594,6 +594,41 @@ function testSetWithCredentials() {
   delete MockXmlHttp.prototype.withCredentials;
 }
 
+function testGetResponse() {
+  var x = new goog.net.XhrIo;
+
+  // No XHR yet
+  assertEquals(null, x.getResponse());
+
+  // XHR with no .response and no response type, gets text.
+  x.xhr_ = {};
+  x.xhr_.responseText = 'text';
+  assertEquals('text', x.getResponse());
+
+  // Response type of text gets text as well.
+  x.setResponseType(goog.net.XhrIo.ResponseType.TEXT);
+  x.xhr_.responseText = '';
+  assertEquals('', x.getResponse());
+
+  // Response type of array buffer gets the array buffer.
+  x.xhr_.mozResponseArrayBuffer = 'ab';
+  x.setResponseType(goog.net.XhrIo.ResponseType.ARRAY_BUFFER);
+  assertEquals('ab', x.getResponse());
+
+  // With a response field, it is returned no matter what value it has.
+  x.xhr_.response = undefined;
+  assertEquals(undefined, x.getResponse());
+
+  x.xhr_.response = null;
+  assertEquals(null, x.getResponse());
+
+  x.xhr_.response = '';
+  assertEquals('', x.getResponse());
+
+  x.xhr_.response = 'resp';
+  assertEquals('resp', x.getResponse());
+}
+
 </script>
 </head>
 

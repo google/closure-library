@@ -1011,15 +1011,55 @@ goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
 
 /**
  * Get the response as the type specificed by {@link #setResponseType}. At time
- * of writing, this is only supported in very recent versions of WebKit
- * (10.0.612.1 dev and later).
+ * of writing, this is only directly supported in very recent versions of WebKit
+ * (10.0.612.1 dev and later). If the field is not supported directly, we will
+ * try to emulate it.
+ *
+ * Emulating the response means following the rules laid out at
+ * http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#the-response-attribute.
+ *
+ * On browsers with no support for this (Chrome < 10, Firefox < 4, etc), only
+ * response types of DEFAULT or TEXT may be used, and the response returned will
+ * be the text response.
+ *
+ * On browsers with Mozilla's draft support for array buffers (Firefox 4, 5),
+ * only response types of DEFAULT, TEXT, and ARRAY_BUFFER may be used, and the
+ * response returned will be either the text response or the Mozilla
+ * implementation of the array buffer response.
+ *
+ * On browsers will full support, any valid response type supported by the
+ * browser may be used, and the response provided by the browser will be
+ * returned.
  *
  * @return {*} The response.
  */
 goog.net.XhrIo.prototype.getResponse = function() {
   /** @preserveTry */
   try {
-    return this.xhr_ && this.xhr_.response;
+    if (!this.xhr_) {
+      return null;
+    }
+    if ('response' in this.xhr_) {
+      return this.xhr_.response;
+    }
+    switch (this.responseType_) {
+      case goog.net.XhrIo.ResponseType.DEFAULT:
+      case goog.net.XhrIo.ResponseType.TEXT:
+        return this.xhr_.responseText;
+        // DOCUMENT and BLOB don't need to be handled here because they are
+        // introduced in the same spec that adds the .response field, and would
+        // have been caught above.
+        // ARRAY_BUFFER needs an implementation for Firefox 4, where it was
+        // implemented using a draft spec rather than the final spec.
+      case goog.net.XhrIo.ResponseType.ARRAY_BUFFER:
+        if ('mozResponseArrayBuffer' in this.xhr_) {
+          return this.xhr_.mozResponseArrayBuffer;
+        }
+    }
+    // Fell through to a response type that is not supported on this browser.
+    this.logger_.severe('Response type ' + this.responseType_ + ' is not ' +
+                        'supported on this browser');
+    return null;
   } catch (e) {
     this.logger_.fine('Can not get response: ' + e.message);
     return null;
