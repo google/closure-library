@@ -185,14 +185,24 @@ goog.fs.Entry.prototype.wrapEntry = function(entry) {
 
 
 /**
+ * Get the URL for this file.
+ *
+ * @param {string=} opt_mimeType The MIME type that will be served for the URL.
+ * @return {string} The URL.
+ */
+goog.fs.Entry.prototype.toUrl = function(opt_mimeType) {
+  return this.entry_.toURL(opt_mimeType);
+};
+
+
+/**
  * Get the URI for this file.
  *
+ * @deprecated Use {@link #toUrl} instead.
  * @param {string=} opt_mimeType The MIME type that will be served for the URI.
  * @return {string} The URI.
  */
-goog.fs.Entry.prototype.toUri = function(opt_mimeType) {
-  return this.entry_.toURI(opt_mimeType);
-};
+goog.fs.Entry.prototype.toUri = goog.fs.Entry.prototype.toUrl;
 
 
 /**

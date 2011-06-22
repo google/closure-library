@@ -185,7 +185,7 @@ goog.net.FileDownloader.prototype.getDownloadedBlob = function(url) {
  */
 goog.net.FileDownloader.prototype.getLocalUrl = function(url) {
   return this.getFile_(url).
-      addCallback(function(fileEntry) { return fileEntry.toUri(); });
+      addCallback(function(fileEntry) { return fileEntry.toUrl(); });
 };
 
 
