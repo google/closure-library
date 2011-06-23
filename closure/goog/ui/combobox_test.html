@@ -244,6 +244,7 @@ function testSetValue() {
   comboBox.onInputEvent_();
   clock.tick();
   input.blur();
+  document.body.focus();
   clock.tick(goog.ui.ComboBox.BLUR_DISMISS_TIMER_MS);
   assertEquals('No items should be displayed',
       0, comboBox.getNumberOfVisibleItems_());
