@@ -247,14 +247,17 @@ goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
 
 
 /**
- * Sets the module info for all modules. Should only be called once.
+ * Sets the module info for all modules. Should only be called once. Also
+ * marks modules that are currently being loaded.
  *
  * @param {string=} opt_info A string representation of the module dependency
  *      graph, in the form: module1:dep1,dep2/module2:dep1,dep2 etc.
  *     Where depX is the base-36 encoded position of the dep in the module list.
+ * @param {Array.<string>=} opt_loadingModuleIds A list of moduleIds that
+ *     are currently being loaded.
  */
 goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
-    opt_info) {
+    opt_info, opt_loadingModuleIds) {
   if (!goog.isString(opt_info)) {
     // The call to this method is generated in two steps, the argument is added
     // after some of the compilation passes.  This means that the initial code
@@ -284,6 +287,9 @@ goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
     }
     moduleIds.push(id);
     this.moduleInfoMap_[id] = new goog.module.ModuleInfo(deps, id);
+  }
+  if (opt_loadingModuleIds) {
+    goog.array.extend(this.loadingModuleIds_, opt_loadingModuleIds);
   }
   this.maybeFinishBaseLoad_();
 };
@@ -1031,3 +1037,4 @@ goog.module.ModuleManager.prototype.disposeInternal = function() {
   this.requestedModuleIdsQueue_ = null;
   this.callbackMap_ = null;
 };
+
