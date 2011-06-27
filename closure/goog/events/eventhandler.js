@@ -58,10 +58,9 @@
 goog.provide('goog.events.EventHandler');
 
 goog.require('goog.Disposable');
+goog.require('goog.array');
 goog.require('goog.events');
 goog.require('goog.events.EventWrapper');
-goog.require('goog.object');
-goog.require('goog.structs.SimplePool');
 
 
 
@@ -79,39 +78,12 @@ goog.events.EventHandler = function(opt_handler) {
 
   /**
    * Keys for events that are being listened to.
-   * @type {Object}
+   * @type {Array.<number>}
    * @private
    */
-  this.keys_ = /** @type {Object} */ (
-      goog.events.EventHandler.keyPool_.getObject());
+  this.keys_ = [];
 };
 goog.inherits(goog.events.EventHandler, goog.Disposable);
-
-
-/**
- * Initial count for the keyPool_
- * @type {number}
- */
-goog.events.EventHandler.KEY_POOL_INITIAL_COUNT = 0;
-
-
-/**
- * Max count for the keyPool_
- * @type {number}
- */
-goog.events.EventHandler.KEY_POOL_MAX_COUNT = 100;
-
-
-/**
- * SimplePool to cache the key object. This was implemented to make IE6
- * performance better and removed an object allocation in the listen method
- * when in steady state.
- * @type {goog.structs.SimplePool}
- * @private
- */
-goog.events.EventHandler.keyPool_ = new goog.structs.SimplePool(
-    goog.events.EventHandler.KEY_POOL_INITIAL_COUNT,
-    goog.events.EventHandler.KEY_POOL_MAX_COUNT);
 
 
 /**
@@ -145,11 +117,13 @@ goog.events.EventHandler.prototype.listen = function(src, type, opt_fn,
     type = goog.events.EventHandler.typeArray_;
   }
   for (var i = 0; i < type.length; i++) {
+    // goog.events.listen generates unique keys so we don't have to check their
+    // presence in the this.keys_ array.
     var key = (/** @type {number} */
         goog.events.listen(src, type[i], opt_fn || this,
                            opt_capture || false,
                            opt_handler || this.handler_ || this));
-    this.keys_[key] = true;
+    this.keys_.push(key);
   }
 
   return this;
@@ -182,7 +156,7 @@ goog.events.EventHandler.prototype.listenOnce = function(src, type, opt_fn,
     var key = (/** @type {number} */
         goog.events.listenOnce(src, type, opt_fn || this, opt_capture,
                                opt_handler || this.handler_ || this));
-    this.keys_[key] = true;
+    this.keys_.push(key);
   }
 
   return this;
@@ -216,7 +190,7 @@ goog.events.EventHandler.prototype.listenWithWrapper = function(src, wrapper,
  * @return {number} Number of listeners registered by this handler.
  */
 goog.events.EventHandler.prototype.getListenerCount = function() {
-  return goog.object.getCount(this.keys_);
+  return this.keys_.length;
 };
 
 
@@ -245,7 +219,7 @@ goog.events.EventHandler.prototype.unlisten = function(src, type, opt_fn,
     if (listener) {
       var key = listener.key;
       goog.events.unlistenByKey(key);
-      delete this.keys_[key];
+      goog.array.remove(this.keys_, key);
     }
   }
 
@@ -278,30 +252,19 @@ goog.events.EventHandler.prototype.unlistenWithWrapper = function(src, wrapper,
  * Unlistens to all events.
  */
 goog.events.EventHandler.prototype.removeAll = function() {
-  for (var key in this.keys_) {
-    goog.events.unlistenByKey((/** @type {number} */ key));
-    // Clean the keys before returning object to the pool.
-    delete this.keys_[key];
-  }
+  goog.array.forEach(this.keys_, goog.events.unlistenByKey);
+  this.keys_.length = 0;
 };
 
 
 /**
- * Disposes of this EventHandler and remove all listeners that it registered.
+ * Disposes of this EventHandler and removes all listeners that it registered.
  * @override
  * @protected
  */
 goog.events.EventHandler.prototype.disposeInternal = function() {
   goog.events.EventHandler.superClass_.disposeInternal.call(this);
-  // The protected disposeInternal method is not supposed to be reentrant.
-  // Unfortunately some projects call it directly, potentially multiple times.
-  // To avoid the side effects of a double releaseObject() call, the disposal
-  // code must not run if the EventHandler has already been disposed of.
-  if (this.keys_) {
-    this.removeAll();
-    goog.events.EventHandler.keyPool_.releaseObject(this.keys_);
-    this.keys_ = null;
-  }
+  this.removeAll();
 };
 
 

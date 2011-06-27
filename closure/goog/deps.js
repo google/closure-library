@@ -161,7 +161,7 @@ goog.addDependency('events/actionhandler.js', ['goog.events.ActionEvent', 'goog.
 goog.addDependency('events/browserevent.js', ['goog.events.BrowserEvent', 'goog.events.BrowserEvent.MouseButton'], ['goog.events.BrowserFeature', 'goog.events.Event', 'goog.events.EventType', 'goog.reflect', 'goog.userAgent']);
 goog.addDependency('events/browserfeature.js', ['goog.events.BrowserFeature'], ['goog.userAgent']);
 goog.addDependency('events/event.js', ['goog.events.Event'], ['goog.Disposable']);
-goog.addDependency('events/eventhandler.js', ['goog.events.EventHandler'], ['goog.Disposable', 'goog.events', 'goog.events.EventWrapper', 'goog.object', 'goog.structs.SimplePool']);
+goog.addDependency('events/eventhandler.js', ['goog.events.EventHandler'], ['goog.Disposable', 'goog.array', 'goog.events', 'goog.events.EventWrapper']);
 goog.addDependency('events/events.js', ['goog.events'], ['goog.array', 'goog.debug.entryPointRegistry', 'goog.debug.errorHandlerWeakDep', 'goog.events.BrowserEvent', 'goog.events.Event', 'goog.events.EventWrapper', 'goog.events.pools', 'goog.object', 'goog.userAgent']);
 goog.addDependency('events/eventtarget.js', ['goog.events.EventTarget'], ['goog.Disposable', 'goog.events']);
 goog.addDependency('events/eventtype.js', ['goog.events.EventType'], ['goog.userAgent']);
@@ -341,7 +341,7 @@ goog.addDependency('net/cookies.js', ['goog.net.Cookies', 'goog.net.cookies'], [
 goog.addDependency('net/crossdomainrpc.js', ['goog.net.CrossDomainRpc'], ['goog.Uri.QueryData', 'goog.debug.Logger', 'goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.json', 'goog.net.EventType', 'goog.net.HttpStatus', 'goog.userAgent']);
 goog.addDependency('net/errorcode.js', ['goog.net.ErrorCode'], []);
 goog.addDependency('net/eventtype.js', ['goog.net.EventType'], []);
-goog.addDependency('net/filedownloader.js', ['goog.net.FileDownloader', 'goog.net.FileDownloader.Error'], ['goog.Disposable', 'goog.async.Deferred', 'goog.crypt.hash32', 'goog.debug.Error', 'goog.events.EventHandler', 'goog.fs', 'goog.fs.DirectoryEntry.Behavior', 'goog.fs.Error.ErrorCode', 'goog.fs.FileSaver.EventType', 'goog.net.EventType', 'goog.net.XhrIo.ResponseType', 'goog.net.XhrIoPool']);
+goog.addDependency('net/filedownloader.js', ['goog.net.FileDownloader', 'goog.net.FileDownloader.Error'], ['goog.Disposable', 'goog.asserts', 'goog.async.Deferred', 'goog.crypt.hash32', 'goog.debug.Error', 'goog.events.EventHandler', 'goog.fs', 'goog.fs.DirectoryEntry.Behavior', 'goog.fs.Error.ErrorCode', 'goog.fs.FileSaver.EventType', 'goog.net.EventType', 'goog.net.XhrIo.ResponseType', 'goog.net.XhrIoPool']);
 goog.addDependency('net/httpstatus.js', ['goog.net.HttpStatus'], []);
 goog.addDependency('net/iframeio.js', ['goog.net.IframeIo', 'goog.net.IframeIo.IncrementalDataEvent'], ['goog.Timer', 'goog.Uri', 'goog.debug', 'goog.debug.Logger', 'goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.json', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.xhrMonitor', 'goog.reflect', 'goog.string', 'goog.structs', 'goog.userAgent']);
 goog.addDependency('net/iframeloadmonitor.js', ['goog.net.IframeLoadMonitor'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.userAgent']);
