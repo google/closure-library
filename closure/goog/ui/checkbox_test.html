@@ -26,6 +26,7 @@ See the COPYING file for details.
     goog.require('goog.ui.Checkbox.State');
     goog.require('goog.ui.CheckboxRenderer');
     goog.require('goog.ui.Component.EventType');
+    goog.require('goog.ui.Component.State');
     goog.require('goog.ui.ControlRenderer');
     goog.require('goog.ui.decorate');
   </script>
@@ -151,29 +152,50 @@ See the COPYING file for details.
       checkbox.setLabel(label);
       checkbox.render(label);
 
+      // Clicking on label toggles checkbox.
       goog.testing.events.fireClickSequence(label);
       assertTrue('checkbox toggled if the label is clicked',
           checkbox.getChecked());
       goog.testing.events.fireClickSequence(checkbox.getElement());
       assertFalse('checkbox toggled if it is clicked', checkbox.getChecked());
 
+      // Test that mouse events on the label have the correct effect on the
+      // checkbox state when it is enabled.
       checkbox.setEnabled(true);
       goog.testing.events.fireMouseOverEvent(label);
+      assertTrue(checkbox.hasState(goog.ui.Component.State.HOVER));
       assertContains('checkbox gets hover state on mouse over',
           'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+      goog.testing.events.fireMouseDownEvent(label);
+      assertTrue(checkbox.hasState(goog.ui.Component.State.ACTIVE));
+      assertContains('checkbox gets active state on label mousedown',
+          'goog-checkbox-active', goog.dom.classes.get(checkbox.getElement()));
       goog.testing.events.fireMouseOutEvent(checkbox.getElement());
+      assertFalse(checkbox.hasState(goog.ui.Component.State.HOVER));
       assertNotContains('checkbox does not have hover state after mouse out',
           'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+      assertFalse(checkbox.hasState(goog.ui.Component.State.ACTIVE));
+      assertNotContains('checkbox does not have active state after mouse out',
+          'goog-checkbox-active', goog.dom.classes.get(checkbox.getElement()));
+
+      // Test label mouse events on disabled checkbox.
       checkbox.setEnabled(false);
       goog.testing.events.fireMouseOverEvent(label);
+      assertFalse(checkbox.hasState(goog.ui.Component.State.HOVER));
       assertNotContains(
-          'checkbox does not get hover state on mouse over when disabled',
+          'disabled checkbox does not get hover state on mouseover',
           'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+      goog.testing.events.fireMouseDownEvent(label);
+      assertFalse(checkbox.hasState(goog.ui.Component.State.ACTIVE));
+      assertNotContains('disabled checkbox does not get active state mousedown',
+          'goog-checkbox-active', goog.dom.classes.get(checkbox.getElement()));
       goog.testing.events.fireMouseOutEvent(checkbox.getElement());
+      assertFalse(checkbox.hasState(goog.ui.Component.State.ACTIVE));
       assertNotContains('checkbox does not get stuck in hover state',
           'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
-      checkbox.setEnabled(true);
 
+      // Making the label null prevents it from affecting checkbox state.
+      checkbox.setEnabled(true);
       checkbox.setLabel(null);
       goog.testing.events.fireClickSequence(label);
       assertFalse('label element deactivated', checkbox.getChecked());
