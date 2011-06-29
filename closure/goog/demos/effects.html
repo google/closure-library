@@ -72,7 +72,7 @@ See the COPYING file for details.
 
     /**
      * Enables all buttons then disposes of the animation.
-     * @param {!goog.events.Event} e goog.fx.Animation.EventType.END event with
+     * @param {!goog.events.Event} e goog.fx.Transition.EventType.END event with
      *     the goog.fx.Animation object in its target.
      */
     function enableButtons(e) {
@@ -93,9 +93,9 @@ See the COPYING file for details.
       var y = el.offsetTop;
       var anim = new goog.fx.dom.Slide(el, [x, y], [a, b], duration,
           goog.fx.easing.easeOut);
-      goog.events.listen(anim, goog.fx.Animation.EventType.BEGIN,
+      goog.events.listen(anim, goog.fx.Transition.EventType.BEGIN,
           disableButtons);
-      goog.events.listen(anim, goog.fx.Animation.EventType.END, enableButtons);
+      goog.events.listen(anim, goog.fx.Transition.EventType.END, enableButtons);
       anim.play();
     }
 
@@ -104,33 +104,33 @@ See the COPYING file for details.
       var h = el.offsetHeight;
       var anim = new goog.fx.dom.Resize(el, [w, h], [a, b], duration,
           goog.fx.easing.easeOut);
-      goog.events.listen(anim, goog.fx.Animation.EventType.BEGIN,
+      goog.events.listen(anim, goog.fx.Transition.EventType.BEGIN,
           disableButtons);
-      goog.events.listen(anim, goog.fx.Animation.EventType.END, enableButtons);
+      goog.events.listen(anim, goog.fx.Transition.EventType.END, enableButtons);
       anim.play();
     }
 
     function fadeout() {
       var anim = new goog.fx.dom.FadeOutAndHide(el, duration);
-      goog.events.listen(anim, goog.fx.Animation.EventType.BEGIN,
+      goog.events.listen(anim, goog.fx.Transition.EventType.BEGIN,
           disableButtons);
-      goog.events.listen(anim, goog.fx.Animation.EventType.END, enableButtons);
+      goog.events.listen(anim, goog.fx.Transition.EventType.END, enableButtons);
       anim.play();
     }
 
     function fadein() {
       var anim = new goog.fx.dom.FadeInAndShow(el, duration);
-      goog.events.listen(anim, goog.fx.Animation.EventType.BEGIN,
+      goog.events.listen(anim, goog.fx.Transition.EventType.BEGIN,
           disableButtons);
-      goog.events.listen(anim, goog.fx.Animation.EventType.END, enableButtons);
+      goog.events.listen(anim, goog.fx.Transition.EventType.END, enableButtons);
       anim.play();
     }
 
     function color(r, g, b) {
       var anim = new goog.fx.dom.BgColorTransform(el, col, [r, g, b], duration);
-      goog.events.listen(anim, goog.fx.Animation.EventType.BEGIN,
+      goog.events.listen(anim, goog.fx.Transition.EventType.BEGIN,
           disableButtons);
-      goog.events.listen(anim, goog.fx.Animation.EventType.END, function(e) {
+      goog.events.listen(anim, goog.fx.Transition.EventType.END, function(e) {
         col = [e.x, e.y, e.z];
         enableButtons();
       });

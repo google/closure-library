@@ -54,9 +54,9 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.events.MouseWheelHandler');
 goog.require('goog.events.MouseWheelHandler.EventType');
-goog.require('goog.fx.Animation.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.fx.Dragger.EventType');
+goog.require('goog.fx.Transition.EventType');
 goog.require('goog.fx.dom.SlideFrom');
 goog.require('goog.math');
 goog.require('goog.math.Coordinate');
@@ -830,7 +830,7 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
   var animation = new goog.fx.dom.SlideFrom(thumb, end,
       goog.ui.SliderBase.ANIMATION_INTERVAL_);
   this.currentAnimation_ = animation;
-  this.getHandler().listen(animation, goog.fx.Animation.EventType.END,
+  this.getHandler().listen(animation, goog.fx.Transition.EventType.END,
       this.endAnimation_);
 
   this.isAnimating_ = true;

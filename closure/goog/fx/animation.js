@@ -28,6 +28,8 @@ goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
+goog.require('goog.fx.Transition');  // Unreferenced: interface
+goog.require('goog.fx.Transition.EventType');
 goog.require('goog.object');
 
 
@@ -39,6 +41,7 @@ goog.require('goog.object');
  * @param {number} duration Length of animation in milliseconds.
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @constructor
+ * @implements {goog.fx.Transition}
  * @extends {goog.events.EventTarget}
  */
 goog.fx.Animation = function(start, end, duration, opt_acc) {
@@ -98,39 +101,46 @@ goog.inherits(goog.fx.Animation, goog.events.EventTarget);
 goog.fx.Animation.EventType = {
   /**
    * Dispatched when played for the first time OR when it is resumed.
+   * @deprecated Use goog.fx.Transition.EventType.PLAY.
    */
-  PLAY: 'play',
+  PLAY: goog.fx.Transition.EventType.PLAY,
 
   /**
    * Dispatched only when the animation starts from the beginning.
+   * @deprecated Use goog.fx.Transition.EventType.BEGIN.
    */
-  BEGIN: 'begin',
+  BEGIN: goog.fx.Transition.EventType.BEGIN,
 
   /**
    * Dispatched only when animation is restarted after a pause.
+   * @deprecated Use goog.fx.Transition.EventType.RESUME.
    */
-  RESUME: 'resume',
+  RESUME: goog.fx.Transition.EventType.RESUME,
 
   /**
    * Dispatched when animation comes to the end of its duration OR stop
    * is called.
+   * @deprecated Use goog.fx.Transition.EventType.END.
    */
-  END: 'end',
+  END: goog.fx.Transition.EventType.END,
 
   /**
    * Dispatched only when stop is called.
+   * @deprecated Use goog.fx.Transition.EventType.STOP.
    */
-  STOP: 'stop',
+  STOP: goog.fx.Transition.EventType.STOP,
 
   /**
    * Dispatched only when animation comes to its end naturally.
+   * @deprecated Use goog.fx.Transition.EventType.FINISH.
    */
-  FINISH: 'finish',
+  FINISH: goog.fx.Transition.EventType.FINISH,
 
   /**
    * Dispatched when an animation is paused.
+   * @deprecated Use goog.fx.Transition.EventType.PAUSE.
    */
-  PAUSE: 'pause',
+  PAUSE: goog.fx.Transition.EventType.PAUSE,
 
   /**
    * Dispatched each frame of the animation.  This is where the actual animator
@@ -461,7 +471,7 @@ goog.fx.Animation.prototype.onAnimate = function() {
  * @protected
  */
 goog.fx.Animation.prototype.onBegin = function() {
-  this.dispatchAnimationEvent_(goog.fx.Animation.EventType.BEGIN);
+  this.dispatchAnimationEvent_(goog.fx.Transition.EventType.BEGIN);
 };
 
 
@@ -481,7 +491,7 @@ goog.fx.Animation.prototype.onDestroy = function() {
  * @protected
  */
 goog.fx.Animation.prototype.onEnd = function() {
-  this.dispatchAnimationEvent_(goog.fx.Animation.EventType.END);
+  this.dispatchAnimationEvent_(goog.fx.Transition.EventType.END);
 };
 
 
@@ -491,7 +501,7 @@ goog.fx.Animation.prototype.onEnd = function() {
  * @protected
  */
 goog.fx.Animation.prototype.onFinish = function() {
-  this.dispatchAnimationEvent_(goog.fx.Animation.EventType.FINISH);
+  this.dispatchAnimationEvent_(goog.fx.Transition.EventType.FINISH);
 };
 
 
@@ -501,7 +511,7 @@ goog.fx.Animation.prototype.onFinish = function() {
  * @protected
  */
 goog.fx.Animation.prototype.onPause = function() {
-  this.dispatchAnimationEvent_(goog.fx.Animation.EventType.PAUSE);
+  this.dispatchAnimationEvent_(goog.fx.Transition.EventType.PAUSE);
 };
 
 
@@ -511,7 +521,7 @@ goog.fx.Animation.prototype.onPause = function() {
  * @protected
  */
 goog.fx.Animation.prototype.onPlay = function() {
-  this.dispatchAnimationEvent_(goog.fx.Animation.EventType.PLAY);
+  this.dispatchAnimationEvent_(goog.fx.Transition.EventType.PLAY);
 };
 
 
@@ -521,7 +531,7 @@ goog.fx.Animation.prototype.onPlay = function() {
  * @protected
  */
 goog.fx.Animation.prototype.onResume = function() {
-  this.dispatchAnimationEvent_(goog.fx.Animation.EventType.RESUME);
+  this.dispatchAnimationEvent_(goog.fx.Transition.EventType.RESUME);
 };
 
 
@@ -531,7 +541,7 @@ goog.fx.Animation.prototype.onResume = function() {
  * @protected
  */
 goog.fx.Animation.prototype.onStop = function() {
-  this.dispatchAnimationEvent_(goog.fx.Animation.EventType.STOP);
+  this.dispatchAnimationEvent_(goog.fx.Transition.EventType.STOP);
 };
 
 

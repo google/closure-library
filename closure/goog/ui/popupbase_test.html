@@ -13,7 +13,10 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.ui.PopupBase</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.events.EventTarget');
   goog.require('goog.events.EventType');
+  goog.require('goog.fx.Transition');
+  goog.require('goog.fx.Transition.EventType');
   goog.require('goog.ui.Popup');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
@@ -178,6 +181,85 @@ function testShowWithNoElementThrowsException() {
   assertEquals('Caller must call setElement before trying to show the popup',
       e.message);
 }
+
+function testShowEventFiredWithNoTransition() {
+  var showHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.SHOW, function() {
+    showHandlerCalled = true;
+  });
+
+  popup.setVisible(true);
+  assertTrue(showHandlerCalled);
+}
+
+function testHideEventFiredWithNoTransition() {
+  var hideHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
+    hideHandlerCalled = true;
+  });
+
+  popup.setVisible(true);
+  popup.setVisible(false);
+  assertTrue(hideHandlerCalled);
+}
+
+function testOnShowTransition() {
+  var mockTransition = new MockTransition();
+
+  var showHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.SHOW, function() {
+    showHandlerCalled = true;
+  });
+
+  popup.setTransition(mockTransition);
+  popup.setVisible(true);
+  assertTrue(mockTransition.wasPlayed);
+
+  assertFalse(showHandlerCalled);
+  mockTransition.dispatchEvent(goog.fx.Transition.EventType.END);
+  assertTrue(showHandlerCalled);
+}
+
+function testOnHideTransition() {
+  var mockTransition = new MockTransition();
+
+  var hideHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
+    hideHandlerCalled = true;
+  });
+
+  popup.setTransition(undefined, mockTransition);
+  popup.setVisible(true);
+  assertFalse(mockTransition.wasPlayed);
+
+  popup.setVisible(false);
+  assertTrue(mockTransition.wasPlayed);
+
+  assertFalse(hideHandlerCalled);
+  mockTransition.dispatchEvent(goog.fx.Transition.EventType.END);
+  assertTrue(hideHandlerCalled);
+}
+
+
+
+/**
+ * @implements {goog.fx.Transition}
+ * @extends {goog.events.EventTarget}
+ */
+var MockTransition = function() {
+  goog.base(this);
+  this.wasPlayed = false;
+};
+goog.inherits(MockTransition, goog.events.EventTarget);
+
+
+MockTransition.prototype.play = function() {
+  this.wasPlayed = true;
+}
+
+
+MockTransition.prototype.stop = goog.nullFunction;
+
 
 // TODO(user): Write better unit tests for click and cross-iframe dismissal.
 

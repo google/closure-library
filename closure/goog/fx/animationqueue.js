@@ -27,7 +27,7 @@ goog.provide('goog.fx.AnimationSerialQueue');
 goog.require('goog.array');
 goog.require('goog.events.EventHandler');
 goog.require('goog.fx.Animation');
-goog.require('goog.fx.Animation.EventType');
+goog.require('goog.fx.Transition.EventType');
 
 
 
@@ -293,7 +293,7 @@ goog.fx.AnimationSerialQueue.prototype.playNext_ = function() {
   if (this.counter_ < this.queue_.length) {
     this.childHandler_.listen(
         this.queue_[this.counter_ - 1],
-        goog.fx.Animation.EventType.FINISH,
+        goog.fx.Transition.EventType.FINISH,
         function() {
           this.playNext_();
         });

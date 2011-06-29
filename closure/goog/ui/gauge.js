@@ -26,6 +26,8 @@ goog.provide('goog.ui.GaugeColoredRange');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.fx.Animation');
+goog.require('goog.fx.Animation.EventType');
+goog.require('goog.fx.Transition.EventType');
 goog.require('goog.fx.easing');
 goog.require('goog.graphics');
 goog.require('goog.graphics.Font');
@@ -501,11 +503,11 @@ goog.ui.Gauge.prototype.setValue = function(value, opt_formattedValue) {
         goog.ui.Gauge.NEEDLE_MOVE_TIME,
         goog.fx.easing.inAndOut);
 
-    var events = [goog.fx.Animation.EventType.BEGIN,
+    var events = [goog.fx.Transition.EventType.BEGIN,
                   goog.fx.Animation.EventType.ANIMATE,
-                  goog.fx.Animation.EventType.END];
+                  goog.fx.Transition.EventType.END];
     goog.events.listen(this.animation_, events, this.onAnimate_, false, this);
-    goog.events.listen(this.animation_, goog.fx.Animation.EventType.END,
+    goog.events.listen(this.animation_, goog.fx.Transition.EventType.END,
         this.onAnimateEnd_, false, this);
 
     // Start animation
