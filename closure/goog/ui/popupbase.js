@@ -433,7 +433,7 @@ goog.ui.PopupBase.prototype.isOrWasRecentlyVisible = function() {
 goog.ui.PopupBase.prototype.setVisible = function(visible) {
   // Make sure that any currently running transition is stopped.
   if (this.showTransition_) this.showTransition_.stop();
-  if (this.endTransition_) this.endTransition_.stop();
+  if (this.hideTransition_) this.hideTransition_.stop();
 
   if (visible) {
     this.show_();
