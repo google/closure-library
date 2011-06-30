@@ -17,12 +17,17 @@ See the COPYING file for details.
   goog.require('goog.events.MouseWheelHandler');
   goog.require('goog.functions');
   goog.require('goog.object');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
 <body>
   <div id="foo"></div>
+  <div id="log" style="position:absolute;right:0;top:0">Logged events:</div>
 <script>
+
+  var log = goog.dom.getElement('log');
+  var stubs = new goog.testing.PropertyReplacer();
 
   var DEFAULT_TYPE = 'mousewheel';
   var GECKO_TYPE = 'DOMMouseScroll';
@@ -33,11 +38,27 @@ See the COPYING file for details.
   var mouseWheelEvent;
   var mouseWheelHandler;
 
+  function setUp() {
+    stubs.remove(goog, 'userAgent');
+  }
+
   function tearDown() {
-    goog.userAgent = null;
+    stubs.reset();
     mouseWheelHandler.dispose();
     mouseWheelHandler = null;
     mouseWheelEvent = null;
+  }
+
+  function tearDownPage() {
+    // Create interactive demo.
+    mouseWheelHandler = new goog.events.MouseWheelHandler(document.body);
+
+    goog.events.listen(mouseWheelHandler,
+        goog.events.MouseWheelHandler.EventType.MOUSEWHEEL,
+        function(e) {
+          log.innerHTML += goog.string.subs('<br/>(deltaX, deltaY): (%s, %s)',
+              e.deltaX, e.deltaY);
+        });
   }
 
   function testIeStyleMouseWheel() {
