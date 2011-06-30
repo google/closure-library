@@ -504,6 +504,9 @@ function testQueryDataIsEmpty() {
   qd = new goog.Uri.QueryData('a=A&b=B&a=A2&b=B2&c=C');
   qd.clear();
   assertTrue(qd.isEmpty());
+
+  qd = new goog.Uri.QueryData('');
+  assertTrue(qd.isEmpty());
 }
 
 function testQueryDataContainsKey() {

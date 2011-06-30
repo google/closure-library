@@ -1078,6 +1078,7 @@ goog.Uri.QueryData = function(opt_query, opt_uri, opt_ignoreCase) {
 goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
   if (!this.keyMap_) {
     this.keyMap_ = new goog.structs.Map();
+    this.count_ = 0;
 
     if (this.encodedQuery_) {
       var pairs = this.encodedQuery_.split('&');
