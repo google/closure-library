@@ -843,9 +843,12 @@ function assertRoughlyEquals(a, b, c, opt_d) {
 
 
 /**
- * @param {*} a
- * @param {*} b
- * @param {*=} opt_c
+ * Checks if the given element is the member of the given container.
+ * @param {*} a Failure message (3 arguments) or the contained element
+ *     (2 arguments).
+ * @param {*} b The contained element (3 arguments) or the container
+ *     (2 arguments).
+ * @param {goog.testing.asserts.ArrayLike=} opt_c The container.
  */
 function assertContains(a, b, opt_c) {
   _validateArguments(2, arguments);
@@ -858,9 +861,12 @@ function assertContains(a, b, opt_c) {
 
 
 /**
- * @param {*} a
- * @param {*} b
- * @param {*=} opt_c
+ * Checks if the given element is not the member of the given container.
+ * @param {*} a Failure message (3 arguments) or the contained element
+ *     (2 arguments).
+ * @param {*} b The contained element (3 arguments) or the container
+ *     (2 arguments).
+ * @param {goog.testing.asserts.ArrayLike=} opt_c The container.
  */
 function assertNotContains(a, b, opt_c) {
   _validateArguments(2, arguments);
