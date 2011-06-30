@@ -64,7 +64,8 @@ goog.dom.FontSizeMonitor = function(opt_domHelper) {
       // iframe has a non zero size and is completely off screen.
       goog.userAgent.IE ? 'div' : 'iframe', {
         'style': 'position:absolute;width:9em;height:9em;top:-99em',
-        'tabIndex': -1
+        'tabIndex': -1,
+        'aria-hidden': 'true'
       });
   var p = dom.getDocument().body;
   p.insertBefore(this.sizeElement_, p.firstChild);

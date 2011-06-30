@@ -157,6 +157,19 @@ function testSetPropertiesDirectAttributeMap() {
   assertEquals('Should be equal', '#myMap', el.getAttribute('usemap'));
 }
 
+function testSetPropertiesAria() {
+  var attrs = {
+    'aria-hidden': 'true',
+    'aria-label': 'This is a label'
+  };
+  var el = goog.dom.createDom('div');
+
+  goog.dom.setProperties(el, attrs);
+  assertEquals('Should be equal', 'true', el.getAttribute('aria-hidden'));
+  assertEquals('Should be equal',
+      'This is a label', el.getAttribute('aria-label'));
+}
+
 function testSetTableProperties() {
   var attrs = {
     'style': 'padding-left: 10px;',
