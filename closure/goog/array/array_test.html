@@ -1134,6 +1134,29 @@ function testArrayEquals() {
 }
 
 
+function testArrayCompare3Basic() {
+  assertEquals( 0, goog.array.compare3([], []));
+  assertEquals( 0, goog.array.compare3(['111', '222'], ['111', '222']));
+  assertEquals(-1, goog.array.compare3(['111', '222'], ['1111', '']));
+  assertEquals( 1, goog.array.compare3(['111', '222'], ['111']));
+  assertEquals( 1, goog.array.compare3(['11', '222', '333'], []));
+  assertEquals(-1, goog.array.compare3([], ['11', '222', '333']));
+}
+
+
+function testArrayCompare3ComparatorFn() {
+  function cmp(a, b) {
+    return a - b;
+  };
+  assertEquals(0, goog.array.compare3([], [], cmp));
+  assertEquals(0, goog.array.compare3([8, 4], [8, 4], cmp));
+  assertEquals(-1, goog.array.compare3([4, 3], [5, 0]));
+  assertEquals(1, goog.array.compare3([6, 2], [6]));
+  assertEquals(1, goog.array.compare3([1, 2, 3], []));
+  assertEquals(-1, goog.array.compare3([], [1, 2, 3]));
+}
+
+
 function assertArraysEqual(arr1, arr2) {
   assertEquals('Expected length ' + arr1.length, arr1.length, arr2.length);
   for (var i = 0; i < arr1.length; i++) {
