@@ -195,6 +195,33 @@ goog.structs.TreeNode.prototype.getRoot = function() {
 
 
 /**
+ * Builds a nested array structure from the node keys in this node's subtree to
+ * facilitate testing tree operations that change the hierarchy.
+ * @return {!Array} The structure of this node's descendants as nested array
+ *     of node keys. The number of unclosed opening brackets up to a particular
+ *     node is proportional to the indentation of that node in the graphical
+ *     representation of the tree. Example:
+ *     <pre>
+ *       this
+ *       |- child1
+ *       |  L- grandchild
+ *       L- child2
+ *     </pre>
+ *     is represented as ['child1', ['grandchild'], 'child2'].
+ */
+goog.structs.TreeNode.prototype.getSubtreeKeys = function() {
+  var ret = [];
+  this.forEachChild(function(child) {
+    ret.push(child.getKey());
+    if (!child.isLeaf()) {
+      ret.push(child.getSubtreeKeys());
+    }
+  });
+  return ret;
+};
+
+
+/**
  * Tells whether this node is the ancestor of the given node.
  * @param {!goog.structs.TreeNode} node A node.
  * @return {boolean} Whether this node is the ancestor of {@code node}.
@@ -301,6 +328,41 @@ goog.structs.TreeNode.prototype.addChildAt = function(child, index) {
   this.children_ = this.children_ || [];
   goog.asserts.assert(index >= 0 && index <= this.children_.length);
   goog.array.insertAt(this.children_, child, index);
+};
+
+
+/**
+ * Replaces a child node at the given index.
+ * @param {!goog.structs.TreeNode} newChild Child node to set. It must not have
+ *     parent node.
+ * @param {number} index Valid index of the old child to replace.
+ * @return {!goog.structs.TreeNode} The original child node, detached from its
+ *     parent.
+ */
+goog.structs.TreeNode.prototype.replaceChildAt = function(newChild, index) {
+  goog.asserts.assert(!newChild.getParent(),
+      'newChild must not have parent node');
+  var children = this.getChildren();
+  var oldChild = children[index];
+  goog.asserts.assert(oldChild, 'Invalid child or child index is given.');
+  oldChild.setParent(null);
+  children[index] = newChild;
+  newChild.setParent(this);
+  return oldChild;
+};
+
+
+/**
+ * Replaces the given child node.
+ * @param {!goog.structs.TreeNode} newChild New node to replace
+ *     {@code oldChild}. It must not have parent node.
+ * @param {!goog.structs.TreeNode} oldChild Existing child node to be replaced.
+ * @return {!goog.structs.TreeNode} The replaced child node detached from its
+ *     parent.
+ */
+goog.structs.TreeNode.prototype.replaceChild = function(newChild, oldChild) {
+  return this.replaceChildAt(newChild,
+      goog.array.indexOf(this.getChildren(), oldChild));
 };
 
 

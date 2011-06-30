@@ -142,6 +142,18 @@ function testGetRoot() {
   assertEquals('has ancestors', node1, node2.getRoot());
 }
 
+function testGetSubtreeKeys() {
+  var root = new goog.structs.TreeNode('root', null);
+  var child1 = new goog.structs.TreeNode('child1', null);
+  var child2 = new goog.structs.TreeNode('child2', null);
+  var grandchild = new goog.structs.TreeNode('grandchild', null);
+  root.addChild(child1);
+  root.addChild(child2);
+  child1.addChild(grandchild);
+  assertArrayEquals('node hierarchy', ['child1', ['grandchild'], 'child2'],
+      root.getSubtreeKeys());
+}
+
 function testContains() {
   var node1 = new goog.structs.TreeNode(1, null);
   var node2 = new goog.structs.TreeNode(2, null);
@@ -248,6 +260,30 @@ function testAddChildAt() {
   node1.addChildAt(node5, 3);
   assertArrayEquals('add to the end', [node3, node4, node2, node5],
       node1.getChildren());
+}
+
+function testReplaceChildAt() {
+  var root = new goog.structs.TreeNode(0, null);
+  var node1 = new goog.structs.TreeNode(1, null);
+  root.addChild(node1);
+
+  var node2 = new goog.structs.TreeNode(2, null);
+  assertEquals('original node', node1, root.replaceChildAt(node2, 0));
+  assertEquals('parent is set', root, node2.getParent());
+  assertArrayEquals('children are updated', [node2], root.getChildren());
+  assertNull('old child node is detached', node1.getParent());
+}
+
+function testReplaceChild() {
+  var root = new goog.structs.TreeNode(0, null);
+  var node1 = new goog.structs.TreeNode(1, null);
+  root.addChild(node1);
+
+  var node2 = new goog.structs.TreeNode(2, null);
+  assertEquals('original node', node1, root.replaceChild(node2, node1));
+  assertEquals('parent is set', root, node2.getParent());
+  assertArrayEquals('children are updated', [node2], root.getChildren());
+  assertNull('old child node is detached', node1.getParent());
 }
 
 function testRemoveChildAt() {
