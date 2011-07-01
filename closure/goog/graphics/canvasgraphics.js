@@ -401,8 +401,22 @@ goog.graphics.CanvasGraphics.prototype.drawElement = function(element) {
  * @param {goog.graphics.CanvasGroupElement|undefined} group The group to draw
  *     it in. If null or undefined, defaults to the root group.
  * @private
+ * @deprecated Use append instead.
  */
 goog.graphics.CanvasGraphics.prototype.append_ = function(element, group) {
+  this.append(element, group);
+};
+
+
+/**
+ * Append an element.
+ *
+ * @param {goog.graphics.Element} element The element to draw.
+ * @param {goog.graphics.CanvasGroupElement|undefined} group The group to draw
+ *     it in. If null or undefined, defaults to the root group.
+ * @protected
+ */
+goog.graphics.CanvasGraphics.prototype.append = function(element, group) {
   group = group || this.canvasElement;
   group.appendChild(element);
 
@@ -431,7 +445,7 @@ goog.graphics.CanvasGraphics.prototype.drawEllipse = function(cx, cy, rx, ry,
     stroke, fill, opt_group) {
   var element = new goog.graphics.CanvasEllipseElement(null, this,
       cx, cy, rx, ry, stroke, fill);
-  this.append_(element, opt_group);
+  this.append(element, opt_group);
   return element;
 };
 
@@ -455,7 +469,7 @@ goog.graphics.CanvasGraphics.prototype.drawRect = function(x, y, width, height,
     stroke, fill, opt_group) {
   var element = new goog.graphics.CanvasRectElement(null, this,
       x, y, width, height, stroke, fill);
-  this.append_(element, opt_group);
+  this.append(element, opt_group);
   return element;
 };
 
@@ -477,7 +491,7 @@ goog.graphics.CanvasGraphics.prototype.drawImage = function(x, y, width, height,
     src, opt_group) {
   var element = new goog.graphics.CanvasImageElement(null, this, x, y, width,
       height, src);
-  this.append_(element, opt_group);
+  this.append(element, opt_group);
   return element;
 };
 
@@ -503,7 +517,7 @@ goog.graphics.CanvasGraphics.prototype.drawTextOnLine = function(
     text, x1, y1, x2, y2, align, font, stroke, fill, opt_group) {
   var element = new goog.graphics.CanvasTextElement(this,
       text, x1, y1, x2, y2, align, font, stroke, fill);
-  this.append_(element, opt_group);
+  this.append(element, opt_group);
   return element;
 };
 
@@ -522,7 +536,7 @@ goog.graphics.CanvasGraphics.prototype.drawPath = function(path, stroke, fill,
     opt_group) {
   var element = new goog.graphics.CanvasPathElement(null, this, path, stroke,
       fill);
-  this.append_(element, opt_group);
+  this.append(element, opt_group);
   return element;
 };
 
@@ -567,7 +581,7 @@ goog.graphics.CanvasGraphics.prototype.createGroup = function(opt_group) {
     this.lastGroup_ = group;
   }
 
-  this.append_(group, opt_group);
+  this.append(group, opt_group);
 
   return group;
 };
