@@ -107,6 +107,22 @@ function testGetLastUri() {
   assertEquals('message sent, URI saved', requestUrl, xhr.getLastUri());
 }
 
+function testGetLastContent() {
+  var xhr = new goog.testing.net.XhrIo();
+  assertEquals('nothing sent yet, empty content',
+               undefined, xhr.getLastContent());
+
+  var postContent = 'var=value&var2=value2';
+  xhr.send('http://www.example.com/', undefined, postContent);
+  assertEquals('POST message sent, content saved',
+               postContent, xhr.getLastContent());
+  xhr.simulateResponse(200, '');
+
+  xhr.send('http://www.example.com/');
+  assertEquals('GET message sent, content cleaned',
+               undefined, xhr.getLastContent());
+}
+
 function testGetResponseText() {
   // Text response came.
   var called = false;
