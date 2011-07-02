@@ -876,15 +876,15 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
   goog.style.showElement(this.getElement(), visible);
 
   if (visible) {
-    /** @preserveTry */
-    try {
-      if (doc.activeElement) {
+    if (doc.activeElement) {
+      /** @preserveTry */
+      try {
         this.outsideFocusEl_ = doc.activeElement;
+      } catch (e) {
+        // NOTE(user): Apparently document.activeElement will sometimes
+        // throw exceptions in IE. If it does, we'll just assume that there
+        // isn't an active element.
       }
-    } catch (e) {
-      // NOTE(user): Apparently document.activeElement will sometimes
-      // throw exceptions in IE. If it does, we'll just assume that there
-      // isn't an active element.
     }
     this.focus();
   }
