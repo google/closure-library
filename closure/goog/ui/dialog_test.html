@@ -23,8 +23,6 @@ See the COPYING file for details.
 </head>
 <body>
 <iframe id="f" src="javascript:'<input>'"></iframe>
-<input id="b" type="button">Open Dialog!</input>
-<input id="e" type="button">Extra button</input>
 <script>
 
   var dialog;
@@ -312,30 +310,6 @@ See the COPYING file for details.
         callRecorder);
     dialog.setVisible(true);
     assertTrue(wasCalled);
-  }
-
-  function testFocusAfterHideEvent() {
-    // Generate a new dialog so we can show it
-    dialog.dispose();
-    dialog = new goog.ui.Dialog();
-    goog.dom.getElement('b').focus();
-    dialog.setVisible(true);
-    dialog.setVisible(false);
-    assertEquals('After opening dialog focus should move back to button',
-                 goog.dom.getElement('b').id,
-                 goog.dom.getDocument().activeElement.id);
-  }
-
-  function testSetFocusElBeforeHideEvent() {
-    // Generate a new dialog so we can show it
-    dialog.dispose();
-    dialog = new goog.ui.Dialog();
-    goog.dom.getElement('b').focus();
-    dialog.setVisible(true);
-    dialog.setOutsideFocusElement(goog.dom.getElement('e'));
-    dialog.setVisible(false);
-    assertEquals(goog.dom.getElement('e').id,
-                 goog.dom.getDocument().activeElement.id);
   }
 
   function testCannedButtonSets() {

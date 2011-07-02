@@ -109,15 +109,6 @@ goog.ui.Dialog.prototype.focusHandler_ = null;
 
 
 /**
- * The element outside of the dialog that should get focus after the dialog is
- * hidden.
- * @type {Element}
- * @private
- */
-goog.ui.Dialog.prototype.outsideFocusEl_;
-
-
-/**
  * Whether the escape key closes this dialog.
  * @type {boolean}
  * @private
@@ -539,7 +530,7 @@ goog.ui.Dialog.prototype.createDom = function() {
       {'className': this.class_, 'tabIndex': 0},
       this.titleEl_ = dom.createDom('div',
           {'className': goog.getCssName(this.class_, 'title'),
-            'id': this.getId()},
+           'id': this.getId()},
           this.titleTextEl_ = dom.createDom('span',
               goog.getCssName(this.class_, 'title-text'), this.title_),
           this.titleCloseEl_ = dom.createDom('span',
@@ -876,16 +867,6 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
   goog.style.showElement(this.getElement(), visible);
 
   if (visible) {
-    if (doc.activeElement) {
-      /** @preserveTry */
-      try {
-        this.outsideFocusEl_ = doc.activeElement;
-      } catch (e) {
-        // NOTE(user): Apparently document.activeElement will sometimes
-        // throw exceptions in IE. If it does, we'll just assume that there
-        // isn't an active element.
-      }
-    }
     this.focus();
   }
 
@@ -895,18 +876,6 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
     this.getHandler().unlisten(this.buttonEl_,
         goog.events.EventType.CLICK, this.onButtonClick_);
     this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_HIDE);
-
-    // Focus the previously focused element. If the previously focused element
-    // is the document body, don't bother.
-    if (this.outsideFocusEl_ && this.outsideFocusEl_ != doc.body) {
-      /** @preserveTry */
-      try {
-        this.outsideFocusEl_.focus();
-      } catch (e) {
-        // Swallow this. IE can throw an error if the element cannot be focused.
-      }
-      this.outsideFocusEl_ = null;
-    }
     if (this.disposeOnHide_) {
       this.dispose();
     }
@@ -978,26 +947,6 @@ goog.ui.Dialog.prototype.focus = function() {
       }
     }
   }
-};
-
-
-/**
- * Sets the element outside of the dialog that will get focus after the dialog
- * is hidden.
- * @param {Element} element The element outside of the dialog.
- */
-goog.ui.Dialog.prototype.setOutsideFocusElement = function(element) {
-  this.outsideFocusEl_ = element;
-};
-
-
-/**
- * Gets the element outside of the dialog that will get focus after the dialog
- * is hidden.
- * @return {Element} The element outside of the dialog.
- */
-goog.ui.Dialog.prototype.getOutsideFocusElement = function() {
-  return this.outsideFocusEl_;
 };
 
 
@@ -1498,7 +1447,7 @@ goog.ui.Dialog.ButtonSet.prototype.set = function(key, caption,
  *     "addButton" calls and build new ButtonSets.
  */
 goog.ui.Dialog.ButtonSet.prototype.addButton = function(button, opt_isDefault,
-    opt_isCancel) {
+      opt_isCancel) {
   return this.set(button.key, button.caption, opt_isDefault, opt_isCancel);
 };
 
