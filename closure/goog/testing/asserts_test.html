@@ -295,7 +295,38 @@ See the COPYING file for details.
     assertThrows('Objects should not be equal', function() {
       assertObjectEquals(obj5, obj4);
     });
+  }
 
+  function testAssertObjectNotEquals() {
+    var obj1 = [{'a': 'hello', 'b': 'world'}];
+    var obj2 = [{'a': 'hello', 'c': 'dear', 'b' : 'world'}];
+
+    // Check with obj1 and obj2 as first and second arguments respectively.
+    assertObjectNotEquals(obj1, obj2);
+
+    // Check with obj1 and obj2 as second and first arguments respectively.
+    assertObjectNotEquals(obj2, obj1);
+
+    // Test if equal objects are considered equal.
+    var obj3 = [{'b': 'world', 'a': 'hello'}];
+    var error = assertThrows('Objects should be equal', function() {
+      assertObjectNotEquals(obj1, obj3);
+    });
+    assertContains('Objects should not be equal', error.message);
+    error = assertThrows('Objects should be equal', function() {
+      assertObjectNotEquals(obj3, obj1);
+    });
+    assertContains('Objects should not be equal', error.message);
+
+    // Test with a case where one of the members has an undefined value.
+    var obj4 = [{'a': 'hello', 'b': undefined}];
+    var obj5 = [{'a': 'hello'}];
+
+    // Check with obj4 and obj5 as first and second arguments respectively.
+    assertObjectNotEquals(obj4, obj5);
+
+    // Check with obj5 and obj4 as first and second arguments respectively.
+    assertObjectNotEquals(obj5, obj4);
   }
 
   function testAssertObjectEquals2() {
