@@ -595,8 +595,9 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
  *
  * See asserts_test.html for more interesting edge cases.
  *
- * The first comparison object provided is the expected value, the
- * second the actual.
+ * The first comparison object provided is the expected value, the second is
+ * the actual.
+ *
  * @param {*} a Assertion message or comparison object.
  * @param {*} b Comparison object.
  * @param {*=} opt_c Comparison object, if an assertion message was provided.
@@ -618,8 +619,6 @@ function assertObjectEquals(a, b, opt_c) {
  * All the same caveats as for assertObjectEquals apply here:
  * Undefined values may be confused for missing values, or vice versa.
  *
- * The first comparison object provided is the expected value, the
- * second the actual.
  * @param {*} a Assertion message or comparison object.
  * @param {*} b Comparison object.
  * @param {*=} opt_c Comparison object, if an assertion message was provided.
@@ -1050,6 +1049,7 @@ goog.exportSymbol('assertNonEmptyString', assertNonEmptyString);
 goog.exportSymbol('assertNaN', assertNaN);
 goog.exportSymbol('assertNotNaN', assertNotNaN);
 goog.exportSymbol('assertObjectEquals', assertObjectEquals);
+goog.exportSymbol('assertObjectNotEquals', assertObjectNotEquals);
 goog.exportSymbol('assertArrayEquals', assertArrayEquals);
 goog.exportSymbol('assertElementsEquals', assertElementsEquals);
 goog.exportSymbol('assertSameElements', assertSameElements);
