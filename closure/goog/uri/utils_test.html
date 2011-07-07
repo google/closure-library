@@ -51,6 +51,8 @@ function testSplit() {
       utils.getPath('mailto:terer258+foo@gmail.com'));
   assertEquals('Query data with no fragment identifier', 'foo=bar&baz=bin',
       utils.getQueryData('http://google.com?foo=bar&baz=bin'));
+
+  assertNull(utils.getDomain('mailto:joe@hominid.com'));
 }
 
 
