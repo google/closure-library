@@ -499,8 +499,11 @@ goog.testing.Mock.prototype.$verifyCall = function(expectation, name, args) {
   if (expectation.name != name) {
     return false;
   }
-  var verifierFn = this.$argumentListVerifiers_[expectation.name] ||
+  var verifierFn =
+      this.$argumentListVerifiers_.hasOwnProperty(expectation.name) ?
+      this.$argumentListVerifiers_[expectation.name] :
       goog.testing.mockmatchers.flexibleArrayMatcher;
+
   return verifierFn(expectation.argumentList, args, expectation);
 };
 

@@ -90,6 +90,11 @@ See the COPYING file for details.
     assertTrue(mock.$verifyCall(expectation, 'a', [new RealObject()]));
   }
 
+  function testVerifyArgumentListForObjectMethods() {
+    var expectation = new goog.testing.MockExpectation('toString');
+    expectation.argumentList = []
+    assertTrue(mock.$verifyCall(expectation, 'toString', []));
+  }
 
   function testRegisterArgumentListVerifier() {
     var expectationA = new goog.testing.MockExpectation('a');
