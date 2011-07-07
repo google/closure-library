@@ -44,17 +44,32 @@ function testSplit() {
   assertEquals('q=query&hl=en', utils.getQueryData(uri));
   assertEquals('fragment', utils.getFragmentEncoded(uri));
   assertEquals('fragment', utils.getFragment(uri));
+
   assertNull(utils.getDomain('http://!!!'));
   assertNull(utils.getScheme('www.x.com:80'));
-
-  assertEquals('terer258+foo@gmail.com',
-      utils.getPath('mailto:terer258+foo@gmail.com'));
   assertEquals('Query data with no fragment identifier', 'foo=bar&baz=bin',
       utils.getQueryData('http://google.com?foo=bar&baz=bin'));
-
-  assertNull(utils.getDomain('mailto:joe@hominid.com'));
 }
 
+function testMailtoUri() {
+  var uri = 'mailto:joe+random@hominid.com';
+  assertNull(utils.getDomain(uri));
+  assertEquals('mailto', utils.getScheme(uri));
+  assertEquals('joe+random@hominid.com', utils.getPath(uri));
+}
+
+function testSplitRelativeUri() {
+  var uri = '/path%20path+path?q=query&hl=en#fragment';
+  assertNull(utils.getScheme(uri));
+  assertNull(utils.getDomain(uri));
+  assertNull(utils.getDomainEncoded(uri));
+  assertNull(utils.getPort(uri));
+  assertEquals('/path%20path+path', utils.getPathEncoded(uri));
+  assertEquals('/path path+path', utils.getPath(uri));
+  assertEquals('q=query&hl=en', utils.getQueryData(uri));
+  assertEquals('fragment', utils.getFragmentEncoded(uri));
+  assertEquals('fragment', utils.getFragment(uri));
+}
 
 function testSplitIntoHostAndPath() {
   // Splitting into host and path takes care of one of the major use cases
