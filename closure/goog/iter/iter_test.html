@@ -438,6 +438,42 @@ function testProductIteration() {
   assertEquals(goog.iter.StopIteration, ex);
 }
 
+function testCycle() {
+
+  var regularArray = [1, 2, 3];
+  var iter = goog.iter.cycle(regularArray);
+
+  // Test 3 cycles to ensure proper cache behavior
+  var values = [];
+  for (var i = 0; i < 9; i++) {
+    values.push(iter.next());
+  }
+
+  assertArrayEquals([1, 2, 3, 1, 2, 3, 1, 2, 3], values);
+}
+
+function testCycleSingleItemIterable() {
+  var singleItemArray = [1];
+
+  var iter = goog.iter.cycle(singleItemArray);
+  var values = [];
+
+  for (var i = 0; i < 5; i++) {
+    values.push(iter.next());
+  }
+
+  assertArrayEquals([1, 1, 1, 1, 1], values);
+}
+
+function testCycleEmptyIterable() {
+
+  var emptyArray = [];
+
+  var iter = goog.iter.cycle(emptyArray);
+  var ex = assertThrows(function(){ iter.next(); });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
 </script>
 </body>
 </html>
