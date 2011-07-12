@@ -775,10 +775,10 @@ goog.date.Date.prototype.getYear = function() {
 
 
 /**
- * @return {number} The month of date, 0 = Jan, 11 = Dec.
+ * @return {goog.date.month} The month of date, 0 = Jan, 11 = Dec.
  */
 goog.date.Date.prototype.getMonth = function() {
-  return this.date_.getMonth();
+  return /** @type {goog.date.month} */ (this.date_.getMonth());
 };
 
 
@@ -801,10 +801,10 @@ goog.date.Date.prototype.getTime = function() {
 
 
 /**
- * @return {number} The day of week, US style. 0 = Sun, 6 = Sat.
+ * @return {goog.date.weekDay} The day of week, US style. 0 = Sun, 6 = Sat.
  */
 goog.date.Date.prototype.getDay = function() {
-  return this.date_.getDay();
+  return /** @type {goog.date.weekDay} */ (this.date_.getDay());
 };
 
 
@@ -833,11 +833,11 @@ goog.date.Date.prototype.getUTCFullYear = function() {
 
 
 /**
- * @return {number} The month of date according to universal time,
+ * @return {goog.date.month} The month of date according to universal time,
  *     0 = Jan, 11 = Dec.
  */
 goog.date.Date.prototype.getUTCMonth = function() {
-  return this.date_.getUTCMonth();
+  return /** @type {goog.date.month} */ (this.date_.getUTCMonth());
 };
 
 
@@ -850,11 +850,11 @@ goog.date.Date.prototype.getUTCDate = function() {
 
 
 /**
- * @return {number} The day of week according to universal time, US style.
- *     0 = Sun, 1 = Mon, 6 = Sat.
+ * @return {goog.date.weekDay} The day of week according to universal time,
+ *     US style. 0 = Sun, 1 = Mon, 6 = Sat.
  */
 goog.date.Date.prototype.getUTCDay = function() {
-  return this.date_.getDay();
+  return /** @type {goog.date.weekDay} */ (this.date_.getDay());
 };
 
 
@@ -1011,6 +1011,8 @@ goog.date.Date.prototype.setYear = function(year) {
 
 /**
  * Sets the month part of the date.
+ *
+ * TODO(user): Update type to goog.date.month.
  *
  * @param {number} month The month, where 0 = Jan, 11 = Dec.
  */
@@ -1326,10 +1328,10 @@ goog.date.DateTime.prototype.getMilliseconds = function() {
 /**
  * Returns the day of week according to universal time, US style.
  *
- * @return {number} Day of week, 0 = Sun, 1 = Mon, 6 = Sat.
+ * @return {goog.date.weekDay} Day of week, 0 = Sun, 1 = Mon, 6 = Sat.
  */
 goog.date.DateTime.prototype.getUTCDay = function() {
-  return this.date_.getUTCDay();
+  return /** @type {goog.date.weekDay} */ (this.date_.getUTCDay());
 };
 
 
