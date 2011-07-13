@@ -17,10 +17,12 @@ See the COPYING file for details.
 <title>Global Mock Unit Test</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.array');
   goog.require('goog.testing.asserts');
   goog.require('goog.testing.FunctionMock');
   goog.require('goog.testing.GlobalFunctionMock');
   goog.require('goog.testing.MethodMock');
+  goog.require('goog.testing.Mock');
   goog.require('goog.testing.StrictMock');
   goog.require('goog.testing.jsunit');
 </script>
@@ -39,6 +41,40 @@ function tearDown() {
 
 
 //----- Tests for goog.testing.FunctionMock
+
+function testMockFunctionCallOrdering() {
+  var doOneTest = function(mockFunction, success, expected_args, actual_args) {
+    goog.array.forEach(expected_args, function(arg) { mockFunction(arg); });
+    mockFunction.$replay();
+    var callFunction = function() {
+      goog.array.forEach(actual_args, function(arg) { mockFunction(arg); });
+      mockFunction.$verify();
+    };
+    if (success) {
+      callFunction();
+    } else {
+      assertThrows(callFunction);
+    }
+  };
+
+  var doTest = function(strict_ok, loose_ok, expected_args, actual_args) {
+    doOneTest(goog.testing.createFunctionMock(), strict_ok,
+              expected_args, actual_args);
+    doOneTest(goog.testing.createFunctionMock('name'), strict_ok,
+              expected_args, actual_args);
+    doOneTest(goog.testing.createFunctionMock('name', goog.testing.Mock.STRICT),
+              strict_ok, expected_args, actual_args);
+    doOneTest(goog.testing.createFunctionMock('name', goog.testing.Mock.LOOSE),
+              loose_ok, expected_args, actual_args);
+  }
+
+  doTest(true, true, [1, 2], [1, 2]);
+  doTest(false, true, [1, 2], [2, 1]);
+  doTest(false, false, [1, 2], [2, 2]);
+  doTest(false, false, [1, 2], [1]);
+  doTest(false, false, [1, 2], [1, 1]);
+  doTest(false, false, [1, 2], [1]);
+}
 
 function testMocksFunctionWithNoArgs() {
   var mockFoo = goog.testing.createFunctionMock();
@@ -233,6 +269,43 @@ function testTearDownHandlesMultipleMocking() {
   assertEquals('I am Spartacus!', globalFoo());
 }
 
+function testGlobalFunctionMockCallOrdering() {
+  var mock = goog.testing.createGlobalFunctionMock('globalFoo');
+  mock(1);
+  mock(2);
+  mock.$replay();
+  assertThrows(function(){globalFoo(2);});
+  mock.$tearDown();
+
+  mock = goog.testing.createGlobalFunctionMock('globalFoo',
+                                               goog.testing.Mock.STRICT);
+  mock(1);
+  mock(2);
+  mock.$replay();
+  globalFoo(1);
+  globalFoo(2);
+  mock.$verify();
+  mock.$tearDown();
+
+  mock = goog.testing.createGlobalFunctionMock('globalFoo',
+                                               goog.testing.Mock.STRICT);
+  mock(1);
+  mock(2);
+  mock.$replay();
+  assertThrows(function(){globalFoo(2);});
+  mock.$tearDown();
+
+  mock = goog.testing.createGlobalFunctionMock('globalFoo',
+                                               goog.testing.Mock.LOOSE);
+  mock(1);
+  mock(2);
+  mock.$replay();
+  globalFoo(2);
+  globalFoo(1);
+  mock.$verify();
+  mock.$tearDown();
+}
+
 //----- Functions for goog.testing.MethodMock to mock
 
 var mynamespace = {};
@@ -264,6 +337,43 @@ function testMethodMockCanOnlyMockExistingMethods() {
   assertThrows(function() {
     goog.testing.createMethodMock(mynamespace, 'doesNotExist');
   });
+}
+
+function testMethodMockCallOrdering() {
+  goog.testing.createMethodMock(mynamespace, 'myMethod');
+  mynamespace.myMethod(1);
+  mynamespace.myMethod(2);
+  mynamespace.myMethod.$replay();
+  assertThrows(function(){mynamespace.myMethod(2);});
+  mynamespace.myMethod.$tearDown();
+
+  goog.testing.createMethodMock(mynamespace, 'myMethod',
+                                goog.testing.Mock.STRICT);
+  mynamespace.myMethod(1);
+  mynamespace.myMethod(2);
+  mynamespace.myMethod.$replay();
+  mynamespace.myMethod(1);
+  mynamespace.myMethod(2);
+  mynamespace.myMethod.$verify();
+  mynamespace.myMethod.$tearDown();
+
+  goog.testing.createMethodMock(mynamespace, 'myMethod',
+                                goog.testing.Mock.STRICT);
+  mynamespace.myMethod(1);
+  mynamespace.myMethod(2);
+  mynamespace.myMethod.$replay();
+  assertThrows(function(){mynamespace.myMethod(2);});
+  mynamespace.myMethod.$tearDown();
+
+  goog.testing.createMethodMock(mynamespace, 'myMethod',
+                                goog.testing.Mock.LOOSE);
+  mynamespace.myMethod(1);
+  mynamespace.myMethod(2);
+  mynamespace.myMethod.$replay();
+  mynamespace.myMethod(2);
+  mynamespace.myMethod(1);
+  mynamespace.myMethod.$verify();
+  mynamespace.myMethod.$tearDown();
 }
 
 //----- Functions for goog.testing.createConstructorMock to mock
@@ -341,6 +451,51 @@ function testConstructorMockWithClassMembers() {
   mockConstructor.$tearDown();
 }
 
+function testConstructorMockCallOrdering() {
+  var instance = {};
+
+  goog.testing.createConstructorMock(constructornamespace,
+                                     'MyConstructorWithArgument');
+  constructornamespace.MyConstructorWithArgument(1).$returns(instance);
+  constructornamespace.MyConstructorWithArgument(2).$returns(instance);
+  constructornamespace.MyConstructorWithArgument.$replay();
+  assertThrows(
+      function(){new constructornamespace.MyConstructorWithArgument(2);});
+  constructornamespace.MyConstructorWithArgument.$tearDown();
+
+  goog.testing.createConstructorMock(constructornamespace,
+                                     'MyConstructorWithArgument',
+                                     goog.testing.Mock.STRICT);
+  constructornamespace.MyConstructorWithArgument(1).$returns(instance);
+  constructornamespace.MyConstructorWithArgument(2).$returns(instance);
+  constructornamespace.MyConstructorWithArgument.$replay();
+  new constructornamespace.MyConstructorWithArgument(1);
+  new constructornamespace.MyConstructorWithArgument(2);
+  constructornamespace.MyConstructorWithArgument.$verify();
+  constructornamespace.MyConstructorWithArgument.$tearDown();
+
+  goog.testing.createConstructorMock(constructornamespace,
+                                     'MyConstructorWithArgument',
+                                     goog.testing.Mock.STRICT);
+  constructornamespace.MyConstructorWithArgument(1).$returns(instance);
+  constructornamespace.MyConstructorWithArgument(2).$returns(instance);
+  constructornamespace.MyConstructorWithArgument.$replay();
+  assertThrows(
+      function(){new constructornamespace.MyConstructorWithArgument(2);});
+  constructornamespace.MyConstructorWithArgument.$tearDown();
+
+  goog.testing.createConstructorMock(constructornamespace,
+                                     'MyConstructorWithArgument',
+                                     goog.testing.Mock.LOOSE);
+  constructornamespace.MyConstructorWithArgument(1).$returns(instance);
+  constructornamespace.MyConstructorWithArgument(2).$returns(instance);
+  constructornamespace.MyConstructorWithArgument.$replay();
+  new constructornamespace.MyConstructorWithArgument(2);
+  new constructornamespace.MyConstructorWithArgument(1);
+  constructornamespace.MyConstructorWithArgument.$verify();
+  constructornamespace.MyConstructorWithArgument.$tearDown();
+}
+
 //----- Helper assertions
 
 function assertQuacksLike(obj, target) {
@@ -354,4 +509,3 @@ function assertQuacksLike(obj, target) {
 
 </body>
 </html>
-
