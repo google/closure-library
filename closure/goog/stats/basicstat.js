@@ -88,6 +88,15 @@ goog.stats.BasicStat.prototype.logger_ =
 
 
 /**
+ * @return {number} The interval which over statistics are being
+ *     accumulated, in milliseconds.
+ */
+goog.stats.BasicStat.prototype.getInterval = function() {
+  return this.interval_;
+};
+
+
+/**
  * Increments the count of this statistic by the specified amount.
  *
  * @param {number} amt The amount to increase the count by.
