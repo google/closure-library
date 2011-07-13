@@ -13,6 +13,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.net.xpc.CrossPageChannel');
+  goog.require('goog.net.xpc.CrossPageChannelRole');
   goog.require('goog.net.xpc.NativeMessagingTransport');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
@@ -115,7 +116,7 @@ function testSendingMessagesToUnconnectedInnerPeer() {
 
   // Construct an unconnected inner peer.
   xpc.getRole = function() {
-    return goog.net.xpc.CrossPageChannel.Role.INNER;
+    return goog.net.xpc.CrossPageChannelRole.INNER;
   };
   xpc.isConnected = function() {
     return false;

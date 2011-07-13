@@ -24,6 +24,7 @@ goog.provide('goog.net.xpc.IframePollingTransport.Sender');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.net.xpc');
+goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
 goog.require('goog.userAgent');
 
@@ -287,7 +288,7 @@ goog.net.xpc.IframePollingTransport.prototype.checkForeignFramesReady_ =
         this.isRcvFrameReady_(this.getAckFrameName_()))) {
     goog.net.xpc.logger.finest('foreign frames not (yet) present');
 
-    if (this.channel_.getRole() == goog.net.xpc.CrossPageChannel.Role.INNER &&
+    if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.INNER &&
         !this.reconnectFrame_) {
       // The inner peer should always have its receiving frames ready.
       // It is safe to assume the channel name has fallen out of sync
@@ -295,7 +296,7 @@ goog.net.xpc.IframePollingTransport.prototype.checkForeignFramesReady_ =
       // which the outer peer will find, and use to resync the channel names.
       this.innerPeerReconnect_();
     } else if (this.channel_.getRole() ==
-               goog.net.xpc.CrossPageChannel.Role.OUTER) {
+               goog.net.xpc.CrossPageChannelRole.OUTER) {
       // The inner peer is either not loaded yet, or the receiving
       // frames are simply missing. Since we cannot discern the two cases, we
       // should scan for a reconnect message from the inner peer.

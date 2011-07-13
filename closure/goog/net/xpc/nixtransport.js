@@ -34,6 +34,7 @@
 goog.provide('goog.net.xpc.NixTransport');
 
 goog.require('goog.net.xpc');
+goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
 goog.require('goog.reflect');
 
@@ -293,7 +294,7 @@ goog.net.xpc.NixTransport.prototype.nixChannel_ = null;
  * Connect this transport.
  */
 goog.net.xpc.NixTransport.prototype.connect = function() {
-  if (this.channel_.getRole() == goog.net.xpc.CrossPageChannel.Role.OUTER) {
+  if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.OUTER) {
     this.attemptOuterSetup_();
   } else {
     this.attemptInnerSetup_();

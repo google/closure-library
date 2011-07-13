@@ -20,7 +20,6 @@
  */
 
 goog.provide('goog.net.xpc.CrossPageChannel');
-goog.provide('goog.net.xpc.CrossPageChannel.Role');
 
 goog.require('goog.Disposable');
 goog.require('goog.Uri');
@@ -29,6 +28,7 @@ goog.require('goog.events');
 goog.require('goog.json');
 goog.require('goog.messaging.AbstractChannel');
 goog.require('goog.net.xpc');
+goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.FrameElementMethodTransport');
 goog.require('goog.net.xpc.IframePollingTransport');
 goog.require('goog.net.xpc.IframeRelayTransport');
@@ -575,23 +575,13 @@ goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_ = function(name) {
 
 
 /**
- * The role of the peer.
- * @enum {number}
- */
-goog.net.xpc.CrossPageChannel.Role = {
-  OUTER: 0,
-  INNER: 1
-};
-
-
-/**
  * Returns the role of this channel (either inner or outer).
  * @return {number} The role of this channel.
  */
 goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
   return window.parent == this.peerWindowObject_ ?
-      goog.net.xpc.CrossPageChannel.Role.INNER :
-      goog.net.xpc.CrossPageChannel.Role.OUTER;
+      goog.net.xpc.CrossPageChannelRole.INNER :
+      goog.net.xpc.CrossPageChannelRole.OUTER;
 };
 
 
