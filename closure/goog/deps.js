@@ -405,6 +405,7 @@ goog.addDependency('soy/renderer.js', ['goog.soy.InjectedDataSupplier', 'goog.so
 goog.addDependency('soy/soy.js', ['goog.soy'], ['goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName']);
 goog.addDependency('soy/soy_test.js', ['goog.soy.testHelper'], ['goog.dom', 'goog.string', 'goog.userAgent']);
 goog.addDependency('spell/spellcheck.js', ['goog.spell.SpellCheck', 'goog.spell.SpellCheck.WordChangedEvent'], ['goog.Timer', 'goog.events.EventTarget', 'goog.structs.Set']);
+goog.addDependency('stats/basicstat.js', ['goog.stats.BasicStat'], ['goog.array', 'goog.debug.Logger', 'goog.iter', 'goog.object', 'goog.string.format', 'goog.structs.CircularBuffer']);
 goog.addDependency('storage/collectablestorage.js', ['goog.storage.CollectableStorage'], ['goog.array', 'goog.asserts', 'goog.iter', 'goog.storage.ErrorCode', 'goog.storage.ExpiringStorage', 'goog.storage.RichStorage.Wrapper', 'goog.storage.mechanism.IterableMechanism']);
 goog.addDependency('storage/encryptedstorage.js', ['goog.storage.EncryptedStorage'], ['goog.crypt', 'goog.crypt.Arc4', 'goog.crypt.Sha1', 'goog.crypt.base64', 'goog.json', 'goog.json.Serializer', 'goog.storage.CollectableStorage', 'goog.storage.ErrorCode', 'goog.storage.RichStorage', 'goog.storage.RichStorage.Wrapper', 'goog.storage.mechanism.IterableMechanism']);
 goog.addDependency('storage/errorcode.js', ['goog.storage.ErrorCode'], []);
