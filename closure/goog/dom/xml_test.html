@@ -72,6 +72,32 @@ function testMaxSizeInIE() {
   }
 }
 
+function testSetAttributes() {
+  var xmlElement = goog.dom.xml.createDocument().createElement('root');
+  var domElement = document.createElement('div');
+  var attrs = {
+    name: 'test3',
+    title: 'A title',
+    random: 'woop',
+    cellpadding: '123'
+  };
+
+  goog.dom.xml.setAttributes(xmlElement, attrs);
+  goog.dom.xml.setAttributes(domElement, attrs);
+
+  assertEquals('test3', xmlElement.getAttribute('name'));
+  assertEquals('test3', domElement.getAttribute('name'));
+
+  assertEquals('A title', xmlElement.getAttribute('title'));
+  assertEquals('A title', domElement.getAttribute('title'));
+
+  assertEquals('woop', xmlElement.getAttribute('random'));
+  assertEquals('woop', domElement.getAttribute('random'));
+
+  assertEquals('123', xmlElement.getAttribute('cellpadding'));
+  assertEquals('123', domElement.getAttribute('cellpadding'));
+}
+
 </script>
 </body>
 </html>
