@@ -94,7 +94,7 @@ goog.style.getStyle = function(element, property) {
 /**
  * Retrieves a computed style value of a node. It returns empty string if the
  * value cannot be computed (which will be the case in Internet Explorer) or
- * "none" if the property requested is a SVG one and it has not been
+ * "none" if the property requested is an SVG one and it has not been
  * explicitly set (firefox and webkit).
  *
  * @param {Element} element Element to get style of.
@@ -868,12 +868,12 @@ goog.style.setWidth = function(element, width) {
  * Gets the height and width of an element, even if its display is none.
  * Specifically, this returns the height and width of the border box,
  * irrespective of the box model in effect.
- * @param {Element} element Element to get width of.
+ * @param {Element} element Element to get size of.
  * @return {!goog.math.Size} Object with width/height properties.
  */
 goog.style.getSize = function(element) {
   if (goog.style.getStyle_(element, 'display') != 'none') {
-    return new goog.math.Size(element.offsetWidth, element.offsetHeight);
+    return goog.style.getSizeWithDisplay_(element);
   }
 
   var style = element.style;
@@ -885,14 +885,39 @@ goog.style.getSize = function(element) {
   style.position = 'absolute';
   style.display = 'inline';
 
-  var originalWidth = element.offsetWidth;
-  var originalHeight = element.offsetHeight;
+  var size = goog.style.getSizeWithDisplay_(element);
 
   style.display = originalDisplay;
   style.position = originalPosition;
   style.visibility = originalVisibility;
 
-  return new goog.math.Size(originalWidth, originalHeight);
+  return size;
+};
+
+
+/**
+ * Gets the height and with of an element when the display is not none.
+ * @param {Element} element Element to get size of.
+ * @return {!goog.math.Size} Object with width/height properties.
+ * @private
+ */
+goog.style.getSizeWithDisplay_ = function(element) {
+  var offsetWidth = element.offsetWidth;
+  var offsetHeight = element.offsetHeight;
+  var webkitOffsetsZero =
+      goog.userAgent.WEBKIT && !offsetWidth && !offsetHeight;
+  if ((!goog.isDef(offsetWidth) || webkitOffsetsZero) &&
+      element.getBoundingClientRect) {
+    // Fall back to calling getBoundingClientRect when offsetWidth or
+    // offsetHeight are not defined, or when they are zero in WebKit browsers.
+    // This makes sure that we return for the correct size for SVG elements, but
+    // will still return 0 on Webkit prior to 534.8, see
+    // http://trac.webkit.org/changeset/67252.
+    var clientRect = goog.style.getBoundingClientRect_(element);
+    return new goog.math.Size(clientRect.right - clientRect.left,
+        clientRect.bottom - clientRect.top);
+  }
+  return new goog.math.Size(offsetWidth, offsetHeight);
 };
 
 

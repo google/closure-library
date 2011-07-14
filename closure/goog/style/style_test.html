@@ -589,7 +589,7 @@ function testGetComputedStyleMsFilter() {
     // IE always returns empty string for computed styles.
     assertEquals('', goog.style.getComputedStyle(e, 'filter'));
   } else {
-    // Non IE returns 'none' for filter as it is a SVG property
+    // Non IE returns 'none' for filter as it is an SVG property
     assertEquals('none', goog.style.getComputedStyle(e, 'filter'));
   }
 }
@@ -602,7 +602,7 @@ function testGetComputedStyleFilter() {
     // IE always returns empty string for computed styles.
     assertEquals('', goog.style.getComputedStyle(e, 'filter'));
   } else {
-    // Non IE returns 'none' for filter as it is a SVG property
+    // Non IE returns 'none' for filter as it is an SVG property
     assertEquals('none', goog.style.getComputedStyle(e, 'filter'));
   }
 }
@@ -1127,6 +1127,57 @@ function testGetSize() {
   dims = goog.style.getSize(el);
   assertNotEquals(0, dims.width);
   assertNotEquals(0, dims.height);
+}
+
+function testGetSizeSvgElements() {
+  var svgEl = document.createElementNS &&
+       document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  if (!svgEl || svgEl.getAttribute('transform') == '' ||
+      (goog.userAgent.WEBKIT && !goog.userAgent.isVersion(534.8))) {
+    // SVG not supported, or getBoundingClientRect not supported on SVG
+    // elements.
+    return;
+  }
+
+  document.body.appendChild(svgEl);
+  el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  el.setAttribute('x', 10);
+  el.setAttribute('y', 10);
+  el.setAttribute('width', 32);
+  el.setAttribute('height', 21);
+  el.setAttribute('fill', '#000');
+
+  svgEl.appendChild(el);
+
+  dims = goog.style.getSize(el);
+  assertEquals(32, dims.width);
+  assertEquals(21, dims.height);
+
+  dims = goog.style.getSize(svgEl);
+  if (goog.userAgent.WEBKIT) {
+    // The size of the <svg> will be the viewport size on WebKit browsers.
+    assertTrue(dims.width >= 32);
+    assertTrue(dims.height >= 21);
+  } else {
+    assertEquals(32, dims.width);
+    assertEquals(21, dims.height);
+  }
+
+  el.style.visibility = 'none';
+
+  dims = goog.style.getSize(el);
+  assertEquals(32, dims.width);
+  assertEquals(21, dims.height);
+
+  dims = goog.style.getSize(svgEl);
+  if (goog.userAgent.WEBKIT) {
+    // The size of the <svg> will be the viewport size on WebKit browsers.
+    assertTrue(dims.width >= 32);
+    assertTrue(dims.height >= 21);
+  } else {
+    assertEquals(32, dims.width);
+    assertEquals(21, dims.height);
+  }
 }
 
 function testGetSizeInlineBlock() {
