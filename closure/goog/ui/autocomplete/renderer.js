@@ -24,6 +24,7 @@ goog.provide('goog.ui.AutoComplete.Renderer.CustomRenderer');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
+goog.require('goog.dispose');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -208,13 +209,19 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
    */
   this.topAlign_ = false;
 
-   /**
-    * Duration (in msec) of fade animation when menu is shown/hidden.
-    * Setting to 0 (default) disables animation entirely.
-    * @type {number}
-    * @private
-    */
+  /**
+   * Duration (in msec) of fade animation when menu is shown/hidden.
+   * Setting to 0 (default) disables animation entirely.
+   * @type {number}
+   * @private
+   */
   this.menuFadeDuration_ = 0;
+
+  /**
+   * Animation in progress, if any.
+   * @type {goog.fx.Animation|undefined}
+   */
+  this.animation_;
 };
 goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
 
@@ -308,8 +315,10 @@ goog.ui.AutoComplete.Renderer.prototype.dismiss = function() {
   if (this.visible_) {
     this.visible_ = false;
     if (this.menuFadeDuration_ > 0) {
-      new goog.fx.dom.FadeOutAndHide(this.element_,
-          this.menuFadeDuration_).play();
+      goog.dispose(this.animation_);
+      this.animation_ = new goog.fx.dom.FadeOutAndHide(this.element_,
+          this.menuFadeDuration_);
+      this.animation_.play();
     } else {
       goog.style.showElement(this.element_, false);
     }
@@ -324,8 +333,10 @@ goog.ui.AutoComplete.Renderer.prototype.show = function() {
   if (!this.visible_) {
     this.visible_ = true;
     if (this.menuFadeDuration_ > 0) {
-      new goog.fx.dom.FadeInAndShow(this.element_,
-          this.menuFadeDuration_).play();
+      goog.dispose(this.animation_);
+      this.animation_ = new goog.fx.dom.FadeInAndShow(this.element_,
+          this.menuFadeDuration_);
+      this.animation_.play();
     } else {
       goog.style.showElement(this.element_, true);
     }
@@ -547,8 +558,6 @@ goog.ui.AutoComplete.Renderer.prototype.setAutoPosition = function(auto) {
  * @protected
  */
 goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
-  goog.ui.AutoComplete.Renderer.superClass_.disposeInternal.call(this);
-
   if (this.element_) {
     goog.events.unlisten(this.element_, goog.events.EventType.CLICK,
         this.handleClick_, false, this);
@@ -564,7 +573,10 @@ goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
     this.visible_ = false;
   }
 
+  goog.dispose(this.animation_);
   delete this.parent_;
+
+  goog.ui.AutoComplete.Renderer.superClass_.disposeInternal.call(this);
 };
 
 
