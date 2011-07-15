@@ -86,8 +86,14 @@ function testRegisterAndUnregisterAnimation() {
   replacer.set(goog.Timer.defaultTimerObject, 'clearTimeout', function() {
     setTimoutCount--;
   });
+  replacer.set(Animation, 'requestAnimationFrameFn_', function() {
+    setTimoutCount++;
+    return timerIdCounter++;
+  });
+  replacer.set(Animation, 'cancelRequestAnimationFrameFn_', function() {
+    setTimoutCount--;
+  });
   replacer.set(Animation, 'globalTimer_', null);
-
 
   anim = new Animation([0], [1], 1000);
   anim2 = new Animation([0], [1], 1000);
@@ -126,6 +132,12 @@ function testRegisterAndUnregisterAnimation() {
   clock.tick(1000);
   assertEquals('There should be no remaining timers', 0, setTimoutCount);
   assertEquals('setInterval should not be called', 0, setIntervalCount);
+}
+
+function testRegisterAndUnregisterAnimationWithRequestAnimationFrame() {
+  Animation.setAnimationWindow(window);
+  testRegisterAndUnregisterAnimation();
+  Animation.setAnimationWindow(null);
 }
 
 function testPlayAndStopDoesNotLeaveAnyActiveAnimations() {

@@ -190,11 +190,35 @@ goog.fx.Animation.globalTimer_ = null;
 
 
 /**
+ * An optional animation window.
+ * @type {?Window}
+ * @private
+ */
+goog.fx.Animation.animationWindow_ = null;
+
+
+/**
+ * A timing control function.
+ * @type {?function(function(number))}
+ * @private
+ */
+goog.fx.Animation.requestAnimationFrameFn_ = null;
+
+
+/**
+ * Cancel function for timing control.
+ * @type {?function(number)}
+ * @private
+ */
+goog.fx.Animation.cancelRequestAnimationFrameFn_ = null;
+
+
+/**
  * Cycle all registered animations.
  * @private
  */
 goog.fx.Animation.cycleAnimations_ = function() {
-  goog.Timer.defaultTimerObject.clearTimeout(goog.fx.Animation.globalTimer_);
+  goog.fx.Animation.resetTimer_();
 
   // Cycle all animations at the "same time".
   var now = goog.now();
@@ -206,8 +230,42 @@ goog.fx.Animation.cycleAnimations_ = function() {
   goog.fx.Animation.globalTimer_ =
       goog.object.isEmpty(goog.fx.Animation.activeAnimations_) ?
           null :
-          goog.Timer.defaultTimerObject.setTimeout(
-              goog.fx.Animation.cycleAnimations_, goog.fx.Animation.TIMEOUT);
+          goog.fx.Animation.startTimer_();
+};
+
+
+/**
+ * Resets the animation timer.
+ * @private
+ */
+goog.fx.Animation.resetTimer_ = function() {
+  if (goog.fx.Animation.globalTimer_) {
+    if (goog.fx.Animation.requestAnimationFrameFn_) {
+      goog.fx.Animation.cancelRequestAnimationFrameFn_.call(
+          goog.fx.Animation.animationWindow_,
+          goog.fx.Animation.globalTimer_);
+    } else {
+      goog.Timer.defaultTimerObject.clearTimeout(
+          goog.fx.Animation.globalTimer_);
+    }
+    goog.fx.Animation.globalTimer_ = null;
+  }
+};
+
+
+/**
+ * Starts the animation timer.
+ * @return {number} A unique ID for the timer, that can be used to clear it.
+ * @private
+ */
+goog.fx.Animation.startTimer_ = function() {
+  if (goog.fx.Animation.requestAnimationFrameFn_) {
+    return goog.fx.Animation.requestAnimationFrameFn_.call(
+        goog.fx.Animation.animationWindow_,
+        goog.fx.Animation.cycleAnimations_);
+  }
+  return goog.Timer.defaultTimerObject.setTimeout(
+      goog.fx.Animation.cycleAnimations_, goog.fx.Animation.TIMEOUT);
 };
 
 
@@ -223,8 +281,7 @@ goog.fx.Animation.registerAnimation = function(animation) {
 
   // If the timer is not already started, start it now.
   if (!goog.fx.Animation.globalTimer_) {
-    goog.fx.Animation.globalTimer_ = goog.Timer.defaultTimerObject.setTimeout(
-        goog.fx.Animation.cycleAnimations_, goog.fx.Animation.TIMEOUT);
+    goog.fx.Animation.globalTimer_ = goog.fx.Animation.startTimer_();
   }
 };
 
@@ -240,11 +297,43 @@ goog.fx.Animation.unregisterAnimation = function(animation) {
 
   // If a timer is running and we no longer have any active timers we stop the
   // timers.
-  if (goog.fx.Animation.globalTimer_ &&
-      goog.object.isEmpty(goog.fx.Animation.activeAnimations_)) {
-    goog.Timer.defaultTimerObject.clearTimeout(goog.fx.Animation.globalTimer_);
-    goog.fx.Animation.globalTimer_ = null;
+  if (goog.object.isEmpty(goog.fx.Animation.activeAnimations_)) {
+    goog.fx.Animation.resetTimer_();
   }
+};
+
+
+/**
+ * Registers an animation window. This allows usage of the timing control API
+ * for animations. Note that this window must be visible, as non-visible
+ * windows can potentially stop animating. This window does not necessarily
+ * need to be the window inside which animation occurs, but must remain visible.
+ * See: https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame.
+ *
+ * @param {Window} animationWindow The window in which to animate elements.
+ */
+goog.fx.Animation.setAnimationWindow = function(animationWindow) {
+  goog.fx.Animation.animationWindow_ = animationWindow;
+
+  if (!animationWindow) {
+    goog.fx.Animation.requestAnimationFrameFn_ = null;
+    goog.fx.Animation.cancelRequestAnimationFrameFn_ = null;
+    return;
+  }
+
+  goog.fx.Animation.requestAnimationFrameFn_ =
+      animationWindow['requestAnimationFrame'] ||
+      animationWindow['webkitRequestAnimationFrame'] ||
+      animationWindow['mozRequestAnimationFrame'] ||
+      animationWindow['oRequestAnimationFrame'] ||
+      animationWindow['msRequestAnimationFrame'];
+
+  goog.fx.Animation.cancelRequestAnimationFrameFn_ =
+      animationWindow['cancelRequestAnimationFrame'] ||
+      animationWindow['webkitCancelRequestAnimationFrame'] ||
+      animationWindow['mozCancelRequestAnimationFrame'] ||
+      animationWindow['oCancelRequestAnimationFrame'] ||
+      animationWindow['msCancelRequestAnimationFrame'];
 };
 
 
