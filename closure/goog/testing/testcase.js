@@ -440,7 +440,17 @@ goog.testing.TestCase.prototype.log = function(val) {
     if (typeof val == 'string') {
       val = this.getTimeStamp_() + ' : ' + val;
     }
-    window.console.log(val);
+    if (val instanceof Error && val.stack) {
+      // Chrome does console.log asynchronously in a different process
+      // (http://code.google.com/p/chromium/issues/detail?id=50316).
+      // This is an acute problem for Errors, which almost never survive. 
+      // Grab references to the immutable strings so they survive.
+      window.console.log(val, val.message, val.stack);
+      // TODO(user): Consider for Chrome cloning any object if we can ensure
+      // there are no circular references.
+    } else {
+      window.console.log(val);
+    }
   }
 };
 
