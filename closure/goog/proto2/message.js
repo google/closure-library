@@ -153,8 +153,8 @@ goog.proto2.Message.prototype.setUnknown = function(tag, value) {
 goog.proto2.Message.prototype.forEachUnknown = function(callback, opt_scope) {
   var scope = opt_scope || this;
   for (var key in this.values_) {
-    if (!this.fields_[key]) {
-      callback.call(scope, /** @type {number} */ (key), this.values_[key]);
+    if (!this.fields_[/** @type {number} */ (key)]) {
+      callback.call(scope, Number(key), this.values_[key]);
     }
   }
 };
