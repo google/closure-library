@@ -34,6 +34,7 @@ goog.require('goog.iter');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.AutoComplete');
+goog.require('goog.ui.AutoComplete.EventType');
 goog.require('goog.ui.IdGenerator');
 goog.require('goog.userAgent');
 
@@ -357,16 +358,19 @@ goog.ui.AutoComplete.Renderer.prototype.isVisible = function() {
  * @param {number} index Index of the item to highlight.
  */
 goog.ui.AutoComplete.Renderer.prototype.hiliteRow = function(index) {
-  this.hiliteNone();
-  this.hilitedRow_ = index;
-  if (index >= 0 && index < this.element_.childNodes.length) {
-    var rowDiv = this.rowDivs_[index];
-    goog.dom.classes.add(rowDiv, this.activeClassName,
-        this.legacyActiveClassName_);
-    if (this.target_) {
-      goog.dom.a11y.setActiveDescendant(this.target_, rowDiv);
+  var evtObj = {type: goog.ui.AutoComplete.EventType.ROW_HILITE, row: index};
+  if (this.dispatchEvent(evtObj)) {
+    this.hiliteNone();
+    this.hilitedRow_ = index;
+    if (index >= 0 && index < this.element_.childNodes.length) {
+      var rowDiv = this.rowDivs_[index];
+      goog.dom.classes.add(rowDiv, this.activeClassName,
+          this.legacyActiveClassName_);
+      if (this.target_) {
+        goog.dom.a11y.setActiveDescendant(this.target_, rowDiv);
+      }
+      goog.style.scrollIntoContainerView(rowDiv, this.element_);
     }
-    goog.style.scrollIntoContainerView(rowDiv, this.element_);
   }
 };
 

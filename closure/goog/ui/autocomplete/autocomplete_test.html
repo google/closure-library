@@ -18,6 +18,7 @@ See the COPYING file for details.
   goog.require('goog.dom.a11y.State');
   goog.require('goog.events.EventTarget');
   goog.require('goog.events.EventHandler');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.AutoComplete');
   goog.require('goog.ui.AutoComplete.EventType');
@@ -89,6 +90,9 @@ TestRend.prototype.getHilitedRowDiv = function() {
   return this.rowDivs_[this.hilitedRow_];
 };
 
+TestRend.prototype.getRowDiv = function(index) {
+  return this.rowDivs_[index];
+};
 
 var handler;
 
@@ -123,6 +127,28 @@ function testMaxMatches() {
   ac.setToken('the');
   assertEquals(4, rend.getRenderedRows().length);
   ac.setToken('');
+}
+
+function testHiliteViaMouse() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var updates = 0;
+  handler.listen(rend,
+      goog.ui.AutoComplete.EventType.ROW_HILITE,
+      function() {
+        updates++;
+      });
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setMaxMatches(4);
+  ac.setToken('the');
+  // Need to set the startRenderingRows_ time to something long ago, otherwise
+  // the mouse event will not be fired.  (The autocomplete logic waits for some
+  // time to pass after rendering before firing mouseover events.)
+  rend.startRenderingRows_ = -1;
+  var hilitedRowDiv = rend.getRowDiv(3);
+  goog.testing.events.fireMouseOverEvent(hilitedRowDiv);
+  assertEquals(2, updates);
 }
 
 function testSuggestionsUpdateEvent() {
@@ -179,6 +205,13 @@ function testHiliteNextPrev_default() {
   var select = new MockSelect();
   var ac = new goog.ui.AutoComplete(ds, rend, select);
 
+  var updates = 0;
+  handler.listen(rend,
+      goog.ui.AutoComplete.EventType.ROW_HILITE,
+      function() {
+        updates++;
+      });
+
   // make sure 'next' and 'prev' don't explode before any token is set
   ac.hiliteNext();
   ac.hilitePrev();
@@ -212,6 +245,8 @@ function testHiliteNextPrev_default() {
     ac.hilitePrev();
     checkHilitedIndex(rend, 0);
   }
+  // 21 changes in the loop above (3 * 7)
+  assertEquals(21, updates);
 }
 
 /**

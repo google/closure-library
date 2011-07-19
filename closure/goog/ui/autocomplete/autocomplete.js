@@ -179,7 +179,14 @@ goog.ui.AutoComplete.prototype.triggerSuggestionsOnUpdate_ = false;
  * @enum {string}
  */
 goog.ui.AutoComplete.EventType = {
+
   /** A row has been highlighted by the renderer */
+  ROW_HILITE: 'rowhilite',
+
+  // Note: The events below are used for internal autocomplete events only and
+  // should not be used in non-autocomplete code.
+
+  /** A row has been mouseovered and should be highlighted by the renderer. */
   HILITE: 'hilite',
 
   /** A row has been selected by the renderer */
