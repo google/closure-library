@@ -430,6 +430,16 @@ goog.ui.AutoComplete.prototype.hiliteId = function(id) {
 
 
 /**
+ * Hilites the index, if it's valid, otherwise does nothing.
+ * @param {number} index The row's index.
+ * @return {boolean} Whether the index was hilited.
+ */
+goog.ui.AutoComplete.prototype.hiliteIndex = function(index) {
+  return this.hiliteId(this.getIdOfIndex_(index));
+};
+
+
+/**
  * If there are any current matches, this passes the hilited row data to
  * <code>selectionHandler.selectRow()</code>
  * @return {boolean} Whether there are any current matches.
