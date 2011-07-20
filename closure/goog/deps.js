@@ -299,6 +299,7 @@ goog.addDependency('math/bezier.js', ['goog.math.Bezier'], ['goog.math', 'goog.m
 goog.addDependency('math/box.js', ['goog.math.Box'], ['goog.math.Coordinate']);
 goog.addDependency('math/coordinate.js', ['goog.math.Coordinate'], []);
 goog.addDependency('math/coordinate3.js', ['goog.math.Coordinate3'], []);
+goog.addDependency('math/exponentialbackoff.js', ['goog.math.ExponentialBackoff'], ['goog.asserts']);
 goog.addDependency('math/integer.js', ['goog.math.Integer'], []);
 goog.addDependency('math/line.js', ['goog.math.Line'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency('math/long.js', ['goog.math.Long'], []);
