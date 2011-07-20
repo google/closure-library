@@ -29,7 +29,7 @@ goog.provide('goog.jsaction.util');
 /**
  * Registers the event handler function with the given DOM element for
  * the given event type.
- * NOTE(user): JsAction only requires basic event handler registration.
+ * NOTE(user): Jsaction only requires basic event handler registration.
  * Purposefully not pulling in goog.events to minimize binary size.
  *
  * @param {!Element} element The element.
