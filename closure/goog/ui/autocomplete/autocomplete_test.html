@@ -134,10 +134,13 @@ function testHiliteViaMouse() {
   var rend = new TestRend();
   var select = new MockSelect();
   var updates = 0;
+  var row = null;
+  var rowNode = null;
   handler.listen(rend,
       goog.ui.AutoComplete.EventType.ROW_HILITE,
-      function() {
+      function(evt) {
         updates++;
+        rowNode = evt.rowNode;
       });
   var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setMaxMatches(4);
@@ -149,6 +152,7 @@ function testHiliteViaMouse() {
   var hilitedRowDiv = rend.getRowDiv(3);
   goog.testing.events.fireMouseOverEvent(hilitedRowDiv);
   assertEquals(2, updates);
+  assertTrue(goog.string.contains(rowNode.innerHTML, 'mice@myotherdomain.com'));
 }
 
 function testSuggestionsUpdateEvent() {

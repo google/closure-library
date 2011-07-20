@@ -358,12 +358,15 @@ goog.ui.AutoComplete.Renderer.prototype.isVisible = function() {
  * @param {number} index Index of the item to highlight.
  */
 goog.ui.AutoComplete.Renderer.prototype.hiliteRow = function(index) {
-  var evtObj = {type: goog.ui.AutoComplete.EventType.ROW_HILITE, row: index};
+  var rowDiv = index >= 0 && index < this.element_.childNodes.length ?
+      this.rowDivs_[index] : undefined;
+
+  var evtObj = {type: goog.ui.AutoComplete.EventType.ROW_HILITE,
+      rowNode: rowDiv};
   if (this.dispatchEvent(evtObj)) {
     this.hiliteNone();
     this.hilitedRow_ = index;
-    if (index >= 0 && index < this.element_.childNodes.length) {
-      var rowDiv = this.rowDivs_[index];
+    if (rowDiv) {
       goog.dom.classes.add(rowDiv, this.activeClassName,
           this.legacyActiveClassName_);
       if (this.target_) {
