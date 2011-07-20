@@ -127,6 +127,10 @@ goog.net.xpc.NativeMessagingTransport.initialize_ = function(listenWindow) {
 goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
   var data = msgEvt.getBrowserEvent().data;
 
+  if (!goog.isString(data)) {
+    return false;
+  }
+
   var headDelim = data.indexOf('|');
   var serviceDelim = data.indexOf(':');
 
