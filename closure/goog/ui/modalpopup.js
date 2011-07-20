@@ -149,6 +149,7 @@ goog.ui.ModalPopup.prototype.createDom = function() {
   this.tabCatcherElement_ = this.getDomHelper().createElement('span');
   goog.style.showElement(this.tabCatcherElement_, false);
   goog.dom.setFocusableTabIndex(this.tabCatcherElement_, true);
+  this.tabCatcherElement_.style.position = 'absolute';
 };
 
 
@@ -421,6 +422,10 @@ goog.ui.ModalPopup.prototype.reposition = function() {
   var left = Math.max(x + viewSize.width / 2 - popupSize.width / 2, 0);
   var top = Math.max(y + viewSize.height / 2 - popupSize.height / 2, 0);
   goog.style.setPosition(this.getElement(), left, top);
+
+  // We place the tab catcher at the same position as the dialog to
+  // prevent IE from scrolling when users try to tab out of the dialog.
+  goog.style.setPosition(this.tabCatcherElement_, left, top);
 };
 
 
