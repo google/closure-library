@@ -349,6 +349,66 @@ function testScriptingDoesntTriggerPasteEvents() {
   assertFalse(pasted);
 }
 
+function testAfterPaste() {
+  goog.userAgent.IE = true;
+  var handlerThatSupportsPasteEvents =
+      new goog.events.PasteHandler(textarea);
+  pasted = false;
+  goog.events.listen(handlerThatSupportsPasteEvents,
+      goog.events.PasteHandler.EventType.PASTE,
+      function() {
+        pasted = true;
+      });
+  var afterPasteFired = false;
+  goog.events.listen(handlerThatSupportsPasteEvents,
+      goog.events.PasteHandler.EventType.AFTER_PASTE,
+      function() {
+        afterPasteFired = true;
+      });
+
+  // Initial paste event comes before AFTER_PASTE has fired.
+  textarea.dispatchEvent(newBrowserEvent('paste'));
+  assertTrue(pasted);
+  assertFalse(afterPasteFired);
+
+  // Once text is pasted, it takes a bit to detect it, at which point
+  // AFTER_PASTE is fired.
+  clock.tick(goog.events.PasteHandler.PASTE_POLLING_PERIOD_MS_);
+  textarea.value = 'text';
+  clock.tick(goog.events.PasteHandler.PASTE_POLLING_PERIOD_MS_);
+  assertTrue(afterPasteFired);
+}
+
+
+function testAfterPasteNotFiredIfDelayTooLong() {
+  goog.userAgent.IE = true;
+  var handlerThatSupportsPasteEvents =
+      new goog.events.PasteHandler(textarea);
+  pasted = false;
+  goog.events.listen(handlerThatSupportsPasteEvents,
+      goog.events.PasteHandler.EventType.PASTE,
+      function() {
+        pasted = true;
+      });
+  var afterPasteFired = false;
+  goog.events.listen(handlerThatSupportsPasteEvents,
+      goog.events.PasteHandler.EventType.AFTER_PASTE,
+      function() {
+        afterPasteFired = true;
+      });
+
+  // Initial paste event comes before AFTER_PASTE has fired.
+  textarea.dispatchEvent(newBrowserEvent('paste'));
+  assertTrue(pasted);
+  assertFalse(afterPasteFired);
+
+  // If the new text doesn't show up in time, we never fire AFTER_PASTE.
+  clock.tick(goog.events.PasteHandler.PASTE_POLLING_TIMEOUT_MS_);
+  textarea.value = 'text';
+  clock.tick(goog.events.PasteHandler.PASTE_POLLING_PERIOD_MS_);
+  assertFalse(afterPasteFired);
+}
+
 </script>
 </body>
 </html>
