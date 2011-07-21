@@ -138,22 +138,12 @@ goog.ui.SelectionMenuButton.prototype.getCheckboxElement = function() {
 
 
 /**
- * Gets the state of the embedded checkbox. Returns false when indeterminate.
- * @return {boolean} Whether the checkbox is checked.
- * @protected
- */
-goog.ui.SelectionMenuButton.prototype.isCheckboxChecked = function() {
-  return this.getCheckboxElement().checked;
-};
-
-
-/**
  * Checkbox click handler.
  * @param {goog.events.BrowserEvent} e Checkbox click event.
  * @protected
  */
 goog.ui.SelectionMenuButton.prototype.handleCheckboxClick = function(e) {
-  if (this.isCheckboxChecked()) {
+  if (this.selectionState == goog.ui.SelectionMenuButton.SelectionState.NONE) {
     this.setSelectionState(goog.ui.SelectionMenuButton.SelectionState.ALL);
     if (this.getItemAt(0)) {
       this.getItemAt(0).dispatchEvent(  // 'All' item
