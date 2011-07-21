@@ -339,6 +339,29 @@ function testFailedRemove() {
   asyncTestCase.waitForAsync('testFailedRemove');
 }
 
+function testIsDownloading() {
+  assertFalse(downloader.isDownloading('/foo/bar'));
+  downloader.download('/foo/bar').addCallback(function() {
+    assertFalse(downloader.isDownloading('/foo/bar'));
+    asyncTestCase.continueTesting();
+  });
+
+  assertTrue(downloader.isDownloading('/foo/bar'));
+
+  xhr.simulateResponse(200, 'data');
+  asyncTestCase.waitForAsync('testIsDownloading');
+}
+
+function testIsDownloadingWhenCancelled() {
+  assertFalse(downloader.isDownloading('/foo/bar'));
+  var deferred = downloader.download('/foo/bar').addErrback(function() {
+    assertFalse(downloader.isDownloading('/foo/bar'));
+  });
+
+  assertTrue(downloader.isDownloading('/foo/bar'));
+  deferred.cancel();
+}
+
 function assertMatches(expected, actual) {
   assert(
       'Expected "' + actual + '" to match ' + expected,

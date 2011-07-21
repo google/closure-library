@@ -117,7 +117,7 @@ goog.inherits(goog.net.FileDownloader, goog.Disposable);
  * @return {!goog.async.Deferred} The deferred result blob.
  */
 goog.net.FileDownloader.prototype.download = function(url) {
-  if (url in this.downloads_) {
+  if (this.isDownloading(url)) {
     return this.downloads_[url].deferred.branch();
   }
 
@@ -140,7 +140,7 @@ goog.net.FileDownloader.prototype.download = function(url) {
  */
 goog.net.FileDownloader.prototype.waitForDownload = function(url) {
   var deferred = new goog.async.Deferred();
-  if (url in this.downloads_) {
+  if (this.isDownloading(url)) {
     this.downloads_[url].deferred.addBoth(function() {
       deferred.callback(null);
     }, this);
@@ -148,6 +148,17 @@ goog.net.FileDownloader.prototype.waitForDownload = function(url) {
     deferred.callback(null);
   }
   return deferred;
+};
+
+
+/**
+ * Returns whether or not there is an active download for a given URL.
+ *
+ * @param {string} url The URL of the download to check.
+ * @return {boolean} Whether or not there is an active download for the URL.
+ */
+goog.net.FileDownloader.prototype.isDownloading = function(url) {
+  return url in this.downloads_;
 };
 
 
@@ -265,7 +276,7 @@ goog.net.FileDownloader.prototype.setBlob = function(url, blob, opt_name) {
       }).
       addCallback(goog.bind(this.fileSuccess_, this, download)).
       addErrback(goog.bind(this.error_, this, download));
-  return download.deferred;
+  return download.deferred.branch();
 };
 
 
