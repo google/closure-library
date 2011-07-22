@@ -15,6 +15,7 @@ See the COPYING file for details.
 <script type="text/javascript">
   goog.require('goog.Timer');
   goog.require('goog.dom');
+  goog.require('goog.functions');
   goog.require('goog.json');
   goog.require('goog.net.BrowserChannel');
   goog.require('goog.net.ChannelRequest');
@@ -451,7 +452,6 @@ function testConnect() {
   assertFalse(browserChannel.isBuffered());
 }
 
-
 function testConnect_backChannelEstablished() {
   connect();
   assertHasBackChannel();
@@ -481,6 +481,24 @@ function testConnect_overrideServerHostPrefix() {
 function testConnect_withServerVersion() {
   connect(8);
   assertEquals(8, browserChannel.channelVersion_);
+}
+
+function testConnect_notOkToMakeRequestForTest() {
+  handler.okToMakeRequest =
+      goog.functions.constant(goog.net.BrowserChannel.Error.NETWORK);
+  browserChannel.connect('/test', '/bind', null);
+  mockClock.tick(0);
+  assertEquals(goog.net.BrowserChannel.State.CLOSED, browserChannel.getState());
+}
+
+function testConnect_notOkToMakeRequestForBind() {
+  browserChannel.connect('/test', '/bind', null);
+  mockClock.tick(0);
+  completeTestConnection();
+  handler.okToMakeRequest =
+      goog.functions.constant(goog.net.BrowserChannel.Error.NETWORK);
+  completeForwardChannel();
+  assertEquals(goog.net.BrowserChannel.State.CLOSED, browserChannel.getState());
 }
 
 

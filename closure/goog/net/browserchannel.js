@@ -854,6 +854,9 @@ goog.net.BrowserChannel.prototype.getSessionId = function() {
  */
 goog.net.BrowserChannel.prototype.connectTest_ = function(testPath) {
   this.channelDebug_.debug('connectTest_()');
+  if (!this.okToMakeRequest_()) {
+    return; // channel is cancelled
+  }
   this.connectionTest_ = new goog.net.BrowserTestChannel(
       this, this.channelDebug_);
   this.connectionTest_.setExtraHeaders(this.extraHeaders_);
@@ -1222,8 +1225,9 @@ goog.net.BrowserChannel.prototype.onStartForwardChannelTimer_ = function(
 goog.net.BrowserChannel.prototype.startForwardChannel_ = function(
     opt_retryRequest) {
   this.channelDebug_.debug('startForwardChannel_');
-
-  if (this.state_ == goog.net.BrowserChannel.State.INIT) {
+  if (!this.okToMakeRequest_()) {
+    return; // channel is cancelled
+  } else if (this.state_ == goog.net.BrowserChannel.State.INIT) {
     if (opt_retryRequest) {
       this.channelDebug_.severe('Not supposed to retry the open');
       return;
@@ -1231,11 +1235,6 @@ goog.net.BrowserChannel.prototype.startForwardChannel_ = function(
     this.open_();
     this.state_ = goog.net.BrowserChannel.State.OPENING;
   } else if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
-    if (!this.okToMakeRequest_()) {
-      // channel is cancelled
-      return;
-    }
-
     if (opt_retryRequest) {
       this.makeForwardChannelRequest_(opt_retryRequest);
       return;
