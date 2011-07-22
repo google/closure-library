@@ -107,6 +107,22 @@ goog.i18n.bidi.LEFT = 'left';
 
 
 /**
+ * 'left' if locale is RTL, 'right' if not.
+ * @type {string}
+ */
+goog.i18n.bidi.I18N_RIGHT = goog.i18n.bidi.IS_RTL ? goog.i18n.bidi.LEFT :
+    goog.i18n.bidi.RIGHT;
+
+
+/**
+ * 'right' if locale is RTL, 'left' if not.
+ * @type {string}
+ */
+goog.i18n.bidi.I18N_LEFT = goog.i18n.bidi.IS_RTL ? goog.i18n.bidi.RIGHT :
+    goog.i18n.bidi.LEFT;
+
+
+/**
  * Convert a directionality given in various formats to a goog.i18n.bidi.Dir
  * constant. Useful for interaction with different standards of directionality
  * representation.
