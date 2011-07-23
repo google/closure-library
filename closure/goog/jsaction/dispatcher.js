@@ -19,6 +19,11 @@
  * calls the dispatcher, which then looks up the corresponding handler
  * function and invokes it.
  *
+ * A fully qualified jsaction name consists of a namespace and an action
+ * name separated by a dot: "namespace.action.
+ * Hierarchichal namespaces are not supported. Namespace and action names
+ * should only consist of alphanumeric characters and underscores.
+ *
  * Usage:
  *
  * The dispatcher first needs to be hooked up to an instance of
@@ -42,9 +47,12 @@
 
 goog.provide('goog.jsaction.Dispatcher');
 goog.provide('goog.jsaction.HandlerFunction');
+goog.provide('goog.jsaction.LoaderFunction');
 
+goog.require('goog.asserts');
 goog.require('goog.jsaction.Context');
 goog.require('goog.jsaction.EventContract');
+goog.require('goog.jsaction.replay');
 goog.require('goog.jsaction.util');
 
 
@@ -53,6 +61,15 @@ goog.require('goog.jsaction.util');
  * @typedef {function(!goog.jsaction.Context):void}
  */
 goog.jsaction.HandlerFunction;
+
+
+/**
+ * The signature of a loader function. It gets a namespace as argument.
+ * A loader function is expected to do whatever necessary to load code and
+ * eventually register the action handlers for the namespace.
+ * @typedef {function(string)}
+ */
+goog.jsaction.LoaderFunction;
 
 
 
@@ -68,6 +85,57 @@ goog.jsaction.Dispatcher = function() {
    * @private
    */
   this.handlers_ = {};
+
+  /**
+   * The loader registry.
+   * @type {!Object.<string, !goog.jsaction.LoaderFunction>}
+   * @private
+   */
+  this.loaders_ = {};
+};
+
+
+/**
+ * Array of queued events. This is shared between EventContract and the
+ * attached dispatcher. EventContract adds entries, while the dispatcher
+ * consumes them when replaying the events.
+ * @type {Array.<!goog.jsaction.ReplayInfo>}
+ * @private
+ */
+goog.jsaction.Dispatcher.prototype.queue_;
+
+
+/**
+ * Attaches this dispatcher to the given EventContract instance.
+ * @param {goog.jsaction.EventContract} contract The EventContract instance
+ *     to attach to.
+ */
+goog.jsaction.Dispatcher.prototype.attach = function(contract) {
+  goog.asserts.assert(!this.queue_, 'Already attached.');
+
+  contract.setDispatcher(this);
+  this.queue_ = contract.getQueue();
+  this.replayEvents_();
+};
+
+
+/**
+ * Registers a loader function for a namespace. The loader function
+ * will be invoked when an action occurs from that namespace without a
+ * handler being present.
+ * The loader is expected to do whatever necessary to load code and
+ * eventually register action handlers for the namespace.
+ * @param {string} ns The namespace.
+ * @param {!goog.jsaction.LoaderFunction} loaderFn The loader function.
+ */
+goog.jsaction.Dispatcher.prototype.registerLoader = function(ns, loaderFn) {
+  this.loaders_[ns] = loaderFn;
+
+  // Invoke the loader right away if there are queued jsactions
+  // in the namespace it is registered for.
+  if (this.hasQueuedActionInNamespace_(ns)) {
+    loaderFn(ns);
+  }
 };
 
 
@@ -79,8 +147,12 @@ goog.jsaction.Dispatcher = function() {
  */
 goog.jsaction.Dispatcher.prototype.registerHandlers = function(ns, handlers) {
   for (var name in handlers) {
-    this.handlers_[ns + '.' + name] = handlers[name];
+    var action = ns + '.' + name;
+    goog.jsaction.Dispatcher.assertValidAction_(action);
+    this.handlers_[action] = handlers[name];
   }
+
+  this.replayEvents_();
 };
 
 
@@ -94,14 +166,101 @@ goog.jsaction.Dispatcher.prototype.registerHandlers = function(ns, handlers) {
  */
 goog.jsaction.Dispatcher.prototype.dispatch = function(
     action, elem, e, time) {
-  var handler = this.handlers_[action];
-  if (handler) {
-    handler(new goog.jsaction.Context(action, elem, e, time));
+  goog.jsaction.Dispatcher.assertValidAction_(action);
 
-    goog.jsaction.util.preventDefault(e);
-
+  if (this.maybeInvokeHandler_(action, elem, e, time)) {
     return true;
   }
 
+  var ns = goog.jsaction.Dispatcher.getNamespace_(action);
+  var loaderFn = this.loaders_[ns];
+  if (loaderFn) {
+    loaderFn(ns);
+    // The loader may register handlers synchronously (although this
+    // will not be the typical case), therefore attempt again to invoke
+    // the handler.
+    return this.maybeInvokeHandler_(action, elem, e, time);
+  }
   return false;
+};
+
+
+/**
+ * Looks up the handler for an action an invokes it (if present).
+ * @param {string} action The action.
+ * @param {!Element} elem The element.
+ * @param {!Event} e The event object.
+ * @param {number} time The time when the event occured.
+ * @return {boolean} Whether the handler has been invoked.
+ * @private
+ */
+goog.jsaction.Dispatcher.prototype.maybeInvokeHandler_ = function(
+    action, elem, e, time) {
+  var handler = this.handlers_[action];
+  if (handler) {
+    handler(new goog.jsaction.Context(action, elem, e, time));
+    goog.jsaction.util.preventDefault(e);
+    return true;
+  }
+  return false;
+};
+
+
+/**
+ * Extracts and returns the namespace from a fully qualified jsaction
+ * of the form "namespace.actionname".
+ * @param {string} action The action.
+ * @return {string} The namespace.
+ * @private
+ */
+goog.jsaction.Dispatcher.getNamespace_ = function(action) {
+  return action.split('.')[0];
+};
+
+
+/**
+ * Asserts the validity of fully qualified action name.
+ * @param {string} action The action name to validate.
+ * @private
+ */
+goog.jsaction.Dispatcher.assertValidAction_ = function(action) {
+  goog.asserts.assert(/^[a-zA-Z_]*\.[a-zA-Z_]*$/.test(action));
+};
+
+
+/**
+ * Determines whether there is a queued action for the given namespace.
+ * @param {string} ns The namespace.
+ * @return {boolean} Whether there is a queued action for the given namespace.
+ * @private
+ */
+goog.jsaction.Dispatcher.prototype.hasQueuedActionInNamespace_ = function(ns) {
+  if (this.queue_) {
+    for (var i = 0; i < this.queue_.length; ++i) {
+      if (ns == goog.jsaction.Dispatcher.getNamespace_(this.queue_[i].action)) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+
+/**
+ * Replays all events in the queue for which there is a handler.
+ * @private
+ */
+goog.jsaction.Dispatcher.prototype.replayEvents_ = function() {
+  if (!this.queue_) {
+    return;
+  }
+  for (var i = 0, replayInfo; replayInfo = this.queue_[i]; ) {
+    if (replayInfo.action in this.handlers_) {
+      // Remove the entry from the queue and replay the event.
+      this.queue_.splice(i, 1);
+      goog.jsaction.replay.replayEvent(replayInfo);
+    } else {
+      ++i;
+    }
+  }
 };
