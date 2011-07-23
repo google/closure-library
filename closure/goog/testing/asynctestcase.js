@@ -553,7 +553,8 @@ goog.testing.AsyncTestCase.prototype.hookOnError_ = function() {
       // Ignore exceptions that we threw on purpose.
       var cbe =
           goog.testing.AsyncTestCase.ControlBreakingException.TO_STRING;
-      if (error.indexOf(cbe) != -1 && self.numControlExceptionsExpected_) {
+      if (String(error).indexOf(cbe) != -1 &&
+          self.numControlExceptionsExpected_) {
         self.numControlExceptionsExpected_ -= 1;
         self.dbgLog_('window.onerror: numControlExceptionsExpected_ = ' +
             self.numControlExceptionsExpected_ + ' and ignoring exception. ' +
