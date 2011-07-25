@@ -218,6 +218,12 @@ goog.debug.Trace_.Stat_ = function() {
 
 
 /**
+ * @type {string|null|undefined}
+ */
+goog.debug.Trace_.Stat_.prototype.type;
+
+
+/**
  * @return {string} A string describing the tracer stat.
  */
 goog.debug.Trace_.Stat_.prototype.toString = function() {
@@ -241,6 +247,12 @@ goog.debug.Trace_.Stat_.prototype.toString = function() {
 goog.debug.Trace_.Event_ = function() {
   // the fields are different for different events - see usage in code
 };
+
+
+/**
+ * @type {string|null|undefined}
+ */
+goog.debug.Trace_.Event_.prototype.type;
 
 
 /**
