@@ -153,6 +153,7 @@ goog.require('goog.structs');
 goog.require('goog.userAgent');
 
 
+
 /**
  * Class for managing requests via iFrames.
  * @constructor
@@ -346,7 +347,7 @@ goog.net.IframeIo.getForm_ = function() {
 goog.net.IframeIo.addFormInputs_ = function(form, data) {
   goog.structs.forEach(data, function(value, key) {
     var inp = goog.dom.createDom('input',
-       {'type': 'hidden', 'name': key, 'value': value});
+        {'type': 'hidden', 'name': key, 'value': value});
     form.appendChild(inp);
   });
 };
@@ -568,7 +569,7 @@ goog.net.IframeIo.prototype.send = function(
  *     caching.
  */
 goog.net.IframeIo.prototype.sendFromForm = function(form, opt_uri,
-     opt_noCache) {
+    opt_noCache) {
   if (this.active_) {
     throw Error('[goog.net.IframeIo] Unable to send, already active.');
   }
@@ -679,7 +680,7 @@ goog.net.IframeIo.prototype.getResponseText = function() {
  * @return {?string} Result from the server.
  */
 goog.net.IframeIo.prototype.getResponseHtml = function() {
- return this.lastContentHtml_;
+  return this.lastContentHtml_;
 };
 
 
@@ -902,7 +903,11 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     var selects = this.form_.getElementsByTagName('select');
     var clones = clone.getElementsByTagName('select');
     for (var i = 0, n = selects.length; i < n; i++) {
-      clones[i].selectedIndex = selects[i].selectedIndex;
+      var selectsOptions = selects[i].getElementsByTagName('option');
+      var clonesOptions = clones[i].getElementsByTagName('option');
+      for (var j = 0, m = selectsOptions.length; j < m; j++) {
+        clonesOptions[j].selected = selectsOptions[j].selected;
+      }
     }
 
     // Some versions of Firefox (1.5 - 1.5.07?) fail to clone the value
