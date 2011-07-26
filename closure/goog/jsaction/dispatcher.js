@@ -42,6 +42,13 @@
  * };
  * dispatcher.registerHandlers('foo', {'bar': fooBarHandler});
  *
+ * If a 'jsaction' attribute doesn't specify a fully qualified jsaction name,
+ * the dispatcher will search for an ancestor with a 'jsnamespace' attribute.
+ * Example markup using the same names as above:
+ * <div jsnamespace="foo">
+ *   <div jsaction="bar">Do Stuff</div>
+ * </div>
+ *
  */
 
 
@@ -93,6 +100,14 @@ goog.jsaction.Dispatcher = function() {
    */
   this.loaders_ = {};
 };
+
+
+/**
+ * Constant for the name of the 'jsnamespace'-attribute.
+ * @type {string}
+ * @private
+ */
+goog.jsaction.Dispatcher.ATTR_JSNAMESPACE_ = 'jsnamespace';
 
 
 /**
@@ -166,6 +181,19 @@ goog.jsaction.Dispatcher.prototype.registerHandlers = function(ns, handlers) {
  */
 goog.jsaction.Dispatcher.prototype.dispatch = function(
     action, elem, e, time) {
+  // If the action doesn't specify a namespace, find the ancestor with a
+  // 'jsnamespace' attribute.
+  if (action.indexOf('.') == -1) {
+    for (var ancestor = elem; ancestor; ancestor = ancestor.parentNode) {
+      var ns = ancestor.getAttribute(
+          goog.jsaction.Dispatcher.ATTR_JSNAMESPACE_);
+      if (ns) {
+        action = ns + '.' + action;
+        break;
+      }
+    }
+  }
+
   goog.jsaction.Dispatcher.assertValidAction_(action);
 
   if (this.maybeInvokeHandler_(action, elem, e, time)) {

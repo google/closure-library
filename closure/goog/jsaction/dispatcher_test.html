@@ -204,6 +204,26 @@ function testGetNamespace() {
 }
 
 
+function testJsnamespaceAttribute() {
+  var dispatcher = new goog.jsaction.Dispatcher;
+  var ancestor = document.createElement('div');
+  ancestor.setAttribute('jsnamespace', 'gna');
+  actionElem = document.createElement('div');
+  actionElem.setAttribute('jsaction', 'klik');
+  ancestor.appendChild(actionElem);
+  var fakeEvent = {};
+
+  var handlerFn = mockControl.createFunctionMock();
+  handlerFn(createContextMatcher('gna.klik', actionElem));
+  dispatcher.registerHandlers('gna', {'klik': handlerFn});
+
+  mockControl.$replayAll();
+
+  assertTrue(dispatcher.dispatch('klik', actionElem, fakeEvent, 123));
+
+  mockControl.$verifyAll();
+}
+
 </script>
 </head>
 </html>
