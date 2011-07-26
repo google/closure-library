@@ -290,6 +290,14 @@ goog.ui.SliderBase.prototype.enterDocument = function() {
 };
 
 
+/** @inheritDoc */
+goog.ui.SliderBase.prototype.exitDocument = function() {
+  goog.base(this, 'exitDocument');
+  goog.disposeAll(this.valueDragger_, this.extentDragger_, this.keyHandler_,
+                  this.mouseWheelHandler_);
+};
+
+
 /**
  * Handler for the before drag event. We use the event properties to determine
  * the new value.
