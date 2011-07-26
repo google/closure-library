@@ -301,7 +301,6 @@ goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterator', 'goog.ite
 goog.addDependency('jsaction/context.js', ['goog.jsaction.Context'], []);
 goog.addDependency('jsaction/dispatcher.js', ['goog.jsaction.Dispatcher', 'goog.jsaction.HandlerFunction', 'goog.jsaction.LoaderFunction'], ['goog.asserts', 'goog.jsaction.Context', 'goog.jsaction.EventContract', 'goog.jsaction.replay', 'goog.jsaction.util']);
 goog.addDependency('jsaction/eventcontract.js', ['goog.jsaction.EventContract', 'goog.jsaction.EventType', 'goog.jsaction.ReplayInfo'], ['goog.jsaction.util', 'goog.object']);
-goog.addDependency('jsaction/jsprops.js', ['goog.jsaction.jsprops'], ['goog.json']);
 goog.addDependency('jsaction/replay.js', ['goog.jsaction.replay'], ['goog.asserts', 'goog.jsaction.EventContract']);
 goog.addDependency('jsaction/util.js', ['goog.jsaction.util'], []);
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Serializer'], []);
