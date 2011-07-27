@@ -823,7 +823,7 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
   // the value might be out of bounds
   v = Math.min(this.getMaximum(), Math.max(v, this.getMinimum()));
 
-  if (this.currentAnimation_) {
+  if (this.isAnimating_) {
     this.currentAnimation_.stop(true);
   }
 
