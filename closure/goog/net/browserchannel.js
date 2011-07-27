@@ -1502,7 +1502,9 @@ goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
 
-  if (goog.userAgent.IE) {
+  // IE 8+ supports XHR Streaming
+  // http://my.safaribooksonline.com/book/web/9780596803773/s/115
+  if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
     uri.setParameterValue('TYPE', 'html');
     this.backChannelRequest_.tridentGet(uri, Boolean(this.hostPrefix_));
   } else {
