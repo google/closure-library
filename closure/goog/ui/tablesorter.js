@@ -102,8 +102,7 @@ goog.ui.TableSorter.prototype.enterDocument = function() {
 
   var table = this.getElement();
   var headerRow = table.getElementsByTagName(goog.dom.TagName.TR)[0];
-  goog.events.listen(headerRow, goog.events.EventType.CLICK,
-      this.sort_, false, this);
+  this.getHandler().listen(headerRow, goog.events.EventType.CLICK, this.sort_);
 };
 
 
