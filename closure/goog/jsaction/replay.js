@@ -35,7 +35,7 @@ goog.jsaction.replay.replayEvent = function(replayInfo) {
   // Add the replay info as property to the event object.
   // This allows the event handler (EventContract#handleEvent_) to
   // detect replayed events.
-  event[goog.jsaction.EventContract.PROP_REPLAY_INFO] = replayInfo;
+  event[goog.jsaction.EventContract.PROPERTY_KEY_REPLAY_INFO] = replayInfo;
 
   goog.jsaction.replay.triggerEvent_(replayInfo.element, event);
 };

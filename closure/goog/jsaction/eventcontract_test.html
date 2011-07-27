@@ -26,7 +26,8 @@ function createHandlerMatcher(containerElem) {
   return new goog.testing.mockmatchers.ArgumentMatcher(
       function(handler) {
         return handler ==
-            containerElem[goog.jsaction.EventContract.PROP_EVENT_HANDLER_];
+            containerElem[
+                goog.jsaction.EventContract.PROPERTY_KEY_EVENT_HANDLER_];
       });
 }
 
@@ -46,9 +47,8 @@ function testAddContainer() {
   var containerElem = document.createElement('div');
   contract.addContainer(containerElem);
 
-  assertTrue(
-      goog.isFunction(
-          containerElem[goog.jsaction.EventContract.PROP_EVENT_HANDLER_]));
+  assertTrue(goog.isFunction(containerElem[
+      goog.jsaction.EventContract.PROPERTY_KEY_EVENT_HANDLER_]));
 }
 
 
@@ -133,7 +133,8 @@ function testClickEventNoAction() {
   contract.addContainer(rootElem);
   contract.addEvent('click');
 
-  var handler = rootElem[goog.jsaction.EventContract.PROP_EVENT_HANDLER_];
+  var handler = rootElem[
+      goog.jsaction.EventContract.PROPERTY_KEY_EVENT_HANDLER_];
   var fakeEvent = {
     type: 'click',
     srcElement: subSubElem
@@ -156,7 +157,8 @@ function testClickEventActionFound() {
   contract.addContainer(rootElem);
   contract.addEvent('click');
 
-  var handler = rootElem[goog.jsaction.EventContract.PROP_EVENT_HANDLER_];
+  var handler = rootElem[
+      goog.jsaction.EventContract.PROPERTY_KEY_EVENT_HANDLER_];
   var fakeEvent = {
     type: 'click',
     srcElement: leafElem
@@ -194,7 +196,8 @@ function testClickActionNotHandled() {
   contract.addContainer(rootElem);
   contract.addEvent('click');
 
-  var eventHandler = rootElem[goog.jsaction.EventContract.PROP_EVENT_HANDLER_];
+  var eventHandler = rootElem[
+      goog.jsaction.EventContract.PROPERTY_KEY_EVENT_HANDLER_];
   var fakeEvent = {
     type: 'click',
     srcElement: childElem
@@ -225,7 +228,8 @@ function testClickActionHandled() {
   contract.addContainer(rootElem);
   contract.addEvent('click');
 
-  var eventHandler = rootElem[goog.jsaction.EventContract.PROP_EVENT_HANDLER_];
+  var eventHandler = rootElem[
+      goog.jsaction.EventContract.PROPERTY_KEY_EVENT_HANDLER_];
   var fakeEvent = {
     type: 'click',
     srcElement: childElem

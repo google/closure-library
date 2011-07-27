@@ -107,7 +107,7 @@ goog.jsaction.Dispatcher = function() {
  * @type {string}
  * @private
  */
-goog.jsaction.Dispatcher.ATTR_JSNAMESPACE_ = 'jsnamespace';
+goog.jsaction.Dispatcher.ATTRIBUTE_NAME_JSNAMESPACE_ = 'jsnamespace';
 
 
 /**
@@ -186,7 +186,7 @@ goog.jsaction.Dispatcher.prototype.dispatch = function(
   if (action.indexOf('.') == -1) {
     for (var ancestor = elem; ancestor; ancestor = ancestor.parentNode) {
       var ns = ancestor.getAttribute(
-          goog.jsaction.Dispatcher.ATTR_JSNAMESPACE_);
+          goog.jsaction.Dispatcher.ATTRIBUTE_NAME_JSNAMESPACE_);
       if (ns) {
         action = ns + '.' + action;
         break;
