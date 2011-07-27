@@ -2216,7 +2216,9 @@ goog.net.BrowserChannel.notifyTimingEvent = function(size, rtt, retries) {
  *     recommends it.
  */
 goog.net.BrowserChannel.prototype.shouldUseSecondaryDomains = function() {
-  return goog.userAgent.IE;
+  // IE8+ allows 6 connections per host.
+  // http://www.browserscope.org/?category=network&v=1
+  return goog.userAgent.IE && !goog.userAgent.isVersion('8');
 };
 
 
