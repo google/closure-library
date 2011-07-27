@@ -22,6 +22,7 @@ See the COPYING file for details.
 </script>
 </head>
 <body>
+<input type="text" id="textInput" style="display:none">
 <script>
 
   /** Mock out the input element. */
@@ -460,6 +461,23 @@ See the COPYING file for details.
 
     mh.detachInput(mockElement);
     assertNull(mh.activeElement_);
+  }
+
+  /**
+   * Make sure an already-focused element becomes active immediately.
+   */
+  function testActiveElementAlreadyFocused() {
+    var element = document.getElementById('textInput');
+    element.style.display = '';
+    element.focus();
+
+    assertNull(mh.activeElement_);
+
+    mh.attachInput(element);
+    assertEquals(element, mh.activeElement_);
+
+    mh.detachInput(element);
+    element.style.display = 'none';
   }
 
   function testUpdateDoesNotTriggerSetTokenForSelectRow() {

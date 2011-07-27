@@ -653,3 +653,14 @@ goog.ui.AutoComplete.prototype.detachInputs = function(var_args) {
       (this.selectionHandler_);
   inputHandler.detachInputs.apply(inputHandler, arguments);
 };
+
+
+/**
+ * Forces an update of the display.
+ * @param {boolean=} opt_force Whether to force an update.
+ */
+goog.ui.AutoComplete.prototype.update = function(opt_force) {
+  var inputHandler = /** @type {goog.ui.AutoComplete.InputHandler} */
+      (this.selectionHandler_);
+  inputHandler.update(opt_force);
+};
