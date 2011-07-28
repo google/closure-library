@@ -56,7 +56,7 @@ goog.vec.Mat3.Type;
  * directly instead of a class reduces overhead.
  * The returned matrix is cleared to all zeros.
  *
- * @return {goog.vec.Mat3.Type} The new, nine element array.
+ * @return {!goog.vec.Mat3.Type} The new, nine element array.
  */
 goog.vec.Mat3.create = function() {
   return new Float32Array(9);
@@ -68,7 +68,7 @@ goog.vec.Mat3.create = function() {
  * directly eliminates any overhead associated with the class representation
  * defined above. The returned matrix is initialized with the identity.
  *
- * @return {goog.vec.Mat3.Type} The new, nine element array.
+ * @return {!goog.vec.Mat3.Type} The new, nine element array.
  */
 goog.vec.Mat3.createIdentity = function() {
   var mat = goog.vec.Mat3.create();
@@ -82,7 +82,7 @@ goog.vec.Mat3.createIdentity = function() {
  *
  * @param {goog.vec.Mat3.Mat3Like} matrix The array containing the
  *     matrix values in column major order.
- * @return {goog.vec.Mat3.Type} The new, nine element array.
+ * @return {!goog.vec.Mat3.Type} The new, nine element array.
  */
 goog.vec.Mat3.createFromArray = function(matrix) {
   var newMatrix = goog.vec.Mat3.create();
@@ -103,7 +103,7 @@ goog.vec.Mat3.createFromArray = function(matrix) {
  * @param {number} v02 The values at (0, 2).
  * @param {number} v12 The values at (1, 2).
  * @param {number} v22 The values at (2, 2).
- * @return {goog.vec.Mat3.Type} The new, nine element array.
+ * @return {!goog.vec.Mat3.Type} The new, nine element array.
  */
 goog.vec.Mat3.createFromValues = function(
     v00, v10, v20, v01, v11, v21, v02, v12, v22) {
@@ -118,7 +118,7 @@ goog.vec.Mat3.createFromValues = function(
  * Creates a clone of a 3x3 matrix.
  *
  * @param {goog.vec.Mat3.Mat3Like} matrix The source 3x3 matrix.
- * @return {goog.vec.Mat3.Mat3Like} The new 3x3 element matrix.
+ * @return {!goog.vec.Mat3.Type} The new 3x3 element matrix.
  */
 goog.vec.Mat3.clone = goog.vec.Mat3.createFromArray;
 
@@ -407,7 +407,7 @@ goog.vec.Mat3.getRows = function(mat, vec0, vec1, vec2) {
  * Makes the given 3x3 matrix the zero matrix.
  *
  * @param {goog.vec.Mat3.Mat3Like} mat The matrix.
- * @return {goog.vec.Mat3.Mat3Like} return mat so operations can be chained.
+ * @return {!goog.vec.Mat3.Mat3Like} return mat so operations can be chained.
  */
 goog.vec.Mat3.makeZero = function(mat) {
   mat[0] = 0;
@@ -427,7 +427,7 @@ goog.vec.Mat3.makeZero = function(mat) {
  * Makes the given 3x3 matrix the identity matrix.
  *
  * @param {goog.vec.Mat3.Mat3Like} mat The matrix.
- * @return {goog.vec.Mat3.Mat3Like} return mat so operations can be chained.
+ * @return {!goog.vec.Mat3.Mat3Like} return mat so operations can be chained.
  */
 goog.vec.Mat3.makeIdentity = function(mat) {
   mat[0] = 1;
@@ -451,7 +451,7 @@ goog.vec.Mat3.makeIdentity = function(mat) {
  * @param {goog.vec.Mat3.Mat3Like} mat1 The second addend.
  * @param {goog.vec.Mat3.Mat3Like} resultMat The matrix to
  *     receive the results (may be either mat0 or mat1).
- * @return {goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
+ * @return {!goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat3.addMat = function(mat0, mat1, resultMat) {
@@ -476,7 +476,7 @@ goog.vec.Mat3.addMat = function(mat0, mat1, resultMat) {
  * @param {goog.vec.Mat3.Mat3Like} mat1 The subtrahend.
  * @param {goog.vec.Mat3.Mat3Like} resultMat The matrix to receive
  *     the results (may be either mat0 or mat1).
- * @return {goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
+ * @return {!goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat3.subMat = function(mat0, mat1, resultMat) {
@@ -501,7 +501,7 @@ goog.vec.Mat3.subMat = function(mat0, mat1, resultMat) {
  * @param {number} scalar The scalar value to multiple to each element of mat.
  * @param {goog.vec.Mat3.Mat3Like} resultMat The matrix to receive
  *     the results (may be mat).
- * @return {goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
+ * @return {!goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat3.multScalar = function(mat, scalar, resultMat) {
@@ -526,7 +526,7 @@ goog.vec.Mat3.multScalar = function(mat, scalar, resultMat) {
  * @param {goog.vec.Mat3.Mat3Like} mat1 The second (right hand) matrix.
  * @param {goog.vec.Mat3.Mat3Like} resultMat The matrix to receive
  *     the results (may be either mat0 or mat1).
- * @return {goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
+ * @return {!goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat3.multMat = function(mat0, mat1, resultMat) {
@@ -557,7 +557,7 @@ goog.vec.Mat3.multMat = function(mat0, mat1, resultMat) {
  * @param {goog.vec.Mat3.Mat3Like} mat The matrix to transpose.
  * @param {goog.vec.Mat3.Mat3Like} resultMat The matrix to receive
  *     the results (may be mat).
- * @return {goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
+ * @return {!goog.vec.Mat3.Mat3Like} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat3.transpose = function(mat, resultMat) {
@@ -646,7 +646,7 @@ goog.vec.Mat3.equals = function(mat0, mat1) {
  * @param {goog.vec.Vec3.Vec3Like} vec The vector to transform.
  * @param {goog.vec.Vec3.Vec3Like} resultVec The vector to
  *     receive the results (may be vec).
- * @return {goog.vec.Vec3.Vec3Like} return resultVec so that operations can be
+ * @return {!goog.vec.Vec3.Vec3Like} return resultVec so that operations can be
  *     chained together.
  */
 goog.vec.Mat3.multVec3 = function(mat, vec, resultVec) {
@@ -665,13 +665,13 @@ goog.vec.Mat3.multVec3 = function(mat, vec, resultVec) {
  * @param {goog.vec.Mat3.Mat3Like} mat The matrix.
  * @param {number} x The translation along the x axis.
  * @param {number} y The translation along the y axis.
- * @return {goog.vec.Mat3.Mat3Like} return mat so that operations can be
+ * @return {!goog.vec.Mat3.Mat3Like} return mat so that operations can be
  *     chained.
  */
 goog.vec.Mat3.makeTranslate = function(mat, x, y) {
   goog.vec.Mat3.makeIdentity(mat);
   goog.vec.Mat3.setColumnValues(mat, 2, x, y, 1);
-  return mat;
+  return /** @type {!goog.vec.Mat3.Mat3Like} */ (mat);
 };
 
 
@@ -683,13 +683,13 @@ goog.vec.Mat3.makeTranslate = function(mat, x, y) {
  * @param {number} x The scale along the x axis.
  * @param {number} y The scale along the y axis.
  * @param {number} z The scale along the z axis.
- * @return {goog.vec.Mat3.Mat3Like} return mat so that operations can be
+ * @return {!goog.vec.Mat3.Mat3Like} return mat so that operations can be
  *     chained.
  */
 goog.vec.Mat3.makeScale = function(mat, x, y, z) {
   goog.vec.Mat3.makeIdentity(mat);
   goog.vec.Mat3.setDiagonalValues(mat, x, y, z);
-  return mat;
+  return /** @type {!goog.vec.Mat3.Mat3Like} */ (mat);
 };
 
 
@@ -702,7 +702,7 @@ goog.vec.Mat3.makeScale = function(mat, x, y, z) {
  * @param {number} ax The x component of the rotation axis.
  * @param {number} ay The y component of the rotation axis.
  * @param {number} az The z component of the rotation axis.
- * @return {goog.vec.Mat3.Mat3Like} return mat so that operations can be
+ * @return {!goog.vec.Mat3.Mat3Like} return mat so that operations can be
  *     chained.
  */
 goog.vec.Mat3.makeRotate = function(mat, angle, ax, ay, az) {
@@ -722,5 +722,5 @@ goog.vec.Mat3.makeRotate = function(mat, angle, ax, ay, az) {
       ax * az * d + ay * s,
       ay * az * d - ax * s,
       az * az * d + c);
-  return mat;
+  return /** @type {!goog.vec.Mat3.Mat3Like} */ (mat);
 };
