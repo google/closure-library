@@ -312,7 +312,9 @@ goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
 
   goog.net.BrowserChannel.notifyStatEvent(
       goog.net.BrowserChannel.Stat.TEST_STAGE_TWO_START);
-  if (goog.userAgent.IE) {
+  // IE 8+ supports XHR Streaming
+  // http://my.safaribooksonline.com/book/web/9780596803773/s/115
+  if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
     recvDataUri.setParameterValues('TYPE', 'html');
     this.request_.tridentGet(recvDataUri, Boolean(this.hostPrefix_));
   } else {
