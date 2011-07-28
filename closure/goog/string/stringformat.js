@@ -126,7 +126,9 @@ goog.string.format.demuxes_['s'] = function(value,
                                             wholeString) {
   var replacement = value;
   // If no padding is necessary we're done.
-  if (isNaN(width) || replacement.length >= width) {
+  // The check for '' is necessary because Firefox incorrectly provides the
+  // empty string instead of undefined for non-participating capture groups.
+  if (isNaN(width) || width == '' || replacement.length >= width) {
     return replacement;
   }
 
@@ -165,6 +167,8 @@ goog.string.format.demuxes_['f'] = function(value,
 
   var replacement = value.toString();
 
+  // The check for '' is necessary because Firefox incorrectly provides the
+  // empty string instead of undefined for non-participating capture groups.
   if (!(isNaN(precision) || precision == '')) {
     replacement = value.toFixed(precision);
   }

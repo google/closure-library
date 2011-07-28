@@ -205,6 +205,18 @@ function testExceptions() {
   assertEquals('[goog.string.format] Template required', e.message);
 }
 
+function testNonParticipatingGroupHandling() {
+  // Firefox supplies empty string instead of undefined for non-participating
+  // capture groups. This can trigger bad behavior if a demuxer only checks
+  // isNaN(val) and not also val == ''. Check for regressions.
+  var format = '%s %d %i %u';
+  var expected = '1 2 3 4';
+  // Good types
+  assertEquals(expected, goog.string.format(format, 1, '2', '3', '4'));
+  // Bad types
+  assertEquals(expected, goog.string.format(format, '1', 2, 3, 4));
+}
+
 </script>
 </body>
 </html>
