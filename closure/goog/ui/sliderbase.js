@@ -54,9 +54,12 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.events.MouseWheelHandler');
 goog.require('goog.events.MouseWheelHandler.EventType');
+goog.require('goog.fx.AnimationParallelQueue');
 goog.require('goog.fx.Dragger');
 goog.require('goog.fx.Dragger.EventType');
 goog.require('goog.fx.Transition.EventType');
+goog.require('goog.fx.dom.ResizeHeight');
+goog.require('goog.fx.dom.ResizeWidth');
 goog.require('goog.fx.dom.SlideFrom');
 goog.require('goog.math');
 goog.require('goog.math.Coordinate');
@@ -143,6 +146,14 @@ goog.ui.SliderBase.prototype.valueThumb;
  * @protected
  */
 goog.ui.SliderBase.prototype.extentThumb;
+
+
+/**
+ * The dom-element highlighting the selected range.
+ * @type {HTMLDivElement}
+ * @protected
+ */
+goog.ui.SliderBase.prototype.rangeHighlight;
 
 
 /**
@@ -240,7 +251,8 @@ goog.ui.SliderBase.prototype.createDom = function() {
 
 /**
  * Subclasses must implement this method and set the valueThumb and
- * extentThumb to non-null values.
+ * extentThumb to non-null values. They can also set the rangeHighlight
+ * element if a range highlight is desired.
  * @type {function() : void}
  * @protected
  */
@@ -776,11 +788,46 @@ goog.ui.SliderBase.prototype.updateUi_ = function() {
     if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
       this.valueThumb.style.top = minCoord.y + 'px';
       this.extentThumb.style.top = maxCoord.y + 'px';
+      if (this.rangeHighlight) {
+        var highlightPositioning = this.calculateRangeHighlightPositioning_(
+            maxCoord.y, minCoord.y, this.valueThumb.offsetHeight);
+        this.rangeHighlight.style.top = highlightPositioning.offset + 'px';
+        this.rangeHighlight.style.height = highlightPositioning.size + 'px';
+      }
     } else {
       this.valueThumb.style.left = minCoord.x + 'px';
       this.extentThumb.style.left = maxCoord.x + 'px';
+      if (this.rangeHighlight) {
+        var highlightPositioning = this.calculateRangeHighlightPositioning_(
+            minCoord.x, maxCoord.x, this.valueThumb.offsetWidth);
+        this.rangeHighlight.style.left = highlightPositioning.offset + 'px';
+        this.rangeHighlight.style.width = highlightPositioning.size + 'px';
+      }
     }
   }
+};
+
+
+/**
+ * Calculates the start position (offset) and size of the range highlight, e.g.
+ * for a horizontal slider, this will return [left, width] for the highlight.
+ * @param {number} firstThumbPos The position of the first thumb along the
+ *     slider axis.
+ * @param {number} secondThumbPos The position of the second thumb along the
+ *     slider axis, must be >= firstThumbPos.
+ * @param {number} thumbSize The size of the thumb, along the slider axis
+ * @return {{offset: number, size: number}} The positioning parameters for the
+ *     range highlight.
+ * @private
+ */
+goog.ui.SliderBase.prototype.calculateRangeHighlightPositioning_ = function(
+    firstThumbPos, secondThumbPos, thumbSize) {
+  // Highlight is inset by half the thumb size, from the edges of the thumb.
+  var highlightInset = Math.ceil(thumbSize / 2);
+  return {
+    offset: firstThumbPos + highlightInset,
+    size: secondThumbPos - firstThumbPos + thumbSize - 2 * highlightInset
+  };
 };
 
 
@@ -827,23 +874,75 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
     this.currentAnimation_.stop(true);
   }
 
+  var animations = new goog.fx.AnimationParallelQueue();
+
   var end;
   var thumb = this.getClosestThumb_(v);
   var coord = this.getThumbCoordinateForValue_(v);
+
   if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
     end = [thumb.offsetLeft, coord.y];
   } else {
     end = [coord.x, thumb.offsetTop];
   }
-  var animation = new goog.fx.dom.SlideFrom(thumb, end,
-      goog.ui.SliderBase.ANIMATION_INTERVAL_);
-  this.currentAnimation_ = animation;
-  this.getHandler().listen(animation, goog.fx.Transition.EventType.END,
+
+  animations.add(new goog.fx.dom.SlideFrom(thumb, end,
+      goog.ui.SliderBase.ANIMATION_INTERVAL_));
+  if (this.rangeHighlight) {
+    this.addRangeHighlightAnimations_(thumb, coord, animations);
+  }
+
+  this.currentAnimation_ = animations;
+  this.getHandler().listen(animations, goog.fx.Transition.EventType.END,
       this.endAnimation_);
 
   this.isAnimating_ = true;
   this.setThumbPosition_(thumb, v);
-  animation.play(false);
+  animations.play(false);
+};
+
+
+/**
+ * Adds animations for the range highlight element to the animation queue.
+ *
+ * @param {Element} thumb The thumb that's moving, must be
+ *     either valueThumb or extentThumb.
+ * @param {goog.math.Coordinate} newCoord The new pixel coordinate of the
+ *     thumb that's moving.
+ * @param {goog.fx.AnimationParallelQueue} animations The animation queue.
+ * @private
+ */
+goog.ui.SliderBase.prototype.addRangeHighlightAnimations_ = function(thumb,
+    newCoord, animations) {
+  var minCoord = this.getThumbCoordinateForValue_(this.rangeModel.getValue());
+  var maxCoord = this.getThumbCoordinateForValue_(
+      this.rangeModel.getValue() + this.rangeModel.getExtent());
+  if (thumb == this.valueThumb) {
+    minCoord = newCoord;
+  } else {
+    maxCoord = newCoord;
+  }
+
+  if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
+    var highlightPositioning = this.calculateRangeHighlightPositioning_(
+        maxCoord.y, minCoord.y, this.valueThumb.offsetHeight);
+    animations.add(new goog.fx.dom.SlideFrom(this.rangeHighlight,
+        [this.rangeHighlight.offsetLeft, highlightPositioning.offset],
+        goog.ui.SliderBase.ANIMATION_INTERVAL_));
+    animations.add(new goog.fx.dom.ResizeHeight(this.rangeHighlight,
+        this.rangeHighlight.offsetHeight, highlightPositioning.size,
+        goog.ui.SliderBase.ANIMATION_INTERVAL_));
+  } else {
+    var highlightPositioning = this.calculateRangeHighlightPositioning_(
+        minCoord.x, maxCoord.x, this.valueThumb.offsetWidth);
+    var newWidth = highlightPositioning[1];
+    animations.add(new goog.fx.dom.SlideFrom(this.rangeHighlight,
+        [highlightPositioning.offset, this.rangeHighlight.offsetTop],
+        goog.ui.SliderBase.ANIMATION_INTERVAL_));
+    animations.add(new goog.fx.dom.ResizeWidth(this.rangeHighlight,
+        this.rangeHighlight.offsetWidth, highlightPositioning.size,
+        goog.ui.SliderBase.ANIMATION_INTERVAL_));
+  }
 };
 
 
@@ -871,9 +970,13 @@ goog.ui.SliderBase.prototype.setOrientation = function(orient) {
     // Update the DOM
     if (this.getElement()) {
       goog.dom.classes.swap(this.getElement(), oldCss, newCss);
-      // we need to reset the left and top
+      // we need to reset the left and top, plus range highlight
       this.valueThumb.style.left = this.valueThumb.style.top = '';
       this.extentThumb.style.left = this.extentThumb.style.top = '';
+      if (this.rangeHighlight) {
+        this.rangeHighlight.style.left = this.rangeHighlight.style.top = '';
+        this.rangeHighlight.style.width = this.rangeHighlight.style.height = '';
+      }
       this.updateUi_();
     }
   }
@@ -901,6 +1004,9 @@ goog.ui.SliderBase.prototype.disposeInternal = function() {
   delete this.currentAnimation_;
   delete this.valueThumb;
   delete this.extentThumb;
+  if (this.rangeHighlight) {
+    delete this.rangeHighlight;
+  }
   this.rangeModel.dispose();
   delete this.rangeModel;
   if (this.keyHandler_) {

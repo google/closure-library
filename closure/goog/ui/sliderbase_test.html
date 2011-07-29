@@ -17,8 +17,27 @@ See the COPYING file for details.
   goog.require('goog.events');
   goog.require('goog.ui.SliderBase');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.MockClock');
   goog.require('goog.testing.recordFunction');
 </script>
+<style type="text/css">
+
+#twoThumbSlider {
+  position: relative;
+  /* Extra 20px is so distance between thumb centers is 1000px */
+  width: 1020px;
+}
+
+#valueThumb, #extentThumb {
+  position: absolute;
+  width: 20px;
+}
+
+#rangeHighlight {
+  position: absolute;
+}
+
+</style>
 </head>
 <body>
 
@@ -30,6 +49,8 @@ var oneChangeEventCount;
 
 var twoThumbSlider;
 var twoChangeEventCount;
+
+var mockClock;
 
 /**
  * A basic class to implement the abstract goog.ui.SliderBase for testing.
@@ -69,6 +90,7 @@ goog.inherits(TwoThumbSlider, goog.ui.SliderBase);
 TwoThumbSlider.prototype.createThumbs = function() {
   this.valueThumb = goog.dom.getElement('valueThumb');
   this.extentThumb = goog.dom.getElement('extentThumb');
+  this.rangeHighlight = goog.dom.getElement('rangeHighlight');
 };
 
 
@@ -80,6 +102,7 @@ TwoThumbSlider.prototype.getCssClass = function() {
 
 function setUp() {
   var sandBox = goog.dom.getElement('sandbox');
+  mockClock = new goog.testing.MockClock(true);
 
   var oneThumbElem = goog.dom.createDom(
       'div', {'id': 'oneThumbSlider'},
@@ -94,7 +117,8 @@ function setUp() {
       });
 
  var twoThumbElem = goog.dom.createDom(
-     'div', {'id': 'oneThumbSlider'},
+     'div', {'id': 'twoThumbSlider'},
+     goog.dom.createDom('div', {'id': 'rangeHighlight'}),
      goog.dom.createDom('span', {'id': 'valueThumb'}),
      goog.dom.createDom('span', {'id': 'extentThumb'}));
   sandBox.appendChild(twoThumbElem);
@@ -112,6 +136,7 @@ function tearDown() {
   goog.events.removeAll();
   oneThumbSlider.dispose();
   twoThumbSlider.dispose();
+  mockClock.dispose();
   goog.dom.getElement('sandbox').innerHTML = '';
 }
 
@@ -191,6 +216,61 @@ function testRangeListener() {
   assertEquals('The range model listener should not have been removed so we ' +
                'should have gotten a second event dispatch',
                2, f.getCallCount());
+}
+
+/**
+ * Verifies that rangeHighlight position and size are correct for the given
+ * startValue and endValue. Assumes slider has default min/max values [0, 100],
+ * width of 1020px, and thumb widths of 20px, with rangeHighlight drawn from
+ * the centers of the thumbs.
+ */
+function assertHighlightedRange(rangeHighlight, startValue, endValue) {
+  var rangeStr = '[' + startValue + ', ' + endValue + ']';
+  var rangeStart = 10 + 10 * startValue;
+  assertEquals('Range highlight for ' + rangeStr + ' should start at ' +
+      rangeStart + 'px.', rangeStart, rangeHighlight.offsetLeft);
+  var rangeSize = 10 * (endValue - startValue);
+  assertEquals('Range highlight for ' + rangeStr + ' should have size ' +
+      rangeSize + 'px.', rangeSize, rangeHighlight.offsetWidth);
+}
+
+function testRangeHighlight() {
+  var rangeHighlight = goog.dom.getElement('rangeHighlight');
+
+  // Test [0, 100]
+  twoThumbSlider.setValue(0);
+  twoThumbSlider.setExtent(100);
+  assertHighlightedRange(rangeHighlight, 0, 100);
+
+  // Test [25, 75]
+  twoThumbSlider.setValue(25);
+  twoThumbSlider.setExtent(50);
+  assertHighlightedRange(rangeHighlight, 25, 75);
+
+  // Test [50, 50]
+  twoThumbSlider.setValue(50);
+  twoThumbSlider.setExtent(0);
+  assertHighlightedRange(rangeHighlight, 50, 50);
+}
+
+function testRangeHighlightAnimation() {
+  var animationDelay = 150; // in ms, is a bit higher than actual delay
+
+  var rangeHighlight = goog.dom.getElement('rangeHighlight');
+  twoThumbSlider.setValue(0);
+  twoThumbSlider.setExtent(100);
+
+  // Animate right thumb, final range is [0, 75]
+  twoThumbSlider.animatedSetValue(75);
+  assertHighlightedRange(rangeHighlight, 0, 100);
+  mockClock.tick(animationDelay);
+  assertHighlightedRange(rangeHighlight, 0, 75);
+
+  // Animate left thumb, final range is [25, 75]
+  twoThumbSlider.animatedSetValue(25);
+  assertHighlightedRange(rangeHighlight, 0, 75);
+  mockClock.tick(animationDelay);
+  assertHighlightedRange(rangeHighlight, 25, 75);
 }
 
 </script>
