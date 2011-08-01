@@ -20,6 +20,7 @@ See the COPYING file for details.
 <script>
 
 var typeOf = goog.debug.reflect.typeOf;
+var className = goog.debug.reflect.className;
 
 function testBasicTypes() {
   assertEquals('undefined', typeOf(undefined));
@@ -27,12 +28,22 @@ function testBasicTypes() {
   assertEquals('boolean', typeOf(false));
   assertEquals('number', typeOf(0));
   assertEquals('string', typeOf(''));
+
+  assertUndefined(className(undefined));
+  assertUndefined(className(null));
+  assertUndefined(className(false));
+  assertUndefined(className(0));
+  assertUndefined(className(''));
 }
 
 function testWrapperTypes() {
   assertEquals('Boolean', typeOf(new Boolean(false)));
   assertEquals('Number', typeOf(new Number(0)));
   assertEquals('String', typeOf(new String('')));
+
+  assertEquals('Boolean', className(Boolean));
+  assertEquals('Number', className(Number));
+  assertEquals('String', className(String));
 }
 
 function testBuiltInTypes() {
@@ -42,6 +53,11 @@ function testBuiltInTypes() {
   assertEquals('Function', typeOf(function() {}));
   assertEquals('Object', typeOf({}));
   assertEquals('RegExp', typeOf(/./));
+
+  assertEquals('Array', className(Array));
+  assertEquals('Date', className(Date));
+  assertEquals('Error', className(Error));
+  assertEquals('Object', className(Object));
 }
 
 function testGoogProvidedTypes() {
@@ -55,6 +71,10 @@ function testGoogProvidedTypes() {
   assertEquals('Object', typeOf(x));
   assertEquals('x.a', typeOf(new x.a));
   assertEquals('Object', typeOf(new x.a.b));
+
+  assertUndefined(className(x));
+  assertEquals('x.a', className(x.a));
+  assertUndefined(className(x.a.b));
 }
 
 function testUnregisteredTypes() {
