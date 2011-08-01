@@ -432,35 +432,41 @@ goog.ui.AutoComplete.InputHandler.prototype.setCursorPosition = function(pos) {
  * Attaches the input handler to an element such as a textarea or input box.
  * The element could basically be anything as long as it exposes the correct
  * interface and events.
- * @param {Element} el An element to attach the input handler too.
+ * @param {Element|goog.events.EventTarget} target An element to attach the
+ *     input handler too.
  */
-goog.ui.AutoComplete.InputHandler.prototype.attachInput = function(el) {
-  goog.dom.a11y.setState(el, 'haspopup', true);
+goog.ui.AutoComplete.InputHandler.prototype.attachInput = function(target) {
+  if (goog.dom.isElement(target)) {
+    goog.dom.a11y.setState(/** @type {Element} */ (target), 'haspopup', true);
+  }
 
-  this.eh_.listen(el, goog.events.EventType.FOCUS, this.handleFocus);
-  this.eh_.listen(el, goog.events.EventType.BLUR, this.handleBlur);
+  this.eh_.listen(target, goog.events.EventType.FOCUS, this.handleFocus);
+  this.eh_.listen(target, goog.events.EventType.BLUR, this.handleBlur);
 
   if (!this.activeElement_) {
     this.activateHandler_.listen(
-        el, goog.events.EventType.KEYDOWN, this.onKeyDownOnInactiveElement_);
+        target, goog.events.EventType.KEYDOWN,
+        this.onKeyDownOnInactiveElement_);
   }
 };
 
 
 /**
  * Detaches the input handler from the provided element.
- * @param {Element} el An element to detach the input handler from.
+ * @param {Element|goog.events.EventTarget} target An element to detach the
+ *     input handler from.
  */
-goog.ui.AutoComplete.InputHandler.prototype.detachInput = function(el) {
-  if (el == this.activeElement_) {
+goog.ui.AutoComplete.InputHandler.prototype.detachInput = function(target) {
+  if (target == this.activeElement_) {
     this.handleBlur();
   }
-  this.eh_.unlisten(el, goog.events.EventType.FOCUS, this.handleFocus);
-  this.eh_.unlisten(el, goog.events.EventType.BLUR, this.handleBlur);
+  this.eh_.unlisten(target, goog.events.EventType.FOCUS, this.handleFocus);
+  this.eh_.unlisten(target, goog.events.EventType.BLUR, this.handleBlur);
 
   if (!this.activeElement_) {
     this.activateHandler_.unlisten(
-        el, goog.events.EventType.KEYDOWN, this.onKeyDownOnInactiveElement_);
+        target, goog.events.EventType.KEYDOWN,
+        this.onKeyDownOnInactiveElement_);
   }
 };
 

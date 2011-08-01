@@ -444,6 +444,22 @@ See the COPYING file for details.
   }
 
   /**
+   * Check attaching to an EventTarget instead of an element.
+   */
+  function testAttachEventTarget() {
+    var target = new goog.events.EventTarget();
+
+    assertNull(mh.activeElement_);
+    mh.attachInput(target);
+    assertNull(mh.activeElement_);
+
+    mockElement.dispatchEvent(new goog.events.Event('focus', mockElement));
+    assertEquals(mockElement, mh.activeElement_);
+
+    mh.detachInput(target);
+  }
+
+  /**
    * Make sure that the active element handling works.
    */
   function testActiveElement() {

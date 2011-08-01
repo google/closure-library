@@ -561,6 +561,24 @@ function testIsNodeLike() {
              goog.dom.isNodeLike({nodeType: 1}));
 }
 
+function testIsElement() {
+  assertFalse('document is not an element', goog.dom.isElement(document));
+  assertTrue('document.body is an element',
+             goog.dom.isElement(document.body));
+  assertFalse('a text node is not an element', goog.dom.isElement(
+      document.createTextNode('')));
+  assertTrue('an element created with createElement() is an element',
+      goog.dom.isElement(document.createElement('a')));
+
+  assertFalse('null is not an element', goog.dom.isElement(null));
+  assertFalse('a string is not an element', goog.dom.isElement('abcd'));
+
+  assertTrue('custom object is an element',
+             goog.dom.isElement({nodeType: 1}));
+  assertFalse('custom non-element object is a not an element',
+              goog.dom.isElement({someProperty: 'somevalue'}));
+}
+
 function testIsWindow() {
   var global = goog.global;
   var frame = window.frames['frame'];
