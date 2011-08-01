@@ -22,6 +22,7 @@ See the COPYING file for details.
 </script>
 </head>
 <body>
+<input type="text" id="textInput" style="display:none">
 <script>
 
   /** Mock out the input element. */
@@ -476,6 +477,39 @@ See the COPYING file for details.
 
     mh.detachInput(mockElement);
     assertNull(mh.activeElement_);
+  }
+
+  /**
+   * We can attach an EventTarget that isn't an element.
+   */
+  function testAttachEventTarget() {
+    var target = new goog.events.EventTarget();
+
+    assertNull(mh.activeElement_);
+    mh.attachInput(target);
+    assertNull(mh.activeElement_);
+
+    target.dispatchEvent(new goog.events.Event('focus', mockElement));
+    assertEquals(mockElement, mh.activeElement_);
+
+    mh.detachInput(target);
+  }
+
+  /**
+   * Make sure an already-focused element becomes active immediately.
+   */
+  function testActiveElementAlreadyFocused() {
+    var element = document.getElementById('textInput');
+    element.style.display = '';
+    element.focus();
+
+    assertNull(mh.activeElement_);
+
+    mh.attachInput(element);
+    assertEquals(element, mh.activeElement_);
+
+    mh.detachInput(element);
+    element.style.display = 'none';
   }
 
   function testUpdateDoesNotTriggerSetTokenForSelectRow() {

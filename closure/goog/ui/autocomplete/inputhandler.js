@@ -447,6 +447,16 @@ goog.ui.AutoComplete.InputHandler.prototype.attachInput = function(target) {
     this.activateHandler_.listen(
         target, goog.events.EventType.KEYDOWN,
         this.onKeyDownOnInactiveElement_);
+
+    // Don't wait for a focus event if the element already has focus.
+    if (goog.dom.isElement(target)) {
+      var ownerDocument = goog.dom.getOwnerDocument(
+          /** @type {Element} */ (target));
+      var focusedElement = ownerDocument && ownerDocument.activeElement;
+      if (focusedElement == target) {
+        this.processFocus(/** @type {Element} */ (target));
+      }
+    }
   }
 };
 
@@ -940,6 +950,16 @@ goog.ui.AutoComplete.InputHandler.prototype.removeKeyEvents_ = function() {
  * @protected
  */
 goog.ui.AutoComplete.InputHandler.prototype.handleFocus = function(e) {
+  this.processFocus(/** @type {Element} */ (e.target || null));
+};
+
+
+/**
+ * Registers handlers for the active element when it receives focus.
+ * @param {Element} target The element to focus.
+ * @protected
+ */
+goog.ui.AutoComplete.InputHandler.prototype.processFocus = function(target) {
   this.activateHandler_.removeAll();
 
   if (this.ac_) {
@@ -948,8 +968,8 @@ goog.ui.AutoComplete.InputHandler.prototype.handleFocus = function(e) {
 
   // Double-check whether the active element has actually changed.
   // This is a fix for Safari 3, which fires spurious focus events.
-  if (e.target != this.activeElement_) {
-    this.activeElement_ = /** @type {Element} */ (e.target) || null;
+  if (target != this.activeElement_) {
+    this.activeElement_ = target;
     if (this.timer_) {
       this.timer_.start();
       this.eh_.listen(this.timer_, goog.Timer.TICK, this.onTick_);
