@@ -25,13 +25,17 @@ goog.require('goog.testing.asserts');
 /**
  * Assert that a control renderer constructor doesn't call getCssClass.
  *
- * @param {Function} rendererClassUnderTest The renderer constructor to test.
+ * @param {?function(new:goog.ui.ControlRenderer)} rendererClassUnderTest The
+ *     renderer constructor to test.
  */
 goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor =
     function(rendererClassUnderTest) {
   var getCssClassCalls = 0;
 
-  /** @constructor */
+  /**
+   * @constructor
+   * @extends {goog.ui.ControlRenderer}
+   */
   function TestControlRenderer() {
     rendererClassUnderTest.call(this);
   }
