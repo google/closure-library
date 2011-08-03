@@ -463,6 +463,8 @@ function testScrollableContainersCalculation() {
 function testMouseMove_mouseOutBeforeThreshold() {
   // Setup dragdrop and item
   var itemEl = document.createElement('div');
+  var childEl = document.createElement('div');
+  itemEl.appendChild(childEl);
   var add = new goog.fx.AbstractDragDrop();
   var item = new goog.fx.DragDropItem(itemEl);
   item.setParent(add);
@@ -470,7 +472,7 @@ function testMouseMove_mouseOutBeforeThreshold() {
 
   // Simulate maybeStartDrag
   item.startPosition_ = new goog.math.Coordinate(10, 10);
-  add.currentDragElement_ = itemEl;
+  item.currentDragElement_ = itemEl;
 
   // Test
   var draggedItem = null;
@@ -479,10 +481,16 @@ function testMouseMove_mouseOutBeforeThreshold() {
   };
 
   var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
-      'type': goog.events.EventType.MOUSEOUT};
+      'type': goog.events.EventType.MOUSEOUT, 'relatedTarget': childEl};
   item.mouseMove_(event);
+  assertEquals("DragStart should not be fired for mouseout on child element.",
+      null, draggedItem);
 
-  assertEquals("dragStart event fired", item, draggedItem);
+  var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
+      'type': goog.events.EventType.MOUSEOUT, 'relatedTarget': itemEl};
+  item.mouseMove_(event);
+  assertEquals("DragStart should be fired for mouseout on main element.",
+      item, draggedItem);
 }
 
 

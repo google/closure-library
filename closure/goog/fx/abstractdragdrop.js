@@ -1341,14 +1341,16 @@ goog.fx.DragDropItem.prototype.maybeStartDrag_ = function(event, element) {
 goog.fx.DragDropItem.prototype.mouseMove_ = function(event) {
   var distance = Math.abs(event.clientX - this.startPosition_.x) +
       Math.abs(event.clientY - this.startPosition_.y);
-
   // Fire dragStart event if the drag distance exceeds the threshold or if the
   // mouse leave the dragged element.
   // TODO(user): Consider using the goog.fx.Dragger to track the distance
   // even after the mouse leaves the dragged element.
-  if (distance > goog.fx.AbstractDragDrop.initDragDistanceThreshold ||
-      event.type == goog.events.EventType.MOUSEOUT) {
-    var currentDragElement = this.currentDragElement_;
+  var currentDragElement = this.currentDragElement_;
+  var distanceAboveThreshold =
+      distance > goog.fx.AbstractDragDrop.initDragDistanceThreshold;
+  var mouseOutOnDragElement = event.type == goog.events.EventType.MOUSEOUT &&
+      event.relatedTarget == currentDragElement;
+  if (distanceAboveThreshold || mouseOutOnDragElement) {
     goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEMOVE,
                          this.mouseMove_, false, this);
     goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEOUT,
