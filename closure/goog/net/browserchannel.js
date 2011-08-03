@@ -1502,9 +1502,7 @@ goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
 
-  // IE 8+ supports XHR Streaming
-  // http://my.safaribooksonline.com/book/web/9780596803773/s/115
-  if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+  if (goog.userAgent.IE) {
     uri.setParameterValue('TYPE', 'html');
     this.backChannelRequest_.tridentGet(uri, Boolean(this.hostPrefix_));
   } else {
@@ -2218,9 +2216,7 @@ goog.net.BrowserChannel.notifyTimingEvent = function(size, rtt, retries) {
  *     recommends it.
  */
 goog.net.BrowserChannel.prototype.shouldUseSecondaryDomains = function() {
-  // IE8+ allows 6 connections per host.
-  // http://www.browserscope.org/?category=network&v=1
-  return goog.userAgent.IE && !goog.userAgent.isVersion('8');
+  return goog.userAgent.IE;
 };
 
 
