@@ -122,12 +122,53 @@ goog.async.Deferred.prototype.unhandledExceptionTimeoutId_;
 
 
 /**
+ * If this Deferred was created by branch(), this will be the "parent" Deferred.
+ * @type {goog.async.Deferred}
+ * @private
+ */
+goog.async.Deferred.prototype.parent_;
+
+
+/**
+ * The number of Deferred objects that have been branched off this one. This
+ * will be decremented whenever a branch is fired or cancelled.
+ * @type {number}
+ * @private
+ */
+goog.async.Deferred.prototype.branches_ = 0;
+
+
+/**
  * Cancels a deferred that has not yet received a value. If this Deferred is
  * paused waiting for a chained Deferred to fire, the chained Deferred will also
  * be cancelled.
+ *
+ * If this Deferred was created by calling branch() on a parent Deferred with
+ * opt_propagateCancel set to true, the parent may also be cancelled. If
+ * opt_deepCancel is set, cancel() will be called on the parent (as well as any
+ * other ancestors if the parent is also a branch). If one or more branches were
+ * created with opt_propagateCancel set to true, the parent will be cancelled if
+ * cancel() is called on all of those branches.
+ *
+ * @param {boolean=} opt_deepCancel If true, cancels this Deferred's parent even
+ *     if cancel() hasn't been called on some of the parent's branches. Has no
+ *     effect on a branch without opt_propagateCancel set to true.
  */
-goog.async.Deferred.prototype.cancel = function() {
+goog.async.Deferred.prototype.cancel = function(opt_deepCancel) {
   if (!this.hasFired()) {
+    if (this.parent_) {
+      // Get rid of the parent reference before potentially running the parent's
+      // canceller callback to ensure that this cancellation doesn't get
+      // double-counted in any way.
+      var parent = this.parent_;
+      delete this.parent_;
+      if (opt_deepCancel) {
+        parent.cancel(opt_deepCancel);
+      } else {
+        parent.branchCancel_();
+      }
+    }
+
     if (this.canceller_) {
       // Call in user-specified scope.
       this.canceller_.call(this.defaultScope_, this);
@@ -139,6 +180,19 @@ goog.async.Deferred.prototype.cancel = function() {
     }
   } else if (this.result_ instanceof goog.async.Deferred) {
     this.result_.cancel();
+  }
+};
+
+
+/**
+ * Handle a single branch being cancelled. Once all branches are cancelled, this
+ * Deferred will be cancelled as well.
+ * @private
+ */
+goog.async.Deferred.prototype.branchCancel_ = function() {
+  this.branches_--;
+  if (this.branches_ <= 0) {
+    this.cancel();
   }
 };
 
@@ -325,12 +379,19 @@ goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
  * of any branches. All branches at the same stage in the callback chain will
  * receive the same starting value.
  *
+ * @param {boolean=} opt_propagateCancel If cancel() is called on every child
+ *     branch created with opt_propagateCancel, the parent will be cancelled as
+ *     well.
  * @return {!goog.async.Deferred} The deferred value at this point in the
  *     callback chain.
  */
-goog.async.Deferred.prototype.branch = function() {
+goog.async.Deferred.prototype.branch = function(opt_propagateCancel) {
   var d = new goog.async.Deferred();
   this.chainDeferred(d);
+  if (opt_propagateCancel) {
+    d.parent_ = this;
+    this.branches_++;
+  }
   return d;
 };
 
@@ -391,6 +452,11 @@ goog.async.Deferred.prototype.fire_ = function() {
     // error, but before that error is rethrown, cancel the rethrow.
     goog.global.clearTimeout(this.unhandledExceptionTimeoutId_);
     delete this.unhandledExceptionTimeoutId_;
+  }
+
+  if (this.parent_) {
+    this.parent_.branches_--;
+    delete this.parent_;
   }
 
   var res = this.result_;

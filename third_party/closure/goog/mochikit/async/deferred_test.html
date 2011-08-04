@@ -632,6 +632,141 @@ function testRepeatedBranch() {
   d.callback(1);
 }
 
+function testCancelThroughBranch() {
+  var wasCancelled = false;
+  var d = new Deferred(function() { wasCancelled = true; });
+  var branch1 = d.branch(true);
+  var branch2 = d.branch(true);
+
+  branch1.cancel();
+  assertFalse(wasCancelled);
+  branch2.cancel();
+  assertTrue(wasCancelled);
+}
+
+function testCancelThroughSeveralBranches() {
+  var wasCancelled = false;
+  var d = new Deferred(function() { wasCancelled = true; });
+  var branch = d.branch(true).branch(true).branch(true);
+
+  branch.cancel();
+  assertTrue(wasCancelled);
+}
+
+function testBranchCancelThenCallback() {
+  var wasCancelled = false;
+  var d = new Deferred(function() { wasCancelled = true; });
+  var wasCalled = false;
+  d.addCallback(function() { wasCalled = true; });
+  var branch1 = d.branch();
+  var branch2 = d.branch();
+
+  var branch1WasCalled = false;
+  var branch2WasCalled = false;
+  branch1.addCallback(function() { branch1WasCalled = true; });
+  branch2.addCallback(function() { branch2WasCalled = true; });
+
+  var branch1HadErrback = false;
+  var branch2HadErrback = false;
+  branch1.addErrback(function() { branch1HadErrback = true; });
+  branch2.addErrback(function() { branch2HadErrback = true; });
+
+  branch1.cancel();
+  assertFalse(wasCancelled);
+  assertTrue(branch1HadErrback);
+  assertFalse(branch2HadErrback);
+
+  d.callback();
+  assertTrue(wasCalled);
+  assertFalse(branch1WasCalled);
+  assertTrue(branch2WasCalled);
+}
+
+function testDeepCancelOnBranch() {
+  var wasCancelled = false;
+  var d = new Deferred(function() { wasCancelled = true; });
+  var branch1 = d.branch(true);
+  var branch2 = d.branch(true).branch(true).branch(true);
+
+  var branch1HadErrback = false;
+  var branch2HadErrback = false;
+  branch1.addErrback(function() { branch1HadErrback = true; });
+  branch2.addErrback(function() { branch2HadErrback = true; });
+
+  branch2.cancel(true /* opt_deepCancel */);
+  assertTrue(wasCancelled);
+  assertTrue(branch1HadErrback);
+  assertTrue(branch2HadErrback);
+}
+
+function testCancelOnRoot() {
+  var wasCancelled = false;
+  var d = new Deferred(function() { wasCancelled = true; });
+  var branch = d.branch(true).branch(true).branch(true);
+
+  d.cancel();
+  assertTrue(wasCancelled);
+}
+
+function testCancelOnLeafBranch() {
+  var wasCancelled = false;
+  var branchWasCancelled = false;
+  var d = new Deferred(function() { wasCancelled = true; });
+  var branch = d.branch(true).branch(true).branch(true);
+  branch.addErrback(function() { branchWasCancelled = true; });
+
+  branch.cancel();
+  assertTrue(wasCancelled);
+  assertTrue(branchWasCancelled);
+}
+
+function testCancelOnIntermediateBranch() {
+  var rootWasCancelled = false;
+
+  var d = new Deferred(function() { rootWasCancelled = true; });
+  var branch = d.branch(true).branch(true).branch(true);
+
+  var deepBranch1 = branch.branch(true);
+  var deepBranch2 = branch.branch(true);
+
+  branch.cancel();
+  assertTrue(rootWasCancelled);
+  assertTrue(deepBranch1.hasFired());
+  assertTrue(deepBranch2.hasFired());
+}
+
+function testCancelWithSomeCompletedBranches() {
+  var d = new Deferred();
+  var branch1 = d.branch(true);
+
+  var branch1HadCallback = false;
+  var branch1HadErrback = false;
+  branch1.
+      addCallback(function() { branch1HadCallback = true; }).
+      addErrback(function() { branch1HadErrback = true; });
+  d.callback(true);
+
+  assertTrue(branch1HadCallback);
+  assertFalse(branch1HadErrback);
+
+  var rootHadCallback = false;
+  var rootHadErrback = false;
+  // Block the root on a new Deferred indefinitely.
+  d.
+      addCallback(function() { rootHadCallback = true; }).
+      addCallback(function() { return new goog.async.Deferred(); }).
+      addErrback(function() { rootHadErrback = true; });
+  var branch2 = d.branch(true);
+
+  assertTrue(rootHadCallback);
+  assertFalse(rootHadErrback);
+
+  branch2.cancel();
+  assertFalse(branch1HadErrback);
+  assertTrue('Cancelling the last active branch should cancel the parent.',
+             rootHadErrback);
+}
+
 </script>
 </body>
 </html>
