@@ -21,6 +21,7 @@ See the COPYING file for details.
 </head>
 <body>
 <input id="i" type="text"></input>
+<input id="p" type="text" placeholder="browser-ignorant placeholder"></input>
 <script>
 
 var labelInput;
@@ -88,6 +89,28 @@ function testPlaceholderAttribute() {
   labelInput.setLabel('new label');
   assertEquals('label should have aria-label attribute \'new label\'',
       'new label', labelInput.getElement().placeholder);
+}
+
+function testDecorateElementWithExistingPlaceholderAttribute() {
+  labelInput = new goog.ui.LabelInput();
+  labelInput.setLabel('search');
+
+  labelInput.decorate(goog.dom.getElement('p'));
+  labelInput.enterDocument();
+  mockClock.tick(10);
+
+  // The presence of an existing placeholder doesn't necessarily mean the
+  // browser supports placeholders. Make sure labels are used for browsers
+  // without placeholder support:
+  if (isPlaceholderSupported()) {
+    assertEquals('label should have placeholder attribute \'search\'', 'search',
+        labelInput.getElement().placeholder);
+  } else {
+    assertEquals('label is rendered', 'search', labelInput.getElement().value);
+    assertEquals('label should have aria-label attribute \'search\'', 'search',
+        goog.dom.a11y.getState(labelInput.getElement(),
+        goog.dom.a11y.State.LABEL));
+  }
 }
 
 function testClassName() {
