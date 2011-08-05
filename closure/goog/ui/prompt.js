@@ -59,8 +59,16 @@ goog.ui.Prompt = function(promptTitle, promptText, callback, opt_defaultValue,
     opt_class, opt_useIframeForIE, opt_domHelper) {
   goog.ui.Dialog.call(this, opt_class, opt_useIframeForIE, opt_domHelper);
 
+  /**
+   * The id of the input element.
+   * @type {string}
+   * @private
+   */
+  this.inputElementId_ = this.makeId('ie');
+
   this.setTitle(promptTitle);
-  this.setContent(promptText + '<br><br>');
+  this.setContent('<label for="' + this.inputElementId_ + '">' + promptText +
+      '</label><br><br>');
   this.callback_ = callback;
   this.defaultValue_ = goog.isDef(opt_defaultValue) ? opt_defaultValue : '';
 
@@ -219,6 +227,7 @@ goog.ui.Prompt.prototype.createDom = function() {
     }
   }
 
+  this.userInputEl_.id = this.inputElementId_;
   var contentEl = this.getContentElement();
   contentEl.appendChild(this.getDomHelper().createDom(
       'div', {'style': 'overflow: auto'}, this.userInputEl_));
