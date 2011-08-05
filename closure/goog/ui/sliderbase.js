@@ -230,6 +230,7 @@ goog.ui.SliderBase.prototype.blockIncrement_ = 10;
 goog.ui.SliderBase.prototype.minExtent_ = 0;
 
 
+// TODO: Make this return a base CSS class (without orientation), in subclasses.
 /**
  * Returns the CSS class applied to the slider element for the given
  * orientation. Subclasses must override this method.
@@ -257,6 +258,24 @@ goog.ui.SliderBase.prototype.createDom = function() {
  * @protected
  */
 goog.ui.SliderBase.prototype.createThumbs = goog.abstractMethod;
+
+
+/**
+ * CSS class name applied to the slider while its thumbs are being dragged.
+ * @type {string}
+ * @private
+ */
+goog.ui.SliderBase.SLIDER_DRAGGING_CSS_CLASS_ =
+    goog.getCssName('goog-slider-dragging');
+
+
+/**
+ * CSS class name applied to a thumb while it's being dragged.
+ * @type {string}
+ * @private
+ */
+goog.ui.SliderBase.THUMB_DRAGGING_CSS_CLASS_ =
+    goog.getCssName('goog-slider-thumb-dragging');
 
 
 /** @inheritDoc */
@@ -289,6 +308,12 @@ goog.ui.SliderBase.prototype.enterDocument = function() {
           this.handleBeforeDrag_).
       listen(this.extentDragger_, goog.fx.Dragger.EventType.BEFOREDRAG,
           this.handleBeforeDrag_).
+      listen(this.valueDragger_,
+          [goog.fx.Dragger.EventType.START, goog.fx.Dragger.EventType.END],
+          this.handleThumbDragStartEnd_).
+      listen(this.extentDragger_,
+          [goog.fx.Dragger.EventType.START, goog.fx.Dragger.EventType.END],
+          this.handleThumbDragStartEnd_).
       listen(this.keyHandler_, goog.events.KeyHandler.EventType.KEY,
           this.handleKeyDown_).
       listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
@@ -340,6 +365,21 @@ goog.ui.SliderBase.prototype.handleBeforeDrag_ = function(e) {
     value = Math.min(Math.max(value, this.getValue()), this.getMaximum());
   }
   this.setThumbPosition_(thumbToDrag, value);
+};
+
+
+/**
+ * Handler for the start/end drag event on the thumgs. Adds/removes
+ * the "-dragging" CSS classes on the slider and thumb.
+ * @param {goog.fx.DragEvent} e The drag event used to drag the thumb.
+ * @private
+ */
+goog.ui.SliderBase.prototype.handleThumbDragStartEnd_ = function(e) {
+  var enable = e.type == goog.fx.Dragger.EventType.START;
+  goog.dom.classes.enable(this.getElement(),
+      goog.ui.SliderBase.SLIDER_DRAGGING_CSS_CLASS_, enable);
+  goog.dom.classes.enable(e.target.handle,
+      goog.ui.SliderBase.THUMB_DRAGGING_CSS_CLASS_, enable);
 };
 
 
@@ -815,7 +855,7 @@ goog.ui.SliderBase.prototype.updateUi_ = function() {
  *     slider axis.
  * @param {number} secondThumbPos The position of the second thumb along the
  *     slider axis, must be >= firstThumbPos.
- * @param {number} thumbSize The size of the thumb, along the slider axis
+ * @param {number} thumbSize The size of the thumb, along the slider axis.
  * @return {{offset: number, size: number}} The positioning parameters for the
  *     range highlight.
  * @private
