@@ -762,7 +762,7 @@ goog.ui.PopupBase.prototype.onDocumentBlur_ = function(e) {
   if (goog.userAgent.IE || goog.userAgent.OPERA) {
     var activeElement = doc.activeElement;
     if (!activeElement || goog.dom.contains(this.element_,
-        activeElement)) {
+        activeElement) || activeElement.tagName == 'BODY') {
       return;
     }
 
