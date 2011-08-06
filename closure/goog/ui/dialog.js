@@ -529,8 +529,10 @@ goog.ui.Dialog.prototype.createDom = function() {
   this.setElementInternal(dom.createDom('div',
       {'className': this.class_, 'tabIndex': 0},
       this.titleEl_ = dom.createDom('div',
-          {'className': goog.getCssName(this.class_, 'title'),
-           'id': this.getId()},
+          {
+            'className': goog.getCssName(this.class_, 'title'),
+            'id': this.getId()
+          },
           this.titleTextEl_ = dom.createDom('span',
               goog.getCssName(this.class_, 'title-text'), this.title_),
           this.titleCloseEl_ = dom.createDom('span',
@@ -987,8 +989,16 @@ goog.ui.Dialog.prototype.resizeBackground_ = function() {
 
   if (this.draggable_) {
     var dialogSize = goog.style.getSize(this.getElement());
-    this.dragger_.limits =
-        new goog.math.Rect(0, 0, w - dialogSize.width, h - dialogSize.height);
+    if (goog.style.getComputedPosition(this.getElement()) == 'fixed') {
+      // Ensure position:fixed dialogs can't be dragged beyond the viewport.
+      this.dragger_.limits = new goog.math.Rect(0, 0,
+          Math.max(0, viewSize.width - dialogSize.width),
+          Math.max(0, viewSize.height - dialogSize.height));
+    } else {
+      this.dragger_.limits = new goog.math.Rect(0, 0,
+          w - dialogSize.width,
+          h - dialogSize.height);
+    }
   }
 };
 
@@ -1447,7 +1457,7 @@ goog.ui.Dialog.ButtonSet.prototype.set = function(key, caption,
  *     "addButton" calls and build new ButtonSets.
  */
 goog.ui.Dialog.ButtonSet.prototype.addButton = function(button, opt_isDefault,
-      opt_isCancel) {
+    opt_isCancel) {
   return this.set(button.key, button.caption, opt_isDefault, opt_isCancel);
 };
 
