@@ -455,26 +455,22 @@ See the COPYING file for details.
     dialog = new goog.ui.Dialog(null, true /* iframe mask */);
     dialog.setVisible(true);
     dialog.setModal(false);
-    assertFalse('IFrame bg element should not be in dom',
-        goog.dom.contains(document.body, dialog.getBackgroundIframe()));
-    assertFalse('bg element should not be in dom',
-        goog.dom.contains(document.body, dialog.getBackgroundElement()));
+    assertNull('IFrame bg element should be null', dialog.bgIframeEl_);
+    assertNull('bg element should be null', dialog.bgEl_);
 
     dialog.setModal(true);
-    assertTrue('IFrame bg element should be in dom',
-        goog.dom.contains(document.body, dialog.getBackgroundIframe()));
-    assertTrue('bg element should be in dom',
-        goog.dom.contains(document.body, dialog.getBackgroundElement()));
+    assertNotNull('IFrame bg element should not be null', dialog.bgIframeEl_);
+    assertNotNull('bg element should not be null', dialog.bgEl_);
 
     assertEquals('IFrame bg element is a child of body',
-        document.body, dialog.getBackgroundIframe().parentNode);
+        document.body, dialog.bgIframeEl_.parentNode);
     assertEquals('bg element is a child of body',
-        document.body, dialog.getBackgroundElement().parentNode);
+        document.body, dialog.bgEl_.parentNode);
 
     assertTrue('IFrame bg element should visible',
-        goog.style.isElementShown(dialog.getBackgroundIframe()));
+        goog.style.isElementShown(dialog.bgIframeEl_));
     assertTrue('bg element should be visible',
-        goog.style.isElementShown(dialog.getBackgroundElement()));
+        goog.style.isElementShown(dialog.bgEl_));
   }
 
   /**

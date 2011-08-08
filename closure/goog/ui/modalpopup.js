@@ -19,9 +19,7 @@
 goog.provide('goog.ui.ModalPopup');
 
 goog.require('goog.Timer');
-goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.dom.iframe');
 goog.require('goog.events');
@@ -115,7 +113,6 @@ goog.ui.ModalPopup.prototype.tabCatcherElement_ = null;
 
 /**
  * @return {string} Base CSS class for this component.
- * @protected
  */
 goog.ui.ModalPopup.prototype.getCssClass = function() {
   return goog.getCssName('goog-modalpopup');
@@ -123,17 +120,8 @@ goog.ui.ModalPopup.prototype.getCssClass = function() {
 
 
 /**
- * Returns the background iframe mask element, if any.
- * @return {Element} The background iframe mask element.
- * @protected
- */
-goog.ui.ModalPopup.prototype.getBackgroundIframe = function() {
-  return this.bgIframeEl_;
-};
-
-
-/**
- * Returns the background mask element.
+ * Returns the background mask element so that more complicated things can be
+ * done with the background region.  Renders if the DOM is not yet created.
  * @return {Element} The background mask element.
  */
 goog.ui.ModalPopup.prototype.getBackgroundElement = function() {
@@ -196,18 +184,34 @@ goog.ui.ModalPopup.prototype.manageBackgroundDom_ = function() {
  * @private
  */
 goog.ui.ModalPopup.prototype.renderBackground_ = function() {
-  goog.asserts.assert(!!this.bgEl_, 'Background element must not be null.');
   if (this.bgIframeEl_) {
     goog.dom.insertSiblingBefore(this.bgIframeEl_, this.getElement());
   }
-  goog.dom.insertSiblingBefore(this.bgEl_, this.getElement());
+  if (this.bgEl_) {
+    goog.dom.insertSiblingBefore(this.bgEl_, this.getElement());
+  }
+};
+
+
+/**
+ * Removes the background mask from document.
+ * @private
+ */
+goog.ui.ModalPopup.prototype.removeBackground_ = function() {
+  if (this.bgIframeEl_) {
+    goog.dom.removeNode(this.bgIframeEl_);
+  }
+  if (this.bgEl_) {
+    goog.dom.removeNode(this.bgEl_);
+  }
 };
 
 
 /** @inheritDoc */
 goog.ui.ModalPopup.prototype.canDecorate = function(element) {
   // Assume we can decorate any DIV.
-  return !!element && element.tagName == goog.dom.TagName.DIV;
+  return !!element && !!element.tagName && element.tagName == 'DIV' &&
+      goog.base(this, 'canDecorate', element);
 };
 
 
@@ -253,8 +257,7 @@ goog.ui.ModalPopup.prototype.exitDocument = function() {
   this.focusHandler_ = null;
 
   goog.base(this, 'exitDocument');
-  goog.dom.removeNode(this.bgIframeEl_);
-  goog.dom.removeNode(this.bgEl_);
+  this.removeBackground_();
   goog.dom.removeNode(this.tabCatcherElement_);
 };
 
