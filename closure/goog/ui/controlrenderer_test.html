@@ -512,20 +512,68 @@ See the COPYING file for details.
           ['goog-button', 'goog-base'], goog.dom.classes.get(element));
     }
 
-    function testUpdateAriaState() {
+    function testUpdateAriaStateDisabled() {
       control.createDom();
       var element = control.getElement();
 
-      controlRenderer.updateAriaState(element, goog.ui.Component.State.ACTIVE,
+      controlRenderer.updateAriaState(element, goog.ui.Component.State.DISABLED,
           true);
-      assertEquals('Control must have pressed ARIA state', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+      assertEquals('Control must have disabled ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
 
-      controlRenderer.updateAriaState(element, goog.ui.Component.State.ACTIVE,
+      controlRenderer.updateAriaState(element, goog.ui.Component.State.DISABLED,
           false);
-      assertEquals('Control must no longer have pressed ARIA state',
+      assertEquals('Control must no longer have disabled ARIA state',
           'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
+  }
+
+    function testUpdateAriaStateSelected() {
+      control.createDom();
+      var element = control.getElement();
+
+      controlRenderer.updateAriaState(element, goog.ui.Component.State.SELECTED,
+          true);
+      assertEquals('Control must have selected ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
+
+      controlRenderer.updateAriaState(element, goog.ui.Component.State.SELECTED,
+          false);
+      assertEquals('Control must no longer have selected ARIA state',
+          'false',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
+  }
+
+    function testUpdateAriaStateChecked() {
+      control.createDom();
+      var element = control.getElement();
+
+      controlRenderer.updateAriaState(element, goog.ui.Component.State.CHECKED,
+          true);
+      assertEquals('Control must have checked ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.CHECKED));
+
+      controlRenderer.updateAriaState(element, goog.ui.Component.State.CHECKED,
+          false);
+      assertEquals('Control must no longer have checked ARIA state',
+          'false',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.CHECKED));
+  }
+
+    function testUpdateAriaStateOpened() {
+      control.createDom();
+      var element = control.getElement();
+
+      controlRenderer.updateAriaState(element, goog.ui.Component.State.OPENED,
+          true);
+      assertEquals('Control must have expanded ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.EXPANDED));
+
+      controlRenderer.updateAriaState(element, goog.ui.Component.State.OPENED,
+          false);
+      assertEquals('Control must no longer have expanded ARIA state',
+          'false',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.EXPANDED));
   }
 
     function testSetContent() {

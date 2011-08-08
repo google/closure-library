@@ -499,7 +499,6 @@ goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
   if (!goog.ui.ControlRenderer.ARIA_STATE_MAP_) {
     goog.ui.ControlRenderer.ARIA_STATE_MAP_ = goog.object.create(
         goog.ui.Component.State.DISABLED, goog.dom.a11y.State.DISABLED,
-        goog.ui.Component.State.ACTIVE, goog.dom.a11y.State.PRESSED,
         goog.ui.Component.State.SELECTED, goog.dom.a11y.State.SELECTED,
         goog.ui.Component.State.CHECKED, goog.dom.a11y.State.CHECKED,
         goog.ui.Component.State.OPENED, goog.dom.a11y.State.EXPANDED);

@@ -127,7 +127,7 @@ goog.ui.CheckboxRenderer.prototype.setCheckboxState = function(
 /**
  * Gets the checkbox's ARIA (accessibility) state from its checked state.
  * @param {goog.ui.Checkbox.State} state Checkbox state.
- * @return {string} The value of goog.dom.a11y.state.PRESSED. Either 'true',
+ * @return {string} The value of goog.dom.a11y.state.CHECKED. Either 'true',
  *     'false', or 'mixed'.
  * @private
  */
