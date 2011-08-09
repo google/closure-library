@@ -298,8 +298,14 @@ goog.ui.ScrollFloater.prototype.startFloating_ = function() {
     'cssFloat': 'none'
   });
 
-  elem.parentNode.replaceChild(this.placeholder_, elem);
-  this.parentElement_.appendChild(elem);
+  // If parents are the same, avoid detaching and reattaching elem.
+  // This prevents Flash embeds from being reloaded, for example.
+  if (elem.parentNode == this.parentElement_) {
+    elem.parentNode.insertBefore(this.placeholder_, elem);
+  } else {
+    elem.parentNode.replaceChild(this.placeholder_, elem);
+    this.parentElement_.appendChild(elem);
+  }
 
   // Versions of IE below 7-in-standards-mode don't handle 'position: fixed',
   // so we must emulate it using an IE-specific idiom for JS-based calculated
@@ -335,7 +341,14 @@ goog.ui.ScrollFloater.prototype.stopFloating_ = function() {
       elem.style.removeExpression('top');
     }
 
-    this.placeholder_.parentNode.replaceChild(elem, this.placeholder_);
+    // If placeholder_ was inserted and didn't replace elem then elem has
+    // the right parent already, no need to replace (which removes elem before
+    // inserting it).
+    if (this.placeholder_.parentNode == this.parentElement_) {
+      this.placeholder_.parentNode.removeChild(this.placeholder_);
+    } else {
+      this.placeholder_.parentNode.replaceChild(elem, this.placeholder_);
+    }
     this.floating_ = false;
   }
 };
