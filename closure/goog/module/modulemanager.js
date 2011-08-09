@@ -18,6 +18,7 @@
  */
 
 goog.provide('goog.module.ModuleManager');
+goog.provide('goog.module.ModuleManager.CallbackType');
 goog.provide('goog.module.ModuleManager.FailureType');
 
 goog.require('goog.Disposable');
