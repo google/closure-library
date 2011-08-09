@@ -347,7 +347,7 @@ goog.positioning.positionAtCoordinate = function(absolutePos,
   // Adjust position to fit inside viewport.
   if (opt_overflow) {
     status = opt_viewport ?
-        goog.positioning.adjustForViewport(
+        goog.positioning.adjustForViewport_(
             absolutePos, size, opt_viewport, opt_overflow) :
         goog.positioning.OverflowStatus.FAILED_OUTSIDE_VIEWPORT;
     if (status & goog.positioning.OverflowStatus.FAILED) {
@@ -378,8 +378,9 @@ goog.positioning.positionAtCoordinate = function(absolutePos,
  *     {@see goog.positioning.Overflow}.
  * @return {goog.positioning.OverflowStatus} Status bitmap,
  *     {@see goog.positioning.OverflowStatus}.
+ * @private
  */
-goog.positioning.adjustForViewport = function(pos, size, viewport, overflow) {
+goog.positioning.adjustForViewport_ = function(pos, size, viewport, overflow) {
   var status = goog.positioning.OverflowStatus.NONE;
 
   var ADJUST_X_EXCEPT_OFFSCREEN =

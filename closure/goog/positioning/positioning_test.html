@@ -480,7 +480,7 @@ function testPositionAtAnchorOutsideViewport() {
 
 
 function testAdjustForViewportFailIgnore() {
-  var f = goog.positioning.adjustForViewport;
+  var f = goog.positioning.adjustForViewport_;
   var viewport = new goog.math.Box(100, 200, 200, 100);
   var overflow = goog.positioning.Overflow.IGNORE;
 
@@ -505,7 +505,7 @@ function testAdjustForViewportFailIgnore() {
 
 
 function testAdjustForViewportFailXY() {
-  var f = goog.positioning.adjustForViewport;
+  var f = goog.positioning.adjustForViewport_;
   var viewport = new goog.math.Box(100, 200, 200, 100);
   var overflow = goog.positioning.Overflow.FAIL_X |
                  goog.positioning.Overflow.FAIL_Y;
@@ -550,7 +550,7 @@ function testAdjustForViewportFailXY() {
 
 
 function testAdjustForViewportAdjustXFailY() {
-  var f = goog.positioning.adjustForViewport;
+  var f = goog.positioning.adjustForViewport_;
   var viewport = new goog.math.Box(100, 200, 200, 100);
   var overflow = goog.positioning.Overflow.ADJUST_X |
                  goog.positioning.Overflow.FAIL_Y;
@@ -595,7 +595,7 @@ function testAdjustForViewportAdjustXFailY() {
 
 
 function testAdjustForViewportResizeHeight() {
-  var f = goog.positioning.adjustForViewport;
+  var f = goog.positioning.adjustForViewport_;
   var viewport = new goog.math.Box(0, 200, 200, 0);
   var overflow = goog.positioning.Overflow.RESIZE_HEIGHT;
 
