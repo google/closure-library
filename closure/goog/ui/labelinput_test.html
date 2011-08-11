@@ -14,9 +14,11 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.dom.a11y');
   goog.require('goog.dom.a11y.State');
-  goog.require('goog.ui.LabelInput');
+  goog.require('goog.events.EventType');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.ui.LabelInput');
 </script>
 </head>
 <body>
@@ -110,6 +112,38 @@ function testDecorateElementWithExistingPlaceholderAttribute() {
     assertEquals('label should have aria-label attribute \'search\'', 'search',
         goog.dom.a11y.getState(labelInput.getElement(),
         goog.dom.a11y.State.LABEL));
+  }
+}
+
+function testDecorateElementWithFocus() {
+  labelInput = new goog.ui.LabelInput();
+  labelInput.setLabel('search');
+
+  var decoratedElement = goog.dom.getElement('i');
+
+  decoratedElement.value = '';
+  decoratedElement.focus();
+
+  labelInput.decorate(decoratedElement);
+  labelInput.enterDocument();
+  mockClock.tick(10);
+
+  assertEquals('label for pre-focused input should not have LABEL_CLASS_NAME',
+      -1,
+      labelInput.getElement().className.indexOf(labelInput.LABEL_CLASS_NAME));
+
+  if (!isPlaceholderSupported()) {
+    assertEquals('label rendered for pre-focused element',
+        '', labelInput.getElement().value);
+    // NOTE(user): element.blur() doesn't seem to trigger the BLUR event in
+    // IE in the test environment. This could be related to the IE issues with
+    // testClassName() below.
+    goog.testing.events.fireBrowserEvent(
+        new goog.testing.events.Event(
+            goog.events.EventType.BLUR, decoratedElement));
+    mockClock.tick(10);
+    assertEquals('label not rendered for blurred element',
+        'search', labelInput.getElement().value);
   }
 }
 

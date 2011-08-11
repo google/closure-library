@@ -93,12 +93,14 @@ goog.provide('goog.ui.AutoComplete.InputHandler');
 
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
+goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.dom.selection');
-goog.require('goog.events');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.string');
 goog.require('goog.ui.AutoComplete');
 goog.require('goog.userAgent');
@@ -1142,7 +1144,8 @@ goog.ui.AutoComplete.InputHandler.prototype.onIeKeyPress_ = function(e) {
  * @param {boolean=} opt_force If true the menu will be forced to update.
  */
 goog.ui.AutoComplete.InputHandler.prototype.update = function(opt_force) {
-  if (opt_force || this.activeElement_ && this.getValue() != this.lastValue_) {
+  if (this.activeElement_ &&
+      (opt_force || this.getValue() != this.lastValue_)) {
     if (opt_force || !this.rowJustSelected_) {
       var token = this.parseToken();
 
