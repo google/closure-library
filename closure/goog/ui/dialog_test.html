@@ -24,7 +24,7 @@ See the COPYING file for details.
 <body>
 <iframe id="f" src="javascript:'<input>'"></iframe>
 <script>
-
+  var decorateTarget;
   var dialog;
 
   function setUp() {
@@ -39,10 +39,14 @@ See the COPYING file for details.
        true);
     dialog.setButtonSet(buttons);
     dialog.setVisible(true);
+
+    decorateTarget = goog.dom.createDom('div');
+    document.body.appendChild(decorateTarget);
   }
 
   function tearDown() {
     dialog.dispose();
+    goog.dom.removeNode(decorateTarget);
   }
 
   function testCrossFrameFocus() {
@@ -498,6 +502,39 @@ See the COPYING file for details.
         dialog.getElement(), goog.events.KeyCodes.ESC);
     assertTrue(wasCalled);
   }
+
+  function testHideButtons_afterRender() {
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
+    assertTrue(goog.style.isElementShown(dialog.buttonEl_));
+    dialog.setButtonSet(null);
+    assertFalse(goog.style.isElementShown(dialog.buttonEl_));
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
+    assertTrue(goog.style.isElementShown(dialog.buttonEl_));
+  }
+
+  function testHideButtons_beforeRender() {
+    dialog.dispose();
+
+    dialog = new goog.ui.Dialog();
+    dialog.setButtonSet(null);
+    dialog.setVisible(true);
+    assertFalse(goog.style.isElementShown(dialog.buttonEl_));
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
+    assertTrue(goog.style.isElementShown(dialog.buttonEl_));
+  }
+
+  function testHideButtons_beforeDecorate() {
+    dialog.dispose();
+
+    dialog = new goog.ui.Dialog();
+    dialog.setButtonSet(null);
+    dialog.decorate(decorateTarget);
+    dialog.setVisible(true);
+    assertFalse(goog.style.isElementShown(dialog.buttonEl_));
+    dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
+    assertTrue(goog.style.isElementShown(dialog.buttonEl_));
+  }
 </script>
 </body>
 </html>
+

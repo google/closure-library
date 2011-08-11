@@ -557,6 +557,7 @@ goog.ui.Dialog.prototype.createDom = function() {
   if (this.buttons_) {
     this.buttons_.attachToElement(this.buttonEl_);
   }
+  goog.style.showElement(this.buttonEl_, !!this.buttons_);
 };
 
 
@@ -752,6 +753,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
     if (this.buttons_) {
       this.buttons_.attachToElement(this.buttonEl_);
     }
+    goog.style.showElement(this.buttonEl_, !!this.buttons_);
   }
 
   // Create the background mask...
@@ -1148,6 +1150,7 @@ goog.ui.Dialog.prototype.setButtonSet = function(buttons) {
     } else {
       this.buttonEl_.innerHTML = '';
     }
+    goog.style.showElement(this.buttonEl_, !!this.buttons_);
   }
 };
 
