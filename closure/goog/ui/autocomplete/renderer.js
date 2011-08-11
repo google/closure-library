@@ -315,6 +315,12 @@ goog.ui.AutoComplete.Renderer.prototype.dismiss = function() {
   }
   if (this.visible_) {
     this.visible_ = false;
+
+    // Clear ARIA popup role for the target input box.
+    if (this.target_) {
+      goog.dom.a11y.setState(this.target_, goog.dom.a11y.State.HASPOPUP, false);
+    }
+
     if (this.menuFadeDuration_ > 0) {
       goog.dispose(this.animation_);
       this.animation_ = new goog.fx.dom.FadeOutAndHide(this.element_,
@@ -333,6 +339,15 @@ goog.ui.AutoComplete.Renderer.prototype.dismiss = function() {
 goog.ui.AutoComplete.Renderer.prototype.show = function() {
   if (!this.visible_) {
     this.visible_ = true;
+
+    // Set ARIA roles and states for the target input box.
+    if (this.target_) {
+      goog.dom.a11y.setRole(this.target_, goog.dom.a11y.Role.COMBOBOX);
+      goog.dom.a11y.setState(
+          this.target_, goog.dom.a11y.State.AUTOCOMPLETE, 'list');
+      goog.dom.a11y.setState(this.target_, goog.dom.a11y.State.HASPOPUP, true);
+    }
+
     if (this.menuFadeDuration_ > 0) {
       goog.dispose(this.animation_);
       this.animation_ = new goog.fx.dom.FadeInAndShow(this.element_,
@@ -433,14 +448,6 @@ goog.ui.AutoComplete.Renderer.prototype.maybeCreateElement_ = function() {
     goog.dom.a11y.setRole(el, goog.dom.a11y.Role.LISTBOX);
 
     el.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
-
-    // Set ARIA roles and states for the target input box.
-    if (this.target_) {
-      goog.dom.a11y.setRole(this.target_, goog.dom.a11y.Role.COMBOBOX);
-      goog.dom.a11y.setState(
-          this.target_, goog.dom.a11y.State.AUTOCOMPLETE, 'list');
-      goog.dom.a11y.setState(this.target_, goog.dom.a11y.State.HASPOPUP, true);
-    }
 
     this.dom_.appendChild(this.parent_, el);
 
