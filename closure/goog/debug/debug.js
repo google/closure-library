@@ -24,6 +24,7 @@ goog.provide('goog.debug');
 goog.require('goog.array');
 goog.require('goog.string');
 goog.require('goog.structs.Set');
+goog.require('goog.userAgent');
 
 
 /**
@@ -37,6 +38,9 @@ goog.require('goog.structs.Set');
 goog.debug.catchErrors = function(logFunc, opt_cancel, opt_target) {
   var target = opt_target || goog.global;
   var oldErrorHandler = target.onerror;
+  // Chrome interprets onerror return value backwards (http://crbug.com/92062).
+  // Safari doesn't support onerror at all.
+  var retVal = goog.userAgent.WEBKIT ? !opt_cancel : !!opt_cancel;
   target.onerror = function(message, url, line) {
     if (oldErrorHandler) {
       oldErrorHandler(message, url, line);
@@ -46,7 +50,7 @@ goog.debug.catchErrors = function(logFunc, opt_cancel, opt_target) {
       fileName: url,
       line: line
     });
-    return Boolean(opt_cancel);
+    return retVal;
   };
 };
 
