@@ -174,7 +174,7 @@ See the COPYING file for details.
   function assertMethodCalledHelper(method, caught) {
     assertTrue('exception not thrown', !!caught);
     assertEquals('exception not caught by error handler',
-        caught, errorHandler.ex);
+        caught.cause, errorHandler.ex);
     assertTrue('fake ' + method + ' not called',
         !!fakeWin[method].called);
     assertTrue('"this" not passed to original ' + method,

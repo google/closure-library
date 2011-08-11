@@ -47,7 +47,7 @@ function testMonitorAndUnmonitor() {
 
 
   var e = assertThrows('expected error', errorFn);
-  assertEquals('Hello!', e.message);
+  assertEquals('Error in protected function: Hello!', e.message);
   assertEquals('Hello!', lastError.message);
 
   errorString = 'Goodbye!';
