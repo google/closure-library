@@ -264,7 +264,7 @@ goog.module.ModuleInfo.prototype.onLoad = function(contextProvider) {
       this.callCallbacks_(this.earlyOnloadCallbacks_, contextProvider());
 
   // Fire any callbacks that were waiting for the module to be loaded.
-  errors = !!errors |
+  errors = !!errors ||
       !!this.callCallbacks_(this.onloadCallbacks_, contextProvider());
 
   if (errors) {
