@@ -24,9 +24,13 @@ See the COPYING file for details.
 
 var lastError;
 var errorHandler;
+var errorFn;
 
 function setUp() {
   lastError = null;
+  errorFn = function(message) {
+    throw {message: message};
+  };
   errorHandler = new goog.debug.ErrorHandler(function(ex) {
     lastError = ex;
   });
@@ -34,28 +38,48 @@ function setUp() {
 }
 
 function testMonitorAndUnmonitor() {
-  var errorString = 'Hello!';
-  var errorFn = function() {
-    throw {message: errorString};
-  };
+  goog.debug.entryPointRegistry.register(function(transformer) {
+    errorFn = transformer(errorFn);
+  });
+  goog.debug.entryPointRegistry.monitorAll(errorHandler);
 
+  var e = assertThrows('expected error', goog.partial(errorFn, 'Hello!'));
+  assertEquals('Error in protected function: Hello!', e.message);
+  assertEquals('Hello!', lastError.message);
+
+  goog.debug.entryPointRegistry.unmonitorAllIfPossible(errorHandler);
+
+  e = assertThrows('expected error', goog.partial(errorFn, 'Goodbye!'));
+  assertEquals('Goodbye!', e.message);
+  assertEquals('Hello!', lastError.message);
+}
+
+function testRegisterAfterMonitor() {
+  goog.debug.entryPointRegistry.monitorAll(errorHandler);
   goog.debug.entryPointRegistry.register(function(transformer) {
     errorFn = transformer(errorFn);
   });
 
-  goog.debug.entryPointRegistry.monitorAll(errorHandler);
-
-
-  var e = assertThrows('expected error', errorFn);
+  var e = assertThrows('expected error', goog.partial(errorFn, 'Hello!'));
   assertEquals('Error in protected function: Hello!', e.message);
   assertEquals('Hello!', lastError.message);
 
-  errorString = 'Goodbye!';
   goog.debug.entryPointRegistry.unmonitorAllIfPossible(errorHandler);
 
-  e = assertThrows('expected error', errorFn);
+  e = assertThrows('expected error', goog.partial(errorFn, 'Goodbye!'));
   assertEquals('Goodbye!', e.message);
   assertEquals('Hello!', lastError.message);
+}
+
+function testInvalidUnmonitor() {
+  goog.debug.entryPointRegistry.monitorAll(errorHandler);
+  var e = assertThrows('expected error', goog.partial(
+      goog.debug.entryPointRegistry.unmonitorAllIfPossible,
+      new goog.debug.ErrorHandler()));
+  assertEquals(
+      'Assertion failed: Only the most recent monitor can be unwrapped.',
+      e.message);
+  goog.debug.entryPointRegistry.unmonitorAllIfPossible(errorHandler);
 }
 
 </script>
