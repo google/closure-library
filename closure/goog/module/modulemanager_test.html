@@ -1109,7 +1109,7 @@ See the COPYING file for details.
     mm.preloadModule('b');
     clock.tick(5);
 
-    assertEquals(1, callback.getCallCount());
+    assertEquals(0, callback.getCallCount());
     assertEquals(1, errback.getCallCount());
     assertEquals(goog.module.ModuleManager.FailureType.INIT_ERROR,
         errback.getLastCall().getArguments()[0]);
