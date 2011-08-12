@@ -908,7 +908,7 @@ goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {
 
     // Remove the mapping from the child element ID map.
     var childElem = control.getElement();
-    if (childElem && childElem.id) {
+    if (childElem && childElem.id && this.childElementIdMap_) {
       goog.object.remove(this.childElementIdMap_, childElem.id);
     }
   }
