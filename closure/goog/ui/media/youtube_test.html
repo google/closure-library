@@ -113,13 +113,26 @@ See the COPYING file for details.
     assertExtractsCorrectly(
         'Lc-8onVA5Jk',
         'http://www.youtube.com/watch?v=Lc-8onVA5Jk&feature=dir');
+    // Last character in the video ID is '-' (a non-word but valid character)
+    // and the video ID is the last query parameter
+    assertExtractsCorrectly(
+        'Lc-8onV5Jk-',
+        'http://www.youtube.com/watch?v=Lc-8onV5Jk-');
 
-    var invalidUrl = 'http://invalidUrl/watch?v=dMH0bHeiRNg';
-    var e = assertThrows('parser expects a well formed URL', function() {
-      goog.ui.media.YoutubeModel.newInstance(invalidUrl);
-    });
-    assertEquals(
-        'failed to parse video id from youtube url: ' + invalidUrl, e.message);
+    var invalidUrls = [
+      'http://invalidUrl/watch?v=dMH0bHeiRNg',
+      'http://www$youtube.com/watch?v=dMH0bHeiRNg',
+      'http://www.youtube$com/watch?v=dMH0bHeiRNg',
+      'http://w_w.youtube.com/watch?v=dMH0bHeiRNg'
+    ];
+    for (var i = 0, j = invalidUrls.length; i < j; ++i) {
+      var e = assertThrows('parser expects a well formed URL', function() {
+        goog.ui.media.YoutubeModel.newInstance(invalidUrls[i]);
+      });
+      assertEquals(
+          'failed to parse video id from youtube url: ' + invalidUrls[i],
+          e.message);
+    }
   }
 
   function testBuildingUrl() {
