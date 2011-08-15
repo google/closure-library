@@ -174,8 +174,11 @@ goog.ui.ControlRenderer.prototype.getAriaRole = function() {
  */
 goog.ui.ControlRenderer.prototype.createDom = function(control) {
   // Create and return DIV wrapping contents.
-  return control.getDomHelper().createDom(
+  var element = control.getDomHelper().createDom(
       'div', this.getClassNames(control).join(' '), control.getContent());
+
+  this.setAriaStates(control, element);
+  return element;
 };
 
 
@@ -331,6 +334,7 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
     goog.dom.classes.set(element, classNames.join(' '));
   }
 
+  this.setAriaStates(control, element);
   return element;
 };
 
@@ -361,13 +365,42 @@ goog.ui.ControlRenderer.prototype.initializeDom = function(control) {
 
 
 /**
- * Sets the element's ARIA role on browsers that support it.
+ * Sets the element's ARIA role.
  * @param {Element} element Element to update.
  */
 goog.ui.ControlRenderer.prototype.setAriaRole = function(element) {
   var ariaRole = this.getAriaRole();
   if (ariaRole) {
     goog.dom.a11y.setRole(element, ariaRole);
+  }
+};
+
+
+/**
+ * Sets the element's ARIA states. An element does not need an ARIA role in
+ * order to have an ARIA state. Only states which are initialized to be true
+ * will be set.
+ * @param {!goog.ui.Control} control Control whose ARIA state will be updated.
+ * @param {!Element} element Element whose ARIA state is to be updated.
+ */
+goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
+  goog.asserts.assert(control);
+  goog.asserts.assert(element);
+  if (!control.isEnabled()) {
+    this.updateAriaState(element, goog.ui.Component.State.DISABLED,
+                         true);
+  }
+  if (control.isSelected()) {
+    this.updateAriaState(element, goog.ui.Component.State.SELECTED,
+                         true);
+  }
+  if (control.isSupportedState(goog.ui.Component.State.CHECKED)) {
+    this.updateAriaState(element, goog.ui.Component.State.CHECKED,
+                         control.isChecked());
+  }
+  if (control.isSupportedState(goog.ui.Component.State.OPENED)) {
+    this.updateAriaState(element, goog.ui.Component.State.OPENED,
+                         control.isOpen());
   }
 };
 
