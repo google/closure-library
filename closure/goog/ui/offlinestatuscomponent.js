@@ -30,6 +30,7 @@ goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.Overflow');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.OfflineStatusCard.EventType');
 goog.require('goog.ui.Popup');
 
 
