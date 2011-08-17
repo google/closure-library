@@ -411,8 +411,9 @@ goog.fx.Animation.prototype.play = function(opt_restart) {
 
   goog.fx.Animation.unregisterAnimation(this);
 
-  this.startTime = /** @type {number} */ (goog.now());
+  var now = /** @type {number} */ (goog.now());
 
+  this.startTime = now;
   if (this.state_ == goog.fx.Animation.State.PAUSED) {
     this.startTime -= this.duration * this.progress;
   }
@@ -433,7 +434,7 @@ goog.fx.Animation.prototype.play = function(opt_restart) {
   this.state_ = goog.fx.Animation.State.PLAYING;
 
   goog.fx.Animation.registerAnimation(this);
-  this.cycle(this.startTime);
+  this.cycle(now);
 
   return true;
 };
@@ -466,6 +467,23 @@ goog.fx.Animation.prototype.pause = function() {
     goog.fx.Animation.unregisterAnimation(this);
     this.state_ = goog.fx.Animation.State.PAUSED;
     this.onPause();
+  }
+};
+
+
+/**
+ * Sets the progress of the animation.
+ * @param {number} progress The new progress of the animation.
+ */
+goog.fx.Animation.prototype.setProgress = function(progress) {
+  this.progress = progress;
+  if (this.state_ == goog.fx.Animation.State.PLAYING) {
+    var now = goog.now();
+    // If the animation is already playing, we recompute startTime and endTime
+    // such that the animation plays consistently, that is:
+    // now = startTime + progress * duration.
+    this.startTime = now - this.duration * this.progress;
+    this.endTime = this.startTime + this.duration;
   }
 };
 
