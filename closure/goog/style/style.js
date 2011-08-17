@@ -1799,12 +1799,18 @@ goog.style.getFloat = function(el) {
  * @return {number} The scroll bar width in px.
  */
 goog.style.getScrollbarWidth = function() {
-  // Add a div outside of the viewport.
-  var mockElement = goog.dom.createElement('div');
-  mockElement.style.cssText = 'visibility:hidden;overflow:scroll;' +
+  // Add two hidden divs.  The child div is larger than the parent and
+  // forces scrollbars to appear on it.
+  // Using overflow:scroll does not work consistently with scrollbars that
+  // are styled with ::-webkit-scrollbar.
+  var outerDiv = goog.dom.createElement('div');
+  outerDiv.style.cssText = 'visiblity:hidden;overflow:auto;' +
       'position:absolute;top:0;width:100px;height:100px';
-  goog.dom.appendChild(goog.dom.getDocument().body, mockElement);
-  var width = mockElement.offsetWidth - mockElement.clientWidth;
-  goog.dom.removeNode(mockElement);
+  var innerDiv = goog.dom.createElement('div');
+  goog.style.setSize(innerDiv, '200px', '200px');
+  outerDiv.appendChild(innerDiv);
+  goog.dom.appendChild(goog.dom.getDocument().body, outerDiv);
+  var width = outerDiv.offsetWidth - outerDiv.clientWidth;
+  goog.dom.removeNode(outerDiv);
   return width;
 };

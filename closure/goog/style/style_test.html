@@ -2115,6 +2115,17 @@ function testScrollBarWidth() {
   assertTrue('should have a scroll bar', hasHorizontalScroll(outer));
 }
 
+function testScrollBarWidth_webkitScrollbar() {
+  // Mess with the default scrollbar styling.
+  var styles = goog.style.installStyles('::-webkit-scrollbar {width: 30px;}');
+  try {
+    var width = goog.style.getScrollbarWidth();
+    assertTrue(width > 0);
+  } finally {
+    goog.style.uninstallStyles(styles);
+  }
+}
+
 function testOffsetParent() {
   var $ = goog.dom.getElement;
   var parent = $('offset-parent');
