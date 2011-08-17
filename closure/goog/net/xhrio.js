@@ -554,7 +554,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
  */
 goog.net.XhrIo.prototype.createXhr = function() {
   return this.xmlHttpFactory_ ?
-      this.xmlHttpFactory_.createInstance() : new goog.net.XmlHttp();
+      this.xmlHttpFactory_.createInstance() : goog.net.XmlHttp();
 };
 
 

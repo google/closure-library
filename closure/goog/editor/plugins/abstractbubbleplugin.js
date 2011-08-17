@@ -307,7 +307,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.getSharedBubble_ =
     function() {
   var bubbleParent = /** @type {!Element} */ (this.bubbleParent_ ||
       this.fieldObject.getAppWindow().document.body);
-  this.dom_ = new goog.dom.getDomHelper(bubbleParent);
+  this.dom_ = goog.dom.getDomHelper(bubbleParent);
 
   var bubble = goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[
       this.fieldObject.id];

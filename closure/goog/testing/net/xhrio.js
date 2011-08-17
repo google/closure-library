@@ -372,7 +372,7 @@ goog.testing.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
  * @protected
  */
 goog.testing.net.XhrIo.prototype.createXhr = function() {
-  return new goog.net.XmlHttp();
+  return goog.net.XmlHttp();
 };
 
 

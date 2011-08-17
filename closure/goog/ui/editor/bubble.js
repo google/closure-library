@@ -57,7 +57,7 @@ goog.ui.editor.Bubble = function(parent, zIndex) {
    * @type {!goog.dom.DomHelper}
    * @private
    */
-  this.dom_ = new goog.dom.getDomHelper(parent);
+  this.dom_ = goog.dom.getDomHelper(parent);
 
   /**
    * Event handler for this bubble.

@@ -59,7 +59,11 @@ var TWO = 2
 var THREE = 3;
 
 // Mock out XHR for createWorkerFromUrl().
-goog.net.XmlHttp = function() {};
+goog.net.XmlHttp = function() {
+  if (!(this instanceof goog.net.XmlHttp)) {
+    return new goog.net.XmlHttp();
+  }
+};
 goog.net.XmlHttp.prototype.open = function(method, url, async) {};
 goog.net.XmlHttp.prototype.send = function(data) {
   this.responseText = workerTestCase.getWorkerCode();
