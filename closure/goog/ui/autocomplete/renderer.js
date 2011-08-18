@@ -103,6 +103,14 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
   this.rows_ = [];
 
   /**
+   * Array of the node divs that hold each result that is being displayed.
+   * @type {Array.<Element>}
+   * @protected
+   * @suppress {underscore}
+   */
+  this.rowDivs_ = [];
+
+  /**
    * The index of the currently highlighted row
    * @type {number}
    * @protected
@@ -373,7 +381,7 @@ goog.ui.AutoComplete.Renderer.prototype.isVisible = function() {
  * @param {number} index Index of the item to highlight.
  */
 goog.ui.AutoComplete.Renderer.prototype.hiliteRow = function(index) {
-  var rowDiv = index >= 0 && index < this.element_.childNodes.length ?
+  var rowDiv = index >= 0 && index < this.rowDivs_.length ?
       this.rowDivs_[index] : undefined;
 
   var evtObj = {type: goog.ui.AutoComplete.EventType.ROW_HILITE,

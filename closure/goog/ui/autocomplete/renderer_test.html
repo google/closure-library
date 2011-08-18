@@ -413,6 +413,40 @@ See the COPYING file for details.
     assertTrue(hideAnimCalled);
   }
 
+  function testHiliteRowWithDefaultRenderer() {
+    renderer.renderRows(rendRows, '');
+    renderer.hiliteRow(2);
+    assertEquals(2, renderer.hilitedRow_);
+    assertTrue(goog.dom.classes.has(
+        renderer.rowDivs_[2], renderer.activeClassName));
+  }
+
+  function testHiliteRowWithCustomRenderer() {
+    // Use a custom renderer that doesn't put the result divs as direct children
+    // of this.element_.
+    var customRenderer = {
+      render: function(renderer, element, rows, token) {
+        // Put all of the results into a results holder div that is a child of
+        // this.element_.
+        var resultsHolder = goog.dom.createDom('div');
+        goog.dom.appendChild(element, resultsHolder);
+        for (var i = 0, row; row = rows[i]; ++i) {
+          var node = renderer.renderRowHtml(row, token);
+          goog.dom.appendChild(resultsHolder, node);
+        }
+      }
+    };
+    var myRenderer = new goog.ui.AutoComplete.Renderer(null, customRenderer);
+
+    // Make sure we can still highlight the row at position 2 even though
+    // this.element_.childNodes contains only a single child.
+    myRenderer.renderRows(rendRows, '');
+    myRenderer.hiliteRow(2);
+    assertEquals(2, myRenderer.hilitedRow_);
+    assertTrue(goog.dom.classes.has(
+        myRenderer.rowDivs_[2], myRenderer.activeClassName));
+  }
+
   // ------- Helper functions -------
   function assertNumBoldTags (boldTagElArray, expectedNum) {
     assertEquals('Incorrect number of bold tags', expectedNum,
