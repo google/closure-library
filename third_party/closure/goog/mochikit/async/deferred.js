@@ -514,6 +514,12 @@ goog.async.Deferred.prototype.fire_ = function() {
     // the error will be seen by global handlers and the user. The rethrow will
     // be canceled if another errback is appended before the timeout executes.
     this.unhandledExceptionTimeoutId_ = goog.global.setTimeout(function() {
+      // The stack trace is clobbered when the error is rethrown. Append the
+      // stack trace to the message if available. Since no one is capturing this
+      // error, the stack trace will be printed to the debug console.
+      if (goog.DEBUG && goog.isDef(res.message) && res.stack) {
+        res.message += '\n' + res.stack;
+      }
       throw res;
     }, 0);
   }

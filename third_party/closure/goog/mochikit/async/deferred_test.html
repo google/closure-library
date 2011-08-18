@@ -316,8 +316,9 @@ function testChainedDeferred2() {
     mockClock.tick();
     neverHappen();
   } catch (ex) {
-    assertEquals('In debug mode, should catch unhandled throw from d2.',
-                 'x', ex.message);
+    assertTrue('In debug mode, should catch unhandled throw from d2. ' +
+               'Error message may include stack trace in some browsers.',
+               goog.string.startsWith(ex.message, 'x'));
   }
 }
 
@@ -770,3 +771,4 @@ function testCancelWithSomeCompletedBranches() {
 </script>
 </body>
 </html>
+
