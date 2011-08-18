@@ -848,6 +848,8 @@ goog.net.XhrIo.prototype.isSuccess = function() {
       return !this.isLastUriEffectiveSchemeHttp_();
 
     case goog.net.HttpStatus.OK:
+    case goog.net.HttpStatus.CREATED:
+    case goog.net.HttpStatus.ACCEPTED:
     case goog.net.HttpStatus.NO_CONTENT:
     case goog.net.HttpStatus.NOT_MODIFIED:
     case goog.net.HttpStatus.QUIRK_IE_NO_CONTENT:
