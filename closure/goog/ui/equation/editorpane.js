@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.equation.EditorPane');
+goog.provide('goog.ui.equation.EditorPane');
 
 goog.require('goog.dom');
 goog.require('goog.style');
@@ -26,10 +26,10 @@ goog.require('goog.ui.Component');
  * @constructor
  * @extends {goog.ui.Component}
  */
-goog.editor.plugins.equation.EditorPane = function(opt_domHelper) {
+goog.ui.equation.EditorPane = function(opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 };
-goog.inherits(goog.editor.plugins.equation.EditorPane, goog.ui.Component);
+goog.inherits(goog.ui.equation.EditorPane, goog.ui.Component);
 
 
 /**
@@ -39,14 +39,14 @@ goog.inherits(goog.editor.plugins.equation.EditorPane, goog.ui.Component);
  * @type {string}
  * @private
  */
-goog.editor.plugins.equation.EditorPane.prototype.helpUrl_ = '';
+goog.ui.equation.EditorPane.prototype.helpUrl_ = '';
 
 
 /**
  * Sets the visibility of this tab pane.
  * @param {boolean} visible Whether this tab should become visible.
  */
-goog.editor.plugins.equation.EditorPane.prototype.setVisible =
+goog.ui.equation.EditorPane.prototype.setVisible =
     function(visible) {
   goog.style.showElement(this.getElement(), visible);
 };
@@ -57,16 +57,14 @@ goog.editor.plugins.equation.EditorPane.prototype.setVisible =
  * @param {string} equation The equation.
  * @protected
  */
-goog.editor.plugins.equation.EditorPane.prototype.setEquation =
-    goog.abstractMethod;
+goog.ui.equation.EditorPane.prototype.setEquation = goog.abstractMethod;
 
 
 /**
  * @return {string} The equation shown in this tab pane.
  * @protected
  */
-goog.editor.plugins.equation.EditorPane.prototype.getEquation =
-    goog.abstractMethod;
+goog.ui.equation.EditorPane.prototype.getEquation = goog.abstractMethod;
 
 
 /**
@@ -74,7 +72,7 @@ goog.editor.plugins.equation.EditorPane.prototype.getEquation =
  * @param {string} url The help link URL.
  * @protected
  */
-goog.editor.plugins.equation.EditorPane.prototype.setHelpUrl = function(url) {
+goog.ui.equation.EditorPane.prototype.setHelpUrl = function(url) {
   this.helpUrl_ = url;
 };
 
@@ -83,7 +81,7 @@ goog.editor.plugins.equation.EditorPane.prototype.setHelpUrl = function(url) {
  * @return {string} The help link URL.
  * @protected
  */
-goog.editor.plugins.equation.EditorPane.prototype.getHelpUrl = function() {
+goog.ui.equation.EditorPane.prototype.getHelpUrl = function() {
   return this.helpUrl_;
 };
 
@@ -92,6 +90,5 @@ goog.editor.plugins.equation.EditorPane.prototype.getHelpUrl = function() {
  * @return {boolean} Whether the equation was modified.
  * @protected
  */
-goog.editor.plugins.equation.EditorPane.prototype.isModified =
-    goog.abstractMethod;
+goog.ui.equation.EditorPane.prototype.isModified = goog.abstractMethod;
 

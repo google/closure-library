@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.equation.TexEditor');
+goog.provide('goog.ui.equation.TexEditor');
 
 goog.require('goog.dom');
-goog.require('goog.editor.plugins.equation.ImageRenderer');
-goog.require('goog.editor.plugins.equation.TexPane');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.equation.ImageRenderer');
+goog.require('goog.ui.equation.TexPane');
 
 
 
@@ -29,8 +29,7 @@ goog.require('goog.ui.Component');
  * @param {goog.dom.DomHelper=} opt_domHelper DomHelper to use.
  * @extends {goog.ui.Component}
  */
-goog.editor.plugins.equation.TexEditor = function(
-    context, helpUrl, opt_domHelper) {
+goog.ui.equation.TexEditor = function(context, helpUrl, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
@@ -47,19 +46,19 @@ goog.editor.plugins.equation.TexEditor = function(
    */
   this.helpUrl_ = helpUrl;
 };
-goog.inherits(goog.editor.plugins.equation.TexEditor, goog.ui.Component);
+goog.inherits(goog.ui.equation.TexEditor, goog.ui.Component);
 
 
 /**
  * The TeX editor pane.
- * @type {goog.editor.plugins.equation.TexPane}
+ * @type {goog.ui.equation.TexPane}
  * @private
  */
-goog.editor.plugins.equation.TexEditor.prototype.texPane_ = null;
+goog.ui.equation.TexEditor.prototype.texPane_ = null;
 
 
 /** @inheritDoc */
-goog.editor.plugins.equation.TexEditor.prototype.createDom = function() {
+goog.ui.equation.TexEditor.prototype.createDom = function() {
   goog.base(this, 'createDom');
   this.createDom_();
 };
@@ -69,9 +68,9 @@ goog.editor.plugins.equation.TexEditor.prototype.createDom = function() {
  * Creates main editor contents.
  * @private
  */
-goog.editor.plugins.equation.TexEditor.prototype.createDom_ = function() {
+goog.ui.equation.TexEditor.prototype.createDom_ = function() {
   var contentElement = this.getElement();
-  this.texPane_ = new goog.editor.plugins.equation.TexPane(this.context_,
+  this.texPane_ = new goog.ui.equation.TexPane(this.context_,
       this.helpUrl_, this.dom_);
   this.addChild(this.texPane_);
   this.texPane_.render(contentElement);
@@ -80,8 +79,7 @@ goog.editor.plugins.equation.TexEditor.prototype.createDom_ = function() {
 
 
 /** @inheritDoc */
-goog.editor.plugins.equation.TexEditor.prototype.decorateInternal =
-    function(element) {
+goog.ui.equation.TexEditor.prototype.decorateInternal = function(element) {
   this.setElementInternal(element);
   this.createDom_();
 };
@@ -91,7 +89,7 @@ goog.editor.plugins.equation.TexEditor.prototype.decorateInternal =
  * Returns the encoded equation.
  * @return {string} The encoded equation.
  */
-goog.editor.plugins.equation.TexEditor.prototype.getEquation = function() {
+goog.ui.equation.TexEditor.prototype.getEquation = function() {
   return this.texPane_.getEquation();
 };
 
@@ -101,8 +99,7 @@ goog.editor.plugins.equation.TexEditor.prototype.getEquation = function() {
  * Clears any previous displayed equation.
  * @param {string} equation The equation text to parse.
  */
-goog.editor.plugins.equation.TexEditor.prototype.setEquation =
-    function(equation) {
+goog.ui.equation.TexEditor.prototype.setEquation = function(equation) {
   this.texPane_.setEquation(equation);
 };
 
@@ -110,8 +107,8 @@ goog.editor.plugins.equation.TexEditor.prototype.setEquation =
 /**
  * @return {string} The html code to embed in the document.
  */
-goog.editor.plugins.equation.TexEditor.prototype.getHtml = function() {
-  return goog.editor.plugins.equation.ImageRenderer.getHtml(this.getEquation());
+goog.ui.equation.TexEditor.prototype.getHtml = function() {
+  return goog.ui.equation.ImageRenderer.getHtml(this.getEquation());
 };
 
 
@@ -119,8 +116,8 @@ goog.editor.plugins.equation.TexEditor.prototype.getHtml = function() {
  * Checks whether the current equation is valid and can be used in a document.
  * @return {boolean} Whether the equation valid.
  */
-goog.editor.plugins.equation.TexEditor.prototype.isValid = function() {
-  return goog.editor.plugins.equation.ImageRenderer.isEquationTooLong(
+goog.ui.equation.TexEditor.prototype.isValid = function() {
+  return goog.ui.equation.ImageRenderer.isEquationTooLong(
       this.getEquation());
 };
 
@@ -129,15 +126,13 @@ goog.editor.plugins.equation.TexEditor.prototype.isValid = function() {
  * Sets the visibility of the editor.
  * @param {boolean} visible Whether the editor should be visible.
  */
-goog.editor.plugins.equation.TexEditor.prototype.setVisible =
-    function(visible) {
+goog.ui.equation.TexEditor.prototype.setVisible = function(visible) {
   this.texPane_.setVisible(visible);
 };
 
 
 /** @inheritDoc */
-goog.editor.plugins.equation.TexEditor.prototype.disposeInternal =
-    function() {
+goog.ui.equation.TexEditor.prototype.disposeInternal = function() {
   if (this.texPane_) {
     this.texPane_.dispose();
   }

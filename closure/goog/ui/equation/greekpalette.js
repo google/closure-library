@@ -12,24 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.equation.GreekPalette');
-
-goog.require('goog.editor.plugins.equation.Palette');
+goog.provide('goog.ui.equation.GreekPalette');
 
 goog.require('goog.math.Size');
+goog.require('goog.ui.equation.Palette');
 
 
 
 /**
  * Constructs a new Greek symbols palette.
- * @param {goog.editor.plugins.equation.PaletteManager} paletteManager The
+ * @param {goog.ui.equation.PaletteManager} paletteManager The
  *     manager of the palette.
- * @extends {goog.editor.plugins.equation.Palette}
+ * @extends {goog.ui.equation.Palette}
  * @constructor
  */
-goog.editor.plugins.equation.GreekPalette = function(paletteManager) {
-  goog.editor.plugins.equation.Palette.call(this, paletteManager,
-      goog.editor.plugins.equation.Palette.Type.GREEK,
+goog.ui.equation.GreekPalette = function(paletteManager) {
+  goog.ui.equation.Palette.call(this, paletteManager,
+      goog.ui.equation.Palette.Type.GREEK,
       0, 30, 18, 18,
       ['\\alpha',
        '\\beta',
@@ -73,5 +72,4 @@ goog.editor.plugins.equation.GreekPalette = function(paletteManager) {
        '\\Omega']);
   this.setSize(new goog.math.Size(7, 6));
 };
-goog.inherits(goog.editor.plugins.equation.GreekPalette,
-    goog.editor.plugins.equation.Palette);
+goog.inherits(goog.ui.equation.GreekPalette, goog.ui.equation.Palette);

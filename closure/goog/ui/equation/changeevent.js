@@ -1,4 +1,4 @@
-// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+// Copyright 2011 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,29 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @see equationeditor.html
- */
+goog.provide('goog.ui.equation.ChangeEvent');
 
-goog.provide('goog.demos.editor.EquationEditor');
-
-goog.require('goog.ui.equation.EquationEditorDialog');
+goog.require('goog.events.Event');
+goog.require('goog.events.EventType');
 
 
 
 /**
+ * Event fired when equation changes.
  * @constructor
+ * @param {boolean} isValid Whether the equation is valid.
+ * @extends {goog.events.Event}
  */
-goog.demos.editor.EquationEditor = function() {
-};
+goog.ui.equation.ChangeEvent = function(isValid) {
+  goog.events.Event.call(this, 'change');
 
-
-/**
- * Creates a new editor and opens the dialog.
- * @param {string} initialEquation The initial equation value to use.
- */
-goog.demos.editor.EquationEditor.prototype.openEditor = function(
-    initialEquation) {
-  var editorDialog = new goog.ui.equation.EquationEditorDialog(initialEquation);
-  editorDialog.setVisible(true);
+  /**
+   * Whether equation is valid.
+   * @type {boolean}
+   */
+  this.isValid = isValid;
 };
+goog.inherits(goog.ui.equation.ChangeEvent, goog.events.Event);
+
