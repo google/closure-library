@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.equation.EquationEditor');
+goog.provide('goog.editor.plugins.equation.EquationEditor');
 
 goog.require('goog.dom');
+goog.require('goog.editor.plugins.equation.EditorPane');
+goog.require('goog.editor.plugins.equation.ImageRenderer');
+goog.require('goog.editor.plugins.equation.TexPane');
 goog.require('goog.events');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Tab');
 goog.require('goog.ui.TabBar');
-goog.require('goog.ui.equation.EditorPane');
-goog.require('goog.ui.equation.ImageRenderer');
-goog.require('goog.ui.equation.TexPane');
 
 
 
@@ -34,7 +34,7 @@ goog.require('goog.ui.equation.TexPane');
  *     link.
  * @extends {goog.ui.Component}
  */
-goog.ui.equation.EquationEditor = function(context, opt_domHelper,
+goog.editor.plugins.equation.EquationEditor = function(context, opt_domHelper,
     opt_helpUrl) {
   goog.base(this, opt_domHelper);
 
@@ -52,14 +52,14 @@ goog.ui.equation.EquationEditor = function(context, opt_domHelper,
    */
   this.helpUrl_ = opt_helpUrl || '';
 };
-goog.inherits(goog.ui.equation.EquationEditor, goog.ui.Component);
+goog.inherits(goog.editor.plugins.equation.EquationEditor, goog.ui.Component);
 
 
 /**
  * Constants for event names.
  * @enum {string}
  */
-goog.ui.equation.EquationEditor.EventType = {
+goog.editor.plugins.equation.EquationEditor.EventType = {
   /**
    * Dispatched when equation changes.
    */
@@ -72,11 +72,11 @@ goog.ui.equation.EquationEditor.EventType = {
  * @type {number}
  * @private
  */
-goog.ui.equation.EquationEditor.prototype.activeTabIndex_ = 0;
+goog.editor.plugins.equation.EquationEditor.prototype.activeTabIndex_ = 0;
 
 
 /** @inheritDoc */
-goog.ui.equation.EquationEditor.prototype.createDom = function() {
+goog.editor.plugins.equation.EquationEditor.prototype.createDom = function() {
   goog.base(this, 'createDom');
   this.createDom_();
 };
@@ -86,7 +86,7 @@ goog.ui.equation.EquationEditor.prototype.createDom = function() {
  * Creates main editor contents.
  * @private
  */
-goog.ui.equation.EquationEditor.prototype.createDom_ = function() {
+goog.editor.plugins.equation.EquationEditor.prototype.createDom_ = function() {
   var contentElement = this.getElement();
 
   /** @desc Title of the visual equation editor tab. */
@@ -121,7 +121,7 @@ goog.ui.equation.EquationEditor.prototype.createDom_ = function() {
   goog.events.listen(tabBar, goog.ui.Component.EventType.SELECT,
       goog.bind(this.handleTabSelect_, this));
 
-  var texEditor = new goog.ui.equation.TexPane(this.context_,
+  var texEditor = new goog.editor.plugins.equation.TexPane(this.context_,
       this.helpUrl_, this.dom_);
   this.addChild(texEditor);
   texEditor.render(tabContent);
@@ -134,7 +134,8 @@ goog.ui.equation.EquationEditor.prototype.createDom_ = function() {
  * Sets the visibility of the editor.
  * @param {boolean} visible Whether the editor should be visible.
  */
-goog.ui.equation.EquationEditor.prototype.setVisible = function(visible) {
+goog.editor.plugins.equation.EquationEditor.prototype.setVisible =
+    function(visible) {
   // Show active tab if visible, or none if not
   this.setVisibleTab_(visible ? this.activeTabIndex_ : -1);
 };
@@ -147,7 +148,8 @@ goog.ui.equation.EquationEditor.prototype.setVisible = function(visible) {
  *     tab is visible.
  * @private
  */
-goog.ui.equation.EquationEditor.prototype.setVisibleTab_ = function(tabIndex) {
+goog.editor.plugins.equation.EquationEditor.prototype.setVisibleTab_ =
+    function(tabIndex) {
   for (var i = 0; i < this.getChildCount(); i++) {
     this.getChildAt(i).setVisible(i == tabIndex);
   }
@@ -155,7 +157,8 @@ goog.ui.equation.EquationEditor.prototype.setVisibleTab_ = function(tabIndex) {
 
 
 /** @inheritDoc */
-goog.ui.equation.EquationEditor.prototype.decorateInternal = function(element) {
+goog.editor.plugins.equation.EquationEditor.prototype.decorateInternal =
+    function(element) {
   this.setElementInternal(element);
   this.createDom_();
 };
@@ -165,7 +168,8 @@ goog.ui.equation.EquationEditor.prototype.decorateInternal = function(element) {
  * Returns the encoded equation.
  * @return {string} The encoded equation.
  */
-goog.ui.equation.EquationEditor.prototype.getEquation = function() {
+goog.editor.plugins.equation.EquationEditor.prototype.getEquation =
+    function() {
   var sel = this.tabBar_.getSelectedTabIndex();
   return this.getChildAt(sel).getEquation();
 };
@@ -174,8 +178,8 @@ goog.ui.equation.EquationEditor.prototype.getEquation = function() {
 /**
  * @return {string} The html code to embed in the document.
  */
-goog.ui.equation.EquationEditor.prototype.getHtml = function() {
-  return goog.ui.equation.ImageRenderer.getHtml(this.getEquation());
+goog.editor.plugins.equation.EquationEditor.prototype.getHtml = function() {
+  return goog.editor.plugins.equation.ImageRenderer.getHtml(this.getEquation());
 };
 
 
@@ -183,8 +187,8 @@ goog.ui.equation.EquationEditor.prototype.getHtml = function() {
  * Checks whether the current equation is valid and can be used in a document.
  * @return {boolean} Whether the equation is valid.
  */
-goog.ui.equation.EquationEditor.prototype.isValid = function() {
-  return goog.ui.equation.ImageRenderer.isEquationTooLong(
+goog.editor.plugins.equation.EquationEditor.prototype.isValid = function() {
+  return goog.editor.plugins.equation.ImageRenderer.isEquationTooLong(
       this.getEquation());
 };
 
@@ -194,7 +198,8 @@ goog.ui.equation.EquationEditor.prototype.isValid = function() {
  * @param {goog.events.Event} e The event.
  * @private
  */
-goog.ui.equation.EquationEditor.prototype.handleTabSelect_ = function(e) {
+goog.editor.plugins.equation.EquationEditor.prototype.handleTabSelect_ =
+    function(e) {
   var sel = this.tabBar_.getSelectedTabIndex();
   if (sel != this.activeTabIndex_) {
     this.activeTabIndex_ = sel;
@@ -210,14 +215,16 @@ goog.ui.equation.EquationEditor.prototype.handleTabSelect_ = function(e) {
  * Clears any previous displayed equation.
  * @param {string} equation The equation text to parse.
  */
-goog.ui.equation.EquationEditor.prototype.setEquation = function(equation) {
+goog.editor.plugins.equation.EquationEditor.prototype.setEquation =
+    function(equation) {
   var sel = this.tabBar_.getSelectedTabIndex();
   this.getChildAt(sel).setEquation(equation);
 };
 
 
 /** @inheritDoc */
-goog.ui.equation.EquationEditor.prototype.disposeInternal = function() {
+goog.editor.plugins.equation.EquationEditor.prototype.disposeInternal =
+    function() {
   this.context_ = null;
   goog.base(this, 'disposeInternal');
 };

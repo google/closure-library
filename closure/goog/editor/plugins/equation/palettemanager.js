@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.equation.PaletteManager');
+goog.provide('goog.editor.plugins.equation.PaletteManager');
 
 goog.require('goog.Timer');
+goog.require('goog.editor.plugins.equation.ArrowPalette');
+goog.require('goog.editor.plugins.equation.ComparisonPalette');
+goog.require('goog.editor.plugins.equation.GreekPalette');
+goog.require('goog.editor.plugins.equation.MathPalette');
+goog.require('goog.editor.plugins.equation.MenuPalette');
+goog.require('goog.editor.plugins.equation.Palette');
+goog.require('goog.editor.plugins.equation.SymbolPalette');
 goog.require('goog.events.EventTarget');
-goog.require('goog.ui.equation.ArrowPalette');
-goog.require('goog.ui.equation.ComparisonPalette');
-goog.require('goog.ui.equation.GreekPalette');
-goog.require('goog.ui.equation.MathPalette');
-goog.require('goog.ui.equation.MenuPalette');
-goog.require('goog.ui.equation.Palette');
-goog.require('goog.ui.equation.SymbolPalette');
 
 
 
@@ -32,19 +32,19 @@ goog.require('goog.ui.equation.SymbolPalette');
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.ui.equation.PaletteManager = function() {
+goog.editor.plugins.equation.PaletteManager = function() {
   goog.events.EventTarget.call(this);
 
   /**
    * The map of palette type and instance pair.
-   * @type {Object.<string, goog.ui.equation.Palette>}
+   * @type {Object.<string, goog.editor.plugins.equation.Palette>}
    * @private
    */
   this.paletteMap_ = {};
 
   /**
    * The current active palette.
-   * @type {goog.ui.equation.Palette}
+   * @type {goog.editor.plugins.equation.Palette}
    * @private
    */
   this.activePalette_ = null;
@@ -67,7 +67,7 @@ goog.ui.equation.PaletteManager = function() {
       this.handleDeactivation_);
 
 };
-goog.inherits(goog.ui.equation.PaletteManager,
+goog.inherits(goog.editor.plugins.equation.PaletteManager,
     goog.events.EventTarget);
 
 
@@ -76,41 +76,42 @@ goog.inherits(goog.ui.equation.PaletteManager,
  * deactivation when mouse pointer is moved outside palettes and moved back
  * quickly inside a grace period.
  */
-goog.ui.equation.PaletteManager.prototype.stopDeactivation = function() {
+goog.editor.plugins.equation.PaletteManager.prototype.stopDeactivation =
+    function() {
   this.deactivationTimer_.stop();
 };
 
 
 /**
  * Returns the palette instance of given type.
- * @param {goog.ui.equation.Palette.Type} type The type of palette
+ * @param {goog.editor.plugins.equation.Palette.Type} type The type of palette
  *     to get.
- * @return {goog.ui.equation.Palette} The palette instance of given
+ * @return {goog.editor.plugins.equation.Palette} The palette instance of given
  *     type. A new instance will be created.  If the instance doesn't exist.
  */
-goog.ui.equation.PaletteManager.prototype.getPalette =
+goog.editor.plugins.equation.PaletteManager.prototype.getPalette =
     function(type) {
   var paletteMap = this.paletteMap_;
   var palette = paletteMap[type];
   if (!palette) {
     switch (type) {
-      case goog.ui.equation.Palette.Type.MENU:
-        palette = new goog.ui.equation.MenuPalette(this);
+      case goog.editor.plugins.equation.Palette.Type.MENU:
+        palette = new goog.editor.plugins.equation.MenuPalette(this);
         break;
-      case goog.ui.equation.Palette.Type.GREEK:
-        palette = new goog.ui.equation.GreekPalette(this);
+      case goog.editor.plugins.equation.Palette.Type.GREEK:
+        palette = new goog.editor.plugins.equation.GreekPalette(this);
         break;
-      case goog.ui.equation.Palette.Type.SYMBOL:
-        palette = new goog.ui.equation.SymbolPalette(this);
+      case goog.editor.plugins.equation.Palette.Type.SYMBOL:
+        palette = new goog.editor.plugins.equation.SymbolPalette(this);
         break;
-      case goog.ui.equation.Palette.Type.COMPARISON:
-        palette = new goog.ui.equation.ComparisonPalette(this);
+      case goog.editor.plugins.equation.Palette.Type.COMPARISON:
+        palette = new goog.editor.plugins.equation.ComparisonPalette(this);
         break;
-      case goog.ui.equation.Palette.Type.MATH:
-        palette = new goog.ui.equation.MathPalette(this);
+      case goog.editor.plugins.equation.Palette.Type.MATH:
+        palette = new goog.editor.plugins.equation.MathPalette(this);
         break;
-      case goog.ui.equation.Palette.Type.ARROW:
-        palette = new goog.ui.equation.ArrowPalette(this);
+      case goog.editor.plugins.equation.Palette.Type.ARROW:
+        palette = new goog.editor.plugins.equation.ArrowPalette(this);
         break;
       default:
         throw new Error('Invalid palette type!');
@@ -123,12 +124,12 @@ goog.ui.equation.PaletteManager.prototype.getPalette =
 
 /**
  * Sets the palette instance of given type to be the active one.
- * @param {goog.ui.equation.Palette.Type} type The type of the
+ * @param {goog.editor.plugins.equation.Palette.Type} type The type of the
  *     palette to set active.
- * @return {goog.ui.equation.Palette} The palette instance of given
+ * @return {goog.editor.plugins.equation.Palette} The palette instance of given
  *     type. A new instance will be created, if the instance doesn't exist.
  */
-goog.ui.equation.PaletteManager.prototype.setActive =
+goog.editor.plugins.equation.PaletteManager.prototype.setActive =
     function(type) {
   var palette = this.activePalette_;
   if (palette) {
@@ -145,9 +146,9 @@ goog.ui.equation.PaletteManager.prototype.setActive =
 
 /**
  * Returns the active palette.
- * @return {goog.ui.equation.Palette} The active palette.
+ * @return {goog.editor.plugins.equation.Palette} The active palette.
  */
-goog.ui.equation.PaletteManager.prototype.getActive = function() {
+goog.editor.plugins.equation.PaletteManager.prototype.getActive = function() {
   return this.activePalette_;
 };
 
@@ -159,7 +160,7 @@ goog.ui.equation.PaletteManager.prototype.getActive = function() {
  * them just briefly (and maybe accidentally).  If you really want to deactivate
  * the active palette, use {@link #deactivateNow()} instead.
  */
-goog.ui.equation.PaletteManager.prototype.deactivate = function() {
+goog.editor.plugins.equation.PaletteManager.prototype.deactivate = function() {
   this.deactivationTimer_.start();
 };
 
@@ -167,7 +168,8 @@ goog.ui.equation.PaletteManager.prototype.deactivate = function() {
 /**
  * Deactivate the open palette immediately.
  */
-goog.ui.equation.PaletteManager.prototype.deactivateNow = function() {
+goog.editor.plugins.equation.PaletteManager.prototype.deactivateNow =
+    function() {
   this.handleDeactivation_();
 };
 
@@ -176,13 +178,15 @@ goog.ui.equation.PaletteManager.prototype.deactivateNow = function() {
  * Internal process of deactivation of the manager.
  * @private
  */
-goog.ui.equation.PaletteManager.prototype.handleDeactivation_ = function() {
-  this.setActive(goog.ui.equation.Palette.Type.MENU);
+goog.editor.plugins.equation.PaletteManager.prototype.handleDeactivation_ =
+    function() {
+  this.setActive(goog.editor.plugins.equation.Palette.Type.MENU);
 };
 
 
 /** @inheritDoc */
-goog.ui.equation.PaletteManager.prototype.disposeInternal = function() {
+goog.editor.plugins.equation.PaletteManager.prototype.disposeInternal =
+    function() {
   goog.base(this, 'disposeInternal');
   this.activePalette_ = null;
   this.paletteMap_ = null;

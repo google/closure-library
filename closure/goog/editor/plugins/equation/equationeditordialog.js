@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.equation.EquationEditorDialog');
+goog.provide('goog.editor.plugins.equation.EquationEditorDialog');
 
 goog.require('goog.dom');
+goog.require('goog.editor.plugins.equation.EquationEditor');
+goog.require('goog.editor.plugins.equation.ImageRenderer');
+goog.require('goog.editor.plugins.equation.TexEditor');
 goog.require('goog.ui.Dialog');
 goog.require('goog.ui.Dialog.ButtonSet');
-goog.require('goog.ui.equation.EquationEditor');
-goog.require('goog.ui.equation.ImageRenderer');
-goog.require('goog.ui.equation.TexEditor');
 
 
 
@@ -30,7 +30,7 @@ goog.require('goog.ui.equation.TexEditor');
  *     an empty equation.
  * @extends {goog.ui.Dialog}
  */
-goog.ui.equation.EquationEditorDialog = function(opt_equation) {
+goog.editor.plugins.equation.EquationEditorDialog = function(opt_equation) {
   goog.ui.Dialog.call(this);
   this.setTitle('Equation Editor');
 
@@ -49,14 +49,14 @@ goog.ui.equation.EquationEditorDialog = function(opt_equation) {
 
   /**
    * The equation editor main API.
-   * @type {goog.ui.equation.TexEditor}
+   * @type {goog.editor.plugins.equation.TexEditor}
    * @private
    */
   this.equationEditor_ =
-      new goog.ui.equation.TexEditor(context, '', domHelper);
+      new goog.editor.plugins.equation.TexEditor(context, '', domHelper);
 
   this.equationEditor_.addEventListener(
-      goog.ui.equation.EquationEditor.EventType.CHANGE,
+      goog.editor.plugins.equation.EquationEditor.EventType.CHANGE,
       this.onChange_, false, this);
 
   this.equationEditor_.render(this.getContentElement());
@@ -64,7 +64,8 @@ goog.ui.equation.EquationEditorDialog = function(opt_equation) {
 
   goog.dom.classes.add(this.getDialogElement(), 'ee-modal-dialog');
 };
-goog.inherits(goog.ui.equation.EquationEditorDialog, goog.ui.Dialog);
+goog.inherits(goog.editor.plugins.equation.EquationEditorDialog,
+    goog.ui.Dialog);
 
 
 /**
@@ -72,11 +73,12 @@ goog.inherits(goog.ui.equation.EquationEditorDialog, goog.ui.Dialog);
  * @type {Element?}
  * @private
  */
-goog.ui.equation.EquationEditorDialog.prototype.okButton_;
+goog.editor.plugins.equation.EquationEditorDialog.prototype.okButton_;
 
 
 /** @inheritDoc */
-goog.ui.equation.EquationEditorDialog.prototype.setVisible = function(visible) {
+goog.editor.plugins.equation.EquationEditorDialog.prototype.setVisible =
+    function(visible) {
   goog.base(this, 'setVisible', visible);
   this.equationEditor_.setVisible(visible);
 };
@@ -87,19 +89,21 @@ goog.ui.equation.EquationEditorDialog.prototype.setVisible = function(visible) {
  * @return {Object} The context that this dialog runs in.
  * @private
  */
-goog.ui.equation.EquationEditorDialog.prototype.populateContext_ = function() {
+goog.editor.plugins.equation.EquationEditorDialog.prototype.populateContext_ =
+    function() {
   var context = {};
-  context.paletteManager = new goog.ui.equation.PaletteManager();
+  context.paletteManager = new goog.editor.plugins.equation.PaletteManager();
   return context;
 };
 
 
 /**
  * Handles CHANGE event fired when user changes equation.
- * @param {goog.ui.equation.ChangeEvent} e The event object.
+ * @param {goog.editor.plugins.equation.ChangeEvent} e The event object.
  * @private
  */
-goog.ui.equation.EquationEditorDialog.prototype.onChange_ = function(e) {
+goog.editor.plugins.equation.EquationEditorDialog.prototype.onChange_ =
+    function(e) {
   if (!this.okButton_) {
     this.okButton_ = this.getButtonSet().getButton(
         goog.ui.Dialog.DefaultButtonKeys.OK);
@@ -112,7 +116,8 @@ goog.ui.equation.EquationEditorDialog.prototype.onChange_ = function(e) {
  * Returns the encoded equation.
  * @return {string} The encoded equation.
  */
-goog.ui.equation.EquationEditorDialog.prototype.getEquation = function() {
+goog.editor.plugins.equation.EquationEditorDialog.prototype.getEquation =
+    function() {
   return this.equationEditor_.getEquation();
 };
 
@@ -121,7 +126,7 @@ goog.ui.equation.EquationEditorDialog.prototype.getEquation = function() {
  * Sets the encoded equation.
  * @param {string} equation The encoded equation.
  */
-goog.ui.equation.EquationEditorDialog.prototype.setEquation =
+goog.editor.plugins.equation.EquationEditorDialog.prototype.setEquation =
     function(equation) {
   this.equationEditor_.setEquation(equation);
 };
@@ -130,7 +135,8 @@ goog.ui.equation.EquationEditorDialog.prototype.setEquation =
 /**
  * @return {string} The html code to embed in the document.
  */
-goog.ui.equation.EquationEditorDialog.prototype.getHtml = function() {
+goog.editor.plugins.equation.EquationEditorDialog.prototype.getHtml =
+    function() {
   return this.equationEditor_.getHtml();
 };
 

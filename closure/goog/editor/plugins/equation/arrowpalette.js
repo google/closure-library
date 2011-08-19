@@ -12,23 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.equation.ArrowPalette');
+goog.provide('goog.editor.plugins.equation.ArrowPalette');
+
+goog.require('goog.editor.plugins.equation.Palette');
 
 goog.require('goog.math.Size');
-goog.require('goog.ui.equation.Palette');
 
 
 
 /**
  * Constructs a new arrows palette.
- * @param {goog.ui.equation.PaletteManager} paletteManager The
+ * @param {goog.editor.plugins.equation.PaletteManager} paletteManager The
  *     manager of the palette.
- * @extends {goog.ui.equation.Palette}
+ * @extends {goog.editor.plugins.equation.Palette}
  * @constructor
  */
-goog.ui.equation.ArrowPalette = function(paletteManager) {
-  goog.ui.equation.Palette.call(this, paletteManager,
-      goog.ui.equation.Palette.Type.ARROW,
+goog.editor.plugins.equation.ArrowPalette = function(paletteManager) {
+  goog.editor.plugins.equation.Palette.call(this, paletteManager,
+      goog.editor.plugins.equation.Palette.Type.ARROW,
       0, 150, 18, 18,
       ['\\leftarrow',
        '\\rightarrow',
@@ -44,4 +45,5 @@ goog.ui.equation.ArrowPalette = function(paletteManager) {
        '\\Updownarrow']);
   this.setSize(new goog.math.Size(12, 1));
 };
-goog.inherits(goog.ui.equation.ArrowPalette, goog.ui.equation.Palette);
+goog.inherits(goog.editor.plugins.equation.ArrowPalette,
+    goog.editor.plugins.equation.Palette);

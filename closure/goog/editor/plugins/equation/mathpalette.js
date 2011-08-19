@@ -12,23 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.equation.MathPalette');
+goog.provide('goog.editor.plugins.equation.MathPalette');
+
+goog.require('goog.editor.plugins.equation.Palette');
 
 goog.require('goog.math.Size');
-goog.require('goog.ui.equation.Palette');
 
 
 
 /**
  * Constructs a new math palette.
- * @param {goog.ui.equation.PaletteManager} paletteManager The
+ * @param {goog.editor.plugins.equation.PaletteManager} paletteManager The
  *     manager of the palette.
- * @extends {goog.ui.equation.Palette}
+ * @extends {goog.editor.plugins.equation.Palette}
  * @constructor
  */
-goog.ui.equation.MathPalette = function(paletteManager) {
-  goog.ui.equation.Palette.call(this, paletteManager,
-      goog.ui.equation.Palette.Type.MATH,
+goog.editor.plugins.equation.MathPalette = function(paletteManager) {
+  goog.editor.plugins.equation.Palette.call(this, paletteManager,
+      goog.editor.plugins.equation.Palette.Type.MATH,
       0, 90, 30, 56,
       ['x_{a}',
        'x^{b}',
@@ -52,4 +53,5 @@ goog.ui.equation.MathPalette = function(paletteManager) {
        '\\lim_{a \\rightarrow b}{x}']);
   this.setSize(new goog.math.Size(10, 2));
 };
-goog.inherits(goog.ui.equation.MathPalette, goog.ui.equation.Palette);
+goog.inherits(goog.editor.plugins.equation.MathPalette,
+    goog.editor.plugins.equation.Palette);

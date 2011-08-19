@@ -18,7 +18,7 @@
 
 goog.provide('goog.demos.editor.EquationEditor');
 
-goog.require('goog.ui.equation.EquationEditorDialog');
+goog.require('goog.editor.plugins.equation.EquationEditorDialog');
 
 
 
@@ -35,6 +35,7 @@ goog.demos.editor.EquationEditor = function() {
  */
 goog.demos.editor.EquationEditor.prototype.openEditor = function(
     initialEquation) {
-  var editorDialog = new goog.ui.equation.EquationEditorDialog(initialEquation);
+  var editorDialog = new goog.editor.plugins.equation.EquationEditorDialog(
+      initialEquation);
   editorDialog.setVisible(true);
 };

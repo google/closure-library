@@ -12,23 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.equation.ComparisonPalette');
+goog.provide('goog.editor.plugins.equation.ComparisonPalette');
+
+goog.require('goog.editor.plugins.equation.Palette');
 
 goog.require('goog.math.Size');
-goog.require('goog.ui.equation.Palette');
 
 
 
 /**
  * Constructs a new comparison palette.
- * @param {goog.ui.equation.PaletteManager} paletteManager The
+ * @param {goog.editor.plugins.equation.PaletteManager} paletteManager The
  *     manager of the palette.
- * @extends {goog.ui.equation.Palette}
+ * @extends {goog.editor.plugins.equation.Palette}
  * @constructor
  */
-goog.ui.equation.ComparisonPalette = function(paletteManager) {
-  goog.ui.equation.Palette.call(this, paletteManager,
-      goog.ui.equation.Palette.Type.COMPARISON,
+goog.editor.plugins.equation.ComparisonPalette = function(paletteManager) {
+  goog.editor.plugins.equation.Palette.call(this, paletteManager,
+      goog.editor.plugins.equation.Palette.Type.COMPARISON,
       0, 70, 18, 18,
       ['\\leq',
        '\\geq',
@@ -53,4 +54,5 @@ goog.ui.equation.ComparisonPalette = function(paletteManager) {
        '\\notin']);
   this.setSize(new goog.math.Size(7, 3));
 };
-goog.inherits(goog.ui.equation.ComparisonPalette, goog.ui.equation.Palette);
+goog.inherits(goog.editor.plugins.equation.ComparisonPalette,
+    goog.editor.plugins.equation.Palette);

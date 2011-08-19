@@ -13,17 +13,18 @@
 // limitations under the License.
 
 goog.provide('goog.editor.plugins.EquationEditorPlugin');
+goog.provide('goog.editor.plugins.EquationEditorPlugin.Dialog');
+goog.provide('goog.editor.plugins.EquationEditorPlugin.OkEvent');
 
 goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractDialogPlugin');
+goog.require('goog.editor.plugins.equation.EquationEditor');
+goog.require('goog.editor.plugins.equation.ImageRenderer');
+goog.require('goog.editor.plugins.equation.TexEditor');
 goog.require('goog.editor.range');
 goog.require('goog.functions');
+goog.require('goog.ui.editor.AbstractDialog');
 goog.require('goog.ui.editor.AbstractDialog.Builder');
-goog.require('goog.ui.editor.EquationEditorDialog');
-goog.require('goog.ui.editor.EquationEditorOkEvent');
-goog.require('goog.ui.equation.EquationEditor');
-goog.require('goog.ui.equation.ImageRenderer');
-goog.require('goog.ui.equation.TexEditor');
 
 
 
@@ -85,10 +86,11 @@ goog.editor.plugins.EquationEditorPlugin.prototype.createDialog =
   var equationImgEl = /** @type {Element} */ (opt_arg || null);
 
   var equationStr = equationImgEl ?
-      goog.ui.equation.ImageRenderer.getEquationFromImage(equationImgEl) : '';
+      goog.editor.plugins.equation.ImageRenderer.getEquationFromImage(
+          equationImgEl) : '';
 
   this.originalElement_ = equationImgEl;
-  var dialog = new goog.ui.editor.EquationEditorDialog(
+  var dialog = new goog.editor.plugins.EquationEditorPlugin.Dialog(
       this.populateContext_(), dom, equationStr, this.helpUrl_);
   dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.OK,
       this.handleOk_,
@@ -106,7 +108,7 @@ goog.editor.plugins.EquationEditorPlugin.prototype.createDialog =
 goog.editor.plugins.EquationEditorPlugin.prototype.populateContext_ =
     function() {
   var context = {};
-  context.paletteManager = new goog.ui.equation.PaletteManager();
+  context.paletteManager = new goog.editor.plugins.equation.PaletteManager();
   return context;
 };
 
@@ -131,6 +133,37 @@ goog.editor.plugins.EquationEditorPlugin.prototype.getEquationFromSelection_ =
 
   return '';
 };
+
+
+
+/**
+ * OK event object for the equation editor dialog.
+ * @param {string} equationHtml html containing the equation to put in the
+ *     editable field.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+goog.editor.plugins.EquationEditorPlugin.OkEvent = function(equationHtml) {
+  this.equationHtml = equationHtml;
+};
+goog.inherits(goog.editor.plugins.EquationEditorPlugin.OkEvent,
+    goog.events.Event);
+
+
+/**
+ * Event type.
+ * @type {goog.ui.editor.AbstractDialog.EventType}
+ * @override
+ */
+goog.editor.plugins.EquationEditorPlugin.OkEvent.prototype.type =
+    goog.ui.editor.AbstractDialog.EventType.OK;
+
+
+/**
+ * HTML containing the equation to put in the editable field.
+ * @type {string}
+ */
+goog.editor.plugins.EquationEditorPlugin.OkEvent.prototype.equationHtml;
 
 
 /** @inheritDoc */
@@ -167,10 +200,115 @@ goog.editor.plugins.EquationEditorPlugin.prototype.handleDoubleClick_ =
 };
 
 
+
+/**
+ * Equation editor dialog (based on goog.ui.editor.AbstractDialog).
+ * @param {Object} context The context that this dialog runs in.
+ * @param {goog.dom.DomHelper} domHelper DomHelper to be used to create the
+ *     dialog's dom structure.
+ * @param {string} equation Initial equation.
+ * @param {string} helpUrl URL pointing to help documentation.
+ * @constructor
+ * @extends {goog.ui.editor.AbstractDialog}
+ */
+goog.editor.plugins.EquationEditorPlugin.Dialog = function(context, domHelper,
+    equation, helpUrl) {
+  goog.ui.editor.AbstractDialog.call(this, domHelper);
+  this.equationEditor_ =
+      new goog.editor.plugins.equation.TexEditor(context, helpUrl);
+  this.equationEditor_.render();
+  this.equationEditor_.setEquation(equation);
+  this.equationEditor_.addEventListener(goog.editor.Command.EQUATION,
+      this.onChange_, false, this);
+};
+goog.inherits(goog.editor.plugins.EquationEditorPlugin.Dialog,
+    goog.ui.editor.AbstractDialog);
+
+
+/**
+ * The equation editor actual UI.
+ * @type {goog.editor.plugins.equation.TexEditor}
+ * @private
+ */
+goog.editor.plugins.EquationEditorPlugin.Dialog.prototype.equationEditor_;
+
+
+/**
+ * The dialog's OK button element.
+ * @type {Element?}
+ * @private
+ */
+goog.editor.plugins.EquationEditorPlugin.Dialog.prototype.okButton_;
+
+
+/** @inheritDoc */
+goog.editor.plugins.EquationEditorPlugin.Dialog.prototype.
+    createDialogControl = function() {
+  var builder = new goog.ui.editor.AbstractDialog.Builder(this);
+
+  /**
+   * @desc The title of the equation editor dialog.
+   */
+  var MSG_EE_DIALOG_TITLE = goog.getMsg('Equation Editor');
+
+  /**
+   * @desc Button label for the equation editor dialog for adding
+   * a new equation.
+   */
+  var MSG_EE_BUTTON_SAVE_NEW = goog.getMsg('Insert equation');
+
+  /**
+   * @desc Button label for the equation editor dialog for saving
+   * a modified equation.
+   */
+  var MSG_EE_BUTTON_SAVE_MODIFY = goog.getMsg('Save changes');
+
+  var okButtonText = this.equationEditor_.getEquation() ?
+      MSG_EE_BUTTON_SAVE_MODIFY : MSG_EE_BUTTON_SAVE_NEW;
+
+  builder.setTitle(MSG_EE_DIALOG_TITLE)
+    .setContent(this.equationEditor_.getElement())
+    .addOkButton(okButtonText)
+    .addCancelButton();
+
+  return builder.build();
+};
+
+
+/**
+ * @inheritDoc
+ */
+goog.editor.plugins.EquationEditorPlugin.Dialog.prototype.createOkEvent =
+    function(e) {
+  if (this.equationEditor_.isValid()) {
+    // Equation is not valid, don't close the dialog.
+    return null;
+  }
+  var equationHtml = this.equationEditor_.getHtml();
+  return new goog.editor.plugins.EquationEditorPlugin.OkEvent(equationHtml);
+};
+
+
+/**
+ * Handles CHANGE event fired when user changes equation.
+ * @param {goog.editor.plugins.equation.ChangeEvent} e The
+ *     event object.
+ * @private
+ */
+goog.editor.plugins.EquationEditorPlugin.Dialog.prototype.onChange_ =
+    function(e) {
+  if (!this.okButton_) {
+    this.okButton_ = this.getButtonElement(
+        goog.ui.Dialog.DefaultButtonKeys.OK);
+  }
+  this.okButton_.disabled = !e.isValid;
+};
+
+
 /**
  * Called when user clicks OK. Inserts the equation at cursor position in the
  * active editable field.
- * @param {goog.ui.editor.EquationEditorOkEvent} e The OK event.
+ * @param {goog.editor.plugins.EquationEditorPlugin.OkEvent} e The OK event.
  * @private
  */
 goog.editor.plugins.EquationEditorPlugin.prototype.handleOk_ =

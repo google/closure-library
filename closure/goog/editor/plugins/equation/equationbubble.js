@@ -18,9 +18,9 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractBubblePlugin');
+goog.require('goog.editor.plugins.equation.ImageRenderer');
 goog.require('goog.string.Unicode');
 goog.require('goog.ui.editor.Bubble');
-goog.require('goog.ui.equation.ImageRenderer');
 
 
 
@@ -82,9 +82,11 @@ goog.editor.plugins.equation.EquationBubble.prototype.getTrogClassId =
 goog.editor.plugins.equation.EquationBubble.prototype.
     getBubbleTargetFromSelection = function(selectedElement) {
   if (selectedElement &&
-      goog.ui.equation.ImageRenderer.isEquationElement(selectedElement)) {
+      goog.editor.plugins.equation.ImageRenderer.isEquationElement(
+          selectedElement)) {
     return selectedElement;
   }
+
   return null;
 };
 

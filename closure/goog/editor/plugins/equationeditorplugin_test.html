@@ -19,9 +19,9 @@ See the COPYING file for details.
   goog.require('goog.editor.Field');
   goog.require('goog.editor.node');
   goog.require('goog.editor.plugins.EquationEditorPlugin');
-  goog.require('goog.ui.editor.EquationEditorDialog');
-  goog.require('goog.ui.editor.EquationEditorOkEvent');
-  goog.require('goog.ui.equation.EquationEditorDialog');
+  goog.require('goog.editor.plugins.EquationEditorPlugin.Dialog');
+  goog.require('goog.editor.plugins.EquationEditorPlugin.OkEvent');
+  goog.require('goog.editor.plugins.equation.EquationEditorDialog');
   goog.require('goog.testing.MockControl');
   goog.require('goog.testing.MockRange');
   goog.require('goog.testing.editor.FieldMock');
@@ -111,7 +111,7 @@ See the COPYING file for details.
     var dialog = plugin.createDialog();
     // Mock of execCommand + clicking OK without actually opening the dialog.
     dialog.dispatchEvent(
-        new goog.ui.editor.EquationEditorOkEvent(IMG_URL));
+        new goog.editor.plugins.EquationEditorPlugin.OkEvent(IMG_URL));
     mockCtrl.$verifyAll();
   }
 

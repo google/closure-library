@@ -17,7 +17,7 @@
  *
  */
 
-goog.provide('goog.ui.equation.ImageRenderer');
+goog.provide('goog.editor.plugins.equation.ImageRenderer');
 
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
@@ -33,7 +33,7 @@ goog.require('goog.uri.utils');
  * @type {string}
  * @private
  */
-goog.ui.equation.ImageRenderer.SERVER_NAME_ =
+goog.editor.plugins.equation.ImageRenderer.SERVER_NAME_ =
     'https://www.google.com';
 
 
@@ -41,14 +41,14 @@ goog.ui.equation.ImageRenderer.SERVER_NAME_ =
  * The longest equation which may be displayed, in characters.
  * @type {number}
  */
-goog.ui.equation.ImageRenderer.MAX_EQUATION_LENGTH = 200;
+goog.editor.plugins.equation.ImageRenderer.MAX_EQUATION_LENGTH = 200;
 
 
 /**
  * Class to put on our equations IMG elements.
  * @type {string}
  */
-goog.ui.equation.ImageRenderer.EE_IMG_CLASS = 'ee_img';
+goog.editor.plugins.equation.ImageRenderer.EE_IMG_CLASS = 'ee_img';
 
 
 /**
@@ -58,14 +58,14 @@ goog.ui.equation.ImageRenderer.EE_IMG_CLASS = 'ee_img';
  *
  * @type {string}
  */
-goog.ui.equation.ImageRenderer.EE_IMG_ATTR = 'eeimg';
+goog.editor.plugins.equation.ImageRenderer.EE_IMG_ATTR = 'eeimg';
 
 
 /**
  * Vertical alignment for the equations IMG elements.
  * @type {string}
  */
-goog.ui.equation.ImageRenderer.EE_IMG_VERTICAL_ALIGN = 'middle';
+goog.editor.plugins.equation.ImageRenderer.EE_IMG_VERTICAL_ALIGN = 'middle';
 
 
 /**
@@ -73,14 +73,14 @@ goog.ui.equation.ImageRenderer.EE_IMG_VERTICAL_ALIGN = 'middle';
  * transparent white.
  * @type {string}
  */
-goog.ui.equation.ImageRenderer.BACKGROUND_COLOR = 'FFFFFF00';
+goog.editor.plugins.equation.ImageRenderer.BACKGROUND_COLOR = 'FFFFFF00';
 
 
 /**
  * The default foreground color as used in the img url, which is black.
  * @type {string}
  */
-goog.ui.equation.ImageRenderer.FOREGROUND_COLOR = '000000';
+goog.editor.plugins.equation.ImageRenderer.FOREGROUND_COLOR = '000000';
 
 
 /**
@@ -90,7 +90,7 @@ goog.ui.equation.ImageRenderer.FOREGROUND_COLOR = '000000';
  * be reflected when the placeholder is replaced with the other content).
  * @type {string}
  */
-goog.ui.equation.ImageRenderer.NO_RESIZE_IMG_CLASS =
+goog.editor.plugins.equation.ImageRenderer.NO_RESIZE_IMG_CLASS =
     goog.getCssName('tr_noresize');
 
 
@@ -100,17 +100,17 @@ goog.ui.equation.ImageRenderer.NO_RESIZE_IMG_CLASS =
  * @return {string} The equation image src url (empty string in case the
  *   equation was empty).
  */
-goog.ui.equation.ImageRenderer.getImageUrl = function(equation) {
+goog.editor.plugins.equation.ImageRenderer.getImageUrl = function(equation) {
   if (!equation) {
     return '';
   }
 
-  var url = goog.ui.equation.ImageRenderer.SERVER_NAME_ +
+  var url = goog.editor.plugins.equation.ImageRenderer.SERVER_NAME_ +
       '/chart?cht=tx' +
       '&chf=bg,s,' +
-      goog.ui.equation.ImageRenderer.BACKGROUND_COLOR +
+      goog.editor.plugins.equation.ImageRenderer.BACKGROUND_COLOR +
       '&chco=' +
-      goog.ui.equation.ImageRenderer.FOREGROUND_COLOR +
+      goog.editor.plugins.equation.ImageRenderer.FOREGROUND_COLOR +
       '&chl=' +
       encodeURIComponent(equation);
   return url;
@@ -122,7 +122,8 @@ goog.ui.equation.ImageRenderer.getImageUrl = function(equation) {
  * @param {string} imageUrl The image url.
  * @return {string?} The equation string, null if imageUrl cannot be parsed.
  */
-goog.ui.equation.ImageRenderer.getEquationFromImageUrl = function(imageUrl) {
+goog.editor.plugins.equation.ImageRenderer.getEquationFromImageUrl =
+    function(imageUrl) {
   return goog.uri.utils.getParamValue(imageUrl, 'chl');
 };
 
@@ -133,13 +134,14 @@ goog.ui.equation.ImageRenderer.getEquationFromImageUrl = function(imageUrl) {
  * @param {Element} equationNode The equation IMG element.
  * @return {!string} The equation string.
  */
-goog.ui.equation.ImageRenderer.getEquationFromImage = function(equationNode) {
+goog.editor.plugins.equation.ImageRenderer.getEquationFromImage =
+    function(equationNode) {
   var url = equationNode.getAttribute('src');
   if (!url) {
     // Should never happen.
     return '';
   }
-  return goog.ui.equation.ImageRenderer.getEquationFromImageUrl(
+  return goog.editor.plugins.equation.ImageRenderer.getEquationFromImageUrl(
       url) || '';
 };
 
@@ -149,12 +151,12 @@ goog.ui.equation.ImageRenderer.getEquationFromImage = function(equationNode) {
  * @param {Node} node The node to check.
  * @return {boolean} Whether given node is an equation element.
  */
-goog.ui.equation.ImageRenderer.isEquationElement = function(node) {
+goog.editor.plugins.equation.ImageRenderer.isEquationElement = function(node) {
   return node.nodeName == goog.dom.TagName.IMG &&
       (node.getAttribute(
-      goog.ui.equation.ImageRenderer.EE_IMG_ATTR) ||
+      goog.editor.plugins.equation.ImageRenderer.EE_IMG_ATTR) ||
           goog.dom.classes.has(node,
-              goog.ui.equation.ImageRenderer.EE_IMG_CLASS));
+              goog.editor.plugins.equation.ImageRenderer.EE_IMG_CLASS));
 };
 
 
@@ -163,19 +165,19 @@ goog.ui.equation.ImageRenderer.isEquationElement = function(node) {
  * @param {string} equation The equation.
  * @return {string} The html code to embed in the document.
  */
-goog.ui.equation.ImageRenderer.getHtml = function(equation) {
+goog.editor.plugins.equation.ImageRenderer.getHtml = function(equation) {
   var imageSrc =
-      goog.ui.equation.ImageRenderer.getImageUrl(equation);
+      goog.editor.plugins.equation.ImageRenderer.getImageUrl(equation);
   if (!imageSrc) {
     return '';
   }
   return '<img src="' + imageSrc + '" ' +
       'alt="' + goog.string.htmlEscape(equation) + '" ' +
-      'class="' + goog.ui.equation.ImageRenderer.EE_IMG_CLASS +
-      ' ' + goog.ui.equation.ImageRenderer.NO_RESIZE_IMG_CLASS +
-      '" ' + goog.ui.equation.ImageRenderer.EE_IMG_ATTR + '="1" ' +
+      'class="' + goog.editor.plugins.equation.ImageRenderer.EE_IMG_CLASS +
+      ' ' + goog.editor.plugins.equation.ImageRenderer.NO_RESIZE_IMG_CLASS +
+      '" ' + goog.editor.plugins.equation.ImageRenderer.EE_IMG_ATTR + '="1" ' +
       'style="vertical-align: ' +
-      goog.ui.equation.ImageRenderer.EE_IMG_VERTICAL_ALIGN + '">';
+      goog.editor.plugins.equation.ImageRenderer.EE_IMG_VERTICAL_ALIGN + '">';
 };
 
 
@@ -184,7 +186,8 @@ goog.ui.equation.ImageRenderer.getHtml = function(equation) {
  * @param {string} equation The equation to test.
  * @return {boolean} Whether the equation is too long.
  */
-goog.ui.equation.ImageRenderer.isEquationTooLong = function(equation) {
+goog.editor.plugins.equation.ImageRenderer.isEquationTooLong = function(
+    equation) {
   return equation.length >
-      goog.ui.equation.ImageRenderer.MAX_EQUATION_LENGTH;
+      goog.editor.plugins.equation.ImageRenderer.MAX_EQUATION_LENGTH;
 };

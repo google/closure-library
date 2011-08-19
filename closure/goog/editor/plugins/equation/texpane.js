@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.equation.TexPane');
+goog.provide('goog.editor.plugins.equation.TexPane');
 
 goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.selection');
+goog.require('goog.editor.plugins.equation.ChangeEvent');
+goog.require('goog.editor.plugins.equation.EditorPane');
+goog.require('goog.editor.plugins.equation.ImageRenderer');
+goog.require('goog.editor.plugins.equation.PaletteManager');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.equation.ChangeEvent');
-goog.require('goog.ui.equation.EditorPane');
-goog.require('goog.ui.equation.ImageRenderer');
-goog.require('goog.ui.equation.PaletteManager');
 
 
 
@@ -37,32 +37,32 @@ goog.require('goog.ui.equation.PaletteManager');
  * @param {string} helpUrl The help link URL.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
- * @extends {goog.ui.equation.EditorPane}
+ * @extends {goog.editor.plugins.equation.EditorPane}
  */
-goog.ui.equation.TexPane = function(
+goog.editor.plugins.equation.TexPane = function(
     context, helpUrl, opt_domHelper) {
-  goog.ui.equation.EditorPane.call(this, opt_domHelper);
+  goog.editor.plugins.equation.EditorPane.call(this, opt_domHelper);
 
   this.setHelpUrl(helpUrl);
 
   /**
    * The palette manager instance.
-   * @type {goog.ui.equation.PaletteManager}
+   * @type {goog.editor.plugins.equation.PaletteManager}
    * @private
    */
   this.paletteManager_ =
-      /** @type {goog.ui.equation.PaletteManager} */(
+      /** @type {goog.editor.plugins.equation.PaletteManager} */(
       context.paletteManager);
 };
-goog.inherits(goog.ui.equation.TexPane,
-    goog.ui.equation.EditorPane);
+goog.inherits(goog.editor.plugins.equation.TexPane,
+    goog.editor.plugins.equation.EditorPane);
 
 
 /**
  * The CSS class name for the preview container.
  * @type {string}
  */
-goog.ui.equation.TexPane.PREVIEW_CONTAINER_CSS_CLASS =
+goog.editor.plugins.equation.TexPane.PREVIEW_CONTAINER_CSS_CLASS =
     'ee-preview-container';
 
 
@@ -70,7 +70,7 @@ goog.ui.equation.TexPane.PREVIEW_CONTAINER_CSS_CLASS =
  * The CSS class name for section titles.
  * @type {string}
  */
-goog.ui.equation.TexPane.SECTION_TITLE_CSS_CLASS =
+goog.editor.plugins.equation.TexPane.SECTION_TITLE_CSS_CLASS =
     'ee-section-title';
 
 
@@ -78,7 +78,7 @@ goog.ui.equation.TexPane.SECTION_TITLE_CSS_CLASS =
  * The CSS class name for section titles that float left.
  * @type {string}
  */
-goog.ui.equation.TexPane.SECTION_TITLE_FLOAT_CSS_CLASS =
+goog.editor.plugins.equation.TexPane.SECTION_TITLE_FLOAT_CSS_CLASS =
     'ee-section-title-floating';
 
 
@@ -86,7 +86,7 @@ goog.ui.equation.TexPane.SECTION_TITLE_FLOAT_CSS_CLASS =
  * The CSS id name for the link to "Learn more".
  * @type {string}
  */
-goog.ui.equation.TexPane.SECTION_LEARN_MORE_CSS_ID =
+goog.editor.plugins.equation.TexPane.SECTION_LEARN_MORE_CSS_ID =
     'ee-section-learn-more';
 
 
@@ -94,14 +94,14 @@ goog.ui.equation.TexPane.SECTION_LEARN_MORE_CSS_ID =
  * The CSS class name for the Tex editor.
  * @type {string}
  */
-goog.ui.equation.TexPane.TEX_EDIT_CSS_CLASS = 'ee-tex';
+goog.editor.plugins.equation.TexPane.TEX_EDIT_CSS_CLASS = 'ee-tex';
 
 
 /**
  * The CSS class name for the preview container.
  * @type {string}
  */
-goog.ui.equation.TexPane.WARNING_CLASS =
+goog.editor.plugins.equation.TexPane.WARNING_CLASS =
     'ee-warning';
 
 
@@ -110,7 +110,7 @@ goog.ui.equation.TexPane.WARNING_CLASS =
  * @type {Element}
  * @private
  */
-goog.ui.equation.TexPane.prototype.texEditorElement_ = null;
+goog.editor.plugins.equation.TexPane.prototype.texEditorElement_ = null;
 
 
 /**
@@ -118,7 +118,7 @@ goog.ui.equation.TexPane.prototype.texEditorElement_ = null;
  * @type {Element}
  * @private
  */
-goog.ui.equation.TexPane.prototype.previewContainer_;
+goog.editor.plugins.equation.TexPane.prototype.previewContainer_;
 
 
 /**
@@ -126,7 +126,7 @@ goog.ui.equation.TexPane.prototype.previewContainer_;
  * @type {Element}
  * @private
  */
-goog.ui.equation.TexPane.prototype.innerContainer_;
+goog.editor.plugins.equation.TexPane.prototype.innerContainer_;
 
 
 /**
@@ -134,7 +134,7 @@ goog.ui.equation.TexPane.prototype.innerContainer_;
  * @type {Element}
  * @private
  */
-goog.ui.equation.TexPane.prototype.texEdit_;
+goog.editor.plugins.equation.TexPane.prototype.texEdit_;
 
 
 /**
@@ -142,7 +142,7 @@ goog.ui.equation.TexPane.prototype.texEdit_;
  * @type {goog.events.InputHandler}
  * @private
  */
-goog.ui.equation.TexPane.prototype.texInputHandler_;
+goog.editor.plugins.equation.TexPane.prototype.texInputHandler_;
 
 
 /**
@@ -150,7 +150,7 @@ goog.ui.equation.TexPane.prototype.texInputHandler_;
  * @type {string}
  * @private
  */
-goog.ui.equation.TexPane.prototype.lastRenderredText_ = '';
+goog.editor.plugins.equation.TexPane.prototype.lastRenderredText_ = '';
 
 
 /**
@@ -159,11 +159,11 @@ goog.ui.equation.TexPane.prototype.lastRenderredText_ = '';
  * @type {number}
  * @private
  */
-goog.ui.equation.TexPane.prototype.changeSequence_ = 0;
+goog.editor.plugins.equation.TexPane.prototype.changeSequence_ = 0;
 
 
 /** @inheritDoc */
-goog.ui.equation.TexPane.prototype.createDom = function() {
+goog.editor.plugins.equation.TexPane.prototype.createDom = function() {
 
   /** @desc Title for TeX editor tab in the equation editor dialog. */
   var MSG_EE_TEX_EQUATION = goog.getMsg('TeX Equation');
@@ -180,14 +180,14 @@ goog.ui.equation.TexPane.prototype.createDom = function() {
       {'style': 'display: none;'},
       domHelper.createDom(goog.dom.TagName.SPAN,
           {'class':
-            goog.ui.equation.TexPane.SECTION_TITLE_CSS_CLASS +
+            goog.editor.plugins.equation.TexPane.SECTION_TITLE_CSS_CLASS +
             ' ' +
-            goog.ui.equation.TexPane.SECTION_TITLE_FLOAT_CSS_CLASS},
+            goog.editor.plugins.equation.TexPane.SECTION_TITLE_FLOAT_CSS_CLASS},
           MSG_EE_TEX_EQUATION),
       this.getHelpUrl() ?
       domHelper.createDom(goog.dom.TagName.A,
       {'id':
-            goog.ui.equation.TexPane.SECTION_LEARN_MORE_CSS_ID,
+            goog.editor.plugins.equation.TexPane.SECTION_LEARN_MORE_CSS_ID,
         'target': '_blank', 'href': this.getHelpUrl()},
       MSG_EE_LEARN_MORE) : null,
       domHelper.createDom(goog.dom.TagName.DIV,
@@ -199,7 +199,7 @@ goog.ui.equation.TexPane.prototype.createDom = function() {
   // Create menu palette.
   var menuPalette =
       this.paletteManager_.setActive(
-      goog.ui.equation.Palette.Type.MENU);
+      goog.editor.plugins.equation.Palette.Type.MENU);
 
   // Render the menu palette.
   menuPalette.render(innerContainer);
@@ -208,7 +208,7 @@ goog.ui.equation.TexPane.prototype.createDom = function() {
       {'style': 'clear:both'}));
 
   var texEdit = this.texEdit_ = domHelper.createDom('textarea',
-      {'class': goog.ui.equation.TexPane.TEX_EDIT_CSS_CLASS,
+      {'class': goog.editor.plugins.equation.TexPane.TEX_EDIT_CSS_CLASS,
         'dir': 'ltr'});
 
   innerContainer.appendChild(texEdit);
@@ -216,13 +216,13 @@ goog.ui.equation.TexPane.prototype.createDom = function() {
   innerContainer.appendChild(
       domHelper.createDom(goog.dom.TagName.DIV,
           {'class':
-            goog.ui.equation.TexPane.SECTION_TITLE_CSS_CLASS},
+            goog.editor.plugins.equation.TexPane.SECTION_TITLE_CSS_CLASS},
           MSG_EE_TEX_PREVIEW));
 
   var previewContainer = this.previewContainer_ = domHelper.createDom(
       goog.dom.TagName.DIV,
       {'class':
-            goog.ui.equation.TexPane.PREVIEW_CONTAINER_CSS_CLASS});
+            goog.editor.plugins.equation.TexPane.PREVIEW_CONTAINER_CSS_CLASS});
 
   innerContainer.appendChild(previewContainer);
 
@@ -231,7 +231,7 @@ goog.ui.equation.TexPane.prototype.createDom = function() {
 
 
 /** @inheritDoc */
-goog.ui.equation.TexPane.prototype.enterDocument = function() {
+goog.editor.plugins.equation.TexPane.prototype.enterDocument = function() {
   this.texInputHandler_ = new goog.events.InputHandler(this.texEdit_);
 
   // Listen to changes in the edit box to redraw equation.
@@ -247,13 +247,13 @@ goog.ui.equation.TexPane.prototype.enterDocument = function() {
 
   // Listen to the action event on the active palette.
   this.getHandler().listen(this.paletteManager_,
-      goog.ui.equation.PaletteEvent.Type.ACTION,
+      goog.editor.plugins.equation.PaletteEvent.Type.ACTION,
       this.handlePaletteAction_, false, this);
 };
 
 
 /** @inheritDoc */
-goog.ui.equation.TexPane.prototype.setVisible = function(visible) {
+goog.editor.plugins.equation.TexPane.prototype.setVisible = function(visible) {
   goog.base(this, 'setVisible', visible);
   if (visible) {
     goog.Timer.callOnce(this.focusTexEdit_, 0, this);
@@ -265,7 +265,7 @@ goog.ui.equation.TexPane.prototype.setVisible = function(visible) {
  * Sets the focus to the TeX edit box.
  * @private
  */
-goog.ui.equation.TexPane.prototype.focusTexEdit_ = function() {
+goog.editor.plugins.equation.TexPane.prototype.focusTexEdit_ = function() {
   this.texEdit_.focus();
   goog.dom.selection.setCursorPosition(this.texEdit_,
       this.texEdit_.value.length);
@@ -276,7 +276,8 @@ goog.ui.equation.TexPane.prototype.focusTexEdit_ = function() {
  * Handles input change within the TeX textarea.
  * @private
  */
-goog.ui.equation.TexPane.prototype.handleEquationChange_ = function() {
+goog.editor.plugins.equation.TexPane.prototype.handleEquationChange_ =
+    function() {
   var text = this.getEquation();
   if (text == this.lastRenderredText_) {
     return; // No change, no need to re-draw
@@ -284,11 +285,11 @@ goog.ui.equation.TexPane.prototype.handleEquationChange_ = function() {
 
   this.lastRenderredText_ = text;
   var isEquationValid =
-      !goog.ui.equation.ImageRenderer.isEquationTooLong(text);
+      !goog.editor.plugins.equation.ImageRenderer.isEquationTooLong(text);
 
   // Dispatch change so that dialog might update the state of its buttons.
   this.dispatchEvent(
-      new goog.ui.equation.ChangeEvent(
+      new goog.editor.plugins.equation.ChangeEvent(
       isEquationValid));
 
   var container = this.previewContainer_;
@@ -300,7 +301,7 @@ goog.ui.equation.TexPane.prototype.handleEquationChange_ = function() {
     if (isEquationValid) {
       // Show equation image.
 
-      var imgSrc = goog.ui.equation.ImageRenderer.getImageUrl(text);
+      var imgSrc = goog.editor.plugins.equation.ImageRenderer.getImageUrl(text);
       childNode = dom.createDom(goog.dom.TagName.IMG, {'src': imgSrc});
     } else {
       // Show a warning message.
@@ -313,7 +314,7 @@ goog.ui.equation.TexPane.prototype.handleEquationChange_ = function() {
           goog.getMsg('Equation is too long');
 
       childNode = dom.createDom(goog.dom.TagName.DIV,
-          {'class': goog.ui.equation.TexPane.WARNING_CLASS},
+          {'class': goog.editor.plugins.equation.TexPane.WARNING_CLASS},
           MSG_EE_TEX_EQUATION_TOO_LONG);
     }
     dom.appendChild(container, childNode);
@@ -329,7 +330,7 @@ goog.ui.equation.TexPane.prototype.handleEquationChange_ = function() {
  * @param {goog.events.Event} e The keyboard event.
  * @private
  */
-goog.ui.equation.TexPane.prototype.handleTexChange_ = function(e) {
+goog.editor.plugins.equation.TexPane.prototype.handleTexChange_ = function(e) {
   this.changeSequence_++;
   goog.Timer.callOnce(
       goog.bind(this.handleTexChangeTimer_, this, this.changeSequence_),
@@ -342,7 +343,7 @@ goog.ui.equation.TexPane.prototype.handleTexChange_ = function(e) {
  * @param {number} seq The change sequence number when the timer started.
  * @private
  */
-goog.ui.equation.TexPane.prototype.handleTexChangeTimer_ =
+goog.editor.plugins.equation.TexPane.prototype.handleTexChangeTimer_ =
     function(seq) {
   // Draw only if this was the last change. If not, just wait for the last.
   if (seq == this.changeSequence_) {
@@ -353,17 +354,18 @@ goog.ui.equation.TexPane.prototype.handleTexChangeTimer_ =
 
 /**
  * Handles an action generated by a palette click.
- * @param {goog.ui.equation.PaletteEvent} e The event object.
+ * @param {goog.editor.plugins.equation.PaletteEvent} e The event object.
  * @private
  */
-goog.ui.equation.TexPane.prototype.handlePaletteAction_ = function(e) {
+goog.editor.plugins.equation.TexPane.prototype.handlePaletteAction_ =
+    function(e) {
   var palette = e.getPalette();
   var paletteManager = this.paletteManager_;
   var activePalette = paletteManager.getActive();
   var texEdit = this.texEdit_;
 
   // This is a click on the menu palette.
-  if (palette.getType() == goog.ui.equation.Palette.Type.MENU) {
+  if (palette.getType() == goog.editor.plugins.equation.Palette.Type.MENU) {
     var idx = palette.getHighlightedIndex();
     var action = (idx != -1) ? palette.getAction(idx) : null;
 
@@ -379,7 +381,7 @@ goog.ui.equation.TexPane.prototype.handlePaletteAction_ = function(e) {
     // Then we just open the one corresponding to the item under the mouse.
     if (action) {
       var subPalette = this.paletteManager_.setActive(
-          /** @type {goog.ui.equation.Palette.Type} */ (action));
+          /** @type {goog.editor.plugins.equation.Palette.Type} */ (action));
       if (!subPalette.getElement()) {
         subPalette.render(this.innerContainer_);
       }
@@ -412,7 +414,7 @@ goog.ui.equation.TexPane.prototype.handlePaletteAction_ = function(e) {
  * @param {string} text Text to insert.
  * @private
  */
-goog.ui.equation.TexPane.prototype.insert_ = function(text) {
+goog.editor.plugins.equation.TexPane.prototype.insert_ = function(text) {
   var texEdit = this.texEdit_;
   var pos = goog.dom.selection.getStart(texEdit);
   var equation = texEdit['value'];
@@ -424,13 +426,13 @@ goog.ui.equation.TexPane.prototype.insert_ = function(text) {
 
 
 /** @inheritDoc */
-goog.ui.equation.TexPane.prototype.getEquation = function() {
+goog.editor.plugins.equation.TexPane.prototype.getEquation = function() {
   return this.texEdit_['value'];
 };
 
 
 /** @inheritDoc */
-goog.ui.equation.TexPane.prototype.setEquation =
+goog.editor.plugins.equation.TexPane.prototype.setEquation =
     function(equation) {
   this.texEdit_['value'] = equation;
   this.handleEquationChange_();
@@ -438,7 +440,7 @@ goog.ui.equation.TexPane.prototype.setEquation =
 
 
 /** @inheritDoc */
-goog.ui.equation.TexPane.prototype.disposeInternal = function() {
+goog.editor.plugins.equation.TexPane.prototype.disposeInternal = function() {
   this.texInputHandler_.dispose();
   this.paletteManager_ = null;
   goog.base(this, 'disposeInternal');

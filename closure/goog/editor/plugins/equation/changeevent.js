@@ -12,38 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.editor.EquationEditorOkEvent');
+goog.provide('goog.editor.plugins.equation.ChangeEvent');
 
 goog.require('goog.events.Event');
-goog.require('goog.ui.editor.AbstractDialog');
+goog.require('goog.events.EventType');
 
 
 
 /**
- * OK event object for the equation editor dialog.
- * @param {string} equationHtml html containing the equation to put in the
- *     editable field.
+ * Event fired when equation changes.
  * @constructor
+ * @param {boolean} isValid Whether the equation is valid.
  * @extends {goog.events.Event}
  */
-goog.ui.editor.EquationEditorOkEvent = function(equationHtml) {
-  this.equationHtml = equationHtml;
+goog.editor.plugins.equation.ChangeEvent = function(isValid) {
+  goog.events.Event.call(this, 'change');
+
+  /**
+   * Whether equation is valid.
+   * @type {boolean}
+   */
+  this.isValid = isValid;
 };
-goog.inherits(goog.ui.editor.EquationEditorOkEvent,
+goog.inherits(goog.editor.plugins.equation.ChangeEvent,
     goog.events.Event);
 
-
-/**
- * Event type.
- * @type {goog.ui.editor.AbstractDialog.EventType}
- * @override
- */
-goog.ui.editor.EquationEditorOkEvent.prototype.type =
-    goog.ui.editor.AbstractDialog.EventType.OK;
-
-
-/**
- * HTML containing the equation to put in the editable field.
- * @type {string}
- */
-goog.ui.editor.EquationEditorOkEvent.prototype.equationHtml;
