@@ -86,8 +86,9 @@ goog.ui.Css3ButtonRenderer.prototype.getContentElement = function(element) {
  * @return {Element} Root element for the button.
  */
 goog.ui.Css3ButtonRenderer.prototype.createDom = function(button) {
+  var classNames = this.getClassNames(button);
   var attr = {
-    'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + this.getCssClass(),
+    'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' '),
     'title': button.getTooltip() || ''
   };
   return button.getDomHelper().createDom('div', attr, button.getContent());
