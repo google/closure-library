@@ -273,6 +273,27 @@ function testRangeHighlightAnimation() {
   assertHighlightedRange(rangeHighlight, 25, 75);
 }
 
+/**
+ * Verifies that no error occurs and that the range highlight is sized correctly
+ * for a zero-size slider (i.e. doesn't attempt to set a negative size). The
+ * test tries to resize the slider from its original size to 0, then checks
+ * that the range highlight's size is correctly set to 0.
+ *
+ * The size verification is needed because Webkit/Gecko outright ignore calls
+ * to set negative sizes on an element, leaving it at its former size. IE
+ * throws an error in the same situation.
+ */
+function testRangeHighlightForZeroSizeSlider() {
+  // Make sure range highlight spans whole slider before zeroing width.
+  twoThumbSlider.setExtent(100);
+  twoThumbSlider.getElement().style.width = 0;
+
+  // The setVisible call is used to force a UI update.
+  twoThumbSlider.setVisible(true);
+  assertEquals('Range highlight size should be 0 when slider size is 0',
+      0, goog.dom.getElement('rangeHighlight').offsetWidth);
+}
+
 </script>
 </body>
 </html>

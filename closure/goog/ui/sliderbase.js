@@ -864,9 +864,12 @@ goog.ui.SliderBase.prototype.calculateRangeHighlightPositioning_ = function(
     firstThumbPos, secondThumbPos, thumbSize) {
   // Highlight is inset by half the thumb size, from the edges of the thumb.
   var highlightInset = Math.ceil(thumbSize / 2);
+  var size = secondThumbPos - firstThumbPos + thumbSize - 2 * highlightInset;
+  // Don't return negative size since it causes an error. IE sometimes attempts
+  // to position the thumbs while slider size is 0, resulting in size < 0 here.
   return {
     offset: firstThumbPos + highlightInset,
-    size: secondThumbPos - firstThumbPos + thumbSize - 2 * highlightInset
+    size: Math.max(size, 0)
   };
 };
 
