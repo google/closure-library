@@ -85,6 +85,9 @@ goog.ui.CheckboxRenderer.prototype.decorate = function(checkbox, element) {
   }
   checkbox.setCheckedInternal(checked);
 
+  goog.dom.a11y.setState(element, goog.dom.a11y.State.CHECKED,
+                         this.ariaStateFromCheckState_(checked));
+
   return element;
 };
 

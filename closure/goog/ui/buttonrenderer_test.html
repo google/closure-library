@@ -32,7 +32,7 @@ See the COPYING file for details.
     var button, buttonRenderer, testRenderer;
     var sandbox = goog.dom.getElement('sandbox');
     var expectedFailures = new goog.testing.ExpectedFailures();
-    
+
     /**
      * A subclass of ButtonRenderer that overrides
      * {@code getStructuralCssClass} for testing purposes.
@@ -99,6 +99,15 @@ See the COPYING file for details.
           goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
     }
 
+    function testCreateDomAriaState() {
+      button.setSupportedState(goog.ui.Component.State.CHECKED, true);
+      button.setChecked(true);
+      var element = buttonRenderer.createDom(button);
+
+      assertEquals('button\'s aria-pressed attribute must be true', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+    }
+
     function testDecorate() {
       sandbox.innerHTML =
           '<div id="foo">Foo</div>\n' +
@@ -125,7 +134,7 @@ See the COPYING file for details.
           goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
       toggle.dispose();
     }
-    
+
     function testCollapse() {
       buttonRenderer.setCollapsed(button, goog.ui.ButtonSide.START);
       assertSameElements('Button should have class to collapse start',
@@ -138,7 +147,7 @@ See the COPYING file for details.
           ['goog-button-collapse-left', 'goog-button-collapse-right'],
           button.getExtraClassNames());
     }
-    
+
     function testCollapseRtl() {
       button.setRightToLeft(true);
       buttonRenderer.setCollapsed(button, goog.ui.ButtonSide.START);
@@ -152,7 +161,7 @@ See the COPYING file for details.
           ['goog-button-collapse-left', 'goog-button-collapse-right'],
           button.getExtraClassNames());
     }
-    
+
     function testCollapseWithStructuralClass() {
       testRenderer.setCollapsed(button, goog.ui.ButtonSide.BOTH);
       assertSameElements('Should use structural class for collapse classes',

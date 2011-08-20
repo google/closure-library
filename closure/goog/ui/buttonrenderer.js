@@ -105,9 +105,10 @@ goog.ui.ButtonRenderer.prototype.createDom = function(button) {
     this.setValue(element, value);
   }
 
-  // Set aria-pressed to false initially.
+  // If this is a toggle button, set ARIA state
   if (button.isSupportedState(goog.ui.Component.State.CHECKED)) {
-    this.updateAriaState(element, goog.ui.Component.State.CHECKED, false);
+    this.updateAriaState(element, goog.ui.Component.State.CHECKED,
+                         button.isChecked());
   }
 
   return element;
@@ -124,9 +125,10 @@ goog.ui.ButtonRenderer.prototype.decorate = function(button, element) {
   button.setValueInternal(this.getValue(element));
   button.setTooltipInternal(this.getTooltip(element));
 
-  // Set aria-pressed to false initially.
+  // If this is a toggle button, set ARIA state
   if (button.isSupportedState(goog.ui.Component.State.CHECKED)) {
-    this.updateAriaState(element, goog.ui.Component.State.CHECKED, false);
+    this.updateAriaState(element, goog.ui.Component.State.CHECKED,
+                         button.isChecked());
   }
 
   return element;
