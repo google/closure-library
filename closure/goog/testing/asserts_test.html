@@ -689,43 +689,43 @@ See the COPYING file for details.
   }
 
   function testAssertThrows() {
-    var fail = false;
+    var failed = false;
     try {
       assertThrows('assertThrows should not pass with null param', null);
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
     try {
       assertThrows(
           'assertThrows should not pass with undefined param',
           undefined);
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
     try {
       assertThrows('assertThrows should not pass with number param', 1);
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
     try {
       assertThrows('assertThrows should not pass with string param', 'string');
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
     try {
       assertThrows('assertThrows should not pass with object param', {});
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
     try {
       var error = assertThrows('valid function throws Error', function() {
@@ -748,46 +748,44 @@ See the COPYING file for details.
   }
 
   function testAssertNotThrows() {
-    var fail = false;
+    var failed = false;
     try {
       assertNotThrows('assertNotThrows should not pass with null param', null);
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
     try {
       assertNotThrows(
           'assertNotThrows should not pass with undefined param', undefined);
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
     try {
       assertNotThrows('assertNotThrows should not pass with number param', 1);
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
     try {
       assertNotThrows('assertNotThrows should not pass with string param',
           'string');
-      assertNotThrows('assertNotThrows should not pass with string param',
-          'string');
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
 
     try {
       assertNotThrows('assertNotThrows should not pass with object param', {});
-      fail = true;
+      failed = true;
     } catch (e) {
     }
-    assertFalse('Fail should not get set to true', fail);
+    assertFalse('Fail should not get set to true', failed);
 
 
     try {
@@ -797,19 +795,23 @@ See the COPYING file for details.
           });
     } catch (e) {
       // Shouldn't be here: throw exception.
-      assertTrue('assertNotThrows returned failure on a valid function', false);
+      fail('assertNotThrows returned failure on a valid function');
     }
 
+    var errorDescription = 'a test error exception';
     try {
+    throw new Error(errorDescription);
       assertNotThrows('non valid error throwing function',
           function() {
-            throw new Error('test');
+            throw new Error(errorDescription);
           });
-      fail = true;
+      failed = true;
     } catch (e) {
+      // Some browsers don't have a stack trace so expect to at least have the
+      // error description.
+      assertContains(errorDescription, e.message);
     }
-    assertFalse('assertNotThrows did not fail on a a thrown exception',
-        fail);
+    assertFalse('assertNotThrows did not fail on a thrown exception', failed);
   }
 
   function testAssertArrayEquals() {

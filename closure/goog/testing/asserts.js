@@ -196,24 +196,31 @@ function assertThrows(a, opt_b) {
 
 
 /**
- * @param {*} a
- * @param {*=} opt_b
+ * Asserts that the function does not throw an error.
+ *
+ * @param {!(string|Function)} a The assertion comment or the function to call.
+ * @param {!Function=} opt_b The function to call (if the first argument of
+ *     {@code assertNotThrows} was the comment).
+ * @throws {goog.testing.JsUnitException} If the assertion failed.
  */
 function assertNotThrows(a, opt_b) {
   _validateArguments(1, arguments);
+  var comment = commentArg(1, arguments);
   var func = nonCommentArg(1, 1, arguments);
-  _assert(commentArg(1, arguments), typeof func == 'function',
+  _assert(comment, typeof func == 'function',
       'Argument passed to assertNotThrows is not a function');
 
-  var isOk = true;
   try {
     func();
   } catch (e) {
-    isOk = false;
+    comment = comment ? (comment + '\n') : '';
+    comment += 'A non expected exception was thrown from function passed to ' +
+               'assertNotThrows';
+    // Some browsers don't have a stack trace so at least have the error
+    // description.
+    var stackTrace = e['stack'] || e['stacktrace'] || e.toString();
+    goog.testing.asserts.raiseException_(comment, stackTrace);
   }
-  _assert(commentArg(1, arguments), isOk,
-      'A non expected exception was thrown from function passed to ' +
-      'assertNotThrows');
 }
 
 
