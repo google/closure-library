@@ -19,7 +19,9 @@
 goog.provide('goog.ui.ModalPopup');
 
 goog.require('goog.Timer');
+goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.dom.iframe');
 goog.require('goog.events');
@@ -113,6 +115,7 @@ goog.ui.ModalPopup.prototype.tabCatcherElement_ = null;
 
 /**
  * @return {string} Base CSS class for this component.
+ * @protected
  */
 goog.ui.ModalPopup.prototype.getCssClass = function() {
   return goog.getCssName('goog-modalpopup');
@@ -120,8 +123,17 @@ goog.ui.ModalPopup.prototype.getCssClass = function() {
 
 
 /**
- * Returns the background mask element so that more complicated things can be
- * done with the background region.  Renders if the DOM is not yet created.
+ * Returns the background iframe mask element, if any.
+ * @return {Element} The background iframe mask element.
+ * @protected
+ */
+goog.ui.ModalPopup.prototype.getBackgroundIframe = function() {
+  return this.bgIframeEl_;
+};
+
+
+/**
+ * Returns the background mask element.
  * @return {Element} The background mask element.
  */
 goog.ui.ModalPopup.prototype.getBackgroundElement = function() {
@@ -144,12 +156,7 @@ goog.ui.ModalPopup.prototype.createDom = function() {
 
   // Manages the DOM for background mask elements.
   this.manageBackgroundDom_();
-
-  // Creates tab catcher element. Added to document in enterDocument
-  this.tabCatcherElement_ = this.getDomHelper().createElement('span');
-  goog.style.showElement(this.tabCatcherElement_, false);
-  goog.dom.setFocusableTabIndex(this.tabCatcherElement_, true);
-  this.tabCatcherElement_.style.position = 'absolute';
+  this.createTabCatcher_();
 };
 
 
@@ -180,38 +187,37 @@ goog.ui.ModalPopup.prototype.manageBackgroundDom_ = function() {
 
 
 /**
- * Renders the background mask.
+ * Creates the tab catcher element.
  * @private
  */
-goog.ui.ModalPopup.prototype.renderBackground_ = function() {
-  if (this.bgIframeEl_) {
-    goog.dom.insertSiblingBefore(this.bgIframeEl_, this.getElement());
-  }
-  if (this.bgEl_) {
-    goog.dom.insertSiblingBefore(this.bgEl_, this.getElement());
+goog.ui.ModalPopup.prototype.createTabCatcher_ = function() {
+  // Creates tab catcher element.
+  if (!this.tabCatcherElement_) {
+    this.tabCatcherElement_ = this.getDomHelper().createElement('span');
+    goog.style.showElement(this.tabCatcherElement_, false);
+    goog.dom.setFocusableTabIndex(this.tabCatcherElement_, true);
+    this.tabCatcherElement_.style.position = 'absolute';
   }
 };
 
 
 /**
- * Removes the background mask from document.
+ * Renders the background mask.
  * @private
  */
-goog.ui.ModalPopup.prototype.removeBackground_ = function() {
+goog.ui.ModalPopup.prototype.renderBackground_ = function() {
+  goog.asserts.assert(!!this.bgEl_, 'Background element must not be null.');
   if (this.bgIframeEl_) {
-    goog.dom.removeNode(this.bgIframeEl_);
+    goog.dom.insertSiblingBefore(this.bgIframeEl_, this.getElement());
   }
-  if (this.bgEl_) {
-    goog.dom.removeNode(this.bgEl_);
-  }
+  goog.dom.insertSiblingBefore(this.bgEl_, this.getElement());
 };
 
 
 /** @inheritDoc */
 goog.ui.ModalPopup.prototype.canDecorate = function(element) {
   // Assume we can decorate any DIV.
-  return !!element && !!element.tagName && element.tagName == 'DIV' &&
-      goog.base(this, 'canDecorate', element);
+  return !!element && element.tagName == goog.dom.TagName.DIV;
 };
 
 
@@ -223,6 +229,7 @@ goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
 
   // Create the background mask...
   this.manageBackgroundDom_();
+  this.createTabCatcher_();
 
   // Make sure the decorated modal popup is hidden.
   goog.style.showElement(this.getElement(), false);
@@ -253,11 +260,11 @@ goog.ui.ModalPopup.prototype.exitDocument = function() {
     this.setVisible(false);
   }
 
-  this.focusHandler_.dispose();
-  this.focusHandler_ = null;
+  goog.dispose(this.focusHandler_);
 
   goog.base(this, 'exitDocument');
-  this.removeBackground_();
+  goog.dom.removeNode(this.bgIframeEl_);
+  goog.dom.removeNode(this.bgEl_);
   goog.dom.removeNode(this.tabCatcherElement_);
 };
 
