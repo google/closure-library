@@ -628,11 +628,11 @@ goog.ui.Component.prototype.render = function(opt_parentElement) {
  *
  * Throws an Error if the component is already rendered.
  *
- * @param {Element} siblingElement  Element to render the component before.
+ * @param {Node} sibling Node to render the component before.
  */
-goog.ui.Component.prototype.renderBefore = function(siblingElement) {
-  this.render_(/** @type {Element} */(siblingElement.parentNode),
-               siblingElement);
+goog.ui.Component.prototype.renderBefore = function(sibling) {
+  this.render_(/** @type {Element} */ (sibling.parentNode),
+               sibling);
 };
 
 
@@ -650,12 +650,12 @@ goog.ui.Component.prototype.renderBefore = function(siblingElement) {
  *
  * @param {Element=} opt_parentElement Optional parent element to render the
  *    component into.
- * @param {Element=} opt_beforeElement Element before which the component is to
+ * @param {Node=} opt_beforeNode Node before which the component is to
  *    be rendered.  If left out the node is appended to the parent element.
  * @private
  */
 goog.ui.Component.prototype.render_ = function(opt_parentElement,
-                                               opt_beforeElement) {
+                                               opt_beforeNode) {
   if (this.inDocument_) {
     throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
@@ -665,7 +665,7 @@ goog.ui.Component.prototype.render_ = function(opt_parentElement,
   }
 
   if (opt_parentElement) {
-    opt_parentElement.insertBefore(this.element_, opt_beforeElement || null);
+    opt_parentElement.insertBefore(this.element_, opt_beforeNode || null);
   } else {
     this.dom_.getDocument().body.appendChild(this.element_);
   }
