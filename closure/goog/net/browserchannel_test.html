@@ -270,8 +270,9 @@ function testFormatArrayOfMaps() {
 }
 
 
-function connect(opt_serverVersion, opt_hostPrefix) {
-  browserChannel.connect('/test', '/bind', null);
+function connect(opt_serverVersion, opt_hostPrefix, opt_uriPrefix) {
+  var uriPrefix = opt_uriPrefix || '';
+  browserChannel.connect(uriPrefix + '/test', uriPrefix + '/bind', null);
   mockClock.tick(0);
   completeTestConnection();
   completeForwardChannel(opt_serverVersion, opt_hostPrefix);
@@ -1164,6 +1165,33 @@ function testResponseWithEvilData() {
           '=<script>moreEvil()\<\/script>');
   assertEquals(goog.net.BrowserChannel.State.CLOSED,
       browserChannel.getState());
+}
+
+
+function testPathAbsolute() {
+  connect(8, undefined, '/talkgadget');
+  assertEquals(browserChannel.backChannelUri_.getDomain(),
+      window.location.hostname);
+  assertEquals(browserChannel.forwardChannelUri_.getDomain(),
+      window.location.hostname);
+}
+
+
+function testPathRelative() {
+  connect(8, undefined, 'talkgadget');
+  assertEquals(browserChannel.backChannelUri_.getDomain(),
+      window.location.hostname);
+  assertEquals(browserChannel.forwardChannelUri_.getDomain(),
+      window.location.hostname);
+}
+
+
+function testPathWithHost() {
+  connect(8, undefined, 'https://example.com');
+  assertEquals(browserChannel.backChannelUri_.getScheme(), 'https');
+  assertEquals(browserChannel.backChannelUri_.getDomain(), 'example.com');
+  assertEquals(browserChannel.forwardChannelUri_.getScheme(), 'https');
+  assertEquals(browserChannel.forwardChannelUri_.getDomain(), 'example.com');
 }
 
 </script>

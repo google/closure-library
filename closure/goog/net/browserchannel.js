@@ -2078,23 +2078,34 @@ goog.net.BrowserChannel.prototype.getBackChannelUri =
  * Creates a data Uri applying logic for secondary hostprefix, port
  * overrides, and versioning.
  * @param {?string} hostPrefix The host prefix.
- * @param {string} path The path on the host.
+ * @param {string} path The path on the host (may be absolute or relative).
  * @param {number=} opt_overridePort Optional override port.
  * @return {goog.Uri} The data URI.
  */
 goog.net.BrowserChannel.prototype.createDataUri =
     function(hostPrefix, path, opt_overridePort) {
-  var locationPage = window.location;
-  var hostName;
-  if (hostPrefix) {
-    hostName = hostPrefix + '.' + locationPage.hostname;
+  var uri = goog.Uri.parse(path);
+  var uriAbsolute = (uri.getDomain() != '');
+  if (uriAbsolute) {
+    if (hostPrefix) {
+      uri.setDomain(hostPrefix + '.' + uri.getDomain());
+    }
+
+    uri.setPort(opt_overridePort || uri.getPort());
   } else {
-    hostName = locationPage.hostname;
+    var locationPage = window.location;
+    var hostName;
+    if (hostPrefix) {
+      hostName = hostPrefix + '.' + locationPage.hostname;
+    } else {
+      hostName = locationPage.hostname;
+    }
+
+    var port = opt_overridePort || locationPage.port;
+
+    uri = goog.Uri.create(locationPage.protocol, null, hostName, port, path);
   }
 
-  var port = opt_overridePort || locationPage.port;
-
-  var uri = goog.Uri.create(locationPage.protocol, null, hostName, port, path);
   if (this.extraParams_) {
     goog.structs.forEach(this.extraParams_, function(value, key, coll) {
       uri.setParameterValue(key, value);
