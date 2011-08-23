@@ -46,6 +46,7 @@ See the COPYING file for details.
       viewportSize = dom.getViewportSize();
       anchor = dom.getElement('anchor');
       popup = dom.getElement('popup');
+      popup.style.overflowY = 'visible';
       goog.style.setSize(popup, 20, 20);
       frameRect = goog.style.getVisibleRectForElement(doc.body);
     }
@@ -166,6 +167,21 @@ See the COPYING file for details.
                   'fits inside the viewport.',
                    frameRect.bottom - popup.offsetHeight,
                    offset.y);
+    }
+
+
+    function testLastRespotOverflow() {
+      var large = 2000;
+      goog.style.setSize(popup, 20, large);
+      popup.style.overflowY = 'auto';
+
+      var pos = new goog.positioning.ViewportClientPosition(0, 0);
+      pos.reposition(popup, corner.TOP_LEFT);
+
+      assertEquals(large, popup.offsetHeight);
+      pos.setLastResortOverflow(goog.positioning.Overflow.RESIZE_HEIGHT);
+      pos.reposition(popup, corner.TOP_LEFT);
+      assertNotEquals(large, popup.offsetHeight);
     }
   </script>
 </body>
