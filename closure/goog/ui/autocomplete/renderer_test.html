@@ -14,7 +14,11 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
+  goog.require('goog.dom.a11y');
+  goog.require('goog.dom.a11y.Role');
+  goog.require('goog.dom.a11y.State');
   goog.require('goog.events');
+  goog.require('goog.functions');
   goog.require('goog.fx.dom.FadeInAndShow');
   goog.require('goog.fx.dom.FadeOutAndHide');
   goog.require('goog.style');
@@ -26,10 +30,12 @@ See the COPYING file for details.
 </head>
 <body>
 <div id="someElement">Click target</div>
+<div id="target">Target</div>
 <script>
   var renderer;
   var rendRows = [];
   var someElement = goog.dom.getElement('someElement');
+  var target = goog.dom.getElement('target');
   var propertyReplacer = new goog.testing.PropertyReplacer();
 
 
@@ -49,6 +55,7 @@ See the COPYING file for details.
   function setUp() {
     renderer = new goog.ui.AutoComplete.Renderer();
     renderer.rowDivs_ = [];
+    renderer.target_ = target;
   }
 
   function tearDown() {
@@ -411,6 +418,30 @@ See the COPYING file for details.
     renderer.dismiss();
     assertFalse(hideCalled);
     assertTrue(hideAnimCalled);
+  }
+
+  function testAriaTags() {
+    renderer.maybeCreateElement_();
+
+    assertEquals('', goog.dom.a11y.getRole(target));
+    assertEquals('',
+        goog.dom.a11y.getState(target, goog.dom.a11y.State.AUTOCOMPLETE));
+    assertEquals('',
+        goog.dom.a11y.getState(target, goog.dom.a11y.State.HASPOPUP));
+
+    renderer.show();
+    assertEquals(goog.dom.a11y.Role.COMBOBOX, goog.dom.a11y.getRole(target));
+    assertEquals('list',
+        goog.dom.a11y.getState(target, goog.dom.a11y.State.AUTOCOMPLETE));
+    assertEquals('true',
+        goog.dom.a11y.getState(target, goog.dom.a11y.State.HASPOPUP));
+
+    renderer.dismiss();
+    assertEquals(goog.dom.a11y.Role.COMBOBOX, goog.dom.a11y.getRole(target));
+    assertEquals('list',
+        goog.dom.a11y.getState(target, goog.dom.a11y.State.AUTOCOMPLETE));
+    assertEquals('false',
+        goog.dom.a11y.getState(target, goog.dom.a11y.State.HASPOPUP));
   }
 
   function testHiliteRowWithDefaultRenderer() {
