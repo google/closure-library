@@ -176,8 +176,11 @@ function testSuggestionsUpdateEvent() {
   ac.setToken('ford');
   assertEquals(3, updates);
 
-  ac.setToken('dent');
+  ac.dismiss();
   assertEquals(4, updates);
+
+  ac.setToken('dent');
+  assertEquals(5, updates);
 }
 
 function checkHilitedIndex(renderer, index) {
