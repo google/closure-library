@@ -14,6 +14,7 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.testing.MockClock');
     goog.require('goog.testing.PerformanceTimer');
     goog.require('goog.testing.jsunit');
   </script>
@@ -21,6 +22,7 @@ See the COPYING file for details.
 <body>
   <div id="sandbox"></div>
   <script>
+    var mockClock;
     var sandbox = document.getElementById('sandbox');
     var timer;
 
@@ -33,29 +35,13 @@ See the COPYING file for details.
       }
     }
 
-    // Slow test function, pretty much guaranteed to run longer than 1ms.
-    function slowTestFunction() {
-      for (var i = 0; i < 1000; i++) {
-        var span = document.createElement('span');
-        span.id = 'span_' + i;
-        span.className = 'foo bar';
-        span.innerHTML = 'Span no. ' + i;
-
-        var div = document.createElement('div');
-        div.id = 'div_ ' + i;
-        div.className = 'foo bar';
-        div.tabIndex = i;
-        div.appendChild(span);
-
-        sandbox.appendChild(div);
-      }
-    }
-
     function setUp() {
+      mockClock = new goog.testing.MockClock(false);
       timer = new goog.testing.PerformanceTimer();
     }
-    
+
     function tearDown() {
+      mockClock.dispose();
       timer = null;
       goog.dom.removeChildren(sandbox);
     }
@@ -93,12 +79,20 @@ See the COPYING file for details.
     }
 
     function testTimeout() {
-      // Slow test function can't finish 10 runs in under 1 millisecond...
-      timer.setTimeoutInterval(1);
-      var results = timer.run(slowTestFunction);
+      mockClock.install();
+      var count = 0;
 
-      assertNotNull('Results must be available',
-          results);
+      var testFunction = function() {
+        mockClock.tick(100);
+        ++count;
+      };
+
+      timer.setNumSamples(200);
+      timer.setTimeoutInterval(2500);
+      var results = timer.run(testFunction);
+
+      assertNotNull('Results must be available', results);
+      assertEquals('Count is wrong', count, results['count']);
       assertTrue('Count must less than expected',
           results['count'] < timer.getNumSamples());
     }
