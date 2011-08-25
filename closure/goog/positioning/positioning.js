@@ -357,7 +357,7 @@ goog.positioning.positionAtCoordinate = function(absolutePos,
 
   goog.style.setPosition(movableElement, absolutePos);
   if (!goog.math.Size.equals(elementSize, size)) {
-    goog.style.setSize(movableElement, size);
+    goog.style.setBorderBoxSize(movableElement, size);
   }
 
   return status;
@@ -421,9 +421,9 @@ goog.positioning.adjustForViewport_ = function(pos, size, viewport, overflow) {
   // specified, ignore it otherwise.
   if (overflow & goog.positioning.Overflow.FAIL_X) {
     status |= (pos.x < viewport.left ?
-                  goog.positioning.OverflowStatus.FAILED_LEFT : 0) |
+                   goog.positioning.OverflowStatus.FAILED_LEFT : 0) |
               (pos.x + size.width > viewport.right ?
-                  goog.positioning.OverflowStatus.FAILED_RIGHT : 0);
+                   goog.positioning.OverflowStatus.FAILED_RIGHT : 0);
   }
 
   // Top edge outside viewport, try to move it.
@@ -451,9 +451,9 @@ goog.positioning.adjustForViewport_ = function(pos, size, viewport, overflow) {
   // specified, ignore it otherwise.
   if (overflow & goog.positioning.Overflow.FAIL_Y) {
     status |= (pos.y < viewport.top ?
-                  goog.positioning.OverflowStatus.FAILED_TOP : 0) |
+                   goog.positioning.OverflowStatus.FAILED_TOP : 0) |
               (pos.y + size.height > viewport.bottom ?
-                  goog.positioning.OverflowStatus.FAILED_BOTTOM : 0);
+                   goog.positioning.OverflowStatus.FAILED_BOTTOM : 0);
   }
 
   return status;

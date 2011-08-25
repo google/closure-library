@@ -659,8 +659,8 @@ function testPositionAtCoordinateResizeHeight() {
                goog.positioning.OverflowStatus.ADJUSTED_Y,
                f(pos, popup, corner, undefined, viewport, overflow));
   var bounds = goog.style.getSize(popup);
-  assertEquals('Height should be resized to 52.',
-               52, bounds.height);
+  assertEquals('Height should be resized to the size of the viewport.',
+               50, bounds.height);
 }
 
 
