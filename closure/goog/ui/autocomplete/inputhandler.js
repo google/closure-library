@@ -1230,7 +1230,7 @@ goog.ui.AutoComplete.InputHandler.prototype.getTokenIndex_ = function(text,
 
   // Calculate which of the entries the cursor is currently in
   var current = 0;
-  for (var i = 0, pos = 0; i < entries.length && pos < caret; i++) {
+  for (var i = 0, pos = 0; i < entries.length && pos <= caret; i++) {
     pos += entries[i].length;
     current = i;
   }

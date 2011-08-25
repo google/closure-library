@@ -549,6 +549,25 @@ See the COPYING file for details.
     assertEquals('bob, waldo, joey', mockElement.value);
   }
 
+  function testSetTokenTextLeftHandSideOfToken() {
+
+    var ih = new MockInputHandler();
+    ih.setSeparators(' ');
+    ih.setWhitespaceWrapEntries(false);
+
+    // Set up our input handler with the necessary mocks
+    var mockAutoCompleter = new MockAutoCompleter();
+    ih.ac_ = mockAutoCompleter;
+    ih.activeElement_ = mockElement;
+    mockElement.value = 'foo bar';
+    // Sets cursor position right before 'bar'
+    ih.setCursorPosition(4);
+
+    ih.setTokenText('bar', true /* multi-row */);
+
+    assertEquals('foo bar ', mockElement.value);
+  }
+
   function testGetThrottleTime() {
     var ih = new goog.ui.AutoComplete.InputHandler();
     ih.setThrottleTime(999);
