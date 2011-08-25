@@ -379,7 +379,7 @@ goog.style.getOffsetParent = function(element) {
 
 /**
  * Calculates and returns the visible rectangle for a given element. Returns a
- * box describing the visible portion of the nearest scrollable ancestor.
+ * box describing the visible portion of the nearest scrollable offset ancestor.
  * Coordinates are given relative to the document.
  *
  * @param {Element} element Element to get the visible rect for.
@@ -390,8 +390,8 @@ goog.style.getVisibleRectForElement = function(element) {
   var visibleRect = new goog.math.Box(0, Infinity, Infinity, 0);
   var dom = goog.dom.getDomHelper(element);
   var body = dom.getDocument().body;
+  var documentElement = dom.getDocument().documentElement;
   var scrollEl = dom.getDocumentScrollElement();
-  var inContainer;
 
   // Determine the size of the visible rect by climbing the dom accounting for
   // all scrollable containers.
@@ -400,9 +400,11 @@ goog.style.getVisibleRectForElement = function(element) {
     // on WEBKIT, body element can have clientHeight = 0 and scrollHeight > 0
     if ((!goog.userAgent.IE || el.clientWidth != 0) &&
         (!goog.userAgent.WEBKIT || el.clientHeight != 0 || el != body) &&
-        (el.scrollWidth != el.clientWidth ||
-         el.scrollHeight != el.clientHeight) &&
-        goog.style.getStyle_(el, 'overflow') != 'visible') {
+        // body may have overflow set on it, yet we still get the entire
+        // viewport. In some browsers, el.offsetParent may be
+        // document.documentElement, so check for that too.
+        (el != body && el != documentElement &&
+            goog.style.getStyle_(el, 'overflow') != 'visible')) {
       var pos = goog.style.getPageOffset(el);
       var client = goog.style.getClientLeftTop(el);
       pos.x += client.x;
@@ -414,32 +416,16 @@ goog.style.getVisibleRectForElement = function(element) {
       visibleRect.bottom = Math.min(visibleRect.bottom,
                                     pos.y + el.clientHeight);
       visibleRect.left = Math.max(visibleRect.left, pos.x);
-      // TODO(user): We may want to check whether the current element is
-      // the document element or the body element, in case somebody sets
-      // overflow on the body element in CSS.
-      inContainer = inContainer || el != scrollEl;
     }
   }
 
-  // Compensate for document scroll in non webkit browsers.
+  // Clip by window's viewport.
   var scrollX = scrollEl.scrollLeft, scrollY = scrollEl.scrollTop;
-  if (goog.userAgent.WEBKIT) {
-    visibleRect.left += scrollX;
-    visibleRect.top += scrollY;
-  } else {
-    visibleRect.left = Math.max(visibleRect.left, scrollX);
-    visibleRect.top = Math.max(visibleRect.top, scrollY);
-  }
-  if (!inContainer || goog.userAgent.WEBKIT) {
-    visibleRect.right += scrollX;
-    visibleRect.bottom += scrollY;
-  }
-
-  // Clip by the window's viewport.
+  visibleRect.left = Math.max(visibleRect.left, scrollX);
+  visibleRect.top = Math.max(visibleRect.top, scrollY);
   var winSize = dom.getViewportSize();
   visibleRect.right = Math.min(visibleRect.right, scrollX + winSize.width);
   visibleRect.bottom = Math.min(visibleRect.bottom, scrollY + winSize.height);
-
   return visibleRect.top >= 0 && visibleRect.left >= 0 &&
          visibleRect.bottom > visibleRect.top &&
          visibleRect.right > visibleRect.left ?

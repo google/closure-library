@@ -255,10 +255,10 @@ goog.positioning.positionAtAnchor = function(anchorElement,
   if (opt_overflow) {
     viewport = goog.style.getVisibleRectForElement(movableElement);
     if (viewport && moveableParentTopLeft) {
-      viewport.top = Math.max(0, viewport.top - moveableParentTopLeft.y);
+      viewport.top = viewport.top - moveableParentTopLeft.y;
       viewport.right -= moveableParentTopLeft.x;
       viewport.bottom -= moveableParentTopLeft.y;
-      viewport.left = Math.max(0, viewport.left - moveableParentTopLeft.x);
+      viewport.left = viewport.left - moveableParentTopLeft.x;
     }
   }
 
