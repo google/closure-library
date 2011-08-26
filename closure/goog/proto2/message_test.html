@@ -362,6 +362,28 @@ function testGetAfterSetWithLazyDeserializer() {
   assertEquals(true, message.getOptionalBool());
 }
 
+function testHasOnLazyDeserializer() {
+  // Test that null values for fields are treated as absent by the lazy
+  // deserializer.
+  var message = new proto2.TestAllTypes();
+
+  var fakeDeserializer = {}; // stub with no methods defined; fails hard
+  message.initializeForLazyDeserializer(fakeDeserializer,
+      {13: false} /* data */);
+  assertEquals(true, message.hasOptionalBool());
+}
+
+function testHasOnLazyDeserializerWithNulls() {
+  // Test that null values for fields are treated as absent by the lazy
+  // deserializer.
+  var message = new proto2.TestAllTypes();
+
+  var fakeDeserializer = {}; // stub with no methods defined; fails hard
+  message.initializeForLazyDeserializer(fakeDeserializer,
+      {13: null} /* data */);
+  assertEquals(false, message.hasOptionalBool());
+}
+
 </script>
 </body>
 </html>

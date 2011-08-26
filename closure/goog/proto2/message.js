@@ -467,7 +467,8 @@ goog.proto2.Message.prototype.has$Value = function(tag) {
   goog.proto2.Util.assert(this.fields_[tag],
                           'No field found for the given tag');
 
-  return tag in this.values_ && goog.isDef(this.values_[tag]);
+  return tag in this.values_ && goog.isDef(this.values_[tag]) &&
+      this.values_[tag] !== null;
 };
 
 
