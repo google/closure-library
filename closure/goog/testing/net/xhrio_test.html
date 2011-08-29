@@ -123,6 +123,22 @@ function testGetLastContent() {
                undefined, xhr.getLastContent());
 }
 
+function testGetLastRequestHeaders() {
+  var xhr = new goog.testing.net.XhrIo();
+  assertEquals('nothing sent yet, empty headers',
+               undefined, xhr.getLastRequestHeaders());
+
+   xhr.send('http://www.example.com/', undefined, undefined,
+       {'From': 'page@google.com'});
+   assertObjectEquals('Request sent with extra headers, headers saved',
+                      {'From': 'page@google.com'}, xhr.getLastRequestHeaders());
+   xhr.simulateResponse(200, '');
+
+   xhr.send('http://www.example.com');
+   assertEquals('New request sent without extra headers',
+                undefined, xhr.getLastRequestHeaders());
+}
+
 function testGetResponseText() {
   // Text response came.
   var called = false;
