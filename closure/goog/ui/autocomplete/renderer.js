@@ -518,9 +518,6 @@ goog.ui.AutoComplete.Renderer.prototype.redraw = function() {
     this.show();
   }
 
-  // Fix bug on Firefox on Mac where scrollbars can show through a floating div
-  this.preventMacScrollbarResurface_(this.element_);
-
   this.reposition();
 
   // Make the autocompleter unselectable, so that it
@@ -599,24 +596,6 @@ goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
   delete this.parent_;
 
   goog.ui.AutoComplete.Renderer.superClass_.disposeInternal.call(this);
-};
-
-
-/**
- * Prevents scrollbars that are below the node from resurfacing through the
- * node. This is a known bug in Firefox on Mac.
- *
- * @param {Node} node The node to prevent scrollbars from resurfacing through.
- * @private
- */
-goog.ui.AutoComplete.Renderer.prototype.preventMacScrollbarResurface_ =
-    function(node) {
-  if (goog.userAgent.GECKO && goog.userAgent.MAC) {
-    node.style.width = '';
-    node.style.overflow = 'visible';
-    node.style.width = node.offsetWidth;
-    node.style.overflow = 'auto';
-  }
 };
 
 
