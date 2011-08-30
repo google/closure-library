@@ -21,10 +21,10 @@
 goog.provide('goog.ui.AutoComplete.Renderer');
 goog.provide('goog.ui.AutoComplete.Renderer.CustomRenderer');
 
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
-goog.require('goog.dispose');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -236,6 +236,14 @@ goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
 
 
 /**
+ * The element on which to base the width of the autocomplete.
+ * @type {Node}
+ * @private
+ */
+goog.ui.AutoComplete.Renderer.prototype.widthProvider_;
+
+
+/**
  * The delay before mouseover events are registered, in milliseconds
  * @type {number}
  */
@@ -248,6 +256,17 @@ goog.ui.AutoComplete.Renderer.DELAY_BEFORE_MOUSEOVER = 300;
  */
 goog.ui.AutoComplete.Renderer.prototype.getElement = function() {
   return this.element_;
+};
+
+
+/**
+ * Sets the width provider element. The provider is only used on redraw and as
+ * such will not automatically update on resize.
+ * @param {Node} widthProvider The element whose width should be mirrored.
+ */
+goog.ui.AutoComplete.Renderer.prototype.setWidthProvider =
+    function(widthProvider) {
+  this.widthProvider_ = widthProvider;
 };
 
 
@@ -385,7 +404,7 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteRow = function(index) {
       this.rowDivs_[index] : undefined;
 
   var evtObj = {type: goog.ui.AutoComplete.EventType.ROW_HILITE,
-      rowNode: rowDiv};
+    rowNode: rowDiv};
   if (this.dispatchEvent(evtObj)) {
     this.hiliteNone();
     this.hilitedRow_ = index;
@@ -488,6 +507,11 @@ goog.ui.AutoComplete.Renderer.prototype.redraw = function() {
     this.element_.style.visibility = 'hidden';
   }
 
+  if (this.widthProvider_) {
+    var width = this.widthProvider_.clientWidth + 'px';
+    this.element_.style.minWidth = width;
+  }
+
   // Remove the current child nodes
   this.rowDivs_.length = 0;
   this.dom_.removeChildren(this.element_);
@@ -535,7 +559,7 @@ goog.ui.AutoComplete.Renderer.prototype.reposition = function() {
     var topLeft = goog.style.getPageOffset(this.target_);
     var locationNodeSize = goog.style.getSize(this.target_);
     var viewSize = goog.style.getSize(goog.style.getClientViewportElement(
-            this.target_));
+        this.target_));
     var elSize = goog.style.getSize(this.element_);
     topLeft.y = this.topAlign_ ? topLeft.y - elSize.height :
         topLeft.y + locationNodeSize.height;
@@ -691,12 +715,12 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
       this.hiliteMatchingText_(node, rest);
     }
   } else {
-     var child = node.firstChild;
-     while (child) {
-       var nextChild = child.nextSibling;
-       this.hiliteMatchingText_(child, tokenOrArray);
-       child = nextChild;
-     }
+    var child = node.firstChild;
+    while (child) {
+      var nextChild = child.nextSibling;
+      this.hiliteMatchingText_(child, tokenOrArray);
+      child = nextChild;
+    }
   }
 };
 
@@ -829,9 +853,6 @@ goog.ui.AutoComplete.Renderer.prototype.handleMouseDown_ = function(e) {
   e.stopPropagation();
   e.preventDefault();
 };
-
-
-
 
 
 /**
