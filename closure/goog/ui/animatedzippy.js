@@ -52,7 +52,7 @@ goog.ui.AnimatedZippy = function(header, content, opt_expanded) {
   elWrapper.appendChild(elContent);
 
   /**
-   * Contant wrapper, used for animation.
+   * Content wrapper, used for animation.
    * @type {Element}
    * @private
    */
@@ -96,7 +96,7 @@ goog.ui.AnimatedZippy.prototype.animationAcceleration = goog.fx.easing.easeOut;
  * @return {boolean} Whether the zippy is in the process of being expanded or
  *     collapsed.
  */
-goog.ui.Zippy.prototype.isBusy = function() {
+goog.ui.AnimatedZippy.prototype.isBusy = function() {
   return this.anim_ != null;
 };
 
