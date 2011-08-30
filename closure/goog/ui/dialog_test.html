@@ -193,6 +193,25 @@ See the COPYING file for details.
     assertTrue(dialog.isVisible());
   }
 
+  function testKeydownClosesWithoutButtonSet() {
+    // Clear button set
+    dialog.setButtonSet(null);
+
+    // Create a custom button.
+    dialog.setContent('<button id="button" name="ok">OK</button>');
+    var wasCalled = false;
+    function called() {
+      wasCalled = true;
+    }
+    var element = goog.dom.getElement('button');
+    goog.events.listen(element, goog.events.EventType.KEYPRESS, called);
+    // Listen for 'Enter' on the button.
+    // This tests using a dialog with no ButtonSet that has been set. Uses
+    // a custom button.  The callback should be called with no exception thrown.
+    goog.testing.events.fireKeySequence(element, goog.events.KeyCodes.ENTER);
+    assertTrue('Should have gotten event on the button.', wasCalled);
+  }
+
   function testEnterKeyWithoutDefaultDoesNotPreventPropagation() {
     var buttons = new goog.ui.Dialog.ButtonSet();
     buttons.set(goog.ui.Dialog.DefaultButtonKeys.CANCEL,
@@ -365,7 +384,7 @@ See the COPYING file for details.
   function testDefaultButtonClassName() {
     var key = 'someKey';
     var msg = 'someMessage';
-    var isDefalut = false;
+    var isDefault = false;
     var buttonSetOne = new goog.ui.Dialog.ButtonSet().set(key, msg, isDefault);
     dialog.setButtonSet(buttonSetOne);
     var defaultClassName = goog.getCssName(buttonSetOne.class_, 'default');

@@ -1010,7 +1010,7 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
         key = defaultKey;
       }
     }
-    if (key) {
+    if (key && buttonSet) {
       hasHandler = true;
       close = this.dispatchEvent(
           new goog.ui.Dialog.Event(key, String(buttonSet.get(key))));
