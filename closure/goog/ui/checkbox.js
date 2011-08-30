@@ -115,7 +115,7 @@ goog.ui.Checkbox.prototype.isUndetermined = function() {
 
 /**
  * Sets the checked state of the checkbox.
- * @param {goog.ui.Checkbox.State|boolean} checked The checked state to set.
+ * @param {?boolean} checked The checked state to set.
  */
 goog.ui.Checkbox.prototype.setChecked = function(checked) {
   if (checked != this.checked_) {
