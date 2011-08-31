@@ -19,6 +19,7 @@
  */
 
 goog.provide('goog.ui.Zippy');
+goog.provide('goog.ui.Zippy.Events');
 goog.provide('goog.ui.ZippyEvent');
 
 goog.require('goog.dom');
