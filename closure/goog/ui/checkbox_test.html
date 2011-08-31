@@ -145,6 +145,30 @@ See the COPYING file for details.
     assertFalse('toggling has been prevented', checkbox.getChecked());
   }
 
+  function testCheckboxAriaLabelledby() {
+    var label = goog.dom.createElement('div');
+    var label2 = goog.dom.createElement('div',  {id: checkbox.makeId('foo')});
+    document.body.appendChild(label);
+    document.body.appendChild(label2);
+    try {
+      checkbox.setChecked(false);
+      checkbox.setLabel(label);
+      checkbox.render(label);
+
+      assertEquals(label.id,
+          goog.dom.a11y.getState(checkbox.getElement(),
+              goog.dom.a11y.State.LABELLEDBY));
+
+      checkbox.setLabel(label2);
+      assertEquals(label2.id,
+          goog.dom.a11y.getState(checkbox.getElement(),
+              goog.dom.a11y.State.LABELLEDBY));
+    } finally {
+      document.body.removeChild(label);
+      document.body.removeChild(label2);
+    }
+  }
+
   function testLabel() {
     var label = goog.dom.createElement('div');
     document.body.appendChild(label);
