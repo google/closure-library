@@ -14,6 +14,9 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.dom.a11y');
+    goog.require('goog.dom.a11y.Role');
+    goog.require('goog.dom.a11y.State');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Component.EventType');
     goog.require('goog.ui.MenuItem');
@@ -61,6 +64,27 @@ function testDefaultCaption() {
 
   select.setSelectedItem(null);
   assertEquals(newCaption, select.getCaption());
+}
+
+// Confirms that aria roles for select conform to spec:
+// http://www.w3.org/TR/wai-aria/roles#listbox
+// Basically the select should have a role of LISTBOX and all the items should
+// have a role of OPTION.
+function testAriaRoles() {
+  select.render(sandbox);
+  var item1 = new goog.ui.MenuItem("item 1");
+  select.addItem(item1);
+  var item2 = new goog.ui.MenuItem("item 2");
+  select.addItem(item2);
+
+  assertEquals(goog.dom.a11y.Role.LISTBOX,
+      goog.dom.a11y.getRole(select.getElement()));
+  assertEquals('false', goog.dom.a11y.getState(select.getElement(),
+          goog.dom.a11y.State.HASPOPUP));
+  assertEquals(goog.dom.a11y.Role.OPTION,
+      goog.dom.a11y.getRole(item1.getElement()));
+  assertEquals(goog.dom.a11y.Role.OPTION,
+      goog.dom.a11y.getRole(item2.getElement()));
 }
 
 /**

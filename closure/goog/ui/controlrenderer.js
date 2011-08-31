@@ -367,9 +367,11 @@ goog.ui.ControlRenderer.prototype.initializeDom = function(control) {
 /**
  * Sets the element's ARIA role.
  * @param {Element} element Element to update.
+ * @param {?goog.dom.a11y.Role=} opt_preferredRole The preferred ARIA role.
  */
-goog.ui.ControlRenderer.prototype.setAriaRole = function(element) {
-  var ariaRole = this.getAriaRole();
+goog.ui.ControlRenderer.prototype.setAriaRole = function(element,
+    opt_preferredRole) {
+  var ariaRole = opt_preferredRole || this.getAriaRole();
   if (ariaRole) {
     goog.dom.a11y.setRole(element, ariaRole);
   }
