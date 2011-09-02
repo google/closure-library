@@ -8,7 +8,7 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.graphics.affinetransform</title>
+<title>Closure Unit Tests - goog.graphics.AffineTransform</title>
 <script src="../base.js"></script>
 <script>
   goog.require('goog.graphics');
@@ -41,12 +41,12 @@ See the COPYING file for details.
 
   function testGetRotateInstance() {
     var tx = goog.graphics.AffineTransform.getRotateInstance(Math.PI / 2, 1, 2);
-    assertEquals(0, Math.round(tx.getScaleX()));
-    assertEquals(1, Math.round(tx.getShearY()));
-    assertEquals(-1, Math.round(tx.getShearX()));
-    assertEquals(0, Math.round(tx.getScaleY()));
-    assertEquals(3, Math.round(tx.getTranslateX()));
-    assertEquals(1, Math.round(tx.getTranslateY()));
+    assertRoughlyEquals(0, tx.getScaleX(), 1e-9);
+    assertRoughlyEquals(1, tx.getShearY(), 1e-9);
+    assertRoughlyEquals(-1, tx.getShearX(), 1e-9);
+    assertRoughlyEquals(0, tx.getScaleY(), 1e-9);
+    assertRoughlyEquals(3, tx.getTranslateX(), 1e-9);
+    assertRoughlyEquals(1, tx.getTranslateY(), 1e-9);
   }
 
   function testGetShearInstance() {
@@ -129,6 +129,17 @@ See the COPYING file for details.
     assertEquals(6, tx.getTranslateY());
   }
 
+  function testPreScale() {
+    var tx = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
+    tx.preScale(2, 3);
+    assertEquals(2, tx.getScaleX());
+    assertEquals(6, tx.getShearY());
+    assertEquals(6, tx.getShearX());
+    assertEquals(12, tx.getScaleY());
+    assertEquals(10, tx.getTranslateX());
+    assertEquals(18, tx.getTranslateY());
+  }
+
   function testTranslate() {
     var tx = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
     tx.translate(2, 3);
@@ -140,15 +151,37 @@ See the COPYING file for details.
     assertEquals(22, tx.getTranslateY());
   }
 
+  function testPreTranslate() {
+    var tx = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
+    tx.preTranslate(2, 3);
+    assertEquals(1, tx.getScaleX());
+    assertEquals(2, tx.getShearY());
+    assertEquals(3, tx.getShearX());
+    assertEquals(4, tx.getScaleY());
+    assertEquals(7, tx.getTranslateX());
+    assertEquals(9, tx.getTranslateY());
+  }
+
   function testRotate() {
     var tx = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
     tx.rotate(Math.PI / 2, 1, 1);
-    assertEquals(3, Math.round(tx.getScaleX()));
-    assertEquals(4, Math.round(tx.getShearY()));
-    assertEquals(-1, Math.round(tx.getShearX()));
-    assertEquals(-2, Math.round(tx.getScaleY()));
-    assertEquals(7, Math.round(tx.getTranslateX()));
-    assertEquals(10, Math.round(tx.getTranslateY()));
+    assertRoughlyEquals(3, tx.getScaleX(), 1e-9);
+    assertRoughlyEquals(4, tx.getShearY(), 1e-9);
+    assertRoughlyEquals(-1, tx.getShearX(), 1e-9);
+    assertRoughlyEquals(-2, tx.getScaleY(), 1e-9);
+    assertRoughlyEquals(7, tx.getTranslateX(), 1e-9);
+    assertRoughlyEquals(10, tx.getTranslateY(), 1e-9);
+  }
+
+  function testPreRotate() {
+    var tx = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
+    tx.preRotate(Math.PI / 2, 1, 1);
+    assertRoughlyEquals(-2, tx.getScaleX(), 1e-9);
+    assertRoughlyEquals(1, tx.getShearY(), 1e-9);
+    assertRoughlyEquals(-4, tx.getShearX(), 1e-9);
+    assertRoughlyEquals(3, tx.getScaleY(), 1e-9);
+    assertRoughlyEquals(-4, tx.getTranslateX(), 1e-9);
+    assertRoughlyEquals(5, tx.getTranslateY(), 1e-9);
   }
 
   function testShear() {
@@ -160,6 +193,17 @@ See the COPYING file for details.
     assertEquals(8, tx.getScaleY());
     assertEquals(5, tx.getTranslateX());
     assertEquals(6, tx.getTranslateY());
+  }
+
+  function testPreShear() {
+    var tx = new goog.graphics.AffineTransform(1, 2, 3, 4, 5, 6);
+    tx.preShear(2, 3);
+    assertEquals(5, tx.getScaleX());
+    assertEquals(5, tx.getShearY());
+    assertEquals(11, tx.getShearX());
+    assertEquals(13, tx.getScaleY());
+    assertEquals(17, tx.getTranslateX());
+    assertEquals(21, tx.getTranslateY());
   }
 
   function testConcatentate() {
