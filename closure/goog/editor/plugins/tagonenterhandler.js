@@ -548,8 +548,9 @@ goog.editor.plugins.TagOnEnterHandler.prototype.scrollCursorIntoViewGecko_ =
   // element to be in view.
   var bottomOfNode = elementY + element.offsetHeight;
 
+  var dom = this.getFieldDomHelper();
   var win = this.getFieldDomHelper().getWindow();
-  var scrollY = goog.dom.getPageScroll(win).y;
+  var scrollY = dom.getDocumentScroll().y;
   var viewportHeight = goog.dom.getViewportSize(win).height;
 
   // If the botom of the element is outside the viewport, move it into view

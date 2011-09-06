@@ -254,7 +254,7 @@ goog.ui.HsvaPalette.prototype.handleMouseDown_ = function(e) {
  */
 goog.ui.HsvaPalette.prototype.handleMouseMoveA_ = function(b, e) {
   e.preventDefault();
-  var vportPos = goog.dom.getPageScroll();
+  var vportPos = this.getDomHelper().getDocumentScroll();
   var newA = (b.top + b.height - Math.min(
       Math.max(vportPos.y + e.clientY, b.top),
       b.top + b.height)) / b.height;

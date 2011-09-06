@@ -28,6 +28,7 @@ goog.require('goog.async.Deferred');
 goog.require('goog.fs.DirectoryEntry');
 goog.require('goog.fs.DirectoryEntry.Behavior');
 goog.require('goog.fs.Error');
+goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.testing.fs.File');
@@ -432,7 +433,7 @@ goog.testing.fs.DirectoryEntry.prototype.createDirectorySync = function(path) {
 goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
     path, behavior, isFile, createFn) {
   // Filter out leading, trailing, and duplicate slashes.
-  var components = goog.array.filter(path.split('/'), goog.identityFunction);
+  var components = goog.array.filter(path.split('/'), goog.functions.identity);
 
   var basename = /** @type {string} */ (goog.array.peek(components)) || '';
   var dir = goog.string.startsWith(path, '/') ?
