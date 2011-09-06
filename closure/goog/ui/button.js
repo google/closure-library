@@ -125,7 +125,7 @@ goog.ui.Button.prototype.getTooltip = function() {
  */
 goog.ui.Button.prototype.setTooltip = function(tooltip) {
   this.tooltip_ = tooltip;
-  this.getRenderer().setTooltip(this. getElement(), tooltip);
+  this.getRenderer().setTooltip(this.getElement(), tooltip);
 };
 
 
