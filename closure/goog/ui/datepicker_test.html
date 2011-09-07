@@ -134,6 +134,19 @@ See the COPYING file for details.
     assertTrue(goog.style.isElementShown(tFoot))
   }
 
+  function testGetDate() {
+    picker = new goog.ui.DatePicker(new Date(2000, 0, 1));
+    var date = picker.getDate();
+    assertObjectEquals(new goog.date.Date(2000, 0, 1), date);
+
+    date.setMonth(1);
+    assertObjectEquals('modifying the returned date is safe',
+        new goog.date.Date(2000, 0, 1), picker.getDate());
+
+    picker.setDate(null);
+    assertNull('no date is selected', picker.getDate());
+  }
+
   function testSetDate() {
     picker = new goog.ui.DatePicker();
     picker.createDom();

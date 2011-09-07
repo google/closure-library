@@ -540,10 +540,10 @@ goog.ui.DatePicker.prototype.selectNone = function() {
 
 
 /**
- * @return {goog.date.Date} The selected date.
+ * @return {goog.date.Date} The selected date or null if nothing is selected.
  */
 goog.ui.DatePicker.prototype.getDate = function() {
-  return this.date_;
+  return this.date_ && this.date_.clone();
 };
 
 
