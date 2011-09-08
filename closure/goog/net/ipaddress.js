@@ -36,14 +36,14 @@ goog.require('goog.string');
  * Please use goog.net.IpAddress static methods or
  * goog.net.Ipv4Address/Ipv6Address classes.
  *
- * @param {goog.math.Integer} address The Ip Address.
+ * @param {!goog.math.Integer} address The Ip Address.
  * @param {number} version The version number (4, 6).
  * @constructor
  */
 goog.net.IpAddress = function(address, version) {
   /**
    * The IP Address.
-   * @type {goog.math.Integer}
+   * @type {!goog.math.Integer}
    * @private
    */
   this.ip_ = address;
@@ -73,7 +73,7 @@ goog.net.IpAddress.prototype.getVersion = function() {
 
 
 /**
- * @param {goog.net.IpAddress} other The other IP Address.
+ * @param {!goog.net.IpAddress} other The other IP Address.
  * @return {boolean} true if the IP Addresses are equal.
  */
 goog.net.IpAddress.prototype.equals = function(other) {
@@ -104,6 +104,8 @@ goog.net.IpAddress.prototype.toString = goog.abstractMethod;
 
 /**
  * Parses an IP Address in a string.
+ * If the string is malformed, the function will simply return null
+ * instead of raising an exception.
  *
  * @param {string} address The IP Address.
  * @see {goog.net.Ipv4Address}
@@ -118,6 +120,9 @@ goog.net.IpAddress.fromString = function(address) {
 
     return new goog.net.Ipv4Address(address);
   } catch (e) {
+    // Both constructors raise exception if the address is malformed (ie.
+    // invalid). The user of this function should not care about catching
+    // the exception, espcially if it's used to validate an user input.
     return null;
   }
 };
@@ -125,9 +130,13 @@ goog.net.IpAddress.fromString = function(address) {
 
 /**
  * Tries to parse a string represented as a host portion of an URI.
- * See RFC 3986
+ * See RFC 3986 for more details on IPv6 addresses inside URI.
+ * If the string is malformed, the function will simply return null
+ * instead of raising an exception.
  *
  * @param {string} address A RFC 3986 encoded IP address.
+ * @see {goog.net.Ipv4Address}
+ * @see {goog.net.Ipv6Address}
  * @return {goog.net.IpAddress} The IP Address.
  */
 goog.net.IpAddress.fromUriString = function(address) {
@@ -140,6 +149,9 @@ goog.net.IpAddress.fromUriString = function(address) {
 
     return new goog.net.Ipv4Address(address);
   } catch (e) {
+    // Both constructors raise exception if the address is malformed (ie.
+    // invalid). The user of this function should not care about catching
+    // the exception, espcially if it's used to validate an user input.
     return null;
   }
 };
@@ -151,69 +163,68 @@ goog.net.IpAddress.fromUriString = function(address) {
  *
  * This constructor accepts strings and instance of goog.math.Integer.
  * If you pass a goog.math.Integer, make sure that its sign is set to positive.
- * @param {(string|goog.math.Integer)} address The address to store.
+ * @param {(string|!goog.math.Integer)} address The address to store.
  * @extends {goog.net.IpAddress}
  * @constructor
  */
 goog.net.Ipv4Address = function(address) {
-  var ip;
+  var ip = goog.math.Integer.ZERO;
   if (address instanceof goog.math.Integer) {
     if (address.getSign() != 0 ||
         address.lessThan(goog.math.Integer.ZERO) ||
         address.greaterThan(goog.net.Ipv4Address.MAX_ADDRESS_)) {
-      throw new Error('The address does not look like an IPv4.');
+      throw Error('The address does not look like an IPv4.');
     } else {
       ip = goog.object.clone(address);
     }
   } else {
     if (!goog.net.Ipv4Address.REGEX_.test(address)) {
-      throw new Error(address + ' does not look like an IPv4 address.');
+      throw Error(address + ' does not look like an IPv4 address.');
     }
 
     var octets = address.split('.');
     if (octets.length != 4) {
-      throw new Error(address + ' does not look like an IPv4 address.');
+      throw Error(address + ' does not look like an IPv4 address.');
     }
 
-    ip = goog.math.Integer.fromInt(0);
     for (var i = 0; i < octets.length; i++) {
       var parsedOctet = goog.string.toNumber(octets[i]);
       if (isNaN(parsedOctet) ||
           parsedOctet < 0 || parsedOctet > 255 ||
           (octets[i].length != 1 && goog.string.startsWith(octets[i], '0'))) {
-        throw new Error('In ' + address + ', octet ' + i + ' is not valid');
+        throw Error('In ' + address + ', octet ' + i + ' is not valid');
       }
       var intOctet = goog.math.Integer.fromNumber(parsedOctet);
       ip = ip.shiftLeft(8).or(intOctet);
     }
   }
-  goog.base(this, /** @type {goog.math.Integer} */ (ip), 4);
+  goog.base(this, /** @type {!goog.math.Integer} */ (ip), 4);
 };
 goog.inherits(goog.net.Ipv4Address, goog.net.IpAddress);
 
 
 /**
  * Regular expression matching all the allowed chars for IPv4.
- * @const
- * @private
  * @type {RegExp}
+ * @private
+ * @const
  */
 goog.net.Ipv4Address.REGEX_ = /^[0-9.]*$/;
 
 
 /**
  * The Maximum length for a netmask (aka, the number of bits for IPv4).
- * @const
  * @type {number}
+ * @const
  */
 goog.net.Ipv4Address.MAX_NETMASK_LENGTH = 32;
 
 
 /**
  * The Maximum address possible for IPv4.
- * @const
- * @private
  * @type {goog.math.Integer}
+ * @private
+ * @const
  */
 goog.net.Ipv4Address.MAX_ADDRESS_ = goog.math.Integer.ONE.shiftLeft(
     goog.net.Ipv4Address.MAX_NETMASK_LENGTH).subtract(goog.math.Integer.ONE);
@@ -230,7 +241,7 @@ goog.net.Ipv4Address.prototype.toString = function() {
   var ip = this.ip_.getBitsUnsigned(0);
   var octets = [];
   for (var i = 3; i >= 0; i--) {
-    octets[i] = (ip & 0xff) + '';
+    octets[i] = String((ip & 0xff));
     ip = ip >>> 8;
   }
 
@@ -254,23 +265,23 @@ goog.net.Ipv4Address.prototype.toUriString = function() {
  *
  * This constructor accepts strings and instance of goog.math.Integer.
  * If you pass a goog.math.Integer, make sure that its sign is set to positive.
- * @param {(string|goog.math.Integer)} address The address to store.
+ * @param {(string|!goog.math.Integer)} address The address to store.
  * @constructor
  * @extends {goog.net.IpAddress}
  */
 goog.net.Ipv6Address = function(address) {
-  var tempIp;
+  var ip = goog.math.Integer.ZERO;
   if (address instanceof goog.math.Integer) {
     if (address.getSign() != 0 ||
         address.lessThan(goog.math.Integer.ZERO) ||
         address.greaterThan(goog.net.Ipv6Address.MAX_ADDRESS_)) {
-      throw new Error('The address does not look like a valid IPv6.');
+      throw Error('The address does not look like a valid IPv6.');
     } else {
-      tempIp = goog.object.clone(address);
+      ip = goog.object.clone(address);
     }
   } else {
     if (!goog.net.Ipv6Address.REGEX_.test(address)) {
-      throw new Error(address + ' is not a valid IPv6 address.');
+      throw Error(address + ' is not a valid IPv6 address.');
     }
 
     var splitColon = address.split(':');
@@ -285,7 +296,7 @@ goog.net.Ipv6Address = function(address) {
     var splitDoubleColon = address.split('::');
     if (splitDoubleColon.length > 2 ||
         (splitDoubleColon.length == 1 && splitColon.length != 8)) {
-      throw new Error(address + ' is not a valid IPv6 address.');
+      throw Error(address + ' is not a valid IPv6 address.');
     }
 
     var ipArr;
@@ -296,56 +307,54 @@ goog.net.Ipv6Address = function(address) {
     }
 
     if (ipArr.length != 8) {
-      throw new Error(address + ' is not a valid IPv6 address');
+      throw Error(address + ' is not a valid IPv6 address');
     }
 
-    tempIp = goog.math.Integer.ZERO;
     for (var i = 0; i < ipArr.length; i++) {
       var parsedHextet = goog.math.Integer.fromString(ipArr[i], 16);
       if (parsedHextet.lessThan(goog.math.Integer.ZERO) ||
           parsedHextet.greaterThan(goog.net.Ipv6Address.MAX_HEXTET_VALUE_)) {
-        throw new Error(ipArr[i] + ' in ' + address +
-                        ' is not a valid hextet.');
+        throw Error(ipArr[i] + ' in ' + address + ' is not a valid hextet.');
       }
-      tempIp = tempIp.shiftLeft(16).or(parsedHextet);
+      ip = ip.shiftLeft(16).or(parsedHextet);
     }
   }
-  goog.base(this, /** @type {goog.math.Integer} */ (tempIp), 6);
+  goog.base(this, /** @type {!goog.math.Integer} */ (ip), 6);
 };
 goog.inherits(goog.net.Ipv6Address, goog.net.IpAddress);
 
 
 /**
  * Regular expression matching all allowed chars for an IPv6.
- * @const
- * @private
  * @type {RegExp}
+ * @private
+ * @const
  */
 goog.net.Ipv6Address.REGEX_ = /^([a-fA-F0-9]*:){2}[a-fA-F0-9:.]*$/;
 
 
 /**
  * The Maximum length for a netmask (aka, the number of bits for IPv6).
- * @const
  * @type {number}
+ * @const
  */
 goog.net.Ipv6Address.MAX_NETMASK_LENGTH = 128;
 
 
 /**
  * The maximum value of a hextet.
- * @const
  * @type {goog.math.Integer}
  * @private
+ * @const
  */
 goog.net.Ipv6Address.MAX_HEXTET_VALUE_ = goog.math.Integer.fromInt(65535);
 
 
 /**
  * The Maximum address possible for IPv6.
- * @const
- * @private
  * @type {goog.math.Integer}
+ * @private
+ * @const
  */
 goog.net.Ipv6Address.MAX_ADDRESS_ = goog.math.Integer.ONE.shiftLeft(
     goog.net.Ipv6Address.MAX_NETMASK_LENGTH).subtract(goog.math.Integer.ONE);
@@ -386,7 +395,7 @@ goog.net.Ipv6Address.prototype.toUriString = function() {
  * This method is in charge of expanding/exploding an IPv6 string from its
  * compressed form.
  * @private
- * @param {Array.<string>} address An IPv6 address split around '::'.
+ * @param {!Array.<string>} address An IPv6 address split around '::'.
  * @return {Array.<string>} The expanded version of the IPv6.
  */
 goog.net.Ipv6Address.explode_ = function(address) {
@@ -419,7 +428,7 @@ goog.net.Ipv6Address.explode_ = function(address) {
 /**
  * This method is in charge of compressing an expanded IPv6 array of hextets.
  * @private
- * @param {Array.<string>} hextets The array of hextet in there string/hex form.
+ * @param {!Array.<string>} hextets The array of hextet.
  * @return {Array.<string>} The compressed version of this array.
  */
 goog.net.Ipv6Address.compress_ = function(hextets) {

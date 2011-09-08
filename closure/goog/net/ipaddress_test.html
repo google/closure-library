@@ -33,7 +33,8 @@ http://code.google.com/p/guava-libraries/
         assertEquals(null, goog.net.IpAddress.fromString('016'));
         assertEquals(null, goog.net.IpAddress.fromString('000.000.000.000'));
         assertEquals(null, goog.net.IpAddress.fromString('000'));
-        assertEquals(null, goog.net.IpAddress.fromString('0x0a.0x0a.0x0a.0x0a'));
+        assertEquals(null,
+            goog.net.IpAddress.fromString('0x0a.0x0a.0x0a.0x0a'));
         assertEquals(null, goog.net.IpAddress.fromString('0x0a.0x0a.0x0a'));
         assertEquals(null, goog.net.IpAddress.fromString('0x0a.0x0a'));
         assertEquals(null, goog.net.IpAddress.fromString('0x0a'));
