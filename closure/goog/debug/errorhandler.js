@@ -20,6 +20,7 @@
 goog.provide('goog.debug.ErrorHandler');
 goog.provide('goog.debug.ErrorHandler.ProtectedFunctionError');
 
+goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.debug.EntryPointMonitor');
 goog.require('goog.debug.Trace');
@@ -76,12 +77,13 @@ goog.debug.ErrorHandler.prototype.setAddTracersToProtectedFunctions =
 
 /** @inheritDoc */
 goog.debug.ErrorHandler.prototype.wrap = function(fn) {
-  return this.protectEntryPoint(fn);
+  return this.protectEntryPoint(goog.asserts.assertFunction(fn));
 };
 
 
 /** @inheritDoc */
 goog.debug.ErrorHandler.prototype.unwrap = function(fn) {
+  goog.asserts.assertFunction(fn);
   return fn[this.getFunctionIndex_(false)] || fn;
 };
 
