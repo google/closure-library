@@ -230,6 +230,33 @@ function testForEachDescendant() {
   assertArrayEquals('visited nodes', [node2, node3, node4], visitedNodes);
 }
 
+function testTraverse() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  var node4 = new goog.structs.TreeNode(4, null);
+  node1.addChild(node2);
+  node2.addChild(node3);
+  node2.addChild(node4);
+
+  var thisContext = {};
+  var visitedNodes = [];
+  node1.traverse(function(node) {
+    assertEquals('value of this', thisContext, this);
+    visitedNodes.push(node);
+  }, thisContext);
+  assertArrayEquals('callback returns nothing => all nodes are visited',
+      [node1, node2, node3, node4], visitedNodes);
+
+  visitedNodes = [];
+  node1.traverse(function(node) {
+    visitedNodes.push(node);
+    return node != node2;  // Cut off at node2.
+  });
+  assertArrayEquals('children of node2 are skipped',
+      [node1, node2], visitedNodes);
+}
+
 function testAddChild() {
   var node1 = new goog.structs.TreeNode(1, null);
   var node2 = new goog.structs.TreeNode(2, null);
