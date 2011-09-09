@@ -443,7 +443,7 @@ goog.testing.TestCase.prototype.log = function(val) {
     if (val instanceof Error && val.stack) {
       // Chrome does console.log asynchronously in a different process
       // (http://code.google.com/p/chromium/issues/detail?id=50316).
-      // This is an acute problem for Errors, which almost never survive. 
+      // This is an acute problem for Errors, which almost never survive.
       // Grab references to the immutable strings so they survive.
       window.console.log(val, val.message, val.stack);
       // TODO(user): Consider for Chrome cloning any object if we can ensure
@@ -852,7 +852,7 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
 /**
  * Handles a test that failed.
  * @param {goog.testing.TestCase.Test} test The test that failed.
- * @param {string|Error=} opt_e The exception object associated with the
+ * @param {*=} opt_e The exception object associated with the
  *     failure or a string.
  * @protected
  */
@@ -867,7 +867,7 @@ goog.testing.TestCase.prototype.doError = function(test, opt_e) {
 
 /**
  * @param {string} name Failed test name.
- * @param {string|Error=} opt_e The exception object associated with the
+ * @param {*=} opt_e The exception object associated with the
  *     failure or a string.
  * @return {goog.testing.TestCase.Error} Error object.
  */

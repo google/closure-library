@@ -352,8 +352,8 @@ goog.testing.AsyncTestCase.prototype.continueTesting = function() {
 
 /**
  * Handles an exception thrown by a test.
- * @param {string|Error=} opt_e The exception object associated with the
- *     failure or a string.
+ * @param {*=} opt_e The exception object associated with the failure
+ *     or a string.
  * @throws Always throws a ControlBreakingException.
  */
 goog.testing.AsyncTestCase.prototype.doAsyncError = function(opt_e) {
