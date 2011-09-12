@@ -35,6 +35,7 @@
 
 
 goog.provide('goog.ui.ScrollFloater');
+goog.provide('goog.ui.ScrollFloater.EventType');
 
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
@@ -84,6 +85,25 @@ goog.ui.ScrollFloater = function(opt_parentElement, opt_domHelper) {
   this.originalStyles_ = {};
 };
 goog.inherits(goog.ui.ScrollFloater, goog.ui.Component);
+
+
+/**
+ * Events dispatched by this component.
+ * @enum {string}
+ */
+goog.ui.ScrollFloater.EventType = {
+  /**
+   * Dispatched when the component starts floating. The event is
+   * cancellable.
+   */
+  FLOAT: 'float',
+
+  /**
+   * Dispatched when the component stops floating and returns to its
+   * original state. The event is cancellable.
+   */
+  DOCK: 'dock'
+};
 
 
 /**
@@ -256,7 +276,9 @@ goog.ui.ScrollFloater.prototype.update_ = function(opt_e) {
  * @private
  */
 goog.ui.ScrollFloater.prototype.startFloating_ = function() {
-  if (this.floating_) {
+  // Ignore if the component is floating or the FLOAT event is cancelled.
+  if (this.floating_ ||
+      !this.dispatchEvent(goog.ui.ScrollFloater.EventType.FLOAT)) {
     return;
   }
 
@@ -330,27 +352,31 @@ goog.ui.ScrollFloater.prototype.startFloating_ = function() {
  * @private
  */
 goog.ui.ScrollFloater.prototype.stopFloating_ = function() {
-  if (this.floating_) {
-    var elem = this.getElement();
-
-    for (var prop in this.originalStyles_) {
-      elem.style[prop] = this.originalStyles_[prop];
-    }
-
-    if (this.needsIePositionHack_()) {
-      elem.style.removeExpression('top');
-    }
-
-    // If placeholder_ was inserted and didn't replace elem then elem has
-    // the right parent already, no need to replace (which removes elem before
-    // inserting it).
-    if (this.placeholder_.parentNode == this.parentElement_) {
-      this.placeholder_.parentNode.removeChild(this.placeholder_);
-    } else {
-      this.placeholder_.parentNode.replaceChild(elem, this.placeholder_);
-    }
-    this.floating_ = false;
+  // Ignore if the component is docked or the DOCK event is cancelled.
+  if (!this.floating_ ||
+      !this.dispatchEvent(goog.ui.ScrollFloater.EventType.DOCK)) {
+    return;
   }
+
+  var elem = this.getElement();
+
+  for (var prop in this.originalStyles_) {
+    elem.style[prop] = this.originalStyles_[prop];
+  }
+
+  if (this.needsIePositionHack_()) {
+    elem.style.removeExpression('top');
+  }
+
+  // If placeholder_ was inserted and didn't replace elem then elem has
+  // the right parent already, no need to replace (which removes elem before
+  // inserting it).
+  if (this.placeholder_.parentNode == this.parentElement_) {
+    this.placeholder_.parentNode.removeChild(this.placeholder_);
+  } else {
+    this.placeholder_.parentNode.replaceChild(elem, this.placeholder_);
+  }
+  this.floating_ = false;
 };
 
 
