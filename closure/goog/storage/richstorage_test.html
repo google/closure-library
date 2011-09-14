@@ -23,7 +23,7 @@ See the COPYING file for details.
 <script>
 
 function testBasicOperations() {
-  var mechanism = new goog.storage.mechanism.mechanismfactory.create('test');
+  var mechanism = goog.storage.mechanism.mechanismfactory.create('test');
   if (mechanism) {
     var storage = new goog.storage.RichStorage(mechanism);
     goog.storage.storage_test.runBasicTests(storage);
@@ -31,7 +31,7 @@ function testBasicOperations() {
 }
 
 function testWrapping() {
-  var mechanism = new goog.storage.mechanism.mechanismfactory.create('test');
+  var mechanism = goog.storage.mechanism.mechanismfactory.create('test');
   if (mechanism) {
     var storage = new goog.storage.RichStorage(mechanism);
 
