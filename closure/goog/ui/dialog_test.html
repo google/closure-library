@@ -19,6 +19,7 @@ See the COPYING file for details.
   goog.require('goog.style');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
@@ -572,6 +573,36 @@ See the COPYING file for details.
     dialog = new goog.ui.Dialog();
     dialog.decorate(decorateTarget);
     assertEquals(0.5, goog.style.getOpacity(dialog.getBackgroundElement()));
+  }
+
+  function testDraggableStyle() {
+    assertTrue('draggable CSS class is set', goog.dom.classes.has(
+        dialog.titleEl_, 'modal-dialog-title-draggable'));
+    dialog.setDraggable(false);
+    assertFalse('draggable CSS class is removed', goog.dom.classes.has(
+        dialog.titleEl_, 'modal-dialog-title-draggable'));
+  }
+
+  function testDraggingLifecycle() {
+    dialog.dispose();
+
+    dialog = new goog.ui.Dialog();
+    dialog.setDraggerLimits_ = goog.testing.recordFunction();
+    dialog.createDom();
+    assertNull('dragger is not created in createDom', dialog.dragger_);
+
+    dialog.setVisible(true);
+    assertNotNull('dragger is created when the dialog is rendered',
+        dialog.dragger_);
+
+    assertNull('dragging limits are not set just before dragging',
+        dialog.setDraggerLimits_.getLastCall());
+    goog.testing.events.fireMouseDownEvent(dialog.titleEl_);
+    assertNotNull('dragging limits are set',
+        dialog.setDraggerLimits_.getLastCall());
+
+    dialog.exitDocument();
+    assertNull('dragger is cleaned up in exitDocument', dialog.dragger_);
   }
 </script>
 </body>

@@ -161,7 +161,7 @@ goog.ui.Dialog.prototype.content_ = '';
 
 /**
  * Dragger.
- * @type {?goog.fx.Dragger}
+ * @type {goog.fx.Dragger}
  * @private
  */
 goog.ui.Dialog.prototype.dragger_ = null;
@@ -451,21 +451,7 @@ goog.ui.Dialog.prototype.getClass = function() {
  */
 goog.ui.Dialog.prototype.setDraggable = function(draggable) {
   this.draggable_ = draggable;
-
-  // this will add the dragger if we've already rendered, and gone through
-  // the enterDocument routine, but now want to dynamically add draggability
-  if (this.draggable_ && !this.dragger_ && this.getElement()) {
-    this.dragger_ = this.createDragger();
-
-  } else if (!this.draggable_ && this.dragger_) {
-    // removes draggable classname post-render
-    if (this.getElement()) {
-      goog.dom.classes.remove(this.titleEl_,
-          goog.getCssName(this.class_, 'title-draggable'));
-    }
-    this.dragger_.dispose();
-    this.dragger_ = null;
-  }
+  this.setDraggingEnabled_(draggable && this.isInDocument());
 };
 
 
@@ -477,8 +463,6 @@ goog.ui.Dialog.prototype.setDraggable = function(draggable) {
  * @protected
  */
 goog.ui.Dialog.prototype.createDragger = function() {
-  goog.dom.classes.add(this.titleEl_,
-      goog.getCssName(this.class_, 'title-draggable'));
   return new goog.fx.Dragger(this.getElement(), this.titleEl_);
 };
 
@@ -488,6 +472,30 @@ goog.ui.Dialog.prototype.createDragger = function() {
  */
 goog.ui.Dialog.prototype.getDraggable = function() {
   return this.draggable_;
+};
+
+
+/**
+ * Enables or disables dragging.
+ * @param {boolean} enabled Whether to enable it.
+ * @private.
+ */
+goog.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
+  if (this.getElement()) {
+    goog.dom.classes.enable(this.titleEl_,
+        goog.getCssName(this.class_, 'title-draggable'), enabled);
+  }
+
+  if (enabled && !this.dragger_) {
+    this.dragger_ = this.createDragger();
+    goog.dom.classes.add(this.titleEl_,
+        goog.getCssName(this.class_, 'title-draggable'));
+    goog.events.listen(this.dragger_, goog.fx.Dragger.EventType.START,
+        this.setDraggerLimits_, false, this);
+  } else if (!enabled && this.dragger_) {
+    this.dragger_.dispose();
+    this.dragger_ = null;
+  }
 };
 
 
@@ -615,9 +623,7 @@ goog.ui.Dialog.prototype.enterDocument = function() {
       this.setVisibleInternal_);
 
   // Add drag support.
-  if (this.draggable_ && !this.dragger_) {
-    this.dragger_ = this.createDragger();
-  }
+  this.setDraggingEnabled_(this.draggable_);
 
   // Add event listeners to the close box and the button container.
   this.getHandler().listen(
@@ -643,10 +649,7 @@ goog.ui.Dialog.prototype.exitDocument = function() {
   }
 
   // Remove drag support.
-  if (this.dragger_) {
-    this.dragger_.dispose();
-    this.dragger_ = null;
-  }
+  this.setDraggingEnabled_(false);
 
   goog.base(this, 'exitDocument');
 };
@@ -690,7 +693,6 @@ goog.ui.Dialog.prototype.setVisibleInternal_ = function(e) {
         listen(this.getElement(), goog.events.EventType.KEYPRESS, this.onKey_);
 
     this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_SHOW);
-    this.setDraggerLimits_();
     // NOTE: see bug 1163154 for an example of an edge case where making the
     // dialog visible in response to a KEYDOWN will result in a CLICK event
     // firing on the default button (immediately closing the dialog) if the key
@@ -699,12 +701,8 @@ goog.ui.Dialog.prototype.setVisibleInternal_ = function(e) {
     //
     // This could be worked around by attaching the onButtonClick_ handler in a
     // setTimeout, but that was deemed undesirable.
-    this.getHandler().
-        listen(this.buttonEl_, goog.events.EventType.CLICK,
-            this.onButtonClick_).
-        listen(
-            this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
-            this.setDraggerLimits_);
+    this.getHandler().listen(this.buttonEl_, goog.events.EventType.CLICK,
+        this.onButtonClick_);
   } else {
     // Stop listening for keyboard and resize events while the dialog is hidden.
     this.getHandler().
@@ -712,10 +710,7 @@ goog.ui.Dialog.prototype.setVisibleInternal_ = function(e) {
         unlisten(this.getElement(), goog.events.EventType.KEYPRESS,
             this.onKey_).
         unlisten(this.buttonEl_, goog.events.EventType.CLICK,
-            this.onButtonClick_).
-        unlisten(
-            this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
-            this.setDraggerLimits_);
+            this.onButtonClick_);
 
     this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_HIDE);
     if (this.disposeOnHide_) {
@@ -765,31 +760,29 @@ goog.ui.Dialog.prototype.focus = function() {
 
 
 /**
- * Sets dragger limits on resize.
+ * Sets dragger limits when dragging is started.
+ * @param {!goog.events.Event} e goog.fx.Dragger.EventType.START event.
  * @private
  */
-goog.ui.Dialog.prototype.setDraggerLimits_ = function() {
-  if (this.draggable_) {
-    var doc = this.getDomHelper().getDocument();
-    var win = goog.dom.getWindow(doc) || window;
+goog.ui.Dialog.prototype.setDraggerLimits_ = function(e) {
+  var doc = this.getDomHelper().getDocument();
+  var win = goog.dom.getWindow(doc) || window;
 
-    // Take the max of scroll height and view height for cases in which document
-    // does not fill screen.
-    var viewSize = goog.dom.getViewportSize(win);
-    var w = Math.max(doc.body.scrollWidth, viewSize.width);
-    var h = Math.max(doc.body.scrollHeight, viewSize.height);
+  // Take the max of scroll height and view height for cases in which document
+  // does not fill screen.
+  var viewSize = goog.dom.getViewportSize(win);
+  var w = Math.max(doc.body.scrollWidth, viewSize.width);
+  var h = Math.max(doc.body.scrollHeight, viewSize.height);
 
-    var dialogSize = goog.style.getSize(this.getElement());
-    if (goog.style.getComputedPosition(this.getElement()) == 'fixed') {
-      // Ensure position:fixed dialogs can't be dragged beyond the viewport.
-      this.dragger_.limits = new goog.math.Rect(0, 0,
-          Math.max(0, viewSize.width - dialogSize.width),
-          Math.max(0, viewSize.height - dialogSize.height));
-    } else {
-      this.dragger_.limits = new goog.math.Rect(0, 0,
-          w - dialogSize.width,
-          h - dialogSize.height);
-    }
+  var dialogSize = goog.style.getSize(this.getElement());
+  if (goog.style.getComputedPosition(this.getElement()) == 'fixed') {
+    // Ensure position:fixed dialogs can't be dragged beyond the viewport.
+    this.dragger_.setLimits(new goog.math.Rect(0, 0,
+        Math.max(0, viewSize.width - dialogSize.width),
+        Math.max(0, viewSize.height - dialogSize.height)));
+  } else {
+    this.dragger_.setLimits(new goog.math.Rect(0, 0,
+        w - dialogSize.width, h - dialogSize.height));
   }
 };
 
