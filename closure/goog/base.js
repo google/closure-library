@@ -1319,13 +1319,13 @@ goog.getCssName = function(className, opt_modifier) {
  * @param {!Object} mapping A map of strings to strings where keys are possible
  *     arguments to goog.getCssName() and values are the corresponding values
  *     that should be returned.
- * @param {string=} style The style of css name mapping. There are two valid
+ * @param {string=} opt_style The style of css name mapping. There are two valid
  *     options: 'BY_PART', and 'BY_WHOLE'.
  * @see goog.getCssName for a description.
  */
-goog.setCssNameMapping = function(mapping, style) {
+goog.setCssNameMapping = function(mapping, opt_style) {
   goog.cssNameMapping_ = mapping;
-  goog.cssNameMappingStyle_ = style;
+  goog.cssNameMappingStyle_ = opt_style;
 };
 
 
@@ -1396,9 +1396,8 @@ goog.exportProperty = function(object, publicName, symbol) {
  * ParentClass.prototype.foo = function(a) { }
  *
  * function ChildClass(a, b, c) {
- *   ParentClass.call(this, a, b);
+ *   goog.base(this, a, b);
  * }
- *
  * goog.inherits(ChildClass, ParentClass);
  *
  * var child = new ChildClass('a', 'b', 'see');
