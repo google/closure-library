@@ -166,7 +166,7 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
 /**
  * Returns an array of all the elements with the provided className.
  * @see {goog.dom.query}
- * @param {!string} className the name of the class to look for.
+ * @param {string} className the name of the class to look for.
  * @param {Document|Element=} opt_el Optional element to look in.
  * @return { {length: number} } The items found with the class name provided.
  */
@@ -185,7 +185,7 @@ goog.dom.getElementsByClass = function(className, opt_el) {
 /**
  * Returns the first element with the provided className.
  * @see {goog.dom.query}
- * @param {!string} className the name of the class to look for.
+ * @param {string} className the name of the class to look for.
  * @param {Element|Document=} opt_el Optional element to look in.
  * @return {Element} The first item with the class name provided.
  */
@@ -2002,7 +2002,7 @@ goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(opt_tag,
 /**
  * Returns an array of all the elements with the provided className.
  * @see {goog.dom.query}
- * @param {!string} className the name of the class to look for.
+ * @param {string} className the name of the class to look for.
  * @param {Element|Document=} opt_el Optional element to look in.
  * @return { {length: number} } The items found with the class name provided.
  */
@@ -2015,7 +2015,7 @@ goog.dom.DomHelper.prototype.getElementsByClass = function(className, opt_el) {
 /**
  * Returns the first element we find matching the provided class name.
  * @see {goog.dom.query}
- * @param {!string} className the name of the class to look for.
+ * @param {string} className the name of the class to look for.
  * @param {Element|Document=} opt_el Optional element to look in.
  * @return {Element} The first item found with the class name provided.
  */

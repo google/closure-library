@@ -730,7 +730,7 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
  * in hiliteMatchingText_.
  * @param {string|Array.<string>} tokenOrArray The token or array to get the
  *     regex string from.
- * @return {!string} The regex-ready token.
+ * @return {string} The regex-ready token.
  * @private
  */
 goog.ui.AutoComplete.Renderer.prototype.getTokenRegExp_ =

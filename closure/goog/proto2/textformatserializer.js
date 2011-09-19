@@ -507,7 +507,7 @@ goog.proto2.TextFormatSerializer.Parser = function() {
 
   /**
    * The current tokenizer.
-   * @type {?goog.proto2.TextFormatSerializer.Tokenizer_}
+   * @type {goog.proto2.TextFormatSerializer.Tokenizer_}
    * @private
    */
   this.tokenizer_ = null;

@@ -131,7 +131,7 @@ goog.ui.equation.ImageRenderer.getEquationFromImageUrl = function(imageUrl) {
  * Gets the equation string from the given equation IMG node. Returns empty
  * string if the src attribute of the is not a valid equation url.
  * @param {Element} equationNode The equation IMG element.
- * @return {!string} The equation string.
+ * @return {string} The equation string.
  */
 goog.ui.equation.ImageRenderer.getEquationFromImage = function(equationNode) {
   var url = equationNode.getAttribute('src');

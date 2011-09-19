@@ -166,7 +166,7 @@ goog.ui.MenuButton.prototype.originalSize_;
 /**
  * Do we render the drop down menu as a sibling to the label, or at the end
  * of the current dom?
- * @type {!boolean}
+ * @type {boolean}
  * @private
  */
 goog.ui.MenuButton.prototype.renderMenuAsSibling_ = false;
@@ -650,7 +650,7 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
     if (open) {
       if (!this.menu_.isInDocument()) {
         if (this.renderMenuAsSibling_) {
-          this.menu_.render(/** @type {?Element} */ (
+          this.menu_.render(/** @type {Element} */ (
               this.getElement().parentNode));
         } else {
           this.menu_.render();

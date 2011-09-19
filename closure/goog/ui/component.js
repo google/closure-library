@@ -505,7 +505,7 @@ goog.ui.Component.prototype.getElementsByClass = function(className) {
  * Returns the first element in this component's DOM with the provided
  * className.
  * @param {string} className The name of the class to look for.
- * @return {?Element} The first item with the class name provided.
+ * @return {Element} The first item with the class name provided.
  */
 goog.ui.Component.prototype.getElementByClass = function(className) {
   return this.element_ ?

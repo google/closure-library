@@ -191,7 +191,7 @@ goog.fx.Animation.globalTimer_ = null;
 
 /**
  * An optional animation window.
- * @type {?Window}
+ * @type {Window}
  * @private
  */
 goog.fx.Animation.animationWindow_ = null;

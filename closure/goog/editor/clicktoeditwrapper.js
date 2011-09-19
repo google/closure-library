@@ -373,7 +373,7 @@ goog.editor.ClickToEditWrapper.prototype.makeFieldEditable = function(field) {
 
 /**
  * Gets a saved caret range for the given range.
- * @param {?goog.dom.AbstractRange} range A range wrapper.
+ * @param {goog.dom.AbstractRange} range A range wrapper.
  * @return {goog.dom.SavedCaretRange} The range, saved with carets, or null
  *    if the range wrapper was null.
  * @private
