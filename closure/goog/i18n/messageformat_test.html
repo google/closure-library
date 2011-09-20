@@ -377,6 +377,33 @@ function testMissingSimplePlaceholder() {
                fmt.format({A: 'none'}));
 }
 
+function testPluralWithIgnorePound() {
+  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, plural,' +
+      'other {# {GROUP}}}');
+
+  // Test pound sign.
+  assertEquals('# group#1',
+               fmt.formatIgnoringPound({'SOME_NUM': '10', 'GROUP': 'group#1'}));
+  // Test other special characters in parameters, like { and }.
+  assertEquals('# } {',
+      fmt.formatIgnoringPound({'SOME_NUM': '10', 'GROUP': '} {'}));
+}
+
+function testSimplePluralWithIgnorePound() {
+  var fmt = new goog.i18n.MessageFormat(
+      'I see {NUM_PEOPLE, plural, offset:1 ' +
+      '=0 {no one at all in {PLACE}.} ' +
+      '=1 {{PERSON} in {PLACE}.} ' +
+      'one {{PERSON} and one other person in {PLACE}.} ' +
+      'other {{PERSON} and # other people in {PLACE}.}}');
+
+  assertEquals('I see Cibu and # other people in the cubes.',
+               fmt.formatIgnoringPound({'NUM_PEOPLE': 100,
+                           'PERSON': 'Cibu',
+                           'PLACE': 'the cubes'}));
+}
+
+
 </script>
 </body>
 </html>
