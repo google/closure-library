@@ -464,6 +464,7 @@ goog.addDependency('structs/treenode.js', ['goog.structs.TreeNode'], ['goog.arra
 goog.addDependency('structs/trie.js', ['goog.structs.Trie'], ['goog.object', 'goog.structs']);
 goog.addDependency('style/cursor.js', ['goog.style.cursor'], ['goog.userAgent']);
 goog.addDependency('style/style.js', ['goog.style'], ['goog.array', 'goog.dom', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.math.Size', 'goog.object', 'goog.string', 'goog.userAgent']);
+goog.addDependency('style/style_test.js', ['goog.style_test'], ['goog.dom', 'goog.style', 'goog.testing.asserts']);
 goog.addDependency('style/transition.js', ['goog.style.transition', 'goog.style.transition.Css3Property'], ['goog.array', 'goog.asserts']);
 goog.addDependency('testing/asserts.js', ['goog.testing.JsUnitException', 'goog.testing.asserts'], ['goog.testing.stacktrace']);
 goog.addDependency('testing/async/mockcontrol.js', ['goog.testing.async.MockControl'], ['goog.asserts', 'goog.async.Deferred', 'goog.debug', 'goog.testing.asserts', 'goog.testing.mockmatchers.IgnoreArgument']);

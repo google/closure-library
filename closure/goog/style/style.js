@@ -1782,14 +1782,20 @@ goog.style.getFloat = function(el) {
  * Returns the scroll bar width (represents the width of both horizontal
  * and vertical scroll).
  *
+ * @param {string=} opt_className An optional class name (or names) to apply
+ *     to the invisible div created to measure the scrollbar. This is necessary
+ *     if some scrollbars are styled differently than others.
  * @return {number} The scroll bar width in px.
  */
-goog.style.getScrollbarWidth = function() {
+goog.style.getScrollbarWidth = function(opt_className) {
   // Add two hidden divs.  The child div is larger than the parent and
   // forces scrollbars to appear on it.
   // Using overflow:scroll does not work consistently with scrollbars that
   // are styled with ::-webkit-scrollbar.
   var outerDiv = goog.dom.createElement('div');
+  if (opt_className) {
+    outerDiv.className = opt_className;
+  }
   outerDiv.style.cssText = 'visiblity:hidden;overflow:auto;' +
       'position:absolute;top:0;width:100px;height:100px';
   var innerDiv = goog.dom.createElement('div');
