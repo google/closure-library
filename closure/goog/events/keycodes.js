@@ -123,6 +123,12 @@ goog.events.KeyCodes = {
   F11: 122,
   F12: 123,
   NUMLOCK: 144,
+  SCROLL_LOCK: 145,
+
+  // OS-specific media keys like volume controls and browser controls.
+  FIRST_MEDIA_KEY: 166,
+  LAST_MEDIA_KEY: 183,
+
   SEMICOLON: 186,            // needs localization
   DASH: 189,                 // needs localization
   EQUALS: 187,               // needs localization
@@ -153,44 +159,22 @@ goog.events.KeyCodes = {
  * @return {boolean} Whether it's a text modifying key.
  */
 goog.events.KeyCodes.isTextModifyingKeyEvent = function(e) {
-  if (e.altKey && !e.ctrlKey ||
-      e.metaKey ||
-      // Function keys don't generate text
-      e.keyCode >= goog.events.KeyCodes.F1 &&
-      e.keyCode <= goog.events.KeyCodes.F12) {
+  if (e.altKey && !e.ctrlKey || e.metaKey) {
     return false;
   }
 
-  // The following keys are quite harmless, even in combination with
-  // CTRL, ALT or SHIFT.
+  var keyCode = e.keyCode;
   switch (e.keyCode) {
-    case goog.events.KeyCodes.ALT:
-    case goog.events.KeyCodes.CAPS_LOCK:
-    case goog.events.KeyCodes.CONTEXT_MENU:
-    case goog.events.KeyCodes.CTRL:
-    case goog.events.KeyCodes.DOWN:
-    case goog.events.KeyCodes.END:
-    case goog.events.KeyCodes.ESC:
-    case goog.events.KeyCodes.HOME:
-    case goog.events.KeyCodes.INSERT:
-    case goog.events.KeyCodes.LEFT:
-    case goog.events.KeyCodes.MAC_FF_META:
-    case goog.events.KeyCodes.META:
-    case goog.events.KeyCodes.NUMLOCK:
-    case goog.events.KeyCodes.NUM_CENTER:
-    case goog.events.KeyCodes.PAGE_DOWN:
-    case goog.events.KeyCodes.PAGE_UP:
-    case goog.events.KeyCodes.PAUSE:
-    case goog.events.KeyCodes.PHANTOM:
-    case goog.events.KeyCodes.PRINT_SCREEN:
-    case goog.events.KeyCodes.RIGHT:
-    case goog.events.KeyCodes.SHIFT:
-    case goog.events.KeyCodes.UP:
-    case goog.events.KeyCodes.WIN_KEY:
-    case goog.events.KeyCodes.WIN_KEY_RIGHT:
-      return false;
-    default:
+    case goog.events.KeyCodes.BACKSPACE:
+    case goog.events.KeyCodes.DELETE:
+    case goog.events.KeyCodes.TAB:
+    case goog.events.KeyCodes.ENTER:
+    case goog.events.KeyCodes.MAC_ENTER:
+    case goog.events.KeyCodes.WIN_IME:
       return true;
+
+    default:
+      return goog.events.KeyCodes.isCharacterKey(e.keyCode);
   }
 };
 

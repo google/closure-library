@@ -30,6 +30,8 @@
  * parameter. For example, {@code $ij.dataKey} will evaluate to
  * 'value' with the above injected data.
  *
+ * @author henrywong@google.com (Henry Wong)
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.soy.InjectedDataSupplier');
