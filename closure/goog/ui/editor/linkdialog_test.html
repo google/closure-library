@@ -101,20 +101,28 @@ See the COPYING file for details.
     stubs.reset();
   }
 
-  function setUpAnchor(href, text, opt_isNew) {
+  function setUpAnchor(href, text, opt_isNew, opt_target) {
     anchorElem.href = href;
     anchorElem.innerHTML = text;
     isNew = !!opt_isNew;
+    if (opt_target) {
+      anchorElem.target = opt_target;
+    }
   }
 
   /**
    * Creates and shows the dialog to be tested.
    * @param {Document=} opt_document Document to render the dialog into.
    *     Defaults to the main window's document.
+   * @param {boolean=} opt_openInNewWindow Whether the open in new window
+   *     checkbox should be shown.
    */
-  function createAndShow(opt_document) {
+  function createAndShow(opt_document, opt_openInNewWindow) {
     dialog = new goog.ui.editor.LinkDialog(new goog.dom.DomHelper(opt_document),
                                            mockLink);
+    if (opt_openInNewWindow) {
+      dialog.showOpenLinkInNewWindow(false);
+    }
     dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.OK,
         mockOkHandler);
     dialog.show();
@@ -124,13 +132,16 @@ See the COPYING file for details.
    * Sets up the mock event handler to expect an OK event with the given text
    * and url.
    */
-  function expectOk(linkText, linkUrl) {
+  function expectOk(linkText, linkUrl, opt_openInNewWindow) {
     mockOkHandler.handleEvent(new goog.testing.mockmatchers.ArgumentMatcher(
         function(arg) {
           return arg.type == goog.ui.editor.AbstractDialog.EventType.OK &&
                  arg.linkText == linkText &&
-                 arg.linkUrl == linkUrl;
-        }));
+                 arg.linkUrl == linkUrl &&
+                 arg.openInNewWindow == !!opt_openInNewWindow;
+        },
+        '{linkText: ' + linkText + ', linkUrl: ' + linkUrl +
+            ', openInNewWindow: ' + opt_openInNewWindow + '}'));
   }
 
   /**
@@ -355,6 +366,54 @@ See the COPYING file for details.
     mockCtrl.$verifyAll();
   }
 
+  function testOpenLinkInNewWindowNewLink() {
+    expectOk(ANCHOR_TEXT, ANCHOR_URL, true);
+    expectOk(ANCHOR_TEXT, ANCHOR_URL, false);
+    mockCtrl.$replayAll();
+
+    setUpAnchor('', '', true);
+    createAndShow(undefined, true);
+    dialog.tabPane_.setSelectedTabId(goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
+    setDisplayInputText(ANCHOR_TEXT);
+    setUrlInputText(ANCHOR_URL);
+
+    assertFalse('"Open in new window" should start unchecked',
+        getOpenInNewWindowCheckboxChecked());
+    setOpenInNewWindowCheckboxChecked(true);
+    assertTrue('"Open in new window" should have gotten checked',
+        getOpenInNewWindowCheckboxChecked());
+    goog.testing.events.fireClickSequence(dialog.getOkButtonElement());
+
+    // Reopen same dialog
+    dialog.show();
+    dialog.tabPane_.setSelectedTabId(goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
+    setDisplayInputText(ANCHOR_TEXT);
+    setUrlInputText(ANCHOR_URL);
+
+    assertTrue('"Open in new window" should remember it was checked',
+        getOpenInNewWindowCheckboxChecked());
+    setOpenInNewWindowCheckboxChecked(false);
+    assertFalse('"Open in new window" should have gotten unchecked',
+        getOpenInNewWindowCheckboxChecked());
+    goog.testing.events.fireClickSequence(dialog.getOkButtonElement());
+  }
+
+  function testOpenLinkInNewWindowExistingLink() {
+    mockCtrl.$replayAll();
+
+    // Edit an existing link that already opens in a new window.
+    setUpAnchor('', '', false, '_blank');
+    createAndShow(undefined, true);
+    dialog.tabPane_.setSelectedTabId(goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
+    setDisplayInputText(ANCHOR_TEXT);
+    setUrlInputText(ANCHOR_URL);
+
+    assertTrue('"Open in new window" should start checked for existing link',
+        getOpenInNewWindowCheckboxChecked());
+
+    mockCtrl.$verifyAll();
+  }
+
   /**
    * Test that clicking on the test button opens a new window with the correct
    * options.
@@ -482,6 +541,14 @@ See the COPYING file for details.
     // Fire event so that dialog behaves like when user types.
     dialog.emailInputHandler_.dispatchEvent(
         goog.events.InputHandler.EventType.INPUT);
+  }
+
+  function getOpenInNewWindowCheckboxChecked() {
+    return dialog.openInNewWindowCheckbox_.checked;
+  }
+
+  function setOpenInNewWindowCheckboxChecked(checked) {
+    dialog.openInNewWindowCheckbox_.checked = checked;
   }
 
 </script>

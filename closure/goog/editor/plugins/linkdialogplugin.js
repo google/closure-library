@@ -68,6 +68,26 @@ goog.editor.plugins.LinkDialogPlugin.prototype.emailWarning_;
 
 
 /**
+ * Whether to show a checkbox where the user can choose to have the link open in
+ * a new window.
+ * @type {boolean}
+ * @private
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow_ = false;
+
+
+/**
+ * Whether the "open link in new window" checkbox should be checked when the
+ * dialog is shown, and also whether it was checked last time the dialog was
+ * closed.
+ * @type {boolean}
+ * @private
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.isOpenLinkInNewWindowChecked_ =
+    false;
+
+
+/**
  * Whether to stop referrer leaks.  Defaults to false.
  * @type {boolean}
  * @private
@@ -78,6 +98,32 @@ goog.editor.plugins.LinkDialogPlugin.prototype.stopReferrerLeaks_ = false;
 /** @inheritDoc */
 goog.editor.plugins.LinkDialogPlugin.prototype.getTrogClassId =
     goog.functions.constant('LinkDialogPlugin');
+
+
+/**
+ * Tells the dialog to show a checkbox where the user can choose to have the
+ * link open in a new window.
+ * @param {boolean} startChecked Whether to check the checkbox the first
+ *     time the dialog is shown. Subesquent times the checkbox will remember its
+ *     previous state.
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow =
+    function(startChecked) {
+  this.showOpenLinkInNewWindow_ = true;
+  this.isOpenLinkInNewWindowChecked_ = startChecked;
+};
+
+
+/**
+ * Returns whether the"open link in new window" checkbox was checked last time
+ * the dialog was closed.
+ * @return {boolean} Whether the"open link in new window" checkbox was checked
+ *     last time the dialog was closed.
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.
+    getOpenLinkInNewWindowCheckedState = function() {
+  return this.isOpenLinkInNewWindowChecked_;
+};
 
 
 /**
@@ -169,6 +215,9 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
   if (this.emailWarning_) {
     dialog.setEmailWarning(this.emailWarning_);
   }
+  if (this.showOpenLinkInNewWindow_) {
+    dialog.showOpenLinkInNewWindow(this.isOpenLinkInNewWindowChecked_);
+  }
   dialog.setStopReferrerLeaks(this.stopReferrerLeaks_);
   this.eventHandler_.
       listen(dialog, goog.ui.editor.AbstractDialog.EventType.OK,
@@ -196,6 +245,22 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk_ = function(e) {
   this.disposeOriginalSelection();
 
   this.currentLink_.setTextAndUrl(e.linkText, e.linkUrl);
+
+  if (this.showOpenLinkInNewWindow_) {
+    var anchor = this.currentLink_.getAnchor();
+    if (e.openInNewWindow) {
+      anchor.target = '_blank';
+    } else {
+      if (anchor.target == '_blank') {
+        anchor.target = '';
+      }
+      // If user didn't indicate to open in a new window but the link already
+      // had a target other than '_blank', let's leave what they had before.
+    }
+    // Save checkbox state for next time.
+    this.isOpenLinkInNewWindowChecked_ = e.openInNewWindow;
+  }
+
   // Place cursor to the right of the modified link.
   this.currentLink_.placeCursorRightOf();
 

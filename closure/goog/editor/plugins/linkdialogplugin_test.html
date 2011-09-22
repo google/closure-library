@@ -86,10 +86,13 @@ See the COPYING file for details.
     goog.dom.removeNode(anchorElem);
   }
 
-  function setUpAnchor(text, href, opt_isNew) {
+  function setUpAnchor(text, href, opt_isNew, opt_target) {
     anchorElem.innerHTML = text;
     anchorElem.href = href;
     isNew = !!opt_isNew;
+    if (opt_target) {
+      anchorElem.target = opt_target;
+    }
   }
 
   /**
@@ -196,6 +199,66 @@ See the COPYING file for details.
 
     mockCtrl.$verifyAll();
     goog.dom.removeNode(newElem);
+  }
+
+  /**
+   * Tests the anchor's target is correctly modified with the "open in new
+   * window" feature on.
+   */
+  function testOkOpenInNewWindow() {
+    mockLink.placeCursorRightOf().$anyTimes();
+    mockField.dispatchSelectionChangeEvent().$anyTimes();
+    mockField.dispatchChange().$anyTimes();
+    mockCtrl.$replayAll();
+
+    plugin = new goog.editor.plugins.LinkDialogPlugin();
+    plugin.registerFieldObject(mockField);
+    plugin.showOpenLinkInNewWindow(false);
+    plugin.currentLink_ = mockLink;
+
+    // Edit a link that doesn't open in a new window and leave it as such.
+    setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
+    var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+    dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
+            NEW_LINK_TEXT, NEW_LINK_URL, false));
+    assertEquals(
+        'Target should not be set for link that doesn\'t open in new window',
+        '', anchorElem.target);
+    assertFalse('Checked state should stay false',
+        plugin.getOpenLinkInNewWindowCheckedState());
+
+    // Edit a link that doesn't open in a new window and toggle it on.
+    setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
+    dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+    dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
+            NEW_LINK_TEXT, NEW_LINK_URL, true));
+    assertEquals(
+        'Target should be set to _blank for link that opens in new window',
+        '_blank', anchorElem.target);
+    assertTrue('Checked state should be true after toggling a link on',
+        plugin.getOpenLinkInNewWindowCheckedState());
+
+    // Edit a link that doesn't open in a named window and don't touch it.
+    setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, false, 'named');
+    dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+    dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
+            NEW_LINK_TEXT, NEW_LINK_URL, false));
+    assertEquals(
+        'Target should keep its original value',
+        'named', anchorElem.target);
+    assertFalse('Checked state should be false again',
+        plugin.getOpenLinkInNewWindowCheckedState());
+
+    // Edit a link that opens in a new window and toggle it off.
+    setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, false, '_blank');
+    dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+    dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
+            NEW_LINK_TEXT, NEW_LINK_URL, false));
+    assertEquals(
+        'Target should not be set for link that doesn\'t open in new window',
+        '', anchorElem.target);
+
+    mockCtrl.$verifyAll();
   }
 
   /**
