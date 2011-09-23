@@ -130,6 +130,7 @@ goog.events.KeyCodes = {
   PERIOD: 190,               // needs localization
   SLASH: 191,                // needs localization
   APOSTROPHE: 192,           // needs localization
+  TILDE: 192,                // needs localization
   SINGLE_QUOTE: 222,         // needs localization
   OPEN_SQUARE_BRACKET: 219,  // needs localization
   BACKSLASH: 220,            // needs localization
