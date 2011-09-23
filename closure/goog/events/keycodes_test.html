@@ -55,13 +55,6 @@ function testTextModifyingKeys() {
           KeyCodes.isTextModifyingKeyEvent(fakeEvent));
     }
   }
-
-  for (var i = KeyCodes.FIRST_MEDIA_KEY; i <= KeyCodes.LAST_MEDIA_KEY; i++) {
-    var fakeEvent = new goog.events.BrowserEvent('keydown');
-    fakeEvent.keyCode = i;
-    assertFalse('Expected key to not modify text: ' + i,
-        KeyCodes.isTextModifyingKeyEvent(fakeEvent));
-  }
 }
 
 function testPhantomKey() {
