@@ -123,6 +123,12 @@ goog.events.KeyCodes = {
   F11: 122,
   F12: 123,
   NUMLOCK: 144,
+  SCROLL_LOCK: 145,
+
+  // OS-specific media keys like volume controls and browser controls.
+  FIRST_MEDIA_KEY: 166,
+  LAST_MEDIA_KEY: 183,
+
   SEMICOLON: 186,            // needs localization
   DASH: 189,                 // needs localization
   EQUALS: 187,               // needs localization
@@ -149,7 +155,7 @@ goog.events.KeyCodes = {
 
 
 /**
- * Returns true if the event contains a text modifying key
+ * Returns true if the event contains a text modifying key.
  * @param {goog.events.BrowserEvent} e A key event.
  * @return {boolean} Whether it's a text modifying key.
  */
@@ -185,13 +191,15 @@ goog.events.KeyCodes.isTextModifyingKeyEvent = function(e) {
     case goog.events.KeyCodes.PHANTOM:
     case goog.events.KeyCodes.PRINT_SCREEN:
     case goog.events.KeyCodes.RIGHT:
+    case goog.events.KeyCodes.SCROLL_LOCK:
     case goog.events.KeyCodes.SHIFT:
     case goog.events.KeyCodes.UP:
     case goog.events.KeyCodes.WIN_KEY:
     case goog.events.KeyCodes.WIN_KEY_RIGHT:
       return false;
     default:
-      return true;
+      return e.keyCode < goog.events.KeyCodes.FIRST_MEDIA_KEY ||
+          e.keyCode > goog.events.KeyCodes.LAST_MEDIA_KEY;
   }
 };
 
@@ -268,6 +276,7 @@ goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
 
 /**
  * Returns true if the key produces a character.
+ * This does not cover characters on non-US keyboards (Russian, Hebrew, etc.).
  *
  * @param {number} keyCode A key code.
  * @return {boolean} Whether it's a character key.

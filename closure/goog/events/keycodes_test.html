@@ -44,8 +44,7 @@ function testTextModifyingKeys() {
       continue;
     }
 
-    var fakeEvent = new goog.events.BrowserEvent('keydown');
-    fakeEvent.keyCode = key;
+    var fakeEvent = createEventWithKeyCode(key);
 
     if (KeyCodes.isCharacterKey(key) || (key in specialTextModifiers)) {
       assertTrue('Expected key to modify text: ' + keyId,
@@ -55,16 +54,33 @@ function testTextModifyingKeys() {
           KeyCodes.isTextModifyingKeyEvent(fakeEvent));
     }
   }
+
+  for (var i = KeyCodes.FIRST_MEDIA_KEY; i <= KeyCodes.LAST_MEDIA_KEY; i++) {
+    var fakeEvent = createEventWithKeyCode(i);
+    assertFalse('Expected key to not modify text: ' + i,
+        KeyCodes.isTextModifyingKeyEvent(fakeEvent));
+  }
 }
 
 function testPhantomKey() {
   // KeyCode 255 deserves its own test to make sure this does not regress,
   // because it's so weird. See the comments in the KeyCode enum.
-  var fakeEvent = new goog.events.BrowserEvent('keydown');
-  fakeEvent.keyCode = goog.events.KeyCodes.PHANTOM;
+  var fakeEvent = createEventWithKeyCode(goog.events.KeyCodes.PHANTOM);
   assertFalse('Expected phantom key to not modify text',
       KeyCodes.isTextModifyingKeyEvent(fakeEvent));
   assertFalse(KeyCodes.isCharacterKey(fakeEvent));
+}
+
+function testNonUsKeyboards() {
+  var fakeEvent = createEventWithKeyCode(1092 /* Russian a */);
+  assertTrue('Expected key to not modify text: 1092',
+      KeyCodes.isTextModifyingKeyEvent(fakeEvent));
+}
+
+function createEventWithKeyCode(i) {
+  var fakeEvent = new goog.events.BrowserEvent('keydown');
+  fakeEvent.keyCode = i;
+  return fakeEvent;
 }
 
 </script>
