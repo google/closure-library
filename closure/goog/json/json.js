@@ -85,7 +85,7 @@ goog.json.parse = function(s) {
   if (goog.json.isValid_(o)) {
     /** @preserveTry */
     try {
-      return eval('(' + o + ')');
+      return /** @type {Object} */ (eval('(' + o + ')'));
     } catch (ex) {
     }
   }
@@ -101,7 +101,7 @@ goog.json.parse = function(s) {
  * @return {Object} The object generated from the JSON string.
  */
 goog.json.unsafeParse = function(s) {
-  return eval('(' + s + ')');
+  return /** @type {Object} */ (eval('(' + s + ')'));
 };
 
 
