@@ -24,6 +24,8 @@ goog.provide('goog.ui.Prompt');
 goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.events.EventType');
+goog.require('goog.functions');
 goog.require('goog.ui.Component.Error');
 goog.require('goog.ui.Dialog');
 goog.require('goog.ui.Dialog.ButtonSet');
@@ -71,9 +73,6 @@ goog.ui.Prompt = function(promptTitle, promptText, callback, opt_defaultValue,
       '</label><br><br>');
   this.callback_ = callback;
   this.defaultValue_ = goog.isDef(opt_defaultValue) ? opt_defaultValue : '';
-
-  goog.events.listen(
-      this, goog.ui.Dialog.EventType.SELECT, this.onPromptExit_);
 
   /** @desc label for a dialog button. */
   var MSG_PROMPT_OK = goog.getMsg('OK');
@@ -137,6 +136,38 @@ goog.ui.Prompt.prototype.rows_ = 1;
  * @private
  */
 goog.ui.Prompt.prototype.cols_ = 0;
+
+
+/**
+ * A validation function that takes a string and returns true if the string is
+ * accepted, false otherwise.
+ * @type {function(string):boolean}
+ * @private
+ */
+goog.ui.Prompt.prototype.validationFn_ = goog.functions.TRUE;
+
+
+/**
+ * Sets the validation function that takes a string and returns true if the
+ * string is accepted, false otherwise.
+ * @param {function(string): boolean} fn The validation function to use on user
+ *     input.
+ */
+goog.ui.Prompt.prototype.setValidationFunction = function(fn) {
+  this.validationFn_ = fn;
+};
+
+
+/** @inheritDoc */
+goog.ui.Prompt.prototype.enterDocument = function() {
+  goog.ui.Prompt.superClass_.enterDocument.call(this);
+  this.getHandler().listen(this,
+      goog.ui.Dialog.EventType.SELECT, this.onPromptExit_);
+
+  this.getHandler().listen(this.userInputEl_,
+      [goog.events.EventType.KEYUP, goog.events.EventType.CHANGE],
+      this.handleInputChanged_);
+};
 
 
 /**
@@ -236,6 +267,19 @@ goog.ui.Prompt.prototype.createDom = function() {
     // Set default button to null so <enter> will work properly in the textarea
     this.getButtonSet().setDefault(null);
   }
+};
+
+
+/**
+ * Handles input change events on the input field.  Disables the OK button if
+ * validation fails on the new input value.
+ * @private
+ */
+goog.ui.Prompt.prototype.handleInputChanged_ = function() {
+  var enableOkButton = this.validationFn_(this.userInputEl_.value);
+  var buttonSet = this.getButtonSet();
+  buttonSet.setButtonEnabled(goog.ui.Dialog.DefaultButtonKeys.OK,
+      enableOkButton);
 };
 
 
