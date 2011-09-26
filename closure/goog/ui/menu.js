@@ -430,7 +430,12 @@ goog.ui.Menu.prototype.decorateContent = function(element) {
   var renderer = this.getRenderer();
   var contentElements = this.getDomHelper().getElementsByTagNameAndClass('div',
       goog.getCssName(renderer.getCssClass(), 'content'), element);
-  for (var el, i = 0; el = contentElements[i]; i++) {
-    renderer.decorateChildren(this, el);
+
+  // Some versions of IE do not like it when you access this nodeList
+  // with invalid indices. See
+  // http://code.google.com/p/closure-library/issues/detail?id=373
+  var length = contentElements.length;
+  for (var i = 0; i < length; i++) {
+    renderer.decorateChildren(this, contentElements[i]);
   }
 };
