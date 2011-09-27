@@ -151,7 +151,7 @@ goog.storage.EncryptedStorage.prototype.decryptValue_ = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.EncryptedStorage.prototype.set = function(
     key, value, opt_expiration) {
   if (!goog.isDef(value)) {
@@ -171,7 +171,7 @@ goog.storage.EncryptedStorage.prototype.set = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.EncryptedStorage.prototype.getWrapper = function(
     key, opt_expired) {
   var wrapper = goog.base(this, 'getWrapper',
@@ -195,7 +195,7 @@ goog.storage.EncryptedStorage.prototype.getWrapper = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.EncryptedStorage.prototype.remove = function(key) {
   goog.base(this, 'remove', this.hashKeyWithSecret_(key));
 };

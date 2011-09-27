@@ -229,7 +229,7 @@ goog.ui.ComboBox.prototype.setEnabled = function(enabled) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ComboBox.prototype.enterDocument = function() {
   goog.ui.ComboBox.superClass_.enterDocument.call(this);
 
@@ -255,7 +255,7 @@ goog.ui.ComboBox.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ComboBox.prototype.exitDocument = function() {
   this.keyHandler_.dispose();
   delete this.keyHandler_;
@@ -274,7 +274,7 @@ goog.ui.ComboBox.prototype.canDecorate = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ComboBox.prototype.disposeInternal = function() {
   goog.ui.ComboBox.superClass_.disposeInternal.call(this);
 

@@ -137,7 +137,7 @@ goog.ui.FilteredMenu.prototype.filterStr_;
 goog.ui.FilteredMenu.prototype.persistentChildren_;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.FilteredMenu.prototype.createDom = function() {
   goog.ui.FilteredMenu.superClass_.createDom.call(this);
 
@@ -217,7 +217,7 @@ goog.ui.FilteredMenu.prototype.tearDownFilterListeners_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.FilteredMenu.prototype.setVisible = function(show, opt_force, opt_e) {
   var visibilityChanged = goog.ui.FilteredMenu.superClass_.setVisible.call(this,
       show, opt_force, opt_e);
@@ -232,7 +232,7 @@ goog.ui.FilteredMenu.prototype.setVisible = function(show, opt_force, opt_e) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.FilteredMenu.prototype.disposeInternal = function() {
   this.tearDownFilterListeners_();
   this.filterInput_ = undefined;
@@ -525,7 +525,7 @@ goog.ui.FilteredMenu.prototype.onFilterLabelClick_ = function(e) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.FilteredMenu.prototype.getContentElement = function() {
   return this.contentElement_ || this.getElement();
 };
@@ -540,7 +540,7 @@ goog.ui.FilteredMenu.prototype.getFilterInputElement = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.FilteredMenu.prototype.decorateInternal = function(element) {
   this.setElementInternal(element);
 

@@ -989,7 +989,7 @@ goog.ui.Gauge.prototype.exitDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Gauge.prototype.disposeInternal = function() {
   this.stopAnimation_();
   this.graphics_.dispose();

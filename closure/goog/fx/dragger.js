@@ -329,7 +329,7 @@ goog.fx.Dragger.prototype.setEnabled = function(enabled) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.Dragger.prototype.disposeInternal = function() {
   goog.fx.Dragger.superClass_.disposeInternal.call(this);
 

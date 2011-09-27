@@ -181,7 +181,7 @@ goog.ui.equation.PaletteManager.prototype.handleDeactivation_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.PaletteManager.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   this.activePalette_ = null;

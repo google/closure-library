@@ -207,7 +207,7 @@ goog.events.PasteHandler.prototype.logger_ =
     goog.debug.Logger.getLogger('goog.events.PasteHandler');
 
 
-/** @inheritDoc */
+/** @override */
 goog.events.PasteHandler.prototype.disposeInternal = function() {
   goog.events.PasteHandler.superClass_.disposeInternal.call(this);
   this.eventHandler_.dispose();

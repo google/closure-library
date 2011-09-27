@@ -158,7 +158,7 @@ goog.ui.editor.Bubble.prototype.logger =
     goog.debug.Logger.getLogger('goog.ui.editor.Bubble');
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.editor.Bubble.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
 

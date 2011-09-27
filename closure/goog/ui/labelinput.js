@@ -227,7 +227,7 @@ goog.ui.LabelInput.prototype.detachEvents_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.LabelInput.prototype.disposeInternal = function() {
   goog.ui.LabelInput.superClass_.disposeInternal.call(this);
   this.detachEvents_();

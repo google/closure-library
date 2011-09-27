@@ -146,7 +146,7 @@ goog.testing.MockClock.prototype.uninstall = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.MockClock.prototype.disposeInternal = function() {
   this.uninstall();
   this.queue_ = null;

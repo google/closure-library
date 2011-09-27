@@ -226,7 +226,7 @@ goog.graphics.CanvasGraphics.prototype.setSize = function(pixelWidth,
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.graphics.CanvasGraphics.prototype.getPixelSize = function() {
   // goog.style.getSize does not work for Canvas elements.  We
   // have to compute the size manually if it is percentage based.
@@ -612,7 +612,7 @@ goog.graphics.CanvasGraphics.prototype.disposeInternal = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.graphics.CanvasGraphics.prototype.enterDocument = function() {
   var oldPixelSize = this.getPixelSize();
   goog.graphics.CanvasGraphics.superClass_.enterDocument.call(this);

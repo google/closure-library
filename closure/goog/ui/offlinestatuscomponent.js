@@ -288,7 +288,7 @@ goog.ui.OfflineStatusComponent.prototype.createDom = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.OfflineStatusComponent.prototype.enterDocument = function() {
   goog.ui.OfflineStatusComponent.superClass_.enterDocument.call(this);
 
@@ -525,7 +525,7 @@ goog.ui.OfflineStatusComponent.prototype.getPopupInternal = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.OfflineStatusComponent.prototype.disposeInternal = function() {
   goog.ui.OfflineStatusComponent.superClass_.disposeInternal.call(this);
 

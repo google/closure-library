@@ -172,7 +172,7 @@ goog.dom.ViewportSizeMonitor.prototype.getSize = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.ViewportSizeMonitor.prototype.disposeInternal = function() {
   goog.dom.ViewportSizeMonitor.superClass_.disposeInternal.call(this);
 

@@ -626,7 +626,7 @@ goog.ui.CanvasRoundedCorner.RADIANS_THREE_HALVES_ = 1.5 * Math.PI;
 goog.ui.CanvasRoundedCorner.RADIANS_TWO_ = 2 * Math.PI;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.CanvasRoundedCorner.prototype.getEndAngle = function() {
   return this.isLeft_ ?
       goog.ui.CanvasRoundedCorner.RADIANS_ONE_ :
@@ -634,7 +634,7 @@ goog.ui.CanvasRoundedCorner.prototype.getEndAngle = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.CanvasRoundedCorner.prototype.getStartAngle = function() {
   return this.isTop_ ?
       goog.ui.CanvasRoundedCorner.RADIANS_THREE_HALVES_ :
@@ -642,13 +642,13 @@ goog.ui.CanvasRoundedCorner.prototype.getStartAngle = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.CanvasRoundedCorner.prototype.getElement = function() {
   return this.canvas_;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.CanvasRoundedCorner.prototype.draw = function() {
   // Determine which direction to draw, and obtain the context.
   var counterClockwise = this.isLeft_ && this.isTop_ ||
@@ -829,25 +829,25 @@ goog.ui.VmlRoundedCorner = function(element,
 goog.inherits(goog.ui.VmlRoundedCorner, goog.ui.AbstractImagelessRoundedCorner);
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.VmlRoundedCorner.prototype.getEndAngle = function() {
   return this.isLeft_ ? 180 : 360;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.VmlRoundedCorner.prototype.getStartAngle = function() {
   return this.isTop_ ? 270 : 90;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.VmlRoundedCorner.prototype.getElement = function() {
   return this.container_;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.VmlRoundedCorner.prototype.draw = function() {
   // Determine which direction to draw, and enable VML.
   var clockwise = this.isLeft_ && !this.isTop_ ||

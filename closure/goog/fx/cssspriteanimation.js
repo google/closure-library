@@ -70,7 +70,7 @@ goog.fx.CssSpriteAnimation = function(element, size, box, time, opt_acc) {
 goog.inherits(goog.fx.CssSpriteAnimation, goog.fx.Animation);
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.CssSpriteAnimation.prototype.onAnimate = function() {
   // Round to nearest sprite.
   var x = -Math.floor(this.coords[0] / this.size_.width) * this.size_.width;
@@ -81,7 +81,7 @@ goog.fx.CssSpriteAnimation.prototype.onAnimate = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.CssSpriteAnimation.prototype.onFinish = function() {
   this.play(true);
   goog.fx.CssSpriteAnimation.superClass_.onFinish.call(this);
@@ -105,7 +105,7 @@ goog.fx.CssSpriteAnimation.prototype.clearSpritePosition = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.CssSpriteAnimation.prototype.disposeInternal = function() {
   goog.fx.CssSpriteAnimation.superClass_.disposeInternal.call(this);
   this.element_ = null;

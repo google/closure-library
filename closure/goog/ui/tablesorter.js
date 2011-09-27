@@ -90,13 +90,13 @@ goog.ui.TableSorter.EventType = {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.TableSorter.prototype.canDecorate = function(element) {
   return element.tagName == goog.dom.TagName.TABLE;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.TableSorter.prototype.enterDocument = function() {
   goog.ui.TableSorter.superClass_.enterDocument.call(this);
 

@@ -790,7 +790,7 @@ goog.ui.PopupBase.prototype.shouldDebounce_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.PopupBase.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   this.handler_.dispose();

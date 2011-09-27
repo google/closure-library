@@ -164,7 +164,7 @@ goog.testing.editor.TestHelper.prototype.select = function(from, fromOffset,
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.editor.TestHelper.prototype.disposeInternal = function() {
   if (goog.editor.node.isEditableContainer(this.root_)) {
     this.tearDownEditableElement();

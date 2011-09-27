@@ -63,13 +63,13 @@ function OneThumbSlider() {
 goog.inherits(OneThumbSlider, goog.ui.SliderBase);
 
 
-/** {@inheritDoc} */
+/** {@override} */
 OneThumbSlider.prototype.createThumbs = function() {
   this.valueThumb = this.extentThumb = goog.dom.getElement('thumb');
 };
 
 
-/** {@inheritDoc} */
+/** {@override} */
 OneThumbSlider.prototype.getCssClass = function() {
   return 'dummyCssClass';
 };
@@ -86,7 +86,7 @@ function TwoThumbSlider() {
 goog.inherits(TwoThumbSlider, goog.ui.SliderBase);
 
 
-/** {@inheritDoc} */
+/** {@override} */
 TwoThumbSlider.prototype.createThumbs = function() {
   this.valueThumb = goog.dom.getElement('valueThumb');
   this.extentThumb = goog.dom.getElement('extentThumb');
@@ -94,7 +94,7 @@ TwoThumbSlider.prototype.createThumbs = function() {
 };
 
 
-/** {@inheritDoc} */
+/** {@override} */
 TwoThumbSlider.prototype.getCssClass = function() {
   return 'dummyCssClass';
 };

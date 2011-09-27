@@ -188,7 +188,7 @@ goog.ui.editor.LinkDialog.prototype.showOpenLinkInNewWindow = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.editor.LinkDialog.prototype.show = function() {
   goog.base(this, 'show');
 
@@ -208,7 +208,7 @@ goog.ui.editor.LinkDialog.prototype.show = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.editor.LinkDialog.prototype.hide = function() {
   this.disableAutogenFlag_(false);
   goog.base(this, 'hide');
@@ -254,7 +254,7 @@ goog.ui.editor.LinkDialog.prototype.setAutogenFeatureEnabled = function(
 // *** Protected interface ************************************************** //
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.editor.LinkDialog.prototype.createDialogControl = function() {
   this.textToDisplayDiv_ = /** @type {HTMLDivElement} */(
       this.buildTextToDisplayDiv_());
@@ -307,7 +307,7 @@ goog.ui.editor.LinkDialog.prototype.createOkEvent = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.editor.LinkDialog.prototype.disposeInternal = function() {
   this.eventHandler_.dispose();
   this.eventHandler_ = null;

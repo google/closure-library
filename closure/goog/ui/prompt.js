@@ -158,7 +158,7 @@ goog.ui.Prompt.prototype.setValidationFunction = function(fn) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Prompt.prototype.enterDocument = function() {
   goog.ui.Prompt.superClass_.enterDocument.call(this);
   this.getHandler().listen(this,
@@ -346,7 +346,7 @@ goog.ui.Prompt.prototype.onPromptExit_ = function(e) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Prompt.prototype.disposeInternal = function() {
   goog.dom.removeNode(this.userInputEl_);
 

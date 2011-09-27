@@ -113,7 +113,7 @@ goog.ui.SelectionMenuButton.prototype.setCheckboxEnabled = function(enable) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SelectionMenuButton.prototype.handleMouseDown = function(e) {
   if (!this.getDomHelper().contains(this.getCheckboxElement(),
       /** @type {Element} */ (e.target))) {
@@ -243,7 +243,7 @@ goog.ui.SelectionMenuButton.prototype.createCheckbox = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SelectionMenuButton.prototype.decorateInternal = function(element) {
   goog.ui.SelectionMenuButton.superClass_.decorateInternal.call(this, element);
   this.addCheckboxEvent();
@@ -251,7 +251,7 @@ goog.ui.SelectionMenuButton.prototype.decorateInternal = function(element) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SelectionMenuButton.prototype.setMenu = function(menu) {
   goog.ui.SelectionMenuButton.superClass_.setMenu.call(this, menu);
   this.addMenuEvent_();

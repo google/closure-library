@@ -355,7 +355,7 @@ goog.events.ImeHandler.isImeDeactivateKeyEvent_ = function(e) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.events.ImeHandler.prototype.disposeInternal = function() {
   this.handler_.dispose();
   this.keyUpHandler_.dispose();

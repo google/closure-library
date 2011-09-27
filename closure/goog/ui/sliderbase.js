@@ -241,7 +241,7 @@ goog.ui.SliderBase.prototype.minExtent_ = 0;
 goog.ui.SliderBase.prototype.getCssClass = goog.abstractMethod;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SliderBase.prototype.createDom = function() {
   goog.ui.SliderBase.superClass_.createDom.call(this);
   var element =
@@ -278,7 +278,7 @@ goog.ui.SliderBase.THUMB_DRAGGING_CSS_CLASS_ =
     goog.getCssName('goog-slider-thumb-dragging');
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SliderBase.prototype.decorateInternal = function(element) {
   goog.ui.SliderBase.superClass_.decorateInternal.call(this, element);
   goog.dom.classes.add(element, this.getCssClass(this.orientation_));
@@ -327,7 +327,7 @@ goog.ui.SliderBase.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SliderBase.prototype.exitDocument = function() {
   goog.base(this, 'exitDocument');
   goog.disposeAll(this.valueDragger_, this.extentDragger_, this.keyHandler_,
@@ -1034,7 +1034,7 @@ goog.ui.SliderBase.prototype.getOrientation = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SliderBase.prototype.disposeInternal = function() {
   goog.ui.SliderBase.superClass_.disposeInternal.call(this);
   if (this.incTimer_) {

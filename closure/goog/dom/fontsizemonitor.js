@@ -123,7 +123,7 @@ goog.dom.FontSizeMonitor.CHANGE_EVENT =
     goog.dom.FontSizeMonitor.EventType.CHANGE;
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.FontSizeMonitor.prototype.disposeInternal = function() {
   goog.dom.FontSizeMonitor.superClass_.disposeInternal.call(this);
 

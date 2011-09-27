@@ -222,7 +222,7 @@ goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.ImageLoader.prototype.disposeInternal = function() {
   if (this.images_) {
     delete this.images_;

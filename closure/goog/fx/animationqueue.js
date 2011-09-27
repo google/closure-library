@@ -171,7 +171,7 @@ goog.fx.AnimationParallelQueue.prototype.onBegin = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.AnimationParallelQueue.prototype.executeChildrenAction = function(f) {
   goog.array.forEach(this.queue_, f);
 };
@@ -323,7 +323,7 @@ goog.fx.AnimationSerialQueue.prototype.remove = function(animation) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.AnimationSerialQueue.prototype.executeChildrenAction = function(f) {
   if (this.counter_ > 0) {
     f(this.queue_[this.counter_ - 1]);

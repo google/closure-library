@@ -379,7 +379,7 @@ goog.net.xpc.IframeRelayTransport.iframeLoadHandler_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.xpc.IframeRelayTransport.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   if (goog.userAgent.WEBKIT) {

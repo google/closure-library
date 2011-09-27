@@ -206,7 +206,7 @@ goog.ui.MenuButton.prototype.exitDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.MenuButton.prototype.disposeInternal = function() {
   goog.ui.MenuButton.superClass_.disposeInternal.call(this);
   if (this.menu_) {
@@ -301,7 +301,7 @@ goog.ui.MenuButton.prototype.containsElement = function(element) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
   // Handle SPACE on keyup and all other keys on keypress.
   if (e.keyCode == goog.events.KeyCodes.SPACE) {

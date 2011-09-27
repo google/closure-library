@@ -695,7 +695,7 @@ goog.ui.DatePicker.prototype.updateFooterRow_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   goog.ui.DatePicker.superClass_.decorateInternal.call(this, el);
 
@@ -761,14 +761,14 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.DatePicker.prototype.createDom = function() {
   goog.ui.DatePicker.superClass_.createDom.call(this);
   this.decorateInternal(this.getElement());
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.DatePicker.prototype.enterDocument = function() {
   goog.ui.DatePicker.superClass_.enterDocument.call(this);
 
@@ -780,7 +780,7 @@ goog.ui.DatePicker.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.DatePicker.prototype.exitDocument = function() {
   goog.ui.DatePicker.superClass_.exitDocument.call(this);
   this.destroyMenu_();
@@ -798,7 +798,7 @@ goog.ui.DatePicker.prototype.create =
     goog.ui.DatePicker.prototype.decorate;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.DatePicker.prototype.disposeInternal = function() {
   goog.ui.DatePicker.superClass_.disposeInternal.call(this);
 

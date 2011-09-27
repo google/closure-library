@@ -496,7 +496,7 @@ goog.dom.a11y.Announcer = function(domHelper) {
 goog.inherits(goog.dom.a11y.Announcer, goog.Disposable);
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.a11y.Announcer.prototype.disposeInternal = function() {
   goog.object.forEach(
       this.liveRegions_, this.domHelper_.removeNode, this.domHelper_);

@@ -379,7 +379,7 @@ goog.messaging.PortChannel.prototype.injectPorts_ = function(ports, message) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.messaging.PortChannel.prototype.disposeInternal = function() {
   goog.events.unlistenByKey(this.listenerKey_);
   // Can't use instanceof here because MessagePort is undefined in workers and

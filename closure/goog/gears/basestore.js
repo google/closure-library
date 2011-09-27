@@ -496,7 +496,7 @@ goog.gears.BaseStore.prototype.hasInSchema_ = function(type, name) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.gears.BaseStore.prototype.disposeInternal = function() {
   goog.gears.BaseStore.superClass_.disposeInternal.call(this);
   this.database_ = null;

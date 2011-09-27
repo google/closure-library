@@ -852,7 +852,7 @@ goog.graphics.VmlGraphics.prototype.getTextWidth = function(text, font) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.graphics.VmlGraphics.prototype.enterDocument = function() {
   goog.graphics.VmlGraphics.superClass_.enterDocument.call(this);
   this.handleContainerResize_();

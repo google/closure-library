@@ -605,7 +605,7 @@ goog.ui.Control.prototype.exitDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Control.prototype.disposeInternal = function() {
   goog.ui.Control.superClass_.disposeInternal.call(this);
   if (this.keyHandler_) {
@@ -691,7 +691,7 @@ goog.ui.Control.prototype.setCaption = function(caption) {
 // Component state management.
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Control.prototype.setRightToLeft = function(rightToLeft) {
   // The superclass implementation ensures the control isn't in the document.
   goog.ui.Control.superClass_.setRightToLeft.call(this, rightToLeft);

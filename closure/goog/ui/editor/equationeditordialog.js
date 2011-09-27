@@ -62,7 +62,7 @@ goog.ui.editor.EquationEditorDialog.prototype.equationEditor_;
 goog.ui.editor.EquationEditorDialog.prototype.okButton_;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.editor.EquationEditorDialog.prototype.createDialogControl =
     function() {
   var builder = new goog.ui.editor.AbstractDialog.Builder(this);
@@ -97,7 +97,7 @@ goog.ui.editor.EquationEditorDialog.prototype.createDialogControl =
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.ui.editor.EquationEditorDialog.prototype.createOkEvent = function(e) {
   if (this.equationEditor_.isValid()) {

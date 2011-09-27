@@ -484,7 +484,7 @@ goog.net.xpc.CrossPageChannel.prototype.notifyTransportError_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
   if (!this.isConnected()) {
     goog.net.xpc.logger.severe('Can\'t send. Channel not connected.');
@@ -631,7 +631,7 @@ goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable_ = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
 

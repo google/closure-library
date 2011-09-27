@@ -162,7 +162,7 @@ goog.ui.equation.TexPane.prototype.lastRenderredText_ = '';
 goog.ui.equation.TexPane.prototype.changeSequence_ = 0;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.TexPane.prototype.createDom = function() {
 
   /** @desc Title for TeX editor tab in the equation editor dialog. */
@@ -230,7 +230,7 @@ goog.ui.equation.TexPane.prototype.createDom = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.TexPane.prototype.enterDocument = function() {
   this.texInputHandler_ = new goog.events.InputHandler(this.texEdit_);
 
@@ -252,7 +252,7 @@ goog.ui.equation.TexPane.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.TexPane.prototype.setVisible = function(visible) {
   goog.base(this, 'setVisible', visible);
   if (visible) {
@@ -423,13 +423,13 @@ goog.ui.equation.TexPane.prototype.insert_ = function(text) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.TexPane.prototype.getEquation = function() {
   return this.texEdit_['value'];
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.TexPane.prototype.setEquation =
     function(equation) {
   this.texEdit_['value'] = equation;
@@ -437,7 +437,7 @@ goog.ui.equation.TexPane.prototype.setEquation =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.TexPane.prototype.disposeInternal = function() {
   this.texInputHandler_.dispose();
   this.paletteManager_ = null;

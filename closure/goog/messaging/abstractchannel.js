@@ -74,7 +74,7 @@ goog.messaging.AbstractChannel.prototype.logger =
  * Immediately calls opt_connectCb if given, and is otherwise a no-op. If
  * subclasses have configuration that needs to happen before the channel is
  * connected, they should override this and {@link #isConnected}.
- * @inheritDoc
+ * @override
  */
 goog.messaging.AbstractChannel.prototype.connect = function(opt_connectCb) {
   if (opt_connectCb) {
@@ -87,14 +87,14 @@ goog.messaging.AbstractChannel.prototype.connect = function(opt_connectCb) {
  * Always returns true. If subclasses have configuration that needs to happen
  * before the channel is connected, they should override this and
  * {@link #connect}.
- * @inheritDoc
+ * @override
  */
 goog.messaging.AbstractChannel.prototype.isConnected = function() {
   return true;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.messaging.AbstractChannel.prototype.registerService =
     function(serviceName, callback, opt_objectPayload) {
   this.services_[serviceName] = {
@@ -104,14 +104,14 @@ goog.messaging.AbstractChannel.prototype.registerService =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.messaging.AbstractChannel.prototype.registerDefaultService =
     function(callback) {
   this.defaultService_ = callback;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.messaging.AbstractChannel.prototype.send = goog.abstractMethod;
 
 
@@ -200,7 +200,7 @@ goog.messaging.AbstractChannel.prototype.decodePayload = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.messaging.AbstractChannel.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   goog.dispose(this.logger);

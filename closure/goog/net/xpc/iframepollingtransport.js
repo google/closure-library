@@ -590,7 +590,7 @@ goog.net.xpc.IframePollingTransport.prototype.send =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.xpc.IframePollingTransport.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
 

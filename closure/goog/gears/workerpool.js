@@ -195,7 +195,7 @@ goog.gears.WorkerPool.prototype.unregisterWorker = function(worker) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.gears.WorkerPool.prototype.disposeInternal = function() {
   goog.gears.WorkerPool.superClass_.disposeInternal.call(this);
   this.workerPool_ = null;

@@ -223,7 +223,7 @@ goog.ui.Dialog.prototype.contentEl_ = null;
 goog.ui.Dialog.prototype.buttonEl_ = null;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Dialog.prototype.getCssClass = function() {
   return this.class_;
 };
@@ -499,7 +499,7 @@ goog.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Dialog.prototype.createDom = function() {
   goog.base(this, 'createDom');
   var element = this.getElement();
@@ -537,7 +537,7 @@ goog.ui.Dialog.prototype.createDom = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Dialog.prototype.decorateInternal = function(element) {
   goog.base(this, 'decorateInternal', element);
 
@@ -614,7 +614,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Dialog.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
@@ -642,7 +642,7 @@ goog.ui.Dialog.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Dialog.prototype.exitDocument = function() {
   if (this.isVisible()) {
     this.setVisible(false);
@@ -868,7 +868,7 @@ goog.ui.Dialog.prototype.getDisposeOnHide = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Dialog.prototype.disposeInternal = function() {
   this.titleCloseEl_ = null;
   this.buttonEl_ = null;

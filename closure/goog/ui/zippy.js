@@ -132,7 +132,7 @@ goog.ui.Zippy.Events = {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Zippy.prototype.disposeInternal = function() {
   if (this.elHeader_) {
     goog.events.removeAll(this.elHeader_);

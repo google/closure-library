@@ -160,7 +160,7 @@ goog.net.BulkLoader.prototype.finishLoad_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.BulkLoader.prototype.disposeInternal = function() {
   goog.net.BulkLoader.superClass_.disposeInternal.call(this);
 

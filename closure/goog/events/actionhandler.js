@@ -146,7 +146,7 @@ goog.events.ActionHandler.prototype.dispatchEvents_ = function(e) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.events.ActionHandler.prototype.disposeInternal = function() {
   goog.events.ActionHandler.superClass_.disposeInternal.call(this);
   goog.events.unlisten(this.element_, goog.events.ActionHandler.KEY_EVENT_TYPE_,

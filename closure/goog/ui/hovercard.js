@@ -125,7 +125,7 @@ goog.ui.HoverCard.EventType = {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.HoverCard.prototype.disposeInternal = function() {
   goog.ui.HoverCard.superClass_.disposeInternal.call(this);
 

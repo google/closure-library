@@ -226,7 +226,7 @@ goog.ui.emoji.EmojiPalette.prototype.getImageLoader = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.emoji.EmojiPalette.prototype.disposeInternal = function() {
   goog.ui.emoji.EmojiPalette.superClass_.disposeInternal.call(this);
 

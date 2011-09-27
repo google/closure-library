@@ -609,7 +609,7 @@ goog.net.IframeIo.prototype.abort = function(opt_failureCode) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.IframeIo.prototype.disposeInternal = function() {
   this.logger_.fine('Disposing iframeIo instance');
 

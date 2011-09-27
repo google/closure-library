@@ -319,7 +319,7 @@ goog.dom.browserrange.IeRange.prototype.clone = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.getBrowserRange = function() {
   return this.range_;
 };
@@ -335,7 +335,7 @@ goog.dom.browserrange.IeRange.prototype.clearCachedValues_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.getContainer = function() {
   if (!this.parentNode_) {
     var selectText = this.range_.text;
@@ -446,7 +446,7 @@ goog.dom.browserrange.IeRange.prototype.findDeepestContainer_ = function(node) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.getStartNode = function() {
   if (!this.startNode_) {
     this.startNode_ = this.getEndpointNode_(goog.dom.RangeEndpoint.START);
@@ -458,7 +458,7 @@ goog.dom.browserrange.IeRange.prototype.getStartNode = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.getStartOffset = function() {
   if (this.startOffset_ < 0) {
     this.startOffset_ = this.getOffset_(goog.dom.RangeEndpoint.START);
@@ -470,7 +470,7 @@ goog.dom.browserrange.IeRange.prototype.getStartOffset = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.getEndNode = function() {
   if (this.isCollapsed()) {
     return this.getStartNode();
@@ -482,7 +482,7 @@ goog.dom.browserrange.IeRange.prototype.getEndNode = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.getEndOffset = function() {
   if (this.isCollapsed()) {
     return this.getStartOffset();
@@ -497,7 +497,7 @@ goog.dom.browserrange.IeRange.prototype.getEndOffset = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.compareBrowserRangeEndpoints = function(
     range, thisEndpoint, otherEndpoint) {
   return this.range_.compareEndPoints(
@@ -715,7 +715,7 @@ goog.dom.browserrange.IeRange.prototype.isRangeInDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.isCollapsed = function() {
   // Note(user) : The earlier implementation used (range.text == ''), but this
   // fails when (range.htmlText == '<br>')
@@ -724,13 +724,13 @@ goog.dom.browserrange.IeRange.prototype.isCollapsed = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.getText = function() {
   return this.range_.text;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.getValidHtml = function() {
   return this.range_.htmlText;
 };
@@ -739,14 +739,14 @@ goog.dom.browserrange.IeRange.prototype.getValidHtml = function() {
 // SELECTION MODIFICATION
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.select = function(opt_reverse) {
   // IE doesn't support programmatic reversed selections.
   this.range_.select();
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.removeContents = function() {
   // NOTE: Sometimes htmlText is non-empty, but the range is actually empty.
   // TODO(user): The htmlText check is probably unnecessary, but I left it in
@@ -859,7 +859,7 @@ goog.dom.browserrange.IeRange.pasteElement_ = function(range, element,
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.surroundContents = function(element) {
   // Make sure the element is detached from the document.
   goog.dom.removeNode(element);
@@ -919,7 +919,7 @@ goog.dom.browserrange.IeRange.insertNode_ = function(clone, node,
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.insertNode = function(node, before) {
   var output = goog.dom.browserrange.IeRange.insertNode_(
       this.range_.duplicate(), node, before);
@@ -928,7 +928,7 @@ goog.dom.browserrange.IeRange.prototype.insertNode = function(node, before) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.surroundWithNodes = function(
     startNode, endNode) {
   var clone1 = this.range_.duplicate();
@@ -940,7 +940,7 @@ goog.dom.browserrange.IeRange.prototype.surroundWithNodes = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.dom.browserrange.IeRange.prototype.collapse = function(toStart) {
   this.range_.collapse(toStart);
 

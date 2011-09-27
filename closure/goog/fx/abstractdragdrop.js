@@ -1078,7 +1078,7 @@ goog.fx.AbstractDragDrop.prototype.getScrollPos = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.AbstractDragDrop.prototype.disposeInternal = function() {
   goog.fx.AbstractDragDrop.superClass_.disposeInternal.call(this);
   this.removeItems();
@@ -1175,7 +1175,7 @@ goog.fx.DragDropEvent = function(type, source, sourceItem,
 goog.inherits(goog.fx.DragDropEvent, goog.events.Event);
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.DragDropEvent.prototype.disposeInternal = function() {
   goog.fx.DragDropEvent.superClass_.disposeInternal.call(this);
 

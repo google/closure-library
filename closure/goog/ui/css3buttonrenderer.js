@@ -70,7 +70,7 @@ goog.addSingletonGetter(goog.ui.Css3ButtonRenderer);
 goog.ui.Css3ButtonRenderer.CSS_CLASS = goog.getCssName('goog-css3-button');
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Css3ButtonRenderer.prototype.getContentElement = function(element) {
   return /** @type {Element} */ (element);
 };
@@ -107,7 +107,7 @@ goog.ui.Css3ButtonRenderer.prototype.canDecorate = function(element) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Css3ButtonRenderer.prototype.decorate = function(button, element) {
   goog.dom.classes.add(element, goog.ui.INLINE_BLOCK_CLASSNAME,
       this.getCssClass());

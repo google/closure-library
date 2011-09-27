@@ -119,7 +119,7 @@ goog.crypt.Md5.T_ = [
  */
 
 
-/** @inheritDoc */
+/** @override */
 goog.crypt.Md5.prototype.reset = function() {
   this.chain_[0] = 0x67452301;
   this.chain_[1] = 0xefcdab89;
@@ -333,7 +333,7 @@ goog.crypt.Md5.prototype.compress_ = function(buf, opt_offset) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
   if (!goog.isDef(opt_length)) {
     opt_length = bytes.length;
@@ -372,7 +372,7 @@ goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.crypt.Md5.prototype.digest = function() {
   // This must accommodate at least 1 padding byte (0x80), 8 bytes of
   // total bitlength, and must end at a 64-byte boundary.

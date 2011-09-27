@@ -105,7 +105,7 @@ goog.ui.Select.prototype.decorateInternal = function(element) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Select.prototype.disposeInternal = function() {
   goog.ui.Select.superClass_.disposeInternal.call(this);
 

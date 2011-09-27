@@ -110,7 +110,7 @@ goog.ui.DimensionPicker.prototype.highlightedRows_ = 0;
 goog.ui.DimensionPicker.prototype.highlightedColumns_ = 0;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.DimensionPicker.prototype.enterDocument = function() {
   goog.ui.DimensionPicker.superClass_.enterDocument.call(this);
 
@@ -128,7 +128,7 @@ goog.ui.DimensionPicker.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.DimensionPicker.prototype.exitDocument = function() {
   goog.ui.DimensionPicker.superClass_.exitDocument.call(this);
 
@@ -158,7 +158,7 @@ goog.ui.DimensionPicker.prototype.handleShow_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.DimensionPicker.prototype.disposeInternal = function() {
   goog.ui.DimensionPicker.superClass_.disposeInternal.call(this);
   delete this.size_;

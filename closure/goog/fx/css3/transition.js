@@ -119,7 +119,7 @@ goog.fx.css3.Transition.prototype.isPlaying_ = false;
 goog.fx.css3.Transition.prototype.timerId_;
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.css3.Transition.prototype.play = function() {
   if (!this.dispatchEvent(goog.fx.Transition.EventType.PLAY) ||
       !this.dispatchEvent(goog.fx.Transition.EventType.BEGIN)) return;
@@ -148,7 +148,7 @@ goog.fx.css3.Transition.prototype.play_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.css3.Transition.prototype.stop = function() {
   if (!this.isPlaying_) return;
 
@@ -177,7 +177,7 @@ goog.fx.css3.Transition.prototype.stop_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.css3.Transition.prototype.disposeInternal = function() {
   this.stop();
   goog.base(this, 'disposeInternal');

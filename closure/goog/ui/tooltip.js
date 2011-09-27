@@ -886,7 +886,7 @@ goog.ui.Tooltip.prototype.clearHideTimer = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Tooltip.prototype.disposeInternal = function() {
   this.setVisible(false);
   this.clearShowTimer();

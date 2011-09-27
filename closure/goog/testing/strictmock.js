@@ -52,13 +52,13 @@ goog.testing.StrictMock = function(objectToMock, opt_mockStaticMethods,
 goog.inherits(goog.testing.StrictMock, goog.testing.Mock);
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.StrictMock.prototype.$recordExpectation = function() {
   this.$expectations_.push(this.$pendingExpectation);
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
   if (this.$expectations_.length == 0) {
     this.$throwCallException(name, args);
@@ -99,7 +99,7 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.StrictMock.prototype.$reset = function() {
   goog.testing.StrictMock.superClass_.$reset.call(this);
 
@@ -107,7 +107,7 @@ goog.testing.StrictMock.prototype.$reset = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.StrictMock.prototype.$verify = function() {
   goog.testing.StrictMock.superClass_.$verify.call(this);
 

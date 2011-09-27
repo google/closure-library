@@ -142,7 +142,7 @@ goog.net.IframeLoadMonitor.prototype.getIframe = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.IframeLoadMonitor.prototype.disposeInternal = function() {
   delete this.iframe_;
   this.maybeStopTimer_();

@@ -72,13 +72,13 @@ goog.editor.plugins.EquationEditorPlugin.prototype.logger_ =
     goog.debug.Logger.getLogger('goog.editor.plugins.EquationEditorPlugin');
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.EquationEditorPlugin.prototype.getTrogClassId =
     goog.functions.constant('EquationEditorPlugin');
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.editor.plugins.EquationEditorPlugin.prototype.createDialog =
     function(dom, opt_arg) {
@@ -133,7 +133,7 @@ goog.editor.plugins.EquationEditorPlugin.prototype.getEquationFromSelection_ =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.EquationEditorPlugin.prototype.enable =
     function(fieldObject) {
   goog.base(this, 'enable', fieldObject);
@@ -145,7 +145,7 @@ goog.editor.plugins.EquationEditorPlugin.prototype.enable =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.EquationEditorPlugin.prototype.disable =
     function(fieldObject) {
   goog.base(this, 'disable', fieldObject);

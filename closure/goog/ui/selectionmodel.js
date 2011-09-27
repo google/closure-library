@@ -267,7 +267,7 @@ goog.ui.SelectionModel.prototype.clear = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SelectionModel.prototype.disposeInternal = function() {
   goog.ui.SelectionModel.superClass_.disposeInternal.call(this);
   delete this.items_;

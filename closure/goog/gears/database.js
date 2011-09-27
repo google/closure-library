@@ -903,7 +903,7 @@ goog.gears.Database.prototype.close = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.gears.Database.prototype.disposeInternal = function() {
   goog.gears.Database.superClass_.disposeInternal.call(this);
   this.database_ = null;

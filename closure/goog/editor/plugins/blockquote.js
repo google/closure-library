@@ -91,7 +91,7 @@ goog.editor.plugins.Blockquote.prototype.logger =
     goog.debug.Logger.getLogger('goog.editor.plugins.Blockquote');
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.Blockquote.prototype.getTrogClassId = function() {
   return goog.editor.plugins.Blockquote.CLASS_ID;
 };
@@ -180,7 +180,7 @@ goog.editor.plugins.Blockquote.prototype.isSetupBlockquote = function(node) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.Blockquote.prototype.isSupportedCommand = function(
     command) {
   return command == goog.editor.plugins.Blockquote.SPLIT_COMMAND;

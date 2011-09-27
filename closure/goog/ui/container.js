@@ -446,7 +446,7 @@ goog.ui.Container.prototype.exitDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.Container.prototype.disposeInternal = function() {
   goog.ui.Container.superClass_.disposeInternal.call(this);
 

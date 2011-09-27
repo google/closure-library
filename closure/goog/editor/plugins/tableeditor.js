@@ -58,7 +58,7 @@ goog.editor.plugins.TableEditor = function() {
 goog.inherits(goog.editor.plugins.TableEditor, goog.editor.Plugin);
 
 
-/** @inheritDoc */
+/** @override */
 // TODO(user): remove this once there's a sensible default
 // implementation in the base Plugin.
 goog.editor.plugins.TableEditor.prototype.getTrogClassId = function() {
@@ -108,7 +108,7 @@ goog.editor.plugins.TableEditor.prototype.isSupportedCommand =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.TableEditor.prototype.enable = function(fieldObject) {
   goog.base(this, 'enable', fieldObject);
 
@@ -154,7 +154,7 @@ goog.editor.plugins.TableEditor.prototype.getAncestorTable_ = function(node) {
 /**
  * Returns the current value of a given command. Currently this plugin
  * only returns a value for goog.editor.plugins.TableEditor.COMMAND.TABLE.
- * @inheritDoc
+ * @override
  */
 goog.editor.plugins.TableEditor.prototype.queryCommandValue =
     function(command) {
@@ -164,7 +164,7 @@ goog.editor.plugins.TableEditor.prototype.queryCommandValue =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.TableEditor.prototype.execCommandInternal = function(
     command, opt_arg) {
   var result = null;

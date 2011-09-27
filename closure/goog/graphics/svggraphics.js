@@ -405,7 +405,7 @@ goog.graphics.SvgGraphics.prototype.setSize = function(pixelWidth,
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.graphics.SvgGraphics.prototype.getPixelSize = function() {
   if (!goog.userAgent.GECKO) {
     return this.isInDocument() ?
@@ -739,7 +739,7 @@ goog.graphics.SvgGraphics.prototype.getDef_ = function(defKey) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.graphics.SvgGraphics.prototype.enterDocument = function() {
   var oldPixelSize = this.getPixelSize();
   goog.graphics.SvgGraphics.superClass_.enterDocument.call(this);
@@ -768,7 +768,7 @@ goog.graphics.SvgGraphics.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.graphics.SvgGraphics.prototype.exitDocument = function() {
   goog.graphics.SvgGraphics.superClass_.exitDocument.call(this);
 
@@ -817,7 +817,7 @@ goog.graphics.SvgGraphics.getResizeCheckTimer_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.graphics.SvgGraphics.prototype.isDomClonable = function() {
   return true;
 };

@@ -95,7 +95,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.isOpenLinkInNewWindowChecked_ =
 goog.editor.plugins.LinkDialogPlugin.prototype.stopReferrerLeaks_ = false;
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.LinkDialogPlugin.prototype.getTrogClassId =
     goog.functions.constant('LinkDialogPlugin');
 
@@ -228,7 +228,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.LinkDialogPlugin.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   this.eventHandler_.dispose();

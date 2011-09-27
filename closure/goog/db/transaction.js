@@ -154,7 +154,7 @@ goog.db.Transaction.prototype.abort = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.db.Transaction.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   this.eventHandler_.dispose();

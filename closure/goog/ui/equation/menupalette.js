@@ -78,7 +78,7 @@ goog.inherits(goog.ui.equation.MenuPaletteRenderer,
 goog.addSingletonGetter(goog.ui.equation.MenuPaletteRenderer);
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.MenuPaletteRenderer.prototype.getCssClass =
     function() {
   return goog.ui.equation.MenuPalette.CSS_CLASS;

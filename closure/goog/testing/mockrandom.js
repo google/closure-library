@@ -117,7 +117,7 @@ goog.testing.MockRandom.prototype.uninstall = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.MockRandom.prototype.disposeInternal = function() {
   this.uninstall();
   delete this.sequence_;

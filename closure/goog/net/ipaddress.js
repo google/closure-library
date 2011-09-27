@@ -231,7 +231,7 @@ goog.net.Ipv4Address.MAX_ADDRESS_ = goog.math.Integer.ONE.shiftLeft(
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.net.Ipv4Address.prototype.toString = function() {
   if (this.ipStr_) {
@@ -252,7 +252,7 @@ goog.net.Ipv4Address.prototype.toString = function() {
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.net.Ipv4Address.prototype.toUriString = function() {
   return this.toString();
@@ -361,7 +361,7 @@ goog.net.Ipv6Address.MAX_ADDRESS_ = goog.math.Integer.ONE.shiftLeft(
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.net.Ipv6Address.prototype.toString = function() {
   if (this.ipStr_) {
@@ -384,7 +384,7 @@ goog.net.Ipv6Address.prototype.toString = function() {
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.net.Ipv6Address.prototype.toUriString = function() {
   return '[' + this.toString() + ']';

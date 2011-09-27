@@ -267,19 +267,19 @@ goog.testing.fs.DirectoryEntry = function(fs, parent, name, children) {
 goog.inherits(goog.testing.fs.DirectoryEntry, goog.testing.fs.Entry);
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.DirectoryEntry.prototype.isFile = function() {
   return false;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.DirectoryEntry.prototype.isDirectory = function() {
   return true;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.DirectoryEntry.prototype.getLastModified = function() {
   var msg = 'reading last modified date for ' + this.getFullPath();
   return this.checkNotDeleted(msg).
@@ -287,14 +287,14 @@ goog.testing.fs.DirectoryEntry.prototype.getLastModified = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.DirectoryEntry.prototype.clone = function() {
   return new goog.testing.fs.DirectoryEntry(
       this.getFileSystem(), this.parent, this.getName(), this.children);
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.DirectoryEntry.prototype.remove = function() {
   if (!goog.object.isEmpty(this.children)) {
     var d = new goog.async.Deferred();
@@ -558,19 +558,19 @@ goog.testing.fs.FileEntry = function(fs, parent, name, data) {
 goog.inherits(goog.testing.fs.FileEntry, goog.testing.fs.Entry);
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.FileEntry.prototype.isFile = function() {
   return true;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.FileEntry.prototype.isDirectory = function() {
   return false;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.FileEntry.prototype.clone = function() {
   return new goog.testing.fs.FileEntry(
       this.getFileSystem(), this.parent,
@@ -578,7 +578,7 @@ goog.testing.fs.FileEntry.prototype.clone = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.fs.FileEntry.prototype.getLastModified = function() {
   return this.file().addCallback(function(file) {
     return file.lastModifiedDate;

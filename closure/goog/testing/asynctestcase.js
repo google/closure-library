@@ -159,7 +159,7 @@ goog.testing.AsyncTestCase.ControlBreakingException.prototype.
     isControlBreakingException = true;
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.AsyncTestCase.ControlBreakingException.prototype.toString =
     function() {
   // This shows up in the console when the exception is not caught.

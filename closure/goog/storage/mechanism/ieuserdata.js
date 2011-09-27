@@ -152,7 +152,7 @@ goog.storage.mechanism.IEUserData.prototype.isAvailable = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.mechanism.IEUserData.prototype.set = function(key, value) {
   this.storageNode_.setAttribute(
       goog.storage.mechanism.IEUserData.encodeKey_(key), value);
@@ -160,7 +160,7 @@ goog.storage.mechanism.IEUserData.prototype.set = function(key, value) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.mechanism.IEUserData.prototype.get = function(key) {
   // According to Microsoft, values can be strings, numbers or booleans. Since
   // we only save strings, any other type is a storage error. If we returned
@@ -176,7 +176,7 @@ goog.storage.mechanism.IEUserData.prototype.get = function(key) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.mechanism.IEUserData.prototype.remove = function(key) {
   this.storageNode_.removeAttribute(
       goog.storage.mechanism.IEUserData.encodeKey_(key));
@@ -184,13 +184,13 @@ goog.storage.mechanism.IEUserData.prototype.remove = function(key) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.mechanism.IEUserData.prototype.getCount = function() {
   return this.getNode_().attributes.length;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.mechanism.IEUserData.prototype.__iterator__ = function(opt_keys) {
   var i = 0;
   var attributes = this.getNode_().attributes;
@@ -214,7 +214,7 @@ goog.storage.mechanism.IEUserData.prototype.__iterator__ = function(opt_keys) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.storage.mechanism.IEUserData.prototype.clear = function() {
   var node = this.getNode_();
   for (var left = node.attributes.length; left > 0; left--) {

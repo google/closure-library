@@ -503,7 +503,7 @@ goog.ui.KeyboardShortcutHandler.prototype.getGlobalKeys = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.KeyboardShortcutHandler.prototype.disposeInternal = function() {
   goog.ui.KeyboardShortcutHandler.superClass_.disposeInternal.call(this);
   this.unregisterAll();

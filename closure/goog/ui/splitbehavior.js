@@ -285,7 +285,7 @@ goog.ui.SplitBehavior.prototype.setActive = function(activate) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.SplitBehavior.prototype.disposeInternal = function() {
   this.setActive(false);
   goog.dispose(this.eventHandler_);

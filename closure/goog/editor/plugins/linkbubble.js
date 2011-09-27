@@ -172,13 +172,13 @@ goog.editor.plugins.LinkBubble.prototype.stopReferrerLeaks = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.LinkBubble.prototype.getTrogClassId = function() {
   return 'LinkBubble';
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.LinkBubble.prototype.getBubbleTargetFromSelection =
     function(selectedElement) {
   var bubbleTarget = goog.dom.getAncestorByTagNameAndClass(selectedElement,
@@ -230,19 +230,19 @@ goog.editor.plugins.LinkBubble.prototype.getTargetUrl = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.LinkBubble.prototype.getBubbleType = function() {
   return goog.dom.TagName.A;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.LinkBubble.prototype.getBubbleTitle = function() {
   return goog.ui.editor.messages.MSG_LINK_CAPTION;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.LinkBubble.prototype.createBubbleContents = function(
     bubbleContainer) {
   var linkObj = this.getLinkToTextObj_();

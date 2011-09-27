@@ -228,7 +228,7 @@ See the COPYING file for details.
     }
     goog.inherits(ListContainer, goog.ui.Container);
 
-    /** @inheritDoc */
+    /** @override */
     ListContainer.prototype.createDom = function() {
       ListContainer.superClass_.createDom.call(this);
       var ul = this.getDomHelper().createDom('ul');
@@ -262,7 +262,7 @@ See the COPYING file for details.
     }
     goog.inherits(KeyHandlingContainer, goog.ui.Container);
 
-    /** @inheritDoc */
+    /** @override */
     KeyHandlingContainer.prototype.handleKeyEventInternal = function() {
       this.keyEventsHandled++;
       return false;

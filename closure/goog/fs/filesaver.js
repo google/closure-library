@@ -160,7 +160,7 @@ goog.fs.FileSaver.prototype.dispatchProgressEvent_ = function(event) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fs.FileSaver.prototype.disposeInternal = function() {
   delete this.saver_;
   goog.base(this, 'disposeInternal');

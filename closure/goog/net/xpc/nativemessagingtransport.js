@@ -263,7 +263,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   if (this.initialized_) {

@@ -224,7 +224,7 @@ goog.ui.BaseRoundedPanel.prototype.decorateInternal = function(element) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.BaseRoundedPanel.prototype.disposeInternal = function() {
   if (this.backgroundElement_) {
     this.getDomHelper().removeNode(this.backgroundElement_);
@@ -538,7 +538,7 @@ goog.ui.GraphicsRoundedPanel.prototype.decorateInternal =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.GraphicsRoundedPanel.prototype.disposeInternal = function() {
   goog.ui.GraphicsRoundedPanel.superClass_.disposeInternal.call(this);
   this.graphics_.dispose();

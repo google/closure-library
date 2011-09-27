@@ -131,7 +131,7 @@ goog.testing.PseudoRandom.prototype.install = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.PseudoRandom.prototype.disposeInternal = function() {
   goog.testing.PseudoRandom.superClass_.disposeInternal.call(this);
   this.uninstall();

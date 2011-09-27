@@ -875,7 +875,7 @@ goog.editor.Field.prototype.clearListeners_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.Field.prototype.disposeInternal = function() {
   if (this.isLoading() || this.isLoaded()) {
     this.logger.warning('Disposing a field that is in use.');

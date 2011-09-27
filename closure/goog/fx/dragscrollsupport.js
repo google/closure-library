@@ -273,7 +273,7 @@ goog.fx.DragScrollSupport.prototype.calculateScrollDelta = function(
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.DragScrollSupport.prototype.disposeInternal = function() {
   goog.fx.DragScrollSupport.superClass_.disposeInternal.call(this);
   this.eventHandler_.dispose();

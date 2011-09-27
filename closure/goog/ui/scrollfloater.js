@@ -191,7 +191,7 @@ goog.ui.ScrollFloater.prototype.decorateInternal = function(element) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ScrollFloater.prototype.enterDocument = function() {
   goog.ui.ScrollFloater.superClass_.enterDocument.call(this);
 
@@ -209,7 +209,7 @@ goog.ui.ScrollFloater.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ScrollFloater.prototype.disposeInternal = function() {
   goog.ui.ScrollFloater.superClass_.disposeInternal.call(this);
 

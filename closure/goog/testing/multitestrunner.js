@@ -554,7 +554,7 @@ goog.testing.MultiTestRunner.prototype.resetProgressDom_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.MultiTestRunner.prototype.createDom = function() {
   goog.testing.MultiTestRunner.superClass_.createDom.call(this);
   var el = this.getElement();
@@ -612,7 +612,7 @@ goog.testing.MultiTestRunner.prototype.createDom = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.MultiTestRunner.prototype.disposeInternal = function() {
   goog.testing.MultiTestRunner.superClass_.disposeInternal.call(this);
   this.tableSorter_.dispose();
@@ -1280,7 +1280,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.lastStateTime_ = 0;
 goog.testing.MultiTestRunner.TestFrame.prototype.currentState_ = 0;
 
 
-/** @inheritDoc */
+/** @override */
 goog.testing.MultiTestRunner.TestFrame.prototype.disposeInternal = function() {
   goog.testing.MultiTestRunner.TestFrame.superClass_.disposeInternal.call(this);
   this.dom_.removeNode(this.iframeEl_);

@@ -1026,7 +1026,7 @@ goog.module.ModuleManager.prototype.executeCallbacks_ = function(type) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.module.ModuleManager.prototype.disposeInternal = function() {
   goog.module.ModuleManager.superClass_.disposeInternal.call(this);
 

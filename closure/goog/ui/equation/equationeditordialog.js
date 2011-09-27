@@ -75,7 +75,7 @@ goog.inherits(goog.ui.equation.EquationEditorDialog, goog.ui.Dialog);
 goog.ui.equation.EquationEditorDialog.prototype.okButton_;
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.EquationEditorDialog.prototype.setVisible = function(visible) {
   goog.base(this, 'setVisible', visible);
   this.equationEditor_.setVisible(visible);

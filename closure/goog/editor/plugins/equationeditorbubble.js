@@ -71,14 +71,14 @@ var MSG_EE_BUBBLE_EDIT = goog.getMsg('Edit');
 var MSG_EE_BUBBLE_REMOVE = goog.getMsg('Remove');
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.equation.EquationBubble.prototype.getTrogClassId =
     function() {
   return 'EquationBubble';
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.equation.EquationBubble.prototype.
     getBubbleTargetFromSelection = function(selectedElement) {
   if (selectedElement &&
@@ -89,7 +89,7 @@ goog.editor.plugins.equation.EquationBubble.prototype.
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.equation.EquationBubble.prototype.createBubbleContents =
     function(bubbleContainer) {
   goog.dom.appendChild(bubbleContainer,
@@ -109,14 +109,14 @@ goog.editor.plugins.equation.EquationBubble.prototype.createBubbleContents =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.equation.EquationBubble.prototype.getBubbleType =
     function() {
   return goog.dom.TagName.IMG;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.editor.plugins.equation.EquationBubble.prototype.getBubbleTitle =
     function() {
   /** @desc Title for the equation bubble. */

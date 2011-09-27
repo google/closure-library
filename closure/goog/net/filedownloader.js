@@ -585,7 +585,7 @@ goog.net.FileDownloader.prototype.freeXhr_ = function(xhr) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.FileDownloader.prototype.disposeInternal = function() {
   delete this.dir_;
   goog.dispose(this.eventHandler_);
@@ -727,7 +727,7 @@ goog.net.FileDownloader.Download_ = function(url, downloader) {
 goog.inherits(goog.net.FileDownloader.Download_, goog.Disposable);
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.FileDownloader.Download_.prototype.disposeInternal = function() {
   this.cancelled = true;
   if (this.xhr) {

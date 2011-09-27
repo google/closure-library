@@ -214,14 +214,14 @@ goog.ui.ModalPopup.prototype.renderBackground_ = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ModalPopup.prototype.canDecorate = function(element) {
   // Assume we can decorate any DIV.
   return !!element && element.tagName == goog.dom.TagName.DIV;
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
   // Decorate the modal popup area element.
   goog.base(this, 'decorateInternal', element);
@@ -236,7 +236,7 @@ goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ModalPopup.prototype.enterDocument = function() {
   this.renderBackground_();
   goog.base(this, 'enterDocument');
@@ -254,7 +254,7 @@ goog.ui.ModalPopup.prototype.enterDocument = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.ModalPopup.prototype.exitDocument = function() {
   if (this.isVisible()) {
     this.setVisible(false);

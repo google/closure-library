@@ -240,7 +240,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.send =
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.net.xpc.FrameElementMethodTransport.prototype.disposeInternal =
     function() {
   goog.net.xpc.FrameElementMethodTransport.superClass_.disposeInternal.call(

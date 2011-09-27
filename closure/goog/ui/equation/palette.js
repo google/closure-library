@@ -267,7 +267,7 @@ goog.inherits(goog.ui.equation.PaletteRenderer, goog.ui.PaletteRenderer);
 goog.addSingletonGetter(goog.ui.equation.PaletteRenderer);
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.equation.PaletteRenderer.prototype.getCssClass =
     function() {
   return goog.ui.equation.Palette.CSS_CLASS;

@@ -329,7 +329,7 @@ goog.module.ModuleInfo.prototype.callCallbacks_ = function(callbacks, context) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.module.ModuleInfo.prototype.disposeInternal = function() {
   goog.module.ModuleInfo.superClass_.disposeInternal.call(this);
   goog.dispose(this.module_);

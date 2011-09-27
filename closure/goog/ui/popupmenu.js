@@ -526,7 +526,7 @@ goog.ui.PopupMenu.prototype.handleBlur = function(e) {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.ui.PopupMenu.prototype.disposeInternal = function() {
   // Always call the superclass' disposeInternal() first (Bug 715885).
   goog.ui.PopupMenu.superClass_.disposeInternal.call(this);
