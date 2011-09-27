@@ -31,28 +31,30 @@ See the COPYING file for details.
 
 var table = new goog.testing.PerformanceTable(goog.dom.getElement('perfTable'));
 
-var MESSAGE_LENGTH_FULL = 10000002;
-var MESSAGE_LENGTH_SHORT = 1000002;
+var MESSAGE_LENGTH_FULL = 10000020;
+var MESSAGE_LENGTH_SHORT = 1000020;
 
 function testHashing() {
   var bytes = [];
   var randomMock = new goog.testing.PseudoRandom(0, true);
-  for (var i = 0; i < MESSAGE_LENGTH_FULL / 2; ++i) {
+  for (var i = 0; i < MESSAGE_LENGTH_FULL / 10; ++i) {
     bytes.push(Math.floor(Math.random() * 0x100));
   }
   randomMock.uninstall();
 
   table.run(function() {
     var md5 = new goog.crypt.Md5();
-    md5.update(bytes, MESSAGE_LENGTH_SHORT / 2);
-    md5.update(bytes, MESSAGE_LENGTH_SHORT / 2);
+    for (var i = 0; i < 10; ++i) {
+      md5.update(bytes, MESSAGE_LENGTH_SHORT / 10);
+    }
     var hash = md5.digest();
   }, 'MD5 hash of ' + Math.round(MESSAGE_LENGTH_SHORT/1000000) + ' Mbytes');
 
   table.run(function() {
     var md5 = new goog.crypt.Md5();
-    md5.update(bytes);
-    md5.update(bytes);
+    for (var i = 0; i < 10; ++i) {
+      md5.update(bytes);
+    }
     var hash = md5.digest();
   }, 'MD5 hash of ' + Math.round(MESSAGE_LENGTH_FULL/1000000) + ' Mbytes');
 }

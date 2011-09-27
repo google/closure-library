@@ -21,7 +21,9 @@ See the COPYING file for details.
 <body>
 <script>
 
-var sixty = '123456789012345678901234567890123456789012345678901234567890';
+var thirty = '123456789012345678901234567890'
+var sixty = thirty + thirty
+var ninety = sixty + thirty
 
 function testBasicOperations() {
   var md5 = new goog.crypt.Md5();
@@ -42,6 +44,20 @@ function testHashing() {
 
   // Simple stream.
   md5.reset();
+  md5.update([97]);
+  assertEquals('0cc175b9c0f1b6a831c399e269772661',
+               goog.crypt.byteArrayToHex(md5.digest()));
+
+  // Simple stream as string.
+  md5.reset();
+  md5.update('a');
+  assertEquals('0cc175b9c0f1b6a831c399e269772661',
+               goog.crypt.byteArrayToHex(md5.digest()));
+
+  // Simple stream with reinitialization.
+  md5.reset();
+  md5.update('b');
+  md5.reset();
   md5.update('a');
   assertEquals('0cc175b9c0f1b6a831c399e269772661',
                goog.crypt.byteArrayToHex(md5.digest()));
@@ -61,8 +77,7 @@ function testHashing() {
 
   // RFC 1321 standard test with two updates.
   md5.reset();
-  md5.update('message');
-  md5.update([32]);
+  md5.update('message ');
   md5.update('digest');
   assertEquals('f96b697d7cb7938d525a2f31aaf161d0',
                goog.crypt.byteArrayToHex(md5.digest()));
@@ -95,17 +110,31 @@ function testHashing() {
   md5.update('45678901234567890');
   assertEquals('57edf4a22be3c955ac49da2e2107b67a',
                goog.crypt.byteArrayToHex(md5.digest()));
+
+  // Double overflow test.
+  md5.reset();
+  md5.update(ninety);
+  md5.update(ninety);
+  assertEquals('649de0d62015d329dca1302b142888d2',
+               goog.crypt.byteArrayToHex(md5.digest()));
+
+  // Double overflow test with arrays.
+  md5.reset();
+  md5.update(goog.crypt.stringToByteArray(ninety));
+  md5.update(goog.crypt.stringToByteArray(ninety));
+  assertEquals('649de0d62015d329dca1302b142888d2',
+               goog.crypt.byteArrayToHex(md5.digest()));
 }
 
 function testPadding() {
-  // Padding fits in two 64-byte blocks.
+  // Message + padding fits in two 64-byte blocks.
   var md5 = new goog.crypt.Md5();
   md5.update(sixty);
   md5.update(sixty.substr(0,59));
   assertEquals('6261005311809757906e04c0d670492d',
                goog.crypt.byteArrayToHex(md5.digest()));
 
-  // Padding does not fit in two 64-byte blocks.
+  // Message + padding does not fit in two 64-byte blocks.
   md5.reset();
   md5.update(sixty);
   md5.update(sixty);
