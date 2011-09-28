@@ -65,6 +65,7 @@ goog.events.KeyCodes = {
   SEVEN: 55,
   EIGHT: 56,
   NINE: 57,
+  FF_SEMICOLON: 59, // Firefox (Gecko) fires this for semicolon instead of 186
   QUESTION_MARK: 63, // needs localization
   A: 65,
   B: 66,
@@ -309,6 +310,7 @@ goog.events.KeyCodes.isCharacterKey = function(keyCode) {
     case goog.events.KeyCodes.NUM_PERIOD:
     case goog.events.KeyCodes.NUM_DIVISION:
     case goog.events.KeyCodes.SEMICOLON:
+    case goog.events.KeyCodes.FF_SEMICOLON:
     case goog.events.KeyCodes.DASH:
     case goog.events.KeyCodes.EQUALS:
     case goog.events.KeyCodes.COMMA:
