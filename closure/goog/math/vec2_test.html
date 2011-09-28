@@ -106,6 +106,25 @@ function testSubtract() {
 }
 
 
+function testRotate() {
+  var a = new goog.math.Vec2(1, -1);
+  a.rotate(Math.PI / 2);
+  assertRoughlyEquals(1, a.x, 0.000001);
+  assertRoughlyEquals(1, a.y, 0.000001);
+  a.rotate(-Math.PI);
+  assertRoughlyEquals(-1, a.x, 0.000001);
+  assertRoughlyEquals(-1, a.y, 0.000001);
+}
+
+
+function testRotateAroundPoint() {
+  var a = goog.math.Vec2.rotateAroundPoint(
+      new goog.math.Vec2(1, -1), new goog.math.Vec2(1, 0), Math.PI / 2);
+  assertRoughlyEquals(2, a.x, 0.000001);
+  assertRoughlyEquals(0, a.y, 0.000001);
+}
+
+
 function testEquals() {
   var a = new goog.math.Vec2(1, 2);
 
