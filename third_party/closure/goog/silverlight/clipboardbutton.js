@@ -132,8 +132,9 @@ goog.silverlight.ClipboardButton.prototype.createDom = function() {
   var element = dom.createDom('div', goog.getCssName('goog-inline-block'));
   this.setElementInternal(element);
 
+  var source = this.slResource_.toString();
   goog.silverlight.createObject(
-      this.slResource_, element, null,
+      source, element, null,
       {version: '4.0',
        width: this.size_.width, height: this.size_.height}, null,
       ['buttonType=' + this.type_,

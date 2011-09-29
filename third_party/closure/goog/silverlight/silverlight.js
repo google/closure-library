@@ -286,7 +286,9 @@ goog.silverlight.createObject =
           var onLoadHandler = slEvents[name];
           slEvents[name] = function(sender) {
             return onLoadHandler(
-                document.getElementById(opt_id), opt_userContext, sender);
+                document.getElementById(/** @type {string} */ (opt_id)),
+                opt_userContext,
+                sender);
           };
         }
         var handlerName = goog.silverlight.getHandlerName(slEvents[name]);

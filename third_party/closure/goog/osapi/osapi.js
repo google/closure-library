@@ -19,7 +19,7 @@
  * @fileoverview Base OSAPI binding.
  * This file was copied from
  * http://svn.apache.org/repos/asf/shindig/trunk/features/src/main/javascript/features/shindig.container/osapi.js
- * and it's slightly modified for closue.
+ * and it's slightly modified for Closure.
  */
 
 goog.provide('goog.osapi');
@@ -28,6 +28,10 @@ goog.provide('goog.osapi');
 // Expose osapi from container side.
 var osapi = osapi || {};
 goog.exportSymbol('osapi', osapi);
+
+
+/** @type {Function} */
+osapi.callback;
 
 
 /**
@@ -83,9 +87,9 @@ goog.osapi.init = function() {
    // Container-side binding for the gadgetsrpctransport used by osapi.
    // Containers add services to the client-side osapi implementation by
    // defining them in the osapi namespace
-  if (gadgets && gadgets.rpc) { // Only define if gadgets rpc exists
+  if (gadgets && gadgets.rpc) { // Only define if gadgets rpc exists.
     // Register the osapi RPC dispatcher.
     gadgets.rpc.register('osapi._handleGadgetRpcMethod',
-        goog.osapi.handleGadgetRpcMethod);
+        /** @type {!Function} */ (goog.osapi.handleGadgetRpcMethod));
   }
 };
