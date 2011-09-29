@@ -265,7 +265,8 @@ goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
 
   switch (keyCode) {
     case goog.events.KeyCodes.ENTER:
-      return true;
+      // IE9 does not fire KEYPRESS on ENTER.
+      return !(goog.userAgent.IE && goog.userAgent.isDocumentMode(9));
     case goog.events.KeyCodes.ESC:
       return !goog.userAgent.WEBKIT;
   }
