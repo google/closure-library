@@ -556,6 +556,25 @@ function testInverse() {
 }
 
 
+function testCoveredLength() {
+  var r = new goog.math.RangeSet();
+  assertEquals(0, r.coveredLength());
+
+  r.add(new goog.math.Range(5, 9));
+  assertEquals(4, r.coveredLength());
+
+  r.add(new goog.math.Range(0, 3));
+  r.add(new goog.math.Range(12, 13));
+  assertEquals(8, r.coveredLength());
+
+  r.add(new goog.math.Range(-1, 13));
+  assertEquals(14, r.coveredLength());
+
+  r.add(new goog.math.Range(13, 13.5));
+  assertEquals(14.5, r.coveredLength());
+}
+
+
 function testGetBounds() {
   var r = new goog.math.RangeSet();
 

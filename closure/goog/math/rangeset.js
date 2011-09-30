@@ -317,6 +317,18 @@ goog.math.RangeSet.prototype.inverse = function(range) {
 
 
 /**
+ * @return {number} The sum of the lengths of ranges covered in the set.
+ */
+goog.math.RangeSet.prototype.coveredLength = function() {
+  return /** @type {number} */ (goog.array.reduce(
+      this.ranges_,
+      function(res, range) {
+        return res + range.end - range.start;
+      }, 0));
+};
+
+
+/**
  * @return {goog.math.Range} The total range this set covers, ignoring any
  *     gaps between ranges.
  */
