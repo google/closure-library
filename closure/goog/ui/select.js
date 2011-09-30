@@ -79,7 +79,7 @@ goog.ui.Select.prototype.defaultCaption_ = null;
  */
 goog.ui.Select.prototype.enterDocument = function() {
   goog.ui.Select.superClass_.enterDocument.call(this);
-  this.updateCaption_();
+  this.updateCaption();
   this.listenToSelectionModelEvents_();
   // Need to set HASPOPUP to false since it's set to true in the parent class.
   goog.dom.a11y.setState(this.getElement(),
@@ -143,7 +143,7 @@ goog.ui.Select.prototype.handleMenuAction = function(e) {
 goog.ui.Select.prototype.handleSelectionChange = function(e) {
   var item = this.getSelectedItem();
   goog.ui.Select.superClass_.setValue.call(this, item && item.getValue());
-  this.updateCaption_();
+  this.updateCaption();
 };
 
 
@@ -198,7 +198,7 @@ goog.ui.Select.prototype.getDefaultCaption = function() {
  */
 goog.ui.Select.prototype.setDefaultCaption = function(caption) {
   this.defaultCaption_ = caption;
-  this.updateCaption_();
+  this.updateCaption();
 };
 
 
@@ -375,9 +375,9 @@ goog.ui.Select.prototype.listenToSelectionModelEvents_ = function() {
  * Updates the caption to be shown in the select button.  If no option is
  * selected and a default caption is set, sets the caption to the default
  * caption; otherwise to the empty string.
- * @private
+ * @protected
  */
-goog.ui.Select.prototype.updateCaption_ = function() {
+goog.ui.Select.prototype.updateCaption = function() {
   var item = this.getSelectedItem();
   this.setContent(item ? item.getCaption() : this.defaultCaption_);
 };
