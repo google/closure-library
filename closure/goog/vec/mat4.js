@@ -1207,7 +1207,8 @@ goog.vec.Mat4.toLookAt = function(mat, eyePt, fwdVec, worldUpVec) {
  * the ZXZ convention.
  * Given the euler angles [theta1, theta2, theta3], the rotation is defined as
  * rotation = rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
- * where rotation_x(theta) means rotation around the X axis of theta radians.
+ * with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
+ * rotation_x(theta) means rotation around the X axis of theta radians,
  *
  * @param {goog.vec.Mat4.Mat4Like} mat The matrix.
  * @param {number} theta1 The angle of rotation around the Z axis in radians.
@@ -1251,28 +1252,45 @@ goog.vec.Mat4.makeEulerZXZ = function(mat, theta1, theta2, theta3) {
 
 
 /**
- * Decomposes a rotation matrix into Euler angles using the ZXZ convention.
+ * Decomposes a rotation matrix into Euler angles using the ZXZ convention so
+ * that rotation = rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
+ * with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
+ * rotation_x(theta) means rotation around the X axis of theta radians.
  *
  * @param {goog.vec.Mat4.Mat4Like} mat The matrix.
  * @param {goog.vec.Mat4.Mat4Like} euler The ZXZ Euler angles in
- *     radians. euler = [roll, tilt, pan].
+ *     radians as [theta1, theta2, theta3].
+ * @param {boolean=} opt_theta2IsNegative Whether theta2 is in [-pi, 0] instead
+ *     of the default [0, pi].
  */
-goog.vec.Mat4.toEulerZXZ = function(mat, euler) {
-  var s2 = Math.sqrt(mat[2] * mat[2] + mat[6] * mat[6]);
+goog.vec.Mat4.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
+  // There is an ambiguity in the sign of sinTheta2 because of the sqrt.
+  var sinTheta2 = Math.sqrt(mat[2] * mat[2] + mat[6] * mat[6]);
 
-  // There is an ambiguity in the sign of s2. We assume the tilt value
-  // is between [-pi/2, 0], so s2 is always negative.
-  if (s2 > goog.vec.EPSILON) {
-    euler[2] = Math.atan2(-mat[2], -mat[6]);
-    euler[1] = Math.atan2(-s2, mat[10]);
-    euler[0] = Math.atan2(-mat[8], mat[9]);
+  // By default we explicitely constrain theta2 to be in [0, pi],
+  // so sinTheta2 is always positive. We can change the behavior and specify
+  // theta2 to be negative in [-pi, 0] with opt_Theta2IsNegative.
+  var signTheta2 = opt_theta2IsNegative ? -1 : 1;
+
+  if (sinTheta2 > goog.vec.EPSILON) {
+    euler[2] = Math.atan2(mat[2] * signTheta2, mat[6] * signTheta2);
+    euler[1] = Math.atan2(sinTheta2 * signTheta2, mat[10]);
+    euler[0] = Math.atan2(mat[8] * signTheta2, -mat[9] * signTheta2);
   } else {
     // There is also an arbitrary choice for roll = 0 or pan = 0 in this case.
     // We assume roll = 0 as some applications do not allow the camera to roll.
     euler[0] = 0;
-    euler[1] = Math.atan2(-s2, mat[10]);
+    euler[1] = Math.atan2(sinTheta2 * signTheta2, mat[10]);
     euler[2] = Math.atan2(mat[1], mat[0]);
   }
+
+  // Atan2 outputs angles in [-pi, pi] so we bring them back to [0, 2 * pi].
+  euler[0] = (euler[0] + Math.PI * 2) % (Math.PI * 2);
+  euler[2] = (euler[2] + Math.PI * 2) % (Math.PI * 2);
+  // For theta2 we want the angle to be in [0, pi] or [-pi, 0] depending on
+  // signTheta2.
+  euler[1] = ((euler[1] * signTheta2 + Math.PI * 2) % (Math.PI * 2)) *
+      signTheta2;
 };
 
 

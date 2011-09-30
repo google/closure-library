@@ -549,25 +549,39 @@ See the COPYING file for details.
   function testMakeEulerZXZ() {
     var m0 = goog.vec.Mat4.create();
     var roll = Math.random() * 2 * Math.PI;
-    var tilt = -Math.random() * Math.PI / 2;
-    var pan = Math.random() * 2 * Math.PI;
+    var tilt = Math.random() * Math.PI;
+    var yaw = Math.random() * 2 * Math.PI;
 
     goog.vec.Mat4.makeRotate(m0, roll, 0, 0, 1);
     goog.vec.Mat4.rotate(m0, tilt, 1, 0, 0);
-    goog.vec.Mat4.rotate(m0, pan, 0, 0, 1);
+    goog.vec.Mat4.rotate(m0, yaw, 0, 0, 1);
 
     var m1 = goog.vec.Mat4.create();
-    goog.vec.Mat4.makeEulerZXZ(m1, roll, tilt, pan);
+    goog.vec.Mat4.makeEulerZXZ(m1, roll, tilt, yaw);
     assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
 
 
     var euler = [0, 0, 0];
     goog.vec.Mat4.toEulerZXZ(m0, euler);
-    // Bring them to their range.
-    euler[0] = (euler[0] + Math.PI * 2) % (Math.PI * 2);
-    euler[1] = (euler[1] - Math.PI * 2) % (Math.PI * 2);
-    euler[2] = (euler[2] + Math.PI * 2) % (Math.PI * 2);
-    assertElementsRoughlyEqual([roll, tilt, pan], euler, goog.vec.EPSILON);
+
+    assertRoughlyEquals(roll, euler[0], goog.vec.EPSILON);
+    assertRoughlyEquals(tilt, euler[1], goog.vec.EPSILON);
+    assertRoughlyEquals(yaw, euler[2], goog.vec.EPSILON);
+
+    // Test negative tilt now.
+    goog.vec.Mat4.makeRotate(m0, roll, 0, 0, 1);
+    goog.vec.Mat4.rotate(m0, -tilt, 1, 0, 0);
+    goog.vec.Mat4.rotate(m0, yaw, 0, 0, 1);
+
+    goog.vec.Mat4.makeEulerZXZ(m1, roll, -tilt, yaw);
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+
+    var euler = [0, 0, 0];
+    goog.vec.Mat4.toEulerZXZ(m0, euler, true);
+
+    assertRoughlyEquals(roll, euler[0], goog.vec.EPSILON);
+    assertRoughlyEquals(-tilt, euler[1], goog.vec.EPSILON);
+    assertRoughlyEquals(yaw, euler[2], goog.vec.EPSILON);
   }
 
   function testEulerZXZExtrema() {
@@ -578,7 +592,8 @@ See the COPYING file for details.
 
     var euler = [0, 0, 0];
     goog.vec.Mat4.toEulerZXZ(m0, euler);
-    assertElementsRoughlyEqual([0, -Math.PI / 2, 0], euler, goog.vec.EPSILON);
+    assertElementsRoughlyEqual(
+        [Math.PI, Math.PI / 2, Math.PI], euler, goog.vec.EPSILON);
     goog.vec.Mat4.makeEulerZXZ(m1, euler[0], euler[1], euler[2]);
     assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
   }
