@@ -58,6 +58,20 @@ goog.color.parse = function(str) {
 
 
 /**
+ * Determines if the given string can be parsed as a color.
+ *     {@see goog.color.parse}.
+ * @param {string} str Potential color string.
+ * @return {boolean} True if str is in a format that can be parsed to a color.
+ */
+goog.color.isValidColor = function(str) {
+  var maybeHex = goog.color.prependHashIfNecessaryHelper(str);
+  return !!(goog.color.isValidHexColor_(maybeHex) ||
+            goog.color.isValidRgbColor_(str).length ||
+            goog.color.names && goog.color.names[str.toLowerCase()]);
+};
+
+
+/**
  * Parses red, green, blue components out of a valid rgb color string.
  * @param {string} str RGB representation of a color.
  *    {@see goog.color.isValidRgbColor_}.

@@ -20,6 +20,22 @@ See the COPYING file for details.
 <body>
 <script>
 
+function testIsValidColor() {
+  var goodColors = ['#ffffff', '#ff7812', '#012345', '#Ff003D', '#3CA',
+                    '(255, 26, 75)', 'RGB(2, 3, 4)', '(0,0,0)', 'white',
+                    'blue'];
+  var badColors = ['#xxxxxx', '8899000', 'not_color', '#1234567', 'fffffg',
+                   '(2555,0,0)', '(1,2,3,4)', 'rgb(1,20,)', 'RGB(20,20,20,)',
+                   'omgwtfbbq'];
+  for (var i = 0; i < goodColors.length; i++) {
+    assertTrue(goodColors[i], goog.color.isValidColor(goodColors[i]));
+  }
+  for (var i = 0; i < badColors.length; i++) {
+    assertFalse(badColors[i], goog.color.isValidColor(badColors[i]));
+  }
+}
+
+
 function testIsValidHexColor() {
   var goodHexColors = ['#ffffff', '#ff7812', '#012345', '#Ff003D', '#3CA'];
   var badHexColors = ['#xxxxxx', '889900', 'not_color', '#1234567', 'fffffg'];
