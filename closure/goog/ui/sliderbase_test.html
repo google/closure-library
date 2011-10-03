@@ -15,10 +15,11 @@ See the COPYING file for details.
 <script type="text/javascript">
   goog.require('goog.dom');
   goog.require('goog.events');
-  goog.require('goog.ui.SliderBase');
-  goog.require('goog.testing.jsunit');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
+  goog.require('goog.ui.SliderBase');
+  goog.require('goog.userAgent');
 </script>
 <style type="text/css">
 
@@ -254,7 +255,12 @@ function testRangeHighlight() {
 }
 
 function testRangeHighlightAnimation() {
-  var animationDelay = 150; // in ms, is a bit higher than actual delay
+  var animationDelay = 160; // Delay in ms, is a bit higher than actual delay.
+  if (goog.userAgent.IE) {
+    // For some reason, (probably due to how timing works), IE7 and IE8 will not
+    // stop if we don't wait for it.
+    animationDelay = 250;
+  }
 
   var rangeHighlight = goog.dom.getElement('rangeHighlight');
   twoThumbSlider.setValue(0);
