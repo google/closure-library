@@ -513,15 +513,34 @@ goog.ui.AutoComplete.prototype.dismissOnDelay = function() {
 
 
 /**
- * Call a dismiss after a delay, if there's already a dismiss active, ignore.
+ * Cancels any delayed dismiss events immediately.
+ * @return {boolean} Whether a delayed dismiss was cancelled.
+ * @private
+ */
+goog.ui.AutoComplete.prototype.immediatelyCancelDelayedDismiss_ = function() {
+  if (this.dismissTimer_) {
+    window.clearTimeout(this.dismissTimer_);
+    this.dismissTimer_ = null;
+    return true;
+  }
+  return false;
+};
+
+
+/**
+ * Cancel the active delayed dismiss if there is one.
  */
 goog.ui.AutoComplete.prototype.cancelDelayedDismiss = function() {
-  window.setTimeout(goog.bind(function() {
-    if (this.dismissTimer_) {
-      window.clearTimeout(this.dismissTimer_);
-      this.dismissTimer_ = null;
-    }
-  }, this), 10);
+  // Under certain circumstances a cancel event occurs immediately prior to a
+  // delayedDismiss event that it should be cancelling. To handle this situation
+  // properly, a timer is used to stop that event.
+  // Using only the timer creates undesirable behavior when the cancel occurs
+  // less than 10ms before the delayed dismiss timout ends. If that happens the
+  // clearTimeout() will occur too late and have no effect.
+  if (!this.immediatelyCancelDelayedDismiss_()) {
+    window.setTimeout(goog.bind(this.immediatelyCancelDelayedDismiss_, this),
+        10);
+  }
 };
 
 
