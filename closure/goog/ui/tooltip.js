@@ -886,6 +886,23 @@ goog.ui.Tooltip.prototype.clearHideTimer = function() {
 };
 
 
+/**
+ * Sets whether the tooltip should be visible. Overrides the default behavior
+ * inherited from {@see goog.ui.PopupBase} by calling {@see clearShowTimer} or
+ * {@see clearHideTimer} first, if appropriate.
+ *
+ * @param {boolean} visible Desired visibility state.
+ */
+goog.ui.Tooltip.prototype.setVisible = function(visible) {
+  if (visible) {
+    this.clearHideTimer();
+  } else {
+    this.clearShowTimer();
+  }
+  goog.base(this, 'setVisible', visible);
+};
+
+
 /** @override */
 goog.ui.Tooltip.prototype.disposeInternal = function() {
   this.setVisible(false);
