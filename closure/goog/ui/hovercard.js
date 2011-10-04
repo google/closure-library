@@ -289,6 +289,21 @@ goog.ui.HoverCard.prototype.cancelTrigger = function() {
 
 
 /**
+ * Sets whether the hovercard should be visible. Overrides the default behavior
+ * inherited from {@see goog.ui.PopupBase} by calling {@see cancelTrigger} first
+ * if the hovercard is to be hidden.
+ *
+ * @param {boolean} visible Desired visibility state.
+ */
+goog.ui.HoverCard.prototype.setVisible = function(visible) {
+  if (!visible) {
+    this.cancelTrigger();
+  }
+  goog.base(this, 'setVisible', visible);
+};
+
+
+/**
  * If hovercard is in the process of being triggered, then cancel it.
  * @private
  */
