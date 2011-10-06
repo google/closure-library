@@ -34,20 +34,24 @@ function allChars(start, end, opt_allowControlCharacters) {
 
 function testStringSerialize() {
 
-  assertEquals('Empty string', goog.json.serialize(''), '""');
+  assertSerialize('""', '');
 
   // unicode
   var str = allChars(0, 10000);
   eval(goog.json.serialize(str));
 
-  assertEquals('true as a string', goog.json.serialize('true'), '"true"');
-  assertEquals('false as a string', goog.json.serialize('false'), '"false"');
-  assertEquals('null as a string', goog.json.serialize('null'), '"null"');
-  assertEquals('number as a string', goog.json.serialize('0'), '"0"');
+  assertSerialize('"true"', 'true');
+  assertSerialize('"false"', 'false');
+  assertSerialize('"null"', 'null');
+  assertSerialize('"0"', '0');
 }
 
 function testNullSerialize() {
-  assertEquals('null', goog.json.serialize(null), 'null');
+  assertSerialize('null', null);
+
+  // TODO(nicksantos): I'm pretty sure that the goog.json.serialize behavior
+  // is correct by the ES5 spec, but JSON.stringify(undefined) is undefined
+  // on both Firefox and Chrome.
   assertEquals('undefined', goog.json.serialize(undefined), 'null');
 
   assertNotEquals('0', goog.json.serialize(0), 'null');
@@ -56,16 +60,16 @@ function testNullSerialize() {
 }
 
 function testNumberSerialize() {
-  assertEquals('0', goog.json.serialize(0), '0');
-  assertEquals('12345', goog.json.serialize(12345), '12345');
-  assertEquals('-12345', goog.json.serialize(-12345), '-12345');
+  assertSerialize('0', 0);
+  assertSerialize('12345', 12345);
+  assertSerialize('-12345', -12345);
 
-  assertEquals('0.1', goog.json.serialize(0.1), '0.1');
+  assertSerialize('0.1', 0.1);
   // the leading zero may not be omitted
-  assertEquals('.1', goog.json.serialize(.1), '0.1');
+  assertSerialize('0.1', .1);
 
   // no leading +
-  assertEquals('+1',goog.json.serialize(+1), '1');
+  assertSerialize('1', +1);
 
   // either format is OK
   var s = goog.json.serialize(1e50);
@@ -79,14 +83,14 @@ function testNumberSerialize() {
   assertTrue('1e50', s == "1e-50" || s == "1E-50");
 
   // These numbers cannot be represented in JSON
-  assertEquals('NaN', goog.json.serialize(NaN), 'null');
-  assertEquals('Infinity', goog.json.serialize(Infinity), 'null');
-  assertEquals('-Infinity', goog.json.serialize(-Infinity), 'null');
+  assertSerialize('null', NaN);
+  assertSerialize('null', Infinity);
+  assertSerialize('null', -Infinity);
 }
 
 function testBooleanSerialize() {
-  assertEquals('true', goog.json.serialize(true), 'true');
-  assertEquals('false', goog.json.serialize(false), 'false');
+  assertSerialize('true', true);
+  assertSerialize('false', false);
 
   assertNotEquals('0', goog.json.serialize(0), 'false');
   assertNotEquals('"false"', goog.json.serialize('false'), 'false');
@@ -101,21 +105,21 @@ function testBooleanSerialize() {
 }
 
 function testArraySerialize() {
-  assertEquals('[]', goog.json.serialize([]), '[]');
-  assertEquals('[1]', goog.json.serialize([1]), '[1]');
-  assertEquals('[1,2]', goog.json.serialize([1,2]), '[1,2]');
-  assertEquals('[1,2,3]', goog.json.serialize([1,2,3]), '[1,2,3]');
-  assertEquals('[[]]', goog.json.serialize([[]]), '[[]]');
+  assertSerialize('[]', []);
+  assertSerialize('[1]', [1]);
+  assertSerialize('[1,2]', [1,2]);
+  assertSerialize('[1,2,3]', [1,2,3]);
+  assertSerialize('[[]]', [[]]);
 
   assertNotEquals('{length:0}', goog.json.serialize({length:0}), '[]');
 }
 
 function testObjectSerialize_emptyObject() {
-  assertEquals('{}', goog.json.serialize({}), '{}');
+  assertSerialize('{}', {});
 }
 
 function testObjectSerialize_oneItem() {
-  assertEquals('{"a":"b"}', goog.json.serialize({a:'b'}), '{"a":"b"}');
+  assertSerialize('{"a":"b"}', {a:'b'});
 }
 
 function testObjectSerialize_twoItems() {
@@ -125,7 +129,7 @@ function testObjectSerialize_twoItems() {
 }
 
 function testObjectSerialize_whitespace() {
-  assertEquals('{" ":" "}', goog.json.serialize({' ':' '}), '{" ":" "}');
+  assertSerialize('{" ":" "}', {' ':' '});
 }
 
 function testSerializeSkipFunction() {
@@ -480,6 +484,49 @@ function testEscape() {
   assertEquals('Should eval to the same string after escaping',
                escaped,
                goog.json.parse(goog.json.serialize(escaped)));
+}
+
+function testReplacer() {
+  assertSerialize('[null,null,0]', [,,0]);
+
+  assertSerialize('[0,0,{"x":0}]', [,,{x:0}], function(k, v) {
+    if (v === undefined && goog.isArray(this)) {
+      return 0;
+    }
+    return v;
+  });
+
+  assertSerialize('[0,1,2,3]', [0, 0, 0, 0], function(k, v) {
+    var kNum = Number(k);
+    if (k && !isNaN(kNum)) {
+      return kNum;
+    }
+    return v;
+  });
+
+  assertSerialize(
+      '{"a":1,"b":{"c":2}}',
+      {'a': 0, 'b': {'c': 1}},
+      function(k, v) {
+    return typeof v == 'number' ? v + 1 : v;
+  });
+}
+
+/**
+ * Asserts that the given object serializes to the given value.
+ * If the current browser has an implementation of JSON.serialize,
+ * we make sure our version matches that one.
+ */
+function assertSerialize(expected, obj, opt_replacer) {
+  assertEquals(expected, goog.json.serialize(obj, opt_replacer));
+
+  // NOTE(nicksantos): Wow, native browser implementations of this suck.
+  if (typeof JSON != 'undefined' && goog.userAgent.WEBKIT) {
+    assertEquals(
+        'goog.json.serialize does not match JSON.stringify',
+        expected,
+        JSON.stringify(obj, opt_replacer));
+  }
 }
 
 /**
