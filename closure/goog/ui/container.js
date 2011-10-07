@@ -871,7 +871,7 @@ goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
   goog.ui.Container.superClass_.addChildAt.call(this, control, index,
       opt_render);
 
-  if (opt_render && this.isInDocument()) {
+  if (control.isInDocument() && this.isInDocument()) {
     this.registerChildId_(control);
   }
 
