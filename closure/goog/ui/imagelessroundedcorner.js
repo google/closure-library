@@ -32,6 +32,7 @@ goog.provide('goog.ui.VmlRoundedCorner');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.graphics.SolidFill');
 goog.require('goog.graphics.Stroke');
+goog.require('goog.graphics.Path');
 goog.require('goog.graphics.VmlGraphics');
 goog.require('goog.userAgent');
 
@@ -860,7 +861,7 @@ goog.ui.VmlRoundedCorner.prototype.draw = function() {
   }
 
   // Draw the defined path.
-  var path = this.graphics_.createPath();
+  var path = new goog.graphics.Path();
   path.moveTo(this.start_[0], this.start_[1]);
   path.arc(this.xCenter_,
            this.yCenter_,
@@ -911,7 +912,7 @@ goog.ui.VmlRoundedCorner.prototype.drawBackground_ =
       this.start_[0] -
           goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR :
       goog.ui.AbstractImagelessRoundedCorner.BORDER_WIDTH_FACTOR;
-  var path = this.graphics_.createPath();
+  var path = new goog.graphics.Path();
 
   // Draw out the path according to the points just defined.
   path.moveTo(this.start_[0], this.start_[1]);

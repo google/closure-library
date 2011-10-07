@@ -31,6 +31,7 @@ goog.require('goog.fx.Transition.EventType');
 goog.require('goog.fx.easing');
 goog.require('goog.graphics');
 goog.require('goog.graphics.Font');
+goog.require('goog.graphics.Path');
 goog.require('goog.graphics.SolidFill');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.GaugeTheme');
@@ -671,7 +672,7 @@ goog.ui.Gauge.prototype.draw_ = function() {
     var rangeColor = this.rangeColors_[i];
     var fromValue = rangeColor.fromValue;
     var toValue = rangeColor.toValue;
-    var path = graphics.createPath();
+    var path = new goog.graphics.Path();
     var fromAngle = this.valueToAngle_(fromValue);
     var toAngle = this.valueToAngle_(toValue);
     path.arc(cx, cy, r, r, fromAngle, toAngle - fromAngle, false);
@@ -714,8 +715,8 @@ goog.ui.Gauge.prototype.draw_ = function() {
   var ticks = majorTicks * minorTicks;
   var valueRange = this.maxValue_ - this.minValue_;
   var tickValueSpan = valueRange / ticks;
-  var majorTicksPath = graphics.createPath();
-  var minorTicksPath = graphics.createPath();
+  var majorTicksPath = new goog.graphics.Path();
+  var minorTicksPath = new goog.graphics.Path();
 
   var tickLabelFill = new goog.graphics.SolidFill(theme.getTickLabelColor());
   var tickLabelFont = this.tickLabelFont_;
@@ -903,7 +904,7 @@ goog.ui.Gauge.prototype.drawValue_ = function() {
   var controlPointMidDy = goog.math.angleDy(angleRight,
       distanceControlPointBase);
 
-  var path = graphics.createPath();
+  var path = new goog.graphics.Path();
   path.moveTo(cx + frontDx, cy + frontDy);
   path.curveTo(cx + controlPointMidDx, cy + controlPointMidDy,
       cx - backDx + (controlPointMidDx / 2),
