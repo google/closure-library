@@ -107,10 +107,22 @@ function testGetLastUri() {
   assertEquals('message sent, URI saved', requestUrl, xhr.getLastUri());
 }
 
+function testGetLastMethod() {
+  var xhr = new goog.testing.net.XhrIo();
+  assertUndefined('nothing sent yet, empty method', xhr.getLastMethod());
+
+  var method = 'POKE';
+  xhr.send('http://www.example.com/', method);
+  assertEquals('message sent, method saved', method, xhr.getLastMethod());
+  xhr.simulateResponse(200, '');
+
+  xhr.send('http://www.example.com/');
+  assertEquals('message sent, method saved', 'GET', xhr.getLastMethod());
+}
+
 function testGetLastContent() {
   var xhr = new goog.testing.net.XhrIo();
-  assertEquals('nothing sent yet, empty content',
-               undefined, xhr.getLastContent());
+  assertUndefined('nothing sent yet, empty content', xhr.getLastContent());
 
   var postContent = 'var=value&var2=value2';
   xhr.send('http://www.example.com/', undefined, postContent);
@@ -119,24 +131,24 @@ function testGetLastContent() {
   xhr.simulateResponse(200, '');
 
   xhr.send('http://www.example.com/');
-  assertEquals('GET message sent, content cleaned',
-               undefined, xhr.getLastContent());
+  assertUndefined('GET message sent, content cleaned', xhr.getLastContent());
 }
 
 function testGetLastRequestHeaders() {
   var xhr = new goog.testing.net.XhrIo();
-  assertEquals('nothing sent yet, empty headers',
-               undefined, xhr.getLastRequestHeaders());
+  assertUndefined('nothing sent yet, empty headers',
+                  xhr.getLastRequestHeaders());
 
    xhr.send('http://www.example.com/', undefined, undefined,
        {'From': 'page@google.com'});
    assertObjectEquals('Request sent with extra headers, headers saved',
-                      {'From': 'page@google.com'}, xhr.getLastRequestHeaders());
+                      {'From': 'page@google.com'},
+                      xhr.getLastRequestHeaders());
    xhr.simulateResponse(200, '');
 
    xhr.send('http://www.example.com');
-   assertEquals('New request sent without extra headers',
-                undefined, xhr.getLastRequestHeaders());
+   assertUndefined('New request sent without extra headers',
+                   xhr.getLastRequestHeaders());
 }
 
 function testGetResponseText() {
