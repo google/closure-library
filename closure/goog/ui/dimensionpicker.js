@@ -268,8 +268,12 @@ goog.ui.DimensionPicker.prototype.setValue = function(columns,
   if (this.highlightedColumns_ != columns ||
       this.highlightedRows_ != opt_rows) {
     var renderer = this.getRenderer();
-    this.size_.width = Math.max(columns, this.minColumns);
-    this.size_.height = Math.max(opt_rows, this.minRows);
+    // Show one more row/column than highlighted so the user understands the
+    // palette can grow.
+    this.size_.width = Math.max(
+        Math.min(columns + 1, this.maxColumns), this.minColumns);
+    this.size_.height = Math.max(
+        Math.min(opt_rows + 1, this.maxRows), this.minRows);
     renderer.updateSize(this, this.getElement());
 
     this.highlightedColumns_ = columns;
