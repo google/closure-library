@@ -13,20 +13,26 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.ui.AutoComplete</title>
 <script src="../../base.js"></script>
 <script>
+  goog.require('goog.dom');
   goog.require('goog.dom.a11y');
   goog.require('goog.dom.a11y.Role');
   goog.require('goog.dom.a11y.State');
-  goog.require('goog.events.EventTarget');
   goog.require('goog.events.EventHandler');
+  goog.require('goog.events.EventTarget');
+  goog.require('goog.string');
+  goog.require('goog.testing.MockControl');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.mockmatchers');
   goog.require('goog.ui.AutoComplete');
   goog.require('goog.ui.AutoComplete.EventType');
+  goog.require('goog.ui.AutoComplete.InputHandler');
   goog.require('goog.ui.AutoComplete.Renderer');
-  goog.require('goog.string');
 </script>
+</head>
+<body>
+<div id="test-area"></div>
 <script>
-
 /**
  * Mock DataStore
  */
@@ -74,7 +80,7 @@ MockSelect.prototype.selectRow = function(row) {
  * Renderer subclass that exposes additional private members for testing.
  */
 function TestRend() {
-  goog.ui.AutoComplete.Renderer.call(this);
+  goog.ui.AutoComplete.Renderer.call(this, goog.dom.getElement('test-area'));
 }
 goog.inherits(TestRend, goog.ui.AutoComplete.Renderer);
 
@@ -95,13 +101,19 @@ TestRend.prototype.getRowDiv = function(index) {
 };
 
 var handler;
+var inputElement;
+var mockControl;
 
 function setUp() {
+  inputElement = goog.dom.createDom('input', {type: 'text'});
   handler = new goog.events.EventHandler();
+  mockControl = new goog.testing.MockControl();
 }
 
 function tearDown() {
   handler.dispose();
+  mockControl.$tearDown();
+  goog.dom.removeChildren(goog.dom.getElement('test-area'));
 }
 
 /**
@@ -608,7 +620,7 @@ function testDispose() {
 function testRolesAndStates() {
   function checkActiveDescendant(activeDescendant) {
     assertEquals(
-        goog.dom.a11y.getActiveDescendant(someDiv),
+        goog.dom.a11y.getActiveDescendant(inputElement),
         activeDescendant);
   }
   function checkRole(el, role) {
@@ -617,9 +629,8 @@ function testRolesAndStates() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var someDiv = goog.dom.createDom('div', {id: 'someDiv'}, 'DIV');
   var ac = new goog.ui.AutoComplete(ds, rend, select);
-  ac.setTarget(someDiv);
+  ac.setTarget(inputElement);
 
   // initially activedescendant is not set
   checkActiveDescendant(null);
@@ -638,10 +649,50 @@ function testRolesAndStates() {
   checkActiveDescendant(null);
 }
 
+function testAttachInputWithAnchor() {
+  var anchorElement = goog.dom.createDom('div', null, inputElement);
+
+  var mockRenderer = mockControl.createLooseMock(
+      goog.ui.AutoComplete.Renderer, true);
+  mockRenderer.setAnchorElement(anchorElement);
+  var ignore = goog.testing.mockmatchers.ignoreArgument;
+  mockRenderer.renderRows(ignore, ignore, inputElement);
+
+  var mockInputHandler = mockControl.createLooseMock(
+      goog.ui.AutoComplete.InputHandler, true);
+  mockInputHandler.attachInputs(inputElement);
+
+  mockControl.$replayAll();
+  var autoComplete = new goog.ui.AutoComplete(
+      null, mockRenderer, mockInputHandler);
+  autoComplete.attachInputWithAnchor(inputElement, anchorElement);
+  autoComplete.setTarget(inputElement);
+
+  autoComplete.renderRows(['abc', 'def']);
+  mockControl.$verifyAll();
+}
+
+function testDetachInputWithAnchor() {
+  var mockRenderer = mockControl.createLooseMock(
+      goog.ui.AutoComplete.Renderer, true);
+  var mockInputHandler = mockControl.createLooseMock(
+      goog.ui.AutoComplete.InputHandler, true);
+  var anchorElement = goog.dom.createDom('div', null, inputElement);
+  var inputElement2 = goog.dom.createDom('input', {type: 'text'});
+  var anchorElement2 = goog.dom.createDom('div', null, inputElement2);
+
+  mockControl.$replayAll();
+  var autoComplete = new goog.ui.AutoComplete(
+      null, mockRenderer, mockInputHandler);
+
+  autoComplete.attachInputWithAnchor(inputElement, anchorElement);
+  autoComplete.attachInputWithAnchor(inputElement2, anchorElement2);
+  autoComplete.detachInputs(inputElement, inputElement2);
+
+  assertFalse(goog.getUid(inputElement) in autoComplete.inputToAnchorMap_);
+  assertFalse(goog.getUid(inputElement2) in autoComplete.inputToAnchorMap_);
+  mockControl.$verifyAll();
+}
 </script>
-
-</head>
-
-<body id='body'>
 </body>
 </html>
