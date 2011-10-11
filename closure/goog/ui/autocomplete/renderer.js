@@ -236,14 +236,6 @@ goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
 
 
 /**
- * The anchor element to position the rendered autocompleter against.
- * @type {Element}
- * @private
- */
-goog.ui.AutoComplete.Renderer.prototype.anchorElement_;
-
-
-/**
  * The element on which to base the width of the autocomplete.
  * @type {Node}
  * @private
@@ -318,15 +310,6 @@ goog.ui.AutoComplete.Renderer.prototype.setHighlightAllTokens =
 goog.ui.AutoComplete.Renderer.prototype.setMenuFadeDuration =
     function(duration) {
   this.menuFadeDuration_ = duration;
-};
-
-
-/**
- * Sets the anchor element for the subsequent call to renderRows.
- * @param {Element} anchor The anchor element.
- */
-goog.ui.AutoComplete.Renderer.prototype.setAnchorElement = function(anchor) {
-  this.anchorElement_ = anchor;
 };
 
 
@@ -573,12 +556,10 @@ goog.ui.AutoComplete.Renderer.prototype.redraw = function() {
  */
 goog.ui.AutoComplete.Renderer.prototype.reposition = function() {
   if (this.target_ && this.reposition_) {
-    // TODO(user): Can we use MenuAnchoredPosition instead?
-    var anchorElement = this.anchorElement_ || this.target_;
-    var topLeft = goog.style.getPageOffset(anchorElement);
-    var locationNodeSize = goog.style.getSize(anchorElement);
+    var topLeft = goog.style.getPageOffset(this.target_);
+    var locationNodeSize = goog.style.getSize(this.target_);
     var viewSize = goog.style.getSize(goog.style.getClientViewportElement(
-        anchorElement));
+        this.target_));
     var elSize = goog.style.getSize(this.element_);
     topLeft.y = this.topAlign_ ? topLeft.y - elSize.height :
         topLeft.y + locationNodeSize.height;

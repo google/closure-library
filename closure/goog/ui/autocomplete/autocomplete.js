@@ -128,15 +128,6 @@ goog.ui.AutoComplete = function(matcher, renderer, selectionHandler) {
    * @private
    */
   this.dismissTimer_ = null;
-
-  /**
-   * Mapping from text input element to the anchor element. If the
-   * mapping does not exist, the input element will act as the anchor
-   * element.
-   * @type {Object.<Element>}
-   * @private
-   */
-  this.inputToAnchorMap_ = {};
 };
 goog.inherits(goog.ui.AutoComplete, goog.events.EventTarget);
 
@@ -556,7 +547,6 @@ goog.ui.AutoComplete.prototype.cancelDelayedDismiss = function() {
 /** @override */
 goog.ui.AutoComplete.prototype.disposeInternal = function() {
   goog.ui.AutoComplete.superClass_.disposeInternal.call(this);
-  delete this.inputToAnchorMap_;
   this.renderer_.dispose();
   this.selectionHandler_.dispose();
   this.matcher_ = null;
@@ -618,8 +608,6 @@ goog.ui.AutoComplete.prototype.renderRows = function(rows,
       data: rows[i]
     });
   }
-  this.renderer_.setAnchorElement(
-      this.inputToAnchorMap_[goog.getUid(this.target_)] || this.target_);
   this.renderer_.renderRows(rendRows, this.token_, this.target_);
 
   if (this.autoHilite_ && rendRows.length != 0 && this.token_) {
@@ -684,27 +672,6 @@ goog.ui.AutoComplete.prototype.detachInputs = function(var_args) {
   var inputHandler = /** @type {goog.ui.AutoComplete.InputHandler} */
       (this.selectionHandler_);
   inputHandler.detachInputs.apply(inputHandler, arguments);
-
-  // Remove mapping from input to anchor if one exists.
-  goog.array.forEach(arguments, function(input) {
-    goog.object.remove(this.inputToAnchorMap_, goog.getUid(input));
-  }, this);
-};
-
-
-/**
- * Attaches the autocompleter to a text area or text input element
- * with an anchor element. The anchor element is the element the
- * autocomplete box will be positioned against.
- * @param {Element} inputElement The input element. May be 'textarea',
- *     text 'input' element, or any other element that exposes similar
- *     interface.
- * @param {Element} anchorElement The anchor element.
- */
-goog.ui.AutoComplete.prototype.attachInputWithAnchor = function(
-    inputElement, anchorElement) {
-  this.inputToAnchorMap_[goog.getUid(inputElement)] = anchorElement;
-  this.attachInputs(inputElement);
 };
 
 
