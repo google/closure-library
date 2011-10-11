@@ -20,9 +20,7 @@
 goog.provide('goog.fx.css3.Transition');
 
 goog.require('goog.Timer');
-goog.require('goog.events.EventTarget');
-goog.require('goog.fx.Transition');  // Unreferenced: interface
-goog.require('goog.fx.Transition.EventType');
+goog.require('goog.fx.TransitionBase');
 goog.require('goog.style');
 goog.require('goog.style.transition');
 
@@ -63,8 +61,7 @@ goog.require('goog.style.transition');
  * @param {goog.style.transition.Css3Property|
  *     Array.<goog.style.transition.Css3Property>} transitions A single CSS3
  *     transition property or an array of it.
- * @extends {goog.events.EventTarget}
- * @implements {goog.fx.Transition}
+ * @extends {goog.fx.TransitionBase}
  * @constructor
  */
 goog.fx.css3.Transition = function(
@@ -101,14 +98,7 @@ goog.fx.css3.Transition = function(
    */
   this.transitions_ = goog.isArray(transitions) ? transitions : [transitions];
 };
-goog.inherits(goog.fx.css3.Transition, goog.events.EventTarget);
-
-
-/**
- * @type {boolean}
- * @private
- */
-goog.fx.css3.Transition.prototype.isPlaying_ = false;
+goog.inherits(goog.fx.css3.Transition, goog.fx.TransitionBase);
 
 
 /**
@@ -121,18 +111,25 @@ goog.fx.css3.Transition.prototype.timerId_;
 
 /** @override */
 goog.fx.css3.Transition.prototype.play = function() {
-  if (!this.dispatchEvent(goog.fx.Transition.EventType.PLAY) ||
-      !this.dispatchEvent(goog.fx.Transition.EventType.BEGIN)) return;
+  if (this.isPlaying()) {
+    return false;
+  }
 
-  this.isPlaying_ = true;
+  this.onBegin();
+  this.onPlay();
+
+  this.startTime = goog.now();
+  this.setStatePlaying();
 
   if (goog.style.transition.isSupported()) {
     goog.style.setStyle(this.element_, this.initialStyle_);
     // Allow element to get updated to its initial state before installing
     // CSS3 transition.
     goog.Timer.callOnce(this.play_, undefined, this);
+    return true;
   } else {
-    this.stop_();
+    this.stop_(false);
+    return false;
   }
 };
 
@@ -144,36 +141,43 @@ goog.fx.css3.Transition.prototype.play = function() {
 goog.fx.css3.Transition.prototype.play_ = function() {
   goog.style.transition.set(this.element_, this.transitions_);
   goog.style.setStyle(this.element_, this.finalStyle_);
-  this.timerId_ = goog.Timer.callOnce(this.stop_, this.duration_ * 1000, this);
+  this.timerId_ = goog.Timer.callOnce(
+      goog.bind(this.stop_, this, false), this.duration_ * 1000);
 };
 
 
 /** @override */
 goog.fx.css3.Transition.prototype.stop = function() {
-  if (!this.isPlaying_) return;
+  if (!this.isPlaying()) return;
 
   if (this.timerId_) {
     goog.Timer.clear(this.timerId_);
     this.timerId_ = 0;
   }
-  this.stop_();
+  this.stop_(true);
 };
 
 
 /**
  * Helper method for stop method.
+ * @param {boolean} stopped If the transition was stopped.
  * @private
  */
-goog.fx.css3.Transition.prototype.stop_ = function() {
-  this.isPlaying_ = false;
+goog.fx.css3.Transition.prototype.stop_ = function(stopped) {
   goog.style.transition.removeAll(this.element_);
 
   // Make sure that we have reached the final style.
   goog.style.setStyle(this.element_, this.finalStyle_);
 
-  this.dispatchEvent(goog.fx.Transition.EventType.END);
-  this.dispatchEvent(goog.fx.Transition.EventType.FINISH);
-  this.dispatchEvent(goog.fx.Transition.EventType.STOP);
+  this.endTime = goog.now();
+  this.setStateStopped();
+
+  if (stopped) {
+    this.onStop();
+  } else {
+    this.onFinish();
+  }
+  this.onEnd();
 };
 
 
@@ -181,4 +185,12 @@ goog.fx.css3.Transition.prototype.stop_ = function() {
 goog.fx.css3.Transition.prototype.disposeInternal = function() {
   this.stop();
   goog.base(this, 'disposeInternal');
+};
+
+
+/**
+ * Pausing CSS3 Transitions in not supported.
+ */
+goog.fx.css3.Transition.prototype.pause = function() {
+  goog.asserts.assert(false, 'Css3 transitions does not support pause action.');
 };

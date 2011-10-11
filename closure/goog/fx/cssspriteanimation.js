@@ -51,7 +51,7 @@ goog.fx.CssSpriteAnimation = function(element, size, box, time, opt_acc) {
   var start = [box.left, box.top];
   // We never draw for the end so we do not need to subtract for the size
   var end = [box.right, box.bottom];
-  goog.fx.Animation.call(this, start, end, time, opt_acc);
+  goog.base(this, start, end, time, opt_acc);
 
   /**
    * HTML element that will be used in the animation.
@@ -77,14 +77,14 @@ goog.fx.CssSpriteAnimation.prototype.onAnimate = function() {
   var y = -Math.floor(this.coords[1] / this.size_.height) * this.size_.height;
   this.element_.style.backgroundPosition = x + 'px ' + y + 'px';
 
-  goog.fx.CssSpriteAnimation.superClass_.onAnimate.call(this);
+  goog.base(this, 'onAnimate');
 };
 
 
 /** @override */
 goog.fx.CssSpriteAnimation.prototype.onFinish = function() {
   this.play(true);
-  goog.fx.CssSpriteAnimation.superClass_.onFinish.call(this);
+  goog.base(this, 'onFinish');
 };
 
 

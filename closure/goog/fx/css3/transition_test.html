@@ -38,6 +38,7 @@ function createTransition(element, duration) {
 
 
 function setUp() {
+  mockClock = new goog.testing.MockClock(true);
   element = goog.dom.createElement('div');
   document.body.appendChild(element);
 }
@@ -51,6 +52,8 @@ function tearDown() {
 
 
 function testPlayEventFiredOnPlay() {
+  if (!goog.style.transition.isSupported()) return;
+
   transition = createTransition(element, 10);
   var handlerCalled = false;
   goog.events.listen(transition, goog.fx.Transition.EventType.PLAY,
@@ -64,6 +67,8 @@ function testPlayEventFiredOnPlay() {
 
 
 function testBeginEventFiredOnPlay() {
+  if (!goog.style.transition.isSupported()) return;
+
   transition = createTransition(element, 10);
   var handlerCalled = false;
   goog.events.listen(transition, goog.fx.Transition.EventType.BEGIN,
@@ -76,45 +81,92 @@ function testBeginEventFiredOnPlay() {
 }
 
 
-function testEndEventFiredOnStop() {
+function testFinishEvents() {
+  if (!goog.style.transition.isSupported()) return;
+
   transition = createTransition(element, 10);
-  var handlerCalled = false;
-  goog.events.listen(transition, goog.fx.Transition.EventType.END,
-      function() {
-        handlerCalled = true;
-      });
-
-  transition.play();
-  transition.stop();
-  assertTrue(handlerCalled);
-}
-
-
-function testFinishEventFiredOnStop() {
-  transition = createTransition(element, 10);
-  var handlerCalled = false;
+  var finishHandlerCalled = false;
+  var endHandlerCalled = false;
   goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
       function() {
-        handlerCalled = true;
+        finishHandlerCalled = true;
+      });
+  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+      function() {
+        endHandlerCalled = true;
       });
 
   transition.play();
-  transition.stop();
-  assertTrue(handlerCalled);
+
+  mockClock.tick(10000);
+
+  assertTrue(finishHandlerCalled);
+  assertTrue(endHandlerCalled);
 }
 
 
-function testStopEventFiredOnStop() {
+function testStopEvents() {
+  if (!goog.style.transition.isSupported()) return;
+
   transition = createTransition(element, 10);
-  var handlerCalled = false;
+
+  var stopHandlerCalled = false;
+  var endHandlerCalled = false;
   goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
       function() {
-        handlerCalled = true;
+        stopHandlerCalled = true;
+      });
+  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+      function() {
+        endHandlerCalled = true;
       });
 
   transition.play();
   transition.stop();
-  assertTrue(handlerCalled);
+  assertTrue(stopHandlerCalled);
+  assertTrue(endHandlerCalled);
+}
+
+function testUnsupportedEvents() {
+  if (goog.style.transition.isSupported()) return;
+
+  transition = createTransition(element, 10);
+
+  var stopHandlerCalled = false;
+  var finishHandlerCalled = false, endHandlerCalled = false;
+  var beginHandlerCalled = false, playHandlerCalled = false;
+  goog.events.listen(transition, goog.fx.Transition.EventType.BEGIN,
+      function() {
+        beginHandlerCalled = true;
+      });
+  goog.events.listen(transition, goog.fx.Transition.EventType.PLAY,
+      function() {
+        playHandlerCalled = true;
+      });
+  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+      function() {
+        finishHandlerCalled = true;
+      });
+  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+      function() {
+        endHandlerCalled = true;
+      });
+
+  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
+      function() {
+        stopHandlerCalled = true;
+      });
+
+  assertFalse(transition.play());
+
+  assertTrue(beginHandlerCalled);
+  assertTrue(playHandlerCalled);
+  assertTrue(endHandlerCalled);
+  assertTrue(finishHandlerCalled);
+
+  transition.stop();
+
+  assertFalse(stopHandlerCalled);
 }
 
 </script>
