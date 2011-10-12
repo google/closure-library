@@ -431,9 +431,9 @@ goog.ui.AutoComplete.InputHandler.prototype.setCursorPosition = function(pos) {
 
 
 /**
- * Attaches the input handler to an element such as a textarea or input box.
- * The element could basically be anything as long as it exposes the correct
- * interface and events.
+ * Attaches the input handler to a target element. The target element
+ * should be a textarea, input box, or other focusable element with the
+ * same interface.
  * @param {Element|goog.events.EventTarget} target An element to attach the
  *     input handler too.
  */
