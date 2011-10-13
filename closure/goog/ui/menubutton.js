@@ -68,6 +68,7 @@ goog.ui.MenuButton = function(content, opt_menu, opt_renderer, opt_domHelper) {
   if (opt_menu) {
     this.setMenu(opt_menu);
   }
+  this.menuMargin_ = null;
   this.timer_ = new goog.Timer(500);  // 0.5 sec
 
   // Phones running iOS prior to version 4.2.
@@ -98,6 +99,15 @@ goog.ui.MenuButton.prototype.menu_;
  * @private
  */
 goog.ui.MenuButton.prototype.positionElement_;
+
+
+/**
+ * The margin to apply to the menu's position when it is shown.  If null, no
+ * margin will be applied.
+ * @type {goog.math.Box}
+ * @private
+ */
+goog.ui.MenuButton.prototype.menuMargin_;
 
 
 /**
@@ -440,6 +450,16 @@ goog.ui.MenuButton.prototype.setPositionElement = function(
 
 
 /**
+ * Sets a margin that will be applied to the menu's position when it is shown.
+ * If null, no margin will be applied.
+ * @param {goog.math.Box} margin Margin to apply.
+ */
+goog.ui.MenuButton.prototype.setMenuMargin = function(margin) {
+  this.menuMargin_ = margin;
+};
+
+
+/**
  * Adds a new menu item at the end of the menu.
  * @param {goog.ui.MenuItem|goog.ui.MenuSeparator|goog.ui.Control} item Menu
  *     item to add to the menu.
@@ -719,7 +739,7 @@ goog.ui.MenuButton.prototype.positionMenu = function() {
   }
   var popupCorner = this.isAlignMenuToStart() ?
       goog.positioning.Corner.TOP_START : goog.positioning.Corner.TOP_END;
-  position.reposition(elem, popupCorner, null, this.originalSize_);
+  position.reposition(elem, popupCorner, this.menuMargin_, this.originalSize_);
 
   if (!this.menu_.isVisible()) {
     goog.style.showElement(elem, false);
