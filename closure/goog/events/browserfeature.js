@@ -35,6 +35,11 @@ goog.events.BrowserFeature = {
   HAS_W3C_BUTTON: !goog.userAgent.IE || goog.userAgent.isDocumentMode(9),
 
   /**
+   * Whether the browser supports full W3C event model.
+   */
+  HAS_W3C_EVENT_SUPPORT: !goog.userAgent.IE || goog.userAgent.isDocumentMode(9),
+
+  /**
    * To prevent default in IE7 for certain keydown events we need set the
    * keyCode to -1.
    */

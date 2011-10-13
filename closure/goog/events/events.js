@@ -59,6 +59,7 @@ goog.require('goog.array');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.debug.errorHandlerWeakDep');
 goog.require('goog.events.BrowserEvent');
+goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventWrapper');
 goog.require('goog.events.pools');
@@ -115,14 +116,6 @@ goog.events.onStringMap_ = {};
  * @private
  */
 goog.events.keySeparator_ = '_';
-
-
-/**
- * Whether the browser natively supports full W3C event propagation.
- * @type {boolean}
- * @private
- */
-goog.events.requiresSyntheticEventPropagation_;
 
 
 /**
@@ -911,7 +904,9 @@ goog.events.handleBrowserEvent_ = function(key, opt_evt) {
   }
   map = map[type];
   var retval, targetsMap;
-  if (goog.events.synthesizeEventPropagation_()) {
+  // Synthesize event propagation if the browser does not support W3C
+  // event model.
+  if (!goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
     var ieEvent = opt_evt ||
         /** @type {Event} */ (goog.getObjectByName('window.event'));
 
@@ -1066,26 +1061,6 @@ goog.events.uniqueIdCounter_ = 0;
  */
 goog.events.getUniqueId = function(identifier) {
   return identifier + '_' + goog.events.uniqueIdCounter_++;
-};
-
-
-/**
- * Returns whether we should synthesize the W3C event propagation.  Versions of
- * IE, up to IE9, don't support addEventListener or the capture phase.
- * @return {boolean} Whether to use IE's proprietary event model.
- * @private
- */
-goog.events.synthesizeEventPropagation_ = function() {
-  if (goog.events.requiresSyntheticEventPropagation_ === undefined) {
-    // TODO(user): goog.events is used in a non DOM context, even though it
-    // couldn't be used with DOM events.  We therefore assume that if we
-    // got here that goog.global===window to keep the compiler happy.  We can't
-    // use navigator.userAgent yet because the IE9 platform preview still
-    // reports as MSIE 8.0.
-    goog.events.requiresSyntheticEventPropagation_ =
-        goog.userAgent.IE && !goog.global['addEventListener'];
-  }
-  return goog.events.requiresSyntheticEventPropagation_;
 };
 
 

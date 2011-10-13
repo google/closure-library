@@ -24,7 +24,6 @@
 
 goog.provide('goog.events.pools');
 
-
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Listener');
 goog.require('goog.structs.SimplePool');
@@ -160,16 +159,20 @@ goog.events.pools.releaseEvent;
 
   function getProxy() {
     // Use a local var f to prevent one allocation.
-    var f = function(eventObject) {
-      var v = proxyCallbackFunction.call(f.src, f.key, eventObject);
-      // NOTE(user): In IE, we hack in a capture phase. However, if
-      // there is inline event handler which tries to prevent default (for
-      // example <a href="..." onclick="return false">...</a>) in a
-      // descendant element, the prevent default will be overridden
-      // by this listener if this listener were to return true. Hence, we
-      // return undefined.
-      if (!v) return v;
-    };
+    var f = goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT ?
+        function(eventObject) {
+          return proxyCallbackFunction.call(f.src, f.key, eventObject);
+        } :
+        function(eventObject) {
+          var v = proxyCallbackFunction.call(f.src, f.key, eventObject);
+          // NOTE(user): In IE, we hack in a capture phase. However, if
+          // there is inline event handler which tries to prevent default (for
+          // example <a href="..." onclick="return false">...</a>) in a
+          // descendant element, the prevent default will be overridden
+          // by this listener if this listener were to return true. Hence, we
+          // return undefined.
+          if (!v) return v;
+        };
     return f;
   }
 
