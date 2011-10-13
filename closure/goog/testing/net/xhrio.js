@@ -65,7 +65,7 @@ goog.inherits(goog.testing.net.XhrIo, goog.events.EventTarget);
 /**
  * All non-disposed instances of goog.testing.net.XhrIo created
  * by {@link goog.testing.net.XhrIo.send} are in this Array.
- * @see goog.testing.net.XhrIo.cleanupAllPendingStaticSends
+ * @see goog.testing.net.XhrIo.cleanup
  * @type {Array.<goog.testing.net.XhrIo>}
  * @private
  */
@@ -79,6 +79,19 @@ goog.testing.net.XhrIo.sendInstances_ = [];
  */
 goog.testing.net.XhrIo.getSendInstances = function() {
   return goog.testing.net.XhrIo.sendInstances_;
+};
+
+
+/**
+ * Disposes all non-disposed instances of goog.testing.net.XhrIo created by
+ * {@link goog.testing.net.XhrIo.send}.
+ * @see goog.net.XhrIo.cleanup
+ */
+goog.testing.net.XhrIo.cleanup = function() {
+  var instances = goog.testing.net.XhrIo.sendInstances_;
+  while (instances.length) {
+    instances.pop().dispose();
+  }
 };
 
 
