@@ -79,7 +79,7 @@ function testBeforeShowEvent() {
   popup.attach(anchor);
 
   function beforeShowPopup(e) {
-    //Ensure that the element is not yet visible.
+    // Ensure that the element is not yet visible.
     assertFalse('The element should not be shown when BEFORE_SHOW event is ' +
         'being handled',
         goog.style.isElementShown(popup.getElement()));
@@ -190,6 +190,117 @@ function testGetAttachTarget() {
   // Make sure we got the right target back.
   assertTarget(target, anchor, targetCorner, menuCorner,
       goog.events.EventType.MOUSEDOWN, margin);
+}
+
+function testSmallViewportSliding() {
+  popup.getElement().style.position = 'absolute';
+  popup.getElement().style.outline = '1px solid blue';
+  var item = new goog.ui.MenuItem('Test Item');
+  popup.addChild(item, true);
+  item.getElement().style.overflow = 'hidden';
+
+  var viewport = goog.style.getClientViewportElement();
+  var viewportRect = goog.style.getVisibleRectForElement(viewport);
+
+  var middlePos = Math.floor((viewportRect.right - viewportRect.left) / 2);
+  var leftwardPos = Math.floor((viewportRect.right - viewportRect.left) / 3);
+  var rightwardPos =
+      Math.floor((viewportRect.right - viewportRect.left) / 3 * 2);
+
+  // Can interpret these positions as widths relative to the viewport as well.
+  var smallWidth = leftwardPos;
+  var mediumWidth = middlePos;
+  var largeWidth = rightwardPos;
+
+  // Test small menu first.  This should be small enough that it will display
+  // its upper left corner where we tell it to in all three positions.
+  popup.getElement().style.width = smallWidth + 'px';
+
+  var target = popup.createAttachTarget(anchor);
+  popup.attach(anchor);
+
+  popup.showMenu(target, leftwardPos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: small size, leftward pos',
+      new goog.math.Coordinate(leftwardPos, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  popup.showMenu(target, middlePos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: small size, middle pos',
+      new goog.math.Coordinate(middlePos, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  popup.showMenu(target, rightwardPos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: small size, rightward pos',
+      new goog.math.Coordinate(rightwardPos, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  // Test medium menu next.  This should display with its upper left corner
+  // at the target when leftward and middle, but on the right it should
+  // position its upper right corner at the target instead.
+  popup.getElement().style.width = mediumWidth + 'px';
+
+  popup.showMenu(target, leftwardPos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: medium size, leftward pos',
+      new goog.math.Coordinate(leftwardPos, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  popup.showMenu(target, middlePos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: medium size, middle pos',
+      new goog.math.Coordinate(middlePos, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  popup.showMenu(target, rightwardPos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: medium size, rightward pos',
+      new goog.math.Coordinate(rightwardPos - mediumWidth, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  // Test large menu next.  This should display with its upper left corner at
+  // the target when leftward, and its upper right corner at the target when
+  // rightward, but right in the middle neither corner can be at the target and
+  // keep the entire menu onscreen, so it should place its upper right corner
+  // at the very right edge of the viewport.
+  popup.getElement().style.width = largeWidth + 'px';
+  popup.showMenu(target, leftwardPos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: large size, leftward pos',
+      new goog.math.Coordinate(leftwardPos, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  popup.showMenu(target, middlePos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: large size, middle pos',
+      new goog.math.Coordinate(
+          viewportRect.right - viewportRect.left - largeWidth, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  popup.showMenu(target, rightwardPos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: large size, rightward pos',
+      new goog.math.Coordinate(rightwardPos - largeWidth, 0),
+      goog.style.getPosition(popup.getElement()));
+
+  // Make sure that the menu still displays correctly if we give the target
+  // a target corner.  We can't set the overflow policy in that case, but it
+  // should still display.
+  popup.detach(anchor);
+  anchor.style.position = 'absolute';
+  anchor.style.left = '24px';
+  anchor.style.top = '24px';
+  var targetCorner = goog.positioning.Corner.TOP_END;
+  target = popup.createAttachTarget(anchor, targetCorner);
+  popup.attach(anchor, targetCorner);
+  popup.getElement().style.width = smallWidth + 'px';
+  popup.showMenu(target, leftwardPos, 0);
+  assertObjectEquals(
+      'Popup in wrong position: small size, leftward pos, with target corner',
+      new goog.math.Coordinate(24, 24),
+      goog.style.getPosition(popup.getElement()));
 }
 
 </script>

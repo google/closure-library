@@ -408,6 +408,13 @@ goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
       new goog.positioning.AnchoredViewportPosition(target.element_,
           target.targetCorner_, true) :
       new goog.positioning.ViewportClientPosition(x, y);
+  if (position.setLastResortOverflow) {
+    // This is a ViewportClientPosition, so we can set the overflow policy.
+    // Allow the menu to slide from the corner rather than clipping if it is
+    // completely impossible to fit it otherwise.
+    position.setLastResortOverflow(goog.positioning.Overflow.ADJUST_X |
+                                   goog.positioning.Overflow.ADJUST_Y);
+  }
   this.showWithPosition(position, target.menuCorner_, target.margin_,
                         target.element_);
 };
