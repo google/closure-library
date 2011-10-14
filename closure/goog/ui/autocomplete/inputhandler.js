@@ -454,8 +454,7 @@ goog.ui.AutoComplete.InputHandler.prototype.attachInput = function(target) {
     if (goog.dom.isElement(target)) {
       var ownerDocument = goog.dom.getOwnerDocument(
           /** @type {Element} */ (target));
-      var focusedElement = ownerDocument && ownerDocument.activeElement;
-      if (focusedElement == target) {
+      if (goog.dom.getActiveElementIE(ownerDocument) == target) {
         this.processFocus(/** @type {Element} */ (target));
       }
     }

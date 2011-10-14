@@ -1910,6 +1910,28 @@ goog.dom.getAncestor = function(
 };
 
 
+/**
+ * Determines the active element in the given document.  IE only.
+ * @param {Document} doc The document to look in.
+ * @return {Element} The active element in IE.
+ */
+goog.dom.getActiveElementIE = function(doc) {
+  try {
+    return doc && doc.activeElement;
+  } catch (e) {
+    // NOTE(nicksantos): Sometimes, evaluating document.activeElement in IE
+    // throws an exception. I'm not 100% sure why, but I suspect it chokes
+    // on document.activeElement if the activeElement has been recently
+    // removed from the DOM by a JS operation.
+    //
+    // We assume that an exception here simply means
+    // "there is no active element."
+  }
+
+  return null;
+};
+
+
 
 /**
  * Create an instance of a DOM helper with a new document object.

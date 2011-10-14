@@ -351,20 +351,9 @@ function testIsEmpty() {
 
   var embed = document.createElement('embed');
   assertFalse('Empty embed should not be empty',
-      goog.editor.node.isEmpty(embed));  
+      goog.editor.node.isEmpty(embed));
 }
 
-function testActiveElementIE() {
-  if (!goog.userAgent.IE) {
-    return;
-  }
-
-  var link = goog.dom.getElement('link')
-  link.focus();
-
-  assertEquals(link,
-      goog.editor.node.getActiveElementIE(document));
-}
 
 /**
  * Test that getLength returns 0 if the node has no length and no children,

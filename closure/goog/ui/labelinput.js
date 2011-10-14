@@ -124,8 +124,8 @@ goog.ui.LabelInput.prototype.decorateInternal = function(element) {
   }
 
   // Check if we're attaching to an element that already has focus.
-  var d = goog.dom.getOwnerDocument(element);
-  if (d && d.activeElement == element) {
+  if (goog.dom.getActiveElementIE(goog.dom.getOwnerDocument(element)) ==
+      element) {
     this.hasFocus_ = true;
     goog.dom.classes.remove(this.getElement(), this.LABEL_CLASS_NAME);
   }

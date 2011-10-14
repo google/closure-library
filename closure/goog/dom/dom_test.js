@@ -1304,6 +1304,17 @@ function testGetDocumentScrollOfFixedViewport() {
   assertEquals(100, dh.getDocumentScroll().y);
 }
 
+function testActiveElementIE() {
+  if (!goog.userAgent.IE) {
+    return;
+  }
+
+  var link = goog.dom.getElement('link');
+  link.focus();
+
+  assertEquals(link.tagName, goog.dom.getActiveElementIE(document).tagName);
+  assertEquals(link, goog.dom.getActiveElementIE(document));
+}
 
 /**
  * @return {boolean} Returns true if the userAgent is IE8 or higher.

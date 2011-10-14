@@ -35,7 +35,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Field.EventType');
-goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.events.BrowserEvent.MouseButton');
 goog.require('goog.events.EventHandler');
@@ -411,7 +410,7 @@ goog.editor.ClickToEditWrapper.prototype.insertCarets_ = function() {
     // document.activeElement. In FF, we have to be more hacky.
     var specialNodeClicked;
     if (goog.editor.BrowserFeature.HAS_ACTIVE_ELEMENT) {
-      specialNodeClicked = goog.editor.node.getActiveElementIE(
+      specialNodeClicked = goog.dom.getActiveElementIE(
           this.originalDomHelper_.getDocument());
     } else {
       specialNodeClicked = this.savedAnchorClicked_;
