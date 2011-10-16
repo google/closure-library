@@ -15,10 +15,12 @@ See the COPYING file for details.
   <script>
     goog.require('goog.dom');
     goog.require('goog.events');
+    goog.require('goog.object');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Zippy');
     goog.require('goog.ui.ZippyEvent');
+    goog.require('goog.ui.Zippy.Events');
   </script>
   <style type="text/css">
 
@@ -205,11 +207,34 @@ See the COPYING file for details.
     doTest(headerlessZippy);
   }
 
+  function testActionEvent() {
+    var actionEventCount = 0;
+    var toggleEventCount = 0;
+    var handleEvent = function(e) {
+      if (e.type == goog.ui.Zippy.Events.TOGGLE) {
+        toggleEventCount++;
+      } else if (e.type == goog.ui.Zippy.Events.ACTION) {
+        actionEventCount++;
+        assertTrue('toggle must have been called first',
+            toggleEventCount >= actionEventCount);
+      }
+    };
+    goog.events.listen(zippy, goog.object.getValues(goog.ui.Zippy.Events),
+        handleEvent);
+    goog.testing.events.fireClickSequence(zippy.elHeader_);
+    assertEquals('Zippy ACTION event fired', 1, actionEventCount);
+    assertEquals('Zippy TOGGLE event fired', 1, toggleEventCount);
+
+    zippy.toggle();
+    assertEquals('Zippy ACTION event NOT fired', 1, actionEventCount);
+    assertEquals('Zippy TOGGLE event fired', 2, toggleEventCount);
+  } 
+
   function testBasicZippyBehavior() {
     var dispatchedActionCount = 0;
     var handleAction = function() {
       dispatchedActionCount++;
-    }
+    };
 
     goog.events.listen(zippy, goog.ui.Zippy.Events.TOGGLE, handleAction);
     goog.testing.events.fireClickSequence(zippy.elHeader_);
