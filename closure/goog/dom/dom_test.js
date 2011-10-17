@@ -1312,8 +1312,8 @@ function testActiveElementIE() {
   var link = goog.dom.getElement('link');
   link.focus();
 
-  assertEquals(link.tagName, goog.dom.getActiveElementIE(document).tagName);
-  assertEquals(link, goog.dom.getActiveElementIE(document));
+  assertEquals(link.tagName, goog.dom.getActiveElement(document).tagName);
+  assertEquals(link, goog.dom.getActiveElement(document));
 }
 
 /**

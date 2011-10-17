@@ -410,7 +410,7 @@ goog.editor.ClickToEditWrapper.prototype.insertCarets_ = function() {
     // document.activeElement. In FF, we have to be more hacky.
     var specialNodeClicked;
     if (goog.editor.BrowserFeature.HAS_ACTIVE_ELEMENT) {
-      specialNodeClicked = goog.dom.getActiveElementIE(
+      specialNodeClicked = goog.dom.getActiveElement(
           this.originalDomHelper_.getDocument());
     } else {
       specialNodeClicked = this.savedAnchorClicked_;

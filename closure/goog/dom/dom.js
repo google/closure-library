@@ -1911,11 +1911,11 @@ goog.dom.getAncestor = function(
 
 
 /**
- * Determines the active element in the given document.  IE only.
+ * Determines the active element in the given document.
  * @param {Document} doc The document to look in.
- * @return {Element} The active element in IE.
+ * @return {Element} The active element.
  */
-goog.dom.getActiveElementIE = function(doc) {
+goog.dom.getActiveElement = function(doc) {
   try {
     return doc && doc.activeElement;
   } catch (e) {

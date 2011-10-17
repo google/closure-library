@@ -752,7 +752,7 @@ goog.ui.ComboBox.prototype.onInputEvent_ = function(e) {
 goog.ui.ComboBox.prototype.handleInputChange_ = function() {
   var token = this.getTokenText_();
   this.setItemVisibilityFromToken_(token);
-  if (goog.dom.getActiveElementIE(this.getDomHelper().getDocument()) ==
+  if (goog.dom.getActiveElement(this.getDomHelper().getDocument()) ==
       this.input_) {
     // Do not alter menu visibility unless the user focus is currently on the
     // combobox (otherwise programmatic changes may cause the menu to become
