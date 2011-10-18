@@ -20,6 +20,7 @@ goog.provide('goog.fx.anim');
 goog.provide('goog.fx.anim.Animated');
 
 goog.require('goog.Timer');
+goog.require('goog.events');
 goog.require('goog.object');
 
 
@@ -46,8 +47,19 @@ goog.fx.anim.Animated.prototype.onAnimationFrame;
  * animation, which uses a timer (setTimout) to schedule animation.
  *
  * @type {number}
+ * @const
  */
 goog.fx.anim.TIMEOUT = 20;
+
+
+/**
+ * Name of event received from the requestAnimationFrame in Firefox.
+ *
+ * @type {string}
+ * @const
+ * @private
+ */
+goog.fx.anim.MOZ_BEFORE_PAINT_EVENT_ = 'MozBeforePaint';
 
 
 /**
@@ -69,7 +81,7 @@ goog.fx.anim.animationWindow_ = null;
 
 /**
  * A timing control function.
- * @type {?function(function(number))}
+ * @type {?function(?function(number))}
  * @private
  */
 goog.fx.anim.requestAnimationFrameFn_ = null;
@@ -84,7 +96,7 @@ goog.fx.anim.cancelRequestAnimationFrameFn_ = null;
 
 
 /**
- * An interval ID for the global timer.
+ * An interval ID for the global timer or event handler uid.
  * @type {?number}
  * @private
  */
@@ -170,7 +182,24 @@ goog.fx.anim.setAnimationWindow = function(animationWindow) {
   // Set up matching render timing functions, the requestAnimationTimer_ and
   // cancelAnimationTimer_ functions.
   if (goog.fx.anim.requestAnimationFrameFn_ &&
-      goog.fx.anim.cancelRequestAnimationFrameFn_) {
+      animationWindow['mozRequestAnimationFrame'] &&
+      !goog.fx.anim.cancelRequestAnimationFrameFn_) {
+    // Because Firefox (Gecko) runs animation in separate threads, it also saves
+    // time by running the requestAnimationFrame callbacks in that same thread.
+    // Sadly this breaks the assumption of implicit thread-safety in JS, and can
+    // thus create thread-based inconsistencies on counters etc.
+    //
+    // Calling cycleAnimations_ using the MozBeforePaint event instead of as
+    // callback fixes this.
+    //
+    // Trigger this condition only if the mozRequestAnimationFrame is available,
+    // but not the W3C requestAnimationFrame function (as in draft) or the
+    // equivalent cancel functions.
+    goog.fx.anim.requestAnimationTimer_ =
+        goog.fx.anim.requestMozAnimationFrame_;
+    goog.fx.anim.cancelAnimationTimer_ = goog.fx.anim.cancelMozAnimationFrame_;
+  } else if (goog.fx.anim.requestAnimationFrameFn_ &&
+             goog.fx.anim.cancelRequestAnimationFrameFn_) {
     goog.fx.anim.requestAnimationTimer_ = goog.fx.anim.requestAnimationFrame_;
     goog.fx.anim.cancelAnimationTimer_ = goog.fx.anim.cancelAnimationFrame_;
   } else {
@@ -192,6 +221,7 @@ goog.fx.anim.setAnimationWindow = function(animationWindow) {
 goog.fx.anim.requestTimer_ = function() {
   if (!goog.fx.anim.animationTimer_) {
     goog.fx.anim.animationTimer_ = goog.Timer.callOnce(function() {
+      goog.fx.anim.animationTimer_ = null;
       // Cycle all animations at 'the same time'.
       goog.fx.anim.cycleAnimations_(goog.now());
     }, goog.fx.anim.TIMEOUT);
@@ -222,8 +252,10 @@ goog.fx.anim.requestAnimationFrame_ = function() {
     // time in ms, as returned from goog.now().
     goog.fx.anim.animationTimer_ =
         goog.fx.anim.requestAnimationFrameFn_.call(
-            goog.fx.anim.animationWindow_,
-            goog.fx.anim.cycleAnimations_);
+            goog.fx.anim.animationWindow_, function(now) {
+              goog.fx.anim.animationTimer_ = null;
+              goog.fx.anim.cycleAnimations_(now);
+            });
   }
 };
 
@@ -237,6 +269,36 @@ goog.fx.anim.cancelAnimationFrame_ = function() {
     goog.fx.anim.cancelRequestAnimationFrameFn_.call(
         goog.fx.anim.animationWindow_,
         goog.fx.anim.animationTimer_);
+    goog.fx.anim.animationTimer_ = null;
+  }
+};
+
+
+/**
+ * Requests an animation frame based on the requestAnimationFrame and
+ * cancelRequestAnimationFrame function pair.
+ * @private
+ */
+goog.fx.anim.requestMozAnimationFrame_ = function() {
+  if (!goog.fx.anim.animationTimer_) {
+    goog.fx.anim.animationTimer_ = goog.events.listen(
+        goog.fx.anim.animationWindow_, goog.fx.anim.MOZ_BEFORE_PAINT_EVENT_,
+        function(event) {
+          goog.fx.anim.cycleAnimations_(event['timeStamp'] || goog.now());
+        }, false);
+  }
+  goog.fx.anim.requestAnimationFrameFn_.call(
+      goog.fx.anim.animationWindow_, null);
+};
+
+
+/**
+ * Cancels an animation frame created by requestAnimationFrame_().
+ * @private
+ */
+goog.fx.anim.cancelMozAnimationFrame_ = function() {
+  if (goog.fx.anim.animationTimer_) {
+    goog.events.unlistenByKey(goog.fx.anim.animationTimer_);
     goog.fx.anim.animationTimer_ = null;
   }
 };
@@ -264,8 +326,6 @@ goog.fx.anim.cancelAnimationTimer_ = goog.fx.anim.cancelTimer_;
  * @private
  */
 goog.fx.anim.cycleAnimations_ = function(now) {
-  goog.fx.anim.animationTimer_ = null;
-
   goog.object.forEach(goog.fx.anim.activeAnimations_, function(anim) {
     anim.onAnimationFrame(now);
   });
