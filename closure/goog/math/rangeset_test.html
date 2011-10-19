@@ -462,6 +462,32 @@ function testUnion() {
 }
 
 
+function testDifference() {
+  var a = new goog.math.RangeSet();
+
+  a.add(new goog.math.Range(1, 5));
+  a.add(new goog.math.Range(10, 11));
+  a.add(new goog.math.Range(15, 20));
+
+  var b = new goog.math.RangeSet();
+
+  b.add(new goog.math.Range(0, 5));
+  b.add(new goog.math.Range(8, 18));
+
+  var test = a.difference(b);
+  assertRangeListsEqual([[18, 20]], test.ranges_);
+
+  var test = b.difference(a);
+  assertRangeListsEqual([[0, 1], [8, 10], [11, 15]], test.ranges_);
+
+  var test = a.difference(a);
+  assertRangeListsEqual([], test.ranges_);
+
+  var test = b.difference(b);
+  assertRangeListsEqual([], test.ranges_);
+}
+
+
 function testIntersection() {
   var a = new goog.math.RangeSet();
 
