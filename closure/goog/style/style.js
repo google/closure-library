@@ -437,7 +437,7 @@ goog.style.getVisibleRectForElement = function(element) {
  * Changes the scroll position of {@code container} with the minimum amount so
  * that the content and the borders of the given {@code element} become visible.
  * If the element is bigger than the container, its top left corner will be
- * aligned to the container's top left corner.
+ * aligned as close to the container's top left corner as possible.
  *
  * @param {Element} element The element to make visible.
  * @param {Element} container The container to scroll.
