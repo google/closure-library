@@ -14,6 +14,8 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.dom.a11y');
+    goog.require('goog.dom.a11y.State');
     goog.require('goog.events');
     goog.require('goog.object');
     goog.require('goog.testing.events');
@@ -176,6 +178,18 @@ See the COPYING file for details.
         dualHeaderZippyExpandedHeaderEl.className);
   }
 
+  function testExpandCollapse_ariaState() {
+    var headerEl = goog.dom.getElement('t1');
+
+    zippy.expand();
+    assertEquals("aria-expanded must be true", "true",
+        goog.dom.a11y.getState(headerEl, goog.dom.a11y.State.EXPANDED));
+
+    zippy.collapse();
+    assertEquals("aria-expanded must be false", "false",
+        goog.dom.a11y.getState(headerEl, goog.dom.a11y.State.EXPANDED));
+  }
+
   function testSetExpand() {
     var expanded = !zippy.isExpanded();
     zippy.setExpanded(expanded);
@@ -228,7 +242,7 @@ See the COPYING file for details.
     zippy.toggle();
     assertEquals('Zippy ACTION event NOT fired', 1, actionEventCount);
     assertEquals('Zippy TOGGLE event fired', 2, toggleEventCount);
-  } 
+  }
 
   function testBasicZippyBehavior() {
     var dispatchedActionCount = 0;

@@ -202,10 +202,6 @@ goog.ui.Zippy.prototype.setExpanded = function(expanded) {
   } else {
     // Update header image, if any.
     this.updateHeaderClassName(expanded);
-    if (this.elHeader_) {
-      goog.dom.a11y.setState(
-          this.elHeader_, goog.dom.a11y.State.EXPANDED, expanded);
-    }
   }
 
   this.setExpandedInternal(expanded);
@@ -236,7 +232,8 @@ goog.ui.Zippy.prototype.isExpanded = function() {
 
 
 /**
- * Updates the header element's className
+ * Updates the header element's className and ARIA (accessibility) EXPANDED
+ * state.
  *
  * @param {boolean} expanded Expanded/visibility state.
  * @protected
@@ -247,6 +244,8 @@ goog.ui.Zippy.prototype.updateHeaderClassName = function(expanded) {
         goog.getCssName('goog-zippy-expanded'), expanded);
     goog.dom.classes.enable(this.elHeader_,
         goog.getCssName('goog-zippy-collapsed'), !expanded);
+    goog.dom.a11y.setState(
+        this.elHeader_, goog.dom.a11y.State.EXPANDED, expanded);
   }
 };
 
