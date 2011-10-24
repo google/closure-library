@@ -276,6 +276,15 @@ goog.ui.Prompt.prototype.createDom = function() {
  * @private
  */
 goog.ui.Prompt.prototype.handleInputChanged_ = function() {
+  this.updateOkButtonState_();
+};
+
+
+/**
+ * Set OK button enabled/disabled state based on input.
+ * @private
+ */
+goog.ui.Prompt.prototype.updateOkButtonState_ = function() {
   var enableOkButton = this.validationFn_(this.userInputEl_.value);
   var buttonSet = this.getButtonSet();
   buttonSet.setButtonEnabled(goog.ui.Dialog.DefaultButtonKeys.OK,
@@ -294,6 +303,7 @@ goog.ui.Prompt.prototype.setVisible = function(visible) {
     this.isClosing_ = false;
     this.userInputEl_.value = this.defaultValue_;
     this.focus();
+    this.updateOkButtonState_();
   }
 };
 

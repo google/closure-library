@@ -54,16 +54,18 @@ function testFocusOnInputElement() {
       goog.dom.selection.getText(prompt.userInputEl_));
 }
 
+
 function testValidationFunction() {
   var promptResult = undefined;
   prompt = new goog.ui.Prompt('title', 'Prompt:', function(result) {
     promptResult = result;
-  }, 'defaultValue');
+  }, '');
   prompt.setValidationFunction(goog.functions.not(goog.string.isEmpty));
   prompt.setVisible(true);
 
   var buttonSet = prompt.getButtonSet();
   var okButton = buttonSet.getButton(goog.ui.Dialog.DefaultButtonKeys.OK);
+  assertTrue(okButton.disabled);
 
   prompt.userInputEl_.value = '';
   goog.testing.events.fireKeySequence(prompt.userInputEl_,
