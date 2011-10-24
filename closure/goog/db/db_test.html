@@ -938,7 +938,8 @@ function testGetMultipleRecordsFromIndex() {
     addTx.objectStore('store').add({key: '1', value: 'a'});
     addTx.objectStore('store').add({key: '2', value: 'a'});
     addTx.objectStore('store').add({key: '3', value: 'b'});
-    addTx.objectStore('store').add({key: '4'});
+    // The following line breaks Chrome 14, but not Chrome 15:
+    // addTx.objectStore('store').add({key: '4'});
     goog.events.listen(
         addTx,
         goog.db.Transaction.EventTypes.ERROR,
@@ -996,9 +997,12 @@ function testUniqueIndex() {
     tx.objectStore('store').add({key: '2', value: 'a'});
     goog.events.listen(tx, goog.db.Transaction.EventTypes.ERROR, function(ev) {
       // expected
-      assertEquals(
-          goog.db.Error.ErrorCode.CONSTRAINT_ERR,
-          ev.target.code);
+      assertTrue(
+          'Expected CONSTRAINT_ERR or UNKNOWN_ERR, was ' + ev.target.code,
+          // Chrome 15+
+          ev.target.code == goog.db.Error.ErrorCode.CONSTRAINT_ERR ||
+            // Chrome 14
+            ev.target.code == goog.db.Error.ErrorCode.UNKNOWN_ERR);
       closeAndContinue(db);
     });
   }).addErrback(failOnError);
