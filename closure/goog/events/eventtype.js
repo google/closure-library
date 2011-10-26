@@ -109,5 +109,10 @@ goog.events.EventType = {
 
   // HTML 5 worker events
   MESSAGE: 'message',
-  CONNECT: 'connect'
+  CONNECT: 'connect',
+
+  // CSS transition events. Based on the browser support described at:
+  // https://developer.mozilla.org/en/css/css_transitions#Browser_compatibility
+  TRANSITIONEND: goog.userAgent.WEBKIT ? 'webkitTransitionEnd' :
+      (goog.userAgent.OPERA ? 'oTransitionEnd' : 'transitionend')
 };
