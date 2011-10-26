@@ -14,6 +14,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script src="../../../third_party/closure/goog/deps.js"></script>
 <script>
+  goog.require('goog.array');
   goog.require('goog.functions');
   goog.require('goog.module.BaseModule');
   goog.require('goog.module.ModuleManager');
@@ -53,12 +54,11 @@ See the COPYING file for details.
         setTimeout(goog.bind(this.onLoad, this, ids.concat(), 0), 5);
       },
       onLoad: function(ids, idxLoaded) {
-        moduleMgr.beforeLoadModuleCode(ids[0]);
+        moduleMgr.beforeLoadModuleCode(ids[idxLoaded]);
         moduleMgr.setLoaded(ids[idxLoaded]);
         moduleMgr.afterLoadModuleCode(ids[idxLoaded]);
         var idx = idxLoaded + 1;
         if (idx < ids.length) {
-          moduleMgr.beforeLoadModuleCode(ids[idx]);
           setTimeout(goog.bind(this.onLoad, this, ids, idx), 2);
         }
       }};
@@ -346,6 +346,222 @@ See the COPYING file for details.
   }
 
   /**
+   * Tests loading multiple modules by requesting a Deferred object.
+   */
+  function testLoadMultiple() {
+    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+    mm.setBatchModeEnabled(true);
+    mm.setLoader(createSuccessfulBatchLoader(mm));
+
+    var calledBack = false;
+    var error = null;
+
+    var d = mm.loadMultiple(['a', 'b']);
+    d.addCallback(function(ctx) {
+      calledBack = true;
+    });
+    d.addErrback(function(err) {
+      error = err;
+    });
+
+    assertFalse(calledBack);
+
+    clock.tick(5);
+    // Callback should not be called, even though 'a' has loaded, since it
+    // should wait for all in the batch to finish.
+    assertFalse(calledBack);
+    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    clock.tick(2);
+
+    assertTrue(calledBack);
+    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
+    assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+    assertNull(error);
+  }
+
+  /**
+   * Tests loading multiple modules with deps by requesting a Deferred object.
+   */
+  function testLoadMultipleWithDeps() {
+    var mm = getModuleManager({'a': [], 'b': ['c'], 'c': []});
+    mm.setBatchModeEnabled(true);
+    mm.setLoader(createSuccessfulBatchLoader(mm));
+
+    var calledBack = false;
+    var error = null;
+
+    var d = mm.loadMultiple(['a', 'b']);
+    d.addCallback(function(ctx) {
+      calledBack = true;
+    });
+    d.addErrback(function(err) {
+      error = err;
+    });
+
+    assertFalse(calledBack);
+
+    clock.tick(5);
+    // Callback should not be called, even though 'a' has loaded, since it
+    // should wait for all in the batch to finish.
+    assertFalse(calledBack);
+    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    clock.tick(2);
+
+    assertFalse(calledBack);
+    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
+
+    clock.tick(2);
+
+    assertTrue(calledBack);
+    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
+    assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
+    assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
+    assertNull(error);
+  }
+
+  /**
+   * Tests loading multiple modules by requesting a Deferred object when
+   * a server error occurs.
+   */
+  function testLoadMultipleWithErrors() {
+    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+    mm.setBatchModeEnabled(true);
+    mm.setLoader(createUnsuccessfulLoader(mm, 500));
+
+    var calledBack = false;
+    var error = null;
+
+    var d = mm.loadMultiple(['a', 'b', 'c']);
+    d.addCallback(function(ctx) {
+      calledBack = true;
+    });
+    d.addErrback(function(err) {
+      error = err;
+    });
+
+    assertFalse(calledBack);
+
+    clock.tick(4);
+
+    // A module request is now underway using the unsuccessful loader.
+    // We substitute a successful loader for future module load requests.
+    mm.setLoader(createSuccessfulBatchLoader(mm));
+
+    clock.tick(1);
+
+    assertFalse(calledBack);
+    assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    // Retry should happen after a backoff
+    clock.tick(5 + mm.getBackOff_());
+    // Callback should not be called, even though 'a' has loaded, since it
+    // should wait for all in the batch to finish.
+    assertFalse(calledBack);
+    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    clock.tick(2);
+    // Callback should not be called, even though 'b' has loaded, since it
+    // should wait for all in the batch to finish.
+    assertFalse(calledBack);
+    assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    clock.tick(2);
+    assertTrue(calledBack);
+    assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
+
+    assertNull(error);
+  }
+
+  /**
+   * Tests loading multiple modules by requesting a Deferred object when
+   * consecutive server error occur and the loader falls back to serial
+   * loads.
+   */
+  function testLoadMultipleWithErrorsFallbackOnSerial() {
+    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+    mm.setBatchModeEnabled(true);
+    mm.setLoader(createUnsuccessfulLoader(mm, 500));
+
+    var calledBack = false;
+    var error = null;
+
+    var d = mm.loadMultiple(['a', 'b', 'c']);
+    d.addCallback(function(ctx) {
+      calledBack = true;
+    });
+    d.addErrback(function(err) {
+      error = err;
+    });
+
+    assertFalse(calledBack);
+
+    clock.tick(5);
+
+    assertFalse(calledBack);
+    assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    // Retry should happen and fail after a backoff
+    clock.tick(5 + mm.getBackOff_());
+    assertFalse(calledBack);
+    assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    // A second retry should happen after a backoff
+    clock.tick(4 + mm.getBackOff_());
+    // The second retry is now underway using the unsuccessful loader.
+    // We substitute a successful loader for future module load requests.
+    mm.setLoader(createSuccessfulBatchLoader(mm));
+
+    clock.tick(1);
+
+    // A second retry should fail now
+    assertFalse(calledBack);
+    assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    // Each module should be loaded individually now, each taking 5 ticks
+
+    clock.tick(5);
+    // Callback should not be called, even though 'a' has loaded, since it
+    // should wait for all in the batch to finish.
+    assertFalse(calledBack);
+    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
+    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    clock.tick(5);
+    // Callback should not be called, even though 'b' has loaded, since it
+    // should wait for all in the batch to finish.
+    assertFalse(calledBack);
+    assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
+    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
+
+    clock.tick(5);
+    assertTrue(calledBack);
+    assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
+
+    assertNull(error);
+  }
+
+  /**
    * Tests loading a module by user action by requesting a Deferred object.
    */
   function testLoadForUser() {
@@ -495,6 +711,183 @@ See the COPYING file for details.
     assertNull(error);
   }
 
+  /**
+   * Tests that load doesn't trigger another load if a module is already
+   * preloading.
+   */
+  function testLoadMultipleWhenPreloading() {
+    var mm = getModuleManager({'a': [], 'b': ['d'], 'c': [], 'd': []});
+    mm.setLoader(createSuccessfulBatchLoader(mm));
+    mm.setBatchModeEnabled(true);
+
+    var origSetLoaded = mm.setLoaded;
+    var calls = {'a': [0, 0, 0], 'b': [0, 0, 0],
+                 'c': [0, 0, 0], 'd': [0, 0, 0]};
+    mm.beforeLoadModuleCode = function(id) {
+      calls[id][0]++;
+    };
+    mm.setLoaded = function(id) {
+      calls[id][1]++;
+      origSetLoaded.call(mm, id);
+    };
+    mm.afterLoadModuleCode = function(id) {
+      calls[id][2]++;
+    };
+
+    var calledBack = false;
+    var error = null;
+
+    mm.preloadModule('c', 2);
+    mm.preloadModule('d', 3);
+    assertFalse(
+        'module "c" should not be loading yet', mm.isModuleLoading('c'));
+    assertFalse(
+        'module "d" should not be loading yet', mm.isModuleLoading('d'));
+    clock.tick(2);
+    assertTrue(
+        'module "c" should now be loading', mm.isModuleLoading('c'));
+    clock.tick(1);
+    assertTrue(
+        'module "d" should now be loading', mm.isModuleLoading('d'));
+
+    var d = mm.loadMultiple(['a', 'b', 'c']);
+    d.addCallback(function(ctx) {
+      calledBack = true;
+    });
+    d.addErrback(function(err) {
+      error = err;
+    });
+
+    assertTrue(
+        'module "a" should be loading', mm.isModuleLoading('a'));
+    assertTrue(
+        'module "b" should be loading', mm.isModuleLoading('b'));
+    assertTrue(
+        'module "c" should still be loading', mm.isModuleLoading('c'));
+    clock.tick(4);
+    assertFalse(
+        'module "c" should be done loading', mm.isModuleLoading('c'));
+    assertTrue(
+        'module "d" should still be loading', mm.isModuleLoading('d'));
+    clock.tick(5);
+    assertFalse(
+        'module "d" should be done loading', mm.isModuleLoading('d'));
+
+    assertFalse(calledBack);
+    assertTrue(
+        'module "a" should still be loading', mm.isModuleLoading('a'));
+    assertTrue(
+        'module "b" should still be loading', mm.isModuleLoading('b'));
+    clock.tick(7);
+    assertTrue(calledBack);
+    assertFalse(
+        'module "a" should be done loading', mm.isModuleLoading('a'));
+    assertFalse(
+        'module "b" should be done loading', mm.isModuleLoading('b'));
+
+    assertEquals(
+        'beforeLoad should only be called once for "a"', 1, calls['a'][0]);
+    assertEquals(
+        'setLoaded should only be called once for "a"', 1, calls['a'][1]);
+    assertEquals(
+        'afterLoad should only be called once for "a"', 1, calls['a'][2]);
+    assertEquals(
+        'beforeLoad should only be called once for "b"', 1, calls['b'][0]);
+    assertEquals(
+        'setLoaded should only be called once for "b"', 1, calls['b'][1]);
+    assertEquals(
+        'afterLoad should only be called once for "b"', 1, calls['b'][2]);
+    assertEquals(
+        'beforeLoad should only be called once for "c"', 1, calls['c'][0]);
+    assertEquals(
+        'setLoaded should only be called once for "c"', 1, calls['c'][1]);
+    assertEquals(
+        'afterLoad should only be called once for "c"', 1, calls['c'][2]);
+    assertEquals(
+        'beforeLoad should only be called once for "d"', 1, calls['d'][0]);
+    assertEquals(
+        'setLoaded should only be called once for "d"', 1, calls['d'][1]);
+    assertEquals(
+        'afterLoad should only be called once for "d"', 1, calls['d'][2]);
+
+    assertNull(error);
+  }
+
+/**
+   * Tests that the deferred is still called when loadMultiple loads modules
+   * that are already preloading.
+   */
+  function testLoadMultipleWhenPreloadingSameModules() {
+    var mm = getModuleManager({'a': [], 'b': ['d'], 'c': [], 'd': []});
+    mm.setLoader(createSuccessfulBatchLoader(mm));
+    mm.setBatchModeEnabled(true);
+
+    var origSetLoaded = mm.setLoaded;
+    var calls = {'c': [0, 0, 0], 'd': [0, 0, 0]};
+    mm.beforeLoadModuleCode = function(id) {
+      calls[id][0]++;
+    };
+    mm.setLoaded = function(id) {
+      calls[id][1]++;
+      origSetLoaded.call(mm, id);
+    };
+    mm.afterLoadModuleCode = function(id) {
+      calls[id][2]++;
+    };
+
+    var calledBack = false;
+    var error = null;
+
+    mm.preloadModule('c', 2);
+    mm.preloadModule('d', 3);
+    assertFalse(
+        'module "c" should not be loading yet', mm.isModuleLoading('c'));
+    assertFalse(
+        'module "d" should not be loading yet', mm.isModuleLoading('d'));
+    clock.tick(2);
+    assertTrue(
+        'module "c" should now be loading', mm.isModuleLoading('c'));
+    clock.tick(1);
+    assertTrue(
+        'module "d" should now be loading', mm.isModuleLoading('d'));
+
+    var d = mm.loadMultiple(['c', 'd']);
+    d.addCallback(function(ctx) {
+      calledBack = true;
+    });
+    d.addErrback(function(err) {
+      error = err;
+    });
+
+    assertTrue(
+        'module "c" should still be loading', mm.isModuleLoading('c'));
+    clock.tick(4);
+    assertFalse(
+        'module "c" should be done loading', mm.isModuleLoading('c'));
+    assertTrue(
+        'module "d" should still be loading', mm.isModuleLoading('d'));
+    clock.tick(5);
+    assertFalse(
+        'module "d" should be done loading', mm.isModuleLoading('d'));
+
+    assertTrue(calledBack);
+
+    assertEquals(
+        'beforeLoad should only be called once for "c"', 1, calls['c'][0]);
+    assertEquals(
+        'setLoaded should only be called once for "c"', 1, calls['c'][1]);
+    assertEquals(
+        'afterLoad should only be called once for "c"', 1, calls['c'][2]);
+    assertEquals(
+        'beforeLoad should only be called once for "d"', 1, calls['d'][0]);
+    assertEquals(
+        'setLoaded should only be called once for "d"', 1, calls['d'][1]);
+    assertEquals(
+        'afterLoad should only be called once for "d"', 1, calls['d'][2]);
+
+    assertNull(error);
+  }
+
  /**
    * Tests loading a module via load when the module is already
    * loaded.  The deferred's callback should be called immediately.
@@ -562,6 +955,124 @@ See the COPYING file for details.
         goog.module.ModuleManager.FailureType.UNAUTHORIZED,
         Number(error.message));
   }
+
+  /**
+   * Tests that the deferred's errbacks are called if a module fails to load.
+   */
+  function testLoadMultipleWithFailingModule() {
+    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+    mm.setLoader(createUnsuccessfulLoader(mm, 401));
+    mm.setBatchModeEnabled(true);
+    mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+        function(callbackType, id, cause) {
+      assertEquals('Failure cause was not as expected',
+                   goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+                   cause);
+    });
+    var calledBack1 = false;
+    var error1 = null;
+    var calledBack2 = false;
+    var error2 = null;
+
+    var d1 = mm.loadMultiple(['a', 'b']);
+    d1.addCallback(function(ctx) {
+      calledBack1 = true;
+    });
+    d1.addErrback(function(err) {
+      error1 = err;
+    });
+
+    var d2 = mm.loadMultiple(['b', 'c']);
+    d2.addCallback(function(ctx) {
+      calledBack2 = true;
+    });
+    d2.addErrback(function(err) {
+      error2 = err;
+    });
+
+    assertFalse(calledBack1);
+    assertNull(error1);
+    assertFalse(calledBack2);
+    assertNull(error2);
+
+    clock.tick(5);
+
+    assertFalse(calledBack1);
+    assertFalse(calledBack2);
+
+    // NOTE: Deferred always calls errbacks with an Error object.  For now the
+    // module manager just passes the FailureType which gets set as the Error
+    // object's message.
+    assertEquals('Failure cause was not as expected',
+        goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+        Number(error1.message));
+
+    // The second deferred should be called since it asks for one of the
+    // original modules.
+    assertEquals('Failure cause was not as expected',
+        goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+        Number(error2.message));
+  }
+
+  /**
+   * Tests that the right dependencies are cancelled on a loadMultiple failure.
+   */
+  function testLoadMultipleWithFailingModule() {
+    var mm = getModuleManager(
+        {'a': [], 'b': [], 'c': ['b'], 'd': ['c'], 'e': []});
+    mm.setLoader(createUnsuccessfulLoader(mm, 401));
+    mm.setBatchModeEnabled(true);
+    var cancelledIds = [];
+
+    mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+        function(callbackType, id, cause) {
+      assertEquals('Failure cause was not as expected',
+                   goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+                   cause);
+      cancelledIds.push(id);
+    });
+    var calledBack1 = false;
+    var error1 = null;
+    var calledBack2 = false;
+    var error2 = null;
+
+    var d1 = mm.loadMultiple(['a', 'b']);
+    d1.addCallback(function(ctx) {
+      calledBack1 = true;
+    });
+    d1.addErrback(function(err) {
+      error1 = err;
+    });
+
+    var d2 = mm.loadMultiple(['c', 'd', 'e']);
+    d2.addCallback(function(ctx) {
+      calledBack2 = true;
+    });
+    d2.addErrback(function(err) {
+      error2 = err;
+    });
+
+    assertFalse(calledBack1);
+    assertNull(error1);
+    assertFalse(calledBack2);
+    assertNull(error2);
+
+    clock.tick(5);
+
+    assertFalse(calledBack1);
+    assertFalse(calledBack2);
+
+    // NOTE: Deferred always calls errbacks with an Error object.  For now the
+    // module manager just passes the FailureType which gets set as the Error
+    // object's message.
+    assertEquals('Failure cause was not as expected',
+        goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+        Number(error1.message));
+
+    // Check that among the failed modules, 'c' and 'd' are also cancelled
+    // due to dependencies.
+    assertTrue(goog.array.equals(['a', 'b', 'c', 'd'], cancelledIds.sort()));
+   }
 
   /**
    * Test loading dependencies transitively.
