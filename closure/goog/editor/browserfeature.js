@@ -159,9 +159,8 @@ goog.editor.BrowserFeature = {
 
   // Whether this browser can't set background color when the selection
   // is collapsed.
-  // Fixed in nightly webkit - https://bugs.webkit.org/show_bug.cgi?id=16049,
-  // should restrict to browser version once we have more info.
-  EATS_EMPTY_BACKGROUND_COLOR: goog.userAgent.GECKO || goog.userAgent.WEBKIT,
+  EATS_EMPTY_BACKGROUND_COLOR: goog.userAgent.GECKO ||
+      goog.userAgent.WEBKIT && !goog.userAgent.isVersion('527'),
 
   // Whether this browser supports the "focusin" or "DOMFocusIn" event
   // consistently.
