@@ -145,14 +145,6 @@ goog.net.xpc.IframePollingTransport.prototype.getAckFrameName_ = function() {
  * Connects this transport.
  */
 goog.net.xpc.IframePollingTransport.prototype.connect = function() {
-  if (this.isDisposed()) {
-    // We should stop polling for connecting if the transport has been
-    // disposed (i.e., the channel has been closed), otherwise
-    // outerPeerReconnect_() may throw exceptions when it refers
-    // channel_.peerWindowObject_ which is reset to null by channel_.close().
-    return;
-  }
-
   goog.net.xpc.logger.fine('transport connect called');
   if (!this.initialized_) {
     goog.net.xpc.logger.fine('initializing...');

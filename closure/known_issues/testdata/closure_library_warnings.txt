@@ -130,67 +130,67 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/ifr
       this.channel_.name + '_ack';
       ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:217: ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:208: ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   this.channel_.name = goog.net.xpc.getRandomString(10);
   ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:218: ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:209: ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   goog.net.xpc.logger.finest('switching channels: ' + this.channel_.name);
                                                       ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:224: ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:215: ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
       '_reconnect_' + this.channel_.name);
                       ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:237: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:228: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   var frames = this.channel_.peerWindowObject_.frames;
                ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:258: ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:249: ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
       this.channel_.name = message[2];
       ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:323: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:314: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
         this.channel_.peerWindowObject_.frames[this.getMsgFrameName_()],
         ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:327: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:318: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
         this.channel_.peerWindowObject_.frames[this.getAckFrameName_()],
         ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:346: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:337: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
     var winObj = this.channel_.peerWindowObject_.frames[frameName];
                  ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:367: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:358: ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   var frames = this.channel_.peerWindowObject_.frames;
                ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:387: ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:378: ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
       this.msgSender_.send(goog.net.xpc.SETUP);
                            ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:402: ERROR - Access to private property notifyConnected_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:393: ERROR - Access to private property notifyConnected_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
     this.channel_.notifyConnected_();
     ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:410: ERROR - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:401: ERROR - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
         this.channel_.deliver_(m.service, m.payload);
         ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:430: ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:421: ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
   if (raw == goog.net.xpc.SETUP) {
              ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:436: ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:427: ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
     this.ackSender_.send(goog.net.xpc.SETUP_ACK_);
                          ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:489: ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:480: ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
   if (msgStr == goog.net.xpc.SETUP_ACK_) {
                 ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:555: ERROR - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js:546: ERROR - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
     this.channel_.deliver_(service, payload);
     ^
 
