@@ -1442,12 +1442,7 @@ goog.dom.getOwnerDocument = function(node) {
  * @return {!Document} The frame content document.
  */
 goog.dom.getFrameContentDocument = function(frame) {
-  var doc;
-  if (goog.userAgent.WEBKIT) {
-    doc = (frame.document || frame.contentWindow.document);
-  } else {
-    doc = (frame.contentDocument || frame.contentWindow.document);
-  }
+  var doc = frame.contentDocument || frame.contentWindow.document;
   return doc;
 };
 
