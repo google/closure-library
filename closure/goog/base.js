@@ -1330,6 +1330,28 @@ goog.setCssNameMapping = function(mapping, opt_style) {
 
 
 /**
+ * To use CSS renaming in compiled mode, one of the input files should have a
+ * call to goog.setCssNameMapping() with an object literal that the JSCompiler
+ * can extract and use to replace all calls to goog.getCssName(). In uncompiled
+ * mode, JavaScript code should be loaded before this base.js file that declares
+ * a global variable, CLOSURE_CSS_NAME_MAPPING, which is used below. This is
+ * to ensure that the mapping is loaded before any calls to goog.getCssName()
+ * are made in uncompiled mode.
+ *
+ * A hook for overriding the CSS name mapping.
+ * @type {Object|undefined}
+ */
+goog.global.CLOSURE_CSS_NAME_MAPPING;
+
+
+if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
+  // This does not call goog.setCssNameMapping() because the JSCompiler
+  // requires that goog.setCssNameMapping() be called with an object literal.
+  goog.cssNameMapping_ = goog.global.CLOSURE_CSS_NAME_MAPPING;
+}
+
+
+/**
  * Abstract implementation of goog.getMsg for use with localized messages.
  * @param {string} str Translatable string, places holders in the form {$foo}.
  * @param {Object=} opt_values Map of place holder name to value.
