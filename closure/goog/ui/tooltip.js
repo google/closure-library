@@ -647,8 +647,8 @@ goog.ui.Tooltip.prototype.hasActiveChild = function() {
  */
 goog.ui.Tooltip.prototype.saveCursorPosition_ = function(event) {
   var scroll = this.dom_.getDocumentScroll();
-  this.cursorPosition.x = event.clientX + scroll.x;
-  this.cursorPosition.y = event.clientY + scroll.y;
+  this.cursorPosition.x = event.screenX + scroll.x;
+  this.cursorPosition.y = event.screenY + scroll.y;
 };
 
 
