@@ -346,7 +346,7 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/tweak/testh
   goog.tweak.registry_ = registry;
   ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/advancedtooltip.js:318: ERROR - Access to private property startHideTimer_ of goog.ui.AdvancedTooltip not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/advancedtooltip.js:317: ERROR - Access to private property startHideTimer_ of goog.ui.AdvancedTooltip not allowed here.
     this.startHideTimer_();
     ^
 
