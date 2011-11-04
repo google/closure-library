@@ -96,7 +96,7 @@ function closeBox() {
       'tr_bubble_closebox');
   assertEquals('Should find only one close box', 1, closeBox.length);
   assertNotNull('Found close box', closeBox[0]);
-  goog.testing.events.fireClickSequence(closeBox[0]);  
+  goog.testing.events.fireClickSequence(closeBox[0]);
 }
 
 function testCloseBox() {
@@ -235,6 +235,69 @@ function testLinkTextClickedCustomUrlFn() {
   assertBubble();
   mockWindowOpen.$verify();
   FIELDMOCK.$verify();
+}
+
+/**
+ * Urls with invalid schemes shouldn't be linkified.
+ * @bug 2585360
+ */
+function testDontLinkifyInvalidScheme() {
+  mockWindowOpen.$replay();
+  FIELDMOCK.$replay();
+  linkBubble.enable(FIELDMOCK);
+
+  var badLink = document.createElement('a');
+  badLink.href = 'javascript:alert(1)';
+  badLink.innerHTML = 'bad link';
+
+  linkBubble.handleSelectionChange(createMouseEvent(badLink));
+  assertBubble();
+
+  // The link shouldn't exist at all, so this sequence should have no effect.
+  goog.testing.events.fireClickSequence(
+      goog.dom.$(goog.editor.plugins.LinkBubble.TEST_LINK_ID_));
+
+  assertBubble();
+  mockWindowOpen.$verify();
+  FIELDMOCK.$verify();
+}
+
+function testIsSafeSchemeToOpen() {
+  // Urls with no scheme at all are ok too since 'http://' will be prepended.
+  var good = [
+    'http://google.com', 'http://google.com/', 'https://google.com',
+    'null@google.com', 'http://www.google.com', 'http://site.com',
+    'google.com', 'google', 'http://google', 'HTTP://GOOGLE.COM',
+    'HtTp://www.google.com'
+  ];
+
+  var bad = [
+    'javascript:google.com', 'httpp://google.com', 'data:foo',
+    'javascript:alert(\'hi\');', 'abc:def'
+  ];
+
+  for (var i = 0; i < good.length; i++) {
+    assertTrue(good[i] + ' should have a safe scheme',
+        linkBubble.isSafeSchemeToOpen_(good[i]));
+  }
+
+  for (i = 0; i < bad.length; i++) {
+    assertFalse(bad[i] + ' should have an unsafe scheme',
+        linkBubble.isSafeSchemeToOpen_(bad[i]));
+  }
+}
+
+function testIsSafeSchemeWithWhitelist() {
+  linkBubble.setSafeToOpenSchemes(['abc']);
+
+  assertTrue('Scheme should be safe',
+              linkBubble.isSafeSchemeToOpen_('abc://google.com'));
+  assertFalse('Scheme should be unsafe',
+              linkBubble.isSafeSchemeToOpen_('http://google.com'));
+
+  linkBubble.setBlockOpeningUnsafeSchemes(false);
+  assertTrue('Non-whitelisted should now be safe after disabling blocking',
+              linkBubble.isSafeSchemeToOpen_('http://google.com'));
 }
 
 /**
