@@ -22,16 +22,13 @@
 
 goog.provide('goog.editor.plugins.LinkDialogPlugin');
 
-goog.require('goog.array');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractDialogPlugin');
 goog.require('goog.events.EventHandler');
 goog.require('goog.functions');
 goog.require('goog.ui.editor.AbstractDialog.EventType');
 goog.require('goog.ui.editor.LinkDialog');
-goog.require('goog.ui.editor.LinkDialog.EventType');
 goog.require('goog.ui.editor.LinkDialog.OkEvent');
-goog.require('goog.uri.utils');
 
 
 
@@ -49,14 +46,6 @@ goog.editor.plugins.LinkDialogPlugin = function() {
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
-
-
-  /**
-   * A list of whitelisted URL schemes which are safe to open.
-   * @type {Array.<string>}
-   * @private
-   */
-  this.safeToOpenSchemes_ = ['http', 'https', 'ftp'];
 };
 goog.inherits(goog.editor.plugins.LinkDialogPlugin,
     goog.editor.plugins.AbstractDialogPlugin);
@@ -106,47 +95,9 @@ goog.editor.plugins.LinkDialogPlugin.prototype.isOpenLinkInNewWindowChecked_ =
 goog.editor.plugins.LinkDialogPlugin.prototype.stopReferrerLeaks_ = false;
 
 
-/**
- * Whether to block opening links with a non-whitelisted URL scheme.
- * @type {boolean}
- * @private
- */
-goog.editor.plugins.LinkDialogPlugin.prototype.blockOpeningUnsafeSchemes_ =
-    true;
-
-
 /** @override */
 goog.editor.plugins.LinkDialogPlugin.prototype.getTrogClassId =
     goog.functions.constant('LinkDialogPlugin');
-
-
-/**
- * Tells the plugin whether to block URLs with schemes not in the whitelist.
- * If blocking is enabled, this plugin will stop the 'Test Link' popup
- * window from being created. Blocking doesn't affect link creation--if the
- * user clicks the 'OK' button with an unsafe URL, the link will still be
- * created as normal.
- * @param {boolean} blockOpeningUnsafeSchemes Whether to block non-whitelisted
- *    schemes.
- */
-goog.editor.plugins.LinkDialogPlugin.prototype.setBlockOpeningUnsafeSchemes =
-    function(blockOpeningUnsafeSchemes) {
-  this.blockOpeningUnsafeSchemes_ = blockOpeningUnsafeSchemes;
-};
-
-
-/**
- * Sets a whitelist of allowed URL schemes that are safe to open.
- * Schemes should all be in lowercase. If the plugin is set to block opening
- * unsafe schemes, user-entered URLs will be converted to lowercase and checked
- * against this list. The whitelist has no effect if blocking is not enabled.
- * @param {Array.<String>} schemes String array of URL schemes to allow (http,
- *     https, etc.).
- */
-goog.editor.plugins.LinkDialogPlugin.prototype.setSafeToOpenSchemes =
-    function(schemes) {
-  this.safeToOpenSchemes_ = schemes;
-};
 
 
 /**
@@ -272,9 +223,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
       listen(dialog, goog.ui.editor.AbstractDialog.EventType.OK,
           this.handleOk_).
       listen(dialog, goog.ui.editor.AbstractDialog.EventType.CANCEL,
-          this.handleCancel_).
-      listen(dialog, goog.ui.editor.LinkDialog.EventType.BEFORE_TEST_LINK,
-          this.handleBeforeTestLink_);
+          this.handleCancel_);
   return dialog;
 };
 
@@ -335,43 +284,4 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleCancel_ = function(e) {
   }
 
   this.eventHandler_.removeAll();
-};
-
-
-/**
- * Handles the BeforeTestLink event fired when the 'test' link is clicked.
- * @param {goog.ui.editor.LinkDialog.BeforeTestLinkEvent} e BeforeTestLink event
- *     object.
- * @private
- */
-goog.editor.plugins.LinkDialogPlugin.prototype.handleBeforeTestLink_ =
-    function(e) {
-  if (!this.isSafeSchemeToOpen_(e.url)) {
-    /** @desc Message when the user tries to test (preview) a link, but the
-     * link cannot be tested. */
-    var MSG_UNSAFE_LINK = goog.getMsg('This link cannot be tested.');
-    alert(MSG_UNSAFE_LINK);
-    e.preventDefault();
-  }
-};
-
-
-/**
- * Determines whether or not a url has a scheme which is safe to open.
- * Schemes like javascript: are unsafe due to the possibility of XSS.
- * If the plugin is not set to block non-whitelisted schemes, this method
- * always returns true.
- * @param {string} url A url.
- * @return {boolean} Whether the url has a safe scheme, or true if blocking
- *     is disabled.
- * @private
- */
-goog.editor.plugins.LinkDialogPlugin.prototype.isSafeSchemeToOpen_ =
-    function(url) {
-  if (this.blockOpeningUnsafeSchemes_) {
-    var scheme = goog.uri.utils.getScheme(url) || 'http';
-    return goog.array.contains(this.safeToOpenSchemes_, scheme.toLowerCase());
-  }
-
-  return true;
 };
