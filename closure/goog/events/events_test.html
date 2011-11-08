@@ -30,7 +30,6 @@ See the COPYING file for details.
 
   function tearDown() {
     goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
-    goog.events.pools.setProxyCallbackFunction(originalHandleBrowserEvent);
     goog.events.removeAll();
   }
 
@@ -51,8 +50,6 @@ See the COPYING file for details.
             e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
       }
     };
-    goog.events.pools.setProxyCallbackFunction(
-        goog.events.handleBrowserEvent_);
 
     var bodyEl = document.body;
     goog.events.listen(bodyEl, goog.events.EventType.CLICK, function(e){

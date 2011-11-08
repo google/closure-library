@@ -62,9 +62,17 @@ goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventWrapper');
-goog.require('goog.events.pools');
+goog.require('goog.events.Listener');
 goog.require('goog.object');
 goog.require('goog.userAgent');
+
+
+/**
+ * @define {boolean} Whether to always assume the garbage collector is good.
+ * @deprecated This is no longer needed and will be removed once apps are
+ * updated.
+ */
+goog.events.ASSUME_GOOD_GC = false;
 
 
 /**
@@ -147,12 +155,12 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
     var map = goog.events.listenerTree_;
 
     if (!(type in map)) {
-      map[type] = goog.events.pools.getObject();
+      map[type] = {count_: 0, remaining_: 0};
     }
     map = map[type];
 
     if (!(capture in map)) {
-      map[capture] = goog.events.pools.getObject();
+      map[capture] = {count_: 0, remaining_: 0};
       map.count_++;
     }
     map = map[capture];
@@ -172,7 +180,7 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
     // Do not use srcUid in map here since that will cast the number to a
     // string which will allocate one string object.
     if (!map[srcUid]) {
-      listenerArray = map[srcUid] = goog.events.pools.getArray();
+      listenerArray = map[srcUid] = [];
       map.count_++;
     } else {
       listenerArray = map[srcUid];
@@ -195,9 +203,9 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
       }
     }
 
-    var proxy = goog.events.pools.getProxy();
+    var proxy = goog.events.getProxy();
     proxy.src = src;
-    listenerObj = goog.events.pools.getListener();
+    listenerObj = new goog.events.Listener();
     listenerObj.init(listener, proxy, src, type, capture, opt_handler);
     var key = listenerObj.key;
     proxy.key = key;
@@ -206,7 +214,7 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
     goog.events.listeners_[key] = listenerObj;
 
     if (!goog.events.sources_[srcUid]) {
-      goog.events.sources_[srcUid] = goog.events.pools.getArray();
+      goog.events.sources_[srcUid] = [];
     }
     goog.events.sources_[srcUid].push(listenerObj);
 
@@ -227,6 +235,31 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
 
     return key;
   }
+};
+
+
+/**
+ * Helper function for returning a proxy function.
+ * @return {Function} A new or reused function object.
+ */
+goog.events.getProxy = function() {
+  var proxyCallbackFunction = goog.events.handleBrowserEvent_;
+  // Use a local var f to prevent one allocation.
+  var f = goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT ?
+      function(eventObject) {
+        return proxyCallbackFunction.call(f.src, f.key, eventObject);
+      } :
+      function(eventObject) {
+        var v = proxyCallbackFunction.call(f.src, f.key, eventObject);
+        // NOTE(user): In IE, we hack in a capture phase. However, if
+        // there is inline event handler which tries to prevent default (for
+        // example <a href="..." onclick="return false">...</a>) in a
+        // descendant element, the prevent default will be overridden
+        // by this listener if this listener were to return true. Hence, we
+        // return undefined.
+        if (!v) return v;
+      };
+  return f;
 };
 
 
@@ -429,8 +462,6 @@ goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
         if (listenerArray[oldIndex].removed) {
           var proxy = listenerArray[oldIndex].proxy;
           proxy.src = null;
-          goog.events.pools.releaseProxy(proxy);
-          goog.events.pools.releaseListener(listenerArray[oldIndex]);
           continue;
         }
         if (oldIndex != newIndex) {
@@ -444,19 +475,15 @@ goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
 
       // In case the length is now zero we release the object.
       if (newIndex == 0) {
-        goog.events.pools.releaseArray(listenerArray);
         delete goog.events.listenerTree_[type][capture][srcUid];
         goog.events.listenerTree_[type][capture].count_--;
 
         if (goog.events.listenerTree_[type][capture].count_ == 0) {
-          goog.events.pools.releaseObject(
-              goog.events.listenerTree_[type][capture]);
           delete goog.events.listenerTree_[type][capture];
           goog.events.listenerTree_[type].count_--;
         }
 
         if (goog.events.listenerTree_[type].count_ == 0) {
-          goog.events.pools.releaseObject(goog.events.listenerTree_[type]);
           delete goog.events.listenerTree_[type];
         }
       }
@@ -871,7 +898,6 @@ goog.events.dispatchEvent = function(src, e) {
 goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
   goog.events.handleBrowserEvent_ = errorHandler.protectEntryPoint(
       goog.events.handleBrowserEvent_);
-  goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
 };
 
 
@@ -922,13 +948,13 @@ goog.events.handleBrowserEvent_ = function(key, opt_evt) {
       goog.events.markIeEvent_(ieEvent);
     }
 
-    var evt = goog.events.pools.getEvent();
+    var evt = new goog.events.BrowserEvent();
     evt.init(ieEvent, this);
 
     retval = true;
     try {
       if (hasCapture) {
-        var ancestors = goog.events.pools.getArray();
+        var ancestors = [];
 
         for (var parent = evt.currentTarget;
              parent;
@@ -971,10 +997,8 @@ goog.events.handleBrowserEvent_ = function(key, opt_evt) {
     } finally {
       if (ancestors) {
         ancestors.length = 0;
-        goog.events.pools.releaseArray(ancestors);
       }
       evt.dispose();
-      goog.events.pools.releaseEvent(evt);
     }
     return retval;
   } // IE
@@ -988,11 +1012,6 @@ goog.events.handleBrowserEvent_ = function(key, opt_evt) {
   }
   return retval;
 };
-
-
-// Set the callback for the proxy pool. This is done here to prevent circular
-// dependencies.
-goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
 
 
 /**
@@ -1073,7 +1092,5 @@ goog.debug.entryPointRegistry.register(
      */
     function(transformer) {
       goog.events.handleBrowserEvent_ = transformer(
-          goog.events.handleBrowserEvent_);
-      goog.events.pools.setProxyCallbackFunction(
           goog.events.handleBrowserEvent_);
     });

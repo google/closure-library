@@ -17,23 +17,16 @@
  * be used by itself and there should be no reason for you to depend on this
  * library.
  *
- * JScript 5.6 has some serious issues with GC so we use object pools to reduce
- * the number of object allocations.
+ * @deprecated goog.events.pools() is not needed by Closure anymore.  A stub
+ * remains in place for those who are incorrectly depending on this file.
  *
  */
 
 goog.provide('goog.events.pools');
 
+goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Listener');
-goog.require('goog.structs.SimplePool');
-goog.require('goog.userAgent.jscript');
-
-
-/**
- * @define {boolean} Whether to always assume the garbage collector is good.
- */
-goog.events.ASSUME_GOOD_GC = false;
 
 
 /**
@@ -41,7 +34,9 @@ goog.events.ASSUME_GOOD_GC = false;
  * This might use an object pool depending on the script engine.
  * @return { {count_: number, remaining_: number} } A new or reused object.
  */
-goog.events.pools.getObject;
+goog.events.pools.getObject = function() {
+  return {count_: 0, remaining_: 0};
+};
 
 
 /**
@@ -50,7 +45,7 @@ goog.events.pools.getObject;
  * object is returned to the pool.
  * @param { {count_: number, remaining_: number} } obj The object to release.
  */
-goog.events.pools.releaseObject;
+goog.events.pools.releaseObject = goog.nullFunction;
 
 
 /**
@@ -58,7 +53,9 @@ goog.events.pools.releaseObject;
  * This might use an object pool depending on the script engine.
  * @return {Array} A new or reused array.
  */
-goog.events.pools.getArray;
+goog.events.pools.getArray = function() {
+  return [];
+};
 
 
 /**
@@ -67,7 +64,7 @@ goog.events.pools.getArray;
  * array is returned to the pool.
  * @param {Array} arr The array to release.
  */
-goog.events.pools.releaseArray;
+goog.events.pools.releaseArray = goog.nullFunction;
 
 
 /**
@@ -76,14 +73,18 @@ goog.events.pools.releaseArray;
  * engine.
  * @return {Function} A new or reused function object.
  */
-goog.events.pools.getProxy;
+goog.events.pools.getProxy = function() {
+  return goog.events.getProxy();
+};
 
 
 /**
  * Sets the callback function to use in the proxy.
  * @param {function(string, (Event|undefined))} cb The callback function to use.
  */
-goog.events.pools.setProxyCallbackFunction;
+goog.events.pools.setProxyCallbackFunction = function(cb) {
+  goog.events.pools.proxyCallbackFunction_ = cb;
+};
 
 
 /**
@@ -92,7 +93,7 @@ goog.events.pools.setProxyCallbackFunction;
  * function is returned to the pool.
  * @param {Function} f The function to release.
  */
-goog.events.pools.releaseProxy;
+goog.events.pools.releaseProxy = goog.nullFunction;
 
 
 /**
@@ -101,7 +102,9 @@ goog.events.pools.releaseProxy;
  * engine.
  * @return {goog.events.Listener} A new or reused listener object.
  */
-goog.events.pools.getListener;
+goog.events.pools.getListener = function() {
+  return new goog.events.Listener();
+};
 
 
 /**
@@ -110,7 +113,7 @@ goog.events.pools.getListener;
  * listener object is returned to the pool.
  * @param {goog.events.Listener} listener The listener object to release.
  */
-goog.events.pools.releaseListener;
+goog.events.pools.releaseListener = goog.nullFunction;
 
 
 /**
@@ -119,7 +122,9 @@ goog.events.pools.releaseListener;
  * script engine.
  * @return {!goog.events.BrowserEvent} A new or reused event object.
  */
-goog.events.pools.getEvent;
+goog.events.pools.getEvent = function getEvent() {
+  return new goog.events.BrowserEvent();
+};
 
 
 /**
@@ -128,232 +133,4 @@ goog.events.pools.getEvent;
  * browser event object is returned to the pool.
  * @param {goog.events.BrowserEvent} event The event object to release.
  */
-goog.events.pools.releaseEvent;
-
-
-(function() {
-  var BAD_GC = !goog.events.ASSUME_GOOD_GC &&
-      goog.userAgent.jscript.HAS_JSCRIPT &&
-      !goog.userAgent.jscript.isVersion('5.7');
-
-  // These functions are shared between the pools' createObject functions and
-  // the non pooled versions.
-
-  function getObject() {
-    return {count_: 0, remaining_: 0};
-  }
-
-  function getArray() {
-    return [];
-  }
-
-  /**
-   * This gets set to {@code goog.events.handleBrowserEvent_} by events.js.
-   * @type {function(string, (Event|undefined))}
-   */
-  var proxyCallbackFunction;
-
-  goog.events.pools.setProxyCallbackFunction = function(cb) {
-    proxyCallbackFunction = cb;
-  };
-
-  function getProxy() {
-    // Use a local var f to prevent one allocation.
-    var f = goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT ?
-        function(eventObject) {
-          return proxyCallbackFunction.call(f.src, f.key, eventObject);
-        } :
-        function(eventObject) {
-          var v = proxyCallbackFunction.call(f.src, f.key, eventObject);
-          // NOTE(user): In IE, we hack in a capture phase. However, if
-          // there is inline event handler which tries to prevent default (for
-          // example <a href="..." onclick="return false">...</a>) in a
-          // descendant element, the prevent default will be overridden
-          // by this listener if this listener were to return true. Hence, we
-          // return undefined.
-          if (!v) return v;
-        };
-    return f;
-  }
-
-  function getListener() {
-    return new goog.events.Listener();
-  }
-
-  function getEvent() {
-    return new goog.events.BrowserEvent();
-  }
-
-  if (!BAD_GC) {
-
-    goog.events.pools.getObject = getObject;
-    goog.events.pools.releaseObject = goog.nullFunction;
-
-    goog.events.pools.getArray = getArray;
-    goog.events.pools.releaseArray = goog.nullFunction;
-
-    goog.events.pools.getProxy = getProxy;
-    goog.events.pools.releaseProxy = goog.nullFunction;
-
-    goog.events.pools.getListener = getListener;
-    goog.events.pools.releaseListener = goog.nullFunction;
-
-    goog.events.pools.getEvent = getEvent;
-    goog.events.pools.releaseEvent = goog.nullFunction;
-
-  } else {
-
-    goog.events.pools.getObject = function() {
-      return objectPool.getObject();
-    };
-
-    goog.events.pools.releaseObject = function(obj) {
-      objectPool.releaseObject(obj);
-    };
-
-    goog.events.pools.getArray = function() {
-      return /** @type {Array} */ (arrayPool.getObject());
-    };
-
-    goog.events.pools.releaseArray = function(obj) {
-      arrayPool.releaseObject(obj);
-    };
-
-    goog.events.pools.getProxy = function() {
-      return /** @type {Function} */ (proxyPool.getObject());
-    };
-
-    goog.events.pools.releaseProxy = function(obj) {
-      proxyPool.releaseObject(getProxy());
-    };
-
-    goog.events.pools.getListener = function() {
-      return /** @type {goog.events.Listener} */ (
-          listenerPool.getObject());
-    };
-
-    goog.events.pools.releaseListener = function(obj) {
-      listenerPool.releaseObject(obj);
-    };
-
-    goog.events.pools.getEvent = function() {
-      return /** @type {!goog.events.BrowserEvent} */ (eventPool.getObject());
-    };
-
-    goog.events.pools.releaseEvent = function(obj) {
-      eventPool.releaseObject(obj);
-    };
-
-    /**
-     * Initial count for the objectPool
-     */
-    var OBJECT_POOL_INITIAL_COUNT = 0;
-
-
-    /**
-     * Max count for the objectPool_
-     */
-    var OBJECT_POOL_MAX_COUNT = 600;
-
-
-    /**
-     * SimplePool to cache the lookup objects. This was implemented to make IE6
-     * performance better and removed an object allocation in goog.events.listen
-     * when in steady state.
-     */
-    var objectPool = new goog.structs.SimplePool(OBJECT_POOL_INITIAL_COUNT,
-                                                 OBJECT_POOL_MAX_COUNT);
-    objectPool.setCreateObjectFn(getObject);
-
-
-    /**
-     * Initial count for the arrayPool
-     */
-    var ARRAY_POOL_INITIAL_COUNT = 0;
-
-
-    /**
-     * Max count for the arrayPool
-     */
-    var ARRAY_POOL_MAX_COUNT = 600;
-
-
-    /**
-     * SimplePool to cache the type arrays. This was implemented to make IE6
-     * performance better and removed an object allocation in goog.events.listen
-     * when in steady state.
-     * @type {goog.structs.SimplePool}
-     */
-    var arrayPool = new goog.structs.SimplePool(ARRAY_POOL_INITIAL_COUNT,
-                                                ARRAY_POOL_MAX_COUNT);
-    arrayPool.setCreateObjectFn(getArray);
-
-
-    /**
-     * Initial count for the proxyPool
-     */
-    var HANDLE_EVENT_PROXY_POOL_INITIAL_COUNT = 0;
-
-
-    /**
-     * Max count for the proxyPool
-     */
-    var HANDLE_EVENT_PROXY_POOL_MAX_COUNT = 600;
-
-
-    /**
-     * SimplePool to cache the handle event proxy. This was implemented to make
-     * IE6 performance better and removed an object allocation in
-     * goog.events.listen when in steady state.
-     */
-    var proxyPool = new goog.structs.SimplePool(
-        HANDLE_EVENT_PROXY_POOL_INITIAL_COUNT,
-        HANDLE_EVENT_PROXY_POOL_MAX_COUNT);
-    proxyPool.setCreateObjectFn(getProxy);
-
-
-    /**
-     * Initial count for the listenerPool
-     */
-    var LISTENER_POOL_INITIAL_COUNT = 0;
-
-
-    /**
-     * Max count for the listenerPool
-     */
-    var LISTENER_POOL_MAX_COUNT = 600;
-
-
-    /**
-     * SimplePool to cache the listener objects. This was implemented to make
-     * IE6 performance better and removed an object allocation in
-     * goog.events.listen when in steady state.
-     */
-    var listenerPool = new goog.structs.SimplePool(LISTENER_POOL_INITIAL_COUNT,
-                                                   LISTENER_POOL_MAX_COUNT);
-    listenerPool.setCreateObjectFn(getListener);
-
-
-    /**
-     * Initial count for the eventPool
-     */
-    var EVENT_POOL_INITIAL_COUNT = 0;
-
-
-    /**
-     * Max count for the eventPool
-     */
-    var EVENT_POOL_MAX_COUNT = 600;
-
-
-    /**
-     * SimplePool to cache the event objects. This was implemented to make IE6
-     * performance better and removed an object allocation in
-     * goog.events.handleBrowserEvent_ when in steady state.
-     * This pool is only used for IE events.
-     */
-    var eventPool = new goog.structs.SimplePool(EVENT_POOL_INITIAL_COUNT,
-                                                EVENT_POOL_MAX_COUNT);
-    eventPool.setCreateObjectFn(getEvent);
-  }
-})();
+goog.events.pools.releaseEvent = goog.nullFunction;
