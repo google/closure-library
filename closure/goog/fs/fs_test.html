@@ -120,6 +120,80 @@ function testIsDirectory() {
   asyncTestCase.waitForAsync('testIsDirectory');
 }
 
+function testReadFileUtf16() {
+  if (!fsExists) {
+    return;
+  }
+  var str = 'test content';
+  var buf = new ArrayBuffer(str.length * 2);
+  var arr = new Uint16Array(buf);
+  for (var i = 0; i < str.length; i++) {
+    arr[i] = str.charCodeAt(i);
+  }
+
+  loadFile('test', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(goog.partial(writeToFile, arr.buffer)).
+      addCallback(goog.partial(checkFileContentWithEncoding, str, 'UTF-16')).
+      addBoth(continueTesting);
+  asyncTestCase.waitForAsync('testReadFile');
+}
+
+function testReadFileUtf8() {
+  if (!fsExists) {
+    return;
+  }
+  var str = 'test content';
+  var buf = new ArrayBuffer(str.length);
+  var arr = new Uint8Array(buf);
+  for (var i = 0; i < str.length; i++) {
+    arr[i] = str.charCodeAt(i) & 0xff;
+  }
+
+  loadFile('test', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(goog.partial(writeToFile, arr.buffer)).
+      addCallback(goog.partial(checkFileContentWithEncoding, str, 'UTF-8')).
+      addBoth(continueTesting);
+  asyncTestCase.waitForAsync('testReadFileUtf8');
+}
+
+function testReadFileAsArrayBuffer() {
+  if (!fsExists) {
+    return;
+  }
+  var str = 'test content';
+  var buf = new ArrayBuffer(str.length);
+  var arr = new Uint8Array(buf);
+  for (var i = 0; i < str.length; i++) {
+    arr[i] = str.charCodeAt(i) & 0xff;
+  }
+
+  loadFile('test', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(goog.partial(writeToFile, arr.buffer)).
+      addCallback(goog.partial(checkFileContentAs, arr.buffer, 'ArrayBuffer',
+          undefined)).
+      addBoth(continueTesting);
+  asyncTestCase.waitForAsync('testReadFileAsArrayBuffer');
+}
+
+function testReadFileAsBinaryString() {
+  if (!fsExists) {
+    return;
+  }
+  var str = 'test content';
+  var buf = new ArrayBuffer(str.length);
+  var arr = new Uint8Array(buf);
+  for (var i = 0; i < str.length; i++) {
+    arr[i] = str.charCodeAt(i);
+  }
+
+  loadFile('test', goog.fs.DirectoryEntry.Behavior.CREATE).
+      addCallback(goog.partial(writeToFile, arr.buffer)).
+      addCallback(goog.partial(checkFileContentAs, str, 'BinaryString',
+          undefined)).
+      addBoth(continueTesting);
+  asyncTestCase.waitForAsync('testReadFileAsArrayBuffer');
+}
+
 function testWriteFile() {
   if (!fsExists) {
     return;
@@ -261,7 +335,7 @@ function testGetLastModified() {
       }).addCallback(function(date) {
         assertRoughlyEquals('Expected the last modified date to be within ' +
                             'a few milliseconds of the test start time.',
-                            now, date.getTime(), 100);
+                            now, date.getTime(), 2000);
       }).addCallback(continueTesting);
 
   asyncTestCase.waitForAsync('testGetLastModified');
@@ -553,9 +627,32 @@ function writeToFile(content, file) {
 }
 
 function checkFileContent(content, file) {
+  return checkFileContentAs(content, 'Text', undefined, file);
+}
+
+function checkFileContentWithEncoding(content, encoding, file) {
+  checkFileContentAs(content, 'Text', encoding, file);
+}
+
+function checkFileContentAs(content, filetype, encoding, file) {
   return file.file().
-      addCallback(function(blob) { return goog.fs.blobToString(blob); }).
-      addCallback(goog.partial(assertEquals, content));
+      addCallback(function(blob) {
+        return goog.fs.FileReader['readAs' + filetype](blob, encoding);
+      }).
+      addCallback(goog.partial(checkEquals, content));
+}
+
+function checkEquals(a, b) {
+  if (a instanceof ArrayBuffer && b instanceof ArrayBuffer) {
+    assertEquals(a.byteLength, b.byteLength);
+    var viewA = new DataView(a);
+    var viewB = new DataView(b);
+    for (var i = 0; i < a.byteLength; i++) {
+      assertEquals(viewA.getUint8(i), viewB.getUint8(i));
+    }
+  } else {
+    assertEquals(a, b);
+  }
 }
 
 function checkFileRemoved(filename) {
