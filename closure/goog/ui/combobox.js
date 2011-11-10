@@ -550,9 +550,21 @@ goog.ui.ComboBox.prototype.maybeShowMenu_ = function(showAll) {
     // wait for all event processing to happen.
     goog.Timer.callOnce(this.clearDismissTimer_, 1, this);
 
+    this.showMenu_();
+    this.positionMenu();
+  }
+};
+
+
+/**
+ * Positions the menu.
+ * @protected
+ */
+goog.ui.ComboBox.prototype.positionMenu = function() {
+  if (this.menu_) {
+    // TODO(user):  Make it right-aligned for RTL.
     var pos = goog.style.getPageOffset(this.getElement());
     this.menu_.setPosition(pos.x, pos.y + this.getElement().offsetHeight);
-    this.showMenu_();
   }
 };
 
