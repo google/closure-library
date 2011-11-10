@@ -129,7 +129,7 @@ goog.ui.SubMenuRenderer.prototype.decorate = function(subMenu, element) {
 goog.ui.SubMenuRenderer.prototype.setContent = function(element, content) {
   // Save the submenu arrow element, if present.
   var contentElement = this.getContentElement(element);
-  var arrowElement = contentElement.lastChild;
+  var arrowElement = contentElement && contentElement.lastChild;
   goog.ui.SubMenuRenderer.superClass_.setContent.call(this, element, content);
   // If the arrowElement was there, is no longer there, and really was an arrow,
   // reappend it.
