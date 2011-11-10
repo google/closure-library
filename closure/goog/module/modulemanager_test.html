@@ -355,21 +355,29 @@ See the COPYING file for details.
 
     var calledBack = false;
     var error = null;
+    var calledBack2 = false;
+    var error2 = null;
 
-    var d = mm.loadMultiple(['a', 'b']);
-    d.addCallback(function(ctx) {
+    var dMap = mm.loadMultiple(['a', 'b']);
+    dMap['a'].addCallback(function(ctx) {
       calledBack = true;
     });
-    d.addErrback(function(err) {
+    dMap['a'].addErrback(function(err) {
       error = err;
+    });
+    dMap['b'].addCallback(function(ctx) {
+      calledBack2 = true;
+    });
+    dMap['b'].addErrback(function(err) {
+      error2 = err;
     });
 
     assertFalse(calledBack);
+    assertFalse(calledBack2);
 
     clock.tick(5);
-    // Callback should not be called, even though 'a' has loaded, since it
-    // should wait for all in the batch to finish.
-    assertFalse(calledBack);
+    assertTrue(calledBack);
+    assertFalse(calledBack2);
     assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
@@ -377,10 +385,12 @@ See the COPYING file for details.
     clock.tick(2);
 
     assertTrue(calledBack);
+    assertTrue(calledBack2);
     assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
     assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
     assertNull(error);
+    assertNull(error2);
   }
 
   /**
@@ -393,39 +403,48 @@ See the COPYING file for details.
 
     var calledBack = false;
     var error = null;
+    var calledBack2 = false;
+    var error2 = null;
 
-    var d = mm.loadMultiple(['a', 'b']);
-    d.addCallback(function(ctx) {
+    var dMap = mm.loadMultiple(['a', 'b']);
+    dMap['a'].addCallback(function(ctx) {
       calledBack = true;
     });
-    d.addErrback(function(err) {
+    dMap['a'].addErrback(function(err) {
       error = err;
+    });
+    dMap['b'].addCallback(function(ctx) {
+      calledBack2 = true;
+    });
+    dMap['b'].addErrback(function(err) {
+      error2 = err;
     });
 
     assertFalse(calledBack);
+    assertFalse(calledBack2);
 
     clock.tick(5);
-    // Callback should not be called, even though 'a' has loaded, since it
-    // should wait for all in the batch to finish.
-    assertFalse(calledBack);
+    assertTrue(calledBack);
+    assertFalse(calledBack2);
     assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
 
     clock.tick(2);
 
-    assertFalse(calledBack);
+    assertFalse(calledBack2);
     assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
 
     clock.tick(2);
 
-    assertTrue(calledBack);
+    assertTrue(calledBack2);
     assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
     assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
     assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
     assertNull(error);
+    assertNull(error2);
   }
 
   /**
@@ -439,16 +458,34 @@ See the COPYING file for details.
 
     var calledBack = false;
     var error = null;
+    var calledBack2 = false;
+    var error2 = null;
+    var calledBack3 = false;
+    var error3 = null;
 
-    var d = mm.loadMultiple(['a', 'b', 'c']);
-    d.addCallback(function(ctx) {
+    var dMap = mm.loadMultiple(['a', 'b', 'c']);
+    dMap['a'].addCallback(function(ctx) {
       calledBack = true;
     });
-    d.addErrback(function(err) {
+    dMap['a'].addErrback(function(err) {
       error = err;
+    });
+    dMap['b'].addCallback(function(ctx) {
+      calledBack2 = true;
+    });
+    dMap['b'].addErrback(function(err) {
+      error2 = err;
+    });
+    dMap['c'].addCallback(function(ctx) {
+      calledBack3 = true;
+    });
+    dMap['c'].addErrback(function(err) {
+      error3 = err;
     });
 
     assertFalse(calledBack);
+    assertFalse(calledBack2);
+    assertFalse(calledBack3);
 
     clock.tick(4);
 
@@ -459,31 +496,35 @@ See the COPYING file for details.
     clock.tick(1);
 
     assertFalse(calledBack);
+    assertFalse(calledBack2);
+    assertFalse(calledBack3);
     assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
 
     // Retry should happen after a backoff
     clock.tick(5 + mm.getBackOff_());
-    // Callback should not be called, even though 'a' has loaded, since it
-    // should wait for all in the batch to finish.
-    assertFalse(calledBack);
+
+    assertTrue(calledBack);
+    assertFalse(calledBack2);
+    assertFalse(calledBack3);
     assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
 
     clock.tick(2);
-    // Callback should not be called, even though 'b' has loaded, since it
-    // should wait for all in the batch to finish.
-    assertFalse(calledBack);
+    assertTrue(calledBack2);
+    assertFalse(calledBack3);
     assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
 
     clock.tick(2);
-    assertTrue(calledBack);
+    assertTrue(calledBack3);
     assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
 
     assertNull(error);
+    assertNull(error2);
+    assertNull(error3);
   }
 
   /**
@@ -498,20 +539,40 @@ See the COPYING file for details.
 
     var calledBack = false;
     var error = null;
+    var calledBack2 = false;
+    var error2 = null;
+    var calledBack3 = false;
+    var error3 = null;
 
-    var d = mm.loadMultiple(['a', 'b', 'c']);
-    d.addCallback(function(ctx) {
+    var dMap = mm.loadMultiple(['a', 'b', 'c']);
+    dMap['a'].addCallback(function(ctx) {
       calledBack = true;
     });
-    d.addErrback(function(err) {
+    dMap['a'].addErrback(function(err) {
       error = err;
+    });
+    dMap['b'].addCallback(function(ctx) {
+      calledBack2 = true;
+    });
+    dMap['b'].addErrback(function(err) {
+      error2 = err;
+    });
+    dMap['c'].addCallback(function(ctx) {
+      calledBack3 = true;
+    });
+    dMap['c'].addErrback(function(err) {
+      error3 = err;
     });
 
     assertFalse(calledBack);
+    assertFalse(calledBack2);
+    assertFalse(calledBack3);
 
     clock.tick(5);
 
     assertFalse(calledBack);
+    assertFalse(calledBack2);
+    assertFalse(calledBack3);
     assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
@@ -519,6 +580,8 @@ See the COPYING file for details.
     // Retry should happen and fail after a backoff
     clock.tick(5 + mm.getBackOff_());
     assertFalse(calledBack);
+    assertFalse(calledBack2);
+    assertFalse(calledBack3);
     assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
@@ -533,6 +596,8 @@ See the COPYING file for details.
 
     // A second retry should fail now
     assertFalse(calledBack);
+    assertFalse(calledBack2);
+    assertFalse(calledBack3);
     assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
@@ -540,25 +605,26 @@ See the COPYING file for details.
     // Each module should be loaded individually now, each taking 5 ticks
 
     clock.tick(5);
-    // Callback should not be called, even though 'a' has loaded, since it
-    // should wait for all in the batch to finish.
-    assertFalse(calledBack);
+    assertTrue(calledBack);
+    assertFalse(calledBack2);
+    assertFalse(calledBack3);
     assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
     assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
 
     clock.tick(5);
-    // Callback should not be called, even though 'b' has loaded, since it
-    // should wait for all in the batch to finish.
-    assertFalse(calledBack);
+    assertTrue(calledBack2);
+    assertFalse(calledBack3);
     assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
     assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
 
     clock.tick(5);
-    assertTrue(calledBack);
+    assertTrue(calledBack3);
     assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
 
     assertNull(error);
+    assertNull(error2);
+    assertNull(error3);
   }
 
   /**
@@ -736,6 +802,10 @@ See the COPYING file for details.
 
     var calledBack = false;
     var error = null;
+    var calledBack2 = false;
+    var error2 = null;
+    var calledBack3 = false;
+    var error3 = null;
 
     mm.preloadModule('c', 2);
     mm.preloadModule('d', 3);
@@ -750,12 +820,24 @@ See the COPYING file for details.
     assertTrue(
         'module "d" should now be loading', mm.isModuleLoading('d'));
 
-    var d = mm.loadMultiple(['a', 'b', 'c']);
-    d.addCallback(function(ctx) {
+    var dMap = mm.loadMultiple(['a', 'b', 'c']);
+    dMap['a'].addCallback(function(ctx) {
       calledBack = true;
     });
-    d.addErrback(function(err) {
+    dMap['a'].addErrback(function(err) {
       error = err;
+    });
+    dMap['b'].addCallback(function(ctx) {
+      calledBack2 = true;
+    });
+    dMap['b'].addErrback(function(err) {
+      error2 = err;
+    });
+    dMap['c'].addCallback(function(ctx) {
+      calledBack3 = true;
+    });
+    dMap['c'].addErrback(function(err) {
+      error3 = err;
     });
 
     assertTrue(
@@ -765,6 +847,8 @@ See the COPYING file for details.
     assertTrue(
         'module "c" should still be loading', mm.isModuleLoading('c'));
     clock.tick(4);
+    assertTrue(calledBack3);
+
     assertFalse(
         'module "c" should be done loading', mm.isModuleLoading('c'));
     assertTrue(
@@ -774,12 +858,15 @@ See the COPYING file for details.
         'module "d" should be done loading', mm.isModuleLoading('d'));
 
     assertFalse(calledBack);
+    assertFalse(calledBack2);
     assertTrue(
         'module "a" should still be loading', mm.isModuleLoading('a'));
     assertTrue(
         'module "b" should still be loading', mm.isModuleLoading('b'));
     clock.tick(7);
+
     assertTrue(calledBack);
+    assertTrue(calledBack2);
     assertFalse(
         'module "a" should be done loading', mm.isModuleLoading('a'));
     assertFalse(
@@ -811,6 +898,8 @@ See the COPYING file for details.
         'afterLoad should only be called once for "d"', 1, calls['d'][2]);
 
     assertNull(error);
+    assertNull(error2);
+    assertNull(error3);
   }
 
 /**
@@ -837,6 +926,8 @@ See the COPYING file for details.
 
     var calledBack = false;
     var error = null;
+    var calledBack2 = false;
+    var error2 = null;
 
     mm.preloadModule('c', 2);
     mm.preloadModule('d', 3);
@@ -851,12 +942,18 @@ See the COPYING file for details.
     assertTrue(
         'module "d" should now be loading', mm.isModuleLoading('d'));
 
-    var d = mm.loadMultiple(['c', 'd']);
-    d.addCallback(function(ctx) {
+    var dMap = mm.loadMultiple(['c', 'd']);
+    dMap['c'].addCallback(function(ctx) {
       calledBack = true;
     });
-    d.addErrback(function(err) {
+    dMap['c'].addErrback(function(err) {
       error = err;
+    });
+    dMap['d'].addCallback(function(ctx) {
+      calledBack2 = true;
+    });
+    dMap['d'].addErrback(function(err) {
+      error2 = err;
     });
 
     assertTrue(
@@ -871,6 +968,7 @@ See the COPYING file for details.
         'module "d" should be done loading', mm.isModuleLoading('d'));
 
     assertTrue(calledBack);
+    assertTrue(calledBack2);
 
     assertEquals(
         'beforeLoad should only be called once for "c"', 1, calls['c'][0]);
@@ -886,6 +984,7 @@ See the COPYING file for details.
         'afterLoad should only be called once for "d"', 1, calls['d'][2]);
 
     assertNull(error);
+    assertNull(error2);
   }
 
  /**
@@ -969,55 +1068,85 @@ See the COPYING file for details.
                    goog.module.ModuleManager.FailureType.UNAUTHORIZED,
                    cause);
     });
-    var calledBack1 = false;
-    var error1 = null;
-    var calledBack2 = false;
-    var error2 = null;
+    var calledBack11 = false;
+    var error11 = null;
+    var calledBack12 = false;
+    var error12 = null;
+    var calledBack21 = false;
+    var error21 = null;
+    var calledBack22 = false;
+    var error22 = null;
 
-    var d1 = mm.loadMultiple(['a', 'b']);
-    d1.addCallback(function(ctx) {
-      calledBack1 = true;
+    var dMap = mm.loadMultiple(['a', 'b']);
+    dMap['a'].addCallback(function(ctx) {
+      calledBack11 = true;
     });
-    d1.addErrback(function(err) {
-      error1 = err;
+    dMap['a'].addErrback(function(err) {
+      error11 = err;
     });
-
-    var d2 = mm.loadMultiple(['b', 'c']);
-    d2.addCallback(function(ctx) {
-      calledBack2 = true;
+    dMap['b'].addCallback(function(ctx) {
+      calledBack12 = true;
     });
-    d2.addErrback(function(err) {
-      error2 = err;
+    dMap['b'].addErrback(function(err) {
+      error12 = err;
     });
 
-    assertFalse(calledBack1);
-    assertNull(error1);
-    assertFalse(calledBack2);
-    assertNull(error2);
+    var dMap2 = mm.loadMultiple(['b', 'c']);
+    dMap2['b'].addCallback(function(ctx) {
+      calledBack21 = true;
+    });
+    dMap2['b'].addErrback(function(err) {
+      error21 = err;
+    });
+    dMap2['c'].addCallback(function(ctx) {
+      calledBack22 = true;
+    });
+    dMap2['c'].addErrback(function(err) {
+      error22 = err;
+    });
+
+    assertFalse(calledBack11);
+    assertFalse(calledBack12);
+    assertFalse(calledBack21);
+    assertFalse(calledBack22);
+    assertNull(error11);
+    assertNull(error12);
+    assertNull(error21);
+    assertNull(error22);
 
     clock.tick(5);
 
-    assertFalse(calledBack1);
-    assertFalse(calledBack2);
+    assertFalse(calledBack11);
+    assertFalse(calledBack12);
+    assertFalse(calledBack21);
+    assertFalse(calledBack22);
 
     // NOTE: Deferred always calls errbacks with an Error object.  For now the
     // module manager just passes the FailureType which gets set as the Error
     // object's message.
     assertEquals('Failure cause was not as expected',
         goog.module.ModuleManager.FailureType.UNAUTHORIZED,
-        Number(error1.message));
-
-    // The second deferred should be called since it asks for one of the
-    // original modules.
+        Number(error11.message));
     assertEquals('Failure cause was not as expected',
         goog.module.ModuleManager.FailureType.UNAUTHORIZED,
-        Number(error2.message));
+        Number(error12.message));
+
+    // The first deferred of the second load should be called since it asks for
+    // one of the failed modules.
+    assertEquals('Failure cause was not as expected',
+        goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+        Number(error21.message));
+
+    // The last deferred should be dropped so it is neither called back nor an
+    // error.
+    assertFalse(calledBack22);
+    assertNull(error22);
   }
 
   /**
    * Tests that the right dependencies are cancelled on a loadMultiple failure.
    */
-  function testLoadMultipleWithFailingModule() {
+  function testLoadMultipleWithFailingModuleDependencies() {
     var mm = getModuleManager(
         {'a': [], 'b': [], 'c': ['b'], 'd': ['c'], 'e': []});
     mm.setLoader(createUnsuccessfulLoader(mm, 401));
@@ -1031,48 +1160,84 @@ See the COPYING file for details.
                    cause);
       cancelledIds.push(id);
     });
-    var calledBack1 = false;
-    var error1 = null;
-    var calledBack2 = false;
-    var error2 = null;
+    var calledBack11 = false;
+    var error11 = null;
+    var calledBack12 = false;
+    var error12 = null;
+    var calledBack21 = false;
+    var error21 = null;
+    var calledBack22 = false;
+    var error22 = null;
+    var calledBack23 = false;
+    var error23 = null;
 
-    var d1 = mm.loadMultiple(['a', 'b']);
-    d1.addCallback(function(ctx) {
-      calledBack1 = true;
+    var dMap = mm.loadMultiple(['a', 'b']);
+    dMap['a'].addCallback(function(ctx) {
+      calledBack11 = true;
     });
-    d1.addErrback(function(err) {
-      error1 = err;
+    dMap['a'].addErrback(function(err) {
+      error11 = err;
     });
-
-    var d2 = mm.loadMultiple(['c', 'd', 'e']);
-    d2.addCallback(function(ctx) {
-      calledBack2 = true;
+    dMap['b'].addCallback(function(ctx) {
+      calledBack12 = true;
     });
-    d2.addErrback(function(err) {
-      error2 = err;
+    dMap['b'].addErrback(function(err) {
+      error12 = err;
     });
 
-    assertFalse(calledBack1);
-    assertNull(error1);
-    assertFalse(calledBack2);
-    assertNull(error2);
+    var dMap2 = mm.loadMultiple(['c', 'd', 'e']);
+    dMap2['c'].addCallback(function(ctx) {
+      calledBack21 = true;
+    });
+    dMap2['c'].addErrback(function(err) {
+      error21 = err;
+    });
+    dMap2['d'].addCallback(function(ctx) {
+      calledBack22 = true;
+    });
+    dMap2['d'].addErrback(function(err) {
+      error22 = err;
+    });
+    dMap2['e'].addCallback(function(ctx) {
+      calledBack23 = true;
+    });
+    dMap2['e'].addErrback(function(err) {
+      error23 = err;
+    });
+
+    assertFalse(calledBack11);
+    assertFalse(calledBack12);
+    assertFalse(calledBack21);
+    assertFalse(calledBack22);
+    assertFalse(calledBack23);
+    assertNull(error11);
+    assertNull(error12);
+    assertNull(error21);
+    assertNull(error22);
+    assertNull(error23);
 
     clock.tick(5);
 
-    assertFalse(calledBack1);
-    assertFalse(calledBack2);
+    assertFalse(calledBack11);
+    assertFalse(calledBack12);
+    assertFalse(calledBack21);
+    assertFalse(calledBack22);
+    assertFalse(calledBack23);
 
     // NOTE: Deferred always calls errbacks with an Error object.  For now the
     // module manager just passes the FailureType which gets set as the Error
     // object's message.
     assertEquals('Failure cause was not as expected',
         goog.module.ModuleManager.FailureType.UNAUTHORIZED,
-        Number(error1.message));
+        Number(error11.message));
+    assertEquals('Failure cause was not as expected',
+        goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+        Number(error12.message));
 
     // Check that among the failed modules, 'c' and 'd' are also cancelled
     // due to dependencies.
     assertTrue(goog.array.equals(['a', 'b', 'c', 'd'], cancelledIds.sort()));
-   }
+  }
 
   /**
    * Test loading dependencies transitively.

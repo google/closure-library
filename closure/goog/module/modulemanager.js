@@ -25,7 +25,6 @@ goog.require('goog.Disposable');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.async.Deferred');
-goog.require('goog.async.DeferredList');
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.Trace');
 goog.require('goog.module.AbstractModuleLoader');
@@ -462,30 +461,30 @@ goog.module.ModuleManager.prototype.addLoadModule_ = function(id, d) {
 
 /**
  * Loads a list of modules or, if some other module is currently being loaded,
- * appends the ids to the queue of requested module ids. Does nothing if the
- * module is already loaded or is currently loading.
+ * appends the ids to the queue of requested module ids. Registers callbacks a
+ * module that is currently loading and returns a fired deferred for a module
+ * that is already loaded.
  *
  * @param {Array.<string>} ids The id of the module to load.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {goog.async.Deferred} A deferred object.
+ * @return {Object.<!goog.async.Deferred>} A mapping from id (String) to
+ *     deferred objects that will callback or errback when the load for that
+ *     id is finished.
  * @private
  */
 goog.module.ModuleManager.prototype.loadModulesOrEnqueueIfNotLoadedOrLoading_ =
     function(ids, opt_userInitiated) {
+  goog.array.removeDuplicates(ids);
   var idsToLoad = [];
-  var deferredList = [];
-  // Set this to true first, that way if for some reason no ids are provided
-  // the behavior is the same as everything being loaded.
-  var allLoaded = true;
+  var deferredMap = {};
   for (var i = 0; i < ids.length; i++) {
     var id = ids[i];
     var moduleInfo = this.getModuleInfo(id);
-    if (!moduleInfo.isLoaded()) {
-      // If it's loaded, skip it, otherwise register callbacks.
-      allLoaded = false;
-      var d = new goog.async.Deferred();
-      deferredList.push(d);
-
+    var d = new goog.async.Deferred();
+    deferredMap[id] = d;
+    if (moduleInfo.isLoaded()) {
+      d.callback(this.moduleContext_);
+    } else {
       this.registerModuleLoadCallbacks_(id, moduleInfo, !!opt_userInitiated, d);
       if (!this.isModuleLoading(id)) {
         idsToLoad.push(id);
@@ -493,18 +492,12 @@ goog.module.ModuleManager.prototype.loadModulesOrEnqueueIfNotLoadedOrLoading_ =
     }
   }
 
-  if (allLoaded) {
-    // Otherwise, if everything is already done loading, callback the deferred
-    // and return
-    var d = new goog.async.Deferred();
-    d.callback(this.moduleContext_);
-    return d;
-  }
-  // If there are ids to load, load them, otherwise, they are all loading
+  // If there are ids to load, load them, otherwise, they are all loading or
+  // loaded.
   if (idsToLoad.length > 0) {
     this.loadModulesOrEnqueue_(idsToLoad);
   }
-  return new goog.async.DeferredList(deferredList, false, true);
+  return deferredMap;
 };
 
 
@@ -842,7 +835,7 @@ goog.module.ModuleManager.prototype.execOnLoad = function(
 goog.module.ModuleManager.prototype.load = function(
     moduleId, opt_userInitiated) {
   return this.loadModulesOrEnqueueIfNotLoadedOrLoading_(
-      [moduleId], opt_userInitiated);
+      [moduleId], opt_userInitiated)[moduleId];
 };
 
 
@@ -852,7 +845,9 @@ goog.module.ModuleManager.prototype.load = function(
  *
  * @param {Array.<string>} moduleIds A list of module ids.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {goog.async.Deferred} A deferred object.
+ * @return {Object.<!goog.async.Deferred>} A mapping from id (String) to
+ *     deferred objects that will callback or errback when the load for that
+ *     id is finished.
  */
 goog.module.ModuleManager.prototype.loadMultiple = function(
     moduleIds, opt_userInitiated) {
