@@ -452,6 +452,9 @@ goog.net.ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
  * @private
  */
 goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
+  this.requestStartTime_ = goog.now();
+  this.ensureWatchDogTimer_();
+
   // clone the base URI to create the request URI. The request uri has the
   // attempt number as a parameter which helps in debugging.
   this.requestUri_ = this.baseUri_.clone();
@@ -483,11 +486,9 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
     }
     this.xmlHttp_.send(this.requestUri_, this.verb_, null, headers);
   }
-  this.requestStartTime_ = goog.now();
   this.channelDebug_.xmlHttpChannelRequest(this.verb_,
       this.requestUri_, this.rid_, this.retryId_,
       this.postData_);
-  this.ensureWatchDogTimer_();
 };
 
 
@@ -780,6 +781,9 @@ goog.net.ChannelRequest.prototype.tridentGet = function(uri,
  * @private
  */
 goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
+  this.requestStartTime_ = goog.now();
+  this.ensureWatchDogTimer_();
+
   this.trident_ = new ActiveXObject('htmlfile');
 
   var hostname = '';
@@ -805,11 +809,8 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.requestUri_.setParameterValue('DOMAIN', hostname);
   this.requestUri_.setParameterValue('t', this.retryId_);
   div.innerHTML = '<iframe src="' + this.requestUri_ + '"></iframe>';
-  this.requestStartTime_ = goog.now();
   this.channelDebug_.tridentChannelRequest('GET',
       this.requestUri_, this.rid_, this.retryId_);
-
-  this.ensureWatchDogTimer_();
 };
 
 

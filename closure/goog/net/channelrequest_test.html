@@ -13,11 +13,12 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.net.ChannelRequest</title>
 <script src="../base.js"></script>
 <script>
+goog.require('goog.functions');
 goog.require('goog.net.BrowserChannel');
 goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
-goog.require('goog.testing.jsunit');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
 </script>
 </head>
@@ -138,6 +139,34 @@ function testRequestTimeout() {
   var req = createChannelRequest(xhrIo);
 
   req.xmlHttpPost(new goog.Uri('some_uri'), 'some_postdata', true);
+  assertEquals(0, req.watchdogTimeoutCallCount);
+  assertEquals(0, req.channel_.completedRequests.length);
+
+  // Watchdog timeout.
+  mockClock.tick(WATCHDOG_TIME);
+  assertEquals(1, req.watchdogTimeoutCallCount);
+  assertEquals(1, req.channel_.completedRequests.length);
+  assertFalse(req.getSuccess());
+
+  // Make sure no more timers are firing.
+  mockClock.tick(ALL_DAY_MS);
+  assertEquals(1, req.watchdogTimeoutCallCount);
+  assertEquals(1, req.channel_.completedRequests.length);
+}
+
+function testRequestTimeoutWithUnexpectedException() {
+  var xhrIo = createXhrIo();
+  var req = createChannelRequest(xhrIo);
+  req.channel_.createXhrIo = goog.functions.error('Weird error');
+
+  try {
+    req.xmlHttpGet(new goog.Uri('some_uri'), true, null);
+    fail('Expected error');
+  } catch (e) {
+    assertEquals('Weird error', e.message);
+  }
+
+
   assertEquals(0, req.watchdogTimeoutCallCount);
   assertEquals(0, req.channel_.completedRequests.length);
 
