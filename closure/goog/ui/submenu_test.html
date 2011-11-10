@@ -148,6 +148,28 @@ function testRtlSubMenuAlignedToStart() {
   assertArrowPosition(subMenu, true);
 }
 
+function testSetContentKeepsArrow_ltr() {
+  document.body.style.direction = 'ltr';
+  menu.decorate(goog.dom.getElement('demoMenu'));
+  var subMenu = menu.getChildAt(1);
+  subMenu.setAlignToEnd(false);
+  subMenu.setContent('test');
+  assertArrowDirection(subMenu, true);
+  assertRenderDirection(subMenu, true);
+  assertArrowPosition(subMenu, false);
+}
+
+function testSetContentKeepsArrow_rtl() {
+  document.body.style.direction = 'rtl';
+  menu.decorate(goog.dom.getElement('demoMenu'));
+  var subMenu = menu.getChildAt(1);
+  subMenu.setAlignToEnd(false);
+  subMenu.setContent('test');
+  assertArrowDirection(subMenu, false);
+  assertRenderDirection(subMenu, false);
+  assertArrowPosition(subMenu, true);
+}
+
 function testExitDocument() {
   menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
