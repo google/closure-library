@@ -138,6 +138,11 @@ function testLtrSubMenuAlignedToStart() {
   assertArrowPosition(subMenu, false);
 }
 
+function testNullContentElement() {
+  var subMenu = new goog.ui.SubMenu();
+  subMenu.setContent('demo');
+}
+
 function testRtlSubMenuAlignedToStart() {
   document.body.style.direction = 'rtl';
   menu.decorate(goog.dom.getElement('demoMenu'));
