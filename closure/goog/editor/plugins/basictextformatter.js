@@ -316,7 +316,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
        * goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_SIZE:
        * goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_FACE:
        */
-      this.execCommandHelper_(command, opt_arg, preserveDir, styleWithCss);
+      this.execCommandHelper_(command, opt_arg, preserveDir, !!styleWithCss);
 
       if (hasDummySelection) {
         this.getDocument_().execCommand('Delete', false, true);
