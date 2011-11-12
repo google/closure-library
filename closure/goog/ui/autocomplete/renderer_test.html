@@ -360,6 +360,17 @@ See the COPYING file for details.
     assertLastNodeText(node, 'nderson');
   }
 
+  function testMousedownToDismiss() {
+    var dismissEvents = 0;
+    goog.events.listen(renderer, goog.ui.AutoComplete.EventType.DISMISS,
+        function() {
+          dismissEvents++;
+        });
+    renderer.redraw();
+    goog.testing.events.fireMouseDownEvent(someElement);
+    assertEquals('1 dismiss event should be fired', 1, dismissEvents);
+  }
+
   function testMenuFadeDuration() {
     var hideCalled = false;
     var hideAnimCalled = false;
