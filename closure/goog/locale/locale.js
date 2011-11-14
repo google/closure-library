@@ -15,6 +15,7 @@
 /**
  * @fileoverview Functions for dealing with Date formatting & Parsing,
  * County and language name, TimeZone list.
+ * @suppress {deprecated} Use goog.i18n instead.
  */
 
 

@@ -30,30 +30,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ex
       group.getWrapper());
       ^
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/locale/locale.js:175: ERROR - Property getLocale of type goog.locale has been deprecated: Use goog.LOCALE and goog.i18n instead.
-        goog.locale.getLocale());
-        ^
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/locale/locale.js:218: ERROR - Property getLocale of type goog.locale has been deprecated: Use goog.LOCALE and goog.i18n instead.
-        goog.locale.getLocale());
-        ^
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/locale/locale.js:345: ERROR - Property getLocale of type goog.locale has been deprecated: Use goog.LOCALE and goog.i18n instead.
-  var locale = opt_locale ? opt_locale : goog.locale.getLocale();
-                                         ^
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/locale/locale.js:366: ERROR - Property getLocale of type goog.locale has been deprecated: Use goog.LOCALE and goog.i18n instead.
-  var locale = opt_locale ? opt_locale : goog.locale.getLocale();
-                                         ^
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/locale/timezonelist.js:82: ERROR - Property getLocale of type goog.locale has been deprecated: Use goog.LOCALE and goog.i18n instead.
-  var locale = goog.locale.getLocale();
-               ^
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/locale/timezonelist.js:108: ERROR - Property getLocale of type goog.locale has been deprecated: Use goog.LOCALE and goog.i18n instead.
-  var locale = goog.locale.getLocale();
-               ^
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:103: ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
   goog.net.xpc.channels_[this.name] = this;
   ^
@@ -674,4 +650,4 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog
       replace(goog.string.html.HtmlParser.EQUALS_RE_, '&#61;');
               ^
 
-169 error(s), 0 warning(s), 97.5% typed
+163 error(s), 0 warning(s), 97.5% typed
