@@ -24,9 +24,6 @@
  */
 
 
-/**
- * Namespace for BrowserChannel
- */
 goog.provide('goog.net.ChannelRequest');
 goog.provide('goog.net.ChannelRequest.Error');
 
@@ -116,6 +113,14 @@ goog.net.ChannelRequest = function(
 
   this.pollingTimer_.setInterval(goog.net.ChannelRequest.POLLING_INTERVAL_MS);
 };
+
+
+/**
+ * Whether to use XHR streaming on IE8.
+ * @type {boolean}
+ * @private
+ */
+goog.net.ChannelRequest.useXhrStreamingOnIE8_ = false;
 
 
 /**
@@ -381,6 +386,32 @@ goog.net.ChannelRequest.INCOMPLETE_CHUNK_ = {};
 
 
 /**
+ * Enable XHR streaming on IE8.
+ *
+ * NOTE(nicksantos): This is a temporary mechanism. We should stop using
+ * it once we're convinced that this is a safe change.
+ */
+goog.net.ChannelRequest.enableXhrStreamingOnIE8 = function() {
+  goog.net.ChannelRequest.useXhrStreamingOnIE8_ = true;
+};
+
+
+/**
+ * @return {boolean} Whether XHR streaming is supported.
+ */
+goog.net.ChannelRequest.supportsXhrStreaming = function() {
+  if (goog.net.ChannelRequest.useXhrStreamingOnIE8_) {
+    // IE 8+ supports XHR Streaming
+    // http://my.safaribooksonline.com/book/web/9780596803773/s/115
+    // but we want to roll it out slowly.
+    return !(goog.userAgent.IE && !goog.userAgent.isVersion('8'));
+  } else {
+    return !goog.userAgent.IE;
+  }
+};
+
+
+/**
  * Sets extra HTTP headers to add to all the requests sent to the server.
  *
  * @param {Object} extraHeaders The HTTP headers.
@@ -532,15 +563,16 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   // If it is Safari less than 420+, there is a bug that causes null to be
   // in the responseText on ready state interactive so we must wait for
   // ready state complete.
-  if (goog.userAgent.IE || (goog.userAgent.WEBKIT &&
-      !goog.userAgent.isVersion(
-          goog.net.ChannelRequest.MIN_WEBKIT_FOR_INTERACTIVE_))) {
+  if (!goog.net.ChannelRequest.supportsXhrStreaming() ||
+      (goog.userAgent.WEBKIT &&
+       !goog.userAgent.isVersion(
+           goog.net.ChannelRequest.MIN_WEBKIT_FOR_INTERACTIVE_))) {
     if (readyState < goog.net.XmlHttp.ReadyState.COMPLETE) {
       // not yet ready
       return;
     }
   } else {
-    // we get partial results in non-IE browsers on ready state interactive
+    // we get partial results in browsers that support ready state interactive.
     // We also make sure that getResponseText is not null in interactive mode
     // before we continue.  However, we don't do it in Opera because it only
     // fire readyState == INTERACTIVE once.  We need the following code to poll

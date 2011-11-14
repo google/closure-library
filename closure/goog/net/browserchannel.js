@@ -1502,7 +1502,7 @@ goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
 
-  if (goog.userAgent.IE) {
+  if (!goog.net.ChannelRequest.supportsXhrStreaming()) {
     uri.setParameterValue('TYPE', 'html');
     this.backChannelRequest_.tridentGet(uri, Boolean(this.hostPrefix_));
   } else {
