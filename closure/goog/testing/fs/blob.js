@@ -19,6 +19,8 @@
 
 goog.provide('goog.testing.fs.Blob');
 
+goog.require('goog.crypt.base64');
+
 
 
 /**
@@ -96,7 +98,8 @@ goog.testing.fs.Blob.prototype.toArrayBuffer = function() {
  * @return {string} The string data encapsulated by the blob as a data: URI.
  */
 goog.testing.fs.Blob.prototype.toDataUrl = function() {
-  return 'data:' + this.type + ',' + encodeURIComponent(this.data_);
+  return 'data:' + this.type + ';base64,' +
+      goog.crypt.base64.encodeString(this.data_);
 };
 
 
