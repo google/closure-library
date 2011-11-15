@@ -650,4 +650,3 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog
       replace(goog.string.html.HtmlParser.EQUALS_RE_, '&#61;');
               ^
 
-163 error(s), 0 warning(s), 97.5% typed
