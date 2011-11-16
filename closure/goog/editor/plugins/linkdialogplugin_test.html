@@ -28,6 +28,7 @@ See the COPYING file for details.
   goog.require('goog.testing.mockmatchers');
   goog.require('goog.ui.editor.AbstractDialog.EventType');
   goog.require('goog.ui.editor.LinkDialog');
+  goog.require('goog.ui.editor.LinkDialog.BeforeTestLinkEvent');
   goog.require('goog.ui.editor.LinkDialog.OkEvent');
   goog.require('goog.userAgent');
 </script>
@@ -44,6 +45,7 @@ See the COPYING file for details.
   var mockCtrl;
   var mockField;
   var mockLink;
+  var mockAlert;
 
   var OLD_LINK_TEXT = 'old text';
   var OLD_LINK_URL = 'http://old.url/';
@@ -64,6 +66,7 @@ See the COPYING file for details.
     mockField = new goog.testing.editor.FieldMock();
     mockCtrl.addMock(mockField);
     mockLink = mockCtrl.createLooseMock(goog.editor.Link);
+    mockAlert = mockCtrl.createGlobalFunctionMock('alert');
 
     isNew = false;
     mockLink.isNew().$anyTimes().$does(function() {
@@ -84,6 +87,7 @@ See the COPYING file for details.
     plugin.dispose();
     tearDownRealEditableField();
     goog.dom.removeNode(anchorElem);
+    mockCtrl.$tearDown();
   }
 
   function setUpAnchor(text, href, opt_isNew, opt_target) {
@@ -339,6 +343,65 @@ See the COPYING file for details.
    */
   function testRestoreSelectionOnCancelNew() {
     testRestoreSelectionOnCancel(true);
+  }
+
+  /**
+   * Tests that the BeforeTestLink event is suppressed for invalid url schemes.
+   */
+  function testTestLinkDisabledForInvalidScheme() {
+    mockAlert(goog.testing.mockmatchers.isString);
+    mockCtrl.$replayAll();
+
+    var invalidUrl = 'javascript:document.write(\'hello\');';
+
+    plugin = new goog.editor.plugins.LinkDialogPlugin();
+    var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+
+    // Mock of execCommand + clicking test without actually opening the dialog.
+    var dispatched = dialog.dispatchEvent(
+        new goog.ui.editor.LinkDialog.BeforeTestLinkEvent(invalidUrl));
+
+    assertFalse(dispatched);
+    mockCtrl.$verifyAll();
+  }
+
+  function testIsSafeSchemeToOpen() {
+    plugin = new goog.editor.plugins.LinkDialogPlugin();
+    // Urls with no scheme at all are ok too since 'http://' will be prepended.
+    var good = [
+      'http://google.com', 'http://google.com/', 'https://google.com',
+      'null@google.com', 'http://www.google.com', 'http://site.com',
+      'google.com', 'google', 'http://google', 'HTTP://GOOGLE.COM',
+      'HtTp://www.google.com'
+    ];
+
+    var bad = [
+      'javascript:google.com', 'httpp://google.com', 'data:foo',
+      'javascript:alert(\'hi\');', 'abc:def'
+    ];
+
+    for (var i = 0; i < good.length; i++) {
+      assertTrue(good[i] + ' should have a safe scheme',
+          plugin.isSafeSchemeToOpen_(good[i]));
+    }
+
+    for (i = 0; i < bad.length; i++) {
+      assertFalse(bad[i] + ' should have an unsafe scheme',
+          plugin.isSafeSchemeToOpen_(bad[i]));
+    }
+  }
+
+  function testShouldOpenWithWhitelist() {
+    plugin.setSafeToOpenSchemes(['abc']);
+
+    assertTrue('Scheme should be safe',
+                plugin.shouldOpenUrl('abc://google.com'));
+    assertFalse('Scheme should be unsafe',
+                plugin.shouldOpenUrl('http://google.com'));
+
+    plugin.setBlockOpeningUnsafeSchemes(false);
+    assertTrue('Non-whitelisted should now be safe after disabling blocking',
+                plugin.shouldOpenUrl('http://google.com'));
   }
 
   /**
