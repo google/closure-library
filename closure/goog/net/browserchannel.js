@@ -2222,9 +2222,21 @@ goog.net.BrowserChannel.notifyTimingEvent = function(size, rtt, retries) {
 
 
 /**
- * Override this in a subclass to enable secondary domains for non-IE browsers.
- * @return {boolean} Whether to use a secondary domain when the server
- *     recommends it.
+ * Determines whether to use a secondary domain when the server gives us
+ * a host prefix. This allows us to work around browser per-domain
+ * connection limits.
+ *
+ * Currently, we only use secondary domains when using Trident's ActiveXObject,
+ * because it supports cross-domain requests out of the box. Even if we wanted
+ * to use secondary domains on Gecko/Webkit, they wouldn't work due to
+ * security restrictions on cross-origin XHRs.
+ *
+ * If you need to use secondary domains on other browsers, you'll need
+ * to override this method in a subclass, and make sure that those browsers
+ * use some messaging mechanism that works cross-domain.
+ *
+ * @return {boolean} Whether to use secondary domains.
+ * @see http://code.google.com/p/closure-library/issues/detail?id=339
  */
 goog.net.BrowserChannel.prototype.shouldUseSecondaryDomains = function() {
   return goog.userAgent.IE;
