@@ -28,28 +28,33 @@ See the COPYING file for details.
     <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=369939">
       https://bugzilla.mozilla.org/show_bug.cgi?id=369939</a>.
   </p>
+  <p>
+    NOTE(pupius): 14/11/2011 The XhrMonitor code has been removed since the
+    above bug doesn't manifest in any currently supported versions.  This test
+    is left in place as a way of verifying the problem doesn't resurface.
+  </p>
   <script>
     var c = new goog.debug.Console;
     c.setCapturing(true);
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    
+
     // Can't use exportSymbol if we want JsUnit support
     top.GG_iframeFn = goog.net.IframeIo.handleIncrementalData;
-    
+
     // Make the dispose time short enough that it will cause the bug to appear
     goog.net.IframeIo.IFRAME_DISPOSE_DELAY_MS = 0;
-    
-    
+
+
     var fileName = 'iframe_xhr_test_response.html';
     var iframeio;
-    
+
     // Create an async test case
     var testCase = new goog.testing.AsyncTestCase(document.title);
     testCase.stepTimeout = 4 * 1000;
     testCase.resultCount = 0;
     testCase.xhrCount = 0;
     testCase.error = null;
-    
+
     /** Set up the iframe io and request the test response page. */
     testCase.setUpPage = function() {
       testCase.waitForAsync('setUpPage');
@@ -59,30 +64,30 @@ See the COPYING file for details.
       goog.events.listen(
           iframeio, 'ready', this.onIframeReady, false, this);
       iframeio.send(fileName);
-      
+
       this.add(new goog.testing.TestCase.Test(
           'test results', this.testResults, this));
     };
-    
+
     /** Disposes the iframe object. */
     testCase.tearDownPage = function() {
       iframeio.dispose();
     };
-    
+
     /** Handles the packets received  from the Iframe incremental results. */
     testCase.onIframeData = function(e) {
       this.log('Data received  : ' + e.data);
       this.resultCount++;
       goog.net.XhrLite.send(fileName, goog.bind(this.onXhrData, this));
     };
-    
+
     /** Handles the iframe becoming ready. */
     testCase.onIframeReady = function(e) {
       this.log('Iframe ready');
       var me = this;
       goog.net.XhrLite.send(fileName, goog.bind(this.onXhrData, this));
     };
-    
+
     /** Handles the response from an Xhr request. */
     testCase.onXhrData = function(e) {
       this.xhrCount++;
@@ -100,7 +105,7 @@ See the COPYING file for details.
         goog.Timer.callOnce(goog.bind(this.continueTesting, this), 0);
       }
     };
-    
+
     /** The main test function that validates the results were as expected. */
     testCase.testResults = function() {
       assertEquals('There should be 3 data packets', 3, this.resultCount);
@@ -109,7 +114,7 @@ See the COPYING file for details.
       if (this.error) {
         throw this.error;
       }
-      
+
       assertEquals('There should be no iframes left', 0,
           document.getElementsByTagName('iframe').length);
     }
@@ -136,7 +141,7 @@ See the COPYING file for details.
         G_testRunner.setStrict(false);
       }
     }
-    
+
   </script>
 </body>
 </html>

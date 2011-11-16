@@ -146,7 +146,6 @@ goog.require('goog.events.EventType');
 goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
-goog.require('goog.net.xhrMonitor');
 goog.require('goog.reflect');
 goog.require('goog.string');
 goog.require('goog.structs');
@@ -789,26 +788,6 @@ goog.net.IframeIo.prototype.setTimeoutInterval = function(ms) {
 
 
 /**
- * Override of dispatchEvent, we ensure that the xhrMonitor is listening for
- * XmlHttpRequests that may be initiated as a result of the event.
- * @override
- */
-goog.net.IframeIo.prototype.dispatchEvent = function(e) {
-  if (this.iframe_) {
-    goog.net.xhrMonitor.pushContext(this.iframe_);
-  }
-  try {
-    return goog.net.IframeIo.superClass_.dispatchEvent.call(this, e);
-  } finally {
-    if (this.iframe_) {
-      goog.net.xhrMonitor.popContext();
-    }
-    return true;
-  }
-};
-
-
-/**
  * Submits the internal form to the iframe.
  * @private
  */
@@ -1114,12 +1093,7 @@ goog.net.IframeIo.prototype.makeReady_ = function() {
   var iframe = this.iframe_;
   this.scheduleIframeDisposal_();
   this.disposeForm_();
-  goog.net.xhrMonitor.pushContext(iframe);
-  try {
-    this.dispatchEvent(goog.net.EventType.READY);
-  } finally {
-    goog.net.xhrMonitor.popContext();
-  }
+  this.dispatchEvent(goog.net.EventType.READY);
 };
 
 
@@ -1225,23 +1199,10 @@ goog.net.IframeIo.prototype.disposeIframes_ = function() {
     this.iframeDisposalTimer_ = null;
   }
 
-  var i = 0;
-  while (i < this.iframesForDisposal_.length) {
-    var iframe = this.iframesForDisposal_[i];
-    if (goog.net.xhrMonitor.isContextSafe(iframe)) {
-      this.logger_.info('Disposing iframe');
-      goog.array.removeAt(this.iframesForDisposal_, i);
-      goog.dom.removeNode(iframe);
-    } else {
-      i++;
-    }
-  }
-
-  // Not all iframes have been disposed, try again in 2s.
-  if (this.iframesForDisposal_.length != 0) {
-    this.logger_.info('Requests outstanding, waiting to dispose');
-    this.iframeDisposalTimer_ = goog.Timer.callOnce(
-        this.disposeIframes_, goog.net.IframeIo.IFRAME_DISPOSE_DELAY_MS, this);
+  while (this.iframesForDisposal_.length != 0) {
+    var iframe = this.iframesForDisposal_.pop();
+    this.logger_.info('Disposing iframe');
+    goog.dom.removeNode(iframe);
   }
 };
 

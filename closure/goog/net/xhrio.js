@@ -51,7 +51,6 @@ goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
-goog.require('goog.net.xhrMonitor');
 goog.require('goog.object');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
@@ -460,12 +459,6 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   this.xhrOptions_ = this.xmlHttpFactory_ ?
       this.xmlHttpFactory_.getOptions() : goog.net.XmlHttp.getOptions();
 
-  // We tell the Xhr Monitor that we are opening an XMLHttpRequest.  This stops
-  // IframeIo from destroying iframes that may have been the source of the
-  // execution context, which can result in an error in FF.  See xhrmonitor.js
-  // for more details.
-  goog.net.xhrMonitor.markXhrOpen(this.xhr_);
-
   // Set up the onreadystatechange callback
   this.xhr_.onreadystatechange = goog.bind(this.onReadyStateChange_, this);
 
@@ -555,26 +548,6 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
 goog.net.XhrIo.prototype.createXhr = function() {
   return this.xmlHttpFactory_ ?
       this.xmlHttpFactory_.createInstance() : goog.net.XmlHttp();
-};
-
-
-/**
- * Override of dispatchEvent.  We need to keep track if an XMLHttpRequest is
- * being sent from the context of another requests' response.  If it is then, we
- * make the XHR send async.
- * @override
- */
-goog.net.XhrIo.prototype.dispatchEvent = function(e) {
-  if (this.xhr_) {
-    goog.net.xhrMonitor.pushContext(this.xhr_);
-    try {
-      return goog.net.XhrIo.superClass_.dispatchEvent.call(this, e);
-    } finally {
-      goog.net.xhrMonitor.popContext();
-    }
-  } else {
-    return goog.net.XhrIo.superClass_.dispatchEvent.call(this, e);
-  }
 };
 
 
@@ -798,13 +771,8 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
     }
 
     if (!opt_fromDispose) {
-      goog.net.xhrMonitor.pushContext(xhr);
       this.dispatchEvent(goog.net.EventType.READY);
-      goog.net.xhrMonitor.popContext();
     }
-
-    // Mark the request as having completed.
-    goog.net.xhrMonitor.markXhrClosed(xhr);
 
     try {
       // NOTE(user): Not nullifying in FireFox can still leak if the callbacks
