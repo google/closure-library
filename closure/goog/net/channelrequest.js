@@ -116,14 +116,6 @@ goog.net.ChannelRequest = function(
 
 
 /**
- * Whether to use XHR streaming on IE8.
- * @type {boolean}
- * @private
- */
-goog.net.ChannelRequest.useXhrStreamingOnIE8_ = false;
-
-
-/**
  * Extra HTTP headers to add to all the requests sent to the server.
  * @type {Object}
  * @private
@@ -386,28 +378,16 @@ goog.net.ChannelRequest.INCOMPLETE_CHUNK_ = {};
 
 
 /**
- * Enable XHR streaming on IE8.
+ * Returns whether XHR streaming is supported on this browser.
  *
- * NOTE(nicksantos): This is a temporary mechanism. We should stop using
- * it once we're convinced that this is a safe change.
- */
-goog.net.ChannelRequest.enableXhrStreamingOnIE8 = function() {
-  goog.net.ChannelRequest.useXhrStreamingOnIE8_ = true;
-};
-
-
-/**
+ * If XHR streaming is not supported, we will try to use an ActiveXObject
+ * to create a Forever IFrame.
+ *
  * @return {boolean} Whether XHR streaming is supported.
+ * @see http://code.google.com/p/closure-library/issues/detail?id=346
  */
 goog.net.ChannelRequest.supportsXhrStreaming = function() {
-  if (goog.net.ChannelRequest.useXhrStreamingOnIE8_) {
-    // IE 8+ supports XHR Streaming
-    // http://my.safaribooksonline.com/book/web/9780596803773/s/115
-    // but we want to roll it out slowly.
-    return !(goog.userAgent.IE && !goog.userAgent.isVersion('8'));
-  } else {
-    return !goog.userAgent.IE;
-  }
+  return !goog.userAgent.IE;
 };
 
 
