@@ -501,15 +501,21 @@ goog.ui.FilteredMenu.prototype.setHighlightedIndex = function(index) {
   var el = this.getHighlighted() ? this.getHighlighted().getElement() : null;
 
   if (el && goog.dom.contains(contentEl, el)) {
-    var contTop = goog.userAgent.IE ? 0 : contentEl.offsetTop;
+    var contentTop = goog.userAgent.IE && !goog.userAgent.isVersion(8) ?
+        0 : contentEl.offsetTop;
+
+    // IE (tested on IE8) sometime does not scroll enough by about
+    // 1px. So we add 1px to the scroll amount. This still looks ok in
+    // other browser except for the most degenerate case (menu height <=
+    // item height).
 
     // Scroll down if the highlighted item is below the bottom edge.
-    var diff = (el.offsetTop + el.offsetHeight - contTop) -
-        (contentEl.clientHeight + contentEl.scrollTop);
+    var diff = (el.offsetTop + el.offsetHeight - contentTop) -
+        (contentEl.clientHeight + contentEl.scrollTop) + 1;
     contentEl.scrollTop += Math.max(diff, 0);
 
     // Scroll up if the highlighted item is above the top edge.
-    diff = contentEl.scrollTop - (el.offsetTop - contTop);
+    diff = contentEl.scrollTop - (el.offsetTop - contentTop) + 1;
     contentEl.scrollTop -= Math.max(diff, 0);
   }
 };
