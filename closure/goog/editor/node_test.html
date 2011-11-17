@@ -11,11 +11,7 @@ See the COPYING file for details.
   @author jparent@google.com (Julie Parent)
 -->
 <head>
-<!--
-This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
--->
-<!--meta http-equiv="X-UA-Compatible" content="IE=edge"-->
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Closure Unit Tests - goog.editor.Node</title>
 <script src="../base.js"></script>
 <script>
@@ -434,7 +430,7 @@ function testIsBlock() {
   // The following tags are considered inline in IE, except LEGEND which is
   // only a block element in WEBKIT.
   var ambiguousTags = goog.object.createSet('HR', 'ISINDEX', 'LEGEND', 'MAP',
-      'OPTGROUP', 'OPTION');
+      'NOFRAMES', 'OPTGROUP', 'OPTION');
   for (var tag in goog.dom.TagName) {
     if (tag.substr(0, 5) != 'FRAME' && !structuralTags[tag] &&
         !ambiguousTags[tag]) {
