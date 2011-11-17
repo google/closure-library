@@ -551,6 +551,57 @@ goog.async.Deferred.fail = function(res) {
 
 
 /**
+ * Creates a deferred that has already been cancelled.
+ * @return {!goog.async.Deferred} The deferred object.
+ */
+goog.async.Deferred.cancelled = function() {
+  var d = new goog.async.Deferred();
+  d.cancel();
+  return d;
+};
+
+
+/**
+ * Applies a callback to both deferred and non-deferred values, providing a
+ * mechanism to normalize synchronous and asynchronous behavior.
+ *
+ * If the value is non-deferred, the callback will be executed immediately and
+ * an already committed deferred returned.
+ *
+ * If the object is a deferred, it is branched (so the callback doesn't affect
+ * the previous chain) and the callback is added to the new deferred.  The
+ * branched deferred is then returned.
+ *
+ * In the following (contrived) example, if <code>isImmediate</code> is true
+ * then 3 is alerted immediately, otherwise 6 is alerted after a 2-second delay.
+ *
+ * <pre>
+ * var value;
+ * if (isImmediate) {
+ *   value = 3;
+ * } else {
+ *   value = new goog.async.Deferred();
+ *   setTimeout(function() { value.callback(6); }, 2000);
+ * }
+ *
+ * var d = goog.async.Deferred.when(value, alert);
+ * </pre>
+ *
+ * @param {*} value Deferred or non-deferred value to pass to the callback.
+ * @param {Function} callback
+ * @return {!goog.async.Deferred}
+ */
+goog.async.Deferred.when = function(value, callback) {
+  if (value instanceof goog.async.Deferred) {
+    return value.branch(true).addCallback(callback);
+  } else {
+    return goog.async.Deferred.succeed(value).addCallback(callback);
+  }
+};
+
+
+
+/**
  * An error sub class that is used when a deferred has already been called.
  * @param {!goog.async.Deferred} deferred The deferred object.
  * @constructor

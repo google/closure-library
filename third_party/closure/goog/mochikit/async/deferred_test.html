@@ -768,6 +768,63 @@ function testCancelWithSomeCompletedBranches() {
              rootHadErrback);
 }
 
+function testStaticCancelled() {
+  var callbackCalled = false;
+  var errbackResult = null;
+
+  var d = goog.async.Deferred.cancelled();
+  d.addCallback(function() { callbackCalled = true;} );
+  d.addErrback(function(err) { errbackResult = err;} );
+
+  assertTrue('Errback should have been called with a cancelled error',
+      errbackResult instanceof goog.async.Deferred.CancelledError);
+  assertFalse('Callback should not have been called', callbackCalled);
+}
+
+function testWhenWithValues() {
+  var called = false;
+  goog.async.Deferred.when(4, function(obj) {
+    called = true;
+    assertEquals(4, obj);
+  });
+  assertTrue('Fn should have been called', called);
+}
+
+function testWhenWithDeferred() {
+  var called = false;
+
+  var d = new goog.async.Deferred();
+  goog.async.Deferred.when(d, function(obj) {
+    called = true;
+    assertEquals(6, obj);
+  });
+  assertFalse('Fn should not have been called yet', called);
+  d.callback(6);
+  assertTrue('Fn should have been called', called);
+}
+
+function testWhenDoesntAlterOriginalChain() {
+  var calls = 0;
+
+  var d1 = new goog.async.Deferred();
+  var d2 = goog.async.Deferred.when(d1, function(obj) {
+    calls++;
+    return obj * 2;
+  });
+  d1.addCallback(function(obj) {
+    assertEquals('Original chain should get original value', 5, obj);
+    calls++;
+  });
+  d2.addCallback(function(obj) {
+    assertEquals('Branched chain should get modified value', 10, obj);
+    calls++;
+  });
+
+  d1.callback(5);
+
+  assertEquals('There should have been 3 callbacks', 3, calls);
+}
+
 </script>
 </body>
 </html>
