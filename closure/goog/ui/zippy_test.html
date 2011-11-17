@@ -16,6 +16,7 @@ See the COPYING file for details.
     goog.require('goog.dom');
     goog.require('goog.dom.a11y');
     goog.require('goog.dom.a11y.State');
+    goog.require('goog.dom.classes');
     goog.require('goog.events');
     goog.require('goog.object');
     goog.require('goog.testing.events');
@@ -165,35 +166,61 @@ See the COPYING file for details.
   function testExpandCollapse_dualHeaderZippy() {
     dualHeaderZippy.expand();
     assertEquals("expanded must be true", true, dualHeaderZippy.isExpanded());
-    assertEquals("collapsed header should not have a class name #1", "",
-        dualHeaderZippyCollapsedHeaderEl.className);
-    assertEquals("expanded header should not have a class name #1", "",
-        dualHeaderZippyExpandedHeaderEl.className);
+    assertFalse("collapsed header should not have state class name #1",
+        hasCollapseOrExpandClasses(dualHeaderZippyCollapsedHeaderEl));
+    assertFalse("expanded header should not have state class name #1",
+        hasCollapseOrExpandClasses(dualHeaderZippyExpandedHeaderEl));
 
     dualHeaderZippy.collapse();
     assertEquals("expanded must be false", false, dualHeaderZippy.isExpanded());
-    assertEquals("collapsed header should not have a class name #2", "",
-        dualHeaderZippyCollapsedHeaderEl.className);
-    assertEquals("expanded header should not have a class name #2", "",
-        dualHeaderZippyExpandedHeaderEl.className);
-  }
-
-  function testExpandCollapse_ariaState() {
-    var headerEl = goog.dom.getElement('t1');
-
-    zippy.expand();
-    assertEquals("aria-expanded must be true", "true",
-        goog.dom.a11y.getState(headerEl, goog.dom.a11y.State.EXPANDED));
-
-    zippy.collapse();
-    assertEquals("aria-expanded must be false", "false",
-        goog.dom.a11y.getState(headerEl, goog.dom.a11y.State.EXPANDED));
+    assertFalse("collapsed header should not have state class name #2",
+        hasCollapseOrExpandClasses(dualHeaderZippyCollapsedHeaderEl));
+    assertFalse("expanded header should not have state class name #2",
+        hasCollapseOrExpandClasses(dualHeaderZippyExpandedHeaderEl));
   }
 
   function testSetExpand() {
     var expanded = !zippy.isExpanded();
     zippy.setExpanded(expanded);
     assertEquals("expanded must be " + expanded, expanded, zippy.isExpanded());
+  }
+
+  function testCssClassesAndAria() {
+    assertTrue('goog-zippy-header is enabled',
+        goog.dom.classes.has(zippy.elHeader_, 'goog-zippy-header'));
+    assertEquals('header aria-expanded is false', 'false',
+        goog.dom.a11y.getState(zippy.elHeader_, 'expanded'));
+    zippy.setExpanded(true);
+    assertTrue('goog-zippy-content is enabled',
+        goog.dom.classes.has(zippy.getContentElement(), 'goog-zippy-content'));
+    assertEquals('header aria role is TAB', 'tab',
+        goog.dom.a11y.getRole(zippy.elHeader_));
+    assertEquals('header aria-expanded is true', 'true',
+        goog.dom.a11y.getState(zippy.elHeader_, 'expanded'));
+  }
+
+  function testHeaderTabIndex() {
+    assertEquals('Header tabIndex is 0', 0, zippy.elHeader_.tabIndex);
+  }
+
+  function testVisibleHeaderId() {
+    var header = document.createElement('div');
+    var content = document.createElement('div');
+    var zippyTest = new goog.ui.Zippy(header, content);
+    assertEquals('zippy header has no id', '', zippyTest.elHeader_.id);
+    var id = zippyTest.getVisibleHeaderId();
+    assertEquals('header id is set', zippyTest.elHeader_.id,
+        zippyTest.getVisibleHeaderId());
+    zippyTest.dispose();
+  }
+
+  function testGetVisibleHeaderElement() {
+    dualHeaderZippy.setExpanded(false);
+    assertEquals(dualHeaderZippyCollapsedHeaderEl,
+        dualHeaderZippy.getVisibleHeaderElement());
+    dualHeaderZippy.setExpanded(true);
+    assertEquals(dualHeaderZippyExpandedHeaderEl,
+        dualHeaderZippy.getVisibleHeaderElement())
   }
 
   function testToggle() {
@@ -206,14 +233,14 @@ See the COPYING file for details.
     var dispatchedActionCount;
     var handleAction = function() {
       dispatchedActionCount++;
-    }
+    };
 
     var doTest = function (zippyObj) {
       dispatchedActionCount = 0;
       goog.events.listen(zippyObj, goog.ui.Zippy.Events.TOGGLE, handleAction);
       zippy.toggle();
       assertEquals("Custom Event must be called ", 1, dispatchedActionCount);
-    }
+    };
 
     doTest(zippy);
     doTest(fakeZippy1);
@@ -256,6 +283,13 @@ See the COPYING file for details.
         dispatchedActionCount);
 
   }
+
+  function hasCollapseOrExpandClasses(el) {
+    var isCollapsed =  goog.dom.classes.has(el, 'goog-zippy-collapsed');
+    var isExpanded =  goog.dom.classes.has(el, 'goog-zippy-expanded');
+    return isCollapsed || isExpanded;
+  }
+
 </script>
 
 </body>
