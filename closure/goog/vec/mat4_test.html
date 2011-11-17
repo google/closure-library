@@ -608,6 +608,10 @@ See the COPYING file for details.
   }
 
   function testToLookAt() {
+    // This test does not use the default precision goog.vec.EPSILON due to
+    // precision issues in some browsers leading to flaky tests.
+    var EPSILON = 1e-4;
+
     var eyeExp = [0, 0, 0];
     var fwdExp = [1, 0, 0];
     var upExp = [0, 1, 0];
@@ -622,12 +626,16 @@ See the COPYING file for details.
     var fwdRes = [0, 0, 0];
     var upRes = [0, 0, 0];
     goog.vec.Mat4.toLookAt(view, eyeRes, fwdRes, upRes);
-    assertElementsRoughlyEqual(eyeExp, eyeRes, goog.vec.EPSILON);
-    assertElementsRoughlyEqual(fwdExp, fwdRes, goog.vec.EPSILON);
-    assertElementsRoughlyEqual(upExp, upRes, goog.vec.EPSILON);
+    assertElementsRoughlyEqual(eyeExp, eyeRes, EPSILON);
+    assertElementsRoughlyEqual(fwdExp, fwdRes, EPSILON);
+    assertElementsRoughlyEqual(upExp, upRes, EPSILON);
   }
 
   function testLookAtDecomposition() {
+    // This test does not use the default precision goog.vec.EPSILON due to
+    // precision issues in some browsers leading to flaky tests.
+    var EPSILON = 1e-4;
+
     var viewExp = goog.vec.Mat4.create();
     var viewRes = goog.vec.Mat4.create();
     var tmp = goog.vec.Mat4.create();
@@ -656,10 +664,10 @@ See the COPYING file for details.
 
     goog.vec.Mat4.makeLookAt(viewRes, eyeRes, centerRes, upRes);
 
-    assertElementsRoughlyEqual(eyeExp, eyeRes, goog.vec.EPSILON);
-    assertElementsRoughlyEqual(fwdExp, fwdRes, goog.vec.EPSILON);
-    assertElementsRoughlyEqual(upExp, upRes, goog.vec.EPSILON);
-    assertElementsRoughlyEqual(viewExp, viewRes, goog.vec.EPSILON);
+    assertElementsRoughlyEqual(eyeExp, eyeRes, EPSILON);
+    assertElementsRoughlyEqual(fwdExp, fwdRes, EPSILON);
+    assertElementsRoughlyEqual(upExp, upRes, EPSILON);
+    assertElementsRoughlyEqual(viewExp, viewRes, EPSILON);
   }
 
 </script>
