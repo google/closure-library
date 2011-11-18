@@ -218,10 +218,10 @@ function checkEquals(a, b) {
   if (hasArrayBuffer &&
       a instanceof ArrayBuffer && b instanceof ArrayBuffer) {
     assertEquals(a.byteLength, b.byteLength);
-    var viewA = new DataView(a);
-    var viewB = new DataView(b);
+    var viewA = new Uint8Array(a);
+    var viewB = new Uint8Array(b);
     for (var i = 0; i < a.byteLength; i++) {
-      assertEquals(viewA.getUint8(i), viewB.getUint8(i));
+      assertEquals(viewA[i], viewB[i]);
     }
   } else {
     assertEquals(a, b);
