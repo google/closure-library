@@ -229,6 +229,53 @@ function testJsInjectionWithUnicodeLineReturn() {
       '&lt;script&gt;malicious_code()&lt;/script&gt;\u2029Vanilla text');
 }
 
+function testJsInjectionWithIgnorableNonTagChar() {
+  assertLinkify(
+      'Angle brackets are normalized even when followed by an ignorable ' +
+          'non-tag character.',
+      '<\u0000img onerror=alert(1337) src=\n>',
+      '&lt;\u0000img onerror=alert(1337) src=\n&gt;');
+}
+
+function testJsInjectionWithTextarea() {
+  assertLinkify(
+      'Putting the result in a textarea can\'t cause other textarea text to ' +
+          'be treated as tag content.',
+      '</textarea',
+      '&lt;/textarea');
+}
+
+function testJsInjectionWithNewlineConversion() {
+  assertLinkify(
+      'Any newline conversion and whitespace normalization won\'t cause tag ' +
+          'parts to be recombined.',
+      '<<br>script<br>>alert(1337)<<br>/<br>script<br>>',
+      '&lt;&lt;br&gt;script&lt;br&gt;&gt;alert(1337)&lt;&lt;br&gt;/&lt;' +
+          'br&gt;script&lt;br&gt;&gt;');
+}
+
+function testNoProtocolBlacklisting() {
+  assertLinkify(
+      'No protocol blacklisting.',
+      'Click: jscript:alert%281337%29\nClick: JSscript:alert%281337%29\n' +
+          'Click: VBscript:alert%281337%29\nClick: Script:alert%281337%29\n' +
+          'Click: flavascript:alert%281337%29',
+      'Click: jscript:alert%281337%29\nClick: JSscript:alert%281337%29\n' +
+          'Click: VBscript:alert%281337%29\nClick: Script:alert%281337%29\n' +
+          'Click: flavascript:alert%281337%29');
+}
+
+function testProtocolWhitelistingEffective() {
+  assertLinkify(
+      'Protocol whitelisting is effective.',
+      'Click httpscript:alert%281337%29\nClick mailtoscript:alert%281337%29\n' +
+          'Click j\u00A0avascript:alert%281337%29\n' +
+          'Click \u00A0javascript:alert%281337%29',
+      'Click httpscript:alert%281337%29\nClick mailtoscript:alert%281337%29\n' +
+          'Click j\u00A0avascript:alert%281337%29\n' +
+          'Click \u00A0javascript:alert%281337%29');
+}
+
 function testLinkifyNoOptions() {
   div.innerHTML = goog.string.linkify.linkifyPlainText('http://www.google.com');
   goog.testing.dom.assertHtmlContentsMatch(
