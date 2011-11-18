@@ -30,6 +30,7 @@ See the COPYING file for details.
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
   goog.require('goog.userAgent');
+  goog.require('goog.userAgent.product');
 </script>
 </head>
 <body>
@@ -910,6 +911,18 @@ function doTestPlaceCursorAtStart(opt_html, opt_parentId) {
       range);
   assertTrue('The range should be collapsed', range.isCollapsed());
   textNode = editableField.getElement().firstChild;
+
+  // We check whether getAttribute exist because textNode may be an actual
+  // TextNode, which does not have getAttribute.
+  if (textNode && textNode.getAttribute &&
+      textNode.getAttribute('_moz_editor_bogus_node')) {
+    // At least in FF >= 6, assigning '' to innerHTML of a contentEditable
+    // element will results in textNode being modified into:
+    // <br _moz_editor_bogus_node="TRUE" _moz_dirty=""> instead of nulling
+    // it. So we should null it ourself.
+    textNode = null;
+  }
+
   var startNode = opt_parentId ?
       editableField.getEditableDomHelper().getElement(opt_parentId).firstChild :
       textNode ? textNode : editableField.getElement();
