@@ -343,6 +343,20 @@ function testMaybeCreateDummyTargetForPosition4() {
   }
 }
 
+function testMaybeCreateDummyTargetForPosition_NegativePositions() {
+  var negTargets = [
+    { box_: new goog.math.Box(-20, 10,  -5, 1) },
+    { box_: new goog.math.Box(20, 10,  30, 1) }
+  ];
+
+  var testGroup = new goog.fx.AbstractDragDrop();
+  testGroup.targetList_ = negTargets;
+  testGroup.targetBox_ = new goog.math.Box(-20, 10, 30, 1);
+
+  var target = testGroup.maybeCreateDummyTargetForPosition_(1, 5);
+  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+  assertTrue(testGroup.isInside_(1, 5, target.box_));
+}
 
 function testCalculateTargetBox() {
   var testGroup = new goog.fx.AbstractDragDrop();

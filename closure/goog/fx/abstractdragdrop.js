@@ -732,6 +732,22 @@ goog.fx.AbstractDragDrop.prototype.containerScrollHandler_ = function(e) {
       container.savedScrollTop_ = container.element_.scrollTop;
       container.savedScrollLeft_ = container.element_.scrollLeft;
 
+      // When the container scrolls, it's possible that one of the targets will
+      // move to the region contained by the dummy target. Since we don't know
+      // which sides (if any) of the dummy target are defined by targets
+      // contained by this container, we are conservative and just shrink it.
+      if (this.activeTarget_ == this.dummyTarget_) {
+        if (deltaTop > 0) {
+          this.dummyTarget_.box_.top += deltaTop;
+        } else {
+          this.dummyTarget_.box_.bottom += deltaTop;
+        }
+        if (deltaLeft > 0) {
+          this.dummyTarget_.box_.left += deltaLeft;
+        } else {
+          this.dummyTarget_.box_.right += deltaLeft;
+        }
+      }
       for (var j = 0, target; target = container.containedTargets_[j]; j++) {
         var box = target.box_;
         box.top += deltaTop;
@@ -743,6 +759,7 @@ goog.fx.AbstractDragDrop.prototype.containerScrollHandler_ = function(e) {
       }
     }
   }
+  this.dragger_.onScroll_(e);
 };
 
 
@@ -966,7 +983,7 @@ goog.fx.AbstractDragDrop.prototype.maybeCreateDummyTargetForPosition_ =
     // mouse pointer. The clipping coordinate cannot be computed and is set to
     // a negative value if the projected DnD target contains the mouse pointer.
 
-    var horizontalClip = -1; // Assume mouse is above or below the DnD box.
+    var horizontalClip = null; // Assume mouse is above or below the DnD box.
     if (x >= box.right) { // Mouse is to the right of the DnD box.
       // Clip the fake box only if the DnD box overlaps it.
       horizontalClip = box.right > fakeTargetBox.left ?
@@ -976,7 +993,7 @@ goog.fx.AbstractDragDrop.prototype.maybeCreateDummyTargetForPosition_ =
       horizontalClip = box.left < fakeTargetBox.right ?
           box.left : fakeTargetBox.right;
     }
-    var verticalClip = -1;
+    var verticalClip = null;
     if (y >= box.bottom) {
       verticalClip = box.bottom > fakeTargetBox.top ?
           box.bottom : fakeTargetBox.top;
@@ -985,26 +1002,26 @@ goog.fx.AbstractDragDrop.prototype.maybeCreateDummyTargetForPosition_ =
           box.top : fakeTargetBox.bottom;
     }
 
-    // If both clippings are possible (positive values have been set), choose
-    // one that gives us larger distance to mouse pointer (mark the shorter
-    // clipping as impossible, by setting it to negative value).
-    if (horizontalClip >= 0 && verticalClip >= 0) {
+    // If both clippings are possible, choose one that gives us larger distance
+    // to mouse pointer (mark the shorter clipping as impossible, by setting it
+    // to null).
+    if (!goog.isNull(horizontalClip) && !goog.isNull(verticalClip)) {
       if (Math.abs(horizontalClip - x) > Math.abs(verticalClip - y)) {
-        verticalClip = -1;
+        verticalClip = null;
       } else {
-        horizontalClip = -1;
+        horizontalClip = null;
       }
     }
 
     // Clip none or one of fake target box sides (at most one clipping
     // coordinate can be active).
-    if (horizontalClip >= 0) {
+    if (!goog.isNull(horizontalClip)) {
       if (horizontalClip <= x) {
         fakeTargetBox.left = horizontalClip;
       } else {
         fakeTargetBox.right = horizontalClip;
       }
-    } else if (verticalClip >= 0) {
+    } else if (!goog.isNull(verticalClip)) {
       if (verticalClip <= y) {
         fakeTargetBox.top = verticalClip;
       } else {
