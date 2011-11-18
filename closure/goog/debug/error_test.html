@@ -53,7 +53,15 @@ function testError() {
           goog.userAgent.product.CHROME &&
           !goog.userAgent.isVersion(532)),
       'error.stack is not widely supported');
+
   try {
+    if (goog.userAgent.product.FIREFOX &&
+        goog.userAgent.isVersion('2.0')) {
+      // Firefox 4 and greater does not have the first line that says
+      // 'Error'. So we insert a dummy line to simplify the test.
+      stack.splice(0, 0, 'Error');
+    }
+
     assertContains('1st line of stack should have "Error"', 'Error', stack[0]);
     // 2nd line is slightly different in firefox/chrome
     assertContains('3rd line of stack should have "zzzzz"', 'zzzzz', stack[2]);
