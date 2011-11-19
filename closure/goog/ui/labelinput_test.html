@@ -14,11 +14,13 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.dom.a11y');
   goog.require('goog.dom.a11y.State');
+  goog.require('goog.dom.classes');
   goog.require('goog.events.EventType');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.LabelInput');
+  goog.require('goog.userAgent');
 </script>
 </head>
 <body>
@@ -154,22 +156,27 @@ function testClassName() {
   if (goog.userAgent.IE) {
     return;
   }
+  // FF does not perform focus if the window is not active in the first place.
+  if (goog.userAgent.GECKO && document.hasFocus && !document.hasFocus()) {
+    return;
+  }
 
   labelInput.decorate(goog.dom.getElement('i'));
   labelInput.setLabel('search');
 
-  assertNotEquals('label before focus should have LABEL_CLASS_NAME',
-      -1, labelInput.getElement().className.indexOf(labelInput.LABEL_CLASS_NAME));
+  var el = labelInput.getElement();
+  assertTrue('label before focus should have LABEL_CLASS_NAME',
+      goog.dom.classes.has(el, labelInput.LABEL_CLASS_NAME));
 
   labelInput.getElement().focus();
 
-  assertEquals('label after focus should not have LABEL_CLASS_NAME',
-      -1, labelInput.getElement().className.indexOf(labelInput.LABEL_CLASS_NAME));
+  assertFalse('label after focus should not have LABEL_CLASS_NAME',
+      goog.dom.classes.has(el, labelInput.LABEL_CLASS_NAME));
 
   labelInput.getElement().blur();
 
-  assertNotEquals('label after blur should have LABEL_CLASS_NAME',
-      -1, labelInput.getElement().className.indexOf(labelInput.LABEL_CLASS_NAME));
+  assertTrue('label after blur should have LABEL_CLASS_NAME',
+      goog.dom.classes.has(el, labelInput.LABEL_CLASS_NAME));
 }
 
 function isPlaceholderSupported() {

@@ -39,6 +39,11 @@ function tearDown() {
 }
 
 function testFocusOnInputElement() {
+  // FF does not perform focus if the window is not active in the first place.
+  if (goog.userAgent.GECKO && document.hasFocus && !document.hasFocus()) {
+    return;
+  }
+
   var promptResult = undefined;
   prompt = new goog.ui.Prompt('title', 'Prompt:', function(result) {
     promptResult = result;
