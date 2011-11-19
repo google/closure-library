@@ -44,7 +44,7 @@ goog.fx.anim.Animated.prototype.onAnimationFrame;
 
 /**
  * Default wait timeout for animations (in milliseconds).  Only used for timed
- * animation, which uses a timer (setTimout) to schedule animation.
+ * animation, which uses a timer (setTimeout) to schedule animation.
  *
  * @type {number}
  * @const

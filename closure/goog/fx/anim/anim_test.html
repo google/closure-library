@@ -20,6 +20,7 @@ See the COPYING file for details.
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent');
 </script>
 <style>
 
@@ -47,12 +48,12 @@ function tearDown() {
 }
 
 function testRegisterAndUnregisterAnimation() {
-  var setTimoutCount = 0;
+  var setTimeoutCount = 0;
   var setIntervalCount = 0;
   var timerIdCounter = 1;
 
   replacer.set(goog.Timer.defaultTimerObject, 'setTimeout', function() {
-    setTimoutCount++;
+    setTimeoutCount++;
     return timerIdCounter++;
   });
   replacer.set(goog.Timer.defaultTimerObject, 'setInterval', function() {
@@ -60,14 +61,14 @@ function testRegisterAndUnregisterAnimation() {
     return timerIdCounter++;
   });
   replacer.set(goog.Timer.defaultTimerObject, 'clearTimeout', function() {
-    setTimoutCount--;
+    setTimeoutCount--;
   });
   replacer.set(goog.fx.anim, 'requestAnimationFrameFn_', function() {
-    setTimoutCount++;
+    setTimeoutCount++;
     return timerIdCounter++;
   });
   replacer.set(goog.fx.anim, 'cancelRequestAnimationFrameFn_', function() {
-    setTimoutCount--;
+    setTimeoutCount--;
   });
 
   var anim = new goog.fx.Animation([0], [1], 1000);
@@ -78,12 +79,12 @@ function testRegisterAndUnregisterAnimation() {
   assertTrue('Should contain the animation',
              goog.object.containsValue(goog.fx.anim.activeAnimations_,
                                        anim));
-  assertEquals('Should have called setTimout once', 1, setTimoutCount);
+  assertEquals('Should have called setTimeout once', 1, setTimeoutCount);
   assertEquals('setInterval should not be called', 0, setIntervalCount);
 
   goog.fx.anim.registerAnimation(anim2);
 
-  assertEquals('Should not have called setTimout again', 1, setTimoutCount);
+  assertEquals('Should not have called setTimeout again', 1, setTimeoutCount);
   assertEquals('setInterval should not be called', 0, setIntervalCount);
 
   // Add anim again.
@@ -91,25 +92,25 @@ function testRegisterAndUnregisterAnimation() {
   assertTrue('Should contain the animation',
              goog.object.containsValue(goog.fx.anim.activeAnimations_,
                                        anim));
-  assertEquals('Should not have called setTimout again', 1, setTimoutCount);
+  assertEquals('Should not have called setTimeout again', 1, setTimeoutCount);
   assertEquals('setInterval should not be called', 0, setIntervalCount);
 
   goog.fx.anim.unregisterAnimation(anim);
   assertFalse('Should not contain the animation',
               goog.object.containsValue(goog.fx.anim.activeAnimations_,
                                         anim));
-  assertEquals('clearTimeout should not have been called', 1, setTimoutCount);
+  assertEquals('clearTimeout should not have been called', 1, setTimeoutCount);
   assertEquals('setInterval should not be called', 0, setIntervalCount);
 
   goog.fx.anim.unregisterAnimation(anim2);
-  assertEquals('There should be no remaining timers', 0, setTimoutCount);
+  assertEquals('There should be no remaining timers', 0, setTimeoutCount);
   assertEquals('setInterval should not be called', 0, setIntervalCount);
 
   // Make sure we don't trigger setTimeout or setInterval.
   clock.tick(1000);
   goog.fx.anim.cycleAnimations_(goog.now());
 
-  assertEquals('There should be no remaining timers', 0, setTimoutCount);
+  assertEquals('There should be no remaining timers', 0, setTimeoutCount);
   assertEquals('setInterval should not be called', 0, setIntervalCount);
 
   anim.dispose();
@@ -117,11 +118,65 @@ function testRegisterAndUnregisterAnimation() {
 }
 
 function testRegisterAndUnregisterAnimationWithRequestAnimationFrame() {
+  if (goog.userAgent.GECKO) {
+    // Firefox uses a different mechanism that we test separately.
+    return;
+  }
+
   goog.fx.anim.setAnimationWindow(window);
   testRegisterAndUnregisterAnimation();
   goog.fx.anim.setAnimationWindow(null);
 }
 
+function testRegisterAndUnregisterAnimationWithRequestAnimationFrameGecko() {
+  // Only FF4 onwards support requestAnimationFrame.
+  if (!goog.userAgent.GECKO || !goog.userAgent.isVersion('2.0')) {
+    return;
+  }
+
+  goog.fx.anim.setAnimationWindow(window);
+
+  var anim = new goog.fx.Animation([0], [1], 1000);
+  var anim2 = new goog.fx.Animation([0], [1], 1000);
+
+  goog.fx.anim.registerAnimation(anim);
+
+  assertTrue('Should contain the animation',
+             goog.object.containsValue(goog.fx.anim.activeAnimations_,
+                                       anim));
+
+  assertEquals('Should have listen to MozBeforePaint once', 1,
+      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+
+  goog.fx.anim.registerAnimation(anim2);
+
+  assertEquals('Should not add more listener for MozBeforePaint', 1,
+      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+
+  // Add anim again.
+  goog.fx.anim.registerAnimation(anim);
+  assertTrue('Should contain the animation',
+             goog.object.containsValue(goog.fx.anim.activeAnimations_,
+                                       anim));
+  assertEquals('Should not add more listener for MozBeforePaint', 1,
+      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+
+  goog.fx.anim.unregisterAnimation(anim);
+  assertFalse('Should not contain the animation',
+              goog.object.containsValue(goog.fx.anim.activeAnimations_,
+                                        anim));
+  assertEquals('Should not clear listener for MozBeforePaint yet', 1,
+      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+
+  goog.fx.anim.unregisterAnimation(anim2);
+  assertEquals('There should be no more listener for MozBeforePaint', 0,
+      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+
+  anim.dispose();
+  anim2.dispose();
+
+  goog.fx.anim.setAnimationWindow(null);
+}
 
 function testRegisterUnregisterAnimation() {
   var anim = new goog.fx.Animation([0], [1], 1000);
