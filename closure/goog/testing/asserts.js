@@ -698,11 +698,11 @@ function assertElementsEquals(a, b, c) {
  * each element is roughly equal.
  * @param {string|Object} a Failure message (4 arguments)
  *     or object #1 (3 arguments).
- * @param {Object} b Object #1 (3 arguments) or object #2 (4 arguments).
- * @param {Object} c Object #2 (4 arguments) or tolerance (3 arguments).
- * @param {number} d tolerance (4 arguments).
+ * @param {Object} b Object #1 (4 arguments) or object #2 (3 arguments).
+ * @param {Object|number} c Object #2 (4 arguments) or tolerance (3 arguments).
+ * @param {number=} opt_d tolerance (4 arguments).
  */
-function assertElementsRoughlyEqual(a, b, c, d) {
+function assertElementsRoughlyEqual(a, b, c, opt_d) {
   _validateArguments(3, arguments);
 
   var v1 = nonCommentArg(1, 3, arguments);
@@ -715,7 +715,7 @@ function assertElementsRoughlyEqual(a, b, c, d) {
   } else {
     assertEquals('length mismatch: ' + failureMessage, v1.length, v2.length);
     for (var i = 0; i < v1.length; ++i) {
-      assertRoughlyEquals(failureMessage, v2[i], v1[i], tolerance);
+      assertRoughlyEquals(failureMessage, v1[i], v2[i], tolerance);
     }
   }
 }
@@ -1059,6 +1059,7 @@ goog.exportSymbol('assertObjectEquals', assertObjectEquals);
 goog.exportSymbol('assertObjectNotEquals', assertObjectNotEquals);
 goog.exportSymbol('assertArrayEquals', assertArrayEquals);
 goog.exportSymbol('assertElementsEquals', assertElementsEquals);
+goog.exportSymbol('assertElementsRoughlyEqual', assertElementsRoughlyEqual);
 goog.exportSymbol('assertSameElements', assertSameElements);
 goog.exportSymbol('assertEvaluatesToTrue', assertEvaluatesToTrue);
 goog.exportSymbol('assertEvaluatesToFalse', assertEvaluatesToFalse);
