@@ -699,7 +699,7 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
         }
 
         var enumValue = field.getNativeType()[name];
-        if (!enumValue) {
+        if (enumValue == null) {
           this.reportError_('Unknown enum value: ' + name);
           return null;
         }
