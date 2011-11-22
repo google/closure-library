@@ -17,8 +17,10 @@ See the COPYING file for details.
     goog.require('goog.dom');
     goog.require('goog.dom.NodeType');
     goog.require('goog.dom.classes');
+    goog.require('goog.events.KeyCodes');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.testing.recordFunction');
     goog.require('goog.ui.Component.State');
     goog.require('goog.ui.MenuItem');
     goog.require('goog.ui.MenuItemRenderer');
@@ -305,6 +307,23 @@ See the COPYING file for details.
       item.setCaption('');
       assertEquals('getCaption() must return empty string', '',
           item.getCaption());
+    }
+
+    function testHandleKeyEventInternalWithMnemonic() {
+      item.performActionInternal =
+          goog.testing.recordFunction(item.performActionInternal);
+      item.setMnemonic(goog.events.KeyCodes.F);
+      item.handleKeyEventInternal({'keyCode': goog.events.KeyCodes.F});
+      assertEquals('performActionInternal must be called', 1,
+          item.performActionInternal.getCallCount());
+    }
+
+    function testHandleKeyEventInternalWithoutMnemonic() {
+      item.performActionInternal = goog.testing.recordFunction(
+          item.performActionInternal);
+      item.handleKeyEventInternal({'keyCode': goog.events.KeyCodes.F});
+      assertEquals('performActionInternal must not be called without a' +
+          ' mnemonic', 0, item.performActionInternal.getCallCount());
     }
 
     function testRender() {
