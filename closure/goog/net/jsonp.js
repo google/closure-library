@@ -35,7 +35,6 @@ goog.provide('goog.net.Jsonp');
 
 goog.require('goog.Uri');
 goog.require('goog.dom');
-goog.require('goog.net.jsloader');
 
 // WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
 //
@@ -173,6 +172,15 @@ goog.net.Jsonp.prototype.send = function(opt_payload,
 
   var payload = opt_payload || null;
 
+  // This is a safeguard that we don't accidentally call appendChild
+  // on a null.
+  if (!document.documentElement.firstChild) {
+    if (opt_errorCallback) {
+      opt_errorCallback(payload);
+    }
+    return null;
+  }
+
   var id = opt_callbackParamValue ||
       '_' + (goog.net.Jsonp.scriptCounter_++).toString(36) +
       goog.now().toString(36);
@@ -183,6 +191,13 @@ goog.net.Jsonp.prototype.send = function(opt_payload,
 
   var script = goog.dom.createElement('script');
 
+  var timeout = null;
+  if (this.timeout_ > 0) {
+    var error = goog.net.Jsonp.newErrorHandler_(id, script, payload,
+                                                opt_errorCallback);
+    timeout = goog.global.setTimeout(error, this.timeout_);
+  }
+
   // Create a new Uri object onto which this payload will be added
   var uri = this.uri_.clone();
   if (payload) {
@@ -190,19 +205,25 @@ goog.net.Jsonp.prototype.send = function(opt_payload,
   }
 
   if (opt_replyCallback) {
-    var reply = goog.net.Jsonp.newReplyHandler_(id, opt_replyCallback);
+    var reply = goog.net.Jsonp.newReplyHandler_(id, script, opt_replyCallback,
+                                                timeout);
     goog.global[goog.net.Jsonp.CALLBACKS][id] = reply;
 
     uri.setParameterValues(this.callbackParamName_,
                            goog.net.Jsonp.CALLBACKS + '.' + id);
   }
 
-  var deferred = goog.net.jsloader.load(uri.toString(),
-      {timeout: this.timeout_, cleanupWhenDone: true});
-  var error = goog.net.Jsonp.newErrorHandler_(id, payload, opt_errorCallback);
-  deferred.addErrback(error);
+  goog.dom.setProperties(script, {
+    'type': 'text/javascript',
+    'id': id,
+    'charset': 'UTF-8',
+    // NOTE(user): Safari never loads the script if we don't set
+    // the src attribute before appending.
+    'src': uri.toString()
+  });
 
-  return {id_: id, deferred_: deferred};
+  goog.dom.appendChild(document.getElementsByTagName('head')[0], script);
+  return { id_: id, timeout_: timeout };
 };
 
 
@@ -213,28 +234,32 @@ goog.net.Jsonp.prototype.send = function(opt_payload,
  * @param {Object} request The request object returned by the send method.
  */
 goog.net.Jsonp.prototype.cancel = function(request) {
-  if (request) {
-    if (request.deferred_) {
-      request.deferred_.cancel();
-    }
-    if (request.id_) {
-      goog.net.Jsonp.cleanup_(request.id_, false);
+  if (request && request.id_) {
+    var scriptNode = goog.dom.getElement(request.id_);
+
+    if (scriptNode && scriptNode.tagName == 'SCRIPT' &&
+        typeof goog.global[goog.net.Jsonp.CALLBACKS][request.id_] ==
+        'function') {
+      request.timeout_ && goog.global.clearTimeout(request.timeout_);
+      goog.net.Jsonp.cleanup_(request.id_, scriptNode, false);
     }
   }
 };
 
 
 /**
- * Creates a timeout callback that calls the given timeoutCallback with the
- * original payload.
+ * Creates a timeout callback that removes the script node and calls
+ * the given timeoutCallback with the original payload.
  *
  * @param {string} id The id of the script node.
+ * @param {Element} scriptNode Script element.
  * @param {Object} payload The payload that was sent to the server.
  * @param {Function=} opt_errorCallback The function called on timeout.
- * @return {!Function} A zero argument function that handles callback duties.
+ * @return {Function} A zero argument function that handles callback duties.
  * @private
  */
 goog.net.Jsonp.newErrorHandler_ = function(id,
+                                           scriptNode,
                                            payload,
                                            opt_errorCallback) {
   /**
@@ -243,7 +268,7 @@ goog.net.Jsonp.newErrorHandler_ = function(id,
    * error-handler, it removes the script node and original function.
    */
   return function() {
-    goog.net.Jsonp.cleanup_(id, false);
+    goog.net.Jsonp.cleanup_(id, scriptNode, false);
     if (opt_errorCallback) {
       opt_errorCallback(payload);
     }
@@ -252,15 +277,20 @@ goog.net.Jsonp.newErrorHandler_ = function(id,
 
 
 /**
- * Creates a reply callback that calls the given replyCallback with data
- * returned by the server.
+ * Creates a reply callback that removes the script node and calls the
+ * given replyCallback with data returned by the server.
  *
  * @param {string} id The id of the script node.
+ * @param {Element} scriptNode Script element.
  * @param {Function} replyCallback The function called on reply.
+ * @param {?number} timeout A timeout call that needs to be cleared.
  * @return {Function} A reply callback function.
  * @private
  */
-goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
+goog.net.Jsonp.newReplyHandler_ = function(id,
+                                           scriptNode,
+                                           replyCallback,
+                                           timeout) {
   /**
    * This function is the handler for the all-is-well response. It
    * clears the error timeout handler, calls the user's handler, then
@@ -269,7 +299,8 @@ goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
    * @param {...Object} var_args The response data sent from the server.
    */
   return function(var_args) {
-    goog.net.Jsonp.cleanup_(id, true);
+    goog.global.clearTimeout(timeout);
+    goog.net.Jsonp.cleanup_(id, scriptNode, true);
     replyCallback.apply(undefined, arguments);
   };
 };
@@ -279,12 +310,19 @@ goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
  * Removes the script node and reply handler with the given id.
  *
  * @param {string} id The id of the script node to be removed.
+ * @param {Node} scriptNode The node to be removed.
  * @param {boolean} deleteReplyHandler If true, delete the reply handler
  *     instead of setting it to nullFunction (if we know the callback could
  *     never be called again).
  * @private
  */
-goog.net.Jsonp.cleanup_ = function(id, deleteReplyHandler) {
+goog.net.Jsonp.cleanup_ = function(id, scriptNode, deleteReplyHandler) {
+  // Do this after a delay (removing the script node of a running script can
+  // confuse older IEs).
+  goog.global.setTimeout(function() {
+    goog.dom.removeNode(scriptNode);
+  }, 0);
+
   if (goog.global[goog.net.Jsonp.CALLBACKS][id]) {
     if (deleteReplyHandler) {
       delete goog.global[goog.net.Jsonp.CALLBACKS][id];
