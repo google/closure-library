@@ -675,6 +675,38 @@ function testEscapeString() {
   assertEquals(expected, actual);
 }
 
+function testCountOf() {
+  assertEquals(goog.string.countOf('REDSOXROX', undefined), 0);
+  assertEquals(goog.string.countOf('REDSOXROX', null), 0);
+  assertEquals(goog.string.countOf('REDSOXROX', ''), 0);
+  assertEquals(goog.string.countOf('', undefined), 0);
+  assertEquals(goog.string.countOf('', null), 0);
+  assertEquals(goog.string.countOf('', ''), 0);
+  assertEquals(goog.string.countOf('', 'REDSOXROX'), 0);
+  assertEquals(goog.string.countOf(undefined, 'R'), 0);
+  assertEquals(goog.string.countOf(null, 'R'), 0);
+  assertEquals(goog.string.countOf(undefined, undefined), 0);
+  assertEquals(goog.string.countOf(null, null), 0);
+
+  assertEquals(goog.string.countOf('REDSOXROX', 'R'), 2);
+  assertEquals(goog.string.countOf('REDSOXROX', 'E'), 1);
+  assertEquals(goog.string.countOf('REDSOXROX', 'X'), 2);
+  assertEquals(goog.string.countOf('REDSOXROX', 'RED'), 1);
+  assertEquals(goog.string.countOf('REDSOXROX', 'ROX'), 1);
+  assertEquals(goog.string.countOf('REDSOXROX', 'OX'), 2);
+  assertEquals(goog.string.countOf('REDSOXROX', 'Z'), 0);
+  assertEquals(goog.string.countOf('REDSOXROX', 'REDSOXROX'), 1);
+  assertEquals(goog.string.countOf('REDSOXROX', 'YANKEES'), 0);
+  assertEquals(goog.string.countOf('REDSOXROX', 'EVIL_EMPIRE'), 0);
+
+  assertEquals(goog.string.countOf('RRRRRRRRR', 'R'), 9);
+  assertEquals(goog.string.countOf('RRRRRRRRR', 'RR'), 4);
+  assertEquals(goog.string.countOf('RRRRRRRRR', 'RRR'), 3);
+  assertEquals(goog.string.countOf('RRRRRRRRR', 'RRRR'), 2);
+  assertEquals(goog.string.countOf('RRRRRRRRR', 'RRRRR'), 1);
+  assertEquals(goog.string.countOf('RRRRRRRRR', 'RRRRRR'), 1);
+}
+
 function testRemoveAt() {
   var str = 'barfoobarbazbar';
   str = goog.string.removeAt(str, 0, 3);
