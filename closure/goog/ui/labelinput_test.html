@@ -185,6 +185,29 @@ function isPlaceholderSupported() {
   }
 }
 
+function testEnable() {
+  labelInput = new goog.ui.LabelInput();
+  labelInput.createDom();
+  labelInput.enterDocument();
+
+  var labelElement = labelInput.getElement();
+  var disabledClass = goog.getCssName(labelInput.LABEL_CLASS_NAME, 'disabled');
+
+  assertTrue('label should be enabled', labelInput.isEnabled());
+  assertFalse('label should not have the disabled class',
+      goog.dom.classes.has(labelElement, disabledClass));
+
+  labelInput.setEnabled(false);
+  assertFalse('label should be disabled', labelInput.isEnabled());
+  assertTrue('label should have the disabled class',
+      goog.dom.classes.has(labelElement, disabledClass));
+
+  labelInput.setEnabled(true);
+  assertTrue('label should be enabled', labelInput.isEnabled());
+  assertFalse('label should not have the disabled class',
+      goog.dom.classes.has(labelElement, disabledClass));
+}
+
 </script>
 </body>
 </html>
