@@ -317,6 +317,38 @@ function testDragMarginScrollConstrainedDivVContainer() {
   dsc.dispose();
 }
 
+
+function testSetHorizontalScrolling() {
+  var dsc = new goog.fx.DragScrollSupport(hContainerDiv);
+  dsc.setHorizontalScrolling(false);
+
+  // Set initial scroll state.
+  var scrollLeft = 50;
+  hContainerDiv.scrollLeft = scrollLeft;
+
+  goog.testing.events.fireMouseMoveEvent(hContainerDiv,
+      new goog.math.Coordinate(200 - 10, 20 + 50));
+  clock.tick(goog.fx.DragScrollSupport.TIMER_STEP_ + 1);
+  assertEquals('Horizontal scrolling should be turned off',
+      0, clock.getTimeoutsMade());
+
+  goog.testing.events.fireMouseMoveEvent(hContainerDiv,
+      new goog.math.Coordinate(200 + 110, 20 + 50));
+  clock.tick(goog.fx.DragScrollSupport.TIMER_STEP_ + 1);
+  assertEquals('Horizontal scrolling should be turned off',
+      0, clock.getTimeoutsMade());
+
+  dsc.setHorizontalScrolling(true);
+  scrollLeft = hContainerDiv.scrollLeft;
+  goog.testing.events.fireMouseMoveEvent(hContainerDiv,
+      new goog.math.Coordinate(200 - 10, 20 + 50));
+  clock.tick(goog.fx.DragScrollSupport.TIMER_STEP_ + 1);
+  assertTrue('Mousing left of the hContainer should trigger scrolling left.',
+      scrollLeft > hContainerDiv.scrollLeft);
+
+  dsc.dispose();
+}
+
 </script>
 </body>
 </html>
