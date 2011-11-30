@@ -59,10 +59,11 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.dom.classes');
   goog.require('goog.events');
-  goog.require('goog.style');
   goog.require('goog.positioning');
   goog.require('goog.positioning.Overflow');
+  goog.require('goog.style');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.Component.EventType');
   goog.require('goog.ui.Menu');
@@ -70,6 +71,8 @@ See the COPYING file for details.
   goog.require('goog.ui.Popup');
   goog.require('goog.ui.SubMenu');
   goog.require('goog.ui.SubMenuRenderer');
+
+
 </script>
 </head>
 <body>
@@ -110,6 +113,40 @@ function tearDown() {
     mockClock.uninstall();
     mockClock = null;
   }
+}
+
+function testKeyHandling() {
+  menu.setFocusable(true);
+  menu.decorate(goog.dom.getElement('demoMenu'));
+
+  var KeyCodes = goog.events.KeyCodes;
+  var plainItem = menu.getChildAt(0);
+  plainItem.setMnemonic(KeyCodes.F);
+
+  var subMenuItem1 = menu.getChildAt(1);
+  var subMenuItem1Menu = subMenuItem1.getMenu();
+  menu.setHighlighted(plainItem);
+
+  var fireKeySequence = goog.testing.events.fireKeySequence;
+
+  assertTrue(
+      'Expected RIGHT key to not be handled',
+      fireKeySequence(plainItem.getElement(), KeyCodes.RIGHT));
+  assertFalse(subMenuItem1Menu.isVisible());
+
+  assertFalse(
+      'Expected F key to be handled',
+      fireKeySequence(plainItem.getElement(), KeyCodes.F));
+
+  assertFalse(
+      'Expected DOWN key to be handled',
+      fireKeySequence(plainItem.getElement(), KeyCodes.DOWN));
+  assertEquals(subMenuItem1, menu.getChildAt(1));
+
+  assertFalse(
+      'Expected RIGHT key to be handled',
+      fireKeySequence(subMenuItem1.getElement(), KeyCodes.RIGHT));
+  assertTrue(subMenuItem1Menu.isVisible());
 }
 
 function testNormalLtrSubMenu() {

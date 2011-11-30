@@ -427,8 +427,13 @@ goog.ui.Menu.prototype.handleKeyEventInternal = function(e) {
     // Loop through all child components, and for each menu item call its
     // key event handler so that keyboard mnemonics can be handled.
     this.forEachChild(function(menuItem) {
-      handled = !handled && menuItem instanceof goog.ui.MenuItem &&
-          menuItem.handleKeyEvent(e);
+      if (!handled) {
+        handled =
+            menuItem.getMnemonic && menuItem.getMnemonic() == e.keyCode &&
+            // We still delegate to handleKeyEvent, so that it can handle
+            // enabled/disabled state.
+            menuItem.handleKeyEvent(e);
+      }
     });
   }
   return handled;
