@@ -14,6 +14,7 @@ See the COPYING file for details.
   goog.require('goog.dom.selection');
   goog.require('goog.functions');
   goog.require('goog.string');
+  goog.require('goog.ui.BidiInput');
   goog.require('goog.ui.Prompt');
   goog.require('goog.userAgent.product');
   goog.require('goog.testing.jsunit');
@@ -80,6 +81,53 @@ function testValidationFunction() {
   goog.testing.events.fireKeySequence(prompt.userInputEl_,
       goog.events.KeyCodes.X);
   assertFalse(okButton.disabled);
+}
+
+function testBidiInput() {
+  var shalomInHebrew = '\u05e9\u05dc\u05d5\u05dd';
+  var promptResult = undefined;
+  prompt = new goog.ui.Prompt('title', 'Prompt:', goog.functions.NULL, '');
+  var bidiInput = new goog.ui.BidiInput();
+  prompt.setInputDecoratorFn(goog.bind(bidiInput.decorate, bidiInput));
+  prompt.setVisible(true);
+
+  prompt.userInputEl_.value = shalomInHebrew;
+  goog.testing.events.fireKeySequence(prompt.userInputEl_,
+      goog.events.KeyCodes.SPACE);
+  goog.testing.events.fireBrowserEvent(
+      {'target' : prompt.userInputEl_, 'type' : 'input'});
+  bidiInput.inputHandler_.dispatchEvent(
+      goog.events.InputHandler.EventType.INPUT);
+  assertEquals('rtl', prompt.userInputEl_.dir);
+
+  prompt.userInputEl_.value = 'shalomInEnglish';
+  goog.testing.events.fireKeySequence(prompt.userInputEl_,
+      goog.events.KeyCodes.SPACE);
+  goog.testing.events.fireBrowserEvent(
+      {'target' : prompt.userInputEl_, 'type' : 'input'});
+  bidiInput.inputHandler_.dispatchEvent(
+      goog.events.InputHandler.EventType.INPUT);
+  assertEquals('ltr', prompt.userInputEl_.dir);
+  goog.dispose(bidiInput);
+}
+
+function testBidiInput_off() {
+  var shalomInHebrew = '\u05e9\u05dc\u05d5\u05dd';
+  var promptResult = undefined;
+  prompt = new goog.ui.Prompt('title', 'Prompt:', goog.functions.NULL, '');
+  prompt.setVisible(true);
+
+  prompt.userInputEl_.value = shalomInHebrew;
+  goog.testing.events.fireKeySequence(prompt.userInputEl_,
+      goog.events.KeyCodes.SPACE);
+  goog.testing.events.fireBrowserEvent(
+      {'target' : prompt.userInputEl_, 'type' : 'input'});
+  assertEquals('', prompt.userInputEl_.dir);
+
+  prompt.userInputEl_.value = 'shalomInEnglish';
+  goog.testing.events.fireKeySequence(prompt.userInputEl_,
+      goog.events.KeyCodes.SPACE);
+  assertEquals('', prompt.userInputEl_.dir);
 }
 
 // An interactive test so we can manually see what it looks like.
