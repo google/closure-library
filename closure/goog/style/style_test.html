@@ -496,6 +496,14 @@ Test-visible
 <div id="offset-parent" style="position:relative">
   <div id="offset-child">child</div>
 </div>
+
+<div id="offset-parent-overflow"
+     style="overflow: scroll; width: 50px; height: 50px;">
+  <a id="offset-child-overflow">
+    scrollscrollscrollscrollscrollscrollscrollscroll
+  </a>
+</div>
+
 <script>
 
 var EPSILON = 2;
@@ -2308,9 +2316,14 @@ function testScrollBarWidth() {
 }
 
 function testOffsetParent() {
-  var $ = goog.dom.getElement;
-  var parent = $('offset-parent');
-  var child = $('offset-child');
+  var parent = goog.dom.getElement('offset-parent');
+  var child = goog.dom.getElement('offset-child');
+  assertEquals(parent, goog.style.getOffsetParent(child));
+}
+
+function testOverflowOffsetParent() {
+  var parent = goog.dom.getElement('offset-parent-overflow');
+  var child = goog.dom.getElement('offset-child-overflow');
   assertEquals(parent, goog.style.getOffsetParent(child));
 }
 
