@@ -184,10 +184,10 @@ function testEmailWithHyphen() {
 
 function testEmailUsernameWithSpecialChars() {
   assertLinkify(
-      'Email with a hyphen and + in the user name',
-      'Send mail to bolin-fest+forum@google.com',
-      'Send mail to <a href="mailto:bolin-fest+forum@google.com">' +
-          'bolin-fest+forum@google.com<\/a>');
+      'Email with a hyphen, period, and + in the user name',
+      'Send mail to bolin-fest+for.um@google.com',
+      'Send mail to <a href="mailto:bolin-fest+for.um@google.com">' +
+          'bolin-fest+for.um@google.com<\/a>');
 }
 
 function testEmailWithUnderscoreInvalid() {
