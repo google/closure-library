@@ -273,6 +273,25 @@ function testAddVec4ByObjects() {
       '(with implicit hash lookups for the x,y,z,w components)');
 }
 
+function testAddVec4BySubarray() {
+  var nVecs = NUM_ITERATIONS;
+  var nVals = nVecs * 4;
+  var a0 = createRandomFloat32Array(nVals);
+  var a1 = createRandomFloat32Array(nVals);
+  var a2 = new Float32Array(nVals);
+
+  table.run(
+      function() {
+        for (var i = 0; i < nVecs; i++) {
+          var t0 = a0.subarray(i * 4 * 4);
+          var t1 = a1.subarray(i * 4 * 4);
+          var t2 = a2.subarray(i * 4 * 4);
+          addVec4(t0, t1, t2);
+        }
+      },
+      'Add vectors using Float32Array.subarray()');
+}
+
 function testAddVec4ByView() {
   var nVecs = NUM_ITERATIONS;
   var nVals = nVecs * 4;
