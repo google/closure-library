@@ -142,7 +142,7 @@ goog.ui.ProgressBar.prototype.attachEvents_ = function() {
 
 
 /**
- * Adds the initial event listeners to the element.
+ * Removes the event listeners added by attachEvents_.
  * @private
  */
 goog.ui.ProgressBar.prototype.detachEvents_ = function() {

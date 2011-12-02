@@ -151,7 +151,7 @@ goog.dom.ViewportSizeMonitor.prototype.windowSizePollInterval_ = null;
 
 /**
  * Checks if polling is required for this user agent. Opera only requires
- * polling when the page is loaded within an IRAME.
+ * polling when the page is loaded within an IFRAME.
  * @return {boolean} Whether polling is required.
  * @private
  */

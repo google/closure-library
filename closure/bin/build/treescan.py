@@ -45,7 +45,7 @@ def ScanTree(root, path_filter=None, ignore_hidden=True):
 
   Args:
     root: str, Path to a root directory.
-    path_filter: A regular expression fileter.  If set, only paths matching
+    path_filter: A regular expression filter.  If set, only paths matching
       the path_filter are returned.
     ignore_hidden: If True, do not follow or return hidden directories or files
       (those starting with a '.' character).

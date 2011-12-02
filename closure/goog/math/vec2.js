@@ -145,8 +145,7 @@ goog.math.Vec2.prototype.normalize = function() {
 
 
 /**
- * Adds another vector to this vector in-place. Uses goog.math.Vec2.sum(a, b) to
- * return a new vector.
+ * Adds another vector to this vector in-place.
  * @param {!goog.math.Coordinate} b The vector to add.
  * @return {!goog.math.Vec2}  This vector with {@code b} added.
  */
@@ -158,8 +157,7 @@ goog.math.Vec2.prototype.add = function(b) {
 
 
 /**
- * Subtracts another vector from this vector in-place. Uses
- * goog.math.Vec2.difference(a, b) to return a new vector.
+ * Subtracts another vector from this vector in-place.
  * @param {!goog.math.Coordinate} b The vector to subtract.
  * @return {!goog.math.Vec2} This vector with {@code b} subtracted.
  */
