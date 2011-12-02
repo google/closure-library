@@ -705,7 +705,12 @@ goog.module.ModuleManager.prototype.getNotYetLoadedTransitiveDepIds_ =
 goog.module.ModuleManager.prototype.maybeFinishBaseLoad_ = function() {
   if (this.currentlyLoadingModule_ == this.baseModuleInfo_) {
     this.currentlyLoadingModule_ = null;
-    this.baseModuleInfo_.onLoad(goog.bind(this.getModuleContext, this));
+    var error = this.baseModuleInfo_.onLoad(
+        goog.bind(this.getModuleContext, this));
+    if (error) {
+      this.dispatchModuleLoadFailed_(
+          goog.module.ModuleManager.FailureType.INIT_ERROR);
+    }
   }
 };
 
@@ -726,7 +731,12 @@ goog.module.ModuleManager.prototype.setLoaded = function(id) {
 
   this.logger_.info('Module loaded: ' + id);
 
-  this.moduleInfoMap_[id].onLoad(goog.bind(this.getModuleContext, this));
+  var error = this.moduleInfoMap_[id].onLoad(
+      goog.bind(this.getModuleContext, this));
+  if (error) {
+    this.dispatchModuleLoadFailed_(
+        goog.module.ModuleManager.FailureType.INIT_ERROR);
+  }
 
   // Remove the module id from the user initiated set if it existed there.
   goog.array.remove(this.userInitiatedLoadingModuleIds_, id);
@@ -983,8 +993,7 @@ goog.module.ModuleManager.prototype.handleLoadError_ = function(status) {
     // from another window.
     this.logger_.info('Module loading unauthorized');
     this.dispatchModuleLoadFailed_(
-        goog.module.ModuleManager.FailureType.UNAUTHORIZED,
-        this.requestedLoadingModuleIds_);
+        goog.module.ModuleManager.FailureType.UNAUTHORIZED);
     // Drop any additional module requests.
     this.requestedModuleIdsQueue_.length = 0;
   } else if (status == 410) {
@@ -1042,7 +1051,7 @@ goog.module.ModuleManager.prototype.requeueBatchOrDispatchFailure_ =
     this.requestedModuleIdsQueue_ = queuedModules.concat(
         this.requestedModuleIdsQueue_);
   } else {
-    this.dispatchModuleLoadFailed_(cause, this.requestedLoadingModuleIds_);
+    this.dispatchModuleLoadFailed_(cause);
   }
 };
 
@@ -1051,11 +1060,11 @@ goog.module.ModuleManager.prototype.requeueBatchOrDispatchFailure_ =
  * Handles when a module load failed.
  * @param {goog.module.ModuleManager.FailureType} cause The reason for the
  *     failure.
- * @param {Array.<string>} failedIds List of module ids that failed.
  * @private
  */
 goog.module.ModuleManager.prototype.dispatchModuleLoadFailed_ = function(
-    cause, failedIds) {
+    cause) {
+  var failedIds = this.requestedLoadingModuleIds_;
   this.loadingModuleIds_.length = 0;
   // If any pending modules depend on the id that failed,
   // they need to be removed from the queue.

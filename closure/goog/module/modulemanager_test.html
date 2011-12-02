@@ -19,6 +19,7 @@ See the COPYING file for details.
   goog.require('goog.module.ModuleManager');
   goog.require('goog.module.ModuleManager.CallbackType');
   goog.require('goog.module.ModuleManager.FailureType');
+  goog.require('goog.testing');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
@@ -1568,6 +1569,84 @@ See the COPYING file for details.
         'should have called timeout callback', firedTimeout);
   }
 
+  /**
+   * Tests that an error during execOnLoad will trigger the error callback.
+   */
+  function testExecOnLoadError() {
+    // Expect two callbacks, each of which will be called with callback type
+    // ERROR, the right module id and failure type INIT_ERROR.
+    var errorCallback1 = goog.testing.createFunctionMock('callback1');
+    errorCallback1(goog.module.ModuleManager.CallbackType.ERROR, 'b',
+        goog.module.ModuleManager.FailureType.INIT_ERROR);
+
+    var errorCallback2 = goog.testing.createFunctionMock('callback2');
+    errorCallback2(goog.module.ModuleManager.CallbackType.ERROR, 'b',
+        goog.module.ModuleManager.FailureType.INIT_ERROR);
+
+    errorCallback1.$replay();
+    errorCallback2.$replay();
+
+    var mm = new goog.module.ModuleManager();
+    mm.setLoader(createSuccessfulNonBatchLoader(mm));
+
+    // Register the first callback before setting the module info map.
+    mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+        errorCallback1);
+
+    mm.setAllModuleInfo({'a': [], 'b': [], 'c': []});
+
+    // Register the second callback after setting the module info map.
+    mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+        errorCallback2);
+
+    var execOnLoadBCalled = false;
+    mm.execOnLoad('b', function() {
+      execOnLoadBCalled = true;
+      throw new Error();
+    });
+
+    clock.tick(5);
+
+    assertTrue('execOnLoad should have been called on module b.',
+        execOnLoadBCalled);
+    errorCallback1.$verify();
+    errorCallback2.$verify();
+  }
+
+  /**
+   * Tests that an error during execOnLoad will trigger the error callback.
+   * Uses setAllModuleInfoString rather than setAllModuleInfo.
+   */
+  function testExecOnLoadErrorModuleInfoString() {
+    // Expect a callback to be called with callback type ERROR, the right module
+    // id and failure type INIT_ERROR.
+    var errorCallback = goog.testing.createFunctionMock('callback');
+    errorCallback(goog.module.ModuleManager.CallbackType.ERROR, 'b',
+        goog.module.ModuleManager.FailureType.INIT_ERROR);
+
+    errorCallback.$replay();
+
+    var mm = new goog.module.ModuleManager();
+    mm.setLoader(createSuccessfulNonBatchLoader(mm));
+
+    // Register the first callback before setting the module info map.
+    mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+        errorCallback);
+
+    mm.setAllModuleInfoString('a/b/c');
+
+    var execOnLoadBCalled = false;
+    mm.execOnLoad('b', function() {
+      execOnLoadBCalled = true;
+      throw new Error();
+    });
+
+    clock.tick(5);
+
+    assertTrue('execOnLoad should have been called on module b.',
+        execOnLoadBCalled);
+    errorCallback.$verify();
+  }
 
   /**
    * Make sure ModuleInfo objects in moduleInfoMap_ get disposed.
