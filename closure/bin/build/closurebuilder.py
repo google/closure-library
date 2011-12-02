@@ -93,7 +93,9 @@ def _GetOptionsParser():
                     dest='compiler_flags',
                     default=[],
                     action='append',
-                    help='Additional flags to pass to the Closure compiler.')
+                    help='Additional flags to pass to the Closure compiler. '
+                    'To pass multiple flags, --compiler_flags has to be '
+                    'specified multiple times.')
   parser.add_option('--output_file',
                     dest='output_file',
                     action='store',
