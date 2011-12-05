@@ -50,6 +50,7 @@
 goog.provide('goog.db');
 
 goog.require('goog.async.Deferred');
+goog.require('goog.db.Error');
 goog.require('goog.db.IndexedDb');
 
 
