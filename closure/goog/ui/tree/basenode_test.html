@@ -9,11 +9,7 @@ See the COPYING file for details.
 <!--
 -->
 <head>
-<!--
-This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
--->
-<!--meta http-equiv="X-UA-Compatible" content="IE=edge"-->
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Closure Unit Tests - goog.ui.tree.BaseNode</title>
 <script src="../../base.js"></script>
 <script>
@@ -189,12 +185,20 @@ function testInvisibleNodesInUnrenderedTree() {
   tree.add(a);
   a.add(b);
   tree.render();
-  // getTextContent uses \n separator in IE7, space in other browsers.
-  assertEquals('invisible node not rendered', 'tree a',
-      goog.dom.getTextContent(tree.getElement()).replace(/\s/g, ' '));
+
+  var textContent =
+      tree.getElement().textContent || tree.getElement().innerText;
+  assertContains('Node should be rendered.', 'tree', textContent);
+  assertContains('Node should be rendered.', 'a', textContent);
+  assertNotContains('Unexpanded node child should not be rendered.',
+      'b', textContent);
+
   a.expand();
-  assertEquals('node is rendered after parent has been expanded', 'tree a b',
-      goog.dom.getTextContent(tree.getElement()).replace(/\s/g, ' '));
+  var textContent =
+      tree.getElement().textContent || tree.getElement().innerText;
+  assertContains('Node should be rendered.', 'tree', textContent);
+  assertContains('Node should be rendered.', 'a', textContent);
+  assertContains('Expanded node child should be rendered.', 'b', textContent);
   tree.dispose();
 }
 
@@ -205,11 +209,20 @@ function testInvisibleNodesInRenderedTree() {
   var b = new goog.ui.tree.TreeNode('b');
   tree.add(a);
   a.add(b);
-  assertEquals('invisible node not rendered', 'tree a',
-      goog.dom.getTextContent(tree.getElement()).replace(/\s/g, ' '));
+
+  var textContent =
+      tree.getElement().textContent || tree.getElement().innerText;
+  assertContains('Node should be rendered.', 'tree', textContent);
+  assertContains('Node should be rendered.', 'a', textContent);
+  assertNotContains('Unexpanded node child should not be rendered.',
+      'b', textContent);
+
   a.expand();
-  assertEquals('node is rendered after parent has been expanded', 'tree a b',
-      goog.dom.getTextContent(tree.getElement()).replace(/\s/g, ' '));
+  var textContent =
+      tree.getElement().textContent || tree.getElement().innerText;
+  assertContains('Node should be rendered.', 'tree', textContent);
+  assertContains('Node should be rendered.', 'a', textContent);
+  assertContains('Expanded node child should be rendered.', 'b', textContent);
   tree.dispose();
 }
 
