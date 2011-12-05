@@ -21,7 +21,9 @@ import subprocess
 
 
 # Pulls a version number from the first line of 'java -version'
-_VERSION_REGEX = re.compile('[\.0-9]+')
+# See http://java.sun.com/j2se/versioning_naming.html to learn more about the
+# command's output format.
+_VERSION_REGEX = re.compile('"([0-9][.0-9]*)')
 
 
 def _GetJavaVersion():
@@ -29,7 +31,7 @@ def _GetJavaVersion():
   proc = subprocess.Popen(['java', '-version'], stderr=subprocess.PIPE)
   unused_stdoutdata, stderrdata = proc.communicate()
   version_line = stderrdata.splitlines()[0]
-  return _VERSION_REGEX.search(version_line).group()
+  return _VERSION_REGEX.search(version_line).group(1)
 
 
 def Compile(compiler_jar_path, source_paths, flags=None):
@@ -45,7 +47,7 @@ def Compile(compiler_jar_path, source_paths, flags=None):
   """
 
   # User friendly version check.
-  if not (distutils.version.LooseVersion(_GetJavaVersion()) >
+  if not (distutils.version.LooseVersion(_GetJavaVersion()) >=
           distutils.version.LooseVersion('1.6')):
     logging.error('Closure Compiler requires Java 1.6 or higher. '
                   'Please visit http://www.java.com/getjava')
