@@ -596,7 +596,7 @@ goog.dom.getDocumentScrollElement_ = function(doc) {
  * Gets the window object associated with the given document.
  *
  * @param {Document=} opt_doc  Document object to get window for.
- * @return {Window} The window associated with the given document.
+ * @return {!Window} The window associated with the given document.
  */
 goog.dom.getWindow = function(opt_doc) {
   // TODO(user): This should not take an argument.
