@@ -289,7 +289,8 @@ goog.ui.SubMenu.prototype.handleKeyEvent = function(e) {
   if (!this.hasKeyboardControl_) {
     // Menu item doesn't have keyboard control and the right key was pressed.
     // So open take keyboard control and open the sub menu.
-    if (this.isEnabled() && keyCode == goog.events.KeyCodes.RIGHT) {
+    if (this.isEnabled() && (keyCode == goog.events.KeyCodes.RIGHT ||
+        keyCode == this.getMnemonic())) {
       this.showSubMenu();
       this.getMenu().highlightFirst();
       this.clearTimers();

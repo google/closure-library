@@ -124,6 +124,7 @@ function testKeyHandling() {
   plainItem.setMnemonic(KeyCodes.F);
 
   var subMenuItem1 = menu.getChildAt(1);
+  subMenuItem1.setMnemonic(KeyCodes.S);
   var subMenuItem1Menu = subMenuItem1.getMenu();
   menu.setHighlighted(plainItem);
 
@@ -146,6 +147,20 @@ function testKeyHandling() {
   assertFalse(
       'Expected RIGHT key to be handled',
       fireKeySequence(subMenuItem1.getElement(), KeyCodes.RIGHT));
+  assertTrue(subMenuItem1Menu.isVisible());
+
+  assertFalse(
+      'Expected LEFT key to be handled',
+      fireKeySequence(subMenuItem1.getElement(), KeyCodes.LEFT));
+  assertFalse(subMenuItem1Menu.isVisible());
+
+  assertFalse(
+      'Expected UP key to be handled',
+      fireKeySequence(subMenuItem1.getElement(), KeyCodes.UP));
+
+  assertFalse(
+      'Expected S key to be handled',
+      fireKeySequence(plainItem.getElement(), KeyCodes.S));
   assertTrue(subMenuItem1Menu.isVisible());
 }
 
