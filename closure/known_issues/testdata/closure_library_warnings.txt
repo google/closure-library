@@ -241,7 +241,7 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/edi
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/tweak/testhelpers.js:49: ERROR - Access to private property registry_ of goog.tweak not allowed here.
   goog.tweak.registry_ = registry;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/advancedtooltip.js:317: ERROR - Access to private property startHideTimer_ of goog.ui.AdvancedTooltip not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/advancedtooltip.js:318: ERROR - Access to private property startHideTimer_ of goog.ui.AdvancedTooltip not allowed here.
     this.startHideTimer_();
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js:61: ERROR - Overriding private property of goog.ui.PopupBase.prototype.
