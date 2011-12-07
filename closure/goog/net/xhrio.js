@@ -120,7 +120,7 @@ goog.net.XhrIo.CONTENT_TYPE_HEADER = 'Content-Type';
  * The pattern matching the 'http' and 'https' URI schemes
  * @type {!RegExp}
  */
-goog.net.XhrIo.HTTP_SCHEME_PATTERN = /^https?:?$/i;
+goog.net.XhrIo.HTTP_SCHEME_PATTERN = /^https?$/i;
 
 
 /**
@@ -824,22 +824,8 @@ goog.net.XhrIo.prototype.isSuccess = function() {
  * @private
  */
 goog.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
-  var lastUriScheme = goog.isString(this.lastUri_) ?
-      goog.uri.utils.getScheme(this.lastUri_) :
-      (/** @type {!goog.Uri} */ this.lastUri_).getScheme();
-  // if it's an absolute URI, we're done.
-  if (lastUriScheme) {
-    return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(lastUriScheme);
-  }
-
-  // if it's a relative URI, it inherits the scheme of the page.
-  if (self.location) {
-    return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(self.location.protocol);
-  } else {
-    // This case can occur from a web worker in Firefox 3.5 . All other browsers
-    // with web workers support self.location from the worker.
-    return true;
-  }
+  var scheme = goog.uri.utils.getEffectiveScheme(String(this.lastUri_));
+  return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(scheme);
 };
 
 

@@ -310,6 +310,7 @@ goog.addDependency('jsaction/jsprops.js', ['goog.jsaction.jsprops'], ['goog.json
 goog.addDependency('jsaction/replay.js', ['goog.jsaction.replay'], ['goog.asserts', 'goog.jsaction.EventContract']);
 goog.addDependency('jsaction/util.js', ['goog.jsaction.util'], []);
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Serializer'], []);
+goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.async.Deferred', 'goog.debug.Error', 'goog.json', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.string', 'goog.uri.utils']);
 goog.addDependency('locale/countries.js', ['goog.locale.countries'], []);
 goog.addDependency('locale/defaultlocalenameconstants.js', ['goog.locale.defaultLocaleNameConstants'], []);
 goog.addDependency('locale/genericfontnames.js', ['goog.locale.genericFontNames'], []);
