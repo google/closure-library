@@ -83,6 +83,10 @@ function newCleanupGuard() {
   }
 }
 
+function getScriptElement(result) {
+  return result.deferred_.defaultScope_.script_;
+}
+
 
 // Check that send function is sane when things go well.
 function testSend() {
@@ -98,7 +102,7 @@ function testSend() {
   var payload = {atisket: 'atasket', basket: 'yellow'};
   var result = jsonp.send(payload, userCallback);
 
-  var script = goog.dom.getElement(result.id_);
+  var script = getScriptElement(result);
 
   assertNotNull('script created', script);
   assertEquals('encoding is utf-8', 'UTF-8', script.charset);
@@ -108,14 +112,10 @@ function testSend() {
   assertTrue('server url', script.src.indexOf(fakeUrl) == 0);
 
   // Now, we have to track down the name of the callback function, so we can
-  // call that to simulate a returned request.
+  // call that to simulate a returned request + verify that the callback
+  // function does not break if it receives a second unexpected parameter.
   var callbackName = /callback=([^&]+)/.exec(script.src)[1];
   var callbackFunc = eval(callbackName);
-  callbackFunc({some: 'data', another: ['data', 'right', 'here']});
-  assertEquals('input was received', 'right', replyReceived.another[1]);
-
-  // Verify that the same callback function does not break if it receives a
-  // second unexpected parameter.
   callbackFunc({some: 'data', another: ['data', 'right', 'here']},
       'unexpected');
   assertEquals('input was received', 'right', replyReceived.another[1]);
@@ -144,7 +144,7 @@ function testSendWhenCallbackHasTwoParameters() {
 
   var payload = {atisket: 'atasket', basket: 'yellow'};
   var result = jsonp.send(payload, userCallback);
-  var script = goog.dom.getElement(result.id_);
+  var script = getScriptElement(result);
 
   // Test a callback function that receives two parameters.
   var callbackName = /callback=([^&]+)/.exec(script.src)[1];
@@ -178,7 +178,7 @@ function testSendWithCallbackParamValue() {
   var payload = {atisket: 'atasket', basket: 'yellow'};
   var result = jsonp.send(payload, userCallback, undefined, 'dummyId');
 
-  var script = goog.dom.getElement(result.id_);
+  var script = getScriptElement(result);
 
   assertNotNull('script created', script);
   assertEquals('encoding is utf-8', 'UTF-8', script.charset);
@@ -193,12 +193,6 @@ function testSendWithCallbackParamValue() {
   // name.
   var callbackFunc = _callbacks_.dummyId;
   callbackFunc({some: 'data', another: ['data', 'right', 'here']});
-  assertEquals('input was received', 'right', replyReceived.another[1]);
-
-  // Verify that the same callback function does not break if it receives a
-  // second unexpected parameter.
-  callbackFunc({some: 'data', another: ['data', 'right', 'here']},
-      'unexpected');
   assertEquals('input was received', 'right', replyReceived.another[1]);
 
   // Because the callbackFunc calls cleanUp_ and that calls setTimeout which
@@ -289,7 +283,7 @@ function testPayloadParameters() {
     'bar': 'baz'
   });
 
-  var script = goog.dom.getElement(result.id_);
+  var script = getScriptElement(result);
   assertEquals('Payload parameters should have been added to url.',
                fakeUrl + '?foo=3&bar=baz',
                script.src);
@@ -311,9 +305,14 @@ function testOptionalPayload() {
   var jsonp = new goog.net.Jsonp(fakeUrl);
   var result = jsonp.send(null, null, errorCallback);
 
-  var script = goog.dom.getElement(result.id_);
+  var script = getScriptElement(result);
   assertEquals('Parameters should not have been added to url.',
                fakeUrl, script.src);
+
+  // Clear the script hooks because we triggered the error manually.
+  script.onload = goog.nullFunction;
+  script.onerror = goog.nullFunction;
+  script.onreadystatechange = goog.nullFunction;
 
   var errorCallbackArguments = errorCallback.getLastCall().getArguments();
   assertEquals(1, errorCallbackArguments.length);
