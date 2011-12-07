@@ -50,8 +50,8 @@ function testHttpBarChartRequest() {
 
 function testHttpsBarChartRequest() {
   var bar = new goog.ui.ServerChart(
-      goog.ui.ServerChart.ChartType.BAR,
-      180,
+      goog.ui.ServerChart.ChartType.BAR, 
+      180, 
       104,
       null,
       goog.ui.ServerChart.CHART_SERVER_HTTPS_URI);
@@ -172,23 +172,11 @@ function testClearDataSets() {
   var chart = new goog.ui.ServerChart(
       goog.ui.ServerChart.ChartType.BAR, 180, 104);
   tryToCreateBarChart(chart);
-  var queryBefore = chart.getUri().getQueryData().clone();
+  var uriBefore = chart.getUri().toString();
   chart.clearDataSets();
   tryToCreateBarChart(chart);
-  var queryAfter = chart.getUri().getQueryData();
-
-  var keysBefore = queryBefore.getKeys();
-  var keysAfter = queryAfter.getKeys();
-
-  assertEquals('Keys before and after should be the same length',
-      keysAfter.length, keysBefore.length);
-
-  for (var i = 0; i < keysBefore.length; i++) {
-    var k = keysBefore[i];
-    assertArrayEquals(
-        'Values for "' + k + '" should be the same for both queries',
-        queryBefore.getValues(k), queryAfter.getValues(k));
-  }
+  var uriAfter = chart.getUri().toString();
+  assertEquals(uriBefore, uriAfter);
 }
 
 function testMultipleDatasetsTextEncoding() {
@@ -492,7 +480,7 @@ function testSetBackgroundFill() {
     area: 'c',
     effect: 's',
     color: '00ff00'}, chart.getBackgroundFill()[1]);
-
+  
   chart.setParameterValue(goog.ui.ServerChart.UriParam.BACKGROUND_FILL,
       'bg,s,00ff00|c,lg,45,ff00ff|bg,s,ff00ff');
   assertEquals(0, chart.getBackgroundFill().length);
