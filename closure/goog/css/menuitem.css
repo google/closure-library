@@ -94,3 +94,14 @@
   right: 0;
   text-align: right;
 }
+
+/* Mnemonic styles. */
+.goog-menuitem-mnemonic-hint {
+  text-decoration: underline;
+}
+
+.goog-menuitem-mnemonic-separator {
+  color: #999;
+  font-size: 12px;
+  padding-left: 4px;
+}

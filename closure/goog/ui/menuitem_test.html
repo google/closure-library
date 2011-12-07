@@ -309,6 +309,30 @@ See the COPYING file for details.
           item.getCaption());
     }
 
+    function testGetSetCaptionForItemWithMnemonics() {
+      var contentArr = [];
+      contentArr.push(goog.dom.createDom('span',
+          goog.getCssName('goog-menuitem-mnemonic-hint'), 'H'));
+      contentArr.push(goog.dom.createTextNode('ello'));
+      item.setCaption(contentArr);
+      assertEquals('getCaption() must not return hint markup', 'Hello',
+          item.getCaption());
+
+      contentArr = [];
+      contentArr.push(goog.dom.createTextNode('Hello'));
+      contentArr.push(goog.dom.createDom('span',
+          goog.getCssName('goog-menuitem-mnemonic-separator'), '(',
+          goog.dom.createDom('span',
+              goog.getCssName('goog-menuitem-mnemonic-hint'), 'J'), ')'));
+      item.setCaption(contentArr);
+      assertEquals('getCaption() must not return the paranethetical mnemonic',
+          'Hello', item.getCaption());
+
+      item.setCaption('');
+      assertEquals('getCaption() must return the empty string', '',
+      item.getCaption());
+    }
+
     function testHandleKeyEventInternalWithMnemonic() {
       item.performActionInternal =
           goog.testing.recordFunction(item.performActionInternal);
