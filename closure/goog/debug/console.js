@@ -157,7 +157,7 @@ goog.debug.Console.instance = null;
 /**
  * The console to which to log.  This is a property so it can be mocked out in
  * unit testing.
- * @type {!Object}
+ * @type {Object}
  * @private
  */
 goog.debug.Console.console_ = window.console;
