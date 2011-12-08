@@ -358,6 +358,56 @@ function testMaybeCreateDummyTargetForPosition_NegativePositions() {
   assertTrue(testGroup.isInside_(1, 5, target.box_));
 }
 
+function testMaybeCreateDummyTargetOutsideScrollableContainer() {
+  var targets = [
+    { box_: new goog.math.Box(0, 3,  10, 1) },
+    { box_: new goog.math.Box(20, 3,  30, 1) }
+  ];
+  var target = targets[0];
+
+  var testGroup = new goog.fx.AbstractDragDrop();
+  testGroup.targetList_ = targets;
+  testGroup.targetBox_ = new goog.math.Box(0, 3, 30, 1);
+
+  testGroup.addScrollableContainer(document.getElementById('container1'));
+  var container = testGroup.scrollableContainers_[0];
+  container.containedTargets_.push(target);
+  container.box_ = new goog.math.Box(0, 3, 5, 1); // shorter than target
+  target.scrollableContainer_ = container;
+
+  // mouse cursor is below scrollable target but not the actual target
+  var dummyTarget = testGroup.maybeCreateDummyTargetForPosition_(2, 7);
+  // dummy target should not overlap the scrollable container
+  assertFalse(boxOverlaps(dummyTarget.box_, container.box_));
+  // but should overlap the actual target, since not all of it is visible
+  assertTrue(boxOverlaps(dummyTarget.box_, target.box_));
+}
+
+function testMaybeCreateDummyTargetInsideScrollableContainer() {
+  var targets = [
+    { box_: new goog.math.Box(0, 3,  10, 1) },
+    { box_: new goog.math.Box(20, 3,  30, 1) }
+  ];
+  var target = targets[0];
+
+  var testGroup = new goog.fx.AbstractDragDrop();
+  testGroup.targetList_ = targets;
+  testGroup.targetBox_ = new goog.math.Box(0, 3, 30, 1);
+
+  testGroup.addScrollableContainer(document.getElementById('container1'));
+  var container = testGroup.scrollableContainers_[0];
+  container.containedTargets_.push(target);
+  container.box_ = new goog.math.Box(0, 3, 20, 1); // longer than target
+  target.scrollableContainer_ = container;
+
+  // mouse cursor is below both the scrollable and the actual target
+  var dummyTarget = testGroup.maybeCreateDummyTargetForPosition_(2, 15);
+  // dummy target should overlap the scrollable container
+  assertTrue(boxOverlaps(dummyTarget.box_, container.box_));
+  // but not overlap the actual target
+  assertFalse(boxOverlaps(dummyTarget.box_, target.box_));
+}
+
 function testCalculateTargetBox() {
   var testGroup = new goog.fx.AbstractDragDrop();
   testGroup.targetList_ = [];

@@ -908,7 +908,7 @@ goog.fx.AbstractDragDrop.prototype.calculateTargetBox_ = function(box) {
 /**
  * Creates a dummy target for the given cursor position. The assumption is to
  * create as big dummy target box as possible, the only constraints are:
- * - The dummy targert box cannot overlap any of real target boxes.
+ * - The dummy target box cannot overlap any of real target boxes.
  * - The dummy target has to contain a point with current mouse coordinates.
  *
  * NOTE: For performance reasons the box construction algorithm is kept simple
@@ -922,6 +922,10 @@ goog.fx.AbstractDragDrop.prototype.calculateTargetBox_ = function(box) {
  * - Mouse pointer is in the bounding box of real target boxes.
  * - None of the boxes have negative coordinate values.
  * - Mouse pointer is not contained by any of "real target" boxes.
+ * - For targets inside a scrollable container, the box used is the
+ *   intersection of the scrollable container's box and the target's box.
+ *   This is because the part of the target that extends outside the scrollable
+ *   container should not be used in the clipping calculations.
  *
  * b) Outline
  * - Initialize the fake target to the bounding box of real targets.
@@ -975,6 +979,18 @@ goog.fx.AbstractDragDrop.prototype.maybeCreateDummyTargetForPosition_ =
   // Clip the fake target based on mouse position and DnD target boxes.
   for (var i = 0, target; target = this.targetList_[i]; i++) {
     var box = target.box_;
+
+    if (target.scrollableContainer_) {
+      // If the target has a scrollable container, use the intersection of that
+      // container's box and the target's box.
+      var scrollBox = target.scrollableContainer_.box_;
+
+      box = new goog.math.Box(
+          Math.max(box.top, scrollBox.top),
+          Math.min(box.right, scrollBox.right),
+          Math.min(box.bottom, scrollBox.bottom),
+          Math.max(box.left, scrollBox.left));
+    }
 
     // Calculate clipping coordinates for horizontal and vertical axis.
     // The clipping coordinate is calculated by projecting fake target box,
