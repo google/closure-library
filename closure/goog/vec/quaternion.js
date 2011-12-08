@@ -23,8 +23,8 @@
 goog.provide('goog.vec.Quaternion');
 
 goog.require('goog.vec');
+goog.require('goog.vec.Vec3');
 goog.require('goog.vec.Vec4');
-
 
 
 /**
@@ -204,6 +204,62 @@ goog.vec.Quaternion.concat = function(quat0, quat1, resultQuat) {
   resultQuat[1] = w0 * y1 - x0 * z1 + y0 * w1 + z0 * x1;
   resultQuat[2] = w0 * z1 + x0 * y1 - y0 * x1 + z0 * w1;
   resultQuat[3] = w0 * w1 - x0 * x1 - y0 * y1 - z0 * z1;
+};
+
+
+/**
+ * Generates a unit quaternion from the given angle-axis rotation pair.
+ * The rotation axis is not required to be a unit vector, but should
+ * have non-zero length.  The angle should be specified in radians.
+ *
+ * @param {number} angle The angle (in radians) to rotate about the axis.
+ * @param {goog.vec.ArrayType} axis Unit vector specifying the axis of rotation.
+ * @param {goog.vec.ArrayType} quat Unit quaternion to store the result.
+ */
+goog.vec.Quaternion.fromAngleAxis = function(angle, axis, quat) {
+  // Normalize the axis of rotation.
+  goog.vec.Vec3.normalize(axis, axis);
+
+  var halfAngle = 0.5 * angle;
+  var sin = Math.sin(halfAngle);
+  goog.vec.Quaternion.setFromValues(
+      quat, sin * axis[0], sin * axis[1], sin * axis[2], Math.cos(halfAngle));
+
+  // Normalize the resulting quaternion.
+  goog.vec.Quaternion.normalize(quat, quat);
+};
+
+
+/**
+ * Generates an angle-axis rotation pair from a unit quaternion.
+ * The quaternion is assumed to be of unit length.  The calculated
+ * values are returned via the passed 'axis' object and the 'angle'
+ * number returned by the function itself. The returned rotation axis
+ * is a non-zero length unit vector, and the returned angle is in
+ * radians in the range of [-PI, +PI].
+ *
+ * @param {goog.vec.ArrayType} quat Unit quaternion to convert.
+ * @param {goog.vec.ArrayType} axis Vector to store the returned rotation axis.
+ * @return {number} angle Angle (in radians) to rotate about 'axis'.
+ *     The range of the returned angle is [-PI, +PI].
+ */
+goog.vec.Quaternion.toAngleAxis = function(quat, axis) {
+  var angle = 2 * Math.acos(quat[3]);
+  var magnitude = Math.min(Math.max(1 - quat[3] * quat[3], 0), 1);
+  if (magnitude < goog.vec.EPSILON) {
+    // This is nearly an identity rotation, so just use a fixed +X axis.
+    goog.vec.Vec3.setFromValues(axis, 1, 0, 0);
+  } else {
+    // Compute the proper rotation axis.
+    goog.vec.Vec3.setFromValues(axis, quat[0], quat[1], quat[2]);
+    // Make sure the rotation axis is of unit length.
+    goog.vec.Vec3.normalize(axis, axis);
+  }
+  // Adjust the range of the returned angle to [-PI, +PI].
+  if (angle > Math.PI) {
+    angle -= 2 * Math.PI;
+  }
+  return angle;
 };
 
 

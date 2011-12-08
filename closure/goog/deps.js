@@ -771,7 +771,7 @@ goog.addDependency('vec/mat3.js', ['goog.vec.Mat3'], ['goog.vec', 'goog.vec.Vec3
 goog.addDependency('vec/mat4.js', ['goog.vec.Mat4'], ['goog.vec', 'goog.vec.Vec3', 'goog.vec.Vec4']);
 goog.addDependency('vec/matrix3.js', ['goog.vec.Matrix3'], ['goog.vec']);
 goog.addDependency('vec/matrix4.js', ['goog.vec.Matrix4'], ['goog.vec', 'goog.vec.Vec3', 'goog.vec.Vec4']);
-goog.addDependency('vec/quaternion.js', ['goog.vec.Quaternion'], ['goog.vec', 'goog.vec.Vec4']);
+goog.addDependency('vec/quaternion.js', ['goog.vec.Quaternion'], ['goog.vec', 'goog.vec.Vec3', 'goog.vec.Vec4']);
 goog.addDependency('vec/ray.js', ['goog.vec.Ray'], ['goog.vec.Vec3']);
 goog.addDependency('vec/vec.js', ['goog.vec'], ['goog.vec.Float32Array']);
 goog.addDependency('vec/vec3.js', ['goog.vec.Vec3'], ['goog.vec']);
