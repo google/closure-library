@@ -92,7 +92,7 @@ goog.date.relative.formatMonth_ = function(date) {
 
 /**
  * Returns a date in short-time format, e.g. 2:50 PM.
- * @param {Date} date The date object.
+ * @param {Date|goog.date.DateTime} date The date object.
  * @return {string} The formatted string.
  * @private
  */
@@ -107,7 +107,7 @@ goog.date.relative.formatShortTime_ = function(date) {
 
 /**
  * Returns a date in full date format, e.g. Tuesday, March 24, 2009.
- * @param {Date} date The date object.
+ * @param {Date|goog.date.DateTime} date The date object.
  * @return {string} The formatted string.
  * @private
  */
@@ -239,7 +239,7 @@ goog.date.relative.formatDay = function(dateMs) {
  *   Monday, February 27, 2009 (4 days ago)
  *   Tuesday, March 20, 2005    // Too long ago for a relative date.
  *
- * @param {Date} date A date object.
+ * @param {Date|goog.date.DateTime} date A date object.
  * @param {string=} opt_shortTimeMsg An optional short time message can be
  *     provided if available, so that it's not recalculated in this function.
  * @param {string=} opt_fullDateMsg An optional date message can be
@@ -262,7 +262,7 @@ goog.date.relative.getDateString = function(
  * the above {@see #getDateString} method who relied on it protecting against
  * future dates.
  *
- * @param {Date} date A timestamp or date object.
+ * @param {Date|goog.date.DateTime} date A date object.
  * @param {string=} opt_shortTimeMsg An optional short time message can be
  *     provided if available, so that it's not recalculated in this function.
  * @param {string=} opt_fullDateMsg An optional date message can be
@@ -284,7 +284,7 @@ goog.date.relative.getPastDateString = function(
  *   Monday, February 27, 2009 (4 days ago)
  *   Tuesday, March 20, 2005    // Too long ago for a relative date.
  *
- * @param {Date} date A timestamp or date object.
+ * @param {Date|goog.date.DateTime} date A date object.
  * @param {function(number) : string} relativeFormatter Function to use when
  *     formatting the relative date.
  * @param {string=} opt_shortTimeMsg An optional short time message can be
@@ -306,6 +306,7 @@ goog.date.relative.getDateString_ = function(
 
   var delta = Math.floor((goog.now() - dateMs) / goog.date.relative.MINUTE_MS_);
   if (delta < 60 * 24) {
+    // TODO(user): this call raises an exception if date is a goog.date.Date.
     return (opt_shortTimeMsg || goog.date.relative.formatShortTime_(date)) +
         relativeDate;
   } else {

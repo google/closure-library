@@ -18,6 +18,7 @@ See the COPYING file for details.
   goog.LOCALE = 'en_US';
   goog.require('goog.testing.jsunit');
   goog.require('goog.date.relative');
+  goog.require('goog.date.DateTime');
 </script>
 </head>
 <body>
@@ -96,15 +97,22 @@ See the COPYING file for details.
 
     assertEquals('2:21 PM (10 minutes ago)',
                  fn(new Date(baseTime - 10 * 60 * 1000)));
-
     assertEquals('4:31 AM (10 hours ago)',
                  fn(new Date(baseTime - 10 * 60 * 60 * 1000)));
-
     assertEquals('Friday, March 13, 2009 (10 days ago)',
                  fn(new Date(baseTime - 10 * 24 * 60 * 60 * 1000)));
-
     assertEquals('Tuesday, March 3, 2009',
                  fn(new Date(baseTime - 20 * 24 * 60 * 60 * 1000)));
+
+    // Test that goog.date.DateTime can also be accepted as input.
+    assertEquals('2:21 PM (10 minutes ago)',
+                 fn(gdatetime(baseTime - 10 * 60 * 1000)));
+    assertEquals('4:31 AM (10 hours ago)',
+                 fn(gdatetime(baseTime - 10 * 60 * 60 * 1000)));
+    assertEquals('Friday, March 13, 2009 (10 days ago)',
+                 fn(gdatetime(baseTime - 10 * 24 * 60 * 60 * 1000)));
+    assertEquals('Tuesday, March 3, 2009',
+                 fn(gdatetime(baseTime - 20 * 24 * 60 * 60 * 1000)));
   }
 
   function testGetPastDateString() {
@@ -113,10 +121,20 @@ See the COPYING file for details.
                  fn(new Date(baseTime - 10 * 60 * 1000)));
     assertEquals('2:41 PM (0 minutes ago)',
                  fn(new Date(baseTime + 10 * 60 * 1000)));
+
+    // Test that goog.date.DateTime can also be accepted as input.
+    assertEquals('2:21 PM (10 minutes ago)',
+                 fn(gdatetime(baseTime - 10 * 60 * 1000)));
+    assertEquals('2:41 PM (0 minutes ago)',
+                 fn(gdatetime(baseTime + 10 * 60 * 1000)));
+  }
+
+  function gdatetime(timestamp) {
+    return new goog.date.DateTime(new Date(timestamp));
   }
 
   function timestamp(str) {
-    return new Date(str).getTime()
+    return new Date(str).getTime();
   }
 
 </script>
