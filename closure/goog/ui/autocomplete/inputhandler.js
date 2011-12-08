@@ -127,6 +127,14 @@ goog.ui.AutoComplete.InputHandler = function(opt_separators, opt_literals,
   goog.Disposable.call(this);
   var throttleTime = opt_throttleTime || 150;
 
+  /**
+   * Whether this input accepts multiple values
+   * @type {boolean}
+   * @private
+   */
+  this.multi_ = opt_multi != null ? opt_multi : true;
+
+  // Set separators depends on this.multi_ being set correctly
   this.setSeparators(goog.isDefAndNotNull(opt_separators) ? opt_separators :
       goog.ui.AutoComplete.InputHandler.STANDARD_LIST_SEPARATORS);
 
@@ -137,13 +145,6 @@ goog.ui.AutoComplete.InputHandler = function(opt_separators, opt_literals,
    * @private
    */
   this.literals_ = opt_literals || '';
-
-  /**
-   * Whether this input accepts multiple values
-   * @type {boolean}
-   * @private
-   */
-  this.multi_ = opt_multi != null ? opt_multi : true;
 
   /**
    * Whether to prevent the default behavior (moving focus to another element)

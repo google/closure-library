@@ -33,17 +33,22 @@ See the COPYING file for details.
     this.focus = function() {}
     this.blur = function() {}
     this.ownerDocument = document;
+    this.selectionStart = 0;
   }
   goog.inherits(MockElement, goog.events.EventTarget);
 
 
   function MockAutoCompleter() {
+    this.setToken = null;
     this.setTokenWasCalled = false;
     this.selectHilitedWasCalled = false;
     this.dismissWasCalled = false;
     this.getTarget = function() { return mockElement };
     this.setTarget = function() { };
-    this.setToken = function() { this.setTokenWasCalled = true; };
+    this.setToken = function(token) {
+      this.setTokenWasCalled = true;
+      this.setToken = token;
+    };
     this.selectHilited = function() {
       this.selectHilitedWasCalled = true;
       return true; // Success.
@@ -566,6 +571,38 @@ See the COPYING file for details.
     ih.setTokenText('bar', true /* multi-row */);
 
     assertEquals('foo bar ', mockElement.value);
+  }
+
+  function testEmptyTokenWithSeparator() {
+    var ih = new goog.ui.AutoComplete.InputHandler();
+    var mockAutoCompleter = new MockAutoCompleter();
+    ih.ac_ = mockAutoCompleter;
+    ih.activeElement_ = mockElement;
+    mockElement.value = ', ,';
+    // Sets cursor position before the second comma
+    goog.dom.selection.setStart(mockElement, 2);
+
+    ih.update();
+    assertTrue('update should call setToken on selectRow',
+                mockAutoCompleter.setTokenWasCalled);
+    assertEquals('update should be called with empty string',
+                '', mockAutoCompleter.setToken);
+  }
+
+  function testNonEmptyTokenWithSeparator() {
+    var ih = new goog.ui.AutoComplete.InputHandler();
+    var mockAutoCompleter = new MockAutoCompleter();
+    ih.ac_ = mockAutoCompleter;
+    ih.activeElement_ = mockElement;
+    mockElement.value = ', joe ,';
+    // Sets cursor position before the second comma
+    goog.dom.selection.setStart(mockElement, 5);
+
+    ih.update();
+    assertTrue('update should call setToken on selectRow',
+                mockAutoCompleter.setTokenWasCalled);
+    assertEquals('update should be called with expected string',
+                'joe', mockAutoCompleter.setToken);
   }
 
   function testGetThrottleTime() {
