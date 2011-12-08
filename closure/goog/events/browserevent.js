@@ -267,8 +267,13 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
 
   this.relatedTarget = relatedTarget;
 
-  this.offsetX = e.offsetX !== undefined ? e.offsetX : e.layerX;
-  this.offsetY = e.offsetY !== undefined ? e.offsetY : e.layerY;
+  // Webkit emits a lame warning whenever layerX/layerY is accessed.
+  // http://code.google.com/p/chromium/issues/detail?id=101733
+  this.offsetX = (goog.userAgent.WEBKIT || e.offsetX !== undefined) ?
+      e.offsetX : e.layerX;
+  this.offsetY = (goog.userAgent.WEBKIT || e.offsetY !== undefined) ?
+      e.offsetY : e.layerY;
+
   this.clientX = e.clientX !== undefined ? e.clientX : e.pageX;
   this.clientY = e.clientY !== undefined ? e.clientY : e.pageY;
   this.screenX = e.screenX || 0;
