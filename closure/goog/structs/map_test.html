@@ -38,12 +38,6 @@ function getMap() {
   return m;
 }
 
-function testPeopleWhoExpectNonStringKeysGetThem() {
-  var m = new goog.structs.Map();
-  m.set(4, 4);
-  assertEquals(m.getKeys()[0], 4);
-}
-
 function testGetCount() {
   var m = getMap();
   assertEquals('count, should be 4', m.getCount(), 4);
@@ -128,10 +122,11 @@ function testRemove() {
   }
 
   for (var i = 0; i < 1000; i++) {
+    assertTrue(m.keys_.length <= 2 * m.getCount());
     m.remove(i);
-  }
-  assertTrue(m.isEmpty());
-  assertEquals('', m.getKeys().join(''));
+ }
+ assertTrue(m.isEmpty());
+ assertEquals('', m.getKeys().join(''));
 }
 
 
@@ -412,7 +407,6 @@ function testEqualsWithDefaultEqualityFn() {
   assertTrue('maps are the same', map1.equals(map2));
 
   map2.set('d', '3');
-
   assertFalse('maps have 3 and \'3\'', map1.equals(map2));
 }
 
