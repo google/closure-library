@@ -353,7 +353,7 @@ goog.ui.PopupMenu.prototype.getToggleMode = function() {
 goog.ui.PopupMenu.prototype.showWithPosition = function(position,
     opt_menuCorner, opt_margin, opt_anchor) {
   var isVisible = this.isVisible();
-  if ((isVisible || this.wasRecentlyHidden()) && this.toggleMode_) {
+  if (this.isOrWasRecentlyVisible() && this.toggleMode_) {
     this.hide();
     return;
   }
@@ -465,6 +465,17 @@ goog.ui.PopupMenu.prototype.hide = function() {
     this.lastHide_ = goog.now();
     this.currentAnchor_ = null;
   }
+};
+
+
+/**
+ * Returns whether the menu is currently visible or was visible within about
+ * 150 ms ago.  This stops the menu toggling back on if the toggleMode == false.
+ * @return {boolean} Whether the popup is currently visible or was visible
+ *     within about 150 ms ago.
+ */
+goog.ui.PopupMenu.prototype.isOrWasRecentlyVisible = function() {
+  return this.isVisible() || this.wasRecentlyHidden();
 };
 
 
