@@ -688,7 +688,18 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
 
     // Create a regular expression to match a token at the beginning of a line
     // or preceeded by non-alpha-numeric characters
-    var re = new RegExp('(.*?)(^|\\W+)(' + token + ')', 'gi');
+    // NOTE(user): this used to have a (^|\\W+) clause where it now has \\b
+    // but it caused various browsers to hang on really long strings. It is
+    // also excessive, because .*?\W+ is the same as .*?\b since \b already
+    // checks that the character before the token is a non-word character
+    // (the only time the regexp is different is if token begins with a
+    // non-word character), and ^ matches the start of the line or following
+    // a line terminator character, which is also \W. The initial group cannot
+    // just be .*? as it will miss line terminators (which is what the \W+
+    // clause used to match). The non-greedy qualifier ensures that we
+    // always find the first match of the token. Without it, a token of 'A'
+    // will match the third A in 'Amanda Annie Anderson' in renderer_test.html
+    var re = new RegExp('((?:.|[\\r\\n])*?)\\b(' + token + ')', 'gi');
     var textNodes = [];
     var lastIndex = 0;
 
@@ -701,26 +712,25 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
       numMatches++;
       textNodes.push(match[1]);
       textNodes.push(match[2]);
-      textNodes.push(match[3]);
       lastIndex = re.lastIndex;
       match = re.exec(text);
     }
     textNodes.push(text.substring(lastIndex));
 
-    // Replace the tokens with bolded text.  Each set of three textNodes
-    // (starting at index idx) includes two nodes of text before the bolded
-    // token, then a third node (at idx + 2) consisting of what should be
+    // Replace the tokens with bolded text.  Each pair of textNodes
+    // (starting at index idx) includes a node of text before the bolded
+    // token, and a node (at idx + 1) consisting of what should be
     // enclosed in bold tags.
     if (textNodes.length > 1) {
       var maxNumToBold = !this.highlightAllTokens_ ? 1 : numMatches;
       for (var i = 0; i < maxNumToBold; i++) {
-        var idx = 3 * i;
+        var idx = 2 * i;
 
-        node.nodeValue = textNodes[idx] + textNodes[idx + 1];
+        node.nodeValue = textNodes[idx];
         var boldTag = this.dom_.createElement('b');
         boldTag.className = this.highlightedClassName;
         this.dom_.appendChild(boldTag,
-            this.dom_.createTextNode(textNodes[idx + 2]));
+            this.dom_.createTextNode(textNodes[idx + 1]));
         boldTag = node.parentNode.insertBefore(boldTag, node.nextSibling);
         node.parentNode.insertBefore(this.dom_.createTextNode(''),
             boldTag.nextSibling);
@@ -728,7 +738,7 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
       }
 
       // Append the remaining text nodes to the end.
-      var remainingTextNodes = goog.array.slice(textNodes, maxNumToBold * 3);
+      var remainingTextNodes = goog.array.slice(textNodes, maxNumToBold * 2);
       node.nodeValue = remainingTextNodes.join('');
     } else if (rest) {
       this.hiliteMatchingText_(node, rest);
@@ -760,17 +770,18 @@ goog.ui.AutoComplete.Renderer.prototype.getTokenRegExp_ =
     return token;
   }
 
+  if (goog.isArray(tokenOrArray)) {
+    // Remove invalid tokens from the array, which may leave us with nothing.
+    tokenOrArray = goog.array.filter(tokenOrArray, function(str) {
+      return !goog.string.isEmptySafe(str);
+    });
+  }
+
   // If highlighting all tokens, join them with '|' so the regular expression
   // will match on any of them.
   if (this.highlightAllTokens_) {
     if (goog.isArray(tokenOrArray)) {
-      // Remove empty or whitespace entries from the array so the joined array
-      // will only contain valid tokens.
-      var tokenArray = goog.array.filter(tokenOrArray, function(str) {
-        return !goog.string.isEmptySafe(str);
-      });
-
-      tokenArray = goog.array.map(tokenArray, goog.string.regExpEscape);
+      var tokenArray = goog.array.map(tokenOrArray, goog.string.regExpEscape);
       token = tokenArray.join('|');
     } else {
       // Remove excess whitespace from the string so bars will separate valid
@@ -784,11 +795,19 @@ goog.ui.AutoComplete.Renderer.prototype.getTokenRegExp_ =
     // Not highlighting all matching tokens.  If tokenOrArray is a string, use
     // that as the token.  If it is an array, use the first element in the
     // array.
+    // TODO(user): why is this this way?. We should match against all
+    // tokens in the array, but only accept the first match.
     if (goog.isArray(tokenOrArray)) {
       token = tokenOrArray.length > 0 ?
           goog.string.regExpEscape(tokenOrArray[0]) : '';
     } else {
-      token = goog.string.regExpEscape(tokenOrArray);
+      // For the single-match string token, we refuse to match anything if
+      // the string begins with a non-word character, as matches by definition
+      // can only occur at the start of a word. (This also handles the
+      // goog.string.isEmptySafe(tokenOrArray) case.)
+      if (!/^\W/.test(tokenOrArray)) {
+        token = goog.string.regExpEscape(tokenOrArray);
+      }
     }
   }
 
