@@ -690,10 +690,9 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
     // non-word character), and ^ matches the start of the line or following
     // a line terminator character, which is also \W. The initial group cannot
     // just be .*? as it will miss line terminators (which is what the \W+
-    // clause used to match). The non-greedy qualifier ensures that we
-    // always find the first match of the token. Without it, a token of 'A'
-    // will match the third A in 'Amanda Annie Anderson' in renderer_test.html
-    var re = new RegExp('((?:.|[\\r\\n])*?)\\b(' + token + ')', 'gi');
+    // clause used to match). Instead we use [\s\S] to match every character,
+    // including line terminators.
+    var re = new RegExp('([\\s\\S]*?)\\b(' + token + ')', 'gi');
     var textNodes = [];
     var lastIndex = 0;
 
