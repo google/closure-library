@@ -1290,6 +1290,16 @@ function testSetBorderBoxSize() {
              goog.userAgent.IE && goog.userAgent.isVersion('8')) {
     assertEquals('border-box', el.style.boxSizing);
   }
+
+  // Try a negative width/height.
+  setBorderBoxSize(el, new Size(-10, -10));
+
+  // Setting the border box smaller than the borders will just give you
+  // a content box of size 0.
+  // NOTE(nicksantos): I'm not really sure why IE7 is special here.
+  var isIeLt8 = goog.userAgent.IE && !goog.userAgent.isVersion('8');
+  assertEquals(20, el.offsetWidth);
+  assertEquals(isIeLt8 ? 39 : 20, el.offsetHeight);
 }
 
 function testSetContentBoxSize() {
@@ -1336,6 +1346,14 @@ function testSetContentBoxSize() {
              goog.userAgent.IE && goog.userAgent.isVersion('8')) {
     assertEquals('content-box', el.style.boxSizing);
   }
+
+  // Try a negative width/height.
+  setContentBoxSize(el, new Size(-10, -10));
+
+  // NOTE(nicksantos): I'm not really sure why IE7 is special here.
+  var isIeLt8 = goog.userAgent.IE && !goog.userAgent.isVersion('8');
+  assertEquals(20, el.offsetWidth);
+  assertEquals(isIeLt8 ? 39 : 20, el.offsetHeight);
 }
 
 function testGetPaddingBox() {

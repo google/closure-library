@@ -1403,8 +1403,11 @@ goog.style.setBoxSizingSize_ = function(element, size, boxSizing) {
     // Includes IE8 and Opera 9.50+
     style.boxSizing = boxSizing;
   }
-  style.width = size.width + 'px';
-  style.height = size.height + 'px';
+
+  // Setting this to a negative value will throw an exception on IE
+  // (and doesn't do anything different than setting it to 0).
+  style.width = Math.max(size.width, 0) + 'px';
+  style.height = Math.max(size.height, 0) + 'px';
 };
 
 

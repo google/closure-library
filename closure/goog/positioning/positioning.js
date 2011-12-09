@@ -406,7 +406,8 @@ goog.positioning.adjustForViewport_ = function(pos, size, viewport, overflow) {
   if (pos.x < viewport.left &&
       pos.x + size.width > viewport.right &&
       overflow & goog.positioning.Overflow.RESIZE_WIDTH) {
-    size.width -= (pos.x + size.width) - viewport.right;
+    size.width = Math.max(
+        size.width - ((pos.x + size.width) - viewport.right), 0);
     status |= goog.positioning.OverflowStatus.WIDTH_ADJUSTED;
   }
 
@@ -436,7 +437,8 @@ goog.positioning.adjustForViewport_ = function(pos, size, viewport, overflow) {
   if (pos.y >= viewport.top &&
       pos.y + size.height > viewport.bottom &&
       overflow & goog.positioning.Overflow.RESIZE_HEIGHT) {
-    size.height -= (pos.y + size.height) - viewport.bottom;
+    size.height = Math.max(
+        size.height - ((pos.y + size.height) - viewport.bottom), 0);
     status |= goog.positioning.OverflowStatus.HEIGHT_ADJUSTED;
   }
 
