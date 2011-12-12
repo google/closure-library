@@ -315,7 +315,7 @@ goog.ui.AdvancedTooltip.prototype.handleMouseMove = function(event) {
   }
 
   if (startTimer) {
-    this.startHideTimer_();
+    this.startHideTimer();
 
     // Even though the mouse coordinate is not on the tooltip (or nested child),
     // they may have an active element because of a focus event.  Don't let

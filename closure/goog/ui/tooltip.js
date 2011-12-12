@@ -510,7 +510,7 @@ goog.ui.Tooltip.prototype.onHide_ = function() {
   // If this tooltip is inside another tooltip, start hide timer for that
   // tooltip in case this tooltip was the only reason it was still showing.
   if (this.parentTooltip_) {
-    this.parentTooltip_.startHideTimer_();
+    this.parentTooltip_.startHideTimer();
   }
 
   goog.events.unlisten(element, goog.events.EventType.MOUSEOVER,
@@ -793,7 +793,7 @@ goog.ui.Tooltip.prototype.handleMouseOutAndBlur = function(event) {
   this.seenInteraction_ = false;
   if (this.isVisible() && (!event.relatedTarget ||
       !goog.dom.contains(this.getElement(), event.relatedTarget))) {
-    this.startHideTimer_();
+    this.startHideTimer();
   } else {
     this.anchor = undefined;
   }
@@ -826,7 +826,7 @@ goog.ui.Tooltip.prototype.handleTooltipMouseOut = function(event) {
   if (this.activeEl_ == element && (!event.relatedTarget ||
       !goog.dom.contains(element, event.relatedTarget))) {
     this.activeEl_ = null;
-    this.startHideTimer_();
+    this.startHideTimer();
   }
 };
 
@@ -863,10 +863,9 @@ goog.ui.Tooltip.prototype.clearShowTimer = function() {
 
 /**
  * Helper method called to start the close timer.
- *
- * @private
+ * @protected
  */
-goog.ui.Tooltip.prototype.startHideTimer_ = function() {
+goog.ui.Tooltip.prototype.startHideTimer = function() {
   if (this.getState() == goog.ui.Tooltip.State.SHOWING) {
     this.hideTimer = goog.Timer.callOnce(
         goog.bind(this.maybeHide, this, this.anchor), this.getHideDelayMs());
