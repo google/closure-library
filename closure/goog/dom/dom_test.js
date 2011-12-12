@@ -1316,6 +1316,31 @@ function testActiveElementIE() {
   assertEquals(link, goog.dom.getActiveElement(document));
 }
 
+function testParentElement() {
+  var testEl = $('testEl');
+  var bodyEl = goog.dom.getParentElement(testEl);
+  assertNotNull(bodyEl);
+  var htmlEl = goog.dom.getParentElement(bodyEl);
+  assertNotNull(htmlEl);
+  var documentNotAnElement = goog.dom.getParentElement(htmlEl);
+  assertNull(documentNotAnElement);
+
+  var tree = goog.dom.htmlToDocumentFragment(
+      '<div>' +
+      '<p>Some text</p>' +
+      '<blockquote>Some <i>special</i> <b>text</b></blockquote>' +
+      '<address><!-- comment -->Foo</address>' +
+      '</div>');
+  assertNull(goog.dom.getParentElement(tree));
+  pEl = goog.dom.getNextNode(tree);
+  var fragmentRootEl = goog.dom.getParentElement(pEl);
+  assertEquals(tree, fragmentRootEl);
+
+  var detachedEl = goog.dom.createDom('div');
+  var detachedHasNoParent = goog.dom.getParentElement(detachedEl);
+  assertNull(detachedHasNoParent);
+}
+
 /**
  * @return {boolean} Returns true if the userAgent is IE8 or higher.
  */
