@@ -15,6 +15,8 @@
 /**
  * @fileoverview Event Types.
  *
+ * @author arv@google.com (Erik Arvidsson)
+ * @author mirkov@google.com (Mirko Visontai)
  */
 
 

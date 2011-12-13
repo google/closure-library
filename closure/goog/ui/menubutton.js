@@ -15,6 +15,7 @@
 /**
  * @fileoverview A menu button control.
  *
+ * @author attila@google.com (Attila Bodis)
  * @see ../demos/menubutton.html
  */
 
@@ -283,7 +284,7 @@ goog.ui.MenuButton.prototype.performActionInternal = function(e) {
 /**
  * Handles mousedown events over the document.  If the mousedown happens over
  * an element unrelated to the component, hides the menu.
- * TODO(user): Reconcile this with goog.ui.Popup (and handle frames/windows).
+ * TODO(attila): Reconcile this with goog.ui.Popup (and handle frames/windows).
  * @param {goog.events.BrowserEvent} e Mouse event to handle.
  * @protected
  */
@@ -617,7 +618,7 @@ goog.ui.MenuButton.prototype.isFocusablePopupMenu = function() {
  * @param {boolean} focusable Whether the attached menu is focusable.
  */
 goog.ui.MenuButton.prototype.setFocusablePopupMenu = function(focusable) {
-  // TODO(user):  The menu itself should advertise whether it is focusable.
+  // TODO(attila):  The menu itself should advertise whether it is focusable.
   this.isFocusablePopupMenu_ = focusable;
 };
 

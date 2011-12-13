@@ -16,8 +16,9 @@
  * @fileoverview Base class for UI controls such as buttons, menus, menu items,
  * toolbar buttons, etc.  The implementation is based on a generalized version
  * of {@link goog.ui.MenuItem}.
- * TODO(user):  If the renderer framework works well, pull it into Component.
+ * TODO(attila):  If the renderer framework works well, pull it into Component.
  *
+ * @author attila@google.com (Attila Bodis)
  * @see ../demos/control.html
  * @see http://code.google.com/p/closure-library/wiki/IntroToControls
  */
@@ -85,7 +86,7 @@ goog.inherits(goog.ui.Control, goog.ui.Component);
 
 
 // Renderer registry.
-// TODO(user): Refactor existing usages inside Google in a follow-up CL.
+// TODO(attila): Refactor existing usages inside Google in a follow-up CL.
 
 
 /**

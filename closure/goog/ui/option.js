@@ -15,6 +15,7 @@
 /**
  * @fileoverview A menu item class that supports selection state.
  *
+ * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.Option');

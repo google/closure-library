@@ -1001,7 +1001,7 @@ goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
     // readable characters like a, b and c. However pressing ctrl+c and so on
     // also causes charCode to be set.
 
-    // TODO(user): Del at end of field or backspace at beginning should be
+    // TODO(arv): Del at end of field or backspace at beginning should be
     // ignored.
     this.gotGeneratingKey_ = e.charCode ||
         goog.editor.Field.isGeneratingKey_(e, goog.userAgent.GECKO);

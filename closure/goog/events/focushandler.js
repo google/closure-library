@@ -18,6 +18,7 @@
  * propagate consistently, and therefore must be added to the element that is
  * focused, this allows you to attach one listener to an ancester and you will
  * be notified when the focus state changes of ony of its descendants.
+ * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/focushandler.html
  */
 

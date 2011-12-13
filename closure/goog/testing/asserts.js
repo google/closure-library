@@ -443,7 +443,7 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
   // To avoid infinite recursion when the two parameters are self-referential
   // along the same path of properties, keep track of the object pairs already
   // seen in this call subtree, and abort when a cycle is detected.
-  // TODO(user,user): The algorithm still does not terminate in cases
+  // TODO(gboyer,user): The algorithm still does not terminate in cases
   // with exponential recursion, e.g. a binary tree with leaf->root links.
   // Investigate ways to solve this without significant performance loss
   // for the common case.
@@ -452,7 +452,7 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
     if (depth % 2) {
       // Compare with midpoint of seen ("Tortoise and hare" loop detection).
       // http://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare
-      // TODO(user,user): For cases with complex cycles the algorithm
+      // TODO(gboyer,user): For cases with complex cycles the algorithm
       // can take a long time to terminate, look into ways to terminate sooner
       // without adding more than constant-time work in non-cycle cases.
       var mid = depth >> 1;

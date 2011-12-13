@@ -211,7 +211,7 @@ goog.async.Deferred.prototype.pause_ = function() {
  * @private
  */
 goog.async.Deferred.prototype.unpause_ = function() {
-  // TODO(user): Rename
+  // TODO(arv): Rename
   this.paused_--;
   if (this.paused_ == 0 && this.hasFired()) {
     this.fire_();

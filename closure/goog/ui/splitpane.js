@@ -639,7 +639,7 @@ goog.ui.SplitPane.prototype.setFirstComponentSize = function(opt_size) {
 
 /**
  * Dummy object to work around compiler warning.
- * TODO(user): Fix compiler or refactor to not depend on resize()
+ * TODO(arv): Fix compiler or refactor to not depend on resize()
  * @private
  * @type {Object}
  */

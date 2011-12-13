@@ -18,6 +18,7 @@
  * Drag and drop implementation for sources/targets consisting of multiple
  * elements.
  *
+ * @author eae@google.com (Emil A Eklund)
  * @see ../demos/dragdrop.html
  */
 
@@ -100,7 +101,7 @@ goog.fx.DragDropGroup.prototype.removeItem = function(element) {
  * @param {Array.<goog.fx.DragDropItem>} list List of items to select or null to
  *     clear selection.
  *
- * TODO(user): Not yet implemented.
+ * TODO(eae): Not yet implemented.
  */
 goog.fx.DragDropGroup.prototype.setSelection = function(list) {
 

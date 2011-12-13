@@ -29,6 +29,7 @@
  * var slider = new goog.ui.Slider;
  * slider.decorate(document.getElementById('slider'));
  *
+ * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/slider.html
  */
 

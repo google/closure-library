@@ -7,6 +7,7 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <!--
+Author: attila@google.com (Attila Bodis)
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -71,7 +72,7 @@ See the COPYING file for details.
       assertEquals('Decorated element must be as expected',
           goog.dom.getElement('start'), element);
       // Due to a bug in ContainerRenderer, the "-vertical" class isn't applied.
-      // TODO(user): Fix this!
+      // TODO(attila): Fix this!
       assertSameElements('Decorated element must have expected class names',
           ['goog-tab-bar', 'goog-tab-bar-start'],
           goog.dom.classes.get(element));

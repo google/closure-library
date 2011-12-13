@@ -23,10 +23,11 @@
  * Note that this class only reflects what the browser tells us and this usually
  * only reflects changes to the File -> Work Offline menu item.
  *
+ * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/onlinehandler.html
  */
 
-// TODO(user): We should probably implement some kind of polling service and/or
+// TODO(arv): We should probably implement some kind of polling service and/or
 // a poll for changes event handler that can be used to fire events when a state
 // changes.
 

@@ -14,8 +14,9 @@
 
 /**
  * @fileoverview Base class for control renderers.
- * TODO(user):  If the renderer framework works well, pull it into Component.
+ * TODO(attila):  If the renderer framework works well, pull it into Component.
  *
+ * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.ControlRenderer');

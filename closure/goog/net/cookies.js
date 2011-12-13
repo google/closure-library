@@ -15,6 +15,7 @@
 /**
  * @fileoverview Functions for setting, getting and deleting cookies.
  *
+ * @author arv@google.com (Erik Arvidsson)
  */
 
 

@@ -62,7 +62,7 @@ goog.array.peek = function(array) {
 goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
 
 
-// NOTE(user): Since most of the array functions are generic it allows you to
+// NOTE(arv): Since most of the array functions are generic it allows you to
 // pass an array-like object. Strings have a length and are considered array-
 // like. However, the 'in' operator does not work on strings so we cannot just
 // use the array path even if the browser supports indexing into strings. We
@@ -987,7 +987,7 @@ goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
  *     first argument is less than, equal to, or greater than the second.
  */
 goog.array.sort = function(arr, opt_compareFn) {
-  // TODO(user): Update type annotation since null is not accepted.
+  // TODO(arv): Update type annotation since null is not accepted.
   goog.asserts.assert(arr.length != null);
 
   goog.array.ARRAY_PROTOTYPE_.sort.call(

@@ -14,6 +14,8 @@
 
 /**
  * @fileoverview Low level handling of XMLHttpRequest.
+ * @author arv@google.com (Erik Arvidsson)
+ * @author dbk@google.com (David Barrett-Kahn)
  */
 
 goog.provide('goog.net.DefaultXmlHttpFactory');

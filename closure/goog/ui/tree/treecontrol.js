@@ -16,6 +16,10 @@
  * @fileoverview Definition of the goog.ui.tree.TreeControl class, which
  * provides a way to view a hierarchical set of data.
  *
+ * @author arv@google.com (Erik Arvidsson)
+ * @author eae@google.com (Emil A Eklund)
+ * @author jonp@google.com (Jon Perlow)
+ * @author annams@google.com (Srinivas Annam)
  *
  * This is a based on the webfx tree control. It since been updated to add
  * typeahead support, as well as accessibility support using ARIA framework.

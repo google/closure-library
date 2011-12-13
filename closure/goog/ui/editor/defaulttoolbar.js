@@ -15,6 +15,8 @@
 /**
  * @fileoverview Factory functions for creating a default editing toolbar.
  *
+ * @author attila@google.com (Attila Bodis)
+ * @author jparent@google.com (Julie Parent)
  * @see ../../demos/editor/editor.html
  */
 
@@ -592,7 +594,7 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
       button.setValue(/** @type {string} */ (value));
     }
   } catch (ex) {
-    // TODO(user): Find out when/why this happens.
+    // TODO(attila): Find out when/why this happens.
   }
 };
 

@@ -23,7 +23,7 @@
  */
 
 
-// TODO(user): Rename/refactor getTextContent and getRawTextContent. The problem
+// TODO(arv): Rename/refactor getTextContent and getRawTextContent. The problem
 // is that getTextContent should mimic the DOM3 textContent. We should add a
 // getInnerText (or getText) which tries to return the visible text, innerText.
 
@@ -409,7 +409,7 @@ goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
  * @return {!goog.math.Size} Object with values 'width' and 'height'.
  */
 goog.dom.getViewportSize = function(opt_window) {
-  // TODO(user): This should not take an argument
+  // TODO(arv): This should not take an argument
   return goog.dom.getViewportSize_(opt_window || window);
 };
 
@@ -470,7 +470,7 @@ goog.dom.getDocumentHeight = function() {
  * @return {number} The height of the document of the given window.
  */
 goog.dom.getDocumentHeight_ = function(win) {
-  // NOTE(user): This method will return the window size rather than the document
+  // NOTE(eae): This method will return the window size rather than the document
   // size in webkit quirks mode.
   var doc = win.document;
   var height = 0;
@@ -599,7 +599,7 @@ goog.dom.getDocumentScrollElement_ = function(doc) {
  * @return {!Window} The window associated with the given document.
  */
 goog.dom.getWindow = function(opt_doc) {
-  // TODO(user): This should not take an argument.
+  // TODO(arv): This should not take an argument.
   return opt_doc ? goog.dom.getWindow_(opt_doc) : window;
 };
 
@@ -715,7 +715,7 @@ goog.dom.append_ = function(doc, parent, args, startIndex) {
 
   for (var i = startIndex; i < args.length; i++) {
     var arg = args[i];
-    // TODO(user): Fix isArrayLike to return false for a text node.
+    // TODO(attila): Fix isArrayLike to return false for a text node.
     if (goog.isArrayLike(arg) && !goog.dom.isNodeLike(arg)) {
       // If the argument is a node list, not a real array, use a clone,
       // because forEach can't be used to mutate a NodeList.
@@ -1442,7 +1442,7 @@ goog.dom.findCommonAncestor = function(var_args) {
  * @return {!Document} The document owning the node.
  */
 goog.dom.getOwnerDocument = function(node) {
-  // TODO(user): Remove IE5 code.
+  // TODO(arv): Remove IE5 code.
   // IE5 uses document instead of ownerDocument
   return /** @type {!Document} */ (
       node.nodeType == goog.dom.NodeType.DOCUMENT ? node :
@@ -1667,7 +1667,7 @@ goog.dom.setFocusableTabIndex = function(element, enable) {
  */
 goog.dom.getTextContent = function(node) {
   var textContent;
-  // Note(user): IE9, Opera, and Safari 3 support innerText but they include
+  // Note(arv): IE9, Opera, and Safari 3 support innerText but they include
   // text nodes in script tags. So we revert to use a user agent test here.
   if (goog.dom.BrowserFeature.CAN_USE_INNER_TEXT && ('innerText' in node)) {
     textContent = goog.string.canonicalizeNewlines(node.innerText);
@@ -1828,7 +1828,7 @@ goog.dom.getNodeAtOffset = function(parent, offset, opt_result) {
  * @return {boolean} Whether the object is a NodeList.
  */
 goog.dom.isNodeList = function(val) {
-  // TODO(user): Now the isNodeList is part of goog.dom we can use
+  // TODO(attila): Now the isNodeList is part of goog.dom we can use
   // goog.userAgent to make this simpler.
   // A NodeList must have a length property of type 'number' on all platforms.
   if (val && typeof val.length == 'number') {
@@ -2086,7 +2086,7 @@ goog.dom.DomHelper.prototype.setProperties = goog.dom.setProperties;
  * @return {!goog.math.Size} Object with values 'width' and 'height'.
  */
 goog.dom.DomHelper.prototype.getViewportSize = function(opt_window) {
-  // TODO(user): This should not take an argument. That breaks the rule of a
+  // TODO(arv): This should not take an argument. That breaks the rule of a
   // a DomHelper representing a single frame/window/document.
   return goog.dom.getViewportSize(opt_window || this.getWindow());
 };

@@ -99,6 +99,8 @@
  * p:     undefined      80 undefined
  * P:     undefined      80 undefined
  *
+ * @author arv@google.com (Erik Arvidsson)
+ * @author eae@google.com (Emil A Eklund)
  * @see ../demos/keyhandler.html
  */
 

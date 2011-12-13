@@ -15,6 +15,7 @@
 /**
  * @fileoverview Advanced tooltip widget implementation.
  *
+ * @author eae@google.com (Emil A Eklund)
  * @see ../demos/advancedtooltip.html
  */
 

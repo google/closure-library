@@ -15,6 +15,7 @@
 /**
  * @fileoverview Animated zippy widget implementation.
  *
+ * @author eae@google.com (Emil A Eklund)
  * @see ../demos/zippy.html
  */
 

@@ -257,7 +257,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
         relatedTarget = null;
       }
     }
-    // TODO(user): Use goog.events.EventType when it has been refactored into its
+    // TODO(arv): Use goog.events.EventType when it has been refactored into its
     // own file.
   } else if (type == goog.events.EventType.MOUSEOVER) {
     relatedTarget = e.fromElement;

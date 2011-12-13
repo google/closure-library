@@ -16,6 +16,7 @@
  * @fileoverview This implementation of goog.gears.WorkerPool uses
  * a fake worker pool (FakeWorkerPool_) that is implemented as an iframe in the
  * current document.
+ * @author arv@google.com (Erik Arvidsson)
  */
 
 goog.provide('goog.gears.FakeWorkerPool');
@@ -81,7 +82,7 @@ goog.gears.FakeWorkerPool_.prototype.createWorkerFromUrl = function(url) {
  */
 goog.gears.FakeWorkerPool_.prototype.createWorker =
     function(code) {
-  // HACK(user): Since this code is included in a worker thread we cannot
+  // HACK(arv): Since this code is included in a worker thread we cannot
   // directly reference window
   var win = goog.getObjectByName('window');
   // This will be dead code on a worker thread so we don't get here. It is
@@ -220,7 +221,7 @@ goog.gears.FakeWorkerPool_.prototype.createMessageObject_ = function(
 goog.gears.FakeWorkerPool_.prototype.getWindow_ = function(workerId) {
   var frameName = this.frameNames_[workerId];
   if (frameName) {
-    // HACK(user): Since this code is included in a worker thread we cannot
+    // HACK(arv): Since this code is included in a worker thread we cannot
     // directly reference window
     var w = goog.getObjectByName('window.frames')[frameName];
     if (w) return w;

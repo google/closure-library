@@ -382,7 +382,7 @@ function testIsArrayLike() {
       goog.isArrayLike(notDefined));
   assertTrue('NodeList should be array-like',
       goog.isArrayLike(elem.childNodes));
-  // TODO(user): Fix isArrayLike to return false for text nodes!
+  // TODO(attila): Fix isArrayLike to return false for text nodes!
   // assertFalse('TextNode should not be array-like', goog.isArrayLike(text));
   assertTrue('Array of nodes should be array-like',
       goog.isArrayLike([elem.firstChild, elem.lastChild]));

@@ -15,6 +15,7 @@
 
 /**
  * @fileoverview Graphics utility functions and factory methods.
+ * @author arv@google.com (Erik Arvidsson)
  */
 
 

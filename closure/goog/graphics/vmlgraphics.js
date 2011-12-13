@@ -15,6 +15,8 @@
 
 /**
  * @fileoverview VmlGraphics sub class that uses VML to draw the graphics.
+ * @author arv@google.com (Erik Arvidsson)
+ * @author yoah@google.com (Yoah Bar-David)
  */
 
 
@@ -270,7 +272,7 @@ goog.graphics.VmlGraphics.prototype.setElementFill = function(element, fill) {
   var vmlElement = element.getElement();
   this.removeFill(vmlElement);
   if (fill instanceof goog.graphics.SolidFill) {
-    // NOTE(user): VML does not understand 'transparent' so hard code support
+    // NOTE(arv): VML does not understand 'transparent' so hard code support
     // for it.
     if (fill.getColor() == 'transparent') {
       vmlElement.filled = false;
@@ -847,7 +849,7 @@ goog.graphics.VmlGraphics.prototype.createGroup = function(opt_group) {
  * @return {number} The width in pixels of the text strings.
  */
 goog.graphics.VmlGraphics.prototype.getTextWidth = function(text, font) {
-  // TODO(user): Implement
+  // TODO(arv): Implement
   return 0;
 };
 

@@ -43,7 +43,7 @@ goog.require('goog.ds.LoadState');
  * @constructor
  * @extends {goog.ds.DataNode}
  */
-// TODO(user): Use interfaces when available.
+// TODO(arv): Use interfaces when available.
 goog.ds.JsDataSource = function(root, dataName, opt_parent) {
   this.parent_ = opt_parent;
   this.dataName_ = dataName;

@@ -1020,7 +1020,7 @@ goog.Uri.reDisallowedInFragment_ = /#/g;
  */
 goog.Uri.haveSameDomain = function(uri1String, uri2String) {
   // Differs from goog.uri.utils.haveSameDomain, since this ignores scheme.
-  // TODO(user): Have this just call goog.uri.util.haveSameDomain.
+  // TODO(gboyer): Have this just call goog.uri.util.haveSameDomain.
   var pieces1 = goog.uri.utils.split(uri1String);
   var pieces2 = goog.uri.utils.split(uri2String);
   return pieces1[goog.uri.utils.ComponentIndex.DOMAIN] ==
@@ -1281,7 +1281,7 @@ goog.Uri.QueryData.prototype.containsKey = function(key) {
  * @return {boolean} Whether there is a parameter with the given value.
  */
 goog.Uri.QueryData.prototype.containsValue = function(value) {
-  // NOTE(user): This solution goes through all the params even if it was the
+  // NOTE(arv): This solution goes through all the params even if it was the
   // first param. We can get around this by not reusing code or by switching to
   // iterators.
   var vals = this.getValues();

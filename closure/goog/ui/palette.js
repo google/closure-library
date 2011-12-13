@@ -16,6 +16,7 @@
  * @fileoverview A palette control.  A palette is a grid that the user can
  * highlight or select via the keyboard or the mouse.
  *
+ * @author attila@google.com (Attila Bodis)
  * @see ../demos/palette.html
  */
 

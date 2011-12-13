@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview Python style iteration utilities.
+ * @author arv@google.com (Erik Arvidsson)
  */
 
 
@@ -125,7 +126,7 @@ goog.iter.toIterator = function(iterable) {
   }
 
 
-  // TODO(user): Should we fall back on goog.structs.getValues()?
+  // TODO(arv): Should we fall back on goog.structs.getValues()?
   throw Error('Not implemented');
 };
 

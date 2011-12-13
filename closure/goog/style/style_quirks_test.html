@@ -840,7 +840,7 @@ function testGetPageOffsetElementOffscreen() {
 function testGetPageOffsetFixedPositionElements() {
   // Skip these tests in certain browsers.
   // position:fixed is not supported in IE before version 7
-  // TODO(user): This conditional looks fishy: it excludes all versions of
+  // TODO(gboyer): This conditional looks fishy: it excludes all versions of
   // IE version 6 and greater.
   if (!goog.userAgent.IE || !goog.userAgent.isVersion('6')) {
     // Test with a position fixed element

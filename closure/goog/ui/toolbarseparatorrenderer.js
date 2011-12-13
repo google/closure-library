@@ -15,6 +15,7 @@
 /**
  * @fileoverview Renderer for toolbar separators.
  *
+ * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.ToolbarSeparatorRenderer');

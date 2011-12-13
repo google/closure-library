@@ -345,7 +345,7 @@ goog.ui.Component.prototype.dom_;
 goog.ui.Component.prototype.inDocument_ = false;
 
 
-// TODO(user): Stop referring to this private field in subclasses.
+// TODO(attila): Stop referring to this private field in subclasses.
 /**
  * The DOM element for the component.
  * @type {Element}
@@ -819,7 +819,7 @@ goog.ui.Component.prototype.disposeInternal = function() {
   this.element_ = null;
   this.model_ = null;
   this.parent_ = null;
-  // TODO(user): delete this.dom_ breaks many unit tests.
+  // TODO(gboyer): delete this.dom_ breaks many unit tests.
 };
 
 
@@ -1003,7 +1003,7 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
     }
     // Render the child into the parent at the appropriate location.  Note that
     // getChildAt(index + 1) returns undefined if inserting at the end.
-    // TODO(user): We should have a renderer with a renderChildAt API.
+    // TODO(attila): We should have a renderer with a renderChildAt API.
     var sibling = this.getChildAt(index + 1);
     // render_() calls enterDocument() if the parent is already in the document.
     child.render_(this.getContentElement(), sibling ? sibling.element_ : null);

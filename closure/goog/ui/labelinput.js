@@ -32,6 +32,7 @@
  * users encounter trouble because the label is deleted upon focus. For now we
  * set the "aria-label" attribute.
  *
+ * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/labelinput.html
  */
 

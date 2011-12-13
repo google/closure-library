@@ -385,13 +385,13 @@ goog.format.conservativelyHasGraphemeBreak_ = function(
   // Return false for everything except the most common Cyrillic characters.
   // Don't worry about Latin characters, because insertWordBreaksGeneric_
   // itself already handles those.
-  // TODO(user): Also account for Greek, Armenian, and Georgian if it is
+  // TODO(gboyer): Also account for Greek, Armenian, and Georgian if it is
   // simple to do so.
   return charCode >= 0x400 && charCode < 0x523;
 };
 
 
-// TODO(user): Consider using a compile-time flag to switch implementations
+// TODO(gboyer): Consider using a compile-time flag to switch implementations
 // rather than relying on the developers to toggle implementations.
 /**
  * Inserts word breaks into an HTML string at a given interval.

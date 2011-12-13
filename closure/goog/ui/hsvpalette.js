@@ -20,6 +20,9 @@
  * palette. Without the styles from the demo css file, only a hex color label
  * and input field show up.
  *
+ * @author arv@google.com (Erik Arvidsson)
+ * @author smcbride@google.com (Sean McBride)
+ * @author manucornet@google.com (Manu Cornet)
  * @see ../demos/hsvpalette.html
  */
 
@@ -292,7 +295,7 @@ goog.ui.HsvPalette.prototype.createDom = function() {
   );
   this.setElementInternal(element);
 
-  // TODO(user): Set tabIndex
+  // TODO(arv): Set tabIndex
 };
 
 

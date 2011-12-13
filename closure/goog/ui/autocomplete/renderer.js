@@ -145,7 +145,7 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
    */
   this.rowClassName = goog.getCssName('ac-row');
 
-  // TODO(user): Remove this as soon as we remove references and ensure that
+  // TODO(gboyer): Remove this as soon as we remove references and ensure that
   // no groups are pushing javascript using this.
   /**
    * The old class name for active row.  This name is deprecated because its

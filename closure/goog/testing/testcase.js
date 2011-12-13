@@ -446,7 +446,7 @@ goog.testing.TestCase.prototype.log = function(val) {
       // This is an acute problem for Errors, which almost never survive.
       // Grab references to the immutable strings so they survive.
       window.console.log(val, val.message, val.stack);
-      // TODO(user): Consider for Chrome cloning any object if we can ensure
+      // TODO(gboyer): Consider for Chrome cloning any object if we can ensure
       // there are no circular references.
     } else {
       window.console.log(val);

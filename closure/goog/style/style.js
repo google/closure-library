@@ -485,7 +485,7 @@ goog.style.scrollIntoContainerView = function(element, container, opt_center) {
  * @return {!goog.math.Coordinate} Client left and top.
  */
 goog.style.getClientLeftTop = function(el) {
-  // NOTE(user): Gecko prior to 1.9 doesn't support clientTop/Left, see
+  // NOTE(eae): Gecko prior to 1.9 doesn't support clientTop/Left, see
   // https://bugzilla.mozilla.org/show_bug.cgi?id=111207
   if (goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9')) {
     var left = parseFloat(goog.style.getComputedStyle(el, 'borderLeftWidth'));
@@ -516,7 +516,7 @@ goog.style.getPageOffset = function(el) {
   var box, doc = goog.dom.getOwnerDocument(el);
   var positionStyle = goog.style.getStyle_(el, 'position');
 
-  // NOTE(user): Gecko pre 1.9 normally use getBoxObjectFor to calculate the
+  // NOTE(eae): Gecko pre 1.9 normally use getBoxObjectFor to calculate the
   // position. When invoked for an element with position absolute and a negative
   // position though it can be off by one. Therefor the recursive implementation
   // is used in those (relatively rare) cases.
@@ -524,11 +524,11 @@ goog.style.getPageOffset = function(el) {
       !el.getBoundingClientRect && positionStyle == 'absolute' &&
       (box = doc.getBoxObjectFor(el)) && (box.screenX < 0 || box.screenY < 0);
 
-  // NOTE(user): If element is hidden (display none or disconnected or any the
+  // NOTE(arv): If element is hidden (display none or disconnected or any the
   // ancestors are hidden) we get (0,0) by default but we still do the
   // accumulation of scroll position.
 
-  // TODO(user): Should we check if the node is disconnected and in that case
+  // TODO(arv): Should we check if the node is disconnected and in that case
   //            return (0,0)?
 
   var pos = new goog.math.Coordinate(0, 0);
@@ -766,7 +766,7 @@ goog.style.setPageOffset = function(el, x, opt_y) {
     x = x.x;
   }
 
-  // NOTE(user): We cannot allow strings for x and y. We could but that would
+  // NOTE(arv): We cannot allow strings for x and y. We could but that would
   // require us to manually transform between different units
 
   // Work out deltas
@@ -979,7 +979,7 @@ goog.style.setOpacity = function(el, alpha) {
   } else if ('MozOpacity' in style) {
     style.MozOpacity = alpha;
   } else if ('filter' in style) {
-    // TODO(user): Overwriting the filter might have undesired side effects.
+    // TODO(arv): Overwriting the filter might have undesired side effects.
     if (alpha === '') {
       style.filter = '';
     } else {
@@ -1257,7 +1257,7 @@ goog.style.isUnselectable = function(el) {
  *     selectable state, and leave its descendants alone; defaults to false.
  */
 goog.style.setUnselectable = function(el, unselectable, opt_noRecurse) {
-  // TODO(user): Do we need all of TR_DomUtil.makeUnselectable() in Closure?
+  // TODO(attila): Do we need all of TR_DomUtil.makeUnselectable() in Closure?
   var descendants = !opt_noRecurse ? el.getElementsByTagName('*') : null;
   var name = goog.style.unselectableStyle_;
   if (name) {
@@ -1484,7 +1484,7 @@ goog.style.getBox_ = function(element, stylePrefix) {
     var bottom = /** @type {string} */ (
         goog.style.getComputedStyle(element, stylePrefix + 'Bottom'));
 
-    // NOTE(user): Gecko can return floating point numbers for the computed
+    // NOTE(arv): Gecko can return floating point numbers for the computed
     // style values.
     return new goog.math.Box(parseFloat(top),
                              parseFloat(right),

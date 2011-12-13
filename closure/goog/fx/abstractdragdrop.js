@@ -18,6 +18,7 @@
  * Provides functionality for implementing drag and drop classes. Also provides
  * support classes and events.
  *
+ * @author eae@google.com (Emil A Eklund)
  */
 
 goog.provide('goog.fx.AbstractDragDrop');
@@ -1140,7 +1141,7 @@ goog.fx.DragDropEvent = function(type, source, sourceItem,
                                  opt_target, opt_targetItem, opt_targetElement,
                                  opt_clientX, opt_clientY, opt_x, opt_y,
                                  opt_subtarget) {
-  // TODO(user): Get rid of all the optional parameters and have the caller set
+  // TODO(eae): Get rid of all the optional parameters and have the caller set
   // the fields directly instead.
   goog.events.Event.call(this, type);
 

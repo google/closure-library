@@ -15,6 +15,7 @@
 /**
  * @fileoverview Constant declarations for common key codes.
  *
+ * @author eae@google.com (Emil A Eklund)
  * @see ../demos/keyhandler.html
  */
 

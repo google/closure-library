@@ -7,6 +7,7 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <!--
+  Author: arv@google.com (Erik Arvidsson)
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -147,7 +148,7 @@ workerTestCase.handleCommand = function(commandId, params) {
 workerTestCase.testResults = function() {
   this.log('Starting testResults');
 
-  // TODO(user): This test is intermitently failing in IE7.
+  // TODO(arv): This test is intermitently failing in IE7.
   return;
 
   for (var i = 0; i < this.tests.length; i++) {

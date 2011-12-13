@@ -15,6 +15,7 @@
 /**
  * @fileoverview Date picker implementation.
  *
+ * @author eae@google.com (Emil A Eklund)
  * @see ../demos/datepicker.html
  */
 
@@ -573,7 +574,7 @@ goog.ui.DatePicker.prototype.setDate = function(date) {
   // selected another month can be displayed.
   this.updateCalendarGrid_();
 
-  // TODO(user): Standardize selection and change events with other components.
+  // TODO(eae): Standardize selection and change events with other components.
   // Fire select event.
   var selectEvent = new goog.ui.DatePickerEvent(
       goog.ui.DatePicker.Events.SELECT, this, this.date_);

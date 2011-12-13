@@ -309,10 +309,10 @@ goog.ENABLE_DEBUG_LOADER = true;
 goog.require = function(name) {
 
   // if the object already exists we do not need do do anything
-  // TODO(user): If we start to support require based on file name this has
+  // TODO(arv): If we start to support require based on file name this has
   //            to change
-  // TODO(user): If we allow goog.foo.* this has to change
-  // TODO(user): If we implement dynamic load after page load we should probably
+  // TODO(arv): If we allow goog.foo.* this has to change
+  // TODO(arv): If we implement dynamic load after page load we should probably
   //            not remove this code for the compiled output
   if (!COMPILED) {
     if (goog.isProvided_(name)) {
@@ -901,7 +901,7 @@ goog.isObject = function(val) {
  * @return {number} The unique ID for the object.
  */
 goog.getUid = function(obj) {
-  // TODO(user): Make the type stricter, do not accept null.
+  // TODO(arv): Make the type stricter, do not accept null.
 
   // In Opera window.hasOwnProperty exists but always returns false so we avoid
   // using it. As a consequence the unique ID generated for BaseClass.prototype
@@ -918,7 +918,7 @@ goog.getUid = function(obj) {
  * @param {Object} obj The object to remove the unique ID field from.
  */
 goog.removeUid = function(obj) {
-  // TODO(user): Make the type stricter, do not accept null.
+  // TODO(arv): Make the type stricter, do not accept null.
 
   // DOM nodes in IE are not instance of Object and throws exception
   // for delete. Instead we try to use removeAttribute

@@ -15,6 +15,7 @@
 /**
  * @fileoverview Renderer for {@link goog.ui.MenuSeparator}s.
  *
+ * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.MenuSeparatorRenderer');

@@ -15,6 +15,7 @@
 /**
  * @fileoverview Default renderer for {@link goog.ui.Button}s.
  *
+ * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.ButtonRenderer');

@@ -16,6 +16,7 @@
  * @fileoverview An animation class that animates CSS sprites by changing the
  * CSS background-position.
  *
+ * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/cssspriteanimation.html
  */
 
