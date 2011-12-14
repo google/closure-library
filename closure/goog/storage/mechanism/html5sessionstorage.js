@@ -13,24 +13,25 @@
 // limitations under the License.
 
 /**
- * @fileoverview Provides data persistence using HTML5 local storage mechanism.
+ * @fileoverview Provides data persistence using HTML5 session storage
+ * mechanism.
  *
  */
 
-goog.provide('goog.storage.mechanism.HTML5LocalStorage');
+goog.provide('goog.storage.mechanism.HTML5SessionStorage');
 
 goog.require('goog.storage.mechanism.HTML5WebStorage');
 
 
 
 /**
- * Provides a storage mechanism that uses HTML5 local storage.
+ * Provides a storage mechanism that uses HTML5 session storage.
  *
  * @constructor
  * @extends {goog.storage.mechanism.HTML5WebStorage}
  */
-goog.storage.mechanism.HTML5LocalStorage = function() {
-  goog.base(this, window.localStorage);
+goog.storage.mechanism.HTML5SessionStorage = function() {
+  goog.base(this, window.sessionStorage);
 };
-goog.inherits(goog.storage.mechanism.HTML5LocalStorage,
+goog.inherits(goog.storage.mechanism.HTML5SessionStorage,
               goog.storage.mechanism.HTML5WebStorage);

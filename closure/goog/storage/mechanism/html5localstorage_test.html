@@ -59,9 +59,9 @@ function testSharing() {
 function testQuota() {
   var mechanism = new goog.storage.mechanism.HTML5LocalStorage();
   if (mechanism.isAvailable()) {
-    // There should be at least 4 MiB.
+    // There should be at least 2 MiB.
     goog.storage.mechanism.mechanism_test.runQuotaTests(
-        mechanism, 4 * 1024 * 1024);
+        mechanism, 2 * 1024 * 1024);
   }
 }
 
