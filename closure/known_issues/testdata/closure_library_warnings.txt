@@ -31,16 +31,16 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/cro
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:128: ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
     new RegExp('^%+' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:554: ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:569: ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
       serviceName == goog.net.xpc.TRANSPORT_SERVICE_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:642: ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:657: ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
   delete goog.net.xpc.channels_[this.name];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:652: ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:667: ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
   for (var name in goog.net.xpc.channels_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:653: ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js:668: ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
     var ch = goog.net.xpc.channels_[name];
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js:117: ERROR - Access to private property iframeElement_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
