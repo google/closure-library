@@ -4,10 +4,10 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/xmldatasource.js:198: ERROR - Access to private property STR_ATTRIBUTE_START_ of goog.ds not allowed here.
   if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START_)) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/gears/loggerclient.js:71: ERROR - Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/gears/loggerclient.js:72: ERROR - Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
   goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/element.js:49: ERROR - Access to private property customEvent_ of goog.graphics.Element not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/element.js:51: ERROR - Access to private property customEvent_ of goog.graphics.Element not allowed here.
   this.customEvent_ = false;
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/ellipse.js:37: ERROR - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
@@ -217,10 +217,10 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nix
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js:429: ERROR - Access to private property notifyConnected_ of goog.net.xpc.NixTransport.channel_ not allowed here.
    this.channel_.notifyConnected_();
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js:49: ERROR - Overriding private property of goog.json.Serializer.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js:50: ERROR - Overriding private property of goog.json.Serializer.prototype.
 goog.proto.Serializer.prototype.serializeArray_ = function(arr, sb) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js:63: ERROR - Access to private property serialize_ of goog.proto.Serializer not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js:64: ERROR - Access to private property serialize_ of goog.proto.Serializer not allowed here.
       this.serialize_(arr[i], sb);
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/asynctestcase.js:696: ERROR - Access to private property now_ of goog.testing.AsyncTestCase not allowed here.
@@ -439,31 +439,31 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockacti
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js:50: ERROR - Access to private property lastEventType_ of goog.ui.MockActivityMonitor not allowed here.
   this.lastEventType_ = type;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:189: ERROR - Access to private property menu_ of goog.ui.PlainTextSpellChecker not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:191: ERROR - Access to private property menu_ of goog.ui.PlainTextSpellChecker not allowed here.
   this.eventHandler_.listen(/** @type {goog.ui.PopupMenu} */ (this.menu_),
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:386: ERROR - Access to private property createWordElement_ of goog.ui.PlainTextSpellChecker not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:388: ERROR - Access to private property createWordElement_ of goog.ui.PlainTextSpellChecker not allowed here.
   node.appendChild(this.createWordElement_(word, status));
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:416: ERROR - Access to private property isVisible_ of goog.ui.PlainTextSpellChecker not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:418: ERROR - Access to private property isVisible_ of goog.ui.PlainTextSpellChecker not allowed here.
   var wasVisible = this.isVisible_;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:607: ERROR - Access to private property nextId_ of goog.ui.AbstractSpellChecker not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:609: ERROR - Access to private property nextId_ of goog.ui.AbstractSpellChecker not allowed here.
   var lastId = goog.ui.AbstractSpellChecker.nextId_;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:641: ERROR - Access to private property menuEdit_ of goog.ui.PlainTextSpellChecker not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js:643: ERROR - Access to private property menuEdit_ of goog.ui.PlainTextSpellChecker not allowed here.
   if (event.target != this.menuEdit_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js:229: ERROR - Access to private property wordElements_ of goog.ui.RichTextSpellChecker not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js:231: ERROR - Access to private property wordElements_ of goog.ui.RichTextSpellChecker not allowed here.
   this.wordElements_ = {};
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js:270: ERROR - Access to private property isVisible_ of goog.ui.RichTextSpellChecker not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js:272: ERROR - Access to private property isVisible_ of goog.ui.RichTextSpellChecker not allowed here.
   if (!this.isVisible_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js:450: ERROR - Overriding private property of goog.ui.AbstractSpellChecker.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js:452: ERROR - Overriding private property of goog.ui.AbstractSpellChecker.prototype.
 goog.ui.RichTextSpellChecker.prototype.createWordElement_ = function(word,
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js:455: ERROR - Access to private property registerWordElement_ of goog.ui.RichTextSpellChecker not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js:457: ERROR - Access to private property registerWordElement_ of goog.ui.RichTextSpellChecker not allowed here.
   this.registerWordElement_(word, el);
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/textarearenderer.js:60: ERROR - Access to protected property setContentInternal of goog.ui.Control not allowed here.
