@@ -507,6 +507,41 @@ function testNoAutoHiliteWhenTokenIsEmpty() {
 }
 
 /**
+ * Checks that opt_preserveHilited works.
+ */
+function testPreserveHilitedWithoutAutoHilite() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setWrap(true);
+  ac.setAllowFreeSelect(true);
+  ac.setMaxMatches(4);
+  ac.setAutoHilite(false);
+
+  ac.setToken('m');
+  assertEquals(4, rend.getRenderedRows().length);
+  // No token; nothing should be hilited.
+  checkHilitedIndex(rend, -1);
+
+  // Hilite the second element
+  var id = rend.getRenderedRows()[1].id;
+  ac.hiliteId(id);
+
+  checkHilitedIndex(rend, 1);
+
+  // Re-render and check if the second element is still hilited
+  ac.renderRows(rend.getRenderedRows(), true /* preserve hilite */);
+
+  checkHilitedIndex(rend, 1);
+
+  // Re-render without preservation
+  ac.renderRows(rend.getRenderedRows());
+
+  checkHilitedIndex(rend, -1);
+}
+
+/**
  * Hilite using ids, the way mouse-based hiliting would work.
  */
 function testHiliteId() {

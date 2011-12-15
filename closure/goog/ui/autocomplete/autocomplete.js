@@ -606,7 +606,7 @@ goog.ui.AutoComplete.prototype.matchListener_ = function(matchedToken, rows,
 goog.ui.AutoComplete.prototype.renderRows = function(rows,
                                                      opt_preserveHilited) {
   var indexToHilite = opt_preserveHilited ?
-      this.getIndexOfId(this.hiliteId_) : null;
+      this.getIndexOfId(this.hiliteId_) : -1;
 
   // Current token matches the matcher's response token.
   this.firstRowId_ += this.rows_.length;
@@ -626,8 +626,10 @@ goog.ui.AutoComplete.prototype.renderRows = function(rows,
   this.renderer_.setAnchorElement(anchor);
   this.renderer_.renderRows(rendRows, this.token_, this.target_);
 
-  if (this.autoHilite_ && rendRows.length != 0 && this.token_) {
-    var idToHilite = indexToHilite != null ?
+  if ((this.autoHilite_ || indexToHilite >= 0) &&
+      rendRows.length != 0 &&
+      this.token_) {
+    var idToHilite = indexToHilite >= 0 ?
         this.getIdOfIndex_(indexToHilite) : this.firstRowId_;
     this.hiliteId(idToHilite);
   } else {
