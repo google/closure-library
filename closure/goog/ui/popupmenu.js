@@ -39,6 +39,7 @@
 
 goog.provide('goog.ui.PopupMenu');
 
+goog.require('goog.events.ActionHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.Corner');
@@ -214,12 +215,16 @@ goog.ui.PopupMenu.prototype.createAttachTarget = function(
 
   var target = {
     element_: element,
+    eventTarget_: element,
     targetCorner_: opt_targetCorner,
     menuCorner_: opt_menuCorner,
-    eventType_: opt_contextMenu ? goog.events.EventType.CONTEXTMENU :
-        goog.events.EventType.MOUSEDOWN,
+    eventType_: goog.events.EventType.CONTEXTMENU,
     margin_: opt_margin
   };
+  if (!opt_contextMenu) {
+    target.eventTarget_ = new goog.events.ActionHandler(element);
+    target.eventType_ = goog.ui.Component.EventType.ACTION;
+  }
 
   this.targets_.set(goog.getUid(element), target);
 
@@ -274,7 +279,7 @@ goog.ui.PopupMenu.prototype.getAttachedElement = function() {
  */
 goog.ui.PopupMenu.prototype.attachEvent_ = function(target) {
   this.getHandler().listen(
-      target.element_, target.eventType_, this.onTargetClick_);
+      target.eventTarget_, target.eventType_, this.onTargetClick_);
 };
 
 
@@ -318,7 +323,7 @@ goog.ui.PopupMenu.prototype.detach = function(element) {
  */
 goog.ui.PopupMenu.prototype.detachEvent_ = function(target) {
   this.getHandler().unlisten(
-      target.element_, target.eventType_, this.onTargetClick_);
+      target.eventTarget_, target.eventType_, this.onTargetClick_);
 };
 
 
@@ -508,7 +513,7 @@ goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
   var keys = this.targets_.getKeys();
   for (var i = 0; i < keys.length; i++) {
     var target = /** @type {Object} */(this.targets_.get(keys[i]));
-    if (target.element_ == e.currentTarget) {
+    if (target.eventTarget_ == e.currentTarget) {
       this.showMenu(target,
                     /** @type {number} */ (e.clientX),
                     /** @type {number} */ (e.clientY));

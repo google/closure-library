@@ -12,11 +12,13 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.dom');
+  goog.require('goog.events.ActionHandler');
   goog.require('goog.events.EventHandler');
   goog.require('goog.events.EventType');
   goog.require('goog.math.Box');
   goog.require('goog.positioning.Corner');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.ui.Component.EventType');
   goog.require('goog.ui.PopupMenu');
 </script>
 </head>
@@ -67,6 +69,7 @@ function assertTarget(target, expectedElement, expectedTargetCorner,
     eventType_: expectedEventType,
     margin_: expectedMargin
   }
+  delete target.eventTarget_;
 
   assertObjectEquals('Target does not match.', expectedTarget, target);
 }
@@ -151,14 +154,14 @@ function testCreateAttachTarget() {
   var target = popup.createAttachTarget(anchor);
   assertTrue(popup.isAttachTarget(anchor));
   assertTarget(target, anchor, undefined, undefined,
-      goog.events.EventType.MOUSEDOWN, undefined);
+      goog.ui.Component.EventType.ACTION, undefined);
 
   // Creating another target with all the parameters.
   target = popup.createAttachTarget(anchor, targetCorner, menuCorner,
       contextMenu, margin);
   assertTrue(popup.isAttachTarget(anchor));
   assertTarget(target, anchor, targetCorner, menuCorner,
-      goog.events.EventType.MOUSEDOWN, margin);
+      goog.ui.Component.EventType.ACTION, margin);
 
   // Finally, switch up the 'contextMenu'
   target = popup.createAttachTarget(anchor, undefined, undefined,
@@ -189,7 +192,7 @@ function testGetAttachTarget() {
 
   // Make sure we got the right target back.
   assertTarget(target, anchor, targetCorner, menuCorner,
-      goog.events.EventType.MOUSEDOWN, margin);
+      goog.ui.Component.EventType.ACTION, margin);
 }
 
 function testSmallViewportSliding() {
