@@ -67,8 +67,8 @@ function testSeparation() {
 function testQuota() {
   var mechanism = new goog.storage.mechanism.IEUserData('foo');
   if (mechanism.isAvailable()) {
-    // We should get at least 32 KiB.
-    goog.storage.mechanism.mechanism_test.runQuotaTests(mechanism, 32 * 1024);
+    // We should get at least 64 KiB.
+    goog.storage.mechanism.mechanism_test.runQuotaTests(mechanism, 64 * 1024);
   }
 }
 

@@ -137,25 +137,17 @@ goog.storage.mechanism.mechanism_test.runQuotaTests = function(
 
   var buffer = '\u03ff'; // 2 bytes
   var savedBytes = 0;
-  var iter = 0;
   try {
-    // Get buffer to required quantum.
-    while (buffer.length < 1024) {
+    while (true) {
+      mechanism.set('foo', buffer);
+      savedBytes = 2 * buffer.length;
       buffer = buffer + buffer;
-    }
-    while (savedBytes < atLeastBytes) {
-      mechanism.set('foo' + iter, buffer);
-      savedBytes += buffer.length;
-      iter += 1;
     }
   } catch (ex) {
     if (ex != goog.storage.mechanism.ErrorCode.QUOTA_EXCEEDED) {
       throw ex;
     }
   }
-  while (iter > 0) {
-    iter -= 1;
-    mechanism.remove('foo' + iter);
-  }
+  mechanism.remove('foo');
   assertTrue(savedBytes >= atLeastBytes);
 };
