@@ -92,7 +92,7 @@ goog.fx.anim.requestAnimationFrameFn_ = null;
  * @type {?function(number)}
  * @private
  */
-goog.fx.anim.cancelRequestAnimationFrameFn_ = null;
+goog.fx.anim.cancelAnimationFrameFn_ = null;
 
 
 /**
@@ -140,7 +140,9 @@ goog.fx.anim.unregisterAnimation = function(animation) {
  * for animations. Note that this window must be visible, as non-visible
  * windows can potentially stop animating. This window does not necessarily
  * need to be the window inside which animation occurs, but must remain visible.
+ *
  * See: https://developer.mozilla.org/en/DOM/window.mozRequestAnimationFrame.
+ * See: http://w3c-test.org/webperf/specs/RequestAnimationFrame/
  *
  * @param {Window} animationWindow The window in which to animate elements.
  */
@@ -160,22 +162,29 @@ goog.fx.anim.setAnimationWindow = function(animationWindow) {
 
   if (!animationWindow) {
     goog.fx.anim.requestAnimationFrameFn_ = null;
-    goog.fx.anim.cancelRequestAnimationFrameFn_ = null;
+    goog.fx.anim.cancelAnimationFrameFn_ = null;
   } else {
     goog.fx.anim.requestAnimationFrameFn_ =
-        animationWindow['requestAnimationFrame'] ||
-        animationWindow['webkitRequestAnimationFrame'] ||
-        animationWindow['mozRequestAnimationFrame'] ||
+        animationWindow['requestAnimationFrame'] ||  // Default name
+        animationWindow['webkitRequestAnimationFrame'] ||  // Chrome 10
+        animationWindow['mozRequestAnimationFrame'] ||  // Firefox 4
         animationWindow['oRequestAnimationFrame'] ||
-        animationWindow['msRequestAnimationFrame'] ||
+        animationWindow['msRequestAnimationFrame'] ||  // IE10 PP2
         null;
 
-    goog.fx.anim.cancelRequestAnimationFrameFn_ =
-        animationWindow['cancelRequestAnimationFrame'] ||
-        animationWindow['webkitCancelRequestAnimationFrame'] ||
-        animationWindow['mozCancelRequestAnimationFrame'] ||
-        animationWindow['oCancelRequestAnimationFrame'] ||
-        animationWindow['msCancelRequestAnimationFrame'] ||
+    // NOTE: Browser specific updates may be needed here as the proposed name
+    // for cancelAnimationFrame was renamed from cancelRequestAnimationFrame as
+    // of draft of December 8 2011.
+    goog.fx.anim.cancelAnimationFrameFn_ =
+        animationWindow['cancelAnimationFrame'] ||  // Default name
+        animationWindow['cancelRequestAnimationFrame'] ||  // Old default name
+        animationWindow['webkitCancelRequestAnimationFrame'] ||  // Chrome 10
+        // Firefox prior to v11 does not support cancelAnimationFrame calls,
+        // only requestAnimationFrame with either a callback or triggering a
+        // MozBeforePaint event.
+        animationWindow['mozCancelAnimationFrame'] ||  // Firefox 11
+        animationWindow['oCancelAnimationFrame'] ||
+        animationWindow['msCancelRequestAnimationFrame'] ||  // IE10 PP2
         null;
   }
 
@@ -183,7 +192,7 @@ goog.fx.anim.setAnimationWindow = function(animationWindow) {
   // cancelAnimationTimer_ functions.
   if (goog.fx.anim.requestAnimationFrameFn_ &&
       animationWindow['mozRequestAnimationFrame'] &&
-      !goog.fx.anim.cancelRequestAnimationFrameFn_) {
+      !goog.fx.anim.cancelAnimationFrameFn_) {
     // Because Firefox (Gecko) runs animation in separate threads, it also saves
     // time by running the requestAnimationFrame callbacks in that same thread.
     // Sadly this breaks the assumption of implicit thread-safety in JS, and can
@@ -199,7 +208,7 @@ goog.fx.anim.setAnimationWindow = function(animationWindow) {
         goog.fx.anim.requestMozAnimationFrame_;
     goog.fx.anim.cancelAnimationTimer_ = goog.fx.anim.cancelMozAnimationFrame_;
   } else if (goog.fx.anim.requestAnimationFrameFn_ &&
-             goog.fx.anim.cancelRequestAnimationFrameFn_) {
+             goog.fx.anim.cancelAnimationFrameFn_) {
     goog.fx.anim.requestAnimationTimer_ = goog.fx.anim.requestAnimationFrame_;
     goog.fx.anim.cancelAnimationTimer_ = goog.fx.anim.cancelAnimationFrame_;
   } else {
@@ -243,7 +252,7 @@ goog.fx.anim.cancelTimer_ = function() {
 
 /**
  * Requests an animation frame based on the requestAnimationFrame and
- * cancelRequestAnimationFrame function pair.
+ * cancelAnimationFrame function pair.
  * @private
  */
 goog.fx.anim.requestAnimationFrame_ = function() {
@@ -266,7 +275,7 @@ goog.fx.anim.requestAnimationFrame_ = function() {
  */
 goog.fx.anim.cancelAnimationFrame_ = function() {
   if (goog.fx.anim.animationTimer_) {
-    goog.fx.anim.cancelRequestAnimationFrameFn_.call(
+    goog.fx.anim.cancelAnimationFrameFn_.call(
         goog.fx.anim.animationWindow_,
         goog.fx.anim.animationTimer_);
     goog.fx.anim.animationTimer_ = null;
@@ -276,7 +285,7 @@ goog.fx.anim.cancelAnimationFrame_ = function() {
 
 /**
  * Requests an animation frame based on the requestAnimationFrame and
- * cancelRequestAnimationFrame function pair.
+ * cancelAnimationFrame function pair.
  * @private
  */
 goog.fx.anim.requestMozAnimationFrame_ = function() {
