@@ -24,8 +24,10 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.editor.BrowserFeature');
+goog.require('goog.editor.Command');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
+goog.require('goog.string');
 goog.require('goog.string.Unicode');
 goog.require('goog.uri.utils');
 
@@ -171,6 +173,40 @@ goog.editor.Link.prototype.placeCursorRightOf = function() {
     range.select();
   } else {
     goog.editor.range.placeCursorNextTo(anchor, false);
+  }
+};
+
+
+/**
+ * Updates the cursor position and link bubble for this link.
+ * @param {goog.editor.Field} field The field in which the link is created.
+ * @param {string} url The link url.
+ * @private
+ */
+goog.editor.Link.prototype.updateLinkDisplay_ = function(field, url) {
+  this.initializeUrl(url);
+  this.placeCursorRightOf();
+  field.execCommand(goog.editor.Command.UPDATE_LINK_BUBBLE);
+};
+
+
+/**
+ * After link creation, finish creating the link depending on the type
+ * of link being created.
+ * @param {goog.editor.Field} field The field where this link is being created.
+ */
+goog.editor.Link.prototype.finishLinkCreation = function(field) {
+  var text = this.getCurrentText();
+  if (goog.editor.Link.isLikelyUrl(text)) {
+    if (text.search(/:/) < 0) {
+      text = 'http://' + goog.string.trimLeft(text);
+    }
+    this.updateLinkDisplay_(field, text);
+  } else if (goog.editor.Link.isLikelyEmailAddress(text)) {
+    text = 'mailto:' + text;
+    this.updateLinkDisplay_(field, text);
+  } else {
+    field.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, this);
   }
 };
 

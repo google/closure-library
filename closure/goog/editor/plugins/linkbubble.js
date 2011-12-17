@@ -224,6 +224,33 @@ goog.editor.plugins.LinkBubble.prototype.getTrogClassId = function() {
 
 
 /** @override */
+goog.editor.plugins.LinkBubble.prototype.isSupportedCommand =
+    function(command) {
+  return command == goog.editor.Command.UPDATE_LINK_BUBBLE;
+};
+
+
+/** @override */
+goog.editor.plugins.LinkBubble.prototype.execCommandInternal =
+    function(command, var_args) {
+  if (command == goog.editor.Command.UPDATE_LINK_BUBBLE) {
+    this.updateLink_();
+  }
+};
+
+
+/**
+ * Updates the href in the link bubble with a new link.
+ * @private
+ */
+goog.editor.plugins.LinkBubble.prototype.updateLink_ = function() {
+  var targetEl = this.getTargetElement();
+  this.closeBubble();
+  this.createBubble(targetEl);
+};
+
+
+/** @override */
 goog.editor.plugins.LinkBubble.prototype.getBubbleTargetFromSelection =
     function(selectedElement) {
   var bubbleTarget = goog.dom.getAncestorByTagNameAndClass(selectedElement,

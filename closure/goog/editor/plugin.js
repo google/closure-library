@@ -354,12 +354,7 @@ goog.editor.Plugin.prototype.execCommand = function(command, var_args) {
       // dispatchChange includes a call to startChangeEvents, which unwinds the
       // call to stopChangeEvents made before the try block.
       this.fieldObject.dispatchChange();
-      // TODO(user): Remove this conditional.  We should always dispatch a
-      // a selection change event here, but link creation is wierd.  See
-      // TR_Editor.prototype.execute for more details
-      if (command != goog.editor.Command.LINK) {
-        this.fieldObject.dispatchSelectionChangeEvent();
-      }
+      this.fieldObject.dispatchSelectionChangeEvent();
     }
   }
 
