@@ -28,8 +28,10 @@ See the COPYING file for details.
   goog.require('goog.events.EventType');
   goog.require('goog.events.KeyCodes');
   goog.require('goog.positioning');
+  goog.require('goog.positioning.MenuAnchoredPosition');
   goog.require('goog.positioning.Overflow');
   goog.require('goog.style');
+  goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
@@ -37,6 +39,8 @@ See the COPYING file for details.
   goog.require('goog.ui.Menu');
   goog.require('goog.ui.MenuButton');
   goog.require('goog.ui.MenuItem');
+  goog.require('goog.userAgent');
+  goog.require('goog.userAgent.product');
 </script>
 </head>
 <body>
@@ -47,6 +51,7 @@ See the COPYING file for details.
 
 var menuButton;
 var clonedMenuButtonDom;
+var expectedFailures = new goog.testing.ExpectedFailures();
 
 // Mock out goog.positioning.positionAtCoordinate to always ignore failure when
 // the window is too small, since we don't care about the viewport size on
@@ -76,6 +81,7 @@ function setUp() {
 }
 
 function tearDown() {
+  expectedFailures.handleTearDown();
   menuButton.dispose();
 
   var element = goog.dom.getElement('demoMenuButton');
@@ -282,6 +288,80 @@ function testAlternatePositioningElement() {
   assertRoughlyEquals(menuNode.offsetTop, posElement.offsetTop
       + posElement.offsetHeight, 20);
   assertRoughlyEquals(menuNode.offsetLeft, posElement.offsetLeft, 20);
+}
+
+/**
+ * Test forced positioning above the button.
+ */
+function testPositioningAboveAnchor() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+
+  // Show the menu.
+  var position = new goog.positioning.MenuAnchoredPosition(
+      menuButton.getElement(),
+      goog.positioning.Corner.TOP_START,
+      /* opt_adjust */ false, /* opt_resize */ false);
+  menuButton.setMenuPosition(position);
+  menuButton.setAlignMenuToStart(true);  // Should have no effect
+  menuButton.setScrollOnOverflow(true);  // Should have no effect
+  menuButton.setOpen(true);
+
+  // Confirm the menu position
+  var buttonBounds = goog.style.getBounds(node);
+  var menuNode = menuButton.getMenu().getElement();
+  var menuBounds = goog.style.getBounds(menuNode);
+
+  expectedFailures.expectFailureFor(isWinSafariBefore5());
+  try {
+    assertRoughlyEquals(menuBounds.top + menuBounds.height,
+        buttonBounds.top, 3);
+    assertRoughlyEquals(menuBounds.left, buttonBounds.left, 3);
+  } catch (e) {
+    expectedFailures.handleException(e);
+  }
+  // For this test to be valid, the node must have non-trival height.
+  assertRoughlyEquals(node.offsetHeight, 19, 3);
+}
+
+/**
+ * Test forced positioning below the button.
+ */
+function testPositioningBelowAnchor() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+
+  // Show the menu.
+  // Show the menu.
+  var position = new goog.positioning.MenuAnchoredPosition(
+      menuButton.getElement(),
+      goog.positioning.Corner.BOTTOM_START,
+      /* opt_adjust */ false, /* opt_resize */ false);
+  menuButton.setMenuPosition(position);
+  menuButton.setAlignMenuToStart(true);  // Should have no effect
+  menuButton.setScrollOnOverflow(true);  // Should have no effect
+  menuButton.setOpen(true);
+
+  // Confirm the menu position
+  var buttonBounds = goog.style.getBounds(node);
+  var menuNode = menuButton.getMenu().getElement();
+  var menuBounds = goog.style.getBounds(menuNode);
+
+  expectedFailures.expectFailureFor(isWinSafariBefore5());
+  try {
+    assertRoughlyEquals(menuBounds.top,
+        buttonBounds.top + buttonBounds.height, 3);
+    assertRoughlyEquals(menuBounds.left, buttonBounds.left, 3);
+  } catch (e) {
+    expectedFailures.handleException(e);
+  }
+  // For this test to be valid, the node must have non-trival height.
+  assertRoughlyEquals(node.offsetHeight, 19, 3);
+}
+
+function isWinSafariBefore5() {
+  return goog.userAgent.WINDOWS && goog.userAgent.product.SAFARI &&
+      !goog.userAgent.isVersion(533);
 }
 
 /**

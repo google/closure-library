@@ -30,13 +30,13 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.math.Box');
 goog.require('goog.math.Rect');
+goog.require('goog.positioning');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.MenuAnchoredPosition');
 goog.require('goog.style');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.registry');
@@ -91,6 +91,14 @@ goog.inherits(goog.ui.MenuButton, goog.ui.Button);
  * @private
  */
 goog.ui.MenuButton.prototype.menu_;
+
+
+/**
+ * The menu position on this button, when set explicitly.
+ * @type {goog.positioning.AnchoredPosition|undefined}
+ * @private
+ */
+goog.ui.MenuButton.prototype.menuPosition_;
 
 
 /**
@@ -438,6 +446,17 @@ goog.ui.MenuButton.prototype.setMenu = function(menu) {
 
 
 /**
+ * Specify explicitly which corner of the button to use, which will override
+ * the value from setAlignMenuToStart() and setScrollOnOverflow().
+ * @param {goog.positioning.AnchoredPosition} position The position of the
+ *     Menu the button.
+ */
+goog.ui.MenuButton.prototype.setMenuPosition = function(position) {
+  this.menuPosition_ = position;
+};
+
+
+/**
  * Sets an element for anchoring the menu.
  * @param {Element} positionElement New element to use for
  *     positioning the dropdown menu.  Null to use the default behavior
@@ -723,11 +742,15 @@ goog.ui.MenuButton.prototype.positionMenu = function() {
 
   var positionElement = this.positionElement_ || this.getElement();
 
-  var anchorCorner = this.isAlignMenuToStart() ?
-      goog.positioning.Corner.BOTTOM_START : goog.positioning.Corner.BOTTOM_END;
-  var position = new goog.positioning.MenuAnchoredPosition(positionElement,
-      anchorCorner, /* opt_adjust */ !this.scrollOnOverflow_,
-      /* opt_resize */ this.scrollOnOverflow_);
+  var position = this.menuPosition_;
+  if (!position) {
+    var anchorCorner = this.isAlignMenuToStart() ?
+        goog.positioning.Corner.BOTTOM_START :
+        goog.positioning.Corner.BOTTOM_END;
+    position = new goog.positioning.MenuAnchoredPosition(positionElement,
+        anchorCorner, /* opt_adjust */ !this.scrollOnOverflow_,
+        /* opt_resize */ this.scrollOnOverflow_);
+  }
 
   var elem = this.menu_.getElement();
   if (!this.menu_.isVisible()) {
@@ -738,8 +761,7 @@ goog.ui.MenuButton.prototype.positionMenu = function() {
   if (!this.originalSize_ && this.scrollOnOverflow_) {
     this.originalSize_ = goog.style.getSize(elem);
   }
-  var popupCorner = this.isAlignMenuToStart() ?
-      goog.positioning.Corner.TOP_START : goog.positioning.Corner.TOP_END;
+  var popupCorner = goog.positioning.flipCornerVertical(position.corner);
   position.reposition(elem, popupCorner, this.menuMargin_, this.originalSize_);
 
   if (!this.menu_.isVisible()) {
