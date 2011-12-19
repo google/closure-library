@@ -466,9 +466,6 @@ goog.ui.RichTextSpellChecker.prototype.createWordElement_ = function(word,
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js ERROR - Access to private property registerWordElement_ of goog.ui.RichTextSpellChecker not allowed here.
   this.registerWordElement_(word, el);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/textarearenderer.js ERROR - Access to protected property setContentInternal of goog.ui.Control not allowed here.
-  control.setContentInternal(element.value);
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js ERROR - Access to private property AMP_RE_ of goog.string.html.HtmlParser not allowed here.
   return s.replace(goog.string.html.HtmlParser.AMP_RE_, '&amp;').
 

@@ -57,7 +57,7 @@ goog.ui.TextareaRenderer.prototype.getAriaRole = function() {
 goog.ui.TextareaRenderer.prototype.decorate = function(control, element) {
   goog.ui.TextareaRenderer.superClass_.decorate.call(this, control,
       element);
-  control.setContentInternal(element.value);
+  control.setContent(element.value);
   return element;
 };
 
