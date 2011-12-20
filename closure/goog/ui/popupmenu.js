@@ -39,7 +39,6 @@
 
 goog.provide('goog.ui.PopupMenu');
 
-goog.require('goog.events.ActionHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.Corner');
@@ -215,17 +214,12 @@ goog.ui.PopupMenu.prototype.createAttachTarget = function(
 
   var target = {
     element_: element,
-    eventTarget_: element,
     targetCorner_: opt_targetCorner,
     menuCorner_: opt_menuCorner,
-    eventType_: goog.events.EventType.CONTEXTMENU,
+    eventType_: opt_contextMenu ? goog.events.EventType.CONTEXTMENU :
+        goog.events.EventType.MOUSEDOWN,
     margin_: opt_margin
   };
-  if (!opt_contextMenu) {
-    // Will be disposed of in disposeInternal.
-    target.eventTarget_ = new goog.events.ActionHandler(element);
-    target.eventType_ = goog.ui.Component.EventType.ACTION;
-  }
 
   this.targets_.set(goog.getUid(element), target);
 
@@ -280,7 +274,7 @@ goog.ui.PopupMenu.prototype.getAttachedElement = function() {
  */
 goog.ui.PopupMenu.prototype.attachEvent_ = function(target) {
   this.getHandler().listen(
-      target.eventTarget_, target.eventType_, this.onTargetClick_);
+      target.element_, target.eventType_, this.onTargetClick_);
 };
 
 
@@ -293,11 +287,6 @@ goog.ui.PopupMenu.prototype.detachAll = function() {
     for (var i = 0; i < keys.length; i++) {
       this.detachEvent_(/** @type {Object} */ (this.targets_.get(keys[i])));
     }
-  }
-
-  var keys = this.targets_.getKeys();
-  for (var i = 0; i < keys.length; i++) {
-    this.disposeHandler_(/** @type {Object} */ (this.targets_.get(keys[i])));
   }
 
   this.targets_.clear();
@@ -317,7 +306,6 @@ goog.ui.PopupMenu.prototype.detach = function(element) {
   if (this.isInDocument()) {
     this.detachEvent_(/** @type {Object} */ (this.targets_.get(key)));
   }
-  this.disposeHandler_(/** @type {Object} */ (this.targets_.get(key)));
 
   this.targets_.remove(key);
 };
@@ -330,20 +318,7 @@ goog.ui.PopupMenu.prototype.detach = function(element) {
  */
 goog.ui.PopupMenu.prototype.detachEvent_ = function(target) {
   this.getHandler().unlisten(
-      target.eventTarget_, target.eventType_, this.onTargetClick_);
-};
-
-
-/**
- * Disposes of handler for the given event, if it needs to be disposed.
- * @param {Object} target The target to dispose handlers of.
- * @private
- */
-goog.ui.PopupMenu.prototype.disposeHandler_ = function(target) {
-  if (target.eventType_ == goog.ui.Component.EventType.ACTION &&
-      target.eventTarget_) {
-    target.eventTarget_.dispose();
-  }
+      target.element_, target.eventType_, this.onTargetClick_);
 };
 
 
@@ -533,7 +508,7 @@ goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
   var keys = this.targets_.getKeys();
   for (var i = 0; i < keys.length; i++) {
     var target = /** @type {Object} */(this.targets_.get(keys[i]));
-    if (target.eventTarget_ == e.currentTarget) {
+    if (target.element_ == e.currentTarget) {
       this.showMenu(target,
                     /** @type {number} */ (e.clientX),
                     /** @type {number} */ (e.clientY));
@@ -573,8 +548,6 @@ goog.ui.PopupMenu.prototype.handleBlur = function(e) {
 goog.ui.PopupMenu.prototype.disposeInternal = function() {
   // Always call the superclass' disposeInternal() first (Bug 715885).
   goog.ui.PopupMenu.superClass_.disposeInternal.call(this);
-
-  this.detachAll();
 
   // Disposes of the attachment target map.
   if (this.targets_) {
