@@ -37,18 +37,18 @@ See the COPYING file for details.
     MockXhrIo.lastHeaders = opt_headers;
   };
 
+  var errorReporter;
+  var originalSetTimeout = window.setTimeout;
   var stubs = new goog.testing.PropertyReplacer();
   var url = "http://www.your.tst/more/bogus.js";
   var encodedUrl = "http%3A%2F%2Fwww.your.tst%2Fmore%2Fbogus.js";
 
   function setUp() {
     stubs.set(goog.net, 'XhrIo', MockXhrIo);
-    // Ensure that setTimeout always gets cleaned up, since ErrorReporter
-    // nukes setTimeout.
-    stubs.set(goog.global, 'setTimeout', window.setTimeout);
   }
 
   function tearDown() {
+    goog.dispose(errorReporter);
     stubs.reset();
     MockXhrIo.lastUrl = null;
   }
@@ -66,7 +66,8 @@ See the COPYING file for details.
   }
 
   function testsendErrorReport() {
-    new goog.debug.ErrorReporter('/log').sendErrorReport(
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace');
 
     assertEquals('/log?script=filename.js&error=message&line=123',
@@ -86,9 +87,9 @@ See the COPYING file for details.
       headers = headersIn;
     }
 
-    var er = new goog.debug.ErrorReporter('/log');
-    er.setXhrSender(mockXhrSender);
-    er.sendErrorReport('message', 'filename.js', 123, 'trace');
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setXhrSender(mockXhrSender);
+    errorReporter.sendErrorReport('message', 'filename.js', 123, 'trace');
 
     assertEquals('/log?script=filename.js&error=message&line=123', uri);
     assertEquals('POST', method);
@@ -97,7 +98,8 @@ See the COPYING file for details.
   }
 
   function testsendErrorReport_noTrace() {
-    new goog.debug.ErrorReporter('/log').sendErrorReport(
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.sendErrorReport(
         'message', 'filename.js', 123);
 
     assertEquals('/log?script=filename.js&error=message&line=123',
@@ -112,7 +114,7 @@ See the COPYING file for details.
           fcn.call();
         });
 
-    goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
 
     var errorFunction = goog.partial(throwAnErrorWith, url, 5, "Hello :)");
 
@@ -134,7 +136,7 @@ See the COPYING file for details.
     // Remove test runner's onerror handler so the test doesn't fail.
     stubs.set(goog.global, 'onerror', null);
 
-    var errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
     goog.global.onerror("Goodbye :(", url, 22);
     assertEquals(
         "/errorreporter?script=" + encodedUrl + "&error=Goodbye%20%3A(&line=22",
@@ -147,7 +149,7 @@ See the COPYING file for details.
     // Remove test runner's onerror handler so the test doesn't fail.
     stubs.set(goog.global, 'onerror', null);
 
-    var errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
     errorReporter.setLoggingHeaders("header!");
     goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
     assertEquals("header!", MockXhrIo.lastHeaders);
@@ -160,7 +162,7 @@ See the COPYING file for details.
           fcn.call();
         });
 
-    goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
 
     var trace =
         "Error(\"Something Wrong\")@:0\n" +
@@ -191,9 +193,9 @@ See the COPYING file for details.
   function testProtectAdditionalEntryPoint_nonIE() {
     stubs.set(goog.userAgent, 'IE', false);
 
-    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
     var fn = function() {};
-    var protectedFn = reporter.protectAdditionalEntryPoint(fn);
+    var protectedFn = errorReporter.protectAdditionalEntryPoint(fn);
     assertNotNull(protectedFn);
     assertNotEquals(fn, protectedFn);
   }
@@ -201,68 +203,71 @@ See the COPYING file for details.
   function testProtectAdditionalEntryPoint_IE() {
     stubs.set(goog.userAgent, 'IE', true);
 
-    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
     var fn = function() {};
-    var protectedFn = reporter.protectAdditionalEntryPoint(fn);
+    var protectedFn = errorReporter.protectAdditionalEntryPoint(fn);
     assertNull(protectedFn);
   }
 
   function testHandleException_dispatchesEvent() {
-    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
     var loggedErrors = 0;
-    goog.events.listen(reporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+    goog.events.listen(errorReporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
         function(event) {
           assertNotNullNorUndefined(event.error);
           loggedErrors++;
         });
-    reporter.handleException(new Error());
-    reporter.handleException(new Error());
+    errorReporter.handleException(new Error());
+    errorReporter.handleException(new Error());
     assertEquals('Expected 2 errors. ' +
         '(Ensure an exception was not swallowed.)', 2, loggedErrors);
   }
 
   function testHandleException_includesContext() {
-    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
     var loggedErrors = 0;
     var testError = new Error('test error');
     var testContext = { 'contextParam' : 'contextValue' };
-    goog.events.listen(reporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+    goog.events.listen(errorReporter,
+        goog.debug.ErrorReporter.ExceptionEvent.TYPE,
         function(event) {
           assertNotNullNorUndefined(event.error);
           assertObjectEquals({ contextParam : 'contextValue' }, event.context);
           loggedErrors++;
         });
-    reporter.handleException(testError, testContext);
+    errorReporter.handleException(testError, testContext);
     assertEquals('Expected 1 error. ' +
         '(Ensure an exception was not swallowed.)', 1, loggedErrors);
   }
 
   function testContextProvider() {
-    var reporter = goog.debug.ErrorReporter.install("/errorreporter",
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter",
         function(error, context) {
           context.providedContext ='value';
         });
     var loggedErrors = 0;
     var testError = new Error('test error');
-    goog.events.listen(reporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+    goog.events.listen(errorReporter,
+        goog.debug.ErrorReporter.ExceptionEvent.TYPE,
         function(event) {
           assertNotNullNorUndefined(event.error);
           assertObjectEquals({ providedContext : 'value' } , event.context);
           loggedErrors++;
         });
-    reporter.handleException(testError);
+    errorReporter.handleException(testError);
     assertEquals('Expected 1 error. ' +
         '(Ensure an exception was not swallowed.)', 1, loggedErrors);
   }
 
   function testContextProvider_withOtherContext() {
-    var reporter = goog.debug.ErrorReporter.install("/errorreporter",
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter",
         function(error, context) {
           context.providedContext = 'value';
         });
     var loggedErrors = 0;
     var testError = new Error('test error');
-    goog.events.listen(reporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+    goog.events.listen(errorReporter,
+        goog.debug.ErrorReporter.ExceptionEvent.TYPE,
         function(event) {
           assertNotNullNorUndefined(event.error);
           assertObjectEquals(
@@ -270,18 +275,28 @@ See the COPYING file for details.
               event.context);
           loggedErrors++;
         });
-    reporter.handleException(testError, { 'otherContext' : 'value' });
+    errorReporter.handleException(testError, { 'otherContext' : 'value' });
     assertEquals('Expected 1 error. ' +
         '(Ensure an exception was not swallowed.)', 1, loggedErrors);
   }
 
   function testHandleException_ignoresExceptionsDuringEventDispatch() {
-    var reporter = goog.debug.ErrorReporter.install("/errorreporter");
-    goog.events.listen(reporter, goog.debug.ErrorReporter.ExceptionEvent.TYPE,
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
+    goog.events.listen(errorReporter,
+        goog.debug.ErrorReporter.ExceptionEvent.TYPE,
         function(event) {
           fail('This exception should be swallowed.');
         });
-    reporter.handleException(new Error());
+    errorReporter.handleException(new Error());
+  }
+
+  function testDisposal() {
+    errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
+    if (!goog.userAgent.IE) {
+      assertNotEquals(originalSetTimeout, window.setTimeout);
+    }
+    goog.dispose(errorReporter);
+    assertEquals(originalSetTimeout, window.setTimeout);
   }
 
 </script>

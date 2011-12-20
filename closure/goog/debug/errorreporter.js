@@ -322,3 +322,10 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
     goog.debug.ErrorReporter.logger_.info(logMessage);
   }
 };
+
+
+/** @override */
+goog.debug.ErrorReporter.prototype.disposeInternal = function() {
+  goog.dispose(this.errorHandler_);
+  goog.base(this, 'disposeInternal');
+};
