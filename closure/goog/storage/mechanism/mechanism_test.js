@@ -137,11 +137,11 @@ goog.storage.mechanism.mechanism_test.runQuotaTests = function(
 
   var buffer = '\u03ff'; // 2 bytes
   var savedBytes = 0;
-  try {
-    while (true) {
-      mechanism.set('foo', buffer);
-      savedBytes = 2 * buffer.length;
+   try {
+    while (buffer.length < atLeastBytes) {
       buffer = buffer + buffer;
+      mechanism.set('foo', buffer);
+      savedBytes = buffer.length;
     }
   } catch (ex) {
     if (ex != goog.storage.mechanism.ErrorCode.QUOTA_EXCEEDED) {
