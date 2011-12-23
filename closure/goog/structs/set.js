@@ -187,6 +187,21 @@ goog.structs.Set.prototype.intersection = function(col) {
 
 
 /**
+ * Finds all values that are present in this set and not in the given
+ * collection.
+ * @param {Array|Object} col A collection.
+ * @return {!goog.structs.Set} A new set containing all the values
+ *     (primitives or objects) present in this set but not in the given
+ *     collection.
+ */
+goog.structs.Set.prototype.difference = function(col) {
+  var result = this.clone();
+  result.removeAll(col);
+  return result;
+};
+
+
+/**
  * Returns an array containing all the elements in this set.
  * @return {!Array} An array containing all the elements in this set.
  */
