@@ -103,7 +103,11 @@ goog.editor.icontent.getInitialIframeContent_ =
   }
 
   // <HTML>
-  html.push('<html style="background:none transparent;');
+  html.push('<html style="background:none transparent;overflow:visible;');
+
+  // NOTE(user): Override min-widths that may be set for all
+  // HTML/BODY nodes. (A similar workaround is below for the <body> tag)
+  html.push('min-width:0;');
 
   // Make sure that the HTML element's height has the
   // correct value as the body element's percentage height is made relative
@@ -153,6 +157,8 @@ goog.editor.icontent.getInitialIframeContent_ =
   // way of getting the pointer to the field in the iframe now that it's
   // always the body.
   html.push('" id="', info.fieldId_, '" style="');
+
+  html.push('min-width:0;');
 
   if (goog.userAgent.GECKO && info.blended_) {
     // IMPORTANT: Apply the css from the body then all of the clearing

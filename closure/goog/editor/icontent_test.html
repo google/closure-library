@@ -144,8 +144,12 @@ function testGetInitialIframeContent() {
       'HAS_CONTENT_EDITABLE', true);
   htmlOut = goog.editor.icontent.getInitialIframeContent_(
       info, html, styleInfo);
+
+  assertEquals(/<html[^>]+overflow:\s*visible;/i.test(htmlOut), true);
+  assertEquals(/<html[^>]+min-width:\s*0;/i.test(htmlOut), true);
   assertEquals(/<body[^>]+?contentEditable/i.test(htmlOut), true);
-};
+  assertEquals(/<body[^>]+min-width:\s*0;/i.test(htmlOut), true);
+}
 
 function testBlendedStandardsGrowingMatchesComparisonDiv() {
   // TODO(nicksantos): If we ever move

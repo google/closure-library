@@ -136,6 +136,27 @@ function testIframeHeightGrowsOnWrap() {
       assertTrue('Wrapped text should cause iframe to grow - initial height: ' +
           unwrappedIframeHeight + ', wrapped height: ' + wrappedIframeHeight,
           wrappedIframeHeight > unwrappedIframeHeight);
+
+      // Ensure that the height remains the same if the editor is defined to
+      // have fixed height.
+      blendedField.overrideFixedHeight(true);
+      blendedField.doFieldSizingGecko();
+      wrappedIframeHeight = blendedField.getEditableIframe().offsetHeight;
+      fieldElem.style.width = '20px';
+      blendedField.doFieldSizingGecko();
+
+      assertEquals(wrappedIframeHeight,
+          blendedField.getEditableIframe().offsetHeight);
+
+      // Now make sure that the height changes again once we allow it to vary.
+      blendedField.overrideFixedHeight(false);
+      blendedField.doFieldSizingGecko();
+
+      assertTrue(
+          'Editor should grow when width is decreased and height is not ' +
+          'fixed: ' + blendedField.getEditableIframe().offsetHeight + ' vs ' +
+          wrappedIframeHeight,
+          blendedField.getEditableIframe().offsetHeight > wrappedIframeHeight);
     } finally {
       blendedField.dispose();
       clock.dispose();
@@ -212,10 +233,11 @@ function testSetMinHeight() {
           });
 
       // Test that min height is obeyed.
-      field.setMinHeight(30);
+      field.setMinHeight(300);
       clock.tick(1000);
-      assertEquals('Iframe height must match min height.',
-          30, goog.style.getSize(iframe).height);
+      assertTrue('Iframe height must be at least min height: ' +
+                 goog.style.getSize(iframe).height + ' vs 300',
+          goog.style.getSize(iframe).height >= 300);
       assertFalse('Setting min height must not cause delayed change event.',
           delayedChangeCalled);
 
