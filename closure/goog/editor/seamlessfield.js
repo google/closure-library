@@ -164,11 +164,13 @@ goog.editor.SeamlessField.prototype.handleOuterDocChange_ = function() {
  * @private
  */
 goog.editor.SeamlessField.prototype.sizeIframeToBodyHeightGecko_ = function() {
-  if (!this.isFixedHeight() && this.acquireSizeIframeLockGecko_()) {
+  if (this.acquireSizeIframeLockGecko_()) {
     var ifr = this.getEditableIframe();
-    var fieldHeight = Math.max(this.getIframeBodyHeightGecko_(),
-                               this.minHeight_ || 0);
+    var fieldHeight = this.getIframeBodyHeightGecko_();
 
+    if (this.minHeight_) {
+      fieldHeight = Math.max(fieldHeight, this.minHeight_);
+    }
     if (parseInt(goog.style.getStyle(ifr, 'height'), 10) != fieldHeight) {
       ifr.style.height = fieldHeight + 'px';
     }
@@ -187,39 +189,39 @@ goog.editor.SeamlessField.prototype.getIframeBodyHeightGecko_ = function() {
   var body = ifr.contentDocument.body;
   var htmlElement = body.parentNode;
 
-  // NOTE(user): In some cases the offset height is inaccurate. If
-  // you constrain the height of the iframe artificially and then ask for the
-  // <html> element's offsetHeight, you'll get back a value that's too low. (I
-  // think the rationale is that the content is being scrolled, so you get the
-  // viewport size rather than the content size.) Further, all observable
-  // dimensions of the iframe's <body> and <html> will be incorrect in one way
-  // or another.
-  //
-  // The only way that I know of to fix this is to set the iframe to its
-  // minimum size (which forces the <html> element's scrollHeight to update),
-  // then read the element's height. We don't need to reset the height here
-  // because the only caller, sizeIframeToBodyHeightGecko_, will do this for us.
-  var desiredHeight = this.minHeight_ || 1;
 
   // If the iframe's height is 0, then the offsetHeight/scrollHeight of the
   // HTML element in the iframe can be totally wack (i.e. too large
-  // by 50-500px). Also, in standard's mode the clientHeight is 0. (The logic
-  // that managed this is now inlined into the calculation for desiredHeight.)
-  goog.style.setStyle(ifr, 'height', desiredHeight + 'px');
+  // by 50-500px). Also, in standard's mode the clientHeight is 0.
+  if (parseInt(goog.style.getStyle(ifr, 'height'), 10) === 0) {
+    goog.style.setStyle(ifr, 'height', 1 + 'px');
+  }
 
-  // In quirks-mode, the body-element always seems
-  // to size to the containing window.  The html-element however,
-  // sizes to the content, and can thus end up with a value smaller
-  // than its child body-element if the content is shrinking.
-  // We want to make the iframe shrink too when the content shrinks,
-  // so rather than size the iframe to the body-element, size it to
-  // the html-element.
-  var fieldHeight = Math.max(body.scrollHeight, htmlElement.scrollHeight);
+  var fieldHeight;
+  if (goog.editor.node.isStandardsMode(body)) {
 
-  // If there is a horizontal scroll, add in the thickness of the
-  // scrollbar.
-  if (htmlElement.clientHeight != htmlElement.offsetHeight) {
-    fieldHeight += goog.editor.SeamlessField.getScrollbarWidth_();
+    // If in standards-mode,
+    // grab the HTML element as it will contain all the field's
+    // contents. The body's height, for example, will not include that of
+    // floated images at the bottom in standards mode.
+    // Note that this value include all scrollbars *except* for scrollbars
+    // on the HTML element itself.
+    fieldHeight = htmlElement.offsetHeight;
+  } else {
+    // In quirks-mode, the body-element always seems
+    // to size to the containing window.  The html-element however,
+    // sizes to the content, and can thus end up with a value smaller
+    // than its child body-element if the content is shrinking.
+    // We want to make the iframe shrink too when the content shrinks,
+    // so rather than size the iframe to the body-element, size it to
+    // the html-element.
+    fieldHeight = htmlElement.scrollHeight;
+
+    // If there is a horizontal scroll, add in the thickness of the
+    // scrollbar.
+    if (htmlElement.clientHeight != htmlElement.offsetHeight) {
+      fieldHeight += goog.editor.SeamlessField.getScrollbarWidth_();
+    }
   }
 
   return fieldHeight;
