@@ -37,10 +37,14 @@ goog.require('goog.positioning.AbstractPosition');
  *     anchored against.
  * @param {goog.positioning.Corner} corner Corner of anchored element the
  *     movable element should be positioned at.
+ * @param {number=} opt_overflow Overflow handling mode. Defaults to IGNORE if
+ *     not specified. Bitmap, {@see goog.positioning.Overflow}.
  * @constructor
  * @extends {goog.positioning.AbstractPosition}
  */
-goog.positioning.AnchoredPosition = function(anchorElement, corner) {
+goog.positioning.AnchoredPosition = function(anchorElement,
+                                             corner,
+                                             opt_overflow) {
   /**
    * Element the movable element should be anchored against.
    * @type {Element}
@@ -52,6 +56,14 @@ goog.positioning.AnchoredPosition = function(anchorElement, corner) {
    * @type {goog.positioning.Corner}
    */
   this.corner = corner;
+
+  /**
+   * Overflow handling mode. Defaults to IGNORE if not specified.
+   * Bitmap, {@see goog.positioning.Overflow}.
+   * @type {number|undefined}
+   * @private
+   */
+  this.overflow_ = opt_overflow;
 };
 goog.inherits(goog.positioning.AnchoredPosition,
               goog.positioning.AbstractPosition);
@@ -74,5 +86,6 @@ goog.positioning.AnchoredPosition.prototype.reposition = function(
                                     movableElement,
                                     movableCorner,
                                     undefined,
-                                    opt_margin);
+                                    opt_margin,
+                                    this.overflow_);
 };
