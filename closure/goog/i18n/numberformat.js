@@ -346,9 +346,15 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
     function(number, minIntDigits, parts) {
   // round the number
   var power = Math.pow(10, this.maximumFractionDigits_);
-  number = Math.round(number * power);
-  var intValue = Math.floor(number / power);
-  var fracValue = Math.floor(number - intValue * power);
+  var shiftedNumber = Math.round(number * power);
+  var intValue, fracValue;
+  if (isFinite(shiftedNumber)) {
+    intValue = Math.floor(shiftedNumber / power);
+    fracValue = Math.floor(shiftedNumber - intValue * power);
+  } else {
+    intValue = number;
+    fracValue = 0;
+  }
 
   var fractionPresent = this.minimumFractionDigits_ > 0 || fracValue > 0;
 

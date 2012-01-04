@@ -65,6 +65,17 @@ function testVeryBigNumber() {
       goog.i18n.NumberFormat.Format.SCIENTIFIC);
   str = fmt.format(1.3456E20);
   assertEquals('1E20', str);
+
+  fmt = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.DECIMAL);
+  str = fmt.format(-1.234567890123456e306);
+  assertEquals(1 + 1 + 306 + 306 / 3, str.length);
+  assertEquals('-1,234,567,890,123,45', str.substr(0, 21));
+
+  str = fmt.format(Infinity);
+  assertEquals('\u221e', str);
+  str = fmt.format(-Infinity);
+  assertEquals('-\u221e', str);
 }
 
 function testStandardFormat() {
