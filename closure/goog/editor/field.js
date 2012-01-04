@@ -808,7 +808,8 @@ goog.editor.Field.prototype.setupChangeListeners_ = function() {
     // handleDrop event for all browsers?
     this.addListener(['beforecut', 'beforepaste', 'drop', 'dragend'],
         this.dispatchBeforeChange);
-    this.addListener(['cut', 'paste'], this.dispatchChange);
+    this.addListener(['cut', 'paste'],
+        goog.functions.lock(this.dispatchChange));
     this.addListener('drop', this.handleDrop_);
   }
 

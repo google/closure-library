@@ -27,6 +27,7 @@ See the COPYING file for details.
   goog.require('goog.testing.LooseMock');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.dom');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
   goog.require('goog.userAgent');
@@ -335,6 +336,42 @@ function testHandledKeyEvent() {
 
   mockPlugin1.$verify();
   mockPlugin2.$verify();
+}
+
+/**
+ * Tests to make sure the cut and paste events are not dispatched immediately.
+ */
+function testHandleCutAndPasteEvents() {
+  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+    // Cut and paste events do not raise events at all in Mozilla.
+    return;
+  }
+  var editableField = new goog.editor.Field('testField');
+  var clock = new goog.testing.MockClock(true);
+  var delayedChanges = goog.testing.recordFunction();
+  goog.events.listen(editableField, goog.editor.Field.EventType.DELAYEDCHANGE,
+      delayedChanges);
+
+  editableField.makeEditable();
+
+  goog.testing.events.fireBrowserEvent(
+      new goog.testing.events.Event('cut', editableField.getElement()));
+  assertEquals('Cut event should be on a timer', 0,
+      delayedChanges.getCallCount());
+  clock.tick(1000);
+  assertEquals('delayed change event should fire within 1s after cut', 1,
+      delayedChanges.getCallCount());
+
+  goog.testing.events.fireBrowserEvent(
+      new goog.testing.events.Event('paste', editableField.getElement()));
+  assertEquals('Paste event should be on a timer', 1,
+      delayedChanges.getCallCount());
+  clock.tick(1000);
+  assertEquals('delayed change event should fire within 1s after paste', 2,
+      delayedChanges.getCallCount());
+
+  clock.dispose();
+  editableField.dispose();
 }
 
 /**
