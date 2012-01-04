@@ -26,7 +26,7 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 
 
-// TODO(user): Add more functions from Python's itertools.
+// TODO(nnaze): Add more functions from Python's itertools.
 // http://docs.python.org/library/itertools.html
 
 

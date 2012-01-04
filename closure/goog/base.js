@@ -266,7 +266,7 @@ goog.addDependency = function(relPath, provides, requires) {
 
 
 
-// NOTE(user): The debug DOM loader was included in base.js as an orignal
+// NOTE(nnaze): The debug DOM loader was included in base.js as an orignal
 // way to do "debug-mode" development.  The dependency system can sometimes
 // be confusing, as can the debug DOM loader's asyncronous nature.
 //
@@ -1006,7 +1006,7 @@ goog.cloneObject = function(obj) {
  * compiler can better support duck-typing constructs as used in
  * goog.cloneObject.
  *
- * TODO(user): Remove once the JSCompiler can infer that the check for
+ * TODO(brenneman): Remove once the JSCompiler can infer that the check for
  * proto.clone is safe in goog.cloneObject.
  *
  * @type {Function}

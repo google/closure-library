@@ -20,7 +20,7 @@ will also do logical validation to prevent duplicate provides and circular
 dependencies.
 """
 
-
+__author__ = 'nnaze@google.com (Nathan Naze)'
 
 
 class DepsTree(object):

@@ -18,7 +18,7 @@
 Simple class to scan a JavaScript file and express its dependencies.
 """
 
-
+__author__ = 'nnaze@google.com'
 
 
 import re

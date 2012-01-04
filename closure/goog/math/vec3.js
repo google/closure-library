@@ -124,7 +124,7 @@ goog.math.Vec3.prototype.magnitude = function() {
 
 /**
  * Returns the squared magnitude of the vector measured from the origin.
- * NOTE(user): Leaving out the square root is not a significant
+ * NOTE(brenneman): Leaving out the square root is not a significant
  * optimization in JavaScript.
  *
  * @return {number} The length of the vector, squared.

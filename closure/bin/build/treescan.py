@@ -21,7 +21,7 @@ import os
 import re
 
 
-
+__author__ = 'nnaze@google.com (Nathan Naze)'
 
 
 # Matches a .js file path.

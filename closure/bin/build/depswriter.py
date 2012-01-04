@@ -34,7 +34,7 @@ import source
 import treescan
 
 
-
+__author__ = 'nnaze@google.com (Nathan Naze)'
 
 
 def MakeDepsFile(source_map):

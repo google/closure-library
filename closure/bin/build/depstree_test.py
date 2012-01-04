@@ -17,7 +17,7 @@
 
 """Unit test for depstree."""
 
-
+__author__ = 'nnaze@google.com (Nathan Naze)'
 
 
 import unittest

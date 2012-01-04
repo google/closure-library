@@ -425,7 +425,7 @@ goog.dom.getViewportSize_ = function(win) {
 
   if (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('500') &&
       !goog.userAgent.MOBILE) {
-    // TODO(user): Sometimes we get something that isn't a valid window
+    // TODO(doughtie): Sometimes we get something that isn't a valid window
     // object. In this case we just revert to the current window. We need to
     // figure out when this happens and find a real fix for it.
     // See the comments on goog.dom.getWindow.

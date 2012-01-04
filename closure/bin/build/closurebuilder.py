@@ -27,7 +27,7 @@ all JS files below a directory.
 usage: %prog [options] [file1.js file2.js ...]
 """
 
-
+__author__ = 'nnaze@google.com (Nathan Naze)'
 
 
 import logging

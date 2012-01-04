@@ -41,6 +41,7 @@
  *   <li>Safari 4+
  * </ul>
  *
+ * @author brenneman@google.com (Shawn Brenneman)
  * @see ../demos/history1.html
  * @see ../demos/history2.html
  */

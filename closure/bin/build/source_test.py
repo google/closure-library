@@ -17,7 +17,7 @@
 
 """Unit test for source."""
 
-
+__author__ = 'nnaze@google.com (Nathan Naze)'
 
 
 import unittest

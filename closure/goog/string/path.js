@@ -15,6 +15,7 @@
 /**
  * @fileoverview Utilities for dealing with POSIX path strings. Based on
  * Python's os.path and posixpath.
+ * @author nnaze@google.com (Nathan Naze)
  */
 
 goog.provide('goog.string.path');
@@ -97,4 +98,4 @@ goog.string.path.normalizePath = function(path) {
   return returnPath || '.';
 };
 
-// TODO(user): Implement other useful functions from os.path
+// TODO(nnaze): Implement other useful functions from os.path

@@ -917,6 +917,8 @@ goog.ui.AutoComplete.InputHandler.prototype.addKeyEvents_ = function() {
     this.eh_.listen(this.activeElement_,
         goog.events.EventType.KEYUP, this.handleKeyUp);
   }
+  this.eh_.listen(this.activeElement_,
+      goog.events.EventType.MOUSEDOWN, this.onMouseDown_);
 
   // IE also needs a keypress to check if the user typed a separator
   if (goog.userAgent.IE) {
@@ -936,6 +938,8 @@ goog.ui.AutoComplete.InputHandler.prototype.removeKeyEvents_ = function() {
   this.keyHandler_.detach();
   this.eh_.unlisten(this.activeElement_,
       goog.events.EventType.KEYUP, this.handleKeyUp);
+  this.eh_.unlisten(this.activeElement_,
+      goog.events.EventType.MOUSEDOWN, this.onMouseDown_);
 
   if (goog.userAgent.IE) {
     this.eh_.unlisten(this.activeElement_,
@@ -1094,6 +1098,27 @@ goog.ui.AutoComplete.InputHandler.prototype.onKeyUp_ = function(e) {
        (e.keyCode == goog.events.KeyCodes.M && e.ctrlKey))) {
     this.stopWaitingForIme_();
   }
+};
+
+
+/**
+ * Handles mouse-down event.
+ * @param {goog.events.BrowserEvent} e Browser event object.
+ * @private
+ */
+goog.ui.AutoComplete.InputHandler.prototype.onMouseDown_ = function(e) {
+  if (this.ac_) {
+    this.handleMouseDown(e);
+  }
+};
+
+
+/**
+ * For subclasses to override to handle the mouse-down event.
+ * @param {goog.events.BrowserEvent} e Browser event object.
+ * @protected
+ */
+goog.ui.AutoComplete.InputHandler.prototype.handleMouseDown = function(e) {
 };
 
 

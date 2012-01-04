@@ -21,6 +21,7 @@
  * This may be used, for example, to track the availability of sparse elements
  * in an array without iterating over the entire array.
  *
+ * @author brenneman@google.com (Shawn Brenneman)
  */
 
 goog.provide('goog.math.RangeSet');
@@ -226,7 +227,7 @@ goog.math.RangeSet.prototype.containsValue = function(value) {
  *     either set.
  */
 goog.math.RangeSet.prototype.union = function(set) {
-  // TODO(user): A linear-time merge would be preferable if it is ever a
+  // TODO(brenneman): A linear-time merge would be preferable if it is ever a
   // bottleneck.
   set = set.clone();
 
