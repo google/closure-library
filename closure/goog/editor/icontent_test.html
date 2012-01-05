@@ -24,6 +24,16 @@ See the COPYING file for details.
 
   goog.require('goog.editor.icontent');
 </script>
+
+<!--
+NOTE(user): This style is set to test the bugfix for http://b/5674613.
+See the comments in icontent.js for details about the workaround.
+-->
+<style type='text/css'>
+  html, body {
+    min-width: 700px;
+  }
+</style>
 </head>
 <body>
 <script>
@@ -145,7 +155,27 @@ function testGetInitialIframeContent() {
   htmlOut = goog.editor.icontent.getInitialIframeContent_(
       info, html, styleInfo);
   assertEquals(/<body[^>]+?contentEditable/i.test(htmlOut), true);
-};
+  assertEquals(/<html[^>]+?style="[^>"]*min-width:\s*0/i.test(htmlOut), true);
+  assertEquals(/<body[^>]+?style="[^>"]*min-width:\s*0/i.test(htmlOut), true);
+}
+
+function testIframeMinWidthOverride() {
+  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+    return; // only executes when using an iframe
+  }
+
+  var info = new goog.editor.icontent.FieldFormatInfo('id', true, true, false);
+  var styleInfo = new goog.editor.icontent.FieldStyleInfo(wrapperDiv,
+      '.MyClass { position: absolute; top: 500px; }');
+  var doc = realIframeDoc;
+  var html = '<div class="MyClass">Some Html</div>';
+  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
+      styleInfo, realIframe);
+
+  // Make sure that the minimum width isn't being inherited from the parent
+  // document's style.
+  assertTrue(doc.body.offsetWidth < 700);
+}
 
 function testBlendedStandardsGrowingMatchesComparisonDiv() {
   // TODO(nicksantos): If we ever move
