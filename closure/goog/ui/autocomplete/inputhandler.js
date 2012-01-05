@@ -906,10 +906,10 @@ goog.ui.AutoComplete.InputHandler.prototype.handleKeyUp = function(e) {
 
 
 /**
- * Adds the necessary key event handlers.
+ * Adds the necessary input event handlers.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.addKeyEvents_ = function() {
+goog.ui.AutoComplete.InputHandler.prototype.addEventHandlers_ = function() {
   this.keyHandler_.attach(this.activeElement_);
   this.eh_.listen(
       this.keyHandler_, goog.events.KeyHandler.EventType.KEY, this.onKey_);
@@ -929,10 +929,10 @@ goog.ui.AutoComplete.InputHandler.prototype.addKeyEvents_ = function() {
 
 
 /**
- * Removes the necessary key event handlers.
+ * Removes the necessary input event handlers.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.removeKeyEvents_ = function() {
+goog.ui.AutoComplete.InputHandler.prototype.removeEventHandlers_ = function() {
   this.eh_.unlisten(
       this.keyHandler_, goog.events.KeyHandler.EventType.KEY, this.onKey_);
   this.keyHandler_.detach();
@@ -983,7 +983,7 @@ goog.ui.AutoComplete.InputHandler.prototype.processFocus = function(target) {
       this.eh_.listen(this.timer_, goog.Timer.TICK, this.onTick_);
     }
     this.lastValue_ = this.getValue();
-    this.addKeyEvents_();
+    this.addEventHandlers_();
   }
 };
 
@@ -1019,7 +1019,7 @@ goog.ui.AutoComplete.InputHandler.prototype.processBlur_ = function() {
   // in the case where attachInput was called on an input that already had
   // the focus
   if (this.activeElement_) {
-    this.removeKeyEvents_();
+    this.removeEventHandlers_();
     this.activeElement_ = null;
 
     if (this.timer_) {
