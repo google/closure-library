@@ -161,13 +161,13 @@ goog.ui.HoverCard.prototype.maxSearchSteps_;
 /**
  * This function can be overridden by passing a function as the first parameter
  * to the constructor.
- * @param {Element} element Element to test.
+ * @param {Node} node Node to test.
  * @return {boolean} Whether or not hovercard should be shown.
  * @private
  */
-goog.ui.HoverCard.prototype.isAnchor_ = function(element) {
-  return element.tagName in this.anchors_ &&
-      !!element.getAttribute(this.anchors_[element.tagName]);
+goog.ui.HoverCard.prototype.isAnchor_ = function(node) {
+  return node.tagName in this.anchors_ &&
+      !!node.getAttribute(this.anchors_[node.tagName]);
 };
 
 
