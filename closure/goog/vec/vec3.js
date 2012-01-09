@@ -276,7 +276,62 @@ goog.vec.Vec3.cross = function(v0, v1, resultVec) {
 
 
 /**
- * Linearly interpolate from v0 to v1 according to f. The value of f should be
+ * Returns the squared distance between two points.
+ *
+ * @param {goog.vec.Vec3.Vec3Like} vec0 First point.
+ * @param {goog.vec.Vec3.Vec3Like} vec1 Second point.
+ * @return {number} The squared distance between the points.
+ */
+goog.vec.Vec3.distanceSquared = function(vec0, vec1) {
+  var x = vec0[0] - vec1[0];
+  var y = vec0[1] - vec1[1];
+  var z = vec0[2] - vec1[2];
+  return x * x + y * y + z * z;
+};
+
+
+/**
+ * Returns the distance between two points.
+ *
+ * @param {goog.vec.Vec3.Vec3Like} vec0 First point.
+ * @param {goog.vec.Vec3.Vec3Like} vec1 Second point.
+ * @return {number} The distance between the points.
+ */
+goog.vec.Vec3.distance = function(vec0, vec1) {
+  return Math.sqrt(goog.vec.Vec3.distanceSquared(vec0, vec1));
+};
+
+
+/**
+ * Returns a unit vector pointing from one point to another.
+ * If the input points are equal then the result will be all zeros.
+ *
+ * @param {goog.vec.Vec3.Vec3Like} vec0 Origin point.
+ * @param {goog.vec.Vec3.Vec3Like} vec1 Target point.
+ * @param {goog.vec.Vec3.Vec3Like} resultVec The vector to receive the
+ *     results (may be vec0 or vec1).
+ * @return {!goog.vec.Vec3.Vec3Like} return resultVec so that operations can be
+ *     chained together.
+ */
+goog.vec.Vec3.direction = function(vec0, vec1, resultVec) {
+  var x = vec1[0] - vec0[0];
+  var y = vec1[1] - vec0[1];
+  var z = vec1[2] - vec0[2];
+  var d = Math.sqrt(x * x + y * y + z * z);
+  if (d) {
+    d = 1 / d;
+    resultVec[0] = x * d;
+    resultVec[1] = y * d;
+    resultVec[2] = z * d;
+  } else {
+    resultVec[0] = resultVec[1] = resultVec[2] = 0;
+  }
+  return resultVec;
+};
+
+
+/**
+ * Linearly interpolate from vec0 to v1 according to f. The value of f should be
  * in the range [0..1] otherwise the results are undefined.
  *
  * @param {goog.vec.Vec3.Vec3Like} v0 The first vector.
