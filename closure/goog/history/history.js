@@ -80,7 +80,7 @@
  * "esp&eacute;re" would show "esp%E8re".  (IE allows unicode characters in the
  * fragment)
  *
- * TODO(user): Should we encapsualte this escaping into the API for visible
+ * TODO(user): Should we encapsulate this escaping into the API for visible
  * history and encode all characters that aren't supported by Firefox?  It also
  * needs to be optional so apps can elect to handle the escaping themselves.
  *
@@ -100,6 +100,12 @@
  * Manually editing the hash in the address bar in IE6 and then hitting the back
  * button can replace the page with a blank page. This is a Bad User Experience,
  * but probably not preventable.
+ *
+ * IE also has a bug when the page is loaded via a server redirect, setting
+ * a new hash value on the window location will force a page reload. This will
+ * happen the first time setToken is called with a new token. The only known
+ * workaround is to force a client reload early, for example by setting
+ * window.location.hash = window.location.hash, which will otherwise be a no-op.
  *
  * Internet Explorer 8.0, Webkit 532.1 and Gecko 1.9.2:
  *
