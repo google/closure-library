@@ -194,7 +194,7 @@ goog.graphics.SvgGraphics.prototype.setElementFill = function(element, fill) {
                  fill.getColor1() + '-' + fill.getColor2();
     // It seems that the SVG version accepts opacity where the VML does not
 
-    var id = this.getDef_(defKey);
+    var id = this.getDef(defKey);
 
     if (!id) { // No def for this yet, create it
       // Create the gradient def entry (only linear gradient are supported)
@@ -233,7 +233,7 @@ goog.graphics.SvgGraphics.prototype.setElementFill = function(element, fill) {
       //   gstyles += 'opacity:' + fill.getOpacity() + ';'
       // }
 
-      id = this.addDef_(defKey, gradient);
+      id = this.addDef(defKey, gradient);
     }
 
     // Link element to linearGradient definition
@@ -710,9 +710,8 @@ goog.graphics.SvgGraphics.prototype.getTextWidth = function(text, font) {
  * @param {Element} defElement DOM element to add as a definition. It must
  *     have an id attribute set.
  * @return {string} The assigned id of the defElement.
- * @private
  */
-goog.graphics.SvgGraphics.prototype.addDef_ = function(defKey, defElement) {
+goog.graphics.SvgGraphics.prototype.addDef = function(defKey, defElement) {
   if (defKey in this.defs_) {
     return this.defs_[defKey];
   }
@@ -732,12 +731,25 @@ goog.graphics.SvgGraphics.prototype.addDef_ = function(defKey, defElement) {
  * Returns the id of a definition element.
  * @param {string} defKey This is a key that should be unique in a way that
  *     if two definitions are equal the should have the same key.
- * @return {string} The id of the found definition element or null if
+ * @return {?string} The id of the found definition element or null if
  *     not found.
- * @private
  */
-goog.graphics.SvgGraphics.prototype.getDef_ = function(defKey) {
+goog.graphics.SvgGraphics.prototype.getDef = function(defKey) {
   return defKey in this.defs_ ? this.defs_[defKey] : null;
+};
+
+/**
+ * Removes a definition of an elemnt from the global definitions.
+ * @param {string} defKey This is a key that should be unique in a way that
+ *     if two definitions are equal they should have the same key.
+ */
+goog.graphics.SvgGraphics.prototype.removeDef = function(defKey) {
+  var id = this.getDef(defKey);
+  if (id)  {
+    var element = this.dom_.getElement(id);
+    this.defsElement_.removeChild(element);
+    delete this.defs_[defKey];
+  }
 };
 
 
