@@ -44,6 +44,28 @@ var PRIMITIVE_EQUALITY_PREDICATES = {
   'Function': TO_STRING_EQUALITY_PREDICATE
 };
 
+/**
+ * Compares equality of two numbers, allowing them to differ up to a given
+ * tolerance.
+ * @param {number} var1 A number.
+ * @param {number} var2 A number.
+ * @param {number} tolerance the maximum allowed difference.
+ * @return {boolean} Whether the two variables are sufficiently close.
+ * @private
+ */
+goog.testing.asserts.numberRoughEqualityPredicate_ = function(
+    var1, var2, tolerance) {
+  return Math.abs(var1 - var2) <= tolerance;
+};
+
+/**
+ * @type {Object.<string, function(*, *, number): boolean>}
+ * @private
+ */
+goog.testing.asserts.primitiveRoughEqualityPredicates_ = {
+  'Number': goog.testing.asserts.numberRoughEqualityPredicate_
+};
+
 
 function _trueTypeOf(something) {
   var result = typeof something;
@@ -429,13 +451,39 @@ goog.testing.asserts.callWithoutLogging = function(fn) {
 
 
 /**
+ * The return value of the equality predicate passed to findDifferences below,
+ * in cases where the predicate can't test the input variables for equality.
+ * @type {?string}
+ */
+goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS = null;
+
+
+/**
+ * The return value of the equality predicate passed to findDifferences below,
+ * in cases where the input vriables are equal.
+ * @type {?string}
+ */
+goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL = '';
+
+
+/**
  * Determines if two items of any type match, and formulates an error message
  * if not.
  * @param {*} expected Expected argument to match.
  * @param {*} actual Argument as a result of performing the test.
+ * @param {(function(string, *, *): ?string)=} opt_equalityPredicate An optional
+ *     function that can be used to check equality of variables. It accepts 3
+ *     arguments: type-of-variables, var1, var2 (in that order) and returns an
+ *     error message if the variables are not equal,
+ *     goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL if the variables
+ *     are equal, or
+ *     goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS if the predicate
+ *     couldn't check the input variables. The function will be called only if
+ *     the types of var1 and var2 are identical.
  * @return {?string} Null on success, error message on failure.
  */
-goog.testing.asserts.findDifferences = function(expected, actual) {
+goog.testing.asserts.findDifferences = function(expected, actual,
+    opt_equalityPredicate) {
   var failures = [];
   var seen1 = [];
   var seen2 = [];
@@ -474,6 +522,17 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
     seen2.pop();
   }
 
+  var equalityPredicate = opt_equalityPredicate || function(type, var1, var2) {
+    var typedPredicate = PRIMITIVE_EQUALITY_PREDICATES[type];
+    if (!typedPredicate) {
+      return goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS;
+    }
+    var equal = typedPredicate(var1, var2);
+    return equal ? goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL :
+        'expected ' + _displayStringForValue(var1) +
+        ' but was ' + _displayStringForValue(var2);
+  };
+
   /**
    * @suppress {missingProperties} The map_ property is unknown to the compiler
    *     unless goog.structs.Map is loaded.
@@ -488,11 +547,12 @@ goog.testing.asserts.findDifferences = function(expected, actual) {
 
     if (typeOfVar1 == typeOfVar2) {
       var isArray = typeOfVar1 == 'Array';
-      var equalityPredicate = PRIMITIVE_EQUALITY_PREDICATES[typeOfVar1];
-      if (equalityPredicate) {
-        if (!equalityPredicate(var1, var2)) {
-          failures.push(path + ' expected ' + _displayStringForValue(var1) +
-                        ' but was ' + _displayStringForValue(var2));
+      var errorMessage = equalityPredicate(typeOfVar1, var1, var2);
+      if (errorMessage !=
+          goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS) {
+        if (errorMessage !=
+            goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL) {
+          failures.push(path + ' ' + errorMessage);
         }
       } else if (isArray && var1.length != var2.length) {
         failures.push(path + ' expected ' + var1.length + '-element array ' +
@@ -615,6 +675,39 @@ function assertObjectEquals(a, b, opt_c) {
   var v2 = nonCommentArg(2, 2, arguments);
   var failureMessage = commentArg(2, arguments) ? commentArg(2, arguments) : '';
   var differences = goog.testing.asserts.findDifferences(v1, v2);
+
+  _assert(failureMessage, !differences, differences);
+}
+
+
+/**
+ * Similar to assertObjectEquals above, but accepts a tolerance margin.
+ *
+ * @param {*} a Assertion message or comparison object.
+ * @param {*} b Comparison object.
+ * @param {*} c Comparison object or tolerance.
+ * @param {*=} opt_d Tolerance, if an assertion message was provided.
+ */
+function assertObjectRoughlyEquals(a, b, c, opt_d) {
+  _validateArguments(3, arguments);
+  var v1 = nonCommentArg(1, 3, arguments);
+  var v2 = nonCommentArg(2, 3, arguments);
+  var tolerance = nonCommentArg(3, 3, arguments);
+  var failureMessage = commentArg(3, arguments) ? commentArg(3, arguments) : '';
+  var equalityPredicate = function(type, var1, var2) {
+    var typedPredicate =
+        goog.testing.asserts.primitiveRoughEqualityPredicates_[type];
+    if (!typedPredicate) {
+      return goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS;
+    }
+    var equal = typedPredicate(var1, var2, tolerance);
+    return equal ? goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL :
+        'expected ' + _displayStringForValue(var1) +
+        ' but was ' + _displayStringForValue(var2) +
+        ' which was more than ' + tolerance + ' away';
+  };
+  var differences = goog.testing.asserts.findDifferences(
+      v1, v2, equalityPredicate);
 
   _assert(failureMessage, !differences, differences);
 }
@@ -867,7 +960,9 @@ function assertRoughlyEquals(a, b, c, opt_d) {
   var expected = nonCommentArg(1, 3, arguments);
   var actual = nonCommentArg(2, 3, arguments);
   var tolerance = nonCommentArg(3, 3, arguments);
-  _assert(commentArg(3, arguments), Math.abs(expected - actual) <= tolerance,
+  _assert(commentArg(3, arguments),
+      goog.testing.asserts.numberRoughEqualityPredicate_(
+          expected, actual, tolerance),
       'Expected ' + expected + ', but got ' + actual +
       ' which was more than ' + tolerance + ' away');
 }
