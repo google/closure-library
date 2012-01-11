@@ -32,6 +32,7 @@ goog.dom.TagName = {
   ADDRESS: 'ADDRESS',
   APPLET: 'APPLET',
   AREA: 'AREA',
+  AUDIO: 'AUDIO',
   B: 'B',
   BASE: 'BASE',
   BASEFONT: 'BASEFONT',
@@ -117,5 +118,6 @@ goog.dom.TagName = {
   TT: 'TT',
   U: 'U',
   UL: 'UL',
-  VAR: 'VAR'
+  VAR: 'VAR',
+  VIDEO: 'VIDEO'
 };
