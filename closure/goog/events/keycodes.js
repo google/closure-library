@@ -33,6 +33,7 @@ goog.require('goog.userAgent');
  * @enum {number}
  */
 goog.events.KeyCodes = {
+  WIN_KEY_FF_LINUX: 0,
   MAC_ENTER: 3,
   BACKSPACE: 8,
   TAB: 9,
@@ -199,6 +200,8 @@ goog.events.KeyCodes.isTextModifyingKeyEvent = function(e) {
     case goog.events.KeyCodes.WIN_KEY:
     case goog.events.KeyCodes.WIN_KEY_RIGHT:
       return false;
+    case goog.events.KeyCodes.WIN_KEY_FF_LINUX:
+      return !goog.userAgent.GECKO;
     default:
       return e.keyCode < goog.events.KeyCodes.FIRST_MEDIA_KEY ||
           e.keyCode > goog.events.KeyCodes.LAST_MEDIA_KEY;

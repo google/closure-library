@@ -37,6 +37,10 @@ function testTextModifyingKeys() {
       KeyCodes.TAB,
       KeyCodes.WIN_IME);
 
+  if (!goog.userAgent.GECKO) {
+    specialTextModifiers[KeyCodes.WIN_KEY_FF_LINUX] = 1;
+  }
+
   for (var keyId in KeyCodes) {
     var key = KeyCodes[keyId];
     if (goog.isFunction(key)) {
@@ -60,6 +64,16 @@ function testTextModifyingKeys() {
     assertFalse('Expected key to not modify text: ' + i,
         KeyCodes.isTextModifyingKeyEvent(fakeEvent));
   }
+}
+
+function testKeyCodeZero() {
+  var zeroEvent = createEventWithKeyCode(0);
+  assertEquals(
+      !goog.userAgent.GECKO,
+      KeyCodes.isTextModifyingKeyEvent(zeroEvent));
+  assertEquals(
+      goog.userAgent.WEBKIT,
+      KeyCodes.isCharacterKey(0));
 }
 
 function testPhantomKey() {
