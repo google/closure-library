@@ -300,6 +300,27 @@ function testRangeHighlightForZeroSizeSlider() {
       0, goog.dom.getElement('rangeHighlight').offsetWidth);
 }
 
+function testMouseWheelEventHandlerEnable() {
+  // Mouse wheel handling should be enabled by default.
+  assertTrue(oneThumbSlider.isHandleMouseWheel());
+
+  // Test disabling the mouse wheel handler
+  oneThumbSlider.setHandleMouseWheel(false);
+  assertFalse(oneThumbSlider.isHandleMouseWheel());
+
+  // Test that enabling again works fine.
+  oneThumbSlider.setHandleMouseWheel(true);
+  assertTrue(oneThumbSlider.isHandleMouseWheel());
+
+  // Test that mouse wheel handling can be disabled before rendering a slider.
+  var wheelDisabledElem = goog.dom.createDom(
+      'div', {}, goog.dom.createDom('span'));
+  var wheelDisabledSlider = new OneThumbSlider();
+  wheelDisabledSlider.setHandleMouseWheel(false);
+  wheelDisabledSlider.decorate(wheelDisabledElem);
+  assertFalse(wheelDisabledSlider.isHandleMouseWheel());
+}
+
 </script>
 </body>
 </html>

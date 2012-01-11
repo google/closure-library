@@ -232,6 +232,14 @@ goog.ui.SliderBase.prototype.blockIncrement_ = 10;
 goog.ui.SliderBase.prototype.minExtent_ = 0;
 
 
+/**
+ * Whether the slider should handle mouse wheel events.
+ * @private
+ * @type {boolean}
+ */
+goog.ui.SliderBase.prototype.isHandleMouseWheel_ = true;
+
+
 // TODO: Make this return a base CSS class (without orientation), in subclasses.
 /**
  * Returns the CSS class applied to the slider element for the given
@@ -319,10 +327,10 @@ goog.ui.SliderBase.prototype.enterDocument = function() {
       listen(this.keyHandler_, goog.events.KeyHandler.EventType.KEY,
           this.handleKeyDown_).
       listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-          this.handleMouseDown_).
-      listen(this.mouseWheelHandler_,
-          goog.events.MouseWheelHandler.EventType.MOUSEWHEEL,
-          this.handleMouseWheel_);
+          this.handleMouseDown_);
+  if (this.isHandleMouseWheel()) {
+    this.enableMouseWheelHandling_(true);
+  }
 
   this.getElement().tabIndex = 0;
   this.updateUi_();
@@ -1251,3 +1259,48 @@ goog.ui.SliderBase.prototype.updateAriaStates = function() {
                            this.getValue());
   }
 };
+
+
+/**
+ * Enables or disables mouse wheel handling for the slider. The mouse wheel
+ * handler enables the user to change the value of slider using a mouse wheel.
+ *
+ * @param {boolean} enable Whether to enable mouse wheel handling.
+ */
+goog.ui.SliderBase.prototype.setHandleMouseWheel = function(enable) {
+  if (this.isInDocument() && enable != this.isHandleMouseWheel()) {
+    this.enableMouseWheelHandling_(enable);
+  }
+
+  this.isHandleMouseWheel_ = enable;
+};
+
+
+/**
+ * @return {boolean} Whether the slider handles mousewheel.
+ */
+goog.ui.SliderBase.prototype.isHandleMouseWheel = function() {
+  return this.isHandleMouseWheel_;
+};
+
+
+/**
+ * Enable/Disable mouse wheel handling.
+ * @param {boolean} enable Whether to enable mouse wheel handling.
+ */
+goog.ui.SliderBase.prototype.enableMouseWheelHandling_ = function(enable) {
+  if (enable) {
+    if (!this.mouseWheelHandler_) {
+      this.mouseWheelHandler_ = new goog.events.MouseWheelHandler(
+          this.getElement());
+    }
+    this.getHandler().listen(this.mouseWheelHandler_,
+        goog.events.MouseWheelHandler.EventType.MOUSEWHEEL,
+        this.handleMouseWheel_);
+  } else {
+    this.getHandler().unlisten(this.mouseWheelHandler_,
+      goog.events.MouseWheelHandler.EventType.MOUSEWHEEL,
+      this.handleMouseWheel_);
+  }
+};
+
