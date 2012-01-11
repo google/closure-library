@@ -960,67 +960,6 @@ function testIdentity() {
   assertTrue(goog.identityFunction() === undefined);
 }
 
-function testPropertyIsEnumerable_() {
-  function A() {}
-  A.prototype.x = 1;
-
-  var a = new A;
-  a.y = 2;
-
-  assertFalse('Properties on the prototype should not be enumerable',
-              goog.propertyIsEnumerable_(a, 'x'))
-  assertTrue('Properties on the instance should be enumerable',
-             goog.propertyIsEnumerable_(a, 'y'))
-
-  // TODO(user): This test failed on the farm in FF3 Linux and no one was able to
-  // reproduce locally. Error:
-  // Permission denied to get property Window.document
-  // For now get the Closure build green by skipping for FF3, and look into
-  // what is causing this to be a problem for the tests running on the farm.
-  if (!(goog.userAgent.GECKO && goog.userAgent.isVersion('1.9'))) {
-    var childWindow;
-    try {
-      childWindow = window.open('', '_blank');
-    } catch (e) {
-      // NOTE(user): For some reason this line errors in Safari 3 on the farm,
-      // "Undefined value".  This only recently started happening (2008/10/21).
-      return;
-    }
-    // TODO(user): Find a way to test this behavior even when pop ups are
-    // blocked, i.e., when childWindow doesn't exist. Using an iframe doesn't
-    // seem to have the same problem.
-    if (childWindow && childWindow.document) {
-      var doc = childWindow.document;
-      doc.open();
-      doc.write('<script>' +
-                'function A() {}' +
-                'A.prototype.x = 1;' +
-                'var c = new A;' +
-                'c.y = 2;' +
-                '</' + 'script>');
-      doc.close();
-      try {
-        if (goog.userAgent.IE) {
-          assertTrue('Properties on the prototype of an object from another ' +
-              'window are enumerable in IE.',
-              goog.propertyIsEnumerable_(childWindow.c, 'x'));
-        } else {
-          assertFalse('Properties on the prototype of an object from another ' +
-              'window should not be enumerable.',
-              goog.propertyIsEnumerable_(childWindow.c, 'x'));
-        }
-        assertTrue('Properties on the instance should be enumerable.',
-            goog.propertyIsEnumerable_(childWindow.c, 'y'));
-      } finally {
-        // Even in the case where an assert fails, we want to close the child
-        // window so it's easy to see the test results.
-        childWindow.close();
-      }
-    }
-  }
-}
-
-
 function testGetObjectByName() {
   var m = {
     'undefined': undefined,
