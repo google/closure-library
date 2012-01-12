@@ -32,7 +32,7 @@ goog.provide('goog.vec.Float32Array');
 /**
  * Constructs a new Float32Array. The new array is initialized to all zeros.
  *
- * @param {goog.vec.Float32Array|Array|ArrayBuffer|TypedArray|number} p0
+ * @param {goog.vec.Float32Array|Array|ArrayBuffer|number} p0
  *     The length of the array, or an array to initialize the contents of the
  *     new Float32Array.
  * @constructor
