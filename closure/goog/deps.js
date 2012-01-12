@@ -1,4 +1,4 @@
-// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+// Copyright 2012 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -780,6 +780,7 @@ goog.addDependency('vec/ray.js', ['goog.vec.Ray'], ['goog.vec.Vec3']);
 goog.addDependency('vec/vec.js', ['goog.vec'], ['goog.vec.Float32Array']);
 goog.addDependency('vec/vec3.js', ['goog.vec.Vec3'], ['goog.vec']);
 goog.addDependency('vec/vec4.js', ['goog.vec.Vec4'], ['goog.vec']);
+goog.addDependency('webgl/webgl.js', ['goog.webgl'], []);
 goog.addDependency('window/window.js', ['goog.window'], ['goog.string', 'goog.userAgent']);
 
 
