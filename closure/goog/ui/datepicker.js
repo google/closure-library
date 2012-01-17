@@ -38,6 +38,7 @@ goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.IdGenerator');
 
 
 
@@ -199,11 +200,12 @@ goog.ui.DatePicker.prototype.elFootRow_ = null;
 
 
 /**
- * Next unique instance ID of a datepicker cell.
- * @type {number}
+ * Generator for unique table cell IDs.
+ * @type {goog.ui.IdGenerator}
  * @private
  */
-goog.ui.DatePicker.nextId_ = 0;
+goog.ui.DatePicker.prototype.cellIdGenerator_ =
+    goog.ui.IdGenerator.getInstance();
 
 
 /**
@@ -1215,7 +1217,7 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
       // Assign a unique element id (required for setting the active descendant
       // ARIA role) unless already set.
       if (!el.id) {
-        el.id = 'goog-dp-' + goog.ui.DatePicker.nextId_++;
+        el.id = this.cellIdGenerator_.getNextUniqueId();
       }
       goog.dom.a11y.setRole(el, 'gridcell');
       var classes = [goog.getCssName(this.getBaseCssClass(), 'date')];

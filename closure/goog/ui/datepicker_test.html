@@ -14,6 +14,7 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.dom.a11y');
     goog.require('goog.events');
     goog.require('goog.i18n.DateTimeSymbols_en_US');
     goog.require('goog.i18n.DateTimeSymbols_zh_HK');
@@ -196,6 +197,23 @@ See the COPYING file for details.
     picker.exitDocument();
     assertEquals('exitDocument cleans up all listeners', listeners,
         goog.events.getTotalListenerCount());
+  }
+
+  function testUniqueCellIds() {
+    picker = new goog.ui.DatePicker();
+    picker.render();
+    var cells = goog.dom.getElementsByTagNameAndClass('td', undefined,
+        picker.getElement());
+    var existingIds = {};
+    var numCells = cells.length;
+    for (var i = 0; i < numCells; i++) {
+      if (goog.dom.a11y.getRole(cells[i]) == goog.dom.a11y.Role.GRIDCELL) {
+        assertNonEmptyString('cell id is non empty', cells[i].id);
+        assertUndefined('cell id is not unique',
+            existingIds[cells[i].id]);
+        existingIds[cells[i].id] = 1;
+      }
+    }
   }
 
 </script>
