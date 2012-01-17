@@ -28,7 +28,7 @@ function setUp() {
  fpsDisplay = new goog.debug.FpsDisplay();
 }
 
-function tesrDown() {
+function tearDown() {
   goog.dispose(fpsDisplay);
   window.clearTimeout(timer);
 }
