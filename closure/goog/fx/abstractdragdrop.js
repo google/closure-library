@@ -813,8 +813,8 @@ goog.fx.AbstractDragDrop.prototype.getDragElementPosition =
   // Subtract margin from drag element position twice, once to adjust the
   // position given by the original node and once for the drag node.
   var marginBox = goog.style.getMarginBox(el);
-  pos.x += (marginBox.left || 0) * 2;
-  pos.y += (marginBox.top || 0) * 2;
+  pos.x -= (marginBox.left || 0) * 2;
+  pos.y -= (marginBox.top || 0) * 2;
 
   return pos;
 };

@@ -17,6 +17,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.fx.AbstractDragDrop');
   goog.require('goog.math.Box');
+  goog.require('goog.style');
   goog.require('goog.testing.jsunit');
 </script>
 <style>
@@ -557,6 +558,29 @@ function testMouseMove_mouseOutBeforeThreshold() {
   item.mouseMove_(event);
   assertEquals("DragStart should be fired for mouseout on main element.",
       item, draggedItem);
+}
+
+
+function testGetDragElementPosition() {
+  var testGroup = new goog.fx.AbstractDragDrop();
+  var sourceEl = document.createElement('div');
+  document.body.appendChild(sourceEl);
+
+  var pageOffset = goog.style.getPageOffset(sourceEl);
+  var pos = testGroup.getDragElementPosition(sourceEl);
+  assertEquals('Drag element position should be source element page offset',
+      pageOffset.x, pos.x);
+  assertEquals('Drag element position should be source element page offset',
+      pageOffset.y, pos.y);
+
+  sourceEl.style.marginLeft = '5px';
+  sourceEl.style.marginTop = '7px';
+  pageOffset = goog.style.getPageOffset(sourceEl);
+  pos = testGroup.getDragElementPosition(sourceEl);
+  assertEquals('Drag element position should be adjusted for source element ' +
+      'margins', pageOffset.x - 10, pos.x);
+  assertEquals('Drag element position should be adjusted for source element ' +
+      'margins', pageOffset.y - 14, pos.y);
 }
 
 
