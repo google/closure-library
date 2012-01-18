@@ -45,8 +45,8 @@ goog.require('goog.positioning.OverflowStatus');
  * @param {goog.positioning.Corner} corner Corner of anchored element the
  *     movable element should be positioned at.
  * @param {boolean=} opt_adjust Whether the positioning should be adjusted until
- *    the element fits inside the viewport even if that means that the anchored
- *    corners are ignored.
+ *     the element fits inside the viewport even if that means that the anchored
+ *     corners are ignored.
  * @constructor
  * @extends {goog.positioning.AnchoredPosition}
  */
@@ -56,26 +56,42 @@ goog.positioning.AnchoredViewportPosition = function(anchorElement,
   goog.positioning.AnchoredPosition.call(this, anchorElement, corner);
 
   /**
-   * Whether the positioning should be adjusted until the element fits inside
-   * the viewport even if that means that the anchored corners are ignored.
-   * @type {boolean|undefined}
+   * The last resort algorithm to use if the algorithm can't fit inside
+   * the viewport.
+   *
+   * IGNORE = do nothing, just display at the preferred position.
+   *
+   * ADJUST_X | ADJUST_Y = Adjust until the element fits, even if that means
+   * that the anchored corners are ignored.
+   *
+   * @type {number}
    * @private
    */
-  this.adjust_ = opt_adjust;
+  this.lastResortOverflow_ = opt_adjust ?
+      (goog.positioning.Overflow.ADJUST_X |
+       goog.positioning.Overflow.ADJUST_Y) :
+      goog.positioning.Overflow.IGNORE;
 };
 goog.inherits(goog.positioning.AnchoredViewportPosition,
               goog.positioning.AnchoredPosition);
 
 
 /**
- * @return {number} A bitmask for the "last resort" overflow. Only takes affect
- *     when {@code opt_adjusted} in the constructor is enabled.
- * @protected
+ * @return {number} A bitmask for the "last resort" overflow.
  */
 goog.positioning.AnchoredViewportPosition.prototype.getLastResortOverflow =
     function() {
-  return goog.positioning.Overflow.ADJUST_X |
-      goog.positioning.Overflow.ADJUST_Y;
+  return this.lastResortOverflow_;
+};
+
+
+/**
+ * @param {number} lastResortOverflow A bitmask for the "last resort" overflow,
+ *     if we fail to fit the element on-screen.
+ */
+goog.positioning.AnchoredViewportPosition.prototype.setLastResortOverflow =
+    function(lastResortOverflow) {
+  this.lastResortOverflow_ = lastResortOverflow;
 };
 
 
@@ -115,18 +131,9 @@ goog.positioning.AnchoredViewportPosition.prototype.reposition = function(
       movableCornerFallback = this.correctCorner_(
           status, movableCornerFallback);
 
-      if (this.adjust_) {
-        goog.positioning.positionAtAnchor(this.element, cornerFallback,
-            movableElement, movableCornerFallback, null, opt_margin,
-            this.getLastResortOverflow(), opt_preferredSize);
-
-      // Or display it anyway at the preferred position, if the adjust option
-      // was not enabled.
-      } else {
-        goog.positioning.positionAtAnchor(this.element, cornerFallback,
-            movableElement, movableCornerFallback, null, opt_margin,
-            goog.positioning.Overflow.IGNORE, opt_preferredSize);
-      }
+      goog.positioning.positionAtAnchor(this.element, cornerFallback,
+          movableElement, movableCornerFallback, null, opt_margin,
+          this.getLastResortOverflow(), opt_preferredSize);
     }
   }
 };
