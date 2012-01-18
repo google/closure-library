@@ -16,20 +16,25 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.uri.utils</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.uri.utils');
   goog.require('goog.functions');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.uri.utils');
 </script>
 </head>
 <body>
 <script>
 var utils = goog.uri.utils;
+var stubs = new goog.testing.PropertyReplacer();
 
 
 function setUpPage() {
   goog.string.getRandomString = goog.functions.constant('RANDOM');
 }
 
+function tearDown() {
+  stubs.reset();
+}
 
 function testSplit() {
   var uri = 'http://www.google.com:80/path%20path+path?q=query&hl=en#fragment';
@@ -532,6 +537,7 @@ function testMakeUnique() {
   assertEquals('http://www.google.com?a=1&b=2&zx=RANDOM#blob',
       goog.uri.utils.makeUnique('http://www.google.com?zx=9&a=1&b=2#blob'));
 }
+
 
 </script>
 </body>

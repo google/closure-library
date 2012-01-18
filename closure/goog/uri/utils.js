@@ -53,6 +53,7 @@ goog.provide('goog.uri.utils.StandardQueryParam');
 
 goog.require('goog.asserts');
 goog.require('goog.string');
+goog.require('goog.userAgent');
 
 
 /**
@@ -236,10 +237,13 @@ goog.uri.utils.ComponentIndex = {
  *     arbitrary strings may still look like path names.
  */
 goog.uri.utils.split = function(uri) {
+
   // See @return comment -- never null.
   return /** @type {!Array.<string|undefined>} */ (
       uri.match(goog.uri.utils.splitRe_));
 };
+
+
 
 
 /**
