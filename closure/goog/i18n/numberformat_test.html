@@ -658,6 +658,25 @@ function isFirefox363Linux() {
       goog.userAgent.product.isVersion('3.6.3') &&
       !goog.userAgent.product.isVersion('3.6.4');
 }
+
+
+function testEnforceAscii() {
+  try {
+    goog.i18n.NumberFormatSymbols.ZERO_DIGIT = 'A';
+    var fmt = new goog.i18n.NumberFormat('0.0000');
+    var str = fmt.format(123.45789179565757);
+    assertEquals('BCD.EFHJ', str);
+    goog.i18n.NumberFormat.setEnforceAsciiDigits(true);
+    str = fmt.format(123.45789179565757);
+    assertEquals('123.4579', str);
+    goog.i18n.NumberFormat.setEnforceAsciiDigits(false);
+    str = fmt.format(123.45789179565757);
+    assertEquals('BCD.EFHJ', str);
+  } finally {
+    goog.i18n.NumberFormatSymbols.ZERO_DIGIT = '0';
+  }
+}
+
 </script>
 </body>
 </html>

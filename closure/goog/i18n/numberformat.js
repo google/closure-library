@@ -97,6 +97,33 @@ goog.i18n.NumberFormat.CurrencyStyle = {
 
 
 /**
+ * If the usage of Ascii digits should be enforced.
+ * @type {boolean}
+ * @private
+ */
+goog.i18n.NumberFormat.enforceAsciiDigits_ = false;
+
+
+/**
+ * Set if the usage of Ascii digits in formatting should be enforced.
+ * @param {boolean} doEnforce Boolean value about if Ascii digits should be
+ *     enforced.
+ */
+goog.i18n.NumberFormat.setEnforceAsciiDigits = function(doEnforce) {
+  goog.i18n.NumberFormat.enforceAsciiDigits_ = doEnforce;
+};
+
+
+/**
+ * Return if Ascii digits is enforced.
+ * @return {boolean} If Ascii digits is enforced.
+ */
+goog.i18n.NumberFormat.isEnforceAsciiDigits = function() {
+  return goog.i18n.NumberFormat.enforceAsciiDigits_;
+};
+
+
+/**
  * Apply provided pattern, result are stored in member variables.
  *
  * @param {string} pattern String pattern being applied.
@@ -369,12 +396,14 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
 
   var decimal = goog.i18n.NumberFormatSymbols.DECIMAL_SEP;
   var grouping = goog.i18n.NumberFormatSymbols.GROUP_SEP;
-  var zeroCode = goog.i18n.NumberFormatSymbols.ZERO_DIGIT.charCodeAt(0);
+  var zeroCode = goog.i18n.NumberFormat.enforceAsciiDigits_ ?
+                 48  /* ascii '0' */ :
+                 goog.i18n.NumberFormatSymbols.ZERO_DIGIT.charCodeAt(0);
   var digitLen = intPart.length;
 
   if (intValue > 0 || minIntDigits > 0) {
     for (var i = digitLen; i < minIntDigits; i++) {
-      parts.push(goog.i18n.NumberFormatSymbols.ZERO_DIGIT);
+      parts.push(String.fromCharCode(zeroCode));
     }
 
     for (var i = 0; i < digitLen; i++) {
@@ -388,7 +417,7 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
   } else if (!fractionPresent) {
     // If there is no fraction present, and we haven't printed any
     // integer digits, then print a zero.
-    parts.push(goog.i18n.NumberFormatSymbols.ZERO_DIGIT);
+    parts.push(String.fromCharCode(zeroCode));
   }
 
   // Output the decimal separator if we always do so.
@@ -428,8 +457,10 @@ goog.i18n.NumberFormat.prototype.addExponentPart_ = function(exponent, parts) {
   }
 
   var exponentDigits = '' + exponent;
+  var zeroChar = goog.i18n.NumberFormat.enforceAsciiDigits_ ? '0' :
+                 goog.i18n.NumberFormatSymbols.ZERO_DIGIT;
   for (var i = exponentDigits.length; i < this.minExponentDigits_; i++) {
-    parts.push(goog.i18n.NumberFormatSymbols.ZERO_DIGIT);
+    parts.push(zeroChar);
   }
   parts.push(exponentDigits);
 };
