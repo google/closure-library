@@ -70,7 +70,7 @@ class DepsTree(object):
       NamespaceNotFoundError: A namespace is requested but doesn't exist.
       CircularDependencyError: A cycle is detected in the dependency tree.
     """
-    if type(required_namespaces) is str:
+    if isinstance(required_namespaces, str):
       required_namespaces = [required_namespaces]
 
     deps_sources = []
