@@ -19,7 +19,7 @@ See the COPYING file for details.
 <body>
 <script>
 
-  function testConstructor() {
+  function testDeprecatedConstructor() {
     assertElementsEquals([0, 0, 0, 0], goog.vec.Vec4.create());
 
     assertElementsEquals([1, 2, 3, 4],
@@ -32,8 +32,32 @@ See the COPYING file for details.
     assertElementsEquals([1, 2, 3, 4], goog.vec.Vec4.clone(v));
   }
 
+  function testConstructor() {
+    assertElementsEquals([0, 0, 0, 0], goog.vec.Vec4.createFloat32());
+
+    assertElementsEquals([1, 2, 3, 4],
+        goog.vec.Vec4.createFloat32FromValues(1, 2, 3, 4));
+
+    assertElementsEquals([1, 2, 3, 4],
+        goog.vec.Vec4.createFloat32FromArray([1, 2, 3, 4]));
+
+    var v = goog.vec.Vec4.createFloat32FromValues(1, 2, 3, 4);
+    assertElementsEquals([1, 2, 3, 4], goog.vec.Vec4.cloneFloat32(v));
+
+    assertElementsEquals([0, 0, 0, 0], goog.vec.Vec4.createFloat64());
+
+    assertElementsEquals([1, 2, 3, 4],
+        goog.vec.Vec4.createFloat64FromValues(1, 2, 3, 4));
+
+    assertElementsEquals([1, 2, 3, 4],
+        goog.vec.Vec4.createFloat64FromArray([1, 2, 3, 4]));
+
+    var w = goog.vec.Vec4.createFloat64FromValues(1, 2, 3, 4);
+    assertElementsEquals([1, 2, 3, 4], goog.vec.Vec4.cloneFloat64(w));
+  }
+
   function testSet() {
-    var v = goog.vec.Vec4.create();
+    var v = goog.vec.Vec4.createFloat32();
     goog.vec.Vec4.setFromValues(v, 1, 2, 3, 4);
     assertElementsEquals([1, 2, 3, 4], v);
 
@@ -42,9 +66,9 @@ See the COPYING file for details.
   }
 
   function testAdd() {
-    var v0 = goog.vec.Vec4.createFromArray([1, 2, 3, 4]);
-    var v1 = goog.vec.Vec4.createFromArray([5, 6, 7, 8]);
-    var v2 = goog.vec.Vec4.clone(v0);
+    var v0 = goog.vec.Vec4.createFloat32FromArray([1, 2, 3, 4]);
+    var v1 = goog.vec.Vec4.createFloat32FromArray([5, 6, 7, 8]);
+    var v2 = goog.vec.Vec4.cloneFloat32(v0);
 
     goog.vec.Vec4.add(v2, v1, v2);
     assertElementsEquals([1, 2, 3, 4], v0);
@@ -56,9 +80,9 @@ See the COPYING file for details.
   }
 
   function testSubtract() {
-    var v0 = goog.vec.Vec4.createFromArray([4, 3, 2, 1]);
-    var v1 = goog.vec.Vec4.createFromArray([5, 6, 7, 8]);
-    var v2 = goog.vec.Vec4.clone(v0);
+    var v0 = goog.vec.Vec4.createFloat32FromArray([4, 3, 2, 1]);
+    var v1 = goog.vec.Vec4.createFloat32FromArray([5, 6, 7, 8]);
+    var v2 = goog.vec.Vec4.cloneFloat32(v0);
 
     goog.vec.Vec4.subtract(v2, v1, v2);
     assertElementsEquals([4, 3, 2, 1], v0);
@@ -74,8 +98,8 @@ See the COPYING file for details.
   }
 
   function testNegate() {
-    var v0 = goog.vec.Vec4.createFromArray([1, 2, 3, 4]);
-    var v1 = goog.vec.Vec4.create();
+    var v0 = goog.vec.Vec4.createFloat32FromArray([1, 2, 3, 4]);
+    var v1 = goog.vec.Vec4.createFloat32();
 
     goog.vec.Vec4.negate(v0, v1);
     assertElementsEquals([-1, -2, -3, -4], v1);
@@ -86,8 +110,8 @@ See the COPYING file for details.
   }
 
   function testScale() {
-    var v0 = goog.vec.Vec4.createFromArray([1, 2, 3, 4]);
-    var v1 = goog.vec.Vec4.create();
+    var v0 = goog.vec.Vec4.createFloat32FromArray([1, 2, 3, 4]);
+    var v1 = goog.vec.Vec4.createFloat32();
 
     goog.vec.Vec4.scale(v0, 4, v1);
     assertElementsEquals([4, 8, 12, 16], v1);
@@ -99,21 +123,20 @@ See the COPYING file for details.
   }
 
   function testMagnitudeSquared() {
-    var v0 = goog.vec.Vec4.createFromArray([1, 2, 3, 4]);
+    var v0 = goog.vec.Vec4.createFloat32FromArray([1, 2, 3, 4]);
     assertEquals(30, goog.vec.Vec4.magnitudeSquared(v0));
   }
 
   function testMagnitude() {
-    var v0 = goog.vec.Vec4.createFromArray([1, 2, 3, 4]);
+    var v0 = goog.vec.Vec4.createFloat32FromArray([1, 2, 3, 4]);
     assertEquals(Math.sqrt(30), goog.vec.Vec4.magnitude(v0));
   }
 
   function testNormalize() {
-    var v0 = goog.vec.Vec4.createFromArray([2, 3, 4, 5]);
-    var v1 = goog.vec.Vec4.create();
-    var v2 = goog.vec.Vec4.create();
-    goog.vec.Vec4.scale(
-        v0, 1 / goog.vec.Vec4.magnitude(v0), v2);
+    var v0 = goog.vec.Vec4.createFloat32FromArray([2, 3, 4, 5]);
+    var v1 = goog.vec.Vec4.createFloat32();
+    var v2 = goog.vec.Vec4.createFloat32();
+    goog.vec.Vec4.scale(v0, 1 / goog.vec.Vec4.magnitude(v0), v2);
 
     goog.vec.Vec4.normalize(v0, v1);
     assertElementsEquals(v2, v1);
@@ -125,16 +148,16 @@ See the COPYING file for details.
   }
 
   function testDot() {
-    var v0 = goog.vec.Vec4.createFromArray([1, 2, 3, 4]);
-    var v1 = goog.vec.Vec4.createFromArray([5, 6, 7, 8]);
+    var v0 = goog.vec.Vec4.createFloat32FromArray([1, 2, 3, 4]);
+    var v1 = goog.vec.Vec4.createFloat32FromArray([5, 6, 7, 8]);
     assertEquals(70, goog.vec.Vec4.dot(v0, v1));
     assertEquals(70, goog.vec.Vec4.dot(v1, v0));
   }
 
   function testLerp() {
-    var v0 = goog.vec.Vec4.createFromValues(1, 2, 3, 4);
-    var v1 = goog.vec.Vec4.createFromValues(10, 20, 30, 40);
-    var v2 = goog.vec.Vec4.clone(v0);
+    var v0 = goog.vec.Vec4.createFloat32FromValues(1, 2, 3, 4);
+    var v1 = goog.vec.Vec4.createFloat32FromValues(10, 20, 30, 40);
+    var v2 = goog.vec.Vec4.cloneFloat32(v0);
 
     goog.vec.Vec4.lerp(v2, v1, 0, v2);
     assertElementsEquals([1, 2, 3, 4], v2);
@@ -145,22 +168,22 @@ See the COPYING file for details.
   }
 
   function testEquals() {
-    var v0 = goog.vec.Vec4.createFromValues(1, 2, 3, 4);
-    var v1 = goog.vec.Vec4.clone(v0);
+    var v0 = goog.vec.Vec4.createFloat32FromValues(1, 2, 3, 4);
+    var v1 = goog.vec.Vec4.cloneFloat32(v0);
     assertElementsEquals(v0, v1);
 
     v1[0] = 5;
     assertFalse(goog.vec.Vec4.equals(v0, v1));
 
-    v1 = goog.vec.Vec4.clone(v0);
+    v1 = goog.vec.Vec4.cloneFloat32(v0);
     v1[1] = 5;
     assertFalse(goog.vec.Vec4.equals(v0, v1));
 
-    v1 = goog.vec.Vec4.clone(v0);
+    v1 = goog.vec.Vec4.cloneFloat32(v0);
     v1[2] = 5;
     assertFalse(goog.vec.Vec4.equals(v0, v1));
 
-    v1 = goog.vec.Vec4.clone(v0);
+    v1 = goog.vec.Vec4.cloneFloat32(v0);
     v1[3] = 5;
     assertFalse(goog.vec.Vec4.equals(v0, v1));
   }

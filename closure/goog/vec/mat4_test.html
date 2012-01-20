@@ -18,7 +18,7 @@ See the COPYING file for details.
 <body>
 <script>
 
-  function testConstructor() {
+  function testDeprecatedConstructor() {
     var m0 = goog.vec.Mat4.create();
     assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], m0);
 
@@ -42,9 +42,33 @@ See the COPYING file for details.
     assertElementsEquals([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], m4);
   }
 
+  function testConstructor() {
+    var m0 = goog.vec.Mat4.createFloat32();
+    assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], m0);
+
+    var m1 = goog.vec.Mat4.createFloat32FromArray(
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+    assertElementsEquals(
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], m1);
+
+    var m2 = goog.vec.Mat4.clone(m1);
+    assertElementsEquals(
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], m1);
+    assertElementsEquals(
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], m2);
+
+    var m3 = goog.vec.Mat4.createFloat32FromValues(
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+    assertElementsEquals(
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], m3);
+
+    var m4 = goog.vec.Mat4.createIdentity();
+    assertElementsEquals([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], m4);
+  }
+
   function testSet() {
-    var m0 = goog.vec.Mat4.create();
-    var m1 = goog.vec.Mat4.createFromArray(
+    var m0 = goog.vec.Mat4.createFloat32();
+    var m1 = goog.vec.Mat4.createFloat32FromArray(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     goog.vec.Mat4.setFromArray(m0, m1);
     assertElementsEquals(
@@ -57,7 +81,7 @@ See the COPYING file for details.
   }
 
   function testSetDiagonal() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.setDiagonalValues(m0, 1, 2, 3, 4);
     assertElementsEquals(
         [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 4], m0);
@@ -69,7 +93,7 @@ See the COPYING file for details.
 
   function testGetDiagonal() {
     var v0 = goog.vec.Vec4.create();
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.setFromArray(
         m0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
 
@@ -110,7 +134,7 @@ See the COPYING file for details.
   }
 
   function testSetGetColumn() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.setColumn(m0, 0, [1, 2, 3, 4]);
     goog.vec.Mat4.setColumn(m0, 1, [5, 6, 7, 8]);
     goog.vec.Mat4.setColumn(m0, 2, [9, 10, 11, 12]);
@@ -130,7 +154,7 @@ See the COPYING file for details.
   }
 
   function testSetGetColumns() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.setColumns(
         m0, [1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]);
     assertElementsEquals(
@@ -146,7 +170,7 @@ See the COPYING file for details.
   }
 
   function testSetGetRow() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.setRow(m0, 0, [1, 2, 3, 4]);
     goog.vec.Mat4.setRow(m0, 1, [5, 6, 7, 8]);
     goog.vec.Mat4.setRow(m0, 2, [9, 10, 11, 12]);
@@ -166,7 +190,7 @@ See the COPYING file for details.
   }
 
   function testSetGetRows() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.setRows(
         m0, [1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]);
     assertElementsEquals(
@@ -182,7 +206,7 @@ See the COPYING file for details.
   }
 
   function testSetRowMajorArray() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.setFromRowMajorArray(
         m0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     assertElementsEquals(
@@ -190,7 +214,7 @@ See the COPYING file for details.
   }
 
   function testMakeZero() {
-    var m0 = goog.vec.Mat4.createFromArray(
+    var m0 = goog.vec.Mat4.createFloat32FromArray(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     assertElementsEquals(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], m0);
@@ -200,14 +224,14 @@ See the COPYING file for details.
   }
 
   function testMakeIdentity() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeIdentity(m0);
     assertElementsEquals(
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], m0);
   }
 
   function testSetGetElement() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     for (var r = 0; r < 4; r++) {
       for (var c = 0; c < 4; c++) {
         var value = c * 4 + r + 1;
@@ -220,11 +244,11 @@ See the COPYING file for details.
   }
 
   function testAddMat() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m1 = goog.vec.Mat4.createFromValues(
+    var m1 = goog.vec.Mat4.createFloat32FromValues(
         9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8);
-    var m2 = goog.vec.Mat4.create();
+    var m2 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.addMat(m0, m1, m2);
     assertElementsEquals(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], m0);
@@ -241,11 +265,11 @@ See the COPYING file for details.
   }
 
   function testSubMat() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m1 = goog.vec.Mat4.createFromValues(
+    var m1 = goog.vec.Mat4.createFloat32FromValues(
         9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8);
-    var m2 = goog.vec.Mat4.create();
+    var m2 = goog.vec.Mat4.createFloat32();
 
     goog.vec.Mat4.subMat(m0, m1, m2);
     assertElementsEquals(
@@ -263,9 +287,9 @@ See the COPYING file for details.
   }
 
   function testMultScalar() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m1 = goog.vec.Mat4.create();
+    var m1 = goog.vec.Mat4.createFloat32();
 
     goog.vec.Mat4.multScalar(m0, 2, m1);
     assertElementsEquals(
@@ -279,11 +303,11 @@ See the COPYING file for details.
   }
 
   function testMultMat() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m1 = goog.vec.Mat4.createFromValues(
+    var m1 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m2 = goog.vec.Mat4.create();
+    var m2 = goog.vec.Mat4.createFloat32();
 
     goog.vec.Mat4.multMat(m0, m1, m2);
     assertElementsEquals(
@@ -298,9 +322,9 @@ See the COPYING file for details.
   }
 
   function testTranspose() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    var m1 = goog.vec.Mat4.create();
+    var m1 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.transpose(m0, m1);
     assertElementsEquals(
         [1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15, 4, 8, 12, 16], m1);
@@ -311,7 +335,7 @@ See the COPYING file for details.
   }
 
   function testDeterminant() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
     assertEquals(0, goog.vec.Mat4.determinant(m0));
     assertElementsEquals(
@@ -325,7 +349,7 @@ See the COPYING file for details.
   }
 
   function testInvert() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
     assertFalse(goog.vec.Mat4.invert(m0, m0));
     assertElementsEquals(
@@ -341,13 +365,13 @@ See the COPYING file for details.
 
     goog.vec.Mat4.makeScale(m0, .01, .01, .01);
     assertTrue(goog.vec.Mat4.invert(m0, m0));
-    var m1 = goog.vec.Mat4.create();
+    var m1 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeScale(m1, 100, 100, 100);
     assertElementsEquals(m1, m0);
   }
 
   function testEquals() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var m1 = goog.vec.Mat4.clone(m0);
     assertTrue(goog.vec.Mat4.equals(m0, m1));
@@ -361,7 +385,7 @@ See the COPYING file for details.
   }
 
   function testMultVec3() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var v0 = [1, 2, 3];
     var v1 = [0, 0, 0];
@@ -375,7 +399,7 @@ See the COPYING file for details.
   }
 
   function testMultVec3NoTranslate() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var v0 = [1, 2, 3];
     var v1 = [0, 0, 0];
@@ -389,7 +413,7 @@ See the COPYING file for details.
   }
 
   function testMultVec3Projective() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var v0 = [1, 2, 3];
     var v1 = [0, 0, 0];
@@ -406,7 +430,7 @@ See the COPYING file for details.
   }
 
   function testMultVec4() {
-    var m0 = goog.vec.Mat4.createFromValues(
+    var m0 = goog.vec.Mat4.createFloat32FromValues(
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     var v0 = [1, 2, 3, 4];
     var v1 = [0, 0, 0, 0];
@@ -418,15 +442,15 @@ See the COPYING file for details.
   }
 
   function testSetValues() {
-    var a0 = goog.vec.Mat4.create();
+    var a0 = goog.vec.Mat4.createFloat32();
     assertElementsEquals(
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], a0);
-    a0 = goog.vec.Mat4.createFromArray(
+    a0 = goog.vec.Mat4.createFloat32FromArray(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     assertElementsEquals(
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], a0);
 
-    var a1 = goog.vec.Mat4.create();
+    var a1 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.setDiagonalValues(a1, 1, 2, 3, 4);
     assertElementsEquals(
         [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 4], a1);
@@ -447,27 +471,27 @@ See the COPYING file for details.
   }
 
   function testMakeTranslate() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeTranslate(m0, 3, 4, 5);
     assertElementsEquals(
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 3, 4, 5, 1], m0);
   }
 
   function testMakeScale() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeScale(m0, 3, 4, 5);
     assertElementsEquals(
         [3, 0, 0, 0, 0, 4, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1], m0);
   }
 
   function testMakeRotate() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeRotate(m0, Math.PI / 2, 0, 0, 1);
     assertElementsRoughlyEqual(
         [0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
         m0, goog.vec.EPSILON);
 
-    var m1 = goog.vec.Mat4.create();
+    var m1 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeRotate(m1, -Math.PI / 4, 0, 0, 1);
     goog.vec.Mat4.multMat(m0, m1, m1);
     assertElementsRoughlyEqual(
@@ -487,9 +511,9 @@ See the COPYING file for details.
     goog.vec.Mat4.setFromValues(
         m0, 1, 2, 3, 4, 2, 3, 4, 1, 3, 4, 1, 2, 4, 1, 2, 3);
 
-    var m1 = goog.vec.Mat4.create();
+    var m1 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeTranslate(m1, 5, 6, 7);
-    var m2 = goog.vec.Mat4.create();
+    var m2 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.multMat(m0, m1, m2);
     goog.vec.Mat4.translate(m0, 5, 6, 7);
     assertElementsEquals(m2, m0);
@@ -518,7 +542,7 @@ See the COPYING file for details.
   }
 
   function testMakeFrustum() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeFrustum(m0, -1, 2, -2, 1, .1, 1.1);
     assertElementsRoughlyEqual(
         [0.06666666, 0, 0, 0,
@@ -528,7 +552,7 @@ See the COPYING file for details.
   }
 
   function testMakePerspective() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makePerspective(m0, 90 * Math.PI / 180, 2, 0.1, 1.1);
     assertElementsRoughlyEqual(
         [0.5, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1.2, -1, 0, 0, -0.22, 0],
@@ -536,7 +560,7 @@ See the COPYING file for details.
   }
 
   function testMakeOrtho() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeOrtho(m0, -1, 2, -2, 1, 0.1, 1.1);
     assertElementsRoughlyEqual(
         [0.6666666, 0, 0, 0,
@@ -547,7 +571,7 @@ See the COPYING file for details.
   }
 
   function testMakeEulerZXZ() {
-    var m0 = goog.vec.Mat4.create();
+    var m0 = goog.vec.Mat4.createFloat32();
     var roll = Math.random() * 2 * Math.PI;
     var tilt = Math.random() * Math.PI;
     var yaw = Math.random() * 2 * Math.PI;
@@ -556,7 +580,7 @@ See the COPYING file for details.
     goog.vec.Mat4.rotate(m0, tilt, 1, 0, 0);
     goog.vec.Mat4.rotate(m0, yaw, 0, 0, 1);
 
-    var m1 = goog.vec.Mat4.create();
+    var m1 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeEulerZXZ(m1, roll, tilt, yaw);
     assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
 
@@ -585,9 +609,9 @@ See the COPYING file for details.
   }
 
   function testEulerZXZExtrema() {
-    var m0 = goog.vec.Mat4.createFromArray(
+    var m0 = goog.vec.Mat4.createFloat32FromArray(
     [1, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 1]);
-    var m1 = goog.vec.Mat4.createFromArray(
+    var m1 = goog.vec.Mat4.createFloat32FromArray(
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
     var euler = [0, 0, 0];
@@ -599,7 +623,7 @@ See the COPYING file for details.
   }
 
   function testLookAt() {
-    var viewMatrix = goog.vec.Mat4.create();
+    var viewMatrix = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeLookAt(
       viewMatrix, [0, 0, 0], [1, 0, 0], [0, 1, 0]);
     assertElementsRoughlyEqual(
@@ -619,7 +643,7 @@ See the COPYING file for details.
     var centerExp = [0, 0, 0];
     goog.vec.Vec3.add(eyeExp, fwdExp, centerExp);
 
-    var view = goog.vec.Mat4.create();
+    var view = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeLookAt(view, eyeExp, centerExp, upExp);
 
     var eyeRes = [0, 0, 0];
@@ -636,9 +660,9 @@ See the COPYING file for details.
     // precision issues in some browsers leading to flaky tests.
     var EPSILON = 1e-4;
 
-    var viewExp = goog.vec.Mat4.create();
-    var viewRes = goog.vec.Mat4.create();
-    var tmp = goog.vec.Mat4.create();
+    var viewExp = goog.vec.Mat4.createFloat32();
+    var viewRes = goog.vec.Mat4.createFloat32();
+    var tmp = goog.vec.Mat4.createFloat32();
 
     // Get a valid set of random vectors eye, forward, up by decomposing
     // a random matrix into a set of lookAt vectors.

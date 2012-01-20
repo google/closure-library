@@ -15,6 +15,7 @@ See the COPYING file for details.
   goog.require('goog.vec.Matrix4');
   goog.require('goog.vec.Quaternion');
   goog.require('goog.vec.Vec3');
+  goog.require('goog.vec.Vec4');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -22,7 +23,7 @@ See the COPYING file for details.
 <script>
 
   function testConjugate() {
-    var q0 = goog.vec.Quaternion.createFromValues(1, 2, 3, 4);
+    var q0 = goog.vec.Quaternion.createFloat32FromValues(1, 2, 3, 4);
     var q1 = goog.vec.Quaternion.create();
 
     goog.vec.Quaternion.conjugate(q0, q1);
@@ -34,8 +35,8 @@ See the COPYING file for details.
   }
 
   function testConcat() {
-    var q0 = goog.vec.Quaternion.createFromValues(1, 2, 3, 4);
-    var q1 = goog.vec.Quaternion.createFromValues(2, 3, 4, 5);
+    var q0 = goog.vec.Quaternion.createFloat32FromValues(1, 2, 3, 4);
+    var q1 = goog.vec.Quaternion.createFloat32FromValues(2, 3, 4, 5);
     var q2 = goog.vec.Quaternion.create();
     goog.vec.Quaternion.concat(q0, q1, q2);
     assertElementsEquals([12, 24, 30, 0], q2);
@@ -45,8 +46,8 @@ See the COPYING file for details.
   }
 
   function testSlerp() {
-    var q0 = goog.vec.Quaternion.createFromValues(1, 2, 3, 4);
-    var q1 = goog.vec.Quaternion.createFromValues(5, -6, 7, -8);
+    var q0 = goog.vec.Quaternion.createFloat32FromValues(1, 2, 3, 4);
+    var q1 = goog.vec.Quaternion.createFloat32FromValues(5, -6, 7, -8);
     var q2 = goog.vec.Quaternion.create();
 
     goog.vec.Quaternion.slerp(q0, q1, 0, q2);
@@ -114,7 +115,7 @@ See the COPYING file for details.
 
   function testToAngleAxis() {
     // Test the identity rotation.
-    var q0 = goog.vec.Quaternion.createFromValues(0, 0, 0, 1);
+    var q0 = goog.vec.Quaternion.createFloat32FromValues(0, 0, 0, 1);
     var axis = goog.vec.Vec3.create();
     var angle = goog.vec.Quaternion.toAngleAxis(q0, axis);
     assertRoughlyEquals(0.0, angle, goog.vec.EPSILON);
@@ -146,7 +147,8 @@ See the COPYING file for details.
   function testFromAngleAxis() {
     // Test identity rotation (zero angle or multiples of TWO_PI).
     var angle = 0.0;
-    var axis = goog.vec.Vec3.createFromValues(-0.408248, 0.8796528, -0.244016);
+    var axis = goog.vec.Vec3.createFloat32FromValues(-0.408248, 0.8796528,
+                                                     -0.244016);
     var q0 = goog.vec.Quaternion.create();
     goog.vec.Quaternion.fromAngleAxis(angle, axis, q0);
     assertElementsRoughlyEqual([0, 0, 0, 1], q0, goog.vec.EPSILON);

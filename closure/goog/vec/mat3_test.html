@@ -8,7 +8,7 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.vec.Vec3</title>
+<title>Closure Unit Tests - goog.vec.Mat3</title>
 <script src="../base.js"></script>
 <script>
   goog.require('goog.vec.Mat3');
@@ -18,7 +18,7 @@ See the COPYING file for details.
 <body>
 <script>
 
-  function testConstructor() {
+  function testDeprecatedConstructor() {
     var m0 = goog.vec.Mat3.create();
     assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0], m0);
 
@@ -36,8 +36,42 @@ See the COPYING file for details.
     assertElementsEquals([1, 0, 0, 0, 1, 0, 0, 0, 1], m4);
   }
 
+  function testConstructor() {
+    var m0 = goog.vec.Mat3.createFloat32();
+    assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0], m0);
+
+    var m1 = goog.vec.Mat3.createFloat32FromArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], m1);
+
+    var m2 = goog.vec.Mat3.createFloat32FromArray(m1);
+    assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], m1);
+    assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], m2);
+
+    var m3 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], m3);
+
+    var m4 = goog.vec.Mat3.createFloat32Identity();
+    assertElementsEquals([1, 0, 0, 0, 1, 0, 0, 0, 1], m4);
+
+    var n0 = goog.vec.Mat3.createFloat64();
+    assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0], n0);
+
+    var n1 = goog.vec.Mat3.createFloat64FromArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], n1);
+
+    var n2 = goog.vec.Mat3.createFloat64FromArray(n1);
+    assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], n1);
+    assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], n2);
+
+    var n3 = goog.vec.Mat3.createFloat64FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], n3);
+
+    var n4 = goog.vec.Mat3.createFloat64Identity();
+    assertElementsEquals([1, 0, 0, 0, 1, 0, 0, 0, 1], n4);
+  }
+
   function testSet() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     var m1 = goog.vec.Mat3.createFromArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     goog.vec.Mat3.setFromArray(m0, m1);
     assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], m0);
@@ -47,7 +81,7 @@ See the COPYING file for details.
   }
 
   function testSetDiagonal() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.setDiagonalValues(m0, 1, 2, 3);
     assertElementsEquals([1, 0, 0, 0, 2, 0, 0, 0, 3], m0);
 
@@ -56,7 +90,7 @@ See the COPYING file for details.
   }
 
   function testSetGetColumn() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.setColumn(m0, 0, [1, 2, 3]);
     goog.vec.Mat3.setColumn(m0, 1, [4, 5, 6]);
     goog.vec.Mat3.setColumn(m0, 2, [7, 8, 9]);
@@ -72,7 +106,7 @@ See the COPYING file for details.
   }
 
   function testSetGetColumns() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.setColumns(m0, [1, 2, 3], [4, 5, 6], [7, 8, 9]);
     assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], m0);
 
@@ -84,7 +118,7 @@ See the COPYING file for details.
   }
 
   function testSetGetRow() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.setRow(m0, 0, [1, 2, 3]);
     goog.vec.Mat3.setRow(m0, 1, [4, 5, 6]);
     goog.vec.Mat3.setRow(m0, 2, [7, 8, 9]);
@@ -100,7 +134,7 @@ See the COPYING file for details.
   }
 
   function testSetGetRows() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.setRows(m0, [1, 2, 3], [4, 5, 6], [7, 8, 9]);
     assertElementsEquals([1, 4, 7, 2, 5, 8, 3, 6, 9], m0);
 
@@ -112,7 +146,7 @@ See the COPYING file for details.
   }
 
   function testSetRowMajorArray() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.setFromRowMajorArray(
         m0, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
     assertElementsEquals([1, 4, 7, 2, 5, 8, 3, 6, 9], m0);
@@ -126,13 +160,13 @@ See the COPYING file for details.
   }
 
   function testMakeIdentity() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.makeIdentity(m0);
     assertElementsEquals([1, 0, 0, 0, 1, 0, 0, 0, 1], m0);
   }
 
   function testSetGetElement() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     for (var r = 0; r < 3; r++) {
       for (var c = 0; c < 3; c++) {
         var value = c * 3 + r + 1;
@@ -144,8 +178,8 @@ See the COPYING file for details.
   }
 
   function testAddMat() {
-    var m0 = goog.vec.Mat3.createFromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    var m1 = goog.vec.Mat3.createFromValues(3, 4, 5, 6, 7, 8, 9, 1, 2);
+    var m0 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    var m1 = goog.vec.Mat3.createFloat32FromValues(3, 4, 5, 6, 7, 8, 9, 1, 2);
     var m2 = goog.vec.Mat3.create();
     goog.vec.Mat3.addMat(m0, m1, m2);
     assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], m0);
@@ -158,8 +192,8 @@ See the COPYING file for details.
   }
 
   function testSubMat() {
-    var m0 = goog.vec.Mat3.createFromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    var m1 = goog.vec.Mat3.createFromValues(3, 4, 5, 6, 7, 8, 9, 1, 2);
+    var m0 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    var m1 = goog.vec.Mat3.createFloat32FromValues(3, 4, 5, 6, 7, 8, 9, 1, 2);
     var m2 = goog.vec.Mat3.create();
 
     goog.vec.Mat3.subMat(m0, m1, m2);
@@ -173,8 +207,8 @@ See the COPYING file for details.
   }
 
   function testMultScalar() {
-    var m0 = goog.vec.Mat3.createFromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    var m1 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    var m1 = goog.vec.Mat3.createFloat32();
 
     goog.vec.Mat3.multScalar(m0, 5, m1);
     assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], m0);
@@ -185,8 +219,8 @@ See the COPYING file for details.
   }
 
   function testMultMat() {
-    var m0 = goog.vec.Mat3.createFromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    var m1 = goog.vec.Mat3.createFromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    var m0 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    var m1 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
     var m2 = goog.vec.Mat3.create();
 
     goog.vec.Mat3.multMat(m0, m1, m2);
@@ -198,8 +232,8 @@ See the COPYING file for details.
   }
 
   function testTranspose() {
-    var m0 = goog.vec.Mat3.createFromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    var m1 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    var m1 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.transpose(m0, m1);
     assertElementsEquals([1, 4, 7, 2, 5, 8, 3, 6, 9], m1);
     goog.vec.Mat3.transpose(m1, m1);
@@ -207,7 +241,7 @@ See the COPYING file for details.
   }
 
   function testInvert() {
-    var m0 = goog.vec.Mat3.createFromValues(1, 1, 1, 1, 1, 1, 1, 1, 1);
+    var m0 = goog.vec.Mat3.createFloat32FromValues(1, 1, 1, 1, 1, 1, 1, 1, 1);
     assertFalse(goog.vec.Mat3.invert(m0, m0));
     assertElementsEquals([1, 1, 1, 1, 1, 1, 1, 1, 1], m0);
 
@@ -223,7 +257,7 @@ See the COPYING file for details.
   }
 
   function testEquals() {
-    var m0 = goog.vec.Mat3.createFromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    var m0 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
     var m1 = goog.vec.Mat3.createFromArray(m0);
     assertTrue(goog.vec.Mat3.equals(m0, m1));
     assertTrue(goog.vec.Mat3.equals(m1, m0));
@@ -236,7 +270,7 @@ See the COPYING file for details.
   }
 
   function testMultVec3() {
-    var m0 = goog.vec.Mat3.createFromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    var m0 = goog.vec.Mat3.createFloat32FromValues(1, 2, 3, 4, 5, 6, 7, 8, 9);
     var v0 = [1, 2, 3];
     var v1 = [0, 0, 0];
 
@@ -247,12 +281,12 @@ See the COPYING file for details.
   }
 
   function testSetValues() {
-    var a0 = goog.vec.Mat3.create();
+    var a0 = goog.vec.Mat3.createFloat32();
     assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0], a0);
     goog.vec.Mat3.setFromValues(a0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
     assertElementsEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], a0);
 
-    var a1 = goog.vec.Mat3.create();
+    var a1 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.setDiagonalValues(a1, 1, 2, 3);
     assertElementsEquals([1, 0, 0, 0, 2, 0, 0, 0, 3], a1);
 
@@ -268,26 +302,26 @@ See the COPYING file for details.
   }
 
   function testMakeTranslate() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.makeTranslate(m0, 3, 4);
     assertElementsEquals([1, 0, 0, 0, 1, 0, 3, 4, 1], m0);
   }
 
   function testMakeScale() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.makeScale(m0, 3, 4, 5);
     assertElementsEquals([3, 0, 0, 0, 4, 0, 0, 0, 5], m0);
   }
 
   function testMakeRotate() {
-    var m0 = goog.vec.Mat3.create();
+    var m0 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.makeRotate(m0, Math.PI / 2, 0, 0, 1);
     var v0 = [0, 1, 0, -1, 0, 0, 0, 0, 1];
     for (var i = 0; i < 9; ++i) {
       assertTrue(Math.abs(m0[i] - v0[i]) < 1e-6);
     }
 
-    var m1 = goog.vec.Mat3.create();
+    var m1 = goog.vec.Mat3.createFloat32();
     goog.vec.Mat3.makeRotate(m1, -Math.PI / 4, 0, 0, 1);
     goog.vec.Mat3.multMat(m0, m1, m1);
     var v1 = [0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 0, 0, 1];
