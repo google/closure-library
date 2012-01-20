@@ -23,6 +23,7 @@ See the COPYING file for details.
     <table id="sortable">
       <thead>
         <tr><th>alpha</th><th>number</th><th>not sortable</th></tr>
+        <tr><th id="not-sortable" colspan="3">cannot sort</th></tr>
       </thead>
       <tbody>
         <tr><td>C</td><td>10</td><td></td></tr>
@@ -30,6 +31,21 @@ See the COPYING file for details.
         <tr><td>C</td><td>17</td><td></td></tr>
         <tr><td>B</td><td>0</td><td></td></tr>
         <tr><td>C</td><td>3</td><td></td></tr>
+      </tbody>
+    </table>
+    <table id="sortable-2">
+      <thead>
+        <tr><th>not sortable 1</th><th colspan="2">not sortable 2</th></tr>
+        <tr>
+          <th id="sorttable-2-col-1">Col 1</th>
+          <th id="sorttable-2-col-2">Col 2</th>
+          <th id="sorttable-2-col-3">Col 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>4</td><td>5</td><td>6</td></tr>
+        <tr><td>1</td><td>2</td><td>3</td></tr>
+        <tr><td>3</td><td>1</td><td>9</td></tr>
       </tbody>
     </table>
   </div>
@@ -46,7 +62,7 @@ See the COPYING file for details.
 
       tableSorter = new goog.ui.TableSorter();
       tableSorter.setSortFunction(0, goog.ui.TableSorter.alphaSort);
-          tableSorter.setSortFunction(2, goog.ui.TableSorter.noSort);
+      tableSorter.setSortFunction(2, goog.ui.TableSorter.noSort);
       tableSorter.decorate(table);
     }
 
@@ -112,9 +128,62 @@ See the COPYING file for details.
       assertEquals(-1, tableSorter.getSortColumn());
     }
 
-    function assertOrder(arr) {
+    function testSortWithNonDefaultSortableHeaderRowIndex() {
+      // Check that clicking on non-sortable header doesn't trigger any sorting.
+      assertOrder(['C', '10', 'A', '10', 'C', '17', 'B', '0', 'C', '3']);
+      goog.testing.events.fireClickEvent(goog.dom.getElement('not-sortable'));
+      assertOrder(['C', '10', 'A', '10', 'C', '17', 'B', '0', 'C', '3']);
+    }
+
+    function testsetSortableHeaderRowIndexAfterDecorateThrows() {
+      var func = function() { tableSorter.setSortableHeaderRowIndex(0); };
+      var msg = assertThrows('failFunc should throw.', func)['message']
+      assertEquals('Component already rendered', msg);
+    }
+
+    function testSortOnSecondHeaderRow() {
+      // Test a table with multiple table headers.
+      // Using setSortableHeaderRowIndex one can specify table header columns to use
+      // in sorting.
+      var tableSorter2 = new goog.ui.TableSorter();
+      tableSorter2.setSortableHeaderRowIndex(1);
+      tableSorter2.decorate(goog.dom.getElement('sortable-2'));
+
+      // Initial order.
+      assertOrder(['4', '5', '6', '1', '2', '3', '3', '1', '9'],
+                  goog.dom.getElement('sortable-2'));
+
+      // Sort on first column.
+      goog.testing.events.fireClickEvent(
+          goog.dom.getElement('sorttable-2-col-1'));
+      assertOrder(['1', '2', '3', '3', '1', '9', '4', '5', '6'],
+                  goog.dom.getElement('sortable-2'));
+
+      // Sort on second column.
+      goog.testing.events.fireClickEvent(
+          goog.dom.getElement('sorttable-2-col-2'));
+      assertOrder(['3', '1', '9', '1', '2', '3', '4', '5', '6'],
+                  goog.dom.getElement('sortable-2'));
+
+      // Sort on third column.
+      goog.testing.events.fireClickEvent(
+          goog.dom.getElement('sorttable-2-col-3'));
+      assertOrder(['1', '2', '3', '4', '5', '6', '3', '1', '9'],
+                  goog.dom.getElement('sortable-2'));
+
+      // Reverse sort on third column.
+      goog.testing.events.fireClickEvent(
+          goog.dom.getElement('sorttable-2-col-3'));
+      assertOrder(['3', '1', '9', '4', '5', '6', '1', '2', '3'],
+                  goog.dom.getElement('sortable-2'));
+
+      tableSorter2.dispose();
+    }
+
+    function assertOrder(arr, opt_table) {
+      var tbl = opt_table || table;
       var actual = [];
-      goog.array.forEach(table.getElementsByTagName('TD'), function(td, idx) {
+      goog.array.forEach(tbl.getElementsByTagName('TD'), function(td, idx) {
         var txt = goog.dom.getTextContent(td);
         if (txt) {
           actual.push(txt);
