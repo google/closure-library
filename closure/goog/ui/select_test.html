@@ -18,6 +18,7 @@ See the COPYING file for details.
     goog.require('goog.dom.a11y.Role');
     goog.require('goog.dom.a11y.State');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.testing.recordFunction');
     goog.require('goog.ui.Component.EventType');
     goog.require('goog.ui.MenuItem');
     goog.require('goog.ui.Select');
@@ -170,6 +171,59 @@ function testExitAndEnterDocument() {
   assertEquals(item3.getCaption(), select.getCaption());
 }
 
+function testSelectEventFiresForProgrammaticChange() {
+  select.render();
+  var item1 = new goog.ui.MenuItem("item 1");
+  var item2 = new goog.ui.MenuItem("item 2");
+  select.addItem(item1);
+  select.addItem(item2);
+
+  var recordingHandler = new goog.testing.recordFunction();
+  goog.events.listen(
+      select, goog.ui.Component.EventType.CHANGE, recordingHandler);
+
+  select.setSelectedItem(item2);
+  assertEquals('Selecting new item should fire CHANGE event.',
+      1, recordingHandler.getCallCount());
+
+  select.setSelectedItem(item2);
+  assertEquals('Selecting the same item should not fire CHANGE event.',
+      1, recordingHandler.getCallCount());
+
+  select.setSelectedIndex(0);
+  assertEquals('Selecting new item should fire CHANGE event.',
+      2, recordingHandler.getCallCount());
+
+  select.setSelectedIndex(0);
+  assertEquals('Selecting the same item should not fire CHANGE event.',
+      2, recordingHandler.getCallCount());
+}
+
+function testSelectEventFiresForUserInitiatedAction() {
+  select.render();
+  var item1 = new goog.ui.MenuItem("item 1");
+  var item2 = new goog.ui.MenuItem("item 2");
+  select.addItem(item1);
+  select.addItem(item2);
+
+  var recordingHandler = new goog.testing.recordFunction();
+  goog.events.listen(
+      select, goog.ui.Component.EventType.CHANGE, recordingHandler);
+
+  select.setOpen(true);
+
+  item2.dispatchEvent(goog.ui.Component.EventType.ACTION);
+  assertEquals('Selecting new item should fire CHANGE event.',
+      1, recordingHandler.getCallCount());
+  assertFalse(select.isOpen());
+
+  select.setOpen(true);
+
+  item2.dispatchEvent(goog.ui.Component.EventType.ACTION);
+  assertEquals('Selecting the same item should not fire CHANGE event.',
+      1, recordingHandler.getCallCount());
+  assertFalse(select.isOpen());
+}
 </script>
 
 </body>

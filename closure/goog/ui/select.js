@@ -40,6 +40,9 @@ goog.require('goog.ui.registry');
  * menu with a selection model, and automatically updating the button's caption
  * based on the current selection.
  *
+ * Select fires the following events:
+ *   CHANGE - after selection changes.
+ *
  * @param {goog.ui.ControlContent} caption Default caption or existing DOM
  *     structure to display as the button's caption when nothing is selected.
  * @param {goog.ui.Menu=} opt_menu Menu containing selection options.
@@ -129,7 +132,11 @@ goog.ui.Select.prototype.disposeInternal = function() {
  */
 goog.ui.Select.prototype.handleMenuAction = function(e) {
   this.setSelectedItem(/** @type {goog.ui.MenuItem} */ (e.target));
-  goog.ui.Select.superClass_.handleMenuAction.call(this, e);
+  goog.base(this, 'handleMenuAction', e);
+
+  // NOTE(user): We should not stop propagation and then fire
+  // our own ACTION event. Fixing this without breaking anyone
+  // relying on this event is hard though.
   e.stopPropagation();
   this.dispatchEvent(goog.ui.Component.EventType.ACTION);
 };
@@ -271,7 +278,12 @@ goog.ui.Select.prototype.removeItemAt = function(index) {
  */
 goog.ui.Select.prototype.setSelectedItem = function(item) {
   if (this.selectionModel_) {
+    var prevItem = this.getSelectedItem();
     this.selectionModel_.setSelectedItem(item);
+
+    if (item != prevItem) {
+      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+    }
   }
 };
 
