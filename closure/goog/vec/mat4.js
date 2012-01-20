@@ -136,7 +136,7 @@ goog.vec.Mat4.createNumberIdentity = function() {
  * The returned matrix is cleared to all zeros.
  *
  * @deprecated Use createFloat32Identity.
- * @return {!goog.vec.Mat4.Float32} The new 16 element array.
+ * @return {!goog.vec.Mat4.Type} The new 16 element array.
  */
 goog.vec.Mat4.createIdentity = function() {
   return goog.vec.Mat4.createFloat32Identity();
@@ -309,8 +309,8 @@ goog.vec.Mat4.createFromValues = function(
  * Creates a clone of a 4x4 matrix of Float32.
  *
  * @deprecated Use cloneFloat32.
- * @param {goog.vec.Mat4.Float32} matrix The source 4x4 matrix.
- * @return {!goog.vec.Mat4.Float32} The new 4x4 element matrix.
+ * @param {goog.vec.Mat4.Mat4Like} matrix The source 4x4 matrix.
+ * @return {!goog.vec.Mat4.Type} The new 4x4 element matrix.
  */
 goog.vec.Mat4.clone = goog.vec.Mat4.createFromArray;
 

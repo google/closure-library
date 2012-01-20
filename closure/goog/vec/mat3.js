@@ -133,7 +133,7 @@ goog.vec.Mat3.createNumberIdentity = function() {
  * The returned matrix is cleared to all zeros.
  *
  * @deprecated Use createFloat32Identity.
- * @return {!goog.vec.Mat3.AnyType} The new 9 element array.
+ * @return {!goog.vec.Mat3.Type} The new 9 element array.
  */
 goog.vec.Mat3.createIdentity = function() {
   return goog.vec.Mat3.createFloat32Identity();
@@ -275,8 +275,8 @@ goog.vec.Mat3.createFromValues = function(
  * Creates a clone of a 3x3 matrix of Float32.
  *
  * @deprecated Use cloneFloat32.
- * @param {goog.vec.Mat3.Float32} matrix The source 3x3 matrix.
- * @return {!goog.vec.Mat3.Float32} The new 3x3 element matrix.
+ * @param {goog.vec.Mat3.Mat3Like} matrix The source 3x3 matrix.
+ * @return {!goog.vec.Mat3.Type} The new 3x3 element matrix.
  */
 goog.vec.Mat3.clone = goog.vec.Mat3.createFromArray;
 

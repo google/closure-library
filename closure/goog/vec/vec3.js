@@ -190,8 +190,8 @@ goog.vec.Vec3.createFromValues = function(v0, v1, v2) {
  * Creates a clone of the given 3 element vector.
  *
  * @deprecated Use cloneFloat32.
- * @param {goog.vec.Vec3.AnyType} vec The source 3 element vector.
- * @return {!goog.vec.Vec3.AnyType} The new cloned vector.
+ * @param {goog.vec.Vec3.Vec3Like} vec The source 3 element vector.
+ * @return {!goog.vec.Vec3.Type} The new cloned vector.
  */
 goog.vec.Vec3.clone = function(vec) {
   var newVec = goog.vec.Vec3.create();
