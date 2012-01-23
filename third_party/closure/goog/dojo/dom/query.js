@@ -96,8 +96,8 @@ goog.require('goog.userAgent');
    *   * `>` child element selectors
    *   * `#foo` style ID selectors
    *   * `*` universal selector
-   *   * `~`, the immediately preceeded-by sibling selector
-   *   * `+`, the preceeded-by sibling selector
+   *   * `~`, the immediately preceded-by sibling selector
+   *   * `+`, the preceded-by sibling selector
    *   * attribute queries:
    *   |  * `[foo]` attribute presence selector
    *   |  * `[foo='bar']` attribute value exact match
@@ -106,8 +106,8 @@ goog.require('goog.userAgent');
    *   |  * `[foo$='bar']` attribute end match
    *   |  * `[foo*='bar']` attribute substring match
    *   * `:first-child`, `:last-child` positional selectors
-   *   * `:empty` content emtpy selector
-   *   * `:empty` content emtpy selector
+   *   * `:empty` content empty selector
+   *   * `:empty` content empty selector
    *   * `:nth-child(n)`, `:nth-child(2n+1)` style positional calculations
    *   * `:nth-child(even)`, `:nth-child(odd)` positional selectors
    *   * `:not(...)` negation pseudo selectors
@@ -121,15 +121,15 @@ goog.require('goog.userAgent');
    * ----------------------
    *
    * While dojo.query handles many CSS3 selectors, some fall outside of
-   * what's resaonable for a programmatic node querying engine to
+   * what's reasonable for a programmatic node querying engine to
    * handle. Currently unsupported selectors include:
    *
    *   * namespace-differentiated selectors of any form
-   *   * all `::` pseduo-element selectors
+   *   * all `::` pseudo-element selectors
    *   * certain pseudo-selectors which don't get a lot of day-to-day use:
    *   |  * `:root`, `:lang()`, `:target`, `:focus`
    *   * all visual and state selectors:
-   *   |  * `:root`, `:active`, `:hover`, `:visisted`, `:link`,
+   *   |  * `:root`, `:active`, `:hover`, `:visited`, `:link`,
    *       `:enabled`, `:disabled`, `:checked`
    *   * `:*-of-type` pseudo selectors
    *
@@ -227,7 +227,7 @@ goog.dom.query = (function() {
     //    the same query run multiple times or under different root nodes
     //    does not re-parse the selector expression but instead uses the
     //    cached data structure. The state machine implemented here
-    //    terminates on the last " " (space) charachter and returns an
+    //    terminates on the last " " (space) character and returns an
     //    ordered array of query component structures (or "parts"). Each
     //    part represents an operator or a simple CSS filtering
     //    expression. The structure for parts is documented in the code
@@ -236,7 +236,7 @@ goog.dom.query = (function() {
 
     // NOTE:
     //    this code is designed to run fast and compress well. Sacrifices
-    //    to readibility and maintainability have been made.
+    //    to readability and maintainability have been made.
     if (specials.indexOf(query.slice(-1)) >= 0) {
       // If we end with a ">", "+", or "~", that means we're implicitly
       // searching all children, so make it explicit.
@@ -278,7 +278,7 @@ goog.dom.query = (function() {
         currentPart = null, // data structure representing the entire clause
         cp = null; // the current pseudo or attr matcher
 
-    // several temporary variables are assigned to this structure durring a
+    // several temporary variables are assigned to this structure during a
     // potential sub-expression match:
     //    attr:
     //      a string representing the current full attribute match in a
@@ -378,11 +378,11 @@ goog.dom.query = (function() {
       currentPart = null;
     }
 
-    // iterate over the query, charachter by charachter, building up a
+    // iterate over the query, character by character, building up a
     // list of query part objects
     for (; lc = cc, cc = query.charAt(x), x < ql; x++) {
       //    cc: the current character in the match
-      //    lc: the last charachter (if any)
+      //    lc: the last character (if any)
 
       // someone is trying to escape something, so don't try to match any
       // fragments. We assume we're inside a literal.
@@ -398,7 +398,7 @@ goog.dom.query = (function() {
         //    .className:first-child
         //  but not:
         //    thinger > div.howdy[type=thinger]
-        //  the indidual components of the previous query would be
+        //  the individual components of the previous query would be
         //  split into 3 parts that would be represented a structure
         //  like:
         //    [
@@ -417,7 +417,7 @@ goog.dom.query = (function() {
         //    ]
         currentPart = {
           query: null, // the full text of the part's rule
-          pseudos: [], // CSS supports multiple pseud-class matches in a single
+          pseudos: [], // CSS supports multiple pseudo-class matches in a single
               // rule
           attrs: [],  // CSS supports multi-attribute match, so we need an array
           classes: [], // class matches may be additive,
@@ -443,7 +443,7 @@ goog.dom.query = (function() {
         if (cc == ']') { // if we're in a [...] clause and we end, do assignment
           if (!cp.attr) {
             // no attribute match was previously begun, so we
-            // assume this is an attribute existance match in the
+            // assume this is an attribute existence match in the
             // form of [someAttributeName]
             cp.attr = ts(inBrackets + 1, x);
           } else {
@@ -475,7 +475,7 @@ goog.dom.query = (function() {
         // now look for other clause parts
       } else if (inParens >= 0) {
         // if we're in a parenthetical expression, we need to figure
-        // out if it's attached to a pseduo-selector rule like
+        // out if it's attached to a pseudo-selector rule like
         // :nth-child(1)
         if (cc == ')') {
           if (inPseudo >= 0) {
@@ -538,7 +538,7 @@ goog.dom.query = (function() {
     // the basic building block of the yes/no chaining system. agree(f1,
     // f2) generates a new function which returns the boolean results of
     // both of the passed functions to a single logical-anded result. If
-    // either are not possed, the other is used exclusively.
+    // either are not passed, the other is used exclusively.
     if (!first) {
       return second;
     }
@@ -687,7 +687,7 @@ goog.dom.query = (function() {
     }
     var l = tret.length;
 
-    // we calcuate the parent length as a cheap way to invalidate the
+    // we calculate the parent length as a cheap way to invalidate the
     // cache. It's not 100% accurate, but it's much more honest than what
     // other libraries do
     if (cl == l && ci >= 0 && cl >= 0) {
@@ -704,7 +704,7 @@ goog.dom.query = (function() {
         te['_i'] = ++i;
         if (node === te) {
           // NOTE:
-          //  shortcuting the return at this step in indexing works
+          //  shortcutting the return at this step in indexing works
           //  very well for benchmarking but we avoid it here since
           //  it leads to potential O(n^2) behavior in sequential
           //  getNodexIndex operations on a previously un-indexed
@@ -854,7 +854,7 @@ goog.dom.query = (function() {
 
   var getSimpleFilterFunc = function(query, ignores) {
     // Generates a node tester function based on the passed query part. The
-    // query part is one of the structures generatd by the query parser when it
+    // query part is one of the structures generated by the query parser when it
     // creates the query AST. The 'ignores' object specifies which (if any)
     // tests to skip, allowing the system to avoid duplicating work where it
     // may have already been taken into account by other factors such as how
@@ -1011,7 +1011,7 @@ goog.dom.query = (function() {
     //    filters them. The search may be specialized by infix operators
     //    (">", "~", or "+") else it will default to searching all
     //    descendants (the " " selector). Once a group of children is
-    //    founde, a test function is applied to weed out the ones we
+    //    found, a test function is applied to weed out the ones we
     //    don't want. Many common cases can be fast-pathed. We spend a
     //    lot of cycles to create a dispatcher that doesn't do more work
     //    than necessary at any point since, unlike this function, the
@@ -1179,7 +1179,7 @@ goog.dom.query = (function() {
         // if we have more than one root at this level, provide a new
         // hash to use for checking group membership but tell the
         // system not to post-filter us since we will already have been
-        // gauranteed to be unique
+        // guaranteed to be unique
         bag = {};
         ret.nozip = true;
       }
@@ -1208,7 +1208,7 @@ goog.dom.query = (function() {
   var _queryFuncCacheDOM = {},
     _queryFuncCacheQSA = {};
 
-  // this is the second level of spliting, from full-length queries (e.g.,
+  // this is the second level of splitting, from full-length queries (e.g.,
   // 'div.foo .bar') into simple query expressions (e.g., ['div.foo',
   // '.bar'])
   var getStepQueryFunc = function(query) {
@@ -1254,7 +1254,7 @@ goog.dom.query = (function() {
   var qsa = 'querySelectorAll';
 
   // some versions of Safari provided QSA, but it was buggy and crash-prone.
-  // We need te detect the right 'internal' webkit version to make this work.
+  // We need to detect the right 'internal' webkit version to make this work.
   var qsaAvail = (
     !!goog.dom.getDocument()[qsa] &&
     // see #5832
@@ -1411,7 +1411,7 @@ goog.dom.query = (function() {
   };
 
   // attempt to efficiently determine if an item in a list is a dupe,
-  // returning a list of 'uniques', hopefully in doucment order
+  // returning a list of 'uniques', hopefully in document order
   var _zipIdxName = '_zipIdx';
   var _zip = function(arr) {
     if (arr && arr.nozip) {
