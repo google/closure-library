@@ -125,5 +125,6 @@ goog.events.KeyNames = {
   192: '~',
   219: 'open-square-bracket',
   220: '\\',
+  221: 'close-square-bracket',
   224: 'win'
 };
