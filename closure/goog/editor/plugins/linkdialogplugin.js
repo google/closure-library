@@ -252,15 +252,15 @@ goog.editor.plugins.LinkDialogPlugin.prototype.getCurrentLink = function() {
  * Creates a new instance of the dialog and registers for the relevant events.
  * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
  *     create the dialog.
- * @param {*} link The target link (should be a goog.editor.Link).
+ * @param {*=} opt_link The target link (should be a goog.editor.Link).
  * @return {goog.ui.editor.LinkDialog} The dialog.
  * @override
  * @protected
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
-    dialogDomHelper, link) {
+    dialogDomHelper, opt_link) {
   var dialog = new goog.ui.editor.LinkDialog(dialogDomHelper,
-      /** @type {goog.editor.Link} */ (link));
+      /** @type {goog.editor.Link} */ (opt_link));
   if (this.emailWarning_) {
     dialog.setEmailWarning(this.emailWarning_);
   }

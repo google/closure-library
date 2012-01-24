@@ -521,7 +521,7 @@ goog.tweak.StringSetting.prototype.getDefaultValue;
 /**
  * @override
  */
-goog.tweak.StringSetting.prototype.encodeNewValue = function(value) {
+goog.tweak.StringSetting.prototype.encodeNewValue = function() {
   return this.getNewValue();
 };
 
