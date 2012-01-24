@@ -27,6 +27,7 @@ goog.require('goog.dom.iframe');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.FocusHandler');
+goog.require('goog.fx.Transition');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.PopupBase.EventType');
@@ -111,6 +112,38 @@ goog.ui.ModalPopup.prototype.bgIframeEl_ = null;
  * @private
  */
 goog.ui.ModalPopup.prototype.tabCatcherElement_ = null;
+
+
+/**
+ * Transition to show the popup.
+ * @type {goog.fx.Transition}
+ * @private
+ */
+goog.ui.ModalPopup.prototype.popupShowTransition_;
+
+
+/**
+ * Transition to hide the popup.
+ * @type {goog.fx.Transition}
+ * @private
+ */
+goog.ui.ModalPopup.prototype.popupHideTransition_;
+
+
+/**
+ * Transition to show the background.
+ * @type {goog.fx.Transition}
+ * @private
+ */
+goog.ui.ModalPopup.prototype.bgShowTransition_;
+
+
+/**
+ * Transition to hide the background.
+ * @type {goog.fx.Transition}
+ * @private
+ */
+goog.ui.ModalPopup.prototype.bgHideTransition_;
 
 
 /**
@@ -281,11 +314,36 @@ goog.ui.ModalPopup.prototype.setVisible = function(visible) {
     return;
   }
 
+  if (this.popupShowTransition_) this.popupShowTransition_.stop();
+  if (this.bgShowTransition_) this.bgShowTransition_.stop();
+  if (this.popupHideTransition_) this.popupHideTransition_.stop();
+  if (this.bgHideTransition_) this.bgHideTransition_.stop();
+
   if (visible) {
     this.show_();
   } else {
     this.hide_();
   }
+};
+
+
+/**
+ * Sets the transitions to show and hide the popup and background.
+ * @param {!goog.fx.Transition} popupShowTransition Transition to show the
+ *     popup.
+ * @param {!goog.fx.Transition} popupHideTransition Transition to hide the
+ *     popup.
+ * @param {!goog.fx.Transition} bgShowTransition Transition to show
+ *     the background.
+ * @param {!goog.fx.Transition} bgHideTransition Transition to hide
+ *     the background.
+ */
+goog.ui.ModalPopup.prototype.setTransition = function(popupShowTransition,
+    popupHideTransition, bgShowTransition, bgHideTransition) {
+  this.popupShowTransition_ = popupShowTransition;
+  this.popupHideTransition_ = popupHideTransition;
+  this.bgShowTransition_ = bgShowTransition;
+  this.bgHideTransition_ = bgHideTransition;
 };
 
 
@@ -309,7 +367,16 @@ goog.ui.ModalPopup.prototype.show_ = function() {
   this.showPopupElement_(true);
   this.focus();
   this.visible_ = true;
-  this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
+
+  if (this.popupShowTransition_ && this.bgShowTransition_) {
+    goog.events.listenOnce(
+        /** @type {goog.events.EventTarget} */ (this.popupShowTransition_),
+        goog.fx.Transition.EventType.END, this.onShow_, false, this);
+    this.popupShowTransition_.play();
+    this.bgShowTransition_.play();
+  } else {
+    this.onShow_();
+  }
 };
 
 
@@ -328,9 +395,15 @@ goog.ui.ModalPopup.prototype.hide_ = function() {
       this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
       this.resizeBackground_);
 
-  this.showPopupElement_(false);
-  this.visible_ = false;
-  this.dispatchEvent(goog.ui.PopupBase.EventType.HIDE);
+  if (this.popupHideTransition_ && this.bgHideTransition_) {
+    goog.events.listenOnce(
+        /** @type {goog.events.EventTarget} */ (this.popupHideTransition_),
+        goog.fx.Transition.EventType.END, this.onHide_, false, this);
+    this.popupHideTransition_.play();
+    this.bgHideTransition_.play();
+  } else {
+    this.onHide_();
+  }
 };
 
 
@@ -348,6 +421,26 @@ goog.ui.ModalPopup.prototype.showPopupElement_ = function(visible) {
   }
   goog.style.showElement(this.getElement(), visible);
   goog.style.showElement(this.tabCatcherElement_, visible);
+};
+
+
+/**
+ * Called after the popup is shown.
+ * @private
+ */
+goog.ui.ModalPopup.prototype.onShow_ = function() {
+  this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
+};
+
+
+/**
+ * Called after the popup is hidden.
+ * @private
+ */
+goog.ui.ModalPopup.prototype.onHide_ = function() {
+  this.showPopupElement_(false);
+  this.visible_ = false;
+  this.dispatchEvent(goog.ui.PopupBase.EventType.HIDE);
 };
 
 

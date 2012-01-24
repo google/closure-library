@@ -17,6 +17,7 @@ See the COPYING file for details.
   goog.require('goog.dispose');
   goog.require('goog.dom');
   goog.require('goog.events');
+  goog.require('goog.events.EventTarget');
   goog.require('goog.style');
   goog.require('goog.ui.PopupBase.EventType');
   goog.require('goog.testing.jsunit');
@@ -166,6 +167,111 @@ function testEventFiredOnHide() {
   assertEquals(1, hideCallCount);
 }
 
+
+function testShowEventFiredWithNoTransition() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+
+  var showHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.SHOW, function() {
+    showHandlerCalled = true;
+  });
+
+  popup.setVisible(true);
+  assertTrue(showHandlerCalled);
+}
+
+function testHideEventFiredWithNoTransition() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+
+  var hideHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
+    hideHandlerCalled = true;
+  });
+
+  popup.setVisible(true);
+  popup.setVisible(false);
+  assertTrue(hideHandlerCalled);
+}
+
+function testTransitionsPlayedOnShow() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+
+  var mockPopupShowTransition = new MockTransition();
+  var mockPopupHideTransition = new MockTransition();
+  var mockBgShowTransition = new MockTransition();
+  var mockBgHideTransition = new MockTransition();
+
+  var showHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.SHOW, function() {
+    showHandlerCalled = true;
+  });
+
+  popup.setTransition(mockPopupShowTransition, mockPopupHideTransition,
+      mockBgShowTransition, mockBgHideTransition);
+  assertFalse(mockPopupShowTransition.wasPlayed);
+  assertFalse(mockBgShowTransition.wasPlayed);
+
+  popup.setVisible(true);
+  assertTrue(mockPopupShowTransition.wasPlayed);
+  assertTrue(mockBgShowTransition.wasPlayed);
+
+  assertFalse(showHandlerCalled);
+  mockPopupShowTransition.dispatchEvent(goog.fx.Transition.EventType.END);
+  assertTrue(showHandlerCalled);
+}
+
+
+function testTransitionsPlayedOnHide() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+
+  var mockPopupShowTransition = new MockTransition();
+  var mockPopupHideTransition = new MockTransition();
+  var mockBgShowTransition = new MockTransition();
+  var mockBgHideTransition = new MockTransition();
+
+  var hideHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
+    hideHandlerCalled = true;
+  });
+
+  popup.setTransition(mockPopupShowTransition, mockPopupHideTransition,
+      mockBgShowTransition, mockBgHideTransition);
+  popup.setVisible(true);
+  assertFalse(mockPopupHideTransition.wasPlayed);
+  assertFalse(mockBgHideTransition.wasPlayed);
+
+  popup.setVisible(false);
+  assertTrue(mockPopupHideTransition.wasPlayed);
+  assertTrue(mockBgHideTransition.wasPlayed);
+
+  assertFalse(hideHandlerCalled);
+  mockPopupHideTransition.dispatchEvent(goog.fx.Transition.EventType.END);
+  assertTrue(hideHandlerCalled);
+}
+
+
+
+/**
+ * @implements {goog.fx.Transition}
+ * @extends {goog.events.EventTarget}
+ */
+var MockTransition = function() {
+  goog.base(this);
+  this.wasPlayed = false;
+};
+goog.inherits(MockTransition, goog.events.EventTarget);
+
+
+MockTransition.prototype.play = function() {
+  this.wasPlayed = true;
+}
+
+
+MockTransition.prototype.stop = goog.nullFunction;
 
 </script>
 </body>
