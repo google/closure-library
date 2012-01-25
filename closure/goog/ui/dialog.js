@@ -569,12 +569,18 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
         null, titleTextClass, this.titleEl_)[0];
     this.titleCloseEl_ = goog.dom.getElementsByTagNameAndClass(
         null, titleCloseClass, this.titleEl_)[0];
+    // Give the title an id if it doesn't already have one.
+    if (!this.titleEl_.id) {
+      this.titleEl_.id = this.getId();
+    }
   } else {
     // Create the title bar element and insert it before the content area.
     // This is useful if the element to decorate only includes a content area.
-    this.titleEl_ = this.getDomHelper().createDom('div', titleClass);
+    this.titleEl_ = this.getDomHelper().createDom('div',
+        {'className': titleClass, 'id': this.getId()});
     this.getElement().insertBefore(this.titleEl_, this.contentEl_);
   }
+  this.titleId_ = this.titleEl_.id;
 
   // Decorate or create the title text element.
   if (this.titleTextEl_) {
