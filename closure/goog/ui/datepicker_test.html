@@ -135,6 +135,16 @@ See the COPYING file for details.
     assertTrue(goog.style.isElementShown(tFoot))
   }
 
+  function testGetActiveMonth() {
+    picker = new goog.ui.DatePicker(new Date(2000, 5, 5));
+    var month = picker.getActiveMonth();
+    assertObjectEquals(new goog.date.Date(2000, 5, 1), month);
+
+    month.setMonth(10);
+    assertObjectEquals('modifying the returned object is safe',
+        new goog.date.Date(2000, 5, 1), picker.getActiveMonth());
+  }
+
   function testGetDate() {
     picker = new goog.ui.DatePicker(new Date(2000, 0, 1));
     var date = picker.getDate();

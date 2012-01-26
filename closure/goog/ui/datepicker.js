@@ -543,6 +543,14 @@ goog.ui.DatePicker.prototype.selectNone = function() {
 
 
 /**
+ * @return {goog.date.Date} The active month displayed.
+ */
+goog.ui.DatePicker.prototype.getActiveMonth = function() {
+  return this.activeMonth_.clone();
+};
+
+
+/**
  * @return {goog.date.Date} The selected date or null if nothing is selected.
  */
 goog.ui.DatePicker.prototype.getDate = function() {
