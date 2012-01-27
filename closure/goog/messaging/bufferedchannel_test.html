@@ -174,6 +174,12 @@ function testBidirectionalCommunicationBuffersUntilReadyPingsSucceed() {
   mockChannel2.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + ':' +
                     messages[1].serviceName,
                     messages[1].payload);
+  mockChannel1.send(
+      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
+      '');
+  mockChannel2.send(
+      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + ':setPeerReady_',
+      '');
 
   mockControl.$replayAll();
   bufferedChannel1.send(messages[0].serviceName, messages[0].payload);
@@ -184,7 +190,7 @@ function testBidirectionalCommunicationBuffersUntilReadyPingsSucceed() {
   clock.tick(goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
   assertEquals(bufferedChannel1.buffer_, null);
   assertEquals(bufferedChannel2.buffer_, null);
-  // Now that peers are ready, a second tick causes no more sends.
+  // A second tick causes more sends, which are noops.
   clock.tick(goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
   mockControl.$verifyAll();
 }

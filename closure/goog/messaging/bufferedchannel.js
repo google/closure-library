@@ -197,9 +197,9 @@ goog.messaging.BufferedChannel.prototype.onTick_ = function(unusedEvent) {
     this.timer_.stop();  // So we don't keep calling send and re-throwing.
     throw e;
   }
-  if (this.isPeerReady()) {
-    this.timer_.stop();
-  }
+  // Keep pinging even once the peer knows we're ready, since the peer might get
+  // reinitialized (e.g., inner frame gets reloaded) and will then block until
+  // it hears our ping again.
 };
 
 
