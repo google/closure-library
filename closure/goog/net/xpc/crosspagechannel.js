@@ -530,6 +530,20 @@ goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
   this.transport_.send(this.escapeServiceName_(serviceName), payload);
 };
 
+/**
+ * Delivers messages to the appropriate service-handler.
+ *
+ * @param {string} serviceName The name of the port.
+ * @param {string} payload The payload.
+ * @param {string=} opt_origin An optional origin for the message, where the
+ *     underlying transport makes that available.  If this is specified, and
+ *     the PEER_HOSTNAME parameter was provided, they must match or the message
+ *     will be rejected.
+ */
+goog.net.xpc.CrossPageChannel.prototype.safeDeliver = function(
+    serviceName, payload, opt_origin) {
+  this.deliver_(serviceName, payload, opt_origin);
+};
 
 /**
  * Delivers messages to the appropriate service-handler.
