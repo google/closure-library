@@ -223,12 +223,6 @@ goog.proto.Serializer.prototype.serializeArray_ = function(arr, sb) {
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js ERROR - Access to private property serialize_ of goog.proto.Serializer not allowed here.
       this.serialize_(arr[i], sb);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/asynctestcase.js ERROR - Access to private property now_ of goog.testing.AsyncTestCase not allowed here.
-    this.setBatchTime(this.now_());
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/asynctestcase.js ERROR - Access to private property now_ of goog.testing.AsyncTestCase not allowed here.
-      var delta = this.now_() - this.getBatchTime();
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/editor/testhelper.js ERROR - Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
     for (var key in goog.editor.plugins.AbstractBubblePlugin.bubbleMap_) {
 

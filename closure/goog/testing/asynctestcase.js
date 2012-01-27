@@ -693,7 +693,7 @@ goog.testing.AsyncTestCase.prototype.pump_ = function(opt_doFirst) {
   // If this function is already above us in the call-stack, then we should
   // return rather than pumping in order to minimize call-stack depth.
   if (!this.returnWillPump_) {
-    this.setBatchTime(this.now_());
+    this.setBatchTime(this.now());
     this.returnWillPump_ = true;
     // If we catch an exception in the step, we don't want to return control
     // to our caller since there may be non-testcase code in our call stack.
@@ -726,7 +726,7 @@ goog.testing.AsyncTestCase.prototype.pump_ = function(opt_doFirst) {
 
       // If the max run time is exceeded call this function again async so as
       // not to block the browser.
-      var delta = this.now_() - this.getBatchTime();
+      var delta = this.now() - this.getBatchTime();
       if (delta > goog.testing.TestCase.MAX_RUN_TIME &&
           !topFuncResult.controlBreakingExceptionThrown) {
         this.saveMessage('Breaking async');

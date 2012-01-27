@@ -76,7 +76,7 @@ function tearDown() {
 
   waitForTimeout(function() {
     // Pointless assertion to verify that tearDown methods can contain waits.
-    assertTrue(testCase.now_() >= testCase.startTime_);
+    assertTrue(testCase.now() >= testCase.startTime_);
   }, 0);
 }
 
