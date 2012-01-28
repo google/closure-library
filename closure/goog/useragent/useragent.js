@@ -495,5 +495,5 @@ goog.userAgent.isDocumentModeCache_ = {};
 goog.userAgent.isDocumentMode = function(documentMode) {
   return goog.userAgent.isDocumentModeCache_[documentMode] ||
       (goog.userAgent.isDocumentModeCache_[documentMode] = goog.userAgent.IE &&
-      document.documentMode && document.documentMode >= documentMode);
+      !!document.documentMode && document.documentMode >= documentMode);
 };
