@@ -265,6 +265,10 @@ goog.editor.plugins.TagOnEnterHandler.prototype.
   if (goog.editor.plugins.EnterHandler.isBrElem(elementAfterCursor)) {
     // The first element in the new line is a line with just a BR and maybe some
     // whitespace.
+    // Calling normalize() is needed because there might be empty text nodes
+    // before BR and empty text nodes cause the cursor position bug in Firefox.
+    // See http://b/5220858
+    elementAfterCursor.normalize();
     var br = elementAfterCursor.getElementsByTagName(goog.dom.TagName.BR)[0];
     if (br.previousSibling &&
         br.previousSibling.nodeType == goog.dom.NodeType.TEXT) {
@@ -707,7 +711,7 @@ goog.editor.plugins.TagOnEnterHandler.joinTextNodes_ = function(node,
  */
 goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_ = function(
     textNode, fromStart, isLeaveEmpty) {
-  var regExp = fromStart ? / ^[\t\r\n]+/ : /[ \t\r\n]+$/;
+  var regExp = fromStart ? /^[ \t\r\n]+/ : /[ \t\r\n]+$/;
   textNode.nodeValue = textNode.nodeValue.replace(regExp,
                                                   goog.string.Unicode.NBSP);
 

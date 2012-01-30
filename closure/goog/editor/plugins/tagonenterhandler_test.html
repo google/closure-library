@@ -119,6 +119,38 @@ function testEnterCreatesBlankLine() {
     assertEquals('Selection should be in text node to avoid creating adjacent' +
                  ' text nodes',
         goog.dom.NodeType.TEXT, range.getStartNode().nodeType);
+    var rangeStartNode =
+        goog.dom.Range.createFromNodeContents(range.getStartNode());
+    assertHTMLEquals('The value of selected text node should be replaced with' +
+                 '&nbsp;',
+        '&nbsp;', rangeStartNode.getHtmlFragment());
+  }
+}
+
+
+/**
+ * Regression test for http://b/3051179 . Tests that when you hit enter and it
+ * creates a blank line with a BR and the cursor is placed in P.
+ * Splitting DOM causes to make an empty text node. Then if the cursor is placed
+ * at the text node the cursor is shown at wrong location.
+ * Therefore this test checks that the cursor is not placed at an empty node.
+ * Fix is in a Gecko-only codepath, thus test runs only for Gecko.
+ */
+function testEnterNormalizeNodes() {
+  if (goog.userAgent.GECKO) {
+    field1.setHtml(false, '<p>one<br></p>');
+    var helper = new goog.testing.editor.TestHelper(field1.getElement());
+    // Place caret after 'one' but keeping a BR as FF does.
+    helper.select('one', 3);
+    field1.getElement().focus();
+    goog.testing.events.fireKeySequence(field1.getElement(),
+                                        goog.events.KeyCodes.ENTER);
+    var range = field1.getRange();
+    assertTrue('Selection should be in P tag',
+                range.getStartNode().nodeType == goog.dom.NodeType.ELEMENT &&
+                range.getStartNode().tagName == goog.dom.TagName.P);
+    assertTrue('Selection should be at the head and collapsed',
+                range.getStartOffset() == 0 && range.isCollapsed());
   }
 }
 
@@ -474,6 +506,42 @@ function testSplitDomAtChildlessElement() {
       node);
 
   goog.dom.removeNode(node);
+}
+
+function testReplaceWhiteSpaceWithNbsp() {
+  var node = document.createElement('div');
+  var textNode = document.createTextNode('');
+  node.appendChild(textNode);
+
+  textNode.nodeValue = ' test ';
+  goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_(
+      node.firstChild, true, false);
+  assertHTMLEquals('&nbsp;test ', node.innerHTML);
+
+  textNode.nodeValue = '  test ';
+  goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_(
+      node.firstChild, true, false);
+  assertHTMLEquals('&nbsp;test ', node.innerHTML);
+
+  textNode.nodeValue = ' test ';
+  goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_(
+      node.firstChild, false, false);
+  assertHTMLEquals(' test&nbsp;', node.innerHTML);
+
+  textNode.nodeValue = ' test  ';
+  goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_(
+      node.firstChild, false, false);
+  assertHTMLEquals(' test&nbsp;', node.innerHTML);
+
+  textNode.nodeValue = '';
+  goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_(
+      node.firstChild, false, false);
+  assertHTMLEquals('&nbsp;', node.innerHTML);
+
+  textNode.nodeValue = '';
+  goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_(
+      node.firstChild, false, true);
+  assertHTMLEquals('', node.innerHTML);
 }
 
 </script>
