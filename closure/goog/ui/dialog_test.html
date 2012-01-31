@@ -17,10 +17,12 @@ See the COPYING file for details.
   goog.require('goog.dom.a11y');
   goog.require('goog.events');
   goog.require('goog.events.EventType');
+  goog.require('goog.fx.css3');
   goog.require('goog.style');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
+  goog.require('goog.ui.PopupBase');
 </script>
 </head>
 <body>
@@ -625,6 +627,16 @@ See the COPYING file for details.
 
     dialog.exitDocument();
     assertNull('dragger is cleaned up in exitDocument', dialog.dragger_);
+  }
+
+  function testDisposingVisibleDialogWithTransitionsDoesNotThrowException() {
+    var transition = goog.fx.css3.fadeIn(dialog.getElement(),
+        0.1 /* duration */);
+
+    dialog.setTransition(transition, transition, transition, transition);
+    dialog.setVisible(true);
+    dialog.dispose();
+    // Nothing to assert. We only want to ensure that there is no error.
   }
 </script>
 </body>

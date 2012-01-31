@@ -558,3 +558,21 @@ goog.ui.ModalPopup.prototype.focusElement_ = function() {
     // Swallow this. IE can throw an error if the element can not be focused.
   }
 };
+
+
+/** @override */
+goog.ui.ModalPopup.prototype.disposeInternal = function() {
+  goog.dispose(this.popupShowTransition_);
+  this.popupShowTransition_ = null;
+
+  goog.dispose(this.popupHideTransition_);
+  this.popupHideTransition_ = null;
+
+  goog.dispose(this.bgShowTransition_);
+  this.bgShowTransition_ = null;
+
+  goog.dispose(this.bgHideTransition_);
+  this.bgHideTransition_ = null;
+
+  goog.base(this, 'disposeInternal');
+};

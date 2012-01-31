@@ -18,6 +18,7 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.events');
   goog.require('goog.events.EventTarget');
+  goog.require('goog.fx.css3');
   goog.require('goog.style');
   goog.require('goog.ui.PopupBase.EventType');
   goog.require('goog.testing.jsunit');
@@ -251,6 +252,25 @@ function testTransitionsPlayedOnHide() {
   assertFalse(hideHandlerCalled);
   mockPopupHideTransition.dispatchEvent(goog.fx.Transition.EventType.END);
   assertTrue(hideHandlerCalled);
+}
+
+
+function testTransitionsDisposed() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+
+  var transition = goog.fx.css3.fadeIn(popup.getElement(), 0.1 /* duration */);
+
+  var hideHandlerCalled = false;
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
+    hideHandlerCalled = true;
+  });
+
+  popup.setTransition(transition, transition, transition, transition);
+  popup.dispose();
+
+  transition.dispatchEvent(goog.fx.Transition.EventType.END);
+  assertFalse(hideHandlerCalled);
 }
 
 

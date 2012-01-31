@@ -686,7 +686,7 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
  * @private
  */
 goog.ui.Dialog.prototype.setVisibleInternal_ = function(e) {
-  if (e.target != this) {
+  if (e.target != this || this.isDisposed()) {
     return;
   }
 
