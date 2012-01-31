@@ -16,6 +16,7 @@ See the COPYING file for details.
   goog.require('goog.crypt.BlobHasher');
   goog.require('goog.crypt.Md5');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.PropertyReplacer');
 </script>
 </head>
 <body>
@@ -77,14 +78,19 @@ FileReaderMock.prototype.readAsArrayBuffer = function(blobMock) {
   }
 };
 
+var stubs = new goog.testing.PropertyReplacer();
+function setUp() {
+  stubs.set(goog.global, 'FileReader', FileReaderMock);
+}
+
+function tearDown() {
+  stubs.reset();
+}
 
 function testBasicOperations() {
   if (!window.Blob) {
     return;
   }
-
-  var originalFileReader = FileReader;
-  FileReader = FileReaderMock;
 
   // Test hashing with one chunk.
   var hashFn = new goog.crypt.Md5();
@@ -113,16 +119,12 @@ function testBasicOperations() {
   assertEquals('d41d8cd98f00b204e9800998ecf8427e',
                goog.crypt.byteArrayToHex(blobHasher.getHash()));
 
-  FileReader = originalFileReader;
 }
 
 function testNormalFlow() {
   if (!window.Blob) {
     return;
   }
-
-  var originalFileReader = FileReader;
-  FileReader = FileReaderMock;
 
   // Test the flow with one chunk.
   var hashFn = new goog.crypt.Md5();
@@ -165,16 +167,12 @@ function testNormalFlow() {
   assertEquals(progressLoops, progressEvents);
   assertEquals(1, completeEvents);
 
-  FileReader = originalFileReader;
 }
 
 function testAbortsAndErrors() {
   if (!window.Blob) {
     return;
   }
-
-  var originalFileReader = FileReader;
-  FileReader = FileReaderMock;
 
   var hashFn = new goog.crypt.Md5();
   var blobHasher = new goog.crypt.BlobHasher(hashFn, 13);
@@ -231,7 +229,6 @@ function testAbortsAndErrors() {
   assertEquals(0, completeEvents);
   abortEvents = 0;
 
-  FileReader = originalFileReader;
 }
 
 </script>

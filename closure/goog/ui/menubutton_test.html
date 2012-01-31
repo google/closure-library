@@ -40,7 +40,7 @@ See the COPYING file for details.
   goog.require('goog.ui.MenuButton');
   goog.require('goog.ui.MenuItem');
   goog.require('goog.userAgent');
-  goog.require('goog.userAgent.product');
+  goog.require('goog.userAgent.product.isVersion');
 </script>
 </head>
 <body>
@@ -312,14 +312,9 @@ function testPositioningAboveAnchor() {
   var menuNode = menuButton.getMenu().getElement();
   var menuBounds = goog.style.getBounds(menuNode);
 
-  expectedFailures.expectFailureFor(isWinSafariBefore5());
-  try {
-    assertRoughlyEquals(menuBounds.top + menuBounds.height,
-        buttonBounds.top, 3);
-    assertRoughlyEquals(menuBounds.left, buttonBounds.left, 3);
-  } catch (e) {
-    expectedFailures.handleException(e);
-  }
+  assertRoughlyEquals(menuBounds.top + menuBounds.height,
+      buttonBounds.top, 3);
+  assertRoughlyEquals(menuBounds.left, buttonBounds.left, 3);
   // For this test to be valid, the node must have non-trival height.
   assertRoughlyEquals(node.offsetHeight, 19, 3);
 }
@@ -361,7 +356,7 @@ function testPositioningBelowAnchor() {
 
 function isWinSafariBefore5() {
   return goog.userAgent.WINDOWS && goog.userAgent.product.SAFARI &&
-      !goog.userAgent.isVersion(533);
+    goog.userAgent.product.isVersion(4) && !goog.userAgent.product.isVersion(5);
 }
 
 /**
