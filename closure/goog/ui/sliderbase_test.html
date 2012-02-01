@@ -16,6 +16,7 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.events');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
   goog.require('goog.ui.SliderBase');
@@ -319,6 +320,76 @@ function testMouseWheelEventHandlerEnable() {
   wheelDisabledSlider.setHandleMouseWheel(false);
   wheelDisabledSlider.decorate(wheelDisabledElem);
   assertFalse(wheelDisabledSlider.isHandleMouseWheel());
+}
+
+function testDisabledAndEnabledSlider() {
+  // Check that a slider is enabled by default
+  assertTrue(oneThumbSlider.isEnabled());
+
+  var listenerCount = oneThumbSlider.getHandler().getListenerCount();
+  // Disable the slider and check its state
+  oneThumbSlider.setEnabled(false);
+  assertFalse(oneThumbSlider.isEnabled());
+  assertTrue(goog.dom.classes.has(
+      oneThumbSlider.getElement(), 'goog-slider-disabled'));
+  assertEquals(0, oneThumbSlider.getHandler().getListenerCount());
+
+  // setValue should work unaffected even when the slider is disabled.
+  oneThumbSlider.setValue(30);
+  assertEquals(30, oneThumbSlider.getValue());
+  assertEquals('Setting valid value must dispatch a change event ' +
+      'even when slider is disabled.', 1, oneChangeEventCount);
+
+  // Test the transition from disabled to enabled
+  oneThumbSlider.setEnabled(true);
+  assertTrue(oneThumbSlider.isEnabled());
+  assertFalse(goog.dom.classes.has(
+      oneThumbSlider.getElement(), 'goog-slider-disabled'));
+  assertTrue(listenerCount == oneThumbSlider.getHandler().getListenerCount());
+}
+
+function testBlockIncrementingWithEnableAndDisabled() {
+  var doc = goog.dom.getOwnerDocument(oneThumbSlider.getElement());
+  // Case when slider is not disabled between the mouse down and up events.
+  goog.testing.events.fireMouseDownEvent(oneThumbSlider.getElement());
+  assertEquals(1, goog.events.getListeners(
+      oneThumbSlider.getElement(),
+      goog.events.EventType.MOUSEMOVE, false).length);
+  assertEquals(1, goog.events.getListeners(
+      doc, goog.events.EventType.MOUSEUP, true).length);
+
+  goog.testing.events.fireMouseUpEvent(oneThumbSlider.getElement());
+
+  assertEquals(0, goog.events.getListeners(
+      oneThumbSlider.getElement(),
+      goog.events.EventType.MOUSEMOVE, false).length);
+  assertEquals(0, goog.events.getListeners(
+      doc, goog.events.EventType.MOUSEUP, true).length);
+
+  // Case when the slider is disabled between the mouse down and up events.
+  goog.testing.events.fireMouseDownEvent(oneThumbSlider.getElement());
+  assertEquals(1, goog.events.getListeners(
+      oneThumbSlider.getElement(),
+      goog.events.EventType.MOUSEMOVE, false).length);
+  assertEquals(1,
+      goog.events.getListeners(doc,
+      goog.events.EventType.MOUSEUP, true).length);
+
+  oneThumbSlider.setEnabled(false);
+
+  assertEquals(0, goog.events.getListeners(
+      oneThumbSlider.getElement(),
+      goog.events.EventType.MOUSEMOVE, false).length);
+  assertEquals(0, goog.events.getListeners(
+      doc, goog.events.EventType.MOUSEUP, true).length);
+  assertEquals(1, oneThumbSlider.getHandler().getListenerCount());
+
+  goog.testing.events.fireMouseUpEvent(oneThumbSlider.getElement());
+  assertEquals(0, goog.events.getListeners(
+      oneThumbSlider.getElement(),
+      goog.events.EventType.MOUSEMOVE, false).length);
+  assertEquals(0, goog.events.getListeners(
+      doc, goog.events.EventType.MOUSEUP, true).length);
 }
 
 </script>
