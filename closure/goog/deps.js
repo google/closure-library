@@ -487,6 +487,7 @@ goog.addDependency('structs/stringset.js', ['goog.structs.StringSet'], ['goog.it
 goog.addDependency('structs/structs.js', ['goog.structs'], ['goog.array', 'goog.object']);
 goog.addDependency('structs/treenode.js', ['goog.structs.TreeNode'], ['goog.array', 'goog.asserts', 'goog.structs.Node']);
 goog.addDependency('structs/trie.js', ['goog.structs.Trie'], ['goog.object', 'goog.structs']);
+goog.addDependency('style/bidi.js', ['goog.style.bidi'], ['goog.style', 'goog.userAgent']);
 goog.addDependency('style/cursor.js', ['goog.style.cursor'], ['goog.userAgent']);
 goog.addDependency('style/style.js', ['goog.style'], ['goog.array', 'goog.dom', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.math.Size', 'goog.object', 'goog.string', 'goog.userAgent']);
 goog.addDependency('style/style_test.js', ['goog.style_test'], ['goog.dom', 'goog.style', 'goog.testing.asserts']);
