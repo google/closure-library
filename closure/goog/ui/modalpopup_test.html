@@ -21,6 +21,7 @@ See the COPYING file for details.
   goog.require('goog.fx.css3');
   goog.require('goog.style');
   goog.require('goog.ui.PopupBase.EventType');
+  goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -29,14 +30,17 @@ See the COPYING file for details.
 
 
 var popup;
+var mockClock;
 
 
 function setUp() {
+  mockClock = new goog.testing.MockClock(true);
 }
 
 
 function tearDown() {
   goog.dispose(popup);
+  mockClock.dispose();
 }
 
 
@@ -252,6 +256,31 @@ function testTransitionsPlayedOnHide() {
   assertFalse(hideHandlerCalled);
   mockPopupHideTransition.dispatchEvent(goog.fx.Transition.EventType.END);
   assertTrue(hideHandlerCalled);
+}
+
+
+function testTransitionsAndDisposingOnHideWorks() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+
+  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
+    popup.dispose();
+  });
+
+  var popupShowTransition = goog.fx.css3.fadeIn(popup.getElement(),
+      0.1 /* duration */);
+  var popupHideTransition = goog.fx.css3.fadeOut(popup.getElement(),
+      0.1 /* duration */);
+  var bgShowTransition = goog.fx.css3.fadeIn(popup.getElement(),
+      0.1 /* duration */);
+  var bgHideTransition = goog.fx.css3.fadeOut(popup.getElement(),
+      0.1 /* duration */);
+
+  popup.setTransition(popupShowTransition, popupHideTransition,
+      bgShowTransition, bgHideTransition);
+  popup.setVisible(true);
+  popup.setVisible(false);
+  // Nothing to assert. We only want to ensure that there is no error.
 }
 
 
