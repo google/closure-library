@@ -770,7 +770,7 @@ goog.i18n.DateTimePatterns_lt = {
   YEAR_MONTH_FULL: 'yyyy MMMM',
   MONTH_DAY_ABBR: 'MMM-d',
   MONTH_DAY_FULL: 'MMMM-dd',
-  MONTH_DAY_SHORT: 'M.d',
+  MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'MMMM-d',
   DAY_ABBR: 'd'
 };
