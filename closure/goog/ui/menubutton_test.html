@@ -298,13 +298,14 @@ function testPositioningAboveAnchor() {
   menuButton.decorate(node);
 
   // Show the menu.
+  menuButton.setAlignMenuToStart(true);  // Should get overridden below
+  menuButton.setScrollOnOverflow(true);  // Should get overridden below
+
   var position = new goog.positioning.MenuAnchoredPosition(
       menuButton.getElement(),
       goog.positioning.Corner.TOP_START,
       /* opt_adjust */ false, /* opt_resize */ false);
   menuButton.setMenuPosition(position);
-  menuButton.setAlignMenuToStart(true);  // Should have no effect
-  menuButton.setScrollOnOverflow(true);  // Should have no effect
   menuButton.setOpen(true);
 
   // Confirm the menu position
@@ -327,14 +328,14 @@ function testPositioningBelowAnchor() {
   menuButton.decorate(node);
 
   // Show the menu.
-  // Show the menu.
+  menuButton.setAlignMenuToStart(true);  // Should get overridden below
+  menuButton.setScrollOnOverflow(true);  // Should get overridden below
+
   var position = new goog.positioning.MenuAnchoredPosition(
       menuButton.getElement(),
       goog.positioning.Corner.BOTTOM_START,
       /* opt_adjust */ false, /* opt_resize */ false);
   menuButton.setMenuPosition(position);
-  menuButton.setAlignMenuToStart(true);  // Should have no effect
-  menuButton.setScrollOnOverflow(true);  // Should have no effect
   menuButton.setOpen(true);
 
   // Confirm the menu position
@@ -496,6 +497,26 @@ function testRenderMenuAsSibling() {
   assertEquals(
       menuButton.getElement().parentNode,
       menuButton.getMenu().getElement().parentNode);
+}
+
+function testAlignToStartSetter() {
+  assertTrue(menuButton.isAlignMenuToStart());
+
+  menuButton.setAlignMenuToStart(false);
+  assertFalse(menuButton.isAlignMenuToStart());
+
+  menuButton.setAlignMenuToStart(true);
+  assertTrue(menuButton.isAlignMenuToStart());
+}
+
+function testScrollOnOverflowSetter() {
+  assertFalse(menuButton.isScrollOnOverflow());
+
+  menuButton.setScrollOnOverflow(true);
+  assertTrue(menuButton.isScrollOnOverflow());
+
+  menuButton.setScrollOnOverflow(false);
+  assertFalse(menuButton.isScrollOnOverflow());
 }
 </script>
 <p>

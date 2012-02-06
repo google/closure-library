@@ -66,6 +66,14 @@ goog.ui.MenuButton = function(content, opt_menu, opt_renderer, opt_domHelper) {
   // Menu buttons support the OPENED state.
   this.setSupportedState(goog.ui.Component.State.OPENED, true);
 
+  /**
+   * The menu position on this button.
+   * @type {!goog.positioning.AnchoredPosition}
+   * @private
+   */
+  this.menuPosition_ = new goog.positioning.MenuAnchoredPosition(
+      null, goog.positioning.Corner.BOTTOM_START);
+
   if (opt_menu) {
     this.setMenu(opt_menu);
   }
@@ -94,14 +102,6 @@ goog.ui.MenuButton.prototype.menu_;
 
 
 /**
- * The menu position on this button, when set explicitly.
- * @type {goog.positioning.AnchoredPosition|undefined}
- * @private
- */
-goog.ui.MenuButton.prototype.menuPosition_;
-
-
-/**
  * The position element.  If set, use positionElement_ to position the
  * popup menu instead of the default which is to use the menu button element.
  * @type {Element|undefined}
@@ -117,25 +117,6 @@ goog.ui.MenuButton.prototype.positionElement_;
  * @private
  */
 goog.ui.MenuButton.prototype.menuMargin_;
-
-
-/**
- * Whether the popup menu should be aligned to the start or the end of the
- * button; defaults to true (align to start).
- * @type {boolean}
- * @private
- */
-goog.ui.MenuButton.prototype.alignToStart_ = true;
-
-
-/**
- * Whether the popup menu should scroll when it's to big to fit vertically
- * on the screen. Defaults to false, use the adjust logic to reposition the
- * menu on overflow rather then scroll.
- * @type {boolean}
- * @private
- */
-goog.ui.MenuButton.prototype.scrollOnOverflow_ = false;
 
 
 /**
@@ -446,13 +427,21 @@ goog.ui.MenuButton.prototype.setMenu = function(menu) {
 
 
 /**
- * Specify explicitly which corner of the button to use, which will override
- * the value from setAlignMenuToStart() and setScrollOnOverflow().
+ * Specify which positioning algorithm to use.
+ *
+ * This method is preferred over the fine-grained positioning methods like
+ * setPositionElement, setAlignMenuToStart, and setScrollOnOverflow. Calling
+ * this method will override settings by those methods.
+ *
  * @param {goog.positioning.AnchoredPosition} position The position of the
- *     Menu the button.
+ *     Menu the button. If the position has a null anchor, we will use the
+ *     menubutton element as the anchor.
  */
 goog.ui.MenuButton.prototype.setMenuPosition = function(position) {
-  this.menuPosition_ = position;
+  if (position) {
+    this.menuPosition_ = position;
+    this.positionElement_ = position.element;
+  }
 };
 
 
@@ -578,13 +567,22 @@ goog.ui.MenuButton.prototype.setEnabled = function(enable) {
 };
 
 
+// TODO(nicksantos): AlignMenuToStart and ScrollOnOverflow and PositionElement
+// should all be deprecated, in favor of people setting their own
+// AnchoredPosition with the parameters they need. Right now, we try
+// to be backwards-compatible as possible, but this is incomplete because
+// the APIs are non-orthogonal.
+
+
 /**
  * @return {boolean} Whether the menu is aligned to the start of the button
  *     (left if the render direction is left-to-right, right if the render
  *     direction is right-to-left).
  */
 goog.ui.MenuButton.prototype.isAlignMenuToStart = function() {
-  return this.alignToStart_;
+  var corner = this.menuPosition_.corner;
+  return corner == goog.positioning.Corner.BOTTOM_START ||
+      corner == goog.positioning.Corner.TOP_START;
 };
 
 
@@ -595,7 +593,9 @@ goog.ui.MenuButton.prototype.isAlignMenuToStart = function() {
  *     the render direction is right-to-left).
  */
 goog.ui.MenuButton.prototype.setAlignMenuToStart = function(alignToStart) {
-  this.alignToStart_ = alignToStart;
+  this.menuPosition_.corner = alignToStart ?
+      goog.positioning.Corner.BOTTOM_START :
+      goog.positioning.Corner.BOTTOM_END;
 };
 
 
@@ -609,7 +609,13 @@ goog.ui.MenuButton.prototype.setAlignMenuToStart = function(alignToStart) {
  *     reposition the menu to fit.
  */
 goog.ui.MenuButton.prototype.setScrollOnOverflow = function(scrollOnOverflow) {
-  this.scrollOnOverflow_ = scrollOnOverflow;
+  if (this.menuPosition_.setLastResortOverflow) {
+    var overflowX = goog.positioning.Overflow.ADJUST_X;
+    var overflowY = scrollOnOverflow ?
+        goog.positioning.Overflow.RESIZE_HEIGHT :
+        goog.positioning.Overflow.ADJUST_Y;
+    this.menuPosition_.setLastResortOverflow(overflowX | overflowY);
+  }
 };
 
 
@@ -618,7 +624,9 @@ goog.ui.MenuButton.prototype.setScrollOnOverflow = function(scrollOnOverflow) {
  *     vertically on the screen.
  */
 goog.ui.MenuButton.prototype.isScrollOnOverflow = function() {
-  return this.scrollOnOverflow_;
+  return this.menuPosition_.getLastResortOverflow &&
+      !!(this.menuPosition_.getLastResortOverflow() &
+         goog.positioning.Overflow.RESIZE_HEIGHT);
 };
 
 
@@ -741,16 +749,8 @@ goog.ui.MenuButton.prototype.positionMenu = function() {
   }
 
   var positionElement = this.positionElement_ || this.getElement();
-
   var position = this.menuPosition_;
-  if (!position) {
-    var anchorCorner = this.isAlignMenuToStart() ?
-        goog.positioning.Corner.BOTTOM_START :
-        goog.positioning.Corner.BOTTOM_END;
-    position = new goog.positioning.MenuAnchoredPosition(positionElement,
-        anchorCorner, /* opt_adjust */ !this.scrollOnOverflow_,
-        /* opt_resize */ this.scrollOnOverflow_);
-  }
+  this.menuPosition_.element = positionElement;
 
   var elem = this.menu_.getElement();
   if (!this.menu_.isVisible()) {
@@ -758,7 +758,7 @@ goog.ui.MenuButton.prototype.positionMenu = function() {
     goog.style.showElement(elem, true);
   }
 
-  if (!this.originalSize_ && this.scrollOnOverflow_) {
+  if (!this.originalSize_ && this.isScrollOnOverflow()) {
     this.originalSize_ = goog.style.getSize(elem);
   }
   var popupCorner = goog.positioning.flipCornerVertical(position.corner);
