@@ -22,46 +22,7 @@ See the COPYING file for details.
 <script>
 
 function testSerializationAndDeserialization() {
-  var message = new proto2.TestAllTypes();
-
-  // Set the fields.
-  // Singular.
-  message.setOptionalInt32(101);
-  message.setOptionalInt64('102');
-  message.setOptionalUint32(103);
-  message.setOptionalUint64('104');
-  message.setOptionalSint32(105);
-  message.setOptionalSint64('106');
-  message.setOptionalFixed32(107);
-  message.setOptionalFixed64('108');
-  message.setOptionalSfixed32(109);
-  message.setOptionalSfixed64('110');
-  message.setOptionalFloat(111.5);
-  message.setOptionalDouble(112.5);
-  message.setOptionalBool(true);
-  message.setOptionalString('test');
-  message.setOptionalBytes('abcd');
-
-  var group = new proto2.TestAllTypes.OptionalGroup();
-  group.setA(111);
-
-  message.setOptionalgroup(group);
-
-  var nestedMessage = new proto2.TestAllTypes.NestedMessage();
-  nestedMessage.setB(112);
-
-  message.setOptionalNestedMessage(nestedMessage);
-
-  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
-
-  // Repeated.
-  message.addRepeatedInt32(201);
-  message.addRepeatedInt32(202);
-
-  // Skip a few repeated fields so we can test how null array values are
-  // handled.
-  message.addRepeatedString('foo');
-  message.addRepeatedString('bar');
+  var message = createPopulatedMessage();
 
   // Serialize.
   var serializer = new goog.proto2.PbLiteSerializer();
@@ -109,6 +70,101 @@ function testSerializationAndDeserialization() {
   assertDeserializationMatches(messageCopy);
 }
 
+function testZeroBasedSerializationAndDeserialization() {
+  var message = createPopulatedMessage();
+
+  // Serialize.
+  var serializer = new goog.proto2.PbLiteSerializer();
+  serializer.setZeroIndexed(true);
+
+  var pblite = serializer.serialize(message);
+
+  assertTrue(goog.isArray(pblite));
+
+  // Assert that everything serialized properly.
+  assertEquals(101, pblite[0]);
+  assertEquals('102', pblite[1]);
+  assertEquals(103, pblite[2]);
+  assertEquals('104', pblite[3]);
+  assertEquals(105, pblite[4]);
+  assertEquals('106', pblite[5]);
+  assertEquals(107, pblite[6]);
+  assertEquals('108', pblite[7]);
+  assertEquals(109, pblite[8]);
+  assertEquals('110', pblite[9]);
+  assertEquals(111.5, pblite[10]);
+  assertEquals(112.5, pblite[11]);
+  assertEquals(1, pblite[12]); // true is serialized as 1
+  assertEquals('test', pblite[13]);
+  assertEquals('abcd', pblite[14]);
+
+  assertEquals(111, pblite[15][16]);
+  assertEquals(112, pblite[17][0]);
+
+  assertTrue(pblite[18] === undefined);
+  assertTrue(pblite[19] === undefined);
+
+  assertEquals(proto2.TestAllTypes.NestedEnum.FOO, pblite[20]);
+
+  assertEquals(201, pblite[30][0]);
+  assertEquals(202, pblite[30][1]);
+  assertEquals('foo', pblite[43][0]);
+  assertEquals('bar', pblite[43][1]);
+
+  // Deserialize.
+  var messageCopy =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), pblite);
+
+  assertNotEquals(messageCopy, message);
+
+  assertEquals(message.getOptionalInt32(), messageCopy.getOptionalInt32());
+  assertDeserializationMatches(messageCopy);
+}
+
+function createPopulatedMessage() {
+  var message = new proto2.TestAllTypes();
+
+  // Set the fields.
+  // Singular.
+  message.setOptionalInt32(101);
+  message.setOptionalInt64('102');
+  message.setOptionalUint32(103);
+  message.setOptionalUint64('104');
+  message.setOptionalSint32(105);
+  message.setOptionalSint64('106');
+  message.setOptionalFixed32(107);
+  message.setOptionalFixed64('108');
+  message.setOptionalSfixed32(109);
+  message.setOptionalSfixed64('110');
+  message.setOptionalFloat(111.5);
+  message.setOptionalDouble(112.5);
+  message.setOptionalBool(true);
+  message.setOptionalString('test');
+  message.setOptionalBytes('abcd');
+
+  var group = new proto2.TestAllTypes.OptionalGroup();
+  group.setA(111);
+
+  message.setOptionalgroup(group);
+
+  var nestedMessage = new proto2.TestAllTypes.NestedMessage();
+  nestedMessage.setB(112);
+
+  message.setOptionalNestedMessage(nestedMessage);
+
+  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+
+  // Repeated.
+  message.addRepeatedInt32(201);
+  message.addRepeatedInt32(202);
+
+  // Skip a few repeated fields so we can test how null array values are
+  // handled.
+  message.addRepeatedString('foo');
+  message.addRepeatedString('bar');
+  return message;
+}
+
 function testDeserializationFromExternalSource() {
   // Test deserialization where the JSON array is initialized from something
   // outside the Closure proto2 library, such as the JsPbLite library, or
@@ -142,10 +198,10 @@ function testDeserializationFromExternalSource() {
     ,,,, // 45-49
   ];
 
-  var serializer = new goog.proto2.PbLiteSerializer();
   // Deserialize.
+  var serializer = new goog.proto2.PbLiteSerializer();
   var messageCopy =
-    serializer.deserialize(proto2.TestAllTypes.getDescriptor(), pblite);
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), pblite);
 
   assertDeserializationMatches(messageCopy);
 
