@@ -90,12 +90,15 @@ See the COPYING file for details.
     mockCtrl.$tearDown();
   }
 
-  function setUpAnchor(text, href, opt_isNew, opt_target) {
+  function setUpAnchor(text, href, opt_isNew, opt_target, opt_rel) {
     anchorElem.innerHTML = text;
     anchorElem.href = href;
     isNew = !!opt_isNew;
     if (opt_target) {
       anchorElem.target = opt_target;
+    }
+    if (opt_rel) {
+      anchorElem.rel = opt_rel;
     }
   }
 
@@ -224,7 +227,7 @@ See the COPYING file for details.
     setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
     var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
     dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
-            NEW_LINK_TEXT, NEW_LINK_URL, false));
+            NEW_LINK_TEXT, NEW_LINK_URL, false, false));
     assertEquals(
         'Target should not be set for link that doesn\'t open in new window',
         '', anchorElem.target);
@@ -261,6 +264,54 @@ See the COPYING file for details.
     assertEquals(
         'Target should not be set for link that doesn\'t open in new window',
         '', anchorElem.target);
+
+    mockCtrl.$verifyAll();
+  }
+
+  function testOkNoFollowEnabled() {
+    verifyRelNoFollow(true, null, 'nofollow');
+  }
+
+  function testOkNoFollowInUppercase() {
+    verifyRelNoFollow(true, 'NOFOLLOW', 'NOFOLLOW');
+  }
+
+  function testOkNoFollowEnabledHasMoreRelValues() {
+    verifyRelNoFollow(true, 'author', 'author nofollow');
+  }
+
+  function testOkNoFollowDisabled() {
+    verifyRelNoFollow(false, null, '');
+  }
+
+  function testOkNoFollowDisabledHasMoreRelValues() {
+    verifyRelNoFollow(false, 'author', 'author');
+  }
+
+  function testOkNoFollowDisabledHasMoreRelValues() {
+    verifyRelNoFollow(false, 'author nofollow', 'author ');
+  }
+
+  function testOkNoFollowInUppercaseWithMoreValues() {
+    verifyRelNoFollow(true, 'NOFOLLOW author', 'NOFOLLOW author');
+  }
+
+  function verifyRelNoFollow(noFollow, originalRel, expectedRel) {
+    mockLink.placeCursorRightOf();
+    mockField.dispatchSelectionChangeEvent();
+    mockField.dispatchChange();
+    mockCtrl.$replayAll();
+
+    plugin = new goog.editor.plugins.LinkDialogPlugin();
+    plugin.registerFieldObject(mockField);
+    plugin.showRelNoFollow();
+    plugin.currentLink_ = mockLink;
+
+    setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, true, null, originalRel);
+    var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+    dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(
+        NEW_LINK_TEXT, NEW_LINK_URL, false, noFollow));
+    assertEquals(expectedRel, anchorElem.rel);
 
     mockCtrl.$verifyAll();
   }

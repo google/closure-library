@@ -99,6 +99,15 @@ goog.editor.plugins.LinkDialogPlugin.prototype.isOpenLinkInNewWindowChecked_ =
 
 
 /**
+ * Weather to show a checkbox where the user can choose to add 'rel=nofollow'
+ * attribute added to the link.
+ * @type {boolean}
+ * @private
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.showRelNoFollow_ = false;
+
+
+/**
  * Whether to stop referrer leaks.  Defaults to false.
  * @type {boolean}
  * @private
@@ -160,6 +169,15 @@ goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow =
     function(startChecked) {
   this.showOpenLinkInNewWindow_ = true;
   this.isOpenLinkInNewWindowChecked_ = startChecked;
+};
+
+
+/**
+ * Tells the dialog to show a checkbox where the user can choose to have
+ * 'rel=nofollow' attribute added to the link.
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.showRelNoFollow = function() {
+  this.showRelNoFollow_ = true;
 };
 
 
@@ -267,6 +285,9 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
   if (this.showOpenLinkInNewWindow_) {
     dialog.showOpenLinkInNewWindow(this.isOpenLinkInNewWindowChecked_);
   }
+  if (this.showRelNoFollow_) {
+    dialog.showRelNoFollow();
+  }
   dialog.setStopReferrerLeaks(this.stopReferrerLeaks_);
   this.eventHandler_.
       listen(dialog, goog.ui.editor.AbstractDialog.EventType.OK,
@@ -310,6 +331,16 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk_ = function(e) {
     }
     // Save checkbox state for next time.
     this.isOpenLinkInNewWindowChecked_ = e.openInNewWindow;
+  }
+
+  if (this.showRelNoFollow_) {
+    var anchor = this.getCurrentLink().getAnchor();
+    var alreadyPresent = goog.ui.editor.LinkDialog.hasNoFollow(anchor.rel);
+    if (alreadyPresent && !e.noFollow) {
+      anchor.rel = goog.ui.editor.LinkDialog.removeNoFollow(anchor.rel);
+    } else if (!alreadyPresent && e.noFollow) {
+      anchor.rel = anchor.rel ? anchor.rel + ' nofollow' : 'nofollow';
+    }
   }
 
   // Place cursor to the right of the modified link.

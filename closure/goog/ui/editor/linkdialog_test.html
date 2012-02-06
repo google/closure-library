@@ -101,12 +101,15 @@ See the COPYING file for details.
     stubs.reset();
   }
 
-  function setUpAnchor(href, text, opt_isNew, opt_target) {
+  function setUpAnchor(href, text, opt_isNew, opt_target, opt_rel) {
     anchorElem.href = href;
     anchorElem.innerHTML = text;
     isNew = !!opt_isNew;
     if (opt_target) {
       anchorElem.target = opt_target;
+    }
+    if (opt_rel) {
+      anchorElem.rel = opt_rel;
     }
   }
 
@@ -116,12 +119,17 @@ See the COPYING file for details.
    *     Defaults to the main window's document.
    * @param {boolean=} opt_openInNewWindow Whether the open in new window
    *     checkbox should be shown.
+   * @param {boolean=} opt_noFollow Whether rel=nofollow checkbox should be
+   *     shown.
    */
-  function createAndShow(opt_document, opt_openInNewWindow) {
+  function createAndShow(opt_document, opt_openInNewWindow, opt_noFollow) {
     dialog = new goog.ui.editor.LinkDialog(new goog.dom.DomHelper(opt_document),
                                            mockLink);
     if (opt_openInNewWindow) {
       dialog.showOpenLinkInNewWindow(false);
+    }
+    if (opt_noFollow) {
+      dialog.showRelNoFollow();
     }
     dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.OK,
         mockOkHandler);
@@ -132,16 +140,18 @@ See the COPYING file for details.
    * Sets up the mock event handler to expect an OK event with the given text
    * and url.
    */
-  function expectOk(linkText, linkUrl, opt_openInNewWindow) {
+  function expectOk(linkText, linkUrl, opt_openInNewWindow, opt_noFollow) {
     mockOkHandler.handleEvent(new goog.testing.mockmatchers.ArgumentMatcher(
         function(arg) {
           return arg.type == goog.ui.editor.AbstractDialog.EventType.OK &&
                  arg.linkText == linkText &&
                  arg.linkUrl == linkUrl &&
-                 arg.openInNewWindow == !!opt_openInNewWindow;
+                 arg.openInNewWindow == !!opt_openInNewWindow &&
+                 arg.noFollow == !!opt_noFollow;
         },
         '{linkText: ' + linkText + ', linkUrl: ' + linkUrl +
-            ', openInNewWindow: ' + opt_openInNewWindow + '}'));
+            ', openInNewWindow: ' + opt_openInNewWindow +
+            ', noFollow: ' + opt_noFollow + '}'));
   }
 
   /**
@@ -410,6 +420,44 @@ See the COPYING file for details.
 
     assertTrue('"Open in new window" should start checked for existing link',
         getOpenInNewWindowCheckboxChecked());
+
+    mockCtrl.$verifyAll();
+  }
+
+  function testRelNoFollowNewLink() {
+    expectOk(ANCHOR_TEXT, ANCHOR_URL, null, true);
+    expectOk(ANCHOR_TEXT, ANCHOR_URL, null, false);
+    mockCtrl.$replayAll();
+
+    setUpAnchor('', '', true, true);
+    createAndShow(null, null, true);
+    dialog.tabPane_.setSelectedTabId(goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
+    setDisplayInputText(ANCHOR_TEXT);
+    setUrlInputText(ANCHOR_URL);
+    assertFalse('rel=nofollow should start unchecked',
+        dialog.relNoFollowCheckbox_.checked);
+
+    // Check rel=nofollow and close the dialog.
+    dialog.relNoFollowCheckbox_.checked = true;
+    goog.testing.events.fireClickSequence(dialog.getOkButtonElement());
+
+    // Reopen the same dialog.
+    anchorElem.rel = 'foo nofollow bar';
+    dialog.show();
+    dialog.tabPane_.setSelectedTabId(goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
+    setDisplayInputText(ANCHOR_TEXT);
+    setUrlInputText(ANCHOR_URL);
+    assertTrue('rel=nofollow should start checked when reopening the dialog',
+        dialog.relNoFollowCheckbox_.checked);
+  }
+
+  function testRelNoFollowExistingLink() {
+    mockCtrl.$replayAll();
+
+    setUpAnchor('', '', null, null, 'foo nofollow bar');
+    createAndShow(null, null, true);
+    assertTrue('rel=nofollow should start checked for existing link',
+        dialog.relNoFollowCheckbox_.checked);
 
     mockCtrl.$verifyAll();
   }
