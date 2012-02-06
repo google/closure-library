@@ -543,7 +543,7 @@ See the COPYING file for details.
                  goog.events.KeyCodes.EQUALS,
                  keyEvent.keyCode);
     assertEquals('= should fire a key event with the charCode 61',
-                 61,
+                 goog.events.KeyCodes.FF_EQUALS,
                  keyEvent.charCode);
   }
 
@@ -564,10 +564,10 @@ See the COPYING file for details.
 
     fireKeyDown(keyHandler, 0, 63, null, false, false, true);
     fireKeyPress(keyHandler, 0, 63, null, false, false, true);
-    assertEquals('= should fire should fire a key event with the keyCode 191',
+    assertEquals('/ should fire a key event with the keyCode 191',
                  goog.events.KeyCodes.SLASH,
                  keyEvent.keyCode);
-    assertEquals('= should fire a key event with the charCode 63',
+    assertEquals('? should fire a key event with the charCode 63',
                  goog.events.KeyCodes.QUESTION_MARK,
                  keyEvent.charCode);
   }

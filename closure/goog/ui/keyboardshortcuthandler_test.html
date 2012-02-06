@@ -300,12 +300,13 @@ See the COPYING file for details.
       listener.$replay();
 
       handler.registerShortcut('quitvi',
-          KeyCodes.COLON, Modifiers.NONE,
+          KeyCodes.SEMICOLON, Modifiers.SHIFT,
           KeyCodes.Q, Modifiers.NONE,
-          KeyCodes.EXCLAMATION, Modifiers.NONE);
-      fire(KeyCodes.COLON);
+          KeyCodes.NUM_ONE, Modifiers.SHIFT);
+      var shiftProperties = { shiftKey: true };
+      fire(KeyCodes.SEMICOLON, shiftProperties);
       fire(KeyCodes.Q);
-      fire(KeyCodes.EXCLAMATION);
+      fire(KeyCodes.NUM_ONE, shiftProperties);
 
       listener.$verify()
     }
@@ -336,9 +337,9 @@ See the COPYING file for details.
 
       // register 3 handlers in 3 diferent ways
       handler.registerShortcut('quitvi',
-          KeyCodes.COLON, Modifiers.NONE,
+          KeyCodes.SEMICOLON, Modifiers.SHIFT,
           KeyCodes.Q, Modifiers.NONE,
-          KeyCodes.EXCLAMATION, Modifiers.NONE);
+          KeyCodes.NUM_ONE, Modifiers.SHIFT);
       handler.registerShortcut('quitemacs',
           [KeyCodes.X, Modifiers.CTRL,
            KeyCodes.C]);
@@ -346,9 +347,10 @@ See the COPYING file for details.
 
 
       // quit vi
-      fire(KeyCodes.COLON);
+      var shiftProperties = { shiftKey: true };
+      fire(KeyCodes.SEMICOLON, shiftProperties);
       fire(KeyCodes.Q);
-      fire(KeyCodes.EXCLAMATION);
+      fire(KeyCodes.NUM_ONE, shiftProperties);
 
       // then press the letter x
       fire(KeyCodes.X);
@@ -667,6 +669,20 @@ See the COPYING file for details.
       listener.$verify()
     }
 
+    function testGeckoShortcuts() {
+      listener.shortcutFired('1');
+      listener.$replay();
+
+      handler.registerShortcut('1', 'semicolon');
+
+      if (goog.userAgent.GECKO) {
+        fire(goog.events.KeyCodes.FF_SEMICOLON);
+      } else {
+        fire(goog.events.KeyCodes.SEMICOLON);
+      }
+
+      listener.$verify()
+    }
   </script>
 </body>
 </html>

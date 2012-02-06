@@ -97,6 +97,28 @@ function createEventWithKeyCode(i) {
   return fakeEvent;
 }
 
+function testNormalizeGeckoKeyCode() {
+  KeyCodes = goog.events.KeyCodes;
+
+  // Test Gecko-specific key codes.
+  assertEquals(
+      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.FF_EQUALS),
+      KeyCodes.EQUALS);
+  assertEquals(
+      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.FF_SEMICOLON),
+      KeyCodes.SEMICOLON);
+  assertEquals(
+      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.MAC_FF_META),
+      KeyCodes.META);
+  assertEquals(
+      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.WIN_KEY_FF_LINUX),
+      KeyCodes.WIN_KEY);
+
+  // Test general key codes.
+  assertEquals(
+      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.COMMA),
+      KeyCodes.COMMA);
+}
 </script>
 
 </body>

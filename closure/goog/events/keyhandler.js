@@ -264,17 +264,6 @@ goog.events.KeyHandler.keyIdentifier_ = {
 
 
 /**
- * Map from Gecko specific key codes to cross browser key codes
- * @type {Object}
- * @private
- */
-goog.events.KeyHandler.mozKeyCodeToKeyCodeMap_ = {
-  61: 187,  // =, equals
-  59: 186   // ;, semicolon
-};
-
-
-/**
  * If true, the KeyEvent fires on keydown. Otherwise, it fires on keypress.
  *
  * @type {boolean}
@@ -308,12 +297,9 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
           this.lastKey_, e.shiftKey, e.ctrlKey, e.altKey)) {
     this.handleEvent(e);
   } else {
-    if (goog.userAgent.GECKO &&
-        e.keyCode in goog.events.KeyHandler.mozKeyCodeToKeyCodeMap_) {
-      this.keyCode_ = goog.events.KeyHandler.mozKeyCodeToKeyCodeMap_[e.keyCode];
-    } else {
-      this.keyCode_ = e.keyCode;
-    }
+    this.keyCode_ = goog.userAgent.GECKO ?
+        goog.events.KeyCodes.normalizeGeckoKeyCode(e.keyCode) :
+        e.keyCode;
   }
 };
 
@@ -367,11 +353,11 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
   } else {
     keyCode = be.keyCode || this.keyCode_;
     charCode = be.charCode || 0;
-    // On the Mac, shift-/ triggers a question mark char code and no key code,
-    // so we synthesize the latter
+    // On the Mac, shift-/ triggers a question mark char code and no key code
+    // (normalized to WIN_KEY), so we synthesize the latter.
     if (goog.userAgent.MAC &&
         charCode == goog.events.KeyCodes.QUESTION_MARK &&
-        !keyCode) {
+        keyCode == goog.events.KeyCodes.WIN_KEY) {
       keyCode = goog.events.KeyCodes.SLASH;
     }
   }

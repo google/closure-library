@@ -15,6 +15,7 @@
 /**
  * @fileoverview Generic keyboard shortcut handler.
  *
+ * @author eae@google.com (Emil A Eklund)
  * @see ../demos/keyboardshortcuts.html
  */
 
@@ -88,7 +89,7 @@ goog.ui.KeyboardShortcutHandler = function(keyTarget) {
    */
   this.alwaysPreventDefault_ = true;
 
-   /**
+  /**
    * Whether to always stop propagation if a shortcut event is fired.
    * @type {boolean}
    * @private
@@ -818,13 +819,17 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
     this.isPrintableKey_ = false;
     return;
   }
+
+  var keyCode = goog.userAgent.GECKO ?
+      goog.events.KeyCodes.normalizeGeckoKeyCode(event.keyCode) :
+      event.keyCode;
+
   var modifiers =
       (event.shiftKey ? goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT : 0) |
       (event.ctrlKey ? goog.ui.KeyboardShortcutHandler.Modifiers.CTRL : 0) |
       (event.altKey ? goog.ui.KeyboardShortcutHandler.Modifiers.ALT : 0) |
       (event.metaKey ? goog.ui.KeyboardShortcutHandler.Modifiers.META : 0);
-  var stroke = goog.ui.KeyboardShortcutHandler.makeKey_(event.keyCode,
-                                                        modifiers);
+  var stroke = goog.ui.KeyboardShortcutHandler.makeKey_(keyCode, modifiers);
 
   // Check if any previous strokes where entered within the acceptable time
   // period.
