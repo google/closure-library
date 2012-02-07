@@ -298,6 +298,7 @@ function testWindowWontSendToWrongOrigin() {
     iframeChannel.send('ping', 'fizzbang');
 
     setTimeout(function() {
+      iframeChannel.dispose();
       asyncTestCase.continueTesting();
     }, asyncTestCase.stepTimeout - 500);
     asyncTestCase.waitForAsync('window response');
@@ -319,6 +320,7 @@ function testWindowWontReceiveFromWrongOrigin() {
     iframeChannel.send('ping', 'fizzbang');
 
     setTimeout(function() {
+      iframeChannel.dispose();
       asyncTestCase.continueTesting();
     }, asyncTestCase.stepTimeout - 500);
     asyncTestCase.waitForAsync('window response');
