@@ -820,19 +820,66 @@ See the COPYING file for details.
     assertArrayEquals('Arrays should be equal', a1, a2);
 
     assertThrows('Should have thrown because args are not arrays', function() {
-      var b1 = true;
-      var b2 = true;
-      assertArrayEquals(b1, b2);
+      assertArrayEquals(true, true);
     });
+
+    a1 = [0, undefined, 2];
+    a2 = [0, , 2];
+    // The following test fails unexpectedly. The bug is tracked at
+    // http://code.google.com/p/closure-library/issues/detail?id=419
+    // assertThrows(
+    //     'assertArrayEquals distinguishes undefined items from sparse arrays',
+    //     function() {
+    //       assertArrayEquals(a1, a2);
+    //     });
+
+    // For the record. This behavior will probably change in the future.
+    assertArrayEquals(
+        'Bug: sparse arrays and undefined items are not distinguished',
+        [0, undefined, 2], [0, , 2]);
+
+    assertThrows('The array elements should be compared with ===', function() {
+      assertArrayEquals([0], ['0'])
+    });
+
+    assertThrows('Arrays with different length should be different',
+        function() {
+          assertArrayEquals([0, undefined], [0])
+        });
+
+    a1 = [0];
+    a2 = [0];
+    a2[-1] = -1;
+    assertArrayEquals('Negative indexes are ignored', a1, a2);
+
+    a1 = [0];
+    a2 = [0];
+    a2['extra'] = 1
+    assertArrayEquals(
+        'Extra properties are ignored. Use assertObjectEquals to compare them.',
+        a1, a2);
+
+    assertArrayEquals('An example where assertObjectEquals would fail in IE.',
+        ['x'], 'x'.match(/x/g))
   }
 
   function testAssertObjectsEqualsDifferentArrays() {
     assertThrows('Should have thrown because args are different', function() {
       var a1 = ['className1'];
       var a2 = ['className2'];
-      assertArrayEquals(a1, a2);
       assertObjectEquals(a1, a2);
     });
+  }
+
+  function testAssertObjectsEqualsNegativeArrayIndexes() {
+    var a1 = [0];
+    var a2 = [0];
+    a2[-1] = -1;
+    // The following test fails unexpectedly. The bug is tracked at
+    // http://code.google.com/p/closure-library/issues/detail?id=418
+    // assertThrows('assertObjectEquals compares negative indexes', function() {
+    //   assertObjectEquals(a1, a2);
+    // });
   }
 
   function testAssertObjectsEqualsDifferentTypeSameToString() {

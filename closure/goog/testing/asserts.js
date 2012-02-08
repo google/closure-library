@@ -536,6 +536,9 @@ goog.testing.asserts.findDifferences = function(expected, actual,
   };
 
   /**
+   * @param {*} var1 An item in the expected object.
+   * @param {*} var2 The corresponding item in the actual object.
+   * @param {string} path Their path in the objects.
    * @suppress {missingProperties} The map_ property is unknown to the compiler
    *     unless goog.structs.Map is loaded.
    */
@@ -712,7 +715,7 @@ var assertObjectRoughlyEquals = function(a, b, c, opt_d) {
       v1, v2, equalityPredicate);
 
   _assert(failureMessage, !differences, differences);
-}
+};
 
 
 /**
@@ -737,9 +740,13 @@ var assertObjectNotEquals = function(a, b, opt_c) {
 
 
 /**
- * @param {*} a The expected value (2 args) or the debug message (3 args).
- * @param {*} b The actual value (2 args) or the expected value (3 args).
- * @param {*=} opt_c The actual value (3 args only).
+ * Compares two arrays ignoring negative indexes and extra properties on the
+ * array objects. Use case: Internet Explorer adds the index, lastIndex and
+ * input enumerable fields to the result of string.match(/regexp/g), which makes
+ * assertObjectEquals fail.
+ * @param {*} a The expected array (2 args) or the debug message (3 args).
+ * @param {*} b The actual array (2 args) or the expected array (3 args).
+ * @param {*=} opt_c The actual array (3 args only).
  */
 var assertArrayEquals = function(a, b, opt_c) {
   _validateArguments(2, arguments);
@@ -757,7 +764,8 @@ var assertArrayEquals = function(a, b, opt_c) {
           typeOfVar2 == 'Array',
           'Expected an array for assertArrayEquals but found a ' + typeOfVar2);
 
-  assertObjectEquals.apply(null, arguments);
+  assertObjectEquals(failureMessage,
+      Array.prototype.concat.call(v1), Array.prototype.concat.call(v2));
 };
 
 
