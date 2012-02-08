@@ -211,6 +211,13 @@ function testDeserializationFromExternalSource() {
   messageCopy.repeatedInt64Array();
   assertFalse(messageCopy.hasRepeatedInt64());
   assertEquals(0, messageCopy.repeatedInt64Count());
+
+  // Access a nested message to ensure it is deserialized.
+  assertNotNull(messageCopy.getOptionalNestedMessage());
+
+  // Verify that the pblite array itself has not been replaced by the
+  // deserialization.
+  assertEquals('array', goog.typeOf(pblite[16]));
 }
 
 function assertDeserializationMatches(messageCopy) {
