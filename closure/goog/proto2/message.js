@@ -33,7 +33,7 @@ goog.require('goog.string');
  */
 goog.proto2.Message = function() {
   /**
-   * Stores the field values in this message.
+   * Stores the field values in this message. Keyed by the tag of the fields.
    * @type {*}
    * @private
    */
@@ -64,7 +64,8 @@ goog.proto2.Message = function() {
   this.lazyDeserializer_ = null;
 
   /**
-   * A map of those fields deserialized.
+   * A map of those fields deserialized, from tag number to their deserialized
+   * value.
    * @type {Object}
    * @private
    */
@@ -473,25 +474,43 @@ goog.proto2.Message.prototype.has$Value = function(tag) {
 
 
 /**
- * If a lazy deserializer is instantiated, lazily deserializes the
- * field if required.
+ * Returns the value for the given field. If a lazy deserializer is
+ * instantiated, lazily deserializes the field if required before returning the
+ * value.
  *
  * @param {goog.proto2.FieldDescriptor} field The field.
+ * @return {*} The field value, if any.
  * @private
  */
-goog.proto2.Message.prototype.lazyDeserialize_ = function(field) {
+goog.proto2.Message.prototype.getValueForField_ = function(field) {
+  // Retrieve the current value, which may still be serialized.
+  var tag = field.getTag();
+  if (!tag in this.values_) {
+    return null;
+  }
+
+  var value = this.values_[tag];
+  if (value == null) {
+    return null;
+  }
+
   // If we have a lazy deserializer, then ensure that the field is
   // properly deserialized.
   if (this.lazyDeserializer_) {
-    var tag = field.getTag();
-
+    // If the tag is not deserialized, then we must do so now. Deserialize
+    // the field's value via the deserializer.
     if (!(tag in this.deserializedFields_)) {
-      this.values_[tag] = this.lazyDeserializer_.deserializeField(
-          this, field, this.values_[tag]);
-
-      this.deserializedFields_[tag] = true;
+      var deserializedValue = this.lazyDeserializer_.deserializeField(
+          this, field, value);
+      this.deserializedFields_[tag] = deserializedValue;
+      return deserializedValue;
     }
+
+    return this.deserializedFields_[tag];
   }
+
+  // Otherwise, just return the value.
+  return value;
 };
 
 
@@ -509,20 +528,20 @@ goog.proto2.Message.prototype.lazyDeserialize_ = function(field) {
  */
 goog.proto2.Message.prototype.get$Value = function(tag, opt_index) {
   var field = this.getFieldByTag_(tag);
-
-  // Ensure that the field is deserialized.
-  this.lazyDeserialize_(field);
+  var value = this.getValueForField_(field);
 
   if (field.isRepeated()) {
+    goog.proto2.Util.assert(goog.isArray(value));
+
     var index = opt_index || 0;
-    goog.proto2.Util.assert(index >= 0 && index < this.count$Values(tag),
+    goog.proto2.Util.assert(index >= 0 && index < value.length,
         'Given index is out of bounds');
 
-    return this.values_[tag][index];
-  } else {
-    goog.proto2.Util.assert(!goog.isArray(this.values_[tag]));
-    return tag in this.values_ ? this.values_[tag] : null;
+    return value[index];
   }
+
+  goog.proto2.Util.assert(!goog.isArray(value));
+  return value;
 };
 
 
@@ -563,14 +582,11 @@ goog.proto2.Message.prototype.get$ValueOrDefault = function(tag, opt_index) {
  */
 goog.proto2.Message.prototype.array$Values = function(tag) {
   goog.proto2.Util.assert(this.getFieldByTag_(tag).isRepeated(),
-                          'Cannot call fieldArray on a non-repeated field');
-
+      'Cannot call fieldArray on a non-repeated field');
   var field = this.getFieldByTag_(tag);
-
-  // Ensure that the field is deserialized.
-  this.lazyDeserialize_(field);
-
-  return this.values_[tag] || [];
+  var value = this.getValueForField_(field);
+  goog.proto2.Util.assert(value == null || goog.isArray(value));
+  return (/** @type {Array} */value) || [];
 };
 
 
@@ -620,7 +636,7 @@ goog.proto2.Message.prototype.set$Value = function(tag, value) {
 
   this.values_[tag] = value;
   if (this.deserializedFields_) {
-    this.deserializedFields_[tag] = true;
+    this.deserializedFields_[tag] = value;
   }
 };
 
