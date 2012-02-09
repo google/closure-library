@@ -61,7 +61,8 @@ goog.functions.NULL = goog.functions.constant(null);
  * into it.
  * @param {*=} opt_returnValue The single value that will be returned.
  * @param {...*} var_args Optional trailing arguments. These are ignored.
- * @return {*} The first argument passed in, or undefined if nothing was passed.
+ * @return {?} The first argument passed in, or undefined if nothing was passed.
+ *     We can't know the type -- just pass it along without type.
  */
 goog.functions.identity = function(opt_returnValue, var_args) {
   return opt_returnValue;
