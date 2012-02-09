@@ -60,12 +60,23 @@ See the COPYING file for details.
   <iframe name="frame" src="../math/math_test.html"></iframe>
 
 <script>
-
-  var $ = goog.dom.getElement;
   var classes = goog.dom.classes;
 
+  function testGet() {
+    var el = document.createElement('div');
+    assertArrayEquals([], goog.dom.classes.get(el));
+    el.className = 'c';
+    assertArrayEquals(['c'], goog.dom.classes.get(el));
+    el.className = 'c d';
+    assertArrayEquals(['c', 'd'], goog.dom.classes.get(el));
+    el.className = 'c\nd';
+    assertArrayEquals(['c', 'd'], goog.dom.classes.get(el));
+    el.className = ' c ';
+    assertArrayEquals(['c'], goog.dom.classes.get(el));
+  }
+
   function testSetAddHasRemove() {
-    var el = $('p1');
+    var el = goog.dom.getElement('p1');
     classes.set(el, 'someclass');
     assertTrue('Should have someclass', classes.has(el, 'someclass'));
 
@@ -99,7 +110,7 @@ See the COPYING file for details.
   }
 
   function testSwap() {
-    var el = $('p1');
+    var el = goog.dom.getElement('p1');
     classes.set(el, 'someclass first');
 
     assertTrue('Should have first class', classes.has(el, 'first'));
@@ -120,7 +131,7 @@ See the COPYING file for details.
   }
 
   function testEnable() {
-    var el = $('p1');
+    var el = goog.dom.getElement('p1');
     classes.set(el, 'someclass first');
 
     assertTrue('Should have first class', classes.has(el, 'first'));
@@ -138,7 +149,7 @@ See the COPYING file for details.
   }
 
   function testToggle() {
-    var el = $('p1');
+    var el = goog.dom.getElement('p1');
     classes.set(el, 'someclass first');
 
     assertTrue('Should have first class', classes.has(el, 'first'));
@@ -156,17 +167,17 @@ See the COPYING file for details.
   }
 
   function testAddNotAddingMultiples() {
-    var el = $('span6');
-    classes.add(el, 'a');
+    var el = goog.dom.getElement('span6');
+    assertTrue(classes.add(el, 'a'));
     assertEquals('a', el.className);
-    classes.add(el, 'a');
+    assertFalse(classes.add(el, 'a'));
     assertEquals('a', el.className);
-    classes.add(el, 'b', 'b');
+    assertFalse(classes.add(el, 'b', 'b'));
     assertEquals('a b', el.className);
   }
 
   function testAddRemoveString() {
-    var el = $('span6');
+    var el = goog.dom.getElement('span6');
     el.className = 'a';
 
     goog.dom.classes.addRemove(el, 'a', 'b');
@@ -183,7 +194,7 @@ See the COPYING file for details.
   }
 
   function testAddRemoveArray() {
-    var el = $('span6');
+    var el = goog.dom.getElement('span6');
     el.className = 'a';
 
     goog.dom.classes.addRemove(el, ['a'], ['b']);
@@ -200,7 +211,7 @@ See the COPYING file for details.
   }
 
   function testAddRemoveMultiple() {
-    var el = $('span6');
+    var el = goog.dom.getElement('span6');
     el.className = 'a';
 
     goog.dom.classes.addRemove(el, ['a'], ['b', 'c', 'd']);
@@ -217,7 +228,7 @@ See the COPYING file for details.
   }
 
   function testHasWithNewlines() {
-    var el = $('p3');
+    var el = goog.dom.getElement('p3');
     assertTrue('Should have someclass', classes.has(el, 'someclass'));
     assertTrue('Should also have otherclass', classes.has(el, 'otherclass'));
     assertFalse('Should not have weirdclass', classes.has(el, 'weirdclass'));
