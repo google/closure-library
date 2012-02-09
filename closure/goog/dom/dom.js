@@ -2404,8 +2404,8 @@ goog.dom.DomHelper.prototype.getOwnerDocument = goog.dom.getOwnerDocument;
 
 /**
  * Cross browser function for getting the document element of an iframe.
- * @param {HTMLIFrameElement|HTMLFrameElement} iframe Iframe element.
- * @return {!HTMLDocument} The frame content document.
+ * @param {Element} iframe Iframe element.
+ * @return {!Document} The frame content document.
  */
 goog.dom.DomHelper.prototype.getFrameContentDocument =
     goog.dom.getFrameContentDocument;

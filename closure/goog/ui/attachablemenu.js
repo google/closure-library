@@ -304,7 +304,7 @@ goog.ui.AttachableMenu.prototype.onMouseOut = function(e) {
 
 /**
  * Mouse down handler for the menu. Prevents default to avoid text selection.
- * @param {goog.events.Event} e The event object.
+ * @param {!goog.events.Event} e The event object.
  * @protected
  */
 goog.ui.AttachableMenu.prototype.onMouseDown = goog.events.Event.preventDefault;
