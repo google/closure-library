@@ -426,7 +426,9 @@ goog.ui.PopupBase.prototype.isOrWasRecentlyVisible = function() {
 
 
 /**
- * Sets whether the popup should be visible.
+ * Sets whether the popup should be visible. After this method
+ * returns, isVisible() will always return the new state, even if
+ * there is a transition.
  *
  * @param {boolean} visible Desired visibility state.
  */
@@ -580,6 +582,9 @@ goog.ui.PopupBase.prototype.hide_ = function(opt_target) {
     this.handler_.removeAll();
   }
 
+  // Set visibility to hidden even if there is a transition.
+  this.isVisible_ = false;
+
   // If there is transition to play, we play it and only hide the element
   // (and fire HIDE event) after the transition is over.
   if (this.hideTransition_) {
@@ -613,7 +618,6 @@ goog.ui.PopupBase.prototype.continueHidingPopup_ = function(opt_target) {
   } else if (this.type_ == goog.ui.PopupBase.Type.MOVE_OFFSCREEN) {
     this.moveOffscreen_();
   }
-  this.isVisible_ = false;
 
   // Notify derived classes and handlers.
   this.onHide_(opt_target);

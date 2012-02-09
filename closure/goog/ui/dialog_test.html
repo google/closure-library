@@ -11,17 +11,18 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.ui.Dialog</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.ui.Dialog');
-  goog.require('goog.ui.Dialog.ButtonSet');
   goog.require('goog.dom');
   goog.require('goog.dom.a11y');
   goog.require('goog.events');
   goog.require('goog.events.EventType');
   goog.require('goog.fx.css3');
   goog.require('goog.style');
+  goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
+  goog.require('goog.ui.Dialog');
+  goog.require('goog.ui.Dialog.ButtonSet');
   goog.require('goog.ui.PopupBase');
 </script>
 </head>
@@ -30,8 +31,10 @@ See the COPYING file for details.
 <script>
   var decorateTarget;
   var dialog;
+  var mockClock;
 
   function setUp() {
+    mockClock = new goog.testing.MockClock(true);
     dialog = new goog.ui.Dialog();
     var buttons = new goog.ui.Dialog.ButtonSet();
     buttons.set(goog.ui.Dialog.DefaultButtonKeys.CANCEL,
@@ -51,6 +54,7 @@ See the COPYING file for details.
   function tearDown() {
     dialog.dispose();
     goog.dom.removeNode(decorateTarget);
+    mockClock.dispose();
   }
 
   function testCrossFrameFocus() {
@@ -637,6 +641,27 @@ See the COPYING file for details.
     dialog.setVisible(true);
     dialog.dispose();
     // Nothing to assert. We only want to ensure that there is no error.
+  }
+
+  function testEventsDuringAnimation() {
+    dialog.dispose();
+    dialog = new goog.ui.Dialog();
+    dialog.render();
+    dialog.setTransition(
+        goog.fx.css3.fadeIn(dialog.getElement(), 1),
+        goog.fx.css3.fadeIn(dialog.getBackgroundElement(), 1),
+        goog.fx.css3.fadeOut(dialog.getElement(), 1),
+        goog.fx.css3.fadeOut(dialog.getBackgroundElement(), 1));
+    dialog.setVisible(true);
+    assertTrue(dialog.isVisible());
+
+    var buttonSet = dialog.getButtonSet();
+    var button = buttonSet.getButton(buttonSet.getDefault());
+
+    // The button event fires while the animation is still going.
+    goog.testing.events.fireClickSequence(button);
+    mockClock.tick(2000);
+    assertFalse(dialog.isVisible());
   }
 </script>
 </body>

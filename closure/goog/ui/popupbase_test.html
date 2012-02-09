@@ -18,6 +18,7 @@ See the COPYING file for details.
   goog.require('goog.events.EventType');
   goog.require('goog.fx.Transition');
   goog.require('goog.fx.Transition.EventType');
+  goog.require('goog.fx.css3');
   goog.require('goog.ui.Popup');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
@@ -239,6 +240,36 @@ function testOnHideTransition() {
   assertFalse(hideHandlerCalled);
   mockTransition.dispatchEvent(goog.fx.Transition.EventType.END);
   assertTrue(hideHandlerCalled);
+}
+
+function testSetVisibleWorksCorrectlyWithTransitions() {
+  popup.setTransition(
+      goog.fx.css3.fadeIn(popup.getElement(), 1),
+      goog.fx.css3.fadeOut(popup.getElement(), 1));
+
+  // Consecutive calls to setVisible works without needing to wait for
+  // transition to finish.
+  popup.setVisible(true);
+  assertTrue(popup.isVisible());
+  popup.setVisible(false);
+  assertFalse(popup.isVisible());
+  clock.tick(1100);
+
+  // Calling setVisible(true) immediately changed the state to visible.
+  popup.setVisible(true);
+  assertTrue(popup.isVisible());
+  clock.tick(1100);
+
+  // Consecutive calls to setVisible, in opposite order.
+  popup.setVisible(false);
+  popup.setVisible(true);
+  assertTrue(popup.isVisible());
+  clock.tick(1100);
+
+  // Calling setVisible(false) immediately changed the state to not visible.
+  popup.setVisible(false);
+  assertFalse(popup.isVisible());
+  clock.tick(1100);
 }
 
 

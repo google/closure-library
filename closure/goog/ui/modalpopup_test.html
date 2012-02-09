@@ -284,6 +284,41 @@ function testTransitionsAndDisposingOnHideWorks() {
 }
 
 
+function testSetVisibleWorksCorrectlyWithTransitions() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+  popup.setTransition(
+      goog.fx.css3.fadeIn(popup.getElement(), 1),
+      goog.fx.css3.fadeIn(popup.getBackgroundElement(), 1),
+      goog.fx.css3.fadeOut(popup.getElement(), 1),
+      goog.fx.css3.fadeOut(popup.getBackgroundElement(), 1));
+
+  // Consecutive calls to setVisible works without needing to wait for
+  // transition to finish.
+  popup.setVisible(true);
+  assertTrue(popup.isVisible());
+  popup.setVisible(false);
+  assertFalse(popup.isVisible());
+  mockClock.tick(1100);
+
+  // Calling setVisible(true) immediately changed the state to visible.
+  popup.setVisible(true);
+  assertTrue(popup.isVisible());
+  mockClock.tick(1100);
+
+  // Consecutive calls to setVisible, in opposite order.
+  popup.setVisible(false);
+  popup.setVisible(true);
+  assertTrue(popup.isVisible());
+  mockClock.tick(1100);
+
+  // Calling setVisible(false) immediately changed the state to not visible.
+  popup.setVisible(false);
+  assertFalse(popup.isVisible());
+  mockClock.tick(1100);
+}
+
+
 function testTransitionsDisposed() {
   popup = new goog.ui.ModalPopup();
   popup.render();
