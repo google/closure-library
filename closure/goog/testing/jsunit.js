@@ -51,6 +51,9 @@ goog.testing.jsunit.AUTO_RUN_ONLOAD = true;
 
 
 (function() {
+  // Increases the maximum number of stack frames in Google Chrome from the
+  // default 10 to 50 to get more useful stack traces.
+  Error.stackTraceLimit = 50;
 
   // Store a reference to the window's timeout so that it can't be overridden
   // by tests.
