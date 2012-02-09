@@ -41,8 +41,7 @@ goog.require('goog.userAgent');
  * @extends {goog.ui.Tooltip}
  */
 goog.ui.AdvancedTooltip = function(opt_el, opt_str, opt_domHelper) {
-  goog.ui.Tooltip.call(this, opt_el, opt_str, goog.dom.isNodeLike(opt_el) ?
-      goog.dom.getDomHelper(/** @type {Node} */(opt_el)) : opt_domHelper);
+  goog.ui.Tooltip.call(this, opt_el, opt_str, opt_domHelper);
 };
 goog.inherits(goog.ui.AdvancedTooltip, goog.ui.Tooltip);
 
