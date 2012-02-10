@@ -987,7 +987,7 @@ See the COPYING file for details.
     assertNull(error2);
   }
 
-  /**
+ /**
    * Tests loading a module via load when the module is already
    * loaded.  The deferred's callback should be called immediately.
    */
@@ -1237,132 +1237,6 @@ See the COPYING file for details.
     // Check that among the failed modules, 'c' and 'd' are also cancelled
     // due to dependencies.
     assertTrue(goog.array.equals(['a', 'b', 'c', 'd'], cancelledIds.sort()));
-  }
-
-  /**
-   * Tests batching the pending requests.
-   */
-  function testBatchPendingRequests() {
-    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
-    mm.setBatchModeEnabled(true);
-    mm.setLoader(createSuccessfulBatchLoader(mm));
-
-    var calledBack = false;
-    var errbackCalled = false;
-    var calledBack2 = false;
-    var errbackCalled2 = false;
-    var calledBack3 = false;
-    var errbackCalled3 = false;
-
-    mm.load('a').addCallback(function(ctx) {
-      calledBack = true;
-    }).addErrback(function(err) {
-      errbackCalled = true;
-    });
-    mm.load('b').addCallback(function(ctx) {
-      calledBack2 = true;
-    }).addErrback(function(err) {
-      error2 = err;
-      errbackCalled2 = true;
-    });
-    mm.load('c').addCallback(function(ctx) {
-      calledBack3 = true;
-    }).addErrback(function(err) {
-      errbackCalled3 = true;
-    });
-
-    assertFalse(calledBack);
-    assertFalse(calledBack2);
-    assertFalse(calledBack3);
-
-    clock.tick(5);
-    assertTrue(calledBack);
-    assertFalse(calledBack2);
-    assertFalse(calledBack3);
-    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
-    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
-    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
-
-    clock.tick(5);
-
-    assertTrue(calledBack2);
-    assertFalse(calledBack3);
-    assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
-    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
-
-    clock.tick(2); // This should only be 2 ticks because b and c were batched.
-
-    assertTrue(calledBack3);
-    assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
-    assertFalse(errbackCalled);
-    assertFalse(errbackCalled2);
-    assertFalse(errbackCalled3);
-  }
-
-  /**
-   * Tests that batching the pending requests doesn't happen
-   * when batch mode is not enabled.
-   */
-  function testBatchPendingRequestsDisabled() {
-    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
-    mm.setBatchModeEnabled(false);
-    mm.setLoader(createSuccessfulBatchLoader(mm));
-
-    var calledBack = false;
-    var errbackCalled = false;
-    var calledBack2 = false;
-    var errbackCalled2 = false;
-    var calledBack3 = false;
-    var errbackCalled3 = false;
-
-    mm.load('a').addCallback(function(ctx) {
-      calledBack = true;
-    }).addErrback(function(err) {
-      errbackCalled = true;
-    });
-    mm.load('b').addCallback(function(ctx) {
-      calledBack2 = true;
-    }).addErrback(function(err) {
-      error2 = err;
-      errbackCalled2 = true;
-    });
-    mm.load('c').addCallback(function(ctx) {
-      calledBack3 = true;
-    }).addErrback(function(err) {
-      errbackCalled3 = true;
-    });
-
-    assertFalse(calledBack);
-    assertFalse(calledBack2);
-    assertFalse(calledBack3);
-
-    clock.tick(5);
-    assertTrue(calledBack);
-    assertFalse(calledBack2);
-    assertFalse(calledBack3);
-    assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
-    assertFalse('module "b" should not be loaded', mm.isModuleLoaded('b'));
-    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
-
-    clock.tick(5);
-
-    assertTrue(calledBack2);
-    assertFalse(calledBack3);
-    assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
-    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
-
-    clock.tick(2); // If b and c were batched, c would be loaded now.
-
-    assertFalse(calledBack3);
-    assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
-
-    clock.tick(3);
-
-    assertTrue(calledBack3);
-    assertTrue('module "c" should be loaded', mm.isModuleLoaded('c'));
-    assertFalse(errbackCalled);
-    assertFalse(errbackCalled2);
-    assertFalse(errbackCalled3);
   }
 
   /**
