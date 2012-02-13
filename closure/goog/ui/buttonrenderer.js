@@ -150,7 +150,6 @@ goog.ui.ButtonRenderer.prototype.getValue = goog.nullFunction;
  * the new value.  No-op in the base class.
  * @param {Element} element The button's root element.
  * @param {string} value New value.
- * @protected
  */
 goog.ui.ButtonRenderer.prototype.setValue = goog.nullFunction;
 

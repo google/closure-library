@@ -95,7 +95,8 @@ goog.ui.Button.prototype.getValue = function() {
  */
 goog.ui.Button.prototype.setValue = function(value) {
   this.value_ = value;
-  this.getRenderer().setValue(this.getElement(), value);
+  var renderer = /** @type {!goog.ui.ButtonRenderer} */ (this.getRenderer());
+  renderer.setValue(this.getElement(), /** @type {string} */ (value));
 };
 
 
