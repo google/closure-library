@@ -375,9 +375,13 @@ goog.testing.AsyncTestCase.prototype.doAsyncError = function(opt_e) {
     fakeTestObj.name = this.activeTest.name + ' [' + fakeTestObj.name + ']';
   }
 
-  // Note: if the test has an error, and then tearDown has an error, they will
-  // both be reported.
-  this.doError(fakeTestObj, opt_e);
+  if (this.activeTest) {
+    // Note: if the test has an error, and then tearDown has an error, they will
+    // both be reported.
+    this.doError(fakeTestObj, opt_e);
+  } else {
+    this.exceptionBeforeTest = opt_e;
+  }
 
   // This is a potential entry point, so we pump. We also add in a bit of a
   // delay to try and prevent any async behavior from the failed test from
@@ -769,7 +773,13 @@ goog.testing.AsyncTestCase.prototype.doIteration_ = function() {
   this.activeTest = this.next();
   if (this.activeTest && this.running) {
     this.result_.runCount++;
-    this.setNextStep_(this.doSetUp_, 'setUp');
+    // If this test should be marked as having failed, doIteration will go
+    // straight to the next test.
+    if (this.maybeFailTestEarly(this.activeTest)) {
+      this.setNextStep_(this.doIteration_, 'doIteration');
+    } else {
+      this.setNextStep_(this.doSetUp_, 'setUp');
+    }
   } else {
     // All tests done.
     this.finalize();

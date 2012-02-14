@@ -196,6 +196,14 @@ goog.testing.TestCase.IS_IE = typeof opera == 'undefined' && !!navigator &&
 
 
 /**
+ * Exception object that was detected before a test runs.
+ * @type {*}
+ * @protected
+ */
+goog.testing.TestCase.prototype.exceptionBeforeTest;
+
+
+/**
  * Whether the test case has ever tried to execute.
  * @type {boolean}
  */
@@ -514,7 +522,11 @@ goog.testing.TestCase.prototype.getNumFilesLoaded = function() {
  * by the test to indicate it has finished.
  */
 goog.testing.TestCase.prototype.runTests = function() {
-  this.setUpPage();
+  try {
+    this.setUpPage();
+  } catch (e) {
+    this.exceptionBeforeTest = e;
+  }
   this.execute();
 };
 
@@ -549,7 +561,7 @@ goog.testing.TestCase.prototype.orderTests_ = function(tests) {
       });
       break;
 
-    // Do nothing for NATURAL.
+      // Do nothing for NATURAL.
   }
 };
 
@@ -707,6 +719,27 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
 
 
 /**
+ * Checks to see if the test should be marked as failed before it is run.
+ *
+ * If there was an error in setUpPage, we treat that as a failure for all tests
+ * and mark them all as having failed.
+ *
+ * @param {goog.testing.TestCase.Test} testCase The current test case.
+ * @return {boolean} Whether the test was marked as failed.
+ * @protected
+ */
+goog.testing.TestCase.prototype.maybeFailTestEarly = function(testCase) {
+  if (this.exceptionBeforeTest) {
+    // We just use the first error to report an error on a failed test.
+    testCase.name = 'setUpPage for ' + testCase.name;
+    this.doError(testCase, this.exceptionBeforeTest);
+    return true;
+  }
+  return false;
+};
+
+
+/**
  * Cycles through the tests, breaking out using a setTimeout if the execution
  * time has execeeded {@link #MAX_RUN_TIME}.
  */
@@ -723,15 +756,19 @@ goog.testing.TestCase.prototype.cycleTests = function() {
     try {
       this.log('Running test: ' + nextTest.name);
 
-      goog.testing.TestCase.currentTestName = nextTest.name;
-      this.setUp();
-      nextTest.execute();
-      this.tearDown();
-      goog.testing.TestCase.currentTestName = null;
+      if (this.maybeFailTestEarly(nextTest)) {
+        cleanedUp = true;
+      } else {
+        goog.testing.TestCase.currentTestName = nextTest.name;
+        this.setUp();
+        nextTest.execute();
+        this.tearDown();
+        goog.testing.TestCase.currentTestName = null;
 
-      cleanedUp = true;
+        cleanedUp = true;
 
-      this.doSuccess(nextTest);
+        this.doSuccess(nextTest);
+      }
     } catch (e) {
       this.doError(nextTest, e);
 

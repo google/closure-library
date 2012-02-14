@@ -41,6 +41,9 @@ var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 asyncTestCase.stepTimeout = 3 * 1000;
 
 function setUpPage() {
+  if (!('Worker' in goog.global)) {
+    return;
+  }
   workerChannel = new goog.messaging.PortChannel(
       new Worker('testdata/portchannel_worker.js'));
 }
