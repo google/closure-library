@@ -491,7 +491,12 @@ See the COPYING file for details.
     goog.dom.removeNode(node);
 
     var newRange = goog.dom.Range.createFromWindow(window);
-    if (goog.userAgent.WEBKIT) {
+
+    // In Chrome 14 and below (<= Webkit 535.1), newRange will be null.
+    // In Chrome 16 and above (>= Webkit 535.7), newRange will be collapsed
+    // like on other browsers.
+    // We didn't bother testing in between.
+    if (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('535.7')) {
       assertNull('Webkit supports rangeCount == 0', newRange);
     } else {
       assertTrue('The other browsers will just have an empty range.',
