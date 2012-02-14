@@ -15,6 +15,7 @@ See the COPYING file for details.
 <script type="text/javascript">
   goog.require('goog.dom');
   goog.require('goog.events');
+  goog.require('goog.style');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
@@ -23,6 +24,11 @@ See the COPYING file for details.
   goog.require('goog.userAgent');
 </script>
 <style type="text/css">
+
+#oneThumbSlider {
+  position: relative;
+  width: 1000px;
+}
 
 #twoThumbSlider {
   position: relative;
@@ -390,6 +396,31 @@ function testBlockIncrementingWithEnableAndDisabled() {
       goog.events.EventType.MOUSEMOVE, false).length);
   assertEquals(0, goog.events.getListeners(
       doc, goog.events.EventType.MOUSEUP, true).length);
+}
+
+function testMouseClickWithMoveToPointEnabled() {
+  var stepSize = 20;
+  oneThumbSlider.setStep(stepSize);
+  oneThumbSlider.setMoveToPointEnabled(true);
+
+  var initialValue = oneThumbSlider.getValue();
+  var coords = goog.style.getClientPosition(oneThumbSlider.getElement());
+
+  coords.x += stepSize / 2;
+
+  // Case when value is increased
+  goog.testing.events.fireClickSequence(oneThumbSlider.getElement(),
+      /* opt_button */ undefined, coords);
+  assertEquals(oneThumbSlider.getValue(), initialValue + stepSize);
+
+  // Case when value is decreased
+  goog.testing.events.fireClickSequence(oneThumbSlider.getElement(),
+      /* opt_button */ undefined, coords);
+  assertEquals(oneThumbSlider.getValue(), initialValue);
+
+  // Case when thumb is clicked
+  goog.testing.events.fireClickSequence(oneThumbSlider.getElement());
+  assertEquals(oneThumbSlider.getValue(), initialValue);
 }
 
 </script>
