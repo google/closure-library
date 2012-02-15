@@ -434,7 +434,7 @@ goog.style.getVisibleRectForElement = function(element) {
 
 
 /**
- * Changes the scroll position of {@code container} with the minimum amount so
+ * Calculate the scroll position of {@code container} with the minimum amount so
  * that the content and the borders of the given {@code element} become visible.
  * If the element is bigger than the container, its top left corner will be
  * aligned as close to the container's top left corner as possible.
@@ -443,8 +443,11 @@ goog.style.getVisibleRectForElement = function(element) {
  * @param {Element} container The container to scroll.
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
+ * @return {!goog.math.Coordinate} The new scroll position of the container,
+ *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
  */
-goog.style.scrollIntoContainerView = function(element, container, opt_center) {
+goog.style.getContainerOffsetToScrollInto =
+    function(element, container, opt_center) {
   // Absolute position of the element's border's top left corner.
   var elementPos = goog.style.getPageOffset(element);
   // Absolute position of the container's border's top left corner.
@@ -459,10 +462,12 @@ goog.style.scrollIntoContainerView = function(element, container, opt_center) {
   var spaceX = container.clientWidth - element.offsetWidth;
   var spaceY = container.clientHeight - element.offsetHeight;
 
+  var scrollLeft = container.scrollLeft;
+  var scrollTop = container.scrollTop;
   if (opt_center) {
     // All browsers round non-integer scroll positions down.
-    container.scrollLeft += relX - spaceX / 2;
-    container.scrollTop += relY - spaceY / 2;
+    scrollLeft += relX - spaceX / 2;
+    scrollTop += relY - spaceY / 2;
   } else {
     // This formula was designed to give the correct scroll values in the
     // following cases:
@@ -471,9 +476,29 @@ goog.style.scrollIntoContainerView = function(element, container, opt_center) {
     //   - it is above container (relY < 0) => scroll up by abs(relY)
     //   - it is below container (relY > spaceY) => scroll down by relY - spaceY
     //   - it is in the container => don't scroll
-    container.scrollLeft += Math.min(relX, Math.max(relX - spaceX, 0));
-    container.scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
+    scrollLeft += Math.min(relX, Math.max(relX - spaceX, 0));
+    scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
   }
+  return new goog.math.Coordinate(scrollLeft, scrollTop);
+};
+
+
+/**
+ * Changes the scroll position of {@code container} with the minimum amount so
+ * that the content and the borders of the given {@code element} become visible.
+ * If the element is bigger than the container, its top left corner will be
+ * aligned as close to the container's top left corner as possible.
+ *
+ * @param {Element} element The element to make visible.
+ * @param {Element} container The container to scroll.
+ * @param {boolean=} opt_center Whether to center the element in the container.
+ *     Defaults to false.
+ */
+goog.style.scrollIntoContainerView = function(element, container, opt_center) {
+  var offset =
+      goog.style.getContainerOffsetToScrollInto(element, container, opt_center);
+  container.scrollLeft = offset.x;
+  container.scrollTop = offset.y;
 };
 
 
