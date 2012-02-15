@@ -201,6 +201,14 @@ goog.net.BrowserChannel.prototype.hostPrefix_ = null;
 
 
 /**
+ * The online handler, if one is in use.
+ * @type {goog.events.OnlineHandler}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.onlineHandler_ = null;
+
+
+/**
  * Whether we allow the use of a subdomain in IE for the backchannel requests.
  * @private
  */
@@ -672,7 +680,13 @@ goog.net.BrowserChannel.Stat = {
    * Event indicating that we have determined that our hanging GET is not
    * receiving data when it should be. Thus it is dead dead and will be retried.
    */
-  BACKCHANNEL_DEAD: 20
+  BACKCHANNEL_DEAD: 20,
+
+  /**
+   * The browser declared itself offline during the lifetime of a request, or
+   * was offline when a request was initially made.
+   */
+  BROWSER_OFFLINE: 21
 };
 
 
@@ -767,16 +781,19 @@ goog.net.BrowserChannel.endExecutionHook_ = function() { };
  * @param {string=} opt_sessionId  The session id for the channel.
  * @param {string|number=} opt_requestId  The request id for this request.
  * @param {number=} opt_retryId  The retry id for this request.
+ * @param {goog.events.OnlineHandler=} opt_onlineHandler An online handler if
+ *     one is in use.
  * @return {goog.net.ChannelRequest} The created channel request.
  */
-goog.net.BrowserChannel.createChannelRequest = function(
-    channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
+goog.net.BrowserChannel.createChannelRequest = function(channel, channelDebug,
+    opt_sessionId, opt_requestId, opt_retryId, opt_onlineHandler) {
   return new goog.net.ChannelRequest(
       channel,
       channelDebug,
       opt_sessionId,
       opt_requestId,
-      opt_retryId);
+      opt_retryId,
+      opt_onlineHandler);
 };
 
 
@@ -829,7 +846,8 @@ goog.net.BrowserChannel.prototype.disconnect = function() {
     this.addAdditionalParams_(uri);
 
     var request = goog.net.BrowserChannel.createChannelRequest(
-        this, this.channelDebug_, this.sid_, rid);
+        this, this.channelDebug_, this.sid_, rid, undefined /* opt_retryId */,
+        this.onlineHandler_);
     request.sendUsingImgTag(uri);
     this.onClose_();
   }
@@ -1270,7 +1288,8 @@ goog.net.BrowserChannel.prototype.open_ = function() {
 
   var rid = this.nextRid_++;
   var request = goog.net.BrowserChannel.createChannelRequest(
-      this, this.channelDebug_, '', rid);
+      this, this.channelDebug_, '', rid, undefined /* opt_retryId */,
+      this.onlineHandler_);
   request.setExtraHeaders(this.extraHeaders_);
   var requestText = this.dequeueOutgoingMaps_();
   var uri = this.forwardChannelUri_.clone();
@@ -1325,7 +1344,8 @@ goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ =
       this.channelDebug_,
       this.sid_,
       rid,
-      this.forwardChannelRetryCount_ + 1);
+      this.forwardChannelRetryCount_ + 1,
+      this.onlineHandler_);
   request.setExtraHeaders(this.extraHeaders_);
 
   // randomize from 50%-100% of the forward channel timeout to avoid
@@ -1439,6 +1459,21 @@ goog.net.BrowserChannel.prototype.ensureBackChannel_ = function() {
 
 
 /**
+ * Whether the browser is currently online, based on navigator.online if the use
+ * of that API is enabled.  If it isn't, always returns true.
+ * @return {boolean} Whether the browser is online.
+ * @private
+ */
+goog.net.BrowserChannel.prototype.isBrowserOnline_ = function() {
+  if (this.onlineHandler_) {
+    return this.onlineHandler_.isOnline();
+  } else {
+    return true;
+  }
+};
+
+
+/**
  * Schedules a back-channel retry, unless the max retries has been reached.
  * @return {boolean} true iff a retry was scheduled.
  * @private
@@ -1450,7 +1485,8 @@ goog.net.BrowserChannel.prototype.maybeRetryBackChannel_ = function() {
     return false;
   }
 
-  if (this.backChannelRetryCount_ >= this.getBackChannelMaxRetries()) {
+  if (this.backChannelRetryCount_ >= this.getBackChannelMaxRetries() ||
+      !this.isBrowserOnline_()) {
     return false;
   }
 
@@ -1491,7 +1527,8 @@ goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
       this.channelDebug_,
       this.sid_,
       'rpc',
-      this.backChannelAttemptId_);
+      this.backChannelAttemptId_,
+      this.onlineHandler_);
   this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
   var uri = this.backChannelUri_.clone();
   uri.setParameterValue('RID', 'rpc');
@@ -1532,6 +1569,25 @@ goog.net.BrowserChannel.prototype.okToMakeRequest_ = function() {
     }
   }
   return true;
+};
+
+
+/**
+ * @return {goog.events.OnlineHandler} The online handler, if there is one.
+ */
+goog.net.BrowserChannel.prototype.getOnlineHandler = function() {
+  return this.onlineHandler_;
+};
+
+
+/**
+ * If it is desirable that this browser channel be sensitive to the browser's
+ * stated online state, an online handler can be provided here which will be
+ * used to make the detection of offline/online transitions more timely.
+ * @param {!goog.events.OnlineHandler} onlineHandler The online handler.
+ */
+goog.net.BrowserChannel.prototype.setOnlineHandler = function(onlineHandler) {
+  this.onlineHandler_ = onlineHandler;
 };
 
 

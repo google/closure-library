@@ -30,6 +30,7 @@ goog.provide('goog.net.ChannelRequest.Error');
 goog.require('goog.Timer');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.OnlineHandler.EventType');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XmlHttp.ReadyState');
 goog.require('goog.object');
@@ -48,10 +49,12 @@ goog.require('goog.userAgent');
  * @param {string=} opt_sessionId  The session id for the channel.
  * @param {string|number=} opt_requestId  The request id for this request.
  * @param {number=} opt_retryId  The retry id for this request.
+ * @param {goog.events.OnlineHandler=} opt_onlineHandler The online handler, if
+ *     one should be used.
  * @constructor
  */
-goog.net.ChannelRequest = function(
-    channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
+goog.net.ChannelRequest = function(channel, channelDebug, opt_sessionId,
+    opt_requestId, opt_retryId, opt_onlineHandler) {
   /**
    * The BrowserChannel object that owns the request.
    * @type {goog.net.BrowserChannel|goog.net.BrowserTestChannel}
@@ -102,6 +105,13 @@ goog.net.ChannelRequest = function(
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
+
+  /**
+   * The online handler, if one should be used.
+   * @type {goog.events.OnlineHandler}
+   * @private
+   */
+  this.onlineHandler_ = opt_onlineHandler || null;
 
   /**
    * A timer for polling responseText in browsers that don't fire
@@ -335,7 +345,12 @@ goog.net.ChannelRequest.Error = {
   /**
    * Errors due to the handler throwing an exception.
    */
-  HANDLER_EXCEPTION: 5
+  HANDLER_EXCEPTION: 5,
+
+  /**
+   * The browser declared itself offline during the request.
+   */
+  BROWSER_OFFLINE: 6
 };
 
 
@@ -471,12 +486,18 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
   this.requestUri_ = this.baseUri_.clone();
   this.requestUri_.setParameterValues('t', this.retryId_);
 
+  // If the browser is offline, don't proceed with the request.
+  if (!this.checkOnlineHandler_()) {
+    return;
+  }
+
   // send the request either as a POST or GET
   this.xmlHttpChunkStart_ = 0;
   var useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
   this.xmlHttp_ = this.channel_.createXhrIo(useSecondaryDomains ?
       hostPrefix : null);
-  goog.events.listen(this.xmlHttp_, goog.net.EventType.READY_STATE_CHANGE,
+  this.eventHandler_.listen(this.xmlHttp_,
+      goog.net.EventType.READY_STATE_CHANGE,
       this.xmlHttpHandler_, false, this);
 
   var headers = this.extraHeaders_ ? goog.object.clone(this.extraHeaders_) : {};
@@ -713,7 +734,8 @@ goog.net.ChannelRequest.prototype.pollResponse_ = function() {
 /**
  * Starts a polling interval for changes to responseText of the
  * XMLHttpRequest, for browsers that don't fire onreadystatechange
- * as data comes in incrementally.
+ * as data comes in incrementally.  This timer is disabled in
+ * cleanup_().
  * @private
  */
 goog.net.ChannelRequest.prototype.startPolling_ = function() {
@@ -724,12 +746,56 @@ goog.net.ChannelRequest.prototype.startPolling_ = function() {
 
 
 /**
- * Stops the polling interval for changes to responseText.
+ * Checks any online handler currently available to decide whether the request
+ * about to start is likely to succeed.  If so, returns true and starts
+ * moniroting that handler to detect a loss of connectivity during the request's
+ * lifetime, which on at least some browsers does not result in the immediate
+ * termination of an XHR, let alone a trident connection.
+ *
+ * If the browser is offline at the time of calling, return false.  Under this
+ * condition the calling routine is expected to abandon the request immediately.
+ * @return {boolean} Whether the request should proceed.
  * @private
  */
-goog.net.ChannelRequest.prototype.stopPolling_ = function() {
-  this.pollingTimer_.stop();
-  this.eventHandler_.removeAll();
+goog.net.ChannelRequest.prototype.checkOnlineHandler_ = function() {
+  if (!this.onlineHandler_) {
+    return true;
+  }
+
+  if (this.onlineHandler_.isOnline()) {
+    this.eventHandler_.listen(this.onlineHandler_,
+        goog.events.OnlineHandler.EventType.OFFLINE,
+        this.cancelRequestAsBrowserIsOffline_);
+    return true;
+  } else {
+    this.cancelRequestAsBrowserIsOffline_();
+    return false;
+  }
+};
+
+
+/**
+ * Called when the browser declares itself offline at the start of a request or
+ * during its lifetime.  Abandons that request.
+ * @private
+ */
+goog.net.ChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ =
+    function() {
+  if (this.successful_) {
+    // Should never happen.
+    this.channelDebug_.severe(
+        'Received browser offline event even though request completed ' +
+        'successfully');
+  }
+
+  this.channelDebug_.browserOfflineResponse(this.requestUri_);
+  this.cleanup_();
+
+  // set error and dispatch failure
+  this.lastError_ = goog.net.ChannelRequest.Error.BROWSER_OFFLINE;
+  goog.net.BrowserChannel.notifyStatEvent(
+      goog.net.BrowserChannel.Stat.BROWSER_OFFLINE);
+  this.dispatchFailure_();
 };
 
 
@@ -796,12 +862,20 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.requestStartTime_ = goog.now();
   this.ensureWatchDogTimer_();
 
+  var hostname = usingSecondaryDomain ? window.location.hostname : '';
+  this.requestUri_ = this.baseUri_.clone();
+  this.requestUri_.setParameterValue('DOMAIN', hostname);
+  this.requestUri_.setParameterValue('t', this.retryId_);
+
+  // If the browser is offline, don't proceed with the request.
+  if (!this.checkOnlineHandler_()) {
+    return;
+  }
+
   this.trident_ = new ActiveXObject('htmlfile');
 
-  var hostname = '';
   var body = '<html><body>';
   if (usingSecondaryDomain) {
-    hostname = window.location.hostname;
     body += '<script>document.domain="' + hostname + '"</scr' + 'ipt>';
   }
   body += '</body></html>';
@@ -817,9 +891,6 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
 
   var div = this.trident_.createElement('div');
   this.trident_.parentWindow.document.body.appendChild(div);
-  this.requestUri_ = this.baseUri_.clone();
-  this.requestUri_.setParameterValue('DOMAIN', hostname);
-  this.requestUri_.setParameterValue('t', this.retryId_);
   div.innerHTML = '<iframe src="' + this.requestUri_ + '"></iframe>';
   this.channelDebug_.tridentChannelRequest('GET',
       this.requestUri_, this.rid_, this.retryId_);
@@ -885,7 +956,6 @@ goog.net.ChannelRequest.prototype.onTridentDoneAsync_ = function(successful) {
   }
   this.channelDebug_.tridentChannelResponseDone(
       this.rid_, successful);
-  this.cancelWatchDogTimer_();
   this.cleanup_();
   this.successful_ = successful;
   this.channel_.onRequestComplete(this);
@@ -923,7 +993,6 @@ goog.net.ChannelRequest.prototype.imgTagGet_ = function() {
  */
 goog.net.ChannelRequest.prototype.cancel = function() {
   this.cancelled_ = true;
-  this.cancelWatchDogTimer_();
   this.cleanup_();
 };
 
@@ -1033,20 +1102,27 @@ goog.net.ChannelRequest.prototype.dispatchFailure_ = function() {
  * @private
  */
 goog.net.ChannelRequest.prototype.cleanup_ = function() {
-  this.stopPolling_();
+  this.cancelWatchDogTimer_();
+
+  // Stop the polling timer, if necessary.
+  this.pollingTimer_.stop();
+
+  // Unhook all event handlers.
+  this.eventHandler_.removeAll();
+
   if (this.xmlHttp_) {
     // clear out this.xmlHttp_ before aborting so we handle getting reentered
     // inside abort
     var xmlhttp = this.xmlHttp_;
     this.xmlHttp_ = null;
-    goog.events.unlisten(xmlhttp, goog.net.EventType.READY_STATE_CHANGE,
-        this.xmlHttpHandler_, false, this);
     xmlhttp.abort();
   }
 
   if (this.trident_) {
     this.trident_ = null;
   }
+
+  this.onlineHandler_ = null;
 };
 
 

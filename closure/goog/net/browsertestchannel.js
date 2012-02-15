@@ -243,7 +243,8 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
   // the first request returns server specific parameters
   sendDataUri.setParameterValues('MODE', 'init');
   this.request_ = goog.net.BrowserChannel.createChannelRequest(
-      this, this.channelDebug_);
+      this, this.channelDebug_, undefined, undefined, undefined,
+      this.channel_.getOnlineHandler());
   this.request_.setExtraHeaders(this.extraHeaders_);
   this.request_.xmlHttpGet(sendDataUri, false /* decodeChunks */,
       null /* hostPrefix */, true /* opt_noClose */);
@@ -303,7 +304,8 @@ goog.net.BrowserTestChannel.prototype.checkBlockedCallback_ = function(
 goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
   this.channelDebug_.debug('TestConnection: starting stage 2');
   this.request_ = goog.net.BrowserChannel.createChannelRequest(
-      this, this.channelDebug_);
+      this, this.channelDebug_, undefined, undefined, undefined,
+      this.channel_.getOnlineHandler());
   this.request_.setExtraHeaders(this.extraHeaders_);
   var recvDataUri = this.channel_.getBackChannelUri(this.hostPrefix_,
       /** @type {string} */ (this.path_));

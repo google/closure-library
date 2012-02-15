@@ -18,6 +18,7 @@ goog.require('goog.net.BrowserChannel');
 goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.events.OnlineHandler');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
 </script>
@@ -26,6 +27,7 @@ goog.require('goog.testing.net.XhrIo');
 <script>
 
 var mockClock;
+var mockOnlineHandler;
 
 /**
  * Time to wait for a network request to time out, before aborting.
@@ -41,6 +43,7 @@ var ALL_DAY_MS = 1000 * 60 * 60 * 24;
 function setUp() {
   mockClock = new goog.testing.MockClock();
   mockClock.install();
+  mockOnlineHandler = new goog.testing.events.OnlineHandler(true);
 }
 
 
@@ -96,7 +99,11 @@ function createChannelRequest(xhrIo) {
   // Install mock browser channel and no-op debug logger.
   var req = new goog.net.ChannelRequest(
       new MockBrowserChannel(),
-      new goog.net.ChannelDebug());
+      new goog.net.ChannelDebug(),
+      undefined,
+      undefined,
+      undefined,
+      mockOnlineHandler);
 
   // Install test XhrIo.
   req.createXhrIo_ = function() {
@@ -153,6 +160,55 @@ function testRequestTimeout() {
   assertEquals(1, req.watchdogTimeoutCallCount);
   assertEquals(1, req.channel_.completedRequests.length);
 }
+
+
+/**
+ * Tests whether the channel closes with the correct error when the browser
+ * goes offline while a request is outstanding.
+ */
+function testGoOfflineDuringRequest() {
+  var xhrIo = createXhrIo();
+  var req = createChannelRequest(xhrIo);
+
+  req.xmlHttpPost(new goog.Uri('some_uri'), 'some_postdata', true);
+  assertEquals(0, req.channel_.completedRequests.length);
+
+  // Go offline.
+  mockOnlineHandler.setOnline(false);
+  mockClock.tick(1);
+  assertEquals(1, req.channel_.completedRequests.length);
+  assertEquals(goog.net.ChannelRequest.Error.BROWSER_OFFLINE,
+      req.getLastError());
+  assertFalse(req.getSuccess());
+
+  // Make sure no more timers are firing.
+  mockClock.tick(ALL_DAY_MS);
+  assertEquals(1, req.channel_.completedRequests.length);
+}
+
+
+/**
+ * Tests that a request started while the browser is in an offline state fails
+ * immediately.
+ */
+function testStartRequestWhileOffline() {
+  mockOnlineHandler.setOnline(false);
+  var xhrIo = createXhrIo();
+  var req = createChannelRequest(xhrIo);
+
+  req.xmlHttpPost(new goog.Uri('some_uri'), 'some_postdata', true);
+
+  // Request should fail immediately.
+  assertEquals(1, req.channel_.completedRequests.length);
+  assertEquals(goog.net.ChannelRequest.Error.BROWSER_OFFLINE,
+      req.getLastError());
+  assertFalse(req.getSuccess());
+
+  // Make sure no more timers are firing.
+  mockClock.tick(ALL_DAY_MS);
+  assertEquals(1, req.channel_.completedRequests.length);
+}
+
 
 function testRequestTimeoutWithUnexpectedException() {
   var xhrIo = createXhrIo();
