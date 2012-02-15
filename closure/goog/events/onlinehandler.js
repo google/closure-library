@@ -60,8 +60,8 @@ goog.events.OnlineHandler = function() {
 
   if (goog.events.BrowserFeature.HAS_HTML5_NETWORK_EVENT_SUPPORT) {
     var target =
-        goog.events.BrowserFeature.HTML5_NETWORK_EVENTS_FIRE_ON_WINDOW ?
-        window : document.body;
+        goog.events.BrowserFeature.HTML5_NETWORK_EVENTS_FIRE_ON_BODY ?
+        document.body : window;
     this.eventHandler_.listen(target, ['online', 'offline'],
                               this.handleChange_);
   } else {

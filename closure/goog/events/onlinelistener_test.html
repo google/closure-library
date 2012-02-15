@@ -109,7 +109,7 @@ function testHtml5() {
 
   // Test for browsers that fire network events on document.body.
   stubs.set(goog.events.BrowserFeature,
-      'HTML5_NETWORK_EVENTS_FIRE_ON_WINDOW', false);
+      'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', true);
 
   var oh = new goog.events.OnlineHandler();
   listenToEvents(oh);
@@ -132,7 +132,7 @@ function testHtml5() {
 
   // Test for browsers that fire network events on window.
   stubs.set(goog.events.BrowserFeature,
-      'HTML5_NETWORK_EVENTS_FIRE_ON_WINDOW', true);
+      'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', false);
 
   oh = new goog.events.OnlineHandler();
   listenToEvents(oh);

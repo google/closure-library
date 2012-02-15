@@ -62,8 +62,10 @@ goog.events.BrowserFeature = {
       goog.userAgent.WEBKIT && goog.userAgent.isVersion('528'),
 
   /**
-   * Whether HTML5 network events fire on the window or otherwise document.body.
+   * Whether HTML5 network events fire on document.body, or otherwise the
+   * window.
    */
-  HTML5_NETWORK_EVENTS_FIRE_ON_WINDOW: !goog.userAgent.GECKO ||
-      goog.userAgent.isVersion('8')
+  HTML5_NETWORK_EVENTS_FIRE_ON_BODY:
+      goog.userAgent.GECKO && !goog.userAgent.isVersion('8') ||
+      goog.userAgent.IE && !goog.userAgent.isVersion('9')
 };
