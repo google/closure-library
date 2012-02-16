@@ -308,7 +308,8 @@ goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
     // Prevent page scrolling in Chrome.
     e.preventDefault();
     if (e.type != goog.events.EventType.KEYUP) {
-      return false;
+      // Ignore events because KeyCodes.SPACE is handled further down.
+      return true;
     }
   } else if (e.type != goog.events.KeyHandler.EventType.KEY) {
     return false;
