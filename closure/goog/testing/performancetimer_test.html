@@ -15,6 +15,7 @@ Author:  attila@google.com (Attila Bodis)
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.math');
     goog.require('goog.testing.MockClock');
     goog.require('goog.testing.PerformanceTimer');
     goog.require('goog.testing.jsunit');
@@ -37,7 +38,7 @@ Author:  attila@google.com (Attila Bodis)
     }
 
     function setUp() {
-      mockClock = new goog.testing.MockClock(false);
+      mockClock = new goog.testing.MockClock(true);
       timer = new goog.testing.PerformanceTimer();
     }
 
@@ -57,32 +58,32 @@ Author:  attila@google.com (Attila Bodis)
     }
 
     function testRun() {
-      // Fast test function should complete successfully in under 5 seconds...
-      var results = timer.run(fastTestFunction);
+      var fakeExecutionTime = [100, 95, 98, 104, 130, 101, 96, 98, 90, 103]
+      var count = 0;
+      var testFunction = function() {
+        mockClock.tick(fakeExecutionTime[count++]);
+      };
 
-      assertNotNull('Results must be available',
-          results);
-      assertTrue('Average must be a nonnegative number',
-          results['average'] >= 0);
-      assertEquals('Count must be as expected', 10,
-          results['count']);
-      assertTrue('Maximum must be a nonnegative number',
-          results['maximum'] >= 0);
-      assertTrue('Mimimum must be a nonnegative number',
-          results['minimum'] >= 0);
-      assertTrue('Standard deviation must be a nonnegative number',
-          results['standardDeviation'] >= 0);
-      assertTrue('Total must be a nonnegative number',
-          results['total'] >= 0);
-      assertTrue('Average must be between minimum and maximum',
-          results['minimum'] <= results['average'] &&
-          results['average'] <= results['maximum']);
+      // Fast test function should complete successfully in under 5 seconds...
+      var results = timer.run(testFunction);
+
+      assertNotNull('Results must be available.', results);
+
+      assertEquals('Average is wrong.',
+          goog.math.average.apply(null, fakeExecutionTime), results['average']);
+      assertEquals('Standard deviation is wrong.',
+          goog.math.standardDeviation.apply(null, fakeExecutionTime),
+          results['standardDeviation']);
+
+      assertEquals('Count must be as expected.', 10, results['count']);
+      assertEquals('Maximum is wrong.', 130, results['maximum']);
+      assertEquals('Mimimum is wrong.', 90, results['minimum']);
+      assertEquals('Total must be a nonnegative number.',
+          goog.math.sum.apply(null, fakeExecutionTime), results['total']);
     }
 
     function testTimeout() {
-      mockClock.install();
       var count = 0;
-
       var testFunction = function() {
         mockClock.tick(100);
         ++count;
