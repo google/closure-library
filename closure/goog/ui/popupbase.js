@@ -688,11 +688,14 @@ goog.ui.PopupBase.prototype.onShow_ = function() {
  * @param {Object=} opt_target Target of the event causing the hide.
  * @return {boolean} If anyone called preventDefault on the event object (or
  *     if any of the handlers returns false this will also return false.
- * @private
+ * @protected
+ * @suppress {underscore}
  */
 goog.ui.PopupBase.prototype.onBeforeHide_ = function(opt_target) {
-  return this.dispatchEvent({type: goog.ui.PopupBase.EventType.BEFORE_HIDE,
-                             target: opt_target});
+  return this.dispatchEvent({
+    type: goog.ui.PopupBase.EventType.BEFORE_HIDE,
+    target: opt_target
+  });
 };
 
 
@@ -705,8 +708,10 @@ goog.ui.PopupBase.prototype.onBeforeHide_ = function(opt_target) {
  */
 goog.ui.PopupBase.prototype.onHide_ = function(opt_target) {
   this.lastHideTime_ = goog.now();
-  this.dispatchEvent({type: goog.ui.PopupBase.EventType.HIDE,
-                      target: opt_target});
+  this.dispatchEvent({
+    type: goog.ui.PopupBase.EventType.HIDE,
+    target: opt_target
+  });
 };
 
 
