@@ -547,6 +547,7 @@ goog.addDependency('testing/recordfunction.js', ['goog.testing.FunctionCall', 'g
 goog.addDependency('testing/shardingtestcase.js', ['goog.testing.ShardingTestCase'], ['goog.asserts', 'goog.testing.TestCase']);
 goog.addDependency('testing/singleton.js', ['goog.testing.singleton'], ['goog.array']);
 goog.addDependency('testing/stacktrace.js', ['goog.testing.stacktrace', 'goog.testing.stacktrace.Frame'], []);
+goog.addDependency('testing/storage/fakemechanism.js', ['goog.testing.storage.FakeMechanism'], ['goog.storage.mechanism.IterableMechanism', 'goog.structs.Map']);
 goog.addDependency('testing/strictmock.js', ['goog.testing.StrictMock'], ['goog.array', 'goog.testing.Mock']);
 goog.addDependency('testing/style/layoutasserts.js', ['goog.testing.style.layoutasserts'], ['goog.style', 'goog.testing.asserts', 'goog.testing.style']);
 goog.addDependency('testing/style/style.js', ['goog.testing.style'], ['goog.math.Rect', 'goog.style']);
