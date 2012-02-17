@@ -98,7 +98,9 @@ goog.ui.TwoThumbSlider.RANGE_HIGHLIGHT_CSS_CLASS =
  * @protected
  */
 goog.ui.TwoThumbSlider.prototype.getCssClass = function(orient) {
-  return goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX + '-' + orient;
+  return orient == goog.ui.SliderBase.Orientation.VERTICAL ?
+      goog.getCssName(goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX, 'vertical') :
+      goog.getCssName(goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX, 'horizontal');
 };
 
 
