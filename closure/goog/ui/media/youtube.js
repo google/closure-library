@@ -126,6 +126,7 @@ goog.addSingletonGetter(goog.ui.media.Youtube);
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @return {goog.ui.media.Media} A Control binded to the youtube renderer.
+ * @suppress {visibility} Calling protected control.setStateInternal().
  */
 goog.ui.media.Youtube.newControl = function(youtubeModel, opt_domHelper) {
   var control = new goog.ui.media.Media(

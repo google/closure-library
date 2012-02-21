@@ -228,7 +228,7 @@ goog.ui.RichTextSpellChecker.prototype.onDictionaryCharged_ = function(e) {
                        this.onDictionaryCharged_, true, this);
 
   // Now actually do the spell checking.
-  this.wordElements_ = {};
+  this.clearWordElements();
   this.initializeAsyncMode();
   this.elementsInserted_ = 0;
   var result = this.processNode_(this.rootNode_);
@@ -269,7 +269,7 @@ goog.ui.RichTextSpellChecker.prototype.finishCheck_ = function() {
   delete this.currentNode_;
   this.handler_.processPending();
 
-  if (!this.isVisible_) {
+  if (!this.isVisible()) {
     goog.events.listen(this.rootNode_, goog.events.EventType.CLICK,
                        this.onWordClick_, false, this);
   }
@@ -442,12 +442,8 @@ goog.ui.RichTextSpellChecker.prototype.processRange = function(node, text) {
 
 
 /**
- * Creates an element for a specified word and stores a reference to it.
- *
- * @param {string} word Word to create element for.
- * @param {goog.spell.SpellCheck.WordStatus} status Status of the word.
- * @return {HTMLSpanElement} The created element.
- * @private
+ * @override
+ * @suppress {accessControls}
  */
 goog.ui.RichTextSpellChecker.prototype.createWordElement_ = function(word,
                                                                      status) {

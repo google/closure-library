@@ -129,7 +129,7 @@ goog.ui.AbstractSpellChecker.ID_SUFFIX_ = 'sc';
  * @type {string}
  * @private
  */
-goog.ui.AbstractSpellChecker.ORIGINAL_ = 'goog-spell-original';
+goog.ui.AbstractSpellChecker.ORIGINAL_ = 'g-spell-original';
 
 
 /**
@@ -319,6 +319,33 @@ goog.ui.AbstractSpellChecker.prototype.setHandler = function(handler) {
 
 
 /**
+ * @return {goog.ui.PopupMenu|undefined} The suggestions menu.
+ * @protected
+ */
+goog.ui.AbstractSpellChecker.prototype.getMenu = function() {
+  return this.menu_;
+};
+
+
+/**
+ * @return {goog.ui.MenuItem|undefined} The menu item for edit word option.
+ * @protected
+ */
+goog.ui.AbstractSpellChecker.prototype.getMenuEdit = function() {
+  return this.menuEdit_;
+};
+
+
+/**
+ * @return {number} The next unique instance ID for a misspelled word.
+ * @protected
+ */
+goog.ui.AbstractSpellChecker.getNextId = function() {
+  return goog.ui.AbstractSpellChecker.nextId_;
+};
+
+
+/**
  * Sets the marker for the excluded text.
  *
  * {@see goog.ui.AbstractSpellChecker.prototype.excludeMarker_}
@@ -350,7 +377,7 @@ goog.ui.AbstractSpellChecker.prototype.check = function() {
  */
 goog.ui.AbstractSpellChecker.prototype.resume = function() {
   this.isVisible_ = false;
-  this.wordElements_ = {};
+  this.clearWordElements();
 
   var input;
   while (input = this.inputElements_.pop()) {
@@ -369,6 +396,15 @@ goog.ui.AbstractSpellChecker.prototype.resume = function() {
  */
 goog.ui.AbstractSpellChecker.prototype.isVisible = function() {
   return this.isVisible_;
+};
+
+
+/**
+ * Clears the word to element references map used by replace/ignore.
+ * @protected
+ */
+goog.ui.AbstractSpellChecker.prototype.clearWordElements = function() {
+  this.wordElements_ = {};
 };
 
 
@@ -692,7 +728,8 @@ goog.ui.AbstractSpellChecker.prototype.getElementById = function(id) {
  * @param {string} word Word to create element for.
  * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
  * @return {HTMLSpanElement} The created element.
- * @private
+ * @protected
+ * @suppress {underscore}
  */
 goog.ui.AbstractSpellChecker.prototype.createWordElement_ = function(word,
                                                                      status) {
@@ -721,7 +758,8 @@ goog.ui.AbstractSpellChecker.prototype.createWordElement_ = function(word,
  *
  * @param {string} word The word to store.
  * @param {HTMLSpanElement} el The element associated with it.
- * @private
+ * @protected
+ * @suppress {underscore}
  */
 goog.ui.AbstractSpellChecker.prototype.registerWordElement_ = function(word,
                                                                        el) {

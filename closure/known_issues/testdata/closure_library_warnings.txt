@@ -7,9 +7,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/gears/loggerclient.js ERROR - Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
   goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/element.js ERROR - Access to private property customEvent_ of goog.graphics.Element not allowed here.
-  this.customEvent_ = false;
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/ellipse.js ERROR - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
       null, group.getWrapper());
 
@@ -325,26 +322,8 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutto
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property rendered_ of goog.ui.CccButton not allowed here.
       this.rendered_ = true;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/customcolorpalette.js ERROR - Overriding private property of goog.ui.ColorPalette.prototype.
-goog.ui.CustomColorPalette.prototype.createColorNodes_ = function() {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/customcolorpalette.js ERROR - Access to private property createColorNodes_ of goog.ui.ColorPalette.prototype not allowed here.
-  var nl = goog.ui.CustomColorPalette.superClass_.createColorNodes_.call(this);
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/drilldownrow.js ERROR - Access to private property children_ of goog.ui.DrilldownRow not allowed here.
   this.children_ = null;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/emoji/emojipicker.js ERROR - Class goog.ui.TabPane has been deprecated: Use goog.ui.TabBar instead.
-    this.tabPane_ = new goog.ui.TabPane(div,
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/emoji/emojipicker.js ERROR - Property TabPane of type goog.ui has been deprecated: Use goog.ui.TabBar instead.
-      this.tabPane_.addPage(new goog.ui.TabPane.TabPage(
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/emoji/emojipicker.js ERROR - Property TabPane of type goog.ui has been deprecated: Use goog.ui.TabBar instead.
-        this.tabPane_, goog.ui.TabPane.Events.CHANGE, this.onPageChanged_);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/emoji/emojipicker.js ERROR - Property TabPane of type goog.ui has been deprecated: Use goog.ui.TabBar instead.
-      this.tabPane_.addPage(new goog.ui.TabPane.TabPage(
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/equation/texeditor.js ERROR - Access to protected property getEquation of goog.ui.equation.TexEditor.prototype.texPane_ not allowed here.
   return this.texPane_.getEquation();
@@ -421,44 +400,11 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imageles
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imagelessroundedcorner.js ERROR - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
   path.arc(this.xCenter_,
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/media/media.js ERROR - Access to protected property setElementInternal of goog.ui.Control not allowed here.
-  control.setElementInternal(div);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/media/youtube.js ERROR - Access to protected property setStateInternal of goog.ui.media.Media not allowed here.
-  control.setStateInternal(goog.ui.Component.State.ACTIVE);
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js ERROR - Access to private property lastEventTime_ of goog.ui.MockActivityMonitor not allowed here.
   this.lastEventTime_ = eventTime;
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js ERROR - Access to private property lastEventType_ of goog.ui.MockActivityMonitor not allowed here.
   this.lastEventType_ = type;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js ERROR - Access to private property menu_ of goog.ui.PlainTextSpellChecker not allowed here.
-  this.eventHandler_.listen(/** @type {goog.ui.PopupMenu} */ (this.menu_),
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js ERROR - Access to private property createWordElement_ of goog.ui.PlainTextSpellChecker not allowed here.
-  node.appendChild(this.createWordElement_(word, status));
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js ERROR - Access to private property isVisible_ of goog.ui.PlainTextSpellChecker not allowed here.
-  var wasVisible = this.isVisible_;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js ERROR - Access to private property nextId_ of goog.ui.AbstractSpellChecker not allowed here.
-  var lastId = goog.ui.AbstractSpellChecker.nextId_;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/plaintextspellchecker.js ERROR - Access to private property menuEdit_ of goog.ui.PlainTextSpellChecker not allowed here.
-  if (event.target != this.menuEdit_) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js ERROR - Access to private property wordElements_ of goog.ui.RichTextSpellChecker not allowed here.
-  this.wordElements_ = {};
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js ERROR - Access to private property isVisible_ of goog.ui.RichTextSpellChecker not allowed here.
-  if (!this.isVisible_) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js ERROR - Overriding private property of goog.ui.AbstractSpellChecker.prototype.
-goog.ui.RichTextSpellChecker.prototype.createWordElement_ = function(word,
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/richtextspellchecker.js ERROR - Access to private property registerWordElement_ of goog.ui.RichTextSpellChecker not allowed here.
-  this.registerWordElement_(word, el);
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js ERROR - Access to private property AMP_RE_ of goog.string.html.HtmlParser not allowed here.
   return s.replace(goog.string.html.HtmlParser.AMP_RE_, '&amp;').

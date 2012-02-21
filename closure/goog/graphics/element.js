@@ -41,6 +41,7 @@ goog.require('goog.math');
  *     this element.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @suppress {visibility} Accessing private field of superclass (see TODO).
  */
 goog.graphics.Element = function(element, graphics) {
   goog.events.EventTarget.call(this);
