@@ -234,7 +234,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
     }
     selectedElement = selectedElement || range && range.getContainerElement();
   }
-  return this.handleSelectionChangeInternal_(selectedElement);
+  return this.handleSelectionChangeInternal(selectedElement);
 };
 
 
@@ -244,10 +244,10 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
  * @param {Element?} selectedElement The selected element.
  * @return {boolean} Always false, allowing every bubble plugin to handle the
  *     event.
- * @private
+ * @protected
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.
-    handleSelectionChangeInternal_ = function(selectedElement) {
+    handleSelectionChangeInternal = function(selectedElement) {
   if (selectedElement) {
     var bubbleTarget = this.getBubbleTargetFromSelection(selectedElement);
     if (bubbleTarget) {

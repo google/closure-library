@@ -174,12 +174,12 @@ function testNoTwoBubblesOpenAtSameTime() {
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
   bubblePlugin.createBubbleContents = goog.nullFunction;
 
-  bubblePlugin.handleSelectionChangeInternal_(link);
+  bubblePlugin.handleSelectionChangeInternal(link);
   assertEquals(0, numTimesCloseCalled);
   assertEquals(link, bubblePlugin.targetElement_);
   FIELDMOCK.$verify();
 
-  bubblePlugin.handleSelectionChangeInternal_(link2);
+  bubblePlugin.handleSelectionChangeInternal(link2);
   assertEquals(1, numTimesCloseCalled);
   assertEquals(link2, bubblePlugin.targetElement_);
   FIELDMOCK.$verify();
