@@ -109,6 +109,14 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
     });
   }
 
+  function assertBrowserAndVersion(userAgent, browser, version) {
+    mockAgent.setUserAgentString(userAgent);
+    updateUserAgentUtils();
+    assertIsBrowser(browser);
+    assertEquals('User agent should have this version',
+                 version, goog.userAgent.VERSION);
+  }
+
   /**
    * @param {Array.<{
    *           ua: string,
@@ -178,7 +186,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
 
   function testFirefox() {
     var userAgents = [
-      {ua: 'Mozilla/6.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; ' +
+     {ua: 'Mozilla/6.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; ' +
            'rv:2.0.0.0) Gecko/20061028 Firefox/3.0',
        versions: [
          {num: 2, truth: true},
@@ -192,9 +200,25 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
          {num: '2.0.4', truth: true},
          {num: 3, truth: false},
          {num: '3.5.3', truth: false}
+       ]},
+      {ua: 'Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/6.0 Firefox/6.0',
+       versions: [
+         {num: 6, truth: true},
+         {num: '6.0', truth: true},
+         {num: 7, truth: false},
+         {num: '7.0', truth: false}
        ]}
     ];
+
     checkEachUserAgentDetected(userAgents, 'FIREFOX');
+
+    // Mozilla reported to us that they plan this UA format starting
+    // in Firefox 13.
+    // See bug at https://bugzilla.mozilla.org/show_bug.cgi?id=588909
+    // and thread at http://goto.google.com/pfltz
+    assertBrowserAndVersion(
+        'Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/6.0 Firefox/6.0',
+        'FIREFOX', '6.0');
   }
 
   function testCamino() {
