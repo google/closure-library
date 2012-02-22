@@ -181,8 +181,6 @@ goog.net.Jsonp.prototype.send = function(opt_payload,
     goog.global[goog.net.Jsonp.CALLBACKS] = {};
   }
 
-  var script = goog.dom.createElement('script');
-
   // Create a new Uri object onto which this payload will be added
   var uri = this.uri_.clone();
   if (payload) {
