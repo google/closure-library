@@ -237,10 +237,6 @@ goog.debug.DebugWindow.prototype.setEnabled = function(enable) {
 
   if (this.enabled_) {
     this.openWindow_();
-
-    if (this.win_) {
-      this.writeInitialDocument_();
-    }
   }
 
   this.setCookie_('enabled', enable ? '1' : '0');
