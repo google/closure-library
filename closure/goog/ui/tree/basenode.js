@@ -888,16 +888,8 @@ goog.ui.tree.BaseNode.prototype.setAfterLabelHtml = function(html) {
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getIconHtml = function() {
-  // here we are not using textToHtml since the file names rarerly contains
-  // HTML...
-  var iconClass = this.getCalculatedIconClass();
-  if (iconClass) {
-    return goog.string.buildString('<img class="', iconClass,
-           '" src="', this.config_.cleardotPath, '">');
-  } else {
-    return goog.string.buildString('<img style="display:none"',
-           '" src="', this.config_.cleardotPath, '">');
-  }
+  return '<span style="display:inline-block" class="' +
+      this.getCalculatedIconClass() + '"></span>';
 };
 
 
@@ -913,10 +905,8 @@ goog.ui.tree.BaseNode.prototype.getCalculatedIconClass = goog.abstractMethod;
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getExpandIconHtml = function() {
-  // here we are not using textToHtml since the file names rarerly contains
-  // HTML...
-  return goog.string.buildString('<img type="expand" class="',
-      this.getExpandIconClass(), '" src="', this.config_.cleardotPath + '">');
+  return '<span type="expand" style="display:inline-block" class="' +
+      this.getExpandIconClass() + '"></span>';
 };
 
 
@@ -1004,8 +994,7 @@ goog.ui.tree.BaseNode.prototype.getExpandIconClass = function() {
  * @return {string} The line style.
  */
 goog.ui.tree.BaseNode.prototype.getLineStyle = function() {
-  return goog.string.buildString(
-      'background-position:', this.getLineStyle2(), ';');
+  return 'background-position:' + this.getLineStyle2() + ';';
 };
 
 

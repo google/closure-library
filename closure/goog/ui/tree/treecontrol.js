@@ -630,7 +630,6 @@ goog.ui.tree.TreeControl.prototype.clearTypeAhead = function() {
  * A default configuration for the tree.
  */
 goog.ui.tree.TreeControl.defaultConfig = {
-  cleardotPath: 'images/cleardot.gif',
   indentWidth: 19,
   cssRoot: goog.getCssName('goog-tree-root') + ' ' +
       goog.getCssName('goog-tree-item'),
