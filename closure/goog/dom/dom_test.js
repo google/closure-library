@@ -1205,6 +1205,9 @@ function testGetAncestorByTagNameAndClass() {
   assertEquals(expected,
       goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV,
           'testAncestor'));
+  assertNull(
+      'Should return null if no search criteria are given',
+      goog.dom.getAncestorByTagNameAndClass(elem));
 }
 
 function testCreateTable() {
