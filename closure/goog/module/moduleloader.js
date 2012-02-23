@@ -108,20 +108,6 @@ goog.module.ModuleLoader.prototype.loadModulesInternal = function(
 
 
 /**
- * Create a script tag.
- * @param {string} uri The uri of the script.
- * @return {Element} The new tag.
- * @private
- */
-goog.module.ModuleLoader.prototype.createScriptElement_ = function(uri) {
-  var scriptEl = goog.dom.createElement('script');
-  scriptEl.src = uri;
-  scriptEl.type = 'text/javascript';
-  return scriptEl;
-};
-
-
-/**
  * Handles a successful response to a request for one or more modules.
  *
  * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
