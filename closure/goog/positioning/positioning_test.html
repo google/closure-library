@@ -41,12 +41,25 @@ goog.require('goog.userAgent.product');
     padding: 0px; /* If the padding has >0 value, IE6 fails some tests. */
     margin: -2px;
   }
+  .box8 {
+    position: absolute;
+    padding: 0px; /* If the padding has >0 value, IE6 fails some tests. */
+    margin: -2px;
+    width: 500px;
+    height: 100px;
+  }
   .anchorFrame {
     overflow: auto;
     width: 100px;
     height: 100px;
   }
   #popup1, #popup2, #popup3, #popup5, #popup6, #popup7 {
+    position: absolute;
+    border: 1px solid red;
+    width: 100px;
+    height: 100px;
+  }
+  #popup8 {
     position: absolute;
     border: 1px solid red;
     width: 100px;
@@ -68,8 +81,8 @@ goog.require('goog.userAgent.product');
   .overflow-hidden {
     overflow: hidden;
   }
-  .overflow-scroll {
-    overflow: scroll;
+  .overflow-auto {
+    overflow: auto;
   }
 </style>
 </head>
@@ -149,6 +162,19 @@ goog.require('goog.userAgent.product');
 
 <iframe id="nested-outer" src="positioning_test_iframe1.html"
  style="overflow:auto;width:150px;height:150px;"></iframe>
+
+<div class="outerbox" dir="rtl">
+  <div class="box1">
+    <span id="anchor8">Anchor8 RTL.</span>
+  </div>
+
+  <div class="box8 overflow-auto">
+    <div id="popup8">
+      <div>Popup8 rtl.</div>
+    </div>
+    <div style="width:10000px;">&nbsp;</div>
+  </div>
+</div>
 
 <div id="test-area"></div>
 
@@ -421,6 +447,43 @@ function testPositionAtAnchorRightToLeft() {
                       popupRect.top);
 }
 
+function testPositionAtAnchorRightToLeftWithScroll() {
+  if (goog.userAgent.IE && goog.userAgent.isVersion('6')) {
+    // These tests fails with IE6.
+    // TODO(user): Investigate the reason.
+    return;
+  }
+
+  var anchor = document.getElementById('anchor8');
+  var popup = document.getElementById('popup8');
+
+  // Anchor top left to top left.
+  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+                                    popup, corner.TOP_LEFT);
+  var anchorRect = goog.style.getBounds(anchor);
+  var popupRect = goog.style.getBounds(popup);
+
+  assertRoundedEquals('Left edge of popup should line up with left edge ' +
+                      'of anchor.',
+                      anchorRect.left,
+                      popupRect.left);
+  assertRoundedEquals('Popup should have the same y position as the anchor.',
+                      anchorRect.top,
+                      popupRect.top);
+
+  // Anchor top start to bottom start.
+  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_START,
+                                    popup, corner.TOP_START);
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  assertRoundedEquals('Right edge of popup should line up with right edge ' +
+                      'of anchor.',
+                      anchorRect.left + anchorRect.width,
+                      popupRect.left + popupRect.width);
+  assertRoundedEquals('Popup should be positioned just below the anchor.',
+                      anchorRect.top + anchorRect.height,
+                      popupRect.top);
+}
 
 function testPositionAtAnchorBodyViewport() {
   var anchor = document.getElementById('anchor1');

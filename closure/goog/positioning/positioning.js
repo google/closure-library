@@ -29,6 +29,7 @@ goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.style');
+goog.require('goog.style.bidi');
 
 
 /**
@@ -210,7 +211,8 @@ goog.positioning.positionAtAnchor = function(anchorElement,
       if (!isBody) {
         moveableParentTopLeft = goog.math.Coordinate.difference(
             moveableParentTopLeft,
-            new goog.math.Coordinate(parent.scrollLeft, parent.scrollTop));
+            new goog.math.Coordinate(goog.style.bidi.getScrollLeft(parent),
+                parent.scrollTop));
       }
     }
   }
