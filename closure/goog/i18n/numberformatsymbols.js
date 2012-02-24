@@ -34,6 +34,8 @@
  */
 
 goog.provide('goog.i18n.NumberFormatSymbols');
+goog.provide('goog.i18n.NumberFormatSymbols_af');
+goog.provide('goog.i18n.NumberFormatSymbols_af_ZA');
 goog.provide('goog.i18n.NumberFormatSymbols_am');
 goog.provide('goog.i18n.NumberFormatSymbols_am_ET');
 goog.provide('goog.i18n.NumberFormatSymbols_ar');
@@ -74,6 +76,7 @@ goog.provide('goog.i18n.NumberFormatSymbols_en_US');
 goog.provide('goog.i18n.NumberFormatSymbols_en_VI');
 goog.provide('goog.i18n.NumberFormatSymbols_en_ZA');
 goog.provide('goog.i18n.NumberFormatSymbols_es');
+goog.provide('goog.i18n.NumberFormatSymbols_es_419');
 goog.provide('goog.i18n.NumberFormatSymbols_es_ES');
 goog.provide('goog.i18n.NumberFormatSymbols_et');
 goog.provide('goog.i18n.NumberFormatSymbols_et_EE');
@@ -186,6 +189,38 @@ goog.provide('goog.i18n.NumberFormatSymbols_zh_HK');
 goog.provide('goog.i18n.NumberFormatSymbols_zh_Hans');
 goog.provide('goog.i18n.NumberFormatSymbols_zh_Hans_CN');
 goog.provide('goog.i18n.NumberFormatSymbols_zh_TW');
+goog.provide('goog.i18n.NumberFormatSymbols_zu');
+goog.provide('goog.i18n.NumberFormatSymbols_zu_ZA');
+
+
+/**
+ * Number formatting symbols for locale af.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_af = {
+  DECIMAL_SEP: ',',
+  GROUP_SEP: '\u00A0',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '\u2030',
+  INFINITY: '\u221E',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '\u00A4#,##0.00',
+  DEF_CURRENCY_CODE: 'ZAR'
+};
+
+
+/**
+ * Number formatting symbols for locale af_ZA.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_af_ZA = goog.i18n.NumberFormatSymbols_af;
 
 
 /**
@@ -769,6 +804,29 @@ goog.i18n.NumberFormatSymbols_es = {
   PERCENT_PATTERN: '#,##0%',
   CURRENCY_PATTERN: '#,##0.00\u00A0\u00A4',
   DEF_CURRENCY_CODE: 'EUR'
+};
+
+
+/**
+ * Number formatting symbols for locale es_419.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_es_419 = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '\u2030',
+  INFINITY: '\u221E',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '\u00A4#,##0.00',
+  DEF_CURRENCY_CODE: 'MXN'
 };
 
 
@@ -2421,9 +2479,47 @@ goog.i18n.NumberFormatSymbols_zh_TW = {
 
 
 /**
+ * Number formatting symbols for locale zu.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_zu = {
+  DECIMAL_SEP: ',',
+  GROUP_SEP: '\u00A0',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '\u2030',
+  INFINITY: '\u221E',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '\u00A4#,##0.00',
+  DEF_CURRENCY_CODE: 'ZAR'
+};
+
+
+/**
+ * Number formatting symbols for locale zu_ZA.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_zu_ZA = goog.i18n.NumberFormatSymbols_zu;
+
+
+/**
  * Selected number formatting symbols by locale.
  */
 goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
+
+if (goog.LOCALE == 'af') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_af;
+}
+
+if (goog.LOCALE == 'af_ZA' || goog.LOCALE == 'af-ZA') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_af;
+}
 
 if (goog.LOCALE == 'am') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_am;
@@ -2583,6 +2679,10 @@ if (goog.LOCALE == 'en_ZA' || goog.LOCALE == 'en-ZA') {
 
 if (goog.LOCALE == 'es') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es;
+}
+
+if (goog.LOCALE == 'es_419' || goog.LOCALE == 'es-419') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_es_419;
 }
 
 if (goog.LOCALE == 'es_ES' || goog.LOCALE == 'es-ES') {
@@ -3031,5 +3131,13 @@ if (goog.LOCALE == 'zh_Hans_CN' || goog.LOCALE == 'zh-Hans-CN') {
 
 if (goog.LOCALE == 'zh_TW' || goog.LOCALE == 'zh-TW') {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_zh_TW;
+}
+
+if (goog.LOCALE == 'zu') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_zu;
+}
+
+if (goog.LOCALE == 'zu_ZA' || goog.LOCALE == 'zu-ZA') {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_zu;
 }
 
