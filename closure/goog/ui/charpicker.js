@@ -526,7 +526,7 @@ goog.ui.CharPicker.prototype.handleSelectedItem_ = function(e) {
  * @private
  */
 goog.ui.CharPicker.prototype.handleInput_ = function(e) {
-  var ch = this.getInputChar_();
+  var ch = this.getInputChar();
   if (ch) {
     var unicode = this.getTagFromChar_(ch);
     this.zoomEl_.innerHTML = ch;
@@ -551,7 +551,7 @@ goog.ui.CharPicker.prototype.handleInput_ = function(e) {
  * @private
  */
 goog.ui.CharPicker.prototype.handleOkClick_ = function(opt_event) {
-  var ch = this.getInputChar_();
+  var ch = this.getInputChar();
   if (ch && ch.charCodeAt(0)) {
     this.selectedChar_ = ch;
     this.updateRecents_(ch);
@@ -771,9 +771,8 @@ goog.ui.CharPicker.prototype.updateRecents_ = function(character) {
 /**
  * Gets the user inputed unicode character.
  * @return {string} Unicode character inputed by user.
- * @private
  */
-goog.ui.CharPicker.prototype.getInputChar_ = function() {
+goog.ui.CharPicker.prototype.getInputChar = function() {
   var text = this.input_.getValue();
   var code = parseInt(text, 16);
   return /** @type {string} */ (goog.i18n.uChar.fromCharCode(code));
