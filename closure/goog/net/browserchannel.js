@@ -67,22 +67,22 @@ goog.require('goog.userAgent');
 /**
  * Encapsulates the logic for a single BrowserChannel.
  *
- * @param {string} clientVersion An application-specific version number that
- *        is sent to the server when connected.
+ * @param {string=} opt_clientVersion An application-specific version number
+ *        that is sent to the server when connected.
  * @constructor
  */
-goog.net.BrowserChannel = function(clientVersion) {
+goog.net.BrowserChannel = function(opt_clientVersion) {
   /**
    * The application specific version that is passed to the server.
-   * @type {string}
+   * @type {?string}
    * @private
    */
-  this.clientVersion_ = clientVersion;
+  this.clientVersion_ = opt_clientVersion || null;
 
   /**
    * The current state of the BrowserChannel. It should be one of the
    * goog.net.BrowserChannel.State constants.
-   * @type {goog.net.BrowserChannel.State}
+   * @type {!goog.net.BrowserChannel.State}
    * @private
    */
   this.state_ = goog.net.BrowserChannel.State.INIT;
@@ -105,7 +105,7 @@ goog.net.BrowserChannel = function(clientVersion) {
 
   /**
    * The channel debug used for browserchannel logging
-   * @type {goog.net.ChannelDebug}
+   * @type {!goog.net.ChannelDebug}
    * @private
    */
   this.channelDebug_ = new goog.net.ChannelDebug();
@@ -727,7 +727,9 @@ goog.net.BrowserChannel.prototype.getChannelDebug = function() {
  */
 goog.net.BrowserChannel.prototype.setChannelDebug = function(
     channelDebug) {
-  this.channelDebug_ = channelDebug;
+  if (goog.isDefAndNotNull(channelDebug)) {
+    this.channelDebug_ = channelDebug;
+  }
 };
 
 
@@ -802,20 +804,20 @@ goog.net.BrowserChannel.createChannelRequest = function(channel, channelDebug,
  *
  * @param {string} testPath  The path for the test connection.
  * @param {string} channelPath  The path for the channel connection.
- * @param {Object} extraParams  Extra parameter keys and values to add to the
- *     requests.
+ * @param {Object=} opt_extraParams  Extra parameter keys and values to add to
+ *     the requests.
  * @param {string=} opt_oldSessionId  Session ID from a previous session.
  * @param {number=} opt_oldArrayId  The last array ID from a previous session.
  */
 goog.net.BrowserChannel.prototype.connect = function(testPath, channelPath,
-    extraParams, opt_oldSessionId, opt_oldArrayId) {
+    opt_extraParams, opt_oldSessionId, opt_oldArrayId) {
   this.channelDebug_.debug('connect()');
 
   goog.net.BrowserChannel.notifyStatEvent(
       goog.net.BrowserChannel.Stat.CONNECT_ATTEMPT);
 
   this.path_ = channelPath;
-  this.extraParams_ = extraParams || {};
+  this.extraParams_ = opt_extraParams || {};
 
   // Attach parameters about the previous session if reconnecting.
   if (opt_oldSessionId && goog.isDef(opt_oldArrayId)) {
