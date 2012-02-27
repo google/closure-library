@@ -97,7 +97,8 @@ goog.editor.icontent.getInitialIframeContent_ =
     function(info, bodyHtml, style) {
   var html = [];
 
-  if (info.standards_ || goog.editor.icontent.useStandardsModeIframes_) {
+  if (info.blended_ && info.standards_ ||
+      goog.editor.icontent.useStandardsModeIframes_) {
     html.push('<!DOCTYPE HTML>');
   }
 

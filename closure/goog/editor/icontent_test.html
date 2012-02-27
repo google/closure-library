@@ -123,7 +123,7 @@ function testWriteInitialIframeContentBlendedQuirksFixedRtl() {
              '-moz-force-broken-image-icon') == -1); // quirks
 }
 
-function testWhiteboxStandards() {
+function testWhiteboxStandardsFixedRtl() {
   var info = new goog.editor.icontent.FieldFormatInfo('id', true, false, true);
   var styleInfo = null;
   var doc = realIframeDoc;
@@ -131,7 +131,13 @@ function testWhiteboxStandards() {
   goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
       styleInfo, realIframe);
   assertBodyCorrect(doc.body, 'id', html, true);
-  assertEquals('CSS1Compat', doc.compatMode);
+
+  // TODO(nicksantos): on Safari, there's a bug where all written iframes
+  // are CSS1Compat. It's fixed in the nightlies as of 3/31/08, so remove
+  // this guard when the latest version of Safari is on the farm.
+  if (!goog.userAgent.WEBKIT) {
+    assertEquals('BackCompat', doc.compatMode); // always use quirks in whitebox
+  }
 }
 
 function testGetInitialIframeContent() {
