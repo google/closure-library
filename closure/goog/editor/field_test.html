@@ -990,6 +990,72 @@ function testPlaceCursorAtStartNonImportantTextNode() {
       '\n<span id="important">important text</span>', 'important');
 }
 
+/**
+ * Helper to test that the cursor is placed at the beginning of the editable
+ * field's contents.
+ * @param {string=} opt_html Html to replace the test file default field
+ *     contents with.
+ * @param {string=} opt_parentId Id of the parent of the node where the cursor
+ *     is expected to be placed. If omitted, will expect cursor to be placed in
+ *     the first child of the field element (or, if the field has no content, in
+ *     the field element itself).
+ * @param {number=} The offset to expect for the end position.
+ */
+function doTestPlaceCursorAtEnd(opt_html, opt_parentId, opt_offset) {
+  var editableField = new goog.editor.Field('testField', document);
+  editableField.makeEditable();
+
+  // Initially place selection not at the end of the editable field.
+  var textNode = editableField.getElement().firstChild;
+  goog.dom.Range.createFromNodes(textNode, 0, textNode, 1).select();
+  if (opt_html != null) {
+    editableField.getElement().innerHTML = opt_html;
+  }
+
+  editableField.placeCursorAtEnd();
+  var range = editableField.getRange();
+  assertNotNull(
+      'Placing the cursor should result in a range object being available',
+      range);
+  assertTrue('The range should be collapsed', range.isCollapsed());
+  textNode = editableField.getElement().firstChild;
+
+  // We check whether getAttribute exist because textNode may be an actual
+  // TextNode, which does not have getAttribute.
+  if (textNode && textNode.getAttribute &&
+      textNode.getAttribute('_moz_editor_bogus_node')) {
+    // At least in FF >= 6, assigning '' to innerHTML of a contentEditable
+    // element will results in textNode being modified into:
+    // <br _moz_editor_bogus_node="TRUE" _moz_dirty=""> instead of nulling
+    // it. So we should null it ourself.
+    textNode = null;
+  }
+
+  var endNode = opt_parentId ?
+      editableField.getEditableDomHelper().getElement(opt_parentId).lastChild :
+      textNode ? textNode : editableField.getElement();
+  assertEquals('The range should end at the specified expected node',
+      endNode, range.getEndNode());
+  var offset = goog.isDefAndNotNull(opt_offset) ?
+      opt_offset :
+      textNode ? endNode.nodeValue.length : endNode.childNodes.length - 1;
+  assertEquals('The range should end at the ending of the node',
+      offset, range.getEndOffset());
+}
+
+function testPlaceCursorAtEnd() {
+  doTestPlaceCursorAtEnd();
+}
+
+function testPlaceCursorAtEndEmptyField() {
+  doTestPlaceCursorAtEnd('', null, 0);
+}
+
+function testPlaceCursorAtEndNonImportantTextNode() {
+  doTestPlaceCursorAtStart(
+      '\n<span id="important">important text</span>', 'important');
+}
+
 // Tests related to change/delayed change events.
 
 function testClearDelayedChange() {

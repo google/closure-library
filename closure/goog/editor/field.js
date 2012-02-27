@@ -41,8 +41,8 @@ goog.require('goog.editor.icontent.FieldStyleInfo');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.events');
-goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.functions');
@@ -846,9 +846,9 @@ goog.editor.Field.SELECTION_CHANGE_FREQUENCY_ = 250;
 
 /**
  * Stops all listeners and timers.
- * @private
+ * @protected
  */
-goog.editor.Field.prototype.clearListeners_ = function() {
+goog.editor.Field.prototype.clearListeners = function() {
   if (this.eventRegister) {
     this.eventRegister.removeAll();
   }
@@ -887,7 +887,7 @@ goog.editor.Field.prototype.disposeInternal = function() {
   }
 
   this.tearDownFieldObject_();
-  this.clearListeners_();
+  this.clearListeners();
   this.originalDomHelper = null;
 
   if (this.eventRegister) {
@@ -2221,16 +2221,37 @@ goog.editor.Field.prototype.focusAndPlaceCursorAtStart = function() {
  * an existing selection in the field.
  */
 goog.editor.Field.prototype.placeCursorAtStart = function() {
+  this.placeCursorAtStartOrEnd_(true);
+};
+
+
+/**
+ * Place the cursor at the start of this field. It's recommended that you only
+ * use this method (and manipulate the selection in general) when there is not
+ * an existing selection in the field.
+ */
+goog.editor.Field.prototype.placeCursorAtEnd = function() {
+  this.placeCursorAtStartOrEnd_(false);
+};
+
+
+/**
+ * Helper method to place the cursor at the start or end of this field.
+ * @param {boolean} isStart True for start, false for end.
+ * @private
+ */
+goog.editor.Field.prototype.placeCursorAtStartOrEnd_ = function(isStart) {
   var field = this.getElement();
   if (field) {
-    var cursorPosition = goog.editor.node.getLeftMostLeaf(field);
+    var cursorPosition = isStart ? goog.editor.node.getLeftMostLeaf(field) :
+        goog.editor.node.getRightMostLeaf(field);
     if (field == cursorPosition) {
-      // The leftmost leaf we found was the field element itself (which likely
+      // The rightmost leaf we found was the field element itself (which likely
       // means the field element is empty). We can't place the cursor next to
       // the field element, so just place it at the beginning.
       goog.dom.Range.createCaret(field, 0).select();
     } else {
-      goog.editor.range.placeCursorNextTo(cursorPosition, true);
+      goog.editor.range.placeCursorNextTo(cursorPosition, isStart);
     }
     this.dispatchSelectionChangeEvent();
   }
@@ -2340,7 +2361,7 @@ goog.editor.Field.prototype.makeUneditable = function(opt_skipRestore) {
   // Clear all listeners before removing the nodes from the dom - if
   // there are listeners on the iframe window, Firefox throws errors trying
   // to unlisten once the iframe is no longer in the dom.
-  this.clearListeners_();
+  this.clearListeners();
 
   // For fields that have loaded, clean up anything that happened in
   // handleFieldOpen or later.
