@@ -30,24 +30,25 @@
 
 goog.provide('goog.module.ModuleLoader');
 
+goog.require('goog.Disposable');
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.events.EventHandler');
-goog.require('goog.module.BaseModuleLoader');
+goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.net.BulkLoader');
 goog.require('goog.net.EventType');
 goog.require('goog.net.jsloader');
 
 
-
 /**
  * A class that loads Javascript modules.
  * @constructor
- * @extends {goog.module.BaseModuleLoader}
+ * @extends {goog.Disposable}
+ * @implements {goog.module.AbstractModuleLoader}
  */
 goog.module.ModuleLoader = function() {
-  goog.module.BaseModuleLoader.call(this);
+  goog.Disposable.call(this);
 
   /**
    * Event handler for managing handling events.
@@ -56,7 +57,7 @@ goog.module.ModuleLoader = function() {
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
 };
-goog.inherits(goog.module.ModuleLoader, goog.module.BaseModuleLoader);
+goog.inherits(goog.module.ModuleLoader, goog.Disposable);
 
 
 /**
@@ -68,7 +69,163 @@ goog.module.ModuleLoader.prototype.logger = goog.debug.Logger.getLogger(
     'goog.module.ModuleLoader');
 
 
+/**
+ * Whether debug mode is enabled.
+ * @type {boolean}
+ * @private
+ */
+goog.module.ModuleLoader.prototype.debugMode_ = false;
+
+
+/**
+ * The postfix to check for in code received from the server before it is
+ * evaluated on the client.
+ * @type {?string}
+ * @private
+ */
+goog.module.ModuleLoader.prototype.codePostfix_ = null;
+
+
+/**
+ * Gets the debug mode for the loader.
+ * @return {boolean} debugMode Whether the debug mode is enabled.
+ */
+goog.module.ModuleLoader.prototype.getDebugMode = function() {
+  return this.debugMode_;
+};
+
+
+/**
+ * Sets the debug mode for the loader.
+ * @param {boolean} debugMode Whether the debug mode is enabled.
+ */
+goog.module.ModuleLoader.prototype.setDebugMode = function(debugMode) {
+  this.debugMode_ = debugMode;
+};
+
+
+/**
+ * Set the postfix to check for when we receive code from the server.
+ * @param {string} codePostfix The postfix.
+ */
+goog.module.ModuleLoader.prototype.setCodePostfix = function(
+    codePostfix) {
+  this.codePostfix_ = codePostfix;
+};
+
+
 /** @override */
+goog.module.ModuleLoader.prototype.loadModules = function(
+    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
+    opt_forceReload) {
+  this.loadModulesInternal(ids, moduleInfoMap, opt_successFn, opt_errorFn,
+      opt_timeoutFn, opt_forceReload);
+};
+
+
+/**
+ * Evaluate the JS code.
+ * @param {Array.<string>} moduleIds The module ids.
+ * @param {string} jsCode The JS code.
+ * @return {boolean} Whether the JS code was evaluated successfully.
+ */
+goog.module.ModuleLoader.prototype.evaluateCode = function(
+    moduleIds, jsCode) {
+  var success = true;
+  try {
+    if (this.validateCodePostfix_(jsCode)) {
+      goog.globalEval(jsCode);
+    } else {
+      success = false;
+    }
+  } catch (e) {
+    success = false;
+    // TODO(user): Consider throwing an exception here.
+    this.logger.warning('Loaded incomplete code for module(s): ' +
+        moduleIds, e);
+  }
+
+  return success;
+};
+
+
+/**
+ * Handles a successful response to a request for one or more modules.
+ * @param {string} jsCode the JS code.
+ * @param {Array.<string>} moduleIds The ids of the modules requested.
+ * @param {function()} successFn The callback for success.
+ * @param {function(?number)} errorFn The callback for error.
+ */
+goog.module.ModuleLoader.prototype.handleRequestSuccess = function(
+    jsCode, moduleIds, successFn, errorFn) {
+  this.logger.info('Code loaded for module(s): ' + moduleIds);
+
+  var success = this.evaluateCode(moduleIds, jsCode);
+  if (!success) {
+    this.handleRequestError(moduleIds, errorFn, null);
+  } else if (success && successFn) {
+    successFn();
+  }
+};
+
+
+/**
+ * Handles an error during a request for one or more modules.
+ * @param {Array.<string>} moduleIds The ids of the modules requested.
+ * @param {function(?number)} errorFn The function to call on failure.
+ * @param {?number} status The response status.
+ */
+goog.module.ModuleLoader.prototype.handleRequestError = function(
+    moduleIds, errorFn, status) {
+  this.logger.warning('Request failed for module(s): ' + moduleIds);
+
+  if (errorFn) {
+    errorFn(status);
+  }
+};
+
+
+/**
+ * Handles a timeout during a request for one or more modules.
+ * @param {Array.<string>} moduleIds The ids of the modules requested.
+ * @param {function()} timeoutFn The function to call on timeout.
+ */
+goog.module.ModuleLoader.prototype.handleRequestTimeout = function(
+    moduleIds, timeoutFn) {
+  this.logger.warning('Request timed out for module(s): ' + moduleIds);
+
+  if (timeoutFn) {
+    timeoutFn();
+  }
+};
+
+
+/**
+ * Validate the js code received from the server.
+ * @param {string} jsCode The JS code.
+ * @return {boolean} TRUE iff the jsCode is valid.
+ * @private
+ */
+goog.module.ModuleLoader.prototype.validateCodePostfix_ = function(
+    jsCode) {
+  return this.codePostfix_ ?
+      goog.string.endsWith(jsCode, this.codePostfix_) : true;
+};
+
+
+/**
+ * Loads a list of JavaScript modules.
+ * @param {Array.<string>} ids The module ids in dependency order.
+ * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
+ * @param {?function()=} opt_successFn The callback if module loading is a
+ *     success.
+ * @param {?function(number)=} opt_errorFn The callback if module loading is in
+ *     error.
+ * @param {?function()=} opt_timeoutFn The callback if module loading times out
+ * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
+ *     module.
+ * @protected
+ */
 goog.module.ModuleLoader.prototype.loadModulesInternal = function(
     ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
     opt_forceReload) {
