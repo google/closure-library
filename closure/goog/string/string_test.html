@@ -634,24 +634,29 @@ function testQuoteSpecialChars() {
   assertEquals('"\\""', goog.string.quote('"'));
   assertEquals('"\'"', goog.string.quote("'"));
   assertEquals('"\\\\"', goog.string.quote('\\'));
+
+  var zeroQuoted = goog.string.quote('\0');
+  assertTrue(
+      'goog.string.quote mangles the 0 char: ',
+      '"\\0"' == zeroQuoted || '"\\x00"' == zeroQuoted);
 }
 
 function testCrossBrowserQuote() {
-  var oldQuoteFn = String.prototype.quote;
-  try {
-    // The vertical space char has weird semantics on jscript, so we don't test
-    // that one.
-    var vertChar = '\x0B'.charCodeAt(0);
-    var str = allChars(0, vertChar) + allChars(vertChar + 1, 10000);
-    var nativeQuote = goog.string.quote(str);
+  // The vertical space char has weird semantics on jscript, so we don't test
+  // that one.
+  var vertChar = '\x0B'.charCodeAt(0);
 
-    String.prototype.quote = null;
-    assertNull(''.quote);
+  // The zero char has two alternate encodings (\0 and \x00) both are ok,
+  // and tested above.
+  var zeroChar = 0;
 
-    assertEquals(nativeQuote, goog.string.quote(str));
-  } finally {
-    String.prototype.quote = oldQuoteFn;
-  }
+  var str = allChars(zeroChar + 1, vertChar) + allChars(vertChar + 1, 10000);
+  var nativeQuote = goog.string.quote(str);
+
+  stubs.set(String.prototype, 'quote', null);
+  assertNull(''.quote);
+
+  assertEquals(nativeQuote, goog.string.quote(str));
 }
 
 function allChars(opt_start, opt_end) {
