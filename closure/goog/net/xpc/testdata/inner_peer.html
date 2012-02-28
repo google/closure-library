@@ -27,6 +27,8 @@ goog.require('goog.net.xpc.CrossPageChannel');
 var channel;
 var queuedMessage;
 
+var OBJECT_RESULT_FROM_SERVICE = {'favorites': 'pie'};
+
 function clearDebug() {
   document.getElementById('debugDiv').innerHTML = '';
 }
@@ -37,6 +39,9 @@ function instantiateChannel(cfg) {
   }
   window.channel = new goog.net.xpc.CrossPageChannel(cfg);
   window.channel.registerService('echo', echoHandler);
+  connectChannel(
+      parent.driver && parent.driver.childConnected ?
+      goog.bind(parent.driver.childConnected, parent.driver) : null);
 }
 
 function connectChannel(opt_callback) {
@@ -66,19 +71,9 @@ function echoHandler(payload) {
   } else {
     window.queuedMessage = payload;
   }
+  return OBJECT_RESULT_FROM_SERVICE;
 }
 
-function handleLoad(evt) {
-  // Get the channel configuration passed by the containing document.
-  var xpc = (new goog.Uri(window.location.href)).getParameterValue('xpc');
-  if (xpc) {
-    var cfg = goog.json.parse(xpc);
-    instantiateChannel(cfg);
-    connectChannel();
-  }
-}
-
-goog.events.listen(window, goog.events.EventType.LOAD, handleLoad);
 
 </script>
 </head>
@@ -99,6 +94,12 @@ logger.addHandler(function(logRecord) {
   msgElm.innerHTML = logRecord.getMessage();
   goog.dom.appendChild(debugDiv, msgElm);
 });
+
+// getConfiguration will be non-null if iframe created with
+// createPeerIframe.
+if (parent.driver && parent.driver.getConfiguration()) {
+  instantiateChannel(parent.driver.getConfiguration());
+}
 </script>
 
 </body>

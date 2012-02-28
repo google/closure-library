@@ -27,13 +27,14 @@ See the COPYING file for details.
 <body>
 <script>
 
-var IFRAME_LOAD_WAIT_MS = 2000;
+var IFRAME_LOAD_WAIT_MS = 1000;
 var stubs = new goog.testing.PropertyReplacer();
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(
     document.title);
 var uniqueId = 0;
 var driver;
-
+var canAccessSameDomainIframe = true;
+var accessCheckIframes = [];
 
 function setUpPage() {
   asyncTestCase.stepTimeout = 10 * 1000;
@@ -47,6 +48,8 @@ function setUpPage() {
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
+  asyncTestCase.waitForAsync('Checking if we can access same domain iframes');
+  checkSameDomainIframeAccess();
 }
 
 
@@ -61,13 +64,42 @@ function tearDown() {
 }
 
 
+function checkSameDomainIframeAccess() {
+  accessCheckIframes.push(
+      create1x1Iframe('nonexistant', 'testdata/i_am_non_existant.html'));
+  window.setTimeout(function () {
+    accessCheckIframes.push(
+        create1x1Iframe('existant', 'testdata/access_checker.html'));
+  }, 10);
+}
+
+
+function create1x1Iframe(iframeId, src) {
+  var iframeAccessChecker = goog.dom.createElement('IFRAME');
+  iframeAccessChecker.id = iframeAccessChecker.name = iframeId;
+  iframeAccessChecker.style.width = iframeAccessChecker.style.height = '1px';
+  iframeAccessChecker.src = src;
+  document.body.insertBefore(iframeAccessChecker, document.body.firstChild);
+  return iframeAccessChecker;
+}
+
+
+function sameDomainIframeAccessComplete(canAccess) {
+  canAccessSameDomainIframe  = canAccess;
+  for (var i = 0; i < accessCheckIframes.length; i++) {
+    document.body.removeChild(accessCheckIframes[i]);
+  }
+  asyncTestCase.continueTesting();
+}
+
+
 function testCreateIframeSpecifyId() {
   driver.createPeerIframe('new_iframe');
 
   asyncTestCase.waitForAsync('iframe load');
   window.setTimeout(function() {
-    asyncTestCase.continueTesting();
     driver.checkPeerIframe();
+    asyncTestCase.continueTesting();
   }, IFRAME_LOAD_WAIT_MS);
 }
 
@@ -77,8 +109,8 @@ function testCreateIframeRandomId() {
 
   asyncTestCase.waitForAsync('iframe load');
   window.setTimeout(function() {
-    asyncTestCase.continueTesting();
     driver.checkPeerIframe();
+    asyncTestCase.continueTesting();
   }, IFRAME_LOAD_WAIT_MS);
 }
 
@@ -88,8 +120,8 @@ function testCreateIframeWithDom() {
 
   asyncTestCase.waitForAsync('iframe load');
   window.setTimeout(function() {
-    asyncTestCase.continueTesting();
     driver.checkPeerIframe();
+    asyncTestCase.continueTesting();
   }, IFRAME_LOAD_WAIT_MS);
 }
 
@@ -99,6 +131,9 @@ function testCreateIframeAsynchronousConnect() {
 
   asyncTestCase.waitForAsync('iframe load');
   window.setTimeout(function() {
+    // TODO(user): The test server has such high latency for testdata that
+    //     this timeout isn't event enough. Averages 5sec on my machine.
+    //     speed this up.
     driver.connect();
   }, IFRAME_LOAD_WAIT_MS);
 }
@@ -106,14 +141,19 @@ function testCreateIframeAsynchronousConnect() {
 
 function testCreateIframeSynchronousConnect() {
   driver.createPeerIframe('new_iframe');
+  // This connection will still get deferred on webkit.
   driver.connect();
 }
 
-
+// TODO(user): Commenting out testExistingIframeConnect test as test will take
+//     too long to test properly. Loading iframe, establishing a connection,
+//     creating another channel, connecting. Figure out how to test properly,
+/*
 function testExistingIframeConnect() {
   driver.createChannel('test_iframe');
   driver.connect();
 }
+*/
 
 function testEscapeServiceName() {
   var escape = goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_;
@@ -216,11 +256,16 @@ goog.inherits(Driver, goog.Disposable);
 
 /** @override */
 Driver.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
-
+  // If we want to cancel the connection process before the iframe has loaded,
+  // kill the iframe/http request.
+  if (this.channel_ && !this.channel_.isConnected() &&
+      document.getElementById(this.iframeId_)) {
+    document.getElementById(this.iframeId_).src = 'about:blank';
+  }
   if (this.channel_) {
     this.channel_.dispose();
   }
+  goog.base(this, 'disposeInternal');
 };
 
 
@@ -262,6 +307,15 @@ Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper) {
   this.channel_ = new goog.net.xpc.CrossPageChannel(cfg, opt_domHelper);
   this.channel_.registerService('msg', goog.bind(this.msgHandler_, this));
   this.cfg_ = cfg;
+};
+
+
+/**
+ * Returns the configuration of the xpc.
+ * @return {?Object} The configuration of the xpc.
+ */
+Driver.prototype.getConfiguration = function() {
+  return this.cfg_;
 };
 
 
@@ -310,22 +364,12 @@ Driver.prototype.checkPeerIframe = function() {
  * Starts the connection. The connection happens asynchronously.
  */
 Driver.prototype.connect = function() {
-  // TODO(user): Get tests to pass for all transports
   if (!this.isTransportTestable_()) {
     asyncTestCase.continueTesting();
     return;
   }
 
-  if (this.iframe_) {
-    // When we create an iframe, we send the config
-    // and it connects itself.
-    this.childConnected_();
-  } else {
-    asyncTestCase.waitForAsync('parent and child connect');
-    var peer = this.getInnerPeer_();
-    peer.instantiateChannel(this.cfg_);
-    peer.connectChannel(goog.bind(this.childConnected_, this));
-  }
+  asyncTestCase.waitForAsync('parent and child connect');
 
   this.channel_.connect(goog.bind(this.parentConnected_, this));
 };
@@ -339,16 +383,18 @@ Driver.prototype.connect = function() {
  * @private
  */
 Driver.prototype.isTransportTestable_ = function() {
-  var testable = true;
+  var testable = false;
 
   var transportType = this.channel_.determineTransportType_();
   switch (transportType) {
-    case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
     case goog.net.xpc.TransportTypes.IFRAME_RELAY:
     case goog.net.xpc.TransportTypes.IFRAME_POLLING:
+      testable = canAccessSameDomainIframe;
+      break;
+    case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
     case goog.net.xpc.TransportTypes.FLASH:
     case goog.net.xpc.TransportTypes.NIX:
-      testable = false;
+      testable = true;
       break;
   }
 
@@ -366,19 +412,18 @@ Driver.prototype.parentConnected_ = function() {
     asyncTestCase.waitForAsync('child echo');
   } else {
     asyncTestCase.waitForAsync('child connect');
+    return;
   }
-
-  this.channel_.send('echo', 'hello')
+  this.channel_.send('echo', 'hello');
 };
 
 
 /**
  * Callback for the child connection.
- * @private
  */
-Driver.prototype.childConnected_ = function() {
+Driver.prototype.childConnected = function() {
   if (this.channel_.isConnected()) {
-    asyncTestCase.waitForAsync('child echo');
+    this.parentConnected_();
   } else {
     asyncTestCase.waitForAsync('parent connect');
   }
@@ -403,9 +448,9 @@ Driver.prototype.msgHandler_ = function(payload) {
 </script>
 
 <!-- Debug box. -->
-<div style="position:absolute; float: right; top: 10px; right: 10px">
+<div style="position:absolute; float: right; top: 10px; right: 10px; width: 500px">
 Debug [<a href="#" onclick="document.getElementById('debugDiv').innerHTML = '';">clear</a>]: <br/>
-<div id="debugDiv" style="border: 1px #000000 solid; font-size:xx-small"></div>
+<div id="debugDiv" style="border: 1px #000000 solid; font-size:xx-small; background: #fff;"></div>
 </div>
 
 <!--
@@ -413,8 +458,15 @@ Setup inner peer. This must be done in the <body>, so that the inner peer iframe
 blocks the onload event in this window until it is fully loaded. The JsUnit
 tests will execute after the onload event fires.
 -->
-<iframe name=test_iframe id=test_iframe src=testdata/inner_peer.html width=300 height=250>
+<!--
+TODO(user): Commenting out testExistingIframeConnect test as test will take
+    too long to test properly. Loading iframe, establishing a connection,
+    creating another channel, connecting. Figure out how to test properly,
+<iframe name=test_iframe id=test_iframe src=testdata/inner_peer.html width=100% height=100%>
 </iframe>
+-->
+
+
 
 </body>
 </html>
