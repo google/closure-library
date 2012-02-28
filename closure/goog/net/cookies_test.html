@@ -13,6 +13,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.array');
   goog.require('goog.net.cookies');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -21,6 +22,7 @@ See the COPYING file for details.
 
 var cookies = goog.net.cookies;
 var baseCount = 0;
+var stubs = new goog.testing.PropertyReplacer();
 
 function checkForCookies() {
   if (!cookies.isEnabled()) {
@@ -46,6 +48,7 @@ function setUp() {
 function tearDown() {
   // Clear up after ourselves.
   cookies.clear();
+  stubs.reset();
 }
 
 function testIsEnabled() {
@@ -194,6 +197,24 @@ function testSetCookieMaxAgeZero() {
   if (!result.match(pattern)) {
     fail('expected match against ' + pattern + ' got ' + result);
   }
+}
+
+function testGetEmptyCookie() {
+  var value = '';
+
+  cookies.set('test', value);
+
+  assertEquals(value, cookies.get('test'));
+}
+
+function testGetEmptyCookieIE() {
+  stubs.set(cookies, 'getCookie_', function() {
+    return 'test1; test2; test3';
+  });
+
+  assertEquals('', cookies.get('test1'));
+  assertEquals('', cookies.get('test2'));
+  assertEquals('', cookies.get('test3'));
 }
 
 // TODO(chrisn): Testing max age > 0 requires a mock clock.

@@ -217,6 +217,9 @@ goog.net.Cookies.prototype.get = function(name, opt_default) {
     if (part.indexOf(nameEq) == 0) {
       return part.substr(nameEq.length);
     }
+    if (part == name) {
+      return '';
+    }
   }
   return opt_default;
 };
