@@ -907,7 +907,7 @@ See the COPYING file for details.
     assertThrowsJsUnitException(
         function() { assertObjectRoughlyEquals({'a': 1}, {'a': 1.2}, 0.1); },
         'Expected <[object Object]> (Object) but was <[object Object]> ' +
-        '(Object)\n   a expected <1> (Number) but was <1.2> (Number) which ' +
+        '(Object)\n   a: Expected <1> (Number) but was <1.2> (Number) which ' +
         'was more than 0.1 away');
   }
 
@@ -1044,6 +1044,32 @@ See the COPYING file for details.
       window.execScript('stringForWindowIEHelper()', 'vbscript');
       assertEquals('<[object]> (Object)', window.stringForWindowIEResult);
     }
+  }
+
+  function testStringSamePrefix() {
+    assertThrowsJsUnitException(
+        function() { assertEquals('abcdefghi', 'abcdefghx'); },
+        'Expected <abcdefghi> (String) but was <abcdefghx> (String)\n' +
+        'Difference was at position 8. Expected [...ghi] vs. actual [...ghx]');
+  }
+
+  function testStringSameSuffix() {
+    assertThrowsJsUnitException(
+        function() { assertEquals('xbcdefghi', 'abcdefghi'); },
+        'Expected <xbcdefghi> (String) but was <abcdefghi> (String)\n' +
+        'Difference was at position 0. Expected [xbc...] vs. actual [abc...]');
+  }
+
+  function testStringDissimilarShort() {
+    assertThrowsJsUnitException(
+        function() { assertEquals('x', 'y'); },
+        'Expected <x> (String) but was <y> (String)');
+  }
+
+  function testStringDissimilarLong() {
+    assertThrowsJsUnitException(
+        function() { assertEquals('xxxxxxxxxx', 'yyyyyyyyyy'); },
+        'Expected <xxxxxxxxxx> (String) but was <yyyyyyyyyy> (String)');
   }
 
   function testAssertElementsEquals() {

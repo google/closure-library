@@ -120,9 +120,9 @@ See the COPYING file for details.
     assertTrue(simpleMatcher.matches({name: 'Bob', age: 42}, mockExpect));
     assertEquals(0, mockExpect.getErrorMessageCount());
     expectObjectEqualsFailure(simpleMatcher, {name: 'Bill', age: 42},
-        'name expected <Bob> (String) but was <Bill> (String)');
+        'name: Expected <Bob> (String) but was <Bill> (String)');
     expectObjectEqualsFailure(simpleMatcher, {name: 'Bob', age: 21},
-        'age expected <42> (Number) but was <21> (Number)');
+        'age: Expected <42> (Number) but was <21> (Number)');
     expectObjectEqualsFailure(simpleMatcher, {name: 'Bob'},
         'property age not present in actual Object');
     expectObjectEqualsFailure(simpleMatcher,
@@ -131,8 +131,8 @@ See the COPYING file for details.
 
     // Multiple mismatches should include multiple messages.
     expectObjectEqualsFailure(simpleMatcher, {name: 'Jim', age: 36},
-        'name expected <Bob> (String) but was <Jim> (String)\n' +
-        '   age expected <42> (Number) but was <36> (Number)');
+        'name: Expected <Bob> (String) but was <Jim> (String)\n' +
+        '   age: Expected <42> (Number) but was <36> (Number)');
   }
 
   function testComplexObjectEquals() {
@@ -142,10 +142,10 @@ See the COPYING file for details.
         {a: 'foo', b: 2, c: ['bar', 3], d: {sub1: 'baz', sub2: -1}}));
     expectObjectEqualsFailure(complexMatcher,
         {a: 'foo', b: 2, c: ['bar', 3], d: {sub1: 'zap', sub2: -1}},
-        'sub1 expected <baz> (String) but was <zap> (String)');
+        'sub1: Expected <baz> (String) but was <zap> (String)');
     expectObjectEqualsFailure(complexMatcher,
         {a: 'foo', b: 2, c: ['bar', 6], d: {sub1: 'baz', sub2: -1}},
-        'c[1] expected <3> (Number) but was <6> (Number)');
+        'c[1]: Expected <3> (Number) but was <6> (Number)');
   }
 
 
@@ -344,7 +344,7 @@ See the COPYING file for details.
     assertEquals(1, mockExpect.errorMessages.length);
     assertEquals(
         'Expected <anything> (String) but was <12345> (Number)\n' +
-        '    expected <anything> (String) but was <12345> (Number)',
+        '    Expected <anything> (String) but was <12345> (Number)',
         mockExpect.errorMessages[0]);
 
     // And test we report errors found via the matcher
@@ -357,7 +357,7 @@ See the COPYING file for details.
     assertEquals(2, mockExpect.errorMessages.length);
     assertEquals(
         'Expected <anything> (String) but was <12345> (Number)\n' +
-        '    expected <anything> (String) but was <12345> (Number)',
+        '    Expected <anything> (String) but was <12345> (Number)',
         mockExpect.errorMessages[0]);
     // plus the new error...
     assertEquals("Expected: isString but was: <null>",
