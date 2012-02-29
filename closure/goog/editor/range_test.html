@@ -372,6 +372,38 @@ function testPlaceCursorNextTo_rightOfLineBreak() {
   assertEquals(node.nextSibling, range.getStartNode());
 }
 
+function testPlaceCursorNextTo_leftOfHr() {
+  var div = $('parentNode');
+  div.innerHTML = '<hr />aaa';
+  var children = div.childNodes;
+  assertEquals(2, children.length);
+  var node = children[0];
+  var range = goog.editor.range.placeCursorNextTo(node, true);
+  if (goog.userAgent.IE && goog.userAgent.isVersion('9')) {
+    assertEquals(div, range.getStartNode());
+    assertEquals(0, range.getStartOffset());
+  } else {
+    assertEquals(children[0], range.getStartNode());
+    assertEquals(0, range.getStartOffset());
+  }
+}
+
+function testPlaceCursorNextTo_rightOfHr() {
+  var div = $('parentNode');
+  div.innerHTML = 'aaa<hr />';
+  var children = div.childNodes;
+  assertEquals(2, children.length);
+  var node = children[1];
+  var range = goog.editor.range.placeCursorNextTo(node, false);
+  if (goog.userAgent.IE && goog.userAgent.isVersion('9')) {
+    assertEquals(div, range.getStartNode());
+    assertEquals(1, range.getStartOffset());
+  } else {
+    assertEquals(children[1], range.getStartNode());
+    assertEquals(0, range.getStartOffset());
+  }
+}
+
 function testGetDeepEndPoint() {
   var div = $('parentNode');
   var def = $('def');
