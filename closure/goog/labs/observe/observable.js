@@ -1,0 +1,85 @@
+// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview Experimental observer-observable API. This is
+ * intended as super lightweight replacement of
+ * goog.events.EventTarget when w3c event model bubble/capture
+ * behavior is not required.
+ *
+ * This is similar to {@code goog.pubsub.PubSub} but with different
+ * intent and naming so that it is more discoverable. The API is
+ * tighter while allowing for more flexibility offered by the
+ * interface {@code Observable}.
+ *
+ * WARNING: This is still highly experimental. Please contact author
+ * before using this.
+ *
+ */
+
+goog.provide('goog.labs.observe.Observable');
+
+goog.require('goog.disposable.IDisposable');
+
+
+
+/**
+ * Interface for an observable object.
+ * @interface
+ * @extends {goog.disposable.IDisposable}
+ */
+goog.labs.observe.Observable = function() {};
+
+
+/**
+ * Registers an observer on the observable for a particular notice type.
+ * There is a special notification type
+ * {@code goog.labs.observe.NoticeType.ALL} that allows observers to
+ * observe all events fired by this observable.
+ *
+ * Note that no guarantee is provided on order of execution of the
+ * observers. For a single notification, one Notice object is reused
+ * across all invoked observers.
+ *
+ * @param {!goog.labs.observe.NoticeType} type The type of events to
+ *     observe.
+ * @param {!goog.labs.observe.Observer} observer The observer to add.
+ */
+goog.labs.observe.Observable.prototype.observe = function(
+    type, observer) {};
+
+
+/**
+ * Unregisters an observer from the observable. The parameter must
+ * be the same as those passed to {@code observe} method.
+ * @param {!goog.labs.observe.NoticeType} type The type of events to observe.
+ * @param {!goog.labs.observe.Observer} observer The observer to remove.
+ * @return {boolean} Whether the observer is removed.
+ */
+goog.labs.observe.Observable.prototype.unobserve = function(
+    type, observer) {};
+
+
+/**
+ * Notifies observers by invoking them. If type is provided, only
+ * observers registered for the given type (or observers registered
+ * without specifying a type) will be invoked, otherwise all
+ * registered observers is invoked. Optionally, a data object may be
+ * given to be passed to each observer.
+ * @param {!goog.labs.observe.NoticeType} type The type of observers to
+ *     notify. If {@code goog.labs.observe.NoticeType.ALL} is given,
+ *     the observable will fire all registered observers.
+ * @param {*=} opt_data An optional data object.
+ */
+goog.labs.observe.Observable.prototype.notify = function(type, opt_data) {};
