@@ -132,16 +132,16 @@ goog.testing.MockClock.prototype.timeoutDelay_ = 0;
 
 
 /**
- * Installs the MockClock by overriding the window object's implementation of
+ * Installs the MockClock by overriding the global object's implementation of
  * setTimeout, setInterval, clearTimeout and clearInterval.
  */
 goog.testing.MockClock.prototype.install = function() {
   if (!this.replacer_) {
     var r = this.replacer_ = new goog.testing.PropertyReplacer();
-    r.set(window, 'setTimeout', goog.bind(this.setTimeout_, this));
-    r.set(window, 'setInterval', goog.bind(this.setInterval_, this));
-    r.set(window, 'clearTimeout', goog.bind(this.clearTimeout_, this));
-    r.set(window, 'clearInterval', goog.bind(this.clearInterval_, this));
+    r.set(goog.global, 'setTimeout', goog.bind(this.setTimeout_, this));
+    r.set(goog.global, 'setInterval', goog.bind(this.setInterval_, this));
+    r.set(goog.global, 'clearTimeout', goog.bind(this.clearTimeout_, this));
+    r.set(goog.global, 'clearInterval', goog.bind(this.clearInterval_, this));
 
     // PropertyReplacer#set can't be called with renameable functions.
     this.oldGoogNow_ = goog.now;
@@ -151,8 +151,8 @@ goog.testing.MockClock.prototype.install = function() {
 
 
 /**
- * Removes the MockClock's hooks into the window functions and revert to their
- * original values.
+ * Removes the MockClock's hooks into the global object's functions and revert
+ * to their original values.
  */
 goog.testing.MockClock.prototype.uninstall = function() {
   if (this.replacer_) {
@@ -354,7 +354,7 @@ goog.testing.MockClock.MAX_INT_ = 2147483647;
 
 /**
  * Schedules a function to be called after {@code millis} milliseconds.
- * Mock implementation for window.setTimeout
+ * Mock implementation for setTimeout.
  * @param {Function} funcToCall The function to call.
  * @param {number} millis The number of milliseconds to call it after.
  * @return {number} The number of timeouts created.
@@ -375,7 +375,7 @@ goog.testing.MockClock.prototype.setTimeout_ = function(funcToCall, millis) {
 
 /**
  * Schedules a function to be called every {@code millis} milliseconds.
- * Mock implementation for window.setInterval
+ * Mock implementation for setInterval.
  * @param {Function} funcToCall The function to call.
  * @param {number} millis The number of milliseconds between calls.
  * @return {number} The number of timeouts created.
@@ -390,7 +390,7 @@ goog.testing.MockClock.prototype.setInterval_ = function(funcToCall, millis) {
 
 /**
  * Clears a timeout.
- * Mock implementation for window.clearTimeout
+ * Mock implementation for clearTimeout.
  * @param {number} timeoutKey The timeout key to clear.
  * @private
  */
@@ -401,7 +401,7 @@ goog.testing.MockClock.prototype.clearTimeout_ = function(timeoutKey) {
 
 /**
  * Clears an interval.
- * Mock implementation for window.clearInterval
+ * Mock implementation for clearInterval.
  * @param {number} timeoutKey The interval key to clear.
  * @private
  */
