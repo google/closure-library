@@ -190,9 +190,15 @@ goog.editor.BrowserFeature = {
   CARET_INSIDE_SELECTION: goog.userAgent.OPERA,
 
   // Whether the browser focuses <body contenteditable> automatically when
-  // the user clicks on <html>. This field is deprecated and unused -- only old
-  // versions of Opera don't have this behavior.
-  FOCUSES_EDITABLE_BODY_ON_HTML_CLICK: true,
+  // the user clicks on <html>. This field is deprecated and unused. However
+  // this is an issue if you want to run on IE in standards mode (does not
+  // currently work well).
+  FOCUSES_EDITABLE_BODY_ON_HTML_CLICK: !goog.userAgent.IE,
+
+  // Setting standards mode in IE(8/9) iframe causes a host of issues
+  // such as jumping (or captured) cursors, HTML content pasting issues,
+  // and unselectable blank lines.
+  PREFERS_QUIRKS_IFRAMES: goog.userAgent.IE,
 
   // Whether to use keydown for key listening (uses keypress otherwise). Taken
   // from goog.events.KeyHandler.
