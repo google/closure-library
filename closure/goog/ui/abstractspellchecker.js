@@ -278,14 +278,18 @@ goog.ui.AbstractSpellChecker.prototype.processedElementsCount_ = 0;
 
 
 /**
- * Marker for the text that does not need to be included in the processing.
+ * Markers for the text that does not need to be included in the processing.
  *
- * For rich text editor this is the class name for the element.
+ * For rich text editor this is a list of strings formatted as
+ * tagName.className or className. If both are specified, the element will be
+ * excluded if BOTH are matched. If only a className is specified, then we will
+ * exclude regions with the className. If only one marker is needed, it may be
+ * passed as a string.
  * For plain text editor this is a RegExp that matches the excluded text.
  *
  * Used exclusively by the derived classes
  *
- * @type {RegExp|string|undefined}
+ * @type {Array.<string>|string|RegExp|undefined}
  * @protected
  */
 goog.ui.AbstractSpellChecker.prototype.excludeMarker;
@@ -348,11 +352,11 @@ goog.ui.AbstractSpellChecker.getNextId = function() {
 /**
  * Sets the marker for the excluded text.
  *
- * {@see goog.ui.AbstractSpellChecker.prototype.excludeMarker_}
+ * {@see goog.ui.AbstractSpellChecker.prototype.excludeMarker}
  *
- * @param {RegExp|string|null} marker RegExp for plain text or class name for
- *        the rich text spell checker for the elements to exclude from
- *        checking.
+ * @param {Array.<string>|string|RegExp|null} marker A RegExp for plain text
+ *        or class names for the rich text spell checker for the elements to
+ *        exclude from checking.
  */
 goog.ui.AbstractSpellChecker.prototype.setExcludeMarker = function(marker) {
   this.excludeMarker = marker || undefined;

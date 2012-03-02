@@ -168,6 +168,30 @@ function testDocumentIntegrity() {
   s.dispose();
 };
 
+function testExcludeMarkers() {
+  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
+  var s = new goog.ui.RichTextSpellChecker(handler);
+  s.setExcludeMarker(['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note']);
+  assertArrayEquals(['goog-quote', 'goog-comment', 'goog-note'],
+      s.excludeMarker);
+  assertArrayEquals(['DIV', undefined, 'SPAN'], s.excludeTags);
+  var el = document.getElementById('test1');
+  el.innerHTML = '<div class="goog-quote"></div>' +
+      '<div class="goog-yes">skip</div>' +
+      '<div class="goog-note"></div>' +
+      '<div class="goog-comment"></div>' +
+      '<br>';
+  var children = el.childNodes;
+  var length = children.length;
+  assertEquals(5, length);
+
+  assertTrue(s.isExcluded_(children[0]));
+  assertFalse(s.isExcluded_(children[1]));
+  assertFalse(s.isExcluded_(children[2]));
+  assertTrue(s.isExcluded_(children[3]));
+  assertFalse(s.isExcluded_(children[4]));
+}
+
 function testBiggerDocument() {
   var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
   var s = new goog.ui.RichTextSpellChecker(handler);
