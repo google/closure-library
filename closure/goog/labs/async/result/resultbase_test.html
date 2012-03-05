@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<title>Closure Unit Tests - goog.labs.async.ResultBase</title>
+<script src="../../../base.js"></script>
+<script>
+
+goog.require('goog.Timer');
+goog.require('goog.labs.async.ResultBase');
+goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.recordFunction');
+goog.require('goog.testing.jsunit');
+
+</script>
+</head>
+<body>
+<script>
+
+var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+
+function testHandlersCalledOnSuccess() {
+  var result = new goog.labs.async.ResultBase();
+  var counter1 = new goog.testing.recordFunction();
+  var counter2 = new goog.testing.recordFunction();
+
+  result.wait(counter1);
+  result.wait(counter2);
+
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+  assertEquals(0, counter1.getCallCount());
+  assertEquals(0, counter2.getCallCount());
+
+  result.setValue(2);
+
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  assertEquals(2, result.getValue());
+  assertEquals(1, counter1.getCallCount());
+  assertEquals(1, counter2.getCallCount());
+
+  var call1 = counter1.popLastCall();
+  assertEquals(result, call1.getArgument(0));
+
+  var call2 = counter2.popLastCall();
+  assertEquals(result, call2.getArgument(0));
+}
+
+function testHandlersCalledOnError() {
+  var result = new goog.labs.async.ResultBase();
+  var counter1 = new goog.testing.recordFunction();
+  var counter2 = new goog.testing.recordFunction();
+
+  result.wait(counter1);
+  result.wait(counter2);
+
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+
+  result.setError();
+
+  assertEquals(goog.labs.async.Result.State.ERROR, result.getState());
+  assertEquals(1, counter1.getCallCount());
+  assertEquals(1, counter2.getCallCount());
+
+  var call1 = counter1.popLastCall();
+  assertObjectEquals(result, call1.getArgument(0));
+
+  var call2 = counter2.popLastCall();
+  assertObjectEquals(result, call2.getArgument(0));
+}
+
+function testAttachingHandlerOnSuccessfulResult() {
+  var result = new goog.labs.async.ResultBase();
+  result.setValue(2);
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+
+  // counter should be called immediately on a resolved Result
+  var counter = new goog.testing.recordFunction();
+  assertEquals(0, counter.getCallCount());
+
+  result.wait(counter);
+
+  assertEquals(1, counter.getCallCount());
+  var call = counter.popLastCall();
+  assertEquals(result, call.getArgument(0));
+}
+
+function testAttachingHandlerOnErrorResult() {
+  var result = new goog.labs.async.ResultBase();
+  result.setError();
+  assertEquals(goog.labs.async.Result.State.ERROR, result.getState());
+
+  // counter should be called immediately on a resolved Result
+  var counter = new goog.testing.recordFunction();
+  assertEquals(0, counter.getCallCount());
+
+  result.wait(counter);
+
+  assertEquals(1, counter.getCallCount());
+  var call = counter.popLastCall();
+  assertEquals(result, call.getArgument(0));
+}
+
+function testSuccess() {
+  var result = new goog.labs.async.ResultBase();
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+
+  result.setValue(1);
+
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+}
+
+function testError() {
+  var result1 = new goog.labs.async.ResultBase();
+  assertEquals(goog.labs.async.Result.State.PENDING, result1.getState());
+
+  result1.setError();
+
+  assertEquals(goog.labs.async.Result.State.ERROR, result1.getState());
+}
+
+function testExceptionThrownOnMultipleSuccessfulResolutionAttempts() {
+  var result = new goog.labs.async.ResultBase();
+  result.setValue(1);
+
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  // Try to set the value again
+  var e = assertThrows(goog.bind(result.setValue, result, 3));
+  assertTrue(e instanceof goog.labs.async.ResultBase.StateError);
+}
+
+function testExceptionThrownOnMultipleErrorResolutionAttempts() {
+  var result = new goog.labs.async.ResultBase();
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+
+  result.setError();
+
+  assertEquals(goog.labs.async.Result.State.ERROR, result.getState());
+  // Try to set error again
+  var e = assertThrows(goog.bind(result.setError, result));
+  assertTrue(e instanceof goog.labs.async.ResultBase.StateError);
+}
+
+function testExceptionThrownOnSuccessThenErrorResolutionAttempt() {
+  var result = new goog.labs.async.ResultBase();
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+
+  result.setValue(1);
+
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  // Try to set error after setting value
+  var e = assertThrows(goog.bind(result.setError, result));
+  assertTrue(e instanceof goog.labs.async.ResultBase.StateError);
+}
+
+function testExceptionThrownOnErrorThenSuccessResolutionAttempt() {
+  var result = new goog.labs.async.ResultBase();
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+
+  result.setError();
+
+  assertEquals(goog.labs.async.Result.State.ERROR, result.getState());
+  // Try to set value after setting error
+  var e = assertThrows(goog.bind(result.setValue, result, 1));
+  assertTrue(e instanceof goog.labs.async.ResultBase.StateError);
+}
+
+function testSuccessfulAsyncResolution() {
+  var result = new goog.labs.async.ResultBase();
+
+  result.wait(function (res) {
+    asyncTestCase.continueTesting();
+
+    assertEquals(goog.labs.async.Result.State.SUCCESS, res.getState());
+    assertEquals(1, res.getValue());
+  });
+
+  goog.Timer.callOnce(function() {
+    result.setValue(1);
+  });
+
+  asyncTestCase.waitForAsync('wait for success');
+}
+
+function testErrorAsyncResolution() {
+  var result = new goog.labs.async.ResultBase();
+
+  result.wait(function (res) {
+    asyncTestCase.continueTesting();
+    assertEquals(goog.labs.async.Result.State.ERROR, res.getState());
+  });
+
+  goog.Timer.callOnce(function() {
+    result.setError();
+  });
+
+  asyncTestCase.waitForAsync('wait for error');
+}
+
+</script>
+</body>
+</html>
