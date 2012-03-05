@@ -140,6 +140,9 @@ goog.proto2.Message.prototype.setUnknown = function(tag, value) {
   goog.proto2.Util.assert(value !== null, 'Value cannot be null');
 
   this.values_[tag] = value;
+  if (this.deserializedFields_) {
+    delete this.deserializedFields_[tag];
+  }
 };
 
 
@@ -373,6 +376,9 @@ goog.proto2.Message.prototype.copyFrom = function(message) {
   for (var i = 0; i < fields.length; i++) {
     var field = fields[i];
     delete this.values_[field.getTag()];
+    if (this.deserializedFields_) {
+      delete this.deserializedFields_[field.getTag()];
+    }
 
     if (message.has(field)) {
       var isComposite = field.isCompositeType();
@@ -665,6 +671,9 @@ goog.proto2.Message.prototype.add$Value = function(tag, value) {
   }
 
   this.values_[tag].push(value);
+  if (this.deserializedFields_) {
+    delete this.deserializedFields_[tag];
+  }
 };
 
 
@@ -711,6 +720,9 @@ goog.proto2.Message.prototype.checkFieldType_ = function(field, value) {
 goog.proto2.Message.prototype.clear$Field = function(tag) {
   goog.proto2.Util.assert(this.getFieldByTag_(tag), 'Unknown field');
   delete this.values_[tag];
+  if (this.deserializedFields_) {
+    delete this.deserializedFields_[tag];
+  }
 };
 
 
