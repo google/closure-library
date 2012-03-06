@@ -88,7 +88,7 @@ goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
 /**
  * Response types that may be requested for XMLHttpRequests.
  * @enum {string}
- * @see http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#the-responsetype-attribute
+ * @see http://www.w3.org/TR/XMLHttpRequest/#the-responsetype-attribute
  */
 goog.net.XhrIo.ResponseType = {
   DEFAULT: '',
@@ -356,7 +356,7 @@ goog.net.XhrIo.prototype.responseType_ = goog.net.XhrIo.ResponseType.DEFAULT;
  * more recent browsers that support this part of the HTTP Access Control
  * standard.
  *
- * @see http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#withcredentials
+ * @see http://www.w3.org/TR/XMLHttpRequest/#the-withcredentials-attribute
  *
  * @type {boolean}
  * @private
@@ -961,7 +961,7 @@ goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
  * try to emulate it.
  *
  * Emulating the response means following the rules laid out at
- * http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#the-response-attribute.
+ * http://www.w3.org/TR/XMLHttpRequest/#the-response-attribute
  *
  * On browsers with no support for this (Chrome < 10, Firefox < 4, etc), only
  * response types of DEFAULT or TEXT may be used, and the response returned will
