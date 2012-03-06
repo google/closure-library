@@ -29,7 +29,6 @@
 goog.provide('goog.webgl');
 
 
-
 /**
  * @const
  * @type {number}
@@ -2102,3 +2101,83 @@ goog.webgl.UNPACK_COLORSPACE_CONVERSION_WEBGL = 0x9243;
  */
 goog.webgl.BROWSER_DEFAULT_WEBGL = 0x9244;
 
+
+/**
+ * From the OES_texture_half_float extension.
+ * http://www.khronos.org/registry/webgl/extensions/OES_texture_half_float/
+ * @const
+ * @type {number}
+ */
+goog.webgl.HALF_FLOAT_OES = 0x8D61;
+
+
+/**
+ * From the OES_standard_derivatives extension.
+ * http://www.khronos.org/registry/webgl/extensions/OES_standard_derivatives/
+ * @const
+ * @type {number}
+ */
+goog.webgl.FRAGMENT_SHADER_DERIVATIVE_HINT_OES = 0x8B8B;
+
+
+/**
+ * From the OES_vertex_array_object extension.
+ * http://www.khronos.org/registry/webgl/extensions/OES_vertex_array_object/
+ * @const
+ * @type {number}
+ */
+goog.webgl.VERTEX_ARRAY_BINDING_OES = 0x85B5;
+
+
+/**
+ * From the WEBGL_debug_renderer_info extension.
+ * http://www.khronos.org/registry/webgl/extensions/WEBGL_debug_renderer_info/
+ * @const
+ * @type {number}
+ */
+goog.webgl.UNMASKED_VENDOR_WEBGL = 0x9245;
+
+
+/**
+ * From the WEBGL_debug_renderer_info extension.
+ * http://www.khronos.org/registry/webgl/extensions/WEBGL_debug_renderer_info/
+ * @const
+ * @type {number}
+ */
+goog.webgl.UNMASKED_RENDERER_WEBGL = 0x9246;
+
+
+/**
+ * From the WEBGL_compressed_texture_s3tc extension.
+ * http://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_s3tc/
+ * @const
+ * @type {number}
+ */
+goog.webgl.COMPRESSED_RGB_S3TC_DXT1_EXT = 0x83F0;
+
+
+/**
+ * From the WEBGL_compressed_texture_s3tc extension.
+ * http://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_s3tc/
+ * @const
+ * @type {number}
+ */
+goog.webgl.COMPRESSED_RGBA_S3TC_DXT1_EXT = 0x83F1;
+
+
+/**
+ * From the WEBGL_compressed_texture_s3tc extension.
+ * http://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_s3tc/
+ * @const
+ * @type {number}
+ */
+goog.webgl.COMPRESSED_RGBA_S3TC_DXT3_EXT = 0x83F2;
+
+
+/**
+ * From the WEBGL_compressed_texture_s3tc extension.
+ * http://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_s3tc/
+ * @const
+ * @type {number}
+ */
+goog.webgl.COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83F3;
