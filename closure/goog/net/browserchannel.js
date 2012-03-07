@@ -117,9 +117,10 @@ goog.net.BrowserChannel = function(opt_clientVersion) {
  * Simple container class for a (mapId, map) pair.
  * @param {number} mapId The id for this map.
  * @param {Object|goog.structs.Map} map The map itself.
+ * @param {Object=} opt_context The context associated with the map.
  * @constructor
  */
-goog.net.BrowserChannel.QueuedMap = function(mapId, map) {
+goog.net.BrowserChannel.QueuedMap = function(mapId, map, opt_context) {
   /**
    * The id for this map.
    * @type {number}
@@ -131,6 +132,12 @@ goog.net.BrowserChannel.QueuedMap = function(mapId, map) {
    * @type {Object|goog.structs.Map}
    */
   this.map = map;
+
+  /**
+   * The context for the map.
+   * @type {Object}
+   */
+  this.context = opt_context || null;
 };
 
 
@@ -1036,8 +1043,9 @@ goog.net.BrowserChannel.prototype.setAllowChunkedMode =
  * suitable for the wire and then reconstituted as a Map data structure that
  * the server can process.
  * @param {Object|goog.structs.Map} map  The map to send.
+ * @param {?Object=} opt_context The context associated with the map.
  */
-goog.net.BrowserChannel.prototype.sendMap = function(map) {
+goog.net.BrowserChannel.prototype.sendMap = function(map, opt_context) {
   if (this.state_ == goog.net.BrowserChannel.State.CLOSED) {
     throw Error('Invalid operation: sending map when state is closed');
   }
@@ -1054,7 +1062,8 @@ goog.net.BrowserChannel.prototype.sendMap = function(map) {
   }
 
   this.outgoingMaps_.push(
-      new goog.net.BrowserChannel.QueuedMap(this.nextMapId_++, map));
+      new goog.net.BrowserChannel.QueuedMap(this.nextMapId_++, map,
+                                            opt_context));
   if (this.state_ == goog.net.BrowserChannel.State.OPENING ||
       this.state_ == goog.net.BrowserChannel.State.OPENED) {
     this.ensureForwardChannel_();
@@ -1862,6 +1871,7 @@ goog.net.BrowserChannel.prototype.onRequestComplete =
           goog.now() - request.getRequestStartTime(),
           this.forwardChannelRetryCount_);
       this.ensureForwardChannel_();
+      this.onSuccess_();
       this.pendingMaps_.length = 0;
     } else {  // i.e., back-channel
       this.ensureBackChannel_();
@@ -2054,6 +2064,17 @@ goog.net.BrowserChannel.prototype.testGoogleComCallback_ = function(networkUp) {
     // We cann onError_ here instead of signalError_ because the latter just
     // calls notifyStatEvent, and we don't want to have another stat event.
     this.onError_(goog.net.BrowserChannel.Error.NETWORK);
+  }
+};
+
+
+/**
+ * Called when messages have been successfully sent from the queue.
+ * @private
+ */
+goog.net.BrowserChannel.prototype.onSuccess_ = function() {
+  if (this.handler_) {
+    this.handler_.channelSuccess(this, this.pendingMaps_);
   }
 };
 
@@ -2441,6 +2462,20 @@ goog.net.BrowserChannel.Handler.prototype.channelOpened =
  */
 goog.net.BrowserChannel.Handler.prototype.channelHandleArray =
     function(browserChannel, array) {
+};
+
+
+/**
+ * Indicates maps were successfully sent on the BrowserChannel.
+ *
+ * @param {goog.net.BrowserChannel} browserChannel The browser channel.
+ * @param {Array.<goog.net.BrowserChannel.QueuedMap>} deliveredMaps The
+ *     array of maps that have been delivered to the server. This is a direct
+ *     reference to the internal BrowserChannel array, so a copy should be made
+ *     if the caller desires a reference to the data.
+ */
+goog.net.BrowserChannel.Handler.prototype.channelSuccess =
+    function(browserChannel, deliveredMaps) {
 };
 
 

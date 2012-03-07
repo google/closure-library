@@ -43,6 +43,7 @@ var RETRY_TIME = 1000;
 var ALL_DAY_MS = 1000 * 60 * 60 * 24;
 
 var browserChannel;
+var deliveredMaps;
 var handler;
 var mockClock;
 var sb;
@@ -188,6 +189,9 @@ function setUp() {
   handler.channelError = function(channel, error) {
     gotError = true;
   };
+  handler.channelSuccess = function(channel, maps) {
+    deliveredMaps = goog.array.clone(maps);
+  };
   handler.channelClosed = function(
       channel, opt_pendingMaps, opt_undeliveredMaps) {
     // Mock out the handler, and let it set a formatted user readable string
@@ -235,7 +239,9 @@ function formatArrayOfMaps(arrayOfMaps) {
     var map = arrayOfMaps[i];
     var keys = map.map.getKeys();
     for (var j = 0; j < keys.length; j++) {
-      result.push(keys[j] + ':' + map.map.get(keys[j]));
+      var tmp = keys[j] + ':' + map.map.get(keys[j]) + (map.context ?
+          ':' + map.context : '');
+      result.push(tmp);
     }
   }
   return result.join(', ');
@@ -267,6 +273,12 @@ function testFormatArrayOfMaps() {
   b.push(new goog.net.BrowserChannel.QueuedMap(0, map3));
   assertEquals('k1:v1, k2:v2, k3:v3, k4:v4, k5:v5, k6:v6',
       formatArrayOfMaps(b));
+
+  // One map with a context.
+  var c = [];
+  c.push(new goog.net.BrowserChannel.QueuedMap(0, map1, 'c1'));
+  assertEquals('k1:v1:c1, k2:v2:c1',
+      formatArrayOfMaps(c));
 }
 
 
@@ -411,10 +423,10 @@ function responseUnknownSessionId() {
 }
 
 
-function sendMap(key, value) {
+function sendMap(key, value, opt_context) {
   var map = new goog.structs.Map();
   map.set(key, value);
-  browserChannel.sendMap(map);
+  browserChannel.sendMap(map, opt_context);
   mockClock.tick(0);
 }
 
@@ -509,6 +521,7 @@ function testSendMap() {
   sendMap('foo', 'bar');
   responseVersion7();
   assertEquals(2, numTimingEvents);
+  assertEquals('foo:bar', formatArrayOfMaps(deliveredMaps));
 }
 
 
@@ -516,8 +529,10 @@ function testSendMap_twice() {
   connect();
   sendMap('foo1', 'bar1');
   responseVersion7();
+  assertEquals('foo1:bar1', formatArrayOfMaps(deliveredMaps));
   sendMap('foo2', 'bar2');
   responseVersion7();
+  assertEquals('foo2:bar2', formatArrayOfMaps(deliveredMaps));
 }
 
 
@@ -637,6 +652,7 @@ function testSetFailFastWhileWaitingForRetry() {
   assertEquals(1, browserChannel.forwardChannelRetryCount_);
 
   assertTrue(gotError);
+  assertEquals(0, deliveredMaps.length);
   // We get the error immediately before starting to ping google.com.
   // Simulate that timing out. We should get a network error in addition to the
   // initial failure.
@@ -895,19 +911,19 @@ function testUndeliveredMaps_clearsPendingMapsAfterNotifying() {
 }
 
 
-function testUndeliveredMaps_notifiesWhenNoResponseReceived() {
+function testUndeliveredMaps_notifiesWithContext() {
   connect();
 
   // First send two messages that succeed.
-  sendMap('foo1', 'bar1');
+  sendMap('foo1', 'bar1', 'context1');
   responseVersion7();
-  sendMap('foo2', 'bar2');
+  sendMap('foo2', 'bar2', 'context2');
   responseVersion7();
 
   // Pretend the server hangs and no longer responds.
-  sendMap('foo3', 'bar3');
-  sendMap('foo4', 'bar4');
-  sendMap('foo5', 'bar5');
+  sendMap('foo3', 'bar3', 'context3');
+  sendMap('foo4', 'bar4', 'context4');
+  sendMap('foo5', 'bar5', 'context5');
 
   // Give up.
   disconnect();
@@ -915,8 +931,9 @@ function testUndeliveredMaps_notifiesWhenNoResponseReceived() {
   // Assert that we are informed of any undelivered messages; both about
   // #3 that was sent but which we don't know if the server received, and
   // #4 and #5 which remain in the outgoing maps and have not yet been sent.
-  assertEquals('foo3:bar3', handler.pendingMapsString);
-  assertEquals('foo4:bar4, foo5:bar5', handler.undeliveredMapsString);
+  assertEquals('foo3:bar3:context3', handler.pendingMapsString);
+  assertEquals('foo4:bar4:context4, foo5:bar5:context5',
+      handler.undeliveredMapsString);
 }
 
 
