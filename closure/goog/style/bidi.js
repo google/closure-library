@@ -80,6 +80,13 @@ goog.style.bidi.getScrollLeft = function(element) {
 goog.style.bidi.getOffsetStart = function(element) {
   var offsetLeftForReal = element.offsetLeft;
 
+  // If the element has no offsetParent then we can't calculate an offsetStart.
+  // We return 0, which is effectivley what you'd get if you asked for
+  // offsetLeft in this case.
+  if (!element.offsetParent) {
+    return 0;
+  }
+
   if (goog.userAgent.GECKO) {
     // When calculating an element's offsetLeft, Firefox erroneously subtracts
     // the border width from the actual distance.  So we need to add it back.

@@ -35,6 +35,8 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
+goog.require('goog.style');
+goog.require('goog.style.bidi');
 goog.require('goog.userAgent');
 
 
@@ -262,7 +264,8 @@ goog.fx.Dragger.prototype.getHandler = function() {
 /**
  * Sets (or reset) the Drag limits after a Dragger is created.
  * @param {goog.math.Rect?} limits Object containing left, top, width,
- *     height for new Dragger limits.
+ *     height for new Dragger limits. If target is right-to-left, then
+ *     rect is interpreted as right, top, width, and height.
  */
 goog.fx.Dragger.prototype.setLimits = function(limits) {
   this.limits = limits || new goog.math.Rect(NaN, NaN, NaN, NaN);
@@ -377,7 +380,7 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     this.clientY = this.startY = e.clientY;
     this.screenX = e.screenX;
     this.screenY = e.screenY;
-    this.deltaX = this.target.offsetLeft;
+    this.deltaX = goog.style.bidi.getOffsetStart(this.target);
     this.deltaY = this.target.offsetTop;
     this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
 
@@ -522,7 +525,9 @@ goog.fx.Dragger.prototype.maybeReinitTouchEvent_ = function(e) {
 goog.fx.Dragger.prototype.handleMove_ = function(e) {
   if (this.enabled_) {
     this.maybeReinitTouchEvent_(e);
-    var dx = e.clientX - this.clientX;
+    // dx in right-to-left cases is relative to the right.
+    var sign = goog.style.isRightToLeft(this.target) ? -1 : 1;
+    var dx = sign * (e.clientX - this.clientX);
     var dy = e.clientY - this.clientY;
     this.clientX = e.clientX;
     this.clientY = e.clientY;
@@ -654,11 +659,16 @@ goog.fx.Dragger.prototype.limitY = function(y) {
  * Normally this is simply moving the element to x,y though in some cases it
  * might be used to resize the layer.  This is basically a shortcut to
  * implementing a default ondrag event handler.
- * @param {number} x X-coordinate for target element.
+ * @param {number} x X-coordinate for target element. In right-to-left, x this
+ *     is the number of pixels the target should be moved to from the right.
  * @param {number} y Y-coordinate for target element.
  */
 goog.fx.Dragger.prototype.defaultAction = function(x, y) {
-  this.target.style.left = x + 'px';
+  if (goog.style.isRightToLeft(this.target)) {
+    this.target.style.right = x + 'px';
+  } else {
+    this.target.style.left = x + 'px';
+  }
   this.target.style.top = y + 'px';
 };
 
