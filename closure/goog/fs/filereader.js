@@ -276,7 +276,7 @@ goog.fs.FileReader.createDeferred_ = function(reader) {
   reader.addEventListener(goog.fs.FileReader.EventType.LOAD_END,
       goog.partial(function(d, r, e) {
         var result = r.getResult();
-        if (result) {
+        if (result != null) {
           d.callback(result);
         } else {
           d.errback(r.getError());
