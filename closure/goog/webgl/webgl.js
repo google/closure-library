@@ -811,13 +811,6 @@ goog.webgl.SAMPLE_COVERAGE_INVERT = 0x80AB;
  * @const
  * @type {number}
  */
-goog.webgl.NUM_COMPRESSED_TEXTURE_FORMATS = 0x86A2;
-
-
-/**
- * @const
- * @type {number}
- */
 goog.webgl.COMPRESSED_TEXTURE_FORMATS = 0x86A3;
 
 
@@ -2181,3 +2174,21 @@ goog.webgl.COMPRESSED_RGBA_S3TC_DXT3_EXT = 0x83F2;
  * @type {number}
  */
 goog.webgl.COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83F3;
+
+
+/**
+ * From the EXT_texture_filter_anisotropic extension.
+ * http://www.khronos.org/registry/webgl/extensions/EXT_texture_filter_anisotropic/
+ * @const
+ * @type {number}
+ */
+goog.webgl.TEXTURE_MAX_ANISOTROPY_EXT = 0x84FE;
+
+
+/**
+ * From the EXT_texture_filter_anisotropic extension.
+ * http://www.khronos.org/registry/webgl/extensions/EXT_texture_filter_anisotropic/
+ * @const
+ * @type {number}
+ */
+goog.webgl.MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;
