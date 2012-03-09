@@ -609,17 +609,12 @@ function testQueryDataGetKeys() {
 function testQueryDataGetValues() {
   var qd = new goog.Uri.QueryData('a=A&b=B&a=A2&b=B2&c=C=extra');
 
-  assertArrayEquals(['A', 'A2', 'B', 'B2', 'C=extra'], qd.getValues());
+  assertEquals('AA2BB2C=extra', qd.getValues().join(''));
   qd.remove('a');
-  assertArrayEquals(['B', 'B2', 'C=extra'], qd.getValues());
+  assertEquals('BB2C=extra', qd.getValues().join(''));
   qd.add('d', 'D');
   qd.add('d', 'D');
-  assertArrayEquals(['B', 'B2', 'C=extra', 'D', 'D'], qd.getValues());
-
-  qd.add('e', new String('Eee'));
-  assertArrayEquals(['B', 'B2', 'C=extra', 'D', 'D', 'Eee'], qd.getValues());
-
-  assertArrayEquals(['Eee'], qd.getValues('e'));
+  assertEquals('BB2C=extraDD', qd.getValues().join(''));
 }
 
 function testQueryDataSet() {
