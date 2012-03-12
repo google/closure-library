@@ -530,7 +530,8 @@ goog.testing.fs.DirectoryEntry.prototype.listDirectory = function() {
  * @return {!goog.async.Deferred}
  */
 goog.testing.fs.DirectoryEntry.prototype.createPath =
-    goog.fs.DirectoryEntry.prototype.createPath;
+    // This isn't really type-safe.
+    /** @type {!Function} */ (goog.fs.DirectoryEntry.prototype.createPath);
 
 
 
