@@ -401,6 +401,47 @@ function assertDeserializationMatches(messageCopy) {
   assertEquals(202, messageCopy.getRepeatedInt32(1));
 }
 
+function testMergeFromLazyTarget() {
+  var serializer = new goog.proto2.PbLiteSerializer();
+
+  var source = new proto2.TestAllTypes();
+  var nested = new proto2.TestAllTypes.NestedMessage();
+  nested.setB(66);
+  source.setOptionalNestedMessage(nested);
+  source.setOptionalInt32(32);
+  source.setOptionalString('foo');
+  source.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+  source.addRepeatedInt32(2);
+
+  var target = new proto2.TestAllTypes();
+  nested = new proto2.TestAllTypes.NestedMessage();
+  nested.setC(77);
+  target.setOptionalNestedMessage(nested);
+  target.setOptionalInt64('64');
+  target.setOptionalString('bar');
+  target.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.BAR);
+  target.addRepeatedInt32(1);
+  var pbliteTarget = serializer.serialize(target);
+  var lazyTarget =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), pbliteTarget);
+
+  var expected = new proto2.TestAllTypes();
+  nested = new proto2.TestAllTypes.NestedMessage();
+  nested.setB(66);
+  nested.setC(77);
+  expected.setOptionalNestedMessage(nested);
+  expected.setOptionalInt32(32);
+  expected.setOptionalInt64('64');
+  expected.setOptionalString('foo');
+  expected.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+  expected.addRepeatedInt32(1);
+  expected.addRepeatedInt32(2);
+
+  lazyTarget.mergeFrom(source);
+  assertTrue('expected and lazyTarget are equal after mergeFrom',
+      lazyTarget.equals(expected));
+}
+
 </script>
 </body>
 </html>

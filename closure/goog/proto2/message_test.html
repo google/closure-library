@@ -262,6 +262,77 @@ function testCopyFromFlatMessage() {
       goog.partial(assertObjectEquals, source, target));
 }
 
+function testMergeFromEmptyMessage() {
+  var source = new proto2.TestAllTypes();
+  source.setOptionalInt32(32);
+  source.setOptionalInt64('64');
+  var nested = new proto2.TestAllTypes.NestedMessage();
+  nested.setB(66);
+  source.setOptionalNestedMessage(nested);
+
+  var target = new proto2.TestAllTypes();
+  target.mergeFrom(source);
+  assertObjectEquals('source and target are equal after mergeFrom', source,
+      target);
+}
+
+function testMergeFromFlatMessage() {
+  var source = new proto2.TestAllTypes();
+  source.setOptionalInt32(32);
+  source.setOptionalString('foo');
+  source.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+
+  var target = new proto2.TestAllTypes();
+  target.setOptionalInt64('64');
+  target.setOptionalString('bar');
+  target.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.BAR);
+
+  var expected = new proto2.TestAllTypes();
+  expected.setOptionalInt32(32);
+  expected.setOptionalInt64('64');
+  expected.setOptionalString('foo');
+  expected.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+
+  target.mergeFrom(source);
+  assertObjectEquals('expected and target are equal after mergeFrom', expected,
+      target);
+}
+
+function testMergeFromNestedMessage() {
+  var source = new proto2.TestAllTypes();
+  var nested = new proto2.TestAllTypes.NestedMessage();
+  nested.setB(66);
+  source.setOptionalNestedMessage(nested);
+
+  var target = new proto2.TestAllTypes();
+  nested = new proto2.TestAllTypes.NestedMessage();
+  nested.setC(77);
+  target.setOptionalNestedMessage(nested);
+
+  var expected = new proto2.TestAllTypes();
+  nested = new proto2.TestAllTypes.NestedMessage();
+  nested.setB(66);
+  nested.setC(77);
+  expected.setOptionalNestedMessage(nested);
+
+  target.mergeFrom(source);
+  assertObjectEquals('expected and target are equal after mergeFrom', expected,
+      target);
+}
+
+function testMergeFromRepeatedMessage() {
+  var source = new proto2.TestAllTypes();
+  source.addRepeatedInt32(2);
+  source.addRepeatedInt32(3);
+
+  var target = new proto2.TestAllTypes();
+  target.addRepeatedInt32(1);
+
+  target.mergeFrom(source);
+  assertArrayEquals('repeated_int32 array has elements from both messages',
+      [1, 2, 3], target.repeatedInt32Array());
+}
+
 function testInitDefaultsWithEmptyMessage() {
   var message = new proto2.TestAllTypes();
   message.initDefaults(false);

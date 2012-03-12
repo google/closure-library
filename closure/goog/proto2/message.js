@@ -339,9 +339,8 @@ goog.proto2.Message.prototype.equals = function(other) {
         return isComposite ? value1.equals(value2) : value1 == value2;
       }
 
-      var tag = field.getTag();
-      var thisValue = this.values_[tag];
-      var otherValue = other.values_[tag];
+      var thisValue = this.getValueForField_(field);
+      var otherValue = other.getValueForField_(field);
 
       if (field.isRepeated()) {
         // In this case thisValue and otherValue are arrays.
@@ -371,16 +370,34 @@ goog.proto2.Message.prototype.equals = function(other) {
 goog.proto2.Message.prototype.copyFrom = function(message) {
   goog.proto2.Util.assert(this.constructor == message.constructor,
       'The source message must have the same type.');
+
+  this.values_ = {};
+  if (this.deserializedFields_) {
+    this.deserializedFields_ = {};
+  }
+  this.mergeFrom(message);
+};
+
+
+/**
+ * Merges the given message into this message.
+ *
+ * Singular fields will be overwritten, except for embedded messages which will
+ * be merged. Repeated fields will be concatenated.
+ * @param {!goog.proto2.Message} message The source message.
+ */
+goog.proto2.Message.prototype.mergeFrom = function(message) {
+  goog.proto2.Util.assert(this.constructor == message.constructor,
+      'The source message must have the same type.');
   var fields = this.getDescriptor().getFields();
 
   for (var i = 0; i < fields.length; i++) {
     var field = fields[i];
-    delete this.values_[field.getTag()];
-    if (this.deserializedFields_) {
-      delete this.deserializedFields_[field.getTag()];
-    }
-
     if (message.has(field)) {
+      if (this.deserializedFields_) {
+        delete this.deserializedFields_[field.getTag()];
+      }
+
       var isComposite = field.isCompositeType();
       if (field.isRepeated()) {
         var values = message.arrayOf(field);
@@ -388,8 +405,17 @@ goog.proto2.Message.prototype.copyFrom = function(message) {
           this.add(field, isComposite ? values[j].clone() : values[j]);
         }
       } else {
-        var value = message.get(field);
-        this.set(field, isComposite ? value.clone() : value);
+        var value = message.getValueForField_(field);
+        if (isComposite) {
+          var child = this.getValueForField_(field);
+          if (child) {
+            child.mergeFrom(value);
+          } else {
+            this.set(field, value.clone());
+          }
+        } else {
+          this.set(field, value);
+        }
       }
     }
   }
