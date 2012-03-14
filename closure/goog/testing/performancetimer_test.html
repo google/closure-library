@@ -57,15 +57,52 @@ Author:  attila@google.com (Attila Bodis)
           timer.getTimeoutInterval());
     }
 
-    function testRun() {
+    function testRun_noSetUpOrTearDown() {
+      runAndAssert(false, false);
+    }
+
+    function testRun_withSetup() {
+      runAndAssert(true, false);
+    }
+
+    function testRun_withTearDown() {
+      runAndAssert(false, true);
+    }
+
+    function testRun_withSetUpAndTearDown() {
+      runAndAssert(true, true);
+    }
+
+    function runAndAssert(useSetUp, useTearDown) {
       var fakeExecutionTime = [100, 95, 98, 104, 130, 101, 96, 98, 90, 103]
       var count = 0;
       var testFunction = function() {
         mockClock.tick(fakeExecutionTime[count++]);
       };
 
+      var setUpCount = 0;
+      var setUpFunction = function() {
+        // Should have no effect on total time.
+        mockClock.tick(7);
+        setUpCount++;
+      };
+
+      var tearDownCount = 0;
+      var tearDownFunction = function() {
+        // Should have no effect on total time.
+        mockClock.tick(11);
+        tearDownCount++;
+      };
+
       // Fast test function should complete successfully in under 5 seconds...
-      var results = timer.run(testFunction);
+      var task = new goog.testing.PerformanceTimer.Task(testFunction);
+      if (useSetUp) {
+        task.withSetUp(setUpFunction);
+      }
+      if (useTearDown) {
+        task.withTearDown(tearDownFunction);
+      }
+      var results = timer.runTask(task);
 
       assertNotNull('Results must be available.', results);
 
@@ -80,6 +117,11 @@ Author:  attila@google.com (Attila Bodis)
       assertEquals('Mimimum is wrong.', 90, results['minimum']);
       assertEquals('Total must be a nonnegative number.',
           goog.math.sum.apply(null, fakeExecutionTime), results['total']);
+
+      assertEquals('Set up count must be as expected.',
+          useSetUp ? 10 : 0, setUpCount);
+      assertEquals('Tear down count must be as expected.',
+          useTearDown ? 10 : 0, tearDownCount);
     }
 
     function testTimeout() {

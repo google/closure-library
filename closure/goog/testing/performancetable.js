@@ -132,7 +132,20 @@ goog.testing.PerformanceTable.prototype.round_ = function(num) {
  * @param {string=} opt_desc A description to associate with this run.
  */
 goog.testing.PerformanceTable.prototype.run = function(fn, opt_desc) {
-  var results = this.timer_.run(fn);
+  this.runTask(
+      new goog.testing.PerformanceTimer.Task((/** @type {function()} */ fn)),
+      opt_desc);
+};
+
+
+/**
+ * Run the given task with the performance timer, and show the results.
+ * @param {goog.testing.PerformanceTimer.Task} task The performance timer task
+ *     to run.
+ * @param {string=} opt_desc A description to associate with this run.
+ */
+goog.testing.PerformanceTable.prototype.runTask = function(task, opt_desc) {
+  var results = this.timer_.runTask(task);
   var average = results['average'];
   var standardDeviation = results['standardDeviation'];
   var isSuspicious = average < 0 || standardDeviation > average * .5;
