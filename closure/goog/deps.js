@@ -321,6 +321,7 @@ goog.addDependency('labs/observe/observable.js', ['goog.labs.observe.Observable'
 goog.addDependency('labs/observe/observe.js', ['goog.labs.observe'], ['goog.labs.observe.Observer']);
 goog.addDependency('labs/observe/observer.js', ['goog.labs.observe.Observer'], []);
 goog.addDependency('labs/observe/simpleobservable.js', ['goog.labs.observe.SimpleObservable'], ['goog.Disposable', 'goog.array', 'goog.asserts', 'goog.labs.observe.Notice', 'goog.labs.observe.NoticeType', 'goog.labs.observe.Observable', 'goog.object']);
+goog.addDependency('labs/structs/map.js', ['goog.labs.structs.Map'], ['goog.array', 'goog.asserts', 'goog.object']);
 goog.addDependency('locale/countries.js', ['goog.locale.countries'], []);
 goog.addDependency('locale/defaultlocalenameconstants.js', ['goog.locale.defaultLocaleNameConstants'], []);
 goog.addDependency('locale/genericfontnames.js', ['goog.locale.genericFontNames'], []);
