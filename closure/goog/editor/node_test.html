@@ -15,6 +15,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.editor.Node</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.array');
   goog.require('goog.dom');
   goog.require('goog.dom.TagName');
   goog.require('goog.editor.node');
@@ -426,14 +427,28 @@ function testIsBlock() {
       'table-cell', 'table-column', 'table-column-group', 'table-footer',
       'table-footer-group', 'table-header-group', 'table-row',
       'table-row-group'];
-  var structuralTags = goog.object.createSet('HTML', 'BODY', 'HEAD');
+
+  var structuralTags = ['HTML', 'BODY', 'HEAD', 'FRAME', 'FRAMESET'];
   // The following tags are considered inline in IE, except LEGEND which is
   // only a block element in WEBKIT.
-  var ambiguousTags = goog.object.createSet('HR', 'ISINDEX', 'LEGEND', 'MAP',
-      'NOFRAMES', 'OPTGROUP', 'OPTION');
+  var ambiguousTags = ['HR', 'ISINDEX', 'LEGEND', 'MAP', 'NOFRAMES',
+      'OPTGROUP', 'OPTION'];
+
+  var tagsToIgnore = goog.array.flatten(structuralTags, ambiguousTags);
+
+  // Checking the applet tag on Firefox causes the test to hang on the
+  // Google test runner for Firefox 10 on Windows XP, but not on Linux.
+  if (goog.userAgent.GECKO &&
+      goog.userAgent.WINDOWS &&
+      goog.userAgent.isVersion(10) &&
+      // 'Windows NT 5.1' is Windows XP.
+      goog.string.contains(
+          goog.userAgent.getUserAgentString(), 'Windows NT 5.1')) {
+    tagsToIgnore.push('APPLET');
+  }
+
   for (var tag in goog.dom.TagName) {
-    if (tag.substr(0, 5) != 'FRAME' && !structuralTags[tag] &&
-        !ambiguousTags[tag]) {
+    if (!goog.array.contains(tagsToIgnore, tag)) {
       var el = goog.dom.createElement(tag);
       document.body.appendChild(el);
       var display = goog.style.getCascadedStyle(el, 'display') ||
