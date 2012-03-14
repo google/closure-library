@@ -527,6 +527,40 @@ function testScrollableContainersCalculation() {
 }
 
 
+function testScrollBeforeMoveDrag() {
+  var group = new goog.fx.AbstractDragDrop();
+  var target = new goog.fx.AbstractDragDrop();
+
+  group.addTarget(target);
+  var container = document.getElementById('container1');
+  group.addScrollableContainer(container);
+
+  var childEl = document.getElementById('child1');
+  var item = new goog.fx.DragDropItem(childEl);
+  item.currentDragElement_ = childEl;
+
+  target.items_.push(item);
+  group.recalculateDragTargets();
+  group.recalculateScrollableContainers();
+
+  // Simulare starting a drag.
+  var moveEvent = {
+    'clientX': 8,
+    'clientY': 10,
+    'type': goog.events.EventType.MOUSEMOVE,
+    'relatedTarget': childEl,
+    'preventDefault': function() {}
+  };
+  group.startDrag(moveEvent, item);
+
+  // Simulate scrolling before the first move drag event.
+  var scrollEvent = {
+    'target': container
+  };
+  assertNotThrows(goog.bind(group.containerScrollHandler_, group, scrollEvent));
+}
+
+
 function testMouseMove_mouseOutBeforeThreshold() {
   // Setup dragdrop and item
   var itemEl = document.createElement('div');

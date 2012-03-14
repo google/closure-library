@@ -737,7 +737,7 @@ goog.fx.AbstractDragDrop.prototype.containerScrollHandler_ = function(e) {
       // move to the region contained by the dummy target. Since we don't know
       // which sides (if any) of the dummy target are defined by targets
       // contained by this container, we are conservative and just shrink it.
-      if (this.activeTarget_ == this.dummyTarget_) {
+      if (this.dummyTarget_ && this.activeTarget_ == this.dummyTarget_) {
         if (deltaTop > 0) {
           this.dummyTarget_.box_.top += deltaTop;
         } else {
