@@ -21,7 +21,9 @@
 
 goog.provide('goog.net.xpc.NativeMessagingTransport');
 
+goog.require('goog.Timer');
 goog.require('goog.events');
+goog.require('goog.events.EventHandler');
 goog.require('goog.net.xpc');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
@@ -61,6 +63,24 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
    * @private
    */
   this.peerHostname_ = peerHostname || '*';
+
+  /**
+   * The event handler.
+   * @type {!goog.events.EventHandler}
+   * @private
+   */
+  this.eventHandler_ = new goog.events.EventHandler(this);
+
+  /**
+   * Timer for connection reattempts.
+   * @type {!goog.Timer}
+   * @private
+   */
+  this.maybeAttemptToConnectTimer_ = new goog.Timer(100, this.getWindow());
+
+  this.eventHandler_.
+      listen(this.maybeAttemptToConnectTimer_, goog.Timer.TICK,
+          this.maybeAttemptToConnect_);
 };
 goog.inherits(goog.net.xpc.NativeMessagingTransport, goog.net.xpc.Transport);
 
@@ -213,7 +233,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
 goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
   goog.net.xpc.NativeMessagingTransport.initialize_(this.getWindow());
   this.initialized_ = true;
-  this.connectWithRetries_();
+  this.maybeAttemptToConnect_();
 };
 
 
@@ -226,13 +246,14 @@ goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
  * soft-reloads and history navigations.
  * @private
  */
-goog.net.xpc.NativeMessagingTransport.prototype.connectWithRetries_ =
+goog.net.xpc.NativeMessagingTransport.prototype.maybeAttemptToConnect_ =
     function() {
   if (this.channel_.isConnected() || this.isDisposed()) {
+    this.maybeAttemptToConnectTimer_.stop();
     return;
   }
+  this.maybeAttemptToConnectTimer_.start();
   this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
-  this.getWindow().setTimeout(goog.bind(this.connectWithRetries_, this), 100);
 };
 
 
@@ -280,6 +301,13 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
           goog.net.xpc.NativeMessagingTransport);
     }
   }
+
+  goog.dispose(this.eventHandler_);
+  delete this.eventHandler_;
+
+  goog.dispose(this.maybeAttemptToConnectTimer_);
+  delete this.maybeAttemptToConnectTimer_;
+
   // Cleaning up this.send as it is an instance method, created in
   // goog.net.xpc.NativeMessagingTransport.prototype.send and has a closure over
   // this.channel_.peerWindowObject_.
