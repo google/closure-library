@@ -29,6 +29,8 @@ goog.require('goog.events');
 goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.positioning.Corner');
+goog.require('goog.positioning.MenuAnchoredPosition');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
@@ -561,10 +563,11 @@ goog.ui.ComboBox.prototype.maybeShowMenu_ = function(showAll) {
  * @protected
  */
 goog.ui.ComboBox.prototype.positionMenu = function() {
-  if (this.menu_) {
-    // TODO(user):  Make it right-aligned for RTL.
-    var pos = goog.style.getPageOffset(this.getElement());
-    this.menu_.setPosition(pos.x, pos.y + this.getElement().offsetHeight);
+  if (this.menu_ && this.menu_.isVisible()) {
+    var position = new goog.positioning.MenuAnchoredPosition(this.getElement(),
+        goog.positioning.Corner.BOTTOM_START, true);
+    position.reposition(this.menu_.getElement(),
+        goog.positioning.Corner.TOP_START);
   }
 };
 

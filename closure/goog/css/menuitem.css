@@ -23,6 +23,13 @@
   white-space: nowrap;
 }
 
+/* BiDi override for the resting state. */
+.goog-menuitem.goog-menuitem-rtl {
+  /* Flip left/right padding for BiDi. */
+  padding-left: 7em;
+  padding-right: 28px;
+}
+
 /* If a menu doesn't have checkable items or items with icons, remove padding. */
 .goog-menu-nocheckbox .goog-menuitem,
 .goog-menu-noicon .goog-menuitem {
@@ -77,6 +84,15 @@
   vertical-align: middle;
   width: 16px;
 }
+
+/* BiDi override for the selected/checked state. */
+.goog-menuitem-rtl .goog-menuitem-checkbox,
+.goog-menuitem-rtl .goog-menuitem-icon {
+  /* Flip left/right positioning. */
+  left: auto;
+  right: 6px;
+}
+
 .goog-option-selected .goog-menuitem-checkbox,
 .goog-option-selected .goog-menuitem-icon {
   /* Client apps may override the URL at which they serve the sprite. */
@@ -93,6 +109,14 @@
   position: absolute;
   right: 0;
   text-align: right;
+}
+
+/* BiDi override for shortcut style. */
+.goog-menuitem-rtl .goog-menuitem-accel {
+  /* Flip left/right positioning and text alignment. */
+  left: 0;
+  right: auto;
+  text-align: left;
 }
 
 /* Mnemonic styles. */
