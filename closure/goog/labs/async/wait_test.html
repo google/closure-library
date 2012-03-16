@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<title>Closure Unit Tests - goog.labs.async.wait</title>
+<script src="../../base.js"></script>
+<script>
+
+goog.require('goog.Timer');
+goog.require('goog.labs.async.Result');
+goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.wait');
+goog.require('goog.testing.MockClock');
+goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
+
+</script>
+</head>
+<body>
+<script>
+
+var result, waitCallback, waitOnSuccessCallback, waitOnErrorCallback;
+
+var mockClock;
+
+function setUpPage() {
+  mockClock = new goog.testing.MockClock();
+  mockClock.install();
+}
+
+function setUp() {
+  mockClock.reset();
+  result = new goog.labs.async.ResultBase();
+  waitCallback = new goog.testing.recordFunction();
+  waitOnSuccessCallback = new goog.testing.recordFunction();
+  waitOnErrorCallback = new goog.testing.recordFunction();
+}
+
+function tearDown() {
+  result = waitCallback = waitOnSuccessCallback = waitOnErrorCallback = null;
+}
+
+function tearDownPage() {
+  mockClock.uninstall();
+}
+
+function testSynchronousSuccess() {
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+  assertUndefined(result.getValue());
+
+  goog.labs.async.wait(result, waitCallback);
+  goog.labs.async.wait.onSuccess(result, waitOnSuccessCallback);
+  goog.labs.async.wait.onError(result, waitOnErrorCallback);
+
+  result.setValue(1);
+
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  assertEquals(1, result.getValue());
+
+  assertCall(waitCallback, result);
+  assertSuccessCall(waitOnSuccessCallback, 1, result);
+  assertNoCall(waitOnErrorCallback);
+}
+
+function testAsynchronousSuccess() {
+  goog.labs.async.wait(result, waitCallback);
+  goog.labs.async.wait.onSuccess(result, waitOnSuccessCallback);
+  goog.labs.async.wait.onError(result, waitOnErrorCallback);
+
+  goog.Timer.callOnce(function() {
+    result.setValue(1);
+  });
+
+  assertUndefined(result.getValue());
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+
+  assertNoCall(waitCallback);
+  assertNoCall(waitOnSuccessCallback);
+  assertNoCall(waitOnErrorCallback);
+
+  mockClock.tick();
+
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  assertEquals(1, result.getValue());
+
+  assertCall(waitCallback, result);
+  assertSuccessCall(waitOnSuccessCallback, 1, result);
+  assertNoCall(waitOnErrorCallback);
+}
+
+function testSynchronousError() {
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+  assertUndefined(result.getValue());
+
+  goog.labs.async.wait(result, waitCallback);
+  goog.labs.async.wait.onSuccess(result, waitOnSuccessCallback);
+  goog.labs.async.wait.onError(result, waitOnErrorCallback);
+
+  result.setError();
+
+  assertEquals(goog.labs.async.Result.State.ERROR, result.getState());
+  assertUndefined(result.getValue());
+
+  assertCall(waitCallback, result);
+  assertNoCall(waitOnSuccessCallback);
+  assertCall(waitOnErrorCallback, result);
+}
+
+function testAsynchronousError() {
+  goog.labs.async.wait(result, waitCallback);
+  goog.labs.async.wait.onSuccess(result, waitOnSuccessCallback);
+  goog.labs.async.wait.onError(result, waitOnErrorCallback);
+
+  goog.Timer.callOnce(function() {
+    result.setError();
+  });
+
+  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+  assertUndefined(result.getValue());
+
+  assertNoCall(waitCallback);
+  assertNoCall(waitOnSuccessCallback);
+  assertNoCall(waitOnErrorCallback);
+
+  mockClock.tick();
+
+  assertEquals(goog.labs.async.Result.State.ERROR, result.getState());
+  assertUndefined(result.getValue());
+
+  assertCall(waitCallback, result);
+  assertNoCall(waitOnSuccessCallback);
+  assertCall(waitOnErrorCallback, result);
+}
+
+function assertCall(recordedFunction, result) {
+  assertEquals(1, recordedFunction.getCallCount());
+  var call = recordedFunction.popLastCall();
+  assertEquals(1, call.getArguments().length);
+  assertEquals(result, call.getArgument(0));
+}
+
+function assertSuccessCall(recordedFunction, value, result) {
+  assertEquals(1, recordedFunction.getCallCount());
+  var call = recordedFunction.popLastCall();
+  assertEquals(2, call.getArguments().length);
+  assertEquals(value, call.getArgument(0));
+  assertEquals(result, call.getArgument(1));
+}
+
+function assertNoCall(recordedFunction) {
+  assertEquals(0, recordedFunction.getCallCount());
+}
+</script>
+</body>
+</html>
