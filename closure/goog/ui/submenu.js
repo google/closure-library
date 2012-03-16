@@ -408,13 +408,17 @@ goog.ui.SubMenu.prototype.setSubMenuVisible_ = function(visible) {
       if (!subMenu.isInDocument()) {
         subMenu.render();
       }
-      this.positionSubMenu_();
       subMenu.setHighlightedIndex(-1);
     }
     this.hasKeyboardControl_ = visible;
     goog.dom.classes.enable(this.getElement(),
         goog.getCssName('goog-submenu-open'), visible);
     subMenu.setVisible(visible);
+    // We must position after the menu is visible, otherwise positioning logic
+    // breaks in RTL.
+    if (visible) {
+      this.positionSubMenu_();
+    }
   }
 };
 
