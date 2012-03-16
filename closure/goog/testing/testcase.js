@@ -160,12 +160,21 @@ goog.testing.TestCase.prototype.order = goog.testing.TestCase.Order.SORTED;
 
 
 /**
- * Save a reference to window.timeout, so any code that overrides the default
+ * Save a reference to window.setTimeout, so any code that overrides the default
  * behavior (e.g. MockClock) doesn't affect our runner.
  * @type {function((Function|string), number, *=): number}
  * @private
  */
 goog.testing.TestCase.protectedTimeout_ = window.setTimeout;
+
+
+/**
+ * Save a reference to window.clearTimeout, so any code that overrides the
+ * default behavior (e.g. MockClock) doesn't affect our runner.
+ * @type {function((null|number|undefined)): void}
+ * @private
+ */
+goog.testing.TestCase.protectedClearTimeout_ = window.clearTimeout;
 
 
 /**
@@ -384,7 +393,8 @@ goog.testing.TestCase.prototype.finalize = function() {
   this.tearDownPage();
 
   var restoredSetTimeout =
-      goog.testing.TestCase.protectedTimeout_ == window.setTimeout;
+      goog.testing.TestCase.protectedTimeout_ == window.setTimeout &&
+      goog.testing.TestCase.protectedClearTimeout_ == window.clearTimeout;
   if (!restoredSetTimeout && goog.testing.TestCase.IS_IE &&
       String(window.setTimeout) == goog.testing.TestCase.setTimeoutAsString_) {
     // In strange cases, IE's value of setTimeout *appears* to change, but
@@ -393,11 +403,12 @@ goog.testing.TestCase.prototype.finalize = function() {
   }
 
   if (!restoredSetTimeout) {
-    var message = 'ERROR: Test did not restore setTimeout';
+    var message = 'ERROR: Test did not restore setTimeout and clearTimeout';
     this.saveMessage(message);
     var err = new goog.testing.TestCase.Error(this.name_, message);
     this.result_.errors.push(err);
   }
+  window.clearTimeout = goog.testing.TestCase.protectedClearTimeout_;
   window.setTimeout = goog.testing.TestCase.protectedTimeout_;
   this.endTime_ = this.now();
   this.running = false;
@@ -819,8 +830,26 @@ goog.testing.TestCase.prototype.countNumFilesLoaded_ = function() {
  * @protected
  */
 goog.testing.TestCase.prototype.timeout = function(fn, time) {
-  var protectedTimeout = goog.testing.TestCase.protectedTimeout_;
-  return protectedTimeout(fn, time);
+  var protectedSetTimeout = goog.testing.TestCase.protectedTimeout_;
+  return protectedSetTimeout(fn, time);
+};
+
+
+/**
+ * Clears a timeout created by {@code this.timeout()}.
+ * @param {number} id A timeout id.
+ * @protected
+ */
+goog.testing.TestCase.prototype.clearTimeout = function(id) {
+  try {
+    // In modern browsers, an Illegal Invocation error is raised if clearTimeout
+    // is called through an alias that does not preserve the window context.
+    goog.testing.TestCase.protectedClearTimeout_.call(window, id);
+  } catch (e) {
+    // In IE before version 9, the built-in window.clearTimeout function does
+    // not support call() or apply(), but may be called through an alias.
+    goog.testing.TestCase.protectedClearTimeout_(id);
+  }
 };
 
 
