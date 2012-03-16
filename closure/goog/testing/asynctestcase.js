@@ -641,7 +641,7 @@ goog.testing.AsyncTestCase.prototype.startTimeoutTimer_ = function() {
 goog.testing.AsyncTestCase.prototype.stopTimeoutTimer_ = function() {
   if (this.timeoutHandle_) {
     this.dbgLog_('Clearing timeout timer with id ' + this.timeoutHandle_);
-    this.clearTimeout(this.timeoutHandle_);
+    window.clearTimeout(this.timeoutHandle_);
     this.timeoutHandle_ = 0;
   }
 };
