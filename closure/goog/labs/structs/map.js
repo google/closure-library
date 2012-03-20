@@ -26,6 +26,7 @@ goog.provide('goog.labs.structs.Map');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.labs.object');
 goog.require('goog.object');
 
 
@@ -162,7 +163,7 @@ goog.labs.structs.Map.prototype.remove = function(key) {
 /**
  * Adds the content of the map to this map. If a new entry uses a key
  * that already exists in this map, the existing key is replaced.
- * @param {goog.labs.structs.Map} map The map to add.
+ * @param {!goog.labs.structs.Map} map The map to add.
  */
 goog.labs.structs.Map.prototype.addAll = function(map) {
   goog.array.forEach(map.getKeys(), function(key) {
@@ -208,7 +209,7 @@ goog.labs.structs.Map.prototype.containsKey = function(key) {
 goog.labs.structs.Map.prototype.containsValue = function(value) {
   var found = goog.object.some(this.map_, function(v, k) {
     return this.hasKeyInPrimaryStore_(k) &&
-        goog.labs.structs.Map.equals_(v, value);
+        goog.labs.object.is(v, value);
   }, this);
   return found || goog.array.contains(this.secondaryStoreValues_, value);
 };
@@ -250,7 +251,7 @@ goog.labs.structs.Map.prototype.getValues = function() {
 
 
 /**
- * @return {Array.<Array>} An array of entries. Each entry is of the
+ * @return {!Array.<Array>} An array of entries. Each entry is of the
  *     form [key, value]. Do not rely on consistent ordering of entries.
  */
 goog.labs.structs.Map.prototype.getEntries = function() {
@@ -278,31 +279,12 @@ goog.labs.structs.Map.prototype.clear = function() {
 
 /**
  * Clones this map.
- * @return {goog.labs.structs.Map} The clone of this map.
+ * @return {!goog.labs.structs.Map} The clone of this map.
  */
 goog.labs.structs.Map.prototype.clone = function() {
   var map = new goog.labs.structs.Map();
   map.addAll(this);
   return map;
-};
-
-
-/**
- * Whether 2 values are equals. This is the default equality
- * comparison for comparing 2 values in the map (not keys).
- * @param {*} v First value to compare.
- * @param {*} v2 Second value to compare.
- * @return {boolean} True if the values are equal.
- * @private
- */
-goog.labs.structs.Map.equals_ = function(v, v2) {
-  if (v === v2) {
-    // 0 === -0, but they are not identical.
-    return v !== 0 || 1 / v === 1 / /** @type {?} */ (v2);
-  }
-
-  // NaN is non-reflexive. NaN !== NaN, although they are considered equals.
-  return v !== v && v2 !== v2;
 };
 
 
