@@ -140,6 +140,21 @@ Author:  attila@google.com (Attila Bodis)
       assertTrue('Count must less than expected',
           results['count'] < timer.getNumSamples());
     }
+
+    function testCreateResults() {
+      var samples = [53, 0, 103];
+      var expectedResults = {
+        'average': 52,
+        'count': 3,
+        'maximum': 103,
+        'minimum': 0,
+        'standardDeviation': goog.math.standardDeviation.apply(null, samples),
+        'total': 156
+      };
+      assertObjectEquals(
+          expectedResults,
+          goog.testing.PerformanceTimer.createResults(samples));
+    }
   </script>
 </body>
 </html>

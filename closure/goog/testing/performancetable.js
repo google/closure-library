@@ -146,6 +146,19 @@ goog.testing.PerformanceTable.prototype.run = function(fn, opt_desc) {
  */
 goog.testing.PerformanceTable.prototype.runTask = function(task, opt_desc) {
   var results = this.timer_.runTask(task);
+  this.recordResults(results, opt_desc);
+};
+
+
+/**
+ * Record a performance timer results object to the performance table. See
+ * {@code goog.testing.PerformanceTimer} for details of the format of this
+ * object.
+ * @param {Object} results The performance timer results object.
+ * @param {string=} opt_desc A description to associate with these results.
+ */
+goog.testing.PerformanceTable.prototype.recordResults = function(
+    results, opt_desc) {
   var average = results['average'];
   var standardDeviation = results['standardDeviation'];
   var isSuspicious = average < 0 || standardDeviation > average * .5;

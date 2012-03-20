@@ -177,9 +177,20 @@ goog.testing.PerformanceTimer.prototype.runTask = function(task) {
     goog.array.remove(samples, Math.max.apply(null, samples));
   }
 
+  return goog.testing.PerformanceTimer.createResults(samples);
+};
+
+
+/**
+ * Creates a performance timer results object by analyzing a given array of
+ * sample timings.
+ * @param {Array.<number>} samples The samples to analyze.
+ * @return {Object} Object containing performance stats.
+ */
+goog.testing.PerformanceTimer.createResults = function(samples) {
   return {
     'average': goog.math.average.apply(null, samples),
-    'count': i,
+    'count': samples.length,
     'maximum': Math.max.apply(null, samples),
     'minimum': Math.min.apply(null, samples),
     'standardDeviation': goog.math.standardDeviation.apply(null, samples),
