@@ -1824,7 +1824,7 @@ goog.style.getScrollbarWidth = function(opt_className) {
   if (opt_className) {
     outerDiv.className = opt_className;
   }
-  outerDiv.style.cssText = 'visiblity:hidden;overflow:auto;' +
+  outerDiv.style.cssText = 'overflow:auto;' +
       'position:absolute;top:0;width:100px;height:100px';
   var innerDiv = goog.dom.createElement('div');
   goog.style.setSize(innerDiv, '200px', '200px');
