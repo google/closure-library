@@ -31,7 +31,26 @@ goog.labs.observe.Observer = function() {};
 
 
 /**
+ * @param {!goog.labs.observe.Observer} observer1 Observer to compare.
+ * @param {!goog.labs.observe.Observer} observer2 Observer to compare.
+ * @return {boolean} Whether observer1 and observer2 are equal, as
+ *     determined by the first observer1's {@code equals} method.
+ */
+goog.labs.observe.Observer.equals = function(observer1, observer2) {
+  return observer1 == observer2 || observer1.equals(observer2);
+};
+
+
+/**
  * Notifies the observer of changes to the observable object.
  * @param {!goog.labs.observe.Notice} notice The notice object.
  */
 goog.labs.observe.Observer.prototype.notify;
+
+
+/**
+ * Whether this observer is equal to the given observer.
+ * @param {!goog.labs.observe.Observer} observer The observer to compare with.
+ * @return {boolean} Whether the two observers are equal.
+ */
+goog.labs.observe.Observer.prototype.equals;

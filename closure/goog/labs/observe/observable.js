@@ -52,17 +52,23 @@ goog.labs.observe.Observable = function() {};
  * observers. For a single notification, one Notice object is reused
  * across all invoked observers.
  *
+ * Note that if an observation with the same type and observer is
+ * already registered, it will not be registered again. Comparison
+ * is done via observer's {@code equals} method.
+ *
  * @param {!goog.labs.observe.NoticeType} type The type of events to
  *     observe.
  * @param {!goog.labs.observe.Observer} observer The observer to add.
+ * @return {boolean} Whether the observer was successfully added.
  */
 goog.labs.observe.Observable.prototype.observe = function(
     type, observer) {};
 
 
 /**
- * Unregisters an observer from the observable. The parameter must
- * be the same as those passed to {@code observe} method.
+ * Unregisters an observer from the observable. The parameter must be
+ * the same as those passed to {@code observe} method. Comparison is
+ * done via observer's {@code equals} method.
  * @param {!goog.labs.observe.NoticeType} type The type of events to observe.
  * @param {!goog.labs.observe.Observer} observer The observer to remove.
  * @return {boolean} Whether the observer is removed.

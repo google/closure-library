@@ -26,6 +26,7 @@ goog.require('goog.asserts');
 goog.require('goog.labs.observe.Notice');
 goog.require('goog.labs.observe.NoticeType');
 goog.require('goog.labs.observe.Observable');
+goog.require('goog.labs.observe.Observer');
 goog.require('goog.object');
 
 
@@ -93,10 +94,15 @@ goog.labs.observe.SimpleObservable.prototype.observe = function(
     type, observer) {
   goog.asserts.assert(!this.isDisposed());
   var list = this.getObservers_(type);
-  // Disallow registering the same observer for the same type.
-  if (!goog.array.contains(list, observer)) {
+  // Registers the (type, observer) only if it has not been previously
+  // registered.
+  var shouldRegisterObserver = !goog.array.some(list, goog.partial(
+      goog.labs.observe.Observer.equals, observer));
+
+  if (shouldRegisterObserver) {
     list.push(observer);
   }
+  return shouldRegisterObserver;
 };
 
 
@@ -104,7 +110,8 @@ goog.labs.observe.SimpleObservable.prototype.observe = function(
 goog.labs.observe.SimpleObservable.prototype.unobserve = function(
     type, observer) {
   goog.asserts.assert(!this.isDisposed());
-  return goog.array.remove(this.getObservers_(type), observer);
+  return goog.array.removeIf(this.getObservers_(type), goog.partial(
+      goog.labs.observe.Observer.equals, observer));
 };
 
 

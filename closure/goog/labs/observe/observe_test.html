@@ -48,5 +48,18 @@ function testToObserverWithScope() {
   observer.notify(notice);
   assertEquals(1, fn.getCallCount());
 }
+
+
+function testToObserverEquals() {
+  var fn = function() {};
+  assertTrue(
+      goog.labs.observe.toObserver(fn).equals(
+          goog.labs.observe.toObserver(fn)));
+
+  var scope = {};
+  assertTrue(
+      goog.labs.observe.toObserver(fn, scope).equals(
+          goog.labs.observe.toObserver(fn, scope)));
+}
 </script>
 </body>

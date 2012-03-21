@@ -21,11 +21,13 @@ goog.provide('goog.labs.observe');
 goog.require('goog.labs.observe.Observer');
 
 
+// TODO(user): Consider moving this to
+// goog.labs.observe.Observer.fromFunction.
 /**
  * Creates an observer that calls the given function.
  * @param {function(!goog.labs.observe.Notice)} fn Function to be converted.
  * @param {Object=} opt_scope Optional scope to execute the function.
- * @return {goog.labs.observe.Observer} An observer object.
+ * @return {!goog.labs.observe.Observer} An observer object.
  */
 goog.labs.observe.toObserver = function(fn, opt_scope) {
   return new goog.labs.observe.FunctionObserver_(fn, opt_scope);
@@ -50,4 +52,10 @@ goog.labs.observe.FunctionObserver_ = function(fn, opt_scope) {
 /** @override */
 goog.labs.observe.FunctionObserver_.prototype.notify = function(notice) {
   this.fn_.call(this.scope_, notice);
+};
+
+
+/** @override */
+goog.labs.observe.FunctionObserver_.prototype.equals = function(observer) {
+  return this.fn_ === observer.fn_ && this.scope_ === observer.scope_;
 };
