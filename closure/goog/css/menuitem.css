@@ -12,7 +12,21 @@
  */
 
 
-/* State: resting. */
+/**
+ * State: resting.
+ *
+ * NOTE(mleibman,chrishenry):
+ * The RTL support in Closure is provided via two mechanisms -- "rtl" CSS
+ * classes and BiDi flipping done by the CSS compiler.  Closure supports RTL
+ * with or without the use of the CSS compiler.  In order for them not
+ * to conflict with each other, the "rtl" CSS classes need to have the @noflip
+ * annotation.  The non-rtl counterparts should ideally have them as well, but,
+ * since .goog-menuitem existed without .goog-menuitem-rtl for so long before
+ * being added, there is a risk of people having templates where they are not
+ * rendering the .goog-menuitem-rtl class when in RTL and instead rely solely
+ * on the BiDi flipping by the CSS compiler.  That's why we're not adding the
+ * @noflip to .goog-menuitem.
+ */
 .goog-menuitem {
   color: #000;
   font: normal 13px Arial, sans-serif;
@@ -24,6 +38,7 @@
 }
 
 /* BiDi override for the resting state. */
+/* @noflip */
 .goog-menuitem.goog-menuitem-rtl {
   /* Flip left/right padding for BiDi. */
   padding-left: 7em;
@@ -86,6 +101,7 @@
 }
 
 /* BiDi override for the selected/checked state. */
+/* @noflip */
 .goog-menuitem-rtl .goog-menuitem-checkbox,
 .goog-menuitem-rtl .goog-menuitem-icon {
   /* Flip left/right positioning. */
@@ -112,6 +128,7 @@
 }
 
 /* BiDi override for shortcut style. */
+/* @noflip */
 .goog-menuitem-rtl .goog-menuitem-accel {
   /* Flip left/right positioning and text alignment. */
   left: 0;
