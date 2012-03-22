@@ -100,6 +100,20 @@ goog.dom.ViewportSizeMonitor.getInstanceForWindow = function(opt_window) {
 
 
 /**
+ * Removes and disposes a viewport size monitor for the given window if one
+ * exists.
+ * @param {Window=} opt_window The window whose monitor should be removed;
+ *     defaults to the window in which this code is executing.
+ */
+goog.dom.ViewportSizeMonitor.removeInstanceForWindow = function(opt_window) {
+  var uid = goog.getUid(opt_window || window);
+
+  goog.dispose(goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid]);
+  delete goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid];
+};
+
+
+/**
  * Map of window hash code to viewport size monitor for that window, if
  * created.
  * @type {Object.<number,goog.dom.ViewportSizeMonitor>}

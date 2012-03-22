@@ -161,6 +161,20 @@ See the COPYING file for details.
         goog.dom.ViewportSizeMonitor.getInstanceForWindow());
   }
 
+
+  function testRemoveInstanceForWindow() {
+    var fakeWindow1 = new FakeWindow();
+    var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+        fakeWindow1);
+
+    goog.dom.ViewportSizeMonitor.removeInstanceForWindow(fakeWindow1);
+    assertTrue(monitor1.isDisposed());
+
+    var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+        fakeWindow1);
+    assertNotEquals(monitor1, monitor2);
+  };
+
 </script>
 </body>
 </html>
