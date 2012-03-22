@@ -312,6 +312,7 @@ goog.addDependency('jsaction/jsprops.js', ['goog.jsaction.jsprops'], ['goog.json
 goog.addDependency('jsaction/replay.js', ['goog.jsaction.replay'], ['goog.asserts', 'goog.jsaction.EventContract']);
 goog.addDependency('jsaction/util.js', ['goog.jsaction.util'], []);
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Serializer'], []);
+goog.addDependency('labs/async/chain.js', ['goog.labs.async.chain'], ['goog.labs.async.Result', 'goog.labs.async.ResultBase', 'goog.labs.async.wait']);
 goog.addDependency('labs/async/result/result.js', ['goog.labs.async.Result'], []);
 goog.addDependency('labs/async/result/resultbase.js', ['goog.labs.async.ResultBase', 'goog.labs.async.ResultBase.StateError'], ['goog.debug.Error', 'goog.labs.async.Result']);
 goog.addDependency('labs/async/wait.js', ['goog.labs.async.wait'], ['goog.labs.async.Result']);
