@@ -69,6 +69,19 @@ function testGetLastModified() {
   waitForAsync('testGetLastModified');
 }
 
+function testGetMetadata() {
+  // Advance the clock to a known time.
+  mockClock.tick(54);
+  var testFile = new goog.testing.fs.FileEntry(fs, fs.getRoot(),
+                                               'timeTest', 'hello world');
+  mockClock.tick();
+  testFile.getMetadata().addCallback(function(metadata) {
+    assertEquals(54, metadata.modificationTime.getTime());
+    asyncTestCase.continueTesting();
+  });
+  waitForAsync('testGetMetadata');
+}
+
 
 function waitForAsync(msg) {
   asyncTestCase.waitForAsync(msg);

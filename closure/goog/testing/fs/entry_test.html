@@ -86,10 +86,19 @@ function testMoveToNewName() {
       }).
       addCallback(function(lastModifiedDate) {
         assertEquals(71, lastModifiedDate.getTime());
+        var oldParentDir = fs.getRoot().getDirectorySync('foo');
+        return oldParentDir.getMetadata();
+      }).
+      addCallback(function(metadata) {
+        assertEquals(71, metadata.modificationTime.getTime());
         return fs.getRoot().getLastModified();
       }).
       addCallback(function(rootLastModifiedDate) {
         assertEquals(71, rootLastModifiedDate.getTime());
+        return fs.getRoot().getMetadata();
+      }).
+      addCallback(function(rootMetadata) {
+        assertEquals(71, rootMetadata.modificationTime.getTime());
         asyncTestCase.continueTesting();
       });
   waitForAsync('waiting for file move');
@@ -116,10 +125,20 @@ function testCopyTo() {
       addCallback(function(lastModifiedDate) {
         assertEquals('The original parent directory was not modified.',
                      0, lastModifiedDate.getTime());
+        var oldParentDir = fs.getRoot().getDirectorySync('foo');
+        return oldParentDir.getMetadata();
+      }).
+      addCallback(function(metadata) {
+        assertEquals('The original parent directory was not modified.',
+                     0, metadata.modificationTime.getTime());
         return fs.getRoot().getLastModified();
       }).
       addCallback(function(rootLastModifiedDate) {
         assertEquals(61, rootLastModifiedDate.getTime());
+        return fs.getRoot().getMetadata();
+      }).
+      addCallback(function(rootMetadata) {
+        assertEquals(61, rootMetadata.modificationTime.getTime());
         asyncTestCase.continueTesting();
       });
   waitForAsync('waiting for file copy');
@@ -158,6 +177,11 @@ function testRemove() {
       }).
       addCallback(function(date) {
         assertEquals(57, date.getTime());
+        var parentDir = fs.getRoot().getDirectorySync('foo');
+        return parentDir.getMetadata();
+      }).
+      addCallback(function(metadata) {
+        assertEquals(57, metadata.modificationTime.getTime());
         asyncTestCase.continueTesting();
       });
   waitForAsync('waiting for file removal');

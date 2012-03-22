@@ -34,6 +34,7 @@ goog.require('goog.functions');
 goog.require('goog.string');
 
 
+
 /**
  * The abstract class for entries in the filesystem.
  *
@@ -107,12 +108,25 @@ goog.fs.Entry.prototype.getFileSystem = function() {
  *     occurs, the errback is called with a {@link goog.fs.Error}.
  */
 goog.fs.Entry.prototype.getLastModified = function() {
+  return this.getMetadata().addCallback(function(metadata) {
+    return metadata.modificationTime;
+  });
+};
+
+
+/**
+ * Retrieves the metadata for this entry.
+ *
+ * @return {!goog.async.Deferred} The deferred Metadata for this entry. If an
+ *     error occurs, the errback is called with a {@link goog.fs.Error}.
+ */
+goog.fs.Entry.prototype.getMetadata = function() {
   var d = new goog.async.Deferred();
 
   this.entry_.getMetadata(
-      function(metadata) { d.callback(metadata.modificationTime); },
+      function(metadata) { d.callback(metadata); },
       goog.bind(function(err) {
-        var msg = 'retrieving last modified date for ' + this.getFullPath();
+        var msg = 'retrieving metadata for ' + this.getFullPath();
         d.errback(new goog.fs.Error(err.code, msg));
       }, this));
   return d;
