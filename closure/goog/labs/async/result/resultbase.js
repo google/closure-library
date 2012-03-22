@@ -54,9 +54,18 @@ goog.labs.async.ResultBase = function() {
 
 /**
  * The 'value' of this Result.
+ * @type {*}
  * @private
  */
 goog.labs.async.ResultBase.prototype.value_;
+
+
+/**
+ * The error slug for this Result.
+ * @type {*}
+ * @private
+ */
+goog.labs.async.ResultBase.prototype.error_;
 
 
 
@@ -94,6 +103,16 @@ goog.labs.async.ResultBase.prototype.getValue = function() {
 
 
 /**
+ * Returns the error slug for this object.
+ *
+ * @return {*} The current error for this Result.
+ */
+goog.labs.async.ResultBase.prototype.getError = function() {
+  return this.error_;
+};
+
+
+/**
  * Attaches handlers to be called when the value of this Result is available.
  *
  * @param {!function(!goog.labs.async.ResultBase)} handler The function called
@@ -127,9 +146,12 @@ goog.labs.async.ResultBase.prototype.setValue = function(value) {
 
 /**
  * Sets the Result to be an error Result.
+ *
+ * @param {*=} opt_error Optional error slug to set for this Result.
  */
-goog.labs.async.ResultBase.prototype.setError = function() {
+goog.labs.async.ResultBase.prototype.setError = function(opt_error) {
   if (this.isPending_()) {
+    this.error_ = opt_error;
     this.state_ = goog.labs.async.Result.State.ERROR;
     this.callHandlers_();
   } else {

@@ -68,3 +68,11 @@ goog.labs.async.Result.prototype.getState = function() {};
  *     pending or was an error.
  */
 goog.labs.async.Result.prototype.getValue = function() {};
+
+
+/**
+ * @return {*} The error slug for this Result. Will return undefined if the
+ *     Result was a success, the error slug was not set, or if the Result is
+ *     pending.
+ */
+goog.labs.async.Result.prototype.getError = function() {};
