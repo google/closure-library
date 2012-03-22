@@ -22,6 +22,7 @@
 goog.provide('goog.async.Deferred');
 goog.provide('goog.async.Deferred.AlreadyCalledError');
 goog.provide('goog.async.Deferred.CancelledError');
+goog.provide('goog.async.Deferred.UnhandledError');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -510,17 +511,11 @@ goog.async.Deferred.prototype.fire_ = function() {
   }
 
   if (unhandledException) {
-    // Rethrow the unhandled error after a timeout. Execution will continue, but
-    // the error will be seen by global handlers and the user. The rethrow will
+    // Throw an UnhandledError after a timeout. Execution will continue, but
+    // the error will be seen by global handlers and the user. The throw will
     // be canceled if another errback is appended before the timeout executes.
     this.unhandledExceptionTimeoutId_ = goog.global.setTimeout(function() {
-      // The stack trace is clobbered when the error is rethrown. Append the
-      // stack trace to the message if available. Since no one is capturing this
-      // error, the stack trace will be printed to the debug console.
-      if (goog.DEBUG && goog.isDef(res.message) && res.stack) {
-        res.message += '\n' + res.stack;
-      }
-      throw res;
+      throw new goog.async.Deferred.UnhandledError(/** @type {!Error} */ (res));
     }, 0);
   }
 };
@@ -653,3 +648,31 @@ goog.inherits(goog.async.Deferred.CancelledError, goog.debug.Error);
  * @override
  */
 goog.async.Deferred.CancelledError.prototype.message = 'Deferred was cancelled';
+
+
+
+/**
+ * An error thrown when an exception is raised from a Deferred callback chain
+ * and there are no errbacks left to handle it.
+ * @param {!Error} cause The original unhandled error.
+ * @constructor
+ * @extends {goog.debug.Error}
+ */
+goog.async.Deferred.UnhandledError = function(cause) {
+  goog.debug.Error.call(this);
+
+  /**
+   * The original error.
+   * @type {!Error}
+   */
+  this.cause = cause;
+
+  /**
+   * Message text.
+   * @type {string}
+   * @override
+   */
+  this.message = 'Unhandled Error in Deferred: ' +
+      (cause.message || '[No message]');
+};
+goog.inherits(goog.async.Deferred.UnhandledError, goog.debug.Error);

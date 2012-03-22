@@ -316,9 +316,9 @@ function testChainedDeferred2() {
     mockClock.tick();
     neverHappen();
   } catch (ex) {
-    assertTrue('In debug mode, should catch unhandled throw from d2. ' +
-               'Error message may include stack trace in some browsers.',
-               goog.string.startsWith(ex.message, 'x'));
+    assertTrue('Should catch unhandled throw from d2.',
+               ex instanceof goog.async.Deferred.UnhandledError &&
+               ex.cause.message == 'x');
   }
 }
 
@@ -366,8 +366,10 @@ function testUnhandledErrors() {
     mockClock.tick();
     neverHappen();
   } catch (ex) {
-    assertEquals('In debug mode, unhandled exceptions should hit the browser.',
-                 1, ex);
+    assertTrue('In debug mode, unhandled exceptions should hit the browser.',
+               ex instanceof goog.async.Deferred.UnhandledError);
+    assertEquals('UnhandledError should contain the original error as cause.',
+                 1, ex.cause);
   }
 
   try {
