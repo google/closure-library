@@ -77,6 +77,13 @@ goog.events.Event.prototype.propagationStopped_ = false;
 
 
 /**
+ * Whether the default action has been prevented.
+ * @type {boolean}
+ */
+goog.events.Event.prototype.defaultPrevented = false;
+
+
+/**
  * Return value for in internal capture/bubble processing for IE.
  * @type {boolean}
  * @suppress {underscore} Technically public, but referencing this outside
@@ -97,6 +104,7 @@ goog.events.Event.prototype.stopPropagation = function() {
  * Prevents the default action, for example a link redirecting to a url.
  */
 goog.events.Event.prototype.preventDefault = function() {
+  this.defaultPrevented = true;
   this.returnValue_ = false;
 };
 
@@ -120,4 +128,12 @@ goog.events.Event.stopPropagation = function(e) {
  */
 goog.events.Event.preventDefault = function(e) {
   e.preventDefault();
+};
+
+
+/**
+ * @return {boolean} Whether the default action has been prevented.
+ */
+goog.events.Event.prototype.isDefaultPrevented = function() {
+  return this.defaultPrevented;
 };

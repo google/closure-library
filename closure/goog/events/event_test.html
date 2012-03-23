@@ -51,7 +51,7 @@ See the COPYING file for details.
     }
 
     function testStopPropagation() {
-      // This test breaks encapsulation because thre is no public getter for
+      // This test breaks encapsulation because there is no public getter for
       // propagationStopped_.
       assertFalse('Propagation must not have been stopped',
           e.propagationStopped_);
@@ -60,11 +60,19 @@ See the COPYING file for details.
     }
 
     function testPreventDefault() {
-      // This test breaks encapsulation because thre is no public getter for
+      // This test breaks encapsulation because there is no public getter for
       // returnValue_.
       assertTrue('Return value must be true', e.returnValue_);
       e.preventDefault();
       assertFalse('Return value must be false', e.returnValue_);
+    }
+
+    function testIsDefaultPrevented() {
+      assertFalse('Default action must not be prevented',
+          e.isDefaultPrevented());
+      e.preventDefault();
+      assertTrue('Default action must be prevented',
+          e.isDefaultPrevented());
     }
   </script>
 </body>
