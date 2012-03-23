@@ -759,6 +759,49 @@ See the COPYING file for details.
       assertEquals(a, component.getChildAt(0));
       assertEquals(a.getElement(), component.getElement().childNodes[0]);
     }
+
+    function testRemoveChildren() {
+      var a = new goog.ui.Component();
+      var b = new goog.ui.Component();
+      var c = new goog.ui.Component();
+
+      component.addChild(a);
+      component.addChild(b);
+      component.addChild(c);
+
+      a.setId('a');
+      b.setId('b');
+      c.setId('c');
+
+      assertArrayEquals('Parent must remove and return children.', [a, b, c],
+          component.removeChildren());
+      assertNull('Parent must no longer contain this child',
+          component.getChild('a'));
+      assertNull('Parent must no longer contain this child',
+          component.getChild('b'));
+      assertNull('Parent must no longer contain this child',
+          component.getChild('c'));
+    }
+
+    function testRemoveChildren_Unrender() {
+      var a = new goog.ui.Component();
+      var b = new goog.ui.Component();
+
+      component.render(sandbox);
+      component.addChild(a);
+      component.addChild(b);
+
+      assertArrayEquals('Prent must remove and return children.', [a, b],
+          component.removeChildren(true));
+      assertNull('Parent must no longer contain this child',
+          component.getChild('a'));
+      assertFalse('Child must no longer be in the document.',
+          a.isInDocument());
+      assertNull('Parent must no longer contain this child',
+          component.getChild('b'));
+      assertFalse('Child must no longer be in the document.',
+          b.isInDocument());
+    }
   </script>
 </body>
 </html>
