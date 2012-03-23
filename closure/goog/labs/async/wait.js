@@ -21,6 +21,7 @@
 
 goog.provide('goog.labs.async.wait');
 
+goog.require('goog.array');
 goog.require('goog.labs.async.Result');
 
 
