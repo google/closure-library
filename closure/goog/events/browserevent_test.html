@@ -61,16 +61,16 @@ function testPreventDefault() {
   var event = {};
   event.defaultPrevented = false;
   var bEvent = new goog.events.BrowserEvent(event);
-  assertFalse(bEvent.isDefaultPrevented());
+  assertFalse(bEvent.defaultPrevented);
   bEvent.preventDefault();
-  assertTrue(bEvent.isDefaultPrevented());
+  assertTrue(bEvent.defaultPrevented);
 }
 
 function testDefaultPrevented() {
   var event = {};
   event.defaultPrevented = true;
   var bEvent = new goog.events.BrowserEvent(event);
-  assertTrue(bEvent.isDefaultPrevented());
+  assertTrue(bEvent.defaultPrevented);
 }
 
 function testIsButtonIe() {

@@ -67,12 +67,10 @@ See the COPYING file for details.
       assertFalse('Return value must be false', e.returnValue_);
     }
 
-    function testIsDefaultPrevented() {
-      assertFalse('Default action must not be prevented',
-          e.isDefaultPrevented());
+    function testDefaultPrevented() {
+      assertFalse('Default action must not be prevented', e.defaultPrevented);
       e.preventDefault();
-      assertTrue('Default action must be prevented',
-          e.isDefaultPrevented());
+      assertTrue('Default action must be prevented', e.defaultPrevented);
     }
   </script>
 </body>

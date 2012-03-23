@@ -78,6 +78,9 @@ goog.events.Event.prototype.propagationStopped_ = false;
 
 /**
  * Whether the default action has been prevented.
+ * This is a property to match the W3C specification at {@link
+ * http://www.w3.org/TR/DOM-Level-3-Events/#events-event-type-defaultPrevented}.
+ * Must be treated as read-only outside the class.
  * @type {boolean}
  */
 goog.events.Event.prototype.defaultPrevented = false;
@@ -128,12 +131,4 @@ goog.events.Event.stopPropagation = function(e) {
  */
 goog.events.Event.preventDefault = function(e) {
   e.preventDefault();
-};
-
-
-/**
- * @return {boolean} Whether the default action has been prevented.
- */
-goog.events.Event.prototype.isDefaultPrevented = function() {
-  return this.defaultPrevented;
 };
