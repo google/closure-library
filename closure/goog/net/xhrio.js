@@ -729,18 +729,21 @@ goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
 
       this.active_ = false;
 
-      // Call the specific callbacks for success or failure. Only call the
-      // success if the status is 200 (HTTP_OK) or 304 (HTTP_CACHED)
-      if (this.isSuccess()) {
-        this.dispatchEvent(goog.net.EventType.COMPLETE);
-        this.dispatchEvent(goog.net.EventType.SUCCESS);
-      } else {
-        this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
-        this.lastError_ = this.getStatusText() + ' [' + this.getStatus() + ']';
-        this.dispatchErrors_();
+      try {
+        // Call the specific callbacks for success or failure. Only call the
+        // success if the status is 200 (HTTP_OK) or 304 (HTTP_CACHED)
+        if (this.isSuccess()) {
+          this.dispatchEvent(goog.net.EventType.COMPLETE);
+          this.dispatchEvent(goog.net.EventType.SUCCESS);
+        } else {
+          this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
+          this.lastError_ =
+              this.getStatusText() + ' [' + this.getStatus() + ']';
+          this.dispatchErrors_();
+        }
+      } finally {
+        this.cleanUpXhr_();
       }
-
-      this.cleanUpXhr_();
     }
   }
 };

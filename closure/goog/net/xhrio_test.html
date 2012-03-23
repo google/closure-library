@@ -479,6 +479,24 @@ function testProtectEntryPointCalledOnAsyncSend() {
       errorHandlerCallbackCalled);
 }
 
+function testXHRIsDiposedEvenIfAListenerThrowsAnExceptionOnComplete() {
+  MockXmlHttp.syncSend = false;
+
+  var x = new goog.net.XhrIo;
+
+  goog.events.listen(x, goog.net.EventType.COMPLETE, function(e) {
+      throw Error();
+  }, false, x);
+
+  x.send('url');
+  assertThrows(function() {
+    lastMockXmlHttp.complete();
+  });
+
+  // The XHR should have been disposed, even though the listener threw an
+  // exception.
+  assertNull(x.xhr_);
+}
 
 function testDisposeInternalDoesNotAbortXhrRequestObjectWhenActiveIsFalse() {
   MockXmlHttp.syncSend = false;
