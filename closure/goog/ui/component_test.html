@@ -18,7 +18,6 @@ See the COPYING file for details.
     goog.require('goog.dom.NodeType');
     goog.require('goog.dom.TagName');
     goog.require('goog.events.EventTarget');
-    goog.require('goog.string.StringBuffer');
     goog.require('goog.testing.PropertyReplacer');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Component');
@@ -652,16 +651,12 @@ See the COPYING file for details.
       component.addChild(new goog.ui.Component());
       component.addChild(new goog.ui.Component());
       component.addChild(new goog.ui.Component());
-      var sb = new goog.string.StringBuffer();
+      var callCount = 0;
       component.forEachChild(function(child, index) {
-        // Note: This is just to test that 'this' is set correctly.
-        var count = this.getChildCount();
-        sb.append(index + 1).append(' of ').append(count);
-        if (index < count - 1) {
-          sb.append(', ');
-        }
+        assertEquals(component, this);
+        callCount++;
       }, component);
-      assertEquals('1 of 3, 2 of 3, 3 of 3', sb.toString());
+      assertEquals(3, callCount);
     }
 
     function testIndexOfChild() {

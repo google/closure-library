@@ -46,7 +46,6 @@ var browserChannel;
 var deliveredMaps;
 var handler;
 var mockClock;
-var sb;
 var gotError;
 var numStatEvents;
 var lastStatEvent;
@@ -57,11 +56,13 @@ var lastPostRetryCount;
 
 // Set to true to see the channel debug output in the browser window.
 var debug = false;
+// Debug message to print out when debug is true.
+var debugMessage = '';
 
 function debugToWindow(message) {
   if (debug) {
-    sb.append(message + '<br>');
-    goog.dom.getElement('debug').innerHTML = sb.toString();
+    debugMessage += message + '<br>';
+    goog.dom.getElement('debug').innerHTML = debugMessage;
   }
 }
 
@@ -157,7 +158,6 @@ function setUpPage() {
     return new MockChannelRequest(
         channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId);
   };
-  sb = new goog.string.StringBuffer();
 
   // Mock out the stat notification code.
   goog.net.BrowserChannel.notifyStatEvent = function(stat) {

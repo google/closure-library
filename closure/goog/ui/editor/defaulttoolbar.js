@@ -26,7 +26,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.editor.Command');
-goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.editor.ToolbarFactory');
@@ -587,8 +586,8 @@ goog.ui.editor.DefaultToolbar.colorUpdateFromValue_ = function(button, color) {
       // Convert from decimal to BGR to RGB.
       var hex = '000000' + value.toString(16);
       var bgr = hex.substr(hex.length - 6, 6);
-      value = new goog.string.StringBuffer('#', bgr.substring(4, 6),
-          bgr.substring(2, 4), bgr.substring(0, 2)).toString();
+      value = '#' + bgr.substring(4, 6) + bgr.substring(2, 4) +
+          bgr.substring(0, 2);
     }
     if (value != button.getValue()) {
       button.setValue(/** @type {string} */ (value));
