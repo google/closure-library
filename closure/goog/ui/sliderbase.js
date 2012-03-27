@@ -787,8 +787,7 @@ goog.ui.SliderBase.prototype.setValueAndExtent = function(value, extent) {
     this.rangeModel.setValue(value);
     this.rangeModel.setExtent(extent);
     this.rangeModel.setMute(false);
-    this.updateUi_();
-    this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+    this.handleRangeModelChange(null);
   }
 };
 

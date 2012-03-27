@@ -14,6 +14,8 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script type="text/javascript">
   goog.require('goog.dom');
+  goog.require('goog.dom.a11y');
+  goog.require('goog.dom.a11y.State');
   goog.require('goog.events');
   goog.require('goog.style');
   goog.require('goog.testing.MockClock');
@@ -206,6 +208,18 @@ function testGetAndSetExtent() {
       7, twoThumbSlider.getExtent());
   assertEquals('Setting invalid value must not dispatch change event.',
       1, twoChangeEventCount);
+}
+
+function testUpdateValueExtent() {
+  twoThumbSlider.setValueAndExtent(30, 50);
+
+  assertEquals('Setting value results in updating aria-valuenow',
+      '30',
+      goog.dom.a11y.getState(
+          twoThumbSlider.getElement(),
+          goog.dom.a11y.State.VALUENOW));
+  assertEquals(30, twoThumbSlider.getValue());
+  assertEquals(50, twoThumbSlider.getExtent());
 }
 
 function testRangeListener() {
