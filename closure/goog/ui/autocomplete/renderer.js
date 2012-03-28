@@ -920,12 +920,14 @@ goog.ui.AutoComplete.Renderer.CustomRenderer = function() {
 
 
 /**
- * Renders the autocomplete box.
- * @param {goog.ui.AutoComplete.Renderer} renderer The autocomplete renderer.
- * @param {Element} element The main element that controls the rendered
+ * Renders the autocomplete box. May be set to null.
+ * @type {function(goog.ui.AutoComplete.Renderer, Element, Array, string)|
+ *        null|undefined}
+ * param {goog.ui.AutoComplete.Renderer} renderer The autocomplete renderer.
+ * param {Element} element The main element that controls the rendered
  *     autocomplete.
- * @param {Array} rows The current set of rows being displayed.
- * @param {string} token The current token that has been entered.
+ * param {Array} rows The current set of rows being displayed.
+ * param {string} token The current token that has been entered.
  */
 goog.ui.AutoComplete.Renderer.CustomRenderer.prototype.render = function(
     renderer, element, rows, token) {
