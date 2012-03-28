@@ -124,6 +124,13 @@ goog.net.ImageLoader.prototype.start = function() {
  * @param {string} id The unique ID of the image to load.
  */
 goog.net.ImageLoader.prototype.loadImage_ = function(src, id) {
+  if (this.isDisposed()) {
+    // When loading an image in IE7 (and maybe IE8), the error handler
+    // may fire before we yield JS control. If the error handler
+    // dispose the ImageLoader, this method will throw exception.
+    return;
+  }
+
   var image;
   if (this.parent_) {
     var dom = goog.dom.getDomHelper(this.parent_);
@@ -163,7 +170,7 @@ goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
   }
 
   if (evt.type == goog.net.EventType.READY_STATE_CHANGE) {
-    // This implies that the user agent is IE; see loadImage()_.
+    // This implies that the user agent is IE; see loadImage_().
     // Noe that this block is used to check whether the image is ready to
     // dispatch the COMPLETE event.
     if (image.readyState == goog.net.EventType.COMPLETE) {

@@ -13,187 +13,161 @@ See the COPYING file for details.
   <title>Closure Unit Tests - goog.net.ImageLoader</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.Timer');
+    goog.require('goog.dispose');
     goog.require('goog.events');
     goog.require('goog.events.EventType');
     goog.require('goog.net.ImageLoader');
-    goog.require('goog.structs.Map');
+    goog.require('goog.object');
+    goog.require('goog.testing.AsyncTestCase');
     goog.require('goog.testing.jsunit');
   </script>
 </head>
 <body>
 <script>
+var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
+
+// Set the AsyncTestCase timeout to larger value to allow more time
+// for images to load.
+asyncTestCase.stepTimeout = 5000;
 
 
-
-  var TEST_IMAGES = new goog.structs.Map();
-
-  var TEST_EVENT_TYPES = [
-    goog.events.EventType.LOAD,
-    goog.net.EventType.COMPLETE,
-    goog.net.EventType.ERROR
-  ];
-
-  //  TEST_IMAGES.set(FileName, Expected Size (width, height), Expected event)
-  var EVENT_TYPE_LOAD = goog.events.EventType.LOAD;
-  TEST_IMAGES.set('imageloader_testimg1.gif', [20, 20, EVENT_TYPE_LOAD]);
-  TEST_IMAGES.set('imageloader_testimg2.gif', [20, 20, EVENT_TYPE_LOAD]);
-  TEST_IMAGES.set('imageloader_testimg3.gif', [32, 32, EVENT_TYPE_LOAD]);
-
-  var EVENT_TYPE_ERROR = goog.net.EventType.ERROR;
-  TEST_IMAGES.set('this-is-not-image-1.gif', [0, 0, EVENT_TYPE_ERROR]);
-  TEST_IMAGES.set('this-is-not-image-2.gif', [0, 0, EVENT_TYPE_ERROR]);
-
-  var TIMEOUT = 5000;
-  // in milleseconds
-
-  // Create a new test case.
-  var imageLoaderTestCase = new goog.testing.TestCase(document.title);
-  var setUpPageStatus;
-
-  // Keep track of time so we can timeout if the images don't load.
-  imageLoaderTestCase.elapsedTime_ = 0;
-
-  imageLoaderTestCase.results_ = new goog.structs.Map();
-
-  /** True once the test environment is set up. */
-  imageLoaderTestCase.isSetUp = false;
-
-  /** True once the page is ready for the test to be run. */
-  imageLoaderTestCase.isReady = false;
-
-  // A regular image loader.
-  imageLoaderTestCase.imageLoader = new goog.net.ImageLoader();
-
-  // An image loader that is used to check whether we can dispose
-  // it safely whenever an event is fired before the COMPLETE event.
-  imageLoaderTestCase.disposalImageLoader = new goog.net.ImageLoader();
-
-  /** Sets up the test environment, adds tests and sets up the worker pools. */
-  imageLoaderTestCase.setUpTests = function() {
-    this.log('Setting tests up');
-
-    this.add(new goog.testing.TestCase.Test('testCompleteResults',
-        this.testCompleteResults, this));
-
-    this.isSetUp = true;
-
-    var keys = TEST_IMAGES.getKeys();
-    for (var i = 0; i < keys.length; i++) {
-      this.log('Adding image: ' + keys[i]);
-      this.imageLoader.addImage('img_' + i, keys[i]);
-      this.disposalImageLoader.addImage('img_' + i, keys[i]);
-    }
-
-    goog.events.listen(this.imageLoader, TEST_EVENT_TYPES,
-        this.handleImageLoaderEvent, false, this);
-
-    goog.events.listen(this.disposalImageLoader, TEST_EVENT_TYPES,
-        this.handleDisposalImageLoaderEvent, false, this);
-
-    this.disposalImageLoader.start();
-  };
-
-  /** Handles any events fired on the disposalImageLoader */
-  imageLoaderTestCase.handleDisposalImageLoaderEvent = function(e) {
-    switch (e.type) {
-      case goog.events.EventType.LOAD:
-      case goog.net.EventType.ERROR:
-        // Make sure that we can dispose this.disposalImageLoader safely.
-        this.disposalImageLoader.dispose();
-
-        // then starts the regular image loader.
-        this.imageLoader.start();
-        break;
-
-      case goog.net.EventType.COMPLETE:
-        throw new Error('disposalImageLoader should have been disposed.');
-        break;
-    }
-  };
+var TEST_EVENT_TYPES = [
+  goog.events.EventType.LOAD,
+  goog.net.EventType.COMPLETE,
+  goog.net.EventType.ERROR
+];
 
 
-  /** Handles any events fired on the imageLoader */
-  imageLoaderTestCase.handleImageLoaderEvent = function(e) {
-    this.log('handleEvent, type: ' + e.type);
+/**
+ * Mapping from test image file name to:
+ * [expected width, expected height, expected event to be fired].
+ */
+var TEST_IMAGES = {
+  'imageloader_testimg1.gif': [20, 20, goog.events.EventType.LOAD],
+  'imageloader_testimg2.gif': [20, 20, goog.events.EventType.LOAD],
+  'imageloader_testimg3.gif': [32, 32, goog.events.EventType.LOAD],
 
-    switch (e.type) {
-      case goog.events.EventType.LOAD:
-        var image = e.target;
-        this.results_.set(image.src.substring(image.src.lastIndexOf('/') + 1),
-            [image.naturalWidth, image.naturalHeight, e.type]);
-        break;
-
-      case goog.net.EventType.ERROR:
-        var image = e.target;
-        this.results_.set(image.src.substring(image.src.lastIndexOf('/') + 1),
-            [image.naturalWidth, image.naturalHeight, e.type]);
-        break;
-
-      case goog.net.EventType.COMPLETE:
-        setUpPageStatus = 'complete';
-        this.isReady = true;
-        break;
-    }
-  };
+  'this-is-not-image-1.gif': [0, 0, goog.net.EventType.ERROR],
+  'this-is-not-image-2.gif': [0, 0, goog.net.EventType.ERROR]
+};
 
 
-  /** Tests the results. */
-  imageLoaderTestCase.testCompleteResults = function() {
-    var keys = TEST_IMAGES.getKeys();
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      this.log(key);
+var startTime;
+var loader;
 
-      // Check if fires the COMPLETE event.
-      assertTrue('Image is not loaded completely',
-          this.results_.containsKey(key));
 
-      // Chcekc size.
-      assertTrue('Image size is not correct',
-          this.results_.get(key)[0] == TEST_IMAGES.get(key)[0] &&
-          this.results_.get(key)[1] == TEST_IMAGES.get(key)[1]);
+function setUp() {
+  startTime = goog.now();
 
-      // Check if fired the correct event.
-      assertTrue('Event *' + TEST_IMAGES.get(key)[2] + '* must be fired',
-          this.results_.get(key)[2] == TEST_IMAGES.get(key)[2]);
-    }
-  };
+  loader = new goog.net.ImageLoader();
 
-  /** Waits until the tests are ready to begin, before running them. */
-  imageLoaderTestCase.runTests = function() {
-    if (!this.isSetUp) {
-      this.setUpTests();
-    }
-    if (this.isReady) {
-      this.execute();
-    } else {
-      if (this.elapsedTime_ > TIMEOUT) {
-        this.log('timed out');
-        setUpPageStatus = 'complete';
-        this.isReady = true;
-        return;
-      }
-      this.log('Not ready, waiting');
-      this.elapsedTime_ += 100;
-      // Try again in 100ms
-      setTimeout('imageLoaderTestCase.runTests()', 100);
-    }
-  };
+  // Adds test images to the loader.
+  var i = 0;
+  for (var key in TEST_IMAGES) {
+    var imageId = 'img_' + i++;
+    loader.addImage(imageId, key);
+  }
+}
 
-  /** Used by the JsUnit test runner. */
-  function testCompleteResults() {
-    imageLoaderTestCase.testCompleteResults();
+
+function tearDown() {
+  goog.dispose(loader);
+}
+
+
+/**
+ * Tests loading image and disposing before loading completes.
+ */
+function testDisposeInTheMiddleOfLoadingWorks() {
+  goog.events.listen(loader, TEST_EVENT_TYPES,
+      goog.partial(handleDisposalImageLoaderEvent, loader));
+  // waitForAsync before starting loader just in case
+  // handleDisposalImageLoaderEvent is called from within loader.start
+  // (before we yield control). This may happen in IE7/IE8.
+  asyncTestCase.waitForAsync('Waiting for loader handler to fire.');
+  loader.start();
+}
+
+
+function handleDisposalImageLoaderEvent(loader, e) {
+  assertFalse('Handler is still invoked after loader is disposed.',
+      loader.isDisposed());
+
+  switch (e.type) {
+    case goog.net.EventType.COMPLETE:
+      fail('This test should never get COMPLETE event.');
+      return;
+
+    case goog.events.EventType.LOAD:
+    case goog.net.EventType.ERROR:
+      loader.dispose();
+      break;
   }
 
-  /** Used by the JsUnit test runner. */
-  function setUpPage() {
-    imageLoaderTestCase.runTests();
-  }
+  // Make sure that handler is never called again after disposal before
+  // marking test as successful.
+  asyncTestCase.waitForAsync('Wait to ensure that COMPLETE is never fired');
+  goog.Timer.callOnce(function() {
+    asyncTestCase.continueTesting();
+  }, 500);
+}
 
-  /** Standalone Closure Test Runner. */
-  if (typeof G_testRunner != 'undefined') {
-    G_testRunner.initialize(imageLoaderTestCase);
-  }
+
+/**
+ * Tests loading of images until completion.
+ */
+function testLoadingUntilCompletion() {
+  var results = {};
+  goog.events.listen(loader, TEST_EVENT_TYPES,
+      function(e) {
+        switch (e.type) {
+          case goog.events.EventType.LOAD:
+            var image = e.target;
+            results[image.src.substring(image.src.lastIndexOf('/') + 1)] =
+                [image.naturalWidth, image.naturalHeight, e.type];
+            return;
+
+          case goog.net.EventType.ERROR:
+            var image = e.target;
+            results[image.src.substring(image.src.lastIndexOf('/') + 1)] =
+                [image.naturalWidth, image.naturalHeight, e.type];
+            return;
+
+          case goog.net.EventType.COMPLETE:
+            // Test completes successfully.
+            asyncTestCase.continueTesting();
+
+            assertImagesAreCorrect(results);
+            return;
+        }
+      });
+
+  // waitForAsync before starting loader just in case handleImageLoaderEvent
+  // is called from within loader.start (before we yield control).
+  // This may happen in IE7/IE8.
+  asyncTestCase.waitForAsync('Waiting for loader handler to fire.');
+  loader.start();
+}
+
+
+function assertImagesAreCorrect(results) {
+  assertEquals(
+      goog.object.getCount(TEST_IMAGES), goog.object.getCount(results));
+  goog.object.forEach(TEST_IMAGES, function(value, key) {
+    // Check if fires the COMPLETE event.
+    assertTrue('Image is not loaded completely.', key in results);
+
+    var image = results[key];
+
+    // Check image size.
+    assertEquals('Image width is not correct', value[0], image[0]);
+    assertEquals('Image length is not correct', value[1], image[1]);
+
+    // Check if fired the correct event.
+    assertEquals('Event *' + value[2] + '* must be fired', value[2], image[2]);
+  });
+}
 
 </script>
 </body>
