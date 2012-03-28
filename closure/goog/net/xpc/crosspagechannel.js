@@ -329,7 +329,7 @@ goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
   // TODO(user) Opera creates a history-entry when creating an iframe
   // programmatically as follows. Find a way which avoids this.
 
-  var iframeElm = goog.dom.createElement('IFRAME');
+  var iframeElm = goog.dom.getDomHelper(parentElm).createElement('IFRAME');
   iframeElm.id = iframeElm.name = iframeId;
   if (opt_configureIframeCb) {
     opt_configureIframeCb(iframeElm);
