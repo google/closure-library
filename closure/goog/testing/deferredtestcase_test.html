@@ -16,6 +16,7 @@ See the COPYING file for details.
     goog.require('goog.testing.DeferredTestCase');
     goog.require('goog.testing.TestRunner');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.testing.recordFunction');
   </script>
 </head>
 <body>
@@ -98,8 +99,6 @@ See the COPYING file for details.
       var d = new goog.async.Deferred();
       d.addCallback(function() {
         return goog.async.Deferred.succeed(true);
-        //return goog.async.Deferred.fail(true);
-        //return new goog.async.Deferred();
       });
 
       var testCompleteDeferred = createDeferredTestCase(d);
@@ -124,26 +123,16 @@ See the COPYING file for details.
 
       var testCompleteDeferred = createDeferredTestCase(d);
 
-      // Override and consume test exception
-      var origFn = testTestCase.doAsyncError;
-      testTestCase.doAsyncError = function() {
-        try {
-          origFn();
-        } catch (e) {
-          testCompleteDeferred.callback(true);
-        }
-      }
+      // Mock doAsyncError to instead let the test completes successfully,
+      // but record the failure. The test works as is because the failing
+      // deferred is not actually asynchronous.
+      var mockDoAsyncError = goog.testing.recordFunction(function() {
+        testTestCase.continueTesting();
+      });
+      testTestCase.doAsyncError = mockDoAsyncError;
+
       testTestCase.execute();
-
-      var deferredCallbackOnFail = new goog.async.Deferred();
-      deferredCallbackOnFail.addCallback(function() {
-        return testCompleteDeferred;
-      });
-      deferredCallbackOnFail.addCallback(function() {
-        assertTrue('Test case should have failed.', !testTestCase.isSuccess());
-      });
-
-      deferredTestCase.waitForDeferred(deferredCallbackOnFail);
+      assertEquals(1, mockDoAsyncError.getCallCount());
     }
 
   </script>

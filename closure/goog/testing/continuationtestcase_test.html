@@ -279,20 +279,22 @@ function testWaitForCondition() {
   var counter = 0;
 
   waitForCondition(function() {
-    return ++counter >= 3;
+    return ++counter >= 2;
   }, function() {
-    assertEquals(3, counter);
-  }, 10, 100);
+    assertEquals(2, counter);
+  }, 10, 200);
 }
 
 
 function testOutOfOrderWaits() {
   var counter = 0;
-  waitForTimeout(function() {assertEquals(5, ++counter);}, 50);
-  waitForTimeout(function() {assertEquals(1, ++counter);}, 10);
-  waitForTimeout(function() {assertEquals(3, ++counter);}, 30);
-  waitForTimeout(function() {assertEquals(2, ++counter);}, 20);
-  waitForTimeout(function() {assertEquals(4, ++counter);}, 40);
+
+  // Note that if the delta between the timeout is too small, two
+  // continuation may be invoked at the same timer tick, using the
+  // registration order.
+  waitForTimeout(function() {assertEquals(3, ++counter);}, 200);
+  waitForTimeout(function() {assertEquals(1, ++counter);}, 0);
+  waitForTimeout(function() {assertEquals(2, ++counter);}, 100);
 }
 
 
