@@ -57,6 +57,22 @@ function testInvalidNodeBug() {
   assertNull(bEvent.relatedTarget);
 }
 
+function testPreventDefault() {
+  var event = {};
+  event.defaultPrevented = false;
+  var bEvent = new goog.events.BrowserEvent(event);
+  assertFalse(bEvent.defaultPrevented);
+  bEvent.preventDefault();
+  assertTrue(bEvent.defaultPrevented);
+}
+
+function testDefaultPrevented() {
+  var event = {};
+  event.defaultPrevented = true;
+  var bEvent = new goog.events.BrowserEvent(event);
+  assertTrue(bEvent.defaultPrevented);
+}
+
 function testIsButtonIe() {
   stubs.set(goog.events.BrowserFeature, 'HAS_W3C_BUTTON', false);
   assertIsButton(
