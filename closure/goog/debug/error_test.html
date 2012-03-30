@@ -62,19 +62,11 @@ function testError() {
       stack.splice(0, 0, 'Error');
     }
 
-   if (Error.captureStackTrace) {
-      // captureStackTrace removes extra junk.
-      assertContains('1st line of stack should have "Error"', 'Error', stack[0]);
-      assertContains('2nd line of stack should have "zzzzz"', 'zzzzz', stack[1]);
-      assertContains('3rd line of stack should have "yyyyy"', 'yyyyy', stack[2]);
-      assertContains('4th line of stack should have "xxxxx"', 'xxxxx', stack[3]);
-   } else {
-      assertContains('1st line of stack should have "Error"', 'Error', stack[0]);
-      // 2nd line is slightly different in firefox/chrome
-      assertContains('3rd line of stack should have "zzzzz"', 'zzzzz', stack[2]);
-      assertContains('4th line of stack should have "yyyyy"', 'yyyyy', stack[3]);
-      assertContains('5th line of stack should have "xxxxx"', 'xxxxx', stack[4]);
-    }
+    assertContains('1st line of stack should have "Error"', 'Error', stack[0]);
+    // 2nd line is slightly different in firefox/chrome
+    assertContains('3rd line of stack should have "zzzzz"', 'zzzzz', stack[2]);
+    assertContains('4th line of stack should have "yyyyy"', 'yyyyy', stack[3]);
+    assertContains('5th line of stack should have "xxxxx"', 'xxxxx', stack[4]);
   } catch (e) {
     expectedFailures.handleException(e);
   }
