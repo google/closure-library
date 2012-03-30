@@ -338,6 +338,23 @@ See the COPYING file for details.
       assertTrue('Should trigger card', card.isVisible());
     }
 
+    function testPositionAfterSecondTriggerWithMaxSearchSteps() {
+      initCard(undefined, true, 2);
+
+      showDelay = 500;
+      goog.testing.events.fireMouseOverEvent(john, elsewhere);
+      timer.tick(showDelay);
+      assertTrue('Should trigger card', card.isVisible());
+      assertEquals('Card cursor x coordinate should be 1',
+          card.position_.coordinate.x, 1);
+      card.cursorPosition = new goog.math.Coordinate(2, 2);
+      goog.testing.events.fireMouseOverEvent(child, elsewhere);
+      timer.tick(showDelay);
+      assertTrue('Should trigger card', card.isVisible());
+      assertEquals('Card cursor x coordinate should be 2',
+          card.position_.coordinate.x, 2);
+    }
+
   </script>
   </body>
 </html>
