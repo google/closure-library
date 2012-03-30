@@ -308,6 +308,16 @@ goog.testing.AsyncTestCase.prototype.numControlExceptionsExpected_ = 0;
 
 
 /**
+ * The current step name.
+ * @return {!string} Step name.
+ * @protected
+ */
+goog.testing.AsyncTestCase.prototype.getCurrentStepName = function() {
+  return this.curStepName_;
+};
+
+
+/**
  * Preferred way of creating an AsyncTestCase. Creates one and initializes it
  * with the G_testRunner.
  * @param {string=} opt_name A descriptive name for the test case.
