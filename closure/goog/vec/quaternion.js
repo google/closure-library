@@ -32,15 +32,19 @@ goog.require('goog.vec.Vec4');
 /** @typedef {goog.vec.Number} */ goog.vec.Quaternion.Number;
 /** @typedef {goog.vec.AnyType} */ goog.vec.Quaternion.AnyType;
 
-//The following type are deprecated - use the above types instead.
-/** @typedef {goog.vec.Vec4.Type} */ goog.vec.Quaternion.Type;
-/** @typedef {goog.vec.ArrayType} */ goog.vec.Quaternion.QuaternionLike;
-
 
 /**
+ * @deprecated Use goog.vec.Quaternion.Float32 or above types instead.
  * @typedef {goog.vec.Vec4.Type}
  */
 goog.vec.Quaternion.Type;
+
+
+/**
+ * @deprecated Use goog.vec.Quaternion.Float32 or above types instead.
+ * @typedef {goog.vec.ArrayType}
+*/
+goog.vec.Quaternion.QuaternionLike;
 
 
 /**
