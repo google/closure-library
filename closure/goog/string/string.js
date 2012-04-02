@@ -1209,6 +1209,14 @@ goog.string.toNumber = function(str) {
 
 
 /**
+ * A memoized cache for goog.string.toCamelCase.
+ * @type {Object.<string>}
+ * @private
+ */
+goog.string.toCamelCaseCache_ = {};
+
+
+/**
  * Converts a string from selector-case to camelCase (e.g. from
  * "multi-part-string" to "multiPartString"), useful for converting
  * CSS selectors and HTML dataset keys to their equivalent JS properties.
@@ -1216,10 +1224,20 @@ goog.string.toNumber = function(str) {
  * @return {string} The string in camelCase form.
  */
 goog.string.toCamelCase = function(str) {
-  return String(str).replace(/\-([a-z])/g, function(all, match) {
-    return match.toUpperCase();
-  });
+  return goog.string.toCamelCaseCache_[str] ||
+      (goog.string.toCamelCaseCache_[str] =
+          String(str).replace(/\-([a-z])/g, function(all, match) {
+            return match.toUpperCase();
+          }));
 };
+
+
+/**
+ * A memoized cache for goog.string.toSelectorCase.
+ * @type {Object.<string>}
+ * @private
+ */
+goog.string.toSelectorCaseCache_ = {};
 
 
 /**
@@ -1230,46 +1248,7 @@ goog.string.toCamelCase = function(str) {
  * @return {string} The string in selector-case form.
  */
 goog.string.toSelectorCase = function(str) {
-  return String(str).replace(/([A-Z])/g, '-$1').toLowerCase();
-};
-
-
-/**
- * Converts a string into TitleCase. First character of the string is always
- * capitalized in addition to the first letter of every subsequent word.
- * Words are delimited by one or more whitespaces by default. Custom delimiters
- * can optionally be specified to replace the default, which doesn't preserve
- * whitespace delimiters and instead must be explicitly included if needed.
- *
- * Default delimiter => " ":
- *    goog.string.toTitleCase('oneTwoThree')    => 'OneTwoThree'
- *    goog.string.toTitleCase('one two three')  => 'One Two Three'
- *    goog.string.toTitleCase('  one   two   ') => '  One   Two   '
- *    goog.string.toTitleCase('one_two_three')  => 'One_two_three'
- *    goog.string.toTitleCase('one-two-three')  => 'One-two-three'
- *
- * Custom delimiter => "_-.":
- *    goog.string.toTitleCase('oneTwoThree', '_-.')       => 'OneTwoThree'
- *    goog.string.toTitleCase('one two three', '_-.')     => 'One two three'
- *    goog.string.toTitleCase('  one   two   ', '_-.')    => '  one   two   '
- *    goog.string.toTitleCase('one_two_three', '_-.')     => 'One_Two_Three'
- *    goog.string.toTitleCase('one-two-three', '_-.')     => 'One-Two-Three'
- *    goog.string.toTitleCase('one...two...three', '_-.') => 'One...Two...Three'
- *    goog.string.toTitleCase('one. two. three', '_-.')   => 'One. two. three'
- *    goog.string.toTitleCase('one-two.three', '_-.')     => 'One-Two.Three'
- *
- * @param {string} str String value in camelCase form.
- * @param {string=} opt_delimiters Custom delimiter character set used to
- *      distinguish words in the string value. Each character represents a
- *      single delimiter. When provided, default whitespace delimiter is
- *      overridden and must be explicitly included if needed.
- * @return {string} String value in TitleCase form.
- */
-goog.string.toTitleCase = function(str, opt_delimiters) {
-  var delimiters = goog.isString(opt_delimiters) ?
-      goog.string.regExpEscape(opt_delimiters) : '\\s';
-  var regexp = new RegExp('(^|[' + delimiters + ']+)([a-z])', 'g');
-  return str.replace(regexp, function(all, p1, p2) {
-    return p1 + p2.toUpperCase();
-  });
+  return goog.string.toSelectorCaseCache_[str] ||
+      (goog.string.toSelectorCaseCache_[str] =
+          String(str).replace(/([A-Z])/g, '-$1').toLowerCase());
 };
