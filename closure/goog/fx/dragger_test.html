@@ -29,19 +29,11 @@ See the COPYING file for details.
 
 <div id="sandbox"></div>
 
-<div id="sandbox_rtl"
-     dir="rtl"
-     style="overflow: auto; position:absolute; top:20px; left: 20px;
-         width: 100px; height: 100px; background: red;"></div>
-<br/><br/><br/><br/><br/><br/><br/><br/>
-
 <script>
 
 var HAS_SET_CAPTURE = goog.fx.Dragger.HAS_SET_CAPTURE_;
 
 var target;
-var targetRtl;
-
 function setUp() {
   var sandbox = goog.dom.getElement('sandbox');
   target = goog.dom.createDom('div', {
@@ -50,37 +42,15 @@ function setUp() {
   });
   sandbox.appendChild(target);
   sandbox.appendChild(goog.dom.createDom('div', {'id': 'handle'}));
-
-  var sandboxRtl = goog.dom.getElement('sandbox_rtl');
-  targetRtl = goog.dom.createDom('div', {
-    'id': 'target_rtl',
-    'style': 'position:absolute; top:15px; right:10px; width:10px; ' +
-        'height: 10px; background: green;'
-  });
-  sandboxRtl.appendChild(targetRtl);
-  sandboxRtl.appendChild(goog.dom.createDom('div', {
-    'id': 'background_rtl',
-    'style': 'width: 10000px;height:50px;position:absolute;color:blue;'
-  }));
-  sandboxRtl.appendChild(goog.dom.createDom('div', {'id': 'handle_rtl'}));
 }
 
 function tearDown() {
   goog.dom.getElement('sandbox').innerHTML = '';
-  goog.dom.getElement('sandbox_rtl').innerHTML = '';
   goog.events.removeAll();
 }
 
 function testStartDrag() {
-  runStartDragTest('handle', target);
-}
-
-function testStartDrag_rtl() {
-  runStartDragTest('handle_rtl', targetRtl);
-}
-
-function runStartDragTest(handleId, targetElement) {
-  var dragger = new goog.fx.Dragger(targetElement, goog.dom.getElement(handleId));
+  var dragger = new goog.fx.Dragger(target, goog.dom.getElement('handle'));
 
   var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
   e.type = goog.events.EventType.MOUSEDOWN;
@@ -93,14 +63,14 @@ function runStartDragTest(handleId, targetElement) {
   e.$replay();
 
   goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function() {
-    targetElement.style.display = 'block';
+    target.style.display = 'block';
   });
 
   dragger.startDrag(e);
 
   assertTrue('Start drag with no hysteresis must actually start the drag.',
       dragger.dragging_);
-  assertEquals(10, goog.style.bidi.getOffsetStart(targetElement));
+
   assertEquals('Dragger startX must match event\'s clientX.',
       1, dragger.startX);
   assertEquals('Dragger clientX must match event\'s clientX',
@@ -114,7 +84,7 @@ function runStartDragTest(handleId, targetElement) {
   assertEquals('Dragger deltaY must match target\'s offsetTop',
       15, dragger.deltaY);
 
-  dragger = new goog.fx.Dragger(targetElement, goog.dom.getElement(handleId));
+  dragger = new goog.fx.Dragger(target, goog.dom.getElement('handle'));
   dragger.setHysteresis(1);
   dragger.startDrag(e);
   assertFalse('Start drag with a valid non-zero hysteresis should not start ' +

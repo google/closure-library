@@ -19,7 +19,6 @@
 
 goog.provide('goog.style.bidi');
 
-goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('goog.userAgent');
 
@@ -81,39 +80,23 @@ goog.style.bidi.getScrollLeft = function(element) {
 goog.style.bidi.getOffsetStart = function(element) {
   var offsetLeftForReal = element.offsetLeft;
 
-  // The element might not have an offsetParent.
-  // For example, the node might not be attached to the DOM tree,
-  // and position:fixed children do not have an offset parent.
-  // Just try to do the best we can with what we have.
-  var bestParent = element.offsetParent;
-
-  if (!bestParent && goog.style.getComputedPosition(element) == 'fixed') {
-    bestParent = goog.dom.getOwnerDocument(element).documentElement;
-  }
-
-  // Just give up in this case.
-  if (!bestParent) {
-    return offsetLeftForReal;
-  }
-
   if (goog.userAgent.GECKO) {
     // When calculating an element's offsetLeft, Firefox erroneously subtracts
     // the border width from the actual distance.  So we need to add it back.
-    var borderWidths = goog.style.getBorderBox(bestParent);
+    var borderWidths = goog.style.getBorderBox(element.offsetParent);
     offsetLeftForReal += borderWidths.left;
   } else if (goog.userAgent.isDocumentMode(8)) {
     // When calculating an element's offsetLeft, IE8-Standards Mode erroneously
     // adds the border width to the actual distance.  So we need to subtract it.
-    var borderWidths = goog.style.getBorderBox(bestParent);
+    var borderWidths = goog.style.getBorderBox(element.offsetParent);
     offsetLeftForReal -= borderWidths.left;
   }
-
-  if (goog.style.isRightToLeft(bestParent)) {
+  if (goog.style.isRightToLeft(element.offsetParent)) {
     // Right edge of the element relative to the left edge of its parent.
     var elementRightOffset = offsetLeftForReal + element.offsetWidth;
 
     // Distance from the parent's right edge to the element's right edge.
-    return bestParent.clientWidth - elementRightOffset;
+    return element.offsetParent.clientWidth - elementRightOffset;
   }
 
   return offsetLeftForReal;
