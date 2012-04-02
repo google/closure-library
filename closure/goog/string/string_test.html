@@ -941,6 +941,8 @@ function testToCamelCase() {
   assertEquals('oneTwo', goog.string.toCamelCase('one-two'));
   assertEquals('one', goog.string.toCamelCase('one'));
   assertEquals('oneTwo', goog.string.toCamelCase('oneTwo'));
+  assertEquals('String value matching a native function name.',
+      'toString', goog.string.toCamelCase('toString'));
 }
 
 function testToSelectorCase() {
@@ -949,6 +951,49 @@ function testToSelectorCase() {
   assertEquals('one-two', goog.string.toSelectorCase('oneTwo'));
   assertEquals('one', goog.string.toSelectorCase('one'));
   assertEquals('one-two', goog.string.toSelectorCase('one-two'));
+  assertEquals('String value matching a native function name.',
+      'to-string', goog.string.toSelectorCase('toString'));
+}
+
+function testToTitleCase() {
+  assertEquals('One', goog.string.toTitleCase('one'));
+  assertEquals('CamelCase', goog.string.toTitleCase('camelCase'));
+  assertEquals('Onelongword', goog.string.toTitleCase('onelongword'));
+  assertEquals('One Two Three', goog.string.toTitleCase('one two three'));
+  assertEquals('One        Two    Three',
+      goog.string.toTitleCase('one        two    three'));
+  assertEquals('   Longword  ', goog.string.toTitleCase('   longword  '));
+  assertEquals('One-two-three', goog.string.toTitleCase('one-two-three'));
+  assertEquals('One_two_three', goog.string.toTitleCase('one_two_three'));
+  assertEquals('String value matching a native function name.',
+      'ToString', goog.string.toTitleCase('toString'));
+
+  // Verify results with no delimiter.
+  assertEquals('One two three', goog.string.toTitleCase('one two three', ''));
+  assertEquals('One-two-three', goog.string.toTitleCase('one-two-three', ''));
+  assertEquals(' onetwothree', goog.string.toTitleCase(' onetwothree', ''));
+
+  // Verify results with one delimiter.
+  assertEquals('One two', goog.string.toTitleCase('one two', '.'));
+  assertEquals(' one two', goog.string.toTitleCase(' one two', '.'));
+  assertEquals(' one.Two', goog.string.toTitleCase(' one.two', '.'));
+  assertEquals('One.Two', goog.string.toTitleCase('one.two', '.'));
+  assertEquals('One...Two...', goog.string.toTitleCase('one...two...', '.'));
+
+  // Verify results with multiple delimiters.
+  var delimiters = '_-.';
+  assertEquals('One two three',
+      goog.string.toTitleCase('one two three', delimiters));
+  assertEquals('  one two three',
+      goog.string.toTitleCase('  one two three', delimiters));
+  assertEquals('One-Two-Three',
+      goog.string.toTitleCase('one-two-three', delimiters));
+  assertEquals('One_Two_Three',
+      goog.string.toTitleCase('one_two_three', delimiters));
+  assertEquals('One...Two...Three',
+      goog.string.toTitleCase('one...two...three', delimiters));
+  assertEquals('One.  two.  three',
+      goog.string.toTitleCase('one.  two.  three', delimiters));
 }
 
 </script>
