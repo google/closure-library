@@ -474,11 +474,12 @@ goog.module.ModuleManager.prototype.addLoadModule_ = function(id, d) {
  */
 goog.module.ModuleManager.prototype.loadModulesOrEnqueueIfNotLoadedOrLoading_ =
     function(ids, opt_userInitiated) {
-  goog.array.removeDuplicates(ids);
+  var uniqueIds = [];
+  goog.array.removeDuplicates(ids, uniqueIds);
   var idsToLoad = [];
   var deferredMap = {};
-  for (var i = 0; i < ids.length; i++) {
-    var id = ids[i];
+  for (var i = 0; i < uniqueIds.length; i++) {
+    var id = uniqueIds[i];
     var moduleInfo = this.getModuleInfo(id);
     var d = new goog.async.Deferred();
     deferredMap[id] = d;

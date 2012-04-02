@@ -1240,6 +1240,21 @@ See the COPYING file for details.
   }
 
   /**
+   * Tests that when loading multiple modules, the input array is not modified
+   * when it has duplicates.
+   */
+  function testLoadMultipleWithDuplicates() {
+    var mm = getModuleManager({'a': [], 'b': []});
+    mm.setBatchModeEnabled(true);
+    mm.setLoader(createSuccessfulBatchLoader(mm));
+
+    var listWithDuplicates = ['a', 'a', 'b'];
+    mm.loadMultiple(listWithDuplicates);
+    assertArrayEquals('loadMultiple should not modify its input',
+        ['a', 'a', 'b'], listWithDuplicates);
+  }
+
+  /**
    * Test loading dependencies transitively.
    */
   function testLoadingDepsInNonBatchMode1() {
