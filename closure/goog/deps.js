@@ -477,7 +477,7 @@ goog.addDependency('storage/storage_test.js', ['goog.storage.storage_test'], ['g
 goog.addDependency('string/linkify.js', ['goog.string.linkify'], ['goog.string']);
 goog.addDependency('string/path.js', ['goog.string.path'], ['goog.array', 'goog.string']);
 goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], []);
-goog.addDependency('string/stringbuffer.js', ['goog.string.StringBuffer'], ['goog.userAgent.jscript']);
+goog.addDependency('string/stringbuffer.js', ['goog.string.StringBuffer'], []);
 goog.addDependency('string/stringformat.js', ['goog.string.format'], ['goog.string']);
 goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree', 'goog.structs.AvlTree.Node'], ['goog.structs', 'goog.structs.Collection']);
 goog.addDependency('structs/circularbuffer.js', ['goog.structs.CircularBuffer'], []);
