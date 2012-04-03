@@ -28,6 +28,7 @@ See the COPYING file for details.
   goog.require('goog.ui.AutoComplete.EventType');
   goog.require('goog.ui.AutoComplete.InputHandler');
   goog.require('goog.ui.AutoComplete.Renderer');
+  goog.require('goog.ui.AutoComplete.RenderOptions');
 </script>
 </head>
 <body>
@@ -36,7 +37,8 @@ See the COPYING file for details.
 /**
  * Mock DataStore
  */
-function MockDS() {
+function MockDS(opt_autoHilite) {
+  this.autoHilite_ = opt_autoHilite;
   this.rows_ = [
     '"Slartibartfast Theadore" <fjordmaster@magrathea.com>',
     '"Zaphod Beeblebrox" <theprez@universe.gov>',
@@ -59,7 +61,13 @@ MockDS.prototype.requestMatchingRows = function(token, maxMatches,
       matches.push(row);
     }
   }
-  matchHandler(token, matches);
+  if (this.autoHilite_ === undefined) {
+    matchHandler(token, matches);
+  } else {
+    var options = new goog.ui.AutoComplete.RenderOptions();
+    options.setAutoHilite(this.autoHilite_);
+    matchHandler(token, matches, options);
+  }
 };
 
 
@@ -538,6 +546,44 @@ function testPreserveHilitedWithoutAutoHilite() {
   // Re-render without preservation
   ac.renderRows(rend.getRenderedRows());
 
+  checkHilitedIndex(rend, -1);
+}
+
+/**
+ * Checks that the autohilite argument "true" of the matcher is used.
+ */
+function testAutoHiliteFromMatcherTrue() {
+  var ds = new MockDS(true);
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setWrap(true);
+  ac.setAllowFreeSelect(true);
+  ac.setAutoHilite(false);  // Will be overruled.
+  ac.setMaxMatches(4);
+
+  ac.setToken('the');
+  assertEquals(4, rend.getRenderedRows().length);
+  // The first row should be highlighted.
+  checkHilitedIndex(rend, 0);
+}
+
+/**
+ * Checks that the autohilite argument "false" of the matcher is used.
+ */
+function testAutoHiliteFromMatcherFalse() {
+  var ds = new MockDS(false);
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
+  ac.setWrap(true);
+  ac.setAllowFreeSelect(true);
+  ac.setAutoHilite(true);  // Will be overruled.
+  ac.setMaxMatches(4);
+
+  ac.setToken('the');
+  assertEquals(4, rend.getRenderedRows().length);
+  // The first row should not be highlighted.
   checkHilitedIndex(rend, -1);
 }
 

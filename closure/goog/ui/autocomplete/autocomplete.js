@@ -579,13 +579,13 @@ goog.ui.AutoComplete.prototype.disposeInternal = function() {
  *
  * @param {string} matchedToken Token that corresponds with the rows.
  * @param {!Array} rows Set of data that match the given token.
- * @param {boolean=} opt_preserveHilited If true, keeps the currently hilited
- *     (by index) element hilited.
- *
+ * @param {(boolean|goog.ui.AutoComplete.RenderOptions)=} opt_options If true,
+ *     keeps the currently hilited (by index) element hilited. If false not.
+ *     Otherwise a RenderOptions object.
  * @private
  */
-goog.ui.AutoComplete.prototype.matchListener_ = function(matchedToken, rows,
-    opt_preserveHilited) {
+goog.ui.AutoComplete.prototype.matchListener_ =
+    function(matchedToken, rows, opt_options) {
   if (this.token_ != matchedToken) {
     // Matcher's response token doesn't match current token.
     // This is probably an async response that came in after
@@ -593,20 +593,25 @@ goog.ui.AutoComplete.prototype.matchListener_ = function(matchedToken, rows,
     return;
   }
 
-  this.renderRows(rows, opt_preserveHilited);
+  this.renderRows(rows, opt_options);
 };
 
 
 /**
  * Renders the rows and adds highlighting.
  * @param {!Array} rows Set of data that match the given token.
- * @param {boolean=} opt_preserveHilited If true, keeps the currently hilited
- *     (by index) element hilited.
+ * @param {(boolean|goog.ui.AutoComplete.RenderOptions)=} opt_options If true,
+ *     keeps the currently hilited (by index) element hilited. If false not.
+ *     Otherwise a RenderOptions object.
  */
-goog.ui.AutoComplete.prototype.renderRows = function(rows,
-                                                     opt_preserveHilited) {
-  var indexToHilite = opt_preserveHilited ?
-      this.getIndexOfId(this.hiliteId_) : -1;
+goog.ui.AutoComplete.prototype.renderRows = function(rows, opt_options) {
+  // The optional argument should be a RenderOptions object.  It can be a
+  // boolean for backwards compatibility, defaulting to false.
+  var optionsObj = goog.typeOf(opt_options) == 'object' && opt_options;
+
+  var preserveHilited =
+      optionsObj ? optionsObj.getPreserveHilited() : opt_options;
+  var indexToHilite = preserveHilited ? this.getIndexOfId(this.hiliteId_) : -1;
 
   // Current token matches the matcher's response token.
   this.firstRowId_ += this.rows_.length;
@@ -626,7 +631,11 @@ goog.ui.AutoComplete.prototype.renderRows = function(rows,
   this.renderer_.setAnchorElement(anchor);
   this.renderer_.renderRows(rendRows, this.token_, this.target_);
 
-  if ((this.autoHilite_ || indexToHilite >= 0) &&
+  var autoHilite = this.autoHilite_;
+  if (optionsObj && optionsObj.getAutoHilite() !== undefined) {
+    autoHilite = optionsObj.getAutoHilite();
+  }
+  if ((autoHilite || indexToHilite >= 0) &&
       rendRows.length != 0 &&
       this.token_) {
     var idToHilite = indexToHilite >= 0 ?
