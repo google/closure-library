@@ -294,6 +294,7 @@ goog.locale.defaultLocaleNameConstants = {
     'SN': 'Senegal',
     'SO': 'Somalia',
     'SR': 'Suriname',
+    'SS': 'South Sudan',
     'ST': 'S\u00e3o Tom\u00e9 and Pr\u00edncipe',
     'SU': 'Union of Soviet Socialist Republics',
     'SV': 'El Salvador',
