@@ -34,20 +34,6 @@ goog.require('goog.vec.Vec4');
 
 
 /**
- * @deprecated Use goog.vec.Quaternion.Float32 or above types instead.
- * @typedef {goog.vec.Vec4.Type}
- */
-goog.vec.Quaternion.Type;
-
-
-/**
- * @deprecated Use goog.vec.Quaternion.Float32 or above types instead.
- * @typedef {goog.vec.ArrayType}
-*/
-goog.vec.Quaternion.QuaternionLike;
-
-
-/**
  * Creates a Float32 quaternion, initialized to zero.
  *
  * @return {!goog.vec.Quaternion.Float32} The new quaternion.
@@ -72,15 +58,6 @@ goog.vec.Quaternion.createNumber = goog.vec.Vec4.createNumber;
 
 
 /**
- * Creates a quaternion, initialized to zero.
- *
- * @deprecated Use createFloat32.
- * @return {!goog.vec.Quaternion.Type} The new quaternion.
- */
-goog.vec.Quaternion.create = goog.vec.Vec4.create;
-
-
-/**
  * Creates a new Float32 quaternion initialized with the values from the
  * supplied array.
  *
@@ -100,18 +77,6 @@ goog.vec.Quaternion.createFloat32FromArray =
  */
 goog.vec.Quaternion.createFloat64FromArray =
     goog.vec.Vec4.createFloat64FromArray;
-
-
-/**
- * Creates a new quaternion initialized with the values from the supplied
- * array.
- *
- * @deprecated Use createFloat32FromArray.
- * @param {!goog.vec.Quaternion.QuaternionLike} vec The source 4 element array.
- * @return {!goog.vec.Quaternion.Type} The new quaternion.
- */
-goog.vec.Quaternion.createFromArray =
-    goog.vec.Vec4.createFromArray;
 
 
 /**
@@ -141,20 +106,6 @@ goog.vec.Quaternion.createFloat64FromValues =
 
 
 /**
- * Creates a new quaternion initialized with the supplied values.
- *
- * @deprecated Use createFloat32FromValues.
- * @param {number} v0 The value for element at index 0.
- * @param {number} v1 The value for element at index 1.
- * @param {number} v2 The value for element at index 2.
- * @param {number} v3 The value for element at index 3.
- * @return {!goog.vec.Quaternion.Type} The new quaternion.
- */
-goog.vec.Quaternion.createFromValues =
-    goog.vec.Vec4.createFromValues;
-
-
-/**
  * Creates a clone of the given Float32 quaternion.
  *
  * @param {goog.vec.Quaternion.Float32} q The source quaternion.
@@ -170,16 +121,6 @@ goog.vec.Quaternion.cloneFloat32 = goog.vec.Vec4.cloneFloat32;
  * @return {goog.vec.Quaternion.Float64} The new quaternion.
  */
 goog.vec.Quaternion.cloneFloat64 = goog.vec.Vec4.cloneFloat64;
-
-
-/**
- * Creates a clone of the given quaternion.
- *
- * @deprecated Use cloneFloat32.
- * @param {goog.vec.Quaternion.QuaternionLike} q The source quaternion.
- * @return {!goog.vec.Quaternion.Type} The new quaternion.
- */
-goog.vec.Quaternion.clone = goog.vec.Vec4.clone;
 
 
 /**
