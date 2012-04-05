@@ -1180,10 +1180,9 @@ goog.testing.JsUnitException = function(comment, opt_message) {
 
 /** @override */
 goog.testing.JsUnitException.prototype.toString = function() {
-  // TODO(agrieve): Fix dependency in build rules.  For more info see
-  // http://b/2020085
-  return '[JsUnitException]';
+  return this.message;
 };
+
 
 goog.exportSymbol('fail', fail);
 goog.exportSymbol('assert', assert);
