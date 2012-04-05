@@ -14,6 +14,7 @@ See the COPYING file for details.
   goog.require('goog.functions');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
@@ -107,6 +108,28 @@ See the COPYING file for details.
   }
 
 
+  function testRequestAnimationFrame() {
+    goog.global.requestAnimationFrame = function () {
+    };
+    var clock = new goog.testing.MockClock(true);
+    var times = [];
+    var recFunc = goog.testing.recordFunction(function(now) {
+      times.push(now);
+    });
+    goog.global.requestAnimationFrame(recFunc);
+    clock.tick(50);
+    assertEquals(1, recFunc.getCallCount());
+    assertEquals(20, times[0]);
+
+    goog.global.requestAnimationFrame(recFunc);
+    clock.tick(100);
+    assertEquals(2, recFunc.getCallCount());
+    assertEquals(70, times[1]);
+
+    clock.uninstall();
+  }
+
+
   function testClearTimeout() {
     var clock = new goog.testing.MockClock(true);
     var ran = false;
@@ -163,6 +186,23 @@ See the COPYING file for details.
     clock.tick(50);
     assertEquals(6, times);
 
+    clock.uninstall();
+  }
+
+
+  function testCancelRequestAnimationFrame() {
+    goog.global.requestAnimationFrame = function () {
+    };
+    goog.global.cancelRequestAnimationFrame = function () {
+    };
+    var clock = new goog.testing.MockClock(true);
+    var ran = false;
+    var c = goog.global.requestAnimationFrame(function() { ran = true; });
+    clock.tick(10);
+    assertFalse(ran);
+    goog.global.cancelRequestAnimationFrame(c);
+    clock.tick(20);
+    assertFalse(ran);
     clock.uninstall();
   }
 

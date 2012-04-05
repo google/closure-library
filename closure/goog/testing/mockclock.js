@@ -87,6 +87,15 @@ goog.inherits(goog.testing.MockClock, goog.Disposable);
 
 
 /**
+ * Default wait timeout for mocking requestAnimationFrame (in milliseconds).
+ *
+ * @type {number}
+ * @const
+ */
+goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT = 20;
+
+
+/**
  * Count of the number of timeouts made.
  * @type {number}
  * @private
@@ -143,9 +152,46 @@ goog.testing.MockClock.prototype.install = function() {
     r.set(goog.global, 'clearTimeout', goog.bind(this.clearTimeout_, this));
     r.set(goog.global, 'clearInterval', goog.bind(this.clearInterval_, this));
 
+    // Replace the requestAnimationFrame functions.
+    this.replaceRequestAnimationFrame_();
+
     // PropertyReplacer#set can't be called with renameable functions.
     this.oldGoogNow_ = goog.now;
     goog.now = goog.bind(this.getCurrentTime, this);
+  }
+};
+
+
+/**
+ * Installs the mocks for requestAnimationFrame and cancelRequestAnimationFrame.
+ * @private
+ */
+goog.testing.MockClock.prototype.replaceRequestAnimationFrame_ = function() {
+  var r = this.replacer_;
+  var requestFuncs = ['requestAnimationFrame',
+                      'webkitRequestAnimationFrame',
+                      'mozRequestAnimationFrame',
+                      'oRequestAnimationFrame',
+                      'msRequestAnimationFrame'];
+
+  var cancelFuncs = ['cancelRequestAnimationFrame',
+                     'webkitCancelRequestAnimationFrame',
+                     'mozCancelRequestAnimationFrame',
+                     'oCancelRequestAnimationFrame',
+                     'msCancelRequestAnimationFrame'];
+
+  for (var i = 0; i < requestFuncs.length; ++i) {
+    if (goog.global && goog.global[requestFuncs[i]]) {
+      r.set(goog.global, requestFuncs[i],
+          goog.bind(this.requestAnimationFrame_, this));
+    }
+  }
+
+  for (var i = 0; i < cancelFuncs.length; ++i) {
+    if (goog.global && goog.global[cancelFuncs[i]]) {
+      r.set(goog.global, cancelFuncs[i],
+          goog.bind(this.cancelRequestAnimationFrame_, this));
+    }
   }
 };
 
@@ -389,6 +435,20 @@ goog.testing.MockClock.prototype.setInterval_ = function(funcToCall, millis) {
 
 
 /**
+ * Schedules a function to be called when an animation frame is triggered.
+ * Mock implementation for requestAnimationFrame.
+ * @param {Function} funcToCall The function to call.
+ * @return {number} The number of timeouts created.
+ * @private
+ */
+goog.testing.MockClock.prototype.requestAnimationFrame_ = function(funcToCall) {
+  return this.setTimeout_(goog.bind(function() {
+    funcToCall(this.getCurrentTime());
+  }, this), goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT);
+};
+
+
+/**
  * Clears a timeout.
  * Mock implementation for clearTimeout.
  * @param {number} timeoutKey The timeout key to clear.
@@ -406,5 +466,17 @@ goog.testing.MockClock.prototype.clearTimeout_ = function(timeoutKey) {
  * @private
  */
 goog.testing.MockClock.prototype.clearInterval_ = function(timeoutKey) {
+  this.deletedKeys_[timeoutKey] = true;
+};
+
+
+/**
+ * Clears a requestAnimationFrame.
+ * Mock implementation for cancelRequestAnimationFrame.
+ * @param {number} timeoutKey The requestAnimationFrame key to clear.
+ * @private
+ */
+goog.testing.MockClock.prototype.cancelRequestAnimationFrame_ =
+    function(timeoutKey) {
   this.deletedKeys_[timeoutKey] = true;
 };
