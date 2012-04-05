@@ -64,6 +64,63 @@ See the COPYING file for details.
                 goog.testing.style.isVisible(div1));
   }
 
+  function testIsOnScreen() {
+    var el = document.createElement('div');
+    document.body.appendChild(el);
+
+    var dom = goog.dom.getDomHelper(el);
+    var winScroll = dom.getDocumentScroll();
+    var winSize = dom.getViewportSize();
+
+    el.style.position = 'absolute';
+    goog.style.setSize(el, 100, 100);
+
+    goog.style.setPosition(el, winScroll.x, winScroll.y);
+    assertTrue("An element fully on the screen is on screen.",
+                goog.testing.style.isOnScreen(el));
+
+    goog.style.setPosition(el, winScroll.x - 10, winScroll.y - 10);
+    assertTrue(
+        "An element partially off the top-left of the screen is on screen.",
+        goog.testing.style.isOnScreen(el));
+
+    goog.style.setPosition(el, winScroll.x - 150, winScroll.y - 10);
+    assertFalse(
+        "An element completely off the top of the screen is off screen.",
+        goog.testing.style.isOnScreen(el));
+
+    goog.style.setPosition(el, winScroll.x - 10, winScroll.y - 150);
+    assertFalse(
+        "An element completely off the left of the screen is off screen.",
+        goog.testing.style.isOnScreen(el));
+
+    goog.style.setPosition(el, winScroll.x + winSize.width + 1, winScroll.y);
+    assertFalse(
+        "An element completely off the right of the screen is off screen.",
+        goog.testing.style.isOnScreen(el));
+
+    goog.style.setPosition(el, winScroll.x, winScroll.y + winSize.height + 1);
+    assertFalse(
+        "An element completely off the bottom of the screen is off screen.",
+        goog.testing.style.isOnScreen(el));
+
+    goog.style.setPosition(el, winScroll.x + winSize.width - 10, winScroll.y);
+    assertTrue(
+        "An element partially off the right of the screen is on screen.",
+        goog.testing.style.isOnScreen(el));
+
+    goog.style.setPosition(el, winScroll.x, winScroll.y + winSize.height - 10);
+    assertTrue(
+        "An element partially off the bottom of the screen is on screen.",
+        goog.testing.style.isOnScreen(el));
+
+    var el2 = document.createElement('div');
+    el2.style.position = 'absolute';
+    goog.style.setSize(el2, 100, 100);
+    goog.style.setPosition(el2, winScroll.x, winScroll.y);
+    assertFalse("An element not in the DOM is not on screen.",
+                goog.testing.style.isOnScreen(el2));
+  }
 
   function testHasVisibleDimensions() {
     goog.style.setSize(div1, 0, 0);
