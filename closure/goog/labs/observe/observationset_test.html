@@ -14,7 +14,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dispose');
-  goog.require('goog.labs.observe');
+  goog.require('goog.labs.observe.Observer');
   goog.require('goog.labs.observe.ObservationSet');
   goog.require('goog.labs.observe.SimpleObservable');
   goog.require('goog.testing.jsunit');
@@ -46,7 +46,8 @@ function tearDown() {
 function testObserveObservesCorrectly() {
   var observerFn = goog.testing.recordFunction();
   assertTrue(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
@@ -63,9 +64,11 @@ function testObserveObservesCorrectly() {
 function testObserveDoesNotRegisterDuplicateObserver() {
   var observerFn = goog.testing.recordFunction();
   assertTrue(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   assertFalse(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
@@ -76,14 +79,17 @@ function testObserveWithMultipleObservers() {
   var observerFn = goog.testing.recordFunction();
   var observerFn2 = goog.testing.recordFunction();
   assertTrue(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   assertTrue(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn2)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn2)));
   assertTrue(observationSet.observe(
       observable, TEST_NOTICE_TYPE_2,
-      goog.labs.observe.toObserver(observerFn)));
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   assertTrue(observationSet.observe(
-      observable2, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable2, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
@@ -106,7 +112,8 @@ function testObserveWithFunction() {
   assertNull(observationSet.observeWithFunction(
       observable, TEST_NOTICE_TYPE, observerFn));
   assertFalse(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
@@ -125,7 +132,7 @@ function testObserveWithFunctionAndScope() {
       observable, TEST_NOTICE_TYPE, observerFn, scope));
   assertFalse(observationSet.observe(
       observable, TEST_NOTICE_TYPE,
-      goog.labs.observe.toObserver(observerFn, scope)));
+      goog.labs.observe.Observer.fromFunction(observerFn, scope)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
@@ -148,7 +155,7 @@ function testObserveWithFunctionWithDefaultScope() {
       observable, TEST_NOTICE_TYPE, observerFn, scope));
   assertFalse(observationSet.observe(
       observable, TEST_NOTICE_TYPE,
-      goog.labs.observe.toObserver(observerFn, scope)));
+      goog.labs.observe.Observer.fromFunction(observerFn, scope)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
@@ -156,7 +163,7 @@ function testObserveWithFunctionWithDefaultScope() {
   // This should succeed since we use observe method.
   assertTrue(observationSet.observe(
       observable, TEST_NOTICE_TYPE,
-      goog.labs.observe.toObserver(observerFn)));
+      goog.labs.observe.Observer.fromFunction(observerFn)));
 
   // This should succeed since the scope is different.
   var scope2 = {};
@@ -168,9 +175,11 @@ function testObserveWithFunctionWithDefaultScope() {
 function testUnobserveUnobservesCorrectly() {
   var observerFn = goog.testing.recordFunction();
   assertTrue(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   assertTrue(observationSet.unobserve(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(0, observerFn.getCallCount());
@@ -182,10 +191,11 @@ function testUnobserveDoesNotUnobserveObservationNotMadeByObservationSet() {
 
   // Observation via observable directly.
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
 
   assertFalse(observationSet.unobserve(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
   observerFn.reset();
@@ -193,10 +203,12 @@ function testUnobserveDoesNotUnobserveObservationNotMadeByObservationSet() {
   // Observation via another ObservationSet.
   var observationSet2 = new goog.labs.observe.ObservationSet();
   observationSet2.observe(
-      observable2, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn));
+      observable2, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn));
 
   assertFalse(observationSet.unobserve(
-      observable2, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable2, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   observable2.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
   observerFn.reset();
@@ -211,7 +223,8 @@ function testUnobserveWithFunction() {
   assertNotNull(observationSet.observeWithFunction(
       observable, TEST_NOTICE_TYPE, observerFn));
   assertTrue(observationSet.unobserve(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(0, observerFn.getCallCount());
@@ -230,7 +243,7 @@ function testUnobserveWithFunctionAndScope() {
       observable, TEST_NOTICE_TYPE, observerFn, scope));
   assertTrue(observationSet.unobserve(
       observable, TEST_NOTICE_TYPE,
-      goog.labs.observe.toObserver(observerFn, scope)));
+      goog.labs.observe.Observer.fromFunction(observerFn, scope)));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(0, observerFn.getCallCount());
@@ -270,14 +283,17 @@ function testRemoveAll() {
   var observerFn = goog.testing.recordFunction();
   var observerFn2 = goog.testing.recordFunction();
   assertTrue(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   assertTrue(observationSet.observe(
-      observable, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn2)));
+      observable, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn2)));
   assertTrue(observationSet.observe(
       observable, TEST_NOTICE_TYPE_2,
-      goog.labs.observe.toObserver(observerFn)));
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   assertTrue(observationSet.observe(
-      observable2, TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn)));
+      observable2, TEST_NOTICE_TYPE,
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   observationSet.removeAll();
 
   observable.notify(TEST_NOTICE_TYPE);

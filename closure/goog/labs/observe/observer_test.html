@@ -10,11 +10,11 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.labs.observe (observe.js)</title>
+<title>Closure Unit Tests - goog.labs.observe.Observer</title>
 <script src="../../base.js"></script>
 <script>
-  goog.require('goog.labs.observe');
   goog.require('goog.labs.observe.Notice');
+  goog.require('goog.labs.observe.Observer');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
 </script>
@@ -31,7 +31,7 @@ function testToObserver() {
     assertEquals('Function receives wrong notice object.', notice, n);
     assertEquals('Function is executed with wrong scope.', expectedScope, this);
   });
-  var observer = goog.labs.observe.toObserver(fn);
+  var observer = goog.labs.observe.Observer.fromFunction(fn);
   observer.notify(notice);
   assertEquals(1, fn.getCallCount());
 }
@@ -44,7 +44,7 @@ function testToObserverWithScope() {
     assertEquals('Function receives wrong notice object.', notice, n);
     assertEquals('Function is executed with wrong scope.', expectedScope, this);
   });
-  var observer = goog.labs.observe.toObserver(fn, expectedScope);
+  var observer = goog.labs.observe.Observer.fromFunction(fn, expectedScope);
   observer.notify(notice);
   assertEquals(1, fn.getCallCount());
 }
@@ -53,13 +53,13 @@ function testToObserverWithScope() {
 function testToObserverEquals() {
   var fn = function() {};
   assertTrue(
-      goog.labs.observe.toObserver(fn).equals(
-          goog.labs.observe.toObserver(fn)));
+      goog.labs.observe.Observer.fromFunction(fn).equals(
+          goog.labs.observe.Observer.fromFunction(fn)));
 
   var scope = {};
   assertTrue(
-      goog.labs.observe.toObserver(fn, scope).equals(
-          goog.labs.observe.toObserver(fn, scope)));
+      goog.labs.observe.Observer.fromFunction(fn, scope).equals(
+          goog.labs.observe.Observer.fromFunction(fn, scope)));
 }
 </script>
 </body>

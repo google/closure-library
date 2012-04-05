@@ -14,7 +14,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dispose');
-  goog.require('goog.labs.observe');
+  goog.require('goog.labs.observe.Observer');
   goog.require('goog.labs.observe.SimpleObservable');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
@@ -40,7 +40,7 @@ function tearDown() {
 function testObserve() {
   var observerFn = goog.testing.recordFunction();
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
 }
@@ -48,7 +48,7 @@ function testObserve() {
 
 function testObserveWithTheSameObserver() {
   var observerFn = goog.testing.recordFunction();
-  var observer = goog.labs.observe.toObserver(observerFn);
+  var observer = goog.labs.observe.Observer.fromFunction(observerFn);
 
   observable.observe(TEST_NOTICE_TYPE, observer);
   observable.observe(TEST_NOTICE_TYPE, observer);
@@ -57,7 +57,7 @@ function testObserveWithTheSameObserver() {
   observerFn.reset();
 
   // observer.equals(observer2) == true
-  var observer2 = goog.labs.observe.toObserver(observerFn);
+  var observer2 = goog.labs.observe.Observer.fromFunction(observerFn);
   observable.observe(TEST_NOTICE_TYPE, observer2);
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
@@ -68,7 +68,7 @@ function testObserveWithAllType() {
   var observerFn = goog.testing.recordFunction();
   observable.observe(
       goog.labs.observe.NoticeType.ALL,
-      goog.labs.observe.toObserver(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn));
 
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
@@ -87,9 +87,9 @@ function testMultipleObserversOnSameType() {
   var observerFn = goog.testing.recordFunction();
   var observerFn2 = goog.testing.recordFunction();
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn2));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn2));
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
   assertEquals(1, observerFn2.getCallCount());
@@ -98,7 +98,7 @@ function testMultipleObserversOnSameType() {
 
 function testObserveOnDifferentType() {
   var observerFn = goog.testing.recordFunction();
-  var observer = goog.labs.observe.toObserver(observerFn);
+  var observer = goog.labs.observe.Observer.fromFunction(observerFn);
   observable.observe(TEST_NOTICE_TYPE, observer);
   observable.observe(TEST_NOTICE_TYPE_2, observer);
 
@@ -113,7 +113,7 @@ function testObserveOnDifferentType() {
 
 function testUnobserve() {
   var observerFn = goog.testing.recordFunction();
-  var observer = goog.labs.observe.toObserver(observerFn);
+  var observer = goog.labs.observe.Observer.fromFunction(observerFn);
   observable.observe(TEST_NOTICE_TYPE, observer);
   assertTrue(observable.unobserve(TEST_NOTICE_TYPE, observer));
   observable.notify(TEST_NOTICE_TYPE);
@@ -131,7 +131,7 @@ function testNotice() {
   });
 
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
 
@@ -150,7 +150,7 @@ function testNoticeWithData() {
   });
 
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
   observable.notify(TEST_NOTICE_TYPE, data);
   assertEquals(1, observerFn.getCallCount());
 }
@@ -162,12 +162,12 @@ function testNoticeWithAllType() {
   var observerFn3 = goog.testing.recordFunction();
 
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
   observable.observe(
-      TEST_NOTICE_TYPE_2, goog.labs.observe.toObserver(observerFn2));
+      TEST_NOTICE_TYPE_2, goog.labs.observe.Observer.fromFunction(observerFn2));
   observable.observe(
       goog.labs.observe.NoticeType.ALL,
-      goog.labs.observe.toObserver(observerFn3));
+      goog.labs.observe.Observer.fromFunction(observerFn3));
 
   observable.notify(goog.labs.observe.NoticeType.ALL);
   assertEquals(1, observerFn.getCallCount());
@@ -181,11 +181,11 @@ function testUnobserveWhileObserverIsFiring() {
     assertTrue(observable.unobserve(TEST_NOTICE_TYPE, observer));
     assertFalse(observable.unobserve(TEST_NOTICE_TYPE, observer));
   });
-  var observer = goog.labs.observe.toObserver(observerFn);
+  var observer = goog.labs.observe.Observer.fromFunction(observerFn);
   var observerFn2 = goog.testing.recordFunction();
   observable.observe(TEST_NOTICE_TYPE, observer);
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn2));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn2));
   observable.notify(TEST_NOTICE_TYPE);
   assertEquals(1, observerFn.getCallCount());
   assertEquals(1, observerFn2.getCallCount());
@@ -197,11 +197,11 @@ function testUnobserveWhileObserverIsFiringOnAllNotice() {
     assertTrue(observable.unobserve(TEST_NOTICE_TYPE, observer));
     assertFalse(observable.unobserve(TEST_NOTICE_TYPE, observer));
   });
-  var observer = goog.labs.observe.toObserver(observerFn);
+  var observer = goog.labs.observe.Observer.fromFunction(observerFn);
   var observerFn2 = goog.testing.recordFunction();
   observable.observe(TEST_NOTICE_TYPE, observer);
   observable.observe(
-      TEST_NOTICE_TYPE, goog.labs.observe.toObserver(observerFn2));
+      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn2));
   observable.notify(goog.labs.observe.NoticeType.ALL);
   assertEquals(1, observerFn.getCallCount());
   assertEquals(1, observerFn2.getCallCount());
@@ -217,7 +217,7 @@ function testSimpleObservableAsComposition() {
     assertEquals(observable, notice.getObservable());
     assertUndefined(notice.getData());
   });
-  var observer = goog.labs.observe.toObserver(observerFn);
+  var observer = goog.labs.observe.Observer.fromFunction(observerFn);
 
   observable.observe(TEST_NOTICE_TYPE, observer);
   observable.notify(TEST_NOTICE_TYPE);
@@ -228,7 +228,7 @@ function testSimpleObservableAsComposition() {
 
 function testDispose() {
   var observerFn = function() {};
-  var observer = goog.labs.observe.toObserver(observerFn);
+  var observer = goog.labs.observe.Observer.fromFunction(observerFn);
 
   observable.dispose();
   assertThrows(function() {

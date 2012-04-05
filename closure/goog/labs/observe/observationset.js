@@ -23,7 +23,7 @@
 goog.provide('goog.labs.observe.ObservationSet');
 
 goog.require('goog.array');
-goog.require('goog.labs.observe');
+goog.require('goog.labs.observe.Observer');
 
 
 
@@ -44,7 +44,7 @@ goog.labs.observe.ObservationSet = function(opt_defaultScope) {
   this.storedObservations_ = [];
 
   /**
-   * @type {Object|undefined}
+   * @type {!Object|undefined}
    * @private
    */
   this.defaultScope_ = opt_defaultScope;
@@ -83,7 +83,7 @@ goog.labs.observe.ObservationSet.prototype.observe = function(
  */
 goog.labs.observe.ObservationSet.prototype.observeWithFunction = function(
     observable, type, fn, opt_scope) {
-  var observer = goog.labs.observe.toObserver(
+  var observer = goog.labs.observe.Observer.fromFunction(
       fn, opt_scope || this.defaultScope_);
   if (this.observe(observable, type, observer)) {
     return observer;
@@ -126,7 +126,7 @@ goog.labs.observe.ObservationSet.prototype.unobserve = function(
  */
 goog.labs.observe.ObservationSet.prototype.unobserveWithFunction = function(
     observable, type, fn, opt_scope) {
-  var observer = goog.labs.observe.toObserver(
+  var observer = goog.labs.observe.Observer.fromFunction(
       fn, opt_scope || this.defaultScope_);
   return this.unobserve(observable, type, observer);
 };
