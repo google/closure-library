@@ -136,6 +136,16 @@ goog.fx.anim.unregisterAnimation = function(animation) {
 
 
 /**
+ * Tears down this module. Useful for testing.
+ */
+// TODO(nicksantos): Wow, this api is pretty broken. This should be fixed.
+goog.fx.anim.tearDown = function() {
+  goog.fx.anim.animationWindow_ = null;
+  goog.fx.anim.cancelTimer_();
+};
+
+
+/**
  * Registers an animation window. This allows usage of the timing control API
  * for animations. Note that this window must be visible, as non-visible
  * windows can potentially stop animating. This window does not necessarily
