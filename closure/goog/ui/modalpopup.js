@@ -490,11 +490,15 @@ goog.ui.ModalPopup.prototype.resizeBackground_ = function() {
   var doc = this.getDomHelper().getDocument();
   var win = goog.dom.getWindow(doc) || window;
 
-  // Take the max of scroll height and view height for cases in which document
-  // does not fill screen.
+  // Take the max of document height and view height, in case the document does
+  // not fill the viewport. Read from both the body element and the html element
+  // to account for browser differences in treatment of absolutely-positioned
+  // content.
   var viewSize = goog.dom.getViewportSize(win);
-  var w = Math.max(doc.body.scrollWidth, viewSize.width);
-  var h = Math.max(doc.body.scrollHeight, viewSize.height);
+  var w = Math.max(viewSize.width,
+      Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth));
+  var h = Math.max(viewSize.height,
+      Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight));
 
   if (this.bgIframeEl_) {
     goog.style.showElement(this.bgIframeEl_, true);
