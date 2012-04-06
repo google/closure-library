@@ -203,18 +203,13 @@ goog.dom.getElementByClass = function(className, opt_el) {
 
 /**
  * Prefer the standardized (http://www.w3.org/TR/selectors-api/), native and
- * fast W3C Selectors API. However, the version of WebKit that shipped with
- * Safari 3.1 and Chrome has a bug where it will not correctly match mixed-
- * case class name selectors in quirks mode.
+ * fast W3C Selectors API.
  * @param {!(Element|Document)} parent The parent document object.
  * @return {boolean} whether or not we can use parent.querySelector* APIs.
  * @private
  */
 goog.dom.canUseQuerySelector_ = function(parent) {
-  return parent.querySelectorAll &&
-         parent.querySelector &&
-         (!goog.userAgent.WEBKIT || goog.dom.isCss1CompatMode_(document) ||
-          goog.userAgent.isVersion('528'));
+  return !!(parent.querySelectorAll && parent.querySelector);
 };
 
 
@@ -422,29 +417,7 @@ goog.dom.getViewportSize = function(opt_window) {
  */
 goog.dom.getViewportSize_ = function(win) {
   var doc = win.document;
-
-  if (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('500') &&
-      !goog.userAgent.MOBILE) {
-    // TODO(doughtie): Sometimes we get something that isn't a valid window
-    // object. In this case we just revert to the current window. We need to
-    // figure out when this happens and find a real fix for it.
-    // See the comments on goog.dom.getWindow.
-    if (typeof win.innerHeight == 'undefined') {
-      win = window;
-    }
-    var innerHeight = win.innerHeight;
-    var scrollHeight = win.document.documentElement.scrollHeight;
-
-    if (win == win.top) {
-      if (scrollHeight < innerHeight) {
-        innerHeight -= 15; // Scrollbars are 15px wide on Mac
-      }
-    }
-    return new goog.math.Size(win.innerWidth, innerHeight);
-  }
-
   var el = goog.dom.isCss1CompatMode_(doc) ? doc.documentElement : doc.body;
-
   return new goog.math.Size(el.clientWidth, el.clientHeight);
 };
 
