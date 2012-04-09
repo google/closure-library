@@ -229,7 +229,7 @@ goog.ui.Textarea.prototype.getMaxHeight_ = function() {
 
 
 /**
- * Sets a minimum height for the textarea, and calls resize if rendered.
+ * Sets a maximum height for the textarea, and calls resize if rendered.
  * @param {number} height New maxHeight value.
  */
 goog.ui.Textarea.prototype.setMaxHeight = function(height) {
