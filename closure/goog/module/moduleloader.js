@@ -118,8 +118,38 @@ goog.module.ModuleLoader.prototype.setCodePostfix = function(
 goog.module.ModuleLoader.prototype.loadModules = function(
     ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
     opt_forceReload) {
-  this.loadModulesInternal(ids, moduleInfoMap, opt_successFn, opt_errorFn,
-      opt_timeoutFn, opt_forceReload);
+  var uris = [];
+  for (var i = 0; i < ids.length; i++) {
+    goog.array.extend(uris, moduleInfoMap[ids[i]].getUris());
+  }
+  this.logger.info('loadModules ids:' + ids + ' uris:' + uris);
+
+  if (this.getDebugMode()) {
+    // In debug mode use <script> tags rather than XHRs to load the files.
+    // This makes it possible to debug and inspect stack traces more easily.
+    // It's also possible to use it to load JavaScript files that are hosted on
+    // another domain.
+    goog.net.jsloader.loadMany(uris);
+  } else {
+    var bulkLoader = new goog.net.BulkLoader(uris);
+    var eventHandler = this.eventHandler_;
+    eventHandler.listen(
+        bulkLoader,
+        goog.net.EventType.SUCCESS,
+        goog.bind(this.handleSuccess_, this, bulkLoader, ids,
+            opt_successFn, opt_errorFn),
+        false,
+        null);
+    eventHandler.listen(
+        bulkLoader,
+        goog.net.EventType.ERROR,
+        goog.bind(this.handleError_, this, bulkLoader, ids, opt_errorFn),
+        false,
+        null);
+    // TODO(user): Need to handle timeouts in the module loading code.
+
+    bulkLoader.load();
+  }
 };
 
 
@@ -155,6 +185,7 @@ goog.module.ModuleLoader.prototype.evaluateCode = function(
  * @param {Array.<string>} moduleIds The ids of the modules requested.
  * @param {function()} successFn The callback for success.
  * @param {function(?number)} errorFn The callback for error.
+ * @protected
  */
 goog.module.ModuleLoader.prototype.handleRequestSuccess = function(
     jsCode, moduleIds, successFn, errorFn) {
@@ -174,6 +205,7 @@ goog.module.ModuleLoader.prototype.handleRequestSuccess = function(
  * @param {Array.<string>} moduleIds The ids of the modules requested.
  * @param {function(?number)} errorFn The function to call on failure.
  * @param {?number} status The response status.
+ * @protected
  */
 goog.module.ModuleLoader.prototype.handleRequestError = function(
     moduleIds, errorFn, status) {
@@ -214,65 +246,15 @@ goog.module.ModuleLoader.prototype.validateCodePostfix_ = function(
 
 
 /**
- * Loads a list of JavaScript modules.
- * @param {Array.<string>} ids The module ids in dependency order.
- * @param {Object} moduleInfoMap A mapping from module id to ModuleInfo object.
- * @param {?function()=} opt_successFn The callback if module loading is a
- *     success.
- * @param {?function(number)=} opt_errorFn The callback if module loading is in
- *     error.
- * @param {?function()=} opt_timeoutFn The callback if module loading times out
- * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
- *     module.
- * @protected
- */
-goog.module.ModuleLoader.prototype.loadModulesInternal = function(
-    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
-    opt_forceReload) {
-  var uris = [];
-  for (var i = 0; i < ids.length; i++) {
-    goog.array.extend(uris, moduleInfoMap[ids[i]].getUris());
-  }
-  this.logger.info('loadModules ids:' + ids + ' uris:' + uris);
-
-  if (this.getDebugMode()) {
-    // In debug mode use <script> tags rather than XHRs to load the files.
-    // This makes it possible to debug and inspect stack traces more easily.
-    // It's also possible to use it to load JavaScript files that are hosted on
-    // another domain.
-    goog.net.jsloader.loadMany(uris);
-  } else {
-    var bulkLoader = new goog.net.BulkLoader(uris);
-    var eventHandler = this.eventHandler_;
-    eventHandler.listen(
-        bulkLoader,
-        goog.net.EventType.SUCCESS,
-        goog.bind(this.handleSuccess, this, bulkLoader, ids,
-            opt_successFn, opt_errorFn),
-        false,
-        null);
-    eventHandler.listen(
-        bulkLoader,
-        goog.net.EventType.ERROR,
-        goog.bind(this.handleError, this, bulkLoader, ids, opt_errorFn),
-        false,
-        null);
-    // TODO(user): Need to handle timeouts in the module loading code.
-
-    bulkLoader.load();
-  }
-};
-
-
-/**
  * Handles a successful response to a request for one or more modules.
  *
  * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
  * @param {Array.<string>} moduleIds The ids of the modules requested.
  * @param {function()} successFn The callback for success.
  * @param {function(?number)} errorFn The callback for error.
+ * @private
  */
-goog.module.ModuleLoader.prototype.handleSuccess = function(
+goog.module.ModuleLoader.prototype.handleSuccess_ = function(
     bulkLoader, moduleIds, successFn, errorFn) {
   var jsCode = bulkLoader.getResponseTexts().join('\n');
 
@@ -294,8 +276,9 @@ goog.module.ModuleLoader.prototype.handleSuccess = function(
  * @param {Array.<string>} moduleIds The ids of the modules requested.
  * @param {function(?number)} errorFn The function to call on failure.
  * @param {number} status The response status.
+ * @private
  */
-goog.module.ModuleLoader.prototype.handleError = function(
+goog.module.ModuleLoader.prototype.handleError_ = function(
     bulkLoader, moduleIds, errorFn, status) {
   this.handleRequestError(moduleIds, errorFn, status);
 
