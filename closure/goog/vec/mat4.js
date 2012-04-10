@@ -20,6 +20,8 @@
  * where noted. Matrix operations follow the mathematical form when multiplying
  * vectors as follows: resultVec = matrix * vec.
  *
+ * The matrices are stored in column-major order.
+ *
  */
 goog.provide('goog.vec.Mat4');
 
@@ -336,9 +338,12 @@ goog.vec.Mat4.getElement = function(mat, row, column) {
  * @param {number} row The row index.
  * @param {number} column The column index.
  * @param {number} value The value to set at the requested row, column.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setElement = function(mat, row, column, value) {
   mat[row + column * 4] = value;
+  return mat;
 };
 
 
@@ -364,6 +369,8 @@ goog.vec.Mat4.setElement = function(mat, row, column, value) {
  * @param {number} v13 The values at (1, 3).
  * @param {number} v23 The values at (2, 3).
  * @param {number} v33 The values at (3, 3).
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setFromValues = function(
     mat, v00, v10, v20, v30, v01, v11, v21, v31, v02, v12, v22, v32,
@@ -384,6 +391,7 @@ goog.vec.Mat4.setFromValues = function(
   mat[13] = v13;
   mat[14] = v23;
   mat[15] = v33;
+  return mat;
 };
 
 
@@ -393,6 +401,8 @@ goog.vec.Mat4.setFromValues = function(
  * @param {goog.vec.Mat4.AnyType} mat The matrix to receive the values.
  * @param {goog.vec.Mat4.AnyType} values The column major ordered
  *     array of values to store in the matrix.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setFromArray = function(mat, values) {
   mat[0] = values[0];
@@ -411,6 +421,7 @@ goog.vec.Mat4.setFromArray = function(mat, values) {
   mat[13] = values[13];
   mat[14] = values[14];
   mat[15] = values[15];
+  return mat;
 };
 
 
@@ -420,6 +431,8 @@ goog.vec.Mat4.setFromArray = function(mat, values) {
  * @param {goog.vec.Mat4.AnyType} mat The matrix to receive the values.
  * @param {goog.vec.Mat4.AnyType} values The row major ordered array of
  *     values to store in the matrix.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setFromRowMajorArray = function(mat, values) {
   mat[0] = values[0];
@@ -441,6 +454,8 @@ goog.vec.Mat4.setFromRowMajorArray = function(mat, values) {
   mat[13] = values[7];
   mat[14] = values[11];
   mat[15] = values[15];
+
+  return mat;
 };
 
 
@@ -452,12 +467,15 @@ goog.vec.Mat4.setFromRowMajorArray = function(mat, values) {
  * @param {number} v11 The values for (1, 1).
  * @param {number} v22 The values for (2, 2).
  * @param {number} v33 The values for (3, 3).
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setDiagonalValues = function(mat, v00, v11, v22, v33) {
   mat[0] = v00;
   mat[5] = v11;
   mat[10] = v22;
   mat[15] = v33;
+  return mat;
 };
 
 
@@ -466,12 +484,15 @@ goog.vec.Mat4.setDiagonalValues = function(mat, v00, v11, v22, v33) {
  *
  * @param {goog.vec.Mat4.AnyType} mat The matrix to receive the values.
  * @param {goog.vec.Vec4.AnyType} vec The vector containing the values.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setDiagonal = function(mat, vec) {
   mat[0] = vec[0];
   mat[5] = vec[1];
   mat[10] = vec[2];
   mat[15] = vec[3];
+  return mat;
 };
 
 
@@ -483,6 +504,8 @@ goog.vec.Mat4.setDiagonal = function(mat, vec) {
  * @param {number=} opt_diagonal Which diagonal to get. A value of 0 selects the
  *     main diagonal, a positive number selects a super diagonal and a negative
  *     number selects a sub diagonal.
+ * @return {goog.vec.Vec4.AnyType} return vec so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.getDiagonal = function(mat, vec, opt_diagonal) {
   if (!opt_diagonal) {
@@ -497,6 +520,7 @@ goog.vec.Mat4.getDiagonal = function(mat, vec, opt_diagonal) {
       vec[i] = mat[offset + 5 * i];
     }
   }
+  return vec;
 };
 
 
@@ -509,6 +533,8 @@ goog.vec.Mat4.getDiagonal = function(mat, vec, opt_diagonal) {
  * @param {number} v1 The value for row 1.
  * @param {number} v2 The value for row 2.
  * @param {number} v3 The value for row 3.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setColumnValues = function(mat, column, v0, v1, v2, v3) {
   var i = column * 4;
@@ -516,6 +542,7 @@ goog.vec.Mat4.setColumnValues = function(mat, column, v0, v1, v2, v3) {
   mat[i + 1] = v1;
   mat[i + 2] = v2;
   mat[i + 3] = v3;
+  return mat;
 };
 
 
@@ -525,6 +552,8 @@ goog.vec.Mat4.setColumnValues = function(mat, column, v0, v1, v2, v3) {
  * @param {goog.vec.Mat4.AnyType} mat The matrix to receive the values.
  * @param {number} column The column index to set the values on.
  * @param {goog.vec.Vec4.AnyType} vec The vector of elements for the column.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setColumn = function(mat, column, vec) {
   var i = column * 4;
@@ -532,6 +561,7 @@ goog.vec.Mat4.setColumn = function(mat, column, vec) {
   mat[i + 1] = vec[1];
   mat[i + 2] = vec[2];
   mat[i + 3] = vec[3];
+  return mat;
 };
 
 
@@ -542,6 +572,8 @@ goog.vec.Mat4.setColumn = function(mat, column, vec) {
  * @param {number} column The column to get the values from.
  * @param {goog.vec.Vec4.AnyType} vec The vector of elements to
  *     receive the column.
+ * @return {goog.vec.Vec4.AnyType} return vec so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.getColumn = function(mat, column, vec) {
   var i = column * 4;
@@ -549,6 +581,7 @@ goog.vec.Mat4.getColumn = function(mat, column, vec) {
   vec[1] = mat[i + 1];
   vec[2] = mat[i + 2];
   vec[3] = mat[i + 3];
+  return vec;
 };
 
 
@@ -560,12 +593,15 @@ goog.vec.Mat4.getColumn = function(mat, column, vec) {
  * @param {goog.vec.Vec4.AnyType} vec1 The values for column 1.
  * @param {goog.vec.Vec4.AnyType} vec2 The values for column 2.
  * @param {goog.vec.Vec4.AnyType} vec3 The values for column 3.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setColumns = function(mat, vec0, vec1, vec2, vec3) {
   goog.vec.Mat4.setColumn(mat, 0, vec0);
   goog.vec.Mat4.setColumn(mat, 1, vec1);
   goog.vec.Mat4.setColumn(mat, 2, vec2);
   goog.vec.Mat4.setColumn(mat, 3, vec3);
+  return mat;
 };
 
 
@@ -595,12 +631,15 @@ goog.vec.Mat4.getColumns = function(mat, vec0, vec1, vec2, vec3) {
  * @param {number} v1 The value for column 1.
  * @param {number} v2 The value for column 2.
  * @param {number} v3 The value for column 3.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setRowValues = function(mat, row, v0, v1, v2, v3) {
   mat[row] = v0;
   mat[row + 4] = v1;
   mat[row + 8] = v2;
   mat[row + 12] = v3;
+  return mat;
 };
 
 
@@ -610,12 +649,15 @@ goog.vec.Mat4.setRowValues = function(mat, row, v0, v1, v2, v3) {
  * @param {goog.vec.Mat4.AnyType} mat The matrix to receive the row values.
  * @param {number} row The index of the row.
  * @param {goog.vec.Vec4.AnyType} vec The vector containing the values.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setRow = function(mat, row, vec) {
   mat[row] = vec[0];
   mat[row + 4] = vec[1];
   mat[row + 8] = vec[2];
   mat[row + 12] = vec[3];
+  return mat;
 };
 
 
@@ -625,12 +667,15 @@ goog.vec.Mat4.setRow = function(mat, row, vec) {
  * @param {goog.vec.Mat4.AnyType} mat The matrix supplying the values.
  * @param {number} row The index of the row supplying the values.
  * @param {goog.vec.Vec4.AnyType} vec The vector to receive the row.
+ * @return {goog.vec.Vec4.AnyType} return vec so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.getRow = function(mat, row, vec) {
   vec[0] = mat[row];
   vec[1] = mat[row + 4];
   vec[2] = mat[row + 8];
   vec[3] = mat[row + 12];
+  return vec;
 };
 
 
@@ -642,12 +687,15 @@ goog.vec.Mat4.getRow = function(mat, row, vec) {
  * @param {goog.vec.Vec4.AnyType} vec1 The values for row 1.
  * @param {goog.vec.Vec4.AnyType} vec2 The values for row 2.
  * @param {goog.vec.Vec4.AnyType} vec3 The values for row 3.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.setRows = function(mat, vec0, vec1, vec2, vec3) {
   goog.vec.Mat4.setRow(mat, 0, vec0);
   goog.vec.Mat4.setRow(mat, 1, vec1);
   goog.vec.Mat4.setRow(mat, 2, vec2);
   goog.vec.Mat4.setRow(mat, 3, vec3);
+  return mat;
 };
 
 
@@ -699,7 +747,7 @@ goog.vec.Mat4.makeZero = function(mat) {
  * Makes the given 4x4 matrix the identity matrix.
  *
  * @param {goog.vec.Mat4.AnyType} mat The matrix.
- * @return {!goog.vec.Mat4.AnyType} return mat so operations can be chained.
+ * @return {goog.vec.Mat4.AnyType} return mat so operations can be chained.
  */
 goog.vec.Mat4.makeIdentity = function(mat) {
   mat[0] = 1;
@@ -730,7 +778,7 @@ goog.vec.Mat4.makeIdentity = function(mat) {
  * @param {goog.vec.Mat4.AnyType} mat1 The second addend.
  * @param {goog.vec.Mat4.AnyType} resultMat The matrix to
  *     receive the results (may be either mat0 or mat1).
- * @return {!goog.vec.Mat4.AnyType} return resultMat so that operations can be
+ * @return {goog.vec.Mat4.AnyType} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.addMat = function(mat0, mat1, resultMat) {
@@ -762,7 +810,7 @@ goog.vec.Mat4.addMat = function(mat0, mat1, resultMat) {
  * @param {goog.vec.Mat4.AnyType} mat1 The subtrahend.
  * @param {goog.vec.Mat4.AnyType} resultMat The matrix to receive
  *     the results (may be either mat0 or mat1).
- * @return {!goog.vec.Mat4.AnyType} return resultMat so that operations can be
+ * @return {goog.vec.Mat4.AnyType} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.subMat = function(mat0, mat1, resultMat) {
@@ -794,7 +842,7 @@ goog.vec.Mat4.subMat = function(mat0, mat1, resultMat) {
  * @param {number} scalar The scalar value to multiply to each element of mat.
  * @param {goog.vec.Mat4.AnyType} resultMat The matrix to receive
  *     the results (may be mat).
- * @return {!goog.vec.Mat4.AnyType} return resultMat so that operations can be
+ * @return {goog.vec.Mat4.AnyType} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.multScalar = function(mat, scalar, resultMat) {
@@ -826,7 +874,7 @@ goog.vec.Mat4.multScalar = function(mat, scalar, resultMat) {
  * @param {goog.vec.Mat4.AnyType} mat1 The second (right hand) matrix.
  * @param {goog.vec.Mat4.AnyType} resultMat The matrix to receive
  *     the results (may be either mat0 or mat1).
- * @return {!goog.vec.Mat4.AnyType} return resultMat so that operations can be
+ * @return {goog.vec.Mat4.AnyType} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.multMat = function(mat0, mat1, resultMat) {
@@ -869,7 +917,7 @@ goog.vec.Mat4.multMat = function(mat0, mat1, resultMat) {
  * @param {goog.vec.Mat4.AnyType} mat The matrix to transpose.
  * @param {goog.vec.Mat4.AnyType} resultMat The matrix to receive
  *     the results (may be mat).
- * @return {!goog.vec.Mat4.AnyType} return resultMat so that operations can be
+ * @return {goog.vec.Mat4.AnyType} return resultMat so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.transpose = function(mat, resultMat) {
@@ -1035,7 +1083,7 @@ goog.vec.Mat4.equals = function(mat0, mat1) {
  * @param {goog.vec.Vec3.AnyType} vec The 3 element vector to transform.
  * @param {goog.vec.Vec3.AnyType} resultVec The 3 element vector to
  *     receive the results (may be vec).
- * @return {!goog.vec.Vec3.AnyType} return resultVec so that operations can be
+ * @return {goog.vec.Vec3.AnyType} return resultVec so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.multVec3 = function(mat, vec, resultVec) {
@@ -1057,7 +1105,7 @@ goog.vec.Mat4.multVec3 = function(mat, vec, resultVec) {
  * @param {goog.vec.Vec3.AnyType} vec The 3 element vector to transform.
  * @param {goog.vec.Vec3.AnyType} resultVec The 3 element vector to
  *     receive the results (may be vec).
- * @return {!goog.vec.Vec3.AnyType} return resultVec so that operations can be
+ * @return {goog.vec.Vec3.AnyType} return resultVec so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.multVec3NoTranslate = function(mat, vec, resultVec) {
@@ -1079,7 +1127,7 @@ goog.vec.Mat4.multVec3NoTranslate = function(mat, vec, resultVec) {
  * @param {goog.vec.Vec3.AnyType} vec The 3 element vector to transform.
  * @param {goog.vec.Vec3.AnyType} resultVec The 3 element vector
  *     to receive the results (may be vec).
- * @return {!goog.vec.Vec3.AnyType} return resultVec so that operations can be
+ * @return {goog.vec.Vec3.AnyType} return resultVec so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.multVec3Projective = function(mat, vec, resultVec) {
@@ -1100,7 +1148,7 @@ goog.vec.Mat4.multVec3Projective = function(mat, vec, resultVec) {
  * @param {goog.vec.Vec4.AnyType} vec The vector to transform.
  * @param {goog.vec.Vec4.AnyType} resultVec The vector to
  *     receive the results (may be vec).
- * @return {!goog.vec.Vec4.AnyType} return resultVec so that operations can be
+ * @return {goog.vec.Vec4.AnyType} return resultVec so that operations can be
  *     chained together.
  */
 goog.vec.Mat4.multVec4 = function(mat, vec, resultVec) {
@@ -1126,8 +1174,7 @@ goog.vec.Mat4.multVec4 = function(mat, vec, resultVec) {
  */
 goog.vec.Mat4.makeTranslate = function(mat, x, y, z) {
   goog.vec.Mat4.makeIdentity(mat);
-  goog.vec.Mat4.setColumnValues(mat, 3, x, y, z, 1);
-  return mat;
+  return goog.vec.Mat4.setColumnValues(mat, 3, x, y, z, 1);
 };
 
 
@@ -1143,8 +1190,7 @@ goog.vec.Mat4.makeTranslate = function(mat, x, y, z) {
  */
 goog.vec.Mat4.makeScale = function(mat, x, y, z) {
   goog.vec.Mat4.makeIdentity(mat);
-  goog.vec.Mat4.setDiagonalValues(mat, x, y, z, 1);
-  return mat;
+  return goog.vec.Mat4.setDiagonalValues(mat, x, y, z, 1);
 };
 
 
@@ -1165,7 +1211,7 @@ goog.vec.Mat4.makeRotate = function(mat, angle, ax, ay, az) {
   var d = 1 - c;
   var s = Math.sin(angle);
 
-  goog.vec.Mat4.setFromValues(mat,
+  return goog.vec.Mat4.setFromValues(mat,
       ax * ax * d + c,
       ax * ay * d + az * s,
       ax * az * d - ay * s,
@@ -1182,7 +1228,57 @@ goog.vec.Mat4.makeRotate = function(mat, angle, ax, ay, az) {
       0,
 
       0, 0, 0, 1);
-  return mat;
+};
+
+
+/**
+ * Makes the given 4x4 matrix a rotation matrix with the given rotation
+ * angle about the X axis.
+ *
+ * @param {goog.vec.Mat4.AnyType} mat The matrix.
+ * @param {number} angle The rotation angle in radians.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained.
+ */
+goog.vec.Mat4.makeRotateX = function(mat, angle) {
+  var c = Math.cos(angle);
+  var s = Math.sin(angle);
+  return goog.vec.Mat4.setFromValues(
+      mat, 1, 0, 0, 0, 0, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1);
+};
+
+
+/**
+ * Makes the given 4x4 matrix a rotation matrix with the given rotation
+ * angle about the Y axis.
+ *
+ * @param {goog.vec.Mat4.AnyType} mat The matrix.
+ * @param {number} angle The rotation angle in radians.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained.
+ */
+goog.vec.Mat4.makeRotateY = function(mat, angle) {
+  var c = Math.cos(angle);
+  var s = Math.sin(angle);
+  return goog.vec.Mat4.setFromValues(
+      mat, c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1);
+};
+
+
+/**
+ * Makes the given 4x4 matrix a rotation matrix with the given rotation
+ * angle about the Z axis.
+ *
+ * @param {goog.vec.Mat4.AnyType} mat The matrix.
+ * @param {number} angle The rotation angle in radians.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained.
+ */
+goog.vec.Mat4.makeRotateZ = function(mat, angle) {
+  var c = Math.cos(angle);
+  var s = Math.sin(angle);
+  return goog.vec.Mat4.setFromValues(
+      mat, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 };
 
 
@@ -1207,13 +1303,12 @@ goog.vec.Mat4.makeFrustum = function(mat, left, right, bottom, top, near, far) {
   var c = -(far + near) / (far - near);
   var d = -(2 * far * near) / (far - near);
 
-  goog.vec.Mat4.setFromValues(mat,
+  return goog.vec.Mat4.setFromValues(mat,
       x, 0, 0, 0,
       0, y, 0, 0,
       a, b, c, -1,
       0, 0, d, 0
   );
-  return mat;
 };
 
 
@@ -1235,31 +1330,30 @@ goog.vec.Mat4.makePerspective = function(mat, fovy, aspect, near, far) {
   var dz = far - near;
   var sinAngle = Math.sin(angle);
   if (dz == 0 || sinAngle == 0 || aspect == 0) {
-    return /** @type {!goog.vec.Mat4.AnyType} */ (mat);
+    return mat;
   }
 
   var cot = Math.cos(angle) / sinAngle;
-  goog.vec.Mat4.setFromValues(mat,
+  return goog.vec.Mat4.setFromValues(mat,
       cot / aspect, 0, 0, 0,
       0, cot, 0, 0,
       0, 0, -(far + near) / dz, -1,
       0, 0, -(2 * near * far) / dz, 0
   );
-  return /** @type {!goog.vec.Mat4.AnyType} */ (mat);
 };
 
 
 /**
  * Makes the given 4x4 matrix an orthographic projection matrix.
  *
- * @param {!goog.vec.Mat4.AnyType} mat The matrix.
+ * @param {goog.vec.Mat4.AnyType} mat The matrix.
  * @param {number} left The coordinate of the left clipping plane.
  * @param {number} right The coordinate of the right clipping plane.
  * @param {number} bottom The coordinate of the bottom clipping plane.
  * @param {number} top The coordinate of the top clipping plane.
  * @param {number} near The distance to the near clipping plane.
  * @param {number} far The distance to the far clipping plane.
- * @return {!goog.vec.Mat4.AnyType} return mat so that operations can be
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
  *     chained.
  */
 goog.vec.Mat4.makeOrtho = function(mat, left, right, bottom, top, near, far) {
@@ -1270,13 +1364,12 @@ goog.vec.Mat4.makeOrtho = function(mat, left, right, bottom, top, near, far) {
   var b = -(top + bottom) / (top - bottom);
   var c = -(far + near) / (far - near);
 
-  goog.vec.Mat4.setFromValues(mat,
+  return goog.vec.Mat4.setFromValues(mat,
       x, 0, 0, 0,
       0, y, 0, 0,
       0, 0, z, 0,
       a, b, c, 1
   );
-  return /** @type {!goog.vec.Mat4.AnyType} */ (mat);
 };
 
 
@@ -1392,11 +1485,11 @@ goog.vec.Mat4.toLookAt = function(mat, eyePt, fwdVec, worldUpVec) {
  * with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
  * rotation_x(theta) means rotation around the X axis of theta radians,
  *
- * @param {!goog.vec.Mat4.AnyType} mat The matrix.
+ * @param {goog.vec.Mat4.AnyType} mat The matrix.
  * @param {number} theta1 The angle of rotation around the Z axis in radians.
  * @param {number} theta2 The angle of rotation around the X axis in radians.
  * @param {number} theta3 The angle of rotation around the Z axis in radians.
- * @return {!goog.vec.Mat4.AnyType} return mat so that operations can be
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
  *     chained.
  */
 goog.vec.Mat4.makeEulerZXZ = function(mat, theta1, theta2, theta3) {
@@ -1440,10 +1533,12 @@ goog.vec.Mat4.makeEulerZXZ = function(mat, theta1, theta2, theta3) {
  * rotation_x(theta) means rotation around the X axis of theta radians.
  *
  * @param {goog.vec.Mat4.AnyType} mat The matrix.
- * @param {goog.vec.Mat4.AnyType} euler The ZXZ Euler angles in
+ * @param {goog.vec.Vec3.AnyType} euler The ZXZ Euler angles in
  *     radians as [theta1, theta2, theta3].
  * @param {boolean=} opt_theta2IsNegative Whether theta2 is in [-pi, 0] instead
  *     of the default [0, pi].
+ * @return {goog.vec.Vec4.AnyType} return euler so that operations can be
+ *     chained together.
  */
 goog.vec.Mat4.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
   // There is an ambiguity in the sign of sinTheta2 because of the sqrt.
@@ -1459,8 +1554,9 @@ goog.vec.Mat4.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
     euler[1] = Math.atan2(sinTheta2 * signTheta2, mat[10]);
     euler[0] = Math.atan2(mat[8] * signTheta2, -mat[9] * signTheta2);
   } else {
-    // There is also an arbitrary choice for roll = 0 or pan = 0 in this case.
-    // We assume roll = 0 as some applications do not allow the camera to roll.
+    // There is also an arbitrary choice for theta1 = 0 or theta2 = 0 here.
+    // We assume theta1 = 0 as some applications do not allow the camera to roll
+    // (i.e. have theta1 != 0).
     euler[0] = 0;
     euler[1] = Math.atan2(sinTheta2 * signTheta2, mat[10]);
     euler[2] = Math.atan2(mat[1], mat[0]);
@@ -1473,6 +1569,8 @@ goog.vec.Mat4.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
   // signTheta2.
   euler[1] = ((euler[1] * signTheta2 + Math.PI * 2) % (Math.PI * 2)) *
       signTheta2;
+
+  return euler;
 };
 
 
@@ -1491,13 +1589,12 @@ goog.vec.Mat4.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
  *     chained.
  */
 goog.vec.Mat4.translate = function(mat, x, y, z) {
-  goog.vec.Mat4.setColumnValues(
+  return goog.vec.Mat4.setColumnValues(
       mat, 3,
       mat[0] * x + mat[4] * y + mat[8] * z + mat[12],
       mat[1] * x + mat[5] * y + mat[9] * z + mat[13],
       mat[2] * x + mat[6] * y + mat[10] * z + mat[14],
       mat[3] * x + mat[7] * y + mat[11] * z + mat[15]);
-  return mat;
 };
 
 
@@ -1516,18 +1613,17 @@ goog.vec.Mat4.translate = function(mat, x, y, z) {
  *     chained.
  */
 goog.vec.Mat4.scale = function(mat, x, y, z) {
-  goog.vec.Mat4.setFromValues(
+  return goog.vec.Mat4.setFromValues(
       mat,
       mat[0] * x, mat[1] * x, mat[2] * x, mat[3] * x,
       mat[4] * y, mat[5] * y, mat[6] * y, mat[7] * y,
       mat[8] * z, mat[9] * z, mat[10] * z, mat[11] * z,
       mat[12], mat[13], mat[14], mat[15]);
-  return mat;
 };
 
 
 /**
- * Rotation the given matrix by angle about the x,y,z axis.  Equivalent to:
+ * Rotate the given matrix by angle about the x,y,z axis.  Equivalent to:
  * goog.vec.Mat4.multMat(
  *     mat,
  *     goog.vec.Mat4.makeRotate(goog.vec.Mat4.create(), angle, x, y, z),
@@ -1562,7 +1658,7 @@ goog.vec.Mat4.rotate = function(mat, angle, x, y, z) {
   var r12 = y * z * diffCosAngle - x * sinAngle;
   var r22 = z * z * diffCosAngle + cosAngle;
 
-  goog.vec.Mat4.setFromValues(
+  return goog.vec.Mat4.setFromValues(
       mat,
       m00 * r00 + m01 * r10 + m02 * r20,
       m10 * r00 + m11 * r10 + m12 * r20,
@@ -1580,6 +1676,100 @@ goog.vec.Mat4.rotate = function(mat, angle, x, y, z) {
       m30 * r02 + m31 * r12 + m32 * r22,
 
       m03, m13, m23, m33);
+};
+
+
+/**
+ * Rotate the given matrix by angle about the x axis.  Equivalent to:
+ * goog.vec.Mat4.multMat(
+ *     mat,
+ *     goog.vec.Mat4.makeRotateX(goog.vec.Mat4.create(), angle),
+ *     mat);
+ *
+ * @param {goog.vec.Mat4.AnyType} mat The matrix.
+ * @param {number} angle The angle in radians.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained.
+ */
+goog.vec.Mat4.rotateX = function(mat, angle) {
+  var m01 = mat[4], m11 = mat[5], m21 = mat[6], m31 = mat[7];
+  var m02 = mat[8], m12 = mat[9], m22 = mat[10], m32 = mat[11];
+
+  var c = Math.cos(angle);
+  var s = Math.sin(angle);
+
+  mat[4] = m01 * c + m02 * s;
+  mat[5] = m11 * c + m12 * s;
+  mat[6] = m21 * c + m22 * s;
+  mat[7] = m31 * c + m32 * s;
+  mat[8] = m01 * -s + m02 * c;
+  mat[9] = m11 * -s + m12 * c;
+  mat[10] = m21 * -s + m22 * c;
+  mat[11] = m31 * -s + m32 * c;
+
+  return mat;
+};
+
+
+/**
+ * Rotate the given matrix by angle about the y axis.  Equivalent to:
+ * goog.vec.Mat4.multMat(
+ *     mat,
+ *     goog.vec.Mat4.makeRotateY(goog.vec.Mat4.create(), angle),
+ *     mat);
+ *
+ * @param {goog.vec.Mat4.AnyType} mat The matrix.
+ * @param {number} angle The angle in radians.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained.
+ */
+goog.vec.Mat4.rotateY = function(mat, angle) {
+  var m00 = mat[0], m10 = mat[1], m20 = mat[2], m30 = mat[3];
+  var m02 = mat[8], m12 = mat[9], m22 = mat[10], m32 = mat[11];
+
+  var c = Math.cos(angle);
+  var s = Math.sin(angle);
+
+  mat[0] = m00 * c + m02 * -s;
+  mat[1] = m10 * c + m12 * -s;
+  mat[2] = m20 * c + m22 * -s;
+  mat[3] = m30 * c + m32 * -s;
+  mat[8] = m00 * s + m02 * c;
+  mat[9] = m10 * s + m12 * c;
+  mat[10] = m20 * s + m22 * c;
+  mat[11] = m30 * s + m32 * c;
+
+  return mat;
+};
+
+
+/**
+ * Rotate the given matrix by angle about the z axis.  Equivalent to:
+ * goog.vec.Mat4.multMat(
+ *     mat,
+ *     goog.vec.Mat4.makeRotateZ(goog.vec.Mat4.create(), angle),
+ *     mat);
+ *
+ * @param {goog.vec.Mat4.AnyType} mat The matrix.
+ * @param {number} angle The angle in radians.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained.
+ */
+goog.vec.Mat4.rotateZ = function(mat, angle) {
+  var m00 = mat[0], m10 = mat[1], m20 = mat[2], m30 = mat[3];
+  var m01 = mat[4], m11 = mat[5], m21 = mat[6], m31 = mat[7];
+
+  var c = Math.cos(angle);
+  var s = Math.sin(angle);
+
+  mat[0] = m00 * c + m01 * s;
+  mat[1] = m10 * c + m11 * s;
+  mat[2] = m20 * c + m21 * s;
+  mat[3] = m30 * c + m31 * s;
+  mat[4] = m00 * -s + m01 * c;
+  mat[5] = m10 * -s + m11 * c;
+  mat[6] = m20 * -s + m21 * c;
+  mat[7] = m30 * -s + m31 * c;
 
   return mat;
 };

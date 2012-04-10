@@ -18,6 +18,24 @@ See the COPYING file for details.
 <body>
 <script>
 
+  var randomMat4 = goog.vec.Mat4.createFloat32FromValues(
+      0.8025078773498535,
+      0.7559120655059814,
+      0.15274643898010254,
+      0.19196106493473053,
+      0.0890120416879654,
+      0.15422114729881287,
+      0.09754583984613419,
+      0.44862601161003113,
+      0.9196512699127197,
+      0.5310639142990112,
+      0.8962187170982361,
+      0.280601441860199,
+      0.594650387763977,
+      0.4134795069694519,
+      0.06632178276777267,
+      0.8837796449661255);
+
   function testDeprecatedConstructor() {
     var m0 = goog.vec.Mat4.create();
     assertElementsEquals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], m0);
@@ -502,6 +520,34 @@ See the COPYING file for details.
         m1, goog.vec.EPSILON);
   }
 
+  function testMakeRotateX() {
+    var m0 = goog.vec.Mat4.createFloat32();
+    var m1 = goog.vec.Mat4.createFloat32()
+
+    goog.vec.Mat4.makeRotateX(m0, Math.PI / 7);
+    goog.vec.Mat4.makeRotate(m1, Math.PI / 7, 1, 0, 0);
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
+  function testMakeRotateY() {
+    var m0 = goog.vec.Mat4.createFloat32();
+    var m1 = goog.vec.Mat4.createFloat32()
+
+    goog.vec.Mat4.makeRotateY(m0, Math.PI / 7);
+    goog.vec.Mat4.makeRotate(m1, Math.PI / 7, 0, 1, 0);
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
+  function testMakeRotateZ() {
+    var m0 = goog.vec.Mat4.createFloat32();
+    var m1 = goog.vec.Mat4.createFloat32()
+
+    goog.vec.Mat4.makeRotateZ(m0, Math.PI / 7);
+    goog.vec.Mat4.makeRotate(m1, Math.PI / 7, 0, 0, 1);
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
+
   function testTranslate() {
     var m0 = goog.vec.Mat4.createIdentity();
     goog.vec.Mat4.translate(m0, 3, 4, 5);
@@ -541,6 +587,36 @@ See the COPYING file for details.
         m0, goog.vec.EPSILON);
   }
 
+  function testRotateX() {
+    var m0 = goog.vec.Mat4.createFloat32();
+    var m1 = goog.vec.Mat4.createFloat32FromArray(randomMat4)
+
+    goog.vec.Mat4.makeRotateX(m0, Math.PI / 7);
+    goog.vec.Mat4.multMat(m1, m0, m0);
+    goog.vec.Mat4.rotateX(m1, Math.PI / 7);
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
+  function testRotateY() {
+    var m0 = goog.vec.Mat4.createFloat32();
+    var m1 = goog.vec.Mat4.createFloat32FromArray(randomMat4)
+
+    goog.vec.Mat4.makeRotateY(m0, Math.PI / 7);
+    goog.vec.Mat4.multMat(m1, m0, m0);
+    goog.vec.Mat4.rotateY(m1, Math.PI / 7);
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
+  function testRotateZ() {
+    var m0 = goog.vec.Mat4.createFloat32();
+    var m1 = goog.vec.Mat4.createFloat32FromArray(randomMat4)
+
+    goog.vec.Mat4.makeRotateZ(m0, Math.PI / 7);
+    goog.vec.Mat4.multMat(m1, m0, m0);
+    goog.vec.Mat4.rotateZ(m1, Math.PI / 7);
+    assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
+  }
+
   function testMakeFrustum() {
     var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeFrustum(m0, -1, 2, -2, 1, .1, 1.1);
@@ -572,9 +648,9 @@ See the COPYING file for details.
 
   function testMakeEulerZXZ() {
     var m0 = goog.vec.Mat4.createFloat32();
-    var roll = Math.random() * 2 * Math.PI;
-    var tilt = Math.random() * Math.PI;
-    var yaw = Math.random() * 2 * Math.PI;
+    var roll = 0.200982 * 2 * Math.PI;
+    var tilt = 0.915833 * Math.PI;
+    var yaw = 0.839392 * 2 * Math.PI;
 
     goog.vec.Mat4.makeRotate(m0, roll, 0, 0, 1);
     goog.vec.Mat4.rotate(m0, tilt, 1, 0, 0);
@@ -662,12 +738,10 @@ See the COPYING file for details.
 
     var viewExp = goog.vec.Mat4.createFloat32();
     var viewRes = goog.vec.Mat4.createFloat32();
-    var tmp = goog.vec.Mat4.createFloat32();
 
     // Get a valid set of random vectors eye, forward, up by decomposing
     // a random matrix into a set of lookAt vectors.
-    for (var i = 0; i < tmp.length; i++)
-      tmp[i] = Math.random();
+    var tmp = goog.vec.Mat4.createFloat32FromArray(randomMat4);
     var eyeExp = [0, 0, 0];
     var fwdExp = [0, 0, 0];
     var upExp = [0, 0, 0];
