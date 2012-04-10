@@ -288,6 +288,15 @@ goog.ui.AutoComplete.Renderer.prototype.setTopAlign = function(align) {
 
 
 /**
+ * Set whether to align autocomplete to the right of the target element.
+ * @param {boolean} align If true, align to right.
+ */
+goog.ui.AutoComplete.Renderer.prototype.setRightAlign = function(align) {
+  this.rightAlign_ = align;
+};
+
+
+/**
  * Set whether or not standard highlighting should be used when rendering rows.
  * @param {boolean} useStandardHighlighting true if standard highlighting used.
  */
