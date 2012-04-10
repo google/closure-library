@@ -93,7 +93,6 @@ goog.provide('goog.i18n.DateTimeSymbols_cch');
 goog.provide('goog.i18n.DateTimeSymbols_cch_NG');
 goog.provide('goog.i18n.DateTimeSymbols_cgg');
 goog.provide('goog.i18n.DateTimeSymbols_cgg_UG');
-goog.provide('goog.i18n.DateTimeSymbols_chr');
 goog.provide('goog.i18n.DateTimeSymbols_chr_US');
 goog.provide('goog.i18n.DateTimeSymbols_ckb');
 goog.provide('goog.i18n.DateTimeSymbols_ckb_Arab');
@@ -104,7 +103,6 @@ goog.provide('goog.i18n.DateTimeSymbols_ckb_IR');
 goog.provide('goog.i18n.DateTimeSymbols_ckb_Latn');
 goog.provide('goog.i18n.DateTimeSymbols_ckb_Latn_IQ');
 goog.provide('goog.i18n.DateTimeSymbols_cs_CZ');
-goog.provide('goog.i18n.DateTimeSymbols_cy');
 goog.provide('goog.i18n.DateTimeSymbols_cy_GB');
 goog.provide('goog.i18n.DateTimeSymbols_da_DK');
 goog.provide('goog.i18n.DateTimeSymbols_dav');
@@ -239,7 +237,6 @@ goog.provide('goog.i18n.DateTimeSymbols_ha_Latn');
 goog.provide('goog.i18n.DateTimeSymbols_ha_Latn_GH');
 goog.provide('goog.i18n.DateTimeSymbols_ha_Latn_NE');
 goog.provide('goog.i18n.DateTimeSymbols_ha_Latn_NG');
-goog.provide('goog.i18n.DateTimeSymbols_haw');
 goog.provide('goog.i18n.DateTimeSymbols_haw_US');
 goog.provide('goog.i18n.DateTimeSymbols_he_IL');
 goog.provide('goog.i18n.DateTimeSymbols_hi_IN');
@@ -2655,9 +2652,9 @@ goog.i18n.DateTimeSymbols_cgg_UG = goog.i18n.DateTimeSymbols_cgg;
 
 
 /**
- * Date/time formatting symbols for locale chr.
+ * Date/time formatting symbols for locale chr_US.
  */
-goog.i18n.DateTimeSymbols_chr = {
+goog.i18n.DateTimeSymbols_chr_US = {
   ERAS: ['ᎤᏓᎷᎸ', 'ᎤᎶᏐᏅ'],
   ERANAMES: ['Ꮟ ᏥᏌ ᎾᏕᎲᏍᎬᎾ',
       'ᎠᎩᏃᎮᎵᏓᏍᏗᏱ ᎠᏕᏘᏱᏍᎬ ᏱᎰᏩ ᏧᏓᏂᎸᎢᏍᏗ'],
@@ -2692,16 +2689,10 @@ goog.i18n.DateTimeSymbols_chr = {
   AMPMS: ['ᏌᎾᎴ', 'ᏒᎯᏱᎢᏗᏢ'],
   DATEFORMATS: ['EEEE, MMMM d, y', 'MMMM d, y', 'MMM d, y', 'M/d/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  FIRSTDAYOFWEEK: 0,
+  FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
-  FIRSTWEEKCUTOFFDAY: 6
+  FIRSTWEEKCUTOFFDAY: 5
 };
-
-
-/**
- * Date/time formatting symbols for locale chr_US.
- */
-goog.i18n.DateTimeSymbols_chr_US = goog.i18n.DateTimeSymbols_chr;
 
 
 /**
@@ -2833,9 +2824,9 @@ goog.i18n.DateTimeSymbols_cs_CZ = {
 
 
 /**
- * Date/time formatting symbols for locale cy.
+ * Date/time formatting symbols for locale cy_GB.
  */
-goog.i18n.DateTimeSymbols_cy = {
+goog.i18n.DateTimeSymbols_cy_GB = {
   ERAS: ['CC', 'OC'],
   ERANAMES: ['Cyn Crist', 'Oed Crist'],
   NARROWMONTHS: ['I', 'C', 'M', 'E', 'M', 'M', 'G', 'A', 'M', 'H', 'T', 'R'],
@@ -2866,12 +2857,6 @@ goog.i18n.DateTimeSymbols_cy = {
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 3
 };
-
-
-/**
- * Date/time formatting symbols for locale cy_GB.
- */
-goog.i18n.DateTimeSymbols_cy_GB = goog.i18n.DateTimeSymbols_cy;
 
 
 /**
@@ -7296,9 +7281,9 @@ goog.i18n.DateTimeSymbols_ha_Latn_NG = goog.i18n.DateTimeSymbols_ha;
 
 
 /**
- * Date/time formatting symbols for locale haw.
+ * Date/time formatting symbols for locale haw_US.
  */
-goog.i18n.DateTimeSymbols_haw = {
+goog.i18n.DateTimeSymbols_haw_US = {
   ERAS: ['BCE', 'CE'],
   ERANAMES: ['BCE', 'CE'],
   NARROWMONTHS: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
@@ -7330,12 +7315,6 @@ goog.i18n.DateTimeSymbols_haw = {
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
 };
-
-
-/**
- * Date/time formatting symbols for locale haw_US.
- */
-goog.i18n.DateTimeSymbols_haw_US = goog.i18n.DateTimeSymbols_haw;
 
 
 /**
@@ -15175,12 +15154,8 @@ if (goog.LOCALE == 'cgg_UG' || goog.LOCALE == 'cgg-UG') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cgg;
 }
 
-if (goog.LOCALE == 'chr') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_chr;
-}
-
 if (goog.LOCALE == 'chr_US' || goog.LOCALE == 'chr-US') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_chr;
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_chr_US;
 }
 
 if (goog.LOCALE == 'ckb') {
@@ -15219,12 +15194,8 @@ if (goog.LOCALE == 'cs_CZ' || goog.LOCALE == 'cs-CZ') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cs_CZ;
 }
 
-if (goog.LOCALE == 'cy') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cy;
-}
-
 if (goog.LOCALE == 'cy_GB' || goog.LOCALE == 'cy-GB') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cy;
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_cy_GB;
 }
 
 if (goog.LOCALE == 'da_DK' || goog.LOCALE == 'da-DK') {
@@ -15759,12 +15730,8 @@ if (goog.LOCALE == 'ha_Latn_NG' || goog.LOCALE == 'ha-Latn-NG') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ha;
 }
 
-if (goog.LOCALE == 'haw') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_haw;
-}
-
 if (goog.LOCALE == 'haw_US' || goog.LOCALE == 'haw-US') {
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_haw;
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_haw_US;
 }
 
 if (goog.LOCALE == 'he_IL' || goog.LOCALE == 'he-IL') {
