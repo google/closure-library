@@ -81,6 +81,26 @@ goog.object.extend(
 
 
 /**
+ * Whether the default action has been prevented.
+ * This is a property to match the W3C specification at {@link
+ * http://www.w3.org/TR/DOM-Level-3-Events/#events-event-type-defaultPrevented}.
+ * Must be treated as read-only outside the class.
+ * @type {boolean}
+ */
+goog.testing.events.Event.prototype.defaultPrevented = false;
+
+
+/**
+ * Prevents the default action, for example a link redirecting to a url, and
+ * sets the return value of the event to false.
+ */
+goog.testing.events.Event.prototype.preventDefault = function() {
+  this.defaultPrevented = true;
+  this.returnValue_ = false;
+};
+
+
+/**
  * A static helper function that sets the mouse position to the event.
  * @param {Event} event A simulated native event.
  * @param {goog.math.Coordinate=} opt_coords Mouse position. Defaults to event's
