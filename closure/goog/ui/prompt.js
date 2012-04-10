@@ -182,6 +182,15 @@ goog.ui.Prompt.prototype.enterDocument = function() {
 
 
 /**
+ * @return {HTMLInputElement} The user input element. May be null if the Prompt
+ *     has not been rendered.
+ */
+goog.ui.Prompt.prototype.getInputElement = function() {
+  return this.userInputEl_;
+};
+
+
+/**
  * Sets an input decorator function.  This function will be called in
  * #enterDocument and will be passed the input element.  This is useful for
  * attaching handlers to the input element for specific change events,
