@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-"""Calculates Javascript dependencies without requiring Google3.
+"""Calculates JavaScript dependencies without requiring Google's build system.
 
 It iterates over a number of search paths and builds a dependency tree.  With
 the inputs provided, it walks the dependency tree and outputs all the files
-required for compilation.\n
+required for compilation.
 """
 
 
