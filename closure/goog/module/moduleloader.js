@@ -34,7 +34,9 @@ goog.require('goog.Disposable');
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
+goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventTarget');
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.net.BulkLoader');
 goog.require('goog.net.EventType');
@@ -44,11 +46,11 @@ goog.require('goog.net.jsloader');
 /**
  * A class that loads Javascript modules.
  * @constructor
- * @extends {goog.Disposable}
+ * @extends {goog.events.EventTarget}
  * @implements {goog.module.AbstractModuleLoader}
  */
 goog.module.ModuleLoader = function() {
-  goog.Disposable.call(this);
+  goog.base(this);
 
   /**
    * Event handler for managing handling events.
@@ -57,7 +59,7 @@ goog.module.ModuleLoader = function() {
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
 };
-goog.inherits(goog.module.ModuleLoader, goog.Disposable);
+goog.inherits(goog.module.ModuleLoader, goog.events.EventTarget);
 
 
 /**
@@ -152,6 +154,10 @@ goog.module.ModuleLoader.prototype.evaluateCode = function(
         moduleIds, e);
   }
 
+  this.dispatchEvent(
+      new goog.module.ModuleLoader.Event(
+          goog.module.ModuleLoader.EventType.EVALUATE_CODE, moduleIds));
+
   return success;
 };
 
@@ -166,6 +172,10 @@ goog.module.ModuleLoader.prototype.evaluateCode = function(
  */
 goog.module.ModuleLoader.prototype.handleRequestSuccess = function(
     jsCode, moduleIds, successFn, errorFn) {
+  this.dispatchEvent(
+      new goog.module.ModuleLoader.Event(
+          goog.module.ModuleLoader.EventType.REQUEST_SUCCESS, moduleIds));
+
   this.logger.info('Code loaded for module(s): ' + moduleIds);
 
   var success = this.evaluateCode(moduleIds, jsCode);
@@ -186,6 +196,10 @@ goog.module.ModuleLoader.prototype.handleRequestSuccess = function(
  */
 goog.module.ModuleLoader.prototype.handleRequestError = function(
     moduleIds, errorFn, status) {
+  this.dispatchEvent(
+      new goog.module.ModuleLoader.Event(
+          goog.module.ModuleLoader.EventType.REQUEST_ERROR, moduleIds));
+
   this.logger.warning('Request failed for module(s): ' + moduleIds);
 
   if (errorFn) {
@@ -263,3 +277,34 @@ goog.module.ModuleLoader.prototype.disposeInternal = function() {
   this.eventHandler_.dispose();
   this.eventHandler_ = null;
 };
+
+
+/**
+ * @enum {string}
+ */
+goog.module.ModuleLoader.EventType = {
+  /** Called after the code for a module is evaluated. */
+  EVALUATE_CODE: goog.events.getUniqueId('evaluateCode'),
+
+  /** Called when the BulkLoader finishes successfully. */
+  REQUEST_SUCCESS: goog.events.getUniqueId('requestSuccess'),
+
+  /** Called when the BulkLoader fails, or code loading fails. */
+  REQUEST_ERROR: goog.events.getUniqueId('requestError')
+};
+
+/**
+ * @param {goog.module.ModuleLoader.EventType} type The type.
+ * @param {Array.<string>} moduleIds The ids of the modules being evaluated.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+goog.module.ModuleLoader.Event = function(type, moduleIds) {
+  goog.base(this, type);
+
+  /**
+   * @type {Array.<string>}
+   */
+  this.moduleIds = moduleIds;
+};
+goog.inherits(goog.module.ModuleLoader.Event, goog.events.Event);
