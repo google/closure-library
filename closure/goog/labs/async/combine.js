@@ -79,7 +79,7 @@ goog.labs.async.combine.onSuccess = function(var_args) {
       goog.labs.async.combine.apply(goog.labs.async.combine, arguments),
       // The combined result never ERRORs
       function(res) {
-        var results = res.getValue();
+        var results = /** @type {Array} */ (res.getValue());
         if (goog.array.every(results, resolvedSuccessfully)) {
           combinedResult.setValue(results);
         } else {

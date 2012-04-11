@@ -115,7 +115,7 @@ goog.proto2.TextFormatSerializer.prototype.serializeMessage_ =
 
     switch (goog.typeOf(value)) {
       case 'string':
-        value = goog.string.quote(value);
+        value = goog.string.quote(/** @type {string} */ (value));
         printer.append(value);
         break;
 
