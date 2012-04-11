@@ -43,6 +43,7 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.jsloader');
 
 
+
 /**
  * A class that loads Javascript modules.
  * @constructor
@@ -80,6 +81,14 @@ goog.module.ModuleLoader.prototype.debugMode_ = false;
 
 
 /**
+ * Whether source url injection is enabled.
+ * @type {boolean}
+ * @private
+ */
+goog.module.ModuleLoader.prototype.sourceUrlInjection_ = false;
+
+
+/**
  * Gets the debug mode for the loader.
  * @return {boolean} debugMode Whether the debug mode is enabled.
  */
@@ -94,6 +103,39 @@ goog.module.ModuleLoader.prototype.getDebugMode = function() {
  */
 goog.module.ModuleLoader.prototype.setDebugMode = function(debugMode) {
   this.debugMode_ = debugMode;
+};
+
+
+/**
+ * When enabled, we will add a sourceURL comment to the end of all scripts
+ * to mark their origin.
+ *
+ * Notice that in most cases, this is far superior to debug mode, because
+ * the scripts will load faster on most browsers. (Debug mode is very slow,
+ * unless you're using Gecko < 1.9. See the comment at the top of this file.)
+ *
+ * On WebKit, stack traces will refect the sourceURL comment, so this is also
+ * useful for debugging webkit stack traces in production.
+ *
+ * There is some performance overhead to doing this.
+ *
+ * TODO(nicksantos): Measure the performance cost, and figure out a decision
+ * tree for when users should turn this on. I'm not sure if most users are
+ * sophisticated enough to know whether they want this or not, because
+ * there are a couple different trade-offs involved. We might want to make
+ * debug mode do this on browsers that support sourceURL.
+ *
+ * @param {boolean} enabled
+ * @see http://bugzilla.mozilla.org/show_bug.cgi?id=583083
+ */
+goog.module.ModuleLoader.prototype.setSourceUrlInjection = function(enabled) {
+  this.sourceUrlInjection_ = enabled;
+};
+
+
+/** @return {boolean} Whether we're using source url injection. */
+goog.module.ModuleLoader.prototype.usingSourceUrlInjection = function() {
+  return this.sourceUrlInjection_;
 };
 
 
@@ -172,12 +214,6 @@ goog.module.ModuleLoader.prototype.evaluateCode = function(
  */
 goog.module.ModuleLoader.prototype.handleRequestSuccess = function(
     jsCode, moduleIds, successFn, errorFn) {
-  this.dispatchEvent(
-      new goog.module.ModuleLoader.Event(
-          goog.module.ModuleLoader.EventType.REQUEST_SUCCESS, moduleIds));
-
-  this.logger.info('Code loaded for module(s): ' + moduleIds);
-
   var success = this.evaluateCode(moduleIds, jsCode);
   if (!success) {
     this.handleRequestError(moduleIds, errorFn, null);
@@ -212,6 +248,7 @@ goog.module.ModuleLoader.prototype.handleRequestError = function(
  * Handles a timeout during a request for one or more modules.
  * @param {Array.<string>} moduleIds The ids of the modules requested.
  * @param {function()} timeoutFn The function to call on timeout.
+ * @protected
  */
 goog.module.ModuleLoader.prototype.handleRequestTimeout = function(
     moduleIds, timeoutFn) {
@@ -234,9 +271,33 @@ goog.module.ModuleLoader.prototype.handleRequestTimeout = function(
  */
 goog.module.ModuleLoader.prototype.handleSuccess_ = function(
     bulkLoader, moduleIds, successFn, errorFn) {
-  var jsCode = bulkLoader.getResponseTexts().join('\n');
+  this.logger.info('Code loaded for module(s): ' + moduleIds);
+  this.dispatchEvent(
+      new goog.module.ModuleLoader.Event(
+          goog.module.ModuleLoader.EventType.REQUEST_SUCCESS, moduleIds));
 
-  this.handleRequestSuccess(jsCode, moduleIds, successFn, errorFn);
+  var contents = bulkLoader.getResponseTexts();
+  if (this.usingSourceUrlInjection()) {
+    // TODO(nicksantos): It's not really clear how to reconcile this with
+    // people who override handleRequestSuccess. Let's just punt for now.
+    var uris = bulkLoader.getRequestUris();
+    for (var i = 0; i < uris.length; i++) {
+      var uri = uris[i];
+      var success = this.evaluateCode(
+          moduleIds, contents[i] + ' //@ sourceURL=' + uri);
+      if (!success) {
+        this.handleRequestError(moduleIds, errorFn, null);
+        break;
+      }
+    }
+
+    if (success && successFn) {
+      successFn();
+    }
+  } else {
+    this.handleRequestSuccess(
+        contents.join('\n'), moduleIds, successFn, errorFn);
+  }
 
   // NOTE: A bulk loader instance is used for loading a set of module ids. Once
   // these modules have been loaded succesfully or in error the bulk loader

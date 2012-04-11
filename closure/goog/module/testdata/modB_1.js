@@ -21,4 +21,8 @@ goog.provide('goog.module.testdata.modB_1');
 
 goog.require('goog.module.ModuleManager');
 
+function throwErrorInModuleB() {
+  throw Error();
+}
+
 goog.module.ModuleManager.getInstance().setLoaded('modB');

@@ -1,19 +1,18 @@
-<!--
-
-  A regression test for goog.module.ModuleLoader.
-
-  Unlike the unit tests for goog.module.ModuleManager, this uses
-  asynchronous test cases and real XHRs.
-
-  Author: nicksantos@google.com (Nick Santos)
--->
-
 <html>
 <!--
 Copyright 2009 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
+-->
+
+<!--
+  A regression test for goog.module.ModuleLoader.
+
+  Unlike the unit tests for goog.module.ModuleManager, this uses
+  asynchronous test cases and real XHRs.
+
+  Author: nicksantos@google.com (Nick Santos)
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,7 +31,7 @@ goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.jsunit');
-
+goog.require('goog.userAgent.product');
 
 </script>
 </head>
@@ -173,6 +172,30 @@ function testLoadDebugModuleAThenB() {
       } else if (uri.indexOf('modB') >= 0) {
         assertTrue(seenLastScriptOfModuleA);
       }
+    }
+  });
+}
+
+function testSourceInjection() {
+  testCase.waitForAsync('wait for module B load');
+  moduleLoader.setSourceUrlInjection(true);
+  moduleManager.execOnLoad('modB', function() {
+    testCase.continueTesting();
+
+    assertTrue(!!throwErrorInModuleB);
+    var ex = null;
+    try {
+      throwErrorInModuleB();
+    } catch (e) {
+      ex = e;
+    }
+
+    assertNotNull(ex);
+
+    // Chrome is currently the only browser that uses sourceURL
+    // when serializing stack traces.
+    if (goog.userAgent.product.CHROME) {
+      assertContains('modB_1.js', ex.stack.toString());
     }
   });
 }
