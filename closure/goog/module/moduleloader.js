@@ -78,15 +78,6 @@ goog.module.ModuleLoader.prototype.debugMode_ = false;
 
 
 /**
- * The postfix to check for in code received from the server before it is
- * evaluated on the client.
- * @type {?string}
- * @private
- */
-goog.module.ModuleLoader.prototype.codePostfix_ = null;
-
-
-/**
  * Gets the debug mode for the loader.
  * @return {boolean} debugMode Whether the debug mode is enabled.
  */
@@ -101,16 +92,6 @@ goog.module.ModuleLoader.prototype.getDebugMode = function() {
  */
 goog.module.ModuleLoader.prototype.setDebugMode = function(debugMode) {
   this.debugMode_ = debugMode;
-};
-
-
-/**
- * Set the postfix to check for when we receive code from the server.
- * @param {string} codePostfix The postfix.
- */
-goog.module.ModuleLoader.prototype.setCodePostfix = function(
-    codePostfix) {
-  this.codePostfix_ = codePostfix;
 };
 
 
@@ -163,11 +144,7 @@ goog.module.ModuleLoader.prototype.evaluateCode = function(
     moduleIds, jsCode) {
   var success = true;
   try {
-    if (this.validateCodePostfix_(jsCode)) {
-      goog.globalEval(jsCode);
-    } else {
-      success = false;
-    }
+    goog.globalEval(jsCode);
   } catch (e) {
     success = false;
     // TODO(user): Consider throwing an exception here.
@@ -229,19 +206,6 @@ goog.module.ModuleLoader.prototype.handleRequestTimeout = function(
   if (timeoutFn) {
     timeoutFn();
   }
-};
-
-
-/**
- * Validate the js code received from the server.
- * @param {string} jsCode The JS code.
- * @return {boolean} TRUE iff the jsCode is valid.
- * @private
- */
-goog.module.ModuleLoader.prototype.validateCodePostfix_ = function(
-    jsCode) {
-  return this.codePostfix_ ?
-      goog.string.endsWith(jsCode, this.codePostfix_) : true;
 };
 
 
