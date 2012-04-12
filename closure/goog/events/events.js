@@ -68,14 +68,6 @@ goog.require('goog.userAgent');
 
 
 /**
- * @define {boolean} Whether to always assume the garbage collector is good.
- * @deprecated This is no longer needed and will be removed once apps are
- * updated.
- */
-goog.events.ASSUME_GOOD_GC = false;
-
-
-/**
  * Container for storing event listeners and their proxies
  * @private
  * @type {Object.<goog.events.Listener>}
