@@ -180,10 +180,6 @@ goog.Uri.prototype.ignoreCase_ = false;
  * @return {string} The string form of the url.
  */
 goog.Uri.prototype.toString = function() {
-  if (this.cachedToString_) {
-    return this.cachedToString_;
-  }
-
   var out = [];
 
   if (this.scheme_) {
@@ -226,7 +222,7 @@ goog.Uri.prototype.toString = function() {
     out.push('#', goog.Uri.encodeSpecialChars_(
         this.fragment_, goog.Uri.reDisallowedInFragment_));
   }
-  return this.cachedToString_ = out.join('');
+  return out.join('');
 };
 
 
@@ -344,7 +340,6 @@ goog.Uri.prototype.getScheme = function() {
  */
 goog.Uri.prototype.setScheme = function(newScheme, opt_decode) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
   this.scheme_ = opt_decode ? goog.Uri.decodeOrEmpty_(newScheme) : newScheme;
 
   // remove an : at the end of the scheme so somebody can pass in
@@ -380,7 +375,6 @@ goog.Uri.prototype.getUserInfo = function() {
  */
 goog.Uri.prototype.setUserInfo = function(newUserInfo, opt_decode) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
   this.userInfo_ = opt_decode ? goog.Uri.decodeOrEmpty_(newUserInfo) :
                    newUserInfo;
   return this;
@@ -411,7 +405,6 @@ goog.Uri.prototype.getDomain = function() {
  */
 goog.Uri.prototype.setDomain = function(newDomain, opt_decode) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
   this.domain_ = opt_decode ? goog.Uri.decodeOrEmpty_(newDomain) : newDomain;
   return this;
 };
@@ -440,7 +433,6 @@ goog.Uri.prototype.getPort = function() {
  */
 goog.Uri.prototype.setPort = function(newPort) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
 
   if (newPort) {
     newPort = Number(newPort);
@@ -480,7 +472,6 @@ goog.Uri.prototype.getPath = function() {
  */
 goog.Uri.prototype.setPath = function(newPath, opt_decode) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
   this.path_ = opt_decode ? goog.Uri.decodeOrEmpty_(newPath) : newPath;
   return this;
 };
@@ -511,7 +502,6 @@ goog.Uri.prototype.hasQuery = function() {
  */
 goog.Uri.prototype.setQueryData = function(queryData, opt_decode) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
 
   if (queryData instanceof goog.Uri.QueryData) {
     this.queryData_ = queryData;
@@ -589,8 +579,6 @@ goog.Uri.prototype.getQuery = function() {
  */
 goog.Uri.prototype.setParameterValue = function(key, value) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
-
   this.queryData_.set(key, value);
   return this;
 };
@@ -611,7 +599,6 @@ goog.Uri.prototype.setParameterValue = function(key, value) {
  */
 goog.Uri.prototype.setParameterValues = function(key, values) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
 
   if (!goog.isArray(values)) {
     values = [String(values)];
@@ -665,7 +652,6 @@ goog.Uri.prototype.getFragment = function() {
  */
 goog.Uri.prototype.setFragment = function(newFragment, opt_decode) {
   this.enforceReadOnly();
-  delete this.cachedToString_;
   this.fragment_ = opt_decode ? goog.Uri.decodeOrEmpty_(newFragment) :
                    newFragment;
   return this;
@@ -1173,14 +1159,6 @@ goog.Uri.QueryData.prototype.count_ = null;
 
 
 /**
- * Decoded query string, or null if it requires computing.
- * @type {?string}
- * @private
- */
-goog.Uri.QueryData.decodedQuery_ = null;
-
-
-/**
  * @return {?number} The number of parameters.
  */
 goog.Uri.QueryData.prototype.getCount = function() {
@@ -1476,11 +1454,7 @@ goog.Uri.QueryData.prototype.toString = function() {
  * @return {string} Decoded query string.
  */
 goog.Uri.QueryData.prototype.toDecodedString = function() {
-  if (!this.decodedQuery_) {
-    this.decodedQuery_ = goog.Uri.decodeOrEmpty_(this.toString());
-  }
-
-  return this.decodedQuery_;
+  return goog.Uri.decodeOrEmpty_(this.toString());
 };
 
 
@@ -1489,11 +1463,7 @@ goog.Uri.QueryData.prototype.toDecodedString = function() {
  * @private
  */
 goog.Uri.QueryData.prototype.invalidateCache_ = function() {
-  delete this.decodedQuery_;
-  delete this.encodedQuery_;
-  if (this.uri_) {
-    delete this.uri_.cachedToString_;
-  }
+  this.encodedQuery_ = null;
 };
 
 
@@ -1521,12 +1491,7 @@ goog.Uri.QueryData.prototype.filterKeys = function(keys) {
  */
 goog.Uri.QueryData.prototype.clone = function() {
   var rv = new goog.Uri.QueryData();
-  if (this.decodedQuery_) {
-    rv.decodedQuery_ = this.decodedQuery_;
-  }
-  if (this.encodedQuery_) {
-    rv.encodedQuery_ = this.encodedQuery_;
-  }
+  rv.encodedQuery_ = this.encodedQuery_;
   if (this.keyMap_) {
     rv.keyMap_ = this.keyMap_.clone();
   }
