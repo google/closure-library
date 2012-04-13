@@ -24,6 +24,7 @@ See the COPYING file for details.
   goog.require('goog.structs.Map');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.PropertyReplacer');
+  goog.require('goog.testing.recordFunction');
   goog.require('goog.testing.asserts');
   goog.require('goog.testing.jsunit');
 </script>
@@ -1243,6 +1244,24 @@ function testPathWithHost() {
   assertEquals(browserChannel.backChannelUri_.getDomain(), 'example.com');
   assertEquals(browserChannel.forwardChannelUri_.getScheme(), 'https');
   assertEquals(browserChannel.forwardChannelUri_.getDomain(), 'example.com');
+}
+
+function testSetDeserializer() {
+  var recordUnsafeParse = goog.testing.recordFunction(
+      goog.json.unsafeParse);
+  browserChannel.setDeserializer(recordUnsafeParse);
+
+  connect();
+  assertEquals(2, recordUnsafeParse.getCallCount());
+
+  var call2 = recordUnsafeParse.popLastCall();
+  var call1 = recordUnsafeParse.popLastCall();
+
+  assertEquals(1, call1.getArguments().length);
+  assertEquals('[[0,["c","1234567890ABCDEF",null]]]', call1.getArgument(0));
+
+  assertEquals(1, call2.getArguments().length);
+  assertEquals('[[1,["foo"]]]', call2.getArgument(0));
 }
 
 </script>

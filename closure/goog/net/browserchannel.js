@@ -359,6 +359,16 @@ goog.net.BrowserChannel.prototype.backChannelAttemptId_;
 
 
 /**
+ * Function to deserialize a response payload. Defaults to
+ * {@code goog.json.unsafeParse}.  The function should return an array.
+ * @type {function(string): !Array}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.deserializerFunction_ = (
+    /** @type {!function(string): !Array} */ goog.json.unsafeParse);
+
+
+/**
  * The latest protocol version that this class supports. We request this version
  * from the server when opening the connection. Should match
  * com.google.net.browserchannel.BrowserChannel.LATEST_CHANNEL_VERSION.
@@ -1167,6 +1177,17 @@ goog.net.BrowserChannel.prototype.hasOutstandingRequests = function() {
 
 
 /**
+ * Sets a new deserialization function for the response payload. A custom
+ * deserializer may be set to handle JSON safety prefixes, for example.
+ * By default, the deserializer is {@code goog.json.unsafeParse}.
+ * @param {function(string): !Array} deserializer Deserialization function.
+ */
+goog.net.BrowserChannel.prototype.setDeserializer = function(deserializer) {
+  this.deserializerFunction_ = deserializer;
+};
+
+
+/**
  * Returns the number of outstanding requests.
  * @return {number} The number of outstanding requests to the server.
  * @private
@@ -1663,7 +1684,7 @@ goog.net.BrowserChannel.prototype.onRequestData =
     if (this.channelVersion_ > 7) {
       var response;
       try {
-        response = (/** @type {Array} */ goog.json.unsafeParse(responseText));
+        response = this.deserializerFunction_(responseText);
       } catch (ex) {
         response = null;
       }
@@ -1683,7 +1704,7 @@ goog.net.BrowserChannel.prototype.onRequestData =
       this.clearDeadBackchannelTimer_();
     }
     if (!goog.string.isEmpty(responseText)) {
-      this.onInput_(/** @type {Array} */ (goog.json.unsafeParse(responseText)));
+      this.onInput_(this.deserializerFunction_(responseText));
     }
   }
 };
