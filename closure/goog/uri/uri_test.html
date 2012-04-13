@@ -316,6 +316,10 @@ function testParameterSetters() {
                goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
                .setParameterValues('key', ['1', '2', '3']).toString());
 
+  assertEquals('/path',
+      goog.Uri.parse('/path?key=v1&key=v2')
+          .setParameterValues('key', []).toString());
+
   // Test case-insensitive setters
   assertEquals('/path?a=b&key=newval&c=d&keywithsuffix=v3',
                goog.Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3', true)

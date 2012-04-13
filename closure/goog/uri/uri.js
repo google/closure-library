@@ -1409,6 +1409,7 @@ goog.Uri.QueryData.prototype.setValues = function(key, values) {
     } else {
       this.count_--;
     }
+    this.keyMap_.remove(key);
   }
 
   if (values.length > 0) {
