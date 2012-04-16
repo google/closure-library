@@ -27,6 +27,7 @@ goog.addDependency('../../third_party/closure/goog/silverlight/silverlight.js', 
 goog.addDependency('../../third_party/closure/goog/silverlight/supporteduseragent.js', ['goog.silverlight.supportedUserAgent'], []);
 goog.addDependency('array/array.js', ['goog.array', 'goog.array.ArrayLike'], ['goog.asserts']);
 goog.addDependency('asserts/asserts.js', ['goog.asserts', 'goog.asserts.AssertionError'], ['goog.debug.Error', 'goog.string']);
+goog.addDependency('async/animationdelay.js', ['goog.async.AnimationDelay'], ['goog.async.Delay', 'goog.functions']);
 goog.addDependency('async/conditionaldelay.js', ['goog.async.ConditionalDelay'], ['goog.Disposable', 'goog.async.Delay']);
 goog.addDependency('async/delay.js', ['goog.Delay', 'goog.async.Delay'], ['goog.Disposable', 'goog.Timer']);
 goog.addDependency('async/throttle.js', ['goog.Throttle', 'goog.async.Throttle'], ['goog.Disposable', 'goog.Timer']);

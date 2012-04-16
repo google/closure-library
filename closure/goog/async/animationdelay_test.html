@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+
+Author: nicksantos@google.com (Nick Santos)
+-->
+
+<head>
+<title>JsUnit tests for goog.async.AnimationDelay</title>
+<script src="../base.js"></script>
+<script>
+
+goog.require('goog.async.AnimationDelay');
+goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.jsunit');
+
+
+</script>
+</head>
+<body>
+<script type='text/javascript'>
+
+var testCase = goog.testing.AsyncTestCase.createAndInstall();
+
+function testStart() {
+  var callCount = 0;
+  var start = goog.now();
+  var delay = new goog.async.AnimationDelay(function(end) {
+    callCount++;
+  });
+
+  delay.start();
+  testCase.waitForAsync('waiting for delay');
+
+  window.setTimeout(function() {
+    testCase.continueTesting();
+    assertEquals(1, callCount);
+  }, 500);
+}
+
+function testStop() {
+  var callCount = 0;
+  var start = goog.now();
+  var delay = new goog.async.AnimationDelay(function(end) {
+    callCount++;
+  });
+
+  delay.start();
+  testCase.waitForAsync('waiting for delay');
+  delay.stop();
+
+  window.setTimeout(function() {
+    testCase.continueTesting();
+    assertEquals(0, callCount);
+  }, 500);
+}
+
+</script>
+</body>
+</html>
