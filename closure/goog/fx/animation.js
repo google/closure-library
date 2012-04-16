@@ -91,8 +91,45 @@ goog.fx.Animation = function(start, end, duration, opt_acc) {
    * @protected
    */
   this.coords = [];
+
+  /**
+   * Whether the animation should use "right" rather than "left" to position
+   * elements in RTL.  This is a temporary flag to allow clients to transition
+   * to the new behavior at their convenience.  At some point it will be the
+   * default.
+   * @type {boolean}
+   * @private
+   */
+  this.useRightPositioningForRtl_ = false;
 };
 goog.inherits(goog.fx.Animation, goog.fx.TransitionBase);
+
+
+/**
+ * Sets whether the animation should use "right" rather than "left" to position
+ * elements.  This is a temporary flag to allow clients to transition
+ * to the new component at their convenience.  At some point "right" will be
+ * used for RTL elements by default.
+ * @param {boolean} useRightPositioningForRtl True if "right" should be used for
+ *     positioning, false if "left" should be used for positioning.
+ */
+goog.fx.Animation.prototype.enableRightPositioningForRtl =
+    function(useRightPositioningForRtl) {
+  this.useRightPositioningForRtl_ = useRightPositioningForRtl;
+};
+
+
+/**
+ * Whether the animation should use "right" rather than "left" to position
+ * elements.  This is a temporary flag to allow clients to transition
+ * to the new component at their convenience.  At some point "right" will be
+ * used for RTL elements by default.
+ * @return {boolean} True if "right" should be used for positioning, false if
+ *     "left" should be used for positioning.
+ */
+goog.fx.Animation.prototype.isRightPositioningForRtlEnabled = function() {
+  return this.useRightPositioningForRtl_;
+};
 
 
 /**

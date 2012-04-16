@@ -35,6 +35,8 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
+goog.require('goog.style');
+goog.require('goog.style.bidi');
 goog.require('goog.userAgent');
 
 
@@ -116,6 +118,14 @@ goog.fx.Dragger.prototype.handle;
  * @type {goog.math.Rect}
  */
 goog.fx.Dragger.prototype.limits;
+
+
+/**
+ * Whether the element is rendered right-to-left. We initialize this lazily.
+ * @type {boolean|undefined}}
+ * @private
+ */
+goog.fx.Dragger.prototype.rightToLeft_;
 
 
 /**
@@ -251,6 +261,31 @@ goog.fx.Dragger.prototype.ieDragStartCancellingOn_ = false;
 
 
 /**
+ * Whether the dragger implements the changes described in http://b/6324964,
+ * making it truly RTL.  This is a temporary flag to allow clients to transition
+ * to the new behavior at their convenience.  At some point it will be the
+ * default.
+ * @type {boolean}
+ * @private
+ */
+goog.fx.Dragger.prototype.useRightPositioningForRtl_ = false;
+
+
+/**
+ * Turns on/off true RTL behavior.  This should be called immediately after
+ * construction.  This is a temporary flag to allow clients to transition
+ * to the new component at their convenience.  At some point true will be the
+ * default.
+ * @param {boolean} useRightPositioningForRtl True if "right" should be used for
+ *     positioning, false if "left" should be used for positioning.
+ */
+goog.fx.Dragger.prototype.enableRightPositioningForRtl =
+    function(useRightPositioningForRtl) {
+  this.useRightPositioningForRtl_ = useRightPositioningForRtl;
+};
+
+
+/**
  * Returns the event handler, intended for subclass use.
  * @return {goog.events.EventHandler} The event handler.
  */
@@ -262,7 +297,9 @@ goog.fx.Dragger.prototype.getHandler = function() {
 /**
  * Sets (or reset) the Drag limits after a Dragger is created.
  * @param {goog.math.Rect?} limits Object containing left, top, width,
- *     height for new Dragger limits.
+ *     height for new Dragger limits. If target is right-to-left and
+ *     enableRightPositioningForRtl(true) is called, then rect is interpreted as
+ *     right, top, width, and height.
  */
 goog.fx.Dragger.prototype.setLimits = function(limits) {
   this.limits = limits || new goog.math.Rect(NaN, NaN, NaN, NaN);
@@ -345,6 +382,20 @@ goog.fx.Dragger.prototype.disposeInternal = function() {
 
 
 /**
+ * Whether the DOM element being manipulated is rendered right-to-left.
+ * @return {boolean} True if the DOM element is rendered right-to-left, false
+ *     otherwise.
+ * @private
+ */
+goog.fx.Dragger.prototype.isRightToLeft_ = function() {
+  if (!goog.isDef(this.rightToLeft_)) {
+    this.rightToLeft_ = goog.style.isRightToLeft(this.target);
+  }
+  return this.rightToLeft_;
+};
+
+
+/**
  * Event handler that is used to start the drag
  * @param {goog.events.BrowserEvent} e Event object.
  */
@@ -377,7 +428,8 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     this.clientY = this.startY = e.clientY;
     this.screenX = e.screenX;
     this.screenY = e.screenY;
-    this.deltaX = this.target.offsetLeft;
+    this.deltaX = this.useRightPositioningForRtl_ ?
+        goog.style.bidi.getOffsetStart(this.target) : this.target.offsetLeft;
     this.deltaY = this.target.offsetTop;
     this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
 
@@ -522,7 +574,10 @@ goog.fx.Dragger.prototype.maybeReinitTouchEvent_ = function(e) {
 goog.fx.Dragger.prototype.handleMove_ = function(e) {
   if (this.enabled_) {
     this.maybeReinitTouchEvent_(e);
-    var dx = e.clientX - this.clientX;
+    // dx in right-to-left cases is relative to the right.
+    var sign = this.useRightPositioningForRtl_ &&
+        this.isRightToLeft_() ? -1 : 1;
+    var dx = sign * (e.clientX - this.clientX);
     var dy = e.clientY - this.clientY;
     this.clientX = e.clientX;
     this.clientY = e.clientY;
@@ -654,11 +709,16 @@ goog.fx.Dragger.prototype.limitY = function(y) {
  * Normally this is simply moving the element to x,y though in some cases it
  * might be used to resize the layer.  This is basically a shortcut to
  * implementing a default ondrag event handler.
- * @param {number} x X-coordinate for target element.
+ * @param {number} x X-coordinate for target element. In right-to-left, x this
+ *     is the number of pixels the target should be moved to from the right.
  * @param {number} y Y-coordinate for target element.
  */
 goog.fx.Dragger.prototype.defaultAction = function(x, y) {
-  this.target.style.left = x + 'px';
+  if (this.useRightPositioningForRtl_ && this.isRightToLeft_()) {
+    this.target.style.right = x + 'px';
+  } else {
+    this.target.style.left = x + 'px';
+  }
   this.target.style.top = y + 'px';
 };
 

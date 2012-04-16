@@ -55,9 +55,11 @@ See the COPYING file for details.
 
 <script type="text/javascript">
 var oneThumbSlider;
+var oneThumbSliderRtl;
 var oneChangeEventCount;
 
 var twoThumbSlider;
+var twoThumbSliderRtl;
 var twoChangeEventCount;
 
 var mockClock;
@@ -140,12 +142,44 @@ function setUp() {
         twoChangeEventCount++;
       });
 
+  var sandBoxRtl = goog.dom.createDom('div',
+      {'dir': 'rtl', 'style': 'position:absolute;'});
+  sandBox.appendChild(sandBoxRtl);
+
+  var oneThumbElemRtl = goog.dom.createDom(
+      'div', {'id': 'oneThumbSliderRtl'},
+      goog.dom.createDom('span', {'id': 'thumbRtl'}));
+  sandBoxRtl.appendChild(oneThumbElemRtl);
+  oneThumbSliderRtl = new OneThumbSlider();
+  oneThumbSliderRtl.enableFlipForRtl(true);
+  oneThumbSliderRtl.decorate(oneThumbElemRtl);
+  goog.events.listen(oneThumbSliderRtl, goog.ui.Component.EventType.CHANGE,
+      function() {
+        oneChangeEventCount++;
+      });
+
+ var twoThumbElemRtl = goog.dom.createDom(
+     'div', {'id': 'twoThumbSliderRtl'},
+     goog.dom.createDom('div', {'id': 'rangeHighlightRtl'}),
+     goog.dom.createDom('span', {'id': 'valueThumbRtl'}),
+     goog.dom.createDom('span', {'id': 'extentThumbRtl'}));
+  sandBoxRtl.appendChild(twoThumbElemRtl);
+  twoThumbSliderRtl = new TwoThumbSlider();
+  twoThumbSliderRtl.enableFlipForRtl(true);
+  twoThumbSliderRtl.decorate(twoThumbElemRtl);
+  twoChangeEventCount = 0;
+  goog.events.listen(twoThumbSliderRtl, goog.ui.Component.EventType.CHANGE,
+      function() {
+        twoChangeEventCount++;
+      });
 }
 
 function tearDown() {
   goog.events.removeAll();
   oneThumbSlider.dispose();
   twoThumbSlider.dispose();
+  oneThumbSliderRtl.dispose();
+  twoThumbSliderRtl.dispose();
   mockClock.dispose();
   goog.dom.getElement('sandbox').innerHTML = '';
 }
@@ -185,6 +219,67 @@ function testGetAndSetValue() {
   twoThumbSlider.setValue(-60);
   assertEquals('Setting invalid value must not change value.',
       60, twoThumbSlider.getValue());
+  assertEquals('Setting invalid value must not dispatch change event.',
+      1, twoChangeEventCount);
+}
+
+function testGetAndSetValueRtl() {
+  var thumbElement = goog.dom.getElement('thumbRtl');
+  assertEquals(0, goog.style.bidi.getOffsetStart(thumbElement));
+  assertEquals('', thumbElement.style.left);
+  assertTrue(thumbElement.style.right >= 0);
+
+  oneThumbSliderRtl.setValue(30);
+  assertEquals(30, oneThumbSliderRtl.getValue());
+  assertEquals('Setting valid value must dispatch only a single change event.',
+      1, oneChangeEventCount);
+
+  assertEquals('', thumbElement.style.left);
+  assertTrue(thumbElement.style.right >= 0);
+
+  oneThumbSliderRtl.setValue(30);
+  assertEquals(30, oneThumbSliderRtl.getValue());
+  assertEquals('Setting to same value must not dispatch change event.',
+      1, oneChangeEventCount);
+
+  oneThumbSliderRtl.setValue(-30);
+  assertEquals('Setting invalid value must not change value.',
+      30, oneThumbSliderRtl.getValue());
+  assertEquals('Setting invalid value must not dispatch change event.',
+      1, oneChangeEventCount);
+
+
+  // Value thumb can't go past extent thumb, so we must move that first to
+  // allow setting value.
+  var valueThumbElement = goog.dom.getElement('valueThumbRtl');
+  var extentThumbElement = goog.dom.getElement('extentThumbRtl');
+  assertEquals(0, goog.style.bidi.getOffsetStart(valueThumbElement));
+  assertEquals(0, goog.style.bidi.getOffsetStart(extentThumbElement));
+  assertEquals('', valueThumbElement.style.left);
+  assertTrue(valueThumbElement.style.right >= 0);
+  assertEquals('', extentThumbElement.style.left);
+  assertTrue(extentThumbElement.style.right >= 0);
+
+  twoThumbSliderRtl.setExtent(70);
+  twoChangeEventCount = 0;
+  twoThumbSliderRtl.setValue(60);
+  assertEquals(60, twoThumbSliderRtl.getValue());
+  assertEquals('Setting valid value must dispatch only a single change event.',
+      1, twoChangeEventCount);
+
+  twoThumbSliderRtl.setValue(60);
+  assertEquals(60, twoThumbSliderRtl.getValue());
+  assertEquals('Setting to same value must not dispatch change event.',
+      1, twoChangeEventCount);
+
+  assertEquals('', valueThumbElement.style.left);
+  assertTrue(valueThumbElement.style.right >= 0);
+  assertEquals('', extentThumbElement.style.left);
+  assertTrue(extentThumbElement.style.right >= 0);
+
+  twoThumbSliderRtl.setValue(-60);
+  assertEquals('Setting invalid value must not change value.',
+      60, twoThumbSliderRtl.getValue());
   assertEquals('Setting invalid value must not dispatch change event.',
       1, twoChangeEventCount);
 }
@@ -254,6 +349,108 @@ function assertHighlightedRange(rangeHighlight, startValue, endValue) {
   var rangeSize = 10 * (endValue - startValue);
   assertEquals('Range highlight for ' + rangeStr + ' should have size ' +
       rangeSize + 'px.', rangeSize, rangeHighlight.offsetWidth);
+}
+
+function testKeyHandlingTests() {
+  twoThumbSlider.setValue(0);
+  twoThumbSlider.setExtent(100);
+  assertEquals(0, twoThumbSlider.getValue());
+  assertEquals(100, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.RIGHT);
+  assertEquals(1, twoThumbSlider.getValue());
+  assertEquals(99, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.RIGHT);
+  assertEquals(2, twoThumbSlider.getValue());
+  assertEquals(98, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT);
+  assertEquals(1, twoThumbSlider.getValue());
+  assertEquals(98, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT);
+  assertEquals(0, twoThumbSlider.getValue());
+  assertEquals(98, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.RIGHT,
+      { shiftKey: true });
+  assertEquals(10, twoThumbSlider.getValue());
+  assertEquals(90, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.RIGHT,
+      { shiftKey: true });
+  assertEquals(20, twoThumbSlider.getValue());
+  assertEquals(80, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT,
+       { shiftKey: true });
+  assertEquals(10, twoThumbSlider.getValue());
+  assertEquals(80, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT,
+      { shiftKey: true });
+  assertEquals(0, twoThumbSlider.getValue());
+  assertEquals(80, twoThumbSlider.getExtent());
+}
+
+function testKeyHandlingRtl() {
+  twoThumbSliderRtl.setValue(0);
+  twoThumbSliderRtl.setExtent(100);
+  assertEquals(0, twoThumbSliderRtl.getValue());
+  assertEquals(100, twoThumbSliderRtl.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSliderRtl.getElement(), goog.events.KeyCodes.RIGHT);
+  assertEquals(0, twoThumbSliderRtl.getValue());
+  assertEquals(99, twoThumbSliderRtl.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSliderRtl.getElement(), goog.events.KeyCodes.RIGHT);
+  assertEquals(0, twoThumbSliderRtl.getValue());
+  assertEquals(98, twoThumbSliderRtl.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSliderRtl.getElement(), goog.events.KeyCodes.LEFT);
+  assertEquals(1, twoThumbSliderRtl.getValue());
+  assertEquals(98, twoThumbSliderRtl.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSliderRtl.getElement(), goog.events.KeyCodes.LEFT);
+  assertEquals(2, twoThumbSliderRtl.getValue());
+  assertEquals(98, twoThumbSliderRtl.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSliderRtl.getElement(), goog.events.KeyCodes.RIGHT,
+      { shiftKey: true });
+  assertEquals(0, twoThumbSliderRtl.getValue());
+  assertEquals(90, twoThumbSliderRtl.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSliderRtl.getElement(), goog.events.KeyCodes.RIGHT,
+      { shiftKey: true });
+  assertEquals(0, twoThumbSliderRtl.getValue());
+  assertEquals(80, twoThumbSliderRtl.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSliderRtl.getElement(), goog.events.KeyCodes.LEFT,
+       { shiftKey: true });
+  assertEquals(10, twoThumbSliderRtl.getValue());
+  assertEquals(80, twoThumbSliderRtl.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSliderRtl.getElement(), goog.events.KeyCodes.LEFT,
+      { shiftKey: true });
+  assertEquals(20, twoThumbSliderRtl.getValue());
+  assertEquals(80, twoThumbSliderRtl.getExtent());
 }
 
 function testRangeHighlight() {

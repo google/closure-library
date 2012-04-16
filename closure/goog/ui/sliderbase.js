@@ -66,6 +66,7 @@ goog.require('goog.fx.dom.Slide');
 goog.require('goog.math');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
+goog.require('goog.style.bidi');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.RangeModel');
@@ -248,6 +249,30 @@ goog.ui.SliderBase.prototype.isHandleMouseWheel_ = true;
 goog.ui.SliderBase.prototype.enabled_ = true;
 
 
+/**
+ * Whether the slider implements the changes described in http://b/6324964,
+ * making it truly RTL.  This is a temporary flag to allow clients to transition
+ * to the new behavior at their convenience.  At some point it will be the
+ * default.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.SliderBase.prototype.flipForRtl_ = false;
+
+
+/**
+ * Enables/disables true RTL behavior.  This should be called immediately after
+ * construction.  This is a temporary flag to allow clients to transition
+ * to the new behavior at their convenience.  At some point it will be the
+ * default.
+ * @param {boolean} flipForRtl True if the slider should be flipped for RTL,
+ *     false otherwise.
+ */
+goog.ui.SliderBase.prototype.enableFlipForRtl = function(flipForRtl) {
+  this.flipForRtl_ = flipForRtl;
+};
+
+
 // TODO: Make this return a base CSS class (without orientation), in subclasses.
 /**
  * Returns the CSS class applied to the slider element for the given
@@ -324,6 +349,9 @@ goog.ui.SliderBase.prototype.enterDocument = function() {
   // Attach the events
   this.valueDragger_ = new goog.fx.Dragger(this.valueThumb);
   this.extentDragger_ = new goog.fx.Dragger(this.extentThumb);
+  this.valueDragger_.enableRightPositioningForRtl(this.flipForRtl_);
+  this.extentDragger_.enableRightPositioningForRtl(this.flipForRtl_);
+
   // The slider is handling the positioning so make the defaultActions empty.
   this.valueDragger_.defaultAction = this.extentDragger_.defaultAction =
       goog.nullFunction;
@@ -461,11 +489,19 @@ goog.ui.SliderBase.prototype.handleKeyDown_ = function(e) {
       this.moveThumbs(-this.getBlockIncrement());
       break;
     case goog.events.KeyCodes.LEFT:
+      var sign = this.flipForRtl_ && this.isRightToLeft() ? 1 : -1;
+      this.moveThumbs(e.shiftKey ?
+          sign * this.getBlockIncrement() : sign * this.getUnitIncrement());
+      break;
     case goog.events.KeyCodes.DOWN:
       this.moveThumbs(e.shiftKey ?
           -this.getBlockIncrement() : -this.getUnitIncrement());
       break;
     case goog.events.KeyCodes.RIGHT:
+      var sign = this.flipForRtl_ && this.isRightToLeft() ? -1 : 1;
+      this.moveThumbs(e.shiftKey ?
+          sign * this.getBlockIncrement() : sign * this.getUnitIncrement());
+      break;
     case goog.events.KeyCodes.UP:
       this.moveThumbs(e.shiftKey ?
           this.getBlockIncrement() : this.getUnitIncrement());
@@ -533,7 +569,7 @@ goog.ui.SliderBase.prototype.startBlockIncrementing_ = function(e) {
     this.incrementing_ = this.lastMousePosition_ < this.thumbToMove_.offsetTop;
   } else {
     this.incrementing_ = this.lastMousePosition_ >
-                         this.thumbToMove_.offsetLeft +
+                         this.getOffsetStart_(this.thumbToMove_) +
                          this.thumbToMove_.offsetWidth;
   }
 
@@ -580,7 +616,7 @@ goog.ui.SliderBase.prototype.handleTimerTick_ = function() {
     }
   } else {
     var mouseX = this.lastMousePosition_;
-    var thumbX = this.thumbToMove_.offsetLeft;
+    var thumbX = this.getOffsetStart_(this.thumbToMove_);
     if (this.incrementing_) {
       var thumbW = this.thumbToMove_.offsetWidth;
       if (mouseX > thumbX + thumbW) {
@@ -631,7 +667,11 @@ goog.ui.SliderBase.prototype.getRelativeMousePos_ = function(e) {
   if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
     return coord.y;
   } else {
-    return coord.x;
+    if (this.flipForRtl_ && this.isRightToLeft()) {
+      return this.getElement().clientWidth - coord.x;
+    } else {
+      return coord.x;
+    }
   }
 };
 
@@ -892,12 +932,13 @@ goog.ui.SliderBase.prototype.updateUi_ = function() {
         this.rangeHighlight.style.height = highlightPositioning.size + 'px';
       }
     } else {
-      this.valueThumb.style.left = minCoord.x + 'px';
-      this.extentThumb.style.left = maxCoord.x + 'px';
+      var pos = (this.flipForRtl_ && this.isRightToLeft()) ? 'right' : 'left';
+      this.valueThumb.style[pos] = minCoord.x + 'px';
+      this.extentThumb.style[pos] = maxCoord.x + 'px';
       if (this.rangeHighlight) {
         var highlightPositioning = this.calculateRangeHighlightPositioning_(
             minCoord.x, maxCoord.x, this.valueThumb.offsetWidth);
-        this.rangeHighlight.style.left = highlightPositioning.offset + 'px';
+        this.rangeHighlight.style[pos] = highlightPositioning.offset + 'px';
         this.rangeHighlight.style.width = highlightPositioning.size + 'px';
       }
     }
@@ -997,15 +1038,17 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
   var coord = this.getThumbCoordinateForValue_(this.getThumbPosition_(thumb));
 
   if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
-    end = [thumb.offsetLeft, coord.y];
+    end = [this.getOffsetStart_(thumb), coord.y];
   } else {
     end = [coord.x, thumb.offsetTop];
   }
 
-  animations.add(new goog.fx.dom.Slide(thumb,
+  var slide = new goog.fx.dom.Slide(thumb,
       [previousCoord.x, previousCoord.y],
       end,
-      goog.ui.SliderBase.ANIMATION_INTERVAL_));
+      goog.ui.SliderBase.ANIMATION_INTERVAL_);
+  slide.enableRightPositioningForRtl(this.flipForRtl_);
+  animations.add(slide);
   if (this.rangeHighlight) {
     this.addRangeHighlightAnimations_(thumb, previousValue, previousExtent,
         coord, animations);
@@ -1051,26 +1094,36 @@ goog.ui.SliderBase.prototype.addRangeHighlightAnimations_ = function(thumb,
         previousMaxCoord.y, previousMinCoord.y, this.valueThumb.offsetHeight);
     var highlightPositioning = this.calculateRangeHighlightPositioning_(
         maxCoord.y, minCoord.y, this.valueThumb.offsetHeight);
-    animations.add(new goog.fx.dom.Slide(this.rangeHighlight,
-        [this.rangeHighlight.offsetLeft, previousHighlightPositioning.offset],
-        [this.rangeHighlight.offsetLeft, highlightPositioning.offset],
-        goog.ui.SliderBase.ANIMATION_INTERVAL_));
-    animations.add(new goog.fx.dom.ResizeHeight(this.rangeHighlight,
+    var slide = new goog.fx.dom.Slide(this.rangeHighlight,
+        [this.getOffsetStart_(this.rangeHighlight),
+          previousHighlightPositioning.offset],
+        [this.getOffsetStart_(this.rangeHighlight),
+          highlightPositioning.offset],
+        goog.ui.SliderBase.ANIMATION_INTERVAL_);
+    var resizeHeight = new goog.fx.dom.ResizeHeight(this.rangeHighlight,
         previousHighlightPositioning.size, highlightPositioning.size,
-        goog.ui.SliderBase.ANIMATION_INTERVAL_));
+        goog.ui.SliderBase.ANIMATION_INTERVAL_);
+    slide.enableRightPositioningForRtl(this.flipForRtl_);
+    resizeHeight.enableRightPositioningForRtl(this.flipForRtl_);
+    animations.add(slide);
+    animations.add(resizeHeight);
   } else {
     var previousHighlightPositioning = this.calculateRangeHighlightPositioning_(
         previousMinCoord.x, previousMaxCoord.x, this.valueThumb.offsetWidth);
     var highlightPositioning = this.calculateRangeHighlightPositioning_(
         minCoord.x, maxCoord.x, this.valueThumb.offsetWidth);
     var newWidth = highlightPositioning[1];
-    animations.add(new goog.fx.dom.Slide(this.rangeHighlight,
+    var slide = new goog.fx.dom.Slide(this.rangeHighlight,
         [previousHighlightPositioning.offset, this.rangeHighlight.offsetTop],
         [highlightPositioning.offset, this.rangeHighlight.offsetTop],
-        goog.ui.SliderBase.ANIMATION_INTERVAL_));
-    animations.add(new goog.fx.dom.ResizeWidth(this.rangeHighlight,
+        goog.ui.SliderBase.ANIMATION_INTERVAL_);
+    var resizeWidth = new goog.fx.dom.ResizeWidth(this.rangeHighlight,
         previousHighlightPositioning.size, highlightPositioning.size,
-        goog.ui.SliderBase.ANIMATION_INTERVAL_));
+        goog.ui.SliderBase.ANIMATION_INTERVAL_);
+    slide.enableRightPositioningForRtl(this.flipForRtl_);
+    resizeWidth.enableRightPositioningForRtl(this.flipForRtl_);
+    animations.add(slide);
+    animations.add(resizeWidth);
   }
 };
 
@@ -1100,10 +1153,11 @@ goog.ui.SliderBase.prototype.setOrientation = function(orient) {
     if (this.getElement()) {
       goog.dom.classes.swap(this.getElement(), oldCss, newCss);
       // we need to reset the left and top, plus range highlight
-      this.valueThumb.style.left = this.valueThumb.style.top = '';
-      this.extentThumb.style.left = this.extentThumb.style.top = '';
+      var pos = (this.flipForRtl_ && this.isRightToLeft()) ? 'right' : 'left';
+      this.valueThumb.style[pos] = this.valueThumb.style.top = '';
+      this.extentThumb.style[pos] = this.extentThumb.style.top = '';
       if (this.rangeHighlight) {
-        this.rangeHighlight.style.left = this.rangeHighlight.style.top = '';
+        this.rangeHighlight.style[pos] = this.rangeHighlight.style.top = '';
         this.rangeHighlight.style.width = this.rangeHighlight.style.height = '';
       }
       this.updateUi_();
@@ -1415,4 +1469,16 @@ goog.ui.SliderBase.prototype.setEnabled = function(enable) {
  */
 goog.ui.SliderBase.prototype.isEnabled = function() {
   return this.enabled_;
+};
+
+
+/**
+ * @param {Element} element An element for which we want offsetLeft.
+ * @return {number} Returns the element's offsetLeft, accounting for RTL if
+ *     flipForRtl_ is true.
+ * @private
+ */
+goog.ui.SliderBase.prototype.getOffsetStart_ = function(element) {
+  return this.flipForRtl_ ?
+      goog.style.bidi.getOffsetStart(element) : element.offsetLeft;
 };
