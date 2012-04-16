@@ -26,6 +26,8 @@ goog.provide('goog.testing.MockClock');
 goog.require('goog.Disposable');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events');
+goog.require('goog.testing.events.Event');
+
 
 
 /**
