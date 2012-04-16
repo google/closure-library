@@ -69,8 +69,12 @@ function testUriCreate() {
 }
 
 function testClone() {
-  var uri1 = new goog.Uri('http://www.google.com:8080/foo');
+  var uri1 = new goog.Uri(
+      'http://user:pass@www.google.com:8080/foo?a=1&b=2#c=3');
   var uri2 = uri1.clone();
+
+  assertNotEquals(uri1, uri2);
+  assertEquals(uri1.toString(), uri2.toString());
 
   uri2.setParameterValues('q','bar');
   assertFalse(uri1.getParameterValue('q') == 'bar');
@@ -337,34 +341,174 @@ function testEncoding() {
                goog.Uri.parse('/foo+bar+baz').getPath());
 }
 
-function testSetters() {
+function testSetScheme() {
   var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
+
+  uri.setScheme('https');
+  assertTrue(uri.hasScheme());
+  assertEquals('https', uri.getScheme());
   assertEquals('https://www.google.com:80/path?q=query#fragmento',
-               uri.setScheme('https').toString());
-  assertEquals('https://%E1%B8%A1oogle.com:80/path?q=query#fragmento',
-               uri.setDomain('\u1e21oogle.com').toString());
-  assertEquals('https://%E1%B8%A1oogle.com:443/path?q=query#fragmento',
-               uri.setPort(443).toString());
+               uri.toString());
+
+  uri.setScheme(encodeURIComponent('ab cd'), true);
+  assertTrue(uri.hasScheme());
+  assertEquals('ab cd', uri.getScheme());
+  assertEquals('ab%20cd://www.google.com:80/path?q=query#fragmento',
+               uri.toString());
+
+  uri.setScheme('http:');
+  assertTrue(uri.hasScheme());
+  assertEquals('http', uri.getScheme());
+  assertEquals('http://www.google.com:80/path?q=query#fragmento',
+               uri.toString());
+
+  uri.setScheme('');
+  assertFalse(uri.hasScheme());
+  assertEquals('', uri.getScheme());
+  assertEquals('//www.google.com:80/path?q=query#fragmento',
+               uri.toString());
+}
+
+function testSetDomain() {
+  var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
+
+  uri.setDomain('\u1e21oogle.com');
+  assertTrue(uri.hasDomain());
+  assertEquals('\u1e21oogle.com', uri.getDomain());
+  assertEquals('http://%E1%B8%A1oogle.com:80/path?q=query#fragmento',
+               uri.toString());
+
+  uri.setDomain(encodeURIComponent('\u1e21oogle.com'), true);
+  assertTrue(uri.hasDomain());
+  assertEquals('\u1e21oogle.com', uri.getDomain());
+  assertEquals('http://%E1%B8%A1oogle.com:80/path?q=query#fragmento',
+               uri.toString());
+
+  uri.setDomain('');
+  assertFalse(uri.hasDomain());
+  assertEquals('', uri.getDomain());
+  assertEquals('http:/path?q=query#fragmento',
+               uri.toString());
+}
+
+function testSetPort() {
+  var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
+
+  assertThrows(function() {
+    uri.setPort(-1);
+  });
+  assertEquals(80, uri.getPort());
+
+  assertThrows(function() {
+    uri.setPort('a');
+  });
+  assertEquals(80, uri.getPort());
+
+  uri.setPort(443);
+  assertTrue(uri.hasPort());
+  assertEquals(443, uri.getPort());
+  assertEquals('http://www.google.com:443/path?q=query#fragmento',
+               uri.toString());
+
+  // TODO(user): This is undocumented, but exist in previous unit
+  // test. We should clarify whether this is intended (alternatively,
+  // setPort(0) also works).
+  uri.setPort(null);
+  assertFalse(uri.hasPort());
+  assertEquals(null, uri.getPort());
+  assertEquals('http://www.google.com/path?q=query#fragmento',
+               uri.toString());
+}
+
+function testSetPath() {
+  var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
+
+  uri.setPath('/search path/');
+  assertTrue(uri.hasPath());
+  assertEquals('/search path/', uri.getPath());
   assertEquals(
-      'https://%E1%B8%A1oogle.com:443/search%20path/?q=query#fragmento',
-      uri.setPath('/search path/').toString());
+      'http://www.google.com:80/search%20path/?q=query#fragmento',
+      uri.toString());
+
+  uri.setPath(encodeURIComponent('/search path 2/'), true);
+  assertTrue(uri.hasPath());
+  assertEquals('/search path 2/', uri.getPath());
   assertEquals(
-      'https://%E1%B8%A1oogle.com:443/search%20path/?q=query#fragmento',
-      uri.setPath('search path/').toString());
+      'http://www.google.com:80/search%20path%202/?q=query#fragmento',
+      uri.toString());
+
+  uri.setPath('');
+  assertFalse(uri.hasPath());
+  assertEquals('', uri.getPath());
   assertEquals(
-      'https://%E1%B8%A1oogle.com:443/search%20path/?q=some%20stuff&lang=en' +
-      '#fragmento', uri.setParameterValues('q', 'some stuff')
-                       .setParameterValues('lang', 'en').toString());
+      'http://www.google.com:80?q=query#fragmento',
+      uri.toString());
+}
+
+function testSetFragment() {
+  var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
+
+  uri.setFragment('foo?bar=a b&baz=2');
+  assertTrue(uri.hasFragment());
+  assertEquals('foo?bar=a b&baz=2', uri.getFragment());
   assertEquals(
-      'https://%E1%B8%A1oogle.com:443/search%20path/?q=some%20stuff&lang=en',
-      uri.setFragment(null).toString());
+      'http://www.google.com:80/path?q=query#foo?bar=a%20b&baz=2',
+      uri.toString());
+
+  uri.setFragment(encodeURIComponent('foo?bar=a b&baz=3'), true);
+  assertTrue(uri.hasFragment());
+  assertEquals('foo?bar=a b&baz=3', uri.getFragment());
   assertEquals(
-      'https://%E1%B8%A1oogle.com/search%20path/?q=some%20stuff&lang=en',
-      uri.setPort(null).toString());
+      'http://www.google.com:80/path?q=query#foo?bar=a%20b&baz=3',
+      uri.toString());
+
+  uri.setFragment('');
+  assertFalse(uri.hasFragment());
+  assertEquals('', uri.getFragment());
   assertEquals(
-      'https://user:pwd@%E1%B8%A1oogle.com/search%20path/' +
-      '?q=some%20stuff&lang=en',
-      uri.setUserInfo('user:pwd').toString());
+      'http://www.google.com:80/path?q=query',
+      uri.toString());
+}
+
+function testSetUserInfo() {
+  var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
+
+  uri.setUserInfo('user:pw d');
+  assertTrue(uri.hasUserInfo());
+  assertEquals('user:pw d', uri.getUserInfo());
+  assertEquals('http://user:pw%20d@www.google.com:80/path?q=query#fragmento',
+      uri.toString());
+
+  uri.setUserInfo(encodeURIComponent('user:pw d2'), true);
+  assertTrue(uri.hasUserInfo());
+  assertEquals('user:pw d2', uri.getUserInfo());
+  assertEquals('http://user:pw%20d2@www.google.com:80/path?q=query#fragmento',
+      uri.toString());
+
+  uri.setUserInfo('user');
+  assertTrue(uri.hasUserInfo());
+  assertEquals('user', uri.getUserInfo());
+  assertEquals('http://user@www.google.com:80/path?q=query#fragmento',
+      uri.toString());
+
+  uri.setUserInfo('');
+  assertFalse(uri.hasUserInfo());
+  assertEquals('', uri.getUserInfo());
+  assertEquals('http://www.google.com:80/path?q=query#fragmento',
+      uri.toString());
+}
+
+function testSetParameterValues() {
+  var uri = new goog.Uri('http://www.google.com:80/path?q=query#fragmento');
+
+  uri.setParameterValues('q', ['foo', 'other query']);
+  assertEquals('http://www.google.com:80/path?q=foo&q=other%20query#fragmento',
+      uri.toString());
+
+  uri.setParameterValues('lang', 'en');
+  assertEquals(
+      'http://www.google.com:80/path?q=foo&q=other%20query&lang=en#fragmento',
+      uri.toString());
 }
 
 function testTreatmentOfAt1() {

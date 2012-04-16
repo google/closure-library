@@ -182,12 +182,14 @@ goog.Uri.prototype.ignoreCase_ = false;
 goog.Uri.prototype.toString = function() {
   var out = [];
 
-  if (this.scheme_) {
+  var scheme = this.getScheme();
+  if (scheme) {
     out.push(goog.Uri.encodeSpecialChars_(
-        this.scheme_, goog.Uri.reDisallowedInSchemeOrUserInfo_), ':');
+        scheme, goog.Uri.reDisallowedInSchemeOrUserInfo_), ':');
   }
 
-  if (this.domain_) {
+  var domain = this.getDomain();
+  if (domain) {
     out.push('//');
 
     if (this.userInfo_) {
@@ -195,32 +197,35 @@ goog.Uri.prototype.toString = function() {
           this.userInfo_, goog.Uri.reDisallowedInSchemeOrUserInfo_), '@');
     }
 
-    out.push(goog.Uri.encodeString_(this.domain_));
+    out.push(goog.Uri.encodeString_(domain));
 
-    if (this.port_ != null) {
-      out.push(':', String(this.getPort()));
+    var port = this.getPort();
+    if (port != null) {
+      out.push(':', String(port));
     }
   }
 
-  if (this.path_) {
-    if (this.hasDomain() && this.path_.charAt(0) != '/') {
+  var path = this.getPath();
+  if (path) {
+    if (this.hasDomain() && path.charAt(0) != '/') {
       out.push('/');
     }
     out.push(goog.Uri.encodeSpecialChars_(
-        this.path_,
-        this.path_.charAt(0) == '/' ?
+        path,
+        path.charAt(0) == '/' ?
             goog.Uri.reDisallowedInAbsolutePath_ :
             goog.Uri.reDisallowedInRelativePath_));
   }
 
-  var query = String(this.queryData_);
+  var query = this.getEncodedQuery();
   if (query) {
     out.push('?', query);
   }
 
-  if (this.fragment_) {
+  var fragment = this.getFragment();
+  if (fragment) {
     out.push('#', goog.Uri.encodeSpecialChars_(
-        this.fragment_, goog.Uri.reDisallowedInFragment_));
+        fragment, goog.Uri.reDisallowedInFragment_));
   }
   return out.join('');
 };
@@ -318,9 +323,7 @@ goog.Uri.prototype.resolve = function(relativeUri) {
  * @return {!goog.Uri} New instance of the URI objcet.
  */
 goog.Uri.prototype.clone = function() {
-  return goog.Uri.create(this.scheme_, this.userInfo_, this.domain_,
-                         this.port_, this.path_, this.queryData_.clone(),
-                         this.fragment_, this.ignoreCase_);
+  return new goog.Uri(this);
 };
 
 
