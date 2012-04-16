@@ -25,7 +25,7 @@ goog.provide('goog.testing.MockClock');
 
 goog.require('goog.Disposable');
 goog.require('goog.testing.PropertyReplacer');
-
+goog.require('goog.testing.events');
 
 
 /**
@@ -443,7 +443,13 @@ goog.testing.MockClock.prototype.setInterval_ = function(funcToCall, millis) {
  */
 goog.testing.MockClock.prototype.requestAnimationFrame_ = function(funcToCall) {
   return this.setTimeout_(goog.bind(function() {
-    funcToCall(this.getCurrentTime());
+    if (funcToCall) {
+      funcToCall(this.getCurrentTime());
+    } else if (goog.global.mozRequestAnimationFrame) {
+      var event = new goog.testing.events.Event('MozBeforePaint', goog.global);
+      event['timeStamp'] = this.getCurrentTime();
+      goog.testing.events.fireBrowserEvent(event);
+    }
   }, this), goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT);
 };
 

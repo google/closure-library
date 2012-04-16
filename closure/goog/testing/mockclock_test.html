@@ -11,14 +11,21 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.testing.MockClock</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.events');
   goog.require('goog.functions');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
 <script>
+  var stubs = new goog.testing.PropertyReplacer();
+
+  function tearDown() {
+    stubs.reset();
+  }
 
   function testMockClockWasInstalled() {
     var clock = new goog.testing.MockClock();
@@ -432,20 +439,33 @@ See the COPYING file for details.
   }
 
   function testCorrectSetTimeoutIsRestored() {
-    var original = window.setTimeout;
     var safe = goog.functions.error('should not have been called');
-    try {
-      window.setTimeout = safe;
-      var clock = new goog.testing.MockClock(true);
-      assertNotEquals('setTimeout is replaced', safe, window.setTimeout);
-      clock.uninstall();
-      // NOTE: If this assertion proves to be flaky in IE, the string value of
-      // the two functions have to be compared as described in
-      // goog.testing.TestCase#finalize.
-      assertEquals('setTimeout is restored', safe, window.setTimeout);
-    } finally {
-      window.setTimeout = original;
-    }
+    stubs.set(window, 'setTimeout', safe);
+
+    var clock = new goog.testing.MockClock(true);
+    assertNotEquals('setTimeout is replaced', safe, window.setTimeout);
+    clock.uninstall();
+    // NOTE: If this assertion proves to be flaky in IE, the string value of
+    // the two functions have to be compared as described in
+    // goog.testing.TestCase#finalize.
+    assertEquals('setTimeout is restored', safe, window.setTimeout);
+  }
+
+  function testMozRequestAnimationFrame() {
+    // Setting this function will indirectly tell the mock clock to mock it out.
+    stubs.set(window, 'mozRequestAnimationFrame', goog.nullFunction);
+
+    var clock = new goog.testing.MockClock(true);
+
+    var mozBeforePaint = goog.testing.recordFunction();
+    goog.events.listen(window, 'MozBeforePaint', mozBeforePaint);
+
+    window.mozRequestAnimationFrame(null);
+    assertEquals(0, mozBeforePaint.getCallCount());
+
+    clock.tick(goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT);
+    assertEquals(1, mozBeforePaint.getCallCount());
+    clock.dispose();
   }
 
 </script>
