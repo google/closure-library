@@ -109,6 +109,11 @@ goog.events.EventType = {
   BEFORECUT: 'beforecut',
   BEFOREPASTE: 'beforepaste',
 
+  // HTML5 online/offline events.
+  // http://www.w3.org/TR/offline-webapps/#related
+  ONLINE: 'online',
+  OFFLINE: 'offline',
+
   // HTML 5 worker events
   MESSAGE: 'message',
   CONNECT: 'connect',
