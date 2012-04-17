@@ -162,6 +162,19 @@ See the COPYING file for details.
     assertMouseWheelEvent(-2, -2, 1);
   }
 
+  function testWebkitStyleMouseWheel_ieStyleOnLinux() {
+    goog.userAgent = {
+        OPERA: false,
+        IE: false,
+        GECKO: false,
+        CAMINO: false,
+        WEBKIT: true,
+        WINDOWS: false,
+        LINUX: true
+    };
+    runWebKitContinousAndDiscreteEventsTest();
+  }
+
   function testWebkitStyleMouseWheel_ieStyleOnMac() {
     goog.userAgent = {
         OPERA: false,
@@ -172,7 +185,10 @@ See the COPYING file for details.
         WINDOWS: false,
         MAC: true
     };
+    runWebKitContinousAndDiscreteEventsTest();
+  }
 
+  function runWebKitContinousAndDiscreteEventsTest() {
     goog.userAgent.isVersion = goog.functions.TRUE;
 
     createHandlerAndListen();
@@ -188,7 +204,7 @@ See the COPYING file for details.
 
     // Even in Webkit versions that usually behave in IE style, sometimes wheel
     // events don't behave; this has been observed for instance with Macbook
-    // touchpads in Webkit 534.10+.
+    // and Chrome OS touchpads in Webkit 534.10+.
     mouseWheelHandler.handleEvent(
         createFakeWebkitMouseWheelEvent(-3, 5));
     assertMouseWheelEvent(-5, 3, -5);

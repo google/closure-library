@@ -200,11 +200,11 @@ goog.events.MouseWheelHandler.prototype.handleEvent = function(e) {
  */
 goog.events.MouseWheelHandler.smartScale_ = function(mouseWheelDelta,
     scaleFactor) {
-  // The basic problem here is that in Webkit on Mac, we can get two very
-  // different types of mousewheel events: from continuous devices (touchpads,
-  // Mighty Mouse) or non-continuous devices (normal wheel mice).
+  // The basic problem here is that in Webkit on Mac and Linux, we can get two
+  // very different types of mousewheel events: from continuous devices
+  // (touchpads, Mighty Mouse) or non-continuous devices (normal wheel mice).
   //
-  // Non-continuous devices in Webkit Mac get their wheel deltas scaled up to
+  // Non-continuous devices in Webkit get their wheel deltas scaled up to
   // behave like IE. Continuous devices return much smaller unscaled values
   // (which most of the time will not be cleanly divisible by the IE scale
   // factor), so we should not try to normalize them down.
@@ -212,7 +212,8 @@ goog.events.MouseWheelHandler.smartScale_ = function(mouseWheelDelta,
   // Detailed discussion:
   //   https://bugs.webkit.org/show_bug.cgi?id=29601
   //   http://trac.webkit.org/browser/trunk/WebKit/chromium/src/mac/WebInputEventFactory.mm#L1063
-  if (goog.userAgent.WEBKIT && goog.userAgent.MAC &&
+  if (goog.userAgent.WEBKIT &&
+      (goog.userAgent.MAC || goog.userAgent.LINUX) &&
       (mouseWheelDelta % scaleFactor) != 0) {
     return mouseWheelDelta;
   } else {
