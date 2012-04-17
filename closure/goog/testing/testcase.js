@@ -90,7 +90,10 @@ goog.testing.TestCase = function(opt_name) {
    */
   this.testsToRun_ = null;
 
-  var search = window.location.search;
+  var search = '';
+  if (goog.global.location) {
+    search = goog.global.location.search;
+  }
 
   // Parse the 'runTests' query parameter into a set of test names and/or
   // test indices.
@@ -165,7 +168,7 @@ goog.testing.TestCase.prototype.order = goog.testing.TestCase.Order.SORTED;
  * @type {function((Function|string), number, *=): number}
  * @private
  */
-goog.testing.TestCase.protectedSetTimeout_ = window.setTimeout;
+goog.testing.TestCase.protectedSetTimeout_ = goog.global.setTimeout;
 
 
 /**
@@ -174,17 +177,17 @@ goog.testing.TestCase.protectedSetTimeout_ = window.setTimeout;
  * @type {function((null|number|undefined)): void}
  * @private
  */
-goog.testing.TestCase.protectedClearTimeout_ = window.clearTimeout;
+goog.testing.TestCase.protectedClearTimeout_ = goog.global.clearTimeout;
 
 
 /**
- * Saved string referencing window.setTimeout's string serialization.  IE
+ * Saved string referencing goog.global.setTimeout's string serialization.  IE
  * sometimes fails to uphold equality for setTimeout, but the string version
  * stays the same.
  * @type {string}
  * @private
  */
-goog.testing.TestCase.setTimeoutAsString_ = String(window.setTimeout);
+goog.testing.TestCase.setTimeoutAsString_ = String(goog.global.setTimeout);
 
 
 /**
@@ -200,8 +203,9 @@ goog.testing.TestCase.currentTestName = null;
  * the browser is IE.
  * @type {boolean}
  */
-goog.testing.TestCase.IS_IE = typeof opera == 'undefined' && !!navigator &&
-    navigator.userAgent.indexOf('MSIE') != -1;
+goog.testing.TestCase.IS_IE = typeof opera == 'undefined' &&
+    !!goog.global.navigator &&
+    goog.global.navigator.userAgent.indexOf('MSIE') != -1;
 
 
 /**
@@ -393,10 +397,11 @@ goog.testing.TestCase.prototype.finalize = function() {
   this.tearDownPage();
 
   var restoredSetTimeout =
-      goog.testing.TestCase.protectedSetTimeout_ == window.setTimeout &&
-      goog.testing.TestCase.protectedClearTimeout_ == window.clearTimeout;
+      goog.testing.TestCase.protectedSetTimeout_ == goog.global.setTimeout &&
+      goog.testing.TestCase.protectedClearTimeout_ == goog.global.clearTimeout;
   if (!restoredSetTimeout && goog.testing.TestCase.IS_IE &&
-      String(window.setTimeout) == goog.testing.TestCase.setTimeoutAsString_) {
+      String(goog.global.setTimeout) ==
+          goog.testing.TestCase.setTimeoutAsString_) {
     // In strange cases, IE's value of setTimeout *appears* to change, but
     // the string representation stays stable.
     restoredSetTimeout = true;
@@ -408,8 +413,8 @@ goog.testing.TestCase.prototype.finalize = function() {
     var err = new goog.testing.TestCase.Error(this.name_, message);
     this.result_.errors.push(err);
   }
-  window.clearTimeout = goog.testing.TestCase.protectedClearTimeout_;
-  window.setTimeout = goog.testing.TestCase.protectedSetTimeout_;
+  goog.global.clearTimeout = goog.testing.TestCase.protectedClearTimeout_;
+  goog.global.setTimeout = goog.testing.TestCase.protectedSetTimeout_;
   this.endTime_ = this.now();
   this.running = false;
   this.result_.runTime = this.endTime_ - this.startTime_;
@@ -455,7 +460,7 @@ goog.testing.TestCase.prototype.isInsideMultiTestRunner = function() {
  * @param {*} val The value to log. Will be ToString'd.
  */
 goog.testing.TestCase.prototype.log = function(val) {
-  if (!this.isInsideMultiTestRunner() && window.console) {
+  if (!this.isInsideMultiTestRunner() && goog.global.console) {
     if (typeof val == 'string') {
       val = this.getTimeStamp_() + ' : ' + val;
     }
@@ -464,11 +469,11 @@ goog.testing.TestCase.prototype.log = function(val) {
       // (http://code.google.com/p/chromium/issues/detail?id=50316).
       // This is an acute problem for Errors, which almost never survive.
       // Grab references to the immutable strings so they survive.
-      window.console.log(val, val.message, val.stack);
+      goog.global.console.log(val, val.message, val.stack);
       // TODO(gboyer): Consider for Chrome cloning any object if we can ensure
       // there are no circular references.
     } else {
-      window.console.log(val);
+      goog.global.console.log(val);
     }
   }
 };
@@ -496,7 +501,9 @@ goog.testing.TestCase.prototype.getReport = function(opt_verbose) {
     var success = this.result_.isSuccess() && !this.testRunner_.hasErrors();
     rv.push(this.name_ + ' [' + (success ? 'PASSED' : 'FAILED') + ']');
   }
-  rv.push(this.trimPath_(window.location.href));
+  if (goog.global.location) {
+    rv.push(this.trimPath_(goog.global.location.href));
+  }
   rv.push(this.result_.getSummary());
   if (opt_verbose) {
     rv.push('.', this.result_.messages.join('\n'));
@@ -690,7 +697,7 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
       var ref = testSource[name];
     } catch (ex) {
       // NOTE(brenneman): When running tests from a file:// URL on Firefox 3.5
-      // for Windows, any reference to window.sessionStorage raises
+      // for Windows, any reference to goog.global.sessionStorage raises
       // an "Operation is not supported" exception. Ignore any exceptions raised
       // by simply accessing global properties.
     }
