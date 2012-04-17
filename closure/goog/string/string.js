@@ -403,14 +403,6 @@ goog.string.numerateCompare = function(str1, str2) {
 
 
 /**
- * Regular expression used for determining if a string needs to be encoded.
- * @type {RegExp}
- * @private
- */
-goog.string.encodeUriRegExp_ = /^[a-zA-Z0-9\-_.!~*'()]*$/;
-
-
-/**
  * URL-encodes a string
  * @param {*} str The string to url-encode.
  * @return {string} An encoded copy of {@code str} that is safe for urls.
@@ -418,15 +410,7 @@ goog.string.encodeUriRegExp_ = /^[a-zA-Z0-9\-_.!~*'()]*$/;
  *     of URLs *will* be encoded.
  */
 goog.string.urlEncode = function(str) {
-  str = String(str);
-  // Checking if the search matches before calling encodeURIComponent avoids an
-  // extra allocation in IE6. This adds about 10us time in FF and a similiar
-  // over head in IE6 for lower working set apps, but for large working set
-  // apps like Gmail, it saves about 70us per call.
-  if (!goog.string.encodeUriRegExp_.test(str)) {
-    return encodeURIComponent(str);
-  }
-  return str;
+  return encodeURIComponent(String(str));
 };
 
 

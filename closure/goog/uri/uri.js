@@ -92,7 +92,7 @@ goog.Uri = function(opt_uri, opt_ignoreCase) {
 
   } else {
     this.setIgnoreCase(!!opt_ignoreCase);
-    this.queryData_ = new goog.Uri.QueryData(null, this, this.ignoreCase_);
+    this.queryData_ = new goog.Uri.QueryData(null, null, this.ignoreCase_);
   }
 };
 
@@ -508,7 +508,6 @@ goog.Uri.prototype.setQueryData = function(queryData, opt_decode) {
 
   if (queryData instanceof goog.Uri.QueryData) {
     this.queryData_ = queryData;
-    this.queryData_.uri_ = this;
     this.queryData_.setIgnoreCase(this.ignoreCase_);
   } else {
     // QueryData accepts encoded query string,
@@ -518,7 +517,7 @@ goog.Uri.prototype.setQueryData = function(queryData, opt_decode) {
                                                goog.Uri.reDisallowedInQuery_);
     }
     this.queryData_ =
-        new goog.Uri.QueryData(queryData, this, this.ignoreCase_);
+        new goog.Uri.QueryData(queryData, null, this.ignoreCase_);
   }
 
   return this;
@@ -912,14 +911,6 @@ goog.Uri.encodeString_ = function(unescapedPart) {
 
 
 /**
- * Regular expression used for determining if a string needs to be encoded.
- * @type {RegExp}
- * @private
- */
-goog.Uri.encodeSpecialRegExp_ = /^[a-zA-Z0-9\-_.!~*'():\/;?]*$/;
-
-
-/**
  * If unescapedPart is non null, then escapes any characters in it that aren't
  * valid characters in a url and also escapes any special characters that
  * appear in extra.
@@ -930,21 +921,10 @@ goog.Uri.encodeSpecialRegExp_ = /^[a-zA-Z0-9\-_.!~*'():\/;?]*$/;
  * @private
  */
 goog.Uri.encodeSpecialChars_ = function(unescapedPart, extra) {
-  var ret = null;
   if (goog.isString(unescapedPart)) {
-    ret = unescapedPart;
-    // Checking if the search matches before calling encodeURI avoids an extra
-    // allocation in IE6
-    if (!goog.Uri.encodeSpecialRegExp_.test(ret)) {
-      ret = encodeURI(unescapedPart);
-    }
-    // Checking if the search matches before calling replace avoids an extra
-    // allocation in IE6
-    if (ret.search(extra) >= 0) {
-      ret = ret.replace(extra, goog.Uri.encodeChar_);
-    }
+    return encodeURI(unescapedPart).replace(extra, goog.Uri.encodeChar_);
   }
-  return ret;
+  return null;
 };
 
 
@@ -1028,8 +1008,9 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
  *
  * @param {?string=} opt_query Optional encoded query string to parse into
  *     the object.
- * @param {goog.Uri=} opt_uri Optional uri object that should have its cache
- *     invalidated when this object updates.
+ * @param {goog.Uri=} opt_uri Optional uri object that should have its
+ *     cache invalidated when this object updates. Deprecated -- this
+ *     is no longer required.
  * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
  *     name in #get.
  * @constructor
@@ -1041,14 +1022,6 @@ goog.Uri.QueryData = function(opt_query, opt_uri, opt_ignoreCase) {
    * @private
    */
   this.encodedQuery_ = opt_query || null;
-
-  /**
-   * Reference to a uri object which uses the query data.  This allows the
-   * QueryData object to invalidate the cache.
-   * @type {goog.Uri}
-   * @private
-   */
-  this.uri_ = opt_uri || null;
 
   /**
    * If true, ignore the case of the parameter name in #get.
@@ -1132,7 +1105,7 @@ goog.Uri.QueryData.createFromKeysValues = function(
   if (keys.length != values.length) {
     throw Error('Mismatched lengths for keys/values');
   }
-  var queryData = new goog.Uri.QueryData(null, opt_uri, opt_ignoreCase);
+  var queryData = new goog.Uri.QueryData(null, null, opt_ignoreCase);
   for (var i = 0; i < keys.length; i++) {
     queryData.add(keys[i], values[i]);
   }

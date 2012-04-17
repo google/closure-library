@@ -371,15 +371,6 @@ function testUrlEncodeAndDecode() {
                input);
 }
 
-function testEncodeOptimizationRegex() {
-  assertEquals(0, 'foo'.search(goog.string.encodeUriRegExp_));
-  assertEquals(0, 'baby1224'.search(goog.string.encodeUriRegExp_));
-  assertEquals(0, '_-*!~'.search(goog.string.encodeUriRegExp_));
-  assertEquals(-1, '%'.search(goog.string.encodeUriRegExp_));
-  assertEquals(-1, '@'.search(goog.string.encodeUriRegExp_));
-  assertEquals(-1, '/'.search(goog.string.encodeUriRegExp_));
-}
-
 
 // === tests for goog.string.newLineToBr ===
 function testNewLineToBr() {
