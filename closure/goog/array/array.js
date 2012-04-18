@@ -694,6 +694,10 @@ goog.array.concat = function(var_args) {
  */
 goog.array.toArray = function(object) {
   var length = object.length;
+
+  // If length is not a number the following it false. This case is kept for
+  // backwards compatibility since there are callers that pass objects that are
+  // not array like.
   if (length > 0) {
     var rv = new Array(length);
     for (var i = 0; i < length; i++) {

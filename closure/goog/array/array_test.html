@@ -717,6 +717,10 @@ function testToArrayOnNonArrayLike() {
   var nonArrayLike = {};
   assertArrayEquals('toArray on non ArrayLike should return an empty array',
                     [], goog.array.toArray(nonArrayLike));
+
+  var nonArrayLike2 = {length: 'hello world'};
+  assertArrayEquals('toArray on non ArrayLike should return an empty array',
+                    [], goog.array.toArray(nonArrayLike2));
 }
 
 function testExtend() {
