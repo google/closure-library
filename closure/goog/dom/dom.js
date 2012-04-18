@@ -693,7 +693,7 @@ goog.dom.append_ = function(doc, parent, args, startIndex) {
       // If the argument is a node list, not a real array, use a clone,
       // because forEach can't be used to mutate a NodeList.
       goog.array.forEach(goog.dom.isNodeList(arg) ?
-          goog.array.clone(arg) : arg,
+          goog.array.toArray(arg) : arg,
           childHandler);
     } else {
       childHandler(arg);
