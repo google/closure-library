@@ -713,6 +713,12 @@ function testToArray() {
   }
 }
 
+function testToArrayOnNonArrayLike() {
+  var nonArrayLike = {};
+  assertArrayEquals('toArray on non ArrayLike should return an empty array',
+                    [], goog.array.toArray(nonArrayLike));
+}
+
 function testExtend() {
   var a = [0, 1];
   goog.array.extend(a, [2, 3]);

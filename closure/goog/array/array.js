@@ -694,11 +694,14 @@ goog.array.concat = function(var_args) {
  */
 goog.array.toArray = function(object) {
   var length = object.length;
-  var rv = new Array(length);
-  for (var i = 0; i < length; i++) {
-    rv[i] = object[i];
+  if (length > 0) {
+    var rv = new Array(length);
+    for (var i = 0; i < length; i++) {
+      rv[i] = object[i];
+    }
+    return rv;
   }
-  return rv;
+  return [];
 };
 
 
