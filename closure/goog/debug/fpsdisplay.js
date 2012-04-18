@@ -23,7 +23,7 @@
 goog.provide('goog.debug.FpsDisplay');
 
 goog.require('goog.asserts');
-goog.require('goog.fx.anim');
+goog.require('goog.async.AnimationDelay');
 goog.require('goog.ui.Component');
 
 
@@ -73,19 +73,27 @@ goog.debug.FpsDisplay.prototype.createDom = function() {
 goog.debug.FpsDisplay.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.animation_ = new goog.debug.FpsDisplay.FpsAnimation_(this.getElement());
-  goog.fx.anim.registerAnimation(this.animation_);
-  goog.fx.anim.setAnimationWindow(this.getDomHelper().getWindow());
+  this.delay_ = new goog.async.AnimationDelay(
+      this.handleDelay_, this.getDomHelper().getWindow(), this);
+  this.delay_.start();
+};
+
+
+/**
+ * @param {number} now The current time.
+ * @private
+ */
+goog.debug.FpsDisplay.prototype.handleDelay_ = function(now) {
+  this.animation_.onAnimationFrame(now);
+  this.delay_.start();
 };
 
 
 /** @override */
 goog.debug.FpsDisplay.prototype.exitDocument = function() {
   goog.base(this, 'exitDocument');
-  if (this.animation_) {
-    goog.fx.anim.unregisterAnimation(this.animation_);
-    goog.fx.anim.setAnimationWindow(null);
-    this.animation_ = null;
-  }
+  this.animation_ = null;
+  goog.dispose(this.delay_);
 };
 
 
@@ -103,7 +111,6 @@ goog.debug.FpsDisplay.prototype.getFps = function() {
 /**
  * @param {Element} elem An element to hold the FPS count.
  * @constructor
- * @implements {goog.fx.anim.Animated}
  * @private
  */
 goog.debug.FpsDisplay.FpsAnimation_ = function(elem) {
@@ -139,7 +146,9 @@ goog.debug.FpsDisplay.FpsAnimation_.prototype.lastTime_ = 0;
 goog.debug.FpsDisplay.FpsAnimation_.prototype.lastFps_ = -1;
 
 
-/** @override */
+/**
+ * @param {number} now The current time.
+ */
 goog.debug.FpsDisplay.FpsAnimation_.prototype.onAnimationFrame = function(now) {
   var SAMPLES = goog.debug.FpsDisplay.SAMPLES;
   if (this.frameNumber_ % SAMPLES == 0) {
