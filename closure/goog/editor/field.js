@@ -2171,12 +2171,7 @@ goog.editor.Field.prototype.isLoading = function() {
  * Gives the field focus.
  */
 goog.editor.Field.prototype.focus = function() {
-  // TODO(user): This is actually the wrong codepath for focusing in WebKit
-  // (WebKit doesn't focus when you do this), but putting WebKit on the "right"
-  // codepath seems to cause test failures. We should figure out what's going on
-  // so focus can work in WebKit and all the tests can pass.
-  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE ||
-      goog.userAgent.WEBKIT) {
+  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
     this.getEditableDomHelper().getWindow().focus();
   } else {
     if (goog.userAgent.OPERA) {

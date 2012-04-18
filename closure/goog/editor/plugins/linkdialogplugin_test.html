@@ -129,6 +129,7 @@ See the COPYING file for details.
     mockLink.placeCursorRightOf();
     mockField.dispatchSelectionChangeEvent();
     mockField.dispatchChange();
+    mockField.focus();
     mockCtrl.$replayAll();
 
     setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
@@ -216,6 +217,7 @@ See the COPYING file for details.
     mockLink.placeCursorRightOf().$anyTimes();
     mockField.dispatchSelectionChangeEvent().$anyTimes();
     mockField.dispatchChange().$anyTimes();
+    mockField.focus().$anyTimes();
     mockCtrl.$replayAll();
 
     plugin = new goog.editor.plugins.LinkDialogPlugin();
@@ -300,6 +302,7 @@ See the COPYING file for details.
     mockLink.placeCursorRightOf();
     mockField.dispatchSelectionChangeEvent();
     mockField.dispatchChange();
+    mockField.focus();
     mockCtrl.$replayAll();
 
     plugin = new goog.editor.plugins.LinkDialogPlugin();

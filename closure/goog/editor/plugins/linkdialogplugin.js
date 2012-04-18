@@ -343,6 +343,8 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk_ = function(e) {
     }
   }
 
+  this.fieldObject.focus();
+
   // Place cursor to the right of the modified link.
   this.currentLink_.placeCursorRightOf();
 
