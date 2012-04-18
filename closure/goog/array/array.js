@@ -685,25 +685,6 @@ goog.array.concat = function(var_args) {
 
 
 /**
- * Does a shallow copy of an array.
- * @param {goog.array.ArrayLike} arr  Array or array-like object to clone.
- * @return {!Array} Clone of the input array.
- */
-goog.array.clone = function(arr) {
-  if (goog.isArray(arr)) {
-    return goog.array.concat(/** @type {!Array} */ (arr));
-  } else { // array like
-    // Concat does not work with non arrays.
-    var rv = [];
-    for (var i = 0, len = arr.length; i < len; i++) {
-      rv[i] = arr[i];
-    }
-    return rv;
-  }
-};
-
-
-/**
  * Converts an object to an array.
  * @param {goog.array.ArrayLike} object  The object to convert to an array.
  * @return {!Array} The object converted into an array. If object has a
@@ -712,15 +693,21 @@ goog.array.clone = function(arr) {
  *     have a length property, an empty array will be returned.
  */
 goog.array.toArray = function(object) {
-  if (goog.isArray(object)) {
-    // This fixes the JS compiler warning and forces the Object to an Array type
-    return goog.array.concat(/** @type {!Array} */ (object));
+  var length = object.length;
+  var rv = new Array(length);
+  for (var i = 0; i < length; i++) {
+    rv[i] = object[i];
   }
-  // Clone what we hope to be an array-like object to an array.
-  // We could check isArrayLike() first, but no check we perform would be as
-  // reliable as simply making the call.
-  return goog.array.clone(/** @type {Array} */ (object));
+  return rv;
 };
+
+
+/**
+ * Does a shallow copy of an array.
+ * @param {goog.array.ArrayLike} arr  Array or array-like object to clone.
+ * @return {!Array} Clone of the input array.
+ */
+goog.array.clone = goog.array.toArray;
 
 
 /**
