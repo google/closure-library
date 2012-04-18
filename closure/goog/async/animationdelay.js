@@ -93,6 +93,14 @@ goog.async.AnimationDelay.prototype.id_ = null;
 
 
 /**
+ * If we're using dom listeners.
+ * @type {?boolean}
+ * @private
+ */
+goog.async.AnimationDelay.prototype.usingListeners_ = false;
+
+
+/**
  * Default wait timeout for animations (in milliseconds).  Only used for timed
  * animation, which uses a timer (setTimeout) to schedule animation.
  *
@@ -118,6 +126,7 @@ goog.async.AnimationDelay.MOZ_BEFORE_PAINT_EVENT_ = 'MozBeforePaint';
  */
 goog.async.AnimationDelay.prototype.start = function() {
   this.stop();
+  this.usingListeners_ = false;
 
   var raf = this.getRaf_();
   var cancelRaf = this.getCancelRaf_();
@@ -138,6 +147,7 @@ goog.async.AnimationDelay.prototype.start = function() {
         goog.async.AnimationDelay.MOZ_BEFORE_PAINT_EVENT_,
         this.callback_);
     this.win_.mozRequestAnimationFrame(null);
+    this.usingListeners_ = true;
   } else if (raf && cancelRaf) {
     this.id_ = raf.call(this.win_, this.callback_);
   } else {
@@ -206,6 +216,9 @@ goog.async.AnimationDelay.prototype.isActive = function() {
  * @private
  */
 goog.async.AnimationDelay.prototype.doAction_ = function(opt_timestamp) {
+  if (this.usingListeners_ && this.id_) {
+    goog.events.unlistenByKey(this.id_);
+  }
   this.id_ = null;
   var timestamp =
       goog.isNumber(opt_timestamp) ?
