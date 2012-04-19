@@ -317,7 +317,6 @@ goog.ui.Textarea.prototype.enterDocument = function() {
  * @private
  */
 goog.ui.Textarea.prototype.getHeight_ = function() {
-  debugger;
   this.discoverTextareaCharacteristics_();
   var textarea = this.getElement();
   // Accounts for a possible (though unlikely) horizontal scrollbar.
@@ -448,7 +447,6 @@ goog.ui.Textarea.prototype.discoverTextareaCharacteristics_ = function() {
  * @private
  */
 goog.ui.Textarea.prototype.grow_ = function(opt_e) {
-  debugger;
   if (this.isResizing_) {
     return;
   }
