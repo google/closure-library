@@ -799,6 +799,11 @@ function testQueryDataGet() {
   assertEquals('B', qd.get('b'));
   assertEquals('C=extra', qd.get('C'));
   assertEquals('Default', qd.get('D', 'Default'));
+
+  // Some unit tests pass undefined to get method (even though the type
+  // for key is {string}). This is not caught by JsCompiler as
+  // tests aren't typically compiled.
+  assertUndefined(qd.get(undefined));
 }
 
 
