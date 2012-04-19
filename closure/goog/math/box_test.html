@@ -30,9 +30,41 @@ function testBoxClone() {
   assertTrue(goog.math.Box.equals(b, b.clone()));
 }
 
+function testBoxRelativePositionX() {
+  var box = new goog.math.Box(50, 100, 100, 50);
+
+  assertEquals(0,
+      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 0)));
+  assertEquals(0,
+      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 75)));
+  assertEquals(0,
+      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 105)));
+  assertEquals(-5,
+      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(45, 75)));
+  assertEquals(5,
+      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(105, 75)));
+}
+
+function testBoxRelativePositionY() {
+  var box = new goog.math.Box(50, 100, 100, 50);
+
+  assertEquals(0,
+      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(0, 75)));
+  assertEquals(0,
+      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 75)));
+  assertEquals(0,
+      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(105, 75)));
+  assertEquals(-5,
+      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 45)));
+  assertEquals(5,
+      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 105)));
+}
+
 function testBoxDistance() {
   var box = new goog.math.Box(50, 100, 100, 50);
 
+  assertEquals(0,
+               goog.math.Box.distance(box, new goog.math.Coordinate(75, 75)));
   assertEquals(25,
                goog.math.Box.distance(box, new goog.math.Coordinate(75, 25)));
   assertEquals(10,
