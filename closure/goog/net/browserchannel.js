@@ -868,8 +868,9 @@ goog.net.BrowserChannel.prototype.disconnect = function() {
         this, this.channelDebug_, this.sid_, rid, undefined /* opt_retryId */,
         this.onlineHandler_);
     request.sendUsingImgTag(uri);
-    this.onClose_();
   }
+
+  this.onClose_();
 };
 
 
