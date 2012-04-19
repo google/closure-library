@@ -376,7 +376,9 @@ goog.inherits(goog.format.JsonPrettyPrinter.HtmlDelimiters,
  * @type {string}
  */
 goog.format.JsonPrettyPrinter.HtmlDelimiters.prototype.preName =
-    '<span class="goog-jsonprettyprinter-propertyname">';
+    '<span class="' +
+    goog.getCssName('goog-jsonprettyprinter-propertyname') +
+    '">';
 
 
 /**
@@ -395,7 +397,9 @@ goog.format.JsonPrettyPrinter.HtmlDelimiters.prototype.postName = '</span>';
  * @type {string}
  */
 goog.format.JsonPrettyPrinter.HtmlDelimiters.prototype.preValue =
-    '<span class="goog-jsonprettyprinter-propertyvalue-%s">';
+    '<span class="' +
+    goog.getCssName('goog-jsonprettyprinter-propertyvalue') +
+    '-%s">';
 
 
 /**
