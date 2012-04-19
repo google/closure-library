@@ -1383,7 +1383,7 @@ goog.fx.DragDropItem.prototype.mouseMove_ = function(event) {
   var distanceAboveThreshold =
       distance > goog.fx.AbstractDragDrop.initDragDistanceThreshold;
   var mouseOutOnDragElement = event.type == goog.events.EventType.MOUSEOUT &&
-      event.relatedTarget == currentDragElement;
+      event.target == currentDragElement;
   if (distanceAboveThreshold || mouseOutOnDragElement) {
     goog.events.unlisten(currentDragElement, goog.events.EventType.MOUSEMOVE,
                          this.mouseMove_, false, this);

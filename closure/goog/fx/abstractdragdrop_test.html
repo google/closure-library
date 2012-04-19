@@ -582,13 +582,13 @@ function testMouseMove_mouseOutBeforeThreshold() {
   };
 
   var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
-      'type': goog.events.EventType.MOUSEOUT, 'relatedTarget': childEl};
+      'type': goog.events.EventType.MOUSEOUT, 'target': childEl};
   item.mouseMove_(event);
   assertEquals("DragStart should not be fired for mouseout on child element.",
       null, draggedItem);
 
   var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
-      'type': goog.events.EventType.MOUSEOUT, 'relatedTarget': itemEl};
+      'type': goog.events.EventType.MOUSEOUT, 'target': itemEl};
   item.mouseMove_(event);
   assertEquals("DragStart should be fired for mouseout on main element.",
       item, draggedItem);
