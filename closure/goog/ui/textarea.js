@@ -283,6 +283,7 @@ goog.ui.Textarea.prototype.resize = function() {
 
 /** @override **/
 goog.ui.Textarea.prototype.enterDocument = function() {
+  goog.base(this, 'enterDocument');
   var textarea = this.getElement();
 
   // Eliminates the vertical scrollbar and changes the box-sizing mode for the
@@ -316,6 +317,7 @@ goog.ui.Textarea.prototype.enterDocument = function() {
  * @private
  */
 goog.ui.Textarea.prototype.getHeight_ = function() {
+  debugger;
   this.discoverTextareaCharacteristics_();
   var textarea = this.getElement();
   // Accounts for a possible (though unlikely) horizontal scrollbar.
@@ -446,6 +448,7 @@ goog.ui.Textarea.prototype.discoverTextareaCharacteristics_ = function() {
  * @private
  */
 goog.ui.Textarea.prototype.grow_ = function(opt_e) {
+  debugger;
   if (this.isResizing_) {
     return;
   }
