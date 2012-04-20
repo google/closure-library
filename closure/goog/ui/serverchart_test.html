@@ -172,11 +172,15 @@ function testClearDataSets() {
   var chart = new goog.ui.ServerChart(
       goog.ui.ServerChart.ChartType.BAR, 180, 104);
   tryToCreateBarChart(chart);
-  var uriBefore = chart.getUri().toString();
+  var uriBefore = chart.getUri();
   chart.clearDataSets();
+  var chart = new goog.ui.ServerChart(
+      goog.ui.ServerChart.ChartType.BAR, 180, 104);
   tryToCreateBarChart(chart);
-  var uriAfter = chart.getUri().toString();
-  assertEquals(uriBefore, uriAfter);
+  var uriAfter = chart.getUri();
+  assertEquals(uriBefore.getScheme(), uriAfter.getScheme());
+  assertEquals(uriBefore.getDomain(), uriAfter.getDomain());
+  assertEquals(uriBefore.getPath(), uriAfter.getPath());
 }
 
 function testMultipleDatasetsTextEncoding() {
