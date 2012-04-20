@@ -350,7 +350,12 @@ goog.net.ChannelRequest.Error = {
   /**
    * The browser declared itself offline during the request.
    */
-  BROWSER_OFFLINE: 6
+  BROWSER_OFFLINE: 6,
+
+  /**
+   * IE is blocking ActiveX streaming.
+   */
+  ACTIVE_X_BLOCKED: 7
 };
 
 
@@ -872,7 +877,18 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
     return;
   }
 
-  this.trident_ = new ActiveXObject('htmlfile');
+  try {
+    this.trident_ = new ActiveXObject('htmlfile');
+  } catch (e) {
+    this.channelDebug_.severe('ActiveX blocked');
+    this.cleanup_();
+
+    this.lastError_ = goog.net.ChannelRequest.Error.ACTIVE_X_BLOCKED;
+    goog.net.BrowserChannel.notifyStatEvent(
+        goog.net.BrowserChannel.Stat.ACTIVE_X_BLOCKED);
+    this.dispatchFailure_();
+    return;
+  }
 
   var body = '<html><body>';
   if (usingSecondaryDomain) {

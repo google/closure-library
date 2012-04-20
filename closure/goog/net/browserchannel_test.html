@@ -301,12 +301,18 @@ function testFormatArrayOfMaps() {
 }
 
 
-function connect(opt_serverVersion, opt_hostPrefix, opt_uriPrefix) {
+function connectForwardChannel(
+    opt_serverVersion, opt_hostPrefix, opt_uriPrefix) {
   var uriPrefix = opt_uriPrefix || '';
   browserChannel.connect(uriPrefix + '/test', uriPrefix + '/bind', null);
   mockClock.tick(0);
   completeTestConnection();
   completeForwardChannel(opt_serverVersion, opt_hostPrefix);
+}
+
+
+function connect(opt_serverVersion, opt_hostPrefix, opt_uriPrefix) {
+  connectForwardChannel(opt_serverVersion, opt_hostPrefix, opt_uriPrefix);
   completeBackChannel();
 }
 
@@ -438,6 +444,16 @@ function responseUnknownSessionId() {
   browserChannel.forwardChannelRequest_.successful_ = false;
   browserChannel.onRequestComplete(
       browserChannel.forwardChannelRequest_);
+  mockClock.tick(0);
+}
+
+
+function responseActiveXBlocked() {
+  browserChannel.backChannelRequest_.lastError_ =
+      goog.net.ChannelRequest.Error.ACTIVE_X_BLOCKED;
+  browserChannel.backChannelRequest_.successful_ = false;
+  browserChannel.onRequestComplete(
+      browserChannel.backChannelRequest_);
   mockClock.tick(0);
 }
 
@@ -831,6 +847,22 @@ function testStatEventReportedOnlyOnce() {
   numStatEvents = 0;
   mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
   assertEquals('No new stat events should be reported.', 0, numStatEvents);
+}
+
+
+function testActiveXBlockedEventReportedOnlyOnce() {
+  stubTmpnetwork();
+
+  connectForwardChannel();
+  numStatEvents = 0;
+  lastStatEvent = null;
+  responseActiveXBlocked();
+
+  assertEquals(1, numStatEvents);
+  assertEquals(goog.net.BrowserChannel.Stat.ERROR_OTHER, lastStatEvent);
+
+  mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
+  assertEquals('No new stat events should be reported.', 1, numStatEvents);
 }
 
 

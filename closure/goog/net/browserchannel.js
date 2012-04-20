@@ -496,7 +496,10 @@ goog.net.BrowserChannel.Error = {
   BAD_DATA: 10,
 
   /** An error due to a response that doesn't start with the magic cookie. */
-  BAD_RESPONSE: 11
+  BAD_RESPONSE: 11,
+
+  /** ActiveX is blocked by the machine's admin settings. */
+  ACTIVE_X_BLOCKED: 12
 };
 
 
@@ -703,7 +706,10 @@ goog.net.BrowserChannel.Stat = {
    * The browser declared itself offline during the lifetime of a request, or
    * was offline when a request was initially made.
    */
-  BROWSER_OFFLINE: 21
+  BROWSER_OFFLINE: 21,
+
+  /** ActiveX is blocked by the machine's admin settings. */
+  ACTIVE_X_BLOCKED: 22
 };
 
 
@@ -1854,6 +1860,7 @@ goog.net.BrowserChannel.prototype.clearDeadBackchannelTimer_ = function() {
 goog.net.BrowserChannel.isFatalError_ =
     function(error, statusCode) {
   return error == goog.net.ChannelRequest.Error.UNKNOWN_SESSION_ID ||
+      error == goog.net.ChannelRequest.Error.ACTIVE_X_BLOCKED ||
       (error == goog.net.ChannelRequest.Error.STATUS &&
        statusCode > 0);
 };
@@ -1939,6 +1946,9 @@ goog.net.BrowserChannel.prototype.onRequestComplete =
       break;
     case goog.net.ChannelRequest.Error.UNKNOWN_SESSION_ID:
       this.signalError_(goog.net.BrowserChannel.Error.UNKNOWN_SESSION_ID);
+      break;
+    case goog.net.ChannelRequest.Error.ACTIVE_X_BLOCKED:
+      this.signalError_(goog.net.BrowserChannel.Error.ACTIVE_X_BLOCKED);
       break;
     default:
       this.signalError_(goog.net.BrowserChannel.Error.REQUEST_FAILED);

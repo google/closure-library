@@ -28,6 +28,7 @@ goog.require('goog.testing.net.XhrIo');
 
 var mockClock;
 var mockOnlineHandler;
+var stubs;
 
 /**
  * Time to wait for a network request to time out, before aborting.
@@ -44,10 +45,12 @@ function setUp() {
   mockClock = new goog.testing.MockClock();
   mockClock.install();
   mockOnlineHandler = new goog.testing.events.OnlineHandler(true);
+  stubs = new goog.testing.PropertyReplacer();
 }
 
 
 function tearDown() {
+  stubs.reset();
   mockClock.uninstall();
 }
 
@@ -236,6 +239,18 @@ function testRequestTimeoutWithUnexpectedException() {
   mockClock.tick(ALL_DAY_MS);
   assertEquals(1, req.watchdogTimeoutCallCount);
   assertEquals(1, req.channel_.completedRequests.length);
+}
+
+function testActiveXBlocked() {
+  var xhrIo = createXhrIo();
+  var req = createChannelRequest(xhrIo);
+  stubs.set(goog.global, 'ActiveXObject',
+      goog.functions.error('Active X blocked'));
+
+  req.tridentGet(new goog.Uri('some_uri'), false);
+  assertFalse(req.getSuccess());
+  assertEquals(goog.net.ChannelRequest.Error.ACTIVE_X_BLOCKED,
+      req.getLastError());
 }
 
 </script>
