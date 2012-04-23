@@ -16,6 +16,22 @@
  * @fileoverview Defines static 'wait' functions that provide a convenient way
  * to wait on results of asynchronous operations.
  *
+ * Example:
+ * <pre>
+ *
+ *  var result = xhr.get('testdata/xhr_test_text.data');
+ *
+ *  // Attach success and failure handlers.
+ *  goog.labs.async.wait.onSuccess(result, function(result) {
+ *    var dataValue = result.getValue();
+ *    alert('value : ' + dataValue);
+ *  });
+ *
+ *  goog.labs.async.wait.onError(result, function(error) {
+ *   // Failed asynchronous call!
+ *  });
+ *  </pre>
+ *
  */
 
 

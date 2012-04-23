@@ -17,6 +17,43 @@
  * Results. This provides a convenience for use cases where asynchronous
  * operations must happen serially i.e. subsequent asynchronous operations are
  * dependent on data returned by prior asynchronous operations.
+ *
+ * Example:
+ * <pre>
+ *
+ *  var testDataResult = xhr.get('testdata/xhr_test_text.data');
+ *
+ *  // Chain this result to perform another asynchronous operation when this
+ *  // Result is resolved.
+ *  var chainedResult = goog.labs.async.chain(testDataResult,
+ *      function(testDataResult) {
+ *
+ *        // The result value of testDataResult is the URL for JSON data.
+ *        var jsonDataUrl = testDataResult.getValue();
+ *
+ *        // Create a new Result object when the original result is resolved.
+ *        var jsonResult = xhr.getJson(jsonDataUrl);
+ *
+ *        // Return the newly created Result.
+ *        return jsonResult;
+ *      });
+ *
+ *  // The chained result resolves to success when both results resolve to
+ *  // success.
+ *  goog.labs.async.wait.onSuccess(chainedResult, function(result) {
+ *
+ *    // At this point, both results have succeeded and we can use the JSON
+ *    // data returned by the second asynchronous call.
+ *    var jsonData = result.getValue();
+ *    assertEquals('ok', jsonData['stat']);
+ *  });
+ *
+ *  // Attach the error handler to be called when either Result fails.
+ *  goog.labs.async.wait.onError(chainedResult, function(result) {
+ *    alert('chained result failed!');
+ *  });
+ * </pre>
+ *
  */
 
 goog.provide('goog.labs.async.chain');

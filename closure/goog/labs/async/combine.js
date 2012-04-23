@@ -16,6 +16,39 @@
  * @fileoverview Defines static 'combine' functions that provide a convenient
  * way to wait on multiple asynchronous Results.
  *
+ * Example:
+ *  <pre>
+ *
+ *  var result1 = xhr.get('testdata/xhr_test_text.data');
+ *
+ *  // Get a second independent Result.
+ *  var result2 = xhr.getJson('testdata/xhr_test_json.data');
+ *
+ *  // Create a Result that resolves when both prior results resolve.
+ *  var combinedResult = goog.labs.async.combine.onSuccess(result1, result2);
+ *
+ *  // Process data after successful resolution of both results.
+ *  goog.labs.async.wait.onSuccess(combinedResult, function(results) {
+ *    var textData = results[0].getValue();
+ *    var jsonData = results[1].getValue();
+ *    assertEquals('Just some data.', textData);
+ *    assertEquals('ok', jsonData['stat']);
+ *  });
+ *
+ *  // Handle errors when either or both results failed.
+ *  goog.labs.async.wait.onError(combinedResult, function(combined) {
+ *    var results = combined.getError();
+ *
+ *    if (results[0].getState() == goog.labs.async.Result.State.ERROR) {
+ *      alert('result1 failed');
+ *    }
+ *
+ *    if (results[1].getState() == goog.labs.async.Result.State.ERROR) {
+ *      alert('result2 failed');
+ *    }
+ *  });
+ *  </pre>
+ *
  */
 
 

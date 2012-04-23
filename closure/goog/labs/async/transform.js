@@ -16,6 +16,26 @@
  * @fileoverview Defines a static 'transform' function that provide a convenient
  * way to transform results of asynchronous operations.
  *
+ * Example:
+ *  <pre>
+ *
+ *  var result = xhr.getJson('testdata/xhr_test_json.data');
+ *
+ *  // Transform contents of returned data using 'processJson' and create a
+ *  // transformed result to use returned JSON.
+ *  var transformedResult = goog.labs.async.transform(result, processJson);
+ *
+ *  // Attach success and failure handlers to the tranformed result.
+ *  goog.labs.async.wait.onSuccess(transformedResult, function(result) {
+ *    var jsonData = result.getValue();
+ *    assertEquals('ok', jsonData['stat']);
+ *  });
+ *
+ *  goog.labs.async.wait.onError(transformedResult, function(error) {
+ *    // Failed getJson call
+ *  });
+ *  </pre>
+ *
  */
 
 
