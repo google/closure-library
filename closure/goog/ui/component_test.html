@@ -727,10 +727,10 @@ See the COPYING file for details.
       c.setId('c');
       d.setId('d');
 
-      component.addChild(a);
-      component.addChild(b);
-      component.addChild(c);
-      component.addChild(d);
+      component.addChild(a, true);
+      component.addChild(b, true);
+      component.addChild(c, true);
+      component.addChild(d, true);
 
       assertEquals('abcd', component.getChildIds().join(''));
       assertEquals(a, component.getChildAt(0));
@@ -753,6 +753,51 @@ See the COPYING file for details.
       assertEquals('adcb', component.getChildIds().join(''));
       assertEquals(a, component.getChildAt(0));
       assertEquals(a.getElement(), component.getElement().childNodes[0]);
+    }
+
+    function testAddChildAfterDomCreatedDoesNotEnterDocument() {
+      var parent = new goog.ui.Component();
+      var child = new goog.ui.Component();
+
+      var nestedDiv = goog.dom.createDom('div');
+      parent.setElementInternal(
+          goog.dom.createDom('div', undefined, nestedDiv));
+      parent.render();
+
+      // Now add a child, whose DOM already exists. This happens, for example,
+      // if the child itself performs an addChild(x, true).
+      child.createDom();
+      parent.addChild(child, false);
+      // The parent shouldn't call enterDocument on the child, since the child
+      // actually isn't in the document yet.
+      assertFalse(child.isInDocument());
+
+      // Now, actually render the child; it should be in the document.
+      child.render(nestedDiv);
+      assertTrue(child.isInDocument());
+      assertEquals('Child should be rendered in the expected div',
+          nestedDiv, child.getElement().parentNode);
+    }
+
+    function testAddChildAfterDomManuallyInserted() {
+      var parent = new goog.ui.Component();
+      var child = new goog.ui.Component();
+
+      var nestedDiv = goog.dom.createDom('div');
+      parent.setElementInternal(
+          goog.dom.createDom('div', undefined, nestedDiv));
+      parent.render();
+
+      // This sequence is weird, but some people do it instead of just manually
+      // doing render.  The addChild will detect that the child is in the DOM
+      // and call enterDocument.
+      child.createDom();
+      nestedDiv.appendChild(child.getElement());
+      parent.addChild(child, false);
+
+      assertTrue(child.isInDocument());
+      assertEquals('Child should be rendered in the expected div',
+          nestedDiv, child.getElement().parentNode);
     }
 
     function testRemoveChildren() {
