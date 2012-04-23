@@ -55,6 +55,7 @@ goog.ui.TextareaRenderer.prototype.getAriaRole = function() {
 
 /** @override */
 goog.ui.TextareaRenderer.prototype.decorate = function(control, element) {
+  this.setUpTextarea_(control);
   goog.ui.TextareaRenderer.superClass_.decorate.call(this, control,
       element);
   control.setContent(element.value);
