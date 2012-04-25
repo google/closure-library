@@ -127,10 +127,10 @@ goog.testing.jsunit.AUTO_RUN_ONLOAD = true;
     // onload handler to avoid running the test in JsTestC.
     if (goog.testing.jsunit.AUTO_RUN_ONLOAD) {
       var onload = window.onload;
-      window.onload = function() {
+      window.onload = function(e) {
         // Call any existing onload handlers.
         if (onload) {
-          onload();
+          onload(e);
         }
         // Wait 500ms longer so that we don't interfere with Selenium.
         realTimeout(function() {

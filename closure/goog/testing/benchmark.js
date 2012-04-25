@@ -81,7 +81,8 @@ goog.testing.benchmark.run_ = function() {
 
 /**
  * Onload handler that runs the benchmarks.
+ * @param {Event} e The event object.
  */
-window.onload = function() {
+window.onload = function(e) {
   goog.testing.benchmark.run_();
 };
