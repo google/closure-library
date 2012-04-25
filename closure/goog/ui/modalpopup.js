@@ -157,8 +157,8 @@ goog.ui.ModalPopup.prototype.getCssClass = function() {
 
 /**
  * Returns the background iframe mask element, if any.
- * @return {Element} The background iframe mask element.
- * @protected
+ * @return {Element} The background iframe mask element, may return
+ *     null/undefined if the modal popup does not use iframe mask.
  */
 goog.ui.ModalPopup.prototype.getBackgroundIframe = function() {
   return this.bgIframeEl_;
