@@ -876,11 +876,13 @@ goog.ui.ComboBox.prototype.isItemSticky_ = function(item) {
  * @param {Object=} opt_data Identifying data for the menu item.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper used for dom
  *     interactions.
+ * @param {goog.ui.MenuItemRenderer=} opt_renderer Optional renderer.
  * @constructor
  * @extends {goog.ui.MenuItem}
  */
-goog.ui.ComboBoxItem = function(content, opt_data, opt_domHelper) {
-  goog.ui.MenuItem.call(this, content, opt_data, opt_domHelper);
+goog.ui.ComboBoxItem = function(content, opt_data, opt_domHelper,
+    opt_renderer) {
+  goog.ui.MenuItem.call(this, content, opt_data, opt_domHelper, opt_renderer);
 };
 goog.inherits(goog.ui.ComboBoxItem, goog.ui.MenuItem);
 
