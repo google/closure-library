@@ -108,7 +108,7 @@ goog.style.getComputedStyle = function(element, property) {
     if (styles) {
       // element.style[..] is undefined for browser specific styles
       // as 'filter'.
-      return styles[property] || styles.getPropertyValue(property);
+      return styles[property] || styles.getPropertyValue(property) || '';
     }
   }
 
