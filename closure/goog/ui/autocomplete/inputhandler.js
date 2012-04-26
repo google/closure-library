@@ -90,6 +90,7 @@
 
 
 goog.provide('goog.ui.AutoComplete.InputHandler');
+goog.provide('goog.ui.ac.InputHandler');
 
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
@@ -102,6 +103,11 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.string');
+//TODO(user): Remove this after known usages are replaced.
+/**
+ * @suppress {extraRequire} This is left here only for genjsdeps management
+ *     until all existing usages are transitioned to the new namespace.
+ */
 goog.require('goog.ui.AutoComplete');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -122,7 +128,7 @@ goog.require('goog.userAgent.product');
  * @constructor
  * @extends {goog.Disposable}
  */
-goog.ui.AutoComplete.InputHandler = function(opt_separators, opt_literals,
+goog.ui.ac.InputHandler = function(opt_separators, opt_literals,
     opt_multi, opt_throttleTime) {
   goog.Disposable.call(this);
   var throttleTime = opt_throttleTime || 150;
@@ -136,7 +142,7 @@ goog.ui.AutoComplete.InputHandler = function(opt_separators, opt_literals,
 
   // Set separators depends on this.multi_ being set correctly
   this.setSeparators(goog.isDefAndNotNull(opt_separators) ? opt_separators :
-      goog.ui.AutoComplete.InputHandler.STANDARD_LIST_SEPARATORS);
+      goog.ui.ac.InputHandler.STANDARD_LIST_SEPARATORS);
 
   /**
    * Characters that are used to delimit literal text. Separarator characters
@@ -196,7 +202,7 @@ goog.ui.AutoComplete.InputHandler = function(opt_separators, opt_literals,
    */
   this.lastKeyCode_ = -1;  // Initialize to a non-existent value.
 };
-goog.inherits(goog.ui.AutoComplete.InputHandler, goog.Disposable);
+goog.inherits(goog.ui.ac.InputHandler, goog.Disposable);
 
 
 /**
@@ -207,7 +213,7 @@ goog.inherits(goog.ui.AutoComplete.InputHandler, goog.Disposable);
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.REQUIRES_ASYNC_BLUR_ =
+goog.ui.ac.InputHandler.REQUIRES_ASYNC_BLUR_ =
     (goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
         // Check the webkit version against the version for iOS 4.2.1.
         !goog.userAgent.isVersion('533.17.9');
@@ -217,21 +223,21 @@ goog.ui.AutoComplete.InputHandler.REQUIRES_ASYNC_BLUR_ =
  * Standard list separators.
  * @type {string}
  */
-goog.ui.AutoComplete.InputHandler.STANDARD_LIST_SEPARATORS = ',;';
+goog.ui.ac.InputHandler.STANDARD_LIST_SEPARATORS = ',;';
 
 
 /**
  * Literals for quotes.
  * @type {string}
  */
-goog.ui.AutoComplete.InputHandler.QUOTE_LITERALS = '"';
+goog.ui.ac.InputHandler.QUOTE_LITERALS = '"';
 
 
 /**
  * The AutoComplete instance this inputhandler is associated with.
- * @type {goog.ui.AutoComplete}
+ * @type {goog.ui.ac.AutoComplete}
  */
-goog.ui.AutoComplete.InputHandler.prototype.ac_;
+goog.ui.ac.InputHandler.prototype.ac_;
 
 
 /**
@@ -239,7 +245,7 @@ goog.ui.AutoComplete.InputHandler.prototype.ac_;
  * @type {string}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.separators_;
+goog.ui.ac.InputHandler.prototype.separators_;
 
 
 /**
@@ -247,7 +253,7 @@ goog.ui.AutoComplete.InputHandler.prototype.separators_;
  * @type {string}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.defaultSeparator_;
+goog.ui.ac.InputHandler.prototype.defaultSeparator_;
 
 
 /**
@@ -255,7 +261,7 @@ goog.ui.AutoComplete.InputHandler.prototype.defaultSeparator_;
  * @type {RegExp}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.trimmer_;
+goog.ui.ac.InputHandler.prototype.trimmer_;
 
 
 /**
@@ -263,7 +269,7 @@ goog.ui.AutoComplete.InputHandler.prototype.trimmer_;
  * @type {RegExp}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.separatorCheck_;
+goog.ui.ac.InputHandler.prototype.separatorCheck_;
 
 
 /**
@@ -271,7 +277,7 @@ goog.ui.AutoComplete.InputHandler.prototype.separatorCheck_;
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.whitespaceWrapEntries_ = true;
+goog.ui.ac.InputHandler.prototype.whitespaceWrapEntries_ = true;
 
 
 /**
@@ -279,7 +285,7 @@ goog.ui.AutoComplete.InputHandler.prototype.whitespaceWrapEntries_ = true;
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.generateNewTokenOnLiteral_ = true;
+goog.ui.ac.InputHandler.prototype.generateNewTokenOnLiteral_ = true;
 
 
 /**
@@ -288,7 +294,7 @@ goog.ui.AutoComplete.InputHandler.prototype.generateNewTokenOnLiteral_ = true;
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.upsideDown_ = false;
+goog.ui.ac.InputHandler.prototype.upsideDown_ = false;
 
 
 /**
@@ -302,7 +308,7 @@ goog.ui.AutoComplete.InputHandler.prototype.upsideDown_ = false;
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.separatorUpdates_ = true;
+goog.ui.ac.InputHandler.prototype.separatorUpdates_ = true;
 
 
 /**
@@ -313,7 +319,7 @@ goog.ui.AutoComplete.InputHandler.prototype.separatorUpdates_ = true;
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.separatorSelects_ = true;
+goog.ui.ac.InputHandler.prototype.separatorSelects_ = true;
 
 
 /**
@@ -321,7 +327,7 @@ goog.ui.AutoComplete.InputHandler.prototype.separatorSelects_ = true;
  * @type {?number}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.activeTimeoutId_ = null;
+goog.ui.ac.InputHandler.prototype.activeTimeoutId_ = null;
 
 
 /**
@@ -329,7 +335,7 @@ goog.ui.AutoComplete.InputHandler.prototype.activeTimeoutId_ = null;
  * @type {Element}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.activeElement_ = null;
+goog.ui.ac.InputHandler.prototype.activeElement_ = null;
 
 
 /**
@@ -337,7 +343,7 @@ goog.ui.AutoComplete.InputHandler.prototype.activeElement_ = null;
  * @type {string}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.lastValue_ = '';
+goog.ui.ac.InputHandler.prototype.lastValue_ = '';
 
 
 /**
@@ -346,7 +352,7 @@ goog.ui.AutoComplete.InputHandler.prototype.lastValue_ = '';
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.waitingForIme_ = false;
+goog.ui.ac.InputHandler.prototype.waitingForIme_ = false;
 
 
 /**
@@ -355,7 +361,7 @@ goog.ui.AutoComplete.InputHandler.prototype.waitingForIme_ = false;
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.rowJustSelected_ = false;
+goog.ui.ac.InputHandler.prototype.rowJustSelected_ = false;
 
 
 /**
@@ -364,23 +370,23 @@ goog.ui.AutoComplete.InputHandler.prototype.rowJustSelected_ = false;
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.updateDuringTyping_ = true;
+goog.ui.ac.InputHandler.prototype.updateDuringTyping_ = true;
 
 
 /**
  * Attach an instance of an AutoComplete
- * @param {goog.ui.AutoComplete} ac Autocomplete object.
+ * @param {goog.ui.ac.AutoComplete} ac Autocomplete object.
  */
-goog.ui.AutoComplete.InputHandler.prototype.attachAutoComplete = function(ac) {
+goog.ui.ac.InputHandler.prototype.attachAutoComplete = function(ac) {
   this.ac_ = ac;
 };
 
 
 /**
  * Returns the associated autocomplete instance.
- * @return {goog.ui.AutoComplete} The associated autocomplete instance.
+ * @return {goog.ui.ac.AutoComplete} The associated autocomplete instance.
  */
-goog.ui.AutoComplete.InputHandler.prototype.getAutoComplete = function() {
+goog.ui.ac.InputHandler.prototype.getAutoComplete = function() {
   return this.ac_;
 };
 
@@ -389,7 +395,7 @@ goog.ui.AutoComplete.InputHandler.prototype.getAutoComplete = function() {
  * Returns the current active element.
  * @return {Element} The currently active element.
  */
-goog.ui.AutoComplete.InputHandler.prototype.getActiveElement = function() {
+goog.ui.ac.InputHandler.prototype.getActiveElement = function() {
   return this.activeElement_;
 };
 
@@ -398,7 +404,7 @@ goog.ui.AutoComplete.InputHandler.prototype.getActiveElement = function() {
  * Returns the value of the current active element.
  * @return {string} The value of the current active element.
  */
-goog.ui.AutoComplete.InputHandler.prototype.getValue = function() {
+goog.ui.ac.InputHandler.prototype.getValue = function() {
   return this.activeElement_.value;
 };
 
@@ -407,7 +413,7 @@ goog.ui.AutoComplete.InputHandler.prototype.getValue = function() {
  * Sets the value of the current active element.
  * @param {string} value The new value.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setValue = function(value) {
+goog.ui.ac.InputHandler.prototype.setValue = function(value) {
   this.activeElement_.value = value;
 };
 
@@ -416,7 +422,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setValue = function(value) {
  * Returns the current cursor position.
  * @return {number} The index of the cursor position.
  */
-goog.ui.AutoComplete.InputHandler.prototype.getCursorPosition = function() {
+goog.ui.ac.InputHandler.prototype.getCursorPosition = function() {
   return goog.dom.selection.getStart(this.activeElement_);
 };
 
@@ -425,7 +431,7 @@ goog.ui.AutoComplete.InputHandler.prototype.getCursorPosition = function() {
  * Sets the cursor at the given position.
  * @param {number} pos The index of the cursor position.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setCursorPosition = function(pos) {
+goog.ui.ac.InputHandler.prototype.setCursorPosition = function(pos) {
   goog.dom.selection.setStart(this.activeElement_, pos);
   goog.dom.selection.setEnd(this.activeElement_, pos);
 };
@@ -438,7 +444,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setCursorPosition = function(pos) {
  * @param {Element|goog.events.EventTarget} target An element to attach the
  *     input handler too.
  */
-goog.ui.AutoComplete.InputHandler.prototype.attachInput = function(target) {
+goog.ui.ac.InputHandler.prototype.attachInput = function(target) {
   if (goog.dom.isElement(target)) {
     goog.dom.a11y.setState(/** @type {Element} */ (target), 'haspopup', true);
   }
@@ -468,7 +474,7 @@ goog.ui.AutoComplete.InputHandler.prototype.attachInput = function(target) {
  * @param {Element|goog.events.EventTarget} target An element to detach the
  *     input handler from.
  */
-goog.ui.AutoComplete.InputHandler.prototype.detachInput = function(target) {
+goog.ui.ac.InputHandler.prototype.detachInput = function(target) {
   if (target == this.activeElement_) {
     this.handleBlur();
   }
@@ -487,7 +493,7 @@ goog.ui.AutoComplete.InputHandler.prototype.detachInput = function(target) {
  * Attaches the input handler to multiple elements.
  * @param {...Element} var_args Elements to attach the input handler too.
  */
-goog.ui.AutoComplete.InputHandler.prototype.attachInputs = function(var_args) {
+goog.ui.ac.InputHandler.prototype.attachInputs = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {
     this.attachInput(arguments[i]);
   }
@@ -498,7 +504,7 @@ goog.ui.AutoComplete.InputHandler.prototype.attachInputs = function(var_args) {
  * Detaches the input handler from multuple elements.
  * @param {...Element} var_args Variable arguments for elements to unbind from.
  */
-goog.ui.AutoComplete.InputHandler.prototype.detachInputs = function(var_args) {
+goog.ui.ac.InputHandler.prototype.detachInputs = function(var_args) {
   for (var i = 0; i < arguments.length; i++) {
     this.detachInput(arguments[i]);
   }
@@ -512,8 +518,7 @@ goog.ui.AutoComplete.InputHandler.prototype.detachInputs = function(var_args) {
  *     auto-complete?  Overrides previous setting of opt_multi on constructor.
  * @return {boolean} Whether to suppress the update event.
  */
-goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
-                                                                 opt_multi) {
+goog.ui.ac.InputHandler.prototype.selectRow = function(row, opt_multi) {
   this.setTokenText(row.toString(), opt_multi);
   return false;
 };
@@ -527,8 +532,8 @@ goog.ui.AutoComplete.InputHandler.prototype.selectRow = function(row,
  *     auto-complete?  Overrides previous setting of opt_multi on constructor.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.setTokenText = function(tokenText,
-                                                                    opt_multi) {
+goog.ui.ac.InputHandler.prototype.setTokenText =
+    function(tokenText, opt_multi) {
   if (goog.isDef(opt_multi) ? opt_multi : this.multi_) {
     var index = this.getTokenIndex_(this.getValue(), this.getCursorPosition());
 
@@ -600,8 +605,8 @@ goog.ui.AutoComplete.InputHandler.prototype.setTokenText = function(tokenText,
 
 
 /** @override */
-goog.ui.AutoComplete.InputHandler.prototype.disposeInternal = function() {
-  goog.ui.AutoComplete.InputHandler.superClass_.disposeInternal.call(this);
+goog.ui.ac.InputHandler.prototype.disposeInternal = function() {
+  goog.ui.ac.InputHandler.superClass_.disposeInternal.call(this);
   if (this.activeTimeoutId_ != null) {
     // Need to check against null explicitly because 0 is a valid value.
     window.clearTimeout(this.activeTimeoutId_);
@@ -618,8 +623,7 @@ goog.ui.AutoComplete.InputHandler.prototype.disposeInternal = function() {
  *
  * @param {string} separators The separator characters to set.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setSeparators =
-    function(separators) {
+goog.ui.ac.InputHandler.prototype.setSeparators = function(separators) {
   this.separators_ = separators;
   this.defaultSeparator_ = this.separators_.substring(0, 1);
 
@@ -635,8 +639,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setSeparators =
  * and previous autocomplete entries.
  * @param {boolean} upsideDown Whether the orientation is upside down.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setUpsideDown =
-    function(upsideDown) {
+goog.ui.ac.InputHandler.prototype.setUpsideDown = function(upsideDown) {
   this.upsideDown_ = upsideDown;
 };
 
@@ -646,7 +649,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setUpsideDown =
  * @param {boolean} newValue boolean value indicating whether or not
  *     auto-completed tokens should be wrapped with whitespace.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setWhitespaceWrapEntries =
+goog.ui.ac.InputHandler.prototype.setWhitespaceWrapEntries =
     function(newValue) {
   this.whitespaceWrapEntries_ = newValue;
 };
@@ -658,7 +661,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setWhitespaceWrapEntries =
  * @param {boolean} newValue boolean value indicating whether or not
  * new tokens should be generated from literals.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setGenerateNewTokenOnLiteral =
+goog.ui.ac.InputHandler.prototype.setGenerateNewTokenOnLiteral =
     function(newValue) {
   this.generateNewTokenOnLiteral_ = newValue;
 };
@@ -670,8 +673,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setGenerateNewTokenOnLiteral =
  * be removed.  This can also be set to null to disable trimming.
  * @param {RegExp} trimmer Regexp to use for trimming or null to disable it.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setTrimmingRegExp =
-    function(trimmer) {
+goog.ui.ac.InputHandler.prototype.setTrimmingRegExp = function(trimmer) {
   this.trimmer_ = trimmer;
 };
 
@@ -681,8 +683,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setTrimmingRegExp =
  * next focusable  element) on TAB.
  * @param {boolean} newValue Whether to preventDefault on TAB.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setPreventDefaultOnTab =
-    function(newValue) {
+goog.ui.ac.InputHandler.prototype.setPreventDefaultOnTab = function(newValue) {
   this.preventDefaultOnTab_ = newValue;
 };
 
@@ -691,8 +692,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setPreventDefaultOnTab =
  * Sets whether separators perform autocomplete.
  * @param {boolean} newValue Whether to autocomplete on separators.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setSeparatorCompletes =
-    function(newValue) {
+goog.ui.ac.InputHandler.prototype.setSeparatorCompletes = function(newValue) {
   this.separatorUpdates_ = newValue;
   this.separatorSelects_ = newValue;
 };
@@ -702,8 +702,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setSeparatorCompletes =
  * Sets whether separators perform autocomplete.
  * @param {boolean} newValue Whether to autocomplete on separators.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setSeparatorSelects =
-    function(newValue) {
+goog.ui.ac.InputHandler.prototype.setSeparatorSelects = function(newValue) {
   this.separatorSelects_ = newValue;
 };
 
@@ -714,7 +713,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setSeparatorSelects =
  * otherwise from the last keypress.
  * @return {number} Throttle time in milliseconds.
  */
-goog.ui.AutoComplete.InputHandler.prototype.getThrottleTime = function() {
+goog.ui.ac.InputHandler.prototype.getThrottleTime = function() {
   return this.timer_ ? this.timer_.getInterval() : -1;
 };
 
@@ -723,8 +722,7 @@ goog.ui.AutoComplete.InputHandler.prototype.getThrottleTime = function() {
  * Sets whether a row has just been selected.
  * @param {boolean} justSelected Whether or not the row has just been selected.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setRowJustSelected =
-    function(justSelected) {
+goog.ui.ac.InputHandler.prototype.setRowJustSelected = function(justSelected) {
   this.rowJustSelected_ = justSelected;
 };
 
@@ -733,7 +731,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setRowJustSelected =
  * Sets the time to wait before updating the results.
  * @param {number} time New throttle time in milliseconds.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setThrottleTime = function(time) {
+goog.ui.ac.InputHandler.prototype.setThrottleTime = function(time) {
   if (time < 0) {
     this.timer_.dispose();
     this.timer_ = null;
@@ -751,7 +749,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setThrottleTime = function(time) {
  * Gets whether the result list is updated during typing.
  * @return {boolean} Value of the flag.
  */
-goog.ui.AutoComplete.InputHandler.prototype.getUpdateDuringTyping = function() {
+goog.ui.ac.InputHandler.prototype.getUpdateDuringTyping = function() {
   return this.updateDuringTyping_;
 };
 
@@ -760,8 +758,7 @@ goog.ui.AutoComplete.InputHandler.prototype.getUpdateDuringTyping = function() {
  * Sets whether the result list should be updated during typing.
  * @param {boolean} value New value of the flag.
  */
-goog.ui.AutoComplete.InputHandler.prototype.setUpdateDuringTyping =
-    function(value) {
+goog.ui.ac.InputHandler.prototype.setUpdateDuringTyping = function(value) {
   this.updateDuringTyping_ = value;
 };
 
@@ -772,7 +769,7 @@ goog.ui.AutoComplete.InputHandler.prototype.setUpdateDuringTyping =
  * @return {boolean} True if the key event was handled.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.handleKeyEvent = function(e) {
+goog.ui.ac.InputHandler.prototype.handleKeyEvent = function(e) {
   switch (e.keyCode) {
 
     // If the menu is open and 'down' caused a change then prevent the default
@@ -869,7 +866,7 @@ goog.ui.AutoComplete.InputHandler.prototype.handleKeyEvent = function(e) {
  * @return {boolean} True if the key event was handled.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.handleSeparator_ = function(e) {
+goog.ui.ac.InputHandler.prototype.handleSeparator_ = function(e) {
   var isSeparatorKey = this.multi_ && e.charCode &&
       this.separators_.indexOf(String.fromCharCode(e.charCode)) != -1;
   if (this.separatorUpdates_ && isSeparatorKey) {
@@ -889,7 +886,7 @@ goog.ui.AutoComplete.InputHandler.prototype.handleSeparator_ = function(e) {
  * @return {boolean} Whether this inputhandler need to listen on key-up.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.needKeyUpListener = function() {
+goog.ui.ac.InputHandler.prototype.needKeyUpListener = function() {
   return false;
 };
 
@@ -900,7 +897,7 @@ goog.ui.AutoComplete.InputHandler.prototype.needKeyUpListener = function() {
  * @return {boolean} Whether an action was taken or not.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.handleKeyUp = function(e) {
+goog.ui.ac.InputHandler.prototype.handleKeyUp = function(e) {
   return false;
 };
 
@@ -909,7 +906,7 @@ goog.ui.AutoComplete.InputHandler.prototype.handleKeyUp = function(e) {
  * Adds the necessary input event handlers.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.addEventHandlers_ = function() {
+goog.ui.ac.InputHandler.prototype.addEventHandlers_ = function() {
   this.keyHandler_.attach(this.activeElement_);
   this.eh_.listen(
       this.keyHandler_, goog.events.KeyHandler.EventType.KEY, this.onKey_);
@@ -932,7 +929,7 @@ goog.ui.AutoComplete.InputHandler.prototype.addEventHandlers_ = function() {
  * Removes the necessary input event handlers.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.removeEventHandlers_ = function() {
+goog.ui.ac.InputHandler.prototype.removeEventHandlers_ = function() {
   this.eh_.unlisten(
       this.keyHandler_, goog.events.KeyHandler.EventType.KEY, this.onKey_);
   this.keyHandler_.detach();
@@ -957,7 +954,7 @@ goog.ui.AutoComplete.InputHandler.prototype.removeEventHandlers_ = function() {
  * @param {goog.events.Event} e Browser event object.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.handleFocus = function(e) {
+goog.ui.ac.InputHandler.prototype.handleFocus = function(e) {
   this.processFocus(/** @type {Element} */ (e.target || null));
 };
 
@@ -967,7 +964,7 @@ goog.ui.AutoComplete.InputHandler.prototype.handleFocus = function(e) {
  * @param {Element} target The element to focus.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.processFocus = function(target) {
+goog.ui.ac.InputHandler.prototype.processFocus = function(target) {
   this.activateHandler_.removeAll();
 
   if (this.ac_) {
@@ -993,9 +990,9 @@ goog.ui.AutoComplete.InputHandler.prototype.processFocus = function(target) {
  * @param {goog.events.Event=} opt_e Browser event object.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.handleBlur = function(opt_e) {
+goog.ui.ac.InputHandler.prototype.handleBlur = function(opt_e) {
   // Phones running iOS prior to version 4.2.
-  if (goog.ui.AutoComplete.InputHandler.REQUIRES_ASYNC_BLUR_) {
+  if (goog.ui.ac.InputHandler.REQUIRES_ASYNC_BLUR_) {
     // @bug 4484488 This is required so that the menu works correctly on
     // iOS prior to version 4.2. Otherwise, the blur action closes the menu
     // before the menu button click can be processed.
@@ -1014,7 +1011,7 @@ goog.ui.AutoComplete.InputHandler.prototype.handleBlur = function(opt_e) {
  * Helper function that does the logic to handle an element blurring.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.processBlur_ = function() {
+goog.ui.ac.InputHandler.prototype.processBlur_ = function() {
   // it's possible that a blur event could fire when there's no active element,
   // in the case where attachInput was called on an input that already had
   // the focus
@@ -1042,7 +1039,7 @@ goog.ui.AutoComplete.InputHandler.prototype.processBlur_ = function() {
  * @param {goog.events.Event} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.onTick_ = function(e) {
+goog.ui.ac.InputHandler.prototype.onTick_ = function(e) {
   this.update();
 };
 
@@ -1052,8 +1049,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onTick_ = function(e) {
  * @param {goog.events.BrowserEvent} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.onKeyDownOnInactiveElement_ =
-    function(e) {
+goog.ui.ac.InputHandler.prototype.onKeyDownOnInactiveElement_ = function(e) {
   this.handleFocus(e);
 };
 
@@ -1064,7 +1060,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onKeyDownOnInactiveElement_ =
  * @param {goog.events.BrowserEvent} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.onKey_ = function(e) {
+goog.ui.ac.InputHandler.prototype.onKey_ = function(e) {
   this.lastKeyCode_ = e.keyCode;
   if (this.ac_) {
     this.handleKeyEvent(e);
@@ -1078,7 +1074,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onKey_ = function(e) {
  * @param {goog.events.BrowserEvent} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.onKeyPress_ = function(e) {
+goog.ui.ac.InputHandler.prototype.onKeyPress_ = function(e) {
   if (this.waitingForIme_ &&
       this.lastKeyCode_ != goog.events.KeyCodes.WIN_IME) {
     this.stopWaitingForIme_();
@@ -1092,7 +1088,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onKeyPress_ = function(e) {
  * @param {goog.events.BrowserEvent} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.onKeyUp_ = function(e) {
+goog.ui.ac.InputHandler.prototype.onKeyUp_ = function(e) {
   if (this.waitingForIme_ &&
       (e.keyCode == goog.events.KeyCodes.ENTER ||
        (e.keyCode == goog.events.KeyCodes.M && e.ctrlKey))) {
@@ -1106,7 +1102,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onKeyUp_ = function(e) {
  * @param {goog.events.BrowserEvent} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.onMouseDown_ = function(e) {
+goog.ui.ac.InputHandler.prototype.onMouseDown_ = function(e) {
   if (this.ac_) {
     this.handleMouseDown(e);
   }
@@ -1118,7 +1114,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onMouseDown_ = function(e) {
  * @param {goog.events.BrowserEvent} e Browser event object.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.handleMouseDown = function(e) {
+goog.ui.ac.InputHandler.prototype.handleMouseDown = function(e) {
 };
 
 
@@ -1126,7 +1122,7 @@ goog.ui.AutoComplete.InputHandler.prototype.handleMouseDown = function(e) {
  * Starts waiting for IME.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.startWaitingForIme_ = function() {
+goog.ui.ac.InputHandler.prototype.startWaitingForIme_ = function() {
   if (this.waitingForIme_) {
     return;
   }
@@ -1142,7 +1138,7 @@ goog.ui.AutoComplete.InputHandler.prototype.startWaitingForIme_ = function() {
  * Stops waiting for IME.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.stopWaitingForIme_ = function() {
+goog.ui.ac.InputHandler.prototype.stopWaitingForIme_ = function() {
   if (!this.waitingForIme_) {
     return;
   }
@@ -1160,7 +1156,7 @@ goog.ui.AutoComplete.InputHandler.prototype.stopWaitingForIme_ = function() {
  * @param {goog.events.BrowserEvent} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.onIeKeyPress_ = function(e) {
+goog.ui.ac.InputHandler.prototype.onIeKeyPress_ = function(e) {
   this.handleSeparator_(e);
 };
 
@@ -1170,7 +1166,7 @@ goog.ui.AutoComplete.InputHandler.prototype.onIeKeyPress_ = function(e) {
  * token.
  * @param {boolean=} opt_force If true the menu will be forced to update.
  */
-goog.ui.AutoComplete.InputHandler.prototype.update = function(opt_force) {
+goog.ui.ac.InputHandler.prototype.update = function(opt_force) {
   if (this.activeElement_ &&
       (opt_force || this.getValue() != this.lastValue_)) {
     if (opt_force || !this.rowJustSelected_) {
@@ -1192,7 +1188,7 @@ goog.ui.AutoComplete.InputHandler.prototype.update = function(opt_force) {
  * @return {string} Token to complete.
  * @protected
  */
-goog.ui.AutoComplete.InputHandler.prototype.parseToken = function() {
+goog.ui.ac.InputHandler.prototype.parseToken = function() {
   return this.parseToken_();
 };
 
@@ -1202,7 +1198,7 @@ goog.ui.AutoComplete.InputHandler.prototype.parseToken = function() {
  * @return {boolean} True if successful.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.moveUp_ = function() {
+goog.ui.ac.InputHandler.prototype.moveUp_ = function() {
   return this.upsideDown_ ? this.ac_.hiliteNext() : this.ac_.hilitePrev();
 };
 
@@ -1212,7 +1208,7 @@ goog.ui.AutoComplete.InputHandler.prototype.moveUp_ = function() {
  * @return {boolean} True if successful.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.moveDown_ = function() {
+goog.ui.ac.InputHandler.prototype.moveDown_ = function() {
   return this.upsideDown_ ? this.ac_.hilitePrev() : this.ac_.hiliteNext();
 };
 
@@ -1222,7 +1218,7 @@ goog.ui.AutoComplete.InputHandler.prototype.moveDown_ = function() {
  * @return {string} Token to complete.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.parseToken_ = function() {
+goog.ui.ac.InputHandler.prototype.parseToken_ = function() {
   var caret = this.getCursorPosition();
   var text = this.getValue();
   return this.trim_(this.splitInput_(text)[this.getTokenIndex_(text, caret)]);
@@ -1235,7 +1231,7 @@ goog.ui.AutoComplete.InputHandler.prototype.parseToken_ = function() {
  * @return {string} Trimmed string.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.trim_ = function(text) {
+goog.ui.ac.InputHandler.prototype.trim_ = function(text) {
   return this.trimmer_ ? String(text).replace(this.trimmer_, '') : text;
 };
 
@@ -1247,8 +1243,7 @@ goog.ui.AutoComplete.InputHandler.prototype.trim_ = function(text) {
  * @return {number} Index of token.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.getTokenIndex_ = function(text,
-                                                                      caret) {
+goog.ui.ac.InputHandler.prototype.getTokenIndex_ = function(text, caret) {
   // Split up the input string into multiple entries
   var entries = this.splitInput_(text);
 
@@ -1269,17 +1264,17 @@ goog.ui.AutoComplete.InputHandler.prototype.getTokenIndex_ = function(text,
 
 /**
  * Splits an input string of text at the occurance of a character in
- * {@link goog.ui.AutoComplete.InputHandler.prototype.separators_} and creates
+ * {@link goog.ui.ac.InputHandler.prototype.separators_} and creates
  * an array of tokens.  Each token may contain additional whitespace and
  * formatting marks.  If necessary use
- * {@link goog.ui.AutoComplete.InputHandler.prototype.trim_} to clean up the
+ * {@link goog.ui.ac.InputHandler.prototype.trim_} to clean up the
  * entries.
  *
  * @param {string} text Input text.
  * @return {Array} Parsed array.
  * @private
  */
-goog.ui.AutoComplete.InputHandler.prototype.splitInput_ = function(text) {
+goog.ui.ac.InputHandler.prototype.splitInput_ = function(text) {
   if (!this.multi_) {
     return [text];
   }
@@ -1310,3 +1305,21 @@ goog.ui.AutoComplete.InputHandler.prototype.splitInput_ = function(text) {
 
   return parts;
 };
+
+
+
+/**
+ * Class for managing the interaction between an auto-complete object and a
+ * text-input or textarea.
+ *
+ * @param {?string=} opt_separators Separators to split multiple entries.
+ * @param {?string=} opt_literals Characters used to delimit text literals.
+ * @param {?boolean=} opt_multi Whether to allow multiple entries
+ *     (Default: true).
+ * @param {?number=} opt_throttleTime Number of milliseconds to throttle
+ *     keyevents with (Default: 150). Use -1 to disable updates on typing. Note
+ *     that typing the separator will update autocomplete suggestions.
+ * @constructor
+ * @extends {goog.Disposable}
+ */
+goog.ui.AutoComplete.InputHandler = goog.ui.ac.InputHandler;

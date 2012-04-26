@@ -19,9 +19,15 @@
 
 
 goog.provide('goog.ui.AutoComplete.ArrayMatcher');
+goog.provide('goog.ui.ac.ArrayMatcher');
 
 goog.require('goog.iter');
 goog.require('goog.string');
+// TODO(user): Remove this after known usages are replaced.
+/**
+ * @suppress {extraRequire} This is left here only for genjsdeps management
+ *     until all existing usages are transitioned to the new namespace.
+ */
 goog.require('goog.ui.AutoComplete');
 
 
@@ -34,7 +40,7 @@ goog.require('goog.ui.AutoComplete');
  * @param {boolean=} opt_noSimilar if true, do not do similarity matches for the
  *     input token against the dictionary.
  */
-goog.ui.AutoComplete.ArrayMatcher = function(rows, opt_noSimilar) {
+goog.ui.ac.ArrayMatcher = function(rows, opt_noSimilar) {
   this.rows_ = rows;
   this.useSimilar_ = !opt_noSimilar;
 };
@@ -44,7 +50,7 @@ goog.ui.AutoComplete.ArrayMatcher = function(rows, opt_noSimilar) {
  * Replaces the rows that this object searches over.
  * @param {Array} rows Dictionary of items to match.
  */
-goog.ui.AutoComplete.ArrayMatcher.prototype.setRows = function(rows) {
+goog.ui.ac.ArrayMatcher.prototype.setRows = function(rows) {
   this.rows_ = rows;
 };
 
@@ -56,7 +62,7 @@ goog.ui.AutoComplete.ArrayMatcher.prototype.setRows = function(rows) {
  * @param {Function} matchHandler callback to execute after matching.
  * @param {string=} opt_fullString The full string from the input box.
  */
-goog.ui.AutoComplete.ArrayMatcher.prototype.requestMatchingRows =
+goog.ui.ac.ArrayMatcher.prototype.requestMatchingRows =
     function(token, maxMatches, matchHandler, opt_fullString) {
 
   var matches = this.getPrefixMatches(token, maxMatches);
@@ -74,7 +80,7 @@ goog.ui.AutoComplete.ArrayMatcher.prototype.requestMatchingRows =
  * @param {number} maxMatches Max number of matches to return.
  * @return {Array} Rows that match.
  */
-goog.ui.AutoComplete.ArrayMatcher.prototype.getPrefixMatches =
+goog.ui.ac.ArrayMatcher.prototype.getPrefixMatches =
     function(token, maxMatches) {
   var matches = [];
 
@@ -100,7 +106,7 @@ goog.ui.AutoComplete.ArrayMatcher.prototype.getPrefixMatches =
  * @param {number} maxMatches Max number of matches to return.
  * @return {Array} The best maxMatches rows.
  */
-goog.ui.AutoComplete.ArrayMatcher.prototype.getSimilarRows =
+goog.ui.ac.ArrayMatcher.prototype.getSimilarRows =
     function(token, maxMatches) {
 
   var results = [];
@@ -163,3 +169,16 @@ goog.ui.AutoComplete.ArrayMatcher.prototype.getSimilarRows =
 
   return matches;
 };
+
+
+
+// TODO(user): Remove this after known usages are replaced.
+/**
+ * Basic class for matching words in an array
+ * @constructor
+ * @param {Array} rows Dictionary of items to match.  Can be objects if they
+ *     have a toString method that returns the value to match against.
+ * @param {boolean=} opt_noSimilar if true, do not do similarity matches for the
+ *     input token against the dictionary.
+ */
+goog.ui.AutoComplete.ArrayMatcher = goog.ui.ac.ArrayMatcher;

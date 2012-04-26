@@ -18,12 +18,18 @@
  */
 
 goog.provide('goog.ui.AutoComplete.RemoteArrayMatcher');
+goog.provide('goog.ui.ac.RemoteArrayMatcher');
 
 goog.require('goog.Disposable');
 goog.require('goog.Uri');
 goog.require('goog.events');
 goog.require('goog.json');
 goog.require('goog.net.XhrIo');
+//TODO(user): Remove this after known usages are replaced.
+/**
+ * @suppress {extraRequire} This is left here only for genjsdeps management
+ *     until all existing usages are transitioned to the new namespace.
+ */
 goog.require('goog.ui.AutoComplete');
 
 
@@ -39,7 +45,7 @@ goog.require('goog.ui.AutoComplete');
  * @constructor
  * @extends {goog.Disposable}
  */
-goog.ui.AutoComplete.RemoteArrayMatcher = function(url, opt_noSimilar) {
+goog.ui.ac.RemoteArrayMatcher = function(url, opt_noSimilar) {
   goog.Disposable.call(this);
 
   /**
@@ -66,7 +72,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher = function(url, opt_noSimilar) {
    */
   this.xhr_ = new goog.net.XhrIo();
 };
-goog.inherits(goog.ui.AutoComplete.RemoteArrayMatcher, goog.Disposable);
+goog.inherits(goog.ui.ac.RemoteArrayMatcher, goog.Disposable);
 
 
 /**
@@ -74,7 +80,7 @@ goog.inherits(goog.ui.AutoComplete.RemoteArrayMatcher, goog.Disposable);
  * @type {string}
  * @private
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.method_ = 'GET';
+goog.ui.ac.RemoteArrayMatcher.prototype.method_ = 'GET';
 
 
 /**
@@ -82,7 +88,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.method_ = 'GET';
  * @type {string|undefined}
  * @private
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.content_ = undefined;
+goog.ui.ac.RemoteArrayMatcher.prototype.content_ = undefined;
 
 
 /**
@@ -90,7 +96,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.content_ = undefined;
  * @type {Object|goog.structs.Map}
  * @private
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.headers_ = null;
+goog.ui.ac.RemoteArrayMatcher.prototype.headers_ = null;
 
 
 /**
@@ -98,14 +104,14 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.headers_ = null;
  * @type {?number}
  * @private
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.lastListenerKey_ = null;
+goog.ui.ac.RemoteArrayMatcher.prototype.lastListenerKey_ = null;
 
 
 /**
  * Set the send method ("GET", "POST").
  * @param {string} method The send method; default: GET.
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setMethod = function(method) {
+goog.ui.ac.RemoteArrayMatcher.prototype.setMethod = function(method) {
   this.method_ = method;
 };
 
@@ -114,8 +120,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setMethod = function(method) {
  * Set the post data.
  * @param {string} content Post data.
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setContent =
-    function(content) {
+goog.ui.ac.RemoteArrayMatcher.prototype.setContent = function(content) {
   this.content_ = content;
 };
 
@@ -125,8 +130,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setContent =
  * @param {Object|goog.structs.Map} headers Map of headers to add to the
  *     request.
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setHeaders =
-    function(headers) {
+goog.ui.ac.RemoteArrayMatcher.prototype.setHeaders = function(headers) {
   this.headers_ = headers;
 };
 
@@ -136,7 +140,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setHeaders =
  * @param {number} interval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setTimeoutInterval =
+goog.ui.ac.RemoteArrayMatcher.prototype.setTimeoutInterval =
     function(interval) {
   this.xhr_.setTimeoutInterval(interval);
 };
@@ -155,7 +159,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.setTimeoutInterval =
  * @return {?string} The complete url. Return null if no request should be sent.
  * @protected
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.buildUrl = function(uri,
+goog.ui.ac.RemoteArrayMatcher.prototype.buildUrl = function(uri,
     token, maxMatches, useSimilar, opt_fullString) {
   var url = new goog.Uri(uri);
   url.setParameterValue('token', token);
@@ -176,7 +180,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.buildUrl = function(uri,
  * @return {boolean} Whether new matches be requested.
  * @protected
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.shouldRequestMatches =
+goog.ui.ac.RemoteArrayMatcher.prototype.shouldRequestMatches =
     function(uri, token, maxMatches, useSimilar, opt_fullString) {
   return true;
 };
@@ -189,7 +193,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.shouldRequestMatches =
  * @return {Array.<string>} The array of suggestions.
  * @protected
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.parseResponseText = function(
+goog.ui.ac.RemoteArrayMatcher.prototype.parseResponseText = function(
     responseText) {
 
   var matches = [];
@@ -211,7 +215,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.parseResponseText = function(
  * @param {Function} matchHandler The AutoComplete match handler.
  * @param {goog.events.Event} event The XHR success event.
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.xhrCallback = function(token,
+goog.ui.ac.RemoteArrayMatcher.prototype.xhrCallback = function(token,
     matchHandler, event) {
   var text = event.target.getResponseText();
   matchHandler(token, this.parseResponseText(text));
@@ -229,7 +233,7 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.xhrCallback = function(token,
  *     matching.
  * @param {string=} opt_fullString The full string from the input box.
  */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.requestMatchingRows =
+goog.ui.ac.RemoteArrayMatcher.prototype.requestMatchingRows =
     function(token, maxMatches, matchHandler, opt_fullString) {
 
   if (!this.shouldRequestMatches(this.url_, token, maxMatches, this.useSimilar_,
@@ -266,8 +270,24 @@ goog.ui.AutoComplete.RemoteArrayMatcher.prototype.requestMatchingRows =
 
 
 /** @override */
-goog.ui.AutoComplete.RemoteArrayMatcher.prototype.disposeInternal = function() {
+goog.ui.ac.RemoteArrayMatcher.prototype.disposeInternal = function() {
   this.xhr_.dispose();
-  goog.ui.AutoComplete.RemoteArrayMatcher.superClass_.disposeInternal.call(
+  goog.ui.ac.RemoteArrayMatcher.superClass_.disposeInternal.call(
       this);
 };
+
+
+
+// TODO(user): Remove this alias after known usages are replaced.
+/**
+ * An array matcher that requests matches via ajax.
+ * @param {string} url The Uri which generates the auto complete matches.  The
+ *     search term is passed to the server as the 'token' query param.
+ * @param {boolean=} opt_noSimilar If true, request that the server does not do
+ *     similarity matches for the input token against the dictionary.
+ *     The value is sent to the server as the 'use_similar' query param which is
+ *     either "1" (opt_noSimilar==false) or "0" (opt_noSimilar==true).
+ * @constructor
+ * @extends {goog.Disposable}
+ */
+goog.ui.AutoComplete.RemoteArrayMatcher = goog.ui.ac.RemoteArrayMatcher;

@@ -19,12 +19,15 @@
  * @see ../../demos/autocomplete-basic.html
  */
 
+// TODO(user): Remove this file completely after known usages are replaced
+// with goog.ui.ac.createSimpleAutoComplete.
 goog.provide('goog.ui.AutoComplete.Basic');
 
 goog.require('goog.ui.AutoComplete');
-goog.require('goog.ui.AutoComplete.ArrayMatcher');
-goog.require('goog.ui.AutoComplete.InputHandler');
-goog.require('goog.ui.AutoComplete.Renderer');
+goog.require('goog.ui.ac.ArrayMatcher');
+goog.require('goog.ui.ac.AutoComplete');
+goog.require('goog.ui.ac.InputHandler');
+goog.require('goog.ui.ac.Renderer');
 
 
 
@@ -37,17 +40,16 @@ goog.require('goog.ui.AutoComplete.Renderer');
  * semi-colons or commas.
  * @param {boolean=} opt_useSimilar use similar matches. e.g. "gost" => "ghost".
  * @constructor
- * @extends {goog.ui.AutoComplete}
+ * @extends {goog.ui.ac.AutoComplete}
  */
 goog.ui.AutoComplete.Basic = function(data, input, opt_multi, opt_useSimilar) {
-  var matcher = new goog.ui.AutoComplete.ArrayMatcher(data, !opt_useSimilar);
-  var renderer = new goog.ui.AutoComplete.Renderer();
-  var inputhandler =
-      new goog.ui.AutoComplete.InputHandler(null, null, !!opt_multi);
+  var matcher = new goog.ui.ac.ArrayMatcher(data, !opt_useSimilar);
+  var renderer = new goog.ui.ac.Renderer();
+  var inputHandler = new goog.ui.ac.InputHandler(null, null, !!opt_multi);
 
-  goog.ui.AutoComplete.call(this, matcher, renderer, inputhandler);
+  goog.ui.ac.AutoComplete.call(this, matcher, renderer, inputHandler);
 
-  inputhandler.attachAutoComplete(this);
-  inputhandler.attachInputs(input);
+  inputHandler.attachAutoComplete(this);
+  inputHandler.attachInputs(input);
 };
-goog.inherits(goog.ui.AutoComplete.Basic, goog.ui.AutoComplete);
+goog.inherits(goog.ui.AutoComplete.Basic, goog.ui.ac.AutoComplete);

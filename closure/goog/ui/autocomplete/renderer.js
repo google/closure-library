@@ -20,6 +20,8 @@
 
 goog.provide('goog.ui.AutoComplete.Renderer');
 goog.provide('goog.ui.AutoComplete.Renderer.CustomRenderer');
+goog.provide('goog.ui.ac.Renderer');
+goog.provide('goog.ui.ac.Renderer.CustomRenderer');
 
 goog.require('goog.dispose');
 goog.require('goog.dom');
@@ -33,9 +35,14 @@ goog.require('goog.fx.dom.FadeOutAndHide');
 goog.require('goog.iter');
 goog.require('goog.string');
 goog.require('goog.style');
+// TODO(user): Remove this after known usages are replaced.
+/**
+ * @suppress {extraRequire} This is left here only for genjsdeps management
+ *     until all existing usages are transitioned to the new namespace.
+ */
 goog.require('goog.ui.AutoComplete');
-goog.require('goog.ui.AutoComplete.EventType');
 goog.require('goog.ui.IdGenerator');
+goog.require('goog.ui.ac.AutoComplete.EventType');
 goog.require('goog.userAgent');
 
 
@@ -56,7 +63,7 @@ goog.require('goog.userAgent');
  *     bolds every matching substring for a given token in each row.
  * @extends {goog.events.EventTarget}
  */
-goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
+goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
     opt_rightAlign, opt_useStandardHighlighting) {
   goog.events.EventTarget.call(this);
 
@@ -232,7 +239,7 @@ goog.ui.AutoComplete.Renderer = function(opt_parentNode, opt_customRenderer,
    */
   this.animation_;
 };
-goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
+goog.inherits(goog.ui.ac.Renderer, goog.events.EventTarget);
 
 
 /**
@@ -240,7 +247,7 @@ goog.inherits(goog.ui.AutoComplete.Renderer, goog.events.EventTarget);
  * @type {Element}
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.anchorElement_;
+goog.ui.ac.Renderer.prototype.anchorElement_;
 
 
 /**
@@ -248,21 +255,21 @@ goog.ui.AutoComplete.Renderer.prototype.anchorElement_;
  * @type {Node}
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.widthProvider_;
+goog.ui.ac.Renderer.prototype.widthProvider_;
 
 
 /**
  * The delay before mouseover events are registered, in milliseconds
  * @type {number}
  */
-goog.ui.AutoComplete.Renderer.DELAY_BEFORE_MOUSEOVER = 300;
+goog.ui.ac.Renderer.DELAY_BEFORE_MOUSEOVER = 300;
 
 
 /**
  * Gets the renderer's element.
  * @return {Element} The  main element that controls the rendered autocomplete.
  */
-goog.ui.AutoComplete.Renderer.prototype.getElement = function() {
+goog.ui.ac.Renderer.prototype.getElement = function() {
   return this.element_;
 };
 
@@ -272,8 +279,7 @@ goog.ui.AutoComplete.Renderer.prototype.getElement = function() {
  * such will not automatically update on resize.
  * @param {Node} widthProvider The element whose width should be mirrored.
  */
-goog.ui.AutoComplete.Renderer.prototype.setWidthProvider =
-    function(widthProvider) {
+goog.ui.ac.Renderer.prototype.setWidthProvider = function(widthProvider) {
   this.widthProvider_ = widthProvider;
 };
 
@@ -282,7 +288,7 @@ goog.ui.AutoComplete.Renderer.prototype.setWidthProvider =
  * Set whether to align autocomplete to top of target element
  * @param {boolean} align If true, align to top.
  */
-goog.ui.AutoComplete.Renderer.prototype.setTopAlign = function(align) {
+goog.ui.ac.Renderer.prototype.setTopAlign = function(align) {
   this.topAlign_ = align;
 };
 
@@ -291,7 +297,7 @@ goog.ui.AutoComplete.Renderer.prototype.setTopAlign = function(align) {
  * Set whether to align autocomplete to the right of the target element.
  * @param {boolean} align If true, align to right.
  */
-goog.ui.AutoComplete.Renderer.prototype.setRightAlign = function(align) {
+goog.ui.ac.Renderer.prototype.setRightAlign = function(align) {
   this.rightAlign_ = align;
 };
 
@@ -300,7 +306,7 @@ goog.ui.AutoComplete.Renderer.prototype.setRightAlign = function(align) {
  * Set whether or not standard highlighting should be used when rendering rows.
  * @param {boolean} useStandardHighlighting true if standard highlighting used.
  */
-goog.ui.AutoComplete.Renderer.prototype.setUseStandardHighlighting =
+goog.ui.ac.Renderer.prototype.setUseStandardHighlighting =
     function(useStandardHighlighting) {
   this.useStandardHighlighting_ = useStandardHighlighting;
 };
@@ -312,7 +318,7 @@ goog.ui.AutoComplete.Renderer.prototype.setUseStandardHighlighting =
  * @param {boolean} highlightAllTokens Whether to highlight all matching tokens
  *     rather than just the first.
  */
-goog.ui.AutoComplete.Renderer.prototype.setHighlightAllTokens =
+goog.ui.ac.Renderer.prototype.setHighlightAllTokens =
     function(highlightAllTokens) {
   this.highlightAllTokens_ = highlightAllTokens;
 };
@@ -324,8 +330,7 @@ goog.ui.AutoComplete.Renderer.prototype.setHighlightAllTokens =
  * @param {number} duration Duration (in msec) of the fade animation (or 0 for
  *     no animation).
  */
-goog.ui.AutoComplete.Renderer.prototype.setMenuFadeDuration =
-    function(duration) {
+goog.ui.ac.Renderer.prototype.setMenuFadeDuration = function(duration) {
   this.menuFadeDuration_ = duration;
 };
 
@@ -334,7 +339,7 @@ goog.ui.AutoComplete.Renderer.prototype.setMenuFadeDuration =
  * Sets the anchor element for the subsequent call to renderRows.
  * @param {Element} anchor The anchor element.
  */
-goog.ui.AutoComplete.Renderer.prototype.setAnchorElement = function(anchor) {
+goog.ui.ac.Renderer.prototype.setAnchorElement = function(anchor) {
   this.anchorElement_ = anchor;
 };
 
@@ -347,8 +352,7 @@ goog.ui.AutoComplete.Renderer.prototype.setAnchorElement = function(anchor) {
  * @param {Element=} opt_target Current HTML node, will position popup beneath
  *     this node.
  */
-goog.ui.AutoComplete.Renderer.prototype.renderRows = function(rows, token,
-    opt_target) {
+goog.ui.ac.Renderer.prototype.renderRows = function(rows, token, opt_target) {
   this.token_ = token;
   this.rows_ = rows;
   this.hilitedRow_ = -1;
@@ -362,7 +366,7 @@ goog.ui.AutoComplete.Renderer.prototype.renderRows = function(rows, token,
 /**
  * Hide the object.
  */
-goog.ui.AutoComplete.Renderer.prototype.dismiss = function() {
+goog.ui.ac.Renderer.prototype.dismiss = function() {
   if (this.target_) {
     goog.dom.a11y.setActiveDescendant(this.target_, null);
   }
@@ -389,7 +393,7 @@ goog.ui.AutoComplete.Renderer.prototype.dismiss = function() {
 /**
  * Show the object.
  */
-goog.ui.AutoComplete.Renderer.prototype.show = function() {
+goog.ui.ac.Renderer.prototype.show = function() {
   if (!this.visible_) {
     this.visible_ = true;
 
@@ -416,7 +420,7 @@ goog.ui.AutoComplete.Renderer.prototype.show = function() {
 /**
  * @return {boolean} True if the object is visible.
  */
-goog.ui.AutoComplete.Renderer.prototype.isVisible = function() {
+goog.ui.ac.Renderer.prototype.isVisible = function() {
   return this.visible_;
 };
 
@@ -425,11 +429,11 @@ goog.ui.AutoComplete.Renderer.prototype.isVisible = function() {
  * Sets the 'active' class of the nth item.
  * @param {number} index Index of the item to highlight.
  */
-goog.ui.AutoComplete.Renderer.prototype.hiliteRow = function(index) {
+goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
   var rowDiv = index >= 0 && index < this.rowDivs_.length ?
       this.rowDivs_[index] : undefined;
 
-  var evtObj = {type: goog.ui.AutoComplete.EventType.ROW_HILITE,
+  var evtObj = {type: goog.ui.ac.AutoComplete.EventType.ROW_HILITE,
     rowNode: rowDiv};
   if (this.dispatchEvent(evtObj)) {
     this.hiliteNone();
@@ -449,7 +453,7 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteRow = function(index) {
 /**
  * Removes the 'active' class from the currently selected row.
  */
-goog.ui.AutoComplete.Renderer.prototype.hiliteNone = function() {
+goog.ui.ac.Renderer.prototype.hiliteNone = function() {
   if (this.hilitedRow_ >= 0) {
     goog.dom.classes.remove(this.rowDivs_[this.hilitedRow_],
                             this.activeClassName, this.legacyActiveClassName_);
@@ -462,7 +466,7 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteNone = function() {
  * @param {number} id Id of the row to hilight. If id is -1 then no rows get
  *     hilited.
  */
-goog.ui.AutoComplete.Renderer.prototype.hiliteId = function(id) {
+goog.ui.ac.Renderer.prototype.hiliteId = function(id) {
   if (id == -1) {
     this.hiliteRow(-1);
   } else {
@@ -482,7 +486,7 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteId = function(id) {
  * @param {Element} elt The container element.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.setMenuClasses_ = function(elt) {
+goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elt) {
   goog.dom.classes.add(elt, this.className);
 };
 
@@ -492,7 +496,7 @@ goog.ui.AutoComplete.Renderer.prototype.setMenuClasses_ = function(elt) {
  * to the parent.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.maybeCreateElement_ = function() {
+goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
   if (!this.element_) {
     // Make element and add it to the parent
     var el = this.dom_.createDom('div', {style: 'display:none'});
@@ -519,7 +523,7 @@ goog.ui.AutoComplete.Renderer.prototype.maybeCreateElement_ = function() {
  * Redraw (or draw if this is the first call) the rendered auto-complete drop
  * down.
  */
-goog.ui.AutoComplete.Renderer.prototype.redraw = function() {
+goog.ui.ac.Renderer.prototype.redraw = function() {
   // Create the element if it doesn't yet exist
   this.maybeCreateElement_();
 
@@ -577,7 +581,7 @@ goog.ui.AutoComplete.Renderer.prototype.redraw = function() {
  * Repositions the auto complete popup relative to the location node, if it
  * exists and the auto position has been set.
  */
-goog.ui.AutoComplete.Renderer.prototype.reposition = function() {
+goog.ui.ac.Renderer.prototype.reposition = function() {
   if (this.target_ && this.reposition_) {
     // TODO(user): Can we use MenuAnchoredPosition instead?
     var anchorElement = this.anchorElement_ || this.target_;
@@ -615,7 +619,7 @@ goog.ui.AutoComplete.Renderer.prototype.reposition = function() {
  * drop down.
  * @param {boolean} auto Whether to autoposition the drop down.
  */
-goog.ui.AutoComplete.Renderer.prototype.setAutoPosition = function(auto) {
+goog.ui.ac.Renderer.prototype.setAutoPosition = function(auto) {
   this.reposition_ = auto;
 };
 
@@ -625,7 +629,7 @@ goog.ui.AutoComplete.Renderer.prototype.setAutoPosition = function(auto) {
  * @override
  * @protected
  */
-goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
+goog.ui.ac.Renderer.prototype.disposeInternal = function() {
   if (this.element_) {
     goog.events.unlisten(this.element_, goog.events.EventType.CLICK,
         this.handleClick_, false, this);
@@ -641,7 +645,7 @@ goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
   goog.dispose(this.animation_);
   delete this.parent_;
 
-  goog.ui.AutoComplete.Renderer.superClass_.disposeInternal.call(this);
+  goog.ui.ac.Renderer.superClass_.disposeInternal.call(this);
 };
 
 
@@ -656,7 +660,7 @@ goog.ui.AutoComplete.Renderer.prototype.disposeInternal = function() {
  * @param {Node} node The node to render into.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.renderRowContents_ =
+goog.ui.ac.Renderer.prototype.renderRowContents_ =
     function(row, token, node) {
   node.innerHTML = goog.string.htmlEscape(row.data.toString());
 };
@@ -673,7 +677,7 @@ goog.ui.AutoComplete.Renderer.prototype.renderRowContents_ =
  *     word, in whatever order and however many times, will be highlighted.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
+goog.ui.ac.Renderer.prototype.hiliteMatchingText_ =
     function(node, tokenOrArray) {
   if (node.nodeType == goog.dom.NodeType.TEXT) {
 
@@ -764,8 +768,7 @@ goog.ui.AutoComplete.Renderer.prototype.hiliteMatchingText_ =
  * @return {string} The regex-ready token.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.getTokenRegExp_ =
-    function(tokenOrArray) {
+goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
   var token = '';
 
   if (!tokenOrArray) {
@@ -825,7 +828,7 @@ goog.ui.AutoComplete.Renderer.prototype.getTokenRegExp_ =
  * @param {string} token Token to highlight.
  * @return {Element} An element with the rendered HTML.
  */
-goog.ui.AutoComplete.Renderer.prototype.renderRowHtml = function(row, token) {
+goog.ui.ac.Renderer.prototype.renderRowHtml = function(row, token) {
   // Create and return the node
   var node = this.dom_.createDom('div', {
     className: this.rowClassName,
@@ -856,7 +859,7 @@ goog.ui.AutoComplete.Renderer.prototype.renderRowHtml = function(row, token) {
  * @return {number} Index corresponding to event target.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.getRowFromEventTarget_ = function(et) {
+goog.ui.ac.Renderer.prototype.getRowFromEventTarget_ = function(et) {
   while (et && et != this.element_ &&
       !goog.dom.classes.has(et, this.rowClassName)) {
     et = /** @type {Element} */ (et.parentNode);
@@ -871,11 +874,11 @@ goog.ui.AutoComplete.Renderer.prototype.getRowFromEventTarget_ = function(et) {
  * @param {goog.events.Event} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.handleClick_ = function(e) {
+goog.ui.ac.Renderer.prototype.handleClick_ = function(e) {
   var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
   if (index >= 0) {
     this.dispatchEvent({
-      type: goog.ui.AutoComplete.EventType.SELECT,
+      type: goog.ui.ac.AutoComplete.EventType.SELECT,
       row: this.rows_[index].id
     });
   }
@@ -888,7 +891,7 @@ goog.ui.AutoComplete.Renderer.prototype.handleClick_ = function(e) {
  * @param {goog.events.Event} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.handleMouseDown_ = function(e) {
+goog.ui.ac.Renderer.prototype.handleMouseDown_ = function(e) {
   e.stopPropagation();
   e.preventDefault();
 };
@@ -902,16 +905,16 @@ goog.ui.AutoComplete.Renderer.prototype.handleMouseDown_ = function(e) {
  * @param {goog.events.Event} e Browser event object.
  * @private
  */
-goog.ui.AutoComplete.Renderer.prototype.handleMouseOver_ = function(e) {
+goog.ui.ac.Renderer.prototype.handleMouseOver_ = function(e) {
   var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
   if (index >= 0) {
     if ((goog.now() - this.startRenderingRows_) <
-        goog.ui.AutoComplete.Renderer.DELAY_BEFORE_MOUSEOVER) {
+        goog.ui.ac.Renderer.DELAY_BEFORE_MOUSEOVER) {
       return;
     }
 
     this.dispatchEvent({
-      type: goog.ui.AutoComplete.EventType.HILITE,
+      type: goog.ui.ac.AutoComplete.EventType.HILITE,
       row: this.rows_[index].id
     });
   }
@@ -924,21 +927,21 @@ goog.ui.AutoComplete.Renderer.prototype.handleMouseOver_ = function(e) {
  * Extending classes should override the render function.
  * @constructor
  */
-goog.ui.AutoComplete.Renderer.CustomRenderer = function() {
+goog.ui.ac.Renderer.CustomRenderer = function() {
 };
 
 
 /**
  * Renders the autocomplete box. May be set to null.
- * @type {function(goog.ui.AutoComplete.Renderer, Element, Array, string)|
+ * @type {function(goog.ui.ac.Renderer, Element, Array, string)|
  *        null|undefined}
- * param {goog.ui.AutoComplete.Renderer} renderer The autocomplete renderer.
+ * param {goog.ui.ac.Renderer} renderer The autocomplete renderer.
  * param {Element} element The main element that controls the rendered
  *     autocomplete.
  * param {Array} rows The current set of rows being displayed.
  * param {string} token The current token that has been entered.
  */
-goog.ui.AutoComplete.Renderer.CustomRenderer.prototype.render = function(
+goog.ui.ac.Renderer.CustomRenderer.prototype.render = function(
     renderer, element, rows, token) {
 };
 
@@ -949,6 +952,37 @@ goog.ui.AutoComplete.Renderer.CustomRenderer.prototype.render = function(
  * @param {string} token Token to highlight.
  * @param {Node} node The node to render into.
  */
-goog.ui.AutoComplete.Renderer.CustomRenderer.prototype.renderRow =
+goog.ui.ac.Renderer.CustomRenderer.prototype.renderRow =
     function(row, token, node) {
 };
+
+
+
+//TODO(user): Remove this alias after known usages are replaced.
+/**
+ * Class for rendering the results of an auto-complete in a drop down list.
+ *
+ * @constructor
+ * @param {Element=} opt_parentNode optional reference to the parent element
+ *     that will hold the autocomplete elements. goog.dom.getDocument().body
+ *     will be used if this is null.
+ * @param {?({renderRow}|{render})=} opt_customRenderer Custom full renderer to
+ *     render each row. Should be something with a renderRow or render method.
+ * @param {boolean=} opt_rightAlign Determines if the autocomplete will always
+ *     be right aligned. False by default.
+ * @param {boolean=} opt_useStandardHighlighting Determines if standard
+ *     highlighting should be applied to each row of data. Standard highlighting
+ *     bolds every matching substring for a given token in each row.
+ * @extends {goog.events.EventTarget}
+ */
+goog.ui.AutoComplete.Renderer = goog.ui.ac.Renderer;
+
+
+
+/**
+ * Class allowing different implementations to custom render the autocomplete.
+ * Extending classes should override the render function.
+ * @constructor
+ */
+goog.ui.AutoComplete.Renderer.CustomRenderer =
+    goog.ui.ac.Renderer.CustomRenderer;

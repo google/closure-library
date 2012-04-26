@@ -21,9 +21,15 @@
  */
 
 goog.provide('goog.ui.AutoComplete.RichRemoteArrayMatcher');
+goog.provide('goog.ui.ac.RichRemoteArrayMatcher');
 
+//TODO(user): Remove this after known usages are replaced.
+/**
+ * @suppress {extraRequire} This is left here only for genjsdeps management
+ *     until all existing usages are transitioned to the new namespace.
+ */
 goog.require('goog.ui.AutoComplete');
-goog.require('goog.ui.AutoComplete.RemoteArrayMatcher');
+goog.require('goog.ui.ac.RemoteArrayMatcher');
 
 
 
@@ -37,10 +43,10 @@ goog.require('goog.ui.AutoComplete.RemoteArrayMatcher');
  *     The value is sent to the server as the 'use_similar' query param which is
  *     either "1" (opt_noSimilar==false) or "0" (opt_noSimilar==true).
  * @constructor
- * @extends {goog.ui.AutoComplete.RemoteArrayMatcher}
+ * @extends {goog.ui.ac.RemoteArrayMatcher}
  */
-goog.ui.AutoComplete.RichRemoteArrayMatcher = function(url, opt_noSimilar) {
-  goog.ui.AutoComplete.RemoteArrayMatcher.call(this, url, opt_noSimilar);
+goog.ui.ac.RichRemoteArrayMatcher = function(url, opt_noSimilar) {
+  goog.ui.ac.RemoteArrayMatcher.call(this, url, opt_noSimilar);
 
   /**
    * A function(rows) that is called before the array matches are returned.
@@ -52,8 +58,7 @@ goog.ui.AutoComplete.RichRemoteArrayMatcher = function(url, opt_noSimilar) {
   this.rowFilter_ = null;
 
 };
-goog.inherits(goog.ui.AutoComplete.RichRemoteArrayMatcher,
-              goog.ui.AutoComplete.RemoteArrayMatcher);
+goog.inherits(goog.ui.ac.RichRemoteArrayMatcher, goog.ui.ac.RemoteArrayMatcher);
 
 
 /**
@@ -61,8 +66,7 @@ goog.inherits(goog.ui.AutoComplete.RichRemoteArrayMatcher,
  * @param {Function} rowFilter A function(rows) that returns an array of rows as
  *     a subset of the rows input array.
  */
-goog.ui.AutoComplete.RichRemoteArrayMatcher.prototype.setRowFilter =
-    function(rowFilter) {
+goog.ui.ac.RichRemoteArrayMatcher.prototype.setRowFilter = function(rowFilter) {
   this.rowFilter_ = rowFilter;
 };
 
@@ -78,7 +82,7 @@ goog.ui.AutoComplete.RichRemoteArrayMatcher.prototype.setRowFilter =
  * @param {Function} matchHandler Callback to execute on the result after
  *     matching.
  */
-goog.ui.AutoComplete.RichRemoteArrayMatcher.prototype.requestMatchingRows =
+goog.ui.ac.RichRemoteArrayMatcher.prototype.requestMatchingRows =
     function(token, maxMatches, matchHandler) {
   // The RichRemoteArrayMatcher must map over the results and filter them
   // before calling the request matchHandler.  This is done by passing
@@ -121,6 +125,22 @@ goog.ui.AutoComplete.RichRemoteArrayMatcher.prototype.requestMatchingRows =
   }, this);
 
   // Call the super's requestMatchingRows with myMatchHandler
-  goog.ui.AutoComplete.RichRemoteArrayMatcher.superClass_
+  goog.ui.ac.RichRemoteArrayMatcher.superClass_
       .requestMatchingRows.call(this, token, maxMatches, myMatchHandler);
 };
+
+
+
+/**
+ * An array matcher that requests rich matches via ajax and converts them into
+ * rich rows.
+ * @param {string} url The Uri which generates the auto complete matches.  The
+ *     search term is passed to the server as the 'token' query param.
+ * @param {boolean=} opt_noSimilar If true, request that the server does not do
+ *     similarity matches for the input token against the dictionary.
+ *     The value is sent to the server as the 'use_similar' query param which is
+ *     either "1" (opt_noSimilar==false) or "0" (opt_noSimilar==true).
+ * @constructor
+ * @extends {goog.ui.ac.RemoteArrayMatcher}
+ */
+goog.ui.AutoComplete.RichRemoteArrayMatcher = goog.ui.ac.RichRemoteArrayMatcher;

@@ -18,7 +18,13 @@
  */
 
 goog.provide('goog.ui.AutoComplete.RenderOptions');
+goog.provide('goog.ui.ac.RenderOptions');
 
+//TODO(user): Remove this after known usages are replaced.
+/**
+ * @suppress {extraRequire} This is left here only for genjsdeps management
+ *     until all existing usages are transitioned to the new namespace.
+ */
 goog.require('goog.ui.AutoComplete');
 
 
@@ -28,7 +34,7 @@ goog.require('goog.ui.AutoComplete');
  * matches.  Used as an optional argument in the callback from the matcher.
  * @constructor
  */
-goog.ui.AutoComplete.RenderOptions = function() {
+goog.ui.ac.RenderOptions = function() {
 };
 
 
@@ -38,7 +44,7 @@ goog.ui.AutoComplete.RenderOptions = function() {
  * @type {boolean}
  * @private
  */
-goog.ui.AutoComplete.RenderOptions.prototype.preserveHilited_ = false;
+goog.ui.ac.RenderOptions.prototype.preserveHilited_ = false;
 
 
 /**
@@ -47,14 +53,13 @@ goog.ui.AutoComplete.RenderOptions.prototype.preserveHilited_ = false;
  * @type {boolean|undefined}
  * @private
  */
-goog.ui.AutoComplete.RenderOptions.prototype.autoHilite_;
+goog.ui.ac.RenderOptions.prototype.autoHilite_;
 
 
 /**
  * @param {boolean} flag The new value for the preserveHilited_ flag.
  */
-goog.ui.AutoComplete.RenderOptions.prototype.setPreserveHilited =
-    function(flag) {
+goog.ui.ac.RenderOptions.prototype.setPreserveHilited = function(flag) {
   this.preserveHilited_ = flag;
 };
 
@@ -62,7 +67,7 @@ goog.ui.AutoComplete.RenderOptions.prototype.setPreserveHilited =
 /**
  * @return {boolean} The value of the preserveHilited_ flag.
  */
-goog.ui.AutoComplete.RenderOptions.prototype.getPreserveHilited = function() {
+goog.ui.ac.RenderOptions.prototype.getPreserveHilited = function() {
   return this.preserveHilited_;
 };
 
@@ -70,7 +75,7 @@ goog.ui.AutoComplete.RenderOptions.prototype.getPreserveHilited = function() {
 /**
  * @param {boolean} flag The new value for the autoHilite_ flag.
  */
-goog.ui.AutoComplete.RenderOptions.prototype.setAutoHilite = function(flag) {
+goog.ui.ac.RenderOptions.prototype.setAutoHilite = function(flag) {
   this.autoHilite_ = flag;
 };
 
@@ -78,6 +83,16 @@ goog.ui.AutoComplete.RenderOptions.prototype.setAutoHilite = function(flag) {
 /**
  * @return {boolean|undefined} The value of the autoHilite_ flag.
  */
-goog.ui.AutoComplete.RenderOptions.prototype.getAutoHilite = function() {
+goog.ui.ac.RenderOptions.prototype.getAutoHilite = function() {
   return this.autoHilite_;
 };
+
+
+
+//TODO(user): Remove this alias after known usages are replaced.
+/**
+ * A simple class that contains options for rendering a set of autocomplete
+ * matches.  Used as an optional argument in the callback from the matcher.
+ * @constructor
+ */
+goog.ui.AutoComplete.RenderOptions = goog.ui.ac.RenderOptions;

@@ -20,11 +20,18 @@
  */
 
 goog.provide('goog.ui.AutoComplete.Remote');
+goog.provide('goog.ui.ac.Remote');
 
+//TODO(user): Remove this after known usages are replaced.
+/**
+ * @suppress {extraRequire} This is left here only for genjsdeps management
+ *     until all existing usages are transitioned to the new namespace.
+ */
 goog.require('goog.ui.AutoComplete');
-goog.require('goog.ui.AutoComplete.InputHandler');
-goog.require('goog.ui.AutoComplete.RemoteArrayMatcher');
-goog.require('goog.ui.AutoComplete.Renderer');
+goog.require('goog.ui.ac.AutoComplete');
+goog.require('goog.ui.ac.InputHandler');
+goog.require('goog.ui.ac.RemoteArrayMatcher');
+goog.require('goog.ui.ac.Renderer');
 
 
 
@@ -38,31 +45,29 @@ goog.require('goog.ui.AutoComplete.Renderer');
  * @param {boolean=} opt_useSimilar Whether to use similar matches; e.g.
  *     "gost" => "ghost".
  * @constructor
- * @extends {goog.ui.AutoComplete}
+ * @extends {goog.ui.ac.AutoComplete}
  */
-goog.ui.AutoComplete.Remote = function(url, input, opt_multi, opt_useSimilar) {
-  var matcher = new goog.ui.AutoComplete.RemoteArrayMatcher(url,
-      !opt_useSimilar);
+goog.ui.ac.Remote = function(url, input, opt_multi, opt_useSimilar) {
+  var matcher = new goog.ui.ac.RemoteArrayMatcher(url, !opt_useSimilar);
   this.matcher_ = matcher;
 
-  var renderer = new goog.ui.AutoComplete.Renderer();
+  var renderer = new goog.ui.ac.Renderer();
 
-  var inputhandler = new goog.ui.AutoComplete.InputHandler(null, null,
-      !!opt_multi, 300);
+  var inputhandler = new goog.ui.ac.InputHandler(null, null, !!opt_multi, 300);
 
-  goog.ui.AutoComplete.call(this, matcher, renderer, inputhandler);
+  goog.ui.ac.AutoComplete.call(this, matcher, renderer, inputhandler);
 
   inputhandler.attachAutoComplete(this);
   inputhandler.attachInputs(input);
 };
-goog.inherits(goog.ui.AutoComplete.Remote, goog.ui.AutoComplete);
+goog.inherits(goog.ui.ac.Remote, goog.ui.ac.AutoComplete);
 
 
 /**
  * Set whether or not standard highlighting should be used when rendering rows.
  * @param {boolean} useStandardHighlighting true if standard highlighting used.
  */
-goog.ui.AutoComplete.Remote.prototype.setUseStandardHighlighting =
+goog.ui.ac.Remote.prototype.setUseStandardHighlighting =
     function(useStandardHighlighting) {
   this.renderer_.setUseStandardHighlighting(useStandardHighlighting);
 };
@@ -70,11 +75,11 @@ goog.ui.AutoComplete.Remote.prototype.setUseStandardHighlighting =
 
 /**
  * Gets the attached InputHandler object.
- * @return {goog.ui.AutoComplete.InputHandler} The input handler.
+ * @return {goog.ui.ac.InputHandler} The input handler.
  */
-goog.ui.AutoComplete.Remote.prototype.getInputHandler = function() {
-  return /** @type {goog.ui.AutoComplete.InputHandler} */ (
-         this.selectionHandler_);
+goog.ui.ac.Remote.prototype.getInputHandler = function() {
+  return /** @type {goog.ui.ac.InputHandler} */ (
+      this.selectionHandler_);
 };
 
 
@@ -82,7 +87,7 @@ goog.ui.AutoComplete.Remote.prototype.getInputHandler = function() {
  * Set the send method ("GET", "POST") for the matcher.
  * @param {string} method The send method; default: GET.
  */
-goog.ui.AutoComplete.Remote.prototype.setMethod = function(method) {
+goog.ui.ac.Remote.prototype.setMethod = function(method) {
   this.matcher_.setMethod(method);
 };
 
@@ -91,7 +96,7 @@ goog.ui.AutoComplete.Remote.prototype.setMethod = function(method) {
  * Set the post data for the matcher.
  * @param {string} content Post data.
  */
-goog.ui.AutoComplete.Remote.prototype.setContent = function(content) {
+goog.ui.ac.Remote.prototype.setContent = function(content) {
   this.matcher_.setContent(content);
 };
 
@@ -101,7 +106,7 @@ goog.ui.AutoComplete.Remote.prototype.setContent = function(content) {
  * @param {Object|goog.structs.Map} headers Map of headers to add to the
  *     request.
  */
-goog.ui.AutoComplete.Remote.prototype.setHeaders = function(headers) {
+goog.ui.ac.Remote.prototype.setHeaders = function(headers) {
   this.matcher_.setHeaders(headers);
 };
 
@@ -111,7 +116,22 @@ goog.ui.AutoComplete.Remote.prototype.setHeaders = function(headers) {
  * @param {number} interval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
  */
-goog.ui.AutoComplete.Remote.prototype.setTimeoutInterval =
-    function(interval) {
+goog.ui.ac.Remote.prototype.setTimeoutInterval = function(interval) {
   this.matcher_.setTimeoutInterval(interval);
 };
+
+
+
+/**
+ * Factory class for building a remote autocomplete widget that autocompletes
+ * an inputbox or text area from a data array provided via ajax.
+ * @param {string} url The Uri which generates the auto complete matches.
+ * @param {Element} input Input element or text area.
+ * @param {boolean=} opt_multi Whether to allow multiple entries; defaults
+ *     to false.
+ * @param {boolean=} opt_useSimilar Whether to use similar matches; e.g.
+ *     "gost" => "ghost".
+ * @constructor
+ * @extends {goog.ui.ac.AutoComplete}
+ */
+goog.ui.AutoComplete.Remote = goog.ui.ac.Remote;

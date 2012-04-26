@@ -19,9 +19,15 @@
  */
 
 goog.provide('goog.ui.AutoComplete.RichInputHandler');
+goog.provide('goog.ui.ac.RichInputHandler');
 
+//TODO(user): Remove this after known usages are replaced.
+/**
+ * @suppress {extraRequire} This is left here only for genjsdeps management
+ *     until all existing usages are transitioned to the new namespace.
+ */
 goog.require('goog.ui.AutoComplete');
-goog.require('goog.ui.AutoComplete.InputHandler');
+goog.require('goog.ui.ac.InputHandler');
 
 
 
@@ -35,15 +41,14 @@ goog.require('goog.ui.AutoComplete.InputHandler');
  * @param {?number=} opt_throttleTime Number of milliseconds to throttle
  *     keyevents with (Default: 150).
  * @constructor
- * @extends {goog.ui.AutoComplete.InputHandler}
+ * @extends {goog.ui.ac.InputHandler}
  */
-goog.ui.AutoComplete.RichInputHandler = function(opt_separators, opt_literals,
+goog.ui.ac.RichInputHandler = function(opt_separators, opt_literals,
     opt_multi, opt_throttleTime) {
-  goog.ui.AutoComplete.InputHandler.call(this, opt_separators, opt_literals,
+  goog.ui.ac.InputHandler.call(this, opt_separators, opt_literals,
       opt_multi, opt_throttleTime);
 };
-goog.inherits(goog.ui.AutoComplete.RichInputHandler,
-              goog.ui.AutoComplete.InputHandler);
+goog.inherits(goog.ui.ac.RichInputHandler, goog.ui.ac.InputHandler);
 
 
 /**
@@ -51,9 +56,26 @@ goog.inherits(goog.ui.AutoComplete.RichInputHandler,
  * @param {Object} row The row to select.
  * @return {boolean} Whether to suppress the update event.
  */
-goog.ui.AutoComplete.RichInputHandler.prototype.selectRow = function(row) {
-  var suppressUpdate = goog.ui.AutoComplete.RichInputHandler.superClass_
+goog.ui.ac.RichInputHandler.prototype.selectRow = function(row) {
+  var suppressUpdate = goog.ui.ac.RichInputHandler.superClass_
       .selectRow.call(this, row);
   row.select(this.ac_.getTarget());
   return suppressUpdate;
 };
+
+
+
+//TODO(user): Remove this alias after known usages are replaced.
+/**
+ * Class for managing the interaction between an autocomplete object and a
+ * text-input or textarea.
+ * @param {?string=} opt_separators Seperators to split multiple entries.
+ * @param {?string=} opt_literals Characters used to delimit text literals.
+ * @param {?boolean=} opt_multi Whether to allow multiple entries
+ *     (Default: true).
+ * @param {?number=} opt_throttleTime Number of milliseconds to throttle
+ *     keyevents with (Default: 150).
+ * @constructor
+ * @extends {goog.ui.ac.InputHandler}
+ */
+goog.ui.AutoComplete.RichInputHandler = goog.ui.ac.RichInputHandler;
