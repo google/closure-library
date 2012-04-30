@@ -163,6 +163,26 @@ See the COPYING file for details.
     assertEquals(fn, errorHandler.unwrap(wrappedFn));
   }
 
+  function testStackPreserved() {
+    var e;
+    var hasStacks;
+    function specialFunctionName() {
+      var e = Error();
+      hasStacks = !!e.stack;
+      throw e;
+    };
+    var wrappedFn = errorHandler.wrap(specialFunctionName);
+    try {
+      wrappedFn();
+    } catch (exception) {
+      e = exception
+    }
+    assertTrue(!!e);
+    if (hasStacks) {
+      assertContains('specialFunctionName', e.stack);
+    }
+  }
+
   function assertSetTimeoutError(caught) {
     assertMethodCalledHelper('setTimeout', caught);
   }

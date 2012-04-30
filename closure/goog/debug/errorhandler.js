@@ -256,6 +256,11 @@ goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
    * @type {*}
    */
   this.cause = cause;
+
+  var stack = cause && cause.stack;
+  if (stack) {
+    this.stack = stack;
+  }
 };
 goog.inherits(goog.debug.ErrorHandler.ProtectedFunctionError, goog.debug.Error);
 
