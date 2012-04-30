@@ -888,6 +888,7 @@ goog.editor.Field.prototype.disposeInternal = function() {
 
   this.tearDownFieldObject_();
   this.clearListeners();
+  this.clearFieldLoadListener_();
   this.originalDomHelper = null;
 
   if (this.eventRegister) {
