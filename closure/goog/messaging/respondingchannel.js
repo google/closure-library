@@ -173,7 +173,8 @@ goog.messaging.RespondingChannel.prototype.send = function(
 
 /**
  * Receives the results of the peer's service results.
- * @param {Object} message The results from the remote service invocation.
+ * @param {!Object|string} message The results from the remote service
+ *     invocation.
  * @private
  */
 goog.messaging.RespondingChannel.prototype.callbackServiceHandler_ = function(
@@ -213,8 +214,8 @@ goog.messaging.RespondingChannel.prototype.registerService = function(
  * their results to the remote caller's callback.
  * @param {function((string|!Object))} callback The callback to process the
  *     incoming messages. Passed the payload.
- * @param {!Object} message The message containing the signature and the data to
- *     invoke the service callback with.
+ * @param {!Object|string} message The message containing the signature and
+ *     the data to invoke the service callback with.
  * @private
  */
 goog.messaging.RespondingChannel.prototype.callbackProxy_ = function(
