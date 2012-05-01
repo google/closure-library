@@ -708,6 +708,7 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
       this.viewportBox_ =
           goog.style.getVisibleRectForElement(this.getElement());
       this.buttonRect_ = goog.style.getBounds(this.getElement());
+      this.positionMenu();
       this.menu_.setHighlightedIndex(-1);
     } else {
       this.setActive(false);
@@ -729,11 +730,6 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
       }
     }
     this.menu_.setVisible(open, false, opt_e);
-    // We must position after the menu is visible, otherwise positioning logic
-    // breaks in RTL.
-    if (open) {
-      this.positionMenu();
-    }
     // In Pivot Tables the menu button somehow gets disposed of during the
     // setVisible call, causing attachPopupListeners_ to fail.
     // TODO(user): Debug what happens.
