@@ -818,7 +818,7 @@ function testQueryDataSetValues() {
   assertEquals('a=A3&a=A4&a=A5&b=B&b=B2&c=C&d=D', String(qd));
 }
 
-function testQueryDataToLowerCase() {
+function testQueryDataSetIgnoreCase() {
   var qd = new goog.Uri.QueryData('aaA=one&BBb=two&cCc=three');
   assertEquals('one', qd.get('aaA'));
   assertEquals(undefined, qd.get('aaa'));
@@ -831,6 +831,13 @@ function testQueryDataToLowerCase() {
   qd.add('DdD', 'four');
   assertEquals('four', qd.get('DdD'));
   assertEquals(undefined, qd.get('ddd'));
+}
+
+function testQueryDataSetIgnoreCaseWithMultipleValues() {
+  var qd = new goog.Uri.QueryData('aaA=one&aaA=two');
+  qd.setIgnoreCase(true);
+  assertArrayEquals(['one', 'two'], qd.getValues('aaA'));
+  assertArrayEquals(['one', 'two'], qd.getValues('aaa'));
 }
 
 function testQueryDataExtend() {
@@ -865,6 +872,20 @@ function testQueryDataCreateFromKeysValues() {
       ['a','b','c'],['A','B','C'])));
   assertEquals('a=A&a=B&a=C', String(goog.Uri.QueryData.createFromKeysValues(
       ['a','a','a'],['A','B','C'])));
+}
+
+function testQueryDataAddMultipleValuesWithSameKey() {
+  var qd = new goog.Uri.QueryData();
+  qd.add('abc', 'v');
+  qd.add('abc', 'v2');
+  qd.add('abc', 'v3');
+  assertEquals('abc=v&abc=v2&abc=v3', qd.toString());
+}
+
+function testQueryDataAddWithArray() {
+  var qd = new goog.Uri.QueryData();
+  qd.add('abc', ['v', 'v2']);
+  assertEquals('abc=v%2Cv2', qd.toString());
 }
 
 function testFragmentEncoding() {

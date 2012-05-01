@@ -1139,19 +1139,12 @@ goog.Uri.QueryData.prototype.add = function(key, value) {
   this.invalidateCache_();
 
   key = this.getKeyName_(key);
-  if (!this.containsKey(key)) {
-    this.keyMap_.set(key, value);
-  } else {
-    var current = this.keyMap_.get(key);
-    if (goog.isArray(current)) {
-      current.push(value);
-    } else {
-      this.keyMap_.set(key, [current, value]);
-    }
+  var values = this.keyMap_.get(key);
+  if (!values) {
+    this.keyMap_.set(key, (values = []));
   }
-
+  values.push(value);
   this.count_++;
-
   return this;
 };
 
@@ -1168,13 +1161,8 @@ goog.Uri.QueryData.prototype.remove = function(key) {
   if (this.keyMap_.containsKey(key)) {
     this.invalidateCache_();
 
-    // we need to get it to know how many to decrement the count with
-    var old = this.keyMap_.get(key);
-    if (goog.isArray(old)) {
-      this.count_ -= old.length;
-    } else {
-      this.count_--;
-    }
+    // Decrement parameter count.
+    this.count_ -= this.keyMap_.get(key).length;
     return this.keyMap_.remove(key);
   }
   return false;
@@ -1239,11 +1227,7 @@ goog.Uri.QueryData.prototype.getKeys = function() {
   var rv = [];
   for (var i = 0; i < keys.length; i++) {
     var val = vals[i];
-    if (goog.isArray(val)) {
-      for (var j = 0; j < val.length; j++) {
-        rv.push(keys[i]);
-      }
-    } else {
+    for (var j = 0; j < val.length; j++) {
       rv.push(keys[i]);
     }
   }
@@ -1287,17 +1271,16 @@ goog.Uri.QueryData.prototype.set = function(key, value) {
   this.ensureKeyMapInitialized_();
   this.invalidateCache_();
 
+  // TODO(user): This could be better written as
+  // this.remove(key), this.add(key, value), but that would reorder
+  // the key (since the key is first removed and then added at the
+  // end) and we would have to fix unit tests that depend on key
+  // ordering.
   key = this.getKeyName_(key);
   if (this.containsKey(key)) {
-    var old = this.keyMap_.get(key);
-    if (goog.isArray(old)) {
-      this.count_ -= old.length;
-    } else {
-      this.count_--;
-    }
+    this.count_ -= this.keyMap_.get(key).length;
   }
-
-  this.keyMap_.set(key, value);
+  this.keyMap_.set(key, [value]);
   this.count_++;
   return this;
 };
@@ -1453,7 +1436,7 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
           var lowerCase = key.toLowerCase();
           if (key != lowerCase) {
             this.remove(key);
-            this.add(lowerCase, value);
+            this.setValues(lowerCase, value);
           }
         }, this);
   }
