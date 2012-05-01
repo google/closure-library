@@ -148,7 +148,24 @@ goog.net.xpc.CfgFields = {
    * (if specified). Used for security sensitive applications that make
    * use of NativeMessagingTransport (i.e. most applications).
    */
-  PEER_HOSTNAME: 'ph'
+  PEER_HOSTNAME: 'ph',
+  /**
+   * Usually both frames using a connection initially send a SETUP message to
+   * each other, and each responds with a SETUP_ACK.  A frame marks itself
+   * connected when it receives that SETUP_ACK.  If this parameter is true
+   * however, the channel it is passed to will not send a SETUP, but rather will
+   * wait for one from its peer and mark itself connected when that arrives.
+   * Peer iframes created using such a channel will send SETUP however, and will
+   * wait for SETUP_ACK before marking themselves connected.  The goal is to
+   * cope with a situation where the availability of the URL for the peer frame
+   * cannot be relied on, eg when the application is offline.  Without this
+   * setting, the primary frame will attempt to send its SETUP message every
+   * 100ms, forever.  This floods the javascript console with uncatchable
+   * security warnings, and fruitlessly burns CPU.  Hopefully this mode does
+   * not reduce reliability, but if offline use is not anticipated it's probably
+   * safest to disable it.
+   */
+  ONE_SIDED_HANDSHAKE: 'osh'
 };
 
 

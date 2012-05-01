@@ -157,7 +157,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetup_ = function() {
       // notify outer frame
       this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
       // notify channel that the transport is ready
-      this.channel_.notifyConnected_();
+      this.channel_.notifyConnected();
     }
   }
   catch (e) {
@@ -185,7 +185,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.transportServiceHandler =
     // get a reference to the gateway function
     this.outgoing_ = this.iframeElm_['XPC_toOuter']['XPC_toInner'];
     // notify the channel we're ready
-    this.channel_.notifyConnected_();
+    this.channel_.notifyConnected();
   } else {
     throw Error('Got unexpected transport message.');
   }

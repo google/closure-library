@@ -42,11 +42,14 @@ goog.require('goog.net.xpc.Transport');
  *     peer.
  * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for
  *     finding the correct window/document.
+ * @param {boolean=} opt_suppressSetupMessage If this is true, this transport
+ *     will not send a SETUP message, and should mark itself connected when
+ *     one is received, rather than waiting for a SETUP_ACK.
  * @constructor
  * @extends {goog.net.xpc.Transport}
  */
 goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
-    opt_domHelper) {
+    opt_domHelper, opt_suppressSetupMessage) {
   goog.base(this, opt_domHelper);
 
   /**
@@ -77,6 +80,13 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
    * @private
    */
   this.maybeAttemptToConnectTimer_ = new goog.Timer(100, this.getWindow());
+
+  /**
+   * Whether to send a setup message.
+   * @type {boolean}
+   * @private
+   */
+  this.sendSetupMessage_ = !opt_suppressSetupMessage;
 
   this.eventHandler_.
       listen(this.maybeAttemptToConnectTimer_, goog.Timer.TICK,
@@ -219,9 +229,12 @@ goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
   switch (payload) {
     case goog.net.xpc.SETUP:
       this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
+      if (!this.sendSetupMessage_) {
+        this.channel_.notifyConnected();
+      }
       break;
     case goog.net.xpc.SETUP_ACK_:
-      this.channel_.notifyConnected_();
+      this.channel_.notifyConnected();
       break;
   }
 };
@@ -248,7 +261,8 @@ goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
  */
 goog.net.xpc.NativeMessagingTransport.prototype.maybeAttemptToConnect_ =
     function() {
-  if (this.channel_.isConnected() || this.isDisposed()) {
+  if (!this.sendSetupMessage_ || this.channel_.isConnected() ||
+      this.isDisposed()) {
     this.maybeAttemptToConnectTimer_.stop();
     return;
   }

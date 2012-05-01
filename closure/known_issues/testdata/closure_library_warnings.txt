@@ -49,14 +49,8 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/fra
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
       this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property notifyConnected_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
-      this.channel_.notifyConnected_();
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
       !this.channel_.isConnected() && payload == goog.net.xpc.SETUP_ACK_) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property notifyConnected_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
-    this.channel_.notifyConnected_();
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property deliver_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
     this.channel_.deliver_(serviceName, payload);
@@ -106,9 +100,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/ifr
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
       this.msgSender_.send(goog.net.xpc.SETUP);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property notifyConnected_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-    this.channel_.notifyConnected_();
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
         this.channel_.deliver_(m.service, m.payload);
 
@@ -148,14 +139,8 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/ifr
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
     this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property notifyConnected_ of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
-    this.channel_.notifyConnected_();
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
   else if (payload == goog.net.xpc.SETUP_ACK_) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property notifyConnected_ of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
-    this.channel_.notifyConnected_();
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to protected property name of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
   url += '#' + this.channel_.name;
@@ -193,9 +178,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nat
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
     case goog.net.xpc.SETUP_ACK_:
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property notifyConnected_ of goog.net.xpc.NativeMessagingTransport.channel_ not allowed here.
-      this.channel_.notifyConnected_();
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
   this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
 
@@ -207,12 +189,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nat
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js ERROR - Access to private property iframeElement_ of goog.net.xpc.NixTransport.channel_ not allowed here.
   var innerFrame = this.channel_.iframeElement_;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js ERROR - Access to private property notifyConnected_ of goog.net.xpc.NixTransport.channel_ not allowed here.
-      this.channel_.notifyConnected_();
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js ERROR - Access to private property notifyConnected_ of goog.net.xpc.NixTransport.channel_ not allowed here.
-   this.channel_.notifyConnected_();
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js ERROR - Overriding private property of goog.json.Serializer.prototype.
 goog.proto.Serializer.prototype.serializeArray_ = function(arr, sb) {

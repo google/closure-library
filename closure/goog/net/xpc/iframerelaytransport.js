@@ -268,10 +268,10 @@ goog.net.xpc.IframeRelayTransport.prototype.transportServiceHandler =
     // TODO(user) Safari swallows the SETUP_ACK from the iframe to the
     // container after hitting reload.
     this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
-    this.channel_.notifyConnected_();
+    this.channel_.notifyConnected();
   }
   else if (payload == goog.net.xpc.SETUP_ACK_) {
-    this.channel_.notifyConnected_();
+    this.channel_.notifyConnected();
   }
 };
 

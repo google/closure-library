@@ -11,8 +11,8 @@ See the COPYING file for details.
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>CrossPageChannel: End-to-End Test</title>
-<script src="../../base.js"></script>
-<script>
+<script type="text/javascript" src="../../base.js"></script>
+<script type="text/javascript">
   goog.require('goog.Disposable');
   goog.require('goog.Uri');
   goog.require('goog.debug.Logger');
@@ -25,7 +25,7 @@ See the COPYING file for details.
 </script>
 </head>
 <body>
-<script>
+<script type="text/javascript">
 
 var IFRAME_LOAD_WAIT_MS = 1000;
 var stubs = new goog.testing.PropertyReplacer();
@@ -126,23 +126,46 @@ function testCreateIframeWithDom() {
 }
 
 
-function testCreateIframeAsynchronousConnect() {
-  driver.createPeerIframe('new_iframe');
-
-  asyncTestCase.waitForAsync('iframe load');
-  window.setTimeout(function() {
-    // TODO(user): The test server has such high latency for testdata that
-    //     this timeout isn't event enough. Averages 5sec on my machine.
-    //     speed this up.
-    driver.connect();
-  }, IFRAME_LOAD_WAIT_MS);
+function testCreateIframeAndConnect_synchronous() {
+  checkCreateIframeAndConnect(true /* synchronous */,
+      false /* oneSidedHandshake */);
 }
 
 
-function testCreateIframeSynchronousConnect() {
-  driver.createPeerIframe('new_iframe');
-  // This connection will still get deferred on webkit.
-  driver.connect();
+function testCreateIframeAndConnect_synchronous_onesided() {
+  checkCreateIframeAndConnect(true /* synchronous */,
+      true /* oneSidedHandshake */);
+}
+
+
+function testCreateIframeAndConnect_asynchronous() {
+  checkCreateIframeAndConnect(false /* synchronous */,
+      false /* oneSidedHandshake */);
+}
+
+
+function testCreateIframeAndConnect_asynchronous_onesided() {
+  checkCreateIframeAndConnect(false /* synchronous */,
+      true /* oneSidedHandshake */);
+}
+
+
+function checkCreateIframeAndConnect(synchronous, oneSidedHandshake) {
+  driver.createPeerIframe('new_iframe', undefined /* opt_domHelper */,
+      oneSidedHandshake);
+
+  if (synchronous) {
+    // This connection will still get deferred on webkit.
+    driver.connect();
+  } else {
+    asyncTestCase.waitForAsync('iframe load');
+    window.setTimeout(function() {
+      // TODO(user): The test server has such high latency for testdata that
+      //     this timeout isn't event enough. Averages 5sec on my machine.
+      //     speed this up.
+      driver.connect();
+    }, IFRAME_LOAD_WAIT_MS);
+  }
 }
 
 // TODO(user): Commenting out testExistingIframeConnect test as test will take
@@ -285,8 +308,11 @@ Driver.prototype.getInnerPeer_ = function() {
  *     otherwise, tells the channel to generate an iframe ID.
  * @param {goog.dom.DomHelper=} opt_domHelper The optional dom helper to use
  *     for determining which window to use.
+ * @param {boolean=} opt_oneSidedHandshake Whether the one sided handshake
+ *     config option should be set.
  */
-Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper) {
+Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper,
+    opt_oneSidedHandshake) {
   var cfg = {};
   if (opt_iframeId) {
     this.iframeId_ = opt_iframeId;
@@ -296,6 +322,7 @@ Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper) {
   cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = 'test_channel' + uniqueId++;
   cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
+  cfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] = !!opt_oneSidedHandshake;
   function resolveUri(fieldName) {
     cfg[fieldName] =
         goog.Uri.resolve(window.location.href, cfg[fieldName]).toString();
@@ -325,8 +352,11 @@ Driver.prototype.getConfiguration = function() {
  *     otherwise, generates an iframe ID.
  * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for
  *     finding the elements in the iframe.
+ * @param {boolean=} opt_oneSidedHandshake Whether a one sided handshake is
+ *     specified.
  */
-Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper) {
+Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper,
+    opt_oneSidedHandshake) {
   var expectedIframeId;
 
   if (opt_iframeId) {

@@ -90,7 +90,7 @@ goog.net.xpc.Transport.prototype.transportServiceHandler = goog.abstractMethod;
 /**
  * Connects this transport.
  * The transport implementation is expected to call
- * CrossPageChannel.prototype.notifyConnected_ when the channel is ready
+ * CrossPageChannel.prototype.notifyConnected when the channel is ready
  * to be used.
  */
 goog.net.xpc.Transport.prototype.connect = goog.abstractMethod;

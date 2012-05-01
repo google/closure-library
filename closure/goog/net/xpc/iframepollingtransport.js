@@ -398,7 +398,7 @@ goog.net.xpc.IframePollingTransport.prototype.checkLocalFramesPresent_ =
  */
 goog.net.xpc.IframePollingTransport.prototype.checkIfConnected_ = function() {
   if (this.sentConnectionSetupAck_ && this.rcvdConnectionSetupAck_) {
-    this.channel_.notifyConnected_();
+    this.channel_.notifyConnected();
 
     if (this.deliveryQueue_) {
       goog.net.xpc.logger.fine('delivering queued messages ' +

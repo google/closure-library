@@ -383,7 +383,7 @@ goog.net.xpc.NixTransport.prototype.attemptInnerSetup_ = function() {
       this.localSetupCompleted_ = true;
 
       // Notify channel that the transport is ready.
-      this.channel_.notifyConnected_();
+      this.channel_.notifyConnected();
     }
   }
   catch (e) {
@@ -426,7 +426,7 @@ goog.net.xpc.NixTransport.prototype.createChannel_ = function(channel) {
 
    // Indicate to the CrossPageChannel that the channel is setup
    // and ready to use.
-   this.channel_.notifyConnected_();
+   this.channel_.notifyConnected();
 };
 
 

@@ -248,7 +248,8 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
       this.transport_ = new goog.net.xpc.NativeMessagingTransport(
           this,
           this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME],
-          this.domHelper_);
+          this.domHelper_,
+          !!this.cfg_[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE]);
       break;
     case goog.net.xpc.TransportTypes.NIX:
       this.transport_ = new goog.net.xpc.NixTransport(this, this.domHelper_);
@@ -315,6 +316,8 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
     peerCfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] =
         this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI];
   }
+  // Ensure that the peer will send its SETUP request as expected.
+  peerCfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] = false;
 
   return peerCfg;
 };
@@ -505,10 +508,10 @@ goog.net.xpc.CrossPageChannel.prototype.close = function() {
 
 
 /**
+ * Package-private.
  * Called by the transport when the channel is connected.
- * @private
  */
-goog.net.xpc.CrossPageChannel.prototype.notifyConnected_ = function() {
+goog.net.xpc.CrossPageChannel.prototype.notifyConnected = function() {
   if (this.isConnected()) {
     return;
   }
@@ -516,6 +519,14 @@ goog.net.xpc.CrossPageChannel.prototype.notifyConnected_ = function() {
   goog.net.xpc.logger.info('Channel "' + this.name + '" connected');
   this.connectCb_();
 };
+
+
+/**
+ * Alias for notifyConected, for backward compatibility reasons.
+ * @private
+ */
+goog.net.xpc.CrossPageChannel.prototype.notifyConnected_ =
+    goog.net.xpc.CrossPageChannel.prototype.notifyConnected;
 
 
 /**
