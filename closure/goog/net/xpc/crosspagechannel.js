@@ -70,7 +70,6 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
   /**
    * The name of the channel.
    * @type {string}
-   * @protected
    */
   this.name = this.cfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] ||
       goog.net.xpc.getRandomString(10);

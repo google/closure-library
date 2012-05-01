@@ -64,26 +64,8 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/ifr
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property cfg_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   this.rcvUri_ = this.channel_.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-      this.channel_.name + '_msg';
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-      this.channel_.name + '_ack';
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-  this.channel_.name = goog.net.xpc.getRandomString(10);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-  goog.net.xpc.logger.finest('switching channels: ' + this.channel_.name);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-      '_reconnect_' + this.channel_.name);
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   var frames = this.channel_.peerWindowObject_.frames;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property name of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-      this.channel_.name = message[2];
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
         this.channel_.peerWindowObject_.frames[this.getMsgFrameName_()],
@@ -141,9 +123,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/ifr
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
   else if (payload == goog.net.xpc.SETUP_ACK_) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to protected property name of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
-  url += '#' + this.channel_.name;
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
   var channel = goog.net.xpc.channels_[channelName];
