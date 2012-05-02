@@ -264,7 +264,7 @@ goog.fx.anim.requestAnimationFrame_ = function() {
         goog.fx.anim.requestAnimationFrameFn_.call(
             goog.fx.anim.animationWindow_, function(now) {
               goog.fx.anim.animationTimer_ = null;
-              goog.fx.anim.cycleAnimations_(now);
+              goog.fx.anim.cycleAnimations_(goog.now());
             });
   }
 };
