@@ -19,6 +19,7 @@ See the COPYING file for details.
     goog.require('goog.events');
     goog.require('goog.testing.ExpectedFailures');
     goog.require('goog.testing.events');
+    goog.require('goog.testing.events.EventObserver');
     goog.require('goog.testing.jsunit');
     goog.require('goog.object');
     goog.require('goog.ui.Control');
@@ -153,9 +154,13 @@ See the COPYING file for details.
     }
 
     function testBasicTextareaBehavior() {
+      var observer = new goog.testing.events.EventObserver();
+      goog.events.listen(textarea, goog.ui.Textarea.EventType.RESIZE, observer);
       textarea.render(sandbox);
       var el = textarea.getElement();
       var heightBefore = textarea.getHeight_();
+      assertTrue('One resize event should be fired during render',
+          observer.getEvents().length == 1);
       textarea.setContent('Lorem ipsum dolor sit amet, consectetuer ' +
           'elit. Aenean sollicitudin ultrices urna. Proin vehicula mauris ac ' +
           'est. Ut scelerisque, risus ut facilisis dictum, est massa lacinia ' +
@@ -163,11 +168,17 @@ See the COPYING file for details.
       var heightAfter = textarea.getHeight_();
       assertTrue('With this much content, height should have grown.',
           heightAfter > heightBefore);
+      assertTrue('With a height change, a resize event should have fired.',
+          observer.getEvents().length == 2);
 
       textarea.setContent('');
       heightAfter = textarea.getHeight_();
       assertTrue('Textarea should shrink with no content.',
           heightAfter <= heightBefore);
+      assertTrue('With a height change, a resize event should have fired.',
+          observer.getEvents().length == 3);
+      goog.events.unlisten(textarea, goog.ui.Textarea.EventType.RESIZE,
+          observer);
     }
 
     function testGetHorizontalScrollBarHeight() {

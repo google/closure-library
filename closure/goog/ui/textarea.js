@@ -23,6 +23,7 @@
  */
 
 goog.provide('goog.ui.Textarea');
+goog.provide('goog.ui.Textarea.EventType');
 
 goog.require('goog.Timer');
 goog.require('goog.events.EventType');
@@ -161,6 +162,15 @@ goog.ui.Textarea.prototype.paddingBox_;
  * @private
  */
 goog.ui.Textarea.prototype.borderBox_;
+
+
+/**
+ * Constants for event names.
+ * @enum {string}
+ */
+goog.ui.Textarea.EventType = {
+  RESIZE: 'resize'
+};
 
 
 /**
@@ -453,6 +463,7 @@ goog.ui.Textarea.prototype.grow_ = function(opt_e) {
   var shouldCallShrink = false;
   this.isResizing_ = true;
   var textarea = this.getElement();
+  var oldHeight = this.height_;
   if (textarea.scrollHeight) {
     var setMinHeight = false;
     var setMaxHeight = false;
@@ -486,6 +497,9 @@ goog.ui.Textarea.prototype.grow_ = function(opt_e) {
 
   if (shouldCallShrink) {
     this.shrink_();
+  }
+  if (oldHeight != this.height_) {
+    this.dispatchEvent(goog.ui.Textarea.EventType.RESIZE);
   }
 };
 
