@@ -22,6 +22,7 @@
 goog.provide('goog.net.xpc.NativeMessagingTransport');
 
 goog.require('goog.Timer');
+goog.require('goog.async.Deferred');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.net.xpc');
@@ -87,6 +88,50 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
    * @private
    */
   this.sendSetupMessage_ = !opt_suppressSetupMessage;
+
+  /**
+   * Fires once we've received our SETUP_ACK message.
+   * @type {!goog.async.Deferred}
+   * @private
+   */
+  this.setupAckReceived_ = new goog.async.Deferred();
+
+  /**
+   * Fires once we've sent our SETUP_ACK message.
+   * @type {!goog.async.Deferred}
+   * @private
+   */
+  this.setupAckSent_ = new goog.async.Deferred();
+
+  /**
+   * Fires once we're marked connected.
+   * @type {!goog.async.Deferred}
+   * @private
+   */
+  this.connected_ = new goog.async.Deferred();
+
+  // We don't want to mark ourselves connected until we have sent whatever
+  // message will cause our counterpart in the other frame to also declare
+  // itself connected, if there is such a message.  Otherwise we risk a user
+  // message being sent in advance of that message, and it being discarded.
+  if (this.sendSetupMessage_) {
+    // Two sided handshake:
+    // SETUP_ACK has to have been received, and sent.
+    this.connected_.awaitDeferred(this.setupAckReceived_);
+    this.connected_.awaitDeferred(this.setupAckSent_);
+  } else {
+    if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.INNER) {
+      // One sided handshake, inner frame:
+      // SETUP_ACK must be received.
+      this.connected_.awaitDeferred(this.setupAckReceived_);
+    } else {
+      // One sided handshake, outer frame:
+      // SETUP_ACK must be sent.
+      this.connected_.awaitDeferred(this.setupAckSent_);
+    }
+  }
+  this.connected_.addCallback(this.channel_.notifyConnected, this.channel_);
+  this.connected_.callback(true);
 
   this.eventHandler_.
       listen(this.maybeAttemptToConnectTimer_, goog.Timer.TICK,
@@ -229,12 +274,14 @@ goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
   switch (payload) {
     case goog.net.xpc.SETUP:
       this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
-      if (!this.sendSetupMessage_) {
-        this.channel_.notifyConnected();
+      if (!this.setupAckSent_.hasFired()) {
+        this.setupAckSent_.callback(true);
       }
       break;
     case goog.net.xpc.SETUP_ACK_:
-      this.channel_.notifyConnected();
+      if (!this.setupAckReceived_.hasFired()) {
+        this.setupAckReceived_.callback(true);
+      }
       break;
   }
 };
@@ -321,6 +368,13 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
 
   goog.dispose(this.maybeAttemptToConnectTimer_);
   delete this.maybeAttemptToConnectTimer_;
+
+  this.setupAckReceived_.cancel();
+  delete this.setupAckReceived_;
+  this.setupAckSent_.cancel();
+  delete this.setupAckSent_;
+  this.connected_.cancel();
+  delete this.connected_;
 
   // Cleaning up this.send as it is an instance method, created in
   // goog.net.xpc.NativeMessagingTransport.prototype.send and has a closure over

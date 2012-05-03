@@ -27,21 +27,25 @@ function tearDown() {
 
 
 function testConstructor() {
-  var t = new goog.net.xpc.NativeMessagingTransport(null, 'http://g.com:80');
+  var xpc = getTestChannel();
+
+  var t = new goog.net.xpc.NativeMessagingTransport(xpc, 'http://g.com:80');
   assertEquals('http://g.com:80', t.peerHostname_);
 
-  var t = new goog.net.xpc.NativeMessagingTransport(null, null);
+  var t = new goog.net.xpc.NativeMessagingTransport(xpc, null);
   assertEquals('*', t.peerHostname_);
   t.dispose();
 }
 
 
 function testConstructorDom() {
+  var xpc = getTestChannel();
+
   var t = new goog.net.xpc.NativeMessagingTransport(
-      null, 'http://g.com:80', goog.dom.getDomHelper());
+      xpc, 'http://g.com:80', goog.dom.getDomHelper());
   assertEquals('http://g.com:80', t.peerHostname_);
 
-  var t = new goog.net.xpc.NativeMessagingTransport(null, null);
+  var t = new goog.net.xpc.NativeMessagingTransport(xpc, null);
   assertEquals('*', t.peerHostname_);
   t.dispose();
 }
@@ -141,6 +145,72 @@ function testSendingMessagesToUnconnectedInnerPeer() {
                'new_channel',
                t.channel_.name);
   t.dispose();
+}
+
+
+function testSignalConnected_innerFrame() {
+  checkSignalConnected(false /* singleSidedHandshake */,
+      true /* innerFrame */);
+}
+
+
+function testSignalConnected_outerFrame() {
+  checkSignalConnected(false /* singleSidedHandshake */,
+      false /* innerFrame */);
+}
+
+
+function testSignalConnected_singleSided_innerFrame() {
+  checkSignalConnected(true /* singleSidedHandshake */,
+      true /* innerFrame */);
+}
+
+
+function testSignalConnected_singleSided_outerFrame() {
+  checkSignalConnected(true /* singleSidedHandshake */,
+      false /* innerFrame */);
+}
+
+
+function checkSignalConnected(singleSidedHandshake, innerFrame) {
+  var xpc = getTestChannel();
+  var connected = false;
+  xpc.notifyConnected = function() {
+    if (connected) {
+      fail();
+    } else {
+      connected = true;
+    }
+  };
+  xpc.getRole = function() {
+    return innerFrame ? goog.net.xpc.CrossPageChannelRole.INNER :
+        goog.net.xpc.CrossPageChannelRole.OUTER;
+  };
+  xpc.isConnected = function() {
+    return false;
+  };
+
+  var transport = new goog.net.xpc.NativeMessagingTransport(xpc, 'http://g.com',
+      undefined /* opt_domHelper */,
+      singleSidedHandshake /* opt_suppressSetupMessage */);
+
+  assertFalse(connected);
+  if (!singleSidedHandshake || innerFrame) {
+    transport.transportServiceHandler(goog.net.xpc.SETUP);
+    assertFalse(connected);
+    transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_);
+    assertTrue(connected);
+  } else {
+    transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_);
+    assertFalse(connected);
+    transport.transportServiceHandler(goog.net.xpc.SETUP);
+    assertTrue(connected);
+  }
+
+  // Verify that additional transport service traffic doesn't cause duplicate
+  // notifications.
+  transport.transportServiceHandler(goog.net.xpc.SETUP);
+  transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_);
 }
 
 
