@@ -382,22 +382,6 @@ See the COPYING file for details.
     assertTrue(monitor.wrap.getCallCount() >= 1);
     assertEquals(replacement, goog.events.handleBrowserEvent_);
   }
-
-  // Fixes bug http://b/6434926
-  function testListenOnceHandlerDispatchCausingInfiniteLoop() {
-    var target = new goog.events.EventTarget();
-
-    var handleFoo = goog.testing.recordFunction(function() {
-      target.dispatchEvent('foo');
-    });
-
-    goog.events.listenOnce(target, 'foo', handleFoo);
-
-    target.dispatchEvent('foo');
-
-    assertEquals('Handler should be called only once.',
-                 1, handleFoo.getCallCount());
-  }
 </script>
 </body>
 </html>
