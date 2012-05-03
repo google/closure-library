@@ -91,7 +91,7 @@ goog.addDependency('debug/logrecordserializer.js', ['goog.debug.logRecordSeriali
 goog.addDependency('debug/reflect.js', ['goog.debug.reflect'], []);
 goog.addDependency('debug/relativetimeprovider.js', ['goog.debug.RelativeTimeProvider'], []);
 goog.addDependency('debug/tracer.js', ['goog.debug.Trace'], ['goog.array', 'goog.debug.Logger', 'goog.iter', 'goog.structs.Map', 'goog.structs.SimplePool']);
-goog.addDependency('disposable/disposable.js', ['goog.Disposable', 'goog.dispose'], ['goog.debug', 'goog.disposable.IDisposable']);
+goog.addDependency('disposable/disposable.js', ['goog.Disposable', 'goog.dispose'], ['goog.disposable.IDisposable']);
 goog.addDependency('disposable/idisposable.js', ['goog.disposable.IDisposable'], []);
 goog.addDependency('dom/a11y.js', ['goog.dom.a11y', 'goog.dom.a11y.Announcer', 'goog.dom.a11y.LivePriority', 'goog.dom.a11y.Role', 'goog.dom.a11y.State'], ['goog.Disposable', 'goog.dom', 'goog.object']);
 goog.addDependency('dom/abstractmultirange.js', ['goog.dom.AbstractMultiRange'], ['goog.array', 'goog.dom', 'goog.dom.AbstractRange']);

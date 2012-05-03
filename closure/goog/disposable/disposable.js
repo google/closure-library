@@ -22,7 +22,6 @@
 goog.provide('goog.Disposable');
 goog.provide('goog.dispose');
 
-goog.require('goog.debug');
 goog.require('goog.disposable.IDisposable');
 
 
@@ -37,7 +36,7 @@ goog.require('goog.disposable.IDisposable');
  */
 goog.Disposable = function() {
   if (goog.Disposable.ENABLE_MONITORING) {
-    this.creationStack = goog.debug.getStacktrace();
+    this.creationStack = new Error().stack;
     goog.Disposable.instances_[goog.getUid(this)] = this;
   }
 };
