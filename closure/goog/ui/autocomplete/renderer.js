@@ -261,6 +261,7 @@ goog.ui.ac.Renderer.prototype.widthProvider_;
 /**
  * The delay before mouseover events are registered, in milliseconds
  * @type {number}
+ * @const
  */
 goog.ui.ac.Renderer.DELAY_BEFORE_MOUSEOVER = 300;
 
@@ -976,6 +977,14 @@ goog.ui.ac.Renderer.CustomRenderer.prototype.renderRow =
  * @extends {goog.events.EventTarget}
  */
 goog.ui.AutoComplete.Renderer = goog.ui.ac.Renderer;
+
+
+/**
+ * The delay before mouseover events are registered, in milliseconds
+ * @type {number}
+ */
+goog.ui.AutoComplete.Renderer.DELAY_BEFORE_MOUSEOVER =
+    goog.ui.ac.Renderer.DELAY_BEFORE_MOUSEOVER;
 
 
 

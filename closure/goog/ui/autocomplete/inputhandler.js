@@ -222,6 +222,7 @@ goog.ui.ac.InputHandler.REQUIRES_ASYNC_BLUR_ =
 /**
  * Standard list separators.
  * @type {string}
+ * @const
  */
 goog.ui.ac.InputHandler.STANDARD_LIST_SEPARATORS = ',;';
 
@@ -229,6 +230,7 @@ goog.ui.ac.InputHandler.STANDARD_LIST_SEPARATORS = ',;';
 /**
  * Literals for quotes.
  * @type {string}
+ * @const
  */
 goog.ui.ac.InputHandler.QUOTE_LITERALS = '"';
 
@@ -1323,3 +1325,19 @@ goog.ui.ac.InputHandler.prototype.splitInput_ = function(text) {
  * @extends {goog.Disposable}
  */
 goog.ui.AutoComplete.InputHandler = goog.ui.ac.InputHandler;
+
+
+/**
+ * Standard list separators.
+ * @type {string}
+ */
+goog.ui.AutoComplete.InputHandler.STANDARD_LIST_SEPARATORS =
+    goog.ui.ac.InputHandler.STANDARD_LIST_SEPARATORS;
+
+
+/**
+ * Literals for quotes.
+ * @type {string}
+ */
+goog.ui.AutoComplete.InputHandler.QUOTE_LITERALS =
+    goog.ui.ac.InputHandler.QUOTE_LITERALS;
