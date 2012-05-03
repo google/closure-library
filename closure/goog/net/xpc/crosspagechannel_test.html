@@ -371,7 +371,7 @@ Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper,
   assertNull('element[id=' + expectedIframeId + '] exists',
       goog.dom.getElement(expectedIframeId));
 
-  this.createChannel(opt_iframeId, opt_domHelper);
+  this.createChannel(opt_iframeId, opt_domHelper, opt_oneSidedHandshake);
   this.iframe_ = this.channel_.createPeerIframe(document.body);
 
   assertEquals(expectedIframeId, this.iframe_.id);

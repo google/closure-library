@@ -283,6 +283,8 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
   peerCfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = this.name;
   peerCfg[goog.net.xpc.CfgFields.TRANSPORT] =
       this.cfg_[goog.net.xpc.CfgFields.TRANSPORT];
+  peerCfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] =
+      this.cfg_[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE];
 
   if (this.cfg_[goog.net.xpc.CfgFields.LOCAL_RELAY_URI]) {
     peerCfg[goog.net.xpc.CfgFields.PEER_RELAY_URI] =
@@ -296,8 +298,6 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
     peerCfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] =
         this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI];
   }
-  // Ensure that the peer will send its SETUP request as expected.
-  peerCfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] = false;
 
   return peerCfg;
 };

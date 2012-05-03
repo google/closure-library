@@ -43,14 +43,14 @@ goog.require('goog.net.xpc.Transport');
  *     peer.
  * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for
  *     finding the correct window/document.
- * @param {boolean=} opt_suppressSetupMessage If this is true, this transport
- *     will not send a SETUP message, and should mark itself connected when
- *     one is received, rather than waiting for a SETUP_ACK.
+ * @param {boolean=} opt_oneSidedHandshake If this is true, only the outer
+ *     transport sends a SETUP message and expects a SETUP_ACK.  The inner
+ *     transport goes connected when it receives the SETUP.
  * @constructor
  * @extends {goog.net.xpc.Transport}
  */
 goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
-    opt_domHelper, opt_suppressSetupMessage) {
+    opt_domHelper, opt_oneSidedHandshake) {
   goog.base(this, opt_domHelper);
 
   /**
@@ -83,11 +83,11 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
   this.maybeAttemptToConnectTimer_ = new goog.Timer(100, this.getWindow());
 
   /**
-   * Whether to send a setup message.
+   * Whether one-sided handshakes are enabled.
    * @type {boolean}
    * @private
    */
-  this.sendSetupMessage_ = !opt_suppressSetupMessage;
+  this.oneSidedHandshake_ = !!opt_oneSidedHandshake;
 
   /**
    * Fires once we've received our SETUP_ACK message.
@@ -114,12 +114,7 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
   // message will cause our counterpart in the other frame to also declare
   // itself connected, if there is such a message.  Otherwise we risk a user
   // message being sent in advance of that message, and it being discarded.
-  if (this.sendSetupMessage_) {
-    // Two sided handshake:
-    // SETUP_ACK has to have been received, and sent.
-    this.connected_.awaitDeferred(this.setupAckReceived_);
-    this.connected_.awaitDeferred(this.setupAckSent_);
-  } else {
+  if (this.oneSidedHandshake_) {
     if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.INNER) {
       // One sided handshake, inner frame:
       // SETUP_ACK must be received.
@@ -129,6 +124,11 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
       // SETUP_ACK must be sent.
       this.connected_.awaitDeferred(this.setupAckSent_);
     }
+  } else {
+    // Two sided handshake:
+    // SETUP_ACK has to have been received, and sent.
+    this.connected_.awaitDeferred(this.setupAckReceived_);
+    this.connected_.awaitDeferred(this.setupAckSent_);
   }
   this.connected_.addCallback(this.channel_.notifyConnected, this.channel_);
   this.connected_.callback(true);
@@ -308,7 +308,12 @@ goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
  */
 goog.net.xpc.NativeMessagingTransport.prototype.maybeAttemptToConnect_ =
     function() {
-  if (!this.sendSetupMessage_ || this.channel_.isConnected() ||
+  // In a one-sided handshake, the outer frame does not send a SETUP message,
+  // but the inner frame does.
+  var outerFrame = this.channel_.getRole() ==
+      goog.net.xpc.CrossPageChannelRole.OUTER;
+  if ((this.oneSidedHandshake_ && outerFrame) ||
+      this.channel_.isConnected() ||
       this.isDisposed()) {
     this.maybeAttemptToConnectTimer_.stop();
     return;
