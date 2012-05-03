@@ -766,11 +766,10 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
  * @return {boolean} Result of listener.
  */
 goog.events.fireListener = function(listener, eventObject) {
-  var rv = listener.handleEvent(eventObject);
   if (listener.callOnce) {
     goog.events.unlistenByKey(listener.key);
   }
-  return rv;
+  return listener.handleEvent(eventObject);
 };
 
 
