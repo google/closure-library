@@ -945,6 +945,27 @@ goog.module.ModuleManager.prototype.registerInitializationCallback = function(
 
 
 /**
+ * Register a late initialization callback for the currently loading module.
+ * Callbacks registered via this function are executed similar to
+ * {@see registerInitializationCallback}, but they are fired after all
+ * initialization callbacks are called.
+ *
+ * @param {Function} fn A callback function that takes a single argument
+ *    which is the module context.
+ * @param {Object=} opt_handler Optional handler under whose scope to execute
+ *     the callback.
+ */
+goog.module.ModuleManager.prototype.registerLateInitializationCallback =
+    function(fn, opt_handler) {
+  if (!this.currentlyLoadingModule_) {
+    this.logger_.severe('No module is currently loading');
+  } else {
+    this.currentlyLoadingModule_.registerCallback(fn, opt_handler);
+  }
+};
+
+
+/**
  * Sets the constructor to use for the module object for the currently
  * loading module. The constructor should derive from {@see
  * goog.module.BaseModule}.
