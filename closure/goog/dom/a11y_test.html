@@ -55,9 +55,17 @@ Author:  attila@google.com (Attila Bodis)
       goog.dom.a11y.setRole(someSpan, goog.dom.a11y.Role.MENU_ITEM);
 
       assertEquals('someDiv\'s role should be MENU',
-            goog.dom.a11y.Role.MENU, goog.dom.a11y.getRole(someDiv));
+          goog.dom.a11y.Role.MENU, goog.dom.a11y.getRole(someDiv));
       assertEquals('someSpan\'s role should be MENU_ITEM',
-            goog.dom.a11y.Role.MENU_ITEM, goog.dom.a11y.getRole(someSpan));
+          goog.dom.a11y.Role.MENU_ITEM, goog.dom.a11y.getRole(someSpan));
+
+      var div = goog.dom.createElement('div');
+      sandbox.appendChild(div);
+      div.innerHTML = '<span id="anotherSpan" role="' +
+          goog.dom.a11y.Role.CHECKBOX + '"></span>';
+      assertEquals('anotherSpan\'s role should be CHECKBOX',
+          goog.dom.a11y.Role.CHECKBOX,
+          goog.dom.a11y.getRole(document.getElementById('anotherSpan')));
     }
 
     function testGetSetState() {
