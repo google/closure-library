@@ -232,6 +232,15 @@ See the COPYING file for details.
       assertTrue('d3 should be disposed', d3.isDisposed());
       assertTrue('d4 should be disposed', d4.isDisposed());
     }
+
+    function testCreationStack() {
+      if (!new Error().stack)
+        return;
+      goog.Disposable.ENABLE_MONITORING = true;
+      var disposableStack = new DisposableTest().creationStack;
+      // Check that the name of this test function occurs in the stack trace.
+      assertNotEquals(-1, disposableStack.indexOf('testCreationStack'));
+    }
     </script>
 </body>
 </html>

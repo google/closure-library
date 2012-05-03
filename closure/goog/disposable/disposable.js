@@ -22,6 +22,7 @@
 goog.provide('goog.Disposable');
 goog.provide('goog.dispose');
 
+goog.require('goog.debug');
 goog.require('goog.disposable.IDisposable');
 
 
@@ -36,6 +37,7 @@ goog.require('goog.disposable.IDisposable');
  */
 goog.Disposable = function() {
   if (goog.Disposable.ENABLE_MONITORING) {
+    this.creationStack = goog.debug.getStacktrace();
     goog.Disposable.instances_[goog.getUid(this)] = this;
   }
 };
@@ -98,6 +100,14 @@ goog.Disposable.prototype.disposed_ = false;
  * @private
  */
 goog.Disposable.prototype.dependentDisposables_;
+
+
+/**
+ * If monitoring the goog.Disposable instances is enabled, stores the creation
+ * stack trace of the Disposable instance.
+ * @type {string}
+ */
+goog.Disposable.prototype.creationStack;
 
 
 /**
