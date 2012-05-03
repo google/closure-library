@@ -35,6 +35,18 @@ _GOOG_BASE_LINE = (
 class Source(object):
   """Scans a JavaScript source for its provided and required namespaces."""
 
+  # Matches a "/* ... */" comment.
+  # Note: We can't definitively distinguish a "/*" in a string literal without a
+  # state machine tokenizer. We'll assume that a line starting with whitespace
+  # and "/*" is a comment.
+  _COMMENT_REGEX = re.compile(
+      r"""
+      ^\s*   # Start of a new line and whitespace
+      /\*    # Opening "/*"
+      .*?    # Non greedy match of any characters (including newlines)
+      \*/    # Closing "*/""",
+      re.MULTILINE | re.DOTALL | re.VERBOSE)
+
   def __init__(self, source):
     """Initialize a source.
 
@@ -55,12 +67,14 @@ class Source(object):
     """Get the source as a string."""
     return self._source
 
+  @classmethod
+  def _StripComments(cls, source):
+    return cls._COMMENT_REGEX.sub('', source)
+
   def _ScanSource(self):
     """Fill in provides and requires by scanning the source."""
 
-    # TODO: Strip source comments first, as these might be in a comment
-    # block.  RegExes can be borrowed from other projects.
-    source = self.GetSource()
+    source = self._StripComments(self.GetSource())
 
     source_lines = source.splitlines()
     for line in source_lines:

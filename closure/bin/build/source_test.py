@@ -50,6 +50,24 @@ class SourceTestCase(unittest.TestCase):
 
     self.assertRaises(Exception, MakeSource)
 
+  def testStripComments(self):
+    self.assertEquals(
+        '\nvar foo = function() {}',
+        source.Source._StripComments((
+            '/* This is\n'
+            '  a comment split\n'
+            '  over multiple lines\n'
+            '*/\n'
+            'var foo = function() {}')))
+
+  def testGoogStatementsInComments(self):
+    test_source = source.Source(_TEST_COMMENT_SOURCE)
+
+    self.assertEqual(set(['foo']),
+                     test_source.provides)
+    self.assertEqual(set(['goog.events.EventType']),
+                     test_source.requires)
+
 
 _TEST_SOURCE = """// Fake copyright notice
 
@@ -64,6 +82,27 @@ goog.require('goog.events.EventType');
 function foo() {
   // Set bar to seventeen to increase performance.
   this.bar = 17;
+}
+"""
+
+_TEST_COMMENT_SOURCE = """// Fake copyright notice
+
+goog.provide('foo');
+
+/*
+goog.provide('foo.test');
+ */
+
+/*
+goog.require('goog.dom');
+*/
+
+// goog.require('goog.dom');
+
+goog.require('goog.events.EventType');
+
+function bar() {
+  this.baz = 55;
 }
 """
 
