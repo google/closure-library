@@ -897,6 +897,13 @@ function testDateTimeEquals() {
 }
 
 
+function testIntervalIsZero() {
+  assertTrue('zero interval', new goog.date.Interval().isZero());
+  var i = new goog.date.Interval(0, 0, 1, -24, 0, 0);
+  assertFalse('1 day minus 24 hours is not considered zero', i.isZero());
+}
+
+
 function testIntervalGetInverse() {
   var i1 = new goog.date.Interval(goog.date.Interval.DAYS, -1);
   var i2 = i1.getInverse();

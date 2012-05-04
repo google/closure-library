@@ -637,6 +637,19 @@ goog.date.Interval.SECONDS = 's';
 
 
 /**
+ * @return {boolean} Whether all fields of the interval are zero.
+ */
+goog.date.Interval.prototype.isZero = function() {
+  return this.years == 0 &&
+         this.months == 0 &&
+         this.days == 0 &&
+         this.hours == 0 &&
+         this.minutes == 0 &&
+         this.seconds == 0;
+};
+
+
+/**
  * @return {!goog.date.Interval} Negative of this interval.
  */
 goog.date.Interval.prototype.getInverse = function() {
