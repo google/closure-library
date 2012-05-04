@@ -1051,8 +1051,10 @@ goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
 /**
  * Creates a new query data instance from a map of names and values.
  *
- * @param {!goog.structs.Map|!Object} map Map of string parameter names to
- *     string parameter values.
+ * @param {!goog.structs.Map|!Object} map Map of string parameter
+ *     names to parameter value. If parameter value is an array, it is
+ *     treated as if the key maps to each individual value in the
+ *     array.
  * @param {goog.Uri=} opt_uri URI object that should have its cache
  *     invalidated when this object updates.
  * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
@@ -1064,11 +1066,19 @@ goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
   if (typeof keys == 'undefined') {
     throw Error('Keys are undefined');
   }
-  return goog.Uri.QueryData.createFromKeysValues(
-      keys,
-      goog.structs.getValues(map),
-      opt_uri,
-      opt_ignoreCase);
+
+  var queryData = new goog.Uri.QueryData(null, null, opt_ignoreCase);
+  var values = goog.structs.getValues(map);
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var value = values[i];
+    if (!goog.isArray(value)) {
+      queryData.add(key, value);
+    } else {
+      queryData.setValues(key, value);
+    }
+  }
+  return queryData;
 };
 
 
@@ -1311,7 +1321,7 @@ goog.Uri.QueryData.prototype.setValues = function(key, values) {
 
   if (values.length > 0) {
     this.invalidateCache_();
-    this.keyMap_.set(this.getKeyName_(key), values);
+    this.keyMap_.set(this.getKeyName_(key), goog.array.clone(values));
     this.count_ += values.length;
   }
 };

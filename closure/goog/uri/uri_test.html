@@ -866,6 +866,16 @@ function testQueryDataCreateFromMap() {
       String(goog.Uri.QueryData.createFromMap({a:'foo&bar'})));
 }
 
+function testQueryDataCreateFromMapWithArrayValues() {
+  var obj = {'key': ['1', '2', '3']};
+  var qd = goog.Uri.QueryData.createFromMap(obj);
+  assertEquals('key=1&key=2&key=3', qd.toString());
+  qd.add('breakCache', 1);
+  obj.key.push('4');
+  assertEquals('key=1&key=2&key=3&breakCache=1', qd.toString());
+
+}
+
 function testQueryDataCreateFromKeysValues() {
   assertEquals('', String(goog.Uri.QueryData.createFromKeysValues([], [])));
   assertEquals('a=A&b=B&c=C', String(goog.Uri.QueryData.createFromKeysValues(
