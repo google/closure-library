@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview A set of observations. This set provides a convenient
- * means of observing many observables at ones.
+ * means of observing many observables at once.
  *
  * This is similar in purpose to {@code goog.events.EventHandler}.
  *
