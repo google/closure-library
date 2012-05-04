@@ -553,8 +553,9 @@ goog.ui.ComboBox.prototype.maybeShowMenu_ = function(showAll) {
     goog.Timer.callOnce(this.clearDismissTimer_, 1, this);
 
     this.showMenu_();
-    this.positionMenu();
   }
+
+  this.positionMenu();
 };
 
 
