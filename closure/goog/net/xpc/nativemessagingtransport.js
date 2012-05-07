@@ -128,9 +128,13 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
     // Two sided handshake:
     // SETUP_ACK has to have been received, and sent.
     this.connected_.awaitDeferred(this.setupAckReceived_);
-    this.connected_.awaitDeferred(this.setupAckSent_);
+
+    // TODO(dbk): Restore this line.  It is necessary to guarantee that the
+    // peer frame is in the connected state when it receives its first message,
+    // but prevents cases where the peer disappears and reconnects.
+    // this.connected_.awaitDeferred(this.setupAckSent_);
   }
-  this.connected_.addCallback(this.channel_.notifyConnected, this.channel_);
+  this.connected_.addCallback(this.notifyConnected_, this);
   this.connected_.callback(true);
 
   this.eventHandler_.
@@ -138,6 +142,16 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
           this.maybeAttemptToConnect_);
 };
 goog.inherits(goog.net.xpc.NativeMessagingTransport, goog.net.xpc.Transport);
+
+
+/**
+ * The id of a timer used briefly during the connection sequence, or null if it
+ * is inactive.
+ * @type {?number}
+ * @private
+ */
+goog.net.xpc.NativeMessagingTransport.prototype.connectionNotificationTimerId_ =
+    null;
 
 
 /**
@@ -350,6 +364,35 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
 };
 
 
+/**
+ * Notify the channel that this transport is connected, possibly at a delay.
+ * @private
+ */
+goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ = function() {
+  // TODO(dbk): Remove this timeout.  This is here strictly as a temporary
+  // measure to prevent premature message delivery by the outer frame to the,
+  // inner frame, and should be removed when my TODO in the constructor is
+  // resolved.
+  if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.OUTER) {
+    this.connectionNotificationTimerId_ = goog.Timer.callOnce(
+        this.doNotifyConnected_, 100, this);
+  } else {
+    this.doNotifyConnected_();
+  }
+};
+
+
+/**
+ * Notify the channel that this transport is connected.
+ * @private
+ */
+goog.net.xpc.NativeMessagingTransport.prototype.doNotifyConnected_ =
+    function() {
+  this.connectionNotificationTimerId_ = null;
+  this.channel_.notifyConnected();
+};
+
+
 /** @override */
 goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
@@ -366,6 +409,10 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
           false,
           goog.net.xpc.NativeMessagingTransport);
     }
+  }
+
+  if (this.connectionNotificationTimerId_) {
+    goog.Timer.clear(this.connectionNotificationTimerId_);
   }
 
   goog.dispose(this.eventHandler_);

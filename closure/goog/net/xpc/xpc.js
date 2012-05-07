@@ -161,9 +161,12 @@ goog.net.xpc.CfgFields = {
    * cannot be relied on, eg when the application is offline.  Without this
    * setting, the primary frame will attempt to send its SETUP message every
    * 100ms, forever.  This floods the javascript console with uncatchable
-   * security warnings, and fruitlessly burns CPU.  Hopefully this mode does
-   * not reduce reliability, but if offline use is not anticipated it's probably
-   * safest to disable it.
+   * security warnings, and fruitlessly burns CPU.  There is one scenario this
+   * mode will not support, and that is reconnection by the outer frame, ie the
+   * creation of a new channel object to connect to a peer iframe which was
+   * already communicating with a previous channel object of the same name.  If
+   * that behavior is needed, this mode should not be used.  Reconnection by
+   * inner frames is supported in this mode however.
    */
   ONE_SIDED_HANDSHAKE: 'osh'
 };

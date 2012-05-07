@@ -168,15 +168,52 @@ function checkCreateIframeAndConnect(synchronous, oneSidedHandshake) {
   }
 }
 
-// TODO(user): Commenting out testExistingIframeConnect test as test will take
-//     too long to test properly. Loading iframe, establishing a connection,
-//     creating another channel, connecting. Figure out how to test properly,
-/*
-function testExistingIframeConnect() {
-  driver.createChannel('test_iframe');
+
+function testReconnection_byOuterFrame() {
+  this.checkReconnection(true /* byOuterFrame */,
+      false /* oneSidedHandshake */);
+}
+
+
+function testReconnection_byInnerFrame() {
+  this.checkReconnection(false /* byOuterFrame */,
+      false /* oneSidedHandshake */);
+}
+
+
+// Reconnection by an outer frame using a one sided handshake is not expected to
+// work.
+function testReconnection_byInnerFrame_oneSided() {
+  this.checkReconnection(false /* byOuterFrame */,
+      true /* oneSidedHandshake */);
+}
+
+
+function checkReconnection(byOuterFrame, oneSidedHandshake) {
+  var ids = driver.createPeerIframe('new_iframe', undefined /* opt_domHelper */,
+      oneSidedHandshake);
+  driver.connect();
+  var callback = byOuterFrame ?
+    goog.partial(performOuterFrameReconnect, ids[0] /* iframeId */,
+        oneSidedHandshake, ids[1] /* channelName */) :
+    performInnerFrameReconnect;
+  driver.setEchoReplyCallback(callback);
+}
+
+
+function performOuterFrameReconnect(iframeId, oneSidedHandshake, channelName) {
+  driver.setEchoReplyCallback(null);
+  driver.createChannel(iframeId, undefined /* opt_domHelper */,
+      oneSidedHandshake, channelName);
   driver.connect();
 }
-*/
+
+
+function performInnerFrameReconnect() {
+  driver.setEchoReplyCallback(null);
+  driver.reconnectPeer();
+}
+
 
 function testEscapeServiceName() {
   var escape = goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_;
@@ -273,6 +310,13 @@ Driver = function() {
    * @private
    */
   this.channel_ = null;
+
+  /**
+   * The function to call when an echo reply is received.
+   * @type {function()}
+   * @private
+   */
+  this.echoReplyCallback_ = goog.bind(this.defaultEchoReplyCallback_, this);
 };
 goog.inherits(Driver, goog.Disposable);
 
@@ -310,16 +354,20 @@ Driver.prototype.getInnerPeer_ = function() {
  *     for determining which window to use.
  * @param {boolean=} opt_oneSidedHandshake Whether the one sided handshake
  *     config option should be set.
+ * @param {string=} opt_channelName The name of the channel to use, or null
+ *     to generate one.
+ * @return {string} The name of the created channel.
  */
 Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper,
-    opt_oneSidedHandshake) {
+    opt_oneSidedHandshake, opt_channelName) {
   var cfg = {};
   if (opt_iframeId) {
     this.iframeId_ = opt_iframeId;
     cfg[goog.net.xpc.CfgFields.IFRAME_ID] = opt_iframeId;
   }
   cfg[goog.net.xpc.CfgFields.PEER_URI] = 'testdata/inner_peer.html';
-  cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = 'test_channel' + uniqueId++;
+  var channelName = opt_channelName || 'test_channel' + uniqueId++
+  cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = channelName;
   cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] = !!opt_oneSidedHandshake;
@@ -334,6 +382,7 @@ Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper,
   this.channel_ = new goog.net.xpc.CrossPageChannel(cfg, opt_domHelper);
   this.channel_.registerService('msg', goog.bind(this.msgHandler_, this));
   this.cfg_ = cfg;
+  return channelName;
 };
 
 
@@ -354,6 +403,8 @@ Driver.prototype.getConfiguration = function() {
  *     finding the elements in the iframe.
  * @param {boolean=} opt_oneSidedHandshake Whether a one sided handshake is
  *     specified.
+ * @return {!Array.<string>} The id of the created iframe and the name of the
+ *     created channel.
  */
 Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper,
     opt_oneSidedHandshake) {
@@ -371,11 +422,13 @@ Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper,
   assertNull('element[id=' + expectedIframeId + '] exists',
       goog.dom.getElement(expectedIframeId));
 
-  this.createChannel(opt_iframeId, opt_domHelper, opt_oneSidedHandshake);
+  var channelName = this.createChannel(opt_iframeId, opt_domHelper,
+      opt_oneSidedHandshake);
   this.iframe_ = this.channel_.createPeerIframe(document.body);
 
   assertEquals(expectedIframeId, this.iframe_.id);
   this.iframeId_ = expectedIframeId;
+  return [this.iframeId_, channelName];
 };
 
 
@@ -403,6 +456,16 @@ Driver.prototype.connect = function() {
 
   this.channel_.connect(goog.bind(this.parentConnected_, this));
 };
+
+
+/**
+ * Get the peer to reconnect, and repeat the echo test.
+ */
+Driver.prototype.reconnectPeer = function() {
+  var peer = this.getInnerPeer_();
+  asyncTestCase.waitForAsync('child reconnecting');
+  peer.instantiateChannel(this.cfg_);
+}
 
 
 /**
@@ -461,6 +524,26 @@ Driver.prototype.childConnected = function() {
 
 
 /**
+ * Sets an alternate echo reply callback, or resets back to the default.
+ * @param {?function()} callback The new callback, or null to reset to the
+ *     default callback.
+ */
+Driver.prototype.setEchoReplyCallback = function(callback) {
+  this.echoReplyCallback_ = callback ? callback :
+      goog.bind(this.defaultEchoReplyCallback_, this);
+};
+
+
+/**
+ * Default method to call when receiveing an echo reply.
+ * @private
+ */
+Driver.prototype.defaultEchoReplyCallback_ = function() {
+  asyncTestCase.continueTesting();
+};
+
+
+/**
  * The handler function for incoming msg requests.
  * @param {string} payload The message payload.
  * @private
@@ -470,8 +553,7 @@ Driver.prototype.msgHandler_ = function(payload) {
   var peer = this.getInnerPeer_();
   assertTrue('child should be connected', peer.isConnected());
   assertEquals('hello', payload);
-
-  asyncTestCase.continueTesting();
+  this.echoReplyCallback_();
 };
 
 

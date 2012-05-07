@@ -15,12 +15,19 @@ See the COPYING file for details.
   goog.require('goog.net.xpc.CrossPageChannel');
   goog.require('goog.net.xpc.CrossPageChannelRole');
   goog.require('goog.net.xpc.NativeMessagingTransport');
+  goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
 </script>
 <script>
 
+mockClock = null;
+
 function tearDown() {
+  if (mockClock) {
+    mockClock.uninstall();
+    mockClock = null;
+  }
   goog.net.xpc.NativeMessagingTransport.activeCount_ = {};
   goog.events.removeAll(window.postMessage ? window : document, 'message');
 }
@@ -175,6 +182,7 @@ function testSignalConnected_singleSided_outerFrame() {
 function checkSignalConnected(singleSidedHandshake, innerFrame) {
   var xpc = getTestChannel();
   var connected = false;
+  mockClock = new goog.testing.MockClock(true /* opt_autoInstall */);
   xpc.notifyConnected = function() {
     if (connected) {
       fail();
@@ -197,13 +205,17 @@ function checkSignalConnected(singleSidedHandshake, innerFrame) {
   assertFalse(connected);
   if (!singleSidedHandshake || innerFrame) {
     transport.transportServiceHandler(goog.net.xpc.SETUP);
+    mockClock.tick(100);
     assertFalse(connected);
     transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_);
+    mockClock.tick(100);
     assertTrue(connected);
   } else {
     transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_);
+    mockClock.tick(100);
     assertFalse(connected);
     transport.transportServiceHandler(goog.net.xpc.SETUP);
+    mockClock.tick(100);
     assertTrue(connected);
   }
 
