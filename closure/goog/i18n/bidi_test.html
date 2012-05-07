@@ -30,13 +30,17 @@ See the COPYING file for details.
     assert(!goog.i18n.bidi.isRtlLanguage('fil'));
     assert(!goog.i18n.bidi.isRtlLanguage('az'));
     assert(!goog.i18n.bidi.isRtlLanguage('iw-Latn'));
+    assert(!goog.i18n.bidi.isRtlLanguage('iw-LATN'));
+    assert(!goog.i18n.bidi.isRtlLanguage('iw_latn'));
     assert(goog.i18n.bidi.isRtlLanguage('ar'));
+    assert(goog.i18n.bidi.isRtlLanguage('AR'));
     assert(goog.i18n.bidi.isRtlLanguage('iw'));
     assert(goog.i18n.bidi.isRtlLanguage('he'));
     assert(goog.i18n.bidi.isRtlLanguage('fa'));
     assert(goog.i18n.bidi.isRtlLanguage('ar-EG'));
     assert(goog.i18n.bidi.isRtlLanguage('az-Arab'));
-    assert(goog.i18n.bidi.isRtlLanguage('az-Arab-IR'));
+    assert(goog.i18n.bidi.isRtlLanguage('az-ARAB-IR'));
+    assert(goog.i18n.bidi.isRtlLanguage('az_arab_IR'));
   }
 
   function testIsLtrChar() {
