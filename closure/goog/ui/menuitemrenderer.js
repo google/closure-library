@@ -194,7 +194,7 @@ goog.ui.MenuItemRenderer.prototype.hasContentStructure = function(element) {
   var child = goog.dom.getFirstElementChild(element);
   var contentClassName = this.getCompositeCssClass_(
       goog.ui.MenuItemRenderer.CompositeCssClassIndex_.CONTENT);
-  return !!child && child.className.indexOf(contentClassName) != -1;
+  return !!child && goog.dom.classes.has(child, contentClassName);
 };
 
 
@@ -259,8 +259,7 @@ goog.ui.MenuItemRenderer.prototype.hasCheckBoxStructure = function(element) {
     var child = contentElement.firstChild;
     var checkboxClassName = this.getCompositeCssClass_(
         goog.ui.MenuItemRenderer.CompositeCssClassIndex_.CHECKBOX);
-    return !!child && !!child.className &&
-        child.className.indexOf(checkboxClassName) != -1;
+    return !!child && goog.dom.classes.has(child, checkboxClassName);
   }
   return false;
 };

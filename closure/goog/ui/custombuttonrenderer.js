@@ -180,11 +180,12 @@ goog.ui.CustomButtonRenderer.prototype.canDecorate = function(element) {
 goog.ui.CustomButtonRenderer.prototype.hasBoxStructure = function(
     button, element) {
   var outer = button.getDomHelper().getFirstElementChild(element);
-  if (outer && outer.className.indexOf(goog.getCssName(this.getCssClass(),
-          'outer-box')) != -1) {
+  var outerClassName = goog.getCssName(this.getCssClass(), 'outer-box');
+  if (outer && goog.dom.classes.has(outer, outerClassName)) {
+
     var inner = button.getDomHelper().getFirstElementChild(outer);
-    if (inner && inner.className.indexOf(goog.getCssName(this.getCssClass(),
-            'inner-box')) != -1) {
+    var innerClassName = goog.getCssName(this.getCssClass(), 'inner-box');
+    if (inner && goog.dom.classes.has(inner, innerClassName)) {
       // We have a proper box structure.
       return true;
     }

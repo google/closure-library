@@ -30,6 +30,7 @@ goog.provide('goog.ui.ImagelessMenuButtonRenderer');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.classes');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.MenuButton');
@@ -151,24 +152,26 @@ goog.ui.ImagelessMenuButtonRenderer.prototype.createButton = function(content,
 goog.ui.ImagelessMenuButtonRenderer.prototype.hasBoxStructure = function(
     button, element) {
   var outer = button.getDomHelper().getFirstElementChild(element);
-  if (outer &&
-      outer.className.indexOf(
-          goog.getCssName(this.getCssClass(), 'outer-box')) != -1) {
+  var outerClassName = goog.getCssName(this.getCssClass(), 'outer-box');
+  if (outer && goog.dom.classes.has(outer, outerClassName)) {
+
     var inner = button.getDomHelper().getFirstElementChild(outer);
-    if (inner &&
-        inner.className.indexOf(
-            goog.getCssName(this.getCssClass(), 'inner-box')) != -1) {
+    var innerClassName = goog.getCssName(this.getCssClass(), 'inner-box');
+    if (inner && goog.dom.classes.has(inner, innerClassName)) {
+
       var pos = button.getDomHelper().getFirstElementChild(inner);
-      if (pos &&
-          pos.className.indexOf(
-              goog.getCssName(this.getCssClass(), 'pos')) != -1) {
+      var posClassName = goog.getCssName(this.getCssClass(), 'pos');
+      if (pos && goog.dom.classes.has(pos, posClassName)) {
+
         var shadow = button.getDomHelper().getFirstElementChild(pos);
-        if (shadow && shadow.className.indexOf(
-              goog.getCssName(this.getCssClass(), 'top-shadow')) != -1) {
+        var shadowClassName = goog.getCssName(
+            this.getCssClass(), 'top-shadow');
+        if (shadow && goog.dom.classes.has(shadow, shadowClassName)) {
+
           var content = button.getDomHelper().getNextElementSibling(shadow);
-          if (content &&
-              content.className.indexOf(
-                goog.getCssName(this.getCssClass(), 'content')) != -1) {
+          var contentClassName = goog.getCssName(
+              this.getCssClass(), 'content');
+          if (content && goog.dom.classes.has(content, contentClassName)) {
             // We have a proper box structure.
             return true;
           }
