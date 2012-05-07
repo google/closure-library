@@ -1,378 +1,378 @@
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/xmldatasource.js ERROR - Access to private property STR_ATTRIBUTE_START_ of goog.ds not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/xmldatasource.js WARNING - Access to private property STR_ATTRIBUTE_START_ of goog.ds not allowed here.
   if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START_)) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/xmldatasource.js ERROR - Access to private property STR_ATTRIBUTE_START_ of goog.ds not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/xmldatasource.js WARNING - Access to private property STR_ATTRIBUTE_START_ of goog.ds not allowed here.
   if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START_)) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/gears/loggerclient.js ERROR - Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/gears/loggerclient.js WARNING - Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
   goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/ellipse.js ERROR - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/ellipse.js WARNING - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
       null, group.getWrapper());
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/image.js ERROR - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/image.js WARNING - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
       group.getWrapper());
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/rectangle.js ERROR - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/rectangle.js WARNING - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
       null, group.getWrapper());
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/shape.js ERROR - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/graphics/ext/shape.js WARNING - Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
       group.getWrapper());
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
   goog.net.xpc.channels_[this.name] = this;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
     new RegExp('^%*' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
     new RegExp('^%+' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
       serviceName == goog.net.xpc.TRANSPORT_SERVICE_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
   delete goog.net.xpc.channels_[this.name];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
   for (var name in goog.net.xpc.channels_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
     var ch = goog.net.xpc.channels_[name];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property iframeElement_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js WARNING - Access to private property iframeElement_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
     this.iframeElm_ = this.channel_.iframeElement_;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
       this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js WARNING - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
       this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js WARNING - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
       !this.channel_.isConnected() && payload == goog.net.xpc.SETUP_ACK_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property deliver_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js WARNING - Access to private property deliver_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
     this.channel_.deliver_(serviceName, payload);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js ERROR - Access to private property deliver_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js WARNING - Access to private property deliver_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
     this.channel_.deliver_(msg.serviceName, msg.payload);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property cfg_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property cfg_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   this.sendUri_ = this.channel_.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property cfg_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property cfg_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   this.rcvUri_ = this.channel_.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   var frames = this.channel_.peerWindowObject_.frames;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
         this.channel_.peerWindowObject_.frames[this.getMsgFrameName_()],
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
         this.channel_.peerWindowObject_.frames[this.getAckFrameName_()],
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
     var winObj = this.channel_.peerWindowObject_.frames[frameName];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property peerWindowObject_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
   var frames = this.channel_.peerWindowObject_.frames;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to protected property SETUP of goog.net.xpc not allowed here.
       this.msgSender_.send(goog.net.xpc.SETUP);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
         this.channel_.deliver_(m.service, m.payload);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to protected property SETUP of goog.net.xpc not allowed here.
   if (raw == goog.net.xpc.SETUP) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
     this.ackSender_.send(goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
   if (msgStr == goog.net.xpc.SETUP_ACK_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js ERROR - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframepollingtransport.js WARNING - Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
     this.channel_.deliver_(service, payload);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property cfg_ of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to private property cfg_ of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
       this.channel_.cfg_[goog.net.xpc.CfgFields.PEER_RELAY_URI];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property cfg_ of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to private property cfg_ of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
   this.peerIframeId_ = this.channel_.cfg_[goog.net.xpc.CfgFields.IFRAME_ID];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
   this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to protected property SETUP of goog.net.xpc not allowed here.
   this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
   goog.net.xpc.channels_[channelName].deliver_(service,
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to protected property SETUP of goog.net.xpc not allowed here.
   if (payload == goog.net.xpc.SETUP) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
     this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
     this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/iframerelaytransport.js WARNING - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
   else if (payload == goog.net.xpc.SETUP_ACK_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
   var channel = goog.net.xpc.channels_[channelName];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
   for (var staleChannelName in goog.net.xpc.channels_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
     var staleChannel = goog.net.xpc.channels_[staleChannelName];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
         service == goog.net.xpc.TRANSPORT_SERVICE_ &&
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to protected property SETUP of goog.net.xpc not allowed here.
         payload == goog.net.xpc.SETUP) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
       delete goog.net.xpc.channels_[staleChannelName];
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property channels_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
       goog.net.xpc.channels_[channelName] = staleChannel;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to protected property SETUP of goog.net.xpc not allowed here.
     case goog.net.xpc.SETUP:
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
       this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
       this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property SETUP_ACK_ of goog.net.xpc not allowed here.
     case goog.net.xpc.SETUP_ACK_:
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property TRANSPORT_SERVICE_ of goog.net.xpc not allowed here.
   this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to protected property SETUP of goog.net.xpc not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to protected property SETUP of goog.net.xpc not allowed here.
   this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js ERROR - Access to private property peerWindowObject_ of goog.net.xpc.NativeMessagingTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nativemessagingtransport.js WARNING - Access to private property peerWindowObject_ of goog.net.xpc.NativeMessagingTransport.channel_ not allowed here.
   var win = this.channel_.peerWindowObject_;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js ERROR - Access to private property iframeElement_ of goog.net.xpc.NixTransport.channel_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js WARNING - Access to private property iframeElement_ of goog.net.xpc.NixTransport.channel_ not allowed here.
   var innerFrame = this.channel_.iframeElement_;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js ERROR - Overriding private property of goog.json.Serializer.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js WARNING - Overriding private property of goog.json.Serializer.prototype.
 goog.proto.Serializer.prototype.serializeArray_ = function(arr, sb) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js ERROR - Access to private property serialize_ of goog.proto.Serializer not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js WARNING - Access to private property serialize_ of goog.proto.Serializer not allowed here.
       this.serialize_(arr[i], sb);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/editor/testhelper.js ERROR - Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/editor/testhelper.js WARNING - Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
     for (var key in goog.editor.plugins.AbstractBubblePlugin.bubbleMap_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/editor/testhelper.js ERROR - Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/editor/testhelper.js WARNING - Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
       goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[key].dispose();
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/editor/testhelper.js ERROR - Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/editor/testhelper.js WARNING - Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
     goog.editor.plugins.AbstractBubblePlugin.bubbleMap_ = {};
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/tweak/testhelpers.js ERROR - Access to private property registry_ of goog.tweak not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/tweak/testhelpers.js WARNING - Access to private property registry_ of goog.tweak not allowed here.
   goog.tweak.registry_ = registry;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Overriding private property of goog.ui.PopupBase.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Overriding private property of goog.ui.PopupBase.prototype.
   this.element_ = goog.dom.createDom('div', {'tabIndex': 0, 'class': cls});
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property lastHideTime_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property lastHideTime_ of goog.ui.BasicMenu not allowed here.
     this.lastHideTime_ = -1;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
   return this.selectedElement_ ? this.items_[goog.array.indexOf(
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
       this.element_.childNodes, this.selectedElement_)] : null;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
   var selectedItem = this.getItemForElement_(this.selectedElement_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Overriding private property of goog.ui.PopupBase.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Overriding private property of goog.ui.PopupBase.prototype.
 goog.ui.BasicMenu.prototype.onDocumentMouseDown_ = function(e) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property hide_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property hide_ of goog.ui.BasicMenu not allowed here.
     this.hide_();
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
       var item = this.getItemForElement_(this.selectedElement_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
      if (this.selectedElement_ && item.hasSubmenu()) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
        this.activateItem_(this.selectedElement_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
       if (this.selectedElement_) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js ERROR - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
         this.activateItem_(this.selectedElement_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Overriding private property of goog.ui.DeprecatedButton.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Overriding private property of goog.ui.DeprecatedButton.prototype.
 goog.ui.CccButton.prototype.getNextUniqueId_ = function() {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property class_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property class_ of goog.ui.CccButton not allowed here.
   return this.class_ + goog.ui.CccButton.ENABLED_CLASS_ADDITION_;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property class_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property class_ of goog.ui.CccButton not allowed here.
   return this.class_ + goog.ui.CccButton.DISABLED_CLASS_ADDITION_;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property caption_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property caption_ of goog.ui.CccButton not allowed here.
   this.caption_ = caption;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property enabled_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property enabled_ of goog.ui.CccButton not allowed here.
     this.enabled_ = enable;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property tooltip_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property tooltip_ of goog.ui.CccButton not allowed here.
       {title: this.tooltip_, className: this.class_ + ' ' +
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property class_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property class_ of goog.ui.CccButton not allowed here.
       {title: this.tooltip_, className: this.class_ + ' ' +
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property enabled_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property enabled_ of goog.ui.CccButton not allowed here.
           (this.enabled_ ? this.getEnabledClass() : this.getDisabledClass()),
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property caption_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property caption_ of goog.ui.CccButton not allowed here.
                           domHelper.createDom('b', {}, this.caption_))));
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property onClick_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property onClick_ of goog.ui.CccButton not allowed here.
       this.onClick_, true, this);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property element_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property element_ of goog.ui.CccButton not allowed here.
   this.element_ = element;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property rendered_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property rendered_ of goog.ui.CccButton not allowed here.
   this.rendered_ = true;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property element_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property element_ of goog.ui.CccButton not allowed here.
       this.element_ = element;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property class_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property class_ of goog.ui.CccButton not allowed here.
       this.class_ = element.className;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js ERROR - Access to private property rendered_ of goog.ui.CccButton not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property rendered_ of goog.ui.CccButton not allowed here.
       this.rendered_ = true;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/drilldownrow.js ERROR - Access to private property children_ of goog.ui.DrilldownRow not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/drilldownrow.js WARNING - Access to private property children_ of goog.ui.DrilldownRow not allowed here.
   this.children_ = null;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/equation/texeditor.js ERROR - Access to protected property getEquation of goog.ui.equation.TexEditor.prototype.texPane_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/equation/texeditor.js WARNING - Access to protected property getEquation of goog.ui.equation.TexEditor.prototype.texPane_ not allowed here.
   return this.texPane_.getEquation();
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/equation/texeditor.js ERROR - Access to protected property setEquation of goog.ui.equation.TexEditor.prototype.texPane_ not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/equation/texeditor.js WARNING - Access to protected property setEquation of goog.ui.equation.TexEditor.prototype.texPane_ not allowed here.
   this.texPane_.setEquation(equation);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/gauge.js ERROR - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/gauge.js WARNING - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
     path.arc(cx, cy, r, r, fromAngle, toAngle - fromAngle, false);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/gauge.js ERROR - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/gauge.js WARNING - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
     path.arc(cx, cy, rBackgroundInternal, rBackgroundInternal,
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Overriding private property of goog.ui.HsvPalette.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.
   this.class_ = opt_class || goog.getCssName('goog-hsva-palette');
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Overriding private property of goog.ui.HsvPalette.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.
   this.document_ = opt_domHelper ? opt_domHelper.getDocument() :
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property setColor_ of goog.ui.HsvPalette.prototype not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property setColor_ of goog.ui.HsvPalette.prototype not allowed here.
     goog.ui.HsvaPalette.superClass_.setColor_.call(this, color);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property element_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property element_ of goog.ui.HsvaPalette not allowed here.
   dom.appendChild(this.element_, this.aImageEl_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property element_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property element_ of goog.ui.HsvaPalette not allowed here.
   dom.appendChild(this.element_, this.aHandleEl_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property element_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property element_ of goog.ui.HsvaPalette not allowed here.
   dom.appendChild(this.element_, this.swatchBackdropEl_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Overriding private property of goog.ui.HsvPalette.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.prototype.
 goog.ui.HsvaPalette.prototype.updateUi_ = function() {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property updateUi_ of goog.ui.HsvPalette.prototype not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property updateUi_ of goog.ui.HsvPalette.prototype not allowed here.
   goog.ui.HsvaPalette.superClass_.updateUi_.call(this);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property swatchEl_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property swatchEl_ of goog.ui.HsvaPalette not allowed here.
     goog.style.setOpacity(this.swatchEl_, a / 255);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
       goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value))) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
     this.inputEl_.value = this.getColorRgbaHex();
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Overriding private property of goog.ui.HsvPalette.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.prototype.
 goog.ui.HsvaPalette.prototype.handleMouseDown_ = function(e) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property handleMouseDown_ of goog.ui.HsvPalette.prototype not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property handleMouseDown_ of goog.ui.HsvPalette.prototype not allowed here.
   goog.ui.HsvaPalette.superClass_.handleMouseDown_.call(this, e);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property vImageEl_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property vImageEl_ of goog.ui.HsvaPalette not allowed here.
     var b = goog.style.getBounds(this.vImageEl_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property mouseMoveListener_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property mouseMoveListener_ of goog.ui.HsvaPalette not allowed here.
     this.mouseMoveListener_ = goog.events.listen(this.document_,
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property mouseUpListener_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property mouseUpListener_ of goog.ui.HsvaPalette not allowed here.
     this.mouseUpListener_ = goog.events.listen(this.document_,
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property handleMouseUp_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property handleMouseUp_ of goog.ui.HsvaPalette not allowed here.
         goog.events.EventType.MOUSEUP, this.handleMouseUp_, false, this);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Overriding private property of goog.ui.HsvPalette.prototype.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.prototype.
 goog.ui.HsvaPalette.prototype.handleInput_ = function(e) {
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js ERROR - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
   var parsed = goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imagelessroundedcorner.js ERROR - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imagelessroundedcorner.js WARNING - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
   path.arc(this.xCenter_,
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imagelessroundedcorner.js ERROR - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imagelessroundedcorner.js WARNING - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
   path.arc(this.xCenter_,
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js ERROR - Access to private property lastEventTime_ of goog.ui.MockActivityMonitor not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js WARNING - Access to private property lastEventTime_ of goog.ui.MockActivityMonitor not allowed here.
   this.lastEventTime_ = eventTime;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js ERROR - Access to private property lastEventType_ of goog.ui.MockActivityMonitor not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js WARNING - Access to private property lastEventType_ of goog.ui.MockActivityMonitor not allowed here.
   this.lastEventType_ = type;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js ERROR - Access to private property AMP_RE_ of goog.string.html.HtmlParser not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js WARNING - Access to private property AMP_RE_ of goog.string.html.HtmlParser not allowed here.
   return s.replace(goog.string.html.HtmlParser.AMP_RE_, '&amp;').
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js ERROR - Access to private property LT_RE_ of goog.string.html.HtmlParser not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js WARNING - Access to private property LT_RE_ of goog.string.html.HtmlParser not allowed here.
       replace(goog.string.html.HtmlParser.LT_RE_, '&lt;').
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js ERROR - Access to private property GT_RE_ of goog.string.html.HtmlParser not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js WARNING - Access to private property GT_RE_ of goog.string.html.HtmlParser not allowed here.
       replace(goog.string.html.HtmlParser.GT_RE_, '&gt;').
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js ERROR - Access to private property QUOTE_RE_ of goog.string.html.HtmlParser not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js WARNING - Access to private property QUOTE_RE_ of goog.string.html.HtmlParser not allowed here.
       replace(goog.string.html.HtmlParser.QUOTE_RE_, '&#34;').
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js ERROR - Access to private property EQUALS_RE_ of goog.string.html.HtmlParser not allowed here.
+javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js WARNING - Access to private property EQUALS_RE_ of goog.string.html.HtmlParser not allowed here.
       replace(goog.string.html.HtmlParser.EQUALS_RE_, '&#61;');
 
