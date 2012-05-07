@@ -219,11 +219,7 @@ goog.dom.TextRangeIterator.prototype.skipTag = function() {
 };
 
 
-/**
- * Replace this iterator's values with values from another.
- * @param {goog.dom.TextRangeIterator} other The iterator to copy.
- * @protected
- */
+/** @override */
 goog.dom.TextRangeIterator.prototype.copyFrom = function(other) {
   this.startNode_ = other.startNode_;
   this.endNode_ = other.endNode_;

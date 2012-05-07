@@ -498,11 +498,7 @@ goog.dom.MultiRangeIterator.prototype.next = function() {
 };
 
 
-/**
- * Replaces this iterator's values with values from another.
- * @param {goog.dom.MultiRangeIterator} other The iterator to copy.
- * @protected
- */
+/** @override */
 goog.dom.MultiRangeIterator.prototype.copyFrom = function(other) {
   this.iterators_ = goog.array.clone(other.iterators_);
   goog.dom.MultiRangeIterator.superClass_.copyFrom.call(this, other);

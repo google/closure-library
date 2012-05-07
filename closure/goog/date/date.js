@@ -1568,8 +1568,9 @@ goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
 /**
  * Tests whether given datetime is exactly equal to this DateTime.
  *
- * @param {goog.date.DateTime} other The datetime to compare.
+ * @param {goog.date.Date} other The datetime to compare.
  * @return {boolean} Whether the given datetime is exactly equal to this one.
+ * @override
  */
 goog.date.DateTime.prototype.equals = function(other) {
   return this.getTime() == other.getTime();

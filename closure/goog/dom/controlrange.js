@@ -487,11 +487,7 @@ goog.dom.ControlRangeIterator.prototype.next = function() {
 };
 
 
-/**
- * Replace this iterator's values with values from another.
- * @param {goog.dom.ControlRangeIterator} other The iterator to copy.
- * @protected
- */
+/** @override */
 goog.dom.ControlRangeIterator.prototype.copyFrom = function(other) {
   this.elements_ = other.elements_;
   this.startNode_ = other.startNode_;

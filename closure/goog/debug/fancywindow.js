@@ -75,11 +75,11 @@ goog.debug.FancyWindow.LOCAL_STORE_PREFIX = 'fancywindow.sel.';
 
 /**
  * Write to the log and maybe scroll into view
- * @param {string} html HTML to post to the log.
  * @protected
  * @suppress {underscore}
+ * @override
  */
-goog.debug.FancyWindow.prototype.writeBufferToLog_ = function(html) {
+goog.debug.FancyWindow.prototype.writeBufferToLog_ = function() {
   this.lastCall_ = goog.now();
   if (this.hasActiveWindow()) {
     var logel = this.dh_.getElement('log');

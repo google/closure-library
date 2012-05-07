@@ -191,7 +191,8 @@ goog.dom.TagIterator.prototype.setPosition = function(node,
 
 
 /**
- * Replace this iterator's values with values from another.
+ * Replace this iterator's values with values from another. The two iterators
+ * must be of the same type.
  * @param {goog.dom.TagIterator} other The iterator to copy.
  * @protected
  */
