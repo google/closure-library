@@ -33,9 +33,6 @@ goog.require('goog.events.EventType');
 goog.require('goog.fx.dom.FadeInAndShow');
 goog.require('goog.fx.dom.FadeOutAndHide');
 goog.require('goog.iter');
-goog.require('goog.positioning');
-goog.require('goog.positioning.Corner');
-goog.require('goog.positioning.Overflow');
 goog.require('goog.string');
 goog.require('goog.style');
 // TODO(user): Remove this after known usages are replaced.
@@ -68,7 +65,7 @@ goog.require('goog.userAgent');
  */
 goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
     opt_rightAlign, opt_useStandardHighlighting) {
-  goog.base(this);
+  goog.events.EventTarget.call(this);
 
   /**
    * Reference to the parent element that will hold the autocomplete elements
@@ -211,7 +208,15 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
    * @type {boolean}
    * @private
    */
-  this.rightAlign_ = !!opt_rightAlign;
+  this.rightAlign_ = opt_rightAlign != null ? opt_rightAlign : false;
+
+  /**
+   * Alignment lock that forces all alignment to the give type, RIGHT | LEFT.
+   * This is set the first time the renderer is aligned.
+   * @type {?string}
+   * @private
+   */
+  this.keepAligned_ = null;
 
   /**
    * Whether to align with top of target field
@@ -579,18 +584,27 @@ goog.ui.ac.Renderer.prototype.redraw = function() {
  */
 goog.ui.ac.Renderer.prototype.reposition = function() {
   if (this.target_ && this.reposition_) {
+    // TODO(user): Can we use MenuAnchoredPosition instead?
     var anchorElement = this.anchorElement_ || this.target_;
-    var anchorCorner = this.rightAlign_ ?
-        goog.positioning.Corner.BOTTOM_RIGHT :
-        goog.positioning.Corner.BOTTOM_LEFT;
-    if (this.topAlign_) {
-      anchorCorner = goog.positioning.flipCornerVertical(anchorCorner);
+    var topLeft = goog.style.getPageOffset(anchorElement);
+    var locationNodeSize = goog.style.getSize(anchorElement);
+    var viewSize = goog.style.getSize(goog.style.getClientViewportElement(
+        anchorElement));
+    var elSize = goog.style.getSize(this.element_);
+    topLeft.y = this.topAlign_ ? topLeft.y - elSize.height :
+        topLeft.y + locationNodeSize.height;
+    // If past right edge of screen, align with right side of location node
+    // Also set param to keep aligning this widget to same side for
+    // successive renders
+    if ((this.rightAlign_ || topLeft.x + elSize.width > viewSize.width) &&
+        this.keepAligned_ != 'LEFT') {
+      topLeft.x = topLeft.x + locationNodeSize.width - elSize.width;
+      this.keepAligned_ = 'RIGHT';
+    } else {
+      this.keepAligned_ = 'LEFT';
     }
 
-    goog.positioning.positionAtAnchor(
-        anchorElement, anchorCorner,
-        this.element_, goog.positioning.flipCornerVertical(anchorCorner),
-        null, null, goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN);
+    goog.style.setPageOffset(this.element_, topLeft);
 
     if (this.topAlign_) {
       // This flickers, but is better than the alternative of positioning
@@ -630,9 +644,9 @@ goog.ui.ac.Renderer.prototype.disposeInternal = function() {
   }
 
   goog.dispose(this.animation_);
-  this.parent_ = null;
+  delete this.parent_;
 
-  goog.base(this, 'disposeInternal');
+  goog.ui.ac.Renderer.superClass_.disposeInternal.call(this);
 };
 
 
