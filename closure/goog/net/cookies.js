@@ -73,22 +73,7 @@ goog.net.Cookies.TEST_COOKIE_NAME_ = 'COOKIES_TEST_';
  * @return {boolean} True if cookies are enabled.
  */
 goog.net.Cookies.prototype.isEnabled = function() {
-  var isEnabled = this.isNavigatorCookieEnabled_();
-
-  if (isEnabled && goog.userAgent.WEBKIT) {
-    // Chrome has a bug where it will report cookies as enabled even if they
-    // are not, see http://code.google.com/p/chromium/issues/detail?id=1850 .
-    // To work around, we set a unique cookie, then check for it.
-    var cookieName = goog.net.Cookies.TEST_COOKIE_NAME_ + goog.now();
-    goog.net.cookies.set(cookieName, '1');
-    if (!this.get(cookieName)) {
-      return false;
-    }
-    // Remove temp cookie.
-    this.remove(cookieName);
-  }
-
-  return isEnabled;
+  return this.isNavigatorCookieEnabled_();
 };
 
 
