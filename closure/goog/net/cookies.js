@@ -60,20 +60,11 @@ goog.net.Cookies.SPLIT_RE_ = /\s*;\s*/;
 
 
 /**
- * Test cookie name.  Used for a temp cookie when testing if cookies are
- * enabled.
- * @type {string}
- * @private
- */
-goog.net.Cookies.TEST_COOKIE_NAME_ = 'COOKIES_TEST_';
-
-
-/**
  * Returns true if cookies are enabled.
  * @return {boolean} True if cookies are enabled.
  */
 goog.net.Cookies.prototype.isEnabled = function() {
-  return this.isNavigatorCookieEnabled_();
+  return navigator.cookieEnabled;
 };
 
 
@@ -338,16 +329,6 @@ goog.net.Cookies.prototype.getCookie_ = function() {
 goog.net.Cookies.prototype.getParts_ = function() {
   return (this.getCookie_() || '').
       split(goog.net.Cookies.SPLIT_RE_);
-};
-
-
-/**
- * Returns navigator.cookieEnabled.  Overridden in unit tests.
- * @return {boolean} The value of navigator.cookieEnabled.
- * @private
- */
-goog.net.Cookies.prototype.isNavigatorCookieEnabled_ = function() {
-  return navigator.cookieEnabled;
 };
 
 

@@ -52,17 +52,7 @@ function tearDown() {
 }
 
 function testIsEnabled() {
-  // Save static function prior to mocking.
-  var isNavigatorCookieEnabled = cookies.isNavigatorCookieEnabled_;
-  try {
-    cookies.isNavigatorCookieEnabled_ = function() { return true; };
-    assertTrue(cookies.isEnabled());
-    cookies.isNavigatorCookieEnabled_ = function() { return false; };
-    assertFalse(cookies.isEnabled());
-  } finally {
-    // Restore static function.
-    cookies.isNavigatorCookieEnabled_ = isNavigatorCookieEnabled;
-  }
+  assertEquals(navigator.cookieEnabled, cookies.isEnabled());
 }
 
 function testCount() {
