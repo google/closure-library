@@ -296,6 +296,63 @@ function testModifyLazyDeserializedMessage() {
   assertEquals(101, messageCopy.getRepeatedInt32(0));
 }
 
+function testModifyLazyDeserializedMessageByAddingMessage() {
+  var pblite = [
+    , // 0
+    101, // 1
+    '102', // 2
+    103, // 3
+    '104', // 4
+    105, // 5
+    '106', // 6
+    107, // 7
+    '108', // 8
+    109, // 9
+    '110', // 10
+    111.5, // 11
+    112.5, // 12
+    1, // 13
+    'test', // 14
+    'abcd', // 15
+    [,,,,,,,,,,,,,,,,,111], // 16, note the 17 commas so value is index 17
+    , // 17
+    [,112], // 18
+    ,, // 19-20
+    proto2.TestAllTypes.NestedEnum.FOO, // 21
+    ,,,,,,,,, // 22-30
+    [201, 202], // 31
+    ,,,,,,,,,,,, // 32-43
+    ['foo', 'bar'], // 44
+    ,,,, // 45-49
+  ];
+
+  // Deserialize.
+  var serializer = new goog.proto2.PbLiteSerializer();
+  var message =
+      serializer.deserialize(proto2.TestAllTypes.getDescriptor(), pblite);
+
+  // Add a new nested message.
+  var nested1 = new proto2.TestAllTypes.NestedMessage();
+  nested1.setB(1234);
+
+  var nested2 = new proto2.TestAllTypes.NestedMessage();
+  nested2.setB(4567);
+
+  message.addRepeatedNestedMessage(nested1);
+
+  // Check the new nested message.
+  assertEquals(1, message.repeatedNestedMessageArray().length);
+  assertTrue(message.repeatedNestedMessageArray()[0].equals(nested1));
+
+  // Add another nested message.
+  message.addRepeatedNestedMessage(nested2);
+
+  // Check both nested messages.
+  assertEquals(2, message.repeatedNestedMessageArray().length);
+  assertTrue(message.repeatedNestedMessageArray()[0].equals(nested1));
+  assertTrue(message.repeatedNestedMessageArray()[1].equals(nested2));
+}
+
 function assertDeserializationMatches(messageCopy) {
   assertNotNull(messageCopy);
 
