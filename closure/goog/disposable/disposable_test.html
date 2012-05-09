@@ -14,6 +14,7 @@ See the COPYING file for details.
   <script>
     goog.require('goog.Disposable');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.testing.recordFunction');
   </script>
 </head>
 <body>
@@ -241,6 +242,27 @@ See the COPYING file for details.
       // Check that the name of this test function occurs in the stack trace.
       assertNotEquals(-1, disposableStack.indexOf('testCreationStack'));
     }
-    </script>
+
+    function testOnDisposeCallback() {
+      var callback = goog.testing.recordFunction();
+      d1.addOnDisposeCallback(callback);
+      assertEquals('callback called too early', 0, callback.getCallCount());
+      d1.dispose();
+      assertEquals('callback should be called once on dispose',
+          1, callback.getCallCount());
+    }
+
+    function testOnDisposeCallbackOrder() {
+      var invocations = [];
+      var callback = function(str) {
+        invocations.push(str);
+      };
+      d1.addOnDisposeCallback(goog.partial(callback, 'a'));
+      d1.addOnDisposeCallback(goog.partial(callback, 'b'));
+      goog.dispose(d1);
+      assertArrayEquals('callbacks should be called in chronological order',
+          ['a', 'b'], invocations);
+    }
+  </script>
 </body>
 </html>

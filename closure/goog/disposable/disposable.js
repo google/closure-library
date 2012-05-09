@@ -102,6 +102,14 @@ goog.Disposable.prototype.dependentDisposables_;
 
 
 /**
+ * Callbacks to invoke when this object is disposed.
+ * @type {Array.<!Function>}
+ * @private
+ */
+goog.Disposable.prototype.onDisposeCallbacks_;
+
+
+/**
  * If monitoring the goog.Disposable instances is enabled, stores the creation
  * stack trace of the Disposable instance.
  * @type {string}
@@ -166,6 +174,20 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
 
 
 /**
+ * Invokes a callback function when this object is disposed. Callbacks are
+ * invoked in the order in which they were added.
+ * @param {!Function} callback The callback function.
+ * @param {Object=} opt_scope An optional scope to call the callback in.
+ */
+goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
+  if (!this.onDisposeCallbacks_) {
+    this.onDisposeCallbacks_ = [];
+  }
+  this.onDisposeCallbacks_.push(goog.bind(callback, opt_scope));
+};
+
+
+/**
  * Deletes or nulls out any references to COM objects, DOM nodes, or other
  * disposable objects. Classes that extend {@code goog.Disposable} should
  * override this method.
@@ -192,6 +214,11 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
 goog.Disposable.prototype.disposeInternal = function() {
   if (this.dependentDisposables_) {
     goog.disposeAll.apply(null, this.dependentDisposables_);
+  }
+  if (this.onDisposeCallbacks_) {
+    while (this.onDisposeCallbacks_.length) {
+      this.onDisposeCallbacks_.shift()();
+    }
   }
 };
 
