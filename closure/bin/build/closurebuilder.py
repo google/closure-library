@@ -17,8 +17,8 @@
 """Utility for Closure Library dependency calculation.
 
 ClosureBuilder scans source files to build dependency info.  From the
-dependencies, the script can produce a deps.js file, a manifest in dependency
-order, a concatenated script, or compiled output from the Closure Compiler.
+dependencies, the script can produce a manifest in dependency order,
+a concatenated script, or compiled output from the Closure Compiler.
 
 Paths to files can be expressed as individual arguments to the tool (intended
 for use with find and xargs).  As a convenience, --root can be used to specify
