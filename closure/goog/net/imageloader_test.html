@@ -80,7 +80,7 @@ function tearDown() {
 /**
  * Tests loading image and disposing before loading completes.
  */
-function XXtestDisposeInTheMiddleOfLoadingWorks() {
+function testDisposeInTheMiddleOfLoadingWorks() {
   goog.events.listen(loader, TEST_EVENT_TYPES,
       goog.partial(handleDisposalImageLoaderEvent, loader));
   // waitForAsync before starting loader just in case
@@ -197,7 +197,7 @@ function makeLoaderSynchronous(loader) {
  * is finally sent when .start() is called again and all images have now
  * completed loading.
  */
-function XXtestImagesAddedAfterStart() {
+function testImagesAddedAfterStart() {
   // Use synchronous image loading.
   makeLoaderSynchronous(loader);
 
@@ -236,7 +236,7 @@ function XXtestImagesAddedAfterStart() {
  * can be called for them, resulting in just one COMPLETE event once all the
  * images have completed.
  */
-function XXtestImagesAddedAndStartedAfterStart() {
+function testImagesAddedAndStartedAfterStart() {
   // Use synchronous image loading.
   makeLoaderSynchronous(loader);
 
@@ -247,16 +247,9 @@ function XXtestImagesAddedAndStartedAfterStart() {
   // Add more images once the first images finishes loading, and call start()
   // to get them going.
   goog.events.listenOnce(loader, goog.events.EventType.LOAD, function(e) {
-    // Work around a bug in goog.events.listenOnce: If its event handler causes
-    // the event being listened for to be dispatched again, it will infinitely
-    // loop even though you'd expect listenOnce's handler to be called only
-    // once.
-    // TODO(user): Remove the CallCount check  once b/6434926 is fixed.
-    if (loadRecordFn.getCallCount() <= 1) {
-      loader.addImage('extra_image', 'extra_image.gif');
-      loader.addImage('extra_image2', 'extra_image2.gif');
-      loader.start();
-    }
+    loader.addImage('extra_image', 'extra_image.gif');
+    loader.addImage('extra_image2', 'extra_image2.gif');
+    loader.start();
   });
 
   // Keep track of how many times COMPLETE was dispatched.
@@ -276,7 +269,7 @@ function XXtestImagesAddedAndStartedAfterStart() {
  * Verifies that if images are removed after loading has started, COMPLETE
  * is dispatched once the remaining images have finished.
  */
-function XXtestImagesRemovedAfterStart() {
+function testImagesRemovedAfterStart() {
   // Use synchronous image loading.
   makeLoaderSynchronous(loader);
 
