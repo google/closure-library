@@ -32,6 +32,8 @@ goog.require('goog.ui.AutoComplete.Basic');
  *     semi-colons or commas.
  * @param {boolean=} opt_useSimilar use similar matches. e.g. "gost" => "ghost".
  * @return {!goog.ui.ac.AutoComplete} A new autocomplete object.
+ * @suppress {deprecated} This will soon use its own implementation instead of
+ *     relying on goog.ui.AutoComplete.Basic.
  */
 goog.ui.ac.createSimpleAutoComplete =
     function(data, input, opt_multi, opt_useSimilar) {

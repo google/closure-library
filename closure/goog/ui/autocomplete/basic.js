@@ -41,6 +41,7 @@ goog.require('goog.ui.ac.Renderer');
  * @param {boolean=} opt_useSimilar use similar matches. e.g. "gost" => "ghost".
  * @constructor
  * @extends {goog.ui.ac.AutoComplete}
+ * @deprecated Use {@link goog.ui.ac.createSimpleAutoComplete} instead.
  */
 goog.ui.AutoComplete.Basic = function(data, input, opt_multi, opt_useSimilar) {
   var matcher = new goog.ui.ac.ArrayMatcher(data, !opt_useSimilar);
