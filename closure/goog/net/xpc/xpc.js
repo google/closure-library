@@ -168,7 +168,14 @@ goog.net.xpc.CfgFields = {
    * that behavior is needed, this mode should not be used.  Reconnection by
    * inner frames is supported in this mode however.
    */
-  ONE_SIDED_HANDSHAKE: 'osh'
+  ONE_SIDED_HANDSHAKE: 'osh',
+  /**
+   * The frame role (inner or outer). Used to explicitly indicate the role for
+   * each peer whenever the role cannot be reliably determined (e.g. the two
+   * peer windows are not parent/child frames). If unspecified, the role will
+   * be dynamically determined, assuming a parent/child frame setup.
+   */
+  ROLE: 'role'
 };
 
 

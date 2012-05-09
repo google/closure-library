@@ -317,6 +317,13 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
     peerCfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] =
         this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI];
   }
+  var role = this.cfg_[goog.net.xpc.CfgFields.ROLE];
+  if (role) {
+    peerCfg[goog.net.xpc.CfgFields.ROLE] =
+        role == goog.net.xpc.CrossPageChannelRole.INNER ?
+            goog.net.xpc.CrossPageChannelRole.OUTER :
+            goog.net.xpc.CrossPageChannelRole.INNER
+  }
 
   return peerCfg;
 };
@@ -677,9 +684,14 @@ goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_ = function(name) {
  * @return {number} The role of this channel.
  */
 goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
-  return window.parent == this.peerWindowObject_ ?
-      goog.net.xpc.CrossPageChannelRole.INNER :
-      goog.net.xpc.CrossPageChannelRole.OUTER;
+  var role = this.cfg_[goog.net.xpc.CfgFields.ROLE];
+  if (role) {
+    return role;
+  } else {
+    return window.parent == this.peerWindowObject_ ?
+        goog.net.xpc.CrossPageChannelRole.INNER :
+        goog.net.xpc.CrossPageChannelRole.OUTER;
+  }
 };
 
 
