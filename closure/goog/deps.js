@@ -803,10 +803,3 @@ goog.addDependency('vec/vec3.js', ['goog.vec.Vec3'], ['goog.vec']);
 goog.addDependency('vec/vec4.js', ['goog.vec.Vec4'], ['goog.vec']);
 goog.addDependency('webgl/webgl.js', ['goog.webgl'], []);
 goog.addDependency('window/window.js', ['goog.window'], ['goog.string', 'goog.userAgent']);
-
-
-/**
- * @deprecated This file is deprecated. The contents have been
- * migrated to the main deps.js instead (which is auto-included by
- * base.js).  Please do not add new dependency here.
- */

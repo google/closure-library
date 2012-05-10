@@ -16,5 +16,5 @@
 /**
  * @deprecated This file is deprecated. The contents have been
  * migrated to the main deps.js instead (which is auto-included by
- * base.js).  Please do not add new dependency here.
+ * base.js).  Please do not add new dependencies here.
  */
