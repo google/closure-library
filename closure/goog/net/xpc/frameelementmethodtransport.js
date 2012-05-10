@@ -231,6 +231,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.deliverQueued_ =
  * @param {string} service The name off the service the message is to be
  * delivered to.
  * @param {string} payload The message content.
+ * @override
  */
 goog.net.xpc.FrameElementMethodTransport.prototype.send =
     function(service, payload) {

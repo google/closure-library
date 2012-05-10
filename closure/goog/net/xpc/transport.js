@@ -100,6 +100,6 @@ goog.net.xpc.Transport.prototype.connect = goog.abstractMethod;
  * Sends a message.
  * @param {string} service The name off the service the message is to be
  * delivered to.
- * @param {string|Object} payload The message content.
+ * @param {string} payload The message content.
  */
 goog.net.xpc.Transport.prototype.send = goog.abstractMethod;

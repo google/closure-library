@@ -453,6 +453,7 @@ goog.net.xpc.NixTransport.prototype.handleMessage_ =
  * @param {string} service The name of the service the message is to be
  *   delivered to.
  * @param {string} payload The message content.
+ * @override
  */
 goog.net.xpc.NixTransport.prototype.send = function(service, payload) {
   // Verify that the NIX channel we have is valid.

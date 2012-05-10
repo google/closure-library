@@ -601,6 +601,7 @@ goog.net.xpc.IframePollingTransport.prototype.MAX_FRAME_LENGTH_ = 3800;
  *
  * @param {string} service Name of service this the message has to be delivered.
  * @param {string} payload The message content.
+ * @override
  */
 goog.net.xpc.IframePollingTransport.prototype.send =
     function(service, payload) {

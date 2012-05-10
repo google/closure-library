@@ -281,6 +281,7 @@ goog.net.xpc.IframeRelayTransport.prototype.transportServiceHandler =
  *
  * @param {string} service Name of service this the message has to be delivered.
  * @param {string} payload The message content.
+ * @override
  */
 goog.net.xpc.IframeRelayTransport.prototype.send = function(service, payload) {
   // If we're on IE and the post-encoding payload is large, split it
