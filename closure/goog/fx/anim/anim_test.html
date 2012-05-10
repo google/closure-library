@@ -22,6 +22,7 @@ See the COPYING file for details.
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
   goog.require('goog.userAgent');
 </script>
 <style>
@@ -47,31 +48,44 @@ function setUp() {
 
 function tearDown() {
   replacer.reset();
+  goog.fx.anim.tearDown();
 }
 
-function testRegisterAndUnregisterAnimation() {
-  var setTimeoutCount = 0;
-  var setIntervalCount = 0;
-  var timerIdCounter = 1;
+function testDelayWithMocks() {
+  goog.fx.anim.setAnimationWindow(null);
+  registerAndUnregisterAnimationWithMocks(goog.async.Delay);
+}
 
-  replacer.set(goog.Timer.defaultTimerObject, 'setTimeout', function() {
-    setTimeoutCount++;
-    return timerIdCounter++;
+function testAnimationDelayWithMocks() {
+  goog.fx.anim.setAnimationWindow(window);
+  registerAndUnregisterAnimationWithMocks(goog.async.AnimationDelay);
+}
+
+/**
+ * @param {!Function} delayType The constructor for Delay or AnimationDelay.
+ *     The methods will be mocked out.
+ */
+function registerAndUnregisterAnimationWithMocks(delayType) {
+  var timerCount = 0;
+
+  replacer.set(delayType.prototype, 'start', function() {
+    timerCount++;
   });
-  replacer.set(goog.Timer.defaultTimerObject, 'setInterval', function() {
-    setIntervalCount++;
-    return timerIdCounter++;
+  replacer.set(delayType.prototype, 'stop', function() {
+    timerCount--;
   });
-  replacer.set(goog.Timer.defaultTimerObject, 'clearTimeout', function() {
-    setTimeoutCount--;
+  replacer.set(delayType.prototype, 'isActive', function() {
+    return timerCount > 0;
   });
-  replacer.set(goog.fx.anim, 'requestAnimationFrameFn_', function() {
-    setTimeoutCount++;
-    return timerIdCounter++;
-  });
-  replacer.set(goog.fx.anim, 'cancelRequestAnimationFrameFn_', function() {
-    setTimeoutCount--;
-  });
+
+  var forbiddenDelayType = delayType == goog.async.AnimationDelay ?
+      goog.async.Delay : goog.async.AnimationDelay;
+  replacer.set(forbiddenDelayType.prototype,
+      'start', goog.functions.error());
+  replacer.set(forbiddenDelayType.prototype,
+      'stop', goog.functions.error());
+  replacer.set(forbiddenDelayType.prototype,
+      'isActive', goog.functions.error());
 
   var anim = new goog.fx.Animation([0], [1], 1000);
   var anim2 = new goog.fx.Animation([0], [1], 1000);
@@ -81,53 +95,36 @@ function testRegisterAndUnregisterAnimation() {
   assertTrue('Should contain the animation',
              goog.object.containsValue(goog.fx.anim.activeAnimations_,
                                        anim));
-  assertEquals('Should have called setTimeout once', 1, setTimeoutCount);
-  assertEquals('setInterval should not be called', 0, setIntervalCount);
+  assertEquals('Should have called start once', 1, timerCount);
 
   goog.fx.anim.registerAnimation(anim2);
 
-  assertEquals('Should not have called setTimeout again', 1, setTimeoutCount);
-  assertEquals('setInterval should not be called', 0, setIntervalCount);
+  assertEquals('Should not have called start again', 1, timerCount);
 
   // Add anim again.
   goog.fx.anim.registerAnimation(anim);
   assertTrue('Should contain the animation',
              goog.object.containsValue(goog.fx.anim.activeAnimations_,
                                        anim));
-  assertEquals('Should not have called setTimeout again', 1, setTimeoutCount);
-  assertEquals('setInterval should not be called', 0, setIntervalCount);
+  assertEquals('Should not have called start again', 1, timerCount);
 
   goog.fx.anim.unregisterAnimation(anim);
   assertFalse('Should not contain the animation',
               goog.object.containsValue(goog.fx.anim.activeAnimations_,
                                         anim));
-  assertEquals('clearTimeout should not have been called', 1, setTimeoutCount);
-  assertEquals('setInterval should not be called', 0, setIntervalCount);
+  assertEquals('clearTimeout should not have been called', 1, timerCount);
 
   goog.fx.anim.unregisterAnimation(anim2);
-  assertEquals('There should be no remaining timers', 0, setTimeoutCount);
-  assertEquals('setInterval should not be called', 0, setIntervalCount);
+  assertEquals('There should be no remaining timers', 0, timerCount);
 
   // Make sure we don't trigger setTimeout or setInterval.
   clock.tick(1000);
   goog.fx.anim.cycleAnimations_(goog.now());
 
-  assertEquals('There should be no remaining timers', 0, setTimeoutCount);
-  assertEquals('setInterval should not be called', 0, setIntervalCount);
+  assertEquals('There should be no remaining timers', 0, timerCount);
 
   anim.dispose();
   anim2.dispose();
-}
-
-function testRegisterAndUnregisterAnimationWithRequestAnimationFrame() {
-  if (goog.userAgent.GECKO) {
-    // Firefox uses a different mechanism that we test separately.
-    return;
-  }
-
-  goog.fx.anim.setAnimationWindow(window);
-  testRegisterAndUnregisterAnimation();
-  goog.fx.anim.setAnimationWindow(null);
 }
 
 function testRegisterAndUnregisterAnimationWithRequestAnimationFrameGecko() {
@@ -185,8 +182,8 @@ function testRegisterUnregisterAnimation() {
 
   goog.fx.anim.registerAnimation(anim);
 
-  assertNotNull('There should be an active timer',
-      goog.fx.anim.animationTimer_);
+  assertTrue('There should be an active timer',
+      goog.fx.anim.animationDelay_ && goog.fx.anim.animationDelay_.isActive());
   assertEquals('There should be an active animations',
       1, goog.object.getCount(goog.fx.anim.activeAnimations_));
 
@@ -194,9 +191,32 @@ function testRegisterUnregisterAnimation() {
 
   assertTrue('There should be no active animations',
       goog.object.isEmpty(goog.fx.anim.activeAnimations_));
-  assertNull('There should be no active timer', goog.fx.anim.animationTimer_);
+  assertFalse('There should be no active timer',
+      goog.fx.anim.animationDelay_ && goog.fx.anim.animationDelay_.isActive());
 
   anim.dispose();
+}
+
+function testCycleWithMockClock() {
+  goog.fx.anim.setAnimationWindow(null);
+  var anim = new goog.fx.Animation([0], [1], 1000);
+  anim.onAnimationFrame = goog.testing.recordFunction();
+
+  goog.fx.anim.registerAnimation(anim);
+  clock.tick(goog.fx.anim.TIMEOUT);
+
+  assertEquals(1, anim.onAnimationFrame.getCallCount());
+}
+
+function testCycleWithMockClockAndAnimationWindow() {
+  goog.fx.anim.setAnimationWindow(window);
+  var anim = new goog.fx.Animation([0], [1], 1000);
+  anim.onAnimationFrame = goog.testing.recordFunction();
+
+  goog.fx.anim.registerAnimation(anim);
+  clock.tick(goog.fx.anim.TIMEOUT);
+
+  assertEquals(1, anim.onAnimationFrame.getCallCount());
 }
 
 </script>
