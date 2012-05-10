@@ -33,6 +33,7 @@ goog.require('goog.net.XmlHttp');
  * the Gears WorkerPool object but uses an iframe and timers to emulate the
  * async nature of the message passing.
  * @constructor
+ * @extends {GearsWorkerPool}
  * @private
  */
 goog.gears.FakeWorkerPool_ = function() {
@@ -139,7 +140,7 @@ goog.gears.FakeWorkerPool_.prototype.allowCrossOrigin = function() {
 
 /**
  * Sends a message to a worker
- * @param {string} message  The message to send.
+ * @param {*} message  The message to send.
  * @param {number} workerId  The id of the worker to send the message to.
  */
 goog.gears.FakeWorkerPool_.prototype.sendMessage =
@@ -245,8 +246,9 @@ goog.inherits(goog.gears.FakeWorkerPool, goog.gears.WorkerPool);
 
 
 /**
- * @return {Object} A fake Gears WorkerPool object.
+ * @return {goog.gears.FakeWorkerPool_} A fake Gears WorkerPool object.
  * @protected
+ * @override
  */
 goog.gears.FakeWorkerPool.prototype.getGearsWorkerPool = function() {
   return new goog.gears.FakeWorkerPool_;
