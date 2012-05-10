@@ -156,8 +156,8 @@ See the COPYING file for details.
         var newProps = recursivelyListCssProperties(doc.body);
 
         assertEquals(oldProps.length, newProps.length);
-        for (var j=0; j<oldProps.length; j++) {
-          for (var k=0; k<propertiesToTest.length; k++) {
+        for (var j = 0; j < oldProps.length; j++) {
+          for (var k = 0; k < propertiesToTest.length; k++) {
             assertEquals('testing property ' + propertiesToTest[k],
                          oldProps[j][0][propertiesToTest[k]],
                          newProps[j][0][propertiesToTest[k]]);

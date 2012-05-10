@@ -245,7 +245,7 @@ function testSimpleDifferentContainersExpand() {
 function testSimpleDifferentContainersSmallExpand() {
   var div = $('parentNode');
   div.innerHTML = '<ol><li>1</li><li><b>bold</b><i>italic</i>' +
-      '<u>under</u<</li></ol>';
+      '<u>under</u></li></ol>';
   // Select all of "bold" and "italic", but we can't expand to the
   // entire li since we didn't select "under".
   var li = div.firstChild.childNodes[1];
