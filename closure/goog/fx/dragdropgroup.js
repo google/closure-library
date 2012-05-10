@@ -52,6 +52,7 @@ goog.inherits(goog.fx.DragDropGroup, goog.fx.AbstractDragDrop);
  * @param {Object=} opt_data Data associated with the source/target.
  * @throws Error If no element argument is provided or if the type is
  *     invalid
+ * @override
  */
 goog.fx.DragDropGroup.prototype.addItem = function(element, opt_data) {
   var item = new goog.fx.DragDropItem(element, opt_data);

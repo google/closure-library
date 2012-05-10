@@ -239,12 +239,11 @@ goog.fx.AbstractDragDrop.prototype.isInitialized = function() {
 /**
  * Add item to drag object.
  *
- * @param {goog.fx.DragDropItem} item Item to be added.
+ * @param {Element|string} element Dom Node, or string representation of node
+ *     id, to be used as drag source/drop target.
  * @throws Error Thrown if called on instance of abstract class
  */
-goog.fx.AbstractDragDrop.prototype.addItem = function(item) {
-  throw Error('Call to pure virtual method');
-};
+goog.fx.AbstractDragDrop.prototype.addItem = goog.abstractMethod;
 
 
 /**

@@ -287,13 +287,15 @@ goog.fx.Animation.prototype.play = function(opt_restart) {
 
 /**
  * Stops the animation.
- * @param {boolean} gotoEnd If true the animation will move to the end coords.
+ * @param {boolean=} opt_gotoEnd If true the animation will move to the 
+ *     end coords.
+ * @override
  */
-goog.fx.Animation.prototype.stop = function(gotoEnd) {
+goog.fx.Animation.prototype.stop = function(opt_gotoEnd) {
   goog.fx.anim.unregisterAnimation(this);
   this.setStateStopped();
 
-  if (gotoEnd) {
+  if (!!opt_gotoEnd) {
     this.progress = 1;
   }
 
