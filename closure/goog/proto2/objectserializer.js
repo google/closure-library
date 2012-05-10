@@ -114,7 +114,8 @@ goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
  *
  * @param {goog.proto2.Message} message The message in which to
  *     place the information.
- * @param {Object} data The data of the message.
+ * @param {*} data The data of the message.
+ * @override
  */
 goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
   var descriptor = message.getDescriptor();

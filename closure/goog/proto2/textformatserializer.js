@@ -55,8 +55,9 @@ goog.inherits(goog.proto2.TextFormatSerializer, goog.proto2.Serializer);
  * Deserializes a message from text format and places the data in the message.
  * @param {goog.proto2.Message} message The message in which to
  *     place the information.
- * @param {string} data The text format data.
+ * @param {*} data The text format data.
  * @return {?string} The parse error or null on success.
+ * @override
  */
 goog.proto2.TextFormatSerializer.prototype.deserializeTo =
     function(message, data) {
@@ -75,6 +76,7 @@ goog.proto2.TextFormatSerializer.prototype.deserializeTo =
  * Serializes a message to a string.
  * @param {goog.proto2.Message} message The message to be serialized.
  * @return {string} The serialized form of the message.
+ * @override
  */
 goog.proto2.TextFormatSerializer.prototype.serialize = function(message) {
   var printer = new goog.proto2.TextFormatSerializer.Printer_();
