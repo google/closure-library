@@ -138,7 +138,7 @@ goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ =
  * @private
  */
 goog.string.linkify.ACCEPTABLE_URL_CHARS_ =
-    goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + '\\w/~%&=+#-@';
+    goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + '\\w/~%&=+#-@!';
 
 
 /**

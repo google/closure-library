@@ -159,6 +159,16 @@ function testUrlWithoutHttp() {
           '<\/a> without the http:// in front.');
 }
 
+function testUrlHashBang() {
+  assertLinkify(
+      'URL with #!',
+      'Another test URL: ' +
+      'https://www.google.com/testurls/#!/page',
+      'Another test URL: ' +
+      '<a href="https://www.google.com/testurls/#!/page">' +
+      'https://www.google.com/testurls/#!/page<\/a>');
+}
+
 function testTextLooksLikeUrlWithoutHttp() {
   assertLinkify(
       'Text looks like an url but is not',
