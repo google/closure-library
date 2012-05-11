@@ -187,51 +187,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/edi
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/tweak/testhelpers.js WARNING - Access to private property registry_ of goog.tweak not allowed here.
   goog.tweak.registry_ = registry;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Overriding private property of goog.ui.DeprecatedButton.prototype.
-goog.ui.CccButton.prototype.getNextUniqueId_ = function() {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property class_ of goog.ui.CccButton not allowed here.
-  return this.class_ + goog.ui.CccButton.ENABLED_CLASS_ADDITION_;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property class_ of goog.ui.CccButton not allowed here.
-  return this.class_ + goog.ui.CccButton.DISABLED_CLASS_ADDITION_;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property caption_ of goog.ui.CccButton not allowed here.
-  this.caption_ = caption;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property enabled_ of goog.ui.CccButton not allowed here.
-    this.enabled_ = enable;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property tooltip_ of goog.ui.CccButton not allowed here.
-      {title: this.tooltip_, className: this.class_ + ' ' +
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property class_ of goog.ui.CccButton not allowed here.
-      {title: this.tooltip_, className: this.class_ + ' ' +
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property enabled_ of goog.ui.CccButton not allowed here.
-          (this.enabled_ ? this.getEnabledClass() : this.getDisabledClass()),
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property caption_ of goog.ui.CccButton not allowed here.
-                          domHelper.createDom('b', {}, this.caption_))));
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property onClick_ of goog.ui.CccButton not allowed here.
-      this.onClick_, true, this);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property element_ of goog.ui.CccButton not allowed here.
-  this.element_ = element;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property rendered_ of goog.ui.CccButton not allowed here.
-  this.rendered_ = true;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property element_ of goog.ui.CccButton not allowed here.
-      this.element_ = element;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property class_ of goog.ui.CccButton not allowed here.
-      this.class_ = element.className;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Access to private property rendered_ of goog.ui.CccButton not allowed here.
-      this.rendered_ = true;
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/drilldownrow.js WARNING - Access to private property children_ of goog.ui.DrilldownRow not allowed here.
   this.children_ = null;
 
