@@ -81,13 +81,14 @@ goog.editor.plugins.LoremIpsum.prototype.queryCommandValue = function(command) {
  * Handles execCommand.
  * @param {string} command The command to execute.
  *     Should be CLEAR_LOREM or UPDATE_LOREM.
- * @param {boolean} placeCursor Whether to place the cursor in the field
- *     after clearing lorem.
+ * @param {*=} opt_placeCursor Whether to place the cursor in the field
+ *     after clearing lorem. Should be a boolean.
+ * @override
  */
 goog.editor.plugins.LoremIpsum.prototype.execCommand = function(command,
-    placeCursor) {
+    opt_placeCursor) {
   if (command == goog.editor.Command.CLEAR_LOREM) {
-    this.clearLorem_(placeCursor);
+    this.clearLorem_(!!opt_placeCursor);
   } else if (command == goog.editor.Command.UPDATE_LOREM) {
     this.updateLorem_();
   }

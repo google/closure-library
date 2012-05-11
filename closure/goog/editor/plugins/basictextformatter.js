@@ -144,13 +144,13 @@ goog.editor.plugins.BasicTextFormatter.prototype.getDocument_ = function() {
 
 /**
  * Execute a user-initiated command.
- * @param {goog.editor.plugins.BasicTextFormatter.COMMAND} command Command
- *     to execute.
- * @param {...string|number|boolean|null} var_args For color commands, this
+ * @param {string} command Command to execute.
+ * @param {...*} var_args For color commands, this
  *     should be the hex color (with the #). For FORMAT_BLOCK, this should be
  *     the goog.editor.plugins.BasicTextFormatter.BLOCK_COMMAND.
  *     It will be unused for other commands.
  * @return {Object|undefined} The result of the command.
+ * @override
  */
 goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
     command, var_args) {

@@ -770,8 +770,9 @@ goog.editor.plugins.UndoRedo.UndoState_.prototype.setRedoState = function(
  * {@code goog.editor.plugins.UndoRedo.UndoState_}s are the same.  We don't
  * bother checking the cursor position (that's not something we'd want to save
  * anyway).
- * @param {goog.editor.plugins.UndoRedo.UndoState_} rhs The state to compare.
+ * @param {goog.editor.plugins.UndoRedoState} rhs The state to compare.
  * @return {boolean} Whether the contents are the same.
+ * @override
  */
 goog.editor.plugins.UndoRedo.UndoState_.prototype.equals = function(rhs) {
   return this.fieldHashCode == rhs.fieldHashCode &&
