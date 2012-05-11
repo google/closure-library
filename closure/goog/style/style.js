@@ -282,11 +282,7 @@ goog.style.getPosition = function(element) {
 goog.style.getClientViewportElement = function(opt_node) {
   var doc;
   if (opt_node) {
-    if (opt_node.nodeType == goog.dom.NodeType.DOCUMENT) {
-      doc = opt_node;
-    } else {
-      doc = goog.dom.getOwnerDocument(opt_node);
-    }
+    doc = goog.dom.getOwnerDocument(opt_node);
   } else {
     doc = goog.dom.getDocument();
   }
@@ -297,6 +293,22 @@ goog.style.getClientViewportElement = function(opt_node) {
     return doc.body;
   }
   return doc.documentElement;
+};
+
+
+/**
+ * Calculates the viewport coordinates relative to the page/document
+ * containing the node. The viewport may be the browser viewport for
+ * non-iframe document, or the iframe container for iframe'd document.
+ * @param {!Document} doc The document to use as the reference point.
+ * @return {!goog.math.Coordinate} The page offset of the viewport.
+ */
+goog.style.getViewportPageOffset = function(doc) {
+  var body = doc.body;
+  var documentElement = doc.documentElement;
+  var scrollLeft = body.scrollLeft || documentElement.scrollLeft;
+  var scrollTop = body.scrollTop || documentElement.scrollTop;
+  return new goog.math.Coordinate(scrollLeft, scrollTop);
 };
 
 

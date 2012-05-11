@@ -504,6 +504,7 @@ Test-visible
   </a>
 </div>
 
+<div id="test-viewport"></div>
 <script>
 
 var EPSILON = 2;
@@ -531,6 +532,9 @@ function tearDown() {
   var testVisibleDiv2 = goog.dom.getElement('test-visible2');
   testVisibleDiv2.setAttribute('style', '');
   testVisibleDiv2.innerHTML = '';
+  var testViewport = goog.dom.getElement('test-viewport');
+  testViewport.setAttribute('style', '');
+  testViewport.innerHTML = '';
 }
 
 function testSetStyle() {
@@ -2338,6 +2342,25 @@ function testOverflowOffsetParent() {
   var parent = goog.dom.getElement('offset-parent-overflow');
   var child = goog.dom.getElement('offset-child-overflow');
   assertEquals(parent, goog.style.getOffsetParent(child));
+}
+
+function testGetViewportPageOffset() {
+  var testViewport = goog.dom.getElement('test-viewport');
+  testViewport.style.height = '5000px';
+  testViewport.style.width = '5000px';
+  var offset = goog.style.getViewportPageOffset(document);
+  assertEquals(0, offset.x);
+  assertEquals(0, offset.y);
+
+  window.scrollTo(0, 100);
+  offset = goog.style.getViewportPageOffset(document);
+  assertEquals(0, offset.x);
+  assertEquals(100, offset.y);
+
+  window.scrollTo(100, 0);
+  offset = goog.style.getViewportPageOffset(document);
+  assertEquals(100, offset.x);
+  assertEquals(0, offset.y);
 }
 
 function hasVerticalScroll(el) {
