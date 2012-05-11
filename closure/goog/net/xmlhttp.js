@@ -37,6 +37,13 @@ goog.net.XmlHttp = function() {
 
 
 /**
+ * @define {boolean} Whether to assume XMLHttpRequest exists. Setting this to
+ *     true strips the ActiveX probing code.
+ */
+goog.net.XmlHttp.ASSUME_NATIVE_XHR = false;
+
+
+/**
  * Gets the options to use with the XMLHttpRequest objects obtained using
  * the static methods.
  * @return {Object} The options.
@@ -168,10 +175,10 @@ goog.net.DefaultXmlHttpFactory.prototype.internalGetOptions = function() {
 
 /**
  * The ActiveX PROG ID string to use to create xhr's in IE. Lazily initialized.
- * @type {?string}
+ * @type {string|undefined}
  * @private
  */
-goog.net.DefaultXmlHttpFactory.prototype.ieProgId_ = null;
+goog.net.DefaultXmlHttpFactory.prototype.ieProgId_;
 
 
 /**
@@ -180,6 +187,10 @@ goog.net.DefaultXmlHttpFactory.prototype.ieProgId_ = null;
  * @private
  */
 goog.net.DefaultXmlHttpFactory.prototype.getProgId_ = function() {
+  if (goog.net.XmlHttp.ASSUME_NATIVE_XHR) {
+    return '';
+  }
+
   // The following blog post describes what PROG IDs to use to create the
   // XMLHTTP object in Internet Explorer:
   // http://blogs.msdn.com/xmlteam/archive/2006/10/23/using-the-right-version-of-msxml-in-internet-explorer.aspx
