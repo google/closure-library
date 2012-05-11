@@ -187,51 +187,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/testing/edi
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/tweak/testhelpers.js WARNING - Access to private property registry_ of goog.tweak not allowed here.
   goog.tweak.registry_ = registry;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Overriding private property of goog.ui.PopupBase.prototype.
-  this.element_ = goog.dom.createDom('div', {'tabIndex': 0, 'class': cls});
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property lastHideTime_ of goog.ui.BasicMenu not allowed here.
-    this.lastHideTime_ = -1;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
-  return this.selectedElement_ ? this.items_[goog.array.indexOf(
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
-      this.element_.childNodes, this.selectedElement_)] : null;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
-  var selectedItem = this.getItemForElement_(this.selectedElement_);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Overriding private property of goog.ui.PopupBase.prototype.
-goog.ui.BasicMenu.prototype.onDocumentMouseDown_ = function(e) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property hide_ of goog.ui.BasicMenu not allowed here.
-    this.hide_();
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
-  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
-  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property getAncestorMenuItem_ of goog.ui.BasicMenu not allowed here.
-  var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
-      var item = this.getItemForElement_(this.selectedElement_);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
-     if (this.selectedElement_ && item.hasSubmenu()) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
-       this.activateItem_(this.selectedElement_);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
-      if (this.selectedElement_) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/basicmenu.js WARNING - Access to private property selectedElement_ of goog.ui.BasicMenu not allowed here.
-        this.activateItem_(this.selectedElement_);
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/cccbutton.js WARNING - Overriding private property of goog.ui.DeprecatedButton.prototype.
 goog.ui.CccButton.prototype.getNextUniqueId_ = function() {
 
