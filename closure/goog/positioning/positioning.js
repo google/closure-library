@@ -184,6 +184,9 @@ goog.positioning.OverflowStatus.FAILED_VERTICAL =
  *     not specified. Bitmap, {@see goog.positioning.Overflow}.
  * @param {goog.math.Size=} opt_preferredSize The preferred size of the
  *     movableElement.
+ * @param {goog.math.Box=} opt_viewport Box object describing the dimensions of
+ *     the viewport. If not provided, a default one will be calculated by the
+ *     position of the anchorElement and its moveable parent element.
  * @return {goog.positioning.OverflowStatus} Status bitmap,
  *     {@see goog.positioning.OverflowStatus}.
  */
@@ -194,7 +197,9 @@ goog.positioning.positionAtAnchor = function(anchorElement,
                                              opt_offset,
                                              opt_margin,
                                              opt_overflow,
-                                             opt_preferredSize) {
+                                             opt_preferredSize,
+                                             opt_viewport) {
+
   goog.asserts.assert(movableElement);
   var movableParentTopLeft =
       goog.positioning.getOffsetParentPageOffset(movableElement);
@@ -235,12 +240,16 @@ goog.positioning.positionAtAnchor = function(anchorElement,
   // Determine dimension of viewport.
   var viewport;
   if (opt_overflow) {
-    viewport = goog.style.getVisibleRectForElement(movableElement);
-    if (viewport) {
-      viewport.top -= movableParentTopLeft.y;
-      viewport.right -= movableParentTopLeft.x;
-      viewport.bottom -= movableParentTopLeft.y;
-      viewport.left -= movableParentTopLeft.x;
+    if (opt_viewport) {
+      viewport = opt_viewport;
+    } else {
+      viewport = goog.style.getVisibleRectForElement(movableElement);
+      if (viewport) {
+        viewport.top -= movableParentTopLeft.y;
+        viewport.right -= movableParentTopLeft.x;
+        viewport.bottom -= movableParentTopLeft.y;
+        viewport.left -= movableParentTopLeft.x;
+      }
     }
   }
 
@@ -533,3 +542,4 @@ goog.positioning.flipCorner = function(corner) {
       goog.positioning.CornerBit.BOTTOM ^
       goog.positioning.CornerBit.RIGHT);
 };
+

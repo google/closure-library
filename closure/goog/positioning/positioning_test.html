@@ -34,7 +34,7 @@ goog.require('goog.userAgent.product');
   .outerbox {
     border: 1px solid gray;
     padding: 3px;
-    margin: 5px;
+    margin: 5px 5px 5px 100px;
   }
   .box2 {
     position: relative;
@@ -100,7 +100,7 @@ goog.require('goog.userAgent.product');
   </div>
 
   <div class="outerbox">
-    <div class="box1">
+    <div id="box1" class="box1">
       <span id="anchor1">Anchor LTR.</span>
     </div>
 
@@ -512,8 +512,76 @@ function testPositionAtAnchorBodyViewport() {
   assertEquals('Popup should be positioned just below the anchor.',
                anchorRect.top + anchorRect.height,
                popupRect.top);
+
+  // Anchor top right to top left.
+  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+                                    popup, corner.TOP_RIGHT);
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  assertEquals('Right edge of popup should line up with left edge of anchor.',
+               anchorRect.left,
+               popupRect.left + popupRect.width);
+  assertEquals('Popup should have the same y position as the anchor.',
+               anchorRect.top,
+               popupRect.top);
 }
 
+function testPositionAtAnchorSpecificViewport() {
+  var anchor = document.getElementById('anchor1');
+  var popup = document.getElementById('popup3');
+
+  // Anchor top right to top left within outerbox.
+  var status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+                                                 popup, corner.TOP_RIGHT,
+                                                 undefined, undefined,
+                                                 overflow.FAIL_X);
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  assertTrue('Positioning operation should have been successful.',
+             (status & goog.positioning.OverflowStatus.FAILED) == 0);
+  assertTrue('X position should not have been adjusted.',
+             (status & goog.positioning.OverflowStatus.ADJUSTED_X) == 0);
+  assertTrue('Y position should not have been adjusted.',
+             (status & goog.positioning.OverflowStatus.ADJUSTED_Y) == 0);
+  assertEquals('Right edge of popup should line up with left edge of anchor.',
+               anchorRect.left,
+               popupRect.left + popupRect.width);
+  assertEquals('Popup should have the same y position as the anchor.',
+               anchorRect.top,
+               popupRect.top);
+
+  // position again within box1.
+  var box = document.getElementById('box1');
+  var viewport = goog.style.getBounds(box);
+  status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+                                             popup, corner.TOP_RIGHT,
+                                             undefined, undefined,
+                                             overflow.FAIL_X, undefined,
+                                             viewport);
+  assertFalse('Positioning operation should have failed.',
+              (status & goog.positioning.OverflowStatus.FAILED) == 0);
+
+  // Change overflow strategy to adjust.
+  status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+                                             popup, corner.TOP_RIGHT,
+                                             undefined, undefined,
+                                             overflow.ADJUST_X, undefined,
+                                             viewport);
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  assertTrue('Positioning operation should have been successful.',
+             (status & goog.positioning.OverflowStatus.FAILED) == 0);
+  assertFalse('X position should have been adjusted.',
+              (status & goog.positioning.OverflowStatus.ADJUSTED_X) == 0);
+  assertTrue('Y position should not have been adjusted.',
+             (status & goog.positioning.OverflowStatus.ADJUSTED_Y) == 0);
+  assertRoughlyEquals(
+      'Left edge of popup should line up with left edge of viewport.',
+      viewport.left, popupRect.left, EPSILON);
+  assertEquals('Popup should have the same y position as the anchor.',
+               anchorRect.top,
+               popupRect.top);
+}
 
 function testPositionAtAnchorOutsideViewport() {
   var anchor = document.getElementById('anchor4');
