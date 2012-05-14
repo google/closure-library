@@ -3,7 +3,7 @@
 // All Rights Reserved.
 
 /**
- * @license Portions of this code are from MochiKit, received by The Closure
+ * Portions of this code are from MochiKit, received by The Closure
  * Library Authors under the MIT license. All other code is Copyright
  * 2005-2009 The Closure Library Authors. All Rights Reserved.
  */
