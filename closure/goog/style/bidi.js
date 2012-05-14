@@ -151,3 +151,25 @@ goog.style.bidi.setScrollOffset = function(element, offsetStart) {
     element.scrollLeft = offsetStart;
   }
 };
+
+
+/**
+ * Sets the element's left style attribute in LTR or right style attribute in
+ * RTL.  Also clears the left attribute in RTL and the right attribute in LTR.
+ * @param {Element} elem The element to position.
+ * @param {number} left The left position in LTR; will be set as right in RTL.
+ * @param {?number} top The top position.  If null only the left/right is set.
+ * @param {boolean} isRtl Whether we are in RTL mode.
+ */
+goog.style.bidi.setPosition = function(elem, left, top, isRtl) {
+  if (!goog.isNull(top)) {
+    elem.style.top = top + 'px';
+  }
+  if (isRtl) {
+    elem.style.right = left + 'px';
+    elem.style.left = '';
+  } else {
+    elem.style.left = left + 'px';
+    elem.style.right = '';
+  }
+};

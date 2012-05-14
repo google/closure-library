@@ -30,6 +30,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
 </head>
 <body>
   <div id="sandbox"></div>
+  <div id="sandboxRtl" dir="rtl"></div>
   <script>
     var samplePalette;
     var eventWasFired = false;
@@ -42,6 +43,18 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
     function tearDown() {
       samplePalette.dispose();
       stubs.reset();
+    }
+
+   function testRtl() {
+      samplePalette.render(document.getElementById('sandboxRtl'));
+      var color = '#ffffff';
+      samplePalette.inputEl_.value = color;
+      samplePalette.handleInput_(null);
+      var expectedRight = samplePalette.hsImageEl_.offsetWidth -
+          Math.ceil(samplePalette.hsHandleEl_.offsetWidth / 2);
+      assertEquals(expectedRight + 'px',
+          samplePalette.hsHandleEl_.style['right']);
+      assertEquals('', samplePalette.hsHandleEl_.style['left']);
     }
     
     function testOptionalInitialColor() {
