@@ -263,6 +263,7 @@ goog.ui.Prompt.prototype.getCols = function() {
 
 /**
  * Create the initial DOM representation for the prompt.
+ * @override
  */
 goog.ui.Prompt.prototype.createDom = function() {
   goog.ui.Prompt.superClass_.createDom.call(this);

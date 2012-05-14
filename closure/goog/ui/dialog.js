@@ -1117,8 +1117,8 @@ goog.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
  * Adds a button to the button set.  Buttons will be displayed in the order they
  * are added.
  *
- * @param {string} key Key used to identify the button in events.
- * @param {string|Element} caption A string caption or a DOM node that can be
+ * @param {*} key Key used to identify the button in events.
+ * @param {*} caption A string caption or a DOM node that can be
  *     appended to a button element.
  * @param {boolean=} opt_isDefault Whether this button is the default button,
  *     Dialog will dispatch for this button if enter is pressed.
@@ -1126,16 +1126,17 @@ goog.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
  *    cancel.  If escape is pressed this button will fire.
  * @return {!goog.ui.Dialog.ButtonSet} The button set, to make it easy to chain
  *    "set" calls and build new ButtonSets.
+ * @override
  */
 goog.ui.Dialog.ButtonSet.prototype.set = function(key, caption,
     opt_isDefault, opt_isCancel) {
   goog.structs.Map.prototype.set.call(this, key, caption);
 
   if (opt_isDefault) {
-    this.defaultButton_ = key;
+    this.defaultButton_ = /** @type {?string} */ (key);
   }
   if (opt_isCancel) {
-    this.cancelButton_ = key;
+    this.cancelButton_ = /** @type {?string} */ (key);
   }
 
   return this;

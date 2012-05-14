@@ -176,7 +176,7 @@ goog.ui.ModalPopup.prototype.getBackgroundElement = function() {
 
 /**
  * Creates the initial DOM representation for the modal popup.
- * Overrides {@link goog.ui.Component#createDom}.
+ * @override
  */
 goog.ui.ModalPopup.prototype.createDom = function() {
   // Create the modal popup element, and make sure it's hidden.
