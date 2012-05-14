@@ -25,6 +25,37 @@ goog.require('goog.string');
 
 
 /**
+ * Returns the final component of a pathname.
+ * See http://docs.python.org/library/os.path.html#os.path.basename
+ * @param {string} path A pathname.
+ * @return {string} path The final component of a pathname, i.e. everything
+ *     after the final slash.
+ */
+goog.string.path.basename = function(path) {
+  var i = path.lastIndexOf('/') + 1;
+  return path.slice(i);
+};
+
+
+/**
+ * Returns the directory component of a pathname.
+ * See http://docs.python.org/library/os.path.html#os.path.dirname
+ * @param {string} path A pathname.
+ * @return {string} The directory component of a pathname, i.e. everything
+ *     leading up to the final slash.
+ */
+goog.string.path.dirname = function(path) {
+  var i = path.lastIndexOf('/') + 1;
+  var head = path.slice(0, i);
+  // If the path isn't all forward slashes, trim the trailing slashes.
+  if (!/^\/+$/.test(head)) {
+    head = head.replace(/\/+$/, '');
+  }
+  return head;
+};
+
+
+/**
  * Joins one or more path components (e.g. 'foo/' and 'bar' make 'foo/bar').
  * An absolute component will discard all previous component.
  * See http://docs.python.org/library/os.path.html#os.path.join
@@ -96,6 +127,20 @@ goog.string.path.normalizePath = function(path) {
 
   var returnPath = initialSlashes + newParts.join('/');
   return returnPath || '.';
+};
+
+
+/**
+ * Splits a pathname into "dirname" and "basename" components, where "basename"
+ * is everything after the final slash. Either part may return an empty string.
+ * See http://docs.python.org/library/os.path.html#os.path.split
+ * @param {string} path A pathname.
+ * @return {!Array.<string>} An array of [dirname, basename].
+ */
+goog.string.path.split = function(path) {
+  var head = goog.string.path.dirname(path);
+  var tail = goog.string.path.basename(path);
+  return [head, tail];
 };
 
 // TODO(nnaze): Implement other useful functions from os.path

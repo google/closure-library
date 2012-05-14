@@ -20,6 +20,22 @@ See the COPYING file for details.
 // Some test data comes from Python's posixpath tests.
 // See http://svn.python.org/view/python/trunk/Lib/test/test_posixpath.py
 
+function testBasename() {
+  assertEquals('bar', goog.string.path.basename('/foo/bar'));
+  assertEquals('', goog.string.path.basename('/'));
+  assertEquals('foo', goog.string.path.basename('foo'));
+  assertEquals('foo', goog.string.path.basename('////foo'));
+  assertEquals('bar', goog.string.path.basename('//foo//bar'));
+}
+
+function testDirname() {
+  assertEquals('/foo', goog.string.path.dirname('/foo/bar'));
+  assertEquals('/', goog.string.path.dirname('/'));
+  assertEquals('', goog.string.path.dirname('foo'));
+  assertEquals('////', goog.string.path.dirname('////foo'));
+  assertEquals('//foo', goog.string.path.dirname('//foo//bar'));
+}
+
 function testJoin() {
   assertEquals('/bar/baz',
               goog.string.path.join('/foo', 'bar', '/bar', 'baz'));
@@ -53,6 +69,13 @@ function testNormalizePath() {
                goog.string.path.normalizePath('/../../../dog'));
 }
 
+function testSplit() {
+  assertArrayEquals(['/foo', 'bar'], goog.string.path.split('/foo/bar'));
+  assertArrayEquals(['/', ''], goog.string.path.split('/'));
+  assertArrayEquals(['', 'foo'], goog.string.path.split('foo'));
+  assertArrayEquals(['////', 'foo'], goog.string.path.split('////foo'));
+  assertArrayEquals(['//foo', 'bar'], goog.string.path.split('//foo//bar'));
+}
 
 </script>
 </body>
