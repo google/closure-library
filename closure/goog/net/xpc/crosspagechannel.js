@@ -322,7 +322,7 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
     peerCfg[goog.net.xpc.CfgFields.ROLE] =
         role == goog.net.xpc.CrossPageChannelRole.INNER ?
             goog.net.xpc.CrossPageChannelRole.OUTER :
-            goog.net.xpc.CrossPageChannelRole.INNER
+            goog.net.xpc.CrossPageChannelRole.INNER;
   }
 
   return peerCfg;
@@ -480,7 +480,7 @@ goog.net.xpc.CrossPageChannel.prototype.continueConnection_ = function() {
   // being in an iframe and the channel is meant to be to the containing page
   if (!this.peerWindowObject_) {
     // throw an error if we are in the top window (== not in an iframe)
-    if (window == top) {
+    if (window == window.top) {
       throw Error(
           "CrossPageChannel: Can't connect, peer window-object not set.");
     } else {
