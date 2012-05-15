@@ -86,17 +86,6 @@ goog.ui.AdvancedTooltip.prototype.boundingBox_;
 
 
 /**
- * Bounding box including padding. If the cursor moves outside of it the tooltip
- * is closed.
- * Only used if a cursor padding has been specified.
- *
- * @type {goog.math.Box}
- * @private
- */
-goog.ui.AdvancedTooltip.prototype.paddingBox_;
-
-
-/**
  * Anchor bounding box.
  *
  * @type {goog.math.Box}
@@ -209,7 +198,6 @@ goog.ui.AdvancedTooltip.prototype.onHide_ = function() {
                        goog.events.EventType.MOUSEMOVE,
                        this.handleMouseMove, false, this);
 
-  this.paddingBox_ = null;
   this.boundingBox_ = null;
   this.anchorBox_ = null;
   this.tracking_ = false;
@@ -235,8 +223,13 @@ goog.ui.AdvancedTooltip.prototype.isMouseInTooltip = function() {
  */
 goog.ui.AdvancedTooltip.prototype.isCoordinateInTooltip = function(coord) {
   // Check if coord is inside the bounding box of the tooltip
-  if (this.paddingBox_) {
-    return this.paddingBox_.contains(coord);
+  if (this.hotSpotPadding_) {
+    var offset = goog.style.getPageOffset(this.getElement());
+    var size = goog.style.getSize(this.getElement());
+    return offset.x - this.hotSpotPadding_.left <= coord.x &&
+        coord.x <= offset.x + size.width + this.hotSpotPadding_.right &&
+        offset.y - this.hotSpotPadding_.top <= coord.y &&
+        coord.y <= offset.y + size.height + this.hotSpotPadding_.bottom;
   }
 
   return goog.ui.AdvancedTooltip.superClass_.isCoordinateInTooltip.call(this,
@@ -343,10 +336,6 @@ goog.ui.AdvancedTooltip.prototype.handleTooltipMouseOver = function(event) {
   if (this.getActiveElement() != this.getElement()) {
     this.tracking_ = false;
     this.setActiveElement(this.getElement());
-
-    if (!this.paddingBox_ && this.hotSpotPadding_) {
-      this.paddingBox_ = this.boundingBox_.clone().expand(this.hotSpotPadding_);
-    }
   }
 };
 
@@ -363,7 +352,7 @@ goog.ui.AdvancedTooltip.prototype.getHideDelayMs = function() {
 
 /**
  * Forces the recalculation of the hotspot on the next mouse over event.
+ * @deprecated Not ever necessary to call this function. Hot spot is calculated
+ *     as neccessary.
  */
-goog.ui.AdvancedTooltip.prototype.resetHotSpot = function() {
-  this.paddingBox_ = null;
-};
+goog.ui.AdvancedTooltip.prototype.resetHotSpot = goog.nullFunction;

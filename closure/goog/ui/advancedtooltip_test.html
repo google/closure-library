@@ -195,6 +195,28 @@ See the COPYING file for details.
     }
   }
 
+  function testResizingTooltipWhileShown() {
+    fireMouseEvents(elsewhere, anchor);
+    clock.tick(SHOWDELAY);
+    popup.style.height = '100px';
+    var attBounds = goog.style.getBounds(popup);
+    var inPadding = new goog.math.Coordinate(
+        attBounds.left + 5, attBounds.top + attBounds.height + 5);
+    var outOfPadding = new goog.math.Coordinate(
+        attBounds.left + 5, attBounds.top + attBounds.height + 15);
+
+    fireMouseEvents(anchor, popup);
+    goog.testing.events.fireMouseOutEvent(popup, elsewhere);
+    goog.testing.events.fireMouseMoveEvent(document, inPadding);
+    clock.tick(HIDEDELAY);
+    assertVisible("Mouse out of popup but within padding shouldn't hide it",
+                  popup);
+
+    goog.testing.events.fireMouseMoveEvent(document, outOfPadding);
+    clock.tick(HIDEDELAY);
+    assertHidden("Mouse move beyond popup padding should hide it", popup);
+  }
+
   function checkNestedTooltips(useAdvancedTooltip) {
     popup.appendChild(goog.dom.createDom(
         'span', {id: 'nestedAnchor'}, 'Nested Anchor'));
