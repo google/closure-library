@@ -47,6 +47,6 @@ goog.inherits(goog.graphics.PathElement, goog.graphics.StrokeAndFillElement);
 
 /**
  * Update the underlying path.
- * @param {goog.graphics.Path} path The path object to draw.
+ * @param {!goog.graphics.Path} path The path object to draw.
  */
 goog.graphics.PathElement.prototype.setPath = goog.abstractMethod;

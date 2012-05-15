@@ -177,7 +177,7 @@ goog.graphics.VmlGraphics.toSizeCoord = function(number) {
  * This function is internal for the VML supporting classes, and
  * should not be used externally.
  *
- * @param {number} number A size in pixels.
+ * @param {number|string} number A size in pixels.
  * @return {string} The size with suffix 'px'.
  */
 goog.graphics.VmlGraphics.toSizePx = function(number) {
@@ -252,7 +252,7 @@ goog.graphics.VmlGraphics.prototype.updateGraphics_ = function() {
  * Appends an element.
  *
  * @param {goog.graphics.Element} element The element wrapper.
- * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  * @private
  */
@@ -629,10 +629,11 @@ goog.graphics.VmlGraphics.prototype.clear = function() {
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.EllipseElement} The newly created element.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.drawEllipse = function(cx, cy, rx, ry,
     stroke, fill, opt_group) {
@@ -656,10 +657,11 @@ goog.graphics.VmlGraphics.prototype.drawEllipse = function(cx, cy, rx, ry,
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.RectElement} The newly created element.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.drawRect = function(x, y, width, height,
     stroke, fill, opt_group) {
@@ -679,7 +681,7 @@ goog.graphics.VmlGraphics.prototype.drawRect = function(x, y, width, height,
  * @param {number} width Width of image.
  * @param {number} height Height of image.
  * @param {string} src Source of the image.
- * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.ImageElement} The newly created element.
@@ -707,10 +709,11 @@ goog.graphics.VmlGraphics.prototype.drawImage = function(x, y, width, height,
  * @param {goog.graphics.Font} font Font describing the font properties.
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.TextElement} The newly created element.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
     text, x1, y1, x2, y2, align, font, stroke, fill, opt_group) {
@@ -751,13 +754,14 @@ goog.graphics.VmlGraphics.prototype.drawTextOnLine = function(
 /**
  * Draw a path.
  *
- * @param {goog.graphics.Path} path The path object to draw.
+ * @param {!goog.graphics.Path} path The path object to draw.
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.PathElement} The newly created element.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.drawPath = function(path, stroke, fill,
     opt_group) {
@@ -823,10 +827,11 @@ goog.graphics.VmlGraphics.getVmlPath = function(path) {
 /**
  * Create an empty group of drawing elements.
  *
- * @param {goog.graphics.VmlGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.GroupElement} The newly created group.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.createGroup = function(opt_group) {
   var element = this.createFullSizeElement_('group');

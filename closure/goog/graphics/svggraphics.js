@@ -166,7 +166,7 @@ goog.graphics.SvgGraphics.prototype.setElementAttributes = function(element,
  * Appends an element.
  *
  * @param {goog.graphics.Element} element The element wrapper.
- * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  * @private
  */
@@ -467,10 +467,11 @@ goog.graphics.SvgGraphics.prototype.clear = function() {
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.EllipseElement} The newly created element.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.drawEllipse = function(
     cx, cy, rx, ry, stroke, fill, opt_group) {
@@ -493,10 +494,11 @@ goog.graphics.SvgGraphics.prototype.drawEllipse = function(
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.RectElement} The newly created element.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.drawRect = function(x, y, width, height,
     stroke, fill, opt_group) {
@@ -516,7 +518,7 @@ goog.graphics.SvgGraphics.prototype.drawRect = function(x, y, width, height,
  * @param {number} width Width of the image.
  * @param {number} height Height of the image.
  * @param {string} src The source fo the image.
- * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.ImageElement} The newly created image wrapped in a
@@ -552,10 +554,11 @@ goog.graphics.SvgGraphics.prototype.drawImage = function(x, y, width, height,
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.TextElement} The newly created element.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.drawTextOnLine = function(
     text, x1, y1, x2, y2, align, font, stroke, fill, opt_group) {
@@ -613,14 +616,15 @@ goog.graphics.SvgGraphics.prototype.drawTextOnLine = function(
 /**
  * Draw a path.
  *
- * @param {goog.graphics.Path} path The path object to draw.
+ * @param {!goog.graphics.Path} path The path object to draw.
  * @param {goog.graphics.Stroke?} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill?} fill Fill object describing the fill.
- * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.PathElement} The newly created element.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.drawPath = function(
     path, stroke, fill, opt_group) {
@@ -675,10 +679,11 @@ goog.graphics.SvgGraphics.getSvgPath = function(path) {
 /**
  * Create an empty group of drawing elements.
  *
- * @param {goog.graphics.SvgGroupElement=} opt_group The group wrapper element
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
  *     to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.GroupElement} The newly created group.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.createGroup = function(opt_group) {
   var element = this.createSvgElement_('g');

@@ -412,7 +412,7 @@ goog.graphics.CanvasGraphics.prototype.append_ = function(element, group) {
  * Append an element.
  *
  * @param {goog.graphics.Element} element The element to draw.
- * @param {goog.graphics.CanvasGroupElement|undefined} group The group to draw
+ * @param {goog.graphics.GroupElement|undefined} group The group to draw
  *     it in. If null or undefined, defaults to the root group.
  * @protected
  */
@@ -436,10 +436,11 @@ goog.graphics.CanvasGraphics.prototype.append = function(element, group) {
  * @param {goog.graphics.Stroke} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill} fill Fill object describing the fill.
- * @param {goog.graphics.CanvasGroupElement=} opt_group The group wrapper
- *     element to append to. If not specified, appends to the main canvas.
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper
+ *     element to append to.  If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.EllipseElement} The newly created element.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.drawEllipse = function(cx, cy, rx, ry,
     stroke, fill, opt_group) {
@@ -460,10 +461,11 @@ goog.graphics.CanvasGraphics.prototype.drawEllipse = function(cx, cy, rx, ry,
  * @param {goog.graphics.Stroke} stroke Stroke object describing the
  *    stroke.
  * @param {goog.graphics.Fill} fill Fill object describing the fill.
- * @param {goog.graphics.CanvasGroupElement=} opt_group The group wrapper
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper
  *     element to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.RectElement} The newly created element.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.drawRect = function(x, y, width, height,
     stroke, fill, opt_group) {
@@ -482,7 +484,7 @@ goog.graphics.CanvasGraphics.prototype.drawRect = function(x, y, width, height,
  * @param {number} width Width of image.
  * @param {number} height Height of image.
  * @param {string} src Source of the image.
- * @param {goog.graphics.CanvasGroupElement=} opt_group The group wrapper
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper
  *     element to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.ImageElement} The newly created element.
@@ -505,18 +507,20 @@ goog.graphics.CanvasGraphics.prototype.drawImage = function(x, y, width, height,
  * @param {number} x2 X coordinate of end of line.
  * @param {number} y2 Y coordinate of end of line.
  * @param {?string} align Horizontal alignment: left (default), center, right.
- * @param {!goog.graphics.Font} font Font describing the font properties.
+ * @param {goog.graphics.Font} font Font describing the font properties.
  * @param {goog.graphics.Stroke} stroke Stroke object describing the stroke.
  * @param {goog.graphics.Fill} fill Fill object describing the fill.
- * @param {goog.graphics.CanvasGroupElement=} opt_group The group wrapper
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper
  *     element to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.TextElement} The newly created element.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.drawTextOnLine = function(
     text, x1, y1, x2, y2, align, font, stroke, fill, opt_group) {
   var element = new goog.graphics.CanvasTextElement(this,
-      text, x1, y1, x2, y2, align, font, stroke, fill);
+      text, x1, y1, x2, y2, align, /** @type {!goog.graphics.Font} */ (font),
+      stroke, fill);
   this.append(element, opt_group);
   return element;
 };
@@ -527,22 +531,23 @@ goog.graphics.CanvasGraphics.prototype.drawTextOnLine = function(
  * @param {!goog.graphics.Path} path The path object to draw.
  * @param {goog.graphics.Stroke} stroke Stroke object describing the stroke.
  * @param {goog.graphics.Fill} fill Fill object describing the fill.
- * @param {goog.graphics.CanvasGroupElement=} opt_group The group wrapper
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper
  *     element to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.PathElement} The newly created element.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.drawPath = function(path, stroke, fill,
     opt_group) {
-  var element = new goog.graphics.CanvasPathElement(null, this, path, stroke,
-      fill);
+  var element = new goog.graphics.CanvasPathElement(null, this,
+      path, stroke, fill);
   this.append(element, opt_group);
   return element;
 };
 
 
 /**
- * @param {goog.graphics.CanvasGroupElement} group The group to possibly
+ * @param {goog.graphics.GroupElement} group The group to possibly
  *     draw to.
  * @return {boolean} Whether drawing can occur now.
  */
@@ -554,7 +559,7 @@ goog.graphics.CanvasGraphics.prototype.isDrawable = function(group) {
 
 /**
  * Returns true if drawing to the given group means a redraw is required.
- * @param {goog.graphics.CanvasGroupElement} group The group to draw to.
+ * @param {goog.graphics.GroupElement} group The group to draw to.
  * @return {boolean} Whether drawing to this group should force a redraw.
  */
 goog.graphics.CanvasGraphics.prototype.isRedrawRequired = function(group) {
@@ -566,10 +571,11 @@ goog.graphics.CanvasGraphics.prototype.isRedrawRequired = function(group) {
 /**
  * Create an empty group of drawing elements.
  *
- * @param {goog.graphics.CanvasGroupElement=} opt_group The group wrapper
+ * @param {goog.graphics.GroupElement=} opt_group The group wrapper
  *     element to append to. If not specified, appends to the main canvas.
  *
  * @return {goog.graphics.CanvasGroupElement} The newly created group.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.createGroup = function(opt_group) {
   var group = new goog.graphics.CanvasGroupElement(this);

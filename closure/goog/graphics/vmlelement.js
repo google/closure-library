@@ -96,8 +96,9 @@ goog.graphics.VmlGroupElement.prototype.isRootElement_ = function() {
 
 /**
  * Set the size of the group element.
- * @param {number} width The width of the group element.
- * @param {number} height The height of the group element.
+ * @param {number|string} width The width of the group element.
+ * @param {number|string} height The height of the group element.
+ * @override
  */
 goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
   var element = this.getElement();
@@ -281,7 +282,8 @@ goog.graphics.VmlPathElement.prototype.getElement =
 
 /**
  * Update the underlying path.
- * @param {goog.graphics.Path} path The path object to draw.
+ * @param {!goog.graphics.Path} path The path object to draw.
+ * @override
  */
 goog.graphics.VmlPathElement.prototype.setPath = function(path) {
   goog.graphics.VmlGraphics.setAttribute(

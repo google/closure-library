@@ -178,7 +178,8 @@ goog.inherits(goog.graphics.SvgPathElement, goog.graphics.PathElement);
 
 /**
  * Update the underlying path.
- * @param {goog.graphics.Path} path The path object to draw.
+ * @param {!goog.graphics.Path} path The path object to draw.
+ * @override
  */
 goog.graphics.SvgPathElement.prototype.setPath = function(path) {
   this.getGraphics().setElementAttributes(this.getElement(),

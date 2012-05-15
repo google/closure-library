@@ -375,6 +375,7 @@ goog.graphics.CanvasPathElement.prototype.path_;
 /**
  * Update the underlying path.
  * @param {!goog.graphics.Path} path The path object to draw.
+ * @override
  */
 goog.graphics.CanvasPathElement.prototype.setPath = function(path) {
   this.path_ = path.isSimple() ? path :
