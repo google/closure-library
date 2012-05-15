@@ -23,8 +23,6 @@ See the COPYING file for details.
 </head>
 <body>
 <script>
-var TEST_NOTICE_TYPE = new goog.labs.observe.NoticeType('testtype');
-var TEST_NOTICE_TYPE_2 = new goog.labs.observe.NoticeType('testtype2');
 var observable1;
 var observable2;
 var observableSet;
@@ -47,14 +45,13 @@ function testAddingObservers() {
   var observerFn1 = goog.testing.recordFunction();
   var observerFn2 = goog.testing.recordFunction();
   assertTrue(observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn1)));
+      goog.labs.observe.Observer.fromFunction(observerFn1)));
   assertFalse(observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn1)));
-  assertTrue(observableSet.addObserver(
-      TEST_NOTICE_TYPE_2,
       goog.labs.observe.Observer.fromFunction(observerFn1)));
   assertTrue(observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn2)));
+      goog.labs.observe.Observer.fromFunction(observerFn2)));
+  assertFalse(observableSet.addObserver(
+      goog.labs.observe.Observer.fromFunction(observerFn2)));
 }
 
 
@@ -68,17 +65,17 @@ function testAddingObservables() {
 function testRemovingObservers() {
   var observerFn = goog.testing.recordFunction();
   observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn));
   observableSet.addObservable(observable1);
   observableSet.addObservable(observable2);
 
   assertTrue(observableSet.removeObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn)));
+      goog.labs.observe.Observer.fromFunction(observerFn)));
   assertFalse(observableSet.removeObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn)));
+      goog.labs.observe.Observer.fromFunction(observerFn)));
 
-  observable1.notify(TEST_NOTICE_TYPE);
-  observable2.notify(TEST_NOTICE_TYPE);
+  observable1.notify();
+  observable2.notify();
   assertEquals(0, observerFn.getCallCount());
 }
 
@@ -87,15 +84,15 @@ function testRemovingObservables() {
   var observerFn = goog.testing.recordFunction();
   observableSet.addObservable(observable1);
   observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn));
   observableSet.addObserver(
-      TEST_NOTICE_TYPE_2, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn));
 
   assertTrue(observableSet.removeObservable(observable1));
   assertFalse(observableSet.removeObservable(observable1));
 
-  observable1.notify(TEST_NOTICE_TYPE);
-  observable1.notify(TEST_NOTICE_TYPE_2);
+  observable1.notify();
+  observable1.notify();
   assertEquals(0, observerFn.getCallCount());
 }
 
@@ -103,20 +100,15 @@ function testRemovingObservables() {
 function testAddingObserverBeforeAddingObservable() {
   var observerFn = goog.testing.recordFunction();
   observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn));
 
   observableSet.addObservable(observable1);
   observableSet.addObservable(observable2);
 
-  observable1.notify(TEST_NOTICE_TYPE);
+  observable1.notify();
   assertEquals(1, observerFn.getCallCount());
-  observable2.notify(TEST_NOTICE_TYPE);
+  observable2.notify();
   assertEquals(2, observerFn.getCallCount());
-  observerFn.reset();
-
-  observable1.notify(TEST_NOTICE_TYPE_2);
-  observable2.notify(TEST_NOTICE_TYPE_2);
-  assertEquals(0, observerFn.getCallCount());
 }
 
 
@@ -127,89 +119,86 @@ function testAddingObserverAfterAddingObservable() {
   observableSet.addObservable(observable1);
 
   observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn1));
+      goog.labs.observe.Observer.fromFunction(observerFn1));
   observableSet.addObserver(
-      TEST_NOTICE_TYPE_2, goog.labs.observe.Observer.fromFunction(observerFn1));
-  observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn2));
+      goog.labs.observe.Observer.fromFunction(observerFn2));
 
-  observable1.notify(TEST_NOTICE_TYPE);
+  observable1.notify();
   assertEquals(1, observerFn1.getCallCount());
   assertEquals(1, observerFn2.getCallCount());
-  observerFn1.reset();
-  observerFn2.reset();
-
-  observable1.notify(TEST_NOTICE_TYPE_2);
-  assertEquals(1, observerFn1.getCallCount());
 }
 
 
 function testRemoveAllObservers() {
-  var observerFn = goog.testing.recordFunction();
+  var observerFn1 = goog.testing.recordFunction();
+  var observerFn2 = goog.testing.recordFunction();
 
   observableSet.addObservable(observable1);
   observableSet.addObservable(observable2);
   observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn1));
   observableSet.addObserver(
-      TEST_NOTICE_TYPE_2, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn2));
 
   observableSet.removeAllObservers();
 
-  observable1.notify(TEST_NOTICE_TYPE);
-  observable1.notify(TEST_NOTICE_TYPE_2);
-  assertEquals(0, observerFn.getCallCount());
+  observable1.notify();
+  observable2.notify();
+  assertEquals(0, observerFn1.getCallCount());
 
   // Ensures that the observables are still around.
   observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
-  observable1.notify(TEST_NOTICE_TYPE);
-  observable2.notify(TEST_NOTICE_TYPE);
-  assertEquals(2, observerFn.getCallCount());
+      goog.labs.observe.Observer.fromFunction(observerFn1));
+  observable1.notify();
+  observable2.notify();
+  assertEquals(2, observerFn1.getCallCount());
 }
 
 
 function testRemoveAllObservables() {
-  var observerFn = goog.testing.recordFunction();
+  var observerFn1 = goog.testing.recordFunction();
+  var observerFn2 = goog.testing.recordFunction();
 
   observableSet.addObservable(observable1);
   observableSet.addObservable(observable2);
   observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn1));
   observableSet.addObserver(
-      TEST_NOTICE_TYPE_2, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn2));
 
   observableSet.removeAllObservables();
 
-  observable1.notify(TEST_NOTICE_TYPE);
-  observable1.notify(TEST_NOTICE_TYPE_2);
-  assertEquals(0, observerFn.getCallCount());
+  observable1.notify();
+  observable2.notify();
+  assertEquals(0, observerFn1.getCallCount());
+  assertEquals(0, observerFn2.getCallCount());
 
   // Ensures that the observers are still around.
   observableSet.addObservable(observable1);
-  observable1.notify(TEST_NOTICE_TYPE);
-  observable1.notify(TEST_NOTICE_TYPE_2);
-  assertEquals(2, observerFn.getCallCount());
+  observable1.notify();
+  assertEquals(1, observerFn1.getCallCount());
+  assertEquals(1, observerFn2.getCallCount());
 }
 
 
 function testRemoveAll() {
-  var observerFn = goog.testing.recordFunction();
+  var observerFn1 = goog.testing.recordFunction();
+  var observerFn2 = goog.testing.recordFunction();
 
   observableSet.addObservable(observable1);
   observableSet.addObservable(observable2);
   observableSet.addObserver(
-      TEST_NOTICE_TYPE, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn1));
   observableSet.addObserver(
-      TEST_NOTICE_TYPE_2, goog.labs.observe.Observer.fromFunction(observerFn));
+      goog.labs.observe.Observer.fromFunction(observerFn2));
 
   observableSet.removeAll();
 
-  observable1.notify(TEST_NOTICE_TYPE);
-  observable1.notify(TEST_NOTICE_TYPE_2);
-  assertEquals(0, observerFn.getCallCount());
+  observable1.notify();
+  observable2.notify();
+  assertEquals(0, observerFn1.getCallCount());
 
-  assertEquals(0, observableSet.observations_.length);
+  assertEquals(0, observableSet.observers_.length);
   assertEquals(0, observableSet.observables_.length);
 }
 

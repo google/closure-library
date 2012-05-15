@@ -28,22 +28,23 @@ goog.require('goog.labs.observe.Observer');
 /**
  * Creates a set of observables.
  *
- * ObservableSet tracks observers (and their types) that it registers
- * on every observables in the set. The class is meant to simplify
- * management of observations on a set of observables.
+ * An ObservableSet is a collection of observables. Observers may be
+ * reigstered and will receive notifications when any of the
+ * observables notify. This class is meant to simplify management of
+ * observations on multiple observables of the same nature.
  *
  * @constructor
  */
 goog.labs.observe.ObservableSet = function() {
   /**
-   * An array of observations where each observation is an array of
-   * [type, observer].
-   * @type {!Array}
+   * The observers registered with this set.
+   * @type {!Array.<!goog.labs.observe.Observer>}
    * @private
    */
-  this.observations_ = [];
+  this.observers_ = [];
 
   /**
+   * The observables in this set.
    * @type {!Array.<!goog.labs.observe.Observable>}
    * @private
    */
@@ -52,28 +53,26 @@ goog.labs.observe.ObservableSet = function() {
 
 
 /**
- * Adds an observer and type that observes all observables in the
- * set. If new observables are added to or removed from the set, the
- * observer will be registered or unregistered accordingly.
+ * Adds an observer that observes all observables in the set. If new
+ * observables are added to or removed from the set, the observer will
+ * be registered or unregistered accordingly.
  *
  * The observer will not be added if there is already an equivalent
- * observer with the same type.
+ * observer.
  *
- * @param {!goog.labs.observe.NoticeType} type The notice type to observe.
  * @param {!goog.labs.observe.Observer} observer The observer to invoke.
  * @return {boolean} Whether the observer is actually added.
  */
-goog.labs.observe.ObservableSet.prototype.addObserver = function(
-    type, observer) {
-  // Check whether the (type, observer) tuple already exists.
-  if (goog.array.find(this.observations_, goog.partial(
-      goog.labs.observe.ObservableSet.compareObservations_, type, observer))) {
+goog.labs.observe.ObservableSet.prototype.addObserver = function(observer) {
+  // Check whether the observer already exists.
+  if (goog.array.find(this.observers_, goog.partial(
+          goog.labs.observe.Observer.equals, observer))) {
     return false;
   }
 
-  this.observations_.push([type, observer]);
+  this.observers_.push(observer);
   goog.array.forEach(this.observables_, function(o) {
-    o.observe(type, observer);
+    o.observe(observer);
   });
   return true;
 };
@@ -83,19 +82,17 @@ goog.labs.observe.ObservableSet.prototype.addObserver = function(
  * Removes an observer from the set. The observer will be removed from
  * all observables in the set. Does nothing if the observer is not in
  * the set.
- * @param {!goog.labs.observe.NoticeType} type The notice type to remove.
  * @param {!goog.labs.observe.Observer} observer The observer to remove.
  * @return {boolean} Whether the observer is actually removed.
  */
-goog.labs.observe.ObservableSet.prototype.removeObserver = function(
-    type, observer) {
-  // Check that the (type, observer) tuple exists before removing.
-  var removed = goog.array.removeIf(this.observations_, goog.partial(
-      goog.labs.observe.ObservableSet.compareObservations_, type, observer));
+goog.labs.observe.ObservableSet.prototype.removeObserver = function(observer) {
+  // Check that the observer exists before removing.
+  var removed = goog.array.removeIf(this.observers_, goog.partial(
+      goog.labs.observe.Observer.equals, observer));
 
   if (removed) {
     goog.array.forEach(this.observables_, function(o) {
-      o.unobserve(type, observer);
+      o.unobserve(observer);
     });
   }
   return removed;
@@ -107,7 +104,7 @@ goog.labs.observe.ObservableSet.prototype.removeObserver = function(
  */
 goog.labs.observe.ObservableSet.prototype.removeAllObservers = function() {
   this.unregisterAll_();
-  this.observations_ = [];
+  this.observers_.length = 0;
 };
 
 
@@ -127,8 +124,8 @@ goog.labs.observe.ObservableSet.prototype.addObservable = function(observable) {
   }
 
   this.observables_.push(observable);
-  goog.array.forEach(this.observations_, function(observation) {
-    observable.observe(observation[0], observation[1]);
+  goog.array.forEach(this.observers_, function(observer) {
+    observable.observe(observer);
   });
   return true;
 };
@@ -144,8 +141,8 @@ goog.labs.observe.ObservableSet.prototype.removeObservable = function(
     observable) {
   var removed = goog.array.remove(this.observables_, observable);
   if (removed) {
-    goog.array.forEach(this.observations_, function(observation) {
-      observable.unobserve(observation[0], observation[1]);
+    goog.array.forEach(this.observers_, function(observer) {
+      observable.unobserve(observer);
     });
   }
   return removed;
@@ -157,7 +154,7 @@ goog.labs.observe.ObservableSet.prototype.removeObservable = function(
  */
 goog.labs.observe.ObservableSet.prototype.removeAllObservables = function() {
   this.unregisterAll_();
-  this.observables_ = [];
+  this.observables_.length = 0;
 };
 
 
@@ -166,7 +163,7 @@ goog.labs.observe.ObservableSet.prototype.removeAllObservables = function() {
  */
 goog.labs.observe.ObservableSet.prototype.removeAll = function() {
   this.removeAllObservers();
-  this.observables_ = [];
+  this.observables_.length = 0;
 };
 
 
@@ -175,27 +172,9 @@ goog.labs.observe.ObservableSet.prototype.removeAll = function() {
  * @private
  */
 goog.labs.observe.ObservableSet.prototype.unregisterAll_ = function() {
-  goog.array.forEach(this.observations_, function(observation) {
-    var type = observation[0];
-    var observer = observation[1];
+  goog.array.forEach(this.observers_, function(observer) {
     goog.array.forEach(this.observables_, function(o) {
-      o.unobserve(type, observer);
+      o.unobserve(observer);
     });
   }, this);
-};
-
-
-/**
- * Compares the given observer and its type with an array of [type, observer].
- * @param {!goog.labs.observe.NoticeType} type The notice type to compare.
- * @param {!goog.labs.observe.Observer} observer The observer to compare.
- * @param {!Array} observation The array of [type, observer] to compare.
- * @return {boolean} Whether the given type and observer matches the
- *     type and observer in the given observationTuple.
- * @private
- */
-goog.labs.observe.ObservableSet.compareObservations_ = function(
-    type, observer, observation) {
-  return observation[0] == type && goog.labs.observe.Observer.equals(
-      observation[1], observer);
 };

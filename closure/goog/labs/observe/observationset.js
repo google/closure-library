@@ -28,8 +28,8 @@ goog.require('goog.labs.observe.Observer');
 
 
 /**
- * A set of observations. An observation is defined by an observable,
- * a type, and an observer. The set keeps track of observations and
+ * A set of observations. An observation is defined by an observable
+ * and an observer. The set keeps track of observations and
  * allows their removal.
  * @param {!Object=} opt_defaultScope Optional function scope to use
  *     when using {@code observeWithFunction} and
@@ -52,40 +52,38 @@ goog.labs.observe.ObservationSet = function(opt_defaultScope) {
 
 
 /**
- * Observes the given type and observer on the observable.
+ * Observes the given observer on the observable.
  * @param {!goog.labs.observe.Observable} observable The observable to
  *     observe on.
- * @param {!goog.labs.observe.NoticeType} type The notice type.
  * @param {!goog.labs.observe.Observer} observer The observer.
  * @return {boolean} True if the observer is successfully registered.
  */
 goog.labs.observe.ObservationSet.prototype.observe = function(
-    observable, type, observer) {
-  var success = observable.observe(type, observer);
+    observable, observer) {
+  var success = observable.observe(observer);
   if (success) {
     this.storedObservations_.push(
         new goog.labs.observe.ObservationSet.Observation_(
-            observable, type, observer));
+            observable, observer));
   }
   return success;
 };
 
 
 /**
- * Observes the given type and function on the observable.
+ * Observes the given function on the observable.
  * @param {!goog.labs.observe.Observable} observable The observable to
  *     observe on.
- * @param {!goog.labs.observe.NoticeType} type The notice type.
  * @param {function(!goog.labs.observe.Notice)} fn The handler function.
  * @param {!Object=} opt_scope Optional scope.
  * @return {goog.labs.observe.Observer} The registered observer object.
  *     If the observer is not successfully registered, this will be null.
  */
 goog.labs.observe.ObservationSet.prototype.observeWithFunction = function(
-    observable, type, fn, opt_scope) {
+    observable, fn, opt_scope) {
   var observer = goog.labs.observe.Observer.fromFunction(
       fn, opt_scope || this.defaultScope_);
-  if (this.observe(observable, type, observer)) {
+  if (this.observe(observable, observer)) {
     return observer;
   }
   return null;
@@ -93,42 +91,40 @@ goog.labs.observe.ObservationSet.prototype.observeWithFunction = function(
 
 
 /**
- * Unobserves the given type and observer from the observable.
+ * Unobserves the given observer from the observable.
  * @param {!goog.labs.observe.Observable} observable The observable to
  *     unobserve from.
- * @param {!goog.labs.observe.NoticeType} type The notice type.
  * @param {!goog.labs.observe.Observer} observer The observer.
  * @return {boolean} True if the observer is successfully removed.
  */
 goog.labs.observe.ObservationSet.prototype.unobserve = function(
-    observable, type, observer) {
+    observable, observer) {
   var removed = goog.array.removeIf(
       this.storedObservations_, function(o) {
-        return o.observable == observable && o.type == type &&
+        return o.observable == observable &&
             goog.labs.observe.Observer.equals(o.observer, observer);
       });
 
   if (removed) {
-    observable.unobserve(type, observer);
+    observable.unobserve(observer);
   }
   return removed;
 };
 
 
 /**
- * Unobserves the given type and function from the observable.
+ * Unobserves the given function from the observable.
  * @param {!goog.labs.observe.Observable} observable The observable to
  *     unobserve from.
- * @param {!goog.labs.observe.NoticeType} type The notice type.
  * @param {function(!goog.labs.observe.Notice)} fn The handler function.
  * @param {!Object=} opt_scope Optional scope.
  * @return {boolean} True if the observer is successfully removed.
  */
 goog.labs.observe.ObservationSet.prototype.unobserveWithFunction = function(
-    observable, type, fn, opt_scope) {
+    observable, fn, opt_scope) {
   var observer = goog.labs.observe.Observer.fromFunction(
       fn, opt_scope || this.defaultScope_);
-  return this.unobserve(observable, type, observer);
+  return this.unobserve(observable, observer);
 };
 
 
@@ -138,9 +134,8 @@ goog.labs.observe.ObservationSet.prototype.unobserveWithFunction = function(
 goog.labs.observe.ObservationSet.prototype.removeAll = function() {
   goog.array.forEach(this.storedObservations_, function(observation) {
     var observable = observation.observable;
-    var type = observation.type;
     var observer = observation.observer;
-    observable.unobserve(type, observer);
+    observable.unobserve(observer);
   });
 };
 
@@ -148,16 +143,14 @@ goog.labs.observe.ObservationSet.prototype.removeAll = function() {
 
 /**
  * A representation of an observation, which is defined uniquely by
- * the observable, type, and observer.
+ * the observable and observer.
  * @param {!goog.labs.observe.Observable} observable The observable.
- * @param {!goog.labs.observe.NoticeType} type The notice type.
  * @param {!goog.labs.observe.Observer} observer The observer.
  * @constructor
  * @private
  */
 goog.labs.observe.ObservationSet.Observation_ = function(
-    observable, type, observer) {
+    observable, observer) {
   this.observable = observable;
-  this.type = type;
   this.observer = observer;
 };

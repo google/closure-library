@@ -24,7 +24,6 @@ goog.require('goog.Disposable');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.labs.observe.Notice');
-goog.require('goog.labs.observe.NoticeType');
 goog.require('goog.labs.observe.Observable');
 goog.require('goog.labs.observe.Observer');
 goog.require('goog.object');
@@ -49,16 +48,16 @@ goog.require('goog.object');
  *   };
  *   goog.inherits(ClassA, goog.Disposable);
  *
- *   ClassA.prototype.observe = function(type, observer) {
- *     this.observable_.observe(type, observer);
+ *   ClassA.prototype.observe = function(observer) {
+ *     this.observable_.observe(observer);
  *   };
  *
- *   ClassA.prototype.unobserve = function(type, observer) {
- *     this.observable_.unobserve(type, observer);
+ *   ClassA.prototype.unobserve = function(observer) {
+ *     this.observable_.unobserve(observer);
  *   };
  *
- *   ClassA.prototype.notify = function(type, opt_data) {
- *     this.observable_.notify(type, opt_data);
+ *   ClassA.prototype.notify = function(opt_data) {
+ *     this.observable_.notify(opt_data);
  *   };
  * </pre>
  *
@@ -72,6 +71,8 @@ goog.require('goog.object');
  * @extends {goog.Disposable}
  */
 goog.labs.observe.SimpleObservable = function(opt_actualObservable) {
+  goog.base(this);
+
   /**
    * @type {!goog.labs.observe.Observable}
    * @private
@@ -79,61 +80,44 @@ goog.labs.observe.SimpleObservable = function(opt_actualObservable) {
   this.actualObservable_ = opt_actualObservable || this;
 
   /**
-   * A mapping from string-ified notice type to an array of registered
-   * observers for that type.
-   * @type {!Object.<string, !Array.<!goog.labs.observe.Observer>>}
+   * Observers registered on this object.
+   * @type {!Array.<!goog.labs.observe.Observer>}
    * @private
    */
-  this.observers_ = {};
+  this.observers_ = [];
 };
 goog.inherits(goog.labs.observe.SimpleObservable, goog.Disposable);
 
 
 /** @override */
-goog.labs.observe.SimpleObservable.prototype.observe = function(
-    type, observer) {
+goog.labs.observe.SimpleObservable.prototype.observe = function(observer) {
   goog.asserts.assert(!this.isDisposed());
-  var list = this.getObservers_(type);
+
   // Registers the (type, observer) only if it has not been previously
   // registered.
-  var shouldRegisterObserver = !goog.array.some(list, goog.partial(
+  var shouldRegisterObserver = !goog.array.some(this.observers_, goog.partial(
       goog.labs.observe.Observer.equals, observer));
-
   if (shouldRegisterObserver) {
-    list.push(observer);
+    this.observers_.push(observer);
   }
   return shouldRegisterObserver;
 };
 
 
 /** @override */
-goog.labs.observe.SimpleObservable.prototype.unobserve = function(
-    type, observer) {
+goog.labs.observe.SimpleObservable.prototype.unobserve = function(observer) {
   goog.asserts.assert(!this.isDisposed());
-  return goog.array.removeIf(this.getObservers_(type), goog.partial(
+  return goog.array.removeIf(this.observers_, goog.partial(
       goog.labs.observe.Observer.equals, observer));
 };
 
 
 /** @override */
-goog.labs.observe.SimpleObservable.prototype.notify = function(type, opt_data) {
+goog.labs.observe.SimpleObservable.prototype.notify = function(opt_data) {
   goog.asserts.assert(!this.isDisposed());
-  goog.asserts.assert(type);
-
-  var observersToNotify;
-  if (type == goog.labs.observe.NoticeType.ALL) {
-    observersToNotify =
-        goog.array.flatten(goog.object.getValues(this.observers_));
-  } else {
-    observersToNotify = goog.array.concat(
-        this.getObservers_(type),
-        this.getObservers_(goog.labs.observe.NoticeType.ALL));
-  }
-
-  var notice = new goog.labs.observe.Notice(
-      this.actualObservable_, type, opt_data);
+  var notice = new goog.labs.observe.Notice(this.actualObservable_, opt_data);
   goog.array.forEach(
-      observersToNotify, function(observer) {
+      goog.array.clone(this.observers_), function(observer) {
         observer.notify(notice);
       });
 };
@@ -141,18 +125,5 @@ goog.labs.observe.SimpleObservable.prototype.notify = function(type, opt_data) {
 
 /** @override */
 goog.labs.observe.SimpleObservable.prototype.disposeInternal = function() {
-  delete this.observers_;
-};
-
-
-/**
- * Retrieves all registered observers for the given type.
- * @param {!goog.labs.observe.NoticeType} type The type to retrieve.
- * @return {!Array.<goog.labs.observe.Observer>} An array of observers,
- *     may be empty.
- * @private
- */
-goog.labs.observe.SimpleObservable.prototype.getObservers_ = function(type) {
-  var str = type.toString();
-  return this.observers_[str] || (this.observers_[str] = []);
+  this.observers_.length = 0;
 };

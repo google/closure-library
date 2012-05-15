@@ -27,22 +27,15 @@ goog.provide('goog.labs.observe.Notice');
  * by an observable.
  * @param {!goog.labs.observe.Observable} observable The observable
  *     object that fires this notice.
- * @param {!goog.labs.observe.NoticeType} type The notice type.
  * @param {*=} opt_data The optional data associated with this notice.
  * @constructor
  */
-goog.labs.observe.Notice = function(observable, type, opt_data) {
+goog.labs.observe.Notice = function(observable, opt_data) {
   /**
    * @type {!goog.labs.observe.Observable}
    * @private
    */
   this.observable_ = observable;
-
-  /**
-   * @type {goog.labs.observe.NoticeType}
-   * @private
-   */
-  this.type_ = type;
 
   /**
    * @type {*}
@@ -58,14 +51,6 @@ goog.labs.observe.Notice = function(observable, type, opt_data) {
  */
 goog.labs.observe.Notice.prototype.getObservable = function() {
   return this.observable_;
-};
-
-
-/**
- * @return {goog.labs.observe.NoticeType} The notice type.
- */
-goog.labs.observe.Notice.prototype.getType = function() {
-  return this.type_;
 };
 
 

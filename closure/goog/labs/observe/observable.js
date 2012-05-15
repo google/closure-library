@@ -43,49 +43,35 @@ goog.labs.observe.Observable = function() {};
 
 
 /**
- * Registers an observer on the observable for a particular notice type.
- * There is a special notification type
- * {@code goog.labs.observe.NoticeType.ALL} that allows observers to
- * observe all events fired by this observable.
+ * Registers an observer on the observable.
  *
  * Note that no guarantee is provided on order of execution of the
  * observers. For a single notification, one Notice object is reused
  * across all invoked observers.
  *
- * Note that if an observation with the same type and observer is
- * already registered, it will not be registered again. Comparison
- * is done via observer's {@code equals} method.
+ * Note that if an observation with the same observer is already
+ * registered, it will not be registered again. Comparison is done via
+ * observer's {@code equals} method.
  *
- * @param {!goog.labs.observe.NoticeType} type The type of events to
- *     observe.
  * @param {!goog.labs.observe.Observer} observer The observer to add.
  * @return {boolean} Whether the observer was successfully added.
  */
-goog.labs.observe.Observable.prototype.observe = function(
-    type, observer) {};
+goog.labs.observe.Observable.prototype.observe = function(observer) {};
 
 
 /**
  * Unregisters an observer from the observable. The parameter must be
  * the same as those passed to {@code observe} method. Comparison is
  * done via observer's {@code equals} method.
- * @param {!goog.labs.observe.NoticeType} type The type of events to observe.
  * @param {!goog.labs.observe.Observer} observer The observer to remove.
  * @return {boolean} Whether the observer is removed.
  */
-goog.labs.observe.Observable.prototype.unobserve = function(
-    type, observer) {};
+goog.labs.observe.Observable.prototype.unobserve = function(observer) {};
 
 
 /**
- * Notifies observers by invoking them. If type is provided, only
- * observers registered for the given type (or observers registered
- * without specifying a type) will be invoked, otherwise all
- * registered observers is invoked. Optionally, a data object may be
+ * Notifies observers by invoking them. Optionally, a data object may be
  * given to be passed to each observer.
- * @param {!goog.labs.observe.NoticeType} type The type of observers to
- *     notify. If {@code goog.labs.observe.NoticeType.ALL} is given,
- *     the observable will fire all registered observers.
  * @param {*=} opt_data An optional data object.
  */
-goog.labs.observe.Observable.prototype.notify = function(type, opt_data) {};
+goog.labs.observe.Observable.prototype.notify = function(opt_data) {};

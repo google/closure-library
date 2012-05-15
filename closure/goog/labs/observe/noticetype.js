@@ -15,6 +15,10 @@
 /**
  * @fileoverview Defines a NoticeType class used to denote different
  * notification type of an observable.
+ *
+ * NOTE(user): This is currently unused due to refactoring. We
+ * have plan to use this soon.
+ *
  */
 
 goog.provide('goog.labs.observe.NoticeType');
