@@ -68,10 +68,12 @@ goog.ui.FlatMenuButtonRenderer.CSS_CLASS =
  *        </div>
  *    </div>
  * Overrides {@link goog.ui.FlatButtonRenderer#createDom}.
- * @param {goog.ui.Button} button Button to render.
+ * @param {goog.ui.Control} control Button to render.
  * @return {Element} Root element for the button.
+ * @override
  */
-goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(button) {
+goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(control) {
+  var button = /** @type {goog.ui.Button} */ (control);
   var classNames = this.getClassNames(button);
   var attributes = {
     'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' '),
@@ -100,9 +102,10 @@ goog.ui.FlatMenuButtonRenderer.prototype.getContentElement = function(element) {
  * the element.  Overrides {@link goog.ui.CustomButtonRenderer#decorate} by
  * looking for a child element that can be decorated by a menu, and if it
  * finds one, decorates it and attaches it to the menu button.
- * @param {goog.ui.MenuButton} button Menu button to decorate the element.
+ * @param {goog.ui.Control} button Menu button to decorate the element.
  * @param {Element} element Element to decorate.
  * @return {Element} Decorated element.
+ * @override
  */
 goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
   // TODO(user): MenuButtonRenderer uses the exact same code.

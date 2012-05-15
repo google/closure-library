@@ -172,6 +172,7 @@ goog.ui.ScrollFloater.CSS_CLASS_ = goog.getCssName('goog-scrollfloater');
 /**
  * Delegates dom creation to superclass, then constructs and
  * decorates required DOM elements.
+ * @override
  */
 goog.ui.ScrollFloater.prototype.createDom = function() {
   goog.ui.ScrollFloater.superClass_.createDom.call(this);

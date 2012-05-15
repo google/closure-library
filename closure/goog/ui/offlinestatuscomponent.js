@@ -276,6 +276,7 @@ goog.ui.OfflineStatusComponent.prototype.getStatusCard = function() {
 
 /**
  * Creates the initial DOM representation for the component.
+ * @override
  */
 goog.ui.OfflineStatusComponent.prototype.createDom = function() {
   var anchorProps = {

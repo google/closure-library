@@ -194,9 +194,10 @@ goog.ui.DrilldownRow.prototype.canDecorate = function(node) {
 /**
  * Child drilldowns are rendered when needed.
  *
- * @param {goog.ui.DrilldownRow} child New child to be added.
+ * @param {goog.ui.Component} child New DrilldownRow child to be added.
  * @param {number} index position to be occupied by the child.
  * @param {boolean=} opt_render true to force immediate rendering.
+ * @override
  */
 goog.ui.DrilldownRow.prototype.addChildAt = function(child, index, opt_render) {
   goog.ui.DrilldownRow.superClass_.addChildAt.call(this, child, index, false);

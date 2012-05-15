@@ -305,6 +305,9 @@ goog.ui.AbstractSpellChecker.nextId_ = 1;
 
 /**
  * @return {goog.spell.SpellCheck} The handler used for caching and lookups.
+ * @override
+ * @suppress {checkTypes} This method makes no sense. It overrides
+ *     Component's getHandler with something different.
  */
 goog.ui.AbstractSpellChecker.prototype.getHandler = function() {
   return this.handler_;

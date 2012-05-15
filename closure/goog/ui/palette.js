@@ -105,11 +105,13 @@ goog.ui.Palette.prototype.disposeInternal = function() {
 /**
  * Overrides {@link goog.ui.Control#setContentInternal} by also updating the
  * grid size and the selection model.  Considered protected.
- * @param {Array.<Node>} items Array of DOM nodes to be displayed as items
- *     in the palette grid (one item per cell).
+ * @param {goog.ui.ControlContent} content Array of DOM nodes to be displayed
+ *     as items in the palette grid (one item per cell).
  * @protected
+ * @override
  */
-goog.ui.Palette.prototype.setContentInternal = function(items) {
+goog.ui.Palette.prototype.setContentInternal = function(content) {
+  var items = /** @type {Array.<Node>} */ (content);
   goog.ui.Palette.superClass_.setContentInternal.call(this, items);
 
   // Adjust the palette size.
@@ -135,12 +137,13 @@ goog.ui.Palette.prototype.setContentInternal = function(items) {
 
 
 /**
- * Overrides {@link goog.ui.Control#getCaption} to return null, since palettes
- * don't have text captions.
- * @return {null} Always null.
+ * Overrides {@link goog.ui.Control#getCaption} to return the empty string,
+ * since palettes don't have text captions.
+ * @return {string} The empty string.
+ * @override
  */
 goog.ui.Palette.prototype.getCaption = function() {
-  return null;
+  return '';
 };
 
 

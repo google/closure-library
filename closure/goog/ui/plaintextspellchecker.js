@@ -145,6 +145,7 @@ goog.ui.PlainTextSpellChecker.prototype.keyHandler_;
 
 /**
  * Creates the initial DOM representation for the component.
+ * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.createDom = function() {
   this.setElementInternal(this.getDomHelper().createElement('textarea'));

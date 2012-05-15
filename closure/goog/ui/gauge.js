@@ -613,6 +613,7 @@ goog.ui.Gauge.prototype.addBackgroundColor = function(fromValue, toValue,
 
 /**
  * Creates the DOM representation of the graphics area.
+ * @override
  */
 goog.ui.Gauge.prototype.createDom = function() {
   this.setElementInternal(this.getDomHelper().createDom(

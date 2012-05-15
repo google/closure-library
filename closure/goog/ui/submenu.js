@@ -375,8 +375,9 @@ goog.ui.SubMenu.prototype.handleMouseOver = function(e) {
 /**
  * Overrides the default mouseup event handler, so that the ACTION isn't
  * dispatched for the submenu itself, instead the submenu is shown instantly.
- * @param {goog.events.BrowserEvent} e The browser event.
+ * @param {goog.events.Event} e The browser event.
  * @return {boolean} True if the action was allowed to proceed, false otherwise.
+ * @override
  */
 goog.ui.SubMenu.prototype.performActionInternal = function(e) {
   this.clearTimers();

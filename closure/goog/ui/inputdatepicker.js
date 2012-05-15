@@ -193,6 +193,7 @@ goog.ui.InputDatePicker.prototype.getInputValueAsDate_ = function() {
 
 /**
  * Creates an input element for use with the popup date picker.
+ * @override
  */
 goog.ui.InputDatePicker.prototype.createDom = function() {
   this.setElementInternal(

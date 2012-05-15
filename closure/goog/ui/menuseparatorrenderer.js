@@ -50,8 +50,9 @@ goog.ui.MenuSeparatorRenderer.CSS_CLASS = goog.getCssName('goog-menuseparator');
 /**
  * Returns an empty, styled menu separator DIV.  Overrides {@link
  * goog.ui.ControlRenderer#createDom}.
- * @param {goog.ui.Separator} separator Separator to render.
+ * @param {goog.ui.Control} separator goog.ui.Separator to render.
  * @return {Element} Root element for the separator.
+ * @override
  */
 goog.ui.MenuSeparatorRenderer.prototype.createDom = function(separator) {
   return separator.getDomHelper().createDom('div', this.getCssClass());
@@ -61,9 +62,11 @@ goog.ui.MenuSeparatorRenderer.prototype.createDom = function(separator) {
 /**
  * Takes an existing element, and decorates it with the separator.  Overrides
  * {@link goog.ui.ControlRenderer#decorate}.
- * @param {goog.ui.Separator} separator Separator to decorate the element.
+ * @param {goog.ui.Control} separator goog.ui.MenuSeparator to decorate the
+ *     element.
  * @param {Element} element Element to decorate.
  * @return {Element} Decorated element.
+ * @override
  */
 goog.ui.MenuSeparatorRenderer.prototype.decorate = function(separator,
                                                             element) {

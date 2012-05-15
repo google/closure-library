@@ -84,10 +84,12 @@ goog.ui.Css3ButtonRenderer.prototype.getContentElement = function(element) {
  *      Contents...
  *    </div>
  * Overrides {@link goog.ui.ButtonRenderer#createDom}.
- * @param {goog.ui.Button} button Button to render.
+ * @param {goog.ui.Control} control goog.ui.Button to render.
  * @return {Element} Root element for the button.
+ * @override
  */
-goog.ui.Css3ButtonRenderer.prototype.createDom = function(button) {
+goog.ui.Css3ButtonRenderer.prototype.createDom = function(control) {
+  var button = /** @type {goog.ui.Button} */ (control);
   var classNames = this.getClassNames(button);
   var attr = {
     'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' '),

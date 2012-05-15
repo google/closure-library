@@ -303,6 +303,7 @@ goog.ui.ServerChart.prototype.numVisibleDataSets_ = null;
 
 /**
  * Creates the DOM node (image) needed for the Chart
+ * @override
  */
 goog.ui.ServerChart.prototype.createDom = function() {
   var size = this.getSize();

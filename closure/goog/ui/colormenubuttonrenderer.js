@@ -132,8 +132,9 @@ goog.ui.ColorMenuButtonRenderer.setCaptionValue = function(caption, value) {
  * Initializes the button's DOM when it enters the document.  Overrides the
  * superclass implementation by making sure the button's color indicator is
  * initialized.
- * @param {goog.ui.ColorMenuButton} button Button whose DOM is to be
+ * @param {goog.ui.Control} button goog.ui.ColorMenuButton whose DOM is to be
  *     initialized as it enters the document.
+ * @override
  */
 goog.ui.ColorMenuButtonRenderer.prototype.initializeDom = function(button) {
   this.setValue(button.getElement(), button.getValue());

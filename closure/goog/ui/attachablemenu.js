@@ -141,13 +141,9 @@ goog.ui.AttachableMenu.prototype.getSelectedItem = function() {
 };
 
 
-/**
- * Sets the specified item as the selected element.
- *
- * @param {Element} elt The item to select. The type of this item is specific
- * to the menu class.
- */
-goog.ui.AttachableMenu.prototype.setSelectedItem = function(elt) {
+/** @override */
+goog.ui.AttachableMenu.prototype.setSelectedItem = function(obj) {
+  var elt = /** @type {Element} */ (obj);
   if (this.selectedElement_) {
     goog.dom.classes.remove(this.selectedElement_, this.selectedItemClassName_);
   }
@@ -306,6 +302,7 @@ goog.ui.AttachableMenu.prototype.onMouseOut = function(e) {
  * Mouse down handler for the menu. Prevents default to avoid text selection.
  * @param {!goog.events.Event} e The event object.
  * @protected
+ * @override
  */
 goog.ui.AttachableMenu.prototype.onMouseDown = goog.events.Event.preventDefault;
 

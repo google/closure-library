@@ -138,6 +138,7 @@ goog.ui.RichTextSpellChecker.prototype.invalidWordCssText =
  *
  * @throws {Error} Not supported. Use decorate.
  * @see #decorate
+ * @override
  */
 goog.ui.RichTextSpellChecker.prototype.createDom = function() {
   throw Error('Render not supported for goog.ui.RichTextSpellChecker.');
