@@ -24,6 +24,7 @@
 goog.provide('goog.proto2.TextFormatSerializer');
 goog.provide('goog.proto2.TextFormatSerializer.Parser');
 
+goog.require('goog.asserts');
 goog.require('goog.json');
 goog.require('goog.proto2.Serializer');
 goog.require('goog.proto2.Util');
@@ -618,26 +619,17 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeFieldValue_ =
  * @return {?number} The converted number or null on error.
  * @private
  */
-goog.proto2.TextFormatSerializer.Parser.prototype.getNumberFromString_ =
+goog.proto2.TextFormatSerializer.Parser.getNumberFromString_ =
     function(num) {
-  var numberString = num;
-  var numberBase = 10;
-  if (num.substr(0, 2) == '0x') {
-    // ASCII output can be printed in unsigned hexadecimal format
-    // occasionally. e.g. 0xaed9b43
-    numberString = num.substr(2);
-    numberBase = 16;
-  } else if (goog.string.endsWith(num, 'f')) {
-    numberString = num.substring(0, num.length - 1);
-  }
 
-  var actualNumber = numberBase == 10 ?
-      parseFloat(numberString) : parseInt(numberString, numberBase);
-  if (actualNumber.toString(numberBase) != numberString) {
-    this.reportError_('Unknown number: ' + num);
-    return null;
-  }
-  return actualNumber;
+  var returnValue = goog.string.contains(num, '.') ?
+      parseFloat(num) : // num is a float.
+      goog.string.parseInt(num); // num is an int.
+
+  goog.asserts.assert(!isNaN(returnValue));
+  goog.asserts.assert(isFinite(returnValue));
+
+  return returnValue;
 };
 
 
@@ -661,7 +653,7 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
       var num = this.consumeNumber_();
       if (!num) { return null; }
 
-      return this.getNumberFromString_(num);
+      return goog.proto2.TextFormatSerializer.Parser.getNumberFromString_(num);
 
     case goog.proto2.FieldDescriptor.FieldType.INT64:
     case goog.proto2.FieldDescriptor.FieldType.UINT64:
@@ -673,7 +665,8 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
 
       if (field.getNativeType() == Number) {
         // 64-bit number stored as a number.
-        return this.getNumberFromString_(num);
+        return goog.proto2.TextFormatSerializer.Parser.getNumberFromString_(
+            num);
       }
 
       return num; // 64-bit numbers are by default stored as strings.
