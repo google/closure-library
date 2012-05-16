@@ -168,28 +168,20 @@ goog.ds.DataManager.prototype.getDataSource = function(name) {
 /**
  * Get the value of the node
  * @return {Object} The value of the node, or null if no value.
+ * @override
  */
 goog.ds.DataManager.prototype.get = function() {
   return this.dataSources_;
 };
 
 
-/**
- * Set the value of the node
- * @param {Object} value The new value of the node.
- */
+/** @override */
 goog.ds.DataManager.prototype.set = function(value) {
   throw Error('Can\'t set on DataManager');
 };
 
 
-/**
- * Gets all of the child nodes of the current node.
- * @param {string=} opt_selector String selector to choose child nodes
- * Should return an empty DataNode list if no child nodes.
- *
- * @return {goog.ds.DataNodeList} The child nodes.
- */
+/** @override */
 goog.ds.DataManager.prototype.getChildNodes = function(opt_selector) {
   if (opt_selector) {
     return new goog.ds.BasicNodeList(
@@ -211,12 +203,7 @@ goog.ds.DataManager.prototype.getChildNode = function(name) {
 };
 
 
-/**
- * Gets the value of a child node
- * @param {string} name The node name.
- * @return {Object} The value of the node, or null if no value or the child node
- *    doesn't exist.
- */
+/** @override */
 goog.ds.DataManager.prototype.getChildNodeValue = function(name) {
   var ds = this.getDataSource(name);
   return ds ? ds.get() : null;

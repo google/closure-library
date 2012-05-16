@@ -50,14 +50,14 @@ goog.ds.DataNode = function() {};
 
 /**
  * Get the value of the node
- * @return {Object} The value of the node, or null if no value.
+ * @return {*} The value of the node, or null if no value.
  */
 goog.ds.DataNode.prototype.get = goog.abstractMethod;
 
 
 /**
  * Set the value of the node
- * @param {Object} value The new value of the node.
+ * @param {*} value The new value of the node.
  */
 goog.ds.DataNode.prototype.set = goog.abstractMethod;
 
@@ -85,7 +85,7 @@ goog.ds.DataNode.prototype.getChildNode = goog.abstractMethod;
 /**
  * Gets the value of a child node
  * @param {string} name The node name.
- * @return {Object} The value of the node, or null if no value or the child node
+ * @return {*} The value of the node, or null if no value or the child node
  *     doesn't exist.
  */
 goog.ds.DataNode.prototype.getChildNodeValue = goog.abstractMethod;
@@ -160,7 +160,7 @@ goog.ds.LoadState = {
  * Base class for data node functionality, has default implementations for
  * many of the functions.
  *
- * implements goog.ds.DataNode
+ * implements {goog.ds.DataNode}
  * @constructor
  */
 goog.ds.BaseDataNode = function() {};
@@ -282,7 +282,8 @@ goog.ds.DataNodeList.prototype.add = goog.abstractMethod;
  * Returns null if node doesn't exist.
  *
  * @param {string} key String lookup key.
- * @return {goog.ds.DataNode} The node, or null if doesn't exist.
+ * @return {*} The node, or null if doesn't exist.
+ * @override
  */
 goog.ds.DataNodeList.prototype.get = goog.abstractMethod;
 
@@ -369,6 +370,7 @@ goog.ds.BasicNodeList.prototype.add = function(node) {
  *
  * @param {string} key String lookup key.
  * @return {goog.ds.DataNode} The node, or null if doesn't exist.
+ * @override
  */
 goog.ds.BasicNodeList.prototype.get = function(key) {
   return this.map_[key] || null;

@@ -53,7 +53,7 @@ goog.ds.JsDataSource = function(root, dataName, opt_parent) {
 
 /**
  * The root JS object. Can be null.
- * @type {Object}
+ * @type {*}
  * @protected
  * @suppress {underscore}
  */
@@ -85,10 +85,7 @@ goog.ds.JsDataSource.prototype.setIsList_ = function(isList) {
 };
 
 
-/**
- * Get the value of the node
- * @return {Object} The value of the node, or null if no value.
- */
+/** @override */
 goog.ds.JsDataSource.prototype.get = function() {
   return !goog.isObject(this.root_) ? this.root_ : this.getChildNodes();
 };
@@ -96,7 +93,8 @@ goog.ds.JsDataSource.prototype.get = function() {
 
 /**
  * Set the value of the node
- * @param {Object} value The new value of the node.
+ * @param {*} value The new value of the node.
+ * @override
  */
 goog.ds.JsDataSource.prototype.set = function(value) {
   if (value && goog.isObject(this.root_)) {
@@ -114,12 +112,8 @@ goog.ds.JsDataSource.prototype.set = function(value) {
 
 
 /**
- * Gets all of the child nodes of the current node.
- * Should return an empty DataNode list if no child nodes.
- * @param {string=} opt_selector String selector to choose child nodes.
- * @return {goog.ds.DataNodeList} The child nodes.
- *
  * TODO(user) revisit lazy creation.
+ * @override
  */
 goog.ds.JsDataSource.prototype.getChildNodes = function(opt_selector) {
   if (!this.root_) {
@@ -200,7 +194,7 @@ goog.ds.JsDataSource.prototype.getChildNode = function(name, opt_canCreate) {
   if (!this.root_) {
     return null;
   }
-  var node = this.getChildNodes().get(name);
+  var node = /** @type {goog.ds.DataNode} */ (this.getChildNodes().get(name));
   if (!node && opt_canCreate) {
     var newObj = {};
     if (goog.isArray(this.root_)) {

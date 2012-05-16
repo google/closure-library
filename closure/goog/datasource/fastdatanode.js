@@ -171,21 +171,15 @@ goog.ds.FastDataNode.emptyList_ = new goog.ds.EmptyNodeList();
 
 /**
  * Not supported for normal FastDataNodes.
- * @param {Object} value Value to set data node to.
+ * @param {*} value Value to set data node to.
+ * @override
  */
 goog.ds.FastDataNode.prototype.set = function(value) {
   throw 'Not implemented yet';
 };
 
 
-/**
- * Returns child nodes of this data node. Currently, only supports
- * returning all children.
- * @param {string=} opt_selector Children to include in child list.
- * @return {goog.ds.DataNode|goog.ds.DataNodeList} List of child nodes.
- */
-// TODO(arv): This class implements DataNodeList but we don't support interfaces
-// yet.
+/** @override */
 goog.ds.FastDataNode.prototype.getChildNodes = function(opt_selector) {
   if (!opt_selector || opt_selector == goog.ds.STR_ALL_CHILDREN_SELECTOR) {
     return this;
@@ -323,7 +317,8 @@ goog.ds.FastDataNode.prototype.add = function(value) {
  * Gets the value of this data node (if called without opt_key) or
  * gets a child node (if called with opt_key).
  * @param {string=} opt_key Name of child node.
- * @return {goog.ds.DataNode} This data node or a child node.
+ * @return {*} This data node or a child node.
+ * @override
  */
 goog.ds.FastDataNode.prototype.get = function(opt_key) {
   if (!goog.isDef(opt_key)) {
@@ -413,7 +408,8 @@ goog.inherits(goog.ds.PrimitiveFastDataNode, goog.ds.AbstractFastDataNode);
 
 /**
  * Returns the value of this data node.
- * @return {*} Value of this data node.
+ * @return {(boolean|number|string)} Value of this data node.
+ * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.get = function() {
   return this.value_;
@@ -422,11 +418,12 @@ goog.ds.PrimitiveFastDataNode.prototype.get = function() {
 
 /**
  * Sets this data node to a new value.
- * @param {number|boolean|string} value Value to set data node to.
+ * @param {*} value Value to set data node to.
+ * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.set = function(value) {
   if (goog.isArray(value) || goog.isObject(value)) {
-    throw 'can only set PrimitiveFastDataNode to primitive values';
+    throw Error('can only set PrimitiveFastDataNode to primitive values');
   }
   this.value_ = value;
   goog.ds.DataManager.getInstance().fireDataChange(this.getDataPath());
@@ -437,6 +434,7 @@ goog.ds.PrimitiveFastDataNode.prototype.set = function(value) {
  * Returns child nodes of this data node. Always returns an unmodifiable,
  * empty list.
  * @return {goog.ds.DataNodeList} (Empty) list of child nodes.
+ * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.getChildNodes = function() {
   return goog.ds.FastDataNode.emptyList_;
@@ -523,7 +521,8 @@ goog.inherits(goog.ds.FastListNode, goog.ds.AbstractFastDataNode);
 
 /**
  * Not supported for FastListNodes.
- * @param {Object} value Value to set data node to.
+ * @param {*} value Value to set data node to.
+ * @override
  */
 goog.ds.FastListNode.prototype.set = function(value) {
   throw Error('Cannot set a FastListNode to a new value');
@@ -533,10 +532,9 @@ goog.ds.FastListNode.prototype.set = function(value) {
 /**
  * Returns child nodes of this data node. Currently, only supports
  * returning all children.
- * @return {goog.ds.DataNode|goog.ds.DataNodeList} List of child nodes.
+ * @return {goog.ds.DataNodeList} List of child nodes.
+ * @override
  */
-// TODO(arv): This class implements DataNodeList but we don't support interfaces
-// yet.
 goog.ds.FastListNode.prototype.getChildNodes = function() {
   return this;
 };
@@ -568,7 +566,8 @@ goog.ds.FastListNode.prototype.getChildNode = function(key, opt_create) {
 /**
  * Returns the value of a child node.
  * @param {string} key Name of child node.
- * @return {Object} Value of child node.
+ * @return {*} Value of child node.
+ * @override
  */
 goog.ds.FastListNode.prototype.getChildNodeValue = function(key) {
   var child = this.getChildNode(key);
@@ -699,6 +698,7 @@ goog.ds.FastListNode.prototype.add = function(value) {
  * @param {string=} opt_key Name of child node.
  * @return {Array|goog.ds.DataNode} Array of child nodes (if called without
  *     opt_key), or a named child node otherwise.
+ * @override
  */
 goog.ds.FastListNode.prototype.get = function(opt_key) {
   // if there are no arguments, DataNode.get was called

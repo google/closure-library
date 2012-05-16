@@ -143,19 +143,15 @@ goog.ds.XmlDataSource.prototype.get = function() {
 
 /**
  * Set the value of the node
- * @param {Object} value The new value of the node.
+ * @param {*} value The new value of the node.
+ * @override
  */
 goog.ds.XmlDataSource.prototype.set = function(value) {
   throw Error('Can\'t set on XmlDataSource yet');
 };
 
 
-/**
- * Gets all of the child nodes of the current node.
- * Should return an empty DataNode list if no child nodes.
- * @param {string=} opt_selector String selector to choose child nodes.
- * @return {goog.ds.DataNodeList} The child nodes.
- */
+/** @override */
 goog.ds.XmlDataSource.prototype.getChildNodes = function(opt_selector) {
   if (opt_selector && opt_selector ==
       goog.ds.XmlDataSource.ATTRIBUTE_SELECTOR_) {
@@ -183,7 +179,7 @@ goog.ds.XmlDataSource.prototype.getChildNode = function(name) {
     var att = this.node_.getAttributeNode(name.substring(1));
     return att ? new goog.ds.XmlDataSource(att, this) : null;
   } else {
-    return this.getChildNodes().get(name);
+    return /** @type {goog.ds.DataNode} */ (this.getChildNodes().get(name));
   }
 };
 
@@ -191,8 +187,9 @@ goog.ds.XmlDataSource.prototype.getChildNode = function(name) {
 /**
  * Gets the value of a child node
  * @param {string} name The node name.
- * @return {Object} The value of the node, or null if no value or the child node
+ * @return {*} The value of the node, or null if no value or the child node
  *    doesn't exist.
+ * @override
  */
 goog.ds.XmlDataSource.prototype.getChildNodeValue = function(name) {
   if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START_)) {
