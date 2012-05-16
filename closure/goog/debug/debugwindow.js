@@ -326,7 +326,7 @@ goog.debug.DebugWindow.prototype.hasActiveWindow = function() {
 goog.debug.DebugWindow.prototype.clear_ = function() {
   this.savedMessages_.clear();
   if (this.hasActiveWindow()) {
-    this.writeInitialDocument_();
+    this.writeInitialDocument();
   }
 };
 
@@ -378,20 +378,19 @@ goog.debug.DebugWindow.prototype.writeToLog_ = function(html) {
   goog.global.clearTimeout(this.bufferTimeout_);
 
   if (goog.now() - this.lastCall_ > 750) {
-    this.writeBufferToLog_();
+    this.writeBufferToLog();
   } else {
     this.bufferTimeout_ =
-        goog.global.setTimeout(goog.bind(this.writeBufferToLog_, this), 250);
+        goog.global.setTimeout(goog.bind(this.writeBufferToLog, this), 250);
   }
 };
 
 
 /**
- * Write to the log and maybe scroll into view
+ * Write to the log and maybe scroll into view.
  * @protected
- * @suppress {underscore}
  */
-goog.debug.DebugWindow.prototype.writeBufferToLog_ = function() {
+goog.debug.DebugWindow.prototype.writeBufferToLog = function() {
   this.lastCall_ = goog.now();
   if (this.hasActiveWindow()) {
     var body = this.win_.document.body;
@@ -453,7 +452,7 @@ goog.debug.DebugWindow.prototype.openWindow_ = function() {
   this.winOpening_ = false;
 
   if (this.win_) {
-    this.writeInitialDocument_();
+    this.writeInitialDocument();
   }
 };
 
@@ -486,11 +485,10 @@ goog.debug.DebugWindow.prototype.getStyleRules = function() {
 
 
 /**
- * Writes the initial HTML of the debug window
+ * Writes the initial HTML of the debug window.
  * @protected
- * @suppress {underscore}
  */
-goog.debug.DebugWindow.prototype.writeInitialDocument_ = function() {
+goog.debug.DebugWindow.prototype.writeInitialDocument = function() {
   if (this.hasActiveWindow()) {
     return;
   }
