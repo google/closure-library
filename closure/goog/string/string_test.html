@@ -987,6 +987,69 @@ function testToTitleCase() {
       goog.string.toTitleCase('one.  two.  three', delimiters));
 }
 
+function testParseInt() {
+  // Many example values borrowed from
+  // http://trac.webkit.org/browser/trunk/LayoutTests/fast/js/kde/
+  // GlobalObject-expected.txt
+
+  // Check non-numbers and strings
+  assertTrue(isNaN(goog.string.parseInt(undefined)));
+  assertTrue(isNaN(goog.string.parseInt(null)));
+  assertTrue(isNaN(goog.string.parseInt({})));
+
+  assertTrue(isNaN(goog.string.parseInt('')));
+  assertTrue(isNaN(goog.string.parseInt(' ')));
+  assertTrue(isNaN(goog.string.parseInt('a')));
+  assertTrue(isNaN(goog.string.parseInt('FFAA')));
+  assertEquals(1, goog.string.parseInt(1))
+  assertEquals(1234567890123456, goog.string.parseInt(1234567890123456))
+  assertEquals(2, goog.string.parseInt(' 2.3'));
+  assertEquals(16, goog.string.parseInt('0x10'));
+  assertEquals(11, goog.string.parseInt('11'));
+  assertEquals(15, goog.string.parseInt('0xF'));
+  assertEquals(15, goog.string.parseInt('0XF'));
+  assertEquals(3735928559, goog.string.parseInt('0XDEADBEEF'));
+  assertEquals(3, goog.string.parseInt('3x'));
+  assertEquals(3, goog.string.parseInt('3 x'));
+  assertFalse(isFinite(goog.string.parseInt('Infinity')));
+  assertEquals(15, goog.string.parseInt('15'));
+  assertEquals(15, goog.string.parseInt('015'));
+  assertEquals(15, goog.string.parseInt('0xf'));
+  assertEquals(15, goog.string.parseInt('15'));
+  assertEquals(15, goog.string.parseInt('0xF'));
+  assertEquals(15, goog.string.parseInt('15.99'));
+  assertTrue(isNaN(goog.string.parseInt('FXX123')));
+  assertEquals(15, goog.string.parseInt('15*3'));
+  assertEquals(7, goog.string.parseInt('0x7'));
+  assertEquals(1, goog.string.parseInt('1x7'));
+
+  // Strings have no special meaning
+  assertTrue(isNaN(goog.string.parseInt('Infinity')));
+  assertTrue(isNaN(goog.string.parseInt('NaN')));
+
+  // Test numbers and values
+  assertEquals(3, goog.string.parseInt(3.3));
+  assertEquals(-3, goog.string.parseInt(-3.3));
+  assertEquals(0, goog.string.parseInt(-0));
+  assertTrue(isNaN(goog.string.parseInt(Infinity)));
+  assertTrue(isNaN(goog.string.parseInt(NaN)));
+  assertTrue(isNaN(goog.string.parseInt(Number.POSITIVE_INFINITY)));
+  assertTrue(isNaN(goog.string.parseInt(Number.NEGATIVE_INFINITY)));
+
+  // In Chrome (at least), parseInt(Number.MIN_VALUE) is 5 (5e-324) and
+  // parseInt(Number.MAX_VALUE) is 1 (1.79...e+308) as they are converted
+  // to strings.  We do not attempt to correct this behavior.
+
+  // Additional values for negatives.
+  assertEquals(-3, goog.string.parseInt('-3'));
+  assertEquals(-32, goog.string.parseInt('-32    '));
+  assertEquals(-32, goog.string.parseInt(' -32 '));
+  assertEquals(-3, goog.string.parseInt('-0x3'));
+  assertEquals(-50, goog.string.parseInt('-0x32    '));
+  assertEquals(-243, goog.string.parseInt('   -0xF3    '));
+  assertTrue(isNaN(goog.string.parseInt(' - 0x32 ')));
+}
+
 </script>
 </body>
 </html>

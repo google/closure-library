@@ -1262,3 +1262,36 @@ goog.string.toTitleCase = function(str, opt_delimiters) {
     return p1 + p2.toUpperCase();
   });
 };
+
+
+/**
+ * Parse a string in decimal or hexidecimal ('0xFFFF') form.
+ *
+ * To parse a particular radix, please use parseInt(string, radix) directly. See
+ * https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/parseInt
+ *
+ * This is a wrapper for the built-in parseInt function that will only parse
+ * numbers as base 10 or base 16.  Some JS implementations assume strings
+ * starting with "0" are intended to be octal. ES3 allowed but discouraged
+ * this behavior. ES5 forbids it.  This function emulates the ES5 behavior.
+ *
+ * For more information, see Mozilla JS Reference: http://goo.gl/8RiFj
+ *
+ * @param {string|number|null|undefined} value The value to be parsed.
+ * @return {number} The number, parsed. If the string failed to parse, this
+ *     will be NaN.
+ */
+goog.string.parseInt = function(value) {
+  // Force finite numbers to strings.
+  if (isFinite(value)) {
+    value = String(value);
+  }
+
+  if (goog.isString(value)) {
+    // If the string starts with '0x' or '-0x', parse as hex.
+    return /^\s*-?0x/i.test(value) ?
+        parseInt(value, 16) : parseInt(value, 10);
+  }
+
+  return NaN;
+};
