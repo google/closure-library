@@ -314,6 +314,8 @@ goog.addDependency('labs/async/result/result.js', ['goog.labs.async.Result'], []
 goog.addDependency('labs/async/result/resultbase.js', ['goog.labs.async.ResultBase', 'goog.labs.async.ResultBase.StateError'], ['goog.debug.Error', 'goog.labs.async.Result']);
 goog.addDependency('labs/async/transform.js', ['goog.labs.async.transform'], ['goog.labs.async.Result', 'goog.labs.async.ResultBase', 'goog.labs.async.wait']);
 goog.addDependency('labs/async/wait.js', ['goog.labs.async.wait'], ['goog.array', 'goog.labs.async.Result']);
+goog.addDependency('labs/net/image.js', ['goog.labs.net.image'], ['goog.events.EventHandler', 'goog.labs.async.ResultBase', 'goog.net.EventType']);
+goog.addDependency('labs/net/image_test.js', ['goog.labs.net.imageTest'], ['goog.events', 'goog.labs.async.Result', 'goog.labs.async.wait', 'goog.labs.net.image', 'goog.net.EventType', 'goog.string', 'goog.testing.AsyncTestCase', 'goog.testing.jsunit']);
 goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.async.Deferred', 'goog.debug.Error', 'goog.json', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.string', 'goog.uri.utils']);
 goog.addDependency('labs/object/object.js', ['goog.labs.object'], []);
 goog.addDependency('labs/observe/notice.js', ['goog.labs.observe.Notice'], []);
