@@ -10,7 +10,7 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.ui.ac.AutoComplete</title>
+<title>Closure Unit Tests - goog.ui.AutoComplete</title>
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
@@ -24,11 +24,11 @@ See the COPYING file for details.
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.mockmatchers');
-  goog.require('goog.ui.ac.AutoComplete');
-  goog.require('goog.ui.ac.AutoComplete.EventType');
-  goog.require('goog.ui.ac.InputHandler');
-  goog.require('goog.ui.ac.Renderer');
-  goog.require('goog.ui.ac.RenderOptions');
+  goog.require('goog.ui.AutoComplete');
+  goog.require('goog.ui.AutoComplete.EventType');
+  goog.require('goog.ui.AutoComplete.InputHandler');
+  goog.require('goog.ui.AutoComplete.Renderer');
+  goog.require('goog.ui.AutoComplete.RenderOptions');
 </script>
 </head>
 <body>
@@ -64,7 +64,7 @@ MockDS.prototype.requestMatchingRows = function(token, maxMatches,
   if (this.autoHilite_ === undefined) {
     matchHandler(token, matches);
   } else {
-    var options = new goog.ui.ac.RenderOptions();
+    var options = new goog.ui.AutoComplete.RenderOptions();
     options.setAutoHilite(this.autoHilite_);
     matchHandler(token, matches, options);
   }
@@ -88,9 +88,9 @@ MockSelect.prototype.selectRow = function(row) {
  * Renderer subclass that exposes additional private members for testing.
  */
 function TestRend() {
-  goog.ui.ac.Renderer.call(this, goog.dom.getElement('test-area'));
+  goog.ui.AutoComplete.Renderer.call(this, goog.dom.getElement('test-area'));
 }
-goog.inherits(TestRend, goog.ui.ac.Renderer);
+goog.inherits(TestRend, goog.ui.AutoComplete.Renderer);
 
 TestRend.prototype.getRenderedRows = function() {
   return this.rows_;
@@ -131,7 +131,7 @@ function testMaxMatches() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
 
   ac.setMaxMatches(2);
   ac.setToken('the');
@@ -157,12 +157,12 @@ function testHiliteViaMouse() {
   var row = null;
   var rowNode = null;
   handler.listen(rend,
-      goog.ui.ac.AutoComplete.EventType.ROW_HILITE,
+      goog.ui.AutoComplete.EventType.ROW_HILITE,
       function(evt) {
         updates++;
         rowNode = evt.rowNode;
       });
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setMaxMatches(4);
   ac.setToken('the');
   // Need to set the startRenderingRows_ time to something long ago, otherwise
@@ -179,10 +179,10 @@ function testSuggestionsUpdateEvent() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   var updates = 0;
   handler.listen(ac,
-      goog.ui.ac.AutoComplete.EventType.SUGGESTIONS_UPDATE,
+      goog.ui.AutoComplete.EventType.SUGGESTIONS_UPDATE,
       function() {
         updates++;
       });
@@ -211,7 +211,7 @@ function testGetRowCount() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   assertEquals(0, ac.getRowCount());
 
   ac.setToken('Zaphod');
@@ -230,11 +230,11 @@ function testHiliteNextPrev_default() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
 
   var updates = 0;
   handler.listen(rend,
-      goog.ui.ac.AutoComplete.EventType.ROW_HILITE,
+      goog.ui.AutoComplete.EventType.ROW_HILITE,
       function() {
         updates++;
       });
@@ -284,7 +284,7 @@ function testHiliteNextPrev_allowFreeSelect() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setAllowFreeSelect(true);
 
   // make sure 'next' and 'prev' don't explode before any token is set
@@ -334,7 +334,7 @@ function testHiliteNextPrev_wrap() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setWrap(true);
 
   // make sure 'next' and 'prev' don't explode before any token is set
@@ -381,7 +381,7 @@ function testHiliteNextPrev_wrapAndAllowFreeSelect() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setWrap(true);
   ac.setAllowFreeSelect(true);
 
@@ -435,7 +435,7 @@ function testHiliteNextPrev_wrapAndAllowFreeSelectNoAutoHilite() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setWrap(true);
   ac.setAllowFreeSelect(true);
   ac.setAutoHilite(false);
@@ -497,7 +497,7 @@ function testNoAutoHiliteWhenTokenIsEmpty() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setWrap(true);
   ac.setAllowFreeSelect(true);
   ac.setAutoHilite(true);
@@ -521,7 +521,7 @@ function testPreserveHilitedWithoutAutoHilite() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setWrap(true);
   ac.setAllowFreeSelect(true);
   ac.setMaxMatches(4);
@@ -556,7 +556,7 @@ function testAutoHiliteFromMatcherTrue() {
   var ds = new MockDS(true);
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setWrap(true);
   ac.setAllowFreeSelect(true);
   ac.setAutoHilite(false);  // Will be overruled.
@@ -575,7 +575,7 @@ function testAutoHiliteFromMatcherFalse() {
   var ds = new MockDS(false);
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setWrap(true);
   ac.setAllowFreeSelect(true);
   ac.setAutoHilite(true);  // Will be overruled.
@@ -594,7 +594,7 @@ function testHiliteId() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
 
   // check a few times
   for (var i = 0; i < 3; ++i) {
@@ -619,14 +619,14 @@ function testSelection() {
   var ac;
 
   // try with default selection
-  ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setToken('m');
   ac.selectHilited();
   assertEquals('"Slartibartfast Theadore" <fjordmaster@magrathea.com>',
                select.selectedRow);
 
   // try second item
-  ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setToken('the');
   ac.hiliteNext();
   ac.selectHilited();
@@ -643,15 +643,15 @@ function testDismiss() {
   var select = new MockSelect();
 
   // dismiss empty
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.dismiss();
 
-  ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setToken('sir not seen in this picture');
   ac.dismiss();
 
   // dismiss with contents
-  ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setToken('t');
   ac.dismiss();
 }
@@ -660,7 +660,7 @@ function testTriggerSuggestionsOnUpdate() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
 
   var dismissCalled = 0;
   rend.dismiss = function() {
@@ -690,7 +690,7 @@ function testDispose() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setToken('the');
   ac.dispose();
 }
@@ -710,7 +710,7 @@ function testRolesAndStates() {
   var ds = new MockDS();
   var rend = new TestRend();
   var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var ac = new goog.ui.AutoComplete(ds, rend, select);
   ac.setTarget(inputElement);
 
   // initially activedescendant is not set
@@ -734,17 +734,17 @@ function testAttachInputWithAnchor() {
   var anchorElement = goog.dom.createDom('div', null, inputElement);
 
   var mockRenderer = mockControl.createLooseMock(
-      goog.ui.ac.Renderer, true);
+      goog.ui.AutoComplete.Renderer, true);
   mockRenderer.setAnchorElement(anchorElement);
   var ignore = goog.testing.mockmatchers.ignoreArgument;
   mockRenderer.renderRows(ignore, ignore, inputElement);
 
   var mockInputHandler = mockControl.createLooseMock(
-      goog.ui.ac.InputHandler, true);
+      goog.ui.AutoComplete.InputHandler, true);
   mockInputHandler.attachInputs(inputElement);
 
   mockControl.$replayAll();
-  var autoComplete = new goog.ui.ac.AutoComplete(
+  var autoComplete = new goog.ui.AutoComplete(
       null, mockRenderer, mockInputHandler);
   autoComplete.attachInputWithAnchor(inputElement, anchorElement);
   autoComplete.setTarget(inputElement);
@@ -755,15 +755,15 @@ function testAttachInputWithAnchor() {
 
 function testDetachInputWithAnchor() {
   var mockRenderer = mockControl.createLooseMock(
-      goog.ui.ac.Renderer, true);
+      goog.ui.AutoComplete.Renderer, true);
   var mockInputHandler = mockControl.createLooseMock(
-      goog.ui.ac.InputHandler, true);
+      goog.ui.AutoComplete.InputHandler, true);
   var anchorElement = goog.dom.createDom('div', null, inputElement);
   var inputElement2 = goog.dom.createDom('input', {type: 'text'});
   var anchorElement2 = goog.dom.createDom('div', null, inputElement2);
 
   mockControl.$replayAll();
-  var autoComplete = new goog.ui.ac.AutoComplete(
+  var autoComplete = new goog.ui.AutoComplete(
       null, mockRenderer, mockInputHandler);
 
   autoComplete.attachInputWithAnchor(inputElement, anchorElement);
