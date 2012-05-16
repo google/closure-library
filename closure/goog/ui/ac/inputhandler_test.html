@@ -10,7 +10,7 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.ui.AutoComplete.InputHandler</title>
+<title>Closure Unit Tests - goog.ui.ac.InputHandler</title>
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.events.KeyCodes');
@@ -18,7 +18,7 @@ See the COPYING file for details.
   goog.require('goog.object');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.MockClock');
-  goog.require('goog.ui.AutoComplete.InputHandler');
+  goog.require('goog.ui.ac.InputHandler');
 </script>
 </head>
 <body>
@@ -64,14 +64,14 @@ See the COPYING file for details.
    * InputHandler.
    */
   function MockInputHandler() {
-    goog.ui.AutoComplete.InputHandler.call(this);
+    goog.ui.ac.InputHandler.call(this);
 
     this.ac_ = new MockAutoCompleter();
     this.cursorPosition_ = 0;
 
     this.attachInput(mockElement);
   }
-  goog.inherits(MockInputHandler, goog.ui.AutoComplete.InputHandler);
+  goog.inherits(MockInputHandler, goog.ui.ac.InputHandler);
 
   /** Checks for updates to the text area, should not happen during IME. */
   MockInputHandler.prototype.update = function() {
@@ -519,7 +519,7 @@ See the COPYING file for details.
 
   function testUpdateDoesNotTriggerSetTokenForSelectRow() {
 
-    var ih = new goog.ui.AutoComplete.InputHandler();
+    var ih = new goog.ui.ac.InputHandler();
 
     // Set up our input handler with the necessary mocks
     var mockAutoCompleter = new MockAutoCompleter();
@@ -574,7 +574,7 @@ See the COPYING file for details.
   }
 
   function testEmptyTokenWithSeparator() {
-    var ih = new goog.ui.AutoComplete.InputHandler();
+    var ih = new goog.ui.ac.InputHandler();
     var mockAutoCompleter = new MockAutoCompleter();
     ih.ac_ = mockAutoCompleter;
     ih.activeElement_ = mockElement;
@@ -590,7 +590,7 @@ See the COPYING file for details.
   }
 
   function testNonEmptyTokenWithSeparator() {
-    var ih = new goog.ui.AutoComplete.InputHandler();
+    var ih = new goog.ui.ac.InputHandler();
     var mockAutoCompleter = new MockAutoCompleter();
     ih.ac_ = mockAutoCompleter;
     ih.activeElement_ = mockElement;
@@ -606,13 +606,13 @@ See the COPYING file for details.
   }
 
   function testGetThrottleTime() {
-    var ih = new goog.ui.AutoComplete.InputHandler();
+    var ih = new goog.ui.ac.InputHandler();
     ih.setThrottleTime(999);
     assertEquals('throttle time set+get', 999, ih.getThrottleTime());
   }
 
   function testGetUpdateDuringTyping() {
-    var ih = new goog.ui.AutoComplete.InputHandler();
+    var ih = new goog.ui.ac.InputHandler();
     ih.setUpdateDuringTyping(false);
     assertFalse('update during typing set+get', ih.getUpdateDuringTyping());
   }

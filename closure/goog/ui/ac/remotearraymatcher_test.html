@@ -10,7 +10,7 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.ui.AutoComplete.RemoteArrayMatcher</title>
+<title>Closure Unit Tests - goog.ui.ac.RemoteArrayMatcher</title>
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.events.KeyCodes');
@@ -18,7 +18,7 @@ See the COPYING file for details.
   goog.require('goog.testing.MockControl');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.net.XhrIo');
-  goog.require('goog.ui.AutoComplete.RemoteArrayMatcher');
+  goog.require('goog.ui.ac.RemoteArrayMatcher');
 </script>
 </head>
 <body>
@@ -43,7 +43,7 @@ See the COPYING file for details.
   }
 
   function testRequestMatchingRows_noSimilarTrue() {
-    var matcher = new goog.ui.AutoComplete.RemoteArrayMatcher(url);
+    var matcher = new goog.ui.ac.RemoteArrayMatcher(url);
     mockMatchHandler(token, responseJson);
     mockControl.$replayAll();
     matcher.requestMatchingRows(token, maxMatches, mockMatchHandler, fullToken);
@@ -53,7 +53,7 @@ See the COPYING file for details.
   }
 
   function testRequestMatchingRows_twoCalls() {
-    var matcher = new goog.ui.AutoComplete.RemoteArrayMatcher(url);
+    var matcher = new goog.ui.ac.RemoteArrayMatcher(url);
 
     var dummyMatchHandler = mockControl.createFunctionMock();
 
