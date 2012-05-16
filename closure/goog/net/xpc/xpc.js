@@ -205,21 +205,22 @@ goog.net.xpc.ChannelStates = {
 /**
  * The name of the transport service (used for internal signalling).
  * @type {string}
- * @private
+ * @suppress {underscore}
  */
 goog.net.xpc.TRANSPORT_SERVICE_ = 'tp';
 
 
 /**
  * Transport signaling message: setup.
- * @protected
+ * @type {string}
  */
 goog.net.xpc.SETUP = 'SETUP';
 
 
 /**
  * Transport signaling message: setup acknowledgement.
- * @private
+ * @type {string}
+ * @suppress {underscore}
  */
 goog.net.xpc.SETUP_ACK_ = 'SETUP_ACK';
 
