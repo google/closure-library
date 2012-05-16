@@ -156,10 +156,12 @@ goog.ui.media.FlickrSet.setFlashUrl = function(flashUrl) {
  * Creates the initial DOM structure of the flickr set, which is basically a
  * the flash object pointing to a flickr set player.
  *
- * @param {goog.ui.media.Media} control The media control.
+ * @param {goog.ui.Control} c The media control.
  * @return {Element} The DOM structure that represents this control.
+ * @override
  */
-goog.ui.media.FlickrSet.prototype.createDom = function(control) {
+goog.ui.media.FlickrSet.prototype.createDom = function(c) {
+  var control = /** @type {goog.ui.media.Media} */ (c);
   var div = goog.ui.media.FlickrSet.superClass_.createDom.call(this, control);
 
   var model =

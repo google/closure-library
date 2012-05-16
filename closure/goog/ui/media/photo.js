@@ -112,10 +112,12 @@ goog.ui.media.Photo.newControl = function(dataModel) {
 /**
  * Creates the initial DOM structure of a photo.
  *
- * @param {goog.ui.media.Media} control The media control.
+ * @param {goog.ui.Control} c The media control.
  * @return {Element} A DOM structure that represents the control.
+ * @override
  */
-goog.ui.media.Photo.prototype.createDom = function(control) {
+goog.ui.media.Photo.prototype.createDom = function(c) {
+  var control = /** @type {goog.ui.media.Media} */ (c);
   var div = goog.ui.media.Photo.superClass_.createDom.call(this, control);
 
   var img = control.getDomHelper().createDom('img', {
