@@ -310,6 +310,7 @@ goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterator', 'goog.ite
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Serializer'], []);
 goog.addDependency('labs/async/chain.js', ['goog.labs.async.chain'], ['goog.labs.async.Result', 'goog.labs.async.ResultBase', 'goog.labs.async.wait']);
 goog.addDependency('labs/async/combine.js', ['goog.labs.async.combine'], ['goog.array', 'goog.labs.async.Result', 'goog.labs.async.ResultBase', 'goog.labs.async.wait']);
+goog.addDependency('labs/async/deferredadaptor.js', ['goog.labs.async.DeferredAdaptor'], ['goog.async.Deferred', 'goog.labs.async.Result', 'goog.labs.async.wait']);
 goog.addDependency('labs/async/result/result.js', ['goog.labs.async.Result'], []);
 goog.addDependency('labs/async/result/resultbase.js', ['goog.labs.async.ResultBase', 'goog.labs.async.ResultBase.StateError'], ['goog.debug.Error', 'goog.labs.async.Result']);
 goog.addDependency('labs/async/transform.js', ['goog.labs.async.transform'], ['goog.labs.async.Result', 'goog.labs.async.ResultBase', 'goog.labs.async.wait']);
