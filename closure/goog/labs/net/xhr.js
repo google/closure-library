@@ -384,10 +384,6 @@ goog.scope(function() {
   goog.inherits(_.Error, goog.debug.Error);
 
 
-  /** @override */
-  _.Error.prototype.name = 'XhrError';
-
-
 
   /**
    * Class for HTTP errors.
@@ -410,10 +406,6 @@ goog.scope(function() {
   goog.inherits(_.HttpError, _.Error);
 
 
-  /** @override */
-  _.HttpError.prototype.name = 'XhrHttpError';
-
-
 
   /**
    * Class for Timeout errors.
@@ -427,9 +419,5 @@ goog.scope(function() {
     goog.base(this, 'Request timed out', url, xhr);
   };
   goog.inherits(_.TimeoutError, _.Error);
-
-
-  /** @override */
-  _.TimeoutError.prototype.name = 'XhrTimeoutError';
 
 });
