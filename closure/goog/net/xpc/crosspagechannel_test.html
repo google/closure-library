@@ -15,6 +15,7 @@ See the COPYING file for details.
 <script type="text/javascript">
   goog.require('goog.Disposable');
   goog.require('goog.Uri');
+  goog.require('goog.async.Deferred');
   goog.require('goog.debug.Logger');
   goog.require('goog.dom');
   goog.require('goog.net.xpc.CrossPageChannel');
@@ -26,6 +27,11 @@ See the COPYING file for details.
 </head>
 <body>
 <script type="text/javascript">
+
+// Set this to false when working on this test.  It needs to be true for
+// automated testing, as some browsers (eg IE8) choke on the large numbers of
+// iframes this test would otherwise leave active.
+var CLEAN_UP_IFRAMES = true;
 
 var IFRAME_LOAD_WAIT_MS = 1000;
 var stubs = new goog.testing.PropertyReplacer();
@@ -115,103 +121,64 @@ function testCreateIframeRandomId() {
 }
 
 
-function testCreateIframeWithDom() {
-  driver.createPeerIframe(goog.dom.getDomHelper());
-
-  asyncTestCase.waitForAsync('iframe load');
-  window.setTimeout(function() {
-    driver.checkPeerIframe();
-    asyncTestCase.continueTesting();
-  }, IFRAME_LOAD_WAIT_MS);
+function testLifeCycle() {
+  checkLifeCycle(
+      false /* oneSidedHandshake */,
+      true /* outerFrameReconnectSupported */,
+      false /* reverse */);
 }
 
 
-function testCreateIframeAndConnect_synchronous() {
-  checkCreateIframeAndConnect(true /* synchronous */,
-      false /* oneSidedHandshake */);
+function testLifeCycle_rev() {
+  checkLifeCycle(
+      false /* oneSidedHandshake */,
+      true /* outerFrameReconnectSupported */,
+      true /* reverse */);
 }
 
 
-function testCreateIframeAndConnect_synchronous_onesided() {
-  checkCreateIframeAndConnect(true /* synchronous */,
-      true /* oneSidedHandshake */);
+function testLifeCycle_onesided() {
+  checkLifeCycle(
+      true /* oneSidedHandshake */,
+      false /* outerFrameReconnectSupported */,
+      false /* reverse */);
 }
 
 
-function testCreateIframeAndConnect_asynchronous() {
-  checkCreateIframeAndConnect(false /* synchronous */,
-      false /* oneSidedHandshake */);
+function testLifeCycle_onesided_rev() {
+  checkLifeCycle(
+      true /* oneSidedHandshake */,
+      false /* outerFrameReconnectSupported */,
+      true /* reverse */);
 }
 
 
-function testCreateIframeAndConnect_asynchronous_onesided() {
-  checkCreateIframeAndConnect(false /* synchronous */,
-      true /* oneSidedHandshake */);
+
+function checkLifeCycle(oneSidedHandshake, outerFrameReconnectSupported,
+    reverse) {
+  driver.createPeerIframe('new_iframe', oneSidedHandshake);
+  driver.connect(true /* fullLifeCycleTest */, outerFrameReconnectSupported,
+      reverse);
 }
 
 
-function checkCreateIframeAndConnect(synchronous, oneSidedHandshake) {
-  driver.createPeerIframe('new_iframe', undefined /* opt_domHelper */,
-      oneSidedHandshake);
-
-  if (synchronous) {
-    // This connection will still get deferred on webkit.
-    driver.connect();
-  } else {
-    asyncTestCase.waitForAsync('iframe load');
-    window.setTimeout(function() {
-      // TODO(user): The test server has such high latency for testdata that
-      //     this timeout isn't event enough. Averages 5sec on my machine.
-      //     speed this up.
-      driver.connect();
-    }, IFRAME_LOAD_WAIT_MS);
-  }
+function testConnectMismatchedNames() {
+  checkConnectMismatchedNames(false /* reverse */);
 }
 
 
-function testReconnection_byOuterFrame() {
-  this.checkReconnection(true /* byOuterFrame */,
-      false /* oneSidedHandshake */);
+function testConnectMismatchedNames_rev() {
+  checkConnectMismatchedNames(true /* reverse */);
 }
 
 
-function testReconnection_byInnerFrame() {
-  this.checkReconnection(false /* byOuterFrame */,
-      false /* oneSidedHandshake */);
-}
 
-
-// Reconnection by an outer frame using a one sided handshake is not expected to
-// work.
-function testReconnection_byInnerFrame_oneSided() {
-  this.checkReconnection(false /* byOuterFrame */,
-      true /* oneSidedHandshake */);
-}
-
-
-function checkReconnection(byOuterFrame, oneSidedHandshake) {
-  var ids = driver.createPeerIframe('new_iframe', undefined /* opt_domHelper */,
-      oneSidedHandshake);
-  driver.connect();
-  var callback = byOuterFrame ?
-    goog.partial(performOuterFrameReconnect, ids[0] /* iframeId */,
-        oneSidedHandshake, ids[1] /* channelName */) :
-    performInnerFrameReconnect;
-  driver.setEchoReplyCallback(callback);
-}
-
-
-function performOuterFrameReconnect(iframeId, oneSidedHandshake, channelName) {
-  driver.setEchoReplyCallback(null);
-  driver.createChannel(iframeId, undefined /* opt_domHelper */,
-      oneSidedHandshake, channelName);
-  driver.connect();
-}
-
-
-function performInnerFrameReconnect() {
-  driver.setEchoReplyCallback(null);
-  driver.reconnectPeer();
+function checkConnectMismatchedNames(reverse) {
+  driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */,
+      true /* opt_randomChannelNames */);
+  driver.connect(false /* fullLifeCycleTest */,
+      false /* outerFrameReconnectSupported */,
+      false /* reverse */);
 }
 
 
@@ -230,21 +197,25 @@ function testEscapeServiceName() {
   assertEquals('Should not escape s%tp', 's%25tp', escape('s%tp'));
 }
 
+
 function testSameDomainCheck_noMessageOrigin() {
   var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
       goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
   assertTrue(channel.isMessageOriginAcceptable_(undefined));
 }
 
+
 function testSameDomainCheck_noPeerHostname() {
   var channel = new goog.net.xpc.CrossPageChannel({});
   assertTrue(channel.isMessageOriginAcceptable_('http://foo.com'));
 }
 
+
 function testSameDomainCheck_unconfigured() {
   var channel = new goog.net.xpc.CrossPageChannel({});
   assertTrue(channel.isMessageOriginAcceptable_(undefined));
 }
+
 
 function testSameDomainCheck_originsMatch() {
   var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
@@ -252,11 +223,13 @@ function testSameDomainCheck_originsMatch() {
   assertTrue(channel.isMessageOriginAcceptable_('http://foo.com'));
 }
 
+
 function testSameDomainCheck_originsMismatch() {
   var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
       goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
   assertFalse(channel.isMessageOriginAcceptable_('http://nasty.com'));
 }
+
 
 function testUnescapeServiceName() {
   var unescape = goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_;
@@ -291,20 +264,6 @@ Driver = function() {
   this.iframe_ = null;
 
   /**
-   * The ID of the peer iframe.
-   * @type {string}
-   * @private
-   */
-  this.iframeId_ = 'test_iframe';
-
-  /**
-   * Channel configuration object.
-   * @type {Object}
-   * @private
-   */
-  this.cfg_ = null;
-
-  /**
    * The channel to use.
    * @type {goog.net.xpc.CrossPageChannel}
    * @private
@@ -312,26 +271,71 @@ Driver = function() {
   this.channel_ = null;
 
   /**
-   * The function to call when an echo reply is received.
-   * @type {function()}
+   * Outer frame configuration object.
+   * @type {Object}
    * @private
    */
-  this.echoReplyCallback_ = goog.bind(this.defaultEchoReplyCallback_, this);
+  this.outerFrameCfg_ = null;
+
+  /**
+   * The initial name of the outer channel.
+   * @type {?string}
+   * @private
+   */
+  this.initialOuterChannelName_ = null;
+
+  /**
+   * Inner frame configuration object.
+   * @type {Object}
+   * @private
+   */
+  this.innerFrameCfg_ = null;
+
+  /**
+   * The contents of the payload of the 'echo' request sent by the inner frame.
+   * @type {?string}
+   * @private
+   */
+  this.innerFrameEchoPayload_ = null;
+
+  /**
+   * The contents of the payload of the 'echo' request sent by the outer frame.
+   * @type {?string}
+   * @private
+   */
+  this.outerFrameEchoPayload_ = null;
+
+  /**
+   * A deferred which fires when the inner frame receives its echo response.
+   * @type {goog.async.Deferred}
+   * @private
+   */
+  this.innerFrameResponseReceived_ = new goog.async.Deferred();
+
+  /**
+   * A deferred which fires when the outer frame receives its echo response.
+   * @type {goog.async.Deferred}
+   * @private
+   */
+  this.outerFrameResponseReceived_ = new goog.async.Deferred();
+
 };
 goog.inherits(Driver, goog.Disposable);
 
 
 /** @override */
 Driver.prototype.disposeInternal = function() {
-  // If we want to cancel the connection process before the iframe has loaded,
-  // kill the iframe/http request.
-  if (this.channel_ && !this.channel_.isConnected() &&
-      document.getElementById(this.iframeId_)) {
-    document.getElementById(this.iframeId_).src = 'about:blank';
+  // Required to make this test perform acceptably (and pass) on slow browsers,
+  // esp IE8.
+  if (CLEAN_UP_IFRAMES) {
+    goog.dom.removeNode(this.iframe_);
+    delete this.iframe_;
   }
-  if (this.channel_) {
-    this.channel_.dispose();
-  }
+  goog.dispose(this.channel_);
+  this.innerFrameResponseReceived_.cancel();
+  this.innerFrameResponseReceived_ = null;
+  this.outerFrameResponseReceived_.cancel();
+  this.outerFrameResponseReceived_ = null;
   goog.base(this, 'disposeInternal');
 };
 
@@ -342,32 +346,34 @@ Driver.prototype.disposeInternal = function() {
  * @private
  */
 Driver.prototype.getInnerPeer_ = function() {
-  return window.frames[this.iframeId_];
+  return this.iframe_.contentWindow;
 };
 
 
 /**
- * Creates the channel.
+ * Sets up the configuration objects for the inner and outer frames.
  * @param {string=} opt_iframeId If present, the ID of the iframe to use,
  *     otherwise, tells the channel to generate an iframe ID.
- * @param {goog.dom.DomHelper=} opt_domHelper The optional dom helper to use
- *     for determining which window to use.
  * @param {boolean=} opt_oneSidedHandshake Whether the one sided handshake
  *     config option should be set.
  * @param {string=} opt_channelName The name of the channel to use, or null
  *     to generate one.
+ * @param {boolean=} randomChannelNames Whether the different ends of the
+ *     channel should be allowed to pick differing, random names.
  * @return {string} The name of the created channel.
+ * @private
  */
-Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper,
-    opt_oneSidedHandshake, opt_channelName) {
+Driver.prototype.setConfiguration_ = function(opt_iframeId,
+    opt_oneSidedHandshake, opt_channelName, opt_randomChannelNames) {
   var cfg = {};
   if (opt_iframeId) {
-    this.iframeId_ = opt_iframeId;
     cfg[goog.net.xpc.CfgFields.IFRAME_ID] = opt_iframeId;
   }
   cfg[goog.net.xpc.CfgFields.PEER_URI] = 'testdata/inner_peer.html';
-  var channelName = opt_channelName || 'test_channel' + uniqueId++
-  cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = channelName;
+  if (!opt_randomChannelNames) {
+    var channelName = opt_channelName || 'test_channel' + uniqueId++;
+    cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = channelName;
+  }
   cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] = !!opt_oneSidedHandshake;
@@ -378,11 +384,48 @@ Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper,
   resolveUri(goog.net.xpc.CfgFields.PEER_URI);
   resolveUri(goog.net.xpc.CfgFields.LOCAL_POLL_URI);
   resolveUri(goog.net.xpc.CfgFields.PEER_POLL_URI);
+  this.outerFrameCfg_ = cfg;
+  this.innerFrameCfg_ = goog.object.clone(cfg);
+};
 
-  this.channel_ = new goog.net.xpc.CrossPageChannel(cfg, opt_domHelper);
-  this.channel_.registerService('msg', goog.bind(this.msgHandler_, this));
-  this.cfg_ = cfg;
-  return channelName;
+
+/**
+ * Creates an outer frame channel object.
+ * @private
+ */
+Driver.prototype.createChannel_ = function() {
+  if (this.channel_) {
+    this.channel_.dispose();
+  }
+  this.channel_ = new goog.net.xpc.CrossPageChannel(this.outerFrameCfg_);
+  this.channel_.registerService('echo',
+      goog.bind(this.echoHandler_, this));
+  this.channel_.registerService('response',
+      goog.bind(this.responseHandler_, this));
+
+  return this.channel_.name;
+};
+
+
+/**
+ * Checks the names of the inner and outer frames meet expectations.
+ * @private
+ */
+Driver.prototype.checkChannelNames_ = function() {
+  var outerName = this.channel_.name;
+  var innerName = this.getInnerPeer_().channel.name;
+  var configName = this.innerFrameCfg_[goog.net.xpc.CfgFields.CHANNEL_NAME]
+      || null;
+
+  // The outer channel never changes its name.
+  assertEquals(this.initialOuterChannelName_, outerName);
+  // The name should be as configured, if it was configured.
+  if (configName) {
+    assertEquals(configName, innerName);
+  }
+  // The names of both ends of the channel should match.
+  assertEquals(innerName, outerName);
+  G_testRunner.log('Channel name: ' + innerName);
 };
 
 
@@ -390,8 +433,8 @@ Driver.prototype.createChannel = function(opt_iframeId, opt_domHelper,
  * Returns the configuration of the xpc.
  * @return {?Object} The configuration of the xpc.
  */
-Driver.prototype.getConfiguration = function() {
-  return this.cfg_;
+Driver.prototype.getInnerFrameConfiguration = function() {
+  return this.innerFrameCfg_;
 };
 
 
@@ -399,15 +442,15 @@ Driver.prototype.getConfiguration = function() {
  * Creates the peer iframe.
  * @param {string=} opt_iframeId If present, the ID of the iframe to create,
  *     otherwise, generates an iframe ID.
- * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for
- *     finding the elements in the iframe.
  * @param {boolean=} opt_oneSidedHandshake Whether a one sided handshake is
  *     specified.
+ * @param {boolean=} opt_randomChannelNames Whether the ends of the channel
+ *     should be allowed to pick differing, random names.
  * @return {!Array.<string>} The id of the created iframe and the name of the
  *     created channel.
  */
-Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper,
-    opt_oneSidedHandshake) {
+Driver.prototype.createPeerIframe = function(opt_iframeId,
+    opt_oneSidedHandshake, opt_randomChannelNames) {
   var expectedIframeId;
 
   if (opt_iframeId) {
@@ -422,13 +465,12 @@ Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper,
   assertNull('element[id=' + expectedIframeId + '] exists',
       goog.dom.getElement(expectedIframeId));
 
-  var channelName = this.createChannel(opt_iframeId, opt_domHelper,
-      opt_oneSidedHandshake);
+  this.setConfiguration_(opt_iframeId, opt_oneSidedHandshake,
+      undefined /* opt_channelName */, opt_randomChannelNames);
+  this.initialOuterChannelName_ = this.createChannel_();
   this.iframe_ = this.channel_.createPeerIframe(document.body);
 
   assertEquals(expectedIframeId, this.iframe_.id);
-  this.iframeId_ = expectedIframeId;
-  return [this.iframeId_, channelName];
 };
 
 
@@ -436,7 +478,7 @@ Driver.prototype.createPeerIframe = function(opt_iframeId, opt_domHelper,
  * Checks if the peer iframe has been created.
  */
 Driver.prototype.checkPeerIframe = function() {
-  assertNotNull(goog.dom.getElement(this.iframeId_));
+  assertNotNull(this.iframe_);
   var peer = this.getInnerPeer_();
   assertNotNull(peer);
   assertNotNull(peer.document);
@@ -446,7 +488,11 @@ Driver.prototype.checkPeerIframe = function() {
 /**
  * Starts the connection. The connection happens asynchronously.
  */
-Driver.prototype.connect = function() {
+Driver.prototype.connect = function(fullLifeCycleTest,
+    outerFrameReconnectSupported, reverse) {
+  // Outer frame reconnect is only tested in a full lifecycle test.
+  assert(fullLifeCycleTest || !outerFrameReconnectSupported);
+
   if (!this.isTransportTestable_()) {
     asyncTestCase.continueTesting();
     return;
@@ -454,18 +500,177 @@ Driver.prototype.connect = function() {
 
   asyncTestCase.waitForAsync('parent and child connect');
 
-  this.channel_.connect(goog.bind(this.parentConnected_, this));
+  // Set the criteria for the initial handshake portion of the test.
+  this.reinitializeDeferreds_();
+  this.innerFrameResponseReceived_.awaitDeferred(
+      this.outerFrameResponseReceived_);
+  this.innerFrameResponseReceived_.addCallback(
+      goog.bind(this.checkChannelNames_, this));
+
+  if (fullLifeCycleTest) {
+    this.innerFrameResponseReceived_.addCallback(
+        goog.bind(this.testReconnects_, this, outerFrameReconnectSupported));
+  } else {
+    this.innerFrameResponseReceived_.addCallback(
+        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  }
+
+  this.continueConnect_(reverse);
+};
+
+
+Driver.prototype.continueConnect_ = function(reverse) {
+  // Wait until the peer is fully established.  Establishment is sometimes very
+  // slow indeed, especially on virtual machines, so a fixed timeout is not
+  // suitable.  This wait is required because we want to take precise control
+  // of the channel startup timing, and shouldn't be needed in production use,
+  // where the inner frame's channel is typically not started by a DOM call as
+  // it is here.
+  if (!this.getInnerPeer_() || !this.getInnerPeer_().instantiateChannel) {
+    window.setTimeout(goog.bind(this.continueConnect_, this, reverse), 100);
+    return;
+  }
+
+  var connectFromOuterFrame = goog.bind(this.channel_.connect, this.channel_,
+      goog.bind(this.outerFrameConnected_, this));
+  var innerConfig = this.innerFrameCfg_;
+  var connectFromInnerFrame = goog.bind(this.getInnerPeer_().instantiateChannel,
+    this.getInnerPeer_(), innerConfig);
+
+  // Take control of the timing and reverse of each frame's first SETUP call.  If
+  // these happen to fire right on top of each other, that tends to mask
+  // problems that reliably occur when there is a short delay.
+  window.setTimeout(connectFromOuterFrame, reverse ? 1 : 10);
+  window.setTimeout(connectFromInnerFrame, reverse ? 10 : 1);
 };
 
 
 /**
- * Get the peer to reconnect, and repeat the echo test.
+ * Called by the outer frame connection callback.
+ * @private
  */
-Driver.prototype.reconnectPeer = function() {
+Driver.prototype.outerFrameConnected_ = function() {
+  var payload = this.outerFrameEchoPayload_ =
+      goog.net.xpc.getRandomString(10);
+  this.channel_.send('echo', payload);
+};
+
+
+/**
+ * Called by the inner frame connection callback.
+ */
+Driver.prototype.innerFrameConnected = function() {
+  var payload = this.innerFrameEchoPayload_ =
+      goog.net.xpc.getRandomString(10);
+  this.getInnerPeer_().sendEcho(payload);
+};
+
+
+/**
+ * The handler function for incoming echo requests.
+ * @param {string} payload The message payload.
+ * @private
+ */
+Driver.prototype.echoHandler_ = function(payload) {
+  assertTrue('outer frame should be connected', this.channel_.isConnected());
   var peer = this.getInnerPeer_();
-  asyncTestCase.waitForAsync('child reconnecting');
-  peer.instantiateChannel(this.cfg_);
-}
+  assertTrue('child should be connected', peer.isConnected());
+  this.channel_.send('response', payload);
+};
+
+
+/**
+ * The handler function for incoming echo responses.
+ * @param {string} payload The message payload.
+ * @private
+ */
+Driver.prototype.responseHandler_ = function(payload) {
+  assertTrue('outer frame should be connected', this.channel_.isConnected());
+  var peer = this.getInnerPeer_();
+  assertTrue('child should be connected', peer.isConnected());
+  assertEquals(this.outerFrameEchoPayload_, payload);
+  this.outerFrameResponseReceived_.callback(true);
+};
+
+
+/**
+ * The handler function for incoming echo replies.
+ * @param {string} payload The message payload.
+ * @private
+ */
+Driver.prototype.innerFrameGotResponse = function(payload) {
+  assertTrue('outer frame should be connected', this.channel_.isConnected());
+  var peer = this.getInnerPeer_();
+  assertTrue('child should be connected', peer.isConnected());
+  assertEquals(this.innerFrameEchoPayload_, payload);
+  this.innerFrameResponseReceived_.callback(true);
+};
+
+
+/**
+ * The second phase of the standard test, where reconnections of both the inner
+ * and outer frames are performed.
+ * @param {boolean} outerFrameReconnectSupported Whether outer frame reconnects
+ *     are supported, and should be tested.
+ * @private
+ */
+Driver.prototype.testReconnects_ = function(outerFrameReconnectSupported) {
+  G_testRunner.log('Performing inner frame reconnect');
+  this.reinitializeDeferreds_();
+  this.innerFrameResponseReceived_.addCallback(
+      goog.bind(this.checkChannelNames_, this));
+
+  if (outerFrameReconnectSupported) {
+    this.innerFrameResponseReceived_.addCallback(
+        goog.bind(this.performOuterFrameReconnect_, this));
+  } else {
+    this.innerFrameResponseReceived_.addCallback(
+        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  }
+
+  this.performInnerFrameReconnect_();
+};
+
+
+/**
+ * Initializes the deferreds and clears the echo payloads, ready for another
+ * sub-test.
+ * @private
+ */
+Driver.prototype.reinitializeDeferreds_ = function() {
+  this.innerFrameEchoPayload_ = null;
+  this.outerFrameEchoPayload_ = null;
+  this.innerFrameResponseReceived_.cancel();
+  this.innerFrameResponseReceived_ = new goog.async.Deferred();
+  this.outerFrameResponseReceived_.cancel();
+  this.outerFrameResponseReceived_ = new goog.async.Deferred();
+};
+
+
+/**
+ * Get the inner frame to reconnect, and repeat the echo test.
+ * @private
+ */
+Driver.prototype.performInnerFrameReconnect_ = function() {
+  var peer = this.getInnerPeer_();
+  peer.instantiateChannel(this.innerFrameCfg_);
+};
+
+
+/**
+ * Get the outer frame to reconnect, and repeat the echo test.
+ * @private
+ */
+Driver.prototype.performOuterFrameReconnect_ = function() {
+  G_testRunner.log('Reconnecting outer frame');
+  this.reinitializeDeferreds_();
+  this.outerFrameResponseReceived_.addCallback(
+      goog.bind(this.checkChannelNames_, this));
+  this.outerFrameResponseReceived_.addCallback(
+      goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  this.createChannel_();
+  this.channel_.connect(goog.bind(this.outerFrameConnected_, this));
+};
 
 
 /**
@@ -494,69 +699,6 @@ Driver.prototype.isTransportTestable_ = function() {
   return testable;
 };
 
-
-/**
- * Callback for the parent connection.
- * @private
- */
-Driver.prototype.parentConnected_ = function() {
-  var peer = this.getInnerPeer_();
-  if (peer.isConnected()) {
-    asyncTestCase.waitForAsync('child echo');
-  } else {
-    asyncTestCase.waitForAsync('child connect');
-    return;
-  }
-  this.channel_.send('echo', 'hello');
-};
-
-
-/**
- * Callback for the child connection.
- */
-Driver.prototype.childConnected = function() {
-  if (this.channel_.isConnected()) {
-    this.parentConnected_();
-  } else {
-    asyncTestCase.waitForAsync('parent connect');
-  }
-};
-
-
-/**
- * Sets an alternate echo reply callback, or resets back to the default.
- * @param {?function()} callback The new callback, or null to reset to the
- *     default callback.
- */
-Driver.prototype.setEchoReplyCallback = function(callback) {
-  this.echoReplyCallback_ = callback ? callback :
-      goog.bind(this.defaultEchoReplyCallback_, this);
-};
-
-
-/**
- * Default method to call when receiveing an echo reply.
- * @private
- */
-Driver.prototype.defaultEchoReplyCallback_ = function() {
-  asyncTestCase.continueTesting();
-};
-
-
-/**
- * The handler function for incoming msg requests.
- * @param {string} payload The message payload.
- * @private
- */
-Driver.prototype.msgHandler_ = function(payload) {
-  assertTrue('parent should be connected', this.channel_.isConnected());
-  var peer = this.getInnerPeer_();
-  assertTrue('child should be connected', peer.isConnected());
-  assertEquals('hello', payload);
-  this.echoReplyCallback_();
-};
-
-
 </script>
 
 <!-- Debug box. -->
@@ -564,21 +706,6 @@ Driver.prototype.msgHandler_ = function(payload) {
 Debug [<a href="#" onclick="document.getElementById('debugDiv').innerHTML = '';">clear</a>]: <br/>
 <div id="debugDiv" style="border: 1px #000000 solid; font-size:xx-small; background: #fff;"></div>
 </div>
-
-<!--
-Setup inner peer. This must be done in the <body>, so that the inner peer iframe
-blocks the onload event in this window until it is fully loaded. The JsUnit
-tests will execute after the onload event fires.
--->
-<!--
-TODO(user): Commenting out testExistingIframeConnect test as test will take
-    too long to test properly. Loading iframe, establishing a connection,
-    creating another channel, connecting. Figure out how to test properly,
-<iframe name=test_iframe id=test_iframe src=testdata/inner_peer.html width=100% height=100%>
-</iframe>
--->
-
-
 
 </body>
 </html>

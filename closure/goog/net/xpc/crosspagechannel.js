@@ -24,6 +24,7 @@ goog.provide('goog.net.xpc.CrossPageChannel');
 goog.require('goog.Disposable');
 goog.require('goog.Uri');
 goog.require('goog.async.Deferred');
+goog.require('goog.async.Delay');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
@@ -134,6 +135,15 @@ goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_ =
  */
 goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_UNESCAPE_RE_ =
     new RegExp('^%+' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
+
+
+/**
+ * A delay between the transport reporting as connected and the calling of the
+ * connection callback.  Sometimes used to paper over timing vulnerabilities.
+ * @type {goog.async.Delay}
+ * @private
+ */
+goog.net.xpc.CrossPageChannel.prototype.connectionDelay_ = null;
 
 
 /**
@@ -509,6 +519,8 @@ goog.net.xpc.CrossPageChannel.prototype.close = function() {
   this.transport_.dispose();
   this.transport_ = null;
   this.connectCb_ = null;
+  goog.dispose(this.connectionDelay_);
+  this.connectionDelay_ = null;
   goog.net.xpc.logger.info('Channel "' + this.name + '" closed');
 };
 
@@ -516,14 +528,26 @@ goog.net.xpc.CrossPageChannel.prototype.close = function() {
 /**
  * Package-private.
  * Called by the transport when the channel is connected.
+ * @param {number=} opt_delay Delay this number of milliseconds before calling
+ *     the connection callback. Usage is discouraged, but can be used to paper
+ *     over timing vulnerabilities when there is no alternative.
  */
-goog.net.xpc.CrossPageChannel.prototype.notifyConnected = function() {
-  if (this.isConnected()) {
+goog.net.xpc.CrossPageChannel.prototype.notifyConnected = function(opt_delay) {
+  if (this.isConnected() ||
+      (this.connectionDelay_ && this.connectionDelay_.isActive())) {
     return;
   }
   this.state_ = goog.net.xpc.ChannelStates.CONNECTED;
   goog.net.xpc.logger.info('Channel "' + this.name + '" connected');
-  this.connectCb_();
+  goog.dispose(this.connectionDelay_);
+  if (opt_delay) {
+    this.connectionDelay_ =
+        new goog.async.Delay(this.connectCb_, opt_delay);
+    this.connectionDelay_.start();
+  } else {
+    this.connectionDelay_ = null;
+    this.connectCb_();
+  }
 };
 
 

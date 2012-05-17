@@ -145,13 +145,13 @@ goog.inherits(goog.net.xpc.NativeMessagingTransport, goog.net.xpc.Transport);
 
 
 /**
- * The id of a timer used briefly during the connection sequence, or null if it
- * is inactive.
- * @type {?number}
+ * Length of the delay in milliseconds between the channel being connected and
+ * the connection callback being called, in cases where coverage of timing flaws
+ * is required.
+ * @type {number}
  * @private
  */
-goog.net.xpc.NativeMessagingTransport.prototype.connectionNotificationTimerId_ =
-    null;
+goog.net.xpc.NativeMessagingTransport.CONNECTION_DELAY_MS_ = 200;
 
 
 /**
@@ -366,31 +366,14 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
 
 
 /**
- * Notify the channel that this transport is connected, possibly at a delay.
+ * Notify the channel that this transport is connected.  A short delay is
+ * required to paper over timing vulnerabilities.
  * @private
  */
-goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ = function() {
-  // TODO(dbk): Remove this timeout.  This is here strictly as a temporary
-  // measure to prevent premature message delivery by the outer frame to the,
-  // inner frame, and should be removed when my TODO in the constructor is
-  // resolved.
-  if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.OUTER) {
-    this.connectionNotificationTimerId_ = goog.Timer.callOnce(
-        this.doNotifyConnected_, 100, this);
-  } else {
-    this.doNotifyConnected_();
-  }
-};
-
-
-/**
- * Notify the channel that this transport is connected.
- * @private
- */
-goog.net.xpc.NativeMessagingTransport.prototype.doNotifyConnected_ =
+goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ =
     function() {
-  this.connectionNotificationTimerId_ = null;
-  this.channel_.notifyConnected();
+  this.channel_.notifyConnected(
+      goog.net.xpc.NativeMessagingTransport.CONNECTION_DELAY_MS_);
 };
 
 
@@ -410,10 +393,6 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
           false,
           goog.net.xpc.NativeMessagingTransport);
     }
-  }
-
-  if (this.connectionNotificationTimerId_) {
-    goog.Timer.clear(this.connectionNotificationTimerId_);
   }
 
   goog.dispose(this.eventHandler_);
