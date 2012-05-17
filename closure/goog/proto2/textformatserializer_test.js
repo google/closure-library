@@ -449,6 +449,64 @@ function testDeserializationVariedNumbers() {
   assertEquals(-35.5, message.getRepeatedFloat(2));
 }
 
+function testParseNumericalConstant() {
+  var parseNumericalConstant =
+      goog.proto2.TextFormatSerializer.Parser.parseNumericalConstant_;
+
+  assertEquals(Infinity, parseNumericalConstant('inf'));
+  assertEquals(Infinity, parseNumericalConstant('inff'));
+  assertEquals(Infinity, parseNumericalConstant('infinity'));
+  assertEquals(Infinity, parseNumericalConstant('infinityf'));
+  assertEquals(Infinity, parseNumericalConstant('Infinityf'));
+
+  assertEquals(-Infinity, parseNumericalConstant('-inf'));
+  assertEquals(-Infinity, parseNumericalConstant('-inff'));
+  assertEquals(-Infinity, parseNumericalConstant('-infinity'));
+  assertEquals(-Infinity, parseNumericalConstant('-infinityf'));
+  assertEquals(-Infinity, parseNumericalConstant('-Infinity'));
+
+  assertNull(parseNumericalConstant('-infin'));
+  assertNull(parseNumericalConstant('infin'));
+  assertNull(parseNumericalConstant('-infinite'));
+
+  assertNull(parseNumericalConstant('-infin'));
+  assertNull(parseNumericalConstant('infin'));
+  assertNull(parseNumericalConstant('-infinite'));
+
+  assertTrue(isNaN(parseNumericalConstant('Nan')));
+  assertTrue(isNaN(parseNumericalConstant('NaN')));
+  assertTrue(isNaN(parseNumericalConstant('NAN')));
+  assertTrue(isNaN(parseNumericalConstant('nan')));
+  assertTrue(isNaN(parseNumericalConstant('nanf')));
+  assertTrue(isNaN(parseNumericalConstant('NaNf')));
+
+  assertEquals(Number.POSITIVE_INFINITY, parseNumericalConstant('infinity'));
+  assertEquals(Number.NEGATIVE_INFINITY, parseNumericalConstant('-inf'));
+  assertEquals(Number.NEGATIVE_INFINITY, parseNumericalConstant('-infinity'));
+
+  assertNull(parseNumericalConstant('na'));
+  assertNull(parseNumericalConstant('-nan'));
+  assertNull(parseNumericalConstant('none'));
+}
+
+function testDeserializationOfNumericalConstants() {
+
+  var message = new proto2.TestAllTypes();
+  var value = (
+      'repeated_float: inf\n' +
+      'repeated_float: -inf\n' +
+      'repeated_float: nan\n' +
+      'repeated_float: 300.2\n'
+      );
+
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+
+  assertEquals(Infinity, message.getRepeatedFloat(0));
+  assertEquals(-Infinity, message.getRepeatedFloat(1));
+  assertTrue(isNaN(message.getRepeatedFloat(2)));
+  assertEquals(300.2, message.getRepeatedFloat(3));
+}
+
 function testGetNumberFromString() {
   var getNumberFromString =
       goog.proto2.TextFormatSerializer.Parser.getNumberFromString_;

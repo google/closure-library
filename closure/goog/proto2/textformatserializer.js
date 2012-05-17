@@ -24,6 +24,7 @@
 goog.provide('goog.proto2.TextFormatSerializer');
 goog.provide('goog.proto2.TextFormatSerializer.Parser');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.json');
 goog.require('goog.proto2.Serializer');
@@ -406,7 +407,8 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.getCurrent = function() {
  */
 goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes = {
   END: /---end---/,
-  IDENTIFIER: /^[a-zA-Z][a-zA-Z0-9_]*/,
+  // Leading "-" to identify "-infinity"."
+  IDENTIFIER: /^-?[a-zA-Z][a-zA-Z0-9_]*/,
   NUMBER: /^(0x[0-9a-f]+)|(([-])?[0-9][0-9]*(\.?[0-9]+)?([f])?)/,
   COMMENT: /^#.*/,
   OPEN_BRACE: /^{/,
@@ -634,6 +636,27 @@ goog.proto2.TextFormatSerializer.Parser.getNumberFromString_ =
 
 
 /**
+ * Parse NaN, positive infinity, or negative infinity from a string.
+ * @param {string} identifier An identifier string to check.
+ * @return {?number} Infinity, negative infinity, NaN, or null if none
+ *     of the constants could be parsed.
+ * @private.
+ */
+goog.proto2.TextFormatSerializer.Parser.parseNumericalConstant_ =
+    function(identifier) {
+  if (/^-?inf(?:inity)?f?$/i.test(identifier)) {
+    return Infinity * (goog.string.startsWith(identifier, '-') ? -1 : 1);
+  }
+
+  if (/^nanf?$/i.test(identifier)) {
+    return NaN;
+  }
+
+  return null;
+};
+
+
+/**
  * Attempts to parse the given field's value from the stream.
  * @param {goog.proto2.FieldDescriptor} field The field.
  * @return {*} The field's value or null if none.
@@ -645,6 +668,18 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
   switch (field.getFieldType()) {
     case goog.proto2.FieldDescriptor.FieldType.DOUBLE:
     case goog.proto2.FieldDescriptor.FieldType.FLOAT:
+
+      var identifier = this.consumeIdentifier_();
+      if (identifier) {
+        var numericalIdentifier =
+            goog.proto2.TextFormatSerializer.Parser.parseNumericalConstant_(
+                identifier);
+        // Use isDefAndNotNull since !!NaN is false.
+        if (goog.isDefAndNotNull(numericalIdentifier)) {
+          return numericalIdentifier;
+        }
+      }
+
     case goog.proto2.FieldDescriptor.FieldType.INT32:
     case goog.proto2.FieldDescriptor.FieldType.UINT32:
     case goog.proto2.FieldDescriptor.FieldType.FIXED32:
@@ -868,7 +903,6 @@ goog.proto2.TextFormatSerializer.Parser.prototype.tryConsume_ =
  */
 goog.proto2.TextFormatSerializer.Parser.prototype.consumeToken_ =
     function(type) {
-  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
   if (!this.lookingAtType_(type)) {
     this.reportError_('Expected token type: ' + type);
     return null;

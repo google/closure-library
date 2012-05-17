@@ -449,7 +449,7 @@ goog.addDependency('proto2/package_test.pb.js', ['someprotopackage.TestPackageTy
 goog.addDependency('proto2/pbliteserializer.js', ['goog.proto2.PbLiteSerializer'], ['goog.proto2.LazyDeserializer', 'goog.proto2.Util']);
 goog.addDependency('proto2/serializer.js', ['goog.proto2.Serializer'], ['goog.proto2.Descriptor', 'goog.proto2.FieldDescriptor', 'goog.proto2.Message', 'goog.proto2.Util']);
 goog.addDependency('proto2/test.pb.js', ['proto2.TestAllTypes', 'proto2.TestAllTypes.NestedEnum', 'proto2.TestAllTypes.NestedMessage', 'proto2.TestAllTypes.OptionalGroup', 'proto2.TestAllTypes.RepeatedGroup'], ['goog.proto2.Message']);
-goog.addDependency('proto2/textformatserializer.js', ['goog.proto2.TextFormatSerializer', 'goog.proto2.TextFormatSerializer.Parser'], ['goog.asserts', 'goog.json', 'goog.proto2.Serializer', 'goog.proto2.Util', 'goog.string']);
+goog.addDependency('proto2/textformatserializer.js', ['goog.proto2.TextFormatSerializer', 'goog.proto2.TextFormatSerializer.Parser'], ['goog.array', 'goog.asserts', 'goog.json', 'goog.proto2.Serializer', 'goog.proto2.Util', 'goog.string']);
 goog.addDependency('proto2/textformatserializer_test.js', ['goog.proto2.TextFormatSerializerTest'], ['goog.proto2.TextFormatSerializer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'proto2.TestAllTypes']);
 goog.addDependency('proto2/util.js', ['goog.proto2.Util'], ['goog.asserts']);
 goog.addDependency('pubsub/pubsub.js', ['goog.pubsub.PubSub'], ['goog.Disposable', 'goog.array']);
