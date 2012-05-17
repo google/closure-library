@@ -32,12 +32,10 @@ goog.provide('goog.events.MouseWheelEvent');
 goog.provide('goog.events.MouseWheelHandler');
 goog.provide('goog.events.MouseWheelHandler.EventType');
 
-goog.require('goog.dom.DomHelper');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventTarget');
 goog.require('goog.math');
-goog.require('goog.style');
 goog.require('goog.userAgent');
 
 
@@ -45,7 +43,7 @@ goog.require('goog.userAgent');
 /**
  * This event handler allows you to catch mouse wheel events in a consistent
  * manner.
- * @param {Element|Document} element The element to listen to the mouse wheel
+ * @param {Element|Document} element  The element to listen to the mouse wheel
  *     event on.
  * @constructor
  * @extends {goog.events.EventTarget}
@@ -59,18 +57,6 @@ goog.events.MouseWheelHandler = function(element) {
    * @private
    */
   this.element_ = element;
-
-  /**
-   * True if the element exists and is RTL, false otherwise.
-   * @type {boolean}
-   * @private
-   */
-  this.isRtl_ = this.element_ ? 
-      (goog.style.isRightToLeft(
-          goog.dom.isElement(this.element_) ?
-              (/** @type {Element} */ this.element_) :
-              (/** @type {Document} */ this.element_).body)) :
-      false;
 
   var type = goog.userAgent.GECKO ? 'DOMMouseScroll' : 'mousewheel';
 
@@ -193,10 +179,6 @@ goog.events.MouseWheelHandler.prototype.handleEvent = function(e) {
   // Don't clamp 'detail', since it could be ambiguous which axis it refers to
   // and because it's informally deprecated anyways.
 
-  // For horizontal scrolling we need to flip the value for RTL grids.
-  if (this.isRtl_) {
-    deltaX = -deltaX;
-  }
   var newEvent = new goog.events.MouseWheelEvent(detail, be, deltaX, deltaY);
   try {
     this.dispatchEvent(newEvent);
