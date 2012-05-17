@@ -61,14 +61,16 @@ goog.events.MouseWheelHandler = function(element) {
   this.element_ = element;
 
   /**
-   * True if the element we are listening on is RTL, false otherwise.
+   * True if the element exists and is RTL, false otherwise.
    * @type {boolean}
    * @private
    */
-  this.isRtl_ = goog.style.isRightToLeft(
-      goog.dom.isElement(this.element_) ?
-          (/** @type {Element} */ this.element_) :
-          (/** @type {Document} */ this.element_).body);
+  this.isRtl_ = this.element_ ? 
+      (goog.style.isRightToLeft(
+          goog.dom.isElement(this.element_) ?
+              (/** @type {Element} */ this.element_) :
+              (/** @type {Document} */ this.element_).body)) :
+      false;
 
   var type = goog.userAgent.GECKO ? 'DOMMouseScroll' : 'mousewheel';
 
