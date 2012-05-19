@@ -17,6 +17,9 @@
 
 """Calculates JavaScript dependencies without requiring Google's build system.
 
+This tool is deprecated and is provided for legacy users.
+See build/closurebuilder.py and build/depswriter.py for the current tools.
+
 It iterates over a number of search paths and builds a dependency tree.  With
 the inputs provided, it walks the dependency tree and outputs all the files
 required for compilation.
@@ -40,9 +43,9 @@ import subprocess
 import sys
 
 
-
-req_regex = re.compile('goog\.require\s*\(\s*[\'\"]([^\)]+)[\'\"]\s*\)')
-prov_regex = re.compile('goog\.provide\s*\(\s*[\'\"]([^\)]+)[\'\"]\s*\)')
+_BASE_REGEX_STRING = '^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
+req_regex = re.compile(_BASE_REGEX_STRING % 'require')
+prov_regex = re.compile(_BASE_REGEX_STRING % 'provide')
 ns_regex = re.compile('^ns:((\w+\.)*(\w+))$')
 version_regex = re.compile('[\.0-9]+')
 
@@ -134,19 +137,35 @@ def BuildDependenciesFromFiles(files):
       file_handle = open(filename, 'r')
     else:
       file_handle = open(filename, 'r', encoding='utf8')
-    dep = DependencyInfo(filename)
+
     try:
-      for line in file_handle:
-        if re.match(req_regex, line):
-          dep.requires.append(re.search(req_regex, line).group(1))
-        if re.match(prov_regex, line):
-          dep.provides.append(re.search(prov_regex, line).group(1))
+      dep = CreateDependencyInfo(filename, file_handle)
+      result.append(dep)
     finally:
       file_handle.close()
-    result.append(dep)
+
     filenames.add(filename)
 
   return result
+
+
+def CreateDependencyInfo(filename, source):
+  """Create dependency info.
+
+  Args:
+    filename: Filename for source.
+    source: File-like object containing source.
+
+  Returns:
+    A DependencyInfo object with provides and requires filled.
+  """
+  dep = DependencyInfo(filename)
+  for line in source:
+    if re.match(req_regex, line):
+      dep.requires.append(re.search(req_regex, line).group(1))
+    if re.match(prov_regex, line):
+      dep.provides.append(re.search(prov_regex, line).group(1))
+  return dep
 
 
 def BuildDependencyHashFromDependencies(deps):
