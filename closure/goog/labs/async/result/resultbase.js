@@ -83,8 +83,6 @@ goog.inherits(goog.labs.async.ResultBase.StateError, goog.debug.Error);
 
 
 /**
- * Returns the state of this object.
- *
  * @return {!goog.labs.async.Result.State} The current state of this Result.
  */
 goog.labs.async.ResultBase.prototype.getState = function() {
@@ -93,8 +91,6 @@ goog.labs.async.ResultBase.prototype.getState = function() {
 
 
 /**
- * Returns the value of this object.
- *
  * @return {*} The current value of this Result.
  */
 goog.labs.async.ResultBase.prototype.getValue = function() {
@@ -103,8 +99,6 @@ goog.labs.async.ResultBase.prototype.getValue = function() {
 
 
 /**
- * Returns the error slug for this object.
- *
  * @return {*} The current error for this Result.
  */
 goog.labs.async.ResultBase.prototype.getError = function() {
@@ -138,7 +132,8 @@ goog.labs.async.ResultBase.prototype.setValue = function(value) {
     this.value_ = value;
     this.state_ = goog.labs.async.Result.State.SUCCESS;
     this.callHandlers_();
-  } else {
+  } else if (!this.isCanceled()) {
+    // setValue is a no-op if this Result has been canceled.
     throw new goog.labs.async.ResultBase.StateError();
   }
 };
@@ -154,7 +149,8 @@ goog.labs.async.ResultBase.prototype.setError = function(opt_error) {
     this.error_ = opt_error;
     this.state_ = goog.labs.async.Result.State.ERROR;
     this.callHandlers_();
-  } else {
+  } else if (!this.isCanceled()) {
+    // setError is a no-op if this Result has been canceled.
     throw new goog.labs.async.ResultBase.StateError();
   }
 };
@@ -174,11 +170,34 @@ goog.labs.async.ResultBase.prototype.callHandlers_ = function() {
 
 
 /**
- * Returns whether this Result is pending.
- *
  * @return {boolean} Whether the Result is pending.
  * @private
  */
 goog.labs.async.ResultBase.prototype.isPending_ = function() {
   return this.state_ == goog.labs.async.Result.State.PENDING;
+};
+
+
+/**
+ * Cancels the Result.
+ *
+ * @return {boolean} Whether the result was canceled. It will not be canceled if
+ *    the result was already canceled or has already resolved.
+ */
+goog.labs.async.ResultBase.prototype.cancel = function() {
+  // cancel is a no-op if the result has been resolved.
+  if (this.isPending_()) {
+    this.setError(new goog.labs.async.Result.CancelError());
+    return true;
+  }
+  return false;
+};
+
+
+/**
+ * @return {boolean} Whether this Result was canceled.
+ */
+goog.labs.async.ResultBase.prototype.isCanceled = function() {
+  return this.state_ == goog.labs.async.Result.State.ERROR &&
+         this.error_ instanceof goog.labs.async.Result.CancelError;
 };

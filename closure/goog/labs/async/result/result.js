@@ -18,6 +18,8 @@
 
 goog.provide('goog.labs.async.Result');
 
+goog.require('goog.debug.Error');
+
 
 
 /**
@@ -76,3 +78,31 @@ goog.labs.async.Result.prototype.getValue = function() {};
  *     pending.
  */
 goog.labs.async.Result.prototype.getError = function() {};
+
+
+/**
+ * Cancels the current Result, invoking the canceler function, if set.
+ *
+ * @return {boolean} Whether the Result was canceled.
+ */
+goog.labs.async.Result.prototype.cancel = function() {};
+
+
+/**
+ * @return {boolean} Whether this Result was canceled.
+ */
+goog.labs.async.Result.prototype.isCanceled = function() {};
+
+
+
+/**
+ * The value to be passed to the error handlers invoked upon cancellation.
+ * @constructor
+ * @param {string=} opt_msg The error message for CancelError.
+ * @extends {goog.debug.Error}
+ */
+goog.labs.async.Result.CancelError = function(opt_msg) {
+  var msg = opt_msg || 'Result canceled';
+  goog.base(this, msg);
+};
+goog.inherits(goog.labs.async.Result.CancelError, goog.debug.Error);

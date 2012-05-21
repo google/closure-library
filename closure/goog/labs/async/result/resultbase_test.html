@@ -196,6 +196,59 @@ function testErrorAsyncResolution() {
   assertEquals(error, res.getError());
 }
 
+function testCancelStateAndReturn() {
+  assertFalse(result.isCanceled());
+  var canceled = result.cancel();
+  assertTrue(result.isCanceled());
+  assertEquals(goog.labs.async.Result.State.ERROR, result.getState());
+  assertTrue(result.getError() instanceof goog.labs.async.Result.CancelError);
+  assertTrue(canceled);
+}
+
+function testErrorHandlersFireOnCancel() {
+  result.wait(resultCallback);
+  result.cancel();
+
+  assertEquals(1, resultCallback.getCallCount());
+  var lastCall = resultCallback.popLastCall();
+  var res = lastCall.getArgument(0);
+  assertEquals(goog.labs.async.Result.State.ERROR, res.getState());
+  assertTrue(res.getError() instanceof goog.labs.async.Result.CancelError);
+}
+
+function testCancelAfterSetValue() {
+  // cancel after setValue/setError => no-op
+  result.wait(resultCallback);
+  result.setValue(1);
+
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  assertEquals(1, result.getValue());
+  assertEquals(1, resultCallback.getCallCount());
+
+  result.cancel();
+
+  assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  assertEquals(1, result.getValue());
+  assertEquals(1, resultCallback.getCallCount());
+}
+
+function testSetValueAfterCancel() {
+  // setValue/setError after cancel => no-op
+  result.wait(resultCallback);
+
+  result.cancel();
+  assertTrue(result.isCanceled());
+  assertTrue(result.getError() instanceof goog.labs.async.Result.CancelError);
+
+  result.setValue(1);
+  assertTrue(result.isCanceled());
+  assertTrue(result.getError() instanceof goog.labs.async.Result.CancelError);
+
+  result.setError(3);
+  assertTrue(result.isCanceled());
+  assertTrue(result.getError() instanceof goog.labs.async.Result.CancelError);
+}
+
 </script>
 </body>
 </html>
