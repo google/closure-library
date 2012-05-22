@@ -78,6 +78,7 @@ goog.inherits(goog.positioning.AnchoredPosition,
  * @param {goog.math.Box=} opt_margin A margin specifin pixels.
  * @param {goog.math.Size=} opt_preferredSize PreferredSize of the
  *     movableElement (unused in this class).
+ * @override
  */
 goog.positioning.AnchoredPosition.prototype.reposition = function(
     movableElement, movableCorner, opt_margin, opt_preferredSize) {

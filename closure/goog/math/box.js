@@ -93,6 +93,7 @@ if (goog.DEBUG) {
   /**
    * Returns a nice string representing the box.
    * @return {string} In the form (50t, 73r, 24b, 13l).
+   * @override
    */
   goog.math.Box.prototype.toString = function() {
     return '(' + this.top + 't, ' + this.right + 'r, ' + this.bottom + 'b, ' +

@@ -493,6 +493,7 @@ if (goog.DEBUG) {
    * </pre>
    *
    * @return {string} A string representation of this matrix.
+   * @override
    */
   goog.math.Matrix.prototype.toString = function() {
     // Calculate correct padding for optimum display of matrix

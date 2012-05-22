@@ -55,6 +55,7 @@ if (goog.DEBUG) {
   /**
    * Returns a nice string representing the coordinate.
    * @return {string} In the form (50, 73).
+   * @override
    */
   goog.math.Coordinate.prototype.toString = function() {
     return '(' + this.x + ', ' + this.y + ')';

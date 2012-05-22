@@ -245,6 +245,7 @@ goog.fx.Animation.prototype.lastFrame = null;
  * @param {boolean=} opt_restart Whether to restart the
  *     animation from the beginning if it has been paused.
  * @return {boolean} Whether animation was started.
+ * @override
  */
 goog.fx.Animation.prototype.play = function(opt_restart) {
   if (opt_restart || this.isStopped()) {
@@ -287,7 +288,7 @@ goog.fx.Animation.prototype.play = function(opt_restart) {
 
 /**
  * Stops the animation.
- * @param {boolean=} opt_gotoEnd If true the animation will move to the 
+ * @param {boolean=} opt_gotoEnd If true the animation will move to the
  *     end coords.
  * @override
  */
@@ -308,6 +309,7 @@ goog.fx.Animation.prototype.stop = function(opt_gotoEnd) {
 
 /**
  * Pauses the animation (iff it's playing).
+ * @override
  */
 goog.fx.Animation.prototype.pause = function() {
   if (this.isPlaying()) {

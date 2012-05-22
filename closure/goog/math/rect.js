@@ -62,6 +62,7 @@ goog.math.Rect = function(x, y, w, h) {
 /**
  * Returns a new copy of the rectangle.
  * @return {!goog.math.Rect} A clone of this Rectangle.
+ * @override
  */
 goog.math.Rect.prototype.clone = function() {
   return new goog.math.Rect(this.left, this.top, this.width, this.height);
@@ -100,6 +101,7 @@ if (goog.DEBUG) {
   /**
    * Returns a nice string representing size and dimensions of rectangle.
    * @return {string} In the form (50, 73 - 75w x 25h).
+   * @override
    */
   goog.math.Rect.prototype.toString = function() {
     return '(' + this.left + ', ' + this.top + ' - ' + this.width + 'w x ' +

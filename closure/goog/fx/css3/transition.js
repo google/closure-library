@@ -190,6 +190,7 @@ goog.fx.css3.Transition.prototype.disposeInternal = function() {
 
 /**
  * Pausing CSS3 Transitions in not supported.
+ * @override
  */
 goog.fx.css3.Transition.prototype.pause = function() {
   goog.asserts.assert(false, 'Css3 transitions does not support pause action.');

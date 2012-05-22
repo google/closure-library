@@ -57,6 +57,7 @@ goog.math.RangeSet = function() {
 if (goog.DEBUG) {
   /**
    * @return {string} A debug string in the form [[1, 5], [8, 9], [15, 30]].
+   * @override
    */
   goog.math.RangeSet.prototype.toString = function() {
     return '[' + this.ranges_.join(', ') + ']';
