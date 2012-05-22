@@ -89,6 +89,7 @@ goog.ui.ImagelessMenuButtonRenderer.prototype.getContentElement = function(
  * element is a DIV, false otherwise.
  * @param {Element} element Element to decorate.
  * @return {boolean} Whether the renderer can decorate the element.
+ * @override
  */
 goog.ui.ImagelessMenuButtonRenderer.prototype.canDecorate = function(element) {
   return element.tagName == goog.dom.TagName.DIV;

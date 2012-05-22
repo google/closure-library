@@ -350,7 +350,7 @@ goog.ui.HoverCard.prototype.onHide_ = function() {
  * This mouse over event is only received if the anchor is already attached.
  * If it was attached manually, then it may need to be triggered.
  * @param {goog.events.BrowserEvent} event Mouse over event.
- * @protected
+ * @override
  */
 goog.ui.HoverCard.prototype.handleMouseOver = function(event) {
   // If this is a child of a triggering element, find the triggering element.
@@ -372,7 +372,7 @@ goog.ui.HoverCard.prototype.handleMouseOver = function(event) {
  * If the mouse moves out of the trigger while we're being triggered, then
  * cancel it.
  * @param {goog.events.BrowserEvent} event Mouse out or blur event.
- * @protected
+ * @override
  */
 goog.ui.HoverCard.prototype.handleMouseOutAndBlur = function(event) {
   // Get ready to see if a trigger should be cancelled.
@@ -397,6 +397,7 @@ goog.ui.HoverCard.prototype.handleMouseOutAndBlur = function(event) {
  * @param {Element} el Element to show tooltip for.
  * @param {goog.positioning.AbstractPosition=} opt_pos Position to display popup
  *     at.
+ * @override
  */
 goog.ui.HoverCard.prototype.maybeShow = function(el, opt_pos) {
   goog.ui.HoverCard.superClass_.maybeShow.call(this, el, opt_pos);

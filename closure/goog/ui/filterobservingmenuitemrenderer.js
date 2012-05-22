@@ -55,6 +55,7 @@ goog.ui.FilterObservingMenuItemRenderer.CSS_CLASS =
  * Returns the CSS class to be applied to menu items rendered using this
  * renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.FilterObservingMenuItemRenderer.prototype.getCssClass = function() {
   return goog.ui.FilterObservingMenuItemRenderer.CSS_CLASS;

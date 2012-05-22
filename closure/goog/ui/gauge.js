@@ -963,10 +963,7 @@ goog.ui.Gauge.prototype.redraw = function() {
 };
 
 
-/**
- * Called when the component is added to the DOM.
- * Overrides {@link goog.ui.Component#enterDocument}.
- */
+/** @override */
 goog.ui.Gauge.prototype.enterDocument = function() {
   goog.ui.Gauge.superClass_.enterDocument.call(this);
 
@@ -981,10 +978,7 @@ goog.ui.Gauge.prototype.enterDocument = function() {
 };
 
 
-/**
- * Called when the component is removed from the DOM.
- * Overrides {@link goog.ui.Component#exitDocument}.
- */
+/** @override */
 goog.ui.Gauge.prototype.exitDocument = function() {
   goog.ui.Gauge.superClass_.exitDocument.call(this);
   this.stopAnimation_();

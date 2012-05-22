@@ -91,6 +91,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(control) {
  * @param {Element} element Root element of the button whose content
  * element is to be returned.
  * @return {Element} The button's content element (if any).
+ * @override
  */
 goog.ui.FlatMenuButtonRenderer.prototype.getContentElement = function(element) {
   return element && /** @type {Element} */ (element.firstChild);
@@ -185,6 +186,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.createDropdown = function(dom) {
  * Returns the CSS class to be applied to the root element of components
  * rendered using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.FlatMenuButtonRenderer.prototype.getCssClass = function() {
   return goog.ui.FlatMenuButtonRenderer.CSS_CLASS;

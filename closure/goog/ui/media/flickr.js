@@ -183,6 +183,7 @@ goog.ui.media.FlickrSet.prototype.createDom = function(c) {
  * Returns the CSS class to be applied to the root element of components
  * rendered using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.media.FlickrSet.prototype.getCssClass = function() {
   return goog.ui.media.FlickrSet.CSS_CLASS;

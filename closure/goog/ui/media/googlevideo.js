@@ -159,6 +159,7 @@ goog.ui.media.GoogleVideo.prototype.createDom = function(c) {
  * rendered using this renderer.
  *
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.media.GoogleVideo.prototype.getCssClass = function() {
   return goog.ui.media.GoogleVideo.CSS_CLASS;

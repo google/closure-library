@@ -263,6 +263,7 @@ goog.ui.HsvPalette.prototype.setHsv_ = function(opt_hue,
  * structure they build is fairly complicated.
  * @param {Element} element Element to decorate.
  * @return {boolean} Returns always false.
+ * @override
  */
 goog.ui.HsvPalette.prototype.canDecorate = function(element) {
   return false;
@@ -302,6 +303,7 @@ goog.ui.HsvPalette.prototype.createDom = function() {
 /**
  * Renders the color picker inside the provided element. This will override the
  * current content of the element.
+ * @override
  */
 goog.ui.HsvPalette.prototype.enterDocument = function() {
   goog.ui.HsvPalette.superClass_.enterDocument.call(this);

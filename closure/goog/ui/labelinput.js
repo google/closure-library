@@ -143,9 +143,7 @@ goog.ui.LabelInput.prototype.decorateInternal = function(element) {
 };
 
 
-/**
- * Called when the DOM for the component is for sure in the document.
- */
+/** @override */
 goog.ui.LabelInput.prototype.enterDocument = function() {
   goog.ui.LabelInput.superClass_.enterDocument.call(this);
   this.attachEvents_();
@@ -157,10 +155,7 @@ goog.ui.LabelInput.prototype.enterDocument = function() {
 };
 
 
-/**
- * Called when the DOM for the component is removed from the document or
- * when the component no longer is managing the DOM.
- */
+/** @override */
 goog.ui.LabelInput.prototype.exitDocument = function() {
   goog.ui.LabelInput.superClass_.exitDocument.call(this);
   this.detachEvents_();

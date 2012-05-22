@@ -86,6 +86,7 @@ goog.ui.FlatButtonRenderer.prototype.getAriaRole = function() {
  * element is a DIV, false otherwise.
  * @param {Element} element Element to decorate.
  * @return {boolean} Whether the renderer can decorate the element.
+ * @override
  */
 goog.ui.FlatButtonRenderer.prototype.canDecorate = function(element) {
   return element.tagName == 'DIV';
@@ -127,6 +128,7 @@ goog.ui.FlatButtonRenderer.prototype.getValue = function(element) {
  * Returns the CSS class to be applied to the root element of components
  * rendered using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.FlatButtonRenderer.prototype.getCssClass = function() {
   return goog.ui.FlatButtonRenderer.CSS_CLASS;

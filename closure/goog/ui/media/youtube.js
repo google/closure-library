@@ -192,6 +192,7 @@ goog.ui.media.Youtube.prototype.setState = function(c, state, enable) {
  * rendered using this renderer.
  *
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.media.Youtube.prototype.getCssClass = function() {
   return goog.ui.media.Youtube.CSS_CLASS;

@@ -213,9 +213,7 @@ goog.ui.InputDatePicker.prototype.setPopupParentElement = function(el) {
 };
 
 
-/**
- * Called when the DOM for the component is for sure in the document.
- */
+/** @override */
 goog.ui.InputDatePicker.prototype.enterDocument = function() {
   goog.ui.InputDatePicker.superClass_.enterDocument.call(this);
   var el = this.getElement();
@@ -236,10 +234,7 @@ goog.ui.InputDatePicker.prototype.enterDocument = function() {
 };
 
 
-/**
- * Called when the DOM for the component is removed from the document or
- * when the component no longer is managing the DOM.
- */
+/** @override */
 goog.ui.InputDatePicker.prototype.exitDocument = function() {
   goog.ui.InputDatePicker.superClass_.exitDocument.call(this);
   var el = this.getElement();
