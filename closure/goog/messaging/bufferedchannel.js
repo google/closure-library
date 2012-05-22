@@ -230,6 +230,7 @@ goog.messaging.BufferedChannel.prototype.registerDefaultService = function(
  *     Object, it is serialized to JSON before sending.  It's the responsibility
  *     of implementors of this class to perform the serialization.
  * @see goog.net.xpc.BufferedChannel.send
+ * @override
  */
 goog.messaging.BufferedChannel.prototype.send = function(serviceName, payload) {
   if (this.isPeerReady()) {

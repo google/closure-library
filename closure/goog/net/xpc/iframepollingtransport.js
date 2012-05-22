@@ -93,6 +93,7 @@ goog.net.xpc.IframePollingTransport.prototype.pollsBeforeReconnect_ = 5;
  * The transport type.
  * @type {number}
  * @protected
+ * @override
  */
 goog.net.xpc.IframePollingTransport.prototype.transportType =
     goog.net.xpc.TransportTypes.IFRAME_POLLING;
@@ -172,6 +173,7 @@ goog.net.xpc.IframePollingTransport.prototype.isChannelAvailable = function() {
 
 /**
  * Connects this transport.
+ * @override
  */
 goog.net.xpc.IframePollingTransport.prototype.connect = function() {
   if (!this.isChannelAvailable()) {

@@ -165,6 +165,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.initialized_ = false;
 /**
  * The transport type.
  * @type {number}
+ * @override
  */
 goog.net.xpc.NativeMessagingTransport.prototype.transportType =
     goog.net.xpc.TransportTypes.NATIVE_MESSAGING;
@@ -282,6 +283,7 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
 /**
  * Handles transport service messages.
  * @param {string} payload The message content.
+ * @override
  */
 goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
     function(payload) {
@@ -303,6 +305,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
 
 /**
  * Connects this transport.
+ * @override
  */
 goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
   goog.net.xpc.NativeMessagingTransport.initialize_(this.getWindow());

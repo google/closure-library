@@ -216,6 +216,7 @@ goog.messaging.PortChannel.REQUIRES_SERIALIZATION_ = goog.userAgent.WEBKIT &&
  * Logger for this class.
  * @type {goog.debug.Logger}
  * @protected
+ * @override
  */
 goog.messaging.PortChannel.prototype.logger =
     goog.debug.Logger.getLogger('goog.messaging.PortChannel');

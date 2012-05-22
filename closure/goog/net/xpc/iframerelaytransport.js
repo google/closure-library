@@ -183,6 +183,7 @@ goog.net.xpc.IframeRelayTransport.fragmentMap_ = {};
 /**
  * The transport type.
  * @type {number}
+ * @override
  */
 goog.net.xpc.IframeRelayTransport.prototype.transportType =
   goog.net.xpc.TransportTypes.IFRAME_RELAY;
@@ -190,6 +191,7 @@ goog.net.xpc.IframeRelayTransport.prototype.transportType =
 
 /**
  * Connects this transport.
+ * @override
  */
 goog.net.xpc.IframeRelayTransport.prototype.connect = function() {
   if (!this.getWindow()['xpcRelay']) {
@@ -261,6 +263,7 @@ goog.net.xpc.IframeRelayTransport.receiveMessage_ =
 /**
  * Handles transport service messages (internal signalling).
  * @param {string} payload The message content.
+ * @override
  */
 goog.net.xpc.IframeRelayTransport.prototype.transportServiceHandler =
     function(payload) {

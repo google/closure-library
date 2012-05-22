@@ -78,6 +78,7 @@ goog.inherits(goog.net.xpc.FrameElementMethodTransport, goog.net.xpc.Transport);
  * The transport type.
  * @type {number}
  * @protected
+ * @override
  */
 goog.net.xpc.FrameElementMethodTransport.prototype.transportType =
    goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD;
@@ -110,6 +111,7 @@ goog.net.xpc.FrameElementMethodTransport.outgoing_ = null;
 
 /**
  * Connect this transport.
+ * @override
  */
 goog.net.xpc.FrameElementMethodTransport.prototype.connect = function() {
   if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.OUTER) {
@@ -177,6 +179,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetup_ = function() {
 /**
  * Handles transport service messages.
  * @param {string} payload The message content.
+ * @override
  */
 goog.net.xpc.FrameElementMethodTransport.prototype.transportServiceHandler =
     function(payload) {

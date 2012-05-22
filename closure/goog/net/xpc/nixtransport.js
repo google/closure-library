@@ -263,6 +263,7 @@ goog.net.xpc.NixTransport.conductGlobalSetup_ = function(listenWindow) {
  * The transport type.
  * @type {number}
  * @protected
+ * @override
  */
 goog.net.xpc.NixTransport.prototype.transportType =
    goog.net.xpc.TransportTypes.NIX;
@@ -292,6 +293,7 @@ goog.net.xpc.NixTransport.prototype.nixChannel_ = null;
 
 /**
  * Connect this transport.
+ * @override
  */
 goog.net.xpc.NixTransport.prototype.connect = function() {
   if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.OUTER) {

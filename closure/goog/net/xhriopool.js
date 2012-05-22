@@ -52,6 +52,7 @@ goog.inherits(goog.net.XhrIoPool, goog.structs.PriorityPool);
 /**
  * Creates an instance of an XhrIo object to use in the pool.
  * @return {goog.net.XhrIo} The created object.
+ * @override
  */
 goog.net.XhrIoPool.prototype.createObject = function() {
   var xhrIo = new goog.net.XhrIo();
