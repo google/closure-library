@@ -196,7 +196,8 @@ goog.ds.DataManager.prototype.getChildNodes = function(opt_selector) {
  * Gets a named child node of the current node
  * @param {string} name The node name.
  * @return {goog.ds.DataNode} The child node,
- *   or null if no node of this name exists.
+ *     or null if no node of this name exists.
+ * @override
  */
 goog.ds.DataManager.prototype.getChildNode = function(name) {
   return this.getDataSource(name);
@@ -213,6 +214,7 @@ goog.ds.DataManager.prototype.getChildNodeValue = function(name) {
 /**
  * Get the name of the node relative to the parent node
  * @return {string} The name of the node.
+ * @override
  */
 goog.ds.DataManager.prototype.getDataName = function() {
   return '';
@@ -222,6 +224,7 @@ goog.ds.DataManager.prototype.getDataName = function() {
 /**
  * Gets the a qualified data path to this node
  * @return {string} The data path.
+ * @override
  */
 goog.ds.DataManager.prototype.getDataPath = function() {
   return '';
@@ -231,6 +234,7 @@ goog.ds.DataManager.prototype.getDataPath = function() {
 /**
  * Load or reload the backing data for this node
  * only loads datasources flagged with autoload
+ * @override
  */
 goog.ds.DataManager.prototype.load = function() {
   var len = this.dataSources_.getCount();
@@ -247,6 +251,7 @@ goog.ds.DataManager.prototype.load = function() {
 /**
  * Gets the state of the backing data for this node
  * @return {goog.ds.LoadState} The state.
+ * @override
  */
 goog.ds.DataManager.prototype.getLoadState = goog.abstractMethod;
 
@@ -254,6 +259,7 @@ goog.ds.DataManager.prototype.getLoadState = goog.abstractMethod;
 /**
  * Whether the value of this node is a homogeneous list of data
  * @return {boolean} True if a list.
+ * @override
  */
 goog.ds.DataManager.prototype.isList = function() {
   return false;

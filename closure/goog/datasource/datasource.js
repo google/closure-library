@@ -353,6 +353,7 @@ goog.ds.BasicNodeList = function(opt_nodes) {
  * TODO(user) Remove function as well
  *
  * @param {goog.ds.DataNode} node The node to add.
+ * @override
  */
 goog.ds.BasicNodeList.prototype.add = function(node) {
   this.list_.push(node);
@@ -383,6 +384,7 @@ goog.ds.BasicNodeList.prototype.get = function(key) {
  *
  * @param {number} index The index of the node.
  * @return {goog.ds.DataNode} The node, or null if doesn't exist.
+ * @override
  */
 goog.ds.BasicNodeList.prototype.getByIndex = function(index) {
   return this.list_[index] || null;
@@ -393,6 +395,7 @@ goog.ds.BasicNodeList.prototype.getByIndex = function(index) {
  * Gets the size of the node list
  *
  * @return {number} The size of the list.
+ * @override
  */
 goog.ds.BasicNodeList.prototype.getCount = function() {
   return this.list_.length;
@@ -403,6 +406,7 @@ goog.ds.BasicNodeList.prototype.getCount = function() {
  * Sets a node in the list of a given name
  * @param {string} name Name of the node.
  * @param {goog.ds.DataNode} node The node.
+ * @override
  */
 goog.ds.BasicNodeList.prototype.setNode = function(name, node) {
   if (node == null) {
@@ -423,6 +427,7 @@ goog.ds.BasicNodeList.prototype.setNode = function(name, node) {
  * Removes a node in the list of a given name
  * @param {string} name Name of the node.
  * @return {boolean} True if node existed and was deleted.
+ * @override
  */
 goog.ds.BasicNodeList.prototype.removeNode = function(name) {
   var existingNode = this.indexMap_[name];
@@ -467,6 +472,7 @@ goog.inherits(goog.ds.EmptyNodeList, goog.ds.BasicNodeList);
  * If the node has a dataName, uses this for the key in the map.
  *
  * @param {goog.ds.DataNode} node The node to add.
+ * @override
  */
 goog.ds.EmptyNodeList.prototype.add = function(node) {
   throw Error('Can\'t add to EmptyNodeList');
@@ -506,6 +512,7 @@ goog.inherits(goog.ds.SortedNodeList, goog.ds.BasicNodeList);
  * If the node has a dataName, uses this for the key in the map.
  *
  * @param {goog.ds.DataNode} node The node to add.
+ * @override
  */
 goog.ds.SortedNodeList.prototype.add = function(node) {
   if (!this.compareFn_) {
@@ -555,6 +562,7 @@ goog.ds.SortedNodeList.prototype.append = function(node) {
  * Sets a node in the list of a given name, maintaining sort order.
  * @param {string} name Name of the node.
  * @param {goog.ds.DataNode} node The node.
+ * @override
  */
 goog.ds.SortedNodeList.prototype.setNode = function(name, node) {
   if (node == null) {

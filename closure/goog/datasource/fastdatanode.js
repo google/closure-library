@@ -75,6 +75,7 @@ goog.ds.AbstractFastDataNode = function(dataName, opt_parent) {
 /**
  * Return the name of this data node.
  * @return {string} Name of this data noden.
+ * @override
  */
 goog.ds.AbstractFastDataNode.prototype.getDataName = function() {
   return this['__dataName'];
@@ -84,6 +85,7 @@ goog.ds.AbstractFastDataNode.prototype.getDataName = function() {
 /**
  * Set the name of this data node.
  * @param {string} value Name.
+ * @override
  */
 goog.ds.AbstractFastDataNode.prototype.setDataName = function(value) {
   this['__dataName'] = value;
@@ -93,6 +95,7 @@ goog.ds.AbstractFastDataNode.prototype.setDataName = function(value) {
 /**
  * Get the path leading to this data node.
  * @return {string} Data path.
+ * @override
  */
 goog.ds.AbstractFastDataNode.prototype.getDataPath = function() {
   var parentPath;
@@ -212,6 +215,7 @@ goog.ds.FastDataNode.prototype.wrapChild_ = function(name) {
  * @param {boolean=} opt_create Whether to create the child if it does not
  * exist.
  * @return {goog.ds.DataNode} Child node.
+ * @override
  */
 goog.ds.FastDataNode.prototype.getChildNode = function(name, opt_create) {
   this.wrapChild_(name);
@@ -251,6 +255,7 @@ goog.ds.FastDataNode.prototype.setChildNode = function(name, value) {
  * the need to create PrimitiveFastData nodes.
  * @param {string} name Name of child node.
  * @return {Object} Value of child node.
+ * @override
  */
 goog.ds.FastDataNode.prototype.getChildNodeValue = function(name) {
   var child = this[name];
@@ -266,6 +271,7 @@ goog.ds.FastDataNode.prototype.getChildNodeValue = function(name) {
  * Returns whether this data node is a list. Always returns false for
  * instances of FastDataNode but may return true for subclasses.
  * @return {boolean} Whether this data node is array-like.
+ * @override
  */
 goog.ds.FastDataNode.prototype.isList = function() {
   return false;
@@ -292,6 +298,7 @@ goog.ds.FastDataNode.prototype.getJsObject = function() {
 /**
  * Creates a deep copy of this data node.
  * @return {goog.ds.FastDataNode} Clone of this data node.
+ * @override
  */
 goog.ds.FastDataNode.prototype.clone = function() {
   return /** @type {goog.ds.FastDataNode} */(goog.ds.FastDataNode.fromJs(
@@ -307,6 +314,7 @@ goog.ds.FastDataNode.prototype.clone = function() {
 /**
  * Adds a child to this data node.
  * @param {goog.ds.DataNode} value Child node to add.
+ * @override
  */
 goog.ds.FastDataNode.prototype.add = function(value) {
   this.setChildNode(value.getDataName(), value);
@@ -336,6 +344,7 @@ goog.ds.FastDataNode.prototype.get = function(opt_key) {
  * method, you should use goog.ds.FastListNode.
  * @param {number} index Index of child node (starting from 0).
  * @return {goog.ds.DataNode} Child node at specified index.
+ * @override
  */
 goog.ds.FastDataNode.prototype.getByIndex = function(index) {
   var i = 0;
@@ -357,6 +366,7 @@ goog.ds.FastDataNode.prototype.getByIndex = function(index) {
  * n is the number of children. If you need a faster implementation of this
  * method, you should use goog.ds.FastListNode.
  * @return {number} Number of child nodes.
+ * @override
  */
 goog.ds.FastDataNode.prototype.getCount = function() {
   var count = 0;
@@ -374,6 +384,7 @@ goog.ds.FastDataNode.prototype.getCount = function() {
  * Sets a child node.
  * @param {string} name Name of child node.
  * @param {Object} value Value of child node.
+ * @override
  */
 goog.ds.FastDataNode.prototype.setNode = function(name, value) {
   this.setChildNode(name, value);
@@ -445,6 +456,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getChildNodes = function() {
  * Get a child node by name. Always returns null.
  * @param {string} name Name of child node.
  * @return {goog.ds.DataNode} Child node.
+ * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.getChildNode = function(name) {
   return null;
@@ -455,6 +467,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getChildNode = function(name) {
  * Returns the value of a child node. Always returns null.
  * @param {string} name Name of child node.
  * @return {Object} Value of child node.
+ * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.getChildNodeValue = function(name) {
   return null;
@@ -465,6 +478,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getChildNodeValue = function(name) {
  * Not supported by primitive data nodes.
  * @param {string} name Name of child node.
  * @param {Object} value Value of child node.
+ * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.setChildNode =
     function(name, value) {
@@ -476,6 +490,7 @@ goog.ds.PrimitiveFastDataNode.prototype.setChildNode =
  * Returns whether this data node is a list. Always returns false for
  * instances of PrimitiveFastDataNode.
  * @return {boolean} Whether this data node is array-like.
+ * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.isList = function() {
   return false;
@@ -546,6 +561,7 @@ goog.ds.FastListNode.prototype.getChildNodes = function() {
  * @param {boolean=} opt_create Whether to create the child if it does not
  * exist.
  * @return {goog.ds.DataNode} Child node.
+ * @override
  */
 goog.ds.FastListNode.prototype.getChildNode = function(key, opt_create) {
   var index = this.getKeyAsNumber_(key);
@@ -650,6 +666,7 @@ goog.ds.FastListNode.prototype.listSizeChanged_ = function() {
 /**
  * Returns whether this data node is a list. Always returns true.
  * @return {boolean} Whether this data node is array-like.
+ * @override
  */
 goog.ds.FastListNode.prototype.isList = function() {
   return true;
@@ -678,6 +695,7 @@ goog.ds.FastListNode.prototype.getJsObject = function() {
 /**
  * Adds a child to this data node
  * @param {goog.ds.DataNode} value Child node to add.
+ * @override
  */
 goog.ds.FastListNode.prototype.add = function(value) {
   if (!value.getDataName) {
@@ -714,6 +732,7 @@ goog.ds.FastListNode.prototype.get = function(opt_key) {
  * Gets a child node by (numeric) index.
  * @param {number} index Index of child node (starting from 0).
  * @return {goog.ds.DataNode} Child node at specified index.
+ * @override
  */
 goog.ds.FastListNode.prototype.getByIndex = function(index) {
   var child = this.values_[index];
@@ -724,6 +743,7 @@ goog.ds.FastListNode.prototype.getByIndex = function(index) {
 /**
  * Gets the number of child nodes.
  * @return {number} Number of child nodes.
+ * @override
  */
 goog.ds.FastListNode.prototype.getCount = function() {
   return this.values_.length;
@@ -734,6 +754,7 @@ goog.ds.FastListNode.prototype.getCount = function() {
  * Sets a child node.
  * @param {string} name Name of child node.
  * @param {Object} value Value of child node.
+ * @override
  */
 goog.ds.FastListNode.prototype.setNode = function(name, value) {
   throw Error('Setting child nodes of a FastListNode is not implemented, yet');
