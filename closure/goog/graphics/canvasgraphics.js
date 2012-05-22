@@ -70,6 +70,7 @@ goog.inherits(goog.graphics.CanvasGraphics, goog.graphics.AbstractGraphics);
  * @param {goog.graphics.StrokeAndFillElement} element The element
  *     wrapper.
  * @param {goog.graphics.Fill} fill The fill object.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.setElementFill = function(element,
     fill) {
@@ -82,6 +83,7 @@ goog.graphics.CanvasGraphics.prototype.setElementFill = function(element,
  * @param {goog.graphics.StrokeAndFillElement} element The element
  *     wrapper.
  * @param {goog.graphics.Stroke} stroke The stroke object.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.setElementStroke = function(
     element, stroke) {
@@ -97,6 +99,7 @@ goog.graphics.CanvasGraphics.prototype.setElementStroke = function(
  * @param {number} angle The angle of the rotation transform.
  * @param {number} centerX The horizontal center of the rotation transform.
  * @param {number} centerY The vertical center of the rotation transform.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.setElementTransform = function(element,
     x, y, angle, centerX, centerY) {
@@ -139,6 +142,7 @@ goog.graphics.CanvasGraphics.prototype.popElementTransform = function() {
 
 /**
  * Creates the DOM representation of the graphics area.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.createDom = function() {
   var element = this.dom_.createDom('div',
@@ -191,6 +195,7 @@ goog.graphics.CanvasGraphics.prototype.getContext = function() {
  * Changes the coordinate system position.
  * @param {number} left The coordinate system left bound.
  * @param {number} top The coordinate system top bound.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.setCoordOrigin = function(left, top) {
   this.coordLeft = left;
@@ -203,6 +208,7 @@ goog.graphics.CanvasGraphics.prototype.setCoordOrigin = function(left, top) {
  * Changes the coordinate size.
  * @param {number} coordWidth The coordinate width.
  * @param {number} coordHeight The coordinate height.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.setCoordSize = function(coordWidth,
                                                                coordHeight) {
@@ -215,6 +221,7 @@ goog.graphics.CanvasGraphics.prototype.setCoordSize = function(coordWidth,
  * Change the size of the canvas.
  * @param {number} pixelWidth The width in pixels.
  * @param {number} pixelHeight The height in pixels.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.setSize = function(pixelWidth,
     pixelHeight) {
@@ -294,6 +301,7 @@ goog.graphics.CanvasGraphics.prototype.reset = function() {
 
 /**
  * Remove all drawing elements from the graphics.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.clear = function() {
   this.reset();
@@ -602,6 +610,7 @@ goog.graphics.CanvasGraphics.prototype.createGroup = function(opt_group) {
  *
  * @param {string} text The text string to measure.
  * @param {goog.graphics.Font} font The font object describing the font style.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.getTextWidth = goog.abstractMethod;
 
@@ -634,6 +643,7 @@ goog.graphics.CanvasGraphics.prototype.enterDocument = function() {
  * Start preventing redraws - useful for chaining large numbers of changes
  * together.  Not guaranteed to do anything - i.e. only use this for
  * optimization of a single code path.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.suspend = function() {
   this.preventRedraw_ = true;
@@ -643,6 +653,7 @@ goog.graphics.CanvasGraphics.prototype.suspend = function() {
 /**
  * Stop preventing redraws.  If any redraws had been prevented, a redraw will
  * be done now.
+ * @override
  */
 goog.graphics.CanvasGraphics.prototype.resume = function() {
   this.preventRedraw_ = false;

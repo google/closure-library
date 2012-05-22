@@ -402,6 +402,7 @@ goog.graphics.Path.prototype.getCurrentPoint = function() {
 
 /**
  * @return {!goog.graphics.Path} A copy of this path.
+ * @override
  */
 goog.graphics.Path.prototype.clone = function() {
   var path = new this.constructor();

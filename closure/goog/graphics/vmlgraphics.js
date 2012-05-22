@@ -267,6 +267,7 @@ goog.graphics.VmlGraphics.prototype.append_ = function(element, opt_group) {
  * Sets the fill for the given element.
  * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
  * @param {goog.graphics.Fill?} fill The fill object.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.setElementFill = function(element, fill) {
   var vmlElement = element.getElement();
@@ -318,6 +319,7 @@ goog.graphics.VmlGraphics.prototype.setElementFill = function(element, fill) {
  * Sets the stroke for the given element.
  * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
  * @param {goog.graphics.Stroke?} stroke The stroke object.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.setElementStroke = function(element,
     stroke) {
@@ -361,6 +363,7 @@ goog.graphics.VmlGraphics.prototype.setElementStroke = function(element,
  * @param {number} angle The angle of the rotation transform.
  * @param {number} centerX The horizontal center of the rotation transform.
  * @param {number} centerY The vertical center of the rotation transform.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.setElementTransform = function(element, x,
     y, angle, centerX, centerY) {
@@ -451,6 +454,7 @@ try {
 
 /**
  * Creates the DOM representation of the graphics area.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.createDom = function() {
   var doc = this.dom_.getDocument();
@@ -563,6 +567,7 @@ goog.graphics.VmlGraphics.prototype.handlePropertyChange_ = function(e) {
  * Changes the coordinate system position.
  * @param {number} left The coordinate system left bound.
  * @param {number} top The coordinate system top bound.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.setCoordOrigin = function(left, top) {
   this.coordLeft = left;
@@ -578,6 +583,7 @@ goog.graphics.VmlGraphics.prototype.setCoordOrigin = function(left, top) {
  * Changes the coordinate size.
  * @param {number} coordWidth The coordinate width.
  * @param {number} coordHeight The coordinate height.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.setCoordSize = function(coordWidth,
                                                             coordHeight) {
@@ -593,6 +599,7 @@ goog.graphics.VmlGraphics.prototype.setCoordSize = function(coordWidth,
  * Change the size of the canvas.
  * @param {number} pixelWidth The width in pixels.
  * @param {number} pixelHeight The height in pixels.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.setSize = function(pixelWidth,
     pixelHeight) {
@@ -602,6 +609,7 @@ goog.graphics.VmlGraphics.prototype.setSize = function(pixelWidth,
 
 /**
  * @return {goog.math.Size} Returns the number of pixels spanned by the surface.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.getPixelSize = function() {
   var el = this.getElement();
@@ -613,6 +621,7 @@ goog.graphics.VmlGraphics.prototype.getPixelSize = function() {
 
 /**
  * Remove all drawing elements from the graphics.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.clear = function() {
   this.canvasElement.clear();
@@ -852,6 +861,7 @@ goog.graphics.VmlGraphics.prototype.createGroup = function(opt_group) {
  * @param {goog.graphics.Font} font The font object describing the font style.
  *
  * @return {number} The width in pixels of the text strings.
+ * @override
  */
 goog.graphics.VmlGraphics.prototype.getTextWidth = function(text, font) {
   // TODO(arv): Implement

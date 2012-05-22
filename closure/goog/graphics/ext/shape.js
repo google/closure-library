@@ -125,6 +125,7 @@ goog.graphics.ext.Shape.prototype.scaleAndSetPath_ = function() {
 /**
  * Redraw the ellipse.  Called when the coordinate system is changed.
  * @protected
+ * @override
  */
 goog.graphics.ext.Shape.prototype.redraw = function() {
   goog.graphics.ext.Shape.superClass_.redraw.call(this);
@@ -137,6 +138,7 @@ goog.graphics.ext.Shape.prototype.redraw = function() {
 /**
  * @return {boolean} Whether the shape is parent dependent.
  * @protected
+ * @override
  */
 goog.graphics.ext.Shape.prototype.checkParentDependent = function() {
   return this.autoSize_ ||

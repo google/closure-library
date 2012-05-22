@@ -180,6 +180,7 @@ goog.graphics.SvgGraphics.prototype.append_ = function(element, opt_group) {
  * Sets the fill of the given element.
  * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
  * @param {goog.graphics.Fill?} fill The fill object.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.setElementFill = function(element, fill) {
   var svgElement = element.getElement();
@@ -245,9 +246,10 @@ goog.graphics.SvgGraphics.prototype.setElementFill = function(element, fill) {
 
 
 /**
-* Sets the stroke of the given element.
+ * Sets the stroke of the given element.
  * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
  * @param {goog.graphics.Stroke?} stroke The stroke object.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.setElementStroke = function(element,
     stroke) {
@@ -276,6 +278,7 @@ goog.graphics.SvgGraphics.prototype.setElementStroke = function(element,
  * @param {number} angle The angle of the rotation transform.
  * @param {number} centerX The horizontal center of the rotation transform.
  * @param {number} centerY The vertical center of the rotation transform.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.setElementTransform = function(element, x,
     y, angle, centerX, centerY) {
@@ -286,6 +289,7 @@ goog.graphics.SvgGraphics.prototype.setElementTransform = function(element, x,
 
 /**
  * Creates the DOM representation of the graphics area.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.createDom = function() {
   // Set up the standard attributes.
@@ -317,6 +321,7 @@ goog.graphics.SvgGraphics.prototype.createDom = function() {
  * Changes the coordinate system position.
  * @param {number} left The coordinate system left bound.
  * @param {number} top The coordinate system top bound.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.setCoordOrigin = function(left, top) {
   this.coordLeft = left;
@@ -330,6 +335,7 @@ goog.graphics.SvgGraphics.prototype.setCoordOrigin = function(left, top) {
  * Changes the coordinate size.
  * @param {number} coordWidth The coordinate width.
  * @param {number} coordHeight The coordinate height.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.setCoordSize = function(coordWidth,
     coordHeight) {
@@ -400,6 +406,7 @@ goog.graphics.SvgGraphics.prototype.updateManualViewBox_ = function() {
  * Change the size of the canvas.
  * @param {number} pixelWidth The width in pixels.
  * @param {number} pixelHeight The height in pixels.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.setSize = function(pixelWidth,
     pixelHeight) {
@@ -449,6 +456,7 @@ goog.graphics.SvgGraphics.prototype.getPixelSize = function() {
 
 /**
  * Remove all drawing elements from the graphics.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.clear = function() {
   this.canvasElement.clear();
@@ -702,6 +710,7 @@ goog.graphics.SvgGraphics.prototype.createGroup = function(opt_group) {
  *
  * @param {string} text The text string to measure.
  * @param {goog.graphics.Font} font The font object describing the font style.
+ * @override
  */
 goog.graphics.SvgGraphics.prototype.getTextWidth = function(text, font) {
   // TODO(user) Implement
