@@ -174,6 +174,7 @@ goog.ui.ColorMenuButton.prototype.setValue = function(value) {
  * dispatches an ACTION event on behalf of the button itself.  Overrides
  * {@link goog.ui.MenuButton#handleMenuAction}.
  * @param {goog.events.Event} e Action event to handle.
+ * @override
  */
 goog.ui.ColorMenuButton.prototype.handleMenuAction = function(e) {
   if (typeof e.target.getSelectedColor == 'function') {

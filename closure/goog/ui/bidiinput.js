@@ -58,6 +58,7 @@ goog.ui.BidiInput.prototype.inputHandler_ = null;
  * Overrides {@link goog.ui.Component#decorateInternal}.  Considered protected.
  * @param {Element} element  Element (HTML Input element) to decorate.
  * @protected
+ * @override
  */
 goog.ui.BidiInput.prototype.decorateInternal = function(element) {
   goog.ui.BidiInput.superClass_.decorateInternal.call(this, element);

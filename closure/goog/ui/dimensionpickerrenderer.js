@@ -110,6 +110,7 @@ goog.ui.DimensionPickerRenderer.prototype.getMouseCatcher_ = function(
  * empty DIVs only.
  * @param {Element} element The element to check.
  * @return {boolean} Whether if the element is an empty div.
+ * @override
  */
 goog.ui.DimensionPickerRenderer.prototype.canDecorate = function(
     element) {
@@ -341,6 +342,7 @@ goog.ui.DimensionPickerRenderer.prototype.positionMouseCatcher = function(
  * Returns the CSS class to be applied to the root element of components
  * rendered using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.DimensionPickerRenderer.prototype.getCssClass = function() {
   return goog.ui.DimensionPickerRenderer.CSS_CLASS;

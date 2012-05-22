@@ -81,6 +81,7 @@ goog.ui.ac.RichRemoteArrayMatcher.prototype.setRowFilter = function(rowFilter) {
  *     responsible for limiting the number of matches that are returned.
  * @param {Function} matchHandler Callback to execute on the result after
  *     matching.
+ * @override
  */
 goog.ui.ac.RichRemoteArrayMatcher.prototype.requestMatchingRows =
     function(token, maxMatches, matchHandler) {

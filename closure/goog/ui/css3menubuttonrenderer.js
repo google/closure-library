@@ -89,6 +89,7 @@ goog.ui.Css3MenuButtonRenderer.prototype.getContentElement = function(element) {
  * element is a DIV, false otherwise.
  * @param {Element} element Element to decorate.
  * @return {boolean} Whether the renderer can decorate the element.
+ * @override
  */
 goog.ui.Css3MenuButtonRenderer.prototype.canDecorate = function(element) {
   return element.tagName == goog.dom.TagName.DIV;

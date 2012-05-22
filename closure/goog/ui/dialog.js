@@ -291,6 +291,7 @@ goog.ui.Dialog.prototype.renderIfNoDom_ = function() {
  * the content area.  Renders if the DOM is not yet created.  Overrides
  * {@link goog.ui.Component#getContentElement}.
  * @return {Element} The content element.
+ * @override
  */
 goog.ui.Dialog.prototype.getContentElement = function() {
   this.renderIfNoDom_();
@@ -357,6 +358,7 @@ goog.ui.Dialog.prototype.getDialogElement = function() {
  * Returns the background mask element so that more complicated things can be
  * done with the background region.  Renders if the DOM is not yet created.
  * @return {Element} The background mask element.
+ * @override
  */
 goog.ui.Dialog.prototype.getBackgroundElement = function() {
   this.renderIfNoDom_();
@@ -679,6 +681,7 @@ goog.ui.Dialog.prototype.exitDocument = function() {
  * method returns, isVisible() will always return the new state, even
  * if there is a transition.
  * @param {boolean} visible Whether the dialog should be visible.
+ * @override
  */
 goog.ui.Dialog.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
@@ -713,6 +716,7 @@ goog.ui.Dialog.prototype.onHide = function() {
 
 /**
  * Focuses the dialog contents and the default dialog button if there is one.
+ * @override
  */
 goog.ui.Dialog.prototype.focus = function() {
   goog.base(this, 'focus');

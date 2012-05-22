@@ -220,6 +220,7 @@ goog.ui.AdvancedTooltip.prototype.isMouseInTooltip = function() {
  * padding if any.
  * @param {goog.math.Coordinate} coord Coordinate being tested.
  * @return {boolean} Whether the coord is in the tooltip.
+ * @override
  */
 goog.ui.AdvancedTooltip.prototype.isCoordinateInTooltip = function(coord) {
   // Check if coord is inside the bounding box of the tooltip
@@ -263,6 +264,7 @@ goog.ui.AdvancedTooltip.prototype.isCoordinateActive_ = function(coord) {
  * Called by timer from mouse out handler. Hides tooltip if cursor is still
  * outside element and tooltip.
  * @param {Element} el Anchor when hide timer was started.
+ * @override
  */
 goog.ui.AdvancedTooltip.prototype.maybeHide = function(el) {
   this.hideTimer = undefined;
@@ -290,6 +292,7 @@ goog.ui.AdvancedTooltip.prototype.maybeHide = function(el) {
  *
  * @param {goog.events.BrowserEvent} event Event object.
  * @protected
+ * @override
  */
 goog.ui.AdvancedTooltip.prototype.handleMouseMove = function(event) {
   var startTimer = this.isVisible();
@@ -331,6 +334,7 @@ goog.ui.AdvancedTooltip.prototype.handleMouseMove = function(event) {
  *
  * @param {goog.events.BrowserEvent} event Event object.
  * @protected
+ * @override
  */
 goog.ui.AdvancedTooltip.prototype.handleTooltipMouseOver = function(event) {
   if (this.getActiveElement() != this.getElement()) {
@@ -343,6 +347,7 @@ goog.ui.AdvancedTooltip.prototype.handleTooltipMouseOver = function(event) {
 /**
  * Override hide delay with cursor tracking hide delay while tracking.
  * @return {number} Hide delay to use.
+ * @override
  */
 goog.ui.AdvancedTooltip.prototype.getHideDelayMs = function() {
   return this.tracking_ ? this.cursorTrackingHideDelayMs_ :

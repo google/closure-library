@@ -319,6 +319,7 @@ goog.ui.Container.prototype.createDom = function() {
  * or null if the container itself hasn't been rendered yet.  Overrides
  * {@link goog.ui.Component#getContentElement} by delegating to the renderer.
  * @return {Element} Element to contain child elements (null if none).
+ * @override
  */
 goog.ui.Container.prototype.getContentElement = function() {
   // Delegate to renderer.
@@ -331,6 +332,7 @@ goog.ui.Container.prototype.getContentElement = function() {
  * Overrides {@link goog.ui.Component#canDecorate}.
  * @param {Element} element Element to decorate.
  * @return {boolean} True iff the element can be decorated.
+ * @override
  */
 goog.ui.Container.prototype.canDecorate = function(element) {
   // Delegate to renderer.
@@ -357,6 +359,7 @@ goog.ui.Container.prototype.decorateInternal = function(element) {
 /**
  * Configures the container after its DOM has been rendered, and sets up event
  * handling.  Overrides {@link goog.ui.Component#enterDocument}.
+ * @override
  */
 goog.ui.Container.prototype.enterDocument = function() {
   goog.ui.Container.superClass_.enterDocument.call(this);
@@ -433,6 +436,7 @@ goog.ui.Container.prototype.enableFocusHandling_ = function(enable) {
 /**
  * Cleans up the container before its DOM is removed from the document, and
  * removes event handlers.  Overrides {@link goog.ui.Component#exitDocument}.
+ * @override
  */
 goog.ui.Container.prototype.exitDocument = function() {
   // {@link #setHighlightedIndex} has to be called before

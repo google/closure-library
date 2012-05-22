@@ -591,6 +591,7 @@ goog.ui.emoji.EmojiPicker.prototype.createPlaceholderEmojiPage_ =
  * structure they build is fairly complicated.
  * @param {Element} element Element to decorate.
  * @return {boolean} Returns always false.
+ * @override
  */
 goog.ui.emoji.EmojiPicker.prototype.canDecorate = function(element) {
   return false;

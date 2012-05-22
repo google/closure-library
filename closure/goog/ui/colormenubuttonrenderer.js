@@ -64,6 +64,7 @@ goog.ui.ColorMenuButtonRenderer.CSS_CLASS =
  * @param {goog.ui.ControlContent} content Text caption or DOM structure.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
  * @return {Element} Caption element.
+ * @override
  */
 goog.ui.ColorMenuButtonRenderer.prototype.createCaption = function(content,
     dom) {
@@ -91,6 +92,7 @@ goog.ui.ColorMenuButtonRenderer.wrapCaption = function(content, dom) {
  * the new color.  Overrides {@link goog.ui.ButtonRenderer#setValue}.
  * @param {Element} element The button control's root element (if rendered).
  * @param {*} value New value; assumed to be a color spec string.
+ * @override
  */
 goog.ui.ColorMenuButtonRenderer.prototype.setValue = function(element, value) {
   if (element) {

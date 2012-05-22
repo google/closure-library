@@ -135,6 +135,7 @@ goog.ui.AttachableMenu.prototype.setSelectedItemClassName = function(name) {
  * Returns the selected item
  *
  * @return {Element} The item selected or null if no item is selected.
+ * @override
  */
 goog.ui.AttachableMenu.prototype.getSelectedItem = function() {
   return this.selectedElement_;
@@ -266,6 +267,7 @@ goog.ui.AttachableMenu.prototype.getNextPrevItem = function(prev) {
  * Mouse over handler for the menu.
  * @param {goog.events.Event} e The event object.
  * @protected
+ * @override
  */
 goog.ui.AttachableMenu.prototype.onMouseOver = function(e) {
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
@@ -284,6 +286,7 @@ goog.ui.AttachableMenu.prototype.onMouseOver = function(e) {
  * Mouse out handler for the menu.
  * @param {goog.events.Event} e The event object.
  * @protected
+ * @override
  */
 goog.ui.AttachableMenu.prototype.onMouseOut = function(e) {
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
@@ -311,6 +314,7 @@ goog.ui.AttachableMenu.prototype.onMouseDown = goog.events.Event.preventDefault;
  * Mouse up handler for the menu.
  * @param {goog.events.Event} e The event object.
  * @protected
+ * @override
  */
 goog.ui.AttachableMenu.prototype.onMouseUp = function(e) {
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
@@ -326,6 +330,7 @@ goog.ui.AttachableMenu.prototype.onMouseUp = function(e) {
  * Key down handler for the menu.
  * @param {goog.events.KeyEvent} e The event object.
  * @protected
+ * @override
  */
 goog.ui.AttachableMenu.prototype.onKeyDown = function(e) {
   switch (e.keyCode) {

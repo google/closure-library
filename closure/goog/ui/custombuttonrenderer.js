@@ -129,6 +129,7 @@ goog.ui.CustomButtonRenderer.prototype.setAriaStates = function(button,
  * @param {Element} element Root element of the button whose content
  *     element is to be returned.
  * @return {Element} The button's content element (if any).
+ * @override
  */
 goog.ui.CustomButtonRenderer.prototype.getContentElement = function(element) {
   return element && /** @type {Element} */ (element.firstChild.firstChild);
@@ -166,6 +167,7 @@ goog.ui.CustomButtonRenderer.prototype.createButton = function(content, dom) {
  * element is a DIV, false otherwise.
  * @param {Element} element Element to decorate.
  * @return {boolean} Whether the renderer can decorate the element.
+ * @override
  */
 goog.ui.CustomButtonRenderer.prototype.canDecorate = function(element) {
   return element.tagName == 'DIV';
@@ -231,6 +233,7 @@ goog.ui.CustomButtonRenderer.prototype.decorate = function(control, element) {
  * Returns the CSS class to be applied to the root element of components
  * rendered using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.CustomButtonRenderer.prototype.getCssClass = function() {
   return goog.ui.CustomButtonRenderer.CSS_CLASS;

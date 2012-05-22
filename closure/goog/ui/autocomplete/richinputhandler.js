@@ -55,6 +55,7 @@ goog.inherits(goog.ui.ac.RichInputHandler, goog.ui.ac.InputHandler);
  * Selects the given rich row.  The row's select(target) method is called.
  * @param {Object} row The row to select.
  * @return {boolean} Whether to suppress the update event.
+ * @override
  */
 goog.ui.ac.RichInputHandler.prototype.selectRow = function(row) {
   var suppressUpdate = goog.ui.ac.RichInputHandler.superClass_

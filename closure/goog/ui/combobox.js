@@ -270,6 +270,7 @@ goog.ui.ComboBox.prototype.exitDocument = function() {
 /**
  * Combo box currently can't decorate elements.
  * @return {boolean} The value false.
+ * @override
  */
 goog.ui.ComboBox.prototype.canDecorate = function() {
   return false;
