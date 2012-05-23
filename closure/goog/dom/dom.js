@@ -1436,7 +1436,7 @@ goog.dom.getFrameContentDocument = function(frame) {
 
 /**
  * Cross-browser function for getting the window of a frame or iframe.
- * @param {HTMLIFrameElement|HTMLFrameElement} frame Frame element.
+ * @param {Element} frame Frame element.
  * @return {Window} The window associated with the given frame.
  */
 goog.dom.getFrameContentWindow = function(frame) {
@@ -2388,7 +2388,7 @@ goog.dom.DomHelper.prototype.getFrameContentDocument =
 
 /**
  * Cross browser function for getting the window of a frame or iframe.
- * @param {HTMLIFrameElement|HTMLFrameElement} frame Frame element.
+ * @param {Element} frame Frame element.
  * @return {Window} The window associated with the given frame.
  */
 goog.dom.DomHelper.prototype.getFrameContentWindow =
