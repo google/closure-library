@@ -86,6 +86,7 @@ goog.editor.plugins.Blockquote.CLASS_ID = 'Blockquote';
  * Logging object.
  * @type {goog.debug.Logger}
  * @protected
+ * @override
  */
 goog.editor.plugins.Blockquote.prototype.logger =
     goog.debug.Logger.getLogger('goog.editor.plugins.Blockquote');
@@ -99,6 +100,7 @@ goog.editor.plugins.Blockquote.prototype.getTrogClassId = function() {
 
 /**
  * Since our exec command is always called from elsewhere, we make it silent.
+ * @override
  */
 goog.editor.plugins.Blockquote.prototype.isSilentCommand = goog.functions.TRUE;
 

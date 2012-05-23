@@ -71,6 +71,7 @@ goog.editor.plugins.LoremIpsum.prototype.usingLorem_ = false;
  * Handles queryCommandValue.
  * @param {string} command The command to query.
  * @return {boolean} The result.
+ * @override
  */
 goog.editor.plugins.LoremIpsum.prototype.queryCommandValue = function(command) {
   return command == goog.editor.Command.USING_LOREM && this.usingLorem_;

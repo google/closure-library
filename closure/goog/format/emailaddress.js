@@ -144,6 +144,7 @@ goog.format.EmailAddress.prototype.setAddress = function(address) {
  *  - remove extra spaces.
  *  - Surround name with quotes if it contains special characters.
  * @return {string} The cleaned address.
+ * @override
  */
 goog.format.EmailAddress.prototype.toString = function() {
   var name = this.getName();

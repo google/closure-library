@@ -101,6 +101,7 @@ goog.editor.plugins.TableEditor.SUPPORTED_COMMANDS_ =
  * @param {string} command Command string to check.
  * @return {boolean} Whether the string corresponds to a command
  *     this plugin handles.
+ * @override
  */
 goog.editor.plugins.TableEditor.prototype.isSupportedCommand =
     function(command) {

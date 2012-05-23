@@ -74,6 +74,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.getNonCollapsingBlankHtml =
  * This plugin is active on uneditable fields so it can provide a value for
  * queryCommandValue calls asking for goog.editor.Command.BLOCKQUOTE.
  * @return {boolean} True.
+ * @override
  */
 goog.editor.plugins.TagOnEnterHandler.prototype.activeOnUneditableFields =
     goog.functions.TRUE;

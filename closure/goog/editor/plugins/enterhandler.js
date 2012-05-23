@@ -88,6 +88,7 @@ goog.editor.plugins.EnterHandler.prototype.enable = function(fieldObject) {
  * @param {string} html The html to prepare.
  * @return {string} The original HTML, or default contents if that
  *    html is empty.
+ * @override
  */
 goog.editor.plugins.EnterHandler.prototype.prepareContentsHtml = function(
     html) {

@@ -80,6 +80,7 @@ goog.inherits(goog.editor.plugins.UndoRedo, goog.editor.Plugin);
  * The logger for this class.
  * @type {goog.debug.Logger}
  * @protected
+ * @override
  */
 goog.editor.plugins.UndoRedo.prototype.logger =
     goog.debug.Logger.getLogger('goog.editor.plugins.UndoRedo');
@@ -167,6 +168,7 @@ goog.editor.plugins.UndoRedo.prototype.setUndoRedoManager = function(manager) {
  * @param {string} command Command string to check.
  * @return {boolean} Whether the string corresponds to a command
  *     this plugin handles.
+ * @override
  */
 goog.editor.plugins.UndoRedo.prototype.isSupportedCommand = function(command) {
   return command in goog.editor.plugins.UndoRedo.SUPPORTED_COMMANDS_;
@@ -188,6 +190,7 @@ goog.editor.plugins.UndoRedo.prototype.registerFieldObject = function(
  * This is probably as simple as skipping over entries in the undo stack
  * that have a hashcode of an uneditable field.
  * @param {goog.editor.Field} fieldObject The field to register with the plugin.
+ * @override
  */
 goog.editor.plugins.UndoRedo.prototype.unregisterFieldObject = function(
     fieldObject) {
@@ -719,6 +722,7 @@ goog.editor.plugins.UndoRedo.UndoState_.prototype.redoCursorPosition_;
 
 /**
  * Performs the undo operation represented by this state.
+ * @override
  */
 goog.editor.plugins.UndoRedo.UndoState_.prototype.undo = function() {
   this.restore_(this, this.undoContent_,
@@ -728,6 +732,7 @@ goog.editor.plugins.UndoRedo.UndoState_.prototype.undo = function() {
 
 /**
  * Performs the redo operation represented by this state.
+ * @override
  */
 goog.editor.plugins.UndoRedo.UndoState_.prototype.redo = function() {
   this.restore_(this, this.redoContent_,
@@ -910,6 +915,7 @@ goog.editor.plugins.UndoRedo.CursorPosition_.prototype.isValid = function() {
 
 /**
  * @return {string} A string representation of this object.
+ * @override
  */
 goog.editor.plugins.UndoRedo.CursorPosition_.prototype.toString = function() {
   if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {

@@ -113,6 +113,7 @@ goog.editor.plugins.BasicTextFormatter.SUPPORTED_COMMANDS_ =
  * @param {string} command Command string to check.
  * @return {boolean} Whether the string corresponds to a command
  *     this plugin handles.
+ * @override
  */
 goog.editor.plugins.BasicTextFormatter.prototype.isSupportedCommand = function(
     command) {
@@ -352,6 +353,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.focusField_ = function() {
  *     selection.  NOTE: This return type list is not documented in MSDN or MDC
  *     and has been constructed from experience.  Please update it
  *     if necessary.
+ * @override
  */
 goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValue = function(
     command) {
