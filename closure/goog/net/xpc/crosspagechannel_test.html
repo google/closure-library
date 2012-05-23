@@ -43,7 +43,8 @@ var canAccessSameDomainIframe = true;
 var accessCheckIframes = [];
 
 function setUpPage() {
-  asyncTestCase.stepTimeout = 10 * 1000;
+  // This test is insanely slow on IE8 for some reason.
+  asyncTestCase.stepTimeout = 20 * 1000;
 
   // Show debug log
   var debugDiv = goog.dom.getElement('debugDiv');
@@ -121,63 +122,288 @@ function testCreateIframeRandomId() {
 }
 
 
-function testLifeCycle() {
+// The following batch of tests:
+// * Establishes a peer iframe
+// * Connects an XPC channel between the frames
+// * From the connection callback in each frame, sends an 'echo' request, and
+//   expects a 'response' response.
+// * Reconnects the inner frame, sends an 'echo', expects a 'response'.
+// * Optionally, reconnects the outer frame, sends an 'echo', expects a
+//   'response'.
+// * Optionally, reconnects the inner frame, but first reconfigures it to the
+//   alternate protocol version, simulating an inner frame navigation that
+//   picks up a new/old version.
+//
+// Every valid combination of protocol versions is tested, with both single and
+// double ended handshakes.  Two timing scenarios are tested per combination,
+// which is what the 'reverse' parameter distinguishes.
+//
+// Where single sided handshake is in use, reconnection by the outer frame is
+// not supported, and therefore is not tested.
+//
+// The only known issue migrating to V2 is that once two V2 peers have
+// connected, replacing either peer with a V1 peer will not work.  Upgrading V1
+// peers to v2 is supported, as is replacing the only v2 peer in a connection
+// with a v1.
+
+
+function testLifeCycle_v1_v1() {
   checkLifeCycle(
       false /* oneSidedHandshake */,
+      1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
       true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
       false /* reverse */);
 }
 
 
-function testLifeCycle_rev() {
+function testLifeCycle_v1_v1_rev() {
   checkLifeCycle(
       false /* oneSidedHandshake */,
+      1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
       true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
       true /* reverse */);
 }
 
 
-function testLifeCycle_onesided() {
+function testLifeCycle_v1_v1_onesided() {
   checkLifeCycle(
       true /* oneSidedHandshake */,
+      1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
       false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
       false /* reverse */);
 }
 
 
-function testLifeCycle_onesided_rev() {
+function testLifeCycle_v1_v1_onesided_rev() {
   checkLifeCycle(
       true /* oneSidedHandshake */,
+      1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
       false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
       true /* reverse */);
 }
 
 
+function testLifeCycle_v1_v2() {
+  checkLifeCycle(
+      false /* oneSidedHandshake */,
+      1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
+      false /* reverse */);
+}
 
-function checkLifeCycle(oneSidedHandshake, outerFrameReconnectSupported,
-    reverse) {
-  driver.createPeerIframe('new_iframe', oneSidedHandshake);
+
+function testLifeCycle_v1_v2_rev() {
+  checkLifeCycle(
+      false /* oneSidedHandshake */,
+      1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
+      true /* reverse */);
+}
+
+
+function testLifeCycle_v1_v2_onesided() {
+  checkLifeCycle(
+      true /* oneSidedHandshake */,
+      1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
+      false /* reverse */);
+}
+
+
+function testLifeCycle_v1_v2_onesided_rev() {
+  checkLifeCycle(
+      true /* oneSidedHandshake */,
+      1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
+      true /* reverse */);
+}
+
+
+function testLifeCycle_v2_v1() {
+  checkLifeCycle(
+      false /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
+      true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
+      false /* reverse */);
+}
+
+
+function testLifeCycle_v2_v1_rev() {
+  checkLifeCycle(
+      false /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
+      true /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
+      true /* reverse */);
+}
+
+
+function testLifeCycle_v2_v1_onesided() {
+  checkLifeCycle(
+      true /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
+      false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
+      false /* reverse */);
+}
+
+
+function testLifeCycle_v2_v1_onesided_rev() {
+  checkLifeCycle(
+      true /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
+      false /* outerFrameReconnectSupported */,
+      true /* innerFrameMigrationSupported */,
+      true /* reverse */);
+}
+
+
+function testLifeCycle_v2_v2() {
+  checkLifeCycle(
+      false /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      true /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */,
+      false /* reverse */);
+}
+
+
+function testLifeCycle_v2_v2_rev() {
+  checkLifeCycle(
+      false /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      true /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */,
+      true /* reverse */);
+}
+
+
+function testLifeCycle_v2_v2_onesided() {
+  checkLifeCycle(
+      true /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      false /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */,
+      false /* reverse */);
+}
+
+
+function testLifeCycle_v2_v2_onesided_rev() {
+  checkLifeCycle(
+      true /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      false /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */,
+      true /* reverse */);
+}
+
+
+function checkLifeCycle(oneSidedHandshake, innerProtocolVersion,
+    outerProtocolVersion, outerFrameReconnectSupported,
+    innerFrameMigrationSupported, reverse) {
+  driver.createPeerIframe('new_iframe', oneSidedHandshake,
+      innerProtocolVersion, outerProtocolVersion);
   driver.connect(true /* fullLifeCycleTest */, outerFrameReconnectSupported,
-      reverse);
+      innerFrameMigrationSupported, reverse);
 }
 
 
-function testConnectMismatchedNames() {
-  checkConnectMismatchedNames(false /* reverse */);
+function testConnectMismatchedNames_v1_v1() {
+  checkConnectMismatchedNames(
+      1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
+      false /* reverse */);
 }
 
 
-function testConnectMismatchedNames_rev() {
-  checkConnectMismatchedNames(true /* reverse */);
+function testConnectMismatchedNames_v1_v1_rev() {
+  checkConnectMismatchedNames(
+      1 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
+      true /* reverse */);
 }
 
 
+function testConnectMismatchedNames_v1_v2() {
+  checkConnectMismatchedNames(
+      1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      false /* reverse */);
+}
 
-function checkConnectMismatchedNames(reverse) {
-  driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */,
-      true /* opt_randomChannelNames */);
+
+function testConnectMismatchedNames_v1_v2_rev() {
+  checkConnectMismatchedNames(
+      1 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      true /* reverse */);
+}
+
+
+function testConnectMismatchedNames_v2_v1() {
+  checkConnectMismatchedNames(
+      2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
+      false /* reverse */);
+}
+
+
+function testConnectMismatchedNames_v2_v1_rev() {
+  checkConnectMismatchedNames(
+      2 /* innerProtocolVersion */,
+      1 /* outerProtocolVersion */,
+      true /* reverse */);
+}
+
+
+function testConnectMismatchedNames_v2_v2() {
+  checkConnectMismatchedNames(
+      2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      false /* reverse */);
+}
+
+
+function testConnectMismatchedNames_v2_v2_rev() {
+  checkConnectMismatchedNames(
+      2 /* innerProtocolVersion */,
+      2 /* outerProtocolVersion */,
+      true /* reverse */);
+}
+
+
+function checkConnectMismatchedNames(innerProtocolVersion,
+    outerProtocolVersion, reverse) {
+  driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */, innerProtocolVersion,
+      outerProtocolVersion, true /* opt_randomChannelNames */);
   driver.connect(false /* fullLifeCycleTest */,
       false /* outerFrameReconnectSupported */,
+      false /* innerFrameMigrationSupported */,
       false /* reverse */);
 }
 
@@ -358,13 +584,18 @@ Driver.prototype.getInnerPeer_ = function() {
  *     config option should be set.
  * @param {string=} opt_channelName The name of the channel to use, or null
  *     to generate one.
+ * @param {number=} opt_innerProtocolVersion The native transport protocol
+ *     version used in the inner iframe.
+ * @param {number=} opt_outerProtocolVersion The native transport protocol
+ *     version used in the outer iframe.
  * @param {boolean=} randomChannelNames Whether the different ends of the
  *     channel should be allowed to pick differing, random names.
  * @return {string} The name of the created channel.
  * @private
  */
 Driver.prototype.setConfiguration_ = function(opt_iframeId,
-    opt_oneSidedHandshake, opt_channelName, opt_randomChannelNames) {
+    opt_oneSidedHandshake, opt_channelName, opt_innerProtocolVersion,
+    opt_outerProtocolVersion, opt_randomChannelNames) {
   var cfg = {};
   if (opt_iframeId) {
     cfg[goog.net.xpc.CfgFields.IFRAME_ID] = opt_iframeId;
@@ -377,6 +608,8 @@ Driver.prototype.setConfiguration_ = function(opt_iframeId,
   cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
   cfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] = !!opt_oneSidedHandshake;
+  cfg[goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+      opt_outerProtocolVersion;
   function resolveUri(fieldName) {
     cfg[fieldName] =
         goog.Uri.resolve(window.location.href, cfg[fieldName]).toString();
@@ -386,6 +619,9 @@ Driver.prototype.setConfiguration_ = function(opt_iframeId,
   resolveUri(goog.net.xpc.CfgFields.PEER_POLL_URI);
   this.outerFrameCfg_ = cfg;
   this.innerFrameCfg_ = goog.object.clone(cfg);
+  this.innerFrameCfg_[
+      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+      opt_innerProtocolVersion;
 };
 
 
@@ -444,13 +680,18 @@ Driver.prototype.getInnerFrameConfiguration = function() {
  *     otherwise, generates an iframe ID.
  * @param {boolean=} opt_oneSidedHandshake Whether a one sided handshake is
  *     specified.
+ * @param {number=} opt_innerProtocolVersion The native transport protocol
+ *     version used in the inner iframe.
+ * @param {number=} opt_outerProtocolVersion The native transport protocol
+ *     version used in the outer iframe.
  * @param {boolean=} opt_randomChannelNames Whether the ends of the channel
  *     should be allowed to pick differing, random names.
  * @return {!Array.<string>} The id of the created iframe and the name of the
  *     created channel.
  */
 Driver.prototype.createPeerIframe = function(opt_iframeId,
-    opt_oneSidedHandshake, opt_randomChannelNames) {
+    opt_oneSidedHandshake, opt_innerProtocolVersion, opt_outerProtocolVersion,
+    opt_randomChannelNames) {
   var expectedIframeId;
 
   if (opt_iframeId) {
@@ -466,8 +707,10 @@ Driver.prototype.createPeerIframe = function(opt_iframeId,
       goog.dom.getElement(expectedIframeId));
 
   this.setConfiguration_(opt_iframeId, opt_oneSidedHandshake,
-      undefined /* opt_channelName */, opt_randomChannelNames);
-  this.initialOuterChannelName_ = this.createChannel_();
+      undefined /* opt_channelName */, opt_innerProtocolVersion,
+      opt_outerProtocolVersion, opt_randomChannelNames);
+  var channelName = this.createChannel_();
+  this.initialOuterChannelName_ = channelName;
   this.iframe_ = this.channel_.createPeerIframe(document.body);
 
   assertEquals(expectedIframeId, this.iframe_.id);
@@ -489,10 +732,7 @@ Driver.prototype.checkPeerIframe = function() {
  * Starts the connection. The connection happens asynchronously.
  */
 Driver.prototype.connect = function(fullLifeCycleTest,
-    outerFrameReconnectSupported, reverse) {
-  // Outer frame reconnect is only tested in a full lifecycle test.
-  assert(fullLifeCycleTest || !outerFrameReconnectSupported);
-
+    outerFrameReconnectSupported, innerFrameMigrationSupported, reverse) {
   if (!this.isTransportTestable_()) {
     asyncTestCase.continueTesting();
     return;
@@ -509,7 +749,8 @@ Driver.prototype.connect = function(fullLifeCycleTest,
 
   if (fullLifeCycleTest) {
     this.innerFrameResponseReceived_.addCallback(
-        goog.bind(this.testReconnects_, this, outerFrameReconnectSupported));
+        goog.bind(this.testReconnects_, this,
+            outerFrameReconnectSupported, innerFrameMigrationSupported));
   } else {
     this.innerFrameResponseReceived_.addCallback(
         goog.bind(asyncTestCase.continueTesting, asyncTestCase));
@@ -614,7 +855,8 @@ Driver.prototype.innerFrameGotResponse = function(payload) {
  *     are supported, and should be tested.
  * @private
  */
-Driver.prototype.testReconnects_ = function(outerFrameReconnectSupported) {
+Driver.prototype.testReconnects_ = function(outerFrameReconnectSupported,
+    innerFrameMigrationSupported) {
   G_testRunner.log('Performing inner frame reconnect');
   this.reinitializeDeferreds_();
   this.innerFrameResponseReceived_.addCallback(
@@ -622,7 +864,11 @@ Driver.prototype.testReconnects_ = function(outerFrameReconnectSupported) {
 
   if (outerFrameReconnectSupported) {
     this.innerFrameResponseReceived_.addCallback(
-        goog.bind(this.performOuterFrameReconnect_, this));
+        goog.bind(this.performOuterFrameReconnect_, this,
+            innerFrameMigrationSupported));
+  } else if (innerFrameMigrationSupported) {
+    this.innerFrameResponseReceived_.addCallback(
+        goog.bind(this.migrateInnerFrame_, this));
   } else {
     this.innerFrameResponseReceived_.addCallback(
         goog.bind(asyncTestCase.continueTesting, asyncTestCase));
@@ -661,15 +907,41 @@ Driver.prototype.performInnerFrameReconnect_ = function() {
  * Get the outer frame to reconnect, and repeat the echo test.
  * @private
  */
-Driver.prototype.performOuterFrameReconnect_ = function() {
+Driver.prototype.performOuterFrameReconnect_ = function(
+    innerFrameMigrationSupported) {
   G_testRunner.log('Reconnecting outer frame');
   this.reinitializeDeferreds_();
-  this.outerFrameResponseReceived_.addCallback(
+  this.innerFrameResponseReceived_.addCallback(
       goog.bind(this.checkChannelNames_, this));
-  this.outerFrameResponseReceived_.addCallback(
-      goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  if (innerFrameMigrationSupported) {
+    this.outerFrameResponseReceived_.addCallback(
+        goog.bind(this.migrateInnerFrame_, this));
+  } else {
+    this.outerFrameResponseReceived_.addCallback(
+        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  }
   this.createChannel_();
   this.channel_.connect(goog.bind(this.outerFrameConnected_, this));
+};
+
+
+/**
+ * Migrate the inner frame to the alternate protocol version and reconnect it.
+ * @private
+ */
+Driver.prototype.migrateInnerFrame_ = function() {
+  G_testRunner.log('Migrating inner frame');
+  this.reinitializeDeferreds_();
+  var innerFrameProtoVersion = this.innerFrameCfg_[
+      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION];
+  this.innerFrameResponseReceived_.addCallback(
+      goog.bind(this.checkChannelNames_, this));
+  this.innerFrameResponseReceived_.addCallback(
+      goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+  this.innerFrameCfg_[
+      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+          innerFrameProtoVersion == 1 ? 2 : 1;
+  this.performInnerFrameReconnect_();
 };
 
 

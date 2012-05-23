@@ -175,7 +175,18 @@ goog.net.xpc.CfgFields = {
    * peer windows are not parent/child frames). If unspecified, the role will
    * be dynamically determined, assuming a parent/child frame setup.
    */
-  ROLE: 'role'
+  ROLE: 'role',
+  /**
+   * Which version of the native transport startup protocol should be used, the
+   * default being '2'.  Version 1 had various timing vulnerabilities, which
+   * had to be compensated for by introducing delays, and is deprecated.  V1
+   * and V2 are broadly compatible, although the more robust timing and lack
+   * of delays is not gained unless both sides are using V2.  The only
+   * unsupported case of cross-protocol interoperation is where a connection
+   * starts out with V2 at both ends, and one of the ends reconnects as a V1.
+   * All other initial startup and reconnection scenarios are supported.
+   */
+  NATIVE_TRANSPORT_PROTOCOL_VERSION: 'nativeProtocolVersion'
 };
 
 
@@ -218,11 +229,25 @@ goog.net.xpc.SETUP = 'SETUP';
 
 
 /**
+ * Transport signaling message: setup for native transport protocol v2.
+ * @type {string}
+ */
+goog.net.xpc.SETUP_NTPV2 = 'SETUP_NTPV2';
+
+
+/**
  * Transport signaling message: setup acknowledgement.
  * @type {string}
  * @suppress {underscore}
  */
 goog.net.xpc.SETUP_ACK_ = 'SETUP_ACK';
+
+
+/**
+ * Transport signaling message: setup acknowledgement.
+ * @type {string}
+ */
+goog.net.xpc.SETUP_ACK_NTPV2 = 'SETUP_ACK_NTPV2';
 
 
 /**

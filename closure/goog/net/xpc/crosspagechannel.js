@@ -285,11 +285,14 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
 
   switch (this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
     case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
+      var protocolVersion = this.cfg_[
+          goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] || 2;
       this.transport_ = new goog.net.xpc.NativeMessagingTransport(
           this,
           this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME],
           this.domHelper_,
-          !!this.cfg_[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE]);
+          !!this.cfg_[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE],
+          protocolVersion);
       break;
     case goog.net.xpc.TransportTypes.NIX:
       this.transport_ = new goog.net.xpc.NixTransport(this, this.domHelper_);
