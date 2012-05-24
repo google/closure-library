@@ -308,6 +308,7 @@ goog.dom.browserrange.IeRange.prototype.endOffset_ = -1;
 
 /**
  * @return {goog.dom.browserrange.IeRange} A clone of this range.
+ * @override
  */
 goog.dom.browserrange.IeRange.prototype.clone = function() {
   var range = new goog.dom.browserrange.IeRange(
