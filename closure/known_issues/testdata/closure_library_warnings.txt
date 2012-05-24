@@ -172,12 +172,6 @@ goog.ui.HsvaPalette.prototype.handleInput_ = function(e) {
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
   var parsed = goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imagelessroundedcorner.js WARNING - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
-  path.arc(this.xCenter_,
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imagelessroundedcorner.js WARNING - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
-  path.arc(this.xCenter_,
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js WARNING - Access to private property lastEventTime_ of goog.ui.MockActivityMonitor not allowed here.
   this.lastEventTime_ = eventTime;
 
