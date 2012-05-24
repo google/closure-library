@@ -109,6 +109,7 @@ goog.ui.PopupMenu.prototype.currentAnchor_ = null;
  * constructed from elements with classname 'goog-menuitem', separators will be
  * made from HR elements.
  * @param {Element} element Element to decorate.
+ * @override
  */
 goog.ui.PopupMenu.prototype.decorateInternal = function(element) {
   goog.ui.PopupMenu.superClass_.decorateInternal.call(this, element);
@@ -122,9 +123,7 @@ goog.ui.PopupMenu.prototype.decorateInternal = function(element) {
 };
 
 
-/**
- * The menu has been added to the document.
- */
+/** @override */
 goog.ui.PopupMenu.prototype.enterDocument = function() {
   goog.ui.PopupMenu.superClass_.enterDocument.call(this);
 
@@ -537,6 +536,7 @@ goog.ui.PopupMenu.prototype.onDocClick = function(e) {
  * Handles the key event target loosing focus.
  * @param {goog.events.BrowserEvent} e The browser event.
  * @protected
+ * @override
  */
 goog.ui.PopupMenu.prototype.handleBlur = function(e) {
   goog.ui.PopupMenu.superClass_.handleBlur.call(this, e);

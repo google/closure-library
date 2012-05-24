@@ -54,6 +54,7 @@ goog.inherits(goog.ui.Option, goog.ui.MenuItem);
  * compatibility with existing uses of this class.
  * @param {goog.events.Event} e Mouse or key event that triggered the action.
  * @return {boolean} True if the action was allowed to proceed, false otherwise.
+ * @override
  */
 goog.ui.Option.prototype.performActionInternal = function(e) {
   return this.dispatchEvent(goog.ui.Component.EventType.ACTION);

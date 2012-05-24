@@ -196,6 +196,7 @@ goog.ui.Popup.prototype.setMargin = function(arg1, opt_arg2, opt_arg3,
 
 /**
  * Repositions the popup according to the current state.
+ * @override
  */
 goog.ui.Popup.prototype.reposition = function() {
   if (!this.position_) {

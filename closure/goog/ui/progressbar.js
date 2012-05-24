@@ -96,9 +96,7 @@ goog.ui.ProgressBar.prototype.createDom = function() {
 };
 
 
-/**
- * Called when the DOM for the component is for sure in the document.
- */
+/** @override */
 goog.ui.ProgressBar.prototype.enterDocument = function() {
   goog.ui.ProgressBar.superClass_.enterDocument.call(this);
   this.attachEvents_();
@@ -111,9 +109,7 @@ goog.ui.ProgressBar.prototype.enterDocument = function() {
 };
 
 
-/**
- * Called when the DOM for the component is for sure in the document.
- */
+/** @override */
 goog.ui.ProgressBar.prototype.exitDocument = function() {
   goog.ui.ProgressBar.superClass_.exitDocument.call(this);
   this.detachEvents_();

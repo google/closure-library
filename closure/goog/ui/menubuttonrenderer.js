@@ -93,6 +93,7 @@ if (goog.userAgent.GECKO) {
  * @param {Element} element Root element of the button whose content element
  *     is to be returned.
  * @return {Element} The button's content element.
+ * @override
  */
 goog.ui.MenuButtonRenderer.prototype.getContentElement = function(element) {
   var content =
@@ -157,6 +158,7 @@ goog.ui.MenuButtonRenderer.prototype.decorate = function(control, element) {
  *     to wrap in a box.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
  * @return {Element} Pseudo-rounded-corner box containing the content.
+ * @override
  */
 goog.ui.MenuButtonRenderer.prototype.createButton = function(content, dom) {
   return goog.ui.MenuButtonRenderer.superClass_.createButton.call(this,
@@ -223,6 +225,7 @@ goog.ui.MenuButtonRenderer.prototype.createDropdown = function(dom) {
  * Returns the CSS class to be applied to the root element of components
  * rendered using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.MenuButtonRenderer.prototype.getCssClass = function() {
   return goog.ui.MenuButtonRenderer.CSS_CLASS;

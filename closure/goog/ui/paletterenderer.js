@@ -172,6 +172,7 @@ goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
  * @param {Element} element Ignored.
  * @return {boolean} False, since palettes don't support the decorate flow (for
  *     now).
+ * @override
  */
 goog.ui.PaletteRenderer.prototype.canDecorate = function(element) {
   return false;
@@ -318,6 +319,7 @@ goog.ui.PaletteRenderer.prototype.selectCell = function(palette, node, select) {
  * Returns the CSS class to be applied to the root element of components
  * rendered using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.PaletteRenderer.prototype.getCssClass = function() {
   return goog.ui.PaletteRenderer.CSS_CLASS;

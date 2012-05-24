@@ -330,6 +330,7 @@ goog.ui.Prompt.prototype.updateOkButtonState_ = function() {
  * Causes the prompt to appear, centered on the screen, gives focus
  * to the text box, and selects the text
  * @param {boolean} visible Whether the dialog should be visible.
+ * @override
  */
 goog.ui.Prompt.prototype.setVisible = function(visible) {
   goog.base(this, 'setVisible', visible);

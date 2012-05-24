@@ -152,9 +152,7 @@ goog.ui.PlainTextSpellChecker.prototype.createDom = function() {
 };
 
 
-/**
- * Called when the component's element is known to be in the document.
- */
+/** @override */
 goog.ui.PlainTextSpellChecker.prototype.enterDocument = function() {
   goog.ui.PlainTextSpellChecker.superClass_.enterDocument.call(this);
 
@@ -184,8 +182,7 @@ goog.ui.PlainTextSpellChecker.prototype.exitDocument = function() {
 /**
  * Initializes suggestions menu. Populates menu with separator and ignore option
  * that are always valid. Suggestions are later added above the separator.
- *
- * @protected
+ * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.initSuggestionsMenu = function() {
   goog.ui.PlainTextSpellChecker.superClass_.initSuggestionsMenu.call(this);
@@ -196,6 +193,7 @@ goog.ui.PlainTextSpellChecker.prototype.initSuggestionsMenu = function() {
 
 /**
  * Checks spelling for all text and displays correction UI.
+ * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.check = function() {
   var text = this.getElement().value;
@@ -382,7 +380,7 @@ goog.ui.PlainTextSpellChecker.prototype.continueAsync_ = function() {
  * @param {Node} node Node containing word.
  * @param {string} word Word to process.
  * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
- * @protected
+ * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.processWord = function(node, word,
                                                                 status) {
@@ -395,7 +393,7 @@ goog.ui.PlainTextSpellChecker.prototype.processWord = function(node, word,
  *
  * @param {Node} node Node containing separator.
  * @param {string} text text to process.
- * @protected
+ * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.processRange = function(node, text) {
   this.endOfLineMatcher_.lastIndex = 0;
@@ -414,6 +412,7 @@ goog.ui.PlainTextSpellChecker.prototype.processRange = function(node, text) {
 
 /**
  * Hides correction UI.
+ * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.resume = function() {
   var wasVisible = this.isVisible();
@@ -444,7 +443,7 @@ goog.ui.PlainTextSpellChecker.prototype.resume = function() {
  *
  * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
  * @return {Object} Properties to apply to word element.
- * @protected
+ * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.getElementProperties =
     function(status) {
@@ -633,7 +632,7 @@ goog.ui.PlainTextSpellChecker.prototype.navigate_ = function(direction) {
  * Handles correction menu actions.
  *
  * @param {goog.events.Event} event Action event.
- * @protected
+ * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.onCorrectionAction = function(event) {
   goog.ui.PlainTextSpellChecker.superClass_.onCorrectionAction.call(this,
