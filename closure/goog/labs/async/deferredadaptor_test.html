@@ -12,7 +12,7 @@ See the COPYING file for details.
 <script>
 
 goog.require('goog.labs.async.DeferredAdaptor');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
@@ -24,7 +24,7 @@ goog.require('goog.testing.recordFunction');
 var result, deferred, record;
 
 function setUp() {
-  result = new goog.labs.async.ResultBase();
+  result = new goog.labs.async.SimpleResult();
   deferred = new goog.labs.async.DeferredAdaptor(result);
   record = new goog.testing.recordFunction();
 }

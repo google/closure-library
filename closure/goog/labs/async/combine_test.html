@@ -13,7 +13,7 @@ See the COPYING file for details.
 
 goog.require('goog.Timer');
 goog.require('goog.array');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.labs.async.combine');
 goog.require('goog.labs.async.wait');
 goog.require('goog.testing.MockClock');
@@ -39,10 +39,10 @@ function tearDownPage() {
 
 function setUp() {
   mockClock.reset();
-  result1 = new goog.labs.async.ResultBase();
-  result2 = new goog.labs.async.ResultBase();
-  result3 = new goog.labs.async.ResultBase();
-  result4 = new goog.labs.async.ResultBase();
+  result1 = new goog.labs.async.SimpleResult();
+  result2 = new goog.labs.async.SimpleResult();
+  result3 = new goog.labs.async.SimpleResult();
+  result4 = new goog.labs.async.SimpleResult();
 
   combinedResult = goog.labs.async.combine(result1, result2, result3, result4);
 

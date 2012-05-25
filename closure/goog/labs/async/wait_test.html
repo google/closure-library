@@ -13,7 +13,7 @@ See the COPYING file for details.
 
 goog.require('goog.Timer');
 goog.require('goog.labs.async.Result');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.labs.async.wait');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
@@ -35,7 +35,7 @@ function setUpPage() {
 
 function setUp() {
   mockClock.reset();
-  result = new goog.labs.async.ResultBase();
+  result = new goog.labs.async.SimpleResult();
   propertyReplacer = new goog.testing.PropertyReplacer();
   waitCallback = new goog.testing.recordFunction();
   waitOnSuccessCallback = new goog.testing.recordFunction();

@@ -12,7 +12,7 @@ See the COPYING file for details.
 <script>
 
 goog.require('goog.Timer');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.labs.async.transform');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
@@ -32,7 +32,7 @@ function setUpPage() {
 
 function setUp() {
   mockClock.reset();
-  result = new goog.labs.async.ResultBase();
+  result = new goog.labs.async.SimpleResult();
   resultCallback = new goog.testing.recordFunction();
   multiplyResult = goog.testing.recordFunction(function(value) {
       return value * 2;

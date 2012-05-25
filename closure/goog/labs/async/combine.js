@@ -56,7 +56,7 @@ goog.provide('goog.labs.async.combine');
 
 goog.require('goog.array');
 goog.require('goog.labs.async.Result');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.labs.async.wait');
 
 
@@ -71,7 +71,7 @@ goog.require('goog.labs.async.wait');
  */
 goog.labs.async.combine = function(var_args) {
   var results = goog.array.clone(arguments);
-  var combinedResult = new goog.labs.async.ResultBase();
+  var combinedResult = new goog.labs.async.SimpleResult();
 
   var isResolved = function(res) {
     return res.getState() != goog.labs.async.Result.State.PENDING;
@@ -102,7 +102,7 @@ goog.labs.async.combine = function(var_args) {
  *     an array of values of the given Result objects.
  */
 goog.labs.async.combine.onSuccess = function(var_args) {
-  var combinedResult = new goog.labs.async.ResultBase();
+  var combinedResult = new goog.labs.async.SimpleResult();
 
   var resolvedSuccessfully = function(res) {
     return res.getState() == goog.labs.async.Result.State.SUCCESS;

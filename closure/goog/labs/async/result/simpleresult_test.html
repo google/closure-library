@@ -7,12 +7,12 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <head>
-<title>Closure Unit Tests - goog.labs.async.ResultBase</title>
+<title>Closure Unit Tests - goog.labs.async.SimpleResult</title>
 <script src="../../../base.js"></script>
 <script>
 
 goog.require('goog.Timer');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.testing.jsunit');
@@ -34,7 +34,7 @@ function setUp() {
   resultCallback = new goog.testing.recordFunction();
   resultCallback1 = new goog.testing.recordFunction();
   resultCallback2 = new goog.testing.recordFunction();
-  result = new goog.labs.async.ResultBase();
+  result = new goog.labs.async.SimpleResult();
 }
 
 function tearDown() {
@@ -123,7 +123,7 @@ function testExceptionThrownOnMultipleSuccessfulResolutionAttempts() {
 
   // Try to set the value again
   var e = assertThrows(goog.bind(result.setValue, result, 3));
-  assertTrue(e instanceof goog.labs.async.ResultBase.StateError);
+  assertTrue(e instanceof goog.labs.async.SimpleResult.StateError);
 }
 
 function testExceptionThrownOnMultipleErrorResolutionAttempts() {
@@ -135,7 +135,7 @@ function testExceptionThrownOnMultipleErrorResolutionAttempts() {
   assertEquals(5, result.getError());
   // Try to set error again
   var e = assertThrows(goog.bind(result.setError, result, 4));
-  assertTrue(e instanceof goog.labs.async.ResultBase.StateError);
+  assertTrue(e instanceof goog.labs.async.SimpleResult.StateError);
 }
 
 function testExceptionThrownOnSuccessThenErrorResolutionAttempt() {
@@ -148,7 +148,7 @@ function testExceptionThrownOnSuccessThenErrorResolutionAttempt() {
 
   // Try to set error after setting value
   var e = assertThrows(goog.bind(result.setError, result, 3));
-  assertTrue(e instanceof goog.labs.async.ResultBase.StateError);
+  assertTrue(e instanceof goog.labs.async.SimpleResult.StateError);
 }
 
 function testExceptionThrownOnErrorThenSuccessResolutionAttempt() {
@@ -161,7 +161,7 @@ function testExceptionThrownOnErrorThenSuccessResolutionAttempt() {
   assertEquals(error, result.getError());
   // Try to set value after setting error
   var e = assertThrows(goog.bind(result.setValue, result, 1));
-  assertTrue(e instanceof goog.labs.async.ResultBase.StateError);
+  assertTrue(e instanceof goog.labs.async.SimpleResult.StateError);
 }
 
 function testSuccessfulAsyncResolution() {

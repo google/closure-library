@@ -13,12 +13,12 @@
 // limitations under the License.
 
 /**
- * @fileoverview A ResultBase object that implements goog.labs.async.Result.
+ * @fileoverview A SimpleResult object that implements goog.labs.async.Result.
  * See below for a more detailed description.
  */
 
-goog.provide('goog.labs.async.ResultBase');
-goog.provide('goog.labs.async.ResultBase.StateError');
+goog.provide('goog.labs.async.SimpleResult');
+goog.provide('goog.labs.async.SimpleResult.StateError');
 
 goog.require('goog.debug.Error');
 goog.require('goog.labs.async.Result');
@@ -26,7 +26,7 @@ goog.require('goog.labs.async.Result');
 
 
 /**
- * A ResultBase object is a basic implementation of the goog.labs.async.Result
+ * A SimpleResult object is a basic implementation of the goog.labs.async.Result
  * interface. This could be subclassed(e.g. XHRResult) or instantiated and
  * returned by another class as a form of result. The caller receiving the
  * result could then attach handlers to be called when the result is resolved
@@ -35,7 +35,7 @@ goog.require('goog.labs.async.Result');
  * @constructor
  * @implements {goog.labs.async.Result}
  */
-goog.labs.async.ResultBase = function() {
+goog.labs.async.SimpleResult = function() {
   /**
    * The current state of this Result.
    * @type {goog.labs.async.Result.State}
@@ -45,7 +45,7 @@ goog.labs.async.ResultBase = function() {
 
   /**
    * The list of handlers to call when this Result is resolved.
-   * @type {!Array.<!function(goog.labs.async.ResultBase)>}
+   * @type {!Array.<!function(goog.labs.async.SimpleResult)>}
    * @private
    */
   this.handlers_ = [];
@@ -57,7 +57,7 @@ goog.labs.async.ResultBase = function() {
  * @type {*}
  * @private
  */
-goog.labs.async.ResultBase.prototype.value_;
+goog.labs.async.SimpleResult.prototype.value_;
 
 
 /**
@@ -65,7 +65,7 @@ goog.labs.async.ResultBase.prototype.value_;
  * @type {*}
  * @private
  */
-goog.labs.async.ResultBase.prototype.error_;
+goog.labs.async.SimpleResult.prototype.error_;
 
 
 
@@ -76,16 +76,16 @@ goog.labs.async.ResultBase.prototype.error_;
  * @constructor
  * @extends {goog.debug.Error}
  */
-goog.labs.async.ResultBase.StateError = function() {
+goog.labs.async.SimpleResult.StateError = function() {
   goog.base(this, 'Multiple attempts to set the state of this Result');
 };
-goog.inherits(goog.labs.async.ResultBase.StateError, goog.debug.Error);
+goog.inherits(goog.labs.async.SimpleResult.StateError, goog.debug.Error);
 
 
 /**
  * @return {!goog.labs.async.Result.State} The current state of this Result.
  */
-goog.labs.async.ResultBase.prototype.getState = function() {
+goog.labs.async.SimpleResult.prototype.getState = function() {
   return this.state_;
 };
 
@@ -93,7 +93,7 @@ goog.labs.async.ResultBase.prototype.getState = function() {
 /**
  * @return {*} The current value of this Result.
  */
-goog.labs.async.ResultBase.prototype.getValue = function() {
+goog.labs.async.SimpleResult.prototype.getValue = function() {
   return this.value_;
 };
 
@@ -101,7 +101,7 @@ goog.labs.async.ResultBase.prototype.getValue = function() {
 /**
  * @return {*} The current error for this Result.
  */
-goog.labs.async.ResultBase.prototype.getError = function() {
+goog.labs.async.SimpleResult.prototype.getError = function() {
   return this.error_;
 };
 
@@ -109,11 +109,11 @@ goog.labs.async.ResultBase.prototype.getError = function() {
 /**
  * Attaches handlers to be called when the value of this Result is available.
  *
- * @param {!function(!goog.labs.async.ResultBase)} handler The function called
+ * @param {!function(!goog.labs.async.SimpleResult)} handler The function called
  *     when the value is available. The function is passed the Result object
  *     as the only argument.
  */
-goog.labs.async.ResultBase.prototype.wait = function(handler) {
+goog.labs.async.SimpleResult.prototype.wait = function(handler) {
   if (this.isPending_()) {
     this.handlers_.push(handler);
   } else {
@@ -127,14 +127,14 @@ goog.labs.async.ResultBase.prototype.wait = function(handler) {
  *
  * @param {*} value The value to set for this Result.
  */
-goog.labs.async.ResultBase.prototype.setValue = function(value) {
+goog.labs.async.SimpleResult.prototype.setValue = function(value) {
   if (this.isPending_()) {
     this.value_ = value;
     this.state_ = goog.labs.async.Result.State.SUCCESS;
     this.callHandlers_();
   } else if (!this.isCanceled()) {
     // setValue is a no-op if this Result has been canceled.
-    throw new goog.labs.async.ResultBase.StateError();
+    throw new goog.labs.async.SimpleResult.StateError();
   }
 };
 
@@ -144,14 +144,14 @@ goog.labs.async.ResultBase.prototype.setValue = function(value) {
  *
  * @param {*=} opt_error Optional error slug to set for this Result.
  */
-goog.labs.async.ResultBase.prototype.setError = function(opt_error) {
+goog.labs.async.SimpleResult.prototype.setError = function(opt_error) {
   if (this.isPending_()) {
     this.error_ = opt_error;
     this.state_ = goog.labs.async.Result.State.ERROR;
     this.callHandlers_();
   } else if (!this.isCanceled()) {
     // setError is a no-op if this Result has been canceled.
-    throw new goog.labs.async.ResultBase.StateError();
+    throw new goog.labs.async.SimpleResult.StateError();
   }
 };
 
@@ -161,7 +161,7 @@ goog.labs.async.ResultBase.prototype.setError = function(opt_error) {
  *
  * @private
  */
-goog.labs.async.ResultBase.prototype.callHandlers_ = function() {
+goog.labs.async.SimpleResult.prototype.callHandlers_ = function() {
   while (this.handlers_.length) {
     var callback = this.handlers_.shift();
     callback(this);
@@ -173,7 +173,7 @@ goog.labs.async.ResultBase.prototype.callHandlers_ = function() {
  * @return {boolean} Whether the Result is pending.
  * @private
  */
-goog.labs.async.ResultBase.prototype.isPending_ = function() {
+goog.labs.async.SimpleResult.prototype.isPending_ = function() {
   return this.state_ == goog.labs.async.Result.State.PENDING;
 };
 
@@ -184,7 +184,7 @@ goog.labs.async.ResultBase.prototype.isPending_ = function() {
  * @return {boolean} Whether the result was canceled. It will not be canceled if
  *    the result was already canceled or has already resolved.
  */
-goog.labs.async.ResultBase.prototype.cancel = function() {
+goog.labs.async.SimpleResult.prototype.cancel = function() {
   // cancel is a no-op if the result has been resolved.
   if (this.isPending_()) {
     this.setError(new goog.labs.async.Result.CancelError());
@@ -197,7 +197,7 @@ goog.labs.async.ResultBase.prototype.cancel = function() {
 /**
  * @return {boolean} Whether this Result was canceled.
  */
-goog.labs.async.ResultBase.prototype.isCanceled = function() {
+goog.labs.async.SimpleResult.prototype.isCanceled = function() {
   return this.state_ == goog.labs.async.Result.State.ERROR &&
          this.error_ instanceof goog.labs.async.Result.CancelError;
 };

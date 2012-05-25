@@ -42,7 +42,7 @@
 goog.provide('goog.labs.async.transform');
 
 goog.require('goog.labs.async.Result');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.labs.async.wait');
 
 
@@ -64,7 +64,7 @@ goog.require('goog.labs.async.wait');
  *     the returned value of the transformer function.
  */
 goog.labs.async.transform = function(result, transformer) {
-  var returnedResult = new goog.labs.async.ResultBase();
+  var returnedResult = new goog.labs.async.SimpleResult();
 
   goog.labs.async.wait(result, function(res) {
     if (res.getState() == goog.labs.async.Result.State.SUCCESS) {

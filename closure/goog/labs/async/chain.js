@@ -59,7 +59,7 @@
 goog.provide('goog.labs.async.chain');
 
 goog.require('goog.labs.async.Result');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.labs.async.wait');
 
 
@@ -93,7 +93,7 @@ goog.require('goog.labs.async.wait');
  *     resolved.
  */
 goog.labs.async.chain = function(result, actionCallback) {
-  var returnedResult = new goog.labs.async.ResultBase();
+  var returnedResult = new goog.labs.async.SimpleResult();
 
   // Wait for the first action.
   goog.labs.async.wait(result, function(result) {

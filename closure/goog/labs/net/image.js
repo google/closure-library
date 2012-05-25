@@ -20,7 +20,7 @@
 goog.provide('goog.labs.net.image');
 
 goog.require('goog.events.EventHandler');
-goog.require('goog.labs.async.ResultBase');
+goog.require('goog.labs.async.SimpleResult');
 goog.require('goog.net.EventType');
 
 
@@ -49,7 +49,7 @@ goog.labs.net.image.load = function(uri) {
   var loadEvent = goog.userAgent.IE ? goog.net.EventType.READY_STATE_CHANGE :
       goog.events.EventType.LOAD;
 
-  var result = new goog.labs.async.ResultBase();
+  var result = new goog.labs.async.SimpleResult();
 
   var handler = new goog.events.EventHandler();
   handler.listen(
