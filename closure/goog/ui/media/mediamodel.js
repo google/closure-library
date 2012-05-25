@@ -140,7 +140,7 @@ goog.ui.media.MediaModel = function(opt_url,
 
   /**
    * The list of credits that pertain to this media object.
-   * @type {Array.<goog.ui.media.MediaModel.Credit>}
+   * @type {!Array.<goog.ui.media.MediaModel.Credit>}
    * @private
    */
   this.credits_ = [];
@@ -434,7 +434,7 @@ goog.ui.media.MediaModel.prototype.findCategoryWithScheme = function(scheme) {
 
 /**
  * Gets the credits of the media.
- * @return {Array.<goog.ui.media.MediaModel.Credit>} The credits of the media.
+ * @return {!Array.<goog.ui.media.MediaModel.Credit>} The credits of the media.
  */
 goog.ui.media.MediaModel.prototype.getCredits = function() {
   return this.credits_;
@@ -460,9 +460,6 @@ goog.ui.media.MediaModel.prototype.setCredits = function(credits) {
  *     with the given role. May be empty.
  */
 goog.ui.media.MediaModel.prototype.findCreditsWithRole = function(role) {
-  if (!this.credits_) {
-    return [];
-  }
   var credits = goog.array.filter(this.credits_, function(credit) {
     return role == credit.getRole();
   });
