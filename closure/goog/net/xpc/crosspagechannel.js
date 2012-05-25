@@ -236,7 +236,12 @@ goog.net.xpc.CrossPageChannel.prototype.isPeerAvailable = function() {
   // results in sane evaluation. When this happens, it's in the inner iframe
   // when querying its parent's 'closed' status. Note that this is a different
   // case than mibuerge@'s note above.
-  return !!this.peerWindowObject_ && !Boolean(this.peerWindowObject_.closed);
+  try {
+    return !!this.peerWindowObject_ && !Boolean(this.peerWindowObject_.closed);
+  } catch (e) {
+    // If the window is closing, an error may be thrown.
+    return false;
+  }
 };
 
 

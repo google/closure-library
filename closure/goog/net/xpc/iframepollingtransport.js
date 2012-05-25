@@ -172,6 +172,36 @@ goog.net.xpc.IframePollingTransport.prototype.isChannelAvailable = function() {
 
 
 /**
+ * Safely retrieves the frames from the peer window. If an error is thrown
+ * (e.g. the window is closing) an empty frame object is returned.
+ * @return {!Object.<!Window>}
+ * @private
+ */
+goog.net.xpc.IframePollingTransport.prototype.getPeerFrames_ = function() {
+  try {
+    if (this.isChannelAvailable()) {
+      return this.channel_.getPeerWindowObject().frames || {};
+    }
+  } catch (e) {
+    // An error may be thrown if the window is closing.
+    goog.net.xpc.logger.fine('error retrieving peer frames');
+  }
+  return {};
+};
+
+
+/**
+ * Safely retrieves the peer frame with the specified name.
+ * @param {string} frameName The name of the peer frame to retrieve.
+ * @return {Window}
+ */
+goog.net.xpc.IframePollingTransport.prototype.getPeerFrame_ = function(
+    frameName) {
+  return this.getPeerFrames_()[frameName];
+};
+
+
+/**
  * Connects this transport.
  * @override
  */
@@ -271,7 +301,7 @@ goog.net.xpc.IframePollingTransport.prototype.maybeInnerPeerReconnect_ =
  */
 goog.net.xpc.IframePollingTransport.prototype.outerPeerReconnect_ = function() {
   goog.net.xpc.logger.finest('outerPeerReconnect called');
-  var frames = this.channel_.getPeerWindowObject().frames;
+  var frames = this.getPeerFrames_();
   var length = frames.length;
   for (var i = 0; i < length; i++) {
     var frameName;
@@ -357,11 +387,11 @@ goog.net.xpc.IframePollingTransport.prototype.checkForeignFramesReady_ =
     // Create receivers.
     this.msgReceiver_ = new goog.net.xpc.IframePollingTransport.Receiver(
         this,
-        this.channel_.getPeerWindowObject().frames[this.getMsgFrameName_()],
+        this.getPeerFrame_(this.getMsgFrameName_()),
         goog.bind(this.processIncomingMsg, this));
     this.ackReceiver_ = new goog.net.xpc.IframePollingTransport.Receiver(
         this,
-        this.channel_.getPeerWindowObject().frames[this.getAckFrameName_()],
+        this.getPeerFrame_(this.getAckFrameName_()),
         goog.bind(this.processIncomingAck, this));
 
     this.checkLocalFramesPresent_();
@@ -380,7 +410,7 @@ goog.net.xpc.IframePollingTransport.prototype.isRcvFrameReady_ =
   goog.net.xpc.logger.finest('checking for receive frame: ' + frameName);
   /** @preserveTry */
   try {
-    var winObj = this.channel_.getPeerWindowObject().frames[frameName];
+    var winObj = this.getPeerFrame_(frameName);
     if (!winObj || winObj.location.href.indexOf(this.rcvUri_) != 0) {
       return false;
     }
@@ -401,7 +431,7 @@ goog.net.xpc.IframePollingTransport.prototype.checkLocalFramesPresent_ =
   // Are the sender frames ready?
   // These contain a document from the peer's domain, therefore we can only
   // check if the frame itself is present.
-  var frames = this.channel_.getPeerWindowObject().frames;
+  var frames = this.getPeerFrames_();
   if (!(frames[this.getAckFrameName_()] &&
         frames[this.getMsgFrameName_()])) {
     // start a timer to check again
@@ -839,7 +869,6 @@ goog.net.xpc.IframePollingTransport.Receiver = function(transport,
   this.rcvFrame_ = windowObj;
 
   this.cb_ = callback;
-
   this.currentLoc_ = this.rcvFrame_.location.href.split('#')[0] + '#INITIAL';
 
   goog.net.xpc.IframePollingTransport.receivers_.push(this);

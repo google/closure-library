@@ -150,6 +150,38 @@ function testSend_innerPeerClosed() {
 };
 
 
+/** Tests that partially closing the outer peer does not cause an error. */
+function testSend_outerPeerClosing() {
+  // Connect the inner channel.
+  innerChannel.connect();
+  mockClock.tick(1000);
+
+  // Close the outer peer before it has a chance to connect, but
+  // leave closed set to false to simulate a partially closed window.
+  closeWindow(innerChannel.getPeerWindowObject());
+  innerChannel.getPeerWindowObject().closed = false;
+
+  // Allow timers to execute (and fail).
+  mockClock.tick(1000);
+};
+
+
+/** Tests that partially closing the inner peer does not cause an error. */
+function testSend_innerPeerClosing() {
+  // Connect the outer channel.
+  outerChannel.connect();
+  mockClock.tick(1000);
+
+  // Close the inner peer before it has a chance to connect, but
+  // leave closed set to false to simulate a partially closed window.
+  closeWindow(outerChannel.getPeerWindowObject());
+  outerChannel.getPeerWindowObject().closed = false;
+
+  // Allow timers to execute (and fail).
+  mockClock.tick(1000);
+};
+
+
 /**
  * Creates a channel with the specified configuration, using frame polling.
  * @param {!goog.net.xpc.CrossPageChannelRole} role The channel role.
