@@ -468,6 +468,21 @@ See the COPYING file for details.
     clock.dispose();
   }
 
+  function testClearBeforeSet() {
+    var clock = new goog.testing.MockClock(true);
+    var expectedId = 1;
+    window.clearTimeout(expectedId);
+
+    var fn = goog.testing.recordFunction();
+    var actualId = window.setTimeout(fn, 0);
+    assertEquals(
+        'In order for this test to work, we have to guess the ids in advance',
+        expectedId, actualId);
+    clock.tick(1);
+    assertEquals(1, fn.getCallCount());
+    clock.dispose();
+  }
+
 </script>
 </body>
 </html>

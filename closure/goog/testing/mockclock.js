@@ -463,7 +463,23 @@ goog.testing.MockClock.prototype.requestAnimationFrame_ = function(funcToCall) {
  * @private
  */
 goog.testing.MockClock.prototype.clearTimeout_ = function(timeoutKey) {
-  this.deletedKeys_[timeoutKey] = true;
+  // Some common libraries register static state with timers.
+  // This is bad. It leads to all sorts of crazy test problems where
+  // 1) Test A sets up a new mock clock and a static timer.
+  // 2) Test B sets up a new mock clock, but re-uses the static timer
+  //    from Test A.
+  // 3) A timeout key from test A gets cleared, breaking a timeout in
+  //    Test B.
+  //
+  // For now, we just hackily fail silently if someone tries to clear a timeout
+  // key before we've allocated it.
+  // Ideally, we should throw an exception if we see this happening.
+  //
+  // TODO(user): We might also try allocating timeout ids from a global
+  // pool rather than a local pool.
+  if (this.isTimeoutSet(timeoutKey)) {
+    this.deletedKeys_[timeoutKey] = true;
+  }
 };
 
 
@@ -474,7 +490,7 @@ goog.testing.MockClock.prototype.clearTimeout_ = function(timeoutKey) {
  * @private
  */
 goog.testing.MockClock.prototype.clearInterval_ = function(timeoutKey) {
-  this.deletedKeys_[timeoutKey] = true;
+  this.clearTimeout_(timeoutKey);
 };
 
 
@@ -486,5 +502,5 @@ goog.testing.MockClock.prototype.clearInterval_ = function(timeoutKey) {
  */
 goog.testing.MockClock.prototype.cancelRequestAnimationFrame_ =
     function(timeoutKey) {
-  this.deletedKeys_[timeoutKey] = true;
+  this.clearTimeout_(timeoutKey);
 };
