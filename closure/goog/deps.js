@@ -341,7 +341,7 @@ goog.addDependency('locale/timezonefingerprint.js', ['goog.locale.TimeZoneFinger
 goog.addDependency('locale/timezonelist.js', ['goog.locale.TimeZoneList'], ['goog.locale']);
 goog.addDependency('math/bezier.js', ['goog.math.Bezier'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency('math/box.js', ['goog.math.Box'], ['goog.math.Coordinate']);
-goog.addDependency('math/coordinate.js', ['goog.math.Coordinate'], []);
+goog.addDependency('math/coordinate.js', ['goog.math.Coordinate'], ['goog.math']);
 goog.addDependency('math/coordinate3.js', ['goog.math.Coordinate3'], []);
 goog.addDependency('math/exponentialbackoff.js', ['goog.math.ExponentialBackoff'], ['goog.asserts']);
 goog.addDependency('math/integer.js', ['goog.math.Integer'], []);

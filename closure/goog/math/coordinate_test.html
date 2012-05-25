@@ -65,6 +65,16 @@ function testCoordinateDistance() {
   assertEquals(5, goog.math.Coordinate.distance(a, b));
 }
 
+function testCoordinateMagnitude() {
+  var a = new goog.math.Coordinate(5, 5);
+  assertEquals(Math.sqrt(50), goog.math.Coordinate.magnitude(a));
+}
+
+function testCoordinateAzimuth() {
+  var a = new goog.math.Coordinate(5, 5);
+  assertEquals(45, goog.math.Coordinate.azimuth(a));
+}
+
 function testCoordinateClone() {
   var c = new goog.math.Coordinate();
   assertEquals(c.toString(), c.clone().toString());
