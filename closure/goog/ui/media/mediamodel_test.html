@@ -69,18 +69,24 @@ See the COPYING file for details.
         model.findCategoryWithScheme('scheme-b').getValue());
   }
 
-  function testMediaModelFindCreditWithRole() {
-    assertNull(model.findCreditWithRole('no such role'));
+
+  function testMediaModelFindCreditsWithRole() {
+    assertEquals(0, model.findCreditsWithRole('no such role').length);
 
     model.setCredits([
         new goog.ui.media.MediaModel.Credit('value-a', 'role-a'),
+        new goog.ui.media.MediaModel.Credit('value-a2', 'role-a'),
         new goog.ui.media.MediaModel.Credit('value-b', 'role-b')
     ]);
-    assertNull(model.findCreditWithRole('no such role'));
+
+    assertEquals(0, model.findCreditsWithRole('no such role').length);
+    assertEquals(2, model.findCreditsWithRole('role-a').length);
     assertEquals('value-a',
-        model.findCreditWithRole('role-a').getValue());
+        model.findCreditsWithRole('role-a')[0].getValue());
+    assertEquals('value-a2',
+        model.findCreditsWithRole('role-a')[1].getValue());
     assertEquals('value-b',
-        model.findCreditWithRole('role-b').getValue());
+        model.findCreditsWithRole('role-b')[0].getValue());
   }
 
   function testMediaModelSubtitles() {

@@ -443,7 +443,7 @@ goog.ui.media.MediaModel.prototype.getCredits = function() {
 
 /**
  * Sets the credits of the media
- * @param {Array.<goog.ui.media.MediaModel.Credit>} credits The credits of the
+ * @param {!Array.<goog.ui.media.MediaModel.Credit>} credits The credits of the
  *     media.
  * @return {!goog.ui.media.MediaModel} The object itself, used for chaining.
  */
@@ -454,19 +454,19 @@ goog.ui.media.MediaModel.prototype.setCredits = function(credits) {
 
 
 /**
- * Finds the first credit with the given role.
+ * Finds all credits with the given role.
  * @param {string} role The role to search for.
- * @return {goog.ui.media.MediaModel.Credit} The credit object that has the
- *     given role. May be null.
+ * @return {!Array.<!goog.ui.media.MediaModel.Credit>} An array of credits
+ *     with the given role. May be empty.
  */
-goog.ui.media.MediaModel.prototype.findCreditWithRole = function(role) {
+goog.ui.media.MediaModel.prototype.findCreditsWithRole = function(role) {
   if (!this.credits_) {
-    return null;
+    return [];
   }
-  var credit = goog.array.find(this.credits_, function(credit) {
+  var credits = goog.array.filter(this.credits_, function(credit) {
     return role == credit.getRole();
   });
-  return /** @type {goog.ui.media.MediaModel.Credit} */ (credit);
+  return /** @type {!Array.<!goog.ui.media.MediaModel.Credit>} */ (credits);
 };
 
 
