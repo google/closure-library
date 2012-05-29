@@ -269,8 +269,8 @@ See the COPYING file for details.
    * @param {!goog.fx.DragListGroup} dlg The DragListGroup to examine.
    */
   function assertIdle(dlg) {
-    assertUndefined('dragger element has been cleaned up', dlg.draggerEl_);
-    assertUndefined('dragger has been cleaned up', dlg.dragger_);
+    assertNull('dragger element has been cleaned up', dlg.draggerEl_);
+    assertNull('dragger has been cleaned up', dlg.dragger_);
     assertEquals('the additional event listeners have been removed',
         initialListenerCount, goog.object.getCount(dlg.eventHandler_.keys_));
   }
@@ -325,6 +325,20 @@ See the COPYING file for details.
         goog.events.Event.preventDefault);
 
     goog.testing.events.fireMouseDownEvent(list.firstChild);
+    assertArrayEquals('event types if dragging is prevented',
+        [goog.fx.DragListGroup.EventType.BEFOREDRAGSTART], firedEventTypes);
+    assertIdle(dlg);
+  }
+
+  function testPreventDefaultBeforeDragStartWithHysteresis() {
+    dlg.setHysteresis(5);
+    goog.events.listen(dlg, goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+        goog.events.Event.preventDefault);
+
+    goog.testing.events.fireMouseDownEvent(list.firstChild, null,
+        new goog.math.Coordinate(0, 0));
+    goog.testing.events.fireMouseMoveEvent(list.firstChild,
+        new goog.math.Coordinate(10, 0));
     assertArrayEquals('event types if dragging is prevented',
         [goog.fx.DragListGroup.EventType.BEFOREDRAGSTART], firedEventTypes);
     assertIdle(dlg);
