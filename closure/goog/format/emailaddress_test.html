@@ -116,6 +116,18 @@ function testparseListWithCommaInLocalPart() {
   assertEquals('someone@gmail.com', res[1].getAddress());
 };
 
+function testparseListWithWhitespaceSeparatedEmails() {
+  var res = goog.format.EmailAddress.parseList('a@b.com <c@d.com> e@f.com '+
+     '"G H" <g@h.com> i@j.com');
+  assertEquals('Should have 5 addresses', 5, res.length);
+  assertEquals('a@b.com', res[0].getAddress());
+  assertEquals('c@d.com', res[1].getAddress());
+  assertEquals('e@f.com', res[2].getAddress());
+  assertEquals('g@h.com', res[3].getAddress());
+  assertEquals('G H', res[3].getName());
+  assertEquals('i@j.com', res[4].getAddress());
+};
+
 function testToString() {
   var f = function(str) {
     return goog.format.EmailAddress.parse(str).toString();

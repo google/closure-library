@@ -257,7 +257,8 @@ goog.format.EmailAddress.parseList = function(str) {
 
   for (var i = 0; i < str.length; ) {
     token = goog.format.EmailAddress.getToken_(str, i);
-    if (token == ',' || token == ';') {
+    if (token == ',' || token == ';' ||
+        (token == ' ' && goog.format.EmailAddress.parse(email).isValid())) {
       if (!goog.string.isEmpty(email)) {
         result.push(goog.format.EmailAddress.parse(email));
       }
