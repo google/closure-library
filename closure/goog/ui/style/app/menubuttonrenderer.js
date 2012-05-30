@@ -110,6 +110,7 @@ goog.ui.style.app.MenuButtonRenderer.prototype.getAriaRole = function() {
  * @param {Element} element Root element of the button whose content element
  *     is to be returned.
  * @return {Element} The button's content element.
+ * @override
  */
 goog.ui.style.app.MenuButtonRenderer.prototype.getContentElement =
     function(element) {
@@ -171,6 +172,7 @@ goog.ui.style.app.MenuButtonRenderer.prototype.decorate =
  *     in a box.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
  * @return {Element} Pseudo-rounded-corner box containing the content.
+ * @override
  */
 goog.ui.style.app.MenuButtonRenderer.prototype.createButton = function(content,
     dom) {
@@ -218,6 +220,7 @@ goog.ui.style.app.MenuButtonRenderer.prototype.createDropdown = function(dom) {
  * Returns the CSS class to be applied to the root element of components
  * rendered using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.style.app.MenuButtonRenderer.prototype.getCssClass = function() {
   return goog.ui.style.app.MenuButtonRenderer.CSS_CLASS;

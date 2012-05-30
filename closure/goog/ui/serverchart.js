@@ -322,6 +322,7 @@ goog.ui.ServerChart.prototype.createDom = function() {
  * </pre>
  *
  * @param {Element} img Image to decorate.
+ * @override
  */
 goog.ui.ServerChart.prototype.decorateInternal = function(img) {
   img.src = this.getUri();

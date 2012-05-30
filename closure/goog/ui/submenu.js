@@ -247,6 +247,7 @@ goog.ui.SubMenu.prototype.clearTimers = function() {
  * @param {boolean=} opt_force If true, doesn't check whether the component
  *     already has the requested visibility, and doesn't dispatch any events.
  * @return {boolean} Whether the visibility was changed.
+ * @override
  */
 goog.ui.SubMenu.prototype.setVisible = function(visible, opt_force) {
   var visibilityChanged = goog.ui.SubMenu.superClass_.setVisible.call(this,
@@ -282,6 +283,7 @@ goog.ui.SubMenu.prototype.dismissSiblings_ = function() {
  * TODO(user): RTL lookup
  * @param {goog.events.KeyEvent} e A key event.
  * @return {boolean} Whether the event was handled.
+ * @override
  */
 goog.ui.SubMenu.prototype.handleKeyEvent = function(e) {
   var keyCode = e.keyCode;

@@ -379,6 +379,7 @@ goog.ui.Tooltip.prototype.setHtml = function(str) {
  * Sets tooltip element.
  *
  * @param {Element} el HTML element to use as the tooltip.
+ * @override
  */
 goog.ui.Tooltip.prototype.setElement = function(el) {
   var oldElement = this.getElement();
@@ -456,6 +457,7 @@ goog.ui.Tooltip.prototype.isCoordinateInTooltip = function(coord) {
  *
  * @return {boolean} Whether tooltip should be shown.
  * @protected
+ * @override
  */
 goog.ui.Tooltip.prototype.onBeforeShow = function() {
   if (!goog.ui.PopupBase.prototype.onBeforeShow.call(this)) {
@@ -928,6 +930,7 @@ goog.inherits(goog.ui.Tooltip.CursorTooltipPosition,
  * @param {goog.positioning.Corner} popupCorner The corner of the popup element
  *     that that should be positioned adjacent to the anchorElement.
  * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+ * @override
  */
 goog.ui.Tooltip.CursorTooltipPosition.prototype.reposition = function(
     element, popupCorner, opt_margin) {
@@ -977,6 +980,7 @@ goog.inherits(goog.ui.Tooltip.ElementTooltipPosition,
  * @param {goog.positioning.Corner} popupCorner The corner of the popup element
  *     that should be positioned adjacent to the anchorElement.
  * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+ * @override
  */
 goog.ui.Tooltip.ElementTooltipPosition.prototype.reposition = function(
     element, popupCorner, opt_margin) {

@@ -170,6 +170,7 @@ goog.ui.tree.TreeControl.prototype.getDepth = function() {
 
 /**
  * Expands the parent chain of this node so that it is visible.
+ * @override
  */
 goog.ui.tree.TreeControl.prototype.reveal = function() {
   // always expanded by default
@@ -266,6 +267,7 @@ goog.ui.tree.TreeControl.prototype.getRowClassName = function() {
 /**
  * Returns the source for the icon.
  * @return {string} Src for the icon.
+ * @override
  */
 goog.ui.tree.TreeControl.prototype.getCalculatedIconClass = function() {
   var expanded = this.getExpanded();
@@ -451,6 +453,7 @@ goog.ui.tree.TreeControl.prototype.getShowRootNode = function() {
 /**
  * Add roles and states.
  * @protected
+ * @override
  */
 goog.ui.tree.TreeControl.prototype.initAccessibility = function() {
   goog.ui.tree.TreeControl.superClass_.initAccessibility.call(this);

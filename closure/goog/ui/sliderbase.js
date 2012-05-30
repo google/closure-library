@@ -342,6 +342,7 @@ goog.ui.SliderBase.prototype.decorateInternal = function(element) {
 /**
  * Called when the DOM for the component is for sure in the document.
  * Subclasses should override this method to set this element's role.
+ * @override
  */
 goog.ui.SliderBase.prototype.enterDocument = function() {
   goog.ui.SliderBase.superClass_.enterDocument.call(this);

@@ -184,6 +184,7 @@ goog.ui.ScrollFloater.prototype.createDom = function() {
 /**
  * Decorates the floated element with the standard ScrollFloater CSS class.
  * @param {Element} element The element to decorate.
+ * @override
  */
 goog.ui.ScrollFloater.prototype.decorateInternal = function(element) {
   goog.ui.ScrollFloater.superClass_.decorateInternal.call(this, element);

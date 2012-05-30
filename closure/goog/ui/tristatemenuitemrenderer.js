@@ -78,11 +78,7 @@ goog.ui.TriStateMenuItemRenderer.prototype.decorate = function(item, element) {
 };
 
 
-/**
- * Returns the CSS class to be applied to menu items rendered using this
- * renderer.
- * @return {string} Renderer-specific CSS class.
- */
+/** @override */
 goog.ui.TriStateMenuItemRenderer.prototype.getCssClass = function() {
   return goog.ui.TriStateMenuItemRenderer.CSS_CLASS;
 };

@@ -53,6 +53,7 @@ goog.addSingletonGetter(goog.ui.ToolbarColorMenuButtonRenderer);
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
  * @return {Element} Caption element.
  * @see goog.ui.ToolbarColorMenuButtonRenderer#createColorIndicator
+ * @override
  */
 goog.ui.ToolbarColorMenuButtonRenderer.prototype.createCaption = function(
     content, dom) {
@@ -69,6 +70,7 @@ goog.ui.ToolbarColorMenuButtonRenderer.prototype.createCaption = function(
  * the new color.  Overrides {@link goog.ui.ButtonRenderer#setValue}.
  * @param {Element} element The button control's root element (if rendered).
  * @param {*} value New value; assumed to be a color spec string.
+ * @override
  */
 goog.ui.ToolbarColorMenuButtonRenderer.prototype.setValue = function(element,
     value) {

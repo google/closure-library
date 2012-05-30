@@ -1009,6 +1009,7 @@ goog.ui.tree.BaseNode.prototype.getLineStyle2 = function() {
 
 /**
  * @return {Element} The element for the tree node.
+ * @override
  */
 goog.ui.tree.BaseNode.prototype.getElement = function() {
   var el = goog.ui.tree.BaseNode.superClass_.getElement.call(this);

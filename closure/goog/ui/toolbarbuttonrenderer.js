@@ -50,6 +50,7 @@ goog.ui.ToolbarButtonRenderer.CSS_CLASS =
  * Returns the CSS class to be applied to the root element of buttons rendered
  * using this renderer.
  * @return {string} Renderer-specific CSS class.
+ * @override
  */
 goog.ui.ToolbarButtonRenderer.prototype.getCssClass = function() {
   return goog.ui.ToolbarButtonRenderer.CSS_CLASS;

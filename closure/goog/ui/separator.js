@@ -59,6 +59,7 @@ goog.inherits(goog.ui.Separator, goog.ui.Control);
  * Configures the component after its DOM has been rendered.  Overrides
  * {@link goog.ui.Control#enterDocument} by making sure no event handler
  * is allocated.
+ * @override
  */
 goog.ui.Separator.prototype.enterDocument = function() {
   goog.ui.Separator.superClass_.enterDocument.call(this);
