@@ -24,12 +24,25 @@ See the COPYING file for details.
 <body>
   <div id="rootDiv">
     <div id="targetDiv">The test presses keys on me!</div>
-    <input type="text" id="targetTextBox" value="text box">
-    <input type="password" id="targetPassword" value="password">
-    <input type="checkbox" id="targetCheckBox">
-    <textarea id="targetTextArea">text area</textarea>
-    <select id="targetSelect"><option>select</option></select>
     <button id="targetButton">A Button</button>
+    <input type="checkbox" id="targetCheckBox">
+    <input type="color" id="targetColor" value="#FF0000">
+    <input type="date" id="targetDate" value="1995-12-31">
+    <input type="datetime" id="targetDateTime" value="1995-12-31T23:59:59.99Z">
+    <input type="datetime-local" id="targetDateTimeLocal"
+           value="1995-12-31T23:59:59.99">
+    <input type="email" id="targetEmail" value="test@google.com">
+    <input type="month" id="targetMonth" value="1995-12">
+    <input type="number" id="targetNumber" value="12345">
+    <input type="password" id="targetPassword" value="password">
+    <input type="search" id="targetSearch" value="search terms">
+    <input type="tel" id="targetTel" value="555 1212">
+    <input type="text" id="targetText" value="text box">
+    <input type="time" id="targetTime" value="12:00">
+    <input type="url" id="targetUrl" value="http://www.google.com">
+    <input type="week" id="targetWeek" value="2005-W52">
+    <select id="targetSelect"><option>select</option></select>
+    <textarea id="targetTextArea">text area</textarea>
   </div>
   <script>
     var Modifiers = goog.ui.KeyboardShortcutHandler.Modifiers;
@@ -477,42 +490,52 @@ See the COPYING file for details.
       listener.$verify();
     }
 
-   function testIgnoreShortcutsExceptEnterInTextBoxAndPassword() {
-      // Events for the text box.
-      listener.shortcutFired('enter');
-      listener.shortcutFired('global');
-      listener.shortcutFired('withAlt');
-      // Events for the password field.
-      listener.shortcutFired('enter');
-      listener.shortcutFired('global');
-      listener.shortcutFired('withAlt');
-      listener.$replay();
+    /**
+     * Checks that the shortcuts are fired on each target.
+     * @param {Array.<string>} shortcuts A list of shortcut identifiers.
+     * @param {Array.<string>} targets A list of element IDs.
+     * @param {function(Element)} fireEvents Function that fires events.
+     */
+    function expectShortcutsOnTargets(shortcuts, targets, fireEvents) {
+      for (var i = 0, ii = targets.length; i < ii; i++) {
+        for (var j = 0, jj = shortcuts.length; j < jj; j++) {
+          listener.shortcutFired(shortcuts[j]);
+        }
+        listener.$replay();
+        fireEvents(goog.dom.getElement(targets[i]));
+        listener.$verify();
+        listener.$reset();
+      }
+    }
 
+    function testIgnoreShortcutsExceptEnterInTextInputFields() {
+      var targets = [
+          'targetColor',
+          'targetDate',
+          'targetDateTime',
+          'targetDateTimeLocal',
+          'targetEmail',
+          'targetMonth',
+          'targetNumber',
+          'targetPassword',
+          'targetSearch',
+          'targetTel',
+          'targetText',
+          'targetTime',
+          'targetUrl',
+          'targetWeek'
+          ];
       registerEnterSpaceXF1AltY();
-      fireEnterSpaceXF1AltY(goog.dom.getElement('targetTextBox'));
-      fireEnterSpaceXF1AltY(goog.dom.getElement('targetPassword'));
-
-      listener.$verify();
+      expectShortcutsOnTargets(
+          ['enter', 'global', 'withAlt'], targets, fireEnterSpaceXF1AltY);
     }
 
     function testIgnoreSpaceInCheckBoxAndButton() {
-      // Events for the check box.
-      listener.shortcutFired('enter');
-      listener.shortcutFired('x');
-      listener.shortcutFired('global');
-      listener.shortcutFired('withAlt');
-      // Events for the button.
-      listener.shortcutFired('enter');
-      listener.shortcutFired('x');
-      listener.shortcutFired('global');
-      listener.shortcutFired('withAlt');
-      listener.$replay();
-
       registerEnterSpaceXF1AltY();
-      fireEnterSpaceXF1AltY(goog.dom.getElement('targetCheckBox'));
-      fireEnterSpaceXF1AltY(goog.dom.getElement('targetButton'));
-
-      listener.$verify();
+      expectShortcutsOnTargets(
+          ['enter', 'x', 'global', 'withAlt'],
+          ['targetCheckBox', 'targetButton'],
+          fireEnterSpaceXF1AltY);
     }
 
     function testIgnoreNonGlobalShortcutsInContentEditable() {
@@ -535,29 +558,20 @@ See the COPYING file for details.
     }
 
     function testSetAllShortcutsAreGlobal() {
-      listener.shortcutFired('enter');
-      listener.shortcutFired('space');
-      listener.shortcutFired('x');
-      listener.shortcutFired('global');
-      listener.shortcutFired('withAlt');
-      listener.$replay();
-
-      registerEnterSpaceXF1AltY();
       handler.setAllShortcutsAreGlobal(true);
-      fireEnterSpaceXF1AltY(goog.dom.getElement('targetTextArea'));
+      registerEnterSpaceXF1AltY();
 
-      listener.$verify();
+      expectShortcutsOnTargets(
+          ['enter', 'space', 'x', 'global', 'withAlt'], ['targetTextArea'],
+          fireEnterSpaceXF1AltY);
     }
 
     function testSetModifierShortcutsAreGlobalFalse() {
-      listener.shortcutFired('global');
-      listener.$replay();
-
-      registerEnterSpaceXF1AltY();
       handler.setModifierShortcutsAreGlobal(false);
-      fireEnterSpaceXF1AltY(goog.dom.getElement('targetTextArea'));
+      registerEnterSpaceXF1AltY();
 
-      listener.$verify();
+      expectShortcutsOnTargets(
+          ['global'], ['targetTextArea'], fireEnterSpaceXF1AltY);
     }
 
     function testAltGraphKeyOnUSLayout() {

@@ -83,6 +83,14 @@ goog.ui.KeyboardShortcutHandler = function(keyTarget) {
       goog.ui.KeyboardShortcutHandler.DEFAULT_GLOBAL_KEYS_);
 
   /**
+   * List of input types that should only accept ENTER as a shortcut.
+   * @type {Object}
+   * @private
+   */
+  this.textInputs_ = goog.object.createSet(
+      goog.ui.KeyboardShortcutHandler.DEFAULT_TEXT_INPUTS_);
+
+  /**
    * Whether to always prevent the default action if a shortcut event is fired.
    * @type {boolean}
    * @private
@@ -159,6 +167,30 @@ goog.ui.KeyboardShortcutHandler.DEFAULT_GLOBAL_KEYS_ = [
   goog.events.KeyCodes.F11,
   goog.events.KeyCodes.F12,
   goog.events.KeyCodes.PAUSE
+];
+
+
+/**
+ * Text input types to allow only ENTER shortcuts.
+ * Web Forms 2.0 for HTML5: Section 4.10.7 from 29 May 2012.
+ * @type {Array.<string>}
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.DEFAULT_TEXT_INPUTS_ = [
+  'color',
+  'date',
+  'datetime',
+  'datetime-local',
+  'email',
+  'month',
+  'number',
+  'password',
+  'search',
+  'tel',
+  'text',
+  'time',
+  'url',
+  'week'
 ];
 
 
@@ -950,7 +982,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
     return true;
   }
   // Allow ENTER to be used as shortcut for text inputs.
-  if (el.tagName == 'INPUT' && (el.type == 'text' || el.type == 'password')) {
+  if (el.tagName == 'INPUT' && this.textInputs_[el.type]) {
     return keyCode == goog.events.KeyCodes.ENTER;
   }
   // Checkboxes, radiobuttons and buttons. Allow all but SPACE as shortcut.
