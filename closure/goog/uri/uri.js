@@ -177,6 +177,7 @@ goog.Uri.prototype.ignoreCase_ = false;
 
 /**
  * @return {string} The string form of the url.
+ * @override
  */
 goog.Uri.prototype.toString = function() {
   var out = [];
@@ -1329,6 +1330,7 @@ goog.Uri.QueryData.prototype.setValues = function(key, values) {
 
 /**
  * @return {string} Encoded query string.
+ * @override
  */
 goog.Uri.QueryData.prototype.toString = function() {
   if (this.encodedQuery_) {

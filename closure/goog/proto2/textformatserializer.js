@@ -282,6 +282,7 @@ goog.proto2.TextFormatSerializer.Printer_ = function() {
 
 /**
  * @return {string} The contents of the printer.
+ * @override
  */
 goog.proto2.TextFormatSerializer.Printer_.prototype.toString = function() {
   return this.buffer_.join('');

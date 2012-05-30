@@ -119,6 +119,7 @@ goog.Disposable.prototype.creationStack;
 
 /**
  * @return {boolean} Whether the object has been disposed of.
+ * @override
  */
 goog.Disposable.prototype.isDisposed = function() {
   return this.disposed_;
@@ -139,6 +140,7 @@ goog.Disposable.prototype.getDisposed = goog.Disposable.prototype.isDisposed;
  * objects, DOM nodes, and other disposable objects. Reentrant.
  *
  * @return {void} Nothing.
+ * @override
  */
 goog.Disposable.prototype.dispose = function() {
   if (!this.disposed_) {

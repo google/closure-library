@@ -87,6 +87,7 @@ goog.math.Vec2.fromCoordinate = function(a) {
 
 /**
  * @return {!goog.math.Vec2} A new vector with the same coordinates as this one.
+ * @override
  */
 goog.math.Vec2.prototype.clone = function() {
   return new goog.math.Vec2(this.x, this.y);

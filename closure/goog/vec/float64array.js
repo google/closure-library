@@ -79,6 +79,7 @@ goog.vec.Float64Array.prototype.set = function(values, opt_offset) {
 /**
  * Creates a string representation of this array.
  * @return {string} The string version of this array.
+ * @override
  */
 goog.vec.Float64Array.prototype.toString = Array.prototype.join;
 

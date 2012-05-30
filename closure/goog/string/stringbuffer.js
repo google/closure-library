@@ -97,6 +97,7 @@ goog.string.StringBuffer.prototype.getLength = function() {
 
 /**
  * @return {string} The concatenated string.
+ * @override
  */
 goog.string.StringBuffer.prototype.toString = function() {
   return this.buffer_;

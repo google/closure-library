@@ -32,7 +32,6 @@ goog.require('goog.string');
  *
  * @param {goog.proto2.ObjectSerializer.KeyOption=} opt_keyOption If specified,
  *     which key option to use when serializing/deserializing.
- *
  * @constructor
  * @extends {goog.proto2.Serializer}
  */
@@ -66,8 +65,8 @@ goog.proto2.ObjectSerializer.KeyOption = {
  * Serializes a message to an object.
  *
  * @param {goog.proto2.Message} message The message to be serialized.
- *
  * @return {Object} The serialized form of the message.
+ * @override
  */
 goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
   var descriptor = message.getDescriptor();
