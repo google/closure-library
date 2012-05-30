@@ -95,6 +95,7 @@ goog.structs.PriorityPool.prototype.setDelay = function(delay) {
  * @param {*=} opt_priority The priority of the request.
  * @return {Object|undefined} The new object from the pool if there is one
  *     available and a callback is not given. Otherwise, undefined.
+ * @override
  */
 goog.structs.PriorityPool.prototype.getObject = function(opt_callback,
                                                         opt_priority) {
@@ -145,6 +146,7 @@ goog.structs.PriorityPool.prototype.handleQueueRequests_ = function() {
  * NOTE: This method does not remove the object from the in use collection.
  *
  * @param {Object} obj The object to add to the collection of free objects.
+ * @override
  */
 goog.structs.PriorityPool.prototype.addFreeObject = function(obj) {
   goog.structs.PriorityPool.superClass_.addFreeObject.call(this, obj);
@@ -161,6 +163,7 @@ goog.structs.PriorityPool.prototype.addFreeObject = function(obj) {
  * greater than the maximum count of objects allowed. This will be the case
  * if no more free objects can be disposed of to get below the minimum count
  * (i.e., all objects are in use).
+ * @override
  */
 goog.structs.PriorityPool.prototype.adjustForMinMax = function() {
   goog.structs.PriorityPool.superClass_.adjustForMinMax.call(this);

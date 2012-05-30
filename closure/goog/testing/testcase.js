@@ -1169,6 +1169,7 @@ goog.testing.TestCase.Error = function(source, message, opt_stack) {
 /**
  * Returns a string representing the error object.
  * @return {string} A string representation of the error.
+ * @override
  */
 goog.testing.TestCase.Error.prototype.toString = function() {
   return 'ERROR in ' + this.source + '\n' +

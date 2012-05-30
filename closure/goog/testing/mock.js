@@ -442,6 +442,7 @@ goog.testing.Mock.prototype.$times = function(times) {
 
 /**
  * Switches from recording to replay mode.
+ * @override
  */
 goog.testing.Mock.prototype.$replay = function() {
   this.$recording_ = false;
@@ -451,6 +452,7 @@ goog.testing.Mock.prototype.$replay = function() {
 /**
  * Resets the state of this mock object. This clears all pending expectations
  * without verifying, and puts the mock in recording mode.
+ * @override
  */
 goog.testing.Mock.prototype.$reset = function() {
   this.$recording_ = true;
@@ -500,6 +502,7 @@ goog.testing.Mock.prototype.$recordAndThrow = function(ex) {
 /**
  * Verify that all of the expectations were met. Should be overridden by
  * subclasses.
+ * @override
  */
 goog.testing.Mock.prototype.$verify = function() {
   if (this.$threwException_) {

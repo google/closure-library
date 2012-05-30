@@ -75,6 +75,7 @@ goog.structs.Set.getKey_ = function(val) {
 
 /**
  * @return {number} The number of elements in the set.
+ * @override
  */
 goog.structs.Set.prototype.getCount = function() {
   return this.map_.getCount();
@@ -84,6 +85,7 @@ goog.structs.Set.prototype.getCount = function() {
 /**
  * Add a primitive or an object to the set.
  * @param {*} element The primitive or object to add.
+ * @override
  */
 goog.structs.Set.prototype.add = function(element) {
   this.map_.set(goog.structs.Set.getKey_(element), element);
@@ -120,6 +122,7 @@ goog.structs.Set.prototype.removeAll = function(col) {
  * Removes the given element from this set.
  * @param {*} element The primitive or object to remove.
  * @return {boolean} Whether the element was found and removed.
+ * @override
  */
 goog.structs.Set.prototype.remove = function(element) {
   return this.map_.remove(goog.structs.Set.getKey_(element));
@@ -147,6 +150,7 @@ goog.structs.Set.prototype.isEmpty = function() {
  * Tests whether this set contains the given element.
  * @param {*} element The primitive or object to test for.
  * @return {boolean} True if this set contains the given element.
+ * @override
  */
 goog.structs.Set.prototype.contains = function(element) {
   return this.map_.containsKey(goog.structs.Set.getKey_(element));

@@ -86,6 +86,7 @@ goog.object.extend(
  * http://www.w3.org/TR/DOM-Level-3-Events/#events-event-type-defaultPrevented}.
  * Must be treated as read-only outside the class.
  * @type {boolean}
+ * @override
  */
 goog.testing.events.Event.prototype.defaultPrevented = false;
 
@@ -93,6 +94,7 @@ goog.testing.events.Event.prototype.defaultPrevented = false;
 /**
  * Prevents the default action, for example a link redirecting to a url, and
  * sets the return value of the event to false.
+ * @override
  */
 goog.testing.events.Event.prototype.preventDefault = function() {
   this.defaultPrevented = true;
