@@ -127,7 +127,13 @@ var _trueTypeOf = function(something) {
 };
 
 var _displayStringForValue = function(aVar) {
-  var result = '<' + aVar + '>';
+  var result;
+  try {
+    result = '<' + String(aVar) + '>';
+  } catch (ex) {
+    result = '<toString failed: ' + ex.message + '>';
+    // toString does not work on this object :-(
+  }
   if (!(aVar === null || aVar === JSUNIT_UNDEFINED_VALUE)) {
     result += ' (' + _trueTypeOf(aVar) + ')';
   }
