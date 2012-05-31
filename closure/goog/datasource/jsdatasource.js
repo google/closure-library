@@ -454,12 +454,7 @@ goog.ds.JsPropertyDataSource.prototype.getDataName = function() {
 };
 
 
-/**
- * Get the parent node
- * @return {goog.ds.DataNode} The parent.
- * @protected
- * @suppress {underscore}
- */
-goog.ds.JsPropertyDataSource.prototype.getParent_ = function() {
+/** @override */
+goog.ds.JsPropertyDataSource.prototype.getParent = function() {
   return this.parentDataNode_;
 };
