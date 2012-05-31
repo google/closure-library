@@ -30,7 +30,6 @@ goog.provide('goog.net.ChannelRequest.Error');
 goog.require('goog.Timer');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
-goog.require('goog.events.OnlineHandler.EventType');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XmlHttp.ReadyState');
 goog.require('goog.object');
@@ -49,12 +48,10 @@ goog.require('goog.userAgent');
  * @param {string=} opt_sessionId  The session id for the channel.
  * @param {string|number=} opt_requestId  The request id for this request.
  * @param {number=} opt_retryId  The retry id for this request.
- * @param {goog.events.OnlineHandler=} opt_onlineHandler The online handler, if
- *     one should be used.
  * @constructor
  */
 goog.net.ChannelRequest = function(channel, channelDebug, opt_sessionId,
-    opt_requestId, opt_retryId, opt_onlineHandler) {
+    opt_requestId, opt_retryId) {
   /**
    * The BrowserChannel object that owns the request.
    * @type {goog.net.BrowserChannel|goog.net.BrowserTestChannel}
@@ -105,13 +102,6 @@ goog.net.ChannelRequest = function(channel, channelDebug, opt_sessionId,
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
-
-  /**
-   * The online handler, if one should be used.
-   * @type {goog.events.OnlineHandler}
-   * @private
-   */
-  this.onlineHandler_ = opt_onlineHandler || null;
 
   /**
    * A timer for polling responseText in browsers that don't fire
@@ -491,11 +481,6 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
   this.requestUri_ = this.baseUri_.clone();
   this.requestUri_.setParameterValues('t', this.retryId_);
 
-  // If the browser is offline, don't proceed with the request.
-  if (!this.checkOnlineHandler_()) {
-    return;
-  }
-
   // send the request either as a POST or GET
   this.xmlHttpChunkStart_ = 0;
   var useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
@@ -523,6 +508,8 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
     }
     this.xmlHttp_.send(this.requestUri_, this.verb_, null, headers);
   }
+  this.channel_.notifyServerReachabilityEvent(
+      goog.net.BrowserChannel.ServerReachability.REQUEST_MADE);
   this.channelDebug_.xmlHttpChannelRequest(this.verb_,
       this.requestUri_, this.rid_, this.retryId_,
       this.postData_);
@@ -566,6 +553,8 @@ goog.net.ChannelRequest.prototype.xmlHttpHandler_ = function(e) {
  */
 goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   var readyState = this.xmlHttp_.getReadyState();
+  var errorCode = this.xmlHttp_.getLastErrorCode();
+  var statusCode = this.xmlHttp_.getStatus();
   // If it is Safari less than 420+, there is a bug that causes null to be
   // in the responseText on ready state interactive so we must wait for
   // ready state complete.
@@ -587,6 +576,22 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
         !goog.userAgent.OPERA && !this.xmlHttp_.getResponseText()) {
       // not yet ready
       return;
+    }
+  }
+
+  // Dispatch any appropriate network events.
+  if (!this.cancelled_ && readyState == goog.net.XmlHttp.ReadyState.COMPLETE &&
+      errorCode != goog.net.ErrorCode.ABORT) {
+
+    // Pretty conservative, these are the only known scenarios which we'd
+    // consider indicative of a truly non-functional network connection.
+    if (errorCode == goog.net.ErrorCode.TIMEOUT ||
+        statusCode <= 0) {
+      this.channel_.notifyServerReachabilityEvent(
+          goog.net.BrowserChannel.ServerReachability.REQUEST_FAILED);
+    } else {
+      this.channel_.notifyServerReachabilityEvent(
+          goog.net.BrowserChannel.ServerReachability.REQUEST_SUCCEEDED);
     }
   }
 
@@ -751,35 +756,6 @@ goog.net.ChannelRequest.prototype.startPolling_ = function() {
 
 
 /**
- * Checks any online handler currently available to decide whether the request
- * about to start is likely to succeed.  If so, returns true and starts
- * moniroting that handler to detect a loss of connectivity during the request's
- * lifetime, which on at least some browsers does not result in the immediate
- * termination of an XHR, let alone a trident connection.
- *
- * If the browser is offline at the time of calling, return false.  Under this
- * condition the calling routine is expected to abandon the request immediately.
- * @return {boolean} Whether the request should proceed.
- * @private
- */
-goog.net.ChannelRequest.prototype.checkOnlineHandler_ = function() {
-  if (!this.onlineHandler_) {
-    return true;
-  }
-
-  if (this.onlineHandler_.isOnline()) {
-    this.eventHandler_.listen(this.onlineHandler_,
-        goog.events.OnlineHandler.EventType.OFFLINE,
-        this.cancelRequestAsBrowserIsOffline_);
-    return true;
-  } else {
-    this.cancelRequestAsBrowserIsOffline_();
-    return false;
-  }
-};
-
-
-/**
  * Called when the browser declares itself offline at the start of a request or
  * during its lifetime.  Abandons that request.
  * @private
@@ -872,11 +848,6 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.requestUri_.setParameterValue('DOMAIN', hostname);
   this.requestUri_.setParameterValue('t', this.retryId_);
 
-  // If the browser is offline, don't proceed with the request.
-  if (!this.checkOnlineHandler_()) {
-    return;
-  }
-
   try {
     this.trident_ = new ActiveXObject('htmlfile');
   } catch (e) {
@@ -910,6 +881,8 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   div.innerHTML = '<iframe src="' + this.requestUri_ + '"></iframe>';
   this.channelDebug_.tridentChannelRequest('GET',
       this.requestUri_, this.rid_, this.retryId_);
+  this.channel_.notifyServerReachabilityEvent(
+      goog.net.BrowserChannel.ServerReachability.REQUEST_MADE);
 };
 
 
@@ -975,6 +948,8 @@ goog.net.ChannelRequest.prototype.onTridentDoneAsync_ = function(successful) {
   this.cleanup_();
   this.successful_ = successful;
   this.channel_.onRequestComplete(this);
+  this.channel_.notifyServerReachabilityEvent(
+      goog.net.BrowserChannel.ServerReachability.BACK_CHANNEL_ACTIVITY);
 };
 
 
@@ -1088,6 +1063,8 @@ goog.net.ChannelRequest.prototype.handleTimeout_ = function() {
   }
 
   this.channelDebug_.timeoutResponse(this.requestUri_);
+  this.channel_.notifyServerReachabilityEvent(
+      goog.net.BrowserChannel.ServerReachability.REQUEST_FAILED);
   this.cleanup_();
 
   // set error and dispatch failure
@@ -1137,8 +1114,6 @@ goog.net.ChannelRequest.prototype.cleanup_ = function() {
   if (this.trident_) {
     this.trident_ = null;
   }
-
-  this.onlineHandler_ = null;
 };
 
 
@@ -1223,6 +1198,8 @@ goog.net.ChannelRequest.prototype.safeOnRequestData_ = function(data) {
   /** @preserveTry */
   try {
     this.channel_.onRequestData(this, data);
+    this.channel_.notifyServerReachabilityEvent(
+        goog.net.BrowserChannel.ServerReachability.BACK_CHANNEL_ACTIVITY);
   } catch (e) {
     // Dump debug info, but keep going without closing the channel.
     this.channelDebug_.dumpException(

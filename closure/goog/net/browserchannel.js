@@ -39,6 +39,8 @@ goog.provide('goog.net.BrowserChannel.Event');
 goog.provide('goog.net.BrowserChannel.Handler');
 goog.provide('goog.net.BrowserChannel.LogSaver');
 goog.provide('goog.net.BrowserChannel.QueuedMap');
+goog.provide('goog.net.BrowserChannel.ServerReachability');
+goog.provide('goog.net.BrowserChannel.ServerReachabilityEvent');
 goog.provide('goog.net.BrowserChannel.Stat');
 goog.provide('goog.net.BrowserChannel.StatEvent');
 goog.provide('goog.net.BrowserChannel.State');
@@ -205,14 +207,6 @@ goog.net.BrowserChannel.prototype.backChannelUri_ = null;
  * @private
  */
 goog.net.BrowserChannel.prototype.hostPrefix_ = null;
-
-
-/**
- * The online handler, if one is in use.
- * @type {goog.events.OnlineHandler}
- * @private
- */
-goog.net.BrowserChannel.prototype.onlineHandler_ = null;
 
 
 /**
@@ -615,6 +609,52 @@ goog.inherits(goog.net.BrowserChannel.TimingEvent, goog.events.Event);
 
 
 /**
+ * The type of event that occurs every time some information about how reachable
+ * the server is is discovered.
+ */
+goog.net.BrowserChannel.Event.SERVER_REACHABILITY_EVENT =
+    'serverreachability';
+
+
+/**
+ * Types of events which reveal information about the reachability of the
+ * server.
+ * @enum {number}
+ */
+goog.net.BrowserChannel.ServerReachability = {
+  REQUEST_MADE: 1,
+  REQUEST_SUCCEEDED: 2,
+  REQUEST_FAILED: 3,
+  BACK_CHANNEL_ACTIVITY: 4
+};
+
+
+
+/**
+ * Event class for goog.net.BrowserChannel.Event.SERVER_REACHABILITY_EVENT.
+ *
+ * @param {goog.events.EventTarget} target The stat event target for
+       the browser channel.
+ * @param {goog.net.BrowserChannel.ServerReachability} reachabilityType The
+ *     reachability event type.
+ * @constructor
+ * @extends {goog.events.Event}
+ */
+goog.net.BrowserChannel.ServerReachabilityEvent = function(target,
+    reachabilityType) {
+  goog.events.Event.call(this,
+      goog.net.BrowserChannel.Event.SERVER_REACHABILITY_EVENT, target);
+
+  /**
+   * @type {goog.net.BrowserChannel.ServerReachability}
+   */
+  this.reachabilityType = reachabilityType;
+};
+goog.inherits(goog.net.BrowserChannel.ServerReachabilityEvent,
+    goog.events.Event);
+
+
+/**
  * Enum that identifies events for statistics that are interesting to track.
  * TODO(user) - Change name not to use Event or use EventTarget
  * @enum {number}
@@ -806,19 +846,16 @@ goog.net.BrowserChannel.endExecutionHook_ = function() { };
  * @param {string=} opt_sessionId  The session id for the channel.
  * @param {string|number=} opt_requestId  The request id for this request.
  * @param {number=} opt_retryId  The retry id for this request.
- * @param {goog.events.OnlineHandler=} opt_onlineHandler An online handler if
- *     one is in use.
  * @return {goog.net.ChannelRequest} The created channel request.
  */
 goog.net.BrowserChannel.createChannelRequest = function(channel, channelDebug,
-    opt_sessionId, opt_requestId, opt_retryId, opt_onlineHandler) {
+    opt_sessionId, opt_requestId, opt_retryId) {
   return new goog.net.ChannelRequest(
       channel,
       channelDebug,
       opt_sessionId,
       opt_requestId,
-      opt_retryId,
-      opt_onlineHandler);
+      opt_retryId);
 };
 
 
@@ -871,8 +908,7 @@ goog.net.BrowserChannel.prototype.disconnect = function() {
     this.addAdditionalParams_(uri);
 
     var request = goog.net.BrowserChannel.createChannelRequest(
-        this, this.channelDebug_, this.sid_, rid, undefined /* opt_retryId */,
-        this.onlineHandler_);
+        this, this.channelDebug_, this.sid_, rid);
     request.sendUsingImgTag(uri);
   }
 
@@ -1327,8 +1363,7 @@ goog.net.BrowserChannel.prototype.open_ = function() {
 
   var rid = this.nextRid_++;
   var request = goog.net.BrowserChannel.createChannelRequest(
-      this, this.channelDebug_, '', rid, undefined /* opt_retryId */,
-      this.onlineHandler_);
+      this, this.channelDebug_, '', rid);
   request.setExtraHeaders(this.extraHeaders_);
   var requestText = this.dequeueOutgoingMaps_();
   var uri = this.forwardChannelUri_.clone();
@@ -1383,8 +1418,7 @@ goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ =
       this.channelDebug_,
       this.sid_,
       rid,
-      this.forwardChannelRetryCount_ + 1,
-      this.onlineHandler_);
+      this.forwardChannelRetryCount_ + 1);
   request.setExtraHeaders(this.extraHeaders_);
 
   // randomize from 50%-100% of the forward channel timeout to avoid
@@ -1498,21 +1532,6 @@ goog.net.BrowserChannel.prototype.ensureBackChannel_ = function() {
 
 
 /**
- * Whether the browser is currently online, based on navigator.online if the use
- * of that API is enabled.  If it isn't, always returns true.
- * @return {boolean} Whether the browser is online.
- * @private
- */
-goog.net.BrowserChannel.prototype.isBrowserOnline_ = function() {
-  if (this.onlineHandler_) {
-    return this.onlineHandler_.isOnline();
-  } else {
-    return true;
-  }
-};
-
-
-/**
  * Schedules a back-channel retry, unless the max retries has been reached.
  * @return {boolean} true iff a retry was scheduled.
  * @private
@@ -1524,8 +1543,7 @@ goog.net.BrowserChannel.prototype.maybeRetryBackChannel_ = function() {
     return false;
   }
 
-  if (this.backChannelRetryCount_ >= this.getBackChannelMaxRetries() ||
-      !this.isBrowserOnline_()) {
+  if (this.backChannelRetryCount_ >= this.getBackChannelMaxRetries()) {
     return false;
   }
 
@@ -1566,8 +1584,7 @@ goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
       this.channelDebug_,
       this.sid_,
       'rpc',
-      this.backChannelAttemptId_,
-      this.onlineHandler_);
+      this.backChannelAttemptId_);
   this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
   var uri = this.backChannelUri_.clone();
   uri.setParameterValue('RID', 'rpc');
@@ -1608,25 +1625,6 @@ goog.net.BrowserChannel.prototype.okToMakeRequest_ = function() {
     }
   }
   return true;
-};
-
-
-/**
- * @return {goog.events.OnlineHandler} The online handler, if there is one.
- */
-goog.net.BrowserChannel.prototype.getOnlineHandler = function() {
-  return this.onlineHandler_;
-};
-
-
-/**
- * If it is desirable that this browser channel be sensitive to the browser's
- * stated online state, an online handler can be provided here which will be
- * used to make the detection of offline/online transitions more timely.
- * @param {!goog.events.OnlineHandler} onlineHandler The online handler.
- */
-goog.net.BrowserChannel.prototype.setOnlineHandler = function(onlineHandler) {
-  this.onlineHandler_ = onlineHandler;
 };
 
 
@@ -2304,6 +2302,20 @@ goog.net.BrowserChannel.onEndExecution = function() {
  */
 goog.net.BrowserChannel.getStatEventTarget = function() {
   return goog.net.BrowserChannel.statEventTarget_;
+};
+
+
+/**
+ * Notify the channel that a particular fine grained network event has occurred.
+ * Should be considered package-private.
+ * @param {goog.net.BrowserChannel.ServerReachability} reachabilityType The
+ *     reachability event type.
+ */
+goog.net.BrowserChannel.prototype.notifyServerReachabilityEvent = function(
+    reachabilityType) {
+  var target = goog.net.BrowserChannel.statEventTarget_;
+  target.dispatchEvent(new goog.net.BrowserChannel.ServerReachabilityEvent(
+      target, reachabilityType));
 };
 
 
