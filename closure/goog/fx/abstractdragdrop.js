@@ -570,11 +570,9 @@ goog.fx.AbstractDragDrop.prototype.disposeDrag = function() {
  * @private
  */
 goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
-  var x = event.clientX;
-  var y = event.clientY;
-  var scroll = this.getScrollPos();
-  x += scroll.x;
-  y += scroll.y;
+  var position = this.getEventPosition(event);
+  var x = position.x;
+  var y = position.y;
 
   // Check if we're still inside the bounds of the active target, if not fire
   // a dragout event and proceed to find a new target.
@@ -1108,6 +1106,19 @@ goog.fx.AbstractDragDrop.prototype.isInside_ = function(x, y, box) {
  */
 goog.fx.AbstractDragDrop.prototype.getScrollPos = function() {
   return goog.dom.getDomHelper(this.dragEl_).getDocumentScroll();
+};
+
+
+/**
+ * Get the position of a drag event.
+ * @param {goog.fx.DragEvent} event Drag event.
+ * @return {goog.math.Coordinate} Position of the event.
+ * @protected
+ */
+goog.fx.AbstractDragDrop.prototype.getEventPosition = function(event) {
+  var scroll = this.getScrollPos();
+  return new goog.math.Coordinate(event.clientX + scroll.x,
+                                  event.clientY + scroll.y);
 };
 
 
