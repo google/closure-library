@@ -99,7 +99,7 @@ See the COPYING file for details.
       samplePalette.render(document.getElementById('sandbox'));
       var color = '#00112233';
       samplePalette.inputEl_.value = color;
-      samplePalette.handleInput_(null);
+      samplePalette.handleInput(null);
       assertEquals(color,
           goog.color.alpha.parse(samplePalette.getColorRgbaHex()).hex);
     }
@@ -141,9 +141,9 @@ See the COPYING file for details.
       samplePalette.render(document.getElementById('sandbox'));
 
       samplePalette.inputEl_.value = '#abcdef22';
-      samplePalette.handleInput_(null);
+      samplePalette.handleInput(null);
       samplePalette.inputEl_.value = '#abcdef';
-      samplePalette.handleInput_(null);
+      samplePalette.handleInput(null);
       assertEquals(1, goog.style.getOpacity(samplePalette.swatchEl_));
     }
 

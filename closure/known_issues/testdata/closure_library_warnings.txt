@@ -133,12 +133,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapale
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property element_ of goog.ui.HsvaPalette not allowed here.
   dom.appendChild(this.element_, this.swatchBackdropEl_);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.prototype.
-goog.ui.HsvaPalette.prototype.updateUi_ = function() {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property updateUi_ of goog.ui.HsvPalette.prototype not allowed here.
-  goog.ui.HsvaPalette.superClass_.updateUi_.call(this);
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property swatchEl_ of goog.ui.HsvaPalette not allowed here.
     goog.style.setOpacity(this.swatchEl_, a / 255);
 
@@ -147,12 +141,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapale
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
     this.inputEl_.value = this.getColorRgbaHex();
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.prototype.
-goog.ui.HsvaPalette.prototype.handleMouseDown_ = function(e) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property handleMouseDown_ of goog.ui.HsvPalette.prototype not allowed here.
-  goog.ui.HsvaPalette.superClass_.handleMouseDown_.call(this, e);
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property vImageEl_ of goog.ui.HsvaPalette not allowed here.
     var b = goog.style.getBounds(this.vImageEl_);
@@ -165,9 +153,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapale
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property handleMouseUp_ of goog.ui.HsvaPalette not allowed here.
         goog.events.EventType.MOUSEUP, this.handleMouseUp_, false, this);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.prototype.
-goog.ui.HsvaPalette.prototype.handleInput_ = function(e) {
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
   var parsed = goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value);

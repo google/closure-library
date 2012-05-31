@@ -193,7 +193,7 @@ goog.ui.HsvPalette.prototype.updateInput = function() {
 goog.ui.HsvPalette.prototype.setColor = function(color) {
   if (color != this.color_) {
     this.setColor_(color);
-    this.updateUi_();
+    this.updateUi();
     this.dispatchEvent(goog.ui.Component.EventType.ACTION);
   }
 };
@@ -228,7 +228,7 @@ goog.ui.HsvPalette.prototype.setHsv = function(opt_hue,
                                                opt_value) {
   if (opt_hue != null || opt_saturation != null || opt_value != null) {
     this.setHsv_(opt_hue, opt_saturation, opt_value);
-    this.updateUi_();
+    this.updateUi();
     this.dispatchEvent(goog.ui.Component.EventType.ACTION);
   }
 };
@@ -310,11 +310,11 @@ goog.ui.HsvPalette.prototype.enterDocument = function() {
 
   // TODO(user): Accessibility.
 
-  this.updateUi_();
+  this.updateUi();
 
   var handler = this.getHandler();
   handler.listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      this.handleMouseDown_, false, this);
+      this.handleMouseDown, false, this);
 
   // Cannot create InputHandler in createDom because IE throws an exception
   // on document.activeElement
@@ -323,7 +323,7 @@ goog.ui.HsvPalette.prototype.enterDocument = function() {
   }
 
   handler.listen(this.inputHandler_,
-      goog.events.InputHandler.EventType.INPUT, this.handleInput_, false, this);
+      goog.events.InputHandler.EventType.INPUT, this.handleInput, false, this);
 };
 
 
@@ -349,9 +349,9 @@ goog.ui.HsvPalette.prototype.disposeInternal = function() {
 /**
  * Updates the position, opacity, and styles for the UI representation of the
  * palette.
- * @private
+ * @protected
  */
-goog.ui.HsvPalette.prototype.updateUi_ = function() {
+goog.ui.HsvPalette.prototype.updateUi = function() {
   if (this.isInDocument()) {
     var h = this.hsv_[0];
     var s = this.hsv_[1];
@@ -397,9 +397,9 @@ goog.ui.HsvPalette.prototype.updateUi_ = function() {
 /**
  * Handles mousedown events on palette UI elements.
  * @param {goog.events.BrowserEvent} e Event object.
- * @private
+ * @protected
  */
-goog.ui.HsvPalette.prototype.handleMouseDown_ = function(e) {
+goog.ui.HsvPalette.prototype.handleMouseDown = function(e) {
   if (e.target == this.vImageEl_ || e.target == this.vHandleEl_) {
     // Setup value change listeners
     var b = goog.style.getBounds(this.vImageEl_);
@@ -476,9 +476,9 @@ goog.ui.HsvPalette.prototype.handleMouseUp_ = function(e) {
 /**
  * Handles input events on the hex value input field.
  * @param {goog.events.Event} e Event object.
- * @private
+ * @protected
  */
-goog.ui.HsvPalette.prototype.handleInput_ = function(e) {
+goog.ui.HsvPalette.prototype.handleInput = function(e) {
   if (/^#[0-9a-f]{6}$/i.test(this.inputEl_.value)) {
     this.setColor(this.inputEl_.value);
   }

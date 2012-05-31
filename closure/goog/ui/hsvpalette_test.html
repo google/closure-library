@@ -49,7 +49,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
       samplePalette.render(document.getElementById('sandboxRtl'));
       var color = '#ffffff';
       samplePalette.inputEl_.value = color;
-      samplePalette.handleInput_(null);
+      samplePalette.handleInput(null);
       var expectedRight = samplePalette.hsImageEl_.offsetWidth -
           Math.ceil(samplePalette.hsHandleEl_.offsetWidth / 2);
       assertEquals(expectedRight + 'px',
@@ -156,7 +156,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
       samplePalette.render(document.getElementById('sandbox'));
       var color = '#001122';
       samplePalette.inputEl_.value = color;
-      samplePalette.handleInput_(null);
+      samplePalette.handleInput(null);
       assertEquals(color, goog.color.parse(samplePalette.getColor()).hex);
     }
     
