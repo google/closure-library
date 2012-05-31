@@ -211,22 +211,20 @@ goog.async.AnimationDelay.prototype.isActive = function() {
 
 /**
  * Invokes the callback function after the delay successfully completes.
- * @param {Event|number=} opt_timestamp The time when the callback is called,
- *     or the event object that fired the before paint event.
  * @private
  */
-goog.async.AnimationDelay.prototype.doAction_ = function(opt_timestamp) {
+goog.async.AnimationDelay.prototype.doAction_ = function() {
   if (this.usingListeners_ && this.id_) {
     goog.events.unlistenByKey(this.id_);
   }
   this.id_ = null;
-  var timestamp =
-      goog.isNumber(opt_timestamp) ?
-          opt_timestamp :
-          goog.isDef(opt_timestamp) ?
-              (opt_timestamp['timeStamp'] || goog.now()) :
-              goog.now();
-  this.listener_.call(this.handler_, timestamp);
+
+  // We are not using the timestamp returned by requestAnimationFrame
+  // because it may be either a Date.now-style time or a
+  // high-resolution time (depending on browser implementation). Using
+  // goog.now() will ensure that the timestamp used is consistent and
+  // compatible with goog.fx.Animation.
+  this.listener_.call(this.handler_, goog.now());
 };
 
 
