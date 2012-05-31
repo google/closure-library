@@ -82,25 +82,19 @@ goog.labs.async.SimpleResult.StateError = function() {
 goog.inherits(goog.labs.async.SimpleResult.StateError, goog.debug.Error);
 
 
-/**
- * @return {!goog.labs.async.Result.State} The current state of this Result.
- */
+/** @override */
 goog.labs.async.SimpleResult.prototype.getState = function() {
   return this.state_;
 };
 
 
-/**
- * @return {*} The current value of this Result.
- */
+/** @override */
 goog.labs.async.SimpleResult.prototype.getValue = function() {
   return this.value_;
 };
 
 
-/**
- * @return {*} The current error for this Result.
- */
+/** @override */
 goog.labs.async.SimpleResult.prototype.getError = function() {
   return this.error_;
 };
@@ -112,6 +106,7 @@ goog.labs.async.SimpleResult.prototype.getError = function() {
  * @param {!function(!goog.labs.async.SimpleResult)} handler The function called
  *     when the value is available. The function is passed the Result object
  *     as the only argument.
+ * @override
  */
 goog.labs.async.SimpleResult.prototype.wait = function(handler) {
   if (this.isPending_()) {
@@ -183,6 +178,7 @@ goog.labs.async.SimpleResult.prototype.isPending_ = function() {
  *
  * @return {boolean} Whether the result was canceled. It will not be canceled if
  *    the result was already canceled or has already resolved.
+ * @override
  */
 goog.labs.async.SimpleResult.prototype.cancel = function() {
   // cancel is a no-op if the result has been resolved.
@@ -194,9 +190,7 @@ goog.labs.async.SimpleResult.prototype.cancel = function() {
 };
 
 
-/**
- * @return {boolean} Whether this Result was canceled.
- */
+/** @override */
 goog.labs.async.SimpleResult.prototype.isCanceled = function() {
   return this.state_ == goog.labs.async.Result.State.ERROR &&
          this.error_ instanceof goog.labs.async.Result.CancelError;
