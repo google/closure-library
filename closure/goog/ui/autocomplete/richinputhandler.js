@@ -30,7 +30,7 @@ goog.require('goog.ui.ac.RichInputHandler');
 
 
 
-//TODO(user): Deprecate/remove this after known usages are replaced.
+//TODO(user): Remove this after known usages are replaced.
 /**
  * This is a stub for backward compatibility.
  * For actual documentation, please see {@link goog.ui.ac.RichInputHandler}.
@@ -40,5 +40,6 @@ goog.require('goog.ui.ac.RichInputHandler');
  * @param {?number=} opt_throttleTime Opt_throttleTime.
  * @constructor
  * @extends {goog.ui.ac.InputHandler}
+ * @deprecated Use {@link goog.ui.ac.RichInputHandler} instead.
  */
 goog.ui.AutoComplete.RichInputHandler = goog.ui.ac.RichInputHandler;

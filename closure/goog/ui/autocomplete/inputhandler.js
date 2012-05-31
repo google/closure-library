@@ -26,7 +26,7 @@ goog.require('goog.ui.ac.InputHandler');
 
 
 
-// TODO(user): Deprecate/remove this after known usages are replaced.
+// TODO(user): Remove this after known usages are replaced.
 /**
  * This is a stub for backward compatibility.
  * For actual documentation, please see {@link goog.ui.ac.InputHandler}.
@@ -37,6 +37,7 @@ goog.require('goog.ui.ac.InputHandler');
  * @param {?number=} opt_throttleTime Opt_throttleTime.
  * @constructor
  * @extends {goog.Disposable}
+ * @deprecated Use {@link goog.ui.ac.InputHandler} instead.
  */
 goog.ui.AutoComplete.InputHandler = goog.ui.ac.InputHandler;
 

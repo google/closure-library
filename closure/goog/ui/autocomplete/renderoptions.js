@@ -25,10 +25,11 @@ goog.require('goog.ui.ac.RenderOptions');
 
 
 
-//TODO(user): Deprecate/remove this after known usages are replaced.
+//TODO(user): Remove this after known usages are replaced.
 /**
  * This is a stub for backward compatibility.
  * For actual documentation, please see {@link goog.ui.ac.RenderOptions}.
  * @constructor
+ * @deprecated Use {@link goog.ui.ac.RenderOptions} instead.
  */
 goog.ui.AutoComplete.RenderOptions = goog.ui.ac.RenderOptions;

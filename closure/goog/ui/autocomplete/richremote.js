@@ -46,7 +46,7 @@ goog.require('goog.ui.ac.RichRemote');
 
 
 
-//TODO(user): Deprecate/remove this after known usages are replaced.
+//TODO(user): Remove this after known usages are replaced.
 /**
  * This is a stub for backward compatibility.
  * For actual documentation, please see {@link goog.ui.ac.RichRemote}.
@@ -56,5 +56,6 @@ goog.require('goog.ui.ac.RichRemote');
  * @param {boolean=} opt_useSimilar Opt_useSimilar.
  * @constructor
  * @extends {goog.ui.ac.Remote}
+ * @deprecated Use {@link goog.ui.ac.RichRemote} instead.
  */
 goog.ui.AutoComplete.RichRemote = goog.ui.ac.RichRemote;

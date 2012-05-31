@@ -27,7 +27,7 @@ goog.require('goog.ui.ac.Renderer.CustomRenderer');
 
 
 
-//TODO(user): Deprecate/remove this after known usages are replaced.
+//TODO(user): Remove this after known usages are replaced.
 /**
  * This is a stub for backward compatibility.
  * For actual documentation, please see {@link goog.ui.ac.Renderer}.
@@ -38,6 +38,7 @@ goog.require('goog.ui.ac.Renderer.CustomRenderer');
  * @param {boolean=} opt_rightAlign Opt_rightAlign.
  * @param {boolean=} opt_useStandardHighlighting Opt_useStandardHighlighting.
  * @extends {goog.events.EventTarget}
+ * @deprecated Use {@link goog.ui.ac.Renderer} instead.
  */
 goog.ui.AutoComplete.Renderer = goog.ui.ac.Renderer;
 

@@ -25,7 +25,7 @@ goog.require('goog.ui.ac.ArrayMatcher');
 
 
 
-// TODO(user): Deprecate/remove this after known usages are replaced.
+// TODO(user): Remove this after known usages are replaced.
 /**
  * This is a stub for backward compatibility. For actual documentation,
  * please see {@link goog.ui.ac.ArrayMatcher}.
@@ -33,5 +33,6 @@ goog.require('goog.ui.ac.ArrayMatcher');
  * @constructor
  * @param {Array} rows Rows.
  * @param {boolean=} opt_noSimilar Opt_noSimilar.
+ * @deprecated Use {@link goog.ui.ac.ArrayMatcher} instead.
  */
 goog.ui.AutoComplete.ArrayMatcher = goog.ui.ac.ArrayMatcher;

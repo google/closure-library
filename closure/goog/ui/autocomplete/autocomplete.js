@@ -27,7 +27,7 @@ goog.require('goog.ui.ac.AutoComplete.EventType');
 
 
 
-// TODO(user): Deprecate/remove this after known usages are replaced.
+// TODO(user): Remove this after known usages are replaced.
 /**
  * This is a stub for backward compatibility. For actual documentation,
  * please see {@link goog.ui.ac.AutoComplete}.
@@ -38,6 +38,7 @@ goog.require('goog.ui.ac.AutoComplete.EventType');
  *
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @deprecated Use {@link goog.ui.ac.AutoComplete} instead.
  */
 goog.ui.AutoComplete = goog.ui.ac.AutoComplete;
 

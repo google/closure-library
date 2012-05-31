@@ -25,7 +25,7 @@ goog.require('goog.ui.ac.RemoteArrayMatcher');
 
 
 
-//TODO(user): Deprecate/remove this after known usages are replaced.
+//TODO(user): Remove this after known usages are replaced.
 /**
  * This is a stub for backward compatibility.
  * For actual documentation, please see {@link goog.ui.ac.RemoteArrayMatcher}.
@@ -33,5 +33,6 @@ goog.require('goog.ui.ac.RemoteArrayMatcher');
  * @param {boolean=} opt_noSimilar Opt_noSimilar.
  * @constructor
  * @extends {goog.Disposable}
+ * @deprecated Use {@link goog.ui.ac.RemoteArrayMatcher} instead.
  */
 goog.ui.AutoComplete.RemoteArrayMatcher = goog.ui.ac.RemoteArrayMatcher;
