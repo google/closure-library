@@ -56,7 +56,7 @@ goog.require('goog.labs.async.wait');
  *
  * @param {!goog.labs.async.Result} result The result whose value will be
  *     transformed.
- * @param {!function(*): *} transformer The transformer
+ * @param {!Function} transformer The transformer
  *     function. The return value of this function will become the value of the
  *     returned result.
  *
@@ -70,7 +70,7 @@ goog.labs.async.transform = function(result, transformer) {
     if (res.getState() == goog.labs.async.Result.State.SUCCESS) {
       returnedResult.setValue(transformer(res.getValue()));
     } else {
-      returnedResult.setError();
+      returnedResult.setError(res.getError());
     }
   });
 

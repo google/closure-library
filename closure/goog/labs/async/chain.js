@@ -109,12 +109,12 @@ goog.labs.async.chain = function(result, actionCallback) {
             goog.labs.async.Result.State.SUCCESS) {
           returnedResult.setValue(dependentResult.getValue());
         } else {
-          returnedResult.setError();
+          returnedResult.setError(dependentResult.getError());
         }
       });
     } else {
       // First action failed, the returned result should also fail.
-      returnedResult.setError();
+      returnedResult.setError(result.getError());
     }
   });
 

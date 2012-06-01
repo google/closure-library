@@ -13,6 +13,10 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.labs.net.xhr</title>
 <script src="../../base.js"></script>
 <script>
+  goog.require('goog.labs.async.Result');
+  goog.require('goog.labs.async.chain');
+  goog.require('goog.labs.async.combine');
+  goog.require('goog.labs.async.wait');
   goog.require('goog.labs.net.xhr');
   goog.require('goog.string');
   goog.require('goog.testing.AsyncTestCase');
@@ -101,50 +105,51 @@ See the COPYING file for details.
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('simpleRequest');
-    xhr.send('GET', 'testdata/xhr_test_text.data').
-        addCallback(function(xhr) {
+    var result = xhr.send('GET', 'testdata/xhr_test_text.data');
+    goog.labs.async.wait.onSuccess(result,
+        function(xhr) {
           assertEquals('Just some data.', xhr.responseText);
           assertEquals(200, xhr.status);
           testCase.continueTesting();
-        }).
-        addErrback(fail);
+        });
+    goog.labs.async.wait.onError(result, fail);
   }
 
   function testGetText() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('getText');
-    xhr.get('testdata/xhr_test_text.data').
-        addCallback(function(content) {
-          assertEquals('Just some data.', content);
-          testCase.continueTesting();
-        }).
-        addErrback(fail);
+    var result = xhr.get('testdata/xhr_test_text.data');
+    goog.labs.async.wait.onSuccess(result, function(content) {
+        assertEquals('Just some data.', content);
+        testCase.continueTesting();
+      });
+    goog.labs.async.wait.onError(result, fail);
   }
 
   function testGetTextWithJson() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('getTextWithJson');
-    xhr.get('testdata/xhr_test_json.data').
-        addCallback(function(content) {
-          assertEquals('while(1);\n{"stat":"ok","count":12345}\n', content);
-          testCase.continueTesting();
-        }).
-        addErrback(fail);
+    var result = xhr.get('testdata/xhr_test_json.data');
+    goog.labs.async.wait.onSuccess(result, function(content) {
+        assertEquals('while(1);\n{"stat":"ok","count":12345}\n', content);
+        testCase.continueTesting();
+      });
+    goog.labs.async.wait.onError(result, fail);
   }
 
   function testPostText() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('postText');
-    xhr.post('testdata/xhr_test_text.data', 'post-data').
-        addCallback(function(content) {
-          // No good way to test post-data gets transported.
-          assertEquals('Just some data.', content);
-          testCase.continueTesting();
-        }).
-        addErrback(fail);
+    var result = xhr.post('testdata/xhr_test_text.data', 'post-data');
+    goog.labs.async.wait.onSuccess(result, function(content) {
+        // No good way to test post-data gets transported.
+        assertEquals('Just some data.', content);
+        testCase.continueTesting();
+      });
+    goog.labs.async.wait.onError(result, fail);
   }
 
   function testGetJson() {
@@ -163,19 +168,19 @@ See the COPYING file for details.
   function testSerialRequests() {
     if (shouldRunLocally) return;
 
-    var d = xhr.get('testdata/xhr_test_text.data').
-        addCallback(function(txt) {
+    var result = xhr.get('testdata/xhr_test_text.data');
+    var chainedResult = goog.labs.async.chain(result, function(result) {
           return xhr.getJson(
               'testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'});
         });
 
     // Data that comes through to callbacks should be from the 2nd request.
-    d.addCallback(function(json) {
+    goog.labs.async.wait.onSuccess(chainedResult, function(json) {
       assertEquals('ok', json['stat']);
       assertEquals(12345, json['count']);
       testCase.continueTesting();
     });
-    d.addErrback(fail);
+    goog.labs.async.wait.onError(chainedResult, fail);
   }
 
   function testParallelRequest() {
@@ -189,60 +194,66 @@ See the COPYING file for details.
       jsonData = response;
     }
 
-    var d = goog.async.Deferred.succeed();
-    d.awaitDeferred(
-        xhr.get('testdata/xhr_test_text.data').addCallback(loadText));
-    d.awaitDeferred(
-        xhr.getJson('testdata/xhr_test_json.data',
-            {xssiPrefix: 'while(1);\n'}).addCallback(loadJson));
-    d.addCallback(function() {
+    var fetchTextResult = xhr.get('testdata/xhr_test_text.data');
+    var textDataResult = goog.labs.async.transform(fetchTextResult, loadText);
+
+    var fetchJsonResult = xhr.getJson('testdata/xhr_test_json.data',
+                                      {xssiPrefix: 'while(1);\n'});
+    var jsonDataResult = goog.labs.async.transform(fetchJsonResult, loadJson);
+        
+    var combinedResult = goog.labs.async.combine(textDataResult,
+                                                 jsonDataResult);
+
+    goog.labs.async.wait.onSuccess(combinedResult, function() {
       assertEquals('Just some data.', textData);
       assertEquals('ok', jsonData['stat']);
       testCase.continueTesting();
     });
-    d.addErrback(fail);
+    goog.labs.async.wait.onError(combinedResult, fail);
   }
 
   function testBadUrlDetectedAsError() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('badUrl');
-    xhr.getJson('unknown-file.dat').
-        addCallback(fail).
-        addErrback(function(err) {
-          assertTrue('Error should be an HTTP error',
-              err instanceof xhr.HttpError);
-          assertEquals(404, err.status);
-          assertNotNull(err.xhr);
-          testCase.continueTesting();
-        });
+    var result = xhr.getJson('unknown-file.dat');
+    goog.labs.async.wait.onSuccess(result, fail);
+    goog.labs.async.wait.onError(result, function(result) {
+        var err = result.getError();
+        assertTrue('Error should be an HTTP error',
+            err instanceof xhr.HttpError);
+        assertEquals(404, err.status);
+        assertNotNull(err.xhr);
+        testCase.continueTesting();
+      });
   }
 
   function testBadOriginTriggersOnErrorHandler() {
     testCase.waitForAsync('badOrigin');
-    xhr.get('http://www.google.com').
-        addCallback(fail).
-        addErrback(function(err) {
-          // In IE this will be a goog.labs.net.xhr.Error since it is thrown
-          //  when calling xhr.open(), other browsers will raise an HttpError.
-          assertTrue('Error should be an xhr error',
-              err instanceof xhr.Error);
-          assertNotNull(err.xhr);
-          testCase.continueTesting();
-        });
+    var result = xhr.get('http://www.google.com');
+    goog.labs.async.wait.onSuccess(result, fail);
+    goog.labs.async.wait.onError(result, function(result) {
+        var err = result.getError();
+        // In IE this will be a goog.labs.net.xhr.Error since it is thrown
+        //  when calling xhr.open(), other browsers will raise an HttpError.
+        assertTrue('Error should be an xhr error',
+            err instanceof xhr.Error);
+        assertNotNull(err.xhr);
+        testCase.continueTesting();
+      });
   }
 
   function testAbortRequest() {
     if (shouldRunLocally) return;
 
     var err;
-    var d = xhr.send('GET', 'test-url', null).
-        addCallback(fail).
-        addErrback(function(e) {
-          err = e;
+    var result = xhr.send('GET', 'test-url', null);
+    goog.labs.async.wait.onSuccess(result, fail);
+    goog.labs.async.wait.onError(result, function(result) {
+          err = result.getError();
         });
-    d.cancel();
-    assertTrue(err instanceof goog.async.Deferred.CancelledError);
+    result.cancel();
+    assertTrue(err instanceof goog.labs.async.Result.CancelError);
   }
 
   //============================================================================
@@ -252,12 +263,12 @@ See the COPYING file for details.
   function testSendNoOptions() {
     var stubXhr = setupStubXMLHttpRequest();
     var called = false;
-    xhr.send('GET', 'test-url', null).
-        addCallback(function(xhr) {
-          called = true;
-          assertEquals('Objects should be equal', xhr, stubXhr);
-        }).
-        addErrback(fail);
+    var result = xhr.send('GET', 'test-url', null);
+    goog.labs.async.wait.onSuccess(result, function(xhr) {
+        called = true;
+        assertEquals('Objects should be equal', xhr, stubXhr);
+      });
+    goog.labs.async.wait.onError(result, fail);
 
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertFalse('Callback should not yet have been called', called);
@@ -272,7 +283,8 @@ See the COPYING file for details.
 
   function testSendPostSetsDefaultHeader() {
     var stubXhr = setupStubXMLHttpRequest();
-    xhr.send('POST', 'test-url', null).addErrback(fail);
+    var result = xhr.send('POST', 'test-url', null);
+    goog.labs.async.wait.onError(result, fail);
 
     stubXhr.load(200);
 
@@ -284,9 +296,10 @@ See the COPYING file for details.
 
   function testSendPostHeaders() {
     var stubXhr = setupStubXMLHttpRequest();
-    xhr.send('POST', 'test-url', null, {
+    var result = xhr.send('POST', 'test-url', null, {
       headers: {'Content-Type': 'text/plain', 'X-Made-Up': 'FooBar'}
-    }).addErrback(fail);
+      });
+    goog.labs.async.wait.onError(result, fail);
 
     stubXhr.load(200);
 
@@ -298,8 +311,8 @@ See the COPYING file for details.
 
   function testSendWithCredentials() {
     var stubXhr = setupStubXMLHttpRequest();
-    xhr.send('POST', 'test-url', null, {withCredentials: true}).
-        addErrback(fail);
+    var result = xhr.send('POST', 'test-url', null, {withCredentials: true});
+    goog.labs.async.wait.onError(result, fail);
     stubXhr.load(200);
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertTrue(stubXhr.withCredentials);
@@ -307,8 +320,8 @@ See the COPYING file for details.
 
   function testSendWithMimeType() {
     var stubXhr = setupStubXMLHttpRequest();
-    xhr.send('POST', 'test-url', null, {mimeType: 'text/plain'}).
-        addErrback(fail);
+    var result = xhr.send('POST', 'test-url', null, {mimeType: 'text/plain'});
+    goog.labs.async.wait.onError(result, fail);
 
     stubXhr.load(200);
     assertTrue('XHR should have been sent', stubXhr.sent);
@@ -318,9 +331,11 @@ See the COPYING file for details.
   function testSendWithHttpError() {
     var stubXhr = setupStubXMLHttpRequest();
     var err;
-    xhr.send('POST', 'test-url', null).
-        addCallback(fail).
-        addErrback(function(e) { err = e; });
+    var result = xhr.send('POST', 'test-url', null);
+    goog.labs.async.wait.onSuccess(result, fail);
+    goog.labs.async.wait.onError(result, function(result) {
+        err = result.getError();
+      });
 
     stubXhr.load(500);
 
@@ -338,7 +353,8 @@ See the COPYING file for details.
 
     var stubXhr = setupStubXMLHttpRequest();
     var err;
-    xhr.send('POST', 'test-url', null, {timeoutMs: 1500}).addErrback(fail);
+    var result = xhr.send('POST', 'test-url', null, {timeoutMs: 1500});
+    goog.labs.async.wait.onError(result, fail);
     assertTrue(mockClock.getTimeoutsMade() > 0);
     mockClock.tick(1400);
     stubXhr.load(200);
@@ -350,9 +366,9 @@ See the COPYING file for details.
   function testSendWithTimeoutHit() {
     var stubXhr = setupStubXMLHttpRequest();
     var err;
-    xhr.send('POST', 'test-url', null, {timeoutMs: 50})
-        .addCallback(fail)
-        .addErrback(function(e) { err = e; });
+    var result = xhr.send('POST', 'test-url', null, {timeoutMs: 50});
+    goog.labs.async.wait.onSuccess(result, fail);
+    goog.labs.async.wait.onError(result, function(res) { err = res.getError(); });
     assertTrue(mockClock.getTimeoutsMade() > 0);
     mockClock.tick(50);
     assertTrue('XHR should have been sent', stubXhr.sent);
@@ -375,28 +391,28 @@ See the COPYING file for details.
   function testCancelRequest() {
     var stubXhr = setupStubXMLHttpRequest();
     var err;
-    var d = xhr.send('GET', 'test-url', null, {timeoutMs: 50}).
-        addCallback(fail).
-        addErrback(function(e) {
-          err = e;
-        });
-    d.cancel();
+    var result = xhr.send('GET', 'test-url', null, {timeoutMs: 50});
+    goog.labs.async.wait.onSuccess(result, fail);
+    goog.labs.async.wait.onError(result, function(result) {
+        err = result.getError();
+      });
+    result.cancel();
     stubXhr.load(0);  // Call load anyway, shoudn't make a difference.
     mockClock.tick(100);  // Timeout should never be called.
 
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertTrue('XHR should have been aborted', stubXhr.aborted);
-    assertTrue(err instanceof goog.async.Deferred.CancelledError);
+    assertTrue(err instanceof goog.labs.async.Result.CancelError);
   }
 
   function testGetJson() {
     var stubXhr = setupStubXMLHttpRequest();
     var responseData;
-    xhr.getJson('test-url').
-        addCallback(function(data) {
-          responseData = data;
-        }).
-        addErrback(fail);
+    var result = xhr.getJson('test-url');
+    goog.labs.async.wait.onSuccess(result, function(data) {
+        responseData = data;
+      });
+    goog.labs.async.wait.onError(result, fail);
 
     stubXhr.responseText = '{"a": 1, "b": 2}';
     stubXhr.load(200);
@@ -407,11 +423,11 @@ See the COPYING file for details.
   function testGetJsonWithXssiPrefix() {
     var stubXhr = setupStubXMLHttpRequest();
     var responseData;
-    xhr.getJson('test-url', {xssiPrefix: 'while(1);\n'}).
-        addCallback(function(data) {
-          responseData = data;
-        }).
-        addErrback(fail);
+    var result = xhr.getJson('test-url', {xssiPrefix: 'while(1);\n'});
+    goog.labs.async.wait.onSuccess(result, function(data) {
+        responseData = data;
+      });
+    goog.labs.async.wait.onError(result, fail);
 
     stubXhr.responseText = 'while(1);\n{"a": 1, "b": 2}';
     stubXhr.load(200);
