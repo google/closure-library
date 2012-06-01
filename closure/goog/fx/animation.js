@@ -321,6 +321,15 @@ goog.fx.Animation.prototype.pause = function() {
 
 
 /**
+ * @return {number} The current progress of the animation, the number
+ *     is between 0 and 1 inclusive.
+ */
+goog.fx.Animation.prototype.getProgress = function() {
+  return this.progress;
+};
+
+
+/**
  * Sets the progress of the animation.
  * @param {number} progress The new progress of the animation.
  */
@@ -488,7 +497,7 @@ goog.fx.AnimationEvent = function(type, anim) {
    * The current progress.
    * @type {number}
    */
-  this.progress = anim.progress;
+  this.progress = anim.getProgress();
 
   /**
    * Frames per second so far.
