@@ -132,6 +132,13 @@ See the COPYING file for details.
       <option value="a">A</option>
       <option value="b">B</option>
     </select>
+
+  </form>
+
+  <form id="testform4">
+    <embed ></embed>
+    <embed type="foo/bar"></embed>
+    <object></object>
   </form>
 
 <script>
@@ -477,6 +484,11 @@ See the COPYING file for details.
     var el = goog.dom.getElement('reset');
     var result = goog.dom.forms.getValue(el);
     assertEquals('reset', result);
+  }
+
+  function testGetFormDataHelperAndNonInputElements() {
+    var el = goog.dom.getElement('testform4');
+    goog.dom.forms.getFormDataHelper_(el, {}, goog.nullFunction);
   }
 </script>
 </body>
