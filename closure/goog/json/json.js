@@ -190,7 +190,7 @@ goog.json.Serializer.prototype.serialize_ = function(object, sb) {
         break;
       }
       if (goog.isArray(object)) {
-        this.serializeArray_((/** @type {!Array} */ object), sb);
+        this.serializeArray((/** @type {!Array} */ object), sb);
         break;
       }
       // should we allow new String, new Number and new Boolean to be treated
@@ -281,11 +281,11 @@ goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
 
 /**
  * Serializes an array to a JSON string
- * @private
  * @param {Array} arr The array to serialize.
  * @param {Array} sb Array used as a string builder.
+ * @protected
  */
-goog.json.Serializer.prototype.serializeArray_ = function(arr, sb) {
+goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
   var l = arr.length;
   sb.push('[');
   var sep = '';

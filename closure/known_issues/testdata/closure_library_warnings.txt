@@ -82,9 +82,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nat
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js WARNING - Access to private property iframeElement_ of goog.net.xpc.NixTransport.channel_ not allowed here.
   var innerFrame = this.channel_.iframeElement_;
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js WARNING - Overriding private property of goog.json.Serializer.prototype.
-goog.proto.Serializer.prototype.serializeArray_ = function(arr, sb) {
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js WARNING - Access to private property serialize_ of goog.proto.Serializer not allowed here.
       this.serialize_(arr[i], sb);
 
