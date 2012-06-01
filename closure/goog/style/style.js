@@ -24,6 +24,7 @@ goog.provide('goog.style');
 
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
@@ -313,19 +314,42 @@ goog.style.getViewportPageOffset = function(doc) {
 
 
 /**
+ * Determines whether getBoundingClientRect is supported for this element.
+ * @param {!Element} el The element to be measured.
+ * @return {boolean} Whether getBoundingClientRect is supported.
+ * @private
+ */
+goog.style.supportsGetBoundingClientRect_ = function(el) {
+  if (goog.userAgent.MOBILE && goog.userAgent.WEBKIT) {
+    // http://crbug.com/130651 -- Android Chrome's getBoundingClientRect
+    // incorrectly applies zoom in iframes.  To avoid adding a dependency to
+    // goog.userAgent.product, this is a little broader to apply to all mobile
+    // WebKit, so this will unfortunately slow down other mobile devices.  To
+    // mitigate the effect, we can still use getClientBoundingRect when not in
+    // an iframe.
+    var win = el.ownerDocument.defaultView;
+    if (win != win.top) {
+      return false;
+    }
+  }
+  return !!el.getBoundingClientRect;
+};
+
+
+/**
  * Gets the client rectangle of the DOM element.
  *
  * getBoundingClientRect is part of a new CSS object model draft (with a
  * long-time presence in IE), replacing the error-prone parent offset
  * computation and the now-deprecated Gecko getBoxObjectFor.
  *
- * This utility patches common browser bugs in getClientBoundingRect. It
- * will fail if getClientBoundingRect is unsupported.
+ * This utility patches common browser bugs in getBoundingClientRect. It
+ * will fail if getBoundingClientRect is unsupported.
  *
  * If the element is not in the DOM, the result is undefined, and an error may
  * be thrown depending on user agent.
  *
- * @param {Element} el The element whose bounding rectangle is being queried.
+ * @param {!Element} el The element whose bounding rectangle is being queried.
  * @return {Object} A native bounding rectangle with numerical left, top,
  *     right, and bottom.  Reported by Firefox to be of object type ClientRect.
  * @private
@@ -345,7 +369,7 @@ goog.style.getBoundingClientRect_ = function(el) {
     // In quirks mode, the offset can be determined by querying the body's
     // clientLeft/clientTop, but in standards mode, it is found by querying
     // the document element's clientLeft/clientTop.  Since we already called
-    // getClientBoundingRect we have already forced a reflow, so it is not
+    // getBoundingClientRect we have already forced a reflow, so it is not
     // too expensive just to query them all.
 
     // See: http://msdn.microsoft.com/en-us/library/ms536433(VS.85).aspx
@@ -554,6 +578,8 @@ goog.style.getClientLeftTop = function(el) {
 goog.style.getPageOffset = function(el) {
   var box, doc = goog.dom.getOwnerDocument(el);
   var positionStyle = goog.style.getStyle_(el, 'position');
+  // TODO(gboyer): Update the jsdoc in a way that doesn't break the universe.
+  goog.asserts.assertObject(el, 'Parameter is required');
 
   // NOTE(eae): Gecko pre 1.9 normally use getBoxObjectFor to calculate the
   // position. When invoked for an element with position absolute and a negative
@@ -578,8 +604,8 @@ goog.style.getPageOffset = function(el) {
     return pos;
   }
 
-  // IE and Gecko 1.9+.
-  if (el.getBoundingClientRect) {
+  // IE, Gecko 1.9+, and most modern WebKit.
+  if (goog.style.supportsGetBoundingClientRect_(el)) {
     box = goog.style.getBoundingClientRect_(el);
     // Must add the scroll coordinates in to get the absolute page offset
     // of element since getBoundingClientRect returns relative coordinates to
@@ -759,14 +785,15 @@ goog.style.getRelativePosition = function(a, b) {
 goog.style.getClientPosition = function(el) {
   var pos = new goog.math.Coordinate;
   if (el.nodeType == goog.dom.NodeType.ELEMENT) {
-    if (el.getBoundingClientRect) {  // IE and Gecko 1.9+
-      var box = goog.style.getBoundingClientRect_(/** @type {Element} */ (el));
+    el = /** @type {!Element} */ (el);
+    if (goog.style.supportsGetBoundingClientRect_(el)) {
+      // IE, Gecko 1.9+, and most modern WebKit
+      var box = goog.style.getBoundingClientRect_(el);
       pos.x = box.left;
       pos.y = box.top;
     } else {
-      var scrollCoord = goog.dom.getDomHelper(/** @type {Element} */ (el))
-          .getDocumentScroll();
-      var pageCoord = goog.style.getPageOffset(/** @type {Element} */ (el));
+      var scrollCoord = goog.dom.getDomHelper(el).getDocumentScroll();
+      var pageCoord = goog.style.getPageOffset(el);
       pos.x = pageCoord.x - scrollCoord.x;
       pos.y = pageCoord.y - scrollCoord.y;
     }
