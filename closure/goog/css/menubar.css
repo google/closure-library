@@ -29,6 +29,10 @@
   border: 1px solid #fff;
 }
 
+.goog-menubar .goog-menu-button-dropdown {
+  display: none;
+}
+
 .goog-menubar .goog-menu-button-outer-box {
   border: none;
 }
