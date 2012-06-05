@@ -37,7 +37,7 @@ See the COPYING file for details.
 
   function setUp() {
     var obj = new RealObject();
-    mock = new goog.testing.LooseMock(obj);
+    mock = new goog.testing.LooseMock(obj, false);
     stubs = new goog.testing.PropertyReplacer();
   }
 
@@ -71,6 +71,33 @@ See the COPYING file for details.
     silenceFailureLogging();
     assertThrows.apply(null, arguments);
     unsilenceFailureLogging();
+  }
+
+  // Test the example given in LooseMock's description.
+  function testExample() {
+    var Duck = function(){};
+    Duck.prototype.feet = function(){}
+    Duck.prototype.fly = function(){}
+    Duck.prototype.flies = function(){}
+    Duck.prototype.run = function(){}
+    Duck.prototype.runs = function(){}
+    Duck.prototype.activities = function(){}
+
+    var duck = new goog.testing.LooseMock(Duck);
+    duck.feet().$returns(2);
+    duck.fly().$returns(true);
+    duck.flies().$returns(true);
+    duck.activities().$returns(1);
+
+    duck.$replay();
+
+    assertTrue(duck.flies());
+    assertEquals(duck.flies(), duck.fly());
+    assertEquals(undefined, duck.runs());
+    assertEquals(duck.runs(), duck.run());
+    assertEquals(1, duck.activities());
+
+    duck.$verify();
   }
 
   // Most of the basic functionality is tested in strictmock_test; these tests
@@ -301,7 +328,7 @@ See the COPYING file for details.
   }
 
   function testIgnoresExtraCalls() {
-    mock = new goog.testing.LooseMock(RealObject, true);
+    mock = new goog.testing.LooseMock(RealObject);
     mock.a();
     mock.$replay();
     mock.a();

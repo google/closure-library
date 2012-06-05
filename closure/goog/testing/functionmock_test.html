@@ -44,7 +44,7 @@ function tearDown() {
 
 function testMockFunctionCallOrdering() {
   var doOneTest = function(mockFunction, success, expected_args, actual_args) {
-    goog.array.forEach(expected_args, function(arg) { mockFunction(arg); });
+    goog.array.forEach(expected_args, function(arg) { mockFunction(arg).$times(1); });
     mockFunction.$replay();
     var callFunction = function() {
       goog.array.forEach(actual_args, function(arg) { mockFunction(arg); });
