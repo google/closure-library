@@ -587,6 +587,45 @@ See the COPYING file for details.
         goog.dom.a11y.getState(dialog.getElement(), 'labelledby'));
   }
 
+
+  function testPreferredAriaRole_renderDefault() {
+    dialog.dispose();
+
+    dialog = new goog.ui.Dialog();
+    dialog.render();
+    assertEquals(dialog.getPreferredAriaRole(),
+        goog.dom.a11y.getRole(dialog.getElement()));
+  }
+
+  function testPreferredAriaRole_decorateDefault() {
+    dialog.dispose();
+
+    dialog = new goog.ui.Dialog();
+    dialog.decorate(decorateTarget);
+    assertEquals(dialog.getPreferredAriaRole(),
+        goog.dom.a11y.getRole(dialog.getElement()));
+  }
+
+  function testPreferredAriaRole_renderOverride() {
+    dialog.dispose();
+
+    dialog = new goog.ui.Dialog();
+    dialog.setPreferredAriaRole(goog.dom.a11y.Role.ALERTDIALOG);
+    dialog.render();
+    assertEquals(goog.dom.a11y.Role.ALERTDIALOG,
+        goog.dom.a11y.getRole(dialog.getElement()));
+  }
+
+  function testPreferredAriaRole_decorateOverride() {
+    dialog.dispose();
+
+    dialog = new goog.ui.Dialog();
+    dialog.setPreferredAriaRole(goog.dom.a11y.Role.ALERTDIALOG);
+    dialog.decorate(decorateTarget);
+    assertEquals(goog.dom.a11y.Role.ALERTDIALOG,
+        goog.dom.a11y.getRole(dialog.getElement()));
+  }
+
   function testDefaultOpacityIsAppliedOnRender() {
     dialog.dispose();
 

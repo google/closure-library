@@ -223,6 +223,14 @@ goog.ui.Dialog.prototype.contentEl_ = null;
 goog.ui.Dialog.prototype.buttonEl_ = null;
 
 
+/**
+ * The dialog's preferred ARIA role.
+ * @type {goog.dom.a11y.Role}
+ * @private
+ */
+goog.ui.Dialog.prototype.preferredAriaRole_ = goog.dom.a11y.Role.DIALOG;
+
+
 /** @override */
 goog.ui.Dialog.prototype.getCssClass = function() {
   return this.class_;
@@ -268,6 +276,28 @@ goog.ui.Dialog.prototype.setContent = function(html) {
  */
 goog.ui.Dialog.prototype.getContent = function() {
   return this.content_;
+};
+
+
+/**
+ * Returns the dialog's preferred ARIA role. This can be used to override the
+ * default dialog role, e.g. with an ARIA role of ALERTDIALOG for a simple
+ * warning or confirmation dialog.
+ * @return {goog.dom.a11y.Role} This dialog's preferred ARIA role.
+ */
+goog.ui.Dialog.prototype.getPreferredAriaRole = function() {
+  return this.preferredAriaRole_;
+};
+
+
+/**
+ * Sets the dialog's preferred ARIA role. This can be used to override the
+ * default dialog role, e.g. with an ARIA role of ALERTDIALOG for a simple
+ * warning or confirmation dialog.
+ * @param {goog.dom.a11y.Role} role This dialog's preferred ARIA role.
+ */
+goog.ui.Dialog.prototype.setPreferredAriaRole = function(role) {
+  this.preferredAriaRole_ = role;
 };
 
 
@@ -521,7 +551,7 @@ goog.ui.Dialog.prototype.createDom = function() {
           goog.getCssName(this.class_, 'buttons')));
 
   this.titleId_ = this.titleEl_.id;
-  goog.dom.a11y.setRole(element, 'dialog');
+  goog.dom.a11y.setRole(element, this.getPreferredAriaRole());
   goog.dom.a11y.setState(element, 'labelledby', this.titleId_ || '');
   // If setContent() was called before createDom(), make sure the inner HTML of
   // the content element is initialized.
@@ -650,7 +680,7 @@ goog.ui.Dialog.prototype.enterDocument = function() {
       this.titleCloseEl_, goog.events.EventType.CLICK,
       this.onTitleCloseClick_);
 
-  goog.dom.a11y.setRole(this.getElement(), 'dialog');
+  goog.dom.a11y.setRole(this.getElement(), this.getPreferredAriaRole());
   if (this.titleTextEl_.id !== '') {
     goog.dom.a11y.setState(
         this.getElement(), 'labelledby', this.titleTextEl_.id);
