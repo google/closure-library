@@ -797,6 +797,9 @@ goog.style.getClientPosition = function(el) {
       pos.x = pageCoord.x - scrollCoord.x;
       pos.y = pageCoord.y - scrollCoord.y;
     }
+    if (goog.userAgent.GECKO && !goog.userAgent.isVersion(12)) {
+      pos = goog.math.Coordinate.sum(pos, goog.style.getCssTranslation(el));
+    }
   } else {
     var isAbstractedEvent = goog.isFunction(el.getBrowserEvent);
     var targetEvent = el;
@@ -1875,3 +1878,55 @@ goog.style.getScrollbarWidth = function(opt_className) {
   goog.dom.removeNode(outerDiv);
   return width;
 };
+
+
+/**
+ * Regular expression to extract x and y translation components from a CSS
+ * transform Matrix representation.
+ *
+ * @type {!RegExp}
+ * @const
+ * @private
+ */
+goog.style.MATRIX_TRANSLATION_REGEX_ =
+    new RegExp('matrix\\([0-9\\.\\-]+, [0-9\\.\\-]+, ' +
+               '[0-9\\.\\-]+, [0-9\\.\\-]+, ' +
+               '([0-9\\.\\-]+)p?x?, ([0-9\\.\\-]+)p?x?\\)');
+
+
+/**
+ * Returns the x,y translation component of any CSS transforms applied to the
+ * element, in pixels.
+ *
+ * @param {!Element} element The element to get the translation of.
+ * @return {!goog.math.Coordinate} The CSS translation of the element in px.
+ */
+goog.style.getCssTranslation = function(element) {
+  var property;
+  if (goog.userAgent.IE) {
+    property = '-ms-transform';
+  } else if (goog.userAgent.WEBKIT) {
+    property = '-webkit-transform';
+  } else if (goog.userAgent.OPERA) {
+    property = '-o-transform';
+  } else if (goog.userAgent.GECKO) {
+    property = '-moz-transform';
+  }
+  var transform;
+  if (property) {
+    transform = goog.style.getStyle_(element, property);
+  }
+  if (!transform) {
+    transform = goog.style.getStyle_(element, 'transform');
+  }
+  if (!transform) {
+    return new goog.math.Coordinate(0, 0);
+  }
+  var matches = transform.match(goog.style.MATRIX_TRANSLATION_REGEX_);
+  if (!matches) {
+    return new goog.math.Coordinate(0, 0);
+  }
+  return new goog.math.Coordinate(parseFloat(matches[1]),
+                                  parseFloat(matches[2]));
+};
+

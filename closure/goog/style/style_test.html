@@ -26,8 +26,11 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('goog.style_test');
+goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
+goog.require('goog.userAgent.product.isVersion');
 
 </script>
 <script>
@@ -228,6 +231,21 @@ i {
   padding: 4px;
   width: auto;
   height: 20px;
+}
+
+#translation {
+  position: absolute;
+  z-index: 10;
+  left: 10px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  background-color: blue;
+  -webkit-transform: translate(20px, 30px);
+  -ms-transform: translate(20px, 30px);
+  -o-transform: translate(20px, 30px);
+  -moz-transform: translate(20px, 30px);
+  transform: translate(20px, 30px);
 }
 
 </style>
@@ -507,9 +525,12 @@ Test-visible
 </div>
 
 <div id="test-viewport"></div>
+<div id="translation"></div>
+
 <script>
 
 var EPSILON = 2;
+var expectedFailures = new goog.testing.ExpectedFailures();
 var $ = goog.dom.getElement;
 
 function setUpPage() {
@@ -531,6 +552,7 @@ function setUp() {
 }
 
 function tearDown() {
+  expectedFailures.handleTearDown();
   var testVisibleDiv2 = goog.dom.getElement('test-visible2');
   testVisibleDiv2.setAttribute('style', '');
   testVisibleDiv2.innerHTML = '';
@@ -2363,6 +2385,25 @@ function testGetViewportPageOffset() {
   offset = goog.style.getViewportPageOffset(document);
   assertEquals(100, offset.x);
   assertEquals(0, offset.y);
+}
+
+function testGetsTranslation() {
+  var element = document.getElementById('translation');
+
+  expectedFailures.expectFailureFor(
+      goog.userAgent.IE && !goog.userAgent.product.isVersion(9),
+      'CSS transforms were only introduced in IE9');
+
+  // First check the element is actually translated, and we haven't missed
+  // one of the vendor-specific transform properties
+  var position = goog.style.getClientPosition(element);
+  var translation = goog.style.getCssTranslation(element);
+  var expectedTranslation = new goog.math.Coordinate(20, 30);
+
+  expectedFailures.run(function() {
+    assertObjectEquals(new goog.math.Coordinate(30, 40), position);
+    assertObjectEquals(expectedTranslation, translation);
+  });
 }
 
 function hasVerticalScroll(el) {
