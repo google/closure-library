@@ -81,13 +81,9 @@ goog.ui.style.app.ButtonRenderer.IE6_CLASS_COMBINATIONS = [];
  *        </div>
  *      </div>
  *    </div>
- * Overrides {@link goog.ui.ButtonRenderer#createDom}.
- * @param {goog.ui.Button} button Button to render.
- * @return {Element} Root element for the button.
  * @override
  */
-goog.ui.style.app.ButtonRenderer.prototype.createDom =
-    goog.ui.style.app.ButtonRenderer.superClass_.createDom;
+goog.ui.style.app.ButtonRenderer.prototype.createDom;
 
 
 /** @override */

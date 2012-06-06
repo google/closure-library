@@ -80,13 +80,9 @@ goog.ui.ImagelessButtonRenderer.CSS_CLASS =
  *        </div>
  *      </div>
  *    </div>
- * Overrides {@link goog.ui.ButtonRenderer#createDom}.
- * @param {goog.ui.Button} button Button to render.
- * @return {Element} Root element for the button.
  * @override
  */
-goog.ui.ImagelessButtonRenderer.prototype.createDom =
-    goog.ui.ImagelessButtonRenderer.superClass_.createDom;
+goog.ui.ImagelessButtonRenderer.prototype.createDom;
 
 
 /** @override */

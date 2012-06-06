@@ -1,8 +1,3 @@
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/datasource.js WARNING - mismatch of the get property type and the type of the property it overrides from superclass goog.ds.DataNode
-original: function (this:goog.ds.DataNode): *
-override: function (this:goog.ds.DataNodeList, string): *
-goog.ds.DataNodeList.prototype.get = goog.abstractMethod;
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/gears/loggerclient.js WARNING - Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
   goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
 
@@ -153,21 +148,11 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapale
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
   var parsed = goog.ui.HsvaPalette.parseUserInput_(this.inputEl_.value);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/imagelessbuttonrenderer.js WARNING - mismatch of the createDom property type and the type of the property it overrides from superclass goog.ui.ControlRenderer
-original: function (this:goog.ui.CustomButtonRenderer, (goog.ui.Control|null)): (Element|null)
-override: function (this:goog.ui.ImagelessButtonRenderer, (goog.ui.Button|null)): (Element|null)
-goog.ui.ImagelessButtonRenderer.prototype.createDom =
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js WARNING - Access to private property lastEventTime_ of goog.ui.MockActivityMonitor not allowed here.
   this.lastEventTime_ = eventTime;
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/mockactivitymonitor.js WARNING - Access to private property lastEventType_ of goog.ui.MockActivityMonitor not allowed here.
   this.lastEventType_ = type;
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/style/app/buttonrenderer.js WARNING - mismatch of the createDom property type and the type of the property it overrides from superclass goog.ui.ControlRenderer
-original: function (this:goog.ui.CustomButtonRenderer, (goog.ui.Control|null)): (Element|null)
-override: function (this:goog.ui.style.app.ButtonRenderer, (goog.ui.Button|null)): (Element|null)
-goog.ui.style.app.ButtonRenderer.prototype.createDom =
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/third_party/closure/goog/caja/string/html/htmlsanitizer.js WARNING - Access to private property AMP_RE_ of goog.string.html.HtmlParser not allowed here.
   return s.replace(goog.string.html.HtmlParser.AMP_RE_, '&amp;').

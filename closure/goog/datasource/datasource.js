@@ -50,6 +50,8 @@ goog.ds.DataNode = function() {};
 
 /**
  * Get the value of the node
+ * @param {...?} var_args Do not check arity of arguments, because
+ *     some subclasses require args.
  * @return {*} The value of the node, or null if no value.
  */
 goog.ds.DataNode.prototype.get = goog.abstractMethod;
