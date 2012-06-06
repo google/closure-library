@@ -591,9 +591,8 @@ goog.ds.SortedNodeList.prototype.setNode = function(name, node) {
 /**
  * The character denoting an attribute.
  * @type {string}
- * @private
  */
-goog.ds.STR_ATTRIBUTE_START_ = '@';
+goog.ds.STR_ATTRIBUTE_START = '@';
 
 
 /**

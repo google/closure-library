@@ -177,7 +177,7 @@ goog.ds.XmlDataSource.prototype.getChildNodes = function(opt_selector) {
  * @override
  */
 goog.ds.XmlDataSource.prototype.getChildNode = function(name) {
-  if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START_)) {
+  if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START)) {
     var att = this.node_.getAttributeNode(name.substring(1));
     return att ? new goog.ds.XmlDataSource(att, this) : null;
   } else {
@@ -194,7 +194,7 @@ goog.ds.XmlDataSource.prototype.getChildNode = function(name) {
  * @override
  */
 goog.ds.XmlDataSource.prototype.getChildNodeValue = function(name) {
-  if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START_)) {
+  if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START)) {
     var node = this.node_.getAttributeNode(name.substring(1));
     return node ? node.nodeValue : null;
   } else {

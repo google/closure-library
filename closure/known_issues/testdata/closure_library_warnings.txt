@@ -1,9 +1,3 @@
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/xmldatasource.js WARNING - Access to private property STR_ATTRIBUTE_START_ of goog.ds not allowed here.
-  if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START_)) {
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/datasource/xmldatasource.js WARNING - Access to private property STR_ATTRIBUTE_START_ of goog.ds not allowed here.
-  if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START_)) {
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/gears/loggerclient.js WARNING - Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
   goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
 
