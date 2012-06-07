@@ -29,6 +29,7 @@ goog.provide('goog.testing.TestCase.Order');
 goog.provide('goog.testing.TestCase.Result');
 goog.provide('goog.testing.TestCase.Test');
 
+goog.require('goog.object');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.stacktrace');
 
@@ -307,6 +308,16 @@ goog.testing.TestCase.prototype.getTests = function() {
  */
 goog.testing.TestCase.prototype.getCount = function() {
   return this.tests_.length;
+};
+
+
+/**
+ * Returns the number of tests actually run in the test case, i.e. subtracting
+ * any which are skipped.
+ * @return {number} The number of un-ignored tests.
+ */
+goog.testing.TestCase.prototype.getActuallyRunCount = function() {
+  return this.testsToRun_ ? goog.object.getCount(this.testsToRun_) : 0;
 };
 
 
@@ -1102,8 +1113,17 @@ goog.testing.TestCase.Result.prototype.getSummary = function() {
           'Call G_testRunner.setStrict(false) if this is expected behavior.  ';
     }
   } else {
+    var failures = this.totalCount - this.successCount;
+    var suppressionMessage = '';
+
+    var countOfRunTests = this.testCase_.getActuallyRunCount();
+    if (countOfRunTests) {
+      failures = countOfRunTests - this.successCount;
+      suppressionMessage = ', ' +
+          (this.totalCount - countOfRunTests) + ' suppressed by querystring';
+    }
     summary += this.successCount + ' passed, ' +
-        (this.totalCount - this.successCount) + ' failed.\n' +
+        failures + ' failed' + suppressionMessage + '.\n' +
         Math.round(this.runTime / this.runCount) + ' ms/test. ' +
         this.numFilesLoaded + ' files loaded.';
   }
