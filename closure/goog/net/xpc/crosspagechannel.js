@@ -553,9 +553,8 @@ goog.net.xpc.CrossPageChannel.prototype.continueConnection_ = function() {
  */
 goog.net.xpc.CrossPageChannel.prototype.close = function() {
   this.cleanUpIncompleteConnection_();
-  if (!this.isConnected()) return;
   this.state_ = goog.net.xpc.ChannelStates.CLOSED;
-  this.transport_.dispose();
+  goog.dispose(this.transport_);
   this.transport_ = null;
   this.connectCb_ = null;
   goog.dispose(this.connectionDelay_);
@@ -769,8 +768,6 @@ goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable_ = function(
 
 /** @override */
 goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
-
   this.close();
 
   this.peerWindowObject_ = null;
@@ -778,6 +775,7 @@ goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
   delete goog.net.xpc.channels_[this.name];
   goog.dispose(this.peerLoadHandler_);
   delete this.peerLoadHandler_;
+  goog.base(this, 'disposeInternal');
 };
 
 
@@ -787,9 +785,6 @@ goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
  */
 goog.net.xpc.CrossPageChannel.disposeAll_ = function() {
   for (var name in goog.net.xpc.channels_) {
-    var ch = goog.net.xpc.channels_[name];
-    if (ch) {
-      ch.dispose();
-    }
+    goog.dispose(goog.net.xpc.channels_[name]);
   }
 };

@@ -23,7 +23,7 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/cro
   for (var name in goog.net.xpc.channels_) {
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/crosspagechannel.js WARNING - Access to private property channels_ of goog.net.xpc not allowed here.
-    var ch = goog.net.xpc.channels_[name];
+    goog.dispose(goog.net.xpc.channels_[name]);
 
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/frameelementmethodtransport.js WARNING - Access to private property iframeElement_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
     this.iframeElm_ = this.channel_.iframeElement_;

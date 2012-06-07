@@ -246,7 +246,7 @@ goog.net.xpc.NativeMessagingTransport.sendTimerId_ = 0;
 goog.net.xpc.NativeMessagingTransport.prototype.couldPeerVersionBe_ =
     function(version) {
   return this.peerProtocolVersion_ == null ||
-      this.peerProtocolVersion_ == version; 
+      this.peerProtocolVersion_ == version;
 };
 
 
@@ -569,7 +569,6 @@ goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ =
 
 /** @override */
 goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
   if (this.initialized_) {
     var listenWindow = this.getWindow();
     var uid = goog.getUid(listenWindow);
@@ -607,6 +606,8 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
   // goog.net.xpc.NativeMessagingTransport.prototype.send and has a closure over
   // this.channel_.peerWindowObject_.
   delete this.send;
+
+  goog.base(this, 'disposeInternal');
 };
 
 

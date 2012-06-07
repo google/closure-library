@@ -474,6 +474,18 @@ function testUnescapeServiceName() {
 
 
 /**
+ * Tests the case where the channel is disposed before it is fully connected.
+ */
+function testDisposeBeforeConnect() {
+  asyncTestCase.waitForAsync('Checking disposal before connection.')
+  driver.createPeerIframe('new_iframe', false /* oneSidedHandshake */,
+      2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+      true /* opt_randomChannelNames */);
+  driver.connectOuterAndDispose();
+}
+
+
+/**
  * Driver for the tests for CrossPageChannel.
  *
  * @constructor
@@ -969,6 +981,35 @@ Driver.prototype.isTransportTestable_ = function() {
   }
 
   return testable;
+};
+
+
+/**
+ * Connect the outer channel but not the inner one.  Wait a short time, then
+ * dispose the outer channel and make sure it was torn down properly.
+ */
+Driver.prototype.connectOuterAndDispose = function() {
+  this.channel_.connect();
+  window.setTimeout(goog.bind(this.disposeAndCheck_, this), 2000);
+};
+
+
+/**
+ * Dispose the cross-page channel. Check that the transport was also
+ * disposed, and allow to run briefly to make sure no timers which will cause
+ * failures are still running.
+ */
+Driver.prototype.disposeAndCheck_ = function() {
+  assertFalse(this.channel_.isConnected());
+  var transport = this.channel_.transport_;
+  this.channel_.dispose();
+  assertNull(this.channel_.transport_);
+  assertTrue(this.channel_.isDisposed());
+  assertTrue(transport.isDisposed());
+
+  // Let any errors caused by erroneous retries happen.
+  window.setTimeout(goog.bind(asyncTestCase.continueTesting, asyncTestCase),
+      2000);
 };
 
 </script>
