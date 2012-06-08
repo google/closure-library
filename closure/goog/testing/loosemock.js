@@ -63,13 +63,39 @@ goog.testing.LooseExpectationCollection.prototype.getExpectations = function() {
 
 
 /**
- * This is a mock that does not care about the order of method calls. As a
- * result, it won't throw exceptions until verify() is called. The only
- * exception is that if a method is called that has no expectations, then an
- * exception will be thrown.
+ * A mock with loose call expectations. Whereas StrictMock verifies what calls
+ * are made, how many times they are called, and in what order they are called,
+ * LooseMock does not. For example:
+ * <pre>
+ *   var duck = new goog.testing.LooseMock(Duck);
+ *   duck.feet().$returns(2);
+ *   duck.fly().$returns(true);
+ *   duck.flies().$returns(true);
+ *   duck.activities().$returns(1);
+ *
+ *   duck.$replay();
+ *
+ *   assertTrue(duck.flies());
+ *   assertEquals(duck.flies(), duck.fly());
+ *   assertEquals(undefined, duck.runs());
+ *   assertEquals(duck.runs(), duck.run());
+ *   assertEquals(1, duck.activities());
+ *
+ *   duck.$verify();
+ * </pre>
+ *
+ * Some verification is often desirable for special cases, such as whether
+ * or not dispose() was called exactly once on a mock object. This is achieved
+ * by explicitly calling $times() or related methods. For example, if we want
+ * to ensure our duck object was disposed of properly, we can add the
+ * expectation explicity with duck.dispose().$times(1). The mock object will
+ * now verify the dispose() method is called exactly once. Loose mocks do not
+ * verify call order, though, so if we want to ensure the dispose() method was
+ * called last, we need to use a strick mock instead.
+ *
  * @param {Object} objectToMock The object to mock.
  * @param {boolean=} opt_ignoreUnexpectedCalls Whether to ignore unexpected
- *     calls.
+ *     calls. Default is true.
  * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
  *     a mock should be constructed from the static functions of a class.
  * @param {boolean=} opt_createProxy An optional argument denoting that
@@ -79,6 +105,9 @@ goog.testing.LooseExpectationCollection.prototype.getExpectations = function() {
  */
 goog.testing.LooseMock = function(objectToMock, opt_ignoreUnexpectedCalls,
     opt_mockStaticMethods, opt_createProxy) {
+  if (!goog.isDef(opt_ignoreUnexpectedCalls)) {
+    opt_ignoreUnexpectedCalls = true;
+  }
   goog.testing.Mock.call(this, objectToMock, opt_mockStaticMethods,
       opt_createProxy);
 
@@ -144,31 +173,34 @@ goog.testing.LooseMock.prototype.$recordCall = function(name, args) {
   // Start from the beginning of the expectations for this name,
   // and iterate over them until we find an expectation that matches
   // and also has calls remaining.
+  var expectation = null;
+  var candidate = undefined;  // save last candidate for $throwCallException
   var collection = this.$expectations_.get(name);
-  var matchingExpectation = null;
   var expectations = collection.getExpectations();
   for (var i = 0; i < expectations.length; i++) {
-    var expectation = expectations[i];
-    if (this.$verifyCall(expectation, name, args)) {
-      matchingExpectation = expectation;
+    candidate = expectations[i];
+    if (this.$verifyCall(candidate, name, args)) {
+      expectation = candidate;
       if (expectation.actualCalls < expectation.maxCalls) {
         break;
       } // else continue and see if we can find something that does match
     }
   }
-  if (matchingExpectation == null) {
-    this.$throwCallException(name, args, expectation);
+  if (expectation == null) {
+    this.$throwCallException(name, args, candidate);
   }
 
-  matchingExpectation.actualCalls++;
-  if (matchingExpectation.actualCalls > matchingExpectation.maxCalls) {
-    this.$throwException('Too many calls to ' + matchingExpectation.name +
-            '\nExpected: ' + matchingExpectation.maxCalls + ' but was: ' +
-            matchingExpectation.actualCalls);
+  expectation.actualCalls++;
+  if (expectation.actualCalls > expectation.maxCalls) {
+    if (!this.$ignoreUnexpectedCalls_ || expectation.explicitCounts) {
+      this.$throwException('Too many calls to ' + expectation.name +
+          '\nExpected: ' + expectation.maxCalls + ' but was: ' +
+          expectation.actualCalls);
+    }
   }
 
   this.$calls_.push([name, args]);
-  return this.$do(matchingExpectation, args);
+  return this.$do(expectation, args);
 };
 
 
@@ -185,29 +217,28 @@ goog.testing.LooseMock.prototype.$reset = function() {
 goog.testing.LooseMock.prototype.$replay = function() {
   goog.testing.LooseMock.superClass_.$replay.call(this);
 
-  // Verify that there are no expectations that can never be reached.
-  // This can't catch every situation, but it is a decent sanity check
-  // and it's similar to the behavior of EasyMock in java.
+  // Verify there are no expectations that can never be reached. If this
+  // expectation can be called infinite times, check if any subsequent
+  // expectation has the exact same argument list. This can't catch every
+  // situation, but it is a decent sanity check, and it's similar to the
+  // behavior of EasyMock in java.
   var collections = this.$expectations_.getValues();
   for (var i = 0; i < collections.length; i++) {
     var expectations = collections[i].getExpectations();
-    for (var j = 0; j < expectations.length; j++) {
+    for (var j = 0; j < expectations.length - 1; j++) {  // all but the last
       var expectation = expectations[j];
-      // If this expectation can be called infinite times, then
-      // check if any subsequent expectation has the exact same
-      // argument list.
       if (!isFinite(expectation.maxCalls)) {
+        var argumentList = expectation.argumentList;
         for (var k = j + 1; k < expectations.length; k++) {
           var laterExpectation = expectations[k];
           if (laterExpectation.minCalls > 0 &&
-              goog.array.equals(expectation.argumentList,
-                  laterExpectation.argumentList)) {
+              goog.array.equals(argumentList, laterExpectation.argumentList)) {
             var name = expectation.name;
-            var argsString = this.$argumentsAsString(expectation.argumentList);
+            var args = this.$argumentsAsString(expectation.argumentList);
             this.$throwException([
-                'Expected call to ', name, ' with arguments ', argsString,
-                ' has an infinite max number of calls; can\'t expect an',
-                ' identical call later with a positive min number of calls'
+              'Expected call to ', name, ' with arguments ', args,
+              ' has an infinite max number of calls; can\'t expect an',
+              ' identical call later with a positive min number of calls'
             ].join(''));
           }
         }
@@ -220,20 +251,23 @@ goog.testing.LooseMock.prototype.$replay = function() {
 /** @override */
 goog.testing.LooseMock.prototype.$verify = function() {
   goog.testing.LooseMock.superClass_.$verify.call(this);
-  var collections = this.$expectations_.getValues();
 
+  var collections = this.$expectations_.getValues();
+  var ignoreUnexpectedCalls = this.$ignoreUnexpectedCalls_;
   for (var i = 0; i < collections.length; i++) {
     var expectations = collections[i].getExpectations();
     for (var j = 0; j < expectations.length; j++) {
       var expectation = expectations[j];
-      if (expectation.actualCalls > expectation.maxCalls) {
-        this.$throwException('Too many calls to ' + expectation.name +
-            '\nExpected: ' + expectation.maxCalls + ' but was: ' +
-            expectation.actualCalls);
-      } else if (expectation.actualCalls < expectation.minCalls) {
-        this.$throwException('Not enough calls to ' + expectation.name +
-            '\nExpected: ' + expectation.minCalls + ' but was: ' +
-            expectation.actualCalls);
+      if (!ignoreUnexpectedCalls || expectation.explicitCounts) {
+        if (expectation.actualCalls > expectation.maxCalls) {
+          this.$throwException('Too many calls to ' + expectation.name +
+              '\nExpected: ' + expectation.maxCalls + ' but was: ' +
+              expectation.actualCalls);
+        } else if (expectation.actualCalls < expectation.minCalls) {
+          this.$throwException('Not enough calls to ' + expectation.name +
+              '\nExpected: ' + expectation.minCalls + ' but was: ' +
+              expectation.actualCalls);
+        }
       }
     }
   }

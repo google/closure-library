@@ -73,10 +73,18 @@ goog.testing.MockExpectation.prototype.minCalls = 1;
 
 
 /**
-  * The maximum number of times this method should be called.
-  * @type {number}
-  */
+ * The maximum number of times this method should be called.
+ * @type {number}
+ */
 goog.testing.MockExpectation.prototype.maxCalls = 1;
+
+
+/**
+ * Whether or not the number of times this method should be called was
+ * explicitly specified (e.g., with $times(), $anyTimes(), etc.).
+ * @type {boolean}
+ */
+goog.testing.MockExpectation.prototype.explicitCounts = false;
 
 
 /**
@@ -402,6 +410,7 @@ goog.testing.Mock.prototype.$does = function(func) {
 goog.testing.Mock.prototype.$atMostOnce = function() {
   this.$pendingExpectation.minCalls = 0;
   this.$pendingExpectation.maxCalls = 1;
+  this.$pendingExpectation.explicitCounts = true;
   return this;
 };
 
@@ -413,6 +422,7 @@ goog.testing.Mock.prototype.$atMostOnce = function() {
  */
 goog.testing.Mock.prototype.$atLeastOnce = function() {
   this.$pendingExpectation.maxCalls = Infinity;
+  this.$pendingExpectation.explicitCounts = true;
   return this;
 };
 
@@ -424,6 +434,7 @@ goog.testing.Mock.prototype.$atLeastOnce = function() {
 goog.testing.Mock.prototype.$anyTimes = function() {
   this.$pendingExpectation.minCalls = 0;
   this.$pendingExpectation.maxCalls = Infinity;
+  this.$pendingExpectation.explicitCounts = true;
   return this;
 };
 
@@ -436,6 +447,7 @@ goog.testing.Mock.prototype.$anyTimes = function() {
 goog.testing.Mock.prototype.$times = function(times) {
   this.$pendingExpectation.minCalls = times;
   this.$pendingExpectation.maxCalls = times;
+  this.$pendingExpectation.explicitCounts = true;
   return this;
 };
 
