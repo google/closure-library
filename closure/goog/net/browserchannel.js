@@ -353,6 +353,44 @@ goog.net.BrowserChannel.prototype.backChannelAttemptId_;
 
 
 /**
+ * The base part of the time before firing next retry request. Default is 5
+ * seconds. Note that a random delay is added (see {@link retryDelaySeedMs_})
+ * for all retries, and linear backoff is applied to the sum for subsequent
+ * retries.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.baseRetryDelayMs_ = 5 * 1000;
+
+
+/**
+ * A random time between 0 and this number of MS is added to the
+ * {@link baseRetryDelayMs_}. Default is 10 seconds.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.retryDelaySeedMs_ = 10 * 1000;
+
+
+/**
+ * Maximum number of attempts to connect to the server for forward channel
+ * requests. Defaults to 2.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.forwardChannelMaxRetries_ = 2;
+
+
+/**
+ * The timeout in milliseconds for a forward channel request. Defaults to 20
+ * seconds. Note that part of this timeout can be randomized.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.forwardChannelRequestTimeoutMs_ = 20 * 1000;
+
+
+/**
  * Function to deserialize a response payload. Defaults to
  * {@code goog.json.unsafeParse}.  The function should return an array.
  * @type {function(string): !Array}
@@ -402,14 +440,6 @@ goog.net.BrowserChannel.State = {
 
 
 /**
- * Maximum number of attempts to connect to the server for forward channel
- * requests.
- * @type {number}
- */
-goog.net.BrowserChannel.FORWARD_CHANNEL_MAX_RETRIES = 2;
-
-
-/**
  * The timeout in milliseconds for a forward channel request.
  * @type {number}
  */
@@ -422,22 +452,6 @@ goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT = 20 * 1000;
  * @type {number}
  */
 goog.net.BrowserChannel.BACK_CHANNEL_MAX_RETRIES = 3;
-
-
-/**
- * Default timeout in MS before the initial retry. Subsequent retries will be
- * slower.
- * @type {number}
- */
-goog.net.BrowserChannel.RETRY_DELAY_MS = 5 * 1000;
-
-
-/**
- * We will add a random time between 0 and this number of MS to retries to
- * the retry time for this request.
- * @type {number}
- */
-goog.net.BrowserChannel.RETRY_DELAY_SEED = 10 * 1000;
 
 
 /**
@@ -1160,8 +1174,28 @@ goog.net.BrowserChannel.prototype.setFailFast = function(failFast) {
  * in fail-fast mode.
  */
 goog.net.BrowserChannel.prototype.getForwardChannelMaxRetries = function() {
-  return this.failFast_ ?
-         0 : goog.net.BrowserChannel.FORWARD_CHANNEL_MAX_RETRIES;
+  return this.failFast_ ? 0 : this.forwardChannelMaxRetries_;
+};
+
+
+/**
+ * Sets the maximum number of attempts to connect to the server for forward
+ * channel requests.
+ * @param {number} retries The maximum number of attempts.
+ */
+goog.net.BrowserChannel.prototype.setForwardChannelMaxRetries =
+    function(retries) {
+  this.forwardChannelMaxRetries_ = retries;
+};
+
+
+/**
+ * Sets the timeout for a forward channel request.
+ * @param {number} timeoutMs The timeout in milliseconds.
+ */
+goog.net.BrowserChannel.prototype.setForwardChannelRequestTimeout =
+    function(timeoutMs) {
+  this.forwardChannelRequestTimeoutMs_ = timeoutMs;
 };
 
 
@@ -1424,9 +1458,8 @@ goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ =
   // randomize from 50%-100% of the forward channel timeout to avoid
   // a big hit if servers happen to die at once.
   request.setTimeout(
-      Math.round(goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT * 0.50) +
-      Math.round(goog.net.BrowserChannel.FORWARD_CHANNEL_RETRY_TIMEOUT * 0.50 *
-                 Math.random()));
+      Math.round(this.forwardChannelRequestTimeoutMs_ * 0.50) +
+      Math.round(this.forwardChannelRequestTimeoutMs_ * 0.50 * Math.random()));
   this.forwardChannelRequest_ = request;
   request.xmlHttpPost(uri, requestText, true);
 };
@@ -1961,8 +1994,8 @@ goog.net.BrowserChannel.prototype.onRequestComplete =
  * @private
  */
 goog.net.BrowserChannel.prototype.getRetryTime_ = function(retryCount) {
-  var retryTime = goog.net.BrowserChannel.RETRY_DELAY_MS +
-      Math.floor(Math.random() * goog.net.BrowserChannel.RETRY_DELAY_SEED);
+  var retryTime = this.baseRetryDelayMs_ +
+      Math.floor(Math.random() * this.retryDelaySeedMs_);
   if (!this.isActive()) {
     this.channelDebug_.debug('Inactive channel');
     retryTime =
@@ -1971,6 +2004,18 @@ goog.net.BrowserChannel.prototype.getRetryTime_ = function(retryCount) {
   // Backoff for subsequent retries
   retryTime = retryTime * retryCount;
   return retryTime;
+};
+
+
+/**
+ * @param {number} baseDelayMs The base part of the retry delay, in ms.
+ * @param {number} delaySeedMs A random delay between 0 and this is added to
+ *     the base part.
+ */
+goog.net.BrowserChannel.prototype.setRetryDelay = function(baseDelayMs,
+    delaySeedMs) {
+  this.baseRetryDelayMs_ = baseDelayMs;
+  this.retryDelaySeedMs_ = delaySeedMs;
 };
 
 
