@@ -626,7 +626,8 @@ goog.graphics.CanvasTextElement.prototype.updateText_ = function() {
   if (this.x1_ == this.x2_) {
     // Special case vertical text
     this.innerElement_.innerHTML =
-        goog.array.map(this.text_.split(''), goog.string.htmlEscape).
+        goog.array.map(this.text_.split(''),
+            function(entry) { return goog.string.htmlEscape(entry); }).
             join('<br>');
   } else {
     this.innerElement_.innerHTML = goog.string.htmlEscape(this.text_);
