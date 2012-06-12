@@ -1109,6 +1109,7 @@ goog.net.ChannelRequest.prototype.cleanup_ = function() {
     var xmlhttp = this.xmlHttp_;
     this.xmlHttp_ = null;
     xmlhttp.abort();
+    xmlhttp.dispose();
   }
 
   if (this.trident_) {
