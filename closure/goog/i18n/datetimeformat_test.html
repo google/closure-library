@@ -7,6 +7,7 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Closure Unit Tests - goog.i18n.DateTimeFormat</title>
 <script src="../base.js"></script>
@@ -105,34 +106,42 @@ See the COPYING file for details.
   };
 
   var date;
-  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
-  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
 
   function testHHmmss() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('HH:mm:ss');
     assertEquals('13:10:10', fmt.format(date));
   }
 
   function testhhmmssa() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('h:mm:ss a');
     assertEquals('1:10:10 nachm.', fmt.format(date));
   }
 
   function testEEEMMMddyy() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('EEE, MMM d, yy');
     assertEquals('Do., Jul 27, 06', fmt.format(date));
   }
 
   function testEEEEMMMddyy() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('EEEE,MMMM dd, yyyy');
     assertEquals('Donnerstag,Juli 27, 2006', fmt.format(date));
   }
 
   function testyyyyMMddG() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10, 250));
     var timeZone = goog.i18n.TimeZone.createTimeZone(420,
         goog.i18n.DateTimeSymbols_de);
@@ -142,12 +151,16 @@ See the COPYING file for details.
   }
 
   function testyyyyyMMMMM() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('yyyyy.MMMMM.dd GGG hh:mm aaa');
     assertEquals('2006.J.27 n. Chr. 01:10 nachm.', fmt.format(date));
   }
 
   function testQQQQyy() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 0, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('QQQQ yy');
     assertEquals('1. Quartal 06', fmt.format(date));
@@ -176,6 +189,8 @@ See the COPYING file for details.
   }
 
   function testQQyyyy() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 0, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('QQ yyyy');
     assertEquals('Q1 2006', fmt.format(date));
@@ -204,6 +219,8 @@ See the COPYING file for details.
   }
 
   function testMMddyyyyHHmmsszzz() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
     assertEquals('07/27/2006 13:10:10 ' + timezoneString(date),
@@ -211,6 +228,8 @@ See the COPYING file for details.
   }
 
   function testMMddyyyyHHmmssZ() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
     assertEquals('07/27/2006 13:10:10 ' + timezoneStringRFC(date),
@@ -218,6 +237,8 @@ See the COPYING file for details.
   }
 
   function testPatternMonthDayMedium() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat(
         goog.i18n.DateTimePatterns.MONTH_DAY_MEDIUM);
@@ -225,6 +246,8 @@ See the COPYING file for details.
   }
 
   function testQuote() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('HH \'o\'\'clock\'');
     assertEquals('13 o\'clock', fmt.format(date));
@@ -235,6 +258,8 @@ See the COPYING file for details.
   }
 
   function testFractionalSeconds() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 256);
     var fmt = new goog.i18n.DateTimeFormat('s:S');
     assertEquals('10:3', fmt.format(date));
@@ -249,6 +274,8 @@ See the COPYING file for details.
   }
 
   function testPredefinedFormatter() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 7, 4, 13, 49, 24, 000);
     var fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
     assertEquals('Freitag, 4. August 2006', fmt.format(date));
@@ -279,6 +306,8 @@ See the COPYING file for details.
   }
 
   function testMMddyyyyHHmmssZSimpleTimeZone() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     var date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
     var timeZone = goog.i18n.TimeZone.createTimeZone(480);
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
@@ -293,6 +322,8 @@ See the COPYING file for details.
 
 
   function testMMddyyyyHHmmssZCommonTimeZone() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     var date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
     var timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
@@ -315,6 +346,8 @@ See the COPYING file for details.
   }
 
   function testMMddyyyyHHmmsszSimpleTimeZone() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     var date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
     var timeZone = goog.i18n.TimeZone.createTimeZone(420);
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
@@ -329,6 +362,8 @@ See the COPYING file for details.
 
 
   function testMMddyyyyHHmmsszCommonTimeZone() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     var date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
     var timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
@@ -360,6 +395,8 @@ See the COPYING file for details.
   }
 
   function testMMddyyyyHHmmssvCommonTimeZone() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     var date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
     var timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
@@ -377,6 +414,8 @@ See the COPYING file for details.
   }
 
   function testMMddyyyyHHmmssvSimpleTimeZone() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     var date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
     var timeZone = goog.i18n.TimeZone.createTimeZone(420);
     var fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
@@ -391,6 +430,8 @@ See the COPYING file for details.
 
 
   function test_yyyyMMddG() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     var date = new Date(Date.UTC(2006, 6, 27, 20, 10, 10));
     var timeZone = goog.i18n.TimeZone.createTimeZone(420);
     var fmt = new goog.i18n.DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
@@ -404,6 +445,9 @@ See the COPYING file for details.
   }
 
   function test_daylightTimeTransition() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+
     // US PST transition to PDT on 2006/4/2/ 2:00am, jump to 2006/4/2 3:00am,
     // That's UTC time 2006/4/2 10:00am
     var timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
@@ -419,6 +463,9 @@ See the COPYING file for details.
   }
 
   function test_timeDisplayOnDaylighTimeTransition() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+
     // US PST transition to PDT on 2006/4/2/ 2:00am, jump to 2006/4/2 3:00am,
     var date = new Date(Date.UTC(2006, 4 - 1, 2, 2, 30, 0));
     var timeZone = goog.i18n.TimeZone.createTimeZone(0);
@@ -430,6 +477,20 @@ See the COPYING file for details.
     date = new Date(Date.UTC(2006, 10 - 1, 29, 1, 30, 0));
     fmt = new goog.i18n.DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
     assertEquals('10/29/2006 01:30:00 +0000', fmt.format(date, timeZone));
+  }
+
+  function test_nativeDigits() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fa;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fa;
+
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    var timeZone = goog.i18n.TimeZone.createTimeZone(420);
+    var fmt = new goog.i18n.DateTimeFormat('y/MM/dd H:mm:ss٫SS');
+    assertEquals('۲۰۰۶/۰۷/۲۷ ۱۳:۱۰:۱۰٫۲۵', fmt.format(date));
+
+    // Make sure standardized timezone formats don't use native digits
+    fmt = new goog.i18n.DateTimeFormat('Z');
+    assertEquals('-0700', fmt.format(date, timeZone));
   }
 </script>
 </body>

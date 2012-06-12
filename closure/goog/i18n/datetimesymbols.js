@@ -238,6 +238,7 @@ goog.i18n.DateTimeSymbols_am = {
  * Date/time formatting symbols for locale ar.
  */
 goog.i18n.DateTimeSymbols_ar = {
+  ZERODIGIT: 0x0660,
   ERAS: ['ق.م', 'م'],
   ERANAMES: ['قبل الميلاد', 'ميلادي'],
   NARROWMONTHS: ['ي', 'ف', 'م', 'أ', 'و', 'ن', 'ل', 'غ', 'س', 'ك',
@@ -328,6 +329,7 @@ goog.i18n.DateTimeSymbols_bg = {
  * Date/time formatting symbols for locale bn.
  */
 goog.i18n.DateTimeSymbols_bn = {
+  ZERODIGIT: 0x09E6,
   ERAS: ['খৃষ্টপূর্ব', 'খৃষ্টাব্দ'],
   ERANAMES: ['খৃষ্টপূর্ব', 'খৃষ্টাব্দ'],
   NARROWMONTHS: ['জা', 'ফে', 'মা', 'এ', 'মে', 'জুন',
@@ -1114,6 +1116,7 @@ goog.i18n.DateTimeSymbols_eu = {
  * Date/time formatting symbols for locale fa.
  */
 goog.i18n.DateTimeSymbols_fa = {
+  ZERODIGIT: 0x06F0,
   ERAS: ['ق.م.', 'م.'],
   ERANAMES: ['قبل از میلاد', 'میلادی'],
   NARROWMONTHS: ['ژ', 'ف', 'م', 'آ', 'م', 'ژ', 'ژ', 'ا', 'س', 'ا',
