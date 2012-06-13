@@ -57,6 +57,8 @@ goog.require('goog.style');
  * @constructor
  */
 goog.fx.AbstractDragDrop = function() {
+  goog.base(this);
+
   /**
    * List of items that makes up the drag source or drop target.
    * @type {Array.<goog.fx.DragDropItem>}
@@ -1124,7 +1126,7 @@ goog.fx.AbstractDragDrop.prototype.getEventPosition = function(event) {
 
 /** @override */
 goog.fx.AbstractDragDrop.prototype.disposeInternal = function() {
-  goog.fx.AbstractDragDrop.superClass_.disposeInternal.call(this);
+  goog.base(this, 'disposeInternal');
   this.removeItems();
 };
 
@@ -1153,7 +1155,7 @@ goog.fx.DragDropEvent = function(type, source, sourceItem,
                                  opt_subtarget) {
   // TODO(eae): Get rid of all the optional parameters and have the caller set
   // the fields directly instead.
-  goog.events.Event.call(this, type);
+  goog.base(this, type);
 
   /**
    * Reference to the source goog.fx.AbstractDragDrop object.
@@ -1221,8 +1223,7 @@ goog.inherits(goog.fx.DragDropEvent, goog.events.Event);
 
 /** @override */
 goog.fx.DragDropEvent.prototype.disposeInternal = function() {
-  goog.fx.DragDropEvent.superClass_.disposeInternal.call(this);
-
+  goog.base(this, 'disposeInternal');
   delete this.dragSource;
   delete this.dragSourceItem;
   delete this.dropTarget;
@@ -1243,6 +1244,7 @@ goog.fx.DragDropEvent.prototype.disposeInternal = function() {
  * @constructor
  */
 goog.fx.DragDropItem = function(element, opt_data) {
+  goog.base(this);
 
   /**
    * Reference to drag source/target element
