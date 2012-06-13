@@ -160,7 +160,7 @@ goog.structs.Map.prototype.containsValue = function(val) {
 /**
  * Whether this map is equal to the argument map.
  * @param {goog.structs.Map} otherMap The map against which to test equality.
- * @param {function(*, *) : boolean=} opt_equalityFn Optional equality function
+ * @param {function(?, ?) : boolean=} opt_equalityFn Optional equality function
  *     to test equality of values. If not specified, this will test whether
  *     the values contained in each map are identical objects.
  * @return {boolean} Whether the maps are equal.
