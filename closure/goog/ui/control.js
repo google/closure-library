@@ -570,6 +570,10 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
         listen(element, goog.events.EventType.MOUSEDOWN, this.handleMouseDown).
         listen(element, goog.events.EventType.MOUSEUP, this.handleMouseUp).
         listen(element, goog.events.EventType.MOUSEOUT, this.handleMouseOut);
+    if (this.handleContextMenu != goog.nullFunction) {
+      handler.listen(element, goog.events.EventType.CONTEXTMENU,
+          this.handleContextMenu);
+    }
     if (goog.userAgent.IE) {
       handler.listen(element, goog.events.EventType.DBLCLICK,
           this.handleDblClick);
@@ -582,6 +586,10 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
             this.handleMouseDown).
         unlisten(element, goog.events.EventType.MOUSEUP, this.handleMouseUp).
         unlisten(element, goog.events.EventType.MOUSEOUT, this.handleMouseOut);
+    if (this.handleContextMenu != goog.nullFunction) {
+      handler.unlisten(element, goog.events.EventType.CONTEXTMENU,
+          this.handleContextMenu);
+    }
     if (goog.userAgent.IE) {
       handler.unlisten(element, goog.events.EventType.DBLCLICK,
           this.handleDblClick);
@@ -1170,6 +1178,13 @@ goog.ui.Control.prototype.handleMouseOut = function(e) {
     }
   }
 };
+
+
+/**
+ * Handles contextmenu events.
+ * @param {goog.events.BrowserEvent} e Event to handle.
+ */
+goog.ui.Control.prototype.handleContextMenu = goog.nullFunction;
 
 
 /**

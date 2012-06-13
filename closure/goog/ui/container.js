@@ -399,7 +399,8 @@ goog.ui.Container.prototype.enterDocument = function() {
         goog.events.EventType.MOUSEDOWN,
         goog.events.EventType.MOUSEUP,
         goog.events.EventType.MOUSEOVER,
-        goog.events.EventType.MOUSEOUT
+        goog.events.EventType.MOUSEOUT,
+        goog.events.EventType.CONTEXTMENU
       ], this.handleChildMouseEvents);
 
   // If the container is focusable, set up keyboard event handling.
@@ -621,6 +622,9 @@ goog.ui.Container.prototype.handleChildMouseEvents = function(e) {
         break;
       case goog.events.EventType.MOUSEOUT:
         control.handleMouseOut(e);
+        break;
+      case goog.events.EventType.CONTEXTMENU:
+        control.handleContextMenu(e);
         break;
     }
   }
