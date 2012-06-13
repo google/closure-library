@@ -1000,7 +1000,7 @@ goog.array.sort = function(arr, opt_compareFn) {
  * O(n) overhead of copying the array twice.
  *
  * @param {Array} arr The array to be sorted.
- * @param {function(*, *): number=} opt_compareFn Optional comparison function
+ * @param {function(?, ?): number=} opt_compareFn Optional comparison function
  *     by which the array is to be ordered. Should take 2 arguments to compare,
  *     and return a negative number, zero, or a positive number depending on
  *     whether the first argument is less than, equal to, or greater than the
@@ -1107,7 +1107,7 @@ goog.array.compare = function(arr1, arr2, opt_equalsFn) {
  * 3-way array compare function.
  * @param {!goog.array.ArrayLike} arr1 The first array to compare.
  * @param {!goog.array.ArrayLike} arr2 The second array to compare.
- * @param {(function(*, *): number)=} opt_compareFn Optional comparison function
+ * @param {(function(?, ?): number)=} opt_compareFn Optional comparison function
  *     by which the array is to be ordered. Should take 2 arguments to compare,
  *     and return a negative number, zero, or a positive number depending on
  *     whether the first argument is less than, equal to, or greater than the
