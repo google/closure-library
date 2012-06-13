@@ -584,6 +584,7 @@ goog.ui.PopupBase.prototype.hide_ = function(opt_target) {
 
   // Set visibility to hidden even if there is a transition.
   this.isVisible_ = false;
+  this.lastHideTime_ = goog.now();
 
   // If there is transition to play, we play it and only hide the element
   // (and fire HIDE event) after the transition is over.
@@ -707,7 +708,6 @@ goog.ui.PopupBase.prototype.onBeforeHide_ = function(opt_target) {
  * @suppress {underscore}
  */
 goog.ui.PopupBase.prototype.onHide_ = function(opt_target) {
-  this.lastHideTime_ = goog.now();
   this.dispatchEvent({
     type: goog.ui.PopupBase.EventType.HIDE,
     target: opt_target

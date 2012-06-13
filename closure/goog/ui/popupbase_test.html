@@ -272,6 +272,19 @@ function testSetVisibleWorksCorrectlyWithTransitions() {
   clock.tick(1100);
 }
 
+function testWasRecentlyVisibleWorksCorrectlyWithTransitions() {
+  popup.setTransition(
+      goog.fx.css3.fadeIn(popup.getElement(), 1),
+      goog.fx.css3.fadeOut(popup.getElement(), 1));
+
+  popup.setVisible(true);
+  clock.tick(1100);
+  popup.setVisible(false);
+  assertTrue(popup.isOrWasRecentlyVisible());
+  clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
+  assertFalse(popup.isOrWasRecentlyVisible());
+}
+
 
 
 /**
