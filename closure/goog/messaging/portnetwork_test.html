@@ -34,6 +34,16 @@ var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 // Use a relatively long timeout because workers can take a while to start up.
 asyncTestCase.stepTimeout = 5 * 1000;
 
+var timer;
+
+function setUp() {
+  timer = new goog.Timer(50);
+}
+
+function tearDown() {
+  goog.dispose(timer);
+}
+
 function testRouteMessageThroughWorkers() {
   if (!('MessageChannel' in goog.global)) {
     return;
@@ -46,7 +56,7 @@ function testRouteMessageThroughWorkers() {
       new Worker('testdata/portnetwork_worker2.js')));
   master.addPort(
       'frame', goog.messaging.PortChannel.forEmbeddedWindow(
-          window.frames['inner'], '*'));
+          window.frames['inner'], '*', timer));
 
   master.dial('worker1').registerService('result', function(msg) {
     assertArrayEquals(['main', 'worker2', 'frame', 'worker1'], msg);

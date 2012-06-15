@@ -36,6 +36,7 @@ var portChannel;
 
 var workerChannel;
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+var timer;
 
 // Use a relatively long timeout because workers can take a while to start up.
 asyncTestCase.stepTimeout = 3 * 1000;
@@ -53,6 +54,7 @@ function tearDownPage() {
 }
 
 function setUp() {
+  timer = new goog.Timer(50);
   mockControl = new goog.testing.MockControl();
   asyncMockControl = new goog.testing.async.MockControl(mockControl);
   mockPort = new goog.events.EventTarget();
@@ -61,6 +63,7 @@ function setUp() {
 }
 
 function tearDown() {
+  goog.dispose(timer);
   portChannel.dispose();
   mockControl.$verifyAll();
 }
@@ -249,7 +252,7 @@ function testWindow() {
   }
   withIframe(function() {
     var iframeChannel = goog.messaging.PortChannel.forEmbeddedWindow(
-        window.frames['inner'], '*');
+        window.frames['inner'], '*', timer);
     iframeChannel.registerService('pong', function(msg) {
       assertEquals('fizzbang', msg);
 
@@ -267,7 +270,7 @@ function testWindowCancelled() {
   }
   withIframe(function() {
     var iframeChannel = goog.messaging.PortChannel.forEmbeddedWindow(
-        window.frames['inner'], '*');
+        window.frames['inner'], '*', timer);
     iframeChannel.cancel();
 
     iframeChannel.registerService('pong', function(msg) {
@@ -292,7 +295,7 @@ function testWindowWontSendToWrongOrigin() {
   }
   withIframe(function() {
     var iframeChannel = goog.messaging.PortChannel.forEmbeddedWindow(
-        window.frames['inner'], 'http://somewhere-else.com');
+        window.frames['inner'], 'http://somewhere-else.com', timer);
     iframeChannel.registerService('pong', function(msg) {
       fail('Should not receive pong from unexpected origin');
       iframeChannel.dispose();
@@ -314,7 +317,7 @@ function testWindowWontReceiveFromWrongOrigin() {
   }
   withIframe(function() {
     var iframeChannel = goog.messaging.PortChannel.forEmbeddedWindow(
-        window.frames['inner'], '*');
+        window.frames['inner'], '*', timer);
     iframeChannel.registerService('pong', function(msg) {
       fail('Should not receive pong from unexpected origin');
       iframeChannel.dispose();
