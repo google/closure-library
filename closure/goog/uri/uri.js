@@ -97,6 +97,23 @@ goog.Uri = function(opt_uri, opt_ignoreCase) {
 
 
 /**
+ * If true, we preserve the type of query parameters set programmatically.
+ *
+ * This means that if you set a parameter to a boolean, and then call
+ * getParameterValue, you will get a boolean back.
+ *
+ * If false, we will coerce parameters to strings, just as they would
+ * appear in real URIs.
+ *
+ * TODO(nicksantos): Set this to false once people have time to flag this
+ * on in tests.
+ *
+ * @type {boolean}
+ */
+goog.Uri.preserveParameterTypesCompatibilityFlag = true;
+
+
+/**
  * Parameter name added to stop caching.
  * @type {string}
  */
@@ -1303,11 +1320,16 @@ goog.Uri.QueryData.prototype.set = function(key, value) {
  * @param {string} key The name of the parameter to get the value for.
  * @param {*=} opt_default The default value to return if the query data
  *     has no such key.
- * @return {*} The first value associated with the key.
+ * @return {*} The first string value associated with the key, or opt_default
+ *     if there's no value.
  */
 goog.Uri.QueryData.prototype.get = function(key, opt_default) {
   var values = key ? this.getValues(key) : [];
-  return values.length > 0 ? values[0] : opt_default;
+  if (goog.Uri.preserveParameterTypesCompatibilityFlag) {
+    return values.length > 0 ? values[0] : opt_default;
+  } else {
+    return values.length > 0 ? String(values[0]) : opt_default;
+  }
 };
 
 
