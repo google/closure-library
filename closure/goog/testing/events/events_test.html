@@ -29,9 +29,10 @@ See the COPYING file for details.
 </head>
 <body>
 <div id="root"></div>
-<input id='testButton' type='input' value='Click Me' />
+<input id='testButton' type='input' value='Click Me'>
 <div id='input'>Prevent Default these events:<br/></div>
 <div id='log' style='position:absolute;right:0;top:0'>Logged events:</div>
+<div id='parentEl'><div id='childEl'>hello!</div></div>
 <script type="text/javascript">
   var firedEventTypes;
   var firedEventCoordinates;
@@ -42,8 +43,11 @@ See the COPYING file for details.
   var log = goog.dom.getElement('log');
   var input = goog.dom.getElement('input');
   var testButton = goog.dom.getElement('testButton');
+  var parentEl = goog.dom.getElement('parentEl');
+  var childEl = goog.dom.getElement('childEl');
   var coordinate = new goog.math.Coordinate(123, 456);
   var stubs = new goog.testing.PropertyReplacer();
+  var eventCount;
 
   function setUp() {
     stubs.reset();
@@ -68,6 +72,38 @@ See the COPYING file for details.
         firedKeyCodes.push(e.keyCode);
       });
     }
+
+    eventCount = {
+      parentBubble: 0,
+      parentCapture: 0,
+      childCapture: 0,
+      childBubble: 0
+    };
+    // Event listeners for the capture/bubble test.
+    goog.events.listen(parentEl, goog.events.EventType.CLICK,
+        function(e) {
+          eventCount.parentCapture++;
+          assertEquals(parentEl, e.currentTarget);
+          assertEquals(childEl, e.target);
+        }, true);
+    goog.events.listen(childEl, goog.events.EventType.CLICK,
+        function(e) {
+          eventCount.childCapture++;
+          assertEquals(childEl, e.currentTarget);
+          assertEquals(childEl, e.target);
+        }, true);
+    goog.events.listen(childEl, goog.events.EventType.CLICK,
+        function(e) {
+          eventCount.childBubble++;
+          assertEquals(childEl, e.currentTarget);
+          assertEquals(childEl, e.target);
+        });
+    goog.events.listen(parentEl, goog.events.EventType.CLICK,
+        function(e) {
+          eventCount.parentBubble++;
+          assertEquals(parentEl, e.currentTarget);
+          assertEquals(childEl, e.target);
+        });
   }
 
   function tearDownPage() {
@@ -404,6 +440,86 @@ See the COPYING file for details.
     stubs.set(goog.userAgent, 'WEBKIT', true);
     assertTrue(goog.testing.events.fireContextMenuSequence(root));
     assertEventTypes(['mousedown', 'contextmenu', 'mouseup', 'click']);
+  }
+
+  function testCaptureBubble_simple() {
+    assertTrue(goog.testing.events.fireClickEvent(childEl));
+    assertObjectEquals({
+      parentCapture: 1,
+      childCapture: 1,
+      childBubble: 1,
+      parentBubble: 1
+    }, eventCount);
+  }
+
+  function testCaptureBubble_preventDefault() {
+    goog.events.listen(childEl, goog.events.EventType.CLICK,
+        function(e) {
+          e.preventDefault();
+        });
+    assertFalse(goog.testing.events.fireClickEvent(childEl));
+    assertObjectEquals({
+      parentCapture: 1,
+      childCapture: 1,
+      childBubble: 1,
+      parentBubble: 1
+    }, eventCount);
+  }
+
+  function testCaptureBubble_stopPropagationParentCapture() {
+    goog.events.listen(parentEl, goog.events.EventType.CLICK,
+        function(e) {
+          e.stopPropagation();
+        }, true /* capture */);
+    assertTrue(goog.testing.events.fireClickEvent(childEl));
+    assertObjectEquals({
+      parentCapture: 1,
+      childCapture: 0,
+      childBubble: 0,
+      parentBubble: 0
+    }, eventCount);
+  }
+
+  function testCaptureBubble_stopPropagationChildCapture() {
+    goog.events.listen(childEl, goog.events.EventType.CLICK,
+        function(e) {
+          e.stopPropagation();
+        }, true /* capture */);
+    assertTrue(goog.testing.events.fireClickEvent(childEl));
+    assertObjectEquals({
+      parentCapture: 1,
+      childCapture: 1,
+      childBubble: 0,
+      parentBubble: 0
+    }, eventCount);
+  }
+
+  function testCaptureBubble_stopPropagationChildBubble() {
+    goog.events.listen(childEl, goog.events.EventType.CLICK,
+        function(e) {
+          e.stopPropagation();
+        });
+    assertTrue(goog.testing.events.fireClickEvent(childEl));
+    assertObjectEquals({
+      parentCapture: 1,
+      childCapture: 1,
+      childBubble: 1,
+      parentBubble: 0
+    }, eventCount);
+  }
+
+  function testCaptureBubble_stopPropagationParentBubble() {
+    goog.events.listen(parentEl, goog.events.EventType.CLICK,
+        function(e) {
+          e.stopPropagation();
+        });
+    assertTrue(goog.testing.events.fireClickEvent(childEl));
+    assertObjectEquals({
+      parentCapture: 1,
+      childCapture: 1,
+      childBubble: 1,
+      parentBubble: 1
+    }, eventCount);
   }
 
   /**
