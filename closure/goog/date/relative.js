@@ -150,18 +150,14 @@ goog.date.relative.format = function(dateMs) {
           delta, future, goog.date.relative.Unit_.HOURS);
 
     } else {
-      // We can be more than 24 hours apart but still only 1 day apart, so we
-      // compare the closest time from today against the target time to find
-      // the number of days in the delta.
-      var midnight = new Date(goog.now());
-      midnight.setHours(0);
-      midnight.setMinutes(0);
-      midnight.setSeconds(0);
-      midnight.setMilliseconds(0);
+      // Timezone offset is in minutes.  We pass goog.now so that we can easily
+      // unit test this, the JSCompiler will optimize it away for us.
+      var offset = new Date(goog.now()).getTimezoneOffset() *
+          goog.date.relative.MINUTE_MS_;
 
       // Convert to days ago.
-      delta = Math.ceil(
-          (midnight.getTime() - dateMs) / goog.date.relative.DAY_MS_);
+      delta = Math.floor((now + offset) / goog.date.relative.DAY_MS_) -
+              Math.floor((dateMs + offset) / goog.date.relative.DAY_MS_);
 
       if (future) {
         delta *= -1;
