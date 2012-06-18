@@ -185,8 +185,8 @@ goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_ =
  *       'H4')
  * </ul>
  * @param {!goog.ui.Select} button "Format block" menu button.
- * @param {!Array.<{caption: string, command: string}>} formats Array of format
- *     option descriptors.
+ * @param {!Array.<{caption: string, command: goog.dom.TagName}>} formats Array
+ *     of format option descriptors.
  */
 goog.ui.editor.ToolbarFactory.addFormatOptions = function(button, formats) {
   goog.array.forEach(formats, function(format) {

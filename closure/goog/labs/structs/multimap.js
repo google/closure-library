@@ -236,11 +236,12 @@ goog.labs.structs.Multimap.prototype.containsKey = function(key) {
  *     value) pair with the given value.
  */
 goog.labs.structs.Multimap.prototype.containsValue = function(value) {
-  return goog.array.some(this.map_.getValues(), function(values) {
-    return goog.array.some(values, function(v) {
-      return goog.labs.object.is(v, value);
-    });
-  });
+  return goog.array.some(this.map_.getValues(),
+      function(values) {
+        return goog.array.some(/** @type {Array} */ (values), function(v) {
+          return goog.labs.object.is(v, value);
+        });
+      });
 };
 
 

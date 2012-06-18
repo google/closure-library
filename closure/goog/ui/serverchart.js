@@ -643,9 +643,9 @@ goog.ui.ServerChart.prototype.getBackgroundFill = function() {
     var fillSpecifications = value.split('|');
     var valid = true;
     goog.array.forEach(fillSpecifications, function(spec) {
-      spec = spec.split(',');
-      if (valid && spec[1] == 's') {
-        result.push({area: spec[0], effect: spec[1], color: spec[2]});
+      var parts = spec.split(',');
+      if (valid && parts[1] == 's') {
+        result.push({area: parts[0], effect: parts[1], color: parts[2]});
       } else {
         // If the format is unsupported, return an empty array.
         result = [];

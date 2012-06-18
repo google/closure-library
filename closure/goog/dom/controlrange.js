@@ -230,7 +230,7 @@ goog.dom.ControlRange.prototype.isRangeInDocument = function() {
     returnValue = goog.array.every(this.getElements(), function(element) {
       // On IE, this throws an exception when the range is detached.
       return goog.userAgent.IE ?
-          element.parentNode :
+          !!element.parentNode :
           goog.dom.contains(element.ownerDocument.body, element);
     });
   } catch (e) {
