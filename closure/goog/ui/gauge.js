@@ -676,9 +676,19 @@ goog.ui.Gauge.prototype.draw_ = function() {
     var path = new goog.graphics.Path();
     var fromAngle = this.valueToAngle_(fromValue);
     var toAngle = this.valueToAngle_(toValue);
-    path.arc(cx, cy, r, r, fromAngle, toAngle - fromAngle, false);
-    path.arc(cx, cy, rBackgroundInternal, rBackgroundInternal,
-        toAngle, fromAngle - toAngle, true);
+    // Move to outer point at "from" angle
+    path.moveTo(
+        cx + goog.math.angleDx(fromAngle, r),
+        cy + goog.math.angleDy(fromAngle, r));
+    // Arc to outer point at "to" angle
+    path.arcTo(r, r, fromAngle, toAngle - fromAngle);
+    // Line to inner point at "to" angle
+    path.lineTo(
+        cx + goog.math.angleDx(toAngle, rBackgroundInternal),
+        cy + goog.math.angleDy(toAngle, rBackgroundInternal));
+    // Arc to inner point at "from" angle
+    path.arcTo(
+        rBackgroundInternal, rBackgroundInternal, toAngle, fromAngle - toAngle);
     path.close();
     fill = new goog.graphics.SolidFill(rangeColor.backgroundColor);
     graphics.drawPath(path, null, fill);

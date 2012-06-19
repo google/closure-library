@@ -100,12 +100,6 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/equation
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/equation/texeditor.js WARNING - Access to protected property setEquation of goog.ui.equation.TexEditor.prototype.texPane_ not allowed here.
   this.texPane_.setEquation(equation);
 
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/gauge.js WARNING - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
-    path.arc(cx, cy, r, r, fromAngle, toAngle - fromAngle, false);
-
-javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/gauge.js WARNING - Property arc of type goog.graphics.Path has been deprecated: Use {@code arcTo} or {@code arcToAsCurves} instead.
-    path.arc(cx, cy, rBackgroundInternal, rBackgroundInternal,
-
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/ui/hsvapalette.js WARNING - Overriding private property of goog.ui.HsvPalette.
   this.class_ = opt_class || goog.getCssName('goog-hsva-palette');
 
