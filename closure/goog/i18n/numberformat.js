@@ -124,6 +124,30 @@ goog.i18n.NumberFormat.isEnforceAsciiDigits = function() {
 
 
 /**
+ * Sets minimum number of fraction digits.
+ * @param {number} min the minimum.
+ */
+goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
+  if (min > this.maximumFractionDigits_) {
+    throw Error('Min value must be less than max value');
+  }
+  this.minimumFractionDigits_ = min;
+};
+
+
+/**
+ * Sets maximum number of fraction digits.
+ * @param {number} max the maximum.
+ */
+goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
+  if (this.minimumFractionDigits_ > max) {
+    throw Error('Min value must be less than max value');
+  }
+  this.maximumFractionDigits_ = max;
+};
+
+
+/**
  * Apply provided pattern, result are stored in member variables.
  *
  * @param {string} pattern String pattern being applied.
