@@ -166,7 +166,7 @@ goog.math.RangeSet.prototype.remove = function(a) {
     b.end = a.start;
   }
 
-  for (i = insertionPoint, b; b = this.ranges_[i]; i++) {
+  for (i = insertionPoint; b = this.ranges_[i]; i++) {
     b.start = Math.max(a.end, b.start);
     if (a.end < b.end) {
       break;
