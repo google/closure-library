@@ -50,7 +50,11 @@ See the COPYING file for details.
     assertEquals('2 hours ago', fn(timestamp('23 March 2009 12:20:56')));
     assertEquals('23 hours ago', fn(timestamp('22 March 2009 15:30:56')));
     assertEquals('1 day ago', fn(timestamp('22 March 2009 12:11:04')));
+    assertEquals('1 day ago', fn(timestamp('22 March 2009 00:00:00')));
+    assertEquals('2 days ago', fn(timestamp('21 March 2009 23:59:59')));
     assertEquals('2 days ago', fn(timestamp('21 March 2009 10:30:56')));
+    assertEquals('2 days ago', fn(timestamp('21 March 2009 00:00:00')));
+    assertEquals('3 days ago', fn(timestamp('20 March 2009 23:59:59')));
   }
 
   function testFormatRelativeForFutureDates() {
@@ -67,8 +71,13 @@ See the COPYING file for details.
     assertEquals('in 59 minutes', fn(timestamp('23 March 2009 15:29:15')));
     assertEquals('in 2 hours', fn(timestamp('23 March 2009 17:20:56')));
     assertEquals('in 23 hours', fn(timestamp('24 March 2009 13:30:56')));
+    assertEquals('in 1 day', fn(timestamp('24 March 2009 14:31:07')));
     assertEquals('in 1 day', fn(timestamp('24 March 2009 16:11:04')));
+    assertEquals('in 1 day', fn(timestamp('24 March 2009 23:59:59')));
+    assertEquals('in 2 days', fn(timestamp('25 March 2009 00:00:00')));
     assertEquals('in 2 days', fn(timestamp('25 March 2009 10:30:56')));
+    assertEquals('in 2 days', fn(timestamp('25 March 2009 23:59:59')));
+    assertEquals('in 3 days', fn(timestamp('26 March 2009 00:00:00')));
   }
 
 
