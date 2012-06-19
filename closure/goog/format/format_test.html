@@ -190,6 +190,54 @@ function testInsertWordBreaks() {
       insertWordBreaks('ab\u0300c\u0301def', 2));
 }
 
+function testInsertWordBreaksWithFormattingCharacters() {
+  // HTML that gets inserted is browser dependent, ensure for the test it is
+  // a constant - browser dependent HTML is for display purposes only.
+  propertyReplacer.set(goog.format, 'WORD_BREAK_HTML', '<wbr>');
+  var insertWordBreaks = goog.format.insertWordBreaks;
+
+  // A date in Arabic-Indic digits with Right-to-Left Marks (U+200F).
+  // The date is "11<RLM>/01<RLM>/2012".
+  var textWithRLMs = 'This is a date - ' +
+      '\u0661\u0661\u200f/\u0660\u0661\u200f/\u0662\u0660\u0661\u0662';
+  // A string of 10 Xs with invisible formatting characters in between.
+  // These characters are in the ranges U+200C to U+200F and U+202A to
+  // U+202E, inclusive. See: http://unicode.org/charts/PDF/U2000.pdf
+  var stringWithInvisibleFormatting = 'X\u200cX\u200dX\u200eX\u200fX\u202a' +
+      'X\u202bX\u202cX\u202dX\u202eX';
+  // A string formed by concatenating copies of the previous string alternating
+  // with characters which behave like breaking spaces. Besides the space
+  // character itself, the other characters are in the range U+2000 to U+200B
+  // inclusive, except for the exclusion of U+2007 and inclusion of U+2029.
+  // See: http://unicode.org/charts/PDF/U2000.pdf
+  var stringWithInvisibleFormattingAndSpacelikeCharacters =
+      stringWithInvisibleFormatting + ' ' +
+      stringWithInvisibleFormatting + '\u2000' +
+      stringWithInvisibleFormatting + '\u2001' +
+      stringWithInvisibleFormatting + '\u2002' +
+      stringWithInvisibleFormatting + '\u2003' +
+      stringWithInvisibleFormatting + '\u2005' +
+      stringWithInvisibleFormatting + '\u2006' +
+      stringWithInvisibleFormatting + '\u2008' +
+      stringWithInvisibleFormatting + '\u2009' +
+      stringWithInvisibleFormatting + '\u200A' +
+      stringWithInvisibleFormatting + '\u200B' +
+      stringWithInvisibleFormatting + '\u2029' +
+      stringWithInvisibleFormatting;
+
+  // Test that the word break algorithm does not count RLMs towards word
+  // length, and therefore does not insert word breaks into a typical date
+  // written in Arabic-Indic digits with RTMs (b/5853915).
+  assertEquals(textWithRLMs, insertWordBreaks(textWithRLMs, 10));
+
+  // Test that invisible formatting characters are not counted towards word
+  // length, and that characters which are treated as breaking spaces behave as
+  // breaking spaces.
+  assertEquals(stringWithInvisibleFormattingAndSpacelikeCharacters,
+      insertWordBreaks(stringWithInvisibleFormattingAndSpacelikeCharacters,
+      10));
+}
+
 function testInsertWordBreaksBasic() {
   // HTML that gets inserted is browser dependent, ensure for the test it is
   // a constant - browser dependent HTML is for display purposes only.
@@ -209,7 +257,7 @@ function testInsertWordBreaksBasic() {
 
   // The word 'Internet' in Hindi.
   var hindiInternet = '\u0907\u0902\u091F\u0930\u0928\u0947\u091F';
-  assertEquals('The baisc algorithm is not good enough to insert word ' +
+  assertEquals('The basic algorithm is not good enough to insert word ' +
       'breaks into Hindi.',
       hindiInternet, insertWordBreaksBasic(hindiInternet, 2));
   // The word 'Internet' in Hindi broken into slashes.
