@@ -21,8 +21,6 @@ See the COPYING file for details.
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
-
-
 </script>
 </head>
 <body>
@@ -412,13 +410,47 @@ See the COPYING file for details.
     propertyReplacer.replace(goog.events.Listener, 'ENABLE_MONITORING', true);
 
     var div = document.createElement('div');
-    var key = goog.events.listen(div, goog.events.EventType.CLICK, goog.nullFunction);
+    var key = goog.events.listen(
+        div, goog.events.EventType.CLICK, goog.nullFunction);
     var listenerStack = goog.events.listeners_[key].creationStack;
 
     // Check that the name of this test function occurs in the stack trace.
     assertContains('testCreationStack', listenerStack);
     goog.events.unlistenByKey(key);
   }
+
+  /**
+   * The behavior of goog.events when a UID changes is undefined.
+   * We just want to make sure we don't throw an exception.
+   */
+  function testUidDisappearanceJsTargets() {
+    var target = new goog.events.EventTarget();
+    var listener = goog.testing.recordFunction();
+    goog.events.listenOnce(target, 'foo', listener, false);
+
+    goog.removeUid(target);
+    target.dispatchEvent('foo');
+    assertEquals(0, listener.getCallCount());
+  }
+
+  /**
+   * The behavior of goog.events when a UID changes is undefined.
+   * We just want to make sure we don't throw an exception.
+   */
+  function testUidDisappearanceBrowserTargets() {
+    var listener = goog.testing.recordFunction();
+    var body = document.body;
+    goog.events.listenOnce(body, 'click', listener);
+
+    goog.removeUid(body);
+    dispatchClick(body);
+    assertEquals(1, listener.getCallCount());
+
+    // Make sure that dispatching again doesn't fire the listener.
+    dispatchClick(body);
+    assertEquals(1, listener.getCallCount());
+  }
+
 </script>
 </body>
 </html>
