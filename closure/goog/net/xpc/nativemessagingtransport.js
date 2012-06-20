@@ -528,9 +528,6 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
     return;
   }
 
-  // postMessage is a method of the window object, except in some versions of
-  // Opera, where it is a method of the document object.
-  var obj = win.postMessage ? win : win.document;
   this.send = function(service, payload) {
     // In IE8 (and perhaps elsewhere), it seems like postMessage is sometimes
     // implemented as a synchronous call.  That is, calling it synchronously
@@ -542,10 +539,30 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
     var channelName = this.channel_.name;
     var sendFunctor = function() {
       transport.sendTimerId_ = 0;
-      goog.net.xpc.logger.fine('send(): service=' + service + ' payload=' +
-          payload + ' to hostname=' + transport.peerHostname_);
-      obj.postMessage(channelName + '|' + service + ':' + payload,
-          transport.peerHostname_);
+
+      try {
+        // postMessage is a method of the window object, except in some
+        // versions of Opera, where it is a method of the document object.  It
+        // also seems that the appearance of postMessage on the peer window
+        // object can sometimes be delayed.
+        var obj = win.postMessage ? win : win.document;
+        if (!obj.postMessage) {
+          goog.net.xpc.logger.warning('Peer window had no postMessage ' +
+              'function.');
+          return;
+        }
+
+        obj.postMessage(channelName + '|' + service + ':' + payload,
+            transport.peerHostname_);
+        goog.net.xpc.logger.fine('send(): service=' + service + ' payload=' +
+            payload + ' to hostname=' + transport.peerHostname_);
+      } catch (error) {
+        // There is some evidence (not totally convincing) that postMessage can
+        // be missing or throw errors during a narrow timing window during
+        // startup.  This protects against that.
+        goog.net.xpc.logger.warning('Error performing postMessage, ignoring.',
+            error);
+      }
     };
     this.sendTimerId_ = goog.Timer.callOnce(sendFunctor, 0);
   };
