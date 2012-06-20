@@ -1212,8 +1212,7 @@ goog.style.setStyles = function(element, stylesString) {
     // the style node works fine and ignores CSS that IE doesn't understand
     element.cssText = stylesString;
   } else {
-    var propToSet = goog.userAgent.WEBKIT ? 'innerText' : 'innerHTML';
-    element[propToSet] = stylesString;
+    element.innerHTML = stylesString;
   }
 };
 
@@ -1929,4 +1928,3 @@ goog.style.getCssTranslation = function(element) {
   return new goog.math.Coordinate(parseFloat(matches[1]),
                                   parseFloat(matches[2]));
 };
-
