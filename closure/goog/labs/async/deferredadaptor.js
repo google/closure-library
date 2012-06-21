@@ -17,6 +17,8 @@
  *
  * TODO (vbhasin): cancel() support.
  * TODO (vbhasin): See if we can make this a static.
+ * TODO (gboyer, vbhasin): Rename to "Adapter" once this graduates; this is the
+ * proper programmer spelling.
  */
 
 
