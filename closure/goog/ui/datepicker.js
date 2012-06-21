@@ -909,10 +909,10 @@ goog.ui.DatePicker.prototype.showMonthMenu_ = function(event) {
 
   var list = [];
   for (var i = 0; i < 12; i++) {
-    list.push(this.symbols_.STANDALONEMONTHS[i]);
+    list.push(this.symbols_.MONTHS[i]);
   }
   this.createMenu_(this.elMonth_, list, this.handleMonthMenuClick_,
-      this.symbols_.STANDALONEMONTHS[this.activeMonth_.getMonth()]);
+      this.symbols_.MONTHS[this.activeMonth_.getMonth()]);
 };
 
 
@@ -1150,12 +1150,12 @@ goog.ui.DatePicker.prototype.updateCalendarGrid_ = function() {
   if (this.elMonthYear_) {
     goog.dom.setTextContent(this.elMonthYear_,
         goog.date.formatMonthAndYear(
-            this.symbols_.STANDALONEMONTHS[date.getMonth()],
+            this.symbols_.MONTHS[date.getMonth()],
             date.getFullYear()));
   }
   if (this.elMonth_) {
     goog.dom.setTextContent(this.elMonth_,
-        this.symbols_.STANDALONEMONTHS[date.getMonth()]);
+        this.symbols_.MONTHS[date.getMonth()]);
   }
   if (this.elYear_) {
     goog.dom.setTextContent(this.elYear_, String(date.getFullYear()));
