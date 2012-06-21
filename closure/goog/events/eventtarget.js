@@ -27,7 +27,6 @@
 goog.provide('goog.events.EventTarget');
 
 goog.require('goog.Disposable');
-goog.require('goog.debug.Logger');
 goog.require('goog.events');
 
 
@@ -81,47 +80,8 @@ goog.require('goog.events');
  */
 goog.events.EventTarget = function() {
   goog.Disposable.call(this);
-  if (goog.events.EventTarget.ENABLE_MONITORING) {
-    this.creationStack = new Error().stack;
-    goog.events.EventTarget.instances_[goog.getUid(this)] = this;
-  }
 };
 goog.inherits(goog.events.EventTarget, goog.Disposable);
-
-
-/**
- * @define {boolean} Whether to enable the monitoring of the
- *     goog.events.EventTarget instances. Switching on the monitoring is only
- *     recommended for debugging because it has a significant impact on
- *     performance and memory usage. If switched off, the monitoring code
- *     compiles down to 0 bytes. The monitoring expects that all event targets
- *     objects call the {@code goog.events.EventTarget} base constructor.
- */
-goog.events.EventTarget.ENABLE_MONITORING = false;
-
-
-/**
- * Maps the unique ID of every undisposed {@code goog.events.EvenTarget} object
- * to the object itself.
- * @type {!Object.<!goog.events.EventTarget>}
- * @private
- */
-goog.events.EventTarget.instances_ = {};
-
-
-/**
- * @return {!Array.<!goog.events.EventTarget>} All {@code
- *     goog.events.EventTarget} objects that haven't been disposed of.
- */
-goog.events.EventTarget.getUndisposedObjects = function() {
-  var ret = [];
-  for (var id in goog.events.EventTarget.instances_) {
-    if (goog.events.EventTarget.instances_.hasOwnProperty(id)) {
-      ret.push(goog.events.EventTarget.instances_[id]);
-    }
-  }
-  return ret;
-};
 
 
 /**
@@ -239,16 +199,4 @@ goog.events.EventTarget.prototype.disposeInternal = function() {
   goog.events.EventTarget.superClass_.disposeInternal.call(this);
   goog.events.removeAll(this);
   this.parentEventTarget_ = null;
-  if (goog.events.EventTarget.ENABLE_MONITORING) {
-    var uid = goog.getUid(this);
-    if (!goog.events.EventTarget.instances_.hasOwnProperty(uid)) {
-      // Either the base class constructor was not called, or the monitoring
-      // mode was turned on after the event target was created.
-      goog.debug.Logger.getLogger('goog.events.EventTarget').warning(
-          this + ' might have forgotten to call the goog.eventTarget base ' +
-          'constructor');
-    } else {
-      delete goog.events.EventTarget.instances_[uid];
-    }
-  }
 };

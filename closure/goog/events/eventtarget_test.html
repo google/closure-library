@@ -418,34 +418,6 @@ See the COPYING file for details.
         listener.count);
   }
 
-  function testMonitoringMode() {
-    function MonitorableEventTarget() {
-      goog.base(this);
-    }
-    goog.inherits(MonitorableEventTarget, goog.events.EventTarget);
-
-    goog.events.EventTarget.ENABLE_MONITORING = true;
-
-    var t1 = new MonitorableEventTarget();
-    var t2 = new MonitorableEventTarget();
-    assertSameElements('the undisposed event targets', [t1, t2],
-        goog.events.EventTarget.getUndisposedObjects());
-    t1.dispose();
-    assertSameElements('the undisposed event targets', [t2],
-        goog.events.EventTarget.getUndisposedObjects());
-    t2.dispose();
-    assertSameElements('the undisposed event targets', [],
-        goog.events.EventTarget.getUndisposedObjects());
-  }
-
-  function testMonitoringFailure() {
-    goog.events.EventTarget.ENABLE_MONITORING = true;
-
-    var t1 = new TargetClass();
-    assertArrayEquals('no disposable objects registered', [],
-        goog.events.EventTarget.getUndisposedObjects());
-  }
-
 </script>
 </body>
 </html>
