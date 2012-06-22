@@ -411,17 +411,6 @@ function testCreateBadPath() {
   }
 
   loadTestDir().
-      addCallback(function(dir) {
-        // COM1 is a reserved filename.
-        return dir.createPath('/foo/bar/COM1');
-      }).
-      addCallback(function(badDir) {
-        fail('Should not have created badDir successfully.');
-      }).
-      addErrback(function(err) {
-        return true;
-      }).
-
       awaitDeferred(loadTestDir()).
       addCallback(function(dir) {
         // There is only one layer of parent directory from the test dir.
