@@ -90,8 +90,7 @@ goog.db.Error.DatabaseErrorCode_ = {
   READ_ONLY_ERR: 9,
   TRANSIENT_ERR: 11,
   TIMEOUT_ERR: 10,
-  QUOTA_ERR: 11,
-  INVALID_ACCESS_ERR: 12
+  QUOTA_ERR: 11
 };
 
 
@@ -134,8 +133,7 @@ goog.db.Error.ErrorCode = {
       goog.db.Error.DatabaseErrorCode_).TIMEOUT_ERR,
   QUOTA_ERR: (goog.global.IDBDatabaseException ||
       goog.global.webkitIDBDatabaseException ||
-      goog.db.Error.DatabaseErrorCode_).QUOTA_ERR,
-  INVALID_ACCESS_ERR: DOMException.INVALID_ACCESS_ERR
+      goog.db.Error.DatabaseErrorCode_).QUOTA_ERR
 };
 
 
@@ -169,8 +167,6 @@ goog.db.Error.getMessage = function(code) {
       return 'Transaction timed out';
     case goog.db.Error.ErrorCode.QUOTA_ERR:
       return 'Database storage space quota exceeded';
-    case goog.db.Error.ErrorCode.INVALID_ACCESS_ERR:
-      return 'Invalid operation';
     default:
       return 'Unrecognized exception with code ' + code;
   }

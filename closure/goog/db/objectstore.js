@@ -292,7 +292,7 @@ goog.db.ObjectStore.prototype.openCursor = function(opt_range, opt_direction) {
 
   try {
     request = this.store_.openCursor(
-        opt_range ? opt_range.range_ : null,
+        opt_range && opt_range.range_,
         opt_direction);
   } catch (err) {
     throw new goog.db.Error(err.code, msg);

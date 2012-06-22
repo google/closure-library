@@ -31,9 +31,9 @@ goog.require('goog.userAgent.product.isVersion');
 </head>
 <body>
 <script>
-// Chrome 18+ is the only browser confirmed to work. Firefox 6 does not.
+// Chrome 14+ is the only browser confirmed to work. Firefox 6 does not.
 var idbSupported = goog.userAgent.product.CHROME &&
-    goog.userAgent.product.isVersion("18");
+    goog.userAgent.product.isVersion("14");
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 var dbName = 'testDb';
 var globalDb = null;
@@ -244,7 +244,7 @@ function testGetNonExistentObjectStore() {
 
   asyncTestCase.waitForAsync('get non-existent object store');
   globalDb.branch().addCallback(addStore).addCallback(function(db) {
-    var tx = db.createTransaction(['store']);
+    var tx = db.createTransaction([]);
     try {
       tx.objectStore('diediedie');
       fail('getting non-existent object store should have failed');
@@ -262,13 +262,13 @@ function testCreateTransaction() {
 
   asyncTestCase.waitForAsync('create transactions');
   globalDb.branch().addCallback(addStore).addCallback(function(db) {
-    var tx = db.createTransaction(['store']);
+    var tx = db.createTransaction([]);
     assertEquals(
         'mode not READ_ONLY',
         goog.db.Transaction.TransactionMode.READ_ONLY,
         tx.getMode());
     tx = db.createTransaction(
-        ['store'],
+        [],
         goog.db.Transaction.TransactionMode.READ_WRITE);
     assertEquals(
         'mode not READ_WRITE',
@@ -579,15 +579,29 @@ function testPutIllegalRecordsWithIndex() {
 
     tx.objectStore('store').put({key: 'dietodeath', value: NaN}).
       addErrback(function(err) {
-        assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+        assertEquals(goog.db.Error.ErrorCode.ABORT_ERR, err.code);
       });
 
     tx.objectStore('store').put({key: 'dietodeath', value: undefined}).
       addErrback(function(err) {
-        assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+        assertEquals(goog.db.Error.ErrorCode.ABORT_ERR, err.code);
       });
 
-    closeAndContinue(db);
+    goog.events.listen(
+        tx,
+        goog.db.Transaction.EventTypes.COMPLETE,
+        function () {
+          fail('transaction should not have succeeded when putting illegal keys');
+        });
+    var errbacks = 0;
+    goog.events.listen(tx, goog.db.Transaction.EventTypes.ERROR, function(ev) {
+      if (errbacks < 2) {
+        // not all have been fired yet
+        errbacks++;
+      } else {
+        closeAndContinue(db);
+      }
+    });
   }).addErrback(failOnError);
 }
 
@@ -830,7 +844,7 @@ function testClear() {
         checkResultsTx.objectStore('store').getAll().addCallback(
             function(results) {
               assertEquals(0, results.length);
-            }).addErrback(failOnError);
+            });
 
         goog.events.listen(checkResultsTx, ERROR, failOnErrorEvent);
         goog.events.listen(checkResultsTx, COMPLETE, function() {
@@ -896,10 +910,12 @@ function testInactiveTransaction() {
         ['store'],
         goog.db.Transaction.TransactionMode.READ_WRITE);
     var store = tx.objectStore('store');
-    var index = store.getIndex('index');
     store.put({key: 'something', value: 'anything'});
     goog.events.listen(tx, goog.db.Transaction.EventTypes.COMPLETE, function() {
-      var expectedCode = goog.db.Error.ErrorCode.TRANSACTION_INACTIVE_ERR;
+      // according to the specification, this should be a
+      // TRANSACTION_INACTIVE_ERR, but Chrome behaves incorrectly as of
+      // version 15.0.874.5
+      var expectedCode = goog.db.Error.ErrorCode.NOT_ALLOWED_ERR;
       store.put({
         key: 'another',
         value: 'thing'
@@ -936,29 +952,28 @@ function testInactiveTransaction() {
       }).addErrback(function(err) {
         assertEquals(expectedCode, err.code);
       });
-
-      index.get('anything').
+      store.getIndex('index').get('anything').
         addCallback(function() {
           fail('getting from index with inactive transaction should have '
             + 'failed');
         }).addErrback(function(err) {
           assertEquals(expectedCode, err.code);
         });
-      index.getKey('anything').
+      store.getIndex('index').getKey('anything').
         addCallback(function() {
           fail('getting key from index with inactive transaction '
             + 'should have failed');
         }).addErrback(function(err) {
           assertEquals(expectedCode, err.code);
         });
-      index.getAll('anything').
+      store.getIndex('index').getAll('anything').
         addCallback(function() {
           fail('getting all from index with inactive transaction '
             + 'should have failed');
         }).addErrback(function(err) {
           assertEquals(expectedCode, err.code);
         });
-      index.getAllKeys('anything').
+      store.getIndex('index').getAllKeys('anything').
         addCallback(function() {
           fail('getting all keys from index with inactive transaction '
             + 'should have failed');
@@ -1034,7 +1049,7 @@ function testManipulateIndexes() {
       return restartDatabase(db);
     });
   }).addCallback(function(db) {
-    var tx = db.createTransaction(['store']);
+    var tx = db.createTransaction([]);
     var store = tx.objectStore('store');
     try {
       var index = store.getIndex('index');
