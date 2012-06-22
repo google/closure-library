@@ -283,7 +283,12 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
     logEl.removeChild(logEl.firstChild);
   }
 
-  this.writeLog(log);
+  // Highlight the page to indicate the overall outcome.
+  if (this.writeLog(log)) {
+    logEl.style.backgroundColor = '#eeffee';
+  } else {
+    logEl.style.backgroundColor = '#ffeeee';
+  }
 
   var runAgainLink = document.createElement('a');
   runAgainLink.style.display = 'block';
@@ -301,8 +306,10 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
 /**
  * Writes a nicely formatted log out to the document.
  * @param {string} log The string to write.
+ * @return {boolean} Whether the log string indicates a success or failure.
  */
 goog.testing.TestRunner.prototype.writeLog = function(log) {
+  var isSuccessfulLog = true;
   var lines = log.split('\n');
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i];
@@ -324,6 +331,8 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
     }
 
     if (isFailOrError) {
+      isSuccessfulLog = false;
+
       var testNameMatch = /(\S+) (\[[^\]]*] )?: (FAILED|ERROR)/.exec(line);
       if (testNameMatch) {
         // Build a URL to run the test individually.  If this test was already
@@ -377,6 +386,8 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
     }
     this.logEl_.appendChild(div);
   }
+
+  return isSuccessfulLog;
 };
 
 
