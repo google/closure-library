@@ -1128,8 +1128,16 @@ function testInstallStyles() {
   var result = goog.style.installStyles(
       '#installTest0 { background-color: rgb(255, 192, 203); }');
 
-  assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
+  // For some odd reason, the change in computed style does not register on
+  // Chrome 19 unless the style property is touched.  The behavior goes
+  // away again in Chrome 20.
+  // TODO(nnaze): Remove special caseing once we switch the testing image
+  // to Chrome 20 or higher.
+  if (isChrome19()) {
+    el.style.display = ''
+  }
 
+  assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
   goog.style.uninstallStyles(result);
   assertEquals(originalBackground, goog.style.getBackgroundColor(el));
 }
@@ -1140,6 +1148,16 @@ function testSetStyles() {
   // Change to pink
   var ss = goog.style.installStyles(
       '#installTest1 { background-color: rgb(255, 192, 203); }');
+
+  // For some odd reason, the change in computed style does not register on
+  // Chrome 19 unless the style property is touched.  The behavior goes
+  // away again in Chrome 20.
+  // TODO(nnaze): Remove special caseing once we switch the testing image
+  // to Chrome 20 or higher.
+  if (isChrome19()) {
+    el.style.display = ''
+  }
+
   assertColorRgbEquals('rgb(255,192,203)', goog.style.getBackgroundColor(el));
 
   // Now change to orange
@@ -1152,6 +1170,11 @@ function testSetStyles() {
 function assertColorRgbEquals(expected, actual) {
   assertEquals(expected,
       goog.color.hexToRgbStyle(goog.color.parse(actual).hex));
+}
+
+function isChrome19() {
+  return goog.userAgent.product.CHROME &&
+         goog.string.startsWith(goog.userAgent.product.VERSION, '19.');
 }
 
 function testIsRightToLeft() {
