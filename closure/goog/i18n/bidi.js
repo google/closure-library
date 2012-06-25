@@ -301,7 +301,7 @@ goog.i18n.bidi.isNeutralChar = function(str) {
 
 
 /**
- * Regular expressions to check if a piece of text if of LTR directionality
+ * Regular expressions to check if a piece of text is of LTR directionality
  * on first character with strong directionality.
  * @type {RegExp}
  * @private
@@ -311,7 +311,7 @@ goog.i18n.bidi.ltrDirCheckRe_ = new RegExp(
 
 
 /**
- * Regular expressions to check if a piece of text if of RTL directionality
+ * Regular expressions to check if a piece of text is of RTL directionality
  * on first character with strong directionality.
  * @type {RegExp}
  * @private
