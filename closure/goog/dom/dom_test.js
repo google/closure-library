@@ -140,7 +140,7 @@ function testGetElementByClass() {
 }
 
 function testSetProperties() {
-  var attrs = { 'name': 'test3', 'title': 'A title', 'random': 'woop' };
+  var attrs = {'name': 'test3', 'title': 'A title', 'random': 'woop'};
   var el = $('testEl');
 
   var res = goog.dom.setProperties(el, attrs);
@@ -160,7 +160,8 @@ function testSetPropertiesDirectAttributeMap() {
 function testSetPropertiesAria() {
   var attrs = {
     'aria-hidden': 'true',
-    'aria-label': 'This is a label'
+    'aria-label': 'This is a label',
+    'role': 'presentation'
   };
   var el = goog.dom.createDom('div');
 
@@ -168,6 +169,7 @@ function testSetPropertiesAria() {
   assertEquals('Should be equal', 'true', el.getAttribute('aria-hidden'));
   assertEquals('Should be equal',
       'This is a label', el.getAttribute('aria-label'));
+  assertEquals('Should be equal', 'presentation', el.getAttribute('role'));
 }
 
 function testSetTableProperties() {
