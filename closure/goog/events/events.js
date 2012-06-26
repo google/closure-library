@@ -999,18 +999,13 @@ goog.events.handleBrowserEvent_ = function(key, opt_evt) {
       if (ancestors) {
         ancestors.length = 0;
       }
-      evt.dispose();
     }
     return retval;
   } // IE
 
   // Caught a non-IE DOM event. 1 additional argument which is the event object
   var be = new goog.events.BrowserEvent(opt_evt, this);
-  try {
-    retval = goog.events.fireListener(listener, be);
-  } finally {
-    be.dispose();
-  }
+  retval = goog.events.fireListener(listener, be);
   return retval;
 };
 

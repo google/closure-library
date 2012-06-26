@@ -407,9 +407,4 @@ goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
 
 /** @override */
 goog.events.BrowserEvent.prototype.disposeInternal = function() {
-  goog.events.BrowserEvent.superClass_.disposeInternal.call(this);
-  this.event_ = null;
-  this.target = null;
-  this.currentTarget = null;
-  this.relatedTarget = null;
 };

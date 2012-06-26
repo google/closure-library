@@ -511,10 +511,6 @@ goog.inherits(goog.net.XhrManager.Event, goog.events.Event);
 
 /** @override */
 goog.net.XhrManager.Event.prototype.disposeInternal = function() {
-  goog.net.XhrManager.Event.superClass_.disposeInternal.call(this);
-  delete this.id;
-  this.xhrIo = null;
-  this.xhrLite = null;
 };
 
 

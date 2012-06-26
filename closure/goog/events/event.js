@@ -20,6 +20,8 @@
 
 goog.provide('goog.events.Event');
 
+// goog.events.Event no longer depends on goog.Disposable. Keep requiring
+// goog.Disposable here to not break projects which assume this dependency.
 goog.require('goog.Disposable');
 
 
@@ -33,11 +35,8 @@ goog.require('goog.Disposable');
  *     this event. It has to implement the {@code EventTarget} interface
  *     declared at {@link http://developer.mozilla.org/en/DOM/EventTarget}.
  * @constructor
- * @extends {goog.Disposable}
  */
 goog.events.Event = function(type, opt_target) {
-  goog.Disposable.call(this);
-
   /**
    * Event type.
    * @type {string}
@@ -56,14 +55,21 @@ goog.events.Event = function(type, opt_target) {
    */
   this.currentTarget = this.target;
 };
-goog.inherits(goog.events.Event, goog.Disposable);
 
 
-/** @override */
+/**
+ * For backwards compatibility (goog.events.Event used to inherit
+ * goog.Disposable).
+ */
 goog.events.Event.prototype.disposeInternal = function() {
-  delete this.type;
-  delete this.target;
-  delete this.currentTarget;
+};
+
+
+/**
+ * For backwards compatibility (goog.events.Event used to inherit
+ * goog.Disposable).
+ */
+goog.events.Event.prototype.dispose = function() {
 };
 
 

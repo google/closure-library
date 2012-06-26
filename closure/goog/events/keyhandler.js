@@ -391,11 +391,7 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
   this.lastKey_ = key;
 
   var event = new goog.events.KeyEvent(key, charCode, repeat, be);
-  try {
-    this.dispatchEvent(event);
-  } finally {
-    event.dispose();
-  }
+  this.dispatchEvent(event);
 };
 
 

@@ -196,11 +196,7 @@ goog.events.MouseWheelHandler.prototype.handleEvent = function(e) {
     deltaX = -deltaX;
   }
   var newEvent = new goog.events.MouseWheelEvent(detail, be, deltaX, deltaY);
-  try {
-    this.dispatchEvent(newEvent);
-  } finally {
-    newEvent.dispose();
-  }
+  this.dispatchEvent(newEvent);
 };
 
 

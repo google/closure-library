@@ -93,11 +93,7 @@ goog.events.FocusHandler.prototype.handleEvent = function(e) {
   event.type = e.type == 'focusin' || e.type == 'focus' ?
       goog.events.FocusHandler.EventType.FOCUSIN :
       goog.events.FocusHandler.EventType.FOCUSOUT;
-  try {
-    this.dispatchEvent(event);
-  } finally {
-    event.dispose();
-  }
+  this.dispatchEvent(event);
 };
 
 

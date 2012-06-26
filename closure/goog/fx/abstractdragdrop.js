@@ -373,11 +373,9 @@ goog.fx.AbstractDragDrop.prototype.startDrag = function(event, item) {
   var dragStartEvent = new goog.fx.DragDropEvent(
       goog.fx.AbstractDragDrop.EventType.DRAGSTART, this, this.dragItem_);
   if (this.dispatchEvent(dragStartEvent) == false) {
-    dragStartEvent.dispose();
     this.dragItem_ = null;
     return;
   }
-  dragStartEvent.dispose();
 
   // Get the source element and create a drag element for it.
   var el = item.getCurrentDragElement();
@@ -506,20 +504,17 @@ goog.fx.AbstractDragDrop.prototype.endDrag = function(event) {
         activeTarget.target_, activeTarget.item_, activeTarget.element_,
         clientX, clientY, x, y);
     this.dispatchEvent(dragEvent);
-    dragEvent.dispose();
 
     var dropEvent = new goog.fx.DragDropEvent(
         goog.fx.AbstractDragDrop.EventType.DROP, this, this.dragItem_,
         activeTarget.target_, activeTarget.item_, activeTarget.element_,
         clientX, clientY, x, y, subtarget);
     activeTarget.target_.dispatchEvent(dropEvent);
-    dropEvent.dispose();
   }
 
   var dragEndEvent = new goog.fx.DragDropEvent(
       goog.fx.AbstractDragDrop.EventType.DRAGEND, this, this.dragItem_);
   this.dispatchEvent(dragEndEvent);
-  dragEndEvent.dispose();
 
   goog.events.unlisten(this.dragger_, goog.fx.Dragger.EventType.DRAG,
                        this.moveDrag_, false, this);
@@ -598,7 +593,6 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
           goog.fx.AbstractDragDrop.EventType.DRAGOUT, this, this.dragItem_,
           activeTarget.target_, activeTarget.item_, activeTarget.element_);
       this.dispatchEvent(sourceDragOutEvent);
-      sourceDragOutEvent.dispose();
 
       // The event should be dispatched the by target DragDrop so that the
       // target DragDrop can manage these events without having to know what
@@ -616,7 +610,6 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
           undefined,
           this.activeSubtarget_);
       activeTarget.target_.dispatchEvent(targetDragOutEvent);
-      targetDragOutEvent.dispose();
     }
     this.activeSubtarget_ = subtarget;
     this.activeTarget_ = null;
@@ -637,7 +630,6 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
           activeTarget.target_, activeTarget.item_, activeTarget.element_);
       sourceDragOverEvent.subtarget = subtarget;
       this.dispatchEvent(sourceDragOverEvent);
-      sourceDragOverEvent.dispose();
 
       // The event should be dispatched by the target DragDrop so that the
       // target DragDrop can manage these events without having to know what
@@ -647,7 +639,6 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
           activeTarget.target_, activeTarget.item_, activeTarget.element_,
           event.clientX, event.clientY, undefined, undefined, subtarget);
       activeTarget.target_.dispatchEvent(targetDragOverEvent);
-      targetDragOverEvent.dispose();
 
     } else if (!activeTarget) {
       // If no target was found create a dummy one so we won't have to iterate
@@ -1223,12 +1214,6 @@ goog.inherits(goog.fx.DragDropEvent, goog.events.Event);
 
 /** @override */
 goog.fx.DragDropEvent.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
-  delete this.dragSource;
-  delete this.dragSourceItem;
-  delete this.dropTarget;
-  delete this.dropTargetItem;
-  delete this.dropTargetElement;
 };
 
 

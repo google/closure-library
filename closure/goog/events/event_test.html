@@ -39,17 +39,6 @@ See the COPYING file for details.
           e.currentTarget);
     }
 
-    function testDispose() {
-      assertFalse('Event must not have been disposed of', e.isDisposed());
-      e.dispose();
-      assertTrue('Event must have been disposed of', e.isDisposed());
-      assertUndefined('Event type must have been deleted', e.type);
-      assertUndefined('Event target reference must have been deleted',
-          e.target);
-      assertUndefined('Current target reference must have been deleted',
-          e.currentTarget);
-    }
-
     function testStopPropagation() {
       // This test breaks encapsulation because there is no public getter for
       // propagationStopped_.
