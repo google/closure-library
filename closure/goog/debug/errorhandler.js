@@ -151,7 +151,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
   if (tracers) {
     var stackTrace = goog.debug.getStacktraceSimple(15);
   }
-  var result = function() {
+  var googDebugErrorHandlerProtectedFunction = function() {
     if (that.isDisposed()) {
       return fn.apply(this, arguments);
     }
@@ -172,8 +172,8 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
       }
     }
   };
-  result[this.getFunctionIndex_(false)] = fn;
-  return result;
+  googDebugErrorHandlerProtectedFunction[this.getFunctionIndex_(false)] = fn;
+  return googDebugErrorHandlerProtectedFunction;
 };
 
 
