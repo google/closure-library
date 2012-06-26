@@ -172,6 +172,20 @@ function testSetPropertiesAria() {
   assertEquals('Should be equal', 'presentation', el.getAttribute('role'));
 }
 
+function testSetPropertiesData() {
+  var attrs = {
+    'data-tooltip': 'This is a tooltip',
+    'data-tooltip-delay': '100'
+  };
+  var el = goog.dom.createDom('div');
+
+  goog.dom.setProperties(el, attrs);
+  assertEquals('Should be equal', 'This is a tooltip',
+      el.getAttribute('data-tooltip'));
+  assertEquals('Should be equal', '100',
+      el.getAttribute('data-tooltip-delay'));
+}
+
 function testSetTableProperties() {
   var attrs = {
     'style': 'padding-left: 10px;',
