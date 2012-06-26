@@ -389,6 +389,14 @@ goog.ui.ComboBox.prototype.getMenu = function() {
 
 
 /**
+ * @return {Element} The input element.
+ */
+goog.ui.ComboBox.prototype.getInputElement = function() {
+  return this.input_;
+};
+
+
+/**
  * @return {number} The number of visible items in the menu.
  * @private
  */
@@ -433,6 +441,9 @@ goog.ui.ComboBox.prototype.getMatchFunction = function() {
  */
 goog.ui.ComboBox.prototype.setDefaultText = function(text) {
   this.defaultText_ = text;
+  if (this.labelInput_) {
+    this.labelInput_.setLabel(this.defaultText_);
+  }
 };
 
 

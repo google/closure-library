@@ -68,13 +68,19 @@ function setUp() {
   comboBox.addItem(new goog.ui.ComboBoxItem('Grey'));
   comboBox.render(goog.dom.getElement('combo'));
 
-  input = comboBox.getElement().getElementsByTagName(
-      goog.dom.TagName.INPUT)[0];
+  input = comboBox.getInputElement();
 }
 
 function tearDown() {
   comboBox.dispose();
   goog.events.removeAll();
+}
+
+function testSetDefaultText() {
+  assertEquals('Select a color...', comboBox.getDefaultText());
+  comboBox.setDefaultText('new default text...');
+  assertEquals('new default text...', comboBox.getDefaultText());
+  assertEquals('new default text...', comboBox.labelInput_.getLabel());
 }
 
 function testGetMenu() {
