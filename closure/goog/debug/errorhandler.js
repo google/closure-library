@@ -258,8 +258,8 @@ goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
   this.cause = cause;
 
   var stack = cause && cause.stack;
-  if (stack) {
-    this.stack = stack;
+  if (stack && goog.isString(stack)) {
+    this.stack = /** @type {string} */ (stack);
   }
 };
 goog.inherits(goog.debug.ErrorHandler.ProtectedFunctionError, goog.debug.Error);
