@@ -30,6 +30,8 @@ See the COPYING file for details.
 #oneThumbSlider {
   position: relative;
   width: 1000px;
+  background: grey;
+  height: 20px;
 }
 
 #twoThumbSlider {
@@ -41,6 +43,13 @@ See the COPYING file for details.
 #valueThumb, #extentThumb {
   position: absolute;
   width: 20px;
+}
+
+#thumb {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background: black;
 }
 
 #rangeHighlight {
@@ -632,6 +641,47 @@ function testMouseClickWithMoveToPointEnabled() {
   // Case when thumb is clicked
   goog.testing.events.fireClickSequence(oneThumbSlider.getElement());
   assertEquals(oneThumbSlider.getValue(), initialValue);
+}
+
+/**
+ * Tests getThumbCoordinateForValue method.
+ */
+function testThumbCoordinateForValue() {
+  var value = 30;
+  oneThumbSlider.setValue(value);
+  var coord = goog.style.getPosition(oneThumbSlider.valueThumb);
+  assertEquals(
+      coord.x, Math.round(oneThumbSlider.getThumbCoordinateForValue(value).x));
+  assertEquals(0, oneThumbSlider.getThumbCoordinateForValue(value).y);
+  // Verify this works regardless of current position.
+  oneThumbSlider.setValue(value / 2);
+  assertEquals(
+      coord.x, Math.round(oneThumbSlider.getThumbCoordinateForValue(value).x));
+}
+
+/**
+ * Tests getValueFromMousePosition method.
+ */
+function testValueFromMousePosition() {
+  var value = 30;
+  oneThumbSlider.setValue(value);
+  var offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  var size = goog.style.getSize(oneThumbSlider.valueThumb);
+  offset.x += size.width / 2;
+  offset.y += size.height / 2;
+  var e = null;
+  goog.events.listen(oneThumbSlider, goog.events.EventType.MOUSEMOVE,
+      function(evt) {
+        e = evt;
+      });
+  goog.testing.events.fireMouseMoveEvent(oneThumbSlider, offset);
+  assertNotEquals(e, null);
+  assertEquals(
+      value, Math.round(oneThumbSlider.getValueFromMousePosition(e)));
+  // Verify this works regardless of current position.
+  oneThumbSlider.setValue(value / 2);
+  assertEquals(
+      value, Math.round(oneThumbSlider.getValueFromMousePosition(e)));
 }
 
 </script>

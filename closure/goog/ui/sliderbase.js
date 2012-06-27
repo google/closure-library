@@ -535,7 +535,7 @@ goog.ui.SliderBase.prototype.handleMouseDown_ = function(e) {
       !goog.dom.contains(this.extentThumb, target)) {
     if (this.moveToPointEnabled_) {
       // just set the value directly based on the position of the click
-      this.animatedSetValue(this.getValueFromMousePosition_(e));
+      this.animatedSetValue(this.getValueFromMousePosition(e));
     } else {
       // start a timer that incrementally moves the handle
       this.startBlockIncrementing_(e);
@@ -565,7 +565,7 @@ goog.ui.SliderBase.prototype.handleMouseWheel_ = function(e) {
  */
 goog.ui.SliderBase.prototype.startBlockIncrementing_ = function(e) {
   this.storeMousePos_(e);
-  this.thumbToMove_ = this.getClosestThumb_(this.getValueFromMousePosition_(e));
+  this.thumbToMove_ = this.getClosestThumb_(this.getValueFromMousePosition(e));
   if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
     this.incrementing_ = this.lastMousePosition_ < this.thumbToMove_.offsetTop;
   } else {
@@ -691,9 +691,8 @@ goog.ui.SliderBase.prototype.storeMousePos_ = function(e) {
  * Returns the value to use for the current mouse position
  * @param {goog.events.Event} e  The mouse event object.
  * @return {number} The value that this mouse position represents.
- * @private
  */
-goog.ui.SliderBase.prototype.getValueFromMousePosition_ = function(e) {
+goog.ui.SliderBase.prototype.getValueFromMousePosition = function(e) {
   var min = this.getMinimum();
   var max = this.getMaximum();
   if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
@@ -708,6 +707,14 @@ goog.ui.SliderBase.prototype.getValueFromMousePosition_ = function(e) {
     return (max - min) * x / availW + min;
   }
 };
+
+
+/**
+ * @deprecated Since 25-June-2012. Use public method getValueFromMousePosition.
+ * @private
+ */
+goog.ui.SliderBase.prototype.getValueFromMousePosition_ =
+    goog.ui.SliderBase.prototype.getValueFromMousePosition;
 
 
 /**
@@ -918,9 +925,9 @@ goog.ui.SliderBase.prototype.handleRangeModelChange = function(e) {
  */
 goog.ui.SliderBase.prototype.updateUi_ = function() {
   if (this.valueThumb && !this.isAnimating_) {
-    var minCoord = this.getThumbCoordinateForValue_(
+    var minCoord = this.getThumbCoordinateForValue(
         this.getThumbPosition_(this.valueThumb));
-    var maxCoord = this.getThumbCoordinateForValue_(
+    var maxCoord = this.getThumbCoordinateForValue(
         this.getThumbPosition_(this.extentThumb));
 
     if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
@@ -977,9 +984,8 @@ goog.ui.SliderBase.prototype.calculateRangeHighlightPositioning_ = function(
  * Returns the position to move the handle to for a given value
  * @param {number} val  The value to get the coordinate for.
  * @return {goog.math.Coordinate} Coordinate with either x or y set.
- * @private
  */
-goog.ui.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
+goog.ui.SliderBase.prototype.getThumbCoordinateForValue = function(val) {
   var coord = new goog.math.Coordinate;
   if (this.valueThumb) {
     var min = this.getMinimum();
@@ -1005,6 +1011,14 @@ goog.ui.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
 
 
 /**
+ * @deprecated Since 25-June-2012. Use public method getThumbCoordinateForValue.
+ * @private
+ */
+goog.ui.SliderBase.prototype.getThumbCoordinateForValue_ =
+    goog.ui.SliderBase.prototype.getThumbCoordinateForValue;
+
+
+/**
  * Sets the value and starts animating the handle towards that position.
  * @param {number} v Value to set and animate to.
  */
@@ -1022,7 +1036,7 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
   var previousValue = this.getValue();
   var previousExtent = this.getExtent();
   var previousThumbValue = this.getThumbPosition_(thumb);
-  var previousCoord = this.getThumbCoordinateForValue_(previousThumbValue);
+  var previousCoord = this.getThumbCoordinateForValue(previousThumbValue);
   var stepSize = this.getStep();
 
   // If the delta is less than a single step, increase it to a step, else the
@@ -1036,7 +1050,7 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
   }
 
   this.setThumbPosition_(thumb, v);
-  var coord = this.getThumbCoordinateForValue_(this.getThumbPosition_(thumb));
+  var coord = this.getThumbCoordinateForValue(this.getThumbPosition_(thumb));
 
   if (this.orientation_ == goog.ui.SliderBase.Orientation.VERTICAL) {
     end = [this.getOffsetStart_(thumb), coord.y];
@@ -1079,8 +1093,8 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
  */
 goog.ui.SliderBase.prototype.addRangeHighlightAnimations_ = function(thumb,
     previousValue, previousExtent, newCoord, animations) {
-  var previousMinCoord = this.getThumbCoordinateForValue_(previousValue);
-  var previousMaxCoord = this.getThumbCoordinateForValue_(
+  var previousMinCoord = this.getThumbCoordinateForValue(previousValue);
+  var previousMaxCoord = this.getThumbCoordinateForValue(
       previousValue + previousExtent);
   var minCoord = previousMinCoord;
   var maxCoord = previousMaxCoord;
