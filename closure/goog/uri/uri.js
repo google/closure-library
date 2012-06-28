@@ -105,12 +105,11 @@ goog.Uri = function(opt_uri, opt_ignoreCase) {
  * If false, we will coerce parameters to strings, just as they would
  * appear in real URIs.
  *
- * TODO(nicksantos): Set this to false once people have time to flag this
- * on in tests.
+ * TODO(nicksantos): Remove this once people have time to fix all tests.
  *
  * @type {boolean}
  */
-goog.Uri.preserveParameterTypesCompatibilityFlag = true;
+goog.Uri.preserveParameterTypesCompatibilityFlag = false;
 
 
 /**
@@ -646,12 +645,15 @@ goog.Uri.prototype.getParameterValues = function(name) {
  * Returns the first value for a given cgi parameter or undefined if the given
  * parameter name does not appear in the query string.
  * @param {string} paramName Unescaped parameter name.
- * @return {*} The first value for a given cgi parameter or
+ * @return {string|undefined} The first value for a given cgi parameter or
  *     undefined if the given parameter name does not appear in the query
  *     string.
  */
 goog.Uri.prototype.getParameterValue = function(paramName) {
-  return this.queryData_.get(paramName);
+  // NOTE(nicksantos): This type-cast is a lie when
+  // preserveParameterTypesCompatibilityFlag is set to true.
+  // But this should only be set to true in tests.
+  return /** @type {string|undefined} */ (this.queryData_.get(paramName));
 };
 
 
