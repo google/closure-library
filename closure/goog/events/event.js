@@ -60,6 +60,7 @@ goog.events.Event = function(type, opt_target) {
 /**
  * For backwards compatibility (goog.events.Event used to inherit
  * goog.Disposable).
+ * @deprecated Events don't need to be disposed.
  */
 goog.events.Event.prototype.disposeInternal = function() {
 };
@@ -68,6 +69,7 @@ goog.events.Event.prototype.disposeInternal = function() {
 /**
  * For backwards compatibility (goog.events.Event used to inherit
  * goog.Disposable).
+ * @deprecated Events don't need to be disposed.
  */
 goog.events.Event.prototype.dispose = function() {
 };
