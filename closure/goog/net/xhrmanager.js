@@ -139,7 +139,7 @@ goog.net.XhrManager.prototype.setTimeoutInterval = function(ms) {
 
 
 /**
- * Returns the number of reuqests either in flight, or waiting to be sent.
+ * Returns the number of requests either in flight, or waiting to be sent.
  * @return {number} The number of requests in flight or pending send.
  */
 goog.net.XhrManager.prototype.getOutstandingCount = function() {
