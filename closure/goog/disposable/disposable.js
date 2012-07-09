@@ -35,6 +35,7 @@ goog.require('goog.disposable.IDisposable');
  * @implements {goog.disposable.IDisposable}
  */
 goog.Disposable = function() {
+  this.disposed_ = false;
   if (goog.Disposable.ENABLE_MONITORING) {
     this.creationStack = new Error().stack;
     goog.Disposable.instances_[goog.getUid(this)] = this;
@@ -86,14 +87,6 @@ goog.Disposable.clearUndisposedObjects = function() {
 
 
 /**
- * Whether the object has been disposed of.
- * @type {boolean}
- * @private
- */
-goog.Disposable.prototype.disposed_ = false;
-
-
-/**
  * Disposables that should be disposed when this object is disposed.
  * @type {Array.<goog.disposable.IDisposable>}
  * @private
@@ -122,7 +115,7 @@ goog.Disposable.prototype.creationStack;
  * @override
  */
 goog.Disposable.prototype.isDisposed = function() {
-  return this.disposed_;
+  return !!this.disposed_;
 };
 
 
@@ -144,19 +137,19 @@ goog.Disposable.prototype.getDisposed = goog.Disposable.prototype.isDisposed;
  */
 goog.Disposable.prototype.dispose = function() {
   if (!this.disposed_) {
+    if (goog.Disposable.ENABLE_MONITORING) {
+      if (this.disposed_ == undefined) {
+        // The disposed_ member variable is only set in the constructor.
+        throw Error(this + ' did not call the goog.Disposable base ' +
+                    'constructor');
+      }
+      var uid = goog.getUid(this);
+      delete goog.Disposable.instances_[uid];
+    }
     // Set disposed_ to true first, in case during the chain of disposal this
     // gets disposed recursively.
     this.disposed_ = true;
     this.disposeInternal();
-    if (goog.Disposable.ENABLE_MONITORING) {
-      var uid = goog.getUid(this);
-      if (!goog.Disposable.instances_.hasOwnProperty(uid)) {
-        throw Error(this + ' did not call the goog.Disposable base ' +
-            'constructor or was disposed of after a clearUndisposedObjects ' +
-            'call');
-      }
-      delete goog.Disposable.instances_[uid];
-    }
   }
 };
 
