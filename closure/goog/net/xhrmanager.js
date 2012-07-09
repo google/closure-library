@@ -148,6 +148,16 @@ goog.net.XhrManager.prototype.getOutstandingCount = function() {
 
 
 /**
+ * Returns requests that are either in flight, or waiting to be sent, in an
+ * object keyed by request id.
+ * @return {!Object} An object containing requests in flight or pending send.
+ */
+goog.net.XhrManager.prototype.getOutstandingRequests = function() {
+  return this.requests_.toObject();
+};
+
+
+/**
  * Registers the given request to be sent. Throws an error if a request
  * already exists with the given ID.
  * NOTE: It is not sent immediately. It is queued and will be sent when an
@@ -212,15 +222,17 @@ goog.net.XhrManager.prototype.abort = function(id, opt_force) {
     var xhrIo = request.xhrIo;
     request.setAborted(true);
     if (opt_force) {
-      // We remove listeners to make sure nothing gets called if a new request
-      // with the same id is made.
-      this.removeXhrListener_(xhrIo, request.getXhrEventCallback());
-      goog.events.listenOnce(
-          xhrIo,
-          goog.net.EventType.READY,
-          function() { this.xhrPool_.releaseObject(xhrIo); },
-          false,
-          this);
+      if (xhrIo) {
+        // We remove listeners to make sure nothing gets called if a new request
+        // with the same id is made.
+        this.removeXhrListener_(xhrIo, request.getXhrEventCallback());
+        goog.events.listenOnce(
+            xhrIo,
+            goog.net.EventType.READY,
+            function() { this.xhrPool_.releaseObject(xhrIo); },
+            false,
+            this);
+      }
       this.requests_.remove(id);
     }
     if (xhrIo) {
