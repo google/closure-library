@@ -24,6 +24,14 @@ See the COPYING file for details.
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
 </script>
+<style>
+#moveOffscreenPopupDiv {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: -1000px;
+}
+</style>
 </head>
 <body>
 
@@ -34,6 +42,9 @@ See the COPYING file for details.
 
   <div id="popupDiv" style="visibility:hidden">
     Popup Contents Here.
+  </div>
+  <div id="moveOffscreenPopupDiv">
+    Move offscreen popup contents here.
   </div>
 </div>
 
@@ -52,6 +63,7 @@ function setUp() {
 function tearDown() {
   popup.dispose();
   clock.uninstall();
+  document.body.setAttribute('dir','ltr');
 }
 
 function testSetVisible() {
@@ -285,7 +297,20 @@ function testWasRecentlyVisibleWorksCorrectlyWithTransitions() {
   assertFalse(popup.isOrWasRecentlyVisible());
 }
 
-
+function testMoveOffscreenRTL() {
+  document.body.setAttribute('dir','rtl');
+  popup.reposition = function() {
+    this.element_.style.left = '100px';
+    this.element_.style.top = '100px';
+  }
+  popup.setType(goog.ui.PopupBase.Type.MOVE_OFFSCREEN);
+  popup.setElement(goog.dom.getElement('moveOffscreenPopupDiv'));
+  originalScrollWidth = goog.dom.getDocumentScrollElement().scrollWidth;
+  popup.setVisible(true);
+  popup.setVisible(false);
+  assertFalse('Moving a popup offscreen should not cause scrollbars',
+      goog.dom.getDocumentScrollElement().scrollWidth != originalScrollWidth);
+}
 
 /**
  * @implements {goog.fx.Transition}

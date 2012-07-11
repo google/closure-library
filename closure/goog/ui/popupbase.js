@@ -651,8 +651,7 @@ goog.ui.PopupBase.prototype.hidePopupElement_ = function() {
  * @private
  */
 goog.ui.PopupBase.prototype.moveOffscreen_ = function() {
-  this.element_.style.left = '-200px';
-  this.element_.style.top = '-200px';
+  this.element_.style.top = '-10000px';
 };
 
 
