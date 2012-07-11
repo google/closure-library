@@ -204,10 +204,10 @@ goog.ui.ScrollFloater.prototype.enterDocument = function() {
 
   this.originalOffset_ = goog.style.getPageOffsetTop(this.getElement());
   this.setScrollingEnabled(this.scrollingEnabled_);
-  this.getHandler().listen(
-      window, goog.events.EventType.SCROLL, this.update_);
-  this.getHandler().listen(
-      window, goog.events.EventType.RESIZE, this.handleResize_);
+  var win = this.getDomHelper().getWindow();
+  this.getHandler().
+      listen(win, goog.events.EventType.SCROLL, this.update_).
+      listen(win, goog.events.EventType.RESIZE, this.handleResize_);
 };
 
 
