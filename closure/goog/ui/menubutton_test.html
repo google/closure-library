@@ -482,6 +482,56 @@ function testResizeOnItemAddOrRemove() {
 }
 
 /**
+ * Tests that adding and removing items from a menu with scrollOnOverflow is on
+ * correctly resizes the menu.
+ */
+function testResizeOnItemAddOrRemoveWithScrollOnOverflow() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  var menu = menuButton.getMenu();
+
+  // Show the menu.
+  menuButton.setScrollOnOverflow(true);
+  menuButton.setOpen(true);
+  var originalSize = goog.style.getSize(menu.getElement());
+
+  // Check that removing an item while the menu is left open correctly changes
+  // the size of the menu.
+  // Remove an item using a method on Menu.
+  var item = menu.removeChildAt(0, true);
+  menuButton.invalidateMenuSize();
+  menuButton.positionMenu();
+
+  // Confirm size of menu changed.
+  var afterRemoveSize = goog.style.getSize(menu.getElement());
+  assertTrue('Height of menu must decrease after removing a menu item.',
+      afterRemoveSize.height < originalSize.height);
+
+  var item2 = menu.removeChildAt(0, true);
+  menuButton.invalidateMenuSize();
+  menuButton.positionMenu();
+
+  // Confirm size of menu changed.
+  var afterRemoveAgainSize = goog.style.getSize(menu.getElement());
+  assertTrue('Height of menu must decrease after removing a second menu item.',
+      afterRemoveAgainSize.height < afterRemoveSize.height);
+
+  // Check that adding an item while the menu is opened correctly changes the
+  // size of the menu.
+  menuButton.addItem(item2);
+  menuButton.invalidateMenuSize();
+  menuButton.positionMenu();
+
+  // Confirm size of menu changed.
+  var afterAddSize = goog.style.getSize(menu.getElement());
+  assertTrue('Height of menu must increase after adding a menu item.',
+      afterRemoveAgainSize.height < afterAddSize.height);
+  assertEquals(
+      'Removing and adding back items must not change the height of a menu.',
+      afterRemoveSize.height, afterAddSize.height);
+}
+
+/**
  * Try rendering the menu as a sibling rather than as a child of the dom.
  */
 function testRenderMenuAsSibling() {

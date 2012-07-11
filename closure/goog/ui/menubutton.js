@@ -741,6 +741,17 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
 
 
 /**
+ * Resets the MenuButton's size.  This is useful for cases where items are added
+ * or removed from the menu and scrollOnOverflow is on.  In those cases the
+ * menu will not behave correctly and resize itself unless this is called
+ * (usually followed by positionMenu()).
+ */
+goog.ui.MenuButton.prototype.invalidateMenuSize = function() {
+  this.originalSize_ = undefined;
+};
+
+
+/**
  * Positions the menu under the button.  May be called directly in cases when
  * the menu size is known to change.
  */
