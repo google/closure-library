@@ -910,7 +910,7 @@ goog.style.setHeight = function(element, height) {
 
 /**
  * Set the width of an element.  Sets the element's style property.
- * @param {Element} element Element to set the height of.
+ * @param {Element} element Element to set the width of.
  * @param {string|number} width The width value to set.  If a number, 'px'
  *     will be appended, otherwise the value will be applied directly.
  */
