@@ -41,8 +41,19 @@ See the COPYING file for details.
   <div id='breaksAroundNode'><br />abcde<br /></div>
   </div>
 
+  <!-- A focusable element to help restore focus to a sane state. -->
+  <input id="focusableElement">
+
 <script>
   var assertRangeEquals = goog.testing.dom.assertRangeEquals;
+
+  function setUp() {
+    // Reset the focus; some tests may invalidate the focus to exercise various
+    // browser bugs.
+    var focusableElement = goog.dom.getElement('focusableElement');
+    focusableElement.focus();
+    focusableElement.blur();
+  }
 
   function normalizeHtml(str) {
     return str.toLowerCase().replace(/[\n\r\f"]/g, '')
@@ -694,6 +705,23 @@ See the COPYING file for details.
         range.containsNode(br, false));
 
     assertRangeEquals(container, 0, container, 0, range);
+  }
+
+  function testFocusedElementDisappears() {
+    // This reproduces a failure case specific to Gecko, where an element is
+    // created, contentEditable is set, is focused, and removed.  After that
+    // happens, calling selection.collapse fails.
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=773137
+    var disappearingElement = goog.dom.createDom('div');
+    document.body.appendChild(disappearingElement);
+    disappearingElement.contentEditable = true;
+    disappearingElement.focus();
+    document.body.removeChild(disappearingElement);
+    var container = goog.dom.getElement('empty');
+    var caret = goog.dom.Range.createCaret(container, 0);
+    // This should not throw.
+    caret.select();
+    assertEquals(0, caret.getStartOffset());
   }
 
   function assertNodeEquals(expected, actual) {
