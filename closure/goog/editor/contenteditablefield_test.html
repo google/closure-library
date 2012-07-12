@@ -1,0 +1,62 @@
+<!--
+  All Rights Reserved.
+
+  Tests for goog.editor.ContentEditableField
+
+  @author gboyer@google.com (Garrett Boyer)
+--><html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Editor Unit Tests - goog.editor.ContentEditableField</title>
+<script src='../base.js'></script>
+<script>
+  goog.require('goog.dom');
+  goog.require('goog.editor.ContentEditableField');
+  goog.require('goog.editor.field_test');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<div id="parent"></div>
+<script>
+  FieldConstructor = goog.editor.ContentEditableField;
+
+  function testNoIframeAndSameElement() {
+    var field = new goog.editor.ContentEditableField('testField');
+    field.makeEditable();
+    assertFalse(field.usesIframe());
+    assertEquals('Original element should equal field element',
+        field.getOriginalElement(), field.getElement());
+    assertEquals('Sanity check on original element',
+        'testField', field.getOriginalElement().id);
+    assertEquals('Editable document should be same as main document',
+        document, field.getEditableDomHelper().getDocument());
+    field.dispose();
+  }
+
+  function testMakeEditableAndUnEditable() {
+    var elem = goog.dom.getElement('testField');
+    goog.dom.setTextContent(elem, 'Hello world');
+    var field = new goog.editor.ContentEditableField('testField');
+
+    field.makeEditable();
+    assertEquals('true', String(elem.contentEditable));
+    assertEquals('Hello world', goog.dom.getTextContent(elem));
+    field.setHtml(false /* addParas */, 'Goodbye world');
+    assertEquals('Goodbye world', goog.dom.getTextContent(elem));
+
+    field.makeUneditable();
+    assertNotEquals('true', String(elem.contentEditable));
+    assertEquals('Goodbye world', goog.dom.getTextContent(elem));
+    field.dispose();
+  }
+</script>
+</body>
+</html>
+</html>

@@ -2152,7 +2152,9 @@ goog.editor.Field.prototype.isLoading = function() {
  * Gives the field focus.
  */
 goog.editor.Field.prototype.focus = function() {
-  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE &&
+      this.usesIframe()) {
+    // In designMode, only the window itself can be focused; not the element.
     this.getEditableDomHelper().getWindow().focus();
   } else {
     if (goog.userAgent.OPERA) {
@@ -2557,7 +2559,8 @@ goog.editor.Field.prototype.iframeFieldLoadHandler = function(iframe,
   var body = doc.body;
   this.setupFieldObject(body);
 
-  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE &&
+      this.usesIframe()) {
     this.turnOnDesignModeGecko();
   }
 
