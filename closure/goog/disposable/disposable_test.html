@@ -49,7 +49,6 @@ See the COPYING file for details.
     // Class which calls dispose recursively.
 
     function RecursiveDisposable() {
-      goog.Disposable.call(this);
       this.disposedCount = 0;
     }
     goog.inherits(RecursiveDisposable, goog.Disposable);
@@ -193,6 +192,10 @@ See the COPYING file for details.
       assertSameElements('no undisposed object in the registry', [],
           goog.Disposable.getUndisposedObjects());
 
+      assertThrows('disposal after clearUndisposedObjects()', function() {
+        d1.dispose();
+      });
+
       // d2 is already disposed of, the redisposal shouldn't throw error.
       d2.dispose();
     }
@@ -259,15 +262,6 @@ See the COPYING file for details.
       goog.dispose(d1);
       assertArrayEquals('callbacks should be called in chronological order',
           ['a', 'b'], invocations);
-    }
-
-    function testMonitoringStartedOnTheFly() {
-      var d1 = new DisposableTest();
-      goog.Disposable.ENABLE_MONITORING = true;
-      var d2 = new DisposableTest();
-      // No errors should be thrown.
-      d1.dispose();
-      d2.dispose();
     }
   </script>
 </body>
