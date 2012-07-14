@@ -27,7 +27,13 @@
   visibility: hidden;
 }
 
+.goog-char-picker-name {
+  font-size: x-small;
+}
+
 .goog-char-picker-unicode {
+  font-size: x-small;
+  color: GrayText;
 }
 
 .goog-char-picker-char-zoom {

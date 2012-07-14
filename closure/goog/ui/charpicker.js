@@ -29,6 +29,8 @@ goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.i18n.CharListDecompressor');
 goog.require('goog.i18n.uChar');
+goog.require('goog.i18n.uChar.LocalNameFetcher');
+goog.require('goog.i18n.uChar.NameFetcher');
 goog.require('goog.structs.Set');
 goog.require('goog.style');
 goog.require('goog.ui.Button');
@@ -65,6 +67,14 @@ goog.ui.CharPicker = function(charPickerData, opt_recents, opt_initCategory,
                               opt_initSubcategory, opt_rowCount,
                               opt_columnCount, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
+
+  /**
+   * Object used to retrieve character names.
+   * @type {!goog.i18n.uChar.NameFetcher}
+   * @private
+   */
+  // TODO(user): Make this a required constructor parameter
+  this.charNameFetcher_ = new goog.i18n.uChar.LocalNameFetcher();
 
   /**
    * Object containing character lists and category names.
@@ -233,6 +243,14 @@ goog.ui.CharPicker.prototype.okbutton_ = null;
 
 
 /**
+ * Element displaying character name in preview.
+ * @type {Element}
+ * @private
+ */
+goog.ui.CharPicker.prototype.charNameEl_ = null;
+
+
+/**
  * Element displaying character in preview.
  * @type {Element}
  * @private
@@ -241,7 +259,7 @@ goog.ui.CharPicker.prototype.zoomEl_ = null;
 
 
 /**
- * Element displaying character name or number in preview.
+ * Element displaying character number (codepoint) in preview.
  * @type {Element}
  * @private
  */
@@ -256,6 +274,21 @@ goog.ui.CharPicker.prototype.unicodeEl_ = null;
  * @private
  */
 goog.ui.CharPicker.prototype.hc_ = null;
+
+
+/**
+ * Sets the name fetcher object. This object is used to retrieve character names
+ * that are displayed within the widget.
+ *
+ * Note: The CharPicker object takes ownership of the NameFetcher object that it
+ * is given and disposes of it when CharPicker is disposed.
+ *
+ * @param {!goog.i18n.uChar.NameFetcher} charNameFetcher The name fetcher.
+ */
+goog.ui.CharPicker.prototype.setCharNameFetcher = function(charNameFetcher) {
+  this.charNameFetcher_.dispose();
+  this.charNameFetcher_ = charNameFetcher;
+};
 
 
 /**
@@ -286,6 +319,7 @@ goog.ui.CharPicker.prototype.createDom = function() {
 
 /** @override */
 goog.ui.CharPicker.prototype.disposeInternal = function() {
+  this.charNameFetcher_.dispose();
   this.hc_.dispose();
   this.hc_ = null;
   this.eventHandler_.dispose();
@@ -370,11 +404,14 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
   this.zoomEl_ = goog.dom.createDom('div',
       {id: 'zoom', className: goog.getCssName('goog-char-picker-char-zoom')});
 
+  this.charNameEl_ = goog.dom.createDom('div',
+      {id: 'charName', className: goog.getCssName('goog-char-picker-name')});
+
   this.unicodeEl_ = goog.dom.createDom('div',
       {id: 'unicode', className: goog.getCssName('goog-char-picker-unicode')});
 
   var card = goog.dom.createDom('div', {'id': 'preview'}, this.zoomEl_,
-      this.unicodeEl_);
+      this.charNameEl_, this.unicodeEl_);
   goog.style.showElement(card, false);
   this.hc_ = new goog.ui.HoverCard({'DIV': 'char'});
   this.hc_.setElement(card);
@@ -388,7 +425,15 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
     var ch = self.getChar_(trigger);
     if (ch) {
       self.zoomEl_.innerHTML = self.displayChar_(ch);
-      self.unicodeEl_.innerHTML = self.getTagFromChar_(ch);
+      self.unicodeEl_.innerHTML = goog.i18n.uChar.toHexString(ch);
+      // Clear the character name since we don't want to show old data because
+      // it is retrieved asynchronously and the DOM object is re-used
+      self.charNameEl_.innerHTML = '';
+      self.charNameFetcher_.getName(ch, function(charName) {
+        if (charName) {
+          self.charNameEl_.innerHTML = charName;
+        }
+      });
     }
   }
 
@@ -528,9 +573,10 @@ goog.ui.CharPicker.prototype.handleSelectedItem_ = function(e) {
 goog.ui.CharPicker.prototype.handleInput_ = function(e) {
   var ch = this.getInputChar();
   if (ch) {
-    var unicode = this.getTagFromChar_(ch);
+    var unicode = goog.i18n.uChar.toHexString(ch);
     this.zoomEl_.innerHTML = ch;
     this.unicodeEl_.innerHTML = unicode;
+    this.charNameEl_.innerHTML = '';
     var coord =
         new goog.ui.Tooltip.ElementTooltipPosition(this.input_.getElement());
     this.hc_.setPosition(coord);
@@ -651,6 +697,7 @@ goog.ui.CharPicker.prototype.setSelectedGrid_ = function(category,
   var charLists = this.data_.charList;
   var charListStr = charLists[category][subcategory];
   var content = this.decompressor_.toCharList(charListStr);
+  this.charNameFetcher_.prefetch(charListStr);
   this.updateGrid_(this.grid_, content);
 };
 
@@ -776,22 +823,6 @@ goog.ui.CharPicker.prototype.getInputChar = function() {
   var text = this.input_.getValue();
   var code = parseInt(text, 16);
   return /** @type {string} */ (goog.i18n.uChar.fromCharCode(code));
-};
-
-
-/**
- * Gets the description text for the given character.
- * @param {string} ch Character whose description is fetched.
- * @return {string} The description of the given character.
- * @private
- */
-goog.ui.CharPicker.prototype.getTagFromChar_ = function(ch) {
-  var unicodetext = goog.i18n.uChar.toHexString(ch);
-  var name = goog.i18n.uChar.toName(ch);
-  if (name) {
-    unicodetext += ' ' + name;
-  }
-  return unicodetext;
 };
 
 
