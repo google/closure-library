@@ -250,29 +250,29 @@ function testMaybeCreateDummyTargetForPosition() {
 
   var target = testGroup.maybeCreateDummyTargetForPosition_(3, 3);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(3, 3, target.box_));
+  assertTrue(testGroup.isInside(3, 3, target.box_));
 
   target = testGroup.maybeCreateDummyTargetForPosition_(2, 4);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(2, 4, target.box_));
+  assertTrue(testGroup.isInside(2, 4, target.box_));
 
   target = testGroup.maybeCreateDummyTargetForPosition_(2, 7);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(2, 7, target.box_));
+  assertTrue(testGroup.isInside(2, 7, target.box_));
 
   testGroup.targetList_.push({ box_: new goog.math.Box(5, 6, 6, 0) });
 
   target = testGroup.maybeCreateDummyTargetForPosition_(3, 3);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(3, 3, target.box_));
+  assertTrue(testGroup.isInside(3, 3, target.box_));
 
   target = testGroup.maybeCreateDummyTargetForPosition_(2, 7);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(2, 7, target.box_));
+  assertTrue(testGroup.isInside(2, 7, target.box_));
 
   target = testGroup.maybeCreateDummyTargetForPosition_(6, 3);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(6, 3, target.box_));
+  assertTrue(testGroup.isInside(6, 3, target.box_));
 
   target = testGroup.maybeCreateDummyTargetForPosition_(0, 3);
   assertNull(target);
@@ -288,11 +288,11 @@ function testMaybeCreateDummyTargetForPosition2() {
 
   var target = testGroup.maybeCreateDummyTargetForPosition_(30, 40);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(30, 40, target.box_));
+  assertTrue(testGroup.isInside(30, 40, target.box_));
 
   target = testGroup.maybeCreateDummyTargetForPosition_(45, 40);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(45, 40, target.box_));
+  assertTrue(testGroup.isInside(45, 40, target.box_));
 
   testGroup.targetList_.push({ box_: new goog.math.Box(40, 50, 50, 40) });
 
@@ -310,7 +310,7 @@ function testMaybeCreateDummyTargetForPosition3BoxHasDecentSize() {
 
   var target = testGroup.maybeCreateDummyTargetForPosition_(3, 3);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(3, 3, target.box_));
+  assertTrue(testGroup.isInside(3, 3, target.box_));
   assertEquals('(1t, 5r, 5b, 1l)', target.box_.toString());
 }
 
@@ -328,7 +328,7 @@ function testMaybeCreateDummyTargetForPosition4() {
         y++) {
       var inRealTarget = false;
       for (var i = 0; i < testGroup.targetList_.length; i++) {
-        if (testGroup.isInside_(x, y, testGroup.targetList_[i].box_)) {
+        if (testGroup.isInside(x, y, testGroup.targetList_[i].box_)) {
           inRealTarget = true;
           break;
         }
@@ -339,7 +339,7 @@ function testMaybeCreateDummyTargetForPosition4() {
           assertFalse('Fake target for point(' + x + ',' + y + ') should ' +
               'not overlap any real targets.',
              boxOverlapsTargets(target.box_, testGroup.targetList_));
-          assertTrue(testGroup.isInside_(x, y, target.box_));
+          assertTrue(testGroup.isInside(x, y, target.box_));
         }
       }
     }
@@ -358,7 +358,7 @@ function testMaybeCreateDummyTargetForPosition_NegativePositions() {
 
   var target = testGroup.maybeCreateDummyTargetForPosition_(1, 5);
   assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
-  assertTrue(testGroup.isInside_(1, 5, target.box_));
+  assertTrue(testGroup.isInside(1, 5, target.box_));
 }
 
 function testMaybeCreateDummyTargetOutsideScrollableContainer() {
@@ -450,31 +450,31 @@ function testIsInside() {
   var box = new goog.math.Box(20, 20, 30, 10);
 
   assertTrue('A point somewhere in the middle of the box should be inside.',
-      add.isInside_(15, 25, box));
+      add.isInside(15, 25, box));
 
   assertTrue('A point in top-left corner should be inside the box.',
-      add.isInside_(10, 20, box));
+      add.isInside(10, 20, box));
 
   assertTrue('A point on top border should be inside the box.',
-      add.isInside_(15, 20, box));
+      add.isInside(15, 20, box));
 
   assertFalse('A point in top-right corner should be outside the box.',
-      add.isInside_(20, 20, box));
+      add.isInside(20, 20, box));
 
   assertFalse('A point on right border should be outside the box.',
-      add.isInside_(20, 25, box));
+      add.isInside(20, 25, box));
 
   assertFalse('A point in bottom-right corner should be outside the box.',
-      add.isInside_(20, 30, box));
+      add.isInside(20, 30, box));
 
   assertFalse('A point on bottom border should be outside the box.',
-      add.isInside_(15, 30, box));
+      add.isInside(15, 30, box));
 
   assertFalse('A point in bottom-left corner should be outside the box.',
-      add.isInside_(10, 30, box));
+      add.isInside(10, 30, box));
 
   assertTrue('A point on left border should be inside the box.',
-      add.isInside_(10, 25, box));
+      add.isInside(10, 25, box));
 
   add.dispose();
 }
@@ -584,13 +584,13 @@ function testMouseMove_mouseOutBeforeThreshold() {
   var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
       'type': goog.events.EventType.MOUSEOUT, 'target': childEl};
   item.mouseMove_(event);
-  assertEquals("DragStart should not be fired for mouseout on child element.",
+  assertEquals('DragStart should not be fired for mouseout on child element.',
       null, draggedItem);
 
   var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
       'type': goog.events.EventType.MOUSEOUT, 'target': itemEl};
   item.mouseMove_(event);
-  assertEquals("DragStart should be fired for mouseout on main element.",
+  assertEquals('DragStart should be fired for mouseout on main element.',
       item, draggedItem);
 }
 

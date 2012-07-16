@@ -583,7 +583,7 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
           activeTarget.box_, x, y);
     }
 
-    if (this.isInside_(x, y, activeTarget.box_) &&
+    if (this.isInside(x, y, activeTarget.box_) &&
         subtarget == this.activeSubtarget_) {
       return;
     }
@@ -616,7 +616,7 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
   }
 
   // Check if inside target box
-  if (this.isInside_(x, y, this.targetBox_)) {
+  if (this.isInside(x, y, this.targetBox_)) {
     // Search for target and fire a dragover event if found
     activeTarget = this.activeTarget_ = this.getTargetFromPosition_(x, y);
     if (activeTarget && activeTarget.target_) {
@@ -1056,12 +1056,12 @@ goog.fx.AbstractDragDrop.prototype.maybeCreateDummyTargetForPosition_ =
  */
 goog.fx.AbstractDragDrop.prototype.getTargetFromPosition_ = function(x, y) {
   for (var target, i = 0; target = this.targetList_[i]; i++) {
-    if (this.isInside_(x, y, target.box_)) {
+    if (this.isInside(x, y, target.box_)) {
       if (target.scrollableContainer_) {
         // If we have a scrollable container we will need to make sure
         // we account for clipping of the scroll area
         var box = target.scrollableContainer_.box_;
-        if (this.isInside_(x, y, box)) {
+        if (this.isInside(x, y, box)) {
           return target;
         }
       } else {
@@ -1081,9 +1081,9 @@ goog.fx.AbstractDragDrop.prototype.getTargetFromPosition_ = function(x, y) {
  * @param {number} y Cursor position on the y-axis.
  * @param {goog.math.Box} box Box to check position against.
  * @return {boolean} Whether the given point is inside {@code box}.
- * @private
+ * @protected
  */
-goog.fx.AbstractDragDrop.prototype.isInside_ = function(x, y, box) {
+goog.fx.AbstractDragDrop.prototype.isInside = function(x, y, box) {
   return x >= box.left &&
          x < box.right &&
          y >= box.top &&
