@@ -13,6 +13,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.fx.css3.Transition</title>
 <script src="../../base.js"></script>
 <script>
+  goog.require('goog.Timer');
   goog.require('goog.dispose');
   goog.require('goog.dom');
   goog.require('goog.events');
@@ -20,6 +21,7 @@ See the COPYING file for details.
   goog.require('goog.style.transition');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
@@ -81,7 +83,7 @@ function testBeginEventFiredOnPlay() {
 }
 
 
-function testFinishEvents() {
+function testFinishEventsFiredAfterFinish() {
   if (!goog.style.transition.isSupported()) return;
 
   transition = createTransition(element, 10);
@@ -105,29 +107,7 @@ function testFinishEvents() {
 }
 
 
-function testStopEvents() {
-  if (!goog.style.transition.isSupported()) return;
-
-  transition = createTransition(element, 10);
-
-  var stopHandlerCalled = false;
-  var endHandlerCalled = false;
-  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
-      function() {
-        stopHandlerCalled = true;
-      });
-  goog.events.listen(transition, goog.fx.Transition.EventType.END,
-      function() {
-        endHandlerCalled = true;
-      });
-
-  transition.play();
-  transition.stop();
-  assertTrue(stopHandlerCalled);
-  assertTrue(endHandlerCalled);
-}
-
-function testUnsupportedEvents() {
+function testEventsWhenTransitionIsUnsupported() {
   if (goog.style.transition.isSupported()) return;
 
   transition = createTransition(element, 10);
@@ -151,7 +131,6 @@ function testUnsupportedEvents() {
       function() {
         endHandlerCalled = true;
       });
-
   goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
       function() {
         stopHandlerCalled = true;
@@ -169,6 +148,77 @@ function testUnsupportedEvents() {
   assertFalse(stopHandlerCalled);
 }
 
+
+function testCallingStopDuringAnimationWorks() {
+  if (!goog.style.transition.isSupported()) return;
+
+  transition = createTransition(element, 10);
+
+  var stopHandler = goog.testing.recordFunction();
+  var endHandler = goog.testing.recordFunction();
+  var finishHandler = goog.testing.recordFunction();
+  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
+      stopHandler);
+  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+      endHandler);
+  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+      finishHandler);
+
+  transition.play();
+  mockClock.tick(1);
+  transition.stop();
+  assertEquals(1, stopHandler.getCallCount());
+  assertEquals(1, endHandler.getCallCount());
+  mockClock.tick(10000);
+  assertEquals(0, finishHandler.getCallCount());
+}
+
+
+function testCallingStopImmediatelyWorks() {
+  if (!goog.style.transition.isSupported()) return;
+
+  transition = createTransition(element, 10);
+
+  var stopHandler = goog.testing.recordFunction();
+  var endHandler = goog.testing.recordFunction();
+  var finishHandler = goog.testing.recordFunction();
+  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
+      stopHandler);
+  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+      endHandler);
+  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+      finishHandler);
+
+  transition.play();
+  transition.stop();
+  assertEquals(1, stopHandler.getCallCount());
+  assertEquals(1, endHandler.getCallCount());
+  mockClock.tick(10000);
+  assertEquals(0, finishHandler.getCallCount());
+}
+
+function testCallingStopAfterAnimationDoesNothing() {
+  if (!goog.style.transition.isSupported()) return;
+
+  transition = createTransition(element, 10);
+
+  var stopHandler = goog.testing.recordFunction();
+  var endHandler = goog.testing.recordFunction();
+  var finishHandler = goog.testing.recordFunction();
+  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
+      stopHandler);
+  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+      endHandler);
+  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+      finishHandler);
+
+  transition.play();
+  mockClock.tick(10000);
+  transition.stop();
+  assertEquals(0, stopHandler.getCallCount());
+  assertEquals(1, endHandler.getCallCount());
+  assertEquals(1, finishHandler.getCallCount());
+}
 </script>
 </body>
 </html>
