@@ -185,6 +185,15 @@ goog.events.KeyHandler.prototype.keyCode_ = -1;
 
 
 /**
+ * Alt key recorded for key down events. FF on Mac does not report the alt key
+ * flag in the key press event, we need to record it in the key down phase.
+ * @type {boolean}
+ * @private
+ */
+goog.events.KeyHandler.prototype.altKey_ = false;
+
+
+/**
  * Enum type for the events fired by the key handler
  * @enum {string}
  */
@@ -274,6 +283,17 @@ goog.events.KeyHandler.USES_KEYDOWN_ = goog.userAgent.IE ||
 
 
 /**
+ * If true, the alt key flag is saved during the key down and reused when
+ * handling the key press. FF on Mac does not set the alt flag in the key press
+ * event.
+ * @type {boolean}
+ * @private
+ */
+goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_ = goog.userAgent.MAC &&
+    goog.userAgent.GECKO;
+
+
+/**
  * Records the keycode for browsers that only returns the keycode for key up/
  * down events. For browser/key combinations that doesn't trigger a key pressed
  * event it also fires the patched key event.
@@ -300,6 +320,9 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
     this.keyCode_ = goog.userAgent.GECKO ?
         goog.events.KeyCodes.normalizeGeckoKeyCode(e.keyCode) :
         e.keyCode;
+    if (goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_) {
+      this.altKey_ = e.altKey;
+    }
   }
 };
 
@@ -314,6 +337,7 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
 goog.events.KeyHandler.prototype.handleKeyup_ = function(e) {
   this.lastKey_ = -1;
   this.keyCode_ = -1;
+  this.altKey_ = e.altKey;
 };
 
 
@@ -325,6 +349,7 @@ goog.events.KeyHandler.prototype.handleKeyup_ = function(e) {
 goog.events.KeyHandler.prototype.handleEvent = function(e) {
   var be = e.getBrowserEvent();
   var keyCode, charCode;
+  var altKey = be.altKey;
 
   // IE reports the character code in the keyCode field for keypress events.
   // There are two exceptions however, Enter and Escape.
@@ -353,6 +378,9 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
   } else {
     keyCode = be.keyCode || this.keyCode_;
     charCode = be.charCode || 0;
+    if (goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_) {
+      altKey = this.altKey_;
+    }
     // On the Mac, shift-/ triggers a question mark char code and no key code
     // (normalized to WIN_KEY), so we synthesize the latter.
     if (goog.userAgent.MAC &&
@@ -391,6 +419,7 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
   this.lastKey_ = key;
 
   var event = new goog.events.KeyEvent(key, charCode, repeat, be);
+  event.altKey = altKey;
   this.dispatchEvent(event);
 };
 

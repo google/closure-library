@@ -522,6 +522,48 @@ See the COPYING file for details.
                  keyEvent.charCode);
   }
 
+  function testGeckoOnMacAltHandling() {
+    goog.userAgent.OPERA = false;
+    goog.userAgent.IE = false;
+    goog.userAgent.GECKO = true;
+    goog.userAgent.CAMINO = false;
+    goog.userAgent.WEBKIT = false;
+    goog.userAgent.MAC = true;
+    goog.userAgent.WINDOWS = false;
+    goog.userAgent.LINUX = false;
+    goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_ = true;
+
+    var keyEvent, keyHandler = new goog.events.KeyHandler();
+    goog.events.listen(keyHandler, goog.events.KeyHandler.EventType.KEY,
+        function(e) { keyEvent = e; });
+
+    fireKeyDown(keyHandler, goog.events.KeyCodes.COMMA, 0, null, false,
+        true, false);
+    fireKeyPress(keyHandler, 0, 8804, null, false, false, false);
+    assertEquals('should fire a key event with COMMA',
+        goog.events.KeyCodes.COMMA,
+        keyEvent.keyCode);
+    assertEquals('should fire a key event with alt key set',
+        true,
+        keyEvent.altKey);
+
+    // Scenario: alt down, a down, a press, a up (should say alt is true),
+    // alt up.
+    keyEvent = undefined;
+    fireKeyDown(keyHandler, 18, 0, null, false, true, false);
+    fireKeyDown(keyHandler, goog.events.KeyCodes.A, 0, null, false, true,
+        false);
+    fireKeyPress(keyHandler, 0, 229, null, false, false, false);
+    assertEquals('should fire a key event with alt key set',
+        true,
+        keyEvent.altKey);
+    fireKeyUp(keyHandler, 0, 229, null, false, true, false);
+    assertEquals('alt key should still be set',
+        true,
+        keyEvent.altKey);
+    fireKeyUp(keyHandler, 18, 0, null, false, false, false);
+  }
+
   function testGeckoEqualSign() {
     goog.userAgent.OPERA = false;
     goog.userAgent.IE = false;
