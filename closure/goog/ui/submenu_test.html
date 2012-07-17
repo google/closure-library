@@ -115,7 +115,7 @@ function tearDown() {
   }
 }
 
-function testKeyHandling() {
+function assertKeyHandlingIsCorrect(keyToOpenSubMenu, keyToCloseSubMenu) {
   menu.setFocusable(true);
   menu.decorate(goog.dom.getElement('demoMenu'));
 
@@ -131,8 +131,8 @@ function testKeyHandling() {
   var fireKeySequence = goog.testing.events.fireKeySequence;
 
   assertTrue(
-      'Expected RIGHT key to not be handled',
-      fireKeySequence(plainItem.getElement(), KeyCodes.RIGHT));
+      'Expected OpenSubMenu key to not be handled',
+      fireKeySequence(plainItem.getElement(), keyToOpenSubMenu));
   assertFalse(subMenuItem1Menu.isVisible());
 
   assertFalse(
@@ -145,13 +145,13 @@ function testKeyHandling() {
   assertEquals(subMenuItem1, menu.getChildAt(1));
 
   assertFalse(
-      'Expected RIGHT key to be handled',
-      fireKeySequence(subMenuItem1.getElement(), KeyCodes.RIGHT));
+      'Expected OpenSubMenu key to be handled',
+      fireKeySequence(subMenuItem1.getElement(), keyToOpenSubMenu));
   assertTrue(subMenuItem1Menu.isVisible());
 
   assertFalse(
-      'Expected LEFT key to be handled',
-      fireKeySequence(subMenuItem1.getElement(), KeyCodes.LEFT));
+      'Expected CloseSubMenu key to be handled',
+      fireKeySequence(subMenuItem1.getElement(), keyToCloseSubMenu));
   assertFalse(subMenuItem1Menu.isVisible());
 
   assertFalse(
@@ -162,6 +162,17 @@ function testKeyHandling() {
       'Expected S key to be handled',
       fireKeySequence(plainItem.getElement(), KeyCodes.S));
   assertTrue(subMenuItem1Menu.isVisible());
+}
+
+function testKeyHandling_ltr() {
+  assertKeyHandlingIsCorrect(goog.events.KeyCodes.RIGHT,
+      goog.events.KeyCodes.LEFT);
+}
+
+function testKeyHandling_rtl() {
+  document.body.style.direction = 'rtl';
+  assertKeyHandlingIsCorrect(goog.events.KeyCodes.LEFT,
+      goog.events.KeyCodes.RIGHT);
 }
 
 function testNormalLtrSubMenu() {
