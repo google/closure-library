@@ -50,6 +50,7 @@ goog.require('goog.string');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 
 
@@ -571,6 +572,15 @@ goog.editor.Field.prototype.isFixedHeight = goog.functions.TRUE;
 
 
 /**
+ * @return {boolean} Whether the field should be refocused on input.
+ *    This is a workaround for the iOS bug that text input doesn't work
+ *    when the main window listens touch events.
+ */
+goog.editor.Field.prototype.shouldRefocusOnInputMobileSafari =
+    goog.functions.FALSE;
+
+
+/**
  * Map of keyCodes (not charCodes) that cause changes in the field contents.
  * @type {Object}
  * @private
@@ -730,6 +740,18 @@ goog.editor.Field.prototype.tearDownFieldObject_ = function() {
  * @private
  */
 goog.editor.Field.prototype.setupChangeListeners_ = function() {
+  if ((goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
+      this.usesIframe() && this.shouldRefocusOnInputMobileSafari()) {
+    // This is a workaround for the iOS bug that text input doesn't work
+    // when the main window listens touch events.
+    var editWindow = this.getEditableDomHelper().getWindow();
+    this.boundRefocusListenerMobileSafari_ =
+        goog.bind(editWindow.focus, editWindow);
+    editWindow.addEventListener(goog.events.EventType.KEYDOWN,
+        this.boundRefocusListenerMobileSafari_, false);
+    editWindow.addEventListener(goog.events.EventType.TOUCHEND,
+        this.boundRefocusListenerMobileSafari_, false);
+  }
   if (goog.userAgent.OPERA && this.usesIframe()) {
     // We can't use addListener here because we need to listen on the window,
     // and removing listeners on window objects from the event register throws
@@ -839,6 +861,21 @@ goog.editor.Field.prototype.clearListeners = function() {
     this.eventRegister.removeAll();
   }
 
+  if ((goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
+      this.usesIframe() && this.shouldRefocusOnInputMobileSafari()) {
+    try {
+      var editWindow = this.getEditableDomHelper().getWindow();
+      editWindow.removeEventListener(goog.events.EventType.KEYDOWN,
+          this.boundRefocusListenerMobileSafari_, false);
+      editWindow.removeEventListener(goog.events.EventType.TOUCHEND,
+          this.boundRefocusListenerMobileSafari_, false);
+    } catch (e) {
+      // The editWindow no longer exists, or has been navigated to a different-
+      // origin URL. Either way, the event listeners have already been removed
+      // for us.
+    }
+    delete this.boundRefocusListenerMobileSafari_;
+  }
   if (goog.userAgent.OPERA && this.usesIframe()) {
     try {
       var editWindow = this.getEditableDomHelper().getWindow();
