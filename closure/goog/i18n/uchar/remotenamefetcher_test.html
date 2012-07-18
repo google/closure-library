@@ -102,6 +102,10 @@ function testPrefetch_abort() {
   assertEquals('http://www.example.com?b88=%C3%BF&p=name',
       nameFetcher.prefetchXhrIo_.getLastUri().toString());
 }
+
+function testIsNameAvailable() {
+  assertTrue(nameFetcher.isNameAvailable('a'));
+}
     </script>
   </body>
 </html>

@@ -718,8 +718,8 @@ goog.ui.CharPicker.prototype.updateGrid_ = function(grid, items) {
     var MSG_PLEASE_HOVER =
         goog.getMsg('Please hover over each cell for the character name.');
 
-    this.notice_.getElement().innerHTML = goog.i18n.uChar.toName(items[0]) ?
-        MSG_PLEASE_HOVER : '';
+    this.notice_.getElement().innerHTML =
+        this.charNameFetcher_.isNameAvailable(items[0]) ? MSG_PLEASE_HOVER : '';
     this.items = items;
     if (this.stickwrap_.offsetHeight > 0) {
       this.stick_.style.height =

@@ -117,6 +117,8 @@ goog.i18n.uChar.RemoteNameFetcher.logger_ =
     goog.debug.Logger.getLogger('goog.i18n.uChar.RemoteNameFetcher');
 
 
+
+
 /** @override */
 goog.i18n.uChar.RemoteNameFetcher.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
@@ -269,4 +271,11 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.fetch_ = function(requestType,
   goog.i18n.uChar.RemoteNameFetcher.logger_.info('Request: ' +
       url.toString());
   xhrIo.send(url);
+};
+
+
+/** @override */
+goog.i18n.uChar.RemoteNameFetcher.prototype.isNameAvailable = function(
+    character) {
+  return true;
 };

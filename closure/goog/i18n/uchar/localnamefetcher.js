@@ -68,3 +68,10 @@ goog.i18n.uChar.LocalNameFetcher.prototype.getName = function(character,
   }
   callback(localName);
 };
+
+
+/** @override */
+goog.i18n.uChar.LocalNameFetcher.prototype.isNameAvailable = function(
+    character) {
+  return !!goog.i18n.uChar.toName(character);
+};

@@ -58,3 +58,16 @@ goog.i18n.uChar.NameFetcher.prototype.prefetch = function(characters) {
  */
 goog.i18n.uChar.NameFetcher.prototype.getName = function(character, callback) {
 };
+
+
+/**
+ * Tests whether the name of a given character is available to be retrieved by
+ * the getName() function.
+ *
+ * @param {string} character The character to test.
+ * @return {boolean} True if the fetcher can retrieve or has a name available
+ *     for the given character.
+ */
+goog.i18n.uChar.NameFetcher.prototype.isNameAvailable = function(character) {
+};
+

@@ -53,6 +53,14 @@ function testGetName_missing() {
   nameFetcher.getName('P', callback);
   assertEquals(1, callback.getCallCount());
 }
+
+function testIsNameAvailable_withAvailableName() {
+  assertTrue(nameFetcher.isNameAvailable(' '));
+}
+
+function testIsNameAvailable_withoutAvailableName() {
+  assertFalse(nameFetcher.isNameAvailable('a'));
+}
     </script>
   </body>
 </html>
