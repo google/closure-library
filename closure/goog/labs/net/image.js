@@ -29,17 +29,24 @@ goog.require('goog.net.EventType');
  * goog.labs.async.combine to preload many images.
  *
  * @param {string} uri URI of the image.
+ * @param {(Image|function(): !Image)=} opt_image If present, instead of
+ *     creating a new Image instance the function will use the passed Image
+ *     instance or the result of calling the Image factory respectively. This
+ *     can be used to control exactly how Image instances are created, for
+ *     example if they should be created in a particular document element, or
+ *     have fields that will trigger CORS image fetches.
  * @return {!goog.labs.async.Result} An asyncronous result that will succeed
  *     if the image successfully loads or error if the image load fails.
  */
-goog.labs.net.image.load = function(uri) {
-
-  // TODO(nnaze): If needed, allow a way to specify how the image is created
-  // (in case an element needs to be created for a specific document, for
-  // example). There was a mechanism for this in goog.net.ImageLoader, which
-  // this file is intended to replace.
-
-  var image = new Image();
+goog.labs.net.image.load = function(uri, opt_image) {
+  var image;
+  if (!goog.isDef(opt_image)) {
+    image = new Image();
+  } else if (goog.isFunction(opt_image)) {
+    image = opt_image();
+  } else {
+    image = opt_image;
+  }
 
   // IE's load event on images can be buggy.  Instead, we wait for
   // readystatechange events and check if readyState is 'complete'.
