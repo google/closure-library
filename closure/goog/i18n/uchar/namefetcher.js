@@ -19,8 +19,6 @@
 
 goog.provide('goog.i18n.uChar.NameFetcher');
 
-goog.require('goog.disposable.IDisposable');
-
 
 
 /**
@@ -28,7 +26,6 @@ goog.require('goog.disposable.IDisposable');
  * Unicode character names.
  *
  * @interface
- * @extends {goog.disposable.IDisposable}
  */
 goog.i18n.uChar.NameFetcher = function() {
 };

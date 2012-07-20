@@ -29,7 +29,6 @@ goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.i18n.CharListDecompressor');
 goog.require('goog.i18n.uChar');
-goog.require('goog.i18n.uChar.LocalNameFetcher');
 goog.require('goog.i18n.uChar.NameFetcher');
 goog.require('goog.structs.Set');
 goog.require('goog.style');
@@ -53,6 +52,9 @@ goog.require('goog.ui.Tooltip.ElementTooltipPosition');
  *
  * See charpicker.html demo for example usage.
  * @param {goog.i18n.CharPickerData} charPickerData Category names and charlist.
+ * @param {!goog.i18n.uChar.NameFetcher} charNameFetcher Object which fetches
+ *     the names of the characters that are shown in the widget. These names
+ *     may be stored locally or come from an external source.
  * @param {Array.<string>=} opt_recents List of characters to be displayed in
  *     resently selected characters area.
  * @param {number=} opt_initCategory Sequence number of initial category.
@@ -63,9 +65,9 @@ goog.require('goog.ui.Tooltip.ElementTooltipPosition');
  * @constructor
  * @extends {goog.ui.Component}
  */
-goog.ui.CharPicker = function(charPickerData, opt_recents, opt_initCategory,
-                              opt_initSubcategory, opt_rowCount,
-                              opt_columnCount, opt_domHelper) {
+goog.ui.CharPicker = function(charPickerData, charNameFetcher, opt_recents,
+                              opt_initCategory, opt_initSubcategory,
+                              opt_rowCount, opt_columnCount, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
@@ -73,8 +75,7 @@ goog.ui.CharPicker = function(charPickerData, opt_recents, opt_initCategory,
    * @type {!goog.i18n.uChar.NameFetcher}
    * @private
    */
-  // TODO(user): Make this a required constructor parameter
-  this.charNameFetcher_ = new goog.i18n.uChar.LocalNameFetcher();
+  this.charNameFetcher_ = charNameFetcher;
 
   /**
    * Object containing character lists and category names.
@@ -277,21 +278,6 @@ goog.ui.CharPicker.prototype.hc_ = null;
 
 
 /**
- * Sets the name fetcher object. This object is used to retrieve character names
- * that are displayed within the widget.
- *
- * Note: The CharPicker object takes ownership of the NameFetcher object that it
- * is given and disposes of it when CharPicker is disposed.
- *
- * @param {!goog.i18n.uChar.NameFetcher} charNameFetcher The name fetcher.
- */
-goog.ui.CharPicker.prototype.setCharNameFetcher = function(charNameFetcher) {
-  this.charNameFetcher_.dispose();
-  this.charNameFetcher_ = charNameFetcher;
-};
-
-
-/**
  * Gets the last selected character.
  * @return {?string} The last selected character.
  */
@@ -319,7 +305,6 @@ goog.ui.CharPicker.prototype.createDom = function() {
 
 /** @override */
 goog.ui.CharPicker.prototype.disposeInternal = function() {
-  this.charNameFetcher_.dispose();
   this.hc_.dispose();
   this.hc_ = null;
   this.eventHandler_.dispose();

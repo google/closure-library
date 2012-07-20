@@ -21,7 +21,6 @@
 
 goog.provide('goog.i18n.uChar.LocalNameFetcher');
 
-goog.require('goog.Disposable');
 goog.require('goog.debug.Logger');
 goog.require('goog.i18n.uChar');
 goog.require('goog.i18n.uChar.NameFetcher');
@@ -35,12 +34,9 @@ goog.require('goog.i18n.uChar.NameFetcher');
  *
  * @constructor
  * @implements {goog.i18n.uChar.NameFetcher}
- * @extends {goog.Disposable}
  */
 goog.i18n.uChar.LocalNameFetcher = function() {
-  goog.base(this);
 };
-goog.inherits(goog.i18n.uChar.LocalNameFetcher, goog.Disposable);
 
 
 /**

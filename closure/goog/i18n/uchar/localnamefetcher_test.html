@@ -26,10 +26,6 @@ function setUp() {
   nameFetcher = new goog.i18n.uChar.LocalNameFetcher();
 }
 
-function tearDown() {
-  nameFetcher.dispose();
-}
-
 function testGetName_exists() {
   var callback = goog.testing.recordFunction(function(name) {
     assertEquals('Space', name);
