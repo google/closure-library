@@ -24,7 +24,6 @@ goog.provide('goog.style');
 
 
 goog.require('goog.array');
-goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
@@ -314,29 +313,6 @@ goog.style.getViewportPageOffset = function(doc) {
 
 
 /**
- * Determines whether getBoundingClientRect is supported for this element.
- * @param {!Element} el The element to be measured.
- * @return {boolean} Whether getBoundingClientRect is supported.
- * @private
- */
-goog.style.supportsGetBoundingClientRect_ = function(el) {
-  if (goog.userAgent.MOBILE && goog.userAgent.WEBKIT) {
-    // http://crbug.com/130651 -- Android Chrome's getBoundingClientRect
-    // incorrectly applies zoom in iframes.  To avoid adding a dependency to
-    // goog.userAgent.product, this is a little broader to apply to all mobile
-    // WebKit, so this will unfortunately slow down other mobile devices.  To
-    // mitigate the effect, we can still use getClientBoundingRect when not in
-    // an iframe.
-    var win = el.ownerDocument.defaultView;
-    if (win != win.top) {
-      return false;
-    }
-  }
-  return !!el.getBoundingClientRect;
-};
-
-
-/**
  * Gets the client rectangle of the DOM element.
  *
  * getBoundingClientRect is part of a new CSS object model draft (with a
@@ -605,7 +581,7 @@ goog.style.getPageOffset = function(el) {
   }
 
   // IE, Gecko 1.9+, and most modern WebKit.
-  if (goog.style.supportsGetBoundingClientRect_(el)) {
+  if (el.getBoundingClientRect) {
     box = goog.style.getBoundingClientRect_(el);
     // Must add the scroll coordinates in to get the absolute page offset
     // of element since getBoundingClientRect returns relative coordinates to
@@ -786,7 +762,7 @@ goog.style.getClientPosition = function(el) {
   var pos = new goog.math.Coordinate;
   if (el.nodeType == goog.dom.NodeType.ELEMENT) {
     el = /** @type {!Element} */ (el);
-    if (goog.style.supportsGetBoundingClientRect_(el)) {
+    if (el.getBoundingClientRect) {
       // IE, Gecko 1.9+, and most modern WebKit
       var box = goog.style.getBoundingClientRect_(el);
       pos.x = box.left;
