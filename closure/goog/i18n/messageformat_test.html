@@ -196,7 +196,7 @@ function testConsecutiveSingleQuotesBeforeSpecialCharDontCreateLiteral() {
 }
 
 function testSerbianSimpleSelect() {
-  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.hrSelect_);
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.beSelect_);
 
   var fmt = new goog.i18n.MessageFormat('{GENDER, select, ' +
       'female {Njen} other {Njegov}} bicikl je ' +
@@ -207,7 +207,7 @@ function testSerbianSimpleSelect() {
 }
 
 function testSerbianSimplePlural() {
-  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.hrSelect_);
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.beSelect_);
 
   var fmt = new goog.i18n.MessageFormat('Ja {NUM_PEOPLE, plural, offset:1 ' +
       '=0 {ne vidim nikoga} ' +
@@ -240,7 +240,7 @@ function testSerbianSimplePlural() {
 }
 
 function testSerbianSimplePluralNoOffset() {
-  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.hrSelect_);
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.beSelect_);
 
   var fmt = new goog.i18n.MessageFormat('Ja {NUM_PEOPLE, plural, ' +
       '=0 {ne vidim nikoga} ' +
@@ -273,7 +273,7 @@ function testSerbianSimplePluralNoOffset() {
 }
 
 function testSerbianSelectNestedInPlural() {
-  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.hrSelect_);
+  stubs.set(goog.i18n.pluralRules, 'select', goog.i18n.pluralRules.beSelect_);
   stubs.set(goog.i18n, 'NumberFormatSymbols', goog.i18n.NumberFormatSymbols_hr);
 
   var fmt = new goog.i18n.MessageFormat('{CIRCLES, plural, ' +
