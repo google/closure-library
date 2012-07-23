@@ -123,6 +123,7 @@ goog.ui.editor.LinkDialog.OkEvent = function(
 goog.inherits(goog.ui.editor.LinkDialog.OkEvent, goog.events.Event);
 
 
+
 /**
  * Event fired before testing a link by opening it in another window.
  * Calling preventDefault will stop the link from being opened.
@@ -339,6 +340,9 @@ goog.ui.editor.LinkDialog.prototype.createOkEvent = function() {
 goog.ui.editor.LinkDialog.prototype.disposeInternal = function() {
   this.eventHandler_.dispose();
   this.eventHandler_ = null;
+
+  this.tabPane_.dispose();
+  this.tabPane_ = null;
 
   this.urlInputHandler_.dispose();
   this.urlInputHandler_ = null;
