@@ -14,7 +14,6 @@ See the COPYING file for details.
   goog.require('goog.array');
   goog.require('goog.object');
   goog.require('goog.testing.Mock');
-  goog.require('goog.testing.MockControl');
   goog.require('goog.testing.MockExpectation');
   goog.require('goog.testing.jsunit');
 </script>
@@ -207,56 +206,6 @@ See the COPYING file for details.
     assertEquals(
         'Unexpected call to fn1(string).\n' +
         'Next expected call was to fn2(number)', msg);
-  }
-
-  // This tests that base Object functions which are not enumerable in IE can
-  // be mocked correctly.
-  function testBindNonEnumerableFunctions() {
-    // Create Foo and override non enumerable functions.
-    var Foo = function() {};
-    Foo.prototype.constructor = function() {
-      fail('real object should never be called');
-    };
-    Foo.prototype.hasOwnProperty = function() {
-      fail('real object should never be called');
-    };
-    Foo.prototype.isPrototypeOf = function() {
-      fail('real object should never be called');
-    };
-    Foo.prototype.propertyIsEnumerable = function() {
-      fail('real object should never be called');
-    };
-    Foo.prototype.toLocaleString = function() {
-      fail('real object should never be called');
-    };
-    Foo.prototype.toString = function() {
-      fail('real object should never be called');
-    };
-    Foo.prototype.valueOf = function() {
-      fail('real object should never be called');
-    };
-
-    // Create Mock and set $returns for toString.
-    var mockControl = new goog.testing.MockControl();
-    var mock = mockControl.createLooseMock(Foo);
-    mock.constructor().$returns('constructor');
-    mock.hasOwnProperty().$returns('hasOwnProperty');
-    mock.isPrototypeOf().$returns('isPrototypeOf');
-    mock.propertyIsEnumerable().$returns('propertyIsEnumerable');
-    mock.toLocaleString().$returns('toLocaleString');
-    mock.toString().$returns('toString');
-    mock.valueOf().$returns('valueOf');
-
-    // Execute and assert that the Mock is working correctly.
-    mockControl.$replayAll();
-    assertEquals('constructor', mock.constructor());
-    assertEquals('hasOwnProperty', mock.hasOwnProperty());
-    assertEquals('isPrototypeOf', mock.isPrototypeOf());
-    assertEquals('propertyIsEnumerable', mock.propertyIsEnumerable());
-    assertEquals('toLocaleString', mock.toLocaleString());
-    assertEquals('toString', mock.toString());
-    assertEquals('valueOf', mock.valueOf());
-    mockControl.$verifyAll();
   }
 
 </script>
