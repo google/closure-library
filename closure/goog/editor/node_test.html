@@ -428,40 +428,76 @@ function testIsBlock() {
       'table-footer-group', 'table-header-group', 'table-row',
       'table-row-group'];
 
-  var structuralTags = ['HTML', 'BODY', 'HEAD', 'FRAME', 'FRAMESET'];
+  var structuralTags = [
+    goog.dom.TagName.BODY,
+    goog.dom.TagName.FRAME,
+    goog.dom.TagName.FRAMESET,
+    goog.dom.TagName.HEAD,
+    goog.dom.TagName.HTML
+  ];
+
   // The following tags are considered inline in IE, except LEGEND which is
   // only a block element in WEBKIT.
-  var ambiguousTags = ['HR', 'ISINDEX', 'LEGEND', 'MAP', 'NOFRAMES',
-      'OPTGROUP', 'OPTION'];
+  var ambiguousTags = [
+    goog.dom.TagName.DETAILS,
+    goog.dom.TagName.HR,
+    goog.dom.TagName.ISINDEX,
+    goog.dom.TagName.LEGEND,
+    goog.dom.TagName.MAP,
+    goog.dom.TagName.NOFRAMES,
+    goog.dom.TagName.OPTGROUP,
+    goog.dom.TagName.OPTION,
+    goog.dom.TagName.SUMMARY
+  ];
+
+  // Older versions of IE and Gecko consider the following elements to be
+  // inline, but IE9+ and Gecko 2.0+ recognize the new elements.
+  var legacyAmbiguousTags = [
+    goog.dom.TagName.ARTICLE,
+    goog.dom.TagName.ASIDE,
+    goog.dom.TagName.FIGCAPTION,
+    goog.dom.TagName.FIGURE,
+    goog.dom.TagName.FOOTER,
+    goog.dom.TagName.HEADER,
+    goog.dom.TagName.HGROUP,
+    goog.dom.TagName.NAV,
+    goog.dom.TagName.SECTION
+  ];
 
   var tagsToIgnore = goog.array.flatten(structuralTags, ambiguousTags);
 
-  // Checking the applet tag on Firefox causes the test to hang on the
-  // Google test runner for Firefox 10 on Windows XP, but not on Linux.
-  if (goog.userAgent.GECKO &&
-      goog.userAgent.WINDOWS &&
-      goog.userAgent.isVersion(10) &&
-      // 'Windows NT 5.1' is Windows XP.
-      goog.string.contains(
-          goog.userAgent.getUserAgentString(), 'Windows NT 5.1')) {
-    tagsToIgnore.push('APPLET');
+  if ((goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) ||
+      (goog.userAgent.GECKO && !goog.userAgent.isVersion('2'))) {
+    goog.array.extend(tagsToIgnore, legacyAmbiguousTags);
+  }
+
+  // Appending an applet tag can cause the test to hang if Java is blocked on
+  // the system.
+  tagsToIgnore.push(goog.dom.TagName.APPLET);
+
+  // Appending an embed tag to the page in IE brings up a warning dialog about
+  // loading Java content.
+  if (goog.userAgent.IE) {
+    tagsToIgnore.push(goog.dom.TagName.EMBED);
   }
 
   for (var tag in goog.dom.TagName) {
-    if (!goog.array.contains(tagsToIgnore, tag)) {
-      var el = goog.dom.createElement(tag);
-      document.body.appendChild(el);
-      var display = goog.style.getCascadedStyle(el, 'display') ||
-                    goog.style.getComputedStyle(el, 'display');
-      goog.dom.removeNode(el);
+    if (goog.array.contains(tagsToIgnore, tag)) {
+      continue;
+    }
 
-      if (goog.editor.node.isBlockTag(el)) {
-        assertContains('Display for ' + tag + ' should be block-like',
-            display, blockDisplays);
-      } else {
-        assertNotContains('Display for ' + tag + ' should not be block-like',
-            display, blockDisplays);
-      }
+    var el = goog.dom.createElement(tag);
+    document.body.appendChild(el);
+    var display = goog.style.getCascadedStyle(el, 'display') ||
+                  goog.style.getComputedStyle(el, 'display');
+    goog.dom.removeNode(el);
+
+    if (goog.editor.node.isBlockTag(el)) {
+      assertContains('Display for ' + tag + ' should be block-like',
+          display, blockDisplays);
+    } else {
+      assertNotContains('Display for ' + tag + ' should not be block-like',
+          display, blockDisplays);
     }
   }
 }

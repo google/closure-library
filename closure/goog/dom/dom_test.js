@@ -22,6 +22,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.object');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -1110,32 +1111,43 @@ function testGetFrameContentWindow() {
 }
 
 function testCanHaveChildren() {
+  var EMPTY_ELEMENTS = goog.object.createSet(
+      goog.dom.TagName.APPLET,
+      goog.dom.TagName.AREA,
+      goog.dom.TagName.BASE,
+      goog.dom.TagName.BR,
+      goog.dom.TagName.COL,
+      goog.dom.TagName.COMMAND,
+      goog.dom.TagName.EMBED,
+      goog.dom.TagName.FRAME,
+      goog.dom.TagName.HR,
+      goog.dom.TagName.IMG,
+      goog.dom.TagName.INPUT,
+      goog.dom.TagName.IFRAME,
+      goog.dom.TagName.ISINDEX,
+      goog.dom.TagName.KEYGEN,
+      goog.dom.TagName.LINK,
+      goog.dom.TagName.NOFRAMES,
+      goog.dom.TagName.NOSCRIPT,
+      goog.dom.TagName.META,
+      goog.dom.TagName.OBJECT,
+      goog.dom.TagName.PARAM,
+      goog.dom.TagName.SCRIPT,
+      goog.dom.TagName.SOURCE,
+      goog.dom.TagName.STYLE,
+      goog.dom.TagName.TRACK,
+      goog.dom.TagName.WBR);
+
+  // IE opens a dialog warning about using Java content if an EMBED is created.
+  var IE_ILLEGAL_ELEMENTS = goog.object.createSet(goog.dom.TagName.EMBED);
+
   for (var tag in goog.dom.TagName) {
-    var expected = true;
-    switch (tag) {
-      case goog.dom.TagName.BASE:
-      case goog.dom.TagName.APPLET:
-      case goog.dom.TagName.AREA:
-      case goog.dom.TagName.BR:
-      case goog.dom.TagName.COL:
-      case goog.dom.TagName.FRAME:
-      case goog.dom.TagName.HR:
-      case goog.dom.TagName.IMG:
-      case goog.dom.TagName.INPUT:
-      case goog.dom.TagName.IFRAME:
-      case goog.dom.TagName.ISINDEX:
-      case goog.dom.TagName.LINK:
-      case goog.dom.TagName.NOFRAMES:
-      case goog.dom.TagName.NOSCRIPT:
-      case goog.dom.TagName.META:
-      case goog.dom.TagName.OBJECT:
-      case goog.dom.TagName.PARAM:
-      case goog.dom.TagName.SCRIPT:
-      case goog.dom.TagName.STYLE:
-        expected = false;
-        break;
+    if (goog.userAgent.IE && tag in IE_ILLEGAL_ELEMENTS) {
+      continue;
     }
-    var node = goog.dom.createDom(tag);
+
+    var expected = !(tag in EMPTY_ELEMENTS);
+    var node = goog.dom.createElement(tag);
     assertEquals(tag + ' should ' + (expected ? '' : 'not ') +
         'have children', expected, goog.dom.canHaveChildren(node));
 

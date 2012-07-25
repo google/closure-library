@@ -888,12 +888,15 @@ goog.dom.canHaveChildren = function(node) {
     case goog.dom.TagName.BASE:
     case goog.dom.TagName.BR:
     case goog.dom.TagName.COL:
+    case goog.dom.TagName.COMMAND:
+    case goog.dom.TagName.EMBED:
     case goog.dom.TagName.FRAME:
     case goog.dom.TagName.HR:
     case goog.dom.TagName.IMG:
     case goog.dom.TagName.INPUT:
     case goog.dom.TagName.IFRAME:
     case goog.dom.TagName.ISINDEX:
+    case goog.dom.TagName.KEYGEN:
     case goog.dom.TagName.LINK:
     case goog.dom.TagName.NOFRAMES:
     case goog.dom.TagName.NOSCRIPT:
@@ -901,7 +904,10 @@ goog.dom.canHaveChildren = function(node) {
     case goog.dom.TagName.OBJECT:
     case goog.dom.TagName.PARAM:
     case goog.dom.TagName.SCRIPT:
+    case goog.dom.TagName.SOURCE:
     case goog.dom.TagName.STYLE:
+    case goog.dom.TagName.TRACK:
+    case goog.dom.TagName.WBR:
       return false;
   }
   return true;
