@@ -39,6 +39,7 @@ goog.provide('goog.testing.Mock');
 goog.provide('goog.testing.MockExpectation');
 
 goog.require('goog.array');
+goog.require('goog.object');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.MockInterface');
 goog.require('goog.testing.mockmatchers');
@@ -210,6 +211,23 @@ goog.testing.Mock.STRICT = 0;
 
 
 /**
+ * Basically a copy of goog.object.PROTOTYPE_FIELDS_.
+ * @const
+ * @type {!Array.<string>}
+ * @private
+ */
+goog.testing.Mock.PROTOTYPE_FIELDS_ = [
+  'constructor',
+  'hasOwnProperty',
+  'isPrototypeOf',
+  'propertyIsEnumerable',
+  'toLocaleString',
+  'toString',
+  'valueOf'
+];
+
+
+/**
  * A proxy for the mock.  This can be used for dependency injection in lieu of
  * the mock if the test requires a strict instanceof check.
  * @type {Object}
@@ -256,8 +274,26 @@ goog.testing.Mock.prototype.$threwException_ = null;
  * @private
  */
 goog.testing.Mock.prototype.$initializeFunctions_ = function(objectToMock) {
-  // TODO (arv): Implement goog.object.getIterator and replace this loop.
-  for (var prop in objectToMock) {
+  // Gets the object properties.
+  var enumerableProperties = goog.object.getKeys(objectToMock);
+
+  // The non enumerable properties are added if they override the ones in the
+  // Object prototype. This is due to the fact that IE8 does not enumerate any
+  // of the prototype Object functions even when overriden and mocking these is
+  // sometimes needed.
+  for (var i = 0; i < goog.testing.Mock.PROTOTYPE_FIELDS_.length; i++) {
+    var prop = goog.testing.Mock.PROTOTYPE_FIELDS_[i];
+    // TODO(user): Remove the conditional to add all prototype fields, look
+    // at b/6758711 before doing this. Also, the comment on the loop should be
+    // updated if this is done.
+    if (objectToMock[prop] !== Object.prototype[prop]) {
+      enumerableProperties.push(prop);
+    }
+  }
+
+  // Adds the properties to the mock.
+  for (var i = 0; i < enumerableProperties.length; i++) {
+    var prop = enumerableProperties[i];
     if (typeof objectToMock[prop] == 'function') {
       this[prop] = goog.bind(this.$mockMethod, this, prop);
       if (this.$proxy) {
