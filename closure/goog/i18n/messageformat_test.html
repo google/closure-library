@@ -16,6 +16,7 @@ See the COPYING file for details.
   goog.require('goog.i18n.NumberFormatSymbols');
   goog.require('goog.i18n.NumberFormatSymbols_en');
   goog.require('goog.i18n.NumberFormatSymbols_hr');
+  goog.require('goog.i18n.ordinalRules');
   goog.require('goog.i18n.pluralRules');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
@@ -403,7 +404,68 @@ function testSimplePluralWithIgnorePound() {
                            'PLACE': 'the cubes'}));
 }
 
+function testSimpleOrdinal() {
+  var fmt = new goog.i18n.MessageFormat('{NUM_FLOOR, selectordinal, ' +
+      'one {Take the elevator to the #st floor.}' +
+      'two {Take the elevator to the #nd floor.}' +
+      'few {Take the elevator to the #rd floor.}' +
+      'other {Take the elevator to the #th floor.}}');
 
+  assertEquals('Take the elevator to the 1st floor.',
+               fmt.format({'NUM_FLOOR': 1}));
+  assertEquals('Take the elevator to the 2nd floor.',
+               fmt.format({'NUM_FLOOR': 2}));
+  assertEquals('Take the elevator to the 3rd floor.',
+               fmt.format({'NUM_FLOOR': 3}));
+  assertEquals('Take the elevator to the 4th floor.',
+               fmt.format({'NUM_FLOOR': 4}));
+  assertEquals('Take the elevator to the 23rd floor.',
+               fmt.format({'NUM_FLOOR': 23}));
+  // Esoteric example.
+  assertEquals('Take the elevator to the 0th floor.',
+               fmt.format({'NUM_FLOOR': 0}));
+}
+
+function testOrdinalWithNegativeValue() {
+  var fmt = new goog.i18n.MessageFormat('{NUM_FLOOR, selectordinal, ' +
+      'one {Take the elevator to the #st floor.}' +
+      'two {Take the elevator to the #nd floor.}' +
+      'few {Take the elevator to the #rd floor.}' +
+      'other {Take the elevator to the #th floor.}}');
+
+  try {
+    fmt.format({'NUM_FLOOR': -2});
+  } catch (e) {
+    assertEquals('Assertion failed: Argument index smaller than offset.',
+                 e.message);
+    return;
+  }
+  fail('Expected an error to be thrown');
+}
+
+function testSimpleOrdinalWithIgnorePound() {
+  var fmt = new goog.i18n.MessageFormat('{NUM_FLOOR, selectordinal, ' +
+      'one {Take the elevator to the #st floor.}' +
+      'two {Take the elevator to the #nd floor.}' +
+      'few {Take the elevator to the #rd floor.}' +
+      'other {Take the elevator to the #th floor.}}');
+
+  assertEquals('Take the elevator to the #th floor.',
+               fmt.formatIgnoringPound({'NUM_FLOOR': 100}));
+}
+
+function testMissingOrInvalidOrdinalParameter() {
+  var fmt = new goog.i18n.MessageFormat('{SOME_NUM, selectordinal,' +
+      'other {result}}');
+
+  // Key name doesn't match A != SOME_NUM.
+  assertEquals('Undefined or invalid parameter - SOME_NUM',
+               fmt.format({A: '10'}));
+
+  // Value is not a number.
+  assertEquals('Undefined or invalid parameter - SOME_NUM',
+               fmt.format({'SOME_NUM': 'Value'}));
+}
 </script>
 </body>
 </html>
