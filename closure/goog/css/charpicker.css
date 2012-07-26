@@ -18,8 +18,7 @@
 .goog-char-picker-hovercard {
   border: solid 5px #ffcc33;
   min-width: 64px;
-  max-width: 200px;
-  height: 64px;
+  max-width: 160px;
   padding: 16px;
   background-color: white;
   text-align: center;
