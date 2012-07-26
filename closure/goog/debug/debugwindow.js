@@ -489,7 +489,7 @@ goog.debug.DebugWindow.prototype.getStyleRules = function() {
  * @protected
  */
 goog.debug.DebugWindow.prototype.writeInitialDocument = function() {
-  if (this.hasActiveWindow()) {
+  if (!this.hasActiveWindow()) {
     return;
   }
 
