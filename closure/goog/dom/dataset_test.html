@@ -99,6 +99,19 @@ function testRemove() {
 }
 
 
+function testGetAll() {
+  var el = $('el1');
+  var expectedDataset = {
+    'basicKey': 'basic',
+    'UnusualKey1': 'unusual1',
+    'unusual-Key2': 'unusual2',
+    '-Bizarre--Key': 'bizarre'
+  };
+  assertHashEquals('Dataset should have basicKey, UnusualKey1, ' +
+                   'unusual-Key2, and -Bizarre--Key',
+                   expectedDataset, dataset.getAll(el));
+}
+
 </script>
 </body>
 </html>
