@@ -583,7 +583,7 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
           activeTarget.box_, x, y);
     }
 
-    if (this.isInside(x, y, activeTarget.box_) &&
+    if (activeTarget.box_.contains(position) &&
         subtarget == this.activeSubtarget_) {
       return;
     }
@@ -616,9 +616,9 @@ goog.fx.AbstractDragDrop.prototype.moveDrag_ = function(event) {
   }
 
   // Check if inside target box
-  if (this.isInside(x, y, this.targetBox_)) {
+  if (this.targetBox_.contains(position)) {
     // Search for target and fire a dragover event if found
-    activeTarget = this.activeTarget_ = this.getTargetFromPosition_(x, y);
+    activeTarget = this.activeTarget_ = this.getTargetFromPosition_(position);
     if (activeTarget && activeTarget.target_) {
       // If a subtargeting function is enabled get the current subtarget
       if (this.subtargetFunction_) {
@@ -1048,20 +1048,19 @@ goog.fx.AbstractDragDrop.prototype.maybeCreateDummyTargetForPosition_ =
 /**
  * Returns the target for a given cursor position.
  *
- * @param {number} x Cursor position on the x-axis.
- * @param {number} y Cursor position on the y-axis.
+ * @param {goog.math.Coordinate} position Cursor position.
  * @return {Object} Target for position or null if no target was defined
  *     for the given position.
  * @private
  */
-goog.fx.AbstractDragDrop.prototype.getTargetFromPosition_ = function(x, y) {
+goog.fx.AbstractDragDrop.prototype.getTargetFromPosition_ = function(position) {
   for (var target, i = 0; target = this.targetList_[i]; i++) {
-    if (this.isInside(x, y, target.box_)) {
+    if (target.box_.contains(position)) {
       if (target.scrollableContainer_) {
         // If we have a scrollable container we will need to make sure
         // we account for clipping of the scroll area
         var box = target.scrollableContainer_.box_;
-        if (this.isInside(x, y, box)) {
+        if (box.contains(position)) {
           return target;
         }
       } else {
@@ -1082,6 +1081,7 @@ goog.fx.AbstractDragDrop.prototype.getTargetFromPosition_ = function(x, y) {
  * @param {goog.math.Box} box Box to check position against.
  * @return {boolean} Whether the given point is inside {@code box}.
  * @protected
+ * @deprecated Use goog.math.Box.contains.
  */
 goog.fx.AbstractDragDrop.prototype.isInside = function(x, y, box) {
   return x >= box.left &&
