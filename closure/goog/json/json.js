@@ -128,8 +128,15 @@ goog.json.Replacer;
  * @return {string} A JSON string representation of the input.
  */
 goog.json.serialize = function(object, opt_replacer) {
-  // TODO(nicksantos): Change this to default to JSON.stringify when available.
-  // I need to fiddle with the default externs a bit to make this happen.
+  // NOTE(nicksantos): Currently, we never use JSON.stringify.
+  //
+  // The last time I evaluated this, JSON.stringify had subtle bugs and behavior
+  // differences on all browsers, and the performance win was not large enough
+  // to justify all the issues. This may change in the future as browser
+  // implementations get better.
+  //
+  // assertSerialize in json_test contains if branches for the cases
+  // that fail.
   return new goog.json.Serializer(opt_replacer).serialize(object);
 };
 
