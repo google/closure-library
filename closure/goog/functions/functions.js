@@ -82,14 +82,17 @@ goog.functions.error = function(message) {
 
 
 /**
- * Given a function, create a function that silently discards all additional
- * arguments.
+ * Given a function, create a function that keeps opt_numArgs arguments and
+ * silently discards all additional arguments.
  * @param {Function} f The original function.
- * @return {!Function} A version of f that discards its arguments.
+ * @param {number=} opt_numArgs The number of arguments to keep. Defaults to 0.
+ * @return {!Function} A version of f that only keeps the first opt_numArgs
+ *     arguments.
  */
-goog.functions.lock = function(f) {
+goog.functions.lock = function(f, opt_numArgs) {
+  opt_numArgs = opt_numArgs || 0;
   return function() {
-    return f.call(this);
+    return f.apply(this, Array.prototype.slice.call(arguments, 0, opt_numArgs));
   };
 };
 

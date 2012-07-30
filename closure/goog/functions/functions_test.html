@@ -51,6 +51,7 @@ function testLock() {
 
   assertEquals(6, add(1, 2, 3));
   assertEquals(0, goog.functions.lock(add)(1, 2, 3));
+  assertEquals(3, goog.functions.lock(add, 2)(1, 2, 3));
   assertEquals(6, goog.partial(add, 1, 2)(3));
   assertEquals(3, goog.functions.lock(goog.partial(add, 1, 2))(3));
 }
