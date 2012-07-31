@@ -45,14 +45,16 @@ goog.dom.dataset.set = function(element, key, value) {
   if (element.dataset) {
     element.dataset[key] = value;
   } else {
-    element.setAttribute('data-' + goog.string.toSelectorCase(key), value);
+    element.setAttribute(
+        goog.dom.dataset.PREFIX_ + goog.string.toSelectorCase(key),
+        value);
   }
 };
 
 
 /**
  * Gets a custom data attribute from an element. The key should be
-  * in camelCase format (e.g "keyName" for the "data-key-name" attribute).
+ * in camelCase format (e.g "keyName" for the "data-key-name" attribute).
  * @param {Element} element DOM node to get the custom data attribute from.
  * @param {string} key Key for the custom data attribute.
  * @return {?string} The attribute value, if it exists.
@@ -61,7 +63,8 @@ goog.dom.dataset.get = function(element, key) {
   if (element.dataset) {
     return element.dataset[key];
   } else {
-    return element.getAttribute('data-' + goog.string.toSelectorCase(key));
+    return element.getAttribute(goog.dom.dataset.PREFIX_ +
+                                goog.string.toSelectorCase(key));
   }
 };
 
@@ -84,7 +87,7 @@ goog.dom.dataset.remove = function(element, key) {
 
 /**
  * Checks whether custom data attribute exists on an element. The key should be
-  * in camelCase format (e.g "keyName" for the "data-key-name" attribute).
+ * in camelCase format (e.g "keyName" for the "data-key-name" attribute).
  *
  * @param {Element} element DOM node to get the custom data attribute from.
  * @param {string} key Key for the custom data attribute.
@@ -104,7 +107,10 @@ goog.dom.dataset.has = function(element, key) {
 
 
 /**
- * Gets all custom data attributes as a string map.
+ * Gets all custom data attributes as a string map.  The attribute names will be
+ * camel cased (e.g., data-foo-bar -> dataset['foobar']).  This operation is not
+ * safe for attributes having camel-cased names clashing with already existing
+ * properties (e.g., data-to-string -> dataset['toString']).
  * @param {!Element} element DOM node to get the data attributes from.
  * @return {!Object} The string map containing data attributes and their
  *     respective values.
