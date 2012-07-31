@@ -1376,6 +1376,27 @@ function testArrayBucketEvenOdd() {
   assertArraysEqual(b[false], [1, 3, 5, 7, 9]);
 }
 
+function testArrayToObject() {
+  var a = [
+    {name: 'a'},
+    {name: 'b'},
+    {name: 'c'},
+    {name: 'd'}];
+
+  function getName(value, index, array) {
+    assertEquals(value, array[index]);
+    assertEquals('number', typeof index);
+    assertEquals(a, array);
+    return value.name;
+  }
+
+  var b = goog.array.toObject(a, getName);
+
+  for (var i = 0; i < a.length; i++) {
+    assertEquals(a[i], b[a[i].name]);
+  }
+}
+
 function testArrayRepeat() {
   assertArrayEquals([], goog.array.repeat(3, 0));
   assertArrayEquals([], goog.array.repeat(3, -1));
