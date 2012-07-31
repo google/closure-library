@@ -265,7 +265,7 @@ goog.editor.plugins.LinkBubble.prototype.getBubbleTargetFromSelection =
     // selected element = range.getContainerElement().  Right now this is true,
     // but attempts to re-use this method for other purposes could cause issues.
     // TODO(robbyw): Refactor this method to also take a range, and use that.
-    var range = this.fieldObject.getRange();
+    var range = this.getFieldObject().getRange();
     if (range && range.isCollapsed() && range.getStartOffset() == 0) {
       var startNode = range.getStartNode();
       var previous = startNode.previousSibling;
@@ -399,7 +399,7 @@ goog.editor.plugins.LinkBubble.prototype.testLink = function() {
       {
         'target': '_blank',
         'noreferrer': this.stopReferrerLeaks_
-      }, this.fieldObject.getAppWindow());
+      }, this.getFieldObject().getAppWindow());
 };
 
 
@@ -443,7 +443,7 @@ goog.editor.plugins.LinkBubble.prototype.getLinkToTextObj_ = function() {
  * @private
  */
 goog.editor.plugins.LinkBubble.prototype.showLinkDialog_ = function() {
-  this.fieldObject.execCommand(goog.editor.Command.MODAL_LINK_EDITOR,
+  this.getFieldObject().execCommand(goog.editor.Command.MODAL_LINK_EDITOR,
       new goog.editor.Link(
           /** @type {HTMLAnchorElement} */ (this.getTargetElement()),
           false));
@@ -456,7 +456,7 @@ goog.editor.plugins.LinkBubble.prototype.showLinkDialog_ = function() {
  * @private
  */
 goog.editor.plugins.LinkBubble.prototype.deleteLink_ = function() {
-  this.fieldObject.dispatchBeforeChange();
+  this.getFieldObject().dispatchBeforeChange();
 
   var link = this.getTargetElement();
   var child = link.lastChild;
@@ -465,7 +465,7 @@ goog.editor.plugins.LinkBubble.prototype.deleteLink_ = function() {
 
   this.closeBubble();
 
-  this.fieldObject.dispatchChange();
+  this.getFieldObject().dispatchChange();
 };
 
 

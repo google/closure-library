@@ -74,7 +74,7 @@ goog.editor.plugins.Emoticons.prototype.execCommandInternal = function(
   });
   img.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, emoji.getId());
 
-  this.fieldObject.getRange().replaceContentsWithNode(img);
+  this.getFieldObject().getRange().replaceContentsWithNode(img);
 
   // IE does the right thing with the cursor, and has a js error when we try
   // to place the cursor manually

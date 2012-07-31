@@ -349,7 +349,8 @@ goog.editor.plugins.Blockquote.prototype.splitQuotedBlockW3C_ =
   // Set the insertion point.
   var dh = this.getFieldDomHelper();
   var tagToInsert =
-      this.fieldObject.queryCommandValue(goog.editor.Command.DEFAULT_TAG) ||
+      this.getFieldObject().queryCommandValue(
+          goog.editor.Command.DEFAULT_TAG) ||
           goog.dom.TagName.DIV;
   var container = dh.createElement(/** @type {string} */ (tagToInsert));
   container.innerHTML = '&nbsp;';  // Prevent the div from collapsing.
@@ -379,7 +380,7 @@ goog.editor.plugins.Blockquote.prototype.splitQuotedBlockW3C_ =
  */
 goog.editor.plugins.Blockquote.prototype.insertEmptyTextNodeBeforeRange_ =
     function() {
-  var range = this.fieldObject.getRange();
+  var range = this.getFieldObject().getRange();
   var node = this.getFieldDomHelper().createTextNode('');
   range.insertNode(node, true);
   return node;
@@ -418,7 +419,8 @@ goog.editor.plugins.Blockquote.prototype.splitQuotedBlockIE_ =
 
   // Set insertion point.
   var tagToInsert =
-      this.fieldObject.queryCommandValue(goog.editor.Command.DEFAULT_TAG) ||
+      this.getFieldObject().queryCommandValue(
+          goog.editor.Command.DEFAULT_TAG) ||
           goog.dom.TagName.DIV;
   var div = dh.createElement(/** @type {string} */ (tagToInsert));
   quoteNode.parentNode.insertBefore(div, secondHalf);

@@ -343,13 +343,13 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk_ = function(e) {
     }
   }
 
-  this.fieldObject.focus();
+  this.getFieldObject().focus();
 
   // Place cursor to the right of the modified link.
   this.currentLink_.placeCursorRightOf();
 
-  this.fieldObject.dispatchSelectionChangeEvent();
-  this.fieldObject.dispatchChange();
+  this.getFieldObject().dispatchSelectionChangeEvent();
+  this.getFieldObject().dispatchChange();
 
   this.eventHandler_.removeAll();
 };
@@ -364,7 +364,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleCancel_ = function(e) {
   if (this.currentLink_.isNew()) {
     goog.dom.flattenElement(this.currentLink_.getAnchor());
     // Make sure listeners know the anchor was flattened out.
-    this.fieldObject.dispatchChange();
+    this.getFieldObject().dispatchChange();
   }
 
   this.eventHandler_.removeAll();

@@ -212,7 +212,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
   } else if (opt_target) {
     selectedElement = /** @type {Element} */ (opt_target);
   } else {
-    var range = this.fieldObject.getRange();
+    var range = this.getFieldObject().getRange();
     if (range) {
       var startNode = range.getStartNode();
       var endNode = range.getEndNode();
@@ -306,17 +306,17 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.disable = function(field) {
 goog.editor.plugins.AbstractBubblePlugin.prototype.getSharedBubble_ =
     function() {
   var bubbleParent = /** @type {!Element} */ (this.bubbleParent_ ||
-      this.fieldObject.getAppWindow().document.body);
+      this.getFieldObject().getAppWindow().document.body);
   this.dom_ = goog.dom.getDomHelper(bubbleParent);
 
   var bubble = goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[
-      this.fieldObject.id];
+      this.getFieldObject().id];
   if (!bubble) {
     bubble = goog.editor.plugins.AbstractBubblePlugin.bubbleFactory_.call(null,
         bubbleParent,
-        this.fieldObject.getBaseZindex());
-    goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[this.fieldObject.id] =
-        bubble;
+        this.getFieldObject().getBaseZindex());
+    goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[
+        this.getFieldObject().id] = bubble;
   }
   return bubble;
 };

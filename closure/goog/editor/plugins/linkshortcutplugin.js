@@ -51,9 +51,9 @@ goog.editor.plugins.LinkShortcutPlugin.prototype.handleKeyboardShortcut =
   var command;
   if (isModifierPressed && key == 'k') {
     var link = /** @type {goog.editor.Link?} */ (
-        this.fieldObject.execCommand(goog.editor.Command.LINK));
+        this.getFieldObject().execCommand(goog.editor.Command.LINK));
     if (link) {
-      link.finishLinkCreation(this.fieldObject);
+      link.finishLinkCreation(this.getFieldObject());
     }
     return true;
   }

@@ -117,7 +117,7 @@ goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
   //    on dialog close (since the DOM nodes would get clobbered in FF)
   // 3) We're not using lorem already
   // 4) The field is not currently active (doesn't have focus).
-  var fieldObj = this.fieldObject;
+  var fieldObj = this.getFieldObject();
   if (!this.usingLorem_ &&
       !fieldObj.inModalMode() &&
       goog.editor.Field.getActiveFieldId() != fieldObj.id) {
@@ -158,7 +158,7 @@ goog.editor.plugins.LoremIpsum.prototype.clearLorem_ = function(
   // Don't mess with lorem state when a dialog is open as that screws
   // with the dialog's ability to properly restore the selection
   // on dialog close (since the DOM nodes would get clobbered)
-  var fieldObj = this.fieldObject;
+  var fieldObj = this.getFieldObject();
   if (this.usingLorem_ && !fieldObj.inModalMode()) {
     var field = fieldObj.getElement();
     if (!field) {
