@@ -7,13 +7,13 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <head>
-<title>Closure Unit Tests - goog.labs.async.chain</title>
+<title>Closure Unit Tests - goog.labs.result.chain</title>
 <script src="../../base.js"></script>
 <script>
 
 goog.require('goog.Timer');
-goog.require('goog.labs.async.SimpleResult');
-goog.require('goog.labs.async.chain');
+goog.require('goog.labs.result.SimpleResult');
+goog.require('goog.labs.result.chain');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -33,8 +33,8 @@ function setUpPage() {
 
 function setUp() {
   mockClock.reset();
-  givenResult = new goog.labs.async.SimpleResult();
-  dependentResult = new goog.labs.async.SimpleResult();
+  givenResult = new goog.labs.result.SimpleResult();
+  dependentResult = new goog.labs.result.SimpleResult();
   counter = new goog.testing.recordFunction();
   actionCallback = goog.testing.recordFunction(function(result) {
     return dependentResult;
@@ -52,8 +52,8 @@ function tearDownPage() {
 // SYNCHRONOUS TESTS:
 
 function testChainWhenBothResultsSuccess() {
-  var finalResult = goog.labs.async.chain(givenResult, actionCallback);
-  goog.labs.async.wait(finalResult, counter);
+  var finalResult = goog.labs.result.chain(givenResult, actionCallback);
+  goog.labs.result.wait(finalResult, counter);
 
   givenResult.setValue(1);
   dependentResult.setValue(2);
@@ -63,8 +63,8 @@ function testChainWhenBothResultsSuccess() {
 }
 
 function testChainWhenFirstResultError() {
-  var finalResult = goog.labs.async.chain(givenResult, actionCallback);
-  goog.labs.async.wait(finalResult, counter);
+  var finalResult = goog.labs.result.chain(givenResult, actionCallback);
+  goog.labs.result.wait(finalResult, counter);
 
   givenResult.setError(4);
 
@@ -73,8 +73,8 @@ function testChainWhenFirstResultError() {
 }
 
 function testChainWhenSecondResultError() {
-  var finalResult = goog.labs.async.chain(givenResult, actionCallback);
-  goog.labs.async.wait(finalResult, counter);
+  var finalResult = goog.labs.result.chain(givenResult, actionCallback);
+  goog.labs.result.wait(finalResult, counter);
 
   givenResult.setValue(1);
   dependentResult.setError(5);
@@ -86,8 +86,8 @@ function testChainWhenSecondResultError() {
 // ASYNCHRONOUS TESTS:
 
 function testChainAsyncWhenBothResultsSuccess() {
-  var finalResult = goog.labs.async.chain(givenResult, actionCallback);
-  goog.labs.async.wait(finalResult, counter);
+  var finalResult = goog.labs.result.chain(givenResult, actionCallback);
+  goog.labs.result.wait(finalResult, counter);
 
   goog.Timer.callOnce(function() { givenResult.setValue(1); });
   mockClock.tick();
@@ -101,8 +101,8 @@ function testChainAsyncWhenBothResultsSuccess() {
 }
 
 function testChainAsyncWhenFirstResultError() {
-  var finalResult = goog.labs.async.chain(givenResult, actionCallback);
-  goog.labs.async.wait(finalResult, counter);
+  var finalResult = goog.labs.result.chain(givenResult, actionCallback);
+  goog.labs.result.wait(finalResult, counter);
 
   goog.Timer.callOnce(function() { givenResult.setError(6); });
   mockClock.tick();
@@ -112,8 +112,8 @@ function testChainAsyncWhenFirstResultError() {
 }
 
 function testChainAsyncWhenSecondResultError() {
-  var finalResult = goog.labs.async.chain(givenResult, actionCallback);
-  goog.labs.async.wait(finalResult, counter);
+  var finalResult = goog.labs.result.chain(givenResult, actionCallback);
+  goog.labs.result.wait(finalResult, counter);
 
   goog.Timer.callOnce(function() { givenResult.setValue(1); });
   mockClock.tick();
@@ -135,7 +135,7 @@ function assertSuccess(recordFunction, result, value) {
   assertEquals(1, recordFunction.getCallCount());
   var res = recordFunction.popLastCall().getArgument(0);
   assertEquals(result, res);
-  assertEquals(goog.labs.async.Result.State.SUCCESS, res.getState());
+  assertEquals(goog.labs.result.Result.State.SUCCESS, res.getState());
   assertEquals(value, res.getValue());
 }
 
@@ -145,7 +145,7 @@ function assertError(recordFunction, result, value) {
   assertEquals(1, recordFunction.getCallCount());
   var res = recordFunction.popLastCall().getArgument(0);
   assertEquals(result, res);
-  assertEquals(goog.labs.async.Result.State.ERROR, res.getState());
+  assertEquals(goog.labs.result.Result.State.ERROR, res.getState());
   assertEquals(value, res.getError());
 }
 

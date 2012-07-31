@@ -25,10 +25,10 @@
  *  var result2 = xhr.getJson('testdata/xhr_test_json.data');
  *
  *  // Create a Result that resolves when both prior results resolve.
- *  var combinedResult = goog.labs.async.combine.onSuccess(result1, result2);
+ *  var combinedResult = goog.labs.result.combine.onSuccess(result1, result2);
  *
  *  // Process data after successful resolution of both results.
- *  goog.labs.async.wait.onSuccess(combinedResult, function(results) {
+ *  goog.labs.result.wait.onSuccess(combinedResult, function(results) {
  *    var textData = results[0].getValue();
  *    var jsonData = results[1].getValue();
  *    assertEquals('Just some data.', textData);
@@ -36,14 +36,14 @@
  *  });
  *
  *  // Handle errors when either or both results failed.
- *  goog.labs.async.wait.onError(combinedResult, function(combined) {
+ *  goog.labs.result.wait.onError(combinedResult, function(combined) {
  *    var results = combined.getError();
  *
- *    if (results[0].getState() == goog.labs.async.Result.State.ERROR) {
+ *    if (results[0].getState() == goog.labs.result.Result.State.ERROR) {
  *      alert('result1 failed');
  *    }
  *
- *    if (results[1].getState() == goog.labs.async.Result.State.ERROR) {
+ *    if (results[1].getState() == goog.labs.result.Result.State.ERROR) {
  *      alert('result2 failed');
  *    }
  *  });
@@ -52,29 +52,29 @@
  */
 
 
-goog.provide('goog.labs.async.combine');
+goog.provide('goog.labs.result.combine');
 
 goog.require('goog.array');
-goog.require('goog.labs.async.Result');
-goog.require('goog.labs.async.SimpleResult');
-goog.require('goog.labs.async.wait');
+goog.require('goog.labs.result.Result');
+goog.require('goog.labs.result.SimpleResult');
+goog.require('goog.labs.result.wait');
 
 
 /**
  * Returns a result that waits on all given results to resolve. Once all have
  * resolved, the returned result will succeed (and never error).
  *
- * @param {...!goog.labs.async.Result} var_args The results to wait on.
+ * @param {...!goog.labs.result.Result} var_args The results to wait on.
  *
- * @return {!goog.labs.async.Result} A new Result whose eventual value will be
+ * @return {!goog.labs.result.Result} A new Result whose eventual value will be
  *     the resolved given Result objects.
  */
-goog.labs.async.combine = function(var_args) {
+goog.labs.result.combine = function(var_args) {
   var results = goog.array.clone(arguments);
-  var combinedResult = new goog.labs.async.SimpleResult();
+  var combinedResult = new goog.labs.result.SimpleResult();
 
   var isResolved = function(res) {
-    return res.getState() != goog.labs.async.Result.State.PENDING;
+    return res.getState() != goog.labs.result.Result.State.PENDING;
   };
 
   var checkResults = function() {
@@ -84,7 +84,7 @@ goog.labs.async.combine = function(var_args) {
   };
 
   goog.array.forEach(results, function(result) {
-    goog.labs.async.wait(result, checkResults);
+    goog.labs.result.wait(result, checkResults);
   });
 
   return combinedResult;
@@ -96,20 +96,20 @@ goog.labs.async.combine = function(var_args) {
  * resolved, the returned result will succeed if and only if all given results
  * succeeded. Otherwise it will error.
  *
- * @param {...!goog.labs.async.Result} var_args The results to wait on.
+ * @param {...!goog.labs.result.Result} var_args The results to wait on.
  *
- * @return {!goog.labs.async.Result} A new Result whose eventual value will be
+ * @return {!goog.labs.result.Result} A new Result whose eventual value will be
  *     an array of values of the given Result objects.
  */
-goog.labs.async.combine.onSuccess = function(var_args) {
-  var combinedResult = new goog.labs.async.SimpleResult();
+goog.labs.result.combine.onSuccess = function(var_args) {
+  var combinedResult = new goog.labs.result.SimpleResult();
 
   var resolvedSuccessfully = function(res) {
-    return res.getState() == goog.labs.async.Result.State.SUCCESS;
+    return res.getState() == goog.labs.result.Result.State.SUCCESS;
   };
 
-  goog.labs.async.wait(
-      goog.labs.async.combine.apply(goog.labs.async.combine, arguments),
+  goog.labs.result.wait(
+      goog.labs.result.combine.apply(goog.labs.result.combine, arguments),
       // The combined result never ERRORs
       function(res) {
         var results = /** @type {Array} */ (res.getValue());

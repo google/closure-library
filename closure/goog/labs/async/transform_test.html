@@ -7,13 +7,13 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <head>
-<title>Closure Unit Tests - goog.labs.async.transform</title>
+<title>Closure Unit Tests - goog.labs.result.transform</title>
 <script src="../../base.js"></script>
 <script>
 
 goog.require('goog.Timer');
-goog.require('goog.labs.async.SimpleResult');
-goog.require('goog.labs.async.transform');
+goog.require('goog.labs.result.SimpleResult');
+goog.require('goog.labs.result.transform');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -32,7 +32,7 @@ function setUpPage() {
 
 function setUp() {
   mockClock.reset();
-  result = new goog.labs.async.SimpleResult();
+  result = new goog.labs.result.SimpleResult();
   resultCallback = new goog.testing.recordFunction();
   multiplyResult = goog.testing.recordFunction(function(value) {
       return value * 2;
@@ -49,49 +49,49 @@ function tearDownPage() {
 }
 
 function testTransformWhenResultSuccess() {
-  var transformedResult = goog.labs.async.transform(result, multiplyResult);
-  goog.labs.async.wait(transformedResult, resultCallback);
+  var transformedResult = goog.labs.result.transform(result, multiplyResult);
+  goog.labs.result.wait(transformedResult, resultCallback);
 
-  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+  assertEquals(goog.labs.result.Result.State.PENDING, result.getState());
   result.setValue(1);
   assertTransformerCall(multiplyResult, 1);
   assertSuccessCall(resultCallback, transformedResult, 2);
 }
 
 function testTransformWhenResultSuccessAsync() {
-  var transformedResult = goog.labs.async.transform(result, multiplyResult);
-  goog.labs.async.wait(transformedResult, resultCallback);
+  var transformedResult = goog.labs.result.transform(result, multiplyResult);
+  goog.labs.result.wait(transformedResult, resultCallback);
 
   goog.Timer.callOnce(function() {
     result.setValue(1);
   });
 
-  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+  assertEquals(goog.labs.result.Result.State.PENDING, result.getState());
   mockClock.tick();
   assertTransformerCall(multiplyResult, 1);
   assertSuccessCall(resultCallback, transformedResult, 2);
 }
 
 function testTransformWhenResultError() {
-  var transformedResult = goog.labs.async.transform(result, multiplyResult);
-  goog.labs.async.wait(transformedResult, resultCallback);
+  var transformedResult = goog.labs.result.transform(result, multiplyResult);
+  goog.labs.result.wait(transformedResult, resultCallback);
 
-  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+  assertEquals(goog.labs.result.Result.State.PENDING, result.getState());
   result.setError(4);
   assertNoCall(multiplyResult);
   assertErrorCall(resultCallback, transformedResult, 4);
 }
 
 function testTransformWhenResultErrorAsync() {
-  var transformedResult = goog.labs.async.transform(result, multiplyResult);
+  var transformedResult = goog.labs.result.transform(result, multiplyResult);
 
-  goog.labs.async.wait(transformedResult, resultCallback);
+  goog.labs.result.wait(transformedResult, resultCallback);
 
   goog.Timer.callOnce(function() {
     result.setError(5);
   });
 
-  assertEquals(goog.labs.async.Result.State.PENDING, result.getState());
+  assertEquals(goog.labs.result.Result.State.PENDING, result.getState());
   mockClock.tick();
   assertNoCall(multiplyResult);
   assertErrorCall(resultCallback, transformedResult, 5);
@@ -102,7 +102,7 @@ function assertSuccessCall(recordFunction, result, value) {
 
   var res = recordFunction.popLastCall().getArgument(0);
   assertEquals(result, res);
-  assertEquals(goog.labs.async.Result.State.SUCCESS, res.getState());
+  assertEquals(goog.labs.result.Result.State.SUCCESS, res.getState());
   assertEquals(value, res.getValue());
 }
 
@@ -111,7 +111,7 @@ function assertErrorCall(recordFunction, result, value) {
 
   var res = recordFunction.popLastCall().getArgument(0);
   assertEquals(result, res);
-  assertEquals(goog.labs.async.Result.State.ERROR, res.getState());
+  assertEquals(goog.labs.result.Result.State.ERROR, res.getState());
   assertEquals(value, res.getError());
 }
 

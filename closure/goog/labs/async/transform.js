@@ -23,15 +23,15 @@
  *
  *  // Transform contents of returned data using 'processJson' and create a
  *  // transformed result to use returned JSON.
- *  var transformedResult = goog.labs.async.transform(result, processJson);
+ *  var transformedResult = goog.labs.result.transform(result, processJson);
  *
  *  // Attach success and failure handlers to the tranformed result.
- *  goog.labs.async.wait.onSuccess(transformedResult, function(result) {
+ *  goog.labs.result.wait.onSuccess(transformedResult, function(result) {
  *    var jsonData = result.getValue();
  *    assertEquals('ok', jsonData['stat']);
  *  });
  *
- *  goog.labs.async.wait.onError(transformedResult, function(error) {
+ *  goog.labs.result.wait.onError(transformedResult, function(error) {
  *    // Failed getJson call
  *  });
  *  </pre>
@@ -39,11 +39,11 @@
  */
 
 
-goog.provide('goog.labs.async.transform');
+goog.provide('goog.labs.result.transform');
 
-goog.require('goog.labs.async.Result');
-goog.require('goog.labs.async.SimpleResult');
-goog.require('goog.labs.async.wait');
+goog.require('goog.labs.result.Result');
+goog.require('goog.labs.result.SimpleResult');
+goog.require('goog.labs.result.wait');
 
 
 /**
@@ -54,20 +54,20 @@ goog.require('goog.labs.async.wait');
  * If the given result is an error, the returned result is also an error and the
  * transform will not be called.
  *
- * @param {!goog.labs.async.Result} result The result whose value will be
+ * @param {!goog.labs.result.Result} result The result whose value will be
  *     transformed.
  * @param {!Function} transformer The transformer
  *     function. The return value of this function will become the value of the
  *     returned result.
  *
- * @return {!goog.labs.async.Result} A new Result whose eventual value will be
+ * @return {!goog.labs.result.Result} A new Result whose eventual value will be
  *     the returned value of the transformer function.
  */
-goog.labs.async.transform = function(result, transformer) {
-  var returnedResult = new goog.labs.async.SimpleResult();
+goog.labs.result.transform = function(result, transformer) {
+  var returnedResult = new goog.labs.result.SimpleResult();
 
-  goog.labs.async.wait(result, function(res) {
-    if (res.getState() == goog.labs.async.Result.State.SUCCESS) {
+  goog.labs.result.wait(result, function(res) {
+    if (res.getState() == goog.labs.result.Result.State.SUCCESS) {
       returnedResult.setValue(transformer(res.getValue()));
     } else {
       returnedResult.setError(res.getError());

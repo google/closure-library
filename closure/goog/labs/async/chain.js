@@ -25,7 +25,7 @@
  *
  *  // Chain this result to perform another asynchronous operation when this
  *  // Result is resolved.
- *  var chainedResult = goog.labs.async.chain(testDataResult,
+ *  var chainedResult = goog.labs.result.chain(testDataResult,
  *      function(testDataResult) {
  *
  *        // The result value of testDataResult is the URL for JSON data.
@@ -40,7 +40,7 @@
  *
  *  // The chained result resolves to success when both results resolve to
  *  // success.
- *  goog.labs.async.wait.onSuccess(chainedResult, function(result) {
+ *  goog.labs.result.wait.onSuccess(chainedResult, function(result) {
  *
  *    // At this point, both results have succeeded and we can use the JSON
  *    // data returned by the second asynchronous call.
@@ -49,18 +49,18 @@
  *  });
  *
  *  // Attach the error handler to be called when either Result fails.
- *  goog.labs.async.wait.onError(chainedResult, function(result) {
+ *  goog.labs.result.wait.onError(chainedResult, function(result) {
  *    alert('chained result failed!');
  *  });
  * </pre>
  *
  */
 
-goog.provide('goog.labs.async.chain');
+goog.provide('goog.labs.result.chain');
 
-goog.require('goog.labs.async.Result');
-goog.require('goog.labs.async.SimpleResult');
-goog.require('goog.labs.async.wait');
+goog.require('goog.labs.result.Result');
+goog.require('goog.labs.result.SimpleResult');
+goog.require('goog.labs.result.wait');
 
 
 /**
@@ -83,30 +83,30 @@ goog.require('goog.labs.async.wait');
  * The value of the returned result, in the case both results succeed, is the
  * value of the second result (the result returned by the action callback.)
  *
- * @param {!goog.labs.async.Result} result The result to chain.
- * @param {!function(!goog.labs.async.Result):!goog.labs.async.Result}
+ * @param {!goog.labs.result.Result} result The result to chain.
+ * @param {!function(!goog.labs.result.Result):!goog.labs.result.Result}
  *     actionCallback The callback called when the result is resolved. This
  *     callback must return a Result.
  *
- * @return {!goog.labs.async.Result} A result that is resolved when both
+ * @return {!goog.labs.result.Result} A result that is resolved when both
  *     the given Result and the Result returned by the actionCallback have
  *     resolved.
  */
-goog.labs.async.chain = function(result, actionCallback) {
-  var returnedResult = new goog.labs.async.SimpleResult();
+goog.labs.result.chain = function(result, actionCallback) {
+  var returnedResult = new goog.labs.result.SimpleResult();
 
   // Wait for the first action.
-  goog.labs.async.wait(result, function(result) {
-    if (result.getState() == goog.labs.async.Result.State.SUCCESS) {
+  goog.labs.result.wait(result, function(result) {
+    if (result.getState() == goog.labs.result.Result.State.SUCCESS) {
 
       // The first action succeeded. Chain the dependent action.
       var dependentResult = actionCallback(result);
-      goog.labs.async.wait(dependentResult, function(dependentResult) {
+      goog.labs.result.wait(dependentResult, function(dependentResult) {
 
         // The dependent action completed. Set the returned result based on the
         // dependent action's outcome.
         if (dependentResult.getState() ==
-            goog.labs.async.Result.State.SUCCESS) {
+            goog.labs.result.Result.State.SUCCESS) {
           returnedResult.setValue(dependentResult.getValue());
         } else {
           returnedResult.setError(dependentResult.getError());

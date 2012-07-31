@@ -22,8 +22,8 @@
 goog.provide('goog.labs.net.imageTest');
 
 goog.require('goog.events');
-goog.require('goog.labs.async.Result');
-goog.require('goog.labs.async.wait');
+goog.require('goog.labs.result.Result');
+goog.require('goog.labs.result.wait');
 goog.require('goog.labs.net.image');
 goog.require('goog.net.EventType');
 goog.require('goog.string');
@@ -44,9 +44,9 @@ function testValidImage() {
 
   var result = goog.labs.net.image.load(url);
 
-  goog.labs.async.wait.onSuccess(result, function(value) {
+  goog.labs.result.wait.onSuccess(result, function(value) {
 
-    assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+    assertEquals(goog.labs.result.Result.State.SUCCESS, result.getState());
 
     assertEquals('IMG', value.tagName);
     assertTrue(goog.string.endsWith(value.src, url));
@@ -69,9 +69,9 @@ function testInvalidImage() {
 
   var result = goog.labs.net.image.load(url);
 
-  goog.labs.async.wait(result, function(result) {
+  goog.labs.result.wait(result, function(result) {
 
-    assertEquals(goog.labs.async.Result.State.ERROR, result.getState());
+    assertEquals(goog.labs.result.Result.State.ERROR, result.getState());
     assertUndefined(result.getValue());
     assertUndefined(result.getError());
 
@@ -95,8 +95,8 @@ function testImageFactory() {
   assertEquals(0, goog.events.getTotalListenerCount());
   var result = goog.labs.net.image.load(url, countedFactory);
 
-  goog.labs.async.wait.onSuccess(result, function(value) {
-    assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  goog.labs.result.wait.onSuccess(result, function(value) {
+    assertEquals(goog.labs.result.Result.State.SUCCESS, result.getState());
     assertEquals(returnedImage, value);
     assertEquals(1, countedFactory.getCallCount());
     assertUndefined(result.getError());
@@ -116,8 +116,8 @@ function testExistingImage() {
   assertEquals(0, goog.events.getTotalListenerCount());
   var result = goog.labs.net.image.load(url, image);
 
-  goog.labs.async.wait.onSuccess(result, function(value) {
-    assertEquals(goog.labs.async.Result.State.SUCCESS, result.getState());
+  goog.labs.result.wait.onSuccess(result, function(value) {
+    assertEquals(goog.labs.result.Result.State.SUCCESS, result.getState());
     assertEquals(image, value);
     assertUndefined(result.getError());
 
