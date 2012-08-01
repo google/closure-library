@@ -226,21 +226,6 @@ goog.Disposable.prototype.disposeInternal = function() {
 
 
 /**
- * Returns True if we can verify the object is disposed.
- * Calls {@code isDisposed} on the argument if it supports it.  If obj
- * is not an object with an isDisposed() method, return false.
- * @param {*} obj The object to investigate.
- * @return {boolean} True if we can verify the object is disposed.
- */
-goog.Disposable.isDisposed = function(obj) {
-  if (obj && typeof obj.isDisposed == 'function') {
-    return obj.isDisposed();
-  }
-  return false;
-};
-
-
-/**
  * Calls {@code dispose} on the argument if it supports it. If obj is not an
  *     object with a dispose() method, this is a no-op.
  * @param {*} obj The object to dispose of.
