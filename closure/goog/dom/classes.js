@@ -15,6 +15,9 @@
 /**
  * @fileoverview Utilities for adding, removing and setting classes.
  *
+ * Note: these utilities are meant to operate on HTMLElements and
+ * will not work on elements with differing interfaces (such as SVGElements).
+ *
  */
 
 
