@@ -76,6 +76,12 @@ javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nat
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js WARNING - Access to private property iframeElement_ of goog.net.xpc.NixTransport.channel_ not allowed here.
   var innerFrame = this.channel_.iframeElement_;
 
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js WARNING - unknown type: unknown
+   if (typeof channel != 'unknown' ||
+
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/net/xpc/nixtransport.js WARNING - unknown type: unknown
+  if (typeof(this.nixChannel_) !== 'unknown') {
+
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/proto/serializer.js WARNING - Access to private property serialize_ of goog.proto.Serializer not allowed here.
       this.serialize_(arr[i], sb);
 
