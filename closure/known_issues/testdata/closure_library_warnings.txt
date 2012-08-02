@@ -1,3 +1,9 @@
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/dom/xml.js WARNING - Property setProperty never defined on Document
+      doc.setProperty('SelectionLanguage', 'XPath');
+
+javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/dom/xml.js WARNING - Property setProperty never defined on Document
+      doc.setProperty('SelectionLanguage', 'XPath');
+
 javascript/closure/bin/closure_library_warnings.txt.tmp/closure/goog/gears/loggerclient.js WARNING - Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
   goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
 
