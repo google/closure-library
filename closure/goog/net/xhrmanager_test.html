@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Closure Unit Tests - goog.net.XhrManager</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.net.XhrManager');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.net.XhrIoPool');
+</script>
+</head>
+<body>
+<script>
+
+  /** @type {goog.net.XhrManager} */
+  var xhrManager
+
+  /** @type {goog.testing.net.XhrIo} */
+  var xhrIo;
+
+
+  function setUp() {
+    xhrManager = new goog.net.XhrManager();
+    xhrManager.xhrPool_ = new goog.testing.net.XhrIoPool();
+    xhrIo = xhrManager.xhrPool_.getXhr();
+  }
+
+
+  function tearDown() {
+    goog.dispose(xhrManager);
+  }
+
+
+  function testGetOutstandingRequestIds() {
+    assertArrayEquals(
+        'No outstanding requests', [], xhrManager.getOutstandingRequestIds());
+
+    xhrManager.send('test1', '/test1');
+    assertArrayEquals(
+        'Single outstanding request', ['test1'],
+        xhrManager.getOutstandingRequestIds());
+
+    xhrManager.send('test2', '/test2');
+    assertArrayEquals(
+        'Two outstanding requests', ['test1', 'test2'],
+        xhrManager.getOutstandingRequestIds());
+
+    xhrIo.simulateResponse(200, 'data');
+    assertArrayEquals(
+        'Single outstanding request', ['test2'],
+        xhrManager.getOutstandingRequestIds());
+
+    xhrIo.simulateResponse(200, 'data');
+    assertArrayEquals(
+        'No outstanding requests', [], xhrManager.getOutstandingRequestIds());
+  }
+
+
+  function testForceAbortQueuedRequest() {
+    xhrManager.send('test', '/test');
+    xhrManager.send('queued', '/queued');
+
+    assertNotThrows(
+        'Forced abort of queued request should not throw an error',
+        goog.bind(xhrManager.abort, xhrManager, 'queued', true));
+
+    assertNotThrows(
+        'Forced abort of normal request should not throw an error',
+        goog.bind(xhrManager.abort, xhrManager, 'test', true));
+  }
+
+</script>
+</body>
+</html>
