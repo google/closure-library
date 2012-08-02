@@ -320,7 +320,7 @@ goog.addDependency('labs/async/deferredadaptor.js', ['goog.labs.result.DeferredA
 goog.addDependency('labs/async/result.js', ['goog.labs.result.Result'], ['goog.debug.Error']);
 goog.addDependency('labs/async/simpleresult.js', ['goog.labs.result.SimpleResult', 'goog.labs.result.SimpleResult.StateError'], ['goog.debug.Error', 'goog.labs.result.Result']);
 goog.addDependency('labs/async/transform.js', ['goog.labs.result.transform'], ['goog.labs.result.Result', 'goog.labs.result.SimpleResult', 'goog.labs.result.wait']);
-goog.addDependency('labs/async/wait.js', ['goog.labs.result.wait'], ['goog.array', 'goog.labs.result.Result']);
+goog.addDependency('labs/async/wait.js', ['goog.labs.result.wait'], ['goog.labs.result.Result']);
 goog.addDependency('labs/net/image.js', ['goog.labs.net.image'], ['goog.events.EventHandler', 'goog.labs.result.SimpleResult', 'goog.net.EventType']);
 goog.addDependency('labs/net/image_test.js', ['goog.labs.net.imageTest'], ['goog.events', 'goog.labs.net.image', 'goog.labs.result.Result', 'goog.labs.result.wait', 'goog.net.EventType', 'goog.string', 'goog.testing.AsyncTestCase', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
 goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.debug.Error', 'goog.json', 'goog.labs.result.Result', 'goog.labs.result.SimpleResult', 'goog.labs.result.transform', 'goog.labs.result.wait', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.string', 'goog.uri.utils']);
@@ -334,6 +334,8 @@ goog.addDependency('labs/observe/simpleobservable.js', ['goog.labs.observe.Simpl
 goog.addDependency('labs/structs/map.js', ['goog.labs.structs.Map'], ['goog.array', 'goog.asserts', 'goog.labs.object', 'goog.object']);
 goog.addDependency('labs/structs/map_perf.js', ['goog.labs.structs.mapPerf'], ['goog.dom', 'goog.labs.structs.Map', 'goog.structs.Map', 'goog.testing.PerformanceTable', 'goog.testing.jsunit']);
 goog.addDependency('labs/structs/multimap.js', ['goog.labs.structs.Multimap'], ['goog.array', 'goog.labs.object', 'goog.labs.structs.Map']);
+goog.addDependency('labs/testing/assertthat.js', ['goog.labs.testing.MatcherError', 'goog.labs.testing.assertThat'], ['goog.asserts', 'goog.debug.Error', 'goog.labs.testing.Matcher']);
+goog.addDependency('labs/testing/matcher.js', ['goog.labs.testing.Matcher'], []);
 goog.addDependency('locale/countries.js', ['goog.locale.countries'], []);
 goog.addDependency('locale/defaultlocalenameconstants.js', ['goog.locale.defaultLocaleNameConstants'], []);
 goog.addDependency('locale/genericfontnames.js', ['goog.locale.genericFontNames'], []);

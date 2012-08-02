@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<title>Closure Unit Tests - goog.labs.testing.assertThat</title>
+<script src="../../base.js"></script>
+<script>
+
+goog.require('goog.labs.testing.Matcher');
+goog.require('goog.labs.testing.assertThat');
+goog.require('goog.testing.recordFunction');
+goog.require('goog.testing.jsunit');
+
+</script>
+</head>
+<body>
+<script>
+
+var successMatchesFn, failureMatchesFn, describeFn, successTestMatcher;
+var failureTestMatcher;
+
+function setUp() {
+  successMatchesFn = new goog.testing.recordFunction(function() {return true;});
+  failureMatchesFn = new goog.testing.recordFunction(function() {return false;});
+  describeFn = new goog.testing.recordFunction();
+
+  successTestMatcher = function() {
+    return { matches: successMatchesFn, describe: describeFn };
+  };
+  failureTestMatcher = function() {
+    return { matches: failureMatchesFn, describe: describeFn };
+  };
+}
+
+function testAssertthatAlwaysCallsMatches() {
+  var value = 7;
+  goog.labs.testing.assertThat(value, successTestMatcher(),
+      'matches is called on success');
+
+  assertEquals(1, successMatchesFn.getCallCount());
+  var matchesCall = successMatchesFn.popLastCall();
+  assertEquals(value, matchesCall.getArgument(0));
+
+  var e = assertThrows(goog.bind(goog.labs.testing.assertThat, null,
+      value, failureTestMatcher(), 'matches is called on failure'));
+
+  assertTrue(e instanceof goog.labs.testing.MatcherError);
+
+  assertEquals(1, failureMatchesFn.getCallCount());
+}
+
+function testAssertthatCallsDescribeOnFailure() {
+  var value = 7;
+  var e = assertThrows(goog.bind(goog.labs.testing.assertThat, null,
+      value, failureTestMatcher(), 'describe is called on failure'));
+
+  assertTrue(e instanceof goog.labs.testing.MatcherError);
+
+  assertEquals(1, failureMatchesFn.getCallCount());
+  assertEquals(1, describeFn.getCallCount());
+
+  var matchesCall = describeFn.popLastCall();
+  assertEquals(value, matchesCall.getArgument(0));
+}
+
+</script>
+</body>
+</html>
