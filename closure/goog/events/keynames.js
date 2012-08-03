@@ -119,6 +119,7 @@ goog.events.KeyNames = {
   123: 'f12',
   186: 'semicolon',
   187: 'equals',
+  189: 'dash',
   188: ',',
   190: '.',
   191: '/',
