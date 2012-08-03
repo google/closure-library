@@ -1284,6 +1284,18 @@ goog.dom.compareNodeOrder = function(node1, node2) {
     return node1.compareDocumentPosition(node2) & 2 ? 1 : -1;
   }
 
+  // Special case for document nodes on IE 7 and 8.
+  if (node1.nodeType == goog.dom.NodeType.DOCUMENT ||
+      node2.nodeType == goog.dom.NodeType.DOCUMENT &&
+      goog.userAgent.IE && !goog.userAgent.isVersion(9)) {
+    if (node1.nodeType == goog.dom.NodeType.DOCUMENT) {
+      return -1;
+    }
+    if (node2.nodeType == goog.dom.NodeType.DOCUMENT) {
+      return 1;
+    }
+  }
+
   // Process in IE using sourceIndex - we check to see if the first node has
   // a source index or if its parent has one.
   if ('sourceIndex' in node1 ||

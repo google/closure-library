@@ -460,6 +460,11 @@ function testCompareNodeOrder() {
       goog.dom.compareNodeOrder(text2, text1) > 0);
   assertTrue('Late text node is after b1',
       goog.dom.compareNodeOrder(text1, $('b1')) > 0);
+
+  assertTrue('Document node is before non-document node',
+      goog.dom.compareNodeOrder(document, b1) < 0);
+  assertTrue('Non-document node is after document node',
+      goog.dom.compareNodeOrder(b1, document) > 0);
 }
 
 function testFindCommonAncestor() {
