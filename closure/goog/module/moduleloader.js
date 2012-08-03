@@ -15,16 +15,15 @@
 /**
  * @fileoverview The module loader for loading modules across the network.
  *
- * Webkit and IE do not guarantee that scripts appended to the document
+ * Browsers do not guarantee that scripts appended to the document
  * are executed in the order they are added. For production mode, we use
  * XHRs to load scripts, because they do not have this problem and they
  * have superior mechanisms for handling failure. However, XHR-evaled
  * scripts are harder to debug.
  *
- * In debugging mode, we use normal script tags. In order to make this work
- * in WebKit and IE, we load the scripts in serial: we do not execute
- * script B to the document until we are certain that script A is
- * finished loading.
+ * In debugging mode, we use normal script tags. In order to make this work,
+ * we load the scripts in serial: we do not execute script B to the document
+ * until we are certain that script A is finished loading.
  *
  */
 
@@ -111,8 +110,8 @@ goog.module.ModuleLoader.prototype.setDebugMode = function(debugMode) {
  * to mark their origin.
  *
  * Notice that in most cases, this is far superior to debug mode, because
- * the scripts will load faster on most browsers. (Debug mode is very slow,
- * unless you're using Gecko < 1.9. See the comment at the top of this file.)
+ * the scripts will load faster on most browsers. (Debug mode is very slow.
+ * See the comment at the top of this file.)
  *
  * On WebKit, stack traces will refect the sourceURL comment, so this is also
  * useful for debugging webkit stack traces in production.

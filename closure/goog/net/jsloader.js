@@ -13,8 +13,8 @@
 // limitations under the License.
 
 /**
- * @fileoverview A utility to load JavaScript files.
- * Refactored from goog.net.Jsonp.
+ * @fileoverview A utility to load JavaScript files via DOM script tags.
+ * Refactored from goog.net.Jsonp. Works cross-domain.
  *
  */
 
@@ -73,7 +73,18 @@ goog.net.jsloader.scriptsToLoad_ = [];
 
 
 /**
- * Loads and evaluates the JavaScript files at the specified URIs, in order.
+ * Loads and evaluates the JavaScript files at the specified URIs, guaranteeing
+ * the order of script loads.
+ *
+ * Because we have to load the scripts in serial (load script 1, exec script 1,
+ * load script 2, exec script 2, and so on), this will be slower than doing
+ * the network fetches in parallel.
+ *
+ * If you need to load a large number of scripts but dependency order doesn't
+ * matter, you should just call goog.net.jsloader.load N times.
+ *
+ * If you need to load a large number of scripts on the same domain,
+ * you may want to use goog.module.ModuleLoader.
  *
  * @param {Array.<string>} uris The URIs to load.
  * @param {goog.net.jsloader.Options=} opt_options Optional parameters. See
@@ -90,34 +101,24 @@ goog.net.jsloader.loadMany = function(uris, opt_options) {
     return;
   }
 
-  if (goog.userAgent.GECKO && !goog.userAgent.isVersion(2)) {
-    // For <script> tags that are loaded in this manner, Gecko 1.9 and earlier
-    // ensures that tag order is consistent with evaluation order.
-    // Unfortunately, other browsers do not make that guarantee. So the other
-    // browsers need a slower and more complex implementation.
-    for (var i = 0; i < uris.length; i++) {
-      goog.net.jsloader.load(uris[i], opt_options);
-    }
-  } else {
-    var isAnotherModuleLoading = goog.net.jsloader.scriptsToLoad_.length;
-    goog.array.extend(goog.net.jsloader.scriptsToLoad_, uris);
-    if (isAnotherModuleLoading) {
-      // jsloader is still loading some other scripts.
-      // In order to prevent the race condition noted above, we just add
-      // these URIs to the end of the scripts' queue and return.
-      return;
-    }
-
-    uris = goog.net.jsloader.scriptsToLoad_;
-    var popAndLoadNextScript = function() {
-      var uri = uris.shift();
-      var deferred = goog.net.jsloader.load(uri, opt_options);
-      if (uris.length) {
-        deferred.addBoth(popAndLoadNextScript);
-      }
-    };
-    popAndLoadNextScript();
+  var isAnotherModuleLoading = goog.net.jsloader.scriptsToLoad_.length;
+  goog.array.extend(goog.net.jsloader.scriptsToLoad_, uris);
+  if (isAnotherModuleLoading) {
+    // jsloader is still loading some other scripts.
+    // In order to prevent the race condition noted above, we just add
+    // these URIs to the end of the scripts' queue and return.
+    return;
   }
+
+  uris = goog.net.jsloader.scriptsToLoad_;
+  var popAndLoadNextScript = function() {
+    var uri = uris.shift();
+    var deferred = goog.net.jsloader.load(uri, opt_options);
+    if (uris.length) {
+      deferred.addBoth(popAndLoadNextScript);
+    }
+  };
+  popAndLoadNextScript();
 };
 
 
