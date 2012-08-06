@@ -263,24 +263,24 @@ goog.async.Deferred.prototype.check_ = function() {
 /**
  * Record a successful result for this operation, and send the result
  * to all registered callback functions.
- * @param {*} result The result of the operation.
+ * @param {*=} opt_result The result of the operation.
  */
-goog.async.Deferred.prototype.callback = function(result) {
+goog.async.Deferred.prototype.callback = function(opt_result) {
   this.check_();
-  this.assertNotDeferred_(result);
-  this.resback_(true /* isSuccess */, result);
+  this.assertNotDeferred_(opt_result);
+  this.resback_(true /* isSuccess */, opt_result);
 };
 
 
 /**
  * Record that this operation failed with an error, and send the error
  * to all registered errback functions.
- * @param {*} result The error result of the operation.
+ * @param {*=} opt_result The error result of the operation.
  */
-goog.async.Deferred.prototype.errback = function(result) {
+goog.async.Deferred.prototype.errback = function(opt_result) {
   this.check_();
-  this.assertNotDeferred_(result);
-  this.resback_(false /* isSuccess */, result);
+  this.assertNotDeferred_(opt_result);
+  this.resback_(false /* isSuccess */, opt_result);
 };
 
 
