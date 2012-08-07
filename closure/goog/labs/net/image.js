@@ -20,8 +20,10 @@
 goog.provide('goog.labs.net.image');
 
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventType');
 goog.require('goog.labs.result.SimpleResult');
 goog.require('goog.net.EventType');
+goog.require('goog.userAgent');
 
 
 /**

@@ -22,9 +22,9 @@
 goog.provide('goog.labs.net.imageTest');
 
 goog.require('goog.events');
-goog.require('goog.labs.result.Result');
-goog.require('goog.labs.result.wait');
 goog.require('goog.labs.net.image');
+goog.require('goog.labs.result');
+goog.require('goog.labs.result.Result');
 goog.require('goog.net.EventType');
 goog.require('goog.string');
 goog.require('goog.testing.AsyncTestCase');
@@ -44,7 +44,7 @@ function testValidImage() {
 
   var result = goog.labs.net.image.load(url);
 
-  goog.labs.result.wait.onSuccess(result, function(value) {
+  goog.labs.result.waitOnSuccess(result, function(value) {
 
     assertEquals(goog.labs.result.Result.State.SUCCESS, result.getState());
 
@@ -95,7 +95,7 @@ function testImageFactory() {
   assertEquals(0, goog.events.getTotalListenerCount());
   var result = goog.labs.net.image.load(url, countedFactory);
 
-  goog.labs.result.wait.onSuccess(result, function(value) {
+  goog.labs.result.waitOnSuccess(result, function(value) {
     assertEquals(goog.labs.result.Result.State.SUCCESS, result.getState());
     assertEquals(returnedImage, value);
     assertEquals(1, countedFactory.getCallCount());
@@ -116,7 +116,7 @@ function testExistingImage() {
   assertEquals(0, goog.events.getTotalListenerCount());
   var result = goog.labs.net.image.load(url, image);
 
-  goog.labs.result.wait.onSuccess(result, function(value) {
+  goog.labs.result.waitOnSuccess(result, function(value) {
     assertEquals(goog.labs.result.Result.State.SUCCESS, result.getState());
     assertEquals(image, value);
     assertUndefined(result.getError());

@@ -28,10 +28,7 @@ goog.provide('goog.labs.net.xhr.TimeoutError');
 
 goog.require('goog.debug.Error');
 goog.require('goog.json');
-goog.require('goog.labs.result.Result');
-goog.require('goog.labs.result.SimpleResult');
-goog.require('goog.labs.result.transform');
-goog.require('goog.labs.result.wait');
+goog.require('goog.labs.result');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.string');
@@ -105,7 +102,7 @@ _.FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded;charset=utf-8';
 _.get = function(url, opt_options) {
   var result = _.send('GET', url, null, opt_options);
   var transformedResult = goog.labs.result.transform(result,
-                                                    _.getResponseText_);
+                                                     _.getResponseText_);
   return transformedResult;
 };
 
@@ -123,7 +120,7 @@ _.get = function(url, opt_options) {
 _.post = function(url, data, opt_options) {
   var result = _.send('POST', url, data, opt_options);
   var transformedResult = goog.labs.result.transform(result,
-                                                    _.getResponseText_);
+                                                     _.getResponseText_);
   return transformedResult;
 };
 
@@ -181,7 +178,7 @@ _.send = function(method, url, data, opt_options) {
   // again.  Thus the slight ugliness here.  If results were pushed into
   // makeRequest, this could become a lot cleaner but we want an option for
   // people not to include goog.labs.result.Result.
-  goog.labs.result.wait.onError(result, function(result) {
+  goog.labs.result.waitOnError(result, function(result) {
     if (result.isCanceled()) {
       xhr.abort();
       xhr.onreadystatechange = goog.nullFunction;
@@ -339,7 +336,7 @@ _.getResponseText_ = function(xhr) {
  */
 _.addJsonParsingCallbacks_ = function(result, options) {
   var resultWithResponseText = goog.labs.result.transform(result,
-                                                         _.getResponseText_);
+                                                          _.getResponseText_);
   var prefixStrippedResult = resultWithResponseText;
   if (options && options.xssiPrefix) {
     prefixStrippedResult = goog.labs.result.transform(resultWithResponseText,
@@ -347,7 +344,7 @@ _.addJsonParsingCallbacks_ = function(result, options) {
   }
 
   var jsonParsedResult = goog.labs.result.transform(prefixStrippedResult,
-                                                   goog.json.parse);
+                                                    goog.json.parse);
   return jsonParsedResult;
 };
 

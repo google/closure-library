@@ -25,8 +25,8 @@
 goog.provide('goog.labs.result.DeferredAdaptor');
 
 goog.require('goog.async.Deferred');
+goog.require('goog.labs.result');
 goog.require('goog.labs.result.Result');
-goog.require('goog.labs.result.wait');
 
 
 

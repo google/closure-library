@@ -13,9 +13,7 @@ See the COPYING file for details.
 
 goog.require('goog.Timer');
 goog.require('goog.array');
-goog.require('goog.labs.result.SimpleResult');
-goog.require('goog.labs.result.combine');
-goog.require('goog.labs.result.wait');
+goog.require('goog.labs.result');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -47,7 +45,7 @@ function setUp() {
   combinedResult = goog.labs.result.combine(result1, result2, result3, result4);
 
   successCombinedResult =
-      goog.labs.result.combine.onSuccess(result1, result2, result3, result4);
+      goog.labs.result.combineOnSuccess(result1, result2, result3, result4);
 
   resultCallback = goog.testing.recordFunction();
 }
