@@ -50,6 +50,18 @@ function testResultErrorResolution() {
   assertEquals(2, call.getArgument(0));
 }
 
+function testResultCancelResolution() {
+  deferred.addCallback(record);
+  var cancelCallback = new goog.testing.recordFunction();
+  deferred.addErrback(cancelCallback);
+  result.cancel();
+  assertEquals(0, record.getCallCount());
+  assertEquals(1, cancelCallback.getCallCount());
+  var call = cancelCallback.popLastCall();
+  assertTrue(call.getArgument(0) instanceof
+             goog.async.Deferred.CancelledError);
+}
+
 function testAddCallbackOnResolvedResult() {
   result.setValue(1);
   assertEquals(1, result.getValue());
