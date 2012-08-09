@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Closure Performance Tests - goog.json vs JSON</title>
+  <link rel="stylesheet" type="text/css" href="../testing/performancetable.css"/>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.json');
+    goog.require('goog.string');
+    goog.require('goog.testing.PerformanceTable');
+    goog.require('goog.testing.PropertyReplacer');
+    goog.require('goog.testing.jsunit');
+  </script>
+</head>
+<body>
+<h1>goog.json and JSON Performance Tests</h1>
+<p>
+<strong>User-agent:</strong>
+<script>document.write(navigator.userAgent);</script>
+</p>
+<div id="perfTable"></div>
+<hr>
+
+<script>
+var table = new goog.testing.PerformanceTable(
+    goog.dom.getElement('perfTable'));
+
+var stubs = new goog.testing.PropertyReplacer();
+
+function tearDown() {
+  stubs.reset();
+}
+
+function testSerialize() {
+  var obj = populateObject({}, 50, 4);
+
+  table.run(function() {
+    var s = JSON.stringify(obj);
+  }, 'Stringify using JSON.stringify');
+
+  table.run(function() {
+    var s = goog.json.serialize(obj);
+  }, 'Stringify using goog.json.serialize');
+}
+
+function testParse() {
+  var obj = populateObject({}, 50, 4);
+  var s = JSON.stringify(obj);
+
+  table.run(function() {
+    var o = JSON.parse(s);
+  }, 'Parse using JSON.parse');
+
+  table.run(function() {
+    var o = goog.json.parse(s);
+  }, 'Parse using goog.json.parse');
+
+  table.run(function() {
+    var o = goog.json.unsafeParse(s);
+  }, 'Parse using goog.json.unsafeParse');
+}
+
+/**
+ * @param obj The object to add properties to.
+ * @param numProperties The number of properties to add.
+ * @param depth The depth at which to recursively add properties.
+ */
+function populateObject(obj, numProperties, depth) {
+  if (depth == 0) {
+    return randomLiteral();
+  }
+
+  // Make an object with a mix of strings, numbers, arrays, objects, booleans
+  // nulls as children.
+  for (var i = 0; i < numProperties; i++) {
+    var bucket = goog.math.randomInt(3);
+    switch (bucket) {
+      case 0:
+        obj[i] = randomLiteral();
+        break;
+      case 1:
+        obj[i] = populateObject({}, numProperties, depth - 1);
+        break;
+      case 2:
+        obj[i] = populateObject([], numProperties, depth - 1);
+        break;
+    }
+  }
+  return obj;
+}
+
+function randomLiteral() {
+  var bucket = goog.math.randomInt(3);
+  switch (bucket) {
+    case 0:
+      return goog.string.getRandomString();
+    case 1:
+      return Math.random();
+    case 2:
+      return Math.random() >= .5;
+  }
+  return null;
+}
+
+</script>
+</body>
+</html>
