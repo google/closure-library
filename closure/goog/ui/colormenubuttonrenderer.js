@@ -115,12 +115,10 @@ goog.ui.ColorMenuButtonRenderer.setCaptionValue = function(caption, value) {
     // borderBottomColor will cause a JS error on IE).
     var hexColor;
 
-    /** @preserveTry */
-    try {
-      hexColor = goog.color.parse(/** @type {string} */ (value)).hex;
-    } catch (ex) {
-      hexColor = null;
-    }
+    var strValue = /** @type {string} */ (value);
+    hexColor = strValue && goog.color.isValidColor(strValue) ?
+        goog.color.parse(strValue).hex :
+        null;
 
     // Stupid IE6/7 doesn't do transparent borders.
     // TODO(attila): Add user-agent version check when IE8 comes out...
