@@ -94,35 +94,6 @@ goog.ui.CustomButtonRenderer.prototype.getAriaRole = function() {
 
 
 /**
- * Sets the button's ARIA states.
- * @param {!goog.ui.Control} button Button whose ARIA state will be updated.
- * @param {!Element} element Element whose ARIA state is to be updated.
- * @override
- */
-goog.ui.CustomButtonRenderer.prototype.setAriaStates = function(button,
-    element) {
-  goog.asserts.assert(button);
-  goog.asserts.assert(element);
-  if (!button.isEnabled()) {
-    this.updateAriaState(element, goog.ui.Component.State.DISABLED,
-                         true);
-  }
-  if (button.isSelected()) {
-    this.updateAriaState(element, goog.ui.Component.State.SELECTED,
-                         true);
-  }
-  if (button.isSupportedState(goog.ui.Component.State.CHECKED)) {
-    this.updateAriaState(element, goog.ui.Component.State.CHECKED,
-                         true);
-  }
-  if (button.isOpen()) {
-    this.updateAriaState(element, goog.ui.Component.State.OPENED,
-                         true);
-  }
-};
-
-
-/**
  * Takes the button's root element and returns the parent element of the
  * button's contents.  Overrides the superclass implementation by taking
  * the nested DIV structure of custom buttons into account.
