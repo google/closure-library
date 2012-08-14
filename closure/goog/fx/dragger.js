@@ -731,6 +731,14 @@ goog.fx.Dragger.prototype.defaultAction = function(x, y) {
 };
 
 
+/**
+ * @return {boolean} Whether the dragger is currently in the midst of a drag.
+ */
+goog.fx.Dragger.prototype.isDragging = function() {
+  return this.dragging_;
+};
+
+
 
 /**
  * Object representing a drag event

@@ -101,7 +101,7 @@ function runStartDragTest(handleId, targetElement) {
   dragger.startDrag(e);
 
   assertTrue('Start drag with no hysteresis must actually start the drag.',
-      dragger.dragging_);
+      dragger.isDragging());
   if (handleId == 'handle_rtl') {
     assertEquals(10, goog.style.bidi.getOffsetStart(targetElement));
   }
@@ -122,7 +122,7 @@ function runStartDragTest(handleId, targetElement) {
   dragger.setHysteresis(1);
   dragger.startDrag(e);
   assertFalse('Start drag with a valid non-zero hysteresis should not start ' +
-      'the drag.', dragger.dragging_);
+      'the drag.', dragger.isDragging());
   e.$verify();
 }
 
@@ -147,7 +147,7 @@ function testStartDrag_Cancel() {
   dragger.startDrag(e);
 
   assertFalse('Start drag must have been cancelled.',
-      dragger.dragging_);
+      dragger.isDragging());
   assertFalse('Dragger must not have registered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
           goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
@@ -177,7 +177,7 @@ function testStartDrag_LeftMouseDownOnly() {
   dragger.startDrag(e);
 
   assertFalse('Start drag must have been cancelled.',
-      dragger.dragging_);
+      dragger.isDragging());
   assertFalse('Dragger must not have registered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
           goog.events.EventType.MOUSEMOVE, true));
@@ -207,7 +207,7 @@ function testStartDrag_MouseMove() {
 
   dragger.startDrag(e);
 
-  assertTrue('Dragging should be in progress.', dragger.dragging_);
+  assertTrue('Dragging should be in progress.', dragger.isDragging());
   assertTrue('Start drag event should have fired.', startDragFired);
   assertTrue('Dragger must have registered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
@@ -239,7 +239,7 @@ function testHandleMove_Cancel() {
   e.$replay();
   dragger.startDrag(e);
   assertFalse('Start drag must not start drag because of hysterisis.',
-      dragger.dragging_);
+      dragger.isDragging());
   assertTrue('Dragger must have registered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
           goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
@@ -250,7 +250,7 @@ function testHandleMove_Cancel() {
   e.clientX = 10;
   e.clientY = 10;
   dragger.handleMove_(e);
-  assertFalse('Drag must be cancelled.', dragger.dragging_);
+  assertFalse('Drag must be cancelled.', dragger.isDragging());
   assertFalse('Dragger must unregistered mousemove handlers.',
       goog.events.hasListener(dragger.document_,
           goog.events.EventType.MOUSEMOVE, true));
@@ -278,7 +278,7 @@ function testIeDragStartCancelling() {
   e.button = 1; // IE only constant for left button.
   var be = new goog.events.BrowserEvent(e);
   dragger.startDrag(be);
-  assertTrue('The drag should have started.', dragger.dragging_);
+  assertTrue('The drag should have started.', dragger.isDragging());
 
   e = new goog.events.Event(goog.events.EventType.DRAGSTART);
   e.target = dragger.document_.documentElement;
@@ -297,7 +297,7 @@ function testIeDragStartCancelling() {
   e.button = 1; // IE only constant for left button.
   be = new goog.events.BrowserEvent(e);
   dragger.startDrag(be);
-  assertTrue('The drag should have started.', dragger.dragging_);
+  assertTrue('The drag should have started.', dragger.isDragging());
 
   e = new goog.events.Event(goog.events.EventType.DRAGSTART);
   e.target = dragger.document_.documentElement;
@@ -329,7 +329,7 @@ function testOnWindowMouseOut() {
     dragger.startDrag(e);
     e.$verify();
 
-    assertTrue(dragger.dragging_);
+    assertTrue(dragger.isDragging());
 
     e = new goog.events.BrowserEvent();
     e.type = goog.events.EventType.MOUSEOUT;
@@ -341,7 +341,7 @@ function testOnWindowMouseOut() {
     assertFalse('Drag is not canceled for normal in-window mouseout.',
         dragCanceled);
     assertTrue('Must not stop dragging for normal in-window mouseout.',
-        dragger.dragging_);
+        dragger.isDragging());
 
     dragCanceled = false;
     delete e.relatedTarget;
@@ -350,7 +350,7 @@ function testOnWindowMouseOut() {
     assertFalse('Drag is not canceled for mousing into iframe.',
         dragCanceled);
     assertTrue('Must not stop dragging for mousing into iframe.',
-        dragger.dragging_);
+        dragger.isDragging());
 
     dragCanceled = false;
     e.target = target;
@@ -358,7 +358,7 @@ function testOnWindowMouseOut() {
     assertTrue('Drag is canceled for real mouse out of top window.',
         dragCanceled);
     assertFalse('Must stop dragging for real mouse out of top window.',
-        dragger.dragging_);
+        dragger.isDragging());
   }
 }
 
@@ -395,7 +395,7 @@ function testWindowBlur() {
     dragger.startDrag(e);
     e.$verify();
 
-    assertTrue(dragger.dragging_);
+    assertTrue(dragger.isDragging());
 
     e = new goog.events.BrowserEvent();
     e.type = goog.events.EventType.BLUR;
@@ -426,7 +426,7 @@ function testBlur() {
     dragger.startDrag(e);
     e.$verify();
 
-    assertTrue(dragger.dragging_);
+    assertTrue(dragger.isDragging());
 
     e = new goog.events.BrowserEvent();
     e.type = goog.events.EventType.BLUR;
