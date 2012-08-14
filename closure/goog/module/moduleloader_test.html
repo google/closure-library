@@ -31,6 +31,7 @@ goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent.product');
 
 </script>
@@ -43,6 +44,10 @@ will fail unless you start Chrome with
 
 <script>
 
+var modA1Loaded = false;
+var modA2Loaded = false;
+var modB1Loaded = false;
+
 var moduleLoader = null;
 var moduleManager = null;
 var stubs = new goog.testing.PropertyReplacer();
@@ -54,8 +59,14 @@ var EventType = goog.module.ModuleLoader.EventType;
 var eventObserver;
 
 testCase.setUp = function() {
+  modA1Loaded = false;
+  modA2Loaded = false;
+  modB1Loaded = false;
+
   goog.provide = goog.nullFunction;
   moduleManager = goog.module.ModuleManager.getInstance();
+  stubs.replace(moduleManager, 'getBackOff_', goog.functions.constant(0));
+
   moduleLoader = new goog.module.ModuleLoader();
   eventObserver = new goog.testing.events.EventObserver();
 
@@ -74,7 +85,7 @@ testCase.setUp = function() {
 
   assertNotLoaded('modA');
   assertNotLoaded('modB');
-  assertUndefined(window.modA_);
+  assertFalse(modA1Loaded);
 };
 
 testCase.tearDown = function() {
@@ -85,7 +96,7 @@ testCase.tearDown = function() {
   moduleManager = goog.module.ModuleManager.instance_ = null;
 
   // tear down the module loaded flag.
-  window.modA_1 = false;
+  modA1Loaded = false;
 
   // Remove all the fake scripts.
   var scripts = goog.array.clone(
@@ -103,7 +114,7 @@ function testLoadModuleA() {
     testCase.continueTesting();
     assertLoaded('modA');
     assertNotLoaded('modB');
-    assertTrue(window.modA_1);
+    assertTrue(modA1Loaded);
 
     assertEquals('EVALUATE_CODE',
         0, observer.getEvents(EventType.EVALUATE_CODE).length);
@@ -122,7 +133,7 @@ function testLoadModuleB() {
     testCase.continueTesting();
     assertLoaded('modA');
     assertLoaded('modB');
-    assertTrue(window.modA_1);
+    assertTrue(modA1Loaded);
   });
 }
 
@@ -133,7 +144,7 @@ function testLoadDebugModuleA() {
     testCase.continueTesting();
     assertLoaded('modA');
     assertNotLoaded('modB');
-    assertTrue(window.modA_1);
+    assertTrue(modA1Loaded);
   });
 }
 
@@ -144,7 +155,7 @@ function testLoadDebugModuleB() {
     testCase.continueTesting();
     assertLoaded('modA');
     assertLoaded('modB');
-    assertTrue(window.modA_1);
+    assertTrue(modA1Loaded);
   });
 }
 
@@ -269,6 +280,29 @@ function testModuleLoaderRecursesTooDeep3modules() {
 
 function testModuleLoaderRecursesTooDeep4modules() {
   testModuleLoaderRecursesTooDeep(3);
+}
+
+function testErrback() {
+  // Don't run this test on IE, because the way the test runner catches
+  // errors on IE plays badly with the simulated errors in the test.
+  if (goog.userAgent.IE) return;
+
+  // Modules will throw an exception if this boolean is set to true.
+  modA1Loaded = true;
+
+  var errorHandler = function() {
+    testCase.continueTesting();
+    assertNotLoaded('modA');
+  };
+  moduleManager.registerCallback(
+      goog.module.ModuleManager.CallbackType.ERROR,
+      errorHandler);
+
+  moduleManager.execOnLoad('modA', function() {
+    fail('modA should not load successfully');
+  });
+
+  testCase.waitForAsync('wait for the error callback');
 }
 
 function assertLoaded(id) {
