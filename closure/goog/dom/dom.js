@@ -644,8 +644,13 @@ goog.dom.createDom_ = function(doc, args) {
       // Clone attributes map to remove 'type' without mutating the input.
       var clone = {};
       goog.object.extend(clone, attributes);
+
+      // JSCompiler can't see how goog.object.extend added this property,
+      // because it was essentially added by reflection.
+      // So it needs to be quoted.
+      delete clone['type'];
+
       attributes = clone;
-      delete attributes.type;
     }
     tagNameArr.push('>');
     tagName = tagNameArr.join('');
