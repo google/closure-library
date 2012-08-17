@@ -117,6 +117,14 @@ goog.json.Replacer;
 
 
 /**
+ * JSON reviver, as defined in Section 15.12.2 of the ES5 spec.
+ *
+ * @typedef {function(this:Object, string, *): *}
+ */
+goog.json.Reviver;
+
+
+/**
  * Serializes an object or a value to a JSON string.
  *
  * @param {*} object The object to serialize.

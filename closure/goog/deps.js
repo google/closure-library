@@ -315,7 +315,10 @@ goog.addDependency('i18n/uchar/localnamefetcher.js', ['goog.i18n.uChar.LocalName
 goog.addDependency('i18n/uchar/namefetcher.js', ['goog.i18n.uChar.NameFetcher'], []);
 goog.addDependency('i18n/uchar/remotenamefetcher.js', ['goog.i18n.uChar.RemoteNameFetcher'], ['goog.Disposable', 'goog.Uri', 'goog.debug.Logger', 'goog.i18n.uChar', 'goog.i18n.uChar.NameFetcher', 'goog.net.XhrIo', 'goog.structs.Map']);
 goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterator', 'goog.iter.StopIteration'], ['goog.array', 'goog.asserts']);
+goog.addDependency('json/evaljsonprocessor.js', ['goog.json.EvalJsonProcessor'], ['goog.json', 'goog.json.Processor', 'goog.json.Serializer']);
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Serializer'], []);
+goog.addDependency('json/nativejsonprocessor.js', ['goog.json.NativeJsonProcessor'], ['goog.asserts', 'goog.json', 'goog.json.Processor']);
+goog.addDependency('json/processor.js', ['goog.json.Processor'], ['goog.string.Parser', 'goog.string.Stringifier']);
 goog.addDependency('labs/net/image.js', ['goog.labs.net.image'], ['goog.events.EventHandler', 'goog.events.EventType', 'goog.labs.result.SimpleResult', 'goog.net.EventType', 'goog.userAgent']);
 goog.addDependency('labs/net/image_test.js', ['goog.labs.net.imageTest'], ['goog.events', 'goog.labs.net.image', 'goog.labs.result', 'goog.labs.result.Result', 'goog.net.EventType', 'goog.string', 'goog.testing.AsyncTestCase', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
 goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.debug.Error', 'goog.json', 'goog.labs.result', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.string', 'goog.uri.utils']);
@@ -492,10 +495,12 @@ goog.addDependency('storage/richstorage.js', ['goog.storage.RichStorage', 'goog.
 goog.addDependency('storage/storage.js', ['goog.storage.Storage'], ['goog.json', 'goog.json.Serializer', 'goog.storage.ErrorCode', 'goog.storage.mechanism.Mechanism']);
 goog.addDependency('storage/storage_test.js', ['goog.storage.storage_test'], ['goog.storage.Storage', 'goog.structs.Map', 'goog.testing.asserts']);
 goog.addDependency('string/linkify.js', ['goog.string.linkify'], ['goog.string']);
+goog.addDependency('string/parser.js', ['goog.string.Parser'], []);
 goog.addDependency('string/path.js', ['goog.string.path'], ['goog.array', 'goog.string']);
 goog.addDependency('string/string.js', ['goog.string', 'goog.string.Unicode'], []);
 goog.addDependency('string/stringbuffer.js', ['goog.string.StringBuffer'], []);
 goog.addDependency('string/stringformat.js', ['goog.string.format'], ['goog.string']);
+goog.addDependency('string/stringifier.js', ['goog.string.Stringifier'], []);
 goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree', 'goog.structs.AvlTree.Node'], ['goog.structs', 'goog.structs.Collection']);
 goog.addDependency('structs/circularbuffer.js', ['goog.structs.CircularBuffer'], []);
 goog.addDependency('structs/collection.js', ['goog.structs.Collection'], []);
