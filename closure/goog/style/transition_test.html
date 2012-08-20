@@ -99,6 +99,13 @@ function testRemoveAllForGecko() {
 }
 
 
+function testRemoveAllForIE() {
+  element.style.MSTransition = 'opacity 1s ease-in';
+  goog.style.transition.removeAll(element);
+  assertEquals('', element.style.MSTransition);
+}
+
+
 function testRemoveAllForOpera() {
   element.style.OTransition = 'opacity 1s ease-in';
   goog.style.transition.removeAll(element);
@@ -106,15 +113,22 @@ function testRemoveAllForOpera() {
 }
 
 
+function testRemoveAllForUnprefixed() {
+  element.style.transition = 'opacity 1s ease-in';
+  goog.style.transition.removeAll(element);
+  assertEquals('', element.style.transition);
+}
+
+
 function testSanityDetectionOfCss3Transition() {
   var support = goog.style.transition.isSupported();
 
-  // No current IE browser supports CSS3 transition.
+  // IE support starts at IE10.
   if (goog.userAgent.IE) {
-    assertFalse(support);
+    assertEquals(goog.userAgent.isVersion('10.0'), support);
   }
 
-  // FF supports start at FF4 (Gecko 2.0)
+  // FF support start at FF4 (Gecko 2.0)
   if (goog.userAgent.GECKO) {
     assertEquals(goog.userAgent.isVersion('2.0'), support);
   }
