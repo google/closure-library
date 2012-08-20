@@ -149,8 +149,9 @@ goog.net.XhrIo.sendInstances_ = [];
  * @param {Function=} opt_callback Callback function for when request is
  *     complete.
  * @param {string=} opt_method Send method, default: GET.
- * @param {string|GearsBlob=} opt_content Post data. This can be a Gears blob
- *     if the underlying HTTP request object is a Gears HTTP request.
+ * @param {string|FormData|GearsBlob=} opt_content
+ *     Post data. This can be a Gears blob if the underlying HTTP request object
+ *     is a Gears HTTP request.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  * @param {number=} opt_timeoutInterval Number of milliseconds after which an
@@ -434,8 +435,9 @@ goog.net.XhrIo.prototype.getWithCredentials = function() {
  * Instance send that actually uses XMLHttpRequest to make a server call.
  * @param {string|goog.Uri} url Uri to make request to.
  * @param {string=} opt_method Send method, default: GET.
- * @param {string|GearsBlob=} opt_content Post data. This can be a Gears blob
- *     if the underlying HTTP request object is a Gears HTTP request.
+ * @param {string|FormData|GearsBlob=} opt_content
+ *     Post data. This can be a Gears blob if the underlying HTTP request object
+ *     is a Gears HTTP request.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  */
@@ -491,9 +493,15 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
     });
   }
 
+  var contentIsFormData = (goog.global['FormData'] &&
+      (content instanceof goog.global['FormData']));
   if (method == 'POST' &&
-      !headers.containsKey(goog.net.XhrIo.CONTENT_TYPE_HEADER)) {
-    // For POST requests, default to the url-encoded form content type.
+      !headers.containsKey(goog.net.XhrIo.CONTENT_TYPE_HEADER) &&
+      !contentIsFormData) {
+    // For POST requests, default to the url-encoded form content type
+    // unless this is a FormData request.  For FormData, the browser will
+    // automatically add a multipart/form-data content type with an appropriate
+    // multipart boundary.
     headers.set(goog.net.XhrIo.CONTENT_TYPE_HEADER,
                 goog.net.XhrIo.FORM_CONTENT_TYPE);
   }

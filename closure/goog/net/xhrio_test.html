@@ -21,6 +21,7 @@ See the COPYING file for details.
   goog.require('goog.object');
   goog.require('goog.string');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.net.XhrIo');
   goog.require('goog.testing.recordFunction');
@@ -33,6 +34,8 @@ function MockXmlHttp() {}
 MockXmlHttp.prototype.readyState = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
 
 MockXmlHttp.prototype.status = 200;
+
+MockXmlHttp.prototype.headers = {};
 
 MockXmlHttp.syncSend = false;
 
@@ -65,7 +68,9 @@ MockXmlHttp.prototype.open = function(verb, uri, async) {
 
 MockXmlHttp.prototype.abort = function() {};
 
-MockXmlHttp.prototype.setRequestHeader = function(key, value) {};
+MockXmlHttp.prototype.setRequestHeader = function(key, value) {
+  this.headers[key] = value;
+};
 
 var lastMockXmlHttp;
 goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(
@@ -78,6 +83,7 @@ goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(
     }));
 
 
+var propertyReplacer = new goog.testing.PropertyReplacer();
 var clock;
 var originalEntryPoint =
     goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_;
@@ -88,6 +94,7 @@ function setUp() {
 }
 
 function tearDown() {
+  propertyReplacer.reset();
   clock.dispose();
   goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ = originalEntryPoint;
 }
@@ -526,6 +533,28 @@ function testCallingAbortFromWithinAbortCallbackDoesntLoop() {
   });
   x.send('url');
   x.abort();
+}
+
+function testPostSetsContentTypeHeader() {
+  var x = new goog.net.XhrIo;
+
+  x.send('url', 'POST', 'content');
+  var headers = lastMockXmlHttp.headers;
+  assertEquals(1, goog.object.getCount(headers));
+  assertEquals(
+      headers[goog.net.XhrIo.CONTENT_TYPE_HEADER],
+      goog.net.XhrIo.FORM_CONTENT_TYPE);
+}
+
+function testPostFormDataDoesNotSetContentTypeHeader() {
+  function FakeFormData() {}
+
+  propertyReplacer.set(goog.global, 'FormData', FakeFormData);
+
+  var x = new goog.net.XhrIo;
+  x.send('url', 'POST', new FakeFormData());
+  var headers = lastMockXmlHttp.headers;
+  assertTrue(goog.object.isEmpty(headers));
 }
 
 function testFactoryInjection() {
