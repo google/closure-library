@@ -104,8 +104,8 @@ goog.crypt.base64.HAS_NATIVE_SUPPORT = goog.userAgent.GECKO ||
 /**
  * Base64-encode an array of bytes.
  *
- * @param {Array.<number>} input An array of bytes (numbers with value in
- *     [0, 255]) to encode.
+ * @param {Array.<number>|Uint8Array} input An array of bytes (numbers with
+ *     value in [0, 255]) to encode.
  * @param {boolean=} opt_webSafe Boolean indicating we should use the
  *     alternative alphabet.
  * @return {string} The base64 encoded string.
