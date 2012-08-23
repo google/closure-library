@@ -617,6 +617,15 @@ See the COPYING file for details.
     assertElementsRoughlyEqual(m0, m1, goog.vec.EPSILON);
   }
 
+  function testGetTranslation() {
+    var mat = goog.vec.Mat4.createFloat32FromArray(randomMat4);
+    var translation = goog.vec.Vec3.createFloat32();
+    goog.vec.Mat4.getTranslation(mat, translation);
+    assertElementsRoughlyEqual(
+        [0.59465038776, 0.413479506969, 0.0663217827677],
+        translation, goog.vec.EPSILON);
+  }
+
   function testMakeFrustum() {
     var m0 = goog.vec.Mat4.createFloat32();
     goog.vec.Mat4.makeFrustum(m0, -1, 2, -2, 1, .1, 1.1);

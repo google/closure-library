@@ -1776,6 +1776,23 @@ goog.vec.Mat4.rotateZ = function(mat, angle) {
 
 
 /**
+ * Retrieves the translation component of the transformation matrix.
+ *
+ * @param {goog.vec.Mat4.AnyType} mat The transformation matrix.
+ * @param {goog.vec.Vec3.AnyType} translation The vector for storing the
+ *     result.
+ * @return {goog.vec.Mat4.AnyType} return mat so that operations can be
+ *     chained.
+ */
+goog.vec.Mat4.getTranslation = function(mat, translation) {
+  translation[0] = mat[12];
+  translation[1] = mat[13];
+  translation[2] = mat[14];
+  return translation;
+};
+
+
+/**
  * @type {Array.<goog.vec.Vec3.Type>}
  * @private
  */
