@@ -20,6 +20,7 @@
 
 goog.provide('goog.editor.Link');
 
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
@@ -30,6 +31,7 @@ goog.require('goog.editor.range');
 goog.require('goog.string');
 goog.require('goog.string.Unicode');
 goog.require('goog.uri.utils');
+goog.require('goog.uri.utils.ComponentIndex');
 
 
 
@@ -53,6 +55,15 @@ goog.editor.Link = function(anchor, isNew) {
    * @private
    */
   this.isNew_ = isNew;
+
+
+  /**
+   * Any extra anchors created by the browser from a selection in the same
+   * operation that created the primary link
+   * @type {!Array.<HTMLAnchorElement>}
+   * @private
+   */
+  this.extraAnchors_ = [];
 };
 
 
@@ -61,6 +72,15 @@ goog.editor.Link = function(anchor, isNew) {
  */
 goog.editor.Link.prototype.getAnchor = function() {
   return this.anchor_;
+};
+
+
+/**
+ * @return {!Array.<HTMLAnchorElement>} The extra anchor elements, if any,
+ *     created by the browser from a selection.
+ */
+goog.editor.Link.prototype.getExtraAnchors = function() {
+  return this.extraAnchors_;
 };
 
 
@@ -99,6 +119,9 @@ goog.editor.Link.prototype.initializeUrl = function(url) {
 goog.editor.Link.prototype.removeLink = function() {
   goog.dom.flattenElement(this.anchor_);
   this.anchor_ = null;
+  while (this.extraAnchors_.length) {
+    goog.dom.flattenElement(/** @type {Element} */(this.extraAnchors_.pop()));
+  }
 };
 
 
@@ -216,14 +239,20 @@ goog.editor.Link.prototype.finishLinkCreation = function(field) {
  * @param {HTMLAnchorElement} anchor The anchor element.
  * @param {string} url The initial URL.
  * @param {string=} opt_target The target.
+ * @param {Array.<HTMLAnchorElement>=} opt_extraAnchors Extra anchors created
+ *     by the browser when parsing a selection.
  * @return {goog.editor.Link} The link.
  */
-goog.editor.Link.createNewLink = function(anchor, url, opt_target) {
+goog.editor.Link.createNewLink = function(anchor, url, opt_target,
+    opt_extraAnchors) {
   var link = new goog.editor.Link(anchor, true);
   link.initializeUrl(url);
 
   if (opt_target) {
     anchor.target = opt_target;
+  }
+  if (opt_extraAnchors) {
+    link.extraAnchors_ = opt_extraAnchors;
   }
 
   return link;

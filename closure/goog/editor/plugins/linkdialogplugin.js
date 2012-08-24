@@ -23,6 +23,7 @@
 goog.provide('goog.editor.plugins.LinkDialogPlugin');
 
 goog.require('goog.array');
+goog.require('goog.dom');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractDialogPlugin');
 goog.require('goog.events.EventHandler');
@@ -317,30 +318,17 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk_ = function(e) {
   this.disposeOriginalSelection();
 
   this.currentLink_.setTextAndUrl(e.linkText, e.linkUrl);
-
   if (this.showOpenLinkInNewWindow_) {
-    var anchor = this.currentLink_.getAnchor();
-    if (e.openInNewWindow) {
-      anchor.target = '_blank';
-    } else {
-      if (anchor.target == '_blank') {
-        anchor.target = '';
-      }
-      // If user didn't indicate to open in a new window but the link already
-      // had a target other than '_blank', let's leave what they had before.
-    }
     // Save checkbox state for next time.
     this.isOpenLinkInNewWindowChecked_ = e.openInNewWindow;
   }
 
-  if (this.showRelNoFollow_) {
-    var anchor = this.getCurrentLink().getAnchor();
-    var alreadyPresent = goog.ui.editor.LinkDialog.hasNoFollow(anchor.rel);
-    if (alreadyPresent && !e.noFollow) {
-      anchor.rel = goog.ui.editor.LinkDialog.removeNoFollow(anchor.rel);
-    } else if (!alreadyPresent && e.noFollow) {
-      anchor.rel = anchor.rel ? anchor.rel + ' nofollow' : 'nofollow';
-    }
+  var anchor = this.currentLink_.getAnchor();
+  this.touchUpAnchorOnOk_(anchor, e);
+  var extraAnchors = this.currentLink_.getExtraAnchors();
+  for (var i = 0; i < extraAnchors.length; ++i) {
+    extraAnchors[i].href = anchor.href;
+    this.touchUpAnchorOnOk_(extraAnchors[i], e);
   }
 
   this.getFieldObject().focus();
@@ -356,6 +344,37 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk_ = function(e) {
 
 
 /**
+ * Apply the necessary properties to a link upon Ok being clicked in the dialog.
+ * @param {HTMLAnchorElement} anchor The anchor to set properties on.
+ * @param {goog.events.Event} e Event object.
+ * @private
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.touchUpAnchorOnOk_ =
+    function(anchor, e) {
+  if (this.showOpenLinkInNewWindow_) {
+    if (e.openInNewWindow) {
+      anchor.target = '_blank';
+    } else {
+      if (anchor.target == '_blank') {
+        anchor.target = '';
+      }
+      // If user didn't indicate to open in a new window but the link already
+      // had a target other than '_blank', let's leave what they had before.
+    }
+  }
+
+  if (this.showRelNoFollow_) {
+    var alreadyPresent = goog.ui.editor.LinkDialog.hasNoFollow(anchor.rel);
+    if (alreadyPresent && !e.noFollow) {
+      anchor.rel = goog.ui.editor.LinkDialog.removeNoFollow(anchor.rel);
+    } else if (!alreadyPresent && e.noFollow) {
+      anchor.rel = anchor.rel ? anchor.rel + ' nofollow' : 'nofollow';
+    }
+  }
+};
+
+
+/**
  * Handles the CANCEL event from the dialog by clearing the anchor if needed.
  * @param {goog.events.Event} e Event object.
  * @private
@@ -363,6 +382,10 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk_ = function(e) {
 goog.editor.plugins.LinkDialogPlugin.prototype.handleCancel_ = function(e) {
   if (this.currentLink_.isNew()) {
     goog.dom.flattenElement(this.currentLink_.getAnchor());
+    var extraAnchors = this.currentLink_.getExtraAnchors();
+    for (var i = 0; i < extraAnchors.length; ++i) {
+      goog.dom.flattenElement(extraAnchors[i]);
+    }
     // Make sure listeners know the anchor was flattened out.
     this.getFieldObject().dispatchChange();
   }

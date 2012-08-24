@@ -24,13 +24,17 @@ goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
+goog.require('goog.editor.Command');
 goog.require('goog.editor.Link');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
+goog.require('goog.editor.style');
 goog.require('goog.iter');
+goog.require('goog.iter.StopIteration');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.string.Unicode');
@@ -958,8 +962,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
  */
 goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
     url, opt_target) {
-  // TODO(robbyw): Handle multi-line links without requiring crazy hacks!
   var anchor = null;
+  var anchors = [];
   var parent = range && range.getContainerElement();
   // We do not yet support creating links around images.  Instead of throwing
   // lots of js errors, just fail silently.
@@ -989,16 +993,19 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
       // We can't do straight comparision since the href can contain the
       // absolute url.
       if (goog.string.endsWith(element.href, uniqueId)) {
-        anchor = element;
+        anchors.push(element);
       }
     };
 
     goog.array.forEach(this.getFieldObject().getElement().getElementsByTagName(
         goog.dom.TagName.A), setHrefAndLink);
+    if (anchors.length) {
+      anchor = anchors.pop();
+    }
   }
 
   return goog.editor.Link.createNewLink(
-      /** @type {HTMLAnchorElement} */ (anchor), url, opt_target);
+      /** @type {HTMLAnchorElement} */ (anchor), url, opt_target, anchors);
 };
 
 

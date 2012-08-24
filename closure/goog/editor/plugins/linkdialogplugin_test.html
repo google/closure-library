@@ -37,10 +37,13 @@ See the COPYING file for details.
 <link rel="stylesheet" href="../../css/editor/linkdialog.css"/>
 </head>
 <body>
+<div id='test'></div>
 <script>
   var plugin;
   var anchorElem;
+  var extraAnchors;
   var isNew;
+  var testDiv;
 
   var mockCtrl;
   var mockField;
@@ -57,10 +60,14 @@ See the COPYING file for details.
   var linkObj;
 
   function setUp() {
+    testDiv = goog.dom.getDocument().getElementById('test');
+    testDiv.innerHTML = 'Some preceeding text';
+
     anchorElem = goog.dom.createElement(goog.dom.TagName.A);
     anchorElem.href = 'http://www.google.com/';
     anchorElem.innerHTML = 'anchor text';
-    goog.dom.appendChild(goog.dom.getDocument().body, anchorElem);
+    goog.dom.appendChild(testDiv, anchorElem);
+    extraAnchors = [];
 
     mockCtrl = new goog.testing.MockControl();
     mockField = new goog.testing.editor.FieldMock();
@@ -81,24 +88,30 @@ See the COPYING file for details.
           anchorElem.href = url;
         });
     mockLink.getAnchor().$anyTimes().$returns(anchorElem);
+    mockLink.getExtraAnchors().$anyTimes().$returns(extraAnchors);
   }
 
   function tearDown() {
     plugin.dispose();
     tearDownRealEditableField();
-    goog.dom.removeNode(anchorElem);
+    testDiv.innerHTML = '';
     mockCtrl.$tearDown();
   }
 
   function setUpAnchor(text, href, opt_isNew, opt_target, opt_rel) {
-    anchorElem.innerHTML = text;
-    anchorElem.href = href;
+    setUpGivenAnchor(anchorElem, text, href, opt_isNew, opt_target, opt_rel);
+  }
+
+  function setUpGivenAnchor(
+      anchor, text, href, opt_isNew, opt_target, opt_rel) {
+    anchor.innerHTML = text;
+    anchor.href = href;
     isNew = !!opt_isNew;
     if (opt_target) {
-      anchorElem.target = opt_target;
+      anchor.target = opt_target;
     }
     if (opt_rel) {
-      anchorElem.rel = opt_rel;
+      anchor.rel = opt_rel;
     }
   }
 
@@ -195,7 +208,7 @@ See the COPYING file for details.
     dialog.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.CANCEL);
 
     assertNotEquals('Anchor element should be removed from document body',
-                    goog.dom.getDocument().body,
+                    testDiv,
                     anchorElem.parentNode);
     var newElem = prevSib.nextSibling;
     assertEquals('Link should be replaced by text node',
@@ -206,7 +219,130 @@ See the COPYING file for details.
                  newElem.nodeValue);
 
     mockCtrl.$verifyAll();
-    goog.dom.removeNode(newElem);
+  }
+
+  /**
+   * Tests that when the Cancel event fires for a new link it gets removed.
+   */
+  function testCancelNewMultiple() {
+    mockField.dispatchChange(); // Should be fired because link was removed.
+    mockCtrl.$replayAll();
+
+    var anchorElem1 = anchorElem;
+    var parent1 = goog.dom.createDom(goog.dom.TagName.DIV, null,
+        anchorElem1);
+    goog.dom.appendChild(testDiv, parent1);
+    setUpGivenAnchor(anchorElem1, OLD_LINK_TEXT + '1', OLD_LINK_URL +'1',
+        true);
+
+    anchorElem2 = goog.dom.createDom(goog.dom.TagName.A);
+    var parent2 = goog.dom.createDom(goog.dom.TagName.DIV, null,
+        anchorElem2);
+    goog.dom.appendChild(testDiv, parent2);
+    setUpGivenAnchor(anchorElem2, OLD_LINK_TEXT + '2', OLD_LINK_URL + '2',
+        true);
+    extraAnchors.push(anchorElem2);
+
+    anchorElem3 = goog.dom.createDom(goog.dom.TagName.A);
+    var parent3 = goog.dom.createDom(goog.dom.TagName.DIV, null,
+        anchorElem3);
+    goog.dom.appendChild(testDiv, parent3);
+    setUpGivenAnchor(anchorElem3, OLD_LINK_TEXT + '3', OLD_LINK_URL + '3',
+        true);
+    extraAnchors.push(anchorElem3);
+
+    plugin = new goog.editor.plugins.LinkDialogPlugin();
+    plugin.registerFieldObject(mockField);
+    var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+
+    // Mock of execCommand + cancel without actually opening the dialog.
+    plugin.currentLink_ = mockLink;
+    dialog.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.CANCEL);
+
+    assertNotEquals('Anchor 1 element should be removed from document body',
+        parent1,
+        anchorElem1.parentNode);
+    assertNotEquals('Anchor 2 element should be removed from document body',
+        parent2,
+        anchorElem2.parentNode);
+    assertNotEquals('Anchor 3 element should be removed from document body',
+        parent3,
+        anchorElem3.parentNode);
+
+    assertEquals('Link 1 should be replaced by text node',
+        goog.dom.NodeType.TEXT,
+        parent1.firstChild.nodeType);
+    assertEquals('Link 2 should be replaced by text node',
+        goog.dom.NodeType.TEXT,
+        parent2.firstChild.nodeType);
+    assertEquals('Link 3 should be replaced by text node',
+        goog.dom.NodeType.TEXT,
+        parent3.firstChild.nodeType);
+
+    assertEquals('Original text 1 should be left behind',
+        OLD_LINK_TEXT + '1',
+        parent1.firstChild.nodeValue);
+    assertEquals('Original text 2 should be left behind',
+        OLD_LINK_TEXT + '2',
+        parent2.firstChild.nodeValue);
+    assertEquals('Original text 3 should be left behind',
+        OLD_LINK_TEXT + '3',
+        parent3.firstChild.nodeValue);
+
+    mockCtrl.$verifyAll();
+  }
+
+  /**
+   * Tests that when the Cancel event fires for a new link it gets removed.
+   */
+  function testOkNewMultiple() {
+    mockLink.placeCursorRightOf();
+    mockField.dispatchSelectionChangeEvent();
+    mockField.dispatchChange();
+    mockField.focus();
+    mockCtrl.$replayAll();
+
+    var anchorElem1 = anchorElem;
+    setUpGivenAnchor(anchorElem1, OLD_LINK_TEXT + '1', OLD_LINK_URL + '1',
+        true);
+
+    anchorElem2 = goog.dom.createElement(goog.dom.TagName.A);
+    goog.dom.appendChild(testDiv, anchorElem2);
+    setUpGivenAnchor(anchorElem2, OLD_LINK_TEXT + '2', OLD_LINK_URL + '2',
+        true);
+    extraAnchors.push(anchorElem2);
+
+    anchorElem3 = goog.dom.createElement(goog.dom.TagName.A);
+    goog.dom.appendChild(testDiv, anchorElem3);
+    setUpGivenAnchor(anchorElem3, OLD_LINK_TEXT + '3', OLD_LINK_URL + '3',
+        true);
+    extraAnchors.push(anchorElem3);
+
+    var prevSib = anchorElem1.previousSibling;
+    plugin = new goog.editor.plugins.LinkDialogPlugin();
+    plugin.registerFieldObject(mockField);
+    var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+
+    // Mock of execCommand + clicking OK without actually opening the dialog.
+    plugin.currentLink_ = mockLink;
+    dialog.dispatchEvent(new goog.ui.editor.LinkDialog.OkEvent(NEW_LINK_TEXT,
+        NEW_LINK_URL));
+
+    assertEquals('Display text 1 must update', NEW_LINK_TEXT,
+        anchorElem1.innerHTML);
+    assertEquals('Display text 2 must not update', OLD_LINK_TEXT + '2',
+        anchorElem2.innerHTML);
+    assertEquals('Display text 3 must not update', OLD_LINK_TEXT + '3',
+        anchorElem3.innerHTML);
+
+    assertEquals('Anchor element 1 href must update', NEW_LINK_URL,
+        anchorElem1.href);
+    assertEquals('Anchor element 2 href must update', NEW_LINK_URL,
+        anchorElem2.href);
+    assertEquals('Anchor element 3 href must update', NEW_LINK_URL,
+        anchorElem3.href);
+
+    mockCtrl.$verifyAll();
   }
 
   /**
