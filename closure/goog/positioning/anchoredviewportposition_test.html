@@ -16,8 +16,6 @@ See the COPYING file for details.
 <script>
 goog.require('goog.dom');
 goog.require('goog.positioning.AnchoredViewportPosition');
-goog.require('goog.positioning.Corner');
-goog.require('goog.positioning.OverflowStatus');
 goog.require('goog.style');
 goog.require('goog.testing.jsunit');
 </script>
@@ -114,19 +112,6 @@ function testRepositionNoSpaceWithAdjustment() {
   assertEquals(viewportSize.height, popupRect.top + popupRect.height);
 }
 
-function testAdjustCorner() {
-  var avp = new goog.positioning.AnchoredViewportPosition(
-      anchor, corner.BOTTOM_LEFT);
-  assertEquals(corner.BOTTOM_LEFT, avp.adjustCorner(0, corner.BOTTOM_LEFT));
-  assertEquals(corner.BOTTOM_RIGHT, avp.adjustCorner(
-      goog.positioning.OverflowStatus.FAILED_HORIZONTAL, corner.BOTTOM_LEFT));
-  assertEquals(corner.TOP_LEFT, avp.adjustCorner(
-      goog.positioning.OverflowStatus.FAILED_VERTICAL, corner.BOTTOM_LEFT));
-  assertEquals(corner.TOP_RIGHT, avp.adjustCorner(
-      goog.positioning.OverflowStatus.FAILED_VERTICAL |
-      goog.positioning.OverflowStatus.FAILED_HORIZONTAL,
-      corner.BOTTOM_LEFT));
-}
 </script>
 </body>
 </html>
