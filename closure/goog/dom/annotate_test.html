@@ -31,6 +31,14 @@ See the COPYING file for details.
     <td>This <b>little</b> piggy</td>
     <td class="s">That little <i>pig</i>gy</td>
   </tr>
+  <tr id="t">
+    <td>This <b>little</b> piggy</td>
+    <td class="s">That little <i>Pig</i>gy</td>
+  </tr>
+  <tr id="u">
+    <td>This <b>little</b> piggy</td>
+    <td class="s">That little <i>Pig</i>gy</td>
+  </tr>
 </table>
 
 <div id="o">
@@ -154,6 +162,26 @@ See the COPYING file for details.
     assertEquals(1, spans.length);
     assertEquals('pig', spans[0].innerHTML);
     assertEquals('gy', spans[0].nextSibling.nodeValue);
+  }
+
+  function testAnnotateTermsIgnoreCase() {
+    var terms1 = [['pig', false]];
+    assertTrue(goog.dom.annotate.annotateTerms(
+        $('t'), terms1, doAnnotation, true));
+    var spans = goog.dom.getElementsByTagNameAndClass('SPAN', 'c0', $('t'));
+    assertEquals(2, spans.length);
+    assertEquals('pig', spans[0].innerHTML);
+    assertEquals('gy', spans[0].nextSibling.nodeValue);
+    assertEquals('Pig', spans[1].innerHTML);
+
+    var terms2 = [['Pig', false]];
+    assertTrue(goog.dom.annotate.annotateTerms(
+        $('u'), terms2, doAnnotation, true));
+    var spans = goog.dom.getElementsByTagNameAndClass('SPAN', 'c0', $('u'));
+    assertEquals(2, spans.length);
+    assertEquals('pig', spans[0].innerHTML);
+    assertEquals('gy', spans[0].nextSibling.nodeValue);
+    assertEquals('Pig', spans[1].innerHTML);
   }
 
   function testAnnotateTermsInObject() {
