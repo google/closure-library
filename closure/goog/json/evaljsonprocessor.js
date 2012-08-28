@@ -24,6 +24,7 @@ goog.require('goog.json.Processor');
 goog.require('goog.json.Serializer');
 
 
+
 /**
  * A class that parses and stringifies JSON using eval (as implemented in
  * goog.json).
@@ -31,15 +32,25 @@ goog.require('goog.json.Serializer');
  *
  * @param {?goog.json.Replacer=} opt_replacer An optional replacer to use during
  *     serialization.
+ * @param {?boolean=} opt_useUnsafeParsing Whether to use goog.json.unsafeParse
+ *     for parsing. Safe parsing is very slow on large strings. On the other
+ *     hand, unsafe parsing uses eval() without checking whether the string is
+ *     valid, so it should only be used if you trust the source of the string.
  * @constructor
  * @implements {goog.json.Processor}
  */
-goog.json.EvalJsonProcessor = function(opt_replacer) {
+goog.json.EvalJsonProcessor = function(opt_replacer, opt_useUnsafeParsing) {
   /**
    * @type {goog.json.Serializer}
    * @private
    */
   this.serializer_ = new goog.json.Serializer(opt_replacer);
+
+  /**
+   * @type {function(string): *}
+   * @private
+   */
+  this.parser_ = opt_useUnsafeParsing ? goog.json.unsafeParse : goog.json.parse;
 };
 
 
@@ -51,5 +62,5 @@ goog.json.EvalJsonProcessor.prototype.stringify = function(object) {
 
 /** @override */
 goog.json.EvalJsonProcessor.prototype.parse = function(s) {
-  return goog.json.parse(s);
+  return this.parser_(s);
 };

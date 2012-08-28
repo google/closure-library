@@ -70,6 +70,16 @@ function testNativeParser_withReviver() {
       json, json);
 }
 
+function testUnsafeJsParser() {
+  var json = '{"a":1,"b":{"c":2}}';
+  runParsingTest(new goog.json.EvalJsonProcessor(null, true), json, json);
+}
+
+function testUnsafeJsParser_withReplacer() {
+  runParsingTest(new goog.json.EvalJsonProcessor(REPLACER, true),
+      '{"a":"foo","b":"goo"}', '{"a":"food","b":"good"}');
+}
+
 function runParsingTest(parser, input, expected) {
   assertEquals(expected, parser.stringify(parser.parse(input)));
 }
