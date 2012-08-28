@@ -359,6 +359,10 @@ goog.addDependency('math/coordinate.js', ['goog.math.Coordinate'], ['goog.math']
 goog.addDependency('math/coordinate3.js', ['goog.math.Coordinate3'], []);
 goog.addDependency('math/exponentialbackoff.js', ['goog.math.ExponentialBackoff'], ['goog.asserts']);
 goog.addDependency('math/integer.js', ['goog.math.Integer'], []);
+goog.addDependency('math/interpolator/interpolator1.js', ['goog.math.interpolator.Interpolator1'], []);
+goog.addDependency('math/interpolator/linear1.js', ['goog.math.interpolator.Linear1'], ['goog.array', 'goog.math', 'goog.math.interpolator.Interpolator1']);
+goog.addDependency('math/interpolator/pchip1.js', ['goog.math.interpolator.Pchip1'], ['goog.math', 'goog.math.interpolator.Spline1']);
+goog.addDependency('math/interpolator/spline1.js', ['goog.math.interpolator.Spline1'], ['goog.array', 'goog.math', 'goog.math.interpolator.Interpolator1', 'goog.math.tdma']);
 goog.addDependency('math/line.js', ['goog.math.Line'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency('math/long.js', ['goog.math.Long'], []);
 goog.addDependency('math/math.js', ['goog.math'], ['goog.array']);
@@ -367,6 +371,7 @@ goog.addDependency('math/range.js', ['goog.math.Range'], []);
 goog.addDependency('math/rangeset.js', ['goog.math.RangeSet'], ['goog.array', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.math.Range']);
 goog.addDependency('math/rect.js', ['goog.math.Rect'], ['goog.math.Box', 'goog.math.Size']);
 goog.addDependency('math/size.js', ['goog.math.Size'], []);
+goog.addDependency('math/tdma.js', ['goog.math.tdma'], []);
 goog.addDependency('math/vec2.js', ['goog.math.Vec2'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency('math/vec3.js', ['goog.math.Vec3'], ['goog.math', 'goog.math.Coordinate3']);
 goog.addDependency('memoize/memoize.js', ['goog.memoize'], []);

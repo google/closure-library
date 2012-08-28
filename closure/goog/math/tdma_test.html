@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2011 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Closure Unit Tests - goog.math.tdma</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.math.tdma');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+<script>
+
+  function testTdmaSolver() {
+    var supDiag = [1, 1, 1, 1, 1];
+    var mainDiag = [-1, -2, -2, -2, -2, -2];
+    var subDiag = [1, 1, 1, 1, 1];
+    var vecRight = [1, 2, 3, 4, 5, 6];
+    var expected = [-56, -55, -52, -46, -36, -21];
+    var result = [];
+    goog.math.tdma.solve(subDiag, mainDiag, supDiag, vecRight, result);
+    assertElementsEquals(expected, result);
+  };
+
+</script>
+</body>
