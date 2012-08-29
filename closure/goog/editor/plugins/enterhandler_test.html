@@ -734,6 +734,21 @@ function testIsInOneContainer() {
   }
 }
 
+function testDeletingEndNodesWithNoNewLine() {
+  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+    container.innerHTML =
+        'a<div>b</div><div><br></div><div>c</div><div>d</div>';
+    var range = goog.dom.Range.createFromNodes(
+      container.childNodes[2], 0, container.childNodes[4].childNodes[0], 1);
+    range.select();
+    var newRange = goog.editor.plugins.EnterHandler.deleteW3cRange_(range);
+    goog.testing.dom.assertHtmlContentsMatch('a<div>b</div>', container);
+    assertTrue(newRange.isCollapsed());
+    assertEquals(container, newRange.getStartNode());
+    assertEquals(2, newRange.getStartOffset());
+  }
+}
+
 </script>
 </body>
 </html>

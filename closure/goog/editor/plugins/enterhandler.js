@@ -616,6 +616,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionW3C_ =
 /**
  * Deletes the contents of the selection from the DOM.
  * @param {goog.dom.AbstractRange} range The range to remove contents from.
+ * @return {goog.dom.AbstractRange} The resulting range. Used for testing.
  * @private
  */
 goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
@@ -635,8 +636,17 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
 
     // Remove The range contents, and ensure the correct content stays selected.
     range.removeContents();
-    range = goog.dom.Range.createCaret(nodeOffset.findTargetNode(baseNode),
-        rangeOffset);
+    var node = nodeOffset.findTargetNode(baseNode);
+    if (node) {
+      range = goog.dom.Range.createCaret(node, rangeOffset);
+    } else {
+      // This occurs when the node that would have been referenced has now been
+      // deleted and there are no other nodes in the baseNode. Thus need to
+      // set the caret to the end of the base node.
+      range =
+          goog.dom.Range.createCaret(baseNode, baseNode.childNodes.length);
+      reselect = false;
+    }
     range.select();
 
     // If we just deleted everything from the container, add an nbsp
@@ -686,6 +696,8 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
       range.select();
     }
   }
+
+  return range;
 };
 
 
