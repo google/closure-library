@@ -48,11 +48,13 @@ goog.provide('goog.net.BrowserChannel.TimingEvent');
 
 goog.require('goog.Uri');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.TextFormatter');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json');
+goog.require('goog.json.EvalJsonProcessor');
 goog.require('goog.net.BrowserTestChannel');
 goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
@@ -111,6 +113,14 @@ goog.net.BrowserChannel = function(opt_clientVersion) {
    * @private
    */
   this.channelDebug_ = new goog.net.ChannelDebug();
+
+  /**
+   * Parser for a response payload. Defaults to use
+   * {@code goog.json.unsafeParse}. The parser should return an array.
+   * @type {!goog.string.Parser}
+   * @private
+   */
+  this.parser_ = new goog.json.EvalJsonProcessor(null, true);
 };
 
 
@@ -388,16 +398,6 @@ goog.net.BrowserChannel.prototype.forwardChannelMaxRetries_ = 2;
  * @private
  */
 goog.net.BrowserChannel.prototype.forwardChannelRequestTimeoutMs_ = 20 * 1000;
-
-
-/**
- * Function to deserialize a response payload. Defaults to
- * {@code goog.json.unsafeParse}.  The function should return an array.
- * @type {function(string): !Array}
- * @private
- */
-goog.net.BrowserChannel.prototype.deserializerFunction_ = (
-    /** @type {!function(string): !Array} */ goog.json.unsafeParse);
 
 
 /**
@@ -954,6 +954,7 @@ goog.net.BrowserChannel.prototype.connectTest_ = function(testPath) {
   this.connectionTest_ = new goog.net.BrowserTestChannel(
       this, this.channelDebug_);
   this.connectionTest_.setExtraHeaders(this.extraHeaders_);
+  this.connectionTest_.setParser(this.parser_);
   this.connectionTest_.connect(testPath);
 };
 
@@ -1254,13 +1255,13 @@ goog.net.BrowserChannel.prototype.hasOutstandingRequests = function() {
 
 
 /**
- * Sets a new deserialization function for the response payload. A custom
- * deserializer may be set to handle JSON safety prefixes, for example.
- * By default, the deserializer is {@code goog.json.unsafeParse}.
- * @param {function(string): !Array} deserializer Deserialization function.
+ * Sets a new parser for the response payload. A custom parser may be set to
+ * avoid using eval(), for example. By default, the parser uses
+ * {@code goog.json.unsafeParse}.
+ * @param {!goog.string.Parser} parser Parser.
  */
-goog.net.BrowserChannel.prototype.setDeserializer = function(deserializer) {
-  this.deserializerFunction_ = deserializer;
+goog.net.BrowserChannel.prototype.setParser = function(parser) {
+  this.parser_ = parser;
 };
 
 
@@ -1722,12 +1723,12 @@ goog.net.BrowserChannel.prototype.onRequestData =
     if (this.channelVersion_ > 7) {
       var response;
       try {
-        response = this.deserializerFunction_(responseText);
+        response = this.parser_.parse(responseText);
       } catch (ex) {
         response = null;
       }
       if (goog.isArray(response) && response.length == 3) {
-        this.handlePostResponse_(response);
+        this.handlePostResponse_(/** @type {Array} */ (response));
       } else {
         this.channelDebug_.debug('Bad POST response data returned');
         this.signalError_(goog.net.BrowserChannel.Error.BAD_RESPONSE);
@@ -1742,7 +1743,9 @@ goog.net.BrowserChannel.prototype.onRequestData =
       this.clearDeadBackchannelTimer_();
     }
     if (!goog.string.isEmpty(responseText)) {
-      this.onInput_(this.deserializerFunction_(responseText));
+      var response = this.parser_.parse(responseText);
+      goog.asserts.assert(goog.isArray(response));
+      this.onInput_(/** @type {Array} */ (response));
     }
   }
 };
