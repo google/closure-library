@@ -40,11 +40,11 @@ goog.events.BrowserFeature = {
   HAS_W3C_EVENT_SUPPORT: !goog.userAgent.IE || goog.userAgent.isDocumentMode(9),
 
   /**
-   * To prevent default in IE7 for certain keydown events we need set the
+   * To prevent default in IE7-8 for certain keydown events we need set the
    * keyCode to -1.
    */
   SET_KEY_CODE_TO_PREVENT_DEFAULT: goog.userAgent.IE &&
-      !goog.userAgent.isVersion('8'),
+      !goog.userAgent.isVersion('9'),
 
   /**
    * Whether the {@code navigator.onLine} property is supported.
