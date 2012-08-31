@@ -1063,8 +1063,12 @@ goog.net.ChannelRequest.prototype.handleTimeout_ = function() {
   }
 
   this.channelDebug_.timeoutResponse(this.requestUri_);
-  this.channel_.notifyServerReachabilityEvent(
-      goog.net.BrowserChannel.ServerReachability.REQUEST_FAILED);
+  // IMG requests never notice if they were successful, and always 'time out'.
+  // This fact says nothing about reachability.
+  if (this.type_ != goog.net.ChannelRequest.Type_.IMG) {
+    this.channel_.notifyServerReachabilityEvent(
+        goog.net.BrowserChannel.ServerReachability.REQUEST_FAILED);
+  }
   this.cleanup_();
 
   // set error and dispatch failure
