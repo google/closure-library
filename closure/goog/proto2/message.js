@@ -753,15 +753,16 @@ goog.proto2.Message.prototype.clear$Field = function(tag) {
 
 
 /**
- * Sets the metadata that represents the definition of this message.
+ * Creates the metadata descriptor representing the definition of this message.
  *
  * GENERATED CODE USE ONLY. Called when constructing message classes.
  *
- * @param {Function} messageType Constructor for the message type to
- *     which this metadata applies.
+ * @param {function(new:goog.proto2.Message)} messageType Constructor for the
+ *     message type to which this metadata applies.
  * @param {Object} metadataObj The object containing the metadata.
+ * @return {!goog.proto2.Descriptor} The new descriptor.
  */
-goog.proto2.Message.set$Metadata = function(messageType, metadataObj) {
+goog.proto2.Message.create$Descriptor = function(messageType, metadataObj) {
   var fields = [];
   var descriptorInfo;
 
@@ -783,11 +784,26 @@ goog.proto2.Message.set$Metadata = function(messageType, metadataObj) {
   }
 
   goog.proto2.Util.assert(descriptorInfo);
+  return new goog.proto2.Descriptor(messageType, descriptorInfo, fields);
+};
 
-  // Create the descriptor.
-  messageType.descriptor_ =
-      new goog.proto2.Descriptor(messageType, descriptorInfo, fields);
 
+/**
+ * Sets the metadata that represents the definition of this message.
+ *
+ * GENERATED CODE USE ONLY. Called when constructing message classes.
+ *
+ * @param {!Function} messageType Constructor for the
+ *     message type to which this metadata applies.
+ * @param {Object} metadataObj The object containing the metadata.
+ */
+goog.proto2.Message.set$Metadata = function(messageType, metadataObj) {
+  // TODO(nicksantos): Change the code generator so that it doesn't
+  // alias the message constructor. Then it will be easier for the compiler
+  // to devirtualize these symbols.
+  messageType.descriptor_ = goog.proto2.Message.create$Descriptor(
+      /** @type {function(new:goog.proto2.Message)} */ (messageType),
+      metadataObj);
   messageType.getDescriptor = function() {
     return messageType.descriptor_;
   };
