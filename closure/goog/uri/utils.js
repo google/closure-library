@@ -88,39 +88,39 @@ goog.uri.utils.CharCode_ = {
  */
 goog.uri.utils.buildFromEncodedParts = function(opt_scheme, opt_userInfo,
     opt_domain, opt_port, opt_path, opt_queryData, opt_fragment) {
-  var out = [];
+  var out = '';
 
   if (opt_scheme) {
-    out.push(opt_scheme, ':');
+    out += opt_scheme + ':';
   }
 
   if (opt_domain) {
-    out.push('//');
+    out += '//';
 
     if (opt_userInfo) {
-      out.push(opt_userInfo, '@');
+      out += opt_userInfo + '@';
     }
 
-    out.push(opt_domain);
+    out += opt_domain;
 
     if (opt_port) {
-      out.push(':', opt_port);
+      out += ':' + opt_port;
     }
   }
 
   if (opt_path) {
-    out.push(opt_path);
+    out += opt_path;
   }
 
   if (opt_queryData) {
-    out.push('?', opt_queryData);
+    out += '?' + opt_queryData;
   }
 
   if (opt_fragment) {
-    out.push('#', opt_fragment);
+    out += '#' + opt_fragment;
   }
 
-  return out.join('');
+  return out;
 };
 
 
