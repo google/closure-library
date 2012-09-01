@@ -231,9 +231,11 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
  *   goog.inherits(mypackage.MyClass, goog.Disposable);
  *
  *   mypackage.MyClass.prototype.disposeInternal = function() {
- *     goog.base(this, 'disposeInternal');
  *     // Dispose logic specific to MyClass.
  *     ...
+ *     // Call superclass's disposeInternal at the end of the subclass's, like
+ *     // in C++, to avoid hard-to-catch issues.
+ *     goog.base(this, 'disposeInternal');
  *   };
  * </pre>
  * @protected
