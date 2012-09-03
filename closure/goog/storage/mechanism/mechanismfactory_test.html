@@ -13,7 +13,8 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.storage.mechanism.iterablemechanism_test');
-  goog.require('goog.storage.mechanism.prefixedmechanism_test');
+  goog.require('goog.storage.mechanism.mechanism_separation_test');
+  goog.require('goog.storage.mechanism.mechanism_sharing_test');
   goog.require('goog.storage.mechanism.mechanism_test');
   goog.require('goog.storage.mechanism.mechanismfactory');
   goog.require('goog.testing.jsunit');
@@ -22,65 +23,33 @@ See the COPYING file for details.
 <body>
 <script>
 
-function testBasicOperations() {
-  // Test the global mechanism.
-  var mechanism = goog.storage.mechanism.mechanismfactory.create();
-  if (mechanism) {
-    goog.storage.mechanism.mechanism_test.runBasicTests(mechanism);
-  }
+function setUp() {
+  mechanism = goog.storage.mechanism.mechanismfactory.create('test');
+  mechanism_shared = goog.storage.mechanism.mechanismfactory.create('test');
+  mechanism_separate = goog.storage.mechanism.mechanismfactory.create('test2');
+}
 
-  // Test some namespace.
-  var mechanismNs = goog.storage.mechanism.mechanismfactory.create('foo');
-  if (mechanismNs) {
-    goog.storage.mechanism.mechanism_test.runBasicTests(mechanismNs);
+function tearDown() {
+  if (!!mechanism) {
+    mechanism.clear();
+    mechanism = null;
+  }
+  if (!!mechanism_shared) {
+    mechanism_shared.clear();
+    mechanism_shared = null;
+  }
+  if (!!mechanism_separate) {
+    mechanism_separate.clear();
+    mechanism_separate = null;
   }
 }
 
-function testIterableOperations() {
-  // Test the global mechanism.
-  var mechanism = goog.storage.mechanism.mechanismfactory.create();
-  if (mechanism) {
-    goog.storage.mechanism.iterablemechanism_test.runIterableTests(mechanism);
-  }
-
-  // Test some namespace.
-  var mechanismNs = goog.storage.mechanism.mechanismfactory.create('foo');
-  if (mechanismNs) {
-    goog.storage.mechanism.iterablemechanism_test.runIterableTests(mechanismNs);
-  }
-}
-
-function testSharing() {
-  // Test the global mechanism.
-  var mechanismA = goog.storage.mechanism.mechanismfactory.create();
-  if (mechanismA) {
-    var mechanismB = goog.storage.mechanism.mechanismfactory.create();
-    assertTrue(!!mechanismB);
-
-    goog.storage.mechanism.prefixedmechanism_test.runSharingTests(
-        mechanismA, mechanismB);
-  }
-
-  // Test some namespace.
-  var mechanismA = goog.storage.mechanism.mechanismfactory.create('foo');
-  if (mechanismA) {
-    var mechanismB = goog.storage.mechanism.mechanismfactory.create('foo');
-    assertTrue(!!mechanismB);
-
-    goog.storage.mechanism.prefixedmechanism_test.runSharingTests(
-        mechanismA, mechanismB);
-  }
-}
-
-function testSeparation() {
-  // Test two different namespaces.
-  var mechanismA = goog.storage.mechanism.mechanismfactory.create('foo');
-  if (mechanismA) {
-    var mechanismB = goog.storage.mechanism.mechanismfactory.create('bar');
-    assertTrue(!!mechanismB);
-
-    goog.storage.mechanism.prefixedmechanism_test.runSeparationTests(
-        mechanismA, mechanismB);
+function testAvailability() {
+  var probe = goog.storage.mechanism.mechanismfactory.create();
+  if (!!probe) {
+    assertNotNull(mechanism);
+    assertNotNull(mechanism_shared);
+    assertNotNull(mechanism_separate);
   }
 }
 

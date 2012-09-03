@@ -13,7 +13,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.storage.mechanism.iterablemechanism_test');
-  goog.require('goog.storage.mechanism.prefixedmechanism_test');
+  goog.require('goog.storage.mechanism.mechanism_sharing_test');
   goog.require('goog.storage.mechanism.mechanism_test');
   goog.require('goog.storage.mechanism.HTML5LocalStorage');
   goog.require('goog.testing.jsunit');
@@ -23,53 +23,35 @@ See the COPYING file for details.
 <body>
 <script>
 
+function setUp() {
+  var localStorage = new goog.storage.mechanism.HTML5LocalStorage();
+  if (localStorage.isAvailable()) {
+    mechanism = localStorage;
+    // There should be at least 2 MiB.
+    minimumQuota = 2 * 1024 * 1024;
+    mechanism_shared = new goog.storage.mechanism.HTML5LocalStorage();
+  }
+}
+
+function tearDown() {
+  if (!!mechanism) {
+    mechanism.clear();
+    mechanism = null;
+  }
+  if (!!mechanism_shared) {
+    mechanism_shared.clear();
+    mechanism_shared = null;
+  }
+}
+
 function testAvailability() {
-  var mechanism = new goog.storage.mechanism.HTML5LocalStorage();
   if (goog.userAgent.WEBKIT && goog.userAgent.isVersion('532.5') ||
       goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.1') ||
       goog.userAgent.IE && goog.userAgent.isVersion('8')) {
+    assertNotNull(mechanism);
     assertTrue(mechanism.isAvailable());
-  }
-}
-
-function testBasicOperations() {
-  var mechanism = new goog.storage.mechanism.HTML5LocalStorage();
-  if (mechanism.isAvailable()) {
-    goog.storage.mechanism.mechanism_test.runBasicTests(mechanism);
-  }
-}
-
-function testIterableOperations() {
-  var mechanism = new goog.storage.mechanism.HTML5LocalStorage();
-  if (mechanism.isAvailable()) {
-    goog.storage.mechanism.iterablemechanism_test.runIterableTests(mechanism);
-  }
-}
-
-function testSharing() {
-  var mechanismA = new goog.storage.mechanism.HTML5LocalStorage();
-  if (mechanismA.isAvailable()) {
-    var mechanismB = new goog.storage.mechanism.HTML5LocalStorage();
-    assertTrue(mechanismB.isAvailable());
-    goog.storage.mechanism.prefixedmechanism_test.runSharingTests(
-        mechanismA, mechanismB);
-  }
-}
-
-function testQuota() {
-  var mechanism = new goog.storage.mechanism.HTML5LocalStorage();
-  if (mechanism.isAvailable()) {
-    // There should be at least 2 MiB.
-    goog.storage.mechanism.mechanism_test.runQuotaTests(
-        mechanism, 2 * 1024 * 1024);
-  }
-}
-
-// This is disabled because it is only suitable for manual testing
-function flaky_testPersistence() {
-  var mechanism = new goog.storage.mechanism.HTML5LocalStorage();
-  if (mechanism.isAvailable()) {
-    goog.storage.mechanism.mechanism_test.runPersistenceTests(mechanism);
+    assertNotNull(mechanism_shared);
+    assertTrue(mechanism_shared.isAvailable());
   }
 }
 

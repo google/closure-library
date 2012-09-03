@@ -13,7 +13,8 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.storage.mechanism.iterablemechanism_test');
-  goog.require('goog.storage.mechanism.prefixedmechanism_test');
+  goog.require('goog.storage.mechanism.mechanism_separation_test');
+  goog.require('goog.storage.mechanism.mechanism_sharing_test');
   goog.require('goog.storage.mechanism.mechanism_test');
   goog.require('goog.storage.mechanism.HTML5LocalStorage');
   goog.require('goog.storage.mechanism.PrefixedMechanism');
@@ -23,50 +24,40 @@ See the COPYING file for details.
 <body>
 <script>
 
-function testBasicOperations() {
-  var submechanism = new goog.storage.mechanism.HTML5LocalStorage();
+var submechanism = null;
+
+function setUp() {
+  submechanism = new goog.storage.mechanism.HTML5LocalStorage();
   if (submechanism.isAvailable()) {
-    var mechanism = new goog.storage.mechanism.PrefixedMechanism(
-        submechanism, 'foo');
-    goog.storage.mechanism.mechanism_test.runBasicTests(mechanism);
+    mechanism = new goog.storage.mechanism.PrefixedMechanism(
+        submechanism, 'test');
+    mechanism_shared = new goog.storage.mechanism.PrefixedMechanism(
+        submechanism, 'test');
+    mechanism_separate = new goog.storage.mechanism.PrefixedMechanism(
+        submechanism, 'test2');
   }
 }
 
-function testIterableOperations() {
-  var submechanism = new goog.storage.mechanism.HTML5LocalStorage();
-  if (submechanism.isAvailable()) {
-    var mechanism = new goog.storage.mechanism.PrefixedMechanism(
-        submechanism, 'foo');
-    goog.storage.mechanism.iterablemechanism_test.runIterableTests(mechanism);
+function tearDown() {
+  if (!!mechanism) {
+    mechanism.clear();
+    mechanism = null;
+  }
+  if (!!mechanism_shared) {
+    mechanism_shared.clear();
+    mechanism_shared = null;
+  }
+  if (!!mechanism_separate) {
+    mechanism_separate.clear();
+    mechanism_separate = null;
   }
 }
 
-function testSharing() {
-  var submechanismA = new goog.storage.mechanism.HTML5LocalStorage();
-  if (submechanismA.isAvailable()) {
-    var submechanismB = new goog.storage.mechanism.HTML5LocalStorage();
-    assertTrue(submechanismB.isAvailable());
-
-    var mechanismA = new goog.storage.mechanism.PrefixedMechanism(
-        submechanismA, 'foo');
-    var mechanismB = new goog.storage.mechanism.PrefixedMechanism(
-        submechanismB, 'foo');
-
-    goog.storage.mechanism.prefixedmechanism_test.runSharingTests(
-        mechanismA, mechanismB);
-  }
-}
-
-function testSeparation() {
-  var submechanism = new goog.storage.mechanism.HTML5LocalStorage();
+function testAvailability() {
   if (submechanism.isAvailable()) {
-    var mechanismA = new goog.storage.mechanism.PrefixedMechanism(
-        submechanism, 'fooA');
-    var mechanismB = new goog.storage.mechanism.PrefixedMechanism(
-        submechanism, 'fooB');
-
-    goog.storage.mechanism.prefixedmechanism_test.runSeparationTests(
-        mechanismA, mechanismB);
+    assertNotNull(mechanism);
+    assertNotNull(mechanism_shared);
+    assertNotNull(mechanism_separate);
   }
 }
 

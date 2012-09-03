@@ -31,7 +31,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
 /**
  * Provides a storage mechanism that uses HTML5 Web storage.
  *
- * @param {?Storage} storage The Web storage object.
+ * @param {Storage} storage The Web storage object.
  * @constructor
  * @extends {goog.storage.mechanism.IterableMechanism}
  */
@@ -88,10 +88,10 @@ goog.storage.mechanism.HTML5WebStorage.prototype.get = function(key) {
   // paradox where a key exists, but it does not when it is retrieved.
   // http://www.w3.org/TR/2009/WD-webstorage-20091029/#the-storage-interface
   var value = this.storage_.getItem(key);
-  if (goog.isString(value) || goog.isNull(value)) {
-    return value;
+  if (!goog.isString(value) && !goog.isNull(value)) {
+    throw goog.storage.mechanism.ErrorCode.INVALID_VALUE;
   }
-  throw goog.storage.mechanism.ErrorCode.INVALID_VALUE;
+  return value;
 };
 
 
@@ -111,22 +111,22 @@ goog.storage.mechanism.HTML5WebStorage.prototype.getCount = function() {
 goog.storage.mechanism.HTML5WebStorage.prototype.__iterator__ = function(
     opt_keys) {
   var i = 0;
-  var newIter = new goog.iter.Iterator;
-  var selfObj = this;
+  var storage = this.storage_;
+  var newIter = new goog.iter.Iterator();
   newIter.next = function() {
-    if (i >= selfObj.getCount()) {
+    if (i >= storage.length) {
       throw goog.iter.StopIteration;
     }
-    var key = goog.asserts.assertString(selfObj.storage_.key(i++));
+    var key = goog.asserts.assertString(storage.key(i++));
     if (opt_keys) {
       return key;
     }
-    var value = selfObj.storage_.getItem(key);
+    var value = storage.getItem(key);
     // The value must exist and be a string, otherwise it is a storage error.
-    if (goog.isString(value)) {
-      return value;
+    if (!goog.isString(value)) {
+      throw goog.storage.mechanism.ErrorCode.INVALID_VALUE;
     }
-    throw goog.storage.mechanism.ErrorCode.INVALID_VALUE;
+    return value;
   };
   return newIter;
 };

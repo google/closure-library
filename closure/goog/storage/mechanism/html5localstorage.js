@@ -13,7 +13,9 @@
 // limitations under the License.
 
 /**
- * @fileoverview Provides data persistence using HTML5 local storage mechanism.
+ * @fileoverview Provides data persistence using HTML5 local storage
+ * mechanism. Local storage must be available under window.localStorage,
+ * see: http://www.w3.org/TR/webstorage/#the-localstorage-attribute.
  *
  */
 
