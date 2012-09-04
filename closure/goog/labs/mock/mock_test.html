@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<title>Closure Unit Tests - goog.labs.mock</title>
+<script src="../../base.js"></script>
+<script>
+
+goog.require('goog.labs.mock');
+goog.require('goog.testing.jsunit');
+
+</script>
+</head>
+<body>
+<script>
+
+var ParentClass = function() {};
+ParentClass.prototype.method1 = function() {};
+ParentClass.prototype.x = 1;
+
+var ChildClass = function() {};
+goog.inherits(ChildClass, ParentClass);
+ChildClass.prototype.method2 = function() {};
+ChildClass.prototype.y = 2;
+
+function testParentClass() {
+  var parentMock = goog.labs.mock(ParentClass);
+
+  assertNotUndefined(parentMock.method1);
+  assertUndefined(parentMock.method1());
+  assertUndefined(parentMock.method2);
+  assertUndefined(parentMock.x);
+  assertUndefined(parentMock.y);
+}
+
+function testChildClass() {
+  var childMock = goog.labs.mock(ChildClass);
+
+  assertNotUndefined(childMock.method1);
+  assertUndefined(childMock.method1());
+  assertNotUndefined(childMock.method2);
+  assertUndefined(childMock.method2());
+  assertUndefined(childMock.x);
+  assertUndefined(childMock.y);
+}
+
+function testParentClassInstance() {
+  var parentMock = goog.labs.mock(new ParentClass());
+
+  assertNotUndefined(parentMock.method1);
+  assertUndefined(parentMock.method1());
+  assertUndefined(parentMock.method2);
+  assertUndefined(parentMock.x);
+  assertUndefined(parentMock.y);
+}
+
+function testChildClassInstance() {
+  var childMock = goog.labs.mock(new ChildClass());
+
+  assertNotUndefined(childMock.method1);
+  assertUndefined(childMock.method1());
+  assertNotUndefined(childMock.method2);
+  assertUndefined(childMock.method2());
+  assertUndefined(childMock.x);
+  assertUndefined(childMock.y);
+}
+
+function testNonEnumerableProperties() {
+  var obj = {
+    'toString': function() {
+      return 'toString';
+    }
+  };
+  var mockObject = goog.labs.mock(obj);
+  assertNotUndefined(mockObject.toString);
+  assertUndefined(mockObject.toString());
+}
+
+</script>
+</body>
+</html>
