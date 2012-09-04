@@ -325,6 +325,7 @@ goog.fx.AbstractDragDrop.prototype.disposeItem = function(item) {
   if (this.isTarget_ && this.targetClass_) {
     goog.dom.classes.remove(item.element, this.targetClass_);
   }
+  item.dispose();
 };
 
 
