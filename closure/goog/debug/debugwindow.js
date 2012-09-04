@@ -23,6 +23,7 @@ goog.provide('goog.debug.DebugWindow');
 
 goog.require('goog.debug.HtmlFormatter');
 goog.require('goog.debug.LogManager');
+goog.require('goog.debug.Logger');
 goog.require('goog.structs.CircularBuffer');
 goog.require('goog.userAgent');
 
@@ -507,14 +508,14 @@ goog.debug.DebugWindow.prototype.writeInitialDocument = function() {
 
 /**
  * Save persistent data (using cookies) for 1 month (cookie specific to this
- * logger object)
+ * logger object).
  * @param {string} key Data name.
  * @param {string} value Data value.
  * @private
  */
 goog.debug.DebugWindow.prototype.setCookie_ = function(key, value) {
-  key += this.identifier_;
-  document.cookie = key + '=' + encodeURIComponent(value) +
+  var fullKey = goog.debug.DebugWindow.getCookieKey_(this.identifier_, key);
+  document.cookie = fullKey + '=' + encodeURIComponent(value) +
       ';path=/;expires=' +
       (new Date(goog.now() + goog.debug.DebugWindow.COOKIE_TIME)).toUTCString();
 };
@@ -534,6 +535,23 @@ goog.debug.DebugWindow.prototype.getCookie_ = function(key, opt_default) {
 
 
 /**
+ * Creates a valid cookie key name which is scoped to the given identifier.
+ * Substitutes all occurences of invalid cookie name characters (whitespace,
+ * ';', and '=') with '_', which is a valid and readable alternative.
+ * @see goog.net.Cookies#isValidName
+ * @see <a href="http://tools.ietf.org/html/rfc2109">RFC 2109</a>
+ * @param {string} identifier Identifier for logging class.
+ * @param {string} key Data name.
+ * @return {string} Cookie key name.
+ * @private
+ */
+goog.debug.DebugWindow.getCookieKey_ = function(identifier, key) {
+  var fullKey = key + identifier;
+  return fullKey.replace(/[;=\s]/g, '_');
+};
+
+
+/**
  * Retrieve data (using cookies).
  * @param {string} identifier Identifier for logging class.
  * @param {string} key Data name.
@@ -543,7 +561,7 @@ goog.debug.DebugWindow.prototype.getCookie_ = function(key, opt_default) {
  */
 goog.debug.DebugWindow.getCookieValue_ = function(
     identifier, key, opt_default) {
-  var fullKey = key + identifier;
+  var fullKey = goog.debug.DebugWindow.getCookieKey_(identifier, key);
   var cookie = String(document.cookie);
   var start = cookie.indexOf(fullKey + '=');
   if (start != -1) {
