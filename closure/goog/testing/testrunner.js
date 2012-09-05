@@ -97,15 +97,6 @@ goog.testing.TestRunner.prototype.strict_ = true;
  * @param {goog.testing.TestCase} testCase The test case to initialize with.
  */
 goog.testing.TestRunner.prototype.initialize = function(testCase) {
-  if (!this.logEl_) {
-    var el = document.getElementById('closureTestRunnerLog');
-    if (el == null) {
-      el = document.createElement('div');
-      document.body.appendChild(el);
-    }
-    this.logEl_ = el;
-  }
-
   if (this.testCase && this.testCase.running) {
     throw Error('The test runner is already waiting for a test to complete');
   }
@@ -275,6 +266,15 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
   var log = this.testCase.getReport(true);
   if (this.errors.length > 0) {
     log += '\n' + this.errors.join('\n');
+  }
+
+  if (!this.logEl_) {
+    var el = document.getElementById('closureTestRunnerLog');
+    if (el == null) {
+      el = document.createElement('div');
+      document.body.appendChild(el);
+    }
+    this.logEl_ = el;
   }
 
   // Remove all children from the log element.
