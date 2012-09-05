@@ -92,13 +92,14 @@ goog.structs.PriorityPool.prototype.setDelay = function(delay) {
  * @param {Function=} opt_callback The function to callback when an object is
  *     available. This could be immediately. If this is not present, then an
  *     object is immediately returned if available, or undefined if not.
- * @param {*=} opt_priority The priority of the request.
+ * @param {*=} opt_priority The priority of the request. A smaller value means a
+ *     higher priority.
  * @return {Object|undefined} The new object from the pool if there is one
  *     available and a callback is not given. Otherwise, undefined.
  * @override
  */
 goog.structs.PriorityPool.prototype.getObject = function(opt_callback,
-                                                        opt_priority) {
+                                                         opt_priority) {
   if (!opt_callback) {
     var result = goog.base(this, 'getObject');
     if (result && this.delay) {
@@ -109,7 +110,8 @@ goog.structs.PriorityPool.prototype.getObject = function(opt_callback,
     return result;
   }
 
-  var priority = opt_priority || goog.structs.PriorityPool.DEFAULT_PRIORITY_;
+  var priority = goog.isDef(opt_priority) ? opt_priority :
+      goog.structs.PriorityPool.DEFAULT_PRIORITY_;
   this.requestQueue_.enqueue(priority, opt_callback);
 
   // Handle all requests.
