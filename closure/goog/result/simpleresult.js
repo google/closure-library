@@ -13,39 +13,39 @@
 // limitations under the License.
 
 /**
- * @fileoverview A SimpleResult object that implements goog.labs.result.Result.
+ * @fileoverview A SimpleResult object that implements goog.result.Result.
  * See below for a more detailed description.
  */
 
-goog.provide('goog.labs.result.SimpleResult');
-goog.provide('goog.labs.result.SimpleResult.StateError');
+goog.provide('goog.result.SimpleResult');
+goog.provide('goog.result.SimpleResult.StateError');
 
 goog.require('goog.debug.Error');
-goog.require('goog.labs.result.Result');
+goog.require('goog.result.Result');
 
 
 
 /**
  * A SimpleResult object is a basic implementation of the
- * goog.labs.result.Result interface. This could be subclassed(e.g. XHRResult)
+ * goog.result.Result interface. This could be subclassed(e.g. XHRResult)
  * or instantiated and returned by another class as a form of result. The caller
  * receiving the result could then attach handlers to be called when the result
  * is resolved(success or error).
  *
  * @constructor
- * @implements {goog.labs.result.Result}
+ * @implements {goog.result.Result}
  */
-goog.labs.result.SimpleResult = function() {
+goog.result.SimpleResult = function() {
   /**
    * The current state of this Result.
-   * @type {goog.labs.result.Result.State}
+   * @type {goog.result.Result.State}
    * @private
    */
-  this.state_ = goog.labs.result.Result.State.PENDING;
+  this.state_ = goog.result.Result.State.PENDING;
 
   /**
    * The list of handlers to call when this Result is resolved.
-   * @type {!Array.<!function(goog.labs.result.SimpleResult)>}
+   * @type {!Array.<!function(goog.result.SimpleResult)>}
    * @private
    */
   this.handlers_ = [];
@@ -57,7 +57,7 @@ goog.labs.result.SimpleResult = function() {
  * @type {*}
  * @private
  */
-goog.labs.result.SimpleResult.prototype.value_;
+goog.result.SimpleResult.prototype.value_;
 
 
 /**
@@ -65,7 +65,7 @@ goog.labs.result.SimpleResult.prototype.value_;
  * @type {*}
  * @private
  */
-goog.labs.result.SimpleResult.prototype.error_;
+goog.result.SimpleResult.prototype.error_;
 
 
 
@@ -76,26 +76,26 @@ goog.labs.result.SimpleResult.prototype.error_;
  * @constructor
  * @extends {goog.debug.Error}
  */
-goog.labs.result.SimpleResult.StateError = function() {
+goog.result.SimpleResult.StateError = function() {
   goog.base(this, 'Multiple attempts to set the state of this Result');
 };
-goog.inherits(goog.labs.result.SimpleResult.StateError, goog.debug.Error);
+goog.inherits(goog.result.SimpleResult.StateError, goog.debug.Error);
 
 
 /** @override */
-goog.labs.result.SimpleResult.prototype.getState = function() {
+goog.result.SimpleResult.prototype.getState = function() {
   return this.state_;
 };
 
 
 /** @override */
-goog.labs.result.SimpleResult.prototype.getValue = function() {
+goog.result.SimpleResult.prototype.getValue = function() {
   return this.value_;
 };
 
 
 /** @override */
-goog.labs.result.SimpleResult.prototype.getError = function() {
+goog.result.SimpleResult.prototype.getError = function() {
   return this.error_;
 };
 
@@ -103,12 +103,12 @@ goog.labs.result.SimpleResult.prototype.getError = function() {
 /**
  * Attaches handlers to be called when the value of this Result is available.
  *
- * @param {!function(!goog.labs.result.SimpleResult)} handler The function
+ * @param {!function(!goog.result.SimpleResult)} handler The function
  *     called when the value is available. The function is passed the Result
  *     object as the only argument.
  * @override
  */
-goog.labs.result.SimpleResult.prototype.wait = function(handler) {
+goog.result.SimpleResult.prototype.wait = function(handler) {
   if (this.isPending_()) {
     this.handlers_.push(handler);
   } else {
@@ -122,14 +122,14 @@ goog.labs.result.SimpleResult.prototype.wait = function(handler) {
  *
  * @param {*} value The value to set for this Result.
  */
-goog.labs.result.SimpleResult.prototype.setValue = function(value) {
+goog.result.SimpleResult.prototype.setValue = function(value) {
   if (this.isPending_()) {
     this.value_ = value;
-    this.state_ = goog.labs.result.Result.State.SUCCESS;
+    this.state_ = goog.result.Result.State.SUCCESS;
     this.callHandlers_();
   } else if (!this.isCanceled()) {
     // setValue is a no-op if this Result has been canceled.
-    throw new goog.labs.result.SimpleResult.StateError();
+    throw new goog.result.SimpleResult.StateError();
   }
 };
 
@@ -139,14 +139,14 @@ goog.labs.result.SimpleResult.prototype.setValue = function(value) {
  *
  * @param {*=} opt_error Optional error slug to set for this Result.
  */
-goog.labs.result.SimpleResult.prototype.setError = function(opt_error) {
+goog.result.SimpleResult.prototype.setError = function(opt_error) {
   if (this.isPending_()) {
     this.error_ = opt_error;
-    this.state_ = goog.labs.result.Result.State.ERROR;
+    this.state_ = goog.result.Result.State.ERROR;
     this.callHandlers_();
   } else if (!this.isCanceled()) {
     // setError is a no-op if this Result has been canceled.
-    throw new goog.labs.result.SimpleResult.StateError();
+    throw new goog.result.SimpleResult.StateError();
   }
 };
 
@@ -156,7 +156,7 @@ goog.labs.result.SimpleResult.prototype.setError = function(opt_error) {
  *
  * @private
  */
-goog.labs.result.SimpleResult.prototype.callHandlers_ = function() {
+goog.result.SimpleResult.prototype.callHandlers_ = function() {
   while (this.handlers_.length) {
     var callback = this.handlers_.shift();
     callback(this);
@@ -168,8 +168,8 @@ goog.labs.result.SimpleResult.prototype.callHandlers_ = function() {
  * @return {boolean} Whether the Result is pending.
  * @private
  */
-goog.labs.result.SimpleResult.prototype.isPending_ = function() {
-  return this.state_ == goog.labs.result.Result.State.PENDING;
+goog.result.SimpleResult.prototype.isPending_ = function() {
+  return this.state_ == goog.result.Result.State.PENDING;
 };
 
 
@@ -180,10 +180,10 @@ goog.labs.result.SimpleResult.prototype.isPending_ = function() {
  *    the result was already canceled or has already resolved.
  * @override
  */
-goog.labs.result.SimpleResult.prototype.cancel = function() {
+goog.result.SimpleResult.prototype.cancel = function() {
   // cancel is a no-op if the result has been resolved.
   if (this.isPending_()) {
-    this.setError(new goog.labs.result.Result.CancelError());
+    this.setError(new goog.result.Result.CancelError());
     return true;
   }
   return false;
@@ -191,7 +191,7 @@ goog.labs.result.SimpleResult.prototype.cancel = function() {
 
 
 /** @override */
-goog.labs.result.SimpleResult.prototype.isCanceled = function() {
-  return this.state_ == goog.labs.result.Result.State.ERROR &&
-         this.error_ instanceof goog.labs.result.Result.CancelError;
+goog.result.SimpleResult.prototype.isCanceled = function() {
+  return this.state_ == goog.result.Result.State.ERROR &&
+         this.error_ instanceof goog.result.Result.CancelError;
 };

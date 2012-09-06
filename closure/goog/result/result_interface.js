@@ -16,7 +16,7 @@
  * @fileoverview Defines an interface that represents a Result.
  */
 
-goog.provide('goog.labs.result.Result');
+goog.provide('goog.result.Result');
 
 goog.require('goog.debug.Error');
 
@@ -29,17 +29,17 @@ goog.require('goog.debug.Error');
  *
  * @interface
  */
-goog.labs.result.Result = function() {};
+goog.result.Result = function() {};
 
 
 /**
  * Attaches handlers to be called when the value of this Result is available.
  *
- * @param {!function(!goog.labs.result.Result)} handler The function called when
+ * @param {!function(!goog.result.Result)} handler The function called when
  *     the value is available. The function is passed the Result object as the
  *     only argument.
  */
-goog.labs.result.Result.prototype.wait = function(handler) {};
+goog.result.Result.prototype.wait = function(handler) {};
 
 
 /**
@@ -47,7 +47,7 @@ goog.labs.result.Result.prototype.wait = function(handler) {};
  *
  * @enum {string}
  */
-goog.labs.result.Result.State = {
+goog.result.Result.State = {
   /** The operation was a success and the value is available. */
   SUCCESS: 'success',
 
@@ -60,16 +60,16 @@ goog.labs.result.Result.State = {
 
 
 /**
- * @return {!goog.labs.result.Result.State} The state of this Result.
+ * @return {!goog.result.Result.State} The state of this Result.
  */
-goog.labs.result.Result.prototype.getState = function() {};
+goog.result.Result.prototype.getState = function() {};
 
 
 /**
  * @return {*} The value of this Result. Will return undefined if the Result is
  *     pending or was an error.
  */
-goog.labs.result.Result.prototype.getValue = function() {};
+goog.result.Result.prototype.getValue = function() {};
 
 
 /**
@@ -77,7 +77,7 @@ goog.labs.result.Result.prototype.getValue = function() {};
  *     Result was a success, the error slug was not set, or if the Result is
  *     pending.
  */
-goog.labs.result.Result.prototype.getError = function() {};
+goog.result.Result.prototype.getError = function() {};
 
 
 /**
@@ -85,13 +85,13 @@ goog.labs.result.Result.prototype.getError = function() {};
  *
  * @return {boolean} Whether the Result was canceled.
  */
-goog.labs.result.Result.prototype.cancel = function() {};
+goog.result.Result.prototype.cancel = function() {};
 
 
 /**
  * @return {boolean} Whether this Result was canceled.
  */
-goog.labs.result.Result.prototype.isCanceled = function() {};
+goog.result.Result.prototype.isCanceled = function() {};
 
 
 
@@ -101,8 +101,8 @@ goog.labs.result.Result.prototype.isCanceled = function() {};
  * @param {string=} opt_msg The error message for CancelError.
  * @extends {goog.debug.Error}
  */
-goog.labs.result.Result.CancelError = function(opt_msg) {
+goog.result.Result.CancelError = function(opt_msg) {
   var msg = opt_msg || 'Result canceled';
   goog.base(this, msg);
 };
-goog.inherits(goog.labs.result.Result.CancelError, goog.debug.Error);
+goog.inherits(goog.result.Result.CancelError, goog.debug.Error);

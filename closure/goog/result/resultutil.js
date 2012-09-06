@@ -20,11 +20,11 @@
  *
  */
 
-goog.provide('goog.labs.result');
+goog.provide('goog.result');
 
 goog.require('goog.array');
-goog.require('goog.labs.result.Result');
-goog.require('goog.labs.result.SimpleResult');
+goog.require('goog.result.Result');
+goog.require('goog.result.SimpleResult');
 
 
 /**
@@ -38,17 +38,17 @@ goog.require('goog.labs.result.SimpleResult');
  * var result = xhr.get('testdata/xhr_test_text.data');
  *
  * // Wait for the result to be resolved and alert it's state.
- * goog.labs.result.wait(result, function(result) {
+ * goog.result.wait(result, function(result) {
  *   alert('State: ' + result.getState());
  * });
  * </pre>
  *
- * @param {!goog.labs.result.Result} result The result to install the handlers.
- * @param {!function(!goog.labs.result.Result)} handler The handler to be
+ * @param {!goog.result.Result} result The result to install the handlers.
+ * @param {!function(!goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result object as the only parameter.
  * @param {!Object=} opt_scope Optional scope for the handler.
  */
-goog.labs.result.wait = function(result, handler, opt_scope) {
+goog.result.wait = function(result, handler, opt_scope) {
   result.wait(opt_scope ? goog.bind(handler, opt_scope) : handler);
 };
 
@@ -64,21 +64,21 @@ goog.labs.result.wait = function(result, handler, opt_scope) {
  * var result = xhr.get('testdata/xhr_test_text.data');
  *
  * // attach a success handler.
- * goog.labs.result.waitOnSuccess(result, function(result) {
+ * goog.result.waitOnSuccess(result, function(result) {
  *   var datavalue = result.getvalue();
  *   alert('value : ' + datavalue);
  * });
  * </pre>
  *
- * @param {!goog.labs.result.Result} result The result to install the handlers.
- * @param {!function(*, !goog.labs.result.Result)} handler The handler to be
+ * @param {!goog.result.Result} result The result to install the handlers.
+ * @param {!function(*, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result value and the result as
  *     parameters.
  * @param {!Object=} opt_scope Optional scope for the handler.
  */
-goog.labs.result.waitOnSuccess = function(result, handler, opt_scope) {
-  goog.labs.result.wait(result, function(res) {
-    if (res.getState() == goog.labs.result.Result.State.SUCCESS) {
+goog.result.waitOnSuccess = function(result, handler, opt_scope) {
+  goog.result.wait(result, function(res) {
+    if (res.getState() == goog.result.Result.State.SUCCESS) {
       // 'this' refers to opt_scope
       handler.call(this, res.getValue(), res);
     }
@@ -98,19 +98,19 @@ goog.labs.result.waitOnSuccess = function(result, handler, opt_scope) {
  * var result = xhr.get('testdata/xhr_test_text.data');
  *
  * // Attach a failure handler.
- * goog.labs.result.waitOnError(result, function(error) {
+ * goog.result.waitOnError(result, function(error) {
  *  // Failed asynchronous call!
  * });
  * </pre>
  *
- * @param {!goog.labs.result.Result} result The result to install the handlers.
- * @param {!function(!goog.labs.result.Result)} handler The handler to be
+ * @param {!goog.result.Result} result The result to install the handlers.
+ * @param {!function(!goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result object as the only parameter.
  * @param {!Object=} opt_scope Optional scope for the handler.
  */
-goog.labs.result.waitOnError = function(result, handler, opt_scope) {
-  goog.labs.result.wait(result, function(res) {
-    if (res.getState() == goog.labs.result.Result.State.ERROR) {
+goog.result.waitOnError = function(result, handler, opt_scope) {
+  goog.result.wait(result, function(res) {
+    if (res.getState() == goog.result.Result.State.ERROR) {
       // 'this' refers to opt_scope
       handler.call(this, res);
     }
@@ -133,33 +133,33 @@ goog.labs.result.waitOnError = function(result, handler, opt_scope) {
  *
  * // Transform contents of returned data using 'processJson' and create a
  * // transformed result to use returned JSON.
- * var transformedResult = goog.labs.result.transform(result, processJson);
+ * var transformedResult = goog.result.transform(result, processJson);
  *
  * // Attach success and failure handlers to the tranformed result.
- * goog.labs.result.waitOnSuccess(transformedResult, function(result) {
+ * goog.result.waitOnSuccess(transformedResult, function(result) {
  *   var jsonData = result.getValue();
  *   assertEquals('ok', jsonData['stat']);
  * });
  *
- * goog.labs.result.waitOnError(transformedResult, function(error) {
+ * goog.result.waitOnError(transformedResult, function(error) {
  *   // Failed getJson call
  * });
  * </pre>
  *
- * @param {!goog.labs.result.Result} result The result whose value will be
+ * @param {!goog.result.Result} result The result whose value will be
  *     transformed.
  * @param {!Function} transformer The transformer
  *     function. The return value of this function will become the value of the
  *     returned result.
  *
- * @return {!goog.labs.result.Result} A new Result whose eventual value will be
+ * @return {!goog.result.Result} A new Result whose eventual value will be
  *     the returned value of the transformer function.
  */
-goog.labs.result.transform = function(result, transformer) {
-  var returnedResult = new goog.labs.result.SimpleResult();
+goog.result.transform = function(result, transformer) {
+  var returnedResult = new goog.result.SimpleResult();
 
-  goog.labs.result.wait(result, function(res) {
-    if (res.getState() == goog.labs.result.Result.State.SUCCESS) {
+  goog.result.wait(result, function(res) {
+    if (res.getState() == goog.result.Result.State.SUCCESS) {
       returnedResult.setValue(transformer(res.getValue()));
     } else {
       returnedResult.setError(res.getError());
@@ -198,7 +198,7 @@ goog.labs.result.transform = function(result, transformer) {
  *
  * // Chain this result to perform another asynchronous operation when this
  * // Result is resolved.
- * var chainedResult = goog.labs.result.chain(testDataResult,
+ * var chainedResult = goog.result.chain(testDataResult,
  *     function(testDataResult) {
  *
  *       // The result value of testDataResult is the URL for JSON data.
@@ -213,7 +213,7 @@ goog.labs.result.transform = function(result, transformer) {
  *
  * // The chained result resolves to success when both results resolve to
  * // success.
- * goog.labs.result.waitOnSuccess(chainedResult, function(result) {
+ * goog.result.waitOnSuccess(chainedResult, function(result) {
  *
  *   // At this point, both results have succeeded and we can use the JSON
  *   // data returned by the second asynchronous call.
@@ -222,35 +222,35 @@ goog.labs.result.transform = function(result, transformer) {
  * });
  *
  * // Attach the error handler to be called when either Result fails.
- * goog.labs.result.waitOnError(chainedResult, function(result) {
+ * goog.result.waitOnError(chainedResult, function(result) {
  *   alert('chained result failed!');
  * });
  * </pre>
  *
- * @param {!goog.labs.result.Result} result The result to chain.
- * @param {!function(!goog.labs.result.Result):!goog.labs.result.Result}
+ * @param {!goog.result.Result} result The result to chain.
+ * @param {!function(!goog.result.Result):!goog.result.Result}
  *     actionCallback The callback called when the result is resolved. This
  *     callback must return a Result.
  *
- * @return {!goog.labs.result.Result} A result that is resolved when both
+ * @return {!goog.result.Result} A result that is resolved when both
  *     the given Result and the Result returned by the actionCallback have
  *     resolved.
  */
-goog.labs.result.chain = function(result, actionCallback) {
-  var returnedResult = new goog.labs.result.SimpleResult();
+goog.result.chain = function(result, actionCallback) {
+  var returnedResult = new goog.result.SimpleResult();
 
   // Wait for the first action.
-  goog.labs.result.wait(result, function(result) {
-    if (result.getState() == goog.labs.result.Result.State.SUCCESS) {
+  goog.result.wait(result, function(result) {
+    if (result.getState() == goog.result.Result.State.SUCCESS) {
 
       // The first action succeeded. Chain the dependent action.
       var dependentResult = actionCallback(result);
-      goog.labs.result.wait(dependentResult, function(dependentResult) {
+      goog.result.wait(dependentResult, function(dependentResult) {
 
         // The dependent action completed. Set the returned result based on the
         // dependent action's outcome.
         if (dependentResult.getState() ==
-            goog.labs.result.Result.State.SUCCESS) {
+            goog.result.Result.State.SUCCESS) {
           returnedResult.setValue(dependentResult.getValue());
         } else {
           returnedResult.setError(dependentResult.getError());
@@ -279,27 +279,27 @@ goog.labs.result.chain = function(result, actionCallback) {
  * var result2 = xhr.getJson('testdata/xhr_test_json.data');
  *
  * // Create a Result that resolves when both prior results resolve.
- * var combinedResult = goog.labs.result.combine(result1, result2);
+ * var combinedResult = goog.result.combine(result1, result2);
  *
  * // Process data after resolution of both results.
- * goog.labs.result.waitOnSuccess(combinedResult, function(results) {
+ * goog.result.waitOnSuccess(combinedResult, function(results) {
  *   goog.array.forEach(results, function(result) {
  *       alert(result.getState());
  *   });
  * });
  * </pre>
  *
- * @param {...!goog.labs.result.Result} var_args The results to wait on.
+ * @param {...!goog.result.Result} var_args The results to wait on.
  *
- * @return {!goog.labs.result.Result} A new Result whose eventual value will be
+ * @return {!goog.result.Result} A new Result whose eventual value will be
  *     the resolved given Result objects.
  */
-goog.labs.result.combine = function(var_args) {
+goog.result.combine = function(var_args) {
   var results = goog.array.clone(arguments);
-  var combinedResult = new goog.labs.result.SimpleResult();
+  var combinedResult = new goog.result.SimpleResult();
 
   var isResolved = function(res) {
-    return res.getState() != goog.labs.result.Result.State.PENDING;
+    return res.getState() != goog.result.Result.State.PENDING;
   };
 
   var checkResults = function() {
@@ -309,7 +309,7 @@ goog.labs.result.combine = function(var_args) {
   };
 
   goog.array.forEach(results, function(result) {
-    goog.labs.result.wait(result, checkResults);
+    goog.result.wait(result, checkResults);
   });
 
   return combinedResult;
@@ -330,10 +330,10 @@ goog.labs.result.combine = function(var_args) {
  * var result2 = xhr.getJson('testdata/xhr_test_json.data');
  *
  * // Create a Result that resolves when both prior results resolve.
- * var combinedResult = goog.labs.result.combineOnSuccess(result1, result2);
+ * var combinedResult = goog.result.combineOnSuccess(result1, result2);
  *
  * // Process data after successful resolution of both results.
- * goog.labs.result.waitOnSuccess(combinedResult, function(results) {
+ * goog.result.waitOnSuccess(combinedResult, function(results) {
  *   var textData = results[0].getValue();
  *   var jsonData = results[1].getValue();
  *   assertEquals('Just some data.', textData);
@@ -341,33 +341,33 @@ goog.labs.result.combine = function(var_args) {
  * });
  *
  * // Handle errors when either or both results failed.
- * goog.labs.result.waitOnError(combinedResult, function(combined) {
+ * goog.result.waitOnError(combinedResult, function(combined) {
  *   var results = combined.getError();
  *
- *   if (results[0].getState() == goog.labs.result.Result.State.ERROR) {
+ *   if (results[0].getState() == goog.result.Result.State.ERROR) {
  *     alert('result1 failed');
  *   }
  *
- *   if (results[1].getState() == goog.labs.result.Result.State.ERROR) {
+ *   if (results[1].getState() == goog.result.Result.State.ERROR) {
  *     alert('result2 failed');
  *   }
  * });
  * </pre>
  *
- * @param {...!goog.labs.result.Result} var_args The results to wait on.
+ * @param {...!goog.result.Result} var_args The results to wait on.
  *
- * @return {!goog.labs.result.Result} A new Result whose eventual value will be
+ * @return {!goog.result.Result} A new Result whose eventual value will be
  *     an array of values of the given Result objects.
  */
-goog.labs.result.combineOnSuccess = function(var_args) {
-  var combinedResult = new goog.labs.result.SimpleResult();
+goog.result.combineOnSuccess = function(var_args) {
+  var combinedResult = new goog.result.SimpleResult();
 
   var resolvedSuccessfully = function(res) {
-    return res.getState() == goog.labs.result.Result.State.SUCCESS;
+    return res.getState() == goog.result.Result.State.SUCCESS;
   };
 
-  goog.labs.result.wait(
-      goog.labs.result.combine.apply(goog.labs.result.combine, arguments),
+  goog.result.wait(
+      goog.result.combine.apply(goog.result.combine, arguments),
       // The combined result never ERRORs
       function(res) {
         var results = /** @type {Array} */ (res.getValue());

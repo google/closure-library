@@ -7,13 +7,13 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <head>
-<title>Closure Unit Tests - goog.labs.result.wait</title>
-<script src="../../base.js"></script>
+<title>Closure Unit Tests - goog.result.wait</title>
+<script src="../base.js"></script>
 <script>
 
 goog.require('goog.Timer');
-goog.require('goog.labs.result.SimpleResult');
-goog.require('goog.labs.result');
+goog.require('goog.result.SimpleResult');
+goog.require('goog.result');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -34,7 +34,7 @@ function setUpPage() {
 
 function setUp() {
   mockClock.reset();
-  result = new goog.labs.result.SimpleResult();
+  result = new goog.result.SimpleResult();
   propertyReplacer = new goog.testing.PropertyReplacer();
   waitCallback = new goog.testing.recordFunction();
   waitOnSuccessCallback = new goog.testing.recordFunction();
@@ -51,16 +51,16 @@ function tearDownPage() {
 }
 
 function testSynchronousSuccess() {
-  assertEquals(goog.labs.result.Result.State.PENDING, result.getState());
+  assertEquals(goog.result.Result.State.PENDING, result.getState());
   assertUndefined(result.getValue());
 
-  goog.labs.result.wait(result, waitCallback);
-  goog.labs.result.waitOnSuccess(result, waitOnSuccessCallback);
-  goog.labs.result.waitOnError(result, waitOnErrorCallback);
+  goog.result.wait(result, waitCallback);
+  goog.result.waitOnSuccess(result, waitOnSuccessCallback);
+  goog.result.waitOnError(result, waitOnErrorCallback);
 
   result.setValue(1);
 
-  assertEquals(goog.labs.result.Result.State.SUCCESS, result.getState());
+  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
   assertEquals(1, result.getValue());
 
   assertCall(waitCallback, result);
@@ -69,16 +69,16 @@ function testSynchronousSuccess() {
 }
 
 function testAsynchronousSuccess() {
-  goog.labs.result.wait(result, waitCallback);
-  goog.labs.result.waitOnSuccess(result, waitOnSuccessCallback);
-  goog.labs.result.waitOnError(result, waitOnErrorCallback);
+  goog.result.wait(result, waitCallback);
+  goog.result.waitOnSuccess(result, waitOnSuccessCallback);
+  goog.result.waitOnError(result, waitOnErrorCallback);
 
   goog.Timer.callOnce(function() {
     result.setValue(1);
   });
 
   assertUndefined(result.getValue());
-  assertEquals(goog.labs.result.Result.State.PENDING, result.getState());
+  assertEquals(goog.result.Result.State.PENDING, result.getState());
 
   assertNoCall(waitCallback);
   assertNoCall(waitOnSuccessCallback);
@@ -86,7 +86,7 @@ function testAsynchronousSuccess() {
 
   mockClock.tick();
 
-  assertEquals(goog.labs.result.Result.State.SUCCESS, result.getState());
+  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
   assertEquals(1, result.getValue());
 
   assertCall(waitCallback, result);
@@ -95,16 +95,16 @@ function testAsynchronousSuccess() {
 }
 
 function testSynchronousError() {
-  assertEquals(goog.labs.result.Result.State.PENDING, result.getState());
+  assertEquals(goog.result.Result.State.PENDING, result.getState());
   assertUndefined(result.getValue());
 
-  goog.labs.result.wait(result, waitCallback);
-  goog.labs.result.waitOnSuccess(result, waitOnSuccessCallback);
-  goog.labs.result.waitOnError(result, waitOnErrorCallback);
+  goog.result.wait(result, waitCallback);
+  goog.result.waitOnSuccess(result, waitOnSuccessCallback);
+  goog.result.waitOnError(result, waitOnErrorCallback);
 
   result.setError();
 
-  assertEquals(goog.labs.result.Result.State.ERROR, result.getState());
+  assertEquals(goog.result.Result.State.ERROR, result.getState());
   assertUndefined(result.getValue());
 
   assertCall(waitCallback, result);
@@ -113,15 +113,15 @@ function testSynchronousError() {
 }
 
 function testAsynchronousError() {
-  goog.labs.result.wait(result, waitCallback);
-  goog.labs.result.waitOnSuccess(result, waitOnSuccessCallback);
-  goog.labs.result.waitOnError(result, waitOnErrorCallback);
+  goog.result.wait(result, waitCallback);
+  goog.result.waitOnSuccess(result, waitOnSuccessCallback);
+  goog.result.waitOnError(result, waitOnErrorCallback);
 
   goog.Timer.callOnce(function() {
     result.setError();
   });
 
-  assertEquals(goog.labs.result.Result.State.PENDING, result.getState());
+  assertEquals(goog.result.Result.State.PENDING, result.getState());
   assertUndefined(result.getValue());
 
   assertNoCall(waitCallback);
@@ -130,7 +130,7 @@ function testAsynchronousError() {
 
   mockClock.tick();
 
-  assertEquals(goog.labs.result.Result.State.ERROR, result.getState());
+  assertEquals(goog.result.Result.State.ERROR, result.getState());
   assertUndefined(result.getValue());
 
   assertCall(waitCallback, result);
@@ -140,27 +140,27 @@ function testAsynchronousError() {
 
 function testCustomScope() {
   var scope = {};
-  goog.labs.result.wait(result, waitCallback, scope);
+  goog.result.wait(result, waitCallback, scope);
   result.setValue(1);
   assertEquals(scope, waitCallback.popLastCall().getThis());
 }
 
 function testDefaultScope() {
-  goog.labs.result.wait(result, waitCallback);
+  goog.result.wait(result, waitCallback);
   result.setValue(1);
   assertEquals(goog.global, waitCallback.popLastCall().getThis());
 }
 
 function testOnSuccessScope() {
   var scope = {};
-  goog.labs.result.waitOnSuccess(result, waitOnSuccessCallback, scope);
+  goog.result.waitOnSuccess(result, waitOnSuccessCallback, scope);
   result.setValue(1);
   assertSuccessCall(waitOnSuccessCallback, 1, result, scope);
 }
 
 function testOnErrorScope() {
   var scope = {};
-  goog.labs.result.waitOnError(result, waitOnErrorCallback, scope);
+  goog.result.waitOnError(result, waitOnErrorCallback, scope);
   result.setError();
   assertCall(waitOnErrorCallback, result, scope);
 }

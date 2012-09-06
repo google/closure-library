@@ -21,14 +21,14 @@ goog.provide('goog.labs.net.image');
 
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
-goog.require('goog.labs.result.SimpleResult');
 goog.require('goog.net.EventType');
+goog.require('goog.result.SimpleResult');
 goog.require('goog.userAgent');
 
 
 /**
  * Loads a single image.  Useful for preloading images. May be combined with
- * goog.labs.result.combine to preload many images.
+ * goog.result.combine to preload many images.
  *
  * @param {string} uri URI of the image.
  * @param {(Image|function(): !Image)=} opt_image If present, instead of
@@ -37,7 +37,7 @@ goog.require('goog.userAgent');
  *     can be used to control exactly how Image instances are created, for
  *     example if they should be created in a particular document element, or
  *     have fields that will trigger CORS image fetches.
- * @return {!goog.labs.result.Result} An asyncronous result that will succeed
+ * @return {!goog.result.Result} An asyncronous result that will succeed
  *     if the image successfully loads or error if the image load fails.
  */
 goog.labs.net.image.load = function(uri, opt_image) {
@@ -58,7 +58,7 @@ goog.labs.net.image.load = function(uri, opt_image) {
   var loadEvent = goog.userAgent.IE ? goog.net.EventType.READY_STATE_CHANGE :
       goog.events.EventType.LOAD;
 
-  var result = new goog.labs.result.SimpleResult();
+  var result = new goog.result.SimpleResult();
 
   var handler = new goog.events.EventHandler();
   handler.listen(

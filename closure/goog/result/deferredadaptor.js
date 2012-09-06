@@ -22,31 +22,31 @@
  */
 
 
-goog.provide('goog.labs.result.DeferredAdaptor');
+goog.provide('goog.result.DeferredAdaptor');
 
 goog.require('goog.async.Deferred');
-goog.require('goog.labs.result');
-goog.require('goog.labs.result.Result');
+goog.require('goog.result');
+goog.require('goog.result.Result');
 
 
 
 /**
  * An adaptor from Result to a Deferred, for use with existing Deferred chains.
  *
- * @param {!goog.labs.result.Result} result A result.
+ * @param {!goog.result.Result} result A result.
  * @constructor
  * @extends {goog.async.Deferred}
  */
-goog.labs.result.DeferredAdaptor = function(result) {
+goog.result.DeferredAdaptor = function(result) {
   goog.base(this);
-  goog.labs.result.wait(result, function(result) {
+  goog.result.wait(result, function(result) {
     if (this.hasFired()) {
       return;
     }
-    if (result.getState() == goog.labs.result.Result.State.SUCCESS) {
+    if (result.getState() == goog.result.Result.State.SUCCESS) {
       this.callback(result.getValue());
-    } else if (result.getState() == goog.labs.result.Result.State.ERROR) {
-      if (result.getError() instanceof goog.labs.result.Result.CancelError) {
+    } else if (result.getState() == goog.result.Result.State.ERROR) {
+      if (result.getError() instanceof goog.result.Result.CancelError) {
         this.cancel();
       } else {
         this.errback(result.getError());
@@ -54,4 +54,4 @@ goog.labs.result.DeferredAdaptor = function(result) {
     }
   }, this);
 };
-goog.inherits(goog.labs.result.DeferredAdaptor, goog.async.Deferred);
+goog.inherits(goog.result.DeferredAdaptor, goog.async.Deferred);

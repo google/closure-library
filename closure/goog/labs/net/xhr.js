@@ -28,9 +28,9 @@ goog.provide('goog.labs.net.xhr.TimeoutError');
 
 goog.require('goog.debug.Error');
 goog.require('goog.json');
-goog.require('goog.labs.result');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
+goog.require('goog.result');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
 
@@ -38,9 +38,9 @@ goog.require('goog.uri.utils');
 
 goog.scope(function() {
 var _ = goog.labs.net.xhr;
-var Result = goog.labs.result.Result;
-var SimpleResult = goog.labs.result.SimpleResult;
-var Wait = goog.labs.result.wait;
+var Result = goog.result.Result;
+var SimpleResult = goog.result.SimpleResult;
+var Wait = goog.result.wait;
 var HttpStatus = goog.net.HttpStatus;
 
 
@@ -101,8 +101,8 @@ _.FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded;charset=utf-8';
  */
 _.get = function(url, opt_options) {
   var result = _.send('GET', url, null, opt_options);
-  var transformedResult = goog.labs.result.transform(result,
-                                                     _.getResponseText_);
+  var transformedResult = goog.result.transform(result,
+                                                _.getResponseText_);
   return transformedResult;
 };
 
@@ -119,8 +119,8 @@ _.get = function(url, opt_options) {
  */
 _.post = function(url, data, opt_options) {
   var result = _.send('POST', url, data, opt_options);
-  var transformedResult = goog.labs.result.transform(result,
-                                                     _.getResponseText_);
+  var transformedResult = goog.result.transform(result,
+                                                _.getResponseText_);
   return transformedResult;
 };
 
@@ -177,8 +177,8 @@ _.send = function(method, url, data, opt_options) {
   // cleanup, however we don't want the callback or errback to be called
   // again.  Thus the slight ugliness here.  If results were pushed into
   // makeRequest, this could become a lot cleaner but we want an option for
-  // people not to include goog.labs.result.Result.
-  goog.labs.result.waitOnError(result, function(result) {
+  // people not to include goog.result.Result.
+  goog.result.waitOnError(result, function(result) {
     if (result.isCanceled()) {
       xhr.abort();
       xhr.onreadystatechange = goog.nullFunction;
@@ -335,16 +335,16 @@ _.getResponseText_ = function(xhr) {
  * @private
  */
 _.addJsonParsingCallbacks_ = function(result, options) {
-  var resultWithResponseText = goog.labs.result.transform(result,
-                                                          _.getResponseText_);
+  var resultWithResponseText = goog.result.transform(result,
+                                                     _.getResponseText_);
   var prefixStrippedResult = resultWithResponseText;
   if (options && options.xssiPrefix) {
-    prefixStrippedResult = goog.labs.result.transform(resultWithResponseText,
+    prefixStrippedResult = goog.result.transform(resultWithResponseText,
         goog.partial(_.stripXssiPrefix_, options.xssiPrefix));
   }
 
-  var jsonParsedResult = goog.labs.result.transform(prefixStrippedResult,
-                                                    goog.json.parse);
+  var jsonParsedResult = goog.result.transform(prefixStrippedResult,
+                                               goog.json.parse);
   return jsonParsedResult;
 };
 

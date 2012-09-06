@@ -7,13 +7,13 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <head>
-<title>Closure Unit Tests - goog.labs.result.combine</title>
-<script src="../../base.js"></script>
+<title>Closure Unit Tests - goog.result.combine</title>
+<script src="../base.js"></script>
 <script>
 
 goog.require('goog.Timer');
 goog.require('goog.array');
-goog.require('goog.labs.result');
+goog.require('goog.result');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
@@ -37,15 +37,15 @@ function tearDownPage() {
 
 function setUp() {
   mockClock.reset();
-  result1 = new goog.labs.result.SimpleResult();
-  result2 = new goog.labs.result.SimpleResult();
-  result3 = new goog.labs.result.SimpleResult();
-  result4 = new goog.labs.result.SimpleResult();
+  result1 = new goog.result.SimpleResult();
+  result2 = new goog.result.SimpleResult();
+  result3 = new goog.result.SimpleResult();
+  result4 = new goog.result.SimpleResult();
 
-  combinedResult = goog.labs.result.combine(result1, result2, result3, result4);
+  combinedResult = goog.result.combine(result1, result2, result3, result4);
 
   successCombinedResult =
-      goog.labs.result.combineOnSuccess(result1, result2, result3, result4);
+      goog.result.combineOnSuccess(result1, result2, result3, result4);
 
   resultCallback = goog.testing.recordFunction();
 }
@@ -56,7 +56,7 @@ function tearDown() {
 }
 
 function testCombineWhenAllResultsSuccess() {
-  goog.labs.result.wait(combinedResult, resultCallback);
+  goog.result.wait(combinedResult, resultCallback);
 
   resolveAllGivenResultsToSuccess();
 
@@ -64,7 +64,7 @@ function testCombineWhenAllResultsSuccess() {
 }
 
 function testAsyncCombineWhenAllResultsSuccess() {
-  goog.labs.result.wait(combinedResult, resultCallback);
+  goog.result.wait(combinedResult, resultCallback);
 
   goog.Timer.callOnce(function() { resolveAllGivenResultsToSuccess(); });
   mockClock.tick();
@@ -73,7 +73,7 @@ function testAsyncCombineWhenAllResultsSuccess() {
 }
 
 function testCombineWhenAllResultsFail() {
-  goog.labs.result.wait(combinedResult, resultCallback);
+  goog.result.wait(combinedResult, resultCallback);
 
   resolveAllGivenResultsToError();
 
@@ -81,7 +81,7 @@ function testCombineWhenAllResultsFail() {
 }
 
 function testAsyncCombineWhenAllResultsFail() {
-  goog.labs.result.wait(combinedResult, resultCallback);
+  goog.result.wait(combinedResult, resultCallback);
 
   goog.Timer.callOnce(function() { resolveAllGivenResultsToError(); });
   mockClock.tick();
@@ -90,7 +90,7 @@ function testAsyncCombineWhenAllResultsFail() {
 }
 
 function testCombineWhenSomeResultsSuccess() {
-  goog.labs.result.wait(combinedResult, resultCallback);
+  goog.result.wait(combinedResult, resultCallback);
 
   resolveSomeGivenResultsToSuccess();
 
@@ -98,7 +98,7 @@ function testCombineWhenSomeResultsSuccess() {
 }
 
 function testAsyncCombineWhenSomeResultsSuccess() {
-  goog.labs.result.wait(combinedResult, resultCallback);
+  goog.result.wait(combinedResult, resultCallback);
 
   goog.Timer.callOnce(function() { resolveSomeGivenResultsToSuccess(); });
   mockClock.tick();
@@ -107,7 +107,7 @@ function testAsyncCombineWhenSomeResultsSuccess() {
 }
 
 function testCombineOnSuccessWhenAllResultsSuccess() {
-  goog.labs.result.wait(successCombinedResult, resultCallback);
+  goog.result.wait(successCombinedResult, resultCallback);
 
   resolveAllGivenResultsToSuccess();
 
@@ -115,7 +115,7 @@ function testCombineOnSuccessWhenAllResultsSuccess() {
 }
 
 function testAsyncCombineOnSuccessWhenAllResultsSuccess() {
-  goog.labs.result.wait(successCombinedResult, resultCallback);
+  goog.result.wait(successCombinedResult, resultCallback);
 
   goog.Timer.callOnce(function() { resolveAllGivenResultsToSuccess(); });
   mockClock.tick();
@@ -124,7 +124,7 @@ function testAsyncCombineOnSuccessWhenAllResultsSuccess() {
 }
 
 function testCombineOnSuccessWhenAllResultsFail() {
-  goog.labs.result.wait(successCombinedResult, resultCallback);
+  goog.result.wait(successCombinedResult, resultCallback);
 
   resolveAllGivenResultsToError();
 
@@ -132,7 +132,7 @@ function testCombineOnSuccessWhenAllResultsFail() {
 }
 
 function testAsyncCombineOnSuccessWhenAllResultsFail() {
-  goog.labs.result.wait(successCombinedResult, resultCallback);
+  goog.result.wait(successCombinedResult, resultCallback);
 
   goog.Timer.callOnce(function() { resolveAllGivenResultsToError(); });
   mockClock.tick();
@@ -141,7 +141,7 @@ function testAsyncCombineOnSuccessWhenAllResultsFail() {
 }
 
 function testCombineOnSuccessWhenSomeResultsSuccess() {
-  goog.labs.result.wait(successCombinedResult, resultCallback);
+  goog.result.wait(successCombinedResult, resultCallback);
 
   resolveSomeGivenResultsToSuccess();
 
@@ -149,7 +149,7 @@ function testCombineOnSuccessWhenSomeResultsSuccess() {
 }
 
 function testAsyncCombineOnSuccessWhenSomeResultsSuccess() {
-  goog.labs.result.wait(successCombinedResult, resultCallback);
+  goog.result.wait(successCombinedResult, resultCallback);
 
   goog.Timer.callOnce(function() { resolveSomeGivenResultsToSuccess(); });
   mockClock.tick();
@@ -158,7 +158,7 @@ function testAsyncCombineOnSuccessWhenSomeResultsSuccess() {
 }
 
 function assertSuccessCall(combinedResult, resultCallback) {
-  assertEquals(goog.labs.result.Result.State.SUCCESS, combinedResult.getState());
+  assertEquals(goog.result.Result.State.SUCCESS, combinedResult.getState());
   assertEquals(1, resultCallback.getCallCount());
 
   var result = resultCallback.popLastCall().getArgument(0);
@@ -167,7 +167,7 @@ function assertSuccessCall(combinedResult, resultCallback) {
 }
 
 function assertErrorCall(combinedResult, resultCallback) {
-  assertEquals(goog.labs.result.Result.State.ERROR,
+  assertEquals(goog.result.Result.State.ERROR,
                  combinedResult.getState());
   assertEquals(1, resultCallback.getCallCount());
 

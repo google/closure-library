@@ -7,13 +7,13 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <head>
-<title>Closure Unit Tests - goog.labs.result.DeferredAdaptor</title>
-<script src="../../base.js"></script>
+<title>Closure Unit Tests - goog.result.DeferredAdaptor</title>
+<script src="../base.js"></script>
 <script>
 
-goog.require('goog.labs.result');
-goog.require('goog.labs.result.DeferredAdaptor');
-goog.require('goog.labs.result.SimpleResult');
+goog.require('goog.result');
+goog.require('goog.result.DeferredAdaptor');
+goog.require('goog.result.SimpleResult');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
@@ -25,8 +25,8 @@ goog.require('goog.testing.recordFunction');
 var result, deferred, record;
 
 function setUp() {
-  result = new goog.labs.result.SimpleResult();
-  deferred = new goog.labs.result.DeferredAdaptor(result);
+  result = new goog.result.SimpleResult();
+  deferred = new goog.result.DeferredAdaptor(result);
   record = new goog.testing.recordFunction();
 }
 
