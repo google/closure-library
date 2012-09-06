@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<title>Closure Unit Tests - Decorator matchers</title>
+<script src="../../base.js"></script>
+<script>
+
+goog.require('goog.labs.testing.AnythingMatcher');
+goog.require('goog.labs.testing.GreaterThanMatcher');
+goog.require('goog.labs.testing.assertThat');
+goog.require('goog.testing.jsunit');
+
+</script>
+</head>
+<body>
+<script>
+
+function testAnythingMatcher() {
+  goog.labs.testing.assertThat(true, anything(), 'anything matches true');
+  goog.labs.testing.assertThat(false, anything(), 'false matches anything');
+}
+
+function testIs() {
+  goog.labs.testing.assertThat(5, is(greaterThan(4)), '5 is > 4');
+}
+
+function testDescribedAs() {
+  var e = assertThrows(function() {
+    goog.labs.testing.assertThat(4, describedAs('this is a test',
+                                 greaterThan(6)))});
+  assertTrue(e instanceof goog.labs.testing.MatcherError);
+  assertEquals('this is a test', e.message);
+}
+
+</script>
+</body>
+</html>
