@@ -54,9 +54,9 @@ goog.events.actionEventWrapper = new goog.events.ActionEventWrapper_();
  */
 goog.events.ActionEventWrapper_.EVENT_TYPES_ = [
   goog.events.EventType.CLICK,
-  goog.userAgent.IE ?
-      goog.events.EventType.KEYDOWN :
-      goog.events.EventType.KEYPRESS
+  goog.userAgent.GECKO ?
+      goog.events.EventType.KEYPRESS :
+      goog.events.EventType.KEYDOWN
 ];
 
 
