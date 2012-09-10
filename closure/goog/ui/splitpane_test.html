@@ -68,7 +68,32 @@ function testDecorate() {
   var sandbox = goog.dom.getElement('sandbox');
   goog.dom.appendChild(sandbox, mainDiv);
 
-  splitpane.decorate(mainDiv);  
+  splitpane.decorate(mainDiv);
+}
+
+function testDecorateWithNestedSplitPane() {
+
+  // Create a standard split pane to be nested within another split pane.
+  var innerSplitPaneDiv = goog.dom.createDom('div', 'goog-splitpane',
+      goog.dom.createDom('div', 'goog-splitpane-first-container e1'),
+      goog.dom.createDom('div', 'goog-splitpane-second-container e2'),
+      goog.dom.createDom('div', 'goog-splitpane-handle e3'));
+
+  // Create a split pane containing a split pane instance.
+  var outerSplitPaneDiv = goog.dom.createDom('div', 'goog-splitpane',
+      goog.dom.createDom('div', 'goog-splitpane-first-container e4',
+          innerSplitPaneDiv),
+      goog.dom.createDom('div', 'goog-splitpane-second-container e5'),
+      goog.dom.createDom('div', 'goog-splitpane-handle e6'));
+
+  var sandbox = goog.dom.getElement('sandbox');
+  goog.dom.appendChild(sandbox, outerSplitPaneDiv);
+
+  // Decorate and check that the correct containers and handle are used.
+  splitpane.decorate(outerSplitPaneDiv);
+  assertTrue(goog.dom.classes.has(splitpane.firstComponentContainer_, 'e4'));
+  assertTrue(goog.dom.classes.has(splitpane.secondComponentContainer_, 'e5'));
+  assertTrue(goog.dom.classes.has(splitpane.splitpaneHandle_, 'e6'));
 }
 
 function testSetSize() {
@@ -81,9 +106,8 @@ function testSetSize() {
 
   var splitpaneSize = goog.style.getBorderBoxSize(splitpane.getElement());
   assertEquals(500, splitpaneSize.width);
-  assertEquals(300, splitpaneSize.height);  
+  assertEquals(300, splitpaneSize.height);
 }
-
 
 function testOrientationChange() {
   splitpane.setInitialSize(200);
@@ -139,6 +163,32 @@ function testOrientationChange() {
   assertEquals(300, secondSize.height);
 }
 
+function testDragEvent() {
+  splitpane.setInitialSize(200);
+  splitpane.setHandleSize(10);
+  splitpane.render(goog.dom.getElement('sandbox'));
+  var eventFired = false;
+  goog.events.listen(splitpane, goog.ui.SplitPane.EventType.HANDLE_DRAG,
+      function() {
+        eventFired = true;
+      });
+
+  var handle = goog.dom.getElementsByTagNameAndClass('div',
+      'goog-splitpane-handle')[0];
+
+  goog.testing.events.fireMouseDownEvent(handle);
+  goog.testing.events.fireMouseMoveEvent(handle);
+  goog.testing.events.fireMouseUpEvent(handle);
+  assertTrue('HANDLE_DRAG event expected', eventFired);
+
+  splitpane.setContinuousResize(false);
+  eventFired = false;
+  goog.testing.events.fireMouseDownEvent(handle);
+  goog.testing.events.fireMouseMoveEvent(handle);
+  goog.testing.events.fireMouseUpEvent(handle);
+  assertFalse('HANDLE_DRAG event not expected', eventFired);
+}
+
 function testDragEndEvent() {
   splitpane.setInitialSize(200);
   splitpane.setHandleSize(10);
@@ -164,9 +214,6 @@ function testDragEndEvent() {
   goog.testing.events.fireMouseUpEvent(handle);
   assertTrue('HANDLE_DRAG_END event expected', eventFired);
 }
-
-
-
 </script>
 </body>
 </html>
