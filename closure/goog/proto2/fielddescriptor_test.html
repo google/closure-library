@@ -15,7 +15,6 @@ See the COPYING file for details.
 <script>
   goog.require('goog.proto2.Descriptor');
   goog.require('goog.proto2.FieldDescriptor');
-  goog.require('goog.proto2.Message');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -103,27 +102,20 @@ function testOptionalField() {
 }
 
 function testContaingType() {
-  var MessageType = function() {
-    goog.base(this);
-  };
-  goog.inherits(MessageType, goog.proto2.Message);
+  var messageType = {};
+  var fieldDescriptor = new goog.proto2.FieldDescriptor(messageType, 10, {
+    name: 'test',
+    fieldType: 7,
+    type: Number
+  });
 
-  var descriptorObj = {
-    0: {
-      name: 'test_message',
-      fullName: 'this.is.a.test_message'
-    },
-    10: {
-      name: 'test',
-      fieldType: 7,
-      type: Number
-    }
-  };
-  goog.proto2.Message.set$Metadata(MessageType, descriptorObj);
+  var descriptor = new goog.proto2.Descriptor(messageType, {
+    name: 'test_message',
+    fullName: 'this.is.a.test_message'
+  }, [fieldDescriptor]);
 
-  var descriptor = MessageType.getDescriptor();
-  var fieldDescriptor = descriptor.getFields()[0];
-  assertEquals('10', fieldDescriptor.getTag());
+  messageType.descriptor_ = descriptor;
+
   assertEquals(descriptor, fieldDescriptor.getContainingType());
 }
 
