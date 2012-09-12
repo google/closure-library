@@ -39,22 +39,12 @@ goog.proto2.Message = function() {
    */
   this.values_ = {};
 
-  // The descriptor_ is static to the message function that is being created.
-  // Therefore, we retrieve it via the constructor.
-
-  /**
-   * Stores the information (i.e. metadata) about this message.
-   * @type {!goog.proto2.Descriptor}
-   * @private
-   */
-  this.descriptor_ = this.constructor.descriptor_;
-
   /**
    * Stores the field information (i.e. metadata) about this message.
    * @type {Object.<number, !goog.proto2.FieldDescriptor>}
    * @private
    */
-  this.fields_ = this.descriptor_.getFieldsMap();
+  this.fields_ = this.getDescriptor().getFieldsMap();
 
   /**
    * The lazy deserializer for this message instance, if any.
@@ -106,6 +96,25 @@ goog.proto2.Message.FieldType = {
   SINT32: 17,
   SINT64: 18
 };
+
+
+/**
+ * The JSON representation of the descriptor. Converted into a real descriptor
+ * with goog.proto2.Message.create$Descriptor.
+ *
+ * @type {Object}
+ * @private
+ */
+goog.proto2.Message.prototype.descriptorObj_ = null;
+
+
+/**
+ * The descriptor. Generated lazily from descriptorObj_.
+ *
+ * @type {goog.proto2.Descriptor}
+ * @private
+ */
+goog.proto2.Message.prototype.descriptor_ = null;
 
 
 /**
@@ -167,9 +176,17 @@ goog.proto2.Message.prototype.forEachUnknown = function(callback, opt_scope) {
 /**
  * Returns the descriptor which describes the current message.
  *
- * @return {goog.proto2.Descriptor} The descriptor.
+ * This only works if we assume people never subclass protobufs.
+ *
+ * @return {!goog.proto2.Descriptor} The descriptor.
  */
 goog.proto2.Message.prototype.getDescriptor = function() {
+  if (!this.descriptor_) {
+    var Ctor = this.constructor;
+    Ctor.prototype.descriptor_ = goog.proto2.Message.create$Descriptor(
+        Ctor, this.descriptorObj_);
+  }
+  goog.asserts.assert(this.descriptor_);
   return this.descriptor_;
 };
 
@@ -801,10 +818,10 @@ goog.proto2.Message.set$Metadata = function(messageType, metadataObj) {
   // TODO(nicksantos): Change the code generator so that it doesn't
   // alias the message constructor. Then it will be easier for the compiler
   // to devirtualize these symbols.
-  messageType.descriptor_ = goog.proto2.Message.create$Descriptor(
-      /** @type {function(new:goog.proto2.Message)} */ (messageType),
-      metadataObj);
+  messageType.prototype.descriptorObj_ = metadataObj;
   messageType.getDescriptor = function() {
-    return messageType.descriptor_;
+    // The descriptor is created lazily when we instantiate a new instance.
+    return messageType.prototype.descriptor_ ||
+        (new messageType()).getDescriptor();
   };
 };
