@@ -13,9 +13,12 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.net.XhrManager</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.events');
+  goog.require('goog.net.EventType');
   goog.require('goog.net.XhrManager');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.net.XhrIoPool');
+  goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
@@ -76,6 +79,43 @@ See the COPYING file for details.
     assertNotThrows(
         'Forced abort of normal request should not throw an error',
         goog.bind(xhrManager.abort, xhrManager, 'test', true));
+  }
+
+
+  function testDefaultResponseType() {
+    var callback = goog.testing.recordFunction(function(e) {
+      assertEquals('test1', e.id);
+      assertEquals(
+          goog.net.XhrIo.ResponseType.DEFAULT, e.xhrIo.getResponseType());
+      eventCalled = true;
+    });
+    goog.events.listenOnce(xhrManager, goog.net.EventType.READY, callback);
+    xhrManager.send('test1', '/test2');
+    assertEquals(1, callback.getCallCount());
+
+    xhrIo.simulateResponse(200, 'data');  // Do this to make tearDown() happy.
+  }
+
+
+  function testNonDefaultResponseType() {
+    var callback = goog.testing.recordFunction(function(e) {
+      assertEquals('test2', e.id);
+      assertEquals(
+          goog.net.XhrIo.ResponseType.ARRAY_BUFFER, e.xhrIo.getResponseType());
+      eventCalled = true;
+    });
+    goog.events.listenOnce(xhrManager, goog.net.EventType.READY, callback);
+    xhrManager.send('test2', '/test2',
+        undefined /* opt_method */,
+        undefined /* opt_content */,
+        undefined /* opt_headers */,
+        undefined /* opt_priority */,
+        undefined /* opt_callback */,
+        undefined /* opt_maxRetries */,
+        goog.net.XhrIo.ResponseType.ARRAY_BUFFER);
+    assertEquals(1, callback.getCallCount());
+
+    xhrIo.simulateResponse(200, 'data');  // Do this to make tearDown() happy.
   }
 
 </script>
