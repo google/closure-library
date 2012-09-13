@@ -301,15 +301,21 @@ goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_ = goog.userAgent.MAC &&
  * @private
  */
 goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
-
   // Ctrl-Tab and Alt-Tab can cause the focus to be moved to another window
   // before we've caught a key-up event.  If the last-key was one of these we
   // reset the state.
-  if (goog.userAgent.WEBKIT &&
-      (this.lastKey_ == goog.events.KeyCodes.CTRL && !e.ctrlKey ||
-       this.lastKey_ == goog.events.KeyCodes.ALT && !e.altKey)) {
-    this.lastKey_ = -1;
-    this.keyCode_ = -1;
+  if (goog.userAgent.WEBKIT) {
+    if (this.lastKey_ == goog.events.KeyCodes.CTRL && !e.ctrlKey ||
+        this.lastKey_ == goog.events.KeyCodes.ALT && !e.altKey) {
+      this.lastKey_ = -1;
+      this.keyCode_ = -1;
+    } else if (this.lastKey_ == -1) {
+      if (e.ctrlKey) {
+        this.lastKey_ = goog.events.KeyCodes.CTRL;
+      } else if (e.altKey) {
+        this.lastKey_ = goog.events.KeyCodes.ALT;
+      }
+    }
   }
 
   if (goog.events.KeyHandler.USES_KEYDOWN_ &&
