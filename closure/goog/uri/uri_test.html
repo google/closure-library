@@ -71,10 +71,13 @@ function testUriCreate() {
 function testClone() {
   var uri1 = new goog.Uri(
       'http://user:pass@www.google.com:8080/foo?a=1&b=2#c=3');
+  // getCount forces instantiation of internal data structures to more thoroughly test clone.
+  uri1.getQueryData().getCount();
   var uri2 = uri1.clone();
 
   assertNotEquals(uri1, uri2);
   assertEquals(uri1.toString(), uri2.toString());
+  assertEquals(2, uri2.getQueryData().getCount());
 
   uri2.setParameterValues('q','bar');
   assertFalse(uri1.getParameterValue('q') == 'bar');
