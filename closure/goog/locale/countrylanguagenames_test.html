@@ -140,6 +140,10 @@ function testGetLocalizedLanguageName() {
 
   result = goog.locale.getLocalizedLanguageName('error');
   assertEquals('error', result);
+
+  result = goog.locale.getLocalizedLanguageName('zh_Hans',
+      LocaleNameConstants_en);
+  assertEquals('Simplified Chinese', result);
 }
 
 
