@@ -258,7 +258,9 @@ goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
   // check the user agent.
   if (!opt_shiftKey &&
       (opt_heldKeyCode == goog.events.KeyCodes.CTRL ||
-       opt_heldKeyCode == goog.events.KeyCodes.ALT)) {
+       opt_heldKeyCode == goog.events.KeyCodes.ALT ||
+       goog.userAgent.MAC &&
+       opt_heldKeyCode == goog.events.KeyCodes.META)) {
     return false;
   }
 
@@ -280,8 +282,6 @@ goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
         return false;
     }
   }
-
-
 
   // When Ctrl+<somekey> is held in IE, it only fires a keypress once, but it
   // continues to fire keydown events as the event repeats.
