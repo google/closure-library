@@ -71,14 +71,43 @@ function testChildClassInstance() {
 }
 
 function testNonEnumerableProperties() {
+  var mockObject = goog.labs.mock({});
+  assertNotUndefined(mockObject.toString);
+  goog.labs.mock.when(mockObject).toString().then(function() {
+    return 'toString';
+  });
+  assertEquals('toString', mockObject.toString());
+}
+
+function testBasicStubbing() {
   var obj = {
-    'toString': function() {
-      return 'toString';
+    method1: function(i) {
+      return 2 * i;
+    },
+    method2: function(i, str) {
+      return str;
+    },
+    method3: function(x) {
+      return x;
     }
   };
-  var mockObject = goog.labs.mock(obj);
-  assertNotUndefined(mockObject.toString);
-  assertUndefined(mockObject.toString());
+
+  var mockObj = goog.labs.mock(obj);
+  goog.labs.mock.when(mockObj).method1(2).then(function(i) {return i;});
+
+  assertEquals(4, obj.method1(2));
+  assertEquals(2, mockObj.method1(2));
+  assertUndefined(mockObj.method1(4));
+
+  goog.labs.mock.when(mockObj).method2(1, 'hi').then(function(i) {return 'oh'});
+  assertEquals('hi', obj.method2(1, 'hi'));
+  assertEquals('oh', mockObj.method2(1, 'hi'));
+  assertUndefined(mockObj.method2(3, 'foo'));
+
+  goog.labs.mock.when(mockObj).method3(4).thenReturn(10);
+  assertEquals(4, obj.method3(4));
+  assertEquals(10, mockObj.method3(4));
+  assertUndefined(mockObj.method3(5));
 }
 
 </script>
