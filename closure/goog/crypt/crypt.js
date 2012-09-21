@@ -68,6 +68,23 @@ goog.crypt.byteArrayToHex = function(array) {
 
 
 /**
+ * Converts a hex string into an integer array.
+ * @param {string} hexString Hex string of 16-bit integers (two characters
+ *     per integer).
+ * @return {!Array.<number>} Array of {0,255} integers for the given string.
+ */
+goog.crypt.hexToByteArray = function(hexString) {
+  goog.asserts.assert(hexString.length % 2 == 0,
+                      'Key string length must be multiple of 2');
+  var arr = [];
+  for (var i = 0; i < hexString.length; i += 2) {
+    arr.push(parseInt(hexString.substring(i, i + 2), 16));
+  }
+  return arr;
+};
+
+
+/**
  * Converts a JS string to a UTF-8 "byte" array.
  * @param {string} str 16-bit unicode string.
  * @return {Array.<number>} UTF-8 byte array.

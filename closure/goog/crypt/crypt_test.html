@@ -63,6 +63,30 @@ function testByteArrayToString() {
   assertEquals('abc', goog.crypt.byteArrayToString([97, 98, 99]));
 }
 
+function testHexToByteArray() {
+  assertElementsEquals(
+      [202, 254, 222, 173],
+      // Java magic number
+      goog.crypt.hexToByteArray('cafedead'));
+
+  assertElementsEquals(
+      [222, 173, 190, 239],
+      // IBM magic number
+      goog.crypt.hexToByteArray('DEADBEEF'));
+}
+
+function testByteArrayToHex() {
+  assertEquals(
+      // Java magic number
+      'cafedead',
+      goog.crypt.byteArrayToHex([202, 254, 222, 173]));
+
+  assertEquals(
+      // IBM magic number
+      'deadbeef',
+      goog.crypt.byteArrayToHex([222, 173, 190, 239]));
+}
+
 </script>
 </body>
 </html>
