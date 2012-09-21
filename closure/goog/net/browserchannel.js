@@ -401,6 +401,23 @@ goog.net.BrowserChannel.prototype.forwardChannelRequestTimeoutMs_ = 20 * 1000;
 
 
 /**
+ * A throttle time in ms for readystatechange events for the backchannel.
+ * Useful for throttling when ready state is INTERACTIVE (partial data).
+ *
+ * This throttle is useful if the server sends large data chunks down the
+ * backchannel.  It prevents examining XHR partial data on every
+ * readystate change event.  This is useful because large chunks can
+ * trigger hundreds of readystatechange events, each of which takes ~5ms
+ * or so to handle, in turn making the UI unresponsive for a significant period.
+ *
+ * If set to zero no throttle is used.
+ * @type {number}
+ * @private
+ */
+goog.net.BrowserChannel.prototype.readyStateChangeThrottleMs_ = 0;
+
+
+/**
  * The latest protocol version that this class supports. We request this version
  * from the server when opening the connection. Should match
  * com.google.net.browserchannel.BrowserChannel.LATEST_CHANNEL_VERSION.
@@ -1028,6 +1045,18 @@ goog.net.BrowserChannel.prototype.setExtraHeaders = function(extraHeaders) {
 
 
 /**
+ * Sets the throttle for handling onreadystatechange events for the request.
+ *
+ * @param {number} throttle The throttle in ms.  A value of zero indicates
+ *     no throttle.
+ */
+goog.net.BrowserChannel.prototype.setReadyStateChangeThrottle = function(
+    throttle) {
+  this.readyStateChangeThrottleMs_ = throttle;
+};
+
+
+/**
  * Returns the handler used for channel callback events.
  *
  * @return {goog.net.BrowserChannel.Handler} The handler.
@@ -1620,6 +1649,8 @@ goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
       'rpc',
       this.backChannelAttemptId_);
   this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
+  this.backChannelRequest_.setReadyStateChangeThrottle(
+      this.readyStateChangeThrottleMs_);
   var uri = this.backChannelUri_.clone();
   uri.setParameterValue('RID', 'rpc');
   uri.setParameterValue('SID', this.sid_);

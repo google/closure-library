@@ -112,6 +112,9 @@ MockChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {};
 
 MockChannelRequest.prototype.setTimeout = function(timeout) {};
 
+MockChannelRequest.prototype.setReadyStateChangeThrottle =
+    function(throttle) {};
+
 MockChannelRequest.prototype.xmlHttpPost = function(uri, postData,
     decodeChunks) {
   this.channelDebug_.debug('---> POST: ' + uri + ', ' + postData + ', ' +

@@ -18,8 +18,10 @@ goog.require('goog.net.BrowserChannel');
 goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
+goog.require('goog.testing.recordFunction');
 </script>
 </head>
 <body>
@@ -35,6 +37,11 @@ var xhrIo;
  * Time to wait for a network request to time out, before aborting.
  */
 var WATCHDOG_TIME = 2000;
+
+/**
+ * Time to throttle readystatechange events.
+ */
+var THROTTLE_TIME = 500;
 
 /**
  * A really long time - used to make sure no more timeouts will fire.
@@ -139,6 +146,48 @@ function testNetworkEvents() {
     checkReachabilityEvents(1, 0, 0, 2);
     xhrIo.simulateResponse(200, '16\Final BC Message');
     checkReachabilityEvents(1, 1, 0, 2);
+  } else {
+    xhrIo.simulateResponse(200, '16\Final BC Message');
+    checkReachabilityEvents(1, 1, 0, 0);
+  }
+}
+
+
+/**
+ * Test throttling of readystatechange events.
+ */
+function testNetworkEvents_throttleReadyStateChange() {
+  createChannelRequest();
+  channelRequest.setReadyStateChangeThrottle(THROTTLE_TIME);
+
+  var recordedHandler =
+      goog.testing.recordFunction(channelRequest.xmlHttpHandler_);
+  stubs.set(channelRequest, 'xmlHttpHandler_', recordedHandler);
+
+  channelRequest.xmlHttpPost(new goog.Uri('some_uri'), 'some_postdata', true);
+  assertEquals(1, recordedHandler.getCallCount());
+
+  checkReachabilityEvents(1, 0, 0, 0);
+  if (goog.net.ChannelRequest.supportsXhrStreaming()) {
+    xhrIo.simulatePartialResponse('17\nI am a BC Message');
+    checkReachabilityEvents(1, 0, 0, 1);
+    assertEquals(3, recordedHandler.getCallCount());
+
+    // Second event should be throttled
+    xhrIo.simulatePartialResponse('23\nI am another BC Message');
+    assertEquals(3, recordedHandler.getCallCount());
+
+    xhrIo.simulatePartialResponse('27\nI am yet another BC Message');
+    assertEquals(3, recordedHandler.getCallCount());
+    mockClock.tick(THROTTLE_TIME);
+
+    checkReachabilityEvents(1, 0, 0, 3);
+    // Only one more call because of throttling.
+    assertEquals(4, recordedHandler.getCallCount());
+
+    xhrIo.simulateResponse(200, '16\Final BC Message');
+    checkReachabilityEvents(1, 1, 0, 3);
+    assertEquals(5, recordedHandler.getCallCount());
   } else {
     xhrIo.simulateResponse(200, '16\Final BC Message');
     checkReachabilityEvents(1, 1, 0, 0);
