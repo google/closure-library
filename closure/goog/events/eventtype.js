@@ -81,6 +81,7 @@ goog.events.EventType = {
   TOUCHCANCEL: 'touchcancel',
 
   // Misc
+  BEFOREUNLOAD: 'beforeunload',
   CONTEXTMENU: 'contextmenu',
   ERROR: 'error',
   HELP: 'help',
