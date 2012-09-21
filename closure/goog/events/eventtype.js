@@ -69,10 +69,12 @@ goog.events.EventType = {
 
   // Drag and drop
   DRAGSTART: 'dragstart',
+  DRAG: 'drag',
   DRAGENTER: 'dragenter',
   DRAGOVER: 'dragover',
   DRAGLEAVE: 'dragleave',
   DROP: 'drop',
+  DRAGEND: 'dragend',
 
   // WebKit touch events.
   TOUCHSTART: 'touchstart',
