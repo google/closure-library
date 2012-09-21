@@ -31,7 +31,6 @@ goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
@@ -1927,11 +1926,7 @@ goog.editor.Field.cancelLinkClick_ = function(e) {
  * @private
  */
 goog.editor.Field.prototype.handleMouseDown_ = function(e) {
-  // If the user clicks on an object (like an image) in the field
-  // and the activeField is not set, set it.
-  if (!goog.editor.Field.getActiveFieldId()) {
-    goog.editor.Field.setActiveFieldId(this.id);
-  }
+  goog.editor.Field.setActiveFieldId(this.id);
 
   // Open links in a new window if the user control + clicks.
   if (goog.userAgent.IE) {
