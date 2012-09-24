@@ -444,7 +444,8 @@ goog.net.XhrIo.prototype.getWithCredentials = function() {
 goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
                                          opt_headers) {
   if (this.xhr_) {
-    throw Error('[goog.net.XhrIo] Object is active with another request');
+    throw Error('[goog.net.XhrIo] Object is active with another request=' +
+        this.lastUri_ + '; newUri=' + url);
   }
 
   var method = opt_method ? opt_method.toUpperCase() : 'GET';

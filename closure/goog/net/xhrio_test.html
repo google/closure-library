@@ -420,8 +420,8 @@ function testSendFromListener() {
     var e = assertThrows(function() {
       x.send('url2');
     });
-    assertEquals('[goog.net.XhrIo] Object is active with another request',
-        e.message);
+    assertEquals('[goog.net.XhrIo] Object is active with another request=url' +
+        '; newUri=url2', e.message);
   });
 
   x.send('url');
