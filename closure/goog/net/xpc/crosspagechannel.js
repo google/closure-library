@@ -621,6 +621,7 @@ goog.net.xpc.CrossPageChannel.prototype.notifyConnected_ =
 
 /**
  * Called by the transport in case of an unrecoverable failure.
+ * Package private. Do not call from outside goog.net.xpc.
  */
 goog.net.xpc.CrossPageChannel.prototype.notifyTransportError = function() {
   goog.net.xpc.logger.info('Transport Error');
