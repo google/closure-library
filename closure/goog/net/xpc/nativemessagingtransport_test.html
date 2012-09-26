@@ -142,7 +142,7 @@ function testSendingMessagesToUnconnectedInnerPeer() {
   var xpc = getTestChannel();
 
   var serviceResult, payloadResult;
-  xpc.deliver_ = function(service, payload) {
+  xpc.xpcDeliver = function(service, payload) {
     serviceResult = service;
     payloadResult = payload;
   };
