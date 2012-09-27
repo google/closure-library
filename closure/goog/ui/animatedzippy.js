@@ -125,6 +125,7 @@ goog.ui.AnimatedZippy.prototype.setExpanded = function(expanded) {
   // Stop active animation (if any) and determine starting height.
   var startH = 0;
   if (this.anim_) {
+    expanded = this.isExpanded();
     goog.events.removeAll(this.anim_);
     this.anim_.stop(false);
 

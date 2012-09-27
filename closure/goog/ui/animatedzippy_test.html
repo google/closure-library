@@ -131,43 +131,6 @@ See the COPYING file for details.
     assertEquals('TOGGLE events must fire', 2, toggleEventsFired);
   }
 
-  function testExpandWhileAnimationRuns() {
-    var animationStopper = function() {
-      fail('expand() must replace animationStopper');
-    };
-    var animationsRunning = 0;
-
-    propertyReplacer.replace(goog.fx.Animation.prototype, 'onPlay', function() {
-      var that = this;
-      animationStopper = function() {
-        that.cycle(that.endTime);
-      };
-      animationsRunning++;
-    });
-    propertyReplacer.replace(goog.fx.Animation.prototype, 'onEnd', function() {
-      animationsRunning--;
-      this.dispatchAnimationEvent(goog.fx.Transition.EventType.END);
-    });
-    propertyReplacer.replace(goog.ui.AnimatedZippy.prototype, 'onAnimate_',
-        goog.functions.NULL);
-
-    animatedZippy.expand();
-    animatedZippy.collapse();
-    animatedZippy.expand();
-    assertEquals('exactly 1 animation must be running', 1, animationsRunning);
-    animationStopper();
-    assertEquals('animation must have finished', 0, animationsRunning);
-    assertEquals('expanded must be true', animatedZippy.isExpanded(), true);
-
-    animatedZippy.collapse();
-    animatedZippy.expand();
-    animatedZippy.collapse();
-    assertEquals('exactly 1 animation must be running', 1, animationsRunning);
-    animationStopper();
-    assertEquals('animation must have finished', 0, animationsRunning);
-    assertEquals('expanded must be false', animatedZippy.isExpanded(), false);
-  }
-
 </script>
 
 </body>
