@@ -176,6 +176,7 @@ goog.ui.editor.Bubble.prototype.disposeInternal = function() {
 
 /**
  * @return {Element} The element that where the bubble's contents go.
+ * @protected
  */
 goog.ui.editor.Bubble.prototype.getContentElement = function() {
   return this.bubbleContents_;
