@@ -1281,6 +1281,23 @@ function testPathWithHost() {
   assertEquals(browserChannel.forwardChannelUri_.getDomain(), 'example.com');
 }
 
+function testCreateXhrIo() {
+  var xhr = browserChannel.createXhrIo(null);
+  assertFalse(xhr.getWithCredentials());
+
+  assertThrows(
+      'Error connection to different host without CORS',
+      goog.bind(browserChannel.createXhrIo, browserChannel, 'some_host'));
+
+  browserChannel.setSupportsCrossDomainXhrs(true);
+
+  xhr = browserChannel.createXhrIo(null);
+  assertTrue(xhr.getWithCredentials());
+
+  xhr = browserChannel.createXhrIo('some_host');
+  assertTrue(xhr.getWithCredentials());
+}
+
 function testSetParser() {
   var recordUnsafeParse = goog.testing.recordFunction(
       goog.json.unsafeParse);
