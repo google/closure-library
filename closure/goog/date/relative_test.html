@@ -19,6 +19,7 @@ See the COPYING file for details.
   goog.require('goog.testing.jsunit');
   goog.require('goog.date.relative');
   goog.require('goog.date.DateTime');
+  goog.require('goog.i18n.DateTimeFormat');
 </script>
 </head>
 <body>
@@ -93,12 +94,26 @@ See the COPYING file for details.
 
   function testFormatDay() {
     var fn = goog.date.relative.formatDay;
+    var formatter = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimeFormat.Format.SHORT_DATE);
+    var format = goog.bind(formatter.format, formatter);
+
     assertEquals('Today', fn(timestamp('23 March 2009 10:31:06')));
     assertEquals('Today', fn(timestamp('23 March 2009 00:12:19')));
     assertEquals('Yesterday', fn(timestamp('22 March 2009 23:48:12')));
     assertEquals('Yesterday', fn(timestamp('22 March 2009 04:11:23')));
     assertEquals('Mar 21', fn(timestamp('21 March 2009 15:54:45')));
     assertEquals('Mar 19', fn(timestamp('19 March 2009 01:22:11')));
+
+    // Test that a formatter can also be accepted as input.
+    assertEquals('Today', fn(timestamp('23 March 2009 10:31:06'), format));
+    assertEquals('Today', fn(timestamp('23 March 2009 00:12:19'), format));
+    assertEquals('Yesterday', fn(timestamp('22 March 2009 23:48:12'), format));
+    assertEquals('Yesterday', fn(timestamp('22 March 2009 04:11:23'), format));
+    assertEquals(format(gdatetime(timestamp('21 March 2009 15:54:45'))),
+        fn(timestamp('21 March 2009 15:54:45'), format));
+    assertEquals(format(gdatetime(timestamp('19 March 2009 01:22:11'))),
+        fn(timestamp('19 March 2009 01:22:11'), format));
   }
 
   function testGetDateString() {
