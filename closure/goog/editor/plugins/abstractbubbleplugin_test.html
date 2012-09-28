@@ -222,6 +222,52 @@ function testSelectOneTextCharacterNoError() {
   FIELDMOCK.$verify();
 }
 
+function testTabKeyEvents() {
+  FIELDMOCK.focus();
+  FIELDMOCK.$replay();
+  bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
+  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
+  bubblePlugin.createBubbleContents = function(container) {
+    this.createLink('linkInBubble0', 'Foo', false, container);
+    this.createLink('linkInBubble1', 'Bar', false, container);
+  };
+  bubblePlugin.handleSelectionChangeInternal(link);
+
+  goog.testing.events.fireKeySequence(fieldDiv,
+      goog.events.KeyCodes.TAB);
+  assertTrue('Bubble should be visible', bubblePlugin.isVisible());
+
+  var linkEls = goog.dom.getElementsByClass(
+      goog.editor.plugins.AbstractBubblePlugin.LINK_CLASSNAME_,
+      bubblePlugin.getSharedBubble_().getContentElement());
+  goog.testing.events.fireKeySequence(linkEls[0], goog.events.KeyCodes.TAB);
+  goog.testing.events.fireKeySequence(linkEls[1], goog.events.KeyCodes.TAB);
+  FIELDMOCK.$verify();
+}
+
+function testTabKeyEventsWithShiftKey() {
+  FIELDMOCK.focus();
+  FIELDMOCK.$replay();
+  bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
+  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
+  bubblePlugin.createBubbleContents = function(container) {
+    this.createLink('linkInBubble0', 'Foo', false, container); 
+    this.createLink('linkInBubble1', 'Bar', false, container); 
+  };
+  bubblePlugin.handleSelectionChangeInternal(link);
+
+  goog.testing.events.fireKeySequence(fieldDiv,
+      goog.events.KeyCodes.TAB);
+  assertTrue('Bubble should be visible', bubblePlugin.isVisible());
+
+  var linkEls = goog.dom.getElementsByClass(
+      goog.editor.plugins.AbstractBubblePlugin.LINK_CLASSNAME_,
+      bubblePlugin.getSharedBubble_().getContentElement());
+  goog.testing.events.fireKeySequence(linkEls[0], goog.events.KeyCodes.TAB,
+      {shiftKey: true});
+  FIELDMOCK.$verify();
+}
+</script>
 </script>
 </body>
 </html>

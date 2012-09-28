@@ -137,7 +137,10 @@ function testDeleteClicked() {
   FIELDMOCK.$times(1);
   FIELDMOCK.dispatchChange();
   FIELDMOCK.$times(1);
+  FIELDMOCK.focus();
+  FIELDMOCK.$times(1);
   FIELDMOCK.$replay();
+
   linkBubble.enable(FIELDMOCK);
 
   linkBubble.handleSelectionChange(createMouseEvent(link));
