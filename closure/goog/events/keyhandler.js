@@ -312,14 +312,16 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
         this.lastKey_ == goog.events.KeyCodes.META && !e.metaKey) {
       this.lastKey_ = -1;
       this.keyCode_ = -1;
-    } else if (this.lastKey_ == -1) {
-      if (e.ctrlKey && e.keyCode != goog.events.KeyCodes.CTRL) {
-        this.lastKey_ = goog.events.KeyCodes.CTRL;
-      } else if (e.altKey && e.keyCode != goog.events.KeyCodes.ALT) {
-        this.lastKey_ = goog.events.KeyCodes.ALT;
-      } else if (e.metaKey && e.keyCode != goog.events.KeyCodes.META) {
-        this.lastKey_ = goog.events.KeyCodes.META;
-      }
+    }
+  }
+
+  if (this.lastKey_ == -1) {
+    if (e.ctrlKey && e.keyCode != goog.events.KeyCodes.CTRL) {
+      this.lastKey_ = goog.events.KeyCodes.CTRL;
+    } else if (e.altKey && e.keyCode != goog.events.KeyCodes.ALT) {
+      this.lastKey_ = goog.events.KeyCodes.ALT;
+    } else if (e.metaKey && e.keyCode != goog.events.KeyCodes.META) {
+      this.lastKey_ = goog.events.KeyCodes.META;
     }
   }
 
