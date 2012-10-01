@@ -478,11 +478,8 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handlePanelClosed_ =
  * @override
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.handleKeyDown = function(e) {
-  if (!this.keyboardNavigationEnabled_) {
-    return false;
-  }
-
-  if (this.isVisible() &&
+  if (this.keyboardNavigationEnabled_ &&
+      this.isVisible() &&
       e.keyCode == goog.events.KeyCodes.TAB && !e.shiftKey) {
     var bubbleEl = this.getSharedBubble_().getContentElement();
     var linkEl = goog.dom.getElementByClass(
@@ -490,9 +487,10 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handleKeyDown = function(e) {
     if (linkEl) {
       linkEl.focus();
       e.preventDefault();
+      return true;
     }
   }
-  return true;
+  return false;
 };
 
 
