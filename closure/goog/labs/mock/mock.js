@@ -42,8 +42,25 @@ goog.require('goog.functions');
 goog.labs.mock = function(objectOrClass) {
   // Go over properties of 'objectOrClass' and create a MockManager to
   // be used for stubbing out calls to methods.
-  var mockedObject = new goog.labs.mock.MockManager_(objectOrClass);
-  return mockedObject.getMockedObject();
+  var mockObjectManager = new goog.labs.mock.MockObjectManager_(objectOrClass);
+  var mockedObject = mockObjectManager.getMockedItem();
+  goog.asserts.assertObject(mockedObject);
+  return /** @type {!Object} */ (mockedObject);
+};
+
+
+/**
+ * Mocks a given function.
+ *
+ * @param {!Function} func A function to be mocked.
+ *
+ * @return {!Function} The mocked function.
+ */
+goog.labs.mockFunction = function(func) {
+  var mockFuncManager = new goog.labs.mock.MockFunctionManager_(func);
+  var mockedFunction = mockFuncManager.getMockedItem();
+  goog.asserts.assertFunction(mockedFunction);
+  return /** @type {!Function} */ (mockedFunction);
 };
 
 
@@ -68,36 +85,141 @@ goog.labs.mock.PROTOTYPE_FIELDS_ = [
 
 
 /**
- * Sets up mock for the given object (or class), stubbing out all the defined
- * methods. By default, all stubs return {@code undefined}, though stubs can be
- * later defined using {@code goog.labs.mock.when}.
- *
- * @param {!Object|!Function} objOrClass The object to set up the mock for.
+ * Base class that provides basic functionality for creating, adding and
+ * finding bindings, offering an executor method that is called when a call to
+ * the stub is made, an array to hold the bindings and the mocked item, among
+ * other things.
  *
  * @constructor
  * @private
  */
-goog.labs.mock.MockManager_ = function(objOrClass) {
+goog.labs.mock.MockManager_ = function() {
   /**
    * Proxies the methods for the mocked object or class to execute the stubs.
    * @type {!Object}
-   * @private
+   * @protected
    * TODO(user): make instanceof work.
    */
-  this.mockedObject_ = {};
+  this.mockedItem = {};
 
   /**
    * Holds the stub bindings established so far.
-   * @private
+   * @protected
    */
-  this.methodBindings_ = [];
+  this.methodBindings = [];
+
+  /**
+   * Holds a reference to the binder used to define stubs.
+   * @protected
+   */
+  this.$stubBinder = null;
+};
+
+
+/**
+ * Handles the first step in creating a stub, returning a stub-binder that
+ * is later used to bind a stub for a method.
+ *
+ * @param {string} methodName The name of the method being bound.
+ * @param {...} var_args The arguments to the method.
+ *
+ * @return {!goog.labs.mock.StubBinder_} The stub binder.
+ * @private
+ */
+goog.labs.mock.MockManager_.prototype.handleMockCall_ =
+    function(methodName, var_args) {
+  var args = goog.array.slice(arguments, 1);
+  return new goog.labs.mock.StubBinder_(this, methodName, args);
+};
+
+
+/**
+ * Returns the mock object. This should have a stubbed method for each method
+ * on the object being mocked.
+ *
+ * @return {!Object|!Function} The mock object.
+ */
+goog.labs.mock.MockManager_.prototype.getMockedItem = function() {
+  return this.mockedItem;
+};
+
+
+/**
+ * Adds a binding for the method name and arguments to be stubbed.
+ *
+ * @param {?string} methodName The name of the stubbed method.
+ * @param {!Array} args The arguments passed to the method.
+ * @param {!Function} func The stub function.
+ *
+ */
+goog.labs.mock.MockManager_.prototype.addBinding =
+    function(methodName, args, func) {
+  var binding = new goog.labs.mock.MethodBinding_(methodName, args, func);
+  this.methodBindings.push(binding);
+};
+
+
+/**
+ * Returns a stub, if defined, for the method and arguments passed in as
+ * parameters.
+ *
+ * @param {string} methodName The name of the stubbed method.
+ * @param {Array} args The arguments passed to the method.
+ *
+ * @return {!Function|undefined} The stub function or undefined.
+ * @private
+ */
+goog.labs.mock.MockManager_.prototype.findBinding_ =
+    function(methodName, args) {
+  var stub = goog.array.find(this.methodBindings, function(binding) {
+    return binding.matches(methodName, args);
+  });
+  return stub && stub.getStub();
+};
+
+
+/**
+ * Looks up the list of stubs defined on the mock object and executes the
+ * function associated with that stub.
+ *
+ * @param {string} methodName The name of the method to execute.
+ * @param {...} var_args The arguments passed to the method.
+ *
+ * @return {*} Value returned by the stub function.
+ * @private
+ */
+goog.labs.mock.MockManager_.prototype.executeStub_ =
+    function(methodName, var_args) {
+  var args = goog.array.slice(arguments, 1);
+  var func = this.findBinding_(methodName, args);
+  if (func) {
+    return func.apply(null, args);
+  }
+};
+
+
+
+/**
+ * Sets up mock for the given object (or class), stubbing out all the defined
+ * methods. By default, all stubs return {@code undefined}, though stubs can be
+ * later defined using {@code goog.labs.mock.when}.
+ *
+ * @param {!Object|!Function} objOrClass The object or class to set up the mock
+ *     for. A class is a constructor function.
+ *
+ * @constructor
+ * @extends {goog.labs.mock.MockManager_}
+ * @private
+ */
+goog.labs.mock.MockObjectManager_ = function(objOrClass) {
+  goog.base(this);
 
   /**
    * Proxies the calls to establish the first step of the stub bindings (object
    * and method name)
    * @private
    */
-  this.binderProxy_ = {};
+  this.objectStubBinder_ = {};
 
   var obj;
   if (goog.isFunction(objOrClass)) {
@@ -127,95 +249,51 @@ goog.labs.mock.MockManager_ = function(objOrClass) {
   for (var i = 0; i < enumerableProperties.length; i++) {
     var prop = enumerableProperties[i];
     if (goog.isFunction(obj[prop])) {
-      this.mockedObject_[prop] = goog.bind(this.executeStub_, this, prop);
-      this.binderProxy_[prop] = goog.bind(this.handleMockCall_, this, prop);
+      this.mockedItem[prop] = goog.bind(this.executeStub_, this, prop);
+      // The stub binder used to create bindings.
+      this.objectStubBinder_[prop] =
+          goog.bind(this.handleMockCall_, this, prop);
     }
   }
-
-  this.mockedObject_.$binderProxy = this.binderProxy_;
+  // The alias for stub binder exposed to the world.
+  this.mockedItem.$stubBinder = this.objectStubBinder_;
 };
+goog.inherits(goog.labs.mock.MockObjectManager_,
+              goog.labs.mock.MockManager_);
+
 
 
 /**
- * Handles the first step in creating a stub, returning a stub-binder that
- * is later used to bind a stub for a method.
+ * Sets up mock for the given function, stubbing out. By default, all stubs
+ * return {@code undefined}, though stubs can be later defined using
+ * {@code goog.labs.mock.when}.
  *
- * @param {string} methodName The name of the method being bound.
- * @param {...} var_args The arguments to the method.
+ * @param {!Function} func The function to set up the mock for.
  *
- * @return {!goog.labs.mock.StubBinder_} The stub binder.
+ * @constructor
+ * @extends {goog.labs.mock.MockManager_}
  * @private
  */
-goog.labs.mock.MockManager_.prototype.handleMockCall_ =
-    function(methodName, var_args) {
-  var args = goog.array.slice(arguments, 1);
-  return new goog.labs.mock.StubBinder_(this, methodName, args);
+goog.labs.mock.MockFunctionManager_ = function(func) {
+  goog.base(this);
+
+  /**
+   * The stub binder used to create bindings.
+   * @type {!Function}
+   * @private
+   */
+  this.functionStubBinder_ = goog.bind(this.handleMockCall_, this, null);
+  /**
+   * The alias for stub binder exposed to the world.
+   * @type {!Function}
+   */
+  this.$stubBinder = this.functionStubBinder_;
+
+  this.mockedItem = goog.bind(this.executeStub_, this, null);
+  this.mockedItem.$stubBinder = this.$stubBinder;
 };
-
-
-/**
- * Returns the mock object. This should have a stubbed method for each method
- * on the object being mocked.
- *
- * @return {!Object} The mock object.
- */
-goog.labs.mock.MockManager_.prototype.getMockedObject = function() {
-  return this.mockedObject_;
-};
-
-
-/**
- * Adds a binding for the method name and arguments to be stubbed.
- *
- * @param {string} methodName The name of the stubbed method.
- * @param {!Array} args The arguments passed to the method.
- * @param {!Function} func The stub function.
- *
- */
-goog.labs.mock.MockManager_.prototype.addBinding =
-    function(methodName, args, func) {
-  var binding = new goog.labs.mock.MethodBinding_(methodName, args, func);
-  this.methodBindings_.push(binding);
-};
-
-
-/**
- * Returns a stub, if defined, for the method and arguments passed in as
- * parameters.
- *
- * @param {string} methodName The name of the stubbed method.
- * @param {Array} args The arguments passed to the method.
- *
- * @return {!Function|undefined} The stub function or undefined.
- * @private
- */
-goog.labs.mock.MockManager_.prototype.findBinding_ =
-    function(methodName, args) {
-  var stub = goog.array.find(this.methodBindings_, function(binding) {
-    return binding.matches(methodName, args);
-  });
-  return stub && stub.getStub();
-};
-
-
-/**
- * Looks up the list of stubs defined on the mock object and executes the
- * function associated with that stub.
- *
- * @param {string} methodName The name of the method to execute.
- * @param {...} var_args The arguments passed to the method.
- *
- * @return {*} Value returned by the stub function.
- * @private
- */
-goog.labs.mock.MockManager_.prototype.executeStub_ =
-    function(methodName, var_args) {
-  var args = goog.array.slice(arguments, 1);
-  var func = this.findBinding_(methodName, args);
-  if (func) {
-    return func.apply(null, args);
-  }
-};
+goog.inherits(goog.labs.mock.MockFunctionManager_,
+              goog.labs.mock.MockManager_);
 
 
 
@@ -223,8 +301,9 @@ goog.labs.mock.MockManager_.prototype.executeStub_ =
  * The stub binder is the object that helps define the stubs by binding
  * method name to the stub method.
  *
- * @param {!goog.labs.mock.MockManager_} mockManager The mock manager.
- * @param {string} name The method name.
+ * @param {!goog.labs.mock.MockManager_}
+ *   mockManager The mock manager.
+ * @param {?string} name The method name.
  * @param {!Array} args The other arguments to the method.
  *
  * @constructor
@@ -240,7 +319,7 @@ goog.labs.mock.StubBinder_ = function(mockManager, name, args) {
 
   /**
    * Holds the name of the method to be bound.
-   * @type {string}
+   * @type {?string}
    * @private
    */
   this.name_ = name;
@@ -289,7 +368,8 @@ goog.labs.mock.StubBinder_.prototype.thenReturn = function(value) {
  * @return {!goog.labs.mock.StubBinder_} The property binder.
  */
 goog.labs.mock.when = function(mockObject) {
-  return mockObject.$binderProxy;
+  goog.asserts.assert(mockObject.$stubBinder, 'Stub binder cannot be null!');
+  return mockObject.$stubBinder;
 };
 
 
@@ -297,7 +377,7 @@ goog.labs.mock.when = function(mockObject) {
 /**
  * Represents a binding between a method name, args and a stub.
  *
- * @param {string} methodName The name of the method being stubbed.
+ * @param {?string} methodName The name of the method being stubbed.
  * @param {!Array} args The arguments passed to the method.
  * @param {!Function} stub The stub function to be called for the given method.
  * @constructor
@@ -306,7 +386,7 @@ goog.labs.mock.when = function(mockObject) {
 goog.labs.mock.MethodBinding_ = function(methodName, args, stub) {
   /**
    * The name of the method being stubbed.
-   * @type {string}
+   * @type {?string}
    * @private
    */
   this.methodName_ = methodName;

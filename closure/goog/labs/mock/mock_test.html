@@ -110,6 +110,18 @@ function testBasicStubbing() {
   assertUndefined(mockObj.method3(5));
 }
 
+function testMockFunctions() {
+  function x(i) { return i; }
+
+  var mockedFunc = goog.labs.mockFunction(x);
+  goog.labs.mock.when(mockedFunc)(100).thenReturn(10);
+  goog.labs.mock.when(mockedFunc)(50).thenReturn(25);
+
+  assertEquals(100, x(100));
+  assertEquals(10, mockedFunc(100));
+  assertEquals(25, mockedFunc(50));
+}
+
 </script>
 </body>
 </html>
