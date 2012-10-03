@@ -193,17 +193,16 @@ var corner = goog.positioning.Corner;
 var overflow = goog.positioning.Overflow;
 var testArea;
 
-function setUpPage() {
+function setUp() {
+  window.scrollTo(0, 0);
+
   var viewportSize = goog.dom.getViewportSize();
   // Some tests need enough size viewport.
   if (viewportSize.width < 600 || viewportSize.height < 600) {
     window.moveTo(0, 0);
     window.resizeTo(640, 640);
   }
-}
 
-function setUp() {
-  window.scrollTo(0, 0);
   testArea = goog.dom.getElement('test-area');
 }
 
@@ -336,9 +335,6 @@ function testPositionAtAnchorWithOffset() {
 
 
 function testPositionAtAnchorOverflowLeftEdgeRightToLeft() {
-  // TODO(nicksantos): Fix me.
-  if (goog.userAgent.product.SAFARI) return;
-
   var anchor = document.getElementById('anchor5');
   var popup = document.getElementById('popup5');
 
@@ -1082,9 +1078,6 @@ function testPositionAtAnchorOffscreen() {
 }
 
 function testPositionAtAnchorWithOverflowScrollOffsetParent() {
-  // TODO(nicksantos): Fix me.
-  if (goog.userAgent.product.SAFARI) return;
-
   var testAreaOffset = goog.style.getPageOffset(testArea);
   var scrollbarWidth = goog.style.getScrollbarWidth();
   window.scrollTo(testAreaOffset.x, testAreaOffset.y);
@@ -1154,9 +1147,6 @@ function testPositionAtAnchorWithOverflowScrollOffsetParent() {
 }
 
 function testPositionAtAnchorWithOverflowHiddenParent() {
-  // TODO(nicksantos): Fix me.
-  if (goog.userAgent.product.SAFARI) return;
-
   var testAreaOffset = goog.style.getPageOffset(testArea);
   window.scrollTo(testAreaOffset.x, testAreaOffset.y);
 

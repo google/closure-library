@@ -78,6 +78,15 @@ function MyFakeEvent(keyCode) {
 }
 
 function setUp() {
+  window.scrollTo(0, 0);
+
+  var viewportSize = goog.dom.getViewportSize();
+  // Some tests need enough size viewport.
+  if (viewportSize.width < 600 || viewportSize.height < 600) {
+    window.moveTo(0, 0);
+    window.resizeTo(640, 640);
+  }
+
   clonedMenuButtonDom = goog.dom.getElement('demoMenuButton').cloneNode(true);
 
   menuButton = new goog.ui.MenuButton();
@@ -327,9 +336,6 @@ function testPositioningAboveAnchor() {
  * Test forced positioning below the button.
  */
 function testPositioningBelowAnchor() {
-  // TODO(nicksantos): Fix me.
-  if (goog.userAgent.product.SAFARI) return;
-  
   var node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
