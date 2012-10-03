@@ -40,6 +40,7 @@ goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.net.BulkLoader');
 goog.require('goog.net.EventType');
 goog.require('goog.net.jsloader');
+goog.require('goog.userAgent.product');
 
 
 
@@ -95,8 +96,18 @@ goog.module.ModuleLoader.prototype.sourceUrlInjection_ = false;
 
 
 /**
+ * @return {boolean} Whether sourceURL affects stack traces.
+ *     Chrome is currently the only browser that does this, but
+ *     we believe other browsers are working on this.
+ */
+goog.module.ModuleLoader.supportsSourceUrlStackTraces = function() {
+  return goog.userAgent.product.CHROME;
+};
+
+
+/**
  * Gets the debug mode for the loader.
- * @return {boolean} debugMode Whether the debug mode is enabled.
+ * @return {boolean} Whether the debug mode is enabled.
  */
 goog.module.ModuleLoader.prototype.getDebugMode = function() {
   return this.debugMode_;
@@ -141,7 +152,9 @@ goog.module.ModuleLoader.prototype.setSourceUrlInjection = function(enabled) {
 
 /** @return {boolean} Whether we're using source url injection. */
 goog.module.ModuleLoader.prototype.usingSourceUrlInjection = function() {
-  return this.sourceUrlInjection_;
+  return this.sourceUrlInjection_ ||
+      (this.getDebugMode() &&
+       goog.module.ModuleLoader.supportsSourceUrlStackTraces());
 };
 
 
@@ -275,11 +288,14 @@ goog.module.ModuleLoader.prototype.downloadModules_ = function(
   }
   this.logger.info('downloadModules ids:' + ids + ' uris:' + uris);
 
-  if (this.getDebugMode()) {
+  if (this.getDebugMode() &&
+      !this.usingSourceUrlInjection()) {
     // In debug mode use <script> tags rather than XHRs to load the files.
     // This makes it possible to debug and inspect stack traces more easily.
     // It's also possible to use it to load JavaScript files that are hosted on
     // another domain.
+    // The scripts need to load serially, so this is much slower than parallel
+    // script loads with source url injection.
     goog.net.jsloader.loadMany(uris);
   } else {
     var loadStatus = this.loadingModulesStatus_[ids];
