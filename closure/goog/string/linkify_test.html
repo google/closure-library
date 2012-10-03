@@ -322,48 +322,48 @@ function testFindFirstUrlNoScheme() {
 }
 
 function testFindFirstUrlNoSchemeWithText() {
-  assertEquals(goog.string.linkify.findFirstUrl(
-      'prefix www.google.com something'), 'www.google.com');
+  assertEquals('www.google.com', goog.string.linkify.findFirstUrl(
+      'prefix www.google.com something'));
 }
 
 function testFindFirstUrlScheme() {
-  assertEquals(goog.string.linkify.findFirstUrl('http://www.google.com'),
-      'http://www.google.com');
+  assertEquals('http://www.google.com', goog.string.linkify.findFirstUrl(
+      'http://www.google.com'));
 }
 
 function testFindFirstUrlSchemeWithText() {
-  assertEquals(goog.string.linkify.findFirstUrl(
-      'prefix http://www.google.com something'), 'http://www.google.com');
+  assertEquals('http://www.google.com', goog.string.linkify.findFirstUrl(
+      'prefix http://www.google.com something'));
 }
 
 function testFindFirstUrlNoUrl() {
-  assertEquals(goog.string.linkify.findFirstUrl(
-      'ygvtfr676 5v68fk uygbt85F^&%^&I%FVvc .'), '');
+  assertEquals('', goog.string.linkify.findFirstUrl(
+      'ygvtfr676 5v68fk uygbt85F^&%^&I%FVvc .'));
 }
 
 function testFindFirstEmailNoScheme() {
-  assertEquals(goog.string.linkify.findFirstEmail('fake@google.com'),
-      'fake@google.com');
+  assertEquals('fake@google.com', goog.string.linkify.findFirstEmail(
+      'fake@google.com'));
 }
 
 function testFindFirstEmailNoSchemeWithText() {
-  assertEquals(goog.string.linkify.findFirstEmail(
-      'prefix fake@google.com something'), 'fake@google.com');
+  assertEquals('fake@google.com', goog.string.linkify.findFirstEmail(
+      'prefix fake@google.com something'));
 }
 
 function testFindFirstEmailScheme() {
-  assertEquals(goog.string.linkify.findFirstEmail('mailto:fake@google.com'),
-      'mailto:fake@google.com');
+  assertEquals('mailto:fake@google.com', goog.string.linkify.findFirstEmail(
+      'mailto:fake@google.com'));
 }
 
 function testFindFirstEmailSchemeWithText() {
-  assertEquals(goog.string.linkify.findFirstEmail(
-      'prefix mailto:fake@google.com something'), 'mailto:fake@google.com');
+  assertEquals('mailto:fake@google.com', goog.string.linkify.findFirstEmail(
+      'prefix mailto:fake@google.com something'));
 }
 
 function testFindFirstEmailNoUrl() {
-  assertEquals(goog.string.linkify.findFirstEmail(
-      'ygvtfr676 5v68fk uygbt85F^&%^&I%FVvc .'), '');
+  assertEquals('', goog.string.linkify.findFirstEmail(
+      'ygvtfr676 5v68fk uygbt85F^&%^&I%FVvc .'));
 }
 
 </script>
