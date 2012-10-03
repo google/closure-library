@@ -224,6 +224,7 @@ goog.editor.Link.prototype.getValidLinkFromText = function() {
     if (text.search(/:/) < 0) {
       return 'http://' + goog.string.trimLeft(text);
     }
+    return text;
   } else if (goog.editor.Link.isLikelyEmailAddress(text)) {
     return 'mailto:' + text;
   }

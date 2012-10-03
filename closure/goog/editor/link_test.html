@@ -229,6 +229,24 @@ function testIsMailToLink() {
   assertTrue(goog.editor.Link.isMailto('mailto://ptucker@gmail.com'));
 }
 
+function testGetValidLinkFromText() {
+  var textLinkPairs = [
+      // input text, expected link output
+      'www.foo.com', 'http://www.foo.com',
+      'user@gmail.com', 'mailto:user@gmail.com',
+      'http://www.foo.com', 'http://www.foo.com',
+      'https://this.that.edu', 'https://this.that.edu',
+      'nothing to see here', null
+  ]
+  var link = new goog.editor.Link(anchor, true);
+
+  for (var i = 0; i < textLinkPairs.length; i += 2) {
+    link.currentText_ = textLinkPairs[i];
+    var result = link.getValidLinkFromText();
+    assertEquals(textLinkPairs[i+1], result);
+  }
+}
+
 </script>
 </body>
 </html>
