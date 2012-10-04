@@ -195,23 +195,25 @@ function testRequireWithExternalDuplicate() {
   goog.addDependency('dup.js', ['dup.base'], []);
   goog.addDependency('dup-child.js', ['dup.base.child'], ['dup.base']);
   goog.provide('dup.base');
+  try {
+    goog.global.CLOSURE_IMPORT_SCRIPT = function(src) {
+      if (src == goog.basePath + 'dup.js') {
+        fail('Duplicate script written!');
+      } else if (src == goog.basePath + 'dup-child.js') {
+        // Allow expected script.
+        return true;
+      } else {
+        // Avoid affecting other state.
+        return false;
+      }
+    };
 
-  stubs.set(goog, 'isDocumentFinishedLoading_', false);
-  stubs.set(goog.global, 'CLOSURE_IMPORT_SCRIPT', function(src) {
-    if (src == goog.basePath + 'dup.js') {
-      fail('Duplicate script written!');
-    } else if (src == goog.basePath + 'dup-child.js') {
-      // Allow expected script.
-      return true;
-    } else {
-      // Avoid affecting other state.
-      return false;
-    }
-  });
-
-  // To differentiate this call from the real one.
-  var require = goog.require;
-  require('dup.base.child');
+    // To differentiate this call from the real one.
+    var require = goog.require;
+    require('dup.base.child');
+  } finally {
+    goog.global.CLOSURE_IMPORT_SCRIPT = undefined;
+  }
 }
 
 //=== tests for language enhancements ===
@@ -1028,7 +1030,6 @@ function testGetCssName() {
 
 function testAddDependency() {
   stubs.set(goog, 'writeScriptTag_', goog.nullFunction);
-  stubs.set(goog, 'isDocumentFinishedLoading_', false);
 
   goog.addDependency(
       'foo.js',
@@ -1166,17 +1167,6 @@ function testGoogRequireCheck() {
 
   stubs.reset();
   delete far;
-}
-
-function testLateRequireProtection() {
-  if (!document.readyState) return;
-  var e = assertThrows(function() {
-    // To differentiate this call from the real one.
-    var require = goog.require;
-    require('goog.ui.Component');
-  });
-
-  assertContains('after document load', e.message);
 }
 
 </script>
