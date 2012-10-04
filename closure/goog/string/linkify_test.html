@@ -321,6 +321,11 @@ function testFindFirstUrlNoScheme() {
   assertEquals(goog.string.linkify.findFirstUrl('www.google.com'), 'www.google.com');
 }
 
+function testFindFirstUrlWithAngleBracketsAndParens() {
+  assertEquals(goog.string.linkify.findFirstUrl(
+      '(<www.google.com>)'), 'www.google.com');
+}
+
 function testFindFirstUrlNoSchemeWithText() {
   assertEquals('www.google.com', goog.string.linkify.findFirstUrl(
       'prefix www.google.com something'));
