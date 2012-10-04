@@ -436,6 +436,7 @@ function testIsNotValid() {
   assertFalse(goog.json.isValid_('"\\\0\\"'));
   assertFalse(goog.json.isValid_('"\\\0"'));
   assertFalse(goog.json.isValid_('"\\0"'));
+  assertFalse(goog.json.isValid_('"\x0c"'));
 
   assertFalse(goog.json.isValid_('"\\\u200D\\", alert(\'foo\') //"\n'));
 }
@@ -444,6 +445,7 @@ function testIsValid() {
   assertTrue(goog.json.isValid_('\n""\n'));
   assertTrue(goog.json.isValid_('[1\n,2\r,3\u2028\n,4\u2029]'));
   assertTrue(goog.json.isValid_('"\x7f"'));
+  assertTrue(goog.json.isValid_('"\x09"'));
   // Test tab characters in json.
   assertTrue(goog.json.isValid_('{"\t":"\t"}'));
 }
