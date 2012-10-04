@@ -540,6 +540,14 @@ if (!COMPILED && goog.ENABLE_DEBUG_LOADER) {
   goog.writeScriptTag_ = function(src) {
     if (goog.inHtmlDocument_()) {
       var doc = goog.global.document;
+
+      // If the user tries to require a new symbol after document load,
+      // something has gone terribly wrong. Doing a document.write would
+      // wipe out the page.
+      if (doc.readyState == 'complete') {
+        throw Error('Cannot write "' + src + '" after document load');
+      }
+
       doc.write(
           '<script type="text/javascript" src="' + src + '"></' + 'script>');
       return true;
