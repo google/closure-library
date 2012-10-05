@@ -136,7 +136,7 @@ goog.events.EventType = {
   MSINERTIASTART: 'MsInertiaStart',
   MSPOINTERCANCEL: 'MsPointerCancel',
   MSPOINTERDOWN: 'MsPointerDown',
-  MSPOINTERMOVE: 'MsPointerDown',
+  MSPOINTERMOVE: 'MsPointerMove',
   MSPOINTEROVER: 'MsPointerOver',
   MSPOINTEROUT: 'MsPointerOut',
   MSPOINTERUP: 'MsPointerUp'
