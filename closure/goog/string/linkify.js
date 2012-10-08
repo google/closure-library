@@ -133,13 +133,12 @@ goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ =
 
 
 /**
- * Regular expression pattern that matches the end of an url.
  * @type {string}
  * @const
  * @private
  */
 goog.string.linkify.ACCEPTABLE_URL_CHARS_ =
-    '[-\\w/~%&=+#@!' + goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + ']';
+    goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + '\\w/~%&=+#-@!';
 
 
 /**
@@ -181,8 +180,8 @@ goog.string.linkify.WWW_START_ = 'www\\.';
  */
 goog.string.linkify.URL_ =
     '(?:' + goog.string.linkify.PROTOCOL_START_ + '|' +
-    goog.string.linkify.WWW_START_ + ')\\w' +
-    goog.string.linkify.ACCEPTABLE_URL_CHARS_ + '*';
+    goog.string.linkify.WWW_START_ + ')\\w[' +
+    goog.string.linkify.ACCEPTABLE_URL_CHARS_ + ']*';
 
 
 /**
