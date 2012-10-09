@@ -122,6 +122,25 @@ function testMockFunctions() {
   assertEquals(25, mockedFunc(50));
 }
 
+function testSpying() {
+  var obj = {
+    method1: function(i) {
+      return 2 * i;
+    },
+    method2: function(i) {
+      return 5 * i;
+    }
+  };
+
+  var spyObj = goog.labs.mock.spy(obj);
+  goog.labs.mock.when(spyObj).method1(2).thenReturn(5);
+
+  assertEquals(2, obj.method1(1));
+  assertEquals(5, spyObj.method1(2));
+  assertEquals(2, spyObj.method1(1));
+  assertEquals(20, spyObj.method2(4));
+}
+
 </script>
 </body>
 </html>

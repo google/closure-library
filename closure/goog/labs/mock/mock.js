@@ -29,6 +29,7 @@ goog.provide('goog.labs.mock');
 goog.require('goog.array');
 goog.require('goog.debug.Error');
 goog.require('goog.functions');
+goog.require('goog.testing.recordFunction');
 
 
 /**
@@ -61,6 +62,23 @@ goog.labs.mockFunction = function(func) {
   var mockedFunction = mockFuncManager.getMockedItem();
   goog.asserts.assertFunction(mockedFunction);
   return /** @type {!Function} */ (mockedFunction);
+};
+
+
+/**
+ * Spies on a given object.
+ *
+ * @param {!Object} obj The object to be spied on.
+ *
+ * @return {!Object} The spy object.
+ */
+goog.labs.mock.spy = function(obj) {
+  // Go over properties of 'obj' and create a MockSpyManager_ to
+  // be used for spying on calls to methods.
+  var mockSpyManager = new goog.labs.mock.MockSpyManager_(obj);
+  var spyObject = mockSpyManager.getMockedItem();
+  goog.asserts.assert(spyObject);
+  return spyObject;
 };
 
 
@@ -101,6 +119,13 @@ goog.labs.mock.MockManager_ = function() {
    * TODO(user): make instanceof work.
    */
   this.mockedItem = {};
+
+  /**
+   * A reference to the object or function being mocked.
+   * @type {Object|Function}
+   * @protected
+   */
+  this.mockee = null;
 
   /**
    * Holds the stub bindings established so far.
@@ -154,7 +179,8 @@ goog.labs.mock.MockManager_.prototype.getMockedItem = function() {
  */
 goog.labs.mock.MockManager_.prototype.addBinding =
     function(methodName, args, func) {
-  var binding = new goog.labs.mock.MethodBinding_(methodName, args, func);
+  var stubFunc = goog.testing.recordFunction(func);
+  var binding = new goog.labs.mock.MethodBinding_(methodName, args, stubFunc);
   this.methodBindings.push(binding);
 };
 
@@ -164,12 +190,12 @@ goog.labs.mock.MockManager_.prototype.addBinding =
  * parameters.
  *
  * @param {string} methodName The name of the stubbed method.
- * @param {Array} args The arguments passed to the method.
+ * @param {!Array} args The arguments passed to the method.
  *
  * @return {!Function|undefined} The stub function or undefined.
- * @private
+ * @protected
  */
-goog.labs.mock.MockManager_.prototype.findBinding_ =
+goog.labs.mock.MockManager_.prototype.getExecutor =
     function(methodName, args) {
   var stub = goog.array.find(this.methodBindings, function(binding) {
     return binding.matches(methodName, args);
@@ -191,7 +217,7 @@ goog.labs.mock.MockManager_.prototype.findBinding_ =
 goog.labs.mock.MockManager_.prototype.executeStub_ =
     function(methodName, var_args) {
   var args = goog.array.slice(arguments, 1);
-  var func = this.findBinding_(methodName, args);
+  var func = this.getExecutor(methodName, args);
   if (func) {
     return func.apply(null, args);
   }
@@ -220,6 +246,8 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
    * @private
    */
   this.objectStubBinder_ = {};
+
+  this.mockee = objOrClass;
 
   var obj;
   if (goog.isFunction(objOrClass)) {
@@ -260,6 +288,72 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
 };
 goog.inherits(goog.labs.mock.MockObjectManager_,
               goog.labs.mock.MockManager_);
+
+
+
+/**
+ * Sets up the spying behavior for the given object.
+ *
+ * @param {!Object} obj The object to be spied on.
+ *
+ * @constructor
+ * @extends {goog.labs.mock.MockObjectManager_}
+ * @private
+ */
+goog.labs.mock.MockSpyManager_ = function(obj) {
+  goog.base(this, obj);
+
+  /**
+   * Record method calls with no stub definitions.
+   * @type {!Array.<!goog.labs.mock.MethodBinding_>}
+   * @private
+   */
+  this.callRecords_ = [];
+};
+goog.inherits(goog.labs.mock.MockSpyManager_,
+              goog.labs.mock.MockObjectManager_);
+
+
+/**
+ * Try to find a stub, if defined, for the method and arguments passed in as
+ * parameters. If no stub is found, returns the spy method that records the
+ * calls to various methods. The records can be used later to verify calling of
+ * specific methods.
+ *
+ * @return {!Function} The stub, if defined, or the spy method.
+ * @override
+ */
+goog.labs.mock.MockSpyManager_.prototype.getExecutor =
+    function(methodName, args) {
+  var stub = goog.base(this, 'getExecutor', methodName, args);
+  return stub || this.invocationLogger_(methodName, args);
+};
+
+
+/**
+ * Records the calls to methods in the object being spied on.
+ *
+ * @param {string} methodName The name of the method.
+ * @param {!Array} args The array of arguments to the method.
+ *
+ * @return {!Function} The call recorder.
+ * @private
+ */
+goog.labs.mock.MockSpyManager_.prototype.invocationLogger_ =
+    function(methodName, args) {
+  var stub = goog.array.find(this.callRecords_, function(binding) {
+    return binding.matches(methodName, args);
+  });
+
+  if (!stub) {
+    // If we didn't find a stub, create a new one.
+    var stubFn = goog.testing.recordFunction(
+        goog.bind(this.mockee[methodName], this.mockee));
+    stub = new goog.labs.mock.MethodBinding_(methodName, args, stubFn);
+    this.callRecords_.push(stub);
+  }
+  return stub.getStub();
+};
 
 
 
