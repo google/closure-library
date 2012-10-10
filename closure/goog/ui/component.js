@@ -1233,7 +1233,7 @@ goog.ui.Component.prototype.removeChildAt = function(index, opt_unrender) {
  * @see goog.ui.Component#removeChild
  * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
  *    removed child components, and detaches their DOM from the document.
- * @return {!Array.<goog.ui.Component>|undefined} The removed components if any.
+ * @return {!Array.<goog.ui.Component>} The removed components if any.
  */
 goog.ui.Component.prototype.removeChildren = function(opt_unrender) {
   var removedChildren = [];
