@@ -1015,7 +1015,10 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
     // render_() calls enterDocument() if the parent is already in the document.
     child.render_(this.getContentElement(), sibling ? sibling.element_ : null);
   } else if (this.inDocument_ && !child.inDocument_ && child.element_ &&
-      child.element_.parentNode) {
+      child.element_.parentNode &&
+      // Under some circumstances, IE8 implicitly creates a Document Fragment
+      // for detached nodes, so ensure the parent is an Element as it should be.
+      child.element_.parentNode.nodeType == goog.dom.NodeType.ELEMENT) {
     // We don't touch the DOM, but if the parent is in the document, and the
     // child element is in the document but not marked as such, then we call
     // enterDocument on the child.
