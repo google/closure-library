@@ -128,16 +128,16 @@ goog.events.EventType = {
 
   // IE specific events.
   // See http://msdn.microsoft.com/en-us/library/ie/hh673557(v=vs.85).aspx
-  MSGESTURECHANGE: 'MsGestureChange',
-  MSGESTUREEND: 'MsGestureEnd',
-  MSGESTUREHOLD: 'MsGestureHold',
-  MSGESTURESTART: 'MsGestureStart',
-  MSGESTURETAP: 'MsGestureTap',
-  MSINERTIASTART: 'MsInertiaStart',
-  MSPOINTERCANCEL: 'MsPointerCancel',
-  MSPOINTERDOWN: 'MsPointerDown',
-  MSPOINTERMOVE: 'MsPointerMove',
-  MSPOINTEROVER: 'MsPointerOver',
-  MSPOINTEROUT: 'MsPointerOut',
-  MSPOINTERUP: 'MsPointerUp'
+  MSGESTURECHANGE: 'MSGestureChange',
+  MSGESTUREEND: 'MSGestureEnd',
+  MSGESTUREHOLD: 'MSGestureHold',
+  MSGESTURESTART: 'MSGestureStart',
+  MSGESTURETAP: 'MSGestureTap',
+  MSINERTIASTART: 'MSInertiaStart',
+  MSPOINTERCANCEL: 'MSPointerCancel',
+  MSPOINTERDOWN: 'MSPointerDown',
+  MSPOINTERMOVE: 'MSPointerMove',
+  MSPOINTEROVER: 'MSPointerOver',
+  MSPOINTEROUT: 'MSPointerOut',
+  MSPOINTERUP: 'MSPointerUp'
 };
