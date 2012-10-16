@@ -68,6 +68,25 @@ function testIsEmpty() {
   assert('A random object is not empty', !goog.string.isEmpty({a: 1, b: 2}));
 }
 
+//=== tests for goog.string.isEmptySafe ===
+
+function testIsEmptySafe() {
+  assert('1. Should be empty', goog.string.isEmptySafe(''));
+  assert('2. Should be empty', goog.string.isEmptySafe(' '));
+  assert('3. Should be empty', goog.string.isEmptySafe('    '));
+  assert('4. Should be empty', goog.string.isEmptySafe(' \t\t\n\xa0   '));
+
+  assert('1. Should not be empty', !goog.string.isEmptySafe(' abc \t\xa0'));
+  assert('2. Should not be empty', !goog.string.isEmptySafe(' a b c \t'));
+  assert('3. Should not be empty', !goog.string.isEmptySafe(';'));
+
+
+  var a;
+  assert('Undefined should be empty (safe)', goog.string.isEmptySafe(a));
+  assert('Null should be empty (safe)', goog.string.isEmptySafe(null));
+  assert('A random object is not empty',
+         !goog.string.isEmptySafe({a: 1, b: 2}));
+}
 
 //=== tests for goog.string.isAlpha ===
 function testIsAlpha() {
