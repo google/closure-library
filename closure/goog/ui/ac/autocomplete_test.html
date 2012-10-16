@@ -644,7 +644,14 @@ function testDismiss() {
 
   // dismiss empty
   var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  var dismissed = 0;
+  handler.listen(ac,
+      goog.ui.ac.AutoComplete.EventType.DISMISS,
+      function() {
+        dismissed++;
+      });
   ac.dismiss();
+  assertEquals(1, dismissed);
 
   ac = new goog.ui.ac.AutoComplete(ds, rend, select);
   ac.setToken('sir not seen in this picture');
