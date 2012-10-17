@@ -110,6 +110,27 @@ See the COPYING file for details.
         'stopped and listening on bubble', 0, listener.getCallCount());
   }
 
+  function testTouchSequenceFired() {
+    var activityMonitor = new goog.ui.ActivityMonitor();
+    var listener = goog.testing.recordFunction();
+    goog.events.listen(activityMonitor, goog.ui.ActivityMonitor.Event.ACTIVITY,
+                       listener);
+
+    mockClock.tick(1000);
+    goog.testing.events.fireTouchSequence(mydiv);
+    assertEquals('Activity event should fire when touch happens after creation',
+                 1, listener.getCallCount());
+
+    mockClock.tick(3000);
+    goog.testing.events.fireTouchSequence(mydiv);
+    assertEquals('Activity event should not fire when touch happens 3s or ' +
+                 'less since the last activity', 1, listener.getCallCount());
+
+    mockClock.tick(1);
+    goog.testing.events.fireTouchSequence(mydiv);
+    assertEquals('Activity event should fire when touch happens more than ' +
+                 '3s since the last activity', 2, listener.getCallCount());
+  }
 </script>
 </body>
 </html>

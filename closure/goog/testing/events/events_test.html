@@ -156,6 +156,39 @@ See the COPYING file for details.
     assertArrayEquals([false, false, false], firedShiftKeys);
   }
 
+  function testTouchStart() {
+    goog.testing.events.fireTouchStartEvent(root);
+    goog.testing.events.fireTouchStartEvent(root, coordinate);
+    assertEventTypes(['touchstart', 'touchstart']);
+    assertCoordinates([goog.style.getClientPosition(root), coordinate]);
+  }
+
+  function testTouchMove() {
+    goog.testing.events.fireTouchMoveEvent(root);
+    goog.testing.events.fireTouchMoveEvent(root, coordinate);
+    assertEventTypes(['touchmove', 'touchmove']);
+    assertCoordinates([goog.style.getClientPosition(root), coordinate]);
+  }
+ 
+  function testTouchEnd() {
+    goog.testing.events.fireTouchEndEvent(root);
+    goog.testing.events.fireTouchEndEvent(root, coordinate);
+    assertEventTypes(['touchend', 'touchend']);
+    assertCoordinates([goog.style.getClientPosition(root), coordinate]);
+  }
+ 
+  function testTouchSequence() {
+    assertTrue(goog.testing.events.fireTouchSequence(root));
+    assertEventTypes(['touchstart', 'touchmove', 'touchend']);
+    var rootPosition = goog.style.getClientPosition(root);
+    assertCoordinates([rootPosition, rootPosition, rootPosition]);
+  }
+
+  function testTouchSequenceWithCoordinate() {
+    assertTrue(goog.testing.events.fireTouchSequence(root, coordinate));
+    assertCoordinates([coordinate, coordinate, coordinate]);
+  }
+ 
   function testClickSequenceWithEventProperty() {
     assertTrue(goog.testing.events.fireClickSequence(
           root, null, undefined, { shiftKey: true }));
