@@ -1158,3 +1158,52 @@ function testDispatchDelayedChange() {
   editableField.dispatchDelayedChange_();
   assertFalse(editableField.delayedChangeTimer_.isActive());
 }
+
+
+function testHandleWindowLevelMouseUp() {
+  var editableField = new FieldConstructor('testField', document);
+  if (editableField.usesIframe()) {
+    // Only run this test if the editor does not use an iframe.
+    return;
+  }
+  editableField.setUseWindowMouseUp(true);
+  editableField.makeEditable();
+  var selectionHasFired = false;
+  goog.events.listenOnce(
+      editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
+      function(e) {
+        selectionHasFired = true;
+      });
+  var editableElement = editableField.getElement();
+  var otherElement = goog.dom.createDom('div');
+  goog.dom.insertSiblingAfter(otherElement, document.body.lastChild);
+
+  goog.testing.events.fireMouseDownEvent(editableElement);
+  assertFalse(selectionHasFired);
+  goog.testing.events.fireMouseUpEvent(otherElement);
+  assertTrue(selectionHasFired);
+}
+
+function testNoHandleWindowLevelMouseUp() {
+  var editableField = new FieldConstructor('testField', document);
+  editableField.setUseWindowMouseUp(false);
+  editableField.makeEditable();
+  var selectionHasFired = false;
+  goog.events.listenOnce(
+      editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
+      function(e) {
+        selectionHasFired = true;
+      });
+  var editableElement = editableField.getElement();
+  var otherElement = goog.dom.createDom('div');
+  goog.dom.insertSiblingAfter(otherElement, document.body.lastChild);
+
+  goog.testing.events.fireMouseDownEvent(editableElement);
+  assertFalse(selectionHasFired);
+  goog.testing.events.fireMouseUpEvent(otherElement);
+  if (goog.userAgent.GECKO && !editableField.usesIframe()) {
+    assertTrue(selectionHasFired);
+  } else {
+    assertFalse(selectionHasFired);
+  }
+}
