@@ -87,6 +87,12 @@ function testByteArrayToHex() {
       goog.crypt.byteArrayToHex([222, 173, 190, 239]));
 }
 
+function testXorByteArray() {
+  assertElementsEquals(
+      [20, 83, 96, 66],
+      goog.crypt.xorByteArray([202, 254, 222, 173], [222, 173, 190, 239]));
+}
+
 </script>
 </body>
 </html>

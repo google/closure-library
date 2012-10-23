@@ -25,7 +25,7 @@ goog.require('goog.array');
  * Turns a string into an array of bytes; a "byte" being a JS number in the
  * range 0-255.
  * @param {string} str String value to arrify.
- * @return {Array.<number>} Array of numbers corresponding to the
+ * @return {!Array.<number>} Array of numbers corresponding to the
  *     UCS character codes of each character in str.
  */
 goog.crypt.stringToByteArray = function(str) {
@@ -133,4 +133,23 @@ goog.crypt.utf8ByteArrayToString = function(bytes) {
     }
   }
   return out.join('');
+};
+
+
+/**
+ * XOR two byte arrays.
+ * @param {!Array.<number>} bytes1 Byte array 1.
+ * @param {!Array.<number>} bytes2 Byte array 2.
+ * @return {!Array.<number>} Resulting XOR of the two byte arrays.
+ */
+goog.crypt.xorByteArray = function(bytes1, bytes2) {
+  goog.asserts.assert(
+      bytes1.length == bytes2.length,
+      'XOR array lengths must match');
+
+  var result = [];
+  for (var i = 0; i < bytes1.length; i++) {
+    result.push(bytes1[i] ^ bytes2[i]);
+  }
+  return result;
 };

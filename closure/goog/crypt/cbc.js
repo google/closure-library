@@ -23,6 +23,7 @@
 goog.provide('goog.crypt.Cbc');
 
 goog.require('goog.array');
+goog.require('goog.crypt');
 
 
 
@@ -90,7 +91,7 @@ goog.crypt.Cbc.prototype.encrypt = function(plainText, initialVector) {
         blockStartIndex,
         blockStartIndex + this.blockSize_);
 
-    var input = goog.crypt.Cbc.xorByteArray_(plainTextBlock, vector);
+    var input = goog.crypt.xorByteArray(plainTextBlock, vector);
     var resultBlock = this.cipher_.encrypt(input);
 
     goog.array.extend(cipherText, resultBlock);
@@ -137,7 +138,7 @@ goog.crypt.Cbc.prototype.decrypt = function(cipherText, initialVector) {
         blockStartIndex + this.blockSize_);
 
     var resultBlock = this.cipher_.decrypt(cipherTextBlock);
-    var plainTextBlock = goog.crypt.Cbc.xorByteArray_(vector, resultBlock);
+    var plainTextBlock = goog.crypt.xorByteArray(vector, resultBlock);
 
     goog.array.extend(plainText, plainTextBlock);
     vector = cipherTextBlock;
@@ -146,22 +147,4 @@ goog.crypt.Cbc.prototype.decrypt = function(cipherText, initialVector) {
   }
 
   return plainText;
-};
-
-
-/**
- * XOR two byte arrays.
- * @param {!Array.<number>} arr1 Byte array.
- * @param {!Array.<number>} arr2 Byte array.
- * @return {!Array.<number>} Resulting XOR of the two byte arrays.
- * @private
- */
-goog.crypt.Cbc.xorByteArray_ = function(arr1, arr2) {
-  goog.asserts.assert(arr1.length == arr2.length,
-                      'XOR array lengths must match');
-  var result = [];
-  for (var i = 0; i < arr1.length; i++) {
-    result.push(arr1[i] ^ arr2[i]);
-  }
-  return result;
 };
