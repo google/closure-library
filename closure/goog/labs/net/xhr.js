@@ -235,6 +235,8 @@ _.makeRequest = function(
   xhr.onreadystatechange = function() {
     if (xhr.readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
       window.clearTimeout(timer);
+      // Note: When developing locally, XHRs to file:// schemes return a status
+      // code of 0. We mark that case as a success too.
       if (HttpStatus.isSuccess(xhr.status) ||
           xhr.status === 0 && !_.isEffectiveSchemeHttp_(url)) {
         callback(xhr);
