@@ -12,6 +12,8 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
+  goog.require('goog.events.EventHandler');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.emoji.EmojiPicker');
   goog.require('goog.ui.emoji.SpriteInfo');
@@ -24,6 +26,15 @@ See the COPYING file for details.
 
 <script>
 
+var handler;
+
+function setUp() {
+  handler = new goog.events.EventHandler();
+}
+
+function tearDown() {
+  handler.removeAll();
+}
 
 // 26 emoji
 var emojiGroup1 = [
@@ -461,6 +472,68 @@ function testGetSelectedEmoji() {
   var emoji = palette.getSelectedEmoji();
   assertEquals(emoji.getId(), 'std.200');
   assertEquals(emoji.getUrl(), '../../demos/emoji/200.gif');
+
+  picker.dispose();
+}
+
+
+function testGetSelectedEmoji_click() {
+  var defaultImg = '../../demos/emoji/none.gif';
+  var picker = new goog.ui.emoji.EmojiPicker(defaultImg);
+  picker.setDelayedLoad(false);
+  picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
+  picker.render();
+
+  var palette = picker.getPage(0);
+  // Artificially select the an emoji
+  palette.setSelectedIndex(2);
+  var element = palette.getSelectedItem();
+  palette.setSelectedIndex(0);  // Select a different emoji.
+
+  var eventSent;
+  handler.listen(picker, goog.ui.Component.EventType.ACTION,
+      function(e) {
+        eventSent = e;
+      })
+  goog.testing.events.fireClickSequence(element, undefined, undefined,
+      { shiftKey: false });
+
+  // Now we should get the first emoji back. See emojiGroup1 above.
+  var emoji = picker.getSelectedEmoji();
+  assertEquals(emoji.getId(), 'std.202');
+  assertEquals(emoji.getUrl(), '../../demos/emoji/202.gif');
+  assertFalse(eventSent.shiftKey);
+
+  picker.dispose();
+}
+
+
+function testGetSelectedEmoji_shiftClick() {
+  var defaultImg = '../../demos/emoji/none.gif';
+  var picker = new goog.ui.emoji.EmojiPicker(defaultImg);
+  picker.setDelayedLoad(false);
+  picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
+  picker.render();
+
+  var palette = picker.getPage(0);
+  // Artificially select the an emoji
+  palette.setSelectedIndex(3);
+  var element = palette.getSelectedItem();
+  palette.setSelectedIndex(0);  // Select a different emoji.
+
+  var eventSent;
+  handler.listen(picker, goog.ui.Component.EventType.ACTION,
+      function(e) {
+        eventSent = e;
+      })
+  goog.testing.events.fireClickSequence(element, undefined, undefined,
+      { shiftKey: true });
+
+  // Now we should get the first emoji back. See emojiGroup1 above.
+  var emoji = picker.getSelectedEmoji();
+  assertEquals(emoji.getId(), 'std.203');
+  assertEquals(emoji.getUrl(), '../../demos/emoji/203.gif');
+  assertTrue(eventSent.shiftKey);
 
   picker.dispose();
 }
