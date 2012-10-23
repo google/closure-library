@@ -1,0 +1,27 @@
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<title>Closure Unit Tests - goog.userAgent quirks</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent');
+</script>
+</head>
+<body>
+
+<script>
+function testGetDocumentModeInQuirksMode() {
+  // This test file is forcing quirks mode.
+  var expected = goog.userAgent.IE ? 5 : undefined;
+  assertEquals(expected, goog.userAgent.DOCUMENT_MODE);
+}
+
+</script>
+</body>
+</html>

@@ -223,6 +223,13 @@ function testIeDocumentModeOverride() {
           '8.0');
 }
 
+function testDocumentModeInStandardsMode() {
+  reinitializeUserAgent();
+  var expectedMode = goog.userAgent.IE ? parseInt(goog.userAgent.VERSION) :
+                                         undefined;
+  assertEquals(expectedMode, goog.userAgent.DOCUMENT_MODE);
+}
+
 function testOpera() {
   var assertOpera = function(uaString) {
     assertUserAgent([UserAgents.OPERA], uaString);
