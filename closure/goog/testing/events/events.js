@@ -640,7 +640,7 @@ goog.testing.events.fireTouchEndEvent = function(
 /**
  * Simulates a simple touch sequence on the given target.
  * @param {EventTarget} target The target for the event.
- * @param {goog.math.Coordinate=} opt_coords Touch position. Defaults to event's
+ * @param {goog.math.Coordinate=} opt_coords Touch position. Defaults to event
  *     target's position (if available), otherwise (0, 0).
  * @param {Object=} opt_eventProperties Event properties to be mixed into the
  *     BrowserEvent.
@@ -652,8 +652,6 @@ goog.testing.events.fireTouchSequence = function(
   // TODO: Support multi-touch events with array of coordinates.
   // Fire touchstart, touchmove, touchend then return the bitwise AND of the 3.
   return !!(goog.testing.events.fireTouchStartEvent(
-                target, opt_coords, opt_eventProperties) &
-            goog.testing.events.fireTouchMoveEvent(
                 target, opt_coords, opt_eventProperties) &
             goog.testing.events.fireTouchEndEvent(
                 target, opt_coords, opt_eventProperties));

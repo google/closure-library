@@ -169,26 +169,26 @@ See the COPYING file for details.
     assertEventTypes(['touchmove', 'touchmove']);
     assertCoordinates([goog.style.getClientPosition(root), coordinate]);
   }
- 
+
   function testTouchEnd() {
     goog.testing.events.fireTouchEndEvent(root);
     goog.testing.events.fireTouchEndEvent(root, coordinate);
     assertEventTypes(['touchend', 'touchend']);
     assertCoordinates([goog.style.getClientPosition(root), coordinate]);
   }
- 
+
   function testTouchSequence() {
     assertTrue(goog.testing.events.fireTouchSequence(root));
-    assertEventTypes(['touchstart', 'touchmove', 'touchend']);
+    assertEventTypes(['touchstart', 'touchend']);
     var rootPosition = goog.style.getClientPosition(root);
-    assertCoordinates([rootPosition, rootPosition, rootPosition]);
+    assertCoordinates([rootPosition, rootPosition]);
   }
 
   function testTouchSequenceWithCoordinate() {
     assertTrue(goog.testing.events.fireTouchSequence(root, coordinate));
-    assertCoordinates([coordinate, coordinate, coordinate]);
+    assertCoordinates([coordinate, coordinate]);
   }
- 
+
   function testClickSequenceWithEventProperty() {
     assertTrue(goog.testing.events.fireClickSequence(
           root, null, undefined, { shiftKey: true }));
