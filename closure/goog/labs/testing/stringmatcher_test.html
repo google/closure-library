@@ -15,6 +15,7 @@ goog.require('goog.labs.testing.ContainsStringMatcher');
 goog.require('goog.labs.testing.EndsWithMatcher');
 goog.require('goog.labs.testing.EqualsMatcher');
 goog.require('goog.labs.testing.EqualToIgnoringWhitespaceMatcher');
+goog.require('goog.labs.testing.RegexMatcher');
 goog.require('goog.labs.testing.StartsWithMatcher');
 goog.require('goog.labs.testing.StringContainsInOrderMatcher');
 goog.require('goog.labs.testing.assertThat');
@@ -79,6 +80,15 @@ function testStringContainsInOrder() {
     goog.labs.testing.assertThat('hybrid', stringContainsInOrder(['hy', 'brid',
     'theory']));
   }, 'stringContainsInOrder should throw exception when it fails');
+}
+
+function testMatchesRegex() {
+  goog.labs.testing.assertThat('foobar', matchesRegex(/foobar/));
+  goog.labs.testing.assertThat('foobar', matchesRegex(/oobar/));
+
+  assertMatcherError(function() {
+    goog.labs.testing.assertThat('foo', matchesRegex(/^foobar$/));
+  }, 'matchesRegex should throw exception when it fails');
 }
 
 function assertMatcherError(callable, errorString) {

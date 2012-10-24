@@ -23,6 +23,7 @@ goog.provide('goog.labs.testing.EndsWithMatcher');
 goog.provide('goog.labs.testing.EqualToIgnoringCaseMatcher');
 goog.provide('goog.labs.testing.EqualToIgnoringWhitespaceMatcher');
 goog.provide('goog.labs.testing.EqualsMatcher');
+goog.provide('goog.labs.testing.RegexMatcher');
 goog.provide('goog.labs.testing.StartsWithMatcher');
 goog.provide('goog.labs.testing.StringContainsInOrderMatcher');
 
@@ -190,6 +191,45 @@ goog.labs.testing.EqualsMatcher.prototype.describe =
 
 
 /**
+ * The MatchesRegex matcher.
+ *
+ * @param {!RegExp} regex The expected regex.
+ *
+ * @constructor
+ * @implements {goog.labs.testing.Matcher}
+ */
+goog.labs.testing.RegexMatcher = function(regex) {
+  /**
+   * @type {!RegExp}
+   * @private
+   */
+  this.regex_ = regex;
+};
+
+
+/**
+ * Determines if input string is equal to the expected string.
+ *
+ * @override
+ */
+goog.labs.testing.RegexMatcher.prototype.matches = function(
+    actualValue) {
+  goog.asserts.assertString(actualValue);
+  return this.regex_.test(actualValue);
+};
+
+
+/**
+ * @override
+ */
+goog.labs.testing.RegexMatcher.prototype.describe =
+    function(actualValue) {
+  return actualValue + ' does not match ' + this.regex_;
+};
+
+
+
+/**
  * The StartsWith matcher.
  *
  * @param {string} value The expected string.
@@ -321,6 +361,18 @@ function equalToIgnoringWhitespace(value) {
  */
 function equals(value) {
   return new goog.labs.testing.EqualsMatcher(value);
+}
+
+
+/**
+ * Matches a string against a regular expression.
+ *
+ * @param {!RegExp} regex The expected regex.
+ *
+ * @return {!goog.labs.testing.RegexMatcher} A RegexMatcher.
+ */
+function matchesRegex(regex) {
+  return new goog.labs.testing.RegexMatcher(regex);
 }
 
 
