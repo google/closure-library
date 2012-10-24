@@ -27,24 +27,6 @@ goog.require('goog.array');
 
 
 /**
- * Override this define at build-time if you know your target supports it.
- * @define {boolean} Whether to use the classList property (DOMTokenList).
- */
-goog.dom.classes.ALWAYS_USE_DOM_TOKEN_LIST = false;
-
-
-/**
- * Enables use of the native DOMTokenList methods.  See the spec at
- * {@link http://dom.spec.whatwg.org/#domtokenlist}.
- * @type {boolean}
- * @private
- */
-goog.dom.classes.NATIVE_DOM_TOKEN_LIST_ =
-    goog.dom.classes.ALWAYS_USE_DOM_TOKEN_LIST ||
-    typeof goog.global.DOMTokenList != 'undefined';
-
-
-/**
  * Sets the entire class name of an element.
  * @param {Node} element DOM node to set class of.
  * @param {string} className Class name(s) to apply to element.
@@ -143,36 +125,24 @@ goog.dom.classes.getDifference_ = function(arr1, arr2) {
  * @param {string} toClass Class to add.
  * @return {boolean} Whether classes were switched.
  */
-goog.dom.classes.swap = goog.dom.classes.NATIVE_DOM_TOKEN_LIST_ ?
-    function(element, fromClass, toClass) {
-      var classes = element.classList;
+goog.dom.classes.swap = function(element, fromClass, toClass) {
+  var classes = goog.dom.classes.get(element);
 
-      if (fromClass && toClass && classes.contains(fromClass)) {
-        classes.remove(fromClass);
-        classes.add(toClass);
-        return true;
-      }
+  var removed = false;
+  for (var i = 0; i < classes.length; i++) {
+    if (classes[i] == fromClass) {
+      goog.array.splice(classes, i--, 1);
+      removed = true;
+    }
+  }
 
-      return false;
-    } :
-    function(element, fromClass, toClass) {
-      var classes = goog.dom.classes.get(element);
+  if (removed) {
+    classes.push(toClass);
+    element.className = classes.join(' ');
+  }
 
-      var removed = false;
-      for (var i = 0; i < classes.length; i++) {
-        if (classes[i] == fromClass) {
-          goog.array.splice(classes, i--, 1);
-          removed = true;
-        }
-      }
-
-      if (removed) {
-        classes.push(toClass);
-        element.className = classes.join(' ');
-      }
-
-      return removed;
-    };
+  return removed;
+};
 
 
 /**
@@ -216,71 +186,25 @@ goog.dom.classes.addRemove = function(element, classesToRemove, classesToAdd) {
  * @param {string} className Class name to test for.
  * @return {boolean} Whether element has the class.
  */
-goog.dom.classes.has = goog.dom.classes.NATIVE_DOM_TOKEN_LIST_ ?
-    function(element, className) {
-      // We allow empty classnames as a no-op, but DOMTokenList.contains()
-      // throws a DOM exception.  We should clean up callers eventually.
-      // Also, we check that classList exists because we might end up on a
-      // Node / Document instead of an Element.  For example, see
-      // goog.dom.getAncestorByTagNameAndClass().
-      return className && element.classList ?
-          element.classList.contains(className) :
-          false;
-    } :
-    function(element, className) {
-      return goog.array.contains(goog.dom.classes.get(element), className);
-    };
+goog.dom.classes.has = function(element, className) {
+  return goog.array.contains(goog.dom.classes.get(element), className);
+};
 
 
 /**
- * Adds or removes a class depending on the enabled argument.  If the className
- * contains a space-separated list of classes, this method will not throw a
- * DOM exception.  Useful for clients that still depend on the old behavior
- * prior to the DOMTokenList versions.
+ * Adds or removes a class depending on the enabled argument.
  * @param {Node} element DOM node to add or remove the class on.
  * @param {string} className Class name to add or remove.
  * @param {boolean} enabled Whether to add or remove the class (true adds,
  *     false removes).
  */
-goog.dom.classes.enableWithDeprecatedBehavior =
-    function(element, className, enabled) {
+goog.dom.classes.enable = function(element, className, enabled) {
   if (enabled) {
     goog.dom.classes.add(element, className);
   } else {
     goog.dom.classes.remove(element, className);
   }
 };
-
-
-/**
- * Adds or removes a class depending on the enabled argument.  If the
- * DOMTokenList version of this method is used, className should be a single,
- * valid class name.
- * @param {Node} element DOM node to add or remove the class on.
- * @param {string} className Class name to add or remove.
- * @param {boolean} enabled Whether to add or remove the class (true adds,
- *     false removes).
- */
-goog.dom.classes.enable = goog.dom.classes.NATIVE_DOM_TOKEN_LIST_ ?
-    function(element, className, enabled) {
-      try {
-        if (className) {
-          if (enabled) {
-            element.classList.add(className);
-          } else {
-            element.classList.remove(className);
-          }
-        }
-      } catch (e) {
-        // In the case of a DOM exception, fallback to using the old enable
-        // method that does not throw an exception.
-        // TODO(user): Track down and fix all usages expecting the
-        // old behavior.
-        goog.dom.classes.enableWithDeprecatedBehavior(element, className,
-            enabled);
-      }
-    } :
-    goog.dom.classes.enableWithDeprecatedBehavior;
 
 
 /**
@@ -292,12 +216,8 @@ goog.dom.classes.enable = goog.dom.classes.NATIVE_DOM_TOKEN_LIST_ ?
  *     (in other words, whether element has the class after this function has
  *     been called).
  */
-goog.dom.classes.toggle = goog.dom.classes.NATIVE_DOM_TOKEN_LIST_ ?
-    function(element, className) {
-      return !!className && element.classList.toggle(className);
-    } :
-    function(element, className) {
-      var add = !goog.dom.classes.has(element, className);
-      goog.dom.classes.enable(element, className, add);
-      return add;
-    };
+goog.dom.classes.toggle = function(element, className) {
+  var add = !goog.dom.classes.has(element, className);
+  goog.dom.classes.enable(element, className, add);
+  return add;
+};
