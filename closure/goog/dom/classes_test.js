@@ -130,15 +130,17 @@ function testToggle() {
   assertTrue('Should have FIRST class', classes.has(el, 'FIRST'));
   assertTrue('Should have SOMECLASS class', classes.has(el, 'SOMECLASS'));
 
-  classes.toggle(el, 'FIRST');
+  var ret = classes.toggle(el, 'FIRST');
 
   assertFalse('Should not have FIRST class', classes.has(el, 'FIRST'));
   assertTrue('Should have SOMECLASS class', classes.has(el, 'SOMECLASS'));
+  assertFalse('Return value should have been false', ret);
 
-  classes.toggle(el, 'FIRST');
+  ret = classes.toggle(el, 'FIRST');
 
   assertTrue('Should have FIRST class', classes.has(el, 'FIRST'));
   assertTrue('Should have SOMECLASS class', classes.has(el, 'SOMECLASS'));
+  assertTrue('Return value should have been true', ret);
 }
 
 function testAddNotAddingMultiples() {

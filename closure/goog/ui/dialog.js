@@ -514,7 +514,10 @@ goog.ui.Dialog.prototype.getDraggable = function() {
  */
 goog.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
   if (this.getElement()) {
-    goog.dom.classes.enable(this.titleEl_,
+    // Subclasses of Dialog may have a space-separated list of classes
+    // so we use the deprecated version of this function.
+    // TODO(user): Track down and fix all clients who depend on this.
+    goog.dom.classes.enableWithDeprecatedBehavior(this.titleEl_,
         goog.getCssName(this.class_, 'title-draggable'), enabled);
   }
 
