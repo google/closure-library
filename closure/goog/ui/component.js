@@ -1137,9 +1137,10 @@ goog.ui.Component.prototype.getChildAt = function(index) {
  * {@code opt_obj} is provided, it will be used as the 'this' object in the
  * function when called.  The function should take two arguments:  the child
  * component and its 0-based index.  The return value is ignored.
- * @param {Function} f The function to call for every child component; should
- *    take 2 arguments (the child and its index).
- * @param {Object=} opt_obj Used as the 'this' object in f when called.
+ * @param {function(this:T,?,number):?} f The function to call for every
+ * child component; should take 2 arguments (the child and its index).
+ * @param {T=} opt_obj Used as the 'this' object in f when called.
+ * @template T
  */
 goog.ui.Component.prototype.forEachChild = function(f, opt_obj) {
   if (this.children_) {
