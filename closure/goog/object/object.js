@@ -41,7 +41,7 @@ goog.object.forEach = function(obj, f, opt_obj) {
  * true, adds the element to a new object.
  *
  * @param {Object.<K,V>} obj The object over which to iterate.
- * @param {function(this:T,K,?,Object.<K,V>):boolean} f The function to call
+ * @param {function(this:T,V,?,Object.<K,V>):boolean} f The function to call
  *     for every element. This
  *     function takes 3 arguments (the element, the index and the object)
  *     and should return a boolean. If the return value is true the
@@ -92,7 +92,7 @@ goog.object.map = function(obj, f, opt_obj) {
  * all calls return false, returns false.
  *
  * @param {Object.<K,V>} obj The object to check.
- * @param {function(this:T,K,?,Object.<K,V>):boolean} f The function to
+ * @param {function(this:T,V,?,Object.<K,V>):boolean} f The function to
  *     call for every element. This function
  *     takes 3 arguments (the element, the index and the object) and should
  *     return a boolean.
