@@ -14,6 +14,7 @@ Author:  attila@google.com (Attila Bodis)
   <title>Closure Unit Tests - goog.testing.PerformanceTimer</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.async.Deferred');
     goog.require('goog.dom');
     goog.require('goog.math');
     goog.require('goog.testing.MockClock');
@@ -27,15 +28,6 @@ Author:  attila@google.com (Attila Bodis)
     var mockClock;
     var sandbox = document.getElementById('sandbox');
     var timer;
-
-    // Fast test function, pretty much guaranteed to run in under 5,000ms.
-    function fastTestFunction() {
-      for (var i = 0; i < 10; i++) {
-        var div = document.createElement('div');
-        div.innerHTML = 'Div no. ' + i;
-        sandbox.appendChild(div);
-      }
-    }
 
     function setUp() {
       mockClock = new goog.testing.MockClock(true);
@@ -58,26 +50,47 @@ Author:  attila@google.com (Attila Bodis)
     }
 
     function testRun_noSetUpOrTearDown() {
-      runAndAssert(false, false);
+      runAndAssert(false, false, false);
     }
 
     function testRun_withSetup() {
-      runAndAssert(true, false);
+      runAndAssert(true, false, false);
     }
 
     function testRun_withTearDown() {
-      runAndAssert(false, true);
+      runAndAssert(false, true, false);
     }
 
     function testRun_withSetUpAndTearDown() {
-      runAndAssert(true, true);
+      runAndAssert(true, true, false);
     }
 
-    function runAndAssert(useSetUp, useTearDown) {
+    function testRunAsync_noSetUpOrTearDown() {
+      runAndAssert(false, false, true);
+    }
+
+    function testRunAsync_withSetup() {
+      runAndAssert(true, false, true);
+    }
+
+    function testRunAsync_withTearDown() {
+      runAndAssert(false, true, true);
+    }
+
+    function testRunAsync_withSetUpAndTearDown() {
+      runAndAssert(true, true, true);
+    }
+
+    function runAndAssert(useSetUp, useTearDown, runAsync) {
       var fakeExecutionTime = [100, 95, 98, 104, 130, 101, 96, 98, 90, 103]
       var count = 0;
       var testFunction = function() {
         mockClock.tick(fakeExecutionTime[count++]);
+        if (runAsync) {
+          var deferred = new goog.async.Deferred();
+          deferred.callback();
+          return deferred;
+        }
       };
 
       var setUpCount = 0;
@@ -85,6 +98,11 @@ Author:  attila@google.com (Attila Bodis)
         // Should have no effect on total time.
         mockClock.tick(7);
         setUpCount++;
+        if (runAsync) {
+          var deferred = new goog.async.Deferred();
+          deferred.callback();
+          return deferred;
+        }
       };
 
       var tearDownCount = 0;
@@ -92,6 +110,11 @@ Author:  attila@google.com (Attila Bodis)
         // Should have no effect on total time.
         mockClock.tick(11);
         tearDownCount++;
+        if (runAsync) {
+          var deferred = new goog.async.Deferred();
+          deferred.callback();
+          return deferred;
+        }
       };
 
       // Fast test function should complete successfully in under 5 seconds...
@@ -102,8 +125,24 @@ Author:  attila@google.com (Attila Bodis)
       if (useTearDown) {
         task.withTearDown(tearDownFunction);
       }
-      var results = timer.runTask(task);
+      if (runAsync) {
+        var assertsRan = false;
+        var deferred = timer.runAsyncTask(task);
+        deferred.addCallback(
+            function(results) {
+              assertsRan = assertResults(results, useSetUp, useTearDown,
+                  setUpCount, tearDownCount, fakeExecutionTime);
+            });
+        assertTrue(assertsRan);
+      } else {
+        var results = timer.runTask(task);
+        assertResults(results, useSetUp, useTearDown, setUpCount, tearDownCount,
+            fakeExecutionTime);
+      }
+    }
 
+    function assertResults(results, useSetUp, useTearDown, setUpCount,
+        tearDownCount, fakeExecutionTime) {
       assertNotNull('Results must be available.', results);
 
       assertEquals('Average is wrong.',
@@ -122,6 +161,8 @@ Author:  attila@google.com (Attila Bodis)
           useSetUp ? 10 : 0, setUpCount);
       assertEquals('Tear down count must be as expected.',
           useTearDown ? 10 : 0, tearDownCount);
+
+      return true;
     }
 
     function testTimeout() {
