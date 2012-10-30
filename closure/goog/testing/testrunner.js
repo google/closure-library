@@ -185,7 +185,7 @@ goog.testing.TestRunner.prototype.logError = function(msg) {
  * @param {Error} ex Exception.
  */
 goog.testing.TestRunner.prototype.logTestFailure = function(ex) {
-  var testName = /** @type {string} */ goog.testing.TestCase.currentTestName;
+  var testName = /** @type {string} */ (goog.testing.TestCase.currentTestName);
   if (this.testCase) {
     this.testCase.logError(testName, ex);
   } else {

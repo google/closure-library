@@ -76,12 +76,12 @@ goog.dom.BufferedViewportSizeMonitor = function(
    * @type {number}
    * @private
    */
-  this.listenerKey_ = /** @type {number} */ goog.events.listen(
+  this.listenerKey_ = /** @type {number} */ (goog.events.listen(
       viewportSizeMonitor,
       goog.events.EventType.RESIZE,
       this.handleResize_,
       false,
-      this);
+      this));
 };
 goog.inherits(goog.dom.BufferedViewportSizeMonitor, goog.events.EventTarget);
 
