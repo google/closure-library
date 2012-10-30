@@ -216,16 +216,20 @@ goog.net.ChannelDebug.prototype.severe = function(text) {
 goog.net.ChannelDebug.prototype.redactResponse_ = function(responseText) {
   // first check if it's not JS - the only non-JS should be the magic cookie
   if (!responseText ||
+      /** @suppress {missingRequire}.  The require creates a circular
+       *  dependency.
+       */
       responseText == goog.net.BrowserChannel.MAGIC_RESPONSE_COOKIE) {
     return responseText;
   }
   /** @preserveTry */
   try {
     var responseArray = goog.json.unsafeParse(responseText);
-
-    for (var i = 0; i < responseArray.length; i++) {
-      if (goog.isArray(responseArray[i])) {
-        this.maybeRedactArray_(responseArray[i]);
+    if (responseArray) {
+      for (var i = 0; i < responseArray.length; i++) {
+        if (goog.isArray(responseArray[i])) {
+          this.maybeRedactArray_(responseArray[i]);
+        }
       }
     }
 
