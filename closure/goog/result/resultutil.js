@@ -303,7 +303,8 @@ goog.result.combine = function(var_args) {
   };
 
   var checkResults = function() {
-    if (goog.array.every(results, isResolved)) {
+    if (combinedResult.getState() == goog.result.Result.State.PENDING &&
+        goog.array.every(results, isResolved)) {
       combinedResult.setValue(results);
     }
   };
