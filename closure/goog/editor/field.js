@@ -446,8 +446,10 @@ goog.editor.Field.prototype.getOriginalElement = function() {
 goog.editor.Field.prototype.addListener = function(type, listener, opt_capture,
                                                    opt_handler) {
   var elem = this.getElement();
-  // On Gecko, keyboard events only reliably fire on the document element.
-  if (elem && goog.editor.BrowserFeature.USE_DOCUMENT_FOR_KEY_EVENTS) {
+  // On Gecko, keyboard events only reliably fire on the document element when
+  // using an iframe.
+  if (goog.editor.BrowserFeature.USE_DOCUMENT_FOR_KEY_EVENTS && elem &&
+      this.usesIframe()) {
     elem = elem.ownerDocument;
   }
   this.eventRegister.listen(elem, type, listener, opt_capture, opt_handler);

@@ -1201,9 +1201,5 @@ function testNoHandleWindowLevelMouseUp() {
   goog.testing.events.fireMouseDownEvent(editableElement);
   assertFalse(selectionHasFired);
   goog.testing.events.fireMouseUpEvent(otherElement);
-  if (goog.userAgent.GECKO && !editableField.usesIframe()) {
-    assertTrue(selectionHasFired);
-  } else {
-    assertFalse(selectionHasFired);
-  }
+  assertFalse(selectionHasFired);
 }
