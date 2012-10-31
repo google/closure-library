@@ -488,10 +488,9 @@ goog.addDependency('result/deferredadaptor.js', ['goog.result.DeferredAdaptor'],
 goog.addDependency('result/result_interface.js', ['goog.result.Result'], ['goog.debug.Error']);
 goog.addDependency('result/resultutil.js', ['goog.result'], ['goog.array', 'goog.result.Result', 'goog.result.SimpleResult']);
 goog.addDependency('result/simpleresult.js', ['goog.result.SimpleResult', 'goog.result.SimpleResult.StateError'], ['goog.debug.Error', 'goog.result.Result']);
-goog.addDependency('soy/data.js', ['goog.soy.data', 'goog.soy.data.SanitizedContentKind'], []);
 goog.addDependency('soy/renderer.js', ['goog.soy.InjectedDataSupplier', 'goog.soy.Renderer'], ['goog.dom', 'goog.soy']);
-goog.addDependency('soy/soy.js', ['goog.soy'], ['goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.soy.data']);
-goog.addDependency('soy/soy_test.js', ['goog.soy.testHelper'], ['goog.dom', 'goog.soy.data', 'goog.string', 'goog.userAgent']);
+goog.addDependency('soy/soy.js', ['goog.soy'], ['goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName']);
+goog.addDependency('soy/soy_test.js', ['goog.soy.testHelper'], ['goog.dom', 'goog.string', 'goog.userAgent']);
 goog.addDependency('spell/spellcheck.js', ['goog.spell.SpellCheck', 'goog.spell.SpellCheck.WordChangedEvent'], ['goog.Timer', 'goog.events.EventTarget', 'goog.structs.Set']);
 goog.addDependency('stats/basicstat.js', ['goog.stats.BasicStat'], ['goog.array', 'goog.debug.Logger', 'goog.iter', 'goog.object', 'goog.string.format', 'goog.structs.CircularBuffer']);
 goog.addDependency('storage/collectablestorage.js', ['goog.storage.CollectableStorage'], ['goog.array', 'goog.asserts', 'goog.iter', 'goog.storage.ErrorCode', 'goog.storage.ExpiringStorage', 'goog.storage.RichStorage.Wrapper', 'goog.storage.mechanism.IterableMechanism']);

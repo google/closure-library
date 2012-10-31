@@ -18,25 +18,10 @@
 
 goog.provide('goog.soy');
 
-goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.soy.data');
 
-
-/**
- * Whether to require all Soy templates to be "strict html". Soy templates that
- * use strict autoescaping forbid noAutoescape along with many dangerous
- * directives, and return a runtime type SanitizedContent that marks them as
- * safe.
- *
- * If this flag is enabled, Soy templates will fail to render if a template
- * returns plain text -- indicating it is a non-strict template.
- *
- * @define {boolean}
- */
-goog.soy.REQUIRE_STRICT_AUTOESCAPE = false;
 
 
 /**
@@ -52,9 +37,9 @@ goog.soy.REQUIRE_STRICT_AUTOESCAPE = false;
  */
 goog.soy.renderElement = function(element, template, opt_templateData,
                                   opt_injectedData) {
-  element.innerHTML = goog.soy.verifyTemplateOutputSafe_(template(
+  element.innerHTML = template(
       opt_templateData || goog.soy.defaultTemplateData_, undefined,
-      opt_injectedData));
+      opt_injectedData);
 };
 
 
@@ -75,9 +60,9 @@ goog.soy.renderElement = function(element, template, opt_templateData,
 goog.soy.renderAsFragment = function(template, opt_templateData,
                                      opt_injectedData, opt_domHelper) {
   var dom = opt_domHelper || goog.dom.getDomHelper();
-  return dom.htmlToDocumentFragment(goog.soy.verifyTemplateOutputSafe_(
+  return dom.htmlToDocumentFragment(
       template(opt_templateData || goog.soy.defaultTemplateData_,
-               undefined, opt_injectedData)));
+               undefined, opt_injectedData));
 };
 
 
@@ -98,9 +83,9 @@ goog.soy.renderAsElement = function(template, opt_templateData,
                                     opt_injectedData, opt_domHelper) {
   var dom = opt_domHelper || goog.dom.getDomHelper();
   var wrapper = dom.createElement(goog.dom.TagName.DIV);
-  wrapper.innerHTML = goog.soy.verifyTemplateOutputSafe_(template(
+  wrapper.innerHTML = template(
       opt_templateData || goog.soy.defaultTemplateData_,
-      undefined, opt_injectedData));
+      undefined, opt_injectedData);
 
   // If the template renders as a single element, return it.
   if (wrapper.childNodes.length == 1) {
@@ -112,38 +97,6 @@ goog.soy.renderAsElement = function(template, opt_templateData,
 
   // Otherwise, return the wrapper DIV.
   return wrapper;
-};
-
-
-/**
- * Verifies that a template result is "safe" to insert as HTML.
- *
- * Note if the template is non-strict autoescape, the guarantees here are very
- * weak. It is recommended applications switch to requiring strict
- * autoescaping over time.
- *
- * @param {*} templateResult The template result.
- * @return {string}
- */
-goog.soy.verifyTemplateOutputSafe_ = function(templateResult) {
-  // Allow strings as long as strict autoescaping is not mandated. Note we
-  // allow everything that isn't an object, because some non-escaping templates
-  // end up returning non-strings if their only print statement is a
-  // non-escaped argument, plus some unit tests spoof templates.
-  // TODO(gboyer): Track down and fix these cases.
-  if (!goog.soy.REQUIRE_STRICT_AUTOESCAPE && !goog.isObject(templateResult)) {
-    return String(templateResult);
-  }
-  // Allow SanitizedContent of kind HTML.
-  var ContentKind = goog.soy.data.SanitizedContentKind;
-  if (templateResult && (templateResult.contentKind === ContentKind.HTML ||
-      templateResult.contentKind === ContentKind.HTML_ATTRIBUTE)) {
-    return goog.asserts.assertString(templateResult.content);
-  }
-  goog.asserts.fail('Soy template output is unsafe for use in HTML: ' +
-      templateResult);
-  // In production, return a safe string, rather than failing hard.
-  return 'zSoyz';
 };
 
 
