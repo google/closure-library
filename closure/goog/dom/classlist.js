@@ -164,8 +164,8 @@ goog.dom.classlist.enable = function(element, className, enabled) {
  */
 goog.dom.classlist.swap = function(element, fromClass, toClass) {
   if (goog.dom.classlist.contains(element, fromClass)) {
-    goog.dom.classlist.enable(element, fromClass, false);
-    goog.dom.classlist.enable(element, toClass, true);
+    goog.dom.classlist.remove(element, fromClass);
+    goog.dom.classlist.add(element, toClass);
     return true;
   }
   return false;
@@ -186,4 +186,20 @@ goog.dom.classlist.toggle = function(element, className) {
   var add = !goog.dom.classlist.contains(element, className);
   goog.dom.classlist.enable(element, className, add);
   return add;
+};
+
+
+/**
+ * Adds and removes a class of an element.  Unlike
+ * {@link goog.dom.classlist.swap}, this method adds the classToAdd regardless
+ * of whether the classToRemove was present and had been removed.  This method
+ * may throw a DOM exception if the class names are empty or invalid.
+ *
+ * @param {Element} element DOM node to swap classes on.
+ * @param {string} classToRemove Class to remove.
+ * @param {string} classToAdd Class to add.
+ */
+goog.dom.classlist.addRemove = function(element, classToRemove, classToAdd) {
+  goog.dom.classlist.remove(element, classToRemove);
+  goog.dom.classlist.add(element, classToAdd);
 };

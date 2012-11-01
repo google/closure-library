@@ -165,3 +165,20 @@ function testToggle() {
   assertTrue('Return value should have been true', ret);
 }
 
+function testAddRemoveString() {
+  var el = document.createElement('div');
+  el.className = 'A';
+
+  classlist.addRemove(el, 'A', 'B');
+  assertEquals('B', el.className);
+
+  classlist.addRemove(el, 'Z', 'C');
+  assertEquals('B C', el.className);
+
+  classlist.addRemove(el, 'C', 'D');
+  assertEquals('B D', el.className);
+
+  classlist.addRemove(el, 'D', 'B');
+  assertEquals('B', el.className);
+}
+
