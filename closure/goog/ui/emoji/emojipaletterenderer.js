@@ -114,7 +114,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.updateAnimatedPaletteItem =
   // now being updated. See createPaletteItem for the structure of the palette
   // items we're modifying.
 
-  var inner = (/** @type {Element} */ item.firstChild);
+  var inner = /** @type {Element} */ (item.firstChild);
 
   // The first case is a palette item with a CSS class representing the sprite,
   // and an animated emoji.

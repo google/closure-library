@@ -1232,7 +1232,7 @@ goog.dom.getParentElement = function(element) {
     return element.parentElement;
   }
   var parent = element.parentNode;
-  return goog.dom.isElement(parent) ? (/** @type {!Element} */ parent) : null;
+  return goog.dom.isElement(parent) ? /** @type {!Element} */ (parent) : null;
 };
 
 

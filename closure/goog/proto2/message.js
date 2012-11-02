@@ -644,7 +644,7 @@ goog.proto2.Message.prototype.array$Values = function(tag) {
   var field = this.getFieldByTag_(tag);
   var value = this.getValueForField_(field);
   goog.proto2.Util.assert(value == null || goog.isArray(value));
-  return (/** @type {Array} */value) || [];
+  return /** @type {Array} */ (value) || [];
 };
 
 

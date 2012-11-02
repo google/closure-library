@@ -346,7 +346,7 @@ goog.debug.Trace_.prototype.reset = function(defaultThreshold) {
   this.defaultThreshold_ = defaultThreshold;
 
   for (var i = 0; i < this.events_.length; i++) {
-    var id = (/** @type {Object} */ this.eventPool_).id;
+    var id = /** @type {Object} */ (this.eventPool_).id;
     if (id) {
       this.idPool_.releaseObject(id);
     }

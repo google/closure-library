@@ -140,7 +140,7 @@ goog.testing.PerformanceTimer.prototype.isDiscardOutliers = function() {
  */
 goog.testing.PerformanceTimer.prototype.run = function(testFn) {
   return this.runTask(new goog.testing.PerformanceTimer.Task(
-      (/** @type {goog.testing.PerformanceTimer.TestFunction} */ testFn)));
+      /** @type {goog.testing.PerformanceTimer.TestFunction} */ (testFn)));
 };
 
 

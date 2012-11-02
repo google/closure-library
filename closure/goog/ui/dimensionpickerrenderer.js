@@ -77,7 +77,7 @@ goog.ui.DimensionPickerRenderer.prototype.getUnderlyingDiv_ = function(
  */
 goog.ui.DimensionPickerRenderer.prototype.getHighlightDiv_ = function(
     element) {
-  return /** @type {Element} */ element.firstChild.lastChild;
+  return /** @type {Element} */ (element.firstChild.lastChild);
 };
 
 
@@ -101,7 +101,7 @@ goog.ui.DimensionPickerRenderer.prototype.getStatusDiv_ = function(
  */
 goog.ui.DimensionPickerRenderer.prototype.getMouseCatcher_ = function(
     element) {
-  return /** @type {Element} */ element.firstChild.firstChild;
+  return /** @type {Element} */ (element.firstChild.firstChild);
 };
 
 

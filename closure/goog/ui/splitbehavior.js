@@ -139,16 +139,16 @@ goog.ui.SplitBehavior.CSS_CLASS = goog.getCssName('goog-split-behavior');
 goog.ui.SplitBehavior.DefaultHandlers = {
   NONE: goog.nullFunction,
   CAPTION: function(targetControl, e) {
-    var item = (/** @type {goog.ui.MenuItem} */e.target);
+    var item = /** @type {goog.ui.MenuItem} */ (e.target);
     var value = (/** @type {string} */((item && item.getValue()) || ''));
-    var button = (/** @type {goog.ui.Button} */targetControl);
+    var button = /** @type {goog.ui.Button} */ (targetControl);
     button.setCaption && button.setCaption(value);
     button.setValue && button.setValue(value);
   },
   VALUE: function(targetControl, e) {
-    var item = (/** @type {goog.ui.MenuItem} */e.target);
+    var item = /** @type {goog.ui.MenuItem} */ (e.target);
     var value = (/** @type {string} */(item && item.getValue()) || '');
-    var button = (/** @type {goog.ui.Button} */targetControl);
+    var button = /** @type {goog.ui.Button} */ (targetControl);
     button.setValue && button.setValue(value);
   }
 };

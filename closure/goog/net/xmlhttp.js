@@ -123,8 +123,8 @@ goog.net.XmlHttp.factory_;
  */
 goog.net.XmlHttp.setFactory = function(factory, optionsFactory) {
   goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(
-      (/** @type {function() : !(XMLHttpRequest|GearsHttpRequest)} */ factory),
-      (/** @type {function() : !Object}*/ optionsFactory)));
+      /** @type {function() : !(XMLHttpRequest|GearsHttpRequest)} */ (factory),
+      /** @type {function() : !Object}*/ (optionsFactory)));
 };
 
 

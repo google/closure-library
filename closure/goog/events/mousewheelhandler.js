@@ -60,8 +60,8 @@ goog.events.MouseWheelHandler = function(element) {
   this.element_ = element;
 
   var rtlElement = goog.dom.isElement(this.element_) ?
-      (/** @type {Element} */ this.element_) :
-      (this.element_ ? (/** @type {Document} */ this.element_).body : null);
+      /** @type {Element} */ (this.element_) :
+      (this.element_ ? /** @type {Document} */ (this.element_).body : null);
 
   /**
    * True if the element exists and is RTL, false otherwise.
