@@ -432,6 +432,26 @@ See the COPYING file for details.
     assertObjectEquals({a: 1, b: 2}, responseData);
   }
 
+  function testSendWithClientException() {
+    var stubXhr = setupStubXMLHttpRequest();
+    stubXhr.send = function(data) {
+      throw new Error('CORS XHR with file:// schemas not allowed.');
+    };
+    var err;
+    var result = xhr.send('POST', 'file://test-url', null);
+    goog.result.waitOnSuccess(result, fail);
+    goog.result.waitOnError(result, function(result) {
+      err = result.getError();
+    });
+
+    stubXhr.load(0);
+
+    assertFalse('XHR should not have been sent', stubXhr.sent);
+    assertTrue(err instanceof Error);
+    assertTrue(
+        /CORS XHR with file:\/\/ schemas not allowed./.test(err.message));
+  }
+
 </script>
 </body>
 </html>

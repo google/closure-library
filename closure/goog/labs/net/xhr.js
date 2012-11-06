@@ -292,6 +292,8 @@ _.makeRequest = function(
   } catch (e) {
     // XMLHttpRequest.send is known to throw on some versions of FF, for example
     // if a cross-origin request is disallowed.
+    xhr.onreadystatechange = goog.nullFunction;
+    window.clearTimeout(timer);
     errback(new _.Error('Error sending XHR: ' + e.message, url, xhr));
   }
 
