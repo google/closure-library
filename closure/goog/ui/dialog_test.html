@@ -135,23 +135,37 @@ See the COPYING file for details.
   }
 
   function testEnterKeyDoesNothingOnSpecialFormElements() {
-    dialog.setContent('<textarea>Hello dialog</textarea>');
-    var textarea = dialog.getContentElement().
-        getElementsByTagName('TEXTAREA')[0];
+    checkEnterKeyDoesNothingOnSpecialFormElement(
+        '<textarea>Hello dialog</textarea>',
+        'TEXTAREA');
+
+    checkEnterKeyDoesNothingOnSpecialFormElement(
+        '<Select>Selection</select>',
+        'SELECT');
+
+    checkEnterKeyDoesNothingOnSpecialFormElement(
+        '<a href="http://google.com">Hello dialog</a>',
+        'A');
+  }
+
+  function checkEnterKeyDoesNothingOnSpecialFormElement(content, tagName) {
+    dialog.setContent(content);
+    var formElement = dialog.getContentElement().
+        getElementsByTagName(tagName)[0];
     var wasCalled = false;
     var callRecorder = function() {
       wasCalled = true;
     };
     goog.events.listen(dialog, goog.ui.Dialog.EventType.SELECT, callRecorder);
 
-    // Enter does not fire on the enabled textarea.
-    goog.testing.events.fireKeySequence(textarea,
+    // Enter does not fire on the enabled form element.
+    goog.testing.events.fireKeySequence(formElement,
         goog.events.KeyCodes.ENTER);
     assertFalse(wasCalled);
 
-    // Enter fires on the disabled textarea.
-    textarea.disabled = true;
-    goog.testing.events.fireKeySequence(textarea,
+    // Enter fires on the disabled form element.
+    formElement.disabled = true;
+    goog.testing.events.fireKeySequence(formElement,
         goog.events.KeyCodes.ENTER);
     assertTrue(wasCalled);
   }

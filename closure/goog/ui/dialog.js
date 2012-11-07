@@ -35,7 +35,9 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.a11y');
+goog.require('goog.dom.a11y.Role');
 goog.require('goog.dom.classes');
+goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -1019,10 +1021,10 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
       var defaultKey = buttonSet.getDefault();
       var defaultButton = defaultKey && buttonSet.getButton(defaultKey);
 
-      // Users may expect to hit enter on a TEXTAREA or a SELECT element.
+      // Users may expect to hit enter on a TEXTAREA, SELECT or an A element.
       var isSpecialFormElement =
-          (target.tagName == 'TEXTAREA' || target.tagName == 'SELECT') &&
-          !target.disabled;
+          (target.tagName == 'TEXTAREA' || target.tagName == 'SELECT' ||
+           target.tagName == 'A') && !target.disabled;
 
       if (defaultButton && !defaultButton.disabled && !isSpecialFormElement) {
         key = defaultKey;
