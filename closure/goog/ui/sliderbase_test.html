@@ -684,6 +684,94 @@ function testValueFromMousePosition() {
       value, Math.round(oneThumbSlider.getValueFromMousePosition(e)));
 }
 
+/**
+ * Tests dragging events.
+ */
+function testDragEvents() {
+  var offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  var size = goog.style.getSize(oneThumbSlider.valueThumb);
+  offset.x += size.width / 2;
+  offset.y += size.height / 2;
+  var event_types = [];
+  var handler = function(evt) {
+    event_types.push(evt.type);
+  }
+
+  goog.events.listen(oneThumbSlider,
+      [goog.ui.SliderBase.EventType.DRAG_START,
+      goog.ui.SliderBase.EventType.DRAG_END,
+      goog.ui.SliderBase.EventType.DRAG_VALUE_START,
+      goog.ui.SliderBase.EventType.DRAG_VALUE_END,
+      goog.ui.SliderBase.EventType.DRAG_EXTENT_START,
+      goog.ui.SliderBase.EventType.DRAG_EXTENT_END,
+      goog.ui.Component.EventType.CHANGE],
+      handler);
+
+  // Since the order of the events between value and extent is not guaranteed
+  // accross browsers, we need to allow for both here and once we have
+  // them all, make sure that they were different.
+  function isValueOrExtentDragStart(type) {
+    return type == goog.ui.SliderBase.EventType.DRAG_VALUE_START ||
+        type == goog.ui.SliderBase.EventType.DRAG_EXTENT_START;
+  };
+  function isValueOrExtentDragEnd(type) {
+    return type == goog.ui.SliderBase.EventType.DRAG_VALUE_END ||
+        type == goog.ui.SliderBase.EventType.DRAG_EXTENT_END;
+  };
+
+  // Test that dragging the thumb calls all the correct events.
+  goog.testing.events.fireMouseDownEvent(oneThumbSlider.valueThumb);
+  offset.x += 100;
+  goog.testing.events.fireMouseMoveEvent(oneThumbSlider.valueThumb, offset);
+  goog.testing.events.fireMouseUpEvent(oneThumbSlider.valueThumb);
+
+  assertEquals(9, event_types.length);
+
+  assertEquals(goog.ui.SliderBase.EventType.DRAG_START, event_types[0]);
+  assertTrue(isValueOrExtentDragStart(event_types[1]));
+
+  assertEquals(goog.ui.SliderBase.EventType.DRAG_START, event_types[2]);
+  assertTrue(isValueOrExtentDragStart(event_types[3]));
+
+  assertEquals(goog.ui.Component.EventType.CHANGE, event_types[4]);
+
+  assertEquals(goog.ui.SliderBase.EventType.DRAG_END, event_types[5]);
+  assertTrue(isValueOrExtentDragEnd(event_types[6]));
+
+  assertEquals(goog.ui.SliderBase.EventType.DRAG_END, event_types[7]);
+  assertTrue(isValueOrExtentDragEnd(event_types[8]));
+
+  assertFalse(event_types[1] == event_types[3]);
+  assertFalse(event_types[6] == event_types[8]);
+
+  // Test that clicking the thumb without moving the mouse does not cause a
+  // CHANGE event between DRAG_START/DRAG_END.
+  event_types = [];
+  goog.testing.events.fireMouseDownEvent(oneThumbSlider.valueThumb);
+  goog.testing.events.fireMouseUpEvent(oneThumbSlider.valueThumb);
+
+  assertEquals(8, event_types.length);
+
+  assertEquals(goog.ui.SliderBase.EventType.DRAG_START, event_types[0]);
+  assertTrue(isValueOrExtentDragStart(event_types[1]));
+
+  assertEquals(goog.ui.SliderBase.EventType.DRAG_START, event_types[2]);
+  assertTrue(isValueOrExtentDragStart(event_types[3]));
+
+  assertEquals(goog.ui.SliderBase.EventType.DRAG_END, event_types[4]);
+  assertTrue(isValueOrExtentDragEnd(event_types[5]));
+
+  assertEquals(goog.ui.SliderBase.EventType.DRAG_END, event_types[6]);
+  assertTrue(isValueOrExtentDragEnd(event_types[7]));
+
+  assertFalse(event_types[1] == event_types[3]);
+  assertFalse(event_types[5] == event_types[7]);
+
+  // Early listener removal, do not wait for tearDown, to avoid building up
+  // arrays of events unnecessarilly in further tests.
+  goog.events.removeAll(oneThumbSlider);
+}
+
 </script>
 </body>
 </html>

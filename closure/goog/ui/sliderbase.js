@@ -90,6 +90,33 @@ goog.inherits(goog.ui.SliderBase, goog.ui.Component);
 
 
 /**
+ * Event types used to listen for dragging events. Note that extent drag events
+ * are also sent for single-thumb sliders, since the one thumb controls both
+ * value and extent together; in this case, they can simply be ignored.
+ * @enum {string}
+ */
+goog.ui.SliderBase.EventType = {
+  /** User started dragging the value thumb */
+  DRAG_VALUE_START: goog.events.getUniqueId('dragvaluestart'),
+  /** User is done dragging the value thumb */
+  DRAG_VALUE_END: goog.events.getUniqueId('dragvalueend'),
+  /** User started dragging the extent thumb */
+  DRAG_EXTENT_START: goog.events.getUniqueId('dragextentstart'),
+  /** User is done dragging the extent thumb */
+  DRAG_EXTENT_END: goog.events.getUniqueId('dragextentend'),
+  // Note that the following two events are sent twice, once for the value
+  // dragger, and once of the extent dragger. If you need to differentiate
+  // between the two, or if your code relies on receiving a single event per
+  // START/END event, it should listen to one of the VALUE/EXTENT-specific
+  // events.
+  /** User started dragging a thumb */
+  DRAG_START: goog.events.getUniqueId('dragstart'),
+  /** User is done dragging a thumb */
+  DRAG_END: goog.events.getUniqueId('dragend')
+};
+
+
+/**
  * Enum for representing the orientation of the slider.
  *
  * @enum {string}
@@ -460,11 +487,23 @@ goog.ui.SliderBase.prototype.handleBeforeDrag_ = function(e) {
  * @private
  */
 goog.ui.SliderBase.prototype.handleThumbDragStartEnd_ = function(e) {
-  var enable = e.type == goog.fx.Dragger.EventType.START;
+  var isDragStart = e.type == goog.fx.Dragger.EventType.START;
   goog.dom.classes.enable(this.getElement(),
-      goog.ui.SliderBase.SLIDER_DRAGGING_CSS_CLASS_, enable);
+      goog.ui.SliderBase.SLIDER_DRAGGING_CSS_CLASS_, isDragStart);
   goog.dom.classes.enable(e.target.handle,
-      goog.ui.SliderBase.THUMB_DRAGGING_CSS_CLASS_, enable);
+      goog.ui.SliderBase.THUMB_DRAGGING_CSS_CLASS_, isDragStart);
+  var isValueDragger = e.dragger == this.valueDragger_;
+  if (isDragStart) {
+    this.dispatchEvent(goog.ui.SliderBase.EventType.DRAG_START);
+    this.dispatchEvent(isValueDragger ?
+        goog.ui.SliderBase.EventType.DRAG_VALUE_START :
+        goog.ui.SliderBase.EventType.DRAG_EXTENT_START);
+  } else {
+    this.dispatchEvent(goog.ui.SliderBase.EventType.DRAG_END);
+    this.dispatchEvent(isValueDragger ?
+        goog.ui.SliderBase.EventType.DRAG_VALUE_END :
+        goog.ui.SliderBase.EventType.DRAG_EXTENT_END);
+  }
 };
 
 
@@ -730,6 +769,18 @@ goog.ui.SliderBase.prototype.getThumbPosition_ = function(thumb) {
   } else {
     throw Error('Illegal thumb element. Neither minThumb nor maxThumb');
   }
+};
+
+
+/**
+ * Returns whether a thumb is currently being dragged with the mouse (or via
+ * touch). Note that changing the value with keyboard, mouswheel, or via
+ * move-to-point click immediately sends a CHANGE event without going through a
+ * dragged state.
+ * @return {boolean} Whether a dragger is currently being dragged.
+ */
+goog.ui.SliderBase.prototype.isDragging = function() {
+  return this.valueDragger_.isDragging() || this.extentDragger_.isDragging();
 };
 
 
