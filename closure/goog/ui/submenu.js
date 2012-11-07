@@ -62,12 +62,10 @@ goog.inherits(goog.ui.SubMenu, goog.ui.MenuItem);
 
 
 /**
- * The delay before opening the sub menu in milliseconds.  (This number is
- * arbitrary, it would be good to get some user studies or a designer to play
- * with some numbers).
+ * The delay before opening the sub menu in milliseconds.
  * @type {number}
  */
-goog.ui.SubMenu.MENU_DELAY_MS = 350;
+goog.ui.SubMenu.MENU_DELAY_MS = 218;
 
 
 /**
