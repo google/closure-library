@@ -1013,10 +1013,7 @@ goog.editor.Field.MUTATION_EVENTS_GECKO = [
  * @protected
  */
 goog.editor.Field.prototype.setupMutationEventHandlersGecko = function() {
-  // Always use DOMSubtreeModified on Gecko when not using an iframe so that
-  // DOM mutations outside the Field do not trigger handleMutationEventGecko_.
-  if (goog.editor.BrowserFeature.HAS_DOM_SUBTREE_MODIFIED_EVENT ||
-      !this.usesIframe()) {
+  if (goog.editor.BrowserFeature.HAS_DOM_SUBTREE_MODIFIED_EVENT) {
     this.eventRegister.listen(this.getElement(), 'DOMSubtreeModified',
         this.handleMutationEventGecko_);
   } else {
