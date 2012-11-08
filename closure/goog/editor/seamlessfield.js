@@ -174,6 +174,7 @@ goog.editor.SeamlessField.prototype.handleOuterDocChange_ = function() {
  */
 goog.editor.SeamlessField.prototype.sizeIframeToBodyHeightGecko_ = function() {
   if (this.acquireSizeIframeLockGecko_()) {
+    var resized = false;
     var ifr = this.getEditableIframe();
     if (ifr) {
       var fieldHeight = this.getIframeBodyHeightGecko_();
@@ -183,9 +184,13 @@ goog.editor.SeamlessField.prototype.sizeIframeToBodyHeightGecko_ = function() {
       }
       if (parseInt(goog.style.getStyle(ifr, 'height'), 10) != fieldHeight) {
         ifr.style.height = fieldHeight + 'px';
+        resized = true;
       }
     }
     this.releaseSizeIframeLockGecko_();
+    if (resized) {
+      this.dispatchEvent(goog.editor.Field.EventType.IFRAME_RESIZED);
+    }
   }
 };
 
@@ -260,6 +265,7 @@ goog.editor.SeamlessField.prototype.sizeIframeToWrapperGecko_ = function() {
   if (this.acquireSizeIframeLockGecko_()) {
     var ifr = this.getEditableIframe();
     var field = this.getElement();
+    var resized = false;
     if (ifr && field) {
       var fieldPaddingBox;
       var widthDiv = ifr.parentNode;
@@ -270,6 +276,7 @@ goog.editor.SeamlessField.prototype.sizeIframeToWrapperGecko_ = function() {
         ifr.style.width = width + 'px';
         field.style.width =
             width - fieldPaddingBox.left - fieldPaddingBox.right + 'px';
+        resized = true;
       }
 
       var height = widthDiv.offsetHeight;
@@ -281,9 +288,14 @@ goog.editor.SeamlessField.prototype.sizeIframeToWrapperGecko_ = function() {
         ifr.style.height = height + 'px';
         field.style.height =
             height - fieldPaddingBox.top - fieldPaddingBox.bottom + 'px';
+        resized = true;
       }
+
     }
     this.releaseSizeIframeLockGecko_();
+    if (resized) {
+      this.dispatchEvent(goog.editor.Field.EventType.IFRAME_RESIZED);
+    }
   }
 };
 

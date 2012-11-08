@@ -148,6 +148,79 @@ function testIframeHeightGrowsOnWrap() {
   }
 }
 
+function testDispatchIframeResizedForWrapperHeight() {
+  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+    var clock = new goog.testing.MockClock(true);
+    var blendedField = initSeamlessField('Hi!', {'border': '2px 5px'});
+    var iframe = createSeamlessIframe();
+    blendedField.attachIframe(iframe);
+
+    var resizeCalled = false;
+    goog.events.listenOnce(
+        blendedField,
+        goog.editor.Field.EventType.IFRAME_RESIZED,
+        function() {
+          resizeCalled = true;
+        });
+
+    try {
+      blendedField.makeEditable();
+      blendedField.setHtml(false, 'Content that should wrap after resize.');
+
+      // Ensure that the field was fully loaded and sized before measuring.
+      clock.tick(1);
+
+      assertFalse('Iframe resize must not be dispatched yet', resizeCalled);
+
+      // Resize the field such that the text should wrap.
+      fieldElem.style.width = '200px';
+      blendedField.sizeIframeToWrapperGecko_();
+      assertTrue('Iframe resize must be dispatched for Wrapper', resizeCalled);
+    } finally {
+      blendedField.dispose();
+      clock.dispose();
+    }
+  }
+}
+
+function testDispatchIframeResizedForBodyHeight() {
+  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+    var clock = new goog.testing.MockClock(true);
+    var blendedField = initSeamlessField('Hi!', {'border': '2px 5px'});
+    var iframe = createSeamlessIframe();
+    blendedField.attachIframe(iframe);
+
+    var resizeCalled = false;
+    goog.events.listenOnce(
+        blendedField,
+        goog.editor.Field.EventType.IFRAME_RESIZED,
+        function() {
+          resizeCalled = true;
+        });
+
+    try {
+      blendedField.makeEditable();
+      blendedField.setHtml(false, 'Content that should wrap after resize.');
+
+      // Ensure that the field was fully loaded and sized before measuring.
+      clock.tick(1);
+
+      assertFalse('Iframe resize must not be dispatched yet', resizeCalled);
+
+      // Resize the field to a different body height.
+      var bodyHeight = blendedField.getIframeBodyHeightGecko_();
+      blendedField.getIframeBodyHeightGecko_ = function() {
+        return bodyHeight + 1;
+      };
+      blendedField.sizeIframeToBodyHeightGecko_();
+      assertTrue('Iframe resize must be dispatched for Body', resizeCalled);
+    } finally {
+      blendedField.dispose();
+      clock.dispose();
+    }
+  }
+}
+
 function testDispatchBlur() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE &&
       !goog.editor.BrowserFeature.CLEARS_SELECTION_WHEN_FOCUS_LEAVES) {
