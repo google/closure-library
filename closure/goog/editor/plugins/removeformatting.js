@@ -185,9 +185,16 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormatting_ = function() {
  * @return {Node} The table, or null if one was not found.
  * @private
  */
-goog.editor.plugins.RemoveFormatting.getTableAncestor_ = function(nodeToCheck) {
-  return goog.dom.getAncestor(nodeToCheck,
-      function(node) { return node.tagName == goog.dom.TagName.TABLE; }, true);
+goog.editor.plugins.RemoveFormatting.prototype.getTableAncestor_ = function(
+    nodeToCheck) {
+  var fieldElement = this.getFieldObject().getElement();
+  while (nodeToCheck && nodeToCheck != fieldElement) {
+    if (nodeToCheck.tagName == goog.dom.TagName.TABLE) {
+      return nodeToCheck;
+    }
+    nodeToCheck = nodeToCheck.parentNode;
+  }
+  return null;
 };
 
 
@@ -495,10 +502,8 @@ goog.editor.plugins.RemoveFormatting.prototype.convertSelectedHtmlText_ =
     var expandedRange = goog.editor.range.expand(range,
         this.getFieldObject().getElement());
 
-    var startInTable = goog.editor.plugins.RemoveFormatting.getTableAncestor_(
-        expandedRange.getStartNode());
-    var endInTable = goog.editor.plugins.RemoveFormatting.getTableAncestor_(
-        expandedRange.getEndNode());
+    var startInTable = this.getTableAncestor_(expandedRange.getStartNode());
+    var endInTable = this.getTableAncestor_(expandedRange.getEndNode());
 
     if (startInTable || endInTable) {
       if (startInTable == endInTable) {
