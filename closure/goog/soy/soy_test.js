@@ -20,8 +20,17 @@ goog.provide('goog.soy.testHelper');
 goog.setTestOnly('goog.soy.testHelper');
 
 goog.require('goog.dom');
+goog.require('goog.soy.data.SanitizedContent');
+goog.require('goog.soy.data.SanitizedContentKind');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+
+
+function makeSanitizedContent(content, kind) {
+  var result = new goog.soy.data.SanitizedContent(content);
+  result.contentKind = kind;
+  return result;
+}
 
 
 
@@ -66,6 +75,44 @@ example.noDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
   assertNotNull(opt_data);
   assertNotUndefined(opt_data);
   return '<div>Hello</div>';
+};
+
+
+example.sanitizedHtmlTemplate = function(opt_data, opt_sb, opt_injectedData) {
+  // Test the SanitizedContent constructor.
+  return makeSanitizedContent('Hello World',
+      goog.soy.data.SanitizedContentKind.HTML);
+};
+
+
+example.sanitizedHtmlAttributeTemplate =
+    function(opt_data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent('Hello World',
+      goog.soy.data.SanitizedContentKind.HTML_ATTRIBUTE);
+};
+
+
+example.sanitizedCssTemplate =
+    function(opt_data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent('display:none',
+      goog.soy.data.SanitizedContentKind.CSS);
+};
+
+
+example.unsanitizedTextTemplate =
+    function(opt_data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent('Hello World',
+      goog.soy.data.SanitizedContentKind.TEXT);
+};
+
+
+example.templateSpoofingSanitizedContentString =
+    function(opt_data, opt_sb, opt_injectedData) {
+  return makeSanitizedContent('Hello World',
+    // This is to ensure we're using triple-equals against a unique Javascript
+    // object.  For example, in Javascript, consider ({}) == '[Object object]'
+    // is true.
+    goog.soy.data.SanitizedContentKind.HTML.toString());
 };
 
 

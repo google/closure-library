@@ -15,15 +15,27 @@ See the COPYING file for details.
   <script>
     goog.require('goog.dom');
     goog.require('goog.dom.TagName');
+    goog.require('goog.functions');
     goog.require('goog.soy');
+    goog.require('goog.soy.data');
     goog.require('goog.soy.testHelper');
     goog.require('goog.string');
+    goog.require('goog.testing.PropertyReplacer');
     goog.require('goog.testing.jsunit');
   </script>
 </head>
 <body>
 <script>
 
+var stubs;
+
+function setUp() {
+  stubs = new goog.testing.PropertyReplacer();
+}
+
+function tearDown() {
+  stubs.reset();
+}
 
 function testRenderElement() {
   var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
@@ -114,6 +126,72 @@ function testRenderAsElementMultiRoot() {
 function testRenderAsElementWithNoData() {
   var elem = goog.soy.renderAsElement(example.noDataTemplate);
   assertEquals('Hello', elementToInnerHtml(elem));
+}
+
+/**
+ * Asserts that the function throws an error for unsafe templates.
+ * @param {Function} function Callback to test.
+ */
+function assertUnsafeTemplateOutputErrorThrown(func) {
+  stubs.set(goog.asserts, 'ENABLE_ASSERTS', true);
+  assertContains('Soy template output is unsafe for use as HTML',
+      assertThrows(func).message);
+  stubs.set(goog.asserts, 'ENABLE_ASSERTS', false);
+  assertEquals('zSoyz', func());
+}
+
+function testRejectUnsanitizedText() {
+  assertUnsafeTemplateOutputErrorThrown(function() {
+    var div = goog.dom.createElement(goog.dom.TagName.DIV);
+    goog.soy.renderElement(div,
+        example.unsanitizedTextTemplate);
+    return div.innerHTML;
+  });
+  assertUnsafeTemplateOutputErrorThrown(function() {
+    // This will render to a text node containing only zSoyz.
+    var fragment = goog.soy.renderAsFragment(example.unsanitizedTextTemplate);
+    return fragment.nodeValue;
+  });
+  assertUnsafeTemplateOutputErrorThrown(function() {
+    return goog.soy.renderAsElement(example.unsanitizedTextTemplate).innerHTML;
+  });
+}
+
+function testRejectSanitizedCss() {
+  assertUnsafeTemplateOutputErrorThrown(function() {
+    goog.soy.renderAsElement(example.sanitizedCssTemplate);
+  });
+}
+
+function testRejectSanitizedCss() {
+  assertUnsafeTemplateOutputErrorThrown(function() {
+    return goog.soy.renderAsElement(
+        example.templateSpoofingSanitizedContentString).innerHTML;
+  });
+}
+
+function testRejectStringTemplatesWhenModeIsSet() {
+  stubs.set(goog.soy, 'REQUIRE_STRICT_AUTOESCAPE', true);
+  assertUnsafeTemplateOutputErrorThrown(function() {
+    return goog.soy.renderAsElement(example.noDataTemplate).innerHTML;
+  });
+}
+
+function testAcceptSanitizedHtml() {
+  assertEquals('Hello World', goog.dom.getTextContent(
+      goog.soy.renderAsElement(example.sanitizedHtmlTemplate)));
+}
+
+function testAcceptSanitizedHtmlAttribute() {
+  assertEquals('Hello World', goog.dom.getTextContent(
+      goog.soy.renderAsElement(example.sanitizedHtmlAttributeTemplate)));
+}
+
+function testAcceptNonObject() {
+  // Some templates, or things that spoof templates in unit tests, might return
+  // non-strings in unusual cases.
+  assertEquals('null', goog.dom.getTextContent(
+      goog.soy.renderAsElement(goog.functions.constant(null))));
 }
 
 </script>
