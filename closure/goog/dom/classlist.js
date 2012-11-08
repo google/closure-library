@@ -135,6 +135,33 @@ goog.dom.classlist.remove = goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ ?
 
 
 /**
+ * Removes a set of classes from an element.  Prefer this call to
+ * repeatedly calling {@code goog.dom.classlist.remove} if you want to remove
+ * a large set of class names at once.
+ * @param {Element} element The element from which to remove classes.
+ * @param {goog.array.ArrayLike.<string>} classesToRemove An array-like object
+ * containing a collection of class names to remove from the element.
+ * This method may throw a DOM exception if classNames contains invalid
+ * or empty class names.
+ */
+goog.dom.classlist.removeAll = goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ ?
+    function(element, classesToRemove) {
+      goog.array.forEach(classesToRemove,
+          goog.partial(goog.dom.classlist.remove, element));
+    } :
+    function(element, classesToRemove) {
+      // Filter out those classes in classesToRemove.
+      element.className = goog.array.filter(
+          goog.dom.classlist.get(element),
+          function(className) {
+            // If this class is not one we are trying to remove,
+            // add it to the array of new class names.
+            return !goog.array.contains(classesToRemove, className);
+          }).join(' ');
+    };
+
+
+/**
  * Adds or removes a class depending on the enabled argument.  This method
  * may throw a DOM exception for an invalid or empty class name if DOMTokenList
  * is used.

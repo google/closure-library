@@ -93,6 +93,46 @@ function testRemoveCaseSensitive() {
   assertEquals('A B C', el.className);
 }
 
+function testRemoveAll() {
+  var elem = document.createElement('div');
+  elem.className = 'foo bar baz';
+
+  goog.dom.classlist.removeAll(elem, ['bar', 'foo']);
+  assertFalse(goog.dom.classlist.contains(elem, 'foo'));
+  assertFalse(goog.dom.classlist.contains(elem, 'bar'));
+  assertTrue(goog.dom.classlist.contains(elem, 'baz'));
+}
+
+function testRemoveAllOne() {
+  var elem = document.createElement('div');
+  elem.className = 'foo bar baz';
+
+  goog.dom.classlist.removeAll(elem, ['bar']);
+  assertFalse(goog.dom.classlist.contains(elem, 'bar'));
+  assertTrue(goog.dom.classlist.contains(elem, 'foo'));
+  assertTrue(goog.dom.classlist.contains(elem, 'baz'));
+}
+
+function testRemoveAllSomeNotPresent() {
+  var elem = document.createElement('div');
+  elem.className = 'foo bar baz';
+
+  goog.dom.classlist.removeAll(elem, ['a', 'bar']);
+  assertTrue(goog.dom.classlist.contains(elem, 'foo'));
+  assertFalse(goog.dom.classlist.contains(elem, 'bar'));
+  assertTrue(goog.dom.classlist.contains(elem, 'baz'));
+}
+
+function testRemoveAllCaseSensitive() {
+  var elem = document.createElement('div');
+  elem.className = 'foo bar baz';
+
+  goog.dom.classlist.removeAll(elem, ['BAR', 'foo']);
+  assertFalse(goog.dom.classlist.contains(elem, 'foo'));
+  assertTrue(goog.dom.classlist.contains(elem, 'bar'));
+  assertTrue(goog.dom.classlist.contains(elem, 'baz'));
+}
+
 function testEnable() {
   var el = goog.dom.getElement('p1');
   classlist.set(el, 'SOMECLASS FIRST');
