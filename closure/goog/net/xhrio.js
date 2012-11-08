@@ -149,7 +149,7 @@ goog.net.XhrIo.sendInstances_ = [];
  * @param {Function=} opt_callback Callback function for when request is
  *     complete.
  * @param {string=} opt_method Send method, default: GET.
- * @param {string|FormData|GearsBlob=} opt_content
+ * @param {ArrayBuffer|Blob|Document|FormData|GearsBlob|string=} opt_content
  *     Post data. This can be a Gears blob if the underlying HTTP request object
  *     is a Gears HTTP request.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
@@ -441,7 +441,7 @@ goog.net.XhrIo.prototype.getWithCredentials = function() {
  * Instance send that actually uses XMLHttpRequest to make a server call.
  * @param {string|goog.Uri} url Uri to make request to.
  * @param {string=} opt_method Send method, default: GET.
- * @param {string|FormData|GearsBlob=} opt_content
+ * @param {ArrayBuffer|Blob|Document|FormData|GearsBlob|string=} opt_content
  *     Post data. This can be a Gears blob if the underlying HTTP request object
  *     is a Gears HTTP request.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the

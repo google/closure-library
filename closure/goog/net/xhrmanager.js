@@ -169,7 +169,7 @@ goog.net.XhrManager.prototype.getOutstandingRequestIds = function() {
  * @param {string} id The id of the request.
  * @param {string} url Uri to make the request too.
  * @param {string=} opt_method Send method, default: GET.
- * @param {string=} opt_content Post data.
+ * @param {ArrayBuffer|Blob|Document|FormData|string=} opt_content Post data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  * @param {*=} opt_priority The priority of the request. A smaller value means a
@@ -544,7 +544,7 @@ goog.net.XhrManager.Event.prototype.disposeInternal = function() {
  * @param {Function} xhrEventCallback Callback attached to the events of the
  *     XhrIo object of the request.
  * @param {string=} opt_method Send method, default: GET.
- * @param {string=} opt_content Post data.
+ * @param {ArrayBuffer|Blob|Document|FormData|string=} opt_content Post data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  * @param {Function=} opt_callback Callback function for when request is
@@ -577,7 +577,7 @@ goog.net.XhrManager.Request = function(url, xhrEventCallback, opt_method,
 
   /**
    * Post data.
-   * @type {string|undefined}
+   * @type {ArrayBuffer|Blob|Document|FormData|string|undefined}
    * @private
    */
   this.content_ = opt_content;
@@ -668,7 +668,8 @@ goog.net.XhrManager.Request.prototype.getMethod = function() {
 
 /**
  * Gets the post data.
- * @return {string|undefined} The post data.
+ * @return {ArrayBuffer|Blob|Document|FormData|string|undefined}
+ *     The post data.
  */
 goog.net.XhrManager.Request.prototype.getContent = function() {
   return this.content_;
