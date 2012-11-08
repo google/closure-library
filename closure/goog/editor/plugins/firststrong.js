@@ -177,7 +177,7 @@ goog.editor.plugins.FirstStrong.prototype.getBlockAncestor_ = function() {
   while (!goog.editor.plugins.FirstStrong.isBlock_(start)) {
     start = start.parentNode;
   }
-  return /** @type {Element} */ start;
+  return /** @type {Element} */ (start);
 };
 
 
