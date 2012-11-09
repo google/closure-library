@@ -647,7 +647,7 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
     // Pretty conservative, these are the only known scenarios which we'd
     // consider indicative of a truly non-functional network connection.
     if (errorCode == goog.net.ErrorCode.TIMEOUT ||
-        (errorCode == goog.net.ErrorCode.HTTP_ERROR && statusCode <= 0)) {
+        statusCode <= 0) {
       this.channel_.notifyServerReachabilityEvent(
           goog.net.BrowserChannel.ServerReachability.REQUEST_FAILED);
     } else {
