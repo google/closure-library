@@ -43,6 +43,15 @@ goog.soy.data.SanitizedContentKind = {
   HTML: goog.DEBUG ? {sanitizedContentKindHtml: true} : {},
 
   /**
+   * Executable Javascript code or expression, safe for insertion in a
+   * script-tag or event handler context, known to be free of any
+   * attacker-controlled scripts. This can either be side-effect-free
+   * Javascript (such as JSON) or Javascript that entirely under Google's
+   * control.
+   */
+  JS: goog.DEBUG ? {sanitizedContentJsStrChars: true} : {},
+
+  /**
    * A sequence of code units that can appear between quotes (either kind) in a
    * JS program without causing a parse error, and without causing any side
    * effects.
