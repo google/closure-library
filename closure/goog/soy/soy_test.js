@@ -26,26 +26,10 @@ goog.require('goog.string');
 goog.require('goog.userAgent');
 
 
-/**
- * Instantiable subclass of SanitizedContent.
- *
- * This is a spoof for sanitized content that isn't robust enough to get
- * through Soy's escaping functions but is good enough for the checks here.
- *
- * @param {string} content The text.
- * @param {goog.soy.data.SanitizedContentKind} kind The kind of safe content.
- * @extends {goog.soy.data.SanitizedContent}
- */
-function SanitizedContentSubclass(content, kind) {
-  // IMPORTANT! No superclass chaining to avoid exception being thrown.
-  this.content = content;
-  this.contentKind = kind;
-};
-goog.inherits(SanitizedContentSubclass, goog.soy.data.SanitizedContent);
-
-
 function makeSanitizedContent(content, kind) {
-  return new SanitizedContentSubclass(content, kind);
+  var result = new goog.soy.data.SanitizedContent(content);
+  result.contentKind = kind;
+  return result;
 }
 
 
