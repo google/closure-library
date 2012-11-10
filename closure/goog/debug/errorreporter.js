@@ -257,7 +257,7 @@ goog.debug.ErrorReporter.prototype.setup_ = function() {
  */
 goog.debug.ErrorReporter.prototype.handleException = function(e,
     opt_context) {
-  var error = (/** @type {!Error} */ goog.debug.normalizeErrorObject(e));
+  var error = /** @type {!Error} */ (goog.debug.normalizeErrorObject(e));
 
   // Construct the context, possibly from the one provided in the argument, and
   // pass it to the context provider if there is one.
