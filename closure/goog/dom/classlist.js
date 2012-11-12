@@ -146,8 +146,9 @@ goog.dom.classlist.remove = goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ ?
  */
 goog.dom.classlist.removeAll = goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ ?
     function(element, classesToRemove) {
-      goog.array.forEach(classesToRemove,
-          goog.partial(goog.dom.classlist.remove, element));
+      goog.array.forEach(classesToRemove, function(className) {
+        goog.dom.classlist.remove(element, className);
+      });
     } :
     function(element, classesToRemove) {
       // Filter out those classes in classesToRemove.
