@@ -598,7 +598,10 @@ goog.testing.TestCase.prototype.orderTests_ = function(tests) {
 /**
  * Gets the object with all globals.
  * @param {string=} opt_prefix An optional prefix. If specified, only get things
- *     under this prefix.
+ *     under this prefix. Note that the prefix is only honored in IE, since it
+ *     supports the RuntimeObject:
+ *     http://msdn.microsoft.com/en-us/library/ff521039%28VS.85%29.aspx
+ *     TODO: Fix this method to honor the prefix in all browsers.
  * @return {Object} An object with all globals starting with the prefix.
  */
 goog.testing.TestCase.prototype.getGlobals = function(opt_prefix) {
@@ -609,7 +612,10 @@ goog.testing.TestCase.prototype.getGlobals = function(opt_prefix) {
 /**
  * Gets the object with all globals.
  * @param {string=} opt_prefix An optional prefix. If specified, only get things
- *     under this prefix.
+ *     under this prefix. Note that the prefix is only honored in IE, since it
+ *     supports the RuntimeObject:
+ *     http://msdn.microsoft.com/en-us/library/ff521039%28VS.85%29.aspx
+ *     TODO: Fix this method to honor the prefix in all browsers.
  * @return {Object} An object with all globals starting with the prefix.
  */
 goog.testing.TestCase.getGlobals = function(opt_prefix) {
