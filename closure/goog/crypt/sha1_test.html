@@ -21,24 +21,22 @@ See the COPYING file for details.
 <body>
 <script>
 
-/**
- * Helper function to convert a byte array to a hex string
- */
-
 function testBasicOperations() {
   var sha1 = new goog.crypt.Sha1();
   goog.crypt.hash_test.runBasicTests(sha1);
 }
 
+function testBlockOperations() {
+  var sha1 = new goog.crypt.Sha1();
+  goog.crypt.hash_test.runBlockTests(sha1, 64);
+}
+
 function testHashing() {
+  // Test vectors from:
+  // csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf
+
   // Empty stream.
   var sha1 = new goog.crypt.Sha1();
-  assertEquals('da39a3ee5e6b4b0d3255bfef95601890afd80709',
-               goog.crypt.byteArrayToHex(sha1.digest()));
-
-  // Empty stream with an empty update.
-  sha1.reset();
-  sha1.update([]);
   assertEquals('da39a3ee5e6b4b0d3255bfef95601890afd80709',
                goog.crypt.byteArrayToHex(sha1.digest()));
 

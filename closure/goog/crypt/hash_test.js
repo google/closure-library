@@ -20,55 +20,29 @@
 goog.provide('goog.crypt.hash_test');
 
 goog.require('goog.array');
+goog.require('goog.crypt');
 goog.require('goog.testing.asserts');
 goog.setTestOnly('hash_test');
 
 
 goog.crypt.hash_test.runBasicTests = function(hash) {
-  // Compute some hash.
+  // Compute first hash.
   hash.update([97, 158]);
-  var golden = hash.digest();
+  var golden1 = hash.digest();
 
-  // Recompute the hash.
-  hash.reset();
-  hash.update([97, 158]);
-  assertArrayEquals('The reset did not produce the initial state',
-      golden, hash.digest());
-
-  // Check for a trivial collision.
-  hash.reset();
-  hash.update([158, 97]);
-  assertTrue('Swapping bytes resulted in a hash collision',
-      !!goog.testing.asserts.findDifferences(golden, hash.digest()));
-
-  // Compute in parts.
-  hash.reset();
-  hash.update([97]);
-  hash.update([158]);
-  assertArrayEquals('Partial updates resulted in a different hash',
-      golden, hash.digest());
-
-  // Test update with specified length.
-  hash.reset();
-  hash.update([97, 158], 0);
-  hash.update([97, 158, 32], 2);
-  assertArrayEquals('Updating with an explicit buffer length did not work',
-      golden, hash.digest());
-
-  // Test array and string inputs.
-  hash.reset();
-  hash.update([97, 66]);
-  golden = hash.digest();
+  // Compute second hash.
   hash.reset();
   hash.update('aB');
-  assertArrayEquals('String and array inputs should give the same result',
-      golden, hash.digest());
+  var golden2 = hash.digest();
+  assertTrue('Two different inputs resulted in a hash collision',
+      !!goog.testing.asserts.findDifferences(golden1, golden2));
 
   // Empty hash.
   hash.reset();
   var empty = hash.digest();
   assertTrue('Empty hash collided with a non-trivial one',
-      !!goog.testing.asserts.findDifferences(golden, empty));
+      !!goog.testing.asserts.findDifferences(golden1, empty) &&
+      !!goog.testing.asserts.findDifferences(golden2, empty));
 
   // Zero-length array update.
   hash.reset();
@@ -81,20 +55,110 @@ goog.crypt.hash_test.runBasicTests = function(hash) {
   hash.update('');
   assertArrayEquals('Updating with an empty string did not give an empty hash',
       empty, hash.digest());
+
+  // Recompute the first hash.
+  hash.reset();
+  hash.update([97, 158]);
+  assertArrayEquals('The reset did not produce the initial state',
+      golden1, hash.digest());
+
+  // Check for a trivial collision.
+  hash.reset();
+  hash.update([158, 97]);
+  assertTrue('Swapping bytes resulted in a hash collision',
+      !!goog.testing.asserts.findDifferences(golden1, hash.digest()));
+
+  // Compare array and string input.
+  hash.reset();
+  hash.update([97, 66]);
+  assertArrayEquals('String and array inputs should give the same result',
+      golden2, hash.digest());
+
+  // Compute in parts.
+  hash.reset();
+  hash.update('a');
+  hash.update([158]);
+  assertArrayEquals('Partial updates resulted in a different hash',
+      golden1, hash.digest());
+
+  // Test update with specified length.
+  hash.reset();
+  hash.update('aB', 0);
+  hash.update([97, 158, 32], 2);
+  assertArrayEquals('Updating with an explicit buffer length did not work',
+      golden1, hash.digest());
+};
+
+
+goog.crypt.hash_test.runBlockTests = function(hash, blockBytes) {
+  // Compute a message which is 1 byte shorter than hash block size.
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var message = '';
+  for (var i = 0; i < blockBytes - 1; i++) {
+    message += chars.charAt(i % chars.length);
+  }
+
+  // Compute golden hash for 1 block + 2 bytes.
+  hash.update(message + '123');
+  var golden1 = hash.digest();
+
+  // Compute golden hash for 2 blocks + 1 byte.
+  hash.reset();
+  hash.update(message + message + '123');
+  var golden2 = hash.digest();
+
+  // Almost fill a block, then overflow.
+  hash.reset();
+  hash.update(message);
+  hash.update('123');
+  assertArrayEquals(golden1, hash.digest());
+
+  // Fill a block.
+  hash.reset();
+  hash.update(message + '1');
+  hash.update('23');
+  assertArrayEquals(golden1, hash.digest());
+
+  // Overflow a block.
+  hash.reset();
+  hash.update(message + '12');
+  hash.update('3');
+  assertArrayEquals(golden1, hash.digest());
+
+  // Test single overflow with an array.
+  hash.reset();
+  hash.update(goog.crypt.stringToByteArray(message + '123'));
+  assertArrayEquals(golden1, hash.digest());
+
+  // Almost fill a block, then overflow this and the next block.
+  hash.reset();
+  hash.update(message);
+  hash.update(message + '123');
+  assertArrayEquals(golden2, hash.digest());
+
+  // Fill two blocks.
+  hash.reset();
+  hash.update(message + message + '12');
+  hash.update('3');
+  assertArrayEquals(golden2, hash.digest());
+
+  // Test double overflow with an array.
+  hash.reset();
+  hash.update(goog.crypt.stringToByteArray(message));
+  hash.update(goog.crypt.stringToByteArray(message + '123'));
+  assertArrayEquals(golden2, hash.digest());
 };
 
 
 // Run performance tests
-goog.crypt.hash_test.runPerfTests = function (hashFactory, hashName) {
-
+goog.crypt.hash_test.runPerfTests = function(hashFactory, hashName) {
   var body = goog.dom.getDocument().body;
   var perfTable = goog.dom.createElement('div');
   goog.dom.appendChild(body, perfTable);
 
-  var table = new goog.testing.PerformanceTable(perfTable)
+  var table = new goog.testing.PerformanceTable(perfTable);
 
   function runPerfTest(byteLength, updateCount) {
-
     var label = (hashName + ': ' + updateCount + ' update(s) of ' + byteLength
         + ' bytes');
 
@@ -108,19 +172,19 @@ goog.crypt.hash_test.runPerfTests = function (hashFactory, hashName) {
       }, label + ' (' + dataType + ')');
     }
 
-    var byteArray = goog.crypt.hash_test.createRandomByteArray_(length);
+    var byteArray = goog.crypt.hash_test.createRandomByteArray_(byteLength);
     var byteString = goog.crypt.hash_test.createByteString_(byteArray);
 
     run(byteArray, 'byte array');
     run(byteString, 'byte string');
   }
 
-  var MESSAGE_LENGTH_LONG = 10000002;
-  var MESSAGE_LENGTH_SHORT = 1000002;
+  var MESSAGE_LENGTH_LONG = 10000000;  // 10 Mbytes
+  var MESSAGE_LENGTH_SHORT = 10;       // 10 bytes
+  var MESSAGE_COUNT_SHORT = MESSAGE_LENGTH_LONG / MESSAGE_LENGTH_SHORT;
 
-  runPerfTest(MESSAGE_LENGTH_SHORT, 1);
   runPerfTest(MESSAGE_LENGTH_LONG, 1);
-  runPerfTest(MESSAGE_LENGTH_SHORT, 10);
+  runPerfTest(MESSAGE_LENGTH_SHORT, MESSAGE_COUNT_SHORT);
 };
 
 
@@ -144,4 +208,4 @@ goog.crypt.hash_test.createByteString_ = function(bytes) {
     str += String.fromCharCode(byte);
   });
   return str;
-}
+};

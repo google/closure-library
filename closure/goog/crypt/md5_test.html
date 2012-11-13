@@ -21,13 +21,16 @@ See the COPYING file for details.
 <body>
 <script>
 
-var thirty = '123456789012345678901234567890'
-var sixty = thirty + thirty
-var ninety = sixty + thirty
+var sixty = '123456789012345678901234567890123456789012345678901234567890';
 
 function testBasicOperations() {
   var md5 = new goog.crypt.Md5();
   goog.crypt.hash_test.runBasicTests(md5);
+}
+
+function testBlockOperations() {
+  var md5 = new goog.crypt.Md5();
+  goog.crypt.hash_test.runBlockTests(md5, 64);
 }
 
 function testHashing() {
@@ -36,29 +39,9 @@ function testHashing() {
   assertEquals('d41d8cd98f00b204e9800998ecf8427e',
                goog.crypt.byteArrayToHex(md5.digest()));
 
-  // Empty stream with an empty update.
-  md5.reset();
-  md5.update([]);
-  assertEquals('d41d8cd98f00b204e9800998ecf8427e',
-               goog.crypt.byteArrayToHex(md5.digest()));
-
   // Simple stream.
   md5.reset();
   md5.update([97]);
-  assertEquals('0cc175b9c0f1b6a831c399e269772661',
-               goog.crypt.byteArrayToHex(md5.digest()));
-
-  // Simple stream as string.
-  md5.reset();
-  md5.update('a');
-  assertEquals('0cc175b9c0f1b6a831c399e269772661',
-               goog.crypt.byteArrayToHex(md5.digest()));
-
-  // Simple stream with reinitialization.
-  md5.reset();
-  md5.update('b');
-  md5.reset();
-  md5.update('a');
   assertEquals('0cc175b9c0f1b6a831c399e269772661',
                goog.crypt.byteArrayToHex(md5.digest()));
 
@@ -88,41 +71,6 @@ function testHashing() {
   md5.update('abcdefghijklmnopqrstuvwxyz');
   md5.update('0123456789');
   assertEquals('d174ab98d277d9f5a5611c2c9f419d9f',
-               goog.crypt.byteArrayToHex(md5.digest()));
-
-  // Fill a 64-byte block.
-  md5.reset();
-  md5.update(sixty + '1234');
-  md5.update('5678901234567890');
-  assertEquals('57edf4a22be3c955ac49da2e2107b67a',
-               goog.crypt.byteArrayToHex(md5.digest()));
-
-  // Overflow a 64-byte block.
-  md5.reset();
-  md5.update(sixty + '12345');
-  md5.update('678901234567890');
-  assertEquals('57edf4a22be3c955ac49da2e2107b67a',
-               goog.crypt.byteArrayToHex(md5.digest()));
-
-  // Almost fill a 64-byte block, then overflow.
-  md5.reset();
-  md5.update(sixty + '123');
-  md5.update('45678901234567890');
-  assertEquals('57edf4a22be3c955ac49da2e2107b67a',
-               goog.crypt.byteArrayToHex(md5.digest()));
-
-  // Double overflow test.
-  md5.reset();
-  md5.update(ninety);
-  md5.update(ninety);
-  assertEquals('649de0d62015d329dca1302b142888d2',
-               goog.crypt.byteArrayToHex(md5.digest()));
-
-  // Double overflow test with arrays.
-  md5.reset();
-  md5.update(goog.crypt.stringToByteArray(ninety));
-  md5.update(goog.crypt.stringToByteArray(ninety));
-  assertEquals('649de0d62015d329dca1302b142888d2',
                goog.crypt.byteArrayToHex(md5.digest()));
 }
 
