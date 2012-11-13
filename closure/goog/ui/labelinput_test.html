@@ -14,7 +14,7 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.dom.a11y');
   goog.require('goog.dom.a11y.State');
-  goog.require('goog.dom.classes');
+  goog.require('goog.dom.classlist');
   goog.require('goog.events.EventType');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
@@ -166,17 +166,17 @@ function testClassName() {
 
   var el = labelInput.getElement();
   assertTrue('label before focus should have LABEL_CLASS_NAME',
-      goog.dom.classes.has(el, labelInput.LABEL_CLASS_NAME));
+      goog.dom.classlist.contains(el, labelInput.LABEL_CLASS_NAME));
 
   labelInput.getElement().focus();
 
   assertFalse('label after focus should not have LABEL_CLASS_NAME',
-      goog.dom.classes.has(el, labelInput.LABEL_CLASS_NAME));
+      goog.dom.classlist.contains(el, labelInput.LABEL_CLASS_NAME));
 
   labelInput.getElement().blur();
 
   assertTrue('label after blur should have LABEL_CLASS_NAME',
-      goog.dom.classes.has(el, labelInput.LABEL_CLASS_NAME));
+      goog.dom.classlist.contains(el, labelInput.LABEL_CLASS_NAME));
 }
 
 function isPlaceholderSupported() {
@@ -195,17 +195,17 @@ function testEnable() {
 
   assertTrue('label should be enabled', labelInput.isEnabled());
   assertFalse('label should not have the disabled class',
-      goog.dom.classes.has(labelElement, disabledClass));
+      goog.dom.classlist.contains(labelElement, disabledClass));
 
   labelInput.setEnabled(false);
   assertFalse('label should be disabled', labelInput.isEnabled());
   assertTrue('label should have the disabled class',
-      goog.dom.classes.has(labelElement, disabledClass));
+      goog.dom.classlist.contains(labelElement, disabledClass));
 
   labelInput.setEnabled(true);
   assertTrue('label should be enabled', labelInput.isEnabled());
   assertFalse('label should not have the disabled class',
-      goog.dom.classes.has(labelElement, disabledClass));
+      goog.dom.classlist.contains(labelElement, disabledClass));
 }
 
 </script>
