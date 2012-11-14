@@ -102,15 +102,10 @@ goog.soy.data.SanitizedContentKind = {
  * SanitizedContent that is attacker-controlled and gets evaluated unescaped in
  * templates.
  *
- * @param {string} content The assumed-sanitized string. Be careful!
  * @constructor
  */
-goog.soy.data.SanitizedContent = function(content) {
-  /**
-   * The textual content.
-   * @type {string}
-   */
-  this.content = content;
+goog.soy.data.SanitizedContent = function() {
+  throw Error('Do not instantiate directly');
 };
 
 
@@ -119,6 +114,13 @@ goog.soy.data.SanitizedContent = function(content) {
  * @type {goog.soy.data.SanitizedContentKind}
  */
 goog.soy.data.SanitizedContent.prototype.contentKind;
+
+
+/**
+ * The already-safe content.
+ * @type {string}
+ */
+goog.soy.data.SanitizedContent.prototype.content;
 
 
 /** @override */
