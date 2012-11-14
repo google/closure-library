@@ -582,7 +582,16 @@ goog.labs.mock.MethodBinding_.prototype.getStub = function() {
  * @return {boolean} If it matches the stored arguments.
  */
 goog.labs.mock.MethodBinding_.prototype.matches = function(methodName, args) {
-  //TODO(user): More elaborate argument matching.
+  //TODO(user): More elaborate argument matching. Think about matching
+  //    objects.
   return this.methodName_ == methodName &&
-         goog.array.equals(args, this.args_);
+      goog.array.equals(args, this.args_, function(arg, spec) {
+        // Duck-type to see if this is an object that implements the
+        // goog.labs.testing.Matcher interface.
+        if (goog.isFunction(spec.matches)) {
+          return spec.matches(arg);
+        } else {
+          return goog.array.defaultCompareEquality(spec, arg);
+        }
+      });
 };

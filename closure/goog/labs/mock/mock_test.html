@@ -13,6 +13,8 @@ See the COPYING file for details.
 
 goog.require('goog.labs.mock');
 goog.require('goog.testing.jsunit');
+goog.require('goog.labs.testing.GreaterThanMatcher');
+goog.require('goog.labs.testing.LessThanMatcher');
 
 </script>
 </head>
@@ -175,6 +177,28 @@ function testVerifyForFunctions() {
 
   var e = assertThrows(goog.bind(goog.labs.mock.verify(mockFunc), 3));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
+}
+
+function testMatchers() {
+  var obj = {
+    method1: function(i) {
+      return 2 * i;
+    },
+    method2: function(i) {
+      return 5 * i;
+    }
+  };
+
+  var mockObj = goog.labs.mock(obj);
+
+  goog.labs.mock.when(mockObj).method1(greaterThan(4)).thenReturn(100);
+  goog.labs.mock.when(mockObj).method1(lessThan(4)).thenReturn(40);
+
+  assertEquals(100, mockObj.method1(5));
+  assertEquals(100, mockObj.method1(6));
+  assertEquals(40, mockObj.method1(2));
+  assertEquals(40, mockObj.method1(1));
+  assertUndefined(mockObj.method1(4));
 }
 
 function testVerifyForUnmockedMethods() {
