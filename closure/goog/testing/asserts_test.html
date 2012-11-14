@@ -788,19 +788,21 @@ See the COPYING file for details.
     assertFalse('Fail should not get set to true', failed);
 
 
+    var result;
     try {
-      assertNotThrows('valid function',
+      result = assertNotThrows('valid function',
           function() {
-            //do nothing;
+            return 'some value';
           });
     } catch (e) {
       // Shouldn't be here: throw exception.
       fail('assertNotThrows returned failure on a valid function');
     }
+    assertEquals('assertNotThrows should return the result of the function.',
+        'some value', result);
 
     var errorDescription = 'a test error exception';
     try {
-    throw new Error(errorDescription);
       assertNotThrows('non valid error throwing function',
           function() {
             throw new Error(errorDescription);
@@ -808,8 +810,11 @@ See the COPYING file for details.
       failed = true;
     } catch (e) {
       // Some browsers don't have a stack trace so expect to at least have the
-      // error description.
-      assertContains(errorDescription, e.message);
+      // error description. For Gecko and IE7 not even that is included.
+      if (!goog.userAgent.GECKO && 
+          (!goog.userAgent.IE || goog.userAgent.isVersion('8'))) {
+        assertContains(errorDescription, e.message);
+      }
     }
     assertFalse('assertNotThrows did not fail on a thrown exception', failed);
   }

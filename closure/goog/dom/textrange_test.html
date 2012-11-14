@@ -15,6 +15,9 @@ See the COPYING file for details.
   goog.require('goog.dom.Range');
   goog.require('goog.dom.ControlRange');
   goog.require('goog.dom.TextRange');
+  goog.require('goog.math.Coordinate');
+  goog.require('goog.style');
+  goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.dom');
   goog.require('goog.testing.jsunit');
   goog.require('goog.userAgent');
@@ -40,14 +43,31 @@ See the COPYING file for details.
       </td>
     </tr>
   </table>
-
+  <!-- Omit whitespace here to ensure no extra text nodes are included. -->
+  <div id="test3Rtl" dir="rtl"><span>position</span><img id="logo3Rtl"
+      src="http://www.google.com/intl/en_ALL/images/logo.gif"><span
+      >test</span></div>
+  <!-- Omit whitespace here to ensure no extra text nodes are included. -->
+  <div id="test3"><span>position</span><img id="logo3"
+      src="http://www.google.com/intl/en_ALL/images/logo.gif"><span
+      >test</span></div>
 
 <script>
   var logo = goog.dom.getElement('logo');
   var logo2 = goog.dom.getElement('logo2');
+  var logo3 = goog.dom.getElement('logo3');
+  var logo3Rtl = goog.dom.getElement('logo3Rtl');
   var table = goog.dom.getElement('table');
   var table2 = goog.dom.getElement('table2');
   var table2div = goog.dom.getElement('table2div');
+  var test3 = goog.dom.getElement('test3');
+  var test3Rtl = goog.dom.getElement('test3Rtl');
+
+  var expectedFailures = new goog.testing.ExpectedFailures();
+
+  function tearDown() {
+    expectedFailures.handleTearDown();
+  }
 
   function testCreateFromNodeContents() {
     assertNotNull('Text range object can be created for element node',
@@ -93,20 +113,15 @@ See the COPYING file for details.
             table2div.firstChild, 1, table2div.lastChild, 1);
     range2 = goog.dom.TextRange.createFromNodes(
             table2div.firstChild, 0, table2div.lastChild, 0);
-    if (!goog.userAgent.WEBKIT) {
-      // TODO(user): Figure out why this fails, fix it, and get the WebKit
-      // folks to fix it :-)
-      assertTrue('TextRange partially contains other TextRange',
-              range2.containsRange(range, true));
-    }
+    assertTrue('TextRange partially contains other TextRange',
+            range2.containsRange(range, true));
     assertFalse('TextRange does not fully contain other TextRange',
             range2.containsRange(range, false));
-    
   }
 
   function testContainsControlRange() {
     if (goog.userAgent.IE) {
-      var range = goog.dom.ControlRange.createFromElements(table2);       
+      var range = goog.dom.ControlRange.createFromElements(table2);
       var range2 = goog.dom.TextRange.createFromNodeContents(table2div);
       assertFalse('TextRange does not contain ControlRange',
               range2.containsRange(range));
@@ -122,6 +137,206 @@ See the COPYING file for details.
     }
   }
 
+  function testGetStartPosition() {
+    expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+        !goog.userAgent.isVersion('2'));
+
+    // The start node is in the top left.
+    var range = goog.dom.TextRange.createFromNodeContents(test3);
+    var topLeft = goog.style.getPageOffset(test3.firstChild);
+
+    if (goog.userAgent.IE) {
+      // On IE the selection is as tall as its tallest element.
+      var logoPosition = goog.style.getPageOffset(logo3);
+      topLeft.y = logoPosition.y;
+
+      if (!goog.userAgent.isVersion('8')) {
+        topLeft.x += 2;
+        topLeft.y += 2;
+      }
+    }
+
+    try {
+      var result = assertNotThrows(goog.bind(range.getStartPosition, range));
+      assertObjectEquals(topLeft, result);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
+
+  function testGetStartPositionNotInDocument() {
+    expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+        !goog.userAgent.isVersion('2'));
+    expectedFailures.expectFailureFor(goog.userAgent.IE &&
+        !goog.userAgent.isVersion('8'));
+
+    var range = goog.dom.TextRange.createFromNodeContents(test3);
+
+    goog.dom.removeNode(test3);
+    try {
+      var result = assertNotThrows(goog.bind(range.getStartPosition, range));
+      assertNull(result);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    } finally {
+      goog.dom.appendChild(document.body, test3);
+    }
+  }
+
+  function testGetStartPositionReversed() {
+    expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+        !goog.userAgent.isVersion('2'));
+
+    // Simulate the user selecting backwards from right-to-left.
+    // The start node is now in the bottom right.
+    var firstNode = test3.firstChild.firstChild;
+    var lastNode = test3.lastChild.lastChild;
+    var range = goog.dom.TextRange.createFromNodes(
+        lastNode, lastNode.nodeValue.length, firstNode, 0);
+    var pageOffset = goog.style.getPageOffset(test3.lastChild);
+    var bottomRight = new goog.math.Coordinate(
+        pageOffset.x + test3.lastChild.offsetWidth,
+        pageOffset.y + test3.lastChild.offsetHeight);
+
+    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+      bottomRight.x += 2;
+      bottomRight.y += 2;
+    }
+
+    try {
+      var result = assertNotThrows(goog.bind(range.getStartPosition, range));
+      assertObjectEquals(bottomRight, result);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
+
+  function testGetStartPositionRightToLeft() {
+    expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+        !goog.userAgent.isVersion('2'));
+
+    // Even in RTL content the start node is still in the top left.
+    var range = goog.dom.TextRange.createFromNodeContents(test3Rtl);
+    var topLeft = goog.style.getPageOffset(test3Rtl.firstChild);
+
+    if (goog.userAgent.IE) {
+      // On IE the selection is as tall as its tallest element.
+      var logoPosition = goog.style.getPageOffset(logo3Rtl);
+      topLeft.y = logoPosition.y;
+
+      if (!goog.userAgent.isVersion('8')) {
+        topLeft.x += 2;
+        topLeft.y += 2;
+      }
+    }
+
+    try {
+      var result = assertNotThrows(goog.bind(range.getStartPosition, range));
+      assertObjectEquals(topLeft, result);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
+
+  function testGetEndPosition() {
+    expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+        !goog.userAgent.isVersion('2'));
+
+    // The end node is in the bottom right.
+    var range = goog.dom.TextRange.createFromNodeContents(test3);
+    var pageOffset = goog.style.getPageOffset(test3.lastChild);
+    var bottomRight = new goog.math.Coordinate(
+        pageOffset.x + test3.lastChild.offsetWidth,
+        pageOffset.y + test3.lastChild.offsetHeight);
+
+    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+      bottomRight.x += 6;
+      bottomRight.y += 2;
+    }
+
+    try {
+      var result = assertNotThrows(goog.bind(range.getEndPosition, range));
+      assertObjectEquals(bottomRight, result);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
+
+  function testGetEndPositionNotInDocument() {
+    expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+        !goog.userAgent.isVersion('2'));
+    expectedFailures.expectFailureFor(goog.userAgent.IE &&
+        !goog.userAgent.isVersion('8'));
+
+    var range = goog.dom.TextRange.createFromNodeContents(test3);
+
+    goog.dom.removeNode(test3);
+    try {
+      var result = assertNotThrows(goog.bind(range.getEndPosition, range));
+      assertNull(result);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    } finally {
+      goog.dom.appendChild(document.body, test3);
+    }
+  }
+
+  function testGetEndPositionReversed() {
+    expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+        !goog.userAgent.isVersion('2'));
+
+    // Simulate the user selecting backwards from right-to-left.
+    // The end node is now in the top left.
+    var firstNode = test3.firstChild.firstChild;
+    var lastNode = test3.lastChild.lastChild;
+    var range = goog.dom.TextRange.createFromNodes(
+        lastNode, lastNode.nodeValue.length, firstNode, 0);
+    var topLeft = goog.style.getPageOffset(test3.firstChild);
+
+    if (goog.userAgent.IE) {
+      // On IE the selection is as tall as its tallest element.
+      var logoPosition = goog.style.getPageOffset(logo3);
+      topLeft.y = logoPosition.y;
+
+      if (!goog.userAgent.isVersion('8')) {
+        topLeft.x += 2;
+        topLeft.y += 2;
+      }
+    }
+
+    try {
+      var result = assertNotThrows(goog.bind(range.getEndPosition, range));
+      assertObjectEquals(topLeft, result);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
+
+  function testGetEndPositionRightToLeft() {
+    expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+        !goog.userAgent.isVersion('2'));
+    expectedFailures.expectFailureFor(goog.userAgent.IE &&
+        !goog.userAgent.isVersion('8'));
+
+    // Even in RTL content the end node is still in the bottom right.
+    var range = goog.dom.TextRange.createFromNodeContents(test3Rtl);
+    var pageOffset = goog.style.getPageOffset(test3Rtl.lastChild);
+    var bottomRight = new goog.math.Coordinate(
+        pageOffset.x + test3Rtl.lastChild.offsetWidth,
+        pageOffset.y + test3Rtl.lastChild.offsetHeight);
+
+    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+      bottomRight.x += 2;
+      bottomRight.y += 2;
+    }
+
+    try {
+      var result = assertNotThrows(goog.bind(range.getEndPosition, range));
+      assertObjectEquals(bottomRight, result);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
 </script>
 </body>
 </html>

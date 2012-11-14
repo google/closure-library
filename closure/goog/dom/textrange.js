@@ -302,6 +302,14 @@ goog.dom.TextRange.prototype.getStartOffset = function() {
 
 
 /** @override */
+goog.dom.TextRange.prototype.getStartPosition = function() {
+  return this.isReversed() ?
+      this.getBrowserRangeWrapper_().getEndPosition() :
+      this.getBrowserRangeWrapper_().getStartPosition();
+};
+
+
+/** @override */
 goog.dom.TextRange.prototype.getEndNode = function() {
   return this.endNode_ ||
       (this.endNode_ = this.getBrowserRangeWrapper_().getEndNode());
@@ -312,6 +320,14 @@ goog.dom.TextRange.prototype.getEndNode = function() {
 goog.dom.TextRange.prototype.getEndOffset = function() {
   return this.endOffset_ != null ? this.endOffset_ :
       (this.endOffset_ = this.getBrowserRangeWrapper_().getEndOffset());
+};
+
+
+/** @override */
+goog.dom.TextRange.prototype.getEndPosition = function() {
+  return this.isReversed() ?
+      this.getBrowserRangeWrapper_().getStartPosition() :
+      this.getBrowserRangeWrapper_().getEndPosition();
 };
 
 

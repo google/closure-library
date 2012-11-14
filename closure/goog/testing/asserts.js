@@ -278,6 +278,7 @@ var assertThrows = function(a, opt_b) {
  * @param {!(string|Function)} a The assertion comment or the function to call.
  * @param {!Function=} opt_b The function to call (if the first argument of
  *     {@code assertNotThrows} was the comment).
+ * @return {*} The return value of the function.
  * @throws {goog.testing.JsUnitException} If the assertion failed.
  */
 var assertNotThrows = function(a, opt_b) {
@@ -288,7 +289,7 @@ var assertNotThrows = function(a, opt_b) {
       'Argument passed to assertNotThrows is not a function');
 
   try {
-    func();
+    return func();
   } catch (e) {
     comment = comment ? (comment + '\n') : '';
     comment += 'A non expected exception was thrown from function passed to ' +
