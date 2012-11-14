@@ -195,9 +195,10 @@ goog.uri.utils.splitRe_ = new RegExp(
     ':)?' +
     '(?://' +
       '(?:([^/?#]*)@)?' +                 // userInfo
-      '([^/#?]*?)' +                      // domain
+      '([\\w\\d\\-\\u0100-\\uffff.%]*)' + // domain - restrict to letters,
+                                          // digits, dashes, dots, percent
+                                          // escapes, and unicode characters.
       '(?::([0-9]+))?' +                  // port
-      '(?=[/#?]|$)' +                     // authority-terminating character
     ')?' +
     '([^?#]+)?' +                         // path
     '(?:\\?([^#]*))?' +                   // query
