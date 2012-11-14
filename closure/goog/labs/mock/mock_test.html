@@ -107,6 +107,7 @@ function testBasicStubbing() {
   goog.labs.mock.when(mockObj).method3(4).thenReturn(10);
   assertEquals(4, obj.method3(4));
   assertEquals(10, mockObj.method3(4));
+  goog.labs.mock.verify(mockObj).method3(4);
   assertUndefined(mockObj.method3(5));
 }
 
@@ -137,8 +138,53 @@ function testSpying() {
 
   assertEquals(2, obj.method1(1));
   assertEquals(5, spyObj.method1(2));
+  goog.labs.mock.verify(spyObj).method1(2);
   assertEquals(2, spyObj.method1(1));
+  goog.labs.mock.verify(spyObj).method1(1);
   assertEquals(20, spyObj.method2(4));
+  goog.labs.mock.verify(spyObj).method2(4);
+}
+
+function testVerifyForObjects() {
+  var obj = {
+    method1: function(i) {
+      return 2 * i;
+    },
+    method2: function(i) {
+      return 5 * i;
+    }
+  };
+
+  var mockObj = goog.labs.mock(obj);
+  goog.labs.mock.when(mockObj).method1(2).thenReturn(5);
+
+  assertEquals(5, mockObj.method1(2));
+  goog.labs.mock.verify(mockObj).method1(2);
+  var e = assertThrows(goog.bind(goog.labs.mock.verify(mockObj).method1, 2));
+  assertTrue(e instanceof goog.labs.mock.VerificationError);
+}
+
+function testVerifyForFunctions() {
+  function func(i) {
+    return i;
+  }
+  var mockFunc = goog.labs.mockFunction(func);
+  goog.labs.mock.when(mockFunc)(2).thenReturn(55);
+  assertEquals(55, mockFunc(2));
+  goog.labs.mock.verify(mockFunc)(2);
+
+  var e = assertThrows(goog.bind(goog.labs.mock.verify(mockFunc), 3));
+  assertTrue(e instanceof goog.labs.mock.VerificationError);
+}
+
+function testVerifyForUnmockedMethods() {
+  var Task = function() {};
+  Task.prototype.run = function() {};
+
+  var mockTask = goog.labs.mock(Task);
+  mockTask.run();
+
+  goog.labs.mock.verify(mockTask).run();
 }
 
 </script>
