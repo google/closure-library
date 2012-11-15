@@ -35,6 +35,8 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.events');
   goog.require('goog.events.Event');
+  goog.require('goog.events.EventType');
+  goog.require('goog.events.KeyCodes');
   goog.require('goog.math.Rect');
   goog.require('goog.style');
   goog.require('goog.testing.events');
@@ -45,7 +47,9 @@ See the COPYING file for details.
 </head>
 <body>
 <div>
-  <div id="sandbox"></div>
+  <div id="wrapper">
+    <div id="sandbox"></div>
+  </div>
 
   <div id="testmenu" class="goog-menu goog-menu-vertical">
     <div class="goog-menu-filter">
@@ -284,6 +288,21 @@ function testScrollIntoView() {
   menu.dispose();
 }
 
+function testEscapeKeyHandling() {
+  menu = new goog.ui.FilteredMenu();
+  menu.addItem(new goog.ui.MenuItem('Family'));
+  menu.addItem(new goog.ui.MenuItem('Friends'));
+  menu.render(sandbox);
+
+  var gotKeyCode = false;
+  var wrapper = document.getElementById('wrapper');
+  goog.events.listenOnce(wrapper, goog.events.EventType.KEYPRESS, function(e) {
+    gotKeyCode = true;
+  });
+  goog.testing.events.fireKeySequence(menu.getFilterInputElement(),
+      goog.events.KeyCodes.ESC);
+  assertFalse('ESC key should not propagate out to parent', gotKeyCode);
+}
 
 function isHighlightedVisible(menu) {
   var contRect = goog.style.getBounds(menu.getContentElement());
@@ -295,6 +314,7 @@ function isHighlightedVisible(menu) {
   var itemRect = goog.style.getBounds(menu.getHighlighted().getElement());
   return contRect.contains(itemRect);
 }
+
 
 </script>
 </body>

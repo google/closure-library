@@ -473,7 +473,7 @@ goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
  * @return {boolean} Whether the event was handled.
  * @override
  */
-goog.ui.FilteredMenu.prototype.handleKeyEvent = function(e) {
+goog.ui.FilteredMenu.prototype.handleKeyEventInternal = function(e) {
   // Home, end and the arrow keys are normally used to change the selected menu
   // item. Return false here to prevent the menu from preventing the default
   // behavior for HOME, END and any key press with a modifier.
@@ -488,7 +488,7 @@ goog.ui.FilteredMenu.prototype.handleKeyEvent = function(e) {
     return true;
   }
 
-  return goog.ui.FilteredMenu.superClass_.handleKeyEvent.call(this, e);
+  return goog.ui.FilteredMenu.superClass_.handleKeyEventInternal.call(this, e);
 };
 
 
