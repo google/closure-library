@@ -155,7 +155,7 @@ goog.i18n.GraphemeBreak.getBreakProp_ = function(acode) {
            0, 2, 0, 2, 0, 2, 4, 2, 0, 4, 2, 1, 2, 0, 2, 0, 2, 0, 2, 0, 1, 2],
           true);
     }
-    return (/** @type {number} */
+    return /** @type {number} */ (
         goog.i18n.GraphemeBreak.inversions_.at(acode));
   }
 };
