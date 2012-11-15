@@ -50,7 +50,14 @@ function testSplit() {
   assertEquals('fragment', utils.getFragmentEncoded(uri));
   assertEquals('fragment', utils.getFragment(uri));
 
-  assertNull(utils.getDomain('http://!!!'));
+  assertEquals(utils.getDomain('http://[2607:f8b0:4006:802::1006]'),
+      '[2607:f8b0:4006:802::1006]');
+  assertEquals(utils.getDomain('http://[2607:f8b0:4006:802::1006]:80'),
+      '[2607:f8b0:4006:802::1006]');
+  assertEquals(utils.getPort('http://[2607:f8b0:4006:802::1006]:80'), 80);
+  assertEquals(utils.getDomain('http://[2607]:80/?q=]'), '[2607]');
+  assertEquals(utils.getDomain('http://!!!'), '!!!');
+  assertNull(utils.getPath('http://!!!'));
   assertNull(utils.getScheme('www.x.com:80'));
   assertEquals('Query data with no fragment identifier', 'foo=bar&baz=bin',
       utils.getQueryData('http://google.com?foo=bar&baz=bin'));
