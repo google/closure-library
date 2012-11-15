@@ -22,14 +22,24 @@ See the COPYING file for details.
 <body>
 <script>
 
+// A browser-independent mock of goog.fs.sliceBlob. The actual implementation
+// calls the underlying slice method differently based on browser version.
+// This mock does not support negative opt_end.
+var fsSliceBlobMock = function(blob, start, opt_end) {
+  if (!goog.isNumber(opt_end)) {
+    opt_end = blob.size;
+  }
+  return blob.slice(start, opt_end);
+};
+
 // Mock out the Blob using a string.
 BlobMock = function(string) {
   this.data = string;
   this.size = this.data.length;
 };
 
-BlobMock.prototype.slice = function(start, length) {
-  return new BlobMock(this.data.substr(start, length));
+BlobMock.prototype.slice = function(start, end) {
+  return new BlobMock(this.data.substr(start, end - start));
 };
 
 
@@ -81,6 +91,7 @@ FileReaderMock.prototype.readAsArrayBuffer = function(blobMock) {
 var stubs = new goog.testing.PropertyReplacer();
 function setUp() {
   stubs.set(goog.global, 'FileReader', FileReaderMock);
+  stubs.set(goog.fs, 'sliceBlob', fsSliceBlobMock);
 }
 
 function tearDown() {
