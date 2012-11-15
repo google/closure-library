@@ -88,6 +88,10 @@ FileReaderMock.prototype.readAsArrayBuffer = function(blobMock) {
   }
 };
 
+FileReaderMock.prototype.isLoading = function() {
+  return this.readyState == this.LOADING;
+}
+
 var stubs = new goog.testing.PropertyReplacer();
 function setUp() {
   stubs.set(goog.global, 'FileReader', FileReaderMock);
@@ -96,6 +100,25 @@ function setUp() {
 
 function tearDown() {
   stubs.reset();
+}
+
+/**
+ * Makes the blobHasher read chunks from the blob and hash it. The number of
+ * reads shall not exceed a pre-determined number (typically blob size / chunk
+ * size) for computing hash. This function fails fast (after maxReads is
+ * reached), assuming that the hasher failed to generate hashes. This prevents
+ * the test suite from going into infinite loop.
+ * @param {!goog.crypt.BlobHasher} blobHasher Hasher in action.
+ * @param {number} maxReads Max number of read attempts.
+ */
+function readFromBlob(blobHasher, maxReads) {
+  var counter = 0;
+  while (blobHasher.fileReader_.isLoading() && counter <= maxReads) {
+    blobHasher.fileReader_.mockLoad();
+    counter++;
+  }
+  assertTrue(counter <= maxReads);
+  return counter;
 }
 
 function testBasicOperations() {
@@ -108,25 +131,21 @@ function testBasicOperations() {
   var blobHasher = new goog.crypt.BlobHasher(hashFn);
   var blob = new BlobMock("The quick brown fox jumps over the lazy dog");
   blobHasher.hash(blob);
-  blobHasher.fileReader_.mockLoad();
+  readFromBlob(blobHasher, 1);
   assertEquals('9e107d9d372bb6826bd81d3542a419d6',
                goog.crypt.byteArrayToHex(blobHasher.getHash()));
 
   // Test hashing with multiple chunks.
   blobHasher = new goog.crypt.BlobHasher(hashFn, 7);
   blobHasher.hash(blob);
-  while (blobHasher.fileReader_ && !blobHasher.fileReader_.result) {
-    blobHasher.fileReader_.mockLoad();
-  }
+  readFromBlob(blobHasher, Math.ceil(blob.size / 7));
   assertEquals('9e107d9d372bb6826bd81d3542a419d6',
                goog.crypt.byteArrayToHex(blobHasher.getHash()));
 
   // Test hashing with no chunks.
   blob = new BlobMock("");
   blobHasher.hash(blob);
-  while (blobHasher.fileReader_ && !blobHasher.fileReader_.result) {
-    blobHasher.fileReader_.mockLoad();
-  }
+  readFromBlob(blobHasher, 1);
   assertEquals('d41d8cd98f00b204e9800998ecf8427e',
                goog.crypt.byteArrayToHex(blobHasher.getHash()));
 
@@ -154,7 +173,7 @@ function testNormalFlow() {
   assertEquals(1, startedEvents);
   assertEquals(0, progressEvents);
   assertEquals(0, completeEvents);
-  blobHasher.fileReader_.mockLoad();
+  readFromBlob(blobHasher, 1);
   assertEquals(1, startedEvents);
   assertEquals(1, progressEvents);
   assertEquals(1, completeEvents);
@@ -169,15 +188,10 @@ function testNormalFlow() {
   assertEquals(1, startedEvents);
   assertEquals(0, progressEvents);
   assertEquals(0, completeEvents);
-  while (blobHasher.fileReader_ && !blobHasher.fileReader_.result) {
-    assertEquals(0, completeEvents);
-    blobHasher.fileReader_.mockLoad();
-    assertEquals(++progressLoops, progressEvents);
-  }
+  progressLoops = readFromBlob(blobHasher, Math.ceil(blob.size / 13));
   assertEquals(1, startedEvents);
   assertEquals(progressLoops, progressEvents);
   assertEquals(1, completeEvents);
-
 }
 
 function testAbortsAndErrors() {
