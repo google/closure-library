@@ -652,6 +652,60 @@ See the COPYING file for details.
   }
 
   /**
+   * Test that link insertion doesn't scroll the field to the top
+   * after clicking Cancel or OK.
+   */
+  function testBug7279077ScrollOnFocus() {
+    if (goog.userAgent.IE) {
+      return;  // TODO(user): take this out once b/7279077 fixed for IE too.
+    }
+    setUpAnchor('12345', '/');
+    setUpRealEditableField();
+
+    // Make the field scrollable and kinda small.
+    var elem = fieldObj.getElement();
+    elem.style.overflow = 'auto';
+    elem.style.height = '40px';
+    elem.style.width = '200px';
+    elem.style.contenteditable = 'true';
+
+    // Add a bunch of text before the anchor tag.
+    var longTextElem = document.createElement('span');
+    longTextElem.innerHTML =goog.string.repeat('All work and no play.<p>', 20);
+    elem.insertBefore(longTextElem, elem.firstChild);
+
+    var helper = new goog.testing.editor.TestHelper(elem);
+    helper.select('12345', 1, '12345', 4); // Selects '234'.
+
+    // Scroll down.
+    elem.scrollTop = 60;
+
+    // Bring up the link insertion dialog, then cancel.
+    plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
+    goog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'foo';
+    goog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
+    var cancelButton = plugin.dialog_.getCancelButtonElement();
+    goog.testing.events.fireClickSequence(cancelButton);
+
+    assertEquals('Field should not have scrolled after cancel',
+        60, elem.scrollTop);
+
+    // Now let's try it with clicking the OK button.
+    plugin.execCommand(goog.editor.Command.MODAL_LINK_EDITOR, linkObj);
+    goog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value = 'foo';
+    goog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
+    var okButton = plugin.dialog_.getOkButtonElement();
+    goog.testing.events.fireClickSequence(okButton);
+
+    assertEquals('Field should not have scrolled after OK',
+        60, elem.scrollTop);
+  }
+
+  /**
    * Setup a real editable field (instead of a mock) and register the plugin to
    * it.
    */
