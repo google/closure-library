@@ -58,15 +58,24 @@ ignored by the tests.
   var WEBKIT_AFTER_CHROME_16 = goog.userAgent.WEBKIT &&
       goog.userAgent.isVersion('535.7');
 
+  var WEBKIT_AFTER_CHROME_21 = goog.userAgent.WEBKIT &&
+      goog.userAgent.isVersion('537.1');
+
   // On Chrome 16, execCommand('insertImage') inserts a garbage BR
   // after the image that we insert. We use this command to paste HTML
   // in-place, because it has better paragraph-preserving semantics.
   //
   // TODO(nicksantos): Figure out if there are better chrome APIs that we
   // should be using, or if insertImage should just be fixed.
-  var insertImageBoldGarbage = WEBKIT_AFTER_CHROME_16 ? '<b><br/></b>' : '';
-  var insertImageFontGarbage = WEBKIT_AFTER_CHROME_16 ?
-      '<font size="1"><br/></font>' : '';
+  var insertImageBoldGarbage = '';
+  var insertImageFontGarbage = '';
+  if (WEBKIT_AFTER_CHROME_21) {
+    insertImageBoldGarbage = '<br>';
+    insertImageFontGarbage = '<br>';
+  } else if (WEBKIT_AFTER_CHROME_16) {
+    insertImageBoldGarbage = '<b><br/></b>';
+    insertImageFontGarbage = '<font size="1"><br/></font>';
+  }
 
   // Extra html to add to test html to make sure removeformatting is actually
   // getting called when you're testing if it leaves certain styles alone
