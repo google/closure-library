@@ -279,7 +279,7 @@ goog.ui.ContainerRenderer.prototype.decorateChildren = function(container,
  *     (null if none).
  */
 goog.ui.ContainerRenderer.prototype.getDecoratorForChild = function(element) {
-  return (/** @type {goog.ui.Control} */
+  return /** @type {goog.ui.Control} */ (
       goog.ui.registry.getDecorator(element));
 };
 

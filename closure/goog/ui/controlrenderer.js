@@ -209,7 +209,7 @@ goog.ui.ControlRenderer.prototype.getContentElement = function(element) {
  */
 goog.ui.ControlRenderer.prototype.enableClassName = function(control,
     className, enable) {
-  var element = (/** @type {Element} */
+  var element = /** @type {Element} */ (
       control.getElement ? control.getElement() : control);
   if (element) {
     // For IE6, we need to enable any combined classes involving this class

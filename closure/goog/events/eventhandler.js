@@ -119,7 +119,7 @@ goog.events.EventHandler.prototype.listen = function(src, type, opt_fn,
   for (var i = 0; i < type.length; i++) {
     // goog.events.listen generates unique keys so we don't have to check their
     // presence in the this.keys_ array.
-    var key = (/** @type {number} */
+    var key = /** @type {number} */ (
         goog.events.listen(src, type[i], opt_fn || this,
                            opt_capture || false,
                            opt_handler || this.handler_ || this));
@@ -153,7 +153,7 @@ goog.events.EventHandler.prototype.listenOnce = function(src, type, opt_fn,
       this.listenOnce(src, type[i], opt_fn, opt_capture, opt_handler);
     }
   } else {
-    var key = (/** @type {number} */
+    var key = /** @type {number} */ (
         goog.events.listenOnce(src, type, opt_fn || this, opt_capture,
                                opt_handler || this.handler_ || this));
     this.keys_.push(key);

@@ -1116,7 +1116,7 @@ goog.ui.Component.prototype.getChildIds = function() {
  */
 goog.ui.Component.prototype.getChild = function(id) {
   // Use childIndex_ for O(1) access by ID.
-  return (this.childIndex_ && id) ? (/** @type {goog.ui.Component} */
+  return (this.childIndex_ && id) ? /** @type {goog.ui.Component} */ (
       goog.object.get(this.childIndex_, id)) || null : null;
 };
 
