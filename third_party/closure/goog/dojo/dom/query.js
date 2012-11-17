@@ -1307,7 +1307,7 @@ goog.dom.query = (function() {
       //    need to tighten up browser rules on ':contains' and '|=' to
       //    figure out which aren't good
       (query.indexOf(':contains') == -1) &&
-      (query.indexOf('|=') == -1)
+      (query.indexOf('|=') == -1) // some browsers don't understand it
     );
 
     // TODO:
