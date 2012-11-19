@@ -25,7 +25,6 @@ goog.provide('goog.style');
 
 goog.require('goog.array');
 goog.require('goog.dom');
-goog.require('goog.dom.vendor');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
@@ -62,71 +61,14 @@ goog.style.setStyle = function(element, style, opt_value) {
 
 /**
  * Sets a style value on an element, with parameters swapped to work with
- * {@code goog.object.forEach()}. Prepends a vendor-specific prefix when
- * necessary.
+ * {@code goog.object.forEach()}.
  * @param {Element} element The element to change.
  * @param {string|number|boolean|undefined} value Style value.
  * @param {string} style Style name.
  * @private
  */
 goog.style.setStyle_ = function(element, value, style) {
-  var propertyName = goog.style.getVendorJsStyleName_(element, style);
-
-  if (propertyName) {
-    element.style[propertyName] = value;
-  }
-};
-
-
-/**
- * Returns a vendor-specific Js style name in camel-case, or null if the
- * property does not exist.
- * @param {Element} element The element to change.
- * @param {string} style Style name.
- * @return {?string} Vendor-specific style.
- * @private
- */
-goog.style.getVendorJsStyleName_ = function(element, style) {
-  var camelStyle = goog.string.toCamelCase(style);
-
-  if (element.style[camelStyle] !== undefined) {
-    return camelStyle;
-  }
-
-  var prefixedStyle = goog.dom.vendor.getVendorJsPrefix() +
-      goog.string.toTitleCase(style);
-
-  if (element.style[prefixedStyle] !== undefined) {
-    return prefixedStyle;
-  }
-
-  return null;
-};
-
-
-/**
- * Returns a vendor-specific style name in camel-case, or null if the property
- * does not exist.
- * @param {Element} element The element to change.
- * @param {string} style Style name.
- * @return {?string} Vendor-specific style.
- * @private
- */
-goog.style.getVendorStyleName_ = function(element, style) {
-  var camelStyle = goog.string.toCamelCase(style);
-
-  if (element.style[camelStyle] !== undefined) {
-    return style;
-  }
-
-  var prefixedStyle = goog.dom.vendor.getVendorJsPrefix() +
-      goog.string.toTitleCase(style);
-
-  if (element.style[prefixedStyle] !== undefined) {
-    return goog.dom.vendor.getVendorPrefix() + '-' + style;
-  }
-
-  return null;
+  element.style[goog.string.toCamelCase(style)] = value;
 };
 
 
