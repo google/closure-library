@@ -568,6 +568,23 @@ function testArrayEveryOmitsDeleted() {
   assertFalse(b);
 }
 
+function testArrayCount() {
+  var a = [0, 1, 2, 3, 4];
+  var context = {};
+  assertEquals(3, goog.array.count(a, function(element, index, array) {
+    assertTrue(goog.isNumber(index));
+    assertEquals(a, array);
+    assertEquals(context, this);
+    return element % 2 == 0;
+  }, context));
+
+  delete a[2];
+  assertEquals('deleted element is ignored', 4,
+      goog.array.count(a, function() {
+        return true;
+      }));
+}
+
 function testArrayContains() {
   var a = [0, 1, 2, 3];
   assertTrue('contain, Should contain 3', goog.array.contains(a, 3));
