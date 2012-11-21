@@ -44,9 +44,10 @@ goog.require('goog.result.SimpleResult');
  * </pre>
  *
  * @param {!goog.result.Result} result The result to install the handlers.
- * @param {!function(!goog.result.Result)} handler The handler to be
+ * @param {!function(this:T, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result object as the only parameter.
- * @param {!Object=} opt_scope Optional scope for the handler.
+ * @param {!T=} opt_scope Optional scope for the handler.
+ * @template T
  */
 goog.result.wait = function(result, handler, opt_scope) {
   result.wait(opt_scope ? goog.bind(handler, opt_scope) : handler);
@@ -71,10 +72,11 @@ goog.result.wait = function(result, handler, opt_scope) {
  * </pre>
  *
  * @param {!goog.result.Result} result The result to install the handlers.
- * @param {!function(*, !goog.result.Result)} handler The handler to be
+ * @param {!function(this:T, ?, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result value and the result as
  *     parameters.
- * @param {!Object=} opt_scope Optional scope for the handler.
+ * @param {!T=} opt_scope Optional scope for the handler.
+ * @template T
  */
 goog.result.waitOnSuccess = function(result, handler, opt_scope) {
   goog.result.wait(result, function(res) {
@@ -104,9 +106,10 @@ goog.result.waitOnSuccess = function(result, handler, opt_scope) {
  * </pre>
  *
  * @param {!goog.result.Result} result The result to install the handlers.
- * @param {!function(!goog.result.Result)} handler The handler to be
+ * @param {!function(this:T, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result object as the only parameter.
- * @param {!Object=} opt_scope Optional scope for the handler.
+ * @param {!T=} opt_scope Optional scope for the handler.
+ * @template T
  */
 goog.result.waitOnError = function(result, handler, opt_scope) {
   goog.result.wait(result, function(res) {
@@ -148,7 +151,7 @@ goog.result.waitOnError = function(result, handler, opt_scope) {
  *
  * @param {!goog.result.Result} result The result whose value will be
  *     transformed.
- * @param {!Function} transformer The transformer
+ * @param {!function(?):?} transformer The transformer
  *     function. The return value of this function will become the value of the
  *     returned result.
  *
@@ -295,6 +298,7 @@ goog.result.chain = function(result, actionCallback) {
  *     the resolved given Result objects.
  */
 goog.result.combine = function(var_args) {
+  /** @type {Array.<!goog.result.Result>} */
   var results = goog.array.clone(arguments);
   var combinedResult = new goog.result.SimpleResult();
 
@@ -371,7 +375,8 @@ goog.result.combineOnSuccess = function(var_args) {
       goog.result.combine.apply(goog.result.combine, arguments),
       // The combined result never ERRORs
       function(res) {
-        var results = /** @type {Array} */ (res.getValue());
+        var results = /** @type {Array.<!goog.result.Result>} */ (
+            res.getValue());
         if (goog.array.every(results, resolvedSuccessfully)) {
           combinedResult.setValue(results);
         } else {
