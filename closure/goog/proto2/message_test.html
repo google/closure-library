@@ -235,6 +235,13 @@ function testCloneWithUnknownFields() {
       'for the unknown fields', message, clone);
 }
 
+function testCopyFromSameMessage() {
+  var source = new proto2.TestAllTypes();
+  source.setOptionalInt32(32);
+  source.copyFrom(source);
+  assertEquals(32, source.getOptionalInt32());
+}
+
 function testCopyFromFlatMessage() {
   // Recursive copying is implicitly tested in the testClone... methods.
 

@@ -196,7 +196,7 @@ goog.proto2.Message.prototype.getDescriptor = function() {
   var Ctor = this.constructor;
   return Ctor.descriptor_ ||
       (Ctor.descriptor_ = goog.proto2.Message.create$Descriptor(
-           Ctor, Ctor.descriptorObj_));
+          Ctor, Ctor.descriptorObj_));
 };
 
 
@@ -397,11 +397,13 @@ goog.proto2.Message.prototype.copyFrom = function(message) {
   goog.proto2.Util.assert(this.constructor == message.constructor,
       'The source message must have the same type.');
 
-  this.values_ = {};
-  if (this.deserializedFields_) {
-    this.deserializedFields_ = {};
+  if (this != message) {
+    this.values_ = {};
+    if (this.deserializedFields_) {
+      this.deserializedFields_ = {};
+    }
+    this.mergeFrom(message);
   }
-  this.mergeFrom(message);
 };
 
 
