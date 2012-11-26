@@ -28,6 +28,7 @@
 goog.provide('goog.dom.classes');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 
 
 /**
@@ -47,6 +48,11 @@ goog.dom.classes.set = function(element, className) {
  *     properties to the array. Do not depend on any of these!
  */
 goog.dom.classes.get = function(element) {
+  // TODO(user): Element is expected to be non-null in this code. For legacy
+  // reasons, this is not reflected in the JSDoc. Migrate the JSDoc in the
+  // future.
+  goog.asserts.assert(element, 'element cannot be null');
+
   var className = element.className;
   // Some types of elements don't have a className in IE (e.g. iframes).
   // Furthermore, in Firefox, className is not a string when the element is
