@@ -104,7 +104,9 @@ goog.style.transition.isSupported = function() {
           '-moz-transition:opacity 1s linear;-o-transition:opacity 1s linear;' +
           'transition:opacity 1s linear">';
 
-      var testElement = el.firstChild;
+      var testElement = /** @type {Element} */ (el.firstChild);
+      goog.asserts.assert(testElement.nodeType == Node.ELEMENT_NODE);
+
       goog.style.transition.css3TransitionSupported_ =
           goog.isDef(testElement.style.transition) ||
           goog.isDef(testElement.style.WebkitTransition) ||
