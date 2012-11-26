@@ -314,6 +314,39 @@ function testNotFirstStrongCharacterInBR_LTR() {
   assertNoCommand();
 }
 
+/**
+ * Regression for {@link http://b/7530985}
+ */
+function testFirstStrongCharacterWithPreviousBlockSibling_RTL() {
+  field.setHtml(false, '<div>Te<div>xt</div>1<b id="cur">2</b>3</div>');
+  goog.editor.range.placeCursorNextTo(dom.$('cur'), true);
+  goog.testing.events.fireNonAsciiKeySequence(fieldElement,
+      goog.events.KeyCodes.T, ALEPH_KEYCODE);
+  assertRTL();
+}
+
+function testFirstStrongCharacterWithPreviousBlockSibling_LTR() {
+  field.setHtml(false,'<div dir="rtl">טק<div>סט</div>1<b id=cur>2</b>3</div>');
+  goog.editor.range.placeCursorNextTo(dom.$('cur'), true);
+  goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
+  assertLTR();
+}
+
+  function testFirstStrongCharacterWithFollowingBlockSibling_RTL() {
+  field.setHtml(false, '<div>1<b id="cur">2</b>3<div>Te</div>xt</div>');
+  goog.editor.range.placeCursorNextTo(dom.$('cur'), true);
+  goog.testing.events.fireNonAsciiKeySequence(fieldElement,
+      goog.events.KeyCodes.T, ALEPH_KEYCODE);
+  assertRTL();
+}
+
+function testFirstStrongCharacterWithFollowingBlockSibling_RTL() {
+  field.setHtml(false, '<div dir="rtl">1<b id="cur">2</b>3<div>א</div>ב</div>');
+  goog.editor.range.placeCursorNextTo(dom.$('cur'), true);
+  goog.testing.events.fireKeySequence(fieldElement, goog.events.KeyCodes.A);
+  assertLTR();
+}
+
 function assertRTL() {
   assertEquals(goog.editor.Command.DIR_RTL, triggeredCommand);
 }
