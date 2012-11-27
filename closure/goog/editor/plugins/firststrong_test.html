@@ -150,6 +150,23 @@ function testFirstStrongCharacterWithInnerDiv_LTR() {
   assertLTR();
 }
 
+/**
+ * Regression for {@link http://b/7549696}
+ */
+function testFirstStrongCharacterInNewLine_RTL() {
+  field.setHtml(false, '<div><b id="cur">English<br>1</b></div>');
+  goog.dom.Range.createCaret(dom.$('cur'), 2).select();
+
+  goog.testing.events.fireNonAsciiKeySequence(fieldElement,
+      goog.events.KeyCodes.T, ALEPH_KEYCODE);
+  // Only GECKO treats <br> as a new paragraph.
+  if (goog.userAgent.GECKO) {
+    assertRTL();
+  } else {
+    assertNoCommand();
+  }
+}
+
 function testFirstStrongCharacterInParagraph_RTL() {
   field.setHtml(false,
       '<div id="text1">1&gt; English</div>' +
