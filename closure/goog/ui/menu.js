@@ -442,6 +442,19 @@ goog.ui.Menu.prototype.handleKeyEventInternal = function(e) {
 };
 
 
+/** @override */
+goog.ui.Menu.prototype.setHighlightedIndex = function(index) {
+  goog.base(this, 'setHighlightedIndex', index);
+
+  // Bring the highlighted item into view. This has no effect if the menu is not
+  // scrollable.
+  var child = this.getChildAt(index);
+  if (child) {
+    goog.style.scrollIntoContainerView(child.getElement(), this.getElement());
+  }
+};
+
+
 /**
  * Decorate menu items located in any descendent node which as been explicitly
  * marked as a 'content' node.

@@ -18,6 +18,11 @@ See the COPYING file for details.
   position: absolute;
   color: #aaa;
 }
+
+.goog-scrollable-menu {
+  max-height:30px;
+  overflow-y:auto;
+}
 </style>    
 <script src="../base.js"></script>
 <script>
@@ -101,6 +106,28 @@ function testIndirectionDecoration() {
   assertEquals(-1, menu.getHighlightedIndex());
 }
 
+function testSetHighlightedIndex() {
+  menu.decorate(goog.dom.getElement('scrollableMenu'));
+  assertEquals(0, menu.getElement().scrollTop);
+
+  // Scroll down
+  var element = goog.dom.getElement('scrollableMenuItem4');
+  menu.setHighlightedIndex(3);
+  assertTrue(element.offsetTop >= menu.getElement().scrollTop);
+  assertTrue(element.offsetTop <=
+      menu.getElement().scrollTop + menu.getElement().offsetHeight);
+
+  // Scroll up
+  element = goog.dom.getElement('scrollableMenuItem3');
+  menu.setHighlightedIndex(2);
+  assertTrue(element.offsetTop >= menu.getElement().scrollTop);
+  assertTrue(element.offsetTop <=
+      menu.getElement().scrollTop + menu.getElement().offsetHeight);
+
+  menu.exitDocument();
+  assertEquals(-1, menu.getHighlightedIndex());
+}
+
 </script>
 
 <p>
@@ -123,6 +150,17 @@ function testIndirectionDecoration() {
       <div id='complexItem3' class="goog-menuitem">Deluge</div>
     </div>
   </div>
+</div>
+
+<p>
+  Here's a scrollable menu:
+</p>
+<div id="scrollableMenu" class="goog-menu goog-scrollable-menu">
+  <div id='scrollableMenuItem1' class="goog-menuitem">Auk</div>
+  <div id='scrollableMenuItem2' class="goog-menuitem">Bird</div>
+  <div id='scrollableMenuItem3' class="goog-menuitem">Crow</div>
+  <div id='scrollableMenuItem4' class="goog-menuitem">Duck</div>
+  <div id='scrollableMenuItem5' class="goog-menuitem">Emu</div>
 </div>
 
 </body>
