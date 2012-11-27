@@ -50,10 +50,9 @@ goog.result.SimpleResult = function() {
    */
   this.handlers_ = [];
 
-  // The value_ and error_ properties are defined in the constructor to ensure
-  // that all SimpleResult instances share the same hidden class in modern
-  // JavaScript engines. They are explicitly initialized to keep the compiler
-  // from removing the definition.
+  // The value_ and error_ properties are initialized in the constructor to
+  // ensure that all SimpleResult instances share the same hidden class in
+  // modern JavaScript engines.
 
   /**
    * The 'value' of this Result.
