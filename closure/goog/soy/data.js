@@ -68,7 +68,10 @@ goog.soy.data.SanitizedContentKind = {
   /** A properly encoded portion of a URI. */
   URI: goog.DEBUG ? {sanitizedContentUri: true} : {},
 
-  /** An attribute name and value such as {@code dir="ltr"}. */
+  /**
+   * Repeated attribute names and values. For example,
+   * {@code dir="ltr" foo="bar" onclick="trustedFunction()" checked}.
+   */
   HTML_ATTRIBUTE: goog.DEBUG ? {sanitizedContentHtmlAttribute: true} : {},
 
   // TODO: Consider separating rules, declarations, and values into
