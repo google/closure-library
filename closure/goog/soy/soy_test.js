@@ -104,7 +104,7 @@ example.sanitizedHtmlTemplate = function(opt_data, opt_sb, opt_injectedData) {
 example.sanitizedHtmlAttributeTemplate =
     function(opt_data, opt_sb, opt_injectedData) {
   return makeSanitizedContent('Hello World',
-      goog.soy.data.SanitizedContentKind.HTML_ATTRIBUTE);
+      goog.soy.data.SanitizedContentKind.ATTRIBUTES);
 };
 
 

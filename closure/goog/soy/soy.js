@@ -140,7 +140,7 @@ goog.soy.verifyTemplateOutputSafe_ = function(templateResult) {
         templateResult);
     var ContentKind = goog.soy.data.SanitizedContentKind;
     if (templateResult.contentKind === ContentKind.HTML ||
-        templateResult.contentKind === ContentKind.HTML_ATTRIBUTE) {
+        templateResult.contentKind === ContentKind.ATTRIBUTES) {
       return goog.asserts.assertString(templateResult.content);
     }
   }

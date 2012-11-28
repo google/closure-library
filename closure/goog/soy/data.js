@@ -72,7 +72,7 @@ goog.soy.data.SanitizedContentKind = {
    * Repeated attribute names and values. For example,
    * {@code dir="ltr" foo="bar" onclick="trustedFunction()" checked}.
    */
-  HTML_ATTRIBUTE: goog.DEBUG ? {sanitizedContentHtmlAttribute: true} : {},
+  ATTRIBUTES: goog.DEBUG ? {sanitizedContentHtmlAttribute: true} : {},
 
   // TODO: Consider separating rules, declarations, and values into
   // separate types, but for simplicity, we'll treat explicitly blessed
