@@ -822,21 +822,6 @@ function testWhenDoesntAlterOriginalChain() {
   assertEquals('There should have been 3 callbacks', 3, calls);
 }
 
-function testAddCallbackWithinCallback() {
-  var calls = [];
-
-  var d = new Deferred();
-  d.addCallback(function() {calls.push('1');});
-  d.addCallback(function() {
-    d.addCallback(function() {calls.push('4');});
-    calls.push('2');
-  });
-  d.addCallback(function() {calls.push('3');});
-
-  d.callback();
-  assertEquals('1,2,3,4', calls.join(','));
-}
-
 </script>
 </body>
 </html>

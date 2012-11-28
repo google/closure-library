@@ -139,15 +139,6 @@ goog.async.Deferred.prototype.branches_ = 0;
 
 
 /**
-  * Whether we are currently looping through the chain, firing
-  * callbacks/errbacks.
-  * @type {boolean}
-  * @private
-  */
-goog.async.Deferred.prototype.processingChain_ = false;
-
-
-/**
  * Cancels a deferred that has not yet received a value. If this Deferred is
  * paused waiting for a chained Deferred to fire, the chained Deferred will also
  * be cancelled.
@@ -347,7 +338,7 @@ goog.async.Deferred.prototype.addErrback = function(eb, opt_scope) {
 goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
   goog.asserts.assert(!this.chained_, 'Chained Deferreds can not be re-used');
   this.chain_.push([cb, eb, opt_scope]);
-  if (!this.processingChain_ && this.hasFired()) {
+  if (this.hasFired()) {
     this.fire_();
   }
   return this;
@@ -480,7 +471,6 @@ goog.async.Deferred.prototype.fire_ = function() {
   var unhandledException = false;
   var isChained = false;
 
-  this.processingChain_ = true;
   while (this.chain_.length && this.paused_ == 0) {
     var chainEntry = this.chain_.shift();
 
@@ -518,7 +508,6 @@ goog.async.Deferred.prototype.fire_ = function() {
       }
     }
   }
-  this.processingChain_ = false;
 
   this.result_ = res;
 
