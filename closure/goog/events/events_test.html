@@ -451,6 +451,66 @@ See the COPYING file for details.
     assertEquals(1, listener.getCallCount());
   }
 
+  function testListenOnceAfterListenDoesNotChangeExistingListener() {
+    var listener = goog.testing.recordFunction();
+    goog.events.listen(document.body, 'click', listener);
+    goog.events.listenOnce(document.body, 'click', listener);
+
+    dispatchClick(document.body);
+    dispatchClick(document.body);
+    dispatchClick(document.body);
+
+    assertEquals(3, listener.getCallCount());
+  }
+
+  function testListenOnceAfterListenOnceDoesNotChangeExistingListener() {
+    var listener = goog.testing.recordFunction();
+    goog.events.listenOnce(document.body, 'click', listener);
+    goog.events.listenOnce(document.body, 'click', listener);
+
+    dispatchClick(document.body);
+    dispatchClick(document.body);
+    dispatchClick(document.body);
+
+    assertEquals(1, listener.getCallCount());
+  }
+
+  function testListenAfterListenOnceRemoveOnceness() {
+    var listener = goog.testing.recordFunction();
+    goog.events.listenOnce(document.body, 'click', listener);
+    goog.events.listen(document.body, 'click', listener);
+
+    dispatchClick(document.body);
+    dispatchClick(document.body);
+    dispatchClick(document.body);
+
+    assertEquals(3, listener.getCallCount());
+  }
+
+  function testUnlistenAfterListenOnce() {
+    var listener = goog.testing.recordFunction();
+
+    goog.events.listenOnce(document.body, 'click', listener);
+    goog.events.unlisten(document.body, 'click', listener);
+    dispatchClick(document.body);
+
+    goog.events.listenOnce(document.body, 'click', listener);
+    goog.events.listen(document.body, 'click', listener);
+    goog.events.unlisten(document.body, 'click', listener);
+    dispatchClick(document.body);
+
+    goog.events.listen(document.body, 'click', listener);
+    goog.events.listenOnce(document.body, 'click', listener);
+    goog.events.unlisten(document.body, 'click', listener);
+    dispatchClick(document.body);
+
+    goog.events.listenOnce(document.body, 'click', listener);
+    goog.events.listenOnce(document.body, 'click', listener);
+    goog.events.unlisten(document.body, 'click', listener);
+    dispatchClick(document.body);
+
+    assertEquals(0, listener.getCallCount());
+  }
 </script>
 </body>
 </html>
