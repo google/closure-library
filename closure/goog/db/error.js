@@ -91,7 +91,8 @@ goog.db.Error.DatabaseErrorCode_ = {
   TRANSIENT_ERR: 11,
   TIMEOUT_ERR: 10,
   QUOTA_ERR: 11,
-  INVALID_ACCESS_ERR: 12
+  INVALID_ACCESS_ERR: 12,
+  INVALID_STATE_ERR: 13
 };
 
 
@@ -136,7 +137,9 @@ goog.db.Error.ErrorCode = {
       goog.global.webkitIDBDatabaseException ||
       goog.db.Error.DatabaseErrorCode_).QUOTA_ERR,
   INVALID_ACCESS_ERR: (goog.global.DOMException ||
-      goog.db.Error.DatabaseErrorCode_).INVALID_ACCESS_ERR
+      goog.db.Error.DatabaseErrorCode_).INVALID_ACCESS_ERR,
+  INVALID_STATE_ERR: (goog.global.DOMException ||
+      goog.db.Error.DatabaseErrorCode_).INVALID_STATE_ERR
 };
 
 
@@ -175,4 +178,18 @@ goog.db.Error.getMessage = function(code) {
     default:
       return 'Unrecognized exception with code ' + code;
   }
+};
+
+
+/**
+ * Returns an error, wrapping it in a {@link goog.db.Error} if it's an IndexedDB
+ * error.
+ *
+ * @param {Error} err The error object to possibly wrap.
+ * @param {string} message The error message to add to err if it's wrapped.
+ * @return {goog.db.Error|Error} The possibly-wrapped error.
+ */
+goog.db.Error.create = function(err, message) {
+  if (!('code' in err)) return err;
+  return new goog.db.Error(err.code, message);
 };

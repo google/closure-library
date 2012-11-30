@@ -16,9 +16,8 @@
  * @fileoverview Wrappers for the HTML5 IndexedDB. The wrappers export nearly
  * the same interface as the standard API, but return goog.async.Deferred
  * objects instead of request objects and use Closure events. The wrapper works
- * and has been tested on Chrome version 18+. Though they should work in theory,
- * the wrapper tests fail in strange, non-deterministic ways on Firefox 6,
- * unfortunately.
+ * and has been tested on Chrome version 22+. It may work on older Chrome
+ * versions, but they aren't explicitly supported.
  *
  * Example usage:
  *
@@ -72,7 +71,7 @@ goog.db.openDatabase = function(name) {
   };
   openRequest.onerror = function(ev) {
     var msg = 'opening database ' + name;
-    d.errback(new goog.db.Error(ev.target.code, msg));
+    d.errback(new goog.db.Error(ev.target.errorCode, msg));
   };
   return d;
 };

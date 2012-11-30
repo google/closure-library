@@ -86,7 +86,7 @@ goog.db.Cursor.prototype.update = function(value) {
     request = this.cursor_.update(value);
   } catch (err) {
     msg += goog.debug.deepExpose(value);
-    d.errback(new goog.db.Error(err.code, msg));
+    d.errback(goog.db.Error.create(err, msg));
     return d;
   }
   request.onsuccess = function(ev) {
@@ -115,7 +115,7 @@ goog.db.Cursor.prototype.remove = function() {
   try {
     request = this.cursor_['delete']();
   } catch (err) {
-    d.errback(new goog.db.Error(err.code, msg));
+    d.errback(goog.db.Error.create(err, msg));
     return d;
   }
   request.onsuccess = function(ev) {
@@ -151,13 +151,13 @@ goog.db.Cursor.prototype.getKey = function() {
  * Possible cursor directions.
  * @see http://www.w3.org/TR/IndexedDB/#idl-def-IDBCursor
  *
- * @enum {number}
+ * @enum {string}
  */
 goog.db.Cursor.Direction = {
-  NEXT: 0,
-  NEXT_NO_DUPLICATE: 1,
-  PREV: 2,
-  PREV_NO_DUPLICATE: 3
+  NEXT: 'next',
+  NEXT_NO_DUPLICATE: 'nextunique',
+  PREV: 'prev',
+  PREV_NO_DUPLICATE: 'prevunique'
 };
 
 

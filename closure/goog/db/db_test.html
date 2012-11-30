@@ -31,12 +31,16 @@ goog.require('goog.userAgent.product.isVersion');
 </head>
 <body>
 <script>
-// Chrome 18+ is the only browser confirmed to work. Firefox 6 does not.
+// Chrome 22+ is the only browser confirmed to work. Firefox does not.
 var idbSupported = goog.userAgent.product.CHROME &&
-    goog.userAgent.product.isVersion("18");
+    goog.userAgent.product.isVersion("22");
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 var dbName = 'testDb';
 var globalDb = null;
+
+// On Chrome 24+, the database reports its default version as 1 as opposed to
+// the empty string (as per the new spec).
+var baseVersion = goog.userAgent.product.isVersion("24") ? 1 : '';
 
 function restartDatabase(db) {
   if (db && db.isOpen()) {
@@ -127,7 +131,7 @@ function setUp() {
   }
 
   globalDb = restartDatabase().addCallback(function(db) {
-    if (db.getVersion() != '') {
+    if (db.getVersion() != baseVersion) {
       return cleanUpDatabase(db);
     }
   }).addErrback(failOnError);
@@ -153,7 +157,7 @@ function testSetVersion() {
 
   asyncTestCase.waitForAsync('set version request');
   globalDb.branch().addCallback(function(db) {
-    assertEquals('', db.getVersion());
+    assertEquals(baseVersion, db.getVersion());
     return db.setVersion('version').addCallback(function(tx) {
       return restartDatabase(db);
     });
@@ -170,7 +174,7 @@ function testManipulateObjectStores() {
 
   asyncTestCase.waitForAsync('set version and manipulate object stores');
   globalDb.branch().addCallback(function(db) {
-    assertEquals('', db.getVersion());
+    assertEquals(baseVersion, db.getVersion());
     return db.setVersion('objstores').addCallback(function(tx) {
       db.createObjectStore('basicStore');
       db.createObjectStore('keyPathStore', {keyPath: 'keyGoesHere'});
@@ -206,7 +210,7 @@ function testBadObjectStoreManipulation() {
   }
 
   asyncTestCase.waitForAsync('bad object store manipulation');
-  var expectedCode = goog.db.Error.ErrorCode.NOT_ALLOWED_ERR;
+  var expectedCode = goog.db.Error.ErrorCode.INVALID_STATE_ERR;
   globalDb.branch().addCallback(function(db) {
     try {
       db.createObjectStore('diediedie');
@@ -1160,9 +1164,12 @@ function testUniqueIndex() {
     goog.events.listen(tx, goog.db.Transaction.EventTypes.ERROR, function(ev) {
       // expected
       assertTrue(
-          'Expected CONSTRAINT_ERR or UNKNOWN_ERR, was ' + ev.target.code,
-          // Chrome 15+
+          'Expected DATA_ERR, CONSTRAINT_ERR or UNKNOWN_ERR, was ' +
+            ev.target.code,
+          // Chrome 15-21, 23+
           ev.target.code == goog.db.Error.ErrorCode.CONSTRAINT_ERR ||
+            // Chrome 22
+            ev.target.code == goog.db.Error.ErrorCode.DATA_ERR ||
             // Chrome 14
             ev.target.code == goog.db.Error.ErrorCode.UNKNOWN_ERR);
       closeAndContinue(db);

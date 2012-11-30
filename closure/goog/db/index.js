@@ -88,7 +88,7 @@ goog.db.Index.prototype.get_ = function(fn, msg, value) {
     request = this.index_[fn](value);
   } catch (err) {
     msg += ' with value ' + goog.debug.deepExpose(value);
-    d.errback(new goog.db.Error(err.code, msg));
+    d.errback(goog.db.Error.create(err, msg));
     return d;
   }
   request.onsuccess = function(ev) {
@@ -155,7 +155,7 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, opt_value) {
     if (opt_value) {
       msg += ' for value ' + goog.debug.deepExpose(opt_value);
     }
-    d.errback(new goog.db.Error(err.code, msg));
+    d.errback(goog.db.Error.create(err, msg));
     return d;
   }
   var result = [];
