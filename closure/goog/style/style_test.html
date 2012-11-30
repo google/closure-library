@@ -1562,6 +1562,19 @@ function testGetPaddingBox() {
   assertTrue(rect.left >= 0);
 }
 
+function testGetPaddingBoxUnattached() {
+  var el = document.createElement('div');
+  var box = goog.style.getPaddingBox(el);
+  if (goog.userAgent.WEBKIT) {
+    assertTrue(isNaN(box.top));
+    assertTrue(isNaN(box.right));
+    assertTrue(isNaN(box.bottom));
+    assertTrue(isNaN(box.left));
+  } else {
+    assertObjectEquals(new goog.math.Box(0, 0, 0, 0), box);
+  }
+}
+
 function testGetMarginBox() {
   // Strict mode
   var el = $('size-e');
