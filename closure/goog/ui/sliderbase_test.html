@@ -16,12 +16,20 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.dom.a11y');
   goog.require('goog.dom.a11y.State');
+  goog.require('goog.dom.classes');
   goog.require('goog.events');
+  goog.require('goog.events.EventType');
+  goog.require('goog.events.KeyCodes');
+  goog.require('goog.fx.Animation');
   goog.require('goog.style');
+  goog.require('goog.style.bidi');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.MockControl');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.mockmatchers');
   goog.require('goog.testing.recordFunction');
+  goog.require('goog.ui.Component');
   goog.require('goog.ui.SliderBase');
   goog.require('goog.userAgent');
 </script>
@@ -72,6 +80,7 @@ var twoThumbSliderRtl;
 var twoChangeEventCount;
 
 var mockClock;
+var mockAnimation;
 
 /**
  * A basic class to implement the abstract goog.ui.SliderBase for testing.
@@ -118,6 +127,24 @@ TwoThumbSlider.prototype.createThumbs = function() {
 /** {@override} */
 TwoThumbSlider.prototype.getCssClass = function() {
   return 'dummyCssClass';
+};
+
+
+/**
+ * Basic class that implements the AnimationFactory interface for testing.
+ * @param {!goog.fx.Animation|!Array.<!goog.fx.Animation>} testAnimations The
+ *     test animations to use.
+ * @constructor
+ * @implements {goog.ui.SliderBase.AnimationFactory}
+ */
+function AnimationFactory(testAnimations) {
+  this.testAnimations = testAnimations;
+}
+
+
+/** @override */
+AnimationFactory.prototype.createAnimations = function() {
+  return this.testAnimations;
 };
 
 
@@ -328,7 +355,7 @@ function testUpdateValueExtent() {
 
 function testRangeListener() {
   var slider = new goog.ui.SliderBase;
-  slider.updateUi_= slider.updateAriaStates = function() {};
+  slider.updateUi_ = slider.updateAriaStates = function() {};
   slider.rangeModel.setValue(0);
 
   var f = goog.testing.recordFunction();
@@ -349,6 +376,9 @@ function testRangeListener() {
  * startValue and endValue. Assumes slider has default min/max values [0, 100],
  * width of 1020px, and thumb widths of 20px, with rangeHighlight drawn from
  * the centers of the thumbs.
+ * @param {number} rangeHighlight The range highlight.
+ * @param {number} startValue The start value.
+ * @param {number} endValue The end value.
  */
 function assertHighlightedRange(rangeHighlight, startValue, endValue) {
   var rangeStr = '[' + startValue + ', ' + endValue + ']';
@@ -527,6 +557,29 @@ function testRangeHighlightForZeroSizeSlider() {
       0, goog.dom.getElement('rangeHighlight').offsetWidth);
 }
 
+function testAnimatedSetValueAnimatesFactoryCreatedAnimations() {
+  // Create and set the factory.
+  var ignore = goog.testing.mockmatchers.ignoreArgument;
+  var mockControl = new goog.testing.MockControl();
+  var mockAnimation1 = mockControl.createLooseMock(goog.fx.Animation);
+  var mockAnimation2 = mockControl.createLooseMock(goog.fx.Animation);
+  var testAnimations = [mockAnimation1, mockAnimation2];
+  oneThumbSlider.setAdditionalAnimations(new AnimationFactory(testAnimations));
+
+  // Expect the animations to be played.
+  mockAnimation1.play(false);
+  mockAnimation2.play(false);
+  mockAnimation1.addEventListener(ignore, ignore, ignore);
+  mockAnimation2.addEventListener(ignore, ignore, ignore);
+
+  // Animate and verify.
+  mockControl.$replayAll();
+  oneThumbSlider.animatedSetValue(50);
+  mockControl.$verifyAll();
+  mockControl.$resetAll();
+  mockControl.$tearDown();
+}
+
 function testMouseWheelEventHandlerEnable() {
   // Mouse wheel handling should be enabled by default.
   assertTrue(oneThumbSlider.isHandleMouseWheel());
@@ -700,7 +753,7 @@ function testDragEvents() {
   var event_types = [];
   var handler = function(evt) {
     event_types.push(evt.type);
-  }
+  };
 
   goog.events.listen(oneThumbSlider,
       [goog.ui.SliderBase.EventType.DRAG_START,

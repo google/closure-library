@@ -41,9 +41,11 @@
  */
 
 goog.provide('goog.ui.SliderBase');
+goog.provide('goog.ui.SliderBase.AnimationFactory');
 goog.provide('goog.ui.SliderBase.Orientation');
 
 goog.require('goog.Timer');
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.dom.a11y.Role');
@@ -53,13 +55,10 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
-goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.events.MouseWheelHandler');
-goog.require('goog.events.MouseWheelHandler.EventType');
 goog.require('goog.fx.AnimationParallelQueue');
 goog.require('goog.fx.Dragger');
-goog.require('goog.fx.Dragger.EventType');
-goog.require('goog.fx.Transition.EventType');
+goog.require('goog.fx.Transition');
 goog.require('goog.fx.dom.ResizeHeight');
 goog.require('goog.fx.dom.ResizeWidth');
 goog.require('goog.fx.dom.Slide');
@@ -68,7 +67,6 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 goog.require('goog.style.bidi');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.RangeModel');
 
 
@@ -81,7 +79,21 @@ goog.require('goog.ui.RangeModel');
  */
 goog.ui.SliderBase = function(opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
+
+  /**
+   * The factory to use to generate additional animations when animating to a
+   * new value.
+   * @type {goog.ui.SliderBase.AnimationFactory}
+   * @private
+   */
+  this.additionalAnimations_ = null;
+
+  /**
+   * The model for the range of the slider.
+   * @type {!goog.ui.RangeModel}
+   */
   this.rangeModel = new goog.ui.RangeModel;
+
   // Don't use getHandler because it gets cleared in exitDocument.
   goog.events.listen(this.rangeModel, goog.ui.Component.EventType.CHANGE,
       this.handleRangeModelChange, false, this);
@@ -1120,12 +1132,46 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
         coord, animations);
   }
 
+  // Create additional animations to play if a factory has been set.
+  if (this.additionalAnimations_) {
+    var additionalAnimations = this.additionalAnimations_.createAnimations(
+        previousValue, v, goog.ui.SliderBase.ANIMATION_INTERVAL_);
+    goog.array.forEach(additionalAnimations, function(animation) {
+      animations.add(animation);
+    });
+  }
+
   this.currentAnimation_ = animations;
   this.getHandler().listen(animations, goog.fx.Transition.EventType.END,
       this.endAnimation_);
 
   this.isAnimating_ = true;
   animations.play(false);
+};
+
+
+/**
+ * @return {boolean} True if the slider is animating, false otherwise.
+ */
+goog.ui.SliderBase.prototype.isAnimating = function() {
+  return this.isAnimating_;
+};
+
+
+/**
+ * Sets the factory that will be used to create additional animations to be
+ * played when animating to a new value.  These animations can be for any
+ * element and the animations will be played in addition to the default
+ * animation(s).  The animations will also be played in the same parallel queue
+ * ensuring that all animations are played at the same time.
+ * @see #animatedSetValue
+ *
+ * @param {goog.ui.SliderBase.AnimationFactory} factory The animation factory to
+ *     use.  This will not change the default animations played by the slider.
+ *     It will only allow for additional animations.
+ */
+goog.ui.SliderBase.prototype.setAdditionalAnimations = function(factory) {
+  this.additionalAnimations_ = factory;
 };
 
 
@@ -1548,3 +1594,23 @@ goog.ui.SliderBase.prototype.getOffsetStart_ = function(element) {
   return this.flipForRtl_ ?
       goog.style.bidi.getOffsetStart(element) : element.offsetLeft;
 };
+
+
+
+/**
+ * The factory for creating additional animations to be played when animating to
+ * a new value.
+ * @interface
+ */
+goog.ui.SliderBase.AnimationFactory = function() {};
+
+
+/**
+ * Creates an additonal animation to play when animating to a new value.
+ *
+ * @param {number} previousValue The previous value (before animation).
+ * @param {number} newValue The new value (after animation).
+ * @param {number} interval The animation interval.
+ * @return {!Array.<!goog.fx.TransitionBase>} The additional animations to play.
+ */
+goog.ui.SliderBase.AnimationFactory.prototype.createAnimations;
