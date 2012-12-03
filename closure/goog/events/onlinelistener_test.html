@@ -17,6 +17,7 @@ See the COPYING file for details.
 
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.OnlineHandler');
+goog.require('goog.net.NetworkStatusMonitor');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.testing.MockClock');
@@ -37,12 +38,12 @@ function listenToEvents(oh) {
   onlineCount = 0;
   offlineCount = 0;
 
-  goog.events.listen(oh, goog.events.OnlineHandler.EventType.ONLINE,
+  goog.events.listen(oh, goog.net.NetworkStatusMonitor.EventType.ONLINE,
                      function(e) {
                        assertTrue(oh.isOnline());
                        onlineCount++;
                      });
-  goog.events.listen(oh, goog.events.OnlineHandler.EventType.OFFLINE,
+  goog.events.listen(oh, goog.net.NetworkStatusMonitor.EventType.OFFLINE,
                      function(e) {
                        assertFalse(oh.isOnline());
                        offlineCount++;

@@ -15,7 +15,7 @@ See the COPYING file for details.
   <title>Closure Unit Tests - goog.testing.events</title>
   <script src="../../base.js"></script>
   <script>
-    goog.require('goog.events.OnlineHandler.EventType');
+    goog.require('goog.net.NetworkStatusMonitor');
     goog.require('goog.testing.events.EventObserver');
     goog.require('goog.testing.events.OnlineHandler');
     goog.require('goog.testing.jsunit');
@@ -73,16 +73,16 @@ See the COPYING file for details.
     handler = new goog.testing.events.OnlineHandler(initialValue);
     observer = new goog.testing.events.EventObserver();
     goog.events.listen(handler,
-       [goog.events.OnlineHandler.EventType.ONLINE,
-           goog.events.OnlineHandler.EventType.OFFLINE],
+       [goog.net.NetworkStatusMonitor.EventType.ONLINE,
+           goog.net.NetworkStatusMonitor.EventType.OFFLINE],
        observer);
   }
 
   function assertEventCounts(expectedOnlineEvents, expectedOfflineEvents) {
-    assertEquals(expectedOnlineEvents,
-        observer.getEvents(goog.events.OnlineHandler.EventType.ONLINE).length);
-    assertEquals(expectedOfflineEvents,
-        observer.getEvents(goog.events.OnlineHandler.EventType.OFFLINE).length);
+    assertEquals(expectedOnlineEvents, observer.getEvents(
+            goog.net.NetworkStatusMonitor.EventType.ONLINE).length);
+    assertEquals(expectedOfflineEvents, observer.getEvents(
+            goog.net.NetworkStatusMonitor.EventType.OFFLINE).length);
   }
 </script>
 </body>
