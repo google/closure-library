@@ -13,7 +13,7 @@ See the COPYING file for details.
 <script>
 
 goog.require('goog.style');
-goog.require('goog.style_test');
+goog.require('goog.style_scrollbar_test');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.userAgent');
@@ -46,10 +46,9 @@ var expectedFailures = new goog.testing.ExpectedFailures();
 
 function tearDown() {
   expectedFailures.handleTearDown();
-}
 
-function testScrollBarWidth() {
-  goog.style_test.testScrollbarWidth();
+  // Assert that the test loaded.
+  goog.asserts.assert(testScrollbarWidth);
 }
 
 function testScrollBarWidth_webkitScrollbar() {
