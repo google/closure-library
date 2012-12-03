@@ -46,7 +46,7 @@ See the COPYING file for details.
 }
 
 #thumb {
-  position: relative;
+  position: absolute;
   width: 20px;
   height: 20px;
   background: black;
@@ -622,11 +622,16 @@ function testMouseClickWithMoveToPointEnabled() {
   var stepSize = 20;
   oneThumbSlider.setStep(stepSize);
   oneThumbSlider.setMoveToPointEnabled(true);
-
   var initialValue = oneThumbSlider.getValue();
-  var coords = goog.style.getClientPosition(oneThumbSlider.getElement());
 
-  coords.x += stepSize / 2;
+  // Figure out the number of pixels per step.
+  var numSteps = Math.round(
+      (oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum()) / stepSize);
+  var size = goog.style.getSize(oneThumbSlider.getElement());
+  var pixelsPerStep = Math.round(size.width / numSteps);
+
+  var coords = goog.style.getClientPosition(oneThumbSlider.getElement());
+  coords.x += pixelsPerStep / 2;
 
   // Case when value is increased
   goog.testing.events.fireClickSequence(oneThumbSlider.getElement(),
