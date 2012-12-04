@@ -21,6 +21,7 @@ See the COPYING file for details.
   goog.require('goog.events.EventType');
   goog.require('goog.events.KeyCodes');
   goog.require('goog.fx.Animation');
+  goog.require('goog.math.Coordinate');
   goog.require('goog.style');
   goog.require('goog.style.bidi');
   goog.require('goog.testing.MockClock');
@@ -42,6 +43,11 @@ See the COPYING file for details.
   height: 20px;
 }
 
+#oneThumbSlider.test-slider-vertical {
+  height: 1000px;
+  width: 20px;
+}
+
 #twoThumbSlider {
   position: relative;
   /* Extra 20px is so distance between thumb centers is 1000px */
@@ -58,6 +64,12 @@ See the COPYING file for details.
   width: 20px;
   height: 20px;
   background: black;
+  top: 5px;
+}
+
+.test-slider-vertical > #thumb {
+  left: 5px;
+  top: auto;
 }
 
 #rangeHighlight {
@@ -100,8 +112,8 @@ OneThumbSlider.prototype.createThumbs = function() {
 
 
 /** {@override} */
-OneThumbSlider.prototype.getCssClass = function() {
-  return 'dummyCssClass';
+OneThumbSlider.prototype.getCssClass = function(orientation) {
+  return goog.getCssName('test-slider', orientation);
 };
 
 
@@ -125,8 +137,8 @@ TwoThumbSlider.prototype.createThumbs = function() {
 
 
 /** {@override} */
-TwoThumbSlider.prototype.getCssClass = function() {
-  return 'dummyCssClass';
+TwoThumbSlider.prototype.getCssClass = function(orientation) {
+  return goog.getCssName('test-slider', orientation);
 };
 
 
@@ -704,17 +716,45 @@ function testMouseClickWithMoveToPointEnabled() {
 /**
  * Tests getThumbCoordinateForValue method.
  */
-function testThumbCoordinateForValue() {
-  var value = 30;
-  oneThumbSlider.setValue(value);
-  var coord = goog.style.getPosition(oneThumbSlider.valueThumb);
-  assertEquals(
-      coord.x, Math.round(oneThumbSlider.getThumbCoordinateForValue(value).x));
-  assertEquals(0, oneThumbSlider.getThumbCoordinateForValue(value).y);
+function testThumbCoordinateForValueWithHorizontalSlider() {
+  // Make sure the y-coordinate stays the same for the horizontal slider.
+  var originalY = goog.style.getPosition(oneThumbSlider.valueThumb).y;
+  var width = oneThumbSlider.getElement().clientWidth -
+      oneThumbSlider.valueThumb.offsetWidth;
+  var range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
+
+  // Verify coordinate for a particular value.
+  var value = 20;
+  var expectedX = Math.round(value / range * width);
+  var expectedCoord = new goog.math.Coordinate(expectedX, originalY);
+  var coord = oneThumbSlider.getThumbCoordinateForValue(value);
+  assertObjectEquals(expectedCoord, coord);
+
   // Verify this works regardless of current position.
   oneThumbSlider.setValue(value / 2);
-  assertEquals(
-      coord.x, Math.round(oneThumbSlider.getThumbCoordinateForValue(value).x));
+  coord = oneThumbSlider.getThumbCoordinateForValue(value);
+  assertObjectEquals(expectedCoord, coord);
+}
+
+function testThumbCoordinateForValueWithVerticalSlider() {
+  // Make sure the x-coordinate stays the same for the vertical slider.
+  oneThumbSlider.setOrientation(goog.ui.SliderBase.Orientation.VERTICAL);
+  var originalX = goog.style.getPosition(oneThumbSlider.valueThumb).x;
+  var height = oneThumbSlider.getElement().clientHeight -
+      oneThumbSlider.valueThumb.offsetHeight;
+  var range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
+
+  // Verify coordinate for a particular value.
+  var value = 20;
+  var expectedY = height - Math.round(value / range * height);
+  var expectedCoord = new goog.math.Coordinate(originalX, expectedY);
+  var coord = oneThumbSlider.getThumbCoordinateForValue(value);
+  assertObjectEquals(expectedCoord, coord);
+
+  // Verify this works regardless of current position.
+  oneThumbSlider.setValue(value / 2);
+  coord = oneThumbSlider.getThumbCoordinateForValue(value);
+  assertObjectEquals(expectedCoord, coord);
 }
 
 /**

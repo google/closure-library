@@ -1062,11 +1062,13 @@ goog.ui.SliderBase.prototype.getThumbCoordinateForValue = function(val) {
       var thumbHeight = this.valueThumb.offsetHeight;
       var h = this.getElement().clientHeight - thumbHeight;
       var bottom = Math.round(ratio * h);
+      coord.x = this.getOffsetStart_(this.valueThumb); // Keep x the same.
       coord.y = h - bottom;
     } else {
       var w = this.getElement().clientWidth - this.valueThumb.offsetWidth;
       var left = Math.round(ratio * w);
       coord.x = left;
+      coord.y = this.valueThumb.offsetTop; // Keep y the same.
     }
   }
   return coord;
