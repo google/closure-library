@@ -937,6 +937,19 @@ var assertEvaluatesToFalse = function(a, opt_b) {
 
 
 /**
+ * Compares two HTML snippets.
+ *
+ * Take extra care if attributes are involved. {@code assertHTMLEquals}'s
+ * implementation isn't prepared for complex cases. For example, the following
+ * comparisons erroneously fail:
+ * <pre>
+ * assertHTMLEquals('<a href="x" target="y">', '<a target="y" href="x">');
+ * assertHTMLEquals('<div classname="a b">', '<div classname="b a">');
+ * assertHTMLEquals('<input disabled>', '<input disabled="disabled">');
+ * </pre>
+ *
+ * When in doubt, use {@code goog.testing.dom.assertHtmlMatches}.
+ *
  * @param {*} a The expected value (2 args) or the debug message (3 args).
  * @param {*} b The actual value (2 args) or the expected value (3 args).
  * @param {*=} opt_c The actual value (3 args only).
