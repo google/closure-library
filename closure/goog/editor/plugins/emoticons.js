@@ -76,10 +76,11 @@ goog.editor.plugins.Emoticons.prototype.execCommandInternal = function(
 
   this.getFieldObject().getRange().replaceContentsWithNode(img);
 
-  // IE does the right thing with the cursor, and has a js error when we try
-  // to place the cursor manually
-  if (!goog.userAgent.IE) {
+  // IE8 does the right thing with the cursor, and has a js error when we try
+  // to place the cursor manually.
+  // IE9 loses the cursor when the window is focused, so focus first.
+  if (!goog.userAgent.IE || goog.userAgent.isDocumentMode(9)) {
+    this.getFieldObject().focus();
     goog.editor.range.placeCursorNextTo(img, false);
-    dom.getWindow().focus();
   }
 };
