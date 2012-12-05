@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+Author:  attila@google.com (Attila Bodis)
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Closure Unit Tests - goog.a11y.aria</title>
+  <script src="../../base.js"></script>
+  <script>
+    goog.require('goog.dom');
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.Role');
+    goog.require('goog.a11y.aria.State');
+    goog.require('goog.testing.jsunit');
+  </script>
+</head>
+<body>
+  <div id="sandbox"></div>
+  <script>
+    var sandbox = goog.dom.getElement('sandbox');
+    var someDiv;
+    var someSpan;
+
+    function setUp() {
+      someDiv = goog.dom.createDom('div', {id: 'someDiv'}, 'DIV');
+      someSpan = goog.dom.createDom('span', {id: 'someSpan'}, 'SPAN');
+      sandbox.appendChild(someDiv);
+      someDiv.appendChild(someSpan);
+    }
+
+    function tearDown() {
+      sandbox.innerHTML = '';
+      someDiv = null;
+      someSpan = null;
+    }
+
+    function testGetSetRole() {
+      assertEquals('someDiv\'s role should be the empty string',
+          '', goog.a11y.aria.getRole(someDiv));
+      assertEquals('someSpan\'s role should be the empty string',
+          '', goog.a11y.aria.getRole(someSpan));
+
+      goog.a11y.aria.setRole(someDiv, goog.a11y.aria.Role.MENU);
+      goog.a11y.aria.setRole(someSpan, goog.a11y.aria.Role.MENU_ITEM);
+
+      assertEquals('someDiv\'s role should be MENU',
+          goog.a11y.aria.Role.MENU, goog.a11y.aria.getRole(someDiv));
+      assertEquals('someSpan\'s role should be MENU_ITEM',
+          goog.a11y.aria.Role.MENU_ITEM, goog.a11y.aria.getRole(someSpan));
+
+      var div = goog.dom.createElement('div');
+      sandbox.appendChild(div);
+      div.innerHTML = '<span id="anotherSpan" role="' +
+          goog.a11y.aria.Role.CHECKBOX + '"></span>';
+      assertEquals('anotherSpan\'s role should be CHECKBOX',
+          goog.a11y.aria.Role.CHECKBOX,
+          goog.a11y.aria.getRole(document.getElementById('anotherSpan')));
+    }
+
+    function testGetSetState() {
+      goog.a11y.aria.setState(someDiv, goog.a11y.aria.State.LABELLEDBY,
+          'someSpan');
+
+      assertEquals(
+          'someDiv\'s labelledby state should be "someSpan"',
+          'someSpan',
+          goog.a11y.aria.getState(someDiv, goog.a11y.aria.State.LABELLEDBY));
+    }
+
+    function testGetSetActiveDescendant() {
+      goog.a11y.aria.setActiveDescendant(someDiv, null);
+      assertNull('someDiv\'s activedescendant should be null',
+          goog.a11y.aria.getActiveDescendant(someDiv));
+
+      goog.a11y.aria.setActiveDescendant(someDiv, someSpan);
+
+      assertEquals(
+          'someDiv\'s active descendant should be "someSpan"',
+          someSpan,
+          goog.a11y.aria.getActiveDescendant(someDiv));
+    }
+  </script>
+</body>
+</html>
