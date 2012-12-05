@@ -33,6 +33,7 @@ var fsExists = goog.isDef(goog.global.requestFileSystem) ||
     goog.isDef(goog.global.webkitRequestFileSystem);
 var deferredFs = fsExists ? goog.fs.getTemporary() : null;
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+asyncTestCase.stepTimeout = 5000;
 var stubs = new goog.testing.PropertyReplacer();
 
 
