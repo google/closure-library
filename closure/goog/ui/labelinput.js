@@ -39,6 +39,7 @@
 goog.provide('goog.ui.LabelInput');
 
 goog.require('goog.Timer');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.dom.a11y.State');
@@ -130,7 +131,9 @@ goog.ui.LabelInput.prototype.decorateInternal = function(element) {
   if (goog.dom.getActiveElement(goog.dom.getOwnerDocument(element)) ==
       element) {
     this.hasFocus_ = true;
-    goog.dom.classlist.remove(this.getElement(), this.LABEL_CLASS_NAME);
+    var el = this.getElement();
+    goog.asserts.assert(el);
+    goog.dom.classlist.remove(el, this.LABEL_CLASS_NAME);
   }
 
   if (goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_) {
@@ -247,7 +250,9 @@ goog.ui.LabelInput.prototype.LABEL_CLASS_NAME =
  */
 goog.ui.LabelInput.prototype.handleFocus_ = function(e) {
   this.hasFocus_ = true;
-  goog.dom.classlist.remove(this.getElement(), this.LABEL_CLASS_NAME);
+  var el = this.getElement();
+  goog.asserts.assert(el);
+  goog.dom.classlist.remove(el, this.LABEL_CLASS_NAME);
   if (goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_) {
     return;
   }
@@ -475,7 +480,9 @@ goog.ui.LabelInput.prototype.check_ = function() {
 
   if (!this.hasChanged()) {
     if (!this.inFocusAndSelect_ && !this.hasFocus_) {
-      goog.dom.classlist.add(this.getElement(), this.LABEL_CLASS_NAME);
+      var el = this.getElement();
+      goog.asserts.assert(el);
+      goog.dom.classlist.add(el, this.LABEL_CLASS_NAME);
     }
 
     // Allow browser to catchup with CSS changes before restoring the label.
@@ -483,7 +490,9 @@ goog.ui.LabelInput.prototype.check_ = function() {
       goog.Timer.callOnce(this.restoreLabel_, 10, this);
     }
   } else {
-    goog.dom.classlist.remove(this.getElement(), this.LABEL_CLASS_NAME);
+    var el = this.getElement();
+    goog.asserts.assert(el);
+    goog.dom.classlist.remove(el, this.LABEL_CLASS_NAME);
   }
 };
 
@@ -527,7 +536,9 @@ goog.ui.LabelInput.prototype.focusAndSelect = function() {
  */
 goog.ui.LabelInput.prototype.setEnabled = function(enabled) {
   this.getElement().disabled = !enabled;
-  goog.dom.classlist.enable(this.getElement(),
+  var el = this.getElement();
+  goog.asserts.assert(el);
+  goog.dom.classlist.enable(el,
       goog.getCssName(this.LABEL_CLASS_NAME, 'disabled'), !enabled);
 };
 
