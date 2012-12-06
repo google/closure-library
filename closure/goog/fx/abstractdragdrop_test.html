@@ -15,9 +15,11 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.fx.AbstractDragDrop</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.functions');
   goog.require('goog.fx.AbstractDragDrop');
   goog.require('goog.math.Box');
   goog.require('goog.style');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
 </script>
 <style>
@@ -526,6 +528,27 @@ function testScrollableContainersCalculation() {
   assertEquals(container, group.targetList_[1].scrollableContainer_);
 }
 
+// See http://b/7494613.
+function testMouseUpOutsideElement() {
+  var group = new goog.fx.AbstractDragDrop();
+  var target = new goog.fx.AbstractDragDrop();
+  group.addTarget(target);
+  var item1 = new goog.fx.DragDropItem(document.getElementById('child1'));
+  group.items_.push(item1);
+  item1.setParent(group);
+  group.init();
+
+  group.startDrag = goog.functions.error('startDrag should not be called.');
+
+  goog.testing.events.fireMouseDownEvent(item1.element);
+  goog.testing.events.fireMouseUpEvent(item1.element.parentNode);
+  // This should have no effect (not start a drag) since the previous event
+  // should have cleared the listeners.
+  goog.testing.events.fireMouseOutEvent(item1.element);
+
+  group.dispose();
+  target.dispose();
+}
 
 function testScrollBeforeMoveDrag() {
   var group = new goog.fx.AbstractDragDrop();
