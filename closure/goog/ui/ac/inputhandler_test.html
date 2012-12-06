@@ -656,6 +656,13 @@ See the COPYING file for details.
     assertTrue('Should be dismissed', mh.ac_.dismissWasCalled);
   }
 
+  function testEmptySeparatorUsesDefaults() {
+    var inputHandler = new goog.ui.ac.InputHandler('');
+    assertFalse(inputHandler.separatorCheck_.test(''));
+    assertFalse(inputHandler.separatorCheck_.test('x'));
+    assertTrue(inputHandler.separatorCheck_.test(','));
+  }
+
 </script>
 </body>
 </html>
