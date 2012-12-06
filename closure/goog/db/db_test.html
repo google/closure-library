@@ -35,7 +35,10 @@ goog.require('goog.userAgent.product.isVersion');
 var idbSupported = goog.userAgent.product.CHROME &&
     goog.userAgent.product.isVersion("22");
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
-var dbName = 'testDb';
+asyncTestCase.stepTimeout = 5000;
+var dbName;
+var dbBaseName = 'testDb';
+var testNumber = 0;
 var globalDb = null;
 
 // On Chrome 24+, the database reports its default version as 1 as opposed to
@@ -130,11 +133,10 @@ function setUp() {
     return;
   }
 
-  globalDb = restartDatabase().addCallback(function(db) {
-    if (db.getVersion() != baseVersion) {
-      return cleanUpDatabase(db);
-    }
-  }).addErrback(failOnError);
+  // Always use a clean database by generating a new database name.
+  testNumber++;
+  dbName = dbBaseName + testNumber.toString();
+  globalDb = restartDatabase();
 }
 
 function testDatabaseOpened() {
