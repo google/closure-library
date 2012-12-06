@@ -15,6 +15,7 @@ Author: attila@google.com (Attila Bodis)
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.dom.a11y.State');
     goog.require('goog.dom.classes');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.MenuItem');
@@ -77,9 +78,12 @@ Author: attila@google.com (Attila Bodis)
 
       item.setChecked(true);
       element = renderer.createDom(item);
+      assertTrue('Item must be checked', item.isChecked());
       assertSameElements('Checked item must have the expected class names',
           ['goog-menuitem', 'goog-option', 'goog-option-selected'],
           goog.dom.classes.get(element));
+      assertEquals('Item must have checked ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.CHECKED));
     }
 
     function testCreateDomForSelectableItem() {
@@ -95,9 +99,12 @@ Author: attila@google.com (Attila Bodis)
 
       item.setSelected(true);
       element = renderer.createDom(item);
+      assertTrue('Item must be selected', item.isSelected());
       assertSameElements('Selected item must have the expected class names',
           ['goog-menuitem', 'goog-option', 'goog-option-selected'],
           goog.dom.classes.get(element));
+      assertEquals('Item must have selected ARIA state', 'true',
+          goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
     }
 
     function testGetContentElement() {
