@@ -26,11 +26,11 @@ goog.provide('goog.dom.a11y.LivePriority');
 goog.provide('goog.dom.a11y.Role');
 goog.provide('goog.dom.a11y.State');
 
-goog.require('goog.Disposable');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Announcer');
-goog.require('goog.dom');
-goog.require('goog.object');
+goog.require('goog.a11y.aria.LivePriority');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
 
 
 // TODO(user): Deprecate this namespace and redirect usage

@@ -25,9 +25,7 @@ goog.provide('goog.a11y.aria.LivePriority');
 goog.provide('goog.a11y.aria.Role');
 goog.provide('goog.a11y.aria.State');
 
-goog.require('goog.Disposable');
 goog.require('goog.dom');
-goog.require('goog.object');
 
 
 /**
