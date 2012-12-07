@@ -712,3 +712,82 @@ function testSetParentEventTarget() {
   eventTargets[0].setParentEventTarget(null);
   assertNull(eventTargets[0].getParentEventTarget());
 }
+
+
+function testListenOnceAfterListenDoesNotChangeExistingListener() {
+  if (!listenOnce) {
+    return;
+  }
+
+  listen(eventTargets[0], EventType.A, listeners[0]);
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+
+  dispatchEvent(eventTargets[0], EventType.A);
+  dispatchEvent(eventTargets[0], EventType.A);
+  dispatchEvent(eventTargets[0], EventType.A);
+
+  assertListenerIsCalled(listeners[0], times(3));
+  assertNoOtherListenerIsCalled();
+}
+
+
+function testListenOnceAfterListenOnceDoesNotChangeExistingListener() {
+  if (!listenOnce) {
+    return;
+  }
+
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+
+  dispatchEvent(eventTargets[0], EventType.A);
+  dispatchEvent(eventTargets[0], EventType.A);
+  dispatchEvent(eventTargets[0], EventType.A);
+
+  assertListenerIsCalled(listeners[0], times(1));
+  assertNoOtherListenerIsCalled();
+}
+
+
+function testListenAfterListenOnceRemoveOnceness() {
+  if (!listenOnce) {
+    return;
+  }
+
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+  listen(eventTargets[0], EventType.A, listeners[0]);
+
+  dispatchEvent(eventTargets[0], EventType.A);
+  dispatchEvent(eventTargets[0], EventType.A);
+  dispatchEvent(eventTargets[0], EventType.A);
+
+  assertListenerIsCalled(listeners[0], times(3));
+  assertNoOtherListenerIsCalled();
+}
+
+
+function testUnlistenAfterListenOnce() {
+  if (!listenOnce) {
+    return;
+  }
+
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+  unlisten(eventTargets[0], EventType.A, listeners[0]);
+  dispatchEvent(eventTargets[0], EventType.A);
+
+  listen(eventTargets[0], EventType.A, listeners[0]);
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+  unlisten(eventTargets[0], EventType.A, listeners[0]);
+  dispatchEvent(eventTargets[0], EventType.A);
+
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+  listen(eventTargets[0], EventType.A, listeners[0]);
+  unlisten(eventTargets[0], EventType.A, listeners[0]);
+  dispatchEvent(eventTargets[0], EventType.A);
+
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+  unlisten(eventTargets[0], EventType.A, listeners[0]);
+  dispatchEvent(eventTargets[0], EventType.A);
+
+  assertNoOtherListenerIsCalled();
+}
