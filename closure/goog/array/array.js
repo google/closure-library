@@ -798,9 +798,8 @@ goog.array.extend = function(arr1, var_args) {
         (isArrayLike = goog.isArrayLike(arr2)) &&
             // The getter for callee throws an exception in strict mode
             // according to section 10.6 in ES5 so check for presence instead.
-            arr2.hasOwnProperty('callee')) {
+            Object.prototype.hasOwnProperty.call(arr2, 'callee')) {
       arr1.push.apply(arr1, arr2);
-
     } else if (isArrayLike) {
       // Otherwise loop over arr2 to prevent copying the object.
       var len1 = arr1.length;
