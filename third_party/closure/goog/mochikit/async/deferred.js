@@ -592,7 +592,7 @@ goog.async.Deferred.cancelled = function() {
  * </pre>
  *
  * @param {*} value Deferred or non-deferred value to pass to the callback.
- * @param {!function(this:T, ?=):?} callback The callback to execute.
+ * @param {!function(this:T, ?):?} callback The callback to execute.
  * @param {T=} opt_scope An optional scope to call the callback in.
  * @return {!goog.async.Deferred}
  * @template T
