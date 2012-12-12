@@ -31,6 +31,7 @@ goog.require('goog.json');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.result');
+goog.require('goog.result.SimpleResult');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
 

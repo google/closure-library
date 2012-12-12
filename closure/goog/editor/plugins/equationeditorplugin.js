@@ -23,6 +23,7 @@ goog.require('goog.ui.editor.EquationEditorDialog');
 goog.require('goog.ui.editor.EquationEditorOkEvent');
 goog.require('goog.ui.equation.EquationEditor');
 goog.require('goog.ui.equation.ImageRenderer');
+goog.require('goog.ui.equation.PaletteManager');
 goog.require('goog.ui.equation.TexEditor');
 
 

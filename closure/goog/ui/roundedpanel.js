@@ -27,6 +27,7 @@ goog.provide('goog.ui.RoundedPanel.Corner');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('goog.graphics');
+goog.require('goog.graphics.Path');
 goog.require('goog.graphics.SolidFill');
 goog.require('goog.graphics.Stroke');
 goog.require('goog.math.Coordinate');

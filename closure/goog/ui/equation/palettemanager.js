@@ -15,6 +15,7 @@
 goog.provide('goog.ui.equation.PaletteManager');
 
 goog.require('goog.Timer');
+goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.ui.equation.ArrowPalette');
 goog.require('goog.ui.equation.ComparisonPalette');

@@ -19,6 +19,7 @@ goog.require('goog.ui.Dialog');
 goog.require('goog.ui.Dialog.ButtonSet');
 goog.require('goog.ui.equation.EquationEditor');
 goog.require('goog.ui.equation.ImageRenderer');
+goog.require('goog.ui.equation.PaletteManager');
 goog.require('goog.ui.equation.TexEditor');
 
 
