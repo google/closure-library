@@ -175,8 +175,6 @@ goog.db.Error.getMessage = function(code) {
       return 'Database storage space quota exceeded';
     case goog.db.Error.ErrorCode.INVALID_ACCESS_ERR:
       return 'Invalid operation';
-    case goog.db.Error.ErrorCode.INVALID_STATE_ERR:
-      return 'Invalid state';
     default:
       return 'Unrecognized exception with code ' + code;
   }

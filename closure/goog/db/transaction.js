@@ -35,11 +35,10 @@ goog.require('goog.events.EventTarget');
  * @see goog.db.IndexedDb#createTransaction
  *
  * @param {!IDBTransaction} tx IndexedDB transaction to back this wrapper.
- * @param {!goog.db.IndexedDb} db The database that this transaction modifies.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.db.Transaction = function(tx, db) {
+goog.db.Transaction = function(tx) {
   goog.base(this);
 
   /**
@@ -49,14 +48,6 @@ goog.db.Transaction = function(tx, db) {
    * @private
    */
   this.tx_ = tx;
-
-  /**
-   * The database that this transaction modifies.
-   *
-   * @type {!goog.db.IndexedDb}
-   * @private
-   */
-  this.db_ = db;
 
   /**
    * Event handler for this transaction.
@@ -138,14 +129,6 @@ goog.db.Transaction.prototype.getMode = function() {
 
 
 /**
- * @return {!goog.db.IndexedDb} The database that this transaction modifies.
- */
-goog.db.Transaction.prototype.getDatabase = function() {
-  return this.db_;
-};
-
-
-/**
  * Opens an object store to do operations on in this transaction. The requested
  * object store must be one that is in this transaction's scope.
  * @see goog.db.IndexedDb#createTransaction
@@ -160,32 +143,6 @@ goog.db.Transaction.prototype.objectStore = function(name) {
   } catch (err) {
     throw new goog.db.Error(err.code, 'getting object store ' + name);
   }
-};
-
-
-/**
- * @return {!goog.async.Deferred} A deferred that will fire once the
- *     transaction is complete. It fires the errback chain if an error occurs
- *     in the transaction, or if it is aborted.
- */
-goog.db.Transaction.prototype.wait = function() {
-  var d = new goog.async.Deferred();
-  goog.events.listenOnce(
-      this, goog.db.Transaction.EventTypes.COMPLETE, goog.bind(d.callback, d));
-  goog.events.listenOnce(
-      this, goog.db.Transaction.EventTypes.ABORT, function() {
-        d.errback(new goog.db.Error(goog.db.Error.ErrorCode.ABORT_ERR,
-            'waiting for transaction to complete'));
-      });
-  goog.events.listenOnce(
-      this, goog.db.Transaction.EventTypes.ERROR, function(e) {
-        d.errback(e.target);
-      });
-
-  var db = this.getDatabase();
-  return d.addCallback(function() {
-    return db;
-  });
 };
 
 

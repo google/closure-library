@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <!--
-Copyright 2012 The Closure Library Authors. All Rights Reserved.
+Copyright 2011 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
@@ -31,60 +31,53 @@ goog.require('goog.userAgent.product.isVersion');
 </head>
 <body>
 <script>
+// Chrome 22+ is the only browser confirmed to work. Firefox does not.
 var idbSupported = goog.userAgent.product.CHROME &&
     goog.userAgent.product.isVersion("22");
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
 asyncTestCase.stepTimeout = 5000;
 var dbName;
 var dbBaseName = 'testDb';
+var testNumber = 0;
 var globalDb = null;
 
 // On Chrome 24+, the database reports its default version as 1 as opposed to
 // the empty string (as per the new spec).
 var baseVersion = goog.userAgent.product.isVersion("24") ? 1 : '';
 
-var dbVersion = 1;
-
-function unblockDatabase(db) {
-  // If a test goes wrong, the database connection may not be closed reliably.
-  // This listens for a version change event (e.g. from deleting it in
-  // preparation for the next test) and closes the existing connection when one
-  // is received.
-  goog.events.listen(db, goog.db.IndexedDb.EventType.VERSION_CHANGE,
-                     function(ev) {
+function restartDatabase(db) {
+  if (db && db.isOpen()) {
     db.close();
+  }
+  return goog.db.openDatabase(dbName);
+}
+
+function cleanUpDatabase(db) {
+  // this is currently not done by deleting the test database because the
+  // deleteDatabase method in the API is not implemented. When it is, this
+  // method can just close the connection, delete the database, then reopen
+  // it on the fresh database.
+  return db.setVersion('').addCallback(function(tx) {
+    var storeNames = db.getObjectStoreNames();
+    for (var i = 0; i < storeNames.length; i++) {
+      db.deleteObjectStore(storeNames[i]);
+    }
+    return restartDatabase(db);
   });
 }
 
-function openDatabase() {
-  return goog.db.openDatabase(dbName).addCallback(unblockDatabase);
-}
-
-function incrementVersion(db, onUpgradeNeeded) {
-  if (db.isOpen()) {
-    db.close();
-  }
-
-  var onBlocked = function(ev) {
-    fail('Upgrade to version ' + dbVersion + ' is blocked.');
-  };
-
-  return goog.db.openDatabase(dbName, ++dbVersion, onUpgradeNeeded, onBlocked).
-      addCallback(unblockDatabase).addCallback(function(db) {
-        assertEquals(dbVersion, db.getVersion());
-      });
-}
-
 function addStore(db) {
-  return incrementVersion(db, function(ev, db, tx) {
+  return db.setVersion('test').addCallback(function(tx) {
     db.createObjectStore('store');
+    return restartDatabase(db);
   });
 }
 
 function addStoreWithIndex(db) {
-  return incrementVersion(db, function(ev, db, tx) {
+  return db.setVersion('test').addCallback(function(tx) {
     var store = db.createObjectStore('store', {keyPath: 'key'});
     store.createIndex('index', 'value');
+    return restartDatabase(db);
   });
 }
 
@@ -99,7 +92,19 @@ function populateStore(values, keys, db) {
     store.put(values[i], keys[i]);
   }
 
-  return putTx.wait();
+  goog.events.listen(
+      putTx,
+      goog.db.Transaction.EventTypes.ERROR,
+      failOnErrorEvent);
+
+  goog.events.listen(
+      putTx,
+      goog.db.Transaction.EventTypes.COMPLETE,
+      function() {
+        d.callback(db)
+      });
+
+  return d;
 }
 
 function assertStoreValues(values, db) {
@@ -108,17 +113,6 @@ function assertStoreValues(values, db) {
     assertSameElements(values, results);
     closeAndContinue(db);
   });
-}
-
-function assertStoreDoesntExist(db) {
-  try {
-    db.createTransaction(['store']);
-    fail('Create transaction with a non-existent store should have failed.');
-  } catch (e) {
-    // expected
-    assertEquals(e.code, goog.db.Error.ErrorCode.NOT_FOUND_ERR);
-    closeAndContinue(db);
-  }
 }
 
 function failOnError(err) {
@@ -140,8 +134,9 @@ function setUp() {
   }
 
   // Always use a clean database by generating a new database name.
-  dbName = dbBaseName + Date.now().toString();
-  globalDb = openDatabase();
+  testNumber++;
+  dbName = dbBaseName + testNumber.toString();
+  globalDb = restartDatabase();
 }
 
 function testDatabaseOpened() {
@@ -157,21 +152,19 @@ function testDatabaseOpened() {
   }).addErrback(failOnError);
 }
 
-function testOpenWithNewVersion() {
+function testSetVersion() {
   if (!idbSupported) {
     return;
   }
 
-  var upgradeNeeded = false;
-  asyncTestCase.waitForAsync('open with new version');
+  asyncTestCase.waitForAsync('set version request');
   globalDb.branch().addCallback(function(db) {
     assertEquals(baseVersion, db.getVersion());
-    db.close();
-    return incrementVersion(db, function(ev, db, tx) {
-      upgradeNeeded = true;
+    return db.setVersion('version').addCallback(function(tx) {
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
-    assertTrue(upgradeNeeded);
+    assertEquals('version', db.getVersion());
     closeAndContinue(db);
   }).addErrback(failOnError);
 }
@@ -181,14 +174,16 @@ function testManipulateObjectStores() {
     return;
   }
 
-  asyncTestCase.waitForAsync('manipulate object stores');
+  asyncTestCase.waitForAsync('set version and manipulate object stores');
   globalDb.branch().addCallback(function(db) {
     assertEquals(baseVersion, db.getVersion());
-    db.close();
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('objstores').addCallback(function(tx) {
       db.createObjectStore('basicStore');
       db.createObjectStore('keyPathStore', {keyPath: 'keyGoesHere'});
-      db.createObjectStore('autoIncrementStore', {autoIncrement: true});
+      db.createObjectStore(
+          'autoIncrementStore',
+          {autoIncrement: true});
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
     var storeNames = db.getObjectStoreNames();
@@ -196,8 +191,10 @@ function testManipulateObjectStores() {
     assertTrue(storeNames.contains('basicStore'));
     assertTrue(storeNames.contains('keyPathStore'));
     assertTrue(storeNames.contains('autoIncrementStore'));
-    return incrementVersion(db, function(ev, db, tx) {
+    assertEquals('objstores', db.getVersion());
+    return db.setVersion('delstores').addCallback(function(tx) {
       db.deleteObjectStore('basicStore');
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
     var storeNames = db.getObjectStoreNames();
@@ -233,7 +230,7 @@ function testBadObjectStoreManipulation() {
       assertEquals(expectedCode, err.code);
     }
   }).addCallback(function(db) {
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('delstore').addCallback(function(tx) {
       try {
         db.deleteObjectStore('diediedie');
         fail('Delete non-existent store should have failed.');
@@ -241,8 +238,9 @@ function testBadObjectStoreManipulation() {
         // expected
         assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
       }
+      closeAndContinue(db);
     });
-  }).addCallback(closeAndContinue).addErrback(failOnError);
+  }).addErrback(failOnError);
 }
 
 function testGetNonExistentObjectStore() {
@@ -387,7 +385,6 @@ function testAddRecord() {
           fail('adding existing record should not have succeeded');
         });
         goog.events.listen(addOverwriteTx, ERROR, function(ev) {
-          // expected
           assertEquals(
               goog.db.Error.ErrorCode.CONSTRAINT_ERR,
               ev.target.code);
@@ -405,8 +402,9 @@ function testPutRecordKeyPathStore() {
 
   asyncTestCase.waitForAsync('adding record, key path store');
   globalDb.branch().addCallback(function(db) {
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('test').addCallback(function(tx) {
       db.createObjectStore('keyStore', {keyPath: 'key'});
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
     var COMPLETE = goog.db.Transaction.EventTypes.COMPLETE;
@@ -442,8 +440,9 @@ function testPutBadRecordKeyPathStore() {
 
   asyncTestCase.waitForAsync('adding bad record, key path store');
   globalDb.branch().addCallback(function(db) {
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('test').addCallback(function(tx) {
       db.createObjectStore('keyStore', {keyPath: 'key'});
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
     var badTx = db.createTransaction(
@@ -468,8 +467,9 @@ function testPutRecordAutoIncrementStore() {
 
   asyncTestCase.waitForAsync('adding record, auto increment store');
   globalDb.branch().addCallback(function(db) {
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('test').addCallback(function(tx) {
       db.createObjectStore('aiStore', {autoIncrement: true});
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
     var tx = db.createTransaction(
@@ -505,11 +505,12 @@ function testPutRecordKeyPathAndAutoIncrementStore() {
 
   asyncTestCase.waitForAsync('adding record, key path + auto increment store');
   globalDb.branch().addCallback(function(db) {
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('test').addCallback(function(tx) {
       db.createObjectStore('hybridStore', {
         keyPath: 'key',
         autoIncrement: true
       });
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
     var tx = db.createTransaction(
@@ -1010,29 +1011,25 @@ function testManipulateIndexes() {
 
   asyncTestCase.waitForAsync('index manipulation');
   globalDb.branch().addCallback(function(db) {
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('testIndex').addCallback(function(tx) {
       var store = db.createObjectStore('store');
       store.createIndex('index', 'attr1');
       store.createIndex('uniqueIndex', 'attr2', {unique: true});
       store.createIndex('multirowIndex', 'attr3', {multirow: true});
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
-    var tx = db.createTransaction(['store']);
-    var store = tx.objectStore('store');
-    var index = store.getIndex('index');
-    var uniqueIndex = store.getIndex('uniqueIndex');
-    var multirowIndex = store.getIndex('multirowIndex');
-    try {
-      var dies = store.getIndex('diediedie');
-      fail('getting non-existent index should have failed');
-    } catch (err) {
-      assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
-    }
-
-    return tx.wait();
-  }).addCallback(function(db) {
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('testDelIndex').addCallback(function(tx) {
       var store = tx.objectStore('store');
+      var index = store.getIndex('index');
+      var uniqueIndex = store.getIndex('uniqueIndex');
+      var multirowIndex = store.getIndex('multirowIndex');
+      try {
+        var dies = store.getIndex('diediedie');
+        fail('getting non-existent index should have failed');
+      } catch (err) {
+        assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
+      }
       store.deleteIndex('index');
       try {
         store.deleteIndex('diediedie');
@@ -1040,6 +1037,7 @@ function testManipulateIndexes() {
       } catch (err) {
         assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
       }
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
     var tx = db.createTransaction(['store']);
@@ -1153,9 +1151,10 @@ function testUniqueIndex() {
 
   asyncTestCase.waitForAsync('adding to unique index');
   globalDb.branch().addCallback(function(db) {
-    return incrementVersion(db, function(ev, db, tx) {
+    return db.setVersion('test').addCallback(function(tx) {
       var store = db.createObjectStore('store', {keyPath: 'key'});
       store.createIndex('index', 'value', {unique: true});
+      return restartDatabase(db);
     });
   }).addCallback(function(db) {
     var tx = db.createTransaction(
@@ -1178,83 +1177,6 @@ function testUniqueIndex() {
       closeAndContinue(db);
     });
   }).addErrback(failOnError);
-}
-
-function testDeleteDatabase() {
-  if (!idbSupported) {
-    return;
-  }
-
-  asyncTestCase.waitForAsync('deleting database');
-  globalDb.branch().addCallback(addStore).addCallback(function(db) {
-    db.close();
-    return goog.db.deleteDatabase(dbName, function() {
-      fail("didn't expect deleteDatabase to be blocked");
-    });
-  }).addCallback(openDatabase)
-      .addCallback(assertStoreDoesntExist)
-      .addErrback(failOnError);
-}
-
-function testDeleteDatabaseIsBlocked() {
-  if (!idbSupported) {
-    return;
-  }
-
-  var wasBlocked = false;
-  asyncTestCase.waitForAsync('deleting database (blocked)');
-  globalDb.branch().addCallback(addStore).addCallback(function(db) {
-    db.close();
-    // Get a fresh connection, without any events registered on globalDb.
-    return goog.db.openDatabase(dbName);
-  }).addCallback(function(db) {
-    return goog.db.deleteDatabase(dbName, function(ev) {
-      wasBlocked = true;
-      db.close();
-    });
-  }).addCallback(function() {
-    assertTrue(wasBlocked);
-    return openDatabase();
-  }).addCallback(assertStoreDoesntExist).addErrback(failOnError);
-}
-
-function testBlockedDeleteDatabaseWithVersionChangeEvent() {
-  if (!idbSupported) {
-    return;
-  }
-
-  var gotVersionChange = false;
-  asyncTestCase.waitForAsync('deleting database (blocked)');
-  globalDb.branch().addCallback(addStore).addCallback(function(db) {
-    db.close();
-    // Get a fresh connection, without any events registered on globalDb.
-    return goog.db.openDatabase(dbName);
-  }).addCallback(function(db) {
-    goog.events.listen(db, goog.db.IndexedDb.EventType.VERSION_CHANGE,
-                       function(ev) {
-      gotVersionChange = true;
-      db.close();
-    });
-    return goog.db.deleteDatabase(dbName);
-  }).addCallback(function() {
-    assertTrue(gotVersionChange);
-    return openDatabase();
-  }).addCallback(assertStoreDoesntExist);
-}
-
-function testDeleteNonExistentDatabase() {
-  if (!idbSupported) {
-    return;
-  }
-
-  // Deleting non-existent db is a no-op.  Shall not throw anything.
-  asyncTestCase.waitForAsync('check delete non-existent db');
-  globalDb.branch().addCallback(function(db) {
-    db.close();
-    return goog.db.deleteDatabase('non-existent-db');
-  }).addCallbacks(function() {
-    asyncTestCase.continueTesting();
-  }, failOnError);
 }
 
 </script>
