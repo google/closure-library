@@ -279,6 +279,35 @@ See the COPYING file for details.
     return isCollapsed || isExpanded;
   }
 
+  function testIsHandleKeyEvent() {
+    zippy.setHandleKeyboardEvents(false);
+    assertFalse('Zippy is not handling key events', zippy.isHandleKeyEvents());
+    assertTrue('Zippy setHandleKeyEvents does not affect handling mouse events',
+        zippy.isHandleMouseEvents());
+    assertEquals(0, zippy.keyboardEventHandler_.getListenerCount());
+
+    zippy.setHandleKeyboardEvents(true);
+    assertTrue('Zippy is handling key events', zippy.isHandleKeyEvents());
+    assertTrue('Zippy setHandleKeyEvents does not affect handling mouse events',
+        zippy.isHandleMouseEvents());
+    assertNotEquals(0, zippy.keyboardEventHandler_.getListenerCount());
+  }
+
+  function testIsHandleMouseEvent() {
+    zippy.setHandleMouseEvents(false);
+    assertFalse('Zippy is not handling mouse events',
+        zippy.isHandleMouseEvents());
+    assertTrue('Zippy setHandleMouseEvents does not affect handling key events',
+        zippy.isHandleKeyEvents());
+    assertEquals(0, zippy.mouseEventHandler_.getListenerCount());
+
+    zippy.setHandleMouseEvents(true);
+    assertTrue('Zippy is handling mouse events', zippy.isHandleMouseEvents());
+    assertTrue('Zippy setHandleMouseEvents does not affect handling key events',
+        zippy.isHandleKeyEvents());
+    assertNotEquals(0, zippy.mouseEventHandler_.getListenerCount());
+  }
+
 </script>
 
 </body>

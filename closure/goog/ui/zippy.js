@@ -302,7 +302,7 @@ goog.ui.Zippy.prototype.updateHeaderClassName = function(expanded) {
 /**
  * @return {boolean} Whether the Zippy handles its own key events.
  */
-goog.ui.Zippy.prototype.isHandleMouseEvents = function() {
+goog.ui.Zippy.prototype.isHandleKeyEvents = function() {
   return this.handleKeyEvents_;
 };
 
@@ -310,7 +310,7 @@ goog.ui.Zippy.prototype.isHandleMouseEvents = function() {
 /**
  * @return {boolean} Whether the Zippy handles its own mouse events.
  */
-goog.ui.Zippy.prototype.isHandleKeyEvents = function() {
+goog.ui.Zippy.prototype.isHandleMouseEvents = function() {
   return this.handleMouseEvents_;
 };
 
