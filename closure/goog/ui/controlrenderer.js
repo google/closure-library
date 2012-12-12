@@ -393,9 +393,9 @@ goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
     this.updateAriaState(element, goog.ui.Component.State.DISABLED,
                          true);
   }
-  if (control.isSelected()) {
+  if (control.isSupportedState(goog.ui.Component.State.SELECTED)) {
     this.updateAriaState(element, goog.ui.Component.State.SELECTED,
-                         true);
+                         control.isSelected());
   }
   if (control.isSupportedState(goog.ui.Component.State.CHECKED)) {
     this.updateAriaState(element, goog.ui.Component.State.CHECKED,

@@ -20,6 +20,7 @@ Author: attila@google.com (Attila Bodis)
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Tab');
     goog.require('goog.ui.TabRenderer');
+    goog.require('goog.testing.dom');
     goog.require('goog.testing.ui.rendererasserts');
   </script>
 </head>
@@ -56,8 +57,9 @@ Author: attila@google.com (Attila Bodis)
     function testCreateDom() {
       var element = renderer.createDom(tab);
       assertNotNull('Element must not be null', element);
-      assertHTMLEquals('DOM must have expected structure',
-          '<div class="goog-tab">Hello</div>', goog.dom.getOuterHtml(element));
+      goog.testing.dom.assertHtmlMatches(
+          '<div class="goog-tab" aria-selected="false">Hello</div>',
+          goog.dom.getOuterHtml(element));
     }
 
     function testCreateDomWithTooltip() {

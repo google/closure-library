@@ -579,7 +579,20 @@ Author: attila@google.com (Attila Bodis)
         goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
     }
 
+    function testCreateDomAriaStateNotSelected() {
+      control.setSupportedState(goog.ui.Component.State.SELECTED, true);
+
+      control.createDom();
+      var element = control.getElement();
+
+      assertFalse('Control must not be selected', control.isSelected());
+      assertEquals('Control must have not-selected ARIA state', 'false',
+        goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
+    }
+
     function testDecorateAriaStateSelected() {
+      control.setSupportedState(goog.ui.Component.State.SELECTED, true);
+
       sandbox.innerHTML =
           '<div id="foo" class="app goog-base-selected"></div>';
       var foo = goog.dom.getElement('foo');
