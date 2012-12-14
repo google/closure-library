@@ -580,6 +580,8 @@ goog.dom.TextRange.prototype.collapse = function(toAnchor) {
  * @private
  */
 goog.dom.DomSavedTextRange_ = function(range) {
+  goog.base(this);
+
   /**
    * The anchor node.
    * @type {Node}
