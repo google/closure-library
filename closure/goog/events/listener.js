@@ -17,16 +17,15 @@
  * @see ../demos/events.html
  */
 
-
-/**
- * Namespace for events
- */
 goog.provide('goog.events.Listener');
+
+goog.require('goog.events.ListenableKey');
 
 
 
 /**
  * Simple class that stores information about a listener
+ * @implements {goog.events.ListenableKey}
  * @constructor
  */
 goog.events.Listener = function() {
