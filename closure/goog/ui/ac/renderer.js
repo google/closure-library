@@ -55,7 +55,8 @@ goog.require('goog.userAgent');
  *     be right aligned. False by default.
  * @param {boolean=} opt_useStandardHighlighting Determines if standard
  *     highlighting should be applied to each row of data. Standard highlighting
- *     bolds every matching substring for a given token in each row.
+ *     bolds every matching substring for a given token in each row. True by
+ *     default.
  * @extends {goog.events.EventTarget}
  */
 goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
@@ -192,6 +193,14 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
       opt_useStandardHighlighting : true;
 
   /**
+   * Flag to indicate whether matches should be done on whole words instead
+   * of any string.
+   * @type {boolean}
+   * @private
+   */
+  this.matchWordBoundary_ = true;
+
+  /**
    * Flag to set all tokens as highlighted in the autocomplete row.
    * @type {boolean}
    * @private
@@ -314,6 +323,17 @@ goog.ui.ac.Renderer.prototype.getRightAlign = function() {
 goog.ui.ac.Renderer.prototype.setUseStandardHighlighting =
     function(useStandardHighlighting) {
   this.useStandardHighlighting_ = useStandardHighlighting;
+};
+
+
+/**
+ * @param {boolean} matchWordBoundary Determines whether matches should be
+ *     higlighted only when the token matches text at a whole-word boundary.
+ *     True by default.
+ */
+goog.ui.ac.Renderer.prototype.setMatchWordBoundary =
+    function(matchWordBoundary) {
+  this.matchWordBoundary_ = matchWordBoundary;
 };
 
 
@@ -701,9 +721,10 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ =
 
     // Create a regular expression to match a token at the beginning of a line
     // or preceeded by non-alpha-numeric characters
-    // NOTE(user): this used to have a (^|\\W+) clause where it now has \\b
-    // but it caused various browsers to hang on really long strings. It is
-    // also excessive, because .*?\W+ is the same as .*?\b since \b already
+    // NOTE(user): When using word matches, this used to have
+    // a (^|\\W+) clause where it now has \\b but it caused various
+    // browsers to hang on really long strings. It is also
+    // excessive, because .*?\W+ is the same as .*?\b since \b already
     // checks that the character before the token is a non-word character
     // (the only time the regexp is different is if token begins with a
     // non-word character), and ^ matches the start of the line or following
@@ -711,7 +732,9 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ =
     // just be .*? as it will miss line terminators (which is what the \W+
     // clause used to match). Instead we use [\s\S] to match every character,
     // including line terminators.
-    var re = new RegExp('([\\s\\S]*?)\\b(' + token + ')', 'gi');
+    var re = this.matchWordBoundary_ ?
+        new RegExp('([\\s\\S]*?)\\b(' + token + ')', 'gi') :
+        new RegExp('([\\s\\S]*?)(' + token + ')', 'gi');
     var textNodes = [];
     var lastIndex = 0;
 

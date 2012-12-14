@@ -67,6 +67,44 @@ See the COPYING file for details.
     propertyReplacer.reset();
   }
 
+  function testBasicStringTokenHighlightingUsingUniversalMatching() {
+    var row = rendRows[0];  // 'Amanda Annie Anderson'
+    renderer.setMatchWordBoundary(false);
+
+    // Should highlight first match only.
+    var token = 'A';
+    var node = renderer.renderRowHtml(row, token);
+    var boldTagElArray = node.getElementsByTagName('b');
+    assertNumBoldTags(boldTagElArray, 1);
+    assertPreviousNodeText(boldTagElArray[0], '');
+    assertHighlightedText(boldTagElArray[0], 'A');
+    assertLastNodeText(node, 'manda Annie Anderson');
+
+    // Match should be case insensitive, and should match tokens in the
+    // middle of words if useWordMatching is turned off ("an" in Amanda).
+    var token = 'an';
+    var node = renderer.renderRowHtml(row, token);
+    var boldTagElArray = node.getElementsByTagName('b');
+    assertNumBoldTags(boldTagElArray, 1);
+    assertPreviousNodeText(boldTagElArray[0], 'Am');
+    assertHighlightedText(boldTagElArray[0], 'an');
+    assertLastNodeText(node, 'da Annie Anderson');
+
+    // Should only match on non-empty strings.
+    token = '';
+    node = renderer.renderRowHtml(row, token);
+    boldTagElArray = node.getElementsByTagName('b');
+    assertNumBoldTags(boldTagElArray, 0);
+    assertLastNodeText(node, 'Amanda Annie Anderson');
+
+    // Should not match leading whitespace.
+    token = ' an';
+    node = renderer.renderRowHtml(row, token);
+    boldTagElArray = node.getElementsByTagName('b');
+    assertNumBoldTags(boldTagElArray, 0);
+    assertLastNodeText(node, 'Amanda Annie Anderson');
+  }
+
   function testBasicStringTokenHighlighting() {
     var row = rendRows[0];  // 'Amanda Annie Anderson'
 
