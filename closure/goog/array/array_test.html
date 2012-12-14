@@ -124,6 +124,16 @@ function testArrayForEachOmitsDeleted() {
   assertEquals('a0c2', s);
 }
 
+function testArrayForEachScope() {
+  var scope = {};
+  var a = ['a', 'b', 'c', 'd'];
+  goog.array.forEach(a, function(val, index, a2) {
+    assertEquals(a, a2);
+    assertEquals('number', typeof index);
+    assertEquals(this, scope);
+  }, scope);
+}
+
 function testArrayForEachRight() {
   var s = '';
   var a = ['a', 'b', 'c', 'd'];
