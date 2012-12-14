@@ -36,36 +36,9 @@ goog.require('goog.disposable.IDisposable');
  */
 goog.Disposable = function() {
   if (goog.Disposable.MONITORING_MODE != goog.Disposable.MonitoringMode.OFF) {
-    /**
-     * If monitoring the goog.Disposable instances is enabled, stores the
-     * creation stack trace of the Disposable instance.
-     * @type {string}
-     */
     this.creationStack = new Error().stack;
     goog.Disposable.instances_[goog.getUid(this)] = this;
   }
-
-  /**
-   * Whether the object has been disposed of.
-   * @type {boolean}
-   * @private
-   */
-  this.disposed_ = false;
-
-  /**
-   * Disposables that should be disposed when this object is disposed.
-   * @type {Array.<goog.disposable.IDisposable>}
-   * @private
-   */
-  this.dependentDisposables_ = null;
-
-
-  /**
-   * Callbacks to invoke when this object is disposed.
-   * @type {Array.<!Function>}
-   * @private
-   */
-  this.onDisposeCallbacks_ = null;
 };
 
 
@@ -133,6 +106,38 @@ goog.Disposable.getUndisposedObjects = function() {
 goog.Disposable.clearUndisposedObjects = function() {
   goog.Disposable.instances_ = {};
 };
+
+
+/**
+ * Whether the object has been disposed of.
+ * @type {boolean}
+ * @private
+ */
+goog.Disposable.prototype.disposed_ = false;
+
+
+/**
+ * Disposables that should be disposed when this object is disposed.
+ * @type {Array.<goog.disposable.IDisposable>}
+ * @private
+ */
+goog.Disposable.prototype.dependentDisposables_;
+
+
+/**
+ * Callbacks to invoke when this object is disposed.
+ * @type {Array.<!Function>}
+ * @private
+ */
+goog.Disposable.prototype.onDisposeCallbacks_;
+
+
+/**
+ * If monitoring the goog.Disposable instances is enabled, stores the creation
+ * stack trace of the Disposable instance.
+ * @type {string}
+ */
+goog.Disposable.prototype.creationStack;
 
 
 /**
