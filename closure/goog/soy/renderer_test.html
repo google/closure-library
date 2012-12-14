@@ -81,6 +81,13 @@ function testRenderAsElementWithNoTemplateData() {
   assertEquals('Hello', elementToInnerHtml(elem));
 }
 
+
+function testRenderConvertsToString() {
+  var renderer = new goog.soy.Renderer(dataSupplier);
+  assertEquals('Output should be a string',
+      'Hello World', renderer.render(example.sanitizedHtmlTemplate));
+}
+
 </script>
 </body>
 </html>

@@ -124,7 +124,8 @@ goog.soy.Renderer.prototype.renderElement = function(element, template,
  * @return {string} The return value of rendering the template directly.
  */
 goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
-  return template(opt_templateData || {}, undefined, this.getInjectedData_());
+  return String(
+      template(opt_templateData || {}, undefined, this.getInjectedData_()));
 };
 
 
