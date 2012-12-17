@@ -236,7 +236,7 @@ goog.ui.editor.DefaultToolbar.MSG_FORMAT_NORMAL = goog.getMsg('Normal');
  *   <li>{@code command} - Corresponding {@link goog.dom.TagName} (e.g.
  *       'H4')
  * </ul>
- * @type {!Array.<{caption:string, command:string}>}
+ * @type {!Array.<{caption: string, command: !goog.dom.TagName}>}
  * @private
  */
 goog.ui.editor.DefaultToolbar.FORMAT_OPTIONS_ = [
