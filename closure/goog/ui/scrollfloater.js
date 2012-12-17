@@ -37,10 +37,10 @@
 goog.provide('goog.ui.ScrollFloater');
 goog.provide('goog.ui.ScrollFloater.EventType');
 
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
-goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
@@ -295,22 +295,22 @@ goog.ui.ScrollFloater.prototype.startFloating_ = function() {
 
   // Store styles while not floating so we can restore them when the
   // element stops floating.
-  goog.object.forEach(goog.ui.ScrollFloater.STORED_STYLE_PROPS_,
-                      function(property) {
-                        this.originalStyles_[property] = elem.style[property];
-                      },
-                      this);
+  goog.array.forEach(goog.ui.ScrollFloater.STORED_STYLE_PROPS_,
+                     function(property) {
+                       this.originalStyles_[property] = elem.style[property];
+                     },
+                     this);
 
   // Copy relevant styles to placeholder so it will be layed out the same
   // as the element that's about to be floated.
-  goog.object.forEach(goog.ui.ScrollFloater.PLACEHOLDER_STYLE_PROPS_,
-                      function(property) {
-                        this.placeholder_.style[property] =
-                            elem.style[property] ||
-                                goog.style.getCascadedStyle(elem, property) ||
-                                goog.style.getComputedStyle(elem, property);
-                      },
-                      this);
+  goog.array.forEach(goog.ui.ScrollFloater.PLACEHOLDER_STYLE_PROPS_,
+                     function(property) {
+                       this.placeholder_.style[property] =
+                           elem.style[property] ||
+                               goog.style.getCascadedStyle(elem, property) ||
+                               goog.style.getComputedStyle(elem, property);
+                     },
+                     this);
 
   goog.style.setSize(this.placeholder_, elem.offsetWidth, elem.offsetHeight);
 

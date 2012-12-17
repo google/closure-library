@@ -906,10 +906,10 @@ goog.ui.ac.Renderer.prototype.getRowFromEventTarget_ = function(et) {
 goog.ui.ac.Renderer.prototype.handleClick_ = function(e) {
   var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
   if (index >= 0) {
-    this.dispatchEvent({
+    this.dispatchEvent(/** @lends {goog.events.Event.prototype} */ ({
       type: goog.ui.ac.AutoComplete.EventType.SELECT,
       row: this.rows_[index].id
-    });
+    }));
   }
   e.stopPropagation();
 };

@@ -187,7 +187,7 @@ goog.ui.CharCounter.prototype.checkLength_ = function() {
     var incremental = this.display_ == goog.ui.CharCounter.Display.INCREMENTAL;
     goog.dom.setTextContent(
         this.elCount_,
-        /** @type {string} */(incremental ? count : this.maxLength_ - count));
+        String(incremental ? count : this.maxLength_ - count));
   }
 };
 
