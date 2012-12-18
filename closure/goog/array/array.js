@@ -35,8 +35,11 @@ goog.require('goog.asserts');
  * If your javascript can be loaded by a third party site and you are wary about
  * relying on the prototype functions, specify
  * "--define goog.NATIVE_ARRAY_PROTOTYPES=false" to the JSCompiler.
+ *
+ * Setting goog.TRUSTED_SITE to false will automatically set
+ * NATIVE_ARRAY_PROTOTYPES to false.
  */
-goog.NATIVE_ARRAY_PROTOTYPES = true;
+goog.NATIVE_ARRAY_PROTOTYPES = goog.TRUSTED_SITE;
 
 
 /**

@@ -81,6 +81,20 @@ goog.LOCALE = 'en';  // default to en
 
 
 /**
+ * @define {boolean} Whether this code could run on untrusted sites.
+ *
+ * On untrusted sites, several native functions can be defined or overridden by
+ * external libraries like Prototype, Datejs, and JQuery and setting this flag
+ * to true forces closure to use its own implementations when possible.
+ *
+ * If your javascript can be loaded by a third party site and you are wary about
+ * relying on non-standard implementations, specify
+ * "--define goog.TRUSTED_SITE=false" to the JSCompiler.
+ */
+goog.TRUSTED_SITE = true;
+
+
+/**
  * Creates object stubs for a namespace.  The presence of one or more
  * goog.provide() calls indicate that the file defines the given
  * objects/namespaces.  Build tools also scan for provide/require statements
@@ -1138,7 +1152,7 @@ goog.mixin = function(target, source) {
  * @return {number} An integer value representing the number of milliseconds
  *     between midnight, January 1, 1970 and the current time.
  */
-goog.now = Date.now || (function() {
+goog.now = (goog.TRUSTED_SITE && Date.now) || (function() {
   // Unary plus operator converts its operand to a number which in the case of
   // a date is done by calling getTime().
   return +new Date();
