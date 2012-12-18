@@ -1248,7 +1248,7 @@ goog.Uri.QueryData.prototype.containsValue = function(value) {
 /**
  * Returns all the keys of the parameters. If a key is used multiple times
  * it will be included multiple times in the returned array
- * @return {!Array} All the keys of the parameters.
+ * @return {!Array.<string>} All the keys of the parameters.
  */
 goog.Uri.QueryData.prototype.getKeys = function() {
   this.ensureKeyMapInitialized_();
