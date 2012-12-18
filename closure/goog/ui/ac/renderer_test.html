@@ -527,6 +527,28 @@ See the COPYING file for details.
         renderer.rowDivs_[2], renderer.activeClassName));
   }
 
+  function testMouseMoveTriggersHiliteEvent() {
+    renderer.renderRows(rendRows, '', target);
+    var el = renderer.getElement();
+    var hiliteRowCalled = false;
+    goog.events.listen(renderer,
+      goog.ui.ac.AutoComplete.EventType.HILITE,
+      function(evt) {
+        hiliteRowCalled = true;
+        renderer.hiliteRow(evt.row);
+      });
+    var secondRowDiv = renderer.getRowDivsForTesting()[1];
+    // Need to make it seem like it's been long enough to trigger another event.
+    renderer.startRenderingRows_ -= goog.ui.ac.Renderer.DELAY_BEFORE_MOUSEOVER;
+    goog.testing.events.fireMouseMoveEvent(secondRowDiv);
+    assertTrue(hiliteRowCalled);
+    hiliteRowCalled = false;
+    // Fire the mouse move event again on the same row and make sure that
+    // we don't re-dispatch the HILITE event.
+    goog.testing.events.fireMouseMoveEvent(secondRowDiv);
+    assertFalse(hiliteRowCalled);
+  }
+
   function testReposition() {
     renderer.renderRows(rendRows, '', target);
     var el = renderer.getElement();
