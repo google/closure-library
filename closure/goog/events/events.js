@@ -848,7 +848,7 @@ goog.events.getTotalListenerCount = function() {
  * stopPropagation, then the bubble listeners won't fire.
  *
  * @param {goog.events.EventTarget} src  The event target.
- * @param {string|Object|goog.events.Event} e Event object.
+ * @param {goog.events.EventLike} e Event object.
  * @return {boolean} If anyone called preventDefault on the event object (or
  *     if any of the handlers returns false) this will also return false.
  *     If there are no handlers, or if all handlers return true, this returns
@@ -867,7 +867,7 @@ goog.events.dispatchEvent = function(src, e) {
     e = new goog.events.Event(e, src);
   } else if (!(e instanceof goog.events.Event)) {
     var oldEvent = e;
-    e = new goog.events.Event(type, src);
+    e = new goog.events.Event(/** @type {string} */ (type), src);
     goog.object.extend(e, oldEvent);
   } else {
     e.target = e.target || src;

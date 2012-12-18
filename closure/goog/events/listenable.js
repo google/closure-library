@@ -21,6 +21,8 @@
 goog.provide('goog.events.Listenable');
 goog.provide('goog.events.ListenableKey');
 
+goog.require('goog.events.EventLike');
+
 
 
 /**
@@ -119,7 +121,7 @@ goog.events.Listenable.prototype.unlistenByKey;
  * function will return false.  If one of the capture listeners calls
  * stopPropagation, then the bubble listeners won't fire.
  *
- * @param {string|Object|goog.events.Event} e Event object.
+ * @param {goog.events.EventLike} e Event object.
  * @return {boolean} If anyone called preventDefault on the event object (or
  *     if any of the listeners returns false this will also return false.
  */
