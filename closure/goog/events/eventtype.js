@@ -141,5 +141,11 @@ goog.events.EventType = {
   MSPOINTERMOVE: 'MSPointerMove',
   MSPOINTEROVER: 'MSPointerOver',
   MSPOINTEROUT: 'MSPointerOut',
-  MSPOINTERUP: 'MSPointerUp'
+  MSPOINTERUP: 'MSPointerUp',
+
+  // Native IMEs/input tools events.
+  TEXTINPUT: 'textinput',
+  COMPOSITIONSTART: 'compositionstart',
+  COMPOSITIONUPDATE: 'compositionupdate',
+  COMPOSITIONEND: 'compositionend'
 };
