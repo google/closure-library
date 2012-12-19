@@ -11,12 +11,6 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.events.EventTarget</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.events.Listenable');
-</script>
-<script>
-goog.events.Listenable.USE_LISTENABLE_INTERFACE = true;
-</script>
-<script>
   goog.require('goog.events.eventTargetTester');
   goog.require('goog.events.eventTargetTester.KeyType');
   goog.require('goog.events.eventTargetTester.UnlistenReturnType');
@@ -25,15 +19,13 @@ goog.events.Listenable.USE_LISTENABLE_INTERFACE = true;
 </head>
 <body>
 <script>
+
 function setUp() {
   var listenFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.listen(type, listener, opt_capt, opt_handler);
+    src.addEventListener(type, listener, opt_capt, opt_handler);
   };
   var unlistenFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.unlisten(type, listener, opt_capt, opt_handler);
-  };
-  var listenOnceFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.listenOnce(type, listener, opt_capt, opt_handler);
+    src.removeEventListener(type, listener, opt_capt, opt_handler);
   };
   var dispatchEventFn = function(src, e) {
     return src.dispatchEvent(e);
@@ -41,9 +33,9 @@ function setUp() {
 
   goog.events.eventTargetTester.setUp(
       listenFn, unlistenFn,
-      listenOnceFn, dispatchEventFn,
-      goog.events.eventTargetTester.KeyType.NUMBER,
-      goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN);
+      null /* listenOnceFn */, dispatchEventFn,
+      goog.events.eventTargetTester.KeyType.UNDEFINED,
+      goog.events.eventTargetTester.UnlistenReturnType.UNDEFINED);
 }
 
 function tearDown() {

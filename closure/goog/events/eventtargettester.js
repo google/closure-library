@@ -327,14 +327,14 @@ function testScope() {
 
 function testDispatchEventDoesNotThrowWithDisposedEventTarget() {
   goog.dispose(eventTargets[0]);
-  dispatchEvent(eventTargets[0], EventType.A);
+  assertTrue(dispatchEvent(eventTargets[0], EventType.A));
 }
 
 
 function testDispatchEventWithObjectLiteral() {
   listen(eventTargets[0], EventType.A, listeners[0]);
 
-  dispatchEvent(eventTargets[0], {type: EventType.A});
+  assertTrue(dispatchEvent(eventTargets[0], {type: EventType.A}));
   assertListenerIsCalled(listeners[0], times(1));
   assertNoOtherListenerIsCalled();
 }
@@ -344,7 +344,7 @@ function testDispatchEventWithCustomEventObject() {
   listen(eventTargets[0], EventType.A, listeners[0]);
 
   var e = new TestEvent();
-  dispatchEvent(eventTargets[0], e);
+  assertTrue(dispatchEvent(eventTargets[0], e));
   assertListenerIsCalled(listeners[0], times(1));
   assertNoOtherListenerIsCalled();
 
