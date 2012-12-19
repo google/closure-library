@@ -370,6 +370,15 @@ goog.ui.ac.Renderer.prototype.setAnchorElement = function(anchor) {
 
 
 /**
+ * @return {Element} The anchor element.
+ * @protected
+ */
+goog.ui.ac.Renderer.prototype.getAnchorElement = function() {
+  return this.anchorElement_;
+};
+
+
+/**
  * Render the autocomplete UI
  *
  * @param {Array} rows Matching UI rows.
@@ -649,6 +658,24 @@ goog.ui.ac.Renderer.prototype.reposition = function() {
  */
 goog.ui.ac.Renderer.prototype.setAutoPosition = function(auto) {
   this.reposition_ = auto;
+};
+
+
+/**
+ * @return {boolean} Whether the drop down will be autopositioned.
+ * @protected
+ */
+goog.ui.ac.Renderer.prototype.getAutoPosition = function() {
+  return this.reposition_;
+};
+
+
+/**
+ * @return {Element} The target element.
+ * @protected
+ */
+goog.ui.ac.Renderer.prototype.getTarget = function() {
+  return this.target_;
 };
 
 
