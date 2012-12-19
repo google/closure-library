@@ -740,12 +740,12 @@ goog.net.CrossDomainRpc.sendResponse =
         dummyUri, numChunksToSend, isDataJson, status, headers);
   } else {
     var numChunksSent = 0;
-    function checkToCreateResponseInfo_() {
+    var checkToCreateResponseInfo_ = function() {
       if (++numChunksSent == numChunksToSend) {
         goog.net.CrossDomainRpc.createResponseInfo_(
             dummyUri, numChunksToSend, isDataJson, status, headers);
       }
-    }
+    };
 
     for (var i = 0; i < numChunksToSend; i++) {
       var chunkStart = i * chunkSize;

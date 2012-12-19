@@ -166,7 +166,7 @@ goog.tweak.TweakUi.createCollapsible = function(opt_domHelper) {
     var hideLink = dh.createDom('a', {href: 'javascript:;'}, 'Hide Tweaks');
     var ret = dh.createDom('div', null, showLink);
 
-    function lazyCreate() {
+    var lazyCreate = function() {
       // Lazily render the UI.
       var ui = new goog.tweak.TweakUi(
           /** @type {!goog.tweak.Registry} */ (registry), dh);
@@ -178,7 +178,7 @@ goog.tweak.TweakUi.createCollapsible = function(opt_domHelper) {
       tweakElem.insertBefore(hideLink, tweakElem.firstChild);
       ret.appendChild(tweakElem);
       return tweakElem;
-    }
+    };
     new goog.ui.Zippy(showLink, lazyCreate, false /* expanded */, hideLink);
     return ret;
   }

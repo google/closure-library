@@ -362,9 +362,9 @@ goog.proto2.Message.prototype.equals = function(other) {
     if (this.has(field)) {
       var isComposite = field.isCompositeType();
 
-      function fieldsEqual(value1, value2) {
+      var fieldsEqual = function(value1, value2) {
         return isComposite ? value1.equals(value2) : value1 == value2;
-      }
+      };
 
       var thisValue = this.getValueForField_(field);
       var otherValue = other.getValueForField_(field);

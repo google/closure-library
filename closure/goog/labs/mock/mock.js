@@ -342,7 +342,7 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
     // Create a temporary subclass with a no-op constructor so that we can
     // create an instance and determine what methods it has.
     /** @constructor */
-    function tempCtor() {};
+    var tempCtor = function() {};
     goog.inherits(tempCtor, objOrClass);
     obj = new tempCtor();
   } else {
