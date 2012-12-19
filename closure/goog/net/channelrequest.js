@@ -683,12 +683,14 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
       this.lastError_ = goog.net.ChannelRequest.Error.UNKNOWN_SESSION_ID;
       goog.net.BrowserChannel.notifyStatEvent(
           goog.net.BrowserChannel.Stat.REQUEST_UNKNOWN_SESSION_ID);
+      this.channelDebug_.warning('XMLHTTP Unknown SID (' + this.rid_ + ')');
     } else {
       this.lastError_ = goog.net.ChannelRequest.Error.STATUS;
       goog.net.BrowserChannel.notifyStatEvent(
           goog.net.BrowserChannel.Stat.REQUEST_BAD_STATUS);
+      this.channelDebug_.warning(
+          'XMLHTTP Bad status ' + status + ' (' + this.rid_ + ')');
     }
-    this.channelDebug_.xmlHttpChannelResponseText(this.rid_, responseText);
     this.cleanup_();
     this.dispatchFailure_();
     return;
