@@ -547,8 +547,6 @@ goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
                        this.handleClick_, false, this);
     goog.events.listen(el, goog.events.EventType.MOUSEDOWN,
                        this.handleMouseDown_, false, this);
-    goog.events.listen(el, goog.events.EventType.MOUSEMOVE,
-                       this.handleMouseMove_, false, this);
     goog.events.listen(el, goog.events.EventType.MOUSEOVER,
                        this.handleMouseOver_, false, this);
   }
@@ -692,8 +690,6 @@ goog.ui.ac.Renderer.prototype.disposeInternal = function() {
         this.handleMouseDown_, false, this);
     goog.events.unlisten(this.element_, goog.events.EventType.MOUSEOVER,
         this.handleMouseOver_, false, this);
-    goog.events.unlisten(this.element_, goog.events.EventType.MOUSEMOVE,
-        this.handleMouseMove_, false, this);
     this.dom_.removeNode(this.element_);
     this.element_ = null;
     this.visible_ = false;
@@ -958,17 +954,6 @@ goog.ui.ac.Renderer.prototype.handleMouseDown_ = function(e) {
 
 
 /**
- * We are only keeping this method here because it would break gmail if we
- * removed it.
- * @param {goog.events.Event} e Browser event object.
- * @private
- */
-goog.ui.ac.Renderer.prototype.handleMouseOver_ = function(e) {
-  this.handleMouseMove_(e);
-};
-
-
-/**
  * Handle the mousing events.  These are redirected to the AutoComplete object
  * which then makes a callback to set the correctly highlighted row.  This is
  * because the AutoComplete can move the focus as well, and there is no sense
@@ -976,9 +961,9 @@ goog.ui.ac.Renderer.prototype.handleMouseOver_ = function(e) {
  * @param {goog.events.Event} e Browser event object.
  * @private
  */
-goog.ui.ac.Renderer.prototype.handleMouseMove_ = function(e) {
+goog.ui.ac.Renderer.prototype.handleMouseOver_ = function(e) {
   var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
-  if (index >= 0 && index != this.hilitedRow_) {
+  if (index >= 0) {
     if ((goog.now() - this.startRenderingRows_) <
         goog.ui.ac.Renderer.DELAY_BEFORE_MOUSEOVER) {
       return;
@@ -989,15 +974,6 @@ goog.ui.ac.Renderer.prototype.handleMouseMove_ = function(e) {
       row: this.rows_[index].id
     });
   }
-};
-
-
-/**
- * Return the array of row divs for testing purposes.
- * @return {Array.<Element>}
- */
-goog.ui.ac.Renderer.prototype.getRowDivsForTesting = function() {
-  return this.rowDivs_;
 };
 
 

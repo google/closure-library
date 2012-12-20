@@ -180,7 +180,7 @@ function testMouseNavigation() {
   assertFalse(goog.dom.classes.has(secondOption, 'ac-active'));
 
   var mouseOver = new goog.events.Event(
-      goog.events.EventType.MOUSEMOVE, secondOption);
+      goog.events.EventType.MOUSEOVER, secondOption);
   simulateEvent(new goog.events.BrowserEvent(mouseOver, parent));
   assert(goog.dom.classes.has(secondOption, 'ac-active'));
 
