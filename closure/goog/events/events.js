@@ -171,6 +171,7 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
  *     false).
  * @param {Object=} opt_handler Element in whose scope to call the listener.
  * @return {?number} Unique key for the listener.
+ * @private
  */
 goog.events.listen_ = function(
     src, type, listener, callOnce, opt_capt, opt_handler) {
@@ -548,17 +549,13 @@ goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
  *
  * @param {Object=} opt_obj Object to remove listeners from.
  * @param {string=} opt_type Type of event to, default is all types.
- * @param {boolean=} opt_capt Whether to remove the listeners from the capture
- *     or bubble phase.  If unspecified, will remove both.
  * @return {number} Number of listeners removed.
  */
-goog.events.removeAll = function(opt_obj, opt_type, opt_capt) {
+goog.events.removeAll = function(opt_obj, opt_type) {
   var count = 0;
 
   var noObj = opt_obj == null;
   var noType = opt_type == null;
-  var noCapt = opt_capt == null;
-  opt_capt = !!opt_capt;
 
   if (!noObj) {
     var srcUid = goog.getUid(/** @type {Object} */ (opt_obj));
@@ -566,25 +563,16 @@ goog.events.removeAll = function(opt_obj, opt_type, opt_capt) {
       var sourcesArray = goog.events.sources_[srcUid];
       for (var i = sourcesArray.length - 1; i >= 0; i--) {
         var listener = sourcesArray[i];
-        if ((noType || opt_type == listener.type) &&
-            (noCapt || opt_capt == listener.capture)) {
+        if (noType || opt_type == listener.type) {
           goog.events.unlistenByKey(listener.key);
           count++;
         }
       }
     }
   } else {
-    // Loop over the sources_ map instead of over the listeners_ since it is
-    // smaller which results in fewer allocations.
-    goog.object.forEach(goog.events.sources_, function(listeners) {
-      for (var i = listeners.length - 1; i >= 0; i--) {
-        var listener = listeners[i];
-        if ((noType || opt_type == listener.type) &&
-            (noCapt || opt_capt == listener.capture)) {
-          goog.events.unlistenByKey(listener.key);
-          count++;
-        }
-      }
+    goog.object.forEach(goog.events.listeners_, function(listener, key) {
+      goog.events.unlistenByKey(key);
+      count++;
     });
   }
 

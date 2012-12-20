@@ -511,6 +511,22 @@ See the COPYING file for details.
 
     assertEquals(0, listener.getCallCount());
   }
+
+  function testRemoveAll() {
+    var listener = goog.testing.recordFunction();
+    var div = document.createElement('div');
+
+    goog.events.listenOnce(document.body, 'click', listener);
+    goog.events.listen(document.body, 'click', listener);
+    goog.events.listenOnce(div, 'click', listener);
+    goog.events.listen(div, 'click', listener);
+
+    goog.events.removeAll();
+
+    dispatchClick(document.body);
+    dispatchClick(div);
+    assertEquals(0, listener.getCallCount());
+  }
 </script>
 </body>
 </html>
