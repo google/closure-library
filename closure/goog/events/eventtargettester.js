@@ -44,6 +44,9 @@ goog.require('goog.testing.recordFunction');
  * @param {Function} dispatchEventFn Function that, given the same
  *     signature as goog.events.dispatchEvent, will dispatch the event
  *     on the given event target.
+ * @param {Function} removeAllFn Function that, given the same
+ *     signature as goog.events.removeAll, will remove all listeners
+ *     according to the contract of goog.events.removeAll.
  * @param {Function} getListenersFn Function that, given the same
  *     signature as goog.events.getListeners, will retrieve listeners.
  * @param {goog.events.eventTargetTester.KeyType} listenKeyType The
@@ -55,12 +58,14 @@ goog.require('goog.testing.recordFunction');
  *     be set to false.
  */
 goog.events.eventTargetTester.setUp = function(
-    listenFn, unlistenFn, listenOnceFn, dispatchEventFn, getListenersFn,
+    listenFn, unlistenFn, listenOnceFn, dispatchEventFn,
+    removeAllFn, getListenersFn,
     listenKeyType, unlistenFnReturnType) {
   listen = listenFn;
   unlisten = unlistenFn;
   listenOnce = listenOnceFn;
   dispatchEvent = dispatchEventFn;
+  removeAll = removeAllFn;
   getListeners = getListenersFn;
   keyType = listenKeyType;
   unlistenReturnType = unlistenFnReturnType;
@@ -159,7 +164,8 @@ var EventType = {
 };
 
 
-var listen, unlisten, listenOnce, dispatchEvent, getListeners;
+var listen, unlisten, listenOnce, dispatchEvent;
+var removeAll, getListeners;
 var keyType, unlistenReturnType;
 var eventTargets, listeners;
 
@@ -791,6 +797,58 @@ function testUnlistenAfterListenOnce() {
   listenOnce(eventTargets[0], EventType.A, listeners[0]);
   unlisten(eventTargets[0], EventType.A, listeners[0]);
   dispatchEvent(eventTargets[0], EventType.A);
+
+  assertNoOtherListenerIsCalled();
+}
+
+
+function testRemoveAllWithType() {
+  if (!removeAll) {
+    return;
+  }
+
+  listen(eventTargets[0], EventType.A, listeners[0], true);
+  listen(eventTargets[0], EventType.A, listeners[1]);
+  listen(eventTargets[0], EventType.C, listeners[2], true);
+  listen(eventTargets[0], EventType.C, listeners[3]);
+  listen(eventTargets[0], EventType.B, listeners[4], true);
+  listen(eventTargets[0], EventType.B, listeners[5], true);
+  listen(eventTargets[0], EventType.B, listeners[6]);
+  listen(eventTargets[0], EventType.B, listeners[7]);
+
+  assertEquals(4, removeAll(eventTargets[0], EventType.B));
+
+  dispatchEvent(eventTargets[0], EventType.A);
+  dispatchEvent(eventTargets[0], EventType.B);
+  dispatchEvent(eventTargets[0], EventType.C);
+
+  assertListenerIsCalled(listeners[0], times(1));
+  assertListenerIsCalled(listeners[1], times(1));
+  assertListenerIsCalled(listeners[2], times(1));
+  assertListenerIsCalled(listeners[3], times(1));
+  assertNoOtherListenerIsCalled();
+}
+
+
+function testRemoveAll() {
+  if (!removeAll) {
+    return;
+  }
+
+  listen(eventTargets[0], EventType.A, listeners[0], true);
+  listen(eventTargets[0], EventType.A, listeners[1]);
+  listen(eventTargets[0], EventType.C, listeners[2], true);
+  listen(eventTargets[0], EventType.C, listeners[3]);
+  listen(eventTargets[0], EventType.B, listeners[4], true);
+  listen(eventTargets[0], EventType.B, listeners[5], true);
+  listen(eventTargets[0], EventType.B, listeners[6]);
+  listen(eventTargets[0], EventType.B, listeners[7]);
+
+  assertEquals(8, removeAll(eventTargets[0]));
+
+  dispatchEvent(eventTargets[0], EventType.A);
+  dispatchEvent(eventTargets[0], EventType.B);
+  dispatchEvent(eventTargets[0], EventType.C);
 
   assertNoOtherListenerIsCalled();
 }

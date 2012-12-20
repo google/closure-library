@@ -214,12 +214,14 @@ goog.events.EventTarget.prototype.dispatchEvent = function(e) {
  */
 goog.events.EventTarget.prototype.disposeInternal = function() {
   goog.events.EventTarget.superClass_.disposeInternal.call(this);
-  goog.events.removeAll(this);
-  this.parentEventTarget_ = null;
 
   if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-    this.eventTargetListeners_ = null;
+    this.removeAllListeners();
+  } else {
+    goog.events.removeAll(this);
   }
+
+  this.parentEventTarget_ = null;
 };
 
 
@@ -325,6 +327,21 @@ goog.events.EventTarget.prototype.unlistenByKey = function(key) {
   }
 
   return goog.array.remove(this.eventTargetListeners_[type], key);
+};
+
+
+/** @override */
+goog.events.EventTarget.prototype.removeAllListeners = function(
+    opt_type, opt_capture) {
+  var count = 0;
+  for (var type in this.eventTargetListeners_) {
+    if (!opt_type || type == opt_type) {
+      var listenerArray = this.eventTargetListeners_[type];
+      count += listenerArray.length;
+      listenerArray.length = 0;
+    }
+  }
+  return count;
 };
 
 

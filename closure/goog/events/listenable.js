@@ -129,6 +129,18 @@ goog.events.Listenable.prototype.dispatchEvent;
 
 
 /**
+ * Removes all listeners from this listenable. If type is specified,
+ * it will only remove listeners of the particular type. otherwise all
+ * registered listeners will be removed.
+ *
+ * @param {string=} opt_type Type of event to remove, default is to
+ *     remove all types.
+ * @return {number} Number of listeners removed.
+ */
+goog.events.Listenable.prototype.removeAllListeners;
+
+
+/**
  * Fires all registered listeners in this listenable for the given
  * type and capture mode, passing them the given eventObject. This
  * does not perform actual capture/bubble. Only implementors of the

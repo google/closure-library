@@ -25,7 +25,7 @@ function setUp() {
   goog.events.eventTargetTester.setUp(
       goog.events.listen, goog.events.unlisten,
       goog.events.listenOnce, goog.events.dispatchEvent,
-      goog.events.getListeners,
+      goog.events.removeAll, goog.events.getListeners,
       goog.events.eventTargetTester.KeyType.NUMBER,
       goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN);
 }

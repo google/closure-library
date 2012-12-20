@@ -38,6 +38,9 @@ function setUp() {
   var dispatchEventFn = function(src, e) {
     return src.dispatchEvent(e);
   };
+  var removeAllFn = function(src, opt_type, opt_capture) {
+    return src.removeAllListeners(opt_type, opt_capture);
+  };
   var getListenersFn = function(src, type, capture) {
     return src.getListeners(type, capture);
   };
@@ -45,7 +48,7 @@ function setUp() {
   goog.events.eventTargetTester.setUp(
       listenFn, unlistenFn,
       listenOnceFn, dispatchEventFn,
-      getListenersFn,
+      removeAllFn, getListenersFn,
       goog.events.eventTargetTester.KeyType.NUMBER,
       goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN);
 }
