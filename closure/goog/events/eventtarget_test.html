@@ -38,10 +38,14 @@ function setUp() {
   var dispatchEventFn = function(src, e) {
     return src.dispatchEvent(e);
   };
+  var getListenersFn = function(src, type, capture) {
+    return src.getListeners(type, capture);
+  };
 
   goog.events.eventTargetTester.setUp(
       listenFn, unlistenFn,
       listenOnceFn, dispatchEventFn,
+      getListenersFn,
       goog.events.eventTargetTester.KeyType.NUMBER,
       goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN);
 }

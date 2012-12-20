@@ -44,6 +44,8 @@ goog.require('goog.testing.recordFunction');
  * @param {Function} dispatchEventFn Function that, given the same
  *     signature as goog.events.dispatchEvent, will dispatch the event
  *     on the given event target.
+ * @param {Function} getListenersFn Function that, given the same
+ *     signature as goog.events.getListeners, will retrieve listeners.
  * @param {goog.events.eventTargetTester.KeyType} listenKeyType The
  *     key type returned by listen call.
  * @param {goog.events.eventTargetTester.UnlistenReturnType}
@@ -53,12 +55,13 @@ goog.require('goog.testing.recordFunction');
  *     be set to false.
  */
 goog.events.eventTargetTester.setUp = function(
-    listenFn, unlistenFn, listenOnceFn, dispatchEventFn,
+    listenFn, unlistenFn, listenOnceFn, dispatchEventFn, getListenersFn,
     listenKeyType, unlistenFnReturnType) {
   listen = listenFn;
   unlisten = unlistenFn;
   listenOnce = listenOnceFn;
   dispatchEvent = dispatchEventFn;
+  getListeners = getListenersFn;
   keyType = listenKeyType;
   unlistenReturnType = unlistenFnReturnType;
 
@@ -156,7 +159,7 @@ var EventType = {
 };
 
 
-var listen, unlisten, listenOnce, dispatchEvent;
+var listen, unlisten, listenOnce, dispatchEvent, getListeners;
 var keyType, unlistenReturnType;
 var eventTargets, listeners;
 
@@ -790,4 +793,29 @@ function testUnlistenAfterListenOnce() {
   dispatchEvent(eventTargets[0], EventType.A);
 
   assertNoOtherListenerIsCalled();
+}
+
+
+function testGetListeners() {
+  if (!getListeners) {
+    return;
+  }
+
+  listen(eventTargets[0], EventType.A, listeners[0], true);
+  listen(eventTargets[0], EventType.A, listeners[1], true);
+  listen(eventTargets[0], EventType.A, listeners[2]);
+  listen(eventTargets[0], EventType.A, listeners[3]);
+
+  var l = getListeners(eventTargets[0], EventType.A, true);
+  assertEquals(2, l.length);
+  assertEquals(listeners[0], l[0].listener);
+  assertEquals(listeners[1], l[1].listener);
+
+  l = getListeners(eventTargets[0], EventType.A, false);
+  assertEquals(2, l.length);
+  assertEquals(listeners[2], l[0].listener);
+  assertEquals(listeners[3], l[1].listener);
+
+  l = getListeners(eventTargets[0], EventType.B, true);
+  assertEquals(0, l.length);
 }

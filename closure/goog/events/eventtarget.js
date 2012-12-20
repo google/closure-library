@@ -356,6 +356,22 @@ goog.events.EventTarget.prototype.fireListeners = function(
 };
 
 
+/** @override */
+goog.events.EventTarget.prototype.getListeners = function(type, capture) {
+  var listenerArray = this.eventTargetListeners_[type];
+  var rv = [];
+  if (listenerArray) {
+    for (var i = 0; i < listenerArray.length; ++i) {
+      var listenerObj = listenerArray[i];
+      if (listenerObj.capture == capture) {
+        rv.push(listenerObj);
+      }
+    }
+  }
+  return rv;
+};
+
+
 /**
  * Dispatches the given event on the ancestorsTree.
  *

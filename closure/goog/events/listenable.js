@@ -129,7 +129,7 @@ goog.events.Listenable.prototype.dispatchEvent;
 
 
 /**
- * Fires all registered listeners in this event target for the given
+ * Fires all registered listeners in this listenable for the given
  * type and capture mode, passing them the given eventObject. This
  * does not perform actual capture/bubble. Only implementors of the
  * interface should be using this.
@@ -145,9 +145,21 @@ goog.events.Listenable.prototype.dispatchEvent;
 goog.events.Listenable.prototype.fireListeners;
 
 
+/**
+ * Gets all listeners in this listenable for the given type and
+ * capture mode.
+ *
+ * @param {string} type The type of the listeners to fire.
+ * @param {boolean} capture The capture mode of the listeners to fire.
+ * @return {!Array.<goog.events.ListenableKey>} An array of registered
+ *     listeners.
+ */
+goog.events.Listenable.prototype.getListeners;
+
+
 
 /**
- * A key interface.
+ * An interface that describes a single registered listener.
  * @interface
  */
 goog.events.ListenableKey = function() {};
