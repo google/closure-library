@@ -115,18 +115,6 @@ goog.math.Vec2.prototype.squaredMagnitude = function() {
 
 
 /**
- * Scales the current vector by a constant.
- * @param {number} s The scale factor.
- * @return {!goog.math.Vec2} The scaled vector.
- */
-goog.math.Vec2.prototype.scale = function(s) {
-  this.x *= s;
-  this.y *= s;
-  return this;
-};
-
-
-/**
  * Reverses the sign of the vector. Equivalent to scaling the vector by -1.
  * @return {!goog.math.Vec2} The inverted vector.
  */
@@ -142,7 +130,8 @@ goog.math.Vec2.prototype.invert = function() {
  * @return {!goog.math.Vec2} The normalized vector.
  */
 goog.math.Vec2.prototype.normalize = function() {
-  return this.scale(1 / this.magnitude());
+  this.scale(1 / this.magnitude());
+  return this;
 };
 
 

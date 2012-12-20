@@ -235,6 +235,64 @@ function testBoundingBox() {
           new goog.math.Coordinate(10, 5)));
 }
 
+function testBoxCeil() {
+  var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
+  assertEquals('The function should return the target instance',
+    box, box.ceil());
+  assertObjectEquals(new goog.math.Box(12, 27, 18, 10), box);
+}
+
+function testBoxFloor() {
+  var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
+  assertEquals('The function should return the target instance',
+    box, box.floor());
+  assertObjectEquals(new goog.math.Box(11, 26, 17, 9), box);
+}
+
+function testBoxRound() {
+  var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
+  assertEquals('The function should return the target instance',
+    box, box.round());
+  assertObjectEquals(new goog.math.Box(11, 27, 18, 9), box);
+}
+
+function testBoxTranslateCoordinate() {
+  var box = new goog.math.Box(10, 30, 20, 5);
+  var c = new goog.math.Coordinate(10, 5);
+  assertEquals('The function should return the target instance',
+    box, box.translate(c));
+  assertObjectEquals(new goog.math.Box(15, 40, 25, 15), box);
+}
+
+function testBoxTranslateXY() {
+  var box = new goog.math.Box(10, 30, 20, 5);
+  assertEquals('The function should return the target instance',
+    box, box.translate(5, 2));
+  assertObjectEquals(new goog.math.Box(12, 35, 22, 10), box);
+}
+
+function testBoxTranslateX() {
+  var box = new goog.math.Box(10, 30, 20, 5);
+  assertEquals('The function should return the target instance',
+    box, box.translate(3));
+  assertObjectEquals(new goog.math.Box(10, 33, 20, 8), box);
+}
+
+function testBoxScaleXY() {
+  var box = new goog.math.Box(10, 20, 30, 5);
+  assertEquals('The function should return the target instance',
+    box, box.scale(2, 3));
+  assertObjectEquals(new goog.math.Box(30, 40, 90, 10), box);
+}
+
+function testBoxScaleFactor() {
+  var box = new goog.math.Box(10, 20, 30, 5);
+  assertEquals('The function should return the target instance',
+    box, box.scale(2));
+  assertObjectEquals(new goog.math.Box(20, 40, 60, 10), box);
+}
+
+
 </script>
 </body>
 </html>

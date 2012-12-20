@@ -310,6 +310,65 @@ function testGetSize() {
   assertEquals(new goog.math.Size(60, 80).toString(),
                new goog.math.Rect(20, 40, 60, 80).getSize().toString());
 }
+
+function testRectCeil() {
+  var rect = new goog.math.Rect(11.4, 26.6, 17.8, 9.2);
+  assertEquals('The function should return the target instance',
+    rect, rect.ceil());
+  assertRectsEqual(new goog.math.Rect(12, 27, 18, 10), rect);
+}
+
+function testRectFloor() {
+  var rect = new goog.math.Rect(11.4, 26.6, 17.8, 9.2);
+  assertEquals('The function should return the target instance',
+    rect, rect.floor());
+  assertRectsEqual(new goog.math.Rect(11, 26, 17, 9), rect);
+}
+
+function testRectRound() {
+  var rect = new goog.math.Rect(11.4, 26.6, 17.8, 9.2);
+  assertEquals('The function should return the target instance',
+    rect, rect.round());
+  assertRectsEqual(new goog.math.Rect(11, 27, 18, 9), rect);
+}
+
+function testRectTranslateCoordinate() {
+  var rect = new goog.math.Rect(10, 40, 30, 20);
+  var c = new goog.math.Coordinate(10, 5);
+  assertEquals('The function should return the target instance',
+    rect, rect.translate(c));
+  assertRectsEqual(new goog.math.Rect(20, 45, 30, 20), rect);
+}
+
+function testRectTranslateXY() {
+  var rect = new goog.math.Rect(10, 20, 40, 35);
+  assertEquals('The function should return the target instance',
+    rect, rect.translate(15, 10));
+  assertRectsEqual(new goog.math.Rect(25, 30, 40, 35), rect);
+}
+
+function testRectTranslateX() {
+  var rect = new goog.math.Rect(12, 34, 113, 88);
+  assertEquals('The function should return the target instance',
+    rect, rect.translate(10));
+  assertRectsEqual(new goog.math.Rect(22, 34, 113, 88), rect);
+}
+
+function testRectScaleXY() {
+  var rect = new goog.math.Rect(10, 30, 100, 60);
+  assertEquals('The function should return the target instance',
+    rect, rect.scale(2, 5));
+  assertRectsEqual(new goog.math.Rect(20, 150, 200, 300), rect);
+}
+
+function testRectScaleFactor() {
+  var rect = new goog.math.Rect(12, 34, 113, 88);
+  assertEquals('The function should return the target instance',
+    rect, rect.scale(10));
+  assertRectsEqual(new goog.math.Rect(120, 340, 1130, 880), rect);
+}
+
+
 </script>
 </body>
 </html>

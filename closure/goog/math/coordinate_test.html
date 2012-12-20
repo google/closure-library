@@ -97,6 +97,63 @@ function testCoordinateSum() {
           new goog.math.Coordinate(2, 50)));
 }
 
+function testCoordinateCeil() {
+  var c = new goog.math.Coordinate(5.2, 7.6);
+  assertObjectEquals(new goog.math.Coordinate(6, 8), c.ceil());
+  c = new goog.math.Coordinate(-1.2, -3.9);
+  assertObjectEquals(new goog.math.Coordinate(-1, -3), c.ceil());
+}
+
+function testCoordinateFloor() {
+  var c = new goog.math.Coordinate(5.2, 7.6);
+  assertObjectEquals(new goog.math.Coordinate(5, 7), c.floor());
+  c = new goog.math.Coordinate(-1.2, -3.9);
+  assertObjectEquals(new goog.math.Coordinate(-2, -4), c.floor());
+}
+
+function testCoordinateRound() {
+  var c = new goog.math.Coordinate(5.2, 7.6);
+  assertObjectEquals(new goog.math.Coordinate(5, 8), c.round());
+  c = new goog.math.Coordinate(-1.2, -3.9);
+  assertObjectEquals(new goog.math.Coordinate(-1, -4), c.round());
+}
+
+function testCoordinateTranslateCoordinate() {
+  var c = new goog.math.Coordinate(10, 20);
+  var t = new goog.math.Coordinate(5, 10);
+  // The translate function modifies the coordinate instead of returning a new one.
+  assertEquals(c, c.translate(t));
+  assertObjectEquals(new goog.math.Coordinate(15, 30), c);
+}
+
+function testCoordinateTranslateXY() {
+  var c = new goog.math.Coordinate(10, 20);
+  // The translate function modifies the coordinate instead of returning a new one.
+  assertEquals(c, c.translate(25, 5));
+  assertObjectEquals(new goog.math.Coordinate(35, 25), c);
+}
+
+function testCoordinateTranslateX() {
+  var c = new goog.math.Coordinate(10, 20);
+  // The translate function modifies the coordinate instead of returning a new one.
+  assertEquals(c, c.translate(5));
+  assertObjectEquals(new goog.math.Coordinate(15, 20), c);
+}
+
+function testCoordinateScaleXY() {
+  var c = new goog.math.Coordinate(10, 15);
+  // The scale function modifies the coordinate instead of returning a new one.
+  assertEquals(c, c.scale(2, 3));
+  assertObjectEquals(new goog.math.Coordinate(20, 45), c);
+}
+
+function testCoordinateScaleFactor() {
+  var c = new goog.math.Coordinate(10, 15);
+  // The scale function modifies the coordinate instead of returning a new one.
+  assertEquals(c, c.scale(2));
+  assertObjectEquals(new goog.math.Coordinate(20, 30), c);
+}
+
 </script>
 </body>
 </html>
