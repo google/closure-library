@@ -81,11 +81,11 @@ goog.LOCALE = 'en';  // default to en
 
 
 /**
- * @define {boolean} Whether this code could run on untrusted sites.
+ * @define {boolean} Whether this code is running on trusted sites.
  *
  * On untrusted sites, several native functions can be defined or overridden by
  * external libraries like Prototype, Datejs, and JQuery and setting this flag
- * to true forces closure to use its own implementations when possible.
+ * to false forces closure to use its own implementations when possible.
  *
  * If your javascript can be loaded by a third party site and you are wary about
  * relying on non-standard implementations, specify
