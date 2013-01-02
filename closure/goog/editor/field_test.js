@@ -1014,6 +1014,45 @@ function doTestPlaceCursorAtStart(opt_html, opt_parentId) {
 }
 
 
+/**
+ * Verify that restoreSavedRange() restores the range and sets the focus.
+ */
+function testRestoreSavedRange() {
+  var editableField = new FieldConstructor('testField', document);
+  editableField.makeEditable();
+
+
+  // Create another node to take the focus later.
+  var doc = goog.dom.getOwnerDocument(editableField.getElement());
+  var otherElem = doc.createElement('div');
+  otherElem.tabIndex = '1';  // Make it focusable.
+  editableField.getElement().parentNode.appendChild(otherElem);
+
+  // Initially place selection not at the start of the editable field.
+  var textNode = editableField.getElement().firstChild;
+  var range = goog.dom.Range.createFromNodes(textNode, 1, textNode, 2);
+  range.select();
+  var savedRange = goog.editor.range.saveUsingNormalizedCarets(range);
+
+  // Change range to be a simple cursor at start, and move focus away.
+  editableField.placeCursorAtStart();
+  otherElem.focus();
+
+  editableField.restoreSavedRange(savedRange);
+
+  // Verify that we have focus and the range is restored.
+  assertEquals('Field should be focused',
+      editableField.getElement(),
+      goog.dom.getActiveElement(doc));
+  var newRange = editableField.getRange();
+  assertEquals('Range startNode', textNode, newRange.getStartNode());
+  assertEquals('Range startOffset', 1, newRange.getStartOffset());
+  assertEquals('Range endNode', textNode, newRange.getEndNode());
+  assertEquals('Range endOffset', 2, newRange.getEndOffset());
+
+}
+
+
 function testPlaceCursorAtStart() {
   doTestPlaceCursorAtStart();
 }
@@ -1062,8 +1101,10 @@ function doTestPlaceCursorAtEnd(opt_html, opt_parentId, opt_offset) {
 
   // We check whether getAttribute exist because textNode may be an actual
   // TextNode, which does not have getAttribute.
-  if (textNode && textNode.getAttribute &&
-      textNode.getAttribute('_moz_editor_bogus_node')) {
+
+  var hasBogusNode = textNode && textNode.getAttribute &&
+                     textNode.getAttribute('_moz_editor_bogus_node');
+  if (hasBogusNode) {
     // At least in FF >= 6, assigning '' to innerHTML of a contentEditable
     // element will results in textNode being modified into:
     // <br _moz_editor_bogus_node="TRUE" _moz_dirty=""> instead of nulling
@@ -1079,8 +1120,13 @@ function doTestPlaceCursorAtEnd(opt_html, opt_parentId, opt_offset) {
   var offset = goog.isDefAndNotNull(opt_offset) ?
       opt_offset :
       textNode ? endNode.nodeValue.length : endNode.childNodes.length - 1;
-  assertEquals('The range should end at the ending of the node',
-      offset, range.getEndOffset());
+  if (hasBogusNode) {
+    assertEquals('The range should end at the ending of the bogus node ' +
+                 'added by FF', offset + 1, range.getEndOffset());
+  } else {
+    assertEquals('The range should end at the ending of the node',
+        offset, range.getEndOffset());
+  }
 }
 
 
