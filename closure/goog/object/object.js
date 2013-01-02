@@ -238,7 +238,7 @@ goog.object.getKeys = function(obj) {
  *
  * @param {!Object} obj An object to get the value from.  Can be array-like.
  * @param {...(string|number|!Array.<number|string>)} var_args A number of keys
- *     (as strings, or nubmers, for array-like objects).  Can also be
+ *     (as strings, or numbers, for array-like objects).  Can also be
  *     specified as a single array of keys.
  * @return {*} The resulting value.  If, at any point, the value for a key
  *     is undefined, returns undefined.
