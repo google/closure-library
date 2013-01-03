@@ -149,6 +149,19 @@ function testAddLogRecordWithAddAndRemoveFilter() {
   assertEquals(3, mockConsole.log.getCallCount());
 }
 
+function testSetConsole() {
+  var fakeConsole = {log: goog.testing.recordFunction()};
+
+  logAtLevel(goog.debug.Logger.Level.INFO, 'test message 1');
+  logAtAllLevels('test message 1');
+  assertEquals(0, fakeConsole.log.getCallCount());
+
+  goog.debug.Console.setConsole(fakeConsole);
+
+  logAtLevel(goog.debug.Logger.Level.INFO, 'test message 2');
+  assertEquals(1, fakeConsole.log.getCallCount());
+}
+
 
 /**
  * Logs the message at all log levels.
