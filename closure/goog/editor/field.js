@@ -1230,7 +1230,7 @@ goog.editor.Field.prototype.injectContents = function(contents, field) {
   var styles = {};
   var newHtml = this.getInjectableContents(contents, styles);
   goog.style.setStyle(field, styles);
-  field.innerHTML = newHtml;
+  goog.editor.node.replaceInnerHtml(field, newHtml);
 };
 
 
@@ -2441,7 +2441,7 @@ goog.editor.Field.prototype.makeUneditable = function(opt_skipRestore) {
   // so that the original node will have the same properties as it did before
   // it was made editable.
   if (goog.isString(html)) {
-    field.innerHTML = html;
+    goog.editor.node.replaceInnerHtml(field, html);
     this.resetOriginalElemProperties();
   }
 

@@ -660,7 +660,7 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
           // Don't break Opera's native break-out-of-lists behavior.
           html = '<br>';
         }
-        container.innerHTML = html;
+        goog.editor.node.replaceInnerHtml(container, html);
         goog.editor.range.selectNodeStart(container.firstChild);
         reselect = false;
       }

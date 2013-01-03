@@ -588,9 +588,10 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
       // div's. The reason may be hidden in CLs 5332866 and 8530601.
       var attribute = 'trtempbr';
       var value = 'temp_br';
-      parent.innerHTML = parent.innerHTML.replace(
+      var newHtml = parent.innerHTML.replace(
           goog.editor.plugins.BasicTextFormatter.BR_REGEXP_,
           '<p$1 ' + attribute + '="' + value + '">');
+      goog.editor.node.replaceInnerHtml(parent, newHtml);
 
       var paragraphs =
           goog.array.toArray(parent.getElementsByTagName(goog.dom.TagName.P));

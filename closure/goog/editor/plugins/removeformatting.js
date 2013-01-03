@@ -283,11 +283,11 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
     // remove parentNodes of the span while they are empty.
 
     if (goog.userAgent.GECKO) {
-      parent.innerHTML =
-          parent.innerHTML.replace(dummyImageNodePattern, html);
+      goog.editor.node.replaceInnerHtml(parent,
+          parent.innerHTML.replace(dummyImageNodePattern, html));
     } else {
-      parent.innerHTML =
-          parent.innerHTML.replace(dummyImageNodePattern, dummySpanText);
+      goog.editor.node.replaceInnerHtml(parent,
+          parent.innerHTML.replace(dummyImageNodePattern, dummySpanText));
       var dummySpan = dh.getElement(dummyNodeId);
       parent = dummySpan;
       while ((parent = dummySpan.parentNode) &&
@@ -307,8 +307,8 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
         goog.dom.insertSiblingAfter(dummySpan, parent);
         goog.dom.removeNode(parent);
       }
-      parent.innerHTML =
-          parent.innerHTML.replace(new RegExp(dummySpanText, 'i'), html);
+      goog.editor.node.replaceInnerHtml(parent,
+          parent.innerHTML.replace(new RegExp(dummySpanText, 'i'), html));
     }
   }
 

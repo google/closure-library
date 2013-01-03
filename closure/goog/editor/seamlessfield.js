@@ -667,7 +667,7 @@ goog.editor.SeamlessField.prototype.attachIframe = function(iframe) {
     goog.style.setStyle(field, 'lineHeight', '0');
   }
 
-  field.innerHTML = html;
+  goog.editor.node.replaceInnerHtml(field, html);
   // Set the initial size
   goog.style.setSize(iframe, width, height);
   goog.style.setSize(field, oldWidth, oldHeight);
