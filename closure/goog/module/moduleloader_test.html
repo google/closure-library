@@ -188,8 +188,17 @@ function testLoadDebugModuleAThenB() {
 }
 
 function testSourceInjection() {
-  testCase.waitForAsync('wait for module B load');
   moduleLoader.setSourceUrlInjection(true);
+  assertSourceInjection();
+}
+
+function testSourceInjectionViaDebugMode() {
+  moduleLoader.setDebugMode(true);
+  assertSourceInjection();
+}
+
+function assertSourceInjection() {
+  testCase.waitForAsync('wait for module B load');
   moduleManager.execOnLoad('modB', function() {
     testCase.continueTesting();
 
@@ -203,10 +212,10 @@ function testSourceInjection() {
 
     assertNotNull(ex);
 
-    // Chrome is currently the only browser that uses sourceURL
-    // when serializing stack traces.
-    if (goog.userAgent.product.CHROME) {
+    if (goog.module.ModuleLoader.supportsSourceUrlStackTraces) {
       assertContains('modB_1.js', ex.stack.toString());
+    } else {
+      assertNotContains('modB_1.js', ex.stack.toString());
     }
   });
 }
