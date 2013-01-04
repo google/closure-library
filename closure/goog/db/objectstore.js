@@ -66,8 +66,8 @@ goog.db.ObjectStore.prototype.getName = function() {
  *
  * @param {string} fn Function name to call on the object store.
  * @param {string} msg Message to give to the error.
- * @param {!Object} value Value to insert into the object store.
- * @param {!Object=} opt_key The key to use.
+ * @param {*} value Value to insert into the object store.
+ * @param {IDBKeyType=} opt_key The key to use.
  * @return {!goog.async.Deferred} The resulting deferred request.
  * @private
  */
@@ -114,10 +114,10 @@ goog.db.ObjectStore.prototype.insert_ = function(fn, msg, value, opt_key) {
  * Adds an object to the object store. Replaces existing objects with the
  * same key.
  *
- * @param {!Object} value The value to put.
- * @param {!Object=} opt_key The key to use. Cannot be used if the keyPath was
- *     specified for the object store. If the keyPath was not specified but
- *     autoIncrement was not enabled, it must be used.
+ * @param {*} value The value to put.
+ * @param {IDBKeyType=} opt_key The key to use. Cannot be used if the
+ *     keyPath was specified for the object store. If the keyPath was not
+ *     specified but autoIncrement was not enabled, it must be used.
  * @return {!goog.async.Deferred} The deferred put request.
  */
 goog.db.ObjectStore.prototype.put = function(value, opt_key) {
@@ -133,10 +133,10 @@ goog.db.ObjectStore.prototype.put = function(value, opt_key) {
  * Adds an object to the object store. Requires that there is no object with
  * the same key already present.
  *
- * @param {!Object} value The value to add.
- * @param {!Object=} opt_key The key to use. Cannot be used if the keyPath was
- *     specified for the object store. If the keyPath was not specified but
- *     autoIncrement was not enabled, it must be used.
+ * @param {*} value The value to add.
+ * @param {IDBKeyType=} opt_key The key to use. Cannot be used if the
+ *     keyPath was specified for the object store. If the keyPath was not
+ *     specified but autoIncrement was not enabled, it must be used.
  * @return {!goog.async.Deferred} The deferred add request.
  */
 goog.db.ObjectStore.prototype.add = function(value, opt_key) {
@@ -152,7 +152,7 @@ goog.db.ObjectStore.prototype.add = function(value, opt_key) {
  * Removes an object from the store. No-op if there is no object present with
  * the given key.
  *
- * @param {!Object} key The key to remove objects under.
+ * @param {IDBKeyType} key The key to remove objects under.
  * @return {!goog.async.Deferred} The deferred remove request.
  */
 goog.db.ObjectStore.prototype.remove = function(key) {
@@ -185,7 +185,7 @@ goog.db.ObjectStore.prototype.remove = function(key) {
  * Gets an object from the store. If no object is present with that key
  * the result is {@code undefined}.
  *
- * @param {!Object} key The key to look up.
+ * @param {IDBKeyType} key The key to look up.
  * @return {!goog.async.Deferred} The deferred get request.
  */
 goog.db.ObjectStore.prototype.get = function(key) {
