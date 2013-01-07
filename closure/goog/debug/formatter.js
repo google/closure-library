@@ -252,6 +252,9 @@ goog.debug.HtmlFormatter.prototype.formatRecord = function(logRecord) {
   if (this.showLoggerName) {
     sb.push('[', goog.string.htmlEscape(logRecord.getLoggerName()), '] ');
   }
+  if (this.showSeverityLevel) {
+    sb.push('[', goog.string.htmlEscape(logRecord.getLevel().name), '] ');
+  }
   sb.push('<span class="', className, '">',
       goog.string.newLineToBr(goog.string.whitespaceEscape(
           goog.string.htmlEscape(logRecord.getMessage()))));
