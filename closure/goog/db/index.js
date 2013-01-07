@@ -135,25 +135,25 @@ goog.db.Index.prototype.getKey = function(value) {
  *
  * @param {string} fn Function name to call on the index to get the request.
  * @param {string} msg Message to give to the error.
- * @param {!Object=} opt_value Value to look up in the index.
+ * @param {IDBKeyType=} opt_key Key to look up in the index.
  * @return {!goog.async.Deferred} The resulting deferred array of objects.
  * @private
  */
-goog.db.Index.prototype.getAll_ = function(fn, msg, opt_value) {
+goog.db.Index.prototype.getAll_ = function(fn, msg, opt_key) {
   // This is the most common use of IDBKeyRange. If more specific uses of
   // cursors are needed then a full wrapper should be created.
   var IDBKeyRange = goog.global.IDBKeyRange || goog.global.webkitIDBKeyRange;
   var d = new goog.async.Deferred();
   var request;
   try {
-    if (opt_value) {
-      request = this.index_[fn](IDBKeyRange.bound(opt_value, opt_value));
+    if (opt_key) {
+      request = this.index_[fn](IDBKeyRange.only(opt_key));
     } else {
       request = this.index_[fn]();
     }
   } catch (err) {
-    if (opt_value) {
-      msg += ' for value ' + goog.debug.deepExpose(opt_value);
+    if (opt_key) {
+      msg += ' for key ' + goog.debug.deepExpose(opt_key);
     }
     d.errback(goog.db.Error.create(err, msg));
     return d;
@@ -169,8 +169,8 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, opt_value) {
     }
   };
   request.onerror = function(ev) {
-    if (opt_value) {
-      msg += ' for value ' + goog.debug.deepExpose(opt_value);
+    if (opt_key) {
+      msg += ' for key ' + goog.debug.deepExpose(opt_key);
     }
     d.errback(new goog.db.Error(
         (/** @type {IDBRequest} */ (ev.target)).errorCode,
@@ -181,32 +181,32 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, opt_value) {
 
 
 /**
- * Gets all indexed objects. If the value is provided, gets all indexed objects
- * that match the value instead.
+ * Gets all indexed objects. If the key is provided, gets all indexed objects
+ * that match the key instead.
  *
- * @param {!Object=} opt_value Value to look up in the index.
+ * @param {IDBKeyType=} opt_key Key to look up in the index.
  * @return {!goog.async.Deferred} A deferred array of objects that match the
- *     value.
+ *     key.
  */
-goog.db.Index.prototype.getAll = function(opt_value) {
+goog.db.Index.prototype.getAll = function(opt_key) {
   return this.getAll_(
       'openCursor',
       'getting all from index ' + this.getName(),
-      opt_value);
+      opt_key);
 };
 
 
 /**
- * Gets the keys to look up all the indexed objects. If the value is provided,
- * gets all keys for objects that match the value instead.
+ * Gets the keys to look up all the indexed objects. If the key is provided,
+ * gets all records for objects that match the key instead.
  *
- * @param {!Object=} opt_value Value to look up in the index.
+ * @param {IDBKeyType=} opt_key Key to look up in the index.
  * @return {!goog.async.Deferred} A deferred array of keys for objects that
- *     match the value.
+ *     match the key.
  */
-goog.db.Index.prototype.getAllKeys = function(opt_value) {
+goog.db.Index.prototype.getAllKeys = function(opt_key) {
   return this.getAll_(
       'openKeyCursor',
       'getting all keys from index ' + this.getName(),
-      opt_value);
+      opt_key);
 };
