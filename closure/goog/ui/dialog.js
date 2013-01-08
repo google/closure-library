@@ -760,7 +760,7 @@ goog.ui.Dialog.prototype.focus = function() {
       var doc = this.getDomHelper().getDocument();
       var buttons = this.buttonEl_.getElementsByTagName('button');
       for (var i = 0, button; button = buttons[i]; i++) {
-        if (button.name == defaultButton) {
+        if (button.name == defaultButton && !button.disabled) {
           try {
             // Reopening a dialog can cause focusing the button to fail in
             // WebKit and Opera. Shift the focus to a temporary <input>

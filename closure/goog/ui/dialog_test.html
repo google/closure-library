@@ -80,6 +80,19 @@ See the COPYING file for details.
     assertEquals(2, focusCounter);
   }
 
+  function testNoDisabledButtonFocus() {
+    dialog.setVisible(false);
+    var buttonEl =
+        dialog.getButtonSet().getButton(goog.ui.Dialog.DefaultButtonKeys.OK);
+    buttonEl.disabled = true;
+    var focused = false;
+    buttonEl.focus = function() {
+      focused = true;
+    }
+    dialog.setVisible(true);
+    assertFalse('Should not have called focus on disabled button', focused);
+  }
+
   function testNoTitleClose() {
     assertTrue(goog.style.isElementShown(dialog.getTitleCloseElement()));
     dialog.setHasTitleCloseButton(false);
