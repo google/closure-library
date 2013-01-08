@@ -13,7 +13,6 @@ See the COPYING file for details.
     goog.require('goog.debug.DivConsole');
     goog.require('goog.debug.Logger');
     goog.require('goog.events');
-    goog.require('goog.events.EventType');
     goog.require('goog.labs.style.PixelDensityMonitor');
     goog.require('goog.labs.style.PixelDensityMonitor.Density');
   </script>
@@ -40,9 +39,11 @@ See the COPYING file for details.
         goog.labs.style.PixelDensityMonitor.Density.NORMAL, 'NORMAL',
         goog.labs.style.PixelDensityMonitor.Density.HIGH, 'HIGH');
 
-    goog.events.listen(monitor, goog.events.EventType.CHANGE, function() {
-      logger.info('Density change: ' + densityMap[monitor.getDensity()]);
-    });
+    goog.events.listen(monitor,
+        goog.labs.style.PixelDensityMonitor.EventType.CHANGE,
+        function() {
+          logger.info('Density change: ' + densityMap[monitor.getDensity()]);
+        });
 
     logger.info('Starting density: ' + densityMap[monitor.getDensity()]);
   </script>
