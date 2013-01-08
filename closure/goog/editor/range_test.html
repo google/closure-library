@@ -379,13 +379,9 @@ function testPlaceCursorNextTo_leftOfHr() {
   assertEquals(2, children.length);
   var node = children[0];
   var range = goog.editor.range.placeCursorNextTo(node, true);
-  if (goog.userAgent.IE && goog.userAgent.isVersion('9')) {
-    assertEquals(div, range.getStartNode());
-    assertEquals(0, range.getStartOffset());
-  } else {
-    assertEquals(children[0], range.getStartNode());
-    assertEquals(0, range.getStartOffset());
-  }
+
+  assertEquals(div, range.getStartNode());
+  assertEquals(0, range.getStartOffset());
 }
 
 function testPlaceCursorNextTo_rightOfHr() {
@@ -395,13 +391,72 @@ function testPlaceCursorNextTo_rightOfHr() {
   assertEquals(2, children.length);
   var node = children[1];
   var range = goog.editor.range.placeCursorNextTo(node, false);
-  if (goog.userAgent.IE && goog.userAgent.isVersion('9')) {
-    assertEquals(div, range.getStartNode());
-    assertEquals(1, range.getStartOffset());
-  } else {
-    assertEquals(children[1], range.getStartNode());
-    assertEquals(0, range.getStartOffset());
-  }
+
+  assertEquals(div, range.getStartNode());
+  assertEquals(2, range.getStartOffset());
+}
+
+function testPlaceCursorNextTo_rightOfImg() {
+  var div = $('parentNode');
+  div.innerHTML =
+      'aaa<img src="https://www.google.com/images/srpr/logo3w.png">bbb';
+  var children = div.childNodes;
+  assertEquals(3, children.length);
+  var imgNode = children[1];
+  var range = goog.editor.range.placeCursorNextTo(imgNode, false);
+
+  assertEquals('range node should be the right sibling of img tag',
+      children[2], range.getStartNode());
+  assertEquals(0, range.getStartOffset());
+
+}
+
+function testPlaceCursorNextTo_rightOfImgAtEnd() {
+  var div = $('parentNode');
+  div.innerHTML =
+      'aaa<img src="https://www.google.com/images/srpr/logo3w.png">';
+  var children = div.childNodes;
+  assertEquals(2, children.length);
+  var imgNode = children[1];
+  var range = goog.editor.range.placeCursorNextTo(imgNode, false);
+
+  assertEquals('range node should be the parent of img',
+      div, range.getStartNode());
+  assertEquals('offset should be right after the img tag',
+      2, range.getStartOffset());
+
+}
+
+function testPlaceCursorNextTo_leftOfImg() {
+  var div = $('parentNode');
+  div.innerHTML =
+      '<img src="https://www.google.com/images/srpr/logo3w.png">xxx';
+  var children = div.childNodes;
+  assertEquals(2, children.length);
+  var imgNode = children[0];
+  var range = goog.editor.range.placeCursorNextTo(imgNode, true);
+
+  assertEquals('range node should be the parent of img',
+      div, range.getStartNode());
+  assertEquals('offset should point to the img tag',
+      0, range.getStartOffset());
+}
+
+function testPlaceCursorNextTo_rightOfFirstOfTwoImgTags() {
+  var div = $('parentNode');
+  div.innerHTML =
+      'aaa<img src="https://www.google.com/images/srpr/logo3w.png">' +
+      '<img src="https://www.google.com/images/srpr/logo3w.png">';
+  var children = div.childNodes;
+  assertEquals(3, children.length);
+  var imgNode = children[1];  // First of two IMG nodes
+  var range = goog.editor.range.placeCursorNextTo(imgNode, false);
+
+  assertEquals('range node should be the parent of img instead of ' +
+      'node with innerHTML=' + range.getStartNode().innerHTML,
+      div, range.getStartNode());
+  assertEquals('offset should be right after the img tag',
+      2, range.getStartOffset());
 }
 
 function testGetDeepEndPoint() {
