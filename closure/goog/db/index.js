@@ -77,17 +77,17 @@ goog.db.Index.prototype.isUnique = function() {
  *
  * @param {string} fn Function name to call on the index to get the request.
  * @param {string} msg Message to give to the error.
- * @param {!Object} value Value to look up in the index.
+ * @param {IDBKeyType} key The key to look up in the index.
  * @return {!goog.async.Deferred} The resulting deferred object.
  * @private
  */
-goog.db.Index.prototype.get_ = function(fn, msg, value) {
+goog.db.Index.prototype.get_ = function(fn, msg, key) {
   var d = new goog.async.Deferred();
   var request;
   try {
-    request = this.index_[fn](value);
+    request = this.index_[fn](key);
   } catch (err) {
-    msg += ' with value ' + goog.debug.deepExpose(value);
+    msg += ' with key ' + goog.debug.deepExpose(key);
     d.errback(goog.db.Error.create(err, msg));
     return d;
   }
@@ -95,7 +95,7 @@ goog.db.Index.prototype.get_ = function(fn, msg, value) {
     d.callback(ev.target.result);
   };
   request.onerror = function(ev) {
-    msg += ' with value ' + goog.debug.deepExpose(value);
+    msg += ' with key ' + goog.debug.deepExpose(key);
     d.errback(new goog.db.Error(
         (/** @type {IDBRequest} */ (ev.target)).errorCode,
         msg));
@@ -106,27 +106,27 @@ goog.db.Index.prototype.get_ = function(fn, msg, value) {
 
 /**
  * Fetches a single object from the object store. Even if there are multiple
- * objects that match the given value, this method will get only one of them.
+ * objects that match the given key, this method will get only one of them.
  *
- * @param {!Object} value Value to look up in the index.
- * @return {!goog.async.Deferred} The deferred object that matches the value.
+ * @param {IDBKeyType} key Key to look up in the index.
+ * @return {!goog.async.Deferred} The deferred object for the given record.
  */
-goog.db.Index.prototype.get = function(value) {
-  return this.get_('get', 'getting from index ' + this.getName(), value);
+goog.db.Index.prototype.get = function(key) {
+  return this.get_('get', 'getting from index ' + this.getName(), key);
 };
 
 
 /**
  * Looks up a single object from the object store and gives back the key that
- * it's listed under in the object store. Even if there are multiple objects
- * that match the given value, this method will only get one of their keys.
+ * it's listed under in the object store. Even if there are multiple records
+ * that match the given key, this method returns the first.
  *
- * @param {!Object} value Value to look up in the index.
- * @return {!goog.async.Deferred} The deferred key for the object that matches
- *     the value.
+ * @param {IDBKeyType} key Key to look up in the index.
+ * @return {!goog.async.Deferred} The deferred key for the record that matches
+ *     the key.
  */
-goog.db.Index.prototype.getKey = function(value) {
-  return this.get_('getKey', 'getting key from index ' + this.getName(), value);
+goog.db.Index.prototype.getKey = function(key) {
+  return this.get_('getKey', 'getting key from index ' + this.getName(), key);
 };
 
 
