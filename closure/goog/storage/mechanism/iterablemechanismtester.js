@@ -20,12 +20,12 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.iterablemechanism_test');
+goog.provide('goog.storage.mechanism.iterableMechanismTester');
 
 goog.require('goog.iter.Iterator');
 goog.require('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.testing.asserts');
-goog.setTestOnly('iterablemechanism_test');
+goog.setTestOnly('iterableMechanismTester');
 
 
 var mechanism = null;

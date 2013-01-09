@@ -14,7 +14,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.crypt.Md5');
-  goog.require('goog.crypt.hash_test')
+  goog.require('goog.crypt.hashTester')
   goog.require('goog.testing.PerformanceTable');
   goog.require('goog.testing.PseudoRandom');
   goog.require('goog.testing.jsunit');
@@ -29,7 +29,7 @@ See the COPYING file for details.
 <script>
 
 function testHashing() {
-  goog.crypt.hash_test.runPerfTests(function() {
+  goog.crypt.hashTester.runPerfTests(function() {
     return new goog.crypt.Md5();
   }, 'MD5');
 }

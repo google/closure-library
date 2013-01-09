@@ -12,7 +12,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.crypt');
-  goog.require('goog.crypt.hash_test');
+  goog.require('goog.crypt.hashTester');
   goog.require('goog.crypt.Sha256');
   goog.require('goog.testing.jsunit');
 </script>
@@ -22,7 +22,7 @@ See the COPYING file for details.
 
 function testBasicOperations() {
   var sha256 = new goog.crypt.Sha256();
-  goog.crypt.hash_test.runBasicTests(sha256);
+  goog.crypt.hashTester.runBasicTests(sha256);
 }
 
 function testHashing() {

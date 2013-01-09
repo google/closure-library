@@ -17,15 +17,22 @@
  *
  */
 
-goog.provide('goog.crypt.hash_test');
+goog.provide('goog.crypt.hashTester');
 
 goog.require('goog.array');
 goog.require('goog.crypt');
+goog.require('goog.testing.PerformanceTable');
+goog.require('goog.testing.PseudoRandom');
 goog.require('goog.testing.asserts');
-goog.setTestOnly('hash_test');
+goog.setTestOnly('hashTester');
 
 
-goog.crypt.hash_test.runBasicTests = function(hash) {
+/**
+ * Runs basic tests.
+ *
+ * @param {!goog.crypt.Hash} hash A hash instance.
+ */
+goog.crypt.hashTester.runBasicTests = function(hash) {
   // Compute first hash.
   hash.update([97, 158]);
   var golden1 = hash.digest();
@@ -90,7 +97,13 @@ goog.crypt.hash_test.runBasicTests = function(hash) {
 };
 
 
-goog.crypt.hash_test.runBlockTests = function(hash, blockBytes) {
+/**
+ * Runs block tests.
+ *
+ * @param {!goog.crypt.Hash} hash A hash instance.
+ * @param {number} blockBytes Size of the hash block.
+ */
+goog.crypt.hashTester.runBlockTests = function(hash, blockBytes) {
   // Compute a message which is 1 byte shorter than hash block size.
   var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var message = '';
@@ -150,8 +163,13 @@ goog.crypt.hash_test.runBlockTests = function(hash, blockBytes) {
 };
 
 
-// Run performance tests
-goog.crypt.hash_test.runPerfTests = function(hashFactory, hashName) {
+/**
+ * Runs performance tests.
+ *
+ * @param {function():!goog.crypt.Hash} hashFactory A hash factory.
+ * @param {string} hashName Name of the hashing function.
+ */
+goog.crypt.hashTester.runPerfTests = function(hashFactory, hashName) {
   var body = goog.dom.getDocument().body;
   var perfTable = goog.dom.createElement('div');
   goog.dom.appendChild(body, perfTable);
@@ -159,8 +177,8 @@ goog.crypt.hash_test.runPerfTests = function(hashFactory, hashName) {
   var table = new goog.testing.PerformanceTable(perfTable);
 
   function runPerfTest(byteLength, updateCount) {
-    var label = (hashName + ': ' + updateCount + ' update(s) of ' + byteLength
-        + ' bytes');
+    var label = (hashName + ': ' + updateCount + ' update(s) of ' + byteLength +
+        ' bytes');
 
     function run(data, dataType) {
       table.run(function() {
@@ -172,8 +190,8 @@ goog.crypt.hash_test.runPerfTests = function(hashFactory, hashName) {
       }, label + ' (' + dataType + ')');
     }
 
-    var byteArray = goog.crypt.hash_test.createRandomByteArray_(byteLength);
-    var byteString = goog.crypt.hash_test.createByteString_(byteArray);
+    var byteArray = goog.crypt.hashTester.createRandomByteArray_(byteLength);
+    var byteString = goog.crypt.hashTester.createByteString_(byteArray);
 
     run(byteArray, 'byte array');
     run(byteString, 'byte string');
@@ -188,24 +206,38 @@ goog.crypt.hash_test.runPerfTests = function(hashFactory, hashName) {
 };
 
 
-goog.crypt.hash_test.createRandomByteArray_ = function(length) {
+/**
+ * Creates and returns a random byte array.
+ *
+ * @param {number} length Length of the byte array.
+ * @return {!Array.<number>} An array of bytes.
+ * @private
+ */
+goog.crypt.hashTester.createRandomByteArray_ = function(length) {
   var random = new goog.testing.PseudoRandom(0);
   var bytes = [];
 
   for (var i = 0; i < length; ++i) {
     // Generates an integer from 0 to 255.
-    var byte = Math.floor(random.random() * 0x100);
-    bytes.push(byte);
+    var b = Math.floor(random.random() * 0x100);
+    bytes.push(b);
   }
 
   return bytes;
 };
 
 
-goog.crypt.hash_test.createByteString_ = function(bytes) {
+/**
+ * Creates a string from an array of bytes.
+ *
+ * @param {!Array.<number>} bytes An array of bytes.
+ * @return {string} The string encoded by the bytes.
+ * @private
+ */
+goog.crypt.hashTester.createByteString_ = function(bytes) {
   var str = '';
-  goog.array.forEach(bytes, function(byte) {
-    str += String.fromCharCode(byte);
+  goog.array.forEach(bytes, function(b) {
+    str += String.fromCharCode(b);
   });
   return str;
 };
