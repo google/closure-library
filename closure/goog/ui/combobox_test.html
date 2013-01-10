@@ -76,6 +76,17 @@ function tearDown() {
   goog.events.removeAll();
 }
 
+function testInputElementAttributes() {
+  var comboBox = new goog.ui.ComboBox();
+  comboBox.setFieldName('a_form_field');
+  comboBox.createDom();
+  var inputElement = comboBox.getInputElement();
+  assertEquals('text', inputElement.type);
+  assertEquals('a_form_field', inputElement.name);
+  assertEquals('off', inputElement.autocomplete);
+  comboBox.dispose();
+}
+
 function testSetDefaultText() {
   assertEquals('Select a color...', comboBox.getDefaultText());
   comboBox.setDefaultText('new default text...');

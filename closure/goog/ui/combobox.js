@@ -200,7 +200,7 @@ goog.ui.ComboBox.prototype.useDropdownArrow_ = false;
  */
 goog.ui.ComboBox.prototype.createDom = function() {
   this.input_ = this.getDomHelper().createDom(
-      'input', {'name': this.fieldName_, 'autocomplete': 'off'});
+      'input', {name: this.fieldName_, type: 'text', autocomplete: 'off'});
   this.button_ = this.getDomHelper().createDom('span',
       goog.getCssName('goog-combobox-button'));
   this.setElementInternal(this.getDomHelper().createDom('span',
