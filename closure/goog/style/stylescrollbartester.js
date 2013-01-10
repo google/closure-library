@@ -13,17 +13,18 @@
 // limitations under the License.
 
 /**
- * @fileoverview Shared unit tests for scrollbar measurement
+ * @fileoverview Shared unit tests for scrollbar measurement.
  *
  * @author flan@google.com (Ian Flanigan)
  */
 
-goog.provide('goog.style_scrollbar_test');
+goog.provide('goog.styleScrollbarTester');
 
 goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('goog.testing.asserts');
-goog.setTestOnly('Tests for scrollbar styles');
+goog.setTestOnly('goog.styleScrollbarTester');
+
 
 /**
  * Tests the scrollbar width calculation. Assumes that there is an element with
@@ -68,7 +69,7 @@ function testScrollbarWidth() {
 
 
 function hasVerticalScroll(el) {
-  return el.clientWidth != 0 && el.offsetWidth - el.clientWidth  > 0;
+  return el.clientWidth != 0 && el.offsetWidth - el.clientWidth > 0;
 }
 
 

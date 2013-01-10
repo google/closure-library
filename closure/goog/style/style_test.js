@@ -24,7 +24,7 @@ goog.require('goog.events.BrowserEvent');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.style');
-goog.require('goog.style_scrollbar_test');
+goog.require('goog.styleScrollbarTester');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -32,7 +32,7 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
 goog.require('goog.testing.asserts');
-goog.setTestOnly('Tests for styles');
+goog.setTestOnly('goog.style_test');
 
 // IE before version 6 will always be border box in compat mode.
 var isBorderBox = goog.dom.isCss1CompatMode() ?

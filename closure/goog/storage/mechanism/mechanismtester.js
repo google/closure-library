@@ -20,7 +20,7 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.mechanism_test');
+goog.provide('goog.storage.mechanism.mechanismTester');
 
 goog.require('goog.storage.mechanism.ErrorCode');
 goog.require('goog.storage.mechanism.HTML5LocalStorage');
@@ -28,7 +28,7 @@ goog.require('goog.storage.mechanism.Mechanism');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
-goog.setTestOnly('mechanism_test');
+goog.setTestOnly('goog.storage.mechanism.mechanismTester');
 
 
 var mechanism = null;
@@ -156,8 +156,7 @@ function testWeirdKeys() {
   assertEquals('control', mechanism.get('=+!@#$%^&*()-_\\|;:\'",./<>?[]{}~`'));
   assertEquals('ten', mechanism.get(
       '\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341'));
-  if (!goog.userAgent.IE ||
-      !mechanism instanceof goog.storage.mechanism.HTML5LocalStorage) {
+  if (!goog.userAgent.IE) {
     // IE does not properly handle nulls in HTML5 localStorage keys (IE8, IE9).
     // https://connect.microsoft.com/IE/feedback/details/667799/
     assertEquals('null', mechanism.get('\0'));
@@ -185,7 +184,7 @@ function testQuota() {
   }
   var buffer = '\u03ff'; // 2 bytes
   var savedBytes = 0;
-   try {
+  try {
     while (buffer.length < minimumQuota) {
       buffer = buffer + buffer;
       mechanism.set('foo', buffer);

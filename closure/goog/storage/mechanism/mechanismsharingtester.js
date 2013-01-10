@@ -22,12 +22,12 @@
  *
  */
 
-goog.provide('goog.storage.mechanism.mechanism_sharing_test');
+goog.provide('goog.storage.mechanism.mechanismSharingTester');
 
 goog.require('goog.iter.Iterator');
 goog.require('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.testing.asserts');
-goog.setTestOnly('mechanism_sharing_test');
+goog.setTestOnly('goog.storage.mechanism.mechanismSharingTester');
 
 
 var mechanism = null;
