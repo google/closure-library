@@ -28,6 +28,77 @@ goog.require('goog.result.SimpleResult');
 
 
 /**
+ * Returns a successful result containing the provided value.
+ *
+ * Example:
+ * <pre>
+ *
+ * var value = 'some-value';
+ * var result = goog.result.immediateResult(value);
+ * assertEquals(goog.result.Result.State.SUCCESS, result.getState());
+ * assertEquals(value, result.getValue());
+ *
+ * </pre>
+ *
+ * @param {*} value The value of the result.
+ * @return {!goog.result.Result} A Result object that has already been resolved
+ *     to the supplied value.
+ */
+goog.result.successfulResult = function(value) {
+  var result = new goog.result.SimpleResult();
+  result.setValue(value);
+  return result;
+};
+
+
+/**
+ * Returns a failed result with the optional error slug set.
+ *
+ * Example:
+ * <pre>
+ *
+ * var error = new Error('something-failed');
+ * var result = goog.result.failedResult(error);
+ * assertEquals(goog.result.Result.State.ERROR, result.getState());
+ * assertEquals(error, result.getError());
+ *
+ * </pre>
+ *
+ * @param {*=} opt_error The error to which the result should resolve.
+ * @return {!goog.result.Result} A Result object that has already been resolved
+ *     to the supplied Error.
+ */
+goog.result.failedResult = function(opt_error) {
+  var result = new goog.result.SimpleResult();
+  result.setError(opt_error);
+  return result;
+};
+
+
+/**
+ * Returns a canceled result.
+ * The result will be resolved to an error of type CancelError.
+ *
+ * Example:
+ * <pre>
+ *
+ * var result = goog.result.canceledResult();
+ * assertEquals(goog.result.Result.State.ERROR, result.getState());
+ * var error = result.getError();
+ * assertTrue(error instanceof goog.result.Result.CancelError);
+ *
+ * </pre>
+ *
+ * @return {!goog.result.Result} A canceled Result.
+ */
+goog.result.canceledResult = function() {
+  var result = new goog.result.SimpleResult();
+  result.cancel();
+  return result;
+};
+
+
+/**
  * Calls the handler on resolution of the result (success or failure).
  * The handler is passed the result object as the only parameter. The call will
  * be immediate if the result is no longer pending.
