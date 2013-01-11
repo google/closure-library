@@ -54,6 +54,17 @@ goog.storage.mechanism.MockThrowableStorage.prototype.removeItem =
 function(key) {};
 
 
+/**
+ * A very simple, dummy implementation of key(), merely to verify that calls to
+ * HTML5WebStorage#key are proxied through.
+ * @param {number} index A key index.
+ * @return {string} The key associated with that index.
+ */
+goog.storage.mechanism.MockThrowableStorage.prototype.key = function(index) {
+  return 'dummyKey';
+};
+
+
 
 /**
  * Provides an HTML5WebStorage wrapper for MockThrowableStorage.
@@ -100,6 +111,11 @@ function testSetThrowsExceptionWhenStorageDisabled() {
     isStorageDisabled = e == goog.storage.mechanism.ErrorCode.STORAGE_DISABLED;
   }
   assertTrue(isStorageDisabled);
+}
+
+function testKeyIterationWithKeyMethod() {
+  var storage = new goog.storage.mechanism.HTML5MockStorage(true);
+  assertEquals('dummyKey', storage.key(1));
 }
 </script>
 </body>

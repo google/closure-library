@@ -162,3 +162,15 @@ goog.storage.mechanism.HTML5WebStorage.prototype.__iterator__ = function(
 goog.storage.mechanism.HTML5WebStorage.prototype.clear = function() {
   this.storage_.clear();
 };
+
+
+/**
+ * Gets the key for a given key index. If an index outside of
+ * [0..this.getCount()) is specified, this function returns null.
+ * @param {number} index A key index.
+ * @return {?string} A storage key, or null if the specified index is out of
+ *     range.
+ */
+goog.storage.mechanism.HTML5WebStorage.prototype.key = function(index) {
+  return this.storage_.key(index);
+};
