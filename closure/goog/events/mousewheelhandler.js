@@ -46,10 +46,12 @@ goog.require('goog.userAgent');
  * manner.
  * @param {Element|Document} element The element to listen to the mouse wheel
  *     event on.
+ * @param {boolean=} opt_capture Whether to handle the mouse wheel event in
+ *     capture phase.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.events.MouseWheelHandler = function(element) {
+goog.events.MouseWheelHandler = function(element, opt_capture) {
   goog.events.EventTarget.call(this);
 
   /**
@@ -77,7 +79,7 @@ goog.events.MouseWheelHandler = function(element) {
    * @type {?number}
    * @private
    */
-  this.listenKey_ = goog.events.listen(this.element_, type, this);
+  this.listenKey_ = goog.events.listen(this.element_, type, this, opt_capture);
 };
 goog.inherits(goog.events.MouseWheelHandler, goog.events.EventTarget);
 
