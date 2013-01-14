@@ -21,7 +21,6 @@
  */
 
 goog.provide('goog.ui.Palette');
-goog.provide('goog.ui.Palette.EventType');
 
 goog.require('goog.array');
 goog.require('goog.dom');
