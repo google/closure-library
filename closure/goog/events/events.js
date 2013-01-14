@@ -54,6 +54,7 @@
 
 
 goog.provide('goog.events');
+goog.provide('goog.events.Key');
 
 goog.require('goog.array');
 goog.require('goog.debug.entryPointRegistry');
@@ -65,6 +66,12 @@ goog.require('goog.events.EventWrapper');
 goog.require('goog.events.Listener');
 goog.require('goog.object');
 goog.require('goog.userAgent');
+
+
+/**
+ * @typedef {?number}
+ */
+goog.events.Key;
 
 
 /**
@@ -135,7 +142,7 @@ goog.events.keySeparator_ = '_';
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
  * @param {Object=} opt_handler Element in whose scope to call the listener.
- * @return {?number} Unique key for the listener.
+ * @return {goog.events.Key} Unique key for the listener.
  */
 goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
   if (goog.isArray(type)) {
@@ -170,7 +177,7 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
  * @param {Object=} opt_handler Element in whose scope to call the listener.
- * @return {?number} Unique key for the listener.
+ * @return {goog.events.Key} Unique key for the listener.
  * @private
  */
 goog.events.listen_ = function(
@@ -315,7 +322,7 @@ goog.events.getProxy = function() {
  * @param {Function|Object} listener Callback method.
  * @param {boolean=} opt_capt Fire in capture phase?.
  * @param {Object=} opt_handler Element in whose scope to call the listener.
- * @return {?number} Unique key for the listener.
+ * @return {goog.events.Key} Unique key for the listener.
  */
 goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
   if (goog.isArray(type)) {
@@ -395,7 +402,8 @@ goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
  * Removes an event listener which was added with listen() by the key
  * returned by listen().
  *
- * @param {?number} key The key returned by listen() for this event listener.
+ * @param {goog.events.Key} key The key returned by listen() for this
+ *     event listener.
  * @return {boolean} indicating whether the listener was there to remove.
  */
 goog.events.unlistenByKey = function(key) {
