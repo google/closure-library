@@ -94,6 +94,11 @@ goog.events.EventTarget = function() {
 goog.inherits(goog.events.EventTarget, goog.Disposable);
 
 
+if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
+  goog.events.Listenable.addImplementation(goog.events.EventTarget);
+}
+
+
 /**
  * Used to tell if an event is a real event in goog.events.listen() so we don't
  * get listen() calling addEventListener() and vice-versa.

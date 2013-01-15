@@ -57,6 +57,10 @@ function tearDown() {
   goog.events.eventTargetTester.tearDown();
 }
 
+function testRuntimeTypeIsCorrect() {
+  var target = new goog.events.EventTarget();
+  assertTrue(goog.events.Listenable.isImplementedBy(target));
+}
 </script>
 </body>
 </html>

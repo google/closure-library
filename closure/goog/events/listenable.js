@@ -44,6 +44,42 @@ goog.events.Listenable.USE_LISTENABLE_INTERFACE = false;
 
 
 /**
+ * An expando property to indicate that an object implements
+ * goog.events.Listenable.
+ *
+ * See addImplementation/isImplementedBy.
+ *
+ * @type {string}
+ * @const
+ * @private
+ */
+goog.events.Listenable.IMPLEMENTED_BY_PROP_ = '__closure_listenable';
+
+
+/**
+ * Marks a given class (constructor) as an implementation of
+ * Listenable, do that we can query that fact at runtime. The class
+ * must have already implemented the interface.
+ * @param {!Function} cls The class constructor. The corresponding
+ *     class must have already implemented the interface.
+ */
+goog.events.Listenable.addImplementation = function(cls) {
+  cls.prototype[goog.events.Listenable.IMPLEMENTED_BY_PROP_] = true;
+};
+
+
+/**
+ * @param {Object} obj The object to check.
+ * @return {boolean} Whether a given instance implements
+ *     Listenable. The class/superclass of the instance must call
+ *     addImplementation.
+ */
+goog.events.Listenable.isImplementedBy = function(obj) {
+  return !!(obj && obj[goog.events.Listenable.IMPLEMENTED_BY_PROP_]);
+};
+
+
+/**
  * Adds an event listener. A listener can only be added once to an
  * object and if it is added again the key for the listener is
  * returned. Note that if the existing listener is a one-off listener
