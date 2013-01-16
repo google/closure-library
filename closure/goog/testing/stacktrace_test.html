@@ -49,7 +49,7 @@ function testParseStackFrameInChrome() {
   frameString = '    at Object.assert (file:///.../asserts.js:29:10)';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
   expected = new goog.testing.stacktrace.Frame('Object', 'assert', '', '',
-      'file:///.../asserts.js:29:10')
+      'file:///.../asserts.js:29:10');
   assertObjectEquals('context object + function name + url', expected, frame);
 
   frameString = '    at http://www.example.com/jsunit.js:117:13';
@@ -249,7 +249,7 @@ function testFollowCallChain() {
   expectedFailures.expectFailureFor(goog.userAgent.OPERA &&
       !goog.userAgent.isVersion('10'));
   try {
-    assertTrue('The stack trace consists of >=2 frames', frames.length >= 2)
+    assertTrue('The stack trace consists of >=2 frames', frames.length >= 2);
   } catch (e) {
     expectedFailures.handleException(e);
   }
@@ -291,6 +291,37 @@ function testParsingLongStackTrace() {
   assertObjectEquals('exception name only', expected, frames[1]);
 }
 
+function testParseStackFrameInIE10() {
+  var frameString = '   at foo (http://bar:4000/bar.js:150:3)';
+  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  var expected = new goog.testing.stacktrace.Frame('', 'foo', '', '',
+      'http://bar:4000/bar.js:150:3');
+  assertObjectEquals('name and path', expected, frame);
+
+  frameString = '   at Anonymous function (http://bar:4000/bar.js:150:3)';
+  frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  expected = new goog.testing.stacktrace.Frame('', 'Anonymous function', '', '',
+      'http://bar:4000/bar.js:150:3');
+  assertObjectEquals('Anonymous function', expected, frame);
+
+  frameString = '   at Global code (http://bar:4000/bar.js:150:3)';
+  frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  expected = new goog.testing.stacktrace.Frame('', 'Global code', '', '',
+      'http://bar:4000/bar.js:150:3');
+  assertObjectEquals('Global code', expected, frame);
+
+  frameString = '   at foo (eval code:150:3)';
+  frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  expected = new goog.testing.stacktrace.Frame('', 'foo', '', '',
+      'eval code:150:3');
+  assertObjectEquals('eval code', expected, frame);
+
+  frameString = '   at eval code (eval code:150:3)';
+  frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  expected = new goog.testing.stacktrace.Frame('', 'eval code', '', '',
+      'eval code:150:3');
+  assertObjectEquals('nested eval', expected, frame);
+}
 </script>
 </body>
 </html>
