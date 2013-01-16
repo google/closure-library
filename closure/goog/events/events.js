@@ -777,7 +777,7 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
 
   var objUid = goog.getUid(obj);
   if (map[objUid]) {
-    map.remaining_--;
+    var remaining = --map.remaining_;
     var listenerArray = map[objUid];
 
     // If locked_ is not set (and if already 0) initialize it to 1.
@@ -801,6 +801,11 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
         }
       }
     } finally {
+      // Allow the count of targets remaining to increase (if perhaps we have
+      // added listeners) but do not allow it to decrease if we have reentered
+      // this method through a listener dispatching the same event type,
+      // resetting and exhausted the remaining count.
+      map.remaining_ = Math.max(remaining, map.remaining_);
       listenerArray.locked_--;
       goog.events.cleanUp_(type, capture, objUid, listenerArray);
     }

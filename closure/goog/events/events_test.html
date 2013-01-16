@@ -527,6 +527,130 @@ See the COPYING file for details.
     dispatchClick(div);
     assertEquals(0, listener.getCallCount());
   }
+
+  function testEventBubblingWithReentrantDispatch_bubbling() {
+    runEventPropogationWithReentrantDispatch(false);
+  }
+
+  function testEventBubblingWithReentrantDispatch_capture() {
+    runEventPropogationWithReentrantDispatch(true);
+  }
+
+  function runEventPropogationWithReentrantDispatch(useCapture) {
+    var eventType = 'test-event-type';
+
+    var child = new goog.events.EventTarget();
+    var parent = new goog.events.EventTarget();
+    child.setParentEventTarget(parent);
+
+    var firstTarget = useCapture ? parent : child;
+    var secondTarget = useCapture ? child : parent;
+
+    var firstListener = function(evt) {
+      if (evt.isFirstEvent) {
+        // Fires another event of the same type the first time it is invoked.
+        child.dispatchEvent(new goog.events.Event(eventType));
+      }
+    };
+    goog.events.listen(firstTarget, eventType, firstListener, useCapture);
+
+    var secondListener = goog.testing.recordFunction();
+    goog.events.listen(secondTarget, eventType, secondListener, useCapture);
+
+    // Fire the first event.
+    var firstEvent = new goog.events.Event(eventType);
+    firstEvent.isFirstEvent = true;
+    child.dispatchEvent(firstEvent);
+
+    assertEquals(2, secondListener.getCallCount());
+  }
+
+  function testEventPropogationWhenListenerRemoved_bubbling() {
+    runEventPropogationWhenListenerRemoved(false);
+  }
+
+  function testEventPropogationWhenListenerRemoved_capture() {
+    runEventPropogationWhenListenerRemoved(true);
+  }
+
+  function runEventPropogationWhenListenerRemoved(useCapture) {
+    var eventType = 'test-event-type';
+
+    var child = new goog.events.EventTarget();
+    var parent = new goog.events.EventTarget();
+    child.setParentEventTarget(parent);
+
+    var firstTarget = useCapture ? parent : child;
+    var secondTarget = useCapture ? child : parent;
+
+    var firstListener = goog.testing.recordFunction();
+    var secondListener = goog.testing.recordFunction();
+    goog.events.listenOnce(firstTarget, eventType, firstListener, useCapture);
+    goog.events.listen(secondTarget, eventType, secondListener, useCapture);
+
+    child.dispatchEvent(new goog.events.Event(eventType));
+
+    assertEquals(1, secondListener.getCallCount());
+  }
+
+  function testEventPropogationWhenListenerAdded_bubbling() {
+    runEventPropogationWhenListenerAdded(false);
+  }
+
+  function testEventPropogationWhenListenerAdded_capture() {
+    runEventPropogationWhenListenerAdded(true);
+  }
+
+  function runEventPropogationWhenListenerAdded(useCapture) {
+    var eventType = 'test-event-type';
+
+    var child = new goog.events.EventTarget();
+    var parent = new goog.events.EventTarget();
+    child.setParentEventTarget(parent);
+
+    var firstTarget = useCapture ? parent : child;
+    var secondTarget = useCapture ? child : parent;
+
+    var firstListener = function() {
+      goog.events.listen(secondTarget, eventType, secondListener, useCapture);
+    };
+    var secondListener = goog.testing.recordFunction();
+    goog.events.listen(firstTarget, eventType, firstListener, useCapture);
+
+    child.dispatchEvent(new goog.events.Event(eventType));
+
+    assertEquals(1, secondListener.getCallCount());
+  }
+
+  function testEventPropogationWhenListenerAddedAndRemoved_bubbling() {
+    runEventPropogationWhenListenerAddedAndRemoved(false);
+  }
+
+  function testEventPropogationWhenListenerAddedAndRemoved_capture() {
+    runEventPropogationWhenListenerAddedAndRemoved(true);
+  }
+
+  function runEventPropogationWhenListenerAddedAndRemoved(useCapture) {
+    var eventType = 'test-event-type';
+
+    var child = new goog.events.EventTarget();
+    var parent = new goog.events.EventTarget();
+    child.setParentEventTarget(parent);
+
+    var firstTarget = useCapture ? parent : child;
+    var secondTarget = useCapture ? child : parent;
+
+    var firstListener = function() {
+      goog.events.listen(secondTarget, eventType, secondListener, useCapture);
+    };
+    var secondListener = goog.testing.recordFunction();
+    goog.events.listenOnce(firstTarget, eventType, firstListener, useCapture);
+
+    child.dispatchEvent(new goog.events.Event(eventType));
+
+    assertEquals(1, secondListener.getCallCount());
+  }
+
 </script>
 </body>
 </html>
