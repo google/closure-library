@@ -97,6 +97,28 @@ function testTransformWhenResultErrorAsync() {
   assertErrorCall(resultCallback, transformedResult, 5);
 }
 
+function testCancelParentResults() {
+  var transformedResult = goog.result.transform(result, multiplyResult);
+  goog.result.wait(transformedResult, resultCallback);
+
+  goog.result.cancelParentResults(transformedResult);
+
+  assertTrue(result.isCanceled());
+  result.setValue(1);
+  assertNoCall(multiplyResult);
+}
+
+function testDoubleTransformCancel() {
+  var step1Result = goog.result.transform(result, multiplyResult);
+  var step2Result = goog.result.transform(step1Result, multiplyResult);
+
+  goog.result.cancelParentResults(step2Result);
+
+  assertFalse(result.isCanceled());
+  assertTrue(step1Result.isCanceled());
+  assertTrue(step2Result.isCanceled());
+}
+
 function assertSuccessCall(recordFunction, result, value) {
   assertEquals(1, recordFunction.getCallCount());
 

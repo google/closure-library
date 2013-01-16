@@ -82,6 +82,41 @@ function testChainWhenSecondResultError() {
   assertError(counter, finalResult, 5);
 }
 
+function testChainCancelFirstResult() {
+  var finalResult = goog.result.chain(givenResult, actionCallback);
+  goog.result.wait(finalResult, counter);
+
+  goog.result.cancelParentResults(finalResult);
+
+  assertNoCall(actionCallback);
+  assertTrue(givenResult.isCanceled());
+  assertTrue(finalResult.isCanceled());
+}
+
+function testChainCancelSecondResult() {
+  var finalResult = goog.result.chain(givenResult, actionCallback);
+  goog.result.wait(finalResult, counter);
+
+  givenResult.setValue(1);
+  goog.result.cancelParentResults(finalResult);
+
+  assertSuccess(actionCallback, givenResult, 1);
+  assertTrue(dependentResult.isCanceled());
+  assertTrue(finalResult.isCanceled());
+}
+
+function testDoubleChainCancel() {
+  var intermediateResult = goog.result.chain(givenResult, actionCallback);
+  var finalResult = goog.result.chain(intermediateResult, actionCallback);
+
+  assertTrue(goog.result.cancelParentResults(finalResult));
+  assertTrue(finalResult.isCanceled());
+  assertTrue(intermediateResult.isCanceled());
+  assertFalse(givenResult.isCanceled());
+  assertFalse(goog.result.cancelParentResults(finalResult));
+}
+
+
 // ASYNCHRONOUS TESTS:
 
 function testChainAsyncWhenBothResultsSuccess() {
@@ -123,6 +158,38 @@ function testChainAsyncWhenSecondResultError() {
   mockClock.tick();
 
   assertError(counter, finalResult, 7);
+}
+
+function testChainAsyncCancelFirstResult() {
+  var finalResult = goog.result.chain(givenResult, actionCallback);
+  goog.result.wait(finalResult, counter);
+
+  goog.Timer.callOnce(function() {
+    goog.result.cancelParentResults(finalResult);
+  });
+  mockClock.tick();
+
+  assertNoCall(actionCallback);
+  assertTrue(givenResult.isCanceled());
+  assertTrue(finalResult.isCanceled());
+}
+
+function testChainAsyncCancelSecondResult() {
+  var finalResult = goog.result.chain(givenResult, actionCallback);
+  goog.result.wait(finalResult, counter);
+
+  goog.Timer.callOnce(function() { givenResult.setValue(1); });
+  mockClock.tick();
+
+  assertSuccess(actionCallback, givenResult, 1);
+
+  goog.Timer.callOnce(function() {
+    goog.result.cancelParentResults(finalResult);
+  });
+  mockClock.tick();
+
+  assertTrue(dependentResult.isCanceled());
+  assertTrue(finalResult.isCanceled());
 }
 
 // HELPER FUNCTIONS:
