@@ -273,6 +273,24 @@ goog.userAgent.ASSUME_X11 = false;
 
 
 /**
+ * @define {boolean} Whether the user agent is running on Android.
+ */
+goog.userAgent.ASSUME_ANDROID = false;
+
+
+/**
+ * @define {boolean} Whether the user agent is running on an iPhone.
+ */
+goog.userAgent.ASSUME_IPHONE = false;
+
+
+/**
+ * @define {boolean} Whether the user agent is running on an iPad.
+ */
+goog.userAgent.ASSUME_IPAD = false;
+
+
+/**
  * @type {boolean}
  * @private
  */
@@ -280,7 +298,10 @@ goog.userAgent.PLATFORM_KNOWN_ =
     goog.userAgent.ASSUME_MAC ||
     goog.userAgent.ASSUME_WINDOWS ||
     goog.userAgent.ASSUME_LINUX ||
-    goog.userAgent.ASSUME_X11;
+    goog.userAgent.ASSUME_X11 ||
+    goog.userAgent.ASSUME_ANDROID ||
+    goog.userAgent.ASSUME_IPHONE ||
+    goog.userAgent.ASSUME_IPAD;
 
 
 /**
@@ -321,6 +342,30 @@ goog.userAgent.initPlatform_ = function() {
   goog.userAgent.detectedX11_ = !!goog.userAgent.getNavigator() &&
       goog.string.contains(goog.userAgent.getNavigator()['appVersion'] || '',
           'X11');
+
+  // Need user agent string for Android/IOS detection
+  var ua = goog.userAgent.getUserAgentString();
+
+  /**
+   * Whether the user agent is running on Android.
+   * @type {boolean}
+   * @private
+   */
+  goog.userAgent.detectedAndroid_ = !!ua && ua.indexOf('Android') >= 0;
+
+  /**
+   * Whether the user agent is running on an iPhone.
+   * @type {boolean}
+   * @private
+   */
+  goog.userAgent.detectedIPhone_ = !!ua && ua.indexOf('iPhone') >= 0;
+
+  /**
+   * Whether the user agent is running on an iPad.
+   * @type {boolean}
+   * @private
+   */
+  goog.userAgent.detectedIPad_ = !!ua && ua.indexOf('iPad') >= 0;
 };
 
 
@@ -359,6 +404,30 @@ goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ?
  */
 goog.userAgent.X11 = goog.userAgent.PLATFORM_KNOWN_ ?
     goog.userAgent.ASSUME_X11 : goog.userAgent.detectedX11_;
+
+
+/**
+ * Whether the user agent is running on Android.
+ * @type {boolean}
+ */
+goog.userAgent.ANDROID = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_ANDROID : goog.userAgent.detectedAndroid_;
+
+
+/**
+ * Whether the user agent is running on an iPhone.
+ * @type {boolean}
+ */
+goog.userAgent.IPHONE = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_IPHONE : goog.userAgent.detectedIPhone_;
+
+
+/**
+ * Whether the user agent is running on an iPad.
+ * @type {boolean}
+ */
+goog.userAgent.IPAD = goog.userAgent.PLATFORM_KNOWN_ ?
+    goog.userAgent.ASSUME_IPAD : goog.userAgent.detectedIPad_;
 
 
 /**
