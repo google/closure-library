@@ -13,6 +13,7 @@ See the COPYING file for details.
 
 goog.require('goog.labs.mock');
 goog.require('goog.testing.jsunit');
+goog.require('goog.labs.testing.AnythingMatcher');
 goog.require('goog.labs.testing.GreaterThanMatcher');
 goog.require('goog.labs.testing.LessThanMatcher');
 
@@ -174,6 +175,7 @@ function testVerifyForFunctions() {
   goog.labs.mock.when(mockFunc)(2).thenReturn(55);
   assertEquals(55, mockFunc(2));
   goog.labs.mock.verify(mockFunc)(2);
+  goog.labs.mock.verify(mockFunc)(lessThan(3));
 
   var e = assertThrows(goog.bind(goog.labs.mock.verify(mockFunc), 3));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
@@ -199,6 +201,59 @@ function testMatchers() {
   assertEquals(40, mockObj.method1(2));
   assertEquals(40, mockObj.method1(1));
   assertUndefined(mockObj.method1(4));
+}
+
+function testMatcherVerify() {
+  var obj = {
+    method: function(i) {
+      return 2 * i;
+    }
+  };
+
+  // Using spy objects.
+  var spy = goog.labs.mock.spy(obj);
+
+  spy.method(6);
+
+  goog.labs.mock.verify(spy).method(greaterThan(4));
+  var e = assertThrows(goog.bind(goog.labs.mock.verify(spy).method, lessThan(4)));
+  assertTrue(e instanceof goog.labs.mock.VerificationError);
+
+  // Using mocks
+  var mockObj = goog.labs.mock(obj);
+
+  mockObj.method(8);
+
+  goog.labs.mock.verify(mockObj).method(greaterThan(7))
+  var e = assertThrows(goog.bind(goog.labs.mock.verify(mockObj).method, lessThan(7)));
+  assertTrue(e instanceof goog.labs.mock.VerificationError);
+}
+
+function testMatcherVerifyColission() {
+  var obj = {
+    method: function(i) {
+      return 2 * i;
+    }
+  };
+  var mockObj = goog.labs.mock(obj);
+
+  goog.labs.mock.when(mockObj).method(5).thenReturn(100);
+  assertNotEquals(100, mockObj.method(greaterThan(2)));
+}
+
+function testMatcherVerifyColissionBetweenMatchers() {
+  var obj = {
+    method: function(i) {
+      return 2 * i;
+    }
+  };
+  var mockObj = goog.labs.mock(obj);
+
+  goog.labs.mock.when(mockObj).method(anything()).thenReturn(100);
+
+  var e = assertThrows(
+      goog.bind(goog.labs.mock.verify(mockObj).method, anything()));
+  assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
 function testVerifyForUnmockedMethods() {

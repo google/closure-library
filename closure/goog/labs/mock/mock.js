@@ -224,7 +224,7 @@ goog.labs.mock.MockManager_.prototype.addBinding =
 goog.labs.mock.MockManager_.prototype.findBinding =
     function(methodName, args) {
   var stub = goog.array.find(this.methodBindings, function(binding) {
-    return binding.matches(methodName, args);
+    return binding.matches(methodName, args, false /* isVerification */);
   });
   return stub && stub.getStub();
 };
@@ -295,7 +295,7 @@ goog.labs.mock.MockManager_.prototype.verifyInvocation =
     function(methodName, var_args) {
   var args = goog.array.slice(arguments, 1);
   var binding = goog.array.find(this.callRecords_, function(binding) {
-    return binding.matches(methodName, args);
+    return binding.matches(methodName, args, true /* isVerification */);
   });
 
   if (!binding) {
@@ -579,13 +579,19 @@ goog.labs.mock.MethodBinding_.prototype.getStub = function() {
  *
  * @param {string} methodName The name of the method being stubbed.
  * @param {!Array} args An array of arguments.
+ * @param {boolean} isVerification Whether this is a function verification call
+ *     or not.
  * @return {boolean} If it matches the stored arguments.
  */
-goog.labs.mock.MethodBinding_.prototype.matches = function(methodName, args) {
+goog.labs.mock.MethodBinding_.prototype.matches = function(
+    methodName, args, isVerification) {
+  var specs = isVerification ? args : this.args_;
+  var calls = isVerification ? this.args_ : args;
+
   //TODO(user): More elaborate argument matching. Think about matching
   //    objects.
   return this.methodName_ == methodName &&
-      goog.array.equals(args, this.args_, function(arg, spec) {
+      goog.array.equals(calls, specs, function(arg, spec) {
         // Duck-type to see if this is an object that implements the
         // goog.labs.testing.Matcher interface.
         if (goog.isFunction(spec.matches)) {
