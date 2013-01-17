@@ -16,7 +16,6 @@ See the COPYING file for details.
 </script>
 </head>
 <body>
-<pre>
 <script>
 
   function testConstuctorWithGoodArray() {
@@ -400,6 +399,14 @@ See the COPYING file for details.
     var expected2 = new goog.math.Matrix([[.03125,  .125 ],
                                           [.10936, -.0625]]);
     assertTrue(expected2.equals(m2.getInverse(), .0001));
+    var m3 = new goog.math.Matrix([[0, 0],
+                                   [0, 0]]);
+    assertNull(m3.getInverse());
+    var m4 = new goog.math.Matrix([[2]]);
+    var expected4 = new goog.math.Matrix([[.5]]);
+    assertTrue(expected4.equals(m4.getInverse(), .0001));
+    var m5 = new goog.math.Matrix([[0]]);
+    assertNull(m5.getInverse());
   }
 
 
