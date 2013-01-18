@@ -259,7 +259,10 @@ goog.ui.LabelInput.prototype.handleFocus_ = function(e) {
   if (!this.hasChanged() && !this.inFocusAndSelect_) {
     var me = this;
     var clearValue = function() {
-      me.getElement().value = '';
+      // Component could be disposed by the time this is called.
+      if (me.getElement()) {
+        me.getElement().value = '';
+      }
     };
     if (goog.userAgent.IE) {
       goog.Timer.callOnce(clearValue, 10);
