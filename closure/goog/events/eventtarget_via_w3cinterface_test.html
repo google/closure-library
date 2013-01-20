@@ -32,7 +32,7 @@ function setUp() {
   };
 
   goog.events.eventTargetTester.setUp(
-      listenFn, unlistenFn,
+      listenFn, unlistenFn, null /* unlistenByKeyFn */,
       null /* listenOnceFn */, dispatchEventFn, null /* removeAllFn */,
       null /* getListenersFn */,
       goog.events.eventTargetTester.KeyType.UNDEFINED,

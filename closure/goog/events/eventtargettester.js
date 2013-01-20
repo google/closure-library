@@ -38,6 +38,9 @@ goog.require('goog.testing.recordFunction');
  * @param {Function} unlistenFn Function that, given the same
  *     signature as goog.events.unlisten, will remove listener from
  *     the given event target.
+ * @param {Function} unlistenByKeyFn Function that, given 2
+ *     parameters: src and key, will remove the corresponding
+ *     listener.
  * @param {Function} listenOnceFn Function that, given the same
  *     signature as goog.events.listenOnce, will add a one-time
  *     listener to the given event target.
@@ -58,11 +61,12 @@ goog.require('goog.testing.recordFunction');
  *     be set to false.
  */
 goog.events.eventTargetTester.setUp = function(
-    listenFn, unlistenFn, listenOnceFn, dispatchEventFn,
-    removeAllFn, getListenersFn,
+    listenFn, unlistenFn, unlistenByKeyFn, listenOnceFn,
+    dispatchEventFn, removeAllFn, getListenersFn,
     listenKeyType, unlistenFnReturnType) {
   listen = listenFn;
   unlisten = unlistenFn;
+  unlistenByKey = unlistenByKeyFn;
   listenOnce = listenOnceFn;
   dispatchEvent = dispatchEventFn;
   removeAll = removeAllFn;
@@ -164,7 +168,7 @@ var EventType = {
 };
 
 
-var listen, unlisten, listenOnce, dispatchEvent;
+var listen, unlisten, unlistenByKey, listenOnce, dispatchEvent;
 var removeAll, getListeners;
 var keyType, unlistenReturnType;
 var eventTargets, listeners;
@@ -691,6 +695,40 @@ function testUnlistenInListen() {
   listen(eventTargets[0], EventType.A, listeners[0]);
   listen(eventTargets[0], EventType.A, listeners[1]);
   listen(eventTargets[0], EventType.A, listeners[2]);
+  listen(eventTargets[0], EventType.A, listeners[3]);
+
+  dispatchEvent(eventTargets[0], EventType.A);
+
+  assertListenerIsCalled(listeners[0], times(1));
+  assertListenerIsCalled(listeners[1], times(1));
+  assertListenerIsCalled(listeners[2], times(0));
+  assertListenerIsCalled(listeners[3], times(1));
+  assertNoOtherListenerIsCalled();
+  resetListeners();
+
+  dispatchEvent(eventTargets[0], EventType.A);
+  assertListenerIsCalled(listeners[0], times(1));
+  assertListenerIsCalled(listeners[1], times(0));
+  assertListenerIsCalled(listeners[2], times(0));
+  assertListenerIsCalled(listeners[3], times(1));
+  assertNoOtherListenerIsCalled();
+}
+
+
+function testUnlistenByKeyInListen() {
+  if (!unlistenByKey) {
+    return;
+  }
+
+  var key1, key2;
+  listeners[1] = createListener(
+      function(e) {
+        unlistenByKey(eventTargets[0], key1);
+        unlistenByKey(eventTargets[0], key2);
+      });
+  listen(eventTargets[0], EventType.A, listeners[0]);
+  key1 = listen(eventTargets[0], EventType.A, listeners[1]);
+  key2 = listen(eventTargets[0], EventType.A, listeners[2]);
   listen(eventTargets[0], EventType.A, listeners[3]);
 
   dispatchEvent(eventTargets[0], EventType.A);

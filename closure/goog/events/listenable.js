@@ -124,6 +124,8 @@ goog.events.Listenable.prototype.listenOnce;
 /**
  * Removes an event listener which was added with listen() or listenOnce().
  *
+ * Implementation needs to call goog.events.cleanUp.
+ *
  * @param {string} type Event type or array of event types.
  * @param {!Function} listener Callback method, or an object
  *     with a handleEvent function. TODO(user): Consider whether
@@ -140,6 +142,8 @@ goog.events.Listenable.prototype.unlisten;
 /**
  * Removes an event listener which was added with listen() by the key
  * returned by listen().
+ *
+ * Implementation needs to call goog.events.cleanUp.
  *
  * @param {goog.events.ListenableKey} key The key returned by
  *     listen() or listenOnce().
@@ -168,6 +172,9 @@ goog.events.Listenable.prototype.dispatchEvent;
  * Removes all listeners from this listenable. If type is specified,
  * it will only remove listeners of the particular type. otherwise all
  * registered listeners will be removed.
+ *
+ * Implementation needs to call goog.events.cleanUp for each removed
+ * listener.
  *
  * @param {string=} opt_type Type of event to remove, default is to
  *     remove all types.
@@ -214,6 +221,24 @@ goog.events.ListenableKey = function() {};
 
 
 /**
+ * Counter used to create a unique key
+ * @type {number}
+ * @private
+ */
+goog.events.ListenableKey.counter_ = 0;
+
+
+/**
+ * Reserves a key to be used for ListenableKey#key field.
+ * @return {number} A number to be used to fill ListenableKey#key
+ *     field.
+ */
+goog.events.ListenableKey.reserveKey = function() {
+  return ++goog.events.ListenableKey.counter_;
+};
+
+
+/**
  * The source event target.
  * @type {!Object}
  */
@@ -247,3 +272,10 @@ goog.events.ListenableKey.prototype.capture;
  * @type {Object}
  */
 goog.events.ListenableKey.prototype.handler;
+
+
+/**
+ * A globally unique number to identify the key.
+ * @type {number}
+ */
+goog.events.ListenableKey.prototype.key;

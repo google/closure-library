@@ -312,9 +312,7 @@ goog.events.EventTarget.prototype.unlisten = function(
       listenerArray, listener, opt_useCapture, opt_listenerScope);
   if (index > -1) {
     var listenerObj = listenerArray[index];
-    // We still need to mark this as removed as unlisten may be called
-    // when a listener fired (the listener may already be queued to be
-    // fired in the same dispatch sequence).
+    goog.events.cleanUp(listenerObj);
     listenerObj.removed = true;
     return goog.array.removeAt(listenerArray, index);
   }
@@ -331,7 +329,12 @@ goog.events.EventTarget.prototype.unlistenByKey = function(key) {
     return false;
   }
 
-  return goog.array.remove(this.eventTargetListeners_[type], key);
+  var removed = goog.array.remove(this.eventTargetListeners_[type], key);
+  if (removed) {
+    goog.events.cleanUp(key);
+    key.removed = true;
+  }
+  return removed;
 };
 
 
@@ -342,7 +345,11 @@ goog.events.EventTarget.prototype.removeAllListeners = function(
   for (var type in this.eventTargetListeners_) {
     if (!opt_type || type == opt_type) {
       var listenerArray = this.eventTargetListeners_[type];
-      count += listenerArray.length;
+      for (var i = 0; i < listenerArray.length; i++) {
+        ++count;
+        goog.events.cleanUp(listenerArray[i]);
+        listenerArray[i].removed = true;
+      }
       listenerArray.length = 0;
     }
   }

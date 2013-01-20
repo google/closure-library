@@ -36,14 +36,6 @@ goog.events.Listener = function() {
 
 
 /**
- * Counter used to create a unique key
- * @type {number}
- * @private
- */
-goog.events.Listener.counter_ = 0;
-
-
-/**
  * @define {boolean} Whether to enable the monitoring of the
  *     goog.events.Listener instances. Switching on the monitoring is only
  *     recommended for debugging because it has a significant impact on
@@ -106,6 +98,7 @@ goog.events.Listener.prototype.handler;
 /**
  * The key of the listener.
  * @type {number}
+ * @override
  */
 goog.events.Listener.prototype.key = 0;
 
@@ -162,7 +155,7 @@ goog.events.Listener.prototype.init = function(listener, proxy, src, type,
   this.capture = !!capture;
   this.handler = opt_handler;
   this.callOnce = false;
-  this.key = ++goog.events.Listener.counter_;
+  this.key = goog.events.ListenableKey.reserveKey();
   this.removed = false;
 };
 

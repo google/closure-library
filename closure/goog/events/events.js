@@ -245,16 +245,14 @@ goog.events.listen_ = function(
   }
 
   var proxy = goog.events.getProxy();
-  proxy.src = src;
   listenerObj = new goog.events.Listener();
   listenerObj.init(listener, proxy, src, type, capture, opt_handler);
   listenerObj.callOnce = callOnce;
 
-  var key = listenerObj.key;
-  proxy.key = key;
+  proxy.src = src;
+  proxy.listener = listenerObj;
 
   listenerArray.push(listenerObj);
-  goog.events.listeners_[key] = listenerObj;
 
   if (!goog.events.sources_[srcUid]) {
     goog.events.sources_[srcUid] = [];
@@ -275,6 +273,8 @@ goog.events.listen_ = function(
     src.attachEvent(goog.events.getOnString_(type), proxy);
   }
 
+  var key = listenerObj.key;
+  goog.events.listeners_[key] = listenerObj;
   return key;
 };
 
@@ -288,10 +288,10 @@ goog.events.getProxy = function() {
   // Use a local var f to prevent one allocation.
   var f = goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT ?
       function(eventObject) {
-        return proxyCallbackFunction.call(f.src, f.key, eventObject);
+        return proxyCallbackFunction.call(f.src, f.listener, eventObject);
       } :
       function(eventObject) {
-        var v = proxyCallbackFunction.call(f.src, f.key, eventObject);
+        var v = proxyCallbackFunction.call(f.src, f.listener, eventObject);
         // NOTE(user): In IE, we hack in a capture phase. However, if
         // there is inline event handler which tries to prevent default (for
         // example <a href="..." onclick="return false">...</a>) in a
@@ -488,6 +488,22 @@ goog.events.unlistenByKey = function(key) {
 goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
     opt_handler) {
   wrapper.unlisten(src, listener, opt_capt, opt_handler);
+};
+
+
+/**
+ * Cleans up goog.events internal data structure. This should be
+ * called by all implementations of goog.events.Listenable when
+ * removing listeners.
+ *
+ * TODO(user): Once we remove numeric key support from
+ * goog.events.listen and friend, we will be able to remove this
+ * requirement.
+ *
+ * @param {goog.events.ListenableKey} listenableKey The key to clean up.
+ */
+goog.events.cleanUp = function(listenableKey) {
+  delete goog.events.listeners_[listenableKey.key];
 };
 
 
@@ -953,7 +969,7 @@ goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
  * Handles an event and dispatches it to the correct listeners. This
  * function is a proxy for the real listener the user specified.
  *
- * @param {number} key Unique key for the listener.
+ * @param {goog.events.Listener} listener The listener object.
  * @param {Event=} opt_evt Optional event object that gets passed in via the
  *     native event handlers.
  * @return {boolean} Result of the event handler.
@@ -961,15 +977,11 @@ goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
  *     fired the event.
  * @private
  */
-goog.events.handleBrowserEvent_ = function(key, opt_evt) {
-  // If the listener isn't there it was probably removed when processing
-  // another listener on the same event (e.g. the later listener is
-  // not managed by closure so that they are both fired under IE)
-  if (!goog.events.listeners_[key]) {
+goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
+  if (listener.removed) {
     return true;
   }
 
-  var listener = goog.events.listeners_[key];
   var type = listener.type;
   var map = goog.events.listenerTree_;
 

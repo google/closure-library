@@ -32,6 +32,9 @@ function setUp() {
   var unlistenFn = function(src, type, listener, opt_capt, opt_handler) {
     return src.unlisten(type, listener, opt_capt, opt_handler);
   };
+  var unlistenByKeyFn = function(src, key) {
+    return src.unlistenByKey(key);
+  };
   var listenOnceFn = function(src, type, listener, opt_capt, opt_handler) {
     return src.listenOnce(type, listener, opt_capt, opt_handler);
   };
@@ -46,7 +49,7 @@ function setUp() {
   };
 
   goog.events.eventTargetTester.setUp(
-      listenFn, unlistenFn,
+      listenFn, unlistenFn, unlistenByKeyFn,
       listenOnceFn, dispatchEventFn,
       removeAllFn, getListenersFn,
       goog.events.eventTargetTester.KeyType.NUMBER,
