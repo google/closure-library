@@ -135,7 +135,7 @@ goog.ui.HsvPalette.prototype.inputHandler_;
 
 /**
  * Listener key for the mousemove event (during a drag operation).
- * @type {?number}
+ * @type {goog.events.Key}
  * @private
  */
 goog.ui.HsvPalette.prototype.mouseMoveListener_;
@@ -143,7 +143,7 @@ goog.ui.HsvPalette.prototype.mouseMoveListener_;
 
 /**
  * Listener key for the mouseup event (during a drag operation).
- * @type {?number}
+ * @type {goog.events.Key}
  * @private
  */
 goog.ui.HsvPalette.prototype.mouseUpListener_;

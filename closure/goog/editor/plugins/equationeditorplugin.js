@@ -52,7 +52,7 @@ goog.editor.plugins.EquationEditorPlugin = function(opt_helpUrl) {
 
   /**
    * The listener key for double click events.
-   * @type {number?}
+   * @type {goog.events.Key}
    * @private
    */
   this.dblClickKey_;

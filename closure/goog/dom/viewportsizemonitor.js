@@ -133,7 +133,7 @@ goog.dom.ViewportSizeMonitor.WINDOW_SIZE_POLL_RATE = 500;
 /**
  * Event listener key for window the window resize handler, as returned by
  * {@link goog.events.listen}.
- * @type {?number}
+ * @type {goog.events.Key}
  * @private
  */
 goog.dom.ViewportSizeMonitor.prototype.listenerKey_ = null;

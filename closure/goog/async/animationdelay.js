@@ -86,7 +86,7 @@ goog.inherits(goog.async.AnimationDelay, goog.Disposable);
 /**
  * Identifier of the active delay timeout, or event listener,
  * or null when inactive.
- * @type {?number}
+ * @type {goog.events.Key|number|null}
  * @private
  */
 goog.async.AnimationDelay.prototype.id_ = null;
@@ -173,7 +173,7 @@ goog.async.AnimationDelay.prototype.stop = function() {
     } else if (raf && cancelRaf) {
       cancelRaf.call(this.win_, /** @type {number} */ (this.id_));
     } else {
-      this.win_.clearTimeout(this.id_);
+      this.win_.clearTimeout(/** @type {number} */ (this.id_));
     }
   }
   this.id_ = null;
@@ -265,4 +265,3 @@ goog.async.AnimationDelay.prototype.getCancelRaf_ = function() {
       win.msCancelRequestAnimationFrame ||
       null;
 };
-

@@ -120,7 +120,7 @@ goog.ui.Bubble.prototype.timerId_ = 0;
 
 /**
  * Key returned by the listen function for the close button.
- * @type {?number}
+ * @type {goog.events.Key}
  * @private
  */
 goog.ui.Bubble.prototype.listener_ = null;

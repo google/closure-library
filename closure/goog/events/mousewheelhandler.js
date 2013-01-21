@@ -76,7 +76,7 @@ goog.events.MouseWheelHandler = function(element, opt_capture) {
 
   /**
    * The key returned from the goog.events.listen.
-   * @type {?number}
+   * @type {goog.events.Key}
    * @private
    */
   this.listenKey_ = goog.events.listen(this.element_, type, this, opt_capture);
@@ -240,7 +240,7 @@ goog.events.MouseWheelHandler.smartScale_ = function(mouseWheelDelta,
 goog.events.MouseWheelHandler.prototype.disposeInternal = function() {
   goog.events.MouseWheelHandler.superClass_.disposeInternal.call(this);
   goog.events.unlistenByKey(this.listenKey_);
-  delete this.listenKey_;
+  this.listenKey_ = null;
 };
 
 
