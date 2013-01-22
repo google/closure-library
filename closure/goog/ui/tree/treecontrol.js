@@ -48,7 +48,7 @@ goog.require('goog.userAgent');
  * view a hierarchical set of data.
  * @param {string} html The HTML content of the node label.
  * @param {Object=} opt_config The configuration for the tree. See
- *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
+ *    goog.ui.tree.TreeControl.defaultConfig. If not specified, a default config
  *    will be used.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
