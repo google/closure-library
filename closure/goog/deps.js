@@ -384,7 +384,7 @@ goog.addDependency('math/interpolator/pchip1.js', ['goog.math.interpolator.Pchip
 goog.addDependency('math/interpolator/spline1.js', ['goog.math.interpolator.Spline1'], ['goog.array', 'goog.math', 'goog.math.interpolator.Interpolator1', 'goog.math.tdma']);
 goog.addDependency('math/line.js', ['goog.math.Line'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency('math/long.js', ['goog.math.Long'], []);
-goog.addDependency('math/math.js', ['goog.math'], ['goog.array']);
+goog.addDependency('math/math.js', ['goog.math'], ['goog.array', 'goog.asserts']);
 goog.addDependency('math/matrix.js', ['goog.math.Matrix'], ['goog.array', 'goog.math', 'goog.math.Size']);
 goog.addDependency('math/range.js', ['goog.math.Range'], []);
 goog.addDependency('math/rangeset.js', ['goog.math.RangeSet'], ['goog.array', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.math.Range']);
