@@ -88,6 +88,39 @@ function testRenderConvertsToString() {
       'Hello World', renderer.render(example.sanitizedHtmlTemplate));
 }
 
+
+function testRenderStrictDoesNotConvertToString() {
+  var renderer = new goog.soy.Renderer(dataSupplier);
+  var result = renderer.renderStrict(example.sanitizedHtmlTemplate);
+  assertEquals('Hello World', result.content);
+  assertEquals(goog.soy.data.SanitizedContentKind.HTML, result.contentKind);
+}
+
+
+function testRenderStrictValidatesOutput() {
+  var renderer = new goog.soy.Renderer(dataSupplier);
+  // Passes.
+  renderer.renderStrict(example.sanitizedHtmlTemplate, {});
+  // No SanitizedContent at all.
+  assertEquals(
+      'Assertion failed: ' +
+      'renderStrict cannot be called on a non-strict soy template',
+      assertThrows(function() {
+        renderer.renderStrict(example.noDataTemplate, {})
+      }).message);
+  // Passes.
+  renderer.renderStrict(example.sanitizedHtmlTemplate, {},
+      goog.soy.data.SanitizedContentKind.HTML);
+  // Wrong content kind.
+  assertEquals(
+      'Assertion failed: ' +
+      'renderStrict was called with the wrong kind of template',
+      assertThrows(function() {
+        renderer.renderStrict(example.sanitizedHtmlTemplate, {},
+            goog.soy.data.SanitizedContentKind.JS);
+      }).message);
+}
+
 </script>
 </body>
 </html>

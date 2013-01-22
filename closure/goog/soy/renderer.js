@@ -37,6 +37,7 @@
 goog.provide('goog.soy.InjectedDataSupplier');
 goog.provide('goog.soy.Renderer');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.soy');
 
@@ -126,6 +127,31 @@ goog.soy.Renderer.prototype.renderElement = function(element, template,
 goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
   return String(
       template(opt_templateData || {}, undefined, this.getInjectedData_()));
+};
+
+
+/**
+ * Renders a strict Soy template and returns the output SanitizedContent object.
+ *
+ * @param {function(Object.<string, *>, (null|undefined), Object.<string, *>):
+ *     RETURN_TYPE} template The Soy template to render.
+ * @param {Object=} opt_templateData The data for the template.
+ * @param {goog.soy.data.SanitizedContentKind=} opt_kind The output kind to
+ *     assert.
+ * @return {RETURN_TYPE} The SanitizedContent object. This return type is
+ *     generic based on the return type of the template, such as
+ *     soy.SanitizedHtml.
+ * @template RETURN_TYPE
+ */
+goog.soy.Renderer.prototype.renderStrict = function(
+    template, opt_templateData, opt_kind) {
+  var result = template(
+      opt_templateData || {}, undefined, this.getInjectedData_());
+  goog.asserts.assertInstanceof(result, goog.soy.data.SanitizedContent,
+      'renderStrict cannot be called on a non-strict soy template');
+  goog.asserts.assert(!opt_kind || result.contentKind === opt_kind,
+      'renderStrict was called with the wrong kind of template');
+  return result;
 };
 
 
