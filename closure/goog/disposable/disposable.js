@@ -117,14 +117,6 @@ goog.Disposable.prototype.disposed_ = false;
 
 
 /**
- * Disposables that should be disposed when this object is disposed.
- * @type {Array.<goog.disposable.IDisposable>}
- * @private
- */
-goog.Disposable.prototype.dependentDisposables_;
-
-
-/**
  * Callbacks to invoke when this object is disposed.
  * @type {Array.<!Function>}
  * @private
@@ -193,10 +185,7 @@ goog.Disposable.prototype.dispose = function() {
  *     this object is disposed.
  */
 goog.Disposable.prototype.registerDisposable = function(disposable) {
-  if (!this.dependentDisposables_) {
-    this.dependentDisposables_ = [];
-  }
-  this.dependentDisposables_.push(disposable);
+  this.addOnDisposeCallback(goog.partial(goog.dispose, disposable));
 };
 
 
@@ -242,9 +231,6 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
  * @protected
  */
 goog.Disposable.prototype.disposeInternal = function() {
-  if (this.dependentDisposables_) {
-    goog.disposeAll.apply(null, this.dependentDisposables_);
-  }
   if (this.onDisposeCallbacks_) {
     while (this.onDisposeCallbacks_.length) {
       this.onDisposeCallbacks_.shift()();
