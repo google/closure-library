@@ -21,15 +21,17 @@
 
 goog.provide('goog.ui.ControlRenderer');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.a11y');
 goog.require('goog.dom.a11y.State');
 goog.require('goog.dom.classes');
 goog.require('goog.object');
 goog.require('goog.style');
-goog.require('goog.ui.Component.State');
-goog.require('goog.ui.ControlContent');
+goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
 
 
@@ -389,21 +391,26 @@ goog.ui.ControlRenderer.prototype.setAriaRole = function(element,
 goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
   goog.asserts.assert(control);
   goog.asserts.assert(element);
+
+  if (!control.isVisible()) {
+    goog.a11y.aria.setState(
+        element, goog.a11y.aria.State.HIDDEN, !control.isVisible());
+  }
   if (!control.isEnabled()) {
-    this.updateAriaState(element, goog.ui.Component.State.DISABLED,
-                         true);
+    this.updateAriaState(
+        element, goog.ui.Component.State.DISABLED, !control.isEnabled());
   }
   if (control.isSupportedState(goog.ui.Component.State.SELECTED)) {
-    this.updateAriaState(element, goog.ui.Component.State.SELECTED,
-                         control.isSelected());
+    this.updateAriaState(
+        element, goog.ui.Component.State.SELECTED, control.isSelected());
   }
   if (control.isSupportedState(goog.ui.Component.State.CHECKED)) {
-    this.updateAriaState(element, goog.ui.Component.State.CHECKED,
-                         control.isChecked());
+    this.updateAriaState(
+        element, goog.ui.Component.State.CHECKED, control.isChecked());
   }
   if (control.isSupportedState(goog.ui.Component.State.OPENED)) {
-    this.updateAriaState(element, goog.ui.Component.State.OPENED,
-                         control.isOpen());
+    this.updateAriaState(
+        element, goog.ui.Component.State.OPENED, control.isOpen());
   }
 };
 
@@ -500,6 +507,9 @@ goog.ui.ControlRenderer.prototype.setVisible = function(element, visible) {
   // The base class implementation is trivial; subclasses should override as
   // needed.  It should be possible to do animated reveals, for example.
   goog.style.showElement(element, visible);
+  if (element) {
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.HIDDEN, !visible);
+  }
 };
 
 

@@ -376,6 +376,94 @@ Author: attila@google.com (Attila Bodis)
           goog.dom.a11y.Role.BUTTON, goog.dom.a11y.getRole(bar));
     }
 
+    function testSetAriaStatesHidden() {
+      sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
+      var foo = goog.dom.getElement('foo');
+
+      control.setVisible(true);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-hidden.', '',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.HIDDEN));
+
+      control.setVisible(false);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-hidden.', 'true',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.HIDDEN));
+    }
+
+    function testSetAriaStatesDisabled() {
+      sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
+      var foo = goog.dom.getElement('foo');
+
+      control.setEnabled(true);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-disabled.', '',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.DISABLED));
+
+      control.setEnabled(false);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-disabled.', 'true',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.DISABLED));
+    }
+
+    function testSetAriaStatesSelected() {
+      sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
+      var foo = goog.dom.getElement('foo');
+      control.setSupportedState(goog.ui.Component.State.SELECTED, true);
+
+      control.setSelected(true);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-selected.', 'true',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.SELECTED));
+
+      control.setSelected(false);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-selected.', 'false',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.SELECTED));
+    }
+
+    function testSetAriaStatesChecked() {
+      sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
+      var foo = goog.dom.getElement('foo');
+      control.setSupportedState(goog.ui.Component.State.CHECKED, true);
+
+      control.setChecked(true);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-checked.', 'true',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.CHECKED));
+
+      control.setChecked(false);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-checked.', 'false',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.CHECKED));
+    }
+
+    function testSetAriaStatesExpanded() {
+      sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
+      var foo = goog.dom.getElement('foo');
+      control.setSupportedState(goog.ui.Component.State.OPENED, true);
+
+      control.setOpen(true);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-expanded.', 'true',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.EXPANDED));
+
+      control.setOpen(false);
+      controlRenderer.setAriaStates(control, foo);
+
+      assertEquals('ControlRenderer did not set aria-expanded.', 'false',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.EXPANDED));
+    }
+
     function testSetAllowTextSelection() {
       sandbox.innerHTML = '<div id="foo"><span>Foo</span></div>';
       var foo = goog.dom.getElement('foo');
@@ -479,8 +567,12 @@ Author: attila@google.com (Attila Bodis)
       var foo = goog.dom.getElement('foo');
       assertTrue('Element must be visible', foo.style.display != 'none');
       controlRenderer.setVisible(foo, true);
+      assertEquals('ControlRenderer did not set aria-hidden.', 'false',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.HIDDEN));
       assertTrue('Element must still be visible', foo.style.display != 'none');
       controlRenderer.setVisible(foo, false);
+      assertEquals('ControlRenderer did not set aria-hidden.', 'true',
+          goog.dom.a11y.getState(foo, goog.a11y.aria.State.HIDDEN));
       assertTrue('Element must be hidden', foo.style.display == 'none');
     }
 
