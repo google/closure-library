@@ -56,6 +56,20 @@ goog.string.path.dirname = function(path) {
 
 
 /**
+ * Extracts the extension part of a pathname.
+ * @param {string} path The path name to process.
+ * @return {string} The extension if any, otherwise the empty string.
+ */
+goog.string.path.extension = function(path) {
+  var separator = '.';
+  // Combining all adjacent periods in the basename to a single period.
+  var basename = goog.string.path.basename(path).replace(/\.+/g, separator);
+  var separatorIndex = basename.lastIndexOf(separator);
+  return separatorIndex <= 0 ? '' : basename.substr(separatorIndex + 1);
+};
+
+
+/**
  * Joins one or more path components (e.g. 'foo/' and 'bar' make 'foo/bar').
  * An absolute component will discard all previous component.
  * See http://docs.python.org/library/os.path.html#os.path.join

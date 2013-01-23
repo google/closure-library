@@ -77,6 +77,33 @@ function testSplit() {
   assertArrayEquals(['//foo', 'bar'], goog.string.path.split('//foo//bar'));
 }
 
+function testExtension() {
+  assertEquals('jpg', goog.string.path.extension('././foo/bar/baz.jpg'));
+  assertEquals('jpg', goog.string.path.extension('././foo bar/baz.jpg'));
+  assertEquals('jpg', goog.string.path.extension(
+      'foo/bar/baz/blah blah.jpg'));
+  assertEquals('', goog.string.path.extension('../../foo/bar/baz baz'));
+  assertEquals('', goog.string.path.extension('../../foo bar/baz baz'));
+  assertEquals('', goog.string.path.extension('foo/bar/.'));
+  assertEquals('', goog.string.path.extension('  '));
+  assertEquals('', goog.string.path.extension(''));
+  assertEquals('', goog.string.path.extension('/home/username/.bashrc'));
+
+  // Tests cases taken from python os.path.splitext().
+  assertEquals("bar", goog.string.path.extension("foo.bar"));
+  assertEquals("bar", goog.string.path.extension("foo.boo.bar"));
+  assertEquals("bar", goog.string.path.extension("foo.boo.biff.bar"));
+  assertEquals("rc", goog.string.path.extension(".csh.rc"));
+  assertEquals("", goog.string.path.extension("nodots"));
+  assertEquals("", goog.string.path.extension(".cshrc"));
+  assertEquals("", goog.string.path.extension("...manydots"));
+  assertEquals("ext", goog.string.path.extension("...manydots.ext"));
+  assertEquals("", goog.string.path.extension("."));
+  assertEquals("", goog.string.path.extension(".."));
+  assertEquals("", goog.string.path.extension("........"));
+  assertEquals("", goog.string.path.extension(""));
+}
+
 </script>
 </body>
 </html>
