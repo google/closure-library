@@ -530,11 +530,6 @@ goog.net.XhrManager.Event = function(type, target, id, xhrIo) {
 goog.inherits(goog.net.XhrManager.Event, goog.events.Event);
 
 
-/** @override */
-goog.net.XhrManager.Event.prototype.disposeInternal = function() {
-};
-
-
 
 /**
  * An encapsulation of everything needed to make a Xhr request.
