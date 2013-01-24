@@ -12,6 +12,7 @@ See the COPYING file for details.
 <title>Closure Integration Tests - goog.db</title>
 <script src="../base.js"></script>
 <script>
+goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.db');
 goog.require('goog.db.IndexedDb');
@@ -21,6 +22,7 @@ goog.require('goog.db.Transaction');
 goog.require('goog.db.Transaction.TransactionMode');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
+goog.require('goog.object');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
@@ -38,6 +40,7 @@ asyncTestCase.stepTimeout = 5000;
 var dbName;
 var dbBaseName = 'testDb';
 var globalDb = null;
+var propertyReplacer;
 
 // On Chrome 24+, the database reports its default version as 1 as opposed to
 // the empty string (as per the new spec).
@@ -110,6 +113,20 @@ function assertStoreValues(values, db) {
   });
 }
 
+function assertStoreValuesAndCursorsDisposed(values, cursors, db) {
+  var assertStoreTx = db.createTransaction(['store']);
+  assertStoreTx.objectStore('store').getAll().addCallback(function(results) {
+    assertSameElements(values, results);
+    assertTrue(cursors.length > 0);
+    goog.array.forEach(cursors, function(elem, index, array) {
+      console.log(elem);
+      assertTrue('array[' + index + '] (' + elem + ') is not disposed',
+                 goog.Disposable.isDisposed(elem));
+    });
+    closeAndContinue(db);
+  });
+}
+
 function assertStoreDoesntExist(db) {
   try {
     db.createTransaction(['store']);
@@ -134,6 +151,10 @@ function closeAndContinue(db) {
   asyncTestCase.continueTesting();
 }
 
+function setUpPage() {
+  propertyReplacer = new goog.testing.PropertyReplacer();
+}
+
 function setUp() {
   if (!idbSupported) {
     return;
@@ -142,6 +163,10 @@ function setUp() {
   // Always use a clean database by generating a new database name.
   dbName = dbBaseName + Date.now().toString();
   globalDb = openDatabase();
+}
+
+function tearDown() {
+  propertyReplacer.reset();
 }
 
 function testDatabaseOpened() {
@@ -647,6 +672,34 @@ function testGetAll() {
       .addCallbacks(addStore, failOnError)
       .addCallback(addData)
       .addCallback(checkStore);
+}
+
+function testGetAllFreesCursor() {
+  if (!idbSupported) {
+    return;
+  }
+  var values = ['1', '2', '3'];
+  var keys = ['a', 'b', 'c'];
+
+  var addData = goog.partial(populateStore, values, keys);
+  var origCursor = goog.db.Cursor;
+  var cursors = [];
+  /** @constructor */
+  var testCursor = function() {
+    origCursor.call(this);
+    cursors.push(this);
+  };
+  goog.object.extend(testCursor, origCursor);
+  goog.inherits(testCursor, origCursor);
+  propertyReplacer.replace(goog.db, 'Cursor', testCursor);
+  var checkStoreAndCursorDisposed =
+      goog.partial(assertStoreValuesAndCursorsDisposed, values, cursors);
+
+  asyncTestCase.waitForAsync('getting all');
+  globalDb.branch()
+      .addCallbacks(addStore, failOnError)
+      .addCallback(addData)
+      .addCallback(checkStoreAndCursorDisposed);
 }
 
 function testCursorGet() {

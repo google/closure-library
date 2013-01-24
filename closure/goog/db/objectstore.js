@@ -244,7 +244,7 @@ goog.db.ObjectStore.prototype.getAll = function(opt_range, opt_direction) {
     goog.db.Cursor.EventType.ERROR,
     goog.db.Cursor.EventType.COMPLETE
   ], function(evt) {
-    goog.events.unlistenByKey(key);
+    cursor.dispose();
     if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
       d.callback(result);
     } else {
@@ -298,6 +298,7 @@ goog.db.ObjectStore.prototype.openCursor = function(opt_range, opt_direction) {
       request = this.store_.openCursor(range);
     }
   } catch (err) {
+    cursor.dispose();
     throw goog.db.Error.create(err, msg);
   }
   request.onsuccess = function(ev) {
