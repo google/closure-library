@@ -52,6 +52,12 @@ goog.require('goog.testing.recordFunction');
  *     according to the contract of goog.events.removeAll.
  * @param {Function} getListenersFn Function that, given the same
  *     signature as goog.events.getListeners, will retrieve listeners.
+ * @param {Function} getListenerFn Function that, given the same
+ *     signature as goog.events.getListener, will retrieve the
+ *     listener object.
+ * @param {Function} hasListenerFn Function that, given the same
+ *     signature as goog.events.hasListener, will determine whether
+ *     listeners exist.
  * @param {goog.events.eventTargetTester.KeyType} listenKeyType The
  *     key type returned by listen call.
  * @param {goog.events.eventTargetTester.UnlistenReturnType}
@@ -62,7 +68,8 @@ goog.require('goog.testing.recordFunction');
  */
 goog.events.eventTargetTester.setUp = function(
     listenFn, unlistenFn, unlistenByKeyFn, listenOnceFn,
-    dispatchEventFn, removeAllFn, getListenersFn,
+    dispatchEventFn, removeAllFn,
+    getListenersFn, getListenerFn, hasListenerFn,
     listenKeyType, unlistenFnReturnType) {
   listen = listenFn;
   unlisten = unlistenFn;
@@ -71,6 +78,8 @@ goog.events.eventTargetTester.setUp = function(
   dispatchEvent = dispatchEventFn;
   removeAll = removeAllFn;
   getListeners = getListenersFn;
+  getListener = getListenerFn;
+  hasListener = hasListenerFn;
   keyType = listenKeyType;
   unlistenReturnType = unlistenFnReturnType;
 
@@ -169,7 +178,7 @@ var EventType = {
 
 
 var listen, unlisten, unlistenByKey, listenOnce, dispatchEvent;
-var removeAll, getListeners;
+var removeAll, getListeners, getListener, hasListener;
 var keyType, unlistenReturnType;
 var eventTargets, listeners;
 
@@ -914,4 +923,41 @@ function testGetListeners() {
 
   l = getListeners(eventTargets[0], EventType.B, true);
   assertEquals(0, l.length);
+}
+
+
+function testGetListener() {
+  if (!getListener) {
+    return;
+  }
+
+  listen(eventTargets[0], EventType.A, listeners[0], true);
+
+  assertNotNull(getListener(eventTargets[0], EventType.A, listeners[0], true));
+  assertNull(
+      getListener(eventTargets[0], EventType.A, listeners[0], true, {}));
+  assertNull(getListener(eventTargets[1], EventType.A, listeners[0], true));
+  assertNull(getListener(eventTargets[0], EventType.B, listeners[0], true));
+  assertNull(getListener(eventTargets[0], EventType.A, listeners[1], true));
+}
+
+
+function testHasListener() {
+  if (!hasListener) {
+    return;
+  }
+
+  assertFalse(hasListener(eventTargets[0]));
+
+  listen(eventTargets[0], EventType.A, listeners[0], true);
+
+  assertTrue(hasListener(eventTargets[0]));
+  assertTrue(hasListener(eventTargets[0], EventType.A));
+  assertTrue(hasListener(eventTargets[0], EventType.A, true));
+  assertTrue(hasListener(eventTargets[0], undefined, true));
+  assertFalse(hasListener(eventTargets[0], EventType.A, false));
+  assertFalse(hasListener(eventTargets[0], undefined, false));
+  assertFalse(hasListener(eventTargets[0], EventType.B));
+  assertFalse(hasListener(eventTargets[0], EventType.B, true));
+  assertFalse(hasListener(eventTargets[1]));
 }

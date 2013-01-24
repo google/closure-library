@@ -47,11 +47,17 @@ function setUp() {
   var getListenersFn = function(src, type, capture) {
     return src.getListeners(type, capture);
   };
+  var getListenerFn = function(src, type, listener, capture, opt_handler) {
+    return src.getListener(type, listener, capture, opt_handler);
+  };
+  var hasListenerFn = function(src, opt_type, opt_capture) {
+    return src.hasListener(opt_type, opt_capture);
+  };
 
   goog.events.eventTargetTester.setUp(
       listenFn, unlistenFn, unlistenByKeyFn,
       listenOnceFn, dispatchEventFn,
-      removeAllFn, getListenersFn,
+      removeAllFn, getListenersFn, getListenerFn, hasListenerFn,
       goog.events.eventTargetTester.KeyType.NUMBER,
       goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN);
 }

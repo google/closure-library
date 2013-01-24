@@ -27,6 +27,7 @@ goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.Listenable');
 goog.require('goog.events.Listener');
+goog.require('goog.object');
 
 
 
@@ -85,7 +86,7 @@ goog.events.EventTarget = function() {
     /**
      * Maps of event type to an array of listeners.
      *
-     * @type {Object.<string, !Array.<!goog.events.Listener>>}
+     * @type {Object.<string, !Array.<!goog.events.ListenableKey>>}
      * @private
      */
     this.eventTargetListeners_ = {};
@@ -398,6 +399,39 @@ goog.events.EventTarget.prototype.getListeners = function(type, capture) {
     }
   }
   return rv;
+};
+
+
+/** @override */
+goog.events.EventTarget.prototype.getListener = function(
+    type, listener, capture, opt_listenerScope) {
+  var listenerArray = this.eventTargetListeners_[type];
+  var i = -1;
+  if (listenerArray) {
+    i = goog.events.EventTarget.findListenerIndex_(
+        listenerArray, listener, capture, opt_listenerScope);
+  }
+  return i > -1 ? listenerArray[i] : null;
+};
+
+
+/** @override */
+goog.events.EventTarget.prototype.hasListener = function(
+    opt_type, opt_capture) {
+  var hasType = goog.isDef(opt_type);
+  var hasCapture = goog.isDef(opt_capture);
+
+  return goog.object.some(
+      this.eventTargetListeners_, function(listenersArray, type) {
+        for (var i = 0; i < listenersArray.length; ++i) {
+          if ((!hasType || listenersArray[i].type == opt_type) &&
+              (!hasCapture || listenersArray[i].capture == opt_capture)) {
+            return true;
+          }
+        }
+
+        return false;
+      });
 };
 
 

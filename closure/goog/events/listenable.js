@@ -212,6 +212,35 @@ goog.events.Listenable.prototype.fireListeners;
 goog.events.Listenable.prototype.getListeners;
 
 
+/**
+ * Gets the goog.events.ListenableKey for the event or null if no such
+ * listener is in use.
+ *
+ * @param {string} type The name of the event without the 'on' prefix.
+ * @param {!Function} listener The listener function to get.
+ * @param {boolean=} capture Whether the listener is a capturing listener.
+ * @param {Object=} opt_listenerScope Object in whose scope to call the
+ *     listener.
+ * @return {goog.events.ListenableKey} the found listener or null if not found.
+ */
+goog.events.Listenable.prototype.getListener;
+
+
+
+/**
+ * Whether there is any active listeners matching the specified
+ * signature. If either the type or capture parameters are
+ * unspecified, the function will match on the remaining criteria.
+ *
+ * @param {string=} opt_type Event type.
+ * @param {boolean=} opt_capture Whether to check for capture or bubble
+ *     listeners.
+ * @return {boolean} Whether there is any active listeners matching
+ *     the requested type and/or capture phase.
+ */
+goog.events.Listenable.prototype.hasListener;
+
+
 
 /**
  * An interface that describes a single registered listener.
