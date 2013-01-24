@@ -115,6 +115,15 @@ goog.math.Vec2.prototype.squaredMagnitude = function() {
 
 
 /**
+ * @return {!goog.math.Vec2} This coordinate after scaling.
+ * @override
+ */
+goog.math.Vec2.prototype.scale =
+    /** @type {function(number, number=):!goog.math.Vec2} */
+    (goog.math.Coordinate.prototype.scale);
+
+
+/**
  * Reverses the sign of the vector. Equivalent to scaling the vector by -1.
  * @return {!goog.math.Vec2} The inverted vector.
  */
@@ -130,8 +139,7 @@ goog.math.Vec2.prototype.invert = function() {
  * @return {!goog.math.Vec2} The normalized vector.
  */
 goog.math.Vec2.prototype.normalize = function() {
-  this.scale(1 / this.magnitude());
-  return this;
+  return this.scale(1 / this.magnitude());
 };
 
 
