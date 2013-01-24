@@ -38,6 +38,7 @@
 goog.provide('goog.ui.AbstractSpellChecker');
 goog.provide('goog.ui.AbstractSpellChecker.AsyncResult');
 
+goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
@@ -750,10 +751,10 @@ goog.ui.AbstractSpellChecker.prototype.createWordElement_ = function(word,
     parameters['tabIndex'] = -1;
   }
 
-  var el = /** @type {HTMLSpanElement} */
+  var el = /** @type {!HTMLSpanElement} */
       (this.getDomHelper().createDom('span', parameters, word));
-  goog.dom.a11y.setRole(el, 'menuitem');
-  goog.dom.a11y.setState(el, 'haspopup', true);
+  goog.a11y.aria.setRole(el, 'menuitem');
+  goog.a11y.aria.setState(el, 'haspopup', true);
   this.registerWordElement_(word, el);
 
   return el;

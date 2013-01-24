@@ -20,9 +20,10 @@
 
 goog.provide('goog.ui.ButtonRenderer');
 
-goog.require('goog.dom.a11y');
-goog.require('goog.dom.a11y.Role');
-goog.require('goog.dom.a11y.State');
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
+goog.require('goog.asserts');
 goog.require('goog.ui.ButtonSide');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.ControlRenderer');
@@ -62,11 +63,11 @@ goog.ui.ButtonRenderer.CSS_CLASS = goog.getCssName('goog-button');
 
 /**
  * Returns the ARIA role to be applied to buttons.
- * @return {goog.dom.a11y.Role|undefined} ARIA role.
+ * @return {goog.a11y.aria.Role|undefined} ARIA role.
  * @override
  */
 goog.ui.ButtonRenderer.prototype.getAriaRole = function() {
-  return goog.dom.a11y.Role.BUTTON;
+  return goog.a11y.aria.Role.BUTTON;
 };
 
 
@@ -84,7 +85,9 @@ goog.ui.ButtonRenderer.prototype.updateAriaState = function(element, state,
     enable) {
   // If button has CHECKED state, assign ARIA atrribute aria-pressed
   if (state == goog.ui.Component.State.CHECKED) {
-    goog.dom.a11y.setState(element, goog.dom.a11y.State.PRESSED, enable);
+    goog.asserts.assert(element,
+        'The button DOM element cannot be null.');
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.PRESSED, enable);
   } else {
     goog.ui.ButtonRenderer.superClass_.updateAriaState.call(this, element,
         state, enable);

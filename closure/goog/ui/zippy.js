@@ -23,8 +23,9 @@ goog.provide('goog.ui.Zippy');
 goog.provide('goog.ui.Zippy.Events');
 goog.provide('goog.ui.ZippyEvent');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -122,7 +123,7 @@ goog.ui.Zippy = function(header, opt_content, opt_expanded,
   function addHeaderEvents(el) {
     if (el) {
       el.tabIndex = 0;
-      goog.dom.a11y.setRole(el, self.getAriaRole());
+      goog.a11y.aria.setRole(el, self.getAriaRole());
       goog.dom.classes.add(el, goog.getCssName('goog-zippy-header'));
       self.enableMouseEventsHandling_(el);
       self.enableKeyboardEventsHandling_(el);
@@ -177,10 +178,10 @@ goog.ui.Zippy.prototype.disposeInternal = function() {
 
 
 /**
- * @return {goog.dom.a11y.Role} The ARIA role to be applied to Zippy element.
+ * @return {goog.a11y.aria.Role} The ARIA role to be applied to Zippy element.
  */
 goog.ui.Zippy.prototype.getAriaRole = function() {
-  return goog.dom.a11y.Role.TAB;
+  return goog.a11y.aria.Role.TAB;
 };
 
 
@@ -293,8 +294,9 @@ goog.ui.Zippy.prototype.updateHeaderClassName = function(expanded) {
         goog.getCssName('goog-zippy-expanded'), expanded);
     goog.dom.classes.enable(this.elHeader_,
         goog.getCssName('goog-zippy-collapsed'), !expanded);
-    goog.dom.a11y.setState(
-        this.elHeader_, goog.dom.a11y.State.EXPANDED, expanded);
+    goog.a11y.aria.setState(this.elHeader_,
+        goog.a11y.aria.State.EXPANDED,
+        expanded);
   }
 };
 

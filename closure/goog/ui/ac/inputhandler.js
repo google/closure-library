@@ -93,8 +93,9 @@ goog.provide('goog.ui.ac.InputHandler');
 
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
+goog.require('goog.a11y.aria');
+goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
 goog.require('goog.dom.selection');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
@@ -442,7 +443,8 @@ goog.ui.ac.InputHandler.prototype.setCursorPosition = function(pos) {
  */
 goog.ui.ac.InputHandler.prototype.attachInput = function(target) {
   if (goog.dom.isElement(target)) {
-    goog.dom.a11y.setState(/** @type {Element} */ (target), 'haspopup', true);
+    var el = /** @type {!Element} */ (target);
+    goog.a11y.aria.setState(el, 'haspopup', true);
   }
 
   this.eh_.listen(target, goog.events.EventType.FOCUS, this.handleFocus);

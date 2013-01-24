@@ -30,12 +30,13 @@ goog.provide('goog.ui.Dialog.DefaultButtonKeys');
 goog.provide('goog.ui.Dialog.Event');
 goog.provide('goog.ui.Dialog.EventType');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.a11y');
-goog.require('goog.dom.a11y.Role');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -227,10 +228,10 @@ goog.ui.Dialog.prototype.buttonEl_ = null;
 
 /**
  * The dialog's preferred ARIA role.
- * @type {goog.dom.a11y.Role}
+ * @type {goog.a11y.aria.Role}
  * @private
  */
-goog.ui.Dialog.prototype.preferredAriaRole_ = goog.dom.a11y.Role.DIALOG;
+goog.ui.Dialog.prototype.preferredAriaRole_ = goog.a11y.aria.Role.DIALOG;
 
 
 /** @override */
@@ -285,7 +286,7 @@ goog.ui.Dialog.prototype.getContent = function() {
  * Returns the dialog's preferred ARIA role. This can be used to override the
  * default dialog role, e.g. with an ARIA role of ALERTDIALOG for a simple
  * warning or confirmation dialog.
- * @return {goog.dom.a11y.Role} This dialog's preferred ARIA role.
+ * @return {goog.a11y.aria.Role} This dialog's preferred ARIA role.
  */
 goog.ui.Dialog.prototype.getPreferredAriaRole = function() {
   return this.preferredAriaRole_;
@@ -296,7 +297,7 @@ goog.ui.Dialog.prototype.getPreferredAriaRole = function() {
  * Sets the dialog's preferred ARIA role. This can be used to override the
  * default dialog role, e.g. with an ARIA role of ALERTDIALOG for a simple
  * warning or confirmation dialog.
- * @param {goog.dom.a11y.Role} role This dialog's preferred ARIA role.
+ * @param {goog.a11y.aria.Role} role This dialog's preferred ARIA role.
  */
 goog.ui.Dialog.prototype.setPreferredAriaRole = function(role) {
   this.preferredAriaRole_ = role;
@@ -553,8 +554,9 @@ goog.ui.Dialog.prototype.createDom = function() {
           goog.getCssName(this.class_, 'buttons')));
 
   this.titleId_ = this.titleEl_.id;
-  goog.dom.a11y.setRole(element, this.getPreferredAriaRole());
-  goog.dom.a11y.setState(element, 'labelledby', this.titleId_ || '');
+  goog.a11y.aria.setRole(element, this.getPreferredAriaRole());
+  goog.a11y.aria.setState(element, goog.a11y.aria.State.LABELLEDBY,
+      this.titleId_ || '');
   // If setContent() was called before createDom(), make sure the inner HTML of
   // the content element is initialized.
   if (this.content_) {
@@ -574,11 +576,13 @@ goog.ui.Dialog.prototype.createDom = function() {
 /** @override */
 goog.ui.Dialog.prototype.decorateInternal = function(element) {
   goog.base(this, 'decorateInternal', element);
-
+  var dialogElement = this.getElement();
+  goog.asserts.assert(dialogElement,
+      'The DOM element for dialog cannot be null.');
   // Decorate or create the content element.
   var contentClass = goog.getCssName(this.class_, 'content');
   this.contentEl_ = goog.dom.getElementsByTagNameAndClass(
-      null, contentClass, this.getElement())[0];
+      null, contentClass, dialogElement)[0];
   if (this.contentEl_) {
     this.content_ = this.contentEl_.innerHTML;
   } else {
@@ -586,7 +590,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
     if (this.content_) {
       this.contentEl_.innerHTML = this.content_;
     }
-    this.getElement().appendChild(this.contentEl_);
+    dialogElement.appendChild(this.contentEl_);
   }
 
   // Decorate or create the title bar element.
@@ -594,7 +598,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
   var titleTextClass = goog.getCssName(this.class_, 'title-text');
   var titleCloseClass = goog.getCssName(this.class_, 'title-close');
   this.titleEl_ = goog.dom.getElementsByTagNameAndClass(
-      null, titleClass, this.getElement())[0];
+      null, titleClass, dialogElement)[0];
   if (this.titleEl_) {
     // Only look for title text & title close elements if a title bar element
     // was found.  Otherwise assume that the entire title bar has to be
@@ -612,7 +616,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
     // This is useful if the element to decorate only includes a content area.
     this.titleEl_ = this.getDomHelper().createDom('div',
         {'className': titleClass, 'id': this.getId()});
-    this.getElement().insertBefore(this.titleEl_, this.contentEl_);
+    dialogElement.insertBefore(this.titleEl_, this.contentEl_);
   }
   this.titleId_ = this.titleEl_.id;
 
@@ -624,7 +628,8 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
         this.title_);
     this.titleEl_.appendChild(this.titleTextEl_);
   }
-  goog.dom.a11y.setState(this.getElement(), 'labelledby', this.titleId_ || '');
+  goog.a11y.aria.setState(dialogElement, goog.a11y.aria.State.LABELLEDBY,
+      this.titleId_ || '');
   // Decorate or create the title close element.
   if (!this.titleCloseEl_) {
     this.titleCloseEl_ = this.getDomHelper().createDom('span', titleCloseClass);
@@ -635,7 +640,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
   // Decorate or create the button container element.
   var buttonsClass = goog.getCssName(this.class_, 'buttons');
   this.buttonEl_ = goog.dom.getElementsByTagNameAndClass(
-      null, buttonsClass, this.getElement())[0];
+      null, buttonsClass, dialogElement)[0];
   if (this.buttonEl_) {
     // Button container element found.  Create empty button set and use it to
     // decorate the button container.
@@ -644,7 +649,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
   } else {
     // Create new button container element, and render a button set into it.
     this.buttonEl_ = this.getDomHelper().createDom('div', buttonsClass);
-    this.getElement().appendChild(this.buttonEl_);
+    dialogElement.appendChild(this.buttonEl_);
     if (this.buttons_) {
       this.buttons_.attachToElement(this.buttonEl_);
     }
@@ -682,10 +687,12 @@ goog.ui.Dialog.prototype.enterDocument = function() {
       this.titleCloseEl_, goog.events.EventType.CLICK,
       this.onTitleCloseClick_);
 
-  goog.dom.a11y.setRole(this.getElement(), this.getPreferredAriaRole());
+  var element = this.getElement();
+  goog.asserts.assert(element, 'The DOM element for dialog cannot be null');
+  goog.a11y.aria.setRole(element, this.getPreferredAriaRole());
   if (this.titleTextEl_.id !== '') {
-    goog.dom.a11y.setState(
-        this.getElement(), 'labelledby', this.titleTextEl_.id);
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.LABELLEDBY,
+        this.titleTextEl_.id);
   }
 
   if (!this.modal_) {

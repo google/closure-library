@@ -26,8 +26,6 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
-goog.require('goog.dom.a11y.State');
 goog.require('goog.dom.classes');
 goog.require('goog.object');
 goog.require('goog.style');
@@ -161,7 +159,7 @@ goog.ui.ControlRenderer.ARIA_STATE_MAP_;
 /**
  * Returns the ARIA role to be applied to the control.
  * See http://wiki/Main/ARIA for more info.
- * @return {goog.dom.a11y.Role|undefined} ARIA role.
+ * @return {goog.a11y.aria.Role|undefined} ARIA role.
  */
 goog.ui.ControlRenderer.prototype.getAriaRole = function() {
   // By default, the ARIA role is unspecified.
@@ -370,13 +368,15 @@ goog.ui.ControlRenderer.prototype.initializeDom = function(control) {
 /**
  * Sets the element's ARIA role.
  * @param {Element} element Element to update.
- * @param {?goog.dom.a11y.Role=} opt_preferredRole The preferred ARIA role.
+ * @param {?goog.a11y.aria.Role=} opt_preferredRole The preferred ARIA role.
  */
 goog.ui.ControlRenderer.prototype.setAriaRole = function(element,
     opt_preferredRole) {
   var ariaRole = opt_preferredRole || this.getAriaRole();
   if (ariaRole) {
-    goog.dom.a11y.setRole(element, ariaRole);
+    goog.asserts.assert(element,
+        'The element passed as a first parameter cannot be null.');
+    goog.a11y.aria.setRole(element, ariaRole);
   }
 };
 
@@ -544,14 +544,16 @@ goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
   // Ensure the ARIA state map exists.
   if (!goog.ui.ControlRenderer.ARIA_STATE_MAP_) {
     goog.ui.ControlRenderer.ARIA_STATE_MAP_ = goog.object.create(
-        goog.ui.Component.State.DISABLED, goog.dom.a11y.State.DISABLED,
-        goog.ui.Component.State.SELECTED, goog.dom.a11y.State.SELECTED,
-        goog.ui.Component.State.CHECKED, goog.dom.a11y.State.CHECKED,
-        goog.ui.Component.State.OPENED, goog.dom.a11y.State.EXPANDED);
+        goog.ui.Component.State.DISABLED, goog.a11y.aria.State.DISABLED,
+        goog.ui.Component.State.SELECTED, goog.a11y.aria.State.SELECTED,
+        goog.ui.Component.State.CHECKED, goog.a11y.aria.State.CHECKED,
+        goog.ui.Component.State.OPENED, goog.a11y.aria.State.EXPANDED);
   }
   var ariaState = goog.ui.ControlRenderer.ARIA_STATE_MAP_[state];
   if (ariaState) {
-    goog.dom.a11y.setState(element, ariaState, enable);
+    goog.asserts.assert(element,
+        'The element passed as a first parameter cannot be null.');
+    goog.a11y.aria.setState(element, ariaState, enable);
   }
 };
 

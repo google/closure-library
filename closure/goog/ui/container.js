@@ -28,9 +28,10 @@ goog.provide('goog.ui.Container');
 goog.provide('goog.ui.Container.EventType');
 goog.provide('goog.ui.Container.Orientation');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
+goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
-goog.require('goog.dom.a11y.State');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
@@ -520,8 +521,12 @@ goog.ui.Container.prototype.handleHighlightItem = function(e) {
       }
     }
   }
-  goog.dom.a11y.setState(this.getElement(),
-      goog.dom.a11y.State.ACTIVEDESCENDANT, e.target.getElement().id);
+  var element = this.getElement();
+  goog.asserts.assert(element,
+      'The DOM element for the container cannot be null.');
+  goog.a11y.aria.setState(element,
+      goog.a11y.aria.State.ACTIVEDESCENDANT,
+      e.target.getElement().id);
 };
 
 
@@ -534,8 +539,12 @@ goog.ui.Container.prototype.handleUnHighlightItem = function(e) {
   if (e.target == this.getHighlighted()) {
     this.highlightedIndex_ = -1;
   }
-  goog.dom.a11y.setState(this.getElement(),
-      goog.dom.a11y.State.ACTIVEDESCENDANT, '');
+  var element = this.getElement();
+  goog.asserts.assert(element,
+      'The DOM element for the container cannot be null.');
+  goog.a11y.aria.setState(element,
+      goog.a11y.aria.State.ACTIVEDESCENDANT,
+      '');
 };
 
 

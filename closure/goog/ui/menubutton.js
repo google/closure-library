@@ -22,9 +22,10 @@
 goog.provide('goog.ui.MenuButton');
 
 goog.require('goog.Timer');
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
+goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
-goog.require('goog.dom.a11y.State');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler.EventType');
@@ -181,8 +182,9 @@ goog.ui.MenuButton.prototype.enterDocument = function() {
   if (this.menu_) {
     this.attachMenuEventListeners_(this.menu_, true);
   }
-  goog.dom.a11y.setState(this.getElement(),
-      goog.dom.a11y.State.HASPOPUP, 'true');
+  var element = this.getElement();
+  goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
+  goog.a11y.aria.setState(element, goog.a11y.aria.State.HASPOPUP, 'true');
 };
 
 
@@ -715,10 +717,12 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
       this.setActive(false);
       this.menu_.setMouseButtonPressed(false);
 
+      var element = this.getElement();
       // Clear any remaining a11y state.
-      if (this.getElement()) {
-        goog.dom.a11y.setState(this.getElement(),
-            goog.dom.a11y.State.ACTIVEDESCENDANT, '');
+      if (element) {
+        goog.a11y.aria.setState(element,
+            goog.a11y.aria.State.ACTIVEDESCENDANT,
+            '');
       }
 
       // Clear any sizes that might have been stored.
@@ -831,8 +835,11 @@ goog.ui.MenuButton.prototype.attachMenuEventListeners_ = function(menu,
  * @param {goog.events.Event} e Highlight event to handle.
  */
 goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
-  goog.dom.a11y.setState(this.getElement(),
-      goog.dom.a11y.State.ACTIVEDESCENDANT, e.target.getElement().id);
+  var element = this.getElement();
+  goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
+  goog.a11y.aria.setState(element,
+      goog.a11y.aria.State.ACTIVEDESCENDANT,
+      e.target.getElement().id);
 };
 
 
@@ -842,8 +849,11 @@ goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
  */
 goog.ui.MenuButton.prototype.handleUnHighlightItem = function(e) {
   if (!this.menu_.getHighlighted()) {
-    goog.dom.a11y.setState(this.getElement(),
-        goog.dom.a11y.State.ACTIVEDESCENDANT, '');
+    var element = this.getElement();
+    goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
+    goog.a11y.aria.setState(element,
+        goog.a11y.aria.State.ACTIVEDESCENDANT,
+        '');
   }
 };
 

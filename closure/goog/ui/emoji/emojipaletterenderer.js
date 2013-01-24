@@ -19,8 +19,8 @@
 
 goog.provide('goog.ui.emoji.EmojiPaletteRenderer');
 
+goog.require('goog.a11y.aria');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
 goog.require('goog.ui.PaletteRenderer');
 goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.SpriteInfo');
@@ -180,7 +180,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.createCell = function(node, dom) {
     'id': this.getCssClass() + '-cell-' +
         goog.ui.emoji.EmojiPaletteRenderer.cellId_++
   }, node);
-  goog.dom.a11y.setRole(cell, 'gridcell');
+  goog.a11y.aria.setRole(cell, 'gridcell');
   return cell;
 };
 

@@ -14,8 +14,8 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
-    goog.require('goog.dom.a11y');
-    goog.require('goog.dom.a11y.State');
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.State');
     goog.require('goog.dom.classes');
     goog.require('goog.events');
     goog.require('goog.object');
@@ -188,15 +188,16 @@ See the COPYING file for details.
   function testCssClassesAndAria() {
     assertTrue('goog-zippy-header is enabled',
         goog.dom.classes.has(zippy.elHeader_, 'goog-zippy-header'));
+    assertNotNull(zippy.elHeader_);
     assertEquals('header aria-expanded is false', 'false',
-        goog.dom.a11y.getState(zippy.elHeader_, 'expanded'));
+        goog.a11y.aria.getState(zippy.elHeader_, 'expanded'));
     zippy.setExpanded(true);
     assertTrue('goog-zippy-content is enabled',
         goog.dom.classes.has(zippy.getContentElement(), 'goog-zippy-content'));
     assertEquals('header aria role is TAB', 'tab',
-        goog.dom.a11y.getRole(zippy.elHeader_));
+        goog.a11y.aria.getRole(zippy.elHeader_));
     assertEquals('header aria-expanded is true', 'true',
-        goog.dom.a11y.getState(zippy.elHeader_, 'expanded'));
+        goog.a11y.aria.getState(zippy.elHeader_, 'expanded'));
   }
 
   function testHeaderTabIndex() {

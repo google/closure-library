@@ -45,11 +45,12 @@ goog.provide('goog.ui.SliderBase.AnimationFactory');
 goog.provide('goog.ui.SliderBase.Orientation');
 
 goog.require('goog.Timer');
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
-goog.require('goog.dom.a11y.Role');
-goog.require('goog.dom.a11y.State');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -1480,7 +1481,10 @@ goog.ui.SliderBase.prototype.setVisible = function(visible) {
  * @protected
  */
 goog.ui.SliderBase.prototype.setAriaRoles = function() {
-  goog.dom.a11y.setRole(this.getElement(), goog.dom.a11y.Role.SLIDER);
+  var el = this.getElement();
+  goog.asserts.assert(el,
+      'The DOM element for the slider base cannot be null.');
+  goog.a11y.aria.setRole(el, goog.a11y.aria.Role.SLIDER);
   this.updateAriaStates();
 };
 
@@ -1492,15 +1496,12 @@ goog.ui.SliderBase.prototype.setAriaRoles = function() {
 goog.ui.SliderBase.prototype.updateAriaStates = function() {
   var element = this.getElement();
   if (element) {
-    goog.dom.a11y.setState(element,
-                           goog.dom.a11y.State.VALUEMIN,
-                           this.getMinimum());
-    goog.dom.a11y.setState(element,
-                           goog.dom.a11y.State.VALUEMAX,
-                           this.getMaximum());
-    goog.dom.a11y.setState(element,
-                           goog.dom.a11y.State.VALUENOW,
-                           this.getValue());
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.VALUEMIN,
+        this.getMinimum());
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.VALUEMAX,
+        this.getMaximum());
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.VALUENOW,
+        this.getValue());
   }
 };
 

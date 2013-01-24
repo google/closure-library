@@ -12,7 +12,9 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.dom');
-  goog.require('goog.dom.a11y');
+  goog.require('goog.a11y.aria');
+  goog.require('goog.a11y.aria.Role');
+  goog.require('goog.a11y.aria.State');
   goog.require('goog.events');
   goog.require('goog.events.EventType');
   goog.require('goog.fx.css3');
@@ -599,8 +601,10 @@ See the COPYING file for details.
     dialog = new goog.ui.Dialog();
     dialog.render();
     assertTrue(!!dialog.getTitleElement().id);
+    assertNotNull(dialog.getElement());
     assertEquals(dialog.getTitleElement().id,
-        goog.dom.a11y.getState(dialog.getElement(), 'labelledby'));
+        goog.a11y.aria.getState(dialog.getElement(),
+            'labelledby'));
   }
 
   function testAriaLabelledBy_decorate() {
@@ -610,8 +614,10 @@ See the COPYING file for details.
     dialog.decorate(decorateTarget);
     dialog.setVisible(true);
     assertTrue(!!dialog.getTitleElement().id);
+    assertNotNull(dialog.getElement());
     assertEquals(dialog.getTitleElement().id,
-        goog.dom.a11y.getState(dialog.getElement(), 'labelledby'));
+        goog.a11y.aria.getState(dialog.getElement(),
+            'labelledby'));
   }
 
 
@@ -620,8 +626,9 @@ See the COPYING file for details.
 
     dialog = new goog.ui.Dialog();
     dialog.render();
+    assertNotNull(dialog.getElement());
     assertEquals(dialog.getPreferredAriaRole(),
-        goog.dom.a11y.getRole(dialog.getElement()));
+        goog.a11y.aria.getRole(dialog.getElement()));
   }
 
   function testPreferredAriaRole_decorateDefault() {
@@ -629,28 +636,31 @@ See the COPYING file for details.
 
     dialog = new goog.ui.Dialog();
     dialog.decorate(decorateTarget);
+    assertNotNull(dialog.getElement());
     assertEquals(dialog.getPreferredAriaRole(),
-        goog.dom.a11y.getRole(dialog.getElement()));
+        goog.a11y.aria.getRole(dialog.getElement()));
   }
 
   function testPreferredAriaRole_renderOverride() {
     dialog.dispose();
 
     dialog = new goog.ui.Dialog();
-    dialog.setPreferredAriaRole(goog.dom.a11y.Role.ALERTDIALOG);
+    dialog.setPreferredAriaRole(goog.a11y.aria.Role.ALERTDIALOG);
     dialog.render();
-    assertEquals(goog.dom.a11y.Role.ALERTDIALOG,
-        goog.dom.a11y.getRole(dialog.getElement()));
+    assertNotNull(dialog.getElement());
+    assertEquals(goog.a11y.aria.Role.ALERTDIALOG,
+        goog.a11y.aria.getRole(dialog.getElement()));
   }
 
   function testPreferredAriaRole_decorateOverride() {
     dialog.dispose();
 
     dialog = new goog.ui.Dialog();
-    dialog.setPreferredAriaRole(goog.dom.a11y.Role.ALERTDIALOG);
+    dialog.setPreferredAriaRole(goog.a11y.aria.Role.ALERTDIALOG);
     dialog.decorate(decorateTarget);
-    assertEquals(goog.dom.a11y.Role.ALERTDIALOG,
-        goog.dom.a11y.getRole(dialog.getElement()));
+    assertNotNull(dialog.getElement());
+    assertEquals(goog.a11y.aria.Role.ALERTDIALOG,
+        goog.a11y.aria.getRole(dialog.getElement()));
   }
 
   function testDefaultOpacityIsAppliedOnRender() {

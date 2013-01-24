@@ -21,9 +21,11 @@
 goog.provide('goog.ui.ac.Renderer');
 goog.provide('goog.ui.ac.Renderer.CustomRenderer');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.dispose');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
@@ -402,14 +404,16 @@ goog.ui.ac.Renderer.prototype.renderRows = function(rows, token, opt_target) {
  */
 goog.ui.ac.Renderer.prototype.dismiss = function() {
   if (this.target_) {
-    goog.dom.a11y.setActiveDescendant(this.target_, null);
+    goog.a11y.aria.setActiveDescendant(this.target_, null);
   }
   if (this.visible_) {
     this.visible_ = false;
 
     // Clear ARIA popup role for the target input box.
     if (this.target_) {
-      goog.dom.a11y.setState(this.target_, goog.dom.a11y.State.HASPOPUP, false);
+      goog.a11y.aria.setState(this.target_,
+          goog.a11y.aria.State.HASPOPUP,
+          false);
     }
 
     if (this.menuFadeDuration_ > 0) {
@@ -433,10 +437,14 @@ goog.ui.ac.Renderer.prototype.show = function() {
 
     // Set ARIA roles and states for the target input box.
     if (this.target_) {
-      goog.dom.a11y.setRole(this.target_, goog.dom.a11y.Role.COMBOBOX);
-      goog.dom.a11y.setState(
-          this.target_, goog.dom.a11y.State.AUTOCOMPLETE, 'list');
-      goog.dom.a11y.setState(this.target_, goog.dom.a11y.State.HASPOPUP, true);
+      goog.a11y.aria.setRole(this.target_,
+          goog.a11y.aria.Role.COMBOBOX);
+      goog.a11y.aria.setState(this.target_,
+          goog.a11y.aria.State.AUTOCOMPLETE,
+          'list');
+      goog.a11y.aria.setState(this.target_,
+          goog.a11y.aria.State.HASPOPUP,
+          true);
     }
 
     if (this.menuFadeDuration_ > 0) {
@@ -476,7 +484,7 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
       goog.dom.classes.add(rowDiv, this.activeClassName,
           this.legacyActiveClassName_);
       if (this.target_) {
-        goog.dom.a11y.setActiveDescendant(this.target_, rowDiv);
+        goog.a11y.aria.setActiveDescendant(this.target_, rowDiv);
       }
       goog.style.scrollIntoContainerView(rowDiv, this.element_);
     }
@@ -536,7 +544,7 @@ goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
     var el = this.dom_.createDom('div', {style: 'display:none'});
     this.element_ = el;
     this.setMenuClasses_(el);
-    goog.dom.a11y.setRole(el, goog.dom.a11y.Role.LISTBOX);
+    goog.a11y.aria.setRole(el, goog.a11y.aria.Role.LISTBOX);
 
     el.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
 
@@ -890,7 +898,7 @@ goog.ui.ac.Renderer.prototype.renderRowHtml = function(row, token) {
     className: this.rowClassName,
     id: goog.ui.IdGenerator.getInstance().getNextUniqueId()
   });
-  goog.dom.a11y.setRole(node, goog.dom.a11y.Role.OPTION);
+  goog.a11y.aria.setRole(node, goog.a11y.aria.Role.OPTION);
   if (this.customRenderer_ && this.customRenderer_.renderRow) {
     this.customRenderer_.renderRow(row, token, node);
   } else {

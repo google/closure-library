@@ -20,10 +20,10 @@
 
 goog.provide('goog.ui.PaletteRenderer');
 
+goog.require('goog.a11y.aria');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.style');
 goog.require('goog.ui.ControlRenderer');
@@ -132,7 +132,7 @@ goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
           rows));
   table.cellSpacing = 0;
   table.cellPadding = 0;
-  goog.dom.a11y.setRole(table, 'grid');
+  goog.a11y.aria.setRole(table, 'grid');
   return table;
 };
 
@@ -162,7 +162,7 @@ goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
     'id': goog.getCssName(this.getCssClass(), 'cell-') +
         goog.ui.PaletteRenderer.cellId_++
   }, node);
-  goog.dom.a11y.setRole(cell, 'gridcell');
+  goog.a11y.aria.setRole(cell, 'gridcell');
   return cell;
 };
 
@@ -291,8 +291,8 @@ goog.ui.PaletteRenderer.prototype.highlightCell = function(palette,
         goog.getCssName(this.getCssClass(), 'cell-hover'), highlight);
     // See http://www.w3.org/TR/2006/WD-aria-state-20061220/#activedescendent
     // for an explanation of the activedescendent.
-    var table = /** @type {Element} */ (palette.getElement().firstChild);
-    goog.dom.a11y.setState(table, 'activedescendent', cell.id);
+    var table = /** @type {!Element} */ (palette.getElement().firstChild);
+    goog.a11y.aria.setState(table, 'activedescendent', cell.id);
   }
 };
 

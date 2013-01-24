@@ -13,9 +13,10 @@ See the COPYING file for details.
   <title>Closure Unit Tests - goog.ui.AnimatedZippy</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.asserts');
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.State');
     goog.require('goog.dom');
-    goog.require('goog.dom.a11y');
-    goog.require('goog.dom.a11y.State');
     goog.require('goog.events');
     goog.require('goog.functions');
     goog.require('goog.fx.Animation');
@@ -75,6 +76,7 @@ See the COPYING file for details.
 
   function setUp() {
     animatedZippyHeaderEl = goog.dom.getElement('t1');
+    goog.asserts.assert(animatedZippyHeaderEl);
     animatedZippy = new goog.ui.AnimatedZippy(animatedZippyHeaderEl,
         goog.dom.getElement('c1'));
 
@@ -108,8 +110,8 @@ See the COPYING file for details.
           assertEquals('expanded must be true', true,
               animatedZippy.isExpanded());
           assertEquals('aria-expanded must be true', 'true',
-              goog.dom.a11y.getState(animatedZippyHeaderEl,
-                  goog.dom.a11y.State.EXPANDED));
+              goog.a11y.aria.getState(animatedZippyHeaderEl,
+                  goog.a11y.aria.State.EXPANDED));
         });
 
     animatedZippy.expand();
@@ -121,8 +123,8 @@ See the COPYING file for details.
         assertEquals('expanded must be false', false,
             animatedZippy.isExpanded());
         assertEquals('aria-expanded must be false', 'false',
-            goog.dom.a11y.getState(animatedZippyHeaderEl,
-                goog.dom.a11y.State.EXPANDED));
+            goog.a11y.aria.getState(animatedZippyHeaderEl,
+                goog.a11y.aria.State.EXPANDED));
       });
 
     animatedZippy.collapse();

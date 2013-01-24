@@ -14,9 +14,9 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
-    goog.require('goog.dom.a11y');
-    goog.require('goog.dom.a11y.Role');
-    goog.require('goog.dom.a11y.State');
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.Role');
+    goog.require('goog.a11y.aria.State');
     goog.require('goog.testing.jsunit');
     goog.require('goog.testing.recordFunction');
     goog.require('goog.ui.Component.EventType');
@@ -77,15 +77,18 @@ function testAriaRoles() {
   select.addItem(item1);
   var item2 = new goog.ui.MenuItem("item 2");
   select.addItem(item2);
-
-  assertEquals(goog.dom.a11y.Role.LISTBOX,
-      goog.dom.a11y.getRole(select.getElement()));
-  assertEquals('false', goog.dom.a11y.getState(select.getElement(),
-          goog.dom.a11y.State.HASPOPUP));
-  assertEquals(goog.dom.a11y.Role.OPTION,
-      goog.dom.a11y.getRole(item1.getElement()));
-  assertEquals(goog.dom.a11y.Role.OPTION,
-      goog.dom.a11y.getRole(item2.getElement()));
+  assertNotNull(select.getElement());
+  assertNotNull(item1.getElement());
+  assertNotNull(item2.getElement());
+  assertEquals(goog.a11y.aria.Role.LISTBOX,
+      goog.a11y.aria.getRole(select.getElement()));
+  assertEquals('false', goog.a11y.aria.getState(
+      select.getElement(),
+      goog.a11y.aria.State.HASPOPUP));
+  assertEquals(goog.a11y.aria.Role.OPTION,
+      goog.a11y.aria.getRole(item1.getElement()));
+  assertEquals(goog.a11y.aria.Role.OPTION,
+      goog.a11y.aria.getRole(item2.getElement()));
 }
 
 /**

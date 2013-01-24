@@ -240,7 +240,7 @@ goog.ui.Control.prototype.allowTextSelection_ = false;
 
 /**
  * The control's preferred ARIA role.
- * @type {?goog.dom.a11y.Role}
+ * @type {?goog.a11y.aria.Role}
  * @private
  */
 goog.ui.Control.prototype.preferredAriaRole_ = null;
@@ -439,7 +439,7 @@ goog.ui.Control.prototype.createDom = function() {
  * cases where a different ARIA role is appropriate for a control because of the
  * context in which it's used.  E.g., a {@link goog.ui.MenuButton} added to a
  * {@link goog.ui.Select} should have an ARIA role of LISTBOX and not MENUITEM.
- * @return {?goog.dom.a11y.Role} This control's preferred ARIA role or null if
+ * @return {?goog.a11y.aria.Role} This control's preferred ARIA role or null if
  *     no preferred ARIA role is set.
  */
 goog.ui.Control.prototype.getPreferredAriaRole = function() {
@@ -453,7 +453,7 @@ goog.ui.Control.prototype.getPreferredAriaRole = function() {
  * different ARIA role is appropriate for a control because of the
  * context in which it's used.  E.g., a {@link goog.ui.MenuButton} added to a
  * {@link goog.ui.Select} should have an ARIA role of LISTBOX and not MENUITEM.
- * @param {goog.dom.a11y.Role} role This control's preferred ARIA role.
+ * @param {goog.a11y.aria.Role} role This control's preferred ARIA role.
  */
 goog.ui.Control.prototype.setPreferredAriaRole = function(role) {
   this.preferredAriaRole_ = role;

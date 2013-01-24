@@ -13,9 +13,9 @@ See the COPYING file for details.
   <title>Closure Unit Tests - goog.ui.ButtonRenderer</title>
   <script src="../base.js"></script>
   <script>
-    goog.require('goog.dom.a11y');
-    goog.require('goog.dom.a11y.Role');
-    goog.require('goog.dom.a11y.State');
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.Role');
+    goog.require('goog.a11y.aria.State');
     goog.require('goog.dom.classes');
     goog.require('goog.style');
     goog.require('goog.testing.ExpectedFailures');
@@ -69,7 +69,7 @@ See the COPYING file for details.
 
     function testGetAriaRole() {
       assertEquals('ButtonRenderer\'s ARIA role must have expected value',
-          goog.dom.a11y.Role.BUTTON, buttonRenderer.getAriaRole());
+          goog.a11y.aria.Role.BUTTON, buttonRenderer.getAriaRole());
     }
 
     function testCreateDom() {
@@ -96,7 +96,7 @@ See the COPYING file for details.
       button.setSupportedState(goog.ui.Component.State.CHECKED, true);
       var element = buttonRenderer.createDom(button);
       assertEquals('button\'s aria-pressed attribute must be false', 'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
     }
 
     function testCreateDomAriaState() {
@@ -105,7 +105,7 @@ See the COPYING file for details.
       var element = buttonRenderer.createDom(button);
 
       assertEquals('button\'s aria-pressed attribute must be true', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
     }
 
     function testDecorate() {
@@ -129,9 +129,10 @@ See the COPYING file for details.
       var toggle = new goog.ui.Button(null, buttonRenderer);
       toggle.setSupportedState(goog.ui.Component.State.CHECKED, true);
       var element = goog.dom.getElement('toggle');
+      assertNotNull(element);
       toggle.decorate(element);
       assertEquals('toggle\'s aria-pressed attribute must be false', 'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
       toggle.dispose();
     }
 
@@ -174,19 +175,19 @@ See the COPYING file for details.
       buttonRenderer.updateAriaState(element, goog.ui.Component.State.CHECKED,
           true);
       assertEquals('Button must have pressed ARIA state', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
 
       // Test for updating a state other than CHECKED
       buttonRenderer.updateAriaState(element, goog.ui.Component.State.DISABLED,
           true);
       assertEquals('Button must have disabled ARIA state', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.DISABLED));
 
       buttonRenderer.updateAriaState(element, goog.ui.Component.State.CHECKED,
           false);
       assertEquals('Control must no longer have pressed ARIA state',
           'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.PRESSED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
     }
 
     function testDoesntCallGetCssClassInConstructor() {

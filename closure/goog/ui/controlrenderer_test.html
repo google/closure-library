@@ -15,9 +15,9 @@ Author: attila@google.com (Attila Bodis)
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom.NodeType');
-    goog.require('goog.dom.a11y');
-    goog.require('goog.dom.a11y.Role');
-    goog.require('goog.dom.a11y.State');
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.Role');
+    goog.require('goog.a11y.aria.State');
     goog.require('goog.dom.classes');
     goog.require('goog.style');
     goog.require('goog.testing.ExpectedFailures');
@@ -58,7 +58,7 @@ Author: attila@google.com (Attila Bodis)
 
     /** {@override} */
     TestRenderer.prototype.getAriaRole = function() {
-      return goog.dom.a11y.Role.BUTTON;
+      return goog.a11y.aria.Role.BUTTON;
     };
 
     /** {@override} */
@@ -127,7 +127,7 @@ Author: attila@google.com (Attila Bodis)
       assertUndefined('ControlRenderer\'s ARIA role must be undefined',
           controlRenderer.getAriaRole());
       assertEquals('TestRenderer\'s ARIA role must have expected value',
-          goog.dom.a11y.Role.BUTTON, testRenderer.getAriaRole());
+          goog.a11y.aria.Role.BUTTON, testRenderer.getAriaRole());
     }
 
     function testCreateDom() {
@@ -366,14 +366,16 @@ Author: attila@google.com (Attila Bodis)
       sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
 
       var foo = goog.dom.getElement('foo');
+      assertNotNull(foo);
       controlRenderer.setAriaRole(foo);
       assertEquals('ControlRenderer must not set ARIA role', '',
-          goog.dom.a11y.getRole(foo));
+          goog.a11y.aria.getRole(foo));
 
       var bar = goog.dom.getElement('bar');
+      assertNotNull(bar);
       testRenderer.setAriaRole(bar);
       assertEquals('Element must have expected ARIA role',
-          goog.dom.a11y.Role.BUTTON, goog.dom.a11y.getRole(bar));
+          goog.a11y.aria.Role.BUTTON, goog.a11y.aria.getRole(bar));
     }
 
     function testSetAriaStatesHidden() {
@@ -384,13 +386,13 @@ Author: attila@google.com (Attila Bodis)
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-hidden.', '',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.HIDDEN));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.HIDDEN));
 
       control.setVisible(false);
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-hidden.', 'true',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.HIDDEN));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.HIDDEN));
     }
 
     function testSetAriaStatesDisabled() {
@@ -401,13 +403,13 @@ Author: attila@google.com (Attila Bodis)
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-disabled.', '',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.DISABLED));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.DISABLED));
 
       control.setEnabled(false);
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-disabled.', 'true',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.DISABLED));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.DISABLED));
     }
 
     function testSetAriaStatesSelected() {
@@ -419,13 +421,13 @@ Author: attila@google.com (Attila Bodis)
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-selected.', 'true',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.SELECTED));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.SELECTED));
 
       control.setSelected(false);
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-selected.', 'false',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.SELECTED));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.SELECTED));
     }
 
     function testSetAriaStatesChecked() {
@@ -437,13 +439,13 @@ Author: attila@google.com (Attila Bodis)
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-checked.', 'true',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.CHECKED));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.CHECKED));
 
       control.setChecked(false);
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-checked.', 'false',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.CHECKED));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.CHECKED));
     }
 
     function testSetAriaStatesExpanded() {
@@ -455,13 +457,13 @@ Author: attila@google.com (Attila Bodis)
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-expanded.', 'true',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.EXPANDED));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.EXPANDED));
 
       control.setOpen(false);
       controlRenderer.setAriaStates(control, foo);
 
       assertEquals('ControlRenderer did not set aria-expanded.', 'false',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.EXPANDED));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.EXPANDED));
     }
 
     function testSetAllowTextSelection() {
@@ -568,11 +570,11 @@ Author: attila@google.com (Attila Bodis)
       assertTrue('Element must be visible', foo.style.display != 'none');
       controlRenderer.setVisible(foo, true);
       assertEquals('ControlRenderer did not set aria-hidden.', 'false',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.HIDDEN));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.HIDDEN));
       assertTrue('Element must still be visible', foo.style.display != 'none');
       controlRenderer.setVisible(foo, false);
       assertEquals('ControlRenderer did not set aria-hidden.', 'true',
-          goog.dom.a11y.getState(foo, goog.a11y.aria.State.HIDDEN));
+          goog.a11y.aria.getState(foo, goog.a11y.aria.State.HIDDEN));
       assertTrue('Element must be hidden', foo.style.display == 'none');
     }
 
@@ -580,25 +582,28 @@ Author: attila@google.com (Attila Bodis)
       control.setRenderer(testRenderer);
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       assertSameElements('Control must have expected class names',
           ['goog-button', 'goog-base'], goog.dom.classes.get(element));
       assertEquals('Control must not have disabled ARIA state', '',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
+          goog.a11y.aria.getState(element,
+              goog.a11y.aria.State.DISABLED));
 
       testRenderer.setState(control, goog.ui.Component.State.DISABLED, true);
       assertSameElements('Control must have disabled class name',
           ['goog-button', 'goog-base', 'goog-base-disabled'],
           goog.dom.classes.get(element));
       assertEquals('Control must have disabled ARIA state', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
+          goog.a11y.aria.getState(element,
+              goog.a11y.aria.State.DISABLED));
 
       testRenderer.setState(control, goog.ui.Component.State.DISABLED, false);
       assertSameElements('Control must no longer have disabled class name',
           ['goog-button', 'goog-base'], goog.dom.classes.get(element));
       assertEquals('Control must not have disabled ARIA state',
           'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
+          goog.a11y.aria.getState(element,
+              goog.a11y.aria.State.DISABLED));
 
       testRenderer.setState(control, 0xFFFFFF, true);
       assertSameElements('Class names must be unchanged for invalid state',
@@ -608,27 +613,30 @@ Author: attila@google.com (Attila Bodis)
     function testUpdateAriaStateDisabled() {
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       controlRenderer.updateAriaState(element, goog.ui.Component.State.DISABLED,
           true);
       assertEquals('Control must have disabled ARIA state', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
+          goog.a11y.aria.getState(element,
+              goog.a11y.aria.State.DISABLED));
 
       controlRenderer.updateAriaState(element, goog.ui.Component.State.DISABLED,
           false);
       assertEquals('Control must no longer have disabled ARIA state',
           'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
-  }
+          goog.a11y.aria.getState(element,
+              goog.a11y.aria.State.DISABLED));
+    }
 
     function testCreateDomAriaStateDisabled() {
       control.setEnabled(false);
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       assertFalse('Control must be disabled', control.isEnabled());
       assertEquals('Control must have disabled ARIA state', 'true',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
+        goog.a11y.aria.getState(element,
+            goog.a11y.aria.State.DISABLED));
     }
 
     function testDecorateAriaStateDisabled() {
@@ -637,27 +645,30 @@ Author: attila@google.com (Attila Bodis)
       var foo = goog.dom.getElement('foo');
 
       var element = testRenderer.decorate(control, foo);
-
+      assertNotNull(element);
       assertFalse('Control must be disabled', control.isEnabled());
       assertEquals('Control must have disabled ARIA state', 'true',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.DISABLED));
+        goog.a11y.aria.getState(element,
+            goog.a11y.aria.State.DISABLED));
     }
 
     function testUpdateAriaStateSelected() {
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       controlRenderer.updateAriaState(element, goog.ui.Component.State.SELECTED,
           true);
       assertEquals('Control must have selected ARIA state', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
+          goog.a11y.aria.getState(element,
+              goog.a11y.aria.State.SELECTED));
 
       controlRenderer.updateAriaState(element, goog.ui.Component.State.SELECTED,
           false);
       assertEquals('Control must no longer have selected ARIA state',
           'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
-  }
+          goog.a11y.aria.getState(element,
+              goog.a11y.aria.State.SELECTED));
+    }
 
     function testCreateDomAriaStateSelected() {
       control.setSupportedState(goog.ui.Component.State.SELECTED, true);
@@ -665,10 +676,10 @@ Author: attila@google.com (Attila Bodis)
 
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       assertTrue('Control must be selected', control.isSelected());
       assertEquals('Control must have selected ARIA state', 'true',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
+        goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
     }
 
     function testCreateDomAriaStateNotSelected() {
@@ -676,10 +687,10 @@ Author: attila@google.com (Attila Bodis)
 
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       assertFalse('Control must not be selected', control.isSelected());
       assertEquals('Control must have not-selected ARIA state', 'false',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
+        goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
     }
 
     function testDecorateAriaStateSelected() {
@@ -690,27 +701,27 @@ Author: attila@google.com (Attila Bodis)
       var foo = goog.dom.getElement('foo');
 
       var element = testRenderer.decorate(control, foo);
-
+      assertNotNull(element);
       assertTrue('Control must be selected', control.isSelected());
       assertEquals('Control must have selected ARIA state', 'true',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.SELECTED));
+        goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
     }
 
     function testUpdateAriaStateChecked() {
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       controlRenderer.updateAriaState(element, goog.ui.Component.State.CHECKED,
           true);
       assertEquals('Control must have checked ARIA state', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.CHECKED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
 
       controlRenderer.updateAriaState(element, goog.ui.Component.State.CHECKED,
           false);
       assertEquals('Control must no longer have checked ARIA state',
           'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.CHECKED));
-  }
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
+    }
 
     function testCreateDomAriaStateChecked() {
       control.setSupportedState(goog.ui.Component.State.CHECKED, true);
@@ -718,11 +729,11 @@ Author: attila@google.com (Attila Bodis)
 
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       assertTrue('Control must be checked', control.isChecked());
       assertEquals('Control must have checked ARIA state', 'true',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.CHECKED));
-  }
+        goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
+    }
 
     function testDecorateAriaStateChecked() {
       sandbox.innerHTML =
@@ -731,27 +742,27 @@ Author: attila@google.com (Attila Bodis)
 
       control.setSupportedState(goog.ui.Component.State.CHECKED, true);
       var element = testRenderer.decorate(control, foo);
-
+      assertNotNull(element);
       assertTrue('Control must be checked', control.isChecked());
       assertEquals('Control must have checked ARIA state', 'true',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.CHECKED));
-  }
+        goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
+    }
 
     function testUpdateAriaStateOpened() {
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       controlRenderer.updateAriaState(element, goog.ui.Component.State.OPENED,
           true);
       assertEquals('Control must have expanded ARIA state', 'true',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.EXPANDED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED));
 
       controlRenderer.updateAriaState(element, goog.ui.Component.State.OPENED,
           false);
       assertEquals('Control must no longer have expanded ARIA state',
           'false',
-          goog.dom.a11y.getState(element, goog.dom.a11y.State.EXPANDED));
-  }
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED));
+    }
 
     function testCreateDomAriaStateOpened() {
       control.setSupportedState(goog.ui.Component.State.OPENED, true);
@@ -759,11 +770,11 @@ Author: attila@google.com (Attila Bodis)
 
       control.createDom();
       var element = control.getElement();
-
+      assertNotNull(element);
       assertTrue('Control must be opened', control.isOpen());
       assertEquals('Control must have expanded ARIA state', 'true',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.EXPANDED));
-  }
+        goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED));
+    }
 
     function testDecorateAriaStateOpened() {
       sandbox.innerHTML =
@@ -772,11 +783,11 @@ Author: attila@google.com (Attila Bodis)
 
       control.setSupportedState(goog.ui.Component.State.OPENED, true);
       var element = testRenderer.decorate(control, foo);
-
+      assertNotNull(element);
       assertTrue('Control must be opened', control.isOpen());
       assertEquals('Control must have expanded ARIA state', 'true',
-        goog.dom.a11y.getState(element, goog.dom.a11y.State.EXPANDED));
-  }
+        goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED));
+    }
 
     function testSetContent() {
       sandbox.innerHTML = 'Hello, world!';

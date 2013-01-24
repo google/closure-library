@@ -14,9 +14,9 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
-  goog.require('goog.dom.a11y');
-  goog.require('goog.dom.a11y.Role');
-  goog.require('goog.dom.a11y.State');
+  goog.require('goog.a11y.aria');
+  goog.require('goog.a11y.aria.Role');
+  goog.require('goog.a11y.aria.State');
   goog.require('goog.events.EventHandler');
   goog.require('goog.events.EventTarget');
   goog.require('goog.string');
@@ -707,12 +707,14 @@ function testDispose() {
  */
 function testRolesAndStates() {
   function checkActiveDescendant(activeDescendant) {
+    assertNotNull(inputElement);
     assertEquals(
-        goog.dom.a11y.getActiveDescendant(inputElement),
+        goog.a11y.aria.getActiveDescendant(inputElement),
         activeDescendant);
   }
   function checkRole(el, role) {
-    assertEquals(goog.dom.a11y.getRole(el), role);
+    assertNotNull(el);
+    assertEquals(goog.a11y.aria.getRole(el), role);
   }
   var ds = new MockDS();
   var rend = new TestRend();
@@ -730,7 +732,7 @@ function testRolesAndStates() {
   checkActiveDescendant(rend.getHilitedRowDiv());
 
   // highligted row should have a role of 'option'
-  checkRole(rend.getHilitedRowDiv(), goog.dom.a11y.Role.OPTION);
+  checkRole(rend.getHilitedRowDiv(), goog.a11y.aria.Role.OPTION);
 
   // closing the autocomplete should clear activedescendant
   ac.dismiss();

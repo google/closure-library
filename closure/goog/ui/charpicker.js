@@ -20,7 +20,9 @@
 
 goog.provide('goog.ui.CharPicker');
 
+goog.require('goog.a11y.aria');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
@@ -762,7 +764,8 @@ goog.ui.CharPicker.prototype.populateGridWithButtons_ = function(grid) {
     button.setVisible(false);
 
     var buttonEl = button.getElement();
-    goog.dom.a11y.setRole(buttonEl, 'gridcell');
+    goog.asserts.assert(buttonEl, 'The button DOM element cannot be null.');
+    goog.a11y.aria.setRole(buttonEl, 'gridcell');
   }
 };
 

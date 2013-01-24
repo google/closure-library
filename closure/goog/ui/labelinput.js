@@ -39,10 +39,10 @@
 goog.provide('goog.ui.LabelInput');
 
 goog.require('goog.Timer');
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
-goog.require('goog.dom.a11y.State');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
@@ -140,9 +140,12 @@ goog.ui.LabelInput.prototype.decorateInternal = function(element) {
     this.getElement().placeholder = this.label_;
     return;
   }
-  goog.dom.a11y.setState(this.getElement(),
-                         goog.dom.a11y.State.LABEL,
-                         this.label_);
+  var labelInputElement = this.getElement();
+  goog.asserts.assert(labelInputElement,
+      'The label input element cannot be null.');
+  goog.a11y.aria.setState(labelInputElement,
+      goog.a11y.aria.State.LABEL,
+      this.label_);
 };
 
 
@@ -449,11 +452,12 @@ goog.ui.LabelInput.prototype.setLabel = function(label) {
   }
   this.label_ = label;
   this.restoreLabel_();
+  var labelInputElement = this.getElement();
   // Check if this has been called before DOM structure building
-  if (this.getElement()) {
-    goog.dom.a11y.setState(this.getElement(),
-                           goog.dom.a11y.State.LABEL,
-                           this.label_);
+  if (labelInputElement) {
+    goog.a11y.aria.setState(labelInputElement,
+        goog.a11y.aria.State.LABEL,
+        this.label_);
   }
 };
 
@@ -471,12 +475,15 @@ goog.ui.LabelInput.prototype.getLabel = function() {
  * @private
  */
 goog.ui.LabelInput.prototype.check_ = function() {
+  var labelInputElement = this.getElement();
+  goog.asserts.assert(labelInputElement,
+      'The label input element cannot be null.');
   if (!goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_) {
     // if we haven't got a form yet try now
     this.attachEventsToForm_();
-    goog.dom.a11y.setState(this.getElement(),
-                           goog.dom.a11y.State.LABEL,
-                           this.label_);
+    goog.a11y.aria.setState(labelInputElement,
+        goog.a11y.aria.State.LABEL,
+        this.label_);
   } else if (this.getElement().placeholder != this.label_) {
     this.getElement().placeholder = this.label_;
   }

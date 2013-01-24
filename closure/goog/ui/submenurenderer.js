@@ -19,9 +19,10 @@
 
 goog.provide('goog.ui.SubMenuRenderer');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
+goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
-goog.require('goog.dom.a11y.State');
 goog.require('goog.dom.classes');
 goog.require('goog.style');
 goog.require('goog.ui.Menu');
@@ -168,7 +169,11 @@ goog.ui.SubMenuRenderer.prototype.initializeDom = function(control) {
   if (arrow != element.lastChild) {
     element.appendChild(arrow);
   }
-  goog.dom.a11y.setState(subMenu.getElement(), goog.dom.a11y.State.HASPOPUP,
+  var subMenuElement = subMenu.getElement();
+  goog.asserts.assert(subMenuElement,
+      'The sub menu DOM element cannot be null.');
+  goog.a11y.aria.setState(subMenuElement,
+      goog.a11y.aria.State.HASPOPUP,
       'true');
 };
 

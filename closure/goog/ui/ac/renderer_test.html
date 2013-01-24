@@ -14,9 +14,9 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
-  goog.require('goog.dom.a11y');
-  goog.require('goog.dom.a11y.Role');
-  goog.require('goog.dom.a11y.State');
+  goog.require('goog.a11y.aria');
+  goog.require('goog.a11y.aria.Role');
+  goog.require('goog.a11y.aria.State');
   goog.require('goog.events');
   goog.require('goog.functions');
   goog.require('goog.fx.dom.FadeInAndShow');
@@ -470,25 +470,34 @@ See the COPYING file for details.
   function testAriaTags() {
     renderer.maybeCreateElement_();
 
-    assertEquals('', goog.dom.a11y.getRole(target));
+    assertNotNull(target);
+    assertEquals('', goog.a11y.aria.getRole(target));
     assertEquals('',
-        goog.dom.a11y.getState(target, goog.dom.a11y.State.AUTOCOMPLETE));
+        goog.a11y.aria.getState(target,
+            goog.a11y.aria.State.AUTOCOMPLETE));
     assertEquals('',
-        goog.dom.a11y.getState(target, goog.dom.a11y.State.HASPOPUP));
+        goog.a11y.aria.getState(target,
+            goog.a11y.aria.State.HASPOPUP));
 
     renderer.show();
-    assertEquals(goog.dom.a11y.Role.COMBOBOX, goog.dom.a11y.getRole(target));
+    assertEquals(goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.getRole(
+        target));
     assertEquals('list',
-        goog.dom.a11y.getState(target, goog.dom.a11y.State.AUTOCOMPLETE));
+        goog.a11y.aria.getState(target,
+            goog.a11y.aria.State.AUTOCOMPLETE));
     assertEquals('true',
-        goog.dom.a11y.getState(target, goog.dom.a11y.State.HASPOPUP));
+        goog.a11y.aria.getState(target,
+            goog.a11y.aria.State.HASPOPUP));
 
     renderer.dismiss();
-    assertEquals(goog.dom.a11y.Role.COMBOBOX, goog.dom.a11y.getRole(target));
+    assertEquals(goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.getRole(
+        target));
     assertEquals('list',
-        goog.dom.a11y.getState(target, goog.dom.a11y.State.AUTOCOMPLETE));
+        goog.a11y.aria.getState(target,
+            goog.a11y.aria.State.AUTOCOMPLETE));
     assertEquals('false',
-        goog.dom.a11y.getState(target, goog.dom.a11y.State.HASPOPUP));
+        goog.a11y.aria.getState(target,
+            goog.a11y.aria.State.HASPOPUP));
   }
 
   function testHiliteRowWithDefaultRenderer() {

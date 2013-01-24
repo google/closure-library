@@ -23,8 +23,9 @@
 goog.provide('goog.ui.PlainTextSpellChecker');
 
 goog.require('goog.Timer');
+goog.require('goog.a11y.aria');
+goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -539,8 +540,10 @@ goog.ui.PlainTextSpellChecker.prototype.disposeInternal = function() {
  * @private
  */
 goog.ui.PlainTextSpellChecker.prototype.initAccessibility_ = function() {
-  goog.dom.a11y.setRole(this.overlay_, 'region');
-  goog.dom.a11y.setState(this.overlay_, 'live', 'assertive');
+  goog.asserts.assert(this.overlay_,
+      'The plain text spell checker DOM element cannot be null.');
+  goog.a11y.aria.setRole(this.overlay_, 'region');
+  goog.a11y.aria.setState(this.overlay_, 'live', 'assertive');
   this.overlay_.tabIndex = 0;
 
   /** @desc Title for Spell Checker's overlay.*/

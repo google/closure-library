@@ -22,6 +22,8 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.Timer');
+  goog.require('goog.a11y.aria');
+  goog.require('goog.a11y.aria.State');
   goog.require('goog.dom');
   goog.require('goog.events');
   goog.require('goog.events.Event');
@@ -139,14 +141,15 @@ function testHighlightItemBehavior() {
     assertTrue('Menu must open after click', menuButton.isOpen());
 
     menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
+    assertNotNull(menuButton.getElement());
     assertEquals('First menuitem must be the aria-activedescendant',
-        'menuItem1', goog.dom.a11y.getState(menuButton.getElement(),
-        goog.dom.a11y.State.ACTIVEDESCENDANT));
+        'menuItem1', goog.a11y.aria.getState(menuButton.getElement(),
+            goog.a11y.aria.State.ACTIVEDESCENDANT));
 
     menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
     assertEquals('Second menuitem must be the aria-activedescendant',
-        'menuItem2', goog.dom.a11y.getState(menuButton.getElement(),
-        goog.dom.a11y.State.ACTIVEDESCENDANT));
+        'menuItem2', goog.a11y.aria.getState(menuButton.getElement(),
+            goog.a11y.aria.State.ACTIVEDESCENDANT));
 }
 
 /**

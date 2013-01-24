@@ -15,7 +15,7 @@ Author: attila@google.com (Attila Bodis)
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
-    goog.require('goog.dom.a11y.Role');
+    goog.require('goog.a11y.aria.Role');
     goog.require('goog.dom.classes');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Tab');
@@ -51,7 +51,7 @@ Author: attila@google.com (Attila Bodis)
 
     function testGetAriaRole() {
       assertEquals('ARIA role must have expected value',
-          goog.dom.a11y.Role.TAB, renderer.getAriaRole());
+          goog.a11y.aria.Role.TAB, renderer.getAriaRole());
     }
 
     function testCreateDom() {

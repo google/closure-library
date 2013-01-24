@@ -23,11 +23,12 @@ goog.provide('goog.ui.DatePicker');
 goog.provide('goog.ui.DatePicker.Events');
 goog.provide('goog.ui.DatePickerEvent');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.asserts');
 goog.require('goog.date');
 goog.require('goog.date.Date');
 goog.require('goog.date.Interval');
 goog.require('goog.dom');
-goog.require('goog.dom.a11y');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -717,7 +718,7 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   var tbody = this.dom_.createElement('tbody');
   var tfoot = this.dom_.createElement('tfoot');
 
-  goog.dom.a11y.setRole(tbody, 'grid');
+  goog.a11y.aria.setRole(tbody, 'grid');
   tbody.tabIndex = '0';
 
   // As per comment in colorpicker: table.tBodies and table.tFoot should not be
@@ -743,7 +744,7 @@ goog.ui.DatePicker.prototype.decorateInternal = function(el) {
         cell.className = (j == 0) ?
             goog.getCssName(this.getBaseCssClass(), 'week') :
             goog.getCssName(this.getBaseCssClass(), 'wday');
-        goog.dom.a11y.setRole(cell, j == 0 ? 'rowheader' : 'columnheader');
+        goog.a11y.aria.setRole(cell, j == 0 ? 'rowheader' : 'columnheader');
       }
       row.appendChild(cell);
       this.elTable_[i][j] = cell;
@@ -1227,7 +1228,8 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
       if (!el.id) {
         el.id = this.cellIdGenerator_.getNextUniqueId();
       }
-      goog.dom.a11y.setRole(el, 'gridcell');
+      goog.asserts.assert(el, 'The table DOM element cannot be null.');
+      goog.a11y.aria.setRole(el, 'gridcell');
       var classes = [goog.getCssName(this.getBaseCssClass(), 'date')];
       if (this.showOtherMonths_ || o.getMonth() == month) {
         // Date belongs to previous or next month
@@ -1252,7 +1254,9 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
             o.getMonth() == this.date_.getMonth() &&
             o.getFullYear() == this.date_.getFullYear()) {
           classes.push(goog.getCssName(this.getBaseCssClass(), 'selected'));
-          goog.dom.a11y.setState(this.tableBody_, 'activedescendant', el.id);
+          goog.asserts.assert(this.tableBody_,
+              'The table body DOM element cannot be null');
+          goog.a11y.aria.setState(this.tableBody_, 'activedescendant', el.id);
         }
 
         // Custom decorator

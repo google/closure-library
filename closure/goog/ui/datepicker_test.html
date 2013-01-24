@@ -14,7 +14,7 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
-    goog.require('goog.dom.a11y');
+    goog.require('goog.a11y.aria');
     goog.require('goog.events');
     goog.require('goog.i18n.DateTimeSymbols_en_US');
     goog.require('goog.i18n.DateTimeSymbols_zh_HK');
@@ -217,7 +217,8 @@ See the COPYING file for details.
     var existingIds = {};
     var numCells = cells.length;
     for (var i = 0; i < numCells; i++) {
-      if (goog.dom.a11y.getRole(cells[i]) == goog.dom.a11y.Role.GRIDCELL) {
+      assertNotNull(cells[i]);
+      if (goog.a11y.aria.getRole(cells[i]) == goog.a11y.aria.Role.GRIDCELL) {
         assertNonEmptyString('cell id is non empty', cells[i].id);
         assertUndefined('cell id is not unique',
             existingIds[cells[i].id]);
