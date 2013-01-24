@@ -131,6 +131,27 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
 
 
 /**
+ * Renders a strict Soy template of kind="text" and returns the output string.
+ * It is an error to use renderText on non-strict templates, or strict templates
+ * of kinds other than "text".
+ *
+ * @param {Function} template The Soy template defining the element's content.
+ * @param {Object=} opt_templateData The data for the template.
+ * @return {string} The return value of rendering the template directly.
+ */
+goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
+  var result = template(
+      opt_templateData || {}, undefined, this.getInjectedData_());
+  goog.asserts.assertInstanceof(result, goog.soy.data.SanitizedContent,
+      'renderText cannot be called on a non-strict soy template');
+  goog.asserts.assert(
+      result.contentKind === goog.soy.data.SanitizedContentKind.TEXT,
+      'renderText was called with a template of kind other than "text"');
+  return String(result);
+};
+
+
+/**
  * Renders a strict Soy template and returns the output SanitizedContent object.
  *
  * @param {function(Object.<string, *>, (null|undefined), Object.<string, *>):
