@@ -23,6 +23,7 @@
  */
 
 
+
 goog.provide('goog.net.BrowserTestChannel');
 
 goog.require('goog.json.EvalJsonProcessor');
@@ -259,6 +260,21 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
 
   goog.net.BrowserChannel.notifyStatEvent(
       goog.net.BrowserChannel.Stat.TEST_STAGE_ONE_START);
+
+  // If the channel already has the result of the first test, then skip it.
+  var firstTestResults = this.channel_.getFirstTestResults();
+  if (goog.isDefAndNotNull(firstTestResults)) {
+    this.hostPrefix_ = firstTestResults[0];
+    this.blockedPrefix_ = firstTestResults[1];
+    if (this.blockedPrefix_) {
+      this.state_ = goog.net.BrowserTestChannel.State_.CHECKING_BLOCKED;
+      this.checkBlocked_();
+    } else {
+      this.state_ = goog.net.BrowserTestChannel.State_.CONNECTION_TESTING;
+      this.connectStage2_();
+    }
+    return;
+  }
 
   // the first request returns server specific parameters
   sendDataUri.setParameterValues('MODE', 'init');

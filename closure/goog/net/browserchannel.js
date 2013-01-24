@@ -73,9 +73,11 @@ goog.require('goog.userAgent');
  *
  * @param {string=} opt_clientVersion An application-specific version number
  *        that is sent to the server when connected.
+ * @param {Array.<string>=} opt_firstTestResults Previously determined results
+ *        of the first browser channel test.
  * @constructor
  */
-goog.net.BrowserChannel = function(opt_clientVersion) {
+  goog.net.BrowserChannel = function(opt_clientVersion, opt_firstTestResults) {
   /**
    * The application specific version that is passed to the server.
    * @type {?string}
@@ -121,6 +123,13 @@ goog.net.BrowserChannel = function(opt_clientVersion) {
    * @private
    */
   this.parser_ = new goog.json.EvalJsonProcessor(null, true);
+
+  /**
+   * An array of results for the first browser channel test call.
+   * @type {Array.<string>}
+   * @private
+   */
+  this.firstTestResults_ = opt_firstTestResults || null;
 };
 
 
@@ -2273,6 +2282,16 @@ goog.net.BrowserChannel.prototype.getForwardChannelUri =
   var uri = this.createDataUri(null, path);
   this.channelDebug_.debug('GetForwardChannelUri: ' + uri);
   return uri;
+};
+
+
+/**
+ * Gets the results for the first browser channel test
+ * @return {Array.<string>} The results.
+ */
+goog.net.BrowserChannel.prototype.getFirstTestResults =
+    function() {
+  return this.firstTestResults_;
 };
 
 
