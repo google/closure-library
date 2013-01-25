@@ -882,6 +882,9 @@ goog.dom.isCss1CompatMode_ = function(doc) {
  *   console.log(a.innerHTML);  // Chrome: "", IE9: "foobar", FF3.5: "foobar"
  * </pre>
  *
+ * For more information, see:
+ * http://dev.w3.org/html5/markup/syntax.html#syntax-elements
+ *
  * TODO(user): Rename shouldAllowChildren() ?
  *
  * @param {Node} node The node to check.

@@ -113,14 +113,14 @@ goog.dom.TextRange.createFromNodes = function(anchorNode, anchorOffset,
   range.isReversed_ = goog.dom.Range.isReversed(anchorNode, anchorOffset,
       focusNode, focusOffset);
 
-  // Avoid selecting BRs directly
-  if (anchorNode.tagName == 'BR') {
+  // Avoid selecting terminal elements directly
+  if (goog.dom.isElement(anchorNode) && !goog.dom.canHaveChildren(anchorNode)) {
     var parent = anchorNode.parentNode;
     anchorOffset = goog.array.indexOf(parent.childNodes, anchorNode);
     anchorNode = parent;
   }
 
-  if (focusNode.tagName == 'BR') {
+  if (goog.dom.isElement(focusNode) && !goog.dom.canHaveChildren(focusNode)) {
     var parent = focusNode.parentNode;
     focusOffset = goog.array.indexOf(parent.childNodes, focusNode);
     focusNode = parent;
