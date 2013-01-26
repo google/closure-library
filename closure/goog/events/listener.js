@@ -69,7 +69,7 @@ goog.events.Listener.prototype.proxy;
 
 /**
  * Object or node that callback is listening to
- * @type {Object|goog.events.EventTarget}
+ * @type {Object|goog.events.Listenable|goog.events.EventTarget}
  */
 goog.events.Listener.prototype.src;
 

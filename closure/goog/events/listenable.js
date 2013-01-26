@@ -269,7 +269,7 @@ goog.events.ListenableKey.reserveKey = function() {
 
 /**
  * The source event target.
- * @type {!Object}
+ * @type {!(Object|goog.events.Listenable|goog.events.EventTarget)}
  */
 goog.events.ListenableKey.prototype.src;
 
