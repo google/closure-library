@@ -386,6 +386,23 @@ function testDisposingEventTargetRemovesListeners() {
 }
 
 
+/**
+ * Unlisten/unlistenByKey should still work after disposal. There are
+ * many circumstances when this is actually necessary. For example, a
+ * user may have listened to an event target and stored the key
+ * (e.g. in a goog.events.EventHandler) and only unlisten after the
+ * target has been disposed.
+ */
+function testUnlistenWorksAfterDisposal() {
+  var key = listen(eventTargets[0], EventType.A, listeners[0]);
+  goog.dispose(eventTargets[0]);
+  unlisten(eventTargets[0], EventType.A, listeners[1]);
+  if (unlistenByKey) {
+    unlistenByKey(eventTargets[0], key);
+  }
+}
+
+
 function testRemovingListener() {
   var ret1 = unlisten(eventTargets[0], EventType.A, listeners[0]);
   listen(eventTargets[0], EventType.A, listeners[0]);

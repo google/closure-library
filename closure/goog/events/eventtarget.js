@@ -302,8 +302,6 @@ goog.events.EventTarget.prototype.listenInternal_ = function(
 /** @override */
 goog.events.EventTarget.prototype.unlisten = function(
     type, listener, opt_useCapture, opt_listenerScope) {
-  goog.asserts.assert(!this.isDisposed());
-
   if (!(type in this.eventTargetListeners_)) {
     return false;
   }
@@ -323,8 +321,6 @@ goog.events.EventTarget.prototype.unlisten = function(
 
 /** @override */
 goog.events.EventTarget.prototype.unlistenByKey = function(key) {
-  goog.asserts.assert(!this.isDisposed());
-
   var type = key.type;
   if (!(type in this.eventTargetListeners_)) {
     return false;
