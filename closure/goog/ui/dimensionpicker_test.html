@@ -66,19 +66,34 @@ See the COPYING file for details.
       picker.render(render);
 
       var size = picker.getValue();
-      assertEquals('Should have 0 columns highlighted', 0, size.width);
-      assertEquals('Should have 0 rows highlighted', 0, size.height);
+      assertEquals('Should have 1 column highlighted initially.',
+          1, size.width);
+      assertEquals('Should have 1 row highlighted initially.',
+          1, size.height);
 
       picker.setValue(1, 2);
-
       size = picker.getValue();
-      assertEquals('Should have 1 column highlighted', 1, size.width);
-      assertEquals('Should have 2 rows highlighted', 2, size.height);
+      assertEquals('Should have 1 column highlighted.', 1, size.width);
+      assertEquals('Should have 2 rows highlighted.', 2, size.height);
 
       picker.setValue(new goog.math.Size(3, 4));
       size = picker.getValue();
-      assertEquals('Should have 3 columns highlighted', 3, size.width);
-      assertEquals('Should have 4 rows highlighted', 4, size.height);
+      assertEquals('Should have 3 columns highlighted.', 3, size.width);
+      assertEquals('Should have 4 rows highlighted.', 4, size.height);
+
+      picker.setValue(new goog.math.Size(-3, 0));
+      size = picker.getValue();
+      assertEquals('Should have 1 column highlighted when passed a negative ' +
+          'column value.', 1, size.width);
+      assertEquals('Should have 1 row highlighted when passed 0 as the row ' +
+          'value.', 1, size.height);
+
+      picker.setValue(picker.maxColumns+10, picker.maxRows+2);
+      size = picker.getValue();
+      assertEquals('Column value should be decreased to match max columns ' +
+          'if it is too high.', picker.maxColumns, size.width);
+      assertEquals('Row value should be decreased to match max rows ' +
+          'if it is too high.', picker.maxRows, size.height);
     }
 
     function testSizeShown() {

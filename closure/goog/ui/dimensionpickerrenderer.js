@@ -154,7 +154,7 @@ goog.ui.DimensionPickerRenderer.prototype.updateSize =
   underlyingDiv.style.height = size.height + 'em';
 
   if (palette.isRightToLeft()) {
-      this.adjustParentDirection_(palette, element);
+    this.adjustParentDirection_(palette, element);
   }
 };
 
@@ -176,10 +176,10 @@ goog.ui.DimensionPickerRenderer.prototype.addElementContents_ = function(
   var mouseCatcherDiv = palette.getDomHelper().createDom(goog.dom.TagName.DIV,
       goog.getCssName(this.getCssClass(), 'mousecatcher'));
   var unhighlightedDiv = palette.getDomHelper().createDom(goog.dom.TagName.DIV,
-    {
-      'class': goog.getCssName(this.getCssClass(), 'unhighlighted'),
-      'style': 'width:100%;height:100%'
-    });
+      {
+        'class': goog.getCssName(this.getCssClass(), 'unhighlighted'),
+        'style': 'width:100%;height:100%'
+      });
   var highlightedDiv = palette.getDomHelper().createDom(goog.dom.TagName.DIV,
       goog.getCssName(this.getCssClass(), 'highlighted'));
   element.appendChild(
@@ -189,14 +189,13 @@ goog.ui.DimensionPickerRenderer.prototype.addElementContents_ = function(
 
   // Lastly we add a div to store the text version of the current state.
   element.appendChild(palette.getDomHelper().createDom(goog.dom.TagName.DIV,
-      goog.getCssName(this.getCssClass(), 'status'),
-      goog.i18n.bidi.enforceLtrInText('0 x 0')));
+      goog.getCssName(this.getCssClass(), 'status')));
 };
 
 
 /**
  * Creates a div and adds the appropriate contents to it.
- * @param {goog.ui.Control} control Picker to render
+ * @param {goog.ui.Control} control Picker to render.
  * @return {Element} Root element for the palette.
  * @override
  */
@@ -223,6 +222,12 @@ goog.ui.DimensionPickerRenderer.prototype.initializeDom = function(
     control) {
   var palette = /** @type {goog.ui.DimensionPicker} */ (control);
   goog.ui.DimensionPickerRenderer.superClass_.initializeDom.call(this, palette);
+
+  // Make the displayed highlighted size match the dimension picker's value.
+  var highlightedSize = palette.getValue();
+  this.setHighlightedSize(palette,
+      highlightedSize.width, highlightedSize.height);
+
   this.positionMouseCatcher(palette);
 };
 
@@ -361,7 +366,7 @@ goog.ui.DimensionPickerRenderer.prototype.getCssClass = function() {
  * @param {Element} element The palette's element.
  */
 goog.ui.DimensionPickerRenderer.prototype.adjustParentDirection_ =
-  function(palette, element) {
+    function(palette, element) {
   var parent = palette.getParent();
   if (parent) {
     var parentElement = parent.getElement();
@@ -392,4 +397,3 @@ goog.ui.DimensionPickerRenderer.prototype.adjustParentDirection_ =
     goog.style.setStyle(element, 'right', '0px');
   }
 };
-
