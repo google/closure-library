@@ -19,6 +19,10 @@
  * All modern browsers have some form of ARIA support, so no browser checks are
  * performed when adding ARIA to components.
  *
+ *
+ * @deprecated Use {@link goog.a11y.aria} instead.
+ *     This file will be removed on 1 Apr 2013.
+ *
  */
 goog.provide('goog.dom.a11y');
 goog.provide('goog.dom.a11y.Announcer');
@@ -33,13 +37,11 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 
 
-// TODO(user): Deprecate this namespace and redirect usage
-// to the goog.a11y.aria namespace.
-
-
 /**
  * Enumeration of ARIA states and properties.
  * @enum {string}
+ * @deprecated Use {@link goog.a11y.aria.State} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.State = goog.a11y.aria.State;
 
@@ -47,6 +49,8 @@ goog.dom.a11y.State = goog.a11y.aria.State;
 /**
  * Enumeration of ARIA roles.
  * @enum {string}
+ * @deprecated Use {@link goog.a11y.aria.Role} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.Role = goog.a11y.aria.Role;
 
@@ -57,6 +61,8 @@ goog.dom.a11y.Role = goog.a11y.aria.Role;
  * See http://www.w3.org/TR/wai-aria/states_and_properties#aria-live
  * for more information.
  * @enum {string}
+ * @deprecated Use {@link goog.a11y.aria.LivePriority} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.LivePriority = goog.a11y.aria.LivePriority;
 
@@ -65,6 +71,8 @@ goog.dom.a11y.LivePriority = goog.a11y.aria.LivePriority;
  * Sets the role of an element.
  * @param {Element} element DOM node to set role of.
  * @param {goog.dom.a11y.Role|string} roleName role name(s).
+ * @deprecated Use {@link goog.a11y.aria.setRole} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.setRole = function(element, roleName) {
   goog.a11y.aria.setRole(
@@ -77,6 +85,8 @@ goog.dom.a11y.setRole = function(element, roleName) {
  * Gets role of an element.
  * @param {Element} element DOM node to get role of.
  * @return {?(goog.dom.a11y.Role|string)} rolename.
+ * @deprecated Use {@link goog.a11y.aria.getRole} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.getRole = function(element) {
   return /** @type {?(goog.dom.a11y.Role|string)} */ (
@@ -91,6 +101,8 @@ goog.dom.a11y.getRole = function(element) {
  *     Automatically adds prefix 'aria-' to the state name.
  * @param {boolean|number|string} value Value for the
  *     state attribute.
+ * @deprecated Use {@link goog.a11y.aria.setState} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.setState = function(element, state, value) {
   goog.a11y.aria.setState(
@@ -105,6 +117,8 @@ goog.dom.a11y.setState = function(element, state, value) {
  * @param {Element} element DOM node to get state from.
  * @param {goog.dom.a11y.State|string} stateName State name.
  * @return {string} Value of the state attribute.
+ * @deprecated Use {@link goog.a11y.aria.getState} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.getState = function(element, stateName) {
   return goog.a11y.aria.getState(
@@ -117,6 +131,8 @@ goog.dom.a11y.getState = function(element, stateName) {
  * Gets the activedescendant of the given element.
  * @param {Element} element DOM node to get activedescendant from.
  * @return {Element} DOM node of the activedescendant.
+ * @deprecated Use {@link goog.a11y.aria.getActiveDescendant} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.getActiveDescendant = function(element) {
   return goog.a11y.aria.getActiveDescendant(
@@ -128,6 +144,8 @@ goog.dom.a11y.getActiveDescendant = function(element) {
  * Sets the activedescendant value for an element.
  * @param {Element} element DOM node to set activedescendant to.
  * @param {Element} activeElement DOM node being set as activedescendant.
+ * @deprecated Use {@link goog.a11y.aria.setActiveDescendant} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.setActiveDescendant = function(element, activeElement) {
   goog.a11y.aria.setActiveDescendant(
@@ -144,6 +162,8 @@ goog.dom.a11y.setActiveDescendant = function(element, activeElement) {
  * @param {goog.dom.DomHelper} domHelper DOM helper.
  * @constructor
  * @extends {goog.Disposable}
+ * @deprecated Use {@link goog.a11y.aria.Announcer} instead.
+ *     This alias will be removed on 1 Apr 2013.
  */
 goog.dom.a11y.Announcer = goog.a11y.aria.Announcer;
 
