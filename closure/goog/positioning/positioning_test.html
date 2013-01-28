@@ -397,12 +397,16 @@ function testPositionAtAnchorWithMargin() {
                                     new goog.math.Box(1, 2, 3, 4));
   anchorRect = goog.style.getBounds(anchor);
   popupRect = goog.style.getBounds(popup);
+
+  var visibleAnchorRect = goog.positioning.getVisiblePart_(anchor);
+
   assertRoundedEquals('Right edge of popup should line up with right edge ' +
                       'of anchor.',
-                      anchorRect.left + anchorRect.width,
+                      visibleAnchorRect.left + visibleAnchorRect.width,
                       popupRect.left + popupRect.width + 2);
+
   assertRoundedEquals('Popup should be positioned just below the anchor.',
-                      anchorRect.top + anchorRect.height,
+                      visibleAnchorRect.top + visibleAnchorRect.height,
                       popupRect.top - 1);
 
 }
