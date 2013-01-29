@@ -1010,9 +1010,8 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
     } else if (e.keyCode == goog.events.KeyCodes.TAB && e.shiftKey &&
         target == this.getElement()) {
       // Prevent the user from shift-tabbing backwards out of the dialog box.
-      // TODO(user): Instead, we should move the focus to the last tabbable
-      // element inside the dialog.
-      hasHandler = true;
+      // Instead, set up a wrap in focus backward to the end of the dialog.
+      this.setupBackwardTabWrap();
     }
   } else if (e.keyCode == goog.events.KeyCodes.ENTER) {
     // Only handle ENTER in keypress events, in case the action opens a

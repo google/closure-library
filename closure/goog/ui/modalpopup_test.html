@@ -362,6 +362,15 @@ function testBackgroundHeight() {
 }
 
 
+function testSetupBackwardTabWrapResetsFlagAfterTimeout() {
+  popup.setupBackwardTabWrap();
+  assertTrue('Backward tab wrap should be in progress',
+      popup.backwardTabWrapInProgress_);
+  mockClock.tick(1);
+  assertFalse('Backward tab wrap flag should be reset after delay',
+      popup.backwardTabWrapInProgress_);
+}
+
 
 /**
  * @implements {goog.fx.Transition}

@@ -115,6 +115,15 @@ goog.ui.ModalPopup.prototype.tabCatcherElement_ = null;
 
 
 /**
+ * Whether the modal popup is in the process of wrapping focus from the top of
+ * the popup to the last tabbable element.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.ModalPopup.prototype.backwardTabWrapInProgress_ = false;
+
+
+/**
  * Transition to show the popup.
  * @type {goog.fx.Transition}
  * @private
@@ -231,6 +240,35 @@ goog.ui.ModalPopup.prototype.createTabCatcher_ = function() {
     goog.dom.setFocusableTabIndex(this.tabCatcherElement_, true);
     this.tabCatcherElement_.style.position = 'absolute';
   }
+};
+
+
+/**
+ * Allow a shift-tab from the top of the modal popup to the last tabbable
+ * element by moving focus to the tab catcher. This should be called after
+ * catching a wrapping shift-tab event and before allowing it to propagate, so
+ * that focus will land on the last tabbable element before the tab catcher.
+ * @protected
+ */
+goog.ui.ModalPopup.prototype.setupBackwardTabWrap = function() {
+  this.backwardTabWrapInProgress_ = true;
+  try {
+    this.tabCatcherElement_.focus();
+  } catch (e) {
+    // Swallow this. IE can throw an error if the element can not be focused.
+  }
+  // Reset the flag on a timer in case anything goes wrong with the followup
+  // event.
+  goog.Timer.callOnce(this.resetBackwardTabWrap_, 0, this);
+};
+
+
+/**
+ * Resets the backward tab wrap flag.
+ * @private
+ */
+goog.ui.ModalPopup.prototype.resetBackwardTabWrap_ = function() {
+  this.backwardTabWrapInProgress_ = false;
 };
 
 
@@ -545,12 +583,16 @@ goog.ui.ModalPopup.prototype.reposition = function() {
 
 /**
  * Handles focus events.  Makes sure that if the user tabs past the
- * elements in the modal popup, the focus wraps back to the beginning.
+ * elements in the modal popup, the focus wraps back to the beginning, and that
+ * if the user shift-tabs past the front of the modal popup, focus wraps around
+ * to the end.
  * @param {goog.events.BrowserEvent} e Browser's event object.
  * @private
  */
 goog.ui.ModalPopup.prototype.onFocus_ = function(e) {
-  if (e.target == this.tabCatcherElement_) {
+  if (this.backwardTabWrapInProgress_) {
+    this.resetBackwardTabWrap_();
+  } else if (e.target == this.tabCatcherElement_) {
     goog.Timer.callOnce(this.focusElement_, 0, this);
   }
 };

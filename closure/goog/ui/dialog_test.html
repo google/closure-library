@@ -342,6 +342,22 @@ See the COPYING file for details.
     assertTrue(selectCalled);
   }
 
+  function testShiftTabAtTopSetsUpWrapAndDoesNotPreventPropagation() {
+    dialog.setupBackwardTabWrap = goog.testing.recordFunction();
+    shiftTabRecorder = goog.testing.recordFunction();
+
+    goog.events.listen(
+        dialog.getElement(), goog.events.EventType.KEYDOWN, shiftTabRecorder);
+    var shiftProperties = { shiftKey: true };
+    goog.testing.events.fireKeySequence(
+        dialog.getElement(), goog.events.KeyCodes.TAB, shiftProperties);
+
+    assertNotNull('Should have gotten event on Shift+TAB',
+        shiftTabRecorder.getLastCall());
+    assertNotNull('Backward tab wrap should have been set up',
+        dialog.setupBackwardTabWrap.getLastCall());
+  }
+
   function testButtonsWithContentsDispatchSelectEvents() {
     var aButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[0];
     var aSpan = document.createElement('SPAN');
