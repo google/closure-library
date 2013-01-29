@@ -108,7 +108,7 @@ goog.editor.plugins.UndoRedo.prototype.undoManager_;
 /**
  * The key for the event listener handling state change events from the
  * undo-redo manager.
- * @type {number}
+ * @type {goog.events.Key}
  * @private
  */
 goog.editor.plugins.UndoRedo.prototype.managerStateChangeKey_;
@@ -155,12 +155,12 @@ goog.editor.plugins.UndoRedo.prototype.setUndoRedoManager = function(manager) {
   }
 
   this.undoManager_ = manager;
-  this.managerStateChangeKey_ = /** @type {number} */ (
+  this.managerStateChangeKey_ =
       goog.events.listen(this.undoManager_,
           goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE,
           this.dispatchCommandValueChange_,
           false,
-          this));
+          this);
 };
 
 
