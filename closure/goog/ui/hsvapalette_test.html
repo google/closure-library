@@ -98,7 +98,7 @@ See the COPYING file for details.
     function testInputColor() {
       samplePalette.render(document.getElementById('sandbox'));
       var color = '#00112233';
-      samplePalette.inputEl_.value = color;
+      samplePalette.inputElement.value = color;
       samplePalette.handleInput(null);
       assertEquals(color,
           goog.color.alpha.parse(samplePalette.getColorRgbaHex()).hex);
@@ -128,23 +128,23 @@ See the COPYING file for details.
       samplePalette.render(document.getElementById('sandbox'));
 
       samplePalette.setAlpha(1);
-      assertEquals(1, goog.style.getOpacity(samplePalette.swatchEl_));
+      assertEquals(1, goog.style.getOpacity(samplePalette.swatchElement));
 
       samplePalette.setAlpha(0x99 / 0xff);
-      assertEquals(0.6, goog.style.getOpacity(samplePalette.swatchEl_));
+      assertEquals(0.6, goog.style.getOpacity(samplePalette.swatchElement));
 
       samplePalette.setAlpha(0);
-      assertEquals(0, goog.style.getOpacity(samplePalette.swatchEl_));
+      assertEquals(0, goog.style.getOpacity(samplePalette.swatchElement));
     }
 
     function testNoTransparencyBehavior() {
       samplePalette.render(document.getElementById('sandbox'));
 
-      samplePalette.inputEl_.value = '#abcdef22';
+      samplePalette.inputElement.value = '#abcdef22';
       samplePalette.handleInput(null);
-      samplePalette.inputEl_.value = '#abcdef';
+      samplePalette.inputElement.value = '#abcdef';
       samplePalette.handleInput(null);
-      assertEquals(1, goog.style.getOpacity(samplePalette.swatchEl_));
+      assertEquals(1, goog.style.getOpacity(samplePalette.swatchElement));
     }
 
   </script>
