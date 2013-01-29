@@ -31,14 +31,7 @@ goog.require('goog.ui.ActivityMonitor');
  * @extends {goog.ui.ActivityMonitor}
  */
 goog.ui.MockActivityMonitor = function() {
-  goog.base(this);
-
-  /**
-   * Tracks whether an event has been fired. Used by simulateEvent.
-   * @type {boolean}
-   * @private
-   */
-  this.eventFired_ = false;
+  goog.ui.ActivityMonitor.call(this);
 };
 goog.inherits(goog.ui.MockActivityMonitor, goog.ui.ActivityMonitor);
 
@@ -49,22 +42,13 @@ goog.inherits(goog.ui.MockActivityMonitor, goog.ui.ActivityMonitor);
  *     not idle. If not specified, defaults to MOUSEMOVE.
  */
 goog.ui.MockActivityMonitor.prototype.simulateEvent = function(opt_type) {
+  var type = opt_type || goog.events.EventType.MOUSEMOVE;
   var eventTime = goog.now();
-  var eventType = opt_type || goog.events.EventType.MOUSEMOVE;
 
-  this.eventFired_ = false;
-  this.updateIdleTime(eventTime, eventType);
+  // update internal state noting whether the user was idle
+  this.lastEventTime_ = eventTime;
+  this.lastEventType_ = type;
 
-  if (!this.eventFired_) {
-    this.dispatchEvent(goog.ui.ActivityMonitor.Event.ACTIVITY);
-  }
-};
-
-
-/**
- * @override
- */
-goog.ui.MockActivityMonitor.prototype.dispatchEvent = function(e) {
-  goog.base(this, 'dispatchEvent', e);
-  this.eventFired_ = true;
+  // dispatch event
+  this.dispatchEvent(goog.ui.ActivityMonitor.Event.ACTIVITY);
 };
