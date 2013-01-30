@@ -89,18 +89,6 @@ function testRenderConvertsToString() {
 }
 
 
-function testRenderRejectsNonHtmlStrictTemplates() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  assertEquals(
-      'Assertion failed: ' +
-      'render was called with a strict template of kind other than "html"' +
-      ' (consider using renderText or renderStrict)',
-      assertThrows(function() {
-        renderer.render(example.unsanitizedTextTemplate, {});
-      }).message);
-}
-
-
 function testRenderStrictDoesNotConvertToString() {
   var renderer = new goog.soy.Renderer(dataSupplier);
   var result = renderer.renderStrict(example.sanitizedHtmlTemplate);
@@ -130,17 +118,6 @@ function testRenderStrictValidatesOutput() {
       assertThrows(function() {
         renderer.renderStrict(example.sanitizedHtmlTemplate, {},
             goog.soy.data.SanitizedContentKind.JS);
-      }).message);
-
-  // renderStrict's opt_kind parameter defaults to SanitizedContentKind.HTML:
-  // Passes.
-  renderer.renderStrict(example.sanitizedHtmlTemplate, {});
-  // Rendering non-HTML template fails:
-  assertEquals(
-      'Assertion failed: ' +
-      'renderStrict was called with the wrong kind of template',
-      assertThrows(function() {
-        renderer.renderStrict(example.unsanitizedTextTemplate, {});
       }).message);
 }
 
