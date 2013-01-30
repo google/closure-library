@@ -72,6 +72,21 @@ function testListenOnceProperCleanup() {
   assertEquals(0, goog.object.getCount(goog.events.listeners_))
 }
 
+function testListenWithObject() {
+  var obj = {};
+  obj.handleEvent = goog.testing.recordFunction();
+  goog.events.listen(eventTargets[0], EventType.A, obj);
+  eventTargets[0].dispatchEvent(EventType.A);
+  assertEquals(1, obj.handleEvent.getCallCount());
+}
+
+function testListenWithObjectHandleEventReturningFalse() {
+  var obj = {};
+  obj.handleEvent = function() { return false; };
+  goog.events.listen(eventTargets[0], EventType.A, obj);
+  assertFalse(eventTargets[0].dispatchEvent(EventType.A));
+}
+
 </script>
 </body>
 </html>

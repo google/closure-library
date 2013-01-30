@@ -1244,7 +1244,7 @@ goog.events.wrapListener_ = function(listener) {
 
   return listener[goog.events.LISTENER_WRAPPER_PROP_] ||
       (listener[goog.events.LISTENER_WRAPPER_PROP_] = function(e) {
-        listener.handleEvent(e);
+        return listener.handleEvent(e);
       });
 };
 

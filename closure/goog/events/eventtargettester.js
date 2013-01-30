@@ -978,3 +978,29 @@ function testHasListener() {
   assertFalse(hasListener(eventTargets[0], EventType.B, true));
   assertFalse(hasListener(eventTargets[1]));
 }
+
+
+function testFiringEventBeforeDisposeInternalWorks() {
+  /**
+   * @extends {goog.events.EventTarget}
+   * @constructor
+   */
+  var MockTarget = function() {
+    goog.base(this);
+  };
+  goog.inherits(MockTarget, goog.events.EventTarget);
+
+  MockTarget.prototype.disposeInternal = function() {
+    dispatchEvent(this, EventType.A);
+    goog.base(this, 'disposeInternal');
+  };
+
+  var t = new MockTarget();
+  try {
+    listen(t, EventType.A, listeners[0]);
+    t.dispose();
+    assertListenerIsCalled(listeners[0], times(1));
+  } catch (e) {
+    goog.dispose(t);
+  }
+}

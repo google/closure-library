@@ -17,6 +17,7 @@ See the COPYING file for details.
   goog.require('goog.events');
   goog.require('goog.events.EventTarget');
   goog.require('goog.events.EventType');
+  goog.require('goog.events.Listenable');
   goog.require('goog.functions');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
@@ -176,6 +177,11 @@ See the COPYING file for details.
   }
 
   function testBubbleShortCircuit() {
+    // Short-circuit no longer works with listenable.
+    if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
+      return;
+    }
+
     var et1 = new goog.events.EventTarget();
     var et2 = new goog.events.EventTarget();
 
@@ -430,7 +436,11 @@ See the COPYING file for details.
 
     goog.removeUid(target);
     target.dispatchEvent('foo');
-    assertEquals(0, listener.getCallCount());
+    if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
+      assertEquals(1, listener.getCallCount());
+    } else {
+      assertEquals(0, listener.getCallCount());
+    }
   }
 
   /**

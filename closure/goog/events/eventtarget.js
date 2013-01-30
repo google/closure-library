@@ -90,6 +90,16 @@ goog.events.EventTarget = function() {
      * @private
      */
     this.eventTargetListeners_ = {};
+
+    /**
+     * Whether the EventTarget has been disposed. This is only true
+     * when disposeInternal of EventTarget is completed (whereas
+     * this.isDisposed() is true the moment obj.dispose() is called,
+     * even before calling its disposeInternal).
+     * @type {boolean}
+     * @private
+     */
+    this.reallyDisposed_ = false;
   }
 };
 goog.inherits(goog.events.EventTarget, goog.Disposable);
@@ -185,7 +195,7 @@ goog.events.EventTarget.prototype.removeEventListener = function(
 /** @override */
 goog.events.EventTarget.prototype.dispatchEvent = function(e) {
   if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-    if (this.isDisposed()) {
+    if (this.reallyDisposed_) {
       return true;
     }
 
@@ -223,6 +233,7 @@ goog.events.EventTarget.prototype.disposeInternal = function() {
 
   if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
     this.removeAllListeners();
+    this.reallyDisposed_ = true;
   } else {
     goog.events.removeAll(this);
   }
@@ -271,7 +282,8 @@ goog.events.EventTarget.prototype.listenOnce = function(
  */
 goog.events.EventTarget.prototype.listenInternal_ = function(
     type, listener, callOnce, opt_useCapture, opt_listenerScope) {
-  goog.asserts.assert(!this.isDisposed());
+  goog.asserts.assert(
+      !this.reallyDisposed_, 'Can not listen on disposed object.');
 
   var listenerArray = this.eventTargetListeners_[type] ||
       (this.eventTargetListeners_[type] = []);
@@ -357,7 +369,9 @@ goog.events.EventTarget.prototype.removeAllListeners = function(
 /** @override */
 goog.events.EventTarget.prototype.fireListeners = function(
     type, capture, eventObject) {
-  goog.asserts.assert(!this.isDisposed());
+  goog.asserts.assert(
+      !this.reallyDisposed_,
+      'Can not fire listeners after dispose() completed.');
 
   if (!(type in this.eventTargetListeners_)) {
     return true;
