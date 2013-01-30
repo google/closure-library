@@ -461,6 +461,15 @@ goog.positioning.adjustForViewport_ = function(pos, size, viewport, overflow) {
     status |= goog.positioning.OverflowStatus.ADJUSTED_Y;
   }
 
+  // Bottom edge inside and top edge outside viewport, try to resize it.
+  if (pos.y <= viewport.top &&
+      pos.y + size.height < viewport.bottom &&
+      overflow & goog.positioning.Overflow.RESIZE_HEIGHT) {
+    size.height = Math.max(size.height - (viewport.top - pos.y), 0);
+    pos.y = 0;
+    status |= goog.positioning.OverflowStatus.HEIGHT_ADJUSTED;
+  }
+
   // Top edge inside and bottom edge outside viewport, try to resize it.
   if (pos.y >= viewport.top &&
       pos.y + size.height > viewport.bottom &&

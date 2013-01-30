@@ -771,6 +771,14 @@ function testAdjustForViewportResizeHeight() {
   assertEquals('Height should be resized to 200.',
                200, size.height);
 
+  var pos = newCoord(0, -50);
+  var size = newSize(50, 240);
+  assertEquals('Viewport height should be resized.',
+               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED,
+               f(pos, size, viewport, overflow));
+  assertEquals('Height should be resized to 190.',
+               190, size.height);
+
   pos = newCoord(150, 150);
   size = newSize(50, 50);
   assertEquals('No Viewport overflow.',
