@@ -260,11 +260,12 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
 
   goog.net.BrowserChannel.notifyStatEvent(
       goog.net.BrowserChannel.Stat.TEST_STAGE_ONE_START);
+  this.startTime_ = goog.now();
 
   // If the channel already has the result of the first test, then skip it.
   var firstTestResults = this.channel_.getFirstTestResults();
   if (goog.isDefAndNotNull(firstTestResults)) {
-    this.hostPrefix_ = firstTestResults[0];
+    this.hostPrefix_ = this.channel_.correctHostPrefix(firstTestResults[0]);
     this.blockedPrefix_ = firstTestResults[1];
     if (this.blockedPrefix_) {
       this.state_ = goog.net.BrowserTestChannel.State_.CHECKING_BLOCKED;
@@ -284,7 +285,6 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
   this.request_.xmlHttpGet(sendDataUri, false /* decodeChunks */,
       null /* hostPrefix */, true /* opt_noClose */);
   this.state_ = goog.net.BrowserTestChannel.State_.INIT;
-  this.startTime_ = goog.now();
 };
 
 
