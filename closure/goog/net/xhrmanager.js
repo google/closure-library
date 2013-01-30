@@ -64,6 +64,7 @@ goog.net.XhrManager = function(
     opt_minCount,
     opt_maxCount,
     opt_timeoutInterval) {
+  goog.base(this);
 
   /**
    * Maximum number of retries for a given request
