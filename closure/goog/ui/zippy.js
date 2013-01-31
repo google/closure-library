@@ -25,6 +25,7 @@ goog.provide('goog.ui.ZippyEvent');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('goog.events');
