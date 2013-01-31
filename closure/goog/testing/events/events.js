@@ -39,8 +39,10 @@ goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.BrowserEvent.MouseButton');
 goog.require('goog.events.BrowserFeature');
+goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.events.Listenable');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.userAgent');
@@ -655,4 +657,34 @@ goog.testing.events.fireTouchSequence = function(
                 target, opt_coords, opt_eventProperties) &
             goog.testing.events.fireTouchEndEvent(
                 target, opt_coords, opt_eventProperties));
+};
+
+
+/**
+ * Mixins a listenable into the given object. This turns the object
+ * into a goog.events.Listenable. This is useful, for example, when
+ * you need to mock a implementation of listenable and still want it
+ * to work with goog.events.
+ * @param {!Object} obj The object to mixin into.
+ */
+goog.testing.events.mixinListenable = function(obj) {
+  var listenable = new goog.events.EventTarget();
+
+  if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
+    listenable.setTargetForTesting(obj);
+
+    var listenablePrototype = goog.events.EventTarget.prototype;
+    for (var key in listenablePrototype) {
+      if (listenablePrototype.hasOwnProperty(key)) {
+        var member = listenablePrototype[key];
+        if (goog.isFunction(member)) {
+          obj[key] = goog.bind(member, listenable);
+        } else {
+          obj[key] = member;
+        }
+      }
+    }
+  } else {
+    goog.mixin(obj, listenable);
+  }
 };

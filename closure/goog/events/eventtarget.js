@@ -100,6 +100,14 @@ goog.events.EventTarget = function() {
      * @private
      */
     this.reallyDisposed_ = false;
+
+    /**
+     * The object to use for event.target. Useful when mixing in an
+     * EventTarget to another object.
+     * @type {!Object}
+     * @private
+     */
+    this.actualEventTarget_ = this;
   }
 };
 goog.inherits(goog.events.EventTarget, goog.Disposable);
@@ -208,7 +216,7 @@ goog.events.EventTarget.prototype.dispatchEvent = function(e) {
     }
 
     return goog.events.EventTarget.dispatchEventInternal_(
-        this, e, ancestorsTree);
+        this.actualEventTarget_, e, ancestorsTree);
   } else {
     return goog.events.dispatchEvent(this, e);
   }
@@ -446,12 +454,23 @@ goog.events.EventTarget.prototype.hasListener = function(
 
 
 /**
+ * Sets the target to be used for {@code event.target} when firing
+ * event. Mainly used for testing. For example, see
+ * {@code goog.testing.events.mixinListenable}.
+ * @param {!Object} target The target.
+ */
+goog.events.EventTarget.prototype.setTargetForTesting = function(target) {
+  this.actualEventTarget_ = target;
+};
+
+
+/**
  * Dispatches the given event on the ancestorsTree.
  *
  * TODO(user): Look for a way to reuse this logic in
  * goog.events, if possible.
  *
- * @param {!goog.events.EventTarget} target The target to dispatch on.
+ * @param {!Object} target The target to dispatch on.
  * @param {goog.events.Event|Object|string} e The event object.
  * @param {Array.<goog.events.Listenable>=} opt_ancestorsTree The ancestors
  *     tree of the target, in reverse order from the closest ancestor

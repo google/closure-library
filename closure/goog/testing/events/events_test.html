@@ -15,16 +15,24 @@ See the COPYING file for details.
   <title>Closure Unit Tests - goog.testing.events</title>
   <script src="../../base.js"></script>
   <script>
+    goog.require('goog.events.Listenable');
+  </script>
+  <script>
+    var ORIGINAL_FLAG_VALUE = goog.events.Listenable.USE_LISTENABLE_INTERFACE;
+    // Sets to true so that the new methods become available.
+    goog.events.Listenable.USE_LISTENABLE_INTERFACE = true;
+  </script>
+  <script>
     goog.require('goog.array');
     goog.require('goog.dom');
+    goog.require('goog.events.Listenable');
     goog.require('goog.math.Coordinate');
     goog.require('goog.string');
     goog.require('goog.testing.PropertyReplacer');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.testing.recordFunction');
     goog.require('goog.userAgent');
-
-
   </script>
 </head>
 <body>
@@ -33,7 +41,7 @@ See the COPYING file for details.
 <div id='input'>Prevent Default these events:<br/></div>
 <div id='log' style='position:absolute;right:0;top:0'>Logged events:</div>
 <div id='parentEl'><div id='childEl'>hello!</div></div>
-<script type="text/javascript">
+<script>
   var firedEventTypes;
   var firedEventCoordinates;
   var firedScreenCoordinates;
@@ -50,6 +58,8 @@ See the COPYING file for details.
   var eventCount;
 
   function setUp() {
+    goog.events.Listenable.USE_LISTENABLE_INTERFACE = ORIGINAL_FLAG_VALUE;
+
     stubs.reset();
     goog.events.removeAll();
     root.innerHTML = '';
@@ -555,6 +565,31 @@ See the COPYING file for details.
     }, eventCount);
   }
 
+  function testMixinListenable(opt_legacy) {
+    goog.events.Listenable.USE_LISTENABLE_INTERFACE = !opt_legacy;
+
+    var obj = {};
+    obj.doFoo = goog.testing.recordFunction();
+
+    goog.testing.events.mixinListenable(obj);
+
+    obj.doFoo();
+    assertEquals(1, obj.doFoo.getCallCount());
+
+    var handler = goog.testing.recordFunction();
+    goog.events.listen(obj, 'test', handler);
+    obj.dispatchEvent('test');
+    assertEquals(1, handler.getCallCount());
+    assertEquals(obj, handler.getLastCall().getArgument(0).target);
+
+    goog.events.unlisten(obj, 'test', handler);
+    obj.dispatchEvent('test');
+    assertEquals(1, handler.getCallCount());
+  }
+
+  function testMixinListenableLegacy() {
+    testMixinListenable(true);
+  }
   /**
    * Assert that the list of events given was fired, in that order.
    */
