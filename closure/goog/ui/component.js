@@ -808,8 +808,6 @@ goog.ui.Component.prototype.exitDocument = function() {
  * @protected
  */
 goog.ui.Component.prototype.disposeInternal = function() {
-  goog.ui.Component.superClass_.disposeInternal.call(this);
-
   if (this.inDocument_) {
     this.exitDocument();
   }
@@ -834,7 +832,8 @@ goog.ui.Component.prototype.disposeInternal = function() {
   this.element_ = null;
   this.model_ = null;
   this.parent_ = null;
-  // TODO(gboyer): delete this.dom_ breaks many unit tests.
+
+  goog.ui.Component.superClass_.disposeInternal.call(this);
 };
 
 
