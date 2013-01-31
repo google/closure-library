@@ -81,6 +81,13 @@ See the COPYING file for details.
   <br/><br/><br/><br/><br/><br/><br/><br/>
 </div>
 
+<div dir="rtl" id="scrollLeftRtl"
+  style="position: relative; width: 100px; height: 100px;
+      background-color: blue">
+  <div style="position:absolute; width: 200px; height: 20px; background-color:
+    green">INNER</div>
+</div>
+
 <hr/>
 
 <br/><br/>
@@ -185,6 +192,18 @@ function testFixedBodyChildRtl() {
 
   assertEquals(expectedOffsetStart,
       goog.style.bidi.getOffsetStart(bodyChild));
+}
+
+function testGetScrollLeftRTL() {
+  var scrollLeftDiv = document.getElementById('scrollLeftRtl');
+  scrollLeftDiv.style.overflow = 'visible';
+  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
+  scrollLeftDiv.style.overflow = 'hidden';
+  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
+  scrollLeftDiv.style.overflow = 'scroll';
+  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
+  scrollLeftDiv.style.overflow = 'auto';
+  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
 }
 
 </script>

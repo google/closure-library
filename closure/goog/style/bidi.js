@@ -39,8 +39,14 @@ goog.style.bidi.getScrollLeft = function(element) {
     return -element.scrollLeft;
   } else if (isRtl && !(goog.userAgent.IE && goog.userAgent.isVersion('8'))) {
     // ScrollLeft starts at the maximum positive value and decreases towards
-    // 0 as the element is scrolled towards the left.
-    return element.scrollWidth - element.clientWidth - element.scrollLeft;
+    // 0 as the element is scrolled towards the left. However, for overflow
+    // visible, there is no scrollLeft and the value always stays correctly at 0
+    var overflowX = goog.style.getComputedOverflowX(element);
+    if (overflowX == 'visible') {
+      return element.scrollLeft;
+    } else {
+      return element.scrollWidth - element.clientWidth - element.scrollLeft;
+    }
   }
   // ScrollLeft behavior is identical in rtl and ltr, it starts at 0 and
   // increases as the element is scrolled away from the start.
