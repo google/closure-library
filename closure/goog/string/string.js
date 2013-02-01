@@ -209,6 +209,40 @@ goog.string.isUnicodeChar = function(ch) {
 
 
 /**
+ * Splits a string into lines, properly handling universal newlines.
+ * @param {string} str String to split.
+ * @param {boolean=} opt_keepNewlines Whether to keep the newlines in the
+ *     resulting strings. Defaults to false.
+ * @return {!Array.<string>} String split into lines.
+ */
+goog.string.splitLines = function(str, opt_keepNewlines) {
+  var re = /\r\n|\r|\n/g;
+  var sliceIndex = 0;
+  var result;
+  var lines = [];
+
+  while (result = re.exec(str)) {
+    var endIndex = (result.index +
+        // if true, include newlines in slice
+        (opt_keepNewlines ? result[0].length : 0));
+
+    var line = str.slice(sliceIndex, endIndex);
+    lines.push(line);
+
+    // remember where to start the slice from
+    sliceIndex = re.lastIndex;
+  }
+
+  // If the string does not end with a newline, add the last line.
+  if (sliceIndex < str.length) {
+    lines.push(str.slice(sliceIndex));
+  }
+
+  return lines;
+};
+
+
+/**
  * Takes a string and replaces newlines with a space. Multiple lines are
  * replaced with a single space.
  * @param {string} str The string from which to strip newlines.
