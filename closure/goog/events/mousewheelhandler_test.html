@@ -19,6 +19,7 @@ See the COPYING file for details.
   goog.require('goog.functions');
   goog.require('goog.object');
   goog.require('goog.testing.PropertyReplacer');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -99,7 +100,7 @@ See the COPYING file for details.
         WEBKIT: false
     };
     var documentObjectWithNoBody = { };
-    goog.mixin(documentObjectWithNoBody, new goog.events.EventTarget());
+    goog.testing.events.mixinListenable(documentObjectWithNoBody);
     mouseWheelHandler = new goog.events.MouseWheelHandler(documentObjectWithNoBody);
   }
 
