@@ -1225,7 +1225,7 @@ goog.events.getUniqueId = function(identifier) {
  * @private
  */
 goog.events.LISTENER_WRAPPER_PROP_ = '__closure_events_fn_' +
-    Math.floor(Math.random() * 2147483648).toString(36);
+    ((Math.random() * 1e9) >>> 0);
 
 
 /**
