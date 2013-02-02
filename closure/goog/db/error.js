@@ -20,6 +20,7 @@
 
 goog.provide('goog.db.Error');
 goog.provide('goog.db.Error.ErrorCode');
+goog.provide('goog.db.Error.ErrorName');
 goog.provide('goog.db.Error.VersionChangeBlockedError');
 
 goog.require('goog.debug.Error');
@@ -30,27 +31,54 @@ goog.require('goog.debug.Error');
  * A database error. Since the stack trace can be unhelpful in an asynchronous
  * context, the error provides a message about where it was produced.
  *
- * @param {number} code The error code.
+ * @param {number|!DOMError} error The DOMError instance returned by the
+ *     browser for Chrome22+, or an error code for previous versions.
  * @param {string} context A description of where the error occured.
  * @param {string=} opt_message Additional message.
  * @constructor
  * @extends {goog.debug.Error}
  */
-goog.db.Error = function(code, context, opt_message) {
-  var msg = 'Error ' + context + ': ' + goog.db.Error.getMessage(code);
-  if (opt_message) {
-    msg += ', ' + opt_message;
+goog.db.Error = function(error, context, opt_message) {
+  var errorCode = null;
+  var internalError = null;
+  if (goog.isNumber(error)) {
+    errorCode = error;
+    internalError = {name: goog.db.Error.getName(errorCode)};
+  } else {
+    internalError = error;
+    errorCode = goog.db.Error.getCode(error.name);
   }
-  goog.base(this, msg);
 
   /**
    * The code for this error.
    *
    * @type {number}
    */
-  this.code = code;
+  this.code = errorCode;
+
+  /**
+   * The DOMException as returned by the browser.
+   *
+   * @type {!DOMError}
+   * @private
+   */
+  this.error_ = /** @type {!DOMError} */ (internalError);
+
+  var msg = 'Error ' + context + ': ' + this.getName();
+  if (opt_message) {
+    msg += ', ' + opt_message;
+  }
+  goog.base(this, msg);
 };
 goog.inherits(goog.db.Error, goog.debug.Error);
+
+
+/**
+ * @return {string} The name of the error.
+ */
+goog.db.Error.prototype.getName = function()  {
+  return this.error_.name;
+};
 
 
 
@@ -184,14 +212,146 @@ goog.db.Error.getMessage = function(code) {
 
 
 /**
- * Returns an error, wrapping it in a {@link goog.db.Error} if it's an IndexedDB
- * error.
- *
- * @param {Error} err The error object to possibly wrap.
- * @param {string} message The error message to add to err if it's wrapped.
- * @return {goog.db.Error|Error} The possibly-wrapped error.
+ * Names of all possible errors as returned from the browser.
+ * @see http://www.w3.org/TR/IndexedDB/#exceptions
+ * @enum {string}
  */
-goog.db.Error.create = function(err, message) {
-  if (!('code' in err)) return err;
-  return new goog.db.Error(err.code, message);
+goog.db.Error.ErrorName = {
+  ABORT_ERR: 'AbortError',
+  CONSTRAINT_ERR: 'ConstraintError',
+  DATA_CLONE_ERR: 'DataCloneError',
+  DATA_ERR: 'DataError',
+  INVALID_ACCESS_ERR: 'InvalidAccessError',
+  INVALID_STATE_ERR: 'InvalidStateError',
+  NOT_FOUND_ERR: 'NotFoundError',
+  QUOTA_EXCEEDED_ERR: 'QuotaExceededError',
+  READ_ONLY_ERR: 'ReadOnlyError',
+  SYNTAX_ERROR: 'SyntaxError',
+  TIMEOUT_ERR: 'TimeoutError',
+  TRANSACTION_INACTIVE_ERR: 'TransactionInactiveError',
+  UNKNOWN_ERR: 'UnknownError',
+  VERSION_ERR: 'VersionError'
+};
+
+
+/**
+ * Translates an error name to an error code. This is purely kept for backwards
+ * compatibility with Chrome21.
+ *
+ * @param {string} name The name of the erorr.
+ * @return {number} The error code corresponding to the error.
+ */
+goog.db.Error.getCode = function(name) {
+  switch (name) {
+    case goog.db.Error.ErrorName.UNKNOWN_ERR:
+      return goog.db.Error.ErrorCode.UNKNOWN_ERR;
+    case goog.db.Error.ErrorName.NOT_FOUND_ERR:
+      return goog.db.Error.ErrorCode.NOT_FOUND_ERR;
+    case goog.db.Error.ErrorName.CONSTRAINT_ERR:
+      return goog.db.Error.ErrorCode.CONSTRAINT_ERR;
+    case goog.db.Error.ErrorName.DATA_ERR:
+      return goog.db.Error.ErrorCode.DATA_ERR;
+    case goog.db.Error.ErrorName.TRANSACTION_INACTIVE_ERR:
+      return goog.db.Error.ErrorCode.TRANSACTION_INACTIVE_ERR;
+    case goog.db.Error.ErrorName.ABORT_ERR:
+      return goog.db.Error.ErrorCode.ABORT_ERR;
+    case goog.db.Error.ErrorName.READ_ONLY_ERR:
+      return goog.db.Error.ErrorCode.READ_ONLY_ERR;
+    case goog.db.Error.ErrorName.TIMEOUT_ERR:
+      return goog.db.Error.ErrorCode.TIMEOUT_ERR;
+    case goog.db.Error.ErrorName.QUOTA_EXCEEDED_ERR:
+      return goog.db.Error.ErrorCode.QUOTA_ERR;
+    case goog.db.Error.ErrorName.INVALID_ACCESS_ERR:
+      return goog.db.Error.ErrorCode.INVALID_ACCESS_ERR;
+    case goog.db.Error.ErrorName.INVALID_STATE_ERR:
+      return goog.db.Error.ErrorCode.INVALID_STATE_ERR;
+    default:
+      return goog.db.Error.ErrorCode.UNKNOWN_ERR;
+  }
+};
+
+
+/**
+ * Converts an error code used by the old spec, to an error name used by the
+ * latest spec.
+ * @see http://www.w3.org/TR/IndexedDB/#exceptions
+ *
+ * @param {!goog.db.Error.ErrorCode|number} code The error code to convert.
+ * @return {!goog.db.Error.ErrorName} The corresponding name of the error.
+ */
+goog.db.Error.getName = function(code) {
+  switch (code) {
+    case goog.db.Error.ErrorCode.UNKNOWN_ERR:
+      return goog.db.Error.ErrorName.UNKNOWN_ERR;
+    case goog.db.Error.ErrorCode.NOT_FOUND_ERR:
+      return goog.db.Error.ErrorName.NOT_FOUND_ERR;
+    case goog.db.Error.ErrorCode.CONSTRAINT_ERR:
+      return goog.db.Error.ErrorName.CONSTRAINT_ERR;
+    case goog.db.Error.ErrorCode.DATA_ERR:
+      return goog.db.Error.ErrorName.DATA_ERR;
+    case goog.db.Error.ErrorCode.TRANSACTION_INACTIVE_ERR:
+      return goog.db.Error.ErrorName.TRANSACTION_INACTIVE_ERR;
+    case goog.db.Error.ErrorCode.ABORT_ERR:
+      return goog.db.Error.ErrorName.ABORT_ERR;
+    case goog.db.Error.ErrorCode.READ_ONLY_ERR:
+      return goog.db.Error.ErrorName.READ_ONLY_ERR;
+    case goog.db.Error.ErrorCode.TIMEOUT_ERR:
+      return goog.db.Error.ErrorName.TIMEOUT_ERR;
+    case goog.db.Error.ErrorCode.QUOTA_ERR:
+      return goog.db.Error.ErrorName.QUOTA_EXCEEDED_ERR;
+    case goog.db.Error.ErrorCode.INVALID_ACCESS_ERR:
+      return goog.db.Error.ErrorName.INVALID_ACCESS_ERR;
+    case goog.db.Error.ErrorCode.INVALID_STATE_ERR:
+      return goog.db.Error.ErrorName.INVALID_STATE_ERR;
+    default:
+      return goog.db.Error.ErrorName.UNKNOWN_ERR;
+  }
+};
+
+
+/**
+ * Constructs an goog.db.Error instance from an IDBRequest. This abstraction is
+ * necessary to provide backwards compatibility with Chrome21.
+ *
+ * @param {!IDBRequest} request The request that failed.
+ * @param {string} message The error message to add to err if it's wrapped.
+ * @return {!goog.db.Error} The error that caused the failure.
+ */
+goog.db.Error.fromRequest = function(request, message) {
+  if ('error' in request) {
+    // Chrome 21 and before.
+    return new goog.db.Error(request.error, message);
+  } else if ('name' in request) {
+    // Chrome 22+.
+    var errorName = goog.db.Error.getName(request.errorCode);
+    return new goog.db.Error(
+        /**@type {!DOMError} */ ({name: errorName}), message);
+  } else {
+    return new goog.db.Error(/** @type {!DOMError} */ (
+        {name: goog.db.Error.ErrorName.UNKNOWN_ERR}), message);
+  }
+};
+
+
+/**
+ * Constructs an goog.db.Error instance from an DOMException. This abstraction
+ * is necessary to provide backwards compatibility with Chrome21.
+ *
+ * @param {!IDBDatabaseException} ex The exception that was thrown.
+ * @param {string} message The error message to add to err if it's wrapped.
+ * @return {!goog.db.Error} The error that caused the failure.
+ */
+goog.db.Error.fromException = function(ex, message) {
+  if ('name' in ex) {
+    // Chrome 21 and before.
+    return new goog.db.Error(/** @type {!DOMError} */ (ex), message);
+  } else if ('code' in ex) {
+    // Chrome 22+.
+    var errorName = goog.db.Error.getName(ex.code);
+    return new goog.db.Error(
+        /** @type {!DOMError} */ ({name: errorName}), message);
+  } else {
+    return new goog.db.Error(/** @type {!DOMError} */ (
+        {name: goog.db.Error.ErrorName.UNKNOWN_ERR}), message);
+  }
 };

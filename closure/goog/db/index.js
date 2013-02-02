@@ -88,7 +88,7 @@ goog.db.Index.prototype.get_ = function(fn, msg, key) {
     request = this.index_[fn](key);
   } catch (err) {
     msg += ' with key ' + goog.debug.deepExpose(key);
-    d.errback(goog.db.Error.create(err, msg));
+    d.errback(goog.db.Error.fromException(err, msg));
     return d;
   }
   request.onsuccess = function(ev) {
@@ -96,9 +96,7 @@ goog.db.Index.prototype.get_ = function(fn, msg, key) {
   };
   request.onerror = function(ev) {
     msg += ' with key ' + goog.debug.deepExpose(key);
-    d.errback(new goog.db.Error(
-        (/** @type {IDBRequest} */ (ev.target)).errorCode,
-        msg));
+    d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   return d;
 };
@@ -155,7 +153,7 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, opt_key) {
     if (opt_key) {
       msg += ' for key ' + goog.debug.deepExpose(opt_key);
     }
-    d.errback(goog.db.Error.create(err, msg));
+    d.errback(goog.db.Error.fromException(err, msg));
     return d;
   }
   var result = [];
@@ -172,9 +170,7 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, opt_key) {
     if (opt_key) {
       msg += ' for key ' + goog.debug.deepExpose(opt_key);
     }
-    d.errback(new goog.db.Error(
-        (/** @type {IDBRequest} */ (ev.target)).errorCode,
-        msg));
+    d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   return d;
 };

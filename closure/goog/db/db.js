@@ -133,7 +133,7 @@ goog.db.openDatabase = function(name, opt_version, opt_onUpgradeNeeded,
   };
   openRequest.onerror = function(ev) {
     var msg = 'opening database ' + name;
-    d.errback(new goog.db.Error(ev.target.errorCode, msg));
+    d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   openRequest.onupgradeneeded = function(ev) {
     if (!opt_onUpgradeNeeded) return;
@@ -170,7 +170,7 @@ goog.db.deleteDatabase = function(name, opt_onBlocked) {
   };
   deleteRequest.onerror = function(ev) {
     var msg = 'deleting database ' + name;
-    d.errback(new goog.db.Error(ev.target.errorCode, msg));
+    d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   deleteRequest.onblocked = function(ev) {
     if (opt_onBlocked) {

@@ -14,6 +14,7 @@ See the COPYING file for details.
 <script>
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
+goog.require('goog.async.DeferredList');
 goog.require('goog.db');
 goog.require('goog.db.IndexedDb');
 goog.require('goog.db.KeyRange');
@@ -133,7 +134,7 @@ function assertStoreDoesntExist(db) {
     fail('Create transaction with a non-existent store should have failed.');
   } catch (e) {
     // expected
-    assertEquals(e.code, goog.db.Error.ErrorCode.NOT_FOUND_ERR);
+    assertEquals(e.getName(), goog.db.Error.ErrorName.NOT_FOUND_ERR);
     closeAndContinue(db);
   }
 }
@@ -240,14 +241,14 @@ function testBadObjectStoreManipulation() {
   }
 
   asyncTestCase.waitForAsync('bad object store manipulation');
-  var expectedCode = goog.db.Error.ErrorCode.INVALID_STATE_ERR;
+  var expectedCode = goog.db.Error.ErrorName.INVALID_STATE_ERR;
   globalDb.branch().addCallback(function(db) {
     try {
       db.createObjectStore('diediedie');
       fail('Create object store outside transaction should have failed.');
     } catch (err) {
       // expected
-      assertEquals(expectedCode, err.code);
+      assertEquals(expectedCode, err.getName());
     }
   }).addCallback(addStore).addCallback(function(db) {
     try {
@@ -255,7 +256,7 @@ function testBadObjectStoreManipulation() {
       fail('Delete object store outside transaction should have failed.');
     } catch (err) {
       // expected
-      assertEquals(expectedCode, err.code);
+      assertEquals(expectedCode, err.getName());
     }
   }).addCallback(function(db) {
     return incrementVersion(db, function(ev, db, tx) {
@@ -264,7 +265,7 @@ function testBadObjectStoreManipulation() {
         fail('Delete non-existent store should have failed.');
       } catch (err) {
         // expected
-        assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
+        assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
       }
     });
   }).addCallback(closeAndContinue).addErrback(failOnError);
@@ -282,7 +283,7 @@ function testGetNonExistentObjectStore() {
       tx.objectStore('diediedie');
       fail('getting non-existent object store should have failed');
     } catch (err) {
-      assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
     }
     closeAndContinue(db);
   }).addErrback(failOnError);
@@ -404,8 +405,8 @@ function testAddRecord() {
                 function(err) {
                   // expected
                   assertEquals(
-                      goog.db.Error.ErrorCode.CONSTRAINT_ERR,
-                      err.code);
+                      goog.db.Error.ErrorName.CONSTRAINT_ERR,
+                      err.getName());
                 });
 
         goog.events.listen(addOverwriteTx, COMPLETE, function() {
@@ -414,8 +415,8 @@ function testAddRecord() {
         goog.events.listen(addOverwriteTx, ERROR, function(ev) {
           // expected
           assertEquals(
-              goog.db.Error.ErrorCode.CONSTRAINT_ERR,
-              ev.target.code);
+              goog.db.Error.ErrorName.CONSTRAINT_ERR,
+              ev.target.getName());
           closeAndContinue(db);
         });
       });
@@ -480,7 +481,7 @@ function testPutBadRecordKeyPathStore() {
           fail('inserting with explicit key should have failed');
         }).addErrback(function(err) {
           // expected
-          assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+          assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
           closeAndContinue(db);
         });
   }).addErrback(failOnError);
@@ -572,19 +573,19 @@ function testPutIllegalRecords() {
     tx.objectStore('store').put('death', null).addCallback(function() {
       fail('putting with null key should have failed');
     }).addErrback(function(err) {
-      assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
     });
 
     tx.objectStore('store').put('death', NaN).addCallback(function() {
       fail('putting with NaN key should have failed');
     }).addErrback(function(err) {
-      assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
     });
 
     tx.objectStore('store').put('death', undefined).addCallback(function() {
       fail('putting with undefined key should have failed');
     }).addErrback(function(err) {
-      assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
     });
 
     closeAndContinue(db);
@@ -716,9 +717,18 @@ function testCursorGet() {
   var openCursorAndCheck = function(db) {
     var cursorTx = db.createTransaction(['store']);
     var store = cursorTx.objectStore('store');
-    var d = new goog.async.Deferred();
     var values = [];
     var keys = [];
+
+    var whenTxComplete = new goog.async.Deferred();
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+      whenTxComplete.callback();
+    });
+
+    var whenCursorComplete = new goog.async.Deferred();
     var cursor = store.openCursor(
         goog.db.KeyRange.bound('b', 'c'),
         goog.db.Cursor.Direction.PREV);
@@ -736,13 +746,18 @@ function testCursorGet() {
     ], function(evt) {
       goog.events.unlistenByKey(key);
       if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
-        d.callback(db);
+        whenCursorComplete.callback(db);
       } else {
-        d.errback();
+        whenCursorComplete.errback();
       }
     });
 
-    d.addCallback(function(db) {
+    var whenAllComplete = goog.async.DeferredList.gatherResults([
+      whenCursorComplete,
+      whenTxComplete
+    ]);
+    whenAllComplete.addCallback(function(results) {
+      var db = results[0];
       assertArrayEquals(['3', '2'], values);
       assertArrayEquals(['c', 'b'], keys);
       closeAndContinue(db);
@@ -775,7 +790,17 @@ function testCursorReplace() {
     var cursorTx = db.createTransaction(
         ['store'],
         goog.db.Transaction.TransactionMode.READ_WRITE);
+
+    var whenTxComplete = new goog.async.Deferred();
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+      whenTxComplete.callback();
+    });
+
     var store = cursorTx.objectStore('store');
+    var whenCursorComplete = new goog.async.Deferred();
     var cursor = store.openCursor(goog.db.KeyRange.bound('b', 'c', true));
 
     var key = goog.events.listen(
@@ -792,11 +817,19 @@ function testCursorReplace() {
     ], function(evt) {
       goog.events.unlistenByKey(key);
       if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
-        d.callback(db);
+        whenCursorComplete.callback(db);
       } else {
-        d.errback();
+        whenCursorComplete.errback();
       }
     });
+
+    goog.async.DeferredList.gatherResults([
+      whenCursorComplete,
+      whenTxComplete
+    ]).addCallbacks(function(results) {
+      d.callback(results[0]);
+    }, failOnError);
+
     return d;
   };
 
@@ -828,7 +861,18 @@ function testCursorRemove() {
     var cursorTx = db.createTransaction(
         ['store'],
         goog.db.Transaction.TransactionMode.READ_WRITE);
+
+    var whenTxComplete = new goog.async.Deferred();
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+      whenTxComplete.callback();
+    });
+
+
     var store = cursorTx.objectStore('store');
+    var whenCursorComplete = new goog.async.Deferred();
     var cursor = store.openCursor(goog.db.KeyRange.lowerBound('b', true));
 
     var key = goog.events.listen(
@@ -844,11 +888,19 @@ function testCursorRemove() {
     ], function(evt) {
       goog.events.unlistenByKey(key);
       if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
-        d.callback(db);
+        whenCursorComplete.callback(db);
       } else {
-        d.errback();
+        whenCursorComplete.errback();
       }
     });
+
+    goog.async.DeferredList.gatherResults([
+      whenCursorComplete,
+      whenTxComplete
+    ]).addCallbacks(function(results) {
+      d.callback(results[0]);
+    }, failOnError);
+
     return d;
   };
 
@@ -957,14 +1009,14 @@ function testInactiveTransaction() {
     var index = store.getIndex('index');
     store.put({key: 'something', value: 'anything'});
     goog.events.listen(tx, goog.db.Transaction.EventTypes.COMPLETE, function() {
-      var expectedCode = goog.db.Error.ErrorCode.TRANSACTION_INACTIVE_ERR;
+      var expectedCode = goog.db.Error.ErrorName.TRANSACTION_INACTIVE_ERR;
       store.put({
         key: 'another',
         value: 'thing'
       }).addCallback(function() {
         fail('putting with inactive transaction should have failed');
       }).addErrback(function(err) {
-        assertEquals(expectedCode, err.code);
+        assertEquals(expectedCode, err.getName());
       });
       store.add({
         key: 'another',
@@ -972,27 +1024,27 @@ function testInactiveTransaction() {
       }).addCallback(function() {
         fail('adding with inactive transaction should have failed');
       }).addErrback(function(err) {
-        assertEquals(expectedCode, err.code);
+        assertEquals(expectedCode, err.getName());
       });
       store.remove('something').addCallback(function() {
         fail('deleting with inactive transaction should have failed');
       }).addErrback(function(err) {
-        assertEquals(expectedCode, err.code);
+        assertEquals(expectedCode, err.getName());
       });
       store.get('something').addCallback(function() {
         fail('getting with inactive transaction should have failed');
       }).addErrback(function(err) {
-        assertEquals(expectedCode, err.code);
+        assertEquals(expectedCode, err.getName());
       });
       store.getAll().addCallback(function() {
         fail('getting all with inactive transaction should have failed');
       }).addErrback(function(err) {
-        assertEquals(expectedCode, err.code);
+        assertEquals(expectedCode, err.getName());
       });
       store.clear().addCallback(function() {
         fail('clearing all with inactive transaction should have failed');
       }).addErrback(function(err) {
-        assertEquals(expectedCode, err.code);
+        assertEquals(expectedCode, err.getName());
       });
 
       index.get('anything').
@@ -1000,28 +1052,28 @@ function testInactiveTransaction() {
           fail('getting from index with inactive transaction should have '
             + 'failed');
         }).addErrback(function(err) {
-          assertEquals(expectedCode, err.code);
+          assertEquals(expectedCode, err.getName());
         });
       index.getKey('anything').
         addCallback(function() {
           fail('getting key from index with inactive transaction '
             + 'should have failed');
         }).addErrback(function(err) {
-          assertEquals(expectedCode, err.code);
+          assertEquals(expectedCode, err.getName());
         });
       index.getAll('anything').
         addCallback(function() {
           fail('getting all from index with inactive transaction '
             + 'should have failed');
         }).addErrback(function(err) {
-          assertEquals(expectedCode, err.code);
+          assertEquals(expectedCode, err.getName());
         });
       index.getAllKeys('anything').
         addCallback(function() {
           fail('getting all keys from index with inactive transaction '
             + 'should have failed');
         }).addErrback(function(err) {
-          assertEquals(expectedCode, err.code);
+          assertEquals(expectedCode, err.getName());
         });
       closeAndContinue(db);
     });
@@ -1040,17 +1092,17 @@ function testWrongTransactionMode() {
     tx.objectStore('store').put('KABOOM!', 'anything').addCallback(function() {
       fail('putting should have failed');
     }).addErrback(function(err) {
-      assertEquals(goog.db.Error.ErrorCode.READ_ONLY_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.READ_ONLY_ERR, err.getName());
     });
     tx.objectStore('store').add('EXPLODE!', 'die').addCallback(function() {
       fail('adding should have failed');
     }).addErrback(function(err) {
-      assertEquals(goog.db.Error.ErrorCode.READ_ONLY_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.READ_ONLY_ERR, err.getName());
     });
     tx.objectStore('store').remove('no key', 'nothing').addCallback(function() {
       fail('deleting should have failed');
     }).addErrback(function(err) {
-      assertEquals(goog.db.Error.ErrorCode.READ_ONLY_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.READ_ONLY_ERR, err.getName());
     });
     closeAndContinue(db);
   }).addErrback(failOnError);
@@ -1079,7 +1131,7 @@ function testManipulateIndexes() {
       var dies = store.getIndex('diediedie');
       fail('getting non-existent index should have failed');
     } catch (err) {
-      assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
     }
 
     return tx.wait();
@@ -1091,7 +1143,7 @@ function testManipulateIndexes() {
         store.deleteIndex('diediedie');
         fail('deleting non-existent index should have failed');
       } catch (err) {
-        assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
+        assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
       }
     });
   }).addCallback(function(db) {
@@ -1101,7 +1153,7 @@ function testManipulateIndexes() {
       var index = store.getIndex('index');
       fail('getting deleted index should have failed');
     } catch (err) {
-      assertEquals(goog.db.Error.ErrorCode.NOT_FOUND_ERR, err.code);
+      assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
     }
     var uniqueIndex = store.getIndex('uniqueIndex');
     var multirowIndex = store.getIndex('multirowIndex');
@@ -1220,14 +1272,11 @@ function testUniqueIndex() {
     goog.events.listen(tx, goog.db.Transaction.EventTypes.ERROR, function(ev) {
       // expected
       assertTrue(
-          'Expected DATA_ERR, CONSTRAINT_ERR or UNKNOWN_ERR, was ' +
-            ev.target.code,
-          // Chrome 15-21, 23+
-          ev.target.code == goog.db.Error.ErrorCode.CONSTRAINT_ERR ||
-            // Chrome 22
-            ev.target.code == goog.db.Error.ErrorCode.DATA_ERR ||
-            // Chrome 14
-            ev.target.code == goog.db.Error.ErrorCode.UNKNOWN_ERR);
+          "Expected DATA_ERR, CONSTRAINT_ERR, was ",
+          // Chrome 21, 23+.
+          goog.db.Error.ErrorName.CONSTRAINT_ERR == ev.target.getName() ||
+          // Chrome 22.
+          goog.db.Error.ErrorName.DATE_ERR == ev.target.getName());
       closeAndContinue(db);
     });
   }).addErrback(failOnError);

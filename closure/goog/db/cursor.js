@@ -86,7 +86,7 @@ goog.db.Cursor.prototype.update = function(value) {
     request = this.cursor_.update(value);
   } catch (err) {
     msg += goog.debug.deepExpose(value);
-    d.errback(goog.db.Error.create(err, msg));
+    d.errback(goog.db.Error.fromException(err, msg));
     return d;
   }
   request.onsuccess = function(ev) {
@@ -94,8 +94,7 @@ goog.db.Cursor.prototype.update = function(value) {
   };
   request.onerror = function(ev) {
     msg += goog.debug.deepExpose(value);
-    d.errback(new goog.db.Error(
-        (/** @type {IDBRequest} */ (ev.target)).errorCode, msg));
+    d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   return d;
 };
@@ -115,15 +114,14 @@ goog.db.Cursor.prototype.remove = function() {
   try {
     request = this.cursor_['delete']();
   } catch (err) {
-    d.errback(goog.db.Error.create(err, msg));
+    d.errback(goog.db.Error.fromException(err, msg));
     return d;
   }
   request.onsuccess = function(ev) {
     d.callback();
   };
   request.onerror = function(ev) {
-    d.errback(new goog.db.Error(
-        (/** @type {IDBRequest} */ (ev.target)).errorCode, msg));
+    d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   return d;
 };

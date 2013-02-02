@@ -107,9 +107,8 @@ goog.db.Transaction.prototype.dispatchError_ = function(ev) {
   } else {
     this.dispatchEvent({
       type: goog.db.Transaction.EventTypes.ERROR,
-      target: new goog.db.Error(
-          (/** @type {IDBRequest} */ (ev.target)).errorCode,
-          'in transaction')
+      target: goog.db.Error.fromRequest(
+          /** @type {!IDBRequest} */ (ev.target), 'in transaction')
     });
   }
 };
@@ -158,8 +157,8 @@ goog.db.Transaction.prototype.getDatabase = function() {
 goog.db.Transaction.prototype.objectStore = function(name) {
   try {
     return new goog.db.ObjectStore(this.tx_.objectStore(name));
-  } catch (err) {
-    throw new goog.db.Error(err.code, 'getting object store ' + name);
+  } catch (ex) {
+    throw goog.db.Error.fromException(ex, 'getting object store ' + name);
   }
 };
 

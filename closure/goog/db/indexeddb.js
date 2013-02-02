@@ -180,7 +180,7 @@ goog.db.IndexedDb.prototype.createObjectStore = function(name, opt_params) {
     return new goog.db.ObjectStore(this.db_.createObjectStore(
         name, opt_params));
   } catch (ex) {
-    throw goog.db.Error.create(ex, 'creating object store ' + name);
+    throw goog.db.Error.fromException(ex, 'creating object store ' + name);
   }
 };
 
@@ -197,7 +197,7 @@ goog.db.IndexedDb.prototype.deleteObjectStore = function(name) {
   try {
     this.db_.deleteObjectStore(name);
   } catch (ex) {
-    throw goog.db.Error.create(ex, 'deleting object store ' + name);
+    throw goog.db.Error.fromException(ex, 'deleting object store ' + name);
   }
 };
 
@@ -232,7 +232,7 @@ goog.db.IndexedDb.prototype.setVersion = function(version) {
     // If a version change is blocked, onerror and onblocked may both fire.
     // Check d.hasFired() to avoid an AlreadyCalledError.
     if (!d.hasFired()) {
-      d.errback(new goog.db.Error(ev.target.errorCode, 'setting version'));
+      d.errback(goog.db.Error.fromRequest(ev.target, 'setting version'));
     }
   };
   request.onblocked = function(ev) {
@@ -266,8 +266,8 @@ goog.db.IndexedDb.prototype.createTransaction = function(storeNames, opt_mode) {
         this.db_.transaction(storeNames, opt_mode) :
         this.db_.transaction(storeNames);
     return new goog.db.Transaction(transaction, this);
-  } catch (err) {
-    throw goog.db.Error.create(err, 'creating transaction');
+  } catch (ex) {
+    throw goog.db.Error.fromException(ex, 'creating transaction');
   }
 };
 
