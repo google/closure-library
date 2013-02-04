@@ -117,6 +117,15 @@ goog.editor.plugins.FirstStrong.prototype.handleSelectionChange =
 };
 
 
+/**
+ * The name of the attribute which records the input text.
+ *
+ * @type {string}
+ * @const
+ */
+goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE = 'fs-input';
+
+
 /** @override */
 goog.editor.plugins.FirstStrong.prototype.handleKeyPress = function(e) {
   if (!this.isNewBlock_) {
@@ -126,12 +135,27 @@ goog.editor.plugins.FirstStrong.prototype.handleKeyPress = function(e) {
   if (e.ctrlKey || e.metaKey) {
     return false;
   }
-  var newChar = goog.i18n.uChar.fromCharCode(e.charCode);
-  if (!newChar) {
-    return false;  // Unrecognized key.
+  var newInput = goog.i18n.uChar.fromCharCode(e.charCode);
+
+  if (!newInput) {
+    var browserEvent = e.getBrowserEvent();
+    if (browserEvent) {
+      if (goog.userAgent.IE && browserEvent['getAttribute']) {
+        newInput = browserEvent['getAttribute'](
+            goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE);
+      } else {
+        newInput = browserEvent[
+            goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE];
+      }
+    }
   }
-  var isLtr = goog.i18n.bidi.isLtrChar(newChar);
-  var isRtl = !isLtr && goog.i18n.bidi.isRtlChar(newChar);
+
+  if (!newInput) {
+    return false; // Unrecognized key.
+  }
+
+  var isLtr = goog.i18n.bidi.isLtrChar(newInput);
+  var isRtl = !isLtr && goog.i18n.bidi.isRtlChar(newInput);
   if (!isLtr && !isRtl) {
     return false;  // This character cannot change anything (it is not Strong).
   }
