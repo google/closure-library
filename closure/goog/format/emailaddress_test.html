@@ -176,7 +176,8 @@ function testToString() {
 function testIsValid() {
   var valid = [
       'e@b.eu', '<a.b+foo@c.com>', 'eric <e@b.com>', '"e" <e@b.com>',
-      'a@FOO.MUSEUM', 'bla@b.co.ac.uk', 'bla@a.b.com'];
+       'a@FOO.MUSEUM', 'bla@b.co.ac.uk', 'bla@a.b.com', 'o\'hara@gm.com',
+       'user+someone@gmail.com', '!/#$%&\'*+-=~|`{}?^_@expample.com' ];
   var invalid = [
       'e', '', 'e @c.com', 'a@b', 'foo.com', 'foo@c..com'];
   goog.array.forEach(valid, function(str) {
