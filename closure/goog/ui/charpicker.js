@@ -307,9 +307,9 @@ goog.ui.CharPicker.prototype.createDom = function() {
 
 /** @override */
 goog.ui.CharPicker.prototype.disposeInternal = function() {
-  this.hc_.dispose();
+  goog.dispose(this.hc_);
   this.hc_ = null;
-  this.eventHandler_.dispose();
+  goog.dispose(this.eventHandler_);
   this.eventHandler_ = null;
   goog.ui.CharPicker.superClass_.disposeInternal.call(this);
 };
@@ -340,7 +340,7 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
       this.submenu_);
   this.addChild(this.submenubutton_, true);
 
-  // The containing compnent for grid component and the scroller.
+  // The containing component for grid component and the scroller.
   var gridcontainer = new goog.ui.Component();
   this.addChild(gridcontainer, true);
 
@@ -499,13 +499,56 @@ goog.ui.CharPicker.prototype.enterDocument = function() {
       listen(
           this.keyHandler_,
           goog.events.KeyHandler.EventType.KEY,
-          this.handleEnter_);
+          this.handleEnter_).
+      listen(
+          this.recentgrid_,
+          goog.ui.Component.EventType.FOCUS,
+          this.handleFocus_).
+      listen(
+          this.grid_,
+          goog.ui.Component.EventType.FOCUS,
+          this.handleFocus_);
 
   goog.events.listen(this.okbutton_.getElement(),
       goog.events.EventType.MOUSEDOWN, this.handleOkClick_, true, this);
 
   goog.events.listen(this.stickwrap_, goog.events.EventType.SCROLL,
       this.handleScroll_, true, this);
+};
+
+
+/**
+ * Handles the button focus by updating the aria label with the character name
+ * so it becomes possible to get spoken feedback while tabbing through the
+ * visible symbols.
+ * @param {goog.events.Event} e The focus event.
+ * @private
+ */
+goog.ui.CharPicker.prototype.handleFocus_ = function(e) {
+  var button = e.target;
+  var element = button.getElement();
+  var ch = this.getChar_(element);
+
+  // Clear the aria label to avoid speaking the old value in case the button
+  // element has no char attribute or the character name cannot be retrieved.
+  goog.a11y.aria.setState(element, goog.a11y.aria.State.LABEL, '');
+
+  if (ch) {
+    // This is working with screen readers because the call to getName is
+    // synchronous once the values have been prefetched by the RemoteNameFetcher
+    // and because it is always synchronous when using the LocalNameFetcher.
+    // Also, the special character itself is not used as the label because some
+    // screen readers, notably ChromeVox, are not able to speak them.
+    // TODO(user): Consider changing the NameFetcher API to provide a
+    // method that lets the caller retrieve multiple character names at once
+    // so that this asynchronous gymnastic can be avoided.
+    this.charNameFetcher_.getName(ch, function(charName) {
+      if (charName) {
+        goog.a11y.aria.setState(
+            element, goog.a11y.aria.State.LABEL, charName);
+      }
+    });
+  }
 };
 
 
@@ -745,8 +788,6 @@ goog.ui.CharPicker.prototype.modifyGridWithItems_ = function(grid, items,
   for (; buttonpos < grid.buttoncount; buttonpos++) {
     grid.getChildAt(buttonpos).setVisible(false);
   }
-  var first = grid.getChildAt(0);
-  goog.dom.setFocusableTabIndex(first.getElement(), true);
 };
 
 
@@ -760,12 +801,20 @@ goog.ui.CharPicker.prototype.populateGridWithButtons_ = function(grid) {
   for (var i = 0; i < grid.buttoncount; i++) {
     var button = new goog.ui.Button(' ',
                                     goog.ui.FlatButtonRenderer.getInstance());
+
+    // Dispatch the focus event so we can update the aria description while
+    // the user tabs through the cells.
+    button.setDispatchTransitionEvents(goog.ui.Component.State.FOCUSED, true);
+
     grid.addChild(button, true);
     button.setVisible(false);
 
     var buttonEl = button.getElement();
     goog.asserts.assert(buttonEl, 'The button DOM element cannot be null.');
-    goog.a11y.aria.setRole(buttonEl, 'gridcell');
+
+    // Override the button role so the user doesn't hear "button" each time he
+    // tabs through the cells.
+    goog.a11y.aria.setRole(buttonEl, '');
   }
 };
 
@@ -781,7 +830,6 @@ goog.ui.CharPicker.prototype.modifyCharNode_ = function(button, ch) {
   var buttonEl = button.getElement();
   buttonEl.innerHTML = text;
   buttonEl.setAttribute('char', ch);
-  goog.dom.setFocusableTabIndex(buttonEl, false);
   button.setVisible(true);
 };
 

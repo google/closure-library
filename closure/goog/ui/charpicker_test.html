@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2013 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Closure Unit Tests - goog.ui.CharPicker</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.State');
+    goog.require('goog.dispose');
+    goog.require('goog.dom');
+    goog.require('goog.i18n.CharPickerData');
+    goog.require('goog.testing.MockControl');
+    goog.require('goog.testing.events');
+    goog.require('goog.testing.jsunit');
+    goog.require('goog.ui.CharPicker');
+  </script>
+</head>
+<body>
+  <div id="charpicker"></div>
+  <script>
+    var charPicker, charPickerData, charPickerElement;
+    var mockControl, charNameFetcherMock;
+
+    function setUp() {
+      mockControl = new goog.testing.MockControl();
+      charNameFetcherMock = mockControl.createLooseMock(
+          goog.i18n.uChar.NameFetcher, true /* opt_ignoreUnexpectedCalls */);
+
+      charPickerData = new goog.i18n.CharPickerData();
+      charPickerElement = goog.dom.getElement('charpicker');
+
+      charPicker = new goog.ui.CharPicker(
+          charPickerData, charNameFetcherMock);
+    }
+
+    function tearDown() {
+      goog.dispose(charPicker);
+      goog.dom.removeChildren(charPickerElement);
+      mockControl.$tearDown();
+    }
+
+    function testAriaLabelIsUpdatedOnFocus() {
+      var character = '←';
+      var characterName = 'right arrow';
+
+      charNameFetcherMock.getName(
+          character,
+          goog.testing.mockmatchers.isFunction).
+          $does(function(c, callback) {
+            callback(characterName);
+          });
+
+      mockControl.$replayAll();
+
+      charPicker.decorate(charPickerElement);
+
+      // Get the first button elements within the grid div and override its
+      // char attribute so the test doesn't depend on the actual grid content.
+      var gridElement = goog.dom.getElementByClass(
+          goog.getCssName('goog-char-picker-grid'), charPickerElement);
+      var buttonElement = goog.dom.getElementsByClass(
+          goog.ui.FlatButtonRenderer.CSS_CLASS, gridElement)[0];
+      buttonElement.setAttribute('char', character);
+
+      // Trigger a focus event on the button element.
+      goog.testing.events.fireBrowserEvent(new goog.events.Event(
+          goog.events.EventType.FOCUS, buttonElement));
+
+      mockControl.$verifyAll();
+
+      var ariaLabel = goog.a11y.aria.getState(
+          buttonElement, goog.a11y.aria.State.LABEL);
+      assertEquals('The aria label should be updated when the button' +
+          'gains focus.', characterName, ariaLabel);
+    }
+  </script>
+</body>
+</html>
