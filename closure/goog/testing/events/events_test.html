@@ -584,6 +584,11 @@ See the COPYING file for details.
     goog.events.unlisten(obj, 'test', handler);
     obj.dispatchEvent('test');
     assertEquals(1, handler.getCallCount());
+
+    goog.events.listen(obj, 'test', handler);
+    obj.dispose();
+    obj.dispatchEvent('test');
+    assertEquals(1, handler.getCallCount());
   }
 
   function testMixinListenableLegacy() {

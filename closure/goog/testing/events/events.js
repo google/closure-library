@@ -674,8 +674,10 @@ goog.testing.events.mixinListenable = function(obj) {
     listenable.setTargetForTesting(obj);
 
     var listenablePrototype = goog.events.EventTarget.prototype;
+    var disposablePrototype = goog.Disposable.prototype;
     for (var key in listenablePrototype) {
-      if (listenablePrototype.hasOwnProperty(key)) {
+      if (listenablePrototype.hasOwnProperty(key) ||
+          disposablePrototype.hasOwnProperty(key)) {
         var member = listenablePrototype[key];
         if (goog.isFunction(member)) {
           obj[key] = goog.bind(member, listenable);
