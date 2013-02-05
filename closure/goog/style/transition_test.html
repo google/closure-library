@@ -13,6 +13,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.style.transition</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.style');
   goog.require('goog.style.transition');
   goog.require('goog.testing.jsunit');
   goog.require('goog.userAgent');
@@ -29,6 +30,10 @@ function setUp() {
   element = {'style': {}};
 }
 
+function getTransitionStyle(element) {
+  return element.style['transition'] || goog.style.getStyle(element, 'transition');
+};
+
 
 function testSetWithNoProperty() {
   try {
@@ -42,18 +47,14 @@ function testSetWithNoProperty() {
 
 function testSetWithString() {
   goog.style.transition.set(element, 'opacity 1s ease-in 0.125s');
-  assertEquals('opacity 1s ease-in 0.125s', element.style.WebkitTransition);
-  assertEquals('opacity 1s ease-in 0.125s', element.style.MozTransition);
-  assertEquals('opacity 1s ease-in 0.125s', element.style.OTransition);
+  assertEquals('opacity 1s ease-in 0.125s', getTransitionStyle(element));
 }
 
 
 function testSetWithSingleProperty() {
   goog.style.transition.set(element,
       {property: 'opacity', duration: 1, timing: 'ease-in', delay: 0.125});
-  assertEquals('opacity 1s ease-in 0.125s', element.style.WebkitTransition);
-  assertEquals('opacity 1s ease-in 0.125s', element.style.MozTransition);
-  assertEquals('opacity 1s ease-in 0.125s', element.style.OTransition);
+  assertEquals('opacity 1s ease-in 0.125s', getTransitionStyle(element));
 }
 
 
@@ -63,11 +64,7 @@ function testSetWithMultipleStrings() {
     'height 0.5s linear 1s'
   ]);
   assertEquals('width 1s ease-in,height 0.5s linear 1s',
-      element.style.WebkitTransition);
-  assertEquals('width 1s ease-in,height 0.5s linear 1s',
-      element.style.MozTransition);
-  assertEquals('width 1s ease-in,height 0.5s linear 1s',
-      element.style.OTransition);
+               getTransitionStyle(element));
 }
 
 
@@ -77,46 +74,27 @@ function testSetWithMultipleProperty() {
     {property: 'height', duration: 0.5, timing: 'linear', delay: 1}
   ]);
   assertEquals('width 1s ease-in 0s,height 0.5s linear 1s',
-      element.style.WebkitTransition);
-  assertEquals('width 1s ease-in 0s,height 0.5s linear 1s',
-      element.style.MozTransition);
-  assertEquals('width 1s ease-in 0s,height 0.5s linear 1s',
-      element.style.OTransition);
+      getTransitionStyle(element));
 }
 
 
-function testRemoveAllForWebkit() {
-  element.style.WebkitTransition = 'opacity 1s ease-in';
+function testRemoveAll() {
+  goog.style.setStyle(element, 'transition', 'opacity 1s ease-in');
   goog.style.transition.removeAll(element);
-  assertEquals('', element.style.WebkitTransition);
+  assertEquals('', getTransitionStyle(element));
 }
 
 
-function testRemoveAllForGecko() {
-  element.style.MozTransition = 'opacity 1s ease-in';
-  goog.style.transition.removeAll(element);
-  assertEquals('', element.style.MozTransition);
-}
+function testAddAndRemoveOnRealElement() {
+  if (!goog.style.transition.isSupported()) {
+    return;
+  }
 
-
-function testRemoveAllForIE() {
-  element.style.MSTransition = 'opacity 1s ease-in';
-  goog.style.transition.removeAll(element);
-  assertEquals('', element.style.MSTransition);
-}
-
-
-function testRemoveAllForOpera() {
-  element.style.OTransition = 'opacity 1s ease-in';
-  goog.style.transition.removeAll(element);
-  assertEquals('', element.style.OTransition);
-}
-
-
-function testRemoveAllForUnprefixed() {
-  element.style.transition = 'opacity 1s ease-in';
-  goog.style.transition.removeAll(element);
-  assertEquals('', element.style.transition);
+  var div = document.getElementById('test');
+  goog.style.transition.set(div, 'opacity 1s ease-in 0.125s');
+  assertEquals('opacity 1s ease-in 0.125s', getTransitionStyle(div));
+  goog.style.transition.removeAll(div);
+  assertEquals('', getTransitionStyle(div));
 }
 
 
@@ -141,6 +119,6 @@ function testSanityDetectionOfCss3Transition() {
 }
 
 </script>
-
+<div id=test></div>
 </body>
 </html>
