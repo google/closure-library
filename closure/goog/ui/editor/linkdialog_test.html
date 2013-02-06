@@ -31,6 +31,7 @@ See the COPYING file for details.
   goog.require('goog.ui.editor.LinkDialog');
   goog.require('goog.ui.editor.LinkDialog.OkEvent');
   goog.require('goog.ui.editor.messages');
+  goog.require('goog.userAgent');
 </script>
 <link rel="stylesheet" href="../../css/dialog.css"/>
 <link rel="stylesheet" href="../../css/linkbutton.css"/>
@@ -155,6 +156,50 @@ See the COPYING file for details.
   }
 
   /**
+   * Return true if we should use active element in our tests.
+   * @return {boolean} .
+   */
+  function useActiveElement() {
+    return goog.editor.BrowserFeature.HAS_ACTIVE_ELEMENT ||
+        goog.userAgent.WEBKIT && goog.userAgent.isVersion(9);
+  }
+
+  /**
+   * Tests that when you show the dialog for a new link, you can switch
+   * to the URL view.
+   * @param {Document=} opt_document Document to render the dialog into.
+   *     Defaults to the main window's document.
+   */
+  function testShowNewLinkSwitchToUrl(opt_document) {
+    mockCtrl.$replayAll();
+    setUpAnchor('', '', true); // Must be done before creating the dialog.
+    createAndShow(opt_document);
+
+    var webRadio = dialog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB).firstChild;
+    var emailRadio = dialog.dom.getElement(
+        goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_TAB).firstChild;
+    assertTrue('Web Radio Button selected', webRadio.checked);
+    assertFalse('Email Radio Button selected', emailRadio.checked);
+    if (useActiveElement()) {
+      assertEquals('Focus should be on url input',
+          getUrlInput(),
+          dialog.dom.getActiveElement());
+    }
+
+    emailRadio.click();
+    assertFalse('Web Radio Button selected', webRadio.checked);
+    assertTrue('Email Radio Button selected', emailRadio.checked);
+    if (useActiveElement()) {
+      assertEquals('Focus should be on url input',
+          getEmailInput(),
+          dialog.dom.getActiveElement());
+    }
+
+    mockCtrl.$verifyAll();
+  }
+
+  /**
    * Tests that when you show the dialog for a new link, the input fields are
    * empty, the web tab is selected and focus is in the url input field.
    * @param {Document=} opt_document Document to render the dialog into.
@@ -174,10 +219,10 @@ See the COPYING file for details.
     assertEquals('On the web tab should be selected',
                  goog.ui.editor.LinkDialog.Id_.ON_WEB,
                  dialog.curTabId_);
-    if (goog.editor.BrowserFeature.HAS_ACTIVE_ELEMENT) {
+    if (useActiveElement()) {
       assertEquals('Focus should be on url input',
                    getUrlInput(),
-                   dialog.dom.getDocument().activeElement);
+                   dialog.dom.getActiveElement());
     }
 
     mockCtrl.$verifyAll();
@@ -209,10 +254,10 @@ See the COPYING file for details.
     assertEquals('On the web tab should be selected',
                  goog.ui.editor.LinkDialog.Id_.ON_WEB,
                  dialog.curTabId_);
-    if (goog.editor.BrowserFeature.HAS_ACTIVE_ELEMENT) {
+    if (useActiveElement()) {
       assertEquals('Focus should be on url input',
                    getUrlInput(),
-                   dialog.dom.getDocument().activeElement);
+                   dialog.dom.getActiveElement());
     }
 
     mockCtrl.$verifyAll();
@@ -236,10 +281,10 @@ See the COPYING file for details.
     assertEquals('Email tab should be selected',
                  goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS,
                  dialog.curTabId_);
-    if (goog.editor.BrowserFeature.HAS_ACTIVE_ELEMENT) {
+    if (useActiveElement()) {
       assertEquals('Focus should be on email input',
                    getEmailInput(),
-                   dialog.dom.getDocument().activeElement);
+                   dialog.dom.getActiveElement());
     }
 
     mockCtrl.$verifyAll();
@@ -559,7 +604,9 @@ See the COPYING file for details.
   }
 
   function getUrlInput() {
-    return dialog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT);
+    var elt = dialog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT);
+    assertNotNullNorUndefined('UrlInput must be found', elt);
+    return elt;
   }
 
   function getUrlInputText() {
@@ -575,8 +622,10 @@ See the COPYING file for details.
   }
 
   function getEmailInput() {
-    return dialog.dom.getElement(
+    var elt = dialog.dom.getElement(
         goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_INPUT);
+    assertNotNullNorUndefined('EmailInput must be found', elt);
+    return elt;
   }
 
   function getEmailInputText() {
