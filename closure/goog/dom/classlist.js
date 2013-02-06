@@ -44,7 +44,7 @@ goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST = false;
  */
 goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ =
     goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST ||
-    !!window['DOMTokenList'];
+    typeof DOMTokenList != 'undefined';
 
 
 /**
@@ -113,6 +113,44 @@ goog.dom.classlist.add = goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ ?
 
 
 /**
+ * Convenience method to add a number of class names at once.
+ * @param {Element} element The element to which to add classes.
+ * @param {goog.array.ArrayLike.<string>} classesToAdd An array-like object
+ * containing a collection of class names to add to the element.
+ * This method may throw a DOM exception if classesToAdd contains invalid
+ * or empty class names.
+ */
+goog.dom.classlist.addAll = goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ ?
+    function(element, classesToAdd) {
+      goog.array.forEach(classesToAdd, function(className) {
+        goog.dom.classlist.add(element, className);
+      });
+    } :
+    function(element, classesToAdd) {
+      var classMap = {};
+
+      // Get all current class names into a map.
+      goog.array.forEach(goog.dom.classlist.get(element),
+          function(className) {
+            classMap[className] = true;
+          });
+
+      // Add new class names to the map.
+      goog.array.forEach(classesToAdd,
+          function(className) {
+            classMap[className] = true;
+          });
+
+      // Flatten the keys of the map into the className.
+      element.className = '';
+      for (var className in classMap) {
+        element.className += element.className.length > 0 ?
+            (' ' + className) : className;
+      }
+    };
+
+
+/**
  * Removes a class from an element.  This method may throw a DOM exception
  * for an invalid or empty class name if DOMTokenList is used.
  * @param {Element} element DOM node to remove class from.
@@ -141,7 +179,7 @@ goog.dom.classlist.remove = goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ ?
  * @param {Element} element The element from which to remove classes.
  * @param {goog.array.ArrayLike.<string>} classesToRemove An array-like object
  * containing a collection of class names to remove from the element.
- * This method may throw a DOM exception if classNames contains invalid
+ * This method may throw a DOM exception if classesToRemove contains invalid
  * or empty class names.
  */
 goog.dom.classlist.removeAll = goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ ?

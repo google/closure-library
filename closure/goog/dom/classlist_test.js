@@ -79,6 +79,26 @@ function testAddCaseSensitive() {
   assertEquals('A a', el.className);
 }
 
+function testAddAll() {
+  var elem = document.createElement('div');
+  elem.className = 'foo goog-bar';
+
+  goog.dom.classlist.addAll(elem, ['goog-baz', 'foo']);
+  assertEquals(3, classlist.get(elem).length);
+  assertTrue(goog.dom.classlist.contains(elem, 'foo'));
+  assertTrue(goog.dom.classlist.contains(elem, 'goog-bar'));
+  assertTrue(goog.dom.classlist.contains(elem, 'goog-baz'));
+}
+
+function testAddAllEmpty() {
+  var classes = 'foo bar';
+  var elem = document.createElement('div');
+  elem.className = classes;
+
+  goog.dom.classlist.addAll(elem, []);
+  assertEquals(elem.className, classes);
+}
+
 function testRemove() {
   var el = document.createElement('div');
   el.className = 'A B C';
