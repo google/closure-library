@@ -244,7 +244,59 @@ See the COPYING file for details.
     tree.add(1);
     tree.remove(1);
     assertEquals(0, tree.getCount());
+
+    var values = ['bill', 'blake', 'elliot', 'jacob', 'john', 'myles', 'ted'];
+
+    // Insert strings into tree out of order
+    tree.add('frodo');
+    tree.add(values[4]);
+    tree.add(values[3]);
+    tree.add(values[0]);
+    tree.add(values[6]);
+    tree.add('samwise');
+    tree.add(values[5]);
+    tree.add(values[1]);
+    tree.add(values[2]);
+    tree.add('pippin');
+    assertEquals(10, tree.getCount());
+    assertEquals(
+        tree.root_.left.count + tree.root_.right.count + 1, tree.getCount());
+
+    // Remove strings from tree
+    assertEquals('samwise', tree.remove('samwise'));
+    assertEquals('pippin', tree.remove('pippin'));
+    assertEquals('frodo', tree.remove('frodo'));
+    assertEquals(null, tree.remove('merry'));
+    assertEquals(7, tree.getCount());
+
+    assertEquals(
+        tree.root_.left.count + tree.root_.right.count + 1, tree.getCount());
   }
+
+  /**
+   * This test verifies that getKthOrder gets the correct value.
+   */
+  function testGetKthOrder() {
+    var tree = new goog.structs.AvlTree(function(a, b) {
+      return a - b;
+    });
+
+    var NUM_TO_INSERT = 2000;
+    var NUM_TO_REMOVE = 500;
+
+    // Insert ints into tree out of order
+    for (var i = 0; i < NUM_TO_INSERT; i += 1) {
+      tree.add(i);
+    }
+
+    // Remove values.
+    for (var i = 0; i < NUM_TO_REMOVE; i += 1) {
+      tree.remove(i);
+    }
+    for (var k = 0; k < tree.getCount(); ++k) {
+      assertEquals(NUM_TO_REMOVE + k, tree.getKthValue(k));
+    }
+  };
 
 </script>
 </body>
