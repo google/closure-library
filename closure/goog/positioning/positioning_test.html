@@ -479,12 +479,16 @@ function testPositionAtAnchorRightToLeftWithScroll() {
                                     popup, corner.TOP_START);
   anchorRect = goog.style.getBounds(anchor);
   popupRect = goog.style.getBounds(popup);
+
+  var visibleAnchorRect = goog.positioning.getVisiblePart_(anchor);
+  var visibleAnchorBox = visibleAnchorRect.toBox();
+
   assertRoundedEquals('Right edge of popup should line up with right edge ' +
                       'of anchor.',
                       anchorRect.left + anchorRect.width,
                       popupRect.left + popupRect.width);
   assertRoundedEquals('Popup should be positioned just below the anchor.',
-                      anchorRect.top + anchorRect.height,
+                      visibleAnchorBox.bottom,
                       popupRect.top);
 }
 
