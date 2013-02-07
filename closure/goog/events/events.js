@@ -70,7 +70,7 @@ goog.require('goog.userAgent');
 
 
 /**
- * @typedef {?number}
+ * @typedef {number|goog.events.ListenableKey}
  */
 goog.events.Key;
 
