@@ -1073,27 +1073,3 @@ function testParseInt() {
   assertEquals(-243, goog.string.parseInt('   -0xF3    '));
   assertTrue(isNaN(goog.string.parseInt(' - 0x32 ')));
 }
-
-// test for goog.string.splitLines
-function testSplitLines() {
-
-  function assertSplitLines(expected, string, opt_keepNewlines) {
-    var keepNewlines = opt_keepNewlines || false;
-    var lines = goog.string.splitLines(string, keepNewlines);
-    assertElementsEquals(expected, lines);
-  }
-
-  // Test values borrowed from Python's splitlines. http://goo.gl/iwawx
-  assertSplitLines(['abc', 'def', '', 'ghi'], 'abc\ndef\n\rghi');
-  assertSplitLines(['abc', 'def', '', 'ghi'], 'abc\ndef\n\r\nghi');
-  assertSplitLines(['abc', 'def', 'ghi'], 'abc\ndef\r\nghi');
-  assertSplitLines(['abc', 'def', 'ghi'], 'abc\ndef\r\nghi\n');
-  assertSplitLines(['abc', 'def', 'ghi', ''], 'abc\ndef\r\nghi\n\r');
-  assertSplitLines(['', 'abc', 'def', 'ghi', ''], '\nabc\ndef\r\nghi\n\r');
-  assertSplitLines(['', 'abc', 'def', 'ghi', ''], '\nabc\ndef\r\nghi\n\r');
-  assertSplitLines(['\n', 'abc\n', 'def\r\n', 'ghi\n', '\r'],
-                   '\nabc\ndef\r\nghi\n\r', true);
-  assertSplitLines(['', 'abc', 'def', 'ghi', ''], '\nabc\ndef\r\nghi\n\r');
-  assertSplitLines(['\n', 'abc\n', 'def\r\n', 'ghi\n', '\r'],
-                   '\nabc\ndef\r\nghi\n\r', true);
-}
