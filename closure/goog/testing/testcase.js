@@ -1149,7 +1149,7 @@ goog.testing.TestCase.initializeTestRunner = function(testCase) {
     gTestRunner['initialize'](testCase);
   } else {
     throw Error('G_testRunner is undefined. Please ensure goog.testing.jsunit' +
-        'is included.');
+        ' is included.');
   }
 };
 
