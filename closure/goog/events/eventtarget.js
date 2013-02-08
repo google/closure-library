@@ -119,6 +119,15 @@ if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
 
 
 /**
+ * An artificial cap on the number of ancestors you can have. This is mainly
+ * for loop detection.
+ * @const {number}
+ * @private
+ */
+goog.events.EventTarget.MAX_ANCESTORS_ = 1000;
+
+
+/**
  * Used to tell if an event is a real event in goog.events.listen() so we don't
  * get listen() calling addEventListener() and vice-versa.
  * @type {boolean}
@@ -210,8 +219,12 @@ goog.events.EventTarget.prototype.dispatchEvent = function(e) {
     var ancestorsTree, ancestor = this.getParentEventTarget();
     if (ancestor) {
       ancestorsTree = [];
+      var ancestorCount = 1;
       for (; ancestor; ancestor = ancestor.getParentEventTarget()) {
         ancestorsTree.push(ancestor);
+        goog.asserts.assert(
+            (++ancestorCount < goog.events.EventTarget.MAX_ANCESTORS_),
+            'infinite loop');
       }
     }
 
