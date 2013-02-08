@@ -15,6 +15,7 @@ Author:  attila@google.com (Attila Bodis)
   <script src="../base.js"></script>
   <script>
     goog.require('goog.Disposable');
+    goog.require('goog.a11y.aria');
     goog.require('goog.dom');
     goog.require('goog.dom.classes');
     goog.require('goog.testing.events');
@@ -40,8 +41,8 @@ Author:  attila@google.com (Attila Bodis)
 
       sandbox.innerHTML =
           '<div id="containerElement" class="goog-container">\n' +
-          '  <div class="goog-control">Hello</div>\n' +
-          '  <div class="goog-control">World</div>\n' +
+          '  <div class="goog-control" id="hello">Hello</div>\n' +
+          '  <div class="goog-control" id="world">World</div>\n' +
           '</div>';
       containerElement = goog.dom.getElement('containerElement');
     }
@@ -115,6 +116,9 @@ Author:  attila@google.com (Attila Bodis)
           container.getChildAt(0).getElement(), sandbox);
       assertTrue('Child 0 should become highlighted after a mouse over',
           container.getChildAt(0).isHighlighted());
+      assertEquals('Child 0 should be the active descendant',
+          container.getChildAt(0).getElement(),
+          goog.a11y.aria.getActiveDescendant(container.getElement()));
 
       goog.testing.events.fireMouseOverEvent(
           container.getChildAt(1).getElement(),
@@ -124,6 +128,9 @@ Author:  attila@google.com (Attila Bodis)
           container.getChildAt(0).isHighlighted());
       assertTrue('Child 1 should now be highlighted.',
           container.getChildAt(1).isHighlighted());
+      assertEquals('Child 1 should be the active descendant',
+          container.getChildAt(1).getElement(),
+          goog.a11y.aria.getActiveDescendant(container.getElement()));
     }
 
     function testHighlightOnEnterPreventable() {

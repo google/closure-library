@@ -23,8 +23,10 @@ goog.provide('goog.ui.PaletteRenderer');
 goog.require('goog.a11y.aria');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.NodeIterator');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
+goog.require('goog.iter');
 goog.require('goog.style');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
@@ -144,7 +146,10 @@ goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
  * @return {Element} Row element.
  */
 goog.ui.PaletteRenderer.prototype.createRow = function(cells, dom) {
-  return dom.createDom('tr', goog.getCssName(this.getCssClass(), 'row'), cells);
+  var row = dom.createDom('tr',
+      goog.getCssName(this.getCssClass(), 'row'), cells);
+  goog.a11y.aria.setRole(row, 'row');
+  return row;
 };
 
 
@@ -163,7 +168,32 @@ goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
         goog.ui.PaletteRenderer.cellId_++
   }, node);
   goog.a11y.aria.setRole(cell, 'gridcell');
+
+  if (!goog.dom.getTextContent(cell) && !goog.a11y.aria.getLabel(cell)) {
+    goog.a11y.aria.setLabel(cell, this.findAriaLabelForCell_(cell));
+  }
   return cell;
+};
+
+
+/**
+ * Descends the DOM and tries to find an aria label for a grid cell
+ * from the first child with a label or title.
+ * @param {!Element} cell The cell.
+ * @return {string} The label to use.
+ * @private
+ */
+goog.ui.PaletteRenderer.prototype.findAriaLabelForCell_ = function(cell) {
+  var iter = new goog.dom.NodeIterator(cell);
+  var label = '';
+  var node;
+  while (!label && (node = goog.iter.nextOrValue(iter, null))) {
+    if (node.nodeType == goog.dom.NodeType.ELEMENT) {
+      label = goog.a11y.aria.getLabel(/** @type {!Element} */ (node)) ||
+          node.title;
+    }
+  }
+  return label;
 };
 
 
@@ -286,7 +316,7 @@ goog.ui.PaletteRenderer.prototype.highlightCell = function(palette,
                                                            node,
                                                            highlight) {
   if (node) {
-    var cell = /** @type {Element} */ (node.parentNode);
+    var cell = this.getCellForItem(node);
     goog.dom.classes.enable(cell,
         goog.getCssName(this.getCssClass(), 'cell-hover'), highlight);
     // See http://www.w3.org/TR/2006/WD-aria-state-20061220/#activedescendent
@@ -294,6 +324,15 @@ goog.ui.PaletteRenderer.prototype.highlightCell = function(palette,
     var table = /** @type {!Element} */ (palette.getElement().firstChild);
     goog.a11y.aria.setState(table, 'activedescendent', cell.id);
   }
+};
+
+
+/**
+ * @param {Node} node Item whose cell is to be returned.
+ * @return {Element} The grid cell for the palette item.
+ */
+goog.ui.PaletteRenderer.prototype.getCellForItem = function(node) {
+  return /** @type {Element} */ (node ? node.parentNode : null);
 };
 
 

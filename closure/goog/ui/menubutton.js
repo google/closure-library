@@ -837,9 +837,11 @@ goog.ui.MenuButton.prototype.attachMenuEventListeners_ = function(menu,
 goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
   var element = this.getElement();
   goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
-  goog.a11y.aria.setState(element,
-      goog.a11y.aria.State.ACTIVEDESCENDANT,
-      e.target.getElement().id);
+  if (e.target.getElement() != null) {
+    goog.a11y.aria.setState(element,
+        goog.a11y.aria.State.ACTIVEDESCENDANT,
+        e.target.getElement().id);
+  }
 };
 
 

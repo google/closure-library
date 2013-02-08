@@ -86,6 +86,19 @@ Author:  attila@google.com (Attila Bodis)
           someSpan,
           goog.a11y.aria.getActiveDescendant(someDiv));
     }
+
+    function testGetSetLabel() {
+      assertEquals(
+          'someDiv\'s label should be ""',
+          '',
+          goog.a11y.aria.getLabel(someDiv));
+
+      goog.a11y.aria.setLabel(someDiv, 'somelabel');
+      assertEquals(
+          'someDiv\'s label should be "somelabel"',
+          'somelabel',
+          goog.a11y.aria.getLabel(someDiv));
+    }
   </script>
 </body>
 </html>

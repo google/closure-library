@@ -11,9 +11,11 @@ See the COPYING file for details.
   <title>Closure Unit Tests - goog.ui.Palette</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.a11y.aria');
     goog.require('goog.dom');
     goog.require('goog.testing.jsunit');
     goog.require('goog.testing.recordFunction');
+    goog.require('goog.ui.Container');
     goog.require('goog.ui.Palette');
   </script>
 </head>
@@ -21,6 +23,7 @@ See the COPYING file for details.
   <div id="sandbox"></div>
   <script>
     var palette;
+    var nodes;
 
     function setUp() {
       nodes = [];
@@ -36,7 +39,7 @@ See the COPYING file for details.
       document.getElementById('sandbox').innerHTML = '';
     }
 
-    function testHighlightListener() {
+    function testAfterHighlightListener() {
       palette.setHighlightedIndex(0);
       var handler = new goog.testing.recordFunction();
       goog.events.listen(palette,
@@ -47,6 +50,86 @@ See the COPYING file for details.
       assertEquals(2, handler.getCallCount())
     }
 
+    function testHighlightItemUpdatesParentA11yActiveDescendant() {
+      var container = new goog.ui.Container();
+      container.render(document.getElementById('sandbox'));
+      container.addChild(palette, true);
+
+      palette.setHighlightedItem(nodes[0]);
+      assertEquals('Node 0 cell should be the container\'s active descendant',
+          palette.getRenderer().getCellForItem(nodes[0]),
+          goog.a11y.aria.getActiveDescendant(container.getElement()));
+
+      palette.setHighlightedItem(nodes[1]);
+      assertEquals('Node 1 cell should be the container\'s active descendant',
+          palette.getRenderer().getCellForItem(nodes[1]),
+          goog.a11y.aria.getActiveDescendant(container.getElement()));
+
+      palette.setHighlightedItem();
+      assertNull('Container should have no active descendant',
+          goog.a11y.aria.getActiveDescendant(container.getElement()))
+
+      container.dispose();
+    }
+
+    function testHighlightCellEvents() {
+      var container = new goog.ui.Container();
+      container.render(document.getElementById('sandbox'));
+      container.addChild(palette, true);
+      var renderer = palette.getRenderer();
+
+      var events = [];
+      var targetElements = [];
+      var handleEvent = function(e) {
+        events.push(e);
+        targetElements.push(e.target.getElement());
+      };
+      palette.getHandler().listen(palette, [
+            this, goog.ui.Component.EventType.HIGHLIGHT,
+            this, goog.ui.Component.EventType.UNHIGHLIGHT
+          ], handleEvent);
+
+      // Test highlight events on first selection
+      palette.setHighlightedItem(nodes[0]);
+      assertEquals('Should have fired 1 event', 1, events.length);
+      assertEquals('HIGHLIGHT event should be fired',
+          goog.ui.Component.EventType.HIGHLIGHT, events[0].type);
+      assertEquals('Event should be fired for node[0] cell',
+          renderer.getCellForItem(nodes[0]), targetElements[0]);
+
+      events = [];
+      targetElements = [];
+
+      // Only fire highlight events when there is a selection change
+      palette.setHighlightedItem(nodes[0]);
+      assertEquals('Should have fired 0 events', 0, events.length);
+
+      // Test highlight events on cell change
+      palette.setHighlightedItem(nodes[1]);
+      assertEquals('Should have fired 2 events', 2, events.length);
+      var unhighlightEvent = events.shift();
+      var highlightEvent = events.shift();
+      assertEquals('UNHIGHLIGHT should be fired first',
+          goog.ui.Component.EventType.UNHIGHLIGHT, unhighlightEvent.type);
+      assertEquals('UNHIGHLIGHT should be fired for node[0] cell',
+          renderer.getCellForItem(nodes[0]), targetElements[0]);
+      assertEquals('HIGHLIGHT should be fired after UNHIGHLIGHT',
+          goog.ui.Component.EventType.HIGHLIGHT, highlightEvent.type);
+      assertEquals('HIGHLIGHT should be fired for node[1] cell',
+          renderer.getCellForItem(nodes[1]), targetElements[1]);
+
+      events = [];
+      targetElements = [];
+
+      // Test highlight events when a cell is unselected
+      palette.setHighlightedItem();
+
+      assertEquals('Should have fired 1 event', 1, events.length);
+      assertEquals('UNHIGHLIGHT event should be fired',
+          goog.ui.Component.EventType.UNHIGHLIGHT, events[0].type);
+      assertEquals('Event should be fired for node[1] cell',
+          renderer.getCellForItem(nodes[1]), targetElements[0]);
+    }
   </script>
 </body>
 </html>

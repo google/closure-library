@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+  @author erickj@google.com (Erick Johnson)
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Closure Unit Tests for PaletteRenderer</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.a11y.aria');
+  goog.require('goog.array');
+  goog.require('goog.dom');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.ui.Container');
+  goog.require('goog.ui.Palette');
+  goog.require('goog.ui.PaletteRenderer');
+</script>
+</head>
+<body>
+
+<div id='root'>
+  <div id='sandbox'></div>
+</div>
+
+<script>
+  var sandbox = goog.dom.getElement('sandbox');
+  var items = [
+    '<div aria-label="label-0"></div>',
+    '<div title="title-1"></div>',
+    '<div aria-label="label-2" title="title-2"></div>',
+    '<div><span title="child-title-3"></span></div>'
+  ];
+  var itemEls;
+  var renderer;
+  var palette;
+
+  function setUp() {
+    itemEls = goog.array.map(items, function(item, index, a) {
+      return goog.dom.htmlToDocumentFragment(item);
+    });
+    renderer = new goog.ui.PaletteRenderer();
+    palette = new goog.ui.Palette(itemEls, renderer);
+    palette.setSize(4, 1);
+  }
+
+  function tearDown() {
+    palette.dispose();
+  }
+
+  function testGridA11yRoles() {
+    var grid = renderer.createDom(palette);
+    var table = grid.getElementsByTagName('table')[0];
+    assertEquals('grid', goog.a11y.aria.getRole(table));
+    var row = table.getElementsByTagName('tr')[0];
+    assertEquals('row', goog.a11y.aria.getRole(row));
+    var cell = row.getElementsByTagName('td')[0];
+    assertEquals('gridcell', goog.a11y.aria.getRole(cell));
+  }
+
+  function testCellA11yLabels() {
+    var grid = renderer.createDom(palette);
+    var cells = grid.getElementsByTagName('td');
+
+    assertEquals('An aria-label is used as a label',
+        'label-0', goog.a11y.aria.getLabel(cells[0]));
+    assertEquals('A title is used as a label',
+        'title-1', goog.a11y.aria.getLabel(cells[1]));
+    assertEquals('An aria-label takes precedence over a title',
+        'label-2', goog.a11y.aria.getLabel(cells[2]));
+    assertEquals('Children are traversed to find labels',
+        'child-title-3', goog.a11y.aria.getLabel(cells[3]));
+  }
+</script>
+</body>
+</html>

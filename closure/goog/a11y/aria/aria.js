@@ -462,3 +462,23 @@ goog.a11y.aria.setActiveDescendant = function(element, activeElement) {
       activeElement ? activeElement.id : '');
 };
 
+
+/**
+ * Gets the label of the given element.
+ * @param {!Element} element DOM node to get label from.
+ * @return {string} label The label.
+ */
+goog.a11y.aria.getLabel = function(element) {
+  return goog.a11y.aria.getState(element, goog.a11y.aria.State.LABEL);
+};
+
+
+/**
+ * Sets the label of the given element.
+ * @param {!Element} element DOM node to set label to.
+ * @param {string} label The label to set.
+ */
+goog.a11y.aria.setLabel = function(element, label) {
+  goog.a11y.aria.setState(element, goog.a11y.aria.State.LABEL, label);
+};
+
