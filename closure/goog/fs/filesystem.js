@@ -57,3 +57,11 @@ goog.fs.FileSystem.prototype.getName = function() {
 goog.fs.FileSystem.prototype.getRoot = function() {
   return new goog.fs.DirectoryEntry(this, this.fs_.root);
 };
+
+
+/**
+ * @return {!FileSystem} The underlying FileSystem object.
+ */
+goog.fs.FileSystem.prototype.getBrowserFileSystem = function() {
+  return this.fs_;
+};
