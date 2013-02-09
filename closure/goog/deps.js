@@ -23,7 +23,9 @@ goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', 
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist.js', ['goog.async.DeferredList'], ['goog.array', 'goog.async.Deferred']);
 goog.addDependency('../../third_party/closure/goog/osapi/osapi.js', ['goog.osapi'], []);
 goog.addDependency('a11y/aria/announcer.js', ['goog.a11y.aria.Announcer'], ['goog.Disposable', 'goog.a11y.aria', 'goog.a11y.aria.LivePriority', 'goog.a11y.aria.State', 'goog.dom', 'goog.object']);
-goog.addDependency('a11y/aria/aria.js', ['goog.a11y.aria', 'goog.a11y.aria.LivePriority', 'goog.a11y.aria.Role', 'goog.a11y.aria.State'], ['goog.dom']);
+goog.addDependency('a11y/aria/aria.js', ['goog.a11y.aria'], ['goog.a11y.aria.Role', 'goog.a11y.aria.State', 'goog.dom']);
+goog.addDependency('a11y/aria/attributes.js', ['goog.a11y.aria.LivePriority', 'goog.a11y.aria.State'], []);
+goog.addDependency('a11y/aria/roles.js', ['goog.a11y.aria.Role'], []);
 goog.addDependency('array/array.js', ['goog.array', 'goog.array.ArrayLike'], ['goog.asserts']);
 goog.addDependency('asserts/asserts.js', ['goog.asserts', 'goog.asserts.AssertionError'], ['goog.debug.Error', 'goog.string']);
 goog.addDependency('async/animationdelay.js', ['goog.async.AnimationDelay'], ['goog.async.Delay', 'goog.functions']);
