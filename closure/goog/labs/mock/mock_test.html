@@ -12,6 +12,7 @@ See the COPYING file for details.
 <script>
 
 goog.require('goog.labs.mock');
+goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.labs.testing.AnythingMatcher');
 goog.require('goog.labs.testing.GreaterThanMatcher');
@@ -168,9 +169,10 @@ function testVerifyForObjects() {
 }
 
 function testVerifyForFunctions() {
-  function func(i) {
+  var func = function(i) {
     return i;
-  }
+  };
+
   var mockFunc = goog.labs.mockFunction(func);
   goog.labs.mock.when(mockFunc)(2).thenReturn(55);
   assertEquals(55, mockFunc(2));
@@ -180,6 +182,76 @@ function testVerifyForFunctions() {
   var e = assertThrows(goog.bind(goog.labs.mock.verify(mockFunc), 3));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
+
+/**
+* When a function invocation verification fails, it should show the failed
+* expectation call, as well as the recorded calls to the same method.
+*/
+function testVerificationErrorMessages() {
+  var mock = goog.labs.mock({
+    method : function(i) {
+      return i;
+    }
+  });
+
+  // Failure when there are no recorded calls.
+  var e = assertThrows(function() { goog.labs.mock.verify(mock).method(4); });
+  assertTrue(e instanceof goog.labs.mock.VerificationError);
+  var expected = '\nExpected: method(4)\n' +
+      'Recorded: No recorded calls';
+  assertEquals(expected, e.message);
+
+
+  // Failure when there are recorded calls with ints and functions
+  // as arguments.
+  var callback = function() {};
+  var callbackId = goog.getUid(callback);
+
+  mock.method(1);
+  mock.method(2);
+  mock.method(callback);
+
+  e = assertThrows(function() { goog.labs.mock.verify(mock).method(3); });
+  assertTrue(e instanceof goog.labs.mock.VerificationError);
+
+  expected = '\nExpected: method(3)\n' +
+      'Recorded: method(1),\n' +
+      '          method(2),\n' +
+      '          method(<function #anonymous' + callbackId + '>)';
+  assertEquals(expected, e.message);
+
+  // With mockFunctions
+  var mockCallback = goog.labs.mockFunction(callback);
+  e = assertThrows(function() { goog.labs.mock.verify(mockCallback)(5);});
+  expected = '\nExpected: #mockFor<#anonymous' + callbackId + '>(5)\n' +
+      'Recorded: No recorded calls';
+
+  mockCallback(8);
+  goog.labs.mock.verify(mockCallback)(8);
+  assertEquals(expected, e.message);
+}
+
+/**
+* Asserts that the given string contains a list of others strings
+* in the given order.
+*/
+function assertContainsInOrder(str, var_args) {
+  var expected = goog.array.splice(arguments, 1);
+  var indices = goog.array.map(expected, function(val) {
+    return str.indexOf(val);
+  });
+
+  for (var i = 0; i < expected.length; i++) {
+    var msg = 'Missing "' + expected[i] + '" from "' + str + '"';
+    assertTrue(msg, indices[i] != -1);
+
+    if (i > 0) {
+      msg = '"' + expected[i - 1] + '" should come before "' + expected[i] +
+          '" in "' + str + '"';
+      assertTrue(msg, indices[i] > indices[i - 1]);
+    }
+  }
+};
 
 function testMatchers() {
   var obj = {
@@ -265,6 +337,32 @@ function testVerifyForUnmockedMethods() {
 
   goog.labs.mock.verify(mockTask).run();
 }
+
+function testFormatMethodCall() {
+  var formatMethodCall = goog.labs.mock.formatMethodCall_;
+  assertEquals('alert()', formatMethodCall('alert'));
+  assertEquals('sum(2, 4)', formatMethodCall('sum', [2, 4]));
+  assertEquals('sum("2", "4")', formatMethodCall('sum', ['2', '4']));
+  assertEquals('call(<function unicorn>)',
+    formatMethodCall('call', [function unicorn() {}]));
+
+  assertEquals('call({"x":1,"y":{"hello":"world"}})',
+    formatMethodCall('call', [{x: 1, y: {hello: 'world'}}]));
+};
+
+function testGetFunctionName() {
+  var f1 = function() {};
+  var f2 = function() {};
+  var named = function myName() {};
+
+  assert(
+    goog.string.startsWith(goog.labs.mock.getFunctionName_(f1), '#anonymous'));
+  assert(
+    goog.string.startsWith(goog.labs.mock.getFunctionName_(f2), '#anonymous'));
+  assertNotEquals(
+    goog.labs.mock.getFunctionName_(f1), goog.labs.mock.getFunctionName_(f2));
+  assertEquals('myName', goog.labs.mock.getFunctionName_(named));
+};
 
 </script>
 </body>
