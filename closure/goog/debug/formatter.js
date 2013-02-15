@@ -266,8 +266,6 @@ goog.debug.HtmlFormatter.prototype.formatRecord = function(logRecord) {
   }
   sb.push('</span><br>');
 
-  // If the logger is enabled, open window and write html message to log
-  // otherwise save it
   return sb.join('');
 };
 
@@ -314,7 +312,5 @@ goog.debug.TextFormatter.prototype.formatRecord = function(logRecord) {
   if (this.showExceptionText && logRecord.getException()) {
     sb.push(logRecord.getExceptionText(), '\n');
   }
-  // If the logger is enabled, open window and write html message to log
-  // otherwise save it
   return sb.join('');
 };
