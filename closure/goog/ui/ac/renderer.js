@@ -124,7 +124,7 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
   this.hilitedRow_ = -1;
 
   /**
-   * The time that the rendering of the menu rows started
+   * The time that the suggestion rows were updated.
    * @type {number}
    * @protected
    * @suppress {underscore}
@@ -486,7 +486,14 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
       if (this.target_) {
         goog.a11y.aria.setActiveDescendant(this.target_, rowDiv);
       }
-      goog.style.scrollIntoContainerView(rowDiv, this.element_);
+      var offset =
+          goog.style.getContainerOffsetToScrollInto(rowDiv, this.element_);
+      if (offset.x != this.element_.scrollLeft ||
+          offset.y != this.element_.scrollTop) {
+        this.element_.scrollLeft = offset.x;
+        this.element_.scrollTop = offset.y;
+        this.startRenderingRows_ = goog.now();
+      }
     }
   }
 };
