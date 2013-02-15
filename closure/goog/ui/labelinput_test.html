@@ -151,6 +151,43 @@ function testDecorateElementWithFocus() {
   }
 }
 
+function testDecorateElementWithFocusDelay() {
+  if (isPlaceholderSupported()) {
+    return; // Delay only affects the older browsers.
+  }
+  var placeholder = 'search';
+
+  labelInput = new goog.ui.LabelInput();
+  labelInput.setLabel(placeholder);
+  var delay = 150;
+  labelInput.labelRestoreDelayMs = delay;
+
+  var decoratedElement = goog.dom.getElement('i');
+
+  decoratedElement.value = '';
+  decoratedElement.focus();
+
+  labelInput.decorate(decoratedElement);
+  labelInput.enterDocument();
+  // wait for all initial setup to settle
+  mockClock.tick(delay);
+
+  // NOTE(user): element.blur() doesn't seem to trigger the BLUR event in
+  // IE in the test environment. This could be related to the IE issues with
+  // testClassName() below.
+  goog.testing.events.fireBrowserEvent(
+      new goog.testing.events.Event(
+          goog.events.EventType.BLUR, decoratedElement));
+
+  mockClock.tick(delay - 1);
+  assertEquals('label should not be restored before labelRestoreDelay',
+      '', labelInput.getElement().value);
+
+  mockClock.tick(1);
+  assertEquals('label not rendered for blurred element with labelRestoreDelay',
+      placeholder, labelInput.getElement().value);
+}
+
 function testClassName() {
   labelInput = new goog.ui.LabelInput();
 
