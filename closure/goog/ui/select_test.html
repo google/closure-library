@@ -67,6 +67,11 @@ function testDefaultCaption() {
   assertEquals(newCaption, select.getCaption());
 }
 
+// TODO(user): Select has been intentionally changed to no longer follow
+// the spec described below. Select is semantically a menu button that opens
+// a menu with options when clicked. Setting it to LISTBOX role does not make
+// screen readers understand it properly.
+//
 // Confirms that aria roles for select conform to spec:
 // http://www.w3.org/TR/wai-aria/roles#listbox
 // Basically the select should have a role of LISTBOX and all the items should
@@ -80,11 +85,8 @@ function testAriaRoles() {
   assertNotNull(select.getElement());
   assertNotNull(item1.getElement());
   assertNotNull(item2.getElement());
-  assertEquals(goog.a11y.aria.Role.LISTBOX,
+  assertEquals(goog.a11y.aria.Role.BUTTON,
       goog.a11y.aria.getRole(select.getElement()));
-  assertEquals('false', goog.a11y.aria.getState(
-      select.getElement(),
-      goog.a11y.aria.State.HASPOPUP));
   assertEquals(goog.a11y.aria.Role.OPTION,
       goog.a11y.aria.getRole(item1.getElement()));
   assertEquals(goog.a11y.aria.Role.OPTION,
