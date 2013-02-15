@@ -185,8 +185,11 @@ goog.positioning.OverflowStatus.FAILED_VERTICAL =
  * @param {goog.math.Size=} opt_preferredSize The preferred size of the
  *     movableElement.
  * @param {goog.math.Box=} opt_viewport Box object describing the dimensions of
- *     the viewport. If not provided, a default one will be calculated by the
- *     position of the anchorElement and its moveable parent element.
+ *     the viewport. The viewport is specified relative to offsetParent of
+ *     {@code movableElement}. In other words, the viewport can be thought of as
+ *     describing a "position: absolute" element contained in the offsetParent.
+ *     It defaults to visible area of nearest scrollable ancestor of
+ *     {@code movableElement} (see {@code goog.style.getVisibleRectForElement}).
  * @return {goog.positioning.OverflowStatus} Status bitmap,
  *     {@see goog.positioning.OverflowStatus}.
  */
