@@ -146,7 +146,7 @@ goog.ui.editor.TabPane.prototype.addTab = function(id, caption, tooltip,
 
   content.id = id + '-tab';
   this.tabContent_.appendChild(content);
-  goog.style.showElement(content, false);
+  goog.style.setElementShown(content, false);
 };
 
 
@@ -183,10 +183,10 @@ goog.ui.editor.TabPane.prototype.handleTabSelect_ = function(e) {
 
   // Show the tab content.
   if (this.visibleContent_) {
-    goog.style.showElement(this.visibleContent_, false);
+    goog.style.setElementShown(this.visibleContent_, false);
   }
   this.visibleContent_ = this.dom_.getElement(tab.getId() + '-tab');
-  goog.style.showElement(this.visibleContent_, true);
+  goog.style.setElementShown(this.visibleContent_, true);
 
   // Select the appropriate radio button (and deselect the current one).
   if (this.selectedRadio_) {

@@ -206,7 +206,7 @@ goog.ui.PlainTextSpellChecker.prototype.check = function() {
   if (this.getElement().parentNode != this.overlay_.parentNode) {
     this.getElement().parentNode.appendChild(this.overlay_);
   }
-  goog.style.showElement(this.overlay_, false);
+  goog.style.setElementShown(this.overlay_, false);
 
   this.preChargeDictionary_(text);
 };
@@ -219,8 +219,8 @@ goog.ui.PlainTextSpellChecker.prototype.check = function() {
 goog.ui.PlainTextSpellChecker.prototype.finishCheck_ = function() {
   // Show correction UI.
   this.positionOverlay_();
-  goog.style.showElement(this.getElement(), false);
-  goog.style.showElement(this.overlay_, true);
+  goog.style.setElementShown(this.getElement(), false);
+  goog.style.setElementShown(this.overlay_, true);
 
   var eh = this.eventHandler_;
   eh.listen(this.overlay_, goog.events.EventType.CLICK, this.onWordClick_);
@@ -420,8 +420,8 @@ goog.ui.PlainTextSpellChecker.prototype.resume = function() {
 
   goog.ui.PlainTextSpellChecker.superClass_.resume.call(this);
 
-  goog.style.showElement(this.overlay_, false);
-  goog.style.showElement(this.getElement(), true);
+  goog.style.setElementShown(this.overlay_, false);
+  goog.style.setElementShown(this.getElement(), true);
   this.getElement().readOnly = false;
 
   if (wasVisible) {
@@ -486,8 +486,8 @@ goog.ui.PlainTextSpellChecker.prototype.onWindowResize_ = function(event) {
 
   if (size.width != this.winSize_.width ||
       size.height != this.winSize_.height) {
-    goog.style.showElement(this.overlay_, false);
-    goog.style.showElement(this.getElement(), true);
+    goog.style.setElementShown(this.overlay_, false);
+    goog.style.setElementShown(this.getElement(), true);
 
     // IE requires a slight delay, allowing the resize operation to take effect.
     if (goog.userAgent.IE) {
@@ -508,8 +508,8 @@ goog.ui.PlainTextSpellChecker.prototype.onWindowResize_ = function(event) {
  */
 goog.ui.PlainTextSpellChecker.prototype.resizeOverlay_ = function() {
    this.positionOverlay_();
-   goog.style.showElement(this.getElement(), false);
-   goog.style.showElement(this.overlay_, true);
+   goog.style.setElementShown(this.getElement(), false);
+   goog.style.setElementShown(this.overlay_, true);
 };
 
 

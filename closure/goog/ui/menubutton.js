@@ -772,7 +772,7 @@ goog.ui.MenuButton.prototype.positionMenu = function() {
   var elem = this.menu_.getElement();
   if (!this.menu_.isVisible()) {
     elem.style.visibility = 'hidden';
-    goog.style.showElement(elem, true);
+    goog.style.setElementShown(elem, true);
   }
 
   if (!this.originalSize_ && this.isScrollOnOverflow()) {
@@ -782,7 +782,7 @@ goog.ui.MenuButton.prototype.positionMenu = function() {
   position.reposition(elem, popupCorner, this.menuMargin_, this.originalSize_);
 
   if (!this.menu_.isVisible()) {
-    goog.style.showElement(elem, false);
+    goog.style.setElementShown(elem, false);
     elem.style.visibility = 'visible';
   }
 };

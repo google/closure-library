@@ -279,11 +279,11 @@ goog.ui.Menu.prototype.setPosition = function(x, opt_y) {
   // that the position gets set correctly.
   var visible = this.isVisible();
   if (!visible) {
-    goog.style.showElement(this.getElement(), true);
+    goog.style.setElementShown(this.getElement(), true);
   }
   goog.style.setPageOffset(this.getElement(), x, opt_y);
   if (!visible) {
-    goog.style.showElement(this.getElement(), false);
+    goog.style.setElementShown(this.getElement(), false);
   }
 };
 

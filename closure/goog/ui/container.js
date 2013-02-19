@@ -1010,7 +1010,7 @@ goog.ui.Container.prototype.setVisible = function(visible, opt_force) {
 
     var elem = this.getElement();
     if (elem) {
-      goog.style.showElement(elem, visible);
+      goog.style.setElementShown(elem, visible);
       if (this.isFocusable()) {
         // Enable keyboard access only for enabled & visible containers.
         this.renderer_.enableTabIndex(this.getKeyEventTarget(),

@@ -631,7 +631,7 @@ goog.ui.PopupBase.prototype.continueHidingPopup_ = function(opt_target) {
  */
 goog.ui.PopupBase.prototype.showPopupElement = function() {
   this.element_.style.visibility = 'visible';
-  goog.style.showElement(this.element_, true);
+  goog.style.setElementShown(this.element_, true);
 };
 
 
@@ -641,7 +641,7 @@ goog.ui.PopupBase.prototype.showPopupElement = function() {
  */
 goog.ui.PopupBase.prototype.hidePopupElement_ = function() {
   this.element_.style.visibility = 'hidden';
-  goog.style.showElement(this.element_, false);
+  goog.style.setElementShown(this.element_, false);
 };
 
 

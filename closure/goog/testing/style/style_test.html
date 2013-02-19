@@ -59,7 +59,7 @@ See the COPYING file for details.
                goog.testing.style.isVisible(div1));
 
     // Tests with hidden element
-    goog.style.showElement(div1, false /* display */);
+    goog.style.setElementShown(div1, false /* display */);
     assertFalse('The div should be detected as not visible.',
                 goog.testing.style.isVisible(div1));
   }

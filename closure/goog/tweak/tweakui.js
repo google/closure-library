@@ -545,7 +545,7 @@ goog.tweak.EntriesPanel.prototype.onHelpClick_ = function(entryDiv) {
 goog.tweak.EntriesPanel.prototype.showDescription_ =
     function(entryDiv, show) {
   var descriptionElem = entryDiv.lastChild.lastChild;
-  goog.style.showElement(/** @type {Element} */ (descriptionElem), show);
+  goog.style.setElementShown(/** @type {Element} */ (descriptionElem), show);
   entryDiv.style.display = show ? 'block' : '';
 };
 

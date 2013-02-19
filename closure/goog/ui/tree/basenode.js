@@ -281,7 +281,7 @@ goog.ui.tree.BaseNode.prototype.addChildAt = function(child, index,
         if (prevNode) {
           prevNode.updateExpandIcon();
         } else {
-          goog.style.showElement(el, true);
+          goog.style.setElementShown(el, true);
           this.setExpanded(this.getExpanded());
         }
       }
@@ -646,7 +646,7 @@ goog.ui.tree.BaseNode.prototype.setExpanded = function(expanded) {
     if (el) {
       ce = this.getChildrenElement();
       if (ce) {
-        goog.style.showElement(ce, expanded);
+        goog.style.setElementShown(ce, expanded);
 
         // Make sure we have the HTML for the children here.
         if (expanded && this.isInDocument() && !ce.hasChildNodes()) {
@@ -665,7 +665,7 @@ goog.ui.tree.BaseNode.prototype.setExpanded = function(expanded) {
   } else {
     ce = this.getChildrenElement();
     if (ce) {
-      goog.style.showElement(ce, false);
+      goog.style.setElementShown(ce, false);
     }
   }
   if (el) {

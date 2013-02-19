@@ -124,12 +124,12 @@ goog.testing.ExpectedFailures.setUpConsole_ = function() {
     }, xButton);
     document.body.appendChild(div);
     goog.events.listen(xButton, goog.events.EventType.CLICK, function() {
-      goog.style.showElement(div, false);
+      goog.style.setElementShown(div, false);
     });
 
     goog.testing.ExpectedFailures.console_ = new goog.debug.DivConsole(div);
     goog.testing.ExpectedFailures.prototype.logger_.addHandler(
-        goog.bind(goog.style.showElement, null, div, true));
+        goog.bind(goog.style.setElementShown, null, div, true));
     goog.testing.ExpectedFailures.prototype.logger_.addHandler(
         goog.bind(goog.testing.ExpectedFailures.console_.addLogRecord,
             goog.testing.ExpectedFailures.console_));

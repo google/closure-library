@@ -80,7 +80,7 @@ See the COPYING file for details.
 
     // Tests with hidden element
     failed = false;
-    goog.style.showElement(div1, false /* display */);
+    goog.style.setElementShown(div1, false /* display */);
     assertThrows('Exception should be thrown when asserting visibility.',
         goog.bind(assertIsVisible, null, div1));
 

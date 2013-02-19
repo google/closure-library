@@ -344,7 +344,7 @@ goog.ui.OfflineStatusCard.prototype.update = function() {
     // Configure the message element.
     var message = this.getAdditionalMessage(status);
     var messageEl = this.messageEl_;
-    goog.style.showElement(messageEl, message);
+    goog.style.setElementShown(messageEl, message);
     if (message) {
       dom.setTextContent(messageEl, message);
     }
@@ -406,7 +406,7 @@ goog.ui.OfflineStatusCard.prototype.createLinkNode_ = function(
   // A text node is needed here in order for links to wrap.
   dom.appendChild(actionEl, dom.createTextNode(' '));
   this.actionMap_.set(goog.getUid(a), action.eventType);
-  goog.style.showElement(a, true);
+  goog.style.setElementShown(a, true);
   dom.setTextContent(a, action.message);
 };
 
@@ -418,7 +418,7 @@ goog.ui.OfflineStatusCard.prototype.createLinkNode_ = function(
 goog.ui.OfflineStatusCard.prototype.configureProgressElement =
     function(status) {
   var showProgress = this.shouldShowProgressBar(status);
-  goog.style.showElement(this.progressEl_, showProgress);
+  goog.style.setElementShown(this.progressEl_, showProgress);
   if (showProgress) {
     this.updateProgressStatus();
   }

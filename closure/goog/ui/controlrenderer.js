@@ -506,7 +506,7 @@ goog.ui.ControlRenderer.prototype.setFocusable = function(control, focusable) {
 goog.ui.ControlRenderer.prototype.setVisible = function(element, visible) {
   // The base class implementation is trivial; subclasses should override as
   // needed.  It should be possible to do animated reveals, for example.
-  goog.style.showElement(element, visible);
+  goog.style.setElementShown(element, visible);
   if (element) {
     goog.a11y.aria.setState(element, goog.a11y.aria.State.HIDDEN, !visible);
   }

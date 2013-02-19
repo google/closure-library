@@ -1400,10 +1400,10 @@ function testSetFloat() {
 function testIsElementShown() {
   var el = $('testEl');
 
-  goog.style.showElement(el, false);
+  goog.style.setElementShown(el, false);
   assertFalse(goog.style.isElementShown(el));
 
-  goog.style.showElement(el, true);
+  goog.style.setElementShown(el, true);
   assertTrue(goog.style.isElementShown(el));
 }
 

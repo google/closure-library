@@ -422,7 +422,7 @@ goog.ui.ac.Renderer.prototype.dismiss = function() {
           this.menuFadeDuration_);
       this.animation_.play();
     } else {
-      goog.style.showElement(this.element_, false);
+      goog.style.setElementShown(this.element_, false);
     }
   }
 };
@@ -453,7 +453,7 @@ goog.ui.ac.Renderer.prototype.show = function() {
           this.menuFadeDuration_);
       this.animation_.play();
     } else {
-      goog.style.showElement(this.element_, true);
+      goog.style.setElementShown(this.element_, true);
     }
   }
 };

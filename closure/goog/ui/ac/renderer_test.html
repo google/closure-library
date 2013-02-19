@@ -428,7 +428,7 @@ See the COPYING file for details.
     var showCalled = false;
     var showAnimCalled = false;
 
-    propertyReplacer.set(goog.style, 'showElement',  function(el, state) {
+    propertyReplacer.set(goog.style, 'setElementShown',  function(el, state) {
       if (state) {
         showCalled = true;
       } else {

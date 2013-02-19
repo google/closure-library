@@ -488,14 +488,14 @@ goog.editor.plugins.LinkBubble.prototype.onShow = function() {
         goog.editor.plugins.LinkBubble.TEST_LINK_SPAN_ID_);
     if (testLinkSpan) {
       var url = this.getTargetUrl();
-      goog.style.showElement(testLinkSpan, !goog.editor.Link.isMailto(url));
+      goog.style.setElementShown(testLinkSpan, !goog.editor.Link.isMailto(url));
     }
 
     for (var i = 0; i < this.extraActions_.length; i++) {
       var action = this.extraActions_[i];
       var actionSpan = this.dom_.getElement(action.spanId_);
       if (actionSpan) {
-        goog.style.showElement(actionSpan, action.toShowFn_(
+        goog.style.setElementShown(actionSpan, action.toShowFn_(
             this.getTargetUrl()));
       }
     }

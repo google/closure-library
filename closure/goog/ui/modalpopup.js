@@ -194,7 +194,7 @@ goog.ui.ModalPopup.prototype.createDom = function() {
   var element = this.getElement();
   goog.dom.classes.add(element, this.getCssClass());
   goog.dom.setFocusableTabIndex(element, true);
-  goog.style.showElement(element, false);
+  goog.style.setElementShown(element, false);
 
   // Manages the DOM for background mask elements.
   this.manageBackgroundDom_();
@@ -214,7 +214,7 @@ goog.ui.ModalPopup.prototype.manageBackgroundDom_ = function() {
     // Flash and other controls behave in similar ways for other browsers
     this.bgIframeEl_ = goog.dom.iframe.createBlank(this.getDomHelper());
     this.bgIframeEl_.className = goog.getCssName(this.getCssClass(), 'bg');
-    goog.style.showElement(this.bgIframeEl_, false);
+    goog.style.setElementShown(this.bgIframeEl_, false);
     goog.style.setOpacity(this.bgIframeEl_, 0);
   }
 
@@ -223,7 +223,7 @@ goog.ui.ModalPopup.prototype.manageBackgroundDom_ = function() {
   if (!this.bgEl_) {
     this.bgEl_ = this.getDomHelper().createDom(
         'div', goog.getCssName(this.getCssClass(), 'bg'));
-    goog.style.showElement(this.bgEl_, false);
+    goog.style.setElementShown(this.bgEl_, false);
   }
 };
 
@@ -236,7 +236,7 @@ goog.ui.ModalPopup.prototype.createTabCatcher_ = function() {
   // Creates tab catcher element.
   if (!this.tabCatcherElement_) {
     this.tabCatcherElement_ = this.getDomHelper().createElement('span');
-    goog.style.showElement(this.tabCatcherElement_, false);
+    goog.style.setElementShown(this.tabCatcherElement_, false);
     goog.dom.setFocusableTabIndex(this.tabCatcherElement_, true);
     this.tabCatcherElement_.style.position = 'absolute';
   }
@@ -303,7 +303,7 @@ goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
   this.createTabCatcher_();
 
   // Make sure the decorated modal popup is hidden.
-  goog.style.showElement(this.getElement(), false);
+  goog.style.setElementShown(this.getElement(), false);
 };
 
 
@@ -461,13 +461,13 @@ goog.ui.ModalPopup.prototype.hide_ = function() {
  */
 goog.ui.ModalPopup.prototype.showPopupElement_ = function(visible) {
   if (this.bgIframeEl_) {
-    goog.style.showElement(this.bgIframeEl_, visible);
+    goog.style.setElementShown(this.bgIframeEl_, visible);
   }
   if (this.bgEl_) {
-    goog.style.showElement(this.bgEl_, visible);
+    goog.style.setElementShown(this.bgEl_, visible);
   }
-  goog.style.showElement(this.getElement(), visible);
-  goog.style.showElement(this.tabCatcherElement_, visible);
+  goog.style.setElementShown(this.getElement(), visible);
+  goog.style.setElementShown(this.tabCatcherElement_, visible);
 };
 
 
@@ -519,10 +519,10 @@ goog.ui.ModalPopup.prototype.focus = function() {
  */
 goog.ui.ModalPopup.prototype.resizeBackground_ = function() {
   if (this.bgIframeEl_) {
-    goog.style.showElement(this.bgIframeEl_, false);
+    goog.style.setElementShown(this.bgIframeEl_, false);
   }
   if (this.bgEl_) {
-    goog.style.showElement(this.bgEl_, false);
+    goog.style.setElementShown(this.bgEl_, false);
   }
 
   var doc = this.getDomHelper().getDocument();
@@ -539,11 +539,11 @@ goog.ui.ModalPopup.prototype.resizeBackground_ = function() {
       Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight));
 
   if (this.bgIframeEl_) {
-    goog.style.showElement(this.bgIframeEl_, true);
+    goog.style.setElementShown(this.bgIframeEl_, true);
     goog.style.setSize(this.bgIframeEl_, w, h);
   }
   if (this.bgEl_) {
-    goog.style.showElement(this.bgEl_, true);
+    goog.style.setElementShown(this.bgEl_, true);
     goog.style.setSize(this.bgEl_, w, h);
   }
 };

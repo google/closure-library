@@ -116,7 +116,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
   if (menuElem) {
     // Move the menu element directly under the body, but hide it first; see
     // bug 1089244.
-    goog.style.showElement(menuElem, false);
+    goog.style.setElementShown(menuElem, false);
     button.getDomHelper().getDocument().body.appendChild(menuElem);
 
     // Decorate the menu and attach it to the button.

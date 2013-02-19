@@ -189,7 +189,7 @@ goog.ui.AttachableMenu.prototype.showPopupElement = function() {
   // The scroll position cannot be set for hidden (display: none) elements in
   // gecko browsers.
   var el = /** @type {Element} */ (this.getElement());
-  goog.style.showElement(el, true);
+  goog.style.setElementShown(el, true);
   el.scrollTop = 0;
   el.style.visibility = 'visible';
 };

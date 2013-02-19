@@ -399,7 +399,7 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
 
   var card = goog.dom.createDom('div', {'id': 'preview'}, this.zoomEl_,
       this.charNameEl_, this.unicodeEl_);
-  goog.style.showElement(card, false);
+  goog.style.setElementShown(card, false);
   this.hc_ = new goog.ui.HoverCard({'DIV': 'char'});
   this.hc_.setElement(card);
   var self = this;
