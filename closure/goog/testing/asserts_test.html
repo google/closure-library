@@ -1020,6 +1020,21 @@ See the COPYING file for details.
     assertNotNull(goog.testing.asserts.findDifferences(a, c));
   }
 
+  function testFindDifferences_multiCycles() {
+    var a = {};
+    a.cycle1 = a;
+    a.test = {
+      cycle2: a
+    };
+
+    var b = {};
+    b.cycle1 = b;
+    b.test = {
+      cycle2: b
+    };
+    assertNull(goog.testing.asserts.findDifferences(a, b));
+  }
+
   function testFindDifferences_binaryTree() {
     function createBinTree(depth, root) {
       if (depth == 0) {

@@ -544,22 +544,20 @@ goog.testing.asserts.findDifferences = function(expected, actual,
   // To avoid infinite recursion when the two parameters are self-referential
   // along the same path of properties, keep track of the object pairs already
   // seen in this call subtree, and abort when a cycle is detected.
-  // TODO(gboyer,user): The algorithm still does not terminate in cases
-  // with exponential recursion, e.g. a binary tree with leaf->root links.
-  // Investigate ways to solve this without significant performance loss
-  // for the common case.
   function innerAssert(var1, var2, path) {
-    var depth = seen1.length;
-    if (depth % 2) {
-      // Compare with midpoint of seen ("Tortoise and hare" loop detection).
-      // http://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare
-      // TODO(gboyer,user): For cases with complex cycles the algorithm
-      // can take a long time to terminate, look into ways to terminate sooner
-      // without adding more than constant-time work in non-cycle cases.
-      var mid = depth >> 1;
-      // Use === to avoid cases like ['x'] == 'x', which is true.
-      var match1 = seen1[mid] === var1;
-      var match2 = seen2[mid] === var2;
+    // This is used for testing, so we can afford to be slow (but more
+    // accurate). So we just check whether var1 is in seen1. If we
+    // found var1 in index i, we simply need to check whether var2 is
+    // in seen2[i]. If it is, we do not recurse to check var1/var2. If
+    // it isn't, we know that the structures of the two objects must be
+    // different.
+    //
+    // This is based on the fact that values at index i in seen1 and
+    // seen2 will be checked for equality eventually (when
+    // innerAssert_(seen1[i], seen2[i], path) finishes).
+    for (var i = 0; i < seen1.length; ++i) {
+      var match1 = seen1[i] === var1;
+      var match2 = seen2[i] === var2;
       if (match1 || match2) {
         if (!match1 || !match2) {
           // Asymmetric cycles, so the objects have different structure.
@@ -568,6 +566,7 @@ goog.testing.asserts.findDifferences = function(expected, actual,
         return;
       }
     }
+
     seen1.push(var1);
     seen2.push(var2);
     innerAssert_(var1, var2, path);
