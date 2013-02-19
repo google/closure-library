@@ -27,7 +27,11 @@ goog.require('goog.events.EventTarget');
 
 
 /**
- * This is the central manager class for an AutoComplete instance.
+ * This is the central manager class for an AutoComplete instance. The matcher
+ * can specify disabled rows that should not be hilited or selected by
+ * implementing <code>isRowDisabled(row):boolean</code> for each autocomplete
+ * row. No row will not be considered disabled if this method is not
+ * implemented.
  *
  * @param {Object} matcher A data source and row matcher, implements
  *        <code>requestMatchingRows(token, maxMatches, matchCallback)</code>.
@@ -247,7 +251,14 @@ goog.ui.ac.AutoComplete.prototype.handleEvent = function(e) {
         break;
 
       case goog.ui.ac.AutoComplete.EventType.SELECT:
-        this.selectHilited();
+        // Make sure the row selected is not a disabled row.
+        var index = this.getIndexOfId(/** @type {number} */ (e.row));
+        var row = this.rows_[index];
+        var rowDisabled = !!row && this.matcher_.isRowDisabled &&
+            this.matcher_.isRowDisabled(row);
+        if (!rowDisabled) {
+          this.selectHilited();
+        }
         break;
 
       case goog.ui.ac.AutoComplete.EventType.CANCEL_DISMISS:
@@ -378,25 +389,30 @@ goog.ui.ac.AutoComplete.prototype.getRowCount = function() {
 
 
 /**
- * Moves the hilite to the next row, or does nothing if we're already at the
- * end of the current set of matches.  Calls renderer.hiliteId() when there's
- * something to do.
+ * Moves the hilite to the next non-disabled row.
+ * Calls renderer.hiliteId() when there's something to do.
  * @return {boolean} Returns true on a successful hilite.
  */
 goog.ui.ac.AutoComplete.prototype.hiliteNext = function() {
   var lastId = this.firstRowId_ + this.rows_.length - 1;
-  if (this.hiliteId_ >= this.firstRowId_ && this.hiliteId_ < lastId) {
-    this.hiliteId(this.hiliteId_ + 1);
-    return true;
-  } else if (this.hiliteId_ == -1) {
-    this.hiliteId(this.firstRowId_);
-    return true;
-  } else if (this.hiliteId_ == lastId) {
-    if (this.allowFreeSelect_) {
+  var toHilite = this.hiliteId_;
+  // Hilite the next row, skipping any disabled rows.
+  for (var i = 0; i < this.rows_.length; i++) {
+    // Increment to the next row.
+    if (toHilite >= this.firstRowId_ && toHilite < lastId) {
+      toHilite++;
+    } else if (toHilite == -1) {
+      toHilite = this.firstRowId_;
+    } else if (this.allowFreeSelect_ && toHilite == lastId) {
       this.hiliteId(-1);
       return false;
-    } else if (this.wrap_) {
-      this.hiliteId(this.firstRowId_);
+    } else if (this.wrap_ && toHilite == lastId) {
+      toHilite = this.firstRowId_;
+    } else {
+      return false;
+    }
+
+    if (this.hiliteId(toHilite)) {
       return true;
     }
   }
@@ -405,42 +421,59 @@ goog.ui.ac.AutoComplete.prototype.hiliteNext = function() {
 
 
 /**
- * Moves the hilite to the previous row, or does nothing if we're already at
- * the beginning of the current set of matches.  Calls renderer.hiliteId()
- * when there's something to do.
+ * Moves the hilite to the previous non-disabled row.  Calls
+ * renderer.hiliteId() when there's something to do.
  * @return {boolean} Returns true on a successful hilite.
  */
 goog.ui.ac.AutoComplete.prototype.hilitePrev = function() {
-  if (this.hiliteId_ > this.firstRowId_) {
-    this.hiliteId(this.hiliteId_ - 1);
-    return true;
-  } else if (this.allowFreeSelect_ && this.hiliteId_ == this.firstRowId_) {
-    this.hiliteId(-1);
-    return false;
-  } else if (this.wrap_ &&
-      (this.hiliteId_ == -1 || this.hiliteId_ == this.firstRowId_)) {
-    var lastId = this.firstRowId_ + this.rows_.length - 1;
-    this.hiliteId(lastId);
-    return true;
+  var lastId = this.firstRowId_ + this.rows_.length - 1;
+  var toHilite = this.hiliteId_;
+  // Hilite the previous row, skipping any disabled rows.
+  for (var i = 0; i < this.rows_.length; i++) {
+    // Decrement to the previous row.
+    if (toHilite > this.firstRowId_) {
+      toHilite--;
+    } else if (this.allowFreeSelect_ && toHilite == this.firstRowId_) {
+      this.hiliteId(-1);
+      return false;
+    } else if (this.wrap_ && (toHilite == -1 || toHilite == this.firstRowId_)) {
+      toHilite = lastId;
+    } else {
+      return false;
+    }
+
+    if (this.hiliteId(toHilite)) {
+      return true;
+    }
   }
   return false;
 };
 
 
 /**
- * Hilites the id if it's valid, otherwise does nothing.
+ * Hilites the id if it's valid and the row is not disabled, otherwise does
+ * nothing.
  * @param {number} id A row id (not index).
- * @return {boolean} Whether the id was hilited.
+ * @return {boolean} Whether the id was hilited. Returns false if the row is
+ *     disabled.
  */
 goog.ui.ac.AutoComplete.prototype.hiliteId = function(id) {
-  this.hiliteId_ = id;
-  this.renderer_.hiliteId(id);
-  return this.getIndexOfId(id) != -1;
+  var index = this.getIndexOfId(id);
+  var row = this.rows_[index];
+  var rowDisabled = !!row && this.matcher_.isRowDisabled &&
+      this.matcher_.isRowDisabled(row);
+  if (!rowDisabled) {
+    this.hiliteId_ = id;
+    this.renderer_.hiliteId(id);
+    return index != -1;
+  }
+  return false;
 };
 
 
 /**
- * Hilites the index, if it's valid, otherwise does nothing.
+ * Hilites the index, if it's valid and the row is not disabled, otherwise does
+ * nothing.
  * @param {number} index The row's index.
  * @return {boolean} Whether the index was hilited.
  */
@@ -638,14 +671,16 @@ goog.ui.ac.AutoComplete.prototype.renderRows = function(rows, opt_options) {
   if (optionsObj && optionsObj.getAutoHilite() !== undefined) {
     autoHilite = optionsObj.getAutoHilite();
   }
+  this.hiliteId_ = -1;
   if ((autoHilite || indexToHilite >= 0) &&
       rendRows.length != 0 &&
       this.token_) {
-    var idToHilite = indexToHilite >= 0 ?
-        this.getIdOfIndex_(indexToHilite) : this.firstRowId_;
-    this.hiliteId(idToHilite);
-  } else {
-    this.hiliteId_ = -1;
+    if (indexToHilite >= 0) {
+      this.hiliteId(this.getIdOfIndex_(indexToHilite));
+    } else {
+      // Hilite the first non-disabled row.
+      this.hiliteNext();
+    }
   }
   this.dispatchEvent(goog.ui.ac.AutoComplete.EventType.SUGGESTIONS_UPDATE);
 };
