@@ -113,6 +113,7 @@ goog.soy.Renderer.prototype.renderAsFragment = function(template,
  */
 goog.soy.Renderer.prototype.renderAsElement = function(template,
                                                        opt_templateData) {
+  this.saveTemplateRender_(template, opt_templateData);
   return goog.soy.renderAsElement(template, opt_templateData,
                                   this.getInjectedData_(), this.dom_);
 };
