@@ -20,16 +20,16 @@ See the COPYING file for details.
 
 function testCircularBuffer() {
   var buff = new goog.structs.CircularBuffer(2);
-  buff.add('first');
+  assertUndefined(buff.add('first'));
   assertEquals(1, buff.getCount());
   assertEquals('first', buff.get(0));
   assertEquals('first', buff.getLast());
-  buff.add('second');
+  assertUndefined(buff.add('second'));
   assertEquals(2, buff.getCount());
   assertEquals('first', buff.get(0));
   assertEquals('second', buff.get(1));
   assertEquals('second', buff.getLast());
-  buff.add('third');
+  assertEquals('first', buff.add('third'));
   assertEquals(2, buff.getCount());
   assertEquals('second', buff.get(0));
   assertEquals('third', buff.get(1));
@@ -39,13 +39,13 @@ function testCircularBuffer() {
 function testIsEmpty() {
   var buff = new goog.structs.CircularBuffer(2);
   assertTrue('initially empty', buff.isEmpty());
-  buff.add('first');
+  assertUndefined(buff.add('first'));
   assertFalse('not empty after add empty', buff.isEmpty());
 }
 
 function testClear() {
   var buff = new goog.structs.CircularBuffer(2);
-  buff.add('first');
+  assertUndefined(buff.add('first'));
   buff.clear();
   assertTrue('should be empty after clear', buff.isEmpty());
 
@@ -53,33 +53,33 @@ function testClear() {
 
 function testGetValues() {
   var buff = new goog.structs.CircularBuffer(2);
-  buff.add('first');
-  buff.add('second');
+  assertUndefined(buff.add('first'));
+  assertUndefined(buff.add('second'));
   assertEquals('firstsecond', buff.getValues().join(''));
 }
 
 function testGetNewestVtalues() {
   var buff = new goog.structs.CircularBuffer(5);
-  buff.add('first');
-  buff.add('second');
-  buff.add('third');
-  buff.add('fourth');
-  buff.add('fifth');
+  assertUndefined(buff.add('first'));
+  assertUndefined(buff.add('second'));
+  assertUndefined(buff.add('third'));
+  assertUndefined(buff.add('fourth'));
+  assertUndefined(buff.add('fifth'));
   assertEquals('fourthfifth', buff.getNewestValues(2).join(''));
 }
 
 
 function testGetKeys() {
   var buff = new goog.structs.CircularBuffer(2);
-  buff.add('first');
-  buff.add('second');
+  assertUndefined(buff.add('first'));
+  assertUndefined(buff.add('second'));
   assertEquals('01', buff.getKeys().join(''));
 }
 
 function testContainsValue() {
   var buff = new goog.structs.CircularBuffer(2);
-  buff.add('first');
-  buff.add('second');
+  assertUndefined(buff.add('first'));
+  assertUndefined(buff.add('second'));
   assertTrue(buff.containsValue('first'));
   assertTrue(buff.containsValue('second'));
   assertFalse(buff.containsValue('third'));
@@ -87,9 +87,9 @@ function testContainsValue() {
 
 function testContainsKey() {
   var buff = new goog.structs.CircularBuffer(3);
-  buff.add('first');
-  buff.add('second');
-  buff.add('third');
+  assertUndefined(buff.add('first'));
+  assertUndefined(buff.add('second'));
+  assertUndefined(buff.add('third'));
   assertTrue(buff.containsKey(0));
   assertTrue(buff.containsKey('0'));
   assertTrue(buff.containsKey(1));
