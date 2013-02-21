@@ -334,6 +334,31 @@ goog.math.Rect.prototype.contains = function(another) {
 
 
 /**
+ * @param {!goog.math.Coordinate} point A coordinate.
+ * @return {number} The squared distance between the point and the closest
+ *     point inside the rectangle. Returns 0 if the point is inside the
+ *     rectangle.
+ */
+goog.math.Rect.prototype.squaredDistance = function(point) {
+  var dx = point.x < this.left ?
+      this.left - point.x : Math.max(point.x - (this.left + this.width), 0);
+  var dy = point.y < this.top ?
+      this.top - point.y : Math.max(point.y - (this.top + this.height), 0);
+  return dx * dx + dy * dy;
+};
+
+
+/**
+ * @param {!goog.math.Coordinate} point A coordinate.
+ * @return {number} The distance between the point and the closest point
+ *     inside the rectangle. Returns 0 if the point is inside the rectangle.
+ */
+goog.math.Rect.prototype.distance = function(point) {
+  return Math.sqrt(this.squaredDistance(point));
+};
+
+
+/**
  * Returns the size of this rectangle.
  * @return {!goog.math.Size} The size of this rectangle.
  */

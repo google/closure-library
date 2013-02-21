@@ -368,6 +368,60 @@ function testRectScaleFactor() {
   assertRectsEqual(new goog.math.Rect(120, 340, 1130, 880), rect);
 }
 
+function testSquaredDistance() {
+  var rect = new goog.math.Rect(-10, -20, 15, 25);
+
+  // Test regions:
+  // 1  2  3
+  //   +-+
+  // 4 |5| 6
+  //   +-+
+  // 7  8  9
+
+  // Region 5 (inside the rectangle).
+  assertEquals(0, rect.squaredDistance(new goog.math.Coordinate(-10, 5)));
+  assertEquals(0, rect.squaredDistance(new goog.math.Coordinate(5, -20)));
+
+  // 1, 2, and 3.
+  assertEquals(25, rect.squaredDistance(new goog.math.Coordinate(9, 8)));
+  assertEquals(36, rect.squaredDistance(new goog.math.Coordinate(2, 11)));
+  assertEquals(53, rect.squaredDistance(new goog.math.Coordinate(12, 7)));
+
+  // 4 and 6.
+  assertEquals(81, rect.squaredDistance(new goog.math.Coordinate(-19, -10)));
+  assertEquals(64, rect.squaredDistance(new goog.math.Coordinate(13, 0)));
+
+  // 7, 8, and 9.
+  assertEquals(20, rect.squaredDistance(new goog.math.Coordinate(-12, -24)));
+  assertEquals(9, rect.squaredDistance(new goog.math.Coordinate(0, -23)));
+  assertEquals(34, rect.squaredDistance(new goog.math.Coordinate(8, -25)));
+}
+
+
+function testDistance() {
+  var rect = new goog.math.Rect(2, 4, 8, 16);
+
+  // Region 5 (inside the rectangle).
+  assertEquals(0, rect.distance(new goog.math.Coordinate(2, 4)));
+  assertEquals(0, rect.distance(new goog.math.Coordinate(10, 20)));
+
+  // 1, 2, and 3.
+  assertRoughlyEquals(
+      Math.sqrt(8), rect.distance(new goog.math.Coordinate(0, 22)), .0001);
+  assertEquals(8, rect.distance(new goog.math.Coordinate(9, 28)));
+  assertRoughlyEquals(
+      Math.sqrt(50), rect.distance(new goog.math.Coordinate(15, 25)), .0001);
+
+  // 4 and 6.
+  assertEquals(7, rect.distance(new goog.math.Coordinate(-5, 6)));
+  assertEquals(10, rect.distance(new goog.math.Coordinate(20, 10)));
+
+  // 7, 8, and 9.
+  assertEquals(5, rect.distance(new goog.math.Coordinate(-2, 1)));
+  assertEquals(2, rect.distance(new goog.math.Coordinate(5, 2)));
+  assertRoughlyEquals(
+      Math.sqrt(10), rect.distance(new goog.math.Coordinate(1, 1)), .0001);
+}
 
 </script>
 </body>
