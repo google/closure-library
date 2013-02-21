@@ -140,21 +140,14 @@ function assertUnsafeTemplateOutputErrorThrown(func) {
   assertEquals('zSoyz', func());
 }
 
-function testRejectUnsanitizedText() {
-  assertUnsafeTemplateOutputErrorThrown(function() {
-    var div = goog.dom.createElement(goog.dom.TagName.DIV);
-    goog.soy.renderElement(div,
-        example.unsanitizedTextTemplate);
-    return div.innerHTML;
-  });
-  assertUnsafeTemplateOutputErrorThrown(function() {
-    // This will render to a text node containing only zSoyz.
-    var fragment = goog.soy.renderAsFragment(example.unsanitizedTextTemplate);
-    return fragment.nodeValue;
-  });
-  assertUnsafeTemplateOutputErrorThrown(function() {
-    return goog.soy.renderAsElement(example.unsanitizedTextTemplate).innerHTML;
-  });
+function testAllowButEscapeUnsanitizedText() {
+  var div = goog.dom.createElement(goog.dom.TagName.DIV);
+  goog.soy.renderElement(div, example.unsanitizedTextTemplate);
+  assertEquals('I &lt;3 Puppies &amp; Kittens', div.innerHTML);
+  var fragment = goog.soy.renderAsFragment(example.unsanitizedTextTemplate);
+  assertEquals('I <3 Puppies & Kittens', fragment.nodeValue);
+  assertEquals('I &lt;3 Puppies &amp; Kittens',
+      goog.soy.renderAsElement(example.unsanitizedTextTemplate).innerHTML);
 }
 
 function testRejectSanitizedCss() {
@@ -182,9 +175,12 @@ function testAcceptSanitizedHtml() {
       goog.soy.renderAsElement(example.sanitizedHtmlTemplate)));
 }
 
-function testAcceptSanitizedHtmlAttribute() {
-  assertEquals('Hello World', goog.dom.getTextContent(
-      goog.soy.renderAsElement(example.sanitizedHtmlAttributeTemplate)));
+function testRejectSanitizedHtmlAttributes() {
+  // Attributes context has nothing to do with html.
+  assertUnsafeTemplateOutputErrorThrown(function() {
+    return goog.dom.getTextContent(
+        goog.soy.renderAsElement(example.sanitizedHtmlAttributesTemplate));
+  });
 }
 
 function testAcceptNonObject() {

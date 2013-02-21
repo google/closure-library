@@ -101,9 +101,9 @@ example.sanitizedHtmlTemplate = function(opt_data, opt_sb, opt_injectedData) {
 };
 
 
-example.sanitizedHtmlAttributeTemplate =
+example.sanitizedHtmlAttributesTemplate =
     function(opt_data, opt_sb, opt_injectedData) {
-  return makeSanitizedContent('Hello World',
+  return makeSanitizedContent('foo="bar"',
       goog.soy.data.SanitizedContentKind.ATTRIBUTES);
 };
 
@@ -117,7 +117,7 @@ example.sanitizedCssTemplate =
 
 example.unsanitizedTextTemplate =
     function(opt_data, opt_sb, opt_injectedData) {
-  return makeSanitizedContent('Hello World',
+  return makeSanitizedContent('I <3 Puppies & Kittens',
       goog.soy.data.SanitizedContentKind.TEXT);
 };
 

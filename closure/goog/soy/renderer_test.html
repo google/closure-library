@@ -149,7 +149,8 @@ function testRenderText() {
   var renderer = new goog.soy.Renderer(dataSupplier);
   // RenderText converts to string.
   assertEquals('Output of renderText should be a string',
-      'Hello World', renderer.renderText(example.unsanitizedTextTemplate));
+      'I <3 Puppies & Kittens',
+      renderer.renderText(example.unsanitizedTextTemplate));
   // RenderText on non-strict template fails.
   assertEquals(
       'Assertion failed: ' +
