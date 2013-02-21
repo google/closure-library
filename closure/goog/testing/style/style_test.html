@@ -40,6 +40,7 @@ See the COPYING file for details.
 
     div1 = createDiv('#EEE');
     div2 = createDiv('#F00');
+    div3 = createDiv('#FFF');
   }
 
 
@@ -48,20 +49,38 @@ See the COPYING file for details.
       div1.parentNode.removeChild(div1);
     if (div2.parentNode)
       div2.parentNode.removeChild(div2);
+    if (div3.parentNode)
+      div3.parentNode.removeChild(div3);
 
     div1 = null;
     div2 = null;
+    div3 = null;
   }
 
 
   function testIsVisible() {
-    assertTrue('The div should be detected as visible.',
+    assertTrue('The div1 should be detected as visible.',
                goog.testing.style.isVisible(div1));
 
-    // Tests with hidden element
+    // Tests with display:none element.
     goog.style.setElementShown(div1, false /* display */);
-    assertFalse('The div should be detected as not visible.',
-                goog.testing.style.isVisible(div1));
+    assertFalse('The div1 should be detected as not visible.',
+               goog.testing.style.isVisible(div1));
+
+    // Tests with hidden element.
+    goog.style.setStyle(div2, 'visibility', 'hidden');
+    assertFalse('The div2 should be detected as not visible.',
+               goog.testing.style.isVisible(div2));
+
+    // Tests with fully transparent element.
+    goog.style.setStyle(div3, 'opacity', '0.0');
+    assertFalse('The div3 should be detected as not visible.',
+               goog.testing.style.isVisible(div3));
+
+    // Tests with opaque element.
+    goog.style.setStyle(div3, 'opacity', '0.5');
+    assertTrue('The div3 should be detected as visible.',
+               goog.testing.style.isVisible(div3));
   }
 
   function testIsOnScreen() {

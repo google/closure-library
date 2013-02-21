@@ -56,18 +56,34 @@ goog.testing.style.hasVisibleDimensions = function(element) {
 
 
 /**
- * Determines whether the CSS style of the element renders it visible.
+ * Determines whether the CSS style (display, visibility, or opacity) of the
+ * element renders it visible.
  * @param {!Element} element The element to check.
  * @return {boolean} Whether the CSS style of the element renders it visible.
  */
 goog.testing.style.isVisible = function(element) {
-  var visibilityStyle =
-      goog.testing.style.getAvailableStyle_(element, 'visibility');
   var displayStyle =
       goog.testing.style.getAvailableStyle_(element, 'display');
+  if (displayStyle == 'none') {
+    return false;
+  }
 
-  return (visibilityStyle != 'hidden' && displayStyle != 'none');
+  var visibilityStyle =
+      goog.testing.style.getAvailableStyle_(element, 'visibility');
+  if (visibilityStyle == 'hidden') {
+    return false;
+  }
+
+  var opacityStyle = goog.style.getOpacity(element);
+
+  if (opacityStyle !== '' && opacityStyle == 0) {
+    // If not set, it's visible. If set, not visible if 0.
+    return false;
+  }
+
+  return true;
 };
+
 
 /**
  * Test whether the given element is on screen.
