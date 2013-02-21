@@ -95,6 +95,22 @@ See the COPYING file for details.
   }
 
 
+  function testSetImmediateAndTick() {
+    var clock = new goog.testing.MockClock(true);
+    var tick0 = false;
+    var tick1 = false;
+    setImmediate(function() { tick0 = true; });
+    setImmediate(function() { tick1 = true; });
+    assertEquals(2, clock.getTimeoutsMade());
+
+    clock.tick(0);
+    assertTrue(tick0);
+    assertTrue(tick1);
+
+    clock.uninstall();
+  }
+
+
   function testSetInterval() {
     var clock = new goog.testing.MockClock(true);
     var times = 0

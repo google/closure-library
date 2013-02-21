@@ -31,6 +31,7 @@ goog.addDependency('asserts/asserts.js', ['goog.asserts', 'goog.asserts.Assertio
 goog.addDependency('async/animationdelay.js', ['goog.async.AnimationDelay'], ['goog.async.Delay', 'goog.functions']);
 goog.addDependency('async/conditionaldelay.js', ['goog.async.ConditionalDelay'], ['goog.Disposable', 'goog.async.Delay']);
 goog.addDependency('async/delay.js', ['goog.Delay', 'goog.async.Delay'], ['goog.Disposable', 'goog.Timer']);
+goog.addDependency('async/nexttick.js', ['goog.async.nextTick'], []);
 goog.addDependency('async/throttle.js', ['goog.Throttle', 'goog.async.Throttle'], ['goog.Disposable', 'goog.Timer']);
 goog.addDependency('base.js', ['goog'], []);
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color']);
