@@ -183,6 +183,51 @@ See the COPYING file for details.
     }
   }
 
+  function testGetProtectedFunction() {
+    var fn = function() {
+      throw new Error('Foo');
+    };
+    var protectedFn = errorHandler.getProtectedFunction(fn);
+    var e = assertThrows(protectedFn);
+    assertTrue(e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
+    assertEquals('Foo', e.cause.message);
+  }
+
+  function testGetProtectedFunction_withoutWrappedErrors() {
+    errorHandler.setWrapErrors(false);
+    var fn = function() {
+      throw new Error('Foo');
+    };
+    var protectedFn = errorHandler.getProtectedFunction(fn);
+    var e = assertThrows(protectedFn);
+    assertTrue(e instanceof Error);
+    assertEquals('Foo', e.message);
+  }
+
+  function testGetProtectedFunction_withoutWrappedErrorsWithMessagePrefix() {
+    errorHandler.setWrapErrors(false);
+    errorHandler.setPrefixErrorMessages(true);
+    var fn = function() {
+      throw new Error('Foo');
+    };
+    var protectedFn = errorHandler.getProtectedFunction(fn);
+    var e = assertThrows(protectedFn);
+    assertTrue(e instanceof Error);
+    assertEquals(
+        goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
+            'Foo', e.message);
+
+    var stringError = function() {
+      throw 'String';
+    };
+    protectedFn = errorHandler.getProtectedFunction(stringError);
+    e = assertThrows(protectedFn);
+    assertEquals('string', typeof e);
+    assertEquals(
+        goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
+            'String', e);
+  }
+
   function assertSetTimeoutError(caught) {
     assertMethodCalledHelper('setTimeout', caught);
   }
