@@ -348,6 +348,26 @@ goog.net.BrowserTestChannel.prototype.checkBlockedCallback_ = function(
  */
 goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
   this.channelDebug_.debug('TestConnection: starting stage 2');
+
+  // If the second test results are available, skip its execution.
+  var secondTestResults = this.channel_.getSecondTestResults();
+  if (goog.isDefAndNotNull(secondTestResults)) {
+    this.channelDebug_.debug(
+        'TestConnection: skipping stage 2, precomputed result is '
+        + secondTestResults ? 'Buffered' : 'Unbuffered');
+    goog.net.BrowserChannel.notifyStatEvent(
+        goog.net.BrowserChannel.Stat.TEST_STAGE_TWO_START);
+    if (secondTestResults) { // Buffered/Proxy connection
+      goog.net.BrowserChannel.notifyStatEvent(
+          goog.net.BrowserChannel.Stat.PROXY);
+      this.channel_.testConnectionFinished(this, false);
+    } else { // Unbuffered/NoProxy connection
+      goog.net.BrowserChannel.notifyStatEvent(
+          goog.net.BrowserChannel.Stat.NOPROXY);
+      this.channel_.testConnectionFinished(this, true);
+    }
+    return; // Skip the test
+  }
   this.request_ = goog.net.BrowserChannel.createChannelRequest(
       this, this.channelDebug_);
   this.request_.setExtraHeaders(this.extraHeaders_);

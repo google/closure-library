@@ -73,9 +73,12 @@ goog.require('goog.structs.CircularBuffer');
  *        that is sent to the server when connected.
  * @param {Array.<string>=} opt_firstTestResults Previously determined results
  *        of the first browser channel test.
+ * @param {boolean=} opt_secondTestResults Previously determined results
+ *        of the second browser channel test.
  * @constructor
  */
-goog.net.BrowserChannel = function(opt_clientVersion, opt_firstTestResults) {
+goog.net.BrowserChannel = function(opt_clientVersion, opt_firstTestResults,
+    opt_secondTestResults) {
   /**
    * The application specific version that is passed to the server.
    * @type {?string}
@@ -128,6 +131,14 @@ goog.net.BrowserChannel = function(opt_clientVersion, opt_firstTestResults) {
    * @private
    */
   this.firstTestResults_ = opt_firstTestResults || null;
+
+  /**
+   * The results of the second browser channel test. True implies the
+   * connection is buffered, False means unbuffered, null means that
+   * the results are not available.
+   * @private
+   */
+  this.secondTestResults_ = opt_secondTestResults || null;
 };
 
 
@@ -2290,6 +2301,16 @@ goog.net.BrowserChannel.prototype.getForwardChannelUri =
 goog.net.BrowserChannel.prototype.getFirstTestResults =
     function() {
   return this.firstTestResults_;
+};
+
+
+/**
+ * Gets the results for the second browser channel test
+ * @return {?boolean} The results. True -> buffered connection,
+ *      False -> unbuffered, null -> unknown.
+ */
+goog.net.BrowserChannel.prototype.getSecondTestResults = function() {
+  return this.secondTestResults_;
 };
 
 
