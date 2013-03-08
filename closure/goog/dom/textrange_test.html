@@ -205,7 +205,7 @@ See the COPYING file for details.
 
     try {
       var result = assertNotThrows(goog.bind(range.getStartPosition, range));
-      assertObjectEquals(bottomRight, result);
+      assertObjectRoughlyEquals(bottomRight, result, 1);
     } catch (e) {
       expectedFailures.handleException(e);
     }
@@ -256,7 +256,7 @@ See the COPYING file for details.
 
     try {
       var result = assertNotThrows(goog.bind(range.getEndPosition, range));
-      assertObjectEquals(bottomRight, result);
+      assertObjectRoughlyEquals(bottomRight, result, 1);
     } catch (e) {
       expectedFailures.handleException(e);
     }
@@ -332,7 +332,7 @@ See the COPYING file for details.
 
     try {
       var result = assertNotThrows(goog.bind(range.getEndPosition, range));
-      assertObjectEquals(bottomRight, result);
+      assertObjectRoughlyEquals(bottomRight, result, 1);
     } catch (e) {
       expectedFailures.handleException(e);
     }

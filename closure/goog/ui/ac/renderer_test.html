@@ -578,7 +578,8 @@ See the COPYING file for details.
     var targetSize = goog.style.getSize(target);
 
     assertEquals(0 + targetOffset.x, rendererOffset.x);
-    assertEquals(targetOffset.y + targetSize.height, rendererOffset.y);
+    assertRoughlyEquals(
+        targetOffset.y + targetSize.height, rendererOffset.y, 1);
   }
 
   function testRepositionWithRightAlign() {
@@ -596,10 +597,12 @@ See the COPYING file for details.
     var targetOffset  = goog.style.getPageOffset(target);
     var targetSize = goog.style.getSize(target);
 
-    assertEquals(
+    assertRoughlyEquals(
         targetOffset.x + targetSize.width,
-        rendererOffset.x + rendererSize.width);
-    assertEquals(targetOffset.y + targetSize.height, rendererOffset.y);
+        rendererOffset.x + rendererSize.width,
+        1);
+    assertRoughlyEquals(
+        targetOffset.y + targetSize.height, rendererOffset.y, 1);
   }
 
   // ------- Helper functions -------

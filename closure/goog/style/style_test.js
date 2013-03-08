@@ -513,12 +513,12 @@ function testGetPageOffsetElementOffscreen() {
       window.scroll(1000, 2000);
       pos = goog.style.getPageOffset(div);
       assertEquals(10000, pos.x);
-      assertEquals(20000, pos.y);
+      assertRoughlyEquals(20000, pos.y, 1);
 
       window.scroll(10000, 20000);
       pos = goog.style.getPageOffset(div);
       assertEquals(10000, pos.x);
-      assertEquals(20000, pos.y);
+      assertRoughlyEquals(20000, pos.y, 1);
     }
   }
   // Undo changes.
