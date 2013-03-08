@@ -74,7 +74,7 @@ goog.object.filter = function(obj, f, opt_obj) {
  *     and should return something. The result will be inserted
  *     into a new object.
  * @param {T=} opt_obj This is used as the 'this' object within f.
- * @return {!Object.<T,R>} a new object with the results from f.
+ * @return {!Object.<K,R>} a new object with the results from f.
  * @template T,K,V,R
  */
 goog.object.map = function(obj, f, opt_obj) {
