@@ -28,6 +28,7 @@ goog.require('goog.debug.Error');
  * to a 'Promise' or a 'Future' in other languages and frameworks.
  *
  * @interface
+ * @classTemplate V
  */
 goog.result.Result = function() {};
 
@@ -35,9 +36,11 @@ goog.result.Result = function() {};
 /**
  * Attaches handlers to be called when the value of this Result is available.
  *
- * @param {!function(!goog.result.Result)} handler The function called when
+ * @this {goog.result.Result.<T>}
+ * @param {!function(!goog.result.Result.<T>)} handler The function called when
  *     the value is available. The function is passed the Result object as the
  *     only argument.
+ * @template T
  */
 goog.result.Result.prototype.wait = function(handler) {};
 
@@ -66,8 +69,10 @@ goog.result.Result.prototype.getState = function() {};
 
 
 /**
- * @return {*} The value of this Result. Will return undefined if the Result is
+ * @this {goog.result.Result.<T>}
+ * @return {T} The value of this Result. Will return undefined if the Result is
  *     pending or was an error.
+ * @template T
  */
 goog.result.Result.prototype.getValue = function() {};
 

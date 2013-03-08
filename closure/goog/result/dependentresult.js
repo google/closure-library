@@ -30,6 +30,7 @@ goog.require('goog.result.Result');
  * Results given as arguments.
  * @interface
  * @extends {goog.result.Result}
+ * @classTemplate V
  */
 goog.result.DependentResult = function() {};
 

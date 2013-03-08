@@ -34,6 +34,7 @@ goog.require('goog.result.Result');
  *
  * @constructor
  * @implements {goog.result.Result}
+ * @classTemplate V
  */
 goog.result.SimpleResult = function() {
   /**
@@ -105,9 +106,11 @@ goog.result.SimpleResult.prototype.getError = function() {
 /**
  * Attaches handlers to be called when the value of this Result is available.
  *
- * @param {!function(!goog.result.SimpleResult)} handler The function
+ * @this {goog.result.SimpleResult.<T>}
+ * @param {!function(!goog.result.SimpleResult.<T>)} handler The function
  *     called when the value is available. The function is passed the Result
  *     object as the only argument.
+ * @template T
  * @override
  */
 goog.result.SimpleResult.prototype.wait = function(handler) {
@@ -122,7 +125,9 @@ goog.result.SimpleResult.prototype.wait = function(handler) {
 /**
  * Sets the value of this Result, changing the state.
  *
- * @param {*} value The value to set for this Result.
+ * @this {goog.result.SimpleResult.<T>}
+ * @param {T} value The value to set for this Result.
+ * @template T
  */
 goog.result.SimpleResult.prototype.setValue = function(value) {
   if (this.isPending_()) {
