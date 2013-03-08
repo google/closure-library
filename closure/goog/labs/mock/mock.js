@@ -42,7 +42,7 @@ goog.require('goog.json');
  *     mocked.
  * @return {!Object} The mocked object.
  */
-goog.labs.mock = function(objectOrClass) {
+goog.labs.mock.mock = function(objectOrClass) {
   // Go over properties of 'objectOrClass' and create a MockManager to
   // be used for stubbing out calls to methods.
   var mockObjectManager = new goog.labs.mock.MockObjectManager_(objectOrClass);
@@ -58,7 +58,7 @@ goog.labs.mock = function(objectOrClass) {
  * @param {!Function} func A function to be mocked.
  * @return {!Function} The mocked function.
  */
-goog.labs.mockFunction = function(func) {
+goog.labs.mock.mockFunction = function(func) {
   var mockFuncManager = new goog.labs.mock.MockFunctionManager_(func);
   var mockedFunction = mockFuncManager.getMockedItem();
   goog.asserts.assertFunction(mockedFunction);
@@ -626,7 +626,7 @@ goog.labs.mock.StubBinder_.prototype.thenReturn = function(value) {
  * Facilitates (and is the first step in) setting up stubs. Obtains an object
  * on which, the method to be mocked is called to create a stub. Sample usage:
  *
- * var mockObj = goog.labs.mock(objectBeingMocked);
+ * var mockObj = goog.labs.mock.mock(objectBeingMocked);
  * goog.labs.mock.when(mockObj).getFoo(3).thenReturn(4);
  *
  * @param {!Object} mockObject The mocked object.
