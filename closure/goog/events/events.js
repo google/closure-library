@@ -291,7 +291,7 @@ goog.events.listen_ = function(
 
   // Attach the proxy through the browser's API
   if (src.addEventListener) {
-    if (src == goog.global || !src.customEvent_) {
+    if (src == goog.global || !goog.events.Listenable.isImplementedBy(src)) {
       src.addEventListener(type, proxy, capture);
     } else if (goog.events.STRICT_EVENT_TARGET) {
       src.assertInitialized();
@@ -483,7 +483,7 @@ goog.events.unlistenByKey = function(key) {
     // TODO(arv): What is this goog.global for? Why would anyone listen to
     // events on the [[Global]] object? Is it supposed to be window? Why would
     // we not want to allow removing event listeners on the window?
-    if (src == goog.global || !src.customEvent_) {
+    if (src == goog.global || !goog.events.Listenable.isImplementedBy(src)) {
       src.removeEventListener(type, proxy, capture);
     }
   } else if (src.detachEvent) {
@@ -970,7 +970,8 @@ goog.events.dispatchEvent = function(src, e) {
 
   if (goog.events.STRICT_EVENT_TARGET) {
     goog.asserts.assert(
-        goog.events.STRICT_EVENT_TARGET && src.customEvent_,
+        goog.events.STRICT_EVENT_TARGET &&
+            goog.events.Listenable.isImplementedBy(src),
         'Can not use goog.events.dispatchEvent with ' +
         'non-goog.events.EventTarget instance.');
     src.assertInitialized();

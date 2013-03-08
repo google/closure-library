@@ -101,11 +101,7 @@ goog.events.EventTarget = function() {
   this.actualEventTarget_ = this;
 };
 goog.inherits(goog.events.EventTarget, goog.Disposable);
-
-
-if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-  goog.events.Listenable.addImplementation(goog.events.EventTarget);
-}
+goog.events.Listenable.addImplementation(goog.events.EventTarget);
 
 
 /**
