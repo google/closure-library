@@ -195,42 +195,39 @@ function assertDifference(a, b, expected) {
 
 function testRectToBox() {
   var r = new goog.math.Rect(0, 0, 0, 0);
-  assertEquals(new goog.math.Box(0, 0, 0, 0).toString(),
-               r.toBox().toString());
+  assertObjectEquals(new goog.math.Box(0, 0, 0, 0), r.toBox());
 
   r.top = 10;
   r.left = 10;
   r.width = 20;
   r.height = 20;
-  assertEquals(new goog.math.Box(10, 30, 30, 10).toString(),
-               r.toBox().toString());
+  assertObjectEquals(new goog.math.Box(10, 30, 30, 10), r.toBox());
 
   r.top = -10;
   r.left = 0;
   r.width = 10;
   r.height = 10;
-  assertEquals(new goog.math.Box(-10, 10, 0, 0).toString(),
-               r.toBox().toString());
+  assertObjectEquals(new goog.math.Box(-10, 10, 0, 0), r.toBox());
 }
 
 function testBoxToRect() {
   var box = new goog.math.Box(0, 0, 0, 0);
-  assertEquals(new goog.math.Rect(0, 0, 0, 0).toString(),
-               goog.math.Rect.createFromBox(box).toString());
+  assertObjectEquals(new goog.math.Rect(0, 0, 0, 0),
+                     goog.math.Rect.createFromBox(box));
 
   box.top = 10;
   box.left = 15;
   box.right = 23;
   box.bottom = 27;
-  assertEquals(goog.math.Rect.createFromBox(box).toString(),
-               new goog.math.Rect(15, 10, 8, 17).toString());
+  assertObjectEquals(new goog.math.Rect(15, 10, 8, 17),
+                     goog.math.Rect.createFromBox(box));
 
   box.top = -10;
   box.left = 3;
   box.right = 12;
   box.bottom = 7;
-  assertEquals(new goog.math.Rect(3, -10, 9, 17).toString(),
-               goog.math.Rect.createFromBox(box).toString());
+  assertObjectEquals(new goog.math.Rect(3, -10, 9, 17),
+                     goog.math.Rect.createFromBox(box));
 }
 
 function testBoxToRectAndBack() {
@@ -243,7 +240,9 @@ function testBoxToRectAndBack() {
 function rectToBoxAndBackTest(rect) {
   var box = rect.toBox();
   var rect2 = goog.math.Rect.createFromBox(box);
-  assertEquals(rect.toString(), rect2.toString());
+
+  // Use toString for this test since otherwise NaN != NaN.
+  assertObjectEquals(rect.toString(), rect2.toString());
 }
 
 function testRectToBoxAndBack() {
@@ -257,6 +256,8 @@ function testRectToBoxAndBack() {
 function boxToRectAndBackTest(box) {
   var rect = goog.math.Rect.createFromBox(box);
   var box2 = rect.toBox();
+
+  // Use toString for this test since otherwise NaN != NaN.
   assertEquals(box.toString(), box2.toString());
 }
 
@@ -307,8 +308,23 @@ function testRectContainsCoordinate() {
 }
 
 function testGetSize() {
-  assertEquals(new goog.math.Size(60, 80).toString(),
-               new goog.math.Rect(20, 40, 60, 80).getSize().toString());
+  assertObjectEquals(new goog.math.Size(60, 80),
+                     new goog.math.Rect(20, 40, 60, 80).getSize());
+}
+
+function testGetBottomRight() {
+  assertObjectEquals(new goog.math.Coordinate(40, 60),
+                     new goog.math.Rect(10, 20, 30, 40).getBottomRight());
+}
+
+function testGetCenter() {
+  assertObjectEquals(new goog.math.Coordinate(25, 40),
+                     new goog.math.Rect(10, 20, 30, 40).getCenter());
+}
+
+function testGetTopLeft() {
+  assertObjectEquals(new goog.math.Coordinate(10, 20),
+                     new goog.math.Rect(10, 20, 30, 40).getTopLeft());
 }
 
 function testRectCeil() {
