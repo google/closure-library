@@ -138,7 +138,8 @@ goog.net.BrowserChannel = function(opt_clientVersion, opt_firstTestResults,
    * the results are not available.
    * @private
    */
-  this.secondTestResults_ = opt_secondTestResults || null;
+  this.secondTestResults_ = goog.isDefAndNotNull(opt_secondTestResults) ?
+      opt_secondTestResults : null;
 };
 
 
