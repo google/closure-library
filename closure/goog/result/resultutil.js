@@ -116,7 +116,7 @@ goog.result.canceledResult = function() {
  * </pre>
  *
  * @param {!goog.result.Result} result The result to install the handlers.
- * @param {!function(this:T, !goog.result.Result)} handler The handler to be
+ * @param {function(this:T, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result object as the only parameter.
  * @param {!T=} opt_scope Optional scope for the handler.
  * @template T
@@ -144,7 +144,7 @@ goog.result.wait = function(result, handler, opt_scope) {
  * </pre>
  *
  * @param {!goog.result.Result} result The result to install the handlers.
- * @param {!function(this:T, ?, !goog.result.Result)} handler The handler to be
+ * @param {function(this:T, ?, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result value and the result as
  *     parameters.
  * @param {!T=} opt_scope Optional scope for the handler.
@@ -178,7 +178,7 @@ goog.result.waitOnSuccess = function(result, handler, opt_scope) {
  * </pre>
  *
  * @param {!goog.result.Result} result The result to install the handlers.
- * @param {!function(this:T, !goog.result.Result)} handler The handler to be
+ * @param {function(this:T, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result object as the only parameter.
  * @param {!T=} opt_scope Optional scope for the handler.
  * @template T
@@ -223,7 +223,7 @@ goog.result.waitOnError = function(result, handler, opt_scope) {
  *
  * @param {!goog.result.Result} result The result whose value will be
  *     transformed.
- * @param {!function(?):?} transformer The transformer
+ * @param {function(?):?} transformer The transformer
  *     function. The return value of this function will become the value of the
  *     returned result.
  *
@@ -303,7 +303,7 @@ goog.result.transform = function(result, transformer) {
  * </pre>
  *
  * @param {!goog.result.Result} result The result to chain.
- * @param {!function(!goog.result.Result):!goog.result.Result}
+ * @param {function(!goog.result.Result):!goog.result.Result}
  *     actionCallback The callback called when the result is resolved. This
  *     callback must return a Result.
  *
