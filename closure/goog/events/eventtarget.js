@@ -123,7 +123,7 @@ goog.events.EventTarget.MAX_ANCESTORS_ = 1000;
  * @type {boolean}
  * @private
  */
-goog.events.EventTarget.prototype.customEvent_ = true;
+goog.events.EventTarget.prototype[goog.events.CUSTOM_EVENT_ATTR] = true;
 
 
 /**

@@ -188,6 +188,15 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
 
 
 /**
+ * Property name that indicates that an object is a
+ * goog.events.EventTarget.
+ * @type {string}
+ * @const
+ */
+goog.events.CUSTOM_EVENT_ATTR = 'customEvent_';
+
+
+/**
  * Adds an event listener for a specific event on a DOM Node or an object that
  * has implemented {@link goog.events.EventTarget}. A listener can only be
  * added once to an object and if it is added again the key for the listener
@@ -291,7 +300,7 @@ goog.events.listen_ = function(
 
   // Attach the proxy through the browser's API
   if (src.addEventListener) {
-    if (src == goog.global || !src.customEvent_) {
+    if (src == goog.global || !src[goog.events.CUSTOM_EVENT_ATTR]) {
       src.addEventListener(type, proxy, capture);
     } else if (goog.events.STRICT_EVENT_TARGET) {
       src.assertInitialized();
@@ -483,7 +492,7 @@ goog.events.unlistenByKey = function(key) {
     // TODO(arv): What is this goog.global for? Why would anyone listen to
     // events on the [[Global]] object? Is it supposed to be window? Why would
     // we not want to allow removing event listeners on the window?
-    if (src == goog.global || !src.customEvent_) {
+    if (src == goog.global || !src[goog.events.CUSTOM_EVENT_ATTR]) {
       src.removeEventListener(type, proxy, capture);
     }
   } else if (src.detachEvent) {
@@ -677,7 +686,7 @@ goog.events.removeAllNativeListeners = function() {
     var src = listener.src;
     // Only remove the listener if it is not on custom event target.
     if (!goog.events.Listenable.isImplementedBy(src) &&
-        !src.customEvent_) {
+        !src[goog.events.CUSTOM_EVENT_ATTR]) {
       goog.events.unlistenByKey(key);
       count++;
     }
@@ -990,7 +999,7 @@ goog.events.dispatchEvent = function(src, e) {
 
   if (goog.events.STRICT_EVENT_TARGET) {
     goog.asserts.assert(
-        goog.events.STRICT_EVENT_TARGET && src.customEvent_,
+        goog.events.STRICT_EVENT_TARGET && src[goog.events.CUSTOM_EVENT_ATTR],
         'Can not use goog.events.dispatchEvent with ' +
         'non-goog.events.EventTarget instance.');
     src.assertInitialized();
