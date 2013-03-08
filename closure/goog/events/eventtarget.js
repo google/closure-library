@@ -84,33 +84,21 @@ goog.require('goog.object');
 goog.events.EventTarget = function() {
   goog.Disposable.call(this);
 
-  if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-    /**
-     * Maps of event type to an array of listeners.
-     *
-     * @type {Object.<string, !Array.<!goog.events.ListenableKey>>}
-     * @private
-     */
-    this.eventTargetListeners_ = {};
+  /**
+   * Maps of event type to an array of listeners.
+   *
+   * @type {Object.<string, !Array.<!goog.events.ListenableKey>>}
+   * @private
+   */
+  this.eventTargetListeners_ = {};
 
-    /**
-     * Whether the EventTarget has been disposed. This is only true
-     * when disposeInternal of EventTarget is completed (whereas
-     * this.isDisposed() is true the moment obj.dispose() is called,
-     * even before calling its disposeInternal).
-     * @type {boolean}
-     * @private
-     */
-    this.reallyDisposed_ = false;
-
-    /**
-     * The object to use for event.target. Useful when mixing in an
-     * EventTarget to another object.
-     * @type {!Object}
-     * @private
-     */
-    this.actualEventTarget_ = this;
-  }
+  /**
+   * The object to use for event.target. Useful when mixing in an
+   * EventTarget to another object.
+   * @type {!Object}
+   * @private
+   */
+  this.actualEventTarget_ = this;
 };
 goog.inherits(goog.events.EventTarget, goog.Disposable);
 
@@ -214,9 +202,7 @@ goog.events.EventTarget.prototype.removeEventListener = function(
 /** @override */
 goog.events.EventTarget.prototype.dispatchEvent = function(e) {
   if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-    if (this.reallyDisposed_) {
-      return true;
-    }
+    this.assertInitialized();
 
     var ancestorsTree, ancestor = this.getParentEventTarget();
     if (ancestor) {
@@ -256,12 +242,24 @@ goog.events.EventTarget.prototype.disposeInternal = function() {
 
   if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
     this.removeAllListeners();
-    this.reallyDisposed_ = true;
   } else {
     goog.events.removeAll(this);
   }
 
   this.parentEventTarget_ = null;
+};
+
+
+/**
+ * Asserts that the event target instance is initialized properly.
+ */
+goog.events.EventTarget.prototype.assertInitialized = function() {
+  if (goog.events.STRICT_EVENT_TARGET) {
+    goog.asserts.assert(
+        this.eventTargetListeners_,
+        'Event target is not initialized. Did you call superclass ' +
+        '(goog.events.EventTarget) constructor?');
+  }
 };
 
 
@@ -305,8 +303,7 @@ goog.events.EventTarget.prototype.listenOnce = function(
  */
 goog.events.EventTarget.prototype.listenInternal_ = function(
     type, listener, callOnce, opt_useCapture, opt_listenerScope) {
-  goog.asserts.assert(
-      !this.reallyDisposed_, 'Can not listen on disposed object.');
+  this.assertInitialized();
 
   var listenerArray = this.eventTargetListeners_[type] ||
       (this.eventTargetListeners_[type] = []);
@@ -392,10 +389,6 @@ goog.events.EventTarget.prototype.removeAllListeners = function(
 /** @override */
 goog.events.EventTarget.prototype.fireListeners = function(
     type, capture, eventObject) {
-  goog.asserts.assert(
-      !this.reallyDisposed_,
-      'Can not fire listeners after dispose() completed.');
-
   if (!(type in this.eventTargetListeners_)) {
     return true;
   }

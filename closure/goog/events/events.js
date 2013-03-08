@@ -81,6 +81,17 @@ goog.events.ListenableType;
 
 
 /**
+ * Whether to be strict with custom event targets. When set to true,
+ * listening/dispatching on un-initialized event targets will fail.
+ * An event target may be un-initialized if you forgot to call
+ * goog.events.EventTarget constructor in the custom event target
+ * constructor.
+ * @type {boolean}
+ */
+goog.events.STRICT_EVENT_TARGET = false;
+
+
+/**
  * Container for storing event listeners and their proxies
  * @private
  * @type {Object.<goog.events.ListenableKey>}
@@ -282,6 +293,8 @@ goog.events.listen_ = function(
   if (src.addEventListener) {
     if (src == goog.global || !src.customEvent_) {
       src.addEventListener(type, proxy, capture);
+    } else if (goog.events.STRICT_EVENT_TARGET) {
+      src.assertInitialized();
     }
   } else {
     // The else above used to be else if (src.attachEvent) and then there was
@@ -946,7 +959,21 @@ goog.events.getTotalListenerCount = function() {
  */
 goog.events.dispatchEvent = function(src, e) {
   if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
+    if (goog.events.STRICT_EVENT_TARGET) {
+      goog.asserts.assert(
+          goog.events.Listenable.isImplementedBy(src),
+          'Can not use goog.events.dispatchEvent with ' +
+          'non-goog.events.Listenable instance.');
+    }
     return src.dispatchEvent(e);
+  }
+
+  if (goog.events.STRICT_EVENT_TARGET) {
+    goog.asserts.assert(
+        goog.events.STRICT_EVENT_TARGET && src.customEvent_,
+        'Can not use goog.events.dispatchEvent with ' +
+        'non-goog.events.EventTarget instance.');
+    src.assertInitialized();
   }
 
   var type = e.type || e;

@@ -9,7 +9,7 @@ See the COPYING file for details.
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Closure Unit Tests - goog.events</title>
-  <script src="../base.js"></script>
+<script src="../base.js"></script>
 <script>
   goog.require('goog.debug.EntryPointMonitor');
   goog.require('goog.debug.ErrorHandler');
@@ -34,6 +34,7 @@ See the COPYING file for details.
   }
 
   function tearDown() {
+    goog.events.STRICT_EVENT_TARGET = false;
     goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
     goog.events.removeAll();
     propertyReplacer.reset();
@@ -661,6 +662,37 @@ See the COPYING file for details.
     assertEquals(1, secondListener.getCallCount());
   }
 
+  function testAssertWhenUsedWithUninitializedCustomEventTarget() {
+    goog.events.STRICT_EVENT_TARGET = true;
+
+    var SubClass = function() { /* does not call superclass ctor */ };
+    goog.inherits(SubClass, goog.events.EventTarget);
+
+    var instance = new SubClass();
+
+    var e;
+    e = assertThrows(function() {
+      goog.events.listen(instance, 'test1', function() {});
+    });
+    assertTrue(e instanceof goog.asserts.AssertionError);
+    e = assertThrows(function() {
+      goog.events.dispatchEvent(instance, 'test1');
+    });
+    assertTrue(e instanceof goog.asserts.AssertionError);
+    e = assertThrows(function() {
+      instance.dispatchEvent('test1');
+    });
+    assertTrue(e instanceof goog.asserts.AssertionError);
+  }
+
+  function testAssertWhenDispatchEventIsUsedWithNonCustomEventTarget() {
+    goog.events.STRICT_EVENT_TARGET = true;
+    var obj = {};
+    e = assertThrows(function() {
+      goog.events.dispatchEvent(obj, 'test1');
+    });
+    assertTrue(e instanceof goog.asserts.AssertionError);
+  }
 </script>
 </body>
 </html>
