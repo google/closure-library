@@ -25,6 +25,8 @@
 goog.provide('goog.editor.Field');
 goog.provide('goog.editor.Field.EventType');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.async.Delay');
@@ -541,6 +543,7 @@ goog.editor.Field.prototype.resetOriginalElemProperties = function() {
   var field = this.getOriginalElement();
   field.removeAttribute('contentEditable');
   field.removeAttribute('g_editable');
+  field.removeAttribute('role');
 
   if (!this.id) {
     field.removeAttribute('id');
@@ -747,6 +750,7 @@ goog.editor.Field.prototype.setupFieldObject = function(field) {
   this.isModified_ = false;
   this.isEverModified_ = false;
   field.setAttribute('g_editable', 'true');
+  goog.a11y.aria.setRole(field, goog.a11y.aria.Role.TEXTBOX);
 };
 
 
