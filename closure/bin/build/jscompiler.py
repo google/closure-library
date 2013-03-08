@@ -14,24 +14,77 @@
 
 """Utility to use the Closure Compiler CLI from Python."""
 
-import distutils.version
+
 import logging
 import re
 import subprocess
 
 
-# Pulls a version number from the first line of 'java -version'
-# See http://java.sun.com/j2se/versioning_naming.html to learn more about the
-# command's output format.
-_VERSION_REGEX = re.compile('"([0-9][.0-9]*)')
+# Pulls a version number from the first line of 'java -version'.
+# Versions are in the format of n.n.*. See
+# http://www.oracle.com/technetwork/java/javase/versioning-naming-139433.html
+_VERSION_REGEX = re.compile(r'"([0-9]\.[0-9]+)')
 
 
-def _GetJavaVersion():
-  """Returns the string for the current version of Java installed."""
-  proc = subprocess.Popen(['java', '-version'], stderr=subprocess.PIPE)
-  unused_stdoutdata, stderrdata = proc.communicate()
-  version_line = stderrdata.splitlines()[0]
-  return _VERSION_REGEX.search(version_line).group(1)
+class JsCompilerError(Exception):
+  """Raised if there's an error in calling the compiler."""
+  pass
+
+
+def _GetJavaVersionString():
+  """Get the version string from the Java VM."""
+  return subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT)
+
+
+def _ParseJavaVersion(version_string):
+  """Returns the string for the current version of Java installed.
+
+  Args:
+    version_string: String of the Java version (e.g. '1.7.2-ea').
+
+  Returns:
+    The major and minor versions, as a float (e.g. 1.7).
+  """
+  match = _VERSION_REGEX.search(version_string)
+  if match:
+    return float(match.group(1))
+
+
+def _GetJsCompilerArgs(compiler_jar_path, java_version, source_paths,
+                       jvm_flags, compiler_flags):
+  """Assembles arguments for call to JsCompiler."""
+
+  if java_version < 1.6:
+    raise JsCompilerError('Closure Compiler requires Java 1.6 or higher. '
+                          'Please visit http://www.java.com/getjava')
+
+  args = ['java']
+
+  # Add JVM flags we believe will produce the best performance.  See
+  # https://groups.google.com/forum/#!topic/closure-library-discuss/7w_O9-vzlj4
+
+  # Attempt 32-bit mode if we're <= Java 1.7
+  if java_version >= 1.7:
+    args += ['-d32']
+
+  # Prefer the "client" VM.
+  args += ['-client']
+
+  # Add JVM flags, if any
+  if jvm_flags:
+    args += jvm_flags
+
+  # Add the application JAR.
+  args += ['-jar', compiler_jar_path]
+
+  for path in source_paths:
+    args += ['--js', path]
+
+  # Add compiler flags, if any.
+  if compiler_flags:
+    args += compiler_flags
+
+  return args
 
 
 def Compile(compiler_jar_path, source_paths,
@@ -49,35 +102,14 @@ def Compile(compiler_jar_path, source_paths,
     The compiled source, as a string, or None if compilation failed.
   """
 
-  # User friendly version check.
-  if not (distutils.version.LooseVersion(_GetJavaVersion()) >=
-          distutils.version.LooseVersion('1.6')):
-    logging.error('Closure Compiler requires Java 1.6 or higher. '
-                  'Please visit http://www.java.com/getjava')
-    return
+  java_version = _ParseJavaVersion(_GetJavaVersionString())
 
-  args = ['java']
-
-  # JVM flags before the -jar
-  if jvm_flags:
-    args += jvm_flags
-
-  args += ['-jar', compiler_jar_path]
-
-  # Closure Compiler flags after the -jar
-  if compiler_flags:
-    args += compiler_flags
-
-  for path in source_paths:
-    args += ['--js', path]
-
+  args = _GetJsCompilerArgs(
+      compiler_jar_path, java_version, source_paths, jvm_flags, compiler_flags)
 
   logging.info('Compiling with the following command: %s', ' '.join(args))
 
-  proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-  stdoutdata, unused_stderrdata = proc.communicate()
-
-  if proc.returncode != 0:
-    return
-
-  return stdoutdata
+  try:
+    return subprocess.check_output(args)
+  except subprocess.CalledProcessError:
+    raise JsCompilerError('JavaScript compilation failed.')

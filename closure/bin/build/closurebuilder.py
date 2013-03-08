@@ -243,18 +243,15 @@ def main():
                     '"compiled"')
       sys.exit(2)
 
+    # Will throw an error if the compilation fails.
     compiled_source = jscompiler.Compile(
         options.compiler_jar,
         [js_source.GetPath() for js_source in deps],
         jvm_flags=options.jvm_flags,
         compiler_flags=options.compiler_flags)
 
-    if compiled_source is None:
-      logging.error('JavaScript compilation failed.')
-      sys.exit(1)
-    else:
-      logging.info('JavaScript compilation succeeded.')
-      out.write(compiled_source)
+    logging.info('JavaScript compilation succeeded.')
+    out.write(compiled_source)
 
   else:
     logging.error('Invalid value for --output flag.')
