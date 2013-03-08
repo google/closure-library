@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2013 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Closure Unit Tests for DimensionPickerRenderer</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.a11y.aria');
+  goog.require('goog.a11y.aria.State');
+  goog.require('goog.dom');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.ui.DimensionPicker');
+  goog.require('goog.ui.DimensionPickerRenderer');
+</script>
+</head>
+
+<body>
+<script>
+  var renderer;
+  var picker;
+
+  function setUp() {
+    renderer = new goog.ui.DimensionPickerRenderer();
+    picker = new goog.ui.DimensionPicker(renderer);
+  }
+
+  function tearDown() {
+    picker.dispose();
+  }
+
+  /**
+   * Tests that the right aria label is added when the highlighted
+   * size changes.
+   */
+  function testSetHighlightedSizeChangesAriaLabel() {
+    picker.render();
+    renderer.setHighlightedSize(picker, 3, 7);
+    assertEquals('3 by 7', goog.a11y.aria.getState(
+        picker.getElement(), goog.a11y.aria.State.LABEL));
+  }
+</script>
+</body>
+</html>
