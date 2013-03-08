@@ -403,14 +403,15 @@ goog.History.prototype.lastToken_ = null;
 
 
 /**
- * Whether the browser supports HTML5 history management.
- * {@link http://www.w3.org/TR/html5/history.html}.
+ * Whether the browser supports HTML5 history management's onhashchange event.
+ * {@link http://www.w3.org/TR/html5/history.html}. IE 9 in compatibility mode
+ * indicates that onhashchange is in window, but testing reveals the event
+ * isn't actually fired.
  * @type {boolean}
  */
-goog.History.HAS_ONHASHCHANGE =
-    goog.userAgent.IE && goog.userAgent.isDocumentMode(8) ||
-    goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.2') ||
-    goog.userAgent.WEBKIT && goog.userAgent.isVersion('532.1');
+goog.History.HAS_ONHASHCHANGE = goog.userAgent.IE ?
+                                document.documentMode >= 8 :
+                                'onhashchange' in window;
 
 
 /**
