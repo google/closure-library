@@ -425,7 +425,7 @@ goog.ui.Bubble.prototype.computeHtmlForCorner_ = function(corner) {
       '<tr>' +
       '<td class="' + this.config_.cssBubbleLeft + '">' +
       '<td class="' + this.config_.cssBubbleFont + '"' +
-      ' style="padding:0 4;background:white">' + message +
+      ' style="padding:0 4px;background:white">' + message +
       '<td id="' + this.closeButtonId_ + '"' +
       ' class="' + this.config_.cssCloseButton + '"/>' +
       '<td class="' + this.config_.cssBubbleRight + '">' +
