@@ -41,10 +41,9 @@ goog.require('goog.result.SimpleResult');
  *
  * </pre>
  *
- * @param {T} value The value of the result.
- * @return {!goog.result.Result.<T>} A Result object that has already been
- *     resolved to the supplied value.
- * @template T
+ * @param {*} value The value of the result.
+ * @return {!goog.result.Result} A Result object that has already been resolved
+ *     to the supplied value.
  */
 goog.result.successfulResult = function(value) {
   var result = new goog.result.SimpleResult();
@@ -116,11 +115,11 @@ goog.result.canceledResult = function() {
  * });
  * </pre>
  *
- * @param {!goog.result.Result.<S>} result The result to install the handlers.
- * @param {function(this:T, !goog.result.Result.<S>)} handler The handler to be
+ * @param {!goog.result.Result} result The result to install the handlers.
+ * @param {function(this:T, !goog.result.Result)} handler The handler to be
  *     called. The handler is passed the result object as the only parameter.
  * @param {!T=} opt_scope Optional scope for the handler.
- * @template T,S
+ * @template T
  */
 goog.result.wait = function(result, handler, opt_scope) {
   result.wait(opt_scope ? goog.bind(handler, opt_scope) : handler);
@@ -144,12 +143,12 @@ goog.result.wait = function(result, handler, opt_scope) {
  * });
  * </pre>
  *
- * @param {!goog.result.Result.<S>} result The result to install the handlers.
- * @param {function(this:T, S, !goog.result.Result.<S>)} handler The handler to
- *     be called. The handler is passed the result value and the result as
+ * @param {!goog.result.Result} result The result to install the handlers.
+ * @param {function(this:T, ?, !goog.result.Result)} handler The handler to be
+ *     called. The handler is passed the result value and the result as
  *     parameters.
  * @param {!T=} opt_scope Optional scope for the handler.
- * @template T,S
+ * @template T
  */
 goog.result.waitOnSuccess = function(result, handler, opt_scope) {
   goog.result.wait(result, function(res) {
@@ -223,15 +222,14 @@ goog.result.waitOnError = function(result, handler, opt_scope) {
  * });
  * </pre>
  *
- * @param {!goog.result.Result.<T>} result The result whose value will be
+ * @param {!goog.result.Result} result The result whose value will be
  *     transformed.
- * @param {function(T):S} transformer The transformer
+ * @param {function(?):?} transformer The transformer
  *     function. The return value of this function will become the value of the
  *     returned result.
  *
- * @return {!goog.result.DependentResult.<S>} A new Result whose eventual value
- *     will be the returned value of the transformer function.
- * @template T,S
+ * @return {!goog.result.DependentResult} A new Result whose eventual value will
+ *     be the returned value of the transformer function.
  */
 goog.result.transform = function(result, transformer) {
   var returnedResult = new goog.result.DependentResultImpl_([result]);
@@ -305,15 +303,14 @@ goog.result.transform = function(result, transformer) {
  * });
  * </pre>
  *
- * @param {!goog.result.Result.<T>} result The result to chain.
- * @param {function(!goog.result.Result.<T>):!goog.result.Result.<S>}
+ * @param {!goog.result.Result} result The result to chain.
+ * @param {function(!goog.result.Result):!goog.result.Result}
  *     actionCallback The callback called when the result is resolved. This
  *     callback must return a Result.
  *
- * @return {!goog.result.DependentResult.<S>} A result that is resolved when
- *     both the given Result and the Result returned by the actionCallback have
+ * @return {!goog.result.DependentResult} A result that is resolved when both
+ *     the given Result and the Result returned by the actionCallback have
  *     resolved.
- * @template T,S
  */
 goog.result.chain = function(result, actionCallback) {
   var dependentResult = new goog.result.DependentResultImpl_([result]);
@@ -371,9 +368,8 @@ goog.result.chain = function(result, actionCallback) {
  *
  * @param {...!goog.result.Result} var_args The results to wait on.
  *
- * @return {!goog.result.DependentResult.<!Array.<!goog.result.Result>>} A
- *     new Result whose eventual value will be the resolved given Result
- *     objects.
+ * @return {!goog.result.DependentResult} A new Result whose eventual value will
+ *     be the resolved given Result objects.
  */
 goog.result.combine = function(var_args) {
   /** @type {!Array.<!goog.result.Result>} */
