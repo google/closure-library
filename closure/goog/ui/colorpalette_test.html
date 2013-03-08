@@ -122,6 +122,14 @@ See the COPYING file for details.
           goog.color.parse(newNodes[1].style.backgroundColor).hex);
     }
 
+    function testSetColorsWithLabels() {
+      emptyPalette.setColors(['#00f', '#FFFFFF', 'black'], ['blue', 'white']);
+      var nodes = emptyPalette.getContent();
+      assertEquals('blue', nodes[0].title);
+      assertEquals('white', nodes[1].title);
+      assertEquals('black', nodes[2].title);
+    }
+
     function testRender() {
       samplePalette.render(document.getElementById('sandbox'));
 
