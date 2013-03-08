@@ -828,7 +828,23 @@ goog.i18n.DateTimeParse.prototype.parseTimeZoneOffset_ =
  * @private
  */
 goog.i18n.DateTimeParse.prototype.parseInt_ = function(text, pos) {
-  var m = text.substring(pos[0]).match(/^\d+/);
+  // Delocalizes the string containing native digits specified by the locale,
+  // replaces the natvie digits with ASCII digits. Leaves other characters.
+  // This is the reverse operation of localizeNumbers_ in datetimeformat.js.
+  if (goog.i18n.DateTimeSymbols.ZERODIGIT) {
+    var parts = [];
+    for (var i = pos[0]; i < text.length; i++) {
+      var c = text.charCodeAt(i) - goog.i18n.DateTimeSymbols.ZERODIGIT;
+      parts.push((0 <= c && c <= 9) ?
+          String.fromCharCode(c + 0x30) :
+          text.charAt(i));
+    }
+    text = parts.join('');
+  } else {
+    text = text.substring(pos[0]);
+  }
+
+  var m = text.match(/^\d+/);
   if (!m) {
     return -1;
   }

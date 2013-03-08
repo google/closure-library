@@ -563,6 +563,50 @@ function testChineseDate() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
 }
 
+// For languages with goog.i18n.DateTimeSymbols.ZERODIGIT defined, the int
+// digits are localized by the locale in datetimeformat.js. This test case is
+// for parsing dates with such native digits.
+function testDatesWithNativeDigits() {
+  // Language Arabic is one example with
+  // goog.i18n.DateTimeSymbols.ZERODIGIT defined.
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fa;
+
+  // Javascript month starts from 0, July is 7 - 1
+  var date = new Date(2006, 7 - 1, 24, 12, 12, 12, 0);
+  var formatter = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimeFormat.Format.FULL_DATE);
+  date_str = formatter.format(date);
+  var parser = new goog.i18n.DateTimeParse(
+      goog.i18n.DateTimeFormat.Format.FULL_DATE);
+
+  parser.parse(date_str, date);
+  assertEquals(2006, date.getFullYear());
+  assertEquals(7 - 1, date.getMonth());
+  assertEquals(24, date.getDate());
+
+  date = new Date(2006, 7 - 1, 24);
+  formatter = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimeFormat.Format.SHORT_DATE);
+  date_str = formatter.format(date);
+  parser = new goog.i18n.DateTimeParse(
+      goog.i18n.DateTimeFormat.Format.SHORT_DATE);
+
+  parser.parse(date_str, date);
+  assertEquals(2006, date.getFullYear());
+  assertEquals(7 - 1, date.getMonth());
+  assertEquals(24, date.getDate());
+
+  date = new Date();
+
+  parser = new goog.i18n.DateTimeParse('y/MM/dd H:mm:ss٫SS');
+  assertTrue(parser.parse('۲۰۰۶/۰۷/۲۷ ۱۳:۱۰:۱۰٫۲۵', date) > 0);
+  assertEquals(2006, date.getFullYear());
+  assertEquals(6, date.getMonth());
+  assertEquals(27, date.getDate());
+
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+}
+
 function testTimeZone() {
   var date = new Date();
 
