@@ -1331,6 +1331,8 @@ function testGetDocumentScrollOfFixedViewport() {
   // iOS and perhaps other environments don't actually support scrolling.
   // Instead, you view the document's fixed layout through a screen viewport.
   // We need getDocumentScroll to handle this case though.
+  // In case of IE10 though, we do want to use scrollLeft/scrollTop
+  // because the rest of the positioning is done off the scrolled away origin.
   var fakeDocumentScrollElement = {scrollLeft: 0, scrollTop: 0};
   var fakeDocument = {
     defaultView: {pageXOffset: 100, pageYOffset: 100},
@@ -1339,8 +1341,13 @@ function testGetDocumentScrollOfFixedViewport() {
   };
   var dh = goog.dom.getDomHelper(document);
   dh.setDocument(fakeDocument);
-  assertEquals(100, dh.getDocumentScroll().x);
-  assertEquals(100, dh.getDocumentScroll().y);
+  if (goog.userAgent.IE && goog.userAgent.isVersion(10)) {
+    assertEquals(0, dh.getDocumentScroll().x);
+    assertEquals(0, dh.getDocumentScroll().y);
+  } else {
+    assertEquals(100, dh.getDocumentScroll().x);
+    assertEquals(100, dh.getDocumentScroll().y);
+  }
 }
 
 function testActiveElementIE() {
