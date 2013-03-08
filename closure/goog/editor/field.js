@@ -644,9 +644,9 @@ goog.editor.Field.CTRL_KEYS_CAUSING_CHANGES_ = {
   88: true // X
 };
 
-if (goog.userAgent.IE) {
-  // In IE input from IME (Input Method Editor) does not generate keypress
-  // event so we have to rely on the keydown event. This way we have
+if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+  // In IE and Webkit, input from IME (Input Method Editor) does not generate a
+  // keypress event so we have to rely on the keydown event. This way we have
   // false positives while the user is using keyboard to select the
   // character to input, but it is still better than the false negatives
   // that ignores user's final input at all.

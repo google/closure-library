@@ -1254,3 +1254,24 @@ function testNoHandleWindowLevelMouseUp() {
   goog.testing.events.fireMouseUpEvent(otherElement);
   assertFalse(selectionHasFired);
 }
+
+function testIsGeneratingKey() {
+  var regularKeyEvent = new goog.events.BrowserEvent();
+  regularKeyEvent.charCode = goog.events.KeyCodes.A;
+
+  var ctrlKeyEvent = new goog.events.BrowserEvent();
+  ctrlKeyEvent.ctrlKey = true;
+  ctrlKeyEvent.metaKey = true;
+  ctrlKeyEvent.charCode = goog.events.KeyCodes.A;
+
+  var imeKeyEvent = new goog.events.BrowserEvent();
+  imeKeyEvent.keyCode = 229; // indicates from an IME - see KEYS_CAUSING_CHANGES
+
+  assertTrue(goog.editor.Field.isGeneratingKey_(regularKeyEvent, true));
+  assertFalse(goog.editor.Field.isGeneratingKey_(ctrlKeyEvent, true));
+  if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+    assertTrue(goog.editor.Field.isGeneratingKey_(imeKeyEvent, false));
+  } else {
+    assertFalse(goog.editor.Field.isGeneratingKey_(imeKeyEvent, false));
+  }
+}
