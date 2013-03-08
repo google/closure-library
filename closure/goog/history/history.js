@@ -303,19 +303,6 @@ goog.History = function(opt_invisible, opt_blankPageUrl, opt_input,
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
 
-  /**
-   * Whether the given window supports HTML5 history management's onhashchange
-   * event. {@link http://www.w3.org/TR/html5/history.html}.
-   *
-   * IE 9 in compatibility mode indicates that onhashchange is in window,
-   * but testing reveals the event isn't actually fired.
-   * @type {boolean}
-   * @protected
-   */
-  this.onHashCodeSupported = (goog.userAgent.IE ?
-      document.documentMode >= 8 :
-      'onhashchange' in this.window_);
-
   if (opt_invisible || goog.History.LEGACY_IE) {
     var iframe;
     if (opt_iframe) {
@@ -416,6 +403,18 @@ goog.History.prototype.lastToken_ = null;
 
 
 /**
+ * Whether the browser supports HTML5 history management's onhashchange event.
+ * {@link http://www.w3.org/TR/html5/history.html}. IE 9 in compatibility mode
+ * indicates that onhashchange is in window, but testing reveals the event
+ * isn't actually fired.
+ * @type {boolean}
+ */
+goog.History.HAS_ONHASHCHANGE = goog.userAgent.IE ?
+                                document.documentMode >= 8 :
+                                'onhashchange' in window;
+
+
+/**
  * Whether the current browser is Internet Explorer prior to version 8. Many IE
  * specific workarounds developed before version 8 are unnecessary in more
  * current versions.
@@ -491,7 +490,7 @@ goog.History.prototype.setEnabled = function(enable) {
 
     // TODO(user): make HTML5 and invisible history work by listening to the
     // iframe # changes instead of the window.
-    if (this.onHashCodeSupported && this.userVisible_) {
+    if (goog.History.HAS_ONHASHCHANGE && this.userVisible_) {
       this.eventHandler_.listen(
           this.window_, goog.events.EventType.HASHCHANGE, this.onHashChange_);
       this.enabled_ = true;
@@ -566,7 +565,7 @@ goog.History.prototype.onShow_ = function(e) {
 /**
  * Handles HTML5 onhashchange events on browsers where it is supported.
  * This is very similar to {@link #check_}, except that it is not executed
- * continuously. It is only used when {@code this.onHashCodeSupported} is
+ * continuously. It is only used when {@code goog.History.HAS_ONHASHCHANGE} is
  * true.
  * @param {goog.events.BrowserEvent} e The browser event.
  * @private
@@ -654,7 +653,7 @@ goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
     if (this.userVisible_) {
       this.setHash_(token, replace);
 
-      if (!this.onHashCodeSupported) {
+      if (!goog.History.HAS_ONHASHCHANGE) {
         if (goog.userAgent.IE) {
           // IE must save state using the iframe.
           this.setIframeToken_(token, replace, opt_title);
@@ -662,7 +661,7 @@ goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
       }
 
       // This condition needs to be called even if
-      // this.onHashCodeSupported is true so the NAVIGATE event fires
+      // goog.History.HAS_ONHASHCHANGE is true so the NAVIGATE event fires
       // sychronously.
       if (this.enabled_) {
         this.check_(false);
@@ -835,7 +834,7 @@ goog.History.prototype.getIframeToken_ = function() {
 
 /**
  * Checks the state of the document fragment and the iframe title to detect
- * navigation changes. If {@code onHashCodeSupported} is
+ * navigation changes. If {@code goog.History.HAS_ONHASHCHANGE} is
  * {@code false}, then this runs approximately twenty times per second.
  * @param {boolean} isNavigation True if the event was initiated by a browser
  *     action, false if it was caused by a setToken call. See
