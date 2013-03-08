@@ -29,13 +29,17 @@ See the COPYING file for details.
 </script>
 <script>
 
-function MockXmlHttp() {}
+function MockXmlHttp() {
+  /**
+   * The headers for this XmlHttpRequest.
+   * @type {!Object.<string>}
+   */
+  this.headers = {};
+}
 
 MockXmlHttp.prototype.readyState = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
 
 MockXmlHttp.prototype.status = 200;
-
-MockXmlHttp.prototype.headers = {};
 
 MockXmlHttp.syncSend = false;
 
@@ -544,6 +548,26 @@ function testPostSetsContentTypeHeader() {
   assertEquals(
       headers[goog.net.XhrIo.CONTENT_TYPE_HEADER],
       goog.net.XhrIo.FORM_CONTENT_TYPE);
+}
+
+function testContentTypeIsTreatedCaseInsensitively() {
+  var x = new goog.net.XhrIo;
+
+  x.send('url', 'POST', 'content', {'content-type': 'testing'});
+
+  assertObjectEquals(
+      'Headers should not be modified since they already contain a ' +
+      'content type definition',
+      {'content-type': 'testing'},
+      lastMockXmlHttp.headers);
+}
+
+function testIsContentTypeHeader_() {
+  assertTrue(goog.net.XhrIo.isContentTypeHeader_('content-type'));
+  assertTrue(goog.net.XhrIo.isContentTypeHeader_('Content-type'));
+  assertTrue(goog.net.XhrIo.isContentTypeHeader_('CONTENT-TYPE'));
+  assertTrue(goog.net.XhrIo.isContentTypeHeader_('Content-Type'));
+  assertFalse(goog.net.XhrIo.isContentTypeHeader_('Content Type'));
 }
 
 function testPostFormDataDoesNotSetContentTypeHeader() {

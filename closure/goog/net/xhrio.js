@@ -501,11 +501,15 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
     });
   }
 
+  // Find whether a content type header is set, ignoring case.
+  // HTTP header names are case-insensitive.  See:
+  // http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
+  var contentTypeKey = goog.array.find(headers.getKeys(),
+      goog.net.XhrIo.isContentTypeHeader_);
+
   var contentIsFormData = (goog.global['FormData'] &&
       (content instanceof goog.global['FormData']));
-  if (method == 'POST' &&
-      !headers.containsKey(goog.net.XhrIo.CONTENT_TYPE_HEADER) &&
-      !contentIsFormData) {
+  if (method == 'POST' && !contentTypeKey && !contentIsFormData) {
     // For POST requests, default to the url-encoded form content type
     // unless this is a FormData request.  For FormData, the browser will
     // automatically add a multipart/form-data content type with an appropriate
@@ -553,6 +557,18 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
     this.logger_.fine(this.formatMsg_('Send error: ' + err.message));
     this.error_(goog.net.ErrorCode.EXCEPTION, err);
   }
+};
+
+
+/**
+ * @param {string} header An HTTP header key.
+ * @return {boolean} Whether the key is a content type header (ignoring
+ *     case.
+ * @private
+ */
+goog.net.XhrIo.isContentTypeHeader_ = function(header) {
+  return goog.string.caseInsensitiveEquals(
+      goog.net.XhrIo.CONTENT_TYPE_HEADER, header);
 };
 
 
