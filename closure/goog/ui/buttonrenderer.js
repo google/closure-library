@@ -24,7 +24,6 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
-goog.require('goog.string');
 goog.require('goog.ui.ButtonSide');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.ControlRenderer');
@@ -74,8 +73,7 @@ goog.ui.ButtonRenderer.prototype.getAriaRole = function() {
 
 /**
  * Updates the button's ARIA (accessibility) state if the button is being
- * treated as a checkbox. Also makes sure that attributes which aren't
- * supported by buttons aren't being added.
+ * treated as a checkbox.
  * @param {Element} element Element whose ARIA state is to be updated.
  * @param {goog.ui.Component.State} state Component state being enabled or
  *     disabled.
@@ -85,31 +83,26 @@ goog.ui.ButtonRenderer.prototype.getAriaRole = function() {
  */
 goog.ui.ButtonRenderer.prototype.updateAriaState = function(element, state,
     enable) {
-  switch (state) {
-    // If button has CHECKED state, assign ARIA atrribute aria-pressed
-    case goog.ui.Component.State.CHECKED:
-      goog.asserts.assert(element,
-          'The button DOM element cannot be null.');
-      goog.a11y.aria.setState(element, goog.a11y.aria.State.PRESSED, enable);
-      break;
-    // Buttons do not support aria-selected
-    case goog.ui.Component.State.SELECTED:
-      goog.asserts.fail('Buttons do not support the ARIA selected attribute.' +
-          ' Please use checked instead.');
-      break;
-    default:
-    case goog.ui.Component.State.OPENED:
-    case goog.ui.Component.State.DISABLED:
-      goog.base(this, 'updateAriaState', element, state, enable);
-      break;
+  // If button has CHECKED state, assign ARIA atrribute aria-pressed
+  if (state == goog.ui.Component.State.CHECKED) {
+    goog.asserts.assert(element,
+        'The button DOM element cannot be null.');
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.PRESSED, enable);
+  } else {
+    goog.ui.ButtonRenderer.superClass_.updateAriaState.call(this, element,
+        state, enable);
   }
 };
 
 
 /** @override */
 goog.ui.ButtonRenderer.prototype.createDom = function(button) {
-  var element = goog.base(this, 'createDom', button);
-  this.setTooltip(element, button.getTooltip());
+  var element = goog.ui.ButtonRenderer.superClass_.createDom.call(this, button);
+
+  var tooltip = button.getTooltip();
+  if (tooltip) {
+    this.setTooltip(element, tooltip);
+  }
 
   var value = button.getValue();
   if (value) {
@@ -182,8 +175,8 @@ goog.ui.ButtonRenderer.prototype.getTooltip = function(element) {
  * @protected
  */
 goog.ui.ButtonRenderer.prototype.setTooltip = function(element, tooltip) {
-  if (element && !goog.string.isEmptySafe(tooltip)) {
-    element.title = tooltip;
+  if (element) {
+    element.title = tooltip || '';
   }
 };
 

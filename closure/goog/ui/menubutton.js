@@ -181,8 +181,6 @@ goog.ui.MenuButton.prototype.enterDocument = function() {
   goog.ui.MenuButton.superClass_.enterDocument.call(this);
   if (this.menu_) {
     this.attachMenuEventListeners_(this.menu_, true);
-    goog.a11y.aria.setState(this.getElementStrict(),
-        goog.a11y.aria.State.HASPOPUP, true);
   }
   var element = this.getElement();
   goog.asserts.assert(element, 'The menu button DOM element cannot be null.');

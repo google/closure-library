@@ -104,16 +104,10 @@ function tearDown() {
 
 /**
  * Open the menu and click on the menu item inside.
- * Check if the aria-haspopup property is set correctly.
  */
 function testBasicButtonBehavior() {
   var node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-
-  assertEquals('Menu button must have aria-haspopup attribute set to true',
-      'true', goog.a11y.aria.getState(menuButton.getElement(),
-      goog.a11y.aria.State.HASPOPUP));
-
   goog.testing.events.fireClickSequence(node);
 
   assertTrue('Menu must open after click', menuButton.isOpen());
@@ -124,7 +118,7 @@ function testBasicButtonBehavior() {
     goog.ui.Component.EventType.ACTION,
     function(e) {
       menuItemClicked++;
-      lastMenuItemClicked = e.target;
+      lastMenuItemClicked = e.target
     });
 
   var menuItem2 = goog.dom.getElement('menuItem2');
@@ -156,16 +150,6 @@ function testHighlightItemBehavior() {
     assertEquals('Second menuitem must be the aria-activedescendant',
         'menuItem2', goog.a11y.aria.getState(menuButton.getElement(),
             goog.a11y.aria.State.ACTIVEDESCENDANT));
-}
-
-/**
- * Make sure the menu opens when enter is pressed.
- */
-function testEnterOpensMenu() {
-  var node = goog.dom.getElement('demoMenuButton');
-  menuButton.decorate(node);
-  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
-  assertTrue('Menu must open after enter', menuButton.isOpen());
 }
 
 /**
