@@ -63,8 +63,8 @@ function testSynchronousSuccess() {
   assertEquals(goog.result.Result.State.SUCCESS, result.getState());
   assertEquals(1, result.getValue());
 
-  assertCall(waitCallback, result);
-  assertSuccessCall(waitOnSuccessCallback, 1, result);
+  assertWaitCall(waitCallback, result);
+  assertCall(waitOnSuccessCallback, 1, result);
   assertNoCall(waitOnErrorCallback);
 }
 
@@ -89,8 +89,8 @@ function testAsynchronousSuccess() {
   assertEquals(goog.result.Result.State.SUCCESS, result.getState());
   assertEquals(1, result.getValue());
 
-  assertCall(waitCallback, result);
-  assertSuccessCall(waitOnSuccessCallback, 1, result);
+  assertWaitCall(waitCallback, result);
+  assertCall(waitOnSuccessCallback, 1, result);
   assertNoCall(waitOnErrorCallback);
 }
 
@@ -107,9 +107,9 @@ function testSynchronousError() {
   assertEquals(goog.result.Result.State.ERROR, result.getState());
   assertUndefined(result.getValue());
 
-  assertCall(waitCallback, result);
+  assertWaitCall(waitCallback, result);
   assertNoCall(waitOnSuccessCallback);
-  assertCall(waitOnErrorCallback, result);
+  assertCall(waitOnErrorCallback, undefined, result);
 }
 
 function testAsynchronousError() {
@@ -133,9 +133,9 @@ function testAsynchronousError() {
   assertEquals(goog.result.Result.State.ERROR, result.getState());
   assertUndefined(result.getValue());
 
-  assertCall(waitCallback, result);
+  assertWaitCall(waitCallback, result);
   assertNoCall(waitOnSuccessCallback);
-  assertCall(waitOnErrorCallback, result);
+  assertCall(waitOnErrorCallback, undefined, result);
 }
 
 function testCustomScope() {
@@ -155,34 +155,51 @@ function testOnSuccessScope() {
   var scope = {};
   goog.result.waitOnSuccess(result, waitOnSuccessCallback, scope);
   result.setValue(1);
-  assertSuccessCall(waitOnSuccessCallback, 1, result, scope);
+  assertCall(waitOnSuccessCallback, 1, result, scope);
 }
 
 function testOnErrorScope() {
   var scope = {};
   goog.result.waitOnError(result, waitOnErrorCallback, scope);
   result.setError();
-  assertCall(waitOnErrorCallback, result, scope);
+  assertCall(waitOnErrorCallback, undefined, result, scope);
 }
 
-// opt_scope defaults to goog.global
-function assertCall(recordedFunction, result, opt_scope) {
-  var scope = opt_scope || goog.global;
-  assertEquals(1, recordedFunction.getCallCount());
-  var call = recordedFunction.popLastCall();
-  assertEquals(1, call.getArguments().length);
-  assertEquals(result, call.getArgument(0));
-  assertEquals(scope, call.getThis());
-}
-
-// opt_scope defaults to goog.global
-function assertSuccessCall(recordedFunction, value, result, opt_scope) {
+/**
+ * Assert that a callback function stubbed out with goog.recordFunction was
+ * called with the expected arguments by goog.result.waitOnSuccess/Error.
+ * @param {Function} recordedFunction The callback function.
+ * @param {?} value The value stored in the result.
+ * @param {!goog.result.Result} result The result that was resolved to SUCCESS
+ *     or ERROR.
+ * @param {Object=} opt_scope Optional scope that the test function should be
+ *     called in. By default, it is goog.global.
+ */
+function assertCall(recordedFunction, value, result, opt_scope) {
   var scope = opt_scope || goog.global;
   assertEquals(1, recordedFunction.getCallCount());
   var call = recordedFunction.popLastCall();
   assertEquals(2, call.getArguments().length);
   assertEquals(value, call.getArgument(0));
   assertEquals(result, call.getArgument(1));
+  assertEquals(scope, call.getThis());
+}
+
+/**
+ * Assert that a callback function stubbed out with goog.recordFunction was
+ * called with the expected arguments by goog.result.wait.
+ * @param {Function} recordedFunction The callback function.
+ * @param {!goog.result.Result} result The result that was resolved to SUCCESS
+ *     or ERROR.
+ * @param {Object=} opt_scope Optional scope that the test function should be
+ *     called in. By default, it is goog.global.
+ */
+function assertWaitCall(recordedFunction, result, opt_scope) {
+  var scope = opt_scope || goog.global;
+  assertEquals(1, recordedFunction.getCallCount());
+  var call = recordedFunction.popLastCall();
+  assertEquals(1, call.getArguments().length);
+  assertEquals(result, call.getArgument(0));
   assertEquals(scope, call.getThis());
 }
 
