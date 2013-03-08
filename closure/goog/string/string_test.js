@@ -293,6 +293,28 @@ function testCaseInsensitiveEndsWith() {
               goog.string.caseInsensitiveEndsWith('ABCD', 'abcde'));
 }
 
+// === tests for goog.string.caseInsensitiveEquals ===
+function testCaseInsensitiveEquals() {
+
+  function assertCaseInsensitiveEquals(str1, str2) {
+    assertTrue(goog.string.caseInsensitiveEquals(str1, str2));
+  }
+
+  function assertCaseInsensitiveNotEquals(str1, str2) {
+    assertFalse(goog.string.caseInsensitiveEquals(str1, str2));
+  }
+
+  assertCaseInsensitiveEquals('abc', 'abc');
+  assertCaseInsensitiveEquals('abc', 'abC');
+  assertCaseInsensitiveEquals('d,e,F,G', 'd,e,F,G');
+  assertCaseInsensitiveEquals('ABCD EFGH 1234', 'abcd efgh 1234');
+  assertCaseInsensitiveEquals('FooBarBaz', 'fOObARbAZ');
+
+  assertCaseInsensitiveNotEquals('ABCD EFGH', 'abcd efg');
+  assertCaseInsensitiveNotEquals('ABC DEFGH', 'ABCD EFGH');
+  assertCaseInsensitiveNotEquals('FooBarBaz', 'fOObARbAZ ');
+}
+
 
 // === tests for goog.string.subs ===
 function testSubs() {
