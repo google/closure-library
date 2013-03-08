@@ -24,6 +24,7 @@ goog.provide('goog.ui.ac.Renderer.CustomRenderer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
+goog.require('goog.array');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
@@ -32,7 +33,6 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.dom.FadeInAndShow');
 goog.require('goog.fx.dom.FadeOutAndHide');
-goog.require('goog.iter');
 goog.require('goog.positioning');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.Overflow');
@@ -598,7 +598,7 @@ goog.ui.ac.Renderer.prototype.redraw = function() {
     this.customRenderer_.render(this, this.element_, this.rows_, this.token_);
   } else {
     var curRow = null;
-    goog.iter.forEach(this.rows_, function(row) {
+    goog.array.forEach(this.rows_, function(row) {
       row = this.renderRowHtml(row, this.token_);
       if (this.topAlign_) {
         // Aligned with top of target = best match at bottom
