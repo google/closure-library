@@ -34,13 +34,16 @@ def _GetJavaVersion():
   return _VERSION_REGEX.search(version_line).group(1)
 
 
-def Compile(compiler_jar_path, source_paths, flags=None):
+def Compile(compiler_jar_path, source_paths,
+            jvm_flags=None,
+            compiler_flags=None):
   """Prepares command-line call to Closure Compiler.
 
   Args:
     compiler_jar_path: Path to the Closure compiler .jar file.
     source_paths: Source paths to build, in order.
-    flags: A list of additional flags to pass on to Closure Compiler.
+    jvm_flags: A list of additional flags to pass on to JVM.
+    compiler_flags: A list of additional flags to pass on to Closure Compiler.
 
   Returns:
     The compiled source, as a string, or None if compilation failed.
@@ -53,12 +56,21 @@ def Compile(compiler_jar_path, source_paths, flags=None):
                   'Please visit http://www.java.com/getjava')
     return
 
-  args = ['java', '-jar', compiler_jar_path]
+  args = ['java']
+
+  # JVM flags before the -jar
+  if jvm_flags:
+    args += jvm_flags
+
+  args += ['-jar', compiler_jar_path]
+
+  # Closure Compiler flags after the -jar
+  if compiler_flags:
+    args += compiler_flags
+
   for path in source_paths:
     args += ['--js', path]
 
-  if flags:
-    args += flags
 
   logging.info('Compiling with the following command: %s', ' '.join(args))
 
