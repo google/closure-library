@@ -693,6 +693,22 @@ See the COPYING file for details.
     });
     assertTrue(e instanceof goog.asserts.AssertionError);
   }
+
+  function testRemoveAllNativeListeners() {
+    var handler = goog.testing.recordFunction();
+
+    var bodyEl = document.body;
+    var div = document.createElement('div');
+    var et = new goog.events.EventTarget();
+    goog.events.listen(bodyEl, goog.events.EventType.CLICK, handler);
+    goog.events.listen(div, goog.events.EventType.CLICK, handler);
+    goog.events.listen(et, 'test', handler);
+
+    goog.events.removeAllNativeListeners();
+    assertFalse(goog.events.hasListener(bodyEl));
+    assertFalse(goog.events.hasListener(div));
+    assertTrue(goog.events.hasListener(et));
+  }
 </script>
 </body>
 </html>
