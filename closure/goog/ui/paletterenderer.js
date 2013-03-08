@@ -21,6 +21,7 @@
 goog.provide('goog.ui.PaletteRenderer');
 
 goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeIterator');
@@ -322,7 +323,8 @@ goog.ui.PaletteRenderer.prototype.highlightCell = function(palette,
     // See http://www.w3.org/TR/2006/WD-aria-state-20061220/#activedescendent
     // for an explanation of the activedescendent.
     var table = /** @type {!Element} */ (palette.getElement().firstChild);
-    goog.a11y.aria.setState(table, 'activedescendent', cell.id);
+    goog.a11y.aria.setState(table, goog.a11y.aria.State.ACTIVEDESCENDANT,
+        cell.id);
   }
 };
 
