@@ -169,9 +169,9 @@ goog.ui.Ratings.prototype.enterDocument = function() {
   // Create the elements for the stars
   for (var i = 0; i < this.ratings_.length; i++) {
     var star = this.getDomHelper().createDom('span', {
-        'title': this.ratings_[i],
-        'class': this.getClassName_(i, false),
-        'index': i});
+      'title': this.ratings_[i],
+      'class': this.getClassName_(i, false),
+      'index': i});
     this.stars_.push(star);
     el.appendChild(star);
   }

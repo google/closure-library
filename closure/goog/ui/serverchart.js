@@ -309,8 +309,8 @@ goog.ui.ServerChart.prototype.createDom = function() {
   var size = this.getSize();
   this.setElementInternal(this.getDomHelper().createDom(
       'img', {'src': this.getUri(),
-      'class': goog.getCssName('goog-serverchart-image'),
-      'width': size[0], 'height': size[1]}));
+        'class': goog.getCssName('goog-serverchart-image'),
+        'width': size[0], 'height': size[1]}));
 };
 
 
@@ -1428,11 +1428,8 @@ goog.ui.ServerChart.prototype.getMultiAxisRange = function(opt_axisNumber) {
  * @param {goog.ui.ServerChart.AxisDisplayType=} opt_axisDisplay The axis
  *     line and ticks.
  */
-goog.ui.ServerChart.prototype.setMultiAxisLabelStyle = function(axisNumber,
-                                                                color,
-                                                                opt_fontSize,
-                                                                opt_alignment,
-                                                             opt_axisDisplay) {
+goog.ui.ServerChart.prototype.setMultiAxisLabelStyle = function(
+    axisNumber, color, opt_fontSize, opt_alignment, opt_axisDisplay) {
   var style = [color];
   if (goog.isDef(opt_fontSize) || goog.isDef(opt_alignment)) {
     style.push(opt_fontSize || '');
@@ -1560,8 +1557,8 @@ goog.ui.ServerChart.prototype.computeDataString_ = function() {
     ok = this.computeDataStringForEncoding_(
         goog.ui.ServerChart.EncodingType.EXTENDED);
     if (!ok) {
-        ok = this.computeDataStringForEncoding_(
-            goog.ui.ServerChart.EncodingType.SIMPLE);
+      ok = this.computeDataStringForEncoding_(
+          goog.ui.ServerChart.EncodingType.SIMPLE);
     }
   }
   if (!ok) {

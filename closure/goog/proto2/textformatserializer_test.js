@@ -13,15 +13,15 @@
 // limitations under the License.
 
 /**
- * @fileoverview Unit tests for goog.proto2.TextFormatSerializer
+ * @fileoverview Unit tests for goog.proto2.TextFormatSerializer.
  *
  */
 
+/** @suppress {extraProvide} */
 goog.provide('goog.proto2.TextFormatSerializerTest');
 
 goog.require('goog.proto2.TextFormatSerializer');
 goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
 goog.require('proto2.TestAllTypes');
 
 goog.setTestOnly('goog.proto2.TextFormatSerializerTest');
@@ -122,6 +122,7 @@ function testSerializationOfUnknown() {
   assertEquals(expected, simplified);
 }
 
+
 /**
  * Asserts that the given string value parses into the given set of tokens.
  * @param {string} value The string value to parse.
@@ -159,20 +160,20 @@ function assertToken(expected, found) {
 function testTokenizer() {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
   assertTokens('{ 123 }', [
-      { type: types.OPEN_BRACE },
-      { type: types.WHITESPACE, value: ' ' },
-      { type: types.NUMBER, value: '123' },
-      { type: types.WHITESPACE, value: ' '},
-      { type: types.CLOSE_BRACE }
+    { type: types.OPEN_BRACE },
+    { type: types.WHITESPACE, value: ' ' },
+    { type: types.NUMBER, value: '123' },
+    { type: types.WHITESPACE, value: ' '},
+    { type: types.CLOSE_BRACE }
   ]);
 }
 
 function testTokenizerNoWhitespace() {
   var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
   assertTokens('{ "hello world" }', [
-      { type: types.OPEN_BRACE },
-      { type: types.STRING, value: '"hello world"' },
-      { type: types.CLOSE_BRACE }
+    { type: types.OPEN_BRACE },
+    { type: types.STRING, value: '"hello world"' },
+    { type: types.CLOSE_BRACE }
   ], true);
 }
 
@@ -265,9 +266,9 @@ function testSerializationOfStringWithQuotes() {
 function testDeserialization() {
   var message = new proto2.TestAllTypes();
   var value = 'optional_int32: 101\n' +
-     'repeated_int32: 201\n' +
-     'repeated_int32: 202\n' +
-     'optional_float: 123.4';
+      'repeated_int32: 201\n' +
+      'repeated_int32: 202\n' +
+      'optional_float: 123.4';
 
   new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
 

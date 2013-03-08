@@ -22,7 +22,6 @@ goog.provide('goog.ui.ColorPalette');
 
 goog.require('goog.array');
 goog.require('goog.color');
-goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.PaletteRenderer');
@@ -130,10 +129,10 @@ goog.ui.ColorPalette.prototype.setSelectedColor = function(color) {
 goog.ui.ColorPalette.prototype.createColorNodes = function() {
   return goog.array.map(this.colors_, function(color) {
     var swatch = this.getDomHelper().createDom('div', {
-        'class': goog.getCssName(this.getRenderer().getCssClass(),
-            'colorswatch'),
-        'style': 'background-color:' + color
-      });
+      'class': goog.getCssName(this.getRenderer().getCssClass(),
+          'colorswatch'),
+      'style': 'background-color:' + color
+    });
     swatch.title = color.charAt(0) == '#' ?
         'RGB (' + goog.color.hexToRgb(color).join(', ') + ')' : color;
     return swatch;

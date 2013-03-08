@@ -111,7 +111,7 @@ goog.i18n.uChar.toName = function(ch) {
   } else if (chCodeStr in names) {
     return names[chCode];
   } else if (0xFE00 <= chCode && chCode <= 0xFE0F ||
-           0xE0100 <= chCode && chCode <= 0xE01EF) {
+      0xE0100 <= chCode && chCode <= 0xE01EF) {
     var seqnum;
     if (0xFE00 <= chCode && chCode <= 0xFE0F) {
       // Variation selectors from 1 to 16.

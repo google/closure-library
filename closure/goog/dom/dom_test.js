@@ -16,13 +16,16 @@
  * @fileoverview Shared code for dom_test.html and dom_quirks_test.html.
  */
 
+/** @suppress {extraProvide} */
 goog.provide('goog.dom.dom_test');
 
 goog.require('goog.dom');
+goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
+goog.require('goog.string.Unicode');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -654,9 +657,9 @@ function testGetFirstElementChild() {
   // Test with an undefined firstElementChild attribute.
   var b2 = $('b2');
   var mockP2 = {
-      childNodes: [b1, b2],
-      firstChild: b1,
-      firstElementChild: undefined
+    childNodes: [b1, b2],
+    firstChild: b1,
+    firstElementChild: undefined
   };
 
   b1 = goog.dom.getFirstElementChild(mockP2);
@@ -676,9 +679,9 @@ function testGetLastElementChild() {
   // Test with an undefined lastElementChild attribute.
   var b1 = $('b1');
   var mockP2 = {
-      childNodes: [b1, b2],
-      lastChild: b2,
-      lastElementChild: undefined
+    childNodes: [b1, b2],
+    lastChild: b2,
+    lastElementChild: undefined
   };
 
   b2 = goog.dom.getLastElementChild(mockP2);
@@ -697,8 +700,8 @@ function testGetNextElementSibling() {
 
   // Test with an undefined nextElementSibling attribute.
   var mockB1 = {
-      nextSibling: b2,
-      nextElementSibling: undefined
+    nextSibling: b2,
+    nextElementSibling: undefined
   };
 
   b2 = goog.dom.getNextElementSibling(mockB1);
@@ -717,8 +720,8 @@ function testGetPreviousElementSibling() {
 
   // Test with an undefined previousElementSibling attribute.
   var mockB2 = {
-      previousSibling: b1,
-      previousElementSibling: undefined
+    previousSibling: b1,
+    previousElementSibling: undefined
   };
 
   b1 = goog.dom.getPreviousElementSibling(mockB2);
@@ -745,8 +748,8 @@ function testGetChildren() {
 
   // Test with an undefined children attribute.
   var mockP2 = {
-      childNodes: [b1, b2],
-      children: undefined
+    childNodes: [b1, b2],
+    children: undefined
   };
 
   children = goog.dom.getChildren(mockP2);
@@ -1376,6 +1379,7 @@ function testParentElement() {
   var detachedHasNoParent = goog.dom.getParentElement(detachedEl);
   assertNull(detachedHasNoParent);
 }
+
 
 /**
  * @return {boolean} Returns true if the userAgent is IE8 or higher.

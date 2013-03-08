@@ -21,13 +21,12 @@
 goog.provide('goog.ui.ContainerRenderer');
 
 goog.require('goog.a11y.aria');
-goog.require('goog.asserts');
 goog.require('goog.array');
-goog.require('goog.dom');
+goog.require('goog.asserts');
+goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
 goog.require('goog.string');
 goog.require('goog.style');
-goog.require('goog.ui.Separator');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 

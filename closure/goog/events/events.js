@@ -55,18 +55,17 @@
 
 goog.provide('goog.events');
 goog.provide('goog.events.Key');
+goog.provide('goog.events.ListenableType');
 
 goog.require('goog.array');
+/** @suppress {extraRequire} */
 goog.require('goog.debug.entryPointRegistry');
-goog.require('goog.debug.errorHandlerWeakDep');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
-goog.require('goog.events.EventWrapper');
 goog.require('goog.events.Listenable');
 goog.require('goog.events.Listener');
 goog.require('goog.object');
-goog.require('goog.userAgent');
 
 
 /**

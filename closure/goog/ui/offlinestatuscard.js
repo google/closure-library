@@ -29,7 +29,6 @@ goog.require('goog.gears.StatusType');
 goog.require('goog.structs.Map');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.ProgressBar');
 
 

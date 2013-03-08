@@ -37,6 +37,9 @@ goog.require('goog.graphics.Path');
 goog.require('goog.graphics.PathElement');
 goog.require('goog.graphics.RectElement');
 goog.require('goog.graphics.TextElement');
+goog.require('goog.math');
+goog.require('goog.string');
+
 
 
 /**

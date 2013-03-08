@@ -23,6 +23,8 @@
 goog.provide('goog.events.EventTarget');
 
 goog.require('goog.Disposable');
+goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.Listenable');

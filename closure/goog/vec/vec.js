@@ -18,6 +18,12 @@
  *     library.
  */
 goog.provide('goog.vec');
+goog.provide('goog.vec.AnyType');
+goog.provide('goog.vec.ArrayType');
+goog.provide('goog.vec.Float32');
+goog.provide('goog.vec.Float64');
+goog.provide('goog.vec.Number');
+
 
 /**
  * On platforms that don't have native Float32Array or Float64Array support we

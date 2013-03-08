@@ -16,6 +16,7 @@
  * @fileoverview Unit tests for goog.string.
  */
 
+/** @suppress {extraProvide} */
 goog.provide('goog.stringTest');
 
 goog.require('goog.functions');
@@ -191,7 +192,7 @@ function testStripNewLines() {
 function testCanonicalizeNewlines() {
   assertEquals('Should replace all types of new line with \\n',
                goog.string.canonicalizeNewlines(
-                    'some\nlines\rthat\r\nare\n\nsplit'),
+      'some\nlines\rthat\r\nare\n\nsplit'),
                'some\nlines\nthat\nare\n\nsplit');
 }
 
@@ -638,7 +639,7 @@ function testTruncateMiddle() {
       goog.string.truncateMiddle(html, 14));
   assertEquals('Should not clip html char',
       'true &amp;&amp;...= false',
-       goog.string.truncateMiddle(html, 14, true));
+      goog.string.truncateMiddle(html, 14, true));
 
   assertEquals('ab...xyz', goog.string.truncateMiddle(str, 5, null, 3));
   assertEquals('abcdefg...xyz', goog.string.truncateMiddle(str, 10, null, 3));
@@ -650,7 +651,7 @@ function testTruncateMiddle() {
       goog.string.truncateMiddle(html, 14, null, 3));
   assertEquals('Should not clip html char',
       'true &amp;&amp; fal...lse',
-       goog.string.truncateMiddle(html, 14, true, 3));
+      goog.string.truncateMiddle(html, 14, true, 3));
 }
 
 
@@ -909,6 +910,7 @@ function assertHashcodeEquals(expectedHashCode, str) {
       expectedHashCode, goog.string.hashCode(str));
 }
 
+
 /**
  * Verify we get random-ish looking values for hash of Strings.
  */
@@ -1047,8 +1049,8 @@ function testParseInt() {
   assertTrue(isNaN(goog.string.parseInt(' ')));
   assertTrue(isNaN(goog.string.parseInt('a')));
   assertTrue(isNaN(goog.string.parseInt('FFAA')));
-  assertEquals(1, goog.string.parseInt(1))
-  assertEquals(1234567890123456, goog.string.parseInt(1234567890123456))
+  assertEquals(1, goog.string.parseInt(1));
+  assertEquals(1234567890123456, goog.string.parseInt(1234567890123456));
   assertEquals(2, goog.string.parseInt(' 2.3'));
   assertEquals(16, goog.string.parseInt('0x10'));
   assertEquals(11, goog.string.parseInt('11'));

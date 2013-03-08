@@ -20,7 +20,8 @@
 
 goog.provide('goog.async.AnimationDelay');
 
-goog.require('goog.async.Delay');
+goog.require('goog.Disposable');
+goog.require('goog.events');
 goog.require('goog.functions');
 
 
@@ -29,6 +30,8 @@ goog.require('goog.functions');
 // goog.async.Delay? I'm not sure if there's enough code for this to really
 // make sense. Subclassing seems like the wrong approach for a variety of
 // reasons. Maybe there should be a common interface?
+
+
 
 /**
  * A delayed callback that pegs to the next animation frame

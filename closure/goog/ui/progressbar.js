@@ -30,7 +30,6 @@ goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.RangeModel');
 goog.require('goog.userAgent');
 
@@ -76,10 +75,10 @@ goog.ui.ProgressBar.Orientation = {
 goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_ = {};
 goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_[
     goog.ui.ProgressBar.Orientation.VERTICAL] =
-        goog.getCssName('progress-bar-vertical');
+    goog.getCssName('progress-bar-vertical');
 goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_[
     goog.ui.ProgressBar.Orientation.HORIZONTAL] =
-        goog.getCssName('progress-bar-horizontal');
+    goog.getCssName('progress-bar-horizontal');
 
 
 /**
@@ -237,7 +236,7 @@ goog.ui.ProgressBar.prototype.setMinimum = function(v) {
 goog.ui.ProgressBar.prototype.setMinimumState_ = function() {
   var element = this.getElement();
   goog.asserts.assert(element,
-       'The progress bar DOM element cannot be null.');
+      'The progress bar DOM element cannot be null.');
   goog.a11y.aria.setState(element, 'valuemin', this.getMinimum());
 };
 

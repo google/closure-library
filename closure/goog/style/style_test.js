@@ -16,22 +16,27 @@
  * @fileoverview Shared unit tests for styles.
  */
 
+/** @suppress {extraProvide} */
 goog.provide('goog.style_test');
 
+goog.require('goog.array');
 goog.require('goog.color');
 goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
+goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
+goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
+goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.style');
-goog.require('goog.styleScrollbarTester');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
-goog.require('goog.testing.asserts');
 goog.setTestOnly('goog.style_test');
 
 // IE before version 6 will always be border box in compat mode.
@@ -286,7 +291,7 @@ function testSetPosition() {
   assertEquals('0px', el.style.top);
 
 
-  goog.style.setPosition(el, new goog.math.Coordinate(20,40));
+  goog.style.setPosition(el, new goog.math.Coordinate(20, 40));
   assertEquals('20px', el.style.left);
   assertEquals('40px', el.style.top);
 }
@@ -426,8 +431,8 @@ function testGetPageOffsetNestedElements() {
 }
 
 function testGetPageOffsetWithBodyPadding() {
-  document.body.style.margin = '40px'
-  document.body.style.padding = '60px'
+  document.body.style.margin = '40px';
+  document.body.style.padding = '60px';
   document.body.style.borderWidth = '70px';
   try {
     var div = goog.dom.createDom('DIV');
@@ -609,7 +614,7 @@ function testSetSize() {
   assertEquals('0px', el.style.width);
   assertEquals('0px', el.style.height);
 
-  goog.style.setSize(el, new goog.math.Size(20,40));
+  goog.style.setSize(el, new goog.math.Size(20, 40));
   assertEquals('20px', el.style.width);
   assertEquals('40px', el.style.height);
 }
@@ -716,7 +721,7 @@ function testGetSize() {
 
 function testGetSizeSvgElements() {
   var svgEl = document.createElementNS &&
-       document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   if (!svgEl || svgEl.getAttribute('transform') == '' ||
       (goog.userAgent.WEBKIT && !goog.userAgent.isVersion(534.8))) {
     // SVG not supported, or getBoundingClientRect not supported on SVG
@@ -857,7 +862,7 @@ function testIsRightToLeft() {
 }
 
 function testPosWithAbsoluteAndScroll() {
-  var el = $('pos-scroll-abs')
+  var el = $('pos-scroll-abs');
   var el1 = $('pos-scroll-abs-1');
   var el2 = $('pos-scroll-abs-2');
 
@@ -1448,7 +1453,7 @@ function testGetOpacity() {
 
   var el4 = {
     style: {}
-  }
+  };
 
   assertEquals('', goog.style.getOpacity(el4));
   assertEquals('', goog.style.getOpacity($('test-opacity')));
@@ -1563,6 +1568,7 @@ function testFramedPageOffset() {
       goog.style.getFramedPageOffset(testElement3, iframeWindow2));
 }
 
+
 /**
  * Asserts that the coordinate is approximately equal to the given
  * x and y coordinates, give or take delta.
@@ -1624,7 +1630,7 @@ function testTranslateRectForAnotherFrame() {
   assertEquals(2 + 350 - 13, rect.top);
   assertEquals(3, rect.width);
   assertEquals(4, rect.height);
-};
+}
 
 function testGetVisibleRectForElement() {
   var container = goog.dom.getElement('test-visible');
@@ -1683,7 +1689,7 @@ function testGetVisibleRectForElement() {
   assertEquals(iframeViewportSize.height, visible.bottom);
   assertEquals(0, visible.left);
   assertEquals(iframeViewportSize.width, visible.right);
-};
+}
 
 function testGetVisibleRectForElementWithBodyScrolled() {
   var container = goog.dom.getElement('test-visible2');
@@ -1927,7 +1933,7 @@ function testScrollIntoContainerViewQuirks() {
   goog.style.scrollIntoContainerView(goog.dom.getElement('item3'), container);
   assertEquals('show item3 with increased height', 59, container.scrollTop);
   goog.style.scrollIntoContainerView(goog.dom.getElement('item3'), container,
-                                                         true);
+      true);
   assertEquals('center item3 with increased height', 87, container.scrollTop);
   goog.dom.getElement('item3').style.height = '';
 
@@ -2029,6 +2035,7 @@ function testGetsTranslation() {
   });
 }
 
+
 /**
  * Return whether a given user agent has been detected.
  * @param {number} agent Value in UserAgents.
@@ -2047,6 +2054,7 @@ function getUserAgentDetected_(agent) {
   }
   return null;
 }
+
 
 /**
  * Rerun the initialization code to set all of the goog.userAgent constants.
@@ -2071,6 +2079,7 @@ function reinitializeUserAgent() {
   goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 }
 
+
 /**
  * Test browser detection for a user agent configuration.
  * @param {Array.<number>} expectedAgents Array of expected userAgents.
@@ -2094,6 +2103,7 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
   }
 }
 
+
 /**
  * Test for the proper vendor style name for a CSS property
  * with a vendor prefix for Webkit.
@@ -2109,6 +2119,7 @@ function testGetVendorStyleNameWebkit() {
   assertEquals('-webkit-transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the proper vendor style name for a CSS property
@@ -2128,6 +2139,7 @@ function testGetVendorStyleNameWebkitNoPrefix() {
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the proper vendor style name for a CSS property
  * with a vendor prefix for Gecko.
@@ -2143,6 +2155,7 @@ function testGetVendorStyleNameGecko() {
   assertEquals('-moz-transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the proper vendor style name for a CSS property
@@ -2162,6 +2175,7 @@ function testGetVendorStyleNameGeckoNoPrefix() {
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the proper vendor style name for a CSS property
  * with a vendor prefix for IE.
@@ -2177,6 +2191,7 @@ function testGetVendorStyleNameIE() {
   assertEquals('-ms-transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the proper vendor style name for a CSS property
@@ -2196,6 +2211,7 @@ function testGetVendorStyleNameIENoPrefix() {
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the proper vendor style name for a CSS property
  * with a vendor prefix for Opera.
@@ -2211,6 +2227,7 @@ function testGetVendorStyleNameOpera() {
   assertEquals('-o-transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the proper vendor style name for a CSS property
@@ -2230,6 +2247,7 @@ function testGetVendorStyleNameOperaNoPrefix() {
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the proper vendor style name for a CSS property
  * with a vendor prefix for Webkit.
@@ -2245,6 +2263,7 @@ function testGetVendorJsStyleNameWebkit() {
   assertEquals('WebkitTransform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the proper vendor style name for a CSS property
@@ -2264,6 +2283,7 @@ function testGetVendorJsStyleNameWebkitNoPrefix() {
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the proper vendor style name for a CSS property
  * with a vendor prefix for Gecko.
@@ -2279,6 +2299,7 @@ function testGetVendorJsStyleNameGecko() {
   assertEquals('MozTransform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the proper vendor style name for a CSS property
@@ -2298,6 +2319,7 @@ function testGetVendorJsStyleNameGeckoNoPrefix() {
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the proper vendor style name for a CSS property
  * with a vendor prefix for IE.
@@ -2313,6 +2335,7 @@ function testGetVendorJsStyleNameIE() {
   assertEquals('msTransform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the proper vendor style name for a CSS property
@@ -2332,6 +2355,7 @@ function testGetVendorJsStyleNameIENoPrefix() {
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the proper vendor style name for a CSS property
  * with a vendor prefix for Opera.
@@ -2347,6 +2371,7 @@ function testGetVendorJsStyleNameOpera() {
   assertEquals('OTransform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the proper vendor style name for a CSS property
@@ -2366,6 +2391,7 @@ function testGetVendorJsStyleNameOperaNoPrefix() {
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the setting a style name for a CSS property
  * with a vendor prefix for Webkit.
@@ -2382,6 +2408,7 @@ function testSetVendorStyleWebkit() {
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, mockElement.style.WebkitTransform);
 }
+
 
 /**
  * Test for the setting a style name for a CSS property
@@ -2400,6 +2427,7 @@ function testSetVendorStyleGecko() {
   assertEquals(styleValue, mockElement.style.MozTransform);
 }
 
+
 /**
  * Test for the setting a style name for a CSS property
  * with a vendor prefix for IE.
@@ -2416,6 +2444,7 @@ function testSetVendorStyleIE() {
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, mockElement.style.msTransform);
 }
+
 
 /**
  * Test for the setting a style name for a CSS property
@@ -2434,6 +2463,7 @@ function testSetVendorStyleOpera() {
   assertEquals(styleValue, mockElement.style.OTransform);
 }
 
+
 /**
  * Test for the getting a style name for a CSS property
  * with a vendor prefix for Webkit.
@@ -2450,6 +2480,7 @@ function testGetVendorStyleWebkit() {
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the getting a style name for a CSS property
@@ -2468,6 +2499,7 @@ function testGetVendorStyleGecko() {
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
 }
 
+
 /**
  * Test for the getting a style name for a CSS property
  * with a vendor prefix for IE.
@@ -2484,6 +2516,7 @@ function testGetVendorStyleIE() {
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
 }
+
 
 /**
  * Test for the getting a style name for a CSS property

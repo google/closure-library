@@ -29,12 +29,11 @@ goog.require('goog.date');
 goog.require('goog.date.Date');
 goog.require('goog.date.Interval');
 goog.require('goog.dom');
+goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
-goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyHandler');
-goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
@@ -1283,8 +1282,7 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
     // weeks are always shown as no month has less than 28 days).
     if (y >= 4) {
       goog.style.setElementShown(this.elTable_[y + 1][0].parentNode,
-                             this.grid_[y][0].getMonth() == month ||
-                                 this.showFixedNumWeeks_);
+          this.grid_[y][0].getMonth() == month || this.showFixedNumWeeks_);
     }
   }
 };

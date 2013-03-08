@@ -81,12 +81,12 @@ goog.i18n.GraphemeBreak.applyLegacyBreakRules_ = function(prop_a, prop_b) {
     return true;
   }
   if ((prop_a == prop.L) &&
-    (prop_b == prop.L || prop_b == prop.V ||
-     prop_b == prop.LV || prop_b == prop.LVT)) {
+      (prop_b == prop.L || prop_b == prop.V ||
+      prop_b == prop.LV || prop_b == prop.LVT)) {
     return false;
   }
   if ((prop_a == prop.LV || prop_a == prop.V) &&
-    (prop_b == prop.V || prop_b == prop.T)) {
+      (prop_b == prop.V || prop_b == prop.T)) {
     return false;
   }
   if ((prop_a == prop.LVT || prop_a == prop.T) && (prop_b == prop.T)) {
@@ -177,5 +177,5 @@ goog.i18n.GraphemeBreak.hasGraphemeBreak = function(a, b, opt_extended) {
   var prop = goog.i18n.GraphemeBreak.property;
 
   return goog.i18n.GraphemeBreak.applyLegacyBreakRules_(prop_a, prop_b) &&
-    !(opt_extended && (prop_a == prop.PREPEND || prop_b == prop.SPACING_MARK));
+      !(opt_extended && (prop_a == prop.PREPEND || prop_b == prop.SPACING_MARK));
 };

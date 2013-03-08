@@ -24,20 +24,17 @@
 goog.provide('goog.ui.Bubble');
 
 goog.require('goog.Timer');
-goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Box');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AbsolutePosition');
-goog.require('goog.positioning.AbstractPosition');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');
+goog.require('goog.positioning.CornerBit');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
-goog.require('goog.ui.Popup.AnchoredPosition');
 
 
 
@@ -261,7 +258,7 @@ goog.ui.Bubble.prototype.configureElement_ = function() {
   }
   var closeButton = this.getDomHelper().getElement(this.closeButtonId_);
   this.listener_ = goog.events.listen(closeButton,
-        goog.events.EventType.CLICK, this.hideBubble_, false, this);
+      goog.events.EventType.CLICK, this.hideBubble_, false, this);
 
   if (this.timeout_) {
     this.timerId_ = goog.Timer.callOnce(this.hideBubble_, this.timeout_, this);

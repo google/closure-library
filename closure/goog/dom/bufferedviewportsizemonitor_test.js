@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview Tests for goog.dom.BufferedViewportSizeMonitor
+ * @fileoverview Tests for goog.dom.BufferedViewportSizeMonitor.
  *
  */
 

@@ -20,6 +20,7 @@
  *     and the mocks don't fit well in the type system.
  */
 
+/** @suppress {extraProvide} */
 goog.provide('goog.editor.seamlessfield_test');
 
 goog.require('goog.dom');
@@ -248,7 +249,7 @@ function testDispatchBlur() {
       clearSelection(opt_window);
       cleared = true;
       clearedWindow = opt_window;
-    }
+    };
     var clock = new goog.testing.MockClock(true);
 
     mockRange.collapse(true);

@@ -113,14 +113,14 @@ goog.testing.ExpectedFailures.prototype.suppressedFailures_;
 goog.testing.ExpectedFailures.setUpConsole_ = function() {
   if (!goog.testing.ExpectedFailures.console_) {
     var xButton = goog.dom.createDom(goog.dom.TagName.DIV, {
-        'style': 'position: absolute; border-left:1px solid #333;' +
-                 'border-bottom:1px solid #333; right: 0; top: 0; width: 1em;' +
-                 'height: 1em; cursor: pointer; background-color: #cde;' +
-                 'text-align: center; color: black'
+      'style': 'position: absolute; border-left:1px solid #333;' +
+          'border-bottom:1px solid #333; right: 0; top: 0; width: 1em;' +
+          'height: 1em; cursor: pointer; background-color: #cde;' +
+          'text-align: center; color: black'
     }, 'X');
     var div = goog.dom.createDom(goog.dom.TagName.DIV, {
       'style': 'position: absolute; border: 1px solid #333; right: 10px;' +
-               'top : 10px; width: 400px; display: none'
+          'top : 10px; width: 400px; display: none'
     }, xButton);
     document.body.appendChild(div);
     goog.events.listen(xButton, goog.events.EventType.CLICK, function() {

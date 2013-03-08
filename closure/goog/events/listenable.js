@@ -21,8 +21,6 @@
 goog.provide('goog.events.Listenable');
 goog.provide('goog.events.ListenableKey');
 
-goog.require('goog.events.EventLike');
-
 
 
 /**
@@ -224,7 +222,6 @@ goog.events.Listenable.prototype.getListeners;
  * @return {goog.events.ListenableKey} the found listener or null if not found.
  */
 goog.events.Listenable.prototype.getListener;
-
 
 
 /**

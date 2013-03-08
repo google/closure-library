@@ -22,22 +22,26 @@
  * @author gboyer@google.com (Garrett Boyer)
  */
 
+/** @suppress {extraProvide} */
 goog.provide('goog.editor.field_test');
 
+goog.require('goog.dom');
 goog.require('goog.dom.Range');
+goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Field');
 goog.require('goog.editor.Plugin');
-goog.require('goog.editor.Command');
+goog.require('goog.editor.range');
 goog.require('goog.events');
+goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.functions');
 goog.require('goog.testing.LooseMock');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.dom');
 goog.require('goog.testing.events');
+goog.require('goog.testing.events.Event');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
 goog.setTestOnly('Tests for goog.editor.*Field');
 
 
@@ -206,9 +210,10 @@ function testDisposed_PluginAutoDispose() {
 
 var STRING_KEY = String.fromCharCode(goog.events.KeyCodes.A).toLowerCase();
 
+
 /**
  * @return {goog.events.Event} Returns an event for a keyboard shortcut
- * for the letter 'a'
+ * for the letter 'a'.
  */
 function getBrowserEvent() {
   var e = new goog.events.BrowserEvent();
@@ -550,7 +555,7 @@ function testPluginExecCommand() {
   plugin.execCommand = function(command, arg) {
     passedCommand = command;
     passedArg = arg;
-  }
+  };
 
   var editableField = new FieldConstructor('testField');
   editableField.registerPlugin(plugin);
@@ -840,7 +845,7 @@ function testSelectionChangeOnMouseUp() {
   assertEquals('Second selection change should fire immediately', 2,
       selectionChanges.getCallCount());
   assertEquals('Plugin should have handled second selection change immediately',
-       2,  plugin.handleSelectionChange.getCallCount());
+      2, plugin.handleSelectionChange.getCallCount());
   var args = plugin.handleSelectionChange.getLastCall().getArguments();
   assertTrue('Plugin should not have received data from extra firing',
       args.length == 0 ||

@@ -58,13 +58,11 @@ goog.require('goog.json.EvalJsonProcessor');
 goog.require('goog.net.BrowserTestChannel');
 goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
-goog.require('goog.net.ChannelRequest.Error');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.tmpnetwork');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.CircularBuffer');
-goog.require('goog.userAgent');
 
 
 
@@ -77,7 +75,7 @@ goog.require('goog.userAgent');
  *        of the first browser channel test.
  * @constructor
  */
-  goog.net.BrowserChannel = function(opt_clientVersion, opt_firstTestResults) {
+goog.net.BrowserChannel = function(opt_clientVersion, opt_firstTestResults) {
   /**
    * The application specific version that is passed to the server.
    * @type {?string}

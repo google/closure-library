@@ -18,14 +18,18 @@
  * @author eae@google.com (Emil A Eklund)
  */
 
-
+/** @suppress {extraProvide} */
 goog.provide('goog.positioningTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.DomHelper');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
-goog.require('goog.math.Rect');
+goog.require('goog.math.Size');
 goog.require('goog.positioning');
+goog.require('goog.positioning.Corner');
+goog.require('goog.positioning.Overflow');
+goog.require('goog.positioning.OverflowStatus');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.jsunit');
@@ -65,6 +69,7 @@ function tearDown() {
   testArea.setAttribute('style', '');
   testArea.innerHTML = '';
 }
+
 
 /**
  * This is used to round pixel values on FF3 Mac.

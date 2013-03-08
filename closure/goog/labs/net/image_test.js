@@ -19,7 +19,7 @@
  */
 
 
-/** @suppress {extraRequire} */
+/** @suppress {extraProvide} */
 goog.provide('goog.labs.net.imageTest');
 
 goog.require('goog.events');
@@ -86,7 +86,7 @@ function testImageFactory() {
   var returnedImage = new Image();
   var factory = function() {
     return returnedImage;
-  }
+  };
   var countedFactory = goog.testing.recordFunction(factory);
 
   var url = 'testdata/cleardot.gif';
