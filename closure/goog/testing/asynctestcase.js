@@ -321,7 +321,7 @@ goog.testing.AsyncTestCase.prototype.getCurrentStepName = function() {
  * Preferred way of creating an AsyncTestCase. Creates one and initializes it
  * with the G_testRunner.
  * @param {string=} opt_name A descriptive name for the test case.
- * @return {goog.testing.AsyncTestCase} The created AsyncTestCase.
+ * @return {!goog.testing.AsyncTestCase} The created AsyncTestCase.
  */
 goog.testing.AsyncTestCase.createAndInstall = function(opt_name) {
   var asyncTestCase = new goog.testing.AsyncTestCase(opt_name);
