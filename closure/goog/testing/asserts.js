@@ -823,9 +823,9 @@ var assertArrayEquals = function(a, b, opt_c) {
  * @param {string|Object} a Failure message (3 arguments)
  *     or object #1 (2 arguments).
  * @param {Object} b Object #1 (2 arguments) or object #2 (3 arguments).
- * @param {Object=} c Object #2 (3 arguments).
+ * @param {Object=} opt_c Object #2 (3 arguments).
  */
-var assertElementsEquals = function(a, b, c) {
+var assertElementsEquals = function(a, b, opt_c) {
   _validateArguments(2, arguments);
 
   var v1 = nonCommentArg(1, 2, arguments);
@@ -1183,6 +1183,7 @@ goog.testing.asserts.isArrayIndexProp_ = function(prop) {
  * @param {string} comment A summary for the exception.
  * @param {?string=} opt_message A description of the exception.
  * @constructor
+ * @extends {Error}
  */
 goog.testing.JsUnitException = function(comment, opt_message) {
   this.isJsUnitException = true;
@@ -1193,7 +1194,15 @@ goog.testing.JsUnitException = function(comment, opt_message) {
   // These fields are for compatibility with jsUnitTestManager.
   this.comment = comment || null;
   this.jsUnitMessage = opt_message || '';
+
+  // Ensure there is a stack trace.
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, goog.testing.JsUnitException);
+  } else {
+    this.stack = new Error().stack || '';
+  }
 };
+goog.inherits(goog.testing.JsUnitException, Error);
 
 
 /** @override */

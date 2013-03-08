@@ -811,7 +811,7 @@ See the COPYING file for details.
     } catch (e) {
       // Some browsers don't have a stack trace so expect to at least have the
       // error description. For Gecko and IE7 not even that is included.
-      if (!goog.userAgent.GECKO && 
+      if (!goog.userAgent.GECKO &&
           (!goog.userAgent.IE || goog.userAgent.isVersion('8'))) {
         assertContains(errorDescription, e.message);
       }
@@ -1102,6 +1102,19 @@ See the COPYING file for details.
         },
         'length mismatch: Message\n' +
         'Expected <2> (Number) but was <1> (Number)');
+  }
+
+  function testStackTrace() {
+    try {
+      assertTrue(false);
+    } catch (e) {
+      if (Error.captureStackTrace) {
+        assertNotUndefined(e.stack);
+      }
+      if (e.stack) {
+        assertContains('testStackTrace', e.stack);
+      }
+    }
   }
 
   function stringForWindowIEHelper() {
