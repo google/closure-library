@@ -621,12 +621,14 @@ goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
 
 
 /**
- * Removes all listeners from an object. You can also optionally
- * remove listeners of a particular type.
+ * Removes all listeners from an object, if no object is specified it will
+ * remove all listeners that have been registered.  You can also optionally
+ * remove listeners of a particular type or capture phase.
  *
- * @param {Object=} opt_obj Object to remove listeners from. Not
- *     specifying opt_obj is now DEPRECATED (it used to remove all
- *     registered listeners).
+ * removeAll() will not remove listeners registered directly on a
+ * goog.events.Listenable and listeners registered via add(Once)Listener.
+ *
+ * @param {Object=} opt_obj Object to remove listeners from.
  * @param {string=} opt_type Type of event to, default is all types.
  * @return {number} Number of listeners removed.
  */
@@ -660,26 +662,6 @@ goog.events.removeAll = function(opt_obj, opt_type) {
     });
   }
 
-  return count;
-};
-
-
-/**
- * Removes all native listeners registered via goog.events. Native
- * listeners are listeners on native browser objects (such as DOM
- * elements). In particular, goog.events.Listenable and
- * goog.events.EventTarget listeners will NOT be removed.
- * @return {number} Number of listeners removed.
- */
-goog.events.removeAllNativeListeners = function() {
-  var count = 0;
-  goog.object.forEach(goog.events.listeners_, function(listener, key) {
-    var src = listener.src;
-    if (!goog.events.Listenable.isImplementedBy(src)) {
-      goog.events.unlistenByKey(key);
-      count++;
-    }
-  });
   return count;
 };
 
