@@ -59,6 +59,7 @@ See the COPYING file for details.
   goog.require('goog.dom');
   goog.require('goog.dom.classes');
   goog.require('goog.events');
+  goog.require('goog.functions');
   goog.require('goog.positioning');
   goog.require('goog.positioning.Overflow');
   goog.require('goog.style');
@@ -453,6 +454,32 @@ function testSubmenuSelectable() {
 
   assertEquals('The submenu should not have fired any further events', 2,
       numClicks);
+}
+
+/**
+ * Tests that entering a child menu cancels the dismiss timer for the submenu.
+ */
+function testEnteringChildCancelsDismiss() {
+  var submenu = new goog.ui.SubMenu('submenu');
+  submenu.isInDocument = goog.functions.TRUE;
+  submenu.addItem(new goog.ui.MenuItem("submenu item 1"));
+  menu.addItem(submenu);
+
+  mockClock = new goog.testing.MockClock(true);
+  submenu.getMenu().setVisible(true);
+
+  // This starts the dismiss timer.
+  submenu.setHighlighted(false);
+
+  // This should cancel the dismiss timer.
+  submenu.getMenu().dispatchEvent(goog.ui.Component.EventType.ENTER);
+
+  // Tick the length of the dismiss timer.
+  mockClock.tick(goog.ui.SubMenu.MENU_DELAY_MS);
+
+  // Check that the menu is now highlighted and still visible.
+  assertTrue(submenu.getMenu().isVisible());
+  assertTrue(submenu.isHighlighted());
 }
 
 /**

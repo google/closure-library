@@ -328,10 +328,10 @@ goog.ui.SubMenu.prototype.handleKeyEvent = function(e) {
  * Listens to the sub menus items and ensures that this menu item is selected
  * while dismissing the others.  This handles the case when the user mouses
  * over other items on their way to the sub menu.
- * @param {goog.events.Event} e Highlight event to handle.
+ * @param {goog.events.Event} e Enter event to handle.
  * @private
  */
-goog.ui.SubMenu.prototype.onChildHighlight_ = function(e) {
+goog.ui.SubMenu.prototype.onChildEnter_ = function(e) {
   if (this.subMenu_.getParent() == this) {
     this.clearTimers();
     this.getParentEventTarget().setHighlighted(this);
@@ -437,8 +437,8 @@ goog.ui.SubMenu.prototype.setSubMenuVisible_ = function(visible) {
 goog.ui.SubMenu.prototype.setMenuListenersEnabled_ = function(menu, attach) {
   var handler = this.getHandler();
   var method = attach ? handler.listen : handler.unlisten;
-  method.call(handler, menu, goog.ui.Component.EventType.HIGHLIGHT,
-      this.onChildHighlight_);
+  method.call(handler, menu, goog.ui.Component.EventType.ENTER,
+      this.onChildEnter_);
 };
 
 
