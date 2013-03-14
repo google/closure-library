@@ -21,7 +21,6 @@
 
 goog.provide('goog.async.Deferred');
 goog.provide('goog.async.Deferred.AlreadyCalledError');
-goog.provide('goog.async.Deferred.CanceledError');
 goog.provide('goog.async.Deferred.CancelledError');
 
 goog.require('goog.array');
@@ -45,14 +44,14 @@ goog.require('goog.debug.Error');
  * computed result. Adding a callback function is the only way to access the
  * result of the Deferred.
  *
- * If a Deferred operation is canceled, an optional user-provided cancellation
+ * If a Deferred operation is cancelled, an optional user-provided cancellation
  * function is invoked which may perform any special cleanup, followed by firing
- * the Deferred's errback sequence with a {@code CanceledError}. If the
+ * the Deferred's errback sequence with a {@code CancelledError}. If the
  * Deferred has already fired, cancellation is ignored.
  *
  * @param {Function=} opt_onCancelFunction A function that will be called if the
- *     Deferred is canceled. If provided, this function runs before the
- *     Deferred is fired with a {@code CanceledError}.
+ *     Deferred is cancelled. If provided, this function runs before the
+ *     Deferred is fired with a {@code CancelledError}.
  * @param {Object=} opt_defaultScope The default object context to call
  *     callbacks and errbacks in.
  * @constructor
@@ -67,7 +66,7 @@ goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
   this.sequence_ = [];
 
   /**
-   * Optional function that will be called if the Deferred is canceled.
+   * Optional function that will be called if the Deferred is cancelled.
    * @type {Function|undefined}
    * @private
    */
@@ -129,12 +128,12 @@ goog.async.Deferred.prototype.blocking_ = false;
 
 
 /**
- * Whether the Deferred has been canceled without having a custom cancel
+ * Whether the Deferred has been cancelled without having a custom cancel
  * function.
  * @type {boolean}
  * @private
  */
-goog.async.Deferred.prototype.silentlyCanceled_ = false;
+goog.async.Deferred.prototype.silentlyCancelled_ = false;
 
 
 /**
@@ -157,7 +156,7 @@ goog.async.Deferred.prototype.parent_;
 
 /**
  * The number of Deferred objects that have been branched off this one. This
- * will be decremented whenever a branch is fired or canceled.
+ * will be decremented whenever a branch is fired or cancelled.
  * @type {number}
  * @private
  */
@@ -167,13 +166,13 @@ goog.async.Deferred.prototype.branches_ = 0;
 /**
  * Cancels a Deferred that has not yet been fired, or is blocked on another
  * deferred operation. If this Deferred is waiting for a blocking Deferred to
- * fire, the blocking Deferred will also be canceled.
+ * fire, the blocking Deferred will also be cancelled.
  *
  * If this Deferred was created by calling branch() on a parent Deferred with
- * opt_propagateCancel set to true, the parent may also be canceled. If
+ * opt_propagateCancel set to true, the parent may also be cancelled. If
  * opt_deepCancel is set, cancel() will be called on the parent (as well as any
  * other ancestors if the parent is also a branch). If one or more branches were
- * created with opt_propagateCancel set to true, the parent will be canceled if
+ * created with opt_propagateCancel set to true, the parent will be cancelled if
  * cancel() is called on all of those branches.
  *
  * @param {boolean=} opt_deepCancel If true, cancels this Deferred's parent even
@@ -184,7 +183,7 @@ goog.async.Deferred.prototype.cancel = function(opt_deepCancel) {
   if (!this.hasFired()) {
     if (this.parent_) {
       // Get rid of the parent reference before potentially running the parent's
-      // canceler function to ensure that this cancellation isn't
+      // canceller function to ensure that this cancellation isn't
       // double-counted.
       var parent = this.parent_;
       delete this.parent_;
@@ -199,10 +198,10 @@ goog.async.Deferred.prototype.cancel = function(opt_deepCancel) {
       // Call in user-specified scope.
       this.onCancelFunction_.call(this.defaultScope_, this);
     } else {
-      this.silentlyCanceled_ = true;
+      this.silentlyCancelled_ = true;
     }
     if (!this.hasFired()) {
-      this.errback(new goog.async.Deferred.CanceledError(this));
+      this.errback(new goog.async.Deferred.CancelledError(this));
     }
   } else if (this.result_ instanceof goog.async.Deferred) {
     this.result_.cancel();
@@ -211,8 +210,8 @@ goog.async.Deferred.prototype.cancel = function(opt_deepCancel) {
 
 
 /**
- * Handle a single branch being canceled. Once all branches are canceled, this
- * Deferred will be canceled as well.
+ * Handle a single branch being cancelled. Once all branches are cancelled, this
+ * Deferred will be cancelled as well.
  *
  * @private
  */
@@ -262,10 +261,10 @@ goog.async.Deferred.prototype.updateResult_ = function(isSuccess, res) {
  */
 goog.async.Deferred.prototype.check_ = function() {
   if (this.hasFired()) {
-    if (!this.silentlyCanceled_) {
+    if (!this.silentlyCancelled_) {
       throw new goog.async.Deferred.AlreadyCalledError(this);
     }
-    this.silentlyCanceled_ = false;
+    this.silentlyCancelled_ = false;
   }
 };
 
@@ -435,7 +434,7 @@ goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
  * same starting value.
  *
  * @param {boolean=} opt_propagateCancel If cancel() is called on every child
- *     branch created with opt_propagateCancel, the parent will be canceled as
+ *     branch created with opt_propagateCancel, the parent will be cancelled as
  *     well.
  * @return {!goog.async.Deferred} A Deferred that will be started with the
  *     computed result from this stage in the execution sequence.
@@ -596,22 +595,15 @@ goog.async.Deferred.fail = function(res) {
 
 
 /**
- * Creates a Deferred that has already been canceled.
+ * Creates a Deferred that has already been cancelled.
  *
  * @return {!goog.async.Deferred} The new Deferred.
  */
-goog.async.Deferred.canceled = function() {
+goog.async.Deferred.cancelled = function() {
   var d = new goog.async.Deferred();
   d.cancel();
   return d;
 };
-
-
-/**
- * Creates a Deferred that has already been canceled. Aliases the preferred
- * spelling {@see goog.async.Deferred.canceled}.
- */
-goog.async.Deferred.cancelled = goog.async.Deferred.canceled;
 
 
 /**
@@ -686,13 +678,14 @@ goog.async.Deferred.AlreadyCalledError.prototype.name = 'AlreadyCalledError';
 
 
 /**
- * An error sub class that is used when a Deferred is canceled.
+ * An error sub class that is used when a Deferred is cancelled.
+ * TODO(brenneman): Cancelled -> American English Canceled.
  *
  * @param {!goog.async.Deferred} deferred The Deferred object.
  * @constructor
  * @extends {goog.debug.Error}
  */
-goog.async.Deferred.CanceledError = function(deferred) {
+goog.async.Deferred.CancelledError = function(deferred) {
   goog.debug.Error.call(this);
 
   /**
@@ -701,19 +694,12 @@ goog.async.Deferred.CanceledError = function(deferred) {
    */
   this.deferred = deferred;
 };
-goog.inherits(goog.async.Deferred.CanceledError, goog.debug.Error);
+goog.inherits(goog.async.Deferred.CancelledError, goog.debug.Error);
 
 
 /** @override */
-goog.async.Deferred.CanceledError.prototype.message = 'Deferred was canceled';
+goog.async.Deferred.CancelledError.prototype.message = 'Deferred was cancelled';
 
 
 /** @override */
-goog.async.Deferred.CanceledError.prototype.name = 'CanceledError';
-
-
-/**
- * An error sub class that is used when a Deferred is canceled. Aliases the
- * preferred spelling {@see goog.async.Deferred.CanceledError}.
- */
-goog.async.Deferred.CancelledError = goog.async.Deferred.CanceledError;
+goog.async.Deferred.CancelledError.prototype.name = 'CancelledError';
