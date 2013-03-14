@@ -88,7 +88,7 @@ goog.events.ListenableType;
  * constructor.
  * @type {boolean}
  */
-goog.events.STRICT_EVENT_TARGET = false;
+goog.events.STRICT_EVENT_TARGET = true;
 
 
 /**
