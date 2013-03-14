@@ -106,7 +106,12 @@ goog.ui.SplitPane.EventType = {
   /**
    * Dispatched after handle drag end.
    */
-  HANDLE_DRAG_END: 'handle_drag_end'
+  HANDLE_DRAG_END: 'handle_drag_end',
+
+  /**
+   * Dispatched after handle snap (double-click splitter).
+   */
+  HANDLE_SNAP: 'handle_snap'
 };
 
 
@@ -742,6 +747,9 @@ goog.ui.SplitPane.prototype.snapIt_ = function() {
     }
     this.setFirstComponentSize(snapSize);
   }
+
+  // Fire a SNAP event.
+  this.dispatchEvent(goog.ui.SplitPane.EventType.HANDLE_SNAP);
 };
 
 
