@@ -102,30 +102,34 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
 
   /**
    * Array used to store the current set of rows being displayed
-   * @type {!Array}
+   * @type {Array}
    * @private
    */
   this.rows_ = [];
 
   /**
    * Array of the node divs that hold each result that is being displayed.
-   * @protected {!Array.<!Element>}
+   * @type {Array.<Element>}
+   * @protected
    * @suppress {underscore}
    */
   this.rowDivs_ = [];
 
   /**
    * The index of the currently highlighted row
-   * @protected {number}
+   * @type {number}
+   * @protected
    * @suppress {underscore}
    */
   this.hilitedRow_ = -1;
 
   /**
-   * The time that the suggestion rows were updated.
-   * @protected {number}
+   * The time that the rendering of the menu rows started
+   * @type {number}
+   * @protected
+   * @suppress {underscore}
    */
-  this.rowsUpdatedTime = -1;
+  this.startRenderingRows_ = -1;
 
   /**
    * Store the current state for the renderer
@@ -386,9 +390,9 @@ goog.ui.ac.Renderer.prototype.getAnchorElement = function() {
  */
 goog.ui.ac.Renderer.prototype.renderRows = function(rows, token, opt_target) {
   this.token_ = token;
-  this.rows_ = rows || [];
+  this.rows_ = rows;
   this.hilitedRow_ = -1;
-  this.rowsUpdatedTime = goog.now();
+  this.startRenderingRows_ = goog.now();
   this.target_ = opt_target;
   this.rowDivs_ = [];
   this.redraw();
@@ -482,20 +486,7 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
       if (this.target_) {
         goog.a11y.aria.setActiveDescendant(this.target_, rowDiv);
       }
-      // When the rows scroll, a mouse over event will be dispatched, and
-      // handleMouseOver_ tries to highlight a row under the mouse cursor.
-      // To suppress hiliting, set rowsUpdateTime here if the rows
-      // scroll and do not make the handler function highlight anything.
-      var offset =
-          goog.style.getContainerOffsetToScrollInto(rowDiv, this.element_);
-      var roundedOffsetX = Math.round(offset.x);
-      var roundedOffsetY = Math.round(offset.y);
-      if (roundedOffsetX != this.element_.scrollLeft ||
-          roundedOffsetY != this.element_.scrollTop) {
-        this.element_.scrollLeft = roundedOffsetX;
-        this.element_.scrollTop = roundedOffsetY;
-        this.rowsUpdatedTime = goog.now();
-      }
+      goog.style.scrollIntoContainerView(rowDiv, this.element_);
     }
   }
 };
@@ -981,7 +972,7 @@ goog.ui.ac.Renderer.prototype.handleMouseDown_ = function(e) {
 goog.ui.ac.Renderer.prototype.handleMouseOver_ = function(e) {
   var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
   if (index >= 0) {
-    if ((goog.now() - this.rowsUpdatedTime) <
+    if ((goog.now() - this.startRenderingRows_) <
         goog.ui.ac.Renderer.DELAY_BEFORE_MOUSEOVER) {
       return;
     }
