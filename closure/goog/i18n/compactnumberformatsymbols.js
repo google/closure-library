@@ -33,8 +33,9 @@
  * modification must be documented in this section, and should be
  * removed after those changes land to CLDR.
  *
- * March 12, 2013 - Adding 'Tsd.' for thousands in the German,
- *                  Austrian, Swiss short formats.
+ * March 13, 2013 - Manually removing thousands entries in the
+ *                  German, Austrian, Swiss short formats.
+ *                  (see b/8367556)
  */
 
 goog.provide('goog.i18n.CompactNumberFormatSymbols');
@@ -945,21 +946,6 @@ goog.i18n.CompactNumberFormatSymbols_da_DK =
  */
 goog.i18n.CompactNumberFormatSymbols_de = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
-    '10000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
-    '100000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
     '1000000': {
       'other': '0\u00A0Mio'
     },
@@ -1034,21 +1020,6 @@ goog.i18n.CompactNumberFormatSymbols_de = {
  */
 goog.i18n.CompactNumberFormatSymbols_de_AT = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
-    '10000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
-    '100000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
     '1000000': {
       'other': '0\u00A0Mio'
     },
@@ -1130,21 +1101,6 @@ goog.i18n.CompactNumberFormatSymbols_de_BE =
  */
 goog.i18n.CompactNumberFormatSymbols_de_CH = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
-    '10000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
-    '100000': {
-      // Re b/8367556, short form for thousands in German is Tsd.
-      // Fix this temporarily before this change gets into CLDR.
-      'other': '0\u00A0Tsd.'
-    },
     '1000000': {
       'other': '0\u00A0Mio'
     },
