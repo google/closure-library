@@ -60,9 +60,6 @@ function MockDS(opt_autoHilite) {
   this.isRowDisabled = function(row) {
     return !!row.rowDisabled;
   };
-  this.setRows = function(rows) {
-    this.rows_ = rows;
-  };
 }
 
 MockDS.prototype.requestMatchingRows = function(token, maxMatches,
@@ -1560,25 +1557,6 @@ function testDetachInputWithAnchor() {
   assertFalse(goog.getUid(inputElement) in autoComplete.inputToAnchorMap_);
   assertFalse(goog.getUid(inputElement2) in autoComplete.inputToAnchorMap_);
   mockControl.$verifyAll();
-}
-
-function testSetTokenWithForceRendering() {
-  var ds = new MockDS();
-  var rend = new TestRend();
-  var select = new MockSelect();
-  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
-
-  ac.setToken('the');
-  assertEquals(4, rend.getRenderedRows().length);
-
-  ds.setRows(['who changed the rows?', 'somebody']);
-  ac.setToken('the');
-  // If we do not force a re-render, nothing will happen.
-  assertEquals(4, rend.getRenderedRows().length);
-
-  // Force re-render.
-  ac.setToken('the', 'dummy', true);
-  assertEquals(1, rend.getRenderedRows().length);
 }
 </script>
 </body>

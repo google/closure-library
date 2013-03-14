@@ -336,13 +336,9 @@ goog.ui.ac.AutoComplete.prototype.setTriggerSuggestionsOnUpdate = function(
  * @param {string} token The string for which to search in the Matcher.
  * @param {string=} opt_fullString Optionally, the full string in the input
  *     field.
- * @param {boolean=} opt_forceRendering Whether to force re-rendering of the
- *     rows. By default, the rows will not re-render if the token does not
- *     change.
  */
-goog.ui.ac.AutoComplete.prototype.setToken = function(token, opt_fullString,
-    opt_forceRendering) {
-  if (!opt_forceRendering && this.token_ == token) {
+goog.ui.ac.AutoComplete.prototype.setToken = function(token, opt_fullString) {
+  if (this.token_ == token) {
     return;
   }
   this.token_ = token;
@@ -767,11 +763,10 @@ goog.ui.ac.AutoComplete.prototype.attachInputWithAnchor = function(
 
 /**
  * Forces an update of the display.
- * @param {boolean=} opt_forceRendering Whether to force re-rendering of the
- *     rows.
+ * @param {boolean=} opt_force Whether to force an update.
  */
-goog.ui.ac.AutoComplete.prototype.update = function(opt_forceRendering) {
+goog.ui.ac.AutoComplete.prototype.update = function(opt_force) {
   var inputHandler = /** @type {goog.ui.ac.InputHandler} */
       (this.selectionHandler_);
-  inputHandler.update(opt_forceRendering);
+  inputHandler.update(opt_force);
 };
