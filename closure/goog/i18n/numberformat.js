@@ -24,6 +24,7 @@ goog.provide('goog.i18n.NumberFormat');
 goog.provide('goog.i18n.NumberFormat.CurrencyStyle');
 goog.provide('goog.i18n.NumberFormat.Format');
 
+goog.require('goog.i18n.CompactNumberFormatSymbols');
 goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.currency');
 
@@ -49,6 +50,7 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
 
   this.maximumIntegerDigits_ = 40;
   this.minimumIntegerDigits_ = 1;
+  this.significantDigits_ = 0; // invariant, <= maximumFractionDigits
   this.maximumFractionDigits_ = 3; // invariant, >= minFractionDigits
   this.minimumFractionDigits_ = 0;
   this.minExponentDigits_ = 0;
@@ -64,6 +66,7 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
   this.groupingSize_ = 3;
   this.decimalSeparatorAlwaysShown_ = false;
   this.useExponentialNotation_ = false;
+  this.compactStyle_ = goog.i18n.NumberFormat.CompactStyle.NONE;
 
   if (typeof pattern == 'number') {
     this.applyStandardPattern_(pattern);
@@ -81,7 +84,9 @@ goog.i18n.NumberFormat.Format = {
   DECIMAL: 1,
   SCIENTIFIC: 2,
   PERCENT: 3,
-  CURRENCY: 4
+  CURRENCY: 4,
+  COMPACT_SHORT: 5,
+  COMPACT_LONG: 6
 };
 
 
@@ -93,6 +98,17 @@ goog.i18n.NumberFormat.CurrencyStyle = {
   LOCAL: 0,     // currency style as it is used in its circulating country.
   PORTABLE: 1,  // currency style that differentiate it from other popular ones.
   GLOBAL: 2     // currency style that is unique among all currencies.
+};
+
+
+/**
+ * Compacting styles.
+ * @enum {number}
+ */
+goog.i18n.NumberFormat.CompactStyle = {
+  NONE: 0,  // Don't compact.
+  SHORT: 1, // Short compact form, such as 1.2B.
+  LONG: 2  // Long compact form, such as 1.2 billion.
 };
 
 
@@ -131,6 +147,10 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
   if (min > this.maximumFractionDigits_) {
     throw Error('Min value must be less than max value');
   }
+  if (this.significantDigits_ > 0 && min > 0) {
+    throw Error(
+        'Can\'t combine significant digits and minimum fraction digits');
+  }
   this.minimumFractionDigits_ = min;
 };
 
@@ -141,9 +161,23 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
  */
 goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
   if (this.minimumFractionDigits_ > max) {
-    throw Error('Min value must be less than max value');
+    throw Error(
+        'Min value must be less than max value');
   }
   this.maximumFractionDigits_ = max;
+};
+
+
+/**
+ * Sets number of significant digits to show. Only fractions will be rounded.
+ * @param {number} number The number of significant digits to include.
+ */
+goog.i18n.NumberFormat.prototype.setSignificantDigits = function(number) {
+  if (this.minimumFractionDigits_ > 0 && number >= 0) {
+    throw Error(
+        'Can\'t combine significant digits and minimum fraction digits');
+  }
+  this.significantDigits_ = number;
 };
 
 
@@ -200,9 +234,30 @@ goog.i18n.NumberFormat.prototype.applyStandardPattern_ = function(patternType) {
           goog.i18n.NumberFormatSymbols.CURRENCY_PATTERN,
           this.intlCurrencyCode_));
       break;
+    case goog.i18n.NumberFormat.Format.COMPACT_SHORT:
+      this.applyCompactStyle_(goog.i18n.NumberFormat.CompactStyle.SHORT);
+      break;
+    case goog.i18n.NumberFormat.Format.COMPACT_LONG:
+      this.applyCompactStyle_(goog.i18n.NumberFormat.CompactStyle.LONG);
+      break;
     default:
       throw Error('Unsupported pattern type.');
   }
+};
+
+
+/**
+ * Apply a predefined pattern for shorthand formats.
+ * @param {!goog.i18n.NumberFormat.CompactStyle} style the compact style to
+ *     set defaults for.
+ * @private
+ */
+goog.i18n.NumberFormat.prototype.applyCompactStyle_ = function(style) {
+  this.compactStyle_ = style;
+  this.applyPattern_(goog.i18n.NumberFormatSymbols.DECIMAL_PATTERN);
+  this.setMinimumFractionDigits(0);
+  this.setMaximumFractionDigits(2);
+  this.setSignificantDigits(2);
 };
 
 
@@ -221,6 +276,10 @@ goog.i18n.NumberFormat.prototype.applyStandardPattern_ = function(patternType) {
  */
 goog.i18n.NumberFormat.prototype.parse = function(text, opt_pos) {
   var pos = opt_pos || [0];
+
+  if (this.compactStyle_ != goog.i18n.NumberFormat.CompactStyle.NONE) {
+    throw Error('Parsing of compact numbers is unimplemented');
+  }
 
   var start = pos[0];
   var ret = NaN;
@@ -289,6 +348,10 @@ goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
   var decimal = goog.i18n.NumberFormatSymbols.DECIMAL_SEP;
   var grouping = goog.i18n.NumberFormatSymbols.GROUP_SEP;
   var exponentChar = goog.i18n.NumberFormatSymbols.EXP_SYMBOL;
+
+  if (this.compactStyle_ != goog.i18n.NumberFormat.CompactStyle.NONE) {
+    throw Error('Parsing of compact style numbers is not implemented');
+  }
 
   var normalizedText = '';
   for (; pos[0] < text.length; pos[0]++) {
@@ -359,6 +422,10 @@ goog.i18n.NumberFormat.prototype.format = function(number) {
   }
 
   var parts = [];
+  var unit = this.getUnitAfterRounding_(number);
+  number /= Math.pow(10, unit.divisorBase);
+
+  parts.push(unit.prefix);
 
   // in icu code, it is commented that certain computation need to keep the
   // negative sign for 0.
@@ -379,8 +446,38 @@ goog.i18n.NumberFormat.prototype.format = function(number) {
   }
 
   parts.push(isNegative ? this.negativeSuffix_ : this.positiveSuffix_);
+  parts.push(unit.suffix);
 
   return parts.join('');
+};
+
+
+/**
+ * Round a number into an integer and fractional part
+ * based on the rounding rules for this NumberFormat.
+ * @param {number} number The number to round.
+ * @return {{intValue: number, fracValue: number}} The integer and fractional
+ *     part after rounding.
+ * @private
+ */
+goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
+  var power = Math.pow(10, this.maximumFractionDigits_);
+  var shiftedNumber = this.significantDigits_ <= 0 ?
+      Math.round(number * power) :
+      Math.floor(this.roundToSignificantDigits_(
+          number * power,
+          this.significantDigits_,
+          this.maximumFractionDigits_));
+
+  var intValue, fracValue;
+  if (isFinite(shiftedNumber)) {
+    intValue = Math.floor(shiftedNumber / power);
+    fracValue = Math.floor(shiftedNumber - intValue * power);
+  } else {
+    intValue = number;
+    fracValue = 0;
+  }
+  return { intValue: intValue, fracValue: fracValue };
 };
 
 
@@ -395,17 +492,11 @@ goog.i18n.NumberFormat.prototype.format = function(number) {
  */
 goog.i18n.NumberFormat.prototype.subformatFixed_ =
     function(number, minIntDigits, parts) {
-  // round the number
+
+  var rounded = this.roundNumber_(number);
   var power = Math.pow(10, this.maximumFractionDigits_);
-  var shiftedNumber = Math.round(number * power);
-  var intValue, fracValue;
-  if (isFinite(shiftedNumber)) {
-    intValue = Math.floor(shiftedNumber / power);
-    fracValue = Math.floor(shiftedNumber - intValue * power);
-  } else {
-    intValue = number;
-    fracValue = 0;
-  }
+  var intValue = rounded.intValue;
+  var fracValue = rounded.fracValue;
 
   var fractionPresent = this.minimumFractionDigits_ > 0 || fracValue > 0;
 
@@ -873,4 +964,145 @@ goog.i18n.NumberFormat.prototype.parseTrunk_ = function(pattern, pos) {
   this.groupingSize_ = Math.max(0, groupingCount);
   this.decimalSeparatorAlwaysShown_ = decimalPos == 0 ||
                                       decimalPos == totalDigits;
+};
+
+
+/**
+ * Alias for the compact format 'unit' object.
+ * @typedef {{
+ *     prefix: string,
+ *     suffix: string,
+ *     divisorBase: number
+ * }}
+ */
+goog.i18n.NumberFormat.CompactNumberUnit;
+
+
+/**
+ * The empty unit, corresponding to a base of 0.
+ * @private {!goog.i18n.NumberFormat.CompactNumberUnit}
+ */
+goog.i18n.NumberFormat.NULL_UNIT_ = { prefix: '', suffix: '', divisorBase: 0 };
+
+
+/**
+ * Get compact unit for a certain number of digits
+ *
+ * @param {number} base The number of digits to get the unit for.
+ * @param {string} plurality The plurality of the number.
+ * @return {!goog.i18n.NumberFormat.CompactNumberUnit} The compact unit.
+ * @private
+ */
+goog.i18n.NumberFormat.prototype.unitFor_ = function(base, plurality) {
+  var table = this.compactStyle_ == goog.i18n.NumberFormat.CompactStyle.SHORT ?
+      goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN :
+      goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_LONG_PATTERN;
+
+  if (base < 3) {
+    return goog.i18n.NumberFormat.NULL_UNIT_;
+  } else {
+    base = Math.min(14, base);
+    var patterns = table[Math.pow(10, base)];
+    if (patterns == null) {
+      return goog.i18n.NumberFormat.NULL_UNIT_;
+    }
+
+    var pattern = patterns[plurality];
+    if (pattern == null) {
+      return goog.i18n.NumberFormat.NULL_UNIT_;
+    }
+
+    var parts = /([^0]*)(0+)(.*)/.exec(pattern);
+    if (parts == null) {
+      return goog.i18n.NumberFormat.NULL_UNIT_;
+    }
+
+    return {
+      prefix: parts[1],
+      suffix: parts[3],
+      divisorBase: base - (parts[2].length - 1)
+    };
+  }
+};
+
+
+/**
+ * Get the compact unit divisor, accounting for rounding of the quantity.
+ *
+ * @param {number} number The number to get the unit for.
+ * @return {!goog.i18n.NumberFormat.CompactNumberUnit} The unit after rounding.
+ * @private
+ */
+goog.i18n.NumberFormat.prototype.getUnitAfterRounding_ = function(number) {
+  if (this.compactStyle_ == goog.i18n.NumberFormat.CompactStyle.NONE) {
+    return goog.i18n.NumberFormat.NULL_UNIT_;
+  }
+
+  number = Math.abs(number);
+
+  var plurality = this.pluralForm_(number);
+  var base = number <= 1.0 ? 0 : this.intLog10_(number);
+  var initialDivisor = this.unitFor_(base, plurality).divisorBase;
+  var attempt = number / Math.pow(10, initialDivisor);
+  var rounded = this.roundNumber_(attempt);
+  var finalPlurality = this.pluralForm_(rounded.intValue + rounded.fracValue);
+  return this.unitFor_(initialDivisor + this.intLog10_(rounded.intValue),
+      finalPlurality);
+};
+
+
+/**
+ * Get the integer base 10 logarithm of a number.
+ *
+ * @param {number} number The number to log.
+ * @return {number} The lowest integer n such that 10^n >= number.
+ * @private
+ */
+goog.i18n.NumberFormat.prototype.intLog10_ = function(number) {
+  // Turns out Math.log(1000000)/Math.LN10 is strictly less than 6.
+  var i = 0;
+  while ((number /= 10) >= 1) i++;
+  return i;
+};
+
+
+/**
+ * Round to a certain number of significant digits.
+ *
+ * @param {number} number The number to round.
+ * @param {number} significantDigits The number of significant digits
+ *     to round to.
+ * @param {number} scale Treat number as fixed point times 10^scale.
+ * @return {number} The rounded number.
+ * @private
+ */
+goog.i18n.NumberFormat.prototype.roundToSignificantDigits_ =
+    function(number, significantDigits, scale) {
+  if (number == 0)
+    return number;
+
+  var digits = this.intLog10_(number);
+  var magnitude = significantDigits - digits - 1;
+
+  // Only round fraction, not (potentially shifted) integers.
+  if (magnitude < -scale) {
+    var point = Math.pow(10, scale);
+    return Math.round(number / point) * point;
+  }
+
+  var power = Math.pow(10, magnitude);
+  var shifted = Math.round(number * power);
+  return shifted / power;
+};
+
+
+/**
+ * Get the plural form of a number.
+ * @param {number} quantity The quantity to find plurality of.
+ * @return {string} One of 'zero', 'one', 'two', 'few', 'many', 'other'.
+ * @private
+ */
+goog.i18n.NumberFormat.prototype.pluralForm_ = function(quantity) {
+  /* TODO: Implement */
+  return 'other';
 };
