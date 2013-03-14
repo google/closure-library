@@ -61,6 +61,7 @@ goog.fx.Dragger = function(target, opt_handle, opt_limits) {
 
   this.document_ = goog.dom.getOwnerDocument(target);
   this.eventHandler_ = new goog.events.EventHandler(this);
+  this.registerDisposable(this.eventHandler_);
 
   // Add listener. Do not use the event handler here since the event handler is
   // used for listeners added and removed during the drag operation.
@@ -237,14 +238,6 @@ goog.fx.Dragger.prototype.document_;
 
 
 /**
- * Event handler used to simplify managing events.
- * @type {goog.events.EventHandler}
- * @private
- */
-goog.fx.Dragger.prototype.eventHandler_;
-
-
-/**
  * The SCROLL event target used to make drag element follow scrolling.
  * @type {EventTarget}
  * @private
@@ -376,7 +369,6 @@ goog.fx.Dragger.prototype.disposeInternal = function() {
 
   this.target = null;
   this.handle = null;
-  this.eventHandler_ = null;
 };
 
 
