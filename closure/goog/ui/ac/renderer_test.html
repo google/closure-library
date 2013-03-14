@@ -18,6 +18,7 @@ See the COPYING file for details.
   goog.require('goog.a11y.aria.Role');
   goog.require('goog.a11y.aria.State');
   goog.require('goog.events');
+  goog.require('goog.events.EventHandler');
   goog.require('goog.functions');
   goog.require('goog.fx.dom.FadeInAndShow');
   goog.require('goog.fx.dom.FadeOutAndHide');
@@ -33,6 +34,7 @@ See the COPYING file for details.
 <div id="someElement">Click target</div>
 <div id="target">Target</div>
 <script>
+  var handler;
   var renderer;
   var rendRows = [];
   var someElement = goog.dom.getElement('someElement');
@@ -60,9 +62,11 @@ See the COPYING file for details.
     renderer = new goog.ui.ac.Renderer();
     renderer.rowDivs_ = [];
     renderer.target_ = target;
+    handler = new goog.events.EventHandler();
   }
 
   function tearDown() {
+    handler.dispose();
     renderer.dispose();
     propertyReplacer.reset();
   }
@@ -534,6 +538,30 @@ See the COPYING file for details.
     assertEquals(2, renderer.hilitedRow_);
     assertTrue(goog.dom.classes.has(
         renderer.rowDivs_[2], renderer.activeClassName));
+  }
+
+  function testHiliteRowScrolling() {
+    renderer.renderRows(rendRows, '', target);
+    renderer.rowsUpdatedTime = -1;
+    // Change the height to make the renderer scroll when selecting the
+    // last row item.
+    goog.style.setHeight(renderer.getElement(), 30);
+    var updates = 0;
+    handler.listen(renderer,
+      goog.ui.ac.AutoComplete.EventType.HILITE,
+      function(evt) {
+        updates++;
+      });
+    // Highlighting the first row does not change the viewport, fireMouseOverEvent
+    // should be dispatched.
+    renderer.hiliteRow(0);
+    goog.testing.events.fireMouseOverEvent(renderer.rowDivs_[1]);
+    assertEquals(1, updates);
+    // Highlighting the first row change the viewport, fireMouseOverEvent should
+                      // not be dispatched.
+    renderer.hiliteRow(3);
+    goog.testing.events.fireMouseOverEvent(renderer.rowDivs_[1]);
+    assertEquals(1, updates);
   }
 
   function testReposition() {
