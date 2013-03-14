@@ -1162,17 +1162,18 @@ goog.ui.ac.InputHandler.prototype.onIeKeyPress_ = function(e) {
 /**
  * Checks if an update has occurred and notified the autocomplete of the new
  * token.
- * @param {boolean=} opt_force If true the menu will be forced to update.
+ * @param {boolean=} opt_forceRendering If true the menu will be forced to
+ *     update.
  */
-goog.ui.ac.InputHandler.prototype.update = function(opt_force) {
+goog.ui.ac.InputHandler.prototype.update = function(opt_forceRendering) {
   if (this.activeElement_ &&
-      (opt_force || this.getValue() != this.lastValue_)) {
-    if (opt_force || !this.rowJustSelected_) {
+      (opt_forceRendering || this.getValue() != this.lastValue_)) {
+    if (opt_forceRendering || !this.rowJustSelected_) {
       var token = this.parseToken();
 
       if (this.ac_) {
         this.ac_.setTarget(this.activeElement_);
-        this.ac_.setToken(token, this.getValue());
+        this.ac_.setToken(token, this.getValue(), opt_forceRendering);
       }
     }
     this.lastValue_ = this.getValue();
