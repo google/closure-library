@@ -10,10 +10,11 @@ All Rights Reserved
   <script src="../../../../../closure/goog/base.js"></script>
   <script>
     goog.require('goog.dom');
-    goog.require('goog.dom.query');
+    // do not require goog.dom.query; use query_compiled.js instead
     goog.require('goog.testing.asserts');
     goog.require('goog.testing.jsunit');
   </script>
+  <script src="query_compiled.js"></script>
   <script src="query_test.js"></script>
 </head>
 <body>
