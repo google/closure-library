@@ -5184,22 +5184,22 @@ goog.i18n.CompactNumberFormatSymbols_ee_TG = {
 goog.i18n.CompactNumberFormatSymbols_el_CY = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0\u00A0\u03C7\u03B9\u03BB\'.\''
+      'other': '0\u00A0\u03C7\u03B9\u03BB.'
     },
     '10000': {
-      'other': '00\u00A0\u03C7\u03B9\u03BB\'.\''
+      'other': '00\u00A0\u03C7\u03B9\u03BB.'
     },
     '100000': {
-      'other': '000\u00A0\u03C7\u03B9\u03BB\'.\''
+      'other': '000\u00A0\u03C7\u03B9\u03BB.'
     },
     '1000000': {
-      'other': '0\u00A0\u03B5\u03BA\'.\''
+      'other': '0\u00A0\u03B5\u03BA.'
     },
     '10000000': {
-      'other': '00\u00A0\u03B5\u03BA\'.\''
+      'other': '00\u00A0\u03B5\u03BA.'
     },
     '100000000': {
-      'other': '000\u00A0\u03B5\u03BA\'.\''
+      'other': '000\u00A0\u03B5\u03BA.'
     },
     '1000000000': {
       'other': '0\u00A0\u03B4\u03B9\u03C2'
@@ -15227,31 +15227,31 @@ goog.i18n.CompactNumberFormatSymbols_hr_BA = {
       'other': '0'
     },
     '1000000': {
-      'other': '0\u00A0mil\'.\''
+      'other': '0\u00A0mil.'
     },
     '10000000': {
-      'other': '00\u00A0mil\'.\''
+      'other': '00\u00A0mil.'
     },
     '100000000': {
-      'other': '000\u00A0mil\'.\''
+      'other': '000\u00A0mil.'
     },
     '1000000000': {
-      'other': '0\u00A0mlr\'.\''
+      'other': '0\u00A0mlr.'
     },
     '10000000000': {
-      'other': '00\u00A0mlr\'.\''
+      'other': '00\u00A0mlr.'
     },
     '100000000000': {
-      'other': '000\u00A0mlr\'.\''
+      'other': '000\u00A0mlr.'
     },
     '1000000000000': {
-      'other': '0\u00A0bil\'.\''
+      'other': '0\u00A0bil.'
     },
     '10000000000000': {
-      'other': '00\u00A0bil\'.\''
+      'other': '00\u00A0bil.'
     },
     '100000000000000': {
-      'other': '000\u00A0bil\'.\''
+      'other': '000\u00A0bil.'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -16362,22 +16362,22 @@ goog.i18n.CompactNumberFormatSymbols_km = {
       'other': '000\u179B'
     },
     '1000000000': {
-      'other': '0\u1796\'.\'\u179B'
+      'other': '0\u1796.\u179B'
     },
     '10000000000': {
-      'other': '00\u1796\'.\'\u179B'
+      'other': '00\u1796.\u179B'
     },
     '100000000000': {
-      'other': '000\u1796\'.\'\u179B'
+      'other': '000\u1796.\u179B'
     },
     '1000000000000': {
-      'other': '0\u179B\'.\'\u179B'
+      'other': '0\u179B.\u179B'
     },
     '10000000000000': {
-      'other': '00\u179B\'.\'\u179B'
+      'other': '00\u179B.\u179B'
     },
     '100000000000000': {
-      'other': '000\u179B\'.\'\u179B'
+      'other': '000\u179B.\u179B'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -17806,40 +17806,40 @@ goog.i18n.CompactNumberFormatSymbols_mgo_CM =
 goog.i18n.CompactNumberFormatSymbols_mk = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0\u00A0\u0438\u043B\u0458\'.\''
+      'other': '0\u00A0\u0438\u043B\u0458.'
     },
     '10000': {
-      'other': '00\u00A0\u0438\u043B\u0458\'.\''
+      'other': '00\u00A0\u0438\u043B\u0458.'
     },
     '100000': {
-      'other': '000\u00A0\u0438\u043B\u0458\'.\''
+      'other': '000\u00A0\u0438\u043B\u0458.'
     },
     '1000000': {
-      'other': '0\u00A0\u043C\u0438\u043B\'.\''
+      'other': '0\u00A0\u043C\u0438\u043B.'
     },
     '10000000': {
-      'other': '00\u00A0\u043C\u0438\u043B\'.\''
+      'other': '00\u00A0\u043C\u0438\u043B.'
     },
     '100000000': {
-      'other': '000\u00A0\u043C\u0438\u043B\'.\''
+      'other': '000\u00A0\u043C\u0438\u043B.'
     },
     '1000000000': {
-      'other': '0\u00A0\u043C\u0438\u043B\u0458\'.\''
+      'other': '0\u00A0\u043C\u0438\u043B\u0458.'
     },
     '10000000000': {
-      'other': '00\u00A0\u043C\u0438\u043B\u0458\'.\''
+      'other': '00\u00A0\u043C\u0438\u043B\u0458.'
     },
     '100000000000': {
-      'other': '000\u00A0\u043C\u0438\u043B\u0458\'.\''
+      'other': '000\u00A0\u043C\u0438\u043B\u0458.'
     },
     '1000000000000': {
-      'other': '0\u00A0\u0442\u0440\u0438\u043B\'.\''
+      'other': '0\u00A0\u0442\u0440\u0438\u043B.'
     },
     '10000000000000': {
-      'other': '00\u00A0\u0442\u0440\u0438\u043B\'.\''
+      'other': '00\u00A0\u0442\u0440\u0438\u043B.'
     },
     '100000000000000': {
-      'other': '000\u00A0\u0442\u0440\u0438\u043B\'.\''
+      'other': '000\u00A0\u0442\u0440\u0438\u043B.'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -18466,31 +18466,31 @@ goog.i18n.CompactNumberFormatSymbols_nl_AW = {
       'other': '000K'
     },
     '1000000': {
-      'other': '0\u00A0mln\'.\''
+      'other': '0\u00A0mln.'
     },
     '10000000': {
-      'other': '00\u00A0mln\'.\''
+      'other': '00\u00A0mln.'
     },
     '100000000': {
-      'other': '000\u00A0mln\'.\''
+      'other': '000\u00A0mln.'
     },
     '1000000000': {
-      'other': '0\u00A0mld\'.\''
+      'other': '0\u00A0mld.'
     },
     '10000000000': {
-      'other': '00\u00A0mld\'.\''
+      'other': '00\u00A0mld.'
     },
     '100000000000': {
-      'other': '000\u00A0mld\'.\''
+      'other': '000\u00A0mld.'
     },
     '1000000000000': {
-      'other': '0\u00A0bln\'.\''
+      'other': '0\u00A0bln.'
     },
     '10000000000000': {
-      'other': '00\u00A0bln\'.\''
+      'other': '00\u00A0bln.'
     },
     '100000000000000': {
-      'other': '000\u00A0bln\'.\''
+      'other': '000\u00A0bln.'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -18549,31 +18549,31 @@ goog.i18n.CompactNumberFormatSymbols_nl_BE = {
       'other': '000K'
     },
     '1000000': {
-      'other': '0\u00A0mln\'.\''
+      'other': '0\u00A0mln.'
     },
     '10000000': {
-      'other': '00\u00A0mln\'.\''
+      'other': '00\u00A0mln.'
     },
     '100000000': {
-      'other': '000\u00A0mln\'.\''
+      'other': '000\u00A0mln.'
     },
     '1000000000': {
-      'other': '0\u00A0mld\'.\''
+      'other': '0\u00A0mld.'
     },
     '10000000000': {
-      'other': '00\u00A0mld\'.\''
+      'other': '00\u00A0mld.'
     },
     '100000000000': {
-      'other': '000\u00A0mld\'.\''
+      'other': '000\u00A0mld.'
     },
     '1000000000000': {
-      'other': '0\u00A0bln\'.\''
+      'other': '0\u00A0bln.'
     },
     '10000000000000': {
-      'other': '00\u00A0bln\'.\''
+      'other': '00\u00A0bln.'
     },
     '100000000000000': {
-      'other': '000\u00A0bln\'.\''
+      'other': '000\u00A0bln.'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -18632,31 +18632,31 @@ goog.i18n.CompactNumberFormatSymbols_nl_SR = {
       'other': '000K'
     },
     '1000000': {
-      'other': '0\u00A0mln\'.\''
+      'other': '0\u00A0mln.'
     },
     '10000000': {
-      'other': '00\u00A0mln\'.\''
+      'other': '00\u00A0mln.'
     },
     '100000000': {
-      'other': '000\u00A0mln\'.\''
+      'other': '000\u00A0mln.'
     },
     '1000000000': {
-      'other': '0\u00A0mld\'.\''
+      'other': '0\u00A0mld.'
     },
     '10000000000': {
-      'other': '00\u00A0mld\'.\''
+      'other': '00\u00A0mld.'
     },
     '100000000000': {
-      'other': '000\u00A0mld\'.\''
+      'other': '000\u00A0mld.'
     },
     '1000000000000': {
-      'other': '0\u00A0bln\'.\''
+      'other': '0\u00A0bln.'
     },
     '10000000000000': {
-      'other': '00\u00A0bln\'.\''
+      'other': '00\u00A0bln.'
     },
     '100000000000000': {
-      'other': '000\u00A0bln\'.\''
+      'other': '000\u00A0bln.'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -20197,22 +20197,22 @@ goog.i18n.CompactNumberFormatSymbols_ro_MD = {
       'other': '000\u00A0K'
     },
     '1000000': {
-      'other': '0\u00A0mil\'.\''
+      'other': '0\u00A0mil.'
     },
     '10000000': {
-      'other': '00\u00A0mil\'.\''
+      'other': '00\u00A0mil.'
     },
     '100000000': {
-      'other': '000\u00A0mil\'.\''
+      'other': '000\u00A0mil.'
     },
     '1000000000': {
-      'other': '0\u00A0mld\'.\''
+      'other': '0\u00A0mld.'
     },
     '10000000000': {
-      'other': '00\u00A0mld\'.\''
+      'other': '00\u00A0mld.'
     },
     '100000000000': {
-      'other': '000\u00A0mld\'.\''
+      'other': '000\u00A0mld.'
     },
     '1000000000000': {
       'other': '0\u00A0T'
@@ -20323,13 +20323,13 @@ goog.i18n.CompactNumberFormatSymbols_rof_TZ =
 goog.i18n.CompactNumberFormatSymbols_ru_BY = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0\u00A0\u0442\u044B\u0441\'.\''
+      'other': '0\u00A0\u0442\u044B\u0441.'
     },
     '10000': {
-      'other': '00\u00A0\u0442\u044B\u0441\'.\''
+      'other': '00\u00A0\u0442\u044B\u0441.'
     },
     '100000': {
-      'other': '000\u00A0\u0442\u044B\u0441\'.\''
+      'other': '000\u00A0\u0442\u044B\u0441.'
     },
     '1000000': {
       'other': '0\u00A0\u043C\u043B\u043D'
@@ -20406,13 +20406,13 @@ goog.i18n.CompactNumberFormatSymbols_ru_BY = {
 goog.i18n.CompactNumberFormatSymbols_ru_KG = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0\u00A0\u0442\u044B\u0441\'.\''
+      'other': '0\u00A0\u0442\u044B\u0441.'
     },
     '10000': {
-      'other': '00\u00A0\u0442\u044B\u0441\'.\''
+      'other': '00\u00A0\u0442\u044B\u0441.'
     },
     '100000': {
-      'other': '000\u00A0\u0442\u044B\u0441\'.\''
+      'other': '000\u00A0\u0442\u044B\u0441.'
     },
     '1000000': {
       'other': '0\u00A0\u043C\u043B\u043D'
@@ -20489,13 +20489,13 @@ goog.i18n.CompactNumberFormatSymbols_ru_KG = {
 goog.i18n.CompactNumberFormatSymbols_ru_KZ = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0\u00A0\u0442\u044B\u0441\'.\''
+      'other': '0\u00A0\u0442\u044B\u0441.'
     },
     '10000': {
-      'other': '00\u00A0\u0442\u044B\u0441\'.\''
+      'other': '00\u00A0\u0442\u044B\u0441.'
     },
     '100000': {
-      'other': '000\u00A0\u0442\u044B\u0441\'.\''
+      'other': '000\u00A0\u0442\u044B\u0441.'
     },
     '1000000': {
       'other': '0\u00A0\u043C\u043B\u043D'
@@ -20572,13 +20572,13 @@ goog.i18n.CompactNumberFormatSymbols_ru_KZ = {
 goog.i18n.CompactNumberFormatSymbols_ru_MD = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0\u00A0\u0442\u044B\u0441\'.\''
+      'other': '0\u00A0\u0442\u044B\u0441.'
     },
     '10000': {
-      'other': '00\u00A0\u0442\u044B\u0441\'.\''
+      'other': '00\u00A0\u0442\u044B\u0441.'
     },
     '100000': {
-      'other': '000\u00A0\u0442\u044B\u0441\'.\''
+      'other': '000\u00A0\u0442\u044B\u0441.'
     },
     '1000000': {
       'other': '0\u00A0\u043C\u043B\u043D'
@@ -20655,13 +20655,13 @@ goog.i18n.CompactNumberFormatSymbols_ru_MD = {
 goog.i18n.CompactNumberFormatSymbols_ru_UA = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0\u00A0\u0442\u044B\u0441\'.\''
+      'other': '0\u00A0\u0442\u044B\u0441.'
     },
     '10000': {
-      'other': '00\u00A0\u0442\u044B\u0441\'.\''
+      'other': '00\u00A0\u0442\u044B\u0441.'
     },
     '100000': {
-      'other': '000\u00A0\u0442\u044B\u0441\'.\''
+      'other': '000\u00A0\u0442\u044B\u0441.'
     },
     '1000000': {
       'other': '0\u00A0\u043C\u043B\u043D'
