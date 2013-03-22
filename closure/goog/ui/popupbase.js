@@ -379,19 +379,6 @@ goog.ui.PopupBase.prototype.getLastHideTime = function() {
 
 
 /**
- * Returns the event handler for the popup. All event listeners belonging to
- * this handler are removed when the tooltip is hidden. Therefore,
- * the recommended usage of this handler is to listen on events in
- * {@link #onShow_}.
- * @return {goog.events.EventHandler} Event handler for this popup.
- * @protected
- */
-goog.ui.PopupBase.prototype.getHandler = function() {
-  return this.handler_;
-};
-
-
-/**
  * Helper to throw exception if the popup is showing.
  * @private
  */
