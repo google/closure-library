@@ -182,8 +182,9 @@ goog.ui.MenuButton.prototype.enterDocument = function() {
   if (this.menu_) {
     this.attachMenuEventListeners_(this.menu_, true);
   }
-  goog.a11y.aria.setState(this.getElementStrict(),
-      goog.a11y.aria.State.HASPOPUP, !!this.menu_);
+  var element = this.getElement();
+  goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
+  goog.a11y.aria.setState(element, goog.a11y.aria.State.HASPOPUP, 'true');
 };
 
 
@@ -413,10 +414,6 @@ goog.ui.MenuButton.prototype.setMenu = function(menu) {
         this.attachMenuEventListeners_(oldMenu, false);
       }
       delete this.menu_;
-    }
-    if (this.isInDocument()) {
-      goog.a11y.aria.setState(this.getElementStrict(),
-          goog.a11y.aria.State.HASPOPUP, !!menu);
     }
     if (menu) {
       this.menu_ = menu;

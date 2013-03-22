@@ -72,12 +72,12 @@ goog.ui.CustomButtonRenderer.prototype.createDom = function(control) {
   var button = /** @type {goog.ui.Button} */ (control);
   var classNames = this.getClassNames(button);
   var attributes = {
-    'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' ')
+    'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' '),
+    'title': button.getTooltip() || ''
   };
   var buttonElement = button.getDomHelper().createDom('div', attributes,
       this.createButton(button.getContent(), button.getDomHelper()));
-  this.setTooltip(
-      buttonElement, /** @type {!string}*/ (button.getTooltip()));
+
   this.setAriaStates(button, buttonElement);
 
   return buttonElement;

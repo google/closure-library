@@ -41,7 +41,7 @@ See the COPYING file for details.
      */
     function TestRenderer() {
       goog.ui.ButtonRenderer.call(this);
-    }
+    };
     goog.inherits(TestRenderer, goog.ui.ButtonRenderer);
     goog.addSingletonGetter(TestRenderer);
 
@@ -106,25 +106,6 @@ See the COPYING file for details.
 
       assertEquals('button\'s aria-pressed attribute must be true', 'true',
           goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
-    }
-
-    function testUseAriaPressedForSelected() {
-      button.setSupportedState(goog.ui.Component.State.SELECTED, true);
-      button.setSelected(true);
-      var element = buttonRenderer.createDom(button);
-
-      assertEquals('button\'s aria-pressed attribute must be true', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
-      assertEquals('button\'s aria-selected attribute must be empty', '',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
-    }
-
-    function testAriaDisabled() {
-      button.setEnabled(false);
-      var element = buttonRenderer.createDom(button);
-
-      assertEquals('button\'s aria-disabled attribute must be true', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.DISABLED));
     }
 
     function testDecorate() {
@@ -206,10 +187,6 @@ See the COPYING file for details.
           false);
       assertEquals('Control must no longer have pressed ARIA state',
           'false',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
-      buttonRenderer.updateAriaState(element, goog.ui.Component.State.SELECTED,
-          true);
-      assertEquals('Button must have pressed ARIA state', 'true',
           goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
     }
 
