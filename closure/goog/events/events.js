@@ -394,8 +394,7 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
  * object that has implemented {@link goog.events.EventTarget}. A listener can
  * only be added once to an object.
  *
- * @param {EventTarget|goog.events.EventTarget} src The node to listen to
- *     events on.
+ * @param {goog.events.ListenableType} src The target to listen to events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
  * @param {Function|Object} listener Callback method, or an object with a
  *     handleEvent function.
@@ -539,8 +538,8 @@ goog.events.unlistenByKey = function(key) {
 /**
  * Removes an event listener which was added with listenWithWrapper().
  *
- * @param {EventTarget|goog.events.EventTarget} src The target to stop
- *     listening to events on.
+ * @param {goog.events.ListenableType} src The target to stop listening to
+ *     events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
  * @param {Function|Object} listener The listener function to remove.
  * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
@@ -744,7 +743,7 @@ goog.events.getListeners_ = function(obj, type, capture) {
  * Gets the goog.events.Listener for the event or null if no such listener is
  * in use.
  *
- * @param {EventTarget|goog.events.EventTarget} src The node from which to get
+ * @param {goog.events.ListenableType} src The target from which to get
  *     listeners.
  * @param {?string} type The name of the event without the 'on' prefix.
  * @param {Function|Object} listener The listener function to get.
@@ -788,7 +787,7 @@ goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
  * specified signature. If either the type or capture parameters are
  * unspecified, the function will match on the remaining criteria.
  *
- * @param {EventTarget|goog.events.EventTarget} obj Target to get listeners for.
+ * @param {goog.events.ListenableType} obj Target to get listeners for.
  * @param {string=} opt_type Event type.
  * @param {boolean=} opt_capture Whether to check for capture or bubble-phase
  *     listeners.

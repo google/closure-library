@@ -97,9 +97,9 @@ goog.events.EventHandler.typeArray_ = [];
 
 
 /**
- * Listen to an event on a DOM node or EventTarget.  If the function is omitted
- * then the EventHandler's handleEvent method will be used.
- * @param {goog.events.EventTarget|EventTarget} src Event source.
+ * Listen to an event on a Listenable.  If the function is omitted then the
+ * EventHandler's handleEvent method will be used.
+ * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for or array of
  *     event types.
  * @param {Function|Object=} opt_fn Optional callback function to be used as the
@@ -131,11 +131,11 @@ goog.events.EventHandler.prototype.listen = function(src, type, opt_fn,
 
 
 /**
- * Listen to an event on a DOM node or EventTarget.  If the function is omitted
- * then the EventHandler's handleEvent method will be used. After the event has
- * fired the event listener is removed from the target. If an array of event
- * types is provided, each event type will be listened to once.
- * @param {goog.events.EventTarget|EventTarget} src Event source.
+ * Listen to an event on a Listenable.  If the function is omitted, then the
+ * EventHandler's handleEvent method will be used. After the event has fired the
+ * event listener is removed from the target. If an array of event types is
+ * provided, each event type will be listened to once.
+ * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for or array of
  *     event types.
  * @param {Function|Object=} opt_fn Optional callback function to be used as the
@@ -197,7 +197,7 @@ goog.events.EventHandler.prototype.getListenerCount = function() {
 
 /**
  * Unlistens on an event.
- * @param {goog.events.EventTarget|EventTarget} src Event source.
+ * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for.
  * @param {Function|Object=} opt_fn Optional callback function to be used as the
  *    listener or an object with handleEvent function.
