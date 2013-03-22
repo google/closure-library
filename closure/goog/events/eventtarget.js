@@ -321,8 +321,7 @@ goog.events.EventTarget.prototype.listenInternal_ = function(
     return listenerObj;
   }
 
-  listenerObj = new goog.events.Listener();
-  listenerObj.init(
+  listenerObj = new goog.events.Listener(
       listener, null, this, type, !!opt_useCapture, opt_listenerScope);
   listenerObj.callOnce = callOnce;
   listenerArray.push(listenerObj);
