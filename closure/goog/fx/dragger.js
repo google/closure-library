@@ -524,13 +524,6 @@ goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
   } else {
     this.dispatchEvent(goog.fx.Dragger.EventType.EARLY_CANCEL);
   }
-
-  // Call preventDefault to prevent mouseup from being raised if this is a
-  // touchend event.
-  if (e.type == goog.events.EventType.TOUCHEND ||
-      e.type == goog.events.EventType.TOUCHCANCEL) {
-    e.preventDefault();
-  }
 };
 
 
