@@ -59,7 +59,7 @@ function testResultCancelResolution() {
   assertEquals(1, cancelCallback.getCallCount());
   var call = cancelCallback.popLastCall();
   assertTrue(call.getArgument(0) instanceof
-             goog.async.Deferred.CancelledError);
+             goog.async.Deferred.CanceledError);
 }
 
 function testAddCallbackOnResolvedResult() {
