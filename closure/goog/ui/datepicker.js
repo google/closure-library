@@ -405,9 +405,10 @@ goog.ui.DatePicker.prototype.setExtraWeekAtEnd = function(b) {
  */
 goog.ui.DatePicker.prototype.setShowWeekNum = function(b) {
   this.showWeekNum_ = b;
-  // The navigation row may rely on the number of visible columns,
-  // so we update it when adding/removing the weeknum column.
+  // The navigation and footer rows may rely on the number of visible columns,
+  // so we update them when adding/removing the weeknum column.
   this.updateNavigationRow_();
+  this.updateFooterRow_();
   this.updateCalendarGrid_();
 };
 
@@ -682,7 +683,7 @@ goog.ui.DatePicker.prototype.updateFooterRow_ = function() {
 
   // Populate the footer row with buttons for Today and None.
   var cell = this.dom_.createElement('td');
-  cell.colSpan = 2;
+  cell.colSpan = this.showWeekNum_ ? 2 : 3;
   cell.className = goog.getCssName(this.getBaseCssClass(), 'today-cont');
 
   /** @desc Label for button that selects the current date. */
@@ -692,7 +693,7 @@ goog.ui.DatePicker.prototype.updateFooterRow_ = function() {
   row.appendChild(cell);
 
   cell = this.dom_.createElement('td');
-  cell.colSpan = 4;
+  cell.colSpan = this.showWeekNum_ ? 4 : 3;
   row.appendChild(cell);
 
   cell = this.dom_.createElement('td');
