@@ -345,17 +345,17 @@ function testGetClientPositionOfOffscreenElement() {
       window.scroll(1, 1);
       var pos = goog.style.getClientPosition(div);
       assertEquals(1999, pos.x);
-      assertEquals(1999, pos.y);
+      assertRoughlyEquals(1999, pos.y, 0.5);
 
       window.scroll(2, 2);
       pos = goog.style.getClientPosition(div);
       assertEquals(1998, pos.x);
-      assertEquals(1998, pos.y);
+      assertRoughlyEquals(1998, pos.y, 0.5);
 
       window.scroll(100, 100);
       pos = goog.style.getClientPosition(div);
       assertEquals(1900, pos.x);
-      assertEquals(1900, pos.y);
+      assertRoughlyEquals(1900, pos.y, 0.5);
     }
   }
   finally {
@@ -426,8 +426,8 @@ function testGetPageOffsetNestedElements() {
   div.appendChild(innerDiv);
   document.body.appendChild(div);
   var pos = goog.style.getPageOffset(innerDiv);
-  assertEquals(140, pos.x);
-  assertEquals(240, pos.y);
+  assertRoughlyEquals(140, pos.x, 0.1);
+  assertRoughlyEquals(240, pos.y, 0.1);
 }
 
 function testGetPageOffsetWithBodyPadding() {
@@ -445,8 +445,8 @@ function testGetPageOffsetWithBodyPadding() {
     div.style.borderWidth = '3px';
     document.body.appendChild(div);
     var pos = goog.style.getPageOffset(div);
-    assertEquals(101, pos.x);
-    assertEquals(201, pos.y);
+    assertRoughlyEquals(101, pos.x, 0.1);
+    assertRoughlyEquals(201, pos.y, 0.1);
   }
   finally {
     document.body.removeChild(div);
@@ -477,8 +477,8 @@ function testGetPageOffsetWithDocumentElementPadding() {
       assertEquals(141, pos.x);
       assertEquals(241, pos.y);
     } else {
-      assertEquals(101, pos.x);
-      assertEquals(201, pos.y);
+      assertRoughlyEquals(101, pos.x, 0.1);
+      assertRoughlyEquals(201, pos.y, 0.1);
     }
   }
   finally {
@@ -508,7 +508,7 @@ function testGetPageOffsetElementOffscreen() {
       window.scroll(1, 1);
       pos = goog.style.getPageOffset(div);
       assertEquals(10000, pos.x);
-      assertEquals(20000, pos.y);
+      assertRoughlyEquals(20000, pos.y, 0.5);
 
       window.scroll(1000, 2000);
       pos = goog.style.getPageOffset(div);
@@ -575,10 +575,10 @@ function testGetPositionTolerantToNoDocumentElementBorder() {
       // Test all major positioning methods.
       var pos = goog.style.getClientPosition(div);
       assertEquals(100, pos.x);
-      assertEquals(200, pos.y);
+      assertRoughlyEquals(200, pos.y, .1);
       var offset = goog.style.getPageOffset(div);
       assertEquals(100, offset.x);
-      assertEquals(200, offset.y);
+      assertRoughlyEquals(200, offset.y, .1);
     } catch (e) {
       expectedFailures.handleException(e);
     }
@@ -730,7 +730,7 @@ function testGetSizeSvgElements() {
   }
 
   document.body.appendChild(svgEl);
-  el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  var el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
   el.setAttribute('x', 10);
   el.setAttribute('y', 10);
   el.setAttribute('width', 32);
@@ -739,7 +739,7 @@ function testGetSizeSvgElements() {
 
   svgEl.appendChild(el);
 
-  dims = goog.style.getSize(el);
+  var dims = goog.style.getSize(el);
   assertEquals(32, dims.width);
   assertRoughlyEquals(21, dims.height, 0.01);
 
@@ -872,7 +872,7 @@ function testPosWithAbsoluteAndScroll() {
   assertEquals(200, pos.x);
   // Don't bother with IE in quirks mode
   if (!goog.userAgent.IE || document.compatMode == 'CSS1Compat') {
-    assertEquals(300, pos.y);
+    assertRoughlyEquals(300, pos.y, .1);
   }
 }
 
@@ -880,7 +880,7 @@ function testPosWithAbsoluteAndWindowScroll() {
   window.scrollBy(0, 200);
   var el = $('abs-upper-left');
   var pos = goog.style.getPageOffset(el);
-  assertEquals('Top should be about 0', 0, pos.y);
+  assertRoughlyEquals('Top should be about 0', 0, pos.y, 0.1);
 }
 
 function testGetBorderBoxSize() {
@@ -1598,7 +1598,7 @@ function testTranslateRectForAnotherFrame() {
   rect = new goog.math.Rect(1, 2, 3, 4);
   goog.style.translateRectForAnotherFrame(rect, iframeDom, thisDom);
   assertEquals(1 + 100, rect.left);
-  assertEquals(2 + 150, rect.top);
+  assertRoughlyEquals(2 + 150, rect.top, .1);
   assertEquals(3, rect.width);
   assertEquals(4, rect.height);
 
@@ -1606,7 +1606,7 @@ function testTranslateRectForAnotherFrame() {
   rect = new goog.math.Rect(1, 2, 3, 4);
   goog.style.translateRectForAnotherFrame(rect, iframeDom, thisDom);
   assertEquals(1 + 100 - 11, rect.left);
-  assertEquals(2 + 150 - 13, rect.top);
+  assertRoughlyEquals(2 + 150 - 13, rect.top, .1);
   assertEquals(3, rect.width);
   assertEquals(4, rect.height);
 
@@ -1619,7 +1619,7 @@ function testTranslateRectForAnotherFrame() {
   rect = new goog.math.Rect(1, 2, 3, 4);
   goog.style.translateRectForAnotherFrame(rect, iframeDom, thisDom);
   assertEquals(1 + 100, rect.left);
-  assertEquals(2 + 350, rect.top);
+  assertRoughlyEquals(2 + 350, rect.top, .1);
   assertEquals(3, rect.width);
   assertEquals(4, rect.height);
 
@@ -1627,7 +1627,7 @@ function testTranslateRectForAnotherFrame() {
   rect = new goog.math.Rect(1, 2, 3, 4);
   goog.style.translateRectForAnotherFrame(rect, iframeDom, thisDom);
   assertEquals(1 + 100 - 11, rect.left);
-  assertEquals(2 + 350 - 13, rect.top);
+  assertRoughlyEquals(2 + 350 - 13, rect.top, .1);
   assertEquals(3, rect.width);
   assertEquals(4, rect.height);
 }
@@ -1671,7 +1671,7 @@ function testGetVisibleRectForElement() {
   assertEquals(winScroll.y + winSize.height, visible.bottom);
 
   // Move the container element to outside of the viewpoert.
-  goog.style.setPosition(container, 8, winScroll.y + winSize.height);
+  goog.style.setPosition(container, 8, winScroll.y + winSize.height * 2);
   visible = goog.style.getVisibleRectForElement(el);
   assertNull(visible);
 
@@ -2030,7 +2030,8 @@ function testGetsTranslation() {
   var expectedTranslation = new goog.math.Coordinate(20, 30);
 
   expectedFailures.run(function() {
-    assertObjectEquals(new goog.math.Coordinate(30, 40), position);
+    assertEquals(30, position.x);
+    assertRoughlyEquals(40, position.y, .1);
     assertObjectEquals(expectedTranslation, translation);
   });
 }
