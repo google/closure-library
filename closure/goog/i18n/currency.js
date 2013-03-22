@@ -33,6 +33,8 @@
 
 
 goog.provide('goog.i18n.currency');
+goog.provide('goog.i18n.currency.CurrencyInfo');
+goog.provide('goog.i18n.currency.CurrencyInfoTier2');
 
 
 /**
