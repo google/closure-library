@@ -613,6 +613,7 @@ goog.ui.ac.InputHandler.prototype.disposeInternal = function() {
   delete this.eh_;
   this.activateHandler_.dispose();
   this.keyHandler_.dispose();
+  goog.dispose(this.timer_);
 };
 
 
