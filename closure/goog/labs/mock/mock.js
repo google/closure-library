@@ -220,7 +220,6 @@ goog.labs.mock.MockManager_ = function() {
    * Proxies the methods for the mocked object or class to execute the stubs.
    * @type {!Object}
    * @protected
-   * TODO(user): make instanceof work.
    */
   this.mockedItem = {};
 
@@ -430,6 +429,13 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   } else {
     obj = objOrClass;
   }
+
+  // Put the object being mocked in the prototype chain of the mock so that
+  // it has all the correct properties and instanceof works.
+  /** @constructor */
+  var mockedItemCtor = function() {};
+  mockedItemCtor.prototype = obj;
+  this.mockedItem = new mockedItemCtor();
 
   var enumerableProperties = goog.object.getKeys(obj);
   // The non enumerable properties are added due to the fact that IE8 does not

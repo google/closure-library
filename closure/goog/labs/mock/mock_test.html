@@ -11,6 +11,8 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
 
+goog.require('goog.events.Event');
+goog.require('goog.events.EventTarget');
 goog.require('goog.labs.mock');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
@@ -26,6 +28,8 @@ goog.require('goog.labs.testing.LessThanMatcher');
 var ParentClass = function() {};
 ParentClass.prototype.method1 = function() {};
 ParentClass.prototype.x = 1;
+ParentClass.prototype.val = 0;
+ParentClass.prototype.incrementVal = function() { this.val++; };
 
 var ChildClass = function() {};
 goog.inherits(ChildClass, ParentClass);
@@ -38,8 +42,10 @@ function testParentClass() {
   assertNotUndefined(parentMock.method1);
   assertUndefined(parentMock.method1());
   assertUndefined(parentMock.method2);
-  assertUndefined(parentMock.x);
+  assertNotUndefined(parentMock.x);
   assertUndefined(parentMock.y);
+  assertTrue('Mock should be an instance of the mocked class.',
+      parentMock instanceof ParentClass);
 }
 
 function testChildClass() {
@@ -49,8 +55,10 @@ function testChildClass() {
   assertUndefined(childMock.method1());
   assertNotUndefined(childMock.method2);
   assertUndefined(childMock.method2());
-  assertUndefined(childMock.x);
-  assertUndefined(childMock.y);
+  assertNotUndefined(childMock.x);
+  assertNotUndefined(childMock.y);
+  assertTrue('Mock should be an instance of the mocked class.',
+      childMock instanceof ChildClass);
 }
 
 function testParentClassInstance() {
@@ -59,8 +67,10 @@ function testParentClassInstance() {
   assertNotUndefined(parentMock.method1);
   assertUndefined(parentMock.method1());
   assertUndefined(parentMock.method2);
-  assertUndefined(parentMock.x);
+  assertNotUndefined(parentMock.x);
   assertUndefined(parentMock.y);
+  assertTrue('Mock should be an instance of the mocked class.',
+      parentMock instanceof ParentClass);
 }
 
 function testChildClassInstance() {
@@ -70,8 +80,10 @@ function testChildClassInstance() {
   assertUndefined(childMock.method1());
   assertNotUndefined(childMock.method2);
   assertUndefined(childMock.method2());
-  assertUndefined(childMock.x);
-  assertUndefined(childMock.y);
+  assertNotUndefined(childMock.x);
+  assertNotUndefined(childMock.y);
+  assertTrue('Mock should be an instance of the mocked class.',
+      childMock instanceof ParentClass);
 }
 
 function testNonEnumerableProperties() {
@@ -147,6 +159,41 @@ function testSpying() {
   goog.labs.mock.verify(spyObj).method1(1);
   assertEquals(20, spyObj.method2(4));
   goog.labs.mock.verify(spyObj).method2(4);
+}
+
+function testSpyParentClassInstance() {
+  var parent = new ParentClass();
+  var parentMock = goog.labs.mock.spy(parent);
+
+  assertNotUndefined(parentMock.method1);
+  assertUndefined(parentMock.method1());
+  assertUndefined(parentMock.method2);
+  assertNotUndefined(parentMock.x);
+  assertUndefined(parentMock.y);
+  assertTrue('Mock should be an instance of the mocked class.',
+      parentMock instanceof ParentClass);
+  var incrementedOrigVal = parent.val + 1;
+  parentMock.incrementVal();
+  assertEquals('Changes in the spied object should reflect in the spy.',
+      incrementedOrigVal, parentMock.val);
+}
+
+function testSpyChildClassInstance() {
+  var child = new ChildClass();
+  var childMock = goog.labs.mock.spy(child);
+
+  assertNotUndefined(childMock.method1);
+  assertUndefined(childMock.method1());
+  assertNotUndefined(childMock.method2);
+  assertUndefined(childMock.method2());
+  assertNotUndefined(childMock.x);
+  assertNotUndefined(childMock.y);
+  assertTrue('Mock should be an instance of the mocked class.',
+      childMock instanceof ParentClass);
+  var incrementedOrigVal = child.val + 1;
+  childMock.incrementVal();
+  assertEquals('Changes in the spied object should reflect in the spy.',
+      incrementedOrigVal, childMock.val);
 }
 
 function testVerifyForObjects() {
