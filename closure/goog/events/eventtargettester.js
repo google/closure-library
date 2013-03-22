@@ -65,14 +65,12 @@ goog.require('goog.testing.recordFunction');
  *     Whether we should check return value from
  *     unlisten call. If unlisten does not return a value, this should
  *     be set to false.
- * @param {boolean} objectListenerSupported Whether listener of type
- *     Object is supported.
  */
 goog.events.eventTargetTester.setUp = function(
     listenFn, unlistenFn, unlistenByKeyFn, listenOnceFn,
     dispatchEventFn, removeAllFn,
     getListenersFn, getListenerFn, hasListenerFn,
-    listenKeyType, unlistenFnReturnType, objectListenerSupported) {
+    listenKeyType, unlistenFnReturnType) {
   listen = listenFn;
   unlisten = unlistenFn;
   unlistenByKey = unlistenByKeyFn;
@@ -84,7 +82,6 @@ goog.events.eventTargetTester.setUp = function(
   hasListener = hasListenerFn;
   keyType = listenKeyType;
   unlistenReturnType = unlistenFnReturnType;
-  objectTypeListenerSupported = objectListenerSupported;
 
   listeners = [];
   for (var i = 0; i < goog.events.eventTargetTester.MAX_; i++) {
@@ -182,7 +179,7 @@ var EventType = {
 
 var listen, unlisten, unlistenByKey, listenOnce, dispatchEvent;
 var removeAll, getListeners, getListener, hasListener;
-var keyType, unlistenReturnType, objectTypeListenerSupported;
+var keyType, unlistenReturnType;
 var eventTargets, listeners;
 
 
@@ -676,10 +673,6 @@ function testStopPropagationAtCapture() {
 
 
 function testHandleEvent() {
-  if (!objectTypeListenerSupported) {
-    return;
-  }
-
   var obj = {};
   obj.handleEvent = goog.testing.recordFunction();
 
