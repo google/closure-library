@@ -475,8 +475,10 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
   var rowDiv = index >= 0 && index < this.rowDivs_.length ?
       this.rowDivs_[index] : undefined;
 
-  var evtObj = {type: goog.ui.ac.AutoComplete.EventType.ROW_HILITE,
-    rowNode: rowDiv};
+  var evtObj = /** @lends {goog.events.Event.prototype} */ ({
+    type: goog.ui.ac.AutoComplete.EventType.ROW_HILITE,
+    rowNode: rowDiv
+  });
   if (this.dispatchEvent(evtObj)) {
     this.hiliteNone();
     this.hilitedRow_ = index;
