@@ -344,6 +344,8 @@ goog.addDependency('labs/classdef/classdef.js', ['goog.labs.classdef'], []);
 goog.addDependency('labs/mock/mock.js', ['goog.labs.mock'], ['goog.array', 'goog.debug', 'goog.debug.Error', 'goog.functions', 'goog.json']);
 goog.addDependency('labs/net/image.js', ['goog.labs.net.image'], ['goog.events.EventHandler', 'goog.events.EventType', 'goog.net.EventType', 'goog.result.SimpleResult', 'goog.userAgent']);
 goog.addDependency('labs/net/image_test.js', ['goog.labs.net.imageTest'], ['goog.events', 'goog.labs.net.image', 'goog.result', 'goog.result.Result', 'goog.string', 'goog.testing.AsyncTestCase', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
+goog.addDependency('labs/net/webchannel.js', ['goog.net.WebChannel', 'goog.net.WebChannel.ErrorEvent', 'goog.net.WebChannel.ErrorStatus', 'goog.net.WebChannel.MessageData', 'goog.net.WebChannel.MessageEvent', 'goog.net.WebChannel.Options'], ['goog.events.Event', 'goog.events.EventTarget']);
+goog.addDependency('labs/net/webchanneltransport.js', ['goog.net.WebChannelTransport'], ['goog.net.WebChannel', 'goog.net.WebChannel.Options']);
 goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.debug.Error', 'goog.json', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.result', 'goog.result.SimpleResult', 'goog.string', 'goog.uri.utils']);
 goog.addDependency('labs/object/object.js', ['goog.labs.object'], []);
 goog.addDependency('labs/observe/notice.js', ['goog.labs.observe.Notice'], []);
