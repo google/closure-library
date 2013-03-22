@@ -610,6 +610,8 @@ goog.async.Deferred.canceled = function() {
 /**
  * Creates a Deferred that has already been canceled. Aliases the preferred
  * spelling {@see goog.async.Deferred.canceled}.
+ * @deprecated Renamed to goog.async.Deferred.canceled. Alias to be removed
+ *     after 2013-04-03.
  */
 goog.async.Deferred.cancelled = goog.async.Deferred.canceled;
 
@@ -717,5 +719,7 @@ goog.async.Deferred.CanceledError.prototype.name = 'CanceledError';
  * preferred spelling {@see goog.async.Deferred.CanceledError}.
  * @constructor
  * @extends {goog.debug.Error}
+ * @deprecated Renamed to goog.async.Deferred.CanceledError. Alias to be removed
+ *     after 2013-04-03.
  */
 goog.async.Deferred.CancelledError = goog.async.Deferred.CanceledError;
