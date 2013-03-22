@@ -182,6 +182,15 @@ goog.testing.TestCase.protectedClearTimeout_ = goog.global.clearTimeout;
 
 
 /**
+ * Save a reference to {@code window.Date}, so any code that overrides
+ * the default behavior doesn't affect our runner.
+ * @type {function(new: Date)}
+ * @private
+ */
+goog.testing.TestCase.protectedDate_ = Date;
+
+
+/**
  * Saved string referencing goog.global.setTimeout's string serialization.  IE
  * sometimes fails to uphold equality for setTimeout, but the string version
  * stays the same.
@@ -880,7 +889,9 @@ goog.testing.TestCase.prototype.clearTimeout = function(id) {
  * @protected
  */
 goog.testing.TestCase.prototype.now = function() {
-  return new Date().getTime();
+  // Cannot use "new goog.testing.TestCase.protectedDate_()" due to b/8323223.
+  var protectedDate = goog.testing.TestCase.protectedDate_;
+  return new protectedDate().getTime();
 };
 
 
@@ -890,7 +901,9 @@ goog.testing.TestCase.prototype.now = function() {
  * @private
  */
 goog.testing.TestCase.prototype.getTimeStamp_ = function() {
-  var d = new Date;
+  // Cannot use "new goog.testing.TestCase.protectedDate_()" due to b/8323223.
+  var protectedDate = goog.testing.TestCase.protectedDate_;
+  var d = new protectedDate();
 
   // Ensure millis are always 3-digits
   var millis = '00' + d.getMilliseconds();
