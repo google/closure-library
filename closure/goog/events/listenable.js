@@ -49,9 +49,9 @@ goog.events.Listenable.USE_LISTENABLE_INTERFACE = false;
  *
  * @type {string}
  * @const
- * @private
  */
-goog.events.Listenable.IMPLEMENTED_BY_PROP_ = '__closure_listenable';
+goog.events.Listenable.IMPLEMENTED_BY_PROP =
+    'closure_listenable_' + ((Math.random() * 1e6) | 0);
 
 
 /**
@@ -62,7 +62,7 @@ goog.events.Listenable.IMPLEMENTED_BY_PROP_ = '__closure_listenable';
  *     class must have already implemented the interface.
  */
 goog.events.Listenable.addImplementation = function(cls) {
-  cls.prototype[goog.events.Listenable.IMPLEMENTED_BY_PROP_] = true;
+  cls.prototype[goog.events.Listenable.IMPLEMENTED_BY_PROP] = true;
 };
 
 
@@ -73,7 +73,7 @@ goog.events.Listenable.addImplementation = function(cls) {
  *     addImplementation.
  */
 goog.events.Listenable.isImplementedBy = function(obj) {
-  return !!(obj && obj[goog.events.Listenable.IMPLEMENTED_BY_PROP_]);
+  return !!(obj && obj[goog.events.Listenable.IMPLEMENTED_BY_PROP]);
 };
 
 
