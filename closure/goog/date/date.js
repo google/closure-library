@@ -399,12 +399,6 @@ goog.date.setDateFromIso8601Week_ = function(d, week, dayOfWeek) {
  * @private
  */
 goog.date.setIso8601TimeOnly_ = function(d, formatted) {
-  // We assume time is set to 00:00:00 prior to this method.
-  goog.asserts.assert(0 == d.getHours());
-  goog.asserts.assert(0 == d.getMinutes());
-  goog.asserts.assert(0 == d.getSeconds());
-  goog.asserts.assert(0 == d.getMilliseconds());
-
   // first strip timezone info from the end
   var parts = formatted.match(goog.date.splitTimezoneStringRegex_);
 
@@ -424,15 +418,15 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
     return false;
   }
 
-  // Compute milliseconds due to this time.
-  // Note, we cannot use the set* methods on the date object, as they
-  // will interpret TZ transitions on the current day (potentially incorporating
-  // the proposed offset).
-  var millis = (parts[1] || 0) * 3600000 + // Hours.
-      (parts[2] || 0) * 60000 +            // Minutes.
-      (parts[3] || 0) * 1000 +             // Seconds.
-      Math.round((parts[4] || 0) * 1000);  // Milliseconds.
-  d.setTime(d.getTime() + millis + offset * 60000);
+  d.setHours(Number(parts[1]));
+  d.setMinutes(Number(parts[2]) || 0);
+  d.setSeconds(Number(parts[3]) || 0);
+  d.setMilliseconds(parts[4] ? parts[4] * 1000 : 0);
+
+  if (offset != 0) {
+    // adjust the date and time according to the specified timezone
+    d.setTime(d.getTime() + offset * 60000);
+  }
 
   return true;
 };

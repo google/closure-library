@@ -596,15 +596,37 @@ function test_setIso8601TimeOnly_() {
   assertEquals('Got 18 hours from ' + iso, 18, d.getHours());
   assertEquals('Got 46 minutes from ' + iso, 46, d.getMinutes());
   assertEquals('Got 39 seconds from ' + iso, 39, d.getSeconds());
-  assertEquals('Got 994 milliseconds from ' + iso, 994, d.getMilliseconds());
 
-  d = new goog.date.DateTime(0, 0);
-  iso = '184639.9942';
-  assertTrue('parsed ' + iso, goog.date.setIso8601TimeOnly_(d, iso));
-  assertEquals('Got 18 hours from ' + iso, 18, d.getHours());
-  assertEquals('Got 46 minutes from ' + iso, 46, d.getMinutes());
-  assertEquals('Got 39 seconds from ' + iso, 39, d.getSeconds());
-  assertEquals('Got 994 milliseconds from ' + iso, 994, d.getMilliseconds());
+  // Fails in Safari4 Winxp, temporarily disabled
+  expectedFailures.expectFailureFor(isWinxpSafari4());
+  try {
+    if (goog.userAgent.WEBKIT && goog.userAgent.MAC) {
+      // Both Safari 3.1 and WebKit (on Mac) return floating-point values.
+      assertRoughlyEquals('Got roughly 994.2 milliseconds from ' + iso, 994.2,
+          d.getMilliseconds(), 0.01);
+    } else {
+      // Other browsers, including WebKit on Windows, return integers.
+      assertEquals('Got 994 milliseconds from ' + iso, 994, d.getMilliseconds());
+    }
+
+    d = new goog.date.DateTime(0, 0);
+    iso = '184639.9942';
+    assertTrue('parsed ' + iso, goog.date.setIso8601TimeOnly_(d, iso));
+    assertEquals('Got 18 hours from ' + iso, 18, d.getHours());
+    assertEquals('Got 46 minutes from ' + iso, 46, d.getMinutes());
+    assertEquals('Got 39 seconds from ' + iso, 39, d.getSeconds());
+    if (goog.userAgent.WEBKIT && goog.userAgent.MAC) {
+      // Both Safari 3.1 and WebKit (on Mac) return floating-point values.
+      assertRoughlyEquals('Got roughly 994.2 milliseconds from ' + iso, 994.2,
+          d.getMilliseconds(), 0.01);
+    } else {
+      // Other browsers, including WebKit on Windows, return integers.
+      assertEquals('Got 994 milliseconds from ' + iso, 994, d.getMilliseconds());
+    }
+  } catch (e) {
+      expectedFailures.handleException(e);
+  }
+
 
   // 1995-02-04 24:00 = 1995-02-05 00:00
   // timezone tests
@@ -623,14 +645,6 @@ function test_setIso8601TimeOnly_() {
   iso = '16:46:39-07:00';
   assertTrue('parsed ' + iso, goog.date.setIso8601TimeOnly_(d, iso));
   assertEquals('Got a 23-hour GMT offset from ' + iso, 23, d.getUTCHours());
-
-  // Check a date on the TZ transition for PST8PDT.
-  // Note, this test is only effective when the testing machine has a timezone
-  // transition on this day (e.g. PST8PDT).
-  d = new goog.date.DateTime(2013, 2, 10);
-  iso = '20:00:00-07:00';
-  assertTrue('parsed ' + iso, goog.date.setIso8601TimeOnly_(d, iso));
-  assertEquals('Got a 3-hour GMT offset from ' + iso, 3, d.getUTCHours());
 }
 
 
