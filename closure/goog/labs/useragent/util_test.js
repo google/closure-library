@@ -18,6 +18,7 @@
 
 goog.provide('goog.labs.userAgent.utilTest');
 
+goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.jsunit');
 
@@ -30,9 +31,7 @@ goog.setTestOnly('goog.labs.userAgent.utilTest');
 function testExtractVersionTuples() {
   // Old Android
   var tuples = goog.labs.userAgent.util.extractVersionTuples(
-      'Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; ' +
-      'HTC Vision Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) ' +
-      'Version/4.0 Mobile Safari/533.1');
+      goog.labs.userAgent.testAgents.ANDROID_BROWSER);
 
   assertEquals(4, tuples.length);
   assertSameElements(
@@ -44,7 +43,7 @@ function testExtractVersionTuples() {
 
   // IE 9
   tuples = goog.labs.userAgent.util.extractVersionTuples(
-      'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)');
+      goog.labs.userAgent.testAgents.IE_9);
   assertEquals(1, tuples.length);
   assertSameElements(
       ['Mozilla', '5.0',
@@ -52,8 +51,7 @@ function testExtractVersionTuples() {
 
   // Opera
   tuples = goog.labs.userAgent.util.extractVersionTuples(
-      'Opera/9.80 (S60; SymbOS; Opera Mobi/447; ' +
-      'U; en) Presto/2.4.18 Version/10.00');
+      goog.labs.userAgent.testAgents.OPERA_10);
   assertEquals(3, tuples.length);
   assertSameElements(['Opera', '9.80', 'S60; SymbOS; Opera Mobi/447; U; en'],
                      tuples[0]);
