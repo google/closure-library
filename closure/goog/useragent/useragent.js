@@ -57,8 +57,8 @@ goog.userAgent.ASSUME_OPERA = false;
 
 
 /**
- * @define {boolean} Whether the {@code goog.userAgent.isVersionOrHigher}
- *     function will return true for any version.
+ * @define {boolean} Whether the {@code goog.userAgent.isVersion} function will
+ *     return true for any version.
  */
 goog.userAgent.ASSUME_ANY_VERSION = false;
 
@@ -511,13 +511,13 @@ goog.userAgent.compare = function(v1, v2) {
 
 
 /**
- * Cache for {@link goog.userAgent.isVersionOrHigher}. Calls to compareVersions
- * are surprisingly expensive and as a browsers version number is unlikely to
- * change during a session we cache the results.
- * @const
+ * Cache for {@link goog.userAgent.isVersion}. Calls to compareVersions are
+ * surprisingly expensive and as a browsers version number is unlikely to change
+ * during a session we cache the results.
+ * @type {Object}
  * @private
  */
-goog.userAgent.isVersionOrHigherCache_ = {};
+goog.userAgent.isVersionCache_ = {};
 
 
 /**
@@ -534,22 +534,12 @@ goog.userAgent.isVersionOrHigherCache_ = {};
  * @return {boolean} Whether the user agent version is higher or the same as
  *     the given version.
  */
-goog.userAgent.isVersionOrHigher = function(version) {
+goog.userAgent.isVersion = function(version) {
   return goog.userAgent.ASSUME_ANY_VERSION ||
-      goog.userAgent.isVersionOrHigherCache_[version] ||
-      (goog.userAgent.isVersionOrHigherCache_[version] =
+      goog.userAgent.isVersionCache_[version] ||
+      (goog.userAgent.isVersionCache_[version] =
           goog.string.compareVersions(goog.userAgent.VERSION, version) >= 0);
 };
-
-
-/**
- * Deprecated alias to {@code goog.userAgent.isVersionOrHigher}.
- * @param {string|number} version The version to check.
- * @return {boolean} Whether the user agent version is higher or the same as
- *     the given version.
- * @deprecated Use goog.userAgent.isVersionOrHigher().
- */
-goog.userAgent.isVersion = goog.userAgent.isVersionOrHigher;
 
 
 /**
