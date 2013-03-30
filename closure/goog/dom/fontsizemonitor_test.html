@@ -205,7 +205,7 @@ function testFirefox2WorkAroundFirefox3() {
   try {
     // 1.9 should clear iframes
     pr.set(goog.userAgent, 'VERSION', '1.9');
-    goog.userAgent.isVersionCache_ = {};
+    goog.userAgent.isVersionOrHigherCache_ = {};
 
     var frameCount = window.frames.length;
     var iframeElementCount = document.getElementsByTagName('iframe').length;
@@ -239,7 +239,7 @@ function testFirefox2WorkAroundFirefox2() {
   try {
     // 1.8 should NOT clear iframes
     pr.set(goog.userAgent, 'VERSION', '1.8');
-    goog.userAgent.isVersionCache_ = {};
+    goog.userAgent.isVersionOrHigherCache_ = {};
 
     var frameCount = window.frames.length;
     var iframeElementCount = document.getElementsByTagName('iframe').length;
