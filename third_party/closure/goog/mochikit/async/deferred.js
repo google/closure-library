@@ -27,6 +27,7 @@ goog.provide('goog.async.Deferred.CancelledError');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
+goog.require('goog.functions');
 
 
 
@@ -162,6 +163,13 @@ goog.async.Deferred.prototype.parent_;
  * @private
  */
 goog.async.Deferred.prototype.branches_ = 0;
+
+
+/**
+ * @define {boolean} Whether unhandled errors should always get rethrown to the
+ * global scope. Defaults to the value of goog.DEBUG.
+ */
+goog.async.Deferred.STRICT_ERRORS = false;
 
 
 /**
@@ -555,6 +563,10 @@ goog.async.Deferred.prototype.fire_ = function() {
         goog.bind(this.continue_, this, true /* isSuccess */),
         goog.bind(this.continue_, this, false /* isSuccess */));
     res.blocking_ = true;
+  } else if (goog.async.Deferred.STRICT_ERRORS && this.isError(res) &&
+      !(res instanceof goog.async.Deferred.CanceledError)) {
+    this.hadError_ = true;
+    unhandledException = true;
   }
 
   if (unhandledException) {
@@ -562,9 +574,8 @@ goog.async.Deferred.prototype.fire_ = function() {
     // the error will be seen by global handlers and the user. The throw will
     // be canceled if another errback is appended before the timeout executes.
     // The error's original stack trace is preserved where available.
-    this.unhandledExceptionTimeoutId_ = goog.global.setTimeout(function() {
-      throw res;
-    }, 0);
+    this.unhandledExceptionTimeoutId_ = goog.global.setTimeout(
+        goog.functions.fail(res), 0);
   }
 };
 

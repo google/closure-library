@@ -13,6 +13,7 @@ goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.string');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 </script>
@@ -21,11 +22,12 @@ goog.require('goog.testing.jsunit');
 <script>
 
 var Deferred = goog.async.Deferred;
-var AlreadyCalledError = goog.async.Deferred.AlreadyCalledError;
-var CanceledError = goog.async.Deferred.CanceledError;
+var AlreadyCalledError = Deferred.AlreadyCalledError;
+var CanceledError = Deferred.CanceledError;
 
 // Unhandled errors may be sent to the browser on a timeout.
 var mockClock = new goog.testing.MockClock();
+var stubs = new goog.testing.PropertyReplacer();
 
 function setUp() {
   mockClock.install();
@@ -35,6 +37,7 @@ function tearDown() {
   // Advance the mockClock to fire any unhandled exception timeouts.
   mockClock.tick();
   mockClock.uninstall();
+  stubs.reset();
 }
 
 function assertEqualsCallback(msg, expected) {
@@ -146,34 +149,31 @@ function testDeferredDependencies() {
 
 // Test double-calling, double-failing, etc.
 function testDoubleCalling() {
-  try {
+  var ex = assertThrows(function() {
     Deferred.succeed(1).callback(2);
     neverHappen();
-  } catch (ex) {
-    assertTrue('double call', ex instanceof AlreadyCalledError);
-  }
+  });
+  assertTrue('double call', ex instanceof AlreadyCalledError);
 }
 
 function testDoubleCalling2() {
-  try {
+  var ex = assertThrows(function() {
     Deferred.fail(1).errback(2);
     neverHappen();
-  } catch (ex) {
-    assertTrue('double-fail', ex instanceof AlreadyCalledError);
-  }
+  });
+  assertTrue('double-fail', ex instanceof AlreadyCalledError);
 }
 
 function testDoubleCalling3() {
-  try {
+  var ex = assertThrows(function() {
     var d = Deferred.succeed(1);
     d.cancel();
     d = d.callback(2);
     assertTrue('swallowed one callback, no canceler', true);
     d.callback(3);
     neverHappen();
-  } catch (ex) {
-    assertTrue('swallow cancel', ex instanceof AlreadyCalledError);
-  }
+  });
+  assertTrue('swallow cancel', ex instanceof AlreadyCalledError);
 }
 
 function testDoubleCalling4() {
@@ -182,48 +182,46 @@ function testDoubleCalling4() {
     count++;
   }
 
-  try {
+  var ex = assertThrows(function() {
     var d = new Deferred(canceled);
     d.cancel();
     d = d.callback(1);
-    neverHappen();
-  } catch (ex) {
-    assertTrue('non-swallowed cancel', ex instanceof AlreadyCalledError);
-  }
+  });
+
+  assertTrue('non-swallowed cancel', ex instanceof AlreadyCalledError);
   assertEquals(1, count);
 }
 
 // Test incorrect Deferred usage
 function testIncorrectUsage() {
   var d = new Deferred();
-  try {
+
+  var ex = assertThrows(function() {
     d.callback(new Deferred());
     neverHappen();
-  } catch (ex) {
-    assertTrue('deferred not allowed for callback', ex instanceof Error);
-  }
+  });
+  assertTrue('deferred not allowed for callback', ex instanceof Error);
 }
 
 function testIncorrectUsage2() {
   var d = new Deferred();
-  try {
+
+  var ex = assertThrows(function() {
     d.errback(new Deferred());
     neverHappen();
-  } catch (ex) {
-    assertTrue('deferred not allowed for errback', ex instanceof Error);
-  }
+  });
+  assertTrue('deferred not allowed for errback', ex instanceof Error);
 }
 
 function testIncorrectUsage3() {
   var d = new Deferred();
   (new Deferred()).addCallback(function() {return d;}).callback(1);
-  try {
+
+  var ex = assertThrows(function() {
     d.addCallback(function() {});
     neverHappen();
-  } catch (ex) {
-    assertTrue('chained deferred not allowed to be re-used',
-               ex instanceof Error);
-  }
+  });
+  assertTrue('chained deferred not allowed to be re-used', ex instanceof Error);
 }
 
 function testCallbackScope1() {
@@ -312,12 +310,11 @@ function testChainedDeferred2() {
   d1.callback();
   assertEquals('B2,A2', calls.join(','));
 
-  try {
+  var ex = assertThrows(function() {
     mockClock.tick();
     neverHappen();
-  } catch (ex) {
-    assertTrue('Should catch unhandled throw from d2.', ex.message == 'x');
-  }
+  });
+  assertTrue('Should catch unhandled throw from d2.', ex.message == 'x');
 }
 
 function testUndefinedResultAndCallbackSequence() {
@@ -359,37 +356,90 @@ function testUnhandledErrors() {
   var d = new Deferred();
   d.addCallback(throwStuff);
 
-  try {
+  var ex = assertThrows(function() {
     d.callback(123);
     mockClock.tick();
     neverHappen();
-  } catch (ex) {
-    assertEquals('Unhandled throws should hit the browser.', 123, ex);
-  }
+  });
+  assertEquals('Unhandled throws should hit the browser.', 123, ex);
 
-  try {
-    d.addErrback(catchStuff);
-    mockClock.tick();
-  } catch (ex) {
-    fail('Errbacks added after a failure should resume.');
-  }
+  assertNotThrows(
+      'Errbacks added after a failure should resume.',
+      function() {
+        d.addErrback(catchStuff);
+        mockClock.tick();
+      });
 
   d.addCallback(assertEqualsCallback('Should recover after throw.', 1));
   mockClock.tick();
+}
+
+function testStrictUnhandledErrors() {
+  stubs.replace(Deferred, 'STRICT_ERRORS', true);
+  var err = Error('never handled');
+
+  // The registered errback exists, but doesn't modify the error value.
+  var d = Deferred.succeed();
+  d.addCallback(function(res) { throw err; });
+  d.addErrback(function(unhandledErr) {});
+
+  var caught = assertThrows(
+      'The error should be rethrown at the next clock tick.',
+      function() { mockClock.tick(); });
+  assertEquals(err, caught);
+}
+
+function testStrictHandledErrors() {
+  stubs.replace(Deferred, 'STRICT_ERRORS', true);
+
+  // The registered errback returns a non-error value.
+  var d = Deferred.succeed();
+  d.addCallback(function(res) { throw Error('eventually handled'); });
+  d.addErrback(function(unhandledErr) { return true; });
+
+  assertNotThrows(
+      'The error was handled and should not be rethrown',
+      function() { mockClock.tick(); });
+  d.addCallback(function(res) { assertTrue(res); });
+}
+
+function testStrictBlockedErrors() {
+  stubs.replace(Deferred, 'STRICT_ERRORS', true);
+
+  var d1 = Deferred.fail(Error('blocked failure'));
+  var d2 = new Deferred();
+
+  d1.addBoth(function() { return d2; });
+  assertNotThrows(
+      'd1 should be blocked until d2 fires.',
+      function() { mockClock.tick(); });
+
+  d2.callback('unblocked');
+  d1.addCallback(assertEqualsCallback(
+      'd1 should receive the fired result from d2.', 'unblocked'));
+}
+
+function testStrictCanceledErrors() {
+  stubs.replace(Deferred, 'STRICT_ERRORS', true);
+
+  var d = Deferred.canceled();
+  assertNotThrows(
+      'CanceledErrors should not be rethrown to the global scope.',
+      function() { mockClock.tick(); });
 }
 
 function testSynchronousErrorCanceling() {
   var d = new Deferred();
   d.addCallback(throwStuff);
 
-  try {
-    d.callback(1);
-    d.addErrback(catchStuff);
-    mockClock.tick();
-  } catch (ex) {
-    fail('Adding an errback to the end of a failing Deferred should cancel ' +
-         'the unhandled error timeout.');
-  }
+  assertNotThrows(
+      'Adding an errback to the end of a failing Deferred should cancel the ' +
+      'unhandled error timeout.',
+      function() {
+        d.callback(1);
+        d.addErrback(catchStuff);
+        mockClock.tick();
+      });
 
   d.addCallback(assertEqualsCallback('Callback should fire', 1));
 }
@@ -752,7 +802,7 @@ function testCancelWithSomeCompletedBranches() {
   // Block the root on a new Deferred indefinitely.
   d.
       addCallback(function() { rootHadCallback = true; }).
-      addCallback(function() { return new goog.async.Deferred(); }).
+      addCallback(function() { return new Deferred(); }).
       addErrback(function() { rootHadErrback = true; });
   var branch2 = d.branch(true);
 
@@ -780,7 +830,7 @@ function testStaticCanceled() {
 
 function testWhenWithValues() {
   var called = false;
-  goog.async.Deferred.when(4, function(obj) {
+  Deferred.when(4, function(obj) {
     called = true;
     assertEquals(4, obj);
   });
@@ -790,8 +840,8 @@ function testWhenWithValues() {
 function testWhenWithDeferred() {
   var called = false;
 
-  var d = new goog.async.Deferred();
-  goog.async.Deferred.when(d, function(obj) {
+  var d = new Deferred();
+  Deferred.when(d, function(obj) {
     called = true;
     assertEquals(6, obj);
   });
@@ -803,8 +853,8 @@ function testWhenWithDeferred() {
 function testWhenDoesntAlterOriginalChain() {
   var calls = 0;
 
-  var d1 = new goog.async.Deferred();
-  var d2 = goog.async.Deferred.when(d1, function(obj) {
+  var d1 = new Deferred();
+  var d2 = Deferred.when(d1, function(obj) {
     calls++;
     return obj * 2;
   });

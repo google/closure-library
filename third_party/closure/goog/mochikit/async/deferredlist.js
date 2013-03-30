@@ -55,7 +55,7 @@ goog.require('goog.async.Deferred');
  *     error callback chain for input deferred objects. If the failing deferred
  *     has a registered callback after this <code>DeferredList</code>, it will
  *     be called with null instead of an <code>Error</code>.
- * @param {Function=} opt_canceller A function that will be called if the
+ * @param {Function=} opt_canceler A function that will be called if the
  *     deferred list is canceled.
  * @param {Object=} opt_defaultScope The default scope to call callbacks with.
  * @constructor
@@ -65,9 +65,9 @@ goog.async.DeferredList = function(list,
                                    opt_fireOnOneCallback,
                                    opt_fireOnOneErrback,
                                    opt_consumeErrors,
-                                   opt_canceller,
+                                   opt_canceler,
                                    opt_defaultScope) {
-  goog.async.Deferred.call(this, opt_canceller, opt_defaultScope);
+  goog.async.Deferred.call(this, opt_canceler, opt_defaultScope);
 
   /**
    * The list of Deferred objects to wait for.
