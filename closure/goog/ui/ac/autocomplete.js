@@ -256,11 +256,7 @@ goog.ui.ac.AutoComplete.prototype.handleEvent = function(e) {
         if (this.hiliteId_ == rowId) {
           rowValid = this.isRowEnabled_(rowId);
         } else {
-          // TODO(user): commenting out this line to see if it's what breaks tests
           rowValid = this.hiliteId(rowId);
-          
-          // rowValid = true;  // TODO(user) not really the right thing to do.
-          //assertEquals('rowId=' + rowId + ', hilite=' + this.hiliteId_, rowId, this.hiliteId_);  // TODO(user): will fail if we get here - just want the info
         }
         if (rowValid) {
           this.selectHilited();
@@ -288,10 +284,8 @@ goog.ui.ac.AutoComplete.prototype.handleEvent = function(e) {
 goog.ui.ac.AutoComplete.prototype.isRowEnabled_ = function(id) {
   var index = this.getIndexOfId(id);
   var row = this.rows_[index];
-  var rowDisabled = !!row && this.matcher_.isRowDisabled &&
-      this.matcher_.isRowDisabled(row);
-  // TODO(user): does also testing for index > -1 break tests?
-  return !rowDisabled;
+  return Boolean(row &&
+    !(this.matcher_.isRowDisabled && this.matcher_.isRowDisabled(row)));
 };
 
 
