@@ -368,9 +368,8 @@ Author: attila@google.com (Attila Bodis)
       var foo = goog.dom.getElement('foo');
       assertNotNull(foo);
       controlRenderer.setAriaRole(foo);
-      assertEquals('ControlRenderer must not set ARIA role', '',
+      assertEvaluatesToFalse('The role should be empty.',
           goog.a11y.aria.getRole(foo));
-
       var bar = goog.dom.getElement('bar');
       assertNotNull(bar);
       testRenderer.setAriaRole(bar);

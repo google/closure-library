@@ -471,7 +471,8 @@ See the COPYING file for details.
     renderer.maybeCreateElement_();
 
     assertNotNull(target);
-    assertEquals('', goog.a11y.aria.getRole(target));
+    assertEvaluatesToFalse('The role should be empty.',
+        goog.a11y.aria.getRole(target));
     assertEquals('',
         goog.a11y.aria.getState(target,
             goog.a11y.aria.State.AUTOCOMPLETE));
