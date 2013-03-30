@@ -19,8 +19,11 @@
 goog.provide('goog.ui.ModalPopup');
 
 goog.require('goog.Timer');
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.dom.iframe');
@@ -322,6 +325,7 @@ goog.ui.ModalPopup.prototype.enterDocument = function() {
   this.getHandler().listen(
       this.focusHandler_, goog.events.FocusHandler.EventType.FOCUSIN,
       this.onFocus_);
+  this.setA11YDetectBackground_(false);
 };
 
 
@@ -358,11 +362,36 @@ goog.ui.ModalPopup.prototype.setVisible = function(visible) {
   if (this.popupHideTransition_) this.popupHideTransition_.stop();
   if (this.bgHideTransition_) this.bgHideTransition_.stop();
 
+  if (this.isInDocument()) {
+    this.setA11YDetectBackground_(visible);
+  }
   if (visible) {
     this.show_();
   } else {
     this.hide_();
   }
+};
+
+
+/**
+ * Sets aria-hidden of the rest of the page to restrict keyboard focus.
+ * @param {boolean} hide Whether to hide or show the rest of the page.
+ * @private
+ */
+goog.ui.ModalPopup.prototype.setA11YDetectBackground_ = function(hide) {
+  for (var child = this.getDomHelper().getDocument().body.firstChild; child;
+      child = child.nextSibling) {
+    if (child.nodeType == goog.dom.NodeType.ELEMENT) {
+      goog.a11y.aria.setState(
+          /** @type {!Element}*/ (child), goog.a11y.aria.State.HIDDEN,
+          hide);
+    }
+  }
+  goog.a11y.aria.setState(
+      this.getElementStrict(), goog.a11y.aria.State.HIDDEN, !hide);
+  goog.a11y.aria.setState(
+      /** @type {!Element}*/ (this.bgEl_ || this.bgIframeEl_),
+      goog.a11y.aria.State.HIDDEN, !hide);
 };
 
 
