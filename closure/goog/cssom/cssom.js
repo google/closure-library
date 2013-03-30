@@ -239,6 +239,7 @@ goog.cssom.getCssRuleIndexInParentStyleSheet = function(cssRule,
  */
 goog.cssom.getParentStyleSheet = function(cssRule) {
   return cssRule.parentStyleSheet ||
+      cssRule.style &&
       cssRule.style['-closure-parent-stylesheet'];
 };
 
