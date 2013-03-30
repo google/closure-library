@@ -190,6 +190,12 @@ See the COPYING file for details.
     assertTrue(result);
   }
 
+  function testGetValueByNameForNonExistentElement() {
+    var form = goog.dom.getElement('testform1');
+    var result = goog.dom.forms.getValueByName(form, 'non_existent');
+    assertNull(result);
+  }
+
   function testHasValueByNameInput() {
     var form = goog.dom.getElement('testform1');
     var result = goog.dom.forms.hasValueByName(form, 'in1');
