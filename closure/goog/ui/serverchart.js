@@ -16,6 +16,10 @@
 /**
  * @fileoverview Component for generating chart PNGs using Google Chart Server.
  *
+ * @deprecated Google Chart Images service (the server-side component of this
+ *     class) has been deprecated. See
+ *     https://developers.google.com/chart/ for alternatives.
+ *
  * @see ../demos/serverchart.html
  */
 
@@ -55,6 +59,9 @@ goog.require('goog.ui.Component');
  *     different than goog.ui.ServerChart.CHART_SERVER_SCHEME_INDEPENDENT_URI.
  * @constructor
  * @extends {goog.ui.Component}
+ *
+ * @deprecated Google Chart Server has been deprecated. See
+ *     https://developers.google.com/chart/image/ for details.
  */
 goog.ui.ServerChart = function(type, opt_width, opt_height, opt_domHelper,
     opt_uri) {
