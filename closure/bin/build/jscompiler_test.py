@@ -30,9 +30,11 @@ class JsCompilerTestCase(unittest.TestCase):
 
   def testGetJsCompilerArgs(self):
 
+    original_check = jscompiler._JavaSupports32BitMode
+    jscompiler._JavaSupports32BitMode = lambda: False
     args = jscompiler._GetJsCompilerArgs(
         'path/to/jscompiler.jar',
-        1.6,
+        (1, 6),
         ['path/to/src1.js', 'path/to/src2.js'],
         ['--test_jvm_flag'],
         ['--test_compiler_flag']
@@ -45,9 +47,27 @@ class JsCompilerTestCase(unittest.TestCase):
          '--js', 'path/to/src2.js', '--test_compiler_flag'],
         args)
 
+    def CheckJava15RaisesError():
+      jscompiler._GetJsCompilerArgs(
+          'path/to/jscompiler.jar',
+          (1, 5),
+          ['path/to/src1.js', 'path/to/src2.js'],
+          ['--test_jvm_flag'],
+          ['--test_compiler_flag'])
+
+    self.assertRaises(jscompiler.JsCompilerError, CheckJava15RaisesError)
+    jscompiler._JavaSupports32BitMode = original_check
+
+  def testGetJsCompilerArgs32BitJava(self):
+
+    original_check = jscompiler._JavaSupports32BitMode
+
+    # Should include the -d32 flag only if 32-bit Java is supported by the
+    # system.
+    jscompiler._JavaSupports32BitMode = lambda: True
     args = jscompiler._GetJsCompilerArgs(
         'path/to/jscompiler.jar',
-        1.7,
+        (1, 6),
         ['path/to/src1.js', 'path/to/src2.js'],
         ['--test_jvm_flag'],
         ['--test_compiler_flag'])
@@ -60,22 +80,33 @@ class JsCompilerTestCase(unittest.TestCase):
          '--test_compiler_flag'],
         args)
 
-    self.assertRaises(
-        jscompiler.JsCompilerError,
-        lambda: jscompiler._GetJsCompilerArgs(
-            'path/to/jscompiler.jar',
-            1.5,
-            ['path/to/src1.js', 'path/to/src2.js'],
-            ['--test_jvm_flag'],
-            ['--test_compiler_flag']))
+    # Should exclude the -d32 flag if 32-bit Java is not supported by the
+    # system.
+    jscompiler._JavaSupports32BitMode = lambda: False
+    args = jscompiler._GetJsCompilerArgs(
+        'path/to/jscompiler.jar',
+        (1, 6),
+        ['path/to/src1.js', 'path/to/src2.js'],
+        ['--test_jvm_flag'],
+        ['--test_compiler_flag'])
+
+    self.assertEqual(
+        ['java', '-client', '--test_jvm_flag',
+         '-jar', 'path/to/jscompiler.jar',
+         '--js', 'path/to/src1.js',
+         '--js', 'path/to/src2.js',
+         '--test_compiler_flag'],
+        args)
+
+    jscompiler._JavaSupports32BitMode = original_check
 
   def testGetJavaVersion(self):
 
     def assertVersion(expected, version_string):
       self.assertEquals(expected, version_string)
 
-      assertVersion(1.7, _TEST_JAVA_VERSION_STRING)
-      assertVersion(1.4, 'java version "1.4.0_03-ea"')
+      assertVersion((1, 7), _TEST_JAVA_VERSION_STRING)
+      assertVersion((1, 4), 'java version "1.4.0_03-ea"')
 
 
 _TEST_JAVA_VERSION_STRING = """\

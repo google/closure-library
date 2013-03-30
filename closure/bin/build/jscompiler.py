@@ -16,14 +16,15 @@
 
 
 import logging
+import os
 import re
 import subprocess
 
 
-# Pulls a version number from the first line of 'java -version'.
-# Versions are in the format of n.n.*. See
+# Pulls just the major and minor version numbers from the first line of
+# 'java -version'. Versions are in the format of [0-9]+\.[0-9]+\..* See:
 # http://www.oracle.com/technetwork/java/javase/versioning-naming-139433.html
-_VERSION_REGEX = re.compile(r'"([0-9]\.[0-9]+)')
+_VERSION_REGEX = re.compile(r'"([0-9]+)\.([0-9]+)')
 
 
 class JsCompilerError(Exception):
@@ -37,24 +38,42 @@ def _GetJavaVersionString():
 
 
 def _ParseJavaVersion(version_string):
-  """Returns the string for the current version of Java installed.
+  """Returns a 2-tuple for the current version of Java installed.
 
   Args:
     version_string: String of the Java version (e.g. '1.7.2-ea').
 
   Returns:
-    The major and minor versions, as a float (e.g. 1.7).
+    The major and minor versions, as a 2-tuple (e.g. (1, 7)).
   """
   match = _VERSION_REGEX.search(version_string)
   if match:
-    return float(match.group(1))
+    version = tuple(int(x, 10) for x in match.groups())
+    assert len(version) == 2
+    return version
+
+
+def _JavaSupports32BitMode():
+  """Determines whether the JVM supports 32-bit mode on the platform."""
+  # Suppresses process output to stderr and stdout from showing up in the
+  # console as we're only trying to determine 32-bit JVM support.
+  supported = False
+  try:
+    devnull = open(os.devnull, 'wb')
+    return subprocess.call(
+        ['java', '-d32', '-version'], stdout=devnull, stderr=devnull) == 0
+  except IOError:
+    pass
+  else:
+    devnull.close()
+  return supported
 
 
 def _GetJsCompilerArgs(compiler_jar_path, java_version, source_paths,
                        jvm_flags, compiler_flags):
   """Assembles arguments for call to JsCompiler."""
 
-  if java_version < 1.6:
+  if java_version < (1, 6):
     raise JsCompilerError('Closure Compiler requires Java 1.6 or higher. '
                           'Please visit http://www.java.com/getjava')
 
@@ -63,8 +82,9 @@ def _GetJsCompilerArgs(compiler_jar_path, java_version, source_paths,
   # Add JVM flags we believe will produce the best performance.  See
   # https://groups.google.com/forum/#!topic/closure-library-discuss/7w_O9-vzlj4
 
-  # Attempt 32-bit mode if we're <= Java 1.7
-  if java_version >= 1.7:
+  # Attempt 32-bit mode if available (Java 7 on Mac OS X does not support 32-bit
+  # mode, for example).
+  if _JavaSupports32BitMode():
     args += ['-d32']
 
   # Prefer the "client" VM.
