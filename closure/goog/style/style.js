@@ -24,7 +24,9 @@ goog.provide('goog.style');
 
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.NodeType');
 goog.require('goog.dom.vendor');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
@@ -310,7 +312,7 @@ goog.style.setPosition = function(el, arg1, opt_arg2) {
   var x, y;
   var buggyGeckoSubPixelPos = goog.userAgent.GECKO &&
       (goog.userAgent.MAC || goog.userAgent.X11) &&
-      goog.userAgent.isVersion('1.9');
+      goog.userAgent.isVersionOrHigher('1.9');
 
   if (arg1 instanceof goog.math.Coordinate) {
     x = arg1.x;
@@ -592,7 +594,7 @@ goog.style.scrollIntoContainerView = function(element, container, opt_center) {
 goog.style.getClientLeftTop = function(el) {
   // NOTE(eae): Gecko prior to 1.9 doesn't support clientTop/Left, see
   // https://bugzilla.mozilla.org/show_bug.cgi?id=111207
-  if (goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9')) {
+  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9')) {
     var left = parseFloat(goog.style.getComputedStyle(el, 'borderLeftWidth'));
     if (goog.style.isRightToLeft(el)) {
       var scrollbarWidth = el.offsetWidth - el.clientWidth - left -
@@ -839,7 +841,7 @@ goog.style.getClientPosition = function(el) {
       pos.x = pageCoord.x - scrollCoord.x;
       pos.y = pageCoord.y - scrollCoord.y;
     }
-    if (goog.userAgent.GECKO && !goog.userAgent.isVersion(12)) {
+    if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher(12)) {
       pos = goog.math.Coordinate.sum(pos, goog.style.getCssTranslation(el));
     }
   } else {
@@ -1117,7 +1119,7 @@ goog.style.setTransparentBackgroundImage = function(el, src) {
   // It is safe to use the style.filter in IE only. In Safari 'filter' is in
   // style object but access to style.filter causes it to throw an exception.
   // Note: IE8 supports images with an alpha channel.
-  if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
     // See TODO in setOpacity.
     style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(' +
         'src="' + src + '", sizingMethod="crop")';
@@ -1299,7 +1301,7 @@ goog.style.setStyles = function(element, stylesString) {
  */
 goog.style.setPreWrap = function(el) {
   var style = el.style;
-  if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
     style.whiteSpace = 'pre';
     style.wordWrap = 'break-word';
   } else if (goog.userAgent.GECKO) {
@@ -1322,7 +1324,7 @@ goog.style.setInlineBlock = function(el) {
   // Without position:relative, weirdness ensues.  Just accept it and move on.
   style.position = 'relative';
 
-  if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
     // IE8 supports inline-block so fall through to the else
     // Zoom:1 forces hasLayout, display:inline gives inline behavior.
     style.zoom = '1';
@@ -1330,7 +1332,7 @@ goog.style.setInlineBlock = function(el) {
   } else if (goog.userAgent.GECKO) {
     // Pre-Firefox 3, Gecko doesn't support inline-block, but -moz-inline-box
     // is close enough.
-    style.display = goog.userAgent.isVersion('1.9a') ? 'inline-block' :
+    style.display = goog.userAgent.isVersionOrHigher('1.9a') ? 'inline-block' :
         '-moz-inline-box';
   } else {
     // Opera, Webkit, and Safari seem to do OK with the standard inline-block
@@ -1440,7 +1442,7 @@ goog.style.setBorderBoxSize = function(element, size) {
   var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
 
   if (goog.userAgent.IE &&
-      (!isCss1CompatMode || !goog.userAgent.isVersion('8'))) {
+      (!isCss1CompatMode || !goog.userAgent.isVersionOrHigher('8'))) {
     var style = element.style;
     if (isCss1CompatMode) {
       var paddingBox = goog.style.getPaddingBox(element);
@@ -1503,7 +1505,7 @@ goog.style.setContentBoxSize = function(element, size) {
   var doc = goog.dom.getOwnerDocument(element);
   var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
   if (goog.userAgent.IE &&
-      (!isCss1CompatMode || !goog.userAgent.isVersion('8'))) {
+      (!isCss1CompatMode || !goog.userAgent.isVersionOrHigher('8'))) {
     var style = element.style;
     if (isCss1CompatMode) {
       style.pixelWidth = size.width;

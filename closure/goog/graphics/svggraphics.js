@@ -83,7 +83,7 @@ goog.graphics.SvgGraphics = function(width, height,
    * @private
    */
   this.useManualViewbox_ = goog.userAgent.WEBKIT &&
-                           !goog.userAgent.isVersion(526);
+                           !goog.userAgent.isVersionOrHigher(526);
 
   /**
    * Event handler.

@@ -78,7 +78,7 @@ See the COPYING file for details.
       assertNotNull(elem);
       assertEquals(goog.dom.TagName.DIV, elem.tagName);
 
-      if (goog.userAgent.IE && !goog.userAgent.isVersion('7')) {
+      if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
         assertSameElements('On IE6, the noalpha class must be present',
             ['goog-hsva-palette', 'goog-hsva-palette-noalpha'],
             goog.dom.classes.get(elem));

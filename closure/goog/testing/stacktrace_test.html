@@ -247,7 +247,7 @@ function testFollowCallChain() {
   // Opera before version 10 doesn't support the caller attribute. In that
   // browser followCallChain_() returns empty stack trace.
   expectedFailures.expectFailureFor(goog.userAgent.OPERA &&
-      !goog.userAgent.isVersion('10'));
+      !goog.userAgent.isVersionOrHigher('10'));
   try {
     assertTrue('The stack trace consists of >=2 frames', frames.length >= 2);
   } catch (e) {

@@ -1004,7 +1004,8 @@ function doTestPlaceCursorAtStart(opt_html, opt_parentId) {
   var startNode = opt_parentId ?
       editableField.getEditableDomHelper().getElement(opt_parentId).firstChild :
       textNode ? textNode : editableField.getElement();
-  if (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('528')) {
+  if (goog.userAgent.WEBKIT &&
+      !goog.userAgent.isVersionOrHigher('528')) {
     // Safari 3 seems to normalize the selection to the shallowest endpoint (in
     // this case the editable element) in all cases tested below. This is OK
     // because when you start typing it magically inserts the text at the
@@ -1083,7 +1084,7 @@ function testPlaceCursorAtStartNonImportantTextNode() {
  *     is expected to be placed. If omitted, will expect cursor to be placed in
  *     the first child of the field element (or, if the field has no content, in
  *     the field element itself).
- * @param {number=} The offset to expect for the end position.
+ * @param {number=} opt_offset The offset to expect for the end position.
  */
 function doTestPlaceCursorAtEnd(opt_html, opt_parentId, opt_offset) {
   var editableField = new FieldConstructor('testField', document);

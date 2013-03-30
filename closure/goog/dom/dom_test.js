@@ -914,7 +914,7 @@ function testIsFocusableTabIndex() {
 
   // WebKit on Mac doesn't support focusable DIVs until version 526 and later.
   if (!goog.userAgent.WEBKIT || !goog.userAgent.MAC ||
-      goog.userAgent.isVersion('526')) {
+      goog.userAgent.isVersionOrHigher('526')) {
     assertTrue('isFocusableTabIndex() must be true for tab index 0',
         goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndex0')));
     assertTrue('isFocusableTabIndex() must be true for tab index 1',
@@ -927,7 +927,7 @@ function testIsFocusableTabIndex() {
 function testSetFocusableTabIndex() {
   // WebKit on Mac doesn't support focusable DIVs until version 526 and later.
   if (!goog.userAgent.WEBKIT || !goog.userAgent.MAC ||
-      goog.userAgent.isVersion('526')) {
+      goog.userAgent.isVersionOrHigher('526')) {
     // Test enabling focusable tab index.
     goog.dom.setFocusableTabIndex(goog.dom.getElement('noTabIndex'), true);
     assertTrue('isFocusableTabIndex() must be true after enabling tab index',
@@ -1341,7 +1341,7 @@ function testGetDocumentScrollOfFixedViewport() {
   };
   var dh = goog.dom.getDomHelper(document);
   dh.setDocument(fakeDocument);
-  if (goog.userAgent.IE && goog.userAgent.isVersion(10)) {
+  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher(10)) {
     assertEquals(0, dh.getDocumentScroll().x);
     assertEquals(0, dh.getDocumentScroll().y);
   } else {

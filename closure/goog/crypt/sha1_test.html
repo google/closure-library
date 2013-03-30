@@ -53,7 +53,7 @@ function testHashing() {
                goog.crypt.byteArrayToHex(sha1.digest()));
 
   // The following test might cause timeouts on IE7.
-  if (!goog.userAgent.IE || goog.userAgent.isVersion('8')) {
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('8')) {
     // Test long message.
     var thousandAs = [];
     for (var i = 0; i < 1000; ++i) {

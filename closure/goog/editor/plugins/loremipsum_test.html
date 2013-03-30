@@ -160,7 +160,7 @@ function testLoremIpsumInClickToEditMode() {
 function getNbsp() {
   // On WebKit (pre-528) and Opera, &nbsp; shows up as its unicode character in
   // innerHTML under some circumstances.
-  return (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('528')) ||
+  return (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528')) ||
          goog.userAgent.OPERA ? '\u00a0' : '&nbsp;';
 }
 

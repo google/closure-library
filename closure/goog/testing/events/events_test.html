@@ -351,7 +351,7 @@ See the COPYING file for details.
   function testKeySequenceWithEscapeKey() {
     assertTrue(goog.testing.events.fireKeySequence(
         root, goog.events.KeyCodes.ESC));
-    if (goog.userAgent.WEBKIT && goog.userAgent.isVersion('525')) {
+    if (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('525')) {
       assertEventTypes(['keydown', 'keyup']);
     } else {
       assertEventTypes(['keydown', 'keypress', 'keyup']);

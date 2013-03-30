@@ -35,7 +35,7 @@ See the COPYING file for details.
 
 function shouldRunTests() {
   // Test disabled in IE7 due to flakiness. See b/4269021.
-  return !(goog.userAgent.IE && goog.userAgent.isVersion('7'));
+  return !(goog.userAgent.IE && goog.userAgent.isVersionOrHigher('7'));
 }
 
 var dialog;

@@ -44,7 +44,7 @@ function setUp() {
 function initImeHandler() {
   goog.events.ImeHandler.USES_COMPOSITION_EVENTS =
       goog.userAgent.GECKO ||
-      (goog.userAgent.WEBKIT && goog.userAgent.isVersion(532));
+      (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher(532));
   imeHandler = new goog.events.ImeHandler(sandbox);
   eventsFired = [];
   goog.events.listen(

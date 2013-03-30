@@ -119,7 +119,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
       assertNotNull(elem);
       assertEquals(goog.dom.TagName.DIV, elem.tagName);
 
-      if (goog.userAgent.IE && !goog.userAgent.isVersion('7')) {
+      if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
         assertSameElements('On IE6, the noalpha class must be present',
             ['goog-hsv-palette', 'goog-hsv-palette-noalpha'],
             goog.dom.classes.get(elem));

@@ -161,7 +161,7 @@ See the COPYING file for details.
    */
   function useActiveElement() {
     return goog.editor.BrowserFeature.HAS_ACTIVE_ELEMENT ||
-        goog.userAgent.WEBKIT && goog.userAgent.isVersion(9);
+        goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher(9);
   }
 
   /**

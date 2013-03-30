@@ -41,7 +41,7 @@ goog.setTestOnly('goog.style_test');
 
 // IE before version 6 will always be border box in compat mode.
 var isBorderBox = goog.dom.isCss1CompatMode() ?
-    (goog.userAgent.IE && !goog.userAgent.isVersion('6')) :
+    (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('6')) :
     true;
 var EPSILON = 2;
 var expectedFailures = new goog.testing.ExpectedFailures();
@@ -341,7 +341,7 @@ function testGetClientPositionOfOffscreenElement() {
     // The following tests do not work in Gecko 1.8 and below, due to an
     // obscure off-by-one bug in goog.style.getPageOffset.  Same for IE.
     if (!goog.userAgent.IE &&
-        !(goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9'))) {
+        !(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9'))) {
       window.scroll(1, 1);
       var pos = goog.style.getClientPosition(div);
       assertEquals(1999, pos.x);
@@ -472,8 +472,8 @@ function testGetPageOffsetWithDocumentElementPadding() {
     document.body.appendChild(div);
     var pos = goog.style.getPageOffset(div);
     // FF3 (but not beyond) gets confused by document margins.
-    if (goog.userAgent.GECKO && goog.userAgent.isVersion('1.9') &&
-        !goog.userAgent.isVersion('1.9.1')) {
+    if (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9') &&
+        !goog.userAgent.isVersionOrHigher('1.9.1')) {
       assertEquals(141, pos.x);
       assertEquals(241, pos.y);
     } else {
@@ -504,7 +504,7 @@ function testGetPageOffsetElementOffscreen() {
     // The following tests do not work in Gecko 1.8 and below, due to an
     // obscure off-by-one bug in goog.style.getPageOffset.  Same for IE.
     if (!(goog.userAgent.IE) &&
-        !(goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9'))) {
+        !(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9'))) {
       window.scroll(1, 1);
       pos = goog.style.getPageOffset(div);
       assertEquals(10000, pos.x);
@@ -531,7 +531,7 @@ function testGetPageOffsetElementOffscreen() {
 function testGetPageOffsetFixedPositionElements() {
   // Skip these tests in certain browsers.
   // position:fixed is not supported in IE before version 7
-  if (!goog.userAgent.IE || !goog.userAgent.isVersion('6')) {
+  if (!goog.userAgent.IE || !goog.userAgent.isVersionOrHigher('6')) {
     // Test with a position fixed element
     var div = goog.dom.createDom('DIV');
     div.style.position = 'fixed';
@@ -723,7 +723,7 @@ function testGetSizeSvgElements() {
   var svgEl = document.createElementNS &&
       document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   if (!svgEl || svgEl.getAttribute('transform') == '' ||
-      (goog.userAgent.WEBKIT && !goog.userAgent.isVersion(534.8))) {
+      (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher(534.8))) {
     // SVG not supported, or getBoundingClientRect not supported on SVG
     // elements.
     return;
@@ -1893,7 +1893,7 @@ function testGetVisibleRectForElementInsideNestedScrollableArea() {
 
 function testGeckoMacOrX11RoundPosition() {
   if ((goog.userAgent.MAC || goog.userAgent.X11) && goog.userAgent.GECKO &&
-      goog.userAgent.isVersion('1.9')) {
+      goog.userAgent.isVersionOrHigher('1.9')) {
 
     var pos = new goog.math.Coordinate(1.5, 1.4);
     var el = document.createElement('div');

@@ -293,7 +293,7 @@ See the COPYING file for details.
    */
   function testExecTwiceReuse() {
     // Test is failing with an out-of-memory error in IE7.
-    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
       return;
     }
 

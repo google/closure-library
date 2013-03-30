@@ -507,7 +507,7 @@ See the COPYING file for details.
     // In Chrome 16 and above (>= Webkit 535.7), newRange will be collapsed
     // like on other browsers.
     // We didn't bother testing in between.
-    if (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('535.7')) {
+    if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('535.7')) {
       assertNull('Webkit supports rangeCount == 0', newRange);
     } else {
       assertTrue('The other browsers will just have an empty range.',
@@ -672,7 +672,7 @@ See the COPYING file for details.
     var range = goog.dom.Range.createFromWindow();
     assertFalse('Should not contain whole <br>',
         range.containsNode(br, false));
-    var isSafari3 = goog.userAgent.WEBKIT && !goog.userAgent.isVersion('528');
+    var isSafari3 = goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528');
 
     if (goog.userAgent.IE || isSafari3) {
       assertTrue('Range over <br> is adjacent to the immediate range after it',

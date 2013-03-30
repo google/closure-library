@@ -33,7 +33,7 @@ goog.require('goog.userAgent');
 <script>
 
 function isBuggyGecko() {
-  return goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9');
+  return goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9');
 }
 
 var monitor;

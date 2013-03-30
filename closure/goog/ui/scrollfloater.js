@@ -403,7 +403,7 @@ goog.ui.ScrollFloater.prototype.handleResize_ = function() {
  */
 goog.ui.ScrollFloater.prototype.needsIePositionHack_ = function() {
   return goog.userAgent.IE &&
-      !(goog.userAgent.isVersion('7') &&
+      !(goog.userAgent.isVersionOrHigher('7') &&
           this.getDomHelper().isCss1CompatMode());
 };
 

@@ -57,7 +57,8 @@ goog.userAgent.ASSUME_OPERA = false;
 
 
 /**
- * @define {boolean} Whether the {@code goog.userAgent.isVersionOrHigher}
+ * @define {boolean} Whether the
+ *     {@code goog.userAgent.isVersionOrHigher}
  *     function will return true for any version.
  */
 goog.userAgent.ASSUME_ANY_VERSION = false;
@@ -511,9 +512,9 @@ goog.userAgent.compare = function(v1, v2) {
 
 
 /**
- * Cache for {@link goog.userAgent.isVersionOrHigher}. Calls to compareVersions
- * are surprisingly expensive and as a browsers version number is unlikely to
- * change during a session we cache the results.
+ * Cache for {@link goog.userAgent.isVersionOrHigher}.
+ * Calls to compareVersions are surprisingly expensive and, as a browser's
+ * version number is unlikely to change during a session, we cache the results.
  * @const
  * @private
  */

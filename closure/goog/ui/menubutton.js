@@ -28,16 +28,16 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
-goog.require('goog.events.KeyHandler.EventType');
+goog.require('goog.events.KeyHandler');
 goog.require('goog.math.Box');
 goog.require('goog.math.Rect');
 goog.require('goog.positioning');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.MenuAnchoredPosition');
+goog.require('goog.positioning.Overflow');
 goog.require('goog.style');
 goog.require('goog.ui.Button');
-goog.require('goog.ui.Component.EventType');
-goog.require('goog.ui.Component.State');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.registry');
@@ -84,7 +84,7 @@ goog.ui.MenuButton = function(content, opt_menu, opt_renderer, opt_domHelper) {
   // Phones running iOS prior to version 4.2.
   if ((goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
       // Check the webkit version against the version for iOS 4.2.1.
-      !goog.userAgent.isVersion('533.17.9')) {
+      !goog.userAgent.isVersionOrHigher('533.17.9')) {
     // @bug 4322060 This is required so that the menu works correctly on
     // iOS prior to version 4.2. Otherwise, the blur action closes the menu
     // before the menu button click can be processed.

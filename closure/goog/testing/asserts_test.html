@@ -812,7 +812,7 @@ See the COPYING file for details.
       // Some browsers don't have a stack trace so expect to at least have the
       // error description. For Gecko and IE7 not even that is included.
       if (!goog.userAgent.GECKO &&
-          (!goog.userAgent.IE || goog.userAgent.isVersion('8'))) {
+          (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('8'))) {
         assertContains(errorDescription, e.message);
       }
     }
@@ -1056,7 +1056,7 @@ See the COPYING file for details.
   }
 
   function testStringForWindowIE() {
-    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
       // NOTE(user): This test sees of we are being affected by a JScript bug
       // in try/finally handling. This bug only affects the lowest try/finally
       // block in the stack. Calling this function via VBScript allows

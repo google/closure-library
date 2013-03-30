@@ -248,7 +248,7 @@ function testMergeCells() {
       goog.editor.plugins.TableEditor.COMMAND.MERGE_CELLS);
   expectedFailures.expectFailureFor(
       goog.userAgent.IE &&
-      goog.userAgent.isVersion('8'));
+      goog.userAgent.isVersionOrHigher('8'));
   try {
     // In IE8, even after explicitly setting the range to span
     // multiple cells, the browser selection only contains the first TD

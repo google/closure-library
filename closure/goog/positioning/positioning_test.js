@@ -77,7 +77,7 @@ function tearDown() {
 function assertRoundedEquals(a, b, c) {
   function round(x) {
     return goog.userAgent.GECKO && (goog.userAgent.MAC || goog.userAgent.X11) &&
-        goog.userAgent.isVersion('1.9') ? Math.round(x) : x;
+        goog.userAgent.isVersionOrHigher('1.9') ? Math.round(x) : x;
   }
   if (arguments.length == 3) {
     assertRoughlyEquals(a, round(b), round(c), ALLOWED_OFFSET);
@@ -272,7 +272,7 @@ function testPositionAtAnchorWithMargin() {
 
 
 function testPositionAtAnchorRightToLeft() {
-  if (goog.userAgent.IE && goog.userAgent.isVersion('6')) {
+  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('6')) {
     // These tests fails with IE6.
     // TODO(user): Investigate the reason.
     return;
@@ -310,7 +310,7 @@ function testPositionAtAnchorRightToLeft() {
 }
 
 function testPositionAtAnchorRightToLeftWithScroll() {
-  if (goog.userAgent.IE && goog.userAgent.isVersion('6')) {
+  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('6')) {
     // These tests fails with IE6.
     // TODO(user): Investigate the reason.
     return;

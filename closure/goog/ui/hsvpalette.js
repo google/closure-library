@@ -29,16 +29,13 @@
 goog.provide('goog.ui.HsvPalette');
 
 goog.require('goog.color');
-goog.require('goog.dom');
-goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
 goog.require('goog.style');
 goog.require('goog.style.bidi');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Component.EventType');
 goog.require('goog.userAgent');
 
 
@@ -273,7 +270,7 @@ goog.ui.HsvPalette.prototype.canDecorate = function(element) {
 /** @override */
 goog.ui.HsvPalette.prototype.createDom = function() {
   var dom = this.getDomHelper();
-  var noalpha = (goog.userAgent.IE && !goog.userAgent.isVersion('7')) ?
+  var noalpha = (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) ?
       ' ' + goog.getCssName(this.className, 'noalpha') : '';
 
   var backdrop = dom.createDom(goog.dom.TagName.DIV,

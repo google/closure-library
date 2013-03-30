@@ -53,13 +53,13 @@ ignored by the tests.
   var testHelper;
 
   var WEBKIT_BEFORE_CHROME_8 = goog.userAgent.WEBKIT &&
-      !goog.userAgent.isVersion('534.10');
+      !goog.userAgent.isVersionOrHigher('534.10');
 
   var WEBKIT_AFTER_CHROME_16 = goog.userAgent.WEBKIT &&
-      goog.userAgent.isVersion('535.7');
+      goog.userAgent.isVersionOrHigher('535.7');
 
   var WEBKIT_AFTER_CHROME_21 = goog.userAgent.WEBKIT &&
-      goog.userAgent.isVersion('537.1');
+      goog.userAgent.isVersionOrHigher('537.1');
 
   // On Chrome 16, execCommand('insertImage') inserts a garbage BR
   // after the image that we insert. We use this command to paste HTML

@@ -24,12 +24,16 @@
 goog.provide('goog.ui.FilteredMenu');
 
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.string');
+goog.require('goog.style');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.FilterObservingMenuItem');
 goog.require('goog.ui.Menu');
+goog.require('goog.userAgent');
 
 
 
@@ -504,7 +508,7 @@ goog.ui.FilteredMenu.prototype.setHighlightedIndex = function(index) {
   var el = this.getHighlighted() ? this.getHighlighted().getElement() : null;
 
   if (el && goog.dom.contains(contentEl, el)) {
-    var contentTop = goog.userAgent.IE && !goog.userAgent.isVersion(8) ?
+    var contentTop = goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(8) ?
         0 : contentEl.offsetTop;
 
     // IE (tested on IE8) sometime does not scroll enough by about

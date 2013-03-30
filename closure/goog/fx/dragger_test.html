@@ -311,7 +311,7 @@ function testIeDragStartCancelling() {
 /** @bug 1680770 */
 function testOnWindowMouseOut() {
   // Test older Gecko browsers - FireFox 2.
-  if (goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9a')) {
+  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9a')) {
     var dragger = new goog.fx.Dragger(target);
 
     var dragCanceled = false;

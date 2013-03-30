@@ -139,7 +139,7 @@ See the COPYING file for details.
 
   function testGetStartPosition() {
     expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-        !goog.userAgent.isVersion('2'));
+        !goog.userAgent.isVersionOrHigher('2'));
 
     // The start node is in the top left.
     var range = goog.dom.TextRange.createFromNodeContents(test3);
@@ -150,7 +150,7 @@ See the COPYING file for details.
       var logoPosition = goog.style.getPageOffset(logo3);
       topLeft.y = logoPosition.y;
 
-      if (!goog.userAgent.isVersion('8')) {
+      if (!goog.userAgent.isVersionOrHigher('8')) {
         topLeft.x += 2;
         topLeft.y += 2;
       }
@@ -166,9 +166,9 @@ See the COPYING file for details.
 
   function testGetStartPositionNotInDocument() {
     expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-        !goog.userAgent.isVersion('2'));
+        !goog.userAgent.isVersionOrHigher('2'));
     expectedFailures.expectFailureFor(goog.userAgent.IE &&
-        !goog.userAgent.isVersion('8'));
+        !goog.userAgent.isVersionOrHigher('8'));
 
     var range = goog.dom.TextRange.createFromNodeContents(test3);
 
@@ -185,7 +185,7 @@ See the COPYING file for details.
 
   function testGetStartPositionReversed() {
     expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-        !goog.userAgent.isVersion('2'));
+        !goog.userAgent.isVersionOrHigher('2'));
 
     // Simulate the user selecting backwards from right-to-left.
     // The start node is now in the bottom right.
@@ -198,7 +198,7 @@ See the COPYING file for details.
         pageOffset.x + test3.lastChild.offsetWidth,
         pageOffset.y + test3.lastChild.offsetHeight);
 
-    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
       bottomRight.x += 2;
       bottomRight.y += 2;
     }
@@ -213,7 +213,7 @@ See the COPYING file for details.
 
   function testGetStartPositionRightToLeft() {
     expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-        !goog.userAgent.isVersion('2'));
+        !goog.userAgent.isVersionOrHigher('2'));
 
     // Even in RTL content the start node is still in the top left.
     var range = goog.dom.TextRange.createFromNodeContents(test3Rtl);
@@ -224,7 +224,7 @@ See the COPYING file for details.
       var logoPosition = goog.style.getPageOffset(logo3Rtl);
       topLeft.y = logoPosition.y;
 
-      if (!goog.userAgent.isVersion('8')) {
+      if (!goog.userAgent.isVersionOrHigher('8')) {
         topLeft.x += 2;
         topLeft.y += 2;
       }
@@ -240,7 +240,7 @@ See the COPYING file for details.
 
   function testGetEndPosition() {
     expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-        !goog.userAgent.isVersion('2'));
+        !goog.userAgent.isVersionOrHigher('2'));
 
     // The end node is in the bottom right.
     var range = goog.dom.TextRange.createFromNodeContents(test3);
@@ -249,7 +249,7 @@ See the COPYING file for details.
         pageOffset.x + test3.lastChild.offsetWidth,
         pageOffset.y + test3.lastChild.offsetHeight);
 
-    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
       bottomRight.x += 6;
       bottomRight.y += 2;
     }
@@ -264,9 +264,9 @@ See the COPYING file for details.
 
   function testGetEndPositionNotInDocument() {
     expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-        !goog.userAgent.isVersion('2'));
+        !goog.userAgent.isVersionOrHigher('2'));
     expectedFailures.expectFailureFor(goog.userAgent.IE &&
-        !goog.userAgent.isVersion('8'));
+        !goog.userAgent.isVersionOrHigher('8'));
 
     var range = goog.dom.TextRange.createFromNodeContents(test3);
 
@@ -283,7 +283,7 @@ See the COPYING file for details.
 
   function testGetEndPositionReversed() {
     expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-        !goog.userAgent.isVersion('2'));
+        !goog.userAgent.isVersionOrHigher('2'));
 
     // Simulate the user selecting backwards from right-to-left.
     // The end node is now in the top left.
@@ -298,7 +298,7 @@ See the COPYING file for details.
       var logoPosition = goog.style.getPageOffset(logo3);
       topLeft.y = logoPosition.y;
 
-      if (!goog.userAgent.isVersion('8')) {
+      if (!goog.userAgent.isVersionOrHigher('8')) {
         topLeft.x += 2;
         topLeft.y += 2;
       }
@@ -314,9 +314,9 @@ See the COPYING file for details.
 
   function testGetEndPositionRightToLeft() {
     expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-        !goog.userAgent.isVersion('2'));
+        !goog.userAgent.isVersionOrHigher('2'));
     expectedFailures.expectFailureFor(goog.userAgent.IE &&
-        !goog.userAgent.isVersion('8'));
+        !goog.userAgent.isVersionOrHigher('8'));
 
     // Even in RTL content the end node is still in the bottom right.
     var range = goog.dom.TextRange.createFromNodeContents(test3Rtl);
@@ -325,7 +325,7 @@ See the COPYING file for details.
         pageOffset.x + test3Rtl.lastChild.offsetWidth,
         pageOffset.y + test3Rtl.lastChild.offsetHeight);
 
-    if (goog.userAgent.IE && !goog.userAgent.isVersion('8')) {
+    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
       bottomRight.x += 2;
       bottomRight.y += 2;
     }

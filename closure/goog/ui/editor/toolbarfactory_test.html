@@ -49,7 +49,7 @@ function testGetLegacySizeFromPx() {
   // We will be warned if other browsers start behaving like webkit pre-534.7.
   expectedFailures.expectFailureFor(
       !goog.userAgent.WEBKIT ||
-      (goog.userAgent.WEBKIT && goog.userAgent.isVersion('534.7')));
+      (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('534.7')));
   try {
     var fieldElem = goog.dom.getElement('myField');
     // Start from 1 because size 0 is bogus (becomes 16px, legacy size 3).

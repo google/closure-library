@@ -797,7 +797,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
     doc.execCommand('styleWithCSS', false, false);
   }
 
-  if (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('526') &&
+  if (goog.userAgent.WEBKIT &&
+      !goog.userAgent.isVersionOrHigher('526') &&
       command.toLowerCase() == 'formatblock' &&
       opt_value && /^[<]?h\d[>]?$/i.test(opt_value)) {
     this.cleanUpSafariHeadings_();
@@ -1440,7 +1441,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandSafariFixes_ =
  */
 goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandGeckoFixes_ =
     function(command) {
-  if (goog.userAgent.isVersion('1.9') &&
+  if (goog.userAgent.isVersionOrHigher('1.9') &&
       command.toLowerCase() == 'formatblock') {
     // Firefox 3 and above throw a JS error for formatblock if the range is
     // a child of the body node. Changing the selection to the BR fixes the

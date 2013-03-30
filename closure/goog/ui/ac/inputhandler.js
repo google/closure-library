@@ -94,14 +94,12 @@ goog.provide('goog.ui.ac.InputHandler');
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
-goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.selection');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
-goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -211,7 +209,7 @@ goog.inherits(goog.ui.ac.InputHandler, goog.Disposable);
 goog.ui.ac.InputHandler.REQUIRES_ASYNC_BLUR_ =
     (goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
         // Check the webkit version against the version for iOS 4.2.1.
-        !goog.userAgent.isVersion('533.17.9');
+        !goog.userAgent.isVersionOrHigher('533.17.9');
 
 
 /**
@@ -577,7 +575,7 @@ goog.ui.ac.InputHandler.prototype.setTokenText =
       // to detect. Since text editing is finicky we restrict this
       // workaround to Firefox and IE 9 where it's necessary.
       if (goog.userAgent.GECKO ||
-          (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
+          (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'))) {
         el.blur();
       }
       // Join the array and replace the contents of the input.

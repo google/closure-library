@@ -31,7 +31,7 @@ function testCreation() {
 
   // Running goog.History in tests on older browsers simply hangs them in TAP.
   if (goog.userAgent.GECKO ||
-      (goog.userAgent.IE && !goog.userAgent.isVersion(9))) {
+      (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9))) {
     return;
   }
 

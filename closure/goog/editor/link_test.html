@@ -126,7 +126,7 @@ function testPlaceCursorRightOf() {
   assertTrue('Range should be collapsed', range.isCollapsed());
   var startNode = range.getStartNode();
 
-  if (goog.userAgent.WEBKIT && !goog.userAgent.isVersion('528')) {
+  if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528')) {
     assertEquals('Selection should be to the right of the anchor',
         anchor, startNode.previousSibling);
   } else {

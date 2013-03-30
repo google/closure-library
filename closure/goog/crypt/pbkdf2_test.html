@@ -27,7 +27,7 @@ function testPBKDF2() {
   // PBKDF2 test vectors from:
   // http://tools.ietf.org/html/rfc6070
 
-  if (goog.userAgent.IE && goog.userAgent.isVersion('7')) {
+  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('7')) {
     return;
   }
 

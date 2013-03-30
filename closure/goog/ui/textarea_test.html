@@ -73,7 +73,7 @@ See the COPYING file for details.
      */
     function isMacSafari3() {
       return goog.userAgent.WEBKIT && goog.userAgent.MAC &&
-          !goog.userAgent.isVersion('527');
+          !goog.userAgent.isVersionOrHigher('527');
     }
 
     /**
@@ -88,7 +88,7 @@ See the COPYING file for details.
      */
     function isFirefox3() {
       return goog.userAgent.GECKO &&
-          !goog.userAgent.isVersion('1.9.1');
+          !goog.userAgent.isVersionOrHigher('1.9.1');
     }
 
     function testConstructor() {

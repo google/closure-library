@@ -813,7 +813,7 @@ function testSelectNodeStartSimple() {
   // of the text node, as you'd expect, but in pre-530 Webkit, it has been
   // normalized to the visible position of P:0.
   if (goog.userAgent.GECKO || goog.userAgent.IE ||
-      (goog.userAgent.WEBKIT && goog.userAgent.isVersion('530'))) {
+      (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('530'))) {
     goog.testing.dom.assertRangeEquals(div.firstChild.firstChild, 0,
         div.firstChild.firstChild, 0, range);
   } else {
@@ -921,8 +921,8 @@ function testNormalizeNode() {
   assertEquals(5, div.childNodes.length);
   assertEquals(2, div.firstChild.childNodes.length);
   goog.editor.range.normalizeNode(div);
-  if (goog.userAgent.GECKO && !goog.userAgent.isVersion(1.9) ||
-      goog.userAgent.WEBKIT && !goog.userAgent.isVersion(526)) {
+  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher(1.9) ||
+      goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher(526)) {
     // Old Gecko and Webkit versions don't delete the empty node.
     assertEquals(4, div.childNodes.length);
   } else {

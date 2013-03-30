@@ -71,7 +71,7 @@ function runEmojiTestWithPlugin(plugin) {
                               range.getStartNode()));
   }
   // Firefox 3.6 is still tested, and would fail here - treitel December 2012
-  if (!(goog.userAgent.GECKO && !goog.userAgent.isVersion(2))) {
+  if (!(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher(2))) {
     assertEquals('range must be around image',
         img.parentElement, range.getContainerElement());
   }

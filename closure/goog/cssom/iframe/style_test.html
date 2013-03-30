@@ -178,7 +178,7 @@ See the COPYING file for details.
       var color = standardizeCSSValue('color', 'red');
       var NORMAL_RULE = 'a{color:' + color;
       var FF_2_RULE = 'a{color:' + color + '!important';
-      if (goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9a')) {
+      if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9a')) {
         assertContains(FF_2_RULE, cssText);
       } else {
         assertContains(NORMAL_RULE, cssText);
@@ -210,7 +210,7 @@ See the COPYING file for details.
           /body{[^{]*background-image:url\(/.test(normalizedCssText));
       // Background-position can't be calculated in FF2, due to this bug:
       // http://bugzilla.mozilla.org/show_bug.cgi?id=316981
-      if (!(goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9'))) {
+      if (!(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9'))) {
         // Expected x position is:
         // originalBackgroundPositionX - elementOffsetLeft
         // 40px - (1px + 8px) == 31px
@@ -251,7 +251,7 @@ See the COPYING file for details.
           /body{[^{]*background-image:url\(/.test(normalizedCssText));
       // Background-position can't be calculated in FF2, due to this bug:
       // http://bugzilla.mozilla.org/show_bug.cgi?id=316981
-      if (!(goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9'))) {
+      if (!(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9'))) {
         // Image offset should have been calculated to be the same as the
         // above example, but adding iframe offset and borderWidth.
         // Expected x position is:
@@ -271,7 +271,7 @@ See the COPYING file for details.
       var isFontFaceCssomSupported =
           goog.userAgent.WEBKIT ||
           goog.userAgent.OPERA ||
-          (goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.1'));
+          (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.1'));
       // We cannot use goog.testing.ExpectedFailures since it dynamically
       // brings in CSS which causes the background context tests to fail
       // in IE6.

@@ -42,7 +42,7 @@ See the COPYING file for details.
 function assertRoundedEquals(a, b, c) {
   function round(x) {
     return goog.userAgent.GECKO && (goog.userAgent.MAC || goog.userAgent.X11) &&
-        goog.userAgent.isVersion('1.9') ? Math.round(x) : x;
+        goog.userAgent.isVersionOrHigher('1.9') ? Math.round(x) : x;
   }
   if (arguments.length == 3) {
     assertEquals(a, round(b), round(c));

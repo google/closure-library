@@ -214,7 +214,7 @@ goog.ui.ControlRenderer.prototype.enableClassName = function(control,
   if (element) {
     // For IE6, we need to enable any combined classes involving this class
     // as well.
-    if (goog.userAgent.IE && !goog.userAgent.isVersion('7')) {
+    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
       var combinedClasses = this.getAppliedCombinedClassNames_(
           goog.dom.classes.get(element), className);
       combinedClasses.push(className);
@@ -320,7 +320,7 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
 
   // For IE6, rewrite all classes on the decorated element if any combined
   // classes apply.
-  if (goog.userAgent.IE && !goog.userAgent.isVersion('7')) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
     var combinedClasses = this.getAppliedCombinedClassNames_(
         classNames);
     if (combinedClasses.length > 0) {
@@ -706,7 +706,7 @@ goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
   }
 
   // Add composite classes for IE6 support
-  if (goog.userAgent.IE && !goog.userAgent.isVersion('7')) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
     classNames.push.apply(classNames,
         this.getAppliedCombinedClassNames_(classNames));
   }

@@ -100,15 +100,15 @@ See the COPYING file for details.
   var FORMATTER;
   var ROOT = goog.dom.getElement('root');
   var HELPER;
-  var OPEN_SUB = goog.userAgent.WEBKIT && !goog.userAgent.isVersion('530') ?
+  var OPEN_SUB = goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('530') ?
       '<span class="Apple-style-span" style="vertical-align: sub;">' :
       '<sub>';
-  var CLOSE_SUB = goog.userAgent.WEBKIT && !goog.userAgent.isVersion('530') ?
+  var CLOSE_SUB = goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('530') ?
                   '</span>' : '</sub>';
-  var OPEN_SUPER = goog.userAgent.WEBKIT && !goog.userAgent.isVersion('530') ?
+  var OPEN_SUPER = goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('530') ?
       '<span class="Apple-style-span" style="vertical-align: super;">' :
       '<sup>';
-  var CLOSE_SUPER = goog.userAgent.WEBKIT && !goog.userAgent.isVersion('530') ?
+  var CLOSE_SUPER = goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('530') ?
                     '</span>' : '</sup>';
   var MOCK_BLOCKQUOTE_STYLE = 'border-left: 1px solid gray;';
   var MOCK_GET_BLOCKQUOTE_STYLES = function() {
@@ -1099,7 +1099,7 @@ See the COPYING file for details.
   }
 
   function testGeckoSelectionChange() {
-    if (!goog.userAgent.GECKO || !goog.userAgent.isVersion('1.9')) {
+    if (!goog.userAgent.GECKO || !goog.userAgent.isVersionOrHigher('1.9')) {
       return;
     }
 

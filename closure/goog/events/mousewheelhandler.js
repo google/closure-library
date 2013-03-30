@@ -32,6 +32,7 @@ goog.provide('goog.events.MouseWheelEvent');
 goog.provide('goog.events.MouseWheelHandler');
 goog.provide('goog.events.MouseWheelHandler.EventType');
 
+goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventTarget');
@@ -140,7 +141,7 @@ goog.events.MouseWheelHandler.prototype.handleEvent = function(e) {
     var wheelDeltaScaleFactor = 1;
     if (goog.userAgent.IE ||
         goog.userAgent.WEBKIT &&
-        (goog.userAgent.WINDOWS || goog.userAgent.isVersion('532.0'))) {
+        (goog.userAgent.WINDOWS || goog.userAgent.isVersionOrHigher('532.0'))) {
       // In IE we get a multiple of 120; we adjust to a multiple of 3 to
       // represent number of lines scrolled (like Gecko).
       // Newer versions of Webkit match IE behavior, and WebKit on

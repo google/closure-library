@@ -45,9 +45,9 @@ function tearDown() {
 }
 
 function testAvailability() {
-  if (goog.userAgent.WEBKIT && goog.userAgent.isVersion('532.5') ||
-      goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.1') ||
-      goog.userAgent.IE && goog.userAgent.isVersion('8')) {
+  if (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('532.5') ||
+      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.1') ||
+      goog.userAgent.IE && goog.userAgent.isVersionOrHigher('8')) {
     assertNotNull(mechanism);
     assertTrue(mechanism.isAvailable());
     assertNotNull(mechanism_shared);

@@ -28,7 +28,6 @@ goog.provide('goog.fx.Dragger.EventType');
 
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('goog.events.BrowserEvent.MouseButton');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -81,7 +80,7 @@ goog.fx.Dragger.HAS_SET_CAPTURE_ =
     // IE and Gecko after 1.9.3 has setCapture
     // WebKit does not yet: https://bugs.webkit.org/show_bug.cgi?id=27330
     goog.userAgent.IE ||
-    goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.3');
+    goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.3');
 
 
 /**

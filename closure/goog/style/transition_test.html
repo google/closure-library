@@ -103,12 +103,12 @@ function testSanityDetectionOfCss3Transition() {
 
   // IE support starts at IE10.
   if (goog.userAgent.IE) {
-    assertEquals(goog.userAgent.isVersion('10.0'), support);
+    assertEquals(goog.userAgent.isVersionOrHigher('10.0'), support);
   }
 
   // FF support start at FF4 (Gecko 2.0)
   if (goog.userAgent.GECKO) {
-    assertEquals(goog.userAgent.isVersion('2.0'), support);
+    assertEquals(goog.userAgent.isVersionOrHigher('2.0'), support);
   }
 
   // Webkit support has existed for a long time, we assume support on

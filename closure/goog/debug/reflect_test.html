@@ -78,7 +78,7 @@ function testGoogProvidedTypes() {
 }
 
 function testUnregisteredTypes() {
-  var oldIE = goog.userAgent.IE && !goog.userAgent.isVersion(8);
+  var oldIE = goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(8);
   assertEquals(oldIE ? 'ActiveXObject' : 'HTMLDocument', typeOf(document));
 
   var expectedTypeOfBody = oldIE ? 'ActiveXObject' : 'HTMLBodyElement';

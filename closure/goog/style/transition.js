@@ -96,7 +96,7 @@ goog.style.transition.isSupported = function() {
     // browser version here instead.
     if (goog.userAgent.IE) {
       goog.style.transition.css3TransitionSupported_ =
-          goog.userAgent.isVersion('10.0');
+          goog.userAgent.isVersionOrHigher('10.0');
     } else {
       // We create a test element with style=-vendor-transition
       // We then detect whether those style properties are recognized and
