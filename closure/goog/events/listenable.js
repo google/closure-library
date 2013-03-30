@@ -38,7 +38,7 @@ goog.events.Listenable = function() {};
  *
  * @type {boolean}
  */
-goog.events.Listenable.USE_LISTENABLE_INTERFACE = false;
+goog.events.Listenable.USE_LISTENABLE_INTERFACE = true;
 
 
 /**
@@ -216,7 +216,7 @@ goog.events.Listenable.prototype.getListeners;
  *
  * @param {string} type The name of the event without the 'on' prefix.
  * @param {!Function} listener The listener function to get.
- * @param {boolean=} capture Whether the listener is a capturing listener.
+ * @param {boolean} capture Whether the listener is a capturing listener.
  * @param {Object=} opt_listenerScope Object in whose scope to call the
  *     listener.
  * @return {goog.events.ListenableKey} the found listener or null if not found.
