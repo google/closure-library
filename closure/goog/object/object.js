@@ -411,7 +411,7 @@ goog.object.get = function(obj, key, opt_val) {
  *
  * @param {Object.<K,V>} obj The object to which to add the key-value pair.
  * @param {string} key The key to add.
- * @param {K} value The value to add.
+ * @param {V} value The value to add.
  * @template K,V
  */
 goog.object.set = function(obj, key, value) {
