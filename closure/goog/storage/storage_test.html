@@ -12,6 +12,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.storage.Storage</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.functions');
   goog.require('goog.storage.ErrorCode');
   goog.require('goog.storage.Storage');
   goog.require('goog.storage.mechanism.mechanismfactory');
@@ -48,6 +49,14 @@ function testMechanismCommunication() {
   assertUndefined(storage.get('second'));
   assertNull(mechanism.get('first'));
   assertNull(mechanism.get('second'));
+}
+
+function testMechanismFailsGracefullyOnInvalidValue() {
+  var mechanism = {
+    get: goog.functions.error('Invalid value')
+  };
+  var storage = new goog.storage.Storage(mechanism);
+  assertUndefined(storage.get('foobar'));
 }
 
 </script>
