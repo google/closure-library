@@ -21,7 +21,7 @@
  * e.g: <code>var myUri = new goog.Uri(window.location);</code>
  *
  * Implements RFC 3986 for parsing/formatting URIs.
- * http://gbiv.com/protocols/uri/rfc/rfc3986.html
+ * http://www.ietf.org/rfc/rfc3986.txt
  *
  * Some changes have been made to the interface (more like .NETs), though the
  * internal representation is now of un-encoded parts, this will change the
