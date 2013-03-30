@@ -64,7 +64,7 @@ goog.testing.TestCase = function(opt_name) {
 
   /**
    * Array of test functions that can be executed.
-   * @type {Array.<goog.testing.TestCase.Test>}
+   * @type {!Array.<!goog.testing.TestCase.Test>}
    * @private
    */
   this.tests_ = [];
@@ -276,7 +276,7 @@ goog.testing.TestCase.prototype.onCompleteCallback_ = null;
 
 /**
  * The test runner that is running this case.
- * @type {goog.testing.TestRunner?}
+ * @type {goog.testing.TestRunner}
  * @private
  */
 goog.testing.TestCase.prototype.testRunner_ = null;
@@ -292,8 +292,25 @@ goog.testing.TestCase.prototype.add = function(test) {
 
 
 /**
+ * Creates and adds a new test.
+ *
+ * Convenience function to make syntax less awkward when not using automatic
+ * test discovery.
+ *
+ * @param {string} name The test name.
+ * @param {!Function} ref Reference to the test function.
+ * @param {!Object=} opt_scope Optional scope that the test function should be
+ *     called in.
+ */
+goog.testing.TestCase.prototype.addNewTest = function(name, ref, opt_scope) {
+  var test = new goog.testing.TestCase.Test(name, ref, opt_scope || this);
+  this.tests_.push(test);
+};
+
+
+/**
  * Sets the tests.
- * @param {Array.<goog.testing.TestCase.Test>} tests A new test array.
+ * @param {!Array.<goog.testing.TestCase.Test>} tests A new test array.
  * @protected
  */
 goog.testing.TestCase.prototype.setTests = function(tests) {
@@ -332,7 +349,7 @@ goog.testing.TestCase.prototype.getActuallyRunCount = function() {
 
 /**
  * Returns the current test and increments the pointer.
- * @return {goog.testing.TestCase.Test?} The current test case.
+ * @return {goog.testing.TestCase.Test} The current test case.
  */
 goog.testing.TestCase.prototype.next = function() {
   var test;

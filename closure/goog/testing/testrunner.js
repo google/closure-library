@@ -277,25 +277,8 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
     this.logEl_ = el;
   }
 
-  // Remove all children from the log element.
-  var logEl = this.logEl_;
-  while (logEl.firstChild) {
-    logEl.removeChild(logEl.firstChild);
-  }
-
   // Highlight the page to indicate the overall outcome.
   this.writeLog(log);
-
-  var runAgainLink = document.createElement('a');
-  runAgainLink.style.display = 'block';
-  runAgainLink.style.fontSize = 'small';
-  runAgainLink.href = '';
-  runAgainLink.onclick = goog.bind(function() {
-    this.execute();
-    return false;
-  }, this);
-  runAgainLink.innerHTML = 'Run again without reloading';
-  logEl.appendChild(runAgainLink);
 };
 
 
@@ -402,3 +385,4 @@ goog.testing.TestRunner.prototype.log = function(s) {
     this.testCase.log(s);
   }
 };
+
