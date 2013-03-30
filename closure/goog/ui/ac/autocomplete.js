@@ -251,18 +251,12 @@ goog.ui.ac.AutoComplete.prototype.handleEvent = function(e) {
         break;
 
       case goog.ui.ac.AutoComplete.EventType.SELECT:
-        var rowId = /** @type {number} */ (e.row);
-        var rowValid;
-        if (this.hiliteId_ == rowId) {
-          rowValid = this.isRowEnabled_(rowId);
-        } else {
-          // TODO(user): commenting out this line to see if it's what breaks tests
-          rowValid = this.hiliteId(rowId);
-          
-          // rowValid = true;  // TODO(user) not really the right thing to do.
-          //assertEquals('rowId=' + rowId + ', hilite=' + this.hiliteId_, rowId, this.hiliteId_);  // TODO(user): will fail if we get here - just want the info
-        }
-        if (rowValid) {
+        // Make sure the row selected is not a disabled row.
+        var index = this.getIndexOfId(/** @type {number} */ (e.row));
+        var row = this.rows_[index];
+        var rowDisabled = !!row && this.matcher_.isRowDisabled &&
+            this.matcher_.isRowDisabled(row);
+        if (!rowDisabled) {
           this.selectHilited();
         }
         break;
@@ -276,22 +270,6 @@ goog.ui.ac.AutoComplete.prototype.handleEvent = function(e) {
         break;
     }
   }
-};
-
-
-/**
- * Returns whether the row with the specified ID is valid and not disabled.
- * @param {number} id A row id (not index).
- * @return {boolean} Whether the id is valid and not disabled.
- * @private
- */
-goog.ui.ac.AutoComplete.prototype.isRowEnabled_ = function(id) {
-  var index = this.getIndexOfId(id);
-  var row = this.rows_[index];
-  var rowDisabled = !!row && this.matcher_.isRowDisabled &&
-      this.matcher_.isRowDisabled(row);
-  // TODO(user): does also testing for index > -1 break tests?
-  return !rowDisabled;
 };
 
 
