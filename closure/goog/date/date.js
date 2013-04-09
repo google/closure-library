@@ -1205,9 +1205,10 @@ goog.date.Date.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
  * @return {boolean} Whether the given date is equal to this one.
  */
 goog.date.Date.prototype.equals = function(other) {
-  return this.getYear() == other.getYear() &&
-         this.getMonth() == other.getMonth() &&
-         this.getDate() == other.getDate();
+  return !!(other &&
+            this.getYear() == other.getYear() &&
+            this.getMonth() == other.getMonth() &&
+            this.getDate() == other.getDate());
 };
 
 

@@ -774,6 +774,8 @@ function testDateIntervalAdd() {
 function testDateEquals() {
   var d1 = new goog.date.Date(2004, goog.date.month.MAR, 1);
   var d2 = new goog.date.Date(2004, goog.date.month.MAR, 1);
+  assertFalse('d1 != null', d1.equals(null));
+  assertFalse('d2 != undefined', d2.equals(undefined));
   assertTrue('d1 == d2', d1.equals(d2));
   assertTrue('d2 == d1', d2.equals(d1));
 
