@@ -68,6 +68,11 @@ testAgents.IE_9 =
 
 
 /** @const {string} */
+testAgents.IE_9_COMPATIBILITY =
+    'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/5.0)';
+
+
+/** @const {string} */
 testAgents.IE_10 =
     'Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0;' +
     ' InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729;' +
@@ -113,9 +118,10 @@ testAgents.SAFARI_IPHONE =
 
 
 /** @const {string} */
-testAgents.IPHONE_6 =
-    'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26' +
-    ' (KHTML, like Gecko) Mobile/10A5376e';
+testAgents.SAFARI_IPHONE_431 =
+    'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_1 like Mac OS X; zh-tw)' +
+    ' AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8G4' +
+    ' Safari/6533.18.5';
 
 
 /** @const {string} */
@@ -158,6 +164,13 @@ testAgents.OPERA_LINUX =
 testAgents.OPERA_MAC =
     'Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168' +
     ' Version/11.52';
+
+
+/** @const {string} */
+testAgents.IPHONE_6 =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 ' +
+    'like Mac OS X) AppleWebKit/536.26 ' +
+    '(KHTML, like Gecko) Mobile/10A5376e';
 
 
 /** @const {string} */
