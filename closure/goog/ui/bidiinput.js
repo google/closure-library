@@ -24,7 +24,6 @@
 goog.provide('goog.ui.BidiInput');
 
 
-goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.InputHandler');
 goog.require('goog.i18n.bidi');
@@ -54,10 +53,10 @@ goog.ui.BidiInput.prototype.inputHandler_ = null;
 
 
 /**
- * Decorates the given HTML element as a BidiInput. The HTML element can be an
- * input element with type='text', a textarea element, or any contenteditable.
+ * Decorates the given HTML element as a BidiInput. The HTML element
+ * must be an input element with type='text' or a textarea element.
  * Overrides {@link goog.ui.Component#decorateInternal}.  Considered protected.
- * @param {Element} element  Element to decorate.
+ * @param {Element} element  Element (HTML Input element) to decorate.
  * @protected
  * @override
  */
@@ -108,7 +107,7 @@ goog.ui.BidiInput.prototype.init_ = function() {
  */
 goog.ui.BidiInput.prototype.setDirection_ = function() {
   var element = this.getElement();
-  var text = this.getValue();
+  var text = element.value;
   switch (goog.i18n.bidi.estimateDirection(text)) {
     case (goog.i18n.bidi.Dir.LTR):
       element.dir = 'ltr';
@@ -146,12 +145,7 @@ goog.ui.BidiInput.prototype.getDirection = function() {
  * @param {string} value  The Value to set in the underlying input field.
  */
 goog.ui.BidiInput.prototype.setValue = function(value) {
-  var element = this.getElement();
-  if (element.value) {
-    element.value = value;
-  } else {
-    goog.dom.setTextContent(element, value);
-  }
+  this.getElement().value = value;
   this.setDirection_();
 };
 
@@ -161,8 +155,7 @@ goog.ui.BidiInput.prototype.setValue = function(value) {
  * @return {string} Value of the underlying input field.
  */
 goog.ui.BidiInput.prototype.getValue = function() {
-  var element = this.getElement();
-  return element.value || goog.dom.getRawTextContent(element);
+  return this.getElement().value;
 };
 
 
