@@ -569,8 +569,9 @@ function testGetPositionTolerantToNoDocumentElementBorder() {
     document.body.appendChild(div);
 
     // Test all major positioning methods.
-    // Temporarily disabled for IE8 - IE8 returns dimensions multiplied by 100
-    expectedFailures.expectFailureFor(isIE8() && !goog.dom.isCss1CompatMode());
+    // Disabled for IE8 and below - IE8 returns dimensions multiplied by 100.
+    expectedFailures.expectFailureFor(
+        goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9));
     try {
       // Test all major positioning methods.
       var pos = goog.style.getClientPosition(div);
@@ -1998,6 +1999,10 @@ function testOverflowOffsetParent() {
 }
 
 function testGetViewportPageOffset() {
+  expectedFailures.expectFailureFor(
+      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9),
+      'Test has been flaky for ie8-winxp image. Disabling.');
+
   var testViewport = goog.dom.getElement('test-viewport');
   testViewport.style.height = '5000px';
   testViewport.style.width = '5000px';
@@ -2534,9 +2539,4 @@ function testGetVendorStyleOpera() {
   assertUserAgent([UserAgents.OPERA], 'Opera');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
-}
-
-function isIE8() {
-  return goog.userAgent.IE && goog.userAgent.isDocumentMode(8) &&
-      !goog.userAgent.isDocumentMode(9);
 }
