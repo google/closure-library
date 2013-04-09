@@ -60,7 +60,7 @@ See the COPYING file for details.
     goog.events.Listenable.USE_LISTENABLE_INTERFACE = ORIGINAL_FLAG_VALUE;
 
     stubs.reset();
-    goog.events.removeAll();
+    goog.events.removeAllNativeListeners();
     root.innerHTML = '';
     firedEventTypes = [];
     firedEventCoordinates = [];

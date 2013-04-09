@@ -73,7 +73,7 @@ function setUp() {
 
 function tearDown() {
   comboBox.dispose();
-  goog.events.removeAll();
+  goog.events.removeAllNativeListeners();
 }
 
 function testInputElementAttributes() {

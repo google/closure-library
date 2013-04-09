@@ -65,7 +65,7 @@ function tearDown() {
   // it is lame. It manifests its lameness by throwing an exception.
   // Kudos to XT for helping me to figure this out.
   try {
-    goog.events.removeAll();
+    goog.events.removeAllNativeListeners();
   } catch (e) {}
 }
 

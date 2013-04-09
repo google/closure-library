@@ -72,7 +72,7 @@ Author: attila@google.com (Attila Bodis)
       control.dispose();
       expectedFailures.handleTearDown();
       goog.dom.removeChildren(sandbox);
-      goog.events.removeAll();
+      goog.events.removeAllNativeListeners();
       resetEventCount();
     }
 

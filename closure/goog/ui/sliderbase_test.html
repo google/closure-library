@@ -223,7 +223,7 @@ function setUp() {
 }
 
 function tearDown() {
-  goog.events.removeAll();
+  goog.events.removeAllNativeListeners();
   oneThumbSlider.dispose();
   twoThumbSlider.dispose();
   oneThumbSliderRtl.dispose();

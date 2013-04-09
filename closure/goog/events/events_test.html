@@ -28,15 +28,20 @@ See the COPYING file for details.
 <script>
   var originalHandleBrowserEvent = goog.events.handleBrowserEvent_;
   var propertyReplacer;
+  var et1, et2, et3;
 
   function setUp() {
+    et1 = new goog.events.EventTarget();
+    et2 = new goog.events.EventTarget();
+    et3 = new goog.events.EventTarget();
     propertyReplacer = new goog.testing.PropertyReplacer();
   }
 
   function tearDown() {
     goog.events.STRICT_EVENT_TARGET = false;
     goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
-    goog.events.removeAll();
+    goog.disposeAll(et1, et2, et3);
+    goog.events.removeAllNativeListeners();
     propertyReplacer.reset();
   }
 
@@ -81,7 +86,6 @@ See the COPYING file for details.
   }
 
   function testSelfRemove() {
-    var et1 = new goog.events.EventTarget();
     var callback = function() {
       // This listener removes itself during event dispatching, so it
       // is marked as 'removed' but not actually removed until after event
@@ -115,27 +119,23 @@ See the COPYING file for details.
   }
 
   function testHasListenerWithEventTarget() {
-    var et = new goog.events.EventTarget();
-    assertFalse(goog.events.hasListener(et));
+    assertFalse(goog.events.hasListener(et1));
 
     function callback() {};
-    goog.events.listen(et, 'test', callback, true);
-    assertTrue(goog.events.hasListener(et));
-    assertTrue(goog.events.hasListener(et, 'test'));
-    assertTrue(goog.events.hasListener(et, 'test', true));
-    assertTrue(goog.events.hasListener(et, undefined, true));
+    goog.events.listen(et1, 'test', callback, true);
+    assertTrue(goog.events.hasListener(et1));
+    assertTrue(goog.events.hasListener(et1, 'test'));
+    assertTrue(goog.events.hasListener(et1, 'test', true));
+    assertTrue(goog.events.hasListener(et1, undefined, true));
 
-    assertFalse(goog.events.hasListener(et, 'click'));
-    assertFalse(goog.events.hasListener(et, 'test', false));
+    assertFalse(goog.events.hasListener(et1, 'click'));
+    assertFalse(goog.events.hasListener(et1, 'test', false));
 
-    goog.events.unlisten(et, 'test', callback, true);
-    assertFalse(goog.events.hasListener(et));
+    goog.events.unlisten(et1, 'test', callback, true);
+    assertFalse(goog.events.hasListener(et1));
   }
 
   function testHasListenerWithMultipleTargets() {
-    var et1 = new goog.events.EventTarget();
-    var et2 = new goog.events.EventTarget();
-
     function callback() {};
 
     goog.events.listen(et1, 'test1', callback, true);
@@ -154,10 +154,6 @@ See the COPYING file for details.
   }
 
   function testBubbleSingle() {
-    var et1 = new goog.events.EventTarget();
-    var et2 = new goog.events.EventTarget();
-    var et3 = new goog.events.EventTarget();
-
     et1.setParentEventTarget(et2);
     et2.setParentEventTarget(et3);
 
@@ -183,9 +179,6 @@ See the COPYING file for details.
       return;
     }
 
-    var et1 = new goog.events.EventTarget();
-    var et2 = new goog.events.EventTarget();
-
     et1.setParentEventTarget(et2);
 
     et2.getParentEventTarget = function() {
@@ -208,10 +201,6 @@ See the COPYING file for details.
   }
 
   function testCaptureSingle() {
-    var et1 = new goog.events.EventTarget();
-    var et2 = new goog.events.EventTarget();
-    var et3 = new goog.events.EventTarget();
-
     et1.setParentEventTarget(et2);
     et2.setParentEventTarget(et3);
 
@@ -232,10 +221,6 @@ See the COPYING file for details.
   }
 
   function testCaptureAndBubble() {
-    var et1 = new goog.events.EventTarget();
-    var et2 = new goog.events.EventTarget();
-    var et3 = new goog.events.EventTarget();
-
     et1.setParentEventTarget(et2);
     et2.setParentEventTarget(et3);
 
@@ -284,8 +269,6 @@ See the COPYING file for details.
   }
 
   function testCapturingRemovesBubblingListener() {
-    var et1 = new goog.events.EventTarget();
-
     var bubbleCount = 0;
     function callbackBubble() {
       bubbleCount++;
@@ -397,15 +380,13 @@ See the COPYING file for details.
 
   // Fixes bug http://b/6434926
   function testListenOnceHandlerDispatchCausingInfiniteLoop() {
-    var target = new goog.events.EventTarget();
-
     var handleFoo = goog.testing.recordFunction(function() {
-      target.dispatchEvent('foo');
+      et1.dispatchEvent('foo');
     });
 
-    goog.events.listenOnce(target, 'foo', handleFoo);
+    goog.events.listenOnce(et1, 'foo', handleFoo);
 
-    target.dispatchEvent('foo');
+    et1.dispatchEvent('foo');
 
     assertEquals('Handler should be called only once.',
                  1, handleFoo.getCallCount());
@@ -431,12 +412,11 @@ See the COPYING file for details.
    * We just want to make sure we don't throw an exception.
    */
   function testUidDisappearanceJsTargets() {
-    var target = new goog.events.EventTarget();
     var listener = goog.testing.recordFunction();
-    goog.events.listenOnce(target, 'foo', listener, false);
+    goog.events.listenOnce(et1, 'foo', listener, false);
 
-    goog.removeUid(target);
-    target.dispatchEvent('foo');
+    goog.removeUid(et1);
+    et1.dispatchEvent('foo');
     if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
       assertEquals(1, listener.getCallCount());
     } else {
@@ -532,7 +512,7 @@ See the COPYING file for details.
     goog.events.listenOnce(div, 'click', listener);
     goog.events.listen(div, 'click', listener);
 
-    goog.events.removeAll();
+    goog.events.removeAllNativeListeners();
 
     dispatchClick(document.body);
     dispatchClick(div);
@@ -550,8 +530,8 @@ See the COPYING file for details.
   function runEventPropogationWithReentrantDispatch(useCapture) {
     var eventType = 'test-event-type';
 
-    var child = new goog.events.EventTarget();
-    var parent = new goog.events.EventTarget();
+    var child = et1;
+    var parent = et2;
     child.setParentEventTarget(parent);
 
     var firstTarget = useCapture ? parent : child;
@@ -587,8 +567,8 @@ See the COPYING file for details.
   function runEventPropogationWhenListenerRemoved(useCapture) {
     var eventType = 'test-event-type';
 
-    var child = new goog.events.EventTarget();
-    var parent = new goog.events.EventTarget();
+    var child = et1;
+    var parent = et2;
     child.setParentEventTarget(parent);
 
     var firstTarget = useCapture ? parent : child;
@@ -615,8 +595,8 @@ See the COPYING file for details.
   function runEventPropogationWhenListenerAdded(useCapture) {
     var eventType = 'test-event-type';
 
-    var child = new goog.events.EventTarget();
-    var parent = new goog.events.EventTarget();
+    var child = et1;
+    var parent = et2;
     child.setParentEventTarget(parent);
 
     var firstTarget = useCapture ? parent : child;
@@ -644,8 +624,8 @@ See the COPYING file for details.
   function runEventPropogationWhenListenerAddedAndRemoved(useCapture) {
     var eventType = 'test-event-type';
 
-    var child = new goog.events.EventTarget();
-    var parent = new goog.events.EventTarget();
+    var child = et1;
+    var parent = et2;
     child.setParentEventTarget(parent);
 
     var firstTarget = useCapture ? parent : child;

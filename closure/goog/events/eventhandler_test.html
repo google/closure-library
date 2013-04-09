@@ -30,9 +30,10 @@ See the COPYING file for details.
   var b = document.getElementById('b');
   var c = document.getElementById('c');
   var d = document.getElementById('d');
+  var eh;
 
   function tearDown() {
-    goog.events.removeAll();
+    goog.dispose(eh);
   }
 
   function testEventHandlerClearsListeners() {
@@ -46,7 +47,7 @@ See the COPYING file for details.
     assertEquals('1 listener should be registered now', 1,
         goog.object.getCount(goog.events.listeners_));
 
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
     eh.listen(a, 'click');
     eh.listen(a, 'keypress');
     eh.listen(b, 'mouseover');
@@ -74,7 +75,7 @@ See the COPYING file for details.
   }
 
   function testListenArray() {
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
 
     eh.listen(a, ['click', 'mousedown', 'mouseup']);
 
@@ -102,7 +103,7 @@ See the COPYING file for details.
     assertEquals('No listeners registered yet', 0,
         goog.object.getCount(goog.events.listeners_));
     var target = new goog.events.EventTarget();
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
     eh.listenOnce(target, 'click', function(e) { events.push(e); });
     assertEquals('1 listener should be registered', 1,
         goog.object.getCount(goog.events.listeners_));
@@ -120,7 +121,7 @@ See the COPYING file for details.
     assertEquals('No listeners registered yet', 0,
         goog.object.getCount(goog.events.listeners_));
     var target = new goog.events.EventTarget();
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
     eh.listenOnce(target, 'click', function(e) { events.push(e); });
     assertEquals('1 listener should be registered', 1,
         goog.object.getCount(goog.events.listeners_));
@@ -136,7 +137,7 @@ See the COPYING file for details.
     assertEquals('No listeners registered yet', 0,
         goog.object.getCount(goog.events.listeners_));
     var target = new goog.events.EventTarget();
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
     eh.listenOnce(target, 'click', function(e) { events.push(e); });
     assertEquals('1 listener should be registered', 1,
         goog.object.getCount(goog.events.listeners_));
@@ -156,7 +157,7 @@ See the COPYING file for details.
     assertEquals('No listeners registered yet', 0,
         goog.object.getCount(goog.events.listeners_));
     var target = new goog.events.EventTarget();
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
     eh.listenOnce(target, ['click', 'mousedown', 'mouseup'],
     function(e) { events.push(e); });
     assertEquals('3 listeners should be registered', 3,
@@ -185,7 +186,7 @@ See the COPYING file for details.
     assertEquals('No listeners registered yet', 0,
         goog.object.getCount(goog.events.listeners_));
     var target = new goog.events.EventTarget();
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
     var handlerObj = {
       handleEvent: function(e) {
         events.push(e);
@@ -210,7 +211,7 @@ See the COPYING file for details.
     assertEquals('No listeners registered yet', 0,
         goog.object.getCount(goog.events.listeners_));
     var target = new goog.events.EventTarget();
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
     var handlerObj = {
       handleEvent: function(e) {
         events.push(e);
@@ -228,7 +229,7 @@ See the COPYING file for details.
   }
 
   function testGetListenerCount() {
-    var eh = new goog.events.EventHandler();
+    eh = new goog.events.EventHandler();
     assertEquals('0 listeners registered initially', 0, eh.getListenerCount());
     var target = new goog.events.EventTarget();
     eh.listen(target, 'click', goog.nullFunction, false);

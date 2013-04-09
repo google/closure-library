@@ -205,7 +205,7 @@ Author:  attila@google.com (Attila Bodis)
     }
 
     function tearDown() {
-      goog.events.removeAll();
+      goog.events.removeAllNativeListeners();
     }
 
     function testCreateEventListeners() {

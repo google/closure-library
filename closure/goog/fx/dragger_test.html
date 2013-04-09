@@ -68,7 +68,7 @@ function setUp() {
 function tearDown() {
   goog.dom.getElement('sandbox').innerHTML = '';
   goog.dom.getElement('sandbox_rtl').innerHTML = '';
-  goog.events.removeAll();
+  goog.events.removeAllNativeListeners();
 }
 
 function testStartDrag() {
