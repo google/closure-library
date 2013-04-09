@@ -17,11 +17,6 @@
  * simulates a bidirectional socket over HTTP. It is the basis of the
  * Gmail Chat IM connections to the server.
  *
- * See http://wiki/Main/BrowserChannel
- * This doesn't yet completely comform to the design document as we've done
- * some renaming and cleanup in the design document that hasn't yet been
- * implemented in the protocol.
- *
  * Typical usage will look like
  *  var handler = [handler object];
  *  var channel = new BrowserChannel(clientVersion);
