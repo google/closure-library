@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+Copyright 2013 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Closure Unit Tests - goog.i18n.collation</title>
+    <meta charset="utf-8">
+    <script src='../base.js'>
+    </script>
+    <script>
+    goog.require('goog.i18n.collation');
+    goog.require('goog.testing.ExpectedFailures')
+    goog.require('goog.testing.jsunit');
+    goog.require('goog.userAgent');
+    </script>
+</head>
+<body>
+<script>
+  var expectedFailures = new goog.testing.ExpectedFailures();
+
+  function tearDown() {
+    expectedFailures.handleTearDown();
+  }
+
+  function testGetEnComparator() {
+    goog.LOCALE = 'en';
+    var compare = goog.i18n.collation.createComparator();
+    // The côte/coté comparison fails in FF/Linux (v19.0) because
+    // calling 'côte'.localeCompare('coté')  gives a negative number (wrong)
+    // when the test is run but a positive number (correct) when calling
+    // it later in the web console. FF/OSX doesn't have this problem.
+    // Mozilla bug: https://bugzilla.mozilla.org/show_bug.cgi?id=856115
+    expectedFailures.expectFailureFor(
+        goog.userAgent.GECKO && goog.userAgent.LINUX);
+    try {
+      assertTrue(compare('côte','coté') > 0)
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
+
+  function testGetFrComparator() {
+    goog.LOCALE = 'fr-CA';
+    var compare = goog.i18n.collation.createComparator();
+    if (!goog.i18n.collation.hasNativeComparator()) return;
+    assertTrue(compare('côte', 'coté') < 0);
+  }
+
+  function testGetComparatorForSpecificLocale() {
+    goog.LOCALE = 'en';
+    var compare = goog.i18n.collation.createComparator('fr-CA');
+    if (!goog.i18n.collation.hasNativeComparator('fr-CA')) return;
+    // 'côte' and 'coté' sort differently for en and fr-CA.
+    assertTrue(compare('côte', 'coté') < 0);
+  }
+</script>
+</body>
+</html>
