@@ -187,6 +187,56 @@ function testHiliteViaMouse() {
   assertTrue(goog.string.contains(rowNode.innerHTML, 'mice@myotherdomain.com'));
 }
 
+function testMouseClickBeforeHilite() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  ac.setMaxMatches(4);
+  ac.setToken('the');
+  // Need to set the startRenderingRows_ time to something long ago, otherwise
+  // the mouse event will not be fired.  (The autocomplete logic waits for some
+  // time to pass after rendering before firing mouseover events.)
+  rend.startRenderingRows_ = -1;
+
+  // hilite row 3...
+  var hilitedRowDiv = rend.getRowDiv(3);
+  goog.testing.events.fireMouseOverEvent(hilitedRowDiv);
+
+  // but click row 2, to simulate mouse getting ahead of focus.
+  var targetRowDiv = rend.getRowDiv(2);
+  goog.testing.events.fireClickEvent(targetRowDiv);
+
+  assertEquals('the.mice@magrathea.com', select.selectedRow);
+}
+
+/*
+ * Send AutoComplete a SELECT event with empty string for the row. We can't
+ * simulate with a simple mouse click, so we dispatch the event directly.
+ */
+function testSelectEventEmptyRow() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  ac.setMaxMatches(4);
+  ac.setToken('the');
+  rend.startRenderingRows_ = -1;
+
+  // hilight row 2 ('the.mice@...')
+  var hilitedRowDiv = rend.getRowDiv(2);
+  goog.testing.events.fireMouseOverEvent(hilitedRowDiv);
+  assertUndefined(select.selectedRow);
+
+  // Dispatch an event that does not specify a row.
+  rend.dispatchEvent({
+      type: goog.ui.ac.AutoComplete.EventType.SELECT,
+      row: ''
+      });
+
+  assertEquals('the.mice@magrathea.com', select.selectedRow);
+}
+
 function testSuggestionsUpdateEvent() {
   var ds = new MockDS();
   var rend = new TestRend();
