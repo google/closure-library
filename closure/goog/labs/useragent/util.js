@@ -22,6 +22,29 @@
 
 goog.provide('goog.labs.userAgent.util');
 
+goog.require('goog.memoize');
+goog.require('goog.string');
+
+
+/**
+ * Returns the user agent string.
+ *
+ * @return {string} The user agent string.
+ */
+goog.labs.userAgent.util.getUserAgentString = goog.memoize(function() {
+  return goog.global['navigator'] ? goog.global['navigator'].userAgent : '';
+});
+
+
+/**
+ * @param {string} str
+ * @return {boolean} Whether the user agent contains the given string.
+ */
+goog.labs.userAgent.util.matchUserAgent = function(str) {
+  var userAgentString = goog.labs.userAgent.util.getUserAgentString();
+  return goog.string.contains(userAgentString, str);
+};
+
 
 /**
  * Parses the user agent into tuples for each section.

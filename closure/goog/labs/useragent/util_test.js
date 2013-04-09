@@ -31,7 +31,7 @@ goog.setTestOnly('goog.labs.userAgent.utilTest');
 function testExtractVersionTuples() {
   // Old Android
   var tuples = goog.labs.userAgent.util.extractVersionTuples(
-      goog.labs.userAgent.testAgents.ANDROID_BROWSER);
+      goog.labs.userAgent.testAgents.ANDROID_BROWSER_235);
 
   assertEquals(4, tuples.length);
   assertSameElements(
