@@ -21,11 +21,11 @@ See the COPYING file for details.
 // See http://svn.python.org/view/python/trunk/Lib/test/test_posixpath.py
 
 function testBasename() {
-  assertEquals('bar', goog.string.path.basename('/foo/bar'));
-  assertEquals('', goog.string.path.basename('/'));
-  assertEquals('foo', goog.string.path.basename('foo'));
-  assertEquals('foo', goog.string.path.basename('////foo'));
-  assertEquals('bar', goog.string.path.basename('//foo//bar'));
+  assertEquals('bar', goog.string.path.baseName('/foo/bar'));
+  assertEquals('', goog.string.path.baseName('/'));
+  assertEquals('foo', goog.string.path.baseName('foo'));
+  assertEquals('foo', goog.string.path.baseName('////foo'));
+  assertEquals('bar', goog.string.path.baseName('//foo//bar'));
 }
 
 function testDirname() {
