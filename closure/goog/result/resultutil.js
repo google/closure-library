@@ -212,8 +212,8 @@ goog.result.waitOnError = function(result, handler, opt_scope) {
  * var transformedResult = goog.result.transform(result, processJson);
  *
  * // Attach success and failure handlers to the tranformed result.
- * goog.result.waitOnSuccess(transformedResult, function(result) {
- *   var jsonData = result.getValue();
+ * goog.result.waitOnSuccess(transformedResult, function(resultValue, result) {
+ *   var jsonData = resultValue;
  *   assertEquals('ok', jsonData['stat']);
  * });
  *
@@ -289,11 +289,11 @@ goog.result.transform = function(result, transformer) {
  *
  * // The chained result resolves to success when both results resolve to
  * // success.
- * goog.result.waitOnSuccess(chainedResult, function(result) {
+ * goog.result.waitOnSuccess(chainedResult, function(resultValue, result) {
  *
  *   // At this point, both results have succeeded and we can use the JSON
  *   // data returned by the second asynchronous call.
- *   var jsonData = result.getValue();
+ *   var jsonData = resultValue;
  *   assertEquals('ok', jsonData['stat']);
  * });
  *
