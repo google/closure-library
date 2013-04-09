@@ -161,8 +161,7 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
  */
 goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
   if (this.minimumFractionDigits_ > max) {
-    throw Error(
-        'Min value must be less than max value');
+    throw Error('Min value must be less than max value');
   }
   this.maximumFractionDigits_ = max;
 };
@@ -178,6 +177,14 @@ goog.i18n.NumberFormat.prototype.setSignificantDigits = function(number) {
         'Can\'t combine significant digits and minimum fraction digits');
   }
   this.significantDigits_ = number;
+};
+
+/**
+ * Sets number of significant digits to show. Only fractions will be rounded.
+ * @return {number} The number of significant digits to include.
+ */
+goog.i18n.NumberFormat.prototype.getSignificantDigits = function() {
+  return this.significantDigits_;
 };
 
 
@@ -248,7 +255,7 @@ goog.i18n.NumberFormat.prototype.applyStandardPattern_ = function(patternType) {
 
 /**
  * Apply a predefined pattern for shorthand formats.
- * @param {!goog.i18n.NumberFormat.CompactStyle} style the compact style to
+ * @param {goog.i18n.NumberFormat.CompactStyle} style the compact style to
  *     set defaults for.
  * @private
  */
@@ -477,14 +484,14 @@ goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
     intValue = number;
     fracValue = 0;
   }
-  return { intValue: intValue, fracValue: fracValue };
+  return {intValue: intValue, fracValue: fracValue};
 };
 
 
 /**
  * Formats a Number in fraction format.
  *
- * @param {number} number Value need to be formated.
+ * @param {number} number
  * @param {number} minIntDigits Minimum integer digits.
  * @param {Array} parts This array holds the pieces of formatted string.
  *     This function will add its formatted pieces to the array.
@@ -993,7 +1000,7 @@ goog.i18n.NumberFormat.NULL_UNIT_ = { prefix: '', suffix: '', divisorBase: 0 };
  * @return {!goog.i18n.NumberFormat.CompactNumberUnit} The compact unit.
  * @private
  */
-goog.i18n.NumberFormat.prototype.unitFor_ = function(base, plurality) {
+goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
   var table = this.compactStyle_ == goog.i18n.NumberFormat.CompactStyle.SHORT ?
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN :
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_LONG_PATTERN;
@@ -1003,7 +1010,7 @@ goog.i18n.NumberFormat.prototype.unitFor_ = function(base, plurality) {
   } else {
     base = Math.min(14, base);
     var patterns = table[Math.pow(10, base)];
-    if (patterns == null) {
+    if (!patterns) {
       return goog.i18n.NumberFormat.NULL_UNIT_;
     }
 
@@ -1013,7 +1020,7 @@ goog.i18n.NumberFormat.prototype.unitFor_ = function(base, plurality) {
     }
 
     var parts = /([^0]*)(0+)(.*)/.exec(pattern);
-    if (parts == null) {
+    if (!parts) {
       return goog.i18n.NumberFormat.NULL_UNIT_;
     }
 
@@ -1041,12 +1048,12 @@ goog.i18n.NumberFormat.prototype.getUnitAfterRounding_ = function(number) {
   number = Math.abs(number);
 
   var plurality = this.pluralForm_(number);
-  var base = number <= 1.0 ? 0 : this.intLog10_(number);
-  var initialDivisor = this.unitFor_(base, plurality).divisorBase;
+  var base = number <= 1 ? 0 : this.intLog10_(number);
+  var initialDivisor = this.getUnitFor_(base, plurality).divisorBase;
   var attempt = number / Math.pow(10, initialDivisor);
   var rounded = this.roundNumber_(attempt);
   var finalPlurality = this.pluralForm_(rounded.intValue + rounded.fracValue);
-  return this.unitFor_(initialDivisor + this.intLog10_(rounded.intValue),
+  return this.getUnitFor_(initialDivisor + this.intLog10_(rounded.intValue),
       finalPlurality);
 };
 
@@ -1078,7 +1085,7 @@ goog.i18n.NumberFormat.prototype.intLog10_ = function(number) {
  */
 goog.i18n.NumberFormat.prototype.roundToSignificantDigits_ =
     function(number, significantDigits, scale) {
-  if (number == 0)
+  if (!number)
     return number;
 
   var digits = this.intLog10_(number);
