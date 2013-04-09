@@ -16,6 +16,7 @@
  * @fileoverview Definition of the ChannelDebug class. ChannelDebug provides
  * a utility for tracing and debugging the BrowserChannel requests.
  *
+ * TODO(user) - allow client to specify a custom redaction policy
  */
 
 
@@ -23,9 +24,8 @@
  * Namespace for BrowserChannel
  */
 goog.provide('goog.net.ChannelDebug');
-
+goog.require('goog.debug.Logger');
 goog.require('goog.json');
-goog.require('goog.log');
 
 
 
@@ -37,10 +37,10 @@ goog.require('goog.log');
 goog.net.ChannelDebug = function() {
   /**
    * The logger instance.
-   * @const
+   * @type {goog.debug.Logger}
    * @private
    */
-  this.logger_ = goog.log.getLogger('goog.net.BrowserChannel');
+  this.logger_ = goog.debug.Logger.getLogger('goog.net.BrowserChannel');
 };
 
 
@@ -58,7 +58,7 @@ goog.net.ChannelDebug.prototype.getLogger = function() {
  * @param {goog.Uri} url The URL being requested.
  */
 goog.net.ChannelDebug.prototype.browserOfflineResponse = function(url) {
-  goog.log.info(this.logger_, 'BROWSER_OFFLINE: ' + url);
+  this.info('BROWSER_OFFLINE: ' + url);
 };
 
 
@@ -72,7 +72,7 @@ goog.net.ChannelDebug.prototype.browserOfflineResponse = function(url) {
  */
 goog.net.ChannelDebug.prototype.xmlHttpChannelRequest =
     function(verb, uri, id, attempt, postData) {
-  goog.log.info(this.logger_,
+  this.info(
       'XMLHTTP REQ (' + id + ') [attempt ' + attempt + ']: ' +
       verb + '\n' + uri + '\n' +
       this.maybeRedactPostData_(postData));
@@ -90,7 +90,7 @@ goog.net.ChannelDebug.prototype.xmlHttpChannelRequest =
  */
 goog.net.ChannelDebug.prototype.xmlHttpChannelResponseMetaData =
     function(verb, uri, id, attempt, readyState, statusCode)  {
-  goog.log.info(this.logger_,
+  this.info(
       'XMLHTTP RESP (' + id + ') [ attempt ' + attempt + ']: ' +
       verb + '\n' + uri + '\n' + readyState + ' ' + statusCode);
 };
@@ -104,7 +104,7 @@ goog.net.ChannelDebug.prototype.xmlHttpChannelResponseMetaData =
  */
 goog.net.ChannelDebug.prototype.xmlHttpChannelResponseText =
     function(id, responseText, opt_desc) {
-  goog.log.info(this.logger_,
+  this.info(
       'XMLHTTP TEXT (' + id + '): ' +
       this.redactResponse_(responseText) +
       (opt_desc ? ' ' + opt_desc : ''));
@@ -120,7 +120,7 @@ goog.net.ChannelDebug.prototype.xmlHttpChannelResponseText =
  */
 goog.net.ChannelDebug.prototype.tridentChannelRequest =
     function(verb, uri, id, attempt) {
-  goog.log.info(this.logger_,
+  this.info(
       'TRIDENT REQ (' + id + ') [ attempt ' + attempt + ']: ' +
       verb + '\n' + uri);
 };
@@ -133,7 +133,7 @@ goog.net.ChannelDebug.prototype.tridentChannelRequest =
  */
 goog.net.ChannelDebug.prototype.tridentChannelResponseText =
     function(id, responseText) {
-  goog.log.info(this.logger_,
+  this.info(
       'TRIDENT TEXT (' + id + '): ' +
       this.redactResponse_(responseText));
 };
@@ -146,7 +146,7 @@ goog.net.ChannelDebug.prototype.tridentChannelResponseText =
  */
 goog.net.ChannelDebug.prototype.tridentChannelResponseDone =
     function(id, successful) {
-  goog.log.info(this.logger_,
+  this.info(
       'TRIDENT TEXT (' + id + '): ' + successful ? 'success' : 'failure');
 };
 
@@ -156,7 +156,7 @@ goog.net.ChannelDebug.prototype.tridentChannelResponseDone =
  * @param {goog.Uri} uri The uri that timed out.
  */
 goog.net.ChannelDebug.prototype.timeoutResponse = function(uri) {
-  goog.log.info(this.logger_, 'TIMEOUT: ' + uri);
+  this.info('TIMEOUT: ' + uri);
 };
 
 
@@ -165,7 +165,7 @@ goog.net.ChannelDebug.prototype.timeoutResponse = function(uri) {
  * @param {string} text The message.
  */
 goog.net.ChannelDebug.prototype.debug = function(text) {
-  goog.log.info(this.logger_, text);
+  this.info(text);
 };
 
 
@@ -175,7 +175,7 @@ goog.net.ChannelDebug.prototype.debug = function(text) {
  * @param {string=} opt_msg The optional message, defaults to 'Exception'.
  */
 goog.net.ChannelDebug.prototype.dumpException = function(e, opt_msg) {
-  goog.log.error(this.logger_, (opt_msg || 'Exception') + e);
+  this.severe((opt_msg || 'Exception') + e);
 };
 
 
@@ -184,7 +184,7 @@ goog.net.ChannelDebug.prototype.dumpException = function(e, opt_msg) {
  * @param {string} text The message.
  */
 goog.net.ChannelDebug.prototype.info = function(text) {
-  goog.log.info(this.logger_, text);
+  this.logger_.info(text);
 };
 
 
@@ -193,7 +193,7 @@ goog.net.ChannelDebug.prototype.info = function(text) {
  * @param {string} text The message.
  */
 goog.net.ChannelDebug.prototype.warning = function(text) {
-  goog.log.warning(this.logger_, text);
+  this.logger_.warning(text);
 };
 
 
@@ -202,7 +202,7 @@ goog.net.ChannelDebug.prototype.warning = function(text) {
  * @param {string} text The message.
  */
 goog.net.ChannelDebug.prototype.severe = function(text) {
-  goog.log.error(this.logger_, text);
+  this.logger_.severe(text);
 };
 
 
