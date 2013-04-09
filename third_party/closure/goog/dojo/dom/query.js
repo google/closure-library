@@ -1258,7 +1258,7 @@ goog.dom.query = (function() {
   var qsaAvail = (
     !!goog.dom.getDocument()[qsa] &&
     // see #5832
-    (!goog.userAgent.WEBKIT || goog.userAgent.isVersion('526'))
+    (!goog.userAgent.WEBKIT || goog.userAgent.isVersionOrHigher('526'))
   );
 
   /** @param {boolean=} opt_forceDOM */
