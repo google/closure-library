@@ -33,7 +33,7 @@ goog.require('goog.events.FocusHandler');
 goog.require('goog.fx.Transition');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.PopupBase.EventType');
+goog.require('goog.ui.PopupBase');
 goog.require('goog.userAgent');
 
 
@@ -71,6 +71,13 @@ goog.ui.ModalPopup = function(opt_useIframeMask, opt_domHelper) {
    * @private
    */
   this.useIframeMask_ = !!opt_useIframeMask;
+
+  /**
+   * The element that had focus before the popup was displayed.
+   * @type {Element}
+   * @private
+   */
+  this.lastFocus_ = null;
 };
 goog.inherits(goog.ui.ModalPopup, goog.ui.Component);
 
@@ -424,6 +431,12 @@ goog.ui.ModalPopup.prototype.show_ = function() {
     return;
   }
 
+  try {
+    this.lastFocus_ = this.getDomHelper().getDocument().activeElement;
+  } catch (e) {
+    // Focus-related actions often throw exceptions.
+    // Sample past issue: https://bugzilla.mozilla.org/show_bug.cgi?id=656283
+  }
   this.resizeBackground_();
   this.reposition();
 
@@ -480,6 +493,18 @@ goog.ui.ModalPopup.prototype.hide_ = function() {
   } else {
     this.onHide();
   }
+  try {
+    var body = this.getDomHelper().getDocument().body;
+    var active = this.getDomHelper().getDocument().activeElement || body;
+    if (this.lastFocus_ && active == body && this.lastFocus_ != body) {
+      this.lastFocus_.focus();
+    }
+  } catch (e) {
+    // Swallow this. IE can throw an error if the element can not be focused.
+  }
+  // Explicitly want to null this out even if there was an error focusing to
+  // avoid bleed over between dialog invocations.
+  this.lastFocus_ = null;
 };
 
 
