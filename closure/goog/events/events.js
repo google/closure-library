@@ -465,9 +465,11 @@ goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
  * @return {boolean} indicating whether the listener was there to remove.
  */
 goog.events.unlistenByKey = function(key) {
-  // TODO(user): When we flip goog.events.Key to be ListenableKey,
-  // we need to change this.
-  var listener = goog.events.listeners_[key];
+  // TODO(user): Should not be required soon. Did this so that
+  // we can fix some production code.
+  var listener = key instanceof goog.events.Listener ?
+      key : goog.events.listeners_[key];
+
   if (!listener) {
     return false;
   }
