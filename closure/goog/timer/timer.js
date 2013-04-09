@@ -245,7 +245,8 @@ goog.Timer.TICK = 'tick';
  * is a common trick to schedule a function to run after a batch of browser
  * event processing.
  *
- * @param {Function} listener Function or object that has a handleEvent method.
+ * @param {Function|{handleEvent:Function}} listener Function or object that
+ *     has a handleEvent method.
  * @param {number=} opt_delay Milliseconds to wait; default is 0.
  * @param {Object=} opt_handler Object in whose scope to call the listener.
  * @return {number} A handle to the timer ID.
