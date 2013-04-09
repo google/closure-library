@@ -114,6 +114,11 @@ function testToIsoString() {
                '2000-01-02T03:04:05', date.toXmlDateTime());
 }
 
+function testIsMidnight() {
+  assertTrue(new goog.date.UtcDateTime(2000, 0, 1).isMidnight());
+  assertFalse(new goog.date.UtcDateTime(2000, 0, 1, 0, 0, 0, 1).isMidnight());
+}
+
 </script>
 </body>
 </html>

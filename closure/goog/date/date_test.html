@@ -1352,6 +1352,14 @@ function testDateCompareDateLikes() {
   assertEquals(1, goog.date.Date.compare(nativeDate, closureDate));
 }
 
+function testIsMidnight() {
+  assertTrue(new goog.date.DateTime(2013, 0, 1).isMidnight());
+  assertFalse(new goog.date.DateTime(2013, 0, 1, 1).isMidnight());
+  assertFalse(new goog.date.DateTime(2013, 0, 1, 0, 1).isMidnight());
+  assertFalse(new goog.date.DateTime(2013, 0, 1, 0, 0, 1).isMidnight());
+  assertFalse(new goog.date.DateTime(2013, 0, 1, 0, 0, 0, 1).isMidnight());
+}
+
 </script>
 </body>
 </html>
