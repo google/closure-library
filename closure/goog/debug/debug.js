@@ -26,6 +26,10 @@ goog.require('goog.structs.Set');
 goog.require('goog.userAgent');
 
 
+/** @define {boolean} Whether logging should be enabled. */
+goog.debug.LOGGING_ENABLED = goog.DEBUG;
+
+
 /**
  * Catches onerror events fired by windows and similar objects.
  * @param {function(Object)} logFunc The function to call with the error

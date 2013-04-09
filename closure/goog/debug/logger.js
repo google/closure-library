@@ -387,16 +387,18 @@ goog.debug.Logger.prototype.getName = function() {
  * @param {Function} handler Handler function to add.
  */
 goog.debug.Logger.prototype.addHandler = function(handler) {
-  if (goog.debug.Logger.ENABLE_HIERARCHY) {
-    if (!this.handlers_) {
-      this.handlers_ = [];
+  if (goog.debug.LOGGING_ENABLED) {
+    if (goog.debug.Logger.ENABLE_HIERARCHY) {
+      if (!this.handlers_) {
+        this.handlers_ = [];
+      }
+      this.handlers_.push(handler);
+    } else {
+      goog.asserts.assert(!this.name_,
+          'Cannot call addHandler on a non-root logger when ' +
+          'goog.debug.Logger.ENABLE_HIERARCHY is false.');
+      goog.debug.Logger.rootHandlers_.push(handler);
     }
-    this.handlers_.push(handler);
-  } else {
-    goog.asserts.assert(!this.name_,
-        'Cannot call addHandler on a non-root logger when ' +
-        'goog.debug.Logger.ENABLE_HIERARCHY is false.');
-    goog.debug.Logger.rootHandlers_.push(handler);
   }
 };
 
@@ -408,9 +410,13 @@ goog.debug.Logger.prototype.addHandler = function(handler) {
  * @return {boolean} Whether the handler was removed.
  */
 goog.debug.Logger.prototype.removeHandler = function(handler) {
-  var handlers = goog.debug.Logger.ENABLE_HIERARCHY ? this.handlers_ :
-      goog.debug.Logger.rootHandlers_;
-  return !!handlers && goog.array.remove(handlers, handler);
+  if (goog.debug.LOGGING_ENABLED) {
+    var handlers = goog.debug.Logger.ENABLE_HIERARCHY ? this.handlers_ :
+        goog.debug.Logger.rootHandlers_;
+    return !!handlers && goog.array.remove(handlers, handler);
+  } else {
+    return false;
+  }
 };
 
 
@@ -446,13 +452,15 @@ goog.debug.Logger.prototype.getChildren = function() {
  * @param {goog.debug.Logger.Level} level The new level.
  */
 goog.debug.Logger.prototype.setLevel = function(level) {
-  if (goog.debug.Logger.ENABLE_HIERARCHY) {
-    this.level_ = level;
-  } else {
-    goog.asserts.assert(!this.name_,
-        'Cannot call setLevel() on a non-root logger when ' +
-        'goog.debug.Logger.ENABLE_HIERARCHY is false.');
-    goog.debug.Logger.rootLevel_ = level;
+  if (goog.debug.LOGGING_ENABLED) {
+    if (goog.debug.Logger.ENABLE_HIERARCHY) {
+      this.level_ = level;
+    } else {
+      goog.asserts.assert(!this.name_,
+          'Cannot call setLevel() on a non-root logger when ' +
+          'goog.debug.Logger.ENABLE_HIERARCHY is false.');
+      goog.debug.Logger.rootLevel_ = level;
+    }
   }
 };
 
@@ -467,7 +475,8 @@ goog.debug.Logger.prototype.setLevel = function(level) {
  * @return {goog.debug.Logger.Level} The level.
  */
 goog.debug.Logger.prototype.getLevel = function() {
-  return this.level_;
+  return goog.debug.LOGGING_ENABLED ?
+      this.level_ : goog.debug.Logger.Level.OFF;
 };
 
 
@@ -476,6 +485,10 @@ goog.debug.Logger.prototype.getLevel = function() {
  * @return {goog.debug.Logger.Level} The level.
  */
 goog.debug.Logger.prototype.getEffectiveLevel = function() {
+  if (!goog.debug.LOGGING_ENABLED) {
+    return goog.debug.Logger.Level.OFF;
+  }
+
   if (!goog.debug.Logger.ENABLE_HIERARCHY) {
     return goog.debug.Logger.rootLevel_;
   }
@@ -498,7 +511,8 @@ goog.debug.Logger.prototype.getEffectiveLevel = function() {
  * @return {boolean} Whether the message would be logged.
  */
 goog.debug.Logger.prototype.isLoggable = function(level) {
-  return level.value >= this.getEffectiveLevel().value;
+  return goog.debug.LOGGING_ENABLED &&
+      level.value >= this.getEffectiveLevel().value;
 };
 
 
@@ -513,7 +527,7 @@ goog.debug.Logger.prototype.isLoggable = function(level) {
  */
 goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
   // java caches the effective level, not sure it's necessary here
-  if (this.isLoggable(level)) {
+  if (goog.debug.LOGGING_ENABLED && this.isLoggable(level)) {
     this.doLogRecord_(this.getLogRecord(level, msg, opt_exception));
   }
 };
@@ -551,7 +565,9 @@ goog.debug.Logger.prototype.getLogRecord = function(level, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.shout = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.SHOUT, msg, opt_exception);
+  if (goog.debug.LOGGING_ENABLED) {
+    this.log(goog.debug.Logger.Level.SHOUT, msg, opt_exception);
+  }
 };
 
 
@@ -563,7 +579,9 @@ goog.debug.Logger.prototype.shout = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.severe = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.SEVERE, msg, opt_exception);
+  if (goog.debug.LOGGING_ENABLED) {
+    this.log(goog.debug.Logger.Level.SEVERE, msg, opt_exception);
+  }
 };
 
 
@@ -575,7 +593,9 @@ goog.debug.Logger.prototype.severe = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.warning = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.WARNING, msg, opt_exception);
+  if (goog.debug.LOGGING_ENABLED) {
+    this.log(goog.debug.Logger.Level.WARNING, msg, opt_exception);
+  }
 };
 
 
@@ -587,7 +607,9 @@ goog.debug.Logger.prototype.warning = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.info = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.INFO, msg, opt_exception);
+  if (goog.debug.LOGGING_ENABLED) {
+    this.log(goog.debug.Logger.Level.INFO, msg, opt_exception);
+  }
 };
 
 
@@ -599,7 +621,9 @@ goog.debug.Logger.prototype.info = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.config = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.CONFIG, msg, opt_exception);
+  if (goog.debug.LOGGING_ENABLED) {
+    this.log(goog.debug.Logger.Level.CONFIG, msg, opt_exception);
+  }
 };
 
 
@@ -611,7 +635,9 @@ goog.debug.Logger.prototype.config = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.fine = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.FINE, msg, opt_exception);
+  if (goog.debug.LOGGING_ENABLED) {
+    this.log(goog.debug.Logger.Level.FINE, msg, opt_exception);
+  }
 };
 
 
@@ -623,7 +649,9 @@ goog.debug.Logger.prototype.fine = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.finer = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.FINER, msg, opt_exception);
+  if (goog.debug.LOGGING_ENABLED) {
+    this.log(goog.debug.Logger.Level.FINER, msg, opt_exception);
+  }
 };
 
 
@@ -635,7 +663,9 @@ goog.debug.Logger.prototype.finer = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.finest = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.FINEST, msg, opt_exception);
+  if (goog.debug.LOGGING_ENABLED) {
+    this.log(goog.debug.Logger.Level.FINEST, msg, opt_exception);
+  }
 };
 
 
@@ -646,7 +676,7 @@ goog.debug.Logger.prototype.finest = function(msg, opt_exception) {
  * @param {goog.debug.LogRecord} logRecord A log record to log.
  */
 goog.debug.Logger.prototype.logRecord = function(logRecord) {
-  if (this.isLoggable(logRecord.getLevel())) {
+  if (goog.debug.LOGGING_ENABLED && this.isLoggable(logRecord.getLevel())) {
     this.doLogRecord_(logRecord);
   }
 };
