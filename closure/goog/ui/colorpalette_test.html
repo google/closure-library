@@ -143,10 +143,6 @@ See the COPYING file for details.
       var table = elem.firstChild;
       assertEquals('TABLE', table.tagName);
       assertEquals('goog-palette-table', table.className);
-
-      // TODO(attila):  Each ColorPalette creates 12 listeners (13 on IE)!
-      assertEquals(goog.userAgent.IE ? 13 : 12,
-          goog.events.getTotalListenerCount());
     }
 
     function testGetSelectedColor() {
