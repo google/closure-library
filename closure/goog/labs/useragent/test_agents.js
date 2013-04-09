@@ -208,6 +208,12 @@ testAgents.CHROME_ANDROID =
 
 
 /** @const {string} */
+testAgents.CHROME_ANDROID_TABLET =
+    'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) ' +
+    'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Safari/535.19';
+
+
+/** @const {string} */
 testAgents.CHROME_IPHONE =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X; en-us) ' +
     'AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/22.0.1194.0 Mobile/11E53 ' +
@@ -245,4 +251,11 @@ testAgents.CHROME_OS =
 testAgents.CHROME_OS_910 =
     'Mozilla/5.0 (X11; U; CrOS i686 9.10.0; en-US) AppleWebKit/532.5' +
     ' (KHTML, like Gecko) Chrome/4.0.253.0 Safari/532.5';
+
+
+/** @const {string} */
+testAgents.KINDLE_FIRE =
+    'Mozilla/5.0 (Linux; U; Android 4.0.3; en-us; KFTT Build/IML74K)' +
+    ' AppleWebKit/535.19 (KHTML, like Gecko) Silk/2.1 Mobile Safari/535.19' +
+    ' Silk-Accelerated=true';
 });  // goog.scope
