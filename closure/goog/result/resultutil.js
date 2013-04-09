@@ -498,9 +498,10 @@ goog.result.combineOnSuccess = function(var_args) {
  */
 goog.result.cancelParentResults = function(dependentResult) {
   var anyCanceled = false;
-  goog.array.forEach(dependentResult.getParentResults(), function(result) {
-    anyCanceled |= result.cancel();
-  });
+  var results = dependentResult.getParentResults();
+  for (var n = 0; n < results.length; n++) {
+    anyCanceled |= results[n].cancel();
+  }
   return !!anyCanceled;
 };
 

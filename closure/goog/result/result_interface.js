@@ -18,8 +18,6 @@
 
 goog.provide('goog.result.Result');
 
-goog.require('goog.debug.Error');
-
 
 
 /**
@@ -98,11 +96,11 @@ goog.result.Result.prototype.isCanceled = function() {};
 /**
  * The value to be passed to the error handlers invoked upon cancellation.
  * @constructor
- * @param {string=} opt_msg The error message for CancelError.
- * @extends {goog.debug.Error}
+ * @extends {Error}
  */
-goog.result.Result.CancelError = function(opt_msg) {
-  var msg = opt_msg || 'Result canceled';
-  goog.base(this, msg);
+goog.result.Result.CancelError = function() {
+  // Note that this does not derive from goog.debug.Error in order to prevent
+  // stack trace capture and reduce the amount of garbage generated during a
+  // cancel() operation.
 };
-goog.inherits(goog.result.Result.CancelError, goog.debug.Error);
+goog.inherits(goog.result.Result.CancelError, Error);
