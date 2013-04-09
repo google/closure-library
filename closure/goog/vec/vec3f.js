@@ -225,10 +225,11 @@ goog.vec.vec3f.magnitude = function(vec0) {
  *     chained together.
  */
 goog.vec.vec3f.normalize = function(vec0, resultVec) {
-  var ilen = 1 / goog.vec.vec3f.magnitude(vec0);
-  resultVec[0] = vec0[0] * ilen;
-  resultVec[1] = vec0[1] * ilen;
-  resultVec[2] = vec0[2] * ilen;
+  var x = vec0[0], y = vec0[1], z = vec0[2];
+  var ilen = 1 / Math.sqrt(x * x + y * y + z * z);
+  resultVec[0] = x * ilen;
+  resultVec[1] = y * ilen;
+  resultVec[2] = z * ilen;
   return resultVec;
 };
 

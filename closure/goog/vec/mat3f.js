@@ -661,8 +661,16 @@ goog.vec.mat3f.multVec3 = function(mat, vec, resultVec) {
  *     chained.
  */
 goog.vec.mat3f.makeTranslate = function(mat, x, y) {
-  goog.vec.mat3f.makeIdentity(mat);
-  return goog.vec.mat3f.setColumnValues(mat, 2, x, y, 1);
+  mat[0] = 1;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = 1;
+  mat[5] = 0;
+  mat[6] = x;
+  mat[7] = y;
+  mat[8] = 1;
+  return mat;
 };
 
 
@@ -678,8 +686,16 @@ goog.vec.mat3f.makeTranslate = function(mat, x, y) {
  *     chained.
  */
 goog.vec.mat3f.makeScale = function(mat, x, y, z) {
-  goog.vec.mat3f.makeIdentity(mat);
-  return goog.vec.mat3f.setDiagonalValues(mat, x, y, z);
+  mat[0] = x;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = y;
+  mat[5] = 0;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = z;
+  return mat;
 };
 
 
@@ -700,18 +716,17 @@ goog.vec.mat3f.makeRotate = function(mat, angle, ax, ay, az) {
   var d = 1 - c;
   var s = Math.sin(angle);
 
-  return goog.vec.mat3f.setFromValues(mat,
-      ax * ax * d + c,
-      ax * ay * d + az * s,
-      ax * az * d - ay * s,
+  mat[0] = ax * ax * d + c;
+  mat[1] = ax * ay * d + az * s;
+  mat[2] = ax * az * d - ay * s;
+  mat[3] = ax * ay * d - az * s;
+  mat[4] = ay * ay * d + c;
+  mat[5] = ay * az * d + ax * s;
+  mat[6] = ax * az * d + ay * s;
+  mat[7] = ay * az * d - ax * s;
+  mat[8] = az * az * d + c;
 
-      ax * ay * d - az * s,
-      ay * ay * d + c,
-      ay * az * d + ax * s,
-
-      ax * az * d + ay * s,
-      ay * az * d - ax * s,
-      az * az * d + c);
+  return mat;
 };
 
 
@@ -727,10 +742,18 @@ goog.vec.mat3f.makeRotate = function(mat, angle, ax, ay, az) {
 goog.vec.mat3f.makeRotateX = function(mat, angle) {
   var c = Math.cos(angle);
   var s = Math.sin(angle);
-  return goog.vec.mat3f.setFromValues(mat,
-                                      1, 0, 0,
-                                      0, c, s,
-                                      0, -s, c);
+
+  mat[0] = 1;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = c;
+  mat[5] = s;
+  mat[6] = 0;
+  mat[7] = -s;
+  mat[8] = c;
+
+  return mat;
 };
 
 
@@ -746,10 +769,18 @@ goog.vec.mat3f.makeRotateX = function(mat, angle) {
 goog.vec.mat3f.makeRotateY = function(mat, angle) {
   var c = Math.cos(angle);
   var s = Math.sin(angle);
-  return goog.vec.mat3f.setFromValues(mat,
-                                      c, 0, -s,
-                                      0, 1, 0,
-                                      s, 0, c);
+
+  mat[0] = c;
+  mat[1] = 0;
+  mat[2] = -s;
+  mat[3] = 0;
+  mat[4] = 1;
+  mat[5] = 0;
+  mat[6] = s;
+  mat[7] = 0;
+  mat[8] = c;
+
+  return mat;
 };
 
 
@@ -765,10 +796,18 @@ goog.vec.mat3f.makeRotateY = function(mat, angle) {
 goog.vec.mat3f.makeRotateZ = function(mat, angle) {
   var c = Math.cos(angle);
   var s = Math.sin(angle);
-  return goog.vec.mat3f.setFromValues(mat,
-                                      c, s, 0,
-                                      -s, c, 0,
-                                      0, 0, 1);
+
+  mat[0] = c;
+  mat[1] = s;
+  mat[2] = 0;
+  mat[3] = -s;
+  mat[4] = c;
+  mat[5] = 0;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = 1;
+
+  return mat;
 };
 
 
@@ -807,19 +846,17 @@ goog.vec.mat3f.rotate = function(mat, angle, x, y, z) {
   var r12 = y * z * diffCosAngle - x * sinAngle;
   var r22 = z * z * diffCosAngle + cosAngle;
 
-  return goog.vec.mat3f.setFromValues(
-      mat,
-      m00 * r00 + m01 * r10 + m02 * r20,
-      m10 * r00 + m11 * r10 + m12 * r20,
-      m20 * r00 + m21 * r10 + m22 * r20,
+  mat[0] = m00 * r00 + m01 * r10 + m02 * r20;
+  mat[1] = m10 * r00 + m11 * r10 + m12 * r20;
+  mat[2] = m20 * r00 + m21 * r10 + m22 * r20;
+  mat[3] = m00 * r01 + m01 * r11 + m02 * r21;
+  mat[4] = m10 * r01 + m11 * r11 + m12 * r21;
+  mat[5] = m20 * r01 + m21 * r11 + m22 * r21;
+  mat[6] = m00 * r02 + m01 * r12 + m02 * r22;
+  mat[7] = m10 * r02 + m11 * r12 + m12 * r22;
+  mat[8] = m20 * r02 + m21 * r12 + m22 * r22;
 
-      m00 * r01 + m01 * r11 + m02 * r21,
-      m10 * r01 + m11 * r11 + m12 * r21,
-      m20 * r01 + m21 * r11 + m22 * r21,
-
-      m00 * r02 + m01 * r12 + m02 * r22,
-      m10 * r02 + m11 * r12 + m12 * r22,
-      m20 * r02 + m21 * r12 + m22 * r22);
+  return mat;
 };
 
 

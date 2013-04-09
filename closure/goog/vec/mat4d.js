@@ -15,7 +15,7 @@
 
 ////////////////////////// NOTE ABOUT EDITING THIS FILE ///////////////////////
 //                                                                           //
-// Any edits to this file must be applied to mat4f_test.html by running:     //
+// Any edits to this file must be applied to mat4f.js by running:            //
 //   swap_type.sh mat4d.js > mat4f.js                                        //
 //                                                                           //
 ////////////////////////// NOTE ABOUT EDITING THIS FILE ///////////////////////
@@ -358,10 +358,22 @@ goog.vec.mat4d.getColumn = function(mat, column, vec) {
  *     chained together.
  */
 goog.vec.mat4d.setColumns = function(mat, vec0, vec1, vec2, vec3) {
-  goog.vec.mat4d.setColumn(mat, 0, vec0);
-  goog.vec.mat4d.setColumn(mat, 1, vec1);
-  goog.vec.mat4d.setColumn(mat, 2, vec2);
-  goog.vec.mat4d.setColumn(mat, 3, vec3);
+  mat[0] = vec0[0];
+  mat[1] = vec0[1];
+  mat[2] = vec0[2];
+  mat[3] = vec0[3];
+  mat[4] = vec1[0];
+  mat[5] = vec1[1];
+  mat[6] = vec1[2];
+  mat[7] = vec1[3];
+  mat[8] = vec2[0];
+  mat[9] = vec2[1];
+  mat[10] = vec2[2];
+  mat[11] = vec2[3];
+  mat[12] = vec3[0];
+  mat[13] = vec3[1];
+  mat[14] = vec3[2];
+  mat[15] = vec3[3];
   return mat;
 };
 
@@ -376,10 +388,22 @@ goog.vec.mat4d.setColumns = function(mat, vec0, vec1, vec2, vec3) {
  * @param {goog.vec.vec4d.Type} vec3 The vector to receive column 3.
  */
 goog.vec.mat4d.getColumns = function(mat, vec0, vec1, vec2, vec3) {
-  goog.vec.mat4d.getColumn(mat, 0, vec0);
-  goog.vec.mat4d.getColumn(mat, 1, vec1);
-  goog.vec.mat4d.getColumn(mat, 2, vec2);
-  goog.vec.mat4d.getColumn(mat, 3, vec3);
+  vec0[0] = mat[0];
+  vec0[1] = mat[1];
+  vec0[2] = mat[2];
+  vec0[3] = mat[3];
+  vec1[0] = mat[4];
+  vec1[1] = mat[5];
+  vec1[2] = mat[6];
+  vec1[3] = mat[7];
+  vec2[0] = mat[8];
+  vec2[1] = mat[9];
+  vec2[2] = mat[10];
+  vec2[3] = mat[11];
+  vec3[0] = mat[12];
+  vec3[1] = mat[13];
+  vec3[2] = mat[14];
+  vec3[3] = mat[15];
 };
 
 
@@ -452,10 +476,22 @@ goog.vec.mat4d.getRow = function(mat, row, vec) {
  *     chained together.
  */
 goog.vec.mat4d.setRows = function(mat, vec0, vec1, vec2, vec3) {
-  goog.vec.mat4d.setRow(mat, 0, vec0);
-  goog.vec.mat4d.setRow(mat, 1, vec1);
-  goog.vec.mat4d.setRow(mat, 2, vec2);
-  goog.vec.mat4d.setRow(mat, 3, vec3);
+  mat[0] = vec0[0];
+  mat[1] = vec1[0];
+  mat[2] = vec2[0];
+  mat[3] = vec3[0];
+  mat[4] = vec0[1];
+  mat[5] = vec1[1];
+  mat[6] = vec2[1];
+  mat[7] = vec3[1];
+  mat[8] = vec0[2];
+  mat[9] = vec1[2];
+  mat[10] = vec2[2];
+  mat[11] = vec3[2];
+  mat[12] = vec0[3];
+  mat[13] = vec1[3];
+  mat[14] = vec2[3];
+  mat[15] = vec3[3];
   return mat;
 };
 
@@ -470,10 +506,22 @@ goog.vec.mat4d.setRows = function(mat, vec0, vec1, vec2, vec3) {
  * @param {goog.vec.vec4d.Type} vec3 The vector to receive row 3.
  */
 goog.vec.mat4d.getRows = function(mat, vec0, vec1, vec2, vec3) {
-  goog.vec.mat4d.getRow(mat, 0, vec0);
-  goog.vec.mat4d.getRow(mat, 1, vec1);
-  goog.vec.mat4d.getRow(mat, 2, vec2);
-  goog.vec.mat4d.getRow(mat, 3, vec3);
+  vec0[0] = mat[0];
+  vec1[0] = mat[1];
+  vec2[0] = mat[2];
+  vec3[0] = mat[3];
+  vec0[1] = mat[4];
+  vec1[1] = mat[5];
+  vec2[1] = mat[6];
+  vec3[1] = mat[7];
+  vec0[2] = mat[8];
+  vec1[2] = mat[9];
+  vec2[2] = mat[10];
+  vec3[2] = mat[11];
+  vec0[3] = mat[12];
+  vec1[3] = mat[13];
+  vec2[3] = mat[14];
+  vec3[3] = mat[15];
 };
 
 
@@ -934,8 +982,23 @@ goog.vec.mat4d.multVec4 = function(mat, vec, resultVec) {
  *     chained.
  */
 goog.vec.mat4d.makeTranslate = function(mat, x, y, z) {
-  goog.vec.mat4d.makeIdentity(mat);
-  return goog.vec.mat4d.setColumnValues(mat, 3, x, y, z, 1);
+  mat[0] = 1;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = 0;
+  mat[5] = 1;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = 0;
+  mat[9] = 0;
+  mat[10] = 1;
+  mat[11] = 0;
+  mat[12] = x;
+  mat[13] = y;
+  mat[14] = z;
+  mat[15] = 1;
+  return mat;
 };
 
 
@@ -950,8 +1013,23 @@ goog.vec.mat4d.makeTranslate = function(mat, x, y, z) {
  *     chained.
  */
 goog.vec.mat4d.makeScale = function(mat, x, y, z) {
-  goog.vec.mat4d.makeIdentity(mat);
-  return goog.vec.mat4d.setDiagonalValues(mat, x, y, z, 1);
+  mat[0] = x;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = 0;
+  mat[5] = y;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = 0;
+  mat[9] = 0;
+  mat[10] = z;
+  mat[11] = 0;
+  mat[12] = 0;
+  mat[13] = 0;
+  mat[14] = 0;
+  mat[15] = 1;
+  return mat;
 };
 
 
@@ -972,23 +1050,24 @@ goog.vec.mat4d.makeRotate = function(mat, angle, ax, ay, az) {
   var d = 1 - c;
   var s = Math.sin(angle);
 
-  return goog.vec.mat4d.setFromValues(mat,
-      ax * ax * d + c,
-      ax * ay * d + az * s,
-      ax * az * d - ay * s,
-      0,
+  mat[0] = ax * ax * d + c;
+  mat[1] = ax * ay * d + az * s;
+  mat[2] = ax * az * d - ay * s;
+  mat[3] = 0;
+  mat[4] = ax * ay * d - az * s;
+  mat[5] = ay * ay * d + c;
+  mat[6] = ay * az * d + ax * s;
+  mat[7] = 0;
+  mat[8] = ax * az * d + ay * s;
+  mat[9] = ay * az * d - ax * s;
+  mat[10] = az * az * d + c;
+  mat[11] = 0;
+  mat[12] = 0;
+  mat[13] = 0;
+  mat[14] = 0;
+  mat[15] = 1;
 
-      ax * ay * d - az * s,
-      ay * ay * d + c,
-      ay * az * d + ax * s,
-      0,
-
-      ax * az * d + ay * s,
-      ay * az * d - ax * s,
-      az * az * d + c,
-      0,
-
-      0, 0, 0, 1);
+  return mat;
 };
 
 
@@ -1004,8 +1083,25 @@ goog.vec.mat4d.makeRotate = function(mat, angle, ax, ay, az) {
 goog.vec.mat4d.makeRotateX = function(mat, angle) {
   var c = Math.cos(angle);
   var s = Math.sin(angle);
-  return goog.vec.mat4d.setFromValues(
-      mat, 1, 0, 0, 0, 0, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1);
+
+  mat[0] = 1;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = 0;
+  mat[5] = c;
+  mat[6] = s;
+  mat[7] = 0;
+  mat[8] = 0;
+  mat[9] = -s;
+  mat[10] = c;
+  mat[11] = 0;
+  mat[12] = 0;
+  mat[13] = 0;
+  mat[14] = 0;
+  mat[15] = 1;
+
+  return mat;
 };
 
 
@@ -1021,8 +1117,25 @@ goog.vec.mat4d.makeRotateX = function(mat, angle) {
 goog.vec.mat4d.makeRotateY = function(mat, angle) {
   var c = Math.cos(angle);
   var s = Math.sin(angle);
-  return goog.vec.mat4d.setFromValues(
-      mat, c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1);
+
+  mat[0] = c;
+  mat[1] = 0;
+  mat[2] = -s;
+  mat[3] = 0;
+  mat[4] = 0;
+  mat[5] = 1;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = s;
+  mat[9] = 0;
+  mat[10] = c;
+  mat[11] = 0;
+  mat[12] = 0;
+  mat[13] = 0;
+  mat[14] = 0;
+  mat[15] = 1;
+
+  return mat;
 };
 
 
@@ -1038,8 +1151,25 @@ goog.vec.mat4d.makeRotateY = function(mat, angle) {
 goog.vec.mat4d.makeRotateZ = function(mat, angle) {
   var c = Math.cos(angle);
   var s = Math.sin(angle);
-  return goog.vec.mat4d.setFromValues(
-      mat, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+
+  mat[0] = c;
+  mat[1] = s;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = -s;
+  mat[5] = c;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = 0;
+  mat[9] = 0;
+  mat[10] = 1;
+  mat[11] = 0;
+  mat[12] = 0;
+  mat[13] = 0;
+  mat[14] = 0;
+  mat[15] = 1;
+
+  return mat;
 };
 
 
@@ -1065,12 +1195,24 @@ goog.vec.mat4d.makeFrustum = function(
   var c = -(far + near) / (far - near);
   var d = -(2 * far * near) / (far - near);
 
-  return goog.vec.mat4d.setFromValues(mat,
-      x, 0, 0, 0,
-      0, y, 0, 0,
-      a, b, c, -1,
-      0, 0, d, 0
-  );
+  mat[0] = x;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = 0;
+  mat[5] = y;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = a;
+  mat[9] = b;
+  mat[10] = c;
+  mat[11] = -1;
+  mat[12] = 0;
+  mat[13] = 0;
+  mat[14] = d;
+  mat[15] = 0;
+
+  return mat;
 };
 
 
@@ -1096,12 +1238,25 @@ goog.vec.mat4d.makePerspective = function(mat, fovy, aspect, near, far) {
   }
 
   var cot = Math.cos(angle) / sinAngle;
-  return goog.vec.mat4d.setFromValues(mat,
-      cot / aspect, 0, 0, 0,
-      0, cot, 0, 0,
-      0, 0, -(far + near) / dz, -1,
-      0, 0, -(2 * near * far) / dz, 0
-  );
+
+  mat[0] = cot / aspect;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = 0;
+  mat[5] = cot;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = 0;
+  mat[9] = 0;
+  mat[10] = -(far + near) / dz;
+  mat[11] = -1;
+  mat[12] = 0;
+  mat[13] = 0;
+  mat[14] = -(2 * near * far) / dz;
+  mat[15] = 0;
+
+  return mat;
 };
 
 
@@ -1126,18 +1281,35 @@ goog.vec.mat4d.makeOrtho = function(mat, left, right, bottom, top, near, far) {
   var b = -(top + bottom) / (top - bottom);
   var c = -(far + near) / (far - near);
 
-  return goog.vec.mat4d.setFromValues(mat,
-      x, 0, 0, 0,
-      0, y, 0, 0,
-      0, 0, z, 0,
-      a, b, c, 1
-  );
+  mat[0] = x;
+  mat[1] = 0;
+  mat[2] = 0;
+  mat[3] = 0;
+  mat[4] = 0;
+  mat[5] = y;
+  mat[6] = 0;
+  mat[7] = 0;
+  mat[8] = 0;
+  mat[9] = 0;
+  mat[10] = z;
+  mat[11] = 0;
+  mat[12] = a;
+  mat[13] = b;
+  mat[14] = c;
+  mat[15] = 1;
+
+  return mat;
 };
 
 
 /**
  * Makes the given 4x4 matrix a modelview matrix of a camera so that
  * the camera is 'looking at' the given center point.
+ *
+ * Note that unlike most other goog.vec functions where we inline
+ * everything, this function does not inline various goog.vec
+ * functions.  This makes the code more readable, but somewhat
+ * less efficient.
  *
  * @param {goog.vec.mat4d.Type} mat The matrix.
  * @param {goog.vec.vec3d.Type} eyePt The position of the eye point
@@ -1187,6 +1359,11 @@ goog.vec.mat4d.makeLookAt = function(mat, eyePt, centerPt, worldUpVec) {
  * The matrix represents the modelview matrix of a camera. It is the inverse
  * of lookAt except for the output of the fwdVec instead of centerPt.
  * The centerPt itself cannot be recovered from a modelview matrix.
+ *
+ * Note that unlike most other goog.vec functions where we inline
+ * everything, this function does not inline various goog.vec
+ * functions.  This makes the code more readable, but somewhat
+ * less efficient.
  *
  * @param {goog.vec.mat4d.Type} mat The matrix.
  * @param {goog.vec.vec3d.Type} eyePt The position of the eye point
@@ -1351,12 +1528,12 @@ goog.vec.mat4d.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
  *     chained.
  */
 goog.vec.mat4d.translate = function(mat, x, y, z) {
-  return goog.vec.mat4d.setColumnValues(
-      mat, 3,
-      mat[0] * x + mat[4] * y + mat[8] * z + mat[12],
-      mat[1] * x + mat[5] * y + mat[9] * z + mat[13],
-      mat[2] * x + mat[6] * y + mat[10] * z + mat[14],
-      mat[3] * x + mat[7] * y + mat[11] * z + mat[15]);
+  mat[12] += mat[0] * x + mat[4] * y + mat[8] * z;
+  mat[13] += mat[1] * x + mat[5] * y + mat[9] * z;
+  mat[14] += mat[2] * x + mat[6] * y + mat[10] * z;
+  mat[15] += mat[3] * x + mat[7] * y + mat[11] * z;
+
+  return mat;
 };
 
 
@@ -1375,12 +1552,24 @@ goog.vec.mat4d.translate = function(mat, x, y, z) {
  *     chained.
  */
 goog.vec.mat4d.scale = function(mat, x, y, z) {
-  return goog.vec.mat4d.setFromValues(
-      mat,
-      mat[0] * x, mat[1] * x, mat[2] * x, mat[3] * x,
-      mat[4] * y, mat[5] * y, mat[6] * y, mat[7] * y,
-      mat[8] * z, mat[9] * z, mat[10] * z, mat[11] * z,
-      mat[12], mat[13], mat[14], mat[15]);
+  mat[0] = mat[0] * x;
+  mat[1] = mat[1] * x;
+  mat[2] = mat[2] * x;
+  mat[3] = mat[3] * x;
+  mat[4] = mat[4] * y;
+  mat[5] = mat[5] * y;
+  mat[6] = mat[6] * y;
+  mat[7] = mat[7] * y;
+  mat[8] = mat[8] * z;
+  mat[9] = mat[9] * z;
+  mat[10] = mat[10] * z;
+  mat[11] = mat[11] * z;
+  mat[12] = mat[12];
+  mat[13] = mat[13];
+  mat[14] = mat[14];
+  mat[15] = mat[15];
+
+  return mat;
 };
 
 
@@ -1403,7 +1592,6 @@ goog.vec.mat4d.rotate = function(mat, angle, x, y, z) {
   var m00 = mat[0], m10 = mat[1], m20 = mat[2], m30 = mat[3];
   var m01 = mat[4], m11 = mat[5], m21 = mat[6], m31 = mat[7];
   var m02 = mat[8], m12 = mat[9], m22 = mat[10], m32 = mat[11];
-  var m03 = mat[12], m13 = mat[13], m23 = mat[14], m33 = mat[15];
 
   var cosAngle = Math.cos(angle);
   var sinAngle = Math.sin(angle);
@@ -1420,24 +1608,20 @@ goog.vec.mat4d.rotate = function(mat, angle, x, y, z) {
   var r12 = y * z * diffCosAngle - x * sinAngle;
   var r22 = z * z * diffCosAngle + cosAngle;
 
-  return goog.vec.mat4d.setFromValues(
-      mat,
-      m00 * r00 + m01 * r10 + m02 * r20,
-      m10 * r00 + m11 * r10 + m12 * r20,
-      m20 * r00 + m21 * r10 + m22 * r20,
-      m30 * r00 + m31 * r10 + m32 * r20,
+  mat[0] = m00 * r00 + m01 * r10 + m02 * r20;
+  mat[1] = m10 * r00 + m11 * r10 + m12 * r20;
+  mat[2] = m20 * r00 + m21 * r10 + m22 * r20;
+  mat[3] = m30 * r00 + m31 * r10 + m32 * r20;
+  mat[4] = m00 * r01 + m01 * r11 + m02 * r21;
+  mat[5] = m10 * r01 + m11 * r11 + m12 * r21;
+  mat[6] = m20 * r01 + m21 * r11 + m22 * r21;
+  mat[7] = m30 * r01 + m31 * r11 + m32 * r21;
+  mat[8] = m00 * r02 + m01 * r12 + m02 * r22;
+  mat[9] = m10 * r02 + m11 * r12 + m12 * r22;
+  mat[10] = m20 * r02 + m21 * r12 + m22 * r22;
+  mat[11] = m30 * r02 + m31 * r12 + m32 * r22;
 
-      m00 * r01 + m01 * r11 + m02 * r21,
-      m10 * r01 + m11 * r11 + m12 * r21,
-      m20 * r01 + m21 * r11 + m22 * r21,
-      m30 * r01 + m31 * r11 + m32 * r21,
-
-      m00 * r02 + m01 * r12 + m02 * r22,
-      m10 * r02 + m11 * r12 + m12 * r22,
-      m20 * r02 + m21 * r12 + m22 * r22,
-      m30 * r02 + m31 * r12 + m32 * r22,
-
-      m03, m13, m23, m33);
+  return mat;
 };
 
 
