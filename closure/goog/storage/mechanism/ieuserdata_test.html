@@ -51,7 +51,7 @@ function tearDown() {
 }
 
 function testAvailability() {
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
     assertNotNull(mechanism);
     assertTrue(mechanism.isAvailable());
     assertNotNull(mechanism_shared);

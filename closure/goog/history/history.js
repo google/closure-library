@@ -420,7 +420,8 @@ goog.History.isOnHashChangeSupported = goog.memoize(function() {
  * current versions.
  * @type {boolean}
  */
-goog.History.LEGACY_IE = goog.userAgent.IE && !goog.userAgent.isDocumentMode(8);
+goog.History.LEGACY_IE = goog.userAgent.IE &&
+    !goog.userAgent.isDocumentModeOrHigher(8);
 
 
 /**

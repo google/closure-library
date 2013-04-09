@@ -424,7 +424,7 @@ goog.net.ChannelRequest.INCOMPLETE_CHUNK_ = {};
  * @see http://code.google.com/p/closure-library/issues/detail?id=346
  */
 goog.net.ChannelRequest.supportsXhrStreaming = function() {
-  return !goog.userAgent.IE || goog.userAgent.isDocumentMode(10);
+  return !goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(10);
 };
 
 

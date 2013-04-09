@@ -47,7 +47,7 @@ goog.storage.mechanism.IEUserData = function(storageKey, opt_storageNodeId) {
   // Tested on IE6, IE7 and IE8. It seems that IE9 introduces some security
   // features which make persistent (loaded) node attributes invisible from
   // JavaScript.
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
     if (!goog.storage.mechanism.IEUserData.storageMap_) {
       goog.storage.mechanism.IEUserData.storageMap_ = new goog.structs.Map();
     }

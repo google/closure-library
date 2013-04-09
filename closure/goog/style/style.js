@@ -356,7 +356,7 @@ goog.style.getClientViewportElement = function(opt_node) {
   }
 
   // In old IE versions the document.body represented the viewport
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9) &&
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9) &&
       !goog.dom.getDomHelper(doc).isCss1CompatMode()) {
     return doc.body;
   }
@@ -434,7 +434,7 @@ goog.style.getOffsetParent = function(element) {
   // element.offsetParent does the right thing in IE7 and below.  In other
   // browsers it only includes elements with position absolute, relative or
   // fixed, not elements with overflow set to auto or scroll.
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(8)) {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(8)) {
     return element.offsetParent;
   }
 

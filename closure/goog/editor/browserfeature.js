@@ -32,13 +32,13 @@ goog.require('goog.userAgent.product.isVersion');
  */
 goog.editor.BrowserFeature = {
   // Whether this browser uses the IE TextRange object.
-  HAS_IE_RANGES: goog.userAgent.IE && !goog.userAgent.isDocumentMode(9),
+  HAS_IE_RANGES: goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9),
 
   // Whether this browser uses the W3C standard Range object.
   // Assumes IE higher versions will be compliance with W3C standard.
   HAS_W3C_RANGES: goog.userAgent.GECKO || goog.userAgent.WEBKIT ||
       goog.userAgent.OPERA ||
-      (goog.userAgent.IE && goog.userAgent.isDocumentMode(9)),
+      (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9)),
 
   // Has the contentEditable attribute, which makes nodes editable.
   //

@@ -466,7 +466,7 @@ function testIsBlock() {
 
   var tagsToIgnore = goog.array.flatten(structuralTags, ambiguousTags);
 
-  if ((goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) ||
+  if ((goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) ||
       (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('2'))) {
     goog.array.extend(tagsToIgnore, legacyAmbiguousTags);
   }
