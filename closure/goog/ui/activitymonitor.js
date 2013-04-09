@@ -203,6 +203,9 @@ goog.ui.ActivityMonitor.prototype.disposeInternal = function() {
  * @param {Document} doc Document to monitor.
  */
 goog.ui.ActivityMonitor.prototype.addDocument = function(doc) {
+  if (goog.array.contains(this.documents_, doc)) {
+    return;
+  }
   this.documents_.push(doc);
   var useCapture = !this.useBubble_;
 

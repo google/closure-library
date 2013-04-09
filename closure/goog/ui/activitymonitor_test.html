@@ -13,6 +13,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.events.Event');
   goog.require('goog.events.EventType');
+  goog.require('goog.dom');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
@@ -130,6 +131,19 @@ See the COPYING file for details.
     goog.testing.events.fireTouchSequence(mydiv);
     assertEquals('Activity event should fire when touch happens more than ' +
                  '3s since the last activity', 2, listener.getCallCount());
+  }
+
+  function testAddDocument_duplicate() {
+    var defaultDoc = goog.dom.getDomHelper().getDocument();
+    var activityMonitor = new goog.ui.ActivityMonitor();
+    assertEquals(1, activityMonitor.documents_.length);
+    assertEquals(defaultDoc, activityMonitor.documents_[0]);
+    var listenerCount = activityMonitor.eventHandler_.getListenerCount();
+
+    activityMonitor.addDocument(defaultDoc);
+    assertEquals(1, activityMonitor.documents_.length);
+    assertEquals(defaultDoc, activityMonitor.documents_[0]);
+    assertEquals(listenerCount, activityMonitor.eventHandler_.getListenerCount());
   }
 </script>
 </body>
