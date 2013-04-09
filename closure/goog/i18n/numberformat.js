@@ -1008,7 +1008,7 @@ goog.i18n.NumberFormat.prototype.unitFor_ = function(base, plurality) {
     }
 
     var pattern = patterns[plurality];
-    if (pattern == null) {
+    if (!pattern || pattern == '0') {
       return goog.i18n.NumberFormat.NULL_UNIT_;
     }
 
