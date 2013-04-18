@@ -122,7 +122,7 @@ goog.result.canceledResult = function() {
  * @template T
  */
 goog.result.wait = function(result, handler, opt_scope) {
-  result.wait(opt_scope ? goog.bind(handler, opt_scope) : handler);
+  result.wait(handler, opt_scope);
 };
 
 
@@ -304,15 +304,16 @@ goog.result.transform = function(result, transformer) {
  * </pre>
  *
  * @param {!goog.result.Result} result The result to chain.
- * @param {function(!goog.result.Result):!goog.result.Result}
+ * @param {function(this:T, !goog.result.Result):!goog.result.Result}
  *     actionCallback The callback called when the result is resolved. This
  *     callback must return a Result.
- *
+ * @param {T=} opt_scope Optional scope for the action callback.
  * @return {!goog.result.DependentResult} A result that is resolved when both
  *     the given Result and the Result returned by the actionCallback have
  *     resolved.
+ * @template T
  */
-goog.result.chain = function(result, actionCallback) {
+goog.result.chain = function(result, actionCallback, opt_scope) {
   var dependentResult = new goog.result.DependentResultImpl_([result]);
 
   // Wait for the first action.
@@ -320,7 +321,7 @@ goog.result.chain = function(result, actionCallback) {
     if (result.getState() == goog.result.Result.State.SUCCESS) {
 
       // The first action succeeded. Chain the contingent action.
-      var contingentResult = actionCallback(result);
+      var contingentResult = actionCallback.call(opt_scope, result);
       dependentResult.addParentResult(contingentResult);
       goog.result.wait(contingentResult, function(contingentResult) {
 

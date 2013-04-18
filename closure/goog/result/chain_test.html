@@ -116,6 +116,17 @@ function testDoubleChainCancel() {
   assertFalse(goog.result.cancelParentResults(finalResult));
 }
 
+function testCustomScope() {
+  var scope = {};
+  var finalResult = goog.result.chain(givenResult, actionCallback, scope);
+  goog.result.wait(finalResult, counter);
+
+  givenResult.setValue(1);
+  dependentResult.setValue(2);
+
+  assertEquals(scope, actionCallback.popLastCall().getThis());
+}
+
 
 // ASYNCHRONOUS TESTS:
 
