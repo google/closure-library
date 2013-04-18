@@ -17,15 +17,12 @@
  *
  */
 
-
-/** @suppress {extraProvide} */
 goog.provide('goog.labs.style.PixelDensityMonitorTest');
 goog.setTestOnly('goog.labs.style.PixelDensityMonitorTest');
 
 goog.require('goog.array');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.events');
-goog.require('goog.events.EventTarget');
 goog.require('goog.labs.style.PixelDensityMonitor');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.jsunit');
