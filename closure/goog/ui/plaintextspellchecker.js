@@ -243,7 +243,7 @@ goog.ui.PlainTextSpellChecker.prototype.finishCheck_ = function() {
  * @private
  */
 goog.ui.PlainTextSpellChecker.prototype.preChargeDictionary_ = function(text) {
-  this.eventHandler_.listen(this.handler_,
+  this.eventHandler_.listen(this.spellCheck,
       goog.spell.SpellCheck.EventType.READY, this.onDictionaryCharged_, true);
 
   this.populateDictionary(text, this.dictionaryPreScanSize_);
@@ -258,7 +258,7 @@ goog.ui.PlainTextSpellChecker.prototype.preChargeDictionary_ = function(text) {
  */
 goog.ui.PlainTextSpellChecker.prototype.onDictionaryCharged_ = function(e) {
   e.stopPropagation();
-  this.eventHandler_.unlisten(this.handler_,
+  this.eventHandler_.unlisten(this.spellCheck,
       goog.spell.SpellCheck.EventType.READY, this.onDictionaryCharged_, true);
   this.checkAsync_(this.getElement().value);
 };
@@ -384,7 +384,7 @@ goog.ui.PlainTextSpellChecker.prototype.continueAsync_ = function() {
  */
 goog.ui.PlainTextSpellChecker.prototype.processWord = function(node, word,
     status) {
-  node.appendChild(this.createWordElement_(word, status));
+  node.appendChild(this.createWordElement(word, status));
 };
 
 
