@@ -63,7 +63,7 @@ goog.log.LogRecord = goog.debug.LogRecord;
 goog.log.getLogger = function(name, opt_level) {
   if (goog.log.ENABLED) {
     var logger = goog.debug.Logger.getLogger(name);
-    if (opt_level) {
+    if (opt_level && logger) {
       logger.setLevel(opt_level);
     }
     return logger;
@@ -81,7 +81,7 @@ goog.log.getLogger = function(name, opt_level) {
  * @param {Function} handler Handler function to add.
  */
 goog.log.addHandler = function(logger, handler) {
-  if (goog.log.ENABLED) {
+  if (goog.log.ENABLED && logger) {
     logger.addHandler(handler);
   }
 };
@@ -95,7 +95,7 @@ goog.log.addHandler = function(logger, handler) {
  * @return {boolean} Whether the handler was removed.
  */
 goog.log.removeHandler = function(logger, handler) {
-  if (goog.log.ENABLED) {
+  if (goog.log.ENABLED && logger) {
     return logger.removeHandler(handler);
   } else {
     return false;
@@ -114,7 +114,7 @@ goog.log.removeHandler = function(logger, handler) {
  *     message.
  */
 goog.log.log = function(logger, level, msg, opt_exception) {
-  if (goog.log.ENABLED) {
+  if (goog.log.ENABLED && logger) {
     logger.log(level, msg, opt_exception);
   }
 };
@@ -129,7 +129,7 @@ goog.log.log = function(logger, level, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.error = function(logger, msg, opt_exception) {
-  if (goog.log.ENABLED) {
+  if (goog.log.ENABLED && logger) {
     logger.severe(msg, opt_exception);
   }
 };
@@ -144,7 +144,7 @@ goog.log.error = function(logger, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.warning = function(logger, msg, opt_exception) {
-  if (goog.log.ENABLED) {
+  if (goog.log.ENABLED && logger) {
     logger.warning(msg, opt_exception);
   }
 };
@@ -159,7 +159,7 @@ goog.log.warning = function(logger, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.info = function(logger, msg, opt_exception) {
-  if (goog.log.ENABLED) {
+  if (goog.log.ENABLED && logger) {
     logger.info(msg, opt_exception);
   }
 };
@@ -174,7 +174,7 @@ goog.log.info = function(logger, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.fine = function(logger, msg, opt_exception) {
-  if (goog.log.ENABLED) {
+  if (goog.log.ENABLED && logger) {
     logger.fine(msg, opt_exception);
   }
 };
