@@ -23,9 +23,6 @@ goog.setTestOnly('goog.events.eventTargetTester.KeyType');
 goog.provide('goog.events.eventTargetTester.UnlistenReturnType');
 goog.setTestOnly('goog.events.eventTargetTester.UnlistenReturnType');
 
-goog.require('goog.array');
-goog.require('goog.events');
-goog.require('goog.events.Listenable');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.testing.asserts');

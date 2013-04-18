@@ -25,6 +25,7 @@ goog.provide('goog.events.FileDropHandler.EventType');
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
