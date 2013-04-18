@@ -68,6 +68,23 @@ function testHandlersCalledOnSuccess() {
   assertObjectEquals(result, res2);
 }
 
+function testCustomHandlerScope() {
+  result.wait(resultCallback1);
+  var scope = {};
+  result.wait(resultCallback2, scope);
+
+  result.setValue(2);
+
+  assertEquals(1, resultCallback1.getCallCount());
+  assertEquals(1, resultCallback2.getCallCount());
+
+  var this1 = resultCallback1.popLastCall().getThis();
+  assertObjectEquals(goog.global, this1);
+
+  var this2 = resultCallback2.popLastCall().getThis();
+  assertObjectEquals(scope, this2);
+}
+
 function testHandlersCalledOnError() {
   result.wait(resultCallback1);
   result.wait(resultCallback2);
