@@ -22,9 +22,17 @@
  */
 goog.provide('goog.a11y.aria');
 
-goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
+goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.object');
+
+
+/**
+ * ARIA states/properties prefix.
+ * @private
+ */
+goog.a11y.aria.ARIA_PREFIX_ = 'aria-';
 
 
 /**
@@ -57,6 +65,16 @@ goog.a11y.aria.getRole = function(element) {
  */
 goog.a11y.aria.setState = function(element, state, value) {
   element.setAttribute('aria-' + state, value);
+};
+
+
+/**
+ * Remove the state or property for the element.
+ * @param {!Element} element DOM node where we set state.
+ * @param {!goog.a11y.aria.State} stateName State name.
+ */
+goog.a11y.aria.removeState = function(element, stateName) {
+  element.removeAttribute(goog.a11y.aria.getAriaAttributeName_(stateName));
 };
 
 
@@ -111,6 +129,24 @@ goog.a11y.aria.setActiveDescendant = function(element, activeElement) {
  */
 goog.a11y.aria.getLabel = function(element) {
   return goog.a11y.aria.getState(element, goog.a11y.aria.State.LABEL);
+};
+
+
+/**
+ * Adds the 'aria-' prefix to ariaName.
+ * @param {string} ariaName ARIA state/property name.
+ * @private
+ * @return {string} The ARIA attribute name with added 'aria-' prefix.
+ * @throws {Error} If no such attribute exists.
+ */
+goog.a11y.aria.getAriaAttributeName_ = function(ariaName) {
+  if (goog.asserts.ENABLE_ASSERTS) {
+    goog.asserts.assert(ariaName, 'ARIA attribute cannot be empty.');
+    goog.asserts.assert(goog.object.containsValue(
+        goog.a11y.aria.State, ariaName),
+        'No such ARIA attribute ' + ariaName);
+  }
+  return goog.a11y.aria.ARIA_PREFIX_ + ariaName;
 };
 
 
