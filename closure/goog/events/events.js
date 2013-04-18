@@ -82,8 +82,7 @@ goog.events.ListenableType;
 
 /**
  * Container for storing event listeners and their proxies
- * @private
- * @type {Object.<goog.events.ListenableKey>}
+ * @private {!Object.<goog.events.ListenableKey>}
  */
 goog.events.listeners_ = {};
 
@@ -169,9 +168,7 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
         type, listener, /* callOnce */ false, opt_capt, opt_handler);
   }
 
-  var key = listenableKey.key;
-  goog.events.listeners_[key] = listenableKey;
-  return key;
+  return listenableKey;
 };
 
 
@@ -300,6 +297,8 @@ goog.events.listen_ = function(
     src.attachEvent(goog.events.getOnString_(type), proxy);
   }
 
+  var key = listenerObj.key;
+  goog.events.listeners_[key] = listenerObj;
   return listenerObj;
 };
 
@@ -368,9 +367,7 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
         type, listener, /* callOnce */ true, opt_capt, opt_handler);
   }
 
-  var key = listenableKey.key;
-  goog.events.listeners_[key] = listenableKey;
-  return key;
+  return listenableKey;
 };
 
 
@@ -432,7 +429,7 @@ goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
     if (listenerArray[i].listener == listener &&
         listenerArray[i].capture == capture &&
         listenerArray[i].handler == opt_handler) {
-      return goog.events.unlistenByKey(listenerArray[i].key);
+      return goog.events.unlistenByKey(listenerArray[i]);
     }
   }
 
@@ -449,11 +446,13 @@ goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
  * @return {boolean} indicating whether the listener was there to remove.
  */
 goog.events.unlistenByKey = function(key) {
-  // TODO(user): Should not be required soon. Did this so that
-  // we can fix some production code.
-  var listener = key instanceof goog.events.Listener ?
-      key : goog.events.listeners_[key];
+  // TODO(user): Remove this check when tests that rely on this
+  // are fixed.
+  if (goog.isNumber(key)) {
+    return false;
+  }
 
+  var listener = /** @type {goog.events.ListenableKey} */ (key);
   if (!listener) {
     return false;
   }
@@ -640,14 +639,14 @@ goog.events.removeAll = function(opt_obj, opt_type) {
       for (var i = sourcesArray.length - 1; i >= 0; i--) {
         var listener = sourcesArray[i];
         if (noType || opt_type == listener.type) {
-          goog.events.unlistenByKey(listener.key);
+          goog.events.unlistenByKey(listener);
           count++;
         }
       }
     }
   } else {
-    goog.object.forEach(goog.events.listeners_, function(listener, key) {
-      goog.events.unlistenByKey(key);
+    goog.object.forEach(goog.events.listeners_, function(listener) {
+      goog.events.unlistenByKey(listener);
       count++;
     });
   }
@@ -665,12 +664,12 @@ goog.events.removeAll = function(opt_obj, opt_type) {
  */
 goog.events.removeAllNativeListeners = function() {
   var count = 0;
-  goog.object.forEach(goog.events.listeners_, function(listener, key) {
+  goog.object.forEach(goog.events.listeners_, function(listener) {
     var src = listener.src;
     // Only remove the listener if it is not on custom event target.
     if (!goog.events.Listenable.isImplementedBy(src) &&
         !src[goog.events.CUSTOM_EVENT_ATTR]) {
-      goog.events.unlistenByKey(key);
+      goog.events.unlistenByKey(listener);
       count++;
     }
   });
@@ -933,7 +932,7 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
  */
 goog.events.fireListener = function(listener, eventObject) {
   if (listener.callOnce) {
-    goog.events.unlistenByKey(listener.key);
+    goog.events.unlistenByKey(listener);
   }
   return listener.handleEvent(eventObject);
 };

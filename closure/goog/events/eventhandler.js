@@ -58,9 +58,8 @@
 goog.provide('goog.events.EventHandler');
 
 goog.require('goog.Disposable');
-goog.require('goog.array');
 goog.require('goog.events');
-goog.require('goog.events.EventWrapper');
+goog.require('goog.object');
 
 
 
@@ -78,10 +77,10 @@ goog.events.EventHandler = function(opt_handler) {
 
   /**
    * Keys for events that are being listened to.
-   * @type {Array.<number>}
+   * @type {!Object.<!goog.events.Key>}
    * @private
    */
-  this.keys_ = [];
+  this.keys_ = {};
 };
 goog.inherits(goog.events.EventHandler, goog.Disposable);
 
@@ -117,13 +116,20 @@ goog.events.EventHandler.prototype.listen = function(src, type, opt_fn,
     type = goog.events.EventHandler.typeArray_;
   }
   for (var i = 0; i < type.length; i++) {
-    // goog.events.listen generates unique keys so we don't have to check their
-    // presence in the this.keys_ array.
-    var key = /** @type {number} */ (
-        goog.events.listen(src, type[i], opt_fn || this,
-                           opt_capture || false,
-                           opt_handler || this.handler_ || this));
-    this.keys_.push(key);
+    var listenerObj = goog.events.listen(
+        src, type[i], opt_fn || this,
+        opt_capture || false,
+        opt_handler || this.handler_ || this);
+
+    if (goog.DEBUG && !listenerObj) {
+      // Some tests mock goog.events.listen, thus ensuring that
+      // they are never testing the real thing anyway, hence this is safe
+      // (except that #getListenerCount() will return the wrong value).
+      return this;
+    }
+
+    var key = listenerObj.key;
+    this.keys_[key] = listenerObj;
   }
 
   return this;
@@ -153,10 +159,11 @@ goog.events.EventHandler.prototype.listenOnce = function(src, type, opt_fn,
       this.listenOnce(src, type[i], opt_fn, opt_capture, opt_handler);
     }
   } else {
-    var key = /** @type {number} */ (
-        goog.events.listenOnce(src, type, opt_fn || this, opt_capture,
-                               opt_handler || this.handler_ || this));
-    this.keys_.push(key);
+    var listenerObj = goog.events.listenOnce(
+        src, type, opt_fn || this, opt_capture,
+        opt_handler || this.handler_ || this);
+    var key = listenerObj.key;
+    this.keys_[key] = listenerObj;
   }
 
   return this;
@@ -191,7 +198,13 @@ goog.events.EventHandler.prototype.listenWithWrapper = function(src, wrapper,
  * @return {number} Number of listeners registered by this handler.
  */
 goog.events.EventHandler.prototype.getListenerCount = function() {
-  return this.keys_.length;
+  var count = 0;
+  for (var key in this.keys_) {
+    if (Object.prototype.hasOwnProperty.call(this.keys_, key)) {
+      count++;
+    }
+  }
+  return count;
 };
 
 
@@ -218,9 +231,8 @@ goog.events.EventHandler.prototype.unlisten = function(src, type, opt_fn,
         opt_capture, opt_handler || this.handler_ || this);
 
     if (listener) {
-      var key = listener.key;
-      goog.events.unlistenByKey(key);
-      goog.array.remove(this.keys_, key);
+      goog.events.unlistenByKey(listener);
+      delete this.keys_[listener.key];
     }
   }
 
@@ -254,8 +266,8 @@ goog.events.EventHandler.prototype.unlistenWithWrapper = function(src, wrapper,
  * Unlistens to all events.
  */
 goog.events.EventHandler.prototype.removeAll = function() {
-  goog.array.forEach(this.keys_, goog.events.unlistenByKey);
-  this.keys_.length = 0;
+  goog.object.forEach(this.keys_, goog.events.unlistenByKey);
+  this.keys_ = {};
 };
 
 

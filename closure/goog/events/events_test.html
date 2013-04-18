@@ -372,7 +372,7 @@ See the COPYING file for details.
     var div = document.createElement('div');
     var key = goog.events.listen(
         div, goog.events.EventType.CLICK, goog.nullFunction);
-    var listenerStack = goog.events.listeners_[key].creationStack;
+    var listenerStack = key.creationStack;
 
     // Check that the name of this test function occurs in the stack trace.
     assertContains('testCreationStack', listenerStack);
