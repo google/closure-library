@@ -277,6 +277,27 @@ See the COPYING file for details.
           });
     }
 
+    function testDecorate_AllowDetached_NotInDocument() {
+      goog.ui.Component.ALLOW_DETACHED_DECORATION = true;
+      var element = document.createElement('div');
+      component.decorate(element);
+      assertFalse('Component should not call enterDocument when decorated ' +
+          'with an element that is not in the document.',
+          component.isInDocument());
+      goog.ui.Component.ALLOW_DETACHED_DECORATION = false;
+    }
+
+    function testDecorate_AllowDetached_InDocument() {
+      goog.ui.Component.ALLOW_DETACHED_DECORATION = true;
+      var element = document.createElement('div');
+      sandbox.appendChild(element);
+      component.decorate(element);
+      assertTrue('Component should call enterDocument when decorated ' +
+          'with an element that is in the document.',
+          component.isInDocument());
+      goog.ui.Component.ALLOW_DETACHED_DECORATION = false;
+    }
+
     function testCannotDecorate() {
       sandbox.innerHTML = '<div id="foo">Foo</div>';
       var foo = goog.dom.getElement('foo');
