@@ -2,60 +2,46 @@
 
 # Warning JSC_BAD_PRIVATE_PROPERTY_ACCESS: Access to private property {0} of {1} not allowed here.
 javascript/closure/gears/loggerclient.js:72  Access to private property doLogRecord_ of goog.debug.Logger.prototype not allowed here.
-javascript/closure/net/xpc/crosspagechannel.js:113  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/crosspagechannel.js:776  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/crosspagechannel.js:788  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/crosspagechannel.js:789  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/frameelementmethodtransport.js:120  Access to private property iframeElement_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
-javascript/closure/net/xpc/frameelementmethodtransport.js:209  Access to private property deliver_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
-javascript/closure/net/xpc/frameelementmethodtransport.js:228  Access to private property deliver_ of goog.net.xpc.FrameElementMethodTransport.channel_ not allowed here.
-javascript/closure/net/xpc/iframepollingtransport.js:478  Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-javascript/closure/net/xpc/iframepollingtransport.js:623  Access to private property deliver_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-javascript/closure/net/xpc/iframepollingtransport.js:64  Access to private property cfg_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-javascript/closure/net/xpc/iframepollingtransport.js:71  Access to private property cfg_ of goog.net.xpc.IframePollingTransport.channel_ not allowed here.
-javascript/closure/net/xpc/iframerelaytransport.js:259  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/iframerelaytransport.js:60  Access to private property cfg_ of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
-javascript/closure/net/xpc/iframerelaytransport.js:67  Access to private property cfg_ of goog.net.xpc.IframeRelayTransport.channel_ not allowed here.
-javascript/closure/net/xpc/nativemessagingtransport.js:315  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/nativemessagingtransport.js:325  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/nativemessagingtransport.js:326  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/nativemessagingtransport.js:342  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/nativemessagingtransport.js:344  Access to private property channels_ of goog.net.xpc not allowed here.
-javascript/closure/net/xpc/nativemessagingtransport.js:526  Access to private property peerWindowObject_ of goog.net.xpc.NativeMessagingTransport.channel_ not allowed here.
-javascript/closure/net/xpc/nixtransport.js:325  Access to private property iframeElement_ of goog.net.xpc.NixTransport.channel_ not allowed here.
+
 javascript/closure/proto/serializer.js:64  Access to private property serialize_ of goog.proto.Serializer not allowed here.
-javascript/closure/testing/editor/testhelper.js:103  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
-javascript/closure/testing/editor/testhelper.js:104  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
-javascript/closure/testing/editor/testhelper.js:107  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
-javascript/closure/tweak/testhelpers.js:49  Access to private property registry_ of goog.tweak not allowed here.
+
+javascript/closure/testing/editor/testhelper.js:105  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+
+javascript/closure/testing/editor/testhelper.js:106  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+
+javascript/closure/testing/editor/testhelper.js:109  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+
+javascript/closure/tweak/testhelpers.js:57  Access to private property registry_ of goog.tweak not allowed here.
+
 javascript/closure/ui/drilldownrow.js:224  Access to private property children_ of goog.ui.DrilldownRow not allowed here.
-javascript/closure/ui/hsvapalette.js:166  Access to private property setColor_ of goog.ui.HsvPalette.prototype not allowed here.
+
+javascript/closure/ui/hsvapalette.js:164  Access to private property setColor_ of goog.ui.HsvPalette.prototype not allowed here.
+
+javascript/closure/ui/hsvapalette.js:184  Access to private property element_ of goog.ui.HsvaPalette not allowed here.
+
+javascript/closure/ui/hsvapalette.js:185  Access to private property element_ of goog.ui.HsvaPalette not allowed here.
+
 javascript/closure/ui/hsvapalette.js:186  Access to private property element_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:187  Access to private property element_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:188  Access to private property element_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:212  Access to private property swatchEl_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:220  Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:221  Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:231  Access to private property vImageEl_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:233  Access to private property mouseMoveListener_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:236  Access to private property mouseUpListener_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:237  Access to private property handleMouseUp_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/hsvapalette.js:262  Access to private property inputEl_ of goog.ui.HsvaPalette not allowed here.
-javascript/closure/ui/mockactivitymonitor.js:50  Access to private property lastEventTime_ of goog.ui.MockActivityMonitor not allowed here.
-javascript/closure/ui/mockactivitymonitor.js:51  Access to private property lastEventType_ of goog.ui.MockActivityMonitor not allowed here.
+
+javascript/closure/ui/hsvapalette.js:231  Access to private property mouseMoveListener_ of goog.ui.HsvaPalette not allowed here.
+
+javascript/closure/ui/hsvapalette.js:234  Access to private property mouseUpListener_ of goog.ui.HsvaPalette not allowed here.
+
 
 # Warning JSC_BAD_PROTECTED_PROPERTY_ACCESS: Access to protected property {0} of {1} not allowed here.
 javascript/closure/graphics/ext/ellipse.js:37  Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+
 javascript/closure/graphics/ext/image.js:38  Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+
 javascript/closure/graphics/ext/rectangle.js:37  Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+
 javascript/closure/graphics/ext/shape.js:44  Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+
 javascript/closure/ui/equation/texeditor.js:103  Access to protected property setEquation of goog.ui.equation.TexEditor.prototype.texPane_ not allowed here.
+
 javascript/closure/ui/equation/texeditor.js:93  Access to protected property getEquation of goog.ui.equation.TexEditor.prototype.texPane_ not allowed here.
 
-# Warning JSC_INEXISTENT_PROPERTY: Property {0} never defined on {1}
-javascript/closure/dom/xml.js:118  Property setProperty never defined on Document
-javascript/closure/dom/xml.js:143  Property setProperty never defined on Document
 
 # Warning JSC_PRIVATE_OVERRIDE: Overriding private property of {0}.
-javascript/closure/ui/hsvapalette.js:66  Overriding private property of goog.ui.HsvPalette.
-javascript/closure/ui/hsvapalette.js:73  Overriding private property of goog.ui.HsvPalette.
+javascript/closure/ui/hsvapalette.js:71  Overriding private property of goog.ui.HsvPalette.
+
