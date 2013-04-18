@@ -217,7 +217,7 @@ goog.ui.DragDropDetector.prototype.window_ = null;
 
 /**
  * The iframe's document, null if the iframe hasn't loaded yet.
- * @type {HTMLDocument}
+ * @type {Document}
  * @private
  */
 goog.ui.DragDropDetector.prototype.document_ = null;
