@@ -469,7 +469,7 @@ goog.positioning.adjustForViewport_ = function(pos, size, viewport, overflow) {
       pos.y + size.height < viewport.bottom &&
       overflow & goog.positioning.Overflow.RESIZE_HEIGHT) {
     size.height = Math.max(size.height - (viewport.top - pos.y), 0);
-    pos.y = 0;
+    pos.y = viewport.top;
     status |= goog.positioning.OverflowStatus.HEIGHT_ADJUSTED;
   }
 
