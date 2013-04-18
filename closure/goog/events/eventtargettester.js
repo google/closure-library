@@ -23,6 +23,8 @@ goog.setTestOnly('goog.events.eventTargetTester.KeyType');
 goog.provide('goog.events.eventTargetTester.UnlistenReturnType');
 goog.setTestOnly('goog.events.eventTargetTester.UnlistenReturnType');
 
+goog.require('goog.array');
+goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.testing.asserts');
@@ -1005,20 +1007,15 @@ function testFiringEventBeforeDisposeInternalWorks() {
   }
 }
 
+
 function testLoopDetection() {
-  // In the old event target API, parent-target loops would get short-circuited
-  // by the targetMap.remaining_ optimization. In the new API, we need some
-  // other mechanism to detect loops.
   var target = new goog.events.EventTarget();
   target.setParentEventTarget(target);
-  if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-    try {
-      target.dispatchEvent('string');
-      fail('expected error');
-    } catch (e) {
-      assertContains('infinite', e.message);
-    }
-  } else {
-    target.dispatchEvent('string'); // No error.
+
+  try {
+    target.dispatchEvent('string');
+    fail('expected error');
+  } catch (e) {
+    assertContains('infinite', e.message);
   }
 }

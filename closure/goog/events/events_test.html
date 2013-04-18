@@ -173,33 +173,6 @@ See the COPYING file for details.
     goog.events.removeAll(et3);
   }
 
-  function testBubbleShortCircuit() {
-    // Short-circuit no longer works with listenable.
-    if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-      return;
-    }
-
-    et1.setParentEventTarget(et2);
-
-    et2.getParentEventTarget = function() {
-      fail('This should never be called');
-    };
-
-    var count = 0;
-    function callback() {
-      count++;
-    }
-
-    goog.events.listen(et1, 'test', callback, false);
-
-    et1.dispatchEvent('test');
-
-    assertEquals(1, count);
-
-    goog.events.removeAll(et1);
-    goog.events.removeAll(et2);
-  }
-
   function testCaptureSingle() {
     et1.setParentEventTarget(et2);
     et2.setParentEventTarget(et3);
@@ -417,11 +390,7 @@ See the COPYING file for details.
 
     goog.removeUid(et1);
     et1.dispatchEvent('foo');
-    if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-      assertEquals(1, listener.getCallCount());
-    } else {
-      assertEquals(0, listener.getCallCount());
-    }
+    assertEquals(1, listener.getCallCount());
   }
 
   /**

@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview An interface for a listenable JavaScript object.
- *
- * WARNING(chrishenry): DO NOT USE! SUPPORT NOT FULLY IMPLEMENTED.
  */
 
 goog.provide('goog.events.Listenable');
@@ -28,17 +26,6 @@ goog.provide('goog.events.ListenableKey');
  * @interface
  */
 goog.events.Listenable = function() {};
-
-
-/**
- * Whether to use the new listenable interface and mechanism in
- * goog.events and goog.events.EventTarget.
- *
- * TODO(user): Remove this once launched and stable.
- *
- * @type {boolean}
- */
-goog.events.Listenable.USE_LISTENABLE_INTERFACE = true;
 
 
 /**

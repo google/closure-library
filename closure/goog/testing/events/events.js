@@ -43,7 +43,6 @@ goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
-goog.require('goog.events.Listenable');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.userAgent');
@@ -671,23 +670,19 @@ goog.testing.events.fireTouchSequence = function(
 goog.testing.events.mixinListenable = function(obj) {
   var listenable = new goog.events.EventTarget();
 
-  if (goog.events.Listenable.USE_LISTENABLE_INTERFACE) {
-    listenable.setTargetForTesting(obj);
+  listenable.setTargetForTesting(obj);
 
-    var listenablePrototype = goog.events.EventTarget.prototype;
-    var disposablePrototype = goog.Disposable.prototype;
-    for (var key in listenablePrototype) {
-      if (listenablePrototype.hasOwnProperty(key) ||
-          disposablePrototype.hasOwnProperty(key)) {
-        var member = listenablePrototype[key];
-        if (goog.isFunction(member)) {
-          obj[key] = goog.bind(member, listenable);
-        } else {
-          obj[key] = member;
-        }
+  var listenablePrototype = goog.events.EventTarget.prototype;
+  var disposablePrototype = goog.Disposable.prototype;
+  for (var key in listenablePrototype) {
+    if (listenablePrototype.hasOwnProperty(key) ||
+        disposablePrototype.hasOwnProperty(key)) {
+      var member = listenablePrototype[key];
+      if (goog.isFunction(member)) {
+        obj[key] = goog.bind(member, listenable);
+      } else {
+        obj[key] = member;
       }
     }
-  } else {
-    goog.mixin(obj, listenable);
   }
 };
