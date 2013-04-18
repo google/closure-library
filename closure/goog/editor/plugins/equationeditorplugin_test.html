@@ -106,9 +106,9 @@ See the COPYING file for details.
     mockField.dispatchBeforeChange().$times(1);
     mockCtrl.$replayAll();
 
-    plugin = new goog.editor.plugins.EquationEditorPlugin(domHelper);
+    plugin = new goog.editor.plugins.EquationEditorPlugin();
     plugin.registerFieldObject(mockField);
-    var dialog = plugin.createDialog();
+    var dialog = plugin.createDialog(domHelper);
     // Mock of execCommand + clicking OK without actually opening the dialog.
     dialog.dispatchEvent(
         new goog.ui.editor.EquationEditorOkEvent(IMG_URL));

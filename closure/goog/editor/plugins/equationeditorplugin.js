@@ -14,17 +14,18 @@
 
 goog.provide('goog.editor.plugins.EquationEditorPlugin');
 
+goog.require('goog.debug.Logger');
+goog.require('goog.dom');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractDialogPlugin');
 goog.require('goog.editor.range');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('goog.functions');
-goog.require('goog.ui.editor.AbstractDialog.Builder');
+goog.require('goog.ui.editor.AbstractDialog');
 goog.require('goog.ui.editor.EquationEditorDialog');
-goog.require('goog.ui.editor.EquationEditorOkEvent');
-goog.require('goog.ui.equation.EquationEditor');
 goog.require('goog.ui.equation.ImageRenderer');
 goog.require('goog.ui.equation.PaletteManager');
-goog.require('goog.ui.equation.TexEditor');
 
 
 
@@ -90,7 +91,7 @@ goog.editor.plugins.EquationEditorPlugin.prototype.createDialog =
 
   this.originalElement_ = equationImgEl;
   var dialog = new goog.ui.editor.EquationEditorDialog(
-      this.populateContext_(), dom, equationStr, this.helpUrl_);
+      this.populateContext_(dom), dom, equationStr, this.helpUrl_);
   dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.OK,
       this.handleOk_,
       false,
@@ -101,13 +102,15 @@ goog.editor.plugins.EquationEditorPlugin.prototype.createDialog =
 
 /**
  * Populates the context that this plugin runs in.
+ * @param {!goog.dom.DomHelper} domHelper The dom helper to be used for the
+ *     palette manager.
  * @return {Object} The context that this plugin runs in.
  * @private
  */
 goog.editor.plugins.EquationEditorPlugin.prototype.populateContext_ =
-    function() {
+    function(domHelper) {
   var context = {};
-  context.paletteManager = new goog.ui.equation.PaletteManager();
+  context.paletteManager = new goog.ui.equation.PaletteManager(domHelper);
   return context;
 };
 
