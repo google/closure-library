@@ -350,6 +350,24 @@ function testAppendParams() {
 }
 
 
+function testValuelessParam() {
+  assertEquals('http://foo.com?q',
+      utils.appendParam('http://foo.com', 'q'));
+  assertEquals('http://foo.com?q',
+      utils.appendParam('http://foo.com', 'q', null /* opt_value */));
+  assertEquals('http://foo.com?q#preserve',
+      utils.appendParam('http://foo.com#preserve', 'q'));
+  assertEquals('should tolerate a lone question mark',
+      'http://foo.com?q',
+      utils.appendParam('http://foo.com?', 'q'));
+  assertEquals('http://foo.com?q=1&r',
+      utils.appendParam('http://foo.com?q=1', 'r'));
+  assertEquals('http://foo.com?q=1&r=2&s#preserve',
+      utils.appendParam('http://foo.com?q=1&r=2#preserve', 's'));
+  assertTrue(utils.hasParam('http://foo.com?q=1&r=2&s#preserve', 's'));
+}
+
+
 function testAppendParamsAsArray() {
   assertEquals('http://foo.com?q=1&r=2&s=3&s=4#preserve',
       utils.appendParams('http://foo.com#preserve',
@@ -403,13 +421,6 @@ function testMultiParamSkipsNullParams() {
       utils.appendParams('foo.com', 'a', [null], 'b', null, 'c', undefined));
   assertEquals('empty strings should NOT be skipped', 'foo.com?a&b',
       utils.appendParams('foo.com', 'a', [''], 'b', ''));
-}
-
-
-function testAppendSingleParamDoesAppendNullParams() {
-  // For the single-param function, exactly 1 parameter will always be appended.
-  assertEquals('appendParam does not skip null params', 'foo.com?a=null',
-      utils.appendParam('foo.com', 'a', null));
 }
 
 
