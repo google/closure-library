@@ -47,11 +47,15 @@ goog.require('goog.userAgent');
 /**
  * Basic object for detecting whether the online state changes.
  * @constructor
- * @extends {goog.net.NetworkStatusMonitor}
+ * @extends {goog.events.EventTarget}
+ * @implements {goog.net.NetworkStatusMonitor}
  */
 goog.events.OnlineHandler = function() {
   goog.base(this);
 
+  /**
+   * @private {goog.events.EventHandler}
+   */
   this.eventHandler_ = new goog.events.EventHandler(this);
 
   // Some browsers do not support navigator.onLine and therefore we don't
@@ -74,12 +78,13 @@ goog.events.OnlineHandler = function() {
     this.timer_.start();
   }
 };
-goog.inherits(goog.events.OnlineHandler, goog.net.NetworkStatusMonitor);
+goog.inherits(goog.events.OnlineHandler, goog.events.EventTarget);
 
 
 /**
  * Enum for the events dispatched by the OnlineHandler.
  * @enum {string}
+ * @deprecated Use goog.net.NetworkStatusMonitor.EventType instead.
  */
 goog.events.OnlineHandler.EventType = goog.net.NetworkStatusMonitor.EventType;
 
@@ -107,14 +112,6 @@ goog.events.OnlineHandler.prototype.online_;
  * @private
  */
 goog.events.OnlineHandler.prototype.timer_;
-
-
-/**
- * Event handler to simplify event listening.
- * @type {goog.events.EventHandler}
- * @private
- */
-goog.events.OnlineHandler.prototype.eventHandler_;
 
 
 /** @override */
@@ -155,11 +152,11 @@ goog.events.OnlineHandler.prototype.handleChange_ = function(e) {
 
 /** @override */
 goog.events.OnlineHandler.prototype.disposeInternal = function() {
-  goog.events.OnlineHandler.superClass_.disposeInternal.call(this);
+  goog.base(this, 'disposeInternal');
   this.eventHandler_.dispose();
-  delete this.eventHandler_;
+  this.eventHandler_ = null;
   if (this.timer_) {
     this.timer_.dispose();
-    delete this.timer_;
+    this.timer_ = null;
   }
 };
