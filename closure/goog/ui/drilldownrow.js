@@ -62,7 +62,6 @@ goog.provide('goog.ui.DrilldownRow');
 
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
-goog.require('goog.events');
 goog.require('goog.ui.Component');
 
 
@@ -81,11 +80,12 @@ goog.require('goog.ui.Component');
  *   decorator: Function that accepts one DrilldownRow argument, and
  *     should customize and style the row.  The default is to call
  *     goog.ui.DrilldownRow.decorator.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */
-goog.ui.DrilldownRow = function(opt_properties) {
-  goog.ui.Component.call(this);
+goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
+  goog.ui.Component.call(this, opt_domHelper);
   var properties = opt_properties || {};
 
   // Initialize instance variables.
