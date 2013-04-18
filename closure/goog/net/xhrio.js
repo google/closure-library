@@ -232,6 +232,13 @@ goog.net.XhrIo.HTTP_SCHEME_PATTERN = /^https?$/i;
 
 
 /**
+ * The methods that typically come along with form data.  We set different
+ * headers depending on whether the HTTP action is one of these.
+ */
+goog.net.XhrIo.METHODS_WITH_FORM_DATA = ['POST', 'PUT', 'DELETE'];
+
+
+/**
  * The Content-Type HTTP header value for a url-encoded form
  * @type {string}
  */
@@ -257,8 +264,7 @@ goog.net.XhrIo.sendInstances_ = [];
  *     complete.
  * @param {string=} opt_method Send method, default: GET.
  * @param {ArrayBuffer|Blob|Document|FormData|GearsBlob|string=} opt_content
- *     Post data. This can be a Gears blob if the underlying HTTP request object
- *     is a Gears HTTP request.
+ *     Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  * @param {number=} opt_timeoutInterval Number of milliseconds after which an
@@ -413,8 +419,7 @@ goog.net.XhrIo.prototype.getWithCredentials = function() {
  * @param {string|goog.Uri} url Uri to make request to.
  * @param {string=} opt_method Send method, default: GET.
  * @param {ArrayBuffer|Blob|Document|FormData|GearsBlob|string=} opt_content
- *     Post data. This can be a Gears blob if the underlying HTTP request object
- *     is a Gears HTTP request.
+ *     Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  */
@@ -458,8 +463,9 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
     return;
   }
 
-  // We can't use null since this won't allow POSTs to have a content length
-  // specified which will cause some proxies to return a 411 error.
+  // We can't use null since this won't allow requests with form data to have a
+  // content length specified which will cause some proxies to return a 411
+  // error.
   var content = opt_content || '';
 
   var headers = this.headers.clone();
@@ -479,11 +485,12 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
 
   var contentIsFormData = (goog.global['FormData'] &&
       (content instanceof goog.global['FormData']));
-  if (method == 'POST' && !contentTypeKey && !contentIsFormData) {
-    // For POST requests, default to the url-encoded form content type
-    // unless this is a FormData request.  For FormData, the browser will
-    // automatically add a multipart/form-data content type with an appropriate
-    // multipart boundary.
+  if (goog.array.contains(goog.net.XhrIo.METHODS_WITH_FORM_DATA, method) &&
+      !contentTypeKey && !contentIsFormData) {
+    // For requests typically with form data, default to the url-encoded form
+    // content type unless this is a FormData request.  For FormData,
+    // the browser will automatically add a multipart/form-data content type
+    // with an appropriate multipart boundary.
     headers.set(goog.net.XhrIo.CONTENT_TYPE_HEADER,
                 goog.net.XhrIo.FORM_CONTENT_TYPE);
   }

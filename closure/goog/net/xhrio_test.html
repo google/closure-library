@@ -550,6 +550,17 @@ function testPostSetsContentTypeHeader() {
       goog.net.XhrIo.FORM_CONTENT_TYPE);
 }
 
+function testNonPostSetsContentTypeHeader() {
+  var x = new goog.net.XhrIo;
+
+  x.send('url', 'PUT', 'content');
+  headers = lastMockXmlHttp.headers;
+  assertEquals(1, goog.object.getCount(headers));
+  assertEquals(
+      headers[goog.net.XhrIo.CONTENT_TYPE_HEADER],
+      goog.net.XhrIo.FORM_CONTENT_TYPE);
+}
+
 function testContentTypeIsTreatedCaseInsensitively() {
   var x = new goog.net.XhrIo;
 
@@ -578,6 +589,17 @@ function testPostFormDataDoesNotSetContentTypeHeader() {
   var x = new goog.net.XhrIo;
   x.send('url', 'POST', new FakeFormData());
   var headers = lastMockXmlHttp.headers;
+  assertTrue(goog.object.isEmpty(headers));
+}
+
+function testNonPostFormDataDoesNotSetContentTypeHeader() {
+  function FakeFormData() {}
+
+  propertyReplacer.set(goog.global, 'FormData', FakeFormData);
+
+  var x = new goog.net.XhrIo;
+  x.send('url', 'PUT', new FakeFormData());
+  headers = lastMockXmlHttp.headers;
   assertTrue(goog.object.isEmpty(headers));
 }
 
