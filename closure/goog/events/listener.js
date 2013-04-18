@@ -25,7 +25,7 @@ goog.require('goog.events.ListenableKey');
 
 /**
  * Simple class that stores information about a listener
- * @param {Function|Object} listener Callback function.
+ * @param {!Function} listener Callback function.
  * @param {Function} proxy Wrapper for the listener that patches the event.
  * @param {Object} src Source object for the event.
  * @param {string} type Event type.
@@ -40,20 +40,9 @@ goog.events.Listener = function(
     this.creationStack = new Error().stack;
   }
 
-  // We test for the type of listener here so that we do not need to
-  // do so on every handleEvent call.
-  if (goog.isFunction(listener)) {
-    this.isFunctionListener_ = true;
-  } else if (listener && listener.handleEvent &&
-      goog.isFunction(listener.handleEvent)) {
-    this.isFunctionListener_ = false;
-  } else {
-    throw Error('Invalid listener argument');
-  }
-
   /**
    * Callback function.
-   * @const {Function|Object}
+   * @const {!Function}
    */
   this.listener = listener;
 
@@ -119,14 +108,6 @@ goog.events.Listener.ENABLE_MONITORING = false;
 
 
 /**
- * Whether the listener is a function or an object that implements handleEvent.
- * @type {boolean}
- * @private
- */
-goog.events.Listener.prototype.isFunctionListener_;
-
-
-/**
  * If monitoring the goog.events.Listener instances is enabled, stores the
  * creation stack trace of the Disposable instance.
  * @type {string}
@@ -140,8 +121,5 @@ goog.events.Listener.prototype.creationStack;
  * @return {boolean} The result of the internal listener call.
  */
 goog.events.Listener.prototype.handleEvent = function(eventObject) {
-  if (this.isFunctionListener_) {
-    return this.listener.call(this.handler || this.src, eventObject);
-  }
-  return this.listener.handleEvent.call(this.listener, eventObject);
+  return this.listener.call(this.handler || this.src, eventObject);
 };

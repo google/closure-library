@@ -158,10 +158,10 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
   }
 
   var listenableKey;
+  listener = goog.events.wrapListener_(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
     listenableKey = src.listen(
-        /** @type {string} */ (type),
-        goog.events.wrapListener_(listener), opt_capt, opt_handler);
+        /** @type {string} */ (type), listener, opt_capt, opt_handler);
   } else {
     listenableKey = goog.events.listen_(
         /** @type {EventTarget} */ (src),
@@ -194,8 +194,7 @@ goog.events.CUSTOM_EVENT_ATTR = 'customEvent_';
  * @param {EventTarget|goog.events.EventTarget} src The node to listen to
  *     events on.
  * @param {?string} type Event type or array of event types.
- * @param {Function|Object} listener Callback method, or an object with a
- *     handleEvent function.
+ * @param {!Function} listener Callback function.
  * @param {boolean} callOnce Whether the listener is a one-off
  *     listener or otherwise.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
@@ -357,10 +356,10 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
   }
 
   var listenableKey;
+  listener = goog.events.wrapListener_(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
     listenableKey = src.listenOnce(
-        /** @type {string} */ (type),
-        goog.events.wrapListener_(listener), opt_capt, opt_handler);
+        /** @type {string} */ (type), listener, opt_capt, opt_handler);
   } else {
     listenableKey = goog.events.listen_(
         /** @type {EventTarget} */ (src),
@@ -412,10 +411,10 @@ goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
     return null;
   }
 
+  listener = goog.events.wrapListener_(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
     return src.unlisten(
-        /** @type {string} */ (type),
-        goog.events.wrapListener_(listener), opt_capt, opt_handler);
+        /** @type {string} */ (type), listener, opt_capt, opt_handler);
   }
 
   var capture = !!opt_capt;
@@ -738,10 +737,10 @@ goog.events.getListeners_ = function(obj, type, capture) {
 goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
   var capture = !!opt_capt;
 
+  listener = goog.events.wrapListener_(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
     return src.getListener(
-        /** @type {string} */ (type),
-        goog.events.wrapListener_(listener), capture, opt_handler);
+        /** @type {string} */ (type), listener, capture, opt_handler);
   }
 
   var listenerArray = goog.events.getListeners_(src, type, capture);
@@ -1181,10 +1180,14 @@ goog.events.LISTENER_WRAPPER_PROP_ = '__closure_events_fn_' +
  * @private
  */
 goog.events.wrapListener_ = function(listener) {
+  goog.asserts.assert(listener, 'Listener can not be null.');
+
   if (goog.isFunction(listener)) {
     return listener;
   }
 
+  goog.asserts.assert(
+      listener.handleEvent, 'An object listener must have handleEvent method.');
   return listener[goog.events.LISTENER_WRAPPER_PROP_] ||
       (listener[goog.events.LISTENER_WRAPPER_PROP_] = function(e) {
         return listener.handleEvent(e);
