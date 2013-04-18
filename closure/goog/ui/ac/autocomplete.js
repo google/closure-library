@@ -21,6 +21,7 @@
 goog.provide('goog.ui.ac.AutoComplete');
 goog.provide('goog.ui.ac.AutoComplete.EventType');
 
+goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 
@@ -57,6 +58,9 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
 
   /**
    * A data-source which provides autocomplete suggestions.
+   *
+   * TODO(user): Tighten the type to !Object.
+   *
    * @type {Object}
    * @protected
    * @suppress {underscore}
@@ -66,6 +70,9 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
   /**
    * A handler which interacts with the input DOM element (textfield, textarea,
    * or richedit).
+   *
+   * TODO(user): Tighten the type to !Object.
+   *
    * @type {Object}
    * @protected
    * @suppress {underscore}
@@ -79,11 +86,15 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * @suppress {underscore}
    */
   this.renderer_ = renderer;
-  goog.events.listen(renderer, [
-    goog.ui.ac.AutoComplete.EventType.HILITE,
-    goog.ui.ac.AutoComplete.EventType.SELECT,
-    goog.ui.ac.AutoComplete.EventType.CANCEL_DISMISS,
-    goog.ui.ac.AutoComplete.EventType.DISMISS], this);
+  goog.events.listen(
+      renderer,
+      [
+        goog.ui.ac.AutoComplete.EventType.HILITE,
+        goog.ui.ac.AutoComplete.EventType.SELECT,
+        goog.ui.ac.AutoComplete.EventType.CANCEL_DISMISS,
+        goog.ui.ac.AutoComplete.EventType.DISMISS
+      ],
+      this.handleEvent, false, this);
 
   /**
    * Currently typed token which will be used for completion.
@@ -94,7 +105,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
   this.token_ = null;
 
   /**
-   * Autcomplete suggestion items.
+   * Autocomplete suggestion items.
    * @type {Array}
    * @protected
    * @suppress {underscore}
@@ -112,6 +123,10 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
   /**
    * Id of the first row in autocomplete menu. Note that new ids are assigned
    * everytime new suggestions are fetched.
+   *
+   * TODO(user): Figure out what subclass does with this value
+   * and whether we should expose a more proper API.
+   *
    * @type {number}
    * @protected
    * @suppress {underscore}
@@ -230,12 +245,112 @@ goog.ui.ac.AutoComplete.EventType = {
 
 
 /**
- * Returns the renderer that renders/shows/highlights/hides the autocomplete
- * menu.
- * @return {goog.events.EventTarget} Renderer used by the this widget.
+ * @return {!Object} The data source providing the `autocomplete
+ *     suggestions.
+ * @protected
+ */
+goog.ui.ac.AutoComplete.prototype.getMacher = function() {
+  return goog.asserts.assert(this.matcher_);
+};
+
+
+/**
+ * Sets the data source providing the autocomplete suggestions.
+ *
+ * See constructor documentation for the interface.
+ *
+ * @param {!Object} matcher The matcher.
+ * @protected
+ */
+goog.ui.ac.AutoComplete.prototype.setMatcher = function(matcher) {
+  this.matcher_ = matcher;
+};
+
+
+/**
+ * @return {!Object} The handler used to interact with the input DOM
+ *     element (textfield, textarea, or richedit), e.g. to update the
+ *     input DOM element with selected value.
+ * @protected
+ */
+goog.ui.ac.AutoComplete.prototype.getSelectionHandler = function() {
+  return goog.asserts.assert(this.selectionHandler_);
+};
+
+
+/**
+ * @return {goog.events.EventTarget} The renderer that
+ *     renders/shows/highlights/hides the autocomplete menu.
+ *     See constructor documentation for the expected renderer API.
  */
 goog.ui.ac.AutoComplete.prototype.getRenderer = function() {
   return this.renderer_;
+};
+
+
+/**
+ * Sets the renderer that renders/shows/highlights/hides the autocomplete
+ * menu.
+ *
+ * See constructor documentation for the expected renderer API.
+ *
+ * @param {goog.events.EventTarget} renderer The renderer.
+ * @protected
+ */
+goog.ui.ac.AutoComplete.prototype.setRenderer = function(renderer) {
+  this.renderer_ = renderer;
+};
+
+
+/**
+ * @return {?string} The currently typed token used for completion.
+ * @protected
+ */
+goog.ui.ac.AutoComplete.prototype.getToken = function() {
+  return this.token_;
+};
+
+/**
+ * Sets the current token (without changing the rendered autocompletion).
+ *
+ * NOTE(user): This method will likely go away when we figure
+ * out a better API.
+ *
+ * @param {?string} token The new token.
+ * @protected
+ */
+goog.ui.ac.AutoComplete.prototype.setTokenInternal = function(token) {
+  this.token_ = token;
+};
+
+
+/**
+ * @return {!Array} The current autocomplete suggestion items.
+ */
+goog.ui.ac.AutoComplete.prototype.getSuggestionItems = function() {
+  return goog.array.clone(goog.asserts.assert(this.rows_));
+};
+
+
+/**
+ * @return {number} The id (not index!) of the currently highlighted row.
+ */
+goog.ui.ac.AutoComplete.prototype.getHighlightedId = function() {
+  return this.hiliteId_;
+};
+
+
+/**
+ * Sets the current highlighted row to the given id (not index). Note
+ * that this does not change any rendering.
+ *
+ * NOTE(user): This method will likely go away when we figure
+ * out a better API.
+ *
+ * @param {number} id The new highlighted row id.
+ */
+goog.ui.ac.AutoComplete.prototype.setHighlightedIdInternal = function(id) {
+  this.hiliteId_ = id;
 };
 
 
