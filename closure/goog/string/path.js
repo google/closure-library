@@ -92,7 +92,7 @@ goog.string.path.join = function(var_args) {
     var arg = arguments[i];
     if (goog.string.startsWith(arg, '/')) {
       path = arg;
-    } else if (path == '' || goog.string.endsWith(arg, '/')) {
+    } else if (path == '' || goog.string.endsWith(path, '/')) {
       path += arg;
     } else {
       path += '/' + arg;

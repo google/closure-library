@@ -41,6 +41,8 @@ function testJoin() {
               goog.string.path.join('/foo', 'bar', '/bar', 'baz'));
   assertEquals('/foo/bar/baz',
               goog.string.path.join('/foo', 'bar', 'baz'));
+  assertEquals('/foo/bar/baz',
+              goog.string.path.join('/foo/', 'bar', 'baz'))
   assertEquals('/foo/bar/baz/',
               goog.string.path.join('/foo/', 'bar/', 'baz/'))
 }
