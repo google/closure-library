@@ -37,10 +37,8 @@ goog.provide('goog.events.OnlineHandler.EventType');
 goog.require('goog.Timer');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.EventHandler');
-goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.net.NetworkStatusMonitor');
-goog.require('goog.userAgent');
 
 
 

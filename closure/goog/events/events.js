@@ -58,6 +58,7 @@ goog.provide('goog.events.Key');
 goog.provide('goog.events.ListenableType');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 /** @suppress {extraRequire} */
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events.BrowserEvent');
@@ -1299,9 +1300,8 @@ goog.events.wrapListener_ = function(listener) {
   }
 
   return listener[goog.events.LISTENER_WRAPPER_PROP_] ||
-      (listener[goog.events.LISTENER_WRAPPER_PROP_] = function(e) {
-        return listener.handleEvent(e);
-      });
+      (listener[goog.events.LISTENER_WRAPPER_PROP_] =
+       goog.bind(listener.handleEvent, listener));
 };
 
 
