@@ -14,8 +14,11 @@ See the COPYING file for details.
 <!-- These paths should be relative to the test -->
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.debug.Error');
   goog.require('goog.debug.ErrorHandler');
+  goog.require('goog.testing.MockControl');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.mockmatchers.SaveArgument');
   goog.require('goog.userAgent');
 </script>
 </head>
@@ -29,6 +32,7 @@ See the COPYING file for details.
   var fakeWin = {};
 
   var errorHandler;
+  var mockControl;
 
   function badTimer() {
     arguments.callee.called = true;
@@ -36,6 +40,7 @@ See the COPYING file for details.
   }
 
   function setUp() {
+    mockControl = new goog.testing.MockControl();
     // On IE, globalEval happens async. So make it synchronous.
     goog.globalEval = function(str) {
       eval(str);
@@ -77,6 +82,7 @@ See the COPYING file for details.
   }
 
   function tearDown() {
+    mockControl.$tearDown();
     goog.dispose(errorHandler);
     errorHandler = null;
 
@@ -194,14 +200,42 @@ See the COPYING file for details.
   }
 
   function testGetProtectedFunction_withoutWrappedErrors() {
+    if (Error.captureStackTrace) {
+      mockControl.createMethodMock(goog.global.console, 'error');
+    }
     errorHandler.setWrapErrors(false);
     var fn = function() {
       throw new Error('Foo');
     };
     var protectedFn = errorHandler.getProtectedFunction(fn);
+
+    mockControl.$replayAll(); // Ensure console.error isn't called.
     var e = assertThrows(protectedFn);
     assertTrue(e instanceof Error);
     assertEquals('Foo', e.message);
+    mockControl.$verifyAll();
+  }
+
+  function testGetProtectedFunction_withoutWrappedErrors_customError() {
+    if (!Error.captureStackTrace) {
+      // Nothing special to test here over previous test.
+      return;
+    }
+    var consoleError = mockControl.createMethodMock(goog.global.console,
+        'error');
+    errorHandler.setWrapErrors(false);
+    var fn = function() {
+      throw new goog.debug.Error('Foo');
+    };
+    var protectedFn = errorHandler.getProtectedFunction(fn);
+    var stack = new goog.testing.mockmatchers.SaveArgument();
+    console.error('Foo', stack);
+    mockControl.$replayAll();
+    var e = assertThrows(protectedFn);
+    mockControl.$verifyAll();
+    assertTrue(e instanceof Error);
+    assertEquals('Foo', e.message);
+    assertEquals(e.stack, stack.arg);
   }
 
   function testGetProtectedFunction_withoutWrappedErrorsWithMessagePrefix() {
