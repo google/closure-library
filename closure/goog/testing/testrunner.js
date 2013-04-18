@@ -279,6 +279,18 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
 
   // Highlight the page to indicate the overall outcome.
   this.writeLog(log);
+
+  // TODO(user): Make this work with multiple test cases (b/8603638).
+  var runAgainLink = document.createElement('a');
+  runAgainLink.style.display = 'block';
+  runAgainLink.style.fontSize = 'small';
+  runAgainLink.href = '';
+  runAgainLink.onclick = goog.bind(function() {
+    this.execute();
+    return false;
+  }, this);
+  runAgainLink.innerHTML = 'Run again without reloading';
+  this.logEl_.appendChild(runAgainLink);
 };
 
 
@@ -385,4 +397,3 @@ goog.testing.TestRunner.prototype.log = function(s) {
     this.testCase.log(s);
   }
 };
-
