@@ -284,8 +284,8 @@ goog.events.listen_ = function(
   }
 
   var proxy = goog.events.getProxy();
-  listenerObj = new goog.events.Listener();
-  listenerObj.init(listener, proxy, src, type, capture, opt_handler);
+  listenerObj = new goog.events.Listener(
+      listener, proxy, src, type, capture, opt_handler);
   listenerObj.callOnce = callOnce;
 
   proxy.src = src;
