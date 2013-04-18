@@ -531,7 +531,7 @@ goog.events.unlistenByKey = function(key) {
     goog.events.cleanUp_(type, capture, srcUid, listenerArray);
   }
 
-  delete goog.events.listeners_[key];
+  delete goog.events.listeners_[listener.key];
 
   return true;
 };
