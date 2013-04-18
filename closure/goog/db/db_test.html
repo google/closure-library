@@ -1359,6 +1359,66 @@ function testDeleteNonExistentDatabase() {
   }, failOnError);
 }
 
+function testObjectStoreCountAll() {
+  if (!idbSupported) {
+    return;
+  }
+
+  var values = ['1', '2', '3', '4'];
+  var keys = ['a', 'b', 'c', 'd'];
+
+  var addData = goog.partial(populateStore, values, keys);
+  var checkCountAll = function(db) {
+    var tx = db.createTransaction(['store']);
+    var store = tx.objectStore('store');
+    return store.count().addCallbacks(function(count) {
+      assertEquals(values.length, count);
+      tx.dispose();
+      closeAndContinue(db);
+    }, function(e) {
+      tx.dispose();
+      db.close();
+      failOnError(e);
+    });
+  };
+
+  asyncTestCase.waitForAsync('testObjectStoreCountAll');
+  globalDb.branch().addCallbacks(addStore, failOnError)
+      .addCallback(addData)
+      .addCallback(checkCountAll);
+}
+
+function testObjectStoreCountSome() {
+  if (!idbSupported) {
+    return;
+  }
+
+  var values = ['1', '2', '3', '4'];
+  var keys = ['a', 'b', 'c', 'd'];
+
+  var addData = goog.partial(populateStore, values, keys);
+  var checkCountSome = function(db) {
+    var tx = db.createTransaction(['store']);
+    var store = tx.objectStore('store');
+    return store.count(goog.db.KeyRange.bound('b', 'c')).addCallbacks(
+        function(count) {
+          assertEquals(2, count);
+          tx.dispose();
+          closeAndContinue(db);
+        }, function(e) {
+          tx.dispose();
+          db.close();
+          failOnError(e);
+        });
+  };
+
+  asyncTestCase.waitForAsync('testObjectStoreCountSome');
+  globalDb.branch()
+      .addCallbacks(addStore, failOnError)
+      .addCallback(addData)
+      .addCallback(checkCountSome);
+}
+
 </script>
 </body>
 </html>
