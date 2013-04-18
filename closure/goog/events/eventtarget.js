@@ -205,7 +205,7 @@ goog.events.EventTarget.prototype.removeEventListener = function(
 
 /** @override */
 goog.events.EventTarget.prototype.dispatchEvent = function(e) {
-  this.assertInitialized();
+  this.assertInitialized_();
 
   var ancestorsTree, ancestor = this.getParentEventTarget();
   if (ancestor) {
@@ -247,14 +247,13 @@ goog.events.EventTarget.prototype.disposeInternal = function() {
 
 /**
  * Asserts that the event target instance is initialized properly.
+ * @private
  */
-goog.events.EventTarget.prototype.assertInitialized = function() {
-  if (goog.events.STRICT_EVENT_TARGET) {
-    goog.asserts.assert(
-        this.eventTargetListeners_,
-        'Event target is not initialized. Did you call superclass ' +
-        '(goog.events.EventTarget) constructor?');
-  }
+goog.events.EventTarget.prototype.assertInitialized_ = function() {
+  goog.asserts.assert(
+      this.eventTargetListeners_,
+      'Event target is not initialized. Did you call superclass ' +
+      '(goog.events.EventTarget) constructor?');
 };
 
 
@@ -296,7 +295,7 @@ goog.events.EventTarget.prototype.listenOnce = function(
  */
 goog.events.EventTarget.prototype.listenInternal_ = function(
     type, listener, callOnce, opt_useCapture, opt_listenerScope) {
-  this.assertInitialized();
+  this.assertInitialized_();
 
   var listenerArray = this.eventTargetListeners_[type] ||
       (this.eventTargetListeners_[type] = []);

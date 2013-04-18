@@ -38,7 +38,6 @@ See the COPYING file for details.
   }
 
   function tearDown() {
-    goog.events.STRICT_EVENT_TARGET = false;
     goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
     goog.disposeAll(et1, et2, et3);
     goog.events.removeAllNativeListeners();
@@ -612,8 +611,6 @@ See the COPYING file for details.
   }
 
   function testAssertWhenUsedWithUninitializedCustomEventTarget() {
-    goog.events.STRICT_EVENT_TARGET = true;
-
     var SubClass = function() { /* does not call superclass ctor */ };
     goog.inherits(SubClass, goog.events.EventTarget);
 
@@ -635,7 +632,6 @@ See the COPYING file for details.
   }
 
   function testAssertWhenDispatchEventIsUsedWithNonCustomEventTarget() {
-    goog.events.STRICT_EVENT_TARGET = true;
     var obj = {};
     e = assertThrows(function() {
       goog.events.dispatchEvent(obj, 'test1');

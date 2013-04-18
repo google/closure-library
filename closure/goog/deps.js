@@ -207,7 +207,7 @@ goog.addDependency('events/browserevent.js', ['goog.events.BrowserEvent', 'goog.
 goog.addDependency('events/browserfeature.js', ['goog.events.BrowserFeature'], ['goog.userAgent']);
 goog.addDependency('events/event.js', ['goog.events.Event', 'goog.events.EventLike'], ['goog.Disposable']);
 goog.addDependency('events/eventhandler.js', ['goog.events.EventHandler'], ['goog.Disposable', 'goog.array', 'goog.events', 'goog.events.EventWrapper']);
-goog.addDependency('events/events.js', ['goog.events', 'goog.events.Key', 'goog.events.ListenableType'], ['goog.array', 'goog.debug.entryPointRegistry', 'goog.events.BrowserEvent', 'goog.events.BrowserFeature', 'goog.events.Listenable', 'goog.events.Listener', 'goog.object']);
+goog.addDependency('events/events.js', ['goog.events', 'goog.events.Key', 'goog.events.ListenableType'], ['goog.array', 'goog.asserts', 'goog.debug.entryPointRegistry', 'goog.events.BrowserEvent', 'goog.events.BrowserFeature', 'goog.events.Listenable', 'goog.events.Listener', 'goog.object']);
 goog.addDependency('events/eventtarget.js', ['goog.events.EventTarget'], ['goog.Disposable', 'goog.array', 'goog.asserts', 'goog.events', 'goog.events.Event', 'goog.events.Listenable', 'goog.events.Listener', 'goog.object']);
 goog.addDependency('events/eventtargettester.js', ['goog.events.eventTargetTester', 'goog.events.eventTargetTester.KeyType', 'goog.events.eventTargetTester.UnlistenReturnType'], ['goog.array', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.testing.asserts', 'goog.testing.recordFunction']);
 goog.addDependency('events/eventtype.js', ['goog.events.EventType'], ['goog.userAgent']);
