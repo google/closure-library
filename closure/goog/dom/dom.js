@@ -1244,7 +1244,9 @@ goog.dom.getParentElement = function(element) {
         goog.userAgent.isVersionOrHigher('9') &&
         !goog.userAgent.isVersionOrHigher('10');
     // SVG elements in IE9 can't use the parentElement property.
-    if (!(isIe9 && element instanceof goog.global['SVGElement'])) {
+    // goog.global['SVGElement'] is not defined in IE9 quirks mode.
+    if (!(isIe9 && goog.global['SVGElement'] &&
+        element instanceof goog.global['SVGElement'])) {
       return element.parentElement;
     }
   }
