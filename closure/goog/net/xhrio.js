@@ -53,6 +53,7 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
@@ -67,21 +68,127 @@ goog.require('goog.uri.utils');
  * @extends {goog.events.EventTarget}
  */
 goog.net.XhrIo = function(opt_xmlHttpFactory) {
-  goog.events.EventTarget.call(this);
+  goog.base(this);
 
   /**
    * Map of default headers to add to every request, use:
    * XhrIo.headers.set(name, value)
-   * @type {goog.structs.Map}
+   * @type {!goog.structs.Map}
    */
   this.headers = new goog.structs.Map();
 
   /**
    * Optional XmlHttpFactory
-   * @type {goog.net.XmlHttpFactory}
-   * @private
+   * @private {goog.net.XmlHttpFactory}
    */
   this.xmlHttpFactory_ = opt_xmlHttpFactory || null;
+
+  /**
+   * Whether XMLHttpRequest is active.  A request is active from the time send()
+   * is called until onReadyStateChange() is complete, or error() or abort()
+   * is called.
+   * @private {boolean}
+   */
+  this.active_ = false;
+
+  /**
+   * The XMLHttpRequest object that is being used for the transfer.
+   * @private {XMLHttpRequest|GearsHttpRequest}
+   */
+  this.xhr_ = null;
+
+  /**
+   * The options to use with the current XMLHttpRequest object.
+   * @private {Object}
+   */
+  this.xhrOptions_ = null;
+
+  /**
+   * Last URL that was requested.
+   * @private {string|goog.Uri}
+   */
+  this.lastUri_ = '';
+
+  /**
+   * Method for the last request.
+   * @private {string}
+   */
+  this.lastMethod_ = '';
+
+  /**
+   * Last error code.
+   * @private {!goog.net.ErrorCode}
+   */
+  this.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
+
+  /**
+   * Last error message.
+   * @private {Error|string}
+   */
+  this.lastError_ = '';
+
+  /**
+   * Used to ensure that we don't dispatch an multiple ERROR events. This can
+   * happen in IE when it does a synchronous load and one error is handled in
+   * the ready statte change and one is handled due to send() throwing an
+   * exception.
+   * @private {boolean}
+   */
+  this.errorDispatched_ = false;
+
+  /**
+   * Used to make sure we don't fire the complete event from inside a send call.
+   * @private {boolean}
+   */
+  this.inSend_ = false;
+
+  /**
+   * Used in determining if a call to {@link #onReadyStateChange_} is from
+   * within a call to this.xhr_.open.
+   * @private {boolean}
+   */
+  this.inOpen_ = false;
+
+  /**
+   * Used in determining if a call to {@link #onReadyStateChange_} is from
+   * within a call to this.xhr_.abort.
+   * @private {boolean}
+   */
+  this.inAbort_ = false;
+
+  /**
+   * Number of milliseconds after which an incomplete request will be aborted
+   * and a {@link goog.net.EventType.TIMEOUT} event raised; 0 means no timeout
+   * is set.
+   * @private {number}
+   */
+  this.timeoutInterval_ = 0;
+
+  /**
+   * Window timeout ID used to cancel the timeout event handler if the request
+   * completes successfully.
+   * @private {Object}
+   */
+  this.timeoutId_ = null;
+
+  /**
+   * The requested type for the response. The empty string means use the default
+   * XHR behavior.
+   * @private {goog.net.XhrIo.ResponseType}
+   */
+  this.responseType_ = goog.net.XhrIo.ResponseType.DEFAULT;
+
+  /**
+   * Whether a "credentialed" request is to be sent (one that is aware of
+   * cookies and authentication). This is applicable only for cross-domain
+   * requests and more recent browsers that support this part of the HTTP Access
+   * Control standard.
+   *
+   * @see http://www.w3.org/TR/XMLHttpRequest/#the-withcredentials-attribute
+   *
+   * @private {boolean}
+   */
+  this.withCredentials_ = false;
 };
 goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
 
@@ -103,8 +210,8 @@ goog.net.XhrIo.ResponseType = {
 
 /**
  * A reference to the XhrIo logger
- * @type {goog.debug.Logger}
- * @private
+ * @private {goog.debug.Logger}
+ * @const
  */
 goog.net.XhrIo.prototype.logger_ =
     goog.debug.Logger.getLogger('goog.net.XhrIo');
@@ -136,8 +243,7 @@ goog.net.XhrIo.FORM_CONTENT_TYPE =
  * All non-disposed instances of goog.net.XhrIo created
  * by {@link goog.net.XhrIo.send} are in this Array.
  * @see goog.net.XhrIo.cleanup
- * @type {Array.<goog.net.XhrIo>}
- * @private
+ * @private {!Array.<!goog.net.XhrIo>}
  */
 goog.net.XhrIo.sendInstances_ = [];
 
@@ -234,142 +340,6 @@ goog.net.XhrIo.cleanupSend_ = function(XhrIo) {
   XhrIo.dispose();
   goog.array.remove(goog.net.XhrIo.sendInstances_, XhrIo);
 };
-
-
-/**
- * Whether XMLHttpRequest is active.  A request is active from the time send()
- * is called until onReadyStateChange() is complete, or error() or abort()
- * is called.
- * @type {boolean}
- * @private
- */
-goog.net.XhrIo.prototype.active_ = false;
-
-
-/**
- * Reference to an XMLHttpRequest object that is being used for the transfer.
- * @type {XMLHttpRequest|GearsHttpRequest}
- * @private
- */
-goog.net.XhrIo.prototype.xhr_ = null;
-
-
-/**
- * The options to use with the current XMLHttpRequest object.
- * @type {Object}
- * @private
- */
-goog.net.XhrIo.prototype.xhrOptions_ = null;
-
-
-/**
- * Last URL that was requested.
- * @type {string|goog.Uri}
- * @private
- */
-goog.net.XhrIo.prototype.lastUri_ = '';
-
-
-/**
- * Method for the last request.
- * @type {string}
- * @private
- */
-goog.net.XhrIo.prototype.lastMethod_ = '';
-
-
-/**
- * Last error code.
- * @type {goog.net.ErrorCode}
- * @private
- */
-goog.net.XhrIo.prototype.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
-
-
-/**
- * Last error message.
- * @type {Error|string}
- * @private
- */
-goog.net.XhrIo.prototype.lastError_ = '';
-
-
-/**
- * This is used to ensure that we don't dispatch an multiple ERROR events. This
- * can happen in IE when it does a synchronous load and one error is handled in
- * the ready statte change and one is handled due to send() throwing an
- * exception.
- * @type {boolean}
- * @private
- */
-goog.net.XhrIo.prototype.errorDispatched_ = false;
-
-
-/**
- * Used to make sure we don't fire the complete event from inside a send call.
- * @type {boolean}
- * @private
- */
-goog.net.XhrIo.prototype.inSend_ = false;
-
-
-/**
- * Used in determining if a call to {@link #onReadyStateChange_} is from within
- * a call to this.xhr_.open.
- * @type {boolean}
- * @private
- */
-goog.net.XhrIo.prototype.inOpen_ = false;
-
-
-/**
- * Used in determining if a call to {@link #onReadyStateChange_} is from within
- * a call to this.xhr_.abort.
- * @type {boolean}
- * @private
- */
-goog.net.XhrIo.prototype.inAbort_ = false;
-
-
-/**
- * Number of milliseconds after which an incomplete request will be aborted and
- * a {@link goog.net.EventType.TIMEOUT} event raised; 0 means no timeout is set.
- * @type {number}
- * @private
- */
-goog.net.XhrIo.prototype.timeoutInterval_ = 0;
-
-
-/**
- * Window timeout ID used to cancel the timeout event handler if the request
- * completes successfully.
- * @type {Object}
- * @private
- */
-goog.net.XhrIo.prototype.timeoutId_ = null;
-
-
-/**
- * The requested type for the response. The empty string means use the default
- * XHR behavior.
- * @type {goog.net.XhrIo.ResponseType}
- * @private
- */
-goog.net.XhrIo.prototype.responseType_ = goog.net.XhrIo.ResponseType.DEFAULT;
-
-
-/**
- * Whether a "credentialed" request is to be sent (one that is aware of cookies
- * and authentication) . This is applicable only for cross-domain requests and
- * more recent browsers that support this part of the HTTP Access Control
- * standard.
- *
- * @see http://www.w3.org/TR/XMLHttpRequest/#the-withcredentials-attribute
- *
- * @type {boolean}
- * @private
- */
-goog.net.XhrIo.prototype.withCredentials_ = false;
 
 
 /**
@@ -679,7 +649,7 @@ goog.net.XhrIo.prototype.disposeInternal = function() {
     this.cleanUpXhr_(true);
   }
 
-  goog.net.XhrIo.superClass_.disposeInternal.call(this);
+  goog.base(this, 'disposeInternal');
 };
 
 
