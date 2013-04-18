@@ -27,7 +27,7 @@ goog.require('goog.events.ListenableKey');
  * Simple class that stores information about a listener
  * @param {!Function} listener Callback function.
  * @param {Function} proxy Wrapper for the listener that patches the event.
- * @param {Object} src Source object for the event.
+ * @param {goog.events.ListenableType} src Source object for the event.
  * @param {string} type Event type.
  * @param {boolean} capture Whether in capture or bubble phase.
  * @param {Object=} opt_handler Object in whose context to execute the callback.
@@ -54,7 +54,7 @@ goog.events.Listener = function(
 
   /**
    * Object or node that callback is listening to
-   * @const {Object|goog.events.Listenable|goog.events.EventTarget}
+   * @const {goog.events.ListenableType}
    */
   this.src = src;
 

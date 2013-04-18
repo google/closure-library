@@ -114,18 +114,6 @@ goog.events.EventTarget.MAX_ANCESTORS_ = 1000;
 
 
 /**
- * Used to tell if an event is a real event in goog.events.listen() so we don't
- * get listen() calling addEventListener() and vice-versa.
- *
- * TODO(user): Remove this.
- *
- * @type {boolean}
- * @private
- */
-goog.events.EventTarget.prototype[goog.events.CUSTOM_EVENT_ATTR] = true;
-
-
-/**
  * Parent event target, used during event bubbling.
  * @type {goog.events.EventTarget?}
  * @private

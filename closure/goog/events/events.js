@@ -75,7 +75,7 @@ goog.events.Key;
 
 
 /**
- * @typedef {EventTarget|goog.events.Listenable|goog.events.EventTarget}
+ * @typedef {EventTarget|goog.events.Listenable}
  */
 goog.events.ListenableType;
 
@@ -173,15 +173,6 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
 
 
 /**
- * Property name that indicates that an object is a
- * goog.events.EventTarget.
- * @type {string}
- * @const
- */
-goog.events.CUSTOM_EVENT_ATTR = 'customEvent_';
-
-
-/**
  * Adds an event listener for a specific event on a DOM Node or an object that
  * has implemented {@link goog.events.Listenable}. A listener can only be
  * added once to an object and if it is added again the key for the listener
@@ -191,8 +182,7 @@ goog.events.CUSTOM_EVENT_ATTR = 'customEvent_';
  * if any. On the other hand a normal listener will change existing
  * one-off listener to become a normal listener.
  *
- * @param {EventTarget|goog.events.EventTarget} src The node to listen to
- *     events on.
+ * @param {EventTarget} src The node to listen to events on.
  * @param {?string} type Event type or array of event types.
  * @param {!Function} listener Callback function.
  * @param {boolean} callOnce Whether the listener is a one-off
@@ -284,9 +274,7 @@ goog.events.listen_ = function(
 
   // Attach the proxy through the browser's API
   if (src.addEventListener) {
-    if (src == goog.global || !src[goog.events.CUSTOM_EVENT_ATTR]) {
-      src.addEventListener(type, proxy, capture);
-    }
+    src.addEventListener(type, proxy, capture);
   } else {
     // The else above used to be else if (src.attachEvent) and then there was
     // another else statement that threw an exception warning the developer
@@ -469,14 +457,7 @@ goog.events.unlistenByKey = function(key) {
   var capture = listener.capture;
 
   if (src.removeEventListener) {
-    // EventTarget calls unlisten so we need to ensure that the source is not
-    // an event target to prevent re-entry.
-    // TODO(arv): What is this goog.global for? Why would anyone listen to
-    // events on the [[Global]] object? Is it supposed to be window? Why would
-    // we not want to allow removing event listeners on the window?
-    if (src == goog.global || !src[goog.events.CUSTOM_EVENT_ATTR]) {
-      src.removeEventListener(type, proxy, capture);
-    }
+    src.removeEventListener(type, proxy, capture);
   } else if (src.detachEvent) {
     src.detachEvent(goog.events.getOnString_(type), proxy);
   }
@@ -666,8 +647,7 @@ goog.events.removeAllNativeListeners = function() {
   goog.object.forEach(goog.events.listeners_, function(listener) {
     var src = listener.src;
     // Only remove the listener if it is not on custom event target.
-    if (!goog.events.Listenable.isImplementedBy(src) &&
-        !src[goog.events.CUSTOM_EVENT_ATTR]) {
+    if (!goog.events.Listenable.isImplementedBy(src)) {
       goog.events.unlistenByKey(listener);
       count++;
     }
@@ -955,8 +935,7 @@ goog.events.getTotalListenerCount = function() {
  * function will return false.  If one of the capture listeners calls
  * stopPropagation, then the bubble listeners won't fire.
  *
- * @param {goog.events.Listenable|goog.events.EventTarget} src The
- *     event target.
+ * @param {goog.events.Listenable} src The event target.
  * @param {goog.events.EventLike} e Event object.
  * @return {boolean} If anyone called preventDefault on the event object (or
  *     if any of the handlers returns false) this will also return false.
@@ -994,7 +973,8 @@ goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
  *     native event handlers.
  * @return {boolean} Result of the event handler.
  * @this {goog.events.EventTarget|Object} The object or Element that
- *     fired the event.
+ *     fired the event. TODO(user): Figure out why the type is
+ *     so weird?
  * @private
  */
 goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
