@@ -35,9 +35,13 @@ goog.require('goog.dom');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.Component.Error');
+goog.require('goog.ui.Component.EventType');
+goog.require('goog.ui.Component.State');
 goog.require('goog.ui.ContainerRenderer');
 goog.require('goog.ui.Control');
 
@@ -543,9 +547,9 @@ goog.ui.Container.prototype.handleUnHighlightItem = function(e) {
   var element = this.getElement();
   goog.asserts.assert(element,
       'The DOM element for the container cannot be null.');
-  // Setting certain ARIA attributes to empty strings is problematic.
-  // Just remove the attribute instead.
-  goog.a11y.aria.removeState(element, goog.a11y.aria.State.ACTIVEDESCENDANT);
+  goog.a11y.aria.setState(element,
+      goog.a11y.aria.State.ACTIVEDESCENDANT,
+      '');
 };
 
 
