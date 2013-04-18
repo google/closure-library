@@ -22,7 +22,6 @@
  */
 goog.provide('goog.i18n.DateTimeParse');
 
-goog.require('goog.date.DateLike');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 
@@ -239,8 +238,11 @@ goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType) {
   } else if (formatType < 8) {
     pattern = goog.i18n.DateTimeSymbols.TIMEFORMATS[formatType - 4];
   } else {
-    pattern = goog.i18n.DateTimeSymbols.DATEFORMATS[formatType - 8] +
-              ' ' + goog.i18n.DateTimeSymbols.TIMEFORMATS[formatType - 8];
+    pattern = goog.i18n.DateTimeSymbols.DATETIMEFORMATS[formatType - 8];
+    pattern = pattern.replace('{1}',
+        goog.i18n.DateTimeSymbols.DATEFORMATS[formatType - 8]);
+    pattern = pattern.replace('{0}',
+        goog.i18n.DateTimeSymbols.TIMEFORMATS[formatType - 8]);
   }
   this.applyPattern_(pattern);
 };

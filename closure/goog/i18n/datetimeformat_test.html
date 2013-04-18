@@ -128,7 +128,7 @@ See the COPYING file for details.
     goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
     var fmt = new goog.i18n.DateTimeFormat('EEE, MMM d, yy');
-    assertEquals('Do., Jul 27, 06', fmt.format(date));
+    assertEquals('Do., Juli 27, 06', fmt.format(date));
   }
 
   function testEEEEMMMddyy() {
@@ -243,6 +243,22 @@ See the COPYING file for details.
     var fmt = new goog.i18n.DateTimeFormat(
         goog.i18n.DateTimePatterns.MONTH_DAY_MEDIUM);
     assertEquals('27. Juli', fmt.format(date));
+  }
+
+  function testPatternDayOfWeekMonthDayMedium() {
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+    var fmt = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_MEDIUM);
+    assertEquals('Thu, Jul 27', fmt.format(date));
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+    var fmt = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_MEDIUM);
+    assertEquals('Do., 27. Juli', fmt.format(date));
   }
 
   function testQuote() {
@@ -492,6 +508,25 @@ See the COPYING file for details.
     fmt = new goog.i18n.DateTimeFormat('Z');
     assertEquals('-0700', fmt.format(date, timeZone));
   }
+
+  // Making sure that the date-time combination is not a simple concatenation
+  function test_dateTimeConcatenation() {
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+    var date = new Date(Date.UTC(2006, 4 - 1, 2, 2, 30, 0));
+    var timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
+    var fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATETIME);
+    // {1} 'at' {0}
+    assertEquals('Saturday, April 1, 2006 at 6:30:00 PM Pacific Standard Time',
+                 fmt.format(date,timeZone));
+    fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.LONG_DATETIME);
+    assertEquals('April 1, 2006 at 6:30:00 PM PST', fmt.format(date, timeZone));
+    // {1}, {0}
+    fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
+    assertEquals('Apr 1, 2006, 6:30:00 PM', fmt.format(date, timeZone));
+    fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.SHORT_DATETIME);
+    assertEquals('4/1/06, 6:30 PM', fmt.format(date, timeZone));
+  }
+
 </script>
 </body>
 </html>
