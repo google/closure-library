@@ -765,7 +765,7 @@ goog.ui.SplitPane.prototype.handleDragStart_ = function(e) {
     // Create the overlay.
     var cssStyles = 'position: relative';
 
-    if (goog.userAgent.IE) {
+    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
       // IE doesn't look at this div unless it has a background, so we'll
       // put one on, but make it opaque.
       cssStyles += ';background-color: #000;filter: Alpha(Opacity=0)';
