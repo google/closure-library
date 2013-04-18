@@ -236,22 +236,23 @@ function testGetDocumentHeightInIframe() {
 }
 
 function testCreateDom() {
-  var el = goog.dom.$dom('div',
+  var el = goog.dom.createDom('div',
       {
         style: 'border: 1px solid black; width: 50%; background-color: #EEE;',
         onclick: "alert('woo')"
       },
-      goog.dom.$dom('p', {style: 'font: normal 12px arial; color: red; '},
-                    'Para 1'),
-      goog.dom.$dom('p', {style: 'font: bold 18px garamond; color: blue; '},
-                    'Para 2'),
-      goog.dom.$dom('p', {style: 'font: normal 24px monospace; color: green'},
-                    'Para 3 ',
-                    goog.dom.$dom('a', {
-                      name: 'link', href: 'http://bbc.co.uk'
-                    },
-                    'has a link'),
-                    ', how cool is this?'));
+      goog.dom.createDom(
+          'p', {style: 'font: normal 12px arial; color: red; '}, 'Para 1'),
+      goog.dom.createDom(
+          'p', {style: 'font: bold 18px garamond; color: blue; '}, 'Para 2'),
+      goog.dom.createDom(
+          'p', {style: 'font: normal 24px monospace; color: green'},
+          'Para 3 ',
+          goog.dom.createDom('a', {
+            name: 'link', href: 'http://bbc.co.uk'
+          },
+          'has a link'),
+          ', how cool is this?'));
 
   assertEquals('Tagname should be a DIV', 'DIV', el.tagName);
   assertEquals('Style width should be 50%', '50%', el.style.width);
@@ -259,31 +260,31 @@ function testCreateDom() {
   assertEquals('second child .innerHTML', 'Para 2',
                el.childNodes[1].innerHTML);
 
-  assertEquals(goog.dom.$dom, goog.dom.createDom);
+  assertEquals(goog.dom.createDom, goog.dom.createDom);
 }
 
 function testCreateDomNoChildren() {
   var el;
 
   // Test unspecified children.
-  el = goog.dom.$dom('div');
+  el = goog.dom.createDom('div');
   assertNull('firstChild should be null', el.firstChild);
 
   // Test null children.
-  el = goog.dom.$dom('div', null, null);
+  el = goog.dom.createDom('div', null, null);
   assertNull('firstChild should be null', el.firstChild);
 
   // Test empty array of children.
-  el = goog.dom.$dom('div', null, []);
+  el = goog.dom.createDom('div', null, []);
   assertNull('firstChild should be null', el.firstChild);
 }
 
 function testCreateDomAcceptsArray() {
   var items = [
-    goog.dom.$dom('li', {}, 'Item 1'),
-    goog.dom.$dom('li', {}, 'Item 2')
+    goog.dom.createDom('li', {}, 'Item 1'),
+    goog.dom.createDom('li', {}, 'Item 2')
   ];
-  var ul = goog.dom.$dom('ul', {}, items);
+  var ul = goog.dom.createDom('ul', {}, items);
   assertEquals('List should have two children', 2, ul.childNodes.length);
   assertEquals('First child should be an LI tag',
       'LI', ul.firstChild.tagName);
@@ -295,14 +296,14 @@ function testCreateDomStringArg() {
   var el;
 
   // Test string arg.
-  el = goog.dom.$dom('div', null, 'Hello');
+  el = goog.dom.createDom('div', null, 'Hello');
   assertEquals('firstChild should be a text node', goog.dom.NodeType.TEXT,
       el.firstChild.nodeType);
   assertEquals('firstChild should have node value "Hello"', 'Hello',
       el.firstChild.nodeValue);
 
   // Test text node arg.
-  el = goog.dom.$dom('div', null, goog.dom.createTextNode('World'));
+  el = goog.dom.createDom('div', null, goog.dom.createTextNode('World'));
   assertEquals('firstChild should be a text node', goog.dom.NodeType.TEXT,
       el.firstChild.nodeType);
   assertEquals('firstChild should have node value "World"', 'World',
@@ -311,25 +312,24 @@ function testCreateDomStringArg() {
 
 function testCreateDomNodeListArg() {
   var el;
-  var emptyElem = goog.dom.$dom('div');
-  var simpleElem = goog.dom.$dom('div', null, 'Hello, world!');
-  var complexElem = goog.dom.$dom('div', null, 'Hello, ',
-                                  goog.dom.$dom('b', null, 'world'),
-      goog.dom.createTextNode('!'));
+  var emptyElem = goog.dom.createDom('div');
+  var simpleElem = goog.dom.createDom('div', null, 'Hello, world!');
+  var complexElem = goog.dom.createDom('div', null, 'Hello, ',
+      goog.dom.createDom('b', null, 'world'), goog.dom.createTextNode('!'));
 
   // Test empty node list.
-  el = goog.dom.$dom('div', null, emptyElem.childNodes);
+  el = goog.dom.createDom('div', null, emptyElem.childNodes);
   assertNull('emptyElem.firstChild should be null', emptyElem.firstChild);
   assertNull('firstChild should be null', el.firstChild);
 
   // Test simple node list.
-  el = goog.dom.$dom('div', null, simpleElem.childNodes);
+  el = goog.dom.createDom('div', null, simpleElem.childNodes);
   assertNull('simpleElem.firstChild should be null', simpleElem.firstChild);
   assertEquals('firstChild should be a text node with value "Hello, world!"',
       'Hello, world!', el.firstChild.nodeValue);
 
   // Test complex node list.
-  el = goog.dom.$dom('div', null, complexElem.childNodes);
+  el = goog.dom.createDom('div', null, complexElem.childNodes);
   assertNull('complexElem.firstChild should be null', complexElem.firstChild);
   assertEquals('Element should have 3 child nodes', 3, el.childNodes.length);
   assertEquals('childNodes[0] should be a text node with value "Hello, "',
@@ -362,7 +362,7 @@ function testContains() {
   assertTrue('Document should contain BODY', goog.dom.contains(
       document, document.body));
 
-  var d = goog.dom.$dom('p', null, 'A paragraph');
+  var d = goog.dom.createDom('p', null, 'A paragraph');
   var t = d.firstChild;
   assertTrue('Same element', goog.dom.contains(d, d));
   assertTrue('Same text', goog.dom.contains(t, t));
@@ -377,12 +377,12 @@ function testContains() {
 }
 
 function testCreateDomWithClassName() {
-  var el = goog.dom.$dom('div', 'cls');
+  var el = goog.dom.createDom('div', 'cls');
   assertNull('firstChild should be null', el.firstChild);
   assertEquals('Tagname should be a DIV', 'DIV', el.tagName);
   assertEquals('ClassName should be cls', 'cls', el.className);
 
-  el = goog.dom.$dom('div', '');
+  el = goog.dom.createDom('div', '');
   assertEquals('ClassName should be empty', '', el.className);
 }
 

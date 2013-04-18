@@ -76,7 +76,7 @@ See the COPYING file for details.
    */
   function setUpTestOk(imageUrl) {
     mockField.focus().$times(1);
-    var tempImage = goog.dom.$dom(goog.dom.TagName.IMG, {src: imageUrl});
+    var tempImage = goog.dom.createDom(goog.dom.TagName.IMG, {src: imageUrl});
     var fullImageUrl = tempImage.src;
     var createdNodeMatcher = new goog.testing.mockmatchers.ArgumentMatcher(
           function(arg) {
