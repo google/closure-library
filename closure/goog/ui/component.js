@@ -26,8 +26,9 @@ goog.provide('goog.ui.Component.EventType');
 goog.provide('goog.ui.Component.State');
 
 goog.require('goog.array');
-goog.require('goog.array.ArrayLike');
+goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.NodeType');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.object');
@@ -496,8 +497,9 @@ goog.ui.Component.prototype.getElementStrict = function() {
  * does not actually change which element is rendered, only the element that is
  * associated with this UI component.
  *
+ * This should only be used by subclasses and its associated renderers.
+ *
  * @param {Element} element Root element for the component.
- * @protected
  */
 goog.ui.Component.prototype.setElementInternal = function(element) {
   this.element_ = element;

@@ -42,7 +42,6 @@ goog.require('goog.math');
  *     this element.
  * @constructor
  * @extends {goog.events.EventTarget}
- * @suppress {visibility} Accessing private field of superclass (see TODO).
  * @deprecated goog.graphics is deprecated. It existed to abstract over browser
  *     differences before the canvas tag was widely supported.  See
  *     http://en.wikipedia.org/wiki/Canvas_element for details.
