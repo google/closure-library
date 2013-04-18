@@ -26,6 +26,7 @@ goog.provide('goog.graphics.Element');
 
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
+goog.require('goog.events.Listenable');
 goog.require('goog.graphics.AffineTransform');
 goog.require('goog.math');
 
@@ -42,6 +43,9 @@ goog.require('goog.math');
  * @constructor
  * @extends {goog.events.EventTarget}
  * @suppress {visibility} Accessing private field of superclass (see TODO).
+ * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+ *     differences before the canvas tag was widely supported.  See
+ *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.Element = function(element, graphics) {
   goog.events.EventTarget.call(this);

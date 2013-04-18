@@ -47,6 +47,9 @@ goog.require('goog.userAgent');
  * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @return {goog.graphics.AbstractGraphics} The created instance.
+ * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+ *     differences before the canvas tag was widely supported.  See
+ *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.createGraphics = function(width, height, opt_coordWidth,
     opt_coordHeight, opt_domHelper) {
@@ -86,6 +89,9 @@ goog.graphics.createGraphics = function(width, height, opt_coordWidth,
  * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
  * @return {goog.graphics.AbstractGraphics} The created instance.
+ * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+ *     differences before the canvas tag was widely supported.  See
+ *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.createSimpleGraphics = function(width, height,
     opt_coordWidth, opt_coordHeight, opt_domHelper) {
@@ -108,6 +114,9 @@ goog.graphics.createSimpleGraphics = function(width, height,
 /**
  * Static function to check if the current browser has Graphics support.
  * @return {boolean} True if the current browser has Graphics support.
+ * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+ *     differences before the canvas tag was widely supported.  See
+ *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.isBrowserSupported = function() {
   if (goog.userAgent.IE) {

@@ -57,6 +57,9 @@ goog.require('goog.userAgent');
  *     document we want to render in.
  * @constructor
  * @extends {goog.graphics.AbstractGraphics}
+ * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+ *     differences before the canvas tag was widely supported.  See
+ *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.SvgGraphics = function(width, height,
                                      opt_coordWidth, opt_coordHeight,
