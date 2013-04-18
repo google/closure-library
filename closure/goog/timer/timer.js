@@ -165,6 +165,13 @@ goog.Timer.prototype.tick_ = function() {
       return;
     }
 
+    // Prevents setInterval from registering a duplicate timeout when called
+    // in the timer event handler.
+    if (this.timer_) {
+      this.timerObject_.clearTimeout(this.timer_);
+      this.timer_ = null;
+    }
+
     this.dispatchTick();
     // The timer could be stopped in the timer event handler.
     if (this.enabled) {
