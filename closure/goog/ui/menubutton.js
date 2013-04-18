@@ -720,13 +720,12 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
       this.setActive(false);
       this.menu_.setMouseButtonPressed(false);
 
-      var element = this.getElement();
+      var element = this.getElementStrict();
       // Clear any remaining a11y state.
-      if (element) {
-        goog.a11y.aria.setState(element,
-            goog.a11y.aria.State.ACTIVEDESCENDANT,
-            '');
-      }
+      // Setting certain ARIA attributes to empty strings is problematic.
+      // Just remove the attribute instead.
+      goog.a11y.aria.removeState(
+          element, goog.a11y.aria.State.ACTIVEDESCENDANT);
 
       // Clear any sizes that might have been stored.
       if (goog.isDefAndNotNull(this.originalSize_)) {
