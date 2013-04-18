@@ -49,8 +49,16 @@ See the COPYING file for details.
       assertEquals(7, goog.math.modulo(23, 8));
       assertEquals(7, goog.math.modulo(-1, 8));
 
-      assertEquals(-4, goog.math.modulo(1, -5));
-      assertEquals(-4, goog.math.modulo(6, -5));
+      // Safari 5.1.7 has a bug in its JS engine where modulo is computed
+      // incorrectly when using variables. We avoid using
+      // goog.testing.ExpectedFailure here since it pulls in a bunch of
+      // extra dependencies for maintaining a DOM console.
+      var a = 1;
+      var b = -5;
+      if (a % b === 1 % -5) {
+        assertEquals(-4, goog.math.modulo(1, -5));
+        assertEquals(-4, goog.math.modulo(6, -5));
+      }
       assertEquals(-4, goog.math.modulo(-4, -5));
     }
 
