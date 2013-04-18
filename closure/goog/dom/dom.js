@@ -1240,7 +1240,13 @@ goog.dom.isWindow = function(obj) {
  */
 goog.dom.getParentElement = function(element) {
   if (goog.dom.BrowserFeature.CAN_USE_PARENT_ELEMENT_PROPERTY) {
-    return element.parentElement;
+    var isIe9 = goog.userAgent.IE &&
+        goog.userAgent.isVersionOrHigher('9') &&
+        !goog.userAgent.isVersionOrHigher('10');
+    // SVG elements in IE9 can't use the parentElement property.
+    if (!(isIe9 && element instanceof goog.global['SVGElement'])) {
+      return element.parentElement;
+    }
   }
   var parent = element.parentNode;
   return goog.dom.isElement(parent) ? /** @type {!Element} */ (parent) : null;

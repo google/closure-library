@@ -1385,6 +1385,31 @@ function testParentElement() {
   var detachedEl = goog.dom.createDom('div');
   var detachedHasNoParent = goog.dom.getParentElement(detachedEl);
   assertNull(detachedHasNoParent);
+
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
+    // svg is not supported in IE8 and below.
+    return;
+  }
+
+  var svg = $('testSvg');
+  assertNotNull(svg);
+  var rect = $('testRect');
+  assertNotNull(rect);
+  var g = $('testG');
+  assertNotNull(g);
+
+  if (goog.userAgent.IE && goog.userAgent.isVersion('9')) {
+    // test to make sure IE9 is returning undefined for .parentElement
+    assertUndefined(g.parentElement);
+    assertUndefined(rect.parentElement);
+    assertUndefined(svg.parentElement);
+  }
+  var shouldBeG = goog.dom.getParentElement(rect);
+  assertEquals(g, shouldBeG);
+  var shouldBeSvg = goog.dom.getParentElement(g);
+  assertEquals(svg, shouldBeSvg);
+  var shouldBeBody = goog.dom.getParentElement(svg);
+  assertEquals(bodyEl, shouldBeBody);
 }
 
 
