@@ -381,6 +381,22 @@ goog.ui.ModalPopup.prototype.setVisible = function(visible) {
 
 
 /**
+ * Sets the aria-hidden value for an element.
+ * Removes the aria-hidden attribute if false.
+ * @param {!Element} element DOM node to set aria-hidden to.
+ * @param {boolean} hide Boolean being set as aria-hidden.
+ * @private
+ */
+goog.ui.ModalPopup.setAriaHidden_ = function(element, hide) {
+  if (hide) {
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.HIDDEN, hide);
+  } else {
+    goog.a11y.aria.removeState(element, goog.a11y.aria.State.HIDDEN);
+  }
+};
+
+
+/**
  * Sets aria-hidden of the rest of the page to restrict keyboard focus.
  * @param {boolean} hide Whether to hide or show the rest of the page.
  * @private
@@ -389,16 +405,10 @@ goog.ui.ModalPopup.prototype.setA11YDetectBackground_ = function(hide) {
   for (var child = this.getDomHelper().getDocument().body.firstChild; child;
       child = child.nextSibling) {
     if (child.nodeType == goog.dom.NodeType.ELEMENT) {
-      goog.a11y.aria.setState(
-          /** @type {!Element}*/ (child), goog.a11y.aria.State.HIDDEN,
-          hide);
+      goog.ui.ModalPopup.setAriaHidden_(/** @type {!Element}*/ (child), hide);
     }
   }
-  goog.a11y.aria.setState(
-      this.getElementStrict(), goog.a11y.aria.State.HIDDEN, !hide);
-  goog.a11y.aria.setState(
-      /** @type {!Element}*/ (this.bgEl_ || this.bgIframeEl_),
-      goog.a11y.aria.State.HIDDEN, !hide);
+  goog.ui.ModalPopup.setAriaHidden_(this.getElementStrict(), !hide);
 };
 
 

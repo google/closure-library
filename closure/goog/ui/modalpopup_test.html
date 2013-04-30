@@ -21,6 +21,7 @@ See the COPYING file for details.
   goog.require('goog.events');
   goog.require('goog.events.EventTarget');
   goog.require('goog.fx.css3');
+  goog.require('goog.string');
   goog.require('goog.style');
   goog.require('goog.ui.PopupBase.EventType');
   goog.require('goog.testing.MockClock');
@@ -45,7 +46,7 @@ function setUp() {
 function tearDown() {
   goog.dispose(popup);
   mockClock.dispose();
-  main.removeAttribute('aria-hidden');
+  goog.a11y.aria.removeState(main, goog.a11y.aria.State.HIDDEN);
 }
 
 
@@ -78,15 +79,11 @@ function testRenderWithoutIframeMask() {
   assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
   assertEquals('true', goog.a11y.aria.getState(
       popup.getElementStrict(), goog.a11y.aria.State.HIDDEN));
-  assertEquals('true', goog.a11y.aria.getState(
-      /** @type {!Element}*/ (bg[0]), goog.a11y.aria.State.HIDDEN));
-  assertEquals('false', goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN));
+  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
+      main, goog.a11y.aria.State.HIDDEN)));
   popup.setVisible(true);
-  assertEquals('false', goog.a11y.aria.getState(
-      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN));
-  assertEquals('false', goog.a11y.aria.getState(
-      /** @type {!Element}*/ (bg[0]), goog.a11y.aria.State.HIDDEN));
+  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
+      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN)));
   assertEquals('true', goog.a11y.aria.getState(
       main, goog.a11y.aria.State.HIDDEN));
 }
@@ -111,11 +108,11 @@ function testRenderWithIframeMask() {
   assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
   assertEquals('true', goog.a11y.aria.getState(
       popup.getElementStrict(), goog.a11y.aria.State.HIDDEN));
-  assertEquals('false', goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN));
+  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
+      main, goog.a11y.aria.State.HIDDEN)));
   popup.setVisible(true);
-  assertEquals('false', goog.a11y.aria.getState(
-      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN));
+  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
+      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN)));
   assertEquals('true', goog.a11y.aria.getState(
       main, goog.a11y.aria.State.HIDDEN));
 }
