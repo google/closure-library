@@ -247,9 +247,8 @@ goog.ui.ac.AutoComplete.EventType = {
 /**
  * @return {!Object} The data source providing the `autocomplete
  *     suggestions.
- * @protected
  */
-goog.ui.ac.AutoComplete.prototype.getMacher = function() {
+goog.ui.ac.AutoComplete.prototype.getMatcher = function() {
   return goog.asserts.assert(this.matcher_);
 };
 
@@ -325,10 +324,29 @@ goog.ui.ac.AutoComplete.prototype.setTokenInternal = function(token) {
 
 
 /**
+ * @param {number} index The suggestion index, must be within the
+ *     interval [0, this.getSuggestionCount()).
+ * @return {Object} The currently suggested item at the given index
+ *     (or null if there is none).
+ */
+goog.ui.ac.AutoComplete.prototype.getSuggestion = function(index) {
+  return this.rows_[index];
+};
+
+
+/**
  * @return {!Array} The current autocomplete suggestion items.
  */
-goog.ui.ac.AutoComplete.prototype.getSuggestionItems = function() {
-  return goog.array.clone(goog.asserts.assert(this.rows_));
+goog.ui.ac.AutoComplete.prototype.getAllSuggestions = function() {
+  return goog.asserts.assert(this.rows_);
+};
+
+
+/**
+ * @return {number} The number of currently suggested items.
+ */
+goog.ui.ac.AutoComplete.prototype.getSuggestionCount = function() {
+  return this.rows_.length;
 };
 
 
@@ -507,9 +525,10 @@ goog.ui.ac.AutoComplete.prototype.isOpen = function() {
 
 /**
  * @return {number} Number of rows in the autocomplete.
+ * @deprecated Use this.getSuggestionCount().
  */
 goog.ui.ac.AutoComplete.prototype.getRowCount = function() {
-  return this.rows_.length;
+  return this.getSuggestionCount();
 };
 
 
