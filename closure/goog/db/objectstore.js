@@ -281,36 +281,9 @@ goog.db.ObjectStore.prototype.getAll = function(opt_range, opt_direction) {
  *     moves in a forward direction with duplicates.
  * @return {!goog.db.Cursor} The cursor.
  * @throws {goog.db.Error} If there was a problem opening the cursor.
- * @suppress {accessControls} Required for accessing cursor.cursor_.
  */
 goog.db.ObjectStore.prototype.openCursor = function(opt_range, opt_direction) {
-  var msg = 'opening cursor ' + this.getName();
-  var cursor = new goog.db.Cursor();
-  var request;
-
-  try {
-    var range = opt_range ? opt_range.range() : null;
-    if (opt_direction) {
-      request = this.store_.openCursor(range, opt_direction);
-    } else {
-      request = this.store_.openCursor(range);
-    }
-  } catch (ex) {
-    cursor.dispose();
-    throw goog.db.Error.fromException(ex, msg);
-  }
-  request.onsuccess = function(ev) {
-    cursor.cursor_ = ev.target.result || null;
-    if (cursor.cursor_) {
-      cursor.dispatchEvent(goog.db.Cursor.EventType.NEW_DATA);
-    } else {
-      cursor.dispatchEvent(goog.db.Cursor.EventType.COMPLETE);
-    }
-  };
-  request.onerror = function(ev) {
-    cursor.dispatchEvent(goog.db.Cursor.EventType.ERROR);
-  };
-  return cursor;
+  return goog.db.Cursor.openCursor(this.store_, opt_range, opt_direction);
 };
 
 

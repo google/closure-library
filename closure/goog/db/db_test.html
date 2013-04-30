@@ -93,7 +93,6 @@ function addStoreWithIndex(db) {
 }
 
 function populateStore(values, keys, db) {
-  var d = new goog.async.Deferred();
   var putTx = db.createTransaction(
       ['store'],
       goog.db.Transaction.TransactionMode.READ_WRITE);
@@ -102,7 +101,17 @@ function populateStore(values, keys, db) {
   for (var i = 0; i < values.length; ++i) {
     store.put(values[i], keys[i]);
   }
+  return putTx.wait();
+}
 
+function populateStoreWithObjects(values, keys, db) {
+  var putTx = db.createTransaction(
+      ['store'],
+      goog.db.Transaction.TransactionMode.READ_WRITE);
+  var store = putTx.objectStore('store');
+  goog.array.forEach(values, function(value, index) {
+    store.put({'key': keys[index], 'value': value});
+  });
   return putTx.wait();
 }
 
@@ -110,6 +119,17 @@ function assertStoreValues(values, db) {
   var assertStoreTx = db.createTransaction(['store']);
   assertStoreTx.objectStore('store').getAll().addCallback(function(results) {
     assertSameElements(values, results);
+    closeAndContinue(db);
+  });
+}
+
+function assertStoreObjectValues(values, db) {
+  var assertStoreTx = db.createTransaction(['store']);
+  assertStoreTx.objectStore('store').getAll().addCallback(function(results) {
+    var retrievedValues = goog.array.map(results, function(result) {
+      return result['value'];
+    });
+    assertSameElements(values, retrievedValues);
     closeAndContinue(db);
   });
 }
@@ -669,10 +689,9 @@ function testGetAll() {
   var checkStore = goog.partial(assertStoreValues, values);
 
   asyncTestCase.waitForAsync('getting all');
-  globalDb.branch()
-      .addCallbacks(addStore, failOnError)
-      .addCallback(addData)
-      .addCallback(checkStore);
+  globalDb.branch().addCallbacks(addStore, failOnError).
+      addCallback(addData).
+      addCallback(checkStore);
 }
 
 function testGetAllFreesCursor() {
@@ -697,13 +716,12 @@ function testGetAllFreesCursor() {
       goog.partial(assertStoreValuesAndCursorsDisposed, values, cursors);
 
   asyncTestCase.waitForAsync('getting all');
-  globalDb.branch()
-      .addCallbacks(addStore, failOnError)
-      .addCallback(addData)
-      .addCallback(checkStoreAndCursorDisposed);
+  globalDb.branch().addCallbacks(addStore, failOnError).
+      addCallback(addData).
+      addCallback(checkStoreAndCursorDisposed);
 }
 
-function testCursorGet() {
+function testObjectStoreCursorGet() {
   if (!idbSupported) {
     return;
   }
@@ -765,13 +783,12 @@ function testCursorGet() {
   };
 
   asyncTestCase.waitForAsync('getting range');
-  globalDb.branch()
-      .addCallbacks(addStore, failOnError)
-      .addCallback(addData)
-      .addCallback(openCursorAndCheck);
+  globalDb.branch().addCallbacks(addStore, failOnError).
+      addCallback(addData).
+      addCallback(openCursorAndCheck);
 }
 
-function testCursorReplace() {
+function testObjectStoreCursorReplace() {
   if (!idbSupported) {
     return;
   }
@@ -835,14 +852,13 @@ function testCursorReplace() {
 
   // Setup and execute test case.
   asyncTestCase.waitForAsync('replacing value by cursor');
-  globalDb.branch()
-      .addCallbacks(addStore, failOnError)
-      .addCallback(addData)
-      .addCallback(openCursorAndReplace)
-      .addCallback(checkStore);
+  globalDb.branch().addCallbacks(addStore, failOnError).
+      addCallback(addData).
+      addCallback(openCursorAndReplace).
+      addCallback(checkStore);
 }
 
-function testCursorRemove() {
+function testObjectStoreCursorRemove() {
   if (!idbSupported) {
     return;
   }
@@ -906,11 +922,10 @@ function testCursorRemove() {
 
   // Setup and execute test case.
   asyncTestCase.waitForAsync('removing value by cursor');
-  globalDb.branch()
-      .addCallbacks(addStore, failOnError)
-      .addCallback(addData)
-      .addCallback(openCursorAndRemove)
-      .addCallback(checkStore);
+  globalDb.branch().addCallbacks(addStore, failOnError).
+      addCallback(addData).
+      addCallback(openCursorAndRemove).
+      addCallback(checkStore);
 }
 
 function testClear() {
@@ -1293,9 +1308,9 @@ function testDeleteDatabase() {
     return goog.db.deleteDatabase(dbName, function() {
       fail("didn't expect deleteDatabase to be blocked");
     });
-  }).addCallback(openDatabase)
-      .addCallback(assertStoreDoesntExist)
-      .addErrback(failOnError);
+  }).addCallback(openDatabase).
+      addCallback(assertStoreDoesntExist).
+      addErrback(failOnError);
 }
 
 function testDeleteDatabaseIsBlocked() {
@@ -1383,9 +1398,9 @@ function testObjectStoreCountAll() {
   };
 
   asyncTestCase.waitForAsync('testObjectStoreCountAll');
-  globalDb.branch().addCallbacks(addStore, failOnError)
-      .addCallback(addData)
-      .addCallback(checkCountAll);
+  globalDb.branch().addCallbacks(addStore, failOnError).
+      addCallback(addData).
+      addCallback(checkCountAll);
 }
 
 function testObjectStoreCountSome() {
@@ -1413,12 +1428,230 @@ function testObjectStoreCountSome() {
   };
 
   asyncTestCase.waitForAsync('testObjectStoreCountSome');
-  globalDb.branch()
-      .addCallbacks(addStore, failOnError)
-      .addCallback(addData)
-      .addCallback(checkCountSome);
+  globalDb.branch().addCallbacks(addStore, failOnError).
+      addCallback(addData).
+      addCallback(checkCountSome);
 }
 
+function testIndexCursorGet() {
+  if (!idbSupported) {
+    return;
+  }
+
+  var values = ['1', '2', '3', '4'];
+  var keys = ['a', 'b', 'c', 'd'];
+
+  var addData = goog.partial(populateStoreWithObjects, values, keys);
+
+  // Open the cursor over range ['b', 'c'], move in backwards direction.
+  var openCursorAndCheck = function(db) {
+    var cursorTx = db.createTransaction(['store']);
+    var store = cursorTx.objectStore('store');
+    var index = store.getIndex('index');
+    var values = [];
+    var keys = [];
+
+    var txDeferred = new goog.async.Deferred();
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.COMPLETE,
+        function() {
+          txDeferred.callback();
+        });
+
+    var cursorDeferred = new goog.async.Deferred();
+    var cursor = index.openCursor(
+        goog.db.KeyRange.bound('2', '3'),
+        goog.db.Cursor.Direction.PREV);
+
+    var key = goog.events.listen(
+        cursor, goog.db.Cursor.EventType.NEW_DATA,
+        function() {
+          values.push(cursor.getValue()['value']);
+          keys.push(cursor.getValue()['key']);
+          cursor.next();
+        });
+
+    goog.events.listenOnce(
+        cursor,
+        [goog.db.Cursor.EventType.COMPLETE, goog.db.Cursor.EventType.ERROR],
+        function(evt) {
+          goog.events.unlistenByKey(key);
+          if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+            cursorDeferred.callback(db);
+          } else {
+            cursorDeferred.errback();
+          }
+        });
+
+    goog.async.DeferredList.gatherResults(
+        [cursorDeferred, txDeferred]).addCallback(
+            function(results) {
+              goog.events.unlistenByKey(key);
+              var db = results[0];
+              assertArrayEquals(['3', '2'], values);
+              assertArrayEquals(['c', 'b'], keys);
+              closeAndContinue(db);
+            });
+  };
+
+  asyncTestCase.waitForAsync('testIndexCursorGet');
+  globalDb.branch().addCallbacks(addStoreWithIndex, failOnError).
+      addCallback(addData).
+      addCallback(openCursorAndCheck);
+}
+
+function testIndexCursorReplace() {
+  if (!idbSupported) {
+    return;
+  }
+
+  var values = ['1', '2', '3', '4'];
+  var keys = ['a', 'b', 'c', 'd'];
+
+  var addData = goog.partial(populateStoreWithObjects, values, keys);
+
+  // Store should contain ['1', '2', '5', '4'] after replacement.
+  var checkStore = goog.partial(assertStoreObjectValues, ['1', '2', '5', '4']);
+
+  // Use a bounded cursor for ['3', '4') to update value '3' -> '5'.
+  var openCursorAndReplace = function(db) {
+    var d = new goog.async.Deferred();
+    var cursorTx = db.createTransaction(
+        ['store'],
+        goog.db.Transaction.TransactionMode.READ_WRITE);
+
+    var txDeferred = new goog.async.Deferred();
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.COMPLETE,
+        function() {
+          txDeferred.callback();
+        });
+
+    var store = cursorTx.objectStore('store');
+    var index = store.getIndex('index');
+    var cursorDeferred = new goog.async.Deferred();
+    var cursor = index.openCursor(
+        goog.db.KeyRange.bound('3', '4', false, true));
+
+    var key = goog.events.listen(
+        cursor, goog.db.Cursor.EventType.NEW_DATA,
+        function() {
+          assertEquals('3', cursor.getValue()['value']);
+          cursor.update(
+              {
+                'key': cursor.getValue()['key'],
+                'value': '5'
+              }).addCallback(function() {
+                cursor.next();
+              }).addErrback(failOnError);
+    });
+
+    goog.events.listenOnce(
+        cursor,
+        [goog.db.Cursor.EventType.COMPLETE, goog.db.Cursor.EventType.ERROR],
+        function(evt) {
+          goog.events.unlistenByKey(key);
+          if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+            cursorDeferred.callback(db);
+          } else {
+            cursorDeferred.errback();
+          }
+        });
+
+    goog.async.DeferredList.gatherResults(
+        [cursorDeferred, txDeferred]).addCallbacks(
+            function(results) {
+              goog.events.unlistenByKey(key);
+              d.callback(results[0]);
+            }, failOnError);
+
+    return d;
+  };
+
+  // Setup and execute test case.
+  asyncTestCase.waitForAsync('replacing value by cursor');
+  globalDb.branch().addCallbacks(addStoreWithIndex, failOnError).
+      addCallback(addData).
+      addCallback(openCursorAndReplace).
+      addCallback(checkStore);
+}
+
+function testIndexCursorRemove() {
+  if (!idbSupported) {
+    return;
+  }
+
+  var values = ['1', '2', '3', '4'];
+  var keys = ['a', 'b', 'c', 'd'];
+
+  var addData = goog.partial(populateStoreWithObjects, values, keys);
+
+  // Store should contain ['1', '2'] after removing elements.
+  var checkStore = goog.partial(assertStoreObjectValues, ['1', '2']);
+
+  // Use a bounded cursor for ('2', ...) to remove '3', '4'.
+  var openCursorAndRemove = function(db) {
+    var d = new goog.async.Deferred();
+    var cursorTx = db.createTransaction(
+        ['store'],
+        goog.db.Transaction.TransactionMode.READ_WRITE);
+
+    var txDeferred = new goog.async.Deferred();
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+    goog.events.listen(
+        cursorTx, goog.db.Transaction.EventTypes.COMPLETE,
+        function() {
+          txDeferred.callback();
+        });
+
+
+    var store = cursorTx.objectStore('store');
+    var index = store.getIndex('index');
+    var cursorDeferred = new goog.async.Deferred();
+    var cursor = index.openCursor(goog.db.KeyRange.lowerBound('2', true));
+
+    var key = goog.events.listen(
+        cursor, goog.db.Cursor.EventType.NEW_DATA,
+        function() {
+          cursor.remove('5').addCallback(function() {
+            cursor.next();
+          }).addErrback(failOnError);
+        });
+
+    goog.events.listenOnce(
+        cursor,
+        [goog.db.Cursor.EventType.COMPLETE, goog.db.Cursor.EventType.ERROR],
+        function(evt) {
+          goog.events.unlistenByKey(key);
+          if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+            cursorDeferred.callback(db);
+          } else {
+            cursorDeferred.errback();
+          }
+        });
+
+    goog.async.DeferredList.gatherResults(
+        [cursorDeferred, txDeferred]).addCallbacks(
+            function(results) {
+              goog.events.unlistenByKey(key);
+              d.callback(results[0]);
+            }, failOnError);
+
+    return d;
+  };
+
+  // Setup and execute test case.
+  asyncTestCase.waitForAsync('removing value by cursor');
+  globalDb.branch().addCallbacks(addStoreWithIndex, failOnError).
+      addCallback(addData).
+      addCallback(openCursorAndRemove).
+      addCallback(checkStore);
+}
 </script>
 </body>
 </html>

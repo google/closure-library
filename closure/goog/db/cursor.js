@@ -146,6 +146,47 @@ goog.db.Cursor.prototype.getKey = function() {
 
 
 /**
+ * Opens a value cursor from IDBObjectStore or IDBIndex over the specified key
+ * range. Returns a cursor object which is able to iterate over the given range.
+ * @param {!(IDBObjectStore|IDBIndex)} source Data source to open cursor.
+ * @param {!goog.db.KeyRange=} opt_range The key range. If undefined iterates
+ *     over the whole data source.
+ * @param {!goog.db.Cursor.Direction=} opt_direction The direction. If undefined
+ *     moves in a forward direction with duplicates.
+ * @return {!goog.db.Cursor} The cursor.
+ * @throws {goog.db.Error} If there was a problem opening the cursor.
+ */
+goog.db.Cursor.openCursor = function(source, opt_range, opt_direction) {
+  var cursor = new goog.db.Cursor();
+  var request;
+
+  try {
+    var range = opt_range ? opt_range.range() : null;
+    if (opt_direction) {
+      request = source.openCursor(range, opt_direction);
+    } else {
+      request = source.openCursor(range);
+    }
+  } catch (ex) {
+    cursor.dispose();
+    throw goog.db.Error.fromException(ex, source.name);
+  }
+  request.onsuccess = function(e) {
+    cursor.cursor_ = e.target.result || null;
+    if (cursor.cursor_) {
+      cursor.dispatchEvent(goog.db.Cursor.EventType.NEW_DATA);
+    } else {
+      cursor.dispatchEvent(goog.db.Cursor.EventType.COMPLETE);
+    }
+  };
+  request.onerror = function(e) {
+    cursor.dispatchEvent(goog.db.Cursor.EventType.ERROR);
+  };
+  return cursor;
+};
+
+
+/**
  * Possible cursor directions.
  * @see http://www.w3.org/TR/IndexedDB/#idl-def-IDBCursor
  *
