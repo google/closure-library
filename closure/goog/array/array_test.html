@@ -1203,14 +1203,6 @@ function testArrayCompare3ComparatorFn() {
 }
 
 
-function assertArraysEqual(arr1, arr2) {
-  assertEquals('Expected length ' + arr1.length, arr1.length, arr2.length);
-  for (var i = 0; i < arr1.length; i++) {
-    assertEquals(arr1[i] + ' expected at position ' + i,  arr1[i], arr2[i]);
-  }
-}
-
-
 function testSort() {
   // Test sorting empty array
   var a = [];
@@ -1224,11 +1216,11 @@ function testSort() {
   var bSorted = ['!!', '1', 'Array', 'JUST', 'NOW', 'Sort', 'about', 'array',
       'test', 'test', 'to'];
   goog.array.sort(b);
-  assertArraysEqual(bSorted, b);
+  assertArrayEquals(bSorted, b);
 
   // Test sorting already sorted array of String(s) of length > 1
   goog.array.sort(b);
-  assertArraysEqual(bSorted, b);
+  assertArrayEquals(bSorted, b);
 
   // Test sorting homogenous array of integer Number(s) of length > 1
   var c = [100, 1, 2000, -1, 0, 1000023, 12312512, -12331, 123, 54325,
@@ -1236,11 +1228,11 @@ function testSort() {
   var cSorted = [-38104783, -12331, -213, -4, -1, 0, 0, 1, 100, 123, 908,
       2000, 5423, 54325, 93708, 1000023, 12312512];
   goog.array.sort(c);
-  assertArraysEqual(cSorted, c);
+  assertArrayEquals(cSorted, c);
 
   // Test sorting already sorted array of integer Number(s) of length > 1
   goog.array.sort(c);
-  assertArraysEqual(cSorted, c);
+  assertArrayEquals(cSorted, c);
 
   // Test sorting homogenous array of Number(s) of length > 1
   var e = [-1321.3124, 0.31255, 54254, 0, 142.88888708, -321434.58758, -324,
@@ -1248,11 +1240,11 @@ function testSort() {
   var eSorted = [-897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0,
       0.31255, 5, 142.88888708, 334, 342, 453, 54254];
   goog.array.sort(e);
-  assertArraysEqual(eSorted, e);
+  assertArrayEquals(eSorted, e);
 
   // Test sorting already sorted array of Number(s) of length > 1
   goog.array.sort(e);
-  assertArraysEqual(eSorted, e);
+  assertArrayEquals(eSorted, e);
 
   // Test sorting array of Number(s) of length > 1,
   // using custom comparison function which does reverse ordering
@@ -1261,12 +1253,12 @@ function testSort() {
   var fSorted = [54254, 453, 342, 334, 142.88888708, 5, 0.31255, 0, -3, -9,
       -324, -1321.3124, -321434.58758, -897123.9]
   goog.array.sort(f, function(a, b) { return b - a; });
-  assertArraysEqual(fSorted, f);
+  assertArrayEquals(fSorted, f);
 
   // Test sorting already sorted array of Number(s) of length > 1
   // using custom comparison function which does reverse ordering
   goog.array.sort(f, function(a, b) {return b - a; });
-  assertArraysEqual(fSorted, f);
+  assertArrayEquals(fSorted, f);
 
   // Test sorting array of custom Object(s) of length > 1 that have
   // an overriden toString
@@ -1286,12 +1278,12 @@ function testSort() {
   var g = [co3, co4, co2, co1];
   var gSorted = [co1, co2, co3, co4];
   goog.array.sort(g);
-  assertArraysEqual(gSorted, g);
+  assertArrayEquals(gSorted, g);
 
   // Test sorting already sorted array of custom Object(s) of length > 1
   // that have an overriden toString
   goog.array.sort(g);
-  assertArraysEqual(gSorted, g);
+  assertArrayEquals(gSorted, g);
 
   // Test sorting an array of custom Object(s) of length > 1 using
   // a custom comparison function
@@ -1300,40 +1292,40 @@ function testSort() {
   goog.array.sort(h, function(a, b) {
     return a.value > b.value ? 1 : a.value < b.value ? -1 : 0;
   });
-  assertArraysEqual(hSorted, h);
+  assertArrayEquals(hSorted, h);
 
   // Test sorting already sorted array of custom Object(s) of length > 1
   // using a custom comparison function
   goog.array.sort(h);
-  assertArraysEqual(hSorted, h);
+  assertArrayEquals(hSorted, h);
 
   // Test sorting arrays of length 1
   var i = ['one'];
   var iSorted = ['one'];
   goog.array.sort(i);
-  assertArraysEqual(iSorted, i);
+  assertArrayEquals(iSorted, i);
 
   var j = [1];
   var jSorted = [1];
   goog.array.sort(j);
-  assertArraysEqual(jSorted, j);
+  assertArrayEquals(jSorted, j);
 
   var k = [1.1];
   var kSorted = [1.1];
   goog.array.sort(k);
-  assertArraysEqual(kSorted, k);
+  assertArrayEquals(kSorted, k);
 
   var l = [co3];
   var lSorted = [co3];
   goog.array.sort(l);
-  assertArraysEqual(lSorted, l);
+  assertArrayEquals(lSorted, l);
 
   var m = [co2];
   var mSorted = [co2];
   goog.array.sort(m, function(a, b) {
     return a.value > b.value ? 1 : a.value < b.value ? -1 : 0;
   });
-  assertArraysEqual(mSorted, m);
+  assertArrayEquals(mSorted, m);
 }
 
 function testStableSort() {
@@ -1351,7 +1343,7 @@ function testStableSort() {
     sortedValues.push(arr[i].val);
   }
   var wantedSortedValues = ['b', 'a', 'c', 'e', 'd'];
-  assertArraysEqual(wantedSortedValues, sortedValues);
+  assertArrayEquals(wantedSortedValues, sortedValues);
 
   // Test array without custom comparison function
   var arr2 = [];
@@ -1391,7 +1383,7 @@ function testArrayBucketModulus() {
     // The order isn't defined, but they should be the same sorted.
     goog.array.sort(a[i])
     goog.array.sort(buckets[i])
-    assertArraysEqual(a[i], buckets[i]);
+    assertArrayEquals(a[i], buckets[i]);
   }
 }
 
@@ -1408,8 +1400,24 @@ function testArrayBucketEvenOdd() {
 
   var b = goog.array.bucket(a, isEven);
 
-  assertArraysEqual(b[true], [2, 4, 6, 8]);
-  assertArraysEqual(b[false], [1, 3, 5, 7, 9]);
+  assertArrayEquals(b[true], [2, 4, 6, 8]);
+  assertArrayEquals(b[false], [1, 3, 5, 7, 9]);
+}
+
+function testArrayBucketUsingThisObject() {
+  var a = [1, 2, 3, 4, 5];
+
+  var obj = {
+    specialValue: 2
+  };
+
+  function isSpecialValue(value, index, array) {
+    return value == this.specialValue ? 1 : 0;
+  }
+
+  var b = goog.array.bucket(a, isSpecialValue, obj);
+  assertArrayEquals(b[0], [1, 3, 4, 5]);
+  assertArrayEquals(b[1], [2]);
 }
 
 function testArrayToObject() {
