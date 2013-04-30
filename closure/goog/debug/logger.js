@@ -97,7 +97,7 @@ goog.debug.Logger.prototype.handlers_ = null;
  *     log handlers attached to them and whether they can have their log level
  *     set. Logging is a bit faster when this is set to false.
  */
-goog.debug.Logger.ENABLE_HIERARCHY = true;
+goog.define('goog.debug.Logger.ENABLE_HIERARCHY', true);
 
 
 if (!goog.debug.Logger.ENABLE_HIERARCHY) {

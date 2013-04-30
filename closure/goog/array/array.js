@@ -39,7 +39,7 @@ goog.require('goog.asserts');
  * Setting goog.TRUSTED_SITE to false will automatically set
  * NATIVE_ARRAY_PROTOTYPES to false.
  */
-goog.NATIVE_ARRAY_PROTOTYPES = goog.TRUSTED_SITE;
+goog.define('goog.NATIVE_ARRAY_PROTOTYPES', goog.TRUSTED_SITE);
 
 
 /**
