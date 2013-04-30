@@ -67,6 +67,48 @@ goog.global.CLOSURE_DEFINES;
 
 
 /**
+ * Builds an object structure for the provided namespace path,
+ * ensuring that names that already exist are not overwritten. For
+ * example:
+ * "a.b.c" -> a = {};a.b={};a.b.c={};
+ * Used by goog.provide and goog.exportSymbol.
+ * @param {string} name name of the object that this file defines.
+ * @param {*=} opt_object the object to expose at the end of the path.
+ * @param {Object=} opt_objectToExportTo The object to add the path to; default
+ *     is |goog.global|.
+ * @private
+ */
+goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
+  var parts = name.split('.');
+  var cur = opt_objectToExportTo || goog.global;
+
+  // Internet Explorer exhibits strange behavior when throwing errors from
+  // methods externed in this manner.  See the testExportSymbolExceptions in
+  // base_test.html for an example.
+  if (!(parts[0] in cur) && cur.execScript) {
+    cur.execScript('var ' + parts[0]);
+  }
+
+  // Certain browsers cannot parse code in the form for((a in b); c;);
+  // This pattern is produced by the JSCompiler when it collapses the
+  // statement above into the conditional loop below. To prevent this from
+  // happening, use a for-loop and reserve the init logic as below.
+
+  // Parentheses added to eliminate strict JS warning in Firefox.
+  for (var part; parts.length && (part = parts.shift());) {
+    if (!parts.length && opt_object !== undefined) {
+      // last part and we have an object; use it
+      cur[part] = opt_object;
+    } else if (cur[part]) {
+      cur = cur[part];
+    } else {
+      cur = cur[part] = {};
+    }
+  }
+};
+
+
+/**
  * Defines a named value. In uncompiled mode, the value is retreived from
  * CLOSURE_DEFINES if the object is defined and has the property specified,
  * and otherwise used the defined defaultValue. When compiled, the default
@@ -117,7 +159,7 @@ goog.DEBUG = true;
  * this rule: the Hebrew language. For legacy reasons the old code (iw) should
  * be used instead of the new code (he), see http://wiki/Main/IIISynonyms.
  */
-goog.LOCALE = 'en';  // default to en
+goog.define('goog.LOCALE', 'en');  // default to en
 
 
 /**
@@ -131,7 +173,7 @@ goog.LOCALE = 'en';  // default to en
  * relying on non-standard implementations, specify
  * "--define goog.TRUSTED_SITE=false" to the JSCompiler.
  */
-goog.TRUSTED_SITE = true;
+goog.define('goog.TRUSTED_SITE', true);
 
 
 /**
@@ -211,48 +253,6 @@ if (!COMPILED) {
    */
   goog.implicitNamespaces_ = {};
 }
-
-
-/**
- * Builds an object structure for the provided namespace path,
- * ensuring that names that already exist are not overwritten. For
- * example:
- * "a.b.c" -> a = {};a.b={};a.b.c={};
- * Used by goog.provide and goog.exportSymbol.
- * @param {string} name name of the object that this file defines.
- * @param {*=} opt_object the object to expose at the end of the path.
- * @param {Object=} opt_objectToExportTo The object to add the path to; default
- *     is |goog.global|.
- * @private
- */
-goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
-  var parts = name.split('.');
-  var cur = opt_objectToExportTo || goog.global;
-
-  // Internet Explorer exhibits strange behavior when throwing errors from
-  // methods externed in this manner.  See the testExportSymbolExceptions in
-  // base_test.html for an example.
-  if (!(parts[0] in cur) && cur.execScript) {
-    cur.execScript('var ' + parts[0]);
-  }
-
-  // Certain browsers cannot parse code in the form for((a in b); c;);
-  // This pattern is produced by the JSCompiler when it collapses the
-  // statement above into the conditional loop below. To prevent this from
-  // happening, use a for-loop and reserve the init logic as below.
-
-  // Parentheses added to eliminate strict JS warning in Firefox.
-  for (var part; parts.length && (part = parts.shift());) {
-    if (!parts.length && goog.isDef(opt_object)) {
-      // last part and we have an object; use it
-      cur[part] = opt_object;
-    } else if (cur[part]) {
-      cur = cur[part];
-    } else {
-      cur = cur[part] = {};
-    }
-  }
-};
 
 
 /**
@@ -355,7 +355,7 @@ goog.addDependency = function(relPath, provides, requires) {
  * provided (and depend on the fact that some outside tool correctly ordered
  * the script).
  */
-goog.ENABLE_DEBUG_LOADER = true;
+goog.define('goog.ENABLE_DEBUG_LOADER', true);
 
 
 /**
