@@ -23,12 +23,12 @@ goog.provide('goog.ui.ComboBox');
 goog.provide('goog.ui.ComboBoxItem');
 
 goog.require('goog.Timer');
-goog.require('goog.debug.Logger');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.log');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.MenuAnchoredPosition');
 goog.require('goog.string');
@@ -72,11 +72,11 @@ goog.ui.ComboBox.BLUR_DISMISS_TIMER_MS = 250;
 
 /**
  * A logger to help debugging of combo box behavior.
- * @type {goog.debug.Logger}
+ * @const
  * @private
  */
 goog.ui.ComboBox.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.ui.ComboBox');
+    goog.log.getLogger('goog.ui.ComboBox');
 
 
 /**
@@ -412,7 +412,8 @@ goog.ui.ComboBox.prototype.getNumberOfVisibleItems_ = function() {
     this.visibleCount_ = count;
   }
 
-  this.logger_.info('getNumberOfVisibleItems() - ' + this.visibleCount_);
+  goog.log.info(this.logger_, 'getNumberOfVisibleItems() - ' +
+      this.visibleCount_);
   return this.visibleCount_;
 };
 
@@ -488,7 +489,7 @@ goog.ui.ComboBox.prototype.setUseDropdownArrow = function(useDropdownArrow) {
  * @param {string} value The new value.
  */
 goog.ui.ComboBox.prototype.setValue = function(value) {
-  this.logger_.info('setValue() - ' + value);
+  goog.log.info(this.logger_, 'setValue() - ' + value);
   if (this.labelInput_.getValue() != value) {
     this.labelInput_.setValue(value);
     this.handleInputChange_();
@@ -549,12 +550,12 @@ goog.ui.ComboBox.prototype.maybeShowMenu_ = function(showAll) {
   var numVisibleItems = this.getNumberOfVisibleItems_();
 
   if (isVisible && numVisibleItems == 0) {
-    this.logger_.fine('no matching items, hiding');
+    goog.log.fine(this.logger_, 'no matching items, hiding');
     this.hideMenu_();
 
   } else if (!isVisible && numVisibleItems > 0) {
     if (showAll) {
-      this.logger_.fine('showing menu');
+      goog.log.fine(this.logger_, 'showing menu');
       this.setItemVisibilityFromToken_('');
       this.setItemHighlightFromToken_(this.getTokenText_());
     }
@@ -630,10 +631,10 @@ goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
       (e.target == this.getElement() || e.target == this.input_ ||
        goog.dom.contains(this.button_, /** @type {Node} */ (e.target)))) {
     if (this.menu_.isVisible()) {
-      this.logger_.fine('Menu is visible, dismissing');
+      goog.log.fine(this.logger_, 'Menu is visible, dismissing');
       this.dismiss();
     } else {
-      this.logger_.fine('Opening dropdown');
+      goog.log.fine(this.logger_, 'Opening dropdown');
       this.maybeShowMenu_(true);
       if (goog.userAgent.OPERA) {
         // select() doesn't focus <input> elements in Opera.
@@ -658,7 +659,7 @@ goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
 goog.ui.ComboBox.prototype.onDocClicked_ = function(e) {
   if (!goog.dom.contains(
       this.menu_.getElement(), /** @type {Node} */ (e.target))) {
-    this.logger_.info('onDocClicked_() - dismissing immediately');
+    goog.log.info(this.logger_, 'onDocClicked_() - dismissing immediately');
     this.dismiss();
   }
 };
@@ -670,7 +671,7 @@ goog.ui.ComboBox.prototype.onDocClicked_ = function(e) {
  * @private
  */
 goog.ui.ComboBox.prototype.onMenuSelected_ = function(e) {
-  this.logger_.info('onMenuSelected_()');
+  goog.log.info(this.logger_, 'onMenuSelected_()');
   var item = /** @type {!goog.ui.MenuItem} */ (e.target);
   // Stop propagation of the original event and redispatch to allow the menu
   // select to be cancelled at this level. i.e. if a menu item should cause
@@ -679,7 +680,8 @@ goog.ui.ComboBox.prototype.onMenuSelected_ = function(e) {
   if (this.dispatchEvent(new goog.ui.ItemEvent(
       goog.ui.Component.EventType.ACTION, this, item))) {
     var caption = item.getCaption();
-    this.logger_.fine('Menu selection: ' + caption + '. Dismissing menu');
+    goog.log.fine(this.logger_,
+        'Menu selection: ' + caption + '. Dismissing menu');
     if (this.labelInput_.getValue() != caption) {
       this.labelInput_.setValue(caption);
       this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
@@ -696,7 +698,7 @@ goog.ui.ComboBox.prototype.onMenuSelected_ = function(e) {
  * @private
  */
 goog.ui.ComboBox.prototype.onInputBlur_ = function(e) {
-  this.logger_.info('onInputBlur_() - delayed dismiss');
+  goog.log.info(this.logger_, 'onInputBlur_() - delayed dismiss');
   this.clearDismissTimer_();
   this.dismissTimer_ = goog.Timer.callOnce(
       this.dismiss, goog.ui.ComboBox.BLUR_DISMISS_TIMER_MS, this);
@@ -725,7 +727,8 @@ goog.ui.ComboBox.prototype.handleKeyEvent = function(e) {
     case goog.events.KeyCodes.ESC:
       // If the menu is visible and the user hit Esc, dismiss the menu.
       if (isMenuVisible) {
-        this.logger_.fine('Dismiss on Esc: ' + this.labelInput_.getValue());
+        goog.log.fine(this.logger_,
+            'Dismiss on Esc: ' + this.labelInput_.getValue());
         this.dismiss();
         handled = true;
       }
@@ -735,7 +738,8 @@ goog.ui.ComboBox.prototype.handleKeyEvent = function(e) {
       if (isMenuVisible) {
         var highlighted = this.menu_.getHighlighted();
         if (highlighted) {
-          this.logger_.fine('Select on Tab: ' + this.labelInput_.getValue());
+          goog.log.fine(this.logger_,
+              'Select on Tab: ' + this.labelInput_.getValue());
           highlighted.performActionInternal(e);
           handled = true;
         }
@@ -745,7 +749,7 @@ goog.ui.ComboBox.prototype.handleKeyEvent = function(e) {
     case goog.events.KeyCodes.DOWN:
       // If the menu is hidden and the user hit the up/down arrow, show it.
       if (!isMenuVisible) {
-        this.logger_.fine('Up/Down - maybe show menu');
+        goog.log.fine(this.logger_, 'Up/Down - maybe show menu');
         this.maybeShowMenu_(true);
         handled = true;
       }
@@ -767,7 +771,8 @@ goog.ui.ComboBox.prototype.handleKeyEvent = function(e) {
  */
 goog.ui.ComboBox.prototype.onInputEvent_ = function(e) {
   // If the key event is text-modifying, update the menu.
-  this.logger_.fine('Key is modifying: ' + this.labelInput_.getValue());
+  goog.log.fine(this.logger_,
+      'Key is modifying: ' + this.labelInput_.getValue());
   this.handleInputChange_();
 };
 
@@ -802,7 +807,7 @@ goog.ui.ComboBox.prototype.handleInputChange_ = function() {
  * @private
  */
 goog.ui.ComboBox.prototype.setItemVisibilityFromToken_ = function(token) {
-  this.logger_.info('setItemVisibilityFromToken_() - ' + token);
+  goog.log.info(this.logger_, 'setItemVisibilityFromToken_() - ' + token);
   var isVisibleItem = false;
   var count = 0;
   var recheckHidden = !this.matchFunction_(token, this.lastToken_);
@@ -846,7 +851,7 @@ goog.ui.ComboBox.prototype.setItemVisibilityFromToken_ = function(token) {
  * @private
  */
 goog.ui.ComboBox.prototype.setItemHighlightFromToken_ = function(token) {
-  this.logger_.info('setItemHighlightFromToken_() - ' + token);
+  goog.log.info(this.logger_, 'setItemHighlightFromToken_() - ' + token);
 
   if (token == '') {
     this.menu_.setHighlightedIndex(-1);

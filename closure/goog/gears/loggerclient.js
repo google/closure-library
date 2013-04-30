@@ -24,7 +24,7 @@ goog.provide('goog.gears.LoggerClient');
 
 goog.require('goog.Disposable');
 goog.require('goog.debug');
-goog.require('goog.debug.Logger');
+goog.require('goog.log');
 
 
 

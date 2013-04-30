@@ -24,10 +24,10 @@ goog.provide('goog.gears.UrlCapture.Event');
 goog.provide('goog.gears.UrlCapture.EventType');
 
 goog.require('goog.Uri');
-goog.require('goog.debug.Logger');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.gears');
+goog.require('goog.log');
 
 
 
@@ -50,7 +50,7 @@ goog.gears.UrlCapture = function(name, requiredCookie, opt_localServer) {
    */
   this.storeName_ = goog.gears.makeSafeFileName(name);
   if (name != this.storeName_) {
-    this.logger_.info(
+    goog.log.info(this.logger_,
         'local store name ' + name + '->' + this.storeName_);
   }
 
@@ -97,11 +97,11 @@ goog.inherits(goog.gears.UrlCapture, goog.events.EventTarget);
 
 /**
  * Logger.
- * @type {goog.debug.Logger}
+ * @const
  * @private
  */
 goog.gears.UrlCapture.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.gears.UrlCapture');
+    goog.log.getLogger('goog.gears.UrlCapture');
 
 
 /**
@@ -131,7 +131,7 @@ goog.gears.UrlCapture.EventType = {
  */
 goog.gears.UrlCapture.prototype.getResourceStore_ = function() {
   if (!this.resourceStore_) {
-    this.logger_.info('creating resource store: ' + this.storeName_);
+    goog.log.info(this.logger_, 'creating resource store: ' + this.storeName_);
     this.resourceStore_ = this.localServer_['createStore'](
         this.storeName_, this.requiredCookie_);
   }
@@ -145,7 +145,7 @@ goog.gears.UrlCapture.prototype.getResourceStore_ = function() {
  */
 goog.gears.UrlCapture.prototype.exists = function() {
   if (!this.resourceStore_) {
-    this.logger_.info('opening resource store: ' + this.storeName_);
+    goog.log.info(this.logger_, 'opening resource store: ' + this.storeName_);
     this.resourceStore_ = this.localServer_['openStore'](
         this.storeName_, this.requiredCookie_);
   }
@@ -157,7 +157,7 @@ goog.gears.UrlCapture.prototype.exists = function() {
  * Remove this resource store.
  */
 goog.gears.UrlCapture.prototype.removeStore = function() {
-  this.logger_.info('removing resource store: ' + this.storeName_);
+  goog.log.info(this.logger_, 'removing resource store: ' + this.storeName_);
   this.localServer_['removeStore'](this.storeName_, this.requiredCookie_);
   this.resourceStore_ = null;
 };
@@ -192,7 +192,7 @@ goog.gears.UrlCapture.prototype.copy = function(srcUri, dstUri) {
  */
 goog.gears.UrlCapture.prototype.capture = function(uris) {
   var count = uris.length;
-  this.logger_.fine('capture: count==' + count);
+  goog.log.fine(this.logger_, 'capture: count==' + count);
   if (!count) {
     throw Error('No URIs to capture');
   }
@@ -206,7 +206,7 @@ goog.gears.UrlCapture.prototype.capture = function(uris) {
 
   var id = this.getResourceStore_()['capture'](
       captureStrings, goog.bind(this.captureCallback_, this));
-  this.logger_.fine('capture started: ' + id);
+  goog.log.fine(this.logger_, 'capture started: ' + id);
   this.uris_[id] = uris;
   this.errorUris_[id] = [];
   this.numCompleted_[id] = 0;
@@ -219,7 +219,7 @@ goog.gears.UrlCapture.prototype.capture = function(uris) {
  * @param {number} captureId The id of the capture to abort, from #capture.
  */
 goog.gears.UrlCapture.prototype.abort = function(captureId) {
-  this.logger_.fine('abort: ' + captureId);
+  goog.log.fine(this.logger_, 'abort: ' + captureId);
 
   // TODO(user) Remove when Gears adds more rubust type handling.
   // Safety measure since Gears behaves very badly if it gets an unexpected
@@ -230,7 +230,7 @@ goog.gears.UrlCapture.prototype.abort = function(captureId) {
 
   // Only need to abort if the capture is still in progress.
   if (this.uris_[captureId] || this.numCompleted_[captureId]) {
-    this.logger_.info('aborting capture: ' + captureId);
+    goog.log.info(this.logger_, 'aborting capture: ' + captureId);
     this.getResourceStore_()['abortCapture'](captureId);
     this.cleanupCapture_(captureId);
     this.dispatchEvent(new goog.gears.UrlCapture.Event(
@@ -245,7 +245,7 @@ goog.gears.UrlCapture.prototype.abort = function(captureId) {
  * @return {boolean} true if captured, false otherwise.
  */
 goog.gears.UrlCapture.prototype.isCaptured = function(uri) {
-  this.logger_.fine('isCaptured: ' + uri);
+  goog.log.fine(this.logger_, 'isCaptured: ' + uri);
   return this.getResourceStore_()['isCaptured'](uri.toString());
 };
 
@@ -255,7 +255,7 @@ goog.gears.UrlCapture.prototype.isCaptured = function(uri) {
  * @param {string|goog.Uri} uri The URI to remove from the store.
  */
 goog.gears.UrlCapture.prototype.remove = function(uri) {
-  this.logger_.fine('remove: ' + uri);
+  goog.log.fine(this.logger_, 'remove: ' + uri);
   this.getResourceStore_()['remove'](uri.toString());
 };
 
@@ -270,7 +270,7 @@ goog.gears.UrlCapture.prototype.remove = function(uri) {
  */
 goog.gears.UrlCapture.prototype.captureCallback_ = function(
     url, success, captureId) {
-  this.logger_.fine('captureCallback_: ' + captureId);
+  goog.log.fine(this.logger_, 'captureCallback_: ' + captureId);
 
   if (!this.uris_[captureId] && !this.numCompleted_[captureId]) {
     // This probably means we were aborted and then a capture event came in.
@@ -307,7 +307,7 @@ goog.gears.UrlCapture.prototype.captureCallback_ = function(
  * @param {number} captureId The id of the capture to clean up.
  */
 goog.gears.UrlCapture.prototype.cleanupCapture_ = function(captureId) {
-  this.logger_.fine('cleanupCapture_: ' + captureId);
+  goog.log.fine(this.logger_, 'cleanupCapture_: ' + captureId);
   delete this.uris_[captureId];
   delete this.numCompleted_[captureId];
   delete this.errorUris_[captureId];

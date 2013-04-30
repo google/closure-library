@@ -28,8 +28,8 @@ goog.provide('goog.debug.FancyWindow');
 
 goog.require('goog.debug.DebugWindow');
 goog.require('goog.debug.LogManager');
-goog.require('goog.debug.Logger');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.log');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
@@ -140,7 +140,7 @@ goog.debug.FancyWindow.prototype.openOptions_ = function() {
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var dh = this.dh_;
   for (var i = 0; i < loggers.length; i++) {
-    var logger = goog.debug.Logger.getLogger(loggers[i]);
+    var logger = goog.log.getLogger(loggers[i]);
     var curlevel = logger.getLevel() ? logger.getLevel().name : 'INHERIT';
     var div = dh.createDom('div', {},
         this.getDropDown_('sel' + loggers[i], curlevel),
@@ -188,13 +188,13 @@ goog.debug.FancyWindow.prototype.closeOptions_ = function() {
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var dh = this.dh_;
   for (var i = 0; i < loggers.length; i++) {
-    var logger = goog.debug.Logger.getLogger(loggers[i]);
+    var logger = goog.log.getLogger(loggers[i]);
     var sel = dh.getElement('sel' + loggers[i]);
     var level = sel.options[sel.selectedIndex].text;
     if (level == 'INHERIT') {
       logger.setLevel(null);
     } else {
-      logger.setLevel(goog.debug.Logger.Level.getPredefinedLevel(level));
+      logger.setLevel(goog.log.Level.getPredefinedLevel(level));
     }
   }
   this.writeOptionsToLocalStorage_();
@@ -296,7 +296,7 @@ goog.debug.FancyWindow.prototype.writeOptionsToLocalStorage_ = function() {
   var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
   for (var i = 0; i < loggers.length; i++) {
     var key = goog.debug.FancyWindow.LOCAL_STORE_PREFIX + loggers[i];
-    var level = goog.debug.Logger.getLogger(loggers[i]).getLevel();
+    var level = goog.log.getLogger(loggers[i]).getLevel();
     if (key in storedKeys) {
       if (!level) {
         window.localStorage.removeItem(key);
@@ -321,11 +321,11 @@ goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
   var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
   for (var key in storedKeys) {
     var loggerName = key.replace(goog.debug.FancyWindow.LOCAL_STORE_PREFIX, '');
-    var logger = goog.debug.Logger.getLogger(loggerName);
+    var logger = goog.log.getLogger(loggerName);
     var curLevel = logger.getLevel();
     var storedLevel = window.localStorage.getItem(key).toString();
     if (!curLevel || curLevel.toString() != storedLevel) {
-      logger.setLevel(goog.debug.Logger.Level.getPredefinedLevel(storedLevel));
+      logger.setLevel(goog.log.Level.getPredefinedLevel(storedLevel));
     }
   }
 };

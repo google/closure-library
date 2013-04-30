@@ -22,9 +22,9 @@
 goog.provide('goog.gears.LoggerServer');
 
 goog.require('goog.Disposable');
-goog.require('goog.debug.Logger');
 goog.require('goog.debug.Logger.Level');
 goog.require('goog.gears.Worker.EventType');
+goog.require('goog.log');
 
 
 
@@ -127,7 +127,7 @@ goog.gears.LoggerServer.prototype.onCommand_ = function(e) {
     if (level) {
       var msg = (this.useMessagePrefix_ ? this.msgPrefix_ : '') + params[i++];
       var exception = params[i++];
-      var logger = goog.debug.Logger.getLogger(name);
+      var logger = goog.log.getLogger(name);
       var logRecord = logger.getLogRecord(level, msg, exception);
       if (this.workerName_) {
         logRecord.workerName = this.workerName_;

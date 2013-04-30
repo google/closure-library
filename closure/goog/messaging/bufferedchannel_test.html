@@ -15,9 +15,9 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.debug.Console');
-  goog.require('goog.debug.Logger');
   goog.require('goog.dom');
   goog.require('goog.events.Event');
+  goog.require('goog.log');
   goog.require('goog.messaging.BufferedChannel');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.MockControl');
@@ -42,9 +42,9 @@ var asyncMockControl = new goog.testing.async.MockControl(mockControl);
 
 
 function setUpPage() {
-  var logger = goog.debug.Logger.getLogger('goog.messaging');
+  var logger = goog.log.getLogger('goog.messaging');
   logger.setLevel(goog.debug.Logger.Level.ALL);
-  logger.addHandler(function(logRecord) {
+  goog.log.addHandler(logger, function(logRecord) {
     var msg = goog.dom.createDom('div');
     msg.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(goog.dom.getElement('debug-div'), msg);

@@ -21,7 +21,6 @@ goog.provide('goog.editor.plugins.BasicTextFormatter');
 goog.provide('goog.editor.plugins.BasicTextFormatter.COMMAND');
 
 goog.require('goog.array');
-goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
@@ -35,6 +34,7 @@ goog.require('goog.editor.range');
 goog.require('goog.editor.style');
 goog.require('goog.iter');
 goog.require('goog.iter.StopIteration');
+goog.require('goog.log');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.string.Unicode');
@@ -63,12 +63,11 @@ goog.editor.plugins.BasicTextFormatter.prototype.getTrogClassId = function() {
 
 /**
  * Logging object.
- * @type {goog.debug.Logger}
  * @protected
  * @override
  */
 goog.editor.plugins.BasicTextFormatter.prototype.logger =
-    goog.debug.Logger.getLogger('goog.editor.plugins.BasicTextFormatter');
+    goog.log.getLogger('goog.editor.plugins.BasicTextFormatter');
 
 
 /**

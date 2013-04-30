@@ -24,8 +24,8 @@ goog.provide('goog.messaging.MultiChannel');
 goog.provide('goog.messaging.MultiChannel.VirtualChannel');
 
 goog.require('goog.Disposable');
-goog.require('goog.debug.Logger');
 goog.require('goog.events.EventHandler');
+goog.require('goog.log');
 goog.require('goog.messaging.MessageChannel'); // interface
 goog.require('goog.object');
 
@@ -70,11 +70,11 @@ goog.inherits(goog.messaging.MultiChannel, goog.Disposable);
 
 /**
  * Logger object for goog.messaging.MultiChannel.
- * @type {goog.debug.Logger}
+ * @const
  * @private
  */
 goog.messaging.MultiChannel.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.messaging.MultiChannel');
+    goog.log.getLogger('goog.messaging.MultiChannel');
 
 
 /**
@@ -115,31 +115,31 @@ goog.messaging.MultiChannel.prototype.handleDefault_ = function(
     serviceName, payload) {
   var match = serviceName.match(/^([^:]*):(.*)/);
   if (!match) {
-    this.logger_.warning('Invalid service name "' + serviceName + '": no ' +
-                         'virtual channel specified');
+    goog.log.warning(this.logger_, 'Invalid service name "' + serviceName +
+        '": no virtual channel specified');
     return;
   }
 
   var channelName = match[1];
   serviceName = match[2];
   if (!(channelName in this.virtualChannels_)) {
-    this.logger_.warning('Virtual channel "' + channelName + ' does not ' +
-                         'exist, but a message was received for it: "' +
-                         serviceName + '"');
+    goog.log.warning(this.logger_, 'Virtual channel "' + channelName +
+        ' does not exist, but a message was received for it: "' +
+        serviceName + '"');
     return;
   }
 
   var virtualChannel = this.virtualChannels_[channelName];
   if (!virtualChannel) {
-    this.logger_.warning('Virtual channel "' + channelName + ' has been ' +
-                         'disposed, but a message was received for it: "' +
-                         serviceName + '"');
+    goog.log.warning(this.logger_, 'Virtual channel "' + channelName +
+        ' has been disposed, but a message was received for it: "' +
+        serviceName + '"');
     return;
   }
 
   if (!virtualChannel.defaultService_) {
-    this.logger_.warning('Service "' + serviceName + '" is not registered ' +
-                         'on virtual channel "' + channelName + '"');
+    goog.log.warning(this.logger_, 'Service "' + serviceName +
+        '" is not registered on virtual channel "' + channelName + '"');
     return;
   }
 
@@ -202,11 +202,11 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.defaultService_;
 
 /**
  * Logger object for goog.messaging.MultiChannel.VirtualChannel.
- * @type {goog.debug.Logger}
+ * @const
  * @private
  */
 goog.messaging.MultiChannel.VirtualChannel.prototype.logger_ =
-    goog.debug.Logger.getLogger(
+    goog.log.getLogger(
         'goog.messaging.MultiChannel.VirtualChannel');
 
 
@@ -282,8 +282,8 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.send =
 goog.messaging.MultiChannel.VirtualChannel.prototype.doCallback_ =
     function(callback, var_args) {
   if (this.isDisposed()) {
-    this.logger_.warning('Virtual channel "' + this.name_ + '" received ' +
-                         ' a message after being disposed.');
+    goog.log.warning(this.logger_, 'Virtual channel "' + this.name_ +
+        '" received a message after being disposed.');
     return;
   }
 

@@ -11,10 +11,10 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
     goog.require('goog.events');
     goog.require('goog.labs.style.PixelDensityMonitor');
     goog.require('goog.labs.style.PixelDensityMonitor.Density');
+    goog.require('goog.log');
   </script>
   <link rel="stylesheet" href="css/demo.css">
 </head>
@@ -28,7 +28,7 @@ See the COPYING file for details.
     <div class="log" id="log"></div>
   </fieldset>
   <script>
-    var logger = goog.debug.Logger.getLogger('PixelDensityMonitor');
+    var logger = goog.log.getLogger('PixelDensityMonitor');
 
     new goog.debug.DivConsole(goog.dom.getElement('log')).setCapturing(true);
 
@@ -42,10 +42,10 @@ See the COPYING file for details.
     goog.events.listen(monitor,
         goog.labs.style.PixelDensityMonitor.EventType.CHANGE,
         function() {
-          logger.info('Density change: ' + densityMap[monitor.getDensity()]);
+          goog.log.info(logger, 'Density change: ' + densityMap[monitor.getDensity()]);
         });
 
-    logger.info('Starting density: ' + densityMap[monitor.getDensity()]);
+    goog.log.info(logger, 'Starting density: ' + densityMap[monitor.getDensity()]);
   </script>
 </body>
 </html>

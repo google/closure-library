@@ -21,6 +21,7 @@ goog.provide('goog.debug.DivConsole');
 
 goog.require('goog.debug.HtmlFormatter');
 goog.require('goog.debug.LogManager');
+goog.require('goog.log');
 goog.require('goog.style');
 
 
@@ -76,9 +77,9 @@ goog.debug.DivConsole.prototype.setCapturing = function(capturing) {
   // attach or detach handler from the root logger
   var rootLogger = goog.debug.LogManager.getRoot();
   if (capturing) {
-    rootLogger.addHandler(this.publishHandler_);
+    goog.log.addHandler(rootLogger, this.publishHandler_);
   } else {
-    rootLogger.removeHandler(this.publishHandler_);
+    goog.log.removeHandler(rootLogger, this.publishHandler_);
     this.logBuffer = '';
   }
   this.isCapturing_ = capturing;

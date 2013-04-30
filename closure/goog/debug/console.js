@@ -25,6 +25,7 @@ goog.provide('goog.debug.Console');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger.Level');
 goog.require('goog.debug.TextFormatter');
+goog.require('goog.log');
 
 
 
@@ -77,9 +78,9 @@ goog.debug.Console.prototype.setCapturing = function(capturing) {
   // attach or detach handler from the root logger
   var rootLogger = goog.debug.LogManager.getRoot();
   if (capturing) {
-    rootLogger.addHandler(this.publishHandler_);
+    goog.log.addHandler(rootLogger, this.publishHandler_);
   } else {
-    rootLogger.removeHandler(this.publishHandler_);
+    goog.log.removeHandler(rootLogger, this.publishHandler_);
     this.logBuffer = '';
   }
   this.isCapturing_ = capturing;

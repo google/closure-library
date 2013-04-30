@@ -25,12 +25,12 @@ goog.provide('goog.gears.WorkerChannel');
 
 goog.require('goog.Disposable');
 goog.require('goog.debug');
-goog.require('goog.debug.Logger');
 goog.require('goog.events');
 goog.require('goog.gears.Worker');
 goog.require('goog.gears.Worker.EventType');
 goog.require('goog.gears.WorkerEvent');
 goog.require('goog.json');
+goog.require('goog.log');
 goog.require('goog.messaging.AbstractChannel');
 
 
@@ -86,12 +86,12 @@ goog.gears.WorkerChannel.prototype.peerOrigin;
 
 /**
  * Logger for this class.
- * @type {goog.debug.Logger}
+ * @const
  * @protected
  * @override
  */
 goog.gears.WorkerChannel.prototype.logger =
-    goog.debug.Logger.getLogger('goog.gears.WorkerChannel');
+    goog.log.getLogger('goog.gears.WorkerChannel');
 
 
 /**
@@ -148,14 +148,14 @@ goog.gears.WorkerChannel.prototype.deliver_ = function(e) {
  */
 goog.gears.WorkerChannel.prototype.validateMessage_ = function(body) {
   if (!('serviceName' in body)) {
-    this.logger.warning('GearsWorkerChannel::deliver_(): ' +
+    goog.log.warning(this.logger, 'GearsWorkerChannel::deliver_(): ' +
                         'Message object doesn\'t contain service name: ' +
                         goog.debug.deepExpose(body));
     return false;
   }
 
   if (!('payload' in body)) {
-    this.logger.warning('GearsWorkerChannel::deliver_(): ' +
+    goog.log.warning(this.logger, 'GearsWorkerChannel::deliver_(): ' +
                         'Message object doesn\'t contain payload: ' +
                         goog.debug.deepExpose(body));
     return false;
@@ -197,8 +197,9 @@ goog.gears.WorkerChannel.prototype.checkMessageOrigin = function(
     return true;
   }
 
-  this.logger.warning('Message from unexpected origin "' + messageOrigin +
-                      '"; expected only messages from origin "' + peerOrigin +
-                      '"');
+  goog.log.warning(this.logger,
+      'Message from unexpected origin "' + messageOrigin +
+      '"; expected only messages from origin "' + peerOrigin +
+      '"');
   return false;
 };

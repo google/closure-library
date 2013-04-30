@@ -72,7 +72,7 @@ See the COPYING file for details.
       tree.render($('treeContainer'));
 
       var elapsed = goog.debug.Trace.stopTracer(tracerId);
-      logger.info('Trace:\n' + goog.debug.Trace.getFormattedTrace());
+      goog.log.info(logger, 'Trace:\n' + goog.debug.Trace.getFormattedTrace());
     }
 
 
