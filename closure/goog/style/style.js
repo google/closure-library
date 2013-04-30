@@ -38,6 +38,13 @@ goog.require('goog.userAgent');
 
 
 /**
+ * @define {boolean} Whether we know at compile time that
+ *     getBoundingClientRect() is present and bug-free on the browser.
+ */
+goog.define('goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS', false);
+
+
+/**
  * Sets a style value on an element.
  *
  * This function is not indended to patch issues in the browser's style
@@ -629,7 +636,9 @@ goog.style.getPageOffset = function(el) {
   // position. When invoked for an element with position absolute and a negative
   // position though it can be off by one. Therefor the recursive implementation
   // is used in those (relatively rare) cases.
-  var BUGGY_GECKO_BOX_OBJECT = goog.userAgent.GECKO && doc.getBoxObjectFor &&
+  var BUGGY_GECKO_BOX_OBJECT =
+      !goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS &&
+      goog.userAgent.GECKO && doc.getBoxObjectFor &&
       !el.getBoundingClientRect && positionStyle == 'absolute' &&
       (box = doc.getBoxObjectFor(el)) && (box.screenX < 0 || box.screenY < 0);
 
@@ -649,7 +658,8 @@ goog.style.getPageOffset = function(el) {
   }
 
   // IE, Gecko 1.9+, and most modern WebKit.
-  if (el.getBoundingClientRect) {
+  if (goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS ||
+      el.getBoundingClientRect) {
     box = goog.style.getBoundingClientRect_(el);
     // Must add the scroll coordinates in to get the absolute page offset
     // of element since getBoundingClientRect returns relative coordinates to
@@ -763,7 +773,8 @@ goog.style.getFramedPageOffset = function(el, relativeWin) {
     // the outer window.
     var offset = currentWin == relativeWin ?
         goog.style.getPageOffset(currentEl) :
-        goog.style.getClientPosition(currentEl);
+        goog.style.getClientPositionForElement_(
+            goog.asserts.assert(currentEl));
 
     position.x += offset.x;
     position.y += offset.y;
@@ -823,27 +834,47 @@ goog.style.getRelativePosition = function(a, b) {
 /**
  * Returns the position of the event or the element's border box relative to
  * the client viewport.
+ * @param {!Element} el Element whose position to get.
+ * @return {!goog.math.Coordinate} The position.
+ * @private
+ */
+goog.style.getClientPositionForElement_ = function(el) {
+  var pos;
+  if (goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS ||
+      el.getBoundingClientRect) {
+    // IE, Gecko 1.9+, and most modern WebKit
+    var box = goog.style.getBoundingClientRect_(el);
+    pos = new goog.math.Coordinate(box.left, box.top);
+  } else {
+    var scrollCoord = goog.dom.getDomHelper(el).getDocumentScroll();
+    var pageCoord = goog.style.getPageOffset(el);
+    pos = new goog.math.Coordinate(
+        pageCoord.x - scrollCoord.x,
+        pageCoord.y - scrollCoord.y);
+  }
+
+  // Gecko below version 12 doesn't add CSS translation to the client position
+  // (using either getBoundingClientRect or getBoxOffsetFor) so we need to do
+  // so manually.
+  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher(12)) {
+    return goog.math.Coordinate.sum(pos, goog.style.getCssTranslation(el));
+  } else {
+    return pos;
+  }
+};
+
+
+/**
+ * Returns the position of the event or the element's border box relative to
+ * the client viewport.
  * @param {Element|Event|goog.events.Event} el Element or a mouse / touch event.
  * @return {!goog.math.Coordinate} The position.
  */
 goog.style.getClientPosition = function(el) {
-  var pos = new goog.math.Coordinate;
+  goog.asserts.assert(el);
   if (el.nodeType == goog.dom.NodeType.ELEMENT) {
-    el = /** @type {!Element} */ (el);
-    if (el.getBoundingClientRect) {
-      // IE, Gecko 1.9+, and most modern WebKit
-      var box = goog.style.getBoundingClientRect_(el);
-      pos.x = box.left;
-      pos.y = box.top;
-    } else {
-      var scrollCoord = goog.dom.getDomHelper(el).getDocumentScroll();
-      var pageCoord = goog.style.getPageOffset(el);
-      pos.x = pageCoord.x - scrollCoord.x;
-      pos.y = pageCoord.y - scrollCoord.y;
-    }
-    if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher(12)) {
-      pos = goog.math.Coordinate.sum(pos, goog.style.getCssTranslation(el));
-    }
+    return goog.style.getClientPositionForElement_(
+        /** @type {!Element} */ (el));
   } else {
     var isAbstractedEvent = goog.isFunction(el.getBrowserEvent);
     var targetEvent = el;
@@ -854,11 +885,10 @@ goog.style.getClientPosition = function(el) {
       targetEvent = el.getBrowserEvent().targetTouches[0];
     }
 
-    pos.x = targetEvent.clientX;
-    pos.y = targetEvent.clientY;
+    return new goog.math.Coordinate(
+        targetEvent.clientX,
+        targetEvent.clientY);
   }
-
-  return pos;
 };
 
 
