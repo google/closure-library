@@ -1097,3 +1097,33 @@ function testParseInt() {
   assertEquals(-243, goog.string.parseInt('   -0xF3    '));
   assertTrue(isNaN(goog.string.parseInt(' - 0x32 ')));
 }
+
+function testIsLowerCamelCase() {
+  assertTrue(goog.string.isLowerCamelCase('foo'));
+  assertTrue(goog.string.isLowerCamelCase('fooBar'));
+  assertTrue(goog.string.isLowerCamelCase('fooBarBaz'));
+  assertTrue(goog.string.isLowerCamelCase('innerHTML'));
+
+  assertFalse(goog.string.isLowerCamelCase(''));
+  assertFalse(goog.string.isLowerCamelCase('a3a'));
+  assertFalse(goog.string.isLowerCamelCase('goog.dom'));
+  assertFalse(goog.string.isLowerCamelCase('Foo'));
+  assertFalse(goog.string.isLowerCamelCase('FooBar'));
+  assertFalse(goog.string.isLowerCamelCase('ABCBBD'));
+}
+
+function testIsUpperCamelCase() {
+  assertFalse(goog.string.isUpperCamelCase(''));
+  assertFalse(goog.string.isUpperCamelCase('foo'));
+  assertFalse(goog.string.isUpperCamelCase('fooBar'));
+  assertFalse(goog.string.isUpperCamelCase('fooBarBaz'));
+  assertFalse(goog.string.isUpperCamelCase('innerHTML'));
+  assertFalse(goog.string.isUpperCamelCase('a3a'));
+  assertFalse(goog.string.isUpperCamelCase('goog.dom'));
+  assertFalse(goog.string.isUpperCamelCase('Boyz2Men'));
+
+  assertTrue(goog.string.isUpperCamelCase('ABCBBD'));
+  assertTrue(goog.string.isUpperCamelCase('Foo'));
+  assertTrue(goog.string.isUpperCamelCase('FooBar'));
+  assertTrue(goog.string.isUpperCamelCase('FooBarBaz'));
+}
