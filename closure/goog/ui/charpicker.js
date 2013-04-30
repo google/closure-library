@@ -21,17 +21,20 @@
 goog.provide('goog.ui.CharPicker');
 
 goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.classes');
 goog.require('goog.events');
+goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.i18n.CharListDecompressor');
 goog.require('goog.i18n.uChar');
-goog.require('goog.i18n.uChar.NameFetcher');
 goog.require('goog.structs.Set');
 goog.require('goog.style');
 goog.require('goog.ui.Button');
@@ -43,7 +46,7 @@ goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.MenuItem');
-goog.require('goog.ui.Tooltip.ElementTooltipPosition');
+goog.require('goog.ui.Tooltip');
 
 
 
@@ -814,7 +817,7 @@ goog.ui.CharPicker.prototype.populateGridWithButtons_ = function(grid) {
 
     // Override the button role so the user doesn't hear "button" each time he
     // tabs through the cells.
-    goog.a11y.aria.setRole(buttonEl, '');
+    goog.a11y.aria.removeRole(buttonEl);
   }
 };
 

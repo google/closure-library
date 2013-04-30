@@ -1,4 +1,4 @@
-// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+// Copyright 2013 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,31 @@
 
 
 /**
- * @fileoverview The file contains enumerations for ARIA states
+ * @fileoverview The file contains generated enumerations for ARIA states
  * and properties as defined by W3C ARIA standard:
  * http://www.w3.org/TR/wai-aria/.
+ *
+ * This is auto-generated code. Do not manually edit! For more details
+ * about how to edit it via the generator check go/closure-ariagen.
  */
 
+goog.provide('goog.a11y.aria.AutoCompleteValues');
+goog.provide('goog.a11y.aria.CheckedValues');
+goog.provide('goog.a11y.aria.DropEffectValues');
+goog.provide('goog.a11y.aria.ExpandedValues');
+goog.provide('goog.a11y.aria.GrabbedValues');
+goog.provide('goog.a11y.aria.InvalidValues');
 goog.provide('goog.a11y.aria.LivePriority');
+goog.provide('goog.a11y.aria.OrientationValues');
+goog.provide('goog.a11y.aria.PressedValues');
+goog.provide('goog.a11y.aria.RelevantValues');
+goog.provide('goog.a11y.aria.SelectedValues');
+goog.provide('goog.a11y.aria.SortValues');
 goog.provide('goog.a11y.aria.State');
 
 
 /**
- * Enumeration of ARIA states and properties.
+ * ARIA states and properties.
  * @enum {string}
  */
 goog.a11y.aria.State = {
@@ -173,25 +187,203 @@ goog.a11y.aria.State = {
 
 
 /**
- * Enumeration of ARIA state values for live regions.
- *
- * See http://www.w3.org/TR/wai-aria/states_and_properties#aria-live
- * for more information.
+ * ARIA state values for AutoCompleteValues.
+ * @enum {string}
+ */
+goog.a11y.aria.AutoCompleteValues = {
+  // The system provides text after the caret as a suggestion
+  // for how to complete the field.
+  INLINE: 'inline',
+  // A list of choices appears from which the user can choose,
+  // but the edit box retains focus.
+  LIST: 'list',
+  // A list of choices appears and the currently selected suggestion
+  // also appears inline.
+  BOTH: 'both',
+  // No input completion suggestions are provided.
+  NONE: 'none'
+};
+
+
+/**
+ * ARIA state values for DropEffectValues.
+ * @enum {string}
+ */
+goog.a11y.aria.DropEffectValues = {
+  // A duplicate of the source object will be dropped into the target.
+  COPY: 'copy',
+  // The source object will be removed from its current location
+  // and dropped into the target.
+  MOVE: 'move',
+  // A reference or shortcut to the dragged object
+  // will be created in the target object.
+  LINK: 'link',
+  // A function supported by the drop target is
+  // executed, using the drag source as an input.
+  EXECUTE: 'execute',
+  // There is a popup menu or dialog that allows the user to choose
+  // one of the drag operations (copy, move, link, execute) and any other
+  // drag functionality, such as cancel.
+  POPUP: 'popup',
+  // No operation can be performed; effectively
+  // cancels the drag operation if an attempt is made to drop on this object.
+  NONE: 'none'
+};
+
+
+/**
+ * ARIA state values for LivePriority.
  * @enum {string}
  */
 goog.a11y.aria.LivePriority = {
-  /**
-   * Default value.  Used for live regions that should never be spoken.
-   */
+  // Updates to the region will not be presented to the user
+  // unless the assitive technology is currently focused on that region.
   OFF: 'off',
-  /**
-   * Spoke only when the user is idle.  Best option in most cases.
-   */
+  // (Background change) Assistive technologies SHOULD announce
+  // updates at the next graceful opportunity, such as at the end of
+  // speaking the current sentence or when the user pauses typing.
   POLITE: 'polite',
-  /**
-   * Spoken as soon as possible, which means that the information has a
-   * higher priority than normal, but does not necessarily interrupt
-   * immediately.
-   */
+  // This information has the highest priority and assistive
+  // technologies SHOULD notify the user immediately.
+  // Because an interruption may disorient users or cause them to not complete
+  // their current task, authors SHOULD NOT use the assertive value unless the
+  // interruption is imperative.
   ASSERTIVE: 'assertive'
+};
+
+
+/**
+ * ARIA state values for OrientationValues.
+ * @enum {string}
+ */
+goog.a11y.aria.OrientationValues = {
+  // The element is oriented vertically.
+  VERTICAL: 'vertical',
+  // The element is oriented horizontally.
+  HORIZONTAL: 'horizontal'
+};
+
+
+/**
+ * ARIA state values for RelevantValues.
+ * @enum {string}
+ */
+goog.a11y.aria.RelevantValues = {
+  // Element nodes are added to the DOM within the live region.
+  ADDITIONS: 'additions',
+  // Text or element nodes within the live region are removed from the DOM.
+  REMOVALS: 'removals',
+  // Text is added to any DOM descendant nodes of the live region.
+  TEXT: 'text',
+  // Equivalent to the combination of all values, "additions removals text".
+  ALL: 'all'
+};
+
+
+/**
+ * ARIA state values for SortValues.
+ * @enum {string}
+ */
+goog.a11y.aria.SortValues = {
+  // Items are sorted in ascending order by this column.
+  ASCENDING: 'ascending',
+  // Items are sorted in descending order by this column.
+  DESCENDING: 'descending',
+  // There is no defined sort applied to the column.
+  NONE: 'none',
+  // A sort algorithm other than ascending or descending has been applied.
+  OTHER: 'other'
+};
+
+
+/**
+ * ARIA state values for CheckedValues.
+ * @enum {string}
+ */
+goog.a11y.aria.CheckedValues = {
+  // The selectable element is checked.
+  TRUE: 'true',
+  // The selectable element is not checked.
+  FALSE: 'false',
+  // Indicates a mixed mode value for a tri-state
+  // checkbox or menuitemcheckbox.
+  MIXED: 'mixed',
+  // The element does not support being checked.
+  UNDEFINED: 'undefined'
+};
+
+
+/**
+ * ARIA state values for ExpandedValues.
+ * @enum {string}
+ */
+goog.a11y.aria.ExpandedValues = {
+  // The element, or another grouping element it controls, is expanded.
+  TRUE: 'true',
+  // The element, or another grouping element it controls, is collapsed.
+  FALSE: 'false',
+  // The element, or another grouping element
+  // it controls, is neither expandable nor collapsible; all its
+  // child elements are shown or there are no child elements.
+  UNDEFINED: 'undefined'
+};
+
+
+/**
+ * ARIA state values for GrabbedValues.
+ * @enum {string}
+ */
+goog.a11y.aria.GrabbedValues = {
+  // Indicates that the element has been "grabbed" for dragging.
+  TRUE: 'true',
+  // Indicates that the element supports being dragged.
+  FALSE: 'false',
+  // Indicates that the element does not support being dragged.
+  UNDEFINED: 'undefined'
+};
+
+
+/**
+ * ARIA state values for InvalidValues.
+ * @enum {string}
+ */
+goog.a11y.aria.InvalidValues = {
+  // There are no detected errors in the value.
+  FALSE: 'false',
+  // The value entered by the user has failed validation.
+  TRUE: 'true',
+  // A grammatical error was detected.
+  GRAMMAR: 'grammar',
+  // A spelling error was detected.
+  SPELLING: 'spelling'
+};
+
+
+/**
+ * ARIA state values for PressedValues.
+ * @enum {string}
+ */
+goog.a11y.aria.PressedValues = {
+  // The element is pressed.
+  TRUE: 'true',
+  // The element supports being pressed but is not currently pressed.
+  FALSE: 'false',
+  // Indicates a mixed mode value for a tri-state toggle button.
+  MIXED: 'mixed',
+  // The element does not support being pressed.
+  UNDEFINED: 'undefined'
+};
+
+
+/**
+ * ARIA state values for SelectedValues.
+ * @enum {string}
+ */
+goog.a11y.aria.SelectedValues = {
+  // The selectable element is selected.
+  TRUE: 'true',
+  // The selectable element is not selected.
+  FALSE: 'false',
+  // The element is not selectable.
+  UNDEFINED: 'undefined'
 };

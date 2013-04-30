@@ -1,4 +1,4 @@
-// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+// Copyright 2013 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
 
 
 /**
- * @fileoverview The file contains enumerations for ARIA roles
+ * @fileoverview The file contains generated enumerations for ARIA roles
  * as defined by W3C ARIA standard: http://www.w3.org/TR/wai-aria/.
+ *
+ * This is auto-generated code. Do not manually edit! For more details
+ * about how to edit it via the generator check go/closure-ariagen.
  */
 
 goog.provide('goog.a11y.aria.Role');
 
 
 /**
- * Enumeration of ARIA roles.
+ * ARIA role values.
  * @enum {string}
  */
 goog.a11y.aria.Role = {

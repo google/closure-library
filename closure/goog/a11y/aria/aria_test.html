@@ -14,11 +14,16 @@ Author:  attila@google.com (Attila Bodis)
   <title>Closure Unit Tests - goog.a11y.aria</title>
   <script src="../../base.js"></script>
   <script>
-    goog.require('goog.dom');
     goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.DropEffectValues');
+    goog.require('goog.a11y.aria.PressedValues');
     goog.require('goog.a11y.aria.Role');
     goog.require('goog.a11y.aria.State');
+    goog.require('goog.dom');
+    goog.require('goog.dom.iframe');
+    goog.require('goog.string');
     goog.require('goog.testing.jsunit');
+    goog.require('goog.userAgent');
   </script>
 </head>
 <body>
@@ -27,10 +32,13 @@ Author:  attila@google.com (Attila Bodis)
     var sandbox = goog.dom.getElement('sandbox');
     var someDiv;
     var someSpan;
+    var htmlButton;
 
     function setUp() {
       someDiv = goog.dom.createDom('div', {id: 'someDiv'}, 'DIV');
       someSpan = goog.dom.createDom('span', {id: 'someSpan'}, 'SPAN');
+      htmlButton = goog.dom.createDom(goog.dom.TagName.BUTTON,
+          {id: 'someButton'}, 'BUTTON');
       sandbox.appendChild(someDiv);
       someDiv.appendChild(someSpan);
     }
@@ -42,10 +50,10 @@ Author:  attila@google.com (Attila Bodis)
     }
 
     function testGetSetRole() {
-      assertEquals('someDiv\'s role should be the empty string',
-          '', goog.a11y.aria.getRole(someDiv));
-      assertEquals('someSpan\'s role should be the empty string',
-          '', goog.a11y.aria.getRole(someSpan));
+      assertEquals('someDiv\'s role should be null',
+          null, goog.a11y.aria.getRole(someDiv));
+      assertEquals('someSpan\'s role should be null',
+          null, goog.a11y.aria.getRole(someSpan));
 
       goog.a11y.aria.setRole(someDiv, goog.a11y.aria.Role.MENU);
       goog.a11y.aria.setRole(someSpan, goog.a11y.aria.Role.MENU_ITEM);
@@ -53,7 +61,8 @@ Author:  attila@google.com (Attila Bodis)
       assertEquals('someDiv\'s role should be MENU',
           goog.a11y.aria.Role.MENU, goog.a11y.aria.getRole(someDiv));
       assertEquals('someSpan\'s role should be MENU_ITEM',
-          goog.a11y.aria.Role.MENU_ITEM, goog.a11y.aria.getRole(someSpan));
+          goog.a11y.aria.Role.MENU_ITEM,
+          goog.a11y.aria.getRole(someSpan));
 
       var div = goog.dom.createElement('div');
       sandbox.appendChild(div);
@@ -65,13 +74,131 @@ Author:  attila@google.com (Attila Bodis)
     }
 
     function testGetSetState() {
-      goog.a11y.aria.setState(someDiv, goog.a11y.aria.State.LABELLEDBY,
+      assertThrows('Should throw because no state is specified.',
+          function () {
+            goog.a11y.aria.getState(someDiv)
+          });
+      assertThrows('Should throw because no state is specified.',
+          function () {
+            goog.a11y.aria.getState(someDiv)
+          });
+      goog.a11y.aria.setState(someDiv,
+          goog.a11y.aria.State.LABELLEDBY,
           'someSpan');
 
       assertEquals(
           'someDiv\'s labelledby state should be "someSpan"',
           'someSpan',
-          goog.a11y.aria.getState(someDiv, goog.a11y.aria.State.LABELLEDBY));
+      goog.a11y.aria.getState(someDiv,
+          goog.a11y.aria.State.LABELLEDBY));
+    }
+
+    function testGetStateValue() {
+      goog.a11y.aria.setState(someDiv, goog.a11y.aria.State.LABEL,
+          'test_label');
+      goog.a11y.aria.setState(someSpan, goog.a11y.aria.State.LABEL,
+      goog.a11y.aria.getStringStateInternalUtil(someDiv,
+          goog.a11y.aria.State.LABEL));
+      assertEquals(goog.a11y.aria.getState(someDiv,
+          goog.a11y.aria.State.LABEL),
+          goog.a11y.aria.getState(someSpan,
+              goog.a11y.aria.State.LABEL));
+      assertEquals('The someDiv\'s enum value should be "test_label".',
+          'test_label',
+          goog.a11y.aria.getStringStateInternalUtil(someDiv,
+              goog.a11y.aria.State.LABEL));
+      assertEquals('The someSpan\'s enum value should be "copy move".',
+          'test_label',
+          goog.a11y.aria.getStringStateInternalUtil(someSpan,
+              goog.a11y.aria.State.LABEL));
+   }
+
+   function testGetStateStringArray() {
+      goog.a11y.aria.setState(someDiv,
+           goog.a11y.aria.State.LABELLEDBY,
+           ['1', '2']);
+      goog.a11y.aria.setState(someSpan,
+           goog.a11y.aria.State.LABELLEDBY,
+           goog.a11y.aria.getStringArrayStateInternalUtil(someDiv,
+                goog.a11y.aria.State.LABELLEDBY));
+      assertEquals(goog.a11y.aria.getState(someDiv,
+          goog.a11y.aria.State.LABELLEDBY),
+          goog.a11y.aria.getState(someSpan,
+              goog.a11y.aria.State.LABELLEDBY));
+
+      assertEquals('The someDiv\'s enum value should be "1 2".', '1 2',
+          goog.a11y.aria.getState(someDiv,
+              goog.a11y.aria.State.LABELLEDBY));
+      assertEquals('The someSpan\'s enum value should be "1 2".', '1 2',
+          goog.a11y.aria.getState(someSpan,
+              goog.a11y.aria.State.LABELLEDBY));
+
+      assertSameElements('The someDiv\'s enum value should be "1 2".',
+          ['1', '2'],
+          goog.a11y.aria.getStringArrayStateInternalUtil(someDiv,
+              goog.a11y.aria.State.LABELLEDBY));
+      assertSameElements('The someSpan\'s enum value should be "1 2".',
+          ['1', '2'],
+          goog.a11y.aria.getStringArrayStateInternalUtil(someSpan,
+              goog.a11y.aria.State.LABELLEDBY));
+   }
+
+   function testGetNumberStateValue() {
+      goog.a11y.aria.setState(someDiv,
+          goog.a11y.aria.State.LEVEL, 1);
+      goog.a11y.aria.setState(someSpan,
+          goog.a11y.aria.State.LEVEL,
+          goog.a11y.aria.getNumberStateInternalUtil(someDiv,
+              goog.a11y.aria.State.LEVEL));
+      assertEquals(goog.a11y.aria.getState(someDiv,
+          goog.a11y.aria.State.LEVEL),
+          goog.a11y.aria.getState(someSpan,
+              goog.a11y.aria.State.LEVEL));
+      assertEquals('The someDiv\'s enum value should be "1".',
+          '1',
+          goog.a11y.aria.getState(someDiv,
+              goog.a11y.aria.State.LEVEL));
+      assertEquals('The someSpan\'s enum value should be "1".',
+          '1',
+          goog.a11y.aria.getState(someSpan,
+              goog.a11y.aria.State.LEVEL));
+      assertEquals('The someDiv\'s enum value should be "1".',
+          1,
+          goog.a11y.aria.getNumberStateInternalUtil(someDiv,
+              goog.a11y.aria.State.LEVEL));
+      assertEquals('The someSpan\'s enum value should be "1".',
+          1,
+          goog.a11y.aria.getNumberStateInternalUtil(someSpan,
+              goog.a11y.aria.State.LEVEL));
+    }
+
+    function testGetBooleanStateValue() {
+      goog.a11y.aria.setState(someDiv,
+          goog.a11y.aria.State.MULTILINE, true);
+      goog.a11y.aria.setState(someSpan,
+          goog.a11y.aria.State.MULTILINE,
+          goog.a11y.aria.getBooleanStateInternalUtil(someDiv,
+              goog.a11y.aria.State.MULTILINE));
+      assertEquals(goog.a11y.aria.getState(someDiv,
+          goog.a11y.aria.State.MULTILINE),
+          goog.a11y.aria.getState(someSpan,
+              goog.a11y.aria.State.MULTILINE));
+      assertEquals('The someDiv\'s enum value should be "true".',
+          'true',
+          goog.a11y.aria.getState(someDiv,
+              goog.a11y.aria.State.MULTILINE));
+      assertEquals('The someSpan\'s enum value should be "true".',
+          'true',
+          goog.a11y.aria.getState(someSpan,
+              goog.a11y.aria.State.MULTILINE));
+      assertEquals('The someDiv\'s enum value should be "true".',
+          true,
+          goog.a11y.aria.getBooleanStateInternalUtil(someDiv,
+              goog.a11y.aria.State.MULTILINE));
+      assertEquals('The someSpan\'s enum value should be "true".',
+          true,
+          goog.a11y.aria.getBooleanStateInternalUtil(someSpan,
+              goog.a11y.aria.State.MULTILINE));
     }
 
     function testGetSetActiveDescendant() {
