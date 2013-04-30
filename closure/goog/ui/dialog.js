@@ -1017,9 +1017,9 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
     // Only handle ENTER in keypress events, in case the action opens a
     // popup window.
     var key;
-    if (target.tagName == 'BUTTON') {
-      // If focus was on a button, it must have been enabled, so we can fire
-      // that button's handler.
+    if (target.tagName == 'BUTTON' && !target.disabled) {
+      // If the target is a button and it's enabled, we can fire that button's
+      // handler.
       key = target.name;
     } else if (buttonSet) {
       // Try to fire the default button's handler (if one exists), but only if

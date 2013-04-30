@@ -149,6 +149,22 @@ See the COPYING file for details.
     assertTrue(wasCalled);
   }
 
+  function testEnterKeyOnDisabledDefaultButtonDoesNotDispatchSelectEvents() {
+    var okButton = dialog.getButtonElement().getElementsByTagName('BUTTON')[1];
+    okButton.focus();
+
+    var callRecorder = goog.testing.recordFunction();
+    goog.events.listen(dialog, goog.ui.Dialog.EventType.SELECT, callRecorder);
+
+    okButton.disabled = true;
+    goog.testing.events.fireKeySequence(okButton, goog.events.KeyCodes.ENTER);
+    assertEquals(0, callRecorder.getCallCount());
+
+    okButton.disabled = false;
+    goog.testing.events.fireKeySequence(okButton, goog.events.KeyCodes.ENTER);
+    assertEquals(1, callRecorder.getCallCount());
+  }
+
   function testEnterKeyDoesNothingOnSpecialFormElements() {
     checkEnterKeyDoesNothingOnSpecialFormElement(
         '<textarea>Hello dialog</textarea>',
