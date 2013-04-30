@@ -27,10 +27,6 @@ _BASE_REGEX_STRING = '^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
 _PROVIDE_REGEX = re.compile(_BASE_REGEX_STRING % 'provide')
 _REQUIRES_REGEX = re.compile(_BASE_REGEX_STRING % 'require')
 
-# This line identifies base.js and should match the line in that file.
-_GOOG_BASE_LINE = (
-    'var goog = goog || {}; // Identifies this file as the Closure base.')
-
 
 class Source(object):
   """Scans a JavaScript source for its provided and required namespaces."""
@@ -71,12 +67,21 @@ class Source(object):
   def _StripComments(cls, source):
     return cls._COMMENT_REGEX.sub('', source)
 
+  @classmethod
+  def _HasProvideGoogFlag(cls, source):
+    """Determines whether the @provideGoog flag is in a comment."""
+    for comment_content in cls._COMMENT_REGEX.findall(source):
+      if '@provideGoog' in comment_content:
+        return True
+
+    return False
+
   def _ScanSource(self):
     """Fill in provides and requires by scanning the source."""
 
-    source = self._StripComments(self.GetSource())
+    stripped_source = self._StripComments(self.GetSource())
 
-    source_lines = source.splitlines()
+    source_lines = stripped_source.splitlines()
     for line in source_lines:
       match = _PROVIDE_REGEX.match(line)
       if match:
@@ -86,12 +91,14 @@ class Source(object):
         self.requires.add(match.group(1))
 
     # Closure's base file implicitly provides 'goog'.
-    for line in source_lines:
-      if line == _GOOG_BASE_LINE:
-        if len(self.provides) or len(self.requires):
-          raise Exception(
-              'Base files should not provide or require namespaces.')
-        self.provides.add('goog')
+    # This is indicated with the @provideGoog flag.
+    if self._HasProvideGoogFlag(self.GetSource()):
+
+      if len(self.provides) or len(self.requires):
+        raise Exception(
+            'Base file should not provide or require namespaces.')
+
+      self.provides.add('goog')
 
 
 def GetFileContents(path):

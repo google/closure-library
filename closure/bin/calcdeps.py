@@ -274,9 +274,10 @@ def FindClosureBasePath(paths):
       is_base = False
 
       # Sanity check that this is the Closure base file.  Check that this
-      # is where goog is defined.
+      # is where goog is defined.  This is determined by the @provideGoog
+      # flag.
       for line in f:
-        if line.startswith('var goog = goog || {};'):
+        if '@provideGoog' in line:
           is_base = True
           break
 
