@@ -973,14 +973,13 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  * Clients of this API may call {@code addChild} and {@code addChildAt} with
  * {@code opt_render} set to true.  If {@code opt_render} is true, calling these
  * methods will automatically render the child component's element into the
- * parent component's element.  However, {@code parent.addChild(child, true)}
- * will throw an error if:
- *  <ul>
- *    <li>the parent component has no DOM (i.e. {@code parent.getElement()} is
- *        null), or
- *    <li>the child component is already in the document, regardless of the
- *        parent's DOM state.
- *  </ul>
+ * parent component's element. If the parent does not yet have an element, then
+ * {@code createDom} will automatically be invoked on the parent before
+ * rendering the child.
+ *
+ * Invoking {@code parent.addChild(child, true)} will throw an error if the
+ * child component is already in the document, regardless of the parent's DOM
+ * state.
  *
  * If {@code opt_render} is true and the parent component is not already
  * in the document, {@code enterDocument} will not be called on this component
