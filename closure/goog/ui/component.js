@@ -60,7 +60,7 @@ goog.inherits(goog.ui.Component, goog.events.EventTarget);
  *     document, and avoid calling enterDocument if it isn't. If false, we
  *     maintain legacy behavior (always call enterDocument from decorate).
  */
-goog.ui.Component.ALLOW_DETACHED_DECORATION = false;
+goog.define('goog.ui.Component.ALLOW_DETACHED_DECORATION', false);
 
 
 /**

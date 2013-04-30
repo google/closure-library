@@ -83,7 +83,7 @@ goog.labs.classdef.defineClass = function(superClass, def) {
  * @define {boolean} Whether the instances returned by
  * goog.labs.classdef.defineClass should be sealed when possible.
  */
-goog.labs.classdef.SEAL_CLASS_INSTANCES = goog.DEBUG;
+goog.define('goog.labs.classdef.SEAL_CLASS_INSTANCES', goog.DEBUG);
 
 
 /**

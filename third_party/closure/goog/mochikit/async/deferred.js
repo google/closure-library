@@ -168,7 +168,7 @@ goog.async.Deferred.prototype.branches_ = 0;
  * @define {boolean} Whether unhandled errors should always get rethrown to the
  * global scope. Defaults to the value of goog.DEBUG.
  */
-goog.async.Deferred.STRICT_ERRORS = false;
+goog.define('goog.async.Deferred.STRICT_ERRORS', false);
 
 
 /**

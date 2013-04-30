@@ -48,14 +48,14 @@ goog.require('goog.userAgent');
  * @define {boolean} Whether we know at compile time that the browser is in
  * quirks mode.
  */
-goog.dom.ASSUME_QUIRKS_MODE = false;
+goog.define('goog.dom.ASSUME_QUIRKS_MODE', false);
 
 
 /**
  * @define {boolean} Whether we know at compile time that the browser is in
  * standards compliance mode.
  */
-goog.dom.ASSUME_STANDARDS_MODE = false;
+goog.define('goog.dom.ASSUME_STANDARDS_MODE', false);
 
 
 /**

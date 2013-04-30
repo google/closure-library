@@ -27,7 +27,7 @@ goog.require('goog.userAgent');
 
 
 /** @define {boolean} Whether logging should be enabled. */
-goog.debug.LOGGING_ENABLED = goog.DEBUG;
+goog.define('goog.debug.LOGGING_ENABLED', goog.DEBUG);
 
 
 /**
