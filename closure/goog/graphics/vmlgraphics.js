@@ -793,6 +793,7 @@ goog.graphics.VmlGraphics.prototype.drawPath = function(path, stroke, fill,
  *
  * @param {goog.graphics.Path} path The logical path.
  * @return {string} The VML path representation.
+ * @suppress {deprecated} goog.graphics is deprecated.
  */
 goog.graphics.VmlGraphics.getVmlPath = function(path) {
   var list = [];

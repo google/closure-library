@@ -401,6 +401,7 @@ goog.graphics.CanvasPathElement.prototype.setPath = function(path) {
 /**
  * Draw the path.  Should be treated as package scope.
  * @param {CanvasRenderingContext2D} ctx The context to draw the element in.
+ * @suppress {deprecated} goog.graphics is deprecated.
  */
 goog.graphics.CanvasPathElement.prototype.draw = function(ctx) {
   this.drawn_ = true;

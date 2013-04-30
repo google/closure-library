@@ -655,6 +655,7 @@ goog.graphics.SvgGraphics.prototype.drawPath = function(
  *
  * @param {goog.graphics.Path} path The logical path.
  * @return {string} The SVG path representation.
+ * @suppress {deprecated} goog.graphics is deprecated.
  */
 goog.graphics.SvgGraphics.getSvgPath = function(path) {
   var list = [];

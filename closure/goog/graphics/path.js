@@ -106,6 +106,7 @@ goog.graphics.Path.Segment = {
  * The number of points for each segment type.
  * @type {!Array.<number>}
  * @private
+ * @suppress {deprecated} goog.graphics.Path is deprecated.
  */
 goog.graphics.Path.segmentArgCounts_ = (function() {
   var counts = [];
@@ -433,6 +434,7 @@ goog.graphics.Path.prototype.isSimple = function() {
  * A map from segment type to the path function to call to simplify a path.
  * @type {!Object}
  * @private
+ * @suppress {deprecated} goog.graphics.Path is deprecated.
  */
 goog.graphics.Path.simplifySegmentMap_ = (function() {
   var map = {};
@@ -454,6 +456,7 @@ goog.graphics.Path.simplifySegmentMap_ = (function() {
  *
  * @param {!goog.graphics.Path} src The path to simplify.
  * @return {!goog.graphics.Path} A new simplified path.
+ * @suppress {deprecated} goog.graphics is deprecated.
  */
 goog.graphics.Path.createSimplifiedPath = function(src) {
   if (src.isSimple()) {
