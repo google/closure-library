@@ -15,6 +15,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
 goog.require('goog.dom');
+goog.require('goog.math.Box');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.OverflowStatus');
@@ -126,6 +127,47 @@ function testAdjustCorner() {
       goog.positioning.OverflowStatus.FAILED_VERTICAL |
       goog.positioning.OverflowStatus.FAILED_HORIZONTAL,
       corner.BOTTOM_LEFT));
+}
+
+// No space to fit, so uses fallback.
+function testOverflowConstraint() {
+  var tinyBox = new goog.math.Box(0, 0, 0, 0);
+  var avp = new goog.positioning.AnchoredViewportPosition(
+      anchor, corner.BOTTOM_LEFT, false, tinyBox);
+  assertEquals(tinyBox, avp.getOverflowConstraint());
+
+  goog.style.setSize(anchor, 50, 50);
+  goog.style.setPosition(anchor, 80, 80);
+  avp.reposition(popup, corner.TOP_LEFT);
+
+  anchorRect = goog.style.getBounds(anchor);
+  popupRect = goog.style.getBounds(popup);
+  assertEquals(anchorRect.left, popupRect.left);
+  assertEquals(anchorRect.top + anchorRect.height, popupRect.top);
+}
+
+// Initially no space to fit above, then changes to have room.
+function testChangeOverflowConstraint() {
+  var tinyBox = new goog.math.Box(0, 0, 0, 0);
+  var avp = new goog.positioning.AnchoredViewportPosition(
+      anchor, corner.BOTTOM_LEFT, false, tinyBox);
+  assertEquals(tinyBox, avp.getOverflowConstraint());
+
+  goog.style.setSize(anchor, 50, 50);
+  goog.style.setPosition(anchor, 80, 80);
+
+  avp.reposition(popup, corner.TOP_LEFT);
+  popupRect = goog.style.getBounds(popup);
+  assertNotEquals(60, popupRect.top);
+
+  var movedBox = new goog.math.Box(60, 100, 100, 60);
+  avp.setOverflowConstraint(movedBox);
+  assertEquals(movedBox, avp.getOverflowConstraint());
+
+  avp.reposition(popup, corner.TOP_LEFT);
+  popupRect = goog.style.getBounds(popup);
+  assertEquals(80, popupRect.left);
+  assertEquals(60, popupRect.top);
 }
 </script>
 </body>
