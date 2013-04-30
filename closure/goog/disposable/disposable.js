@@ -73,7 +73,7 @@ goog.Disposable.MonitoringMode = {
  *     performance and memory usage. If switched off, the monitoring code
  *     compiles down to 0 bytes.
  */
-goog.define('goog.Disposable.MONITORING_MODE', 0);
+goog.Disposable.MONITORING_MODE = 0;
 
 
 /**

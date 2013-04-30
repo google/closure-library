@@ -89,7 +89,7 @@ goog.crypt.Aes = function(key) {
  * @define {boolean} Whether to call test method stubs.  This can be enabled
  *     for unit testing.
  */
-goog.define('goog.crypt.Aes.ENABLE_TEST_MODE', false);
+goog.crypt.Aes.ENABLE_TEST_MODE = false;
 
 
 /**

@@ -30,7 +30,7 @@ goog.require('goog.debug.Logger');
 
 
 /** @define {boolean} Whether logging is enabled. */
-goog.define('goog.log.ENABLED', goog.debug.LOGGING_ENABLED);
+goog.log.ENABLED = goog.debug.LOGGING_ENABLED;
 
 
 /** @typedef {goog.debug.Logger} */

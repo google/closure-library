@@ -47,7 +47,7 @@ goog.testing.jsunit.CORE_SCRIPT =
  * @define {boolean} If this code is being parsed by JsTestC, we let it disable
  * the onload handler to avoid running the test in JsTestC.
  */
-goog.define('goog.testing.jsunit.AUTO_RUN_ONLOAD', true);
+goog.testing.jsunit.AUTO_RUN_ONLOAD = true;
 
 
 (function() {

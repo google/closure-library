@@ -35,7 +35,7 @@ goog.require('goog.string');
  * If this flag is enabled, Soy templates will fail to render if a template
  * returns plain text -- indicating it is a non-strict template.
  */
-goog.define('goog.soy.REQUIRE_STRICT_AUTOESCAPE', false);
+goog.soy.REQUIRE_STRICT_AUTOESCAPE = false;
 
 
 /**
