@@ -13,11 +13,11 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.array');
-    goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.LogManager');
     goog.require('goog.events');
-    goog.require('goog.log');
     goog.require('goog.object');
+    goog.require('goog.debug.DivConsole');
+    goog.require('goog.debug.Logger');
+    goog.require('goog.debug.LogManager');
     goog.require('goog.ui.CustomButton');
     goog.require('goog.ui.ImagelessButtonRenderer');
     goog.require('goog.ui.ToggleButton');
@@ -123,15 +123,15 @@ See the COPYING file for details.
 
     // Set up a logger.
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    var logger = goog.log.getLogger('demo');
+    var logger = goog.debug.Logger.getLogger('demo');
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-    goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
+    logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
 
     function logEvent(e) {
-      goog.log.info(logger, '"' + e.target.getCaption() + '" dispatched: ' + e.type);
+      logger.info('"' + e.target.getCaption() + '" dispatched: ' + e.type);
     }
 
     // Create some buttons using CustomButton with the

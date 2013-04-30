@@ -11,10 +11,10 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
 goog.require('goog.debug.DivConsole');
+goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.InputHandler');
-goog.require('goog.log');
 </script>
 <link rel="stylesheet" href="css/demo.css">
 </head>
@@ -38,7 +38,7 @@ goog.require('goog.log');
 
 <script>
 var $ = goog.dom.getElement;
-var logger = goog.log.getLogger('demo');
+var logger = goog.debug.Logger.getLogger('demo');
 var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
 
 goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.FINER);
@@ -51,7 +51,7 @@ var INPUTHANDLER_EVENTS =
 
 
 function logEvent(src, e) {
-  goog.log.info(logger, '[Event from ' + src + ']:  ' + e.type);
+  logger.info('[Event from ' + src + ']:  ' + e.type);
 }
 
 function addSome(id) {

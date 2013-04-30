@@ -115,7 +115,7 @@ goog.ds.JsXmlHttpDataSource.prototype.setQueryData = function(data) {
  * @override
  */
 goog.ds.JsXmlHttpDataSource.prototype.load = function() {
-  goog.log.info(goog.ds.logger, 'Sending JS request for DataSource ' +
+  goog.ds.logger.info('Sending JS request for DataSource ' +
       this.getDataName() + ' to ' + this.uri_);
 
   if (this.uri_) {
@@ -157,8 +157,7 @@ goog.ds.JsXmlHttpDataSource.prototype.success_ = function()  {
  */
 goog.ds.JsXmlHttpDataSource.prototype.completed_ = function(e) {
   if (this.xhr_.isSuccess()) {
-    goog.log.info(goog.ds.logger, 'Got data for DataSource ' +
-        this.getDataName());
+    goog.ds.logger.info('Got data for DataSource ' + this.getDataName());
     var text = this.xhr_.getResponseText();
 
     // Look for start and end token and trim text
@@ -181,13 +180,13 @@ goog.ds.JsXmlHttpDataSource.prototype.completed_ = function(e) {
     catch (ex) {
       // Invalid JS
       this.loadState_ = goog.ds.LoadState.FAILED;
-      goog.log.error(goog.ds.logger, 'Failed to parse data: ' + ex.message);
+      goog.ds.logger.severe('Failed to parse data: ' + ex.message);
     }
 
     // Call on a timer to avoid threading issues on IE.
     goog.global.setTimeout(goog.bind(this.success_, this), 0);
   } else {
-    goog.log.info(goog.ds.logger, 'Data retrieve failed for DataSource ' +
+    goog.ds.logger.info('Data retrieve failed for DataSource ' +
         this.getDataName());
     this.loadState_ = goog.ds.LoadState.FAILED;
   }

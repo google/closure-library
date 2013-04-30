@@ -22,11 +22,11 @@ goog.provide('goog.gears.LogStore.Query');
 goog.require('goog.async.Delay');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.LogRecord');
+goog.require('goog.debug.Logger');
 goog.require('goog.debug.Logger.Level');
 goog.require('goog.gears.BaseStore');
 goog.require('goog.gears.BaseStore.SchemaType');
 goog.require('goog.json');
-goog.require('goog.log');
 
 
 
@@ -140,11 +140,11 @@ goog.gears.LogStore.prototype.isFlushing_ = false;
 
 /**
  * Logger.
- * @const
+ * @type {goog.debug.Logger}
  * @private
  */
 goog.gears.LogStore.prototype.logger_ =
-    goog.log.getLogger('goog.gears.LogStore');
+    goog.debug.Logger.getLogger('goog.gears.LogStore');
 
 
 /**
@@ -189,7 +189,7 @@ goog.gears.LogStore.prototype.flush = function() {
   this.isFlushing_ = true;
 
   // Grab local copy of records so database can log during this process.
-  goog.log.info(this.logger_, 'flushing ' + this.records_.length + ' records');
+  this.logger_.info('flushing ' + this.records_.length + ' records');
   var records = this.records_;
   this.records_ = [];
 
@@ -284,7 +284,7 @@ goog.gears.LogStore.prototype.pruneBeforeCount = function(opt_count) {
   }
   var count = typeof opt_count == 'number' ?
       opt_count : goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_;
-  goog.log.info(this.logger_, 'pruning before ' + count + ' records ago');
+  this.logger_.info('pruning before ' + count + ' records ago');
   this.flush();
   this.getDatabaseInternal().execute('DELETE FROM ' + this.tableName_ +
       ' WHERE id <= ((SELECT MAX(id) FROM ' + this.tableName_ + ') - ?)',
@@ -301,8 +301,7 @@ goog.gears.LogStore.prototype.pruneBeforeSequenceNumber =
   if (!this.getDatabaseInternal()) {
     return;
   }
-  goog.log.info(this.logger_, 'pruning before sequence number ' +
-      sequenceNumber);
+  this.logger_.info('pruning before sequence number ' + sequenceNumber);
   this.flush();
   this.getDatabaseInternal().execute(
       'DELETE FROM ' + this.tableName_ + ' WHERE id <= ?',
@@ -330,11 +329,11 @@ goog.gears.LogStore.prototype.setCapturing = function(capturing) {
     // Attach or detach handler from the root logger.
     var rootLogger = goog.debug.LogManager.getRoot();
     if (capturing) {
-      goog.log.addHandler(rootLogger, this.publishHandler_);
-      goog.log.info(this.logger_, 'enabled');
+      rootLogger.addHandler(this.publishHandler_);
+      this.logger_.info('enabled');
     } else {
-      goog.log.info(this.logger_, 'disabling');
-      goog.log.removeHandler(rootLogger, this.publishHandler_);
+      this.logger_.info('disabling');
+      rootLogger.removeHandler(this.publishHandler_);
     }
   }
 };

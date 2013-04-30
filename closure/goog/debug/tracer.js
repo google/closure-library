@@ -21,8 +21,8 @@
 goog.provide('goog.debug.Trace');
 
 goog.require('goog.array');
+goog.require('goog.debug.Logger');
 goog.require('goog.iter');
-goog.require('goog.log');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.SimplePool');
 
@@ -153,11 +153,11 @@ goog.debug.Trace_ = function() {
 
 /**
  * Logger for the tracer
- * @const
+ * @type {goog.debug.Logger}
  * @private
  */
 goog.debug.Trace_.prototype.logger_ =
-    goog.log.getLogger('goog.debug.Trace');
+    goog.debug.Logger.getLogger('goog.debug.Trace');
 
 
 /**
@@ -394,7 +394,7 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
   var varAlloc = this.getTotalVarAlloc();
   var outstandingEventCount = this.outstandingEvents_.getCount();
   if (this.events_.length + outstandingEventCount > this.MAX_TRACE_SIZE) {
-    goog.log.warning(this.logger_, 'Giant thread trace. Clearing to ' +
+    this.logger_.warning('Giant thread trace. Clearing to ' +
                          'avoid memory leak.');
     // This is the more likely case. This usually means that we
     // either forgot to clear the trace or else we are performing a

@@ -33,9 +33,9 @@ goog.provide('goog.crypt.BlobHasher.EventType');
 goog.require('goog.asserts');
 goog.require('goog.crypt');
 goog.require('goog.crypt.Hash');
+goog.require('goog.debug.Logger');
 goog.require('goog.events.EventTarget');
 goog.require('goog.fs');
-goog.require('goog.log');
 
 
 
@@ -101,10 +101,10 @@ goog.crypt.BlobHasher = function(hashFn, opt_blockSize) {
 
   /**
    * The logger used by this object.
-   * @const
+   * @type {!goog.debug.Logger}
    * @private
    */
-  this.logger_ = goog.log.getLogger('goog.crypt.BlobHasher');
+  this.logger_ = goog.debug.Logger.getLogger('goog.crypt.BlobHasher');
 };
 goog.inherits(goog.crypt.BlobHasher, goog.events.EventTarget);
 
@@ -222,7 +222,7 @@ goog.crypt.BlobHasher.prototype.processNextBlock_ = function() {
     var chunk = goog.fs.sliceBlob(this.blob_, this.bytesProcessed_,
                                   this.bytesProcessed_ + size);
     if (!chunk || chunk.size != size) {
-      goog.log.error(this.logger_, 'Failed slicing the blob');
+      this.logger_.severe('Failed slicing the blob');
       this.onError_();
       return;
     }
@@ -232,7 +232,7 @@ goog.crypt.BlobHasher.prototype.processNextBlock_ = function() {
     } else if (this.fileReader_.readAsBinaryString) {
       this.fileReader_.readAsBinaryString(chunk);
     } else {
-      goog.log.error(this.logger_, 'Failed calling the chunk reader');
+      this.logger_.severe('Failed calling the chunk reader');
       this.onError_();
     }
   } else {
@@ -248,7 +248,7 @@ goog.crypt.BlobHasher.prototype.processNextBlock_ = function() {
  * @private
  */
 goog.crypt.BlobHasher.prototype.onLoad_ = function() {
-  goog.log.info(this.logger_, 'Successfully loaded a chunk');
+  this.logger_.info('Successfully loaded a chunk');
 
   var array = null;
   if (this.fileReader_.result instanceof Array ||
@@ -259,7 +259,7 @@ goog.crypt.BlobHasher.prototype.onLoad_ = function() {
     array = new Uint8Array(this.fileReader_.result);
   }
   if (!array) {
-    goog.log.error(this.logger_, 'Failed reading the chunk');
+    this.logger_.severe('Failed reading the chunk');
     this.onError_();
     return;
   }

@@ -25,8 +25,8 @@ goog.provide('goog.messaging.AbstractChannel');
 
 goog.require('goog.Disposable');
 goog.require('goog.debug');
+goog.require('goog.debug.Logger');
 goog.require('goog.json');
-goog.require('goog.log');
 goog.require('goog.messaging.MessageChannel'); // interface
 
 
@@ -63,11 +63,11 @@ goog.messaging.AbstractChannel.prototype.defaultService_;
 
 /**
  * Logger for this class.
- * @type {goog.log.Logger}
+ * @type {goog.debug.Logger}
  * @protected
  */
 goog.messaging.AbstractChannel.prototype.logger =
-    goog.log.getLogger('goog.messaging.AbstractChannel');
+    goog.debug.Logger.getLogger('goog.messaging.AbstractChannel');
 
 
 /**
@@ -166,7 +166,7 @@ goog.messaging.AbstractChannel.prototype.getService = function(
     return {callback: callback, objectPayload: objectPayload};
   }
 
-  goog.log.warning(this.logger, 'Unknown service name "' + serviceName + '"');
+  this.logger.warning('Unknown service name "' + serviceName + '"');
   return null;
 };
 
@@ -189,7 +189,7 @@ goog.messaging.AbstractChannel.prototype.decodePayload = function(
     try {
       return goog.json.parse(payload);
     } catch (err) {
-      goog.log.warning(this.logger, 'Expected JSON payload for ' + serviceName +
+      this.logger.warning('Expected JSON payload for ' + serviceName +
                           ', was "' + payload + '"');
       return null;
     }

@@ -38,12 +38,12 @@ goog.provide('goog.events.PasteHandler.State');
 
 goog.require('goog.Timer');
 goog.require('goog.async.ConditionalDelay');
+goog.require('goog.debug.Logger');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
-goog.require('goog.log');
 goog.require('goog.userAgent');
 
 
@@ -201,11 +201,11 @@ goog.events.PasteHandler.prototype.previousEvent_;
 
 /**
  * A logger, used to help us debug the algorithm.
- * @const
+ * @type {goog.debug.Logger}
  * @private
  */
 goog.events.PasteHandler.prototype.logger_ =
-    goog.log.getLogger('goog.events.PasteHandler');
+    goog.debug.Logger.getLogger('goog.events.PasteHandler');
 
 
 /** @override */
@@ -249,7 +249,7 @@ goog.events.PasteHandler.prototype.checkUpdatedText_ = function() {
   if (this.oldValue_ == this.element_.value) {
     return false;
   }
-  goog.log.info(this.logger_, 'detected textchange after paste');
+  this.logger_.info('detected textchange after paste');
   this.dispatchEvent(goog.events.PasteHandler.EventType.AFTER_PASTE);
   return true;
 };
@@ -346,12 +346,12 @@ goog.events.PasteHandler.prototype.handleEvent_ = function(e) {
       break;
     }
     default: {
-      goog.log.error(this.logger_, 'invalid ' + this.state_ + ' state');
+      this.logger_.severe('invalid ' + this.state_ + ' state');
     }
   }
   this.lastTime_ = goog.now();
   this.oldValue_ = this.element_.value;
-  goog.log.info(this.logger_, e.type + ' -> ' + this.state_);
+  this.logger_.info(e.type + ' -> ' + this.state_);
   this.previousEvent_ = e.type;
 };
 
@@ -382,14 +382,13 @@ goog.events.PasteHandler.prototype.handleUnderInit_ = function(e) {
     case goog.events.EventType.MOUSEOVER: {
       this.state_ = goog.events.PasteHandler.State.INIT;
       if (this.element_.value != this.oldValue_) {
-        goog.log.info(this.logger_, 'paste by dragdrop while on init!');
+        this.logger_.info('paste by dragdrop while on init!');
         this.dispatch_(e);
       }
       break;
     }
     default: {
-      goog.log.error(this.logger_,
-          'unexpected event ' + e.type + 'during init');
+      this.logger_.severe('unexpected event ' + e.type + 'during init');
     }
   }
 };
@@ -434,7 +433,7 @@ goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
               MANDATORY_MS_BETWEEN_INPUT_EVENTS_TIE_BREAKER;
       if (goog.now() > minimumMilisecondsBetweenInputEvents ||
           this.previousEvent_ == goog.events.EventType.FOCUS) {
-        goog.log.info(this.logger_, 'paste by textchange while focused!');
+        this.logger_.info('paste by textchange while focused!');
         this.dispatch_(e);
       }
       break;
@@ -444,7 +443,7 @@ goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
       break;
     }
     case goog.events.EventType.KEYDOWN: {
-      goog.log.info(this.logger_, 'key down ... looking for ctrl+v');
+      this.logger_.info('key down ... looking for ctrl+v');
       // Opera + MAC does not set e.ctrlKey. Instead, it gives me e.keyCode = 0.
       // http://www.quirksmode.org/js/keys.html
       if (goog.userAgent.MAC && goog.userAgent.OPERA && e.keyCode == 0 ||
@@ -456,14 +455,13 @@ goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
     }
     case goog.events.EventType.MOUSEOVER: {
       if (this.element_.value != this.oldValue_) {
-        goog.log.info(this.logger_, 'paste by dragdrop while focused!');
+        this.logger_.info('paste by dragdrop while focused!');
         this.dispatch_(e);
       }
       break;
     }
     default: {
-      goog.log.error(this.logger_,
-          'unexpected event ' + e.type + ' during focused');
+      this.logger_.severe('unexpected event ' + e.type + ' during focused');
     }
   }
 };
@@ -495,21 +493,20 @@ goog.events.PasteHandler.prototype.handleUnderTyping_ = function(e) {
       if (e.ctrlKey && e.keyCode == goog.events.KeyCodes.V ||
           e.shiftKey && e.keyCode == goog.events.KeyCodes.INSERT ||
           e.metaKey && e.keyCode == goog.events.KeyCodes.V) {
-        goog.log.info(this.logger_, 'paste by ctrl+v while keypressed!');
+        this.logger_.info('paste by ctrl+v while keypressed!');
         this.dispatch_(e);
       }
       break;
     }
     case goog.events.EventType.MOUSEOVER: {
       if (this.element_.value != this.oldValue_) {
-        goog.log.info(this.logger_, 'paste by dragdrop while keypressed!');
+        this.logger_.info('paste by dragdrop while keypressed!');
         this.dispatch_(e);
       }
       break;
     }
     default: {
-      goog.log.error(this.logger_,
-          'unexpected event ' + e.type + ' during keypressed');
+      this.logger_.severe('unexpected event ' + e.type + ' during keypressed');
     }
   }
 };

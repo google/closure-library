@@ -27,11 +27,11 @@ goog.provide('goog.editor.Table');
 goog.provide('goog.editor.TableCell');
 goog.provide('goog.editor.TableRow');
 
+goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.log');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
 
@@ -46,7 +46,7 @@ goog.editor.Table = function(node) {
   this.element = goog.dom.getAncestorByTagNameAndClass(node,
       goog.dom.TagName.TABLE);
   if (!this.element) {
-    goog.log.error(this.logger_,
+    this.logger_.severe(
         "Can't create Table based on a node " +
         "that isn't a table, or descended from a table.");
   }
@@ -57,11 +57,11 @@ goog.editor.Table = function(node) {
 
 /**
  * Logger object for debugging and error messages.
- * @type {goog.log.Logger}
+ * @type {goog.debug.Logger}
  * @private
  */
 goog.editor.Table.prototype.logger_ =
-    goog.log.getLogger('goog.editor.Table');
+    goog.debug.Logger.getLogger('goog.editor.Table');
 
 
 /**
@@ -231,7 +231,7 @@ goog.editor.Table.prototype.insertColumn = function(opt_colIndex) {
 goog.editor.Table.prototype.removeRow = function(rowIndex) {
   var row = this.rows[rowIndex];
   if (!row) {
-    goog.log.warning(this.logger_,
+    this.logger_.warning(
         "Can't remove row at position " + rowIndex + ': no such row.');
   }
   for (var i = 0, cell; cell = row.columns[i]; i += cell.colSpan) {
@@ -257,7 +257,7 @@ goog.editor.Table.prototype.removeColumn = function(colIndex) {
   for (var i = 0, row; row = this.rows[i]; i++) {
     var cell = row.columns[colIndex];
     if (!cell) {
-      goog.log.error(this.logger_,
+      this.logger_.severe(
           "Can't remove cell at position " + i + ', ' + colIndex +
           ': no such cell.');
     }
@@ -289,7 +289,7 @@ goog.editor.Table.prototype.mergeCells = function(
   var cells = [];
   var cell;
   if (startRowIndex == endRowIndex && startColIndex == endColIndex) {
-    goog.log.warning(this.logger_, "Can't merge single cell");
+    this.logger_.warning("Can't merge single cell");
     return false;
   }
   // Gather cells and do sanity check.
@@ -300,7 +300,7 @@ goog.editor.Table.prototype.mergeCells = function(
           cell.endRow > endRowIndex ||
           cell.startCol < startColIndex ||
           cell.endCol > endColIndex) {
-        goog.log.warning(this.logger_,
+        this.logger_.warning(
             "Can't merge cells: the cell in row " + i + ', column ' + j +
             'extends outside the supplied rectangle.');
         return false;

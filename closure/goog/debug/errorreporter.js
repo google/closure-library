@@ -23,11 +23,11 @@ goog.provide('goog.debug.ErrorReporter.ExceptionEvent');
 
 goog.require('goog.debug');
 goog.require('goog.debug.ErrorHandler');
+goog.require('goog.debug.Logger');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
-goog.require('goog.log');
 goog.require('goog.net.XhrIo');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -140,11 +140,11 @@ goog.debug.ErrorReporter.prototype.extraHeaders_;
 /**
  * Logging object.
  *
- * @const
+ * @type {goog.debug.Logger}
  * @private
  */
 goog.debug.ErrorReporter.logger_ =
-    goog.log.getLogger('goog.debug.ErrorReporter');
+    goog.debug.Logger.getLogger('goog.debug.ErrorReporter');
 
 
 /**
@@ -268,8 +268,8 @@ goog.debug.ErrorReporter.prototype.handleException = function(e,
     try {
       this.contextProvider_(error, context);
     } catch (err) {
-      goog.log.error(goog.debug.ErrorReporter.logger_,
-          'Context provider threw an ' + 'exception: ' + err.message);
+      goog.debug.ErrorReporter.logger_.severe('Context provider threw an ' +
+          'exception: ' + err.message);
     }
   }
   this.sendErrorReport(error.message, error.fileName, error.lineNumber,
@@ -323,7 +323,7 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
         'line:', line, '\n',
         'error:', message, '\n',
         'trace:', opt_trace);
-    goog.log.info(goog.debug.ErrorReporter.logger_, logMessage);
+    goog.debug.ErrorReporter.logger_.info(logMessage);
   }
 };
 

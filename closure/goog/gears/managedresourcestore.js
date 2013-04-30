@@ -22,10 +22,10 @@ goog.provide('goog.gears.ManagedResourceStore.EventType');
 goog.provide('goog.gears.ManagedResourceStore.UpdateStatus');
 goog.provide('goog.gears.ManagedResourceStoreEvent');
 
+goog.require('goog.debug.Logger');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.gears');
-goog.require('goog.log');
 goog.require('goog.string');
 
 
@@ -62,7 +62,7 @@ goog.gears.ManagedResourceStore = function(name, requiredCookie,
 
   this.name_ = goog.gears.makeSafeFileName(name);
   if (name != this.name_) {
-    goog.log.info(this.logger_,
+    this.logger_.info(
         'managed resource store name ' + name + '->' + this.name_);
   }
 
@@ -97,11 +97,11 @@ goog.gears.ManagedResourceStore.UpdateStatus = {
 
 /**
  * Logger.
- * @const
+ * @type {goog.debug.Logger}
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.logger_ =
-    goog.log.getLogger('goog.gears.ManagedResourceStore');
+    goog.debug.Logger.getLogger('goog.gears.ManagedResourceStore');
 
 
 /**

@@ -13,13 +13,13 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.gears.LogStore</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.debug.Logger');
   goog.require('goog.debug.LogManager');
-  goog.require('goog.gears.Database');
   goog.require('goog.gears.LogStore');
-  goog.require('goog.log');
-  goog.require('goog.testing.MockClock');
+  goog.require('goog.gears.Database');
   goog.require('goog.testing.asserts');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.MockClock');
 </script>
 </head>
 <body>
@@ -140,11 +140,11 @@ function testSetCapturing() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
 
   // Disabled capturing. Select by logger to avoid other records.
   assertFalse('capturing', logStore_.isCapturing());
-  goog.log.error(logger, 'not capturing');
+  logger.severe('not capturing');
   var query = new goog.gears.LogStore.Query();
   query.loggerLike = loggerName;
   assertEquals('records found while not capturing',
@@ -153,14 +153,14 @@ function testSetCapturing() {
   // Enable capturing.
   logStore_.setCapturing(true);
   assertTrue('not capturing', logStore_.isCapturing());
-  goog.log.error(logger, 'capturing');
+  logger.severe('capturing');
   var count = logStore_.select(query).length;
   assertTrue('no records found while capturing', count > 0);
 
   // Disable capturing.
   logStore_.setCapturing(false);
   assertFalse('capturing', logStore_.isCapturing());
-  goog.log.error(logger, 'not capturing');
+  logger.severe('not capturing');
   assertEquals('records found while not capturing',
       count, logStore_.select(query).length);
 }
@@ -176,7 +176,7 @@ function testLogException() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
 
   // Log message.
   var beforeMillis = goog.now();
@@ -188,8 +188,8 @@ function testLogException() {
     fileName: 'my-file',
     stack: 'my-stack'
   };
-  goog.log.info(logger, msgs[0]);
-  goog.log.error(logger, msgs[1], err);
+  logger.info(msgs[0]);
+  logger.severe(msgs[1], err);
   var afterMillis = goog.now();
 
   // Select by logger to avoid other records.
@@ -217,19 +217,19 @@ function testSelectByLevel() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
   logger.setLevel(goog.debug.Logger.Level.FINE);
 
   // Log messages.
   var msg = 'my-message';
   var beforeMillis = goog.now();
-  goog.log.log(logger, goog.log.Level.FINEST, msg + 'FINEST');
-  goog.log.log(logger, goog.log.Level.FINER, msg + 'FINER');
-  goog.log.fine(logger, msg + 'FINE');
+  logger.finest(msg + 'FINEST');
+  logger.finer(msg + 'FINER');
+  logger.fine(msg + 'FINE');
   logger.config(msg + 'CONFIG');
-  goog.log.info(logger, msg + 'INFO');
-  goog.log.warning(logger, msg + 'WARNING');
-  goog.log.error(logger, msg + 'SEVERE');
+  logger.info(msg + 'INFO');
+  logger.warning(msg + 'WARNING');
+  logger.severe(msg + 'SEVERE');
   var afterMillis = goog.now();
 
   // Select FINE+ records. Select by logger to avoid other records.
@@ -282,18 +282,18 @@ function testSelectByMillis() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
 
   // Log messages.
   var msg = 'my-message';
   var millis0 = mockClock_.tick(100000);
-  goog.log.info(logger, msg + 0);
+  logger.info(msg + 0);
   var millis1 = mockClock_.tick(100000);
-  goog.log.info(logger, msg + 1);
+  logger.info(msg + 1);
   var millis2 = mockClock_.tick(100000);
-  goog.log.info(logger, msg + 2);
+  logger.info(msg + 2);
   var millis3 = mockClock_.tick(0xfffffffffffffffffffffffff);
-  goog.log.info(logger, msg + 3);
+  logger.info(msg + 3);
   var millis4 = mockClock_.tick(100000);
 
   // Select before records. Select by logger to avoid other records.
@@ -340,15 +340,15 @@ function testSelectByMessage() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
 
   // Log messages.
   var msg = 'my-message';
   var beforeMillis = goog.now();
-  goog.log.info(logger, msg + '1');
-  goog.log.info(logger, msg + '20');
-  goog.log.info(logger, msg + '21');
-  goog.log.info(logger, msg + '3');
+  logger.info(msg + '1');
+  logger.info(msg + '20');
+  logger.info(msg + '21');
+  logger.info(msg + '3');
   var afterMillis = goog.now();
 
   // Select 2 records.
@@ -374,9 +374,9 @@ function testSelectByLogger() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger1 = goog.log.getLogger(loggerName + 1);
-  var logger2 = goog.log.getLogger(loggerName + 2);
-  var logger3 = goog.log.getLogger(loggerName + 3);
+  var logger1 = goog.debug.Logger.getLogger(loggerName + 1);
+  var logger2 = goog.debug.Logger.getLogger(loggerName + 2);
+  var logger3 = goog.debug.Logger.getLogger(loggerName + 3);
 
   // Log messages.
   var msg = 'my-message';
@@ -410,20 +410,20 @@ function testSelectLimit() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
 
   // Log messages.
   var msg = 'my-message';
   var beforeMillis = goog.now();
-  goog.log.info(logger, msg + '1');
+  logger.info(msg + '1');
   mockClock_.tick();
-  goog.log.info(logger, msg + '2');
+  logger.info(msg + '2');
   mockClock_.tick();
-  goog.log.info(logger, msg + '3');
+  logger.info(msg + '3');
   mockClock_.tick();
-  goog.log.info(logger, msg + '4');
+  logger.info(msg + '4');
   mockClock_.tick();
-  goog.log.info(logger, msg + '5');
+  logger.info(msg + '5');
   mockClock_.tick();
   var afterMillis = goog.now();
 
@@ -458,21 +458,21 @@ function testPruneBeforeCount() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
 
   // Log messages.
   var msg = 'my-message';
-  goog.log.error(logger, msg + '1!');
+  logger.severe(msg + '1!');
   mockClock_.tick();
-  goog.log.warning(logger, msg + '2');
+  logger.warning(msg + '2');
   mockClock_.tick();
-  goog.log.error(logger, msg + '3!');
+  logger.severe(msg + '3!');
   var betweenMillis = mockClock_.tick();
-  goog.log.warning(logger, msg + '4');
+  logger.warning(msg + '4');
   mockClock_.tick();
-  goog.log.error(logger, msg + '5!');
+  logger.severe(msg + '5!');
   mockClock_.tick();
-  goog.log.warning(logger, msg + '6');
+  logger.warning(msg + '6');
   mockClock_.tick();
 
   // Select by logger to avoid other records.
@@ -494,21 +494,21 @@ function testPruneBeforeSequenceNumber() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
 
   // Log messages.
   var msg = 'my-message';
-  goog.log.error(logger, msg + '1!');
+  logger.severe(msg + '1!');
   mockClock_.tick();
-  goog.log.warning(logger, msg + '2');
+  logger.warning(msg + '2');
   mockClock_.tick();
-  goog.log.error(logger, msg + '3!');
+  logger.severe(msg + '3!');
   var betweenMillis = mockClock_.tick();
-  goog.log.warning(logger, msg + '4');
+  logger.warning(msg + '4');
   mockClock_.tick();
-  goog.log.error(logger, msg + '5!');
+  logger.severe(msg + '5!');
   mockClock_.tick();
-  goog.log.warning(logger, msg + '6');
+  logger.warning(msg + '6');
   mockClock_.tick();
 
   // Select by logger to avoid other records.
@@ -531,22 +531,22 @@ function testAutoPrune() {
 
   // Create logger object.
   var loggerName = 'my-logger';
-  var logger = goog.log.getLogger(loggerName);
+  var logger = goog.debug.Logger.getLogger(loggerName);
 
   // Log messages.
   var msg = 'my-message';
   mockClock_.tick(100);
-  goog.log.error(logger, msg + '1!');
+  logger.severe(msg + '1!');
   mockClock_.tick(100);
-  goog.log.warning(logger, msg + '2');
+  logger.warning(msg + '2');
   mockClock_.tick(100);
-  goog.log.error(logger, msg + '3!');
+  logger.severe(msg + '3!');
   mockClock_.tick(100);
-  goog.log.warning(logger, msg + '4');
+  logger.warning(msg + '4');
   mockClock_.tick(100);
-  goog.log.error(logger, msg + '5!');
+  logger.severe(msg + '5!');
   mockClock_.tick(100);
-  goog.log.warning(logger, msg + '6');
+  logger.warning(msg + '6');
   mockClock_.tick(100);
 
   // Auto-prune specified interval (100).
@@ -559,7 +559,7 @@ function testAutoPrune() {
   logStore_.startAutoPrune();
   assertTrue('auto prune should be active', logStore_.isAutoPruneActive());
   assertEquals('wrong # records', 3, logStore_.select(query).length);
-  goog.log.warning(logger, msg + '7');
+  logger.warning(msg + '7');
   mockClock_.tick(50);
   assertEquals('wrong # records', 4, logStore_.select(query).length);
   mockClock_.tick(50);
@@ -568,7 +568,7 @@ function testAutoPrune() {
   // Stop autoprune.
   logStore_.stopAutoPrune();
   assertFalse('auto prune should not be active', logStore_.isAutoPruneActive());
-  goog.log.warning(logger, msg + '8');
+  logger.warning(msg + '8');
   mockClock_.tick(200);
   assertEquals('wrong # records', 4, logStore_.select(query).length);
 
@@ -577,16 +577,16 @@ function testAutoPrune() {
   logStore_.startAutoPrune(3);
   assertTrue('auto prune should be active', logStore_.isAutoPruneActive());
   assertEquals('wrong # records', 3, logStore_.select(query).length);
-  goog.log.warning(logger, msg + '7');
-  goog.log.error(logger, msg + '8!');
-  goog.log.warning(logger, msg + '9');
+  logger.warning(msg + '7');
+  logger.severe(msg + '8!');
+  logger.warning(msg + '9');
   mockClock_.tick(50);
   assertEquals('wrong # records', 6, logStore_.select(query).length);
   mockClock_.tick(50);
   assertEquals('wrong # records', 6, logStore_.select(query).length);
   mockClock_.tick(599900);
   assertEquals('wrong # records', 3, logStore_.select(query).length);
-  goog.log.warning(logger, msg + '10');
+  logger.warning(msg + '10');
   mockClock_.tick(100);
   assertEquals('wrong # records', 4, logStore_.select(query).length);
 

@@ -67,11 +67,11 @@ goog.inherits(goog.editor.plugins.EquationEditorPlugin,
 
 /**
  * The logger for the EquationEditorPlugin.
- * @type {goog.log.Logger}
+ * @type {goog.debug.Logger}
  * @private
  */
 goog.editor.plugins.EquationEditorPlugin.prototype.logger_ =
-    goog.log.getLogger('goog.editor.plugins.EquationEditorPlugin');
+    goog.debug.Logger.getLogger('goog.editor.plugins.EquationEditorPlugin');
 
 
 /** @override */
