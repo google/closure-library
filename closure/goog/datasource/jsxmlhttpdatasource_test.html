@@ -12,7 +12,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.ds.JsXmlHttpDataSource');
-  goog.require('goog.net.MockXhrLite');
+  goog.require('goog.testing.net.XhrIo');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.TestQueue');
 </script>
@@ -37,7 +37,7 @@ See the COPYING file for details.
       new goog.ds.JsXmlHttpDataSource("uri", "namne", TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
 
     var testQueue = new goog.testing.TestQueue();
-    dataSource.xhr_ = new goog.net.MockXhrLite(testQueue);
+    dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
 
     var expectedContent = "Some test content";
     dataSource.setQueryData(expectedContent);
@@ -57,7 +57,7 @@ See the COPYING file for details.
       new goog.ds.JsXmlHttpDataSource("uri?a=1&b=2", "namne", TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
 
     var testQueue = new goog.testing.TestQueue();
-    dataSource.xhr_ = new goog.net.MockXhrLite(testQueue);
+    dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
 
     dataSource.load();
 
@@ -76,7 +76,7 @@ See the COPYING file for details.
       new goog.ds.JsXmlHttpDataSource(expectedUri, "namne", TEXT_PREFIX, TEXT_POSTFIX, USE_GET);
 
     var testQueue = new goog.testing.TestQueue();
-    dataSource.xhr_ = new goog.net.MockXhrLite(testQueue);
+    dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
 
     dataSource.load();
 
