@@ -85,6 +85,7 @@ goog.events.EventType = {
   // Misc
   BEFOREUNLOAD: 'beforeunload',
   CONTEXTMENU: 'contextmenu',
+  DOMCONTENTLOADED: 'DOMContentLoaded',
   ERROR: 'error',
   HELP: 'help',
   LOAD: 'load',
