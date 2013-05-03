@@ -271,7 +271,7 @@ goog.net.XhrManager.prototype.handleAvailableXhr_ = function(id, xhrIo) {
     xhrIo.setResponseType(request.getResponseType());
 
     // Add a reference to the XhrIo object to the request.
-    request.xhrIo = request.xhrLite = xhrIo;
+    request.xhrIo = xhrIo;
 
     // Notify the listeners.
     this.dispatchEvent(new goog.net.XhrManager.Event(
@@ -521,12 +521,6 @@ goog.net.XhrManager.Event = function(type, target, id, xhrIo) {
    * @type {goog.net.XhrIo}
    */
   this.xhrIo = xhrIo;
-
-  /**
-   * The xhrLite field aliases xhrIo for backwards compatibility.
-   * @type {goog.net.XhrLite}
-   */
-  this.xhrLite = /** @type {goog.net.XhrLite} */ (xhrIo);
 };
 goog.inherits(goog.net.XhrManager.Event, goog.events.Event);
 

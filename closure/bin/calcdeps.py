@@ -486,7 +486,7 @@ def main():
                     action='append',
                     help='The inputs to calculate dependencies for. Valid '
                     'values can be files, directories, or namespaces '
-                    '(ns:goog.net.XhrLite).  Only relevant to "list" and '
+                    '(ns:goog.net.XhrIo).  Only relevant to "list" and '
                     '"script" output.')
   parser.add_option('-p',
                     '--path',

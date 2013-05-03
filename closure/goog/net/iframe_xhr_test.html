@@ -13,7 +13,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.events');
   goog.require('goog.debug.Console');
-  goog.require('goog.net.XhrLite');
+  goog.require('goog.net.XhrIo');
   goog.require('goog.net.IframeIo');
   goog.require('goog.testing.AsyncTestCase');
   goog.require('goog.testing.jsunit');
@@ -78,14 +78,14 @@ See the COPYING file for details.
     testCase.onIframeData = function(e) {
       this.log('Data received  : ' + e.data);
       this.resultCount++;
-      goog.net.XhrLite.send(fileName, goog.bind(this.onXhrData, this));
+      goog.net.XhrIo.send(fileName, goog.bind(this.onXhrData, this));
     };
 
     /** Handles the iframe becoming ready. */
     testCase.onIframeReady = function(e) {
       this.log('Iframe ready');
       var me = this;
-      goog.net.XhrLite.send(fileName, goog.bind(this.onXhrData, this));
+      goog.net.XhrIo.send(fileName, goog.bind(this.onXhrData, this));
     };
 
     /** Handles the response from an Xhr request. */
