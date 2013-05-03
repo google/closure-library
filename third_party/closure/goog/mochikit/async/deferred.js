@@ -79,22 +79,6 @@ goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
    * @private
    */
   this.defaultScope_ = opt_defaultScope || null;
-
-  if (goog.async.Deferred.LONG_STACK_TRACES) {
-    /**
-     * Holds the stack trace at time of deferred creation if the JS engine
-     * provides the Error.captureStackTrace API.
-     * @private {?string}
-     */
-    this.constructorStack_ = null;
-    if (Error.captureStackTrace) {
-      var target = { stack: '' };
-      Error.captureStackTrace(target, goog.async.Deferred);
-      // Remove first line and force stringify to prevent memory leak due to
-      // holding on to actual stack frames.
-      this.constructorStack_ = target.stack.replace(/^[^\n]*\n/, '');
-    }
-  }
 };
 
 
@@ -185,13 +169,6 @@ goog.async.Deferred.prototype.branches_ = 0;
  * global scope. Defaults to the value of goog.DEBUG.
  */
 goog.define('goog.async.Deferred.STRICT_ERRORS', false);
-
-
-/**
- * @define {boolean} Whether to attempt to make stack traces long.  Defaults to
- * the value of goog.DEBUG.
- */
-goog.define('goog.async.Deferred.LONG_STACK_TRACES', goog.DEBUG);
 
 
 /**
@@ -320,26 +297,7 @@ goog.async.Deferred.prototype.callback = function(opt_result) {
 goog.async.Deferred.prototype.errback = function(opt_result) {
   this.check_();
   this.assertNotDeferred_(opt_result);
-  this.makeStackTraceLong_(opt_result);
   this.updateResult_(false /* isSuccess */, opt_result);
-};
-
-
-/**
- * Attempt to make the error's stack trace be long in that it contains the
- * stack trace from the point where the deferred was created on top of the
- * current stack trace to give additional context.
- * @param {*} error
- * @private
- */
-goog.async.Deferred.prototype.makeStackTraceLong_ = function(error) {
-  if (!goog.async.Deferred.LONG_STACK_TRACES) {
-    return;
-  }
-  if (this.constructorStack_ && goog.isObject(error) && error.stack) {
-    error.stack = error.stack + '\nDEFERRED OPERATION:\n' +
-        this.constructorStack_;
-  }
 };
 
 
@@ -587,7 +545,6 @@ goog.async.Deferred.prototype.fire_ = function() {
       } catch (ex) {
         res = ex;
         this.hadError_ = true;
-        this.makeStackTraceLong_(res);
 
         if (!this.hasErrback_()) {
           // If an error is thrown with no additional errbacks in the queue,
