@@ -24,9 +24,6 @@
 
 goog.provide('goog.net.WebChannelTransport');
 
-goog.require('goog.net.WebChannel');
-goog.require('goog.net.WebChannel.Options');
-
 
 
 /**
@@ -44,6 +41,12 @@ goog.require('goog.net.WebChannel.Options');
  * by WebChannelTransport. Applications may choose HTML5 shared workers
  * or other techniques to access the same transport instance
  * across different window contexts.
+ *
+ * To avoid circular dependency or the need to introduce another factory class,
+ * WebChannelTransport instances are to be created directly by using the
+ * constructor of available WebChannelTransport implementation classes:
+ * 1. Legacy transport: {@link goog.net.BrowserChannelTransport}
+ * 2. Default transport: to come ...
  *
  * @interface
  */

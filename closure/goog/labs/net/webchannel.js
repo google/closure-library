@@ -39,14 +39,9 @@
  */
 
 goog.provide('goog.net.WebChannel');
-goog.provide('goog.net.WebChannel.ErrorEvent');
-goog.provide('goog.net.WebChannel.ErrorStatus');
-goog.provide('goog.net.WebChannel.MessageData');
-goog.provide('goog.net.WebChannel.MessageEvent');
-goog.provide('goog.net.WebChannel.Options');
 
+goog.require('goog.events');
 goog.require('goog.events.Event');
-goog.require('goog.events.EventTarget');
 
 
 
@@ -65,14 +60,13 @@ goog.net.WebChannel = function() {};
 
 
 /**
- * Configuration spec of a WebChannel (to be completed):
+ * Configuration spec of a WebChannel (TODO(user): to complete):
  * 1) delivery: ordered, reliable, timeout
  * 2) HTTP: special headers, URI prefix, cross domains
  * 3) debugging: stats, logging
  * 4) pattern: full-duplex, server-client or client-server messaging
  * 5) QoS: priority, throttling,
  * 6) buffer management: batch size, delivery interval
- * 7) compatibility: browserchannel (as the underlying protocol)
  *
  * WebChannels are configured in the context of the containing
  * {@link WebChannelTransport}. The configuration parameters are specified
@@ -86,6 +80,14 @@ goog.net.WebChannel = function() {};
  * }}
  */
 goog.net.WebChannel.Options;
+
+
+/**
+ * Types that are allowed as message data.
+ *
+ * @typedef {(ArrayBuffer|Blob|Object.<String>|Array)}
+ */
+goog.net.WebChannel.MessageData;
 
 
 /**
@@ -115,34 +117,29 @@ goog.net.WebChannel.prototype.send = goog.abstractMethod;
  */
 goog.net.WebChannel.EventType = {
   /** Dispatched when the channel is opened. */
-  OPEN: 'open',
+  OPEN: goog.events.getUniqueId('open'),
 
   /** Dispatched when the channel is closed. */
-  CLOSE: 'close',
+  CLOSE: goog.events.getUniqueId('close'),
 
   /** Dispatched when the channel is aborted due to errors. */
-  ERROR: 'error',
+  ERROR: goog.events.getUniqueId('error'),
 
   /** Dispatched when the channel has received a new message. */
-  MESSAGE: 'message'
+  MESSAGE: goog.events.getUniqueId('message')
 };
 
 
-/**
- * Defines the types that are allowed as message data.
- * @typedef {(ArrayBuffer|Blob|string)}
- */
-goog.net.WebChannel.MessageData;
-
-
 
 /**
- * The event interface for the MESSAGE_EVENT type.
+ * The event interface for the MESSAGE event.
  *
  * @constructor
  * @extends {goog.events.Event}
  */
-goog.net.WebChannel.MessageEvent = function() {};
+goog.net.WebChannel.MessageEvent = function() {
+  goog.base(this, goog.net.WebChannel.EventType.MESSAGE);
+};
 goog.inherits(goog.net.WebChannel.MessageEvent, goog.events.Event);
 
 
@@ -172,12 +169,14 @@ goog.net.WebChannel.ErrorStatus = {
 
 
 /**
- * The event interface for the ERROR_EVENT type.
+ * The event interface for the ERROR event.
  *
  * @constructor
  * @extends {goog.events.Event}
  */
-goog.net.WebChannel.ErrorEvent = function() {};
+goog.net.WebChannel.ErrorEvent = function() {
+  goog.base(this, goog.net.WebChannel.EventType.ERROR);
+};
 goog.inherits(goog.net.WebChannel.ErrorEvent, goog.events.Event);
 
 

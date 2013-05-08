@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2013 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>
+  Closure Unit Tests - goog.net.WebChannel (Browserchannel Transport)
+</title>
+<script type="text/javascript" src="../../base.js"></script>
+<script type="text/javascript">
+  goog.require('goog.events');
+  goog.require('goog.functions');
+  goog.require('goog.net.WebChannel');
+  goog.require('goog.net.BrowserChannelTransport');
+  goog.require('goog.testing.PropertyReplacer');
+  goog.require('goog.testing.jsunit');
+</script>
+</head>
+<body>
+
+<!-- Define unit tests. -->
+<script type="text/javascript" >
+
+var webChannel;
+var testUrl = 'http://127.0.0.1:8080/test';
+
+var propertyReplacer = new goog.testing.PropertyReplacer();
+
+function setUp() {
+  propertyReplacer.set(goog.net, 'BrowserChannel', MockBrowserChannel);
+}
+
+function tearDown() {
+  propertyReplacer.reset();
+  goog.dispose(webChannel);
+}
+
+function testOpenWithUrl() {
+  var webChannelTransport = new goog.net.BrowserChannelTransport();
+  webChannel = webChannelTransport.createWebChannel(testUrl);
+
+  var eventFired = false;
+  goog.events.listen(webChannel, goog.net.WebChannel.EventType.OPEN,
+      function(e) {
+        eventFired= true;
+      });
+
+  webChannel.open();
+  assertFalse(eventFired);
+
+  var browserchannel = webChannel.browserChannel_;
+  assertNotNull(browserchannel);
+
+  simulateOpenEvent(browserchannel);
+  assertTrue(eventFired);
+}
+
+function testOpenThenCloseChannel() {
+  var webChannelTransport = new goog.net.BrowserChannelTransport();
+  webChannel = webChannelTransport.createWebChannel(testUrl);
+
+  var eventFired = false;
+  goog.events.listen(webChannel, goog.net.WebChannel.EventType.CLOSE,
+      function(e) {
+        eventFired= true;
+      });
+
+  webChannel.open();
+  assertFalse(eventFired);
+
+  var browserchannel = webChannel.browserChannel_;
+  assertNotNull(browserchannel);
+
+  simulateCloseEvent(browserchannel);
+  assertTrue(eventFired);
+}
+
+
+function testChannelError() {
+  var webChannelTransport = new goog.net.BrowserChannelTransport();
+  webChannel = webChannelTransport.createWebChannel(testUrl);
+
+  var eventFired = false;
+  goog.events.listen(webChannel, goog.net.WebChannel.EventType.ERROR,
+      function(e) {
+        eventFired= true;
+        assertEquals(goog.net.WebChannel.ErrorStatus.NETWORK_ERROR, e.status)
+      });
+
+  webChannel.open();
+  assertFalse(eventFired);
+
+  var browserchannel = webChannel.browserChannel_;
+  assertNotNull(browserchannel);
+
+  simulateErrorEvent(browserchannel);
+  assertTrue(eventFired);
+}
+
+
+function testChannelMessage() {
+  var webChannelTransport = new goog.net.BrowserChannelTransport();
+  webChannel = webChannelTransport.createWebChannel(testUrl);
+
+  var eventFired = false;
+  var data = "foo";
+  goog.events.listen(webChannel, goog.net.WebChannel.EventType.MESSAGE,
+      function(e) {
+        eventFired= true;
+        assertEquals(e.data, data);
+      });
+
+  webChannel.open();
+  assertFalse(eventFired);
+
+  var browserchannel = webChannel.browserChannel_;
+  assertNotNull(browserchannel);
+
+  simulateMessageEvent(browserchannel, data);
+  assertTrue(eventFired);
+}
+
+
+/**
+ * Simulates the BrowserChannel firing the open event for the given channel.
+ * @param {!MockBrowserChannel} bc The mock BrowserChannel.
+ */
+function simulateOpenEvent(bc) {
+  assertNotNull(bc.getHandler());
+  bc.getHandler().channelOpened();
+}
+
+/**
+ * Simulates the BrowserChannel firing the close event for the given channel.
+ * @param {!MockBrowserChannel} bc The mock BrowserChannel.
+ */
+function simulateCloseEvent(bc) {
+  assertNotNull(bc.getHandler());
+  bc.getHandler().channelClosed();
+}
+
+/**
+ * Simulates the BrowserChannel firing the error event for the given channel.
+ * @param {!MockBrowserChannel} bc The mock BrowserChannel.
+ */
+function simulateErrorEvent(bc) {
+  assertNotNull(bc.getHandler());
+  bc.getHandler().channelError();
+}
+
+/**
+ * Simulates the BrowserChannel firing the message event for the given channel.
+ * @param {!MockBrowserChannel} bc The mock BrowserChannel.
+ * @param {String} data The message data.
+ */
+function simulateMessageEvent(bc, data) {
+  assertNotNull(bc.getHandler());
+  bc.getHandler().channelHandleArray(bc, data);
+}
+
+
+
+/**
+ * Mock BrowserChannel constructor.
+ * @constructor
+ */
+MockBrowserChannel = function() {
+  /** @private {?goog.net.BrowserChannel.Handler} */
+  this.handler_ = null;
+};
+
+
+/**
+ * Mocks out the setHandler method of the BrowserChannel.
+ */
+MockBrowserChannel.prototype.setHandler = function(handler) {
+  this.handler_ = handler;
+};
+
+
+/**
+ * Mocks out the getHandler method of the BrowserChannel.
+ *
+ * @return {?goog.net.BrowserChannel.Handler} The handler.
+ */
+MockBrowserChannel.prototype.getHandler = function(handler) {
+  return this.handler_;
+};
+
+
+/**
+ * Mocks out the connect method of the BrowserChannel.
+ */
+MockBrowserChannel.prototype.connect = function(testPath, channelPath) {
+  // Nothing to do here.
+};
+
+
+/**
+ * Mocks out the disconnect method of the BrowserChannel.
+ */
+MockBrowserChannel.prototype.disconnect = function() {
+  // Nothing to do here.
+};
+
+
+/**
+ * Mocks out the sendMap method of the BrowserChannel.
+ */
+MockBrowserChannel.prototype.sendMap = function(message) {
+  // Nothing to do here.
+};
+
+</script>
+</body>
+</html>
