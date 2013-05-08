@@ -25,6 +25,7 @@ goog.provide('goog.a11y.aria');
 
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
+goog.require('goog.a11y.aria.datatables');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -134,10 +135,27 @@ goog.a11y.aria.setState = function(element, stateName, value) {
     var array = /** @type {!goog.array.ArrayLike.<string>} */ (value);
     value = array.join(' ');
   }
-  stateName = goog.a11y.aria.getAriaAttributeName_(stateName);
-  // TODO(user): remove the state if the value to set is empty.
-  // This change will require fixing clients' code.
-  element.setAttribute(stateName, value);
+  var attrStateName = goog.a11y.aria.getAriaAttributeName_(stateName);
+  if (value === '' || value == undefined) {
+    var defaultValueMap = goog.a11y.aria.datatables.getDefaultValuesMap();
+    // Work around for browsers that don't properly support ARIA.
+    // According to the ARIA W3C standard, user agents should allow
+    // setting empty value which results in setting the default value
+    // for the ARIA state if such exists. The exact text from the ARIA W3C
+    // standard (http://www.w3.org/TR/wai-aria/states_and_properties):
+    // "When a value is indicated as the default, the user agent
+    // MUST follow the behavior prescribed by this value when the state or
+    // property is empty or undefined."
+    // The defaultValueMap contains the default values for the ARIA states
+    // and has as a key the goog.a11y.aria.State constant for the state.
+    if (stateName in defaultValueMap) {
+      element.setAttribute(attrStateName, defaultValueMap[stateName]);
+    } else {
+      element.removeAttribute(attrStateName);
+    }
+  } else {
+    element.setAttribute(attrStateName, value);
+  }
 };
 
 

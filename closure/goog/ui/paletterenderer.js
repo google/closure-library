@@ -171,7 +171,10 @@ goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
   goog.a11y.aria.setRole(cell, 'gridcell');
 
   if (!goog.dom.getTextContent(cell) && !goog.a11y.aria.getLabel(cell)) {
-    goog.a11y.aria.setLabel(cell, this.findAriaLabelForCell_(cell));
+    var ariaLabelForCell = this.findAriaLabelForCell_(cell);
+    if (ariaLabelForCell) {
+      goog.a11y.aria.setLabel(cell, ariaLabelForCell);
+    }
   }
   return cell;
 };

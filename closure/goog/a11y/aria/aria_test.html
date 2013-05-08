@@ -91,6 +91,38 @@ Author:  attila@google.com (Attila Bodis)
           'someSpan',
       goog.a11y.aria.getState(someDiv,
           goog.a11y.aria.State.LABELLEDBY));
+
+
+      // Test setting for aria-activedescendant with empty value.
+      assertFalse(someDiv.hasAttribute ?
+          someDiv.hasAttribute('aria-activedescendant') :
+          !!someDiv.getAttribute('aria-activedescendant'));
+      goog.a11y.aria.setState(someDiv,
+          goog.a11y.aria.State.ACTIVEDESCENDANT,
+          'someSpan');
+      assertEquals('someSpan', goog.a11y.aria.getState(someDiv,
+          goog.a11y.aria.State.ACTIVEDESCENDANT));
+      goog.a11y.aria.setState(someDiv,
+          goog.a11y.aria.State.ACTIVEDESCENDANT,
+          '');
+      assertFalse(someDiv.hasAttribute ?
+          someDiv.hasAttribute('aria-activedescendant') :
+          !!someDiv.getAttribute('aria-activedescendant'));
+
+      // Test setting state that has a default value to empty value.
+      assertFalse(someDiv.hasAttribute ?
+          someDiv.hasAttribute('aria-relevant') :
+          !!someDiv.getAttribute('aria-relevant'));
+      goog.a11y.aria.setState(someDiv,
+          goog.a11y.aria.State.RELEVANT,
+          'text');
+      assertEquals('text', goog.a11y.aria.getState(someDiv,
+          goog.a11y.aria.State.RELEVANT));
+      goog.a11y.aria.setState(someDiv,
+          goog.a11y.aria.State.RELEVANT,
+          '');
+      assertEquals('additions text', someDiv.getAttribute('aria-relevant'));
+
     }
 
     function testGetStateValue() {
