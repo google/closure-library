@@ -1819,7 +1819,7 @@ goog.net.BrowserChannel.prototype.onRequestData =
     if (!goog.string.isEmpty(responseText)) {
       var response = this.parser_.parse(responseText);
       goog.asserts.assert(goog.isArray(response));
-      this.onInput_(/** @type {Array} */ (response));
+      this.onInput_(/** @type {!Array} */ (response));
     }
   }
 };
@@ -2098,11 +2098,10 @@ goog.net.BrowserChannel.prototype.setRetryDelay = function(baseDelayMs,
 
 /**
  * Processes the data returned by the server.
- * @param {Array} respArray The response array returned by the server.
+ * @param {!Array.<!Array>} respArray The response array returned by the server.
  * @private
  */
 goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
-  // respArray is an array of arrays
   var batch = this.handler_ && this.handler_.channelHandleMultipleArrays ?
       [] : null;
   for (var i = 0; i < respArray.length; i++) {
@@ -2133,7 +2132,7 @@ goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
       }
     } else if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
       if (nextArray[0] == 'stop') {
-        if (batch && batch.length) {
+        if (batch && !goog.array.isEmpty(batch)) {
           this.handler_.channelHandleMultipleArrays(this, batch);
           batch.length = 0;
         }
@@ -2156,7 +2155,7 @@ goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
       this.backChannelRetryCount_ = 0;
     }
   }
-  if (batch && batch.length) {
+  if (batch && !goog.array.isEmpty(batch)) {
     this.handler_.channelHandleMultipleArrays(this, batch);
   }
 };
@@ -2607,7 +2606,7 @@ goog.net.BrowserChannel.LogSaver.clearBuffer = function() {
 
 
 /**
- * Interface for the browser channel handler
+ * Abstract base class for the browser channel handler
  * @constructor
  */
 goog.net.BrowserChannel.Handler = function() {
@@ -2617,7 +2616,7 @@ goog.net.BrowserChannel.Handler = function() {
 /**
  * Callback handler for when a batch of response arrays is received from the
  * server.
- * @type {Function}
+ * @type {?function(!goog.net.BrowserChannel, !Array.<!Array>)}
  */
 goog.net.BrowserChannel.Handler.prototype.channelHandleMultipleArrays = null;
 

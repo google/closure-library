@@ -258,7 +258,7 @@ goog.soy.InjectedDataSupplier = function() {};
 
 /**
  * Gets the injected data. Implementation may assume that
-v * {@code goog.soy.Renderer} will treat the returned data as
+ * {@code goog.soy.Renderer} will treat the returned data as
  * immutable.  The renderer will call this every time one of its
  * {@code render*} methods is called.
  * @return {Object} A key-value pair representing the injected data.
