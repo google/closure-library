@@ -87,7 +87,7 @@ goog.events.EventTarget = function() {
   /**
    * Maps of event type to an array of listeners.
    *
-   * @type {Object.<string, !Array.<!goog.events.ListenableKey>>}
+   * @type {Object.<string, !Array.<!goog.events.Listener>>}
    * @private
    */
   this.eventTargetListeners_ = {};
@@ -378,12 +378,13 @@ goog.events.EventTarget.prototype.fireListeners = function(
     var listener = listenerArray[i];
     // We might not have a listener if the listener was removed.
     if (listener && !listener.removed && listener.capture == capture) {
-      // TODO(user): This logic probably should be in the Listener
-      // object instead.
+      var listenerFn = listener.listener;
+      var listenerHandler = listener.handler || listener.src;
+
       if (listener.callOnce) {
         this.unlistenByKey(listener);
       }
-      rv = listener.handleEvent(eventObject) !== false && rv;
+      rv = listenerFn.call(listenerHandler, eventObject) !== false && rv;
     }
   }
 

@@ -43,19 +43,19 @@ goog.events.Listener = function(
 
   /**
    * Callback function.
-   * @const {!Function}
+   * @type {Function}
    */
   this.listener = listener;
 
   /**
    * Proxy for callback that passes through {@link goog.events#HandleEvent_}.
-   * @const {Function}
+   * @type {Function}
    */
   this.proxy = proxy;
 
   /**
    * Object or node that callback is listening to
-   * @const {EventTarget|goog.events.Listenable}
+   * @type {EventTarget|goog.events.Listenable}
    */
   this.src = src;
 
@@ -73,7 +73,7 @@ goog.events.Listener = function(
 
   /**
    * Optional object whose context to execute the listener in
-   * @const {Object|undefined}
+   * @type {Object|undefined}
    */
   this.handler = opt_handler;
 
@@ -117,10 +117,13 @@ goog.events.Listener.prototype.creationStack;
 
 
 /**
- * Calls the internal listener
- * @param {Object} eventObject Event object to be passed to listener.
- * @return {boolean} The result of the internal listener call.
+ * Marks this listener as removed. This also remove references held by
+ * this listener object (such as listener and event source).
  */
-goog.events.Listener.prototype.handleEvent = function(eventObject) {
-  return this.listener.call(this.handler || this.src, eventObject);
+goog.events.Listener.prototype.markAsRemoved = function() {
+  this.removed = true;
+  this.listener = null;
+  this.proxy = null;
+  this.src = null;
+  this.handler = null;
 };

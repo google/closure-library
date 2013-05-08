@@ -478,7 +478,7 @@ goog.events.unlistenByKey = function(key) {
     }
   }
 
-  listener.removed = true;
+  listener.markAsRemoved();
 
   // There are some esoteric situations where the hash code of an object
   // can change, and we won't be able to find the listenerArray anymore.
@@ -559,8 +559,6 @@ goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
            oldIndex < listenerArray.length;
            oldIndex++) {
         if (listenerArray[oldIndex].removed) {
-          var proxy = listenerArray[oldIndex].proxy;
-          proxy.src = null;
           continue;
         }
         if (oldIndex != newIndex) {
@@ -910,10 +908,13 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
  * @return {boolean} Result of listener.
  */
 goog.events.fireListener = function(listener, eventObject) {
+  var listenerFn = listener.listener;
+  var listenerHandler = listener.handler || listener.src;
+
   if (listener.callOnce) {
     goog.events.unlistenByKey(listener);
   }
-  return listener.handleEvent(eventObject);
+  return listenerFn.call(listenerHandler, eventObject);
 };
 
 
