@@ -135,14 +135,12 @@ goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ =
 
 
 /**
- * Set of characters to be put into a regex character set ("[...]"). It includes
+ * Set of characters to be put into a regex character set ("[...]"), used to
+ * match against a url hostname and everything after it. It includes
  * "#-@", which represents the characters "#$%&'()*+,-./0123456789:;<=>?@".
  * @type {string}
  * @const
  * @private
- * TODO(user): It's unclear if the author intended the "#-@" characters
- * literally or the range "#" to "@". This should be investigated and possibly
- * fixed.
  */
 goog.string.linkify.ACCEPTABLE_URL_CHARS_ =
     goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + '\\w~#-@!\\[\\]';
@@ -166,7 +164,7 @@ goog.string.linkify.RECOGNIZED_PROTOCOLS_ = ['https?', 'ftp'];
  * @private
  */
 goog.string.linkify.PROTOCOL_START_ =
-    '(' + goog.string.linkify.RECOGNIZED_PROTOCOLS_.join('|') + ')://+';
+    '(' + goog.string.linkify.RECOGNIZED_PROTOCOLS_.join('|') + ')://';
 
 
 /**

@@ -366,6 +366,14 @@ function testFindFirstEmailNoUrl() {
       'ygvtfr676 5v68fk uygbt85F^&%^&I%FVvc .'));
 }
 
+function testContainsPunctuation_parens() {
+  assertLinkify(
+      'Link contains parens, but does not end with them',
+      'www.google.com/abc(v1).html',
+      '<a href="http://www.google.com/abc(v1).html">' +
+          'www.google.com/abc(v1).html<\/a>');
+}
+
 function testEndsWithPunctuation() {
   assertLinkify(
       'Link ends with punctuation',
@@ -374,11 +382,18 @@ function testEndsWithPunctuation() {
       ' It\'s awesome.');
 }
 
-function testEndsWithPunctuation_parens() {
+function testEndsWithPunctuation_closeParen() {
   assertLinkify(
       'Link inside parentheses',
       '(For more info see www.googl.com)',
       '(For more info see <a href="http://www.googl.com">www.googl.com<\/a>)');
+}
+
+function testEndsWithPunctuation_openParen() {
+  assertLinkify(
+      'Link followed by open parenthesis',
+      'www.google.com(',
+      '<a href="http://www.google.com(">www.google.com(<\/a>');
 }
 
 function testEndsWithPunctuation_angles() {
