@@ -115,11 +115,13 @@ goog.string.linkify.findFirstEmail = function(text) {
 
 
 /**
+ * If one of these characters is at the end of a url, it will be considered as a
+ * puncutation and not part of the url.
  * @type {string}
  * @const
  * @private
  */
-goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = ':;,\\.?\\[\\]';
+goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = ':;,\\.?>\\]\\)';
 
 
 /**
@@ -133,12 +135,17 @@ goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ =
 
 
 /**
+ * Set of characters to be put into a regex character set ("[...]"). It includes
+ * "#-@", which represents the characters "#$%&'()*+,-./0123456789:;<=>?@".
  * @type {string}
  * @const
  * @private
+ * TODO(user): It's unclear if the author intended the "#-@" characters
+ * literally or the range "#" to "@". This should be investigated and possibly
+ * fixed.
  */
 goog.string.linkify.ACCEPTABLE_URL_CHARS_ =
-    goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + '\\w/~%&=+#-@!';
+    goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + '\\w~#-@!\\[\\]';
 
 
 /**

@@ -366,6 +366,37 @@ function testFindFirstEmailNoUrl() {
       'ygvtfr676 5v68fk uygbt85F^&%^&I%FVvc .'));
 }
 
+function testEndsWithPunctuation() {
+  assertLinkify(
+      'Link ends with punctuation',
+      'Have you seen www.google.com? It\'s awesome.',
+      'Have you seen <a href="http://www.google.com">www.google.com<\/a>?' +
+      ' It\'s awesome.');
+}
+
+function testEndsWithPunctuation_parens() {
+  assertLinkify(
+      'Link inside parentheses',
+      '(For more info see www.googl.com)',
+      '(For more info see <a href="http://www.googl.com">www.googl.com<\/a>)');
+}
+
+function testEndsWithPunctuation_angles() {
+  assertLinkify(
+      'Link inside angled brackets',
+      'Here is a bibliography entry <http://www.google.com/>',
+      'Here is a bibliography entry &lt;<a href="http://www.google.com/">' +
+          'http://www.google.com/<\/a>&gt;');
+}
+
+function testBracketsInUrl() {
+  assertLinkify(
+      'Link containing brackets',
+      'before http://google.com/details?answer[0]=42 after',
+      'before <a href="http://google.com/details?answer[0]=42">' +
+          'http://google.com/details?answer[0]=42<\/a> after');
+}
+
 </script>
 </body>
 </html>
