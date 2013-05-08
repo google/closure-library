@@ -464,7 +464,7 @@ goog.events.EventTarget.prototype.setTargetForTesting = function(target) {
  *     tree of the target, in reverse order from the closest ancestor
  *     to the root event target. May be null if the target has no ancestor.
  * @return {boolean} If anyone called preventDefault on the event object (or
- *     if any of the listeners returns false this will also return false.
+ *     if any of the listeners returns false) this will also return false.
  * @private
  */
 goog.events.EventTarget.dispatchEventInternal_ = function(

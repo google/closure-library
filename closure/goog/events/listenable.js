@@ -148,7 +148,7 @@ goog.events.Listenable.prototype.unlistenByKey;
  *
  * @param {goog.events.EventLike} e Event object.
  * @return {boolean} If anyone called preventDefault on the event object (or
- *     if any of the listeners returns false this will also return false.
+ *     if any of the listeners returns false) this will also return false.
  */
 goog.events.Listenable.prototype.dispatchEvent;
 
