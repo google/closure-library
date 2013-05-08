@@ -217,14 +217,6 @@ goog.ui.DrilldownRow.prototype.removeChild = function(child) {
 };
 
 
-/** @override */
-goog.ui.DrilldownRow.prototype.disposeInternal = function() {
-  delete this.html_;
-  this.children_ = null;
-  goog.ui.DrilldownRow.superClass_.disposeInternal.call(this);
-};
-
-
 /**
  * Rendering of DrilldownRow's is on need, do not call this directly
  * from application code.
