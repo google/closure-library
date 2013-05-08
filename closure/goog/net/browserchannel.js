@@ -2607,7 +2607,7 @@ goog.net.BrowserChannel.LogSaver.clearBuffer = function() {
 
 
 /**
- * Abstract base class for the browser channel handler
+ * Interface for the browser channel handler
  * @constructor
  */
 goog.net.BrowserChannel.Handler = function() {
@@ -2617,11 +2617,9 @@ goog.net.BrowserChannel.Handler = function() {
 /**
  * Callback handler for when a batch of response arrays is received from the
  * server.
- * @param {goog.net.BrowserChannel} channel The channel.
- * @param {Array} respArrays The received response arrays.
+ * @type {Function}
  */
-goog.net.BrowserChannel.Handler.prototype.channelHandleMultipleArrays =
-    goog.nullFunction;
+goog.net.BrowserChannel.Handler.prototype.channelHandleMultipleArrays = null;
 
 
 /**
