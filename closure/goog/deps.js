@@ -349,6 +349,7 @@ goog.addDependency('labs/net/image.js', ['goog.labs.net.image'], ['goog.events.E
 goog.addDependency('labs/net/image_test.js', ['goog.labs.net.imageTest'], ['goog.events', 'goog.labs.net.image', 'goog.result', 'goog.result.Result', 'goog.string', 'goog.testing.AsyncTestCase', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
 goog.addDependency('labs/net/webchannel.js', ['goog.net.WebChannel'], ['goog.events', 'goog.events.Event']);
 goog.addDependency('labs/net/webchanneltransport.js', ['goog.net.WebChannelTransport'], []);
+goog.addDependency('labs/net/webchanneltransportfactory.js', ['goog.net.createWebChannelTransport'], ['goog.functions', 'goog.net.BrowserChannelTransport']);
 goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.debug.Error', 'goog.json', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.result', 'goog.result.SimpleResult', 'goog.string', 'goog.uri.utils']);
 goog.addDependency('labs/object/object.js', ['goog.labs.object'], []);
 goog.addDependency('labs/observe/notice.js', ['goog.labs.observe.Notice'], []);
