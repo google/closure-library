@@ -412,6 +412,13 @@ function testBracketsInUrl() {
           'http://google.com/details?answer[0]=42<\/a> after');
 }
 
+function testUrlWithExclamation() {
+  assertLinkify(
+      'URL with exclamation points',
+      'This is awesome www.google.com!',
+      'This is awesome <a href="http://www.google.com">www.google.com<\/a>!');
+}
+
 </script>
 </body>
 </html>
