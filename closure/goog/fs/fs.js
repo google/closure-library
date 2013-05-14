@@ -29,7 +29,7 @@ goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileReader');
-goog.require('goog.fs.FileSystem');
+goog.require('goog.fs.FileSystemImpl');
 goog.require('goog.userAgent');
 
 
@@ -52,7 +52,7 @@ goog.fs.get_ = function(type, size) {
 
   var d = new goog.async.Deferred();
   requestFileSystem(type, size, function(fs) {
-    d.callback(new goog.fs.FileSystem(fs));
+    d.callback(new goog.fs.FileSystemImpl(fs));
   }, function(err) {
     d.errback(new goog.fs.Error(err.code, 'requesting filesystem'));
   });
