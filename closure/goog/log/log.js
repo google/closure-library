@@ -33,15 +33,18 @@ goog.require('goog.debug.Logger');
 goog.define('goog.log.ENABLED', goog.debug.LOGGING_ENABLED);
 
 
-/** @typedef {goog.debug.Logger} */
+
+/** @constructor */
 goog.log.Logger = goog.debug.Logger;
 
 
-/** @typedef {goog.debug.Logger.Level} */
+
+/** @constructor */
 goog.log.Level = goog.debug.Logger.Level;
 
 
-/** @typedef {goog.debug.LogRecord} */
+
+/** @constructor */
 goog.log.LogRecord = goog.debug.LogRecord;
 
 
