@@ -619,10 +619,14 @@ goog.ui.ac.InputHandler.prototype.disposeInternal = function() {
  * Sets the entry separator characters.
  *
  * @param {string} separators The separator characters to set.
+ * @param {string=} opt_defaultSeparators The defaultSeparator character to set.
  */
-goog.ui.ac.InputHandler.prototype.setSeparators = function(separators) {
+goog.ui.ac.InputHandler.prototype.setSeparators =
+    function(separators, opt_defaultSeparators) {
   this.separators_ = separators;
-  this.defaultSeparator_ = this.separators_.substring(0, 1);
+  this.defaultSeparator_ =
+      goog.isDefAndNotNull(opt_defaultSeparators) ?
+      opt_defaultSeparators : this.separators_.substring(0, 1);
 
   var wspaceExp = this.multi_ ? '[\\s' + this.separators_ + ']+' : '[\\s]+';
 

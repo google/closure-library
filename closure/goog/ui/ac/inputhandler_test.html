@@ -663,6 +663,23 @@ See the COPYING file for details.
     assertTrue(inputHandler.separatorCheck_.test(','));
   }
 
+  function testMultipleSeparatorUsesEmptyDefaults() {
+    var inputHandler = new goog.ui.ac.InputHandler(',\n', null, true);
+    inputHandler.setWhitespaceWrapEntries(false);
+    inputHandler.setSeparators(',\n', '');
+
+    // Set up our input handler with the necessary mocks
+    var mockAutoCompleter = new MockAutoCompleter();
+    inputHandler.ac_ = mockAutoCompleter;
+    inputHandler.activeElement_ = mockElement;
+    mockElement.value = 'bob,wal';
+    inputHandler.setCursorPosition(8);
+
+    inputHandler.setTokenText('waldo', true /* multi-row */);
+
+    assertEquals('bob,waldo', mockElement.value);
+  }
+
 </script>
 </body>
 </html>
