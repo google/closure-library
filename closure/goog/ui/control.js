@@ -373,8 +373,8 @@ goog.ui.Control.prototype.addClassName = function(className) {
  *     element.
  */
 goog.ui.Control.prototype.removeClassName = function(className) {
-  if (className && this.extraClassNames_) {
-    goog.array.remove(this.extraClassNames_, className);
+  if (className && this.extraClassNames_ &&
+      goog.array.remove(this.extraClassNames_, className)) {
     if (this.extraClassNames_.length == 0) {
       this.extraClassNames_ = null;
     }
