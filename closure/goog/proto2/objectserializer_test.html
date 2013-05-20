@@ -330,6 +330,55 @@ function testDeserialization() {
     message.getOptionalNestedEnum());
 }
 
+function testDeserializationUnknownEnumValue() {
+  var simplified = {
+    21: 1001
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message = serializer.deserialize(
+    proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertEquals(1001, message.getOptionalNestedEnum());
+}
+
+function testDeserializationNamedEnumValue() {
+  var simplified = {
+    21: 'BAR'
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message = serializer.deserialize(
+    proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertEquals(proto2.TestAllTypes.NestedEnum.BAR,
+    message.getOptionalNestedEnum());
+}
+
+function testDeserializationUnknownNamedEnumValue() {
+  var simplified = {
+    21: 'BARRED'
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var deserializationFailed = false;
+  try {
+    var message = serializer.deserialize(
+      proto2.TestAllTypes.getDescriptor(), simplified);
+  } catch(error) {
+    // Error is expected.
+    deserializationFailed = true;    
+  }
+  assertTrue(deserializationFailed);
+}
+
 function testDeserializationNumbersOrStrings() {
   // 64-bit types may have been serialized as numbers or strings.
   // Deserialization should be able to handle either.
