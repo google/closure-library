@@ -36,6 +36,7 @@ goog.provide('goog.testing.events');
 goog.provide('goog.testing.events.Event');
 
 goog.require('goog.Disposable');
+goog.require('goog.asserts');
 goog.require('goog.dom.NodeType');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
@@ -102,6 +103,21 @@ goog.testing.events.Event.prototype.stopPropagation = function() {
 goog.testing.events.Event.prototype.preventDefault = function() {
   this.defaultPrevented = true;
   this.returnValue_ = false;
+};
+
+
+/**
+ * Asserts an event target exists.  This will fail if target is not defined.
+ *
+ * TODO(nnaze): Gradually add this to the methods in this file, and eventually
+ *     update the method signatures to not take nullables.  See http://b/8961907
+ *
+ * @param {EventTarget} target A target to assert.
+ * @return {!EventTarget} The target, guaranteed to exist.
+ * @private
+ */
+goog.testing.events.assertEventTarget_ = function(target) {
+  return goog.asserts.assert(target, 'Target should not be defined.');
 };
 
 
