@@ -15,6 +15,9 @@ See the COPYING file for details.
   goog.require('goog.i18n.NumberFormat');
   goog.require('goog.i18n.NumberFormatSymbols');
   goog.require('goog.i18n.NumberFormatSymbols_fr');
+  goog.require('goog.i18n.CompactNumberFormatSymbols');
+  goog.require('goog.i18n.CompactNumberFormatSymbols_fr');
+  goog.require('goog.i18n.CompactNumberFormatSymbols_de');
   goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.jsunit');
   goog.require('goog.userAgent');
@@ -26,7 +29,12 @@ See the COPYING file for details.
 <script>
 
 var expectedFailures = new goog.testing.ExpectedFailures();
-goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
+
+function setUp() {
+  // Always switch back to English on startup.
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_en;
+}
 
 function tearDown() {
   expectedFailures.handleTearDown();
@@ -617,7 +625,6 @@ function testLocaleSwitch() {
   fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00;(\u00a4#,##0.00)', 'SEK');
   str = fmt.format(-1234.56);
   assertEquals('(kr1\u00a0234,56)', str);
-  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
 }
 
 function testFrenchParse() {
@@ -650,13 +657,10 @@ function testFrenchParse() {
   fmt = new goog.i18n.NumberFormat('#,##0.00');
   value = fmt.parse('8 123\u00a0456,99');
   assertEquals(8123456.99, value);
-  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
 }
 
 
 function testFailParseShouldThrow() {
-  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
-
   var fmt = new goog.i18n.NumberFormat('0.0000');
   var value = fmt.parse('x');
   assertNaN(value);
@@ -732,6 +736,33 @@ function testSignificantDigitsMoreThanMax() {
   assertEquals('12.3', fmt.format(12.34));
   assertEquals('1.23', fmt.format(1.234));
   assertEquals('0.12', fmt.format(0.1234));
+}
+
+function testSimpleCompactFrench() {
+  // Switch to French.
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fr;
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_fr;
+
+  var fmt = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.COMPACT_SHORT);
+
+  var str = fmt.format(123400000);
+  assertEquals('123\u00A0M', str);
+}
+
+function testSimpleCompactGerman() {
+  // Switch to German.
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_de;
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_de;
+
+  var fmt = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.COMPACT_SHORT);
+
+  // The german short compact decimal has a simple '0' for 1000's, which is
+  // supposed to be interpreted as 'leave the number as-is'.
+  // (The number itself will still be formatted with the '.', but no rounding)
+  var str = fmt.format(1234);
+  assertEquals('1.234', str);
 }
 
 function testSimpleCompact1() {
