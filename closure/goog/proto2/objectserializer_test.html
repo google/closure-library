@@ -14,12 +14,19 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.proto2.ObjectSerializer');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
   goog.require('proto2.TestAllTypes');
 </script>
 </head>
 <body>
 <script>
+
+var propertyReplacer = new goog.testing.PropertyReplacer();
+
+function tearDown() {
+  propertyReplacer.reset();
+}
 
 function testSerialization() {
   var message = new proto2.TestAllTypes();
@@ -345,10 +352,12 @@ function testDeserializationUnknownEnumValue() {
   assertEquals(1001, message.getOptionalNestedEnum());
 }
 
-function testDeserializationNamedEnumValue() {
+function testDeserializationSymbolicEnumValue() {
   var simplified = {
     21: 'BAR'
   };
+
+  propertyReplacer.set(goog.proto2.Serializer, 'DECODE_SYMBOLIC_ENUMS', true);
 
   var serializer = new goog.proto2.ObjectSerializer();
 
@@ -361,22 +370,30 @@ function testDeserializationNamedEnumValue() {
     message.getOptionalNestedEnum());
 }
 
-function testDeserializationUnknownNamedEnumValue() {
+function testDeserializationSymbolicEnumValueTurnedOff() {
+  var simplified = {
+    21: 'BAR'
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  assertThrows('Should have an assertion failure in deserialization',
+      function() {
+        serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+      });
+}
+
+function testDeserializationUnknownSymbolicEnumValue() {
   var simplified = {
     21: 'BARRED'
   };
 
   var serializer = new goog.proto2.ObjectSerializer();
 
-  var deserializationFailed = false;
-  try {
-    var message = serializer.deserialize(
-      proto2.TestAllTypes.getDescriptor(), simplified);
-  } catch(error) {
-    // Error is expected.
-    deserializationFailed = true;    
-  }
-  assertTrue(deserializationFailed);
+  assertThrows('Should have an assertion failure in deserialization',
+      function() {
+        serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+      });
 }
 
 function testDeserializationNumbersOrStrings() {

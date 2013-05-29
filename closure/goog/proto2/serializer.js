@@ -37,6 +37,13 @@ goog.proto2.Serializer = function() {};
 
 
 /**
+ * @define {boolean} Whether to decode and convert symbolic enum values to
+ * actual enum values or leave them as strings.
+ */
+goog.define('goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS', false);
+
+
+/**
  * Serializes a message to the expected format.
  *
  * @param {goog.proto2.Message} message The message to be serialized.
@@ -122,7 +129,7 @@ goog.proto2.Serializer.prototype.getDeserializedValue = function(field, value) {
   // Decode enum values.
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.ENUM) {
     // If it's a string, get enum value by name.
-    if (goog.isString(value)) {
+    if (goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS && goog.isString(value)) {
       // enumType is a regular Javascript enum as defined in field's metadata.
       var enumType = field.getNativeType();
       if (goog.object.containsKey(enumType, value)) {
