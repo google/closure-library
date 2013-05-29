@@ -155,6 +155,12 @@ goog.testing.MockClock.prototype.install = function() {
     r.set(goog.global, 'clearTimeout', goog.bind(this.clearTimeout_, this));
     r.set(goog.global, 'clearInterval', goog.bind(this.clearInterval_, this));
 
+    // Override our {@code goog.async.nextTick} implementation.
+    /** @suppress {missingRequire} */
+    if (goog.async && goog.async.nextTick) {
+      r.set(goog.async, 'nextTick', goog.bind(this.nextTick_, this));
+    }
+
     // Replace the requestAnimationFrame functions.
     this.replaceRequestAnimationFrame_();
 
@@ -454,6 +460,20 @@ goog.testing.MockClock.prototype.requestAnimationFrame_ = function(funcToCall) {
       goog.testing.events.fireBrowserEvent(event);
     }
   }, this), goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT);
+};
+
+
+/**
+ * Schedules a function to be called immediately after the current JS execution.
+ * Mock implementation for {@code goog.async.nextTick} which is a utility
+ * wrapper that provides setImmediate-like function in browsers that don't
+ * implement setImmediate.
+ * @param {Function} funcToCall The function to call.
+ * @return {number} The number of timeouts created.
+ * @private
+ */
+goog.testing.MockClock.prototype.nextTick_ = function(funcToCall) {
+  return this.setImmediate_(funcToCall);
 };
 
 
