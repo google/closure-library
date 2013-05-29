@@ -255,7 +255,7 @@ goog.math.longestCommonSubsequence = function(
   }
 
   for (i = 1; i <= length1; i++) {
-    for (j = 1; j <= length1; j++) {
+    for (j = 1; j <= length2; j++) {
       if (compare(array1[i - 1], array2[j - 1])) {
         arr[i][j] = arr[i - 1][j - 1] + 1;
       } else {
