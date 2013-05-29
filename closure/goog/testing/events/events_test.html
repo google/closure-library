@@ -165,7 +165,7 @@ See the COPYING file for details.
 
   function testTouchMove() {
     goog.testing.events.fireTouchMoveEvent(root);
-    goog.testing.events.fireTouchMoveEvent(root, coordinate);
+    goog.testing.events.fireTouchMoveEvent(root, coordinate, {touches: []});
     assertEventTypes(['touchmove', 'touchmove']);
     assertCoordinates([goog.style.getClientPosition(root), coordinate]);
   }

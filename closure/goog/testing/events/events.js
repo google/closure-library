@@ -611,6 +611,9 @@ goog.testing.events.fireTouchStartEvent = function(
   var touchstart =
       new goog.testing.events.Event(goog.events.EventType.TOUCHSTART, target);
   goog.testing.events.setEventClientXY_(touchstart, opt_coords);
+  if (opt_eventProperties) {
+    goog.object.extend(touchstart, opt_eventProperties);
+  }
   return goog.testing.events.fireBrowserEvent(touchstart);
 };
 
@@ -631,6 +634,9 @@ goog.testing.events.fireTouchMoveEvent = function(
   var touchmove =
       new goog.testing.events.Event(goog.events.EventType.TOUCHMOVE, target);
   goog.testing.events.setEventClientXY_(touchmove, opt_coords);
+  if (opt_eventProperties) {
+    goog.object.extend(touchmove, opt_eventProperties);
+  }
   return goog.testing.events.fireBrowserEvent(touchmove);
 };
 
@@ -651,6 +657,9 @@ goog.testing.events.fireTouchEndEvent = function(
   var touchend =
       new goog.testing.events.Event(goog.events.EventType.TOUCHEND, target);
   goog.testing.events.setEventClientXY_(touchend, opt_coords);
+  if (opt_eventProperties) {
+    goog.object.extend(touchend, opt_eventProperties);
+  }
   return goog.testing.events.fireBrowserEvent(touchend);
 };
 
