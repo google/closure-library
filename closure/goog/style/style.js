@@ -406,7 +406,15 @@ goog.style.getViewportPageOffset = function(doc) {
  * @private
  */
 goog.style.getBoundingClientRect_ = function(el) {
-  var rect = el.getBoundingClientRect();
+  var rect;
+  try {
+    rect = el.getBoundingClientRect();
+  } catch (e) {
+    // In IE < 9, calling getBoundingClientRect on an orphan element raises an
+    // "Unspecified Error". All other browsers return zeros.
+    return {'left': 0, 'top': 0, 'right': 0, 'bottom': 0};
+  }
+
   // Patch the result in IE only, so that this function can be inlined if
   // compiled for non-IE.
   if (goog.userAgent.IE) {

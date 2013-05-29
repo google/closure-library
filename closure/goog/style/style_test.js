@@ -364,6 +364,13 @@ function testGetClientPositionOfOffscreenElement() {
   }
 }
 
+function testGetClientPositionOfOrphanElement() {
+  var orphanElem = document.createElement('DIV');
+  var pos = goog.style.getClientPosition(orphanElem);
+  assertEquals(0, pos.x);
+  assertEquals(0, pos.y);
+}
+
 function testGetClientPositionEvent() {
   var mockEvent = {};
   mockEvent.clientX = 100;
@@ -775,6 +782,13 @@ function testGetSizeInlineBlock() {
   var el = $('height-test-inner');
   var dims = goog.style.getSize(el);
   assertNotEquals(0, dims.height);
+}
+
+function testGetSizeOfOrphanElement() {
+  var orphanElem = document.createElement('DIV');
+  var size = goog.style.getSize(orphanElem);
+  assertEquals(0, size.width);
+  assertEquals(0, size.height);
 }
 
 function testGetBounds() {
