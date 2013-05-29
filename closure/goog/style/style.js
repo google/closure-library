@@ -196,10 +196,9 @@ goog.style.getComputedStyle = function(element, property) {
  *
  * @param {Element} element Element to get style of.
  * @param {string} style Property to get (camel-case).
- * @return {string} Style value.
+ * @return {?string} Style value.
  */
 goog.style.getCascadedStyle = function(element, style) {
-  // TODO(nicksantos): This should be documented to return null. #fixTypes
   return element.currentStyle ? element.currentStyle[style] : null;
 };
 
@@ -1706,6 +1705,7 @@ goog.style.getIePixelBorder_ = function(element, prop) {
     return 0;
   }
   var width = goog.style.getCascadedStyle(element, prop + 'Width');
+  goog.asserts.assert(width);
   if (width in goog.style.ieBorderWidthKeywords_) {
     return goog.style.ieBorderWidthKeywords_[width];
   }
