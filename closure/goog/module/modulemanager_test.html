@@ -28,7 +28,6 @@ See the COPYING file for details.
 <body>
 <script>
   var clock;
-  var requestCount = 0
 
   function setUpPage() {
     clock = new goog.testing.MockClock(true);
@@ -36,10 +35,6 @@ See the COPYING file for details.
 
   function tearDownPage() {
     clock.dispose();
-  }
-
-  function setUp() {
-    requestCount = 0;
   }
 
   function getModuleManager(infoMap) {
@@ -56,7 +51,6 @@ See the COPYING file for details.
     return {
       loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
           opt_timeoutFn) {
-        requestCount++;
         setTimeout(goog.bind(this.onLoad, this, ids.concat(), 0), 5);
       },
       onLoad: function(ids, idxLoaded) {
@@ -74,7 +68,6 @@ See the COPYING file for details.
     return {
       loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
           opt_timeoutFn) {
-        requestCount++;
         setTimeout(function() {
           moduleMgr.beforeLoadModuleCode(ids[0]);
           moduleMgr.setLoaded(ids[0]);
@@ -350,65 +343,6 @@ See the COPYING file for details.
 
     assertTrue(calledBack);
     assertNull(error);
-  }
-
-  /**
-   * Tests loading 2 modules asserting that the loads happen in parallel
-   * in one unit of time.
-   */
-  function testLoad_concurrent() {
-    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
-    mm.setConcurrentLoadingEnabled(true);
-    mm.setLoader(createSuccessfulNonBatchLoader(mm));
-
-    var calledBack = false;
-    var error = null;
-
-    mm.load('a');
-    mm.load('b');
-    assertEquals(2, requestCount);
-    // Only time for one serialized download.
-    clock.tick(5);
-
-    assertTrue(mm.getModuleInfo('a').isLoaded());
-    assertTrue(mm.getModuleInfo('b').isLoaded());
-  }
-
-  function testLoad_concurrentSecondIsDepOfFist() {
-    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
-    mm.setBatchModeEnabled(true);
-    mm.setConcurrentLoadingEnabled(true);
-    mm.setLoader(createSuccessfulBatchLoader(mm));
-
-    var calledBack = false;
-    var error = null;
-
-    mm.loadMultiple(['a', 'b']);
-    mm.load('b');
-    assertEquals('No 2nd request expected', 1, requestCount);
-    // Only time for one serialized download.
-    clock.tick(5);
-    clock.tick(2); // Makes second module come in from batch requst.
-
-    assertTrue(mm.getModuleInfo('a').isLoaded());
-    assertTrue(mm.getModuleInfo('b').isLoaded());
-  }
-
-  function testLoad_nonConcurrent() {
-    var mm = getModuleManager({'a': [], 'b': [], 'c': []});
-    mm.setLoader(createSuccessfulNonBatchLoader(mm));
-
-    var calledBack = false;
-    var error = null;
-
-    mm.load('a');
-    mm.load('b');
-    assertEquals(1, requestCount);
-    // Only time for one serialized download.
-    clock.tick(5);
-
-    assertTrue(mm.getModuleInfo('a').isLoaded());
-    assertFalse(mm.getModuleInfo('b').isLoaded());
   }
 
   function testLoadUnknown() {
