@@ -84,6 +84,24 @@ function testFromCharCode() {
   assertEquals('\uD869\uDED6', result);
 }
 
+function testFromCharCode_invalidValues() {
+  var result = goog.i18n.uChar.fromCharCode(-1);
+  assertEquals(null, result);
+
+  result = goog.i18n.uChar.fromCharCode(
+      goog.i18n.uChar.CODE_POINT_MAX_VALUE_ + 1);
+  assertEquals(null, result);
+
+  result = goog.i18n.uChar.fromCharCode(null);
+  assertEquals(null, result);
+
+  result = goog.i18n.uChar.fromCharCode(undefined);
+  assertEquals(null, result);
+
+  result = goog.i18n.uChar.fromCharCode(NaN);
+  assertEquals(null, result);
+}
+
 function testToName() {
   var result = goog.i18n.uChar.toName(' ');
   assertEquals('Space', result);
