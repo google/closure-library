@@ -832,48 +832,15 @@ goog.ui.SliderBase.prototype.moveThumbs = function(delta) {
  * @private
  */
 goog.ui.SliderBase.prototype.setThumbPosition_ = function(thumb, position) {
-  var intermediateExtent = null;
-  // Make sure the maxThumb stays within minThumb <= maxThumb <= maximum
-  if (thumb == this.extentThumb &&
-      position <= this.rangeModel.getMaximum() &&
-      position >= this.rangeModel.getValue() + this.minExtent_) {
-    // For the case where there is only one thumb, we don't want to set the
-    // extent twice, causing two change events, so delay setting until we know
-    // if there will be a subsequent change.
-    intermediateExtent = position - this.rangeModel.getValue();
-  }
-
-  // Make sure the minThumb stays within minimum <= minThumb <= maxThumb
-  var currentExtent = intermediateExtent || this.rangeModel.getExtent();
-  if (thumb == this.valueThumb &&
-      position >= this.getMinimum() &&
-      position <= this.rangeModel.getValue() +
-          currentExtent - this.minExtent_) {
-    var newExtent = currentExtent -
-                    (position - this.rangeModel.getValue());
-    // The range model will round the value and extent. Since we're setting
-    // both, extent and value at the same time, it can happen that the
-    // rounded sum of position and extent is not equal to the sum of the
-    // position and extent rounded individually. If this happens, we simply
-    // ignore the update to prevent inconsistent moves of the extent thumb.
-    // TODO(user): This no-op needs to be fixed. We should never ignore an
-    // update, and instead remove logic where we rely on round(position) +
-    // round(extent) = round(position + extent).
-    var roundedPosition = this.rangeModel.roundToStepWithMin(position);
-    var roundedNewExtent = this.rangeModel.roundToStepWithMin(newExtent);
-    var roundedSum = this.rangeModel.roundToStepWithMin(position + newExtent);
-    var roundedValuesAreConsistent = goog.math.nearlyEquals(
-        roundedPosition + roundedNewExtent, roundedSum);
-    if (roundedValuesAreConsistent) {
-      // Atomically update the position and extent.
-      this.setValueAndExtent(position, newExtent);
-      intermediateExtent = null;
-    }
-  }
-
-  // Need to be able to set extent to 0.
-  if (intermediateExtent != null) {
-    this.rangeModel.setExtent(intermediateExtent);
+  // Round first so that all computations and checks are consistent.
+  var roundedPosition = this.rangeModel.roundToStepWithMin(position);
+  var value = thumb == this.valueThumb ? roundedPosition :
+      this.rangeModel.getValue();
+  var end = thumb == this.extentThumb ? roundedPosition :
+      this.rangeModel.getValue() + this.rangeModel.getExtent();
+  if (value >= this.getMinimum() && end >= value + this.minExtent_ &&
+      this.getMaximum() >= end) {
+    this.setValueAndExtent(value, end - value);
   }
 };
 

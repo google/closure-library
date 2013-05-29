@@ -724,6 +724,17 @@ function testNonIntegerStepSize() {
   assertRoughlyEquals(0.3, oneThumbSlider.getValue(), 0.000001);
 }
 
+function testSingleThumbSliderHasZeroExtent() {
+  var stepSize = 0.02;
+  oneThumbSlider.setStep(stepSize);
+  oneThumbSlider.setMinimum(-1);
+  oneThumbSlider.setMaximum(1);
+  oneThumbSlider.setValue(0.7);
+  assertEquals(0, oneThumbSlider.getExtent());
+  oneThumbSlider.setValue(0.3);
+  assertEquals(0, oneThumbSlider.getExtent());
+}
+
 /**
  * Tests getThumbCoordinateForValue method.
  */
