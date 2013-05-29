@@ -140,10 +140,6 @@ var _displayStringForValue = function(aVar) {
   return result;
 };
 
-
-/**
- * @param {string} failureMessage The failure message.
- */
 var fail = function(failureMessage) {
   goog.testing.asserts.raiseException('Call to fail()', failureMessage);
 };
