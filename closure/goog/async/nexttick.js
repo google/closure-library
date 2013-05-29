@@ -34,8 +34,15 @@ goog.async.nextTick = function(callback, opt_context) {
   if (opt_context) {
     cb = goog.bind(callback, opt_context);
   }
+  // Introduced and currently only supported by IE10.
+  if (goog.isFunction(goog.global.setImmediate)) {
+    goog.global.setImmediate(cb);
+    return;
+  }
+  // Look for and cache the custom fallback version of setImmediate.
   if (!goog.async.nextTick.setImmediate_) {
-    goog.async.nextTick.setImmediate_ = goog.async.nextTick.getSetImmediate_();
+    goog.async.nextTick.setImmediate_ =
+        goog.async.nextTick.getSetImmediateEmulator_();
   }
   goog.async.nextTick.setImmediate_(cb);
 };
@@ -55,12 +62,7 @@ goog.async.nextTick.setImmediate_;
  * @return {function(function())} The "setImmediate" implementation.
  * @private
  */
-goog.async.nextTick.getSetImmediate_ = function() {
-  // Introduced and currently only supported by IE10.
-  if (typeof goog.global.setImmediate === 'function') {
-    return /** @type {function(function())} */ (
-        goog.bind(goog.global.setImmediate, goog.global));
-  }
+goog.async.nextTick.getSetImmediateEmulator_ = function() {
   // Create a private message channel and use it to postMessage empty messages
   // to ourselves.
   var Channel = goog.global['MessageChannel'];
