@@ -272,8 +272,10 @@ goog.debug.ErrorReporter.prototype.handleException = function(e,
           'exception: ' + err.message);
     }
   }
-  this.sendErrorReport(error.message, error.fileName, error.lineNumber,
-      error.stack, context);
+  // Truncate message to a reasonable length, since it will be sent in the URL.
+  var message = error.message.substring(0, 2000);
+  this.sendErrorReport(message, error.fileName, error.lineNumber, error.stack,
+      context);
 
   try {
     this.dispatchEvent(
