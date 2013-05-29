@@ -44,7 +44,8 @@ goog.define('goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST', false);
  */
 goog.dom.classlist.NATIVE_DOM_TOKEN_LIST_ =
     goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST ||
-    typeof DOMTokenList != 'undefined';
+    // Whether DOMTokenList exists.
+    (!!goog.global['DOMTokenList']);
 
 
 /**
