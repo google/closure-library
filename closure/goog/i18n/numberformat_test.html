@@ -841,6 +841,35 @@ function testCompactWithoutSignificant2() {
   assertEquals('1M', fmt.format(999995));
 }
 
+function testShowTrailingZerosWithSignificantDigits() {
+  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  fmt.setSignificantDigits(2);
+  fmt.setShowTrailingZeros(true);
+
+  assertEquals('2.0', fmt.format(2));
+  assertEquals('2,000', fmt.format(2000));
+  assertEquals('0.20', fmt.format(0.2));
+  assertEquals('0.02', fmt.format(0.02));
+  assertEquals('0.002', fmt.format(0.002));
+  assertEquals('0.00', fmt.format(0));
+
+  fmt.setShowTrailingZeros(false);
+  assertEquals('2', fmt.format(2));
+  assertEquals('0.2', fmt.format(0.2));
+}
+
+
+function testShowTrailingZerosWithSignificantDigitsCompactShort() {
+  var fmt = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.COMPACT_SHORT);
+  fmt.setSignificantDigits(2);
+  fmt.setShowTrailingZeros(true);
+
+  assertEquals('2.0', fmt.format(2));
+  assertEquals('2.0K', fmt.format(2000));
+  assertEquals('20', fmt.format(20));
+}
+
 </script>
 </body>
 </html>

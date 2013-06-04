@@ -56,6 +56,13 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
   this.minExponentDigits_ = 0;
   this.useSignForPositiveExponent_ = false;
 
+  /*
+   * Whether to show trailing zeros in the fraction when significantDigits_ is
+   * positive.
+   * @private {boolean}
+   */
+  this.showTrailingZeros_ = false;
+
   this.positivePrefix_ = '';
   this.positiveSuffix_ = '';
   this.negativePrefix_ = '-';
@@ -179,12 +186,25 @@ goog.i18n.NumberFormat.prototype.setSignificantDigits = function(number) {
   this.significantDigits_ = number;
 };
 
+
 /**
- * Sets number of significant digits to show. Only fractions will be rounded.
+ * Gets number of significant digits to show. Only fractions will be rounded.
  * @return {number} The number of significant digits to include.
  */
 goog.i18n.NumberFormat.prototype.getSignificantDigits = function() {
   return this.significantDigits_;
+};
+
+
+/**
+ * Sets whether trailing fraction zeros should be shown when significantDigits_
+ * is positive. If this is true and significantDigits_ is 2, 1 will be formatted
+ * as '1.0'.
+ * @param {boolean} showTrailingZeros Whether trailing zeros should be shown.
+ */
+goog.i18n.NumberFormat.prototype.setShowTrailingZeros =
+    function(showTrailingZeros) {
+  this.showTrailingZeros_ = showTrailingZeros;
 };
 
 
@@ -505,7 +525,17 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
   var intValue = rounded.intValue;
   var fracValue = rounded.fracValue;
 
-  var fractionPresent = this.minimumFractionDigits_ > 0 || fracValue > 0;
+  var numIntDigits = (intValue == 0) ? 0 : this.intLog10_(intValue) + 1;
+  var fractionPresent = this.minimumFractionDigits_ > 0 || fracValue > 0 ||
+      (this.showTrailingZeros_ && numIntDigits < this.significantDigits_);
+  var minimumFractionDigits = this.minimumFractionDigits_;
+  if (fractionPresent) {
+    if (this.showTrailingZeros_ && this.significantDigits_ > 0) {
+      minimumFractionDigits = this.significantDigits_ - numIntDigits;
+    } else {
+      minimumFractionDigits = this.minimumFractionDigits_;
+    }
+  }
 
   var intPart = '';
   var translatableInt = intValue;
@@ -550,7 +580,7 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
   var fracPart = '' + (fracValue + power);
   var fracLen = fracPart.length;
   while (fracPart.charAt(fracLen - 1) == '0' &&
-         fracLen > this.minimumFractionDigits_ + 1) {
+      fracLen > minimumFractionDigits + 1) {
     fracLen--;
   }
 
