@@ -20,12 +20,14 @@
 
 goog.provide('goog.net.jsloader');
 goog.provide('goog.net.jsloader.Error');
+goog.provide('goog.net.jsloader.ErrorCode');
+goog.provide('goog.net.jsloader.Options');
 
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.debug.Error');
 goog.require('goog.dom');
-goog.require('goog.userAgent');
+goog.require('goog.dom.TagName');
 
 
 /**

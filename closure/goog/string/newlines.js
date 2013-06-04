@@ -22,6 +22,7 @@
  * Namespace for string utilities
  */
 goog.provide('goog.string.newlines');
+goog.provide('goog.string.newlines.Line');
 
 goog.require('goog.array');
 

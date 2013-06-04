@@ -34,9 +34,9 @@
  *
  */
 goog.provide('goog.vec.mat3d');
+goog.provide('goog.vec.mat3d.Type');
 
 goog.require('goog.vec');
-goog.require('goog.vec.vec3d');
 
 
 /** @typedef {goog.vec.Float64} */ goog.vec.mat3d.Type;

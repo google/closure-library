@@ -21,6 +21,7 @@ goog.provide('goog.math.Matrix');
 goog.require('goog.array');
 goog.require('goog.math');
 goog.require('goog.math.Size');
+goog.require('goog.string');
 
 
 

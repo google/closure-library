@@ -34,6 +34,7 @@
  *
  */
 goog.provide('goog.vec.mat4d');
+goog.provide('goog.vec.mat4d.Type');
 
 goog.require('goog.vec');
 goog.require('goog.vec.vec3d');

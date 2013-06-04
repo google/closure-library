@@ -37,9 +37,11 @@ goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
+goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XhrIoPool');
+goog.require('goog.structs');
 goog.require('goog.structs.Map');
 
 // TODO(user): Add some time in between retries.

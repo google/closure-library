@@ -34,7 +34,9 @@
  *
  */
 goog.provide('goog.vec.vec3f');
+goog.provide('goog.vec.vec3f.Type');
 
+/** @suppress {extraRequire} */
 goog.require('goog.vec');
 
 /** @typedef {goog.vec.Float32} */ goog.vec.vec3f.Type;

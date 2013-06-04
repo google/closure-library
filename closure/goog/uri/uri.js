@@ -38,6 +38,7 @@ goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 goog.require('goog.uri.utils.ComponentIndex');
+goog.require('goog.uri.utils.StandardQueryParam');
 
 
 

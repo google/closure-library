@@ -35,7 +35,9 @@
  */
 
 goog.provide('goog.vec.vec2f');
+goog.provide('goog.vec.vec2f.Type');
 
+/** @suppress {extraRequire} */
 goog.require('goog.vec');
 
 

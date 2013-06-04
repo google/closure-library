@@ -43,7 +43,6 @@
 goog.provide('goog.structs.AvlTree');
 goog.provide('goog.structs.AvlTree.Node');
 
-goog.require('goog.structs');
 goog.require('goog.structs.Collection');
 
 
