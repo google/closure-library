@@ -319,20 +319,16 @@ function testCaseInsensitiveEquals() {
 
 // === tests for goog.string.subs ===
 function testSubs() {
+  assertEquals('Should be the same', goog.string.subs('nothing to subs'),
+               'nothing to subs');
+  assertEquals('Should be the same', goog.string.subs('%s', '1'), '1');
   assertEquals('Should be the same',
-               'nothing to subs',
-               goog.string.subs('nothing to subs'));
-  assertEquals('Should be the same',
-               '1',
-               goog.string.subs('%s', '1'));
-  assertEquals('Should be the same',
-               '12true',
-               goog.string.subs('%s%s%s', '1', 2, true));
+               goog.string.subs('%s%s%s', '1', 2, true), '12true');
   function f() {
-    fail('This should not be called');
+    assertTrue('This should not be called', false);
   }
   f.toString = function() { return 'f'; };
-  assertEquals('Should not call function', 'f', goog.string.subs('%s', f));
+  assertEquals('Should not call function', goog.string.subs('%s', f), 'f');
 
   // If the string that is to be substituted in contains $& then it will be
   // usually be replaced with %s, we need to check goog.string.subs, handles
@@ -350,13 +346,6 @@ function testSubs() {
     assertEquals('$' + i + ' should not be substituted',
         '_$' + i + '_', goog.string.subs('%s', '_$' + i + '_'));
   }
-
-  assertEquals(
-      'Only the first three "%s" strings should be replaced.',
-      'test foo test bar test baz test %s test %s test',
-      goog.string.subs(
-          'test %s test %s test %s test %s test %s test',
-          'foo', 'bar', 'baz'));
 }
 
 
