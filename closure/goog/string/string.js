@@ -103,18 +103,18 @@ goog.string.caseInsensitiveEquals = function(str1, str2) {
  *     {@code %s} has been replaced an argument from {@code var_args}.
  */
 goog.string.subs = function(str, var_args) {
-  // This appears to be slow, but testing shows it compares more or less
-  // equivalent to the regex.exec method.
-  for (var i = 1; i < arguments.length; i++) {
-    // We cast to String in case an argument is a Function.  Replacing $&, for
-    // example, with $$$& stops the replace from subsituting the whole match
-    // into the resultant string.  $$$& in the first replace becomes $$& in the
-    //  second, which leaves $& in the resultant string.  Also:
-    // $$, $`, $', $n $nn
-    var replacement = String(arguments[i]).replace(/\$/g, '$$$$');
-    str = str.replace(/\%s/, replacement);
+  var splitParts = str.split('%s');
+  var returnString = '';
+
+  var subsArguments = Array.prototype.slice.call(arguments, 1);
+  while (subsArguments.length &&
+         // Replace up to the last split part. We are inserting in the
+         // positions between split parts.
+         splitParts.length > 1) {
+    returnString += splitParts.shift() + subsArguments.shift();
   }
-  return str;
+
+  return returnString + splitParts.join('%s'); // Join unused '%s'
 };
 
 
