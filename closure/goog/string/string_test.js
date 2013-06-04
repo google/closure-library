@@ -1138,3 +1138,25 @@ function testIsUpperCamelCase() {
   assertTrue(goog.string.isUpperCamelCase('FooBar'));
   assertTrue(goog.string.isUpperCamelCase('FooBarBaz'));
 }
+
+function testSplitLimit() {
+  assertArrayEquals(['a*a*a*a'], goog.string.splitLimit('a*a*a*a', '*', -1));
+  assertArrayEquals(['a*a*a*a'], goog.string.splitLimit('a*a*a*a', '*', 0));
+  assertArrayEquals(['a', 'a*a*a'], goog.string.splitLimit('a*a*a*a', '*', 1));
+  assertArrayEquals(['a', 'a', 'a*a'],
+                    goog.string.splitLimit('a*a*a*a', '*', 2));
+  assertArrayEquals(['a', 'a', 'a', 'a'],
+                    goog.string.splitLimit('a*a*a*a', '*', 3));
+  assertArrayEquals(['a', 'a', 'a', 'a'],
+                    goog.string.splitLimit('a*a*a*a', '*', 4));
+
+  assertArrayEquals(['bbbbbbbbbbbb'],
+                    goog.string.splitLimit('bbbbbbbbbbbb', 'a', 10));
+  assertArrayEquals(['babab', 'bab', 'abb'],
+                    goog.string.splitLimit('bababaababaaabb', 'aa', 10));
+  assertArrayEquals(['babab', 'babaaabb'],
+                    goog.string.splitLimit('bababaababaaabb', 'aa', 1));
+  assertArrayEquals(
+      ['b', 'a', 'b', 'a', 'b', 'a', 'a', 'b', 'a', 'b', 'aaabb'],
+      goog.string.splitLimit('bababaababaaabb', '', 10));
+}
