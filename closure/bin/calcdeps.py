@@ -89,7 +89,7 @@ def ExpandDirectories(refs):
   for ref in refs:
     if IsDirectory(ref):
       # Disable 'Unused variable' for subdirs
-      # pylint: disable-msg=W0612
+      # pylint: disable=unused-variable
       for (directory, subdirs, filenames) in os.walk(ref):
         for filename in filenames:
           if IsJsFile(filename):
