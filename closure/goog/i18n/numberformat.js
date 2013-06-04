@@ -27,6 +27,7 @@ goog.provide('goog.i18n.NumberFormat.Format');
 goog.require('goog.i18n.CompactNumberFormatSymbols');
 goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.currency');
+goog.require('goog.math');
 
 
 
@@ -634,7 +635,7 @@ goog.i18n.NumberFormat.prototype.subformatExponential_ =
     return;
   }
 
-  var exponent = Math.floor(Math.log(number) / Math.log(10));
+  var exponent = goog.math.safeFloor(Math.log(number) / Math.log(10));
   number /= Math.pow(10, exponent);
 
   var minIntDigits = this.minimumIntegerDigits_;

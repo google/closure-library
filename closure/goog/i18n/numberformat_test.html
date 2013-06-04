@@ -101,6 +101,10 @@ function testStandardFormat() {
   fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.SCIENTIFIC);
   str = fmt.format(1234.579);
   assertEquals('1E3', str);
+  // Math.log(1000000)/Math.LN10 is strictly less than 6. Make sure it gets
+  // formatted correctly.
+  str = fmt.format(1000000);
+  assertEquals('1E6', str);
 }
 
 function testNegativePercentage() {
