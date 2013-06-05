@@ -21,7 +21,6 @@
 goog.provide('goog.date.relative');
 
 goog.require('goog.i18n.DateTimeFormat');
-goog.require('goog.i18n.MessageFormat');
 
 
 /**
@@ -335,81 +334,98 @@ goog.date.relative.getDateString_ = function(
 goog.date.relative.getMessage_ = function(delta, future, unit) {
   if (!future && unit == goog.date.relative.Unit_.MINUTES) {
     /**
-     * @desc [ICU Syntax] Relative date indicating how many minutes ago
-     * something happened.
+     * @desc Relative date indicating how many minutes ago something happened
+     * (singular).
      */
-    var MSG_MINUTES_AGO =
-        goog.getMsg('{NUM, plural, ' +
-            '=0 {{NUM} minutes ago}' +
-            '=1 {{NUM} minute ago}' +
-            'other {{NUM} minutes ago}}');
+    var MSG_MINUTES_AGO_SINGULAR =
+        goog.getMsg('{$num} minute ago', {'num' : delta});
 
-    return new goog.i18n.MessageFormat(MSG_MINUTES_AGO).format({'NUM': delta});
+    /**
+     * @desc Relative date indicating how many minutes ago something happened
+     * (plural).
+     */
+    var MSG_MINUTES_AGO_PLURAL =
+        goog.getMsg('{$num} minutes ago', {'num' : delta});
+
+    return delta == 1 ? MSG_MINUTES_AGO_SINGULAR : MSG_MINUTES_AGO_PLURAL;
 
   } else if (future && unit == goog.date.relative.Unit_.MINUTES) {
     /**
-     * @desc [ICU Syntax] Relative date indicating in how many minutes something
-     * happens.
+     * @desc Relative date indicating in how many minutes something happens
+     * (singular).
      */
-    var MSG_IN_MINUTES =
-        goog.getMsg('{NUM, plural, ' +
-            '=0 {in {NUM} minutes}' +
-            '=1 {in {NUM} minute}' +
-            'other {in {NUM} minutes}}');
+    var MSG_IN_MINUTES_SINGULAR =
+        goog.getMsg('in {$num} minute', {'num' : delta});
 
-    return new goog.i18n.MessageFormat(MSG_IN_MINUTES).format({'NUM': delta});
+    /**
+     * @desc Relative date indicating in how many minutes something happens
+     * (plural).
+     */
+    var MSG_IN_MINUTES_PLURAL =
+        goog.getMsg('in {$num} minutes', {'num' : delta});
+
+    return delta == 1 ? MSG_IN_MINUTES_SINGULAR : MSG_IN_MINUTES_PLURAL;
 
   } else if (!future && unit == goog.date.relative.Unit_.HOURS) {
     /**
-     * @desc [ICU Syntax] Relative date indicating how many hours ago something
-     * happened.
+     * @desc Relative date indicating how many hours ago something happened
+     * (singular).
      */
-    var MSG_HOURS_AGO =
-        goog.getMsg('{NUM, plural, ' +
-            '=0 {{NUM} hours ago}' +
-            '=1 {{NUM} hour ago}' +
-            'other {{NUM} hours ago}}');
+    var MSG_HOURS_AGO_SINGULAR =
+        goog.getMsg('{$num} hour ago', {'num' : delta});
 
-    return new goog.i18n.MessageFormat(MSG_HOURS_AGO).format({'NUM': delta});
+    /**
+     * @desc Relative date indicating how many hours ago something happened
+     * (plural).
+     */
+    var MSG_HOURS_AGO_PLURAL = goog.getMsg('{$num} hours ago', {'num' : delta});
+
+    return delta == 1 ? MSG_HOURS_AGO_SINGULAR : MSG_HOURS_AGO_PLURAL;
 
   } else if (future && unit == goog.date.relative.Unit_.HOURS) {
     /**
-     * @desc [ICU Syntax] Relative date indicating in how many hours something
-     * happens.
+     * @desc Relative date indicating in how many hours something happens
+     * (singular).
      */
-    var MSG_IN_HOURS =
-        goog.getMsg('{NUM, plural, ' +
-            '=0 {in {NUM} hours}' +
-            '=1 {in {NUM} hour}' +
-            'other {in {NUM} hours}}');
+    var MSG_IN_HOURS_SINGULAR = goog.getMsg('in {$num} hour', {'num' : delta});
 
-    return new goog.i18n.MessageFormat(MSG_IN_HOURS).format({'NUM': delta});
+    /**
+     * @desc Relative date indicating in how many hours something happens
+     * (plural).
+     */
+    var MSG_IN_HOURS_PLURAL = goog.getMsg('in {$num} hours', {'num' : delta});
+
+    return delta == 1 ? MSG_IN_HOURS_SINGULAR : MSG_IN_HOURS_PLURAL;
 
   } else if (!future && unit == goog.date.relative.Unit_.DAYS) {
     /**
-     * @desc [ICU Syntax] Relative date indicating how many days ago something
-     * happened.
+     * @desc Relative date indicating how many days ago something happened
+     * (singular).
      */
-    var MSG_DAYS_AGO =
-        goog.getMsg('{NUM, plural, ' +
-            '=0 {{NUM} days ago}' +
-            '=1 {{NUM} day ago}' +
-            'other {{NUM} days ago}}');
+    var MSG_DAYS_AGO_SINGULAR = goog.getMsg('{$num} day ago', {'num' : delta});
 
-    return new goog.i18n.MessageFormat(MSG_DAYS_AGO).format({'NUM': delta});
+    /**
+     * @desc Relative date indicating how many days ago something happened
+     * (plural).
+     */
+    var MSG_DAYS_AGO_PLURAL = goog.getMsg('{$num} days ago', {'num' : delta});
+
+    return delta == 1 ? MSG_DAYS_AGO_SINGULAR : MSG_DAYS_AGO_PLURAL;
 
   } else if (future && unit == goog.date.relative.Unit_.DAYS) {
     /**
-     * @desc [ICU Syntax] Relative date indicating in how many days something
-     * happens.
+     * @desc Relative date indicating in how many days something happens
+     * (singular).
      */
-    var MSG_IN_DAYS =
-        goog.getMsg('{NUM, plural, ' +
-            '=0 {in {NUM} days}' +
-            '=1 {in {NUM} day}' +
-            'other {in {NUM} days}}');
+    var MSG_IN_DAYS_SINGULAR = goog.getMsg('in {$num} day', {'num' : delta});
 
-    return new goog.i18n.MessageFormat(MSG_IN_DAYS).format({'NUM': delta});
+    /**
+     * @desc Relative date indicating in how many days something happens
+     * (plural).
+     */
+    var MSG_IN_DAYS_PLURAL = goog.getMsg('in {$num} days', {'num' : delta});
+
+    return delta == 1 ? MSG_IN_DAYS_SINGULAR : MSG_IN_DAYS_PLURAL;
 
   } else {
     return '';
