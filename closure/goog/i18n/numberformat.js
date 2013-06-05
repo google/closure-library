@@ -1144,3 +1144,34 @@ goog.i18n.NumberFormat.prototype.pluralForm_ = function(quantity) {
   /* TODO: Implement */
   return 'other';
 };
+
+
+/**
+ * Checks if the currency symbol comes before the value ($12) or after (12$)
+ * Handy for applications that need to have separate UI fields for the currency
+ * value and symbol, especially for input: Price: [USD] [123.45]
+ * The currency symbol might be a combo box, or a label.
+ *
+ * @return {boolean} true if currency is before value.
+ */
+goog.i18n.NumberFormat.prototype.isCurrencyCodeBeforeValue = function() {
+  var posCurrSymbol = this.pattern_.indexOf('\u00A4'); // '¤' Currency sign
+  var posPound = this.pattern_.indexOf('#');
+  var posZero = this.pattern_.indexOf('0');
+
+  // posCurrValue is the first '#' or '0' found.
+  // If none of them is found (not possible, but still),
+  // the result is true (postCurrSymbol < MAX_VALUE)
+  // That is OK, matches the en_US and ROOT locales.
+  var posCurrValue = Number.MAX_VALUE;
+  if (posPound >= 0 && posPound < posCurrValue) {
+    posCurrValue = posPound;
+  }
+  if (posZero >= 0 && posZero < posCurrValue) {
+    posCurrValue = posZero;
+  }
+
+  // No need to test, it is guaranteed that both these symbols exist.
+  // If not, we have bigger problems than this.
+  return posCurrSymbol < posCurrValue;
+};

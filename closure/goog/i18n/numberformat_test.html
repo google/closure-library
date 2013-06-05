@@ -874,6 +874,77 @@ function testShowTrailingZerosWithSignificantDigitsCompactShort() {
   assertEquals('20', fmt.format(20));
 }
 
+function testCurrencyCodeOrder() {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fr;
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_fr;
+  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  assertFalse(fmt.isCurrencyCodeBeforeValue());
+
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_en;
+  var fmt1 = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  assertTrue(fmt1.isCurrencyCodeBeforeValue());
+
+  // Check that we really have different formatters with different patterns
+  assertFalse(fmt.isCurrencyCodeBeforeValue());
+
+
+  // Using custom patterns instead of standard locale ones
+
+  fmt = new goog.i18n.NumberFormat("\u00A4 #0");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("\u00A4 0 and #");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("#0 \u00A4");
+  assertFalse(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("0 and # \u00A4");
+  assertFalse(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("\u00A4 0");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("0 \u00A4");
+  assertFalse(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("\u00A4 #");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("# \u00A4");
+  assertFalse(fmt.isCurrencyCodeBeforeValue());
+
+
+  // Edge cases, should never happen (like #0 separated by currency symbol,
+  // or missing currency symbol, or missing both # and 0, or missing all)
+  // We still make sure we get reasonable results (as much as possible)
+
+  fmt = new goog.i18n.NumberFormat("0 \u00A4 #");
+  assertFalse(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("# \u00A4 0");
+  assertFalse(fmt.isCurrencyCodeBeforeValue());
+
+  fmt = new goog.i18n.NumberFormat("\u00A4");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());  // currency first, en_US style
+
+  fmt = new goog.i18n.NumberFormat("0");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());  // currency first, en_US style
+
+  fmt = new goog.i18n.NumberFormat("#");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());  // currency first, en_US style
+
+  fmt = new goog.i18n.NumberFormat("#0");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());  // currency first, en_US style
+
+  fmt = new goog.i18n.NumberFormat("0 and #");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());  // currency first, en_US style
+
+  fmt = new goog.i18n.NumberFormat("nothing");
+  assertTrue(fmt.isCurrencyCodeBeforeValue());  // currency first, en_US style
+}
+
 </script>
 </body>
 </html>
