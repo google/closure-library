@@ -1360,6 +1360,33 @@ function testIsMidnight() {
   assertFalse(new goog.date.DateTime(2013, 0, 1, 0, 0, 0, 1).isMidnight());
 }
 
+function testMinMax() {
+  // Comparison of two goog.date.DateTimes
+  var dateTime1 = new goog.date.DateTime(2000, 0, 1);
+  var dateTime2 = new goog.date.DateTime(2000, 0, 1, 0, 0, 0, 1);
+  assertEquals(dateTime1, goog.date.min(dateTime1, dateTime2));
+  assertEquals(dateTime1, goog.date.min(dateTime2, dateTime1));
+  assertEquals(dateTime2, goog.date.max(dateTime1, dateTime2));
+  assertEquals(dateTime2, goog.date.max(dateTime2, dateTime1));
+
+  // Comparison of two goog.date.Dates
+  var date1 = new goog.date.Date(2000, 0, 1);
+  var date2 = new goog.date.Date(2000, 0, 2);
+  assertEquals(date1, goog.date.min(date1, date2));
+
+  // Comparison of native Dates.
+  var jsDate1 = new Date(2000, 0, 1);
+  var jsDate2 = new Date(2000, 0, 2);
+  assertEquals(jsDate1, goog.date.min(jsDate1, jsDate2));
+  assertEquals(jsDate2, goog.date.max(jsDate1, jsDate2));
+
+  // Comparison of different types.
+  assertEquals(date1, goog.date.min(date1, dateTime2));
+  assertEquals(dateTime2, goog.date.min(date2, dateTime2));
+  assertEquals(date1, goog.date.min(date1, jsDate2));
+  assertEquals(jsDate2, goog.date.max(dateTime1, jsDate2));
+}
+
 </script>
 </body>
 </html>
