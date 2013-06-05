@@ -12,8 +12,8 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.string.linkify');
-  goog.require('goog.testing.jsunit');
   goog.require('goog.testing.dom');
+  goog.require('goog.testing.jsunit');
 </script>
 </head>
 <body>
@@ -318,7 +318,8 @@ function testLinkifyOptionsClassName() {
 }
 
 function testFindFirstUrlNoScheme() {
-  assertEquals(goog.string.linkify.findFirstUrl('www.google.com'), 'www.google.com');
+  assertEquals('www.google.com', goog.string.linkify.findFirstUrl(
+      'www.google.com'));
 }
 
 function testFindFirstUrlNoSchemeWithText() {
@@ -402,6 +403,22 @@ function testEndsWithPunctuation_angles() {
       'Here is a bibliography entry <http://www.google.com/>',
       'Here is a bibliography entry &lt;<a href="http://www.google.com/">' +
           'http://www.google.com/<\/a>&gt;');
+}
+
+function testEndsWithPunctuation_closingPairThenSingle() {
+  assertLinkify(
+      'Link followed by closing punctuation pair then singular punctuation',
+      'Here is a bibliography entry <http://www.google.com/>, PTAL.',
+      'Here is a bibliography entry &lt;<a href="http://www.google.com/">' +
+          'http://www.google.com/<\/a>&gt;, PTAL.');
+}
+
+function testEndsWithPunctuation_ellipses() {
+  assertLinkify(
+      'Link followed by three dots',
+      'just look it up on www.google.com...',
+      'just look it up on <a href="http://www.google.com">www.google.com' +
+          '<\/a>...');
 }
 
 function testBracketsInUrl() {

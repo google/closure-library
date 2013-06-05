@@ -115,8 +115,8 @@ goog.string.linkify.findFirstEmail = function(text) {
 
 
 /**
- * If one of these characters is at the end of a url, it will be considered as a
- * puncutation and not part of the url.
+ * If a series of these characters is at the end of a url, it will be considered
+ * punctuation and not part of the url.
  * @type {string}
  * @const
  * @private
@@ -129,9 +129,8 @@ goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = ':;,\\.?>\\]\\)!';
  * @const
  * @private
  */
-goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ =
-    new RegExp(
-        '^(.*)([' + goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + '])$');
+goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ = new RegExp(
+    '^(.*?)([' + goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + ']+)$');
 
 
 /**
@@ -142,8 +141,7 @@ goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ =
  * @const
  * @private
  */
-goog.string.linkify.ACCEPTABLE_URL_CHARS_ =
-    goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + '\\w~#-@!\\[\\]';
+goog.string.linkify.ACCEPTABLE_URL_CHARS_ = '\\w~#-@!\\[\\]';
 
 
 /**
