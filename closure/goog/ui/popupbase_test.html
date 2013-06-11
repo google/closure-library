@@ -14,12 +14,14 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.ui.PopupBase</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.dom');
   goog.require('goog.events.EventTarget');
   goog.require('goog.events.EventType');
   goog.require('goog.fx.Transition');
   goog.require('goog.fx.Transition.EventType');
   goog.require('goog.fx.css3');
   goog.require('goog.ui.Popup');
+  goog.require('goog.useragent');
   goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
@@ -310,6 +312,151 @@ function testMoveOffscreenRTL() {
   popup.setVisible(false);
   assertFalse('Moving a popup offscreen should not cause scrollbars',
       goog.dom.getDocumentScrollElement().scrollWidth != originalScrollWidth);
+}
+
+function testOnDocumentBlurDisabledCrossIframeDismissalWithoutDelay() {
+  popup.setEnableCrossIframeDismissal(false);
+  popup.setVisible(true);
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should remain visible', popup.isVisible());
+}
+
+function testOnDocumentBlurDisabledCrossIframeDismissalWithDelay() {
+  popup.setEnableCrossIframeDismissal(false);
+  popup.setVisible(true);
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should remain visible', popup.isVisible());
+}
+
+function testOnDocumentBlurActiveElementInsidePopupWithoutDelay() {
+  popup.setVisible(true);
+  var elementInsidePopup = goog.dom.createDom('div');
+  goog.dom.append(popupDiv, elementInsidePopup);
+  elementInsidePopup.setAttribute('tabIndex', 0);
+  elementInsidePopup.focus();
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should remain visible', popup.isVisible());
+}
+
+function testOnDocumentBlurActiveElementInsidePopupWithDelay() {
+  popup.setVisible(true);
+  var elementInsidePopup = goog.dom.createDom('div');
+  goog.dom.append(popupDiv, elementInsidePopup);
+  elementInsidePopup.setAttribute('tabIndex', 0);
+  elementInsidePopup.focus();
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should remain visible', popup.isVisible());
+}
+
+function testOnDocumentBlurActiveElementIsBodyWithoutDelay() {
+  popup.setVisible(true);
+  var bodyElement = goog.dom.getDomHelper().
+      getElementsByTagNameAndClass('body')[0];
+  bodyElement.setAttribute('tabIndex', 0);
+  bodyElement.focus();
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should remain visible', popup.isVisible());
+}
+
+function testOnDocumentBlurActiveElementIsBodyWithDelay() {
+  popup.setVisible(true);
+  var bodyElement = goog.dom.getDomHelper().
+      getElementsByTagNameAndClass('body')[0];
+  bodyElement.setAttribute('tabIndex', 0);
+  bodyElement.focus();
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should remain visible', popup.isVisible());
+}
+
+function testOnDocumentBlurEventTargetNotDocumentWithoutDelay() {
+  popup.setVisible(true);
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, targetDiv);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should remain visible', popup.isVisible());
+}
+
+function testOnDocumentBlurEventTargetNotDocumentWithDelay() {
+  popup.setVisible(true);
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, targetDiv);
+  clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should remain visible', popup.isVisible());
+}
+
+function testOnDocumentBlurShouldDebounceWithoutDelay() {
+  popup.setVisible(true);
+  var commonAncestor = goog.dom.getElement('commonAncestor');
+  var focusDiv = goog.dom.createDom('div', 'tabIndex');
+  focusDiv.setAttribute('tabIndex', 0);
+  goog.dom.appendChild(commonAncestor, focusDiv);
+  focusDiv.focus();
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should be visible', popup.isVisible());
+  goog.dom.removeNode(focusDiv);
+}
+
+function testOnDocumentBlurShouldNotDebounceWithDelay() {
+  popup.setVisible(true);
+  clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
+  var commonAncestor = goog.dom.getElement('commonAncestor');
+  var focusDiv = goog.dom.createDom('div', 'tabIndex');
+  focusDiv.setAttribute('tabIndex', 0);
+  goog.dom.appendChild(commonAncestor, focusDiv);
+  focusDiv.focus();
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  goog.testing.events.fireBrowserEvent(e);
+  assertFalse('Popup should be invisible', popup.isVisible());
+  goog.dom.removeNode(focusDiv);
+}
+
+
+function testOnDocumentBlurShouldNotHideBubbleWithoutDelay() {
+  popup.setVisible(true);
+  var commonAncestor = goog.dom.getElement('commonAncestor');
+  var focusDiv = goog.dom.createDom('div', 'tabIndex');
+  focusDiv.setAttribute('tabIndex', 0);
+  goog.dom.appendChild(commonAncestor, focusDiv);
+  focusDiv.focus();
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  goog.testing.events.fireBrowserEvent(e);
+  assertTrue('Popup should be visible', popup.isVisible());
+  goog.dom.removeNode(focusDiv);
+}
+
+function testOnDocumentBlurShouldHideBubbleWithDelay() {
+  popup.setVisible(true);
+  clock.tick(goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
+  var commonAncestor = goog.dom.getElement('commonAncestor');
+  var focusDiv = goog.dom.createDom('div', 'tabIndex');
+  focusDiv.setAttribute('tabIndex', 0);
+  goog.dom.appendChild(commonAncestor, focusDiv);
+  focusDiv.focus();
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, document);
+  goog.testing.events.fireBrowserEvent(e);
+  assertFalse('Popup should be invisible', popup.isVisible());
+  goog.dom.removeNode(focusDiv);
 }
 
 /**

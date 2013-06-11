@@ -780,7 +780,7 @@ goog.ui.PopupBase.prototype.onDocumentBlur_ = function(e) {
   // Ignore blur events if the active element is still inside the popup or if
   // there is no longer an active element.  For example, a widget like a
   // goog.ui.Button might programatically blur itself before losing tabIndex.
-  if (goog.userAgent.IE || goog.userAgent.OPERA) {
+  if (typeof document.activeElement != 'undefined') {
     var activeElement = doc.activeElement;
     if (!activeElement || goog.dom.contains(this.element_,
         activeElement) || activeElement.tagName == 'BODY') {
