@@ -50,6 +50,14 @@ goog.testing.jsunit.CORE_SCRIPT =
 goog.define('goog.testing.jsunit.AUTO_RUN_ONLOAD', true);
 
 
+/**
+ * @define {number} Sets a delay in milliseconds after the window onload event
+ * and running the tests. Used to prevent interference with Selenium and give
+ * tests with asynchronous operations time to finish loading.
+ */
+goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
+
+
 (function() {
   // Increases the maximum number of stack frames in Google Chrome from the
   // default 10 to 50 to get more useful stack traces.
@@ -132,7 +140,7 @@ goog.define('goog.testing.jsunit.AUTO_RUN_ONLOAD', true);
         if (onload) {
           onload(e);
         }
-        // Wait 500ms longer so that we don't interfere with Selenium.
+        // Wait so that we don't interfere with WebDriver.
         realTimeout(function() {
           if (!tr.initialized) {
             var test = new goog.testing.TestCase(document.title);
@@ -140,7 +148,7 @@ goog.define('goog.testing.jsunit.AUTO_RUN_ONLOAD', true);
             tr.initialize(test);
           }
           tr.execute();
-        }, 500);
+        }, goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS);
         window.onload = null;
       };
     }
