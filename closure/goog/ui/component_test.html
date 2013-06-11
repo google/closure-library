@@ -375,13 +375,10 @@ See the COPYING file for details.
           'getRequiredElementByClass() should return the first completed task',
           'groceries',
           component.getRequiredElementByClass('task').id);
-      try {
+      assertThrows('Attempting to retrieve a required element that does not' +
+          'exist should fail', function() {
         component.getRequiredElementByClass('undefinedClass');
-        fail('Attempting to retrieve a required element that does not exist ' +
-            'should fail');
-      } catch (e) {
-        // No-op, expected failure.
-      }
+      });
     }
 
     function testEnterExitDocument() {
