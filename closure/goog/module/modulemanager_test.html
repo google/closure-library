@@ -95,6 +95,14 @@ See the COPYING file for details.
       }};
   }
 
+  function createUnsuccessfulBatchLoader(moduleMgr, status) {
+    return {
+      loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+          opt_timeoutFn) {
+        setTimeout(function() { opt_errFn(status); }, 5);
+      }};
+  }
+
   function createTimeoutLoader(moduleMgr, status) {
     return {
       loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
@@ -1547,6 +1555,42 @@ See the COPYING file for details.
     clock.tick(5);
     assertTrue(
         'module "r" should be loaded', mm.isModuleLoaded('r'));
+  }
+
+  /**
+   * Tests error loading modules which are retried.
+   */
+  function testErrorLoadingModule_batchMode() {
+    var mm = getModuleManager({
+      'p': ['q'],
+      'q': [],
+      'r': ['q','p']});
+    mm.setLoader(createUnsuccessfulBatchLoader(mm, 500));
+    mm.setBatchModeEnabled(true);
+
+    mm.preloadModule('r');
+    clock.tick(4);
+
+    // A module request is now underway using the unsuccessful loader.
+    // We substitute a successful loader for future module load requests.
+    mm.setLoader(createSuccessfulBatchLoader(mm));
+    clock.tick(1);
+    assertFalse(
+        'module "q" should not be loaded (1)', mm.isModuleLoaded('q'));
+    assertFalse(
+        'module "p" should not be loaded (1)', mm.isModuleLoaded('p'));
+    assertFalse(
+        'module "r" should not be loaded (1)', mm.isModuleLoaded('r'));
+
+    // Failed loads are automatically retried after a backOff.
+    clock.tick(5 + mm.getBackOff_());
+    assertTrue('module "q" should be loaded', mm.isModuleLoaded('q'));
+    clock.tick(2);
+    assertTrue(
+        'module "p" should not be loaded (2)', mm.isModuleLoaded('p'));
+    clock.tick(2);
+    assertTrue(
+        'module "r" should not be loaded (2)', mm.isModuleLoaded('r'));
   }
 
   /**

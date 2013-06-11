@@ -715,7 +715,8 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
       goog.array.clone(idsToLoadImmediately),
       this.moduleInfoMap_,
       null,
-      goog.bind(this.handleLoadError_, this, this.requestedLoadingModuleIds_),
+      goog.bind(this.handleLoadError_, this, this.requestedLoadingModuleIds_,
+          idsToLoadImmediately),
       goog.bind(this.handleLoadTimeout_, this),
       !!opt_forceReload);
 
@@ -1120,19 +1121,21 @@ goog.module.ModuleManager.FailureType = {
  * Handles a module load failure.
  *
  * @param {!Array.<string>} requestedLoadingModuleIds Modules ids that were
- *     requested in failed request.
+ *     requested in failed request. Does not included calculated dependencies.
+ * @param {!Array.<string>} requestedModuleIdsWithDeps All module ids requested
+ *     in the failed request including all dependencies.
  * @param {?number} status The error status.
  * @private
  */
 goog.module.ModuleManager.prototype.handleLoadError_ = function(
-    requestedLoadingModuleIds, status) {
+    requestedLoadingModuleIds, requestedModuleIdsWithDeps, status) {
   this.consecutiveFailures_++;
   // Module manager was not designed to be reentrant. Reinstate the instance
   // var with actual value when request failed (Other requests may have
   // started already.)
   this.requestedLoadingModuleIds_ = requestedLoadingModuleIds;
   // Pretend we never requested the failed modules.
-  goog.array.forEach(requestedLoadingModuleIds,
+  goog.array.forEach(requestedModuleIdsWithDeps,
       goog.partial(goog.array.remove, this.requestedModuleIds_), this);
 
   if (status == 401) {
