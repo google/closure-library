@@ -190,6 +190,41 @@ function testAcceptNonObject() {
       goog.soy.renderAsElement(goog.functions.constant(null))));
 }
 
+function testDebugAssertionWithBadFirstTag() {
+  try {
+    goog.soy.renderAsElement(example.tableRowTemplate);
+    // Expect no exception in production code.
+    assert(!goog.DEBUG);
+  } catch (e) {
+    // Expect exception in debug code.
+    assert(goog.DEBUG);
+    // Make sure to let the developer know which tag caused the problem.
+    assertContains('<tr>', e.message);
+  }
+
+  try {
+    goog.soy.renderAsFragment(example.tableRowTemplate);
+    // Expect no exception in production code.
+    assert(!goog.DEBUG);
+  } catch (e) {
+    // Expect exception in debug code.
+    assert(goog.DEBUG);
+    // Make sure to let the developer know which tag caused the problem.
+    assertContains('<tr>', e.message);
+  }
+
+  try {
+    goog.soy.renderAsElement(example.colGroupTemplateCaps);
+    // Expect no exception in production code.
+    assert(!goog.DEBUG);
+  } catch (e) {
+    // Expect exception in debug code.
+    assert(goog.DEBUG);
+    // Make sure to let the developer know which tag caused the problem.
+    assertContains('<COLGROUP>', e.message);
+  }
+}
+
 </script>
 </body>
 </html>

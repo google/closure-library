@@ -74,9 +74,11 @@ goog.soy.renderElement = function(element, template, opt_templateData,
 goog.soy.renderAsFragment = function(template, opt_templateData,
                                      opt_injectedData, opt_domHelper) {
   var dom = opt_domHelper || goog.dom.getDomHelper();
-  return dom.htmlToDocumentFragment(goog.soy.ensureTemplateOutputHtml_(
+  var html = goog.soy.ensureTemplateOutputHtml_(
       template(opt_templateData || goog.soy.defaultTemplateData_,
-               undefined, opt_injectedData)));
+               undefined, opt_injectedData));
+  goog.soy.assertFirstTagValid_(html);
+  return dom.htmlToDocumentFragment(html);
 };
 
 
@@ -97,9 +99,11 @@ goog.soy.renderAsElement = function(template, opt_templateData,
                                     opt_injectedData, opt_domHelper) {
   var dom = opt_domHelper || goog.dom.getDomHelper();
   var wrapper = dom.createElement(goog.dom.TagName.DIV);
-  wrapper.innerHTML = goog.soy.ensureTemplateOutputHtml_(template(
+  var html = goog.soy.ensureTemplateOutputHtml_(template(
       opt_templateData || goog.soy.defaultTemplateData_,
       undefined, opt_injectedData));
+  goog.soy.assertFirstTagValid_(html);
+  wrapper.innerHTML = html;
 
   // If the template renders as a single element, return it.
   if (wrapper.childNodes.length == 1) {
@@ -161,6 +165,35 @@ goog.soy.ensureTemplateOutputHtml_ = function(templateResult) {
   // In production, return a safe string, rather than failing hard.
   return 'zSoyz';
 };
+
+
+/**
+ * Checks that the rendered HTML does not start with an invalid tag that would
+ * likely cause unexpected output from renderAsElement or renderAsFragment.
+ * See {@link http://www.w3.org/TR/html5/semantics.html#semantics} for reference
+ * as to which HTML elements can be parents of each other.
+ * @param {string} html The output of a template.
+ * @private
+ */
+goog.soy.assertFirstTagValid_ = function(html) {
+  if (goog.asserts.ENABLE_ASSERTS) {
+    var matches = html.match(goog.soy.INVALID_TAG_TO_RENDER_);
+    goog.asserts.assert(!matches, 'This template starts with a %s, which ' +
+        'cannot be a child of a <div>, as required by soy internals. ' +
+        'Consider using goog.soy.renderElement instead.\nTemplate output: %s',
+        matches && matches[0], html);
+  }
+};
+
+
+/**
+ * A pattern to find templates that cannot be rendered by renderAsElement or
+ * renderAsFragment, as these elements cannot exist as the child of a <div>.
+ * @type {!RegExp}
+ * @private
+ */
+goog.soy.INVALID_TAG_TO_RENDER_ =
+    /^<(body|caption|col|colgroup|head|html|tr|td|tbody|thead|tfoot)>/i;
 
 
 /**

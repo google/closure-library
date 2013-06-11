@@ -134,6 +134,16 @@ example.templateSpoofingSanitizedContentString =
 };
 
 
+example.tableRowTemplate = function(opt_data, opt_sb, opt_injectedData) {
+  return '<tr><td></td></tr>';
+};
+
+
+example.colGroupTemplateCaps = function(opt_data, opt_sb, opt_injectedData) {
+  return '<COLGROUP></COLGROUP>';
+};
+
+
 //
 // Test helper functions.
 //
