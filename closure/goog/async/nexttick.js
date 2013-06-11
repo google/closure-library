@@ -21,6 +21,9 @@
 
 goog.provide('goog.async.nextTick');
 
+goog.require('goog.debug.entryPointRegistry');
+goog.require('goog.functions');
+
 
 /**
  * Fires the provided callbacks as soon as possible after the current JS
@@ -34,6 +37,7 @@ goog.async.nextTick = function(callback, opt_context) {
   if (opt_context) {
     cb = goog.bind(callback, opt_context);
   }
+  cb = goog.async.nextTick.wrapCallback_(cb);
   // Introduced and currently only supported by IE10.
   if (goog.isFunction(goog.global.setImmediate)) {
     goog.global.setImmediate(cb);
@@ -145,3 +149,26 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     goog.global.setTimeout(cb, 0);
   };
 };
+
+
+/**
+ * Helper function that is overrided to protect callbacks with entry point
+ * monitor if the application monitors entry points.
+ * @param {function()} callback Callback function to fire as soon as possible.
+ * @return {function()} The wrapped callback.
+ * @private
+ */
+goog.async.nextTick.wrapCallback_ = goog.functions.identity;
+
+
+// Register the callback function as an entry point, so that it can be
+// monitored for exception handling, etc. This has to be done in this file
+// since it requires special code to handle all browsers.
+goog.debug.entryPointRegistry.register(
+    /**
+     * @param {function(!Function): !Function} transformer The transforming
+     *     function.
+     */
+    function(transformer) {
+      goog.async.nextTick.wrapCallback_ = transformer;
+    });

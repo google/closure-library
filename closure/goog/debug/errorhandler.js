@@ -222,6 +222,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
 };
 
 
+// TODO(user): Allow these functions to take in the window to protect.
 /**
  * Installs exception protection for window.setTimeout to handle exceptions.
  */
@@ -237,6 +238,28 @@ goog.debug.ErrorHandler.prototype.protectWindowSetTimeout =
 goog.debug.ErrorHandler.prototype.protectWindowSetInterval =
     function() {
   this.protectWindowFunctionsHelper_('setInterval');
+};
+
+
+/**
+ * Install exception protection for window.requestAnimationFrame to handle
+ * exceptions.
+ */
+goog.debug.ErrorHandler.prototype.protectWindowRequestAnimationFrame =
+    function() {
+  var win = goog.getObjectByName('window');
+  var fnNames = [
+    'requestAnimationFrame',
+    'mozRequestAnimationFrame',
+    'webkitAnimationFrame',
+    'msRequestAnimationFrame'
+  ];
+  for (var i = 0; i < fnNames.length; i++) {
+    var fnName = fnNames[i];
+    if (fnNames[i] in win) {
+      win[fnName] = this.protectEntryPoint(win[fnName]);
+    }
+  }
 };
 
 

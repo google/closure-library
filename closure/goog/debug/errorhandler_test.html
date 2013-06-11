@@ -75,6 +75,12 @@ See the COPYING file for details.
       }
     };
 
+    fakeWin.requestAnimationFrame = function(fn) {
+      fakeWin.requestAnimationFrame.called = true;
+      fakeWin.requestAnimationFrame.that = this;
+      fn();
+    };
+
     // just record the exception in the error handler when it happens
     errorHandler = new goog.debug.ErrorHandler(function(ex) {
                                                  this.ex = ex;
@@ -141,6 +147,18 @@ See the COPYING file for details.
       caught = ex;
     }
     assertSetIntervalError(caught);
+  }
+
+  function testWrapRequestAnimationFrame() {
+    errorHandler.protectWindowRequestAnimationFrame();
+
+    var caught;
+    try {
+      fakeWin.requestAnimationFrame(badTimer);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertRequestAnimationFrameError(caught);
   }
 
   function testDisposal() {
@@ -253,6 +271,10 @@ See the COPYING file for details.
 
   function assertSetIntervalError(caught) {
     assertMethodCalledHelper('setInterval', caught);
+  }
+
+  function assertRequestAnimationFrameError(caught) {
+    assertMethodCalledHelper('requestAnimationFrame', caught);
   }
 
   function assertMethodCalledHelper(method, caught) {
