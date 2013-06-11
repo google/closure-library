@@ -540,6 +540,20 @@ goog.ui.Component.prototype.getElementByClass = function(className) {
 
 
 /**
+ * Similar to {@code getElementByClass} except that it expects the
+ * element to be present in the dom thus returning a required value. Otherwise,
+ * will assert.
+ * @param {string} className The name of the class to look for.
+ * @return {Element} The first item with the class name provided.
+ */
+goog.ui.Component.prototype.getRequiredElementByClass = function(className) {
+  var el = this.getElementByClass(className);
+  goog.asserts.assertObject(el, 'Expected element with class: %s', className);
+  return el;
+};
+
+
+/**
  * Returns the event handler for this component, lazily created the first time
  * this method is called.
  * @return {!goog.events.EventHandler} Event handler for this component.

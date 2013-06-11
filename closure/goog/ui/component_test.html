@@ -360,6 +360,30 @@ See the COPYING file for details.
           component.getElementsByClass('task').length);
     }
 
+    function testGetRequiredElementByClass() {
+      sandbox.innerHTML =
+        '<ul id="task-list">' +
+          '<li class="task">Unclog drain' +
+        '</ul>' +
+        '<ul id="completed-tasks">' +
+          '<li id="groceries" class="task">Buy groceries' +
+          '<li class="task">Rotate tires' +
+          '<li class="task">Clean kitchen' +
+        '</ul>';
+      component.decorate(goog.dom.getElement('completed-tasks'));
+      assertEquals(
+          'getRequiredElementByClass() should return the first completed task',
+          'groceries',
+          component.getRequiredElementByClass('task').id);
+      try {
+        component.getRequiredElementByClass('undefinedClass');
+        fail('Attempting to retrieve a required element that does not exist ' +
+            'should fail');
+      } catch (e) {
+        // No-op, expected failure.
+      }
+    }
+
     function testEnterExitDocument() {
       var c1 = new goog.ui.Component();
       var c2 = new goog.ui.Component();
