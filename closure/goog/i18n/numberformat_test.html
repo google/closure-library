@@ -20,6 +20,7 @@ See the COPYING file for details.
   goog.require('goog.i18n.CompactNumberFormatSymbols_de');
   goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.userAgent');
   goog.require('goog.userAgent.product');
   goog.require('goog.userAgent.product.isVersion');
@@ -30,6 +31,8 @@ See the COPYING file for details.
 
 var expectedFailures = new goog.testing.ExpectedFailures();
 
+var stubs = new goog.testing.PropertyReplacer();
+
 function setUp() {
   // Always switch back to English on startup.
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
@@ -38,6 +41,7 @@ function setUp() {
 
 function tearDown() {
   expectedFailures.handleTearDown();
+  stubs.reset();
 }
 
 function veryBigNumberCompare(str1, str2) {
@@ -943,6 +947,37 @@ function testCurrencyCodeOrder() {
 
   fmt = new goog.i18n.NumberFormat("nothing");
   assertTrue(fmt.isCurrencyCodeBeforeValue());  // currency first, en_US style
+}
+
+function testCompactWithBaseFormattingNumber() {
+  var fmt = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.COMPACT_SHORT);
+
+  fmt.setBaseFormatting(1000);
+  assertEquals('0.8K', fmt.format(800, 1000));
+
+  fmt.setBaseFormatting(null);
+  assertEquals('800', fmt.format(800, 1000));
+  fmt.setBaseFormatting(1000);
+  assertEquals('1,200K', fmt.format(1200000, 1000));
+  assertEquals('0.01K', fmt.format(10, 1000));
+  fmt.setSignificantDigits(0);
+  fmt.setMinimumFractionDigits(2);
+  assertEquals('0.00K', fmt.format(1, 1000));
+}
+
+function testCompactWithBaseFormattingFrench() {
+  // Switch to French.
+  stubs.set(goog.i18n, 'NumberFormatSymbols', goog.i18n.NumberFormatSymbols_fr);
+  stubs.set(goog.i18n, 'CompactNumberFormatSymbols',
+            goog.i18n.CompactNumberFormatSymbols_fr);
+
+  var fmt = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.COMPACT_SHORT);
+  assertEquals('123\u00A0M', fmt.format(123400000));
+  fmt.setBaseFormatting(1000);
+  assertEquals('123\u00A0400\u00A0K', fmt.format(123400000));
+
 }
 
 </script>
