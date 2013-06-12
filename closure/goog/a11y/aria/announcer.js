@@ -92,8 +92,12 @@ goog.a11y.aria.Announcer.prototype.getLiveRegion_ = function(priority) {
   }
   var liveRegion;
   liveRegion = this.domHelper_.createElement('div');
+  // Note that IE has a habit of declaring things that aren't display:none as
+  // invisible to third-party tools like JAWs, so we can't just use height:0.
   liveRegion.style.position = 'absolute';
   liveRegion.style.top = '-1000px';
+  liveRegion.style.height = '1px';
+  liveRegion.style.overflow = 'hidden';
   goog.a11y.aria.setState(liveRegion, goog.a11y.aria.State.LIVE,
       priority);
   goog.a11y.aria.setState(liveRegion, goog.a11y.aria.State.ATOMIC,
