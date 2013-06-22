@@ -15,15 +15,10 @@
 /**
  * @fileoverview Base WebChannel implementation.
  *
- * The first version uses goog.net.browserchannel as baseline to ease revision
- * tracking with the legacy implementation.
- *
- * @visibility {//closure/goog:internal}
  */
 
 
 goog.provide('goog.labs.net.webChannel.WebChannelBase');
-goog.provide('goog.labs.net.webChannel.WebChannelBaseTestChannel');
 
 goog.require('goog.Uri');
 goog.require('goog.array');
@@ -32,13 +27,12 @@ goog.require('goog.debug.Logger');
 goog.require('goog.debug.TextFormatter');
 goog.require('goog.json');
 goog.require('goog.json.EvalJsonProcessor');
+goog.require('goog.labs.net.webChannel.BaseTestChannel');
+goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.WebChannelRequest');
-goog.require('goog.labs.net.webChannel.WebChannelRequestSupport');
-goog.require('goog.labs.net.webChannel.webChannelRequestStats');
-goog.require(
-    'goog.labs.net.webChannel.webChannelRequestStats.ServerReachability');
-goog.require('goog.labs.net.webChannel.webChannelRequestStats.Stat');
+goog.require('goog.labs.net.webChannel.requestStats');
+goog.require('goog.labs.net.webChannel.requestStats.Stat');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.tmpnetwork');
 goog.require('goog.string');
@@ -59,7 +53,7 @@ goog.require('goog.structs.CircularBuffer');
  * @param {boolean=} opt_secondTestResults Previously determined results
  *        of the second channel test.
  * @constructor
- * @implements {goog.labs.net.webChannel.WebChannelRequestSupport}
+ * @implements {goog.labs.net.webChannel.Channel}
  */
 goog.labs.net.webChannel.WebChannelBase = function(
     opt_clientVersion, opt_firstTestResults, opt_secondTestResults) {
@@ -69,14 +63,6 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private
    */
   this.clientVersion_ = opt_clientVersion || null;
-
-  /**
-   * The current state of the WebChannel. It should be one of the
-   * goog.labs.net.webChannel.WebChannelBase.State constants.
-   * @type {!goog.labs.net.webChannel.WebChannelBase.State}
-   * @private
-   */
-  this.state_ = goog.labs.net.webChannel.WebChannelBase.State.INIT;
 
   /**
    * An array of queued maps that need to be sent to the server.
@@ -128,60 +114,13 @@ goog.labs.net.webChannel.WebChannelBase = function(
 };
 
 
-
-/**
- * A TestChannel is used during the first part of channel negotiation
- * with the server to create the channel. It helps us determine whether we're
- * behind a buffering proxy. It also runs the logic to see if the channel
- * has been blocked by a network administrator.
- *
- * Note this is branched off goog.net.BrowserTestChannel. We keep this class in
- * the same file as WebChannelBase due to the tight coupling between
- * the two classes. Eventually we plan to break such coupling by redesigning
- * the test channel as a sub component of WebChannelBase.
- *
- * @constructor
- * @param {!goog.labs.net.webChannel.WebChannelBase} channel The channel
- *     that owns this test channel.
- * @param {!goog.labs.net.webChannel.WebChannelDebug} channelDebug A
- *     WebChannelDebug instance to use for logging.
- * @implements {goog.labs.net.webChannel.WebChannelRequestSupport}
- */
-goog.labs.net.webChannel.WebChannelBaseTestChannel = function(
-    channel, channelDebug) {
-  /**
-   * The channel that owns this test channel
-   * @type {!goog.labs.net.webChannel.WebChannelBase}
-   * @private
-   */
-  this.channel_ = channel;
-
-  /**
-   * The channel debug to use for logging
-   * @type {!goog.labs.net.webChannel.WebChannelDebug}
-   * @private
-   */
-  this.channelDebug_ = channelDebug;
-
-  /**
-   * Parser for a response payload. Defaults to use
-   * {@code goog.json.unsafeParse}. The parser should return an array.
-   * @type {goog.string.Parser}
-   * @private
-   */
-  this.parser_ = new goog.json.EvalJsonProcessor(null, true);
-};
-
-
 goog.scope(function() {
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
-var WebChannelBaseTestChannel =
-    goog.labs.net.webChannel.WebChannelBaseTestChannel;
+var BaseTestChannel = goog.labs.net.webChannel.BaseTestChannel;
 var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 var WebChannelRequest = goog.labs.net.webChannel.WebChannelRequest;
-var webChannelRequestStats = goog.labs.net.webChannel.webChannelRequestStats;
-var WebChannelRequestSupport =
-    goog.labs.net.webChannel.WebChannelRequestSupport;
+var requestStats = goog.labs.net.webChannel.requestStats;
+var Channel = goog.labs.net.webChannel.Channel;
 
 
 
@@ -348,7 +287,7 @@ WebChannelBase.prototype.deadBackChannelTimerId_ = null;
 /**
  * The TestChannel object which encapsulates the logic for determining
  * interesting network conditions about the client.
- * @type {WebChannelBaseTestChannel}
+ * @type {BaseTestChannel}
  * @private
  */
 WebChannelBase.prototype.connectionTest_ = null;
@@ -527,6 +466,14 @@ WebChannelBase.State = {
 
 
 /**
+* The current state of the WebChannel.
+* @type {!WebChannelBase.State}
+* @private
+*/
+WebChannelBase.prototype.state_ = WebChannelBase.State.INIT;
+
+
+/**
  * The timeout in milliseconds for a forward channel request.
  * @type {number}
  */
@@ -655,28 +602,6 @@ WebChannelBase.prototype.setChannelDebug = function(channelDebug) {
 
 
 /**
- * Instantiates a ChannelRequest with the given parameters. Overidden in tests.
- *
- * @param {WebChannelBase|WebChannelBaseTestChannel} channel
- *     The channel object that owns this request.
- * @param {WebChannelDebug} channelDebug A WebChannelDebug to use for logging.
- * @param {string=} opt_sessionId  The session id for the channel.
- * @param {string|number=} opt_requestId  The request id for this request.
- * @param {number=} opt_retryId  The retry id for this request.
- * @return {WebChannelRequest} The created channel request.
- */
-WebChannelBase.createChannelRequest = function(channel, channelDebug,
-    opt_sessionId, opt_requestId, opt_retryId) {
-  return new WebChannelRequest(
-      channel,
-      channelDebug,
-      opt_sessionId,
-      opt_requestId,
-      opt_retryId);
-};
-
-
-/**
  * Starts the channel. This initiates connections to the server.
  *
  * @param {string} testPath  The path for the test connection.
@@ -690,8 +615,7 @@ WebChannelBase.prototype.connect = function(testPath, channelPath,
     opt_extraParams, opt_oldSessionId, opt_oldArrayId) {
   this.channelDebug_.debug('connect()');
 
-  webChannelRequestStats.notifyStatEvent(
-      webChannelRequestStats.Stat.CONNECT_ATTEMPT);
+  requestStats.notifyStatEvent(requestStats.Stat.CONNECT_ATTEMPT);
 
   this.path_ = channelPath;
   this.extraParams_ = opt_extraParams || {};
@@ -724,8 +648,8 @@ WebChannelBase.prototype.disconnect = function() {
     // Add the reconnect parameters.
     this.addAdditionalParams_(uri);
 
-    var request = WebChannelBase.createChannelRequest(this, this.channelDebug_,
-        this.sid_, rid);
+    var request = WebChannelRequest.createChannelRequest(
+        this, this.channelDebug_, this.sid_, rid);
     request.sendUsingImgTag(uri);
   }
 
@@ -754,8 +678,7 @@ WebChannelBase.prototype.connectTest_ = function(testPath) {
   if (!this.okToMakeRequest_()) {
     return; // channel is cancelled
   }
-  this.connectionTest_ = new WebChannelBaseTestChannel(this,
-      this.channelDebug_);
+  this.connectionTest_ = new BaseTestChannel(this, this.channelDebug_);
   this.connectionTest_.setExtraHeaders(this.extraHeaders_);
   this.connectionTest_.setParser(this.parser_);
   this.connectionTest_.connect(testPath);
@@ -1036,8 +959,6 @@ WebChannelBase.prototype.getBackChannelMaxRetries = function() {
 
 
 /**
- * Returns whether the channel is closed
- * @return {boolean} true if the channel is closed.
  * @override
  */
 WebChannelBase.prototype.isClosed = function() {
@@ -1123,7 +1044,7 @@ WebChannelBase.prototype.ensureForwardChannel_ = function() {
     return;
   }
 
-  this.forwardChannelTimerId_ = webChannelRequestStats.setTimeout(
+  this.forwardChannelTimerId_ = requestStats.setTimeout(
       goog.bind(this.onStartForwardChannelTimer_, this), 0);
   this.forwardChannelRetryCount_ = 0;
 };
@@ -1151,7 +1072,7 @@ WebChannelBase.prototype.maybeRetryForwardChannel_ =
 
   this.channelDebug_.debug('Going to retry POST');
 
-  this.forwardChannelTimerId_ = webChannelRequestStats.setTimeout(
+  this.forwardChannelTimerId_ = requestStats.setTimeout(
       goog.bind(this.onStartForwardChannelTimer_, this, request),
       this.getRetryTime_(this.forwardChannelRetryCount_));
   this.forwardChannelRetryCount_++;
@@ -1224,7 +1145,7 @@ WebChannelBase.prototype.open_ = function() {
   this.nextRid_ = Math.floor(Math.random() * 100000);
 
   var rid = this.nextRid_++;
-  var request = WebChannelBase.createChannelRequest(
+  var request = WebChannelRequest.createChannelRequest(
       this, this.channelDebug_, '', rid);
   request.setExtraHeaders(this.extraHeaders_);
   var requestText = this.dequeueOutgoingMaps_();
@@ -1275,7 +1196,7 @@ WebChannelBase.prototype.makeForwardChannelRequest_ =
   // Add the additional reconnect parameters.
   this.addAdditionalParams_(uri);
 
-  var request = WebChannelBase.createChannelRequest(
+  var request = WebChannelRequest.createChannelRequest(
       this,
       this.channelDebug_,
       this.sid_,
@@ -1386,7 +1307,7 @@ WebChannelBase.prototype.ensureBackChannel_ = function() {
   }
 
   this.backChannelAttemptId_ = 1;
-  this.backChannelTimerId_ = webChannelRequestStats.setTimeout(
+  this.backChannelTimerId_ = requestStats.setTimeout(
       goog.bind(this.onStartBackChannelTimer_, this), 0);
   this.backChannelRetryCount_ = 0;
 };
@@ -1411,7 +1332,7 @@ WebChannelBase.prototype.maybeRetryBackChannel_ = function() {
   this.channelDebug_.debug('Going to retry GET');
 
   this.backChannelAttemptId_++;
-  this.backChannelTimerId_ = webChannelRequestStats.setTimeout(
+  this.backChannelTimerId_ = requestStats.setTimeout(
       goog.bind(this.onStartBackChannelTimer_, this),
       this.getRetryTime_(this.backChannelRetryCount_));
   this.backChannelRetryCount_++;
@@ -1440,7 +1361,7 @@ WebChannelBase.prototype.startBackChannel_ = function() {
   }
 
   this.channelDebug_.debug('Creating new HttpRequest');
-  this.backChannelRequest_ = WebChannelBase.createChannelRequest(
+  this.backChannelRequest_ = WebChannelRequest.createChannelRequest(
       this,
       this.channelDebug_,
       this.sid_,
@@ -1492,9 +1413,7 @@ WebChannelBase.prototype.okToMakeRequest_ = function() {
 
 
 /**
- * Callback from TestChannel for when the channel is finished.
- * @param {WebChannelBaseTestChannel} testChannel The TestChannel.
- * @param {boolean} useChunked  Whether we can chunk responses.
+ * @override
  */
 WebChannelBase.prototype.testConnectionFinished =
     function(testChannel, useChunked) {
@@ -1507,10 +1426,7 @@ WebChannelBase.prototype.testConnectionFinished =
 
 
 /**
- * Callback from TestChannel for when the channel has an error.
- * @param {WebChannelBaseTestChannel} testChannel The TestChannel.
- * @param {WebChannelRequest.Error} errorCode  The error code of the
-       failure.
+ * @override
  */
 WebChannelBase.prototype.testConnectionFailure =
     function(testChannel, errorCode) {
@@ -1521,8 +1437,7 @@ WebChannelBase.prototype.testConnectionFailure =
 
 
 /**
- * Callback from TestChannel for when the channel is blocked.
- * @param {WebChannelBaseTestChannel} testChannel The TestChannel.
+ * @override
  */
 WebChannelBase.prototype.testConnectionBlocked =
     function(testChannel) {
@@ -1533,13 +1448,9 @@ WebChannelBase.prototype.testConnectionBlocked =
 
 
 /**
- * Callback from ChannelRequest for when new data is received
- * @param {WebChannelRequest} request  The request object.
- * @param {string} responseText The text of the response.
  * @override
  */
-WebChannelBase.prototype.onRequestData =
-    function(request, responseText) {
+WebChannelBase.prototype.onRequestData = function(request, responseText) {
   if (this.state_ == WebChannelBase.State.CLOSED ||
       (this.backChannelRequest_ != request &&
        this.forwardChannelRequest_ != request)) {
@@ -1604,7 +1515,7 @@ WebChannelBase.prototype.handlePostResponse_ = function(responseValues) {
     }
     if (!this.deadBackChannelTimerId_) {
       // We expect to receive data within 2 RTTs or we retry the backchannel.
-      this.deadBackChannelTimerId_ = webChannelRequestStats.setTimeout(
+      this.deadBackChannelTimerId_ = requestStats.setTimeout(
           goog.bind(this.onBackChannelDead_, this),
           2 * WebChannelBase.RTT_ESTIMATE);
     }
@@ -1638,8 +1549,7 @@ WebChannelBase.prototype.handleBackchannelMissing_ = function() {
     return;
   }
   this.maybeRetryBackChannel_();
-  webChannelRequestStats.notifyStatEvent(
-      webChannelRequestStats.Stat.BACKCHANNEL_MISSING);
+  requestStats.notifyStatEvent(requestStats.Stat.BACKCHANNEL_MISSING);
 };
 
 
@@ -1668,6 +1578,7 @@ WebChannelBase.prototype.shouldRetryBackChannel_ = function(
  * @param {?string} serverHostPrefix The host prefix provided by the server.
  * @return {?string} The host prefix to actually use, if any. Will return null
  *     if the use of host prefixes was disabled via setAllowHostPrefix().
+ * @override
  */
 WebChannelBase.prototype.correctHostPrefix = function(
     serverHostPrefix) {
@@ -1692,8 +1603,7 @@ WebChannelBase.prototype.onBackChannelDead_ = function() {
     this.backChannelRequest_.cancel();
     this.backChannelRequest_ = null;
     this.maybeRetryBackChannel_();
-    webChannelRequestStats.notifyStatEvent(
-        webChannelRequestStats.Stat.BACKCHANNEL_DEAD);
+    requestStats.notifyStatEvent(requestStats.Stat.BACKCHANNEL_DEAD);
   }
 };
 
@@ -1731,8 +1641,6 @@ WebChannelBase.isFatalError_ =
 
 
 /**
- * Callback from ChannelRequest that indicates a request has completed.
- * @param {WebChannelRequest} request The request object.
  * @override
  */
 WebChannelBase.prototype.onRequestComplete = function(request) {
@@ -1760,7 +1668,7 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
     // Yay!
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       var size = request.getPostData() ? request.getPostData().length : 0;
-      webChannelRequestStats.notifyTimingEvent(size,
+      requestStats.notifyTimingEvent(size,
           goog.now() - request.getRequestStartTime(),
           this.forwardChannelRetryCount_);
       this.ensureForwardChannel_();
@@ -1946,8 +1854,7 @@ WebChannelBase.prototype.signalError_ = function(error) {
     goog.net.tmpnetwork.testGoogleCom(
         goog.bind(this.testGoogleComCallback_, this), imageUri);
   } else {
-    webChannelRequestStats.notifyStatEvent(
-        webChannelRequestStats.Stat.ERROR_OTHER);
+    requestStats.notifyStatEvent(requestStats.Stat.ERROR_OTHER);
   }
   this.onError_(error);
 };
@@ -1961,12 +1868,10 @@ WebChannelBase.prototype.signalError_ = function(error) {
 WebChannelBase.prototype.testGoogleComCallback_ = function(networkUp) {
   if (networkUp) {
     this.channelDebug_.info('Successfully pinged google.com');
-    webChannelRequestStats.notifyStatEvent(
-        webChannelRequestStats.Stat.ERROR_OTHER);
+    requestStats.notifyStatEvent(requestStats.Stat.ERROR_OTHER);
   } else {
     this.channelDebug_.info('Failed to ping google.com');
-    webChannelRequestStats.notifyStatEvent(
-        webChannelRequestStats.Stat.ERROR_NETWORK);
+    requestStats.notifyStatEvent(requestStats.Stat.ERROR_NETWORK);
     // We cann onError_ here instead of signalError_ because the latter just
     // calls notifyStatEvent, and we don't want to have another stat event.
     this.onError_(WebChannelBase.Error.NETWORK);
@@ -2032,12 +1937,9 @@ WebChannelBase.prototype.onClose_ = function() {
 
 
 /**
- * Gets the Uri used for the connection that sends data to the server.
- * @param {string} path The path on the host.
- * @return {goog.Uri} The forward channel URI.
+ * @override
  */
-WebChannelBase.prototype.getForwardChannelUri =
-    function(path) {
+WebChannelBase.prototype.getForwardChannelUri = function(path) {
   var uri = this.createDataUri(null, path);
   this.channelDebug_.debug('GetForwardChannelUri: ' + uri);
   return uri;
@@ -2045,11 +1947,9 @@ WebChannelBase.prototype.getForwardChannelUri =
 
 
 /**
- * Gets the results for the first channel test
- * @return {Array.<string>} The results.
+ * @override
  */
-WebChannelBase.prototype.getFirstTestResults =
-    function() {
+WebChannelBase.prototype.getFirstTestResults = function() {
   return this.firstTestResults_;
 };
 
@@ -2065,13 +1965,9 @@ WebChannelBase.prototype.getSecondTestResults = function() {
 
 
 /**
- * Gets the Uri used for the connection that receives data from the server.
- * @param {?string} hostPrefix The host prefix.
- * @param {string} path The path on the host.
- * @return {goog.Uri} The back channel URI.
+ * @override
  */
-WebChannelBase.prototype.getBackChannelUri =
-    function(hostPrefix, path) {
+WebChannelBase.prototype.getBackChannelUri = function(hostPrefix, path) {
   var uri = this.createDataUri(this.shouldUseSecondaryDomains() ?
       hostPrefix : null, path);
   this.channelDebug_.debug('GetBackChannelUri: ' + uri);
@@ -2080,12 +1976,7 @@ WebChannelBase.prototype.getBackChannelUri =
 
 
 /**
- * Creates a data Uri applying logic for secondary hostprefix, port
- * overrides, and versioning.
- * @param {?string} hostPrefix The host prefix.
- * @param {string} path The path on the host (may be absolute or relative).
- * @param {number=} opt_overridePort Optional override port.
- * @return {goog.Uri} The data URI.
+ * @override
  */
 WebChannelBase.prototype.createDataUri =
     function(hostPrefix, path, opt_overridePort) {
@@ -2128,13 +2019,6 @@ WebChannelBase.prototype.createDataUri =
 
 
 /**
- * Called when creating an XhrIo object.  Override in a subclass if
- * you need to customize the behavior, for example to enable the creation of
- * XHR's capable of calling a secondary domain. Will also allow calling
- * a secondary domain if withCredentials (CORS) is enabled.
- * @param {?string} hostPrefix The host prefix, if we need an XhrIo object
- *     capable of calling a secondary domain.
- * @return {!goog.net.XhrIo} A new XhrIo object.
  * @override
  */
 WebChannelBase.prototype.createXhrIo = function(hostPrefix) {
@@ -2148,9 +2032,7 @@ WebChannelBase.prototype.createXhrIo = function(hostPrefix) {
 
 
 /**
- * Gets whether this channel is currently active. This is used to determine the
- * length of time to wait before retrying. This call delegates to the handler.
- * @return {boolean} Whether the channel is currently active.
+ * @override
  */
 WebChannelBase.prototype.isActive = function() {
   return !!this.handler_ && this.handler_.isActive(this);
@@ -2158,27 +2040,6 @@ WebChannelBase.prototype.isActive = function() {
 
 
 /**
- * Determines whether to use a secondary domain when the server gives us
- * a host prefix. This allows us to work around browser per-domain
- * connection limits.
- *
- * Currently, we  use secondary domains when using Trident's ActiveXObject,
- * because it supports cross-domain requests out of the box.  Note that in IE10
- * we no longer use ActiveX since it's not supported in Metro mode and IE10
- * supports XHR streaming.
- *
- * If you need to use secondary domains on other browsers and IE10,
- * you have two choices:
- *     1) If you only care about browsers that support CORS
- *        (https://developer.mozilla.org/en-US/docs/HTTP_access_control), you
- *        can use {@link #setSupportsCrossDomainXhrs} and set the appropriate
- *        CORS response headers on the server.
- *     2) Or, override this method in a subclass, and make sure that those
- *        browsers use some messaging mechanism that works cross-domain (e.g
- *        iframes and window.postMessage).
- *
- * @return {boolean} Whether to use secondary domains.
- * @see http://code.google.com/p/closure-library/issues/detail?id=339
  * @override
  */
 WebChannelBase.prototype.shouldUseSecondaryDomains = function() {
@@ -2409,7 +2270,7 @@ WebChannelBase.Handler.prototype.badMapError = function(channel, map) {
 
 
 /**
- * Allows the handler to override a host prefix provided by the server.  Will
+ * Allows the handler to override a host prefix provided by the server. Will
  * be called whenever the channel has received such a prefix and is considering
  * its use.
  * @param {?string} serverHostPrefix The host prefix provided by the server.
@@ -2418,545 +2279,5 @@ WebChannelBase.Handler.prototype.badMapError = function(channel, map) {
 WebChannelBase.Handler.prototype.correctHostPrefix =
     function(serverHostPrefix) {
   return serverHostPrefix;
-};
-
-
-/**
- * Extra HTTP headers to add to all the requests sent to the server.
- * @type {Object}
- * @private
- */
-WebChannelBaseTestChannel.prototype.extraHeaders_ = null;
-
-
-/**
- * The test request.
- * @type {WebChannelRequest}
- * @private
- */
-WebChannelBaseTestChannel.prototype.request_ = null;
-
-
-/**
- * Whether we have received the first result as an intermediate result. This
- * helps us determine whether we're behind a buffering proxy.
- * @type {boolean}
- * @private
- */
-WebChannelBaseTestChannel.prototype.receivedIntermediateResult_ =
-    false;
-
-
-/**
- * The time when the test request was started. We use timing in IE as
- * a heuristic for whether we're behind a buffering proxy.
- * @type {?number}
- * @private
- */
-WebChannelBaseTestChannel.prototype.startTime_ = null;
-
-
-/**
- * The time for of the first result part. We use timing in IE as a
- * heuristic for whether we're behind a buffering proxy.
- * @type {?number}
- * @private
- */
-WebChannelBaseTestChannel.prototype.firstTime_ = null;
-
-
-/**
- * The time for of the last result part. We use timing in IE as a
- * heuristic for whether we're behind a buffering proxy.
- * @type {?number}
- * @private
- */
-WebChannelBaseTestChannel.prototype.lastTime_ = null;
-
-
-/**
- * The relative path for test requests.
- * @type {?string}
- * @private
- */
-WebChannelBaseTestChannel.prototype.path_ = null;
-
-
-/**
- * The state of the state machine for this object.
- *
- * @type {?number}
- * @private
- */
-WebChannelBaseTestChannel.prototype.state_ = null;
-
-
-/**
- * The last status code received.
- * @type {number}
- * @private
- */
-WebChannelBaseTestChannel.prototype.lastStatusCode_ = -1;
-
-
-/**
- * A subdomain prefix for using a subdomain in IE for the backchannel
- * requests.
- * @type {?string}
- * @private
- */
-WebChannelBaseTestChannel.prototype.hostPrefix_ = null;
-
-
-/**
- * A subdomain prefix for testing whether the channel was disabled by
- * a network administrator;
- * @type {?string}
- * @private
- */
-WebChannelBaseTestChannel.prototype.blockedPrefix_ = null;
-
-
-/**
- * Enum type for the test channel state machine
- * @enum {number}
- * @private
- */
-WebChannelBaseTestChannel.State_ = {
-  /**
-   * The state for the TestChannel state machine where we making the
-   * initial call to get the server configured parameters.
-   */
-  INIT: 0,
-
-  /**
-   * The state for the TestChannel state machine where we're checking to
-   * see if the channel has been blocked.
-   */
-  CHECKING_BLOCKED: 1,
-
-  /**
-   * The  state for the TestChannel state machine where we're checking to
-   * se if we're behind a buffering proxy.
-   */
-  CONNECTION_TESTING: 2
-};
-
-
-/**
- * Time in MS for waiting for the request to see if the channel is blocked.
- * If the response takes longer than this many ms, we assume the request has
- * failed.
- * @type {number}
- * @private
- */
-WebChannelBaseTestChannel.BLOCKED_TIMEOUT_ = 5000;
-
-
-/**
- * Number of attempts to try to see if the check to see if we're blocked
- * succeeds. Sometimes the request can fail because of flaky network conditions
- * and checking multiple times reduces false positives.
- * @type {number}
- * @private
- */
-WebChannelBaseTestChannel.BLOCKED_RETRIES_ = 3;
-
-
-/**
- * Time in ms between retries of the blocked request
- * @type {number}
- * @private
- */
-WebChannelBaseTestChannel.BLOCKED_PAUSE_BETWEEN_RETRIES_ = 2000;
-
-
-/**
- * Time between chunks in the test connection that indicates that we
- * are not behind a buffering proxy. This value should be less than or
- * equals to the time between chunks sent from the server.
- * @type {number}
- * @private
- */
-WebChannelBaseTestChannel.MIN_TIME_EXPECTED_BETWEEN_DATA_ = 500;
-
-
-/**
- * Sets extra HTTP headers to add to all the requests sent to the server.
- *
- * @param {Object} extraHeaders The HTTP headers.
- */
-WebChannelBaseTestChannel.prototype.setExtraHeaders = function(
-    extraHeaders) {
-  this.extraHeaders_ = extraHeaders;
-};
-
-
-/**
- * Sets a new parser for the response payload. A custom parser may be set to
- * avoid using eval(), for example.
- * By default, the parser uses {@code goog.json.unsafeParse}.
- * @param {!goog.string.Parser} parser Parser.
- */
-WebChannelBaseTestChannel.prototype.setParser = function(parser) {
-  this.parser_ = parser;
-};
-
-
-/**
- * Starts the test channel. This initiates connections to the server.
- *
- * @param {string} path The relative uri for the test connection.
- */
-WebChannelBaseTestChannel.prototype.connect = function(path) {
-  this.path_ = path;
-  var sendDataUri = this.channel_.getForwardChannelUri(this.path_);
-
-  webChannelRequestStats.notifyStatEvent(
-      webChannelRequestStats.Stat.TEST_STAGE_ONE_START);
-  this.startTime_ = goog.now();
-
-  // If the channel already has the result of the first test, then skip it.
-  var firstTestResults = this.channel_.getFirstTestResults();
-  if (goog.isDefAndNotNull(firstTestResults)) {
-    this.hostPrefix_ = this.channel_.correctHostPrefix(firstTestResults[0]);
-    this.blockedPrefix_ = firstTestResults[1];
-    if (this.blockedPrefix_) {
-      this.state_ = WebChannelBaseTestChannel.State_.CHECKING_BLOCKED;
-      this.checkBlocked_();
-    } else {
-      this.state_ = WebChannelBaseTestChannel.State_.CONNECTION_TESTING;
-      this.connectStage2_();
-    }
-    return;
-  }
-
-  // the first request returns server specific parameters
-  sendDataUri.setParameterValues('MODE', 'init');
-  this.request_ = WebChannelBase.createChannelRequest(this, this.channelDebug_);
-  this.request_.setExtraHeaders(this.extraHeaders_);
-  this.request_.xmlHttpGet(sendDataUri, false /* decodeChunks */,
-      null /* hostPrefix */, true /* opt_noClose */);
-  this.state_ = WebChannelBaseTestChannel.State_.INIT;
-};
-
-
-/**
- * Checks to see whether the channel is blocked. This is for implementing the
- * feature that allows network administrators to block Gmail Chat. The
- * strategy to determine if we're blocked is to try to load an image off a
- * special subdomain that network administrators will block access to if they
- * are trying to block chat. For Gmail Chat, the subdomain is
- * chatenabled.mail.google.com.
- * @private
- */
-WebChannelBaseTestChannel.prototype.checkBlocked_ = function() {
-  var uri = this.channel_.createDataUri(this.blockedPrefix_,
-      '/mail/images/cleardot.gif');
-  uri.makeUnique();
-  goog.net.tmpnetwork.testLoadImageWithRetries(uri.toString(),
-      WebChannelBaseTestChannel.BLOCKED_TIMEOUT_,
-      goog.bind(this.checkBlockedCallback_, this),
-      WebChannelBaseTestChannel.BLOCKED_RETRIES_,
-      WebChannelBaseTestChannel.BLOCKED_PAUSE_BETWEEN_RETRIES_);
-  webChannelRequestStats.notifyServerReachabilityEvent(
-      webChannelRequestStats.ServerReachability.REQUEST_MADE);
-};
-
-
-/**
- * Callback for testLoadImageWithRetries to check if a channel is blocked.
- * @param {boolean} succeeded Whether the request succeeded.
- * @private
- */
-WebChannelBaseTestChannel.prototype.checkBlockedCallback_ = function(
-    succeeded) {
-  if (succeeded) {
-    this.state_ = WebChannelBaseTestChannel.State_.CONNECTION_TESTING;
-    this.connectStage2_();
-  } else {
-    webChannelRequestStats.notifyStatEvent(
-        webChannelRequestStats.Stat.CHANNEL_BLOCKED);
-    this.channel_.testConnectionBlocked(this);
-  }
-
-  // We don't dispatch a REQUEST_FAILED server reachability event when the
-  // block request fails, as such a failure is not a good signal that the
-  // server has actually become unreachable.
-  if (succeeded) {
-    webChannelRequestStats.notifyServerReachabilityEvent(
-        webChannelRequestStats.ServerReachability.REQUEST_SUCCEEDED);
-  }
-};
-
-
-/**
- * Begins the second stage of the test channel where we test to see if we're
- * behind a buffering proxy. The server sends back a multi-chunked response
- * with the first chunk containing the content '1' and then two seconds later
- * sending the second chunk containing the content '2'. Depending on how we
- * receive the content, we can tell if we're behind a buffering proxy.
- * @private
- */
-WebChannelBaseTestChannel.prototype.connectStage2_ = function() {
-  this.channelDebug_.debug('TestConnection: starting stage 2');
-
-  // If the second test results are available, skip its execution.
-  var secondTestResults = this.channel_.getSecondTestResults();
-  if (goog.isDefAndNotNull(secondTestResults)) {
-    this.channelDebug_.debug(
-        'TestConnection: skipping stage 2, precomputed result is ' +
-        secondTestResults ? 'Buffered' : 'Unbuffered');
-    webChannelRequestStats.notifyStatEvent(
-        webChannelRequestStats.Stat.TEST_STAGE_TWO_START);
-    if (secondTestResults) { // Buffered/Proxy connection
-      webChannelRequestStats.notifyStatEvent(webChannelRequestStats.Stat.PROXY);
-      this.channel_.testConnectionFinished(this, false);
-    } else { // Unbuffered/NoProxy connection
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.NOPROXY);
-      this.channel_.testConnectionFinished(this, true);
-    }
-    return; // Skip the test
-  }
-  this.request_ = WebChannelBase.createChannelRequest(this, this.channelDebug_);
-  this.request_.setExtraHeaders(this.extraHeaders_);
-  var recvDataUri = this.channel_.getBackChannelUri(this.hostPrefix_,
-      /** @type {string} */ (this.path_));
-
-  webChannelRequestStats.notifyStatEvent(
-      webChannelRequestStats.Stat.TEST_STAGE_TWO_START);
-  if (!WebChannelRequest.supportsXhrStreaming()) {
-    recvDataUri.setParameterValues('TYPE', 'html');
-    this.request_.tridentGet(recvDataUri, Boolean(this.hostPrefix_));
-  } else {
-    recvDataUri.setParameterValues('TYPE', 'xmlhttp');
-    this.request_.xmlHttpGet(recvDataUri, false /** decodeChunks */,
-        this.hostPrefix_, false /** opt_noClose */);
-  }
-};
-
-
-/**
- * Factory method for XhrIo objects.
- * @param {?string} hostPrefix The host prefix, if we need an XhrIo object
- *     capable of calling a secondary domain.
- * @return {!goog.net.XhrIo} New XhrIo object.
- * @override
- */
-WebChannelBaseTestChannel.prototype.createXhrIo = function(
-    hostPrefix) {
-  return this.channel_.createXhrIo(hostPrefix);
-};
-
-
-/**
- * Aborts the test channel.
- */
-WebChannelBaseTestChannel.prototype.abort = function() {
-  if (this.request_) {
-    this.request_.cancel();
-    this.request_ = null;
-  }
-  this.lastStatusCode_ = -1;
-};
-
-
-/**
- * Returns whether the test channel is closed. The ChannelRequest object expects
- * this method to be implemented on its handler.
- *
- * @return {boolean} Whether the channel is closed.
- * @override
- */
-WebChannelBaseTestChannel.prototype.isClosed = function() {
-  return false;
-};
-
-
-/**
- * Callback from ChannelRequest for when new data is received
- *
- * @param {WebChannelRequest} req  The request object.
- * @param {string} responseText The text of the response.
- * @override
- */
-WebChannelBaseTestChannel.prototype.onRequestData =
-    function(req, responseText) {
-  this.lastStatusCode_ = req.getLastStatusCode();
-  if (this.state_ == WebChannelBaseTestChannel.State_.INIT) {
-    this.channelDebug_.debug('TestConnection: Got data for stage 1');
-    if (!responseText) {
-      this.channelDebug_.debug('TestConnection: Null responseText');
-      // The server should always send text; something is wrong here
-      this.channel_.testConnectionFailure(this,
-          WebChannelRequest.Error.BAD_DATA);
-      return;
-    }
-    /** @preserveTry */
-    try {
-      var respArray = this.parser_.parse(responseText);
-    } catch (e) {
-      this.channelDebug_.dumpException(e);
-      this.channel_.testConnectionFailure(this,
-          WebChannelRequest.Error.BAD_DATA);
-      return;
-    }
-    this.hostPrefix_ = this.channel_.correctHostPrefix(respArray[0]);
-    this.blockedPrefix_ = respArray[1];
-  } else if (this.state_ ==
-             WebChannelBaseTestChannel.State_.CONNECTION_TESTING) {
-    if (this.receivedIntermediateResult_) {
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.TEST_STAGE_TWO_DATA_TWO);
-      this.lastTime_ = goog.now();
-    } else {
-      // '11111' is used instead of '1' to prevent a small amount of buffering
-      // by Safari.
-      if (responseText == '11111') {
-        webChannelRequestStats.notifyStatEvent(
-            webChannelRequestStats.Stat.TEST_STAGE_TWO_DATA_ONE);
-        this.receivedIntermediateResult_ = true;
-        this.firstTime_ = goog.now();
-        if (this.checkForEarlyNonBuffered_()) {
-          // If early chunk detection is on, and we passed the tests,
-          // assume HTTP_OK, cancel the test and turn on noproxy mode.
-          this.lastStatusCode_ = 200;
-          this.request_.cancel();
-          this.channelDebug_.debug(
-              'Test connection succeeded; using streaming connection');
-          webChannelRequestStats.notifyStatEvent(
-              webChannelRequestStats.Stat.NOPROXY);
-          this.channel_.testConnectionFinished(this, true);
-        }
-      } else {
-        webChannelRequestStats.notifyStatEvent(
-            webChannelRequestStats.Stat.TEST_STAGE_TWO_DATA_BOTH);
-        this.firstTime_ = this.lastTime_ = goog.now();
-        this.receivedIntermediateResult_ = false;
-      }
-    }
-  }
-};
-
-
-/**
- * Callback from ChannelRequest that indicates a request has completed.
- *
- * @param {WebChannelRequest} req  The request object.
- * @override
- */
-WebChannelBaseTestChannel.prototype.onRequestComplete =
-    function(req) {
-  this.lastStatusCode_ = this.request_.getLastStatusCode();
-  if (!this.request_.getSuccess()) {
-    this.channelDebug_.debug(
-        'TestConnection: request failed, in state ' + this.state_);
-    if (this.state_ == WebChannelBaseTestChannel.State_.INIT) {
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.TEST_STAGE_ONE_FAILED);
-    } else if (this.state_ ==
-               WebChannelBaseTestChannel.State_.CONNECTION_TESTING) {
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.TEST_STAGE_TWO_FAILED);
-    }
-    this.channel_.testConnectionFailure(this,
-        /** @type {WebChannelRequest.Error} */
-        (this.request_.getLastError()));
-    return;
-  }
-
-  if (this.state_ == WebChannelBaseTestChannel.State_.INIT) {
-    this.channelDebug_.debug(
-        'TestConnection: request complete for initial check');
-    if (this.blockedPrefix_) {
-      this.state_ = WebChannelBaseTestChannel.State_.CHECKING_BLOCKED;
-      this.checkBlocked_();
-    } else {
-      this.state_ = WebChannelBaseTestChannel.State_.CONNECTION_TESTING;
-      this.connectStage2_();
-    }
-  } else if (this.state_ ==
-             WebChannelBaseTestChannel.State_.CONNECTION_TESTING) {
-    this.channelDebug_.debug('TestConnection: request complete for stage 2');
-    var goodConn = false;
-
-    if (!WebChannelRequest.supportsXhrStreaming()) {
-      // we always get Trident responses in separate calls to
-      // onRequestData, so we have to check the time they came
-      var ms = this.lastTime_ - this.firstTime_;
-      if (ms < 200) {
-        // TODO: need to empirically verify that this number is OK
-        // for slow computers
-        goodConn = false;
-      } else {
-        goodConn = true;
-      }
-    } else {
-      goodConn = this.receivedIntermediateResult_;
-    }
-
-    if (goodConn) {
-      this.channelDebug_.debug(
-          'Test connection succeeded; using streaming connection');
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.NOPROXY);
-      this.channel_.testConnectionFinished(this, true);
-    } else {
-      this.channelDebug_.debug(
-          'Test connection failed; not using streaming');
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.PROXY);
-      this.channel_.testConnectionFinished(this, false);
-    }
-  }
-};
-
-
-/**
- * Returns the last status code received for a request.
- * @return {number} The last status code received for a request.
- */
-WebChannelBaseTestChannel.prototype.getLastStatusCode = function() {
-  return this.lastStatusCode_;
-};
-
-
-/**
- * @return {boolean} Whether we should be using secondary domains when the
- *     server instructs us to do so.
- * @override
- */
-WebChannelBaseTestChannel.prototype.shouldUseSecondaryDomains = function() {
-  return this.channel_.shouldUseSecondaryDomains();
-};
-
-
-/**
- * Gets whether this channel is currently active. This is used to determine the
- * length of time to wait before retrying.
- *
- * @param {WebChannelBase} channel The channel.
- * @return {boolean} Whether the channel is currently active.
- */
-WebChannelBaseTestChannel.prototype.isActive = function(channel) {
-  return this.channel_.isActive();
-};
-
-
-/**
- * @return {boolean} True if test stage 2 detected a non-buffered
- *     channel early and early no buffering detection is enabled.
- * @private
- */
-WebChannelBaseTestChannel.prototype.checkForEarlyNonBuffered_ = function() {
-  var ms = this.firstTime_ - this.startTime_;
-
-  // we always get Trident responses in separate calls to
-  // onRequestData, so we have to check the time that the first came in
-  // and verify that the data arrived before the second portion could
-  // have been sent. For all other browser's we skip the timing test.
-  return WebChannelRequest.supportsXhrStreaming() ||
-      ms < WebChannelBaseTestChannel.MIN_TIME_EXPECTED_BETWEEN_DATA_;
 };
 });  // goog.scope

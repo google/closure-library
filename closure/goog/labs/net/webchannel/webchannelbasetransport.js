@@ -20,13 +20,9 @@
  * Particularly, multiplexing is not possible, and only strings are
  * supported as message types.
  *
- * This is a package private implementation of the {@link goog.net.WebChannel}
- * API.
- *
- * @visibility {//visibility:private}
  */
 
-goog.provide('goog.net.WebChannelBaseTransport');
+goog.provide('goog.labs.net.webChannel.WebChannelBaseTransport');
 
 goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
@@ -46,16 +42,20 @@ goog.require('goog.string.path');
  * @constructor
  * @implements {goog.net.WebChannelTransport}
  */
-goog.net.WebChannelBaseTransport = function() {
-};
+goog.labs.net.webChannel.WebChannelBaseTransport = function() {};
+
+
+goog.scope(function() {
+var WebChannelBaseTransport = goog.labs.net.webChannel.WebChannelBaseTransport;
+var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
 
 
 /**
  * @override
  */
-goog.net.WebChannelBaseTransport.prototype.createWebChannel = function(
+WebChannelBaseTransport.prototype.createWebChannel = function(
     url, opt_options) {
-  return new goog.net.WebChannelBaseTransport.Channel(url, opt_options);
+  return new WebChannelBaseTransport.Channel(url, opt_options);
 };
 
 
@@ -71,16 +71,16 @@ goog.net.WebChannelBaseTransport.prototype.createWebChannel = function(
  * @implements {goog.net.WebChannel}
  * @extends {goog.events.EventTarget}
  */
-goog.net.WebChannelBaseTransport.Channel = function(url, opt_options) {
+WebChannelBaseTransport.Channel = function(url, opt_options) {
   goog.base(this);
 
   /**
    * The underlying channel object.
    *
-   * @type {!goog.labs.net.webChannel.WebChannelBase}
+   * @type {!WebChannelBase}
    * @private
    */
-  this.channel_ = new goog.labs.net.webChannel.WebChannelBase();
+  this.channel_ = new WebChannelBase();
 
   /**
    * The URL of the target server end-point.
@@ -104,24 +104,19 @@ goog.net.WebChannelBaseTransport.Channel = function(url, opt_options) {
    * @private
    */
   this.logger_ = goog.debug.Logger.getLogger(
-      'goog.net.WebChannelBaseTransport');
+      'goog.labs.net.webChannel.WebChannelBaseTransport');
 
 };
-goog.inherits(goog.net.WebChannelBaseTransport.Channel,
-    goog.events.EventTarget);
-
-
-goog.scope(function() {
-var Channel = goog.net.WebChannelBaseTransport.Channel;
+goog.inherits(WebChannelBaseTransport.Channel, goog.events.EventTarget);
 
 
 /**
  * The channel handler.
  *
- * @type {!goog.labs.net.webChannel.WebChannelBase.Handler}
+ * @type {WebChannelBase.Handler}
  * @private
  */
-Channel.prototype.channelHandler_;
+WebChannelBaseTransport.Channel.prototype.channelHandler_ = null;
 
 
 /**
@@ -131,11 +126,11 @@ Channel.prototype.channelHandler_;
  *
  * @override
  */
-Channel.prototype.open = function() {
+WebChannelBaseTransport.Channel.prototype.open = function() {
   var testUrl = goog.string.path.join(this.url_, 'test');
   this.channel_.connect(testUrl, this.url_);
 
-  this.channelHandler_ = new Channel.Handler_(this);
+  this.channelHandler_ = new WebChannelBaseTransport.Channel.Handler_(this);
   this.channel_.setHandler(this.channelHandler_);
 };
 
@@ -143,7 +138,7 @@ Channel.prototype.open = function() {
 /**
  * @override
  */
-Channel.prototype.close = function() {
+WebChannelBaseTransport.Channel.prototype.close = function() {
   this.channel_.disconnect();
 };
 
@@ -154,7 +149,7 @@ Channel.prototype.close = function() {
  * @param {!goog.net.WebChannel.MessageData} message The message to send.
  * @override
  */
-Channel.prototype.send = function(message) {
+WebChannelBaseTransport.Channel.prototype.send = function(message) {
   goog.asserts.assert(goog.isObject(message), 'only object type expected');
   this.channel_.sendMap(message);
 };
@@ -163,7 +158,7 @@ Channel.prototype.send = function(message) {
 /**
  * @override
  */
-Channel.prototype.disposeInternal = function() {
+WebChannelBaseTransport.Channel.prototype.disposeInternal = function() {
   this.channel_.setHandler(null);
   delete this.channelHandler_;
   this.channel_.disconnect();
@@ -181,23 +176,24 @@ Channel.prototype.disposeInternal = function() {
  * @constructor
  * @extends {goog.net.WebChannel.MessageEvent}
  */
-Channel.MessageEvent = function(array) {
+WebChannelBaseTransport.Channel.MessageEvent = function(array) {
   goog.base(this);
 
   this.data = array;
 };
-goog.inherits(Channel.MessageEvent, goog.net.WebChannel.MessageEvent);
+goog.inherits(WebChannelBaseTransport.Channel.MessageEvent,
+              goog.net.WebChannel.MessageEvent);
 
 
 
 /**
  * The error event.
  *
- * @param {goog.labs.net.webChannel.WebChannelBase.Error} error The error code.
+ * @param {WebChannelBase.Error} error The error code.
  * @constructor
  * @extends {goog.net.WebChannel.ErrorEvent}
  */
-Channel.ErrorEvent = function(error) {
+WebChannelBaseTransport.Channel.ErrorEvent = function(error) {
   goog.base(this);
 
   /**
@@ -205,38 +201,37 @@ Channel.ErrorEvent = function(error) {
    */
   this.status = goog.net.WebChannel.ErrorStatus.NETWORK_ERROR;
 };
-goog.inherits(Channel.ErrorEvent, goog.net.WebChannel.ErrorEvent);
+goog.inherits(WebChannelBaseTransport.Channel.ErrorEvent,
+              goog.net.WebChannel.ErrorEvent);
 
 
 
 /**
- * Implementation of the {@link goog.labs.net.webChannel.WebChannelBase.Handler}
- * interface.
+ * Implementation of the {@link WebChannelBase.Handler} interface.
  *
- * @param {!goog.net.WebChannelBaseTransport.Channel} channel The enclosing
- * WebChannel object.
+ * @param {!WebChannelBaseTransport.Channel} channel The enclosing WebChannel.
  *
  * @constructor
- * @extends {goog.labs.net.webChannel.WebChannelBase.Handler}
+ * @extends {WebChannelBase.Handler}
  * @private
  */
-Channel.Handler_ = function(channel) {
+WebChannelBaseTransport.Channel.Handler_ = function(channel) {
   goog.base(this);
 
   /**
-   * @type {!goog.net.WebChannelBaseTransport.Channel}
+   * @type {!WebChannelBaseTransport.Channel}
    * @private
    */
   this.channel_ = channel;
 };
-goog.inherits(Channel.Handler_,
-              goog.labs.net.webChannel.WebChannelBase.Handler);
+goog.inherits(WebChannelBaseTransport.Channel.Handler_, WebChannelBase.Handler);
 
 
 /**
  * @override
  */
-Channel.Handler_.prototype.channelOpened = function(channel) {
+WebChannelBaseTransport.Channel.Handler_.prototype.channelOpened = function(
+    channel) {
   this.channel_.logger_.info('WebChannel opened on ' + this.channel_.url_);
   this.channel_.dispatchEvent(goog.net.WebChannel.EventType.OPEN);
 };
@@ -245,27 +240,30 @@ Channel.Handler_.prototype.channelOpened = function(channel) {
 /**
  * @override
  */
-Channel.Handler_.prototype.channelHandleArray = function(channel, array) {
+WebChannelBaseTransport.Channel.Handler_.prototype.channelHandleArray =
+    function(channel, array) {
   goog.asserts.assert(array, 'array expected to be defined');
-
-  this.channel_.dispatchEvent(new Channel.MessageEvent(array));
+  this.channel_.dispatchEvent(
+      new WebChannelBaseTransport.Channel.MessageEvent(array));
 };
 
 
 /**
  * @override
  */
-Channel.Handler_.prototype.channelError = function(channel, error) {
+WebChannelBaseTransport.Channel.Handler_.prototype.channelError = function(
+    channel, error) {
   this.channel_.logger_.info('WebChannel aborted on ' + this.channel_.url_ +
       ' due to channel error: ' + error);
-  this.channel_.dispatchEvent(new Channel.ErrorEvent(error));
+  this.channel_.dispatchEvent(
+      new WebChannelBaseTransport.Channel.ErrorEvent(error));
 };
 
 
 /**
  * @override
  */
-Channel.Handler_.prototype.channelClosed = function(
+WebChannelBaseTransport.Channel.Handler_.prototype.channelClosed = function(
     channel, opt_pendingMaps, opt_undeliveredMaps) {
   this.channel_.logger_.info('WebChannel closed on ' + this.channel_.url_);
   this.channel_.dispatchEvent(goog.net.WebChannel.EventType.CLOSE);

@@ -17,8 +17,7 @@ goog.require('goog.Uri');
 goog.require('goog.functions');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.WebChannelRequest');
-goog.require('goog.labs.net.webChannel.webChannelRequestStats');
-goog.require('goog.labs.net.webChannel.WebChannelRequestSupport');
+goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -65,7 +64,7 @@ function setUp() {
     }
     reachabilityEvents[reachabilityType]++;
   };
-  stubs.set(goog.labs.net.webChannel.webChannelRequestStats,
+  stubs.set(goog.labs.net.webChannel.requestStats,
       'notifyServerReachabilityEvent', notifyServerReachabilityEvent);
 }
 
@@ -273,7 +272,7 @@ function testActiveXBlocked() {
 
 function checkReachabilityEvents(reqMade, reqSucceeded, reqFail, backChannel) {
   var Reachability =
-      goog.labs.net.webChannel.webChannelRequestStats.ServerReachability;
+      goog.labs.net.webChannel.requestStats.ServerReachability;
   assertEquals(reqMade,
       reachabilityEvents[Reachability.REQUEST_MADE] || 0);
   assertEquals(reqSucceeded,

@@ -25,15 +25,13 @@
 
 
 goog.provide('goog.labs.net.webChannel.WebChannelRequest');
-goog.provide('goog.labs.net.webChannel.WebChannelRequestSupport');
 
 goog.require('goog.Timer');
 goog.require('goog.async.Throttle');
 goog.require('goog.events.EventHandler');
-goog.require('goog.labs.net.webChannel.webChannelRequestStats');
-goog.require(
-    'goog.labs.net.webChannel.webChannelRequestStats.ServerReachability');
-goog.require('goog.labs.net.webChannel.webChannelRequestStats.Stat');
+goog.require('goog.labs.net.webChannel.requestStats');
+goog.require('goog.labs.net.webChannel.requestStats.ServerReachability');
+goog.require('goog.labs.net.webChannel.requestStats.Stat');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XmlHttp');
@@ -43,22 +41,9 @@ goog.require('goog.userAgent');
 
 
 /**
- * Callbacks to the channel-level functions. The introduction of this interface
- * avoids circular dependency between WebChannelRequest and WebChannelBase.
- *
- * TODO(user): create a separate interface class to address the coupling
- * between the channel and request classes.
- *
- * @interface
- */
-goog.labs.net.webChannel.WebChannelRequestSupport = function() {};
-
-
-
-/**
  * A new WebChannelRequest is created for each request to the server.
  *
- * @param {goog.labs.net.webChannel.WebChannelRequestSupport} channel
+ * @param {goog.labs.net.webChannel.Channel} channel
  *     The channel that owns this request.
  * @param {goog.labs.net.webChannel.WebChannelDebug} channelDebug A
  *     WebChannelDebug to use for logging.
@@ -71,7 +56,7 @@ goog.labs.net.webChannel.WebChannelRequest = function(channel, channelDebug,
     opt_sessionId, opt_requestId, opt_retryId) {
   /**
    * The channel object that owns the request.
-   * @type {goog.labs.net.webChannel.WebChannelRequestSupport}
+   * @type {goog.labs.net.webChannel.Channel}
    * @private
    */
   this.channel_ = channel;
@@ -134,42 +119,10 @@ goog.labs.net.webChannel.WebChannelRequest = function(channel, channelDebug,
 
 
 goog.scope(function() {
-var WebChannelRequestSupport =
-    goog.labs.net.webChannel.WebChannelRequestSupport;
+var Channel = goog.labs.net.webChannel.Channel;
 var WebChannelRequest = goog.labs.net.webChannel.WebChannelRequest;
-var webChannelRequestStats =
-    goog.labs.net.webChannel.webChannelRequestStats;
-
-
-/**
- * @see goog.labs.net.webChannel.WebChannelBase.
- */
-WebChannelRequestSupport.prototype.shouldUseSecondaryDomains =
-    goog.abstractMethod;
-
-
-/**
- * @see goog.labs.net.webChannel.WebChannelBase.
- */
-WebChannelRequestSupport.prototype.createXhrIo = goog.abstractMethod;
-
-
-/**
- * @see goog.labs.net.webChannel.WebChannelBase.
- */
-WebChannelRequestSupport.prototype.onRequestComplete = goog.abstractMethod;
-
-
-/**
- * @see goog.labs.net.webChannel.WebChannelBase.
- */
-WebChannelRequestSupport.prototype.isClosed = goog.abstractMethod;
-
-
-/**
- * @see goog.labs.net.webChannel.WebChannelBase.
- */
-WebChannelRequestSupport.prototype.onRequestData = goog.abstractMethod;
+var requestStats = goog.labs.net.webChannel.requestStats;
+var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 
 
 /**
@@ -598,8 +551,8 @@ WebChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
     }
     this.xmlHttp_.send(this.requestUri_, this.verb_, null, headers);
   }
-  webChannelRequestStats.notifyServerReachabilityEvent(
-      webChannelRequestStats.ServerReachability.REQUEST_MADE);
+  requestStats.notifyServerReachabilityEvent(
+      requestStats.ServerReachability.REQUEST_MADE);
   this.channelDebug_.xmlHttpChannelRequest(this.verb_,
       this.requestUri_, this.rid_, this.retryId_,
       this.postData_);
@@ -632,7 +585,7 @@ WebChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
  * @private
  */
 WebChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
-  webChannelRequestStats.onStartExecution();
+  requestStats.onStartExecution();
 
   /** @preserveTry */
   try {
@@ -651,7 +604,7 @@ WebChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
       this.channelDebug_.dumpException(ex, 'No response text');
     }
   } finally {
-    webChannelRequestStats.onEndExecution();
+    requestStats.onEndExecution();
   }
 };
 
@@ -691,11 +644,11 @@ WebChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
     // consider indicative of a truly non-functional network connection.
     if (errorCode == goog.net.ErrorCode.TIMEOUT ||
         statusCode <= 0) {
-      webChannelRequestStats.notifyServerReachabilityEvent(
-          webChannelRequestStats.ServerReachability.REQUEST_FAILED);
+      requestStats.notifyServerReachabilityEvent(
+          requestStats.ServerReachability.REQUEST_FAILED);
     } else {
-      webChannelRequestStats.notifyServerReachabilityEvent(
-          webChannelRequestStats.ServerReachability.REQUEST_SUCCEEDED);
+      requestStats.notifyServerReachabilityEvent(
+          requestStats.ServerReachability.REQUEST_SUCCEEDED);
     }
   }
 
@@ -724,13 +677,12 @@ WebChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
       // the user got moved to another server, etc.,). Handlers can special
       // case this error
       this.lastError_ = WebChannelRequest.Error.UNKNOWN_SESSION_ID;
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.REQUEST_UNKNOWN_SESSION_ID);
+      requestStats.notifyStatEvent(
+          requestStats.Stat.REQUEST_UNKNOWN_SESSION_ID);
       this.channelDebug_.warning('XMLHTTP Unknown SID (' + this.rid_ + ')');
     } else {
       this.lastError_ = WebChannelRequest.Error.STATUS;
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.REQUEST_BAD_STATUS);
+      requestStats.notifyStatEvent(requestStats.Stat.REQUEST_BAD_STATUS);
       this.channelDebug_.warning(
           'XMLHTTP Bad status ' + status + ' (' + this.rid_ + ')');
     }
@@ -789,8 +741,8 @@ WebChannelRequest.prototype.decodeNextChunks_ = function(readyState,
       if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
         // should have consumed entire response when the request is done
         this.lastError_ = WebChannelRequest.Error.BAD_DATA;
-        webChannelRequestStats.notifyStatEvent(
-            webChannelRequestStats.Stat.REQUEST_INCOMPLETE_DATA);
+        requestStats.notifyStatEvent(
+            requestStats.Stat.REQUEST_INCOMPLETE_DATA);
         decodeNextChunksSuccessful = false;
       }
       this.channelDebug_.xmlHttpChannelResponseText(
@@ -798,8 +750,7 @@ WebChannelRequest.prototype.decodeNextChunks_ = function(readyState,
       break;
     } else if (chunkText == WebChannelRequest.INVALID_CHUNK_) {
       this.lastError_ = WebChannelRequest.Error.BAD_DATA;
-      webChannelRequestStats.notifyStatEvent(
-          webChannelRequestStats.Stat.REQUEST_BAD_DATA);
+      requestStats.notifyStatEvent(requestStats.Stat.REQUEST_BAD_DATA);
       this.channelDebug_.xmlHttpChannelResponseText(
           this.rid_, responseText, '[Invalid Chunk]');
       decodeNextChunksSuccessful = false;
@@ -814,8 +765,7 @@ WebChannelRequest.prototype.decodeNextChunks_ = function(readyState,
       responseText.length == 0) {
     // also an error if we didn't get any response
     this.lastError_ = WebChannelRequest.Error.NO_DATA;
-    webChannelRequestStats.notifyStatEvent(
-        webChannelRequestStats.Stat.REQUEST_NO_DATA);
+    requestStats.notifyStatEvent(requestStats.Stat.REQUEST_NO_DATA);
     decodeNextChunksSuccessful = false;
   }
   this.successful_ = this.successful_ && decodeNextChunksSuccessful;
@@ -879,8 +829,7 @@ WebChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ = function() {
 
   // set error and dispatch failure
   this.lastError_ = WebChannelRequest.Error.BROWSER_OFFLINE;
-  webChannelRequestStats.notifyStatEvent(
-      webChannelRequestStats.Stat.BROWSER_OFFLINE);
+  requestStats.notifyStatEvent(requestStats.Stat.BROWSER_OFFLINE);
   this.dispatchFailure_();
 };
 
@@ -960,8 +909,7 @@ WebChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
     this.cleanup_();
 
     this.lastError_ = WebChannelRequest.Error.ACTIVE_X_BLOCKED;
-    webChannelRequestStats.notifyStatEvent(
-        webChannelRequestStats.Stat.ACTIVE_X_BLOCKED);
+    requestStats.notifyStatEvent(requestStats.Stat.ACTIVE_X_BLOCKED);
     this.dispatchFailure_();
     return;
   }
@@ -986,8 +934,8 @@ WebChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   div.innerHTML = '<iframe src="' + this.requestUri_ + '"></iframe>';
   this.channelDebug_.tridentChannelRequest('GET',
       this.requestUri_, this.rid_, this.retryId_);
-  webChannelRequestStats.notifyServerReachabilityEvent(
-      webChannelRequestStats.ServerReachability.REQUEST_MADE);
+  requestStats.notifyServerReachabilityEvent(
+      requestStats.ServerReachability.REQUEST_MADE);
 };
 
 
@@ -1000,7 +948,7 @@ WebChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
  */
 WebChannelRequest.prototype.onTridentRpcMessage_ = function(msg) {
   // need to do async b/c this gets called off of the context of the ActiveX
-  webChannelRequestStats.setTimeout(
+  requestStats.setTimeout(
       goog.bind(this.onTridentRpcMessageAsync_, this, msg), 0);
 };
 
@@ -1032,7 +980,7 @@ WebChannelRequest.prototype.onTridentRpcMessageAsync_ = function(msg) {
  */
 WebChannelRequest.prototype.onTridentDone_ = function(successful) {
   // need to do async b/c this gets called off of the context of the ActiveX
-  webChannelRequestStats.setTimeout(
+  requestStats.setTimeout(
       goog.bind(this.onTridentDoneAsync_, this, successful), 0);
 };
 
@@ -1054,8 +1002,8 @@ WebChannelRequest.prototype.onTridentDoneAsync_ = function(
   this.cleanup_();
   this.successful_ = successful;
   this.channel_.onRequestComplete(this);
-  webChannelRequestStats.notifyServerReachabilityEvent(
-      webChannelRequestStats.ServerReachability.BACK_CHANNEL_ACTIVITY);
+  requestStats.notifyServerReachabilityEvent(
+      requestStats.ServerReachability.BACK_CHANNEL_ACTIVITY);
 };
 
 
@@ -1117,7 +1065,7 @@ WebChannelRequest.prototype.startWatchDogTimer_ = function(time) {
     // assertion
     throw Error('WatchDog timer not null');
   }
-  this.watchDogTimerId_ = webChannelRequestStats.setTimeout(
+  this.watchDogTimerId_ = requestStats.setTimeout(
       goog.bind(this.onWatchDogTimeout_, this), time);
 };
 
@@ -1172,15 +1120,14 @@ WebChannelRequest.prototype.handleTimeout_ = function() {
   // IMG requests never notice if they were successful, and always 'time out'.
   // This fact says nothing about reachability.
   if (this.type_ != WebChannelRequest.Type_.IMG) {
-    webChannelRequestStats.notifyServerReachabilityEvent(
-        webChannelRequestStats.ServerReachability.REQUEST_FAILED);
+    requestStats.notifyServerReachabilityEvent(
+        requestStats.ServerReachability.REQUEST_FAILED);
   }
   this.cleanup_();
 
   // set error and dispatch failure
   this.lastError_ = WebChannelRequest.Error.TIMEOUT;
-  webChannelRequestStats.notifyStatEvent(
-      webChannelRequestStats.Stat.REQUEST_TIMEOUT);
+  requestStats.notifyStatEvent(requestStats.Stat.REQUEST_TIMEOUT);
   this.dispatchFailure_();
 };
 
@@ -1312,13 +1259,33 @@ WebChannelRequest.prototype.safeOnRequestData_ = function(data) {
   /** @preserveTry */
   try {
     this.channel_.onRequestData(this, data);
-    var stats = webChannelRequestStats.ServerReachability;
-    webChannelRequestStats.notifyServerReachabilityEvent(
-        stats.BACK_CHANNEL_ACTIVITY);
+    var stats = requestStats.ServerReachability;
+    requestStats.notifyServerReachabilityEvent(stats.BACK_CHANNEL_ACTIVITY);
   } catch (e) {
     // Dump debug info, but keep going without closing the channel.
     this.channelDebug_.dumpException(
         e, 'Error in httprequest callback');
   }
+};
+
+
+/**
+ * Convenience factory method.
+ *
+ * @param {Channel} channel The channel object that owns this request.
+ * @param {WebChannelDebug} channelDebug A WebChannelDebug to use for logging.
+ * @param {string=} opt_sessionId  The session id for the channel.
+ * @param {string|number=} opt_requestId  The request id for this request.
+ * @param {number=} opt_retryId  The retry id for this request.
+ * @return {WebChannelRequest} The created channel request.
+ */
+WebChannelRequest.createChannelRequest = function(channel, channelDebug,
+    opt_sessionId, opt_requestId, opt_retryId) {
+  return new WebChannelRequest(
+      channel,
+      channelDebug,
+      opt_sessionId,
+      opt_requestId,
+      opt_retryId);
 };
 });  // goog.scope

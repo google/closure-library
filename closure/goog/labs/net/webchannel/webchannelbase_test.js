@@ -1,44 +1,52 @@
-<!DOCTYPE html>
-<html>
-<!--
-Copyright 2009 The Closure Library Authors. All Rights Reserved.
+// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-Use of this source code is governed by the Apache License, Version 2.0.
-See the COPYING file for details.
--->
-<!--
--->
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.labs.net.webChannel.WebChannelBase</title>
-<script src="../../../base.js"></script>
-<script>
-  // TODO(user): create a _test.js file for this test.
-  goog.require('goog.Timer');
-  goog.require('goog.dom');
-  goog.require('goog.functions');
-  goog.require('goog.json');
-  goog.require('goog.labs.net.webChannel.WebChannelBase');
-  goog.require('goog.labs.net.webChannel.WebChannelDebug');
-  goog.require('goog.labs.net.webChannel.WebChannelRequest');
-  goog.require('goog.labs.net.webChannel.webChannelRequestStats');
-  goog.require('goog.net.tmpnetwork');
-  goog.require('goog.string.StringBuffer');
-  goog.require('goog.structs.Map');
-  goog.require('goog.testing.MockClock');
-  goog.require('goog.testing.PropertyReplacer');
-  goog.require('goog.testing.recordFunction');
-  goog.require('goog.testing.asserts');
-  goog.require('goog.testing.jsunit');
-</script>
-</head>
-<body>
-<script>
+/**
+ * @fileoverview Unit tests for goog.labs.net.webChannel.WebChannelBase.
+ * @suppress {accessControls} Private methods are accessed for test purposes.
+ *
+ */
+
+
+goog.provide('goog.labs.net.webChannel.webChannelBaseTest');
+
+goog.require('goog.Timer');
+goog.require('goog.array');
+goog.require('goog.dom');
+goog.require('goog.functions');
+goog.require('goog.json');
+goog.require('goog.labs.net.webChannel.WebChannelBase');
+goog.require('goog.labs.net.webChannel.WebChannelDebug');
+goog.require('goog.labs.net.webChannel.WebChannelRequest');
+goog.require('goog.labs.net.webChannel.requestStats');
+goog.require('goog.labs.net.webChannel.requestStats.Stat');
+goog.require('goog.net.tmpnetwork');
+goog.require('goog.structs.Map');
+goog.require('goog.testing.MockClock');
+goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.testing.asserts');
+goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
+
+goog.setTestOnly('goog.labs.net.webChannel.webChannelBaseTest');
+
 
 /**
  * Delay between a network failure and the next network request.
  */
 var RETRY_TIME = 1000;
+
 
 /**
  * A really long time - used to make sure no more timeouts will fire.
@@ -88,6 +96,7 @@ function stubTmpnetwork() {
 }
 
 
+
 /**
  * Mock ChannelRequest.
  * @constructor
@@ -123,23 +132,23 @@ MockChannelRequest.prototype.xmlHttpPost = function(uri, postData,
   this.channelDebug_.debug('---> POST: ' + uri + ', ' + postData + ', ' +
       decodeChunks);
   this.postData_ = postData;
-  this.requestStartTime_ = goog.now()
+  this.requestStartTime_ = goog.now();
 };
 
 MockChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
     opt_noClose) {
   this.channelDebug_.debug('<--- GET: ' + uri + ', ' + decodeChunks + ', ' +
       opt_noClose);
-  this.requestStartTime_ = goog.now()
+  this.requestStartTime_ = goog.now();
 };
 
 MockChannelRequest.prototype.tridentGet = function(uri, usingSecondaryDomain) {
   this.channelDebug_.debug('<---GET (T): ' + uri);
-  this.requestStartTime_ = goog.now()
+  this.requestStartTime_ = goog.now();
 };
 
 MockChannelRequest.prototype.sendUsingImgTag = function(uri) {
-  this.requestStartTime_ = goog.now()
+  this.requestStartTime_ = goog.now();
 };
 
 MockChannelRequest.prototype.cancel = function() {
@@ -175,22 +184,27 @@ MockChannelRequest.prototype.getRequestStartTime = function() {
 };
 
 
+/**
+ * @suppress {invalidCasts} The cast from MockChannelRequest to
+ * WebChannelRequest is invalid and will not compile. *
+ */
 function setUpPage() {
   // Use our MockChannelRequests instead of the real ones.
-  goog.labs.net.webChannel.WebChannelBase.createChannelRequest = function(
+  goog.labs.net.webChannel.WebChannelRequest.createChannelRequest = function(
       channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
-    return new MockChannelRequest(
-        channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId);
+    return /** @type {!goog.labs.net.webChannel.WebChannelRequest} */ (
+        new MockChannelRequest(channel, channelDebug, opt_sessionId,
+            opt_requestId, opt_retryId));
   };
 
   // Mock out the stat notification code.
-  goog.labs.net.webChannel.webChannelRequestStats.notifyStatEvent = function(
+  goog.labs.net.webChannel.requestStats.notifyStatEvent = function(
       stat) {
     numStatEvents++;
     lastStatEvent = stat;
   };
 
-  goog.labs.net.webChannel.webChannelRequestStats.notifyTimingEvent = function(
+  goog.labs.net.webChannel.requestStats.notifyTimingEvent = function(
       size, rtt, retries) {
     numTimingEvents++;
     lastPostSize = size;
@@ -198,7 +212,6 @@ function setUpPage() {
     lastPostRetryCount = retries;
   };
 }
-
 
 function setUp() {
   numTimingEvents = 0;
@@ -218,15 +231,19 @@ function setUp() {
   handler.channelSuccess = function(channel, maps) {
     deliveredMaps = goog.array.clone(maps);
   };
+
+  /**
+   * @suppress {checkTypes} The callback function type declaration is skipped.
+   */
   handler.channelClosed = function(
       channel, opt_pendingMaps, opt_undeliveredMaps) {
     // Mock out the handler, and let it set a formatted user readable string
     // of the undelivered maps which we can use when verifying our assertions.
     if (opt_pendingMaps) {
-      this.pendingMapsString = formatArrayOfMaps(opt_pendingMaps);
+      handler.pendingMapsString = formatArrayOfMaps(opt_pendingMaps);
     }
     if (opt_undeliveredMaps) {
-      this.undeliveredMapsString = formatArrayOfMaps(opt_undeliveredMaps);
+      handler.undeliveredMapsString = formatArrayOfMaps(opt_undeliveredMaps);
     }
   };
   handler.channelHandleMultipleArrays = function() {};
@@ -303,12 +320,18 @@ function testFormatArrayOfMaps() {
 
   // One map with a context.
   var c = [];
-  c.push(new goog.labs.net.webChannel.WebChannelBase.QueuedMap(0, map1, 'c1'));
+  c.push(new goog.labs.net.webChannel.WebChannelBase.QueuedMap(
+      0, map1, new String('c1')));
   assertEquals('k1:v1:c1, k2:v2:c1',
       formatArrayOfMaps(c));
 }
 
 
+/**
+ * @param {number=} opt_serverVersion
+ * @param {string=} opt_hostPrefix
+ * @param {string=} opt_uriPrefix
+ */
 function connectForwardChannel(
     opt_serverVersion, opt_hostPrefix, opt_uriPrefix) {
   var uriPrefix = opt_uriPrefix || '';
@@ -319,6 +342,11 @@ function connectForwardChannel(
 }
 
 
+/**
+ * @param {number=} opt_serverVersion
+ * @param {string=} opt_hostPrefix
+ * @param {string=} opt_uriPrefix
+ */
 function connect(opt_serverVersion, opt_hostPrefix, opt_uriPrefix) {
   connectForwardChannel(opt_serverVersion, opt_hostPrefix, opt_uriPrefix);
   completeBackChannel();
@@ -357,6 +385,10 @@ function completeBackTestConnection() {
 }
 
 
+/**
+ * @param {number=} opt_serverVersion
+ * @param {string=} opt_hostPrefix
+ */
 function completeForwardChannel(opt_serverVersion, opt_hostPrefix) {
   var responseData = '[[0,["c","1234567890ABCDEF",' +
       (opt_hostPrefix ? '"' + opt_hostPrefix + '"' : 'null') +
@@ -390,9 +422,16 @@ function responseVersion7() {
   mockClock.tick(0);
 }
 
-function responseNoBackchannel(lastArrayIdSentFromServer, outstandingDataSize) {
-  responseData = goog.json.serialize(
-      [0, lastArrayIdSentFromServer, outstandingDataSize]);
+
+/**
+ *
+ * @param {number=} opt_lastArrayIdSentFromServer
+ * @param {number=} opt_outstandingDataSize
+ */
+function responseNoBackchannel(
+    opt_lastArrayIdSentFromServer, opt_outstandingDataSize) {
+  var responseData = goog.json.serialize(
+      [0, opt_lastArrayIdSentFromServer, opt_outstandingDataSize]);
   channel.onRequestData(
       channel.forwardChannelRequest_,
       responseData);
@@ -402,12 +441,12 @@ function responseNoBackchannel(lastArrayIdSentFromServer, outstandingDataSize) {
 }
 
 function response(lastArrayIdSentFromServer, outstandingDataSize) {
-  responseData = goog.json.serialize(
+  var responseData = goog.json.serialize(
       [1, lastArrayIdSentFromServer, outstandingDataSize]);
   channel.onRequestData(
       channel.forwardChannelRequest_,
       responseData
-      );
+  );
   channel.onRequestComplete(
       channel.forwardChannelRequest_);
   mockClock.tick(0);
@@ -434,6 +473,9 @@ function responseTimeout() {
 }
 
 
+/**
+ * @param {number=} opt_statusCode
+ */
 function responseRequestFailed(opt_statusCode) {
   channel.forwardChannelRequest_.lastError_ =
       goog.labs.net.webChannel.WebChannelRequest.Error.STATUS;
@@ -466,6 +508,11 @@ function responseActiveXBlocked() {
 }
 
 
+/**
+ * @param {string} key
+ * @param {string} value
+ * @param {string=} opt_context
+ */
 function sendMap(key, value, opt_context) {
   var map = new goog.structs.Map();
   map.set(key, value);
@@ -486,7 +533,7 @@ function hasBackChannel() {
 
 function hasDeadBackChannelTimer() {
   return goog.isDefAndNotNull(channel.deadBackChannelTimerId_);
-};
+}
 
 
 function assertHasForwardChannel() {
@@ -521,7 +568,7 @@ function testConnect_withServerHostPrefix() {
 function testConnect_withClientHostPrefix() {
   handler.correctHostPrefix = function(hostPrefix) {
     return 'clientHostPrefix';
-  }
+  };
   connect();
   assertEquals('clientHostPrefix', channel.hostPrefix_);
 }
@@ -529,7 +576,7 @@ function testConnect_withClientHostPrefix() {
 function testConnect_overrideServerHostPrefix() {
   handler.correctHostPrefix = function(hostPrefix) {
     return 'clientHostPrefix';
-  }
+  };
   connect(undefined, 'serverHostPrefix');
   assertEquals('clientHostPrefix', channel.hostPrefix_);
 }
@@ -637,7 +684,7 @@ function testBackChannelRemainsEstablished_afterDoubleSendMap() {
 }
 
 
-function testTimingEvent(){
+function testTimingEvent() {
   connect();
   assertEquals(1, numTimingEvents);
   sendMap('', '');
@@ -852,7 +899,7 @@ function testStatEventReportedOnlyOnce() {
   responseUnknownSessionId();
 
   assertEquals(1, numStatEvents);
-  assertEquals(goog.labs.net.webChannel.webChannelRequestStats.Stat.ERROR_OTHER,
+  assertEquals(goog.labs.net.webChannel.requestStats.Stat.ERROR_OTHER,
       lastStatEvent);
 
   numStatEvents = 0;
@@ -870,7 +917,7 @@ function testActiveXBlockedEventReportedOnlyOnce() {
   responseActiveXBlocked();
 
   assertEquals(1, numStatEvents);
-  assertEquals(goog.labs.net.webChannel.webChannelRequestStats.Stat.ERROR_OTHER,
+  assertEquals(goog.labs.net.webChannel.requestStats.Stat.ERROR_OTHER,
       lastStatEvent);
 
   mockClock.tick(goog.net.tmpnetwork.GOOGLECOM_TIMEOUT);
@@ -896,7 +943,7 @@ function testStatEventReportedOnlyOnce_onNetworkUp() {
   // Assert we report the correct stat event.
   assertEquals(1, numStatEvents);
   assertEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.ERROR_NETWORK,
+      goog.labs.net.webChannel.requestStats.Stat.ERROR_NETWORK,
       lastStatEvent);
 }
 
@@ -919,7 +966,7 @@ function testStatEventReportedOnlyOnce_onNetworkDown() {
 
   // Assert we report the correct stat event.
   assertEquals(1, numStatEvents);
-  assertEquals(goog.labs.net.webChannel.webChannelRequestStats.Stat.ERROR_OTHER,
+  assertEquals(goog.labs.net.webChannel.requestStats.Stat.ERROR_OTHER,
       lastStatEvent);
 }
 
@@ -943,8 +990,10 @@ function testOutgoingMapsAwaitsResponse() {
   assertEquals(0, channel.outgoingMaps_.length);
 }
 
-
 function testUndeliveredMaps_doesNotNotifyWhenSuccessful() {
+  /**
+   * @suppress {checkTypes} The callback function type declaration is skipped.
+   */
   handler.channelClosed = function(
       channel, opt_pendingMaps, opt_undeliveredMaps) {
     if (opt_pendingMaps || opt_undeliveredMaps) {
@@ -962,6 +1011,9 @@ function testUndeliveredMaps_doesNotNotifyWhenSuccessful() {
 
 
 function testUndeliveredMaps_doesNotNotifyIfNothingWasSent() {
+  /**
+   * @suppress {checkTypes} The callback function type declaration is skipped.
+   */
   handler.channelClosed = function(
       channel, opt_pendingMaps, opt_undeliveredMaps) {
     if (opt_pendingMaps || opt_undeliveredMaps) {
@@ -1066,7 +1118,7 @@ function testResponseNoBackchannelPostNotBeforeBackchannel() {
       channel.forwardChannelRequest_.getRequestStartTime());
   responseNoBackchannel();
   assertNotEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_MISSING,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_MISSING,
       lastStatEvent);
 }
 
@@ -1082,7 +1134,7 @@ function testResponseNoBackchannel() {
       channel.forwardChannelRequest_.getRequestStartTime());
   responseNoBackchannel();
   assertEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_MISSING,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_MISSING,
       lastStatEvent);
 }
 
@@ -1095,7 +1147,7 @@ function testResponseNoBackchannelWithNoBackchannel() {
   channel.backChannelRequest_ = null;
   responseNoBackchannel();
   assertEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_MISSING,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_MISSING,
       lastStatEvent);
 }
 
@@ -1109,7 +1161,7 @@ function testResponseNoBackchannelWithStartTimer() {
   channel.backChannelTimerId_ = 123;
   responseNoBackchannel();
   assertNotEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_MISSING,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_MISSING,
       lastStatEvent);
 }
 
@@ -1139,7 +1191,7 @@ function testResponseWithArraysMissing() {
   assertEquals(7, channel.lastPostResponseArrayId_);
   mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE * 2);
   assertEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_DEAD,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
       lastStatEvent);
 }
 
@@ -1160,7 +1212,7 @@ function testMultipleResponsesWithArraysMissing() {
   mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE);
   // The original timer should still fire.
   assertEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_DEAD,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
       lastStatEvent);
 }
 
@@ -1178,7 +1230,7 @@ function testOnlyRetryOnceBasedOnResponse() {
   assertTrue(hasDeadBackChannelTimer());
   mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE * 2);
   assertEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_DEAD,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
       lastStatEvent);
   assertEquals(1, channel.backChannelRetryCount_);
   mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE);
@@ -1205,7 +1257,7 @@ function testResponseWithArraysMissingAndLiveChannel() {
   assertFalse(hasDeadBackChannelTimer());
   mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE);
   assertNotEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_DEAD,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
       lastStatEvent);
 }
 
@@ -1223,7 +1275,7 @@ function testResponseWithBigOutstandingData() {
   assertFalse(hasDeadBackChannelTimer());
   mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE * 2);
   assertNotEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_DEAD,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
       lastStatEvent);
 }
 
@@ -1240,7 +1292,7 @@ function testResponseInBufferedMode() {
   assertFalse(hasDeadBackChannelTimer());
   mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE * 2);
   assertNotEquals(
-      goog.labs.net.webChannel.webChannelRequestStats.Stat.BACKCHANNEL_DEAD,
+      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
       lastStatEvent);
 }
 
@@ -1251,7 +1303,7 @@ function testResponseWithGarbage() {
   channel.onRequestData(
       channel.forwardChannelRequest_,
       'garbage'
-      );
+  );
   assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
       channel.getState());
 }
@@ -1263,7 +1315,7 @@ function testResponseWithGarbageInArray() {
   channel.onRequestData(
       channel.forwardChannelRequest_,
       '["garbage"]'
-      );
+  );
   assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
       channel.getState());
 }
@@ -1274,10 +1326,7 @@ function testResponseWithEvilData() {
   sendMap('foo1', 'bar1');
   channel.onRequestData(
       channel.forwardChannelRequest_,
-      goog.labs.net.webChannel.WebChannelBase.LAST_ARRAY_ID_RESPONSE_PREFIX +
-          '=<script>evil()\<\/script>&' +
-      goog.labs.net.webChannel.WebChannelBase.OUTSTANDING_DATA_RESPONSE_PREFIX +
-          '=<script>moreEvil()\<\/script>');
+      'foo=<script>evil()\<\/script>&' + 'bar=<script>moreEvil()\<\/script>');
   assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
       channel.getState());
 }
@@ -1327,8 +1376,7 @@ function testCreateXhrIo() {
 }
 
 function testSetParser() {
-  var recordUnsafeParse = goog.testing.recordFunction(
-      goog.json.unsafeParse);
+  var recordUnsafeParse = goog.testing.recordFunction(goog.json.unsafeParse);
   var parser = {};
   parser.parse = recordUnsafeParse;
   channel.setParser(parser);
@@ -1349,8 +1397,3 @@ function testSetParser() {
   assertEquals(1, call3.getArguments().length);
   assertEquals('[[1,["foo"]]]', call3.getArgument(0));
 }
-
-</script>
-<div id="debug" style="font-size: small"></div>
-</body>
-</html>

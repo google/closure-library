@@ -20,29 +20,27 @@
  */
 
 
-goog.provide('goog.labs.net.webChannel.webChannelRequestStats');
-goog.provide('goog.labs.net.webChannel.webChannelRequestStats.Event');
-goog.provide(
-    'goog.labs.net.webChannel.webChannelRequestStats.ServerReachability');
-goog.provide(
-    'goog.labs.net.webChannel.webChannelRequestStats.ServerReachabilityEvent');
-goog.provide('goog.labs.net.webChannel.webChannelRequestStats.Stat');
-goog.provide('goog.labs.net.webChannel.webChannelRequestStats.StatEvent');
-goog.provide('goog.labs.net.webChannel.webChannelRequestStats.TimingEvent');
+goog.provide('goog.labs.net.webChannel.requestStats');
+goog.provide('goog.labs.net.webChannel.requestStats.Event');
+goog.provide('goog.labs.net.webChannel.requestStats.ServerReachability');
+goog.provide('goog.labs.net.webChannel.requestStats.ServerReachabilityEvent');
+goog.provide('goog.labs.net.webChannel.requestStats.Stat');
+goog.provide('goog.labs.net.webChannel.requestStats.StatEvent');
+goog.provide('goog.labs.net.webChannel.requestStats.TimingEvent');
 
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 
 
 goog.scope(function() {
-var webChannelRequestStats = goog.labs.net.webChannel.webChannelRequestStats;
+var requestStats = goog.labs.net.webChannel.requestStats;
 
 
 /**
  * Events fired.
  * @type {Object}
  */
-webChannelRequestStats.Event = {};
+requestStats.Event = {};
 
 
 /**
@@ -50,14 +48,14 @@ webChannelRequestStats.Event = {};
  * @type {goog.events.EventTarget}
  * @private
  */
-webChannelRequestStats.statEventTarget_ = new goog.events.EventTarget();
+requestStats.statEventTarget_ = new goog.events.EventTarget();
 
 
 /**
  * The type of event that occurs every time some information about how reachable
  * the server is is discovered.
  */
-webChannelRequestStats.Event.SERVER_REACHABILITY_EVENT = 'serverreachability';
+requestStats.Event.SERVER_REACHABILITY_EVENT = 'serverreachability';
 
 
 /**
@@ -65,7 +63,7 @@ webChannelRequestStats.Event.SERVER_REACHABILITY_EVENT = 'serverreachability';
  * server.
  * @enum {number}
  */
-webChannelRequestStats.ServerReachability = {
+requestStats.ServerReachability = {
   REQUEST_MADE: 1,
   REQUEST_SUCCEEDED: 2,
   REQUEST_FAILED: 3,
@@ -79,37 +77,33 @@ webChannelRequestStats.ServerReachability = {
  *
  * @param {goog.events.EventTarget} target The stat event target for
        the channel.
- * @param {webChannelRequestStats.ServerReachability} reachabilityType
+ * @param {requestStats.ServerReachability} reachabilityType
  *     The reachability event type.
  * @constructor
  * @extends {goog.events.Event}
  */
-webChannelRequestStats.ServerReachabilityEvent = function(target,
-    reachabilityType) {
+requestStats.ServerReachabilityEvent = function(target, reachabilityType) {
   goog.events.Event.call(this,
-      webChannelRequestStats.Event.SERVER_REACHABILITY_EVENT, target);
+      requestStats.Event.SERVER_REACHABILITY_EVENT, target);
 
   /**
-   * @type {webChannelRequestStats.ServerReachability}
+   * @type {requestStats.ServerReachability}
    */
   this.reachabilityType = reachabilityType;
 };
-goog.inherits(webChannelRequestStats.ServerReachabilityEvent,
-    goog.events.Event);
+goog.inherits(requestStats.ServerReachabilityEvent, goog.events.Event);
 
 
 /**
  * Notify the channel that a particular fine grained network event has occurred.
  * Should be considered package-private.
- * @param {webChannelRequestStats.ServerReachability} reachabilityType
+ * @param {requestStats.ServerReachability} reachabilityType
  *     The reachability event type.
  */
-webChannelRequestStats.notifyServerReachabilityEvent = function(
-    reachabilityType) {
-  var target = webChannelRequestStats.statEventTarget_;
+requestStats.notifyServerReachabilityEvent = function(reachabilityType) {
+  var target = requestStats.statEventTarget_;
   target.dispatchEvent(
-      new webChannelRequestStats.ServerReachabilityEvent(
-          target, reachabilityType));
+      new requestStats.ServerReachabilityEvent(target, reachabilityType));
 };
 
 
@@ -117,7 +111,7 @@ webChannelRequestStats.notifyServerReachabilityEvent = function(
  * Stat Event that fires when things of interest happen that may be useful for
  * applications to know about for stats or debugging purposes.
  */
-webChannelRequestStats.Event.STAT_EVENT = 'statevent';
+requestStats.Event.STAT_EVENT = 'statevent';
 
 
 /**
@@ -125,7 +119,7 @@ webChannelRequestStats.Event.STAT_EVENT = 'statevent';
  * TODO(user) - Change name not to use Event or use EventTarget
  * @enum {number}
  */
-webChannelRequestStats.Stat = {
+requestStats.Stat = {
   /** Event indicating a new connection attempt. */
   CONNECT_ATTEMPT: 0,
 
@@ -225,32 +219,39 @@ webChannelRequestStats.Stat = {
  *
  * @param {goog.events.EventTarget} eventTarget The stat event target for
        the channel.
- * @param {webChannelRequestStats.Stat} stat The stat.
+ * @param {requestStats.Stat} stat The stat.
  * @constructor
  * @extends {goog.events.Event}
  */
-webChannelRequestStats.StatEvent = function(eventTarget, stat) {
-  goog.events.Event.call(this, webChannelRequestStats.Event.STAT_EVENT,
-      eventTarget);
+requestStats.StatEvent = function(eventTarget, stat) {
+  goog.events.Event.call(this, requestStats.Event.STAT_EVENT, eventTarget);
 
   /**
    * The stat
-   * @type {webChannelRequestStats.Stat}
+   * @type {requestStats.Stat}
    */
   this.stat = stat;
 
 };
-goog.inherits(webChannelRequestStats.StatEvent, goog.events.Event);
+goog.inherits(requestStats.StatEvent, goog.events.Event);
+
+
+/**
+ * Returns the singleton event target for stat events.
+ * @return {goog.events.EventTarget} The event target for stat events.
+ */
+requestStats.getStatEventTarget = function() {
+  return requestStats.statEventTarget_;
+};
 
 
 /**
  * Helper function to call the stat event callback.
- * @param {webChannelRequestStats.Stat} stat The stat.
+ * @param {requestStats.Stat} stat The stat.
  */
-webChannelRequestStats.notifyStatEvent = function(stat) {
-  var target = webChannelRequestStats.statEventTarget_;
-  target.dispatchEvent(
-      new webChannelRequestStats.StatEvent(target, stat));
+requestStats.notifyStatEvent = function(stat) {
+  var target = requestStats.statEventTarget_;
+  target.dispatchEvent(new requestStats.StatEvent(target, stat));
 };
 
 
@@ -258,12 +259,12 @@ webChannelRequestStats.notifyStatEvent = function(stat) {
  * An event that fires when POST requests complete successfully, indicating
  * the size of the POST and the round trip time.
  */
-webChannelRequestStats.Event.TIMING_EVENT = 'timingevent';
+requestStats.Event.TIMING_EVENT = 'timingevent';
 
 
 
 /**
- * Event class for webChannelRequestStats.Event.TIMING_EVENT
+ * Event class for requestStats.Event.TIMING_EVENT
  *
  * @param {goog.events.EventTarget} target The stat event target for
        the channel.
@@ -273,9 +274,9 @@ webChannelRequestStats.Event.TIMING_EVENT = 'timingevent';
  * @constructor
  * @extends {goog.events.Event}
  */
-webChannelRequestStats.TimingEvent = function(target, size, rtt, retries) {
+requestStats.TimingEvent = function(target, size, rtt, retries) {
   goog.events.Event.call(this,
-      webChannelRequestStats.Event.TIMING_EVENT, target);
+      requestStats.Event.TIMING_EVENT, target);
 
   /**
    * @type {number}
@@ -293,7 +294,7 @@ webChannelRequestStats.TimingEvent = function(target, size, rtt, retries) {
   this.retries = retries;
 
 };
-goog.inherits(webChannelRequestStats.TimingEvent, goog.events.Event);
+goog.inherits(requestStats.TimingEvent, goog.events.Event);
 
 
 /**
@@ -303,11 +304,10 @@ goog.inherits(webChannelRequestStats.TimingEvent, goog.events.Event);
  * @param {number} rtt The amount of time from POST start to response.
  * @param {number} retries The number of times the POST had to be retried.
  */
-webChannelRequestStats.notifyTimingEvent = function(
-    size, rtt, retries) {
-  var target = webChannelRequestStats.statEventTarget_;
+requestStats.notifyTimingEvent = function(size, rtt, retries) {
+  var target = requestStats.statEventTarget_;
   target.dispatchEvent(
-      new webChannelRequestStats.TimingEvent(
+      new requestStats.TimingEvent(
           target, size, rtt, retries));
 };
 
@@ -318,8 +318,8 @@ webChannelRequestStats.notifyTimingEvent = function(
  * special information. The function takes no parameters and return void.
  * @param {Function} startHook  The function for the start hook.
  */
-webChannelRequestStats.setStartThreadExecutionHook = function(startHook) {
-  webChannelRequestStats.startExecutionHook_ = startHook;
+requestStats.setStartThreadExecutionHook = function(startHook) {
+  requestStats.startExecutionHook_ = startHook;
 };
 
 
@@ -329,8 +329,8 @@ webChannelRequestStats.setStartThreadExecutionHook = function(startHook) {
  * special information. The function takes no parameters and return void.
  * @param {Function} endHook  The function for the end hook.
  */
-webChannelRequestStats.setEndThreadExecutionHook = function(endHook) {
-  webChannelRequestStats.endExecutionHook_ = endHook;
+requestStats.setEndThreadExecutionHook = function(endHook) {
+  requestStats.endExecutionHook_ = endHook;
 };
 
 
@@ -340,7 +340,7 @@ webChannelRequestStats.setEndThreadExecutionHook = function(endHook) {
  * @type {Function}
  * @private
  */
-webChannelRequestStats.startExecutionHook_ = function() { };
+requestStats.startExecutionHook_ = function() { };
 
 
 /**
@@ -349,22 +349,22 @@ webChannelRequestStats.startExecutionHook_ = function() { };
  * @type {Function}
  * @private
  */
-webChannelRequestStats.endExecutionHook_ = function() { };
+requestStats.endExecutionHook_ = function() { };
 
 
 /**
  * Helper function to call the start hook
  */
-webChannelRequestStats.onStartExecution = function() {
-  webChannelRequestStats.startExecutionHook_();
+requestStats.onStartExecution = function() {
+  requestStats.startExecutionHook_();
 };
 
 
 /**
  * Helper function to call the end hook
  */
-webChannelRequestStats.onEndExecution = function() {
-  webChannelRequestStats.endExecutionHook_();
+requestStats.onEndExecution = function() {
+  requestStats.endExecutionHook_();
 };
 
 
@@ -375,16 +375,16 @@ webChannelRequestStats.onEndExecution = function() {
  * @param {number} ms The time in MS for the timer.
  * @return {number} The ID of the timer.
  */
-webChannelRequestStats.setTimeout = function(fn, ms) {
+requestStats.setTimeout = function(fn, ms) {
   if (!goog.isFunction(fn)) {
     throw Error('Fn must not be null and must be a function');
   }
   return goog.global.setTimeout(function() {
-    webChannelRequestStats.onStartExecution();
+    requestStats.onStartExecution();
     try {
       fn();
     } finally {
-      webChannelRequestStats.onEndExecution();
+      requestStats.onEndExecution();
     }
   }, ms);
 };

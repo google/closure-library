@@ -11,14 +11,14 @@ See the COPYING file for details.
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>
-  Closure Unit Tests - goog.net.WebChannelBaseTransport
+  Closure Unit Tests - goog.labs.net.webChannel.WebChannelBaseTransport
 </title>
-<script type="text/javascript" src="../../base.js"></script>
+<script type="text/javascript" src="../../../base.js"></script>
 <script type="text/javascript">
   goog.require('goog.events');
   goog.require('goog.functions');
+  goog.require('goog.labs.net.webChannel.WebChannelBaseTransport');
   goog.require('goog.net.WebChannel');
-  goog.require('goog.net.WebChannelBaseTransport');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
 </script>
@@ -44,7 +44,8 @@ function tearDown() {
 }
 
 function testOpenWithUrl() {
-  var webChannelTransport = new goog.net.WebChannelBaseTransport();
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(testUrl);
 
   var eventFired = false;
@@ -64,7 +65,8 @@ function testOpenWithUrl() {
 }
 
 function testOpenThenCloseChannel() {
-  var webChannelTransport = new goog.net.WebChannelBaseTransport();
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(testUrl);
 
   var eventFired = false;
@@ -85,7 +87,8 @@ function testOpenThenCloseChannel() {
 
 
 function testChannelError() {
-  var webChannelTransport = new goog.net.WebChannelBaseTransport();
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(testUrl);
 
   var eventFired = false;
@@ -107,7 +110,8 @@ function testChannelError() {
 
 
 function testChannelMessage() {
-  var webChannelTransport = new goog.net.WebChannelBaseTransport();
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(testUrl);
 
   var eventFired = false;
