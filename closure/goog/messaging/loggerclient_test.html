@@ -14,6 +14,7 @@ See the COPYING file for details.
 <script>
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.Logger.Level');
+goog.require('goog.debug.stackTrace');
 goog.require('goog.messaging.LoggerClient');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.jsunit');
@@ -87,7 +88,8 @@ function testCommandWithStringException() {
       name: 'Unknown error',
       message: 'oh no',
       stack: '[Anonymous](object, foo bar, oh no)\n' +
-          '[Anonymous](foo bar, oh no)\n' + goog.debug.getStacktrace(),
+          '[Anonymous](foo bar, oh no)\n' +
+          goog.debug.stackTrace.getStacktrace(),
       lineNumber: 'Not available',
       fileName: window.location.href
     }

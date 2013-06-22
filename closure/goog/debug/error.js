@@ -23,6 +23,8 @@
 
 goog.provide('goog.debug.Error');
 
+goog.require('goog.debug.stackTrace');
+
 
 
 /**
@@ -37,7 +39,8 @@ goog.debug.Error = function(opt_msg) {
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, goog.debug.Error);
   } else {
-    this.stack = new Error().stack || '';
+    this.stack =
+        new Error().stack || goog.debug.stackTrace.getStacktrace() || '';
   }
 
   if (opt_msg) {
