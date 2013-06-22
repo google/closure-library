@@ -20,7 +20,7 @@
 
 goog.provide('goog.debug');
 
-goog.require('goog.debug.stackTrace');
+goog.require('goog.array');
 goog.require('goog.string');
 goog.require('goog.structs.Set');
 goog.require('goog.userAgent');
@@ -199,7 +199,7 @@ goog.debug.exposeException = function(err, opt_fn) {
         e.fileName + '</a>\nLine: ' + e.lineNumber + '\n\nBrowser stack:\n' +
         goog.string.htmlEscape(e.stack + '-> ') +
         '[end]\n\nJS stack traversal:\n' + goog.string.htmlEscape(
-            goog.debug.stackTrace.getStacktrace(opt_fn) + '-> ');
+            goog.debug.getStacktrace(opt_fn) + '-> ');
     return error;
   } catch (e2) {
     return 'Exception trying to expose exception! You win, we lose. ' + e2;
@@ -278,7 +278,7 @@ goog.debug.normalizeErrorObject = function(err) {
 goog.debug.enhanceError = function(err, opt_message) {
   var error = typeof err == 'string' ? Error(err) : err;
   if (!error.stack) {
-    error.stack = goog.debug.stackTrace.getStacktrace(arguments.callee.caller);
+    error.stack = goog.debug.getStacktrace(arguments.callee.caller);
   }
   if (opt_message) {
     // find the first unoccupied 'messageX' property
@@ -293,51 +293,179 @@ goog.debug.enhanceError = function(err, opt_message) {
 
 
 /**
- * Alias for {@link goog.debug.stackTrace.getStacktraceSimple}.
- *
  * Gets the current stack trace. Simple and iterative - doesn't worry about
  * catching circular references or getting the args.
  * @param {number=} opt_depth Optional maximum depth to trace back to.
  * @return {string} A string with the function names of all functions in the
  *     stack, separated by \n.
- * @deprecated Use goog.debug.stackTrace.getStacktraceSimple instead.
  */
-goog.debug.getStacktraceSimple = goog.debug.stackTrace.getStacktraceSimple;
+goog.debug.getStacktraceSimple = function(opt_depth) {
+  var sb = [];
+  var fn = arguments.callee.caller;
+  var depth = 0;
+
+  while (fn && (!opt_depth || depth < opt_depth)) {
+    sb.push(goog.debug.getFunctionName(fn));
+    sb.push('()\n');
+    /** @preserveTry */
+    try {
+      fn = fn.caller;
+    } catch (e) {
+      sb.push('[exception trying to get caller]\n');
+      break;
+    }
+    depth++;
+    if (depth >= goog.debug.MAX_STACK_DEPTH) {
+      sb.push('[...long stack...]');
+      break;
+    }
+  }
+  if (opt_depth && depth >= opt_depth) {
+    sb.push('[...reached max depth limit...]');
+  } else {
+    sb.push('[end]');
+  }
+
+  return sb.join('');
+};
 
 
 /**
- * Alias for {@link goog.debug.stackTrace.getStacktrace}.
- *
+ * Max length of stack to try and output
+ * @type {number}
+ */
+goog.debug.MAX_STACK_DEPTH = 50;
+
+
+/**
  * Gets the current stack trace, either starting from the caller or starting
  * from a specified function that's currently on the call stack.
  * @param {Function=} opt_fn Optional function to start getting the trace from.
  *     If not provided, defaults to the function that called this.
  * @return {string} Stack trace.
- * @deprecated Use goog.debug.stackTrace.getStacktrace instead.
  */
-goog.debug.getStacktrace = goog.debug.stackTrace.getStacktrace;
+goog.debug.getStacktrace = function(opt_fn) {
+  return goog.debug.getStacktraceHelper_(opt_fn || arguments.callee.caller, []);
+};
 
 
 /**
- * Alias for {@link goog.debug.stackTrace.setFunctionResolver}.
- *
+ * Private helper for getStacktrace().
+ * @param {Function} fn Function to start getting the trace from.
+ * @param {Array} visited List of functions visited so far.
+ * @return {string} Stack trace starting from function fn.
+ * @private
+ */
+goog.debug.getStacktraceHelper_ = function(fn, visited) {
+  var sb = [];
+
+  // Circular reference, certain functions like bind seem to cause a recursive
+  // loop so we need to catch circular references
+  if (goog.array.contains(visited, fn)) {
+    sb.push('[...circular reference...]');
+
+  // Traverse the call stack until function not found or max depth is reached
+  } else if (fn && visited.length < goog.debug.MAX_STACK_DEPTH) {
+    sb.push(goog.debug.getFunctionName(fn) + '(');
+    var args = fn.arguments;
+    for (var i = 0; i < args.length; i++) {
+      if (i > 0) {
+        sb.push(', ');
+      }
+      var argDesc;
+      var arg = args[i];
+      switch (typeof arg) {
+        case 'object':
+          argDesc = arg ? 'object' : 'null';
+          break;
+
+        case 'string':
+          argDesc = arg;
+          break;
+
+        case 'number':
+          argDesc = String(arg);
+          break;
+
+        case 'boolean':
+          argDesc = arg ? 'true' : 'false';
+          break;
+
+        case 'function':
+          argDesc = goog.debug.getFunctionName(arg);
+          argDesc = argDesc ? argDesc : '[fn]';
+          break;
+
+        case 'undefined':
+        default:
+          argDesc = typeof arg;
+          break;
+      }
+
+      if (argDesc.length > 40) {
+        argDesc = argDesc.substr(0, 40) + '...';
+      }
+      sb.push(argDesc);
+    }
+    visited.push(fn);
+    sb.push(')\n');
+    /** @preserveTry */
+    try {
+      sb.push(goog.debug.getStacktraceHelper_(fn.caller, visited));
+    } catch (e) {
+      sb.push('[exception trying to get caller]\n');
+    }
+
+  } else if (fn) {
+    sb.push('[...long stack...]');
+  } else {
+    sb.push('[end]');
+  }
+  return sb.join('');
+};
+
+
+/**
  * Set a custom function name resolver.
  * @param {function(Function): string} resolver Resolves functions to their
  *     names.
- * @deprecated Use goog.debug.stackTrace.setFunctionResolver instead.
  */
-goog.debug.setFunctionResolver = goog.debug.stackTrace.setFunctionResolver;
+goog.debug.setFunctionResolver = function(resolver) {
+  goog.debug.fnNameResolver_ = resolver;
+};
 
 
 /**
- * Alias for {@link goog.debug.stackTrace.getFunctionName}.
- *
  * Gets a function name
  * @param {Function} fn Function to get name of.
  * @return {string} Function's name.
- * @deprecated Use goog.debug.stackTrace.getFunctionName instead.
  */
-goog.debug.getFunctionName = goog.debug.stackTrace.getFunctionName;
+goog.debug.getFunctionName = function(fn) {
+  if (goog.debug.fnNameCache_[fn]) {
+    return goog.debug.fnNameCache_[fn];
+  }
+  if (goog.debug.fnNameResolver_) {
+    var name = goog.debug.fnNameResolver_(fn);
+    if (name) {
+      goog.debug.fnNameCache_[fn] = name;
+      return name;
+    }
+  }
+
+  // Heuristically determine function name based on code.
+  var functionSource = String(fn);
+  if (!goog.debug.fnNameCache_[functionSource]) {
+    var matches = /function ([^\(]+)/.exec(functionSource);
+    if (matches) {
+      var method = matches[1];
+      goog.debug.fnNameCache_[functionSource] = method;
+    } else {
+      goog.debug.fnNameCache_[functionSource] = '[Anonymous]';
+    }
+  }
+
+  return goog.debug.fnNameCache_[functionSource];
+};
 
 
 /**
@@ -355,3 +483,18 @@ goog.debug.makeWhitespaceVisible = function(string) {
       .replace(/\t/g, '[t]');
 };
 
+
+/**
+ * Hash map for storing function names that have already been looked up.
+ * @type {Object}
+ * @private
+ */
+goog.debug.fnNameCache_ = {};
+
+
+/**
+ * Resolves functions to their names.  Resolved function names will be cached.
+ * @type {function(Function):string}
+ * @private
+ */
+goog.debug.fnNameResolver_;
