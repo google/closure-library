@@ -25,10 +25,11 @@ goog.provide('goog.fx.DragListGroup');
 goog.provide('goog.fx.DragListGroup.EventType');
 goog.provide('goog.fx.DragListGroupEvent');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
+goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -192,15 +193,6 @@ goog.fx.DragListGroup.prototype.draggerElClass_;
  * @private
  */
 goog.fx.DragListGroup.prototype.currDragItem_;
-
-
-/**
- * The drag list that {@code this.currDragItem_} is currently hovering over, or
- * null if it is not hovering over a list.
- * @type {Element}
- * @private
- */
-goog.fx.DragListGroup.prototype.currHoverList_;
 
 
 /**
@@ -469,29 +461,6 @@ goog.fx.DragListGroup.prototype.disposeInternal = function() {
 
 
 /**
- * Caches the heights of each drag list and drag item, except for the current
- * drag item.
- *
- * @param {Element} currDragItem The item currently being dragged.
- * @private
- */
-goog.fx.DragListGroup.prototype.recacheListAndItemBounds_ = function(
-    currDragItem) {
-  for (var i = 0, n = this.dragLists_.length; i < n; i++) {
-    var dragList = this.dragLists_[i];
-    dragList.dlgBounds_ = goog.style.getBounds(dragList);
-  }
-
-  for (var i = 0, n = this.dragItems_.length; i < n; i++) {
-    var dragItem = this.dragItems_[i];
-    if (dragItem != currDragItem) {
-      dragItem.dlgBounds_ = goog.style.getBounds(dragItem);
-    }
-  }
-};
-
-
-/**
  * Handles mouse and touch events which may start a drag action.
  * @param {!goog.events.BrowserEvent} e MOUSEDOWN or TOUCHSTART event.
  * @private
@@ -560,7 +529,6 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   this.origList_ = /** @type {Element} */ (this.currDragItem_.parentNode);
   this.origNextItem_ = goog.dom.getNextElementSibling(this.currDragItem_);
   this.currHoverItem_ = this.origNextItem_;
-  this.currHoverList_ = this.origList_;
 
   // If there's a CSS class specified for the current drag item, add it.
   // Otherwise, make the actual current drag item hidden (takes up space).
@@ -577,16 +545,6 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   this.draggerEl_.halfHeight = draggerElSize.height / 2;
 
   this.draggerEl_.style.visibility = '';
-
-  // Record the bounds of all the drag lists and all the other drag items. This
-  // caching is for efficiency, so that we don't have to recompute the bounds on
-  // each drag move. Do this in the state where the current drag item is not in
-  // any of the lists, except when update while dragging is disabled, as in this
-  // case the current drag item does not get removed until drag ends.
-  if (this.updateWhileDragging_) {
-    this.currDragItem_.style.display = 'none';
-  }
-  this.recacheListAndItemBounds_(this.currDragItem_);
   this.currDragItem_.style.display = '';
 
   // Listen to events on the dragger.
@@ -661,13 +619,6 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     }
   }
 
-  // If the current hover list is different than the last, the lists may have
-  // shrunk, so we should recache the bounds.
-  if (hoverList != this.currHoverList_) {
-    this.currHoverList_ = hoverList;
-    this.recacheListAndItemBounds_(this.currDragItem_);
-  }
-
   this.dispatchEvent(
       new goog.fx.DragListGroupEvent(
           goog.fx.DragListGroup.EventType.DRAGMOVE, this, dragEvent,
@@ -691,20 +642,10 @@ goog.fx.DragListGroup.prototype.cleanup_ = function(opt_e) {
   this.cleanupDragDom_();
 
   this.currDragItem_ = null;
-  this.currHoverList_ = null;
   this.origList_ = null;
   this.origNextItem_ = null;
   this.draggerEl_ = null;
   this.dragger_ = null;
-
-  // Note: IE doesn't allow 'delete' for fields on HTML elements (because
-  // they're not real JS objects in IE), so we just set them to null.
-  for (var i = 0, n = this.dragLists_.length; i < n; i++) {
-    this.dragLists_[i].dlgBounds_ = null;
-  }
-  for (var i = 0, n = this.dragItems_.length; i < n; i++) {
-    this.dragItems_[i].dlgBounds_ = null;
-  }
 };
 
 
@@ -881,7 +822,7 @@ goog.fx.DragListGroup.prototype.getHoverDragList_ = function(draggerElCenter) {
     if (dragList == prevHoverList) {
       continue;
     }
-    if (this.isInRect_(draggerElCenter, dragList.dlgBounds_)) {
+    if (this.isInRect_(draggerElCenter, goog.style.getBounds(dragList))) {
       return dragList;
     }
   }
@@ -1009,7 +950,8 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
       continue;
     }
 
-    var relevantBound = getRelevantBoundFn(item.dlgBounds_);
+    var relevantBound = getRelevantBoundFn(goog.style.getBounds(item));
+
     // When the hoverlist is broken into multiple rows (i.e., in the case of
     // LEFT_2D and RIGHT_2D) it is no longer enough to only look at the
     // x-coordinate alone in order to find the {@earliestAfterItem} in the
@@ -1068,7 +1010,7 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
  * @private
  */
 goog.fx.DragListGroup.verticalDistanceFromItem_ = function(item, target) {
-  var itemBounds = item.dlgBounds_;
+  var itemBounds = goog.style.getBounds(item);
   var itemCenterY = itemBounds.top + (itemBounds.height - 1) / 2;
   return Math.abs(target.y - itemCenterY);
 };
