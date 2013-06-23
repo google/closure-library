@@ -37,7 +37,7 @@ See the COPYING file for details.
         goog.dom.getElement('perfTable'));
 
     // Number of operations to measure in each table line.
-    var OPS_COUNT = 20000;
+    var OPS_COUNT = 100000;
 
     var stubs = new goog.testing.PropertyReplacer();
 
@@ -111,6 +111,40 @@ See the COPYING file for details.
           }
         }
       }, 'Add elements to string set with repetition');
+    }
+
+    function testGetCount() {
+      var bigSet = new goog.structs.Set;
+      var bigStringSet = new goog.structs.StringSet;
+      for (var i = 0; i < OPS_COUNT; i++) {
+        bigSet.add(i);
+        bigStringSet.add(i);
+      }
+
+      table.run(function() {
+        bigSet.getCount();
+      }, 'Count the number of elements in a set');
+
+      table.run(function() {
+        bigStringSet.getCount();
+      }, 'Count the number of elements in a string set');
+    }
+
+    function testGetValues() {
+      var bigSet = new goog.structs.Set;
+      var bigStringSet = new goog.structs.StringSet;
+      for (var i = 0; i < OPS_COUNT; i++) {
+        bigSet.add(i);
+        bigStringSet.add(i);
+      }
+
+      table.run(function() {
+        bigSet.getValues();
+      }, 'Convert a set to array');
+
+      table.run(function() {
+        bigStringSet.getValues();
+      }, 'Convert a string set to array');
     }
 
     function testForEach() {
