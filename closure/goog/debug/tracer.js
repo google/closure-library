@@ -31,7 +31,7 @@ goog.require('goog.structs.SimplePool');
 /**
  * Class used for singleton goog.debug.Trace.  Used for timing slow points in
  * the code. Based on the java Tracer class but optimized for javascript.
- * See com.google.common.base.Tracer.
+ * See com.google.common.tracing.Tracer.
  * @constructor
  * @private
  */
