@@ -64,6 +64,12 @@ goog.debug.ErrorReporter = function(
   this.contextProvider_ = opt_contextProvider || null;
 
   /**
+   * The string prefix of any optional context parameters logged with the error.
+   * @private {string}
+   */
+  this.contextPrefix_ = 'context.';
+
+  /**
    * XHR sender.
    * @type {function(string, string, string, (Object|goog.structs.Map)=)}
    * @private
@@ -309,7 +315,7 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
     // Copy context into query data map
     if (opt_context) {
       for (var entry in opt_context) {
-        queryMap['context.' + entry] = opt_context[entry];
+        queryMap[this.contextPrefix_ + entry] = opt_context[entry];
       }
     }
 
@@ -327,6 +333,15 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
         'trace:', opt_trace);
     goog.debug.ErrorReporter.logger_.info(logMessage);
   }
+};
+
+
+/**
+ * @param {string} prefix The prefix to appear prepended to all context
+ *     variables in the error report body.
+ */
+goog.debug.ErrorReporter.prototype.setContextPrefix = function(prefix) {
+  this.contextPrefix_ = prefix;
 };
 
 

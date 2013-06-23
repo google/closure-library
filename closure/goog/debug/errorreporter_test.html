@@ -299,6 +299,14 @@ See the COPYING file for details.
     assertEquals(originalSetTimeout, window.setTimeout);
   }
 
+  function testSetContextPrefix(args) {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setContextPrefix('baz.');
+    errorReporter.sendErrorReport(
+        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
+    assertEquals('trace=trace&baz.foo=bar', MockXhrIo.lastContent);
+  }
+
 </script>
 </body>
 </html>
