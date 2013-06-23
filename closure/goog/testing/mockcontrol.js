@@ -117,7 +117,7 @@ goog.testing.MockControl.prototype.$tearDown = function() {
  *     a mock should be constructed from the static functions of a class.
  * @param {boolean=} opt_createProxy An optional argument denoting that
  *     a proxy for the target mock should be created.
- * @return {goog.testing.StrictMock} The mock object.
+ * @return {!goog.testing.StrictMock} The mock object.
  */
 goog.testing.MockControl.prototype.createStrictMock = function(
     objectToMock, opt_mockStaticMethods, opt_createProxy) {
@@ -138,7 +138,7 @@ goog.testing.MockControl.prototype.createStrictMock = function(
  *     a mock should be constructed from the static functions of a class.
  * @param {boolean=} opt_createProxy An optional argument denoting that
  *     a proxy for the target mock should be created.
- * @return {goog.testing.LooseMock} The mock object.
+ * @return {!goog.testing.LooseMock} The mock object.
  */
 goog.testing.MockControl.prototype.createLooseMock = function(
     objectToMock, opt_ignoreUnexpectedCalls,
