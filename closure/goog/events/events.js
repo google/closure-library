@@ -13,14 +13,17 @@
 // limitations under the License.
 
 /**
- * @fileoverview Event Manager.
+ * @fileoverview An event manager for both native browser event
+ * targets and custom JavaScript event targets
+ * ({@code goog.events.Listenable}). This provides an abstraction
+ * over browsers' event systems.
  *
- * Provides an abstracted interface to the browsers' event
- * systems. This uses an indirect lookup of listener functions to avoid circular
- * references between DOM (in IE) or XPCOM (in Mozilla) objects which leak
- * memory. This makes it easier to write OO Javascript/DOM code.
- *
- * It simulates capture & bubble in Internet Explorer.
+ * It also provides a simulation of W3C event model's capture phase in
+ * Internet Explorer (IE 8 and below). Caveat: the simulation does not
+ * interact well with listeners registered directly on the elements
+ * (bypassing goog.events) or even with listeners registered via
+ * goog.events in a separate JS binary. In these cases, we provide
+ * no ordering guarantees.
  *
  * The listeners will also automagically have their event objects patched, so
  * your handlers don't need to worry about the browser.
@@ -31,7 +34,6 @@
  * goog.events.listen(myNode, 'mouseover', mouseHandler, true);
  * goog.events.unlisten(myNode, 'mouseover', mouseHandler, true);
  * goog.events.removeAll(myNode);
- * goog.events.removeAll();
  * </pre>
  *
  *                                            in IE and event object patching]
@@ -43,14 +45,23 @@
  */
 
 
-// This uses 3 lookup tables/trees.
-// listenerTree_ is a tree of type -> capture -> src uid -> [Listener]
-// listeners_ is a map of key -> [Listener]
+// IMPLEMENTATION NOTES:
+// This uses an indirect lookup of listener functions to avoid
+// circular references between DOM (in IE) or XPCOM (in Mozilla)
+// objects which leak memory. Unfortunately, this design is now
+// problematic in modern browsers as it requires a global lookup table
+// in JavaScript. This lookup table needs to be cleaned up manually
+// (by calling #unlisten/#unlistenByKey), otherwise it will cause
+// memory leaks. (This does not apply to goog.events.EventTarget, which
+// no longer uses the global lookup table.)
 //
-// The key is a field of the Listener. The Listener class also has the type,
-// capture and the src so one can always trace back in the tree
-//
-// sources_: src uid -> [Listener]
+// This uses 3 lookup tables/trees for native event targets.
+//   listenerTree_ is a tree of type -> capture -> src uid -> [Listener]
+//   listeners_ is a map of key -> [Listener]
+//       The key is a field of the Listener. The Listener class also
+//       has the type, capture and the src so one can always trace
+//       back in the tree
+//   sources_: src uid -> [Listener]
 
 
 goog.provide('goog.events');
@@ -59,7 +70,6 @@ goog.provide('goog.events.ListenableType');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
-/** @suppress {extraRequire} */
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.BrowserFeature');
@@ -113,8 +123,9 @@ goog.events.onString_ = 'on';
 
 
 /**
- * Map of computed on strings for IE event types. Caching this removes an extra
- * object allocation in goog.events.listen which improves IE6 performance.
+ * Map of computed "on<eventname>" strings for IE event types. Caching
+ * this removes an extra object allocation in goog.events.listen which
+ * improves IE6 performance.
  * @type {Object}
  * @private
  */
@@ -131,19 +142,20 @@ goog.events.keySeparator_ = '_';
 
 
 /**
- * Adds an event listener for a specific event on a DOM Node or an
- * object that has implemented {@link goog.events.Listenable}. A
- * listener can only be added once to an object and if it is added
- * again the key for the listener is returned. Note that if the
- * existing listener is a one-off listener (registered via
- * listenOnce), it will no longer be a one-off listener after a call
- * to listen().
+ * Adds an event listener for a specific event on a native event
+ * target (such as a DOM element) or an object that has implemented
+ * {@link goog.events.Listenable}. A listener can only be added once
+ * to an object and if it is added again the key for the listener is
+ * returned. Note that if the existing listener is a one-off listener
+ * (registered via listenOnce), it will no longer be a one-off
+ * listener after a call to listen().
  *
- * @param {goog.events.ListenableType} src The node to listen to
- *     events on.
+ * @param {EventTarget|goog.events.Listenable} src The node to listen
+ *     to events on.
  * @param {string|Array.<string>} type Event type or array of event types.
- * @param {Function|Object} listener Callback method, or an object with a
- *     handleEvent function.
+ * @param {Function|Object} listener Callback method, or an object
+ *     with a handleEvent function. WARNING: passing an Object is now
+ *     softly deprecated.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
  * @param {Object=} opt_handler Element in whose scope to call the listener.
@@ -157,26 +169,22 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
     return null;
   }
 
-  var listenableKey;
   listener = goog.events.wrapListener_(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
-    listenableKey = src.listen(
+    return src.listen(
         /** @type {string} */ (type), listener, opt_capt, opt_handler);
   } else {
-    listenableKey = goog.events.listen_(
+    return goog.events.listen_(
         /** @type {EventTarget} */ (src),
         type, listener, /* callOnce */ false, opt_capt, opt_handler);
   }
-
-  return listenableKey;
 };
 
 
 /**
- * Adds an event listener for a specific event on a DOM Node or an object that
- * has implemented {@link goog.events.Listenable}. A listener can only be
- * added once to an object and if it is added again the key for the listener
- * is returned.
+ * Adds an event listener for a specific event on a native event
+ * target. A listener can only be added once to an object and if it
+ * is added again the key for the listener is returned.
  *
  * Note that a one-off listener will not change an existing listener,
  * if any. On the other hand a normal listener will change existing
@@ -316,9 +324,10 @@ goog.events.getProxy = function() {
 
 
 /**
- * Adds an event listener for a specific event on a DomNode or an object that
- * has implemented {@link goog.events.Listenable}. After the event has fired
- * the event listener is removed from the target.
+ * Adds an event listener for a specific event on a native event
+ * target (such as a DOM element) or an object that has implemented
+ * {@link goog.events.Listenable}. After the event has fired the event
+ * listener is removed from the target.
  *
  * If an existing listener already exists, listenOnce will do
  * nothing. In particular, if the listener was previously registered
@@ -327,8 +336,8 @@ goog.events.getProxy = function() {
  * one-off listener, listenOnce does not modify the listeners (it is
  * still a once listener).
  *
- * @param {goog.events.ListenableType} src The node to listen to
- *     events on.
+ * @param {EventTarget|goog.events.Listenable} src The node to listen
+ *     to events on.
  * @param {string|Array.<string>} type Event type or array of event types.
  * @param {Function|Object} listener Callback method.
  * @param {boolean=} opt_capt Fire in capture phase?.
@@ -363,7 +372,8 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
  * object that has implemented {@link goog.events.Listenable}. A listener can
  * only be added once to an object.
  *
- * @param {goog.events.ListenableType} src The target to listen to events on.
+ * @param {EventTarget|goog.events.Listenable} src The target to
+ *     listen to events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
  * @param {Function|Object} listener Callback method, or an object with a
  *     handleEvent function.
@@ -380,7 +390,7 @@ goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt,
 /**
  * Removes an event listener which was added with listen().
  *
- * @param {goog.events.ListenableType} src The target to stop
+ * @param {EventTarget|goog.events.Listenable} src The target to stop
  *     listening to events on.
  * @param {string|Array.<string>} type The name of the event without the 'on'
  *     prefix.
@@ -502,8 +512,8 @@ goog.events.unlistenByKey = function(key) {
 /**
  * Removes an event listener which was added with listenWithWrapper().
  *
- * @param {goog.events.ListenableType} src The target to stop listening to
- *     events on.
+ * @param {EventTarget|goog.events.Listenable} src The target to stop
+ *     listening to events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
  * @param {Function|Object} listener The listener function to remove.
  * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
@@ -514,22 +524,6 @@ goog.events.unlistenByKey = function(key) {
 goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
     opt_handler) {
   wrapper.unlisten(src, listener, opt_capt, opt_handler);
-};
-
-
-/**
- * Cleans up goog.events internal data structure. This should be
- * called by all implementations of goog.events.Listenable when
- * removing listeners.
- *
- * TODO(user): Once we remove numeric key support from
- * goog.events.listen and friend, we will be able to remove this
- * requirement.
- *
- * @param {goog.events.ListenableKey} listenableKey The key to clean up.
- */
-goog.events.cleanUp = function(listenableKey) {
-  delete goog.events.listeners_[listenableKey.key];
 };
 
 
@@ -584,7 +578,6 @@ goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
           delete goog.events.listenerTree_[type];
         }
       }
-
     }
   }
 };
@@ -642,13 +635,11 @@ goog.events.removeAll = function(opt_obj, opt_type) {
  */
 goog.events.removeAllNativeListeners = function() {
   var count = 0;
+  // All listeners in goog.events.listeners_ are native listeners,
+  // custom listenable is no longer inserted to this table.
   goog.object.forEach(goog.events.listeners_, function(listener) {
-    var src = listener.src;
-    // Only remove the listener if it is not on custom event target.
-    if (!goog.events.Listenable.isImplementedBy(src)) {
-      goog.events.unlistenByKey(listener);
-      count++;
-    }
+    goog.events.unlistenByKey(listener);
+    count++;
   });
   return count;
 };
@@ -702,8 +693,8 @@ goog.events.getListeners_ = function(obj, type, capture) {
  * Gets the goog.events.Listener for the event or null if no such listener is
  * in use.
  *
- * @param {goog.events.ListenableType} src The target from which to get
- *     listeners.
+ * @param {EventTarget|goog.events.Listenable} src The target from
+ *     which to get listeners.
  * @param {?string} type The name of the event without the 'on' prefix.
  * @param {Function|Object} listener The listener function to get.
  * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
@@ -745,7 +736,8 @@ goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
  * specified signature. If either the type or capture parameters are
  * unspecified, the function will match on the remaining criteria.
  *
- * @param {goog.events.ListenableType} obj Target to get listeners for.
+ * @param {EventTarget|goog.events.Listenable} obj Target to get
+ *     listeners for.
  * @param {string=} opt_type Event type.
  * @param {boolean=} opt_capture Whether to check for capture or bubble-phase
  *     listeners.
@@ -805,10 +797,10 @@ goog.events.expose = function(e) {
 
 
 /**
- * Returns a string wth on prepended to the specified type. This is used for IE
+ * Returns a string with on prepended to the specified type. This is used for IE
  * which expects "on" to be prepended. This function caches the string in order
  * to avoid extra allocations in steady state.
- * @param {string} type Event type strng.
+ * @param {string} type Event type.
  * @return {string} The type string with 'on' prepended.
  * @private
  */
@@ -973,9 +965,7 @@ goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
  * @param {Event=} opt_evt Optional event object that gets passed in via the
  *     native event handlers.
  * @return {boolean} Result of the event handler.
- * @this {goog.events.EventTarget|Object} The object or Element that
- *     fired the event. TODO(user): Figure out why the type is
- *     so weird?
+ * @this {EventTarget} The object or Element that fired the event.
  * @private
  */
 goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
@@ -1010,8 +1000,7 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
     }
 
     var evt = new goog.events.BrowserEvent();
-    // TODO(user): update @this for this function
-    evt.init(ieEvent, /** @type {EventTarget} */ (this));
+    evt.init(ieEvent, this);
 
     retval = true;
     try {

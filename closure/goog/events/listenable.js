@@ -22,8 +22,31 @@ goog.provide('goog.events.ListenableKey');
 
 
 /**
- * A listenable interface. Also see goog.events.EventTarget.
+ * A listenable interface. A listenable is an object with the ability
+ * to dispatch/broadcast events to "event listeners" registered via
+ * listen/listenOnce.
+ *
+ * The interface allows for an event propagation mechanism similar
+ * to one offered by native browser event targets, such as
+ * capture/bubble mechanism, stopping propagation, and preventing
+ * default actions. Capture/bubble mechanism depends on the ancestor
+ * tree constructed via {@code #getParentEventTarget}; this tree
+ * must be directed acyclic graph. The meaning of default action(s)
+ * in preventDefault is specific to a particular use case.
+ *
+ * Implementations that do not support capture/bubble or can not have
+ * a parent listenable can simply not implement any ability to set the
+ * parent listenable (and have {@code #getParentEventTarget} return
+ * null).
+ *
+ * Implementation of this class can be used with or independently from
+ * goog.events.
+ *
+ * Implementation must call {@code #addImplementation(implClass)}.
+ *
  * @interface
+ * @see goog.events
+ * @see http://www.w3.org/TR/DOM-Level-2-Events/events.html
  */
 goog.events.Listenable = function() {};
 
@@ -109,12 +132,9 @@ goog.events.Listenable.prototype.listenOnce;
 /**
  * Removes an event listener which was added with listen() or listenOnce().
  *
- * Implementation needs to call goog.events.cleanUp.
- *
  * @param {string} type Event type or array of event types.
  * @param {!Function} listener Callback method, or an object
- *     with a handleEvent function. TODO(user): Consider whether
- *     we can remove Object.
+ *     with a handleEvent function.
  * @param {boolean=} opt_useCapture Whether to fire in capture phase
  *     (defaults to false).
  * @param {Object=} opt_listenerScope Object in whose scope to call
@@ -127,8 +147,6 @@ goog.events.Listenable.prototype.unlisten;
 /**
  * Removes an event listener which was added with listen() by the key
  * returned by listen().
- *
- * Implementation needs to call goog.events.cleanUp.
  *
  * @param {goog.events.ListenableKey} key The key returned by
  *     listen() or listenOnce().
@@ -158,14 +176,25 @@ goog.events.Listenable.prototype.dispatchEvent;
  * it will only remove listeners of the particular type. otherwise all
  * registered listeners will be removed.
  *
- * Implementation needs to call goog.events.cleanUp for each removed
- * listener.
- *
  * @param {string=} opt_type Type of event to remove, default is to
  *     remove all types.
  * @return {number} Number of listeners removed.
  */
 goog.events.Listenable.prototype.removeAllListeners;
+
+
+/**
+ * Returns the parent of this event target to use for capture/bubble
+ * mechanism.
+ *
+ * NOTE(user): The name reflects the original implementation of
+ * custom event target ({@code goog.events.EventTarget}). We decided
+ * that changing the name is not worth it.
+ *
+ * @return {goog.events.Listenable} The parent EventTarget or null if
+ *     there is no parent.
+ */
+goog.events.Listenable.prototype.getParentEventTarget;
 
 
 /**
