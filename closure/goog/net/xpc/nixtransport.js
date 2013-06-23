@@ -255,7 +255,7 @@ goog.net.xpc.NixTransport.conductGlobalSetup_ = function(listenWindow) {
     listenWindow['nix_setup_complete'] = true;
   }
   catch (e) {
-    goog.net.xpc.logger.severe(
+    goog.log.error(goog.net.xpc.logger,
         'exception caught while attempting global setup: ' + e);
   }
 };
@@ -334,7 +334,7 @@ goog.net.xpc.NixTransport.prototype.attemptOuterSetup_ = function() {
     this.localSetupCompleted_ = true;
   }
   catch (e) {
-    goog.net.xpc.logger.severe(
+    goog.log.error(goog.net.xpc.logger,
         'exception caught while attempting setup: ' + e);
   }
 
@@ -374,7 +374,8 @@ goog.net.xpc.NixTransport.prototype.attemptInnerSetup_ = function() {
       var remoteAuthToken = this.nixChannel_['GetAuthToken']();
 
       if (remoteAuthToken != this.remoteAuthToken_) {
-        goog.net.xpc.logger.severe('Invalid auth token from other party');
+        goog.log.error(goog.net.xpc.logger,
+            'Invalid auth token from other party');
         return;
       }
 
@@ -391,7 +392,7 @@ goog.net.xpc.NixTransport.prototype.attemptInnerSetup_ = function() {
     }
   }
   catch (e) {
-    goog.net.xpc.logger.severe(
+    goog.log.error(goog.net.xpc.logger,
         'exception caught while attempting setup: ' + e);
     return;
   }
@@ -415,7 +416,8 @@ goog.net.xpc.NixTransport.prototype.createChannel_ = function(channel) {
   // Verify that the channel is in fact a NIX wrapper.
   if (typeof channel != 'unknown' ||
       !(goog.net.xpc.NixTransport.NIX_ID_FIELD in channel)) {
-    goog.net.xpc.logger.severe('Invalid NIX channel given to createChannel_');
+    goog.log.error(goog.net.xpc.logger,
+        'Invalid NIX channel given to createChannel_');
   }
 
   this.nixChannel_ = channel;
@@ -424,7 +426,7 @@ goog.net.xpc.NixTransport.prototype.createChannel_ = function(channel) {
   var remoteAuthToken = this.nixChannel_['GetAuthToken']();
 
   if (remoteAuthToken != this.remoteAuthToken_) {
-    goog.net.xpc.logger.severe('Invalid auth token from other party');
+    goog.log.error(goog.net.xpc.logger, 'Invalid auth token from other party');
     return;
   }
 
@@ -462,7 +464,7 @@ goog.net.xpc.NixTransport.prototype.handleMessage_ =
 goog.net.xpc.NixTransport.prototype.send = function(service, payload) {
   // Verify that the NIX channel we have is valid.
   if (typeof(this.nixChannel_) !== 'unknown') {
-    goog.net.xpc.logger.severe('NIX channel not connected');
+    goog.log.error(goog.net.xpc.logger, 'NIX channel not connected');
   }
 
   // Send the message via the NIX wrapper object.

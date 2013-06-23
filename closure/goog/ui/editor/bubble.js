@@ -25,7 +25,6 @@
 
 goog.provide('goog.ui.editor.Bubble');
 
-goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.ViewportSizeMonitor');
@@ -34,6 +33,7 @@ goog.require('goog.editor.style');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.log');
 goog.require('goog.math.Box');
 goog.require('goog.object');
 goog.require('goog.positioning');
@@ -157,11 +157,11 @@ goog.ui.editor.Bubble.prototype.createBubbleDom = function(dom, container) {
 
 /**
  * A logger for goog.ui.editor.Bubble.
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @protected
  */
 goog.ui.editor.Bubble.prototype.logger =
-    goog.debug.Logger.getLogger('goog.ui.editor.Bubble');
+    goog.log.getLogger('goog.ui.editor.Bubble');
 
 
 /** @override */
@@ -434,7 +434,7 @@ goog.ui.editor.Bubble.prototype.reposition = function() {
         goog.positioning.Overflow.ADJUST_X |
         goog.positioning.Overflow.ADJUST_Y);
     if (status & goog.positioning.OverflowStatus.FAILED) {
-      this.logger.warning(
+      goog.log.warning(this.logger,
           'reposition(): positionAtAnchor() failed with ' + status);
     }
   }

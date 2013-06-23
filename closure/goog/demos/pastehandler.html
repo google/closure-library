@@ -12,11 +12,11 @@ See the COPYING file for details.
   <link rel="stylesheet" href="css/demo.css">
   <script src="../base.js"></script>
   <script>
-    goog.require('goog.debug.LogManager');
-    goog.require('goog.debug.Logger');
     goog.require('goog.debug.DivConsole');
+    goog.require('goog.debug.LogManager');
     goog.require('goog.dom');
     goog.require('goog.events.PasteHandler');
+    goog.require('goog.log');
     goog.require('goog.ui.KeyboardShortcutEvent');
   </script>
 </head>
@@ -39,14 +39,14 @@ See the COPYING file for details.
   <script type="text/javascript">
     var textarea = goog.dom.getElement('foo');
     var pasteHandler = new goog.events.PasteHandler(textarea);
-    var logger = goog.debug.Logger.getLogger('demo')
+    var logger = goog.log.getLogger('demo')
 
     goog.events.listen(pasteHandler, goog.events.PasteHandler.EventType.PASTE,
         function(e) {
-          logger.shout('pasted!');
+          goog.log.log(logger, goog.log.Level.SHOUT, 'pasted!');
         });
 
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.SEVERE);
+    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.SEVERE);
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
   </script>

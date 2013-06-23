@@ -14,7 +14,6 @@
 
 goog.provide('goog.editor.plugins.EquationEditorPlugin');
 
-goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractDialogPlugin');
@@ -22,6 +21,7 @@ goog.require('goog.editor.range');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
+goog.require('goog.log');
 goog.require('goog.ui.editor.AbstractDialog');
 goog.require('goog.ui.editor.EquationEditorDialog');
 goog.require('goog.ui.equation.ImageRenderer');
@@ -67,11 +67,11 @@ goog.inherits(goog.editor.plugins.EquationEditorPlugin,
 
 /**
  * The logger for the EquationEditorPlugin.
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @private
  */
 goog.editor.plugins.EquationEditorPlugin.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.editor.plugins.EquationEditorPlugin');
+    goog.log.getLogger('goog.editor.plugins.EquationEditorPlugin');
 
 
 /** @override */

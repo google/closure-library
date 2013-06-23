@@ -49,7 +49,6 @@ label.options {
 
 <script type="text/javascript">
 goog.require('goog.debug.DivConsole');
-goog.require('goog.debug.Logger');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -57,6 +56,7 @@ goog.require('goog.events.ActionHandler');
 goog.require('goog.events.ActionHandler.EventType');
 goog.require('goog.fx.Transition.EventType');
 goog.require('goog.fx.css3');
+goog.require('goog.log');
 </script>
 </head>
 <body>
@@ -116,7 +116,7 @@ goog.require('goog.fx.css3');
 
 <script>
 // Set up debug console.
-var logger = goog.debug.Logger.getLogger('Demo');
+var logger = goog.log.getLogger('Demo');
 new goog.debug.DivConsole(goog.dom.getElement('log')).
     setCapturing(true);
 var eventTypes = goog.object.getValues(goog.fx.Transition.EventType);
@@ -206,7 +206,7 @@ function getValue_(name) {
 
 function installListener_(transition) {
   goog.events.listen(transition, eventTypes, function(e) {
-    logger.info('Fired event: ' + e.type);
+    goog.log.info(logger, 'Fired event: ' + e.type);
   });
 }
 

@@ -25,9 +25,9 @@
 goog.provide('goog.labs.net.webChannel.WebChannelBaseTransport');
 
 goog.require('goog.asserts');
-goog.require('goog.debug.Logger');
 goog.require('goog.events.EventTarget');
 goog.require('goog.labs.net.webChannel.WebChannelBase');
+goog.require('goog.log');
 goog.require('goog.net.WebChannel');
 goog.require('goog.net.WebChannelTransport');
 goog.require('goog.string.path');
@@ -100,10 +100,10 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
   /**
    * The logger for this class.
-   * @type {!goog.debug.Logger}
+   * @type {goog.log.Logger}
    * @private
    */
-  this.logger_ = goog.debug.Logger.getLogger(
+  this.logger_ = goog.log.getLogger(
       'goog.labs.net.webChannel.WebChannelBaseTransport');
 
 };
@@ -232,7 +232,8 @@ goog.inherits(WebChannelBaseTransport.Channel.Handler_, WebChannelBase.Handler);
  */
 WebChannelBaseTransport.Channel.Handler_.prototype.channelOpened = function(
     channel) {
-  this.channel_.logger_.info('WebChannel opened on ' + this.channel_.url_);
+  goog.log.info(this.channel_.logger_,
+      'WebChannel opened on ' + this.channel_.url_);
   this.channel_.dispatchEvent(goog.net.WebChannel.EventType.OPEN);
 };
 
@@ -253,7 +254,8 @@ WebChannelBaseTransport.Channel.Handler_.prototype.channelHandleArray =
  */
 WebChannelBaseTransport.Channel.Handler_.prototype.channelError = function(
     channel, error) {
-  this.channel_.logger_.info('WebChannel aborted on ' + this.channel_.url_ +
+  goog.log.info(this.channel_.logger_,
+      'WebChannel aborted on ' + this.channel_.url_ +
       ' due to channel error: ' + error);
   this.channel_.dispatchEvent(
       new WebChannelBaseTransport.Channel.ErrorEvent(error));
@@ -265,7 +267,8 @@ WebChannelBaseTransport.Channel.Handler_.prototype.channelError = function(
  */
 WebChannelBaseTransport.Channel.Handler_.prototype.channelClosed = function(
     channel, opt_pendingMaps, opt_undeliveredMaps) {
-  this.channel_.logger_.info('WebChannel closed on ' + this.channel_.url_);
+  goog.log.info(this.channel_.logger_,
+      'WebChannel closed on ' + this.channel_.url_);
   this.channel_.dispatchEvent(goog.net.WebChannel.EventType.CLOSE);
 };
 });  // goog.scope

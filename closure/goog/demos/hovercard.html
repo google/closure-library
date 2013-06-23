@@ -11,8 +11,8 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
     goog.require('goog.debug.LogManager');
+    goog.require('goog.log');
     goog.require('goog.positioning.AnchoredPosition');
     goog.require('goog.positioning.Corner');
     goog.require('goog.ui.Component.EventType');
@@ -109,16 +109,16 @@ See the COPYING file for details.
       var timer = goog.now();
 
       // Set up a logger.
-      goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-      var logger = goog.debug.Logger.getLogger('demo');
+      goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+      var logger = goog.log.getLogger('demo');
       var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
       logconsole.setCapturing(true);
 
       var EVENTS = goog.object.getValues(goog.ui.HoverCard.EventType);
-      logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+      goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
 
       function logEvent(e) {
-        logger.info('HoverCard dispatched: ' + e.type);
+        goog.log.info(logger, 'HoverCard dispatched: ' + e.type);
       }
 
       // Initialize hovercard object.

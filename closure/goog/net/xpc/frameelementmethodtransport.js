@@ -163,7 +163,7 @@ goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetup_ = function() {
     }
   }
   catch (e) {
-    goog.net.xpc.logger.severe(
+    goog.log.error(goog.net.xpc.logger,
         'exception caught while attempting setup: ' + e);
   }
   // retry necessary?

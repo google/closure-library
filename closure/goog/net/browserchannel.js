@@ -44,12 +44,12 @@ goog.provide('goog.net.BrowserChannel.TimingEvent');
 goog.require('goog.Uri');
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.debug.Logger');
 goog.require('goog.debug.TextFormatter');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json');
 goog.require('goog.json.EvalJsonProcessor');
+goog.require('goog.log');
 goog.require('goog.net.BrowserTestChannel');
 goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
@@ -2568,18 +2568,18 @@ goog.net.BrowserChannel.LogSaver.setEnabled = function(enable) {
   }
 
   var fn = goog.net.BrowserChannel.LogSaver.addLogRecord;
-  var logger = goog.debug.Logger.getLogger('goog.net');
+  var logger = goog.log.getLogger('goog.net');
   if (enable) {
-    logger.addHandler(fn);
+    goog.log.addHandler(logger, fn);
   } else {
-    logger.removeHandler(fn);
+    goog.log.removeHandler(logger, fn);
   }
 };
 
 
 /**
  * Adds a log record.
- * @param {goog.debug.LogRecord} logRecord the LogRecord.
+ * @param {goog.log.LogRecord} logRecord the LogRecord.
  */
 goog.net.BrowserChannel.LogSaver.addLogRecord = function(logRecord) {
   goog.net.BrowserChannel.LogSaver.buffer_.add(

@@ -21,12 +21,12 @@ goog.provide('goog.gears.LogStore.Query');
 
 goog.require('goog.async.Delay');
 goog.require('goog.debug.LogManager');
-goog.require('goog.debug.LogRecord');
-goog.require('goog.debug.Logger');
-goog.require('goog.debug.Logger.Level');
 goog.require('goog.gears.BaseStore');
 goog.require('goog.gears.BaseStore.SchemaType');
 goog.require('goog.json');
+goog.require('goog.log');
+goog.require('goog.log.Level');
+goog.require('goog.log.LogRecord');
 
 
 
@@ -57,7 +57,7 @@ goog.gears.LogStore = function(database, opt_tableName) {
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         // Timestamp.
         'millis BIGINT',
-        // #goog.debug.Logger.Level value.
+        // #goog.log.Level value.
         'level INTEGER',
         // Message.
         'msg TEXT',
@@ -87,7 +87,7 @@ goog.gears.LogStore = function(database, opt_tableName) {
 
   /**
    * Buffered log records not yet flushed to DB.
-   * @type {Array.<goog.debug.LogRecord>}
+   * @type {Array.<goog.log.LogRecord>}
    * @private
    */
   this.records_ = [];
@@ -140,11 +140,11 @@ goog.gears.LogStore.prototype.isFlushing_ = false;
 
 /**
  * Logger.
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @private
  */
 goog.gears.LogStore.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.gears.LogStore');
+    goog.log.getLogger('goog.gears.LogStore');
 
 
 /**
@@ -189,7 +189,7 @@ goog.gears.LogStore.prototype.flush = function() {
   this.isFlushing_ = true;
 
   // Grab local copy of records so database can log during this process.
-  this.logger_.info('flushing ' + this.records_.length + ' records');
+  goog.log.info(this.logger_, 'flushing ' + this.records_.length + ' records');
   var records = this.records_;
   this.records_ = [];
 
@@ -284,7 +284,7 @@ goog.gears.LogStore.prototype.pruneBeforeCount = function(opt_count) {
   }
   var count = typeof opt_count == 'number' ?
       opt_count : goog.gears.LogStore.DEFAULT_PRUNE_KEEPER_COUNT_;
-  this.logger_.info('pruning before ' + count + ' records ago');
+  goog.log.info(this.logger_, 'pruning before ' + count + ' records ago');
   this.flush();
   this.getDatabaseInternal().execute('DELETE FROM ' + this.tableName_ +
       ' WHERE id <= ((SELECT MAX(id) FROM ' + this.tableName_ + ') - ?)',
@@ -301,7 +301,8 @@ goog.gears.LogStore.prototype.pruneBeforeSequenceNumber =
   if (!this.getDatabaseInternal()) {
     return;
   }
-  this.logger_.info('pruning before sequence number ' + sequenceNumber);
+  goog.log.info(this.logger_,
+      'pruning before sequence number ' + sequenceNumber);
   this.flush();
   this.getDatabaseInternal().execute(
       'DELETE FROM ' + this.tableName_ + ' WHERE id <= ?',
@@ -329,11 +330,11 @@ goog.gears.LogStore.prototype.setCapturing = function(capturing) {
     // Attach or detach handler from the root logger.
     var rootLogger = goog.debug.LogManager.getRoot();
     if (capturing) {
-      rootLogger.addHandler(this.publishHandler_);
-      this.logger_.info('enabled');
+      goog.log.addHandler(rootLogger, this.publishHandler_);
+      goog.log.info(this.logger_, 'enabled');
     } else {
-      this.logger_.info('disabling');
-      rootLogger.removeHandler(this.publishHandler_);
+      goog.log.info(this.logger_, 'disabling');
+      goog.log.removeHandler(rootLogger, this.publishHandler_);
     }
   }
 };
@@ -341,7 +342,7 @@ goog.gears.LogStore.prototype.setCapturing = function(capturing) {
 
 /**
  * Adds a log record.
- * @param {goog.debug.LogRecord} logRecord the LogRecord.
+ * @param {goog.log.LogRecord} logRecord the LogRecord.
  */
 goog.gears.LogStore.prototype.addLogRecord = function(logRecord) {
   this.records_.push(logRecord);
@@ -359,7 +360,7 @@ goog.gears.LogStore.prototype.addLogRecord = function(logRecord) {
 /**
  * Select log records.
  * @param {goog.gears.LogStore.Query} query Query object.
- * @return {Array.<goog.debug.LogRecord>} Selected logs in descending
+ * @return {Array.<goog.log.LogRecord>} Selected logs in descending
  *     order of creation time.
  */
 goog.gears.LogStore.prototype.select = function(query) {
@@ -387,7 +388,7 @@ goog.gears.LogStore.prototype.select = function(query) {
 
     // Parse fields, allowing for invalid values.
     var sequenceNumber = Number(row['id']) || 0;
-    var level = goog.debug.Logger.Level.getPredefinedLevelByValue(
+    var level = goog.log.Level.getPredefinedLevelByValue(
         Number(row['level']) || 0);
     var msg = row['msg'] || '';
     var loggerName = row['logger'] || '';
@@ -398,7 +399,7 @@ goog.gears.LogStore.prototype.select = function(query) {
     var exceptionText = row['exceptionText'] || '';
 
     // Create record.
-    var record = new goog.debug.LogRecord(level, msg, loggerName,
+    var record = new goog.log.LogRecord(level, msg, loggerName,
         millis, sequenceNumber);
     if (exception) {
       record.setException(exception);
@@ -435,9 +436,9 @@ goog.gears.LogStore.Query = function() {
 
 /**
  * Minimum logging level.
- * @type {goog.debug.Logger.Level}
+ * @type {goog.log.Level}
  */
-goog.gears.LogStore.Query.prototype.level = goog.debug.Logger.Level.ALL;
+goog.gears.LogStore.Query.prototype.level = goog.log.Level.ALL;
 
 
 /**

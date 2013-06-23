@@ -32,7 +32,7 @@ goog.provide('goog.ds.Util');
 goog.provide('goog.ds.logger');
 
 goog.require('goog.array');
-goog.require('goog.debug.Logger');
+goog.require('goog.log');
 
 
 
@@ -627,9 +627,9 @@ goog.ds.STR_ARRAY_START = '[';
 
 /**
  * Shared logger instance for data package
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  */
-goog.ds.logger = goog.debug.Logger.getLogger('goog.ds');
+goog.ds.logger = goog.log.getLogger('goog.ds');
 
 
 /**

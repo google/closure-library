@@ -22,11 +22,11 @@ goog.provide('goog.gears.Database.TransactionEvent');
 
 goog.require('goog.array');
 goog.require('goog.debug');
-goog.require('goog.debug.Logger');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.gears');
 goog.require('goog.json');
+goog.require('goog.log');
 
 
 
@@ -58,7 +58,7 @@ goog.gears.Database = function(userId, appName) {
     var dbId = userId + '-' + appName;
     var safeDbId = goog.gears.makeSafeFileName(dbId);
     if (dbId != safeDbId) {
-      this.logger_.info('database name ' + dbId + '->' + safeDbId);
+      goog.log.info(this.logger_, 'database name ' + dbId + '->' + safeDbId);
     }
     this.safeDbId_ = safeDbId;
     this.database_.open(safeDbId);
@@ -98,11 +98,11 @@ goog.inherits(goog.gears.Database.TransactionEvent, goog.events.Event);
 
 /**
  * Logger object
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @private
  */
 goog.gears.Database.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.gears.Database');
+    goog.log.getLogger('goog.gears.Database');
 
 
 /**
@@ -314,7 +314,7 @@ goog.gears.Database.resultSetToArray = function(rs) {
  * @return {GearsResultSet} The results.
  */
 goog.gears.Database.prototype.execute = function(sql, var_args) {
-  this.logger_.finer('Executing SQL: ' + sql);
+  goog.log.log(this.logger_, goog.log.Level.FINER, 'Executing SQL: ' + sql);
 
   // TODO(user): Remove when Gears adds more rubust type handling.
   // Safety measure since Gears behaves very badly if it gets an unexpected
@@ -332,7 +332,7 @@ goog.gears.Database.prototype.execute = function(sql, var_args) {
     } else {
       args = goog.array.slice(arguments, 1);
     }
-    this.logger_.finest('SQL arguments: ' + args);
+    goog.log.log(this.logger_, goog.log.Level.FINEST, 'SQL arguments: ' + args);
 
     // TODO(user): Type safety checking for args?
     return this.database_.execute(sql, args);
@@ -839,7 +839,7 @@ goog.gears.Database.prototype.isInTransaction = function() {
  */
 goog.gears.Database.prototype.ensureNoTransaction = function(opt_logMsgPrefix) {
   if (this.isInTransaction()) {
-    this.logger_.warning((opt_logMsgPrefix || 'ensureNoTransaction') +
+    goog.log.warning(this.logger_, (opt_logMsgPrefix || 'ensureNoTransaction') +
                          ' - rolling back unexpected transaction');
     do {
       this.rollback();

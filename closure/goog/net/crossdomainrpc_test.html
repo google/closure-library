@@ -16,7 +16,7 @@ See the COPYING file for details.
 <link href="CrossDomainRpc_test.css" rel="stylesheet" type="text/css">
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.debug.Logger');
+  goog.require('goog.log');
   goog.require('goog.net.CrossDomainRpc');
   goog.require('goog.testing.jsunit');
 </script>
@@ -58,7 +58,7 @@ function testNormalRequest() {
         if (e.target.status < 300) {
           var elapsed = new Date() - start;
           var responseData = eval(e.target.responseText);
-          goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
               elapsed + 'ms: [' + responseData.result.length + '] '
               + print(responseData)
           );
@@ -67,7 +67,7 @@ function testNormalRequest() {
           assertEquals(e.target.responseHeaders.a, 1);
           assertEquals(e.target.responseHeaders.b, '2');
         } else {
-          goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
               print(e));
           fail();
         }
@@ -85,7 +85,7 @@ function testErrorRequest() {
         if (e.target.status < 300) {
           fail('should have failed requesting a non-existent URI');
         } else {
-          goog.net.CrossDomainRpc.logger_.log(goog.debug.Logger.Level.FINE,
+          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
               'expected error seen; event=' + print(e));
         }
       },

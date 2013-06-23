@@ -14,8 +14,7 @@ See the COPYING file for details.
 
   goog.require('goog.debug');
   goog.require('goog.debug.FancyWindow');
-  goog.require('goog.debug.Logger');
-
+  goog.require('goog.log');
   /**
    * Person - a sample person object.
    * @param {string} name The name
@@ -62,8 +61,8 @@ See the COPYING file for details.
     debugWindow.init();
 
     // Create a logger.
-    var theLogger = goog.debug.Logger.getLogger('demo');
-    theLogger.info('Logging examples');
+    var theLogger = goog.log.getLogger('demo');
+    goog.log.info(theLogger, 'Logging examples');
 
     // Create a simple object.
     var someone = {'name': 'joe',
@@ -73,9 +72,9 @@ See the COPYING file for details.
         'address': '233 Great Road, Axtonhammer, MD'};
 
     // Show the object, note that it will output '[object Object]'.
-    theLogger.info(someone);
+    goog.log.info(theLogger, someone);
     // Use expose to walk through the object and show all data.
-    theLogger.info('Person: '+ goog.debug.expose(someone));
+    goog.log.info(theLogger, 'Person: '+ goog.debug.expose(someone));
 
     // Now create a Person object to demonstrate expose w/functions.
     var pObj = new Person('fred', 2);
@@ -84,27 +83,27 @@ See the COPYING file for details.
     pObj.setAddress('1 broadway, ny, ny');
 
     // The toString will be called.
-    theLogger.info('toString: '+ pObj);
+    goog.log.info(theLogger, 'toString: '+ pObj);
     // Does not show the functions by default.
-    theLogger.info('expose (no functions): ' + goog.debug.expose(pObj));
+    goog.log.info(theLogger, 'expose (no functions): ' + goog.debug.expose(pObj));
     // You can specify false if you really want to.
-    theLogger.info('expose (no functions): ' + goog.debug.expose(pObj, false));
+    goog.log.info(theLogger, 'expose (no functions): ' + goog.debug.expose(pObj, false));
     // Shows the functions as well.
-    theLogger.info('expose (w/functions): ' + goog.debug.expose(pObj, true));
+    goog.log.info(theLogger, 'expose (w/functions): ' + goog.debug.expose(pObj, true));
 
     // Show deepExpose, which walks recursively through data.
-    theLogger.info('deepExpose (no functions): '+ goog.debug.deepExpose(pObj));
+    goog.log.info(theLogger, 'deepExpose (no functions): '+ goog.debug.deepExpose(pObj));
     // You can specify false if you really want to.
-    theLogger.info('deepExpose (no functions): '+
+    goog.log.info(theLogger, 'deepExpose (no functions): '+
         goog.debug.deepExpose(pObj, false));
-    theLogger.info('deepExpose (w/functions): '+
+    goog.log.info(theLogger, 'deepExpose (w/functions): '+
         goog.debug.deepExpose(pObj, true));
 
-    theLogger.shout('shout');
-    theLogger.severe('severe');
-    theLogger.warning('warning');
-    theLogger.info('info');
-    theLogger.fine('fine');
+    goog.log.log(theLogger, goog.log.Level.SHOUT, 'shout');
+    goog.log.error(theLogger, 'severe');
+    goog.log.warning(theLogger, 'warning');
+    goog.log.info(theLogger, 'info');
+    goog.log.fine(theLogger, 'fine');
   }
 
 

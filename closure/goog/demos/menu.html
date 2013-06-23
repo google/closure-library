@@ -15,11 +15,11 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.array');
-    goog.require('goog.events');
-    goog.require('goog.object');
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
     goog.require('goog.debug.LogManager');
+    goog.require('goog.events');
+    goog.require('goog.log');
+    goog.require('goog.object');
     goog.require('goog.ui.CheckBoxMenuItem');
     goog.require('goog.ui.Menu');
     goog.require('goog.ui.MenuItem');
@@ -114,17 +114,17 @@ See the COPYING file for details.
     var timer = goog.now();
 
     // Set up a logger.
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    var logger = goog.debug.Logger.getLogger('demo');
+    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+    var logger = goog.log.getLogger('demo');
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-    logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+    goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
 
     function logEvent(e) {
       var name = e.target.getCaption ? e.target.getCaption() : 'Menu';
-      logger.info('"' + name + '" dispatched: ' + e.type);
+      goog.log.info(logger, '"' + name + '" dispatched: ' + e.type);
     }
 
     var el = goog.dom.getElement('menu1');
@@ -208,7 +208,7 @@ See the COPYING file for details.
     baz.setEnabled(false);
     menu5.render(goog.dom.getElement('menu5'));
     goog.events.listen(menu5, EVENTS, logEvent);
-    
+
     var menu6 = new goog.ui.Menu();
     menu6.decorate(goog.dom.getElement('menu6'));
     goog.events.listen(menu6, EVENTS, logEvent);

@@ -22,7 +22,7 @@
 goog.provide('goog.messaging.LoggerServer');
 
 goog.require('goog.Disposable');
-goog.require('goog.debug.Logger');
+goog.require('goog.log');
 
 
 
@@ -81,10 +81,10 @@ goog.messaging.LoggerServer.prototype.log_ = function(message) {
        * @type {!{level: number, message: string,
        *           name: string, exception: Object}}
        */ (message);
-  var level = goog.debug.Logger.Level.getPredefinedLevelByValue(args['level']);
+  var level = goog.log.Level.getPredefinedLevelByValue(args['level']);
   if (level) {
     var msg = '[' + this.channelName_ + '] ' + args['message'];
-    goog.debug.Logger.getLogger(args['name'])
+    goog.log.getLogger(args['name'])
         .log(level, msg, args['exception']);
   }
 };

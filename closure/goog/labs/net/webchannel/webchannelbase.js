@@ -23,7 +23,6 @@ goog.provide('goog.labs.net.webChannel.WebChannelBase');
 goog.require('goog.Uri');
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.debug.Logger');
 goog.require('goog.debug.TextFormatter');
 goog.require('goog.json');
 goog.require('goog.json.EvalJsonProcessor');
@@ -33,6 +32,7 @@ goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.WebChannelRequest');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.labs.net.webChannel.requestStats.Stat');
+goog.require('goog.log');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.tmpnetwork');
 goog.require('goog.string');
@@ -2075,18 +2075,18 @@ WebChannelBase.LogSaver.setEnabled = function(enable) {
   }
 
   var fn = WebChannelBase.LogSaver.addLogRecord;
-  var logger = goog.debug.Logger.getLogger('goog.net');
+  var logger = goog.log.getLogger('goog.net');
   if (enable) {
-    logger.addHandler(fn);
+    goog.log.addHandler(logger, fn);
   } else {
-    logger.removeHandler(fn);
+    goog.log.removeHandler(logger, fn);
   }
 };
 
 
 /**
  * Adds a log record.
- * @param {goog.debug.LogRecord} logRecord the LogRecord.
+ * @param {goog.log.LogRecord} logRecord the LogRecord.
  */
 WebChannelBase.LogSaver.addLogRecord = function(logRecord) {
   WebChannelBase.LogSaver.buffer_.add(

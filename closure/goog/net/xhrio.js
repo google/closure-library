@@ -43,10 +43,10 @@ goog.provide('goog.net.XhrIo.ResponseType');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
-goog.require('goog.debug.Logger');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json');
+goog.require('goog.log');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.HttpStatus');
@@ -219,7 +219,7 @@ goog.net.XhrIo.ResponseType = {
  * @const
  */
 goog.net.XhrIo.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.net.XhrIo');
+    goog.log.getLogger('goog.net.XhrIo');
 
 
 /**
@@ -476,12 +476,13 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
    * @preserveTry
    */
   try {
-    this.logger_.fine(this.formatMsg_('Opening Xhr'));
+    goog.log.fine(this.logger_, this.formatMsg_('Opening Xhr'));
     this.inOpen_ = true;
     this.xhr_.open(method, url, true);  // Always async!
     this.inOpen_ = false;
   } catch (err) {
-    this.logger_.fine(this.formatMsg_('Error opening Xhr: ' + err.message));
+    goog.log.fine(this.logger_,
+        this.formatMsg_('Error opening Xhr: ' + err.message));
     this.error_(goog.net.ErrorCode.EXCEPTION, err);
     return;
   }
@@ -539,7 +540,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
     this.cleanUpTimeoutTimer_(); // Paranoid, should never be running.
     if (this.timeoutInterval_ > 0) {
       this.useXhr2Timeout_ = goog.net.XhrIo.shouldUseXhr2Timeout_(this.xhr_);
-      this.logger_.fine(this.formatMsg_('Will abort after ' +
+      goog.log.fine(this.logger_, this.formatMsg_('Will abort after ' +
           this.timeoutInterval_ + 'ms if incomplete, xhr2 ' +
           this.useXhr2Timeout_));
       if (this.useXhr2Timeout_) {
@@ -551,13 +552,13 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
             this.timeoutInterval_, this);
       }
     }
-    this.logger_.fine(this.formatMsg_('Sending request'));
+    goog.log.fine(this.logger_, this.formatMsg_('Sending request'));
     this.inSend_ = true;
     this.xhr_.send(content);
     this.inSend_ = false;
 
   } catch (err) {
-    this.logger_.fine(this.formatMsg_('Send error: ' + err.message));
+    goog.log.fine(this.logger_, this.formatMsg_('Send error: ' + err.message));
     this.error_(goog.net.ErrorCode.EXCEPTION, err);
   }
 };
@@ -623,7 +624,7 @@ goog.net.XhrIo.prototype.timeout_ = function() {
     this.lastError_ = 'Timed out after ' + this.timeoutInterval_ +
                       'ms, aborting';
     this.lastErrorCode_ = goog.net.ErrorCode.TIMEOUT;
-    this.logger_.fine(this.formatMsg_(this.lastError_));
+    goog.log.fine(this.logger_, this.formatMsg_(this.lastError_));
     this.dispatchEvent(goog.net.EventType.TIMEOUT);
     this.abort(goog.net.ErrorCode.TIMEOUT);
   }
@@ -671,7 +672,7 @@ goog.net.XhrIo.prototype.dispatchErrors_ = function() {
  */
 goog.net.XhrIo.prototype.abort = function(opt_failureCode) {
   if (this.xhr_ && this.active_) {
-    this.logger_.fine(this.formatMsg_('Aborting'));
+    goog.log.fine(this.logger_, this.formatMsg_('Aborting'));
     this.active_ = false;
     this.inAbort_ = true;
     this.xhr_.abort();
@@ -767,7 +768,7 @@ goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
     // NOTE(user): In IE if send() errors on a *local* request the readystate
     // is still changed to COMPLETE.  We need to ignore it and allow the
     // try/catch around send() to pick up the error.
-    this.logger_.fine(this.formatMsg_(
+    goog.log.fine(this.logger_, this.formatMsg_(
         'Local request error detected and ignored'));
 
   } else {
@@ -786,7 +787,7 @@ goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
 
     // readyState indicates the transfer has finished
     if (this.isComplete()) {
-      this.logger_.fine(this.formatMsg_('Request complete'));
+      goog.log.fine(this.logger_, this.formatMsg_('Request complete'));
 
       this.active_ = false;
 
@@ -845,8 +846,8 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
       // This seems to occur with a Gears HTTP request. Delayed the setting of
       // this onreadystatechange until after READY is sent out and catching the
       // error to see if we can track down the problem.
-      this.logger_.severe('Problem encountered resetting onreadystatechange: ' +
-                          e.message);
+      goog.log.error(this.logger_,
+          'Problem encountered resetting onreadystatechange: ' + e.message);
     }
   }
 };
@@ -933,7 +934,7 @@ goog.net.XhrIo.prototype.getStatus = function() {
     return this.getReadyState() > goog.net.XmlHttp.ReadyState.LOADED ?
         this.xhr_.status : -1;
   } catch (e) {
-    this.logger_.warning('Can not get status: ' + e.message);
+    goog.log.warning(this.logger_, 'Can not get status: ' + e.message);
     return -1;
   }
 };
@@ -955,7 +956,7 @@ goog.net.XhrIo.prototype.getStatusText = function() {
     return this.getReadyState() > goog.net.XmlHttp.ReadyState.LOADED ?
         this.xhr_.statusText : '';
   } catch (e) {
-    this.logger_.fine('Can not get status: ' + e.message);
+    goog.log.fine(this.logger_, 'Can not get status: ' + e.message);
     return '';
   }
 };
@@ -985,7 +986,7 @@ goog.net.XhrIo.prototype.getResponseText = function() {
     // when the state is not LOADING or DONE. Instead, IE and Gears can
     // throw unexpected exceptions, for example when a request is aborted
     // or no data is available yet.
-    this.logger_.fine('Can not get responseText: ' + e.message);
+    goog.log.fine(this.logger_, 'Can not get responseText: ' + e.message);
     return '';
   }
 };
@@ -1016,7 +1017,7 @@ goog.net.XhrIo.prototype.getResponseBody = function() {
   } catch (e) {
     // IE can throw unexpected exceptions, for example when a request is aborted
     // or no data is yet available.
-    this.logger_.fine('Can not get responseBody: ' + e.message);
+    goog.log.fine(this.logger_, 'Can not get responseBody: ' + e.message);
   }
   return null;
 };
@@ -1033,7 +1034,7 @@ goog.net.XhrIo.prototype.getResponseXml = function() {
   try {
     return this.xhr_ ? this.xhr_.responseXML : null;
   } catch (e) {
-    this.logger_.fine('Can not get responseXML: ' + e.message);
+    goog.log.fine(this.logger_, 'Can not get responseXML: ' + e.message);
     return null;
   }
 };
@@ -1109,11 +1110,12 @@ goog.net.XhrIo.prototype.getResponse = function() {
         }
     }
     // Fell through to a response type that is not supported on this browser.
-    this.logger_.severe('Response type ' + this.responseType_ + ' is not ' +
-                        'supported on this browser');
+    goog.log.error(this.logger_,
+        'Response type ' + this.responseType_ + ' is not ' +
+        'supported on this browser');
     return null;
   } catch (e) {
-    this.logger_.fine('Can not get response: ' + e.message);
+    goog.log.fine(this.logger_, 'Can not get response: ' + e.message);
     return null;
   }
 };

@@ -31,11 +31,11 @@ goog.provide('goog.module.ModuleLoader');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
-goog.require('goog.debug.Logger');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
+goog.require('goog.log');
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.net.BulkLoader');
 goog.require('goog.net.EventType');
@@ -72,10 +72,10 @@ goog.inherits(goog.module.ModuleLoader, goog.events.EventTarget);
 
 /**
  * A logger.
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @protected
  */
-goog.module.ModuleLoader.prototype.logger = goog.debug.Logger.getLogger(
+goog.module.ModuleLoader.prototype.logger = goog.log.getLogger(
     'goog.module.ModuleLoader');
 
 
@@ -201,7 +201,7 @@ goog.module.ModuleLoader.prototype.evaluateCode_ = function(moduleIds) {
   this.dispatchEvent(new goog.module.ModuleLoader.Event(
       goog.module.ModuleLoader.EventType.REQUEST_SUCCESS, moduleIds));
 
-  this.logger.info('evaluateCode ids:' + moduleIds);
+  goog.log.info(this.logger, 'evaluateCode ids:' + moduleIds);
   var success = true;
   var loadStatus = this.loadingModulesStatus_[moduleIds];
   var uris = loadStatus.requestUris;
@@ -218,7 +218,7 @@ goog.module.ModuleLoader.prototype.evaluateCode_ = function(moduleIds) {
   } catch (e) {
     success = false;
     // TODO(user): Consider throwing an exception here.
-    this.logger.warning('Loaded incomplete code for module(s): ' +
+    goog.log.warning(this.logger, 'Loaded incomplete code for module(s): ' +
         moduleIds, e);
   }
 
@@ -245,7 +245,7 @@ goog.module.ModuleLoader.prototype.evaluateCode_ = function(moduleIds) {
  */
 goog.module.ModuleLoader.prototype.handleSuccess_ = function(
     bulkLoader, moduleIds) {
-  this.logger.info('Code loaded for module(s): ' + moduleIds);
+  goog.log.info(this.logger, 'Code loaded for module(s): ' + moduleIds);
 
   var loadStatus = this.loadingModulesStatus_[moduleIds];
   loadStatus.responseTexts = bulkLoader.getResponseTexts();
@@ -296,7 +296,7 @@ goog.module.ModuleLoader.prototype.downloadModules_ = function(
   for (var i = 0; i < ids.length; i++) {
     goog.array.extend(uris, moduleInfoMap[ids[i]].getUris());
   }
-  this.logger.info('downloadModules ids:' + ids + ' uris:' + uris);
+  goog.log.info(this.logger, 'downloadModules ids:' + ids + ' uris:' + uris);
 
   if (this.getDebugMode() &&
       !this.usingSourceUrlInjection_()) {
@@ -372,7 +372,7 @@ goog.module.ModuleLoader.prototype.handleErrorHelper_ = function(
       new goog.module.ModuleLoader.Event(
           goog.module.ModuleLoader.EventType.REQUEST_ERROR, moduleIds));
 
-  this.logger.warning('Request failed for module(s): ' + moduleIds);
+  goog.log.warning(this.logger, 'Request failed for module(s): ' + moduleIds);
 
   if (errorFn) {
     errorFn(status);

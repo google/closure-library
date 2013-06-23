@@ -13,9 +13,9 @@ See the COPYING file for details.
     goog.require('goog.array');
     goog.require('goog.debug.DivConsole');
     goog.require('goog.debug.LogManager');
-    goog.require('goog.debug.Logger');
     goog.require('goog.events');
     goog.require('goog.events.EventType');
+    goog.require('goog.log');
     goog.require('goog.object');
     goog.require('goog.ui.Control');
     goog.require('goog.ui.ControlRenderer');
@@ -287,16 +287,16 @@ See the COPYING file for details.
     var timer = goog.now();
 
     // Set up a logger.
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    var logger = goog.debug.Logger.getLogger('demo');
+    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+    var logger = goog.log.getLogger('demo');
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-    logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+    goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
 
     function logEvent(e) {
-      logger.info('"' + e.target.getCaption() + '" dispatched: ' + e.type);
+      goog.log.info(logger, '"' + e.target.getCaption() + '" dispatched: ' + e.type);
     }
 
     // Create the first control programmatically, and make it focusable.

@@ -34,10 +34,11 @@ See the COPYING file for details.
 
   <script type="text/javascript" src="../../base.js"></script>
   <script type="text/javascript">
-    goog.require('goog.graphics');
+    goog.require('goog.debug.DivConsole');
     goog.require('goog.events');
     goog.require('goog.events.EventType');
-    goog.require('goog.debug.DivConsole');
+    goog.require('goog.graphics');
+    goog.require('goog.log');
   </script>
 </head>
 
@@ -62,8 +63,8 @@ See the COPYING file for details.
 
   <script type="text/javascript">
     // Set up a logger to track responses
-    var log = goog.debug.Logger.getLogger('Events');
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+    var log = goog.log.getLogger('Events');
+    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
     var logconsole = new goog.debug.DivConsole(document.getElementById('log'));
     logconsole.setCapturing(true);
 

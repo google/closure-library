@@ -19,12 +19,12 @@ See the COPYING file for details.
   goog.require('goog.userAgent');
 </script>
 <style>
-  
+
   html, body {
     width: 100%;
     height: 100%;
     overflow:hidden;
-  }  
+  }
 
   #log {
     position: absolute;
@@ -34,22 +34,22 @@ See the COPYING file for details.
     height: 100%;
     overflow: auto;
   }
-  
+
   p, input {
     font-family: verdana, helvetica, arial, sans-serif;
     font-size: small;
     margin: 0px;
   }
-  
+
   input {
     font-family: verdana, helvetica, arial, sans-serif;
     font-size: x-small;
   }
-  
+
   i {
     font-size: 85%;
   }
-  
+
 
 </style>
 </head>
@@ -101,7 +101,7 @@ See the COPYING file for details.
     <option selected="selected">Three (Default)</option>
     <option>Four</option>
     <option>Five</option>
-  </select><br>  
+  </select><br>
   <select name="selectmultiple">
     <option>One</option>
     <option selected="selected">Two (Default checked)</option>
@@ -122,30 +122,30 @@ TODO(pupius):<br>
 // Server
 
 // Set up a logger to track responses
-goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.INFO);
+goog.debug.LogManager.getRoot().setLevel(goog.log.Level.INFO);
 var logconsole = new goog.debug.DivConsole(document.getElementById('log'));
 logconsole.setCapturing(true);
 
-var testLogger = goog.debug.Logger.getLogger('test');
+var testLogger = goog.log.getLogger('test');
 
 
 /** Creates an iframeIo instance and sets up the test environment */
 function getTestIframeIo() {
   logconsole.addSeparator();
   logconsole.getFormatter().resetRelativeTimeStart();
-  
+
   var io = new goog.net.IframeIo();
   io.setErrorChecker(checkForError);
-  
-  goog.events.listen(io, 'success', onSuccess); 
-  goog.events.listen(io, 'error', onError);  
+
+  goog.events.listen(io, 'success', onSuccess);
+  goog.events.listen(io, 'error', onError);
   goog.events.listen(io, 'ready', onReady);
-  
+
   return io;
 }
 
 /**
- * Checks for error strings returned by the GSE and error variables that 
+ * Checks for error strings returned by the GSE and error variables that
  * the Gmail server and GFE set on certain errors.
  */
 function checkForError(doc) {
@@ -165,22 +165,22 @@ function checkForError(doc) {
 
 /** Logs the status of an iframeIo object */
 function logStatus(i) {
-  testLogger.fine('Is complete/success/active: ' +
+  goog.log.fine(testLogger, 'Is complete/success/active: ' +
       [i.isComplete(), i.isSuccess(), i.isActive()].join('/'));
 }
 
 function onSuccess(e) {
-  testLogger.warning('Request Succeeded');
-  logStatus(e.target);  
+  goog.log.warning(testLogger, 'Request Succeeded');
+  logStatus(e.target);
 }
 
 function onError(e) {
-  testLogger.warning('Request Errored: ' + e.target.getLastError());
-  logStatus(e.target);  
+  goog.log.warning(testLogger, 'Request Errored: ' + e.target.getLastError());
+  logStatus(e.target);
 }
 
 function onReady(e) {
-  testLogger.info('Test finished and iframe ready, disposing test object');
+  goog.log.info(testLogger, 'Test finished and iframe ready, disposing test object');
   e.target.dispose();
 }
 
@@ -188,54 +188,54 @@ function onReady(e) {
 
 function simpleGet() {
   var io = getTestIframeIo();
-  goog.events.listen(io, 'complete', onSimpleTestComplete); 
-  io.send('/iframeio/ping', 'GET');  
+  goog.events.listen(io, 'complete', onSimpleTestComplete);
+  io.send('/iframeio/ping', 'GET');
 }
 
 
 function simplePost() {
-  var io = getTestIframeIo();  
-  goog.events.listen(io, 'complete', onSimpleTestComplete); 
-  io.send('/iframeio/ping', 'POST');  
+  var io = getTestIframeIo();
+  goog.events.listen(io, 'complete', onSimpleTestComplete);
+  io.send('/iframeio/ping', 'POST');
 }
 
 function onSimpleTestComplete(e) {
-  testLogger.info('ResponseText: ' + e.target.getResponseText());
+  goog.log.info(testLogger, 'ResponseText: ' + e.target.getResponseText());
 }
 
 function abort() {
   var io = getTestIframeIo();
-  goog.events.listen(io, 'complete', onAbortComplete); 
-  goog.events.listen(io, 'abort', onAbort); 
-  io.send('/iframeio/ping', 'GET');  
+  goog.events.listen(io, 'complete', onAbortComplete);
+  goog.events.listen(io, 'abort', onAbort);
+  io.send('/iframeio/ping', 'GET');
   io.abort();
 }
 
 function onAbortComplete(e) {
-  testLogger.info('Hmm, request should have been aborted');
+  goog.log.info(testLogger, 'Hmm, request should have been aborted');
 }
 
 function onAbort(e) {
-  testLogger.info('Request aborted');
+  goog.log.info(testLogger, 'Request aborted');
 }
 
 
 function errorGse404() {
   var io = getTestIframeIo();
-  io.send('/iframeio/404', 'GET');  
+  io.send('/iframeio/404', 'GET');
 }
 
 function jsonEcho(method) {
   var io = getTestIframeIo();
   goog.events.listen(io, 'complete', onJsonComplete);
   var data = {'p1': 'x', 'p2': 'y', 'p3': 'z', 'r': 10};
-  io.send('/iframeio/jsonecho?q1=a&q2=b&q3=c&r=5', method, false, data);    
+  io.send('/iframeio/jsonecho?q1=a&q2=b&q3=c&r=5', method, false, data);
 }
 
 function onJsonComplete(e) {
-  testLogger.info('ResponseText: ' + e.target.getResponseText());
+  goog.log.info(testLogger, 'ResponseText: ' + e.target.getResponseText());
   var json = e.target.getResponseJson();
-  testLogger.info('ResponseJson:\n' + goog.debug.deepExpose(json, true));
+  goog.log.info(testLogger, 'ResponseJson:\n' + goog.debug.deepExpose(json, true));
 }
 
 
@@ -248,45 +248,45 @@ function sendFromForm() {
 }
 
 function onUploadSuccess(e) {
-  testLogger.shout('Upload Succeeded');
-  testLogger.info('ResponseText: ' + e.target.getResponseText());
+  goog.log.log(testLogger, goog.log.Level.SHOUT, 'Upload Succeeded');
+  goog.log.info(testLogger, 'ResponseText: ' + e.target.getResponseText());
 }
 
 function onUploadError(e) {
-  testLogger.shout('Upload Errored');
-  testLogger.info('ResponseText: ' + e.target.getResponseText());
+  goog.log.log(testLogger, goog.log.Level.SHOUT, 'Upload Errored');
+  goog.log.info(testLogger, 'ResponseText: ' + e.target.getResponseText());
 }
 
 
 function redirect1() {
   var io = getTestIframeIo();
-  io.send('/iframeio/redirect', 'GET');  
+  io.send('/iframeio/redirect', 'GET');
 }
 
 function redirect2() {
   var io = getTestIframeIo();
-  io.send('/iframeio/move', 'GET');    
+  io.send('/iframeio/move', 'GET');
 }
 
 function badUrl() {
   var io = getTestIframeIo();
-  io.send('http://news.bbc.co.uk', 'GET');  
+  io.send('http://news.bbc.co.uk', 'GET');
 }
 
 function localUrl1() {
   var io = getTestIframeIo();
   goog.events.listen(io, 'complete', onLocalSuccess);
-  io.send('c:\test.txt', 'GET'); 
+  io.send('c:\test.txt', 'GET');
 }
 
-function localUrl2() {  
+function localUrl2() {
   var io = getTestIframeIo();
   goog.events.listen(io, 'success', onLocalSuccess);
-  io.send('//test.txt', 'GET');  
+  io.send('//test.txt', 'GET');
 }
 
 function onLocalSuccess(e) {
-  testLogger.info('The file was found:\n' + e.target.getResponseText());  
+  goog.log.info(testLogger, 'The file was found:\n' + e.target.getResponseText());
 }
 
 function getServerTime(noCache) {
@@ -296,29 +296,29 @@ function getServerTime(noCache) {
 }
 
 function onTestCacheSuccess(e) {
-  testLogger.info('Date reported: ' + e.target.getResponseText());  
+  goog.log.info(testLogger, 'Date reported: ' + e.target.getResponseText());
 }
 
 
 function errorGmail() {
   var io = getTestIframeIo();
   goog.events.listen(io, 'error', onGmailError);
-  io.send('/iframeio/gmailerror', 'GET');  
+  io.send('/iframeio/gmailerror', 'GET');
 }
 
 function onGmailError(e) {
-  testLogger.info('Gmail error: ' + e.target.getLastError());  
+  goog.log.info(testLogger, 'Gmail error: ' + e.target.getLastError());
 }
 
 
 function errorGfe() {
   var io = getTestIframeIo();
   goog.events.listen(io, 'error', onGfeError);
-  io.send('/iframeio/gfeerror', 'GET');  
+  io.send('/iframeio/gfeerror', 'GET');
 }
 
 function onGfeError(e) {
-  testLogger.info('GFE error: ' + e.target.getLastError());  
+  goog.log.info(testLogger, 'GFE error: ' + e.target.getLastError());
 }
 
 
@@ -330,7 +330,7 @@ function incremental() {
 
 window['P'] = function(iframe, data) {
   var iframeIo = goog.net.IframeIo.getInstanceByName(iframe.name);
-  testLogger.info('Data recieved - ' + data);
+  goog.log.info(testLogger, 'Data recieved - ' + data);
 };
 
 
@@ -346,8 +346,8 @@ function postForm() {
 
 <script>
 // UNIT TESTS - to be run via the JsUnit testRunner
-    
-// TODO(user): How to unit test all of this?  Creating a MockIframe could 
+
+// TODO(user): How to unit test all of this?  Creating a MockIframe could
 // help for the IE code path, but since the other browsers require weird
 // behaviors this becomes very tricky.
 

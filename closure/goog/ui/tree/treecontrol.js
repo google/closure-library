@@ -31,11 +31,11 @@ goog.provide('goog.ui.tree.TreeControl');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
-goog.require('goog.debug.Logger');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
 goog.require('goog.events.FocusHandler');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.log');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeNode');
 goog.require('goog.ui.tree.TypeAhead');
@@ -76,7 +76,7 @@ goog.ui.tree.TreeControl = function(html, opt_config, opt_domHelper) {
       // works since IE6SP1
       document.execCommand('BackgroundImageCache', false, true);
     } catch (e) {
-      this.logger_.warning('Failed to enable background image cache');
+      goog.log.warning(this.logger_, 'Failed to enable background image cache');
     }
   }
 };
@@ -101,11 +101,11 @@ goog.ui.tree.TreeControl.prototype.focusHandler_ = null;
 
 /**
  * Logger
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @private
  */
 goog.ui.tree.TreeControl.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.ui.tree.TreeControl');
+    goog.log.getLogger('goog.ui.tree.TreeControl');
 
 
 /**
@@ -522,7 +522,7 @@ goog.ui.tree.TreeControl.prototype.detachEvents_ = function() {
  * @private
  */
 goog.ui.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
-  this.logger_.fine('Received event ' + e.type);
+  goog.log.fine(this.logger_, 'Received event ' + e.type);
   var node = this.getNodeFromEvent_(e);
   if (node) {
     switch (e.type) {

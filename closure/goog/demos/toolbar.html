@@ -12,11 +12,11 @@ See the COPYING file for details.
   <script>
     goog.require('goog.array');
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
     goog.require('goog.debug.LogManager');
     goog.require('goog.dom');
     goog.require('goog.events');
     goog.require('goog.events.EventType');
+    goog.require('goog.log');
     goog.require('goog.object');
     goog.require('goog.style');
     goog.require('goog.ui.Button');
@@ -29,9 +29,9 @@ See the COPYING file for details.
     goog.require('goog.ui.SelectionModel');
     goog.require('goog.ui.Separator');
     goog.require('goog.ui.Toolbar');
-    goog.require('goog.ui.ToolbarRenderer');
     goog.require('goog.ui.ToolbarButton');
     goog.require('goog.ui.ToolbarMenuButton');
+    goog.require('goog.ui.ToolbarRenderer');
     goog.require('goog.ui.ToolbarSelect');
     goog.require('goog.ui.ToolbarSeparator');
     goog.require('goog.ui.ToolbarToggleButton');
@@ -493,20 +493,20 @@ See the COPYING file for details.
     var timer;
 
     // Set up a logger.
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    var logger = goog.debug.Logger.getLogger('demo');
+    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+    var logger = goog.log.getLogger('demo');
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-    logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+    goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
 
     function logEvent(e) {
       var caption = e.target.getId();
       if (typeof e.target.getCaption == 'function' && e.target.getCaption()) {
         caption += ' (' + e.target.getCaption() + ')';
       }
-      logger.info('"' + caption + '" dispatched: ' + e.type);
+      goog.log.info(logger, '"' + caption + '" dispatched: ' + e.type);
     }
 
     function showPerf(id, start) {
@@ -529,14 +529,14 @@ See the COPYING file for details.
       if (typeof this.getCaption == 'function' && this.getCaption()) {
         caption += ' (' + this.getCaption() + ')';
       }
-      logger.info((this.isVisible() ? 'Showed' : 'Hid') + ' ' + caption
+      goog.log.info(logger, (this.isVisible() ? 'Showed' : 'Hid') + ' ' + caption
           + ' in ' + (goog.now() - t) + 'ms');
     }
 
     function handleEnable(e) {
       if (typeof this.isParentDisabled_ == 'function' &&
           this.isParentDisabled_()) {
-        logger.warning('Can\'t enable/disable control if parent is disabled!');
+        goog.log.warning(logger, 'Can\'t enable/disable control if parent is disabled!');
         return false;
       }
 
@@ -547,7 +547,7 @@ See the COPYING file for details.
       if (typeof this.getCaption == 'function' && this.getCaption()) {
         caption += ' (' + this.getCaption() + ')';
       }
-      logger.info((this.isEnabled() ? 'Enabled' : 'Disabled') + ' ' + caption
+      goog.log.info(logger, (this.isEnabled() ? 'Enabled' : 'Disabled') + ' ' + caption
           + ' in ' + (goog.now() - t) + 'ms');
       return true;
     }

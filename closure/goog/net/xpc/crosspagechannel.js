@@ -114,7 +114,7 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
   goog.events.listen(window, 'unload',
       goog.net.xpc.CrossPageChannel.disposeAll_);
 
-  goog.net.xpc.logger.info('CrossPageChannel created: ' + this.name);
+  goog.log.info(goog.net.xpc.logger, 'CrossPageChannel created: ' + this.name);
 };
 goog.inherits(goog.net.xpc.CrossPageChannel, goog.messaging.AbstractChannel);
 
@@ -339,7 +339,8 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
   }
 
   if (this.transport_) {
-    goog.net.xpc.logger.info('Transport created: ' + this.transport_.getName());
+    goog.log.info(goog.net.xpc.logger,
+        'Transport created: ' + this.transport_.getName());
   } else {
     throw Error('CrossPageChannel: No suitable transport found!');
   }
@@ -416,7 +417,7 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
  */
 goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
     parentElm, opt_configureIframeCb, opt_addCfgParam) {
-  goog.net.xpc.logger.info('createPeerIframe()');
+  goog.log.info(goog.net.xpc.logger, 'createPeerIframe()');
 
   var iframeId = this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID];
   if (!iframeId) {
@@ -451,12 +452,14 @@ goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
         goog.bind(function() {
           parentElm.appendChild(iframeElm);
           iframeElm.src = peerUri.toString();
-          goog.net.xpc.logger.info('peer iframe created (' + iframeId + ')');
+          goog.log.info(goog.net.xpc.logger,
+              'peer iframe created (' + iframeId + ')');
         }, this), 1);
   } else {
     iframeElm.src = peerUri.toString();
     parentElm.appendChild(iframeElm);
-    goog.net.xpc.logger.info('peer iframe created (' + iframeId + ')');
+    goog.log.info(goog.net.xpc.logger,
+        'peer iframe created (' + iframeId + ')');
   }
 
   return /** @type {!HTMLIFrameElement} */ (iframeElm);
@@ -532,7 +535,7 @@ goog.net.xpc.CrossPageChannel.prototype.connect = function(opt_connectCb) {
  * @private
  */
 goog.net.xpc.CrossPageChannel.prototype.continueConnection_ = function() {
-  goog.net.xpc.logger.info('continueConnection_()');
+  goog.log.info(goog.net.xpc.logger, 'continueConnection_()');
   this.peerWindowDeferred_ = null;
   if (this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]) {
     this.iframeElement_ = this.domHelper_.getElement(
@@ -581,7 +584,7 @@ goog.net.xpc.CrossPageChannel.prototype.close = function() {
   this.connectCb_ = null;
   goog.dispose(this.connectionDelay_);
   this.connectionDelay_ = null;
-  goog.net.xpc.logger.info('Channel "' + this.name + '" closed');
+  goog.log.info(goog.net.xpc.logger, 'Channel "' + this.name + '" closed');
 };
 
 
@@ -598,7 +601,7 @@ goog.net.xpc.CrossPageChannel.prototype.notifyConnected = function(opt_delay) {
     return;
   }
   this.state_ = goog.net.xpc.ChannelStates.CONNECTED;
-  goog.net.xpc.logger.info('Channel "' + this.name + '" connected');
+  goog.log.info(goog.net.xpc.logger, 'Channel "' + this.name + '" connected');
   goog.dispose(this.connectionDelay_);
   if (opt_delay) {
     this.connectionDelay_ =
@@ -624,7 +627,7 @@ goog.net.xpc.CrossPageChannel.prototype.notifyConnected_ =
  * Package private. Do not call from outside goog.net.xpc.
  */
 goog.net.xpc.CrossPageChannel.prototype.notifyTransportError = function() {
-  goog.net.xpc.logger.info('Transport Error');
+  goog.log.info(goog.net.xpc.logger, 'Transport Error');
   this.close();
 };
 
@@ -632,12 +635,12 @@ goog.net.xpc.CrossPageChannel.prototype.notifyTransportError = function() {
 /** @override */
 goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
   if (!this.isConnected()) {
-    goog.net.xpc.logger.severe('Can\'t send. Channel not connected.');
+    goog.log.error(goog.net.xpc.logger, 'Can\'t send. Channel not connected.');
     return;
   }
   // Check if the peer is still around.
   if (!this.isPeerAvailable()) {
-    goog.net.xpc.logger.severe('Peer has disappeared.');
+    goog.log.error(goog.net.xpc.logger, 'Peer has disappeared.');
     this.close();
     return;
   }
@@ -682,13 +685,15 @@ goog.net.xpc.CrossPageChannel.prototype.xpcDeliver = function(
 
   // Check whether the origin of the message is as expected.
   if (!this.isMessageOriginAcceptable_(opt_origin)) {
-    goog.net.xpc.logger.warning('Message received from unapproved origin "' +
+    goog.log.warning(goog.net.xpc.logger,
+        'Message received from unapproved origin "' +
         opt_origin + '" - rejected.');
     return;
   }
 
   if (this.isDisposed()) {
-    goog.net.xpc.logger.warning('CrossPageChannel::xpcDeliver(): Disposed.');
+    goog.log.warning(goog.net.xpc.logger,
+        'CrossPageChannel::xpcDeliver(): Disposed.');
   } else if (!serviceName ||
       serviceName == goog.net.xpc.TRANSPORT_SERVICE_) {
     this.transport_.transportServiceHandler(payload);
@@ -697,7 +702,7 @@ goog.net.xpc.CrossPageChannel.prototype.xpcDeliver = function(
     if (this.isConnected()) {
       this.deliver(this.unescapeServiceName_(serviceName), payload);
     } else {
-      goog.net.xpc.logger.info(
+      goog.log.info(goog.net.xpc.logger,
           'CrossPageChannel::xpcDeliver(): Not connected.');
     }
   }

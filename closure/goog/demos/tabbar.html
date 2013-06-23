@@ -31,12 +31,12 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
-    goog.require('goog.debug.Logger.Level');
     goog.require('goog.debug.LogManager');
     goog.require('goog.dom');
     goog.require('goog.events');
     goog.require('goog.events.EventType');
+    goog.require('goog.log');
+    goog.require('goog.log.Level');
     goog.require('goog.object');
     goog.require('goog.ui.Component.EventType');
     goog.require('goog.ui.RoundedTabRenderer');
@@ -217,19 +217,19 @@ See the COPYING file for details.
     var timer = goog.now();
 
     // Set up a logger.
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    var logger = goog.debug.Logger.getLogger('demo');
+    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+    var logger = goog.log.getLogger('demo');
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-    logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+    goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
 
     function logEvent(e) {
       var source =
           typeof e.target.getCaption == 'function' && e.target.getCaption() ||
           e.target.getId();
-      logger.info('"' + source + '" dispatched: ' + e.type);
+      goog.log.info(logger, '"' + source + '" dispatched: ' + e.type);
     }
 
     var topTab = new goog.ui.TabBar();

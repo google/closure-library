@@ -12,11 +12,11 @@ See the COPYING file for details.
   <script>
     goog.require('goog.array');
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
     goog.require('goog.debug.LogManager');
     goog.require('goog.dom');
     goog.require('goog.events');
     goog.require('goog.events.EventType');
+    goog.require('goog.log');
     goog.require('goog.object');
     goog.require('goog.style');
     goog.require('goog.ui.Container');
@@ -386,19 +386,19 @@ See the COPYING file for details.
     var timer = goog.now();
 
     // Set up a logger.
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    var logger = goog.debug.Logger.getLogger('demo');
+    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+    var logger = goog.log.getLogger('demo');
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-    logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+    goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
 
     function logEvent(e) {
       var source =
           typeof e.target.getCaption == 'function' && e.target.getCaption() ||
           e.target.getId();
-      logger.info('"' + source + '" dispatched: ' + e.type);
+      goog.log.info(logger, '"' + source + '" dispatched: ' + e.type);
     }
 
     // Programmatically create a vertical container.
@@ -424,7 +424,7 @@ See the COPYING file for details.
         function(e) {
           var t = goog.now();
           vc.setVisible(e.target.checked);
-          logger.info((e.target.checked ? 'Showed' : 'Hid') +
+          goog.log.info(logger, (e.target.checked ? 'Showed' : 'Hid') +
               ' vertical container in ' + (goog.now() - t) + 'ms');
         });
     goog.events.listen(goog.dom.getElement('enable_vc'),
@@ -435,7 +435,7 @@ See the COPYING file for details.
           // If the container as a whole is disabled, you can't enable/disable
           // child controls.
           goog.dom.getElement('enable_porthos').disabled = !vc.isEnabled();
-          logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
+          goog.log.info(logger, (e.target.checked ? 'Enabled' : 'Disabled') +
               ' vertical container in ' + (goog.now() - t) + 'ms');
         });
     goog.events.listen(goog.dom.getElement('show_porthos'),
@@ -463,7 +463,7 @@ See the COPYING file for details.
                   true);
             }
           });
-          logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
+          goog.log.info(logger, (e.target.checked ? 'Enabled' : 'Disabled') +
               ' state transition events for this container\'s children');
         });
 
@@ -492,7 +492,7 @@ See the COPYING file for details.
         function(e) {
           var t = goog.now();
           hc.setVisible(e.target.checked);
-          logger.info((e.target.checked ? 'Showed' : 'Hid') +
+          goog.log.info(logger, (e.target.checked ? 'Showed' : 'Hid') +
               ' horizontal container in ' + (goog.now() - t) + 'ms');
         });
     goog.events.listen(goog.dom.getElement('enable_hc'),
@@ -503,7 +503,7 @@ See the COPYING file for details.
           // If the container as a whole is disabled, you can't enable/disable
           // child controls.
           goog.dom.getElement('enable_doc').disabled = !hc.isEnabled();
-          logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
+          goog.log.info(logger, (e.target.checked ? 'Enabled' : 'Disabled') +
               ' horizontal container in ' + (goog.now() - t) + 'ms');
         });
     goog.events.listen(goog.dom.getElement('show_doc'),
@@ -531,7 +531,7 @@ See the COPYING file for details.
                   true);
             }
           });
-          logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
+          goog.log.info(logger, (e.target.checked ? 'Enabled' : 'Disabled') +
               ' state transition events for this container\'s children');
         });
 
@@ -606,7 +606,7 @@ See the COPYING file for details.
         function(e) {
           var t = goog.now();
           tb.setEnabled(e.target.checked);
-          logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
+          goog.log.info(logger, (e.target.checked ? 'Enabled' : 'Disabled') +
               ' toolbar in ' + (goog.now() - t) + 'ms');
         });
 
@@ -620,7 +620,7 @@ See the COPYING file for details.
         function(e) {
           var t = goog.now();
           tb2.setEnabled(e.target.checked);
-          logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
+          goog.log.info(logger, (e.target.checked ? 'Enabled' : 'Disabled') +
               ' toolbar in ' + (goog.now() - t) + 'ms');
         });
 
@@ -635,7 +635,7 @@ See the COPYING file for details.
         function(e) {
           var t = goog.now();
           tb3.setEnabled(e.target.checked);
-          logger.info((e.target.checked ? 'Enabled' : 'Disabled') +
+          goog.log.info(logger, (e.target.checked ? 'Enabled' : 'Disabled') +
               ' toolbar in ' + (goog.now() - t) + 'ms');
         });
     goog.events.listen(goog.dom.getElement('show_tb3'),
@@ -643,7 +643,7 @@ See the COPYING file for details.
         function(e) {
           var t = goog.now();
           tb3.setVisible(e.target.checked);
-          logger.info((e.target.checked ? 'Showed' : 'Hid') +
+          goog.log.info(logger, (e.target.checked ? 'Showed' : 'Hid') +
               ' content element in ' + (goog.now() - t) + 'ms');
         });
 

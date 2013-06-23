@@ -19,7 +19,6 @@
 
 goog.provide('goog.editor.plugins.Blockquote');
 
-goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
@@ -29,6 +28,7 @@ goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.functions');
+goog.require('goog.log');
 
 
 
@@ -84,12 +84,12 @@ goog.editor.plugins.Blockquote.CLASS_ID = 'Blockquote';
 
 /**
  * Logging object.
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @protected
  * @override
  */
 goog.editor.plugins.Blockquote.prototype.logger =
-    goog.debug.Logger.getLogger('goog.editor.plugins.Blockquote');
+    goog.log.getLogger('goog.editor.plugins.Blockquote');
 
 
 /** @override */

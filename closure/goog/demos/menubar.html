@@ -11,19 +11,19 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.array');
-    goog.require('goog.events');
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
     goog.require('goog.debug.LogManager');
+    goog.require('goog.events');
+    goog.require('goog.log');
     goog.require('goog.object');
     goog.require('goog.ui.Menu');
     goog.require('goog.ui.MenuBarRenderer');
-    goog.require('goog.ui.menuBarDecorator');
-    goog.require('goog.ui.menuBar');
     goog.require('goog.ui.MenuButton');
     goog.require('goog.ui.MenuItem');
     goog.require('goog.ui.Separator');
     goog.require('goog.ui.decorate');
+    goog.require('goog.ui.menuBar');
+    goog.require('goog.ui.menuBarDecorator');
   </script>
   <link rel="stylesheet" href="css/demo.css">
   <link rel="stylesheet" href="../css/menu.css">
@@ -76,7 +76,7 @@ See the COPYING file for details.
               <tbody>
                 <tr>
                   <td>
-                    <div id="menuBarProgrammatic" 
+                    <div id="menuBarProgrammatic"
                         class="format-lightborder"></div>
                   </td>
                 </tr>
@@ -183,19 +183,19 @@ See the COPYING file for details.
 
   // Set up a logger.
   var timer = goog.now();
-  goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-  var logger = goog.debug.Logger.getLogger('demo');
+  goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+  var logger = goog.log.getLogger('demo');
   var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
   logconsole.setCapturing(true);
 
   var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-  logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+  goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
 
   function logEvent(e) {
     var component = e.target;
     var caption = (typeof component.getCaption == 'function') ?
         component.getCaption() : component.getId();
-    logger.info('"' + caption + '" dispatched: ' + e.type);
+    goog.log.info(logger, '"' + caption + '" dispatched: ' + e.type);
   }
 
   buildMenu(goog.dom.getElement('menuBarProgrammatic'));

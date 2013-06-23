@@ -26,7 +26,7 @@
 
 goog.provide('goog.ui.emoji.EmojiPicker');
 
-goog.require('goog.debug.Logger');
+goog.require('goog.log');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.TabPane');
@@ -408,11 +408,11 @@ goog.ui.emoji.EmojiPicker.prototype.setProgressiveRender =
 /**
  * Logger for the emoji picker.
  *
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @private
  */
 goog.ui.emoji.EmojiPicker.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.ui.emoji.EmojiPicker');
+    goog.log.getLogger('goog.ui.emoji.EmojiPicker');
 
 
 /**

@@ -35,12 +35,11 @@ See the COPYING file for details.
 </style>
 <script src="../base.js"></script>
 <script>
-
 goog.require('goog.debug.DivConsole');
 goog.require('goog.events');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
-
+goog.require('goog.log');
 </script>
 </head>
 <body>
@@ -69,11 +68,11 @@ goog.require('goog.events.KeyHandler');
 
 var divConsole = new goog.debug.DivConsole(document.getElementById('console'));
 divConsole.setCapturing(true);
-var logger = new goog.debug.Logger.getLogger('demo');
+var logger = new goog.log.getLogger('demo');
 
 var docKh = new goog.events.KeyHandler(document);
 goog.events.listen(docKh, 'key', function(e) {
-  logger.info('keyCode: ' + e.keyCode +
+  goog.log.info(logger, 'keyCode: ' + e.keyCode +
               ', charCode: ' + e.charCode +
               ', repeat: ' + e.repeat +
               ', target: ' + e.target +
@@ -88,7 +87,7 @@ goog.events.listen(noTabKh, goog.events.KeyHandler.EventType.KEY, function(e) {
 });
 
 function numberInputKeyHandler(e) {
-  logger.info('isTextModifyingKeyEvent: ' +
+  goog.log.info(logger, 'isTextModifyingKeyEvent: ' +
               goog.events.KeyCodes.isTextModifyingKeyEvent(e));
   if (e.target.className != 'number-input' ||
       e.ctrlKey ||

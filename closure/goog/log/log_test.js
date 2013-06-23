@@ -24,6 +24,8 @@ goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.testing.jsunit');
 
+
+
 goog.setTestOnly('goog.logTest');
 
 
@@ -74,7 +76,7 @@ function testLogging1() {
   handler.logRecord = null;
 
   goog.log.removeHandler(root, f);
-  logger.log(goog.log.Level.WARNING, 'foo');
+  goog.log.log(logger, goog.log.Level.WARNING, 'foo');
   assertNull(handler.logRecord);
 }
 
@@ -91,7 +93,7 @@ function testLogging2() {
   handler.logRecord = null;
 
   goog.log.removeHandler(root, f);
-  logger.log(goog.log.Level.WARNING, 'foo');
+  goog.log.log(logger, goog.log.Level.WARNING, 'foo');
   assertNull(handler.logRecord);
 }
 

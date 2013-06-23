@@ -46,7 +46,8 @@ goog.provide('goog.net.xpc.TransportNames');
 goog.provide('goog.net.xpc.TransportTypes');
 goog.provide('goog.net.xpc.UriCfgFields');
 
-goog.require('goog.debug.Logger');
+goog.require('goog.log');
+
 
 
 /**
@@ -287,6 +288,6 @@ goog.net.xpc.randomStringCharacters_ =
 
 /**
  * The logger.
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  */
-goog.net.xpc.logger = goog.debug.Logger.getLogger('goog.net.xpc');
+goog.net.xpc.logger = goog.log.getLogger('goog.net.xpc');

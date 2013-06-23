@@ -11,12 +11,12 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.array');
+    goog.require('goog.debug.DivConsole');
+    goog.require('goog.debug.LogManager');
     goog.require('goog.events');
     goog.require('goog.events.EventType');
+    goog.require('goog.log');
     goog.require('goog.object');
-    goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
-    goog.require('goog.debug.LogManager');
     goog.require('goog.ui.ImagelessMenuButtonRenderer');
     goog.require('goog.ui.Menu');
     goog.require('goog.ui.MenuButton');
@@ -30,7 +30,7 @@ See the COPYING file for details.
   <link rel="stylesheet" href="../css/menuseparator.css">
   <link rel="stylesheet" href="../css/menubutton.css">
   <link rel="stylesheet" href="../css/imagelessbutton.css">
-  <link rel="stylesheet" href="../css/imagelessmenubutton.css"> 
+  <link rel="stylesheet" href="../css/imagelessmenubutton.css">
   <style>
     /* Base class for all icon elements. */
     .icon {
@@ -140,19 +140,19 @@ See the COPYING file for details.
     var timer = goog.now();
 
     // Set up a logger.
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    var logger = goog.debug.Logger.getLogger('demo');
+    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+    var logger = goog.log.getLogger('demo');
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
 
     var EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-    logger.fine('Listening for: ' + EVENTS.join(', ') + '.');
+    goog.log.fine(logger, 'Listening for: ' + EVENTS.join(', ') + '.');
 
     function logEvent(e) {
       var component = e.target;
       var caption = (typeof component.getCaption == 'function') ?
           component.getCaption() : component.getId();
-      logger.info('"' + caption + '" dispatched: ' + e.type);
+      goog.log.info(logger, '"' + caption + '" dispatched: ' + e.type);
     }
 
     // Create a sample menu.

@@ -19,7 +19,7 @@
 goog.provide('goog.net.NetworkTester');
 goog.require('goog.Timer');
 goog.require('goog.Uri');
-goog.require('goog.debug.Logger');
+goog.require('goog.log');
 
 
 
@@ -78,11 +78,11 @@ goog.net.NetworkTester.DEFAULT_TIMEOUT_MS = 10000;
 
 /**
  * Logger object
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @private
  */
 goog.net.NetworkTester.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.net.NetworkTester');
+    goog.log.getLogger('goog.net.NetworkTester');
 
 
 /**
@@ -232,7 +232,7 @@ goog.net.NetworkTester.prototype.start = function() {
   }
   this.running_ = true;
 
-  this.logger_.info('Starting');
+  goog.log.info(this.logger_, 'Starting');
   this.attempt_ = 0;
   this.startNextAttempt_();
 };
@@ -255,11 +255,11 @@ goog.net.NetworkTester.prototype.startNextAttempt_ = function() {
   this.attempt_++;
 
   if (goog.net.NetworkTester.getNavigatorOffline_()) {
-    this.logger_.info('Browser is set to work offline.');
+    goog.log.info(this.logger_, 'Browser is set to work offline.');
     // Call in a timeout to make async like the rest.
     goog.Timer.callOnce(goog.bind(this.onResult, this, false), 0);
   } else {
-    this.logger_.info('Loading image (attempt ' + this.attempt_ +
+    goog.log.info(this.logger_, 'Loading image (attempt ' + this.attempt_ +
                       ') at ' + this.uri_);
     this.image_ = new Image();
     this.image_.onload = goog.bind(this.onImageLoad_, this);
@@ -287,7 +287,7 @@ goog.net.NetworkTester.getNavigatorOffline_ = function() {
  * @private
  */
 goog.net.NetworkTester.prototype.onImageLoad_ = function() {
-  this.logger_.info('Image loaded');
+  goog.log.info(this.logger_, 'Image loaded');
   this.onResult(true);
 };
 
@@ -297,7 +297,7 @@ goog.net.NetworkTester.prototype.onImageLoad_ = function() {
  * @private
  */
 goog.net.NetworkTester.prototype.onImageError_ = function() {
-  this.logger_.info('Image load error');
+  goog.log.info(this.logger_, 'Image load error');
   this.onResult(false);
 };
 
@@ -307,7 +307,7 @@ goog.net.NetworkTester.prototype.onImageError_ = function() {
  * @private
  */
 goog.net.NetworkTester.prototype.onImageAbort_ = function() {
-  this.logger_.info('Image load aborted');
+  goog.log.info(this.logger_, 'Image load aborted');
   this.onResult(false);
 };
 
@@ -317,7 +317,7 @@ goog.net.NetworkTester.prototype.onImageAbort_ = function() {
  * @private
  */
 goog.net.NetworkTester.prototype.onImageTimeout_ = function() {
-  this.logger_.info('Image load timed out');
+  goog.log.info(this.logger_, 'Image load timed out');
   this.onResult(false);
 };
 

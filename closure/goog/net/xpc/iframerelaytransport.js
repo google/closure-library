@@ -137,7 +137,8 @@ if (goog.userAgent.WEBKIT) {
       var ifr = goog.net.xpc.IframeRelayTransport.iframeRefs_.
           shift().iframeElement;
       goog.dom.removeNode(ifr);
-      goog.net.xpc.logger.finest('iframe removed');
+      goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+          'iframe removed');
     }
 
     goog.net.xpc.IframeRelayTransport.cleanupTimer_ = window.setTimeout(
@@ -368,7 +369,7 @@ goog.net.xpc.IframeRelayTransport.prototype.send_ =
 
   this.getWindow().document.body.appendChild(ifr);
 
-  goog.net.xpc.logger.finest('msg sent: ' + url);
+  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST, 'msg sent: ' + url);
 };
 
 
@@ -378,7 +379,7 @@ goog.net.xpc.IframeRelayTransport.prototype.send_ =
  * @this Element
  */
 goog.net.xpc.IframeRelayTransport.iframeLoadHandler_ = function() {
-  goog.net.xpc.logger.finest('iframe-load');
+  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST, 'iframe-load');
   goog.dom.removeNode(this);
   this.xpcOnload = null;
 };

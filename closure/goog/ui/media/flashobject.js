@@ -45,10 +45,10 @@ goog.provide('goog.ui.media.FlashObject.ScriptAccessLevel');
 goog.provide('goog.ui.media.FlashObject.Wmodes');
 
 goog.require('goog.asserts');
-goog.require('goog.debug.Logger');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
+goog.require('goog.log');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs.Map');
@@ -253,11 +253,11 @@ goog.ui.media.FlashObject.FF_WMODE_PARAMS_ = 'wmode=%s';
 /**
  * A logger used for debugging.
  *
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @private
  */
 goog.ui.media.FlashObject.prototype.logger_ =
-    goog.debug.Logger.getLogger('goog.ui.media.FlashObject');
+    goog.log.getLogger('goog.ui.media.FlashObject');
 
 
 /**
@@ -538,7 +538,7 @@ goog.ui.media.FlashObject.prototype.createDom = function() {
   if (this.hasRequiredVersion() &&
       !goog.userAgent.flash.isVersion(
           /** @type {string} */ (this.getRequiredVersion()))) {
-    this.logger_.warning('Required flash version not found:' +
+    goog.log.warning(this.logger_, 'Required flash version not found:' +
         this.getRequiredVersion());
     throw Error(goog.ui.Component.Error.NOT_SUPPORTED);
   }

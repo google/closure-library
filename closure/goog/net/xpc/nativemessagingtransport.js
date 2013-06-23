@@ -167,7 +167,7 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
       listen(this.maybeAttemptToConnectTimer_, goog.Timer.TICK,
           this.maybeAttemptToConnect_);
 
-  goog.net.xpc.logger.info('NativeMessagingTransport created.  ' +
+  goog.log.info(goog.net.xpc.logger, 'NativeMessagingTransport created.  ' +
       'protocolVersion=' + this.protocolVersion_ + ', oneSidedHandshake=' +
       this.oneSidedHandshake_ + ', role=' + this.channel_.getRole());
 };
@@ -301,8 +301,9 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
   var service = data.substring(headDelim + 1, serviceDelim);
   var payload = data.substring(serviceDelim + 1);
 
-  goog.net.xpc.logger.fine('messageReceived: channel=' + channelName +
-                           ', service=' + service + ', payload=' + payload);
+  goog.log.fine(goog.net.xpc.logger,
+      'messageReceived: channel=' + channelName +
+      ', service=' + service + ', payload=' + payload);
 
   // Attempt to deliver message to the channel. Keep in mind that it may not
   // exist for several reasons, including but not limited to:
@@ -335,7 +336,8 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
       // navigation (particularly Firefox 1.5+). We can trust the outer peer,
       // since we only accept postMessage messages from the same hostname that
       // originally setup the channel.
-      goog.net.xpc.logger.fine('changing channel name to ' + channelName);
+      goog.log.fine(goog.net.xpc.logger,
+          'changing channel name to ' + channelName);
       staleChannel.name = channelName;
       // Remove old stale pointer to channel.
       delete goog.net.xpc.channels[staleChannelName];
@@ -347,7 +349,7 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
   }
 
   // Failed to find a channel to deliver this message to, so simply ignore it.
-  goog.net.xpc.logger.info('channel name mismatch; message ignored"');
+  goog.log.info(goog.net.xpc.logger, 'channel name mismatch; message ignored"');
   return false;
 };
 
@@ -390,8 +392,8 @@ goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
         if ((prevPeerProtocolVersion == 1 || this.peerEndpointId_ != null) &&
             this.peerEndpointId_ != peerEndpointId) {
           // Send a new SETUP message since the peer has been replaced.
-          goog.net.xpc.logger.info('Sending SETUP and changing peer ID to: ' +
-              peerEndpointId);
+          goog.log.info(goog.net.xpc.logger,
+              'Sending SETUP and changing peer ID to: ' + peerEndpointId);
           this.sendSetupMessage_();
         }
         this.peerEndpointId_ = peerEndpointId;
@@ -524,7 +526,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
                                                                 payload) {
   var win = this.channel_.getPeerWindowObject();
   if (!win) {
-    goog.net.xpc.logger.fine('send(): window not ready');
+    goog.log.fine(goog.net.xpc.logger, 'send(): window not ready');
     return;
   }
 
@@ -547,21 +549,21 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(service,
         // object can sometimes be delayed.
         var obj = win.postMessage ? win : win.document;
         if (!obj.postMessage) {
-          goog.net.xpc.logger.warning('Peer window had no postMessage ' +
-              'function.');
+          goog.log.warning(goog.net.xpc.logger,
+              'Peer window had no postMessage function.');
           return;
         }
 
         obj.postMessage(channelName + '|' + service + ':' + payload,
             transport.peerHostname_);
-        goog.net.xpc.logger.fine('send(): service=' + service + ' payload=' +
-            payload + ' to hostname=' + transport.peerHostname_);
+        goog.log.fine(goog.net.xpc.logger, 'send(): service=' + service +
+            ' payload=' + payload + ' to hostname=' + transport.peerHostname_);
       } catch (error) {
         // There is some evidence (not totally convincing) that postMessage can
         // be missing or throw errors during a narrow timing window during
         // startup.  This protects against that.
-        goog.net.xpc.logger.warning('Error performing postMessage, ignoring.',
-            error);
+        goog.log.warning(goog.net.xpc.logger,
+            'Error performing postMessage, ignoring.', error);
       }
     };
     this.sendTimerId_ = goog.Timer.callOnce(sendFunctor, 0);
