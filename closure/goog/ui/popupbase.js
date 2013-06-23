@@ -23,12 +23,12 @@ goog.provide('goog.ui.PopupBase.Type');
 
 goog.require('goog.Timer');
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.fx.Transition');
-goog.require('goog.fx.Transition.EventType');
 goog.require('goog.style');
 goog.require('goog.userAgent');
 

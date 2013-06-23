@@ -27,9 +27,8 @@ goog.require('goog.positioning.Corner');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.DatePicker');
-goog.require('goog.ui.DatePicker.Events');
 goog.require('goog.ui.Popup');
-goog.require('goog.ui.PopupBase.EventType');
+goog.require('goog.ui.PopupBase');
 
 
 

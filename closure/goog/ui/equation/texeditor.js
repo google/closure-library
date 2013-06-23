@@ -14,7 +14,6 @@
 
 goog.provide('goog.ui.equation.TexEditor');
 
-goog.require('goog.dom');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.equation.ImageRenderer');
 goog.require('goog.ui.equation.TexPane');

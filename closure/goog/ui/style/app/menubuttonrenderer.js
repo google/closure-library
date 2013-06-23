@@ -26,7 +26,6 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.style');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.style.app.ButtonRenderer');

@@ -25,11 +25,8 @@ goog.provide('goog.ui.editor.AbstractDialog.EventType');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventTarget');
+goog.require('goog.string');
 goog.require('goog.ui.Dialog');
-goog.require('goog.ui.Dialog.ButtonSet');
-goog.require('goog.ui.Dialog.DefaultButtonKeys');
-goog.require('goog.ui.Dialog.Event');
-goog.require('goog.ui.Dialog.EventType');
 
 
 // *** Public interface ***************************************************** //

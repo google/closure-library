@@ -23,10 +23,14 @@ goog.provide('goog.ui.HoverCard');
 goog.provide('goog.ui.HoverCard.EventType');
 goog.provide('goog.ui.HoverCard.TriggerEvent');
 
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.AdvancedTooltip');
+goog.require('goog.ui.PopupBase');
+goog.require('goog.ui.Tooltip');
 
 
 

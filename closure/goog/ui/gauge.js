@@ -25,15 +25,15 @@ goog.provide('goog.ui.GaugeColoredRange');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
-goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.fx.Animation');
-goog.require('goog.fx.Animation.EventType');
-goog.require('goog.fx.Transition.EventType');
+goog.require('goog.fx.Transition');
 goog.require('goog.fx.easing');
 goog.require('goog.graphics');
 goog.require('goog.graphics.Font');
 goog.require('goog.graphics.Path');
 goog.require('goog.graphics.SolidFill');
+goog.require('goog.math');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.GaugeTheme');
 

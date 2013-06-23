@@ -24,8 +24,9 @@ goog.provide('goog.ui.ComboBoxItem');
 
 goog.require('goog.Timer');
 goog.require('goog.debug.Logger');
+goog.require('goog.dom');
 goog.require('goog.dom.classlist');
-goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
@@ -38,6 +39,7 @@ goog.require('goog.ui.ItemEvent');
 goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
+goog.require('goog.ui.MenuSeparator');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 

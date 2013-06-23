@@ -20,10 +20,11 @@
 goog.provide('goog.ui.emoji.EmojiPaletteRenderer');
 
 goog.require('goog.a11y.aria');
-goog.require('goog.dom');
+goog.require('goog.dom.NodeType');
+goog.require('goog.dom.classes');
+goog.require('goog.style');
 goog.require('goog.ui.PaletteRenderer');
 goog.require('goog.ui.emoji.Emoji');
-goog.require('goog.ui.emoji.SpriteInfo');
 
 
 

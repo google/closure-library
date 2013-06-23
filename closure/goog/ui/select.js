@@ -23,14 +23,11 @@
 
 goog.provide('goog.ui.Select');
 
-goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
-goog.require('goog.a11y.aria.State');
-goog.require('goog.asserts');
 goog.require('goog.events.EventType');
-goog.require('goog.ui.Component.EventType');
-goog.require('goog.ui.ControlContent');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.MenuButton');
+goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.SelectionModel');
 goog.require('goog.ui.registry');
 

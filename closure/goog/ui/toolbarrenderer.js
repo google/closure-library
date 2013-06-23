@@ -21,7 +21,7 @@
 goog.provide('goog.ui.ToolbarRenderer');
 
 goog.require('goog.a11y.aria.Role');
-goog.require('goog.ui.Container.Orientation');
+goog.require('goog.ui.Container');
 goog.require('goog.ui.ContainerRenderer');
 goog.require('goog.ui.Separator');
 goog.require('goog.ui.ToolbarSeparatorRenderer');

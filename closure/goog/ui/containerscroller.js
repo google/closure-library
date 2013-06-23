@@ -19,12 +19,12 @@
 
 goog.provide('goog.ui.ContainerScroller');
 
+goog.require('goog.Disposable');
 goog.require('goog.Timer');
 goog.require('goog.events.EventHandler');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Component.EventType');
-goog.require('goog.ui.Container.EventType');
+goog.require('goog.ui.Container');
 
 
 

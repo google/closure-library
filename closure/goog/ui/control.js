@@ -27,13 +27,13 @@ goog.provide('goog.ui.Control');
 
 goog.require('goog.array');
 goog.require('goog.dom');
-goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
+/** @suppress {extraRequire} */
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.ui.decorate');

@@ -29,7 +29,7 @@ goog.provide('goog.ui.ImagelessButtonRenderer');
 
 goog.require('goog.dom.classes');
 goog.require('goog.ui.Button');
-goog.require('goog.ui.ControlContent');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.CustomButtonRenderer');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.registry');

@@ -36,7 +36,6 @@ goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
 goog.require('goog.events.FocusHandler');
 goog.require('goog.events.KeyHandler');
-goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeNode');
 goog.require('goog.ui.tree.TypeAhead');

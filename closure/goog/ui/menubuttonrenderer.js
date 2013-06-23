@@ -26,6 +26,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.string');
 goog.require('goog.style');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.CustomButtonRenderer');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.Menu');

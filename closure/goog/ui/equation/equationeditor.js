@@ -14,12 +14,9 @@
 
 goog.provide('goog.ui.equation.EquationEditor');
 
-goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Tab');
 goog.require('goog.ui.TabBar');
-goog.require('goog.ui.equation.EditorPane');
 goog.require('goog.ui.equation.ImageRenderer');
 goog.require('goog.ui.equation.TexPane');
 

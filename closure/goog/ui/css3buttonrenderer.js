@@ -30,12 +30,11 @@
 
 goog.provide('goog.ui.Css3ButtonRenderer');
 
-goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.ButtonRenderer');
-goog.require('goog.ui.ControlContent');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.registry');
 

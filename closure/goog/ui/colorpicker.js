@@ -30,7 +30,6 @@ goog.provide('goog.ui.ColorPicker.EventType');
 
 goog.require('goog.ui.ColorPalette');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Component.State');
 
 
 

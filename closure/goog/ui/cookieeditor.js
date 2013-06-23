@@ -18,6 +18,7 @@
  */
 goog.provide('goog.ui.CookieEditor');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');

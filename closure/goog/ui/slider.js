@@ -44,7 +44,6 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.dom');
 goog.require('goog.ui.SliderBase');
-goog.require('goog.ui.SliderBase.Orientation');
 
 
 

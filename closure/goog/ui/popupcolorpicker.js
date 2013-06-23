@@ -27,7 +27,6 @@ goog.require('goog.events.EventType');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.ui.ColorPicker');
-goog.require('goog.ui.ColorPicker.EventType');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
 

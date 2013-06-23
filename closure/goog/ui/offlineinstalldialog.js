@@ -35,8 +35,6 @@ goog.require('goog.gears');
 goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Dialog');
-goog.require('goog.ui.Dialog.ButtonSet');
-goog.require('goog.ui.Dialog.EventType');
 goog.require('goog.window');
 
 

@@ -25,12 +25,11 @@ goog.provide('goog.ui.OfflineStatusComponent.StatusClassNames');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
 goog.require('goog.gears.StatusType');
-goog.require('goog.positioning');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.Overflow');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.OfflineStatusCard.EventType');
+goog.require('goog.ui.OfflineStatusCard');
 goog.require('goog.ui.Popup');
 
 

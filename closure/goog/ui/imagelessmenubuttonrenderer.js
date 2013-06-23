@@ -31,7 +31,6 @@ goog.provide('goog.ui.ImagelessMenuButtonRenderer');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.MenuButtonRenderer');

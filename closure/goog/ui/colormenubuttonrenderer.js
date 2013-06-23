@@ -23,7 +23,6 @@ goog.provide('goog.ui.ColorMenuButtonRenderer');
 
 goog.require('goog.color');
 goog.require('goog.dom.classes');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.userAgent');
 

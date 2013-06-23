@@ -27,8 +27,9 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dispose');
 goog.require('goog.dom');
+goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classes');
-goog.require('goog.events.Event');
+goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.dom.FadeInAndShow');
@@ -39,8 +40,7 @@ goog.require('goog.positioning.Overflow');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.IdGenerator');
-goog.require('goog.ui.ac.AutoComplete.EventType');
-goog.require('goog.userAgent');
+goog.require('goog.ui.ac.AutoComplete');
 
 
 

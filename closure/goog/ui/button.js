@@ -23,12 +23,15 @@
 goog.provide('goog.ui.Button');
 goog.provide('goog.ui.Button.Side');
 
+goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.events.KeyHandler');
 goog.require('goog.ui.ButtonRenderer');
 goog.require('goog.ui.ButtonSide');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.NativeButtonRenderer');
+goog.require('goog.ui.registry');
 
 
 

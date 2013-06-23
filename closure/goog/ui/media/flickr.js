@@ -62,11 +62,9 @@
 goog.provide('goog.ui.media.FlickrSet');
 goog.provide('goog.ui.media.FlickrSetModel');
 
-goog.require('goog.object');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaModel');
-goog.require('goog.ui.media.MediaModel.Player');
 goog.require('goog.ui.media.MediaRenderer');
 
 

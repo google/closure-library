@@ -22,10 +22,10 @@
 
 goog.provide('goog.ui.editor.ToolbarController');
 
-goog.require('goog.editor.Field.EventType');
+goog.require('goog.editor.Field');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
-goog.require('goog.ui.Component.EventType');
+goog.require('goog.ui.Component');
 
 
 

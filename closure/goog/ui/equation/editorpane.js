@@ -14,7 +14,6 @@
 
 goog.provide('goog.ui.equation.EditorPane');
 
-goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 

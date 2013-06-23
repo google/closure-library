@@ -15,7 +15,6 @@
 goog.provide('goog.ui.equation.ChangeEvent');
 
 goog.require('goog.events.Event');
-goog.require('goog.events.EventType');
 
 
 

@@ -27,18 +27,23 @@ goog.provide('goog.ui.editor.Bubble');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.ViewportSizeMonitor');
+goog.require('goog.dom.classes');
 goog.require('goog.editor.style');
-goog.require('goog.events');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Box');
+goog.require('goog.object');
 goog.require('goog.positioning');
+goog.require('goog.positioning.Corner');
+goog.require('goog.positioning.Overflow');
+goog.require('goog.positioning.OverflowStatus');
 goog.require('goog.string');
 goog.require('goog.style');
-goog.require('goog.ui.Component.EventType');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.PopupBase');
-goog.require('goog.ui.PopupBase.EventType');
 goog.require('goog.userAgent');
 
 

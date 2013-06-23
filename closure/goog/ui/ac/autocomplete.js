@@ -21,9 +21,11 @@
 goog.provide('goog.ui.ac.AutoComplete');
 goog.provide('goog.ui.ac.AutoComplete.EventType');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
+goog.require('goog.object');
 
 
 
@@ -308,6 +310,7 @@ goog.ui.ac.AutoComplete.prototype.setRenderer = function(renderer) {
 goog.ui.ac.AutoComplete.prototype.getToken = function() {
   return this.token_;
 };
+
 
 /**
  * Sets the current token (without changing the rendered autocompletion).

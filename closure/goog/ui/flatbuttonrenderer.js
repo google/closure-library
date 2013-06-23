@@ -20,7 +20,6 @@
 
 goog.provide('goog.ui.FlatButtonRenderer');
 
-goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.dom.classes');
 goog.require('goog.ui.Button');

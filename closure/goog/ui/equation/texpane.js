@@ -21,13 +21,12 @@ goog.require('goog.dom.selection');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
-goog.require('goog.string');
 goog.require('goog.style');
-goog.require('goog.ui.Component');
 goog.require('goog.ui.equation.ChangeEvent');
 goog.require('goog.ui.equation.EditorPane');
 goog.require('goog.ui.equation.ImageRenderer');
-goog.require('goog.ui.equation.PaletteManager');
+goog.require('goog.ui.equation.Palette');
+goog.require('goog.ui.equation.PaletteEvent');
 
 
 

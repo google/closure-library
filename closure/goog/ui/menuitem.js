@@ -24,12 +24,10 @@ goog.provide('goog.ui.MenuItem');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
-goog.require('goog.events.KeyCodes');
 goog.require('goog.math.Coordinate');
 goog.require('goog.string');
-goog.require('goog.ui.Component.State');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.MenuItemRenderer');
 goog.require('goog.ui.registry');
 

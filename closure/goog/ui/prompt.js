@@ -26,11 +26,8 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
-goog.require('goog.ui.Component.Error');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.Dialog');
-goog.require('goog.ui.Dialog.ButtonSet');
-goog.require('goog.ui.Dialog.DefaultButtonKeys');
-goog.require('goog.ui.Dialog.EventType');
 goog.require('goog.userAgent');
 
 

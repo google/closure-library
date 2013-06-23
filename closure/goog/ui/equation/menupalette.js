@@ -16,7 +16,7 @@ goog.provide('goog.ui.equation.MenuPalette');
 goog.provide('goog.ui.equation.MenuPaletteRenderer');
 
 goog.require('goog.math.Size');
-goog.require('goog.style');
+goog.require('goog.ui.PaletteRenderer');
 goog.require('goog.ui.equation.Palette');
 goog.require('goog.ui.equation.PaletteRenderer');
 

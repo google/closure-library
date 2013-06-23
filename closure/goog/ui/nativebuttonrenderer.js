@@ -23,7 +23,7 @@ goog.provide('goog.ui.NativeButtonRenderer');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.ButtonRenderer');
-goog.require('goog.ui.Component.State');
+goog.require('goog.ui.Component');
 
 
 

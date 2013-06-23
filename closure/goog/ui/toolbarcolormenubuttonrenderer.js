@@ -22,7 +22,6 @@ goog.provide('goog.ui.ToolbarColorMenuButtonRenderer');
 
 goog.require('goog.dom.classes');
 goog.require('goog.ui.ColorMenuButtonRenderer');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.ToolbarMenuButtonRenderer');
 

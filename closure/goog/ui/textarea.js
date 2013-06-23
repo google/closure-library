@@ -25,14 +25,12 @@
 goog.provide('goog.ui.Textarea');
 goog.provide('goog.ui.Textarea.EventType');
 
-goog.require('goog.Timer');
+goog.require('goog.dom');
 goog.require('goog.events.EventType');
-goog.require('goog.events.KeyCodes');
 goog.require('goog.style');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.TextareaRenderer');
 goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
 
 
 

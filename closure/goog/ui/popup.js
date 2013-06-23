@@ -29,14 +29,12 @@ goog.provide('goog.ui.Popup.ViewPortClientPosition');
 goog.provide('goog.ui.Popup.ViewPortPosition');
 
 goog.require('goog.math.Box');
-goog.require('goog.positioning');
 goog.require('goog.positioning.AbsolutePosition');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.ClientPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.Overflow');
-goog.require('goog.positioning.OverflowStatus');
 goog.require('goog.positioning.ViewportClientPosition');
 goog.require('goog.positioning.ViewportPosition');
 goog.require('goog.style');

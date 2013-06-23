@@ -20,7 +20,7 @@
 goog.provide('goog.ui.MenuBarRenderer');
 
 goog.require('goog.a11y.aria.Role');
-goog.require('goog.dom');
+goog.require('goog.ui.Container');
 goog.require('goog.ui.ContainerRenderer');
 
 

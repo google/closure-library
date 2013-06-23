@@ -20,7 +20,6 @@
 
 goog.provide('goog.ui.ColorSplitBehavior');
 
-goog.require('goog.ui.ColorButton');
 goog.require('goog.ui.ColorMenuButton');
 goog.require('goog.ui.SplitBehavior');
 

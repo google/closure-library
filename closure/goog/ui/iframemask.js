@@ -26,10 +26,8 @@ goog.provide('goog.ui.IframeMask');
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
 goog.require('goog.dom');
-goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.iframe');
 goog.require('goog.events.EventHandler');
-goog.require('goog.events.EventTarget');
 goog.require('goog.style');
 
 

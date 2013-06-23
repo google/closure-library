@@ -26,7 +26,6 @@
 
 goog.provide('goog.ui.emoji.EmojiPalette');
 
-goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.net.ImageLoader');
 goog.require('goog.ui.Palette');

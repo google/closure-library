@@ -22,7 +22,7 @@ goog.provide('goog.ui.RoundedTabRenderer');
 
 goog.require('goog.dom');
 goog.require('goog.ui.Tab');
-goog.require('goog.ui.TabBar.Location');
+goog.require('goog.ui.TabBar');
 goog.require('goog.ui.TabRenderer');
 goog.require('goog.ui.registry');
 

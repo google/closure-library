@@ -27,10 +27,9 @@
 goog.provide('goog.ui.emoji.EmojiPicker');
 
 goog.require('goog.debug.Logger');
-goog.require('goog.dom');
+goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.TabPane');
-goog.require('goog.ui.TabPane.TabPage');
 goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.EmojiPalette');
 goog.require('goog.ui.emoji.EmojiPaletteRenderer');

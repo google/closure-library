@@ -29,9 +29,9 @@
 
 goog.provide('goog.ui.emoji.PopupEmojiPicker');
 
-goog.require('goog.dom');
 goog.require('goog.events.EventType');
 goog.require('goog.positioning.AnchoredPosition');
+goog.require('goog.positioning.Corner');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
 goog.require('goog.ui.emoji.EmojiPicker');
