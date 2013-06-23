@@ -413,10 +413,10 @@ function completeBackChannel() {
 }
 
 
-function responseVersion7() {
+function responseDone() {
   channel.onRequestData(
       channel.forwardChannelRequest_,
-      goog.labs.net.webChannel.WebChannelDebug.MAGIC_RESPONSE_COOKIE);
+      '[1,0,0]');  // mock data
   channel.onRequestComplete(
       channel.forwardChannelRequest_);
   mockClock.tick(0);
@@ -550,8 +550,9 @@ function testConnect() {
   connect();
   assertEquals(goog.labs.net.webChannel.WebChannelBase.State.OPENED,
       channel.getState());
-  // If the server specifies no version, the client assumes 6
-  assertEquals(6, channel.channelVersion_);
+  // If the server specifies no version, the client assumes the latest version
+  assertEquals(goog.labs.net.webChannel.WebChannelBase.LATEST_CHANNEL_VERSION,
+               channel.channelVersion_);
   assertFalse(channel.isBuffered());
 }
 
@@ -611,7 +612,7 @@ function testSendMap() {
   connect();
   assertEquals(1, numTimingEvents);
   sendMap('foo', 'bar');
-  responseVersion7();
+  responseDone();
   assertEquals(2, numTimingEvents);
   assertEquals('foo:bar', formatArrayOfMaps(deliveredMaps));
 }
@@ -620,10 +621,10 @@ function testSendMap() {
 function testSendMap_twice() {
   connect();
   sendMap('foo1', 'bar1');
-  responseVersion7();
+  responseDone();
   assertEquals('foo1:bar1', formatArrayOfMaps(deliveredMaps));
   sendMap('foo2', 'bar2');
-  responseVersion7();
+  responseDone();
   assertEquals('foo2:bar2', formatArrayOfMaps(deliveredMaps));
 }
 
@@ -631,7 +632,7 @@ function testSendMap_twice() {
 function testSendMap_andReceive() {
   connect();
   sendMap('foo', 'bar');
-  responseVersion7();
+  responseDone();
   receive('["the server reply"]');
 }
 
@@ -655,7 +656,7 @@ function testReceive_andSendMap() {
   connect();
   receive('["the server reply"]');
   sendMap('foo', 'bar');
-  responseVersion7();
+  responseDone();
   assertHasBackChannel();
 }
 
@@ -664,7 +665,7 @@ function testBackChannelRemainsEstablished_afterSingleSendMap() {
   connect();
 
   sendMap('foo', 'bar');
-  responseVersion7();
+  responseDone();
   receive('["ack"]');
 
   assertHasBackChannel();
@@ -676,7 +677,7 @@ function testBackChannelRemainsEstablished_afterDoubleSendMap() {
 
   sendMap('foo1', 'bar1');
   sendMap('foo2', 'bar2');
-  responseVersion7();
+  responseDone();
   receive('["ack"]');
 
   // This assertion would fail prior to CL 13302660.
@@ -691,7 +692,7 @@ function testTimingEvent() {
   assertEquals(1, numTimingEvents);
   mockClock.tick(20);
   var expSize = channel.forwardChannelRequest_.getPostData().length;
-  responseVersion7();
+  responseDone();
 
   assertEquals(2, numTimingEvents);
   assertEquals(expSize, lastPostSize);
@@ -703,7 +704,7 @@ function testTimingEvent() {
   responseTimeout();
   assertEquals(2, numTimingEvents);
   mockClock.tick(RETRY_TIME + 1);
-  responseVersion7();
+  responseDone();
   assertEquals(3, numTimingEvents);
   assertEquals(expSize, lastPostSize);
   assertEquals(1, lastPostRetryCount);
@@ -984,7 +985,7 @@ function testOutgoingMapsAwaitsResponse() {
   sendMap('foo4', 'bar');
   assertEquals(3, channel.outgoingMaps_.length);
 
-  responseVersion7();
+  responseDone();
   // Now the forward channel request is completed and a new started, so all maps
   // are dequeued from the array of outgoing maps into this new forward request.
   assertEquals(0, channel.outgoingMaps_.length);
@@ -1003,9 +1004,9 @@ function testUndeliveredMaps_doesNotNotifyWhenSuccessful() {
 
   connect();
   sendMap('foo1', 'bar1');
-  responseVersion7();
+  responseDone();
   sendMap('foo2', 'bar2');
-  responseVersion7();
+  responseDone();
   disconnect();
 }
 
@@ -1048,9 +1049,9 @@ function testUndeliveredMaps_notifiesWithContext() {
 
   // First send two messages that succeed.
   sendMap('foo1', 'bar1', 'context1');
-  responseVersion7();
+  responseDone();
   sendMap('foo2', 'bar2', 'context2');
-  responseVersion7();
+  responseDone();
 
   // Pretend the server hangs and no longer responds.
   sendMap('foo3', 'bar3', 'context3');
@@ -1073,7 +1074,7 @@ function testUndeliveredMaps_serviceUnavailable() {
   // Send a few maps, and let one fail.
   connect();
   sendMap('foo1', 'bar1');
-  responseVersion7();
+  responseDone();
   sendMap('foo2', 'bar2');
   responseRequestFailed();
 

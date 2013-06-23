@@ -47,14 +47,6 @@ var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 
 
 /**
- * The normal response for forward channel requests.
- * Used only before version 8 of the protocol.
- * @type {string}
- */
-WebChannelDebug.MAGIC_RESPONSE_COOKIE = 'y2f%';
-
-
-/**
  * Gets the logger used by this ChannelDebug.
  * @return {goog.debug.Logger} The logger used by this WebChannelDebug.
  */
@@ -224,9 +216,7 @@ WebChannelDebug.prototype.severe = function(text) {
  * @private
  */
 WebChannelDebug.prototype.redactResponse_ = function(responseText) {
-  // first check if it's not JS - the only non-JS should be the magic cookie
-  if (!responseText ||
-      responseText == WebChannelDebug.MAGIC_RESPONSE_COOKIE) {
+  if (!responseText) {
     return responseText;
   }
   /** @preserveTry */

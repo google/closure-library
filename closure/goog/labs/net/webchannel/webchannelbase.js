@@ -537,7 +537,7 @@ WebChannelBase.Error = {
   /** An error due to bad data being returned from the server. */
   BAD_DATA: 10,
 
-  /** An error due to a response that doesn't start with the magic cookie. */
+  /** An error due to a response that is not parsable. */
   BAD_RESPONSE: 11,
 
   /** ActiveX is blocked by the machine's admin settings. */
@@ -1173,17 +1173,9 @@ WebChannelBase.prototype.makeForwardChannelRequest_ =
   var rid;
   var requestText;
   if (opt_retryRequest) {
-    if (this.channelVersion_ > 6) {
-      // In version 7 and up we can tack on new arrays to a retry.
-      this.requeuePendingMaps_();
-      rid = this.nextRid_ - 1;  // Must use last RID
-      requestText = this.dequeueOutgoingMaps_();
-    } else {
-      // TODO(user): Remove this code and the opt_retryRequest passing
-      // once server-side support for ver 7 is ubiquitous.
-      rid = opt_retryRequest.getRequestId();
-      requestText = /** @type {string} */ (opt_retryRequest.getPostData());
-    }
+    this.requeuePendingMaps_();
+    rid = this.nextRid_ - 1;  // Must use last RID
+    requestText = this.dequeueOutgoingMaps_();
   } else {
     rid = this.nextRid_++;
     requestText = this.dequeueOutgoingMaps_();
@@ -1243,7 +1235,7 @@ WebChannelBase.prototype.dequeueOutgoingMaps_ = function() {
                        WebChannelBase.MAX_MAPS_PER_REQUEST_);
   var sb = ['count=' + count];
   var offset;
-  if (this.channelVersion_ > 6 && count > 0) {
+  if (count > 0) {
     // To save a bit of bandwidth, specify the base mapId and the rest as
     // offsets from it.
     offset = this.outgoingMaps_[0].mapId;
@@ -1254,12 +1246,7 @@ WebChannelBase.prototype.dequeueOutgoingMaps_ = function() {
   for (var i = 0; i < count; i++) {
     var mapId = this.outgoingMaps_[i].mapId;
     var map = this.outgoingMaps_[i].map;
-    if (this.channelVersion_ <= 6) {
-      // Map IDs were not used in ver 6 and before, just indexes in the request.
-      mapId = i;
-    } else {
-      mapId -= offset;
-    }
+    mapId -= offset;
     try {
       goog.structs.forEach(map, function(value, key, coll) {
         sb.push('req' + mapId + '_' + key + '=' + encodeURIComponent(value));
@@ -1461,23 +1448,16 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
 
   if (this.forwardChannelRequest_ == request &&
       this.state_ == WebChannelBase.State.OPENED) {
-    if (this.channelVersion_ > 7) {
-      var response;
-      try {
-        response = this.parser_.parse(responseText);
-      } catch (ex) {
-        response = null;
-      }
-      if (goog.isArray(response) && response.length == 3) {
-        this.handlePostResponse_(/** @type {Array} */ (response));
-      } else {
-        this.channelDebug_.debug('Bad POST response data returned');
-        this.signalError_(WebChannelBase.Error.BAD_RESPONSE);
-      }
-    } else if (responseText !=
-               WebChannelDebug.MAGIC_RESPONSE_COOKIE) {
-      this.channelDebug_.debug('Bad data returned - missing/invald ' +
-                                   'magic cookie');
+    var response;
+    try {
+      response = this.parser_.parse(responseText);
+    } catch (ex) {
+      response = null;
+    }
+    if (goog.isArray(response) && response.length == 3) {
+      this.handlePostResponse_(/** @type {Array} */ (response));
+    } else {
+      this.channelDebug_.debug('Bad POST response data returned');
       this.signalError_(WebChannelBase.Error.BAD_RESPONSE);
     }
   } else {
@@ -1778,9 +1758,6 @@ WebChannelBase.prototype.onInput_ = function(respArray) {
         var negotiatedVersion = nextArray[3];
         if (goog.isDefAndNotNull(negotiatedVersion)) {
           this.channelVersion_ = negotiatedVersion;
-        } else {
-          // Servers prior to version 7 did not send this, so assume version 6.
-          this.channelVersion_ = 6;
         }
         this.state_ = WebChannelBase.State.OPENED;
         if (this.handler_) {
