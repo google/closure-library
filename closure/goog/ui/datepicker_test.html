@@ -137,16 +137,6 @@ See the COPYING file for details.
     assertTrue(goog.style.isElementShown(tFoot))
   }
 
-  function testLongDateFormat() {
-    picker = new goog.ui.DatePicker();
-    picker.create(sandbox);
-    picker.setLongDateFormat(true);
-    var dates = $$('td', 'goog-date-picker-date');
-    for (var i = 0; i < dates.length; i++) {
-      assertEquals(2, goog.dom.getTextContent(dates[i]).length);
-    }
-  }
-
   function testGetActiveMonth() {
     picker = new goog.ui.DatePicker(new Date(2000, 5, 5));
     var month = picker.getActiveMonth();
