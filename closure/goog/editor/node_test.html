@@ -46,6 +46,11 @@ var gChildTextNode3a = null;
 var gChildWsNode3 = null;
 var gChildTextNode3b = null;
 
+
+function tearDown() {
+  expectedFailures.handleTearDown();
+}
+
 function setUpDomTree() {
   gChildWsNode1 = document.createTextNode(' \t\r\n');
   gChildTextNode1 = document.createTextNode('Child node');
