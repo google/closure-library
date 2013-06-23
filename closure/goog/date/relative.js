@@ -323,6 +323,19 @@ goog.date.relative.getDateString_ = function(
 };
 
 
+/*
+ * TODO(user):
+ *
+ * I think that this whole relative formatting should move to DateTimeFormat,
+ * make sure it treats plurals properly (now it does not), an so on.
+ * But we would have to wait for the next version of CLDR, which is cleaning
+ * the data for relative dates (even ICU has incomplete support for this).
+ *
+ * It also looks like this is not an object, and it does not save
+ * DateTimeSymbols at the time of creation, but uses the current value,
+ * whatever that is. So if one changes the global goog.i18n.DateTimeSymbols
+ * in between calls, then we get different results.
+ */
 /**
  * Gets a localized relative date string for a given delta and unit.
  * @param {number} delta Number of minutes/hours/days.
@@ -332,20 +345,23 @@ goog.date.relative.getDateString_ = function(
  * @private
  */
 goog.date.relative.getMessage_ = function(delta, future, unit) {
+  // Convert to localized (native) digits
+  var localizedDelta =
+      goog.i18n.DateTimeFormat.prototype.localizeNumbers('' + delta);
   if (!future && unit == goog.date.relative.Unit_.MINUTES) {
     /**
      * @desc Relative date indicating how many minutes ago something happened
      * (singular).
      */
     var MSG_MINUTES_AGO_SINGULAR =
-        goog.getMsg('{$num} minute ago', {'num' : delta});
+        goog.getMsg('{$num} minute ago', {'num' : localizedDelta});
 
     /**
      * @desc Relative date indicating how many minutes ago something happened
      * (plural).
      */
     var MSG_MINUTES_AGO_PLURAL =
-        goog.getMsg('{$num} minutes ago', {'num' : delta});
+        goog.getMsg('{$num} minutes ago', {'num' : localizedDelta});
 
     return delta == 1 ? MSG_MINUTES_AGO_SINGULAR : MSG_MINUTES_AGO_PLURAL;
 
@@ -355,14 +371,14 @@ goog.date.relative.getMessage_ = function(delta, future, unit) {
      * (singular).
      */
     var MSG_IN_MINUTES_SINGULAR =
-        goog.getMsg('in {$num} minute', {'num' : delta});
+        goog.getMsg('in {$num} minute', {'num' : localizedDelta});
 
     /**
      * @desc Relative date indicating in how many minutes something happens
      * (plural).
      */
     var MSG_IN_MINUTES_PLURAL =
-        goog.getMsg('in {$num} minutes', {'num' : delta});
+        goog.getMsg('in {$num} minutes', {'num' : localizedDelta});
 
     return delta == 1 ? MSG_IN_MINUTES_SINGULAR : MSG_IN_MINUTES_PLURAL;
 
@@ -372,13 +388,14 @@ goog.date.relative.getMessage_ = function(delta, future, unit) {
      * (singular).
      */
     var MSG_HOURS_AGO_SINGULAR =
-        goog.getMsg('{$num} hour ago', {'num' : delta});
+        goog.getMsg('{$num} hour ago', {'num' : localizedDelta});
 
     /**
      * @desc Relative date indicating how many hours ago something happened
      * (plural).
      */
-    var MSG_HOURS_AGO_PLURAL = goog.getMsg('{$num} hours ago', {'num' : delta});
+    var MSG_HOURS_AGO_PLURAL =
+        goog.getMsg('{$num} hours ago', {'num' : localizedDelta});
 
     return delta == 1 ? MSG_HOURS_AGO_SINGULAR : MSG_HOURS_AGO_PLURAL;
 
@@ -387,13 +404,15 @@ goog.date.relative.getMessage_ = function(delta, future, unit) {
      * @desc Relative date indicating in how many hours something happens
      * (singular).
      */
-    var MSG_IN_HOURS_SINGULAR = goog.getMsg('in {$num} hour', {'num' : delta});
+    var MSG_IN_HOURS_SINGULAR =
+        goog.getMsg('in {$num} hour', {'num' : localizedDelta});
 
     /**
      * @desc Relative date indicating in how many hours something happens
      * (plural).
      */
-    var MSG_IN_HOURS_PLURAL = goog.getMsg('in {$num} hours', {'num' : delta});
+    var MSG_IN_HOURS_PLURAL =
+        goog.getMsg('in {$num} hours', {'num' : localizedDelta});
 
     return delta == 1 ? MSG_IN_HOURS_SINGULAR : MSG_IN_HOURS_PLURAL;
 
@@ -402,13 +421,15 @@ goog.date.relative.getMessage_ = function(delta, future, unit) {
      * @desc Relative date indicating how many days ago something happened
      * (singular).
      */
-    var MSG_DAYS_AGO_SINGULAR = goog.getMsg('{$num} day ago', {'num' : delta});
+    var MSG_DAYS_AGO_SINGULAR =
+        goog.getMsg('{$num} day ago', {'num' : localizedDelta});
 
     /**
      * @desc Relative date indicating how many days ago something happened
      * (plural).
      */
-    var MSG_DAYS_AGO_PLURAL = goog.getMsg('{$num} days ago', {'num' : delta});
+    var MSG_DAYS_AGO_PLURAL =
+        goog.getMsg('{$num} days ago', {'num' : localizedDelta});
 
     return delta == 1 ? MSG_DAYS_AGO_SINGULAR : MSG_DAYS_AGO_PLURAL;
 
@@ -417,13 +438,15 @@ goog.date.relative.getMessage_ = function(delta, future, unit) {
      * @desc Relative date indicating in how many days something happens
      * (singular).
      */
-    var MSG_IN_DAYS_SINGULAR = goog.getMsg('in {$num} day', {'num' : delta});
+    var MSG_IN_DAYS_SINGULAR =
+        goog.getMsg('in {$num} day', {'num' : localizedDelta});
 
     /**
      * @desc Relative date indicating in how many days something happens
      * (plural).
      */
-    var MSG_IN_DAYS_PLURAL = goog.getMsg('in {$num} days', {'num' : delta});
+    var MSG_IN_DAYS_PLURAL =
+        goog.getMsg('in {$num} days', {'num' : localizedDelta});
 
     return delta == 1 ? MSG_IN_DAYS_SINGULAR : MSG_IN_DAYS_PLURAL;
 
