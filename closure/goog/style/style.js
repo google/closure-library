@@ -1003,14 +1003,36 @@ goog.style.setWidth = function(element, width) {
 
 /**
  * Gets the height and width of an element, even if its display is none.
+ *
  * Specifically, this returns the height and width of the border box,
  * irrespective of the box model in effect.
+ *
+ * Note that this function does not take CSS transforms into account. Please see
+ * {@code goog.style.getTransformedSize}.
  * @param {Element} element Element to get size of.
  * @return {!goog.math.Size} Object with width/height properties.
  */
 goog.style.getSize = function(element) {
+  return goog.style.evaluateWithTemporaryDisplay_(
+      goog.style.getSizeWithDisplay_, /** @type {!Element} */ (element));
+};
+
+
+/**
+ * Call {@code fn} on {@code element} such that {@code element}'s dimensions are
+ * accurate when it's passed to {@code fn}.
+ * @param {function(!Element): T} fn Function to call with {@code element} as
+ *     an argument after temporarily changing {@code element}'s display such
+ *     that its dimensions are accurate.
+ * @param {!Element} element Element (which may have display none) to use as
+ *     argument to {@code fn}.
+ * @return {T} Value returned by calling {@code fn} with {@code element}.
+ * @template T
+ * @private
+ */
+goog.style.evaluateWithTemporaryDisplay_ = function(fn, element) {
   if (goog.style.getStyle_(element, 'display') != 'none') {
-    return goog.style.getSizeWithDisplay_(element);
+    return fn(element);
   }
 
   var style = element.style;
@@ -1022,18 +1044,18 @@ goog.style.getSize = function(element) {
   style.position = 'absolute';
   style.display = 'inline';
 
-  var size = goog.style.getSizeWithDisplay_(element);
+  var retVal = fn(element);
 
   style.display = originalDisplay;
   style.position = originalPosition;
   style.visibility = originalVisibility;
 
-  return size;
+  return retVal;
 };
 
 
 /**
- * Gets the height and with of an element when the display is not none.
+ * Gets the height and width of an element when the display is not none.
  * @param {Element} element Element to get size of.
  * @return {!goog.math.Size} Object with width/height properties.
  * @private
@@ -1055,6 +1077,33 @@ goog.style.getSizeWithDisplay_ = function(element) {
         clientRect.bottom - clientRect.top);
   }
   return new goog.math.Size(offsetWidth, offsetHeight);
+};
+
+
+/**
+ * Gets the height and width of an element, post transform, even if its display
+ * is none.
+ *
+ * This is like {@code goog.style.getSize}, except:
+ * <ol>
+ * <li>Takes webkitTransforms such as rotate and scale into account.
+ * <li>Will return null if {@code element} doesn't respond to
+ *     {@code getBoundingClientRect}.
+ * <li>Currently doesn't make sense on non-WebKit browsers which don't support
+ *    webkitTransforms.
+ * </ol>
+ * @param {!Element} element Element to get size of.
+ * @return {goog.math.Size} Object with width/height properties.
+ */
+goog.style.getTransformedSize = function(element) {
+  if (!element.getBoundingClientRect) {
+    return null;
+  }
+
+  var clientRect = goog.style.evaluateWithTemporaryDisplay_(
+      goog.style.getBoundingClientRect_, element);
+  return new goog.math.Size(clientRect.right - clientRect.left,
+      clientRect.bottom - clientRect.top);
 };
 
 
