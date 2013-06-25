@@ -13288,7 +13288,7 @@ goog.i18n.DateTimeSymbols_nb_NO = {
   AMPMS: ['AM', 'PM'],
   DATEFORMATS: ['EEEE d. MMMM y', 'd. MMMM y', 'd. MMM y', 'dd.MM.yy'],
   TIMEFORMATS: ['\'kl\'. HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{0} {1}', '{0} {1}', '{0} {1}', '{0} {1}'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} \'kl.\' {0}', '{1}, {0}', '{1}, {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 3
@@ -21150,4 +21150,3 @@ if (goog.LOCALE == 'zh_Hant_TW' || goog.LOCALE == 'zh-Hant-TW') {
 if (goog.LOCALE == 'zu_ZA' || goog.LOCALE == 'zu-ZA') {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zu_ZA;
 }
-

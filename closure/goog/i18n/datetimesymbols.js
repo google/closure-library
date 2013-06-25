@@ -2412,7 +2412,7 @@ goog.i18n.DateTimeSymbols_nb = {
   AMPMS: ['AM', 'PM'],
   DATEFORMATS: ['EEEE d. MMMM y', 'd. MMMM y', 'd. MMM y', 'dd.MM.yy'],
   TIMEFORMATS: ['\'kl\'. HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{0} {1}', '{0} {1}', '{0} {1}', '{0} {1}'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} \'kl.\' {0}', '{1}, {0}', '{1}, {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 3
@@ -2486,7 +2486,7 @@ goog.i18n.DateTimeSymbols_no = {
   AMPMS: ['AM', 'PM'],
   DATEFORMATS: ['EEEE d. MMMM y', 'd. MMMM y', 'd. MMM y', 'dd.MM.yy'],
   TIMEFORMATS: ['\'kl\'. HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{0} {1}', '{0} {1}', '{0} {1}', '{0} {1}'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} \'kl.\' {0}', '{1}, {0}', '{1}, {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 3
@@ -3711,4 +3711,3 @@ if (goog.LOCALE == 'af') {
 } else {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
 }
-
