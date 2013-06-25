@@ -21,6 +21,7 @@
 goog.provide('goog.debug.ErrorReporter');
 goog.provide('goog.debug.ErrorReporter.ExceptionEvent');
 
+goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.debug.entryPointRegistry');
@@ -68,6 +69,13 @@ goog.debug.ErrorReporter = function(
    * @private {string}
    */
   this.contextPrefix_ = 'context.';
+
+  /**
+   * The number of bytes after which the ErrorReporter truncates the POST body.
+   * If null, the ErrorReporter won't truncate the body.
+   * @private {?number}
+   */
+  this.truncationLimit_ = null;
 
   /**
    * XHR sender.
@@ -322,6 +330,11 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
     // Copy query data map into request.
     var queryData = goog.uri.utils.buildQueryDataFromMap(queryMap);
 
+    // Truncate if truncationLimit set.
+    if (goog.isNumber(this.truncationLimit_)) {
+      queryData = queryData.substring(0, this.truncationLimit_);
+    }
+
     // Send the request with the contents of the error.
     this.xhrSender_(requestUrl, 'POST', queryData, this.extraHeaders_);
   } catch (e) {
@@ -342,6 +355,17 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
  */
 goog.debug.ErrorReporter.prototype.setContextPrefix = function(prefix) {
   this.contextPrefix_ = prefix;
+};
+
+
+/**
+ * @param {?number} limit Size in bytes to begin truncating POST body.  Set to
+ *     null to prevent truncation.  The limit must be >= 0.
+ */
+goog.debug.ErrorReporter.prototype.setTruncationLimit = function(limit) {
+  goog.asserts.assert(!goog.isNumber(limit) || limit >= 0,
+      'Body limit must be valid number >= 0 or null');
+  this.truncationLimit_ = limit;
 };
 
 

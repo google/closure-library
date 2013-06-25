@@ -299,7 +299,7 @@ See the COPYING file for details.
     assertEquals(originalSetTimeout, window.setTimeout);
   }
 
-  function testSetContextPrefix(args) {
+  function testSetContextPrefix() {
     errorReporter = new goog.debug.ErrorReporter('/log');
     errorReporter.setContextPrefix('baz.');
     errorReporter.sendErrorReport(
@@ -307,6 +307,45 @@ See the COPYING file for details.
     assertEquals('trace=trace&baz.foo=bar', MockXhrIo.lastContent);
   }
 
+  function testTruncationLimit() {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setTruncationLimit(6);
+    errorReporter.sendErrorReport(
+        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
+    assertEquals('trace=', MockXhrIo.lastContent);
+  }
+
+
+  function testZeroTruncationLimit() {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setTruncationLimit(0);
+    errorReporter.sendErrorReport(
+        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
+    assertEquals('', MockXhrIo.lastContent);
+  }
+
+  function testTruncationLimitLargerThanBody() {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setTruncationLimit(9999);
+    errorReporter.sendErrorReport(
+        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
+    assertEquals('trace=trace&context.foo=bar', MockXhrIo.lastContent);
+  }
+
+  function testSetNegativeTruncationLimit() {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    assertThrows(function() {
+      errorReporter.setTruncationLimit(-10);
+    });
+  }
+
+  function testSetTruncationLimitNull() {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setTruncationLimit(null);
+    errorReporter.sendErrorReport(
+        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
+    assertEquals('trace=trace&context.foo=bar', MockXhrIo.lastContent);
+  }
 </script>
 </body>
 </html>
