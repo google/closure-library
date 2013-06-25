@@ -499,12 +499,21 @@ goog.events.unlistenByKey = function(key) {
   // doesn't really matter if we can't clean it up in this case.
   var listenerArray = goog.events.listenerTree_[type][capture][srcUid];
   if (listenerArray) {
-    listenerArray.needsCleanup_ = true;
-    goog.events.cleanUp_(type, capture, srcUid, listenerArray);
+    goog.array.remove(listenerArray, listener);
+    if (listenerArray.length == 0) {
+      delete goog.events.listenerTree_[type][capture][srcUid];
+      goog.events.listenerTree_[type][capture].count_--;
+    }
+    if (goog.events.listenerTree_[type][capture].count_ == 0) {
+      delete goog.events.listenerTree_[type][capture];
+      goog.events.listenerTree_[type].count_--;
+    }
+    if (goog.events.listenerTree_[type].count_ == 0) {
+      delete goog.events.listenerTree_[type];
+    }
   }
 
   delete goog.events.listeners_[listener.key];
-
   return true;
 };
 
@@ -524,62 +533,6 @@ goog.events.unlistenByKey = function(key) {
 goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
     opt_handler) {
   wrapper.unlisten(src, listener, opt_capt, opt_handler);
-};
-
-
-/**
- * Cleans up the listener array as well as the listener tree
- * @param {string} type  The type of the event.
- * @param {boolean} capture Whether to clean up capture phase listeners instead
- *     bubble phase listeners.
- * @param {number} srcUid  The unique ID of the source.
- * @param {Array.<goog.events.Listener>} listenerArray The array being cleaned.
- * @private
- */
-goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
-  // The listener array gets locked during the dispatch phase so that removals
-  // of listeners during this phase does not screw up the indeces. This method
-  // is called after we have removed a listener as well as after the dispatch
-  // phase in case any listeners were removed.
-  if (!listenerArray.locked_) { // catches both 0 and not set
-    if (listenerArray.needsCleanup_) {
-      // Loop over the listener array and remove listeners that have removed set
-      // to true. This could have been done with filter or something similar but
-      // we want to change the array in place and we want to minimize
-      // allocations. Adding a listener during this phase adds to the end of the
-      // array so that works fine as long as the length is rechecked every in
-      // iteration.
-      for (var oldIndex = 0, newIndex = 0;
-           oldIndex < listenerArray.length;
-           oldIndex++) {
-        if (listenerArray[oldIndex].removed) {
-          continue;
-        }
-        if (oldIndex != newIndex) {
-          listenerArray[newIndex] = listenerArray[oldIndex];
-        }
-        newIndex++;
-      }
-      listenerArray.length = newIndex;
-
-      listenerArray.needsCleanup_ = false;
-
-      // In case the length is now zero we release the object.
-      if (newIndex == 0) {
-        delete goog.events.listenerTree_[type][capture][srcUid];
-        goog.events.listenerTree_[type][capture].count_--;
-
-        if (goog.events.listenerTree_[type][capture].count_ == 0) {
-          delete goog.events.listenerTree_[type][capture];
-          goog.events.listenerTree_[type].count_--;
-        }
-
-        if (goog.events.listenerTree_[type].count_ == 0) {
-          delete goog.events.listenerTree_[type];
-        }
-      }
-    }
-  }
 };
 
 
@@ -855,21 +808,13 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
   var objUid = goog.getUid(obj);
   if (map[objUid]) {
     var remaining = --map.remaining_;
-    var listenerArray = map[objUid];
 
-    // If locked_ is not set (and if already 0) initialize it to 1.
-    if (!listenerArray.locked_) {
-      listenerArray.locked_ = 1;
-    } else {
-      listenerArray.locked_++;
-    }
-
+    // Events added in the dispatch phase should not be dispatched in
+    // the current dispatch phase. They will be included in the next
+    // dispatch phase though.
+    var listenerArray = goog.array.clone(map[objUid]);
     try {
-      // Events added in the dispatch phase should not be dispatched in
-      // the current dispatch phase. They will be included in the next
-      // dispatch phase though.
-      var length = listenerArray.length;
-      for (var i = 0; i < length; i++) {
+      for (var i = 0; i < listenerArray.length; i++) {
         var listener = listenerArray[i];
         // We might not have a listener if the listener was removed.
         if (listener && !listener.removed) {
@@ -883,8 +828,6 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
       // this method through a listener dispatching the same event type,
       // resetting and exhausted the remaining count.
       map.remaining_ = Math.max(remaining, map.remaining_);
-      listenerArray.locked_--;
-      goog.events.cleanUp_(type, capture, objUid, listenerArray);
     }
   }
 
