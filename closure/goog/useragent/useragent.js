@@ -572,6 +572,7 @@ goog.userAgent.isDocumentModeOrHigher = function(documentMode) {
  * @param {number} version The version to check.
  * @return {boolean} Whether the IE effective document mode is higher or the
  *      same as the given version.
+ * @deprecated Use goog.userAgent.isDocumentModeOrHigher().
  */
 goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
 
