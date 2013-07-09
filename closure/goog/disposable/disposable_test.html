@@ -68,6 +68,7 @@ See the COPYING file for details.
 
     function tearDown() {
       goog.Disposable.MONITORING_MODE = goog.Disposable.MonitoringMode.OFF;
+      goog.Disposable.INCLUDE_STACK_ON_CREATION = true;
       goog.Disposable.instances_ = {};
       d1.dispose();
       d2.dispose();
@@ -245,6 +246,20 @@ See the COPYING file for details.
       var disposableStack = new DisposableTest().creationStack;
       // Check that the name of this test function occurs in the stack trace.
       assertNotEquals(-1, disposableStack.indexOf('testCreationStack'));
+    }
+
+    function testMonitoredWithoutCreationStack() {
+      if (!new Error().stack)
+        return;
+      goog.Disposable.MONITORING_MODE =
+          goog.Disposable.MonitoringMode.PERMANENT;
+      goog.Disposable.INCLUDE_STACK_ON_CREATION = false;
+      var d1 = new DisposableTest();
+
+      // Check that it is tracked, but not with a creation stack.
+      assertUndefined(d1.creationStack);
+      assertSameElements('the undisposed instance', [d1],
+          goog.Disposable.getUndisposedObjects());
     }
 
     function testOnDisposeCallback() {
