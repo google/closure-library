@@ -899,7 +899,7 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
     return true;
   }
   map = map[type];
-  var retval, targetsMap;
+
   // Synthesize event propagation if the browser does not support W3C
   // event model.
   if (!goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
@@ -910,70 +910,47 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
     var hasCapture = true in map;
     var hasBubble = false in map;
 
-    if (hasCapture) {
-      if (goog.events.isMarkedIeEvent_(ieEvent)) {
-        return true;
-      }
-
-      goog.events.markIeEvent_(ieEvent);
-    }
-
     var evt = new goog.events.BrowserEvent();
     evt.init(ieEvent, this);
 
-    retval = true;
-    try {
-      if (hasCapture) {
-        var ancestors = [];
+    var retval = true;
 
-        for (var parent = evt.currentTarget;
-             parent;
-             parent = parent.parentNode) {
-          ancestors.push(parent);
-        }
+    // If we have not marked this event yet, we should perform capture
+    // simulation.
+    if (hasCapture && !goog.events.isMarkedIeEvent_(ieEvent)) {
+      goog.events.markIeEvent_(ieEvent);
 
-        targetsMap = map[true];
-
-        // Call capture listeners
-        for (var i = ancestors.length - 1;
-             !evt.propagationStopped_ && i >= 0;
-             i--) {
-          evt.currentTarget = ancestors[i];
-          retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type,
-                                               true, evt);
-        }
-
-        if (hasBubble) {
-          targetsMap = map[false];
-
-          // Call bubble listeners
-          for (var i = 0;
-               !evt.propagationStopped_ && i < ancestors.length;
-               i++) {
-            evt.currentTarget = ancestors[i];
-            retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type,
-                                                 false, evt);
-          }
-        }
-
-      } else {
-        // Bubbling, let IE handle the propagation.
-        retval = goog.events.fireListener(listener, evt);
+      var ancestors = [];
+      for (var parent = evt.currentTarget; parent; parent = parent.parentNode) {
+        ancestors.push(parent);
       }
 
-    } finally {
-      if (ancestors) {
-        ancestors.length = 0;
+      // Call capture listeners
+      var targetsMap = map[true];
+      for (var i = ancestors.length - 1; !evt.propagationStopped_ && i >= 0;
+           i--) {
+        evt.currentTarget = ancestors[i];
+        retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type,
+                                             true, evt);
       }
     }
+
+    // Bubbling, let IE handle the propagation.
+    //
+    // We have to check for removed again, because the listener could
+    // have been removed during capture simulation phase. Also check
+    // that the listener is not a capture listener - if it is, it is
+    // the dummy bubbling listener that we installed to stand in for
+    // the capturing listener.
+    if (!listener.removed && !listener.capture) {
+      retval &= goog.events.fireListener(listener, evt);
+    }
     return retval;
-  } // IE
+  }
 
   // Caught a non-IE DOM event. 1 additional argument which is the event object
-  var be = new goog.events.BrowserEvent(
-      opt_evt, /** @type {EventTarget} */ (this));
-  retval = goog.events.fireListener(listener, be);
-  return retval;
+  return goog.events.fireListener(
+      listener, new goog.events.BrowserEvent(opt_evt, this));
 };
 
 
