@@ -51,7 +51,13 @@ See the COPYING file for details.
 
   function setUp() {
     stubs.reset();
-    goog.events.removeAllNativeListeners();
+    goog.events.removeAll(root);
+    goog.events.removeAll(log);
+    goog.events.removeAll(input);
+    goog.events.removeAll(testButton);
+    goog.events.removeAll(parentEl);
+    goog.events.removeAll(childEl);
+
     root.innerHTML = '';
     firedEventTypes = [];
     firedEventCoordinates = [];

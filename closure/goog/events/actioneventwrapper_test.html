@@ -28,6 +28,9 @@ See the COPYING file for details.
   function setUp() {
     events = [];
     eh = new goog.events.EventHandler();
+
+    assertEquals('No listeners registered yet', 0,
+        goog.events.getListeners(a).length);
   }
 
 
@@ -40,15 +43,19 @@ See the COPYING file for details.
     events.push(e);
   };
 
-  function testAddActionListener() {
-    assertEquals('No listeners registered yet', 0,
-        goog.object.getCount(goog.events.listeners_));
+  function assertListenersExist(el, listenerCount, capt) {
+    var EVENT_TYPES = goog.events.ActionEventWrapper_.EVENT_TYPES_;
+    for (var i = 0; i < EVENT_TYPES.length; ++i) {
+      assertEquals(listenerCount, goog.events.getListeners(
+          el, EVENT_TYPES[i], capt).length);
+    }
+  }
 
+  function testAddActionListener() {
     var listener = function(e) { events.push(e); }
     goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
 
-    assertEquals('2 listeners should be registered', 2,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 1, false);
 
     goog.testing.events.fireClickSequence(a);
     assertEquals('1 event should have been dispatched', 1, events.length);
@@ -66,14 +73,10 @@ See the COPYING file for details.
 
     goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
         listener);
-    assertEquals('no listeners should be registered', 0,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 0, false);
   }
 
   function testAddActionListenerInCaptPhase() {
-    assertEquals('No listeners registered yet', 0,
-        goog.object.getCount(goog.events.listeners_));
-
     var count = 0;
     var captListener = function(e) {
       events.push(e);
@@ -93,8 +96,8 @@ See the COPYING file for details.
     goog.events.listenWithWrapper(a, goog.events.actionEventWrapper,
         bubbleListener);
 
-    assertEquals('4 listeners should be registered', 4,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 1, false);
+    assertListenersExist(a, 1, true);
 
     goog.testing.events.fireClickSequence(a);
     assertEquals('2 event should have been dispatched', 2, events.length);
@@ -114,25 +117,21 @@ See the COPYING file for details.
         captListener, true);
     goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
         bubbleListener);
-    assertEquals('no listeners should be registered', 0,
-        goog.object.getCount(goog.events.listeners_));
+
+    assertListenersExist(a, 0, false);
+    assertListenersExist(a, 0, true);
   }
 
 
   function testRemoveActionListener() {
-    assertEquals('No listeners registered yet', 0,
-        goog.object.getCount(goog.events.listeners_));
-
     var listener1 = function(e) { events.push(e); };
     var listener2 = function(e) { events.push({type: 'err'}); }
 
     goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener1);
-    assertEquals('2 listeners should be registered', 2,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 1, false);
 
     goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener2);
-    assertEquals('4 listeners should be registered', 4,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 2, false);
 
     goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
     assertEquals('2 events should have been dispatched', 2, events.length);
@@ -141,8 +140,7 @@ See the COPYING file for details.
 
     goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
         listener2);
-    assertEquals('2 listeners should be registered', 2,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 1, false);
 
     events = [];
     goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
@@ -151,20 +149,15 @@ See the COPYING file for details.
 
     goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
         listener1);
-    assertEquals('0 listeners should be registered', 0,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 0, false);
   }
 
 
   function testEventHandlerActionListener() {
-    assertEquals('No listeners registered yet', 0,
-        goog.object.getCount(goog.events.listeners_));
-
     var listener = function(e) { events.push(e); }
     eh.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
 
-    assertEquals('2 listeners should be registered', 2,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 1, false);
 
     goog.testing.events.fireClickSequence(a);
     assertEquals('1 event should have been dispatched', 1, events.length);
@@ -182,22 +175,17 @@ See the COPYING file for details.
 
     eh.unlistenWithWrapper(a, goog.events.actionEventWrapper,
         listener);
-    assertEquals('no listeners should be registered', 0,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 0, false);
   }
 
 
   function testEventHandlerActionListenerWithScope() {
-    assertEquals('No listeners registered yet', 0,
-        goog.object.getCount(goog.events.listeners_));
-
     var foo = new Foo();
     var eh2 = new goog.events.EventHandler(foo);
 
     eh2.listenWithWrapper(a, goog.events.actionEventWrapper, foo.test);
 
-    assertEquals('2 listeners should be registered', 2,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 1, false);
 
     goog.testing.events.fireClickSequence(a);
     assertEquals('1 event should have been dispatched', 1, events.length);
@@ -214,8 +202,7 @@ See the COPYING file for details.
     assertEquals('2 events should have been dispatched', 2, events.length);
 
     eh2.dispose();
-    assertEquals('no listeners should be registered', 0,
-        goog.object.getCount(goog.events.listeners_));
+    assertListenersExist(a, 0, false);
     delete foo;
   }
 
