@@ -175,6 +175,24 @@ goog.fx.Dragger.prototype.startY = 0;
 
 
 /**
+ * The x position relative to screen where the first mousedown or touchstart
+ * occurred.
+ * @type {number}
+ * @private
+ */
+goog.fx.Dragger.prototype.startScreenX_ = 0;
+
+
+/**
+ * The y position relative to screen where the first mousedown or touchstart
+ * occurred.
+ * @type {number}
+ * @private
+ */
+goog.fx.Dragger.prototype.startScreenY_ = 0;
+
+
+/**
  * Current x position of drag relative to target's parent.
  * @type {number}
  */
@@ -416,8 +434,8 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
 
     this.clientX = this.startX = e.clientX;
     this.clientY = this.startY = e.clientY;
-    this.screenX = e.screenX;
-    this.screenY = e.screenY;
+    this.screenX = this.startScreenX_ = e.screenX;
+    this.screenY = this.startScreenY_ = e.screenY;
     this.deltaX = this.useRightPositioningForRtl_ ?
         goog.style.bidi.getOffsetStart(this.target) : this.target.offsetLeft;
     this.deltaY = this.target.offsetTop;
@@ -435,7 +453,27 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
  * @protected
  */
 goog.fx.Dragger.prototype.setupDragHandlers = function() {
-  var doc = this.document_;
+  this.setupDragHandlersOnDocument_(this.document_);
+  var doc = goog.dom.getOwnerDocument(this.handle);
+  // If target and handle in different documents, need to set up handlers on
+  // the additional document.
+  if (doc != this.document_) {
+    this.setupDragHandlersOnDocument_(doc);
+  }
+
+  if (this.scrollTarget_) {
+    this.eventHandler_.listen(this.scrollTarget_, goog.events.EventType.SCROLL,
+        this.onScroll_, !goog.fx.Dragger.HAS_SET_CAPTURE_);
+  }
+};
+
+
+/**
+ * Sets up event handlers on given document.
+ * @param {Document} doc The document to set up handlers.
+ * @private
+ */
+goog.fx.Dragger.prototype.setupDragHandlersOnDocument_ = function(doc) {
   var docEl = doc.documentElement;
   // Use bubbling when we have setCapture since we got reports that IE has
   // problems with the capturing events in combination with setCapture.
@@ -467,11 +505,6 @@ goog.fx.Dragger.prototype.setupDragHandlers = function() {
     // Cancel IE's 'ondragstart' event.
     this.eventHandler_.listen(doc, goog.events.EventType.DRAGSTART,
                               goog.events.Event.preventDefault);
-  }
-
-  if (this.scrollTarget_) {
-    this.eventHandler_.listen(this.scrollTarget_, goog.events.EventType.SCROLL,
-                              this.onScroll_, useCapture);
   }
 };
 
@@ -565,16 +598,16 @@ goog.fx.Dragger.prototype.handleMove_ = function(e) {
     // dx in right-to-left cases is relative to the right.
     var sign = this.useRightPositioningForRtl_ &&
         this.isRightToLeft_() ? -1 : 1;
-    var dx = sign * (e.clientX - this.clientX);
-    var dy = e.clientY - this.clientY;
+    var dx = sign * (e.screenX - this.screenX);
+    var dy = e.screenY - this.screenY;
     this.clientX = e.clientX;
     this.clientY = e.clientY;
     this.screenX = e.screenX;
     this.screenY = e.screenY;
 
     if (!this.dragging_) {
-      var diffX = this.startX - this.clientX;
-      var diffY = this.startY - this.clientY;
+      var diffX = this.startScreenX_ - this.screenX;
+      var diffY = this.startScreenY_ - this.screenY;
       var distance = diffX * diffX + diffY * diffY;
       if (distance > this.hysteresisDistanceSquared_) {
         if (this.fireDragStart_(e)) {
@@ -739,7 +772,7 @@ goog.fx.Dragger.prototype.isDragging = function() {
  * @extends {goog.events.Event}
  */
 goog.fx.DragEvent = function(type, dragobj, clientX, clientY, browserEvent,
-                             opt_actX, opt_actY, opt_dragCanceled) {
+    opt_actX, opt_actY, opt_dragCanceled) {
   goog.events.Event.call(this, type);
 
   /**
