@@ -103,12 +103,12 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
     return;
   }
 
-  var doc = this.win_.document;
+  var doc = this.win.document;
   doc.open();
   doc.write(this.getHtml_());
   doc.close();
 
-  (goog.userAgent.IE ? doc.body : this.win_).onresize =
+  (goog.userAgent.IE ? doc.body : this.win).onresize =
       goog.bind(this.resizeStuff_, this);
 
   // Create a dom helper for the logging window
@@ -224,8 +224,8 @@ goog.debug.FancyWindow.prototype.resizeStuff_ = function() {
  */
 goog.debug.FancyWindow.prototype.exit_ = function(e) {
   this.setEnabled(false);
-  if (this.win_) {
-    this.win_.close();
+  if (this.win) {
+    this.win.close();
   }
 };
 
