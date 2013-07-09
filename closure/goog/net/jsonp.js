@@ -34,7 +34,6 @@
 goog.provide('goog.net.Jsonp');
 
 goog.require('goog.Uri');
-goog.require('goog.asserts');
 goog.require('goog.net.jsloader');
 
 // WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
@@ -56,7 +55,7 @@ goog.require('goog.net.jsloader');
  * host URL. By default, if no reply arrives within 5s, the channel
  * assumes the call failed to complete successfully.
  *
- * @param {!goog.Uri|string} uri The Uri of the server side code that receives
+ * @param {goog.Uri|string} uri The Uri of the server side code that receives
  *     data posted through this channel (e.g.,
  *     "http://maps.google.com/maps/geo").
  *
@@ -66,8 +65,6 @@ goog.require('goog.net.jsloader');
  * @constructor
  */
 goog.net.Jsonp = function(uri, opt_callbackParamName) {
-  goog.asserts.assert(goog.isDefAndNotNull(uri));
-
   /**
    * The uri_ object will be used to encode the payload that is sent to the
    * server.
