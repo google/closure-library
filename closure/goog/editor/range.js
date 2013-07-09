@@ -27,10 +27,10 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.RangeEndpoint');
 goog.require('goog.dom.SavedCaretRange');
-goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.node');
 goog.require('goog.editor.style');
 goog.require('goog.iter');
+goog.require('goog.userAgent');
 
 
 /**
@@ -333,53 +333,54 @@ goog.editor.range.getDeepEndPoint = function(range, atStart) {
  *    range. Should be called after body.normalize() is called.
  */
 goog.editor.range.normalize = function(range) {
-  var startPoint = goog.editor.range.normalizePoint_(
-      goog.editor.range.getDeepEndPoint(range, true));
-  var startParent = startPoint.getParentPoint();
-  var startPreviousSibling = startPoint.node.previousSibling;
-  if (startPoint.node.nodeType == goog.dom.NodeType.TEXT) {
-    startPoint.node = null;
+  var isReversed = range.isReversed();
+  var anchorPoint = goog.editor.range.normalizePoint_(
+      goog.editor.range.getDeepEndPoint(range, !isReversed));
+  var anchorParent = anchorPoint.getParentPoint();
+  var anchorPreviousSibling = anchorPoint.node.previousSibling;
+  if (anchorPoint.node.nodeType == goog.dom.NodeType.TEXT) {
+    anchorPoint.node = null;
   }
 
-  var endPoint = goog.editor.range.normalizePoint_(
-      goog.editor.range.getDeepEndPoint(range, false));
-  var endParent = endPoint.getParentPoint();
-  var endPreviousSibling = endPoint.node.previousSibling;
-  if (endPoint.node.nodeType == goog.dom.NodeType.TEXT) {
-    endPoint.node = null;
+  var focusPoint = goog.editor.range.normalizePoint_(
+      goog.editor.range.getDeepEndPoint(range, isReversed));
+  var focusParent = focusPoint.getParentPoint();
+  var focusPreviousSibling = focusPoint.node.previousSibling;
+  if (focusPoint.node.nodeType == goog.dom.NodeType.TEXT) {
+    focusPoint.node = null;
   }
 
   /** @return {goog.dom.AbstractRange} The normalized range. */
   return function() {
-    if (!startPoint.node && startPreviousSibling) {
-      // If startPoint.node was previously an empty text node with no siblings,
-      // startPreviousSibling may not have a nextSibling since that node will no
-      // longer exist.  Do our best and point to the end of the previous
+    if (!anchorPoint.node && anchorPreviousSibling) {
+      // If anchorPoint.node was previously an empty text node with no siblings,
+      // anchorPreviousSibling may not have a nextSibling since that node will
+      // no longer exist.  Do our best and point to the end of the previous
       // element.
-      startPoint.node = startPreviousSibling.nextSibling;
-      if (!startPoint.node) {
-        startPoint = goog.editor.range.Point.getPointAtEndOfNode(
-            startPreviousSibling);
+      anchorPoint.node = anchorPreviousSibling.nextSibling;
+      if (!anchorPoint.node) {
+        anchorPoint = goog.editor.range.Point.getPointAtEndOfNode(
+            anchorPreviousSibling);
       }
     }
 
-    if (!endPoint.node && endPreviousSibling) {
-      // If endPoint.node was previously an empty text node with no siblings,
-      // endPreviousSibling may not have a nextSibling since that node will no
+    if (!focusPoint.node && focusPreviousSibling) {
+      // If focusPoint.node was previously an empty text node with no siblings,
+      // focusPreviousSibling may not have a nextSibling since that node will no
       // longer exist.  Do our best and point to the end of the previous
       // element.
-      endPoint.node = endPreviousSibling.nextSibling;
-      if (!endPoint.node) {
-        endPoint = goog.editor.range.Point.getPointAtEndOfNode(
-            endPreviousSibling);
+      focusPoint.node = focusPreviousSibling.nextSibling;
+      if (!focusPoint.node) {
+        focusPoint = goog.editor.range.Point.getPointAtEndOfNode(
+            focusPreviousSibling);
       }
     }
 
     return goog.dom.Range.createFromNodes(
-        startPoint.node || startParent.node.firstChild || startParent.node,
-        startPoint.offset,
-        endPoint.node || endParent.node.firstChild || endParent.node,
-        endPoint.offset);
+        anchorPoint.node || anchorParent.node.firstChild || anchorParent.node,
+        anchorPoint.offset,
+        focusPoint.node || focusParent.node.firstChild || focusParent.node,
+        focusPoint.offset);
   };
 };
 

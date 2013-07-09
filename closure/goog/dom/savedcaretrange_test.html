@@ -62,6 +62,10 @@ See the COPYING file for details.
   <div id='bug1480638'>foo<table><tr><td>bar</td></tr></table>baz</div>
 
 <script>
+  function setUp() {
+    document.body.normalize();
+  }
+
   /** @bug 1480638 */
   function testSavedCaretRangeDoesntChangeSelection() {
     // NOTE(nicksantos): We cannot detect this bug programatically. The only
@@ -86,6 +90,7 @@ See the COPYING file for details.
 
     var range = goog.dom.Range.createFromNodes(
         def.firstChild, 1, jkl.firstChild, 2);
+    assertFalse(range.isReversed())
     range.select();
 
     var saved = range.saveUsingCarets();
@@ -102,6 +107,7 @@ See the COPYING file for details.
     jkl = goog.dom.getElement('jkl');
 
     var restoredRange = clearSelectionAndRestoreSaved(parent, saved);
+    assertFalse(restoredRange.isReversed())
     goog.testing.dom.assertRangeEquals(
         def, 1, jkl, 1, restoredRange);
 
@@ -122,6 +128,22 @@ See the COPYING file for details.
     }
   }
 
+  function testReversedSavedCaretRange() {
+    var parent = goog.dom.getElement('caretRangeTest');
+    var def = goog.dom.getElement('def');
+    var jkl = goog.dom.getElement('jkl');
+
+    var range = goog.dom.Range.createFromNodes(
+        jkl.firstChild, 1, def.firstChild, 2);
+    assertTrue(range.isReversed())
+    range.select();
+
+    var saved = range.saveUsingCarets();
+    var restoredRange = clearSelectionAndRestoreSaved(parent, saved);
+    assertTrue(restoredRange.isReversed())
+    goog.testing.dom.assertRangeEquals(
+        def, 1, jkl, 1, restoredRange);
+  }
 
   /*
   TODO(user): Look into why removeCarets test doesn't pass.

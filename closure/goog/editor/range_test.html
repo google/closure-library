@@ -20,6 +20,7 @@ See the COPYING file for details.
   goog.require('goog.editor.range');
   goog.require('goog.testing.dom');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.userAgent');
 </script>
 </head>
 <body>
@@ -707,12 +708,15 @@ function testSelectionPreservingNormalize1() {
   fragmentText(jkl.firstChild);
 
   goog.dom.Range.createFromNodes(def, 3, jkl, 4).select();
+  assertFalse(goog.dom.Range.createFromWindow(window).isReversed());
+
   var oldRangeDescription = goog.testing.dom.exposeRange(
       goog.dom.Range.createFromWindow(window));
   goog.editor.range.selectionPreservingNormalize(parent);
 
   // Check that everything was normalized ok.
   var range = goog.dom.Range.createFromWindow(window);
+  assertFalse(range.isReversed());
 
   assertEquals("def should have 1 child; range is " +
       goog.testing.dom.exposeRange(range) +
@@ -744,6 +748,39 @@ function testSelectionPreservingNormalize2() {
   assertEquals(1, def.childNodes.length);
   assertEquals(1, jkl.childNodes.length);
   assertFalse(goog.dom.Range.hasSelection(window));
+}
+
+function testSelectionPreservingNormalize3() {
+  if (goog.userAgent.IE) {
+    return;
+  }
+  var parent = $('normalizeTest-2');
+  var def = $('def-2');
+  var jkl = $('jkl-2');
+  fragmentText(def.firstChild);
+  fragmentText(jkl.firstChild);
+
+  goog.dom.Range.createFromNodes(jkl, 4, def, 3).select();
+  assertTrue(goog.dom.Range.createFromWindow(window).isReversed());
+
+  var oldRangeDescription = goog.testing.dom.exposeRange(
+      goog.dom.Range.createFromWindow(window));
+  goog.editor.range.selectionPreservingNormalize(parent);
+
+  // Check that everything was normalized ok.
+  var range = goog.dom.Range.createFromWindow(window);
+  assertTrue(range.isReversed());
+
+  assertEquals("def should have 1 child; range is " +
+      goog.testing.dom.exposeRange(range) +
+      ", range was " + oldRangeDescription,
+      1, def.childNodes.length);
+  assertEquals("jkl should have 1 child; range is " +
+      goog.testing.dom.exposeRange(range) +
+      ", range was " + oldRangeDescription,
+      1, jkl.childNodes.length);
+  goog.testing.dom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2,
+      range);
 }
 
 function testSelectionPreservingNormalizeAfterPlaceCursorNextTo() {

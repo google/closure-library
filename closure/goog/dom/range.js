@@ -127,16 +127,16 @@ goog.dom.Range.createCaret = function(node, offset) {
 /**
  * Create a new range wrapper that selects the area between the given nodes,
  * accounting for the given offsets.
- * @param {Node} startNode The node to start with.
- * @param {number} startOffset The offset within the node to start.
- * @param {Node} endNode The node to end with.
- * @param {number} endOffset The offset within the node to end.
+ * @param {Node} anchorNode The node to anchor on.
+ * @param {number} anchorOffset The offset within the node to anchor on.
+ * @param {Node} focusNode The node to focus on.
+ * @param {number} focusOffset The offset within the node to focus on.
  * @return {goog.dom.AbstractRange} A range wrapper object.
  */
-goog.dom.Range.createFromNodes = function(startNode, startOffset, endNode,
-    endOffset) {
-  return goog.dom.TextRange.createFromNodes(startNode, startOffset, endNode,
-      endOffset);
+goog.dom.Range.createFromNodes = function(anchorNode, anchorOffset, focusNode,
+    focusOffset) {
+  return goog.dom.TextRange.createFromNodes(anchorNode, anchorOffset, focusNode,
+      focusOffset);
 };
 
 
@@ -186,10 +186,10 @@ goog.dom.Range.hasSelection = function(opt_win) {
 
 /**
  * Returns whether the focus position occurs before the anchor position.
- * @param {Node} anchorNode The node to start with.
- * @param {number} anchorOffset The offset within the node to start.
- * @param {Node} focusNode The node to end with.
- * @param {number} focusOffset The offset within the node to end.
+ * @param {Node} anchorNode The node to anchor on.
+ * @param {number} anchorOffset The offset within the node to anchor on.
+ * @param {Node} focusNode The node to focus on.
+ * @param {number} focusOffset The offset within the node to focus on.
  * @return {boolean} Whether the focus position occurs before the anchor
  *     position.
  */
