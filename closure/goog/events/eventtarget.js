@@ -31,7 +31,7 @@ goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.Listenable');
-goog.require('goog.events.Listener');
+goog.require('goog.events.ListenerMap');
 goog.require('goog.object');
 
 
@@ -76,17 +76,14 @@ goog.events.EventTarget = function() {
 
   /**
    * Maps of event type to an array of listeners.
-   *
-   * @type {Object.<string, !Array.<!goog.events.Listener>>}
-   * @private
+   * @private {!goog.events.ListenerMap}
    */
-  this.eventTargetListeners_ = {};
+  this.eventTargetListeners_ = new goog.events.ListenerMap(this);
 
   /**
    * The object to use for event.target. Useful when mixing in an
    * EventTarget to another object.
-   * @type {!Object}
-   * @private
+   * @private {!Object}
    */
   this.actualEventTarget_ = this;
 };
@@ -225,7 +222,8 @@ goog.events.EventTarget.prototype.disposeInternal = function() {
 /** @override */
 goog.events.EventTarget.prototype.listen = function(
     type, listener, opt_useCapture, opt_listenerScope) {
-  return this.listenInternal_(
+  this.assertInitialized_();
+  return this.eventTargetListeners_.add(
       type, listener, false /* callOnce */, opt_useCapture, opt_listenerScope);
 };
 
@@ -233,121 +231,51 @@ goog.events.EventTarget.prototype.listen = function(
 /** @override */
 goog.events.EventTarget.prototype.listenOnce = function(
     type, listener, opt_useCapture, opt_listenerScope) {
-  return this.listenInternal_(
+  return this.eventTargetListeners_.add(
       type, listener, true /* callOnce */, opt_useCapture, opt_listenerScope);
-};
-
-
-/**
- * Adds an event listener. A listener can only be added once to an
- * object and if it is added again the key for the listener is
- * returned.
- *
- * Note that a one-off listener will not change an existing listener,
- * if any. On the other hand a normal listener will change existing
- * one-off listener to become a normal listener.
- *
- * @param {string} type Event type to listen to.
- * @param {!Function} listener Callback method.
- * @param {boolean} callOnce Whether the listener is a one-off
- *     listener or otherwise.
- * @param {boolean=} opt_useCapture Whether to fire in capture phase
- *     (defaults to false).
- * @param {Object=} opt_listenerScope Object in whose scope to call the
- *     listener.
- * @return {goog.events.ListenableKey} Unique key for the listener.
- * @private
- */
-goog.events.EventTarget.prototype.listenInternal_ = function(
-    type, listener, callOnce, opt_useCapture, opt_listenerScope) {
-  this.assertInitialized_();
-
-  var listenerArray = this.eventTargetListeners_[type] ||
-      (this.eventTargetListeners_[type] = []);
-
-  var listenerObj;
-  var index = goog.events.EventTarget.findListenerIndex_(
-      listenerArray, listener, opt_useCapture, opt_listenerScope);
-  if (index > -1) {
-    listenerObj = listenerArray[index];
-    if (!callOnce) {
-      // Ensure that, if there is an existing callOnce listener, it is no
-      // longer a callOnce listener.
-      listenerObj.callOnce = false;
-    }
-    return listenerObj;
-  }
-
-  listenerObj = new goog.events.Listener(
-      listener, null, this, type, !!opt_useCapture, opt_listenerScope);
-  listenerObj.callOnce = callOnce;
-  listenerArray.push(listenerObj);
-
-  return listenerObj;
 };
 
 
 /** @override */
 goog.events.EventTarget.prototype.unlisten = function(
     type, listener, opt_useCapture, opt_listenerScope) {
-  if (!(type in this.eventTargetListeners_)) {
-    return false;
-  }
-
-  var listenerArray = this.eventTargetListeners_[type];
-  var index = goog.events.EventTarget.findListenerIndex_(
-      listenerArray, listener, opt_useCapture, opt_listenerScope);
-  if (index > -1) {
-    var listenerObj = listenerArray[index];
-    listenerObj.removed = true;
-    return goog.array.removeAt(listenerArray, index);
-  }
-  return false;
+  return this.eventTargetListeners_.remove(
+      type, listener, opt_useCapture, opt_listenerScope);
 };
 
 
 /** @override */
 goog.events.EventTarget.prototype.unlistenByKey = function(key) {
-  var type = key.type;
-  if (!(type in this.eventTargetListeners_)) {
-    return false;
-  }
-
-  var removed = goog.array.remove(this.eventTargetListeners_[type], key);
-  if (removed) {
-    key.removed = true;
-  }
-  return removed;
+  return this.eventTargetListeners_.removeByKey(key);
 };
 
 
 /** @override */
-goog.events.EventTarget.prototype.removeAllListeners = function(
-    opt_type, opt_capture) {
-  var count = 0;
-  for (var type in this.eventTargetListeners_) {
-    if (!opt_type || type == opt_type) {
-      var listenerArray = this.eventTargetListeners_[type];
-      for (var i = 0; i < listenerArray.length; i++) {
-        ++count;
-        listenerArray[i].removed = true;
-      }
-      listenerArray.length = 0;
-    }
+goog.events.EventTarget.prototype.removeAllListeners = function(opt_type) {
+  // TODO(user): Previously, removeAllListeners can be called on
+  // uninitialized EventTarget, so we preserve that behavior. We
+  // should remove this when usages that rely on that fact are purged.
+  if (!this.eventTargetListeners_) {
+    return 0;
   }
-  return count;
+  return this.eventTargetListeners_.removeAll(opt_type);
 };
 
 
 /** @override */
 goog.events.EventTarget.prototype.fireListeners = function(
     type, capture, eventObject) {
-  if (!(type in this.eventTargetListeners_)) {
+  // TODO(user): Original code avoids array creation when there
+  // is no listener, so we do the same. If this optimization turns
+  // out to be not required, we can replace this with
+  // getListeners(type, capture) instead, which is simpler.
+  var listenerArray = this.eventTargetListeners_.listeners[type];
+  if (!listenerArray) {
     return true;
   }
+  listenerArray = goog.array.clone(listenerArray);
 
   var rv = true;
-  var listenerArray = goog.array.clone(this.eventTargetListeners_[type]);
   for (var i = 0; i < listenerArray.length; ++i) {
     var listener = listenerArray[i];
     // We might not have a listener if the listener was removed.
@@ -368,50 +296,22 @@ goog.events.EventTarget.prototype.fireListeners = function(
 
 /** @override */
 goog.events.EventTarget.prototype.getListeners = function(type, capture) {
-  var listenerArray = this.eventTargetListeners_[type];
-  var rv = [];
-  if (listenerArray) {
-    for (var i = 0; i < listenerArray.length; ++i) {
-      var listenerObj = listenerArray[i];
-      if (listenerObj.capture == capture) {
-        rv.push(listenerObj);
-      }
-    }
-  }
-  return rv;
+  return this.eventTargetListeners_.getListeners(type, capture);
 };
 
 
 /** @override */
 goog.events.EventTarget.prototype.getListener = function(
     type, listener, capture, opt_listenerScope) {
-  var listenerArray = this.eventTargetListeners_[type];
-  var i = -1;
-  if (listenerArray) {
-    i = goog.events.EventTarget.findListenerIndex_(
-        listenerArray, listener, capture, opt_listenerScope);
-  }
-  return i > -1 ? listenerArray[i] : null;
+  return this.eventTargetListeners_.getListener(
+      type, listener, capture, opt_listenerScope);
 };
 
 
 /** @override */
 goog.events.EventTarget.prototype.hasListener = function(
     opt_type, opt_capture) {
-  var hasType = goog.isDef(opt_type);
-  var hasCapture = goog.isDef(opt_capture);
-
-  return goog.object.some(
-      this.eventTargetListeners_, function(listenersArray, type) {
-        for (var i = 0; i < listenersArray.length; ++i) {
-          if ((!hasType || listenersArray[i].type == opt_type) &&
-              (!hasCapture || listenersArray[i].capture == opt_capture)) {
-            return true;
-          }
-        }
-
-        return false;
-      });
+  return this.eventTargetListeners_.hasListener(opt_type, opt_capture);
 };
 
 
@@ -498,29 +398,4 @@ goog.events.EventTarget.dispatchEventInternal_ = function(
   }
 
   return rv;
-};
-
-
-/**
- * Finds the index of a matching goog.events.Listener in the given
- * listenerArray.
- * @param {!Array.<!goog.events.Listener>} listenerArray Array of listener.
- * @param {!Function} listener The listener function.
- * @param {boolean=} opt_useCapture The capture flag for the listener.
- * @param {Object=} opt_listenerScope The listener scope.
- * @return {number} The index of the matching listener within the
- *     listenerArray.
- * @private
- */
-goog.events.EventTarget.findListenerIndex_ = function(
-    listenerArray, listener, opt_useCapture, opt_listenerScope) {
-  for (var i = 0; i < listenerArray.length; ++i) {
-    var listenerObj = listenerArray[i];
-    if (listenerObj.listener == listener &&
-        listenerObj.capture == !!opt_useCapture &&
-        listenerObj.handler == opt_listenerScope) {
-      return i;
-    }
-  }
-  return -1;
 };
