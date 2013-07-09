@@ -211,27 +211,18 @@ goog.events.listen_ = function(
   var map = goog.events.listenerTree_;
 
   if (!(type in map)) {
-    map[type] = {count_: 0, remaining_: 0};
+    map[type] = {count_: 0};
   }
   map = map[type];
 
   if (!(capture in map)) {
-    map[capture] = {count_: 0, remaining_: 0};
+    map[capture] = {count_: 0};
     map.count_++;
   }
   map = map[capture];
 
   var srcUid = goog.getUid(src);
   var listenerArray, listenerObj;
-
-  // The remaining_ property is used to be able to short circuit the iteration
-  // of the event listeners.
-  //
-  // Increment the remaining event listeners to call even if this event might
-  // already have been fired. At this point we do not know if the event has
-  // been fired and it is too expensive to find out. By incrementing it we are
-  // guaranteed that we will not skip any event listeners.
-  map.remaining_++;
 
   // Do not use srcUid in map here since that will cast the number to a
   // string which will allocate one string object.
@@ -473,11 +464,6 @@ goog.events.unlistenByKey = function(key) {
   }
 
   var srcUid = goog.getUid(src);
-
-  // In a perfect implementation we would decrement the remaining_ field here
-  // but then we would need to know if the listener has already been fired or
-  // not. We therefore skip doing this and in this uncommon case the entire
-  // ancestor chain will need to be traversed as before.
 
   // Remove from sources_
   if (goog.events.sources_[srcUid]) {
@@ -807,27 +793,17 @@ goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
 
   var objUid = goog.getUid(obj);
   if (map[objUid]) {
-    var remaining = --map.remaining_;
-
     // Events added in the dispatch phase should not be dispatched in
     // the current dispatch phase. They will be included in the next
     // dispatch phase though.
     var listenerArray = goog.array.clone(map[objUid]);
-    try {
-      for (var i = 0; i < listenerArray.length; i++) {
-        var listener = listenerArray[i];
-        // We might not have a listener if the listener was removed.
-        if (listener && !listener.removed) {
-          retval &=
-              goog.events.fireListener(listener, eventObject) !== false;
-        }
+    for (var i = 0; i < listenerArray.length; i++) {
+      var listener = listenerArray[i];
+      // We might not have a listener if the listener was removed.
+      if (listener && !listener.removed) {
+        retval &=
+            goog.events.fireListener(listener, eventObject) !== false;
       }
-    } finally {
-      // Allow the count of targets remaining to increase (if perhaps we have
-      // added listeners) but do not allow it to decrease if we have reentered
-      // this method through a listener dispatching the same event type,
-      // resetting and exhausted the remaining count.
-      map.remaining_ = Math.max(remaining, map.remaining_);
     }
   }
 
@@ -957,11 +933,10 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
         }
 
         targetsMap = map[true];
-        targetsMap.remaining_ = targetsMap.count_;
 
         // Call capture listeners
         for (var i = ancestors.length - 1;
-             !evt.propagationStopped_ && i >= 0 && targetsMap.remaining_;
+             !evt.propagationStopped_ && i >= 0;
              i--) {
           evt.currentTarget = ancestors[i];
           retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type,
@@ -970,12 +945,10 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
 
         if (hasBubble) {
           targetsMap = map[false];
-          targetsMap.remaining_ = targetsMap.count_;
 
           // Call bubble listeners
           for (var i = 0;
-               !evt.propagationStopped_ && i < ancestors.length &&
-               targetsMap.remaining_;
+               !evt.propagationStopped_ && i < ancestors.length;
                i++) {
             evt.currentTarget = ancestors[i];
             retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type,
