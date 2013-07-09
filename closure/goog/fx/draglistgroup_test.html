@@ -354,6 +354,50 @@ See the COPYING file for details.
     assertIdle(dlg);
   }
 
+  /**
+   * Tests that a new item can be added to a drag list after the control has
+   * been initialized.
+   */
+  function testAddItemToDragList() {
+    var item =
+        goog.dom.createDom('div', null, goog.dom.createTextNode('newItem'));
+
+    dlg.addItemToDragList(list, item);
+
+    assertEquals(item, list.lastChild);
+    assertEquals(4, goog.dom.getChildren(list).length);
+
+    goog.events.listen(dlg, goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+        goog.events.Event.preventDefault);
+
+    goog.testing.events.fireMouseDownEvent(item);
+    assertTrue('Should fire beforedragstart event when clicked',
+        goog.array.equals([goog.fx.DragListGroup.EventType.BEFOREDRAGSTART],
+        firedEventTypes));
+  }
+
+  /**
+   * Tests that a new item added to a drag list after the control has been
+   * initialized is inserted at the correct position.
+   */
+  function testInsertItemInDragList() {
+    var item =
+        goog.dom.createDom('div', null, goog.dom.createTextNode('newItem'));
+
+    dlg.addItemToDragList(list, item, 0);
+
+    assertEquals(item, list.firstChild);
+    assertEquals(4, goog.dom.getChildren(list).length);
+
+    goog.events.listen(dlg, goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+        goog.events.Event.preventDefault);
+
+    goog.testing.events.fireMouseDownEvent(item);
+    assertTrue('Should fire beforedragstart event when clicked',
+        goog.array.equals([goog.fx.DragListGroup.EventType.BEFOREDRAGSTART],
+        firedEventTypes));
+  }
+
 </script>
 </body>
 </html>

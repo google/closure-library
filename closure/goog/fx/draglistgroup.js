@@ -410,37 +410,33 @@ goog.fx.DragListGroup.prototype.init = function() {
 
     var dragItems = goog.dom.getChildren(dragList);
     for (var j = 0, numItems = dragItems.length; j < numItems; ++j) {
-      var dragItem = dragItems[j];
-      var dragItemHandle = this.getHandleForDragItem_(dragItem);
-
-      var uid = goog.getUid(dragItemHandle);
-      this.dragItemForHandle_[uid] = dragItem;
-
-      if (this.dragItemHoverClasses_) {
-        this.eventHandler_.listen(
-            dragItem, goog.events.EventType.MOUSEOVER,
-            this.handleDragItemMouseover_);
-        this.eventHandler_.listen(
-            dragItem, goog.events.EventType.MOUSEOUT,
-            this.handleDragItemMouseout_);
-      }
-      if (this.dragItemHandleHoverClasses_) {
-        this.eventHandler_.listen(
-            dragItemHandle, goog.events.EventType.MOUSEOVER,
-            this.handleDragItemHandleMouseover_);
-        this.eventHandler_.listen(
-            dragItemHandle, goog.events.EventType.MOUSEOUT,
-            this.handleDragItemHandleMouseout_);
-      }
-
-      this.dragItems_.push(dragItem);
-      this.eventHandler_.listen(dragItemHandle,
-          [goog.events.EventType.MOUSEDOWN, goog.events.EventType.TOUCHSTART],
-          this.handlePotentialDragStart_);
+      this.listenForDragEvents(dragItems[j]);
     }
   }
 
   this.isInitialized_ = true;
+};
+
+
+/**
+ * Adds a single item to the given drag list and sets up the drag listeners for
+ * it.
+ * If opt_index is specified the item is inserted at this index, otherwise the
+ * item is added as the last child of the list.
+ *
+ * @param {!Element} list The drag list where to add item to.
+ * @param {!Element} item The new element to add.
+ * @param {number=} opt_index Index where to insert the item in the list. If not
+ * specified item is inserted as the last child of list.
+ */
+goog.fx.DragListGroup.prototype.addItemToDragList = function(list, item,
+    opt_index) {
+  if (goog.isDef(opt_index)) {
+    goog.dom.insertChildAt(list, item, opt_index);
+  } else {
+    goog.dom.appendChild(list, item);
+  }
+  this.listenForDragEvents(item);
 };
 
 
@@ -488,6 +484,43 @@ goog.fx.DragListGroup.prototype.recacheListAndItemBounds_ = function(
       dragItem.dlgBounds_ = goog.style.getBounds(dragItem);
     }
   }
+};
+
+
+/**
+ * Listens for drag events on the given drag item. This method is currently used
+ * to initialize drag items.
+ *
+ * @param {Element} dragItem the element to initialize. This element has to be
+ * in one of the drag lists.
+ * @protected
+ */
+goog.fx.DragListGroup.prototype.listenForDragEvents = function(dragItem) {
+  var dragItemHandle = this.getHandleForDragItem_(dragItem);
+  var uid = goog.getUid(dragItemHandle);
+  this.dragItemForHandle_[uid] = dragItem;
+
+  if (this.dragItemHoverClasses_) {
+    this.eventHandler_.listen(
+        dragItem, goog.events.EventType.MOUSEOVER,
+        this.handleDragItemMouseover_);
+    this.eventHandler_.listen(
+        dragItem, goog.events.EventType.MOUSEOUT,
+        this.handleDragItemMouseout_);
+  }
+  if (this.dragItemHandleHoverClasses_) {
+    this.eventHandler_.listen(
+        dragItemHandle, goog.events.EventType.MOUSEOVER,
+        this.handleDragItemHandleMouseover_);
+    this.eventHandler_.listen(
+        dragItemHandle, goog.events.EventType.MOUSEOUT,
+        this.handleDragItemHandleMouseout_);
+  }
+
+  this.dragItems_.push(dragItem);
+  this.eventHandler_.listen(dragItemHandle,
+      [goog.events.EventType.MOUSEDOWN, goog.events.EventType.TOUCHSTART],
+      this.handlePotentialDragStart_);
 };
 
 
