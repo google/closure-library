@@ -38,7 +38,7 @@ goog.provide('goog.vec.Float64Array');
  * @constructor
  */
 goog.vec.Float64Array = function(p0) {
-  this.length = p0.length || p0;
+  this.length = /** @type {number} */ (p0.length || p0);
   for (var i = 0; i < this.length; i++) {
     this[i] = p0[i] || 0;
   }
