@@ -23,20 +23,15 @@ See the COPYING file for details.
 <body>
 <script>
 
-// Test how overwritten object prototype affects StringSet.
-Object.prototype.evil1 = null;
-Object.prototype.evil2 = null;
-
 var TEST_VALUES = [
   '', ' ', '  ', 'true', 'null', 'undefined', '0', 'new', 'constructor',
-  'prototype', '__proto__', 'set', 'hasOwnProperty', 'toString', 'valueOf',
-  'evil1'
+  'prototype', '__proto__', 'set', 'hasOwnProperty', 'toString', 'valueOf'
 ];
 
 var TEST_VALUES_WITH_DUPLICATES = [
   '', '', ' ', '  ', 'true', true, 'null', null, 'undefined', undefined, '0', 0,
   'new', 'constructor', 'prototype', '__proto__', 'set', 'hasOwnProperty',
-  'toString', 'valueOf', 'evil1'
+  'toString', 'valueOf'
 ];
 
 function testConstructor() {
@@ -46,6 +41,30 @@ function testConstructor() {
   var s = new goog.structs.StringSet(TEST_VALUES_WITH_DUPLICATES);
   assertSameElements('duplicates are filtered out by their string value',
       TEST_VALUES, s.getValues());
+}
+
+function testConstructorAssertsThatObjectPrototypeHasNoEnumerableKeys() {
+  assertNotThrows(goog.structs.StringSet);
+  Object.prototype.foo = 0;
+  try {
+    assertThrows(goog.structs.StringSet);
+  } finally {
+    delete Object.prototype.foo;
+  }
+  assertNotThrows(goog.structs.StringSet);
+}
+
+function testOverridingObjectPrototypeToStringIsSafe() {
+  var originalToString = Object.prototype.toString;
+  Object.prototype.toString = function() {
+    return 'object';
+  }
+  try {
+    assertEquals(0, new goog.structs.StringSet().getCount());
+    assertFalse(new goog.structs.StringSet().contains('toString'));
+  } finally {
+    Object.prototype.toString = originalToString;
+  }
 }
 
 function testAdd() {
@@ -94,11 +113,6 @@ function testContains() {
     assertTrue('s contains ' + element, s.contains(element));
   });
   assertFalse('s does not contain 42', s.contains(42));
-
-  Object.prototype[' a'] = 'a';
-  Object.prototype['  a'] = 'a';
-  assertFalse('empty set does not contain elements defined in Object.prototype',
-      new goog.structs.StringSet().contains(' a'));
 }
 
 function testContainsArray() {

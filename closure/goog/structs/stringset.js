@@ -21,6 +21,7 @@
  * it isn't optimized for IE6 garbage collector (see the description of
  * {@link goog.structs.Map#keys_} for details), and it distinguishes its
  * elements by their string value not by hash code.
+ * The implementation assumes that no new keys are added to Object.prototype.
  */
 
 goog.provide('goog.structs.StringSet');
@@ -34,6 +35,7 @@ goog.require('goog.iter');
  * @param {!Array=} opt_elements Elements to add to the set. The non-string
  *     items will be converted to strings, so 15 and '15' will mean the same.
  * @constructor
+ * @throws {Error} If Object.prototype has enumerable keys.
  */
 goog.structs.StringSet = function(opt_elements) {
   /**
@@ -47,6 +49,12 @@ goog.structs.StringSet = function(opt_elements) {
     for (var i = 0; i < opt_elements.length; i++) {
       this.elements_[this.encode(opt_elements[i])] = null;
     }
+  }
+
+  // TODO(user): Move this assertion to goog.object and tie it to
+  //     goog.DEBUG == true when all failures caused by this change are fixed.
+  for (var key in goog.structs.StringSet.EMPTY_OBJECT_) {
+    throw Error(key + ' should not be enumerable in Object.prototype');
   }
 };
 
@@ -118,8 +126,7 @@ goog.structs.StringSet.prototype.addArray = function(arr) {
  */
 goog.structs.StringSet.prototype.addDifference_ = function(set1, set2) {
   for (var key in set1.elements_) {
-    if (set1.elements_.hasOwnProperty(key) &&
-        !set2.elements_.hasOwnProperty(key)) {
+    if (!(key in set2.elements_)) {
       this.elements_[key] = null;
     }
   }
@@ -132,9 +139,7 @@ goog.structs.StringSet.prototype.addDifference_ = function(set1, set2) {
  */
 goog.structs.StringSet.prototype.addSet = function(stringSet) {
   for (var key in stringSet.elements_) {
-    if (stringSet.elements_.hasOwnProperty(key)) {
-      this.elements_[key] = null;
-    }
+    this.elements_[key] = null;
   }
 };
 
@@ -163,7 +168,7 @@ goog.structs.StringSet.prototype.clone = function() {
  * @return {boolean} Whether it is in the set.
  */
 goog.structs.StringSet.prototype.contains = function(element) {
-  return this.elements_.hasOwnProperty(this.encode(element));
+  return this.encode(element) in this.elements_;
 };
 
 
@@ -174,7 +179,7 @@ goog.structs.StringSet.prototype.contains = function(element) {
  */
 goog.structs.StringSet.prototype.containsArray = function(arr) {
   for (var i = 0; i < arr.length; i++) {
-    if (!this.elements_.hasOwnProperty(this.encode(arr[i]))) {
+    if (!(this.encode(arr[i]) in this.elements_)) {
       return false;
     }
   }
@@ -202,9 +207,7 @@ goog.structs.StringSet.prototype.equals = function(stringSet) {
  */
 goog.structs.StringSet.prototype.forEach = function(f, opt_obj) {
   for (var key in this.elements_) {
-    if (this.elements_.hasOwnProperty(key)) {
-      f.call(opt_obj, this.decode(key), undefined, this);
-    }
+    f.call(opt_obj, this.decode(key), undefined, this);
   }
 };
 
@@ -226,9 +229,7 @@ goog.structs.StringSet.prototype.getCount = Object.keys ?
     function() {
       var count = 0;
       for (var key in this.elements_) {
-        if (this.elements_.hasOwnProperty(key)) {
-          count++;
-        }
+        count++;
       }
       return count;
     };
@@ -255,8 +256,7 @@ goog.structs.StringSet.prototype.getDifference = function(stringSet) {
 goog.structs.StringSet.prototype.getIntersection = function(stringSet) {
   var ret = new goog.structs.StringSet;
   for (var key in this.elements_) {
-    if (stringSet.elements_.hasOwnProperty(key) &&
-        this.elements_.hasOwnProperty(key)) {
+    if (key in stringSet.elements_) {
       ret.elements_[key] = null;
     }
   }
@@ -301,9 +301,7 @@ goog.structs.StringSet.prototype.getValues = Object.keys ?
     function() {
       var ret = [];
       for (var key in this.elements_) {
-        if (this.elements_.hasOwnProperty(key)) {
-          ret.push(this.decode(key));
-        }
+        ret.push(this.decode(key));
       }
       return ret;
     };
@@ -316,8 +314,7 @@ goog.structs.StringSet.prototype.getValues = Object.keys ?
  */
 goog.structs.StringSet.prototype.isDisjoint = function(stringSet) {
   for (var key in this.elements_) {
-    if (stringSet.elements_.hasOwnProperty(key) &&
-        this.elements_.hasOwnProperty(key)) {
+    if (key in stringSet.elements_) {
       return false;
     }
   }
@@ -330,9 +327,7 @@ goog.structs.StringSet.prototype.isDisjoint = function(stringSet) {
  */
 goog.structs.StringSet.prototype.isEmpty = function() {
   for (var key in this.elements_) {
-    if (this.elements_.hasOwnProperty(key)) {
-      return false;
-    }
+    return false;
   }
   return true;
 };
@@ -345,8 +340,7 @@ goog.structs.StringSet.prototype.isEmpty = function() {
  */
 goog.structs.StringSet.prototype.isSubsetOf = function(stringSet) {
   for (var key in this.elements_) {
-    if (!stringSet.elements_.hasOwnProperty(key) &&
-        this.elements_.hasOwnProperty(key)) {
+    if (!(key in stringSet.elements_)) {
       return false;
     }
   }
@@ -371,7 +365,7 @@ goog.structs.StringSet.prototype.isSupersetOf = function(stringSet) {
  */
 goog.structs.StringSet.prototype.remove = function(element) {
   var key = this.encode(element);
-  if (this.elements_.hasOwnProperty(key)) {
+  if (key in this.elements_) {
     delete this.elements_[key];
     return true;
   }
