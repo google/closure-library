@@ -10,10 +10,14 @@ See the COPYING file for details.
   <script src="../../base.js"></script>
   <script>
     goog.require('goog.Uri');
+    goog.require('goog.array');
+    goog.require('goog.dom');
+    goog.require('goog.dom.TagName');
     goog.require('goog.editor.Field');
     goog.require('goog.editor.plugins.Emoticons');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.emoji.Emoji');
+    goog.require('goog.userAgent');
   </script>
 </head>
 <div id='parent'>
@@ -24,11 +28,11 @@ See the COPYING file for details.
 var HTML;
 
 function setUp() {
-  HTML = goog.dom.$('parent').innerHTML;
+  HTML = goog.dom.getElement('parent').innerHTML;
 }
 
 function tearDown() {
-  goog.dom.$('parent').innerHTML = HTML;
+  goog.dom.getElement('parent').innerHTML = HTML;
 }
 
 function testEmojiWithEmoticonsPlugin() {

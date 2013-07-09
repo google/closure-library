@@ -18,19 +18,16 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
-  goog.require('goog.dom.TagName');
-  goog.require('goog.functions');
   goog.require('goog.editor.plugins.AbstractBubblePlugin');
   goog.require('goog.events.BrowserEvent');
-  goog.require('goog.events.EventType');
   goog.require('goog.events.KeyCodes');
+  goog.require('goog.functions');
   goog.require('goog.style');
   goog.require('goog.testing.editor.FieldMock');
   goog.require('goog.testing.editor.TestHelper');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
-  goog.require('goog.testing.LooseMock');
-  goog.require('goog.userAgent');
+  goog.require('goog.ui.editor.Bubble');
 </script>
 <link rel="stylesheet" type="text/css" href="../../css/bubble.css">
 </head>
@@ -41,7 +38,7 @@ See the COPYING file for details.
 <script>
 
 var testHelper;
-var fieldDiv = goog.dom.$('field');
+var fieldDiv = goog.dom.getElement('field');
 var COMMAND = 'base';
 var FIELDMOCK;
 var bubblePlugin;
@@ -55,7 +52,7 @@ function setUpPage() {
     window.moveTo(0, 0);
     window.resizeTo(640, 480);
   }
-};
+}
 
 function setUp() {
   testHelper = new goog.testing.editor.TestHelper(fieldDiv);
@@ -110,7 +107,7 @@ function helpTestCreateBubble(opt_fn) {
   bubblePlugin.createBubbleContents = function(bubbleContainer) {
     numCalled++;
     assertNotNull('bubbleContainer should not be null', bubbleContainer);
-  }
+  };
   if (opt_fn) {
     opt_fn();
   }
@@ -165,7 +162,7 @@ function testZindexBehavior() {
 
 function testNoTwoBubblesOpenAtSameTime() {
   FIELDMOCK.$replay();
-  var origClose = goog.bind(bubblePlugin.closeBubble, bubblePlugin);;
+  var origClose = goog.bind(bubblePlugin.closeBubble, bubblePlugin);
   var numTimesCloseCalled = 0;
   bubblePlugin.closeBubble = function() {
     numTimesCloseCalled++;
@@ -218,7 +215,7 @@ function testSelectOneTextCharacterNoError() {
   testHelper.select(link.firstChild, 0, link.firstChild, 1);
   // This should execute without js errors.
   bubblePlugin.handleSelectionChange();
-  assertTrue("Bubble should have been opened", bubblePlugin.isVisible());
+  assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
   FIELDMOCK.$verify();
 }
 
@@ -251,8 +248,8 @@ function testTabKeyEventsWithShiftKey() {
   bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
   bubblePlugin.createBubbleContents = function(container) {
-    this.createLink('linkInBubble0', 'Foo', false, container); 
-    this.createLink('linkInBubble1', 'Bar', false, container); 
+    this.createLink('linkInBubble0', 'Foo', false, container);
+    this.createLink('linkInBubble1', 'Bar', false, container);
   };
   bubblePlugin.handleSelectionChangeInternal(link);
 
