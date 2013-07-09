@@ -119,7 +119,7 @@ goog.ds.AbstractFastDataNode.prototype.getDataPath = function() {
  */
 goog.ds.FastDataNode = function(root, dataName, opt_parent) {
   goog.ds.AbstractFastDataNode.call(this, dataName, opt_parent);
-  this.extendWith_(root);
+  this.extendWith(root);
 };
 goog.inherits(goog.ds.FastDataNode, goog.ds.AbstractFastDataNode);
 
@@ -128,9 +128,8 @@ goog.inherits(goog.ds.FastDataNode, goog.ds.AbstractFastDataNode);
  * Add all attributes of object to this data node.
  * @param {Object} object Object to add attributes from.
  * @protected
- * @suppress {underscore}
  */
-goog.ds.FastDataNode.prototype.extendWith_ = function(object) {
+goog.ds.FastDataNode.prototype.extendWith = function(object) {
   for (var key in object) {
     this[key] = object[key];
   }
