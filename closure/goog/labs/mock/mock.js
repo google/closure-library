@@ -368,7 +368,6 @@ goog.labs.mock.MockManager_.prototype.recordCall_ =
  *
  * @param {string} methodName The name of the method.
  * @param {...} var_args The arguments passed.
- * @return {!Function} The stub, if defined, or the spy method.
  * @protected
  */
 goog.labs.mock.MockManager_.prototype.verifyInvocation =
