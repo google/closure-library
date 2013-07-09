@@ -15,6 +15,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.a11y.aria');
+  goog.require('goog.a11y.aria.Role');
   goog.require('goog.array');
   goog.require('goog.dom');
   goog.require('goog.testing.jsunit');
@@ -56,12 +57,12 @@ See the COPYING file for details.
 
   function testGridA11yRoles() {
     var grid = renderer.createDom(palette);
+    assertEquals(goog.a11y.aria.Role.GRID, goog.a11y.aria.getRole(grid));
     var table = grid.getElementsByTagName('table')[0];
-    assertEquals('grid', goog.a11y.aria.getRole(table));
     var row = table.getElementsByTagName('tr')[0];
-    assertEquals('row', goog.a11y.aria.getRole(row));
+    assertEquals(goog.a11y.aria.Role.ROW, goog.a11y.aria.getRole(row));
     var cell = row.getElementsByTagName('td')[0];
-    assertEquals('gridcell', goog.a11y.aria.getRole(cell));
+    assertEquals(goog.a11y.aria.Role.GRIDCELL, goog.a11y.aria.getRole(cell));
   }
 
   function testCellA11yLabels() {
