@@ -1398,7 +1398,7 @@ function testParentElement() {
   var g = $('testG');
   assertNotNull(g);
 
-  if (goog.userAgent.IE && goog.userAgent.isVersion('9')) {
+  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9')) {
     // test to make sure IE9 is returning undefined for .parentElement
     assertUndefined(g.parentElement);
     assertUndefined(rect.parentElement);
