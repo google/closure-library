@@ -69,3 +69,26 @@ function testEventFireDifferingTime() {
   monitor.simulateEvent();
   assertEquals(2, recordedFunction.getCallCount());
 }
+
+function testDispatchEventReturnValue() {
+  assertTrue(monitor.dispatchEvent(goog.ui.ActivityMonitor.Event.ACTIVITY));
+  assertEquals(1, recordedFunction.getCallCount());
+}
+
+function testDispatchEventPreventDefault() {
+  // Undo the listen call in setUp.
+  goog.events.unlisten(
+      monitor,
+      goog.ui.ActivityMonitor.Event.ACTIVITY,
+      recordedFunction);
+
+  // Listen with a function that cancels the event.
+  goog.events.listen(
+      monitor,
+      goog.ui.ActivityMonitor.Event.ACTIVITY,
+      function(e) {
+        e.preventDefault();
+      });
+
+  assertFalse(monitor.dispatchEvent(goog.ui.ActivityMonitor.Event.ACTIVITY));
+}
