@@ -249,10 +249,11 @@ goog.debug.normalizeErrorObject = function(err) {
 
   // The IE Error object contains only the name and the message.
   // The Safari Error object uses the line and sourceURL fields.
-  if (threwError || !err.lineNumber || !err.fileName || !err.stack) {
+  if (threwError || !err.lineNumber || !err.fileName || !err.stack ||
+      !err.message || !err.name) {
     return {
-      'message': err.message,
-      'name': err.name,
+      'message': err.message || 'Not available',
+      'name': err.name || 'UnknownError',
       'lineNumber': lineNumber,
       'fileName': fileName,
       'stack': err.stack || 'Not available'
