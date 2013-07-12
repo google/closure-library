@@ -41,8 +41,10 @@ goog.labs.userAgent.browser.matchOpera_ = goog.memoize(
  * @return {boolean} Whether the user's browser is IE.
  * @private
  */
-goog.labs.userAgent.browser.matchIE_ = goog.memoize(
-    goog.partial(goog.labs.userAgent.util.matchUserAgent, 'IE'));
+goog.labs.userAgent.browser.matchIE_ = goog.memoize(function() {
+  return goog.labs.userAgent.util.matchUserAgent('Trident') ||
+      goog.labs.userAgent.util.matchUserAgent('MSIE');
+});
 
 
 /**
@@ -180,7 +182,7 @@ goog.labs.userAgent.browser.getIEVersion_ = goog.memoize(function() {
   } else if (gDoc && gDoc.compatMode && gDoc.compatMode == 'CSS1Compat') {
     version = 7;
   } else {
-    var arr = /IE\s+([^\);]+)(?:\)|;)/.exec(userAgentString);
+    var arr = /\b(?:MSIE|rv)\s+([^\);]+)(?:\)|;)/.exec(userAgentString);
     version = arr && arr[1] ? arr[1] : '';
   }
   return version;

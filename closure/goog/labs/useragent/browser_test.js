@@ -55,6 +55,11 @@ function testOpera() {
 }
 
 function testIE() {
+  setGlobalUAString(goog.labs.userAgent.testAgents.IE_6);
+  assertTrue(goog.labs.userAgent.browser.isIE());
+  assertVersion('6.0');
+  assertVersionBetween('5.0', '7.0');
+
   setGlobalUAString(goog.labs.userAgent.testAgents.IE_10);
   assertTrue(goog.labs.userAgent.browser.isIE());
   assertVersion('10.6');
@@ -85,6 +90,11 @@ function testIE() {
   setDocumentMode('8');
   assertTrue(goog.labs.userAgent.browser.isIE());
   assertVersion('8');
+
+  setGlobalUAString(goog.labs.userAgent.testAgents.IE_11);
+  assertTrue(goog.labs.userAgent.browser.isIE());
+  assertVersion('11.0');
+  assertVersionBetween('10.0', '12.0');
 }
 
 function testFirefox() {

@@ -151,16 +151,18 @@ goog.userAgent.init_ = function() {
   if (!goog.userAgent.BROWSER_KNOWN_ &&
       (ua = goog.userAgent.getUserAgentString())) {
     var navigator = goog.userAgent.getNavigator();
-    goog.userAgent.detectedOpera_ = ua.indexOf('Opera') == 0;
+    goog.userAgent.detectedOpera_ = goog.string.startsWith(ua, 'Opera');
     goog.userAgent.detectedIe_ = !goog.userAgent.detectedOpera_ &&
-        ua.indexOf('MSIE') != -1;
+        (goog.string.contains(ua, 'MSIE') ||
+         goog.string.contains(ua, 'Trident'));
     goog.userAgent.detectedWebkit_ = !goog.userAgent.detectedOpera_ &&
-        ua.indexOf('WebKit') != -1;
+        goog.string.contains(ua, 'WebKit');
     // WebKit also gives navigator.product string equal to 'Gecko'.
     goog.userAgent.detectedMobile_ = goog.userAgent.detectedWebkit_ &&
-        ua.indexOf('Mobile') != -1;
+        goog.string.contains(ua, 'Mobile');
     goog.userAgent.detectedGecko_ = !goog.userAgent.detectedOpera_ &&
-        !goog.userAgent.detectedWebkit_ && navigator.product == 'Gecko';
+        !goog.userAgent.detectedWebkit_ && !goog.userAgent.detectedIe_ &&
+        navigator.product == 'Gecko';
   }
 };
 
@@ -352,21 +354,22 @@ goog.userAgent.initPlatform_ = function() {
    * @type {boolean}
    * @private
    */
-  goog.userAgent.detectedAndroid_ = !!ua && ua.indexOf('Android') >= 0;
+  goog.userAgent.detectedAndroid_ = !!ua &&
+      goog.string.contains(ua, 'Android');
 
   /**
    * Whether the user agent is running on an iPhone.
    * @type {boolean}
    * @private
    */
-  goog.userAgent.detectedIPhone_ = !!ua && ua.indexOf('iPhone') >= 0;
+  goog.userAgent.detectedIPhone_ = !!ua && goog.string.contains(ua, 'iPhone');
 
   /**
    * Whether the user agent is running on an iPad.
    * @type {boolean}
    * @private
    */
-  goog.userAgent.detectedIPad_ = !!ua && ua.indexOf('iPad') >= 0;
+  goog.userAgent.detectedIPad_ = !!ua && goog.string.contains(ua, 'iPad');
 };
 
 
@@ -451,7 +454,7 @@ goog.userAgent.determineVersion_ = function() {
     if (goog.userAgent.GECKO) {
       re = /rv\:([^\);]+)(\)|;)/;
     } else if (goog.userAgent.IE) {
-      re = /MSIE\s+([^\);]+)(\)|;)/;
+      re = /\b(?:MSIE|rv)\s+([^\);]+)(\)|;)/;
     } else if (goog.userAgent.WEBKIT) {
       // WebKit/125.4
       re = /WebKit\/(\S+)/;

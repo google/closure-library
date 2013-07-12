@@ -150,6 +150,14 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
          {num: 7.1, truth: false},
          {num: 8, truth: false}
        ]
+      },
+      {ua: 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv 11.0) like Gecko',
+       versions: [
+         {num: 10, truth: true},
+         {num: 11, truth: true},
+         {num: '11.0', truth: true},
+         {num: '12', truth: false}
+       ]
       }
     ];
     // hide any navigator.product value by putting in a navigator with no

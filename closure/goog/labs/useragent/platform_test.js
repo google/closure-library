@@ -213,6 +213,12 @@ function testWindows() {
   assertTrue(goog.labs.userAgent.platform.isWindows());
   assertVersion('6.1');
   assertVersionBetween('6', '7');
+
+  uaString = goog.labs.userAgent.testAgents.IE_11;
+  setGlobalUAString(uaString, platform);
+  assertTrue(goog.labs.userAgent.platform.isWindows());
+  assertVersion('6.3');
+  assertVersionBetween('6', '6.5');
 }
 
 function testX11() {

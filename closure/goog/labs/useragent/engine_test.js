@@ -19,6 +19,7 @@
 goog.provide('goog.labs.userAgent.engineTest');
 
 goog.require('goog.labs.userAgent.engine');
+goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
@@ -94,6 +95,11 @@ function testTrident() {
   assertTrue(goog.labs.userAgent.engine.isTrident());
   assertVersion('5.0');
   assertLowAndHighVersions('5.0', '6.0');
+
+  setGlobalUAString(goog.labs.userAgent.testAgents.IE_11);
+  assertTrue(goog.labs.userAgent.engine.isTrident());
+  assertVersion('7.0');
+  assertLowAndHighVersions('6.0', '8.0');
 }
 
 function testWebKit() {

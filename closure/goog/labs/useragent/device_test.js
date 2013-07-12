@@ -61,6 +61,9 @@ function testDesktop() {
   assertIsDesktop(goog.labs.userAgent.testAgents.CHROME_25);
   assertIsDesktop(goog.labs.userAgent.testAgents.OPERA_10);
   assertIsDesktop(goog.labs.userAgent.testAgents.FIREFOX_19);
+  assertIsDesktop(goog.labs.userAgent.testAgents.IE_9);
+  assertIsDesktop(goog.labs.userAgent.testAgents.IE_10);
+  assertIsDesktop(goog.labs.userAgent.testAgents.IE_11);
 }
 
 function assertIsMobile(uaString) {
