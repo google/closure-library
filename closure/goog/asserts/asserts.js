@@ -281,3 +281,13 @@ goog.asserts.assertInstanceof = function(value, type, opt_message, var_args) {
   return value;
 };
 
+
+/**
+ * Checks that no enumerable keys are present in Object.prototype. Such keys
+ * would break most code that use {@code for (var ... in ...)} loops.
+ */
+goog.asserts.assertObjectPrototypeIsIntact = function() {
+  for (var key in Object.prototype) {
+    goog.asserts.fail(key + ' should not be enumerable in Object.prototype.');
+  }
+};

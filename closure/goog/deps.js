@@ -588,7 +588,7 @@ goog.addDependency('structs/quadtree.js', ['goog.structs.QuadTree', 'goog.struct
 goog.addDependency('structs/queue.js', ['goog.structs.Queue'], ['goog.array']);
 goog.addDependency('structs/set.js', ['goog.structs.Set'], ['goog.structs', 'goog.structs.Collection', 'goog.structs.Map']);
 goog.addDependency('structs/simplepool.js', ['goog.structs.SimplePool'], ['goog.Disposable']);
-goog.addDependency('structs/stringset.js', ['goog.structs.StringSet'], ['goog.iter']);
+goog.addDependency('structs/stringset.js', ['goog.structs.StringSet'], ['goog.asserts', 'goog.iter']);
 goog.addDependency('structs/structs.js', ['goog.structs'], ['goog.array', 'goog.object']);
 goog.addDependency('structs/treenode.js', ['goog.structs.TreeNode'], ['goog.array', 'goog.asserts', 'goog.structs.Node']);
 goog.addDependency('structs/trie.js', ['goog.structs.Trie'], ['goog.object', 'goog.structs']);

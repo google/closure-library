@@ -152,6 +152,21 @@ function testInstanceof() {
 
 }
 
+function testObjectPrototypeIsIntact() {
+  goog.asserts.assertObjectPrototypeIsIntact();
+  var originalToString = Object.prototype.toString;
+  Object.prototype.toString = goog.nullFunction;
+  try {
+    goog.asserts.assertObjectPrototypeIsIntact();
+    Object.prototype.foo = 1;
+    doTestMessage(goog.asserts.assertObjectPrototypeIsIntact,
+        'Failure: foo should not be enumerable in Object.prototype.');
+  } finally {
+    Object.prototype.toString = originalToString;
+    delete Object.prototype.foo;
+  }
+}
+
 function testAssertionError() {
   var error = new goog.asserts.AssertionError('foo %s %s', [1, 'two']);
   assertEquals('Wrong message', 'foo 1 two', error.message);

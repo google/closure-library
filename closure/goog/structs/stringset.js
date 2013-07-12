@@ -26,6 +26,7 @@
 
 goog.provide('goog.structs.StringSet');
 
+goog.require('goog.asserts');
 goog.require('goog.iter');
 
 
@@ -35,7 +36,6 @@ goog.require('goog.iter');
  * @param {!Array=} opt_elements Elements to add to the set. The non-string
  *     items will be converted to strings, so 15 and '15' will mean the same.
  * @constructor
- * @throws {Error} If Object.prototype has enumerable keys.
  */
 goog.structs.StringSet = function(opt_elements) {
   /**
@@ -51,11 +51,7 @@ goog.structs.StringSet = function(opt_elements) {
     }
   }
 
-  // TODO(user): Move this assertion to goog.object and tie it to
-  //     goog.DEBUG == true when all failures caused by this change are fixed.
-  for (var key in goog.structs.StringSet.EMPTY_OBJECT_) {
-    throw Error(key + ' should not be enumerable in Object.prototype');
-  }
+  goog.asserts.assertObjectPrototypeIsIntact();
 };
 
 
