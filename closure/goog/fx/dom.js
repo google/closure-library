@@ -206,14 +206,14 @@ goog.fx.dom.Swipe = function(element, start, end, time, opt_acc) {
   }
   goog.fx.dom.PredefinedEffect.apply(this, arguments);
 
-  /*
+  /**
    * Maximum width for element.
    * @type {number}
    * @private
    */
   this.maxWidth_ = Math.max(this.endPoint[0], this.startPoint[0]);
 
-  /*
+  /**
    * Maximum height for element.
    * @type {number}
    * @private
