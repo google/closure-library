@@ -58,7 +58,7 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
   this.minExponentDigits_ = 0;
   this.useSignForPositiveExponent_ = false;
 
-  /*
+  /**
    * Whether to show trailing zeros in the fraction when significantDigits_ is
    * positive.
    * @private {boolean}
