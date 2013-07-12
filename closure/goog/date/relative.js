@@ -128,7 +128,6 @@ goog.date.relative.formatFullDate_ = function(date) {
  * @return {string} The formatted date.
  */
 goog.date.relative.format = function(dateMs) {
-
   var now = goog.now();
   var delta = Math.floor((now - dateMs) / goog.date.relative.MINUTE_MS_);
 
@@ -205,15 +204,14 @@ goog.date.relative.formatPast = function(dateMs) {
 
 /**
  * Accepts a timestamp in milliseconds and outputs a relative day. i.e. "Today",
- * "Yesterday" or "Sept 15".
+ * "Yesterday", "Tomorrow", or "Sept 15".
  *
  * @param {number} dateMs Date in milliseconds.
- * @param {!function(!Date):string=} opt_formatter Formatter for the date.
+ * @param {function(!Date):string=} opt_formatter Formatter for the date.
  *     Defaults to form 'MMM dd'.
  * @return {string} The formatted date.
  */
 goog.date.relative.formatDay = function(dateMs, opt_formatter) {
-  var message;
   var today = new Date(goog.now());
 
   today.setHours(0);
@@ -222,15 +220,26 @@ goog.date.relative.formatDay = function(dateMs, opt_formatter) {
   today.setMilliseconds(0);
 
   var yesterday = new Date(today.getTime() - goog.date.relative.DAY_MS_);
-  if (today.getTime() < dateMs) {
+  var tomorrow = new Date(today.getTime() + goog.date.relative.DAY_MS_);
+  var dayAfterTomorrow = new Date(today.getTime() +
+      2 * goog.date.relative.DAY_MS_);
+
+  var message;
+  if (dateMs >= tomorrow.getTime() && dateMs < dayAfterTomorrow.getTime()) {
+    /** @desc Tomorrow. */
+    var MSG_TOMORROW = goog.getMsg('Tomorrow');
+    message = MSG_TOMORROW;
+  } else if (dateMs >= today.getTime() && dateMs < tomorrow.getTime()) {
     /** @desc Today. */
     var MSG_TODAY = goog.getMsg('Today');
     message = MSG_TODAY;
-  } else if (yesterday.getTime() < dateMs) {
+  } else if (dateMs >= yesterday.getTime() && dateMs < today.getTime()) {
     /** @desc Yesterday. */
     var MSG_YESTERDAY = goog.getMsg('Yesterday');
     message = MSG_YESTERDAY;
   } else {
+    // If we don't have a special relative term for this date, then return the
+    // short date format (or a custom-formatted date).
     var formatFunction = opt_formatter || goog.date.relative.formatMonth_;
     message = formatFunction(new Date(dateMs));
   }

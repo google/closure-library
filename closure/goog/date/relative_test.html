@@ -100,6 +100,10 @@ See the COPYING file for details.
         goog.i18n.DateTimeFormat.Format.SHORT_DATE);
     var format = goog.bind(formatter.format, formatter);
 
+    assertEquals('Sep 25', fn(timestamp('25 September 2009 10:31:06')));
+    assertEquals('Mar 25', fn(timestamp('25 March 2009 00:12:19')));
+    assertEquals('Tomorrow', fn(timestamp('24 March 2009 10:31:06')));
+    assertEquals('Tomorrow', fn(timestamp('24 March 2009 00:12:19')));
     assertEquals('Today', fn(timestamp('23 March 2009 10:31:06')));
     assertEquals('Today', fn(timestamp('23 March 2009 00:12:19')));
     assertEquals('Yesterday', fn(timestamp('22 March 2009 23:48:12')));
