@@ -84,6 +84,7 @@ goog.events.EventType = {
 
   // Misc
   BEFOREUNLOAD: 'beforeunload',
+  CONSOLEMESSAGE: 'consolemessage',
   CONTEXTMENU: 'contextmenu',
   DOMCONTENTLOADED: 'DOMContentLoaded',
   ERROR: 'error',
@@ -148,5 +149,17 @@ goog.events.EventType = {
   TEXTINPUT: 'textinput',
   COMPOSITIONSTART: 'compositionstart',
   COMPOSITIONUPDATE: 'compositionupdate',
-  COMPOSITIONEND: 'compositionend'
+  COMPOSITIONEND: 'compositionend',
+
+  // Webview tag events
+  // See http://developer.chrome.com/dev/apps/webview_tag.html
+  EXIT: 'exit',
+  LOADABORT: 'loadabort',
+  LOADCOMMIT: 'loadcommit',
+  LOADREDIRECT: 'loadredirect',
+  LOADSTART: 'loadstart',
+  LOADSTOP: 'loadstop',
+  RESPONSIVE: 'responsive',
+  SIZECHANGED: 'sizechanged',
+  UNRESPONSIVE: 'unresponsive'
 };
