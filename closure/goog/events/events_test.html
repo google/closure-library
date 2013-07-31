@@ -14,6 +14,7 @@ See the COPYING file for details.
   goog.require('goog.debug.EntryPointMonitor');
   goog.require('goog.debug.ErrorHandler');
   goog.require('goog.debug.ErrorHandler.ProtectedFunctionError');
+  goog.require('goog.dom');
   goog.require('goog.events');
   goog.require('goog.events.EventTarget');
   goog.require('goog.events.EventType');
@@ -653,6 +654,61 @@ See the COPYING file for details.
     assertFalse(goog.events.hasListener(bodyEl));
     assertFalse(goog.events.hasListener(div));
     assertTrue(goog.events.hasListener(et));
+  }
+
+  function testPropagationStoppedDuringCapture() {
+    var captureHandler = goog.testing.recordFunction(function(e) {
+      e.stopPropagation();
+    });
+    var bubbleHandler = goog.testing.recordFunction();
+
+    var body = document.body;
+    var div = document.createElement('div');
+    body.appendChild(div);
+    try {
+      goog.events.listen(body, 'click', captureHandler, true);
+      goog.events.listen(div, 'click', bubbleHandler, false);
+      goog.events.listen(body, 'click', bubbleHandler, false);
+
+      dispatchClick(div);
+      assertEquals(1, captureHandler.getCallCount());
+      assertEquals(0, bubbleHandler.getCallCount());
+
+      goog.events.unlisten(body, 'click', captureHandler, true);
+
+      dispatchClick(div);
+      assertEquals(2, bubbleHandler.getCallCount());
+    } finally {
+      goog.dom.removeNode(div);
+      goog.events.removeAll(body);
+      goog.events.removeAll(div);
+    }
+  }
+
+  function testPropagationStoppedDuringBubble() {
+    var captureHandler = goog.testing.recordFunction();
+    var bubbleHandler1 = goog.testing.recordFunction(function(e) {
+      e.stopPropagation();
+    });
+    var bubbleHandler2 = goog.testing.recordFunction();
+
+    var body = document.body;
+    var div = document.createElement('div');
+    body.appendChild(div);
+    try {
+      goog.events.listen(body, 'click', captureHandler, true);
+      goog.events.listen(div, 'click', bubbleHandler1, false);
+      goog.events.listen(body, 'click', bubbleHandler2, false);
+
+      dispatchClick(div);
+      assertEquals(1, captureHandler.getCallCount());
+      assertEquals(1, bubbleHandler1.getCallCount());
+      assertEquals(0, bubbleHandler2.getCallCount());
+    } finally {
+      goog.dom.removeNode(div);
+      goog.events.removeAll(body);
+      goog.events.removeAll(div);
+    }
   }
 </script>
 </body>

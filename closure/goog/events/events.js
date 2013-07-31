@@ -273,8 +273,7 @@ goog.events.listen_ = function(
     src.attachEvent(goog.events.getOnString_(type), proxy);
   }
 
-  var key = listenerObj.key;
-  goog.events.listeners_[key] = listenerObj;
+  goog.events.listeners_[listenerObj.key] = listenerObj;
   return listenerObj;
 };
 
@@ -333,18 +332,15 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
     return null;
   }
 
-  var listenableKey;
   listener = goog.events.wrapListener_(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
-    listenableKey = src.listenOnce(
+    return src.listenOnce(
         /** @type {string} */ (type), listener, opt_capt, opt_handler);
   } else {
-    listenableKey = goog.events.listen_(
+    return goog.events.listen_(
         /** @type {EventTarget} */ (src),
         type, listener, /* callOnce */ true, opt_capt, opt_handler);
   }
-
-  return listenableKey;
 };
 
 
@@ -431,10 +427,7 @@ goog.events.unlistenByKey = function(key) {
   }
 
   var listener = /** @type {goog.events.ListenableKey} */ (key);
-  if (!listener) {
-    return false;
-  }
-  if (listener.removed) {
+  if (!listener || listener.removed) {
     return false;
   }
 
@@ -523,16 +516,13 @@ goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
  * @return {number} Number of listeners removed.
  */
 goog.events.removeAll = function(opt_obj, opt_type) {
-  var count = 0;
-
-  var noObj = opt_obj == null;
-  var noType = opt_type == null;
-
-  if (!noObj) {
-    if (opt_obj && goog.events.Listenable.isImplementedBy(opt_obj)) {
+  if (opt_obj) {
+    if (goog.events.Listenable.isImplementedBy(opt_obj)) {
       return opt_obj.removeAllListeners(opt_type);
     }
 
+    var count = 0;
+    var noType = opt_type == null;
     var srcUid = goog.getUid(/** @type {Object} */ (opt_obj));
     if (goog.events.sources_[srcUid]) {
       var sourcesArray = goog.events.sources_[srcUid];
@@ -544,14 +534,11 @@ goog.events.removeAll = function(opt_obj, opt_type) {
         }
       }
     }
+    return count;
   } else {
-    goog.object.forEach(goog.events.listeners_, function(listener) {
-      goog.events.unlistenByKey(listener);
-      count++;
-    });
+    // TODO(user): Remove this branch once opt_obj becomes mandatory.
+    return goog.events.removeAllNativeListeners();
   }
-
-  return count;
 };
 
 
@@ -908,8 +895,7 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
       goog.events.markIeEvent_(ieEvent);
     }
 
-    var evt = new goog.events.BrowserEvent();
-    evt.init(ieEvent, this);
+    var evt = new goog.events.BrowserEvent(ieEvent, this);
 
     retval = true;
     try {
@@ -957,13 +943,11 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
       }
     }
     return retval;
-  } // IE
+  }
 
-  // Caught a non-IE DOM event. 1 additional argument which is the event object
-  var be = new goog.events.BrowserEvent(
-      opt_evt, /** @type {EventTarget} */ (this));
-  retval = goog.events.fireListener(listener, be);
-  return retval;
+  // Otherwise, simply fire the listener.
+  return goog.events.fireListener(
+      listener, new goog.events.BrowserEvent(opt_evt, this));
 };
 
 
