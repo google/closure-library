@@ -84,6 +84,31 @@ function testGetElement() {
   assertEquals(goog.dom.$, goog.dom.getElement);
 }
 
+function testGetElementDomHelper() {
+  var domHelper = new goog.dom.DomHelper();
+  var el = domHelper.getElement('testEl');
+  assertEquals('Should be able to get id', el.id, 'testEl');
+}
+
+function testGetRequiredElement() {
+  var el = goog.dom.getRequiredElement('testEl');
+  assertTrue(goog.isDefAndNotNull(el));
+  assertEquals('testEl', el.id);
+  assertThrows(function() {
+    goog.dom.getRequiredElement('does_not_exist');
+  });
+}
+
+function testGetRequiredElementDomHelper() {
+  var domHelper = new goog.dom.DomHelper();
+  var el = domHelper.getRequiredElement('testEl');
+  assertTrue(goog.isDefAndNotNull(el));
+  assertEquals('testEl', el.id);
+  assertThrows(function() {
+    domHelper.getRequiredElement('does_not_exist');
+  });
+}
+
 function testGetElementsByTagNameAndClass() {
   assertEquals('Should get 6 spans',
       goog.dom.getElementsByTagNameAndClass('span').length, 6);

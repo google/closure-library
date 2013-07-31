@@ -34,6 +34,7 @@ goog.provide('goog.dom.DomHelper');
 goog.provide('goog.dom.NodeType');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
@@ -119,14 +120,61 @@ goog.dom.getDocument = function() {
 
 
 /**
- * Alias for getElementById. If a DOM node is passed in then we just return
- * that.
+ * Gets an element from the current document by element id.
+ *
+ * If an Element is passed in, it is returned.
+ *
  * @param {string|Element} element Element ID or a DOM node.
  * @return {Element} The element with the given ID, or the node passed in.
  */
 goog.dom.getElement = function(element) {
+  return goog.dom.getElementHelper_(document, element);
+};
+
+
+/**
+ * Gets an element by id from the given document (if present).
+ * If an element is given, it is returned.
+ * @param {!Document} doc
+ * @param {string|Element} element Element ID or a DOM node.
+ * @return {Element} The resulting element.
+ * @private
+ */
+goog.dom.getElementHelper_ = function(doc, element) {
   return goog.isString(element) ?
-      document.getElementById(element) : element;
+      doc.getElementById(element) :
+      element;
+};
+
+
+/**
+ * Gets an element by id, asserting that the element is found.
+ *
+ * This is used when an element is expected to exist, and should fail with
+ * an assertion error if it does not (if assertions are enabled).
+ *
+ * @param {string} id Element ID.
+ * @return {!Element} The element with the given ID, if it exists.
+ */
+goog.dom.getRequiredElement = function(id) {
+  return goog.dom.getRequiredElementHelper_(document, id);
+};
+
+
+/**
+ * Helper function for getRequiredElementHelper functions, both static and
+ * on DomHelper.  Asserts the element with the given id exists.
+ * @param {!Document} doc
+ * @param {string} id
+ * @return {!Element} The element with the given ID, if it exists.
+ * @private
+ */
+goog.dom.getRequiredElementHelper_ = function(doc, id) {
+  // To prevent users passing in Elements as is permitted in getElement().
+  goog.asserts.assertString(id);
+  var element = goog.dom.getElement(id);
+  goog.asserts.assert(element, 'No element found with id: ' + id);
+  return element;
 };
 
 
@@ -2012,11 +2060,21 @@ goog.dom.DomHelper.prototype.getDocument = function() {
  * @return {Element} The element with the given ID, or the node passed in.
  */
 goog.dom.DomHelper.prototype.getElement = function(element) {
-  if (goog.isString(element)) {
-    return this.document_.getElementById(element);
-  } else {
-    return element;
-  }
+  return goog.dom.getElementHelper_(this.document_, element);
+};
+
+
+/**
+ * Gets an element by id, asserting that the element is found.
+ *
+ * This is used when an element is expected to exist, and should fail with
+ * an assertion error if it does not (if assertions are enabled).
+ *
+ * @param {string} id Element ID.
+ * @return {!Element} The element with the given ID, if it exists.
+ */
+goog.dom.DomHelper.prototype.getRequiredElement = function(id) {
+  return goog.dom.getRequiredElementHelper_(this.document_, id);
 };
 
 
