@@ -245,7 +245,7 @@ goog.inherits(goog.ui.media.YoutubeModel, goog.ui.media.MediaModel);
 // character and not create a character range like "[a-f]".
 goog.ui.media.YoutubeModel.MATCHER_ = new RegExp(
     // Lead in.
-    'http://(?:[a-zA-Z]{2,3}\\.)?' +
+    'https?://(?:[a-zA-Z]{2,3}\\.)?' +
     // Watch URL prefix.  This should handle new URLs of the form:
     // http://www.youtube.com/watch#!v=jqxENMKaeCU&feature=related
     // where the parameters appear after "#!" instead of "?".

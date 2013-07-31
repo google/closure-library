@@ -234,6 +234,17 @@ See the COPYING file for details.
     assertEquals(1, flash.length);
   }
 
+  function testUrlMatcher() {
+    var matcher = goog.ui.media.YoutubeModel.MATCHER_;
+    assertTrue(matcher.test('http://www.youtube.com/watch?v=55D-ybnYQSs'));
+    assertTrue(matcher.test('https://youtube.com/watch?v=55D-ybnYQSs'));
+    assertTrue(matcher.test('https://youtube.com/watch?blarg=blop&v=55D-ybnYQSs'));
+    assertTrue(matcher.test('http://www.youtube.com/watch?v=55D-ybnYQSs#wee'));
+
+    assertFalse(matcher.test('http://www.cnn.com/watch?v=55D-ybnYQSs#wee'));
+    assertFalse(matcher.test('ftp://www.youtube.com/watch?v=55D-ybnYQSs#wee'));
+  }
+
   function assertExtractsCorrectly(expectedVideoId, url) {
     var youtube = goog.ui.media.YoutubeModel.newInstance(url);
     assertEquals('videoid for ' + url, expectedVideoId, youtube.getVideoId());
