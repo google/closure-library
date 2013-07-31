@@ -50,6 +50,27 @@ See the COPYING file for details.
     assertFalse(random.hasMoreValues());
     assertNotUndefined(Math.random());
   }
+
+  function testRandomStrictlyFromSequence() {
+    var random = new goog.testing.MockRandom([], /* install */ true);
+    random.setStrictlyFromSequence(true);
+    assertFalse(random.hasMoreValues());
+    assertThrows(function() {
+      Math.random();
+    });
+
+    random.inject(3);
+    assertTrue(random.hasMoreValues());
+    assertNotThrows(function() {
+      Math.random();
+    });
+
+    random.setStrictlyFromSequence(false);
+    assertFalse(random.hasMoreValues());
+    assertNotThrows(function() {
+      Math.random();
+    });
+  }
   
 </script>
 </body>
