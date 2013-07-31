@@ -563,6 +563,9 @@ goog.ui.PopupBase.prototype.show_ = function() {
   }
   this.isVisible_ = true;
 
+  this.lastShowTime_ = goog.now();
+  this.lastHideTime_ = -1;
+
   // If there is transition to play, we play it and fire SHOW event after
   // the transition is over.
   if (this.showTransition_) {
@@ -688,8 +691,6 @@ goog.ui.PopupBase.prototype.onBeforeShow = function() {
  * @suppress {underscore}
  */
 goog.ui.PopupBase.prototype.onShow_ = function() {
-  this.lastShowTime_ = goog.now();
-  this.lastHideTime_ = -1;
   this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
 };
 
