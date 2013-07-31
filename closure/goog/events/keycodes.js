@@ -69,6 +69,7 @@ goog.events.KeyCodes = {
   NINE: 57,
   FF_SEMICOLON: 59, // Firefox (Gecko) fires this for semicolon instead of 186
   FF_EQUALS: 61, // Firefox (Gecko) fires this for equals instead of 187
+  FF_DASH: 173, // Firefox (Gecko) fires this for dash instead of 189
   QUESTION_MARK: 63, // needs localization
   A: 65,
   B: 66,
@@ -367,6 +368,8 @@ goog.events.KeyCodes.normalizeGeckoKeyCode = function(keyCode) {
       return goog.events.KeyCodes.EQUALS;
     case goog.events.KeyCodes.FF_SEMICOLON:
       return goog.events.KeyCodes.SEMICOLON;
+    case goog.events.KeyCodes.FF_DASH:
+      return goog.events.KeyCodes.DASH;
     case goog.events.KeyCodes.MAC_FF_META:
       return goog.events.KeyCodes.META;
     case goog.events.KeyCodes.WIN_KEY_FF_LINUX:
