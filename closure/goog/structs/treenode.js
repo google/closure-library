@@ -270,6 +270,28 @@ goog.structs.TreeNode.findCommonAncestor = function(var_args) {
 
 
 /**
+ * Returns a node whose key matches the given one in the hierarchy rooted at
+ * this node. The hierarchy is searched using an in-order traversal.
+ * @param {*} key The key to search for.
+ * @return {goog.structs.TreeNode} The node with the given key, or null if no
+ *     node with the given key exists in the hierarchy.
+ */
+goog.structs.TreeNode.prototype.getNodeByKey = function(key) {
+  if (this.getKey() == key) {
+    return this;
+  }
+  var children = this.getChildren();
+  for (var i = 0; i < children.length; i++) {
+    var descendant = children[i].getNodeByKey(key);
+    if (descendant) {
+      return descendant;
+    }
+  }
+  return null;
+};
+
+
+/**
  * Traverses all child nodes.
  * @param {function(!goog.structs.TreeNode, number,
  *     !Array.<!goog.structs.TreeNode>)} f Callback function. It takes the

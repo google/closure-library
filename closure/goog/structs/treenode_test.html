@@ -192,6 +192,27 @@ function testFindCommonAncestor() {
   assertNull('disconnected nodes', findCommonAncestor(node3, node5));
 }
 
+function testGetNodeByKey() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  var node3 = new goog.structs.TreeNode(3, null);
+  var node4 = new goog.structs.TreeNode(4, null);
+  var node5 = new goog.structs.TreeNode(2, null);
+  var node6 = new goog.structs.TreeNode(3, null);
+  node1.addChild(node2);
+  node2.addChild(node3);
+  node1.addChild(node4);
+  node4.addChild(node5);
+  node1.addChild(node6);
+
+  assertEquals('root', node1, node1.getNodeByKey(1));
+  assertEquals('child with unique key', node5, node4.getNodeByKey(2));
+  assertEquals('child with duplicate keys', node2, node1.getNodeByKey(2));
+  assertEquals('grandchild with duplicate keys', node3, node1.getNodeByKey(3));
+  assertNull('disconnected', node2.getNodeByKey(4));
+  assertNull('missing', node1.getNodeByKey(5));
+}
+
 function testForEachChild() {
   var node1 = new goog.structs.TreeNode(1, null);
   var node2 = new goog.structs.TreeNode(2, null);
