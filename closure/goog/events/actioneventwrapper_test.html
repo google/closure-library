@@ -11,6 +11,8 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.events.actionEventWrapper</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.a11y.aria');
+  goog.require('goog.a11y.aria.Role');
   goog.require('goog.events');
   goog.require('goog.events.EventHandler');
   goog.require('goog.events.actionEventWrapper');
@@ -64,12 +66,19 @@ See the COPYING file for details.
     goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
     assertEquals('2 events should have been dispatched', 2, events.length);
     assertEquals('Should be an keypress event', 'keypress', events[1].type)
+    
+    goog.a11y.aria.setRole(
+        /** @type {!Element} */ (a), goog.a11y.aria.Role.Button);
+    goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+    assertEquals('3 events should have been dispatched', 3, events.length);
+    assertEquals('Should be an keypress event', 'keypress', events[1].type)
+    goog.a11y.aria.removeRole(/** @type {!Element} */ (a));
 
     goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
-    assertEquals('2 events should have been dispatched', 2, events.length);
+    assertEquals('3 events should have been dispatched', 3, events.length);
 
     goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
-    assertEquals('2 events should have been dispatched', 2, events.length);
+    assertEquals('3 events should have been dispatched', 3, events.length);
 
     goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
         listener);
