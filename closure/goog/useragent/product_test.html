@@ -268,7 +268,17 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
          {num: '0.2.153', truth: true},
          {num: '4.1.223.13', truth: false},
          {num: '4.0.223.10', truth: true}
-       ]}
+       ]},
+      {ua: 'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B)' +
+           'AppleWebKit/535.19 (KHTML, like Gecko) ' +
+           'Chrome/18.0.1025.133 Mobile' +
+           'Safari/535.19',
+       versions: [
+         {num: 18, truth: true},
+         {num: '0.2.153', truth: true},
+         {num: 29, truth: false},
+         {num: '18.0.1025.133', truth: true}
+       ]},
     ];
     checkEachUserAgentDetected(userAgents, 'CHROME');
   }
