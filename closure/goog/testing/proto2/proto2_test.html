@@ -112,6 +112,30 @@ function testFindDifferences_RepeatedNestedMessageDiffers() {
       goog.testing.proto2.findDifferences_(message1, message2, ''));
 }
 
+function testJsonToProto() {
+  var nested = new proto2.TestAllTypes.NestedMessage();
+  nested.setB(1);
+  var message = new proto2.TestAllTypes;
+  message.addRepeatedNestedMessage(nested);
+  message.setOptionalInt32(2);
+  // Successfully deserializes simple as well as message fields.
+  assertObjectEquals(
+      message,
+      goog.testing.proto2.jsonToProto(proto2.TestAllTypes, {
+        'optional_int32': 2,
+        'repeated_nested_message': [{'b': 1}]
+      }));
+  // Fails if the field name is not recognized.
+  assertThrows(function() {
+    goog.testing.proto2.jsonToProto(proto2.TestAllTypes, {'unknown': 1});
+  });
+  // Fails if the value type is wrong in the JSON object.
+  assertThrows(function() {
+    goog.testing.proto2.jsonToProto(proto2.TestAllTypes,
+        {'optional_int32': '1'});
+  });
+}
+
 </script>
 </body>
 </html>
