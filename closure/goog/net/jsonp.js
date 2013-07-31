@@ -18,7 +18,7 @@
  * @fileoverview Implements a cross-domain communication channel. A
  * typical web page is prevented by browser security from sending
  * request, such as a XMLHttpRequest, to other servers than the ones
- * from which it came. The Jsonp class provides a workound, by
+ * from which it came. The Jsonp class provides a workaround by
  * using dynamically generated script tags. Typical usage:.
  *
  * var jsonp = new goog.net.Jsonp(new goog.Uri('http://my.host.com/servlet'));
