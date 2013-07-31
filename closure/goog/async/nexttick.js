@@ -82,7 +82,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       var iframe = document.createElement('iframe');
       iframe.style.display = 'none';
       iframe.src = '';
-      document.body.appendChild(iframe);
+      document.documentElement.appendChild(iframe);
       var win = iframe.contentWindow;
       var doc = win.document;
       doc.open();
