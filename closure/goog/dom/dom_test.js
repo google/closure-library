@@ -24,8 +24,10 @@ goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.string.Unicode');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -38,8 +40,11 @@ var $ = goog.dom.getElement;
 var divForTestingScrolling;
 var myIframe;
 var myIframeDoc;
+var stubs;
 
 function setUpPage() {
+
+  stubs = new goog.testing.PropertyReplacer();
   divForTestingScrolling = document.createElement('div');
   divForTestingScrolling.style.width = '5000px';
   divForTestingScrolling.style.height = '5000px';
@@ -70,6 +75,7 @@ function tearDownPage() {
 
 function tearDown() {
   window.scrollTo(0, 0);
+  stubs.reset();
 }
 
 function testDom() {
@@ -1444,3 +1450,26 @@ function testParentElement() {
 function isIE8OrHigher() {
   return goog.userAgent.IE && goog.userAgent.product.isVersion('8');
 }
+
+
+function testDevicePixelRatio() {
+  stubs.set(goog.dom, 'getWindow', goog.functions.constant(
+      {
+        matchMedia: function(query) {
+          return {
+            matches: query.indexOf('1.5') >= 0
+          };
+        }
+      }));
+  assertEquals(goog.dom.getPixelRatio(), 1.5);
+
+  stubs.set(goog.dom, 'getWindow', goog.functions.constant(
+      {devicePixelRatio: 2.0}));
+  goog.dom.devicePixelRatio_ = null;
+  assertEquals(goog.dom.getPixelRatio(), 2);
+
+  stubs.set(goog.dom, 'getWindow', goog.functions.constant({}));
+  goog.dom.devicePixelRatio_ = null;
+  assertEquals(goog.dom.getPixelRatio(), 1);
+}
+
