@@ -12,6 +12,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.i18n.bidi');
+  goog.require('goog.i18n.bidi.Dir');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -22,6 +23,33 @@ See the COPYING file for details.
   var PDF = '\u202C';
   var LRM = '\u200E';
   var RLM = '\u200F';
+
+  function testToDir() {
+    assertEquals(null, goog.i18n.bidi.toDir(null));
+    assertEquals(null, goog.i18n.bidi.toDir(null, true));
+
+    assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
+        goog.i18n.bidi.toDir(goog.i18n.bidi.Dir.NEUTRAL));
+    assertEquals(null, goog.i18n.bidi.toDir(0, true));
+
+    assertEquals(goog.i18n.bidi.Dir.LTR,
+        goog.i18n.bidi.toDir(goog.i18n.bidi.Dir.LTR));
+    assertEquals(goog.i18n.bidi.Dir.LTR,
+        goog.i18n.bidi.toDir(goog.i18n.bidi.Dir.LTR, true));
+    assertEquals(goog.i18n.bidi.Dir.LTR, goog.i18n.bidi.toDir(100));
+    assertEquals(goog.i18n.bidi.Dir.LTR, goog.i18n.bidi.toDir(100, true));
+    assertEquals(goog.i18n.bidi.Dir.LTR, goog.i18n.bidi.toDir(false));
+    assertEquals(goog.i18n.bidi.Dir.LTR, goog.i18n.bidi.toDir(false, true));
+
+    assertEquals(goog.i18n.bidi.Dir.RTL,
+        goog.i18n.bidi.toDir(goog.i18n.bidi.Dir.RTL));
+    assertEquals(goog.i18n.bidi.Dir.RTL,
+        goog.i18n.bidi.toDir(goog.i18n.bidi.Dir.RTL, true));
+    assertEquals(goog.i18n.bidi.Dir.RTL, goog.i18n.bidi.toDir(-100));
+    assertEquals(goog.i18n.bidi.Dir.RTL, goog.i18n.bidi.toDir(-100, true));
+    assertEquals(goog.i18n.bidi.Dir.RTL, goog.i18n.bidi.toDir(true));
+    assertEquals(goog.i18n.bidi.Dir.RTL, goog.i18n.bidi.toDir(true, true));
+  }
 
   function testIsRtlLang() {
     assert(!goog.i18n.bidi.isRtlLanguage('en'));
@@ -245,11 +273,11 @@ See the COPYING file for details.
   }
 
   function testEstimateDirection() {
-    assertEquals(goog.i18n.bidi.Dir.UNKNOWN,
+    assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
                  goog.i18n.bidi.estimateDirection('', false));
-    assertEquals(goog.i18n.bidi.Dir.UNKNOWN,
+    assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
                  goog.i18n.bidi.estimateDirection(' ', false));
-    assertEquals(goog.i18n.bidi.Dir.UNKNOWN,
+    assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
                  goog.i18n.bidi.estimateDirection('! (...)', false));
     assertEquals(goog.i18n.bidi.Dir.LTR,
                  goog.i18n.bidi.estimateDirection('All-Ascii content', false));

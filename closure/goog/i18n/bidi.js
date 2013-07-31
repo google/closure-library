@@ -21,6 +21,8 @@
  * Namespace for bidi supporting functions.
  */
 goog.provide('goog.i18n.bidi');
+goog.provide('goog.i18n.bidi.Dir');
+goog.provide('goog.i18n.bidi.Format');
 
 
 /**
@@ -91,9 +93,26 @@ goog.i18n.bidi.Format = {
  * @enum {number}
  */
 goog.i18n.bidi.Dir = {
+  /**
+   * Left-to-right.
+   */
+  LTR: 1,
+
+  /**
+   * Right-to-left.
+   */
   RTL: -1,
-  UNKNOWN: 0,
-  LTR: 1
+
+  /**
+   * Neither left-to-right nor right-to-left.
+   */
+  NEUTRAL: 0,
+
+  /**
+   * A historical misnomer for NEUTRAL.
+   * @deprecated For "neutral", use NEUTRAL; for "unknown", use null.
+   */
+  UNKNOWN: 0
 };
 
 
@@ -132,19 +151,28 @@ goog.i18n.bidi.I18N_LEFT = goog.i18n.bidi.IS_RTL ? goog.i18n.bidi.RIGHT :
  * constant. Useful for interaction with different standards of directionality
  * representation.
  *
- * @param {goog.i18n.bidi.Dir|number|boolean} givenDir Directionality given in
- *     one of the following formats:
+ * @param {goog.i18n.bidi.Dir|number|boolean|null} givenDir Directionality given
+ *     in one of the following formats:
  *     1. A goog.i18n.bidi.Dir constant.
- *     2. A number (positive = LRT, negative = RTL, 0 = unknown).
+ *     2. A number (positive = LTR, negative = RTL, 0 = neutral).
  *     3. A boolean (true = RTL, false = LTR).
- * @return {goog.i18n.bidi.Dir} A goog.i18n.bidi.Dir constant matching the given
- *     directionality.
+ *     4. A null for unknown directionality.
+ * @param {boolean=} opt_noNeutral Whether a givenDir of zero or
+ *     goog.i18n.bidi.Dir.NEUTRAL should be treated as null, i.e. unknown, in
+ *     order to preserve legacy behavior.
+ * @return {?goog.i18n.bidi.Dir} A goog.i18n.bidi.Dir constant matching the
+ *     given directionality. If given null, returns null (i.e. unknown).
  */
-goog.i18n.bidi.toDir = function(givenDir) {
+goog.i18n.bidi.toDir = function(givenDir, opt_noNeutral) {
   if (typeof givenDir == 'number') {
+    // This includes the non-null goog.i18n.bidi.Dir case.
     return givenDir > 0 ? goog.i18n.bidi.Dir.LTR :
-        givenDir < 0 ? goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.UNKNOWN;
+        givenDir < 0 ? goog.i18n.bidi.Dir.RTL :
+        opt_noNeutral ? null : goog.i18n.bidi.Dir.NEUTRAL;
+  } else if (givenDir == null) {
+    return null;
   } else {
+    // Must be typeof givenDir == 'boolean'.
     return givenDir ? goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.LTR;
   }
 };
@@ -767,7 +795,7 @@ goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
   }
 
   return totalCount == 0 ?
-      (hasWeaklyLtr ? goog.i18n.bidi.Dir.LTR : goog.i18n.bidi.Dir.UNKNOWN) :
+      (hasWeaklyLtr ? goog.i18n.bidi.Dir.LTR : goog.i18n.bidi.Dir.NEUTRAL) :
       (rtlCount / totalCount > goog.i18n.bidi.rtlDetectionThreshold_ ?
           goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.LTR);
 };
@@ -789,18 +817,23 @@ goog.i18n.bidi.detectRtlDirectionality = function(str, opt_isHtml) {
 
 /**
  * Sets text input element's directionality and text alignment based on a
- * given directionality.
+ * given directionality. Does nothing if the given directionality is unknown or
+ * neutral.
  * @param {Element} element Input field element to set directionality to.
- * @param {goog.i18n.bidi.Dir|number|boolean} dir Desired directionality, given
- *     in one of the following formats:
+ * @param {goog.i18n.bidi.Dir|number|boolean|null} dir Desired directionality,
+ *     given in one of the following formats:
  *     1. A goog.i18n.bidi.Dir constant.
- *     2. A number (positive = LRT, negative = RTL, 0 = unknown).
+ *     2. A number (positive = LRT, negative = RTL, 0 = neutral).
  *     3. A boolean (true = RTL, false = LTR).
+ *     4. A null for unknown directionality.
  */
 goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
-  if (element &&
-      (dir = goog.i18n.bidi.toDir(dir)) != goog.i18n.bidi.Dir.UNKNOWN) {
-    element.style.textAlign = dir == goog.i18n.bidi.Dir.RTL ? 'right' : 'left';
-    element.dir = dir == goog.i18n.bidi.Dir.RTL ? 'rtl' : 'ltr';
+  if (element) {
+    dir = goog.i18n.bidi.toDir(dir);
+    if (dir) {
+      element.style.textAlign =
+          dir == goog.i18n.bidi.Dir.RTL ? 'right' : 'left';
+      element.dir = dir == goog.i18n.bidi.Dir.RTL ? 'rtl' : 'ltr';
+    }
   }
 };

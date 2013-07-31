@@ -12,6 +12,8 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.i18n.BidiFormatter');
+  goog.require('goog.i18n.bidi.Dir');
+  goog.require('goog.i18n.bidi.Format');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -24,7 +26,7 @@ See the COPYING file for details.
   var PDF = goog.i18n.bidi.Format.PDF;
   var LTR = goog.i18n.bidi.Dir.LTR;
   var RTL = goog.i18n.bidi.Dir.RTL;
-  var UNKNOWN = goog.i18n.bidi.Dir.UNKNOWN;
+  var NEUTRAL = goog.i18n.bidi.Dir.NEUTRAL;
   var he = '\u05e0\u05e1';
   var en = 'abba';
   var html = '&lt;';
@@ -32,12 +34,19 @@ See the COPYING file for details.
   var longHe = '\u05e0 \u05e1 \u05e0 ';
   var ltrFmt = new goog.i18n.BidiFormatter(LTR,  false);  // LTR context
   var rtlFmt = new goog.i18n.BidiFormatter(RTL, false);  // RTL context
-  var unkFmt = new goog.i18n.BidiFormatter(UNKNOWN,  false);  // unknown context
+  var unkFmt = new goog.i18n.BidiFormatter(null,  false);  // unknown context
+
+  function testGetContextDir() {
+    assertEquals(null, unkFmt.getContextDir());
+    assertEquals(null, new goog.i18n.BidiFormatter(NEUTRAL).getContextDir());
+    assertEquals(LTR, ltrFmt.getContextDir());
+    assertEquals(RTL, rtlFmt.getContextDir());
+  }
 
   function testEstimateDirection() {
-    assertEquals(UNKNOWN, ltrFmt.estimateDirection(''));
-    assertEquals(UNKNOWN, rtlFmt.estimateDirection(''));
-    assertEquals(UNKNOWN, unkFmt.estimateDirection(''));
+    assertEquals(NEUTRAL, ltrFmt.estimateDirection(''));
+    assertEquals(NEUTRAL, rtlFmt.estimateDirection(''));
+    assertEquals(NEUTRAL, unkFmt.estimateDirection(''));
     assertEquals(LTR, ltrFmt.estimateDirection(en));
     assertEquals(LTR, rtlFmt.estimateDirection(en));
     assertEquals(LTR, unkFmt.estimateDirection(en));
@@ -62,7 +71,7 @@ See the COPYING file for details.
     assertEquals('overall dir and context dir are LTR',
         'ltr', ltrFmt.dirAttrValue(en, true));
 
-    // Input's directionality is unknown.
+    // Input's directionality is neutral.
     assertEquals('ltr', ltrFmt.dirAttrValue('', true));
     assertEquals('rtl', rtlFmt.dirAttrValue('', true));
     assertEquals('ltr', unkFmt.dirAttrValue('', true));
@@ -77,24 +86,38 @@ See the COPYING file for details.
   function testKnownDirAttrValue() {
     assertEquals('rtl', ltrFmt.knownDirAttrValue(RTL));
     assertEquals('rtl', rtlFmt.knownDirAttrValue(RTL));
+    assertEquals('rtl', unkFmt.knownDirAttrValue(RTL));
     assertEquals('ltr', rtlFmt.knownDirAttrValue(LTR));
     assertEquals('ltr', ltrFmt.knownDirAttrValue(LTR));
+    assertEquals('ltr', unkFmt.knownDirAttrValue(LTR));
 
-    // Input directionality is unknown.
-    assertEquals('ltr', ltrFmt.knownDirAttrValue(UNKNOWN));
-    assertEquals('rtl', rtlFmt.knownDirAttrValue(UNKNOWN));
-    assertEquals('ltr', unkFmt.knownDirAttrValue(UNKNOWN));
+    // Input directionality is neutral.
+    assertEquals('ltr', ltrFmt.knownDirAttrValue(NEUTRAL));
+    assertEquals('rtl', rtlFmt.knownDirAttrValue(NEUTRAL));
+    assertEquals('ltr', unkFmt.knownDirAttrValue(NEUTRAL));
   }
 
   function testDirAttr() {
     assertEquals('overall dir (RTL) doesnt match context dir (LTR)',
         'dir="rtl"', ltrFmt.dirAttr(he, true));
+    assertEquals('overall dir (RTL) doesnt match context dir (unknown)',
+        'dir="rtl"', unkFmt.dirAttr(he, true));
     assertEquals('overall dir matches context dir (RTL)',
         '', rtlFmt.dirAttr(he, true));
+
     assertEquals('overall dir (LTR) doesnt match context dir (RTL)',
         'dir="ltr"', rtlFmt.dirAttr(en, true));
+    assertEquals('overall dir (LTR) doesnt match context dir (unknown)',
+        'dir="ltr"', unkFmt.dirAttr(en, true));
     assertEquals('overall dir matches context dir (LTR)',
         '', ltrFmt.dirAttr(en, true));
+
+    assertEquals('neutral in RTL context',
+        '', rtlFmt.dirAttr('.', true));
+    assertEquals('neutral in LTR context',
+        '', ltrFmt.dirAttr('.', true));
+    assertEquals('neutral in unknown context',
+        '', unkFmt.dirAttr('.', true));
 
     // Text contains HTML or HTML-escaping:
     assertEquals('dir="rtl"',
@@ -105,13 +128,13 @@ See the COPYING file for details.
 
   function testKnownDirAttr() {
     assertEquals('overall dir (RTL) doesnt match context dir (LTR)',
-        'dir="rtl"', ltrFmt.knownDirAttr(goog.i18n.bidi.Dir.RTL));
+        'dir="rtl"', ltrFmt.knownDirAttr(RTL));
     assertEquals('overall dir matches context dir (RTL)',
-        '', rtlFmt.knownDirAttr(goog.i18n.bidi.Dir.RTL));
+        '', rtlFmt.knownDirAttr(RTL));
     assertEquals('overall dir (LTR) doesnt match context dir (RTL)',
-        'dir="ltr"', rtlFmt.knownDirAttr(goog.i18n.bidi.Dir.LTR));
+        'dir="ltr"', rtlFmt.knownDirAttr(LTR));
     assertEquals('overall dir matches context dir (LTR)',
-        '', ltrFmt.knownDirAttr(goog.i18n.bidi.Dir.LTR));
+        '', ltrFmt.knownDirAttr(LTR));
   }
 
   function testSpanWrap() {
@@ -163,7 +186,7 @@ See the COPYING file for details.
 
     var ltrAlwaysSpanFmt = new goog.i18n.BidiFormatter(LTR,  true);
     var rtlAlwaysSpanFmt = new goog.i18n.BidiFormatter(RTL, true);
-    var unkAlwaysSpanFmt = new goog.i18n.BidiFormatter(UNKNOWN,  true);
+    var unkAlwaysSpanFmt = new goog.i18n.BidiFormatter(null,  true);
 
     assertEquals('alwaysSpan, overall dir matches context dir (LTR), ' +
         'no dirReset',
@@ -191,37 +214,80 @@ See the COPYING file for details.
   }
 
   function testSpanWrapWithKnownDir() {
-    assertEquals('overall dir matches context dir (LTR)',
-        en, ltrFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, en));
-    assertEquals(
-        'overall dir (but not exit dir) supposedly matches context dir (LTR)',
-        he + LRM, ltrFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, he));
-    assertEquals('overall dir matches context dir (RTL)',
-        he, rtlFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.RTL, he));
-    assertEquals(
-        'overall dir (but not exit dir) supposedly matches context dir (RTL)',
-        en + RLM, rtlFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.RTL, en));
-
-    assertEquals('overall dir (RTL) doesnt match context dir (LTR)',
+    assertEquals('known LTR in LTR context',
+        en, ltrFmt.spanWrapWithKnownDir(LTR, en));
+    assertEquals('unknown LTR in LTR context',
+        en, ltrFmt.spanWrapWithKnownDir(null, en));
+    assertEquals('overall LTR but exit RTL in LTR context',
+        he + LRM, ltrFmt.spanWrapWithKnownDir(LTR, he));
+    assertEquals('known RTL in LTR context',
         '<span dir="rtl">' + he + '<\/span>' + LRM,
-        ltrFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.RTL, he));
-    assertEquals('supposed overall dir (RTL) doesnt match context dir (LTR)',
+        ltrFmt.spanWrapWithKnownDir(RTL, he));
+    assertEquals('unknown RTL in LTR context',
+        '<span dir="rtl">' + he + '<\/span>' + LRM,
+        ltrFmt.spanWrapWithKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in LTR context',
         '<span dir="rtl">' + en + '<\/span>' + LRM,
-        ltrFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.RTL, en));
-    assertEquals('overall dir (LTR) doesnt match context dir (RTL)',
+        ltrFmt.spanWrapWithKnownDir(RTL, en));
+    assertEquals('known neutral in LTR context',
+        '.', ltrFmt.spanWrapWithKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in LTR context',
+        '.', ltrFmt.spanWrapWithKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in LTR context',
+        en, ltrFmt.spanWrapWithKnownDir(NEUTRAL, en));
+    assertEquals('overall neutral but exit RTL in LTR context',
+        he + LRM, ltrFmt.spanWrapWithKnownDir(NEUTRAL, he));
+
+    assertEquals('known RTL in RTL context',
+        he, rtlFmt.spanWrapWithKnownDir(RTL, he));
+    assertEquals('unknown RTL in RTL context',
+        he, rtlFmt.spanWrapWithKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in RTL context',
+        en + RLM, rtlFmt.spanWrapWithKnownDir(RTL, en));
+    assertEquals('known LTR in RTL context',
         '<span dir="ltr">' + en + '<\/span>' + RLM,
-        rtlFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, en));
-    assertEquals('supposed overall dir (LTR) doesnt match context dir (RTL)',
+        rtlFmt.spanWrapWithKnownDir(LTR, en));
+    assertEquals('unknown LTR in RTL context',
+        '<span dir="ltr">' + en + '<\/span>' + RLM,
+        rtlFmt.spanWrapWithKnownDir(null, en));
+    assertEquals('LTR but exit RTL in RTL context',
         '<span dir="ltr">' + he + '<\/span>' + RLM,
-        rtlFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, he));
-    assertEquals(
-        'supposed overall dir (LTR) doesnt match context dir (unknown)',
+        rtlFmt.spanWrapWithKnownDir(LTR, he));
+    assertEquals('known neutral in RTL context',
+        '.', rtlFmt.spanWrapWithKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in RTL context',
+        '.', rtlFmt.spanWrapWithKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in LTR context',
+        he, rtlFmt.spanWrapWithKnownDir(NEUTRAL, he));
+    assertEquals('overall neutral but exit RTL in LTR context',
+        en + RLM, rtlFmt.spanWrapWithKnownDir(NEUTRAL, en));
+
+    assertEquals('known RTL in unknown context',
+        '<span dir="rtl">' + he + '<\/span>',
+        unkFmt.spanWrapWithKnownDir(RTL, he));
+    assertEquals('unknown RTL in unknown context',
+        '<span dir="rtl">' + he + '<\/span>',
+        unkFmt.spanWrapWithKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in unknown context',
+        '<span dir="rtl">' + en + '<\/span>',
+        unkFmt.spanWrapWithKnownDir(RTL, en));
+    assertEquals('known LTR in unknown context',
+        '<span dir="ltr">' + en + '<\/span>',
+        unkFmt.spanWrapWithKnownDir(LTR, en));
+    assertEquals('unknown LTR in unknown context',
+        '<span dir="ltr">' + en + '<\/span>',
+        unkFmt.spanWrapWithKnownDir(null, en));
+    assertEquals('LTR but exit RTL in unknown context',
         '<span dir="ltr">' + he + '<\/span>',
-        unkFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, he));
-    assertEquals(
-        'supposed overall dir (neutral) doesnt match context dir (LTR)',
-        he + LRM,
-        ltrFmt.spanWrapWithKnownDir(goog.i18n.bidi.Dir.UNKNOWN, he));
+        unkFmt.spanWrapWithKnownDir(LTR, he));
+    assertEquals('known neutral in unknown context',
+        '.', unkFmt.spanWrapWithKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in unknown context',
+        '.', unkFmt.spanWrapWithKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in unknown context',
+        he, unkFmt.spanWrapWithKnownDir(NEUTRAL, he));
+    assertEquals('overall neutral but exit RTL in unknown context',
+        en, unkFmt.spanWrapWithKnownDir(NEUTRAL, en));
   }
 
   function testUnicodeWrap() {
@@ -267,37 +333,82 @@ See the COPYING file for details.
   }
 
   function testUnicodeWrapWithKnownDir() {
-    assertEquals('overall dir matches context dir (LTR)',
-        en, ltrFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, en));
-    assertEquals(
-        'overall dir (but not exit dir) supposedly matches context dir (LTR)',
-        he + LRM, ltrFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, he));
-    assertEquals('overall dir matches context dir (RTL)',
-        he, rtlFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.RTL, he));
-    assertEquals(
-        'overall dir (but not exit dir) supposedly matches context dir (RTL)',
-        en + RLM, rtlFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.RTL, en));
-
-    assertEquals('overall dir (RTL) doesnt match context dir (LTR)',
+    assertEquals('known LTR in LTR context',
+        en, ltrFmt.unicodeWrapWithKnownDir(LTR, en));
+    assertEquals('unknown LTR in LTR context',
+        en, ltrFmt.unicodeWrapWithKnownDir(null, en));
+    assertEquals('overall LTR but exit RTL in LTR context',
+        he + LRM, ltrFmt.unicodeWrapWithKnownDir(LTR, he));
+    assertEquals('known RTL in LTR context',
         RLE + he + PDF + LRM,
-        ltrFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.RTL, he));
-    assertEquals('supposed overall dir (RTL) doesnt match context dir (LTR)',
+        ltrFmt.unicodeWrapWithKnownDir(RTL, he));
+    assertEquals('unknown RTL in LTR context',
+        RLE + he + PDF + LRM,
+        ltrFmt.unicodeWrapWithKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in LTR context',
         RLE + en + PDF + LRM,
-        ltrFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.RTL, en));
-    assertEquals('overall dir (LTR) doesnt match context dir (RTL)',
-        LRE + en + PDF + RLM,
-        rtlFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, en));
-    assertEquals('supposed overall dir (LTR) doesnt match context dir (RTL)',
-        LRE + he + PDF + RLM,
-        rtlFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, he));
-    assertEquals(
-        'supposed overall dir (LTR) doesnt match context dir (unknown)',
-        LRE + he + PDF,
-        unkFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.LTR, he));
-    assertEquals(
-        'supposed overall dir (neutral) doesnt match context dir (LTR)',
+        ltrFmt.unicodeWrapWithKnownDir(RTL, en));
+    assertEquals('known neutral in LTR context',
+        '.', ltrFmt.unicodeWrapWithKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in LTR context',
+        '.', ltrFmt.unicodeWrapWithKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in LTR context',
+        en, ltrFmt.unicodeWrapWithKnownDir(NEUTRAL, en));
+    assertEquals('overall neutral but exit RTL in LTR context',
         he + LRM,
-        ltrFmt.unicodeWrapWithKnownDir(goog.i18n.bidi.Dir.UNKNOWN, he));
+        ltrFmt.unicodeWrapWithKnownDir(NEUTRAL, he));
+
+    assertEquals('known RTL in RTL context',
+        he, rtlFmt.unicodeWrapWithKnownDir(RTL, he));
+    assertEquals('unknown RTL in RTL context',
+        he, rtlFmt.unicodeWrapWithKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in RTL context',
+        en + RLM, rtlFmt.unicodeWrapWithKnownDir(RTL, en));
+    assertEquals('known LTR in RTL context',
+        LRE + en + PDF + RLM,
+        rtlFmt.unicodeWrapWithKnownDir(LTR, en));
+    assertEquals('unknown LTR in RTL context',
+        LRE + en + PDF + RLM,
+        rtlFmt.unicodeWrapWithKnownDir(null, en));
+    assertEquals('LTR but exit RTL in RTL context',
+        LRE + he + PDF + RLM,
+        rtlFmt.unicodeWrapWithKnownDir(LTR, he));
+    assertEquals('known neutral in RTL context',
+        '.', rtlFmt.unicodeWrapWithKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in RTL context',
+        '.', rtlFmt.unicodeWrapWithKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in LTR context',
+        he, rtlFmt.unicodeWrapWithKnownDir(NEUTRAL, he));
+    assertEquals('overall neutral but exit RTL in LTR context',
+        en + RLM,
+        rtlFmt.unicodeWrapWithKnownDir(NEUTRAL, en));
+
+    assertEquals('known RTL in unknown context',
+        RLE + he + PDF,
+        unkFmt.unicodeWrapWithKnownDir(RTL, he));
+    assertEquals('unknown RTL in unknown context',
+        RLE + he + PDF,
+        unkFmt.unicodeWrapWithKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in unknown context',
+        RLE + en + PDF,
+        unkFmt.unicodeWrapWithKnownDir(RTL, en));
+    assertEquals('known LTR in unknown context',
+        LRE + en + PDF,
+        unkFmt.unicodeWrapWithKnownDir(LTR, en));
+    assertEquals('unknown LTR in unknown context',
+        LRE + en + PDF,
+        unkFmt.unicodeWrapWithKnownDir(null, en));
+    assertEquals('LTR but exit RTL in unknown context',
+        LRE + he + PDF,
+        unkFmt.unicodeWrapWithKnownDir(LTR, he));
+    assertEquals('known neutral in unknown context',
+        '.', unkFmt.unicodeWrapWithKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in unknown context',
+        '.', unkFmt.unicodeWrapWithKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in unknown context',
+        he, unkFmt.unicodeWrapWithKnownDir(NEUTRAL, he));
+    assertEquals('overall neutral but exit RTL in unknown context',
+        en, unkFmt.unicodeWrapWithKnownDir(NEUTRAL, en));
   }
 
   function testMarkAfter() {
@@ -317,10 +428,76 @@ See the COPYING file for details.
         '', rtlFmt.markAfter(longHe + he, true));
   }
 
+  function testMarkAfterKnownDir() {
+    assertEquals('known LTR in LTR context',
+        '', ltrFmt.markAfterKnownDir(LTR, en));
+    assertEquals('unknown LTR in LTR context',
+        '', ltrFmt.markAfterKnownDir(null, en));
+    assertEquals('overall LTR but exit RTL in LTR context',
+        LRM, ltrFmt.markAfterKnownDir(LTR, he));
+    assertEquals('known RTL in LTR context',
+        LRM, ltrFmt.markAfterKnownDir(RTL, he));
+    assertEquals('unknown RTL in LTR context',
+        LRM, ltrFmt.markAfterKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in LTR context',
+        LRM, ltrFmt.markAfterKnownDir(RTL, en));
+    assertEquals('known neutral in LTR context',
+        '', ltrFmt.markAfterKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in LTR context',
+        '', ltrFmt.markAfterKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in LTR context',
+        '', ltrFmt.markAfterKnownDir(NEUTRAL, en));
+    assertEquals('overall neutral but exit RTL in LTR context',
+        LRM, ltrFmt.markAfterKnownDir(NEUTRAL, he));
+
+    assertEquals('known RTL in RTL context',
+        '', rtlFmt.markAfterKnownDir(RTL, he));
+    assertEquals('unknown RTL in RTL context',
+        '', rtlFmt.markAfterKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in RTL context',
+        RLM, rtlFmt.markAfterKnownDir(RTL, en));
+    assertEquals('known LTR in RTL context',
+        RLM, rtlFmt.markAfterKnownDir(LTR, en));
+    assertEquals('unknown LTR in RTL context',
+        RLM, rtlFmt.markAfterKnownDir(null, en));
+    assertEquals('LTR but exit RTL in RTL context',
+        RLM, rtlFmt.markAfterKnownDir(LTR, he));
+    assertEquals('known neutral in RTL context',
+        '', rtlFmt.markAfterKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in RTL context',
+        '', rtlFmt.markAfterKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in LTR context',
+        '', rtlFmt.markAfterKnownDir(NEUTRAL, he));
+    assertEquals('overall neutral but exit RTL in LTR context',
+        RLM, rtlFmt.markAfterKnownDir(NEUTRAL, en));
+
+    assertEquals('known RTL in unknown context',
+        '', unkFmt.markAfterKnownDir(RTL, he));
+    assertEquals('unknown RTL in unknown context',
+        '', unkFmt.markAfterKnownDir(null, he));
+    assertEquals('overall RTL but exit LTR in unknown context',
+        '', unkFmt.markAfterKnownDir(RTL, en));
+    assertEquals('known LTR in unknown context',
+        '', unkFmt.markAfterKnownDir(LTR, en));
+    assertEquals('unknown LTR in unknown context',
+        '', unkFmt.markAfterKnownDir(null, en));
+    assertEquals('LTR but exit RTL in unknown context',
+        '', unkFmt.markAfterKnownDir(LTR, he));
+    assertEquals('known neutral in unknown context',
+        '', unkFmt.markAfterKnownDir(NEUTRAL, '.'));
+    assertEquals('unknown neutral in unknown context',
+        '', unkFmt.markAfterKnownDir(null, '.'));
+    assertEquals('overall neutral but exit LTR in unknown context',
+        '', unkFmt.markAfterKnownDir(NEUTRAL, he));
+    assertEquals('overall neutral but exit RTL in unknown context',
+        '', unkFmt.markAfterKnownDir(NEUTRAL, en));
+  }
+
   function testMark() {
     // Implicitly, also tests the constructor.
     assertEquals(LRM, (new goog.i18n.BidiFormatter(LTR)).mark());
-    assertEquals('',  (new goog.i18n.BidiFormatter(UNKNOWN)).mark());
+    assertEquals('',  (new goog.i18n.BidiFormatter(null)).mark());
+    assertEquals('',  (new goog.i18n.BidiFormatter(NEUTRAL)).mark());
     assertEquals(RLM, (new goog.i18n.BidiFormatter(RTL)).mark());
     assertEquals(RLM, (new goog.i18n.BidiFormatter(true)).mark());
     assertEquals(LRM, (new goog.i18n.BidiFormatter(false)).mark());
