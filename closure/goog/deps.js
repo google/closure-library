@@ -409,6 +409,8 @@ goog.addDependency('locale/timezonefingerprint.js', ['goog.locale.TimeZoneFinger
 goog.addDependency('locale/timezonelist.js', ['goog.locale.TimeZoneList'], ['goog.locale']);
 goog.addDependency('log/log.js', ['goog.log', 'goog.log.Level', 'goog.log.LogRecord', 'goog.log.Logger'], ['goog.debug', 'goog.debug.LogRecord', 'goog.debug.Logger']);
 goog.addDependency('log/log_test.js', ['goog.logTest'], ['goog.debug.LogManager', 'goog.log', 'goog.log.Level', 'goog.testing.jsunit']);
+goog.addDependency('math/affinetransform.js', ['goog.math.AffineTransform'], ['goog.math']);
+goog.addDependency('math/affinetransform_test.js', ['goog.math.AffineTransformTest'], ['goog.array', 'goog.math', 'goog.math.AffineTransform', 'goog.testing.jsunit']);
 goog.addDependency('math/bezier.js', ['goog.math.Bezier'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency('math/box.js', ['goog.math.Box'], ['goog.math.Coordinate']);
 goog.addDependency('math/coordinate.js', ['goog.math.Coordinate'], ['goog.math']);
