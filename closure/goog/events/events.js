@@ -124,6 +124,15 @@ goog.events.onStringMap_ = {};
 
 
 /**
+ * Randomized string used to avoid collisions if two copies of goog.events are
+ * used the same frame.
+ * @type {number}
+ * @private
+ */
+goog.events.RANDOM_PROPERTY_SUFFIX_ = ((Math.random() * 1e9) | 0);
+
+
+/**
  * Adds an event listener for a specific event on a native event
  * target (such as a DOM element) or an object that has implemented
  * {@link goog.events.Listenable}. A listener can only be added once
@@ -823,6 +832,18 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
 
 
 /**
+ * Property used as a hack to mark an IE event as handled.
+ *
+ * This only needs to avoid collision with other versions of Closure, so this
+ * saves bytes by not having any particular prefix.
+ *
+ * @type {number}
+ * @private
+ */
+goog.events.IE_EVENT_MARKER_PROP_ = goog.events.RANDOM_PROPERTY_SUFFIX_;
+
+
+/**
  * This is used to mark the IE event object so we do not do the Closure pass
  * twice for a bubbling event.
  * @param {Event} e The IE browser event.
@@ -830,32 +851,29 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
  */
 goog.events.markIeEvent_ = function(e) {
   // Only the keyCode and the returnValue can be changed. We use keyCode for
-  // non keyboard events.
+  // beforeunload events.
   // event.returnValue is a bit more tricky. It is undefined by default. A
   // boolean false prevents the default action. In a window.onbeforeunload and
-  // the returnValue is non undefined it will be alerted. However, we will only
-  // modify the returnValue for keyboard events. We can get a problem if non
-  // closure events sets the keyCode or the returnValue
+  // the returnValue is non undefined it will be alerted, so we use keyCode.
+  // We can get a problem if non closure events sets the keyCode or the
+  // returnValue.
+  // NOTE: We tried just storing the last window.event instance and doing an
+  // equality compare. It appears that IE creates a new COM wrapper at each
+  // stage in bubbling, even though it reuses the same backing object.
 
-  var useReturnValue = false;
-
-  if (e.keyCode == 0) {
-    // We cannot change the keyCode in case that srcElement is input[type=file].
-    // We could test that that is the case but that would allocate 3 objects.
-    // If we use try/catch we will only allocate extra objects in the case of a
-    // failure.
-    /** @preserveTry */
-    try {
-      e.keyCode = -1;
-      return;
-    } catch (ex) {
-      useReturnValue = true;
+  if (e.type == 'beforeunload') {
+    e.keyCode = -1;
+  } else {
+    // Use a unique per-instance value in case two instances of Closure are
+    // listening in the same window. However, don't re-set the return value if
+    // it was explicitly set to an explicit value. Note we use bracket notation
+    // since we are violating the type signature set up by externs.
+    if (!goog.isDef(e['returnValue'])) {
+      e['returnValue'] = {};
     }
-  }
-
-  if (useReturnValue ||
-      /** @type {boolean|undefined} */ (e.returnValue) == undefined) {
-    e.returnValue = true;
+    if (goog.isObject(e['returnValue'])) {
+      e['returnValue'][goog.events.IE_EVENT_MARKER_PROP_] = true;
+    }
   }
 };
 
@@ -868,7 +886,13 @@ goog.events.markIeEvent_ = function(e) {
  * @private
  */
 goog.events.isMarkedIeEvent_ = function(e) {
-  return e.keyCode < 0 || e.returnValue != undefined;
+  // Remember from markIeEvent_:
+  // - Most of the time, returnValue is used to convey this.
+  // - In beforeunload, we use keyCode.
+  var returnValue = e['returnValue'];
+  return e.keyCode < 0 ||
+      goog.isObject(returnValue) &&
+          goog.events.IE_EVENT_MARKER_PROP_ in returnValue;
 };
 
 
@@ -920,7 +944,7 @@ goog.events.getListenerMap_ = function(src) {
  * @private
  */
 goog.events.LISTENER_WRAPPER_PROP_ = '__closure_events_fn_' +
-    ((Math.random() * 1e9) >>> 0);
+    goog.events.RANDOM_PROPERTY_SUFFIX_;
 
 
 /**
