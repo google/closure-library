@@ -430,7 +430,6 @@ goog.math.Path.prototype.isSimple = function() {
  * A map from segment type to the path function to call to simplify a path.
  * @type {!Object}
  * @private
- * @suppress {deprecated} goog.math.Path is deprecated.
  */
 goog.math.Path.simplifySegmentMap_ = (function() {
   var map = {};
@@ -452,7 +451,6 @@ goog.math.Path.simplifySegmentMap_ = (function() {
  *
  * @param {!goog.math.Path} src The path to simplify.
  * @return {!goog.math.Path} A new simplified path.
- * @suppress {deprecated} goog.math is deprecated.
  */
 goog.math.Path.createSimplifiedPath = function(src) {
   if (src.isSimple()) {
