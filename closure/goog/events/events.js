@@ -876,70 +876,50 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
     return true;
   }
   map = map[type];
-  var retval, targetsMap;
+
   // Synthesize event propagation if the browser does not support W3C
   // event model.
   if (!goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
     var ieEvent = opt_evt ||
         /** @type {Event} */ (goog.getObjectByName('window.event'));
+    var evt = new goog.events.BrowserEvent(ieEvent, this);
+    var retval = true;
 
-    // Check if we have any capturing event listeners for this type.
-    var hasCapture = true in map;
-    var hasBubble = false in map;
+    // If we have not marked this event yet, we should perform capture
+    // simulation.
+    if (!goog.events.isMarkedIeEvent_(ieEvent)) {
+      goog.events.markIeEvent_(ieEvent);
 
-    if (hasCapture) {
-      if (goog.events.isMarkedIeEvent_(ieEvent)) {
-        return true;
+      var ancestors = [];
+      for (var parent = evt.currentTarget; parent; parent = parent.parentNode) {
+        ancestors.push(parent);
       }
 
-      goog.events.markIeEvent_(ieEvent);
-    }
-
-    var evt = new goog.events.BrowserEvent(ieEvent, this);
-
-    retval = true;
-    try {
-      if (hasCapture) {
-        var ancestors = [];
-
-        for (var parent = evt.currentTarget;
-             parent;
-             parent = parent.parentNode) {
-          ancestors.push(parent);
-        }
-
-        targetsMap = map[true];
-
-        // Call capture listeners
-        for (var i = ancestors.length - 1;
-             !evt.propagationStopped_ && i >= 0;
+      var captureTargetsMap = map[true];
+      if (captureTargetsMap) {
+        for (var i = ancestors.length - 1; !evt.propagationStopped_ && i >= 0;
              i--) {
           evt.currentTarget = ancestors[i];
-          retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type,
-                                               true, evt);
+          retval &= goog.events.fireListeners_(
+              captureTargetsMap, ancestors[i], type, true, evt);
         }
-
-        if (hasBubble) {
-          targetsMap = map[false];
-
-          // Call bubble listeners
-          for (var i = 0;
-               !evt.propagationStopped_ && i < ancestors.length;
-               i++) {
-            evt.currentTarget = ancestors[i];
-            retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type,
-                                                 false, evt);
-          }
-        }
-
-      } else {
-        // Bubbling, let IE handle the propagation.
-        retval = goog.events.fireListener(listener, evt);
       }
 
-    } finally {
-      if (ancestors) {
-        ancestors.length = 0;
+      var bubbleTargetsMap = map[false];
+      if (bubbleTargetsMap) {
+        // We can technically rely on IE to perform bubble event
+        // propagation. However, it turns out that IE fires events in
+        // opposite order of attachEvent registration, which broke
+        // some code and tests that rely on the order. (While W3C DOM
+        // Level 2 Events TR leaves the event ordering unspecified,
+        // modern browsers and W3C DOM Level 3 Events Working Draft
+        // actually specify the order as the registration order.)
+        for (var i = 0; !evt.propagationStopped_ && i < ancestors.length;
+             i++) {
+          evt.currentTarget = ancestors[i];
+          retval &= goog.events.fireListeners_(
+              bubbleTargetsMap, ancestors[i], type, false, evt);
+        }
       }
     }
     return retval;

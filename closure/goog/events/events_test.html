@@ -46,43 +46,37 @@ See the COPYING file for details.
   }
 
   function testProtectBrowserEventEntryPoint() {
-    var errorHandlerCallbackCalled = false;
-    var errorHandler = new goog.debug.ErrorHandler(function() {
-      errorHandlerCallbackCalled = true;
-    });
+    var errorHandlerFn = goog.testing.recordFunction();
+    var errorHandler = new goog.debug.ErrorHandler(errorHandlerFn);
 
     goog.events.protectBrowserEventEntryPoint(errorHandler);
 
-    var protectedHandleBrowserEvent_ = goog.events.handleBrowserEvent_;
-    goog.events.handleBrowserEvent_ = function(evt) {
+    var browserEventHandler = goog.testing.recordFunction(goog.events.handleBrowserEvent_);
+    goog.events.handleBrowserEvent_ = function() {
       try {
-        protectedHandleBrowserEvent_(evt);
-      } catch (e) {
-        assertTrue(
-            e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
+        browserEventHandler.apply(this, arguments);
+      } catch(e) {
+        // Ignored.
       }
     };
 
-    var bodyEl = document.body;
-    goog.events.listen(bodyEl, goog.events.EventType.CLICK, function(e){
-      throw Error;
+    var err = Error('test');
+    var body = document.body;
+    goog.events.listen(body, goog.events.EventType.CLICK, function() {
+      throw err;
     });
 
-    triggerClickEvent(bodyEl);
+    dispatchClick(body);
 
-    assertTrue('Error handler callback should be called.',
-        errorHandlerCallbackCalled);
-  }
+    assertEquals('Error handler callback should be called.',
+        1, errorHandlerFn.getCallCount());
+    assertEquals(err, errorHandlerFn.getLastCall().getArgument(0));
 
-  function triggerClickEvent(element) {
-    if (document.createEvent) {
-      var event = document.createEvent("MouseEvents");
-      event.initMouseEvent("click", true, true, window,
-          0, 0, 0, 0, 0, false, false, false, false, 0, null);
-      element.dispatchEvent(event);
-    } else {
-      element.fireEvent('onclick', element.ownerDocument.createEventObject());
-    }
+    assertEquals(1, browserEventHandler.getCallCount());
+    var err2 = browserEventHandler.getLastCall().getError();
+    assertNotNull(err2);
+    assertTrue(
+        err2 instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
   }
 
   function testSelfRemove() {
@@ -404,11 +398,6 @@ See the COPYING file for details.
 
     goog.removeUid(body);
     dispatchClick(body);
-    assertEquals(1, listener.getCallCount());
-
-    // Make sure that dispatching again doesn't fire the listener.
-    dispatchClick(body);
-    assertEquals(1, listener.getCallCount());
   }
 
   function testListenOnceAfterListenDoesNotChangeExistingListener() {
@@ -704,6 +693,64 @@ See the COPYING file for details.
       assertEquals(1, captureHandler.getCallCount());
       assertEquals(1, bubbleHandler1.getCallCount());
       assertEquals(0, bubbleHandler2.getCallCount());
+    } finally {
+      goog.dom.removeNode(div);
+      goog.events.removeAll(body);
+      goog.events.removeAll(div);
+    }
+  }
+
+  function testAddingCaptureListenerDuringBubbleShouldNotFireTheListener() {
+    var body = document.body;
+    var div = document.createElement('div');
+    body.appendChild(div);
+
+    var captureHandler1 = goog.testing.recordFunction();
+    var captureHandler2 = goog.testing.recordFunction();
+    var bubbleHandler = goog.testing.recordFunction(function(e) {
+      goog.events.listen(body, 'click', captureHandler1, true);
+      goog.events.listen(div, 'click', captureHandler2, true);
+    });
+
+    try {
+      goog.events.listen(div, 'click', bubbleHandler, false);
+
+      dispatchClick(div);
+
+      // These verify that the capture handlers registered in the bubble
+      // handler is not invoked in the same event propagation phase.
+      assertEquals(0, captureHandler1.getCallCount());
+      assertEquals(0, captureHandler2.getCallCount());
+      assertEquals(1, bubbleHandler.getCallCount());
+    } finally {
+      goog.dom.removeNode(div);
+      goog.events.removeAll(body);
+      goog.events.removeAll(div);
+    }
+  }
+
+  function testRemovingCaptureListenerDuringBubbleWouldNotFireListenerTwice() {
+    var body = document.body;
+    var div = document.createElement('div');
+    body.appendChild(div);
+
+    var captureHandler = goog.testing.recordFunction();
+    var bubbleHandler1 = goog.testing.recordFunction(function(e) {
+      goog.events.unlisten(body, 'click', captureHandler, true);
+    });
+    var bubbleHandler2 = goog.testing.recordFunction();
+
+    try {
+      goog.events.listen(body, 'click', captureHandler, true);
+      goog.events.listen(div, 'click', bubbleHandler1, false);
+      goog.events.listen(body, 'click', bubbleHandler2, false);
+
+      dispatchClick(div);
+      assertEquals(1, captureHandler.getCallCount());
+
+      // Verify that neither of these handlers are called more than once.
+      assertEquals(1, bubbleHandler1.getCallCount());
+      assertEquals(1, bubbleHandler2.getCallCount());
     } finally {
       goog.dom.removeNode(div);
       goog.events.removeAll(body);
