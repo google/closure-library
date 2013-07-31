@@ -53,7 +53,7 @@ goog.date.UtcDateTime = function(opt_year, opt_month, opt_date, opt_hours,
   } else {
     timestamp = opt_year ? opt_year.getTime() : goog.now();
   }
-  this.date_ = new Date(timestamp);
+  this.date = new Date(timestamp);
 };
 goog.inherits(goog.date.UtcDateTime, goog.date.DateTime);
 
@@ -77,7 +77,7 @@ goog.date.UtcDateTime.fromIsoString = function(formatted) {
  * @override
  */
 goog.date.UtcDateTime.prototype.clone = function() {
-  var date = new goog.date.UtcDateTime(this.date_);
+  var date = new goog.date.UtcDateTime(this.date);
   date.setFirstDayOfWeek(this.getFirstDayOfWeek());
   date.setFirstWeekCutOffDay(this.getFirstWeekCutOffDay());
   return date;
@@ -94,7 +94,7 @@ goog.date.UtcDateTime.prototype.add = function(interval) {
       interval.seconds + 60 * (
           interval.minutes + 60 * (
               interval.hours + 24 * interval.days)));
-  this.date_ = new Date(this.date_.getTime() + daysAndTimeMillis);
+  this.date = new Date(this.date.getTime() + daysAndTimeMillis);
 };
 
 
