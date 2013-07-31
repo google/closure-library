@@ -258,11 +258,13 @@ goog.result.transform = function(result, transformer) {
  * of both of the results resolve (depending on their success or failure.) The
  * state and value of the returned result in the various cases is documented
  * below:
+ * <pre>
  *
  * First Result State:    Second Result State:    Returned Result State:
  * SUCCESS                SUCCESS                 SUCCESS
  * SUCCESS                ERROR                   ERROR
  * ERROR                  Not created             ERROR
+ * </pre>
  *
  * The value of the returned result, in the case both results succeed, is the
  * value of the second result (the result returned by the action callback.)
