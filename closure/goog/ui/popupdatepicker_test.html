@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2013 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Closure Unit Tests - goog.ui.PopupDatePicker</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.events');
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.recordFunction');
+  goog.require('goog.ui.PopupDatePicker');
+</script>
+</head>
+<body>
+<script>
+
+var popupDatePicker;
+
+function setUp() {
+  popupDatePicker = new goog.ui.PopupDatePicker();
+}
+
+function tearDown() {
+  popupDatePicker.dispose();
+}
+
+function testIsVisible() {
+  assertFalse(popupDatePicker.isVisible());
+  popupDatePicker.createDom();
+  assertFalse(popupDatePicker.isVisible());
+  popupDatePicker.render();
+  assertFalse(popupDatePicker.isVisible());
+  popupDatePicker.showPopup(document.body);
+  assertTrue(popupDatePicker.isVisible());
+  popupDatePicker.hidePopup();
+  assertFalse(popupDatePicker.isVisible());
+}
+
+function testFiresShowAndHideEvents() {
+  var showHandler = goog.testing.recordFunction();
+  var hideHandler = goog.testing.recordFunction();
+  goog.events.listen(popupDatePicker, goog.ui.PopupBase.EventType.SHOW,
+      showHandler);
+  goog.events.listen(popupDatePicker, goog.ui.PopupBase.EventType.HIDE,
+      hideHandler);
+  popupDatePicker.createDom();
+  popupDatePicker.render();
+  assertEquals(0, showHandler.getCallCount());
+  assertEquals(0, hideHandler.getCallCount());
+
+  popupDatePicker.showPopup(document.body);
+  // Bug in goog.ui.Popup: the SHOW event is fired twice.
+  assertEquals(2, showHandler.getCallCount());
+  assertEquals(0, hideHandler.getCallCount());
+  showHandler.reset();
+
+  popupDatePicker.hidePopup();
+  assertEquals(0, showHandler.getCallCount());
+  assertEquals(1, hideHandler.getCallCount());
+}
+
+</script>
+</body>
+</html>

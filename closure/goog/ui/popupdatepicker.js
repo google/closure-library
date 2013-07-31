@@ -33,7 +33,8 @@ goog.require('goog.ui.PopupBase');
 
 
 /**
- * Popup date picker widget.
+ * Popup date picker widget. Fires goog.ui.PopupBase.EventType.SHOW or HIDE
+ * events when its visibility changes.
  *
  * @param {goog.ui.DatePicker=} opt_datePicker Optional DatePicker.  This
  *     enables the use of a custom date-picker instance.
@@ -89,6 +90,15 @@ goog.ui.PopupDatePicker.prototype.createDom = function() {
   goog.ui.PopupDatePicker.superClass_.createDom.call(this);
   this.getElement().className = goog.getCssName('goog-popupdatepicker');
   this.popup_ = new goog.ui.Popup(this.getElement());
+  this.popup_.setParentEventTarget(this);
+};
+
+
+/**
+ * @return {boolean} Whether the date picker is visible.
+ */
+goog.ui.PopupDatePicker.prototype.isVisible = function() {
+  return this.popup_ ? this.popup_.isVisible() : false;
 };
 
 
