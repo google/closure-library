@@ -269,7 +269,7 @@ goog.i18n.currency.CurrencyInfo = {
   'CNY': [2, '¥', 'RMB¥'],
   'COP': [0, '$', 'COL$'],
   'CRC': [0, '\u20a1', 'CR\u20a1'],
-  'CZK': [2, 'K\u010d', 'K\u010d'],
+  'CZK': [42, 'K\u010d', 'K\u010d'],
   'DKK': [18, 'kr', 'kr'],
   'DOP': [2, '$', 'RD$'],
   'EGP': [2, '£', 'LE'],

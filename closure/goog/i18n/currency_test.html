@@ -124,6 +124,26 @@ See the COPYING file for details.
     assertEquals('CNY ¥123,456.79', str);
   }
 
+  function testCurrencyFormatCZK() {
+    var formatter;
+    var str;
+
+    formatter = new goog.i18n.NumberFormat(
+        goog.i18n.currency.getLocalCurrencyPattern('CZK'));
+    str = formatter.format(123456.7899);
+    assertEquals('123,456.79 Kč', str);
+
+    formatter = new goog.i18n.NumberFormat(
+        goog.i18n.currency.getPortableCurrencyPattern('CZK'));
+    str = formatter.format(123456.7899);
+    assertEquals('123,456.79 Kč', str);
+
+    formatter = new goog.i18n.NumberFormat(
+        goog.i18n.currency.getGlobalCurrencyPattern('CZK'));
+    str = formatter.format(123456.7899);
+    assertEquals('CZK 123,456.79 Kč', str);
+  }
+
   function testCurrencyFormatEUR() {
     var formatter;
     var str;
