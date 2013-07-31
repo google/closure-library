@@ -50,7 +50,7 @@ goog.require('goog.userAgent.product');
  * A menu button control.  Extends {@link goog.ui.Button} by composing a button
  * with a dropdown arrow and a popup menu.
  *
- * @param {goog.ui.ControlContent} content Text caption or existing DOM
+ * @param {goog.ui.ControlContent=} opt_content Text caption or existing DOM
  *     structure to display as the button's caption (if any).
  * @param {goog.ui.Menu=} opt_menu Menu to render under the button when clicked.
  * @param {goog.ui.ButtonRenderer=} opt_renderer Renderer used to render or
@@ -60,8 +60,9 @@ goog.require('goog.userAgent.product');
  * @constructor
  * @extends {goog.ui.Button}
  */
-goog.ui.MenuButton = function(content, opt_menu, opt_renderer, opt_domHelper) {
-  goog.ui.Button.call(this, content, opt_renderer ||
+goog.ui.MenuButton = function(opt_content, opt_menu, opt_renderer,
+    opt_domHelper) {
+  goog.ui.Button.call(this, opt_content, opt_renderer ||
       goog.ui.MenuButtonRenderer.getInstance(), opt_domHelper);
 
   // Menu buttons support the OPENED state.

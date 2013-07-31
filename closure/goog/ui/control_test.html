@@ -2137,6 +2137,11 @@ Author: attila@google.com (Attila Bodis)
       assertTrue('Action must have been performed', actionPerformed);
       assertFalse('Control must have been deactivated', control.isActive());
     }
+
+    function testDefaultConstructor() {
+      var control = new goog.ui.Control();
+      assertNull(control.getContent());
+    }
   </script>
 </body>
 </html>

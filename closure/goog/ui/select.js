@@ -41,8 +41,9 @@ goog.require('goog.ui.registry');
  * Select fires the following events:
  *   CHANGE - after selection changes.
  *
- * @param {goog.ui.ControlContent} caption Default caption or existing DOM
+ * @param {goog.ui.ControlContent=} opt_caption Default caption or existing DOM
  *     structure to display as the button's caption when nothing is selected.
+ *     Defaults to no caption.
  * @param {goog.ui.Menu=} opt_menu Menu containing selection options.
  * @param {goog.ui.ButtonRenderer=} opt_renderer Renderer used to render or
  *     decorate the control; defaults to {@link goog.ui.MenuButtonRenderer}.
@@ -51,9 +52,13 @@ goog.require('goog.ui.registry');
  * @constructor
  * @extends {goog.ui.MenuButton}
  */
-goog.ui.Select = function(caption, opt_menu, opt_renderer, opt_domHelper) {
-  goog.ui.MenuButton.call(this, caption, opt_menu, opt_renderer, opt_domHelper);
-  this.setDefaultCaption(caption);
+goog.ui.Select = function(opt_caption, opt_menu, opt_renderer, opt_domHelper) {
+  goog.base(this, opt_caption, opt_menu, opt_renderer, opt_domHelper);
+  /**
+   * Default caption to show when no option is selected.
+   * @private {goog.ui.ControlContent}
+   */
+  this.defaultCaption_ = this.getContent();
 };
 goog.inherits(goog.ui.Select, goog.ui.MenuButton);
 
@@ -64,14 +69,6 @@ goog.inherits(goog.ui.Select, goog.ui.MenuButton);
  * @private
  */
 goog.ui.Select.prototype.selectionModel_ = null;
-
-
-/**
- * Default caption to be shown when no option is selected.
- * @type {goog.ui.ControlContent}
- * @private
- */
-goog.ui.Select.prototype.defaultCaption_ = null;
 
 
 /** @override */

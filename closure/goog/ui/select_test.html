@@ -67,6 +67,11 @@ function testDefaultCaption() {
   assertEquals(newCaption, select.getCaption());
 }
 
+function testNoDefaultCaption() {
+  assertNull(new goog.ui.Select().getDefaultCaption());
+  assertEquals('', new goog.ui.Select('').getDefaultCaption());
+}
+
 // TODO(user): Select has been intentionally changed to no longer follow
 // the spec described below. Select is semantically a menu button that opens
 // a menu with options when clicked. Setting it to LISTBOX role does not make

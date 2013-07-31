@@ -63,8 +63,8 @@ goog.require('goog.userAgent');
  * hide, mouseover, mouseout, and user action, respectively.  Additional states
  * are also supported.  See closure/demos/control.html
  * for example usage.
- * @param {goog.ui.ControlContent} content Text caption or DOM structure
- *     to display as the content of the component (if any).
+ * @param {goog.ui.ControlContent=} opt_content Text caption or DOM structure
+ *     to display as the content of the control (if any).
  * @param {goog.ui.ControlRenderer=} opt_renderer Renderer used to render or
  *     decorate the component; defaults to {@link goog.ui.ControlRenderer}.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
@@ -72,11 +72,11 @@ goog.require('goog.userAgent');
  * @constructor
  * @extends {goog.ui.Component}
  */
-goog.ui.Control = function(content, opt_renderer, opt_domHelper) {
+goog.ui.Control = function(opt_content, opt_renderer, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
   this.renderer_ = opt_renderer ||
       goog.ui.registry.getDefaultRenderer(this.constructor);
-  this.setContentInternal(content);
+  this.setContentInternal(goog.isDef(opt_content) ? opt_content : null);
 };
 goog.inherits(goog.ui.Control, goog.ui.Component);
 
