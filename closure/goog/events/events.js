@@ -99,24 +99,22 @@ goog.events.listeners_ = {};
 
 /**
  * The root of the listener tree
- * @private
- * @type {Object}
+ * @dict
+ * @private {!Object}
  */
 goog.events.listenerTree_ = {};
 
 
 /**
  * Lookup for mapping source UIDs to listeners.
- * @private
- * @type {Object}
+ * @private {!Object}
  */
 goog.events.sources_ = {};
 
 
 /**
- * String used to prepend to IE event types.  Not a constant so that it is not
- * inlined.
- * @type {string}
+ * String used to prepend to IE event types.
+ * @const
  * @private
  */
 goog.events.onString_ = 'on';
@@ -126,19 +124,11 @@ goog.events.onString_ = 'on';
  * Map of computed "on<eventname>" strings for IE event types. Caching
  * this removes an extra object allocation in goog.events.listen which
  * improves IE6 performance.
- * @type {Object}
+ * @const
+ * @dict
  * @private
  */
 goog.events.onStringMap_ = {};
-
-
-/**
- * Separator used to split up the various parts of an event key, to help avoid
- * the possibilities of collisions.
- * @type {string}
- * @private
- */
-goog.events.keySeparator_ = '_';
 
 
 /**
@@ -1029,8 +1019,7 @@ goog.events.isMarkedIeEvent_ = function(e) {
 
 /**
  * Counter to create unique event ids.
- * @type {number}
- * @private
+ * @private {number}
  */
 goog.events.uniqueIdCounter_ = 0;
 
@@ -1050,7 +1039,7 @@ goog.events.getUniqueId = function(identifier) {
 /**
  * Expando property for listener function wrapper for Object with
  * handleEvent.
- * @type {string}
+ * @const
  * @private
  */
 goog.events.LISTENER_WRAPPER_PROP_ = '__closure_events_fn_' +
