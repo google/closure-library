@@ -37,7 +37,6 @@ goog.require('goog.array');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
-goog.require('goog.dom.classlist');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -1888,10 +1887,8 @@ goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
   var tagName = opt_tag ? opt_tag.toUpperCase() : null;
   return /** @type {Element} */ (goog.dom.getAncestor(element,
       function(node) {
-        return goog.dom.isElement(node) &&
-               (!tagName || node.nodeName == tagName) &&
-               (!opt_class || goog.dom.classlist.contains(
-                   /** @type {!Element} */ (node), opt_class));
+        return (!tagName || node.nodeName == tagName) &&
+               (!opt_class || goog.dom.classes.has(node, opt_class));
       }, true));
 };
 
