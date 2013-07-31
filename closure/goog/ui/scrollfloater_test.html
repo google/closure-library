@@ -49,7 +49,7 @@ See the COPYING file for details.
     var callRecorder = function() { floatWasCalled = true; };
     goog.events.listen(
         scrollFloater, goog.ui.ScrollFloater.EventType.FLOAT, callRecorder);
-    scrollFloater.float_();
+    scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.TOP);
     assertTrue('FLOAT event was called', floatWasCalled);
     assertTrue('Should be floating', scrollFloater.isFloating());
     assertFalse('Should not be pinned', scrollFloater.isPinned());
@@ -86,7 +86,7 @@ See the COPYING file for details.
     // Have eventCanceller handle the FLOAT event and verify cancellation.
     goog.events.listen(
         scrollFloater, goog.ui.ScrollFloater.EventType.FLOAT, eventCanceller);
-    scrollFloater.float_();
+    scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.TOP);
     assertFalse('Should not be floating', scrollFloater.isFloating());
 
     // Have eventCanceller handle the PIN event and verify cancellation.
@@ -98,7 +98,7 @@ See the COPYING file for details.
     // Detach eventCanceller and enable floating.
     goog.events.unlisten(
         scrollFloater, goog.ui.ScrollFloater.EventType.FLOAT, eventCanceller);
-    scrollFloater.float_();
+    scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.TOP);
 
     // Have eventCanceller handle the DOCK event and verify cancellation.
     goog.events.listen(
@@ -123,11 +123,16 @@ See the COPYING file for details.
     goog.style.setStyle(scrollFloater.getElement(), 'font-size', '10px');
     goog.events.listen(
         scrollFloater, goog.ui.ScrollFloater.EventType.FLOAT, updateStyle);
-    scrollFloater.float_();
+    scrollFloater.float_(goog.ui.ScrollFloater.FloatMode_.BOTTOM);
 
     // Ensure event handler got called and updated the font size.
     assertEquals('Font size should be 20px',
         '20px', goog.style.getStyle(scrollFloater.getElement(), 'font-size'));
+
+    assertEquals('Top should be auto',
+        'auto', goog.style.getStyle(scrollFloater.getElement(), 'top'));
+    assertEquals('Bottom should be 0px',
+        0, parseInt(goog.style.getStyle(scrollFloater.getElement(), 'bottom')));
 
     scrollFloater.dispose();
   }
