@@ -963,6 +963,19 @@ goog.getUid = function(obj) {
 
 
 /**
+ * Whether the given object is alreay assigned a unique ID.
+ *
+ * This does not modify the object.
+ *
+ * @param {Object} obj The object to check.
+ * @return {boolean} Whether there an assigned unique id for the object.
+ */
+goog.hasUid = function(obj) {
+  return !!obj[goog.UID_PROPERTY_];
+};
+
+
+/**
  * Removes the unique ID from an object. This is useful if the object was
  * previously mutated using {@code goog.getUid} in which case the mutation is
  * undone.

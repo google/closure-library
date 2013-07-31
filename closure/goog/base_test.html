@@ -517,6 +517,17 @@ function testGetUid() {
   assertNotEquals('Unique IDs must be unique', uid2, uid3);
 }
 
+function testHasUid() {
+  var a = {};
+
+  assertFalse(goog.hasUid(a));
+  assertFalse(goog.UID_PROPERTY_ in a);
+
+  var uid = goog.getUid(a);
+  assertTrue(goog.hasUid(a));
+  assertEquals(uid, goog.getUid(a));
+}
+
 function testRemoveUidFromPlainObject() {
   var a = {};
   var uid = goog.getUid(a);
