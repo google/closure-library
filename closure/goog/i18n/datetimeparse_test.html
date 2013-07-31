@@ -21,6 +21,7 @@ See the COPYING file for details.
   goog.require('goog.i18n.DateTimeSymbols');
   goog.require('goog.i18n.DateTimeSymbols_en');
   goog.require('goog.i18n.DateTimeSymbols_fr');
+  goog.require('goog.i18n.DateTimeSymbols_pl');
   goog.require('goog.i18n.DateTimeSymbols_zh');
   goog.require('goog.testing.ExpectedFailures');
   goog.require('goog.testing.jsunit');
@@ -761,6 +762,55 @@ function testDateTime() {
   assertEquals(date_org.getSeconds(), date_parsed.getSeconds());
 }
 
+/** @bug 9901750 */
+function testStandaloneMonthPattern() {
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pl;
+  try {
+    var date1 = new goog.date.Date(2006, 7 - 1);
+    var date2 = new goog.date.Date();
+    var formatter =
+        new goog.i18n.DateTimeFormat('LLLL yyyy');
+    var parser =
+        new goog.i18n.DateTimeParse('LLLL yyyy');
+    var dateStr = formatter.format(date1);
+    parser.parse(dateStr, date2);
+    assertEquals(date1.getFullYear(), date2.getFullYear());
+    assertEquals(date1.getMonth(), date2.getMonth());
+  } finally {
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+  }
+
+  // Sanity tests to make sure MMM... (and LLL...) formats still work for
+  // different locales.
+  var symbols = [
+    goog.i18n.DateTimeSymbols_en,
+    goog.i18n.DateTimeSymbols_pl
+  ];
+  try {
+    for (var i = 0; i < symbols.length; i++) {
+      goog.i18n.DateTimeSymbols = symbols[i];
+      var tests = {
+        'MMMM yyyy': goog.i18n.DateTimeSymbols.MONTHS,
+        'LLLL yyyy': goog.i18n.DateTimeSymbols.STANDALONEMONTHS,
+        'MMM yyyy': goog.i18n.DateTimeSymbols.SHORTMONTHS,
+        'LLL yyyy': goog.i18n.DateTimeSymbols.STANDALONESHORTMONTHS
+      };
+      for (var format in tests) {
+        var parser = new goog.i18n.DateTimeParse(format);
+        var months = tests[format];
+        for (var m = 0; m < months.length; m++) {
+          var dateStr = months[m] + ' 2006';
+          var date = new goog.date.Date();
+          parser.parse(dateStr, date);
+          assertEquals(2006, date.getFullYear());
+          assertEquals(m, date.getMonth());
+        }
+      }
+    }
+  } finally {
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+  }
+}
 </script>
 </body>
 </html>
