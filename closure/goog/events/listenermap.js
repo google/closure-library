@@ -188,7 +188,7 @@ goog.events.ListenerMap.prototype.removeAll = function(opt_type) {
       var listenerArray = this.listeners[type];
       for (var i = 0; i < listenerArray.length; i++) {
         ++count;
-        listenerArray[i].removed = true;
+        listenerArray[i].markAsRemoved();
       }
       delete this.listeners[type];
       this.typeCount_--;

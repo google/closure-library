@@ -927,6 +927,31 @@ function testRemoveAll() {
 }
 
 
+function testRemoveAllCallsMarkAsRemoved() {
+  if (!removeAll) {
+    return;
+  }
+
+  var key0 = listen(eventTargets[0], EventType.A, listeners[0]);
+  var key1 = listen(eventTargets[1], EventType.A, listeners[1]);
+
+  assertNotNullNorUndefined(key0.listener);
+  assertFalse(key0.removed);
+  assertNotNullNorUndefined(key1.listener);
+  assertFalse(key1.removed);
+
+  assertEquals(1, removeAll(eventTargets[0]));
+  assertNull(key0.listener);
+  assertTrue(key0.removed);
+  assertNotNullNorUndefined(key1.listener);
+  assertFalse(key1.removed);
+
+  assertEquals(1, removeAll(eventTargets[1]));
+  assertNull(key1.listener);
+  assertTrue(key1.removed);
+}
+
+
 function testGetListeners() {
   if (!getListeners) {
     return;
