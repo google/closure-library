@@ -399,6 +399,15 @@ goog.ui.ComboBox.prototype.getInputElement = function() {
 
 
 /**
+ * @return {goog.ui.LabelInput} A LabelInput control that manages the
+ *     focus/blur state of the input box.
+ */
+goog.ui.ComboBox.prototype.getLabelInput = function() {
+  return this.labelInput_;
+};
+
+
+/**
  * @return {number} The number of visible items in the menu.
  * @private
  */
