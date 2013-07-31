@@ -571,16 +571,6 @@ goog.testing.TestCase.prototype.getNumFilesLoaded = function() {
 
 
 /**
- * Returns the test results object: a map from test names to a list of test
- * failures (if any exist).
- * @return {!Object.<string, !Array.<string>>} Tests results object.
- */
-goog.testing.TestCase.prototype.getTestResults = function() {
-  return this.result_.resultsByName;
-};
-
-
-/**
  * Executes each of the tests.
  * Overridable by the individual test case.  This allows test cases to defer
  * when the test is actually started.  If overridden, finalize must be called
@@ -823,6 +813,7 @@ goog.testing.TestCase.prototype.cycleTests = function() {
     // Execute the test and handle the error, we execute all tests rather than
     // stopping after a single error.
     var cleanedUp = false;
+
     try {
       this.log('Running test: ' + nextTest.name);
 
@@ -969,12 +960,6 @@ goog.testing.TestCase.prototype.trimPath_ = function(path) {
  */
 goog.testing.TestCase.prototype.doSuccess = function(test) {
   this.result_.successCount++;
-  if (test.name in this.result_.resultsByName) {
-    throw Error('Test ' + test.name + ' was run twice or there are two tests ' +
-        'with the same name.');
-  }
-  // An empty list of error messages indicates that the test passed.
-  this.result_.resultsByName[test.name] = [];
   var message = test.name + ' : PASSED';
   this.saveMessage(message);
   this.log(message);
@@ -994,11 +979,6 @@ goog.testing.TestCase.prototype.doError = function(test, opt_e) {
   this.saveMessage(message);
   var err = this.logError(test.name, opt_e);
   this.result_.errors.push(err);
-  if (test.name in this.result_.resultsByName) {
-    throw Error('Test ' + test.name + ' was run twice or there are two tests ' +
-        'with the same name.');
-  }
-  this.result_.resultsByName[test.name] = [err.toString()];
 };
 
 
@@ -1126,15 +1106,6 @@ goog.testing.TestCase.Result = function(testCase) {
    * @type {boolean}
    */
   this.testSuppressed = false;
-
-  /**
-   * Test results for each test that was run. The test name is always added
-   * as the key in the map, and the array of strings is an optional list
-   * of failure messages. If the array is empty, the test passed. Otherwise,
-   * the test failed.
-   * @type {!Object.<string, !Array.<string>>}
-   */
-  this.resultsByName = {};
 
   /**
    * Errors encountered while running the test.
