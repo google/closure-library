@@ -42,6 +42,7 @@ goog.require('goog.messaging.AbstractChannel');
  *     should already be initialized.
  * @constructor
  * @extends {goog.messaging.AbstractChannel}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.WorkerChannel = function(worker) {
   goog.base(this);

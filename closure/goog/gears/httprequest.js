@@ -31,6 +31,7 @@ goog.require('goog.net.XmlHttp');
 /**
  * Sets up the Gears HttpRequest's to be the default HttpRequest's used via
  * the goog.net.XmlHttp factory.
+ * @deprecated Gears is discontinued.
  */
 goog.gears.HttpRequest.setup = function() {
   // Set the XmlHttp factory.

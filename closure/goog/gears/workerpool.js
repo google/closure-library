@@ -35,6 +35,7 @@ goog.require('goog.gears.Worker');
  *
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.WorkerPool = function() {
   goog.events.EventTarget.call(this);
@@ -65,6 +66,7 @@ goog.inherits(goog.gears.WorkerPool, goog.events.EventTarget);
 /**
  * Enum for event types fired by the WorkerPool.
  * @enum {string}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.WorkerPool.EventType = {
   UNKNOWN_WORKER: 'uknown_worker'
@@ -213,6 +215,7 @@ goog.gears.WorkerPool.prototype.disposeInternal = function() {
  *
  * @constructor
  * @extends {goog.events.Event}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.WorkerPool.Event = function(
     type, senderId, messageObject) {

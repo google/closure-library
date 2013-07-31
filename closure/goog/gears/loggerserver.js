@@ -38,6 +38,7 @@ goog.require('goog.log.Level');
  *     is added to the log records and to exceptions as {@code workerName}.
  * @constructor
  * @extends {goog.Disposable}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.LoggerServer = function(worker, logCommandId, opt_workerName) {
   goog.Disposable.call(this);

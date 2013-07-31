@@ -33,6 +33,7 @@ goog.require('goog.Disposable');
  * @param {goog.gears.Database} database The data base to store the data in.
  * @constructor
  * @extends {goog.Disposable}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.BaseStore = function(database) {
   goog.Disposable.call(this);
@@ -50,6 +51,7 @@ goog.inherits(goog.gears.BaseStore, goog.Disposable);
 /**
  * Schema definition types
  * @enum {number}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.BaseStore.SchemaType = {
   TABLE: 1,

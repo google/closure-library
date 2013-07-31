@@ -36,6 +36,7 @@ goog.require('goog.log.LogRecord');
  * @param {?string=} opt_tableName Name of logging table to use.
  * @extends {goog.gears.BaseStore}
  * @constructor
+ * @deprecated Gears is discontinued.
  */
 goog.gears.LogStore = function(database, opt_tableName) {
   goog.gears.BaseStore.call(this, database);
@@ -429,6 +430,7 @@ goog.gears.LogStore.prototype.disposeInternal = function() {
 /**
  * Query to select log records.
  * @constructor
+ * @deprecated Gears is discontinued.
  */
 goog.gears.LogStore.Query = function() {
 };

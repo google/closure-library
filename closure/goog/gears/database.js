@@ -37,6 +37,7 @@ goog.require('goog.log');
  * @extends {goog.events.EventTarget}
  * @param {string} userId the id token for this user.
  * @param {string} appName  the name of the application creating this database.
+ * @deprecated Gears is discontinued.
  */
 goog.gears.Database = function(userId, appName) {
   goog.events.EventTarget.call(this);
@@ -72,6 +73,7 @@ goog.inherits(goog.gears.Database, goog.events.EventTarget);
 /**
  * Constants for transaction event names.
  * @enum {string}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.Database.EventType = {
   BEFOREBEGIN: 'beforebegin',
@@ -89,6 +91,7 @@ goog.gears.Database.EventType = {
  * @extends {goog.events.Event}
  * @constructor
  * @param {goog.gears.Database.EventType} eventType The type of event.
+ * @deprecated Gears is discontinued.
  */
 goog.gears.Database.TransactionEvent = function(eventType) {
   goog.events.Event.call(this, eventType);

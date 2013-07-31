@@ -34,6 +34,7 @@ goog.require('goog.events.EventTarget');
  * @param {number=} opt_id  The id of the worker this represents.
  *
  * @extends {goog.events.EventTarget}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.Worker = function(workerPool, opt_id) {
   goog.events.EventTarget.call(this);
@@ -159,6 +160,7 @@ goog.gears.Worker.prototype.disposeInternal = function() {
 /**
  * Enum for event types fired by the worker.
  * @enum {string}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.Worker.EventType = {
   MESSAGE: 'message',
@@ -174,6 +176,7 @@ goog.gears.Worker.EventType = {
  *
  * @constructor
  * @extends {goog.events.Event}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.WorkerEvent = function(type, messageObject) {
   goog.events.Event.call(this, type);

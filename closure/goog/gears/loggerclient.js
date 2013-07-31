@@ -38,6 +38,7 @@ goog.require('goog.debug.Logger');
  *     object when serializing it.
  * @constructor
  * @extends {goog.Disposable}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.LoggerClient = function(mainThread, logCommandId, opt_workerName) {
   if (goog.gears.LoggerClient.instance_) {

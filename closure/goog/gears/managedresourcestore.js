@@ -52,6 +52,7 @@ goog.require('goog.string');
  *
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.ManagedResourceStore = function(name, requiredCookie,
     opt_localServer) {
@@ -86,6 +87,7 @@ goog.gears.ManagedResourceStore.UPDATE_INTERVAL_MS = 500;
 /**
  * Enum for possible values of Gears ManagedResourceStore.updatedStatus
  * @enum
+ * @deprecated Gears is discontinued.
  */
 goog.gears.ManagedResourceStore.UpdateStatus = {
   OK: 0,
@@ -521,6 +523,7 @@ goog.gears.ManagedResourceStore.prototype.disposeInternal = function() {
 /**
  * Enum for event types fired by ManagedResourceStore.
  * @enum {string}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.ManagedResourceStore.EventType = {
   COMPLETE: 'complete',
@@ -537,6 +540,7 @@ goog.gears.ManagedResourceStore.EventType = {
  * @param {string=} opt_errorMessage  The error message if failure.
  * @constructor
  * @extends {goog.events.Event}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.ManagedResourceStoreEvent = function(type, opt_errorMessage) {
   goog.events.Event.call(this, type);

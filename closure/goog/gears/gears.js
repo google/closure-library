@@ -29,6 +29,7 @@ goog.require('goog.string');
 /**
  * Returns a new Gears factory object.
  * @return {Object} the Gears factory object if available or null otherwise.
+ * @deprecated Gears is discontinued.
  */
 goog.gears.getFactory = function() {
   if (goog.gears.factory_ != undefined) {
@@ -122,6 +123,7 @@ goog.gears.factory_ = undefined;
  * Whether we can create a Gears factory object. This does not cache the
  * result.
  * @return {boolean} true if we can create a Gears factory object.
+ * @deprecated Gears is discontinued.
  */
 goog.gears.hasFactory = function() {
   if (goog.gears.hasFactory_ != undefined) return goog.gears.hasFactory_;
@@ -199,6 +201,7 @@ goog.gears.MAX_FILE_NAME_PREFIX_LENGTH_ = goog.gears.MAX_FILE_NAME_LENGTH_ - 10;
   *     return originalFileName.
   * @throws {Error} If originalFileName is null, empty or contains only
   *     invalid characters.
+  * @deprecated Gears is discontinued.
   */
 goog.gears.makeSafeFileName = function(originalFileName) {
   if (!originalFileName) {

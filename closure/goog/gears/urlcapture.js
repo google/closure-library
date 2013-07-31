@@ -39,6 +39,7 @@ goog.require('goog.log');
  * @param {?string} requiredCookie  A cookie that must be present for the
  *     managed store to be active. Should have the form "foo=bar".
  * @param {GearsResourceStore=} opt_localServer The LocalServer for gears.
+ * @deprecated Gears is discontinued.
  */
 goog.gears.UrlCapture = function(name, requiredCookie, opt_localServer) {
   goog.events.EventTarget.call(this);
@@ -342,6 +343,7 @@ goog.gears.UrlCapture.prototype.usesGoogUri_ = function(captureId) {
  * @param {string|goog.Uri=} opt_uri The URI for the event.
  * @param {Array.<string|goog.Uri>=} opt_errorUris The URIs that failed to load
  * correctly.
+ * @deprecated Gears is discontinued.
  */
 goog.gears.UrlCapture.Event = function(type, captureId, opt_uri,
     opt_errorUris) {

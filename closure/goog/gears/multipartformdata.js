@@ -30,6 +30,7 @@ goog.require('goog.string');
 /**
  * Creates a new multipart form data builder.
  * @constructor
+ * @deprecated Gears is discontinued.
  */
 goog.gears.MultipartFormData = function() {
   /**

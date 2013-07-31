@@ -24,6 +24,7 @@ goog.provide('goog.gears.StatusType');
 /**
  * The possible status type's for Gears.
  * @enum {string}
+ * @deprecated Gears is discontinued.
  */
 goog.gears.StatusType = {
   NOT_INSTALLED: 'ni',
