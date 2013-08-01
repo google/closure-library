@@ -16,23 +16,6 @@
  * @fileoverview Utilities for working with JsUnit.  Writes out the JsUnit file
  * that needs to be included in every unit test.
  *
- * This file additionally exposes a goog.testing.TestRunner singleton at
- * G_testRunner for integration with Selenium and other automated test runners.
- *
- * If a TestCase hasn't been registered with the singleton runner when
- * window.onload occurs, the testRunner will try to auto-discover JsUnit-
- * style test names (test*, setUp, tearDown, setUpPage, tearDownPage, etc).
- *
- * The hooks for selenium are:
- *  - G_testRunner.isFinished() -> boolean
- *  - G_testRunner.isSuccess() -> boolean
- *  - G_testRunner.getReport() -> string
- *  - G_testRunner.getRunTime() -> number
- *  - G_testRunner.getTestResults() -> Object.<string, Array.<string>>
- *
- * TODO(nnaze): Expose the singleton as a Closure-style singleton (e.g.
- *     goog.jsunit.defaultTestRunner).
- *
  * Testing code should not have dependencies outside of goog.testing so as to
  * reduce the chance of masking missing dependencies.
  *
@@ -163,7 +146,7 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
           if (!tr.initialized) {
             var test = new goog.testing.TestCase(document.title);
             test.autoDiscoverTests();
-            tr.addTestCase(test);
+            tr.initialize(test);
           }
           tr.execute();
         }, goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS);
