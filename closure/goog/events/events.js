@@ -858,7 +858,7 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
         }
       }
     } else {
-      retval = goog.events.fireListener(listener, ieEvent);
+      retval = goog.events.fireListener(listener, evt);
     }
     return retval;
   }
