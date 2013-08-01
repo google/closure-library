@@ -80,6 +80,81 @@ goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
    */
   this.defaultScope_ = opt_defaultScope || null;
 
+  /**
+   * Whether the Deferred has been fired.
+   * @type {boolean}
+   * @private
+   */
+  this.fired_ = false;
+
+  /**
+   * Whether the last result in the execution sequence was an error.
+   * @type {boolean}
+   * @private
+   */
+  this.hadError_ = false;
+
+  /**
+   * The current Deferred result, updated as callbacks and errbacks are
+   * executed.
+   * @type {*}
+   * @private
+   */
+  this.result_ = undefined;
+
+  /**
+   * Whether the Deferred is blocked waiting on another Deferred to fire. If a
+   * callback or errback returns a Deferred as a result, the execution sequence
+   * is blocked until that Deferred result becomes available.
+   * @type {boolean}
+   * @private
+   */
+  this.blocked_ = false;
+
+  /**
+   * Whether this Deferred is blocking execution of another Deferred. If this
+   * instance was returned as a result in another Deferred's execution
+   * sequence,that other Deferred becomes blocked until this instance's
+   * execution sequence completes. No additional callbacks may be added to a
+   * Deferred once it is blocking another instance.
+   * @type {boolean}
+   * @private
+   */
+  this.blocking_ = false;
+
+  /**
+   * Whether the Deferred has been canceled without having a custom cancel
+   * function.
+   * @type {boolean}
+   * @private
+   */
+  this.silentlyCanceled_ = false;
+
+  /**
+   * If an error is thrown during Deferred execution with no errback to catch
+   * it, the error is rethrown after a timeout. Reporting the error after a
+   * timeout allows execution to continue in the calling context.
+   * @type {number}
+   * @private
+   */
+  this.unhandledExceptionTimeoutId_ = 0;  // Falsish.
+
+  /**
+   * If this Deferred was created by branch(), this will be the "parent"
+   * Deferred.
+   * @type {goog.async.Deferred}
+   * @private
+   */
+  this.parent_ = null;
+
+  /**
+   * The number of Deferred objects that have been branched off this one. This
+   * will be decremented whenever a branch is fired or canceled.
+   * @type {number}
+   * @private
+   */
+  this.branches_ = 0;
+
   if (goog.async.Deferred.LONG_STACK_TRACES) {
     /**
      * Holds the stack trace at time of deferred creation if the JS engine
@@ -99,88 +174,6 @@ goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
     }
   }
 };
-
-
-/**
- * Whether the Deferred has been fired.
- * @type {boolean}
- * @private
- */
-goog.async.Deferred.prototype.fired_ = false;
-
-
-/**
- * Whether the last result in the execution sequence was an error.
- * @type {boolean}
- * @private
- */
-goog.async.Deferred.prototype.hadError_ = false;
-
-
-/**
- * The current Deferred result, updated as callbacks and errbacks are executed.
- * @type {*}
- * @private
- */
-goog.async.Deferred.prototype.result_;
-
-
-/**
- * Whether the Deferred is blocked waiting on another Deferred to fire. If a
- * callback or errback returns a Deferred as a result, the execution sequence is
- * blocked until that Deferred result becomes available.
- * @type {boolean}
- * @private
- */
-goog.async.Deferred.prototype.blocked_ = false;
-
-
-/**
- * Whether this Deferred is blocking execution of another Deferred. If this
- * instance was returned as a result in another Deferred's execution sequence,
- * that other Deferred becomes blocked until this instance's execution sequence
- * completes. No additional callbacks may be added to a Deferred once it
- * is blocking another instance.
- * @type {boolean}
- * @private
- */
-goog.async.Deferred.prototype.blocking_ = false;
-
-
-/**
- * Whether the Deferred has been canceled without having a custom cancel
- * function.
- * @type {boolean}
- * @private
- */
-goog.async.Deferred.prototype.silentlyCanceled_ = false;
-
-
-/**
- * If an error is thrown during Deferred execution with no errback to catch it,
- * the error is rethrown after a timeout. Reporting the error after a timeout
- * allows execution to continue in the calling context.
- * @type {number}
- * @private
- */
-goog.async.Deferred.prototype.unhandledExceptionTimeoutId_;
-
-
-/**
- * If this Deferred was created by branch(), this will be the "parent" Deferred.
- * @type {goog.async.Deferred}
- * @private
- */
-goog.async.Deferred.prototype.parent_;
-
-
-/**
- * The number of Deferred objects that have been branched off this one. This
- * will be decremented whenever a branch is fired or canceled.
- * @type {number}
- * @private
- */
-goog.async.Deferred.prototype.branches_ = 0;
 
 
 /**
