@@ -15,6 +15,8 @@ See the COPYING file for details.
   goog.require('goog.i18n.NumberFormat');
   goog.require('goog.i18n.NumberFormatSymbols');
   goog.require('goog.i18n.NumberFormatSymbols_fr');
+  goog.require('goog.i18n.NumberFormatSymbols_pl');
+  goog.require('goog.i18n.NumberFormatSymbols_ro');
   goog.require('goog.i18n.CompactNumberFormatSymbols');
   goog.require('goog.i18n.CompactNumberFormatSymbols_fr');
   goog.require('goog.i18n.CompactNumberFormatSymbols_de');
@@ -978,6 +980,18 @@ function testCompactWithBaseFormattingFrench() {
   fmt.setBaseFormatting(1000);
   assertEquals('123\u00A0400\u00A0K', fmt.format(123400000));
 
+}
+
+// Moved Polish, Romanian, other currencies to tier 2, check that it works now
+function testPolish() {
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pl;
+  var fmPl = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ro;
+  var fmRo = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
+
+  assertEquals('100.00\u00A0z\u0142', fmPl.format(100)); // 100.00 zł
+  assertEquals('100.00\u00A0RON', fmRo.format(100));
 }
 
 </script>

@@ -33,15 +33,15 @@ See the COPYING file for details.
   }
 
   function testAddTier2Support() {
-    assertFalse('UAH' in goog.i18n.currency.CurrencyInfo);
+    assertFalse('LRD' in goog.i18n.currency.CurrencyInfo);
     assertThrows(function() {
-      goog.i18n.currency.getLocalCurrencyPattern('UAH');
+      goog.i18n.currency.getLocalCurrencyPattern('LRD');
     });
 
     goog.i18n.currency.addTier2Support();
-    assertTrue('UAH' in goog.i18n.currency.CurrencyInfo);
-    assertEquals("'₴'#,##0.00",
-        goog.i18n.currency.getLocalCurrencyPattern('UAH'));
+    assertTrue('LRD' in goog.i18n.currency.CurrencyInfo);
+    assertEquals("'$'#,##0.00",
+        goog.i18n.currency.getLocalCurrencyPattern('LRD'));
   }
 
   function testCurrencyPattern() {
@@ -211,8 +211,6 @@ See the COPYING file for details.
   function testCurrencyFormatPLN() {
     var formatter;
     var str;
-
-    goog.i18n.currency.addTier2Support();
 
     formatter = new goog.i18n.NumberFormat(
         goog.i18n.currency.getLocalCurrencyPattern('PLN'));
