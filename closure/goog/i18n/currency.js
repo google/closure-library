@@ -48,7 +48,7 @@ goog.i18n.currency.PRECISION_MASK_ = 0x07;
  * Whether the currency sign should be positioned after the number.
  * @private
  */
-goog.i18n.currency.POSITION_FLAG_ = 0x08;
+goog.i18n.currency.POSITION_FLAG_ = 0x10;
 
 
 /**
@@ -246,7 +246,7 @@ goog.i18n.currency.adjustPrecision = function(pattern, currencyCode) {
  * the currency sign should be positioned after the number. Valid values are 0
  * (before the number) or 16 (after the number). The space flag indicates
  * whether a space should be inserted between the currency sign and number.
- * Valid values are 0 (no space) and 24 (space).
+ * Valid values are 0 (no space) and 32 (space).
  *
  * The number in the array is calculated by adding together the mask and flag
  * values. For example:
@@ -254,7 +254,7 @@ goog.i18n.currency.adjustPrecision = function(pattern, currencyCode) {
  * 0: no precision (0), currency sign first (0), no space (0)
  * 2: two decimals precision (2), currency sign first (0), no space (0)
  * 18: two decimals precision (2), currency sign last (16), no space (0)
- * 42: two decimals precision (2), currency sign last (16), space (24)
+ * 50: two decimals precision (2), currency sign last (16), space (32)
  *
  * @type {!Object.<!Array>}
  */
@@ -269,11 +269,11 @@ goog.i18n.currency.CurrencyInfo = {
   'CNY': [2, '¥', 'RMB¥'],
   'COP': [0, '$', 'COL$'],
   'CRC': [0, '\u20a1', 'CR\u20a1'],
-  'CZK': [42, 'K\u010d', 'K\u010d'],
+  'CZK': [50, 'K\u010d', 'K\u010d'],
   'DKK': [18, 'kr', 'kr'],
   'DOP': [2, '$', 'RD$'],
   'EGP': [2, '£', 'LE'],
-  'EUR': [18, '€', '€'],
+  'EUR': [2, '€', '€'],
   'GBP': [2, '£', 'GB£'],
   'HKD': [2, '$', 'HK$'],
   'ILS': [2, '\u20AA', 'IL\u20AA'],
@@ -286,12 +286,12 @@ goog.i18n.currency.CurrencyInfo = {
   'MNT': [0, '\u20AE', 'MN₮'],
   'MXN': [2, '$', 'Mex$'],
   'MYR': [2, 'RM', 'RM'],
-  'NOK': [18, 'kr', 'NOkr'],
+  'NOK': [50, 'kr', 'NOkr'],
   'PAB': [2, 'B/.', 'B/.'],
   'PEN': [2, 'S/.', 'S/.'],
   'PHP': [2, '\u20B1', 'Php'],
   'PKR': [0, 'Rs', 'PKRs.'],
-  'RUB': [42, 'руб.', 'руб.'],
+  'RUB': [50, 'руб.', 'руб.'],
   'SAR': [2, 'Rial', 'Rial'],
   'SEK': [2, 'kr', 'kr'],
   'SGD': [2, '$', 'S$'],
@@ -311,14 +311,14 @@ goog.i18n.currency.CurrencyInfo = {
  * @type {!Object.<!Array>}
  */
 goog.i18n.currency.CurrencyInfoTier2 = {
-  'AFN': [16, 'Af.', 'AFN'],
+  'AFN': [48, 'Af.', 'AFN'],
   'ALL': [0, 'Lek', 'Lek'],
   'AMD': [0, 'Dram', 'dram'],
   'AOA': [2, 'Kz', 'Kz'],
   'ARS': [2, '$', 'AR$'],
   'AWG': [2, 'Afl.', 'Afl.'],
   'AZN': [2, 'man.', 'man.'],
-  'BAM': [18, 'KM', 'KM'],
+  'BAM': [2, 'KM', 'KM'],
   'BBD': [2, '$', 'Bds$'],
   'BGN': [2, 'lev', 'lev'],
   'BHD': [3, 'din', 'din'],
@@ -388,7 +388,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'NZD': [2, '$', 'NZ$'],
   'OMR': [3, 'Rial', 'OMR'],
   'PGK': [2, 'PGK', 'PGK'],
-  'PLN': [2, 'z\u0142', 'z\u0142'],
+  'PLN': [18, 'z\u0142', 'z\u0142'],
   'PYG': [0, 'Gs', 'PYG'],
   'QAR': [2, 'Rial', 'QR'],
   'RON': [2, 'RON', 'RON'],
@@ -402,7 +402,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'SOS': [0, 'SOS', 'SOS'],
   'SRD': [2, '$', 'SR$'],
   'STD': [0, 'Db', 'Db'],
-  'SYP': [16, '£', 'SY£'],
+  'SYP': [0, '£', 'SY£'],
   'SZL': [2, 'SZL', 'SZL'],
   'TJS': [2, 'Som', 'TJS'],
   'TND': [3, 'din', 'DT'],
