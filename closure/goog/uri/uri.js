@@ -1277,7 +1277,7 @@ goog.Uri.QueryData.prototype.getKeys = function() {
 goog.Uri.QueryData.prototype.getValues = function(opt_key) {
   this.ensureKeyMapInitialized_();
   var rv = [];
-  if (opt_key) {
+  if (goog.isString(opt_key)) {
     if (this.containsKey(opt_key)) {
       rv = goog.array.concat(rv, this.keyMap_.get(this.getKeyName_(opt_key)));
     }

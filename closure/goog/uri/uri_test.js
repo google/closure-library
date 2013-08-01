@@ -1039,6 +1039,16 @@ function testAbsolutePathUnescapedWithColon() {
                new goog.Uri('//www.foo.bar/path:with:colon/x').toString());
 }
 
+// verifies bug http://b/9821952
+function testGetQueryForEmptyString() {
+  var queryData = new goog.Uri.QueryData('a=b&c=d');
+  assertArrayEquals(['b', 'd'], queryData.getValues());
+  assertArrayEquals([], queryData.getValues(''));
+
+  queryData = new goog.Uri.QueryData('a=b&c=d&=e');
+  assertArrayEquals(['e'], queryData.getValues(''));
+}
+
 function assertDotRemovedEquals(expected, path) {
   assertEquals(expected, goog.Uri.removeDotSegments(path));
 }
