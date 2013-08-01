@@ -13,19 +13,10 @@
 // limitations under the License.
 
 /**
- * @fileoverview The test runner is a singleton object that is used to execute
- * a goog.testing.TestCases, display the results, and expose the results to
- * Selenium for automation.  If a TestCase hasn't been registered with the
- * runner by the time window.onload occurs, the testRunner will try to auto-
- * discover JsUnit style test pages.
+ * @fileoverview The test runner is an object that is used to execute
+ * one or more goog.testing.TestCases and display the results.
  *
- * The hooks for selenium are (see http://go/selenium-hook-setup):-
- *  - Boolean G_testRunner.isFinished()
- *  - Boolean G_testRunner.isSuccess()
- *  - String G_testRunner.getReport()
- *  - number G_testRunner.getRunTime()
- *  - Object.<string, Array.<string>> G_testRunner.getTestResults()
- *
+
  * Testing code should not have dependencies outside of goog.testing so as to
  * reduce the chance of masking missing dependencies.
  *
@@ -38,20 +29,45 @@ goog.require('goog.testing.TestCase');
 
 
 /**
- * Construct a test runner.
+ * A test runner runs one or more test cases, displaying the results.
  *
- * NOTE(user): This is currently pretty weird, I'm essentially trying to
- * create a wrapper that the Selenium test can hook into to query the state of
- * the running test case, while making goog.testing.TestCase general.
+ * The test runner will run the provided test cases.
+ *
+ * Users will generally not need to construct a TestRunner themselves, but
+ * rather use the G_testRunner singleton defined in goog.testing.jsunit.
  *
  * @constructor
  */
 goog.testing.TestRunner = function() {
   /**
    * Errors that occurred in the window.
-   * @type {Array.<string>}
+   * @type {!Array.<string>}
    */
   this.errors = [];
+
+  /**
+   * The test cases to be run.
+   * @private {!Array.<!goog.testing.TestCase>}
+   */
+  this.testCases_ = [];
+
+  /**
+   * Whether the test runner has started.
+   * @private {boolean}
+   */
+  this.started_ = false;
+
+  /**
+   * Whether the test runner has finished.
+   * @private {boolean}
+   */
+  this.finished_ = false;
+
+  /**
+   * On execution, the queue will be filled and test cases read from it.
+   * @private {Array.<!goog.testing.TestCase>}
+   */
+  this.testCaseExecutionQueue_ = null;
 };
 
 
@@ -96,14 +112,39 @@ goog.testing.TestRunner.prototype.strict_ = true;
 /**
  * Initializes the test runner.
  * @param {goog.testing.TestCase} testCase The test case to initialize with.
+ * @deprecated Use addTestCase().
  */
 goog.testing.TestRunner.prototype.initialize = function(testCase) {
-  if (this.testCase && this.testCase.running) {
-    throw Error('The test runner is already waiting for a test to complete');
+  if (testCase) {
+    this.addTestCase(testCase);
+    return;
   }
-  this.testCase = testCase;
-  testCase.setTestRunner(this);
+
+  throw Error('testCase is not an object');
+};
+
+
+/**
+ * Adds a test case to be run.
+ *
+ * This will throw an error if the runner execution has already started.
+ * @param {!goog.testing.TestCase} testCase
+ */
+goog.testing.TestRunner.prototype.addTestCase = function(testCase) {
   this.initialized = true;
+
+  // Sanity check that test case exists (as we may not have compiler type
+  // checks in test files).
+  if (!testCase) {
+    throw Error('testCase is not defined');
+  }
+
+  if (this.started_) {
+    throw Error('Test cases cannot be added after the runner has started.');
+  }
+
+  testCase.setTestRunner(this);
+  this.testCases_.push(testCase);
 };
 
 
@@ -138,14 +179,20 @@ goog.testing.TestRunner.prototype.isInitialized = function() {
 
 
 /**
+ * @return {boolean} Whether the test runner has started.
+ */
+goog.testing.TestRunner.prototype.isStarted = function() {
+  return this.started_;
+};
+
+
+/**
  * Returns true if the test runner is finished.
  * Used by Selenium Hooks.
  * @return {boolean} Whether the test runner is active.
  */
 goog.testing.TestRunner.prototype.isFinished = function() {
-  return this.errors.length > 0 ||
-      this.initialized && !!this.testCase && this.testCase.started &&
-      !this.testCase.running;
+  return this.finished_;
 };
 
 
@@ -155,7 +202,7 @@ goog.testing.TestRunner.prototype.isFinished = function() {
  * @return {boolean} Whether the current test returned successfully.
  */
 goog.testing.TestRunner.prototype.isSuccess = function() {
-  return !this.hasErrors() && !!this.testCase && this.testCase.isSuccess();
+  return this.finished_ && !this.hasErrors();
 };
 
 
@@ -250,12 +297,36 @@ goog.testing.TestRunner.prototype.getNumFilesLoaded = function() {
  * Executes a test case and prints the results to the window.
  */
 goog.testing.TestRunner.prototype.execute = function() {
-  if (!this.testCase) {
+  this.started_ = true;
+
+  if (this.testCases_.length == 0) {
     throw Error('The test runner must be initialized with a test case before ' +
                 'execute can be called.');
   }
-  this.testCase.setCompletedCallback(goog.bind(this.onComplete_, this));
-  this.testCase.runTests();
+
+  // Clone the added tests to form an execution queue.
+  this.testCaseExecutionQueue_ = this.testCases_.slice();
+  this.runNextTestCaseInExecutionQueue_();
+};
+
+
+/**
+ * Runs the next test in the execution queue if there is one. If not, calls
+ * the onComplete_() methods.
+ * @private
+ */
+goog.testing.TestRunner.prototype.runNextTestCaseInExecutionQueue_ =
+    function() {
+  var testCase = this.testCaseExecutionQueue_.shift();
+  if (testCase) {
+    this.testCase = testCase;
+    testCase.setCompletedCallback(
+        goog.bind(this.runNextTestCaseInExecutionQueue_, this));
+    testCase.runTests();
+  } else {
+    // We've run all the tests and are done.
+    this.onComplete_();
+  }
 };
 
 
@@ -264,6 +335,8 @@ goog.testing.TestRunner.prototype.execute = function() {
  * @private
  */
 goog.testing.TestRunner.prototype.onComplete_ = function() {
+  this.finished_ = true;
+
   var log = this.testCase.getReport(true);
   if (this.errors.length > 0) {
     log += '\n' + this.errors.join('\n');
