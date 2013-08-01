@@ -25,6 +25,9 @@ goog.provide('goog.memoize');
 
 /**
  * Decorator around functions that caches the inner function's return values.
+ *
+ * To cache parameterless functions, see goog.functions.cacheReturnValue.
+ *
  * @param {Function} f The function to wrap. Its return value may only depend
  *     on its arguments and 'this' context. There may be further restrictions
  *     on the arguments depending on the capabilities of the serializer used.
