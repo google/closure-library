@@ -723,6 +723,72 @@ function testGetResponse() {
   assertEquals('resp', x.getResponse());
 }
 
+function testGetResponseHeaders() {
+  var x = new goog.net.XhrIo();
+
+  // No XHR yet
+  assertEquals(0, goog.object.getCount(x.getResponseHeaders()));
+
+  // Simulate an XHR with 2 headers.
+  var headersRaw = 'test1: foo\r\ntest2: bar';
+
+  propertyReplacer.set(x, 'getAllResponseHeaders',
+                       goog.functions.constant(headersRaw));
+
+  var headers = x.getResponseHeaders();
+  assertEquals(2, goog.object.getCount(headers));
+  assertEquals('foo', headers['test1']);
+  assertEquals('bar', headers['test2']);
+}
+
+function testGetResponseHeadersWithColonInValue() {
+  var x = new goog.net.XhrIo();
+
+  // Simulate an XHR with a colon in the http header value.
+  var headersRaw = 'test1: f:o:o';
+
+  propertyReplacer.set(x, 'getAllResponseHeaders',
+                       goog.functions.constant(headersRaw));
+
+  var headers = x.getResponseHeaders();
+  assertEquals(1, goog.object.getCount(headers));
+  assertEquals('f:o:o', headers['test1']);
+}
+
+function testGetResponseHeadersMultipleValuesForOneKey() {
+  var x = new goog.net.XhrIo();
+
+  // No XHR yet
+  assertEquals(0, goog.object.getCount(x.getResponseHeaders()));
+
+  // Simulate an XHR with 2 headers.
+  var headersRaw = 'test1: foo\r\ntest1: bar';
+
+  propertyReplacer.set(x, 'getAllResponseHeaders',
+                       goog.functions.constant(headersRaw));
+
+  var headers = x.getResponseHeaders();
+  assertEquals(1, goog.object.getCount(headers));
+  assertEquals('foo, bar', headers['test1']);
+}
+
+function testGetResponseHeadersEmptyHeader() {
+  var x = new goog.net.XhrIo();
+
+  // No XHR yet
+  assertEquals(0, goog.object.getCount(x.getResponseHeaders()));
+
+  // Simulate an XHR with 2 headers, the last of which is empty.
+  var headersRaw = 'test2: bar\r\n';
+
+  propertyReplacer.set(x, 'getAllResponseHeaders',
+                       goog.functions.constant(headersRaw));
+
+  var headers = x.getResponseHeaders();
+  assertEquals(1, goog.object.getCount(headers));
+  assertEquals('bar', headers['test2']);
+}
+
 </script>
 </head>
 

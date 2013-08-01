@@ -705,5 +705,26 @@ goog.testing.net.XhrIo.prototype.getAllResponseHeaders = function() {
     headers.push(name + ': ' + value);
   });
 
-  return headers.join('\n');
+  return headers.join('\r\n');
+};
+
+
+/**
+ * Returns all response headers as a key-value map.
+ * Multiple values for the same header key can be combined into one,
+ * separated by a comma and a space. See:
+ * http://www.w3.org/TR/XMLHttpRequest/#the-getresponseheader()-method
+ * @return {!Object.<string, string>} An object with the header keys as keys
+ *     and header values as values.
+ */
+goog.testing.net.XhrIo.prototype.getResponseHeaders = function() {
+  var headersObject = {};
+  goog.object.forEach(this.responseHeaders_, function(value, key) {
+    if (headersObject[key]) {
+      headersObject[key] += ', ' + value;
+    } else {
+      headersObject[key] = value;
+    }
+  });
+  return headersObject;
 };

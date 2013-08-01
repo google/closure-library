@@ -379,6 +379,45 @@ function testEvents_Success() {
   mockControl.$resetAll();
 }
 
+function testGetResponseHeaders() {
+  var xhr = new goog.testing.net.XhrIo();
+  var mockListener = mockControl.createFunctionMock();
+  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+      .$does(function(e) {
+    var headers = e.target.getResponseHeaders();
+    assertEquals(2, goog.object.getCount(headers));
+    assertEquals('foo', headers['test1']);
+    assertEquals('bar', headers['test2']);
+  });
+  mockControl.$replayAll();
+  goog.events.listen(xhr, goog.net.EventType.SUCCESS, mockListener);
+
+  // Simulate an XHR with 2 headers.
+  xhr.simulateResponse(200, '', {'test1': 'foo', 'test2': 'bar'});
+
+  mockControl.$verifyAll();
+  mockControl.$resetAll();
+}
+
+function testGetResponseHeadersWithColonInValue() {
+  var xhr = new goog.testing.net.XhrIo();
+  var mockListener = mockControl.createFunctionMock();
+  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+      .$does(function(e) {
+    var headers = e.target.getResponseHeaders();
+    assertEquals(1, goog.object.getCount(headers));
+    assertEquals('f:o:o', headers['test1']);
+  });
+  mockControl.$replayAll();
+  goog.events.listen(xhr, goog.net.EventType.SUCCESS, mockListener);
+
+  // Simulate an XHR with a colon in the http header value.
+  xhr.simulateResponse(200, '', {'test1': 'f:o:o'});
+  
+  mockControl.$verifyAll();
+  mockControl.$resetAll();
+}
+
 </script>
 </body>
 </html>
