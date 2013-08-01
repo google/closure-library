@@ -316,20 +316,22 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @return {R} Result of evaluating f repeatedly across the values of the array.
  * @template T,S,R
  */
-goog.array.reduce = function(arr, f, val, opt_obj) {
-  if (arr.reduce) {
-    if (opt_obj) {
-      return arr.reduce(goog.bind(f, opt_obj), val);
-    } else {
-      return arr.reduce(f, val);
-    }
-  }
-  var rval = val;
-  goog.array.forEach(arr, function(val, index) {
-    rval = f.call(opt_obj, rval, val, index, arr);
-  });
-  return rval;
-};
+goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
+                    goog.array.ARRAY_PROTOTYPE_.reduce ?
+    function(arr, f, val, opt_obj) {
+      goog.asserts.assert(arr.length != null);
+      if (opt_obj) {
+        f = goog.bind(f, opt_obj);
+      }
+      return goog.array.ARRAY_PROTOTYPE_.reduce.call(arr, f, val);
+    } :
+    function(arr, f, val, opt_obj) {
+      var rval = val;
+      goog.array.forEach(arr, function(val, index) {
+        rval = f.call(opt_obj, rval, val, index, arr);
+      });
+      return rval;
+    };
 
 
 /**
@@ -358,20 +360,22 @@ goog.array.reduce = function(arr, f, val, opt_obj) {
  *     values of the array.
  * @template T,S,R
  */
-goog.array.reduceRight = function(arr, f, val, opt_obj) {
-  if (arr.reduceRight) {
-    if (opt_obj) {
-      return arr.reduceRight(goog.bind(f, opt_obj), val);
-    } else {
-      return arr.reduceRight(f, val);
-    }
-  }
-  var rval = val;
-  goog.array.forEachRight(arr, function(val, index) {
-    rval = f.call(opt_obj, rval, val, index, arr);
-  });
-  return rval;
-};
+goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
+                         goog.array.ARRAY_PROTOTYPE_.reduceRight ?
+    function(arr, f, val, opt_obj) {
+      goog.asserts.assert(arr.length != null);
+      if (opt_obj) {
+        f = goog.bind(f, opt_obj);
+      }
+      return goog.array.ARRAY_PROTOTYPE_.reduceRight.call(arr, f, val);
+    } :
+    function(arr, f, val, opt_obj) {
+      var rval = val;
+      goog.array.forEachRight(arr, function(val, index) {
+        rval = f.call(opt_obj, rval, val, index, arr);
+      });
+      return rval;
+    };
 
 
 /**
