@@ -11,11 +11,13 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.events</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.asserts.AssertionError');
   goog.require('goog.debug.EntryPointMonitor');
   goog.require('goog.debug.ErrorHandler');
   goog.require('goog.debug.ErrorHandler.ProtectedFunctionError');
   goog.require('goog.dom');
   goog.require('goog.events');
+  goog.require('goog.events.CaptureSimulationMode');
   goog.require('goog.events.EventTarget');
   goog.require('goog.events.EventType');
   goog.require('goog.events.Listenable');
@@ -39,6 +41,8 @@ See the COPYING file for details.
   }
 
   function tearDown() {
+    goog.events.CAPTURE_SIMULATION_MODE =
+        goog.events.CaptureSimulationMode.ON;
     goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
     goog.disposeAll(et1, et2, et3);
     goog.events.removeAllNativeListeners();
@@ -755,6 +759,42 @@ See the COPYING file for details.
       goog.dom.removeNode(div);
       goog.events.removeAll(body);
       goog.events.removeAll(div);
+    }
+  }
+
+  function testCaptureSimulationModeOffAndFail() {
+    goog.events.CAPTURE_SIMULATION_MODE =
+        goog.events.CaptureSimulationMode.OFF_AND_FAIL;
+    var captureHandler = goog.testing.recordFunction();
+
+    if (!goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
+      var err = assertThrows(function() {
+        goog.events.listen(document.body, 'click', captureHandler, true);
+      });
+      assertTrue(err instanceof goog.asserts.AssertionError);
+
+      // Sanity tests.
+      dispatchClick(document.body);
+      assertEquals(0, captureHandler.getCallCount());
+    } else {
+      goog.events.listen(document.body, 'click', captureHandler, true);
+      dispatchClick(document.body);
+      assertEquals(1, captureHandler.getCallCount());
+    }
+  }
+
+  function testCaptureSimulationModeOffAndSilent() {
+    goog.events.CAPTURE_SIMULATION_MODE =
+        goog.events.CaptureSimulationMode.OFF_AND_SILENT;
+    var captureHandler = goog.testing.recordFunction();
+
+    goog.events.listen(document.body, 'click', captureHandler, true);
+    if (!goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
+      dispatchClick(document.body);
+      assertEquals(0, captureHandler.getCallCount());
+    } else {
+      dispatchClick(document.body);
+      assertEquals(1, captureHandler.getCallCount());
     }
   }
 </script>

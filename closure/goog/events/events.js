@@ -60,6 +60,7 @@
 
 
 goog.provide('goog.events');
+goog.provide('goog.events.CaptureSimulationMode');
 goog.provide('goog.events.Key');
 goog.provide('goog.events.ListenableType');
 
@@ -121,6 +122,36 @@ goog.events.onString_ = 'on';
  * @private
  */
 goog.events.onStringMap_ = {};
+
+
+/**
+ * @enum {number} Different capture simulation mode for IE8-.
+ */
+goog.events.CaptureSimulationMode = {
+  /**
+   * Does not perform capture simulation. Will asserts in IE8- when you
+   * add capture listeners.
+   */
+  OFF_AND_FAIL: 0,
+
+  /**
+   * Does not perform capture simulation, silently ignore capture
+   * listeners.
+   */
+  OFF_AND_SILENT: 1,
+
+  /**
+   * Performs capture simulation.
+   */
+  ON: 2
+};
+
+
+/**
+ * @define {number} The capture simulation mode for IE8-. By default,
+ *     this is ON.
+ */
+goog.define('goog.events.CAPTURE_SIMULATION_MODE', 2);
 
 
 /**
@@ -190,6 +221,16 @@ goog.events.listen_ = function(
   }
 
   var capture = !!opt_capt;
+  if (capture && !goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
+    if (goog.events.CAPTURE_SIMULATION_MODE ==
+        goog.events.CaptureSimulationMode.OFF_AND_FAIL) {
+      goog.asserts.fail('Can not register capture listener in IE8-.');
+      return null;
+    } else if (goog.events.CAPTURE_SIMULATION_MODE ==
+        goog.events.CaptureSimulationMode.OFF_AND_SILENT) {
+      return null;
+    }
+  }
 
   var srcUid = goog.getUid(src);
   var listenerMap = goog.events.listenerTree_[srcUid];
@@ -781,37 +822,43 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
     var evt = new goog.events.BrowserEvent(ieEvent, this);
     var retval = true;
 
-    // If we have not marked this event yet, we should perform capture
-    // simulation.
-    if (!goog.events.isMarkedIeEvent_(ieEvent)) {
-      goog.events.markIeEvent_(ieEvent);
+    if (goog.events.CAPTURE_SIMULATION_MODE ==
+            goog.events.CaptureSimulationMode.ON) {
+      // If we have not marked this event yet, we should perform capture
+      // simulation.
+      if (!goog.events.isMarkedIeEvent_(ieEvent)) {
+        goog.events.markIeEvent_(ieEvent);
 
-      var ancestors = [];
-      for (var parent = evt.currentTarget; parent; parent = parent.parentNode) {
-        ancestors.push(parent);
-      }
+        var ancestors = [];
+        for (var parent = evt.currentTarget; parent;
+             parent = parent.parentNode) {
+          ancestors.push(parent);
+        }
 
-      // Fire capture listeners.
-      var type = listener.type;
-      for (var i = ancestors.length - 1; !evt.propagationStopped_ && i >= 0;
-           i--) {
-        evt.currentTarget = ancestors[i];
-        retval &= goog.events.fireListeners_(ancestors[i], type, true, evt);
-      }
+        // Fire capture listeners.
+        var type = listener.type;
+        for (var i = ancestors.length - 1; !evt.propagationStopped_ && i >= 0;
+             i--) {
+          evt.currentTarget = ancestors[i];
+          retval &= goog.events.fireListeners_(ancestors[i], type, true, evt);
+        }
 
-      // Fire bubble listeners.
-      //
-      // We can technically rely on IE to perform bubble event
-      // propagation. However, it turns out that IE fires events in
-      // opposite order of attachEvent registration, which broke
-      // some code and tests that rely on the order. (While W3C DOM
-      // Level 2 Events TR leaves the event ordering unspecified,
-      // modern browsers and W3C DOM Level 3 Events Working Draft
-      // actually specify the order as the registration order.)
-      for (var i = 0; !evt.propagationStopped_ && i < ancestors.length; i++) {
-        evt.currentTarget = ancestors[i];
-        retval &= goog.events.fireListeners_(ancestors[i], type, false, evt);
+        // Fire bubble listeners.
+        //
+        // We can technically rely on IE to perform bubble event
+        // propagation. However, it turns out that IE fires events in
+        // opposite order of attachEvent registration, which broke
+        // some code and tests that rely on the order. (While W3C DOM
+        // Level 2 Events TR leaves the event ordering unspecified,
+        // modern browsers and W3C DOM Level 3 Events Working Draft
+        // actually specify the order as the registration order.)
+        for (var i = 0; !evt.propagationStopped_ && i < ancestors.length; i++) {
+          evt.currentTarget = ancestors[i];
+          retval &= goog.events.fireListeners_(ancestors[i], type, false, evt);
+        }
       }
+    } else {
+      retval = goog.events.fireListener(listener, ieEvent);
     }
     return retval;
   }
