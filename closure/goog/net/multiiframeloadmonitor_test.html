@@ -71,10 +71,7 @@ See the COPYING file for details.
     dom.appendChild(frameParent, frame4);
     frame4.src = TEST_FRAME_SRCS[2];
 
-    this.add(new goog.testing.TestCase.Test(
-        'test results', this.testResults, this));
-    this.add(new goog.testing.TestCase.Test(
-        'stopMonitoring', this.testStop, this));
+
   };
 
 
@@ -102,11 +99,11 @@ See the COPYING file for details.
   }
 
   /** Tests the results. */
-  iframeLoaderTestCase.testResults = function() {
+  iframeLoaderTestCase.addNewTest('testResults', function() {
     this.log('getting test results');
     assertTrue(this.multipleCompleteNoContent_);
     assertTrue(this.multipleCompleteContent_);
-  };
+  });
 
   iframeLoaderTestCase.fakeLoadMonitor = function() {
     // Replaces IframeLoadMonitor with a fake version that just tracks
@@ -128,8 +125,7 @@ See the COPYING file for details.
     goog.net.IframeLoadMonitor = this.loadMonitorConstructor;
   };
 
-
-  iframeLoaderTestCase.testStop = function() {
+  iframeLoaderTestCase.addNewTest('stopMonitoring', function() {
     // create two unloaded frames, make sure that load monitors are loaded
     // behind the scenes, then make sure they are disposed properly.
     this.fakeLoadMonitor();
@@ -138,34 +134,18 @@ See the COPYING file for details.
     var multiMonitor = new goog.net.MultiIframeLoadMonitor(
       frames,
       function() {
-        fail("should not invoke callback for unloaded rames"); 
+        fail("should not invoke callback for unloaded rames");
       });
     assertEquals(frames.length, this.numMonitors);
     assertEquals(0, this.disposeCalled);
     multiMonitor.stopMonitoring();
     assertEquals(frames.length, this.disposeCalled);
     this.unfakeLoadMonitor();
-  };
-
-  /** Used by the JsUnit test runner. */
-  function testResults() {
-    iframeLoaderTestCase.testResults();
-  }
-
-  /** Used by the JsUnit test runner. */
-  function testDispose() {
-    iframeLoaderTestCase.testDispose();
-  }
-
-  /** Used by the JsUnit test runner. */
-  function setUpPage() {
-    iframeLoaderTestCase.runTests();
-  }
+  });
 
   /** Standalone Closure Test Runner. */
-  if (typeof G_testRunner != 'undefined') {
-    G_testRunner.initialize(iframeLoaderTestCase);
-  }
+  G_testRunner.initialize(iframeLoaderTestCase);
+
 
 </script>
 </body>

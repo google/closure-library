@@ -64,9 +64,6 @@ See the COPYING file for details.
       goog.events.listen(
           iframeio, 'ready', this.onIframeReady, false, this);
       iframeio.send(fileName);
-
-      this.add(new goog.testing.TestCase.Test(
-          'test results', this.testResults, this));
     };
 
     /** Disposes the iframe object. */
@@ -107,7 +104,7 @@ See the COPYING file for details.
     };
 
     /** The main test function that validates the results were as expected. */
-    testCase.testResults = function() {
+    testCase.addNewTest('testResults', function() {
       assertEquals('There should be 3 data packets', 3, this.resultCount);
       // 3 results + 1 ready
       assertEquals('There should be 4 XHR results', 4, this.xhrCount);
@@ -117,7 +114,7 @@ See the COPYING file for details.
 
       assertEquals('There should be no iframes left', 0,
           document.getElementsByTagName('iframe').length);
-    }
+    });
 
     /** This test only runs on GECKO browsers. */
     if (goog.userAgent.GECKO) {
@@ -126,20 +123,13 @@ See the COPYING file for details.
         testCase.reset();
         testCase.cycleTests();
       }
-
-      /** Used by the JsUnit test runner. */
-      var setUpPage = function() {
-        testCase.runTests();
-      }
     }
 
     // Standalone Closure Test Runner.
-    if (typeof G_testRunner != 'undefined') {
-      if (goog.userAgent.GECKO) {
-        G_testRunner.initialize(testCase);
-      } else {
-        G_testRunner.setStrict(false);
-      }
+    if (goog.userAgent.GECKO) {
+      G_testRunner.initialize(testCase);
+    } else {
+      G_testRunner.setStrict(false);
     }
 
   </script>

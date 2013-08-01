@@ -63,11 +63,7 @@ See the COPYING file for details.
     dom.appendChild(frameParent, frame1);
     this.log('Loading frame with content check at: ' + TEST_FRAME_SRCS[0]);
     frame1.src = TEST_FRAME_SRCS[0];
-
-    this.add(new goog.testing.TestCase.Test(
-        'test results', this.testResults, this));
   };
-
 
   /** Handles any events fired */
   iframeLoaderTestCase.handleEvent = function(e) {
@@ -86,27 +82,15 @@ See the COPYING file for details.
   }
 
   /** Tests the results. */
-  iframeLoaderTestCase.testResults = function() {
+  iframeLoaderTestCase.addNewTest('testResults', function() {
     this.log('getting test results');
     for (var i = 0; i < this.iframeLoadMonitors_.length; i++) {
       assertTrue(this.iframeLoadMonitors_[i].isLoaded());
     }
-  };
-
-  /** Used by the JsUnit test runner. */
-  function testResults() {
-    iframeLoaderTestCase.testResults();
-  }
-
-  /** Used by the JsUnit test runner. */
-  function setUpPage() {
-    iframeLoaderTestCase.runTests();
-  }
+  });
 
   /** Standalone Closure Test Runner. */
-  if (typeof G_testRunner != 'undefined') {
-    G_testRunner.initialize(iframeLoaderTestCase);
-  }
+  G_testRunner.initialize(iframeLoaderTestCase);
 
 </script>
 </body>

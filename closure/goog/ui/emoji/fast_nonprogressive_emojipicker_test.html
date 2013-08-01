@@ -210,8 +210,6 @@ testCase.setUpPage = function() {
   // Now we load the animated emoji and check the structure again. The animated
   // emoji will be different.
   this.picker.manuallyLoadAnimatedEmoji();
-
-  this.add(new goog.testing.TestCase.Test('test', this.testStructure, this));
 };
 
 testCase.onImageLoaded = function(e) {
@@ -229,7 +227,7 @@ testCase.tearDownPage = function() {
   this.picker.dispose();
 };
 
-testCase.testStructure = function() {
+testCase.addNewTest('testStructure', function() {
   // Bug 2280968
   if (goog.userAgent.IE && goog.userAgent.VERSION == '6.0') {
     this.log('Not testing emojipicker structure');
@@ -239,16 +237,12 @@ testCase.testStructure = function() {
   this.log('Testing emojipicker structure');
   checkPostLoadStructureForFastLoadNonProgressivePicker(this.palette,
       spritedEmoji2, this.images);
-};
+});
 
-function setUpPage() {
-  testCase.runTests();
-}
 
 // Standalone Closure Test Runner.
-if (typeof G_testRunner != 'undefined') {
-  G_testRunner.initialize(testCase);
-}
+G_testRunner.initialize(testCase);
+
 
 
 </script>

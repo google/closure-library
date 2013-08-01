@@ -69,9 +69,6 @@ var THREE = 3;
 // Create a new test case.
 var workerTestCase = new goog.testing.TestCase(document.title);
 
-/** True once the test environment is set up. */
-workerTestCase.isSetUp = false;
-
 /** True once the page is ready for the test to be run. */
 workerTestCase.isReady = false;
 
@@ -101,8 +98,6 @@ workerTestCase.setUpTests = function() {
 
   this.add(new goog.testing.TestCase.Test(
       'test worker results', this.testResults, this));
-
-  this.isSetUp = true;
 
   // Can't test if gears isn't installed.
   if (!isGearsAllowed()) {
@@ -170,34 +165,11 @@ workerTestCase.testResults = function() {
   }
 };
 
-/** Waits until the tests are ready to begin, before running them. */
-workerTestCase.runTests = function() {
-  if (!this.isSetUp) {
-    this.setUpTests();
-  }
-  if (this.isReady) {
-    this.execute();
-  } else {
-    this.log('Not ready, waiting');
-    // Try again in 100ms
-    setTimeout('workerTestCase.runTests()', 100);
-  }
-};
+/* Standalone Closure Test Runner. */
 
-/** Used by the JsUnit test runner. */
-function testResults() {
-  workerTestCase.testResults();
-}
+workerTestCase.setUpTests();
+G_testRunner.initialize(workerTestCase);
 
-/** Used by the JsUnit test runner. */
-function setUpPage() {
-  workerTestCase.runTests();
-}
-
-/** Standalone Closure Test Runner. */
-if (typeof G_testRunner != 'undefined') {
-  G_testRunner.initialize(workerTestCase);
-}
 
 </script>
 </body>

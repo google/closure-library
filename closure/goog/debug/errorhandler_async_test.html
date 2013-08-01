@@ -43,8 +43,6 @@ See the COPYING file for details.
     this.oldWindowOnError = window.onerror;
     window.onerror = goog.bind(this.onError, this);
 
-    this.add(new goog.testing.TestCase.Test(
-        'test results', this.testResults, this));
     this.timeoutId = window.setTimeout(goog.bind(this.timeOut, this), 10);
     this.intervalId = window.setInterval(goog.bind(this.interval, this), 20);
   };
@@ -77,7 +75,7 @@ See the COPYING file for details.
     throw arguments.callee;
   };
 
-  testCase.testResults = function() {
+  testCase.addNewTest('testResults', function() {
     var timeoutHit, intervalHit;
 
     for (var i = 0; i < this.exceptions.length; ++i) {
@@ -96,17 +94,10 @@ See the COPYING file for details.
       assertEquals('2 exceptions should have been caught and rethrown',
           2, this.errors)
     }
-  };
-
-  function setUpPage() {
-    testCase.runTests();
-  }
+  });
 
   // Standalone Closure Test Runner.
-  if (typeof G_testRunner != 'undefined') {
-    G_testRunner.initialize(testCase);
-  }
-
+  G_testRunner.initialize(testCase);
 </script>
 </body>
 </html>
