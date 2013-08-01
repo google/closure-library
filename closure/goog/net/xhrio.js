@@ -1149,8 +1149,12 @@ goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
 /**
  * Returns all response headers as a key-value map.
  * Multiple values for the same header key can be combined into one,
- * separated by a comma and a space. See:
- * http://www.w3.org/TR/XMLHttpRequest/#the-getresponseheader()-method
+ * separated by a comma and a space.
+ * Note that the native getResponseHeader method for retrieving a single header
+ * does a case insensitive match on the header name. This method does not
+ * include any case normalization logic, it will just return a key-value
+ * representation of the headers.
+ * See: http://www.w3.org/TR/XMLHttpRequest/#the-getresponseheader()-method
  * @return {!Object.<string, string>} An object with the header keys as keys
  *     and header values as values.
  */
