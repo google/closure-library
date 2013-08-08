@@ -692,7 +692,7 @@ goog.uri.utils.buildQueryDataBuffer_ = function(
  * @param {goog.uri.utils.QueryArray} keysAndValues Alternating keys and
  *     values.  See the typedef.
  * @param {number=} opt_startIndex A start offset into the arary, defaults to 0.
- * @return {string} The encoded query string, in the for 'a=1&b=2'.
+ * @return {string} The encoded query string, in the form 'a=1&b=2'.
  */
 goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {
   var buffer = goog.uri.utils.buildQueryDataBuffer_(
@@ -729,7 +729,7 @@ goog.uri.utils.buildQueryDataBufferFromMap_ = function(buffer, map) {
  * @param {Object} map An object where keys are URI-encoded parameter keys,
  *     and the values are arbitrary types or arrays.  Keys with a null value
  *     are dropped.
- * @return {string} The encoded query string, in the for 'a=1&b=2'.
+ * @return {string} The encoded query string, in the form 'a=1&b=2'.
  */
 goog.uri.utils.buildQueryDataFromMap = function(map) {
   var buffer = goog.uri.utils.buildQueryDataBufferFromMap_([], map);
