@@ -757,21 +757,22 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ =
     var text = node.nodeValue;
 
     // Create a regular expression to match a token at the beginning of a line
+    // or preceeded by non-alpha-numeric characters. Note: token could have |
+    // operators in it, so we need to parenthesise it before adding \b to it.
     // or preceeded by non-alpha-numeric characters
+    //
     // NOTE(user): When using word matches, this used to have
     // a (^|\\W+) clause where it now has \\b but it caused various
-    // browsers to hang on really long strings. It is also
-    // excessive, because .*?\W+ is the same as .*?\b since \b already
-    // checks that the character before the token is a non-word character
-    // (the only time the regexp is different is if token begins with a
-    // non-word character), and ^ matches the start of the line or following
-    // a line terminator character, which is also \W. The initial group cannot
-    // just be .*? as it will miss line terminators (which is what the \W+
-    // clause used to match). Instead we use [\s\S] to match every character,
-    // including line terminators.
+    // browsers to hang on really long strings. The (^|\\W+) matcher was also
+    // unnecessary, because \b already checks that the character before the
+    // is a non-word character, and ^ matches the start of the line or following
+    // a line terminator character, which is also \W. The regexp also used to
+    // have a capturing match before the \\b, which would capture the
+    // non-highlighted content, but that caused the regexp matching to run much
+    // slower than the current version.
     var re = this.matchWordBoundary_ ?
-        new RegExp('([\\s\\S]*?)\\b(' + token + ')', 'gi') :
-        new RegExp('([\\s\\S]*?)(' + token + ')', 'gi');
+        new RegExp('\\b(?:' + token + ')', 'gi') :
+        new RegExp(token, 'gi');
     var textNodes = [];
     var lastIndex = 0;
 
@@ -782,8 +783,8 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ =
     var numMatches = 0;
     while (match) {
       numMatches++;
-      textNodes.push(match[1]);
-      textNodes.push(match[2]);
+      textNodes.push(text.substring(lastIndex, match.index));
+      textNodes.push(text.substring(match.index, re.lastIndex));
       lastIndex = re.lastIndex;
       match = re.exec(text);
     }
