@@ -287,6 +287,11 @@ goog.testing.TestCase.prototype.testRunner_ = null;
  * @param {goog.testing.TestCase.Test} test The test to add.
  */
 goog.testing.TestCase.prototype.add = function(test) {
+  if (this.started) {
+    throw Error('Tests cannot be added after execute() has been called. ' +
+                'Test: ' + test.name);
+  }
+
   this.tests_.push(test);
 };
 
