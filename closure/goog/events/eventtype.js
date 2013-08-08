@@ -105,6 +105,7 @@ goog.events.EventType = {
   HELP: 'help',
   LOAD: 'load',
   LOSECAPTURE: 'losecapture',
+  ORIENTATIONCHANGE: 'orientationchange',
   READYSTATECHANGE: 'readystatechange',
   RESIZE: 'resize',
   SCROLL: 'scroll',
