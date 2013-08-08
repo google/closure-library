@@ -22,7 +22,7 @@
 
 goog.provide('goog.labs.userAgent.util');
 
-goog.require('goog.memoize');
+goog.require('goog.functions');
 goog.require('goog.string');
 
 
@@ -31,9 +31,10 @@ goog.require('goog.string');
  *
  * @return {string} The user agent string.
  */
-goog.labs.userAgent.util.getUserAgentString = goog.memoize(function() {
-  return goog.global['navigator'] ? goog.global['navigator'].userAgent : '';
-});
+goog.labs.userAgent.util.getUserAgentString = goog.functions.cacheReturnValue(
+    function() {
+      return goog.global['navigator'] ? goog.global['navigator'].userAgent : '';
+    });
 
 
 /**

@@ -30,7 +30,7 @@ var propertyReplacer = new goog.testing.PropertyReplacer();
 
 function setUp() {
   // disable memoization
-  propertyReplacer.set(goog.memoize, 'ENABLE_MEMOIZE', false);
+  propertyReplacer.set(goog.functions, 'CACHE_RETURN_VALUE', false);
 }
 
 function tearDown() {

@@ -23,8 +23,8 @@
 
 goog.provide('goog.labs.userAgent.platform');
 
+goog.require('goog.functions');
 goog.require('goog.labs.userAgent.util');
-goog.require('goog.memoize');
 goog.require('goog.string');
 
 
@@ -33,9 +33,10 @@ goog.require('goog.string');
  *
  * @return {string} The platform string.
  */
-goog.labs.userAgent.platform.getPlatformString = goog.memoize(function() {
+goog.labs.userAgent.platform.getPlatformString =
+    goog.functions.cacheReturnValue(function() {
   return goog.global['navigator'] && goog.global['navigator'].platform ?
-      goog.global['navigator'].platform : '';
+         goog.global['navigator'].platform : '';
 });
 
 
@@ -44,10 +45,11 @@ goog.labs.userAgent.platform.getPlatformString = goog.memoize(function() {
  *
  * @return {string} The appVersion string.
  */
-goog.labs.userAgent.platform.getAppVersion = goog.memoize(function() {
-  return goog.global['navigator'] && goog.global['navigator'].appVersion ?
-      goog.global['navigator'].appVersion : '';
-});
+goog.labs.userAgent.platform.getAppVersion = goog.functions.cacheReturnValue(
+    function() {
+      return goog.global['navigator'] && goog.global['navigator'].appVersion ?
+          goog.global['navigator'].appVersion : '';
+    });
 
 
 /**
@@ -64,77 +66,80 @@ goog.labs.userAgent.platform.matchPlatform_ = function(str) {
 /**
  * @return {boolean} Whether the platform is Android.
  */
-goog.labs.userAgent.platform.isAndroid = goog.memoize(
+goog.labs.userAgent.platform.isAndroid = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.util.matchUserAgent, 'Android'));
 
 
 /**
  * @return {boolean} Whether the platform is iPod.
  */
-goog.labs.userAgent.platform.isIpod = goog.memoize(
+goog.labs.userAgent.platform.isIpod = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.util.matchUserAgent, 'iPod'));
 
 
 /**
  * @return {boolean} Whether the platform is iPhone.
  */
-goog.labs.userAgent.platform.isIphone = goog.memoize(function() {
-  return goog.labs.userAgent.util.matchUserAgent('iPhone') &&
-      !goog.labs.userAgent.util.matchUserAgent('iPod');
-});
+goog.labs.userAgent.platform.isIphone = goog.functions.cacheReturnValue(
+    function() {
+      return goog.labs.userAgent.util.matchUserAgent('iPhone') &&
+             !goog.labs.userAgent.util.matchUserAgent('iPod');
+    });
 
 
 /**
  * @return {boolean} Whether the platform is iPad.
  */
-goog.labs.userAgent.platform.isIpad = goog.memoize(
+goog.labs.userAgent.platform.isIpad = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.util.matchUserAgent, 'iPad'));
 
 
 /**
  * @return {boolean} Whether the platform is iOS.
  */
-goog.labs.userAgent.platform.isIos = goog.memoize(function() {
-  return goog.labs.userAgent.platform.isIphone() ||
-      goog.labs.userAgent.platform.isIpad() ||
-      goog.labs.userAgent.platform.isIpod();
-});
+goog.labs.userAgent.platform.isIos = goog.functions.cacheReturnValue(
+    function() {
+      return goog.labs.userAgent.platform.isIphone() ||
+             goog.labs.userAgent.platform.isIpad() ||
+             goog.labs.userAgent.platform.isIpod();
+    });
 
 
 /**
  * @return {boolean} Whether the platform is Mac.
  */
-goog.labs.userAgent.platform.isMac = goog.memoize(
+goog.labs.userAgent.platform.isMac = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.platform.matchPlatform_, 'Mac'));
 
 
 /**
  * @return {boolean} Whether the platform is Linux.
  */
-goog.labs.userAgent.platform.isLinux = goog.memoize(
+goog.labs.userAgent.platform.isLinux = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.platform.matchPlatform_, 'Linux'));
 
 
 /**
  * @return {boolean} Whether the platform is Windows.
  */
-goog.labs.userAgent.platform.isWindows = goog.memoize(
+goog.labs.userAgent.platform.isWindows = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.platform.matchPlatform_, 'Win'));
 
 
 /**
  * @return {boolean} Whether the platform is X11.
  */
-goog.labs.userAgent.platform.isX11 = goog.memoize(function() {
-  var appVersion = goog.labs.userAgent.platform.getAppVersion();
-  return goog.string.contains(appVersion, 'X11');
-});
+goog.labs.userAgent.platform.isX11 = goog.functions.cacheReturnValue(
+    function() {
+      var appVersion = goog.labs.userAgent.platform.getAppVersion();
+      return goog.string.contains(appVersion, 'X11');
+    });
 
 
 /**
  * @return {boolean} Whether the platform is ChromeOS.
  */
-goog.labs.userAgent.platform.isChromeOS = goog.memoize(
+goog.labs.userAgent.platform.isChromeOS = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.util.matchUserAgent, 'CrOS'));
 
 

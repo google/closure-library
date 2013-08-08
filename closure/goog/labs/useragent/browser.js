@@ -24,8 +24,8 @@
 goog.provide('goog.labs.userAgent.browser');
 
 goog.require('goog.asserts');
+goog.require('goog.functions');
 goog.require('goog.labs.userAgent.util');
-goog.require('goog.memoize');
 goog.require('goog.string');
 
 
@@ -33,7 +33,7 @@ goog.require('goog.string');
  * @return {boolean} Whether the user's browser is Opera.
  * @private
  */
-goog.labs.userAgent.browser.matchOpera_ = goog.memoize(
+goog.labs.userAgent.browser.matchOpera_ = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.util.matchUserAgent, 'Opera'));
 
 
@@ -41,117 +41,123 @@ goog.labs.userAgent.browser.matchOpera_ = goog.memoize(
  * @return {boolean} Whether the user's browser is IE.
  * @private
  */
-goog.labs.userAgent.browser.matchIE_ = goog.memoize(function() {
-  return goog.labs.userAgent.util.matchUserAgent('Trident') ||
-      goog.labs.userAgent.util.matchUserAgent('MSIE');
-});
+goog.labs.userAgent.browser.matchIE_ = goog.functions.cacheReturnValue(
+    function() {
+      return goog.labs.userAgent.util.matchUserAgent('Trident') ||
+             goog.labs.userAgent.util.matchUserAgent('MSIE');
+    });
 
 
 /**
  * @return {boolean} Whether the user's browser is Firefox.
  * @private
  */
-goog.labs.userAgent.browser.matchFirefox_ = goog.memoize(function() {
-  return goog.labs.userAgent.util.matchUserAgent('Firefox');
-});
+goog.labs.userAgent.browser.matchFirefox_ = goog.functions.cacheReturnValue(
+    function() {
+      return goog.labs.userAgent.util.matchUserAgent('Firefox');
+    });
 
 
 /**
  * @return {boolean} Whether the user's browser is Safari.
  * @private
  */
-goog.labs.userAgent.browser.matchSafari_ = goog.memoize(function() {
-  return goog.labs.userAgent.util.matchUserAgent('Safari') &&
-      !goog.labs.userAgent.util.matchUserAgent('Chrome') &&
-      !goog.labs.userAgent.util.matchUserAgent('CriOS') &&
-      !goog.labs.userAgent.util.matchUserAgent('Android');
-});
+goog.labs.userAgent.browser.matchSafari_ = goog.functions.cacheReturnValue(
+    function() {
+      return goog.labs.userAgent.util.matchUserAgent('Safari') &&
+             !goog.labs.userAgent.util.matchUserAgent('Chrome') &&
+             !goog.labs.userAgent.util.matchUserAgent('CriOS') &&
+             !goog.labs.userAgent.util.matchUserAgent('Android');
+    });
 
 
 /**
  * @return {boolean} Whether the user's browser is Chrome.
  * @private
  */
-goog.labs.userAgent.browser.matchChrome_ = goog.memoize(function() {
-  return goog.labs.userAgent.util.matchUserAgent('Chrome') ||
-      goog.labs.userAgent.util.matchUserAgent('CriOS');
-});
+goog.labs.userAgent.browser.matchChrome_ = goog.functions.cacheReturnValue(
+    function() {
+      return goog.labs.userAgent.util.matchUserAgent('Chrome') ||
+             goog.labs.userAgent.util.matchUserAgent('CriOS');
+    });
 
 
 /**
  * @return {boolean} Whether the user's browser is the Android browser.
  * @private
  */
-goog.labs.userAgent.browser.matchAndroidBrowser_ = goog.memoize(function() {
+goog.labs.userAgent.browser.matchAndroidBrowser_ =
+    goog.functions.cacheReturnValue(function() {
   return goog.labs.userAgent.util.matchUserAgent('Android') &&
-      !goog.labs.userAgent.util.matchUserAgent('Chrome') &&
-      !goog.labs.userAgent.util.matchUserAgent('CriOS');
+         !goog.labs.userAgent.util.matchUserAgent('Chrome') &&
+         !goog.labs.userAgent.util.matchUserAgent('CriOS');
 });
 
 
 /**
  * @return {boolean} Whether the user's browser is Opera.
  */
-goog.labs.userAgent.browser.isOpera =
-    goog.memoize(goog.labs.userAgent.browser.matchOpera_);
+goog.labs.userAgent.browser.isOpera = goog.functions.cacheReturnValue(
+    goog.labs.userAgent.browser.matchOpera_);
 
 
 /**
  * @return {boolean} Whether the user's browser is IE.
  */
-goog.labs.userAgent.browser.isIE =
-    goog.memoize(goog.labs.userAgent.browser.matchIE_);
+goog.labs.userAgent.browser.isIE = goog.functions.cacheReturnValue(
+    goog.labs.userAgent.browser.matchIE_);
 
 
 /**
  * @return {boolean} Whether the user's browser is Firefox.
  */
-goog.labs.userAgent.browser.isFirefox =
-    goog.memoize(goog.labs.userAgent.browser.matchFirefox_);
+goog.labs.userAgent.browser.isFirefox = goog.functions.cacheReturnValue(
+    goog.labs.userAgent.browser.matchFirefox_);
 
 
 /**
  * @return {boolean} Whether the user's browser is Safari.
  */
-goog.labs.userAgent.browser.isSafari =
-    goog.memoize(goog.labs.userAgent.browser.matchSafari_);
+goog.labs.userAgent.browser.isSafari = goog.functions.cacheReturnValue(
+    goog.labs.userAgent.browser.matchSafari_);
 
 
 /**
  * @return {boolean} Whether the user's browser is Chrome.
  */
-goog.labs.userAgent.browser.isChrome =
-    goog.memoize(goog.labs.userAgent.browser.matchChrome_);
+goog.labs.userAgent.browser.isChrome = goog.functions.cacheReturnValue(
+    goog.labs.userAgent.browser.matchChrome_);
 
 
 /**
  * @return {boolean} Whether the user's browser is the Android browser.
  */
-goog.labs.userAgent.browser.isAndroidBrowser =
-    goog.memoize(goog.labs.userAgent.browser.matchAndroidBrowser_);
+goog.labs.userAgent.browser.isAndroidBrowser = goog.functions.cacheReturnValue(
+    goog.labs.userAgent.browser.matchAndroidBrowser_);
 
 
 /**
  * @return {string} The browser version or empty string if version cannot be
  *     determined.
  */
-goog.labs.userAgent.browser.getVersion = goog.memoize(function() {
-  var userAgentString = goog.labs.userAgent.util.getUserAgentString();
-  // Special case IE since IE's version is inside the parenthesis and without
-  // the '/'.
-  if (goog.labs.userAgent.browser.isIE()) {
-    return goog.labs.userAgent.browser.getIEVersion_();
-  }
+goog.labs.userAgent.browser.getVersion = goog.functions.cacheReturnValue(
+    function() {
+      var userAgentString = goog.labs.userAgent.util.getUserAgentString();
+      // Special case IE since IE's version is inside the parenthesis and
+      // without the '/'.
+      if (goog.labs.userAgent.browser.isIE()) {
+        return goog.labs.userAgent.browser.getIEVersion_();
+      }
 
-  var versionTuples =
-      goog.labs.userAgent.util.extractVersionTuples(userAgentString);
-  // tuples[2] (The first X/Y tuple after the parenthesis) contains the browser
-  // version number.
-  // TODO (vbhasin): Make this check more robust.
-  goog.asserts.assert(versionTuples.length > 2,
-                      'Couldn\'t extract version tuple from user agent string');
-  return goog.isDef(versionTuples[2][1]) ? versionTuples[2][1] : '';
-});
+      var versionTuples = goog.labs.userAgent.util.extractVersionTuples(
+          userAgentString);
+      // tuples[2] (The first X/Y tuple after the parenthesis) contains the
+      // browser version number.
+      // TODO (vbhasin): Make this check more robust.
+      goog.asserts.assert(versionTuples.length > 2,
+          'Couldn\'t extract version tuple from user agent string');
+      return goog.isDef(versionTuples[2][1]) ? versionTuples[2][1] : '';
+    });
 
 
 /**
@@ -172,7 +178,8 @@ goog.labs.userAgent.browser.isVersionOrHigher = function(version) {
  * @return {string}
  * @private
  */
-goog.labs.userAgent.browser.getIEVersion_ = goog.memoize(function() {
+goog.labs.userAgent.browser.getIEVersion_ =
+    goog.functions.cacheReturnValue(function() {
   var gDoc = goog.global['document'];
   var version;
   var userAgentString = goog.labs.userAgent.util.getUserAgentString();

@@ -31,7 +31,7 @@ var testAgents = goog.labs.userAgent.testAgents;
 
 function setUp() {
   // disable memoization
-  propertyReplacer.set(goog.memoize, 'ENABLE_MEMOIZE', false);
+  propertyReplacer.set(goog.functions, 'CACHE_RETURN_VALUE', false);
 }
 
 function tearDown() {

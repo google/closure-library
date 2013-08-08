@@ -23,8 +23,8 @@
 goog.provide('goog.labs.userAgent.engine');
 
 goog.require('goog.array');
+goog.require('goog.functions');
 goog.require('goog.labs.userAgent.util');
-goog.require('goog.memoize');
 goog.require('goog.string');
 
 
@@ -33,9 +33,12 @@ goog.require('goog.string');
  *
  * @return {?string} The user agent string.
  */
-goog.labs.userAgent.engine.getUserAgentString = goog.memoize(function() {
-  return goog.global['navigator'] ? goog.global['navigator'].userAgent : null;
-});
+goog.labs.userAgent.engine.getUserAgentString = goog.functions.cacheReturnValue(
+    function() {
+      return goog.global['navigator'] ?
+             goog.global['navigator'].userAgent :
+             null;
+    });
 
 
 /**
@@ -52,28 +55,28 @@ goog.labs.userAgent.engine.matchUserAgent_ = function(str) {
 /**
  * @return {boolean} Whether the rendering engine is Presto.
  */
-goog.labs.userAgent.engine.isPresto = goog.memoize(
+goog.labs.userAgent.engine.isPresto = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.engine.matchUserAgent_, 'Presto'));
 
 
 /**
  * @return {boolean} Whether the rendering engine is Trident.
  */
-goog.labs.userAgent.engine.isTrident = goog.memoize(
+goog.labs.userAgent.engine.isTrident = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.engine.matchUserAgent_, 'Trident'));
 
 
 /**
  * @return {boolean} Whether the rendering engine is WebKit.
  */
-goog.labs.userAgent.engine.isWebKit = goog.memoize(
+goog.labs.userAgent.engine.isWebKit = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.engine.matchUserAgent_, 'WebKit'));
 
 
 /**
  * @return {boolean} Whether the rendering engine is Gecko.
  */
-goog.labs.userAgent.engine.isGecko = goog.memoize(
+goog.labs.userAgent.engine.isGecko = goog.functions.cacheReturnValue(
     goog.partial(goog.labs.userAgent.engine.matchUserAgent_, 'Gecko'));
 
 
@@ -81,38 +84,41 @@ goog.labs.userAgent.engine.isGecko = goog.memoize(
  * @return {string} The rendering engine's version or empty string if version
  *     can't be determined.
  */
-goog.labs.userAgent.engine.getVersion = goog.memoize(function() {
-  var userAgentString = goog.labs.userAgent.engine.getUserAgentString();
+goog.labs.userAgent.engine.getVersion = goog.functions.cacheReturnValue(
+    function() {
+      var userAgentString = goog.labs.userAgent.engine.getUserAgentString();
 
-  if (userAgentString) {
-    var tuples = goog.labs.userAgent.util.extractVersionTuples(userAgentString);
+      if (userAgentString) {
+        var tuples = goog.labs.userAgent.util.extractVersionTuples(
+            userAgentString);
 
-    var engineTuple = tuples[1];
-    if (engineTuple) {
-      // In Gecko, the version string is either in the browser info or the
-      // Firefox version.  See Gecko user agent string reference:
-      // http://goo.gl/mULqa
-      if (engineTuple[0] == 'Gecko') {
-        return goog.labs.userAgent.engine.getVersionForKey_(tuples, 'Firefox');
+        var engineTuple = tuples[1];
+        if (engineTuple) {
+          // In Gecko, the version string is either in the browser info or the
+          // Firefox version.  See Gecko user agent string reference:
+          // http://goo.gl/mULqa
+          if (engineTuple[0] == 'Gecko') {
+            return goog.labs.userAgent.engine.getVersionForKey_(
+                tuples, 'Firefox');
+          }
+
+          return engineTuple[1];
+        }
+
+        // IE has only one version identifier, and the Trident version is
+        // specified in the parenthetical.
+        var browserTuple = tuples[0];
+        var info;
+        if (browserTuple && (info = browserTuple[2])) {
+          var match = /Trident\/([^\s;]+)/.exec(info);
+          if (match) {
+            return match[1];
+          }
+        }
+
+        return '';
       }
-
-      return engineTuple[1];
-    }
-
-    // IE has only one version identifier, and the Trident version is
-    // specified in the parenthetical.
-    var browserTuple = tuples[0];
-    var info;
-    if (browserTuple && (info = browserTuple[2])) {
-      var match = /Trident\/([^\s;]+)/.exec(info);
-      if (match) {
-        return match[1];
-      }
-    }
-
-    return '';
-  }
-});
+    });
 
 
 /**
