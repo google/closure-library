@@ -35,6 +35,7 @@ goog.addDependency('async/delay.js', ['goog.Delay', 'goog.async.Delay'], ['goog.
 goog.addDependency('async/nexttick.js', ['goog.async.nextTick'], ['goog.debug.entryPointRegistry', 'goog.functions']);
 goog.addDependency('async/throttle.js', ['goog.Throttle', 'goog.async.Throttle'], ['goog.Disposable', 'goog.Timer']);
 goog.addDependency('base.js', ['goog'], []);
+goog.addDependency('base_test.js', ['an.existing.path', 'dup.base', 'far.out', 'goog.baseTest', 'goog.explicit', 'goog.implicit.explicit', 'goog.test', 'goog.test.name', 'goog.test.name.space', 'goog.xy', 'goog.xy.z', 'ns', 'testDep.bar'], ['goog.Timer', 'goog.functions', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent']);
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color']);
 goog.addDependency('color/color.js', ['goog.color'], ['goog.color.names', 'goog.math']);
 goog.addDependency('color/names.js', ['goog.color.names'], []);
