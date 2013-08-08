@@ -1461,6 +1461,9 @@ function testDevicePixelRatio() {
           };
         }
       }));
+
+  stubs.set(goog.functions, 'CACHE_RETURN_VALUE', false);
+
   assertEquals(goog.dom.getPixelRatio(), 1.5);
 
   stubs.set(goog.dom, 'getWindow', goog.functions.constant(

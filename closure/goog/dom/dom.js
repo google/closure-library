@@ -38,6 +38,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classes');
+goog.require('goog.functions');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -2023,39 +2024,44 @@ goog.dom.devicePixelRatio_;
  * devicePixelRatio is not defined, the ratio is calculated with
  * window.matchMedia, if present. Otherwise, gives 1.0.
  *
+ * This function is cached so that the pixel ratio is calculated only once
+ * and only calculated when first requested.
+ *
  * @return {number} The number of actual pixels per virtual pixel.
  */
-goog.dom.getPixelRatio = function() {
-  if (goog.isDefAndNotNull(goog.dom.devicePixelRatio_)) {
-    return goog.dom.devicePixelRatio_;
-  }
+goog.dom.getPixelRatio = goog.functions.cacheReturnValue(function() {
+  var win = goog.dom.getWindow();
+
   // devicePixelRatio does not work on Mobile firefox.
   // TODO(user): Enable this check on a known working mobile Gecko version.
   // Filed a bug: https://bugzilla.mozilla.org/show_bug.cgi?id=896804
-  var win = goog.dom.getWindow();
-  goog.dom.devicePixelRatio_ = 1.0;
   var isFirefoxMobile = goog.userAgent.GECKO && goog.userAgent.MOBILE;
+
   if (goog.isDef(win.devicePixelRatio) && !isFirefoxMobile) {
-    goog.dom.devicePixelRatio_ = win.devicePixelRatio;
+    return win.devicePixelRatio;
   } else if (win.matchMedia) {
-    /**
-     * Calculates a mediaQuery to check if the current device supports the
-     * given actual to virtual pixel ratio.
-     * @param {number} pixelRatio The ratio of actual pixels to virtual pixels.
-     * @return {number} pixelRatio if applicable, otherwise 0.
-     */
-    var matchesPixelRatio = function(pixelRatio) {
-      var query = '(-webkit-min-device-pixel-ratio: ' + pixelRatio + '),' +
-          '(min--moz-device-pixel-ratio: ' + pixelRatio + '),' +
-          '(min-resolution: ' + pixelRatio + 'dppx)';
-      return win.matchMedia(query).matches ? pixelRatio : 0;
-    };
-    goog.dom.devicePixelRatio_ = matchesPixelRatio(.75) ||
-        matchesPixelRatio(1.5) ||
-        matchesPixelRatio(2) ||
-        matchesPixelRatio(3) || 1;
+    return goog.dom.matchesPixelRatio_(.75) ||
+           goog.dom.matchesPixelRatio_(1.5) ||
+           goog.dom.matchesPixelRatio_(2) ||
+           goog.dom.matchesPixelRatio_(3) || 1;
   }
-  return goog.dom.devicePixelRatio_;
+  return 1;
+});
+
+
+/**
+ * Calculates a mediaQuery to check if the current device supports the
+ * given actual to virtual pixel ratio.
+ * @param {number} pixelRatio The ratio of actual pixels to virtual pixels.
+ * @return {number} pixelRatio if applicable, otherwise 0.
+ * @private
+ */
+goog.dom.matchesPixelRatio_ = function(pixelRatio) {
+  var win = goog.dom.getWindow();
+  var query = ('(-webkit-min-device-pixel-ratio: ' + pixelRatio + '),' +
+               '(min--moz-device-pixel-ratio: ' + pixelRatio + '),' +
+               '(min-resolution: ' + pixelRatio + 'dppx)');
+  return win.matchMedia(query).matches ? pixelRatio : 0;
 };
 
 
