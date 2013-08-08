@@ -27,6 +27,8 @@ goog.setTestOnly('goog.labs.userAgent.engineTest');
 
 var propertyReplacer = new goog.testing.PropertyReplacer();
 
+var testAgents = goog.labs.userAgent.testAgents;
+
 function setUp() {
   // disable memoization
   propertyReplacer.set(goog.memoize, 'ENABLE_MEMOIZE', false);
@@ -55,43 +57,29 @@ function assertLowAndHighVersions(lowVersion, highVersion) {
 }
 
 function testPresto() {
-  setGlobalUAString(
-      'Opera/9.80 (Windows NT 6.1; U; es-ES) Presto/2.9.181 Version/12.00');
-  assertTrue(goog.labs.userAgent.engine.isPresto());
-  assertVersion('2.9.181');
-  assertLowAndHighVersions('2.9', '2.10');
-
-  setGlobalUAString(
-      'Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168' +
-      ' Version/11.52');
+  setGlobalUAString(testAgents.OPERA_LINUX);
   assertTrue(goog.labs.userAgent.engine.isPresto());
   assertVersion('2.9.168');
   assertLowAndHighVersions('2.9', '2.10');
 
-  setGlobalUAString(
-      'Opera/9.80 (X11; Linux i686; U; ru) Presto/2.8.131 Version/11.11');
+  setGlobalUAString(testAgents.OPERA_MAC);
   assertTrue(goog.labs.userAgent.engine.isPresto());
-  assertVersion('2.8.131');
-  assertLowAndHighVersions('2.8', '2.9');
+  assertVersion('2.9.168');
+  assertLowAndHighVersions('2.9', '2.10');
 }
 
 function testTrident() {
-  setGlobalUAString(
-      'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; ' +
-      'WOW64; Trident/6.0)');
+  setGlobalUAString(testAgents.IE_10);
   assertTrue(goog.labs.userAgent.engine.isTrident());
   assertVersion('6.0');
   assertLowAndHighVersions('6.0', '7.0');
 
-  setGlobalUAString(
-      'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; ' +
-      'Trident/4.0; SLCC2; Media Center PC 6.0; InfoPath.2; MS-RTC LM 8)');
+  setGlobalUAString(testAgents.IE_8);
   assertTrue(goog.labs.userAgent.engine.isTrident());
   assertVersion('4.0');
   assertLowAndHighVersions('4.0', '5.0');
 
-  setGlobalUAString(
-      'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)');
+  setGlobalUAString(testAgents.IE_9_COMPATIBILITY);
   assertTrue(goog.labs.userAgent.engine.isTrident());
   assertVersion('5.0');
   assertLowAndHighVersions('5.0', '6.0');
@@ -103,40 +91,25 @@ function testTrident() {
 }
 
 function testWebKit() {
-  setGlobalUAString(
-      'Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; HTC Vision Build/GRI40)' +
-      'AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1');
+  setGlobalUAString(testAgents.ANDROID_BROWSER_235);
   assertTrue(goog.labs.userAgent.engine.isWebKit());
   assertVersion('533.1');
   assertLowAndHighVersions('533.0', '534.0');
 
-  setGlobalUAString(
-      'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) ' +
-      'AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.370.0 Safari/533.4');
+  setGlobalUAString(testAgents.CHROME_25);
   assertTrue(goog.labs.userAgent.engine.isWebKit());
-  assertVersion('533.4');
+  assertVersion('535.8');
+  assertLowAndHighVersions('535.0', '536.0');
+
+  setGlobalUAString(testAgents.SAFARI_6);
+  assertTrue(goog.labs.userAgent.engine.isWebKit());
+  assertVersion('536.25');
+  assertLowAndHighVersions('536.0', '537.0');
+
+  setGlobalUAString(testAgents.SAFARI_IPHONE);
+  assertTrue(goog.labs.userAgent.engine.isWebKit());
+  assertVersion('533.17.9');
   assertLowAndHighVersions('533.0', '534.0');
-
-  setGlobalUAString(
-      'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) ' +
-      'AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.370.0 Safari/533.4');
-  assertTrue(goog.labs.userAgent.engine.isWebKit());
-  assertVersion('533.4');
-  assertLowAndHighVersions('533.0', '534.0');
-
-  setGlobalUAString(
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 ' +
-      '(KHTML, like Gecko) Version/5.1.3 Safari/534.53.10');
-  assertTrue(goog.labs.userAgent.engine.isWebKit());
-  assertVersion('534.55.3');
-  assertLowAndHighVersions('534.0', '535.0');
-
-  setGlobalUAString(
-      'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.15 ' +
-      '(KHTML, like Gecko) Chrome/24.0.1295.0 Safari/537.15');
-  assertTrue(goog.labs.userAgent.engine.isWebKit());
-  assertVersion('537.15');
-  assertLowAndHighVersions('537.0', '538.0');
 }
 
 function testGecko() {

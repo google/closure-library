@@ -80,9 +80,7 @@ testAgents.IE_9_COMPATIBILITY =
 
 /** @const {string} */
 testAgents.IE_10 =
-    'Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0;' +
-    ' InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729;' +
-    ' .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0';
+    'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
 
 
 /** @const {string} */

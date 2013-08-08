@@ -199,7 +199,7 @@ function testWindows() {
   uaString = goog.labs.userAgent.testAgents.IE_10;
   setGlobalUAString(uaString, platform);
   assertTrue(goog.labs.userAgent.platform.isWindows());
-  assertVersion('6.1');
+  assertVersion('6.2');
   assertVersionBetween('6', '6.5');
 
   uaString = goog.labs.userAgent.testAgents.CHROME_25;

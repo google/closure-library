@@ -62,7 +62,7 @@ function testIE() {
 
   setGlobalUAString(goog.labs.userAgent.testAgents.IE_10);
   assertTrue(goog.labs.userAgent.browser.isIE());
-  assertVersion('10.6');
+  assertVersion('10.0');
   assertVersionBetween('10.0', '11.0');
 
   setGlobalUAString(goog.labs.userAgent.testAgents.IE_9);
