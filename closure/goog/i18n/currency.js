@@ -59,15 +59,26 @@ goog.i18n.currency.SPACE_FLAG_ = 0x20;
 
 
 /**
+ * Whether tier2 was enabled already by calling addTier2Support().
+ * @private
+ */
+goog.i18n.currency.tier2Enabled_ = false;
+
+
+/**
  * This function will add tier2 currency support. Be default, only tier1
  * (most popular currencies) are supported. If an application really needs
  * to support some of the rarely used currencies, it should call this function
  * before any other functions in this namespace.
  */
 goog.i18n.currency.addTier2Support = function() {
-  for (var key in goog.i18n.currency.CurrencyInfoTier2) {
-    goog.i18n.currency.CurrencyInfo[key] =
-        goog.i18n.currency.CurrencyInfoTier2[key];
+  // Protection from executing this these again and again.
+  if (!goog.i18n.currency.tier2Enabled_) {
+    for (var key in goog.i18n.currency.CurrencyInfoTier2) {
+      goog.i18n.currency.CurrencyInfo[key] =
+          goog.i18n.currency.CurrencyInfoTier2[key];
+    }
+    goog.i18n.currency.tier2Enabled_ = true;
   }
 };
 
