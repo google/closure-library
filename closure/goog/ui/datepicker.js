@@ -27,6 +27,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
 goog.require('goog.date');
 goog.require('goog.date.Date');
+goog.require('goog.date.DateRange');
 goog.require('goog.date.Interval');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
@@ -130,6 +131,15 @@ goog.ui.DatePicker.prototype.showFixedNumWeeks_ = true;
  * @private
  */
 goog.ui.DatePicker.prototype.showOtherMonths_ = true;
+
+
+/**
+ * Range of dates which are selectable by the user.
+ * @type {goog.date.DateRange}
+ * @private
+ */
+goog.ui.DatePicker.prototype.userSelectableDateRange_ =
+    goog.date.DateRange.allTime();
 
 
 /**
@@ -395,6 +405,29 @@ goog.ui.DatePicker.prototype.setShowFixedNumWeeks = function(b) {
 goog.ui.DatePicker.prototype.setShowOtherMonths = function(b) {
   this.showOtherMonths_ = b;
   this.redrawCalendarGrid_();
+};
+
+
+/**
+ * Sets the range of dates which may be selected by the user.
+ *
+ * @param {goog.date.DateRange} dateRange The range of selectable dates.
+ */
+goog.ui.DatePicker.prototype.setUserSelectableDateRange =
+    function(dateRange) {
+  this.userSelectableDateRange_ = dateRange;
+};
+
+
+/**
+ * Determine if a date may be selected by the user.
+ *
+ * @param {goog.date.Date} date The date to be tested.
+ * @return {boolean} Whether the user may select this date.
+ * @private
+ */
+goog.ui.DatePicker.prototype.isUserSelectableDate_ = function(date) {
+  return this.userSelectableDateRange_.contains(date);
 };
 
 
@@ -892,7 +925,9 @@ goog.ui.DatePicker.prototype.handleGridClick_ = function(event) {
     for (el = event.target; el; el = el.previousSibling, x++) {}
     for (el = event.target.parentNode; el; el = el.previousSibling, y++) {}
     var obj = this.grid_[y][x];
-    this.setDate(obj.clone());
+    if (this.isUserSelectableDate_(obj)) {
+      this.setDate(obj.clone());
+    }
   }
 };
 
@@ -947,7 +982,9 @@ goog.ui.DatePicker.prototype.handleGridKeyPress_ = function(event) {
     date = this.activeMonth_.clone();
     date.setDate(1);
   }
-  this.setDate(date);
+  if (this.isUserSelectableDate_(date)) {
+    this.setDate(date);
+  }
 };
 
 
@@ -1251,6 +1288,10 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
       goog.asserts.assert(el, 'The table DOM element cannot be null.');
       goog.a11y.aria.setRole(el, 'gridcell');
       var classes = [goog.getCssName(this.getBaseCssClass(), 'date')];
+      if (!this.isUserSelectableDate_(o)) {
+        classes.push(goog.getCssName(this.getBaseCssClass(),
+            'unavailable-date'));
+      }
       if (this.showOtherMonths_ || o.getMonth() == month) {
         // Date belongs to previous or next month
         if (o.getMonth() != month) {

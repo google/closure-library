@@ -12,13 +12,11 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.date.Date');
+  goog.require('goog.date.DateRange');
+  goog.require('goog.date.DateRange.StandardDateRangeKeys');
   goog.require('goog.date.Interval');
   goog.require('goog.iter.Iterator');
   goog.require('goog.testing.jsunit');
-</script>
-<script>
-  goog.require('goog.date.DateRange');
-  goog.require('goog.date.DateRange.StandardDateRangeKeys');
 </script>
 </head>
 <body>
@@ -155,7 +153,7 @@ function testThisWeek() {
   ];
 
   // 0 - is Monday, 6 is Sunday.
-  for (var i = 0; i < 7; i++){
+  for (var i = 0; i < 7; i++) {
     var date = new gd(2011, 3, 1);
     date.setFirstDayOfWeek(i);
     assertStartEnd('thisWeek, ' + i, startDates[i], endDates[i],
@@ -191,7 +189,7 @@ function testLastWeek() {
   ];
 
   // 0 - is Monday, 6 is Sunday.
-  for (var i = 0; i < 7; i++){
+  for (var i = 0; i < 7; i++) {
     var date = new gd(2011, 3, 1);
     date.setFirstDayOfWeek(i);
     assertStartEnd('lastWeek, ' + i, startDates[i], endDates[i],
@@ -237,6 +235,18 @@ function testIterator() {
   assertTrue('day 8', new gd(2008, 9, 9).equals(i.next()));
   assertTrue('day 9', new gd(2008, 9, 10).equals(i.next()));
   assertThrows('day 10', goog.bind(i.next, i));
+}
+
+function testContains() {
+  var r = new gdr(new gd(2008, 9, 10), new gd(2008, 9, 12));
+  assertFalse('min date', r.contains(goog.date.DateRange.MINIMUM_DATE));
+  assertFalse('9/10/2007', r.contains(new gd(2007, 9, 10)));
+  assertFalse('9/9/2008', r.contains(new gd(2008, 9, 9)));
+  assertTrue('9/10/2008', r.contains(new gd(2008, 9, 10)));
+  assertTrue('9/11/2008', r.contains(new gd(2008, 9, 11)));
+  assertTrue('9/12/2008', r.contains(new gd(2008, 9, 12)));
+  assertFalse('9/13/2008', r.contains(new gd(2008, 9, 13)));
+  assertFalse('max date', r.contains(goog.date.DateRange.MAXIMUM_DATE));
 }
 
 function assertStartEnd(name, start, end, actual) {

@@ -83,6 +83,18 @@ goog.date.DateRange.prototype.getEndDate = function() {
 
 
 /**
+ * Tests if a date falls within this range.
+ *
+ * @param {goog.date.Date} date The date to test.
+ * @return {boolean} Whether the date is in the range.
+ */
+goog.date.DateRange.prototype.contains = function(date) {
+  return date.valueOf() >= this.startDate_.valueOf() &&
+      date.valueOf() <= this.endDate_.valueOf();
+};
+
+
+/**
  * @return {goog.iter.Iterator} An iterator over the date range.
  */
 goog.date.DateRange.prototype.iterator = function() {
