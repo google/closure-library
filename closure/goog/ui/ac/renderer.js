@@ -472,12 +472,15 @@ goog.ui.ac.Renderer.prototype.isVisible = function() {
  * @param {number} index Index of the item to highlight.
  */
 goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
+  var row = index >= 0 && index < this.rows_.length ?
+      this.rows_[index] : undefined;
   var rowDiv = index >= 0 && index < this.rowDivs_.length ?
       this.rowDivs_[index] : undefined;
 
   var evtObj = /** @lends {goog.events.Event.prototype} */ ({
     type: goog.ui.ac.AutoComplete.EventType.ROW_HILITE,
-    rowNode: rowDiv
+    rowNode: rowDiv,
+    row: row ? row.data : null
   });
   if (this.dispatchEvent(evtObj)) {
     this.hiliteNone();

@@ -26,6 +26,7 @@ See the COPYING file for details.
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.ui.ac.AutoComplete');
   goog.require('goog.ui.ac.Renderer');
 </script>
 </head>
@@ -576,6 +577,30 @@ See the COPYING file for details.
         1);
     assertRoughlyEquals(
         targetOffset.y + targetSize.height, rendererOffset.y, 1);
+  }
+
+  function testHiliteEvent() {
+    renderer.renderRows(rendRows, '');
+
+    var hiliteEventFired = false;
+    goog.events.listenOnce(renderer,
+        goog.ui.ac.AutoComplete.EventType.ROW_HILITE,
+        function(e) {
+          hiliteEventFired = true;
+          assertEquals(e.row, rendRows[1].data);
+        });
+    renderer.hiliteRow(1);
+    assertTrue(hiliteEventFired);
+
+    hiliteEventFired = false;
+    goog.events.listenOnce(renderer,
+        goog.ui.ac.AutoComplete.EventType.ROW_HILITE,
+        function(e) {
+          hiliteEventFired = true;
+          assertNull(e.row);
+        });
+    renderer.hiliteRow(rendRows.length); // i.e. out of bounds.
+    assertTrue(hiliteEventFired);
   }
 
   // ------- Helper functions -------
