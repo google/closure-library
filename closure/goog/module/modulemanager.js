@@ -823,6 +823,8 @@ goog.module.ModuleManager.prototype.maybeFinishBaseLoad_ = function() {
       this.dispatchModuleLoadFailed_(
           goog.module.ModuleManager.FailureType.INIT_ERROR);
     }
+
+    this.dispatchActiveIdleChangeIfNeeded_();
   }
 };
 

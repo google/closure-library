@@ -2138,6 +2138,32 @@ See the COPYING file for details.
     mm.consecutiveFailures_++;
     assertEquals(20000, mm.getBackOff_());
   }
+
+  /**
+   * Tests that the IDLE callbacks are executed for active->idle transitions
+   * after setAllModuleInfoString with currently loading modules.
+   */
+  function testIdleCallbackWithInitialModules() {
+    var callback = goog.testing.recordFunction();
+
+    var mm = new goog.module.ModuleManager();
+    mm.setAllModuleInfoString('a', ['a']);
+    mm.registerCallback(
+        goog.module.ModuleManager.CallbackType.IDLE, callback);
+
+    assertTrue(mm.isActive());
+
+    mm.beforeLoadModuleCode('a');
+
+    assertEquals(0, callback.getCallCount());
+
+    mm.setLoaded('a');
+    mm.afterLoadModuleCode('a');
+
+    assertFalse(mm.isActive());
+
+    assertEquals(1, callback.getCallCount());
+  }
 </script>
 </body>
 </html>
