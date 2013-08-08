@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Static utilities for collecting stats associated with
- * WebChannelRequest.
+ * ChannelRequest.
  *
  * @visibility {//visibility:private}
  */

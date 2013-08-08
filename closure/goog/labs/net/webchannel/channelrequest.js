@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview Definition of the WebChannelRequest class. The request
+ * @fileoverview Definition of the ChannelRequest class. The request
  * object encapsulates the logic for making a single request, either for the
  * forward channel, back channel, or test channel, to the server. It contains
  * the logic for the three types of transports we use:
@@ -24,7 +24,7 @@
  */
 
 
-goog.provide('goog.labs.net.webChannel.WebChannelRequest');
+goog.provide('goog.labs.net.webChannel.ChannelRequest');
 
 goog.require('goog.Timer');
 goog.require('goog.async.Throttle');
@@ -41,7 +41,7 @@ goog.require('goog.userAgent');
 
 
 /**
- * A new WebChannelRequest is created for each request to the server.
+ * A new ChannelRequest is created for each request to the server.
  *
  * @param {goog.labs.net.webChannel.Channel} channel
  *     The channel that owns this request.
@@ -52,256 +52,209 @@ goog.require('goog.userAgent');
  * @param {number=} opt_retryId  The retry id for this request.
  * @constructor
  */
-goog.labs.net.webChannel.WebChannelRequest = function(channel, channelDebug,
+goog.labs.net.webChannel.ChannelRequest = function(channel, channelDebug,
     opt_sessionId, opt_requestId, opt_retryId) {
   /**
    * The channel object that owns the request.
-   * @type {goog.labs.net.webChannel.Channel}
-   * @private
+   * @private {goog.labs.net.webChannel.Channel}
    */
   this.channel_ = channel;
 
   /**
    * The channel debug to use for logging
-   * @type {goog.labs.net.webChannel.WebChannelDebug}
-   * @private
+   * @private {goog.labs.net.webChannel.WebChannelDebug}
    */
   this.channelDebug_ = channelDebug;
 
   /**
    * The Session ID for the channel.
-   * @type {string|undefined}
-   * @private
+   * @private {string|undefined}
    */
   this.sid_ = opt_sessionId;
 
   /**
    * The RID (request ID) for the request.
-   * @type {string|number|undefined}
-   * @private
+   * @private {string|number|undefined}
    */
   this.rid_ = opt_requestId;
 
-
   /**
    * The attempt number of the current request.
-   * @type {number}
-   * @private
+   * @private {number}
    */
   this.retryId_ = opt_retryId || 1;
 
-
-  /**
-   * The timeout in ms before failing the request.
-   * @type {number}
-   * @private
-   */
-  this.timeout_ = goog.labs.net.webChannel.WebChannelRequest.TIMEOUT_MS_;
-
   /**
    * An object to keep track of the channel request event listeners.
-   * @type {!goog.events.EventHandler}
-   * @private
+   * @private {!goog.events.EventHandler}
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
 
   /**
+   * The timeout in ms before failing the request.
+   * @private {number}
+   */
+  this.timeout_ = goog.labs.net.webChannel.ChannelRequest.TIMEOUT_MS_;
+
+  /**
    * A timer for polling responseText in browsers that don't fire
    * onreadystatechange during incremental loading of responseText.
-   * @type {goog.Timer}
-   * @private
+   * @private {goog.Timer}
    */
   this.pollingTimer_ = new goog.Timer();
 
   this.pollingTimer_.setInterval(
-      goog.labs.net.webChannel.WebChannelRequest.POLLING_INTERVAL_MS_);
+      goog.labs.net.webChannel.ChannelRequest.POLLING_INTERVAL_MS_);
+
+  /**
+   * Extra HTTP headers to add to all the requests sent to the server.
+   * @private {Object}
+   */
+  this.extraHeaders_ = null;
+
+
+  /**
+   * Whether the request was successful. This is only set to true after the
+   * request successfully completes.
+   * @private {boolean}
+   */
+  this.successful_ = false;
+
+
+  /**
+   * The TimerID of the timer used to detect if the request has timed-out.
+   * @type {?number}
+   * @private
+   */
+  this.watchDogTimerId_ = null;
+
+  /**
+   * The time in the future when the request will timeout.
+   * @private {?number}
+   */
+  this.watchDogTimeoutTime_ = null;
+
+  /**
+   * The time the request started.
+   * @private {?number}
+   */
+  this.requestStartTime_ = null;
+
+  /**
+   * The type of request (XMLHTTP, IMG, Trident)
+   * @private {?number}
+   */
+  this.type_ = null;
+
+  /**
+   * The base Uri for the request. The includes all the parameters except the
+   * one that indicates the retry number.
+   * @private {goog.Uri}
+   */
+  this.baseUri_ = null;
+
+  /**
+   * The request Uri that was actually used for the most recent request attempt.
+   * @private {goog.Uri}
+   */
+  this.requestUri_ = null;
+
+  /**
+   * The post data, if the request is a post.
+   * @private {?string}
+   */
+  this.postData_ = null;
+
+  /**
+   * The XhrLte request if the request is using XMLHTTP
+   * @private {goog.net.XhrIo}
+   */
+  this.xmlHttp_ = null;
+
+  /**
+   * The position of where the next unprocessed chunk starts in the response
+   * text.
+   * @private {number}
+   */
+  this.xmlHttpChunkStart_ = 0;
+
+  /**
+   * The Trident instance if the request is using Trident.
+   * @private {ActiveXObject}
+   */
+  this.trident_ = null;
+
+  /**
+   * The verb (Get or Post) for the request.
+   * @private {?string}
+   */
+  this.verb_ = null;
+
+  /**
+   * The last error if the request failed.
+   * @private {?goog.labs.net.webChannel.ChannelRequest.Error}
+   */
+  this.lastError_ = null;
+
+  /**
+   * The last status code received.
+   * @private {number}
+   */
+  this.lastStatusCode_ = -1;
+
+  /**
+   * Whether to send the Connection:close header as part of the request.
+   * @private {boolean}
+   */
+  this.sendClose_ = true;
+
+  /**
+   * Whether the request has been cancelled due to a call to cancel.
+   * @private {boolean}
+   */
+  this.cancelled_ = false;
+
+  /**
+   * A throttle time in ms for readystatechange events for the backchannel.
+   * Useful for throttling when ready state is INTERACTIVE (partial data).
+   * If set to zero no throttle is used.
+   *
+   * See WebChannelBase.prototype.readyStateChangeThrottleMs_
+   *
+   * @private {number}
+   */
+  this.readyStateChangeThrottleMs_ = 0;
+
+  /**
+   * The throttle for readystatechange events for the current request, or null
+   * if there is none.
+   * @private {goog.async.Throttle}
+   */
+  this.readyStateChangeThrottle_ = null;
 };
 
 
 goog.scope(function() {
 var Channel = goog.labs.net.webChannel.Channel;
-var WebChannelRequest = goog.labs.net.webChannel.WebChannelRequest;
+var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 var requestStats = goog.labs.net.webChannel.requestStats;
 var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 
 
 /**
- * Extra HTTP headers to add to all the requests sent to the server.
- * @type {Object}
- * @private
- */
-WebChannelRequest.prototype.extraHeaders_ = null;
-
-
-/**
- * Whether the request was successful. This is only set to true after the
- * request successfully completes.
- * @type {boolean}
- * @private
- */
-WebChannelRequest.prototype.successful_ = false;
-
-
-/**
- * The TimerID of the timer used to detect if the request has timed-out.
- * @type {?number}
- * @private
- */
-WebChannelRequest.prototype.watchDogTimerId_ = null;
-
-
-/**
- * The time in the future when the request will timeout.
- * @type {?number}
- * @private
- */
-WebChannelRequest.prototype.watchDogTimeoutTime_ = null;
-
-
-/**
- * The time the request started.
- * @type {?number}
- * @private
- */
-WebChannelRequest.prototype.requestStartTime_ = null;
-
-
-/**
- * The type of request (XMLHTTP, IMG, Trident)
- * @type {?number}
- * @private
- */
-WebChannelRequest.prototype.type_ = null;
-
-
-/**
- * The base Uri for the request. The includes all the parameters except the
- * one that indicates the retry number.
- * @type {goog.Uri}
- * @private
- */
-WebChannelRequest.prototype.baseUri_ = null;
-
-
-/**
- * The request Uri that was actually used for the most recent request attempt.
- * @type {goog.Uri}
- * @private
- */
-WebChannelRequest.prototype.requestUri_ = null;
-
-
-/**
- * The post data, if the request is a post.
- * @type {?string}
- * @private
- */
-WebChannelRequest.prototype.postData_ = null;
-
-
-/**
- * The XhrLte request if the request is using XMLHTTP
- * @type {goog.net.XhrIo}
- * @private
- */
-WebChannelRequest.prototype.xmlHttp_ = null;
-
-
-/**
- * The position of where the next unprocessed chunk starts in the response
- * text.
- * @type {number}
- * @private
- */
-WebChannelRequest.prototype.xmlHttpChunkStart_ = 0;
-
-
-/**
- * The Trident instance if the request is using Trident.
- * @type {ActiveXObject}
- * @private
- */
-WebChannelRequest.prototype.trident_ = null;
-
-
-/**
- * The verb (Get or Post) for the request.
- * @type {?string}
- * @private
- */
-WebChannelRequest.prototype.verb_ = null;
-
-
-/**
- * The last error if the request failed.
- * @type {?WebChannelRequest.Error}
- * @private
- */
-WebChannelRequest.prototype.lastError_ = null;
-
-
-/**
- * The last status code received.
- * @type {number}
- * @private
- */
-WebChannelRequest.prototype.lastStatusCode_ = -1;
-
-
-/**
- * Whether to send the Connection:close header as part of the request.
- * @type {boolean}
- * @private
- */
-WebChannelRequest.prototype.sendClose_ = true;
-
-
-/**
- * Whether the request has been cancelled due to a call to cancel.
- * @type {boolean}
- * @private
- */
-WebChannelRequest.prototype.cancelled_ = false;
-
-
-/**
- * A throttle time in ms for readystatechange events for the backchannel.
- * Useful for throttling when ready state is INTERACTIVE (partial data).
- * If set to zero no throttle is used.
- *
- * See WebChannelBase.prototype.readyStateChangeThrottleMs_
- *
- * @type {number}
- * @private
- */
-WebChannelRequest.prototype.readyStateChangeThrottleMs_ = 0;
-
-
-/**
- * The throttle for readystatechange events for the current request, or null
- * if there is none.
- * @type {goog.async.Throttle}
- * @private
- */
-WebChannelRequest.prototype.readyStateChangeThrottle_ = null;
-
-
-/**
  * Default timeout in MS for a request. The server must return data within this
  * time limit for the request to not timeout.
- * @type {number}
- * @private
+ * @private {number}
  */
-WebChannelRequest.TIMEOUT_MS_ = 45 * 1000;
+ChannelRequest.TIMEOUT_MS_ = 45 * 1000;
 
 
 /**
  * How often to poll (in MS) for changes to responseText in browsers that don't
  * fire onreadystatechange during incremental loading of responseText.
- * @type {number}
- * @private
+ * @private {number}
  */
-WebChannelRequest.POLLING_INTERVAL_MS_ = 250;
+ChannelRequest.POLLING_INTERVAL_MS_ = 250;
 
 
 /**
@@ -309,7 +262,7 @@ WebChannelRequest.POLLING_INTERVAL_MS_ = 250;
  * @enum {number}
  * @private
  */
-WebChannelRequest.Type_ = {
+ChannelRequest.Type_ = {
   /**
    * XMLHTTP requests.
    */
@@ -331,7 +284,7 @@ WebChannelRequest.Type_ = {
  * Enum type for identifying an error.
  * @enum {number}
  */
-WebChannelRequest.Error = {
+ChannelRequest.Error = {
   /**
    * Errors due to a non-200 status code.
    */
@@ -377,18 +330,17 @@ WebChannelRequest.Error = {
 /**
  * Returns a useful error string for debugging based on the specified error
  * code.
- * @param {WebChannelRequest.Error} errorCode The error code.
+ * @param {?ChannelRequest.Error} errorCode The error code.
  * @param {number} statusCode The HTTP status code.
  * @return {string} The error string for the given code combination.
  */
-WebChannelRequest.errorStringFromCode = function(
-    errorCode, statusCode) {
+ChannelRequest.errorStringFromCode = function(errorCode, statusCode) {
   switch (errorCode) {
-    case WebChannelRequest.Error.STATUS:
+    case ChannelRequest.Error.STATUS:
       return 'Non-200 return code (' + statusCode + ')';
-    case WebChannelRequest.Error.NO_DATA:
+    case ChannelRequest.Error.NO_DATA:
       return 'XMLHTTP failure (no data)';
-    case WebChannelRequest.Error.TIMEOUT:
+    case ChannelRequest.Error.TIMEOUT:
       return 'HttpConnection timeout';
     default:
       return 'Unknown error';
@@ -398,19 +350,17 @@ WebChannelRequest.errorStringFromCode = function(
 
 /**
  * Sentinel value used to indicate an invalid chunk in a multi-chunk response.
- * @type {Object}
- * @private
+ * @private {Object}
  */
-WebChannelRequest.INVALID_CHUNK_ = {};
+ChannelRequest.INVALID_CHUNK_ = {};
 
 
 /**
  * Sentinel value used to indicate an incomplete chunk in a multi-chunk
  * response.
- * @type {Object}
- * @private
+ * @private {Object}
  */
-WebChannelRequest.INCOMPLETE_CHUNK_ = {};
+ChannelRequest.INCOMPLETE_CHUNK_ = {};
 
 
 /**
@@ -422,7 +372,7 @@ WebChannelRequest.INCOMPLETE_CHUNK_ = {};
  * @return {boolean} Whether XHR streaming is supported.
  * @see http://code.google.com/p/closure-library/issues/detail?id=346
  */
-WebChannelRequest.supportsXhrStreaming = function() {
+ChannelRequest.supportsXhrStreaming = function() {
   return !goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(10);
 };
 
@@ -432,7 +382,7 @@ WebChannelRequest.supportsXhrStreaming = function() {
  *
  * @param {Object} extraHeaders The HTTP headers.
  */
-WebChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {
+ChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {
   this.extraHeaders_ = extraHeaders;
 };
 
@@ -442,7 +392,7 @@ WebChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {
  *
  * @param {number} timeout   The timeout in MS for when we fail the request.
  */
-WebChannelRequest.prototype.setTimeout = function(timeout) {
+ChannelRequest.prototype.setTimeout = function(timeout) {
   this.timeout_ = timeout;
 };
 
@@ -453,8 +403,7 @@ WebChannelRequest.prototype.setTimeout = function(timeout) {
  * @param {number} throttle The throttle in ms.  A value of zero indicates
  *     no throttle.
  */
-WebChannelRequest.prototype.setReadyStateChangeThrottle = function(
-    throttle) {
+ChannelRequest.prototype.setReadyStateChangeThrottle = function(throttle) {
   this.readyStateChangeThrottleMs_ = throttle;
 };
 
@@ -467,9 +416,8 @@ WebChannelRequest.prototype.setReadyStateChangeThrottle = function(
  * @param {boolean} decodeChunks  Whether to the result is expected to be
  *     encoded for chunking and thus requires decoding.
  */
-WebChannelRequest.prototype.xmlHttpPost = function(uri, postData,
-    decodeChunks) {
-  this.type_ = WebChannelRequest.Type_.XML_HTTP;
+ChannelRequest.prototype.xmlHttpPost = function(uri, postData, decodeChunks) {
+  this.type_ = ChannelRequest.Type_.XML_HTTP;
   this.baseUri_ = uri.clone().makeUnique();
   this.postData_ = postData;
   this.decodeChunks_ = decodeChunks;
@@ -489,9 +437,9 @@ WebChannelRequest.prototype.xmlHttpPost = function(uri, postData,
  * @param {boolean=} opt_noClose   Whether to request that the tcp/ip connection
  *     should be closed.
  */
-WebChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
+ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
     hostPrefix, opt_noClose) {
-  this.type_ = WebChannelRequest.Type_.XML_HTTP;
+  this.type_ = ChannelRequest.Type_.XML_HTTP;
   this.baseUri_ = uri.clone().makeUnique();
   this.postData_ = null;
   this.decodeChunks_ = decodeChunks;
@@ -510,7 +458,7 @@ WebChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
  *     domain.
  * @private
  */
-WebChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
+ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
   this.requestStartTime_ = goog.now();
   this.ensureWatchDogTimer_();
 
@@ -564,7 +512,7 @@ WebChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
  * @param {goog.events.Event} evt The event.
  * @private
  */
-WebChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
+ChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
   var xhr = /** @type {goog.net.XhrIo} */ (evt.target);
   var throttle = this.readyStateChangeThrottle_;
   if (throttle &&
@@ -584,7 +532,7 @@ WebChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
  * @param {goog.net.XhrIo} xmlhttp The XhrIo object for the current request.
  * @private
  */
-WebChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
+ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
   requestStats.onStartExecution();
 
   /** @preserveTry */
@@ -614,11 +562,11 @@ WebChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
  *
  * @private
  */
-WebChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
+ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   var readyState = this.xmlHttp_.getReadyState();
   var errorCode = this.xmlHttp_.getLastErrorCode();
   var statusCode = this.xmlHttp_.getStatus();
-  if (!WebChannelRequest.supportsXhrStreaming()) {
+  if (!ChannelRequest.supportsXhrStreaming()) {
     if (readyState < goog.net.XmlHttp.ReadyState.COMPLETE) {
       // not yet ready
       return;
@@ -676,12 +624,12 @@ WebChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
       // server doesn't know about the session (maybe it got restarted, maybe
       // the user got moved to another server, etc.,). Handlers can special
       // case this error
-      this.lastError_ = WebChannelRequest.Error.UNKNOWN_SESSION_ID;
+      this.lastError_ = ChannelRequest.Error.UNKNOWN_SESSION_ID;
       requestStats.notifyStatEvent(
           requestStats.Stat.REQUEST_UNKNOWN_SESSION_ID);
       this.channelDebug_.warning('XMLHTTP Unknown SID (' + this.rid_ + ')');
     } else {
-      this.lastError_ = WebChannelRequest.Error.STATUS;
+      this.lastError_ = ChannelRequest.Error.STATUS;
       requestStats.notifyStatEvent(requestStats.Stat.REQUEST_BAD_STATUS);
       this.channelDebug_.warning(
           'XMLHTTP Bad status ' + status + ' (' + this.rid_ + ')');
@@ -697,7 +645,7 @@ WebChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
 
   if (this.decodeChunks_) {
     this.decodeNextChunks_(readyState, responseText);
-    if (goog.userAgent.OPERA &&
+    if (goog.userAgent.OPERA && this.successful_ &&
         readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE) {
       this.startPolling_();
     }
@@ -731,16 +679,16 @@ WebChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
  * @param {string} responseText The value of responseText.
  * @private
  */
-WebChannelRequest.prototype.decodeNextChunks_ = function(readyState,
-        responseText) {
+ChannelRequest.prototype.decodeNextChunks_ = function(readyState,
+    responseText) {
   var decodeNextChunksSuccessful = true;
   while (!this.cancelled_ &&
          this.xmlHttpChunkStart_ < responseText.length) {
     var chunkText = this.getNextChunk_(responseText);
-    if (chunkText == WebChannelRequest.INCOMPLETE_CHUNK_) {
+    if (chunkText == ChannelRequest.INCOMPLETE_CHUNK_) {
       if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
         // should have consumed entire response when the request is done
-        this.lastError_ = WebChannelRequest.Error.BAD_DATA;
+        this.lastError_ = ChannelRequest.Error.BAD_DATA;
         requestStats.notifyStatEvent(
             requestStats.Stat.REQUEST_INCOMPLETE_DATA);
         decodeNextChunksSuccessful = false;
@@ -748,8 +696,8 @@ WebChannelRequest.prototype.decodeNextChunks_ = function(readyState,
       this.channelDebug_.xmlHttpChannelResponseText(
           this.rid_, null, '[Incomplete Response]');
       break;
-    } else if (chunkText == WebChannelRequest.INVALID_CHUNK_) {
-      this.lastError_ = WebChannelRequest.Error.BAD_DATA;
+    } else if (chunkText == ChannelRequest.INVALID_CHUNK_) {
+      this.lastError_ = ChannelRequest.Error.BAD_DATA;
       requestStats.notifyStatEvent(requestStats.Stat.REQUEST_BAD_DATA);
       this.channelDebug_.xmlHttpChannelResponseText(
           this.rid_, responseText, '[Invalid Chunk]');
@@ -764,7 +712,7 @@ WebChannelRequest.prototype.decodeNextChunks_ = function(readyState,
   if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE &&
       responseText.length == 0) {
     // also an error if we didn't get any response
-    this.lastError_ = WebChannelRequest.Error.NO_DATA;
+    this.lastError_ = ChannelRequest.Error.NO_DATA;
     requestStats.notifyStatEvent(requestStats.Stat.REQUEST_NO_DATA);
     decodeNextChunksSuccessful = false;
   }
@@ -783,7 +731,7 @@ WebChannelRequest.prototype.decodeNextChunks_ = function(readyState,
  * Polls the response for new data.
  * @private
  */
-WebChannelRequest.prototype.pollResponse_ = function() {
+ChannelRequest.prototype.pollResponse_ = function() {
   var readyState = this.xmlHttp_.getReadyState();
   var responseText = this.xmlHttp_.getResponseText();
   if (this.xmlHttpChunkStart_ < responseText.length) {
@@ -804,7 +752,7 @@ WebChannelRequest.prototype.pollResponse_ = function() {
  * cleanup_().
  * @private
  */
-WebChannelRequest.prototype.startPolling_ = function() {
+ChannelRequest.prototype.startPolling_ = function() {
   this.eventHandler_.listen(this.pollingTimer_, goog.Timer.TICK,
       this.pollResponse_);
   this.pollingTimer_.start();
@@ -816,7 +764,7 @@ WebChannelRequest.prototype.startPolling_ = function() {
  * during its lifetime.  Abandons that request.
  * @private
  */
-WebChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ = function() {
+ChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ = function() {
   if (this.successful_) {
     // Should never happen.
     this.channelDebug_.severe(
@@ -828,7 +776,7 @@ WebChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ = function() {
   this.cleanup_();
 
   // set error and dispatch failure
-  this.lastError_ = WebChannelRequest.Error.BROWSER_OFFLINE;
+  this.lastError_ = ChannelRequest.Error.BROWSER_OFFLINE;
   requestStats.notifyStatEvent(requestStats.Stat.BROWSER_OFFLINE);
   this.dispatchFailure_();
 };
@@ -849,22 +797,22 @@ WebChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ = function() {
  *                         indicating a special condition.
  * @private
  */
-WebChannelRequest.prototype.getNextChunk_ = function(responseText) {
+ChannelRequest.prototype.getNextChunk_ = function(responseText) {
   var sizeStartIndex = this.xmlHttpChunkStart_;
   var sizeEndIndex = responseText.indexOf('\n', sizeStartIndex);
   if (sizeEndIndex == -1) {
-    return WebChannelRequest.INCOMPLETE_CHUNK_;
+    return ChannelRequest.INCOMPLETE_CHUNK_;
   }
 
   var sizeAsString = responseText.substring(sizeStartIndex, sizeEndIndex);
   var size = Number(sizeAsString);
   if (isNaN(size)) {
-    return WebChannelRequest.INVALID_CHUNK_;
+    return ChannelRequest.INVALID_CHUNK_;
   }
 
   var chunkStartIndex = sizeEndIndex + 1;
   if (chunkStartIndex + size > responseText.length) {
-    return WebChannelRequest.INCOMPLETE_CHUNK_;
+    return ChannelRequest.INCOMPLETE_CHUNK_;
   }
 
   var chunkText = responseText.substr(chunkStartIndex, size);
@@ -880,9 +828,8 @@ WebChannelRequest.prototype.getNextChunk_ = function(responseText) {
  * @param {goog.Uri} uri The uri to request from.
  * @param {boolean} usingSecondaryDomain Whether to use a secondary domain.
  */
-WebChannelRequest.prototype.tridentGet = function(uri,
-    usingSecondaryDomain) {
-  this.type_ = WebChannelRequest.Type_.TRIDENT;
+ChannelRequest.prototype.tridentGet = function(uri, usingSecondaryDomain) {
+  this.type_ = ChannelRequest.Type_.TRIDENT;
   this.baseUri_ = uri.clone().makeUnique();
   this.tridentGet_(usingSecondaryDomain);
 };
@@ -893,7 +840,7 @@ WebChannelRequest.prototype.tridentGet = function(uri,
  * @param {boolean} usingSecondaryDomain Whether to use a secondary domain.
  * @private
  */
-WebChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
+ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.requestStartTime_ = goog.now();
   this.ensureWatchDogTimer_();
 
@@ -908,7 +855,7 @@ WebChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
     this.channelDebug_.severe('ActiveX blocked');
     this.cleanup_();
 
-    this.lastError_ = WebChannelRequest.Error.ACTIVE_X_BLOCKED;
+    this.lastError_ = ChannelRequest.Error.ACTIVE_X_BLOCKED;
     requestStats.notifyStatEvent(requestStats.Stat.ACTIVE_X_BLOCKED);
     this.dispatchFailure_();
     return;
@@ -946,7 +893,7 @@ WebChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
  * @param {string} msg The data payload.
  * @private
  */
-WebChannelRequest.prototype.onTridentRpcMessage_ = function(msg) {
+ChannelRequest.prototype.onTridentRpcMessage_ = function(msg) {
   // need to do async b/c this gets called off of the context of the ActiveX
   requestStats.setTimeout(
       goog.bind(this.onTridentRpcMessageAsync_, this, msg), 0);
@@ -960,7 +907,7 @@ WebChannelRequest.prototype.onTridentRpcMessage_ = function(msg) {
  * @param {string} msg  The data payload.
  * @private
  */
-WebChannelRequest.prototype.onTridentRpcMessageAsync_ = function(msg) {
+ChannelRequest.prototype.onTridentRpcMessageAsync_ = function(msg) {
   if (this.cancelled_) {
     return;
   }
@@ -978,7 +925,7 @@ WebChannelRequest.prototype.onTridentRpcMessageAsync_ = function(msg) {
  * @param {boolean} successful Whether the request successfully completed.
  * @private
  */
-WebChannelRequest.prototype.onTridentDone_ = function(successful) {
+ChannelRequest.prototype.onTridentDone_ = function(successful) {
   // need to do async b/c this gets called off of the context of the ActiveX
   requestStats.setTimeout(
       goog.bind(this.onTridentDoneAsync_, this, successful), 0);
@@ -992,8 +939,7 @@ WebChannelRequest.prototype.onTridentDone_ = function(successful) {
  * @param {boolean} successful Whether the request successfully completed.
  * @private
  */
-WebChannelRequest.prototype.onTridentDoneAsync_ = function(
-    successful) {
+ChannelRequest.prototype.onTridentDoneAsync_ = function(successful) {
   if (this.cancelled_) {
     return;
   }
@@ -1013,8 +959,8 @@ WebChannelRequest.prototype.onTridentDoneAsync_ = function(
  * send something to the server while the page is getting torn down.
  * @param {goog.Uri} uri The uri to send a request to.
  */
-WebChannelRequest.prototype.sendUsingImgTag = function(uri) {
-  this.type_ = WebChannelRequest.Type_.IMG;
+ChannelRequest.prototype.sendUsingImgTag = function(uri) {
+  this.type_ = ChannelRequest.Type_.IMG;
   this.baseUri_ = uri.clone().makeUnique();
   this.imgTagGet_();
 };
@@ -1025,7 +971,7 @@ WebChannelRequest.prototype.sendUsingImgTag = function(uri) {
  *
  * @private
  */
-WebChannelRequest.prototype.imgTagGet_ = function() {
+ChannelRequest.prototype.imgTagGet_ = function() {
   var eltImg = new Image();
   eltImg.src = this.baseUri_;
   this.requestStartTime_ = goog.now();
@@ -1036,7 +982,7 @@ WebChannelRequest.prototype.imgTagGet_ = function() {
 /**
  * Cancels the request no matter what the underlying transport is.
  */
-WebChannelRequest.prototype.cancel = function() {
+ChannelRequest.prototype.cancel = function() {
   this.cancelled_ = true;
   this.cleanup_();
 };
@@ -1048,7 +994,7 @@ WebChannelRequest.prototype.cancel = function() {
  *
  * @private
  */
-WebChannelRequest.prototype.ensureWatchDogTimer_ = function() {
+ChannelRequest.prototype.ensureWatchDogTimer_ = function() {
   this.watchDogTimeoutTime_ = goog.now() + this.timeout_;
   this.startWatchDogTimer_(this.timeout_);
 };
@@ -1060,7 +1006,7 @@ WebChannelRequest.prototype.ensureWatchDogTimer_ = function() {
  * @param {number} time The number of milliseconds to wait.
  * @private
  */
-WebChannelRequest.prototype.startWatchDogTimer_ = function(time) {
+ChannelRequest.prototype.startWatchDogTimer_ = function(time) {
   if (this.watchDogTimerId_ != null) {
     // assertion
     throw Error('WatchDog timer not null');
@@ -1075,7 +1021,7 @@ WebChannelRequest.prototype.startWatchDogTimer_ = function(time) {
  *
  * @private
  */
-WebChannelRequest.prototype.cancelWatchDogTimer_ = function() {
+ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
   if (this.watchDogTimerId_) {
     goog.global.clearTimeout(this.watchDogTimerId_);
     this.watchDogTimerId_ = null;
@@ -1090,7 +1036,7 @@ WebChannelRequest.prototype.cancelWatchDogTimer_ = function() {
  *
  * @private
  */
-WebChannelRequest.prototype.onWatchDogTimeout_ = function() {
+ChannelRequest.prototype.onWatchDogTimeout_ = function() {
   this.watchDogTimerId_ = null;
   var now = goog.now();
   if (now - this.watchDogTimeoutTime_ >= 0) {
@@ -1109,7 +1055,7 @@ WebChannelRequest.prototype.onWatchDogTimeout_ = function() {
  *
  * @private
  */
-WebChannelRequest.prototype.handleTimeout_ = function() {
+ChannelRequest.prototype.handleTimeout_ = function() {
   if (this.successful_) {
     // Should never happen.
     this.channelDebug_.severe(
@@ -1119,14 +1065,14 @@ WebChannelRequest.prototype.handleTimeout_ = function() {
   this.channelDebug_.timeoutResponse(this.requestUri_);
   // IMG requests never notice if they were successful, and always 'time out'.
   // This fact says nothing about reachability.
-  if (this.type_ != WebChannelRequest.Type_.IMG) {
+  if (this.type_ != ChannelRequest.Type_.IMG) {
     requestStats.notifyServerReachabilityEvent(
         requestStats.ServerReachability.REQUEST_FAILED);
   }
   this.cleanup_();
 
   // set error and dispatch failure
-  this.lastError_ = WebChannelRequest.Error.TIMEOUT;
+  this.lastError_ = ChannelRequest.Error.TIMEOUT;
   requestStats.notifyStatEvent(requestStats.Stat.REQUEST_TIMEOUT);
   this.dispatchFailure_();
 };
@@ -1136,7 +1082,7 @@ WebChannelRequest.prototype.handleTimeout_ = function() {
  * Notifies the channel that this request failed.
  * @private
  */
-WebChannelRequest.prototype.dispatchFailure_ = function() {
+ChannelRequest.prototype.dispatchFailure_ = function() {
   if (this.channel_.isClosed() || this.cancelled_) {
     return;
   }
@@ -1151,7 +1097,7 @@ WebChannelRequest.prototype.dispatchFailure_ = function() {
  *
  * @private
  */
-WebChannelRequest.prototype.cleanup_ = function() {
+ChannelRequest.prototype.cleanup_ = function() {
   this.cancelWatchDogTimer_();
 
   goog.dispose(this.readyStateChangeThrottle_);
@@ -1184,7 +1130,7 @@ WebChannelRequest.prototype.cleanup_ = function() {
  *
  * @return {boolean} True if the request succeeded.
  */
-WebChannelRequest.prototype.getSuccess = function() {
+ChannelRequest.prototype.getSuccess = function() {
   return this.successful_;
 };
 
@@ -1192,9 +1138,9 @@ WebChannelRequest.prototype.getSuccess = function() {
 /**
  * If the request was not successful, returns the reason.
  *
- * @return {?WebChannelRequest.Error}  The last error.
+ * @return {?ChannelRequest.Error}  The last error.
  */
-WebChannelRequest.prototype.getLastError = function() {
+ChannelRequest.prototype.getLastError = function() {
   return this.lastError_;
 };
 
@@ -1203,7 +1149,7 @@ WebChannelRequest.prototype.getLastError = function() {
  * Returns the status code of the last request.
  * @return {number} The status code of the last request.
  */
-WebChannelRequest.prototype.getLastStatusCode = function() {
+ChannelRequest.prototype.getLastStatusCode = function() {
   return this.lastStatusCode_;
 };
 
@@ -1213,7 +1159,7 @@ WebChannelRequest.prototype.getLastStatusCode = function() {
  *
  * @return {string|undefined} The session ID.
  */
-WebChannelRequest.prototype.getSessionId = function() {
+ChannelRequest.prototype.getSessionId = function() {
   return this.sid_;
 };
 
@@ -1224,7 +1170,7 @@ WebChannelRequest.prototype.getSessionId = function() {
  *
  * @return {string|number|undefined} The request ID.
  */
-WebChannelRequest.prototype.getRequestId = function() {
+ChannelRequest.prototype.getRequestId = function() {
   return this.rid_;
 };
 
@@ -1234,7 +1180,7 @@ WebChannelRequest.prototype.getRequestId = function() {
  *
  * @return {?string} The POST data provided by the request initiator.
  */
-WebChannelRequest.prototype.getPostData = function() {
+ChannelRequest.prototype.getPostData = function() {
   return this.postData_;
 };
 
@@ -1244,7 +1190,7 @@ WebChannelRequest.prototype.getPostData = function() {
  *
  * @return {?number} The time the request started, as returned by goog.now().
  */
-WebChannelRequest.prototype.getRequestStartTime = function() {
+ChannelRequest.prototype.getRequestStartTime = function() {
   return this.requestStartTime_;
 };
 
@@ -1255,7 +1201,7 @@ WebChannelRequest.prototype.getRequestStartTime = function() {
  * @param {string} data The request data.
  * @private
  */
-WebChannelRequest.prototype.safeOnRequestData_ = function(data) {
+ChannelRequest.prototype.safeOnRequestData_ = function(data) {
   /** @preserveTry */
   try {
     this.channel_.onRequestData(this, data);
@@ -1277,15 +1223,11 @@ WebChannelRequest.prototype.safeOnRequestData_ = function(data) {
  * @param {string=} opt_sessionId  The session id for the channel.
  * @param {string|number=} opt_requestId  The request id for this request.
  * @param {number=} opt_retryId  The retry id for this request.
- * @return {WebChannelRequest} The created channel request.
+ * @return {!ChannelRequest} The created channel request.
  */
-WebChannelRequest.createChannelRequest = function(channel, channelDebug,
+ChannelRequest.createChannelRequest = function(channel, channelDebug,
     opt_sessionId, opt_requestId, opt_retryId) {
-  return new WebChannelRequest(
-      channel,
-      channelDebug,
-      opt_sessionId,
-      opt_requestId,
+  return new ChannelRequest(channel, channelDebug, opt_sessionId, opt_requestId,
       opt_retryId);
 };
 });  // goog.scope

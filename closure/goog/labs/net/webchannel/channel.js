@@ -77,7 +77,7 @@ Channel.prototype.createXhrIo = goog.abstractMethod;
 
 /**
  * Callback from ChannelRequest that indicates a request has completed.
- * @param {goog.labs.net.webChannel.WebChannelRequest} request
+ * @param {goog.labs.net.webChannel.ChannelRequest} request
  *     The request object.
  */
 Channel.prototype.onRequestComplete = goog.abstractMethod;
@@ -92,7 +92,7 @@ Channel.prototype.isClosed = goog.abstractMethod;
 
 /**
  * Callback from ChannelRequest for when new data is received
- * @param {goog.labs.net.webChannel.WebChannelRequest} request
+ * @param {goog.labs.net.webChannel.ChannelRequest} request
  *     The request object.
  * @param {string} responseText The text of the response.
  */
@@ -180,7 +180,7 @@ Channel.prototype.testConnectionFinished = goog.abstractMethod;
  * Callback from TestChannel for when the channel has an error.
  * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
  *     The TestChannel.
- * @param {goog.labs.net.webChannel.WebChannelRequest.Error} errorCode
+ * @param {goog.labs.net.webChannel.ChannelRequest.Error} errorCode
  *     The error code of the failure.
  */
 Channel.prototype.testConnectionFailure = goog.abstractMethod;

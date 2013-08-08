@@ -22,7 +22,7 @@ goog.provide('goog.labs.net.webChannel.BaseTestChannel');
 
 goog.require('goog.json.EvalJsonProcessor');
 goog.require('goog.labs.net.webChannel.Channel');
-goog.require('goog.labs.net.webChannel.WebChannelRequest');
+goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.labs.net.webChannel.requestStats.ServerReachability');
 goog.require('goog.labs.net.webChannel.requestStats.Stat');
@@ -71,7 +71,7 @@ goog.labs.net.webChannel.BaseTestChannel = function(channel, channelDebug) {
 goog.scope(function() {
 var BaseTestChannel = goog.labs.net.webChannel.BaseTestChannel;
 var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
-var WebChannelRequest = goog.labs.net.webChannel.WebChannelRequest;
+var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 var requestStats = goog.labs.net.webChannel.requestStats;
 var Channel = goog.labs.net.webChannel.Channel;
 
@@ -86,7 +86,7 @@ BaseTestChannel.prototype.extraHeaders_ = null;
 
 /**
  * The test request.
- * @type {WebChannelRequest}
+ * @type {ChannelRequest}
  * @private
  */
 BaseTestChannel.prototype.request_ = null;
@@ -285,8 +285,7 @@ BaseTestChannel.prototype.connect = function(path) {
 
   // the first request returns server specific parameters
   sendDataUri.setParameterValues('MODE', 'init');
-  this.request_ = WebChannelRequest.createChannelRequest(
-      this, this.channelDebug_);
+  this.request_ = ChannelRequest.createChannelRequest(this, this.channelDebug_);
   this.request_.setExtraHeaders(this.extraHeaders_);
   this.request_.xmlHttpGet(sendDataUri, false /* decodeChunks */,
       null /* hostPrefix */, true /* opt_noClose */);
@@ -369,14 +368,13 @@ BaseTestChannel.prototype.connectStage2_ = function() {
     }
     return; // Skip the test
   }
-  this.request_ = WebChannelRequest.createChannelRequest(
-      this, this.channelDebug_);
+  this.request_ = ChannelRequest.createChannelRequest(this, this.channelDebug_);
   this.request_.setExtraHeaders(this.extraHeaders_);
   var recvDataUri = this.channel_.getBackChannelUri(this.hostPrefix_,
       /** @type {string} */ (this.path_));
 
   requestStats.notifyStatEvent(requestStats.Stat.TEST_STAGE_TWO_START);
-  if (!WebChannelRequest.supportsXhrStreaming()) {
+  if (!ChannelRequest.supportsXhrStreaming()) {
     recvDataUri.setParameterValues('TYPE', 'html');
     this.request_.tridentGet(recvDataUri, Boolean(this.hostPrefix_));
   } else {
@@ -422,7 +420,7 @@ BaseTestChannel.prototype.isClosed = function() {
 /**
  * Callback from ChannelRequest for when new data is received
  *
- * @param {WebChannelRequest} req  The request object.
+ * @param {ChannelRequest} req The request object.
  * @param {string} responseText The text of the response.
  * @override
  */
@@ -433,8 +431,7 @@ BaseTestChannel.prototype.onRequestData = function(req, responseText) {
     if (!responseText) {
       this.channelDebug_.debug('TestConnection: Null responseText');
       // The server should always send text; something is wrong here
-      this.channel_.testConnectionFailure(this,
-          WebChannelRequest.Error.BAD_DATA);
+      this.channel_.testConnectionFailure(this, ChannelRequest.Error.BAD_DATA);
       return;
     }
     /** @preserveTry */
@@ -442,8 +439,7 @@ BaseTestChannel.prototype.onRequestData = function(req, responseText) {
       var respArray = this.parser_.parse(responseText);
     } catch (e) {
       this.channelDebug_.dumpException(e);
-      this.channel_.testConnectionFailure(this,
-          WebChannelRequest.Error.BAD_DATA);
+      this.channel_.testConnectionFailure(this, ChannelRequest.Error.BAD_DATA);
       return;
     }
     this.hostPrefix_ = this.channel_.correctHostPrefix(respArray[0]);
@@ -483,7 +479,7 @@ BaseTestChannel.prototype.onRequestData = function(req, responseText) {
 /**
  * Callback from ChannelRequest that indicates a request has completed.
  *
- * @param {WebChannelRequest} req  The request object.
+ * @param {ChannelRequest} req The request object.
  * @override
  */
 BaseTestChannel.prototype.onRequestComplete = function(req) {
@@ -497,7 +493,7 @@ BaseTestChannel.prototype.onRequestComplete = function(req) {
       requestStats.notifyStatEvent(requestStats.Stat.TEST_STAGE_TWO_FAILED);
     }
     this.channel_.testConnectionFailure(this,
-        /** @type {WebChannelRequest.Error} */
+        /** @type {ChannelRequest.Error} */
         (this.request_.getLastError()));
     return;
   }
@@ -516,7 +512,7 @@ BaseTestChannel.prototype.onRequestComplete = function(req) {
     this.channelDebug_.debug('TestConnection: request complete for stage 2');
     var goodConn = false;
 
-    if (!WebChannelRequest.supportsXhrStreaming()) {
+    if (!ChannelRequest.supportsXhrStreaming()) {
       // we always get Trident responses in separate calls to
       // onRequestData, so we have to check the time they came
       var ms = this.lastTime_ - this.firstTime_;
@@ -585,7 +581,7 @@ BaseTestChannel.prototype.checkForEarlyNonBuffered_ = function() {
   // onRequestData, so we have to check the time that the first came in
   // and verify that the data arrived before the second portion could
   // have been sent. For all other browser's we skip the timing test.
-  return WebChannelRequest.supportsXhrStreaming() ||
+  return ChannelRequest.supportsXhrStreaming() ||
       ms < BaseTestChannel.MIN_TIME_EXPECTED_BETWEEN_DATA_;
 };
 

@@ -26,9 +26,9 @@ goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.functions');
 goog.require('goog.json');
+goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.WebChannelBase');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
-goog.require('goog.labs.net.webChannel.WebChannelRequest');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.labs.net.webChannel.requestStats.Stat');
 goog.require('goog.net.tmpnetwork');
@@ -186,13 +186,13 @@ MockChannelRequest.prototype.getRequestStartTime = function() {
 
 /**
  * @suppress {invalidCasts} The cast from MockChannelRequest to
- * WebChannelRequest is invalid and will not compile. *
+ * ChannelRequest is invalid and will not compile. *
  */
 function setUpPage() {
   // Use our MockChannelRequests instead of the real ones.
-  goog.labs.net.webChannel.WebChannelRequest.createChannelRequest = function(
+  goog.labs.net.webChannel.ChannelRequest.createChannelRequest = function(
       channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
-    return /** @type {!goog.labs.net.webChannel.WebChannelRequest} */ (
+    return /** @type {!goog.labs.net.webChannel.ChannelRequest} */ (
         new MockChannelRequest(channel, channelDebug, opt_sessionId,
             opt_requestId, opt_retryId));
   };
@@ -465,7 +465,7 @@ function receive(data) {
 
 function responseTimeout() {
   channel.forwardChannelRequest_lastError_ =
-      goog.labs.net.webChannel.WebChannelRequest.Error.TIMEOUT;
+      goog.labs.net.webChannel.ChannelRequest.Error.TIMEOUT;
   channel.forwardChannelRequest_.successful_ = false;
   channel.onRequestComplete(
       channel.forwardChannelRequest_);
@@ -478,7 +478,7 @@ function responseTimeout() {
  */
 function responseRequestFailed(opt_statusCode) {
   channel.forwardChannelRequest_.lastError_ =
-      goog.labs.net.webChannel.WebChannelRequest.Error.STATUS;
+      goog.labs.net.webChannel.ChannelRequest.Error.STATUS;
   channel.forwardChannelRequest_.lastStatusCode_ =
       opt_statusCode || 503;
   channel.forwardChannelRequest_.successful_ = false;
@@ -490,7 +490,7 @@ function responseRequestFailed(opt_statusCode) {
 
 function responseUnknownSessionId() {
   channel.forwardChannelRequest_.lastError_ =
-      goog.labs.net.webChannel.WebChannelRequest.Error.UNKNOWN_SESSION_ID;
+      goog.labs.net.webChannel.ChannelRequest.Error.UNKNOWN_SESSION_ID;
   channel.forwardChannelRequest_.successful_ = false;
   channel.onRequestComplete(
       channel.forwardChannelRequest_);
@@ -500,7 +500,7 @@ function responseUnknownSessionId() {
 
 function responseActiveXBlocked() {
   channel.backChannelRequest_.lastError_ =
-      goog.labs.net.webChannel.WebChannelRequest.Error.ACTIVE_X_BLOCKED;
+      goog.labs.net.webChannel.ChannelRequest.Error.ACTIVE_X_BLOCKED;
   channel.backChannelRequest_.successful_ = false;
   channel.onRequestComplete(
       channel.backChannelRequest_);
