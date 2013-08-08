@@ -20,7 +20,10 @@
 
 
 goog.provide('goog.Disposable');
+/** @suppress {extraProvide} */
 goog.provide('goog.dispose');
+/** @suppress {extraProvide} */
+goog.provide('goog.disposeAll');
 
 goog.require('goog.disposable.IDisposable');
 
@@ -55,7 +58,7 @@ goog.Disposable.MonitoringMode = {
   /**
    * Creating and disposing the goog.Disposable instances is monitored. All
    * disposable objects need to call the {@code goog.Disposable} base
-   * constructor. The PERMANENT mode must bet switched on before creating any
+   * constructor. The PERMANENT mode must be switched on before creating any
    * goog.Disposable instances.
    */
   PERMANENT: 1,
