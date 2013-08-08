@@ -78,9 +78,7 @@ See the COPYING file for details.
   var testCase = new goog.testing.AsyncTestCase(document.title);
   testCase.stepTimeout = 5 * 1000;
 
-  testCase.setUpPage = function() {
-    this.autoDiscoverTests();
-  };
+  testCase.autoDiscoverTests();
 
   testCase.tearDown = function() {
     if (mockClock) {
