@@ -124,6 +124,11 @@ function testHexToRgbaStyle() {
                goog.color.alpha.hexToRgbaStyle('#cecececc'));
   assertEquals('rgba(51,204,170,0.2)',
                goog.color.alpha.hexToRgbaStyle('#3CA3'));
+  assertEquals('rgba(1,2,3,0.016)',
+               goog.color.alpha.hexToRgbaStyle('#01020304'));
+  assertEquals('rgba(255,255,0,0.333)',
+               goog.color.alpha.hexToRgbaStyle('#FFFF0055'));
+
   var badHexColors = ['#12345', null, undefined, '#.1234567890'];
   for (var i = 0; i < badHexColors.length; ++i) {
     var e = assertThrows(badHexColors[i] + ' is an invalid hex color',
@@ -147,7 +152,9 @@ function testRgbaToHex() {
 
 function testRgbaToRgbaStyle() {
   var testColors = [[[175, 19, 255, 1], 'rgba(175,19,255,1)'],
-                    [[53, 124, 240, .6], 'rgba(53,124,240,0.6)']];
+                    [[53, 124, 240, .6], 'rgba(53,124,240,0.6)'],
+                    [[10, 20, 30, .1234567], 'rgba(10,20,30,0.123)'],
+                    [[20, 30, 40, 1/3], 'rgba(20,30,40,0.333)']];
 
   for (var i = 0; i < testColors.length; ++i) {
     var r = goog.color.alpha.rgbaToRgbaStyle(testColors[i][0][0],
@@ -294,6 +301,24 @@ function testHslaArrayToRgbaStyle() {
                goog.color.alpha.hslaArrayToRgbaStyle([120, 100, 70, 0.5]));
   assertEquals('rgba(28,23,23,0.9)',
                goog.color.alpha.hslaArrayToRgbaStyle([0, 10, 10, 0.9]));
+}
+
+function testRgbaStyleParsableResult() {
+  var testColors = [[175, 19, 255, 1],
+                    [53, 124, 240, .6],
+                    [20, 30, 40, 0.3333333],
+                    [255, 255, 255, 0.7071067811865476]];
+
+  for (var i = 0, testColor; testColor = testColors[i]; i++) {
+    var rgbaStyle = goog.color.alpha.rgbaStyle_(testColor);
+    var parsedColor = goog.color.alpha.hexToRgba(
+        goog.color.alpha.parse(rgbaStyle).hex);
+    assertEquals(testColor[0], parsedColor[0]);
+    assertEquals(testColor[1], parsedColor[1]);
+    assertEquals(testColor[2], parsedColor[2]);
+    // Parsing keeps a 1/255 accuracy on the alpha channel.
+    assertRoughlyEquals(testColor[3], parsedColor[3], 0.005);
+  }
 }
 
 </script>

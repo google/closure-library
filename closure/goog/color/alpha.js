@@ -430,14 +430,17 @@ goog.color.alpha.isValidHslaColor_ = function(str) {
 
 /**
  * Takes an array of [r, g, b, a] and converts it into a string appropriate for
- * CSS styles.
+ * CSS styles. The alpha channel value is rounded to 3 decimal places to make
+ * sure the produced string is not too long.
  * @param {Array.<number>} rgba [r, g, b, a] with r, g, b in [0, 255] and a
  *     in [0, 1].
  * @return {string} string of the form 'rgba(r,g,b,a)'.
  * @private
  */
 goog.color.alpha.rgbaStyle_ = function(rgba) {
-  return 'rgba(' + rgba.join(',') + ')';
+  var roundedRgba = rgba.slice(0);
+  roundedRgba[3] = Math.round(rgba[3] * 1000) / 1000;
+  return 'rgba(' + roundedRgba.join(',') + ')';
 };
 
 
