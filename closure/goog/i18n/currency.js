@@ -312,7 +312,7 @@ goog.i18n.currency.CurrencyInfo = {
   'PEN': [2, 'S/.', 'S/.'],
   'PHP': [2, '\u20B1', 'Php'],
   'PKR': [0, 'Rs', 'PKRs.'],
-  'PLN': [18, 'z\u0142', 'z\u0142'],
+  'PLN': [50, 'z\u0142', 'z\u0142'],
   'RON': [2, 'RON', 'RON'],
   'RSD': [0, 'din', 'RSD'],
   'RUB': [50, 'руб.', 'руб.'],

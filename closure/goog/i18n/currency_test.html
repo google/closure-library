@@ -215,17 +215,17 @@ See the COPYING file for details.
     formatter = new goog.i18n.NumberFormat(
         goog.i18n.currency.getLocalCurrencyPattern('PLN'));
     str = formatter.format(123456.7899);
-    assertEquals('123,456.79zł', str);
+    assertEquals('123,456.79 zł', str);
 
     formatter = new goog.i18n.NumberFormat(
         goog.i18n.currency.getPortableCurrencyPattern('PLN'));
     str = formatter.format(123456.7899);
-    assertEquals('123,456.79zł', str);
+    assertEquals('123,456.79 zł', str);
 
     formatter = new goog.i18n.NumberFormat(
         goog.i18n.currency.getGlobalCurrencyPattern('PLN'));
     str = formatter.format(123456.7899);
-    assertEquals('PLN 123,456.79zł', str);
+    assertEquals('PLN 123,456.79 zł', str);
   }
 
   function testCurrencyFormatUSD() {
