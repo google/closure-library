@@ -546,6 +546,19 @@ goog.testing.events.firePopStateEvent = function(target, state) {
 
 
 /**
+ * Simulate a blur event on the given target.
+ * @param {EventTarget} target The target for the event.
+ * @return {boolean} The value returned by firing the blur browser event,
+ *      which returns false iff 'preventDefault' was invoked.
+ */
+goog.testing.events.fireBlurEvent = function(target) {
+  var e = new goog.testing.events.Event(
+      goog.events.EventType.BLUR, target);
+  return goog.testing.events.fireBrowserEvent(e);
+};
+
+
+/**
  * Simulate a focus event on the given target.
  * @param {EventTarget} target The target for the event.
  * @return {boolean} The value returned by firing the focus browser event,

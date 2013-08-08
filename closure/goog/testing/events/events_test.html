@@ -149,6 +149,16 @@ See the COPYING file for details.
     assertCoordinates([goog.style.getClientPosition(root), coordinate]);
   }
 
+  function testFocus() {
+    goog.testing.events.fireFocusEvent(root);
+    assertEventTypes(['focus']);
+  }
+
+  function testBlur() {
+    goog.testing.events.fireBlurEvent(root);
+    assertEventTypes(['blur']);
+  }
+
   function testClickSequence() {
     assertTrue(goog.testing.events.fireClickSequence(root));
     assertEventTypes(['mousedown', 'mouseup', 'click']);
