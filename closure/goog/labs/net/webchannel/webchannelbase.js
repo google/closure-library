@@ -59,6 +59,7 @@ var requestStats = goog.labs.net.webChannel.requestStats;
  * @param {boolean=} opt_secondTestResults Previously determined results
  *        of the second channel test.
  * @constructor
+ * @struct
  * @implements {goog.labs.net.webChannel.Channel}
  */
 goog.labs.net.webChannel.WebChannelBase = function(
@@ -324,6 +325,12 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {boolean}
    */
   this.supportsCrossDomainXhrs_ = false;
+
+  /**
+   * The current session id.
+   * @private {string}
+   */
+  this.sid_ = '';
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -336,6 +343,7 @@ var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
  * @param {!Object|!goog.structs.Map} map The map itself.
  * @param {!Object=} opt_context The context associated with the map.
  * @constructor
+ * @struct
  */
 WebChannelBase.QueuedMap = function(mapId, map, opt_context) {
   /**
@@ -2026,6 +2034,7 @@ WebChannelBase.LogSaver.clearBuffer = function() {
 /**
  * Abstract base class for the channel handler
  * @constructor
+ * @struct
  */
 WebChannelBase.Handler = function() {};
 

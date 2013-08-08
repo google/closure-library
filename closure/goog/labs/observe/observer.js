@@ -77,6 +77,7 @@ goog.labs.observe.Observer.fromFunction = function(fn, opt_scope) {
  * @param {function(!goog.labs.observe.Notice)} fn Function to delegate to.
  * @param {!Object=} opt_scope Optional scope to execute the function.
  * @constructor
+ * @struct
  * @implements {goog.labs.observe.Observer}
  * @private
  */

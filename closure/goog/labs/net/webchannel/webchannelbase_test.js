@@ -100,6 +100,7 @@ function stubTmpnetwork() {
 /**
  * Mock ChannelRequest.
  * @constructor
+ * @struct
  */
 var MockChannelRequest = function(channel, channelDebug, opt_sessionId,
     opt_requestId, opt_retryId) {

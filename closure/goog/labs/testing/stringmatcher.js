@@ -40,6 +40,7 @@ goog.require('goog.string');
  * @param {string} value The expected string.
  *
  * @constructor
+ * @struct
  * @implements {goog.labs.testing.Matcher}
  */
 goog.labs.testing.ContainsStringMatcher = function(value) {
@@ -79,6 +80,7 @@ goog.labs.testing.ContainsStringMatcher.prototype.describe =
  * @param {string} value The expected string.
  *
  * @constructor
+ * @struct
  * @implements {goog.labs.testing.Matcher}
  */
 goog.labs.testing.EndsWithMatcher = function(value) {
@@ -117,6 +119,7 @@ goog.labs.testing.EndsWithMatcher.prototype.describe =
  * @param {string} value The expected string.
  *
  * @constructor
+ * @struct
  * @implements {goog.labs.testing.Matcher}
  */
 goog.labs.testing.EqualToIgnoringWhitespaceMatcher = function(value) {
@@ -158,6 +161,7 @@ goog.labs.testing.EqualToIgnoringWhitespaceMatcher.prototype.describe =
  * @param {string} value The expected string.
  *
  * @constructor
+ * @struct
  * @implements {goog.labs.testing.Matcher}
  */
 goog.labs.testing.EqualsMatcher = function(value) {
@@ -196,6 +200,7 @@ goog.labs.testing.EqualsMatcher.prototype.describe =
  * @param {!RegExp} regex The expected regex.
  *
  * @constructor
+ * @struct
  * @implements {goog.labs.testing.Matcher}
  */
 goog.labs.testing.RegexMatcher = function(regex) {
@@ -235,6 +240,7 @@ goog.labs.testing.RegexMatcher.prototype.describe =
  * @param {string} value The expected string.
  *
  * @constructor
+ * @struct
  * @implements {goog.labs.testing.Matcher}
  */
 goog.labs.testing.StartsWithMatcher = function(value) {
@@ -273,6 +279,7 @@ goog.labs.testing.StartsWithMatcher.prototype.describe =
  * @param {Array.<string>} values The expected string values.
  *
  * @constructor
+ * @struct
  * @implements {goog.labs.testing.Matcher}
  */
 goog.labs.testing.StringContainsInOrderMatcher = function(values) {

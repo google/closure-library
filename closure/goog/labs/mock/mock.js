@@ -213,6 +213,7 @@ goog.labs.mock.VerificationError.getVerificationErrorMsg_ =
  * other things.
  *
  * @constructor
+ * @struct
  * @private
  */
 goog.labs.mock.MockManager_ = function() {
@@ -394,6 +395,7 @@ goog.labs.mock.MockManager_.prototype.verifyInvocation =
  *     for. A class is a constructor function.
  *
  * @constructor
+ * @struct
  * @extends {goog.labs.mock.MockManager_}
  * @private
  */
@@ -478,6 +480,7 @@ goog.inherits(goog.labs.mock.MockObjectManager_,
  * @param {!Object} obj The object to be spied on.
  *
  * @constructor
+ * @struct
  * @extends {goog.labs.mock.MockObjectManager_}
  * @private
  */
@@ -516,6 +519,7 @@ goog.labs.mock.MockSpyManager_.prototype.findBinding =
  * @param {!Function} func The function to set up the mock for.
  *
  * @constructor
+ * @struct
  * @extends {goog.labs.mock.MockManager_}
  * @private
  */
@@ -578,6 +582,7 @@ goog.labs.mock.MockFunctionManager_.prototype.useMockedFunctionName_ =
  * @param {!Array} args The other arguments to the method.
  *
  * @constructor
+ * @struct
  * @private
  */
 goog.labs.mock.StubBinder_ = function(mockManager, name, args) {
@@ -651,6 +656,7 @@ goog.labs.mock.when = function(mockObject) {
  * @param {!Array} args The arguments passed to the method.
  * @param {!Function} stub The stub function to be called for the given method.
  * @constructor
+ * @struct
  * @private
  */
 goog.labs.mock.MethodBinding_ = function(methodName, args, stub) {

@@ -51,6 +51,7 @@ goog.require('goog.userAgent');
  * @param {string|number=} opt_requestId  The request id for this request.
  * @param {number=} opt_retryId  The retry id for this request.
  * @constructor
+ * @struct
  */
 goog.labs.net.webChannel.ChannelRequest = function(channel, channelDebug,
     opt_sessionId, opt_requestId, opt_retryId) {
@@ -231,6 +232,14 @@ goog.labs.net.webChannel.ChannelRequest = function(channel, channelDebug,
    * @private {goog.async.Throttle}
    */
   this.readyStateChangeThrottle_ = null;
+
+
+  /**
+   * Whether to the result is expected to be encoded for chunking and thus
+   * requires decoding.
+   * @private {boolean}
+   */
+  this.decodeChunks_ = false;
 };
 
 

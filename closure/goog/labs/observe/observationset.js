@@ -35,6 +35,7 @@ goog.require('goog.labs.observe.Observer');
  *     when using {@code observeWithFunction} and
  *     {@code unobserveWithFunction}.
  * @constructor
+ * @struct
  */
 goog.labs.observe.ObservationSet = function(opt_defaultScope) {
   /**
@@ -147,6 +148,7 @@ goog.labs.observe.ObservationSet.prototype.removeAll = function() {
  * @param {!goog.labs.observe.Observable} observable The observable.
  * @param {!goog.labs.observe.Observer} observer The observer.
  * @constructor
+ * @struct
  * @private
  */
 goog.labs.observe.ObservationSet.Observation_ = function(

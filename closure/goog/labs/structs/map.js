@@ -34,6 +34,7 @@ goog.require('goog.object');
 /**
  * Creates a new map.
  * @constructor
+ * @struct
  */
 goog.labs.structs.Map = function() {
   // clear() initializes the map to the empty state.
@@ -81,6 +82,12 @@ goog.labs.structs.Map.prototype.secondaryStoreKeys_;
  * @private
  */
 goog.labs.structs.Map.prototype.secondaryStoreValues_;
+
+
+/**
+ * @private {number}
+ */
+goog.labs.structs.Map.prototype.count_;
 
 
 /**

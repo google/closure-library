@@ -40,6 +40,7 @@ goog.require('goog.string.path');
  * implementation.
  *
  * @constructor
+ * @struct
  * @implements {goog.net.WebChannelTransport}
  */
 goog.labs.net.webChannel.WebChannelBaseTransport = function() {};

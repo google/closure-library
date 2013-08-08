@@ -37,6 +37,7 @@ goog.require('goog.net.tmpnetwork');
  * has been blocked by a network administrator.
  *
  * @constructor
+ * @struct
  * @param {!goog.labs.net.webChannel.Channel} channel The channel
  *     that owns this test channel.
  * @param {!goog.labs.net.webChannel.WebChannelDebug} channelDebug A

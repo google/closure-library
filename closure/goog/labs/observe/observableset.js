@@ -34,6 +34,7 @@ goog.require('goog.labs.observe.Observer');
  * observations on multiple observables of the same nature.
  *
  * @constructor
+ * @struct
  */
 goog.labs.observe.ObservableSet = function() {
   /**

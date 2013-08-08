@@ -29,6 +29,7 @@ goog.provide('goog.labs.observe.Notice');
  *     object that fires this notice.
  * @param {*=} opt_data The optional data associated with this notice.
  * @constructor
+ * @struct
  */
 goog.labs.observe.Notice = function(observable, opt_data) {
   /**
