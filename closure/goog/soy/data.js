@@ -25,6 +25,8 @@ goog.provide('goog.soy.data');
 goog.provide('goog.soy.data.SanitizedContent');
 goog.provide('goog.soy.data.SanitizedContentKind');
 
+goog.require('goog.i18n.bidi.Dir');
+
 
 /**
  * A type of textual content.
@@ -97,7 +99,7 @@ goog.soy.data.SanitizedContentKind = {
 
 
 /**
- * A string-like object that carries a content-type.
+ * A string-like object that carries a content-type and a content direction.
  *
  * IMPORTANT! Do not create these directly, nor instantiate the subclasses.
  * Instead, use a trusted, centrally reviewed library as endorsed by your team
@@ -117,6 +119,14 @@ goog.soy.data.SanitizedContent = function() {
  * @type {goog.soy.data.SanitizedContentKind}
  */
 goog.soy.data.SanitizedContent.prototype.contentKind;
+
+
+/**
+ * The content's direction; null if unknown and thus to be estimated when
+ * necessary.
+ * @type {?goog.i18n.bidi.Dir}
+ */
+goog.soy.data.SanitizedContent.prototype.contentDir = null;
 
 
 /**
