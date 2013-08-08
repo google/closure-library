@@ -20,15 +20,23 @@ goog.provide('goog.functionsTest');
 goog.setTestOnly('goog.functionsTest');
 
 goog.require('goog.functions');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
+
 
 var fTrue = makeCallOrderLogger('fTrue', true);
 var gFalse = makeCallOrderLogger('gFalse', false);
 var hTrue = makeCallOrderLogger('hTrue', true);
 
+var stubs = new goog.testing.PropertyReplacer();
+
 function setUp() {
   callOrder = [];
+}
+
+function tearDown() {
+  stubs.reset();
 }
 
 function testTrue() {
@@ -217,7 +225,7 @@ function assertCallOrderAndReset(expectedArray) {
   callOrder = [];
 }
 
-function testLazilyEvaluate() {
+function testCacheReturnValue() {
   var returnFive = function() {
     return 5;
   };
@@ -231,4 +239,48 @@ function testLazilyEvaluate() {
   assertEquals(1, recordedReturnFive.getCallCount());
   assertEquals(5, cachedRecordedReturnFive());
   assertEquals(1, recordedReturnFive.getCallCount());
+}
+
+
+function testCacheReturnValueFlagEnabled() {
+  var count = 0;
+  var returnIncrementingInteger = function() {
+    count++;
+    return count;
+  };
+
+  var recordedFunction = goog.testing.recordFunction(
+      returnIncrementingInteger);
+  var cachedRecordedFunction = goog.functions.cacheReturnValue(
+      recordedFunction);
+
+  assertEquals(0, recordedFunction.getCallCount());
+  assertEquals(1, cachedRecordedFunction());
+  assertEquals(1, recordedFunction.getCallCount());
+  assertEquals(1, cachedRecordedFunction());
+  assertEquals(1, recordedFunction.getCallCount());
+  assertEquals(1, cachedRecordedFunction());
+}
+
+
+function testCacheReturnValueFlagDisabled() {
+  stubs.set(goog.functions, 'CACHE_RETURN_VALUE', false);
+
+  var count = 0;
+  var returnIncrementingInteger = function() {
+    count++;
+    return count;
+  };
+
+  var recordedFunction = goog.testing.recordFunction(
+      returnIncrementingInteger);
+  var cachedRecordedFunction = goog.functions.cacheReturnValue(
+      recordedFunction);
+
+  assertEquals(0, recordedFunction.getCallCount());
+  assertEquals(1, cachedRecordedFunction());
+  assertEquals(1, recordedFunction.getCallCount());
+  assertEquals(2, cachedRecordedFunction());
+  assertEquals(2, recordedFunction.getCallCount());
+  assertEquals(3, cachedRecordedFunction());
 }

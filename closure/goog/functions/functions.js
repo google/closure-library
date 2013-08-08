@@ -256,6 +256,13 @@ goog.functions.create = function(constructor, var_args) {
 
 
 /**
+ * @define {boolean} Whether the return value cache should be used.
+ *    This should only be used to disable caches when testing.
+ */
+goog.define('goog.functions.CACHE_RETURN_VALUE', true);
+
+
+/**
  * Gives a wrapper function that caches the return value of a parameterless
  * function when first called.
  *
@@ -275,10 +282,15 @@ goog.functions.cacheReturnValue = function(fn) {
   var value;
 
   return function() {
+    if (!goog.functions.CACHE_RETURN_VALUE) {
+      return fn();
+    }
+
     if (!called) {
       value = fn();
       called = true;
     }
+
     return value;
-  };
+  }
 };
