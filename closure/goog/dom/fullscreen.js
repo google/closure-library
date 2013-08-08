@@ -22,7 +22,6 @@ goog.provide('goog.dom.fullscreen.EventType');
 
 goog.require('goog.dom');
 goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
 
 
 /**
@@ -57,7 +56,7 @@ goog.dom.fullscreen.EventType = {
 goog.dom.fullscreen.isSupported = function(opt_domHelper) {
   var doc = goog.dom.fullscreen.getDocument_(opt_domHelper);
   var body = doc.body;
-  return !!(body.webkitRequestFullScreen ||
+  return !!(body.webkitRequestFullscreen ||
       (body.mozRequestFullScreen && doc.mozFullScreenEnabled) ||
       (body.msRequestFullscreen && doc.msFullscreenEnabled) ||
       (body.requestFullscreen && doc.fullscreenEnabled));
@@ -69,8 +68,8 @@ goog.dom.fullscreen.isSupported = function(opt_domHelper) {
  * @param {!Element} element The element to put full screen.
  */
 goog.dom.fullscreen.requestFullScreen = function(element) {
-  if (element.webkitRequestFullScreen) {
-    element.webkitRequestFullScreen();
+  if (element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
   } else if (element.mozRequestFullScreen) {
     element.mozRequestFullScreen();
   } else if (element.msRequestFullscreen) {
@@ -89,11 +88,8 @@ goog.dom.fullscreen.requestFullScreenWithKeys = function(
     element) {
   if (element.mozRequestFullScreenWithKeys) {
     element.mozRequestFullScreenWithKeys();
-  } else if (element.webkitRequestFullScreen &&
-      element.ALLOW_KEYBOARD_INPUT &&
-      goog.userAgent.product.CHROME) {
-    // Safari has the ALLOW_KEYBOARD_INPUT property but using it gives an error.
-    element.webkitRequestFullScreen(element.ALLOW_KEYBOARD_INPUT);
+  } else if (element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
   } else {
     goog.dom.fullscreen.requestFullScreen(element);
   }
