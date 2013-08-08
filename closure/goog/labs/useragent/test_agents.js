@@ -85,7 +85,7 @@ testAgents.IE_10 =
 
 /** @const {string} */
 testAgents.IE_11 =
-    'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv 11.0) like Gecko';
+    'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
 
 
 /** @const {string} */

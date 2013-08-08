@@ -182,7 +182,7 @@ goog.labs.userAgent.browser.getIEVersion_ = goog.memoize(function() {
   } else if (gDoc && gDoc.compatMode && gDoc.compatMode == 'CSS1Compat') {
     version = 7;
   } else {
-    var arr = /\b(?:MSIE|rv)\s+([^\);]+)(?:\)|;)/.exec(userAgentString);
+    var arr = /\b(?:MSIE|rv)[: ]([^\);]+)(?:\)|;)/.exec(userAgentString);
     version = arr && arr[1] ? arr[1] : '';
   }
   return version;

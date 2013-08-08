@@ -454,7 +454,7 @@ goog.userAgent.determineVersion_ = function() {
     if (goog.userAgent.GECKO) {
       re = /rv\:([^\);]+)(\)|;)/;
     } else if (goog.userAgent.IE) {
-      re = /\b(?:MSIE|rv)\s+([^\);]+)(\)|;)/;
+      re = /\b(?:MSIE|rv)[: ]([^\);]+)(\)|;)/;
     } else if (goog.userAgent.WEBKIT) {
       // WebKit/125.4
       re = /WebKit\/(\S+)/;
