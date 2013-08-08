@@ -26,8 +26,10 @@ function testRequestingRows() {
   var items = ['a', 'Ab', 'abc', 'ba', 'ca'];
   var am = new ArrayMatcher(items, true);
 
+  var res;
   function matcher(token, matches) {
     assertEquals('a', token);
+    res = matches;
     assertEquals('Should have three matches', 3, matches.length);
     assertEquals('a', matches[0]);
     assertEquals('Ab', matches[1]);
@@ -35,6 +37,8 @@ function testRequestingRows() {
   }
 
   am.requestMatchingRows('a', 10, matcher);
+  var res2 = goog.ui.ac.ArrayMatcher.getMatchesForRows('a', 10, items);
+  assertArrayEquals(res, res2);
 }
 
 function testRequestingRowsMaxMatches() {
@@ -87,6 +91,8 @@ function testGetPrefixMatches() {
   var res = am.getPrefixMatches('a', 10);
   assertEquals('Should have one match', 1, res.length);
   assertEquals('Should return \'a\'', 'a', res[0]);
+  var res2 = goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows('a', 10, items);
+  assertArrayEquals(res, res2);
 }
 
 function testGetPrefixMatchesMaxMatches() {
@@ -113,6 +119,8 @@ function testGetSimilarRows() {
   var res = am.getSimilarRows('a', 10);
   assertEquals('Should have one match', 1, res.length);
   assertEquals('xa', res[0]);
+  var res2 = goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows('a', 10, items);
+  assertArrayEquals(res, res2);
 }
 
 function testGetSimilarRowsMaxMatches() {
