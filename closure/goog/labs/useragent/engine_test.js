@@ -43,11 +43,13 @@ function assertLowAndHighVersions(lowVersion, highVersion) {
 function testPresto() {
   goog.labs.userAgent.util.setUserAgent(testAgents.OPERA_LINUX);
   assertTrue(goog.labs.userAgent.engine.isPresto());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('2.9.168');
   assertLowAndHighVersions('2.9', '2.10');
 
   goog.labs.userAgent.util.setUserAgent(testAgents.OPERA_MAC);
   assertTrue(goog.labs.userAgent.engine.isPresto());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('2.9.168');
   assertLowAndHighVersions('2.9', '2.10');
 }
@@ -55,21 +57,25 @@ function testPresto() {
 function testTrident() {
   goog.labs.userAgent.util.setUserAgent(testAgents.IE_10);
   assertTrue(goog.labs.userAgent.engine.isTrident());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('6.0');
   assertLowAndHighVersions('6.0', '7.0');
 
   goog.labs.userAgent.util.setUserAgent(testAgents.IE_8);
   assertTrue(goog.labs.userAgent.engine.isTrident());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('4.0');
   assertLowAndHighVersions('4.0', '5.0');
 
   goog.labs.userAgent.util.setUserAgent(testAgents.IE_9_COMPATIBILITY);
   assertTrue(goog.labs.userAgent.engine.isTrident());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('5.0');
   assertLowAndHighVersions('5.0', '6.0');
 
   goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_11);
   assertTrue(goog.labs.userAgent.engine.isTrident());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('7.0');
   assertLowAndHighVersions('6.0', '8.0');
 }
@@ -77,21 +83,25 @@ function testTrident() {
 function testWebKit() {
   goog.labs.userAgent.util.setUserAgent(testAgents.ANDROID_BROWSER_235);
   assertTrue(goog.labs.userAgent.engine.isWebKit());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('533.1');
   assertLowAndHighVersions('533.0', '534.0');
 
   goog.labs.userAgent.util.setUserAgent(testAgents.CHROME_25);
   assertTrue(goog.labs.userAgent.engine.isWebKit());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('535.8');
   assertLowAndHighVersions('535.0', '536.0');
 
   goog.labs.userAgent.util.setUserAgent(testAgents.SAFARI_6);
   assertTrue(goog.labs.userAgent.engine.isWebKit());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('536.25');
   assertLowAndHighVersions('536.0', '537.0');
 
   goog.labs.userAgent.util.setUserAgent(testAgents.SAFARI_IPHONE);
   assertTrue(goog.labs.userAgent.engine.isWebKit());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('533.17.9');
   assertLowAndHighVersions('533.0', '534.0');
 }

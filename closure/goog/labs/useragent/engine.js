@@ -55,7 +55,9 @@ goog.labs.userAgent.engine.isWebKit = function() {
  * @return {boolean} Whether the rendering engine is Gecko.
  */
 goog.labs.userAgent.engine.isGecko = function() {
-  return goog.labs.userAgent.util.matchUserAgent('Gecko');
+  return goog.labs.userAgent.util.matchUserAgent('Gecko') &&
+      !goog.labs.userAgent.engine.isWebKit() &&
+      !goog.labs.userAgent.engine.isTrident();
 };
 
 
