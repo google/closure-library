@@ -29,6 +29,7 @@ goog.require('goog.json.EvalJsonProcessor');
 goog.require('goog.labs.net.webChannel.BaseTestChannel');
 goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
+goog.require('goog.labs.net.webChannel.ForwardChannelRequestPool');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.labs.net.webChannel.requestStats.Stat');
@@ -44,6 +45,8 @@ var BaseTestChannel = goog.labs.net.webChannel.BaseTestChannel;
 var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 var requestStats = goog.labs.net.webChannel.requestStats;
+var ForwardChannelRequestPool =
+    goog.labs.net.webChannel.ForwardChannelRequestPool;
 
 
 
@@ -97,6 +100,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    */
   this.parser_ = new goog.json.EvalJsonProcessor(null, true);
 
+
   /**
    * An array of results for the first test call.
    * @private {Array.<string>}
@@ -123,12 +127,6 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {Object}
    */
   this.extraParams_ = null;
-
-  /**
-   * The current ChannelRequest object for the forwardchannel.
-   * @private {ChannelRequest}
-   */
-  this.forwardChannelRequest_ = null;
 
   /**
    * The ChannelRequest object for the backchannel.
@@ -331,6 +329,13 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {string}
    */
   this.sid_ = '';
+
+  /**
+   * The current ChannelRequest pool for the forward channel.
+   *
+   * @private {!ForwardChannelRequestPool}
+   */
+  this.forwardChannelRequestPool_ = new ForwardChannelRequestPool();
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -655,10 +660,7 @@ WebChannelBase.prototype.cancelRequests_ = function() {
 
   this.clearDeadBackchannelTimer_();
 
-  if (this.forwardChannelRequest_) {
-    this.forwardChannelRequest_.cancel();
-    this.forwardChannelRequest_ = null;
-  }
+  this.forwardChannelRequestPool_.cancel();
 
   if (this.forwardChannelTimerId_) {
     goog.global.clearTimeout(this.forwardChannelTimerId_);
@@ -833,18 +835,17 @@ WebChannelBase.prototype.sendMap = function(map, opt_context) {
 WebChannelBase.prototype.setFailFast = function(failFast) {
   this.failFast_ = failFast;
   this.channelDebug_.info('setFailFast: ' + failFast);
-  if ((this.forwardChannelRequest_ || this.forwardChannelTimerId_) &&
+  if ((this.forwardChannelRequestPool_.hasPendingRequest() ||
+       this.forwardChannelTimerId_) &&
       this.forwardChannelRetryCount_ > this.getForwardChannelMaxRetries()) {
     this.channelDebug_.info(
         'Retry count ' + this.forwardChannelRetryCount_ +
         ' > new maxRetries ' + this.getForwardChannelMaxRetries() +
         '. Fail immediately!');
-    if (this.forwardChannelRequest_) {
-      this.forwardChannelRequest_.cancel();
-      // Go through the standard onRequestComplete logic to expose the max-retry
-      // failure in the standard way.
-      this.onRequestComplete(this.forwardChannelRequest_);
-    } else {  // i.e., this.forwardChannelTimerId_
+
+    if (!this.forwardChannelRequestPool_.forceComplete(
+        goog.bind(this.onRequestComplete, this))) {
+      // i.e., this.forwardChannelTimerId_
       goog.global.clearTimeout(this.forwardChannelTimerId_);
       this.forwardChannelTimerId_ = null;
       // The error code from the last failed request is gone, so just use a
@@ -956,9 +957,7 @@ WebChannelBase.prototype.getOutstandingRequests_ = function() {
   if (this.backChannelRequest_) {
     count++;
   }
-  if (this.forwardChannelRequest_) {
-    count++;
-  }
+  count += this.forwardChannelRequestPool_.getRequestCount();
   return count;
 };
 
@@ -968,8 +967,8 @@ WebChannelBase.prototype.getOutstandingRequests_ = function() {
  * @private
  */
 WebChannelBase.prototype.ensureForwardChannel_ = function() {
-  if (this.forwardChannelRequest_) {
-    // connection in process - no need to start a new request
+  if (this.forwardChannelRequestPool_.isFull()) {
+    // enough connection in process - no need to start a new request
     return;
   }
 
@@ -993,7 +992,7 @@ WebChannelBase.prototype.ensureForwardChannel_ = function() {
  */
 WebChannelBase.prototype.maybeRetryForwardChannel_ =
     function(request) {
-  if (this.forwardChannelRequest_ || this.forwardChannelTimerId_) {
+  if (this.forwardChannelRequestPool_.isFull() || this.forwardChannelTimerId_) {
     // Should be impossible to be called in this state.
     this.channelDebug_.severe('Request already in progress');
     return false;
@@ -1057,7 +1056,7 @@ WebChannelBase.prototype.startForwardChannel_ = function(
       return;
     }
 
-    if (this.forwardChannelRequest_) {
+    if (this.forwardChannelRequestPool_.isFull()) {
       // Should be impossible to be called in this state.
       this.channelDebug_.severe('startForwardChannel_ returned: ' +
                                     'connection already in progress');
@@ -1092,8 +1091,8 @@ WebChannelBase.prototype.open_ = function() {
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
 
+  this.forwardChannelRequestPool_.addRequest(request);
   request.xmlHttpPost(uri, requestText, true);
-  this.forwardChannelRequest_ = request;
 };
 
 
@@ -1131,7 +1130,7 @@ WebChannelBase.prototype.makeForwardChannelRequest_ =
   request.setTimeout(
       Math.round(this.forwardChannelRequestTimeoutMs_ * 0.50) +
       Math.round(this.forwardChannelRequestTimeoutMs_ * 0.50 * Math.random()));
-  this.forwardChannelRequest_ = request;
+  this.forwardChannelRequestPool_.addRequest(request);
   request.xmlHttpPost(uri, requestText, true);
 };
 
@@ -1366,13 +1365,13 @@ WebChannelBase.prototype.testConnectionBlocked =
 WebChannelBase.prototype.onRequestData = function(request, responseText) {
   if (this.state_ == WebChannelBase.State.CLOSED ||
       (this.backChannelRequest_ != request &&
-       this.forwardChannelRequest_ != request)) {
+       !this.forwardChannelRequestPool_.hasRequest(request))) {
     // either CLOSED or a request we don't know about (perhaps an old request)
     return;
   }
   this.lastStatusCode_ = request.getLastStatusCode();
 
-  if (this.forwardChannelRequest_ == request &&
+  if (this.forwardChannelRequestPool_.hasRequest(request) &&
       this.state_ == WebChannelBase.State.OPENED) {
     var response;
     try {
@@ -1381,7 +1380,7 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
       response = null;
     }
     if (goog.isArray(response) && response.length == 3) {
-      this.handlePostResponse_(/** @type {!Array} */ (response));
+      this.handlePostResponse_(/** @type {!Array} */ (response), request);
     } else {
       this.channelDebug_.debug('Bad POST response data returned');
       this.signalError_(WebChannelBase.Error.BAD_RESPONSE);
@@ -1402,12 +1401,15 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
 /**
  * Handles a POST response from the server.
  * @param {Array} responseValues The key value pairs in the POST response.
+ * @param {!ChannelRequest} forwardReq The forward channel request that
+ * triggers this function call.
  * @private
  */
-WebChannelBase.prototype.handlePostResponse_ = function(responseValues) {
+WebChannelBase.prototype.handlePostResponse_ = function(
+    responseValues, forwardReq) {
   // The first response value is set to 0 if server is missing backchannel.
   if (responseValues[0] == 0) {
-    this.handleBackchannelMissing_();
+    this.handleBackchannelMissing_(forwardReq);
     return;
   }
   this.lastPostResponseArrayId_ = responseValues[1];
@@ -1432,9 +1434,11 @@ WebChannelBase.prototype.handlePostResponse_ = function(responseValues) {
 /**
  * Handles a POST response from the server telling us that it has detected that
  * we have no hanging GET connection.
+ * @param {!ChannelRequest} forwardReq The forward channel request that
+ * triggers this function call.
  * @private
  */
-WebChannelBase.prototype.handleBackchannelMissing_ = function() {
+WebChannelBase.prototype.handleBackchannelMissing_ = function(forwardReq) {
   // As long as the back channel was started before the POST was sent,
   // we should retry the backchannel. We give a slight buffer of RTT_ESTIMATE
   // so as not to excessively retry the backchannel
@@ -1446,8 +1450,7 @@ WebChannelBase.prototype.handleBackchannelMissing_ = function() {
     this.channelDebug_.warning(
         'We do not have a BackChannel established');
   } else if (this.backChannelRequest_.getRequestStartTime() +
-      WebChannelBase.RTT_ESTIMATE <
-      this.forwardChannelRequest_.getRequestStartTime()) {
+      WebChannelBase.RTT_ESTIMATE < forwardReq.getRequestStartTime()) {
     this.clearDeadBackchannelTimer_();
     this.backChannelRequest_.cancel();
     this.backChannelRequest_ = null;
@@ -1554,8 +1557,8 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
     this.clearDeadBackchannelTimer_();
     this.backChannelRequest_ = null;
     type = WebChannelBase.ChannelType_.BACK_CHANNEL;
-  } else if (this.forwardChannelRequest_ == request) {
-    this.forwardChannelRequest_ = null;
+  } else if (this.forwardChannelRequestPool_.hasRequest(request)) {
+    this.forwardChannelRequestPool_.removeRequest(request);
     type = WebChannelBase.ChannelType_.FORWARD_CHANNEL;
   } else {
     // return if it was an old request from a previous session
@@ -1781,6 +1784,7 @@ WebChannelBase.prototype.testGoogleComCallback_ = function(networkUp) {
  * @private
  */
 WebChannelBase.prototype.onSuccess_ = function() {
+  // TODO(user): optimize for request pool (>1)
   if (this.handler_) {
     this.handler_.channelSuccess(this, this.pendingMaps_);
   }
