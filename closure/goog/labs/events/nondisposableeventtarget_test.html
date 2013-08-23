@@ -8,14 +8,14 @@ See the COPYING file for details.
 -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.events.EventTarget</title>
-<script src="../base.js"></script>
+<title>Closure Unit Tests - goog.labs.events.EventTarget</title>
+<script src="../../base.js"></script>
 <script>
   goog.require('goog.events.Listenable');
   goog.require('goog.events.eventTargetTester');
   goog.require('goog.events.eventTargetTester.KeyType');
   goog.require('goog.events.eventTargetTester.UnlistenReturnType');
-  goog.require('goog.events.EventTarget');
+  goog.require('goog.labs.events.NonDisposableEventTarget');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -23,7 +23,7 @@ See the COPYING file for details.
 <script>
 function setUp() {
   var newListenableFn = function() {
-    return new goog.events.EventTarget();
+    return new goog.labs.events.NonDisposableEventTarget();
   };
   var listenFn = function(src, type, listener, opt_capt, opt_handler) {
     return src.listen(type, listener, opt_capt, opt_handler);
@@ -66,7 +66,7 @@ function tearDown() {
 }
 
 function testRuntimeTypeIsCorrect() {
-  var target = new goog.events.EventTarget();
+  var target = new goog.labs.events.NonDisposableEventTarget();
   assertTrue(goog.events.Listenable.isImplementedBy(target));
 }
 </script>
