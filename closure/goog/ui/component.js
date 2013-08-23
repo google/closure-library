@@ -342,7 +342,7 @@ goog.ui.Component.prototype.id_ = null;
  * created in a different window.
  * @type {!goog.dom.DomHelper}
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  */
 goog.ui.Component.prototype.dom_;
 

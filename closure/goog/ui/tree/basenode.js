@@ -1259,7 +1259,7 @@ goog.ui.tree.BaseNode.prototype.onMouseDown = function(e) {
  * Handles a click event.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  */
 goog.ui.tree.BaseNode.prototype.onClick_ = goog.events.Event.preventDefault;
 
@@ -1268,7 +1268,7 @@ goog.ui.tree.BaseNode.prototype.onClick_ = goog.events.Event.preventDefault;
  * Handles a double click event.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  */
 goog.ui.tree.BaseNode.prototype.onDoubleClick_ = function(e) {
   var el = e.target;

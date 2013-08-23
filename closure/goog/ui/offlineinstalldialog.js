@@ -399,7 +399,7 @@ goog.ui.OfflineInstallDialogScreen = function(dialog, type) {
   /**
    * @type {goog.ui.OfflineInstallDialog}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.dialog_ = dialog;
 
@@ -598,7 +598,7 @@ goog.ui.OfflineInstallDialog.EnableScreen = function(dialog) {
   /**
    * @type {string}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.enableMsg_ = MSG_OFFLINE_DIALOG_ENABLE_GEARS;
 };
@@ -672,7 +672,7 @@ goog.ui.OfflineInstallDialog.InstallScreen = function(dialog, opt_type) {
   /**
    * @type {string}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.installMsg_ = MSG_OFFLINE_DIALOG_INSTALL_GEARS;
 
@@ -685,7 +685,7 @@ goog.ui.OfflineInstallDialog.InstallScreen = function(dialog, opt_type) {
   /**
    * @type {string}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.enableMsg_ = MSG_INSTALL_GEARS;
 
@@ -910,7 +910,7 @@ goog.ui.OfflineInstallDialog.UpgradeScreen = function(dialog) {
    * Override to say upgrade instead of install.
    * @type {string}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.installMsg_ = MSG_OFFLINE_DIALOG_INSTALL_NEW_GEARS;
 
@@ -926,7 +926,7 @@ goog.ui.OfflineInstallDialog.UpgradeScreen = function(dialog) {
    * Override the text on the button to show upgrade instead of install.
    * @type {string}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.enableMsg_ = MSG_OFFLINE_DIALOG_UPGRADE_GEARS;
 };

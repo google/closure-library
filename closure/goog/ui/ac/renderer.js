@@ -111,7 +111,7 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
    * Array of the node divs that hold each result that is being displayed.
    * @type {Array.<Element>}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.rowDivs_ = [];
 
@@ -119,7 +119,7 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
    * The index of the currently highlighted row
    * @type {number}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.hilitedRow_ = -1;
 
@@ -127,7 +127,7 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
    * The time that the rendering of the menu rows started
    * @type {number}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.startRenderingRows_ = -1;
 

@@ -90,8 +90,9 @@ goog.events.Event.prototype.dispose = function() {
 /**
  * Whether to cancel the event in internal capture/bubble processing for IE.
  * @type {boolean}
- * @suppress {underscore} Technically public, but referencing this outside
- *     this package is strongly discouraged.
+ * @public
+ * @suppress {underscore|visibility} Technically public, but referencing this
+ *     outside this package is strongly discouraged.
  */
 goog.events.Event.prototype.propagationStopped_ = false;
 
@@ -109,8 +110,9 @@ goog.events.Event.prototype.defaultPrevented = false;
 /**
  * Return value for in internal capture/bubble processing for IE.
  * @type {boolean}
- * @suppress {underscore} Technically public, but referencing this outside
- *     this package is strongly discouraged.
+ * @public
+ * @suppress {underscore|visibility} Technically public, but referencing this
+ *     outside this package is strongly discouraged.
  */
 goog.events.Event.prototype.returnValue_ = true;
 

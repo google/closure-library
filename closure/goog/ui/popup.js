@@ -72,7 +72,7 @@ goog.ui.Popup = function(opt_element, opt_position) {
    *
    * @type {goog.positioning.AbstractPosition|undefined}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.position_ = opt_position || undefined;
   goog.ui.PopupBase.call(this, opt_element);

@@ -62,7 +62,7 @@ goog.ui.TabPane = function(el, opt_tabLocation, opt_domHelper,
    * subclasses of Component may refer to it directly.
    * @type {goog.dom.DomHelper}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.dom_ = opt_domHelper || goog.dom.getDomHelper();
 
@@ -501,7 +501,7 @@ goog.ui.TabPane.TabPage = function(opt_el, opt_title, opt_domHelper) {
    * subclasses of Component may refer to it directly.
    * @type {goog.dom.DomHelper}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.dom_ = opt_domHelper || goog.dom.getDomHelper();
 

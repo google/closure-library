@@ -64,7 +64,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    *
    * @type {Object}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.matcher_ = matcher;
 
@@ -76,7 +76,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    *
    * @type {Object}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.selectionHandler_ = selectionHandler;
 
@@ -84,7 +84,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * A renderer to render/show/highlight/hide the autocomplete menu.
    * @type {goog.events.EventTarget}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.renderer_ = renderer;
   goog.events.listen(
@@ -101,7 +101,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * Currently typed token which will be used for completion.
    * @type {?string}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.token_ = null;
 
@@ -109,7 +109,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * Autocomplete suggestion items.
    * @type {Array}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.rows_ = [];
 
@@ -117,7 +117,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * Id of the currently highlighted row.
    * @type {number}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.hiliteId_ = -1;
 
@@ -130,7 +130,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    *
    * @type {number}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.firstRowId_ = 0;
 
@@ -138,7 +138,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * The target HTML node for displaying.
    * @type {Element}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.target_ = null;
 

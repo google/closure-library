@@ -55,7 +55,7 @@ goog.ds.JsDataSource = function(root, dataName, opt_parent) {
  * The root JS object. Can be null.
  * @type {*}
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  */
 goog.ds.JsDataSource.prototype.root_;
 

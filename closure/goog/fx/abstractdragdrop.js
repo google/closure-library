@@ -64,7 +64,7 @@ goog.fx.AbstractDragDrop = function() {
    * List of items that makes up the drag source or drop target.
    * @type {Array.<goog.fx.DragDropItem>}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.items_ = [];
 

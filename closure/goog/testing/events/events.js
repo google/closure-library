@@ -74,8 +74,9 @@ goog.testing.events.Event = function(type, opt_target) {
 /**
  * Whether to cancel the event in internal capture/bubble processing for IE.
  * @type {boolean}
- * @suppress {underscore} Technically public, but referencing this outside
- *     this package is strongly discouraged.
+ * @public
+ * @suppress {underscore|visibility} Technically public, but referencing this
+ *     outside this package is strongly discouraged.
  */
 goog.testing.events.Event.prototype.propagationStopped_ = false;
 
@@ -87,8 +88,9 @@ goog.testing.events.Event.prototype.defaultPrevented = false;
 /**
  * Return value for in internal capture/bubble processing for IE.
  * @type {boolean}
- * @suppress {underscore} Technically public, but referencing this outside
- *     this package is strongly discouraged.
+ * @public
+ * @suppress {underscore|visibility} Technically public, but referencing this
+ *     outside this package is strongly discouraged.
  */
 goog.testing.events.Event.prototype.returnValue_ = true;
 

@@ -117,7 +117,7 @@ goog.testing.TestCase = function(opt_name) {
    * Object used to encapsulate the test results.
    * @type {goog.testing.TestCase.Result}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.result_ = new goog.testing.TestCase.Result(this);
 

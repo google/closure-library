@@ -172,7 +172,7 @@ goog.ui.AdvancedTooltip.prototype.getCursorTrackingHideDelayMs = function() {
 /**
  * Called after the popup is shown.
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  * @override
  */
 goog.ui.AdvancedTooltip.prototype.onShow_ = function() {
@@ -193,7 +193,7 @@ goog.ui.AdvancedTooltip.prototype.onShow_ = function() {
 /**
  * Called after the popup is hidden.
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  * @override
  */
 goog.ui.AdvancedTooltip.prototype.onHide_ = function() {

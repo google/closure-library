@@ -206,7 +206,7 @@ goog.ui.AttachableMenu.prototype.showPopupElement = function() {
 /**
  * Called after the menu is shown.
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  * @override
  */
 goog.ui.AttachableMenu.prototype.onShow_ = function() {

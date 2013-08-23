@@ -688,7 +688,7 @@ goog.ui.PopupBase.prototype.onBeforeShow = function() {
  * Called after the popup is shown. Derived classes can override to hook this
  * event but should make sure to call the parent class method.
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  */
 goog.ui.PopupBase.prototype.onShow_ = function() {
   this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
@@ -703,7 +703,7 @@ goog.ui.PopupBase.prototype.onShow_ = function() {
  * @return {boolean} If anyone called preventDefault on the event object (or
  *     if any of the handlers returns false this will also return false.
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  */
 goog.ui.PopupBase.prototype.onBeforeHide_ = function(opt_target) {
   return this.dispatchEvent({
@@ -718,7 +718,7 @@ goog.ui.PopupBase.prototype.onBeforeHide_ = function(opt_target) {
  * event but should make sure to call the parent class method.
  * @param {Object=} opt_target Target of the event causing the hide.
  * @protected
- * @suppress {underscore}
+ * @suppress {underscore|visibility}
  */
 goog.ui.PopupBase.prototype.onHide_ = function(opt_target) {
   this.dispatchEvent({
