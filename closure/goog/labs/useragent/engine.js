@@ -39,7 +39,9 @@ goog.labs.userAgent.engine.isPresto = function() {
  * @return {boolean} Whether the rendering engine is Trident.
  */
 goog.labs.userAgent.engine.isTrident = function() {
-  return goog.labs.userAgent.util.matchUserAgent('Trident');
+  // IE only started including the Trident token in IE8.
+  return goog.labs.userAgent.util.matchUserAgent('Trident') ||
+      goog.labs.userAgent.util.matchUserAgent('MSIE');
 };
 
 

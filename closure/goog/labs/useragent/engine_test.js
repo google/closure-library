@@ -55,6 +55,11 @@ function testPresto() {
 }
 
 function testTrident() {
+  goog.labs.userAgent.util.setUserAgent(testAgents.IE_6);
+  assertTrue(goog.labs.userAgent.engine.isTrident());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
+  assertVersion('');
+
   goog.labs.userAgent.util.setUserAgent(testAgents.IE_10);
   assertTrue(goog.labs.userAgent.engine.isTrident());
   assertFalse(goog.labs.userAgent.engine.isGecko());
