@@ -983,6 +983,72 @@ function testSetFocusableTabIndex() {
   }
 }
 
+function testIsFocusable() {
+  // Test all types of form elements with no tab index specified are focusable.
+  assertTrue('isFocusable() must be true for input elements with ' +
+      'no tab index',
+      goog.dom.isFocusable(goog.dom.getElement('noTabIndexInput')));
+  assertTrue('isFocusable() must be true for textarea elements with ' +
+      'no tab index',
+      goog.dom.isFocusable(goog.dom.getElement('noTabIndexTextArea')));
+  assertTrue('isFocusable() must be true for select elements with ' +
+      'no tab index',
+      goog.dom.isFocusable(goog.dom.getElement('noTabIndexSelect')));
+  assertTrue('isFocusable() must be true for button elements with ' +
+      'no tab index',
+      goog.dom.isFocusable(goog.dom.getElement('noTabIndexButton')));
+
+  // Test form element with negative tab index is not focusable.
+  assertFalse('isFocusable() must be false for form elements with ' +
+      'negative tab index',
+      goog.dom.isFocusable(goog.dom.getElement('negTabIndexButton')));
+
+  // Test form element with zero tab index is focusable.
+  assertTrue('isFocusable() must be true for form elements with ' +
+      'zero tab index',
+      goog.dom.isFocusable(goog.dom.getElement('zeroTabIndexButton')));
+
+  // Test form element with positive tab index is focusable.
+  assertTrue('isFocusable() must be true for form elements with ' +
+      'positive tab index',
+      goog.dom.isFocusable(goog.dom.getElement('posTabIndexButton')));
+
+  // Test disabled form element with no tab index is not focusable.
+  assertFalse('isFocusable() must be false for disabled form elements with ' +
+      'no tab index',
+      goog.dom.isFocusable(goog.dom.getElement('disabledNoTabIndexButton')));
+
+  // Test disabled form element with negative tab index is not focusable.
+  assertFalse('isFocusable() must be false for disabled form elements with ' +
+      'negative tab index',
+      goog.dom.isFocusable(goog.dom.getElement('disabledNegTabIndexButton')));
+
+  // Test disabled form element with zero tab index is not focusable.
+  assertFalse('isFocusable() must be false for disabled form elements with ' +
+      'zero tab index',
+      goog.dom.isFocusable(goog.dom.getElement('disabledZeroTabIndexButton')));
+
+  // Test disabled form element with positive tab index is not focusable.
+  assertFalse('isFocusable() must be false for disabled form elements with ' +
+      'positive tab index',
+      goog.dom.isFocusable(goog.dom.getElement('disabledPosTabIndexButton')));
+
+  // Test non-form types should return same value as isFocusableTabIndex()
+  assertEquals('isFocusable() and isFocusableTabIndex() must agree for ' +
+      ' no tab index',
+      goog.dom.isFocusableTabIndex(goog.dom.getElement('noTabIndex')),
+      goog.dom.isFocusable(goog.dom.getElement('noTabIndex')));
+  assertEquals('isFocusable() and isFocusableTabIndex() must agree for ' +
+      ' tab index -2',
+      goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndexNegative2')),
+      goog.dom.isFocusable(goog.dom.getElement('tabIndexNegative2')));
+  assertEquals('isFocusable() and isFocusableTabIndex() must agree for ' +
+      ' tab index -1',
+      goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndexNegative1')),
+      goog.dom.isFocusable(goog.dom.getElement('tabIndexNegative1')));
+
+}
+
 function testGetTextContent() {
   function t(inp, out) {
     assertEquals(out.replace(/ /g, '_'),

@@ -91,6 +91,20 @@ See the COPYING file for details.
   <div id="tabIndex1" tabindex="1">Test</div>
   <div id="tabIndex2" tabindex="2">Test</div>
 
+  <form>
+    <input id="noTabIndexInput">
+    <textarea id="noTabIndexTextArea">Test</textarea>
+    <select id="noTabIndexSelect"><option>Test</option></select>
+    <button id="noTabIndexButton">Test</button>
+    <button id="negTabIndexButton" tabindex="-1">Test</button>
+    <button id="zeroTabIndexButton" tabindex="0">Test</button>
+    <button id="posTabIndexButton" tabindex="1">Test</button>
+    <button id="disabledNoTabIndexButton" disabled>Test</button>
+    <button id="disabledNegTabIndexButton" disabled tabindex="-1">Test</button>
+    <button id="disabledZeroTabIndexButton" disabled tabindex="0">Test</button>
+    <button id="disabledPosTabIndexButton" disabled tabindex="1">Test</button>
+  </form>
+
   <div id="toReplace">Replace Test</div>
 
   <iframe id="iframe"></iframe>

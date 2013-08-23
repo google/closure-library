@@ -1666,16 +1666,8 @@ goog.dom.PREDEFINED_TAG_VALUES_ = {'IMG': ' ', 'BR': '\n'};
  * @see http://fluidproject.org/blog/2008/01/09/getting-setting-and-removing-tabindex-values-with-javascript/
  */
 goog.dom.isFocusableTabIndex = function(element) {
-  // IE returns 0 for an unset tabIndex, so we must use getAttributeNode(),
-  // which returns an object with a 'specified' property if tabIndex is
-  // specified.  This works on other browsers, too.
-  var attrNode = element.getAttributeNode('tabindex'); // Must be lowercase!
-  if (attrNode && attrNode.specified) {
-    var index = element.tabIndex;
-    // NOTE: IE9 puts tabIndex in 16-bit int, e.g. -2 is 65534.
-    return goog.isNumber(index) && index >= 0 && index < 32768;
-  }
-  return false;
+  return goog.dom.hasSpecifiedTabIndex_(element) &&
+         goog.dom.isTabIndexFocusable_(element);
 };
 
 
@@ -1699,6 +1691,89 @@ goog.dom.setFocusableTabIndex = function(element, enable) {
     element.tabIndex = -1;
     element.removeAttribute('tabIndex'); // Must be camelCase!
   }
+};
+
+
+/**
+ * Returns true if the element can be focused, i.e. it has a tab index that
+ * allows it to receive keyboard focus (tabIndex >= 0), or it is a form element
+ * that natively supports keyboard focus.
+ * @param {Element} element Element to check.
+ * @return {boolean} Whether the element allows keyboard focus.
+ */
+goog.dom.isFocusable = function(element) {
+  var focusable;
+  // Form elements can have unspecified tab index.
+  if (goog.dom.isFormElement_(element)) {
+    // Make sure the element is not disabled ...
+    focusable = !element.disabled &&
+        // ... and if a tab index is specified, it allows focus.
+        (!goog.dom.hasSpecifiedTabIndex_(element) ||
+         goog.dom.isTabIndexFocusable_(element));
+  } else {
+    focusable = goog.dom.isFocusableTabIndex(element);
+  }
+
+  // IE requires elements to be visible in order to focus them.
+  return focusable && goog.userAgent.IE ?
+             goog.dom.hasNonZeroBoundingRect_(element) : focusable;
+};
+
+
+/**
+ * Returns true if the element has a specified tab index.
+ * @param {Element} element Element to check.
+ * @return {boolean} Whether the element has a specified tab index.
+ * @private
+ */
+goog.dom.hasSpecifiedTabIndex_ = function(element) {
+  // IE returns 0 for an unset tabIndex, so we must use getAttributeNode(),
+  // which returns an object with a 'specified' property if tabIndex is
+  // specified.  This works on other browsers, too.
+  var attrNode = element.getAttributeNode('tabindex'); // Must be lowercase!
+  return goog.isDefAndNotNull(attrNode) && attrNode.specified;
+};
+
+
+/**
+ * Returns true if the element's tab index allows the element to be focused.
+ * @param {Element} element Element to check.
+ * @return {boolean} Whether the element's tab index allows focus.
+ * @private
+ */
+goog.dom.isTabIndexFocusable_ = function(element) {
+  var index = element.tabIndex;
+  // NOTE: IE9 puts tabIndex in 16-bit int, e.g. -2 is 65534.
+  return goog.isNumber(index) && index >= 0 && index < 32768;
+};
+
+
+/**
+ * Returns true if the element is a form element.
+ * @param {Element} element Element to check.
+ * @return {boolean} Whether the element is a form element.
+ * @private
+ */
+goog.dom.isFormElement_ = function(element) {
+  return element.tagName == goog.dom.TagName.INPUT ||
+         element.tagName == goog.dom.TagName.TEXTAREA ||
+         element.tagName == goog.dom.TagName.SELECT ||
+         element.tagName == goog.dom.TagName.BUTTON;
+};
+
+
+/**
+ * Returns true if the element has a bounding rectangle that would be visible
+ * (i.e. its width and height are greater than zero).
+ * @param {Element} element Element to check.
+ * @return {boolean} Whether the element has a non-zero bounding rectangle.
+ * @private
+ */
+goog.dom.hasNonZeroBoundingRect_ = function(element) {
+  var rect = goog.isFunction(element['getBoundingClientRect']) ?
+      element.getBoundingClientRect() :
+      {'height': element.offsetHeight, 'width': element.offsetWidth};
+  return goog.isDefAndNotNull(rect) && rect.height > 0 && rect.width > 0;
 };
 
 
@@ -2683,6 +2758,16 @@ goog.dom.DomHelper.prototype.isFocusableTabIndex = goog.dom.isFocusableTabIndex;
  */
 goog.dom.DomHelper.prototype.setFocusableTabIndex =
     goog.dom.setFocusableTabIndex;
+
+
+/**
+ * Returns true if the element can be focused, i.e. it has a tab index that
+ * allows it to receive keyboard focus (tabIndex >= 0), or it is a form element
+ * that natively supports keyboard focus.
+ * @param {Element} element Element to check.
+ * @return {boolean} Whether the element allows keyboard focus.
+ */
+goog.dom.DomHelper.prototype.isFocusable = goog.dom.isFocusable;
 
 
 /**
