@@ -138,7 +138,7 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.initializeFromCssRule =
     return false;
   }
   var selector;
-  var declarations;
+  var declarations = '';
   if (ruleStyle &&
       (selector = cssRule.selectorText) &&
       (declarations = ruleStyle.cssText)) {
