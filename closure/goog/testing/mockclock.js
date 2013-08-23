@@ -27,6 +27,7 @@ goog.require('goog.Disposable');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events');
 goog.require('goog.testing.events.Event');
+goog.require('goog.testing.watchers');
 
 
 
@@ -209,6 +210,8 @@ goog.testing.MockClock.prototype.uninstall = function() {
     this.replacer_ = null;
     goog.now = this.oldGoogNow_;
   }
+
+  this.fireResetEvent();
 };
 
 
@@ -231,6 +234,17 @@ goog.testing.MockClock.prototype.reset = function() {
   this.nowMillis_ = 0;
   this.timeoutsMade_ = 0;
   this.timeoutDelay_ = 0;
+
+  this.fireResetEvent();
+};
+
+
+/**
+ * Signals that the mock clock has been reset, allowing objects that
+ * maintain their own internal state to reset.
+ */
+goog.testing.MockClock.prototype.fireResetEvent = function() {
+  goog.testing.watchers.signalclockReset();
 };
 
 
