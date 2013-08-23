@@ -529,8 +529,7 @@ goog.proto2.Message.prototype.has$Value = function(tag) {
   goog.proto2.Util.assert(this.fields_[tag],
                           'No field found for the given tag');
 
-  return tag in this.values_ && goog.isDef(this.values_[tag]) &&
-      this.values_[tag] !== null;
+  return goog.isDefAndNotNull(this.values_[tag]);
 };
 
 
@@ -546,12 +545,9 @@ goog.proto2.Message.prototype.has$Value = function(tag) {
 goog.proto2.Message.prototype.getValueForField_ = function(field) {
   // Retrieve the current value, which may still be serialized.
   var tag = field.getTag();
-  if (!tag in this.values_) {
-    return null;
-  }
 
   var value = this.values_[tag];
-  if (value == null) {
+  if (!goog.isDefAndNotNull(value)) {
     return null;
   }
 
