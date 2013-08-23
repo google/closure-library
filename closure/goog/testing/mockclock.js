@@ -244,7 +244,7 @@ goog.testing.MockClock.prototype.reset = function() {
  * maintain their own internal state to reset.
  */
 goog.testing.MockClock.prototype.fireResetEvent = function() {
-  goog.testing.watchers.signalclockReset();
+  goog.testing.watchers.signalClockReset();
 };
 
 

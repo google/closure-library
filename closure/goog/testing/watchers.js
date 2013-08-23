@@ -28,7 +28,7 @@ goog.testing.watchers.resetWatchers_ = [];
 /**
  * Fires clock reset watching functions.
  */
-goog.testing.watchers.signalclockReset = function() {
+goog.testing.watchers.signalClockReset = function() {
   var watchers = goog.testing.watchers.resetWatchers_;
   for (var i = 0; i < watchers.length; i++) {
     goog.testing.watchers.resetWatchers_[i]();
