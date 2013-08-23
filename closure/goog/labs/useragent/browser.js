@@ -131,7 +131,12 @@ goog.labs.userAgent.browser.isAndroidBrowser =
 
 /**
  * @return {string} The browser version or empty string if version cannot be
- *     determined.
+ *     determined. Note that for Internet Explorer, this returns the version of
+ *     the browser, not the version of the rendering engine. (IE 8 in
+ *     compatibility mode will return 8.0 rather than 7.0. To determine the
+ *     rendering engine version, look at document.documentMode instead. See
+ *     http://msdn.microsoft.com/en-us/library/cc196988(v=vs.85).aspx for more
+ *     details.)
  */
 goog.labs.userAgent.browser.getVersion = function() {
   var userAgentString = goog.labs.userAgent.util.getUserAgent();
@@ -165,23 +170,42 @@ goog.labs.userAgent.browser.isVersionOrHigher = function(version) {
 
 /**
  * Determines IE version. More information:
- * http://msdn.microsoft.com/en-us/library/jj676915(v=vs.85).aspx
+ * http://msdn.microsoft.com/en-us/library/ie/bg182625(v=vs.85).aspx#uaString
+ * http://msdn.microsoft.com/en-us/library/hh869301(v=vs.85).aspx
+ * http://blogs.msdn.com/b/ie/archive/2010/03/23/introducing-ie9-s-user-agent-string.aspx
+ * http://blogs.msdn.com/b/ie/archive/2009/01/09/the-internet-explorer-8-user-agent-string-updated-edition.aspx
  *
  * @return {string}
  * @private
  */
 goog.labs.userAgent.browser.getIEVersion_ = function() {
-  var gDoc = goog.global['document'];
-  var version;
+  var version = '';
   var userAgentString = goog.labs.userAgent.util.getUserAgent();
-
-  if (gDoc && gDoc.documentMode) {
-    version = gDoc.documentMode;
-  } else if (gDoc && gDoc.compatMode && gDoc.compatMode == 'CSS1Compat') {
-    version = 7;
-  } else {
-    var arr = /\b(?:MSIE|rv)[: ]([^\);]+)(?:\)|;)/.exec(userAgentString);
-    version = arr && arr[1] ? arr[1] : '';
+  var arr = /\b(?:MSIE|rv)[: ]([^\);]+)(?:\)|;)/.exec(userAgentString);
+  if (arr && arr[1]) {
+    if (arr[1] == '7.0') {
+      // IE in compatibility mode identifies itself as MSIE 7.0. Here we use the
+      // Trident version to determine the version of IE. For more details, see
+      // the links above.
+      var tridentVersion = /Trident\/(\d.\d)/.exec(userAgentString);
+      if (tridentVersion && tridentVersion[1]) {
+        switch (tridentVersion[1]) {
+          case '4.0':
+            version = '8.0';
+            break;
+          case '5.0':
+            version = '9.0';
+            break;
+          case '6.0':
+            version = '10.0';
+            break;
+        }
+      } else {
+        version = '7.0';
+      }
+    } else {
+      version = arr[1];
+    }
   }
   return version;
 };

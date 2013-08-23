@@ -59,6 +59,11 @@ testAgents.IE_6 =
 
 
 /** @const {string} */
+testAgents.IE_7 =
+    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)';
+
+
+/** @const {string} */
 testAgents.IE_8 =
     'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)';
 
@@ -75,12 +80,17 @@ testAgents.IE_9 =
 
 /** @const {string} */
 testAgents.IE_9_COMPATIBILITY =
-    'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/5.0)';
+    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0)';
 
 
 /** @const {string} */
 testAgents.IE_10 =
     'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+
+
+/** @const {string} */
+testAgents.IE_10_COMPATIBILITY =
+    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/6.0)';
 
 
 /** @const {string} */
