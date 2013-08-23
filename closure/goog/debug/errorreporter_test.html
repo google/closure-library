@@ -346,6 +346,34 @@ See the COPYING file for details.
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
     assertEquals('trace=trace&context.foo=bar', MockXhrIo.lastContent);
   }
+
+  function testSetAdditionalArgumentsArgsEmptyObject() {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setAdditionalArguments({});
+    errorReporter.sendErrorReport(
+        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
+    assertEquals('/log?script=filename.js&error=message&line=123',
+        MockXhrIo.lastUrl);
+  }
+
+  function testSetAdditionalArgumentsSingleArgument() {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setAdditionalArguments({'extra': 'arg'});
+    errorReporter.sendErrorReport(
+        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
+    assertEquals('/log?script=filename.js&error=message&line=123&extra=arg',
+        MockXhrIo.lastUrl);
+  }
+
+  function testSetAdditionalArgumentsMultipleArguments() {
+    errorReporter = new goog.debug.ErrorReporter('/log');
+    errorReporter.setAdditionalArguments({'extra': 'arg', 'cat': 'dog'});
+    errorReporter.sendErrorReport(
+        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
+    assertEquals(
+        '/log?script=filename.js&error=message&line=123&extra=arg&cat=dog',
+        MockXhrIo.lastUrl);
+  }
 </script>
 </body>
 </html>

@@ -78,6 +78,12 @@ goog.debug.ErrorReporter = function(
   this.truncationLimit_ = null;
 
   /**
+   * Additional arguments to append to URL before sending XHR.
+   * @private {!Object.<string,string>}
+   */
+  this.additionalArguments_ = {};
+
+  /**
    * XHR sender.
    * @type {function(string, string, string, (Object|goog.structs.Map)=)}
    * @private
@@ -317,6 +323,12 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
     // Create the logging URL.
     var requestUrl = goog.uri.utils.appendParams(this.handlerUrl_,
         'script', fileName, 'error', message, 'line', line);
+
+    if (!goog.object.isEmpty(this.additionalArguments_)) {
+      requestUrl = goog.uri.utils.appendParamsFromMap(requestUrl,
+          this.additionalArguments_);
+    }
+
     var queryMap = {};
     queryMap['trace'] = opt_trace;
 
@@ -366,6 +378,15 @@ goog.debug.ErrorReporter.prototype.setTruncationLimit = function(limit) {
   goog.asserts.assert(!goog.isNumber(limit) || limit >= 0,
       'Body limit must be valid number >= 0 or null');
   this.truncationLimit_ = limit;
+};
+
+
+/**
+ * @param {!Object.<string,string>} urlArgs Set of key-value pairs to append
+ *     to handlerUrl_ before sending XHR.
+ */
+goog.debug.ErrorReporter.prototype.setAdditionalArguments = function(urlArgs) {
+  this.additionalArguments_ = urlArgs;
 };
 
 
