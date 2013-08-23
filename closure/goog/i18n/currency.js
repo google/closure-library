@@ -325,7 +325,7 @@ goog.i18n.currency.CurrencyInfo = {
   'TZS': [0, 'TSh', 'TSh'],
   'UAH': [2, '\u20B4', 'UAH'],
   'USD': [2, '$', 'US$'],
-  'UYU': [2, '$', 'UY$'],
+  'UYU': [2, '$', '$U'],
   'VND': [0, '\u20AB', 'VN\u20AB'],
   'YER': [0, 'Rial', 'Rial'],
   'ZAR': [2, 'R', 'ZAR']
@@ -422,7 +422,6 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'TOP': [2, 'T$', 'T$'],
   'TTD': [2, '$', 'TT$'],
   'UGX': [0, 'UGX', 'UGX'],
-  'UYU': [1, '$', '$U'],
   'UZS': [0, 'so\u02bcm', 'UZS'],
   'VEF': [2, 'Bs', 'Bs'],
   'VUV': [0, 'VUV', 'VUV'],
