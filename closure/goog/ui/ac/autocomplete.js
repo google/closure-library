@@ -33,8 +33,7 @@ goog.require('goog.object');
  * This is the central manager class for an AutoComplete instance. The matcher
  * can specify disabled rows that should not be hilited or selected by
  * implementing <code>isRowDisabled(row):boolean</code> for each autocomplete
- * row. No row will not be considered disabled if this method is not
- * implemented.
+ * row. No row will be considered disabled if this method is not implemented.
  *
  * @param {Object} matcher A data source and row matcher, implements
  *        <code>requestMatchingRows(token, maxMatches, matchCallback)</code>.
