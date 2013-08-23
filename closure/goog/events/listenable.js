@@ -83,7 +83,11 @@ goog.events.Listenable.addImplementation = function(cls) {
  *     addImplementation.
  */
 goog.events.Listenable.isImplementedBy = function(obj) {
-  return !!(obj && obj[goog.events.Listenable.IMPLEMENTED_BY_PROP]);
+  try {
+    return !!(obj && obj[goog.events.Listenable.IMPLEMENTED_BY_PROP]);
+  } catch (e) {
+    return false;
+  }
 };
 
 
