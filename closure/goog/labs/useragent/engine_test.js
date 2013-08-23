@@ -112,24 +112,17 @@ function testWebKit() {
 }
 
 function testGecko() {
-  goog.labs.userAgent.util.setUserAgent(
-      'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0a2');
+  goog.labs.userAgent.util.setUserAgent(testAgents.FIREFOX_LINUX);
   assertTrue(goog.labs.userAgent.engine.isGecko());
-  assertVersion('15.0a2');
+  assertVersion('15.0.1');
   assertLowAndHighVersions('14.0', '16.0');
-  // This is actually not at V15 because it is alpha 2
-  assertFalse(goog.labs.userAgent.engine.isVersionOrHigher('15'));
 
-  goog.labs.userAgent.util.setUserAgent(
-      'Mozilla/6.0 (Windows NT 6.2; WOW64; rv:16.0.1) Gecko/20121011 ' +
-      'Firefox/16.0.1');
+  goog.labs.userAgent.util.setUserAgent(testAgents.FIREFOX_19);
   assertTrue(goog.labs.userAgent.engine.isGecko());
-  assertVersion('16.0.1');
-  assertLowAndHighVersions('16.0', '17.0');
+  assertVersion('19.0');
+  assertLowAndHighVersions('18.0', '20.0');
 
-  goog.labs.userAgent.util.setUserAgent(
-      'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:14.0) ' +
-      'Gecko/20100101 Firefox/14.0.1');
+  goog.labs.userAgent.util.setUserAgent(testAgents.FIREFOX_WINDOWS);
   assertTrue(goog.labs.userAgent.engine.isGecko());
   assertVersion('14.0.1');
   assertLowAndHighVersions('14.0', '15.0');
