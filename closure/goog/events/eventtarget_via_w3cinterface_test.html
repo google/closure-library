@@ -14,6 +14,7 @@ See the COPYING file for details.
   goog.require('goog.events.eventTargetTester');
   goog.require('goog.events.eventTargetTester.KeyType');
   goog.require('goog.events.eventTargetTester.UnlistenReturnType');
+  goog.require('goog.events.EventTarget');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -21,6 +22,9 @@ See the COPYING file for details.
 <script>
 
 function setUp() {
+  var newListenableFn = function() {
+    return new goog.events.EventTarget();
+  };
   var listenFn = function(src, type, listener, opt_capt, opt_handler) {
     src.addEventListener(type, listener, opt_capt, opt_handler);
   };
@@ -32,7 +36,7 @@ function setUp() {
   };
 
   goog.events.eventTargetTester.setUp(
-      listenFn, unlistenFn, null /* unlistenByKeyFn */,
+      newListenableFn, listenFn, unlistenFn, null /* unlistenByKeyFn */,
       null /* listenOnceFn */, dispatchEventFn, null /* removeAllFn */,
       null /* getListenersFn */, null /* getListenerFn */,
       null /* hasListenerFn */,
