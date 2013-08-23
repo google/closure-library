@@ -59,8 +59,8 @@ goog.events.actionEventWrapper = new goog.events.ActionEventWrapper_();
 goog.events.ActionEventWrapper_.EVENT_TYPES_ = [
   goog.events.EventType.CLICK,
   goog.userAgent.GECKO ?
-      goog.events.EventType.KEYPRESS :
-      goog.events.EventType.KEYDOWN
+      goog.events.EventType.KEYPRESS : goog.events.EventType.KEYDOWN,
+  goog.events.EventType.KEYUP
 ];
 
 
@@ -84,14 +84,18 @@ goog.events.ActionEventWrapper_.prototype.listen = function(target, listener,
   var callback = function(e) {
     if (e.type == goog.events.EventType.CLICK && e.isMouseActionButton()) {
       listener.call(opt_scope, e);
-    } else if (e.keyCode == goog.events.KeyCodes.ENTER ||
-        e.keyCode == goog.events.KeyCodes.MAC_ENTER ||
-        e.keyCode == goog.events.KeyCodes.SPACE &&
-        goog.a11y.aria.getRole(/** @type {!Element} */ (e.target)) ==
-            goog.a11y.aria.Role.BUTTON) {
+    } else if ((e.keyCode == goog.events.KeyCodes.ENTER ||
+        e.keyCode == goog.events.KeyCodes.MAC_ENTER) &&
+        e.type != goog.events.EventType.KEYUP) {
       // convert keydown to keypress for backward compatibility.
       e.type = goog.events.EventType.KEYPRESS;
       listener.call(opt_scope, e);
+    } else if (e.keyCode == goog.events.KeyCodes.SPACE &&
+        e.type == goog.events.EventType.KEYUP &&
+        goog.a11y.aria.getRole(/** @type {!Element} */ (e.target)) ==
+            goog.a11y.aria.Role.BUTTON) {
+      listener.call(opt_scope, e);
+      e.preventDefault();
     }
   };
   callback.listener_ = listener;
