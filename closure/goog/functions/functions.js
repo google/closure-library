@@ -111,6 +111,18 @@ goog.functions.lock = function(f, opt_numArgs) {
 
 
 /**
+ * Creates a function that returns its nth argument.
+ * @param {number} n The position of the return argument.
+ * @return {!Function} A new function.
+ */
+goog.functions.nth = function(n) {
+  return function() {
+    return arguments[n];
+  };
+};
+
+
+/**
  * Given a function, create a new function that swallows its return value
  * and replaces it with a new one.
  * @param {Function} f A function.

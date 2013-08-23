@@ -63,6 +63,15 @@ function testLock() {
   assertEquals(3, goog.functions.lock(goog.partial(add, 1, 2))(3));
 }
 
+function testNth() {
+  assertEquals(1, goog.functions.nth(0)(1));
+  assertEquals(2, goog.functions.nth(1)(1, 2));
+  assertEquals('a', goog.functions.nth(0)('a', 'b'));
+  assertEquals(undefined, goog.functions.nth(0)());
+  assertEquals(undefined, goog.functions.nth(1)(true));
+  assertEquals(undefined, goog.functions.nth(-1)());
+}
+
 function testIdentity() {
   assertEquals(3, goog.functions.identity(3));
   assertEquals(3, goog.functions.identity(3, 4, 5, 6));
