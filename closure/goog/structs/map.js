@@ -45,8 +45,7 @@ goog.structs.Map = function(opt_map, var_args) {
 
   /**
    * Underlying JS object used to implement the map.
-   * @type {!Object}
-   * @private
+   * @private {!Object}
    */
   this.map_ = {};
 
@@ -61,10 +60,21 @@ goog.structs.Map = function(opt_map, var_args) {
    * This array can contain deleted keys so it's necessary to check the map
    * as well to see if the key is still in the map (this doesn't require a
    * memory allocation in IE).
-   * @type {!Array.<string>}
-   * @private
+   * @private {!Array.<string>}
    */
   this.keys_ = [];
+
+  /**
+   * The number of key value pairs in the map.
+   * @private {number}
+   */
+  this.count_ = 0;
+
+  /**
+   * Version used to detect changes while iterating.
+   * @private {number}
+   */
+  this.version_ = 0;
 
   var argLength = arguments.length;
 
@@ -79,22 +89,6 @@ goog.structs.Map = function(opt_map, var_args) {
     this.addAll(/** @type {Object} */ (opt_map));
   }
 };
-
-
-/**
- * The number of key value pairs in the map.
- * @private
- * @type {number}
- */
-goog.structs.Map.prototype.count_ = 0;
-
-
-/**
- * Version used to detect changes while iterating.
- * @private
- * @type {number}
- */
-goog.structs.Map.prototype.version_ = 0;
 
 
 /**

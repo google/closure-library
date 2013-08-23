@@ -39,6 +39,14 @@ goog.require('goog.structs');
  */
 goog.structs.Trie = function(opt_trie) {
   /**
+   * This trie's value.  For the base trie, this will be the value of the
+   * empty key, if defined.
+   * @private
+   * @type {*}
+   */
+  this.value_ = undefined;
+
+  /**
    * This trie's child nodes.
    * @private
    * @type {Object.<goog.structs.Trie>}
@@ -49,15 +57,6 @@ goog.structs.Trie = function(opt_trie) {
     this.setAll(opt_trie);
   }
 };
-
-
-/**
- * This trie's value.  For the base trie, this will be the value of the
- * empty key, if defined.
- * @private
- * @type {*}
- */
-goog.structs.Trie.prototype.value_ = undefined;
 
 
 /**

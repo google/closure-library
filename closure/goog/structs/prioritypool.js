@@ -36,9 +36,14 @@ goog.require('goog.structs.PriorityQueue');
  */
 goog.structs.PriorityPool = function(opt_minCount, opt_maxCount) {
   /**
+   * The key for the most recent timeout created.
+   * @private {number|undefined}
+   */
+  this.delayTimeout_ = undefined;
+
+  /**
    * Queue of requests for pool objects.
-   * @type {goog.structs.PriorityQueue}
-   * @private
+   * @private {goog.structs.PriorityQueue}
    */
   this.requestQueue_ = new goog.structs.PriorityQueue();
 
@@ -49,14 +54,6 @@ goog.structs.PriorityPool = function(opt_minCount, opt_maxCount) {
   goog.structs.Pool.call(this, opt_minCount, opt_maxCount);
 };
 goog.inherits(goog.structs.PriorityPool, goog.structs.Pool);
-
-
-/**
- * The key for the most recent timeout created.
- * @type {number|undefined}
- * @private
- */
-goog.structs.PriorityPool.prototype.delayTimeout_;
 
 
 /**

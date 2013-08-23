@@ -33,27 +33,23 @@ goog.provide('goog.structs.CircularBuffer');
  */
 goog.structs.CircularBuffer = function(opt_maxSize) {
   /**
+   * Index of the next element in the circular array structure.
+   * @private {number}
+   */
+  this.nextPtr_ = 0;
+
+  /**
    * Maximum size of the the circular array structure.
-   * @type {number}
-   * @private
+   * @private {number}
    */
   this.maxSize_ = opt_maxSize || 100;
 
   /**
    * Underlying array for the CircularBuffer.
-   * @type {Array}
-   * @private
+   * @private {Array}
    */
   this.buff_ = [];
 };
-
-
-/**
- * Index of the next element in the circular array structure.
- * @type {number}
- * @private
- */
-goog.structs.CircularBuffer.prototype.nextPtr_ = 0;
 
 
 /**

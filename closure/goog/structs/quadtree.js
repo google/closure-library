@@ -40,23 +40,19 @@ goog.require('goog.math.Coordinate');
  * @constructor
  */
 goog.structs.QuadTree = function(minX, minY, maxX, maxY) {
+  /**
+   * Count of the number of items in the tree.
+   * @private {number}
+   */
+  this.count_ = 0;
 
   /**
    * The root node for the quad tree.
-   * @type {goog.structs.QuadTree.Node}
-   * @private
+   * @private {goog.structs.QuadTree.Node}
    */
   this.root_ = new goog.structs.QuadTree.Node(
       minX, minY, maxX - minX, maxY - minY);
 };
-
-
-/**
- * Count of the number of items in the tree.
- * @type {number}
- * @private
- */
-goog.structs.QuadTree.prototype.count_ = 0;
 
 
 /**

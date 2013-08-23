@@ -34,6 +34,11 @@ goog.require('goog.array');
  * @constructor
  */
 goog.structs.InversionMap = function(rangeArray, valueArray, opt_delta) {
+  /**
+   * @protected {Array}
+   */
+  this.rangeArray = null;
+
   if (rangeArray.length != valueArray.length) {
     // rangeArray and valueArray has to match in number of entries.
     return null;
@@ -41,18 +46,10 @@ goog.structs.InversionMap = function(rangeArray, valueArray, opt_delta) {
   this.storeInversion_(rangeArray, opt_delta);
 
   /**
-   * @type {Array}
-   * @protected
+   * @protected {Array}
    */
   this.values = valueArray;
 };
-
-
-/**
- * @type {Array}
- * @protected
- */
-goog.structs.InversionMap.prototype.rangeArray;
 
 
 /**

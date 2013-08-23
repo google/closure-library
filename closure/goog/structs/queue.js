@@ -32,24 +32,24 @@ goog.require('goog.array');
  * @constructor
  */
 goog.structs.Queue = function() {
+  /**
+   * The index of the next element to be removed from the queue.
+   * @private {number}
+   */
+  this.head_ = 0;
+
+  /**
+   * The index at which the next element would be added to the queue.
+   * @private {number}
+   */
+  this.tail_ = 0;
+
+  /**
+   * @const
+   * @private {!Array}
+   */
   this.elements_ = [];
 };
-
-
-/**
- * The index of the next element to be removed from the queue.
- * @private
- * @type {number}
- */
-goog.structs.Queue.prototype.head_ = 0;
-
-
-/**
- * The index at which the next element would be added to the queue.
- * @private
- * @type {number}
- */
-goog.structs.Queue.prototype.tail_ = 0;
 
 
 /**

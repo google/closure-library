@@ -39,6 +39,18 @@ goog.require('goog.structs.Node');
  */
 goog.structs.TreeNode = function(key, value) {
   goog.structs.Node.call(this, key, value);
+
+  /**
+   * Reference to the parent node or null if it has no parent.
+   * @private {goog.structs.TreeNode}
+   */
+  this.parent_ = null;
+
+  /**
+   * Child nodes or null in case of leaf node.
+   * @private {Array.<!goog.structs.TreeNode>}
+   */
+  this.children_ = null;
 };
 goog.inherits(goog.structs.TreeNode, goog.structs.Node);
 
@@ -48,22 +60,6 @@ goog.inherits(goog.structs.TreeNode, goog.structs.Node);
  * @private
  */
 goog.structs.TreeNode.EMPTY_ARRAY_ = [];
-
-
-/**
- * Reference to the parent node or null if it has no parent.
- * @type {goog.structs.TreeNode}
- * @private
- */
-goog.structs.TreeNode.prototype.parent_ = null;
-
-
-/**
- * Child nodes or null in case of leaf node.
- * @type {Array.<!goog.structs.TreeNode>}
- * @private
- */
-goog.structs.TreeNode.prototype.children_ = null;
 
 
 /**

@@ -52,41 +52,35 @@ goog.structs.SimplePool = function(initialCount, maxCount) {
   goog.Disposable.call(this);
 
   /**
+   * Function for overriding createObject. The avoids a common case requiring
+   * subclassing this class.
+   * @private {Function}
+   */
+  this.createObjectFn_ = null;
+
+  /**
+   * Function for overriding disposeObject. The avoids a common case requiring
+   * subclassing this class.
+   * @private {Function}
+   */
+  this.disposeObjectFn_ = null;
+
+  /**
    * Maximum number of objects allowed
-   * @type {number}
-   * @private
+   * @private {number}
    */
   this.maxCount_ = maxCount;
 
   /**
    * Queue used to store objects that are currently in the pool and available
    * to be used.
-   * @type {Array}
-   * @private
+   * @private {Array}
    */
   this.freeQueue_ = [];
 
   this.createInitial_(initialCount);
 };
 goog.inherits(goog.structs.SimplePool, goog.Disposable);
-
-
-/**
- * Function for overriding createObject. The avoids a common case requiring
- * subclassing this class.
- * @type {Function}
- * @private
- */
-goog.structs.SimplePool.prototype.createObjectFn_ = null;
-
-
-/**
- * Function for overriding disposeObject. The avoids a common case requiring
- * subclassing this class.
- * @type {Function}
- * @private
- */
-goog.structs.SimplePool.prototype.disposeObjectFn_ = null;
 
 
 /**
