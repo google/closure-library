@@ -117,7 +117,7 @@ goog.testing.events.Event.prototype.preventDefault = function() {
  * @private
  */
 goog.testing.events.assertEventTarget_ = function(target) {
-  return goog.asserts.assert(target, 'Target should not be defined.');
+  return goog.asserts.assert(target, 'EventTarget should be defined.');
 };
 
 
