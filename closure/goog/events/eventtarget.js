@@ -64,6 +64,9 @@ goog.require('goog.object');
  *   // Or: goog.events.unlisten(source, 'foo', handleEvent);
  * </pre>
  *
+ * TODO(user): Consider writing a parallel class to this that
+ * does not implement goog.Disposable.
+ *
  * @constructor
  * @extends {goog.Disposable}
  * @implements {goog.events.Listenable}

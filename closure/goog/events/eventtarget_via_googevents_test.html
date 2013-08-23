@@ -16,7 +16,6 @@ See the COPYING file for details.
   goog.require('goog.events.eventTargetTester');
   goog.require('goog.events.eventTargetTester.KeyType');
   goog.require('goog.events.eventTargetTester.UnlistenReturnType');
-  goog.require('goog.events.EventTarget');
   goog.require('goog.object');
   goog.require('goog.testing.jsunit');
 </script>
@@ -25,14 +24,11 @@ See the COPYING file for details.
 <script>
 
 function setUp() {
-  var newListenableFn = function() {
-    return new goog.events.EventTarget();
-  };
   var unlistenByKeyFn = function(src, key) {
     return goog.events.unlistenByKey(key);
   };
   goog.events.eventTargetTester.setUp(
-      newListenableFn, goog.events.listen, goog.events.unlisten, unlistenByKeyFn,
+      goog.events.listen, goog.events.unlisten, unlistenByKeyFn,
       goog.events.listenOnce, goog.events.dispatchEvent,
       goog.events.removeAll, goog.events.getListeners,
       goog.events.getListener, goog.events.hasListener,
