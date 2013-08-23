@@ -227,7 +227,7 @@ goog.ui.media.YoutubeModel = function(videoId, opt_caption, opt_description) {
       goog.ui.media.YoutubeModel.getThumbnailUrl(videoId))]);
 
   this.setPlayer(new goog.ui.media.MediaModel.Player(
-      this.getFlashUrl(videoId, true)));
+      goog.ui.media.YoutubeModel.getFlashUrl(videoId, true)));
 };
 goog.inherits(goog.ui.media.YoutubeModel, goog.ui.media.MediaModel);
 
@@ -328,7 +328,7 @@ goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
 
 
 /**
- * An auxiliary method that builds URL of the flash movie to be embedded,
+ * A static auxiliary method that builds URL of the flash movie to be embedded,
  * out of the youtube video id.
  *
  * @param {string} videoId The youtube video ID.
@@ -336,8 +336,7 @@ goog.ui.media.YoutubeModel.getThumbnailUrl = function(youtubeId) {
  *     as soon as it is shown, or if it should show a 'play' button.
  * @return {string} The flash URL to be embedded on the page.
  */
-goog.ui.media.YoutubeModel.prototype.getFlashUrl = function(videoId,
-                                                            opt_autoplay) {
+goog.ui.media.YoutubeModel.getFlashUrl = function(videoId, opt_autoplay) {
   var autoplay = opt_autoplay ? '&autoplay=1' : '';
   // YouTube video ids are extracted from youtube URLs, which are user
   // generated input. the video id is later used to embed a flash object,
