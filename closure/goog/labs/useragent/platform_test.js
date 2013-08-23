@@ -20,37 +20,19 @@ goog.provide('goog.labs.userAgent.platformTest');
 
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.labs.userAgent.testAgents');
-goog.require('goog.testing.PropertyReplacer');
+goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.jsunit');
 
 goog.setTestOnly('goog.labs.userAgent.platformTest');
 
-var propertyReplacer = new goog.testing.PropertyReplacer();
-
 function setUp() {
-  // disable memoization
-  propertyReplacer.set(goog.functions, 'CACHE_RETURN_VALUE', false);
-}
-
-function tearDown() {
-  propertyReplacer.reset();
-}
-
-function setGlobalUAString(uaString, platform, appVersion) {
-  var mockGlobal = {
-    'navigator': {
-      'userAgent': uaString,
-      'platform': platform,
-      'appVersion': appVersion
-    }
-  };
-  propertyReplacer.set(goog, 'global', mockGlobal);
+  goog.labs.userAgent.util.setUserAgent(null);
 }
 
 function testAndroid() {
   var uaString = goog.labs.userAgent.testAgents.ANDROID_BROWSER_233;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isAndroid());
   assertVersion('2.3.3');
   assertVersionBetween('2.3.0', '2.3.5');
@@ -59,7 +41,7 @@ function testAndroid() {
 
   uaString = goog.labs.userAgent.testAgents.ANDROID_BROWSER_221;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isAndroid());
   assertVersion('2.2.1');
   assertVersionBetween('2.2.0', '2.2.5');
@@ -68,7 +50,7 @@ function testAndroid() {
 
   uaString = goog.labs.userAgent.testAgents.CHROME_ANDROID;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isAndroid());
   assertVersion('4.0.2');
   assertVersionBetween('4.0.0', '4.1.0');
@@ -79,7 +61,7 @@ function testAndroid() {
 function testIpod() {
   var uaString = goog.labs.userAgent.testAgents.SAFARI_IPOD;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIpod());
   assertTrue(goog.labs.userAgent.platform.isIos());
   assertVersion('');
@@ -87,7 +69,7 @@ function testIpod() {
 
 function testIphone() {
   var uaString = goog.labs.userAgent.testAgents.SAFARI_IPHONE;
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIphone());
   assertTrue(goog.labs.userAgent.platform.isIos());
   assertVersion('4.2.1');
@@ -95,14 +77,14 @@ function testIphone() {
   assertVersionBetween('4.2', '4.3');
 
   uaString = goog.labs.userAgent.testAgents.IPHONE_6;
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIphone());
   assertTrue(goog.labs.userAgent.platform.isIos());
   assertVersion('6.0');
   assertVersionBetween('5', '7');
 
   uaString = goog.labs.userAgent.testAgents.SAFARI_IPHONE_32;
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIphone());
   assertTrue(goog.labs.userAgent.platform.isIos());
   assertVersion('3.2');
@@ -112,7 +94,7 @@ function testIphone() {
 function testIpad() {
   var uaString = goog.labs.userAgent.testAgents.IPAD_4;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIpad());
   assertTrue(goog.labs.userAgent.platform.isIos());
   assertVersion('3.2');
@@ -121,7 +103,7 @@ function testIpad() {
 
   uaString = goog.labs.userAgent.testAgents.IPAD_5;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIpad());
   assertTrue(goog.labs.userAgent.platform.isIos());
   assertVersion('5.1');
@@ -129,7 +111,7 @@ function testIpad() {
 
   uaString = goog.labs.userAgent.testAgents.IPAD_6;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIpad());
   assertTrue(goog.labs.userAgent.platform.isIos());
   assertVersion('6.0');
@@ -139,31 +121,31 @@ function testIpad() {
 function testMac() {
   var uaString = goog.labs.userAgent.testAgents.CHROME_MAC;
   var platform = 'IntelMac';
-  setGlobalUAString(uaString, platform);
-  assertTrue(goog.labs.userAgent.platform.isMac());
+  goog.labs.userAgent.util.setUserAgent(uaString, platform);
+  assertTrue(goog.labs.userAgent.platform.isMacintosh());
   assertVersion('10.8.2');
   assertVersionBetween('10', '11');
   assertVersionBetween('10.8', '10.9');
   assertVersionBetween('10.8.1', '10.8.3');
 
   uaString = goog.labs.userAgent.testAgents.OPERA_MAC;
-  setGlobalUAString(uaString, platform);
-  assertTrue(goog.labs.userAgent.platform.isMac());
+  goog.labs.userAgent.util.setUserAgent(uaString, platform);
+  assertTrue(goog.labs.userAgent.platform.isMacintosh());
   assertVersion('10.6.8');
   assertVersionBetween('10', '11');
   assertVersionBetween('10.6', '10.7');
   assertVersionBetween('10.6.5', '10.7.0');
 
   uaString = goog.labs.userAgent.testAgents.SAFARI_MAC;
-  setGlobalUAString(uaString, platform);
-  assertTrue(goog.labs.userAgent.platform.isMac());
+  goog.labs.userAgent.util.setUserAgent(uaString, platform);
+  assertTrue(goog.labs.userAgent.platform.isMacintosh());
   assertVersionBetween('10', '11');
   assertVersionBetween('10.6', '10.7');
   assertVersionBetween('10.6.5', '10.7.0');
 
   uaString = goog.labs.userAgent.testAgents.FIREFOX_MAC;
-  setGlobalUAString(uaString, platform);
-  assertTrue(goog.labs.userAgent.platform.isMac());
+  goog.labs.userAgent.util.setUserAgent(uaString, platform);
+  assertTrue(goog.labs.userAgent.platform.isMacintosh());
   assertVersion('11.7.9');
   assertVersionBetween('11', '12');
   assertVersionBetween('11.7', '11.8');
@@ -172,75 +154,64 @@ function testMac() {
 
 function testLinux() {
   var uaString = goog.labs.userAgent.testAgents.FIREFOX_LINUX;
-  var platform = 'Linux';
-  setGlobalUAString(uaString, platform);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isLinux());
   assertVersion('');
 
   uaString = goog.labs.userAgent.testAgents.CHROME_LINUX;
-  setGlobalUAString(uaString, platform);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isLinux());
   assertVersion('');
 
   uaString = goog.labs.userAgent.testAgents.OPERA_LINUX;
-  setGlobalUAString(uaString, platform);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isLinux());
   assertVersion('');
 }
 
 function testWindows() {
   var uaString = goog.labs.userAgent.testAgents.SAFARI_WINDOWS;
-  var platform = 'Win32';
-  setGlobalUAString(uaString, platform);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isWindows());
   assertVersion('6.1');
   assertVersionBetween('6', '7');
 
   uaString = goog.labs.userAgent.testAgents.IE_10;
-  setGlobalUAString(uaString, platform);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isWindows());
   assertVersion('6.2');
   assertVersionBetween('6', '6.5');
 
   uaString = goog.labs.userAgent.testAgents.CHROME_25;
-  setGlobalUAString(uaString, platform);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isWindows());
   assertVersion('5.1');
   assertVersionBetween('5', '6');
 
   uaString = goog.labs.userAgent.testAgents.FIREFOX_WINDOWS;
-  setGlobalUAString(uaString, platform);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isWindows());
   assertVersion('6.1');
   assertVersionBetween('6', '7');
 
   uaString = goog.labs.userAgent.testAgents.IE_11;
-  setGlobalUAString(uaString, platform);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isWindows());
   assertVersion('6.3');
   assertVersionBetween('6', '6.5');
 }
 
-function testX11() {
-  var uaString = goog.labs.userAgent.testAgents.CHROME_LINUX;
-  var platform = 'Linux';
-  var appVersion = goog.labs.userAgent.testAgents.CHROME_LINUX_APPVERVERSION;
-  setGlobalUAString(uaString, platform, appVersion);
-  assertTrue(goog.labs.userAgent.platform.isX11());
-  assertVersion('');
-}
-
 function testChromeOS() {
   var uaString = goog.labs.userAgent.testAgents.CHROME_OS_910;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isChromeOS());
   assertVersion('9.10.0');
   assertVersionBetween('9', '10');
 
   uaString = goog.labs.userAgent.testAgents.CHROME_OS;
 
-  setGlobalUAString(uaString);
+  goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isChromeOS());
   assertVersion('3701.62.0');
   assertVersionBetween('3701', '3702');

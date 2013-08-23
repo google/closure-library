@@ -58,3 +58,11 @@ function testExtractVersionTuples() {
   assertSameElements(['Presto', '2.4.18', undefined], tuples[1]);
   assertSameElements(['Version', '10.00', undefined], tuples[2]);
 }
+
+function testSetUserAgent() {
+  var ua = 'Five Finger Death Punch';
+  goog.labs.userAgent.util.setUserAgent(ua);
+  assertEquals(ua, goog.labs.userAgent.util.getUserAgent());
+  assertTrue(goog.labs.userAgent.util.matchUserAgent('Punch'));
+  assertFalse(goog.labs.userAgent.util.matchUserAgent('Mozilla'));
+}

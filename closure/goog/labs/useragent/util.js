@@ -22,19 +22,36 @@
 
 goog.provide('goog.labs.userAgent.util');
 
-goog.require('goog.functions');
 goog.require('goog.string');
 
 
 /**
- * Returns the user agent string.
- *
+ * A possible override for applications which wish to not check
+ * navigator.userAgent but use a specified value for detection instead.
+ * @private {string}
+ */
+goog.labs.userAgent.util.userAgent_ =
+    goog.global['navigator'] ? goog.global['navigator'].userAgent : '';
+
+
+/**
+ * Applications may override browser detection on the built in
+ * navigator.userAgent object by setting this string. Set to null to use the
+ * browser object instead.
+ * @param {?string} userAgent the User-Agent override
+ */
+goog.labs.userAgent.util.setUserAgent = function(userAgent) {
+  goog.labs.userAgent.util.userAgent_ = userAgent ||
+      (goog.global['navigator'] ? goog.global['navigator'].userAgent : '');
+};
+
+
+/**
  * @return {string} The user agent string.
  */
-goog.labs.userAgent.util.getUserAgentString = goog.functions.cacheReturnValue(
-    function() {
-      return goog.global['navigator'] ? goog.global['navigator'].userAgent : '';
-    });
+goog.labs.userAgent.util.getUserAgent = function() {
+  return goog.labs.userAgent.util.userAgent_;
+};
 
 
 /**
@@ -42,8 +59,8 @@ goog.labs.userAgent.util.getUserAgentString = goog.functions.cacheReturnValue(
  * @return {boolean} Whether the user agent contains the given string.
  */
 goog.labs.userAgent.util.matchUserAgent = function(str) {
-  var userAgentString = goog.labs.userAgent.util.getUserAgentString();
-  return goog.string.contains(userAgentString, str);
+  var userAgent = goog.labs.userAgent.util.getUserAgent();
+  return goog.string.contains(userAgent, str);
 };
 
 
