@@ -93,7 +93,7 @@ goog.math.lerp = function(a, b, x) {
 
 /**
  * Tests whether the two values are equal to each other, within a certain
- * tolerance to adjust for floating pount errors.
+ * tolerance to adjust for floating point errors.
  * @param {number} a A number.
  * @param {number} b A number.
  * @param {number=} opt_tolerance Optional tolerance range. Defaults
