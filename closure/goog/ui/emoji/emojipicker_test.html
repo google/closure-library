@@ -12,6 +12,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
+  goog.require('goog.dom.classlist');
   goog.require('goog.events.EventHandler');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
@@ -553,7 +554,7 @@ function checkStructureForNonProgressivePicker(palette, emoji) {
     palette.setSelectedIndex(i);
     var emojiInfo = emoji[1][i];
     var cell = palette.getSelectedItem();
-    var inner = cell.firstChild;
+    var inner = /** @type {Element} */ (cell.firstChild);
 
     // Check that the cell is a div wrapped around something else, and that the
     // outer div contains the goomoji attribute
@@ -570,7 +571,7 @@ function checkStructureForNonProgressivePicker(palette, emoji) {
       var cssClass = spriteInfo.getCssClass();
       if (cssClass) {
         assertTrue('Sprite should have its CSS class set',
-            goog.dom.classes.has(inner, cssClass));
+            goog.dom.classlist.contains(inner, cssClass));
       } else {
         checkPathsEndWithSameFile(
             goog.style.getStyle(inner, 'background-image'),
@@ -608,7 +609,7 @@ function checkStructureForProgressivePicker(palette, emoji) {
     palette.setSelectedIndex(i);
     var emojiInfo = emoji[1][i];
     var cell = palette.getSelectedItem();
-    var inner = cell.firstChild;
+    var inner = /** @type {Element} */ (cell.firstChild);
 
     // Check that the cell is a div wrapped around something else, and that the
     // outer div contains the goomoji attribute
@@ -625,7 +626,7 @@ function checkStructureForProgressivePicker(palette, emoji) {
       if (cssClass) {
         assertEquals("DIV", inner.tagName);
         assertTrue('Sprite should have its CSS class set',
-            goog.dom.classes.has(inner, cssClass));
+            goog.dom.classlist.contains(inner, cssClass));
       } else {
         // There's an inner div wrapping an img tag
         assertEquals("DIV", inner.tagName);
@@ -667,7 +668,7 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
     palette.setSelectedIndex(i);
     var emojiInfo = emoji[1][i];
     var cell = palette.getSelectedItem();
-    var inner = cell.firstChild;
+    var inner = /** @type {Element} */ (cell.firstChild);
 
     // Check that the cell is a div wrapped around something else, and that the
     // outer div contains the goomoji attribute
@@ -699,7 +700,7 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
         var cssClass = spriteInfo.getCssClass();
         if (cssClass) {
           assertTrue('Sprite should have its CSS class set',
-              goog.dom.classes.has(inner, cssClass));
+              goog.dom.classlist.contains(inner, cssClass));
         } else {
           checkPathsEndWithSameFile(
               goog.style.getStyle(inner, 'background-image'),
@@ -737,7 +738,7 @@ function checkPostLoadStructureForFastLoadProgressivePicker(palette, emoji) {
     palette.setSelectedIndex(i);
     var emojiInfo = emoji[1][i];
     var cell = palette.getSelectedItem();
-    var inner = cell.firstChild;
+    var inner = /** @type {Element} */ (cell.firstChild);
 
     // Check that the cell is a div wrapped around something else, and that the
     // outer div contains the goomoji attribute
@@ -767,7 +768,7 @@ function checkPostLoadStructureForFastLoadProgressivePicker(palette, emoji) {
         if (cssClass) {
           assertEquals("DIV", inner.tagName);
           assertTrue('Sprite should have its CSS class set',
-              goog.dom.classes.has(inner, cssClass));
+              goog.dom.classlist.contains(inner, cssClass));
         } else {
           // There's an inner div wrapping an img tag
           assertEquals("DIV", inner.tagName);
