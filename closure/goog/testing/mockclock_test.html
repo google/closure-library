@@ -142,12 +142,13 @@ See the COPYING file for details.
     goog.global.requestAnimationFrame(recFunc);
     clock.tick(50);
     assertEquals(1, recFunc.getCallCount());
-    assertEquals(20, times[0]);
+    assertEquals(goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT, times[0]);
 
+    var now = clock.getCurrentTime();
     goog.global.requestAnimationFrame(recFunc);
     clock.tick(100);
     assertEquals(2, recFunc.getCallCount());
-    assertEquals(70, times[1]);
+    assertEquals(now + goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT, times[1]);
 
     clock.uninstall();
   }

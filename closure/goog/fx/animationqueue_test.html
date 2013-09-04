@@ -11,6 +11,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.fx.Animation</title>
 <script type="text/javascript" src="../base.js"></script>
 <script type="text/javascript">
+  goog.require('goog.async.AnimationDelay');
   goog.require('goog.events');
   goog.require('goog.fx.Animation');
   goog.require('goog.fx.AnimationParallelQueue');
@@ -36,9 +37,9 @@ See the COPYING file for details.
 
   function testParallelEvents() {
     var anim = new goog.fx.AnimationParallelQueue();
-    anim.add(new goog.fx.Animation([0], [100], 200));
-    anim.add(new goog.fx.Animation([0], [100], 400));
-    anim.add(new goog.fx.Animation([0], [100], 600));
+    anim.add(new goog.fx.Animation([0], [100], 20 * goog.async.AnimationDelay.TIMEOUT));
+    anim.add(new goog.fx.Animation([0], [100], 40 * goog.async.AnimationDelay.TIMEOUT));
+    anim.add(new goog.fx.Animation([0], [100], 60 * goog.async.AnimationDelay.TIMEOUT));
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -66,23 +67,23 @@ See the COPYING file for details.
     // PLAY, BEGIN
     anim.play();
     // No queue events.
-    clock.tick(100);
+    clock.tick(10 * goog.async.AnimationDelay.TIMEOUT);
     // PAUSE
     anim.pause();
     // No queue events
-    clock.tick(200);
+    clock.tick(20 * goog.async.AnimationDelay.TIMEOUT);
     // PLAY, RESUME
     anim.play();
     // No queue events.
-    clock.tick(400);
+    clock.tick(40 * goog.async.AnimationDelay.TIMEOUT);
     // END, STOP
     anim.stop();
     // PLAY, BEGIN
     anim.play();
     // No queue events.
-    clock.tick(400);
+    clock.tick(40 * goog.async.AnimationDelay.TIMEOUT);
     // END, FINISH
-    clock.tick(200);
+    clock.tick(20 * goog.async.AnimationDelay.TIMEOUT);
 
     // Make sure the event counts are right.
     assertEquals(3, playEvents);
@@ -96,9 +97,9 @@ See the COPYING file for details.
 
   function testSerialEvents() {
     var anim = new goog.fx.AnimationSerialQueue();
-    anim.add(new goog.fx.Animation([0], [100], 100));
-    anim.add(new goog.fx.Animation([0], [100], 200));
-    anim.add(new goog.fx.Animation([0], [100], 300));
+    anim.add(new goog.fx.Animation([0], [100], 10 * goog.async.AnimationDelay.TIMEOUT));
+    anim.add(new goog.fx.Animation([0], [100], 20 * goog.async.AnimationDelay.TIMEOUT));
+    anim.add(new goog.fx.Animation([0], [100], 30 * goog.async.AnimationDelay.TIMEOUT));
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -126,23 +127,23 @@ See the COPYING file for details.
     // PLAY, BEGIN
     anim.play();
     // No queue events.
-    clock.tick(100);
+    clock.tick(10 * goog.async.AnimationDelay.TIMEOUT);
     // PAUSE
     anim.pause();
     // No queue events
-    clock.tick(200);
+    clock.tick(20 * goog.async.AnimationDelay.TIMEOUT);
     // PLAY, RESUME
     anim.play();
     // No queue events.
-    clock.tick(400);
+    clock.tick(40 * goog.async.AnimationDelay.TIMEOUT);
     // END, STOP
     anim.stop();
     // PLAY, BEGIN
     anim.play(true);
     // No queue events.
-    clock.tick(400);
+    clock.tick(40 * goog.async.AnimationDelay.TIMEOUT);
     // END, FINISH
-    clock.tick(200);
+    clock.tick(20 * goog.async.AnimationDelay.TIMEOUT);
 
     // Make sure the event counts are right.
     assertEquals(3, playEvents);
@@ -156,9 +157,9 @@ See the COPYING file for details.
 
   function testParallelPause() {
     var anim = new goog.fx.AnimationParallelQueue();
-    anim.add(new goog.fx.Animation([0], [100], 100));
-    anim.add(new goog.fx.Animation([0], [100], 200));
-    anim.add(new goog.fx.Animation([0], [100], 300));
+    anim.add(new goog.fx.Animation([0], [100], 10 * goog.async.AnimationDelay.TIMEOUT));
+    anim.add(new goog.fx.Animation([0], [100], 20 * goog.async.AnimationDelay.TIMEOUT));
+    anim.add(new goog.fx.Animation([0], [100], 30 * goog.async.AnimationDelay.TIMEOUT));
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -172,7 +173,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isPlaying());
     assertTrue(anim.isPlaying());
 
-    clock.tick(100);
+    clock.tick(10 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isPlaying());
@@ -186,7 +187,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isPaused());
     assertTrue(anim.isPaused());
 
-    clock.tick(200);
+    clock.tick(20 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isPaused());
@@ -200,7 +201,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isPlaying());
     assertTrue(anim.isPlaying());
 
-    clock.tick(100);
+    clock.tick(10 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -214,7 +215,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isPaused());
     assertTrue(anim.isPaused());
 
-    clock.tick(200);
+    clock.tick(20 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -228,7 +229,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isPlaying());
     assertTrue(anim.isPlaying());
 
-    clock.tick(100);
+    clock.tick(10 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -238,9 +239,9 @@ See the COPYING file for details.
 
   function testSerialPause() {
     var anim = new goog.fx.AnimationSerialQueue();
-    anim.add(new goog.fx.Animation([0], [100], 100));
-    anim.add(new goog.fx.Animation([0], [100], 200));
-    anim.add(new goog.fx.Animation([0], [100], 300));
+    anim.add(new goog.fx.Animation([0], [100], 10 * goog.async.AnimationDelay.TIMEOUT));
+    anim.add(new goog.fx.Animation([0], [100], 20 * goog.async.AnimationDelay.TIMEOUT));
+    anim.add(new goog.fx.Animation([0], [100], 30 * goog.async.AnimationDelay.TIMEOUT));
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -254,7 +255,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isStopped());
     assertTrue(anim.isPlaying());
 
-    clock.tick(100);
+    clock.tick(10 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isPlaying());
@@ -268,7 +269,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isStopped());
     assertTrue(anim.isPaused());
 
-    clock.tick(400);
+    clock.tick(40 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isPaused());
@@ -282,7 +283,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isStopped());
     assertTrue(anim.isPlaying());
 
-    clock.tick(200);
+    clock.tick(20 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -296,7 +297,7 @@ See the COPYING file for details.
     assertTrue(anim.queue[2].isPaused());
     assertTrue(anim.isPaused());
 
-    clock.tick(300);
+    clock.tick(30 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());
@@ -305,7 +306,7 @@ See the COPYING file for details.
 
     anim.play();
 
-    clock.tick(300);
+    clock.tick(30 * goog.async.AnimationDelay.TIMEOUT);
 
     assertTrue(anim.queue[0].isStopped());
     assertTrue(anim.queue[1].isStopped());

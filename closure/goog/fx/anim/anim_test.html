@@ -215,7 +215,7 @@ function testCycleWithMockClockAndAnimationWindow() {
   anim.onAnimationFrame = goog.testing.recordFunction();
 
   goog.fx.anim.registerAnimation(anim);
-  clock.tick(goog.fx.anim.TIMEOUT);
+  clock.tick(goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT);
 
   assertEquals(1, anim.onAnimationFrame.getCallCount());
 }

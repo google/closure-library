@@ -14,6 +14,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.fx.CssSpriteAnimation</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.async.AnimationDelay');
   goog.require('goog.fx.CssSpriteAnimation');
   goog.require('goog.math.Box');
   goog.require('goog.math.Size');
@@ -38,7 +39,7 @@ See the COPYING file for details.
 var el = document.getElementById('test');
 var size = new goog.math.Size(10, 10);
 var box = new goog.math.Box(0, 10, 100, 0);
-var time = 1000;
+var time = 1000 * goog.async.AnimationDelay.TIMEOUT;
 var anim, clock;
 
 function setUpPage() {
@@ -86,30 +87,30 @@ function assertBackgroundPosition(x, y) {
 function testAnimation() {
   assertBackgroundPosition(0, 0);
 
-  clock.tick(5);
+  clock.tick(5 * goog.async.AnimationDelay.TIMEOUT);
   assertBackgroundPosition(0, 0);
 
-  clock.tick(95);
+  clock.tick(95 * goog.async.AnimationDelay.TIMEOUT);
   assertBackgroundPosition(0, -10);
 
-  clock.tick(100);
+  clock.tick(100 * goog.async.AnimationDelay.TIMEOUT);
   assertBackgroundPosition(0, -20);
 
-  clock.tick(300);
+  clock.tick(300 * goog.async.AnimationDelay.TIMEOUT);
   assertBackgroundPosition(0, -50);
 
-  clock.tick(400);
+  clock.tick(400 * goog.async.AnimationDelay.TIMEOUT);
   assertBackgroundPosition(0, -90);
 
   // loop around
-  clock.tick(100);
+  clock.tick(100 * goog.async.AnimationDelay.TIMEOUT);
   assertBackgroundPosition(0, 0);
 }
 
 function testClearSpritePosition() {
   assertBackgroundPosition(0, 0);
 
-  clock.tick(100);
+  clock.tick(100 * goog.async.AnimationDelay.TIMEOUT);
   assertBackgroundPosition(0, -10);
   anim.clearSpritePosition();
 

@@ -11,6 +11,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.fx.Animation</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.async.AnimationDelay');
   goog.require('goog.events');
   goog.require('goog.fx.Animation');
   goog.require('goog.testing.MockClock');
@@ -50,20 +51,20 @@ See the COPYING file for details.
   }
 
   function testPauseOffset() {
-    var anim = new goog.fx.Animation([0], [1000], 1000);
+    var anim = new goog.fx.Animation([0], [1000], 100 * goog.async.AnimationDelay.TIMEOUT);
     anim.play();
 
     assertEquals(0, anim.coords[0]);
     assertRoughlyEquals(0, anim.progress, 1e-4);
 
-    clock.tick(300);
+    clock.tick(30 * goog.async.AnimationDelay.TIMEOUT);
 
     assertEquals(300, anim.coords[0]);
     assertRoughlyEquals(0.3, anim.progress, 1e-4);
 
     anim.pause();
 
-    clock.tick(400);
+    clock.tick(40 * goog.async.AnimationDelay.TIMEOUT);
 
     assertEquals(300, anim.coords[0]);
     assertRoughlyEquals(0.3, anim.progress, 1e-4);
@@ -73,14 +74,14 @@ See the COPYING file for details.
     assertEquals(300, anim.coords[0]);
     assertRoughlyEquals(0.3, anim.progress, 1e-4);
 
-    clock.tick(400);
+    clock.tick(40 * goog.async.AnimationDelay.TIMEOUT);
 
     assertEquals(700, anim.coords[0]);
     assertRoughlyEquals(0.7, anim.progress, 1e-4);
 
     anim.pause();
 
-    clock.tick(300);
+    clock.tick(30 * goog.async.AnimationDelay.TIMEOUT);
 
     assertEquals(700, anim.coords[0]);
     assertRoughlyEquals(0.7, anim.progress, 1e-4);
@@ -92,7 +93,7 @@ See the COPYING file for details.
     assertEquals(700, anim.coords[0]);
     assertRoughlyEquals(0.7, anim.progress, 1e-4);
 
-    clock.tick(300);
+    clock.tick(30 * goog.async.AnimationDelay.TIMEOUT);
 
     assertEquals(1000, anim.coords[0]);
     assertRoughlyEquals(1, anim.progress, 1e-4);

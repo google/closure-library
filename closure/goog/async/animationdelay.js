@@ -105,12 +105,13 @@ goog.async.AnimationDelay.prototype.usingListeners_ = false;
 
 /**
  * Default wait timeout for animations (in milliseconds).  Only used for timed
- * animation, which uses a timer (setTimeout) to schedule animation.
+ * animation, which uses a timer (setTimeout) to schedule animation. The default
+ * is floor(1000 / 60), i.e the nearest integer to acheive 60 FPS.
  *
  * @type {number}
  * @const
  */
-goog.async.AnimationDelay.TIMEOUT = 20;
+goog.async.AnimationDelay.TIMEOUT = 16;
 
 
 /**

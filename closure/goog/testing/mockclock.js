@@ -91,11 +91,12 @@ goog.inherits(goog.testing.MockClock, goog.Disposable);
 
 /**
  * Default wait timeout for mocking requestAnimationFrame (in milliseconds).
- *
+ * Approximate 60fps and use a floating point number to emulate the
+ * requestAnimationFrame API.
  * @type {number}
  * @const
  */
-goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT = 20;
+goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT = (1000 / 60);
 
 
 /**
