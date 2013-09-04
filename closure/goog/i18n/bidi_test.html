@@ -367,6 +367,9 @@ See the COPYING file for details.
     assertEquals(goog.i18n.bidi.Dir.RTL,
                  goog.i18n.bidi.estimateDirection(
                      '\u05d4\u05d3\u05dc\u05ea &amp; &lt; &gt;', true));
+    assertEquals(goog.i18n.bidi.Dir.LTR,
+                 goog.i18n.bidi.estimateDirection(
+                     'foo/<b>\u05d0</b>', true));
   }
 
   var bidi_text = [];

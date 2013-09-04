@@ -224,7 +224,7 @@ goog.i18n.bidi.htmlSkipReg_ = /<[^>]*>|&[^;]+;/g;
  * @private
  */
 goog.i18n.bidi.stripHtmlIfNeeded_ = function(str, opt_isStripNeeded) {
-  return opt_isStripNeeded ? str.replace(goog.i18n.bidi.htmlSkipReg_, ' ') :
+  return opt_isStripNeeded ? str.replace(goog.i18n.bidi.htmlSkipReg_, '') :
       str;
 };
 
