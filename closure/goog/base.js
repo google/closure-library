@@ -58,7 +58,7 @@ goog.global = this;
  *
  * Example:
  * <pre>
- *   var CLOSURE_DEFINES = {'goog.DEBUG', false};
+ *   var CLOSURE_DEFINES = {'goog.DEBUG': false};
  * </pre>
  *
  * @type {Object.<string, (string|number|boolean)>|undefined}
