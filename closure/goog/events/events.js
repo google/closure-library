@@ -44,20 +44,11 @@
  * @see ../demos/stopevent.html
  */
 
-
 // IMPLEMENTATION NOTES:
-// This uses an indirect lookup of listener functions to avoid
-// circular references between DOM (in IE) or XPCOM (in Mozilla)
-// objects which leak memory. Unfortunately, this design is now
-// problematic in modern browsers as it requires a global lookup table
-// in JavaScript. This lookup table needs to be cleaned up manually
-// (by calling #unlisten/#unlistenByKey), otherwise it will cause
-// memory leaks. (This does not apply to goog.events.EventTarget, which
-// no longer uses the global lookup table.)
-//
-// This uses a single lookup table for native event targets.
-//   listenerTree_ maps goog.getUid(src) -> goog.events.ListenerMap.
-
+// goog.events stores an auxiliary data structure on each EventTarget
+// source being listened on. This allows us to take advantage of GC,
+// having the data structure GC'd when the EventTarget is GC'd. This
+// GC behavior is equivalent to using W3C DOM Events directly.
 
 goog.provide('goog.events');
 goog.provide('goog.events.CaptureSimulationMode');
@@ -98,11 +89,12 @@ goog.events.listeners_ = {};
 
 
 /**
- * The root of the listener tree
- * @dict
- * @private {!Object}
+ * Property name on a native event target for the listener map
+ * associated with the event target.
+ * @const
+ * @private
  */
-goog.events.listenerTree_ = {};
+goog.events.LISTENER_MAP_PROP_ = 'closure_lm_' + ((Math.random() * 1e6) | 0);
 
 
 /**
@@ -152,6 +144,13 @@ goog.events.CaptureSimulationMode = {
  *     this is ON.
  */
 goog.define('goog.events.CAPTURE_SIMULATION_MODE', 2);
+
+
+/**
+ * Estimated count of total native listeners.
+ * @private {number}
+ */
+goog.events.listenerCountEstimate_ = 0;
 
 
 /**
@@ -232,10 +231,9 @@ goog.events.listen_ = function(
     }
   }
 
-  var srcUid = goog.getUid(src);
-  var listenerMap = goog.events.listenerTree_[srcUid];
+  var listenerMap = goog.events.getListenerMap_(src);
   if (!listenerMap) {
-    goog.events.listenerTree_[srcUid] = listenerMap =
+    src[goog.events.LISTENER_MAP_PROP_] = listenerMap =
         new goog.events.ListenerMap(src);
   }
 
@@ -266,7 +264,7 @@ goog.events.listen_ = function(
     src.attachEvent(goog.events.getOnString_(type), proxy);
   }
 
-  goog.events.listeners_[listenerObj.key] = listenerObj;
+  goog.events.listenerCountEstimate_++;
   return listenerObj;
 };
 
@@ -438,29 +436,26 @@ goog.events.unlistenByKey = function(key) {
   } else if (src.detachEvent) {
     src.detachEvent(goog.events.getOnString_(type), proxy);
   }
+  goog.events.listenerCountEstimate_--;
 
-  // There are some esoteric situations where the hash code of an object
-  // can change, and we won't be able to find the listenerArray anymore.
-  // For example, if you're listening on a window, and the user navigates to
-  // a different window, the UID will disappear.
-  //
-  // It should be impossible to ever find the original listenerArray, so it
-  // doesn't really matter if we can't clean it up in this case.
   var listenerMap = goog.events.getListenerMap_(
       /** @type {EventTarget} */ (src));
+  // TODO(user): Try to remove this conditional and execute the
+  // first branch always. This should be safe.
   if (listenerMap) {
     listenerMap.removeByKey(listener);
     if (listenerMap.getTypeCount() == 0) {
       // Null the src, just because this is simple to do (and useful
       // for IE <= 7).
       listenerMap.src = null;
-      delete goog.events.listenerTree_[goog.getUid(src)];
+      // We don't use delete here because IE does not allow delete
+      // on a window object.
+      src[goog.events.LISTENER_MAP_PROP_] = null;
     }
   } else {
     listener.markAsRemoved();
   }
 
-  delete goog.events.listeners_[listener.key];
   return true;
 };
 
@@ -494,28 +489,19 @@ goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
  * @return {number} Number of listeners removed.
  */
 goog.events.removeAll = function(opt_obj, opt_type) {
-  if (opt_obj) {
-    if (goog.events.Listenable.isImplementedBy(opt_obj)) {
-      return opt_obj.removeAllListeners(opt_type);
-    }
-    return goog.events.removeAll_(goog.getUid(opt_obj), opt_type);
-  } else {
-    // TODO(user): Remove this branch once opt_obj becomes mandatory.
-    return goog.events.removeAllNativeListeners();
+  // TODO(user): Change the type of opt_obj from Object= to
+  // !EventTarget|goog.events.Listenable). And replace this with an
+  // assertion.
+  if (!opt_obj) {
+    return 0;
   }
-};
 
+  if (goog.events.Listenable.isImplementedBy(opt_obj)) {
+    return opt_obj.removeAllListeners(opt_type);
+  }
 
-/**
- * Removes all listeners from the given source id. If opt_type is
- * specified, it will only remove listeners with matching type.
- * @param {number|string} srcUid The source id.
- * @param {string=} opt_type The listener type to remove.
- * @return {number} The number of removed listeners.
- * @private
- */
-goog.events.removeAll_ = function(srcUid, opt_type) {
-  var listenerMap = goog.events.listenerTree_[srcUid];
+  var listenerMap = goog.events.getListenerMap_(
+      /** @type {EventTarget} */ (opt_obj));
   if (!listenerMap) {
     return 0;
   }
@@ -543,13 +529,12 @@ goog.events.removeAll_ = function(srcUid, opt_type) {
  * elements). In particular, goog.events.Listenable and
  * goog.events.EventTarget listeners will NOT be removed.
  * @return {number} Number of listeners removed.
+ * @deprecated This doesn't do anything, now that Closure no longer
+ * stores a central listener registry.
  */
 goog.events.removeAllNativeListeners = function() {
-  var count = 0;
-  for (var srcUid in goog.events.listenerTree_) {
-    count += goog.events.removeAll_(srcUid);
-  }
-  return count;
+  goog.events.listenerCountEstimate_ = 0;
+  return 0;
 };
 
 
@@ -749,14 +734,13 @@ goog.events.fireListener = function(listener, eventObject) {
 /**
  * Gets the total number of listeners currently in the system.
  * @return {number} Number of listeners.
+ * @deprecated This returns estimated count, now that Closure no longer
+ * stores a central listener registry. We still return an estimation
+ * to keep existing listener-related tests passing. In the near future,
+ * this function will be removed.
  */
 goog.events.getTotalListenerCount = function() {
-  var count = 0;
-  for (var srcUid in goog.events.listenerTree_) {
-    var listenerMap = goog.events.listenerTree_[srcUid];
-    count += listenerMap.getListenerCount();
-  }
-  return count;
+  return goog.events.listenerCountEstimate_;
 };
 
 
@@ -945,18 +929,10 @@ goog.events.getUniqueId = function(identifier) {
  * @private
  */
 goog.events.getListenerMap_ = function(src) {
-  // Try not to modify the object unnecessarily. Current
-  // implementation of goog.events is not safe with respect to element
-  // cloning (cloneNode will also clone the unique id, which results
-  // in the two elements sharing data structure), so we try not to
-  // create unique id unless absolutely necessary.
-  //
-  // TODO(user): This limitation will go away with distributed
-  // listener map, coming soon.
-  if (goog.hasUid(src)) {
-    return goog.events.listenerTree_[goog.getUid(src)] || null;
-  }
-  return null;
+  var listenerMap = src[goog.events.LISTENER_MAP_PROP_];
+  // IE serializes the property as well (e.g. when serializing outer
+  // HTML). So we must check that the value is of the correct type.
+  return listenerMap instanceof goog.events.ListenerMap ? listenerMap : null;
 };
 
 

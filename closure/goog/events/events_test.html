@@ -45,7 +45,7 @@ See the COPYING file for details.
         goog.events.CaptureSimulationMode.ON;
     goog.events.handleBrowserEvent_ = originalHandleBrowserEvent;
     goog.disposeAll(et1, et2, et3);
-    goog.events.removeAllNativeListeners();
+    goog.events.removeAll(document.body);
     propertyReplacer.reset();
   }
 
@@ -378,32 +378,6 @@ See the COPYING file for details.
     goog.events.unlistenByKey(key);
   }
 
-  /**
-   * The behavior of goog.events when a UID changes is undefined.
-   * We just want to make sure we don't throw an exception.
-   */
-  function testUidDisappearanceJsTargets() {
-    var listener = goog.testing.recordFunction();
-    goog.events.listenOnce(et1, 'foo', listener, false);
-
-    goog.removeUid(et1);
-    et1.dispatchEvent('foo');
-    assertEquals(1, listener.getCallCount());
-  }
-
-  /**
-   * The behavior of goog.events when a UID changes is undefined.
-   * We just want to make sure we don't throw an exception.
-   */
-  function testUidDisappearanceBrowserTargets() {
-    var listener = goog.testing.recordFunction();
-    var body = document.body;
-    goog.events.listenOnce(body, 'click', listener);
-
-    goog.removeUid(body);
-    dispatchClick(body);
-  }
-
   function testListenOnceAfterListenDoesNotChangeExistingListener() {
     var listener = goog.testing.recordFunction();
     goog.events.listen(document.body, 'click', listener);
@@ -462,22 +436,6 @@ See the COPYING file for details.
     goog.events.unlisten(document.body, 'click', listener);
     dispatchClick(document.body);
 
-    assertEquals(0, listener.getCallCount());
-  }
-
-  function testRemoveAll() {
-    var listener = goog.testing.recordFunction();
-    var div = document.createElement('div');
-
-    goog.events.listenOnce(document.body, 'click', listener);
-    goog.events.listen(document.body, 'click', listener);
-    goog.events.listenOnce(div, 'click', listener);
-    goog.events.listen(div, 'click', listener);
-
-    goog.events.removeAllNativeListeners();
-
-    dispatchClick(document.body);
-    dispatchClick(div);
     assertEquals(0, listener.getCallCount());
   }
 
@@ -633,21 +591,6 @@ See the COPYING file for details.
     assertTrue(e instanceof goog.asserts.AssertionError);
   }
 
-  function testRemoveAllNativeListeners() {
-    var handler = goog.testing.recordFunction();
-
-    var bodyEl = document.body;
-    var div = document.createElement('div');
-    var et = new goog.events.EventTarget();
-    goog.events.listen(bodyEl, goog.events.EventType.CLICK, handler);
-    goog.events.listen(div, goog.events.EventType.CLICK, handler);
-    goog.events.listen(et, 'test', handler);
-
-    goog.events.removeAllNativeListeners();
-    assertFalse(goog.events.hasListener(bodyEl));
-    assertFalse(goog.events.hasListener(div));
-    assertTrue(goog.events.hasListener(et));
-  }
 
   function testPropagationStoppedDuringCapture() {
     var captureHandler = goog.testing.recordFunction(function(e) {
