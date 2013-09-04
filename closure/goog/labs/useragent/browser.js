@@ -130,6 +130,16 @@ goog.labs.userAgent.browser.isAndroidBrowser =
 
 
 /**
+ * For more information, see:
+ * http://docs.aws.amazon.com/silk/latest/developerguide/user-agent.html
+ * @return {boolean} Whether the user's browser is Silk.
+ */
+goog.labs.userAgent.browser.isSilk = function() {
+  return goog.labs.userAgent.util.matchUserAgent('Silk');
+};
+
+
+/**
  * @return {string} The browser version or empty string if version cannot be
  *     determined. Note that for Internet Explorer, this returns the version of
  *     the browser, not the version of the rendering engine. (IE 8 in

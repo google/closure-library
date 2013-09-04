@@ -212,6 +212,13 @@ function testAndroidBrowser233() {
   assertVersionBetween('3.0', '5.0');
 }
 
+function testSilk() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.KINDLE_FIRE);
+  assertTrue(goog.labs.userAgent.browser.isSilk());
+  assertVersion('2.1');
+}
+
 function assertVersion(version) {
   assertEquals(version, goog.labs.userAgent.browser.getVersion());
 }
