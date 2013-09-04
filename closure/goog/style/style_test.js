@@ -778,6 +778,24 @@ function testGetSizeSvgElements() {
   }
 }
 
+function testGetSizeSvgDocument() {
+  var svgEl = document.createElementNS &&
+      document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  if (!svgEl || svgEl.getAttribute('transform') == '' ||
+      (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher(534.8))) {
+    // SVG not supported, or getBoundingClientRect not supported on SVG
+    // elements.
+    return;
+  }
+
+  var frame = goog.dom.getElement('svg-frame');
+  var doc = goog.dom.getFrameContentDocument(frame);
+  var rect = doc.getElementById('rect');
+  var dims = goog.style.getSize(rect);
+  assertEquals(50, dims.width);
+  assertEquals(50, dims.height);
+}
+
 function testGetSizeInlineBlock() {
   var el = $('height-test-inner');
   var dims = goog.style.getSize(el);

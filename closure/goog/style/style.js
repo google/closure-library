@@ -417,7 +417,7 @@ goog.style.getBoundingClientRect_ = function(el) {
 
   // Patch the result in IE only, so that this function can be inlined if
   // compiled for non-IE.
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.IE && el.ownerDocument.body) {
 
     // In IE, most of the time, 2 extra pixels are added to the top and left
     // due to the implicit 2-pixel inset border.  In IE6/7 quirks mode and

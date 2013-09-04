@@ -17,6 +17,7 @@ See the COPYING file for details.
     maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
 <title>Closure Unit Tests - goog.dom.style</title>
 <script src="../base.js"></script>
+<script>goog.require('goog.userAgent');</script>
 <style>
 
 * {
@@ -523,6 +524,10 @@ Test-visible
 <div id="scaled"></div>
 
 <script>
+if (!goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(9)) {
+  document.write(
+      '<iframe id="svg-frame" src="style_test_rect.svg"></' + 'iframe>');
+}
 goog.require('goog.style_test');
 </script>
 
