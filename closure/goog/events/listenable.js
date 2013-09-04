@@ -99,8 +99,7 @@ goog.events.Listenable.isImplementedBy = function(obj) {
  * listener after a call to listen().
  *
  * @param {string} type Event type or array of event types.
- * @param {!Function} listener Callback method, or an object
- *     with a handleEvent function.
+ * @param {!Function} listener Callback method.
  * @param {boolean=} opt_useCapture Whether to fire in capture phase
  *     (defaults to false).
  * @param {Object=} opt_listenerScope Object in whose scope to call the
@@ -122,8 +121,7 @@ goog.events.Listenable.prototype.listen;
  * still a once listener).
  *
  * @param {string} type Event type or array of event types.
- * @param {!Function} listener Callback method, or an object
- *     with a handleEvent function.
+ * @param {!Function} listener Callback method.
  * @param {boolean=} opt_useCapture Whether to fire in capture phase
  *     (defaults to false).
  * @param {Object=} opt_listenerScope Object in whose scope to call the
@@ -137,8 +135,7 @@ goog.events.Listenable.prototype.listenOnce;
  * Removes an event listener which was added with listen() or listenOnce().
  *
  * @param {string} type Event type or array of event types.
- * @param {!Function} listener Callback method, or an object
- *     with a handleEvent function.
+ * @param {!Function} listener Callback method.
  * @param {boolean=} opt_useCapture Whether to fire in capture phase
  *     (defaults to false).
  * @param {Object=} opt_listenerScope Object in whose scope to call
