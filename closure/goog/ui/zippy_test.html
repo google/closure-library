@@ -16,7 +16,7 @@ See the COPYING file for details.
     goog.require('goog.dom');
     goog.require('goog.a11y.aria');
     goog.require('goog.a11y.aria.State');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.object');
     goog.require('goog.testing.events');
@@ -187,13 +187,14 @@ See the COPYING file for details.
 
   function testCssClassesAndAria() {
     assertTrue('goog-zippy-header is enabled',
-        goog.dom.classes.has(zippy.elHeader_, 'goog-zippy-header'));
+        goog.dom.classlist.contains(zippy.elHeader_, 'goog-zippy-header'));
     assertNotNull(zippy.elHeader_);
     assertEquals('header aria-expanded is false', 'false',
         goog.a11y.aria.getState(zippy.elHeader_, 'expanded'));
     zippy.setExpanded(true);
     assertTrue('goog-zippy-content is enabled',
-        goog.dom.classes.has(zippy.getContentElement(), 'goog-zippy-content'));
+        goog.dom.classlist.contains(zippy.getContentElement(),
+        'goog-zippy-content'));
     assertEquals('header aria role is TAB', 'tab',
         goog.a11y.aria.getRole(zippy.elHeader_));
     assertEquals('header aria-expanded is true', 'true',
@@ -275,8 +276,8 @@ See the COPYING file for details.
   }
 
   function hasCollapseOrExpandClasses(el) {
-    var isCollapsed =  goog.dom.classes.has(el, 'goog-zippy-collapsed');
-    var isExpanded =  goog.dom.classes.has(el, 'goog-zippy-expanded');
+    var isCollapsed =  goog.dom.classlist.contains(el, 'goog-zippy-collapsed');
+    var isExpanded =  goog.dom.classlist.contains(el, 'goog-zippy-expanded');
     return isCollapsed || isExpanded;
   }
 
