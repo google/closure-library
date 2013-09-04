@@ -29,6 +29,7 @@ goog.require('goog.json');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.ForwardChannelRequestPool');
 goog.require('goog.labs.net.webChannel.WebChannelBase');
+goog.require('goog.labs.net.webChannel.WebChannelBaseTransport');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.labs.net.webChannel.requestStats.Stat');
@@ -104,9 +105,8 @@ function stubTmpnetwork() {
  * @param {boolean} spdyEnabled Whether SPDY is enabled for the test.
  */
 function stubSpdyCheck(spdyEnabled) {
-  var enabled = !!spdyEnabled;
   stubs.set(goog.labs.net.webChannel.ForwardChannelRequestPool,
-      enabled,
+      'isSpdyEnabled_',
       function() {
         return spdyEnabled;
       });
@@ -362,7 +362,7 @@ function testFormatArrayOfMaps() {
  */
 function connectForwardChannel(
     opt_serverVersion, opt_hostPrefix, opt_uriPrefix, opt_spdyEnabled) {
-  stubSpdyCheck(opt_spdyEnabled);
+  stubSpdyCheck(!!opt_spdyEnabled);
   var uriPrefix = opt_uriPrefix || '';
   channel.connect(uriPrefix + '/test', uriPrefix + '/bind', null);
   mockClock.tick(0);
@@ -1502,4 +1502,26 @@ function testSetParser() {
 
   assertEquals(1, call3.getArguments().length);
   assertEquals('[[1,["foo"]]]', call3.getArgument(0));
+}
+
+function testSpdyLimitOption() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  stubSpdyCheck(true);
+  var webChannelDefault = webChannelTransport.createWebChannel('/foo');
+  assertEquals(10,
+      webChannelDefault.getRuntimeProperties().getSpdyRequestLimit());
+
+  var options = {'spdyRequestLimit': 100};
+
+  stubSpdyCheck(false);
+  var webChannelDisabled = webChannelTransport.createWebChannel(
+      '/foo', options);
+  assertEquals(1,
+      webChannelDisabled.getRuntimeProperties().getSpdyRequestLimit());
+
+  stubSpdyCheck(true);
+  var webChannelEnabled = webChannelTransport.createWebChannel('/foo', options);
+  assertEquals(100,
+      webChannelEnabled.getRuntimeProperties().getSpdyRequestLimit());
 }

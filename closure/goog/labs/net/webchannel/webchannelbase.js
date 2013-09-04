@@ -55,6 +55,8 @@ var ForwardChannelRequestPool =
  * for now. Ongoing changes to goog.net.BrowserChannel will be back
  * ported to this implementation as needed.
  *
+ * @param {!goog.net.WebChannel.Options=} opt_options Configuration for the
+ *        WebChannel instance.
  * @param {string=} opt_clientVersion An application-specific version number
  *        that is sent to the server when connected.
  * @param {!Array.<string>=} opt_firstTestResults Previously determined results
@@ -65,7 +67,7 @@ var ForwardChannelRequestPool =
  * @struct
  * @implements {goog.labs.net.webChannel.Channel}
  */
-goog.labs.net.webChannel.WebChannelBase = function(
+goog.labs.net.webChannel.WebChannelBase = function(opt_options,
     opt_clientVersion, opt_firstTestResults, opt_secondTestResults) {
   /**
    * The application specific version that is passed to the server.
@@ -335,7 +337,8 @@ goog.labs.net.webChannel.WebChannelBase = function(
    *
    * @private {!ForwardChannelRequestPool}
    */
-  this.forwardChannelRequestPool_ = new ForwardChannelRequestPool();
+  this.forwardChannelRequestPool_ = new ForwardChannelRequestPool(
+      opt_options && opt_options.spdyRequestLimit);
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -518,6 +521,14 @@ WebChannelBase.MAX_MAPS_PER_REQUEST_ = 1000;
  * @type {number}
  */
 WebChannelBase.OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF = 37500;
+
+
+/**
+ * @return {!ForwardChannelRequestPool} The forward channel request pool.
+ */
+WebChannelBase.prototype.getForwardChannelRequestPool = function() {
+  return this.forwardChannelRequestPool_;
+};
 
 
 /**

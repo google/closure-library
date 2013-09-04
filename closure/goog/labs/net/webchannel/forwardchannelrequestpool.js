@@ -34,9 +34,11 @@ var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 /**
  * This class represents the state of all forward channel requests.
  *
+ * @param {number=} opt_maxPoolSize The maximum pool size.
+ *
  * @constructor
  */
-goog.labs.net.webChannel.ForwardChannelRequestPool = function() {
+goog.labs.net.webChannel.ForwardChannelRequestPool = function(opt_maxPoolSize) {
   /**
    * The current size limit of the request pool. This limit is meant to be
    * read-only for an existing channel.
@@ -48,8 +50,10 @@ goog.labs.net.webChannel.ForwardChannelRequestPool = function() {
    * @private
    * @const
    */
-  this.maxSize_ = this.isSpdyEnabled_() ?
-      goog.labs.net.webChannel.ForwardChannelRequestPool.MAX_POOL_SIZE_ : 1;
+  this.maxSize_ = ForwardChannelRequestPool.isSpdyEnabled_() ?
+      (opt_maxPoolSize ? opt_maxPoolSize :
+          goog.labs.net.webChannel.ForwardChannelRequestPool.MAX_POOL_SIZE_) :
+      1;
 
   /**
    * The container for all the pending request objects.
@@ -86,9 +90,9 @@ ForwardChannelRequestPool.MAX_POOL_SIZE_ = 10;
  * @return {boolean} True if SPDY is enabled for the current page.
  * @private
  */
-ForwardChannelRequestPool.prototype.isSpdyEnabled_ = function() {
-  return window.chrome && window.chrome.loadTimes &&
-      window.chrome.loadTimes() && window.chrome.loadTimes().wasFetchViaSpdy;
+ForwardChannelRequestPool.isSpdyEnabled_ = function() {
+  return !!(window.chrome && window.chrome.loadTimes &&
+      window.chrome.loadTimes() && window.chrome.loadTimes().wasFetchedViaSpdy);
 };
 
 

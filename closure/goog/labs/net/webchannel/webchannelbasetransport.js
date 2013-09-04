@@ -78,31 +78,29 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
   /**
    * The underlying channel object.
    *
-   * @type {!WebChannelBase}
-   * @private
+   * @private {!WebChannelBase}
    */
-  this.channel_ = new WebChannelBase();
+  this.channel_ = new WebChannelBase(opt_options);
 
   /**
    * The URL of the target server end-point.
    *
-   * @type {string}
-   * @private
+   * @private {string}
    */
   this.url_ = url;
 
   /**
-   * The channel options.
+   * The test URL of the target server end-point. This value defaults to
+   * this.url_ + '/test'.
    *
-   * @type {?goog.net.WebChannel.Options}
-   * @private
+   * @private {string}
    */
-  this.options_ = opt_options || null;
+  this.testUrl_ = (opt_options && opt_options.testUrl) ? opt_options.testUrl :
+      goog.string.path.join(this.url_, 'test');
 
   /**
    * The logger for this class.
-   * @type {goog.log.Logger}
-   * @private
+   * @private {goog.log.Logger}
    */
   this.logger_ = goog.log.getLogger(
       'goog.labs.net.webChannel.WebChannelBaseTransport');
@@ -123,13 +121,10 @@ WebChannelBaseTransport.Channel.prototype.channelHandler_ = null;
 /**
  * Test path is always set to "/url/test".
  *
- * TODO(user): The test path may be made configurable via the options.
- *
  * @override
  */
 WebChannelBaseTransport.Channel.prototype.open = function() {
-  var testUrl = goog.string.path.join(this.url_, 'test');
-  this.channel_.connect(testUrl, this.url_);
+  this.channel_.connect(this.testUrl_, this.url_);
 
   this.channelHandler_ = new WebChannelBaseTransport.Channel.Handler_(this);
   this.channel_.setHandler(this.channelHandler_);
@@ -208,7 +203,7 @@ goog.inherits(WebChannelBaseTransport.Channel.ErrorEvent,
 
 
 /**
- * Implementation of the {@link WebChannelBase.Handler} interface.
+ * Implementation of {@link WebChannelBase.Handler} interface.
  *
  * @param {!WebChannelBaseTransport.Channel} channel The enclosing WebChannel.
  *
@@ -271,5 +266,41 @@ WebChannelBaseTransport.Channel.Handler_.prototype.channelClosed = function(
   goog.log.info(this.channel_.logger_,
       'WebChannel closed on ' + this.channel_.url_);
   this.channel_.dispatchEvent(goog.net.WebChannel.EventType.CLOSE);
+};
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.Channel.prototype.getRuntimeProperties = function() {
+  return new WebChannelBaseTransport.ChannelProperties(this.channel_);
+};
+
+
+
+/**
+ * Implementation of the {@link goog.net.WebChannel.RuntimeProperties}.
+ *
+ * @param {!WebChannelBase} channel The underlying channel object.
+ *
+ * @constructor
+ * @implements {goog.net.WebChannel.RuntimeProperties}
+ */
+WebChannelBaseTransport.ChannelProperties = function(channel) {
+  /**
+   * The underlying channel object.
+   *
+   * @private {!WebChannelBase}
+   */
+  this.channel_ = channel;
+};
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.getSpdyRequestLimit =
+    function() {
+  return this.channel_.getForwardChannelRequestPool().getMaxSize();
 };
 });  // goog.scope

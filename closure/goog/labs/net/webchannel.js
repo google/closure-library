@@ -60,23 +60,23 @@ goog.net.WebChannel = function() {};
 
 
 /**
- * Configuration spec of a WebChannel (TODO(user): to complete):
- * 1) delivery: ordered, reliable, timeout
- * 2) HTTP: special headers, URI prefix, cross domains
- * 3) debugging: stats, logging
- * 4) pattern: full-duplex, server-client or client-server messaging
- * 5) QoS: priority, throttling,
- * 6) buffer management: batch size, delivery interval
+ * Configuration spec for newly created WebChannel instances.
  *
  * WebChannels are configured in the context of the containing
  * {@link WebChannelTransport}. The configuration parameters are specified
  * when a new instance of WebChannel is created via {@link WebChannelTransport}.
  *
+ * spdyRequestLimit: the maximum number of in-flight HTTP requests allowed
+ *                   when SPDY is enabled. Currently we only detect SPDY
+ *                   in Chrome. This parameter defaults to 10. When SPDY is
+ *                   not enabled, this parameter will have no effect.
+ *
+ * testUrl: the test URL for detecting connectivity during the initial
+ *          handshake. This parameter defaults to "/<channel_url>/test".
+ *
  * @typedef {{
- *   ordered: (boolean|undefined),
- *   reliable: (boolean|undefined),
- *   timeoutMs: (number|undefined),
- *   priority: (number|undefined)
+ *   spdyRequestLimit: (number|undefined),
+ *   testUrl: (string|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
@@ -186,3 +186,29 @@ goog.inherits(goog.net.WebChannel.ErrorEvent, goog.events.Event);
  * @type {!goog.net.WebChannel.ErrorStatus}
  */
 goog.net.WebChannel.ErrorEvent.prototype.status;
+
+
+/**
+ * @return {!goog.net.WebChannel.RuntimeProperties} The runtime properties
+ * of the WebChannel instance.
+ */
+goog.net.WebChannel.prototype.getRuntimeProperties = goog.abstractMethod;
+
+
+
+/**
+ * The readonly runtime properties of the WebChannel instance.
+ *
+ * This class is defined for debugging and monitoring purposes, and for
+ * optimization functions that the application may choose to manage by itself.
+ *
+ * @interface
+ */
+goog.net.WebChannel.RuntimeProperties = function() {};
+
+
+/**
+ * @return {number} The effective request limit for the channel.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.getSpdyRequestLimit =
+    goog.abstractMethod;
