@@ -32,7 +32,7 @@ function setUp() {
 function testMobile() {
   assertIsMobile(goog.labs.userAgent.testAgents.ANDROID_BROWSER_235);
   assertIsMobile(goog.labs.userAgent.testAgents.CHROME_ANDROID);
-  assertIsMobile(goog.labs.userAgent.testAgents.SAFARI_IPHONE);
+  assertIsMobile(goog.labs.userAgent.testAgents.SAFARI_IPHONE_6);
 }
 
 function testTablet() {

@@ -104,11 +104,18 @@ function testWebKit() {
   assertVersion('536.25');
   assertLowAndHighVersions('536.0', '537.0');
 
-  goog.labs.userAgent.util.setUserAgent(testAgents.SAFARI_IPHONE);
+  goog.labs.userAgent.util.setUserAgent(testAgents.SAFARI_IPHONE_6);
   assertTrue(goog.labs.userAgent.engine.isWebKit());
   assertFalse(goog.labs.userAgent.engine.isGecko());
-  assertVersion('533.17.9');
-  assertLowAndHighVersions('533.0', '534.0');
+  assertVersion('536.26');
+  assertLowAndHighVersions('536.0', '537.0');
+}
+
+function testOpera15() {
+  goog.labs.userAgent.util.setUserAgent(testAgents.OPERA_15);
+  assertTrue(goog.labs.userAgent.engine.isWebKit());
+  assertFalse(goog.labs.userAgent.engine.isPresto());
+  assertVersion('537.36');
 }
 
 function testGecko() {

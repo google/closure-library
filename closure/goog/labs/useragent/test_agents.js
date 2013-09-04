@@ -130,7 +130,14 @@ testAgents.SAFARI_6 =
 
 
 /** @const {string} */
-testAgents.SAFARI_IPHONE =
+testAgents.SAFARI_IPHONE_32 =
+    'Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us)' +
+    ' AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314' +
+    ' Safari/531.21.10';
+
+
+/** @const {string} */
+testAgents.SAFARI_IPHONE_421 =
     'Mozilla/5.0 (iPhone; U; ru; CPU iPhone OS 4_2_1 like Mac OS X; ru)' +
     ' AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148a' +
     ' Safari/6533.18.5';
@@ -144,10 +151,10 @@ testAgents.SAFARI_IPHONE_431 =
 
 
 /** @const {string} */
-testAgents.SAFARI_IPHONE_32 =
-    'Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us)' +
-    ' AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314' +
-    ' Safari/531.21.10';
+testAgents.SAFARI_IPHONE_6 =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X)' +
+    ' AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e' +
+    ' Safari/8536.25';
 
 
 /** @const {string} */
@@ -186,10 +193,9 @@ testAgents.OPERA_MAC =
 
 
 /** @const {string} */
-testAgents.IPHONE_6 =
-    'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 ' +
-    'like Mac OS X) AppleWebKit/536.26 ' +
-    '(KHTML, like Gecko) Mobile/10A5376e';
+testAgents.OPERA_15 =
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 ' +
+    '(KHTML, like Gecko) Chrome/28.0.1500.52 Safari/537.36 OPR/15.0.1147.100';
 
 
 /** @const {string} */

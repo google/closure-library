@@ -67,8 +67,8 @@ goog.labs.userAgent.util.matchUserAgent = function(str) {
 /**
  * Parses the user agent into tuples for each section.
  * @param {string} userAgent
- * @return {!Array.<string>} Tuples of key, version, and the contents of the
- *     parenthetical.
+ * @return {!Array.<!Array.<string>>} Tuples of key, version, and the contents
+ *     of the parenthetical.
  */
 goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {
   // Matches each section of a user agent string.

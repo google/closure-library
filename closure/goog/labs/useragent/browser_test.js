@@ -53,6 +53,14 @@ function testOperaLinux() {
   assertVersionBetween('11.00', '12.00');
 }
 
+function testOpera15() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.OPERA_15);
+  assertTrue(goog.labs.userAgent.browser.isOpera());
+  assertVersion('15.0.1147.100');
+  assertVersionBetween('15.00', '16.00');
+}
+
 function testIE6() {
   goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_6);
   assertTrue(goog.labs.userAgent.browser.isIE());
@@ -182,10 +190,10 @@ function testSafari6() {
 
 function testSafariIphone() {
   goog.labs.userAgent.util.setUserAgent(
-      goog.labs.userAgent.testAgents.SAFARI_IPHONE);
+      goog.labs.userAgent.testAgents.SAFARI_IPHONE_6);
   assertTrue(goog.labs.userAgent.browser.isSafari());
-  assertVersion('5.0.2');
-  assertVersionBetween('5.0', '6.0');
+  assertVersion('6.0');
+  assertVersionBetween('5.0', '7.0');
 }
 
 function testAndroidBrowser235() {

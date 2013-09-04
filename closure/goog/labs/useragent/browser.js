@@ -23,6 +23,7 @@
 
 goog.provide('goog.labs.userAgent.browser');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.string');
@@ -33,7 +34,8 @@ goog.require('goog.string');
  * @private
  */
 goog.labs.userAgent.browser.matchOpera_ = function() {
-  return goog.labs.userAgent.util.matchUserAgent('Opera');
+  return goog.labs.userAgent.util.matchUserAgent('Opera') ||
+      goog.labs.userAgent.util.matchUserAgent('OPR');
 };
 
 
@@ -153,17 +155,16 @@ goog.labs.userAgent.browser.getVersion = function() {
   // Special case IE since IE's version is inside the parenthesis and
   // without the '/'.
   if (goog.labs.userAgent.browser.isIE()) {
-    return goog.labs.userAgent.browser.getIEVersion_();
+    return goog.labs.userAgent.browser.getIEVersion_(userAgentString);
   }
 
-  var versionTuples = goog.labs.userAgent.util.extractVersionTuples(
-      userAgentString);
-  // tuples[2] (The first X/Y tuple after the parenthesis) contains the
-  // browser version number.
-  // TODO (vbhasin): Make this check more robust.
-  goog.asserts.assert(versionTuples.length > 2,
-      'Couldn\'t extract version tuple from user agent string');
-  return goog.isDef(versionTuples[2][1]) ? versionTuples[2][1] : '';
+  if (goog.labs.userAgent.browser.isOpera()) {
+    return goog.labs.userAgent.browser.getOperaVersion_(userAgentString);
+  }
+
+  var versionTuples =
+      goog.labs.userAgent.util.extractVersionTuples(userAgentString);
+  return goog.labs.userAgent.browser.getVersionFromTuples_(versionTuples);
 };
 
 
@@ -185,19 +186,19 @@ goog.labs.userAgent.browser.isVersionOrHigher = function(version) {
  * http://blogs.msdn.com/b/ie/archive/2010/03/23/introducing-ie9-s-user-agent-string.aspx
  * http://blogs.msdn.com/b/ie/archive/2009/01/09/the-internet-explorer-8-user-agent-string-updated-edition.aspx
  *
+ * @param {string} userAgent the User-Agent.
  * @return {string}
  * @private
  */
-goog.labs.userAgent.browser.getIEVersion_ = function() {
+goog.labs.userAgent.browser.getIEVersion_ = function(userAgent) {
   var version = '';
-  var userAgentString = goog.labs.userAgent.util.getUserAgent();
-  var arr = /\b(?:MSIE|rv)[: ]([^\);]+)(?:\)|;)/.exec(userAgentString);
+  var arr = /\b(?:MSIE|rv)[: ]([^\);]+)(?:\)|;)/.exec(userAgent);
   if (arr && arr[1]) {
     if (arr[1] == '7.0') {
       // IE in compatibility mode identifies itself as MSIE 7.0. Here we use the
       // Trident version to determine the version of IE. For more details, see
       // the links above.
-      var tridentVersion = /Trident\/(\d.\d)/.exec(userAgentString);
+      var tridentVersion = /Trident\/(\d.\d)/.exec(userAgent);
       if (tridentVersion && tridentVersion[1]) {
         switch (tridentVersion[1]) {
           case '4.0':
@@ -218,4 +219,40 @@ goog.labs.userAgent.browser.getIEVersion_ = function() {
     }
   }
   return version;
+};
+
+
+/**
+ * Determines Opera version. More information:
+ * http://my.opera.com/ODIN/blog/2013/07/15/opera-user-agent-strings-opera-15-and-beyond
+ *
+ * @param {string} userAgent The User-Agent.
+ * @return {string}
+ * @private
+ */
+goog.labs.userAgent.browser.getOperaVersion_ = function(userAgent) {
+  var versionTuples =
+      goog.labs.userAgent.util.extractVersionTuples(userAgent);
+  var lastTuple = goog.array.peek(versionTuples);
+  if (lastTuple[0] == 'OPR' && lastTuple[1]) {
+    return lastTuple[1];
+  }
+
+  return goog.labs.userAgent.browser.getVersionFromTuples_(versionTuples);
+};
+
+
+/**
+ * Nearly all User-Agents start with Mozilla/N.0. This looks at the second tuple
+ * for the actual browser version number.
+ * @param {!Array.<!Array.<string>>} versionTuples
+ * @return {string} The version or empty string if it cannot be determined.
+ * @private
+ */
+goog.labs.userAgent.browser.getVersionFromTuples_ = function(versionTuples) {
+  // versionTuples[2] (The first X/Y tuple after the parenthesis) contains the
+  // browser version number.
+  goog.asserts.assert(versionTuples.length > 2,
+      'Couldn\'t extract version tuple from user agent string');
+  return versionTuples[2] && versionTuples[2][1] ? versionTuples[2][1] : '';
 };

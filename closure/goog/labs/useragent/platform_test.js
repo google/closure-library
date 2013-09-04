@@ -68,7 +68,7 @@ function testIpod() {
 }
 
 function testIphone() {
-  var uaString = goog.labs.userAgent.testAgents.SAFARI_IPHONE;
+  var uaString = goog.labs.userAgent.testAgents.SAFARI_IPHONE_421;
   goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIphone());
   assertTrue(goog.labs.userAgent.platform.isIos());
@@ -76,7 +76,7 @@ function testIphone() {
   assertVersionBetween('4', '5');
   assertVersionBetween('4.2', '4.3');
 
-  uaString = goog.labs.userAgent.testAgents.IPHONE_6;
+  uaString = goog.labs.userAgent.testAgents.SAFARI_IPHONE_6;
   goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isIphone());
   assertTrue(goog.labs.userAgent.platform.isIos());
