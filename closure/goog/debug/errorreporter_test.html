@@ -44,6 +44,7 @@ See the COPYING file for details.
 
   function setUp() {
     stubs.set(goog.labs.net, 'xhr', MockXhr);
+    goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT = true;
   }
 
   function tearDown() {
@@ -346,6 +347,14 @@ See the COPYING file for details.
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
     assertEquals('trace=trace&context.foo=bar', MockXhr.lastContent);
+  }
+
+  function testAttemptAutoProtectWithAllowAutoProtectOff() {
+    goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT = false;
+    assertThrows(function() {
+      errorReporter = new goog.debug.ErrorReporter(
+          '/log', function(e, context) {}, false);
+    });
   }
 
   function testSetAdditionalArgumentsArgsEmptyObject() {
