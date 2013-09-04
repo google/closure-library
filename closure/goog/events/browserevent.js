@@ -218,7 +218,7 @@ goog.events.BrowserEvent.prototype.state;
 
 /**
  * Whether the default platform modifier key was pressed at time of event.
- * (This is control for all platforms except Mac, where it's Meta.
+ * (This is control for all platforms except Mac, where it's Meta.)
  * @type {boolean}
  */
 goog.events.BrowserEvent.prototype.platformModifierKey = false;
