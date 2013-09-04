@@ -148,6 +148,14 @@ goog.testing.TestCase.Order = {
 
 
 /**
+ * @return {string} The name of the test.
+ */
+goog.testing.TestCase.prototype.getName = function() {
+  return this.name_;
+};
+
+
+/**
  * The maximum amount of time that the test can run before we force it to be
  * async.  This prevents the test runner from blocking the browser and
  * potentially hurting the Selenium test harness.
@@ -275,14 +283,6 @@ goog.testing.TestCase.prototype.onCompleteCallback_ = null;
 
 
 /**
- * The test runner that is running this case.
- * @type {goog.testing.TestRunner}
- * @private
- */
-goog.testing.TestCase.prototype.testRunner_ = null;
-
-
-/**
  * Adds a new test to the test case.
  * @param {goog.testing.TestCase.Test} test The test to add.
  */
@@ -309,7 +309,7 @@ goog.testing.TestCase.prototype.add = function(test) {
  */
 goog.testing.TestCase.prototype.addNewTest = function(name, ref, opt_scope) {
   var test = new goog.testing.TestCase.Test(name, ref, opt_scope || this);
-  this.tests_.push(test);
+  this.add(test);
 };
 
 
@@ -388,15 +388,6 @@ goog.testing.TestCase.prototype.setCompletedCallback = function(fn) {
 
 
 /**
- * Sets the test runner that is running this test case.
- * @param {goog.testing.TestRunner} tr The test runner.
- */
-goog.testing.TestCase.prototype.setTestRunner = function(tr) {
-  this.testRunner_ = tr;
-};
-
-
-/**
  * Can be overridden in test classes to indicate whether the tests in a case
  * should be run in that particular situation.  For example, this could be used
  * to stop tests running in a particular browser, where browser support for
@@ -461,9 +452,9 @@ goog.testing.TestCase.prototype.finalize = function() {
   this.running = false;
   this.result_.runTime = this.endTime_ - this.startTime_;
   this.result_.numFilesLoaded = this.countNumFilesLoaded_();
+  this.result_.complete = true;
 
   this.log(this.result_.getSummary());
-
   if (this.result_.isSuccess()) {
     this.log('Tests complete');
   } else {
@@ -537,22 +528,28 @@ goog.testing.TestCase.prototype.isSuccess = function() {
  */
 goog.testing.TestCase.prototype.getReport = function(opt_verbose) {
   var rv = [];
-  if (this.testRunner_ && !this.testRunner_.isFinished()) {
+
+  if (this.running) {
     rv.push(this.name_ + ' [RUNNING]');
   } else {
-    var success = this.result_.isSuccess() && !this.testRunner_.hasErrors();
-    rv.push(this.name_ + ' [' + (success ? 'PASSED' : 'FAILED') + ']');
+    var label = this.result_.isSuccess() ? 'PASSED' : 'FAILED';
+    rv.push(this.name_ + ' [' + label + ']');
   }
+
   if (goog.global.location) {
     rv.push(this.trimPath_(goog.global.location.href));
   }
+
   rv.push(this.result_.getSummary());
+
   if (opt_verbose) {
     rv.push('.', this.result_.messages.join('\n'));
   } else if (!this.result_.isSuccess()) {
     rv.push(this.result_.errors.join('\n'));
   }
+
   rv.push(' ');
+
   return rv.join('\n');
 };
 
@@ -1087,7 +1084,6 @@ goog.testing.TestCase.Test.prototype.execute = function() {
  * @constructor
  */
 goog.testing.TestCase.Result = function(testCase) {
-
   /**
    * The test case that owns this result.
    * @type {goog.testing.TestCase}
@@ -1142,15 +1138,21 @@ goog.testing.TestCase.Result = function(testCase) {
 
   /**
    * Errors encountered while running the test.
-   * @type {Array.<goog.testing.TestCase.Error>}
+   * @type {!Array.<goog.testing.TestCase.Error>}
    */
   this.errors = [];
 
   /**
    * Messages to show the user after running the test.
-   * @type {Array.<string>}
+   * @type {!Array.<string>}
    */
   this.messages = [];
+
+  /**
+   * Whether the tests have completed.
+   * @type {boolean}
+   */
+  this.complete = false;
 };
 
 
@@ -1158,11 +1160,7 @@ goog.testing.TestCase.Result = function(testCase) {
  * @return {boolean} Whether the test was successful.
  */
 goog.testing.TestCase.Result.prototype.isSuccess = function() {
-  var noErrors = this.runCount == this.successCount && this.errors.length == 0;
-  if (noErrors && !this.testSuppressed && this.isStrict()) {
-    return this.runCount > 0;
-  }
-  return noErrors;
+  return this.complete && this.errors.length == 0;
 };
 
 
@@ -1175,12 +1173,6 @@ goog.testing.TestCase.Result.prototype.getSummary = function() {
       this.runTime + 'ms.\n';
   if (this.testSuppressed) {
     summary += 'Tests not run because shouldRunTests() returned false.';
-  } else if (this.runCount == 0) {
-    summary += 'No tests found.  ';
-    if (this.isStrict()) {
-      summary +=
-          'Call G_testRunner.setStrict(false) if this is expected behavior.  ';
-    }
   } else {
     var failures = this.totalCount - this.successCount;
     var suppressionMessage = '';
@@ -1214,15 +1206,6 @@ goog.testing.TestCase.initializeTestRunner = function(testCase) {
     throw Error('G_testRunner is undefined. Please ensure goog.testing.jsunit' +
         ' is included.');
   }
-};
-
-
-/**
- * Determines whether the test result should report failure if no tests are run.
- * @return {boolean} Whether this is strict.
- */
-goog.testing.TestCase.Result.prototype.isStrict = function() {
-  return this.testCase_.testRunner_.isStrict();
 };
 
 
