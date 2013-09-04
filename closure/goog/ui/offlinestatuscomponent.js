@@ -24,11 +24,11 @@ goog.provide('goog.ui.OfflineStatusComponent.StatusClassNames');
 
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventType');
-goog.require('goog.gears.StatusType');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.Overflow');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.GearsStatusType');
 goog.require('goog.ui.OfflineStatusCard');
 goog.require('goog.ui.Popup');
 
@@ -71,16 +71,16 @@ goog.ui.OfflineStatusComponent.prototype.dirty_ = false;
 
 /**
  * The status of the component.
- * @type {goog.gears.StatusType}
+ * @type {goog.ui.GearsStatusType}
  * @private
  */
 goog.ui.OfflineStatusComponent.prototype.status_ =
-    goog.gears.StatusType.NOT_INSTALLED;
+    goog.ui.GearsStatusType.NOT_INSTALLED;
 
 
 /**
  * The status of the component that is displayed.
- * @type {goog.gears.StatusType?}
+ * @type {goog.ui.GearsStatusType?}
  * @private
  */
 goog.ui.OfflineStatusComponent.prototype.displayedStatus_ = null;
@@ -177,7 +177,7 @@ goog.ui.OfflineStatusComponent.prototype.MSG_OFFLINE_STATUS_ERROR_TITLE_ =
 
 /**
  * Gets the status of the offline component of the app.
- * @return {goog.gears.StatusType} The offline status.
+ * @return {goog.ui.GearsStatusType} The offline status.
  */
 goog.ui.OfflineStatusComponent.prototype.getStatus = function() {
   return this.status_;
@@ -186,7 +186,7 @@ goog.ui.OfflineStatusComponent.prototype.getStatus = function() {
 
 /**
  * Sets the status of the offline component of the app.
- * @param {goog.gears.StatusType} status The offline
+ * @param {goog.ui.GearsStatusType} status The offline
  *     status.
  */
 goog.ui.OfflineStatusComponent.prototype.setStatus = function(status) {
@@ -209,7 +209,7 @@ goog.ui.OfflineStatusComponent.prototype.setStatus = function(status) {
 /**
  * Returns whether the given status is different from the currently
  * recorded status.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  * @return {boolean} Whether the status is different.
  */
 goog.ui.OfflineStatusComponent.prototype.isStatusDifferent = function(status) {
@@ -343,7 +343,7 @@ goog.ui.OfflineStatusComponent.prototype.update = function() {
 
 /**
  * Gets the messaging info for the given status.
- * @param {goog.gears.StatusType} status Status to get the message info for.
+ * @param {goog.ui.GearsStatusType} status Status to get the message info for.
  * @return {Object} Object that has three properties - text (string),
  *     textIsHtml (boolean), and title (string).
  */
@@ -353,24 +353,24 @@ goog.ui.OfflineStatusComponent.prototype.getMessageInfo = function(status) {
   var textIsHtml = true;
 
   switch (status) {
-    case goog.gears.StatusType.NOT_INSTALLED:
-    case goog.gears.StatusType.INSTALLED:
+    case goog.ui.GearsStatusType.NOT_INSTALLED:
+    case goog.ui.GearsStatusType.INSTALLED:
       text = this.MSG_OFFLINE_NEW_FEATURE_;
       textIsHtml = false;
       break;
-    case goog.gears.StatusType.PAUSED:
+    case goog.ui.GearsStatusType.PAUSED:
       title = this.MSG_OFFLINE_STATUS_PAUSED_TITLE_;
       break;
-    case goog.gears.StatusType.OFFLINE:
+    case goog.ui.GearsStatusType.OFFLINE:
       title = this.MSG_OFFLINE_STATUS_OFFLINE_TITLE_;
       break;
-    case goog.gears.StatusType.ONLINE:
+    case goog.ui.GearsStatusType.ONLINE:
       title = this.MSG_OFFLINE_STATUS_ONLINE_TITLE_;
       break;
-    case goog.gears.StatusType.SYNCING:
+    case goog.ui.GearsStatusType.SYNCING:
       title = this.MSG_OFFLINE_STATUS_SYNCING_TITLE_;
       break;
-    case goog.gears.StatusType.ERROR:
+    case goog.ui.GearsStatusType.ERROR:
       title = this.MSG_OFFLINE_STATUS_ERROR_TITLE_;
       break;
     default:
@@ -383,7 +383,7 @@ goog.ui.OfflineStatusComponent.prototype.getMessageInfo = function(status) {
 
 /**
  * Gets the CSS className for the given status.
- * @param {goog.gears.StatusType} status Status to get the className for.
+ * @param {goog.ui.GearsStatusType} status Status to get the className for.
  * @return {string} The className.
  * @private
  */
@@ -391,27 +391,27 @@ goog.ui.OfflineStatusComponent.prototype.getStatusClassName_ = function(
     status) {
   var className = '';
   switch (status) {
-    case goog.gears.StatusType.NOT_INSTALLED:
+    case goog.ui.GearsStatusType.NOT_INSTALLED:
       className =
           goog.ui.OfflineStatusComponent.StatusClassNames.NOT_INSTALLED;
       break;
-    case goog.gears.StatusType.INSTALLED:
+    case goog.ui.GearsStatusType.INSTALLED:
       className = goog.ui.OfflineStatusComponent.StatusClassNames.INSTALLED;
       break;
-    case goog.gears.StatusType.PAUSED:
+    case goog.ui.GearsStatusType.PAUSED:
       className = goog.ui.OfflineStatusComponent.StatusClassNames.PAUSED;
       break;
-    case goog.gears.StatusType.OFFLINE:
+    case goog.ui.GearsStatusType.OFFLINE:
       className = goog.ui.OfflineStatusComponent.StatusClassNames.OFFLINE;
       break;
-    case goog.gears.StatusType.ONLINE:
+    case goog.ui.GearsStatusType.ONLINE:
       className = goog.ui.OfflineStatusComponent.StatusClassNames.ONLINE;
       break;
-    case goog.gears.StatusType.SYNCING:
-    case goog.gears.StatusType.CAPTURING:
+    case goog.ui.GearsStatusType.SYNCING:
+    case goog.ui.GearsStatusType.CAPTURING:
       className = goog.ui.OfflineStatusComponent.StatusClassNames.SYNCING;
       break;
-    case goog.gears.StatusType.ERROR:
+    case goog.ui.GearsStatusType.ERROR:
       className = goog.ui.OfflineStatusComponent.StatusClassNames.ERROR;
       break;
     default:
@@ -440,8 +440,8 @@ goog.ui.OfflineStatusComponent.prototype.handleClick_ = function(e) {
 goog.ui.OfflineStatusComponent.prototype.performAction = function() {
   var status = this.getStatus();
 
-  if (status == goog.gears.StatusType.NOT_INSTALLED ||
-      status == goog.gears.StatusType.INSTALLED) {
+  if (status == goog.ui.GearsStatusType.NOT_INSTALLED ||
+      status == goog.ui.GearsStatusType.INSTALLED) {
     this.performEnableAction();
   } else {
     this.performStatusAction();

@@ -18,15 +18,20 @@
  *
  */
 
-goog.provide('goog.gears.StatusType');
+goog.provide('goog.ui.GearsStatusType');
 
 
 /**
- * The possible status type's for Gears.
+ * The possible status types for Gears.
+ *
+ * This is branched from goog.gears.StatusType as goog.ui.OfflineStatusCard
+ * and goog.ui.OfflineStatusComponent are still in use and rely on these status
+ * codes.
+ *
  * @enum {string}
  * @deprecated Gears is discontinued.
  */
-goog.gears.StatusType = {
+goog.ui.GearsStatusType = {
   NOT_INSTALLED: 'ni',
   INSTALLED: 'i',
   PAUSED: 'p',

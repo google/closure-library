@@ -25,10 +25,10 @@ goog.provide('goog.ui.OfflineStatusCard.EventType');
 
 goog.require('goog.dom');
 goog.require('goog.events.EventType');
-goog.require('goog.gears.StatusType');
 goog.require('goog.structs.Map');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.GearsStatusType');
 goog.require('goog.ui.ProgressBar');
 
 
@@ -80,11 +80,11 @@ goog.ui.OfflineStatusCard.prototype.dirty = false;
 
 /**
  * The status of the component.
- * @type {goog.gears.StatusType}
+ * @type {goog.ui.GearsStatusType}
  * @private
  */
 goog.ui.OfflineStatusCard.prototype.status_ =
-    goog.gears.StatusType.NOT_INSTALLED;
+    goog.ui.GearsStatusType.NOT_INSTALLED;
 
 
 /**
@@ -237,7 +237,7 @@ goog.ui.OfflineStatusCard.prototype.getProgressBar = function() {
 
 /**
  * Gets the status of the offline component of the app.
- * @return {goog.gears.StatusType} The offline status.
+ * @return {goog.ui.GearsStatusType} The offline status.
  */
 goog.ui.OfflineStatusCard.prototype.getStatus = function() {
   return this.status_;
@@ -246,7 +246,7 @@ goog.ui.OfflineStatusCard.prototype.getStatus = function() {
 
 /**
  * Sets the status of the offline component of the app.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  */
 goog.ui.OfflineStatusCard.prototype.setStatus = function(status) {
   if (this.status_ != status) {
@@ -356,7 +356,7 @@ goog.ui.OfflineStatusCard.prototype.update = function() {
 
 /**
  * Set the message to display in the status portion of the card.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  */
 goog.ui.OfflineStatusCard.prototype.configureStatusElement = function(status) {
   /**
@@ -371,7 +371,7 @@ goog.ui.OfflineStatusCard.prototype.configureStatusElement = function(status) {
 
 /**
  * Set the action element to show correct action(s) for a particular status.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  */
 goog.ui.OfflineStatusCard.prototype.configureActionLinks = function(status) {
   // Configure the action element.
@@ -412,7 +412,7 @@ goog.ui.OfflineStatusCard.prototype.createLinkNode_ = function(
 
 /**
  * Configure the progress bar element.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  */
 goog.ui.OfflineStatusCard.prototype.configureProgressElement =
     function(status) {
@@ -426,12 +426,12 @@ goog.ui.OfflineStatusCard.prototype.configureProgressElement =
 
 /**
  * Returns true if we want to display a progress bar.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  * @return {boolean} Whether we want to display a progress bar.
  */
 goog.ui.OfflineStatusCard.prototype.shouldShowProgressBar = function(status) {
-  return status == goog.gears.StatusType.SYNCING ||
-      status == goog.gears.StatusType.CAPTURING;
+  return status == goog.ui.GearsStatusType.SYNCING ||
+      status == goog.ui.GearsStatusType.CAPTURING;
 };
 
 
@@ -487,36 +487,36 @@ goog.ui.OfflineStatusCard.prototype.getProgressStatusMessage = function() {
 
 /**
  * Gets the status message for the given status.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  * @return {string} The status message.
  */
 goog.ui.OfflineStatusCard.prototype.getStatusMessage = function(status) {
   var message = '';
 
   switch (status) {
-    case goog.gears.StatusType.OFFLINE:
+    case goog.ui.GearsStatusType.OFFLINE:
       /** @desc Status shown when the app is offline. */
       var MSG_OFFLINE_STATUS_OFFLINE_MESSAGE = goog.getMsg(
           'Offline. No connection available.');
       message = MSG_OFFLINE_STATUS_OFFLINE_MESSAGE;
       break;
-    case goog.gears.StatusType.ONLINE:
+    case goog.ui.GearsStatusType.ONLINE:
       /** @desc Status shown when the app is online. */
       var MSG_OFFLINE_STATUS_ONLINE_MESSAGE = goog.getMsg('Online');
       message = MSG_OFFLINE_STATUS_ONLINE_MESSAGE;
       break;
-    case goog.gears.StatusType.SYNCING:
+    case goog.ui.GearsStatusType.SYNCING:
       /** @desc Status shown when the app is synchronizing. */
       var MSG_OFFLINE_STATUS_SYNCING_MESSAGE = goog.getMsg('Synchronizing...');
       message = MSG_OFFLINE_STATUS_SYNCING_MESSAGE;
       break;
-    case goog.gears.StatusType.CAPTURING:
+    case goog.ui.GearsStatusType.CAPTURING:
       /** @desc Status shown when the app is capturing resources. */
       var MSG_OFFLINE_STATUS_CAPTURING_MESSAGE = goog.getMsg(
           'Updating software...');
       message = MSG_OFFLINE_STATUS_CAPTURING_MESSAGE;
       break;
-    case goog.gears.StatusType.ERROR:
+    case goog.ui.GearsStatusType.ERROR:
       /** @desc Status shown when an error has occured. */
       var MSG_OFFLINE_STATUS_ERROR_MESSAGE = goog.getMsg(
           'Errors have been found.');
@@ -531,7 +531,7 @@ goog.ui.OfflineStatusCard.prototype.getStatusMessage = function(status) {
 
 /**
  * Gets the action to display for the given status.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  * @return {Array.<Object>?} An array of action objects to display.
  */
 goog.ui.OfflineStatusCard.prototype.getActions = function(status) {
@@ -554,7 +554,7 @@ goog.ui.OfflineStatusCard.prototype.createActionObject = function(
 
 /**
  * Gets the additional message to display for the given status.
- * @param {goog.gears.StatusType} status The offline status.
+ * @param {goog.ui.GearsStatusType} status The offline status.
  * @return {string} The additional message.
  */
 goog.ui.OfflineStatusCard.prototype.getAdditionalMessage = function(status) {
