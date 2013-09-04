@@ -184,5 +184,9 @@ goog.events.EventType = {
   LOADSTOP: 'loadstop',
   RESPONSIVE: 'responsive',
   SIZECHANGED: 'sizechanged',
-  UNRESPONSIVE: 'unresponsive'
+  UNRESPONSIVE: 'unresponsive',
+
+  // HTML5 Page Visibility API.  See details at
+  // {@code goog.labs.dom.PageVisibilityMonitor}.
+  VISIBILITYCHANGE: 'visibilitychange'
 };

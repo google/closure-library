@@ -180,6 +180,90 @@ function testVendorJsPrefixIE() {
 }
 
 
+/**
+ * Tests for the vendor Js prefix if no UA detected.
+ */
+function testVendorJsPrefixNone() {
+  assertUserAgent([], '');
+  assertNull(goog.dom.vendor.getVendorJsPrefix());
+}
+
+
+/**
+ * Tests for the prefixed property name on Webkit.
+ */
+function testPrefixedPropertyNameWebkit() {
+  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertEquals('webkitFoobar',
+      goog.dom.vendor.getPrefixedPropertyName('foobar'));
+}
+
+
+/**
+ * Tests for the prefixed property name on Webkit in an object.
+ */
+function testPrefixedPropertyNameWebkitAndObject() {
+  var mockDocument = {
+    // setting a value of 0 on purpose, to ensure we only look for property
+    // names, not their values.
+    'webkitFoobar': 0
+  };
+  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertEquals('webkitFoobar',
+      goog.dom.vendor.getPrefixedPropertyName('foobar', mockDocument));
+}
+
+
+/**
+ * Tests for the prefixed property name.
+ */
+function testPrefixedPropertyName() {
+  assertUserAgent([], '');
+  assertNull(goog.dom.vendor.getPrefixedPropertyName('foobar'));
+}
+
+
+/**
+ * Tests for the prefixed property name in an object.
+ */
+function testPrefixedPropertyNameAndObject() {
+  var mockDocument = {
+    'foobar': 0
+  };
+  assertUserAgent([], '');
+  assertEquals('foobar',
+      goog.dom.vendor.getPrefixedPropertyName('foobar', mockDocument));
+}
+
+
+/**
+ * Tests for the prefixed property name when it doesn't exist.
+ */
+function testPrefixedPropertyNameAndObjectIsEmpty() {
+  var mockDocument = {};
+  assertUserAgent([], '');
+  assertNull(goog.dom.vendor.getPrefixedPropertyName('foobar', mockDocument));
+}
+
+
+/**
+ * Test for prefixed event type.
+ */
+function testPrefixedEventType() {
+  assertUserAgent([], '');
+  assertEquals('foobar', goog.dom.vendor.getPrefixedEventType('foobar'));
+}
+
+
+/**
+ * Test for browser-specific prefixed event type.
+ */
+function testPrefixedEventTypeForBrowser() {
+  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertEquals('webkitfoobar', goog.dom.vendor.getPrefixedEventType('foobar'));
+}
+
+
 function assertIe(uaString, expectedVersion) {
   assertUserAgent([UserAgents.IE], uaString);
   assertEquals('User agent ' + uaString + ' should have had version ' +
