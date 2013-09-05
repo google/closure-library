@@ -15,6 +15,7 @@ See the COPYING file for details.
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.userAgent');
+  goog.require('goog.userAgentTestUtil');
 </script>
 </head>
 <body>
@@ -36,28 +37,6 @@ var UserAgents = {
   WEBKIT: 'WEBKIT'
 };
 
-/**
- * Rerun the initialization code to set all of the goog.userAgent constants.
- */
-function reinitializeUserAgent() {
-  goog.userAgent.init_();
-
-  // Unfortunately we can't isolate the useragent setting in a function
-  // we can call, because things rely on it compiling to nothing when
-  // one of the ASSUME flags is set, and the compiler isn't smart enough
-  // to do that when the setting is done inside a function that's inlined.
-  goog.userAgent.OPERA = goog.userAgent.detectedOpera_;
-  goog.userAgent.IE = goog.userAgent.detectedIe_;
-  goog.userAgent.GECKO = goog.userAgent.detectedGecko_;
-  goog.userAgent.WEBKIT = goog.userAgent.detectedWebkit_;
-  goog.userAgent.MOBILE = goog.userAgent.detectedMobile_;
-  goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
-
-  goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
-  goog.userAgent.initPlatform_();
-
-  goog.userAgent.VERSION = goog.userAgent.determineVersion_();
-}
 
 function tearDown() {
   documentMode = undefined;
@@ -80,30 +59,12 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
     }
   };
   propertyReplacer.set(goog, 'global', mockGlobal);
-  reinitializeUserAgent();
+  goog.userAgentTestUtil.reinitializeUserAgent();
   for (var ua in UserAgents) {
     var isExpected = goog.array.contains(expectedAgents, UserAgents[ua]);
-    assertEquals(isExpected, getUserAgentDetected_(UserAgents[ua]));
+    assertEquals(isExpected,
+        goog.userAgentTestUtil.getUserAgentDetected(UserAgents[ua]))
   }
-}
-
-/**
- * Return whether a given user agent has been detected.
- * @param {number} agent Value in UserAgents.
- * @return {boolean} Whether the user agent has been detected.
- */
-function getUserAgentDetected_(agent) {
-  switch (agent) {
-    case UserAgents.GECKO:
-      return goog.userAgent.detectedGecko_;
-    case UserAgents.IE:
-      return goog.userAgent.detectedIe_;
-    case UserAgents.OPERA:
-      return goog.userAgent.detectedOpera_;
-    case UserAgents.WEBKIT:
-      return goog.userAgent.detectedWebkit_;
-  }
-  return null;
 }
 
 function testOperaInit() {
@@ -116,14 +77,14 @@ function testOperaInit() {
       return '9.20';
     }
   };
-  reinitializeUserAgent();
+  goog.userAgentTestUtil.reinitializeUserAgent();
   assertTrue(goog.userAgent.detectedOpera_);
   assertEquals('9.20', goog.userAgent.VERSION);
 
   // What if 'opera' global has been overwritten?
   // We must degrade gracefully (rather than throwing JS errors).
   goog.global['opera'] = 'bobloblaw';
-  reinitializeUserAgent();
+  goog.userAgentTestUtil.reinitializeUserAgent();
   assertUndefined(goog.userAgent.VERSION);
 }
 
@@ -226,7 +187,7 @@ function testIeDocumentModeOverride() {
 }
 
 function testDocumentModeInStandardsMode() {
-  reinitializeUserAgent();
+  goog.userAgentTestUtil.reinitializeUserAgent();
   var expectedMode = goog.userAgent.IE ? parseInt(goog.userAgent.VERSION) :
                                          undefined;
   assertEquals(expectedMode, goog.userAgent.DOCUMENT_MODE);
@@ -271,7 +232,7 @@ function testNoNavigator() {
   // global object has no "navigator" property.
   var mockGlobal = {};
   propertyReplacer.set(goog, 'global', mockGlobal);
-  reinitializeUserAgent();
+  goog.userAgentTestUtil.reinitializeUserAgent();
 
   assertEquals('Platform should be the empty string', '',
       goog.userAgent.PLATFORM);

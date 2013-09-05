@@ -908,6 +908,7 @@ goog.addDependency('useragent/platform.js', ['goog.userAgent.platform'], ['goog.
 goog.addDependency('useragent/product.js', ['goog.userAgent.product'], ['goog.userAgent']);
 goog.addDependency('useragent/product_isversion.js', ['goog.userAgent.product.isVersion'], ['goog.userAgent.product']);
 goog.addDependency('useragent/useragent.js', ['goog.userAgent'], ['goog.string']);
+goog.addDependency('useragent/useragenttestutil.js', ['goog.userAgentTestUtil', 'goog.userAgentTestUtil.UserAgents'], ['goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.userAgent']);
 goog.addDependency('vec/float32array.js', ['goog.vec.Float32Array'], []);
 goog.addDependency('vec/float64array.js', ['goog.vec.Float64Array'], []);
 goog.addDependency('vec/mat3.js', ['goog.vec.Mat3'], ['goog.vec']);
