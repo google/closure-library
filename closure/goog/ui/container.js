@@ -927,6 +927,7 @@ goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {
     if (index != -1) {
       if (index == this.highlightedIndex_) {
         control.setHighlighted(false);
+        this.highlightedIndex_ = -1;
       } else if (index < this.highlightedIndex_) {
         this.highlightedIndex_--;
       }

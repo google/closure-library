@@ -453,6 +453,19 @@ Author:  attila@google.com (Attila Bodis)
       assertTrue('The removed control must handle its own mouse events',
           a.isHandleMouseEvents());
     }
+
+    function testRemoveHighlightedDisposedChild() {
+      goog.dom.removeChildren(containerElement);
+      container.decorate(containerElement);
+
+      var a = new goog.ui.Control('A');
+      container.addChild(a, true);
+
+      container.setHighlightedIndex(0);
+      a.dispose();
+      container.removeChild(a);
+      container.dispose();
+    }
   </script>
 </body>
 </html>
