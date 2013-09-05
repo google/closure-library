@@ -1,4 +1,4 @@
-#!/usr/bin/python2.4
+#!/usr/bin/python
 #
 # Copyright 2010 The Closure Library Authors. All Rights Reserved.
 #
@@ -123,6 +123,7 @@ def Transform(lines):
   mode = START
   aliases_used = set()
   insertion_index = None
+  num_blank_lines = 0
   for line in lines:
     if mode == START:
       result.append(line)
@@ -134,11 +135,20 @@ def Transform(lines):
       if (line and
           not re.search(REQUIRES_RE, line) and
           not line.isspace()):
+        # There should be two blank lines before goog.scope
+        result += ['\n'] * 2
         result.append('goog.scope(function() {\n')
         insertion_index = len(result)
-        result.append('\n')
+        result += ['\n'] * num_blank_lines
         mode = IN_SCOPE
+      elif line.isspace():
+        # Keep track of the number of blank lines before each block of code so
+        # that we can move them after the goog.scope line if necessary.
+        num_blank_lines += 1
       else:
+        # Print the blank lines we saw before this code block
+        result += ['\n'] * num_blank_lines
+        num_blank_lines = 0
         result.append(line)
 
     if mode == IN_SCOPE:
@@ -164,7 +174,7 @@ def Transform(lines):
         # Truncate all-whitespace lines
         result.append('\n')
       else:
-        result.append('  ' + line)
+        result.append(line)
 
   if len(aliases_used):
     aliases_used = [alias for alias in aliases_used]
@@ -173,8 +183,8 @@ def Transform(lines):
     for alias in aliases_used:
       symbol = aliases_to_globals[alias]
       result.insert(insertion_index,
-                    '  var %s = %s;\n' % (alias, symbol))
-    result.append('});\n')
+                    'var %s = %s;\n' % (alias, symbol))
+    result.append('});  // goog.scope\n')
     return result
   else:
     return None
