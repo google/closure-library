@@ -23,6 +23,8 @@ goog.require('goog.array');
 goog.require('goog.color');
 goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
+/** @suppress {extraRequire} */
+goog.require('goog.functions');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
@@ -37,6 +39,9 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
+goog.require('goog.userAgentTestUtil');
+goog.require('goog.userAgentTestUtil.UserAgents');
+
 goog.setTestOnly('goog.style_test');
 
 // IE before version 6 will always be border box in compat mode.
@@ -47,12 +52,6 @@ var EPSILON = 2;
 var expectedFailures = new goog.testing.ExpectedFailures();
 var $ = goog.dom.getElement;
 var propertyReplacer = new goog.testing.PropertyReplacer();
-var UserAgents = {
-  GECKO: 'GECKO',
-  IE: 'IE',
-  OPERA: 'OPERA',
-  WEBKIT: 'WEBKIT'
-};
 
 
 function setUpPage() {
@@ -82,7 +81,7 @@ function tearDown() {
   testViewport.setAttribute('style', '');
   testViewport.innerHTML = '';
   propertyReplacer.reset();
-  reinitializeUserAgent();
+  goog.userAgentTestUtil.reinitializeUserAgent();
 }
 
 function testSetStyle() {
@@ -2121,50 +2120,6 @@ function testGetsTranslation() {
 
 
 /**
- * Return whether a given user agent has been detected.
- * @param {number} agent Value in UserAgents.
- * @return {boolean} Whether the user agent has been detected.
- */
-function getUserAgentDetected_(agent) {
-  switch (agent) {
-    case UserAgents.GECKO:
-      return goog.userAgent.detectedGecko_;
-    case UserAgents.IE:
-      return goog.userAgent.detectedIe_;
-    case UserAgents.OPERA:
-      return goog.userAgent.detectedOpera_;
-    case UserAgents.WEBKIT:
-      return goog.userAgent.detectedWebkit_;
-  }
-  return null;
-}
-
-
-/**
- * Rerun the initialization code to set all of the goog.userAgent constants.
- */
-function reinitializeUserAgent() {
-  goog.userAgent.init_();
-
-  // Unfortunately we can't isolate the useragent setting in a function
-  // we can call, because things rely on it compiling to nothing when
-  // one of the ASSUME flags is set, and the compiler isn't smart enough
-  // to do that when the setting is done inside a function that's inlined.
-  goog.userAgent.OPERA = goog.userAgent.detectedOpera_;
-  goog.userAgent.IE = goog.userAgent.detectedIe_;
-  goog.userAgent.GECKO = goog.userAgent.detectedGecko_;
-  goog.userAgent.WEBKIT = goog.userAgent.detectedWebkit_;
-  goog.userAgent.MOBILE = goog.userAgent.detectedMobile_;
-  goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
-
-  goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
-  goog.userAgent.initPlatform_();
-
-  goog.userAgent.VERSION = goog.userAgent.determineVersion_();
-}
-
-
-/**
  * Test browser detection for a user agent configuration.
  * @param {Array.<number>} expectedAgents Array of expected userAgents.
  * @param {string} uaString User agent string.
@@ -2180,10 +2135,21 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
     }
   };
   propertyReplacer.set(goog, 'global', mockGlobal);
-  reinitializeUserAgent();
-  for (var ua in UserAgents) {
-    var isExpected = goog.array.contains(expectedAgents, UserAgents[ua]);
-    assertEquals(isExpected, getUserAgentDetected_(UserAgents[ua]));
+
+  propertyReplacer.set(
+      /** @suppress {missingRequire} */
+      goog.labs.userAgent.util,
+      'getUserAgent',
+      goog.functions.constant(uaString));
+
+  goog.userAgentTestUtil.reinitializeUserAgent();
+  for (var ua in goog.userAgentTestUtil.UserAgents) {
+    var isExpected = goog.array.contains(
+        expectedAgents,
+        goog.userAgentTestUtil.UserAgents[ua]);
+    assertEquals(isExpected,
+                 goog.userAgentTestUtil.getUserAgentDetected(
+                     goog.userAgentTestUtil.UserAgents[ua]));
   }
 }
 
@@ -2199,7 +2165,7 @@ function testGetVendorStyleNameWebkit() {
     }
   };
 
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   assertEquals('-webkit-transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
@@ -2217,7 +2183,7 @@ function testGetVendorStyleNameWebkitNoPrefix() {
     }
   };
 
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   assertEquals(
       'transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
@@ -2235,7 +2201,7 @@ function testGetVendorStyleNameGecko() {
     }
   };
 
-  assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   assertEquals('-moz-transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
@@ -2253,7 +2219,7 @@ function testGetVendorStyleNameGeckoNoPrefix() {
     }
   };
 
-  assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   assertEquals(
       'transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
@@ -2271,7 +2237,7 @@ function testGetVendorStyleNameIE() {
     }
   };
 
-  assertUserAgent([UserAgents.IE], 'MSIE');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals('-ms-transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
@@ -2289,7 +2255,7 @@ function testGetVendorStyleNameIENoPrefix() {
     }
   };
 
-  assertUserAgent([UserAgents.IE], 'MSIE');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals(
       'transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
@@ -2307,7 +2273,7 @@ function testGetVendorStyleNameOpera() {
     }
   };
 
-  assertUserAgent([UserAgents.OPERA], 'Opera');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals('-o-transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
 }
@@ -2325,7 +2291,7 @@ function testGetVendorStyleNameOperaNoPrefix() {
     }
   };
 
-  assertUserAgent([UserAgents.OPERA], 'Opera');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals(
       'transform',
       goog.style.getVendorStyleName_(mockElement, 'transform'));
@@ -2343,7 +2309,7 @@ function testGetVendorJsStyleNameWebkit() {
     }
   };
 
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   assertEquals('WebkitTransform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
@@ -2361,7 +2327,7 @@ function testGetVendorJsStyleNameWebkitNoPrefix() {
     }
   };
 
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   assertEquals(
       'transform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
@@ -2373,13 +2339,14 @@ function testGetVendorJsStyleNameWebkitNoPrefix() {
  * with a vendor prefix for Gecko.
  */
 function testGetVendorJsStyleNameGecko() {
+
   var mockElement = {
     'style': {
       'MozTransform': ''
     }
   };
 
-  assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   assertEquals('MozTransform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
@@ -2397,7 +2364,7 @@ function testGetVendorJsStyleNameGeckoNoPrefix() {
     }
   };
 
-  assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   assertEquals(
       'transform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
@@ -2415,7 +2382,7 @@ function testGetVendorJsStyleNameIE() {
     }
   };
 
-  assertUserAgent([UserAgents.IE], 'MSIE');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals('msTransform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
@@ -2433,7 +2400,7 @@ function testGetVendorJsStyleNameIENoPrefix() {
     }
   };
 
-  assertUserAgent([UserAgents.IE], 'MSIE');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals(
       'transform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
@@ -2451,7 +2418,7 @@ function testGetVendorJsStyleNameOpera() {
     }
   };
 
-  assertUserAgent([UserAgents.OPERA], 'Opera');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals('OTransform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
 }
@@ -2469,7 +2436,7 @@ function testGetVendorJsStyleNameOperaNoPrefix() {
     }
   };
 
-  assertUserAgent([UserAgents.OPERA], 'Opera');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals(
       'transform',
       goog.style.getVendorJsStyleName_(mockElement, 'transform'));
@@ -2488,7 +2455,7 @@ function testSetVendorStyleWebkit() {
   };
   var styleValue = 'translate3d(0,0,0)';
 
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, mockElement.style.WebkitTransform);
 }
@@ -2506,7 +2473,7 @@ function testSetVendorStyleGecko() {
   };
   var styleValue = 'translate3d(0,0,0)';
 
-  assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, mockElement.style.MozTransform);
 }
@@ -2524,7 +2491,7 @@ function testSetVendorStyleIE() {
   };
   var styleValue = 'translate3d(0,0,0)';
 
-  assertUserAgent([UserAgents.IE], 'MSIE');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, mockElement.style.msTransform);
 }
@@ -2542,7 +2509,7 @@ function testSetVendorStyleOpera() {
   };
   var styleValue = 'translate3d(0,0,0)';
 
-  assertUserAgent([UserAgents.OPERA], 'Opera');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, mockElement.style.OTransform);
 }
@@ -2560,7 +2527,7 @@ function testGetVendorStyleWebkit() {
   };
   var styleValue = 'translate3d(0,0,0)';
 
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
 }
@@ -2578,7 +2545,7 @@ function testGetVendorStyleGecko() {
   };
   var styleValue = 'translate3d(0,0,0)';
 
-  assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
 }
@@ -2596,7 +2563,7 @@ function testGetVendorStyleIE() {
   };
   var styleValue = 'translate3d(0,0,0)';
 
-  assertUserAgent([UserAgents.IE], 'MSIE');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
 }
@@ -2614,7 +2581,7 @@ function testGetVendorStyleOpera() {
   };
   var styleValue = 'translate3d(0,0,0)';
 
-  assertUserAgent([UserAgents.OPERA], 'Opera');
+  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   goog.style.setStyle(mockElement, 'transform', styleValue);
   assertEquals(styleValue, goog.style.getStyle(mockElement, 'transform'));
 }
