@@ -574,6 +574,8 @@ goog.i18n.DateTimePatterns_af_NA = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -590,6 +592,8 @@ goog.i18n.DateTimePatterns_af_ZA = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -606,6 +610,8 @@ goog.i18n.DateTimePatterns_agq = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -622,6 +628,8 @@ goog.i18n.DateTimePatterns_agq_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -638,6 +646,8 @@ goog.i18n.DateTimePatterns_ak = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -654,6 +664,8 @@ goog.i18n.DateTimePatterns_ak_GH = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -670,6 +682,8 @@ goog.i18n.DateTimePatterns_am_ET = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE፣ MMM d y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -686,6 +700,8 @@ goog.i18n.DateTimePatterns_ar_001 = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -702,6 +718,8 @@ goog.i18n.DateTimePatterns_ar_AE = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -718,6 +736,8 @@ goog.i18n.DateTimePatterns_ar_BH = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -734,6 +754,8 @@ goog.i18n.DateTimePatterns_ar_DJ = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -750,6 +772,8 @@ goog.i18n.DateTimePatterns_ar_DZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -766,6 +790,8 @@ goog.i18n.DateTimePatterns_ar_EG = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -782,6 +808,8 @@ goog.i18n.DateTimePatterns_ar_EH = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -798,6 +826,8 @@ goog.i18n.DateTimePatterns_ar_ER = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -814,6 +844,8 @@ goog.i18n.DateTimePatterns_ar_IL = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -830,6 +862,8 @@ goog.i18n.DateTimePatterns_ar_IQ = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -846,6 +880,8 @@ goog.i18n.DateTimePatterns_ar_JO = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -862,6 +898,8 @@ goog.i18n.DateTimePatterns_ar_KM = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -878,6 +916,8 @@ goog.i18n.DateTimePatterns_ar_KW = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -894,6 +934,8 @@ goog.i18n.DateTimePatterns_ar_LB = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -910,6 +952,8 @@ goog.i18n.DateTimePatterns_ar_LY = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -926,6 +970,8 @@ goog.i18n.DateTimePatterns_ar_MA = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -942,6 +988,8 @@ goog.i18n.DateTimePatterns_ar_MR = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -958,6 +1006,8 @@ goog.i18n.DateTimePatterns_ar_OM = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -974,6 +1024,8 @@ goog.i18n.DateTimePatterns_ar_PS = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -990,6 +1042,8 @@ goog.i18n.DateTimePatterns_ar_QA = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -1006,6 +1060,8 @@ goog.i18n.DateTimePatterns_ar_SA = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -1022,6 +1078,8 @@ goog.i18n.DateTimePatterns_ar_SD = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -1038,6 +1096,8 @@ goog.i18n.DateTimePatterns_ar_SO = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -1054,6 +1114,8 @@ goog.i18n.DateTimePatterns_ar_SY = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -1070,6 +1132,8 @@ goog.i18n.DateTimePatterns_ar_TD = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -1086,6 +1150,8 @@ goog.i18n.DateTimePatterns_ar_TN = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -1102,6 +1168,8 @@ goog.i18n.DateTimePatterns_ar_YE = {
   MONTH_DAY_SHORT: 'd/‏M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -1118,6 +1186,8 @@ goog.i18n.DateTimePatterns_as = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -1134,6 +1204,8 @@ goog.i18n.DateTimePatterns_as_IN = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -1150,6 +1222,8 @@ goog.i18n.DateTimePatterns_asa = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1166,6 +1240,8 @@ goog.i18n.DateTimePatterns_asa_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1182,6 +1258,8 @@ goog.i18n.DateTimePatterns_az = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d, MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d, MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -1198,6 +1276,8 @@ goog.i18n.DateTimePatterns_az_Cyrl = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d, MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d, MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -1214,6 +1294,8 @@ goog.i18n.DateTimePatterns_az_Cyrl_AZ = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d, MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d, MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -1230,6 +1312,8 @@ goog.i18n.DateTimePatterns_az_Latn = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d, MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d, MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -1246,6 +1330,8 @@ goog.i18n.DateTimePatterns_az_Latn_AZ = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d, MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d, MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -1262,6 +1348,8 @@ goog.i18n.DateTimePatterns_bas = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1278,6 +1366,8 @@ goog.i18n.DateTimePatterns_bas_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1294,6 +1384,8 @@ goog.i18n.DateTimePatterns_be = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1310,6 +1402,8 @@ goog.i18n.DateTimePatterns_be_BY = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1326,6 +1420,8 @@ goog.i18n.DateTimePatterns_bem = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1342,6 +1438,8 @@ goog.i18n.DateTimePatterns_bem_ZM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1358,6 +1456,8 @@ goog.i18n.DateTimePatterns_bez = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1374,6 +1474,8 @@ goog.i18n.DateTimePatterns_bez_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1390,6 +1492,8 @@ goog.i18n.DateTimePatterns_bg_BG = {
   MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'd MMM, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y \'г\'.',
+  MONTH_DAY_YEAR_MEDIUM: 'dd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1406,6 +1510,8 @@ goog.i18n.DateTimePatterns_bm = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1422,6 +1528,8 @@ goog.i18n.DateTimePatterns_bm_ML = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1438,6 +1546,8 @@ goog.i18n.DateTimePatterns_bn_BD = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -1454,6 +1564,8 @@ goog.i18n.DateTimePatterns_bn_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -1470,6 +1582,8 @@ goog.i18n.DateTimePatterns_bo = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y ལོ་འི་MMMཙེས་d',
   DAY_ABBR: 'd'
 };
 
@@ -1486,6 +1600,8 @@ goog.i18n.DateTimePatterns_bo_CN = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y ལོ་འི་MMMཙེས་d',
   DAY_ABBR: 'd'
 };
 
@@ -1502,6 +1618,8 @@ goog.i18n.DateTimePatterns_bo_IN = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y ལོ་འི་MMMཙེས་d',
   DAY_ABBR: 'd'
 };
 
@@ -1518,6 +1636,8 @@ goog.i18n.DateTimePatterns_br_FR = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -1534,6 +1654,8 @@ goog.i18n.DateTimePatterns_brx = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -1550,6 +1672,8 @@ goog.i18n.DateTimePatterns_brx_IN = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -1566,6 +1690,8 @@ goog.i18n.DateTimePatterns_bs = {
   MONTH_DAY_SHORT: 'dd.MM.',
   MONTH_DAY_MEDIUM: 'dd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, dd. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'dd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -1582,6 +1708,8 @@ goog.i18n.DateTimePatterns_bs_Cyrl = {
   MONTH_DAY_SHORT: 'dd.MM.',
   MONTH_DAY_MEDIUM: 'dd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, dd. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'dd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -1598,6 +1726,8 @@ goog.i18n.DateTimePatterns_bs_Cyrl_BA = {
   MONTH_DAY_SHORT: 'dd.MM.',
   MONTH_DAY_MEDIUM: 'dd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, dd. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'dd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -1614,6 +1744,8 @@ goog.i18n.DateTimePatterns_bs_Latn = {
   MONTH_DAY_SHORT: 'dd.MM.',
   MONTH_DAY_MEDIUM: 'dd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, dd. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'dd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -1630,6 +1762,8 @@ goog.i18n.DateTimePatterns_bs_Latn_BA = {
   MONTH_DAY_SHORT: 'dd.MM.',
   MONTH_DAY_MEDIUM: 'dd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, dd. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'dd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -1646,6 +1780,8 @@ goog.i18n.DateTimePatterns_ca_AD = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1662,6 +1798,8 @@ goog.i18n.DateTimePatterns_ca_ES = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1678,6 +1816,8 @@ goog.i18n.DateTimePatterns_cgg = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1694,6 +1834,8 @@ goog.i18n.DateTimePatterns_cgg_UG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1710,6 +1852,8 @@ goog.i18n.DateTimePatterns_chr_US = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -1726,6 +1870,8 @@ goog.i18n.DateTimePatterns_cs_CZ = {
   MONTH_DAY_SHORT: 'd. M.',
   MONTH_DAY_MEDIUM: 'd. M.',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. M.',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. M. y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. M. y',
   DAY_ABBR: 'd.'
 };
 
@@ -1742,6 +1888,8 @@ goog.i18n.DateTimePatterns_cy_GB = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1758,6 +1906,8 @@ goog.i18n.DateTimePatterns_da_DK = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd.'
 };
 
@@ -1774,6 +1924,8 @@ goog.i18n.DateTimePatterns_dav = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1790,6 +1942,8 @@ goog.i18n.DateTimePatterns_dav_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1806,6 +1960,8 @@ goog.i18n.DateTimePatterns_de_BE = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1822,6 +1978,8 @@ goog.i18n.DateTimePatterns_de_DE = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1838,6 +1996,8 @@ goog.i18n.DateTimePatterns_de_LI = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1854,6 +2014,8 @@ goog.i18n.DateTimePatterns_de_LU = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1870,6 +2032,8 @@ goog.i18n.DateTimePatterns_dje = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1886,6 +2050,8 @@ goog.i18n.DateTimePatterns_dje_NE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1902,6 +2068,8 @@ goog.i18n.DateTimePatterns_dua = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1918,6 +2086,8 @@ goog.i18n.DateTimePatterns_dua_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1934,6 +2104,8 @@ goog.i18n.DateTimePatterns_dyo = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1950,6 +2122,8 @@ goog.i18n.DateTimePatterns_dyo_SN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -1966,6 +2140,8 @@ goog.i18n.DateTimePatterns_dz = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'སྤྱི་LLLL ཚེ་d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, སྤྱི་LLL ཚེ་d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'གཟའ་EEE, ལོy ཟླ་MMM ཚེ་d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -1982,6 +2158,8 @@ goog.i18n.DateTimePatterns_dz_BT = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'སྤྱི་LLLL ཚེ་d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, སྤྱི་LLL ཚེ་d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'གཟའ་EEE, ལོy ཟླ་MMM ཚེ་d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -1998,6 +2176,8 @@ goog.i18n.DateTimePatterns_ebu = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2014,6 +2194,8 @@ goog.i18n.DateTimePatterns_ebu_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2030,6 +2212,8 @@ goog.i18n.DateTimePatterns_ee = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d \'lia\'',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d \'lia\'',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d \'lia\', y',
   DAY_ABBR: 'd'
 };
 
@@ -2046,6 +2230,8 @@ goog.i18n.DateTimePatterns_ee_GH = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d \'lia\'',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d \'lia\'',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d \'lia\', y',
   DAY_ABBR: 'd'
 };
 
@@ -2062,6 +2248,8 @@ goog.i18n.DateTimePatterns_ee_TG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d \'lia\'',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d \'lia\'',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d \'lia\', y',
   DAY_ABBR: 'd'
 };
 
@@ -2078,6 +2266,8 @@ goog.i18n.DateTimePatterns_el_CY = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2094,6 +2284,8 @@ goog.i18n.DateTimePatterns_el_GR = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2110,6 +2302,8 @@ goog.i18n.DateTimePatterns_en_150 = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2126,6 +2320,8 @@ goog.i18n.DateTimePatterns_en_AG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2142,6 +2338,8 @@ goog.i18n.DateTimePatterns_en_AS = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2158,6 +2356,8 @@ goog.i18n.DateTimePatterns_en_BB = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2174,6 +2374,8 @@ goog.i18n.DateTimePatterns_en_BE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2190,6 +2392,8 @@ goog.i18n.DateTimePatterns_en_BM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2206,6 +2410,8 @@ goog.i18n.DateTimePatterns_en_BS = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2222,6 +2428,8 @@ goog.i18n.DateTimePatterns_en_BW = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'dd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE dd MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE dd MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'dd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2238,6 +2446,8 @@ goog.i18n.DateTimePatterns_en_BZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'dd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE dd MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE dd MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'dd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2254,6 +2464,8 @@ goog.i18n.DateTimePatterns_en_CA = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2270,6 +2482,8 @@ goog.i18n.DateTimePatterns_en_CM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2286,6 +2500,8 @@ goog.i18n.DateTimePatterns_en_DM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2302,6 +2518,8 @@ goog.i18n.DateTimePatterns_en_FJ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2318,6 +2536,8 @@ goog.i18n.DateTimePatterns_en_FM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2334,6 +2554,8 @@ goog.i18n.DateTimePatterns_en_GD = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2350,6 +2572,8 @@ goog.i18n.DateTimePatterns_en_GG = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2366,6 +2590,8 @@ goog.i18n.DateTimePatterns_en_GH = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2382,6 +2608,8 @@ goog.i18n.DateTimePatterns_en_GI = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2398,6 +2626,8 @@ goog.i18n.DateTimePatterns_en_GM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2414,6 +2644,8 @@ goog.i18n.DateTimePatterns_en_GU = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2430,6 +2662,8 @@ goog.i18n.DateTimePatterns_en_GY = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2446,6 +2680,8 @@ goog.i18n.DateTimePatterns_en_HK = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -2462,6 +2698,8 @@ goog.i18n.DateTimePatterns_en_IM = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2478,6 +2716,8 @@ goog.i18n.DateTimePatterns_en_JE = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2494,6 +2734,8 @@ goog.i18n.DateTimePatterns_en_JM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2510,6 +2752,8 @@ goog.i18n.DateTimePatterns_en_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2526,6 +2770,8 @@ goog.i18n.DateTimePatterns_en_KI = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2542,6 +2788,8 @@ goog.i18n.DateTimePatterns_en_KN = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2558,6 +2806,8 @@ goog.i18n.DateTimePatterns_en_KY = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2574,6 +2824,8 @@ goog.i18n.DateTimePatterns_en_LC = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2590,6 +2842,8 @@ goog.i18n.DateTimePatterns_en_LR = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2606,6 +2860,8 @@ goog.i18n.DateTimePatterns_en_LS = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2622,6 +2878,8 @@ goog.i18n.DateTimePatterns_en_MG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2638,6 +2896,8 @@ goog.i18n.DateTimePatterns_en_MH = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2654,6 +2914,8 @@ goog.i18n.DateTimePatterns_en_MP = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2670,6 +2932,8 @@ goog.i18n.DateTimePatterns_en_MT = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'dd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2686,6 +2950,8 @@ goog.i18n.DateTimePatterns_en_MU = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2702,6 +2968,8 @@ goog.i18n.DateTimePatterns_en_MW = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2718,6 +2986,8 @@ goog.i18n.DateTimePatterns_en_NA = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2734,6 +3004,8 @@ goog.i18n.DateTimePatterns_en_NG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2750,6 +3022,8 @@ goog.i18n.DateTimePatterns_en_NZ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2766,6 +3040,8 @@ goog.i18n.DateTimePatterns_en_PG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2782,6 +3058,8 @@ goog.i18n.DateTimePatterns_en_PH = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2798,6 +3076,8 @@ goog.i18n.DateTimePatterns_en_PK = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -2814,6 +3094,8 @@ goog.i18n.DateTimePatterns_en_PR = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2830,6 +3112,8 @@ goog.i18n.DateTimePatterns_en_PW = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2846,6 +3130,8 @@ goog.i18n.DateTimePatterns_en_SB = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2862,6 +3148,8 @@ goog.i18n.DateTimePatterns_en_SC = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2878,6 +3166,8 @@ goog.i18n.DateTimePatterns_en_SL = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2894,6 +3184,8 @@ goog.i18n.DateTimePatterns_en_SS = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2910,6 +3202,8 @@ goog.i18n.DateTimePatterns_en_SZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2926,6 +3220,8 @@ goog.i18n.DateTimePatterns_en_TC = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2942,6 +3238,8 @@ goog.i18n.DateTimePatterns_en_TO = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2958,6 +3256,8 @@ goog.i18n.DateTimePatterns_en_TT = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2974,6 +3274,8 @@ goog.i18n.DateTimePatterns_en_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -2990,6 +3292,8 @@ goog.i18n.DateTimePatterns_en_UG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3006,6 +3310,8 @@ goog.i18n.DateTimePatterns_en_UM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3022,6 +3328,8 @@ goog.i18n.DateTimePatterns_en_US_POSIX = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3038,6 +3346,8 @@ goog.i18n.DateTimePatterns_en_VC = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3054,6 +3364,8 @@ goog.i18n.DateTimePatterns_en_VG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3070,6 +3382,8 @@ goog.i18n.DateTimePatterns_en_VI = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3086,6 +3400,8 @@ goog.i18n.DateTimePatterns_en_VU = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3102,6 +3418,8 @@ goog.i18n.DateTimePatterns_en_WS = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3118,6 +3436,8 @@ goog.i18n.DateTimePatterns_en_ZM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3134,6 +3454,8 @@ goog.i18n.DateTimePatterns_en_ZW = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'dd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE dd MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'dd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -3150,6 +3472,8 @@ goog.i18n.DateTimePatterns_eo = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -3166,6 +3490,8 @@ goog.i18n.DateTimePatterns_es_AR = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3182,6 +3508,8 @@ goog.i18n.DateTimePatterns_es_BO = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3198,6 +3526,8 @@ goog.i18n.DateTimePatterns_es_CL = {
   MONTH_DAY_SHORT: 'dd-MM',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3214,6 +3544,8 @@ goog.i18n.DateTimePatterns_es_CO = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3230,6 +3562,8 @@ goog.i18n.DateTimePatterns_es_CR = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3246,6 +3580,8 @@ goog.i18n.DateTimePatterns_es_CU = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3262,6 +3598,8 @@ goog.i18n.DateTimePatterns_es_DO = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3278,6 +3616,8 @@ goog.i18n.DateTimePatterns_es_EA = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3294,6 +3634,8 @@ goog.i18n.DateTimePatterns_es_EC = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3310,6 +3652,8 @@ goog.i18n.DateTimePatterns_es_GQ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3326,6 +3670,8 @@ goog.i18n.DateTimePatterns_es_GT = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3342,6 +3688,8 @@ goog.i18n.DateTimePatterns_es_HN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3358,6 +3706,8 @@ goog.i18n.DateTimePatterns_es_IC = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3374,6 +3724,8 @@ goog.i18n.DateTimePatterns_es_MX = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3390,6 +3742,8 @@ goog.i18n.DateTimePatterns_es_NI = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3406,6 +3760,8 @@ goog.i18n.DateTimePatterns_es_PA = {
   MONTH_DAY_SHORT: 'MM/dd',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3422,6 +3778,8 @@ goog.i18n.DateTimePatterns_es_PE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3438,6 +3796,8 @@ goog.i18n.DateTimePatterns_es_PH = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3454,6 +3814,8 @@ goog.i18n.DateTimePatterns_es_PR = {
   MONTH_DAY_SHORT: 'MM/dd',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3470,6 +3832,8 @@ goog.i18n.DateTimePatterns_es_PY = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3486,6 +3850,8 @@ goog.i18n.DateTimePatterns_es_SV = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3502,6 +3868,8 @@ goog.i18n.DateTimePatterns_es_US = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3518,6 +3886,8 @@ goog.i18n.DateTimePatterns_es_UY = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3534,6 +3904,8 @@ goog.i18n.DateTimePatterns_es_VE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3550,6 +3922,8 @@ goog.i18n.DateTimePatterns_et_EE = {
   MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3566,6 +3940,8 @@ goog.i18n.DateTimePatterns_eu_ES = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3582,6 +3958,8 @@ goog.i18n.DateTimePatterns_ewo = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3598,6 +3976,8 @@ goog.i18n.DateTimePatterns_ewo_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3614,6 +3994,8 @@ goog.i18n.DateTimePatterns_fa_AF = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'd LLLL',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d LLL',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y G',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y G',
   DAY_ABBR: 'd'
 };
 
@@ -3630,6 +4012,8 @@ goog.i18n.DateTimePatterns_fa_IR = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'd LLLL',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d LLL',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y G',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y G',
   DAY_ABBR: 'd'
 };
 
@@ -3646,6 +4030,8 @@ goog.i18n.DateTimePatterns_ff = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3662,6 +4048,8 @@ goog.i18n.DateTimePatterns_ff_SN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3678,6 +4066,8 @@ goog.i18n.DateTimePatterns_fi_FI = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'ccc d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3694,6 +4084,8 @@ goog.i18n.DateTimePatterns_fil_PH = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -3710,6 +4102,8 @@ goog.i18n.DateTimePatterns_fo = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -3726,6 +4120,8 @@ goog.i18n.DateTimePatterns_fo_FO = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -3742,6 +4138,8 @@ goog.i18n.DateTimePatterns_fr_BE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3758,6 +4156,8 @@ goog.i18n.DateTimePatterns_fr_BF = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3774,6 +4174,8 @@ goog.i18n.DateTimePatterns_fr_BI = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3790,6 +4192,8 @@ goog.i18n.DateTimePatterns_fr_BJ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3806,6 +4210,8 @@ goog.i18n.DateTimePatterns_fr_BL = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3822,6 +4228,8 @@ goog.i18n.DateTimePatterns_fr_CD = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3838,6 +4246,8 @@ goog.i18n.DateTimePatterns_fr_CF = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3854,6 +4264,8 @@ goog.i18n.DateTimePatterns_fr_CG = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3870,6 +4282,8 @@ goog.i18n.DateTimePatterns_fr_CH = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3886,6 +4300,8 @@ goog.i18n.DateTimePatterns_fr_CI = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3902,6 +4318,8 @@ goog.i18n.DateTimePatterns_fr_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3918,6 +4336,8 @@ goog.i18n.DateTimePatterns_fr_DJ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3934,6 +4354,8 @@ goog.i18n.DateTimePatterns_fr_DZ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3950,6 +4372,8 @@ goog.i18n.DateTimePatterns_fr_FR = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3966,6 +4390,8 @@ goog.i18n.DateTimePatterns_fr_GA = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3982,6 +4408,8 @@ goog.i18n.DateTimePatterns_fr_GF = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -3998,6 +4426,8 @@ goog.i18n.DateTimePatterns_fr_GN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4014,6 +4444,8 @@ goog.i18n.DateTimePatterns_fr_GP = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4030,6 +4462,8 @@ goog.i18n.DateTimePatterns_fr_GQ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4046,6 +4480,8 @@ goog.i18n.DateTimePatterns_fr_HT = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4062,6 +4498,8 @@ goog.i18n.DateTimePatterns_fr_KM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4078,6 +4516,8 @@ goog.i18n.DateTimePatterns_fr_LU = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4094,6 +4534,8 @@ goog.i18n.DateTimePatterns_fr_MA = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4110,6 +4552,8 @@ goog.i18n.DateTimePatterns_fr_MC = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4126,6 +4570,8 @@ goog.i18n.DateTimePatterns_fr_MF = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4142,6 +4588,8 @@ goog.i18n.DateTimePatterns_fr_MG = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4158,6 +4606,8 @@ goog.i18n.DateTimePatterns_fr_ML = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4174,6 +4624,8 @@ goog.i18n.DateTimePatterns_fr_MQ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4190,6 +4642,8 @@ goog.i18n.DateTimePatterns_fr_MR = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4206,6 +4660,8 @@ goog.i18n.DateTimePatterns_fr_MU = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4222,6 +4678,8 @@ goog.i18n.DateTimePatterns_fr_NC = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4238,6 +4696,8 @@ goog.i18n.DateTimePatterns_fr_NE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4254,6 +4714,8 @@ goog.i18n.DateTimePatterns_fr_PF = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4270,6 +4732,8 @@ goog.i18n.DateTimePatterns_fr_RE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4286,6 +4750,8 @@ goog.i18n.DateTimePatterns_fr_RW = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4302,6 +4768,8 @@ goog.i18n.DateTimePatterns_fr_SC = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4318,6 +4786,8 @@ goog.i18n.DateTimePatterns_fr_SN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4334,6 +4804,8 @@ goog.i18n.DateTimePatterns_fr_SY = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4350,6 +4822,8 @@ goog.i18n.DateTimePatterns_fr_TD = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4366,6 +4840,8 @@ goog.i18n.DateTimePatterns_fr_TG = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4382,6 +4858,8 @@ goog.i18n.DateTimePatterns_fr_TN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4398,6 +4876,8 @@ goog.i18n.DateTimePatterns_fr_VU = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4414,6 +4894,8 @@ goog.i18n.DateTimePatterns_fr_YT = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4430,6 +4912,8 @@ goog.i18n.DateTimePatterns_ga = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4446,6 +4930,8 @@ goog.i18n.DateTimePatterns_ga_IE = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4462,6 +4948,8 @@ goog.i18n.DateTimePatterns_gl_ES = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -4478,6 +4966,8 @@ goog.i18n.DateTimePatterns_gsw_CH = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4494,6 +4984,8 @@ goog.i18n.DateTimePatterns_gu_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd, MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4510,6 +5002,8 @@ goog.i18n.DateTimePatterns_guz = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4526,6 +5020,8 @@ goog.i18n.DateTimePatterns_guz_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4542,6 +5038,8 @@ goog.i18n.DateTimePatterns_gv = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4558,6 +5056,8 @@ goog.i18n.DateTimePatterns_gv_GB = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4574,6 +5074,8 @@ goog.i18n.DateTimePatterns_ha = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -4590,6 +5092,8 @@ goog.i18n.DateTimePatterns_ha_Latn = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -4606,6 +5110,8 @@ goog.i18n.DateTimePatterns_ha_Latn_GH = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -4622,6 +5128,8 @@ goog.i18n.DateTimePatterns_ha_Latn_NE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -4638,6 +5146,8 @@ goog.i18n.DateTimePatterns_ha_Latn_NG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -4654,6 +5164,8 @@ goog.i18n.DateTimePatterns_haw_US = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4670,6 +5182,8 @@ goog.i18n.DateTimePatterns_he_IL = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd בMMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d בMMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d בMMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd בMMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4686,6 +5200,8 @@ goog.i18n.DateTimePatterns_hi_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -4702,6 +5218,8 @@ goog.i18n.DateTimePatterns_hr_BA = {
   MONTH_DAY_SHORT: 'd. M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd.'
 };
 
@@ -4718,6 +5236,8 @@ goog.i18n.DateTimePatterns_hr_HR = {
   MONTH_DAY_SHORT: 'd. M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd.'
 };
 
@@ -4734,6 +5254,8 @@ goog.i18n.DateTimePatterns_hu_HU = {
   MONTH_DAY_SHORT: 'M. d.',
   MONTH_DAY_MEDIUM: 'MMMM d.',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d., EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y. MMM d., EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y. MMM d.',
   DAY_ABBR: 'd'
 };
 
@@ -4750,6 +5272,8 @@ goog.i18n.DateTimePatterns_hy = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'd MMM, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'd MMM, y թ., EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y թ.',
   DAY_ABBR: 'd'
 };
 
@@ -4766,6 +5290,8 @@ goog.i18n.DateTimePatterns_hy_AM = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'd MMM, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'd MMM, y թ., EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y թ.',
   DAY_ABBR: 'd'
 };
 
@@ -4782,6 +5308,8 @@ goog.i18n.DateTimePatterns_id_ID = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4798,6 +5326,8 @@ goog.i18n.DateTimePatterns_ig = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4814,6 +5344,8 @@ goog.i18n.DateTimePatterns_ig_NG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4830,6 +5362,8 @@ goog.i18n.DateTimePatterns_ii = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4846,6 +5380,8 @@ goog.i18n.DateTimePatterns_ii_CN = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4862,6 +5398,8 @@ goog.i18n.DateTimePatterns_is_IS = {
   MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -4878,6 +5416,8 @@ goog.i18n.DateTimePatterns_it_CH = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4894,6 +5434,8 @@ goog.i18n.DateTimePatterns_it_IT = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4910,6 +5452,8 @@ goog.i18n.DateTimePatterns_it_SM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4926,6 +5470,8 @@ goog.i18n.DateTimePatterns_ja_JP = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日(EEE)',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日(EEE)',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -4942,6 +5488,8 @@ goog.i18n.DateTimePatterns_jgo = {
   MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4958,6 +5506,8 @@ goog.i18n.DateTimePatterns_jgo_CM = {
   MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -4974,6 +5524,8 @@ goog.i18n.DateTimePatterns_jmc = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -4990,6 +5542,8 @@ goog.i18n.DateTimePatterns_jmc_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5006,6 +5560,8 @@ goog.i18n.DateTimePatterns_ka = {
   MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -5022,6 +5578,8 @@ goog.i18n.DateTimePatterns_ka_GE = {
   MONTH_DAY_SHORT: 'd.M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -5038,6 +5596,8 @@ goog.i18n.DateTimePatterns_kab = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5054,6 +5614,8 @@ goog.i18n.DateTimePatterns_kab_DZ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5070,6 +5632,8 @@ goog.i18n.DateTimePatterns_kam = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5086,6 +5650,8 @@ goog.i18n.DateTimePatterns_kam_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5102,6 +5668,8 @@ goog.i18n.DateTimePatterns_kde = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5118,6 +5686,8 @@ goog.i18n.DateTimePatterns_kde_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5134,6 +5704,8 @@ goog.i18n.DateTimePatterns_kea = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd \'di\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'di\' MMM \'di\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5150,6 +5722,8 @@ goog.i18n.DateTimePatterns_kea_CV = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd \'di\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'di\' MMM \'di\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5166,6 +5740,8 @@ goog.i18n.DateTimePatterns_khq = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5182,6 +5758,8 @@ goog.i18n.DateTimePatterns_khq_ML = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5198,6 +5776,8 @@ goog.i18n.DateTimePatterns_ki = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5214,6 +5794,8 @@ goog.i18n.DateTimePatterns_ki_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5230,6 +5812,8 @@ goog.i18n.DateTimePatterns_kk = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5246,6 +5830,8 @@ goog.i18n.DateTimePatterns_kk_Cyrl = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5262,6 +5848,8 @@ goog.i18n.DateTimePatterns_kk_Cyrl_KZ = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5278,6 +5866,8 @@ goog.i18n.DateTimePatterns_kl = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5294,6 +5884,8 @@ goog.i18n.DateTimePatterns_kl_GL = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5310,6 +5902,8 @@ goog.i18n.DateTimePatterns_kln = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5326,6 +5920,8 @@ goog.i18n.DateTimePatterns_kln_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5342,6 +5938,8 @@ goog.i18n.DateTimePatterns_km = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5358,6 +5956,8 @@ goog.i18n.DateTimePatterns_km_KH = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5374,6 +5974,8 @@ goog.i18n.DateTimePatterns_kn_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd, MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -5390,6 +5992,8 @@ goog.i18n.DateTimePatterns_ko_KP = {
   MONTH_DAY_SHORT: 'M. d.',
   MONTH_DAY_MEDIUM: 'MMMM d일',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d일 (EEE)',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y년 MMM d일 (EEE)',
+  MONTH_DAY_YEAR_MEDIUM: 'y년 MMM d일',
   DAY_ABBR: 'd일'
 };
 
@@ -5406,6 +6010,8 @@ goog.i18n.DateTimePatterns_ko_KR = {
   MONTH_DAY_SHORT: 'M. d.',
   MONTH_DAY_MEDIUM: 'MMMM d일',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d일 (EEE)',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y년 MMM d일 (EEE)',
+  MONTH_DAY_YEAR_MEDIUM: 'y년 MMM d일',
   DAY_ABBR: 'd일'
 };
 
@@ -5422,6 +6028,8 @@ goog.i18n.DateTimePatterns_kok = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5438,6 +6046,8 @@ goog.i18n.DateTimePatterns_kok_IN = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5454,6 +6064,8 @@ goog.i18n.DateTimePatterns_ks = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -5470,6 +6082,8 @@ goog.i18n.DateTimePatterns_ks_Arab = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -5486,6 +6100,8 @@ goog.i18n.DateTimePatterns_ks_Arab_IN = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -5502,6 +6118,8 @@ goog.i18n.DateTimePatterns_ksb = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5518,6 +6136,8 @@ goog.i18n.DateTimePatterns_ksb_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5534,6 +6154,8 @@ goog.i18n.DateTimePatterns_ksf = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5550,6 +6172,8 @@ goog.i18n.DateTimePatterns_ksf_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5566,6 +6190,8 @@ goog.i18n.DateTimePatterns_kw = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5582,6 +6208,8 @@ goog.i18n.DateTimePatterns_kw_GB = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5598,6 +6226,8 @@ goog.i18n.DateTimePatterns_lag = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5614,6 +6244,8 @@ goog.i18n.DateTimePatterns_lag_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5630,6 +6262,8 @@ goog.i18n.DateTimePatterns_lg = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5646,6 +6280,8 @@ goog.i18n.DateTimePatterns_lg_UG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5662,6 +6298,8 @@ goog.i18n.DateTimePatterns_ln_AO = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5678,6 +6316,8 @@ goog.i18n.DateTimePatterns_ln_CD = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5694,6 +6334,8 @@ goog.i18n.DateTimePatterns_ln_CF = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5710,6 +6352,8 @@ goog.i18n.DateTimePatterns_ln_CG = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5726,6 +6370,8 @@ goog.i18n.DateTimePatterns_lo = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5742,6 +6388,8 @@ goog.i18n.DateTimePatterns_lo_LA = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5758,6 +6406,8 @@ goog.i18n.DateTimePatterns_lt_LT = {
   MONTH_DAY_SHORT: 'MM-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -5774,6 +6424,8 @@ goog.i18n.DateTimePatterns_lu = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5790,6 +6442,8 @@ goog.i18n.DateTimePatterns_lu_CD = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5806,6 +6460,8 @@ goog.i18n.DateTimePatterns_luo = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5822,6 +6478,8 @@ goog.i18n.DateTimePatterns_luo_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5838,6 +6496,8 @@ goog.i18n.DateTimePatterns_luy = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5854,6 +6514,8 @@ goog.i18n.DateTimePatterns_luy_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5870,6 +6532,8 @@ goog.i18n.DateTimePatterns_lv_LV = {
   MONTH_DAY_SHORT: 'dd.MM.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y. \'g\'. d. MMM',
+  MONTH_DAY_YEAR_MEDIUM: 'y. \'g\'. d. MMM',
   DAY_ABBR: 'd'
 };
 
@@ -5886,6 +6550,8 @@ goog.i18n.DateTimePatterns_mas = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5902,6 +6568,8 @@ goog.i18n.DateTimePatterns_mas_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5918,6 +6586,8 @@ goog.i18n.DateTimePatterns_mas_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5934,6 +6604,8 @@ goog.i18n.DateTimePatterns_mer = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5950,6 +6622,8 @@ goog.i18n.DateTimePatterns_mer_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5966,6 +6640,8 @@ goog.i18n.DateTimePatterns_mfe = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5982,6 +6658,8 @@ goog.i18n.DateTimePatterns_mfe_MU = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -5998,6 +6676,8 @@ goog.i18n.DateTimePatterns_mg = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6014,6 +6694,8 @@ goog.i18n.DateTimePatterns_mg_MG = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6030,6 +6712,8 @@ goog.i18n.DateTimePatterns_mgh = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -6046,6 +6730,8 @@ goog.i18n.DateTimePatterns_mgh_MZ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 
@@ -6062,6 +6748,8 @@ goog.i18n.DateTimePatterns_mgo = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6078,6 +6766,8 @@ goog.i18n.DateTimePatterns_mgo_CM = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6094,6 +6784,8 @@ goog.i18n.DateTimePatterns_mk = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6110,6 +6802,8 @@ goog.i18n.DateTimePatterns_mk_MK = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6126,6 +6820,8 @@ goog.i18n.DateTimePatterns_ml_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6142,6 +6838,8 @@ goog.i18n.DateTimePatterns_mn = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6158,6 +6856,8 @@ goog.i18n.DateTimePatterns_mn_Cyrl = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6174,6 +6874,8 @@ goog.i18n.DateTimePatterns_mn_Cyrl_MN = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6190,6 +6892,8 @@ goog.i18n.DateTimePatterns_mr_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6206,6 +6910,8 @@ goog.i18n.DateTimePatterns_ms_Latn = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6222,6 +6928,8 @@ goog.i18n.DateTimePatterns_ms_Latn_BN = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6238,6 +6946,8 @@ goog.i18n.DateTimePatterns_ms_Latn_MY = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6254,6 +6964,8 @@ goog.i18n.DateTimePatterns_ms_Latn_SG = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6270,6 +6982,8 @@ goog.i18n.DateTimePatterns_mt_MT = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6286,6 +7000,8 @@ goog.i18n.DateTimePatterns_mua = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6302,6 +7018,8 @@ goog.i18n.DateTimePatterns_mua_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6318,6 +7036,8 @@ goog.i18n.DateTimePatterns_my = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6334,6 +7054,8 @@ goog.i18n.DateTimePatterns_my_MM = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, y MMM d',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6350,6 +7072,8 @@ goog.i18n.DateTimePatterns_naq = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6366,6 +7090,8 @@ goog.i18n.DateTimePatterns_naq_NA = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6382,6 +7108,8 @@ goog.i18n.DateTimePatterns_nb_NO = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd.'
 };
 
@@ -6398,6 +7126,8 @@ goog.i18n.DateTimePatterns_nd = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6414,6 +7144,8 @@ goog.i18n.DateTimePatterns_nd_ZW = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6430,6 +7162,8 @@ goog.i18n.DateTimePatterns_ne = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6446,6 +7180,8 @@ goog.i18n.DateTimePatterns_ne_IN = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6462,6 +7198,8 @@ goog.i18n.DateTimePatterns_ne_NP = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6478,6 +7216,8 @@ goog.i18n.DateTimePatterns_nl_AW = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6494,6 +7234,8 @@ goog.i18n.DateTimePatterns_nl_BE = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6510,6 +7252,8 @@ goog.i18n.DateTimePatterns_nl_CW = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6526,6 +7270,8 @@ goog.i18n.DateTimePatterns_nl_NL = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6542,6 +7288,8 @@ goog.i18n.DateTimePatterns_nl_SR = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6558,6 +7306,8 @@ goog.i18n.DateTimePatterns_nl_SX = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6574,6 +7324,8 @@ goog.i18n.DateTimePatterns_nmg = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6590,6 +7342,8 @@ goog.i18n.DateTimePatterns_nmg_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6606,6 +7360,8 @@ goog.i18n.DateTimePatterns_nn = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd.'
 };
 
@@ -6622,6 +7378,8 @@ goog.i18n.DateTimePatterns_nn_NO = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd.'
 };
 
@@ -6638,6 +7396,8 @@ goog.i18n.DateTimePatterns_nus = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6654,6 +7414,8 @@ goog.i18n.DateTimePatterns_nus_SD = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6670,6 +7432,8 @@ goog.i18n.DateTimePatterns_nyn = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6686,6 +7450,8 @@ goog.i18n.DateTimePatterns_nyn_UG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6702,6 +7468,8 @@ goog.i18n.DateTimePatterns_om = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -6718,6 +7486,8 @@ goog.i18n.DateTimePatterns_om_ET = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -6734,6 +7504,8 @@ goog.i18n.DateTimePatterns_om_KE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -6750,6 +7522,8 @@ goog.i18n.DateTimePatterns_or_IN = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6766,6 +7540,8 @@ goog.i18n.DateTimePatterns_pa = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6782,6 +7558,8 @@ goog.i18n.DateTimePatterns_pa_Arab = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6798,6 +7576,8 @@ goog.i18n.DateTimePatterns_pa_Arab_PK = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6814,6 +7594,8 @@ goog.i18n.DateTimePatterns_pa_Guru = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6830,6 +7612,8 @@ goog.i18n.DateTimePatterns_pa_Guru_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6846,6 +7630,8 @@ goog.i18n.DateTimePatterns_pl_PL = {
   MONTH_DAY_SHORT: 'd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -6862,6 +7648,8 @@ goog.i18n.DateTimePatterns_ps = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'G y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'G y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6878,6 +7666,8 @@ goog.i18n.DateTimePatterns_ps_AF = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'G y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'G y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -6894,6 +7684,8 @@ goog.i18n.DateTimePatterns_pt_AO = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d/MM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d/MM/y',
+  MONTH_DAY_YEAR_MEDIUM: 'd/MM/y',
   DAY_ABBR: 'd'
 };
 
@@ -6910,6 +7702,8 @@ goog.i18n.DateTimePatterns_pt_CV = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d/MM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d/MM/y',
+  MONTH_DAY_YEAR_MEDIUM: 'd/MM/y',
   DAY_ABBR: 'd'
 };
 
@@ -6926,6 +7720,8 @@ goog.i18n.DateTimePatterns_pt_GW = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d/MM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d/MM/y',
+  MONTH_DAY_YEAR_MEDIUM: 'd/MM/y',
   DAY_ABBR: 'd'
 };
 
@@ -6942,6 +7738,8 @@ goog.i18n.DateTimePatterns_pt_MO = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d/MM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d/MM/y',
+  MONTH_DAY_YEAR_MEDIUM: 'd/MM/y',
   DAY_ABBR: 'd'
 };
 
@@ -6958,6 +7756,8 @@ goog.i18n.DateTimePatterns_pt_MZ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d/MM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d/MM/y',
+  MONTH_DAY_YEAR_MEDIUM: 'd/MM/y',
   DAY_ABBR: 'd'
 };
 
@@ -6974,6 +7774,8 @@ goog.i18n.DateTimePatterns_pt_ST = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d/MM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d/MM/y',
+  MONTH_DAY_YEAR_MEDIUM: 'd/MM/y',
   DAY_ABBR: 'd'
 };
 
@@ -6990,6 +7792,8 @@ goog.i18n.DateTimePatterns_pt_TL = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd \'de\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d/MM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d/MM/y',
+  MONTH_DAY_YEAR_MEDIUM: 'd/MM/y',
   DAY_ABBR: 'd'
 };
 
@@ -7006,6 +7810,8 @@ goog.i18n.DateTimePatterns_rm = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -7022,6 +7828,8 @@ goog.i18n.DateTimePatterns_rm_CH = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -7038,6 +7846,8 @@ goog.i18n.DateTimePatterns_rn = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7054,6 +7864,8 @@ goog.i18n.DateTimePatterns_rn_BI = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7070,6 +7882,8 @@ goog.i18n.DateTimePatterns_ro_MD = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7086,6 +7900,8 @@ goog.i18n.DateTimePatterns_ro_RO = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7102,6 +7918,8 @@ goog.i18n.DateTimePatterns_rof = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7118,6 +7936,8 @@ goog.i18n.DateTimePatterns_rof_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7134,6 +7954,8 @@ goog.i18n.DateTimePatterns_ru_BY = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'ccc, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y \'г\'.',
   DAY_ABBR: 'd'
 };
 
@@ -7150,6 +7972,8 @@ goog.i18n.DateTimePatterns_ru_KG = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'ccc, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y \'г\'.',
   DAY_ABBR: 'd'
 };
 
@@ -7166,6 +7990,8 @@ goog.i18n.DateTimePatterns_ru_KZ = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'ccc, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y \'г\'.',
   DAY_ABBR: 'd'
 };
 
@@ -7182,6 +8008,8 @@ goog.i18n.DateTimePatterns_ru_MD = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'ccc, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y \'г\'.',
   DAY_ABBR: 'd'
 };
 
@@ -7198,6 +8026,8 @@ goog.i18n.DateTimePatterns_ru_RU = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'ccc, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y \'г\'.',
   DAY_ABBR: 'd'
 };
 
@@ -7214,6 +8044,8 @@ goog.i18n.DateTimePatterns_ru_UA = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'ccc, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y \'г\'.',
   DAY_ABBR: 'd'
 };
 
@@ -7230,6 +8062,8 @@ goog.i18n.DateTimePatterns_rw = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -7246,6 +8080,8 @@ goog.i18n.DateTimePatterns_rw_RW = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -7262,6 +8098,8 @@ goog.i18n.DateTimePatterns_rwk = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7278,6 +8116,8 @@ goog.i18n.DateTimePatterns_rwk_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7294,6 +8134,8 @@ goog.i18n.DateTimePatterns_saq = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7310,6 +8152,8 @@ goog.i18n.DateTimePatterns_saq_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7326,6 +8170,8 @@ goog.i18n.DateTimePatterns_sbp = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d y',
   DAY_ABBR: 'd'
 };
 
@@ -7342,6 +8188,8 @@ goog.i18n.DateTimePatterns_sbp_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d y',
   DAY_ABBR: 'd'
 };
 
@@ -7358,6 +8206,8 @@ goog.i18n.DateTimePatterns_seh = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd \'de\' MMM \'de\' y',
   DAY_ABBR: 'd'
 };
 
@@ -7374,6 +8224,8 @@ goog.i18n.DateTimePatterns_seh_MZ = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d \'de\' MMM \'de\' y',
+  MONTH_DAY_YEAR_MEDIUM: 'd \'de\' MMM \'de\' y',
   DAY_ABBR: 'd'
 };
 
@@ -7390,6 +8242,8 @@ goog.i18n.DateTimePatterns_ses = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7406,6 +8260,8 @@ goog.i18n.DateTimePatterns_ses_ML = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7422,6 +8278,8 @@ goog.i18n.DateTimePatterns_sg = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -7438,6 +8296,8 @@ goog.i18n.DateTimePatterns_sg_CF = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -7454,6 +8314,8 @@ goog.i18n.DateTimePatterns_shi = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -7470,6 +8332,8 @@ goog.i18n.DateTimePatterns_shi_Latn = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -7486,6 +8350,8 @@ goog.i18n.DateTimePatterns_shi_Latn_MA = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -7502,6 +8368,8 @@ goog.i18n.DateTimePatterns_shi_Tfng = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -7518,6 +8386,8 @@ goog.i18n.DateTimePatterns_shi_Tfng_MA = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -7534,6 +8404,8 @@ goog.i18n.DateTimePatterns_si = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -7550,6 +8422,8 @@ goog.i18n.DateTimePatterns_si_LK = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -7566,6 +8440,8 @@ goog.i18n.DateTimePatterns_sk_SK = {
   MONTH_DAY_SHORT: 'd.M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM.',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd.M.y',
   DAY_ABBR: 'd.'
 };
 
@@ -7582,6 +8458,8 @@ goog.i18n.DateTimePatterns_sl_SI = {
   MONTH_DAY_SHORT: 'd. M.',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7598,6 +8476,8 @@ goog.i18n.DateTimePatterns_sn = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7614,6 +8494,8 @@ goog.i18n.DateTimePatterns_sn_ZW = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7630,6 +8512,8 @@ goog.i18n.DateTimePatterns_so = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -7646,6 +8530,8 @@ goog.i18n.DateTimePatterns_so_DJ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -7662,6 +8548,8 @@ goog.i18n.DateTimePatterns_so_ET = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -7678,6 +8566,8 @@ goog.i18n.DateTimePatterns_so_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -7694,6 +8584,8 @@ goog.i18n.DateTimePatterns_so_SO = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -7710,6 +8602,8 @@ goog.i18n.DateTimePatterns_sq_AL = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -7726,6 +8620,8 @@ goog.i18n.DateTimePatterns_sq_MK = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -7742,6 +8638,8 @@ goog.i18n.DateTimePatterns_sr_Cyrl = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -7758,6 +8656,8 @@ goog.i18n.DateTimePatterns_sr_Cyrl_BA = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -7774,6 +8674,8 @@ goog.i18n.DateTimePatterns_sr_Cyrl_ME = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -7790,6 +8692,8 @@ goog.i18n.DateTimePatterns_sr_Cyrl_RS = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -7806,6 +8710,8 @@ goog.i18n.DateTimePatterns_sr_Latn = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -7822,6 +8728,8 @@ goog.i18n.DateTimePatterns_sr_Latn_BA = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -7838,6 +8746,8 @@ goog.i18n.DateTimePatterns_sr_Latn_ME = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -7854,6 +8764,8 @@ goog.i18n.DateTimePatterns_sr_Latn_RS = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd. MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d. MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d. MMM y.',
+  MONTH_DAY_YEAR_MEDIUM: 'd. MMM y.',
   DAY_ABBR: 'd'
 };
 
@@ -7870,6 +8782,8 @@ goog.i18n.DateTimePatterns_sv_AX = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd:\'e\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7886,6 +8800,8 @@ goog.i18n.DateTimePatterns_sv_FI = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd:\'e\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7902,6 +8818,8 @@ goog.i18n.DateTimePatterns_sv_SE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd:\'e\' MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7918,6 +8836,8 @@ goog.i18n.DateTimePatterns_sw_KE = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7934,6 +8854,8 @@ goog.i18n.DateTimePatterns_sw_TZ = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7950,6 +8872,8 @@ goog.i18n.DateTimePatterns_sw_UG = {
   MONTH_DAY_SHORT: 'd-M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7966,6 +8890,8 @@ goog.i18n.DateTimePatterns_swc = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7982,6 +8908,8 @@ goog.i18n.DateTimePatterns_swc_CD = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -7998,6 +8926,8 @@ goog.i18n.DateTimePatterns_ta_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -8014,6 +8944,8 @@ goog.i18n.DateTimePatterns_ta_LK = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -8030,6 +8962,8 @@ goog.i18n.DateTimePatterns_ta_MY = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -8046,6 +8980,8 @@ goog.i18n.DateTimePatterns_ta_SG = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM, y',
   DAY_ABBR: 'd'
 };
 
@@ -8062,6 +8998,8 @@ goog.i18n.DateTimePatterns_te_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d, MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd, MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8078,6 +9016,8 @@ goog.i18n.DateTimePatterns_teo = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8094,6 +9034,8 @@ goog.i18n.DateTimePatterns_teo_KE = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8110,6 +9052,8 @@ goog.i18n.DateTimePatterns_teo_UG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8126,6 +9070,8 @@ goog.i18n.DateTimePatterns_th_TH = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8142,6 +9088,8 @@ goog.i18n.DateTimePatterns_ti = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -8158,6 +9106,8 @@ goog.i18n.DateTimePatterns_ti_ER = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -8174,6 +9124,8 @@ goog.i18n.DateTimePatterns_ti_ET = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'd-MMM-y',
   DAY_ABBR: 'd'
 };
 
@@ -8190,6 +9142,8 @@ goog.i18n.DateTimePatterns_to = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8206,6 +9160,8 @@ goog.i18n.DateTimePatterns_to_TO = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8222,6 +9178,8 @@ goog.i18n.DateTimePatterns_tr_CY = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'dd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'd MMMM EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'd MMM y EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'dd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8238,6 +9196,8 @@ goog.i18n.DateTimePatterns_tr_TR = {
   MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'dd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'd MMMM EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'd MMM y EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'dd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8254,6 +9214,8 @@ goog.i18n.DateTimePatterns_twq = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8270,6 +9232,8 @@ goog.i18n.DateTimePatterns_twq_NE = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8286,6 +9250,8 @@ goog.i18n.DateTimePatterns_tzm = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8302,6 +9268,8 @@ goog.i18n.DateTimePatterns_tzm_Latn = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8318,6 +9286,8 @@ goog.i18n.DateTimePatterns_tzm_Latn_MA = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8334,6 +9304,8 @@ goog.i18n.DateTimePatterns_uk_UA = {
   MONTH_DAY_SHORT: 'dd.MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8350,6 +9322,8 @@ goog.i18n.DateTimePatterns_ur_IN = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -8366,6 +9340,8 @@ goog.i18n.DateTimePatterns_ur_PK = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE، d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE، d MMM، y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM، y',
   DAY_ABBR: 'd'
 };
 
@@ -8382,6 +9358,8 @@ goog.i18n.DateTimePatterns_uz = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -8398,6 +9376,8 @@ goog.i18n.DateTimePatterns_uz_Arab = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -8414,6 +9394,8 @@ goog.i18n.DateTimePatterns_uz_Arab_AF = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'G y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'G y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -8430,6 +9412,8 @@ goog.i18n.DateTimePatterns_uz_Cyrl = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -8446,6 +9430,8 @@ goog.i18n.DateTimePatterns_uz_Cyrl_UZ = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -8462,6 +9448,8 @@ goog.i18n.DateTimePatterns_uz_Latn = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -8478,6 +9466,8 @@ goog.i18n.DateTimePatterns_uz_Latn_UZ = {
   MONTH_DAY_SHORT: 'MM-dd',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'MMM d, EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y MMM d, EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y MMM d',
   DAY_ABBR: 'd'
 };
 
@@ -8494,6 +9484,8 @@ goog.i18n.DateTimePatterns_vai = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8510,6 +9502,8 @@ goog.i18n.DateTimePatterns_vai_Latn = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d y',
   DAY_ABBR: 'd'
 };
 
@@ -8526,6 +9520,8 @@ goog.i18n.DateTimePatterns_vai_Latn_LR = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d y',
   DAY_ABBR: 'd'
 };
 
@@ -8542,6 +9538,8 @@ goog.i18n.DateTimePatterns_vai_Vaii = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8558,6 +9556,8 @@ goog.i18n.DateTimePatterns_vai_Vaii_LR = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8574,6 +9574,8 @@ goog.i18n.DateTimePatterns_vi_VN = {
   MONTH_DAY_SHORT: 'dd-M',
   MONTH_DAY_MEDIUM: 'dd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, dd MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, dd MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'dd MMM, y',
   DAY_ABBR: '\'Ngày\' dd'
 };
 
@@ -8590,6 +9592,8 @@ goog.i18n.DateTimePatterns_vun = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8606,6 +9610,8 @@ goog.i18n.DateTimePatterns_vun_TZ = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8622,6 +9628,8 @@ goog.i18n.DateTimePatterns_xog = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8638,6 +9646,8 @@ goog.i18n.DateTimePatterns_xog_UG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8654,6 +9664,8 @@ goog.i18n.DateTimePatterns_yav = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8670,6 +9682,8 @@ goog.i18n.DateTimePatterns_yav_CM = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'd MMMM',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8686,6 +9700,8 @@ goog.i18n.DateTimePatterns_yo = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8702,6 +9718,8 @@ goog.i18n.DateTimePatterns_yo_NG = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   DAY_ABBR: 'd'
 };
 
@@ -8718,6 +9736,8 @@ goog.i18n.DateTimePatterns_zh_Hans = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8734,6 +9754,8 @@ goog.i18n.DateTimePatterns_zh_Hans_CN = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8750,6 +9772,8 @@ goog.i18n.DateTimePatterns_zh_Hans_HK = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8766,6 +9790,8 @@ goog.i18n.DateTimePatterns_zh_Hans_MO = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8782,6 +9808,8 @@ goog.i18n.DateTimePatterns_zh_Hans_SG = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8798,6 +9826,8 @@ goog.i18n.DateTimePatterns_zh_Hant = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8814,6 +9844,8 @@ goog.i18n.DateTimePatterns_zh_Hant_HK = {
   MONTH_DAY_SHORT: 'd/M',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8830,6 +9862,8 @@ goog.i18n.DateTimePatterns_zh_Hant_MO = {
   MONTH_DAY_SHORT: 'M-d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8846,6 +9880,8 @@ goog.i18n.DateTimePatterns_zh_Hant_TW = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'M月d日',
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
+  MONTH_DAY_YEAR_MEDIUM: 'y年M月d日',
   DAY_ABBR: 'd日'
 };
 
@@ -8862,6 +9898,8 @@ goog.i18n.DateTimePatterns_zu_ZA = {
   MONTH_DAY_SHORT: 'M/d',
   MONTH_DAY_MEDIUM: 'MMMM d',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE, MMM d',
+  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE, MMM d, y',
+  MONTH_DAY_YEAR_MEDIUM: 'MMM d, y',
   DAY_ABBR: 'd'
 };
 

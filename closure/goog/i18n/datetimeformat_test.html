@@ -16,8 +16,10 @@ See the COPYING file for details.
   goog.require('goog.i18n.TimeZone');
   goog.require('goog.i18n.DateTimePatterns');
   goog.require('goog.i18n.DateTimePatterns_de');
+  goog.require('goog.i18n.DateTimePatterns_sv');
   goog.require('goog.i18n.DateTimeSymbols');
   goog.require('goog.i18n.DateTimeSymbols_de');
+  goog.require('goog.i18n.DateTimeSymbols_sv');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -259,6 +261,28 @@ See the COPYING file for details.
     var fmt = new goog.i18n.DateTimeFormat(
         goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_MEDIUM);
     assertEquals('Do., 27. Juli', fmt.format(date));
+  }
+
+  function testPatternDayOfWeekMonthDayYearMedium() {
+    date = new Date(2012, 5, 28, 13, 10, 10, 250);
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+    var fmt = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
+    assertEquals('Thu, Jun 28, 2012', fmt.format(date));
+    var fmt = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
+    assertEquals('Jun 28, 2012', fmt.format(date));
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_sv;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sv;
+    var fmt = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
+    assertEquals('tors 28 jun 2012', fmt.format(date));
+    var fmt = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
+    assertEquals('28 jun 2012', fmt.format(date));
   }
 
   function testQuote() {
