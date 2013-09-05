@@ -58,6 +58,13 @@ function testAndroid() {
   assertVersionBetween('4', '5');
 }
 
+function testKindleFire() {
+  uaString = goog.labs.userAgent.testAgents.KINDLE_FIRE;
+  goog.labs.userAgent.util.setUserAgent(uaString);
+  assertTrue(goog.labs.userAgent.platform.isAndroid());
+  assertVersion('4.0.3');
+}
+
 function testIpod() {
   var uaString = goog.labs.userAgent.testAgents.SAFARI_IPOD;
 
