@@ -14,6 +14,10 @@
 
 /**
  * @fileoverview Defines an interface that represents a Result.
+ *
+ * NOTE: goog.result is soft deprecated - we expect to replace this and
+ * goog.async.Deferred with a wrapper around W3C Promises:
+ * http://dom.spec.whatwg.org/#promises.
  */
 
 goog.provide('goog.result.Result');

@@ -18,6 +18,10 @@
  *     gives an overview of their functionality along with some examples and the
  *     actual definitions have detailed descriptions next to them.
  *
+ *
+ * NOTE: goog.result is soft deprecated - we expect to replace this and
+ * goog.async.Deferred with a wrapper around W3C Promises:
+ * http://dom.spec.whatwg.org/#promises.
  */
 
 goog.provide('goog.result');
