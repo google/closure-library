@@ -16,8 +16,7 @@
  * @fileoverview Utilities used by goog.labs.userAgent tools. These functions
  * should not be used outside of goog.labs.userAgent.*.
  *
- * @visibility {//closure/goog/dom:__subpackages__}
- * @visibility {//closure/goog/useragent:__subpackages__}
+ * @visibility {//visibility:private}
  * @author nnaze@google.com (Nathan Naze)
  */
 
@@ -39,10 +38,10 @@ goog.labs.userAgent.util.userAgent_ =
  * Applications may override browser detection on the built in
  * navigator.userAgent object by setting this string. Set to null to use the
  * browser object instead.
- * @param {?string=} opt_userAgent The User-Agent override.
+ * @param {?string} userAgent the User-Agent override
  */
-goog.labs.userAgent.util.setUserAgent = function(opt_userAgent) {
-  goog.labs.userAgent.util.userAgent_ = opt_userAgent ||
+goog.labs.userAgent.util.setUserAgent = function(userAgent) {
+  goog.labs.userAgent.util.userAgent_ = userAgent ||
       (goog.global['navigator'] ? goog.global['navigator'].userAgent : '');
 };
 
