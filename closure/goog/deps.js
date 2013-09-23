@@ -371,12 +371,6 @@ goog.addDependency('labs/net/webchanneltransport.js', ['goog.net.WebChannelTrans
 goog.addDependency('labs/net/webchanneltransportfactory.js', ['goog.net.createWebChannelTransport'], ['goog.functions', 'goog.labs.net.webChannel.WebChannelBaseTransport']);
 goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.debug.Error', 'goog.json', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.result', 'goog.result.SimpleResult', 'goog.string', 'goog.uri.utils']);
 goog.addDependency('labs/object/object.js', ['goog.labs.object'], []);
-goog.addDependency('labs/observe/notice.js', ['goog.labs.observe.Notice'], []);
-goog.addDependency('labs/observe/observable.js', ['goog.labs.observe.Observable'], ['goog.disposable.IDisposable']);
-goog.addDependency('labs/observe/observableset.js', ['goog.labs.observe.ObservableSet'], ['goog.array', 'goog.labs.observe.Observer']);
-goog.addDependency('labs/observe/observationset.js', ['goog.labs.observe.ObservationSet'], ['goog.array', 'goog.labs.observe.Observer']);
-goog.addDependency('labs/observe/observer.js', ['goog.labs.observe.Observer'], []);
-goog.addDependency('labs/observe/simpleobservable.js', ['goog.labs.observe.SimpleObservable'], ['goog.Disposable', 'goog.array', 'goog.asserts', 'goog.labs.observe.Notice', 'goog.labs.observe.Observable', 'goog.labs.observe.Observer', 'goog.object']);
 goog.addDependency('labs/storage/boundedcollectablestorage.js', ['goog.labs.storage.BoundedCollectableStorage'], ['goog.array', 'goog.asserts', 'goog.iter', 'goog.storage.CollectableStorage', 'goog.storage.ErrorCode', 'goog.storage.ExpiringStorage']);
 goog.addDependency('labs/structs/map.js', ['goog.labs.structs.Map'], ['goog.array', 'goog.asserts', 'goog.labs.object', 'goog.object']);
 goog.addDependency('labs/structs/map_perf.js', ['goog.labs.structs.mapPerf'], ['goog.dom', 'goog.labs.structs.Map', 'goog.structs.Map', 'goog.testing.PerformanceTable', 'goog.testing.jsunit']);
