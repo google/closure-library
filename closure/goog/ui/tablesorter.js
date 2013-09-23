@@ -249,15 +249,15 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
   for (var i = 0, len = rows.length; i < len; i++) {
     var row = rows[i];
     var value = goog.dom.getTextContent(row.cells[column]);
-    values.push([value, row]);
+    values.push([value, i, row]);
   }
 
   // Sort the array.
   var multiplier = this.reversed_ ? -1 : 1;
-  goog.array.stableSort(values,
-                        function(a, b) {
-                          return sortFunction(a[0], b[0]) * multiplier;
-                        });
+  var cmpFn = function(a, b) {
+    return multiplier * sortFunction(a[0], b[0]) || a[1] - b[1];
+  };
+  goog.array.sort(values, cmpFn);
 
   // Remove the tbody temporarily since this speeds up the sort on some
   // browsers.
@@ -265,7 +265,7 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
 
   // Sort the rows, using the resulting array.
   for (i = 0; i < len; i++) {
-    tBody.appendChild(values[i][1]);
+    tBody.appendChild(values[i][2]);
   }
 
   // Reinstate the tbody.
