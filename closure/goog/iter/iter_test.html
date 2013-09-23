@@ -534,6 +534,45 @@ function testAccumulateFloat() {
   assertArrayEquals([1.0, 3.5, 4.0, 5.5, 6.0], goog.iter.toArray(iter));
 }
 
+function testZipArrays() {
+  var iter = goog.iter.zip([1, 2, 3], [4, 5, 6], [7, 8, 9]);
+  assertArrayEquals([1, 4, 7], iter.next());
+  assertArrayEquals([2, 5, 8], iter.next());
+  assertArrayEquals([3, 6, 9], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testZipSingleArg() {
+  var iter = goog.iter.zip([1, 2, 3]);
+  assertArrayEquals([1], iter.next());
+  assertArrayEquals([2], iter.next());
+  assertArrayEquals([3], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testZipUnevenArgs() {
+  var iter = goog.iter.zip([1, 2, 3], [4, 5], [7]);
+  assertArrayEquals([1, 4, 7], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testZipNoArgs() {
+  var iter = goog.iter.zip();
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testZipIterators() {
+  var iter = goog.iter.zip(goog.iter.count(), goog.iter.repeat('foo'));
+  assertArrayEquals([0, 'foo'], iter.next());
+  assertArrayEquals([1, 'foo'], iter.next());
+  assertArrayEquals([2, 'foo'], iter.next());
+  assertArrayEquals([3, 'foo'], iter.next());
+}
+
 </script>
 </body>
 </html>
