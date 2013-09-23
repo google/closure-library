@@ -28,7 +28,7 @@ goog.require('goog.array');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classlist');
+goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -139,13 +139,13 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
   this.visible_ = false;
 
   /**
-   * Classname for the main element.  This must be a single valid class name.
+   * Classname for the main element
    * @type {string}
    */
   this.className = goog.getCssName('ac-renderer');
 
   /**
-   * Classname for row divs.  This must be a single valid class name.
+   * Classname for row divs
    * @type {string}
    */
   this.rowClassName = goog.getCssName('ac-row');
@@ -164,7 +164,7 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
   this.legacyActiveClassName_ = goog.getCssName('active');
 
   /**
-   * Class name for active row div.  This must be a single valid class name.
+   * Class name for active row div.
    * Active row will have rowClassName & activeClassName &
    * legacyActiveClassName.
    * @type {string}
@@ -486,8 +486,8 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
     this.hiliteNone();
     this.hilitedRow_ = index;
     if (rowDiv) {
-      goog.dom.classlist.addAll(rowDiv, [this.activeClassName,
-          this.legacyActiveClassName_]);
+      goog.dom.classes.add(rowDiv, this.activeClassName,
+          this.legacyActiveClassName_);
       if (this.target_) {
         goog.a11y.aria.setActiveDescendant(this.target_, rowDiv);
       }
@@ -502,8 +502,8 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
  */
 goog.ui.ac.Renderer.prototype.hiliteNone = function() {
   if (this.hilitedRow_ >= 0) {
-    goog.dom.classlist.removeAll(this.rowDivs_[this.hilitedRow_],
-        [this.activeClassName, this.legacyActiveClassName_]);
+    goog.dom.classes.remove(this.rowDivs_[this.hilitedRow_],
+                            this.activeClassName, this.legacyActiveClassName_);
   }
 };
 
@@ -534,8 +534,7 @@ goog.ui.ac.Renderer.prototype.hiliteId = function(id) {
  * @private
  */
 goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elt) {
-  // Legacy clients may set the renderer's className to a space-separated list.
-  goog.dom.classlist.addAll(elt, this.className.split(' '));
+  goog.dom.classes.add(elt, this.className);
 };
 
 
@@ -900,25 +899,25 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
  * @return {Element} An element with the rendered HTML.
  */
 goog.ui.ac.Renderer.prototype.renderRowHtml = function(row, token) {
-  // Create and return the element.
-  var elem = this.dom_.createDom('div', {
+  // Create and return the node
+  var node = this.dom_.createDom('div', {
     className: this.rowClassName,
     id: goog.ui.IdGenerator.getInstance().getNextUniqueId()
   });
-  goog.a11y.aria.setRole(elem, goog.a11y.aria.Role.OPTION);
+  goog.a11y.aria.setRole(node, goog.a11y.aria.Role.OPTION);
   if (this.customRenderer_ && this.customRenderer_.renderRow) {
-    this.customRenderer_.renderRow(row, token, elem);
+    this.customRenderer_.renderRow(row, token, node);
   } else {
-    this.renderRowContents_(row, token, elem);
+    this.renderRowContents_(row, token, node);
   }
 
   if (token && this.useStandardHighlighting_) {
-    this.hiliteMatchingText_(elem, token);
+    this.hiliteMatchingText_(node, token);
   }
 
-  goog.dom.classlist.add(elem, this.rowClassName);
-  this.rowDivs_.push(elem);
-  return elem;
+  goog.dom.classes.add(node, this.rowClassName);
+  this.rowDivs_.push(node);
+  return node;
 };
 
 
@@ -932,7 +931,7 @@ goog.ui.ac.Renderer.prototype.renderRowHtml = function(row, token) {
  */
 goog.ui.ac.Renderer.prototype.getRowFromEventTarget_ = function(et) {
   while (et && et != this.element_ &&
-      !goog.dom.classlist.contains(et, this.rowClassName)) {
+      !goog.dom.classes.has(et, this.rowClassName)) {
     et = /** @type {Element} */ (et.parentNode);
   }
   return et ? goog.array.indexOf(this.rowDivs_, et) : -1;
