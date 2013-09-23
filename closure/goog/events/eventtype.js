@@ -165,7 +165,7 @@ goog.events.EventType = {
   LOSTPOINTERCAPTURE: 'lostpointercapture',
 
   // IE specific events.
-  // See http://msdn.microsoft.com/en-us/library/ie/hh673557(v=vs.85).aspx
+  // See http://msdn.microsoft.com/en-us/library/ie/hh772103(v=vs.85).aspx
   // Note: these events will be supplanted in IE11.
   MSGESTURECHANGE: 'MSGestureChange',
   MSGESTUREEND: 'MSGestureEnd',
@@ -177,9 +177,12 @@ goog.events.EventType = {
   MSLOSTPOINTERCAPTURE: 'MSLostPointerCapture',
   MSPOINTERCANCEL: 'MSPointerCancel',
   MSPOINTERDOWN: 'MSPointerDown',
+  MSPOINTERENTER: 'MSPointerEnter',
+  MSPOINTERHOVER: 'MSPointerHover',
+  MSPOINTERLEAVE: 'MSPointerLeave',
   MSPOINTERMOVE: 'MSPointerMove',
-  MSPOINTEROVER: 'MSPointerOver',
   MSPOINTEROUT: 'MSPointerOut',
+  MSPOINTEROVER: 'MSPointerOver',
   MSPOINTERUP: 'MSPointerUp',
 
   // Native IMEs/input tools events.
