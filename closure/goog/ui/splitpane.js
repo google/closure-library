@@ -888,11 +888,11 @@ goog.ui.SplitPane.prototype.handleDoubleClick_ = function(e) {
 
 /** @override */
 goog.ui.SplitPane.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
-
-  this.splitDragger_.dispose();
+  goog.dispose(this.splitDragger_);
   this.splitDragger_ = null;
 
   goog.dom.removeNode(this.iframeOverlay_);
   this.iframeOverlay_ = null;
+
+  goog.base(this, 'disposeInternal');
 };
