@@ -474,6 +474,43 @@ function testCycleEmptyIterable() {
   assertEquals(goog.iter.StopIteration, ex);
 }
 
+function testCountNoArgs() {
+  var iter = goog.iter.count();
+  var values = goog.iter.takeWhile(iter, function(n) { return n < 5; });
+  assertArrayEquals([0, 1, 2, 3, 4], goog.iter.toArray(values));
+}
+
+function testCountStart() {
+  var iter = goog.iter.count(10);
+  var values = goog.iter.takeWhile(iter, function(n) { return n < 15; });
+  assertArrayEquals([10, 11, 12, 13, 14], goog.iter.toArray(values));
+}
+
+function testCountStep() {
+  var iter = goog.iter.count(10, 2);
+  var values = goog.iter.takeWhile(iter, function(n) { return n < 20; });
+  assertArrayEquals([10, 12, 14, 16, 18], goog.iter.toArray(values));
+}
+
+function testCountNegativeStep() {
+  var iter = goog.iter.count(10, -2);
+  var values = goog.iter.takeWhile(iter, function(n) { return n > 0; });
+  assertArrayEquals([10, 8, 6, 4, 2], goog.iter.toArray(values));
+}
+
+function testCountZeroStep() {
+  var iter = goog.iter.count(42, 0);
+  assertEquals(42, iter.next());
+  assertEquals(42, iter.next());
+  assertEquals(42, iter.next());
+}
+
+function testCountFloat() {
+  var iter = goog.iter.count(1.5, 0.5);
+  var values = goog.iter.takeWhile(iter, function(n) { return n < 4; });
+  assertArrayEquals([1.5, 2.0, 2.5, 3.0, 3.5], goog.iter.toArray(values));
+}
+
 </script>
 </body>
 </html>
