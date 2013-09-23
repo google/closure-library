@@ -1447,6 +1447,23 @@ function testGetDocumentScrollOfFixedViewport() {
   }
 }
 
+
+function testGetDocumentScrollFromDocumentWithoutABody() {
+  // Some documents, like SVG docs, do not have a body element. The document
+  // element should be used when computing the document scroll for these
+  // documents.
+  var fakeDocument = {
+    defaultView: {pageXOffset: 0, pageYOffset: 0},
+    documentElement: {scrollLeft: 0, scrollTop: 0}
+  };
+
+  var dh = new goog.dom.DomHelper(fakeDocument);
+  assertEquals(fakeDocument.documentElement, dh.getDocumentScrollElement());
+  assertEquals(0, dh.getDocumentScroll().x);
+  assertEquals(0, dh.getDocumentScroll().y);
+  // OK if this does not throw.
+}
+
 function testActiveElementIE() {
   if (!goog.userAgent.IE) {
     return;
