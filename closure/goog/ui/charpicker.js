@@ -24,7 +24,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
@@ -434,27 +434,27 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
   goog.events.listen(this.hc_, goog.ui.HoverCard.EventType.BEFORE_SHOW,
                      onBeforeShow);
 
-  goog.dom.classes.add(element, goog.getCssName('goog-char-picker'));
-  goog.dom.classes.add(this.stick_, goog.getCssName('goog-stick'));
-  goog.dom.classes.add(this.stickwrap_, goog.getCssName('goog-stickwrap'));
-  goog.dom.classes.add(gridcontainer.getElement(),
+  goog.dom.classlist.add(element, goog.getCssName('goog-char-picker'));
+  goog.dom.classlist.add(this.stick_, goog.getCssName('goog-stick'));
+  goog.dom.classlist.add(this.stickwrap_, goog.getCssName('goog-stickwrap'));
+  goog.dom.classlist.add(gridcontainer.getElement(),
       goog.getCssName('goog-char-picker-grid-container'));
-  goog.dom.classes.add(this.grid_.getElement(),
+  goog.dom.classlist.add(this.grid_.getElement(),
       goog.getCssName('goog-char-picker-grid'));
-  goog.dom.classes.add(this.recentgrid_.getElement(),
+  goog.dom.classlist.add(this.recentgrid_.getElement(),
       goog.getCssName('goog-char-picker-grid'));
-  goog.dom.classes.add(this.recentgrid_.getElement(),
+  goog.dom.classlist.add(this.recentgrid_.getElement(),
       goog.getCssName('goog-char-picker-recents'));
 
-  goog.dom.classes.add(this.notice_.getElement(),
+  goog.dom.classlist.add(this.notice_.getElement(),
       goog.getCssName('goog-char-picker-notice'));
-  goog.dom.classes.add(uplus.getElement(),
+  goog.dom.classlist.add(uplus.getElement(),
       goog.getCssName('goog-char-picker-uplus'));
-  goog.dom.classes.add(this.input_.getElement(),
+  goog.dom.classlist.add(this.input_.getElement(),
       goog.getCssName('goog-char-picker-input-box'));
-  goog.dom.classes.add(this.okbutton_.getElement(),
+  goog.dom.classlist.add(this.okbutton_.getElement(),
       goog.getCssName('goog-char-picker-okbutton'));
-  goog.dom.classes.add(card, goog.getCssName('goog-char-picker-hovercard'));
+  goog.dom.classlist.add(card, goog.getCssName('goog-char-picker-hovercard'));
   this.hc_.className = goog.getCssName('goog-char-picker-hovercard');
 
   this.grid_.buttoncount = this.gridsize_;
@@ -467,9 +467,9 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
   new goog.ui.ContainerScroller(this.menu_);
   new goog.ui.ContainerScroller(this.submenu_);
 
-  goog.dom.classes.add(this.menu_.getElement(),
+  goog.dom.classlist.add(this.menu_.getElement(),
       goog.getCssName('goog-char-picker-menu'));
-  goog.dom.classes.add(this.submenu_.getElement(),
+  goog.dom.classlist.add(this.submenu_.getElement(),
       goog.getCssName('goog-char-picker-menu'));
 };
 

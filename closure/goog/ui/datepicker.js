@@ -31,7 +31,7 @@ goog.require('goog.date.DateRange');
 goog.require('goog.date.Interval');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyHandler');
@@ -796,7 +796,7 @@ goog.ui.DatePicker.prototype.updateFooterRow_ = function() {
 goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   goog.ui.DatePicker.superClass_.decorateInternal.call(this, el);
 
-  goog.dom.classes.add(el, this.getBaseCssClass());
+  goog.dom.classlist.add(el, this.getBaseCssClass());
 
   var table = this.dom_.createElement('table');
   var thead = this.dom_.createElement('thead');
@@ -1269,11 +1269,11 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
     if (this.showWeekNum_) {
       goog.dom.setTextContent(this.elTable_[y + 1][0],
                               this.grid_[y][0].getWeekNumber());
-      goog.dom.classes.set(this.elTable_[y + 1][0],
+      goog.dom.classlist.set(this.elTable_[y + 1][0],
                            goog.getCssName(this.getBaseCssClass(), 'week'));
     } else {
       goog.dom.setTextContent(this.elTable_[y + 1][0], '');
-      goog.dom.classes.set(this.elTable_[y + 1][0], '');
+      goog.dom.classlist.set(this.elTable_[y + 1][0], '');
     }
 
     for (var x = 0; x < 7; x++) {
@@ -1337,7 +1337,7 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
       } else {
         goog.dom.setTextContent(el, '');
       }
-      goog.dom.classes.set(el, classes.join(' '));
+      goog.dom.classlist.set(el, classes.join(' '));
     }
 
     // Hide the either the last one or last two weeks if they contain no days

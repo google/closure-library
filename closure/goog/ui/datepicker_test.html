@@ -16,7 +16,7 @@ See the COPYING file for details.
     goog.require('goog.a11y.aria');
     goog.require('goog.a11y.aria.Role');
     goog.require('goog.dom');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.i18n.DateTimeSymbols_en_US');
     goog.require('goog.i18n.DateTimeSymbols_zh_HK');
@@ -47,7 +47,7 @@ See the COPYING file for details.
     assertSameElements(
         'Button element must have expected class names',
         ['goog-date-picker-btn', 'goog-date-picker-month'],
-        goog.dom.classes.get(month)
+        goog.dom.classlist.get(month)
     );
   }
 
@@ -61,7 +61,7 @@ See the COPYING file for details.
     assertSameElements(
         'Button element must have expected class names',
         ['goog-date-picker-btn', 'goog-date-picker-year'],
-        goog.dom.classes.get(year)
+        goog.dom.classlist.get(year)
     );
   }
 
@@ -260,8 +260,8 @@ See the COPYING file for details.
     picker = new goog.ui.DatePicker();
     var div = goog.dom.createDom('div', 'existing-class');
     picker.decorate(div);
-    assertTrue(goog.dom.classes.has(div, picker.getBaseCssClass()));
-    assertTrue(goog.dom.classes.has(div, 'existing-class'));
+    assertTrue(goog.dom.classlist.contains(div, picker.getBaseCssClass()));
+    assertTrue(goog.dom.classlist.contains(div, 'existing-class'));
   }
 
 </script>
