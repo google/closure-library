@@ -87,14 +87,6 @@ goog.ui.OfflineStatusComponent.prototype.displayedStatus_ = null;
 
 
 /**
- * The dialog that manages the install flow.
- * @type {goog.ui.OfflineInstallDialog?}
- * @private
- */
-goog.ui.OfflineStatusComponent.prototype.dialog_ = null;
-
-
-/**
  * The card for displaying the detailed status.
  * @type {goog.ui.OfflineStatusCard?}
  * @private
@@ -214,28 +206,6 @@ goog.ui.OfflineStatusComponent.prototype.setStatus = function(status) {
  */
 goog.ui.OfflineStatusComponent.prototype.isStatusDifferent = function(status) {
   return this.status_ != status;
-};
-
-
-/**
- * Sets the install dialog.
- * @param {goog.ui.OfflineInstallDialog} dialog The dialog.
- */
-goog.ui.OfflineStatusComponent.prototype.setInstallDialog = function(dialog) {
-  // If there is a current dialog, remove it.
-  if (this.dialog_ && this.indexOfChild(this.dialog_) >= 0) {
-    this.removeChild(this.dialog_);
-  }
-  this.dialog_ = dialog;
-};
-
-
-/**
- * Gets the install dialog.
- * @return {goog.ui.OfflineInstallDialog} dialog The dialog.
- */
-goog.ui.OfflineStatusComponent.prototype.getInstallDialog = function() {
-  return this.dialog_;
 };
 
 
@@ -453,18 +423,7 @@ goog.ui.OfflineStatusComponent.prototype.performAction = function() {
  * Performs the action to start the flow of enabling the offline feature of
  * the application.
  */
-goog.ui.OfflineStatusComponent.prototype.performEnableAction = function() {
-  // If Gears is not installed or if it is installed but not enabled, then
-  // show the install dialog.
-  var dialog = this.dialog_;
-  if (dialog) {
-    if (!dialog.isInDocument()) {
-      this.addChild(dialog);
-      dialog.render(this.getDomHelper().getDocument().body);
-    }
-    dialog.setVisible(true);
-  }
-};
+goog.ui.OfflineStatusComponent.prototype.performEnableAction = function() {};
 
 
 /**
@@ -522,11 +481,6 @@ goog.ui.OfflineStatusComponent.prototype.getPopupInternal = function() {
 /** @override */
 goog.ui.OfflineStatusComponent.prototype.disposeInternal = function() {
   goog.ui.OfflineStatusComponent.superClass_.disposeInternal.call(this);
-
-  if (this.dialog_) {
-    this.dialog_.dispose();
-    this.dialog_ = null;
-  }
 
   if (this.card_) {
     this.card_.dispose();
