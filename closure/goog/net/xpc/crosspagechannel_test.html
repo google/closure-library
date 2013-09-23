@@ -122,6 +122,19 @@ function testCreateIframeRandomId() {
 }
 
 
+function testGetRole() {
+  var cfg = {};
+  cfg[goog.net.xpc.CfgFields.ROLE] = goog.net.xpc.CrossPageChannelRole.OUTER;
+  var channel = new goog.net.xpc.CrossPageChannel(cfg);
+  // If the configured role is ignored, this will cause the dynamicly
+  // determined role to become INNER.
+  channel.peerWindowObject_ = window.parent;
+  assertEquals('Channel should use role from the config.',
+      goog.net.xpc.CrossPageChannelRole.OUTER, channel.getRole());
+  channel.dispose();
+}
+
+
 // The following batch of tests:
 // * Establishes a peer iframe
 // * Connects an XPC channel between the frames

@@ -758,7 +758,7 @@ goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_ = function(name) {
  */
 goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
   var role = this.cfg_[goog.net.xpc.CfgFields.ROLE];
-  if (role) {
+  if (goog.isNumber(role)) {
     return role;
   } else {
     return window.parent == this.peerWindowObject_ ?
