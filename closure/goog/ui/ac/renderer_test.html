@@ -14,6 +14,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
+  goog.require('goog.dom.classlist');
   goog.require('goog.a11y.aria');
   goog.require('goog.a11y.aria.Role');
   goog.require('goog.a11y.aria.State');
@@ -506,7 +507,7 @@ See the COPYING file for details.
     renderer.renderRows(rendRows, '');
     renderer.hiliteRow(2);
     assertEquals(2, renderer.hilitedRow_);
-    assertTrue(goog.dom.classes.has(
+    assertTrue(goog.dom.classlist.contains(
         renderer.rowDivs_[2], renderer.activeClassName));
   }
 
@@ -534,7 +535,7 @@ See the COPYING file for details.
     renderer.renderRows(rendRows, '');
     renderer.hiliteRow(2);
     assertEquals(2, renderer.hilitedRow_);
-    assertTrue(goog.dom.classes.has(
+    assertTrue(goog.dom.classlist.contains(
         renderer.rowDivs_[2], renderer.activeClassName));
   }
 
