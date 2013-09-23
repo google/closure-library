@@ -222,12 +222,6 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
     return false;
   }
 
-  // Get some useful DOM nodes.
-  var table = this.getElement();
-  var tBody = table.tBodies[0];
-  var rows = tBody.rows;
-  var headers = table.tHead.rows[this.sortableHeaderRowIndex_].cells;
-
   // Remove old header classes.
   if (this.header_) {
     goog.dom.classes.remove(this.header_, this.reversed_ ?
@@ -238,42 +232,40 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
   // If the user clicks on the same column, sort it in reverse of what it is
   // now.  Otherwise, sort forward.
   this.reversed_ = !!opt_reverse;
-
-  // Get some useful DOM nodes.
-  var header = headers[column];
-
-  // Collect all the rows in to an array.
-  var values = [];
-  for (var i = 0, len = rows.length; i < len; i++) {
-    var row = rows[i];
-    var value = goog.dom.getTextContent(row.cells[column]);
-    values.push([value, i, row]);
-  }
-
-  // Sort the array.
   var multiplier = this.reversed_ ? -1 : 1;
   var cmpFn = function(a, b) {
     return multiplier * sortFunction(a[0], b[0]) || a[1] - b[1];
   };
-  goog.array.sort(values, cmpFn);
 
-  // Remove the tbody temporarily since this speeds up the sort on some
-  // browsers.
-  table.removeChild(tBody);
+  // Sort all tBodies
+  var table = this.getElement();
+  goog.array.forEach(table.tBodies, function(tBody) {
+    // Collect all of the rows into an array.
+    var values = goog.array.map(tBody.rows, function(row, rowIndex) {
+      return [goog.dom.getTextContent(row.cells[column]), rowIndex, row];
+    });
 
-  // Sort the rows, using the resulting array.
-  for (i = 0; i < len; i++) {
-    tBody.appendChild(values[i][2]);
-  }
+    goog.array.sort(values, cmpFn);
 
-  // Reinstate the tbody.
-  table.insertBefore(tBody, table.tBodies[0] || null);
+    // Remove the tBody temporarily since this speeds up the sort on some
+    // browsers.
+    var nextSibling = tBody.nextSibling;
+    table.removeChild(tBody);
+
+    // Sort the rows, using the resulting array.
+    goog.array.forEach(values, function(row) {
+      tBody.appendChild(row[2]);
+    });
+
+    // Reinstate the tBody.
+    table.insertBefore(tBody, nextSibling);
+  });
 
   // Mark this as the last sorted column.
-  this.header_ = header;
+  this.header_ = table.tHead.rows[this.sortableHeaderRowIndex_].cells[column];
 
   // Update the header class.
-  goog.dom.classes.add(header, this.reversed_ ?
+  goog.dom.classes.add(this.header_, this.reversed_ ?
       goog.getCssName('goog-tablesorter-sorted-reverse') :
       goog.getCssName('goog-tablesorter-sorted'));
 

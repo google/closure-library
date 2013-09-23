@@ -48,6 +48,21 @@ See the COPYING file for details.
         <tr><td>3</td><td>1</td><td>9</td></tr>
       </tbody>
     </table>
+    <table id="sortable-3">
+      <thead>
+        <tr><th id="sortable-3-col">Sortable</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>B</td></tr>
+        <tr><td>C</td></tr>
+        <tr><td>A</td></tr>
+      </tbody>
+      <tbody>
+        <tr><td>B</td></tr>
+        <tr><td>A</td></tr>
+        <tr><td>C</td></tr>
+      </tbody>
+    </table>
   </div>
   <script>
     var oldHtml = goog.dom.getElement('content').innerHTML;
@@ -89,6 +104,7 @@ See the COPYING file for details.
       goog.testing.events.fireClickEvent(alphaHeader);
       goog.testing.events.fireClickEvent(alphaHeader);
       assertOrder(['C', '10', 'C', '17', 'C', '3', 'B', '0', 'A', '10']);
+      assertFalse(goog.dom.classes.has(alphaHeader, 'goog-tablesorter-sorted'));
       assertTrue(goog.dom.classes.has(alphaHeader,
           'goog-tablesorter-sorted-reverse'));
       assertEquals(0, tableSorter.getSortColumn());
@@ -201,6 +217,22 @@ See the COPYING file for details.
       tableSorter.setSortFunction(2, goog.ui.TableSorter.alphaSort);
       goog.testing.events.fireClickEvent(alphaHeader);
       assertOrder(['10', 'C', '17', 'C', '3', 'C', '0', 'B', '10', 'A']);
+    }
+
+    function testTwoBodies() {
+      var table3 = goog.dom.getElement('sortable-3');
+      var header = goog.dom.getElement('sortable-3-col');
+      var sorter3 = new goog.ui.TableSorter();
+      sorter3.setSortFunction(0, goog.ui.TableSorter.alphaSort);
+      try {
+        sorter3.decorate(table3);
+        goog.testing.events.fireClickEvent(header);
+        assertOrder(['A', 'B', 'C', 'A', 'B', 'C'], table3);
+        goog.testing.events.fireClickEvent(header);
+        assertOrder(['C', 'B', 'A', 'C', 'B', 'A'], table3);
+      } finally {
+        sorter3.dispose();
+      }
     }
 
     function assertOrder(arr, opt_table) {
