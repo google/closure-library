@@ -140,8 +140,6 @@ goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
  *
  * Supported for legacy but use goog.events.listen(src, type, handler) instead.
  *
- * TODO(user): Deprecate this.
- *
  * @param {string} type The type of the event to listen for.
  * @param {Function|Object} handler The function to handle the event. The
  *     handler can also be an object that implements the handleEvent method
@@ -151,6 +149,7 @@ goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
  *     of the event.
  * @param {Object=} opt_handlerScope Object in whose scope to call
  *     the listener.
+ * @deprecated Use {@code #listen} instead.
  */
 goog.events.EventTarget.prototype.addEventListener = function(
     type, handler, opt_capture, opt_handlerScope) {
@@ -163,8 +162,6 @@ goog.events.EventTarget.prototype.addEventListener = function(
  * same object as the one added. If the handler has not been added then
  * nothing is done.
  *
- * TODO(user): Deprecate this.
- *
  * @param {string} type The type of the event to listen for.
  * @param {Function|Object} handler The function to handle the event. The
  *     handler can also be an object that implements the handleEvent method
@@ -174,6 +171,7 @@ goog.events.EventTarget.prototype.addEventListener = function(
  *     of the event.
  * @param {Object=} opt_handlerScope Object in whose scope to call
  *     the listener.
+ * @deprecated Use {@code #unlisten} instead.
  */
 goog.events.EventTarget.prototype.removeEventListener = function(
     type, handler, opt_capture, opt_handlerScope) {
@@ -337,9 +335,6 @@ goog.events.EventTarget.prototype.assertInitialized_ = function() {
 
 /**
  * Dispatches the given event on the ancestorsTree.
- *
- * TODO(user): Look for a way to reuse this logic in
- * goog.events, if possible.
  *
  * @param {!Object} target The target to dispatch on.
  * @param {goog.events.Event|Object|string} e The event object.
