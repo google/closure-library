@@ -873,6 +873,19 @@ function testRemoveDuplicates() {
   assertRemovedDuplicates([obj, uid], [obj, uid])
 };
 
+function testRemoveDuplicates_customHashFn() {
+  var object1 = {key: 'foo'};
+  var object2 = {key: 'bar'};
+  var dupeObject = {key: 'foo'};
+  var array = [object1, object2, dupeObject, 'bar'];
+  var hashFn = function(object) {
+    return goog.isObject(object) ? object.key :
+        (typeof object).charAt(0) + object;
+  };
+  goog.array.removeDuplicates(array, /* opt_rv */ undefined, hashFn);
+  assertArrayEquals([object1, object2, 'bar'], array);
+}
+
 function testBinaryInsertRemove() {
   var makeChecker = function(array, fn, opt_compareFn) {
     return function(value, expectResult, expectArray) {

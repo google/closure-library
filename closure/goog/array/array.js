@@ -880,27 +880,36 @@ goog.array.slice = function(arr, start, opt_end) {
  * For objects, duplicates are identified as having the same unique ID as
  * defined by {@link goog.getUid}.
  *
+ * Alternatively you can specify a custom hash function that returns a unique
+ * value for each item in the array it should consider unique.
+ *
  * Runtime: N,
  * Worstcase space: 2N (no dupes)
  *
- * @param {goog.array.ArrayLike} arr The array from which to remove duplicates.
+ * @param {Array.<T>|goog.array.ArrayLike} arr The array from which to remove
+ *     duplicates.
  * @param {Array=} opt_rv An optional array in which to return the results,
  *     instead of performing the removal inplace.  If specified, the original
  *     array will remain unchanged.
+ * @param {function(T):string=} opt_hashFn An optional function to use to
+ *     apply to every item in the array. This function should return a unique
+ *     value for each item in the array it should consider unique.
+ * @template T
  */
-goog.array.removeDuplicates = function(arr, opt_rv) {
+goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
   var returnArray = opt_rv || arr;
+  var defaultHashFn = function(item) {
+    // Prefix each type with a single character representing the type to
+    // prevent conflicting keys (e.g. true and 'true').
+    return goog.isObject(current) ? 'o' + goog.getUid(current) :
+        (typeof current).charAt(0) + current;
+  };
+  var hashFn = opt_hashFn || defaultHashFn;
 
   var seen = {}, cursorInsert = 0, cursorRead = 0;
   while (cursorRead < arr.length) {
     var current = arr[cursorRead++];
-
-    // Prefix each type with a single character representing the type to
-    // prevent conflicting keys (e.g. true and 'true').
-    var key = goog.isObject(current) ?
-        'o' + goog.getUid(current) :
-        (typeof current).charAt(0) + current;
-
+    var key = hashFn(current);
     if (!Object.prototype.hasOwnProperty.call(seen, key)) {
       seen[key] = true;
       returnArray[cursorInsert++] = current;
