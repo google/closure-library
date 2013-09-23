@@ -123,19 +123,6 @@ function testDecorate() {
 }
 
 
-function testDisposeClearsAllListeners() {
-  menu = new goog.ui.FilteredMenu();
-  menu.addItem(new goog.ui.MenuItem('Menu Item 1'));
-  menu.addItem(new goog.ui.MenuItem('Menu Item 2'));
-  menu.render(sandbox);
-  menu.dispose();
-
-  assertEquals('Dispose should clear all listeners.',
-               0,
-               goog.events.getTotalListenerCount());
-}
-
-
 function testFilter() {
   menu = new goog.ui.FilteredMenu();
   menu.addItem(new goog.ui.MenuItem('Family'));

@@ -226,18 +226,6 @@ See the COPYING file for details.
                 picker.isUserSelectableDate_(new goog.date.Date(2010, 1, 28)));
   }
 
-  function testEventListenerLeaks() {
-    var listeners = goog.events.getTotalListenerCount();
-    picker = new goog.ui.DatePicker();
-    assertEquals('no listeners registered in constructor', listeners,
-        goog.events.getTotalListenerCount());
-    picker.createDom();
-    picker.enterDocument();
-    picker.exitDocument();
-    assertEquals('exitDocument cleans up all listeners', listeners,
-        goog.events.getTotalListenerCount());
-  }
-
   function testUniqueCellIds() {
     picker = new goog.ui.DatePicker();
     picker.render();

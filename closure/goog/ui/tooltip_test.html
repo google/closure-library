@@ -326,16 +326,6 @@ See the COPYING file for details.
       ttNested.dispose();
     }
 
-    function testMemoryLeak() {
-      var listeners = goog.events.getTotalListenerCount();
-      var anchor = dom.createElement('div');
-      var tooltip = new goog.ui.Tooltip(anchor, '');
-      tooltip.setVisible(true);
-      tooltip.dispose();
-      assertEquals('no event listeners leaked', listeners,
-                   goog.events.getTotalListenerCount());
-    }
-
     function testPosition() {
       dom.getDocument().body.style.paddingBottom = '150%'; // force scrollbar
       var scrollEl = dom.getDocumentScrollElement();

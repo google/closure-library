@@ -207,8 +207,6 @@ Author:  attila@google.com (Attila Bodis)
     function testCreateEventListeners() {
       table.run(goog.partial(createEventListeners, SAMPLES_PER_RUN),
           '1A: Create event listeners');
-      assertEquals(SAMPLES_PER_RUN * timer.getNumSamples() * 2,
-          goog.events.getTotalListenerCount());
       assertEquals(0, actionCount);
       assertEquals(0, changeCount);
     }
@@ -264,8 +262,6 @@ Author:  attila@google.com (Attila Bodis)
         createEventListeners(SAMPLES_PER_RUN);
         dispatchEvents(SAMPLES_PER_RUN);
       }, '3A: Events');
-      assertEquals(SAMPLES_PER_RUN * timer.getNumSamples() * 2,
-          goog.events.getTotalListenerCount());
       assertEquals(SAMPLES_PER_RUN * timer.getNumSamples() * 5, actionCount);
       assertEquals(SAMPLES_PER_RUN * timer.getNumSamples() * 5, changeCount);
     }

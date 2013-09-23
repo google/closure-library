@@ -102,8 +102,6 @@ See the COPYING file for details.
   function tearDown() {
     dlg.dispose();
     goog.dom.getElement('sandbox').innerHTML = '';
-    assertEquals('all event listeners have been removed', 0,
-        goog.events.getTotalListenerCount());
   }
 
   /**
