@@ -881,7 +881,8 @@ goog.testing.MultiTestRunner.prototype.drawStatsHistogram_ = function(
     ylabels.push(i);
   }
   var chart = new goog.ui.ServerChart(
-      goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR, width, 250);
+      goog.ui.ServerChart.ChartType.VERTICAL_STACKED_BAR, width, 250, null,
+      goog.ui.ServerChart.CHART_SERVER_HTTPS_URI);
   chart.setTitle(title);
   chart.addDataSet(data, 'ff9900');
   chart.setLeftLabels(ylabels);
