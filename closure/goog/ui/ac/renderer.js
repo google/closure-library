@@ -545,10 +545,8 @@ goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elt) {
  */
 goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
   if (!this.element_) {
-    // Make element and add it to the parent. Make sure that the dropdown will
-    // get scrollbars if it isn't large enough to show all rows.
-    var el =
-        this.dom_.createDom('div', {style: 'display:none; overflow-y:auto'});
+    // Make element and add it to the parent
+    var el = this.dom_.createDom('div', {style: 'display:none'});
     this.element_ = el;
     this.setMenuClasses_(el);
     goog.a11y.aria.setRole(el, goog.a11y.aria.Role.LISTBOX);
@@ -650,20 +648,10 @@ goog.ui.ac.Renderer.prototype.reposition = function() {
     var anchorElement = this.anchorElement_ || this.target_;
     var anchorCorner = this.getAnchorCorner();
 
-    // positionAtAnchor will set the height of this.element_ when it runs
-    // (because of RESIZE_HEIGHT), and it will never increase it relative to its
-    // current value when it runs again. But if the user scrolls their page,
-    // then we might actually want a bigger height when the dropdown is
-    // displayed next time. So we clear the height before calling
-    // positionAtAnchor, so it is free to set the height as large as it chooses.
-    this.element_.style.height = '';
-
     goog.positioning.positionAtAnchor(
         anchorElement, anchorCorner,
         this.element_, goog.positioning.flipCornerVertical(anchorCorner),
-        null, null,
-        goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN |
-        goog.positioning.Overflow.RESIZE_HEIGHT);
+        null, null, goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN);
 
     if (this.topAlign_) {
       // This flickers, but is better than the alternative of positioning
