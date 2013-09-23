@@ -173,15 +173,6 @@ function testToString() {
                f('JOHN, \\"Doe\\" <john@gmail.com>'));
 };
 
-function doIsValidTest(testFunc, valid, invalid) {
-  goog.array.forEach(valid, function(str) {
-    assertTrue(testFunc(str));
-  });
-  goog.array.forEach(invalid, function(str) {
-    assertFalse(testFunc(str));
-  });
-};
-
 function testIsValid() {
   var valid = [
       'e@b.eu', '<a.b+foo@c.com>', 'eric <e@b.com>', '"e" <e@b.com>',
@@ -189,23 +180,12 @@ function testIsValid() {
        'user+someone@gmail.com', '!/#$%&\'*+-=~|`{}?^_@expample.com' ];
   var invalid = [
       'e', '', 'e @c.com', 'a@b', 'foo.com', 'foo@c..com'];
-  doIsValidTest(goog.format.EmailAddress.isValidAddress, valid, invalid);
-};
-
-function testIsValidLocalPart() {
-  var valid = [
-      'e', 'a.b+foo', 'o\'hara', 'user+someone', '!/#$%&\'*+-=~|`{}?^_'];
-  var invalid = [
-      'A@b@c', 'a"b(c)d,e:f;g<h>i[j\\k]l', 'just"not"right',
-      'this is"not\\allowed', 'this\\ still\"not\\\\allowed'];
-  doIsValidTest(goog.format.EmailAddress.isValidLocalPartSpec, valid, invalid);
-};
-
-function testIsValidDomainPart() {
-  var valid = [
-      'example.com', 'dept.example.org', 'long.domain.with.dots.c.o.m.ca'];
-  var invalid = ['', '@a.b.c', '..com'];
-  doIsValidTest(goog.format.EmailAddress.isValidDomainPartSpec, valid, invalid);
+  goog.array.forEach(valid, function(str) {
+    assertTrue(goog.format.EmailAddress.isValidAddress(str));
+  });
+  goog.array.forEach(invalid, function(str) {
+    assertFalse(goog.format.EmailAddress.isValidAddress(str));
+  });
 };
 </script>
 </body>

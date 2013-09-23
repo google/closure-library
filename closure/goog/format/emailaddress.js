@@ -104,47 +104,6 @@ goog.format.EmailAddress.ESCAPED_BACKSLASHES_ = /\\\\/g;
 
 
 /**
- * A string representing the RegExp for the local part of an email address.
- * @private {string}
- */
-goog.format.EmailAddress.LOCAL_PART_REGEXP_STR_ =
-    '[+a-zA-Z0-9_.!#$%&\'*/=?^`{|}~-]+';
-
-
-/**
- * A string representing the RegExp for the domain part of an email address.
- * @private {string}
- */
-goog.format.EmailAddress.DOMAIN_PART_REGEXP_STR_ =
-    '([a-zA-Z0-9-]+\.)+[a-zA-Z0-9]{2,6}';
-
-
-/**
- * A RegExp to match the local part of an email address.
- * @private {RegExp}
- */
-goog.format.EmailAddress.LOCAL_PART_ =
-    new RegExp('^' + goog.format.EmailAddress.LOCAL_PART_REGEXP_STR_ + '$');
-
-
-/**
- * A RegExp to match the domain part of an email address.
- * @private {RegExp}
- */
-goog.format.EmailAddress.DOMAIN_PART_ =
-    new RegExp('^' + goog.format.EmailAddress.DOMAIN_PART_REGEXP_STR_ + '$');
-
-
-/**
- * A RegExp to match an email address.
- * @private {RegExp}
- */
-goog.format.EmailAddress.EMAIL_ADDRESS_ =
-    new RegExp('^' + goog.format.EmailAddress.LOCAL_PART_REGEXP_STR_ + '@' +
-        goog.format.EmailAddress.DOMAIN_PART_REGEXP_STR_ + '$');
-
-
-/**
  * Get the name associated with the email address.
  * @return {string} The name or personal portion of the address.
  */
@@ -242,29 +201,9 @@ goog.format.EmailAddress.isValidAddrSpec = function(str) {
   // For more details, see http://en.wikipedia.org/wiki/Email_address#Syntax
   // TODO(mariakhomenko): we should also be handling i18n domain names as per
   // http://en.wikipedia.org/wiki/Internationalized_domain_name
-  return goog.format.EmailAddress.EMAIL_ADDRESS_.test(str);
-};
-
-
-/**
- * Checks if the provided string is a valid local port (part before the '@') of
- * an email address.
- * @param {string} str The local part to check.
- * @return {boolean} Whether the provided string is a valid local part.
- */
-goog.format.EmailAddress.isValidLocalPartSpec = function(str) {
-  return goog.format.EmailAddress.LOCAL_PART_.test(str);
-};
-
-
-/**
- * Checks if the provided string is a valid domain port (part after the '@') of
- * an email address.
- * @param {string} str The domain part to check.
- * @return {boolean} Whether the provided string is a valid domain part.
- */
-goog.format.EmailAddress.isValidDomainPartSpec = function(str) {
-  return goog.format.EmailAddress.DOMAIN_PART_.test(str);
+  var filter =
+      /^[+a-zA-Z0-9_.!#$%&'*\/=?^`{|}~-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z0-9]{2,6}$/;
+  return filter.test(str);
 };
 
 
