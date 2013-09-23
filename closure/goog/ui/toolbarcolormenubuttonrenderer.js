@@ -20,7 +20,7 @@
 
 goog.provide('goog.ui.ToolbarColorMenuButtonRenderer');
 
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.ui.ColorMenuButtonRenderer');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.ToolbarMenuButtonRenderer');
@@ -91,7 +91,7 @@ goog.ui.ToolbarColorMenuButtonRenderer.prototype.setValue = function(element,
 goog.ui.ToolbarColorMenuButtonRenderer.prototype.initializeDom = function(
     button) {
   this.setValue(button.getElement(), button.getValue());
-  goog.dom.classes.add(button.getElement(),
+  goog.dom.classlist.add(button.getElement(),
       goog.getCssName('goog-toolbar-color-menu-button'));
   goog.ui.ToolbarColorMenuButtonRenderer.superClass_.initializeDom.call(this,
       button);

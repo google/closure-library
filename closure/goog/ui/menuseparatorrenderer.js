@@ -21,7 +21,7 @@
 goog.provide('goog.ui.MenuSeparatorRenderer');
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.ControlRenderer');
 
@@ -82,7 +82,7 @@ goog.ui.MenuSeparatorRenderer.prototype.decorate = function(separator,
     goog.dom.insertSiblingBefore(element, hr);
     goog.dom.removeNode(hr);
   } else {
-    goog.dom.classes.add(element, this.getCssClass());
+    goog.dom.classlist.add(element, this.getCssClass());
   }
   return element;
 };
