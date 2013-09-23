@@ -16,7 +16,7 @@ See the COPYING file for details.
 <script>
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.tree.BaseNode');
@@ -61,12 +61,13 @@ function testExpandIconAfterAddChild() {
   tree.addChild(node1);
 
   node1.addChild(node2);
-  assertTrue('expand icon of node1 changed to L+', goog.dom.classes.has(
+  assertTrue('expand icon of node1 changed to L+', goog.dom.classlist.contains(
       node1.getExpandIconElement(), 'goog-tree-expand-icon-lplus'));
 
   node1.removeChild(node2);
-  assertFalse('expand icon of node1 changed back to L', goog.dom.classes.has(
-      node1.getExpandIconElement(), 'goog-tree-expand-icon-lplus'));
+  assertFalse('expand icon of node1 changed back to L',
+      goog.dom.classlist.contains(
+          node1.getExpandIconElement(), 'goog-tree-expand-icon-lplus'));
 }
 
 function testExpandEvents() {

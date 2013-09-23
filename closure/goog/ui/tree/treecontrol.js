@@ -31,7 +31,7 @@ goog.provide('goog.ui.tree.TreeControl');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.events.FocusHandler');
 goog.require('goog.events.KeyHandler');
@@ -186,7 +186,7 @@ goog.ui.tree.TreeControl.prototype.reveal = function() {
  */
 goog.ui.tree.TreeControl.prototype.handleFocus_ = function(e) {
   this.focused_ = true;
-  goog.dom.classes.add(this.getElement(), 'focused');
+  goog.dom.classlist.add(this.getElement(), 'focused');
 
   if (this.selectedItem_) {
     this.selectedItem_.select();
@@ -201,7 +201,7 @@ goog.ui.tree.TreeControl.prototype.handleFocus_ = function(e) {
  */
 goog.ui.tree.TreeControl.prototype.handleBlur_ = function(e) {
   this.focused_ = false;
-  goog.dom.classes.remove(this.getElement(), 'focused');
+  goog.dom.classlist.remove(this.getElement(), 'focused');
 };
 
 
