@@ -115,7 +115,7 @@ dom.PageVisibilityMonitor.prototype.getHiddenPropertyName_ = goog.memoize(
  * @private
  */
 dom.PageVisibilityMonitor.prototype.isPrefixed_ = function() {
-  return this.getHiddenPropertyName_() == 'hidden';
+  return this.getHiddenPropertyName_() != 'hidden';
 };
 
 
