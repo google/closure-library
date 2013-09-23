@@ -49,7 +49,7 @@ See the COPYING file for details.
   <script>
     goog.require('goog.array');
     goog.require('goog.dom');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.userAgent');
     goog.require('goog.userAgent.adobeReader');
     goog.require('goog.userAgent.flash');
@@ -184,11 +184,11 @@ See the COPYING file for details.
     if (goog.isBoolean(value)) {
       value = value ? 'yes' : 'no';
       goog.dom.setTextContent(valueCell, value);
-      goog.dom.classes.set(valueCell, value);
+      goog.dom.classlist.set(valueCell, value);
     } else {
       goog.dom.setTextContent(valueCell, value);
       if (!value) {
-        goog.dom.classes.set(valueCell, 'no');
+        goog.dom.classlist.set(valueCell, 'no');
       }
     }
   }
