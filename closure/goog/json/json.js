@@ -19,6 +19,8 @@
 
 
 goog.provide('goog.json');
+goog.provide('goog.json.Replacer');
+goog.provide('goog.json.Reviver');
 goog.provide('goog.json.Serializer');
 
 
@@ -108,6 +110,7 @@ goog.json.unsafeParse = function(s) {
 
 /**
  * JSON replacer, as defined in Section 15.12.3 of the ES5 spec.
+ * @see http://ecma-international.org/ecma-262/5.1/#sec-15.12.3
  *
  * TODO(nicksantos): Array should also be a valid replacer.
  *
@@ -118,6 +121,7 @@ goog.json.Replacer;
 
 /**
  * JSON reviver, as defined in Section 15.12.2 of the ES5 spec.
+ * @see http://ecma-international.org/ecma-262/5.1/#sec-15.12.3
  *
  * @typedef {function(this:Object, string, *): *}
  */
