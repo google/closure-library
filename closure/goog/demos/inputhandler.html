@@ -79,10 +79,6 @@ goog.object.forEach(['text', 'password', 'textarea'], function(id) {
   goog.events.listen(el, DOM_EVENTS,
       goog.partial(logEvent, 'DOM'));
 });
-
-goog.events.listen(window, 'unload', function() {
-  goog.events.removeAllNativeListeners();
-});
 </script>
 </body>
 </html>

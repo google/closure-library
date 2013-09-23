@@ -213,9 +213,6 @@ See the COPYING file for details.
     // Perf and clean up
     goog.dom.setTextContent(goog.dom.getElement('perf'),
         (goog.now() - timer) + 'ms');
-    goog.events.listen(window, 'unload', function() {
-      goog.events.removeAllNativeListeners();
-    });
   </script>
 </body>
 </html>

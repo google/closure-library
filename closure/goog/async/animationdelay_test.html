@@ -46,7 +46,6 @@ function testStart() {
   window.setTimeout(function() {
     testCase.continueTesting();
     assertEquals(1, callCount);
-    assertEquals(0, goog.events.getTotalListenerCount());
   }, 500);
 }
 
@@ -64,7 +63,6 @@ function testStop() {
   window.setTimeout(function() {
     testCase.continueTesting();
     assertEquals(0, callCount);
-    assertEquals(0, goog.events.getTotalListenerCount());
   }, 500);
 }
 

@@ -140,10 +140,6 @@ See the COPYING file for details.
       alert('You chose: ' + e.key);
     });
 
-    goog.events.listen(window, 'unload', function() {
-      goog.events.removeAllNativeListeners();
-    });
-
     var currDialog;
 
     function showDialog(dialog) {

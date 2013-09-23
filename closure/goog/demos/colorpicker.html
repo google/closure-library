@@ -34,10 +34,6 @@ See the COPYING file for details.
         el.innerHTML = 'You selected: ' + color;
         el.style.color = color;
       });
-
-    goog.events.listen(window, 'unload', function() {
-      goog.events.removeAllNativeListeners();
-    });
   </script>
 </body>
 </html>

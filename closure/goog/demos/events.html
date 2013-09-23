@@ -23,7 +23,6 @@ See the COPYING file for details.
   <p>
     <a href="javascript:addListeners()">Listen</a> |
     <a href="javascript:removeListeners()">UnListen</a> |
-    <a href="javascript:removeAll()">Remove All</a> |
     <a href="javascript:void(goog.events.unlisten($('link1'), 'click', one))">Remove One</a> |
     <a href="javascript:void(goog.events.unlisten($('link1'), 'click', two))">Remove Two</a> |
     <a href="javascript:void(goog.events.unlisten($('link1'), 'click', three))">Remove Three</a> |
@@ -80,10 +79,6 @@ See the COPYING file for details.
       goog.events.unlisten($('link2'), 'click', handleEventB);
       goog.events.unlisten($('link3'), 'click', handleEventB);
       goog.events.unlisten($('link4'), 'click', handleEventB);
-    }
-
-    function removeAll() {
-      goog.events.removeAllNativeListeners();
     }
 
     addListeners();

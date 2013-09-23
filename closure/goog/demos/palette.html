@@ -294,10 +294,6 @@ See the COPYING file for details.
 
     goog.dom.setTextContent(goog.dom.getElement('perf'),
         (goog.now() - timer) + 'ms');
-
-    goog.events.listen(window, 'unload', function() {
-      goog.events.removeAllNativeListeners();
-    });
   </script>
 </body>
 </html>

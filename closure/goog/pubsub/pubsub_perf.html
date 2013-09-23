@@ -204,10 +204,6 @@ Author:  attila@google.com (Attila Bodis)
       targets = [];
     }
 
-    function tearDown() {
-      goog.events.removeAllNativeListeners();
-    }
-
     function testCreateEventListeners() {
       table.run(goog.partial(createEventListeners, SAMPLES_PER_RUN),
           '1A: Create event listeners');
