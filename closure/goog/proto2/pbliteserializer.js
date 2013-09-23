@@ -38,10 +38,10 @@
 
 goog.provide('goog.proto2.PbLiteSerializer');
 
-goog.require('goog.asserts');
 goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.LazyDeserializer');
 goog.require('goog.proto2.Serializer');
+goog.require('goog.proto2.Util');
 
 
 
@@ -139,7 +139,7 @@ goog.proto2.PbLiteSerializer.prototype.deserializeField =
   if (field.isRepeated()) {
     var data = [];
 
-    goog.asserts.assert(goog.isArray(value));
+    goog.proto2.Util.assert(goog.isArray(value));
 
     for (var i = 0; i < value.length; i++) {
       data[i] = this.getDeserializedValue(field, value[i]);
@@ -170,7 +170,7 @@ goog.proto2.PbLiteSerializer.prototype.getDeserializedValue =
     function(field, value) {
 
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.BOOL) {
-    goog.asserts.assert(goog.isNumber(value) || goog.isBoolean(value),
+    goog.proto2.Util.assert(goog.isNumber(value) || goog.isBoolean(value),
         'Value is expected to be a number or boolean');
     return !!value;
   }
