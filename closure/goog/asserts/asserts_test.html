@@ -12,6 +12,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.asserts');
+  goog.require('goog.dom');
   goog.require('goog.string');
   goog.require('goog.testing.jsunit');
 </script>
@@ -136,6 +137,15 @@ function testBoolean() {
                 'Assertion failed: Expected boolean but got number: 1234.');
   doTestMessage(goog.partial(goog.asserts.assertBoolean, null, 'ouch %s', 1),
                 'Assertion failed: ouch 1');
+}
+
+function testElement() {
+  assertThrows(goog.partial(goog.asserts.assertElement, null));
+  assertThrows(goog.partial(goog.asserts.assertElement, 'foo'));
+  assertThrows(goog.partial(goog.asserts.assertElement,
+      goog.dom.createTextNode('foo')));
+  var elem = goog.dom.createElement('div');
+  assertEquals(elem, goog.asserts.assertElement(elem));
 }
 
 function testInstanceof() {
