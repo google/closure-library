@@ -511,6 +511,14 @@ function testCountFloat() {
   assertArrayEquals([1.5, 2.0, 2.5, 3.0, 3.5], goog.iter.toArray(values));
 }
 
+function testRepeat() {
+  var obj = {foo: 'bar'};
+  var iter = goog.iter.repeat(obj);
+  assertEquals(obj, iter.next());
+  assertEquals(obj, iter.next());
+  assertEquals(obj, iter.next());
+}
+
 </script>
 </body>
 </html>

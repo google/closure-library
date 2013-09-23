@@ -24,6 +24,7 @@ goog.provide('goog.iter.StopIteration');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.functions');
 
 
 // TODO(nnaze): Add more functions from Python's itertools.
@@ -705,8 +706,8 @@ goog.iter.cycle = function(iterable) {
 /**
  * Creates an iterator that counts indefinitely from a starting value.
  * @see http://docs.python.org/2/library/itertools.html#itertools.count
- * @param {number=} opt_start  The starting value. Default is 0.
- * @param {number=} opt_step  The number to increment with between each call to
+ * @param {number=} opt_start The starting value. Default is 0.
+ * @param {number=} opt_step The number to increment with between each call to
  *     next. Negative and floating point numbers are allowed. Default is 1.
  * @return {!goog.iter.Iterator} A new iterator that returns the values in the
  *     series.
@@ -721,6 +722,20 @@ goog.iter.count = function(opt_start, opt_step) {
     counter += step;
     return returnValue;
   };
+
+  return iter;
+};
+
+
+/**
+ * Creates an iterator that returns the same object or value repeatedly.
+ * @param {*} value Any object or value to repeat.
+ * @return {!goog.iter.Iterator} A new iterator that returns the repeated value.
+ */
+goog.iter.repeat = function(value) {
+  var iter = new goog.iter.Iterator();
+
+  iter.next = goog.functions.constant(value);
 
   return iter;
 };
