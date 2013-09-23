@@ -51,7 +51,7 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -373,7 +373,7 @@ goog.ui.SliderBase.DISABLED_CSS_CLASS_ =
 /** @override */
 goog.ui.SliderBase.prototype.decorateInternal = function(element) {
   goog.ui.SliderBase.superClass_.decorateInternal.call(this, element);
-  goog.dom.classes.add(element, this.getCssClass(this.orientation_));
+  goog.dom.classlist.add(element, this.getCssClass(this.orientation_));
   this.createThumbs();
   this.setAriaRoles();
 };
@@ -501,9 +501,9 @@ goog.ui.SliderBase.prototype.handleBeforeDrag_ = function(e) {
  */
 goog.ui.SliderBase.prototype.handleThumbDragStartEnd_ = function(e) {
   var isDragStart = e.type == goog.fx.Dragger.EventType.START;
-  goog.dom.classes.enable(this.getElement(),
+  goog.dom.classlist.enable(this.getElement(),
       goog.ui.SliderBase.SLIDER_DRAGGING_CSS_CLASS_, isDragStart);
-  goog.dom.classes.enable(e.target.handle,
+  goog.dom.classlist.enable(goog.asserts.assertElement(e.target.handle),
       goog.ui.SliderBase.THUMB_DRAGGING_CSS_CLASS_, isDragStart);
   var isValueDragger = e.dragger == this.valueDragger_;
   if (isDragStart) {
@@ -1239,7 +1239,7 @@ goog.ui.SliderBase.prototype.setOrientation = function(orient) {
 
     // Update the DOM
     if (this.getElement()) {
-      goog.dom.classes.swap(this.getElement(), oldCss, newCss);
+      goog.dom.classlist.swap(this.getElement(), oldCss, newCss);
       // we need to reset the left and top, plus range highlight
       var pos = (this.flipForRtl_ && this.isRightToLeft()) ? 'right' : 'left';
       this.valueThumb.style[pos] = this.valueThumb.style.top = '';
@@ -1546,7 +1546,7 @@ goog.ui.SliderBase.prototype.setEnabled = function(enable) {
       // handlers be appropriately unlistened.
       this.stopBlockIncrementing_();
     }
-    goog.dom.classes.enable(this.getElement(),
+    goog.dom.classlist.enable(this.getElement(),
         goog.ui.SliderBase.DISABLED_CSS_CLASS_, !enable);
   }
 };
