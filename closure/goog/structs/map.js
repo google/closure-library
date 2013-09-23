@@ -40,6 +40,7 @@ goog.require('goog.object');
  * @param {...*} var_args If 2 or more arguments are present then they
  *     will be used as key-value pairs.
  * @constructor
+ * @template K, V
  */
 goog.structs.Map = function(opt_map, var_args) {
 
@@ -101,7 +102,7 @@ goog.structs.Map.prototype.getCount = function() {
 
 /**
  * Returns the values of the map.
- * @return {!Array} The values in the map.
+ * @return {!Array.<V>} The values in the map.
  */
 goog.structs.Map.prototype.getValues = function() {
   this.cleanupKeysArray_();
@@ -137,7 +138,7 @@ goog.structs.Map.prototype.containsKey = function(key) {
 
 /**
  * Whether the map contains the given value. This is O(n).
- * @param {*} val The value to check for.
+ * @param {V} val The value to check for.
  * @return {boolean} Whether the map contains the value.
  */
 goog.structs.Map.prototype.containsValue = function(val) {
@@ -154,7 +155,7 @@ goog.structs.Map.prototype.containsValue = function(val) {
 /**
  * Whether this map is equal to the argument map.
  * @param {goog.structs.Map} otherMap The map against which to test equality.
- * @param {function(?, ?) : boolean=} opt_equalityFn Optional equality function
+ * @param {function(V, V): boolean=} opt_equalityFn Optional equality function
  *     to test equality of values. If not specified, this will test whether
  *     the values contained in each map are identical objects.
  * @return {boolean} Whether the maps are equal.
@@ -281,9 +282,10 @@ goog.structs.Map.prototype.cleanupKeysArray_ = function() {
  * Returns the value for the given key.  If the key is not found and the default
  * value is not given this will return {@code undefined}.
  * @param {*} key The key to get the value for.
- * @param {*=} opt_val The value to return if no item is found for the given
+ * @param {(T|V)=} opt_val The value to return if no item is found for the given
  *     key, defaults to undefined.
- * @return {*} The value for the given key.
+ * @return {V} The value for the given key.
+ * @template T
  */
 goog.structs.Map.prototype.get = function(key, opt_val) {
   if (goog.structs.Map.hasKey_(this.map_, key)) {
@@ -296,7 +298,7 @@ goog.structs.Map.prototype.get = function(key, opt_val) {
 /**
  * Adds a key-value pair to the map.
  * @param {*} key The key.
- * @param {*} value The value to add.
+ * @param {V} value The value to add.
  * @return {*} Some subclasses return a value.
  */
 goog.structs.Map.prototype.set = function(key, value) {
