@@ -47,7 +47,6 @@ function setUp() {
 }
 
 function tearDown() {
-  goog.events.removeAllNativeListeners();
   fieldElem.parentNode.replaceChild(fieldElemClone, fieldElem);
 }
 
@@ -305,7 +304,6 @@ function testSetMinHeight() {
       assertFalse('Setting min height must not cause delayed change event.',
           delayedChangeCalled);
     } finally {
-      goog.events.removeAllNativeListeners();
       field.dispose();
       clock.dispose();
     }
@@ -324,7 +322,6 @@ function testSetMinHeightWithNoIframe() {
       field.setMinHeight(30);
     } finally {
       field.dispose();
-      goog.events.removeAllNativeListeners();
     }
   }
 }
