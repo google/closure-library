@@ -22,13 +22,13 @@
  */
 
 goog.provide('goog.proto2.TextFormatSerializer');
-goog.provide('goog.proto2.TextFormatSerializer.Parser');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.json');
+goog.require('goog.object');
+goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.Serializer');
-goog.require('goog.proto2.Util');
 goog.require('goog.string');
 
 
