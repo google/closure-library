@@ -182,7 +182,7 @@ See the COPYING file for details.
         var styleSheets = goog.cssom.getAllCssStyleSheets();
         var styleSheet = styleSheets[3];
         var newCssRule = '.css-addCssRulePos { display: block; }';
-        var rules = styleSheet.rules || styleSheet.cssRules;
+        var rules = styleSheet.cssRules || styleSheet.rules;
         var origNumberOfRules = rules.length;
 
         // Firefox croaks if we try to insert a CSSRule at an index that
@@ -196,21 +196,21 @@ See the COPYING file for details.
         // perfectly fine since IE's styleSheet.rules does not contain
         // references to anything but CSSStyleRules.
         var pos = 0;
-        if (!goog.userAgent.IE) {
+        if (styleSheet.cssRules) {
           pos = goog.array.findIndex(rules, function(rule) {
             return rule.type == goog.cssom.CssRuleType.STYLE;
           });
         }
         goog.cssom.addCssRule(styleSheet, newCssRule, pos);
 
-        rules = styleSheet.rules || styleSheet.cssRules;
+        rules = styleSheet.cssRules || styleSheet.rules;
         var newNumberOfRules = rules.length;
         assertEquals(newNumberOfRules, origNumberOfRules + 1);
 
         // Remove the added rule so we don't mess up other tests.
         goog.cssom.removeCssRule(styleSheet, pos);
 
-        rules = styleSheet.rules || styleSheet.cssRules;
+        rules = styleSheet.cssRules || styleSheet.rules;
         assertEquals(origNumberOfRules, rules.length);
       }
 
@@ -219,7 +219,7 @@ See the COPYING file for details.
         //  not passed in?
         var styleSheets = goog.cssom.getAllCssStyleSheets();
         var styleSheet = styleSheets[3];
-        var rules = styleSheet.rules || styleSheet.cssRules;
+        var rules = styleSheet.cssRules || styleSheet.rules;
         var origNumberOfRules = rules.length;
         var newCssRule = '.css-addCssRuleNoIndex { display: block; }';
 
@@ -228,14 +228,14 @@ See the COPYING file for details.
         // the entry.
         goog.cssom.addCssRule(styleSheet, newCssRule);
 
-        rules = styleSheet.rules || styleSheet.cssRules;
+        rules = styleSheet.cssRules || styleSheet.rules;
         var newNumberOfRules = rules.length;
         assertEquals(newNumberOfRules, origNumberOfRules + 1);
 
         // Remove the added rule so we don't mess up the other tests.
         goog.cssom.removeCssRule(styleSheet, newNumberOfRules - 1);
 
-        rules = styleSheet.rules || styleSheet.cssRules;
+        rules = styleSheet.cssRules || styleSheet.rules;
         assertEquals(origNumberOfRules, rules.length);
       }
 

@@ -294,17 +294,24 @@ goog.cssom.addCssRule = function(cssStyleSheet, cssText, opt_index) {
   if (index < 0 || index == undefined) {
     // If no index specified, insert at the end of the current list
     // of rules.
-    // If on IE, use rules property, otherwise use cssRules property.
-    var rules = cssStyleSheet.rules || cssStyleSheet.cssRules;
+
+    // Select cssRules unless it isn't present.  For pre-IE9 IE, use the rules
+    // collection instead.
+    // It's important to be consistent in using only the W3C or IE apis on
+    // IE9+ where both are present to ensure that there is no indexing
+    // mismatches - the collections are subtly different in what the include or
+    // exclude which can lead to one collection being longer than the other
+    // depending on the page's construction.
+    var rules = cssStyleSheet.cssRules || cssStyleSheet.rules;
     index = rules.length;
   }
   if (cssStyleSheet.insertRule) {
-    // W3C.
+    // W3C (including IE9+).
     cssStyleSheet.insertRule(cssText, index);
 
   } else {
-    // IE: We have to parse the cssRule text to get the selector separated
-    // from the style text.
+    // IE, pre 9: We have to parse the cssRule text to get the selector
+    // separated from the style text.
     // aka Everything that isn't a colon, followed by a colon, then
     // the rest is the style part.
     var matches = /^([^\{]+)\{([^\{]+)\}/.exec(cssText);
