@@ -870,16 +870,6 @@ goog.dom.htmlToDocumentFragment_ = function(doc, htmlString) {
 
 
 /**
- * Returns the compatMode of the document.
- * @return {string} The result is either CSS1Compat or BackCompat.
- * @deprecated use goog.dom.isCss1CompatMode instead.
- */
-goog.dom.getCompatMode = function() {
-  return goog.dom.isCss1CompatMode() ? 'CSS1Compat' : 'BackCompat';
-};
-
-
-/**
  * Returns true if the browser is in "CSS1-compatible" (standards-compliant)
  * mode, false otherwise.
  * @return {boolean} True if in CSS1-compatible mode.
@@ -2394,16 +2384,6 @@ goog.dom.DomHelper.prototype.createTable = function(rows, columns,
  */
 goog.dom.DomHelper.prototype.htmlToDocumentFragment = function(htmlString) {
   return goog.dom.htmlToDocumentFragment_(this.document_, htmlString);
-};
-
-
-/**
- * Returns the compatMode of the document.
- * @return {string} The result is either CSS1Compat or BackCompat.
- * @deprecated use goog.dom.DomHelper.prototype.isCss1CompatMode instead.
- */
-goog.dom.DomHelper.prototype.getCompatMode = function() {
-  return this.isCss1CompatMode() ? 'CSS1Compat' : 'BackCompat';
 };
 
 
