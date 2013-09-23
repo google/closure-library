@@ -33,8 +33,9 @@
 goog.provide('goog.ui.SplitPane');
 goog.provide('goog.ui.SplitPane.Orientation');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.math.Rect');
@@ -86,6 +87,9 @@ goog.ui.SplitPane = function(firstComponent, secondComponent, orientation,
    */
   this.secondComponent_ = secondComponent;
   this.addChild(secondComponent);
+
+  /** @private {Element} */
+  this.splitpaneHandle_ = null;
 };
 goog.inherits(goog.ui.SplitPane, goog.ui.Component);
 
@@ -349,8 +353,8 @@ goog.ui.SplitPane.prototype.getElementToDecorate_ = function(rootElement,
   // Decorate the root element's children, if available.
   var childElements = goog.dom.getChildren(rootElement);
   for (var i = 0; i < childElements.length; i++) {
-    var childElement = childElements[i];
-    if (goog.dom.classes.has(childElement, className)) {
+    var childElement = goog.asserts.assertElement(childElements[i]);
+    if (goog.dom.classlist.contains(childElement, className)) {
       return childElement;
     }
   }
@@ -495,11 +499,11 @@ goog.ui.SplitPane.prototype.isVertical = function() {
 goog.ui.SplitPane.prototype.setUpHandle_ = function() {
   if (this.isVertical()) {
     this.splitpaneHandle_.style.height = this.handleSize_ + 'px';
-    goog.dom.classes.add(this.splitpaneHandle_,
+    goog.dom.classlist.add(this.splitpaneHandle_,
         goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_);
   } else {
     this.splitpaneHandle_.style.width = this.handleSize_ + 'px';
-    goog.dom.classes.add(this.splitpaneHandle_,
+    goog.dom.classlist.add(this.splitpaneHandle_,
         goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_);
   }
 };
@@ -511,13 +515,13 @@ goog.ui.SplitPane.prototype.setUpHandle_ = function() {
  */
 goog.ui.SplitPane.prototype.setOrientationClassForHandle = function() {
   if (this.isVertical()) {
-    goog.dom.classes.swap(this.splitpaneHandle_,
-                          goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_,
-                          goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_);
+    goog.dom.classlist.swap(this.splitpaneHandle_,
+        goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_,
+        goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_);
   } else {
-    goog.dom.classes.swap(this.splitpaneHandle_,
-                          goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_,
-                          goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_);
+    goog.dom.classlist.swap(this.splitpaneHandle_,
+        goog.ui.SplitPane.HANDLE_CLASS_NAME_VERTICAL_,
+        goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_);
   }
 };
 

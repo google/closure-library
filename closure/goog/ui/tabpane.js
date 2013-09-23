@@ -25,7 +25,7 @@ goog.provide('goog.ui.TabPane.TabPage');
 goog.provide('goog.ui.TabPaneEvent');
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
@@ -171,20 +171,20 @@ goog.ui.TabPane.prototype.create_ = function() {
     case goog.ui.TabPane.TabLocation.TOP:
       this.el_.insertBefore(this.elButtonBar_, this.elContent_);
       this.el_.insertBefore(this.createClear_(), this.elContent_);
-      goog.dom.classes.add(this.el_, goog.getCssName('goog-tabpane-top'));
+      goog.dom.classlist.add(this.el_, goog.getCssName('goog-tabpane-top'));
       break;
     case goog.ui.TabPane.TabLocation.BOTTOM:
       this.el_.appendChild(this.elButtonBar_);
       this.el_.appendChild(this.createClear_());
-      goog.dom.classes.add(this.el_, goog.getCssName('goog-tabpane-bottom'));
+      goog.dom.classlist.add(this.el_, goog.getCssName('goog-tabpane-bottom'));
       break;
     case goog.ui.TabPane.TabLocation.LEFT:
       this.el_.insertBefore(this.elButtonBar_, this.elContent_);
-      goog.dom.classes.add(this.el_, goog.getCssName('goog-tabpane-left'));
+      goog.dom.classlist.add(this.el_, goog.getCssName('goog-tabpane-left'));
       break;
     case goog.ui.TabPane.TabLocation.RIGHT:
       this.el_.insertBefore(this.elButtonBar_, this.elContent_);
-      goog.dom.classes.add(this.el_, goog.getCssName('goog-tabpane-right'));
+      goog.dom.classlist.add(this.el_, goog.getCssName('goog-tabpane-right'));
       break;
     default:
       throw Error('Invalid tab location');

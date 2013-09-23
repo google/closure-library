@@ -14,7 +14,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script type="text/javascript">
   goog.require('goog.dom');
-  goog.require('goog.dom.classes');
+  goog.require('goog.dom.classlist');
   goog.require('goog.math.Size');
   goog.require('goog.style');
   goog.require('goog.testing.events');
@@ -92,9 +92,11 @@ function testDecorateWithNestedSplitPane() {
 
   // Decorate and check that the correct containers and handle are used.
   splitpane.decorate(outerSplitPaneDiv);
-  assertTrue(goog.dom.classes.has(splitpane.firstComponentContainer_, 'e4'));
-  assertTrue(goog.dom.classes.has(splitpane.secondComponentContainer_, 'e5'));
-  assertTrue(goog.dom.classes.has(splitpane.splitpaneHandle_, 'e6'));
+  assertTrue(goog.dom.classlist.contains(
+      splitpane.firstComponentContainer_, 'e4'));
+  assertTrue(goog.dom.classlist.contains(
+      splitpane.secondComponentContainer_, 'e5'));
+  assertTrue(goog.dom.classlist.contains(splitpane.splitpaneHandle_, 'e6'));
 }
 
 function testSetSize() {
