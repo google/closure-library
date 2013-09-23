@@ -154,8 +154,7 @@ goog.dom.getRequiredElementHelper_ = function(doc, id) {
   // To prevent users passing in Elements as is permitted in getElement().
   goog.asserts.assertString(id);
   var element = goog.dom.getElement(id);
-  element = goog.asserts.assertElement(element,
-      'No element found with id: ' + id);
+  goog.asserts.assert(element, 'No element found with id: ' + id);
   return element;
 };
 
