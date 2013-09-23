@@ -79,6 +79,28 @@ function testOpenWithTestUrl() {
   assertNotNull(testPath);
 }
 
+function testOpenWithCustomHeaders() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {'messageHeaders': {'foo-key': 'foo-value'}};
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  var extraHeaders_ = webChannel.extraHeaders_;
+  assertNotNull(extraHeaders_);
+}
+
+function testOpenWithCustomParams() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {'messageUrlParams': {'foo-key': 'foo-value'}};
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  var extraParams = webChannel.extraUrlParams_;
+  assertNotNull(extraParams);
+}
+
 function testOpenThenCloseChannel() {
   var webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
@@ -191,7 +213,7 @@ function simulateMessageEvent(bc, data) {
 
 
 /**
- * Mock WebChannelBase constructor.
+ * Mock WebChannelBase constructor. Fields are cached values for validation.
  * @constructor
  * @struct
  */
@@ -201,6 +223,12 @@ MockWebChannelBase = function() {
 
   /** @private {?string} */
   this.testPath_ = null;
+
+  /** @private {Object} */
+  this.extraHeaders_ = null;
+
+  /** @private {Object} */
+  this.extraUrlParams_ = null;
 };
 
 
@@ -225,8 +253,10 @@ MockWebChannelBase.prototype.getHandler = function(handler) {
 /**
  * Mocks out the connect method of the WebChannelBase.
  */
-MockWebChannelBase.prototype.connect = function(testPath, channelPath) {
+MockWebChannelBase.prototype.connect = function(testPath, channelPath,
+    opt_extraUrlParams) {
   this.testPath_ = testPath;
+  this.extraUrlParams_ = opt_extraUrlParams || null;
 };
 
 
@@ -243,4 +273,13 @@ MockWebChannelBase.prototype.disconnect = function() {
  */
 MockWebChannelBase.prototype.sendMap = function(message) {
   // Nothing to do here.
+};
+
+
+/**
+ * Mocks out the setExtraHeaders method of the WebChannelBase.
+ * @param {Object} extraHeaders The HTTP headers.
+ */
+MockWebChannelBase.prototype.setExtraHeaders = function(extraHeaders) {
+  this.extraHeaders_ = extraHeaders;
 };

@@ -105,6 +105,17 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
   this.logger_ = goog.log.getLogger(
       'goog.labs.net.webChannel.WebChannelBaseTransport');
 
+
+  /**
+   * @private {Object} messageUrlParams Extra URL parameters
+   * to be added to each HTTP request.
+   */
+  this.messageUrlParams = (opt_options && opt_options.messageUrlParams) || null;
+
+  var messageHeaders = (opt_options && opt_options.messageHeaders) || null;
+  if (messageHeaders) {
+    this.channel_.setExtraHeaders(messageHeaders);
+  }
 };
 goog.inherits(WebChannelBaseTransport.Channel, goog.events.EventTarget);
 
@@ -124,7 +135,8 @@ WebChannelBaseTransport.Channel.prototype.channelHandler_ = null;
  * @override
  */
 WebChannelBaseTransport.Channel.prototype.open = function() {
-  this.channel_.connect(this.testUrl_, this.url_);
+  this.channel_.connect(this.testUrl_, this.url_,
+                        (this.messageUrlParams || undefined));
 
   this.channelHandler_ = new WebChannelBaseTransport.Channel.Handler_(this);
   this.channel_.setHandler(this.channelHandler_);

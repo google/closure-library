@@ -543,7 +543,6 @@ WebChannelBase.prototype.getChannelDebug = function() {
 
 /**
  * Sets the logger.
- * TODO(user): Add interface for channel loggers or remove this function.
  *
  * @param {!WebChannelDebug} channelDebug The channel debug object.
  */
@@ -695,8 +694,7 @@ WebChannelBase.prototype.getExtraHeaders = function() {
  *
  * @param {Object} extraHeaders The HTTP headers, or null.
  */
-WebChannelBase.prototype.setExtraHeaders = function(
-    extraHeaders) {
+WebChannelBase.prototype.setExtraHeaders = function(extraHeaders) {
   this.extraHeaders_ = extraHeaders;
 };
 

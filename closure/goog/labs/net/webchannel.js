@@ -74,9 +74,17 @@ goog.net.WebChannel = function() {};
  * testUrl: the test URL for detecting connectivity during the initial
  *          handshake. This parameter defaults to "/<channel_url>/test".
  *
+ * messageHeaders: custom headers to be added to every message sent to the
+ *                 server.
+ *
+ * messageUrlParams: custom url query parameters to be added to every message
+ *                   sent to the server.
+ *
  * @typedef {{
  *   spdyRequestLimit: (number|undefined),
- *   testUrl: (string|undefined)
+ *   testUrl: (string|undefined),
+ *   messageHeaders: (!Object.<string, string>|undefined),
+ *   messageUrlParams: (!Object.<string, string>|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
@@ -85,7 +93,7 @@ goog.net.WebChannel.Options;
 /**
  * Types that are allowed as message data.
  *
- * @typedef {(ArrayBuffer|Blob|Object.<String>|Array)}
+ * @typedef {(ArrayBuffer|Blob|Object.<string, string>|Array)}
  */
 goog.net.WebChannel.MessageData;
 
