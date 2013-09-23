@@ -519,6 +519,21 @@ function testRepeat() {
   assertEquals(obj, iter.next());
 }
 
+function testAccumulateArray() {
+  var iter = goog.iter.accumulate([1, 2, 3, 4, 5]);
+  assertArrayEquals([1, 3, 6, 10, 15], goog.iter.toArray(iter));
+}
+
+function testAccumulateIterator() {
+  var iter = goog.iter.accumulate(goog.iter.range(1, 6));
+  assertArrayEquals([1, 3, 6, 10, 15], goog.iter.toArray(iter));
+}
+
+function testAccumulateFloat() {
+  var iter = goog.iter.accumulate([1.0, 2.5, 0.5, 1.5, 0.5]);
+  assertArrayEquals([1.0, 3.5, 4.0, 5.5, 6.0], goog.iter.toArray(iter));
+}
+
 </script>
 </body>
 </html>
