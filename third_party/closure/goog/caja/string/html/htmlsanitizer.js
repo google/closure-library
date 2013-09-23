@@ -62,9 +62,9 @@ goog.require('goog.string.html.HtmlSaxHandler');
  * Strips unsafe tags and attributes from HTML.
  *
  * @param {string} htmlText The HTML text to sanitize.
- * @param {function(string) : string} opt_urlPolicy A transform to apply to URL
+ * @param {function(string): string=} opt_urlPolicy A transform to apply to URL
  *     attribute values.
- * @param {function(string) : string} opt_nmTokenPolicy A transform to apply to
+ * @param {function(string): string=} opt_nmTokenPolicy A transform to apply to
  *     names, IDs, and classes.
  * @return {string} A sanitized HTML, safe to be embedded on the page.
  */
