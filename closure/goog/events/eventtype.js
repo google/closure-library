@@ -151,8 +151,22 @@ goog.events.EventType = {
   /** @suppress {missingRequire} */
   TRANSITIONEND: goog.events.getVendorPrefixedName_('TransitionEnd'),
 
+  // W3C Pointer Events
+  // http://www.w3.org/TR/pointerevents/
+  POINTERDOWN: 'pointerdown',
+  POINTERUP: 'pointerup',
+  POINTERCANCEL: 'pointercancel',
+  POINTERMOVE: 'pointermove',
+  POINTEROVER: 'pointerover',
+  POINTEROUT: 'pointerout',
+  POINTERENTER: 'pointerenter',
+  POINTERLEAVE: 'pointerleave',
+  GOTPOINTERCAPTURE: 'gotpointercapture',
+  LOSTPOINTERCAPTURE: 'lostpointercapture',
+
   // IE specific events.
   // See http://msdn.microsoft.com/en-us/library/ie/hh673557(v=vs.85).aspx
+  // Note: these events will be supplanted in IE11.
   MSGESTURECHANGE: 'MSGestureChange',
   MSGESTUREEND: 'MSGestureEnd',
   MSGESTUREHOLD: 'MSGestureHold',
