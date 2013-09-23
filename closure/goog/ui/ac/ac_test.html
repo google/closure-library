@@ -15,6 +15,8 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.ui.ac.AutoComplete</title>
 <script src="../../base.js"></script>
 <script>
+  goog.require('goog.asserts');
+  goog.require('goog.dom.classlist');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.MockClock');
   goog.require('goog.ui.ac');
@@ -146,18 +148,17 @@ function testKeyNavigation() {
   assert(document.body.innerHTML, !!findNodeByInnerText(data[1]));
   assert(!!findNodeByInnerText(data[2]));
 
-  var selected = findNodeByInnerText(data[0]);
-  assert(!!selected);
+  var selected = goog.asserts.assertElement(findNodeByInnerText(data[0]));
   assertTrue('Should have new standard active class',
-      goog.dom.classes.has(selected, 'ac-active'));
+      goog.dom.classlist.contains(selected, 'ac-active'));
   assertTrue('Should have legacy active class',
-      goog.dom.classes.has(selected, 'active'));
+      goog.dom.classlist.contains(selected, 'active'));
 
   simulateAllKeyEventsOnInput(goog.events.KeyCodes.DOWN);
-  assertFalse(goog.dom.classes.has(
-                  findNodeByInnerText(data[0]), 'ac-active'));
-  assert(goog.dom.classes.has(
-             findNodeByInnerText(data[1]), 'ac-active'));
+  assertFalse(goog.dom.classlist.contains(
+      goog.asserts.assertElement(findNodeByInnerText(data[0])), 'ac-active'));
+  assert(goog.dom.classlist.contains(
+      goog.asserts.assertElement(findNodeByInnerText(data[1])), 'ac-active'));
 
   simulateAllKeyEventsOnInput(goog.events.KeyCodes.ENTER);
   assertEquals('c, aab, ', input.value);
@@ -174,15 +175,14 @@ function testMouseNavigation() {
   simulateAllKeyEventsOnInput(goog.events.KeyCodes.A);
   mockClock.tick(500);
 
-  var secondOption = findNodeByInnerText(data[1]);
-  assert(!!secondOption);
+  var secondOption = goog.asserts.assertElement(findNodeByInnerText(data[1]));
   var parent = secondOption.parentNode;
-  assertFalse(goog.dom.classes.has(secondOption, 'ac-active'));
+  assertFalse(goog.dom.classlist.contains(secondOption, 'ac-active'));
 
   var mouseOver = new goog.events.Event(
       goog.events.EventType.MOUSEOVER, secondOption);
   simulateEvent(new goog.events.BrowserEvent(mouseOver, parent));
-  assert(goog.dom.classes.has(secondOption, 'ac-active'));
+  assert(goog.dom.classlist.contains(secondOption, 'ac-active'));
 
   var mouseDown = new goog.events.Event(
       goog.events.EventType.MOUSEDOWN, secondOption);
