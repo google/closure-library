@@ -38,7 +38,10 @@
 
 goog.provide('goog.proto2.PbLiteSerializer');
 
+goog.require('goog.asserts');
+goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.LazyDeserializer');
+goog.require('goog.proto2.Serializer');
 goog.require('goog.proto2.Util');
 
 
@@ -168,8 +171,9 @@ goog.proto2.PbLiteSerializer.prototype.getDeserializedValue =
     function(field, value) {
 
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.BOOL) {
-    // Booleans are serialized in numeric form.
-    return value === 1;
+    goog.asserts.assert(goog.isNumber(value) || goog.isBoolean(value),
+        'Value is expected to be a number or boolean');
+    return !!value;
   }
 
   return goog.proto2.Serializer.prototype.getDeserializedValue.apply(this,

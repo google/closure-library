@@ -334,10 +334,10 @@ goog.addDependency('i18n/uchar/remotenamefetcher.js', ['goog.i18n.uChar.RemoteNa
 goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterator', 'goog.iter.StopIteration'], ['goog.array', 'goog.asserts']);
 goog.addDependency('json/evaljsonprocessor.js', ['goog.json.EvalJsonProcessor'], ['goog.json', 'goog.json.Processor', 'goog.json.Serializer']);
 goog.addDependency('json/hybrid.js', ['goog.json.hybrid'], ['goog.asserts', 'goog.json']);
-goog.addDependency('json/hybrid_test.js', ['goog.json.hybridTest'], ['goog.json', 'goog.json.hybrid', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
-goog.addDependency('json/hybridjsonprocessor.js', ['goog.json.HybridJsonProcessor'], ['goog.json.Processor', 'goog.json.hybrid', 'goog.string.Stringifier']);
+goog.addDependency('json/hybrid_test.js', ['goog.json.hybridTest'], ['goog.json', 'goog.json.hybrid', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent']);
+goog.addDependency('json/hybridjsonprocessor.js', ['goog.json.HybridJsonProcessor'], ['goog.json.Processor', 'goog.json.hybrid']);
 goog.addDependency('json/hybridjsonprocessor_test.js', ['goog.json.HybridJsonProcessorTest'], ['goog.json.HybridJsonProcessor', 'goog.json.hybrid', 'goog.testing.jsunit']);
-goog.addDependency('json/json.js', ['goog.json', 'goog.json.Serializer'], []);
+goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.json.Reviver', 'goog.json.Serializer'], []);
 goog.addDependency('json/nativejsonprocessor.js', ['goog.json.NativeJsonProcessor'], ['goog.asserts', 'goog.json', 'goog.json.Processor']);
 goog.addDependency('json/processor.js', ['goog.json.Processor'], ['goog.string.Parser', 'goog.string.Stringifier']);
 goog.addDependency('labs/classdef/classdef.js', ['goog.labs.classdef'], []);
@@ -503,7 +503,7 @@ goog.addDependency('net/xhriopool.js', ['goog.net.XhrIoPool'], ['goog.net.XhrIo'
 goog.addDependency('net/xhrmanager.js', ['goog.net.XhrManager', 'goog.net.XhrManager.Event', 'goog.net.XhrManager.Request'], ['goog.Disposable', 'goog.events', 'goog.events.Event', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.XhrIo', 'goog.net.XhrIoPool', 'goog.structs', 'goog.structs.Map']);
 goog.addDependency('net/xmlhttp.js', ['goog.net.DefaultXmlHttpFactory', 'goog.net.XmlHttp', 'goog.net.XmlHttp.OptionType', 'goog.net.XmlHttp.ReadyState'], ['goog.net.WrapperXmlHttpFactory', 'goog.net.XmlHttpFactory']);
 goog.addDependency('net/xmlhttpfactory.js', ['goog.net.XmlHttpFactory'], []);
-goog.addDependency('net/xpc/crosspagechannel.js', ['goog.net.xpc.CrossPageChannel'], ['goog.Disposable', 'goog.Uri', 'goog.async.Deferred', 'goog.async.Delay', 'goog.dom', 'goog.events', 'goog.events.EventHandler', 'goog.json', 'goog.messaging.AbstractChannel', 'goog.net.xpc', 'goog.net.xpc.CrossPageChannelRole', 'goog.net.xpc.FrameElementMethodTransport', 'goog.net.xpc.IframePollingTransport', 'goog.net.xpc.IframeRelayTransport', 'goog.net.xpc.NativeMessagingTransport', 'goog.net.xpc.NixTransport', 'goog.net.xpc.Transport', 'goog.userAgent']);
+goog.addDependency('net/xpc/crosspagechannel.js', ['goog.net.xpc.CrossPageChannel'], ['goog.Disposable', 'goog.Uri', 'goog.async.Deferred', 'goog.async.Delay', 'goog.dom', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.json', 'goog.messaging.AbstractChannel', 'goog.net.xpc', 'goog.net.xpc.CrossPageChannelRole', 'goog.net.xpc.FrameElementMethodTransport', 'goog.net.xpc.IframePollingTransport', 'goog.net.xpc.IframeRelayTransport', 'goog.net.xpc.NativeMessagingTransport', 'goog.net.xpc.NixTransport', 'goog.net.xpc.Transport', 'goog.userAgent']);
 goog.addDependency('net/xpc/crosspagechannelrole.js', ['goog.net.xpc.CrossPageChannelRole'], []);
 goog.addDependency('net/xpc/frameelementmethodtransport.js', ['goog.net.xpc.FrameElementMethodTransport'], ['goog.net.xpc', 'goog.net.xpc.CrossPageChannelRole', 'goog.net.xpc.Transport']);
 goog.addDependency('net/xpc/iframepollingtransport.js', ['goog.net.xpc.IframePollingTransport', 'goog.net.xpc.IframePollingTransport.Receiver', 'goog.net.xpc.IframePollingTransport.Sender'], ['goog.array', 'goog.dom', 'goog.net.xpc', 'goog.net.xpc.CrossPageChannelRole', 'goog.net.xpc.Transport', 'goog.userAgent']);
@@ -533,7 +533,7 @@ goog.addDependency('proto2/lazydeserializer.js', ['goog.proto2.LazyDeserializer'
 goog.addDependency('proto2/message.js', ['goog.proto2.Message'], ['goog.proto2.Descriptor', 'goog.proto2.FieldDescriptor', 'goog.proto2.Util', 'goog.string']);
 goog.addDependency('proto2/objectserializer.js', ['goog.proto2.ObjectSerializer'], ['goog.proto2.Serializer', 'goog.proto2.Util', 'goog.string']);
 goog.addDependency('proto2/package_test.pb.js', ['someprotopackage.TestPackageTypes'], ['goog.proto2.Message', 'proto2.TestAllTypes']);
-goog.addDependency('proto2/pbliteserializer.js', ['goog.proto2.PbLiteSerializer'], ['goog.proto2.LazyDeserializer', 'goog.proto2.Util']);
+goog.addDependency('proto2/pbliteserializer.js', ['goog.proto2.PbLiteSerializer'], ['goog.asserts', 'goog.proto2.FieldDescriptor', 'goog.proto2.LazyDeserializer', 'goog.proto2.Serializer', 'goog.proto2.Util']);
 goog.addDependency('proto2/serializer.js', ['goog.proto2.Serializer'], ['goog.proto2.Descriptor', 'goog.proto2.FieldDescriptor', 'goog.proto2.Message', 'goog.proto2.Util']);
 goog.addDependency('proto2/test.pb.js', ['proto2.TestAllTypes', 'proto2.TestAllTypes.NestedEnum', 'proto2.TestAllTypes.NestedMessage', 'proto2.TestAllTypes.OptionalGroup', 'proto2.TestAllTypes.RepeatedGroup', 'proto2.TestDefaultChild', 'proto2.TestDefaultParent'], ['goog.proto2.Message']);
 goog.addDependency('proto2/textformatserializer.js', ['goog.proto2.TextFormatSerializer', 'goog.proto2.TextFormatSerializer.Parser'], ['goog.array', 'goog.asserts', 'goog.json', 'goog.proto2.Serializer', 'goog.proto2.Util', 'goog.string']);
@@ -898,7 +898,7 @@ goog.addDependency('useragent/platform.js', ['goog.userAgent.platform'], ['goog.
 goog.addDependency('useragent/product.js', ['goog.userAgent.product'], ['goog.userAgent']);
 goog.addDependency('useragent/product_isversion.js', ['goog.userAgent.product.isVersion'], ['goog.userAgent.product']);
 goog.addDependency('useragent/useragent.js', ['goog.userAgent'], ['goog.string']);
-goog.addDependency('useragent/useragenttestutil.js', ['goog.userAgentTestUtil', 'goog.userAgentTestUtil.UserAgents'], ['goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.userAgent']);
+goog.addDependency('useragent/useragenttestutil.js', ['goog.userAgentTestUtil', 'goog.userAgentTestUtil.UserAgents'], ['goog.userAgent']);
 goog.addDependency('vec/float32array.js', ['goog.vec.Float32Array'], []);
 goog.addDependency('vec/float64array.js', ['goog.vec.Float64Array'], []);
 goog.addDependency('vec/mat3.js', ['goog.vec.Mat3'], ['goog.vec']);
