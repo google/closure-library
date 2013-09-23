@@ -19,6 +19,7 @@
 
 
 goog.provide('goog.iter');
+goog.provide('goog.iter.Iterable');
 goog.provide('goog.iter.Iterator');
 goog.provide('goog.iter.StopIteration');
 
