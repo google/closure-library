@@ -28,6 +28,7 @@ goog.require('goog.async.Delay');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventType');
 goog.require('goog.json');
 goog.require('goog.messaging.AbstractChannel');
 goog.require('goog.net.xpc');
@@ -111,8 +112,12 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
 
   goog.net.xpc.channels[this.name] = this;
 
-  goog.events.listen(window, 'unload',
-      goog.net.xpc.CrossPageChannel.disposeAll_);
+  if (!goog.events.getListener(window, goog.events.EventType.UNLOAD,
+      goog.net.xpc.CrossPageChannel.disposeAll_)) {
+    // Set listener to dispose all registered channels on page unload.
+    goog.events.listenOnce(window, goog.events.EventType.UNLOAD,
+        goog.net.xpc.CrossPageChannel.disposeAll_);
+  }
 
   goog.log.info(goog.net.xpc.logger, 'CrossPageChannel created: ' + this.name);
 };
@@ -803,3 +808,4 @@ goog.net.xpc.CrossPageChannel.disposeAll_ = function() {
     goog.dispose(goog.net.xpc.channels[name]);
   }
 };
+
