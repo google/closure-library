@@ -25,7 +25,7 @@ goog.provide('goog.ui.editor.DefaultToolbar');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.editor.Command');
 goog.require('goog.style');
 goog.require('goog.ui.editor.ToolbarFactory');
@@ -437,7 +437,7 @@ goog.ui.editor.DefaultToolbar.rtlButtonFactory_ = function(id, tooltip,
     // Enable/disable a marker class on the toolbar's root element; the rest is
     // done using CSS scoping in editortoolbar.css.  This changes
     // direction-senitive toolbar icons (like indent/outdent)
-    goog.dom.classes.enable(
+    goog.dom.classlist.enable(
         button.getParent().getElement(), goog.getCssName('tr-rtl-mode'), isRtl);
     button.setChecked(isRtl);
   };
@@ -497,7 +497,7 @@ goog.ui.editor.DefaultToolbar.fontFaceFactory_ = function(id, tooltip,
   goog.ui.editor.DefaultToolbar.addDefaultFonts(button);
   button.setDefaultCaption(goog.ui.editor.DefaultToolbar.MSG_FONT_NORMAL);
   // Font options don't have keyboard accelerators.
-  goog.dom.classes.add(button.getMenu().getContentElement(),
+  goog.dom.classlist.add(button.getMenu().getContentElement(),
       goog.getCssName('goog-menu-noaccel'));
 
   // How to update this button's state.
@@ -546,7 +546,7 @@ goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(id, tooltip,
   goog.ui.editor.DefaultToolbar.addDefaultFontSizes(button);
   button.setDefaultCaption(goog.ui.editor.DefaultToolbar.MSG_FONT_SIZE_NORMAL);
   // Font size options don't have keyboard accelerators.
-  goog.dom.classes.add(button.getMenu().getContentElement(),
+  goog.dom.classlist.add(button.getMenu().getContentElement(),
       goog.getCssName('goog-menu-noaccel'));
   // How to update this button's state.
   button.updateFromValue = function(value) {
@@ -684,7 +684,7 @@ goog.ui.editor.DefaultToolbar.formatBlockFactory_ = function(id, tooltip,
   goog.ui.editor.DefaultToolbar.addDefaultFormatOptions(button);
   button.setDefaultCaption(goog.ui.editor.DefaultToolbar.MSG_FORMAT_NORMAL);
   // Format options don't have keyboard accelerators.
-  goog.dom.classes.add(button.getMenu().getContentElement(),
+  goog.dom.classlist.add(button.getMenu().getContentElement(),
       goog.getCssName('goog-menu-noaccel'));
   // How to update this button.
   button.updateFromValue = function(value) {

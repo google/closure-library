@@ -18,6 +18,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom.DomHelper');
+  goog.require('goog.dom.classlist');
   goog.require('goog.events.EventHandler');
   goog.require('goog.events.KeyCodes');
   goog.require('goog.testing.MockControl');
@@ -275,9 +276,9 @@ function testBasicLayout() {
                  '>The Apply Button<',
                  html);
   assertTrue('Dialog should have default Closure class',
-             goog.dom.classes.has(dialogElem, 'modal-dialog'));
+             goog.dom.classlist.contains(dialogElem, 'modal-dialog'));
   assertTrue('Dialog should have our custom class',
-             goog.dom.classes.has(dialogElem, 'myClassName'));
+             goog.dom.classlist.contains(dialogElem, 'myClassName'));
 
   mockCtrl.$verifyAll();
 }

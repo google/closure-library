@@ -28,7 +28,7 @@ goog.provide('goog.ui.editor.Bubble');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.ViewportSizeMonitor');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.editor.style');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -275,7 +275,7 @@ goog.ui.editor.Bubble.prototype.addPanel = function(type, title, targetElement,
   if (numPanels == 1) {
     this.openBubble_();
   } else if (numPanels == 2) {
-    goog.dom.classes.add(this.bubbleContainer_,
+    goog.dom.classlist.add(this.bubbleContainer_,
         goog.getCssName('tr_multi_bubble'));
   }
   this.reposition();
@@ -295,7 +295,7 @@ goog.ui.editor.Bubble.prototype.removePanel = function(id) {
 
   var numPanels = goog.object.getCount(this.panels_);
   if (numPanels <= 1) {
-    goog.dom.classes.remove(this.bubbleContainer_,
+    goog.dom.classlist.remove(this.bubbleContainer_,
         goog.getCssName('tr_multi_bubble'));
   }
 
@@ -347,7 +347,7 @@ goog.ui.editor.Bubble.prototype.handlePopupHide = function() {
 
   // Update the state to reflect no panels.
   this.panels_ = {};
-  goog.dom.classes.remove(this.bubbleContainer_,
+  goog.dom.classlist.remove(this.bubbleContainer_,
       goog.getCssName('tr_multi_bubble'));
 
   this.eventHandler_.removeAll();

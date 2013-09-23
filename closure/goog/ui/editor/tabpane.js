@@ -22,7 +22,7 @@
 goog.provide('goog.ui.editor.TabPane');
 
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.style');
@@ -156,7 +156,7 @@ goog.ui.editor.TabPane.prototype.enterDocument = function() {
 
   // Get the root element and add a class name to it.
   var root = this.getElement();
-  goog.dom.classes.add(root, goog.getCssName('tr-tabpane'));
+  goog.dom.classlist.add(root, goog.getCssName('tr-tabpane'));
 
   // Add the tabs.
   this.addChild(this.tabBar_, true);
