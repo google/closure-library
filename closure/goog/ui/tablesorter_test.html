@@ -180,6 +180,29 @@ See the COPYING file for details.
       tableSorter2.dispose();
     }
 
+    function testSortAfterSwapping() {
+      // First click
+      goog.testing.events.fireClickEvent(alphaHeader);
+      assertOrder(['A', '10', 'B', '0', 'C', '10', 'C', '17', 'C', '3']);
+      assertEquals(0, tableSorter.getSortColumn());
+
+      // Move first column to the end
+      for (var i = 0, r; (r = table.rows[i]); i++) {
+        var cell = r.cells[0];
+        cell.parentNode.appendChild(cell);
+      }
+      // Make sure the above worked as expected
+      assertOrder(['10', 'A', '0', 'B', '10', 'C', '17', 'C', '3', 'C']);
+
+      // Our column is now the second one
+      assertEquals(2, tableSorter.getSortColumn());
+
+      // Second click, should reverse
+      tableSorter.setSortFunction(2, goog.ui.TableSorter.alphaSort);
+      goog.testing.events.fireClickEvent(alphaHeader);
+      assertOrder(['10', 'C', '17', 'C', '3', 'C', '0', 'B', '10', 'A']);
+    }
+
     function assertOrder(arr, opt_table) {
       var tbl = opt_table || table;
       var actual = [];

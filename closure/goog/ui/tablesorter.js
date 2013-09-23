@@ -49,11 +49,11 @@ goog.ui.TableSorter = function(opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
-   * The current sort column of the table, or -1 if none.
-   * @type {number}
+   * The current sort header of the table, or null if none.
+   * @type {HTMLTableCellElement}
    * @private
    */
-  this.column_ = -1;
+  this.header_ = null;
 
   /**
    * Whether the last sort was in reverse.
@@ -132,7 +132,7 @@ goog.ui.TableSorter.prototype.enterDocument = function() {
  * @return {number} The current sort column of the table, or -1 if none.
  */
 goog.ui.TableSorter.prototype.getSortColumn = function() {
-  return this.column_;
+  return this.header_ ? this.header_.cellIndex : -1;
 };
 
 
@@ -196,15 +196,14 @@ goog.ui.TableSorter.prototype.sort_ = function(e) {
   var target = /** @type {Node} */ (e.target);
   var th = goog.dom.getAncestorByTagNameAndClass(target,
       goog.dom.TagName.TH);
-  var col = th.cellIndex;
 
   // If the user clicks on the same column, sort it in reverse of what it is
   // now.  Otherwise, sort forward.
-  var reverse = col == this.column_ ? !this.reversed_ : false;
+  var reverse = th == this.header_ ? !this.reversed_ : false;
 
   // Perform the sort.
   if (this.dispatchEvent(goog.ui.TableSorter.EventType.BEFORESORT)) {
-    if (this.sort(col, reverse)) {
+    if (this.sort(th.cellIndex, reverse)) {
       this.dispatchEvent(goog.ui.TableSorter.EventType.SORT);
     }
   }
@@ -230,9 +229,8 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
   var headers = table.tHead.rows[this.sortableHeaderRowIndex_].cells;
 
   // Remove old header classes.
-  if (this.column_ >= 0) {
-    var oldHeader = headers[this.column_];
-    goog.dom.classes.remove(oldHeader, this.reversed_ ?
+  if (this.header_) {
+    goog.dom.classes.remove(this.header_, this.reversed_ ?
         goog.getCssName('goog-tablesorter-sorted-reverse') :
         goog.getCssName('goog-tablesorter-sorted'));
   }
@@ -272,7 +270,7 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
   table.insertBefore(tBody, table.tBodies[0] || null);
 
   // Mark this as the last sorted column.
-  this.column_ = column;
+  this.header_ = header;
 
   // Update the header class.
   goog.dom.classes.add(header, this.reversed_ ?
