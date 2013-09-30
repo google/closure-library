@@ -18,6 +18,7 @@ goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.PropertyReplacer');
 
 
 </script>
@@ -26,7 +27,17 @@ goog.require('goog.testing.jsunit');
 
 <script>
 
-var KeyCodes = goog.events.KeyCodes;
+var KeyCodes;
+var stubs;
+
+function setUpPage() {
+  KeyCodes = goog.events.KeyCodes;
+  stubs = new goog.testing.PropertyReplacer();
+}
+
+function tearDown() {
+  stubs.reset();
+}
 
 function testTextModifyingKeys() {
   var specialTextModifiers = goog.object.createSet(
@@ -98,27 +109,76 @@ function createEventWithKeyCode(i) {
 }
 
 function testNormalizeGeckoKeyCode() {
-  KeyCodes = goog.events.KeyCodes;
+  stubs.set(goog.userAgent, 'GECKO', true);
 
   // Test Gecko-specific key codes.
   assertEquals(
       goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.FF_EQUALS),
       KeyCodes.EQUALS);
   assertEquals(
+      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.FF_EQUALS),
+      KeyCodes.EQUALS);
+
+  assertEquals(
       goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.FF_SEMICOLON),
       KeyCodes.SEMICOLON);
+  assertEquals(
+      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.FF_SEMICOLON),
+      KeyCodes.SEMICOLON);
+
   assertEquals(
       goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.MAC_FF_META),
       KeyCodes.META);
   assertEquals(
+      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.MAC_FF_META),
+      KeyCodes.META);
+
+  assertEquals(
       goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.WIN_KEY_FF_LINUX),
+      KeyCodes.WIN_KEY);
+  assertEquals(
+      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.WIN_KEY_FF_LINUX),
       KeyCodes.WIN_KEY);
 
   // Test general key codes.
   assertEquals(
       goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.COMMA),
       KeyCodes.COMMA);
+  assertEquals(
+      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.COMMA),
+      KeyCodes.COMMA);
 }
+
+function testNormalizeMacWebKitKeyCode() {
+  stubs.set(goog.userAgent, 'GECKO', false);
+  stubs.set(goog.userAgent, 'MAC', true);
+  stubs.set(goog.userAgent, 'WEBKIT', true);
+
+  // Test Mac WebKit specific key codes.
+  assertEquals(
+      goog.events.KeyCodes.normalizeMacWebKitKeyCode(KeyCodes.MAC_WK_CMD_LEFT),
+      KeyCodes.META);
+  assertEquals(
+      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.MAC_WK_CMD_LEFT),
+      KeyCodes.META);
+
+  assertEquals(
+      goog.events.KeyCodes.normalizeMacWebKitKeyCode(KeyCodes.MAC_WK_CMD_RIGHT),
+      KeyCodes.META);
+  assertEquals(
+      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.MAC_WK_CMD_RIGHT),
+      KeyCodes.META);
+
+  // Test general key codes.
+  assertEquals(
+      goog.events.KeyCodes.normalizeMacWebKitKeyCode(KeyCodes.COMMA),
+      KeyCodes.COMMA);
+  assertEquals(
+      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.COMMA),
+      KeyCodes.COMMA);
+}
+
+
 </script>
 
 </body>

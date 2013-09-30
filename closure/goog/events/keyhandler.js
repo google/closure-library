@@ -304,7 +304,6 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
   // Ctrl-Tab and Alt-Tab can cause the focus to be moved to another window
   // before we've caught a key-up event.  If the last-key was one of these we
   // reset the state.
-
   if (goog.userAgent.WEBKIT) {
     if (this.lastKey_ == goog.events.KeyCodes.CTRL && !e.ctrlKey ||
         this.lastKey_ == goog.events.KeyCodes.ALT && !e.altKey ||
@@ -330,9 +329,7 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
           this.lastKey_, e.shiftKey, e.ctrlKey, e.altKey)) {
     this.handleEvent(e);
   } else {
-    this.keyCode_ = goog.userAgent.GECKO ?
-        goog.events.KeyCodes.normalizeGeckoKeyCode(e.keyCode) :
-        e.keyCode;
+    this.keyCode_ = goog.events.KeyCodes.normalizeKeyCode(e.keyCode);
     if (goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_) {
       this.altKey_ = e.altKey;
     }
@@ -413,6 +410,7 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
     }
   }
 
+  keyCode = goog.events.KeyCodes.normalizeKeyCode(keyCode);
   var key = keyCode;
   var keyIdentifier = be.keyIdentifier;
 
