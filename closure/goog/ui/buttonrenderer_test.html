@@ -16,7 +16,7 @@ See the COPYING file for details.
     goog.require('goog.a11y.aria');
     goog.require('goog.a11y.aria.Role');
     goog.require('goog.a11y.aria.State');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.style');
     goog.require('goog.testing.ExpectedFailures');
     goog.require('goog.testing.jsunit');
@@ -86,7 +86,7 @@ See the COPYING file for details.
       assertNotNull('Element must not be null', element);
       assertEquals('Element must be a DIV', 'DIV', element.tagName);
       assertSameElements('Element must have expected class name',
-          ['goog-button'], goog.dom.classes.get(element));
+          ['goog-button'], goog.dom.classlist.get(element));
       assertEquals('Element must have expected title', 'Hello, world!',
           element.title);
       assertUndefined('Element must have no value', element.value);

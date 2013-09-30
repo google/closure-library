@@ -16,7 +16,7 @@ Author: attila@google.com (Attila Bodis)
   <script>
     goog.require('goog.dom');
     goog.require('goog.a11y.aria.Role');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Tab');
     goog.require('goog.ui.TabRenderer');
@@ -78,7 +78,7 @@ Author: attila@google.com (Attila Bodis)
       var foo = renderer.decorate(tab, goog.dom.getElement('foo'));
       assertNotNull('Decorated element must not be null', foo);
       assertSameElements('Decorated element must have expected class',
-          ['goog-tab'], goog.dom.classes.get(foo));
+          ['goog-tab'], goog.dom.classlist.get(foo));
       assertEquals('Decorated tab must have expected content', 'Foo',
           tab.getContent().nodeValue);
       assertUndefined('Decorated tab must not have tooltip', tab.getTooltip());
@@ -88,7 +88,7 @@ Author: attila@google.com (Attila Bodis)
       var bar = renderer.decorate(tab, goog.dom.getElement('bar'));
       assertNotNull('Decorated element must not be null', bar);
       assertSameElements('Decorated element must have expected class',
-          ['goog-tab'], goog.dom.classes.get(bar));
+          ['goog-tab'], goog.dom.classlist.get(bar));
       assertEquals('Decorated tab must have expected content', 'Bar',
           tab.getContent().nodeValue);
       assertEquals('Decorated tab must have expected tooltip', 'Yes',
