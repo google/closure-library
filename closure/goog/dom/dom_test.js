@@ -891,6 +891,22 @@ function testSetTextContent() {
       p1.childNodes.length);
   assertEquals(s, p1.firstChild.data);
 
+  // Text/CharacterData
+  p1.innerHTML = 'before';
+  s = 'after';
+  goog.dom.setTextContent(p1.firstChild, s);
+  assertEquals('We should have one childNode after setTextContent', 1,
+      p1.childNodes.length);
+  assertEquals(s, p1.firstChild.data);
+
+  // DocumentFragment
+  var df = document.createDocumentFragment();
+  s = 'hello world';
+  goog.dom.setTextContent(df, s);
+  assertEquals('We should have one childNode after setTextContent', 1,
+      df.childNodes.length);
+  assertEquals(s, df.firstChild.data);
+
   // clean up
   p1.innerHTML = '';
 }

@@ -1516,26 +1516,30 @@ goog.dom.getFrameContentWindow = function(frame) {
 
 
 /**
- * Cross-browser function for setting the text content of an element.
- * @param {Element} element The element to change the text content of.
- * @param {string|number} text The string that should replace the current
- *     element content.
+ * Sets the text content of a node, with cross-browser support.
+ * @param {Node} node The node to change the text content of.
+ * @param {string|number} text The value that should replace the node's content.
  */
-goog.dom.setTextContent = function(element, text) {
-  if ('textContent' in element) {
-    element.textContent = text;
-  } else if (element.firstChild &&
-             element.firstChild.nodeType == goog.dom.NodeType.TEXT) {
+goog.dom.setTextContent = function(node, text) {
+  goog.asserts.assert(node != null,
+      'goog.dom.setTextContent expects a non-null value for node');
+
+  if ('textContent' in node) {
+    node.textContent = text;
+  } else if (node.nodeType == goog.dom.NodeType.TEXT) {
+    node.data = text;
+  } else if (node.firstChild &&
+             node.firstChild.nodeType == goog.dom.NodeType.TEXT) {
     // If the first child is a text node we just change its data and remove the
     // rest of the children.
-    while (element.lastChild != element.firstChild) {
-      element.removeChild(element.lastChild);
+    while (node.lastChild != node.firstChild) {
+      node.removeChild(node.lastChild);
     }
-    element.firstChild.data = text;
+    node.firstChild.data = text;
   } else {
-    goog.dom.removeChildren(element);
-    var doc = goog.dom.getOwnerDocument(element);
-    element.appendChild(doc.createTextNode(String(text)));
+    goog.dom.removeChildren(node);
+    var doc = goog.dom.getOwnerDocument(node);
+    node.appendChild(doc.createTextNode(String(text)));
   }
 };
 
@@ -2684,10 +2688,9 @@ goog.dom.DomHelper.prototype.getFrameContentWindow =
 
 
 /**
- * Cross browser function for setting the text content of an element.
- * @param {Element} element The element to change the text content of.
- * @param {string} text The string that should replace the current element
- *     content with.
+ * Sets the text content of a node, with cross-browser support.
+ * @param {Node} node The node to change the text content of.
+ * @param {string|number} text The value that should replace the node's content.
  */
 goog.dom.DomHelper.prototype.setTextContent = goog.dom.setTextContent;
 
