@@ -14,7 +14,7 @@ See the COPYING file for details.
     goog.require('goog.debug.DivConsole');
     goog.require('goog.debug.LogManager');
     goog.require('goog.dom');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.log');
     goog.require('goog.object');
@@ -244,7 +244,7 @@ See the COPYING file for details.
           'still be 100', 100, textarea.minHeight_);
 
       // We need to test how CSS drop shadows effect this too.
-      goog.dom.classes.add(textarea.getElement(), 'drop-shadowed');
+      goog.dom.classlist.add(textarea.getElement(), 'drop-shadowed');
       textarea.mouseUpListener_({});
       assertEquals('After a mouseup which is not a resize, minHeight should ' +
           'still be 100 even with a shadow', 100, textarea.minHeight_);

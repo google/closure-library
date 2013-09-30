@@ -15,7 +15,7 @@ See the COPYING file for details.
 <script type="text/javascript">
   goog.require('goog.array');
   goog.require('goog.dom');
-  goog.require('goog.dom.classes');
+  goog.require('goog.dom.classlist');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.ColorButton');
   goog.require('goog.ui.decorate');
@@ -59,10 +59,12 @@ function testDecorate() {
 
 function assertColorButton(div) {
   assertTrue('button className contains goog-color-button',
-      goog.array.contains(goog.dom.classes.get(div), 'goog-color-button'));
-  var caption = div.firstChild.firstChild.firstChild;
+      goog.array.contains(goog.dom.classlist.get(div), 'goog-color-button'));
+  var caption = goog.asserts.assertElement(
+      div.firstChild.firstChild.firstChild);
   assertTrue('caption className contains goog-color-button',
-      goog.array.contains(goog.dom.classes.get(caption), 'goog-color-button'));
+      goog.array.contains(goog.dom.classlist.get(caption),
+          'goog-color-button'));
 }
 
 </script>

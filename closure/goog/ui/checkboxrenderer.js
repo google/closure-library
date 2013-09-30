@@ -24,7 +24,7 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.object');
 goog.require('goog.ui.ControlRenderer');
 
@@ -69,7 +69,7 @@ goog.ui.CheckboxRenderer.prototype.decorate = function(checkbox, element) {
   // need to set the checkbox state.
   element = goog.base(this, 'decorate', checkbox, element);
 
-  var classes = goog.dom.classes.get(element);
+  var classes = goog.dom.classlist.get(element);
   // Update the checked state of the element based on its css classNames
   // with the following order: undetermined -> checked -> unchecked.
   var checked = goog.ui.Checkbox.State.UNCHECKED;
@@ -113,12 +113,12 @@ goog.ui.CheckboxRenderer.prototype.setCheckboxState = function(
   if (element) {
     var classToAdd = this.getClassForCheckboxState(state);
     goog.asserts.assert(classToAdd);
-    if (goog.dom.classes.has(element, classToAdd)) {
+    if (goog.dom.classlist.contains(element, classToAdd)) {
       return;
     }
     goog.object.forEach(goog.ui.Checkbox.State, function(state) {
       var className = this.getClassForCheckboxState(state);
-      goog.dom.classes.enable(element, className,
+      goog.dom.classlist.enable(element, className,
           className == classToAdd);
     }, this);
     goog.a11y.aria.setState(element, goog.a11y.aria.State.CHECKED,

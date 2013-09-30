@@ -21,7 +21,7 @@
 goog.provide('goog.ui.TriStateMenuItem');
 goog.provide('goog.ui.TriStateMenuItem.State');
 
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.TriStateMenuItemRenderer');
@@ -150,8 +150,8 @@ goog.ui.TriStateMenuItem.prototype.performActionInternal = function(e) {
 
   var checkboxClass = goog.getCssName(
       this.getRenderer().getCssClass(), 'checkbox');
-  var clickOnCheckbox = e.target && goog.dom.classes.has(
-      /** @type {Element} */ (e.target), checkboxClass);
+  var clickOnCheckbox = e.target && goog.dom.classlist.contains(
+      /** @type {!Element} */ (e.target), checkboxClass);
 
   return this.dispatchEvent(clickOnCheckbox || this.allowPartial_ ?
       goog.ui.Component.EventType.CHANGE :

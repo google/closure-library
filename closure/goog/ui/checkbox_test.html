@@ -17,7 +17,7 @@ See the COPYING file for details.
     goog.require('goog.a11y.aria');
     goog.require('goog.a11y.aria.Role');
     goog.require('goog.a11y.aria.State');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.events.KeyCodes');
     goog.require('goog.testing.events');
@@ -58,24 +58,24 @@ See the COPYING file for details.
     checkbox.setChecked(false);
     assertSameElements('classnames of unchecked checkbox',
         ['goog-checkbox', 'goog-checkbox-unchecked'],
-        goog.dom.classes.get(checkbox.getElement()));
+        goog.dom.classlist.get(checkbox.getElement()));
 
     checkbox.setChecked(true);
     assertSameElements('classnames of checked checkbox',
         ['goog-checkbox', 'goog-checkbox-checked'],
-        goog.dom.classes.get(checkbox.getElement()));
+        goog.dom.classlist.get(checkbox.getElement()));
 
     checkbox.setChecked(null);
     assertSameElements('classnames of partially checked checkbox',
         ['goog-checkbox', 'goog-checkbox-undetermined'],
-        goog.dom.classes.get(checkbox.getElement()));
+        goog.dom.classlist.get(checkbox.getElement()));
 
     checkbox.setEnabled(false);
     assertSameElements('classnames of partially checked disabled checkbox',
         ['goog-checkbox',
          'goog-checkbox-undetermined',
          'goog-checkbox-disabled'],
-        goog.dom.classes.get(checkbox.getElement()));
+        goog.dom.classlist.get(checkbox.getElement()));
   }
 
   function testIsEnabled() {
@@ -190,18 +190,19 @@ See the COPYING file for details.
       goog.testing.events.fireMouseOverEvent(label);
       assertTrue(checkbox.hasState(goog.ui.Component.State.HOVER));
       assertContains('checkbox gets hover state on mouse over',
-          'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+          'goog-checkbox-hover', goog.dom.classlist.get(checkbox.getElement()));
       goog.testing.events.fireMouseDownEvent(label);
       assertTrue(checkbox.hasState(goog.ui.Component.State.ACTIVE));
       assertContains('checkbox gets active state on label mousedown',
-          'goog-checkbox-active', goog.dom.classes.get(checkbox.getElement()));
+          'goog-checkbox-active',
+          goog.dom.classlist.get(checkbox.getElement()));
       goog.testing.events.fireMouseOutEvent(checkbox.getElement());
       assertFalse(checkbox.hasState(goog.ui.Component.State.HOVER));
       assertNotContains('checkbox does not have hover state after mouse out',
-          'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+          'goog-checkbox-hover', goog.dom.classlist.get(checkbox.getElement()));
       assertFalse(checkbox.hasState(goog.ui.Component.State.ACTIVE));
       assertNotContains('checkbox does not have active state after mouse out',
-          'goog-checkbox-active', goog.dom.classes.get(checkbox.getElement()));
+          'goog-checkbox-active', goog.dom.classlist.get(checkbox.getElement()));
 
       // Test label mouse events on disabled checkbox.
       checkbox.setEnabled(false);
@@ -209,15 +210,16 @@ See the COPYING file for details.
       assertFalse(checkbox.hasState(goog.ui.Component.State.HOVER));
       assertNotContains(
           'disabled checkbox does not get hover state on mouseover',
-          'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+          'goog-checkbox-hover', goog.dom.classlist.get(checkbox.getElement()));
       goog.testing.events.fireMouseDownEvent(label);
       assertFalse(checkbox.hasState(goog.ui.Component.State.ACTIVE));
       assertNotContains('disabled checkbox does not get active state mousedown',
-          'goog-checkbox-active', goog.dom.classes.get(checkbox.getElement()));
+          'goog-checkbox-active',
+          goog.dom.classlist.get(checkbox.getElement()));
       goog.testing.events.fireMouseOutEvent(checkbox.getElement());
       assertFalse(checkbox.hasState(goog.ui.Component.State.ACTIVE));
       assertNotContains('checkbox does not get stuck in hover state',
-          'goog-checkbox-hover', goog.dom.classes.get(checkbox.getElement()));
+          'goog-checkbox-hover', goog.dom.classlist.get(checkbox.getElement()));
 
       // Making the label null prevents it from affecting checkbox state.
       checkbox.setEnabled(true);
@@ -253,15 +255,15 @@ See the COPYING file for details.
     customCheckbox.createDom();
     assertElementsEquals(
         ['my-custom-checkbox', 'my-custom-checkbox-unchecked'],
-        goog.dom.classes.get(customCheckbox.getElement()));
+        goog.dom.classlist.get(customCheckbox.getElement()));
     customCheckbox.setChecked(true);
     assertElementsEquals(
         ['my-custom-checkbox', 'my-custom-checkbox-checked'],
-        goog.dom.classes.get(customCheckbox.getElement()));
+        goog.dom.classlist.get(customCheckbox.getElement()));
     customCheckbox.setChecked(null);
     assertElementsEquals(
         ['my-custom-checkbox', 'my-custom-checkbox-undetermined'],
-        goog.dom.classes.get(customCheckbox.getElement()));
+        goog.dom.classlist.get(customCheckbox.getElement()));
     customCheckbox.dispose();
   }
 
