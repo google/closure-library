@@ -970,3 +970,48 @@ goog.iter.GroupByIterator_.prototype.groupItems_ = function(targetKey) {
 goog.iter.groupBy = function(iterable, opt_keyFunc) {
   return new goog.iter.GroupByIterator_(iterable, opt_keyFunc);
 };
+
+
+/**
+ * Returns an array of iterators each of which can iterate over the values in
+ * {@code iterable} without advancing the others.
+ * @see http://docs.python.org/2/library/itertools.html#itertools.tee
+ * @param {!goog.iter.Iterable} iterable  The iterable to tee.
+ * @param {number=} opt_num  The number of iterators to create. Default is 2.
+ * @return {!Array.<goog.iter.Iterator>} An array of iterators.
+ */
+goog.iter.tee = function(iterable, opt_num) {
+  var iterator = goog.iter.toIterator(iterable);
+  var num = goog.isNumber(opt_num) ? opt_num : 2;
+  var buffers = goog.array.map(goog.array.range(num), function() {
+    return [];
+  });
+
+  var addNextIteratorValueToBuffers = function() {
+    var val = iterator.next();
+    goog.array.forEach(buffers, function(buffer) {
+      buffer.push(val);
+    });
+  };
+
+  var createIterator = function(buffer) {
+    // Each tee'd iterator has an associated buffer (initially empty). When a
+    // tee'd iterator's buffer is empty, it calls
+    // addNextIteratorValueToBuffers(), adding the next value to all tee'd
+    // iterators' buffers, and then returns that value. This allows each
+    // iterator to be advanced independently.
+    var iter = new goog.iter.Iterator();
+
+    iter.next = function() {
+      if (goog.array.isEmpty(buffer)) {
+        addNextIteratorValueToBuffers();
+      }
+      goog.asserts.assert(!goog.array.isEmpty(buffer));
+      return buffer.shift();
+    };
+
+    return iter;
+  };
+
+  return goog.array.map(buffers, createIterator);
+};

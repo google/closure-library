@@ -647,6 +647,40 @@ function testGroupByKeyFunc() {
   assertEquals(goog.iter.StopIteration, ex);
 }
 
+function testTeeArray() {
+  var iters = goog.iter.tee('ABC'.split(''));
+  assertEquals(2, iters.length);
+  var it0 = iters[0], it1 = iters[1];
+  assertEquals('A', it0.next());
+  assertEquals('A', it1.next());
+  assertEquals('B', it0.next());
+  assertEquals('B', it1.next());
+  assertEquals('C', it0.next());
+  assertEquals('C', it1.next());
+  var ex = assertThrows(function() { it0.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+  ex = assertThrows(function() { it1.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testTeeIterator() {
+  var iters = goog.iter.tee(goog.iter.count(), 3);
+  assertEquals(3, iters.length);
+  var it0 = iters[0], it1 = iters[1], it2 = iters[2];
+  assertEquals(0, it0.next());
+  assertEquals(1, it0.next());
+  assertEquals(0, it1.next());
+  assertEquals(1, it1.next());
+  assertEquals(2, it1.next());
+  assertEquals(2, it0.next());
+  assertEquals(0, it2.next());
+  assertEquals(1, it2.next());
+  assertEquals(2, it2.next());
+  assertEquals(3, it0.next());
+  assertEquals(3, it1.next());
+  assertEquals(3, it2.next());
+}
+
 </script>
 </body>
 </html>
