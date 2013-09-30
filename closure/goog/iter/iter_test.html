@@ -573,6 +573,44 @@ function testZipIterators() {
   assertArrayEquals([3, 'foo'], iter.next());
 }
 
+function testZipLongestArrays() {
+  var iter = goog.iter.zipLongest('-', 'ABCD'.split(''), 'xy'.split(''));
+  assertArrayEquals(['A', 'x'], iter.next());
+  assertArrayEquals(['B', 'y'], iter.next());
+  assertArrayEquals(['C', '-'], iter.next());
+  assertArrayEquals(['D', '-'], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testZipLongestSingleArg() {
+  var iter = goog.iter.zipLongest('-', 'ABCD'.split(''));
+  assertArrayEquals(['A'], iter.next());
+  assertArrayEquals(['B'], iter.next());
+  assertArrayEquals(['C'], iter.next());
+  assertArrayEquals(['D'], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testZipLongestNoArgs() {
+  var iter = goog.iter.zipLongest();
+  assertArrayEquals([], goog.iter.toArray(iter));
+  var iter = goog.iter.zipLongest('fill');
+  assertArrayEquals([], goog.iter.toArray(iter));
+}
+
+function testZipLongestIterators() {
+  var iter = goog.iter.zipLongest(null, goog.iter.range(3), goog.iter.range(5));
+  assertArrayEquals([0, 0], iter.next());
+  assertArrayEquals([1, 1], iter.next());
+  assertArrayEquals([2, 2], iter.next());
+  assertArrayEquals([null, 3], iter.next());
+  assertArrayEquals([null, 4], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
 </script>
 </body>
 </html>
