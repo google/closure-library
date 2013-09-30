@@ -378,7 +378,7 @@ function testNotIgnoringResponse() {
     return;
   }
   var iframeIo = new goog.net.IframeIo();
-  iframeIo.send("javascript:''");
+  iframeIo.send('about:blank');
   // Simulate the frame finishing loading.
   goog.testing.events.fireBrowserEvent(new goog.testing.events.Event(
       goog.events.EventType.LOAD, iframeIo.getRequestIframe()));
@@ -388,7 +388,7 @@ function testNotIgnoringResponse() {
 function testIgnoreResponse() {
   var iframeIo = new goog.net.IframeIo();
   iframeIo.setIgnoreResponse(true);
-  iframeIo.send("javascript:''");
+  iframeIo.send('about:blank');
   // Simulate the frame finishing loading.
   goog.testing.events.fireBrowserEvent(new goog.testing.events.Event(
       goog.events.EventType.LOAD, iframeIo.getRequestIframe()));
