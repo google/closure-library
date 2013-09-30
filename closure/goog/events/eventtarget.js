@@ -219,7 +219,8 @@ goog.events.EventTarget.prototype.listen = function(
     type, listener, opt_useCapture, opt_listenerScope) {
   this.assertInitialized_();
   return this.eventTargetListeners_.add(
-      type, listener, false /* callOnce */, opt_useCapture, opt_listenerScope);
+      String(type), listener, false /* callOnce */, opt_useCapture,
+      opt_listenerScope);
 };
 
 
@@ -227,7 +228,8 @@ goog.events.EventTarget.prototype.listen = function(
 goog.events.EventTarget.prototype.listenOnce = function(
     type, listener, opt_useCapture, opt_listenerScope) {
   return this.eventTargetListeners_.add(
-      type, listener, true /* callOnce */, opt_useCapture, opt_listenerScope);
+      String(type), listener, true /* callOnce */, opt_useCapture,
+      opt_listenerScope);
 };
 
 
@@ -235,7 +237,7 @@ goog.events.EventTarget.prototype.listenOnce = function(
 goog.events.EventTarget.prototype.unlisten = function(
     type, listener, opt_useCapture, opt_listenerScope) {
   return this.eventTargetListeners_.remove(
-      type, listener, opt_useCapture, opt_listenerScope);
+      String(type), listener, opt_useCapture, opt_listenerScope);
 };
 
 
@@ -264,7 +266,7 @@ goog.events.EventTarget.prototype.fireListeners = function(
   // is no listener, so we do the same. If this optimization turns
   // out to be not required, we can replace this with
   // getListeners(type, capture) instead, which is simpler.
-  var listenerArray = this.eventTargetListeners_.listeners[type];
+  var listenerArray = this.eventTargetListeners_.listeners[String(type)];
   if (!listenerArray) {
     return true;
   }
@@ -291,7 +293,7 @@ goog.events.EventTarget.prototype.fireListeners = function(
 
 /** @override */
 goog.events.EventTarget.prototype.getListeners = function(type, capture) {
-  return this.eventTargetListeners_.getListeners(type, capture);
+  return this.eventTargetListeners_.getListeners(String(type), capture);
 };
 
 
@@ -299,14 +301,15 @@ goog.events.EventTarget.prototype.getListeners = function(type, capture) {
 goog.events.EventTarget.prototype.getListener = function(
     type, listener, capture, opt_listenerScope) {
   return this.eventTargetListeners_.getListener(
-      type, listener, capture, opt_listenerScope);
+      String(type), listener, capture, opt_listenerScope);
 };
 
 
 /** @override */
 goog.events.EventTarget.prototype.hasListener = function(
     opt_type, opt_capture) {
-  return this.eventTargetListeners_.hasListener(opt_type, opt_capture);
+  var id = goog.isDef(opt_type) ? String(opt_type) : undefined;
+  return this.eventTargetListeners_.hasListener(id, opt_capture);
 };
 
 
