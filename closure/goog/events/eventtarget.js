@@ -138,8 +138,6 @@ goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
  * using the same type then it will only be called once when the event is
  * dispatched.
  *
- * Supported for legacy but use goog.events.listen(src, type, handler) instead.
- *
  * @param {string} type The type of the event to listen for.
  * @param {Function|Object} handler The function to handle the event. The
  *     handler can also be an object that implements the handleEvent method
@@ -149,7 +147,9 @@ goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
  *     of the event.
  * @param {Object=} opt_handlerScope Object in whose scope to call
  *     the listener.
- * @deprecated Use {@code #listen} instead.
+ * @deprecated Use {@code #listen} instead, when possible. Otherwise, use
+ *     {@code goog.events.listen} if you are passing Object
+ *     (instead of Function) as handler.
  */
 goog.events.EventTarget.prototype.addEventListener = function(
     type, handler, opt_capture, opt_handlerScope) {
@@ -171,7 +171,9 @@ goog.events.EventTarget.prototype.addEventListener = function(
  *     of the event.
  * @param {Object=} opt_handlerScope Object in whose scope to call
  *     the listener.
- * @deprecated Use {@code #unlisten} instead.
+ * @deprecated Use {@code #unlisten} instead, when possible. Otherwise, use
+ *     {@code goog.events.unlisten} if you are passing Object
+ *     (instead of Function) as handler.
  */
 goog.events.EventTarget.prototype.removeEventListener = function(
     type, handler, opt_capture, opt_handlerScope) {
