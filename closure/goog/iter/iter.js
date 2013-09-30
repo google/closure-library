@@ -1105,3 +1105,46 @@ goog.iter.slice = function(iterable, start, opt_end) {
 
   return iterator;
 };
+
+
+/**
+ * Checks an array for duplicate elements.
+ * @param {Array.<T>|goog.array.ArrayLike} arr The array to check for
+ *     duplicates.
+ * @return {boolean} True, if the array contains duplicates, false otherwise.
+ * @private
+ * @template T
+ */
+// TODO(user): Consider moving this into goog.array as a public function.
+goog.iter.hasDuplicates_ = function(arr) {
+  var deduped = [];
+  goog.array.removeDuplicates(arr, deduped);
+  return arr.length != deduped.length;
+};
+
+
+/**
+ * Creates an iterator that returns permutations of elements in
+ * {@code iterable}. Permutations are obtained by taking the Cartesian product
+ * of {@code opt_length} iterables and filtering out those with repeated
+ * elements. For example, the permutations of {@code [1,2,3]} are
+ * {@code [[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1]]}.
+ * @see http://docs.python.org/2/library/itertools.html#itertools.permutations
+ * @param {!goog.iter.Iterable} iterable The iterable from which to generate
+ *    permutations.
+ * @param {number=} opt_length Length of each permutation. If omitted, defaults
+ *     to the length of {@code iterable}.
+ * @return {goog.iter.Iterator} A new iterator containing the permutations of
+ *     {@code iterable}.
+ */
+goog.iter.permutations = function(iterable, opt_length) {
+  var pool = goog.iter.toArray(iterable);
+  var length = goog.isNumber(opt_length) ? opt_length : pool.length;
+
+  var sets = goog.array.repeat(pool, length);
+  var product = goog.iter.product.apply(undefined, sets);
+
+  return goog.iter.filter(product, function(arr) {
+    return !goog.iter.hasDuplicates_(arr);
+  });
+};

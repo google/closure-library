@@ -747,6 +747,28 @@ function testSliceStartGreater() {
   assertEquals(goog.iter.StopIteration, ex);
 }
 
+function testPermutationsNoLength() {
+  var iter = goog.iter.permutations(goog.iter.range(3));
+  assertArrayEquals([0, 1, 2], iter.next());
+  assertArrayEquals([0, 2, 1], iter.next());
+  assertArrayEquals([1, 0, 2], iter.next());
+  assertArrayEquals([1, 2, 0], iter.next());
+  assertArrayEquals([2, 0, 1], iter.next());
+  assertArrayEquals([2, 1, 0], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testPermutationsLength() {
+  var iter = goog.iter.permutations('ABC'.split(''), 2);
+  assertArrayEquals(['A', 'B'], iter.next());
+  assertArrayEquals(['A', 'C'], iter.next());
+  assertArrayEquals(['B', 'A'], iter.next());
+  assertArrayEquals(['B', 'C'], iter.next());
+  assertArrayEquals(['C', 'A'], iter.next());
+  assertArrayEquals(['C', 'B'], iter.next());
+}
+
 </script>
 </body>
 </html>
