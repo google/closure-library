@@ -81,14 +81,15 @@ goog.json.isValid_ = function(s) {
  * the string then you should use unsafeParse instead.
  *
  * @param {*} s The JSON string to parse.
- * @return {Object} The object generated from the JSON string.
+ * @throws Error if s is invalid JSON.
+ * @return {!Object} The object generated from the JSON string.
  */
 goog.json.parse = function(s) {
   var o = String(s);
   if (goog.json.isValid_(o)) {
     /** @preserveTry */
     try {
-      return /** @type {Object} */ (eval('(' + o + ')'));
+      return /** @type {!Object} */ (eval('(' + o + ')'));
     } catch (ex) {
     }
   }
@@ -230,7 +231,7 @@ goog.json.Serializer.prototype.serialize_ = function(object, sb) {
 /**
  * Character mappings used internally for goog.string.quote
  * @private
- * @type {Object}
+ * @type {!Object}
  */
 goog.json.Serializer.charToJsonCharCache_ = {
   '\"': '\\"',
@@ -252,7 +253,7 @@ goog.json.Serializer.charToJsonCharCache_ = {
  * regular expressions. The condition below detects such behaviour and
  * adjusts the regular expression accordingly.
  * @private
- * @type {RegExp}
+ * @type {!RegExp}
  */
 goog.json.Serializer.charsToReplace_ = /\uffff/.test('\uffff') ?
     /[\\\"\x00-\x1f\x7f-\uffff]/g : /[\\\"\x00-\x1f\x7f-\xff]/g;
