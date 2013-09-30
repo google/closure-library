@@ -681,6 +681,24 @@ function testTeeIterator() {
   assertEquals(3, it2.next());
 }
 
+function testEnumerateNoStart() {
+  var iter = goog.iter.enumerate('ABC'.split(''));
+  assertArrayEquals([0, 'A'], iter.next());
+  assertArrayEquals([1, 'B'], iter.next());
+  assertArrayEquals([2, 'C'], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testEnumerateStart() {
+  var iter = goog.iter.enumerate('DEF'.split(''), 3);
+  assertArrayEquals([3, 'D'], iter.next());
+  assertArrayEquals([4, 'E'], iter.next());
+  assertArrayEquals([5, 'F'], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
 </script>
 </body>
 </html>

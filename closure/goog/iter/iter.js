@@ -1015,3 +1015,16 @@ goog.iter.tee = function(iterable, opt_num) {
 
   return goog.array.map(buffers, createIterator);
 };
+
+
+/**
+ * Creates an iterator that returns arrays containing a count and an element
+ * obtained from the given {@code iterable}.
+ * @see http://docs.python.org/2/library/functions.html#enumerate
+ * @param {!goog.iter.Iterable} iterable  The iterable to enumerate.
+ * @param {number=} opt_start  Optional starting value. Default is 0.
+ * @return {!goog.iter.Iterator} A new iterator containing count/item pairs.
+ */
+goog.iter.enumerate = function(iterable, opt_start) {
+  return goog.iter.zip(goog.iter.count(opt_start), iterable);
+};
