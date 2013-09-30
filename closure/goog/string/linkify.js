@@ -34,6 +34,15 @@ goog.require('goog.string');
  * @return {string} HTML Linkified HTML text.
  */
 goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
+  // This shortcut makes linkifyPlainText ~10x faster if text doesn't contain
+  // URLs or email addresses and adds insignificant performance penalty if it
+  // does.
+  if (text.indexOf('@') == -1 &&
+      text.indexOf('://') == -1 &&
+      text.indexOf('www.') == -1) {
+    return goog.string.htmlEscape(text);
+  }
+
   var attributesMap = opt_attributes || {};
   // Set default options.
   if (!('rel' in attributesMap)) {
