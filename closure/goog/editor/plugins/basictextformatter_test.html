@@ -19,13 +19,21 @@ See the COPYING file for details.
   goog.require('goog.array');
   goog.require('goog.dom');
   goog.require('goog.dom.Range');
+  goog.require('goog.dom.TagName');
+  goog.require('goog.editor.BrowserFeature');
+  goog.require('goog.editor.Command');
+  goog.require('goog.editor.Field');
+  goog.require('goog.editor.Plugin');
   goog.require('goog.editor.plugins.BasicTextFormatter');
   goog.require('goog.object');
+  goog.require('goog.style');
   goog.require('goog.testing.ExpectedFailures');
+  goog.require('goog.testing.LooseMock');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.editor.FieldMock');
   goog.require('goog.testing.editor.TestHelper');
   goog.require('goog.testing.jsunit');
+  goog.require('goog.testing.mockmatchers');
   goog.require('goog.userAgent');
 </script>
 </head>
@@ -66,6 +74,14 @@ See the COPYING file for details.
     <li>bar</li>
     <li>baz</li>
   </ol>
+
+  <div>
+    <ol id="switchListType">
+      <li>switch</li>
+      <li>list</li>
+      <li>type</li>
+    </ol>
+  </div>
 
   <p>before <span id="toQuote">Foo. Bar, baz.</span> after</p>
   <p>before <div id="toQuote2">Foo.<p/>Bar,<p/>baz.</div> after</p>
@@ -255,6 +271,35 @@ See the COPYING file for details.
               /courier/i.test(document.queryCommandValue('fontname')));
       tearDownListAndBlockquoteTests();
     }
+  }
+
+  function testSwitchListType() {
+    if (!goog.userAgent.WEBKIT) {
+      return;
+    }
+    // Test that we're not seeing https://bugs.webkit.org/show_bug.cgi?id=19539,
+    // the type of multi-item lists.
+    setUpListAndBlockquoteTests();
+
+    FIELDMOCK.$replay();
+    var list = goog.dom.getElement('switchListType');
+    var parent = goog.dom.getParentElement(list);
+
+    goog.dom.Range.createFromNodeContents(list).select();
+    FORMATTER.execCommandInternal('insertunorderedlist');
+    list = goog.dom.getFirstElementChild(parent);
+    assertEquals(goog.dom.TagName.UL, list.tagName);
+    assertEquals(3, goog.dom.getElementsByTagNameAndClass(
+        goog.dom.TagName.LI, null, list).length);
+
+    goog.dom.Range.createFromNodeContents(list).select();
+    FORMATTER.execCommandInternal('insertorderedlist');
+    list = goog.dom.getFirstElementChild(parent);
+    assertEquals(goog.dom.TagName.OL, list.tagName);
+    assertEquals(3, goog.dom.getElementsByTagNameAndClass(
+        goog.dom.TagName.LI, null, list).length);
+
+    tearDownListAndBlockquoteTests();
   }
 
   function setUpSubSuperTests() {
