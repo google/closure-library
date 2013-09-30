@@ -554,6 +554,7 @@ goog.net.IframeIo.prototype.send = function(
   this.form_.method = method;
 
   this.sendFormInternal_();
+  this.clearForm_();
 };
 
 
@@ -1261,15 +1262,26 @@ goog.net.IframeIo.prototype.disposeIframes_ = function() {
 
 
 /**
+ * Removes all the child nodes from the static form so it can be reused again.
+ * This should happen right after sending a request. Otherwise, there can be
+ * issues when another iframe uses this form right after the first iframe.
+ * @private
+ */
+goog.net.IframeIo.prototype.clearForm_ = function() {
+  if (this.form_ && this.form_ == goog.net.IframeIo.form_) {
+    goog.dom.removeChildren(this.form_);
+  }
+};
+
+
+/**
  * Disposes of the Form.  Since IE6 leaks form nodes, this just cleans up the
  * DOM and nullifies the instances reference so the form can be used for another
  * request.
  * @private
  */
 goog.net.IframeIo.prototype.disposeForm_ = function() {
-  if (this.form_ && this.form_ == goog.net.IframeIo.form_) {
-    goog.dom.removeChildren(this.form_);
-  }
+  this.clearForm_();
   this.form_ = null;
 };
 
