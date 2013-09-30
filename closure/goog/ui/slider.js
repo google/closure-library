@@ -18,16 +18,18 @@
  *
  * To decorate, the slider should be bound to an element with the class name
  * 'goog-slider-[vertical / horizontal]' containing a child with the classname
- * 'goog-slider-thumb'.
+ * 'goog-slider-thumb', whose position is set to relative.
+ * Note that you won't be able to see these elements unless they are styled.
  *
  * Decorate Example:
  * <div id="slider" class="goog-slider-horizontal">
- *   <div class="goog-twothumbslider-thumb">
+ *   <div class="goog-slider-thumb"></div>
  * </div>
- * <script>
  *
+ * <script>
  * var slider = new goog.ui.Slider;
  * slider.decorate(document.getElementById('slider'));
+ * </script>
  *
  * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/slider.html
