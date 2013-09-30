@@ -1148,3 +1148,39 @@ goog.iter.permutations = function(iterable, opt_length) {
     return !goog.iter.hasDuplicates_(arr);
   });
 };
+
+
+/**
+ * Creates an iterator that returns combinations of elements from
+ * {@code iterable}. Combinations are obtained by taking the
+ * {@see goog.iter#permutations} of {@code iterable} and filtering those whose
+ * elements appear in the order they are encountered in {@code iterable}. For
+ * example, the 3-length combinations of {@code [0,1,2,3]} are
+ * {@code [[0,1,2], [0,1,3], [0,2,3], [1,2,3]]}.
+ * @see http://docs.python.org/2/library/itertools.html#itertools.combinations
+ * @param {!goog.iter.Iterable} iterable The iterable from which to generate
+ *     combinations.
+ * @param {number} length The length of each combination.
+ * @return {goog.iter.Iterator} A new iterator containing combinations from
+ *     the {@code iterable}.
+ */
+goog.iter.combinations = function(iterable, length) {
+  var pool = goog.iter.toArray(iterable);
+  var indexes = goog.iter.range(pool.length);
+  var indexIterator = goog.iter.permutations(indexes, length);
+  var sortedIndexIterator = goog.iter.filter(indexIterator, function(arr) {
+    return goog.array.isSorted(arr);
+  });
+
+  var iter = new goog.iter.Iterator();
+
+  iter.next = function() {
+    return goog.array.map(
+        /** @type {!Array.<number>} */
+        (sortedIndexIterator.next()), function(i) {
+          return pool[i];
+        });
+  };
+
+  return iter;
+};

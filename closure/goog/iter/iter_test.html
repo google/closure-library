@@ -769,6 +769,16 @@ function testPermutationsLength() {
   assertArrayEquals(['C', 'B'], iter.next());
 }
 
+function testCombinations() {
+  var iter = goog.iter.combinations(goog.iter.range(4), 3);
+  assertArrayEquals([0, 1, 2], iter.next());
+  assertArrayEquals([0, 1, 3], iter.next());
+  assertArrayEquals([0, 2, 3], iter.next());
+  assertArrayEquals([1, 2, 3], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
 </script>
 </body>
 </html>
