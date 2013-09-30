@@ -25,7 +25,7 @@ goog.require('goog.Disposable');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.ui.ButtonSide');
 goog.require('goog.ui.Component');
@@ -248,7 +248,7 @@ goog.ui.SplitBehavior.prototype.decorate = function(element, opt_activate) {
  * @return {goog.ui.SplitBehavior} A split behavior.
  */
 goog.ui.SplitBehavior.prototype.render = function(element, opt_activate) {
-  goog.dom.classes.add(element, goog.ui.SplitBehavior.CSS_CLASS);
+  goog.dom.classlist.add(element, goog.ui.SplitBehavior.CSS_CLASS);
   this.first_.render(element);
   this.second_.render(element);
   this.collapseSides_(this.first_, this.second_);

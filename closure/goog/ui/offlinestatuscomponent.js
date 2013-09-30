@@ -22,7 +22,7 @@
 goog.provide('goog.ui.OfflineStatusComponent');
 goog.provide('goog.ui.OfflineStatusComponent.StatusClassNames');
 
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');
@@ -288,11 +288,11 @@ goog.ui.OfflineStatusComponent.prototype.update = function() {
     var previousStatusClassName = this.getStatusClassName_(previousStatus);
     var currentStatusClassName = this.getStatusClassName_(status);
     if (previousStatus &&
-        goog.dom.classes.has(element, previousStatusClassName)) {
-      goog.dom.classes.swap(
+        goog.dom.classlist.contains(element, previousStatusClassName)) {
+      goog.dom.classlist.swap(
           element, previousStatusClassName, currentStatusClassName);
     } else {
-      goog.dom.classes.add(element, currentStatusClassName);
+      goog.dom.classlist.add(element, currentStatusClassName);
     }
 
     // Set the current display status

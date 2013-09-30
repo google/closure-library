@@ -22,7 +22,7 @@ goog.provide('goog.ui.CustomColorPalette');
 
 goog.require('goog.color');
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.ui.ColorPalette');
 goog.require('goog.ui.Component');
 
@@ -75,7 +75,7 @@ goog.ui.CustomColorPalette.prototype.createColorNodes = function() {
 goog.ui.CustomColorPalette.prototype.performActionInternal = function(e) {
   var item = /** @type {Element} */ (this.getHighlightedItem());
   if (item) {
-    if (goog.dom.classes.has(
+    if (goog.dom.classlist.contains(
         item, goog.getCssName('goog-palette-customcolor'))) {
       // User activated the special "add custom color" swatch.
       this.promptForCustomColor();

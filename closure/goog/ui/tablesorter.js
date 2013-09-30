@@ -25,7 +25,7 @@ goog.provide('goog.ui.TableSorter.EventType');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
 goog.require('goog.ui.Component');
@@ -224,7 +224,7 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
 
   // Remove old header classes.
   if (this.header_) {
-    goog.dom.classes.remove(this.header_, this.reversed_ ?
+    goog.dom.classlist.remove(this.header_, this.reversed_ ?
         goog.getCssName('goog-tablesorter-sorted-reverse') :
         goog.getCssName('goog-tablesorter-sorted'));
   }
@@ -265,7 +265,7 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
   this.header_ = table.tHead.rows[this.sortableHeaderRowIndex_].cells[column];
 
   // Update the header class.
-  goog.dom.classes.add(this.header_, this.reversed_ ?
+  goog.dom.classlist.add(this.header_, this.reversed_ ?
       goog.getCssName('goog-tablesorter-sorted-reverse') :
       goog.getCssName('goog-tablesorter-sorted'));
 

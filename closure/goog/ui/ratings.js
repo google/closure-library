@@ -36,7 +36,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 
@@ -158,7 +158,7 @@ goog.ui.Ratings.prototype.enterDocument = function() {
   var el = this.getElement();
   goog.asserts.assert(el, 'The DOM element for ratings cannot be null.');
   el.tabIndex = 0;
-  goog.dom.classes.add(el, this.getCssClass());
+  goog.dom.classlist.add(el, this.getCssClass());
   goog.a11y.aria.setRole(el, goog.a11y.aria.Role.SLIDER);
   goog.a11y.aria.setState(el, goog.a11y.aria.State.VALUEMIN, 0);
   var max = this.ratings_.length - 1;
@@ -407,7 +407,7 @@ goog.ui.Ratings.prototype.onKeyDown_ = function(e) {
  */
 goog.ui.Ratings.prototype.highlightIndex_ = function(n) {
   for (var i = 0, star; star = this.stars_[i]; i++) {
-    goog.dom.classes.set(star, this.getClassName_(i, i <= n));
+    goog.dom.classlist.set(star, this.getClassName_(i, i <= n));
   }
 };
 
