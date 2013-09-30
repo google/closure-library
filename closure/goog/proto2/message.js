@@ -730,7 +730,6 @@ goog.proto2.Message.prototype.add$Value = function(tag, value) {
  * @private
  */
 goog.proto2.Message.prototype.checkFieldType_ = function(field, value) {
-  goog.asserts.assert(value != null);
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.ENUM) {
     goog.asserts.assertNumber(value);
   } else {
