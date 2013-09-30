@@ -22,7 +22,6 @@ goog.provide('goog.fs.FileReader.EventType');
 goog.provide('goog.fs.FileReader.ReadyState');
 
 goog.require('goog.async.Deferred');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.ProgressEvent');
@@ -273,7 +272,7 @@ goog.fs.FileReader.readAsDataUrl = function(blob) {
  */
 goog.fs.FileReader.createDeferred_ = function(reader) {
   var deferred = new goog.async.Deferred();
-  reader.addEventListener(goog.fs.FileReader.EventType.LOAD_END,
+  reader.listen(goog.fs.FileReader.EventType.LOAD_END,
       goog.partial(function(d, r, e) {
         var result = r.getResult();
         var error = r.getError();
