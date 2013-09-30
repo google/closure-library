@@ -626,6 +626,27 @@ function testCompressIterators() {
   assertArrayEquals([1, 3, 5, 7, 9], goog.iter.toArray(iter));
 }
 
+function testGroupByNoKeyFunc() {
+  var iter = goog.iter.groupBy('AAABBBBCDD'.split(''));
+  assertArrayEquals(['A', ['A', 'A', 'A']], iter.next());
+  assertArrayEquals(['B', ['B', 'B', 'B', 'B']], iter.next());
+  assertArrayEquals(['C', ['C']], iter.next());
+  assertArrayEquals(['D', ['D', 'D']], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testGroupByKeyFunc() {
+  var keyFunc = function(x) { return x.toLowerCase(); };
+  var iter = goog.iter.groupBy('AaAABBbbBCccddDD'.split(''), keyFunc);
+  assertArrayEquals(['a', ['A', 'a', 'A', 'A']], iter.next());
+  assertArrayEquals(['b', ['B', 'B', 'b', 'b', 'B']], iter.next());
+  assertArrayEquals(['c', ['C', 'c', 'c']], iter.next());
+  assertArrayEquals(['d', ['d', 'd', 'D', 'D']], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
 </script>
 </body>
 </html>
