@@ -381,7 +381,7 @@ goog.ui.LabelInput.prototype.hasFocus = function() {
 
 
 /**
- * @return {boolean} Whether the value has changed been changed by the user.
+ * @return {boolean} Whether the value has been changed by the user.
  */
 goog.ui.LabelInput.prototype.hasChanged = function() {
   return !!this.getElement() && this.getElement().value != '' &&
