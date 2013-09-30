@@ -841,3 +841,29 @@ goog.iter.zipLongest = function(fillValue, var_args) {
 
   return iter;
 };
+
+
+/**
+ * Creates an iterator that filters {@code iterable} based on a series of
+ * {@code selectors}. On each call to {@code next()}, one item is taken from
+ * both the {@code iterable} and {@code selectors} iterators. If the item from
+ * {@code selectors} evaluates to true, the item from {@code iterable} is given.
+ * Otherwise, it is skipped. Once either {@code iterable} or {@code selectors}
+ * is exhausted, subsequent calls to {@code next()} will throw
+ * {@code goog.iter.StopIteration}.
+ * @see http://docs.python.org/2/library/itertools.html#itertools.compress
+ * @param {!goog.iter.Iterable.<T>} iterable The iterable to filter.
+ * @param {!goog.iter.Iterable} selectors An iterable of items to be evaluated
+ *     in a boolean context to determine if the corresponding element in
+ *     {@code iterable} should be included in the result.
+ * @return {!goog.iter.Iterable.<T>} A new iterator that returns the filtered
+ *    values.
+ * @template T
+ */
+goog.iter.compress = function(iterable, selectors) {
+  var selectorIterator = goog.iter.toIterator(selectors);
+
+  return goog.iter.filter(iterable, function() {
+    return !!selectorIterator.next();
+  });
+};

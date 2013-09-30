@@ -611,6 +611,21 @@ function testZipLongestIterators() {
   assertEquals(goog.iter.StopIteration, ex);
 }
 
+function testCompressArray() {
+  var iter = goog.iter.compress('ABCDEF'.split(''), [1, 0, 1, 0, 1, 1]);
+  assertEquals('ACEF', goog.iter.join(iter, ''));
+}
+
+function testCompressUnevenArgs() {
+  var iter = goog.iter.compress('ABCDEF'.split(''), [false, true, true]);
+  assertEquals('BC', goog.iter.join(iter, ''));
+}
+
+function testCompressIterators() {
+  var iter = goog.iter.compress(goog.iter.range(10), goog.iter.cycle([0, 1]));
+  assertArrayEquals([1, 3, 5, 7, 9], goog.iter.toArray(iter));
+}
+
 </script>
 </body>
 </html>
