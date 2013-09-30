@@ -476,25 +476,25 @@ function testCycleEmptyIterable() {
 
 function testCountNoArgs() {
   var iter = goog.iter.count();
-  var values = goog.iter.takeWhile(iter, function(n) { return n < 5; });
+  var values = goog.iter.limit(iter, 5);
   assertArrayEquals([0, 1, 2, 3, 4], goog.iter.toArray(values));
 }
 
 function testCountStart() {
   var iter = goog.iter.count(10);
-  var values = goog.iter.takeWhile(iter, function(n) { return n < 15; });
+  var values = goog.iter.limit(iter, 5);
   assertArrayEquals([10, 11, 12, 13, 14], goog.iter.toArray(values));
 }
 
 function testCountStep() {
   var iter = goog.iter.count(10, 2);
-  var values = goog.iter.takeWhile(iter, function(n) { return n < 20; });
+  var values = goog.iter.limit(iter, 5);
   assertArrayEquals([10, 12, 14, 16, 18], goog.iter.toArray(values));
 }
 
 function testCountNegativeStep() {
   var iter = goog.iter.count(10, -2);
-  var values = goog.iter.takeWhile(iter, function(n) { return n > 0; });
+  var values = goog.iter.limit(iter, 5);
   assertArrayEquals([10, 8, 6, 4, 2], goog.iter.toArray(values));
 }
 
@@ -507,7 +507,7 @@ function testCountZeroStep() {
 
 function testCountFloat() {
   var iter = goog.iter.count(1.5, 0.5);
-  var values = goog.iter.takeWhile(iter, function(n) { return n < 4; });
+  var values = goog.iter.limit(iter, 5);
   assertArrayEquals([1.5, 2.0, 2.5, 3.0, 3.5], goog.iter.toArray(values));
 }
 
@@ -695,6 +695,54 @@ function testEnumerateStart() {
   assertArrayEquals([3, 'D'], iter.next());
   assertArrayEquals([4, 'E'], iter.next());
   assertArrayEquals([5, 'F'], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testLimitLess() {
+  var iter = goog.iter.limit('ABCDEFG'.split(''), 3);
+  assertEquals('ABC', goog.iter.join(iter, ''));
+}
+
+function testLimitGreater() {
+  var iter = goog.iter.limit('ABCDEFG'.split(''), 10);
+  assertEquals('ABCDEFG', goog.iter.join(iter, ''));
+}
+
+function testConsumeLess() {
+  var iter = goog.iter.consume('ABCDEFG'.split(''), 3);
+  assertEquals('DEFG', goog.iter.join(iter, ''));
+}
+
+function testConsumeGreater() {
+  var iter = goog.iter.consume('ABCDEFG'.split(''), 10);
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testSliceStart() {
+  var iter = goog.iter.slice('ABCDEFG'.split(''), 2);
+  assertEquals('CDEFG', goog.iter.join(iter, ''));
+}
+
+function testSliceStop() {
+  var iter = goog.iter.slice('ABCDEFG'.split(''), 2, 4);
+  assertEquals('CD', goog.iter.join(iter, ''));
+}
+
+function testSliceStartStopEqual() {
+  var iter = goog.iter.slice('ABCDEFG'.split(''), 1, 1);
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testSliceIterator() {
+  var iter = goog.iter.slice(goog.iter.count(20), 0, 5);
+  assertArrayEquals([20, 21, 22, 23, 24], goog.iter.toArray(iter));
+}
+
+function testSliceStartGreater() {
+  var iter = goog.iter.slice('ABCDEFG'.split(''), 10);
   var ex = assertThrows(function() { iter.next() });
   assertEquals(goog.iter.StopIteration, ex);
 }
