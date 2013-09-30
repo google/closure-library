@@ -22,6 +22,7 @@
  */
 goog.provide('goog.i18n.DateTimeParse');
 
+goog.require('goog.date');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 
@@ -148,7 +149,7 @@ goog.i18n.DateTimeParse.ambiguousYearCenturyStart = 80;
 /**
  * Apply a pattern to this Parser. The pattern string will be parsed and saved
  * in "compiled" form.
- * Note: this method is somewhat similar to the pattern parsing methold in
+ * Note: this method is somewhat similar to the pattern parsing method in
  *       datetimeformat. If you see something wrong here, you might want
  *       to check the other.
  * @param {string} pattern It describes the format of date string that need to
@@ -419,7 +420,7 @@ goog.i18n.DateTimeParse.NUMERIC_FORMAT_CHARS_ = 'MydhHmsSDkK';
  *
  * @param {Object} part pattern part to be examined.
  *
- * @return {boolean} true if the pattern part is numberic field.
+ * @return {boolean} true if the pattern part is numeric field.
  * @private
  */
 goog.i18n.DateTimeParse.prototype.isNumericField_ = function(part) {
@@ -439,7 +440,7 @@ goog.i18n.DateTimeParse.prototype.isNumericField_ = function(part) {
  * field; the others remain fixed. This allows "123456" => 12:34:56, but
  * "12345" => 1:23:45. Likewise, for the pattern "yyyyMMdd" we try 4/2/2,
  * 3/2/2, 2/2/2, and finally 1/2/2. The first field of connected numeric
- * fields will be marked as abutStart, its width can be reduced to accomodate
+ * fields will be marked as abutStart, its width can be reduced to accommodate
  * others.
  *
  * @private
@@ -706,7 +707,7 @@ goog.i18n.DateTimeParse.prototype.subParseDayOfWeek_ =
 /**
  * Parse fractional seconds field.
  *
- * @param {number} value parsed numberic value.
+ * @param {number} value parsed numeric value.
  * @param {Array.<number>} pos current parse position.
  * @param {number} start where this field start.
  * @param {goog.i18n.DateTimeParse.MyDate_} cal object to hold parsed value.
@@ -752,7 +753,7 @@ goog.i18n.DateTimeParse.prototype.subparseTimeZoneInGMT_ =
   }
 
   // TODO(user): check for named time zones by looking through the locale
-  // data from the DateFormatZoneData strings. should parse both short and long
+  // data from the DateFormatZoneData strings. Should parse both short and long
   // forms.
   // subParseZoneString(text, start, cal);
 
@@ -834,7 +835,7 @@ goog.i18n.DateTimeParse.prototype.parseTimeZoneOffset_ =
  */
 goog.i18n.DateTimeParse.prototype.parseInt_ = function(text, pos) {
   // Delocalizes the string containing native digits specified by the locale,
-  // replaces the natvie digits with ASCII digits. Leaves other characters.
+  // replaces the native digits with ASCII digits. Leaves other characters.
   // This is the reverse operation of localizeNumbers_ in datetimeformat.js.
   if (goog.i18n.DateTimeSymbols.ZERODIGIT) {
     var parts = [];
@@ -1050,7 +1051,9 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ =
   if (this.day != undefined) {
     date.setDate(this.day);
   } else {
-    date.setDate(orgDate);
+    var maxDate =
+        goog.date.getNumberOfDaysInMonth(date.getFullYear(), date.getMonth());
+    date.setDate(orgDate > maxDate ? maxDate : orgDate);
   }
 
   if (goog.isFunction(date.setHours)) {
