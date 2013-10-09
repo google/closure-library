@@ -22,14 +22,19 @@ See the COPYING file for details.
 </head>
 <body>
 <script type="text/javascript">
-  MockXhr = function() {};
+  MockXhrIo = function() {};
 
-  MockXhr.lastUrl = null;
+  MockXhrIo.prototype.onReadyStateChangeEntryPoint_ = function() {};
 
-  MockXhr.send = function(method, url, opt_content, opt_options) {
-    MockXhr.lastUrl = url;
-    MockXhr.lastContent = opt_content;
-    MockXhr.lastHeaders = opt_options.headers;
+  MockXhrIo.protectEntryPoints = function() {};
+
+  MockXhrIo.lastUrl = null;
+
+  MockXhrIo.send = function(url, opt_callback, opt_method, opt_content,
+      opt_headers, opt_timeInterval) {
+    MockXhrIo.lastUrl = url;
+    MockXhrIo.lastContent = opt_content;
+    MockXhrIo.lastHeaders = opt_headers;
   };
 
   var errorReporter;
@@ -39,15 +44,14 @@ See the COPYING file for details.
   var encodedUrl = "http%3A%2F%2Fwww.your.tst%2Fmore%2Fbogus.js";
 
   function setUp() {
-    stubs.set(goog.labs.net, 'xhr', MockXhr);
+    stubs.set(goog.net, 'XhrIo', MockXhrIo);
     goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT = true;
   }
 
   function tearDown() {
     goog.dispose(errorReporter);
     stubs.reset();
-    MockXhr.lastUrl = null;
-    MockXhr.lastContent = null;
+    MockXhrIo.lastUrl = null;
   }
 
   function throwAnErrorWith(script, line, message, opt_stack) {
@@ -68,8 +72,8 @@ See the COPYING file for details.
         'message', 'filename.js', 123, 'trace');
 
     assertEquals('/log?script=filename.js&error=message&line=123',
-        MockXhr.lastUrl);
-    assertEquals('trace=trace', MockXhr.lastContent);
+        MockXhrIo.lastUrl);
+    assertEquals('trace=trace', MockXhrIo.lastContent);
   }
 
   function testsendErrorReportWithCustomSender() {
@@ -100,8 +104,8 @@ See the COPYING file for details.
         'message', 'filename.js', 123);
 
     assertEquals('/log?script=filename.js&error=message&line=123',
-        MockXhr.lastUrl);
-    assertEquals('', MockXhr.lastContent);
+        MockXhrIo.lastUrl);
+    assertEquals('', MockXhrIo.lastContent);
   }
 
   function test_nonInternetExplorerSendErrorReport() {
@@ -123,8 +127,8 @@ See the COPYING file for details.
 
     assertEquals(
         "/errorreporter?script=" + encodedUrl + "&error=Hello%20%3A)&line=5",
-        MockXhr.lastUrl);
-    assertEquals("trace=Not%20available", MockXhr.lastContent);
+        MockXhrIo.lastUrl);
+    assertEquals("trace=Not%20available", MockXhrIo.lastContent);
   }
 
   function test_internetExplorerSendErrorReport() {
@@ -137,8 +141,8 @@ See the COPYING file for details.
     goog.global.onerror("Goodbye :(", url, 22);
     assertEquals(
         "/errorreporter?script=" + encodedUrl + "&error=Goodbye%20%3A(&line=22",
-        MockXhr.lastUrl);
-    assertEquals("trace=Not%20available", MockXhr.lastContent);
+        MockXhrIo.lastUrl);
+    assertEquals("trace=Not%20available", MockXhrIo.lastContent);
   }
 
   function test_setLoggingHeaders() {
@@ -147,10 +151,9 @@ See the COPYING file for details.
     stubs.set(goog.global, 'onerror', null);
 
     errorReporter = goog.debug.ErrorReporter.install("/errorreporter");
-    errorReporter.setLoggingHeaders({'header': 'stuff!'});
+    errorReporter.setLoggingHeaders("header!");
     goog.global.onerror("Goodbye :(", "http://www.your.tst/more/bogus.js", 22);
-    assertNotUndefined(MockXhr.lastHeaders.header);
-    assertEquals("stuff!", MockXhr.lastHeaders.header);
+    assertEquals("header!", MockXhrIo.lastHeaders);
   }
 
   function test_nonInternetExplorerSendErrorReportWithTrace() {
@@ -179,13 +182,13 @@ See the COPYING file for details.
 
     assertEquals(
         "/errorreporter?script=" + encodedUrl + "&error=Hello%20%3A)&line=5",
-        MockXhr.lastUrl);
+        MockXhrIo.lastUrl);
     assertEquals("trace=" +
         "Error(%22Something%20Wrong%22)%40%3A0%0A" +
         "%24MF%24E%24Nx%24(%5Bobject%20Object%5D)%40"+
         "http%3A%2F%2Fa.b.c%3A83%2Fa%2Ff.js%3A901%0A"+
         "(%5Bobject%20Object%5D)%40http%3A%2F%2Fa.b.c%3A813%2Fa%2Ff.js%3A37",
-        MockXhr.lastContent);
+        MockXhrIo.lastContent);
   }
 
   function testProtectAdditionalEntryPoint_nonIE() {
@@ -302,7 +305,7 @@ See the COPYING file for details.
     errorReporter.setContextPrefix('baz.');
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
-    assertEquals('trace=trace&baz.foo=bar', MockXhr.lastContent);
+    assertEquals('trace=trace&baz.foo=bar', MockXhrIo.lastContent);
   }
 
   function testTruncationLimit() {
@@ -310,7 +313,7 @@ See the COPYING file for details.
     errorReporter.setTruncationLimit(6);
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
-    assertEquals('trace=', MockXhr.lastContent);
+    assertEquals('trace=', MockXhrIo.lastContent);
   }
 
   function testEnablePOSTBodySizeReporting() {
@@ -318,7 +321,7 @@ See the COPYING file for details.
     errorReporter.setEnablePostBodySizeReporting(true);
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
-    assertEquals('size=27&trace=trace&context.foo=bar', MockXhr.lastContent);
+    assertEquals('size=27&trace=trace&context.foo=bar', MockXhrIo.lastContent);
   }
 
   function testZeroTruncationLimit() {
@@ -326,7 +329,7 @@ See the COPYING file for details.
     errorReporter.setTruncationLimit(0);
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
-    assertEquals('', MockXhr.lastContent);
+    assertEquals('', MockXhrIo.lastContent);
   }
 
   function testTruncationLimitLargerThanBody() {
@@ -334,7 +337,7 @@ See the COPYING file for details.
     errorReporter.setTruncationLimit(9999);
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
-    assertEquals('trace=trace&context.foo=bar', MockXhr.lastContent);
+    assertEquals('trace=trace&context.foo=bar', MockXhrIo.lastContent);
   }
 
   function testSetNegativeTruncationLimit() {
@@ -349,7 +352,7 @@ See the COPYING file for details.
     errorReporter.setTruncationLimit(null);
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
-    assertEquals('trace=trace&context.foo=bar', MockXhr.lastContent);
+    assertEquals('trace=trace&context.foo=bar', MockXhrIo.lastContent);
   }
 
   function testAttemptAutoProtectWithAllowAutoProtectOff() {
@@ -366,7 +369,7 @@ See the COPYING file for details.
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
     assertEquals('/log?script=filename.js&error=message&line=123',
-        MockXhr.lastUrl);
+        MockXhrIo.lastUrl);
   }
 
   function testSetAdditionalArgumentsSingleArgument() {
@@ -375,7 +378,7 @@ See the COPYING file for details.
     errorReporter.sendErrorReport(
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
     assertEquals('/log?script=filename.js&error=message&line=123&extra=arg',
-        MockXhr.lastUrl);
+        MockXhrIo.lastUrl);
   }
 
   function testSetAdditionalArgumentsMultipleArguments() {
@@ -385,7 +388,7 @@ See the COPYING file for details.
         'message', 'filename.js', 123, 'trace', {"foo": "bar"});
     assertEquals(
         '/log?script=filename.js&error=message&line=123&extra=arg&cat=dog',
-        MockXhr.lastUrl);
+        MockXhrIo.lastUrl);
   }
 </script>
 </body>

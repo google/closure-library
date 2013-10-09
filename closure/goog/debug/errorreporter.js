@@ -28,8 +28,8 @@ goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
-goog.require('goog.labs.net.xhr');
 goog.require('goog.log');
+goog.require('goog.net.XhrIo');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
@@ -91,7 +91,7 @@ goog.debug.ErrorReporter = function(
 
   /**
    * XHR sender.
-   * @type {function(string, string, string, Object=)}
+   * @type {function(string, string, string, (Object|goog.structs.Map)=)}
    * @private
    */
   this.xhrSender_ = goog.debug.ErrorReporter.defaultXhrSender;
@@ -172,7 +172,7 @@ goog.debug.ErrorReporter.ExceptionEvent.TYPE =
 
 /**
  * Extra headers for the error-reporting XHR.
- * @type {Object|undefined}
+ * @type {Object|goog.structs.Map|undefined}
  * @private
  */
 goog.debug.ErrorReporter.prototype.extraHeaders_;
@@ -215,14 +215,14 @@ goog.debug.ErrorReporter.install = function(
  * Default implementation of XHR sender interface.
  *
  * @param {string} uri URI to make request to.
- * @param {string} method HTTP request method.
+ * @param {string} method Send method.
  * @param {string} content Post data.
- * @param {Object=} opt_headers Map of headers to add to the
+ * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  */
 goog.debug.ErrorReporter.defaultXhrSender = function(uri, method, content,
     opt_headers) {
-  goog.labs.net.xhr.send(method, uri, content, {headers: opt_headers});
+  goog.net.XhrIo.send(uri, null, method, content, opt_headers);
 };
 
 
@@ -281,7 +281,8 @@ if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
 
 /**
  * Add headers to the logging url.
- * @param {Object} loggingHeaders Extra headers to send to the logging URL.
+ * @param {Object|goog.structs.Map} loggingHeaders Extra headers to send
+ *     to the logging URL.
  */
 goog.debug.ErrorReporter.prototype.setLoggingHeaders =
     function(loggingHeaders) {
@@ -291,10 +292,11 @@ goog.debug.ErrorReporter.prototype.setLoggingHeaders =
 
 /**
  * Set the function used to send error reports to the server.
- * @param {function(string, string, string, Object=)} xhrSender If provided,
- *     this will be used to send a report to the server instead of the default
- *     method. The function will be given the URI, HTTP method request content,
- *     and (optionally) request headers to be added.
+ * @param {function(string, string, string, (Object|goog.structs.Map)=)}
+ *     xhrSender If provided, this will be used to send a report to the
+ *     server instead of the default method. The function will be given the URI,
+ *     HTTP method request content, and (optionally) request headers to be
+ *     added.
  */
 goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
   this.xhrSender_ = xhrSender;
