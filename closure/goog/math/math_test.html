@@ -221,6 +221,19 @@ See the COPYING file for details.
           'numeric', isNaN(goog.math.average(1, 2, 'foo', 3)));
     }
 
+    function testSampleVariance() {
+      assertEquals('sampleVariance() must return 0 if there are no samples',
+          0, goog.math.sampleVariance());
+      assertEquals('sampleVariance() must return 0 if there is only one ' +
+          'sample', 0, goog.math.sampleVariance(17));
+      assertRoughlyEquals('sampleVariance() must handle positive integers',
+          48, goog.math.sampleVariance(3, 7, 7, 19),
+          0.0001);
+      assertRoughlyEquals('sampleVariance() must handle real numbers',
+          12.0138, goog.math.sampleVariance(1.23, -2.34, 3.14, -4.56),
+          0.0001);
+    }
+
     function testStandardDeviation() {
       assertEquals('standardDeviation() must return 0 if there are no samples',
           0, goog.math.standardDeviation());

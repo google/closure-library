@@ -311,15 +311,14 @@ goog.math.average = function(var_args) {
 
 
 /**
- * Returns the sample standard deviation of the arguments.  For a definition of
- * sample standard deviation, see e.g.
- * http://en.wikipedia.org/wiki/Standard_deviation
+ * Returns the unbiased sample variance of the arguments. For a definition,
+ * see e.g. http://en.wikipedia.org/wiki/Variance
  * @param {...number} var_args Number samples to analyze.
- * @return {number} The sample standard deviation of the arguments (0 if fewer
+ * @return {number} The unbiased sample variance of the arguments (0 if fewer
  *     than two samples were provided, or {@code NaN} if any of the samples is
  *     not a valid number).
  */
-goog.math.standardDeviation = function(var_args) {
+goog.math.sampleVariance = function(var_args) {
   var sampleSize = arguments.length;
   if (sampleSize < 2) {
     return 0;
@@ -331,7 +330,21 @@ goog.math.standardDeviation = function(var_args) {
         return Math.pow(val - mean, 2);
       })) / (sampleSize - 1);
 
-  return Math.sqrt(variance);
+  return variance;
+};
+
+
+/**
+ * Returns the sample standard deviation of the arguments.  For a definition of
+ * sample standard deviation, see e.g.
+ * http://en.wikipedia.org/wiki/Standard_deviation
+ * @param {...number} var_args Number samples to analyze.
+ * @return {number} The sample standard deviation of the arguments (0 if fewer
+ *     than two samples were provided, or {@code NaN} if any of the samples is
+ *     not a valid number).
+ */
+goog.math.standardDeviation = function(var_args) {
+  return Math.sqrt(goog.math.sampleVariance.apply(null, arguments));
 };
 
 
