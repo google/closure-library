@@ -271,6 +271,15 @@ See the COPYING file for details.
           'be > 50', textarea.getElement().offsetHeight > 50);
     }
 
+    function testSetPlaceholder() {
+      textarea.setPlaceholder('Some default text here.');
+      textarea.setPlaceholder('new default text...');
+      textarea.render(sandbox);
+      if (textarea.supportsNativePlaceholder_()) {
+        assertEquals('new default text...', textarea.getElement().placeholder);
+      }
+    }
+
     function testMinAndMaxHeight() {
       textarea.render(sandbox);
       textarea.setMinHeight(50);

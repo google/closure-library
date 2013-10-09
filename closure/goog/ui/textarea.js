@@ -25,7 +25,9 @@
 goog.provide('goog.ui.Textarea');
 goog.provide('goog.ui.Textarea.EventType');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.style');
 goog.require('goog.ui.Control');
@@ -73,6 +75,23 @@ goog.ui.Textarea.NEEDS_HELP_SHRINKING_ = goog.userAgent.GECKO ||
  * @private
  */
 goog.ui.Textarea.prototype.isResizing_ = false;
+
+
+/**
+ * Represents if we have focus on the textarea element, used only
+ * to render the placeholder if we don't have native placeholder
+ * support.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.Textarea.prototype.hasFocusForPlaceholder_ = false;
+
+
+/**
+ * @type {boolean}
+ * @private
+ */
+goog.ui.Textarea.prototype.hasUserInput_ = false;
 
 
 /**
@@ -163,11 +182,43 @@ goog.ui.Textarea.prototype.borderBox_;
 
 
 /**
+ * Default text content for the textarea when it is unchanged and unfocussed.
+ * We use the placeholder attribute for all browsers that have support for
+ * it (new in HTML5 for the following browsers:
+ *
+ *   Internet Explorer 10.0
+ *   Firefox 4.0
+ *   Opera 11.6
+ *   Chrome 4.0
+ *   Safari 5.0
+ *
+ * For older browsers, we save the defaultText_ and set it as the element's
+ * value and add the TEXTAREA_PLACEHOLDER_CLASS to indicate that it's a
+ * placeholder string.
+ * @type {string}
+ * @private
+ */
+goog.ui.Textarea.prototype.defaultText_ = '';
+
+
+/**
  * Constants for event names.
  * @enum {string}
  */
 goog.ui.Textarea.EventType = {
   RESIZE: 'resize'
+};
+
+
+/**
+ * Sets the default text for the textarea.
+ * @param {string} text The default text for the textarea.
+ */
+goog.ui.Textarea.prototype.setPlaceholder = function(text) {
+  this.defaultText_ = text;
+  if (this.getElement()) {
+    this.restorePlaceholder_();
+  }
 };
 
 
@@ -252,7 +303,9 @@ goog.ui.Textarea.prototype.setMaxHeight = function(height) {
  *     string by the browser when setting textarea.value.
  */
 goog.ui.Textarea.prototype.setValue = function(value) {
-  this.setContent(String(value));
+  var strValue = String(value);
+  this.hasUserInput_ = (strValue != '');
+  this.setContent(strValue);
 };
 
 
@@ -261,7 +314,14 @@ goog.ui.Textarea.prototype.setValue = function(value) {
  * @return {string} value The value of the textarea.
  */
 goog.ui.Textarea.prototype.getValue = function() {
-  return this.getElement().value;
+  // We potentially have the placeholder stored in the value.
+  // We know it's safe to return the value if we know we had
+  // user input or if we used the placeholder.
+  if (this.supportsNativePlaceholder_() || this.hasUserInput_) {
+    // We don't do anything fancy here.
+    return this.getElement().value;
+  }
+  return '';
 };
 
 
@@ -289,6 +349,35 @@ goog.ui.Textarea.prototype.resize = function() {
 };
 
 
+/**
+ * @return {boolean} True if the element supports the placeholder attribute.
+ * @private
+ */
+goog.ui.Textarea.prototype.supportsNativePlaceholder_ = function() {
+  goog.asserts.assert(this.getElement());
+  return 'placeholder' in this.getElement();
+};
+
+
+/**
+ * Sets the value of the textarea element to the default text.
+ * @private
+ */
+goog.ui.Textarea.prototype.restorePlaceholder_ = function() {
+  // Check again in case something changed since this was scheduled.
+  // We check that the element is still there since this is called by a timer
+  // and the dispose method may have been called prior to this.
+  if (this.supportsNativePlaceholder_()) {
+    this.getElement().placeholder = this.defaultText_;
+  } else if (this.getElement() && !this.hasUserInput_ &&
+      !this.hasFocusForPlaceholder_) {
+    goog.dom.classlist.add(this.getElement(),
+                           goog.ui.Textarea.TEXTAREA_PLACEHOLDER_CLASS);
+    this.getElement().value = this.defaultText_;
+  }
+};
+
+
 /** @override **/
 goog.ui.Textarea.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
@@ -311,8 +400,10 @@ goog.ui.Textarea.prototype.enterDocument = function() {
       listen(textarea, goog.events.EventType.SCROLL, this.grow_).
       listen(textarea, goog.events.EventType.FOCUS, this.grow_).
       listen(textarea, goog.events.EventType.KEYUP, this.grow_).
-      listen(textarea, goog.events.EventType.MOUSEUP, this.mouseUpListener_);
+      listen(textarea, goog.events.EventType.MOUSEUP, this.mouseUpListener_).
+      listen(textarea, goog.events.EventType.BLUR, this.blur_);
 
+  this.restorePlaceholder_();
   this.resize();
 };
 
@@ -450,6 +541,32 @@ goog.ui.Textarea.prototype.discoverTextareaCharacteristics_ = function() {
 
 
 /**
+ * The CSS class name to add to the input when the user has not entered a
+ * value.
+ */
+goog.ui.Textarea.TEXTAREA_PLACEHOLDER_CLASS =
+    goog.getCssName('textarea-placeholder-input');
+
+
+/**
+ * Called when the element goes out of focus.
+ * @param {goog.events.Event=} opt_e The browser event.
+ * @private
+ */
+goog.ui.Textarea.prototype.blur_ = function(opt_e) {
+  if (!this.supportsNativePlaceholder_()) {
+    this.hasFocusForPlaceholder_ = false;
+    if (this.getElement().value == '') {
+      // Only transition to the default text if we have
+      // no user input.
+      this.hasUserInput_ = false;
+      this.restorePlaceholder_();
+    }
+  }
+};
+
+
+/**
  * Resizes the textarea to grow/shrink to match its contents.
  * @param {goog.events.Event=} opt_e The browser event.
  * @private
@@ -458,9 +575,28 @@ goog.ui.Textarea.prototype.grow_ = function(opt_e) {
   if (this.isResizing_) {
     return;
   }
+  var textarea = this.getElement();
+  // If the element is getting focus and we don't support placeholders
+  // natively, then remove the placeholder class.
+  if (!this.supportsNativePlaceholder_() && opt_e &&
+      opt_e.type == goog.events.EventType.FOCUS) {
+    // We must have a textarea element, since we're growing it.
+    // Remove the placeholder CSS + set the value to empty if we're currently
+    // showing the defaultText_ value if this is the first time we're getting
+    // focus.
+    if (textarea.value == this.defaultText_ &&
+        !this.hasFocusForPlaceholder_) {
+      goog.dom.classlist.remove(
+          textarea, goog.ui.Textarea.TEXTAREA_PLACEHOLDER_CLASS);
+      textarea.value = '';
+    }
+    this.hasFocusForPlaceholder_ = true;
+    if (textarea.value != '') {
+      this.hasUserInput_ = true;
+    }
+  }
   var shouldCallShrink = false;
   this.isResizing_ = true;
-  var textarea = this.getElement();
   var oldHeight = this.height_;
   if (textarea.scrollHeight) {
     var setMinHeight = false;
