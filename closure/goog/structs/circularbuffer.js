@@ -138,7 +138,7 @@ goog.structs.CircularBuffer.prototype.getNewestValues = function(maxCount) {
   var start = this.getCount() - maxCount;
   var rv = [];
   for (var i = start; i < l; i++) {
-    rv[i] = this.get(i);
+    rv.push(this.get(i));
   }
   return rv;
 };

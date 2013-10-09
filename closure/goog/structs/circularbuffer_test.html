@@ -55,17 +55,17 @@ function testGetValues() {
   var buff = new goog.structs.CircularBuffer(2);
   assertUndefined(buff.add('first'));
   assertUndefined(buff.add('second'));
-  assertEquals('firstsecond', buff.getValues().join(''));
+  assertArrayEquals(['first', 'second'], buff.getValues());
 }
 
-function testGetNewestVtalues() {
+function testGetNewestValues() {
   var buff = new goog.structs.CircularBuffer(5);
   assertUndefined(buff.add('first'));
   assertUndefined(buff.add('second'));
   assertUndefined(buff.add('third'));
   assertUndefined(buff.add('fourth'));
   assertUndefined(buff.add('fifth'));
-  assertEquals('fourthfifth', buff.getNewestValues(2).join(''));
+  assertArrayEquals(['fourth', 'fifth'], buff.getNewestValues(2));
 }
 
 
@@ -73,7 +73,7 @@ function testGetKeys() {
   var buff = new goog.structs.CircularBuffer(2);
   assertUndefined(buff.add('first'));
   assertUndefined(buff.add('second'));
-  assertEquals('01', buff.getKeys().join(''));
+  assertArrayEquals([0, 1], buff.getKeys());
 }
 
 function testContainsValue() {
