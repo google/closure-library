@@ -19,6 +19,9 @@
 goog.provide('goog.events.Listenable');
 goog.provide('goog.events.ListenableKey');
 
+/** @suppress {extraRequire} */
+goog.require('goog.events.EventId');
+
 
 
 /**
