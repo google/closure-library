@@ -31,6 +31,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.actionEventWrapper');
 goog.require('goog.functions');
 goog.require('goog.string.Unicode');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.editor.Bubble');
 goog.require('goog.userAgent');
@@ -459,6 +460,15 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.onShow = goog.nullFunction;
 
 
 /**
+ * Called when the bubble is closed or hidden. The default implementation does
+ * nothing.
+ * @protected
+ */
+goog.editor.plugins.AbstractBubblePlugin.prototype.cleanOnBubbleClose =
+    goog.nullFunction;
+
+
+/**
  * Handles when the bubble panel is closed.  Invoked when the entire bubble is
  * hidden and also directly when the panel is closed manually.
  * @private
@@ -468,6 +478,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.handlePanelClosed_ =
   this.targetElement_ = null;
   this.panelId_ = null;
   this.eventRegister.removeAll();
+  this.cleanOnBubbleClose();
 };
 
 
