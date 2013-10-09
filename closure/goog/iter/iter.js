@@ -513,55 +513,19 @@ goog.iter.toArray = function(iterable) {
 
 
 /**
- * Iterates over 2 iterators and returns true if they contain the same sequence
- * of elements and have the same length.
- * @param {goog.iter.Iterable} iterable1  The first iterable object.
- * @param {goog.iter.Iterable} iterable2  The second iterable object.
- * @return {boolean} true if the iterators contain the same sequence of
+ * Iterates over two iterables and returns true if they contain the same
+ * sequence of elements and have the same length.
+ * @param {!goog.iter.Iterable} iterable1 The first iterable object.
+ * @param {!goog.iter.Iterable} iterable2 The second iterable object.
+ * @return {boolean} true if the iterables contain the same sequence of
  *     elements and have the same length.
  */
 goog.iter.equals = function(iterable1, iterable2) {
-  iterable1 = goog.iter.toIterator(iterable1);
-  iterable2 = goog.iter.toIterator(iterable2);
-  var b1, b2;
-  /** @preserveTry */
-  try {
-    while (true) {
-      b1 = b2 = false;
-      var val1 = iterable1.next();
-      b1 = true;
-      var val2 = iterable2.next();
-      b2 = true;
-      if (val1 != val2) {
-        return false;
-      }
-    }
-  } catch (ex) {
-    if (ex !== goog.iter.StopIteration) {
-      throw ex;
-    } else {
-      if (b1 && !b2) {
-        // iterable1 done but iterable2 is not done.
-        return false;
-      }
-      if (!b2) {
-        /** @preserveTry */
-        try {
-          // iterable2 not done?
-          val2 = iterable2.next();
-          // iterable2 not done but iterable1 is done
-          return false;
-        } catch (ex1) {
-          if (ex1 !== goog.iter.StopIteration) {
-            throw ex1;
-          }
-          // iterable2 done as well... They are equal
-          return true;
-        }
-      }
-    }
-  }
-  return false;
+  var fillValue = {};
+  var pairs = goog.iter.zipLongest(fillValue, iterable1, iterable2);
+  return goog.iter.every(pairs, function(pair) {
+    return pair[0] == pair[1];
+  });
 };
 
 
