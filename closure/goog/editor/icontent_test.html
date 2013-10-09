@@ -17,7 +17,6 @@ See the COPYING file for details.
 <script src='../base.js'></script>
 <script>
   goog.require('goog.dom');
-  goog.require('goog.dom.classes');
   goog.require('goog.editor.BrowserFeature');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.PropertyReplacer');
@@ -204,7 +203,7 @@ function assertBodyCorrect(body, id, bodyHTML, opt_rtl) {
   } else {
     assertNotEquals('true', String(body.contentEditable));
   }
-  assert(goog.dom.classes.has(body, 'editable'));
+  assertContains('editable', body.className.match(/\S+/g));
   assertEquals('true', String(body.getAttribute('g_editable')));
   assertEquals('true',
       // IE has bugs with getAttribute('hideFocus'), and
