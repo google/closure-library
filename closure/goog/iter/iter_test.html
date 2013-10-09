@@ -779,6 +779,18 @@ function testCombinations() {
   assertEquals(goog.iter.StopIteration, ex);
 }
 
+function testCombinationsWithReplacement() {
+  var iter = goog.iter.combinationsWithReplacement('ABC'.split(''), 2);
+  assertArrayEquals(['A', 'A'], iter.next());
+  assertArrayEquals(['A', 'B'], iter.next());
+  assertArrayEquals(['A', 'C'], iter.next());
+  assertArrayEquals(['B', 'B'], iter.next());
+  assertArrayEquals(['B', 'C'], iter.next());
+  assertArrayEquals(['C', 'C'], iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
 </script>
 </body>
 </html>
