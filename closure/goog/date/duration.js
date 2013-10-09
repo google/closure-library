@@ -120,8 +120,10 @@ goog.date.duration.format = function(durationMs) {
       MSG_DURATION_MINUTES, minutes, minutesText);
 
   /**
-   * @desc Duration time text concatenated from the individual time unit
-   * message parts, eg. "2 days 11 hours 15 minutes", "1 day 1 minute", etc...
+   * @desc Duration time text concatenated from the individual time unit message
+   * parts. The separator will be a space (e.g. '1 day 2 hours 24 minutes') or
+   * nothing in case one/two of the duration parts is empty (
+   * e.g. '1 hour 30 minutes', '3 days 15 minutes', '2 hours').
    */
   var MSG_CONCATENATED_DURATION_TEXT = goog.getMsg(
       '{$daysPart}{$daysSeparator}{$hoursPart}{$hoursSeparator}{$minutesPart}',
