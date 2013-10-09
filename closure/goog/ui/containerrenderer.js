@@ -24,7 +24,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.registry');
@@ -176,7 +176,7 @@ goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
   // Configure the container's state based on the CSS class names it has.
   var baseClass = this.getCssClass();
   var hasBaseClass = false;
-  var classNames = goog.dom.classes.get(element);
+  var classNames = goog.dom.classlist.get(element);
   if (classNames) {
     goog.array.forEach(classNames, function(className) {
       if (className == baseClass) {
@@ -189,7 +189,7 @@ goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
 
   if (!hasBaseClass) {
     // Make sure the container's root element has the renderer's own CSS class.
-    goog.dom.classes.add(element, baseClass);
+    goog.dom.classlist.add(element, baseClass);
   }
 
   // Decorate the element's children, if applicable.  This should happen after

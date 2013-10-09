@@ -17,7 +17,7 @@ Author:  attila@google.com (Attila Bodis)
     goog.require('goog.Disposable');
     goog.require('goog.a11y.aria');
     goog.require('goog.dom');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Container');
@@ -67,7 +67,7 @@ Author:  attila@google.com (Attila Bodis)
     }
 
     function testDecorateDisabled() {
-      goog.dom.classes.add(containerElement, 'goog-container-disabled');
+      goog.dom.classlist.add(containerElement, 'goog-container-disabled');
 
       assertTrue('Container must be enabled', container.isEnabled());
       container.decorate(containerElement);
