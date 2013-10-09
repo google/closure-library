@@ -113,6 +113,32 @@ function testEmptyRecords() {
       goog.labs.format.csv.parse('a,,c\r\nd,e,\n,,'));
 }
 
+function testIgnoringErrors() {
+  // The results of these tests are not defined by the RFC. They
+  // generally strive to be "reasonable" while keeping the code simple.
+
+  // Quotes inside field
+  assertObjectEquals(
+      [['Hello "World"!', 'b'], ['c', 'd']], goog.labs.format.csv.parse(
+          'Hello "World"!,b\nc,d', true));
+
+  // Missing closing quote
+  assertObjectEquals(
+      [['Hello', 'World!']], goog.labs.format.csv.parse(
+          'Hello,"World!', true));
+
+  // Broken use of quotes in quoted field
+  assertObjectEquals(
+      [['a', 'Hello"World!"']], goog.labs.format.csv.parse(
+          'a,"Hello"World!"', true));
+
+  // All of the above. A real mess.
+  assertObjectEquals(
+      [['This" is', 'very\n\tvery"broken"', ' indeed!']],
+      goog.labs.format.csv.parse(
+          'This" is,"very\n\tvery"broken"," indeed!', true));
+}
+
 function testFindLineInfo() {
   var testString = 'abc\ndef\rghi';
   var info = goog.labs.format.csv.ParseError.findLineInfo_(testString, 4);

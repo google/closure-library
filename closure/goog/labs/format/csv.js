@@ -146,9 +146,11 @@ goog.labs.format.csv.Token;
  * be made on the resulting array.
  *
  * @param {string} text The entire CSV text to be parsed.
+ * @param {boolean=} opt_ignoreErrors Whether to ignore parsing errors and
+ *      instead try to recover and keep going.
  * @return {!Array.<!Array.<string>>} The parsed CSV.
  */
-goog.labs.format.csv.parse = function(text) {
+goog.labs.format.csv.parse = function(text, opt_ignoreErrors) {
 
   var index = 0;  // current char offset being considered
 
@@ -242,16 +244,29 @@ goog.labs.format.csv.parse = function(text) {
           break;
         }
 
-        throw new goog.labs.format.csv.ParseError(
-            text, index - 1,
-            'Unexpected character "' + token + '" after quote mark');
+        if (!opt_ignoreErrors) {
+          // Ignoring errors here means keep going in current field after
+          // closing quote. E.g. "ab"c,d splits into abc,d
+          throw new goog.labs.format.csv.ParseError(
+              text, index - 1,
+              'Unexpected character "' + token + '" after quote mark');
+        } else {
+          // Fall back to reading the rest of this field as unquoted.
+          // Note: the rest is guaranteed not start with ", as that case is
+          // eliminated above.
+          return text.substring(start, index) + readField();
+        }
       }
     }
 
     if (goog.isNull(end)) {
-      throw new goog.labs.format.csv.ParseError(
-          text, text.length - 1,
-          'Unexpected end of text after open quote');
+      if (!opt_ignoreErrors) {
+        throw new goog.labs.format.csv.ParseError(
+            text, text.length - 1,
+            'Unexpected end of text after open quote');
+      } else {
+        end = text.length;
+      }
     }
 
     // Take substring, combine double quotes.
@@ -298,7 +313,7 @@ goog.labs.format.csv.parse = function(text) {
         break;
       }
 
-      if (token == '"') {
+      if (token == '"' && !opt_ignoreErrors) {
         throw new goog.labs.format.csv.ParseError(text, index - 1,
                                                   'Unexpected quote mark');
       }
