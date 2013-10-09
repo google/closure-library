@@ -65,7 +65,7 @@ goog.proto2.ObjectSerializer.KeyOption = {
  * Serializes a message to an object.
  *
  * @param {goog.proto2.Message} message The message to be serialized.
- * @return {Object} The serialized form of the message.
+ * @return {!Object} The serialized form of the message.
  * @override
  */
 goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
