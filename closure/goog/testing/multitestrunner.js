@@ -26,7 +26,7 @@ goog.provide('goog.testing.MultiTestRunner.TestFrame');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.functions');
 goog.require('goog.string');
@@ -1071,26 +1071,26 @@ goog.testing.MultiTestRunner.prototype.showTab_ = function(tab) {
   var activeTabCssClass = goog.getCssName('goog-testrunner-activetab');
   if (tab == 0) {
     this.logEl_.style.display = '';
-    goog.dom.classes.add(this.logTabEl_, activeTabCssClass);
+    goog.dom.classlist.add(this.logTabEl_, activeTabCssClass);
   } else {
     this.logEl_.style.display = 'none';
-    goog.dom.classes.remove(this.logTabEl_, activeTabCssClass);
+    goog.dom.classlist.remove(this.logTabEl_, activeTabCssClass);
   }
 
   if (tab == 1) {
     this.reportEl_.style.display = '';
-    goog.dom.classes.add(this.reportTabEl_, activeTabCssClass);
+    goog.dom.classlist.add(this.reportTabEl_, activeTabCssClass);
   } else {
     this.reportEl_.style.display = 'none';
-    goog.dom.classes.remove(this.reportTabEl_, activeTabCssClass);
+    goog.dom.classlist.remove(this.reportTabEl_, activeTabCssClass);
   }
 
   if (tab == 2) {
     this.statsEl_.style.display = '';
-    goog.dom.classes.add(this.statsTabEl_, activeTabCssClass);
+    goog.dom.classlist.add(this.statsTabEl_, activeTabCssClass);
   } else {
     this.statsEl_.style.display = 'none';
-    goog.dom.classes.remove(this.statsTabEl_, activeTabCssClass);
+    goog.dom.classlist.remove(this.statsTabEl_, activeTabCssClass);
   }
 };
 
