@@ -104,16 +104,24 @@ goog.inherits(goog.net.ImageLoader, goog.events.EventTarget);
 
 /**
  * An array of event types to listen to on images.  This is browser dependent.
- * Internet Explorer doesn't reliably raise LOAD events on images, so we must
- * use READY_STATE_CHANGE.  If the image is cached locally, IE won't fire the
- * LOAD event while the onreadystate event is fired always.  On the other hand,
- * the ERROR event is always fired whenever the image is not loaded successfully
- * no matter whether it's cached or not.
+ *
+ * For IE 10 and below, Internet Explorer doesn't reliably raise LOAD events
+ * on images, so we must use READY_STATE_CHANGE.  Since the image is cached
+ * locally, IE won't fire the LOAD event while the onreadystate event is fired
+ * always. On the other hand, the ERROR event is always fired whenever the image
+ * is not loaded successfully no matter whether it's cached or not.
+ *
+ * In IE 11, onreadystatechange is removed and replaced with onload:
+ *
+ * http://msdn.microsoft.com/en-us/library/ie/ms536957(v=vs.85).aspx
+ * http://msdn.microsoft.com/en-us/library/ie/bg182625(v=vs.85).aspx
+ *
  * @type {!Array.<string>}
  * @private
  */
 goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
-  goog.userAgent.IE ? goog.net.EventType.READY_STATE_CHANGE :
+  goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('11') ?
+      goog.net.EventType.READY_STATE_CHANGE :
       goog.events.EventType.LOAD,
   goog.net.EventType.ABORT,
   goog.net.EventType.ERROR
