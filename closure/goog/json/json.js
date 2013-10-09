@@ -82,14 +82,14 @@ goog.json.isValid_ = function(s) {
  *
  * @param {*} s The JSON string to parse.
  * @throws Error if s is invalid JSON.
- * @return {!Object} The object generated from the JSON string.
+ * @return {Object} The object generated from the JSON string, or null.
  */
 goog.json.parse = function(s) {
   var o = String(s);
   if (goog.json.isValid_(o)) {
     /** @preserveTry */
     try {
-      return /** @type {!Object} */ (eval('(' + o + ')'));
+      return /** @type {Object} */ (eval('(' + o + ')'));
     } catch (ex) {
     }
   }

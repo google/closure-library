@@ -198,6 +198,7 @@ function testStringUnsafeParse() {
 }
 
 function testNullParse() {
+  assertEquals('null', goog.json.parse(null), null);
   assertEquals('null', goog.json.parse('null'), null);
 
   assertNotEquals('0', goog.json.parse('0'), null);
@@ -206,6 +207,7 @@ function testNullParse() {
 }
 
 function testNullUnsafeParse() {
+  assertEquals('null', goog.json.unsafeParse(null), null);
   assertEquals('null', goog.json.unsafeParse('null'), null);
 
   assertNotEquals('0', goog.json.unsafeParse('0'), null);
