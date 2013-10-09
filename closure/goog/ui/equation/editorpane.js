@@ -54,14 +54,12 @@ goog.ui.equation.EditorPane.prototype.setVisible =
 /**
  * Sets the equation to show in this tab pane.
  * @param {string} equation The equation.
- * @protected
  */
 goog.ui.equation.EditorPane.prototype.setEquation = goog.abstractMethod;
 
 
 /**
  * @return {string} The equation shown in this tab pane.
- * @protected
  */
 goog.ui.equation.EditorPane.prototype.getEquation = goog.abstractMethod;
 
