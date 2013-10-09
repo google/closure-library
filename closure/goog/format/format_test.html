@@ -120,6 +120,9 @@ function testFormatNumBytes() {
   assertEquals('1MB', numBytesToString(1024 * 1024));
   assertEquals('6GB', numBytesToString(6 * 1024 * 1024 * 1024));
   assertEquals('12.06TB', numBytesToString(12345.6789 * 1024 * 1024 * 1024));
+
+  assertEquals('454', numBytesToString(454, 2, true, true));
+  assertEquals('5 KB', numBytesToString(5 * 1024, 2, true, true));
 }
 
 function testStringToNumeric() {
