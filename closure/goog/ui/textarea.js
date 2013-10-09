@@ -192,13 +192,13 @@ goog.ui.Textarea.prototype.borderBox_;
  *   Chrome 4.0
  *   Safari 5.0
  *
- * For older browsers, we save the placeholderText_ and set it as the element's
+ * For older browsers, we save the defaultText_ and set it as the element's
  * value and add the TEXTAREA_PLACEHOLDER_CLASS to indicate that it's a
  * placeholder string.
  * @type {string}
  * @private
  */
-goog.ui.Textarea.prototype.placeholderText_ = '';
+goog.ui.Textarea.prototype.defaultText_ = '';
 
 
 /**
@@ -215,7 +215,7 @@ goog.ui.Textarea.EventType = {
  * @param {string} text The default text for the textarea.
  */
 goog.ui.Textarea.prototype.setPlaceholder = function(text) {
-  this.placeholderText_ = text;
+  this.defaultText_ = text;
   if (this.getElement()) {
     this.restorePlaceholder_();
   }
@@ -368,16 +368,12 @@ goog.ui.Textarea.prototype.restorePlaceholder_ = function() {
   // We check that the element is still there since this is called by a timer
   // and the dispose method may have been called prior to this.
   if (this.supportsNativePlaceholder_()) {
-    this.getElement().placeholder = this.placeholderText_;
+    this.getElement().placeholder = this.defaultText_;
   } else if (this.getElement() && !this.hasUserInput_ &&
       !this.hasFocusForPlaceholder_) {
     goog.dom.classlist.add(this.getElement(),
                            goog.ui.Textarea.TEXTAREA_PLACEHOLDER_CLASS);
-    if (this.placeholderText_) {
-      // Unfortunately, this will fire the input event. Don't
-      // actually set the text unless we absolutely have to.
-      this.getElement().value = this.placeholderText_;
-    }
+    this.getElement().value = this.defaultText_;
   }
 };
 
@@ -586,9 +582,9 @@ goog.ui.Textarea.prototype.grow_ = function(opt_e) {
       opt_e.type == goog.events.EventType.FOCUS) {
     // We must have a textarea element, since we're growing it.
     // Remove the placeholder CSS + set the value to empty if we're currently
-    // showing the placeholderText_ value if this is the first time we're
-    // getting focus.
-    if (textarea.value == this.placeholderText_ &&
+    // showing the defaultText_ value if this is the first time we're getting
+    // focus.
+    if (textarea.value == this.defaultText_ &&
         !this.hasFocusForPlaceholder_) {
       goog.dom.classlist.remove(
           textarea, goog.ui.Textarea.TEXTAREA_PLACEHOLDER_CLASS);
