@@ -27,7 +27,7 @@ goog.provide('goog.fx.DragDropEvent');
 goog.provide('goog.fx.DragDropItem');
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
@@ -202,7 +202,8 @@ goog.fx.AbstractDragDrop.initDragDistanceThreshold = 5;
 /**
  * Set class to add to source elements being dragged.
  *
- * @param {string} className Class to be added.
+ * @param {string} className Class to be added.  Must be a single, valid
+ *     classname.
  */
 goog.fx.AbstractDragDrop.prototype.setDragClass = function(className) {
   this.dragClass_ = className;
@@ -212,7 +213,8 @@ goog.fx.AbstractDragDrop.prototype.setDragClass = function(className) {
 /**
  * Set class to add to source elements.
  *
- * @param {string} className Class to be added.
+ * @param {string} className Class to be added.  Must be a single, valid
+ *     classname.
  */
 goog.fx.AbstractDragDrop.prototype.setSourceClass = function(className) {
   this.sourceClass_ = className;
@@ -222,7 +224,8 @@ goog.fx.AbstractDragDrop.prototype.setSourceClass = function(className) {
 /**
  * Set class to add to target elements.
  *
- * @param {string} className Class to be added.
+ * @param {string} className Class to be added.  Must be a single, valid
+ *     classname.
  */
 goog.fx.AbstractDragDrop.prototype.setTargetClass = function(className) {
   this.targetClass_ = className;
@@ -299,12 +302,12 @@ goog.fx.AbstractDragDrop.prototype.initItem = function(item) {
     goog.events.listen(item.element, goog.events.EventType.MOUSEDOWN,
                        item.mouseDown_, false, item);
     if (this.sourceClass_) {
-      goog.dom.classes.add(item.element, this.sourceClass_);
+      goog.dom.classlist.add(item.element, this.sourceClass_);
     }
   }
 
   if (this.isTarget_ && this.targetClass_) {
-    goog.dom.classes.add(item.element, this.targetClass_);
+    goog.dom.classlist.add(item.element, this.targetClass_);
   }
 };
 
@@ -320,11 +323,11 @@ goog.fx.AbstractDragDrop.prototype.disposeItem = function(item) {
     goog.events.unlisten(item.element, goog.events.EventType.MOUSEDOWN,
                          item.mouseDown_, false, item);
     if (this.sourceClass_) {
-      goog.dom.classes.remove(item.element, this.sourceClass_);
+      goog.dom.classlist.remove(item.element, this.sourceClass_);
     }
   }
   if (this.isTarget_ && this.targetClass_) {
-    goog.dom.classes.remove(item.element, this.targetClass_);
+    goog.dom.classlist.remove(item.element, this.targetClass_);
   }
   item.dispose();
 };
@@ -783,7 +786,7 @@ goog.fx.AbstractDragDrop.prototype.setSubtargetFunction = function(f) {
 goog.fx.AbstractDragDrop.prototype.createDragElement = function(sourceEl) {
   var dragEl = this.cloneNode_(sourceEl);
   if (this.dragClass_) {
-    goog.dom.classes.add(dragEl, this.dragClass_);
+    goog.dom.classlist.add(dragEl, this.dragClass_);
   }
 
   return dragEl;

@@ -25,10 +25,11 @@ goog.provide('goog.fx.DragListGroup');
 goog.provide('goog.fx.DragListGroup.EventType');
 goog.provide('goog.fx.DragListGroupEvent');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -36,6 +37,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
 goog.require('goog.fx.Dragger.EventType');
 goog.require('goog.math.Coordinate');
+goog.require('goog.string');
 goog.require('goog.style');
 
 
@@ -174,12 +176,12 @@ goog.fx.DragListGroup.prototype.currDragItemClasses_;
 
 
 /**
- * The user-supplied CSS class to add to the clone of the current drag item
+ * The user-supplied CSS classes to add to the clone of the current drag item
  * that's actually being dragged around (during a drag action).
- * @type {string|undefined}
+ * @type {Array.<string>|undefined}
  * @private
  */
-goog.fx.DragListGroup.prototype.draggerElClass_;
+goog.fx.DragListGroup.prototype.draggerElClasses_;
 
 
 // The next 5 are info applicable during a drag action.
@@ -315,7 +317,8 @@ goog.fx.DragListGroup.prototype.getHysteresis = function() {
  *     bounding box expands in this direction).
  * @param {boolean=} opt_unused Unused argument.
  * @param {string=} opt_dragHoverClass CSS class to apply to this drag list when
- *     the draggerEl hovers over it during a drag action.
+ *     the draggerEl hovers over it during a drag action.  If present, must be a
+ *     single, valid classname (not a string of space-separated classnames).
  */
 goog.fx.DragListGroup.prototype.addDragList = function(
     dragListElement, growthDirection, opt_unused, opt_dragHoverClass) {
@@ -393,7 +396,8 @@ goog.fx.DragListGroup.prototype.setCurrDragItemClass = function(var_args) {
  */
 goog.fx.DragListGroup.prototype.setDraggerElClass = function(draggerElClass) {
   goog.asserts.assert(!this.isInitialized_);
-  this.draggerElClass_ = draggerElClass;
+  // Split space-separated classes up into an array.
+  this.draggerElClasses_ = goog.string.trim(draggerElClass).split(' ');
 };
 
 
@@ -534,9 +538,9 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
   this.currDragItem_ = /** @type {Element} */ (this.dragItemForHandle_[uid]);
 
   this.draggerEl_ = this.cloneNode_(this.currDragItem_);
-  if (this.draggerElClass_) {
+  if (this.draggerElClasses_) {
     // Add CSS class for the clone, if any.
-    goog.dom.classes.add(this.draggerEl_, this.draggerElClass_);
+    goog.dom.classlist.addAll(this.draggerEl_, this.draggerElClasses_ || []);
   }
 
   // Place the clone (i.e. draggerEl) at the same position as the actual
@@ -598,8 +602,8 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   // If there's a CSS class specified for the current drag item, add it.
   // Otherwise, make the actual current drag item hidden (takes up space).
   if (this.currDragItemClasses_) {
-    goog.dom.classes.add.apply(null,
-        goog.array.concat(this.currDragItem_, this.currDragItemClasses_));
+    goog.dom.classlist.addAll(this.currDragItem_,
+        this.currDragItemClasses_ || []);
   } else {
     this.currDragItem_.style.visibility = 'hidden';
   }
@@ -675,7 +679,7 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     this.currDragItem_.style.display = '';
     // Add drag list's hover class (if any).
     if (hoverList.dlgDragHoverClass_) {
-      goog.dom.classes.add(hoverList, hoverList.dlgDragHoverClass_);
+      goog.dom.classlist.add(hoverList, hoverList.dlgDragHoverClass_);
     }
 
   } else {
@@ -689,7 +693,7 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     for (var i = 0, n = this.dragLists_.length; i < n; i++) {
       var dragList = this.dragLists_[i];
       if (dragList.dlgDragHoverClass_) {
-        goog.dom.classes.remove(dragList, dragList.dlgDragHoverClass_);
+        goog.dom.classlist.remove(dragList, dragList.dlgDragHoverClass_);
       }
     }
   }
@@ -803,8 +807,8 @@ goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
   // If there's a CSS class specified for the current drag item, remove it.
   // Otherwise, make the current drag item visible (instead of empty space).
   if (this.currDragItemClasses_ && this.currDragItem_) {
-    goog.dom.classes.remove.apply(null,
-        goog.array.concat(this.currDragItem_, this.currDragItemClasses_));
+    goog.dom.classlist.removeAll(this.currDragItem_,
+        this.currDragItemClasses_ || []);
   } else if (this.currDragItem_) {
     this.currDragItem_.style.visibility = 'visible';
   }
@@ -813,7 +817,7 @@ goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
   for (var i = 0, n = this.dragLists_.length; i < n; i++) {
     var dragList = this.dragLists_[i];
     if (dragList.dlgDragHoverClass_) {
-      goog.dom.classes.remove(dragList, dragList.dlgDragHoverClass_);
+      goog.dom.classlist.remove(dragList, dragList.dlgDragHoverClass_);
     }
   }
 };
@@ -839,9 +843,8 @@ goog.fx.DragListGroup.prototype.getHandleForDragItem_ = function(dragItem) {
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragItemMouseover_ = function(e) {
-  goog.dom.classes.add.apply(null,
-      goog.array.concat(/** @type {Element} */ (e.currentTarget),
-                        this.dragItemHoverClasses_));
+  var targetEl = goog.asserts.assertElement(e.currentTarget);
+  goog.dom.classlist.addAll(targetEl, this.dragItemHoverClasses_ || []);
 };
 
 
@@ -851,9 +854,8 @@ goog.fx.DragListGroup.prototype.handleDragItemMouseover_ = function(e) {
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragItemMouseout_ = function(e) {
-  goog.dom.classes.remove.apply(null,
-      goog.array.concat(/** @type {Element} */ (e.currentTarget),
-                        this.dragItemHoverClasses_));
+  var targetEl = goog.asserts.assertElement(e.currentTarget);
+  goog.dom.classlist.removeAll(targetEl, this.dragItemHoverClasses_ || []);
 };
 
 
@@ -863,9 +865,8 @@ goog.fx.DragListGroup.prototype.handleDragItemMouseout_ = function(e) {
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragItemHandleMouseover_ = function(e) {
-  goog.dom.classes.add.apply(null,
-      goog.array.concat(/** @type {Element} */ (e.currentTarget),
-                        this.dragItemHandleHoverClasses_));
+  var targetEl = goog.asserts.assertElement(e.currentTarget);
+  goog.dom.classlist.addAll(targetEl, this.dragItemHandleHoverClasses_ || []);
 };
 
 
@@ -875,9 +876,9 @@ goog.fx.DragListGroup.prototype.handleDragItemHandleMouseover_ = function(e) {
  * @private
  */
 goog.fx.DragListGroup.prototype.handleDragItemHandleMouseout_ = function(e) {
-  goog.dom.classes.remove.apply(null,
-      goog.array.concat(/** @type {Element} */ (e.currentTarget),
-                        this.dragItemHandleHoverClasses_));
+  var targetEl = goog.asserts.assertElement(e.currentTarget);
+  goog.dom.classlist.removeAll(targetEl,
+      this.dragItemHandleHoverClasses_ || []);
 };
 
 
