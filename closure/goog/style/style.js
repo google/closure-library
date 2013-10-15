@@ -224,6 +224,20 @@ goog.style.getStyle_ = function(element, style) {
 
 
 /**
+ * Retrieves the computed value of the box-sizing CSS attribute.
+ * Browser support: http://caniuse.com/css3-boxsizing.
+ * @param {!Element} element The element whose box-sizing to get.
+ * @return {?string} 'content-box', 'border-box' or 'padding-box'. null if
+ *     box-sizing is not supported (IE7 and below).
+ */
+goog.style.getComputedBoxSizing = function(element) {
+  return goog.style.getStyle_(element, 'boxSizing') ||
+      goog.style.getStyle_(element, 'MozBoxSizing') ||
+      goog.style.getStyle_(element, 'WebkitBoxSizing') || null;
+};
+
+
+/**
  * Retrieves the computed value of the position CSS attribute.
  * @param {Element} element The element to get the position of.
  * @return {string} Position value.

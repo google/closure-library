@@ -184,6 +184,22 @@ function testGetComputedStyleFilter() {
   }
 }
 
+function testGetComputedBoxSizing() {
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(8)) {
+    var defaultBoxSizing = goog.dom.isCss1CompatMode() ?
+        'content-box' : 'border-box';
+    var el = goog.dom.getElement('box-sizing-unset');
+    assertEquals(defaultBoxSizing, goog.style.getComputedBoxSizing(el));
+
+    el = goog.dom.getElement('box-sizing-border-box');
+    assertEquals('border-box', goog.style.getComputedBoxSizing(el));
+  } else {
+    // IE7 and below don't support box-sizing.
+    assertNull(goog.style.getComputedBoxSizing(
+        goog.dom.getElement('box-sizing-border-box')));
+  }
+}
+
 function testGetComputedPosition() {
   assertEquals('position not set', 'static',
                goog.style.getComputedPosition($('position-unset')));
