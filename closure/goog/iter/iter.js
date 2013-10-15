@@ -386,42 +386,49 @@ goog.iter.every = function(iterable, f, opt_obj) {
 
 
 /**
- * Takes zero or more iterators and returns one iterator that will iterate over
+ * Takes zero or more iterables and returns one iterator that will iterate over
  * them in the order chained.
- * @param {...goog.iter.Iterator} var_args  Any number of iterator objects.
+ * @param {...!goog.iter.Iterable} var_args Any number of iterable objects.
  * @return {!goog.iter.Iterator} Returns a new iterator that will iterate over
- *     all the given iterators' contents.
+ *     all the given iterables' contents.
  */
 goog.iter.chain = function(var_args) {
-  var args = arguments;
-  var length = args.length;
-  var i = 0;
-  var newIter = new goog.iter.Iterator;
+  var iterator = goog.iter.toIterator(arguments);
+  var iter = new goog.iter.Iterator();
+  var current = null;
 
-  /**
-   * @return {*} The next item in the iteration.
-   * @this {goog.iter.Iterator}
-   */
-  newIter.next = function() {
-    /** @preserveTry */
-    try {
-      if (i >= length) {
-        throw goog.iter.StopIteration;
+  iter.next = function() {
+    while (true) {
+      if (current == null) {
+        var it = /** @type {!goog.iter.Iterable} */ (iterator.next());
+        current = goog.iter.toIterator(it);
       }
-      var current = goog.iter.toIterator(args[i]);
-      return current.next();
-    } catch (ex) {
-      if (ex !== goog.iter.StopIteration || i >= length) {
-        throw ex;
-      } else {
-        // In case we got a StopIteration increment counter and try again.
-        i++;
-        return this.next();
+      try {
+        return current.next();
+      } catch (ex) {
+        if (ex !== goog.iter.StopIteration) {
+          throw ex;
+        }
+        current = null;
       }
     }
   };
 
-  return newIter;
+  return iter;
+};
+
+
+/**
+ * Takes a single iterable containing zero or more iterables and returns one
+ * iterator that will iterate over each one in the order given.
+ * @see http://docs.python.org/2/library/itertools.html#itertools.chain.from_iterable
+ * @param {!goog.iter.Iterable.<!goog.iter.Iterable>} iterable The iterable of
+ *     iterables to chain.
+ * @return {!goog.iter.Iterator} Returns a new iterator that will iterate over
+ *     all the contents of the iterables contained within {@code iterable}.
+ */
+goog.iter.chainFromIterable = function(iterable) {
+  return goog.iter.chain.apply(undefined, iterable);
 };
 
 

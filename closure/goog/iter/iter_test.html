@@ -222,6 +222,21 @@ function testChain() {
   // no args
   iter2 = goog.iter.chain();
   assertEquals('', goog.iter.join(iter2, ''));
+
+  // arrays
+  var arr = [0, 1];
+  var arr2 = [2, 3];
+  var arr3 = [4, 5];
+  iter = goog.iter.chain(arr, arr2, arr3);
+  assertEquals('012345', goog.iter.join(iter, ''));
+}
+
+function testChainFromIterable() {
+  var arg = [0, 1];
+  var arg2 = [2, 3];
+  var arg3 = goog.iter.range(4, 6);
+  var iter = goog.iter.chainFromIterable([arg, arg2, arg3]);
+  assertEquals('012345', goog.iter.join(iter, ''));
 }
 
 function testDropWhile() {
