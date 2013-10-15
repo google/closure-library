@@ -172,7 +172,7 @@ goog.dom.browserrange.AbstractRange.prototype.containsRange =
 
   var range = abstractRange.getBrowserRange();
   var start = goog.dom.RangeEndpoint.START, end = goog.dom.RangeEndpoint.END;
-  /** {@preserveTry} */
+  /** @preserveTry */
   try {
     if (checkPartial) {
       // There are two ways to not overlap.  Being before, and being after.

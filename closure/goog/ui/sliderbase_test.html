@@ -105,13 +105,13 @@ function OneThumbSlider() {
 goog.inherits(OneThumbSlider, goog.ui.SliderBase);
 
 
-/** {@override} */
+/** @override */
 OneThumbSlider.prototype.createThumbs = function() {
   this.valueThumb = this.extentThumb = goog.dom.getElement('thumb');
 };
 
 
-/** {@override} */
+/** @override */
 OneThumbSlider.prototype.getCssClass = function(orientation) {
   return goog.getCssName('test-slider', orientation);
 };
@@ -128,7 +128,7 @@ function TwoThumbSlider() {
 goog.inherits(TwoThumbSlider, goog.ui.SliderBase);
 
 
-/** {@override} */
+/** @override */
 TwoThumbSlider.prototype.createThumbs = function() {
   this.valueThumb = goog.dom.getElement('valueThumb');
   this.extentThumb = goog.dom.getElement('extentThumb');
@@ -136,7 +136,7 @@ TwoThumbSlider.prototype.createThumbs = function() {
 };
 
 
-/** {@override} */
+/** @override */
 TwoThumbSlider.prototype.getCssClass = function(orientation) {
   return goog.getCssName('test-slider', orientation);
 };
