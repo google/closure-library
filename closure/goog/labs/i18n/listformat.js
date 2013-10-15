@@ -54,6 +54,7 @@ goog.require('goog.labs.i18n.ListFormatSymbols');
  * Similar to the ICU4J class com.ibm.icu.text.ListFormatter:
  *   http://icu-project.org/apiref/icu4j/com/ibm/icu/text/ListFormatter.html
  * @constructor
+ * @final
  */
 goog.labs.i18n.ListFormat = function() {
   /**
@@ -160,6 +161,7 @@ goog.labs.i18n.ListFormat.prototype.format = function(items) {
  * Similar to the ICU4J class com.icu.util.GenderInfo:
  *   http://icu-project.org/apiref/icu4j/com/ibm/icu/util/GenderInfo.html
  * @constructor
+ * @final
  */
 goog.labs.i18n.GenderInfo = function() {
   /**
