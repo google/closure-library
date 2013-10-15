@@ -1657,7 +1657,7 @@ goog.dom.PREDEFINED_TAG_VALUES_ = {'IMG': ' ', 'BR': '\n'};
 
 /**
  * Returns true if the element has a tab index that allows it to receive
- * keyboard focus (tabIndex >= 0), false otherwise.  Note that form elements
+ * keyboard focus (tabIndex >= 0), false otherwise.  Note that some elements
  * natively support keyboard focus, even if they have no tab index.
  * @param {Element} element Element to check.
  * @return {boolean} Whether the element has a tab index that allows keyboard
@@ -1695,15 +1695,15 @@ goog.dom.setFocusableTabIndex = function(element, enable) {
 
 /**
  * Returns true if the element can be focused, i.e. it has a tab index that
- * allows it to receive keyboard focus (tabIndex >= 0), or it is a form element
+ * allows it to receive keyboard focus (tabIndex >= 0), or it is an element
  * that natively supports keyboard focus.
  * @param {Element} element Element to check.
  * @return {boolean} Whether the element allows keyboard focus.
  */
 goog.dom.isFocusable = function(element) {
   var focusable;
-  // Form elements can have unspecified tab index.
-  if (goog.dom.isFormElement_(element)) {
+  // Some elements can have unspecified tab index and still receive focus.
+  if (goog.dom.nativelySupportsFocus_(element)) {
     // Make sure the element is not disabled ...
     focusable = !element.disabled &&
         // ... and if a tab index is specified, it allows focus.
@@ -1748,13 +1748,14 @@ goog.dom.isTabIndexFocusable_ = function(element) {
 
 
 /**
- * Returns true if the element is a form element.
+ * Returns true if the element is focusable even when tabIndex is not set.
  * @param {Element} element Element to check.
- * @return {boolean} Whether the element is a form element.
+ * @return {boolean} Whether the element natively supports focus.
  * @private
  */
-goog.dom.isFormElement_ = function(element) {
-  return element.tagName == goog.dom.TagName.INPUT ||
+goog.dom.nativelySupportsFocus_ = function(element) {
+  return element.tagName == goog.dom.TagName.A ||
+         element.tagName == goog.dom.TagName.INPUT ||
          element.tagName == goog.dom.TagName.TEXTAREA ||
          element.tagName == goog.dom.TagName.SELECT ||
          element.tagName == goog.dom.TagName.BUTTON;
@@ -2726,7 +2727,7 @@ goog.dom.DomHelper.prototype.findNodes = goog.dom.findNodes;
 
 /**
  * Returns true if the element has a tab index that allows it to receive
- * keyboard focus (tabIndex >= 0), false otherwise.  Note that form elements
+ * keyboard focus (tabIndex >= 0), false otherwise.  Note that some elements
  * natively support keyboard focus, even if they have no tab index.
  * @param {Element} element Element to check.
  * @return {boolean} Whether the element has a tab index that allows keyboard
@@ -2750,7 +2751,7 @@ goog.dom.DomHelper.prototype.setFocusableTabIndex =
 
 /**
  * Returns true if the element can be focused, i.e. it has a tab index that
- * allows it to receive keyboard focus (tabIndex >= 0), or it is a form element
+ * allows it to receive keyboard focus (tabIndex >= 0), or it is an element
  * that natively supports keyboard focus.
  * @param {Element} element Element to check.
  * @return {boolean} Whether the element allows keyboard focus.
