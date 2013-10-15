@@ -116,7 +116,6 @@ requestStats.Event.STAT_EVENT = 'statevent';
 
 /**
  * Enum that identifies events for statistics that are interesting to track.
- * TODO(user) - Change name not to use Event or use EventTarget
  * @enum {number}
  */
 requestStats.Stat = {
@@ -135,81 +134,77 @@ requestStats.Stat = {
   /** Event indicating the start of test stage one. */
   TEST_STAGE_ONE_START: 3,
 
-
-  /** Event indicating the channel is blocked by a network administrator. */
-  CHANNEL_BLOCKED: 4,
-
   /** Event indicating the start of test stage two. */
-  TEST_STAGE_TWO_START: 5,
+  TEST_STAGE_TWO_START: 4,
 
   /** Event indicating the first piece of test data was received. */
-  TEST_STAGE_TWO_DATA_ONE: 6,
+  TEST_STAGE_TWO_DATA_ONE: 5,
 
   /**
    * Event indicating that the second piece of test data was received and it was
    * recieved separately from the first.
    */
-  TEST_STAGE_TWO_DATA_TWO: 7,
+  TEST_STAGE_TWO_DATA_TWO: 6,
 
   /** Event indicating both pieces of test data were received simultaneously. */
-  TEST_STAGE_TWO_DATA_BOTH: 8,
+  TEST_STAGE_TWO_DATA_BOTH: 7,
 
   /** Event indicating stage one of the test request failed. */
-  TEST_STAGE_ONE_FAILED: 9,
+  TEST_STAGE_ONE_FAILED: 8,
 
   /** Event indicating stage two of the test request failed. */
-  TEST_STAGE_TWO_FAILED: 10,
+  TEST_STAGE_TWO_FAILED: 9,
 
   /**
    * Event indicating that a buffering proxy is likely between the client and
    * the server.
    */
-  PROXY: 11,
+  PROXY: 10,
 
   /**
    * Event indicating that no buffering proxy is likely between the client and
    * the server.
    */
-  NOPROXY: 12,
+  NOPROXY: 11,
 
   /** Event indicating an unknown SID error. */
-  REQUEST_UNKNOWN_SESSION_ID: 13,
+  REQUEST_UNKNOWN_SESSION_ID: 12,
 
   /** Event indicating a bad status code was received. */
-  REQUEST_BAD_STATUS: 14,
+  REQUEST_BAD_STATUS: 13,
 
   /** Event indicating incomplete data was received */
-  REQUEST_INCOMPLETE_DATA: 15,
+  REQUEST_INCOMPLETE_DATA: 14,
 
   /** Event indicating bad data was received */
-  REQUEST_BAD_DATA: 16,
+  REQUEST_BAD_DATA: 15,
 
   /** Event indicating no data was received when data was expected. */
-  REQUEST_NO_DATA: 17,
+  REQUEST_NO_DATA: 16,
 
   /** Event indicating a request timeout. */
-  REQUEST_TIMEOUT: 18,
+  REQUEST_TIMEOUT: 17,
 
   /**
    * Event indicating that the server never received our hanging GET and so it
    * is being retried.
    */
-  BACKCHANNEL_MISSING: 19,
+  BACKCHANNEL_MISSING: 18,
 
   /**
    * Event indicating that we have determined that our hanging GET is not
    * receiving data when it should be. Thus it is dead dead and will be retried.
    */
-  BACKCHANNEL_DEAD: 20,
+  BACKCHANNEL_DEAD: 19,
 
   /**
    * The browser declared itself offline during the lifetime of a request, or
    * was offline when a request was initially made.
    */
-  BROWSER_OFFLINE: 21,
+  BROWSER_OFFLINE: 20,
 
   /** ActiveX is blocked by the machine's admin settings. */
-  ACTIVE_X_BLOCKED: 22
+  ACTIVE_X_BLOCKED: 21
 };
 
 

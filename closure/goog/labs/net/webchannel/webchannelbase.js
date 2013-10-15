@@ -29,6 +29,7 @@ goog.require('goog.json.EvalJsonProcessor');
 goog.require('goog.labs.net.webChannel.BaseTestChannel');
 goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
+goog.require('goog.labs.net.webChannel.ConnectionState');
 goog.require('goog.labs.net.webChannel.ForwardChannelRequestPool');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.netUtils');
@@ -42,6 +43,7 @@ goog.require('goog.structs.CircularBuffer');
 
 goog.scope(function() {
 var BaseTestChannel = goog.labs.net.webChannel.BaseTestChannel;
+var ConnectionState = goog.labs.net.webChannel.ConnectionState;
 var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 var requestStats = goog.labs.net.webChannel.requestStats;
@@ -59,16 +61,14 @@ var ForwardChannelRequestPool =
  *        WebChannel instance.
  * @param {string=} opt_clientVersion An application-specific version number
  *        that is sent to the server when connected.
- * @param {!Array.<string>=} opt_firstTestResults Previously determined results
- *        of the first channel test.
- * @param {boolean=} opt_secondTestResults Previously determined results
- *        of the second channel test.
+ * @param {!ConnectionState=} opt_conn Previously determined connection
+ *        conditions.
  * @constructor
  * @struct
  * @implements {goog.labs.net.webChannel.Channel}
  */
 goog.labs.net.webChannel.WebChannelBase = function(opt_options,
-    opt_clientVersion, opt_firstTestResults, opt_secondTestResults) {
+    opt_clientVersion, opt_conn) {
   /**
    * The application specific version that is passed to the server.
    * @private {?string}
@@ -102,21 +102,11 @@ goog.labs.net.webChannel.WebChannelBase = function(opt_options,
    */
   this.parser_ = new goog.json.EvalJsonProcessor(null, true);
 
-
   /**
-   * An array of results for the first test call.
-   * @private {Array.<string>}
+   * Previous connectivity test results.
+   * @private {!ConnectionState}
    */
-  this.firstTestResults_ = opt_firstTestResults || null;
-
-  /**
-   * The results of the second test. True implies the
-   * connection is buffered, False means unbuffered, null means that
-   * the results are not available.
-   * @private {?boolean}
-   */
-  this.secondTestResults_ = goog.isDefAndNotNull(opt_secondTestResults) ?
-      opt_secondTestResults : null;
+  this.ConnState_ = opt_conn || new ConnectionState();
 
   /**
    * Extra HTTP headers to add to all the requests sent to the server.
@@ -476,9 +466,6 @@ WebChannelBase.Error = {
 
   /** A general network error. */
   NETWORK: 8,
-
-  /** An error due to the channel being blocked by a network administrator. */
-  BLOCKED: 9,
 
   /** An error due to bad data being returned from the server. */
   BAD_DATA: 10,
@@ -1360,17 +1347,6 @@ WebChannelBase.prototype.testConnectionFailure =
 /**
  * @override
  */
-WebChannelBase.prototype.testConnectionBlocked =
-    function(testChannel) {
-  this.channelDebug_.debug('Test Connection Blocked');
-  this.lastStatusCode_ = this.connectionTest_.getLastStatusCode();
-  this.signalError_(WebChannelBase.Error.BLOCKED);
-};
-
-
-/**
- * @override
- */
 WebChannelBase.prototype.onRequestData = function(request, responseText) {
   if (this.state_ == WebChannelBase.State.CLOSED ||
       (this.backChannelRequest_ != request &&
@@ -1753,8 +1729,7 @@ WebChannelBase.prototype.ensureInState_ = function(var_args) {
  */
 WebChannelBase.prototype.signalError_ = function(error) {
   this.channelDebug_.info('Error code ' + error);
-  if (error == WebChannelBase.Error.REQUEST_FAILED ||
-      error == WebChannelBase.Error.BLOCKED) {
+  if (error == WebChannelBase.Error.REQUEST_FAILED) {
     // Create a separate Internet connection to check
     // if it's a server error or user's network error.
     var imageUri = null;
@@ -1859,18 +1834,8 @@ WebChannelBase.prototype.getForwardChannelUri = function(path) {
 /**
  * @override
  */
-WebChannelBase.prototype.getFirstTestResults = function() {
-  return this.firstTestResults_;
-};
-
-
-/**
- * Gets the results for the second channel test
- * @return {?boolean} The results. True -> buffered connection,
- *      False -> unbuffered, null -> unknown.
- */
-WebChannelBase.prototype.getSecondTestResults = function() {
-  return this.secondTestResults_;
+WebChannelBase.prototype.getConnectionState = function() {
+  return this.ConnState_;
 };
 
 

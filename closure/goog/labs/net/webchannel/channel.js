@@ -156,16 +156,6 @@ Channel.prototype.createDataUri = goog.abstractMethod;
 /**
  * Not needed for testchannel.
  *
- * Callback from TestChannel for when the channel is blocked.
- * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
- *     The TestChannel.
- */
-Channel.prototype.testConnectionBlocked = goog.abstractMethod;
-
-
-/**
- * Not needed for testchannel.
- *
  * Callback from TestChannel for when the channel is finished.
  * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
  *     The TestChannel.
@@ -188,8 +178,9 @@ Channel.prototype.testConnectionFailure = goog.abstractMethod;
 
 /**
  * Not needed for testchannel.
- * Gets the results for the first channel test
- * @return {Array.<string>} The results.
+ * Gets the result of previous connectivity tests.
+ *
+ * @return {!goog.labs.net.webChannel.ConnectionState} The connectivity state.
  */
-Channel.prototype.getFirstTestResults = goog.abstractMethod;
+Channel.prototype.getConnectionState = goog.abstractMethod;
 });  // goog.scope
