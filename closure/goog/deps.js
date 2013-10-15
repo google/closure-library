@@ -583,6 +583,7 @@ goog.addDependency('string/string_test.js', ['goog.stringTest'], ['goog.function
 goog.addDependency('string/stringbuffer.js', ['goog.string.StringBuffer'], []);
 goog.addDependency('string/stringformat.js', ['goog.string.format'], ['goog.string']);
 goog.addDependency('string/stringifier.js', ['goog.string.Stringifier'], []);
+goog.addDependency('string/typedstring.js', ['goog.string.TypedString'], []);
 goog.addDependency('structs/avltree.js', ['goog.structs.AvlTree', 'goog.structs.AvlTree.Node'], ['goog.structs.Collection']);
 goog.addDependency('structs/circularbuffer.js', ['goog.structs.CircularBuffer'], []);
 goog.addDependency('structs/collection.js', ['goog.structs.Collection'], []);
