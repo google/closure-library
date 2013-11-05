@@ -841,7 +841,7 @@ goog.ui.KeyboardShortcutHandler.makeKey_ = function(keyCode, modifiers) {
  * @private
  */
 goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
-  if (!this.isValidShortcut_(event)) {
+  if (!this.isValidShortcut(event)) {
     return;
   }
   // For possible printable-key events, we cannot identify whether the events
@@ -944,9 +944,9 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
  * Checks if a given keypress event may be treated as a shortcut.
  * @param {goog.events.BrowserEvent} event Keypress event.
  * @return {boolean} Whether to attempt to process the event as a shortcut.
- * @private
+ * @protected
  */
-goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
+goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut = function(event) {
   var keyCode = event.keyCode;
 
   // Ignore Ctrl, Shift and ALT
