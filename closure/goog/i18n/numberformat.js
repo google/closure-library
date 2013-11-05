@@ -161,9 +161,6 @@ goog.i18n.NumberFormat.isEnforceAsciiDigits = function() {
  * @param {number} min the minimum.
  */
 goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
-  if (min > this.maximumFractionDigits_) {
-    throw Error('Min value must be less than max value');
-  }
   if (this.significantDigits_ > 0 && min > 0) {
     throw Error(
         'Can\'t combine significant digits and minimum fraction digits');
@@ -177,9 +174,6 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
  * @param {number} max the maximum.
  */
 goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
-  if (this.minimumFractionDigits_ > max) {
-    throw Error('Min value must be less than max value');
-  }
   this.maximumFractionDigits_ = max;
 };
 
@@ -566,6 +560,9 @@ goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
  */
 goog.i18n.NumberFormat.prototype.subformatFixed_ =
     function(number, minIntDigits, parts) {
+  if (this.minimumFractionDigits_ > this.maximumFractionDigits_) {
+    throw Error('Min value must be less than max value');
+  }
 
   var rounded = this.roundNumber_(number);
   var power = Math.pow(10, this.maximumFractionDigits_);

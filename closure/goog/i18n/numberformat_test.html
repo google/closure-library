@@ -711,6 +711,38 @@ function testEnforceAscii() {
   }
 }
 
+function testFractionDigits() {
+  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  fmt.setMinimumFractionDigits(4);
+  fmt.setMaximumFractionDigits(6);
+  assertEquals('0.1230', fmt.format(0.123));
+  assertEquals('0.123456', fmt.format(0.123456));
+  assertEquals('0.123457', fmt.format(0.12345678));
+}
+
+function testFractionDigitsSetOutOfOrder() {
+  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  // First, setup basic min/max
+  fmt.setMinimumFractionDigits(2);
+  fmt.setMaximumFractionDigits(2);
+  // Now change to a lower min & max, but change the max value first so that it
+  // is temporarily less than the current "min" value.  This makes sure that we
+  // don't throw an error.
+  fmt.setMaximumFractionDigits(1);
+  fmt.setMinimumFractionDigits(1);
+  assertEquals('2.3', fmt.format(2.34));
+}
+
+function testFractionDigitsInvalid() {
+  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  fmt.setMinimumFractionDigits(2);
+  fmt.setMaximumFractionDigits(1);
+  try {
+    fmt.format(0.123);
+    fail('Should have thrown exception.');
+  } catch(e) {}
+}
+
 function testSignificantDigitsEqualToMax() {
   var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMinimumFractionDigits(0);
