@@ -50,6 +50,7 @@ goog.require('goog.testing.mockmatchers');
  * This is a class that represents an expectation.
  * @param {string} name The name of the method for this expectation.
  * @constructor
+ * @final
  */
 goog.testing.MockExpectation = function(name) {
   /**
@@ -170,7 +171,10 @@ goog.testing.Mock = function(objectToMock, opt_mockStaticMethods,
   }
   if (opt_createProxy && !opt_mockStaticMethods &&
       goog.isFunction(objectToMock)) {
-    /** @constructor */
+    /**
+ * @constructor
+ * @final
+ */
     var tempCtor = function() {};
     goog.inherits(tempCtor, objectToMock);
     this.$proxy = new tempCtor();

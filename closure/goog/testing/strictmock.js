@@ -36,6 +36,7 @@ goog.require('goog.testing.Mock');
  *     a proxy for the target mock should be created.
  * @constructor
  * @extends {goog.testing.Mock}
+ * @final
  */
 goog.testing.StrictMock = function(objectToMock, opt_mockStaticMethods,
     opt_createProxy) {

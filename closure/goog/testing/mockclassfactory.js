@@ -57,6 +57,7 @@ goog.require('goog.testing.mockmatchers');
  *     was replaced by a proxy.
  * @param {Function} proxy The proxy that replaced the original class.
  * @constructor
+ * @final
  */
 goog.testing.MockClassRecord = function(namespace, className, originalClass,
     proxy) {
@@ -210,6 +211,7 @@ goog.testing.MockClassRecord.prototype.reset = function() {
  * both static and loose mocks.  The MockClassFactory is a singleton since it
  * tracks the classes that have been mocked internally.
  * @constructor
+ * @final
  */
 goog.testing.MockClassFactory = function() {
   if (goog.testing.MockClassFactory.instance_) {

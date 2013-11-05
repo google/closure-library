@@ -98,6 +98,7 @@ goog.require('goog.testing.asserts');
  * @param {string=} opt_name Optional name for the test case.
  * @constructor
  * @extends {goog.testing.TestCase}
+ * @final
  */
 goog.testing.ContinuationTestCase = function(opt_name) {
   goog.testing.TestCase.call(this, opt_name);
@@ -474,6 +475,7 @@ goog.testing.ContinuationTestCase.prototype.testCondition_ = function(
  *     after the test method completes or fails.
  * @constructor
  * @extends {goog.testing.TestCase.Test}
+ * @final
  */
 goog.testing.ContinuationTestCase.Test = function(setUp, test, tearDown) {
   // This test container has a name, but no evaluation function or scope.
@@ -615,6 +617,7 @@ goog.testing.ContinuationTestCase.Test.prototype.cancelPhase_ =
  * @param {Object=} opt_scope The object context to run the test in.
  * @constructor
  * @extends {goog.testing.TestCase.Test}
+ * @final
  */
 goog.testing.ContinuationTestCase.Step = function(name, ref, opt_scope) {
   goog.testing.TestCase.Test.call(this, name, ref, opt_scope);

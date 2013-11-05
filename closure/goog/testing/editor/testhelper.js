@@ -35,6 +35,7 @@ goog.require('goog.testing.dom');
  * @param {Element} root The root editable element.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.testing.editor.TestHelper = function(root) {
   if (!root) {

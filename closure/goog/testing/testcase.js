@@ -1082,6 +1082,7 @@ goog.testing.TestCase.Test.prototype.execute = function() {
  * A class for representing test results.  A bag of public properties.
  * @param {goog.testing.TestCase} testCase The test case that owns this result.
  * @constructor
+ * @final
  */
 goog.testing.TestCase.Result = function(testCase) {
   /**
@@ -1216,6 +1217,7 @@ goog.testing.TestCase.initializeTestRunner = function(testCase) {
  * @param {string} message The error message.
  * @param {string=} opt_stack A string showing the execution stack.
  * @constructor
+ * @final
  */
 goog.testing.TestCase.Error = function(source, message, opt_stack) {
   /**

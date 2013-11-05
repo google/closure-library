@@ -31,6 +31,7 @@ goog.require('goog.testing.Mock');
  * class is necessary to manage the return/throw behavior when the mock is
  * being called.
  * @constructor
+ * @final
  */
 goog.testing.LooseExpectationCollection = function() {
   /**

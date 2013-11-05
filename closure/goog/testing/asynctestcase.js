@@ -133,6 +133,7 @@ goog.testing.AsyncTestCase.TopStackFuncResult_;
  * An exception class used solely for control flow.
  * @param {string=} opt_message Error message.
  * @constructor
+ * @final
  */
 goog.testing.AsyncTestCase.ControlBreakingException = function(opt_message) {
   /**

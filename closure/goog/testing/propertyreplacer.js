@@ -58,6 +58,7 @@ goog.require('goog.userAgent');
  * </ul>
  *
  * @constructor
+ * @final
  */
 goog.testing.PropertyReplacer = function() {
   /**

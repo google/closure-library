@@ -46,6 +46,7 @@ goog.require('goog.testing.TestCase');
  * @param {number} numShards Number of shards to split up test cases into.
  * @extends {goog.testing.TestCase}
  * @constructor
+ * @final
  */
 goog.testing.ShardingTestCase = function(shardIndex, numShards, opt_name) {
   goog.base(this, opt_name);

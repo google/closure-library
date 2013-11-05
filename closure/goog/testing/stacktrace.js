@@ -34,6 +34,7 @@ goog.provide('goog.testing.stacktrace.Frame');
  * @param {string} path File path or URL including line number and optionally
  *     column number separated by colons.
  * @constructor
+ * @final
  */
 goog.testing.stacktrace.Frame = function(context, name, alias, args, path) {
   this.context_ = context;

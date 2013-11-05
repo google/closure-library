@@ -32,6 +32,7 @@ goog.require('goog.events.Event');
  * @param {number} total The total data that was to be processed, in bytes.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.testing.fs.ProgressEvent = function(type, loaded, total) {
   goog.base(this, type);

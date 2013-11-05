@@ -30,6 +30,7 @@ goog.require('goog.testing.net.XhrIo');
  * @param {goog.testing.net.XhrIo=} opt_xhr The mock XhrIo object.
  * @constructor
  * @extends {goog.net.XhrIoPool}
+ * @final
  */
 goog.testing.net.XhrIoPool = function(opt_xhr) {
   /**

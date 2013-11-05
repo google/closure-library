@@ -58,6 +58,7 @@ goog.require('goog.testing.asserts');
  * </pre>
  *
  * @constructor
+ * @final
  */
 goog.testing.ExpectedFailures = function() {
   goog.testing.ExpectedFailures.setUpConsole_();

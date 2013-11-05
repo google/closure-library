@@ -33,6 +33,7 @@ goog.require('goog.testing.fs.Blob');
  * @param {string=} opt_type The mime type of the blob.
  * @constructor
  * @extends {goog.testing.fs.Blob}
+ * @final
  */
 goog.testing.fs.File = function(name, opt_lastModified, opt_data, opt_type) {
   goog.base(this, opt_data, opt_type);

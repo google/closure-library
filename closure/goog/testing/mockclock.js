@@ -53,6 +53,7 @@ goog.require('goog.testing.watchers');
  * @param {boolean=} opt_autoInstall Install the MockClock at construction time.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.testing.MockClock = function(opt_autoInstall) {
   goog.Disposable.call(this);

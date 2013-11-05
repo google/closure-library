@@ -38,6 +38,7 @@ goog.require('goog.testing.events');
  *     message, for cross-document and channel events.
  * @extends {goog.testing.events.Event}
  * @constructor
+ * @final
  */
 goog.testing.messaging.MockMessageEvent = function(
     data, opt_origin, opt_lastEventId, opt_source, opt_ports) {

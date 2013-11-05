@@ -41,6 +41,7 @@ goog.require('goog.ui.TableSorter');
  * @param {goog.dom.DomHelper=} opt_domHelper A DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
+ * @final
  */
 goog.testing.MultiTestRunner = function(opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
@@ -1155,6 +1156,7 @@ goog.testing.MultiTestRunner.prototype.onStatsTabClicked_ = function(e) {
  * @param {goog.dom.DomHelper=} opt_domHelper Optional dom helper.
  * @constructor
  * @extends {goog.ui.Component}
+ * @final
  */
 goog.testing.MultiTestRunner.TestFrame = function(
     basePath, timeoutMs, verbosePasses, opt_domHelper) {

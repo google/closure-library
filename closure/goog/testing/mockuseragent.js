@@ -30,6 +30,7 @@ goog.require('goog.userAgent');
  *
  * @extends {goog.Disposable}
  * @constructor
+ * @final
  */
 goog.testing.MockUserAgent = function() {
   goog.Disposable.call(this);

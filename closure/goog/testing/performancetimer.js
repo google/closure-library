@@ -323,6 +323,7 @@ goog.testing.PerformanceTimer.TestFunction;
  * @param {goog.testing.PerformanceTimer.TestFunction} test Test function whose
  *     performance is to be measured.
  * @constructor
+ * @final
  */
 goog.testing.PerformanceTimer.Task = function(test) {
   /**
