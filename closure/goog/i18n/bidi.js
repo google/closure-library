@@ -22,6 +22,7 @@
  */
 goog.provide('goog.i18n.bidi');
 goog.provide('goog.i18n.bidi.Dir');
+goog.provide('goog.i18n.bidi.DirectionalString');
 goog.provide('goog.i18n.bidi.Format');
 
 
@@ -837,3 +838,33 @@ goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
     }
   }
 };
+
+
+
+/**
+ * Strings that have an (optional) known direction.
+ *
+ * Implementations of this interface are string-like objects that carry an
+ * attached direction, if known.
+ * @interface
+ */
+goog.i18n.bidi.DirectionalString = function() {};
+
+
+/**
+ * Interface marker of the DirectionalString interface.
+ *
+ * This property can be used to determine at runtime whether or not an object
+ * implements this interface.  All implementations of this interface set this
+ * property to {@code true}.
+ * @type {boolean}
+ */
+goog.i18n.bidi.DirectionalString.prototype.
+    implementsGoogI18nBidiDirectionalString;
+
+
+/**
+ * Retrieves this object's known direction (if any).
+ * @return {?goog.i18n.bidi.Dir} The known direction. Null if unknown.
+ */
+goog.i18n.bidi.DirectionalString.prototype.getDirection;

@@ -304,7 +304,7 @@ goog.addDependency('history/eventtype.js', ['goog.history.EventType'], []);
 goog.addDependency('history/history.js', ['goog.History', 'goog.History.Event', 'goog.History.EventType'], ['goog.Timer', 'goog.dom', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.history.Event', 'goog.history.EventType', 'goog.memoize', 'goog.string', 'goog.userAgent']);
 goog.addDependency('history/history_test.js', ['goog.HistoryTest'], ['goog.History', 'goog.testing.jsunit', 'goog.userAgent']);
 goog.addDependency('history/html5history.js', ['goog.history.Html5History', 'goog.history.Html5History.TokenTransformer'], ['goog.asserts', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.history.Event', 'goog.history.EventType']);
-goog.addDependency('i18n/bidi.js', ['goog.i18n.bidi', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.Format'], []);
+goog.addDependency('i18n/bidi.js', ['goog.i18n.bidi', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.i18n.bidi.Format'], []);
 goog.addDependency('i18n/bidiformatter.js', ['goog.i18n.BidiFormatter'], ['goog.i18n.bidi', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.Format', 'goog.string']);
 goog.addDependency('i18n/charlistdecompressor.js', ['goog.i18n.CharListDecompressor'], ['goog.array', 'goog.i18n.uChar']);
 goog.addDependency('i18n/charpickerdata.js', ['goog.i18n.CharPickerData'], []);
