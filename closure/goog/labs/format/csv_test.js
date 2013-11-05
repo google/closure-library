@@ -129,14 +129,20 @@ function testIgnoringErrors() {
 
   // Broken use of quotes in quoted field
   assertObjectEquals(
-      [['a', 'Hello"World!"']], goog.labs.format.csv.parse(
+      [['a', '"Hello"World!"']], goog.labs.format.csv.parse(
           'a,"Hello"World!"', true));
 
   // All of the above. A real mess.
   assertObjectEquals(
-      [['This" is', 'very\n\tvery"broken"', ' indeed!']],
+      [['This" is', '"very\n\tvery"broken"', ' indeed!']],
       goog.labs.format.csv.parse(
           'This" is,"very\n\tvery"broken"," indeed!', true));
+}
+
+function testIgnoringErrorsTrailingTabs() {
+  assertObjectEquals(
+      [['"a\tb"\t'], ['c,d']], goog.labs.format.csv.parse(
+          '"a\tb"\t\n"c,d"', true));
 }
 
 function testFindLineInfo() {
