@@ -143,6 +143,7 @@ goog.define('goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT', true);
  *     server alongside this error.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.debug.ErrorReporter.ExceptionEvent = function(error, context) {
   goog.events.Event.call(this, goog.debug.ErrorReporter.ExceptionEvent.TYPE);

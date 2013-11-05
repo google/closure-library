@@ -37,6 +37,7 @@ goog.require('goog.Timer');
  * @param {Object=} opt_handler Object in whose scope to call the listener.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.async.Throttle = function(listener, interval, opt_handler) {
   goog.Disposable.call(this);
@@ -77,6 +78,7 @@ goog.inherits(goog.async.Throttle, goog.Disposable);
  * A deprecated alias.
  * @deprecated Use goog.async.Throttle instead.
  * @constructor
+ * @final
  */
 goog.Throttle = goog.async.Throttle;
 

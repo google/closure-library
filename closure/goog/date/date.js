@@ -472,6 +472,7 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
  * @param {number=} opt_minutes Minutes.
  * @param {number=} opt_seconds Seconds.
  * @constructor
+ * @final
  */
 goog.date.Interval = function(opt_years, opt_months, opt_days, opt_hours,
                               opt_minutes, opt_seconds) {

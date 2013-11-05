@@ -54,6 +54,7 @@ goog.define('goog.asserts.ENABLE_ASSERTS', goog.DEBUG);
  * @param {!Array.<*>} messageArgs The items to substitute into the pattern.
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.asserts.AssertionError = function(messagePattern, messageArgs) {
   messageArgs.unshift(messagePattern);

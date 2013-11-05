@@ -300,6 +300,7 @@ goog.ds.XmlDataSource.createChildlessDocument_ = function() {
  * implements goog.ds.XmlHttpDataSource.
  * @constructor
  * @extends {goog.ds.XmlDataSource}
+ * @final
  */
 goog.ds.XmlHttpDataSource = function(uri, name) {
   goog.ds.XmlDataSource.call(this, null, null, name);

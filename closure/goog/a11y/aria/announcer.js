@@ -36,6 +36,7 @@ goog.require('goog.object');
  * @param {goog.dom.DomHelper=} opt_domHelper DOM helper.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.a11y.aria.Announcer = function(opt_domHelper) {
   goog.base(this);

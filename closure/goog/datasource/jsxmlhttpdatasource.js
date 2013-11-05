@@ -51,6 +51,7 @@ goog.require('goog.net.XhrIo');
  *
  * @extends {goog.ds.FastDataNode}
  * @constructor
+ * @final
  */
 goog.ds.JsXmlHttpDataSource = function(uri, name, opt_startText, opt_endText,
                                        opt_usePost) {

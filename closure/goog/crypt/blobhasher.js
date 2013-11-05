@@ -46,6 +46,7 @@ goog.require('goog.log');
  * @param {number=} opt_blockSize Processing block size.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.crypt.BlobHasher = function(hashFn, opt_blockSize) {
   goog.base(this);

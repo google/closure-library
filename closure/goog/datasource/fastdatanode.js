@@ -407,6 +407,7 @@ goog.ds.FastDataNode.prototype.removeNode = function(name) {
  * @param {goog.ds.DataNode=} opt_parent Parent of this data node.
  * @extends {goog.ds.AbstractFastDataNode}
  * @constructor
+ * @final
  */
 goog.ds.PrimitiveFastDataNode = function(value, dataName, opt_parent) {
   this.value_ = value;
@@ -512,6 +513,7 @@ goog.ds.PrimitiveFastDataNode.prototype.getJsObject = function() {
  * @param {goog.ds.DataNode=} opt_parent parent of this node.
  * @extends {goog.ds.AbstractFastDataNode}
  * @constructor
+ * @final
  */
 // TODO(arv): Use interfaces when available.  This implements DataNodeList
 // as well.

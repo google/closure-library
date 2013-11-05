@@ -335,6 +335,7 @@ goog.debug.ErrorHandler.prototype.disposeInternal = function() {
  * @param {*} cause The error thrown by the entry point.
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
   var message = goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +

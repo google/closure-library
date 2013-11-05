@@ -54,6 +54,7 @@ goog.require('goog.ds.logger');
  *
  * @extends {goog.ds.JsDataSource}
  * @constructor
+ * @final
  */
 goog.ds.JsonDataSource = function(uri, name, opt_callbackParamName) {
   goog.ds.JsDataSource.call(this, null, name, null);

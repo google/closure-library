@@ -37,6 +37,7 @@ goog.require('goog.debug.Error');
  * @param {string=} opt_message Additional message.
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.db.Error = function(error, context, opt_message) {
   var errorCode = null;
@@ -89,6 +90,7 @@ goog.db.Error.prototype.getName = function()  {
  *
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.db.Error.VersionChangeBlockedError = function() {
   goog.base(this, 'Version change blocked');

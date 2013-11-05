@@ -40,6 +40,7 @@ goog.require('goog.structs.Map');
  * Create a DataManger
  * @extends {goog.ds.DataNode}
  * @constructor
+ * @final
  */
 goog.ds.DataManager = function() {
   this.dataSources_ = new goog.ds.BasicNodeList();

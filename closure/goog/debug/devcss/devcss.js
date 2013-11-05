@@ -42,6 +42,7 @@ goog.require('goog.userAgent');
  *     If not passed in, will be determined using goog.userAgent.
  * @throws {Error} When userAgent detection fails.
  * @constructor
+ * @final
  */
 goog.debug.DevCss = function(opt_userAgent, opt_userAgentVersion) {
   if (!opt_userAgent) {

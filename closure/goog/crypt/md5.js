@@ -42,6 +42,7 @@ goog.require('goog.crypt.Hash');
  * MD5 cryptographic hash constructor.
  * @constructor
  * @extends {goog.crypt.Hash}
+ * @final
  */
 goog.crypt.Md5 = function() {
   goog.base(this);

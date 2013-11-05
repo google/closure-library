@@ -287,6 +287,7 @@ goog.debug.HtmlFormatter.prototype.formatRecord = function(logRecord) {
  * @param {string=} opt_prefix The prefix to place before text records.
  * @constructor
  * @extends {goog.debug.Formatter}
+ * @final
  */
 goog.debug.TextFormatter = function(opt_prefix) {
   goog.debug.Formatter.call(this, opt_prefix);

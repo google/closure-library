@@ -40,6 +40,7 @@ goog.require('goog.crypt.Hash');
  * The properties declared here are discussed in the above algorithm document.
  * @constructor
  * @extends {goog.crypt.Hash}
+ * @final
  */
 goog.crypt.Sha1 = function() {
   goog.base(this);

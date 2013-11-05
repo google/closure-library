@@ -460,6 +460,7 @@ goog.ds.BasicNodeList.prototype.indexOf = function(name) {
  * Immulatable empty node list
  * @extends {goog.ds.BasicNodeList}
  * @constructor
+ * @final
  */
 
 goog.ds.EmptyNodeList = function() {
@@ -645,6 +646,7 @@ goog.ds.Util.makeReferenceNode = function(node, name) {
   /**
    * @constructor
    * @extends {goog.ds.DataNode}
+   * @final
    */
   var nodeCreator = function() {};
   nodeCreator.prototype = node;

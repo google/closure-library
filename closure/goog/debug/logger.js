@@ -47,6 +47,7 @@ goog.require('goog.debug.LogRecord');
  *
  * @constructor
  * @param {string} name The name of the Logger.
+ * @final
  */
 goog.debug.Logger = function(name) {
   /**
@@ -143,6 +144,7 @@ if (!goog.debug.Logger.ENABLE_HIERARCHY) {
  * @param {string} name The name of the level.
  * @param {number} value The numeric value of the level.
  * @constructor
+ * @final
  */
 goog.debug.Logger.Level = function(name, value) {
   /**

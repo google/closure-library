@@ -39,6 +39,7 @@ goog.require('goog.events.EventTarget');
  * @param {!goog.db.IndexedDb} db The database that this transaction modifies.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.db.Transaction = function(tx, db) {
   goog.base(this);

@@ -35,6 +35,7 @@ goog.require('goog.ui.Component');
  * @param {goog.dom.DomHelper=} opt_domHelper An optional dom helper.
  * @constructor
  * @extends {goog.ui.Component}
+ * @final
  */
 goog.debug.FpsDisplay = function(opt_domHelper) {
   goog.base(this, opt_domHelper);

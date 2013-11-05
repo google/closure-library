@@ -52,6 +52,7 @@ goog.require('goog.functions');
  * @param {Object=} opt_handler The object scope to invoke the function in.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.async.AnimationDelay = function(listener, opt_window, opt_handler) {
   goog.base(this);

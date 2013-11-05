@@ -38,6 +38,7 @@ goog.require('goog.crypt.Hash');
  * @param {number=} opt_blockSize Optional. The block size {@code hasher} uses.
  *     If not specified, 16.
  * @extends {goog.crypt.Hash}
+ * @final
  */
 goog.crypt.Hmac = function(hasher, key, opt_blockSize) {
   goog.base(this);
