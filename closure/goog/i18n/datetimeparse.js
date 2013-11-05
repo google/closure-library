@@ -126,6 +126,7 @@ goog.require('goog.i18n.DateTimeSymbols');
  * Construct a DateTimeParse based on current locale.
  * @param {string|number} pattern pattern specification or pattern type.
  * @constructor
+ * @final
  */
 goog.i18n.DateTimeParse = function(pattern) {
   this.patternParts_ = [];

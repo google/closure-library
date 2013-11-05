@@ -94,6 +94,7 @@ goog.require('goog.string');
  * Construct a DateTimeFormat object based on current locale.
  * @constructor
  * @param {string|number} pattern pattern specification or pattern type.
+ * @final
  */
 goog.i18n.DateTimeFormat = function(pattern) {
   goog.asserts.assert(goog.isDef(pattern), 'Pattern must be defined');

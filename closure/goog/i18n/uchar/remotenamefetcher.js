@@ -50,6 +50,7 @@ goog.require('goog.structs.Map');
  * @constructor
  * @implements {goog.i18n.uChar.NameFetcher}
  * @extends {goog.Disposable}
+ * @final
  */
 goog.i18n.uChar.RemoteNameFetcher = function(dataSourceUri) {
   goog.base(this);

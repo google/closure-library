@@ -80,6 +80,7 @@ goog.require('goog.string');
  *     matches the context, so that the DOM structure of the output does not
  *     depend on the combination of directionalities. Default: false.
  * @constructor
+ * @final
  */
 goog.i18n.BidiFormatter = function(contextDir, opt_alwaysSpan) {
   /**

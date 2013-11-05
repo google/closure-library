@@ -74,6 +74,7 @@ goog.require('goog.i18n.pluralRules');
  * @param {string} pattern The pattern we parse and apply positional parameters
  *     to.
  * @constructor
+ * @final
  */
 goog.i18n.MessageFormat = function(pattern) {
   /**
