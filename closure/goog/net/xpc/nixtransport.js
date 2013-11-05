@@ -33,9 +33,12 @@
 
 goog.provide('goog.net.xpc.NixTransport');
 
+goog.require('goog.log');
 goog.require('goog.net.xpc');
+goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
+goog.require('goog.net.xpc.TransportTypes');
 goog.require('goog.reflect');
 
 

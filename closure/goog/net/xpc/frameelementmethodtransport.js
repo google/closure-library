@@ -23,9 +23,11 @@
 
 goog.provide('goog.net.xpc.FrameElementMethodTransport');
 
+goog.require('goog.log');
 goog.require('goog.net.xpc');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
+goog.require('goog.net.xpc.TransportTypes');
 
 
 

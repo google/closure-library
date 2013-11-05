@@ -49,7 +49,6 @@ goog.provide('goog.net.xpc.UriCfgFields');
 goog.require('goog.log');
 
 
-
 /**
  * Enum used to identify transport types.
  * @enum {number}
