@@ -165,9 +165,9 @@ goog.events.listenerCountEstimate_ = 0;
  * @param {EventTarget|goog.events.Listenable} src The node to listen
  *     to events on.
  * @param {string|Array.<string>} type Event type or array of event types.
- * @param {Function|Object} listener Callback method, or an object
- *     with a handleEvent function. WARNING: passing an Object is now
- *     softly deprecated.
+ * @param {function(?):?|{handleEvent:function(?):?}|null} listener Callback
+ *     method, or an object with a handleEvent function. WARNING: passing an
+ *     Object is now softly deprecated.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
  * @param {Object=} opt_handler Element in whose scope to call the listener.
@@ -310,7 +310,8 @@ goog.events.getProxy = function() {
  * @param {EventTarget|goog.events.Listenable} src The node to listen
  *     to events on.
  * @param {string|Array.<string>} type Event type or array of event types.
- * @param {Function|Object} listener Callback method.
+ * @param {function(?):?|{handleEvent:function(?):?}|null} listener Callback
+ *     method.
  * @param {boolean=} opt_capt Fire in capture phase?.
  * @param {Object=} opt_handler Element in whose scope to call the listener.
  * @return {goog.events.Key} Unique key for the listener.
@@ -343,8 +344,8 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
  * @param {EventTarget|goog.events.Listenable} src The target to
  *     listen to events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
- * @param {Function|Object} listener Callback method, or an object with a
- *     handleEvent function.
+ * @param {function(?):?|{handleEvent:function(?):?}|null} listener Callback
+ *     method, or an object with a handleEvent function.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
  * @param {Object=} opt_handler Element in whose scope to call the listener.
@@ -362,7 +363,8 @@ goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt,
  *     listening to events on.
  * @param {string|Array.<string>} type The name of the event without the 'on'
  *     prefix.
- * @param {Function|Object} listener The listener function to remove.
+ * @param {function(?):?|{handleEvent:function(?):?}|null} listener The
+ *     listener function to remove.
  * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
  *     whether the listener is fired during the capture or bubble phase of the
  *     event.
@@ -466,7 +468,8 @@ goog.events.unlistenByKey = function(key) {
  * @param {EventTarget|goog.events.Listenable} src The target to stop
  *     listening to events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
- * @param {Function|Object} listener The listener function to remove.
+ * @param {function(?):?|{handleEvent:function(?):?}|null} listener The
+ *     listener function to remove.
  * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
  *     whether the listener is fired during the capture or bubble phase of the
  *     event.
@@ -570,7 +573,8 @@ goog.events.getListeners = function(obj, type, capture) {
  * @param {EventTarget|goog.events.Listenable} src The target from
  *     which to get listeners.
  * @param {?string} type The name of the event without the 'on' prefix.
- * @param {Function|Object} listener The listener function to get.
+ * @param {function(?):?|{handleEvent:function(?):?}|null} listener The
+ *     listener function to get.
  * @param {boolean=} opt_capt In DOM-compliant browsers, this determines
  *                            whether the listener is fired during the
  *                            capture or bubble phase of the event.

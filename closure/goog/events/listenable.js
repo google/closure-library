@@ -313,8 +313,7 @@ goog.events.ListenableKey.prototype.type;
 
 /**
  * The listener function.
- * TODO(user): Narrow the type if possible.
- * @type {Function|Object}
+ * @type {function(?):?|{handleEvent:function(?):?}|null}
  */
 goog.events.ListenableKey.prototype.listener;
 
