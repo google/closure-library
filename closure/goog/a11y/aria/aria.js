@@ -278,7 +278,10 @@ goog.a11y.aria.getStateBoolean = function(element, stateName) {
   goog.asserts.assert(
       goog.isBoolean(attr) || attr == null || attr == 'true' ||
           attr == 'false');
-  return attr == null ? null : Boolean(attr);
+  if (attr == null) {
+    return attr;
+  }
+  return goog.isBoolean(attr) ? attr : attr == 'true';
 };
 
 

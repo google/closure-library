@@ -195,6 +195,11 @@ Author:  attila@google.com (Attila Bodis)
     }
 
     function testGetStateBoolean() {
+      assertNull(ARIA.getStateBoolean(someDiv, State.MULTILINE));
+
+      ARIA.setState(someDiv, State.MULTILINE, false);
+      assertFalse(ARIA.getStateBoolean(someDiv, State.MULTILINE));
+
       ARIA.setState(someDiv, State.MULTILINE, true);
       ARIA.setState(someSpan, State.MULTILINE,
           ARIA.getStateBoolean(someDiv, State.MULTILINE));
