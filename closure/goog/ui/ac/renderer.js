@@ -232,6 +232,14 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
   this.menuFadeDuration_ = 0;
 
   /**
+   * Whether we should limit the dropdown from extending past the bottom of the
+   * screen and instead show a scrollbar on the dropdown.
+   * @type {boolean}
+   * @private
+   */
+  this.showScrollbarsIfTooLarge_ = false;
+
+  /**
    * Animation in progress, if any.
    * @type {goog.fx.Animation|undefined}
    */
@@ -315,6 +323,16 @@ goog.ui.ac.Renderer.prototype.setRightAlign = function(align) {
  */
 goog.ui.ac.Renderer.prototype.getRightAlign = function() {
   return this.rightAlign_;
+};
+
+
+/**
+ * @param {boolean} show Whether we should limit the dropdown from extending
+ *     past the bottom of the screen and instead show a scrollbar on the
+ *     dropdown.
+ */
+goog.ui.ac.Renderer.prototype.setShowScrollbarsIfTooLarge = function(show) {
+  this.showScrollbarsIfTooLarge_ = show;
 };
 
 
@@ -549,6 +567,11 @@ goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
   if (!this.element_) {
     // Make element and add it to the parent
     var el = this.dom_.createDom('div', {style: 'display:none'});
+    if (this.showScrollbarsIfTooLarge_) {
+      // Make sure that the dropdown will get scrollbars if it isn't large
+      // enough to show all rows.
+      el.style.overflowY = 'auto';
+    }
     this.element_ = el;
     this.setMenuClasses_(el);
     goog.a11y.aria.setRole(el, goog.a11y.aria.Role.LISTBOX);
@@ -650,10 +673,23 @@ goog.ui.ac.Renderer.prototype.reposition = function() {
     var anchorElement = this.anchorElement_ || this.target_;
     var anchorCorner = this.getAnchorCorner();
 
+    var overflowMode = goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN;
+    if (this.showScrollbarsIfTooLarge_) {
+      // positionAtAnchor will set the height of this.element_ when it runs
+      // (because of RESIZE_HEIGHT), and it will never increase it relative to
+      // its current value when it runs again. But if the user scrolls their
+      // page, then we might actually want a bigger height when the dropdown is
+      // displayed next time. So we clear the height before calling
+      // positionAtAnchor, so it is free to set the height as large as it
+      // chooses.
+      this.element_.style.height = '';
+      overflowMode |= goog.positioning.Overflow.RESIZE_HEIGHT;
+    }
+
     goog.positioning.positionAtAnchor(
         anchorElement, anchorCorner,
         this.element_, goog.positioning.flipCornerVertical(anchorCorner),
-        null, null, goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN);
+        null, null, overflowMode);
 
     if (this.topAlign_) {
       // This flickers, but is better than the alternative of positioning

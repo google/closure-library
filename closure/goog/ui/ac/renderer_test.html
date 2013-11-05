@@ -11,6 +11,14 @@ See the COPYING file for details.
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Closure Unit Tests - goog.ui.ac.Renderer</title>
+<style type="text/css">
+#viewport {
+  width: 400px;
+  height: 200px;
+  overflow: hidden; /* Suppress scroll bars to get consistent cross-browser resizing */
+  position: relative;
+}
+</style>
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.dom');
@@ -34,11 +42,17 @@ See the COPYING file for details.
 <body>
 <div id="someElement">Click target</div>
 <div id="target">Target</div>
+<div id="viewport">
+  Parent (viewport) element for some tests
+  <div id="viewportTarget">Target for viewport tests</div>
+</div>
 <script>
   var renderer;
   var rendRows = [];
   var someElement = goog.dom.getElement('someElement');
   var target = goog.dom.getElement('target');
+  var viewport = goog.dom.getElement('viewport');
+  var viewportTarget = goog.dom.getElement('viewportTarget');
   var propertyReplacer = new goog.testing.PropertyReplacer();
 
 
@@ -549,6 +563,7 @@ See the COPYING file for details.
     renderer.redraw();
 
     var rendererOffset = goog.style.getPageOffset(renderer.getElement());
+    var rendererSize = goog.style.getSize(renderer.getElement());
     var targetOffset  = goog.style.getPageOffset(target);
     var targetSize = goog.style.getSize(target);
 
@@ -578,6 +593,37 @@ See the COPYING file for details.
         1);
     assertRoughlyEquals(
         targetOffset.y + targetSize.height, rendererOffset.y, 1);
+  }
+
+  function testRepositionResizeHeight() {
+    renderer = new goog.ui.ac.Renderer(viewport);
+    renderer.renderRows(rendRows, '', viewportTarget);
+    renderer.setAutoPosition(true);
+    renderer.setShowScrollbarsIfTooLarge(true);
+
+    // Stick a huge row in the dropdown element, to make sure it won't fit in the viewport.
+    var hugeRow = goog.dom.createDom('div', {style:'height:1000px'});
+    goog.dom.appendChild(renderer.getElement(), hugeRow);
+
+    renderer.reposition();
+
+    var rendererOffset = goog.style.getPageOffset(renderer.getElement());
+    var rendererSize = goog.style.getSize(renderer.getElement());
+    var viewportOffset = goog.style.getPageOffset(viewport);
+    var viewportSize = goog.style.getSize(viewport);
+
+    assertEquals(viewportOffset.y + viewportSize.height, rendererSize.height + rendererOffset.y);
+
+    // Remove the huge row, and make sure that the dropdown element gets shrunk.
+    renderer.getElement().removeChild(hugeRow);
+    renderer.reposition();
+
+    rendererOffset = goog.style.getPageOffset(renderer.getElement());
+    rendererSize = goog.style.getSize(renderer.getElement());
+    viewportOffset = goog.style.getPageOffset(viewport);
+    viewportSize = goog.style.getSize(viewport);
+
+    assertTrue((rendererSize.height + rendererOffset.y) < (viewportOffset.y + viewportSize.height));
   }
 
   function testHiliteEvent() {
