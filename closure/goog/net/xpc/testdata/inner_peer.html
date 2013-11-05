@@ -89,6 +89,9 @@ logger.addHandler(function(logRecord) {
   goog.dom.appendChild(debugDiv, msgElm);
 });
 
+if (parent && parent.iframeLoadHandler) {
+  parent.iframeLoadHandler();
+}
 </script>
 
 </body>

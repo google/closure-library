@@ -60,7 +60,8 @@ goog.net.xpc.TransportTypes = {
   IFRAME_RELAY: 3,
   IFRAME_POLLING: 4,
   FLASH: 5,
-  NIX: 6
+  NIX: 6,
+  DIRECT: 7
 };
 
 
@@ -75,7 +76,8 @@ goog.net.xpc.TransportNames = {
   '3': 'IframeRelayTransport',
   '4': 'IframePollingTransport',
   '5': 'FlashTransport',
-  '6': 'NixTransport'
+  '6': 'NixTransport',
+  '7': 'DirectTransport'
 };
 
 

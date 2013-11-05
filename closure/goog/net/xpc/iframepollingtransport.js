@@ -286,7 +286,7 @@ goog.net.xpc.IframePollingTransport.prototype.maybeInnerPeerReconnect_ =
 
   goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
       'Inner peer reconnect triggered.');
-  this.channel_.name = goog.net.xpc.getRandomString(10);
+  this.channel_.updateChannelNameAndCatalog(goog.net.xpc.getRandomString(10));
   goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
       'switching channels: ' + this.channel_.name);
   this.deconstructSenderFrames_();

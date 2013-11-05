@@ -336,13 +336,7 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
       // navigation (particularly Firefox 1.5+). We can trust the outer peer,
       // since we only accept postMessage messages from the same hostname that
       // originally setup the channel.
-      goog.log.fine(goog.net.xpc.logger,
-          'changing channel name to ' + channelName);
-      staleChannel.name = channelName;
-      // Remove old stale pointer to channel.
-      delete goog.net.xpc.channels[staleChannelName];
-      // Create fresh pointer to channel.
-      goog.net.xpc.channels[channelName] = staleChannel;
+      staleChannel.updateChannelNameAndCatalog(channelName);
       staleChannel.xpcDeliver(service, payload);
       return true;
     }

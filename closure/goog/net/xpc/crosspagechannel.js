@@ -21,24 +21,31 @@
 
 goog.provide('goog.net.xpc.CrossPageChannel');
 
-goog.require('goog.Disposable');
 goog.require('goog.Uri');
 goog.require('goog.async.Deferred');
 goog.require('goog.async.Delay');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.json');
+goog.require('goog.log');
 goog.require('goog.messaging.AbstractChannel');
 goog.require('goog.net.xpc');
+goog.require('goog.net.xpc.CfgFields');
+goog.require('goog.net.xpc.ChannelStates');
 goog.require('goog.net.xpc.CrossPageChannelRole');
+goog.require('goog.net.xpc.DirectTransport');
 goog.require('goog.net.xpc.FrameElementMethodTransport');
 goog.require('goog.net.xpc.IframePollingTransport');
 goog.require('goog.net.xpc.IframeRelayTransport');
 goog.require('goog.net.xpc.NativeMessagingTransport');
 goog.require('goog.net.xpc.NixTransport');
-goog.require('goog.net.xpc.Transport');
+goog.require('goog.net.xpc.TransportTypes');
+goog.require('goog.net.xpc.UriCfgFields');
+goog.require('goog.string');
+goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
 
 
@@ -70,7 +77,9 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
   this.cfg_ = cfg;
 
   /**
-   * The name of the channel.
+   * The name of the channel. Please use
+   * <code>updateChannelNameAndCatalog</code> to change this from the transports
+   * vs changing the property directly.
    * @type {string}
    */
   this.name = this.cfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] ||
@@ -310,20 +319,23 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
     return;
   }
 
-  if (!this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
-    this.cfg_[goog.net.xpc.CfgFields.TRANSPORT] =
+  // TODO(user): Use goog.scope.
+  var CfgFields = goog.net.xpc.CfgFields;
+
+  if (!this.cfg_[CfgFields.TRANSPORT]) {
+    this.cfg_[CfgFields.TRANSPORT] =
         this.determineTransportType_();
   }
 
-  switch (this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
+  switch (this.cfg_[CfgFields.TRANSPORT]) {
     case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
       var protocolVersion = this.cfg_[
-          goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] || 2;
+          CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] || 2;
       this.transport_ = new goog.net.xpc.NativeMessagingTransport(
           this,
-          this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME],
+          this.cfg_[CfgFields.PEER_HOSTNAME],
           this.domHelper_,
-          !!this.cfg_[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE],
+          !!this.cfg_[CfgFields.ONE_SIDED_HANDSHAKE],
           protocolVersion);
       break;
     case goog.net.xpc.TransportTypes.NIX:
@@ -340,6 +352,19 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
     case goog.net.xpc.TransportTypes.IFRAME_POLLING:
       this.transport_ =
           new goog.net.xpc.IframePollingTransport(this, this.domHelper_);
+      break;
+    case goog.net.xpc.TransportTypes.DIRECT:
+      if (this.peerWindowObject_ &&
+          goog.net.xpc.DirectTransport.isSupported(/** @type {!Window} */ (
+              this.peerWindowObject_))) {
+        this.transport_ =
+            new goog.net.xpc.DirectTransport(this, this.domHelper_);
+      } else {
+        goog.log.info(
+            goog.net.xpc.logger,
+            'DirectTransport not supported for this window, peer window in' +
+            ' different security context or not set yet.');
+      }
       break;
   }
 
@@ -769,6 +794,20 @@ goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
 
 
 /**
+ * Sets the channel name. Note, this doesn't establish a unique channel to
+ * communicate on.
+ * @param {string} name The new channel name.
+ */
+goog.net.xpc.CrossPageChannel.prototype.updateChannelNameAndCatalog = function(
+    name) {
+  goog.log.fine(goog.net.xpc.logger, 'changing channel name to ' + name);
+  delete goog.net.xpc.channels[this.name];
+  this.name = name;
+  goog.net.xpc.channels[name] = this;
+};
+
+
+/**
  * Returns whether an incoming message with the given origin is acceptable.
  * If an incoming request comes with a specified (non-empty) origin, and the
  * PEER_HOSTNAME config parameter has also been provided, the two must match,
@@ -808,4 +847,3 @@ goog.net.xpc.CrossPageChannel.disposeAll_ = function() {
     goog.dispose(goog.net.xpc.channels[name]);
   }
 };
-
