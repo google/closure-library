@@ -575,6 +575,8 @@ goog.addDependency('storage/mechanism/prefixedmechanism.js', ['goog.storage.mech
 goog.addDependency('storage/richstorage.js', ['goog.storage.RichStorage', 'goog.storage.RichStorage.Wrapper'], ['goog.storage.ErrorCode', 'goog.storage.Storage', 'goog.storage.mechanism.Mechanism']);
 goog.addDependency('storage/storage.js', ['goog.storage.Storage'], ['goog.json', 'goog.json.Serializer', 'goog.storage.ErrorCode']);
 goog.addDependency('storage/storage_test.js', ['goog.storage.storage_test'], ['goog.storage.Storage', 'goog.structs.Map', 'goog.testing.asserts']);
+goog.addDependency('string/const.js', ['goog.string.Const'], ['goog.asserts', 'goog.string.TypedString']);
+goog.addDependency('string/const_test.js', ['goog.string.constTest'], ['goog.string.Const', 'goog.testing.jsunit']);
 goog.addDependency('string/linkify.js', ['goog.string.linkify'], ['goog.string']);
 goog.addDependency('string/newlines.js', ['goog.string.newlines', 'goog.string.newlines.Line'], ['goog.array']);
 goog.addDependency('string/newlines_test.js', ['goog.string.newlinesTest'], ['goog.string.newlines', 'goog.testing.jsunit']);
