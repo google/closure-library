@@ -36,6 +36,7 @@ goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
+goog.require('goog.uri.utils.StandardQueryParam');
 goog.require('goog.userAgent');
 
 
@@ -47,9 +48,9 @@ goog.require('goog.userAgent');
  *     The channel that owns this request.
  * @param {goog.labs.net.webChannel.WebChannelDebug} channelDebug A
  *     WebChannelDebug to use for logging.
- * @param {string=} opt_sessionId  The session id for the channel.
- * @param {string|number=} opt_requestId  The request id for this request.
- * @param {number=} opt_retryId  The retry id for this request.
+ * @param {string=} opt_sessionId The session id for the channel.
+ * @param {string|number=} opt_requestId The request id for this request.
+ * @param {number=} opt_retryId The retry id for this request.
  * @constructor
  * @struct
  * @final
@@ -446,9 +447,12 @@ ChannelRequest.prototype.xmlHttpPost = function(uri, postData, decodeChunks) {
  *     won't cause it to be added to the URL.
  * @param {boolean=} opt_noClose   Whether to request that the tcp/ip connection
  *     should be closed.
+ * @param {boolean=} opt_duplicateRandom   Whether to duplicate the randomness
+ *     parameter which is only required for the initial handshake. This allows
+ *     a server to break compatibility with old version clients.
  */
 ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
-    hostPrefix, opt_noClose) {
+    hostPrefix, opt_noClose, opt_duplicateRandom) {
   this.type_ = ChannelRequest.Type_.XML_HTTP;
   this.baseUri_ = uri.clone().makeUnique();
   this.postData_ = null;
@@ -456,6 +460,16 @@ ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
   if (opt_noClose) {
     this.sendClose_ = false;
   }
+
+  // TODO(user): clean this up once we phase out all BrowserChannel clients,
+  if (opt_duplicateRandom) {
+    var randomParam = this.baseUri_.getParameterValue(
+        goog.uri.utils.StandardQueryParam.RANDOM);
+    this.baseUri_.setParameterValue(  // baseUri_ reusable for future requests
+        goog.uri.utils.StandardQueryParam.RANDOM + '1',  // 'zx1'
+        randomParam);
+  }
+
   this.sendXmlHttp_(hostPrefix);
 };
 

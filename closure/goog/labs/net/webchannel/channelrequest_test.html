@@ -283,6 +283,17 @@ function checkReachabilityEvents(reqMade, reqSucceeded, reqFail, backChannel) {
   assertEquals(backChannel,
       reachabilityEvents[Reachability.BACK_CHANNEL_ACTIVITY] || 0);
 }
+
+function testDuplicatedRandomParams() {
+  createChannelRequest();
+  channelRequest.xmlHttpGet(new goog.Uri('some_uri'), true, null, true,
+      true /* opt_duplicateRandom */);
+  var z = xhrIo.getLastUri().getParameterValue('zx');
+  var z1 = xhrIo.getLastUri().getParameterValue('zx1');
+  assertTrue(goog.isDefAndNotNull(z));
+  assertTrue(goog.isDefAndNotNull(z1));
+  assertEquals(z1, z);
+}
 </script>
 </body>
 </html>
