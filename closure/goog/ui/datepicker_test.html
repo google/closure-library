@@ -176,6 +176,7 @@ See the COPYING file for details.
     picker.enterDocument();
     var selectEvents = 0;
     var changeEvents = 0;
+    var changeActiveMonthEvents = 0;
     goog.events.listen(picker, goog.ui.DatePicker.Events.SELECT,
         function() {
           selectEvents++;
@@ -184,11 +185,17 @@ See the COPYING file for details.
         function() {
           changeEvents++;
         });
+    goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
+        function() {
+          changeActiveMonthEvents++;
+        });
 
     // Set date.
     picker.setDate(new Date(2010, 1, 26));
     assertEquals('no select event dispatched', 1, selectEvents);
     assertEquals('no change event dispatched', 1, changeEvents);
+    assertEquals('no change active month event dispatched',
+        1, changeActiveMonthEvents);
     assertTrue('date is set',
         new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
 
@@ -196,17 +203,66 @@ See the COPYING file for details.
     picker.setDate(new Date(2010, 1, 26));
     assertEquals('1 select event dispatched', 2, selectEvents);
     assertEquals('no change event dispatched', 1, changeEvents);
+    assertEquals('no change active month event dispatched',
+        1, changeActiveMonthEvents);
 
     // Set date to different date.
     picker.setDate(new Date(2010, 1, 27));
     assertEquals('another select event dispatched', 3, selectEvents);
     assertEquals('1 change event dispatched', 2, changeEvents);
+    assertEquals('2 change active month events dispatched',
+        1, changeActiveMonthEvents);
+
+    // Set date to a date in a different month.
+    picker.setDate(new Date(2010, 2, 27));
+    assertEquals('another select event dispatched', 4, selectEvents);
+    assertEquals('another change event dispatched', 3, changeEvents);
+    assertEquals('3 change active month event dispatched',
+        2, changeActiveMonthEvents);
 
     // Set date to none.
     picker.setDate(null);
-    assertEquals('another select event dispatched', 4, selectEvents);
-    assertEquals('another change event dispatched', 3, changeEvents);
+    assertEquals('another select event dispatched', 5, selectEvents);
+    assertEquals('another change event dispatched', 4, changeEvents);
     assertNull('date cleared', picker.getDate());
+  }
+
+  function testChangeActiveMonth() {
+    picker = new goog.ui.DatePicker();
+    var changeActiveMonthEvents = 0;
+    goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
+    function() {
+      changeActiveMonthEvents++;
+    });
+
+    // Set date.
+    picker.setDate(new Date(2010, 1, 26));
+    assertEquals('no change active month event dispatched',
+        1, changeActiveMonthEvents);
+    assertTrue('date is set',
+        new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
+
+    // Change to next month.
+    picker.nextMonth();
+    assertEquals('1 change active month event dispatched',
+        2, changeActiveMonthEvents);
+    assertTrue('date should still be the same',
+        new goog.date.Date(2010, 1, 26).equals(picker.getDate()));
+
+    // Change to next year.
+    picker.nextYear();
+    assertEquals('2 change active month events dispatched',
+        3, changeActiveMonthEvents);
+
+    // Change to previous month.
+    picker.previousMonth();
+    assertEquals('3 change active month events dispatched',
+        4, changeActiveMonthEvents);
+
+    // Change to previous year.
+    picker.previousYear();
+    assertEquals('4 change active month events dispatched',
+        5, changeActiveMonthEvents);
   }
 
   function testUserSelectableDates() {
