@@ -42,6 +42,7 @@ goog.require('goog.ui.AbstractSpellChecker');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.AbstractSpellChecker}
+ * @final
  */
 goog.ui.RichTextSpellChecker = function(handler, opt_domHelper) {
   goog.ui.AbstractSpellChecker.call(this, handler, opt_domHelper);

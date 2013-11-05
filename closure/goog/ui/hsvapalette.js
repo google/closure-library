@@ -46,6 +46,7 @@ goog.require('goog.ui.HsvPalette');
  *     'goog-hsva-palette').
  * @extends {goog.ui.HsvPalette}
  * @constructor
+ * @final
  */
 goog.ui.HsvaPalette = function(opt_domHelper, opt_color, opt_alpha, opt_class) {
   goog.base(this, opt_domHelper, opt_color, opt_class);

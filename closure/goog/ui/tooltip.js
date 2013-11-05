@@ -915,6 +915,7 @@ goog.ui.Tooltip.prototype.disposeInternal = function() {
  * @param {number=} opt_arg2 Top position.
  * @constructor
  * @extends {goog.positioning.ViewportPosition}
+ * @final
  */
 goog.ui.Tooltip.CursorTooltipPosition = function(arg1, opt_arg2) {
   goog.positioning.ViewportPosition.call(this, arg1, opt_arg2);

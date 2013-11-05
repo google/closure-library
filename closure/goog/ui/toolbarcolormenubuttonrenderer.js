@@ -31,6 +31,7 @@ goog.require('goog.ui.ToolbarMenuButtonRenderer');
  * Toolbar-style renderer for {@link goog.ui.ColorMenuButton}s.
  * @constructor
  * @extends {goog.ui.ToolbarMenuButtonRenderer}
+ * @final
  */
 goog.ui.ToolbarColorMenuButtonRenderer = function() {
   goog.ui.ToolbarMenuButtonRenderer.call(this);

@@ -47,6 +47,7 @@ goog.require('goog.ui.registry');
  *     Please use a simpler button renderer like css3buttonrenderer.
  * @constructor
  * @extends {goog.ui.MenuButtonRenderer}
+ * @final
  */
 goog.ui.ImagelessMenuButtonRenderer = function() {
   goog.ui.MenuButtonRenderer.call(this);

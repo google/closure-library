@@ -104,6 +104,7 @@ goog.require('goog.ui.media.MediaRenderer');
  *
  * @constructor
  * @extends {goog.ui.media.MediaRenderer}
+ * @final
  */
 goog.ui.media.Youtube = function() {
   goog.ui.media.MediaRenderer.call(this);
@@ -207,6 +208,7 @@ goog.ui.media.Youtube.prototype.getCssClass = function() {
  *     video.
  * @constructor
  * @extends {goog.ui.media.MediaModel}
+ * @final
  */
 goog.ui.media.YoutubeModel = function(videoId, opt_caption, opt_description) {
   goog.ui.media.MediaModel.call(

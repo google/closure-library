@@ -112,6 +112,7 @@ goog.require('goog.ui.ControlRenderer');
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Control}
+ * @final
  */
 goog.ui.media.Media = function(dataModel, opt_renderer, opt_domHelper) {
   goog.ui.Control.call(this, null, opt_renderer, opt_domHelper);

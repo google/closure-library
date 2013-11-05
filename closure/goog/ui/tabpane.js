@@ -662,6 +662,7 @@ goog.ui.TabPane.TabPage.prototype.setParent_ = function(tabPane, opt_index) {
  * @param {goog.ui.TabPane.TabPage} page Selected page in tab pane.
  * @extends {goog.events.Event}
  * @constructor
+ * @final
  */
 goog.ui.TabPaneEvent = function(type, target, page) {
   goog.events.Event.call(this, type, target);

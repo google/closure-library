@@ -437,6 +437,7 @@ goog.ui.HoverCard.prototype.setMaxSearchSteps = function(maxSearchSteps) {
  * @param {Object=} opt_data Optional data to be available in the TRIGGER event.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.ui.HoverCard.TriggerEvent = function(type, target, anchor, opt_data) {
   goog.events.Event.call(this, type, target);

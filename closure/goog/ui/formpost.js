@@ -33,6 +33,7 @@ goog.require('goog.ui.Component');
  * @constructor
  * @extends {goog.ui.Component}
  * @param {goog.dom.DomHelper=} opt_dom The DOM helper.
+ * @final
  */
 goog.ui.FormPost = function(opt_dom) {
   goog.ui.Component.call(this, opt_dom);

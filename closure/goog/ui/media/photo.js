@@ -72,6 +72,7 @@ goog.require('goog.ui.media.MediaRenderer');
  *
  * @constructor
  * @extends {goog.ui.media.MediaRenderer}
+ * @final
  */
 goog.ui.media.Photo = function() {
   goog.ui.media.MediaRenderer.call(this);

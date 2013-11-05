@@ -30,6 +30,7 @@ goog.require('goog.ui.ContainerRenderer');
  * goog.ui.ContainerRenderer}.
  * @constructor
  * @extends {goog.ui.ContainerRenderer}
+ * @final
  */
 goog.ui.MenuBarRenderer = function() {
   goog.base(this);

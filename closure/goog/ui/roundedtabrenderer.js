@@ -32,6 +32,7 @@ goog.require('goog.ui.registry');
  * Rounded corner tab renderer for {@link goog.ui.Tab}s.
  * @constructor
  * @extends {goog.ui.TabRenderer}
+ * @final
  */
 goog.ui.RoundedTabRenderer = function() {
   goog.ui.TabRenderer.call(this);

@@ -32,6 +32,7 @@ goog.require('goog.graphics.Stroke');
  * Users can extend this class to provide a custom color theme, and apply the
  * custom color theme by calling  {@link goog.ui.Gauge#setTheme}.
  * @constructor
+ * @final
  */
 goog.ui.GaugeTheme = function() {
 };

@@ -62,6 +62,7 @@ goog.require('goog.ui.Component');
  *
  * @deprecated Google Chart Server has been deprecated. See
  *     https://developers.google.com/chart/image/ for details.
+ * @final
  */
 goog.ui.ServerChart = function(type, opt_width, opt_height, opt_domHelper,
     opt_uri) {
@@ -1824,6 +1825,7 @@ goog.ui.ServerChart.Event = {
  * @constructor
  * @param {string} uri The overly-long URI string.
  * @extends {goog.events.Event}
+ * @final
  */
 goog.ui.ServerChart.UriTooLongEvent = function(uri) {
   goog.events.Event.call(this, goog.ui.ServerChart.Event.URI_TOO_LONG);

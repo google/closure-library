@@ -432,6 +432,7 @@ goog.ui.Zippy.prototype.dispatchActionEvent_ = function() {
  * @param {boolean} expanded Expanded state.
  * @extends {goog.events.Event}
  * @constructor
+ * @final
  */
 goog.ui.ZippyEvent = function(type, target, expanded) {
   goog.base(this, type, target);

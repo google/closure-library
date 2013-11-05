@@ -47,6 +47,7 @@ goog.require('goog.userAgent');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.AbstractSpellChecker}
+ * @final
  */
 goog.ui.PlainTextSpellChecker = function(handler, opt_domHelper) {
   goog.ui.AbstractSpellChecker.call(this, handler, opt_domHelper);

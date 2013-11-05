@@ -31,6 +31,7 @@ goog.require('goog.ui.ControlRenderer');
  * be no-ops.
  * @constructor
  * @extends {goog.ui.ControlRenderer}
+ * @final
  */
 goog.ui.TextareaRenderer = function() {
   goog.ui.ControlRenderer.call(this);

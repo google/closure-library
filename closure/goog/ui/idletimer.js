@@ -46,6 +46,7 @@ goog.require('goog.ui.ActivityMonitor');
  *     remains responsible for disposing of it.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.ui.IdleTimer = function(idleThreshold, opt_activityMonitor) {
   goog.events.EventTarget.call(this);

@@ -266,6 +266,7 @@ goog.ui.BaseRoundedPanel.prototype.getContentElement = function() {
  *     document we want to render in.
  * @extends {goog.ui.BaseRoundedPanel}
  * @constructor
+ * @final
  */
 goog.ui.CssRoundedPanel = function(radius,
                                    borderWidth,
@@ -391,6 +392,7 @@ goog.ui.CssRoundedPanel.prototype.getStyle_ = function(corner) {
  *     document we want to render in.
  * @extends {goog.ui.BaseRoundedPanel}
  * @constructor
+ * @final
  */
 goog.ui.GraphicsRoundedPanel = function(radius,
                                         borderWidth,

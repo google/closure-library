@@ -44,6 +44,7 @@ goog.require('goog.ui.registry');
  *
  * TODO(attila): Figure out how to better integrate this into the
  * goog.ui.Control state management framework.
+ * @final
  */
 goog.ui.TriStateMenuItem = function(content, opt_model, opt_domHelper,
     opt_renderer) {

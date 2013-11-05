@@ -24,6 +24,7 @@ goog.provide('goog.ui.IdGenerator');
 /**
  * Creates a new id generator.
  * @constructor
+ * @final
  */
 goog.ui.IdGenerator = function() {
 };

@@ -29,6 +29,7 @@ goog.require('goog.ui.ActivityMonitor');
  * the unit test.
  * @constructor
  * @extends {goog.ui.ActivityMonitor}
+ * @final
  */
 goog.ui.MockActivityMonitor = function() {
   goog.base(this);

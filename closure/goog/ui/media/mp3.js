@@ -82,6 +82,7 @@ goog.require('goog.ui.media.MediaRenderer');
  *
  * @constructor
  * @extends {goog.ui.media.MediaRenderer}
+ * @final
  */
 goog.ui.media.Mp3 = function() {
   goog.ui.media.MediaRenderer.call(this);

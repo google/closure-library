@@ -86,6 +86,7 @@ goog.require('goog.ui.media.MediaRenderer');
  *
  * @constructor
  * @extends {goog.ui.media.MediaRenderer}
+ * @final
  */
 goog.ui.media.GoogleVideo = function() {
   goog.ui.media.MediaRenderer.call(this);
@@ -178,6 +179,7 @@ goog.ui.media.GoogleVideo.prototype.getCssClass = function() {
  * @param {boolean=} opt_autoplay Whether to autoplay video.
  * @constructor
  * @extends {goog.ui.media.MediaModel}
+ * @final
  */
 goog.ui.media.GoogleVideoModel = function(videoId, opt_caption, opt_description,
                                           opt_autoplay) {

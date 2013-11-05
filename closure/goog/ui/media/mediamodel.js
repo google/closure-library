@@ -494,6 +494,7 @@ goog.ui.media.MediaModel.prototype.setSubTitles = function(subtitles) {
  * @param {string} url The URL of the thumbnail's image.
  * @param {goog.math.Size=} opt_size The size of the thumbnail's image if known.
  * @constructor
+ * @final
  */
 goog.ui.media.MediaModel.Thumbnail = function(url, opt_size) {
   /**
@@ -562,6 +563,7 @@ goog.ui.media.MediaModel.Thumbnail.prototype.setSize = function(size) {
  * @param {Object=} opt_vars Optional map of arguments to the player.
  * @param {goog.math.Size=} opt_size The size of the player if known.
  * @constructor
+ * @final
  */
 goog.ui.media.MediaModel.Player = function(url, opt_vars, opt_size) {
   /**
@@ -659,6 +661,7 @@ goog.ui.media.MediaModel.Player.prototype.setSize = function(size) {
  * @param {string=} opt_label The human readable label that can be displayed in
  *     end user applications.
  * @constructor
+ * @final
  */
 goog.ui.media.MediaModel.Category = function(scheme, value, opt_label) {
   /**
@@ -757,6 +760,7 @@ goog.ui.media.MediaModel.Category.prototype.setLabel = function(label) {
  * @param {goog.ui.media.MediaModel.Credit.Scheme=} opt_scheme The URI that
  *     identifies the role scheme.
  * @constructor
+ * @final
  */
 goog.ui.media.MediaModel.Credit = function(value, opt_role, opt_scheme) {
   /**
@@ -875,6 +879,7 @@ goog.ui.media.MediaModel.Credit.prototype.setScheme = function(scheme) {
  * @param {string} lang An RFC 3066 language.
  * @param {string} type The MIME type of the URI.
  * @constructor
+ * @final
  */
 goog.ui.media.MediaModel.SubTitle = function(href, lang, type) {
   /**

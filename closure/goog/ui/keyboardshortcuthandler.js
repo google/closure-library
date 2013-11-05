@@ -1004,6 +1004,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
  *     event originated from.
  * @extends {goog.events.Event}
  * @constructor
+ * @final
  */
 goog.ui.KeyboardShortcutEvent = function(type, identifier, target) {
   goog.events.Event.call(this, type, target);
