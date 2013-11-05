@@ -13,6 +13,9 @@ See the COPYING file for details.
   <script>
     goog.require('goog.a11y.aria');
     goog.require('goog.dom');
+    goog.require('goog.events.EventType');
+    goog.require('goog.events.KeyCodes');
+    goog.require('goog.testing.events.Event');
     goog.require('goog.testing.jsunit');
     goog.require('goog.testing.recordFunction');
     goog.require('goog.ui.Container');
@@ -129,6 +132,21 @@ See the COPYING file for details.
           goog.ui.Component.EventType.UNHIGHLIGHT, events[0].type);
       assertEquals('Event should be fired for node[1] cell',
           renderer.getCellForItem(nodes[1]), targetElements[0]);
+    }
+
+    function testHandleKeyEventLoops() {
+      palette.setHighlightedIndex(0);
+      var createKeyEvent = function(keyCode) {
+        return new goog.events.KeyEvent(keyCode,
+            0 /* charCode */,
+            false /* repeat */,
+            new goog.testing.events.Event(goog.events.EventType.KEYDOWN));
+      };
+      palette.handleKeyEvent(createKeyEvent(goog.events.KeyCodes.LEFT));
+      assertEquals(nodes.length - 1, palette.getHighlightedIndex());
+
+      palette.handleKeyEvent(createKeyEvent(goog.events.KeyCodes.RIGHT));
+      assertEquals(0, palette.getHighlightedIndex());
     }
   </script>
 </body>

@@ -308,22 +308,25 @@ goog.ui.Palette.prototype.handleKeyEvent = function(e) {
 
   switch (e.keyCode) {
     case goog.events.KeyCodes.LEFT:
-      if (highlightedIndex == -1) {
+      // If the highlighted index is uninitialized, or is at the beginning, move
+      // it to the end.
+      if (highlightedIndex == -1 ||
+          highlightedIndex == 0) {
         highlightedIndex = numItems;
       }
-      if (highlightedIndex > 0) {
-        this.setHighlightedIndex(highlightedIndex - 1);
-        e.preventDefault();
-        return true;
-      }
+      this.setHighlightedIndex(highlightedIndex - 1);
+      e.preventDefault();
+      return true;
       break;
 
     case goog.events.KeyCodes.RIGHT:
-      if (highlightedIndex < numItems - 1) {
-        this.setHighlightedIndex(highlightedIndex + 1);
-        e.preventDefault();
-        return true;
+      // If the highlighted index at the end, move it to the beginning.
+      if (highlightedIndex == numItems - 1) {
+        highlightedIndex = -1;
       }
+      this.setHighlightedIndex(highlightedIndex + 1);
+      e.preventDefault();
+      return true;
       break;
 
     case goog.events.KeyCodes.UP:
