@@ -47,6 +47,7 @@ goog.require('goog.fx.Animation');
  *
  * @constructor
  * @extends {goog.fx.Animation}
+ * @final
  */
 goog.fx.CssSpriteAnimation = function(element, size, box, time, opt_acc) {
   var start = [box.left, box.top];

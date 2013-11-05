@@ -994,5 +994,6 @@ goog.History.EventType = goog.history.EventType;
  * @extends {goog.events.Event}
  * @constructor
  * @deprecated Use goog.history.Event.
+ * @final
  */
 goog.History.Event = goog.history.Event;

@@ -32,6 +32,7 @@ goog.require('goog.math.Rect');
  * Creates a path object
  * @constructor
  * @extends {goog.graphics.Path}
+ * @final
  */
 goog.graphics.ext.Path = function() {
   goog.graphics.Path.call(this);

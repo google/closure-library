@@ -32,6 +32,7 @@ goog.require('goog.json.hybrid');
  * available.
  * @constructor
  * @implements {goog.json.Processor}
+ * @final
  */
 goog.json.HybridJsonProcessor = function() {};
 

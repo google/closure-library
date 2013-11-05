@@ -61,6 +61,7 @@ goog.require('goog.style');
  * @deprecated goog.graphics is deprecated. It existed to abstract over browser
  *     differences before the canvas tag was widely supported.  See
  *     http://en.wikipedia.org/wiki/Canvas_element for details.
+ * @final
  */
 goog.graphics.VmlGraphics = function(width, height,
                                      opt_coordWidth, opt_coordHeight,

@@ -34,6 +34,7 @@ goog.require('goog.fs.ProgressEvent');
  *
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.fs.FileReader = function() {
   goog.base(this);

@@ -172,5 +172,6 @@ goog.fs.FileSaver.prototype.disposeInternal = function() {
  * A wrapper for the progress events emitted by the FileSaver.
  *
  * @deprecated Use {goog.fs.ProgressEvent}.
+ * @final
  */
 goog.fs.FileSaver.ProgressEvent = goog.fs.ProgressEvent;

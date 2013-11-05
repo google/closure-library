@@ -29,6 +29,7 @@ goog.require('goog.string');
  * @param {string=} opt_address The email address.
  * @param {string=} opt_name The name associated with the email address.
  * @constructor
+ * @final
  */
 goog.format.EmailAddress = function(opt_address, opt_name) {
   /**

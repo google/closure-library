@@ -52,6 +52,7 @@ goog.require('goog.math');
  * @param {number=} opt_m02 The m02 coordinate of the transform.
  * @param {number=} opt_m12 The m12 coordinate of the transform.
  * @constructor
+ * @final
  */
 goog.graphics.AffineTransform = function(opt_m00, opt_m10, opt_m01,
     opt_m11, opt_m02, opt_m12) {

@@ -44,6 +44,7 @@ goog.require('goog.graphics.ext.Group');
  *     degradation of text support.
  * @constructor
  * @extends {goog.graphics.ext.Group}
+ * @final
  */
 goog.graphics.ext.Graphics = function(width, height, opt_coordWidth,
     opt_coordHeight, opt_domHelper, opt_isSimple) {

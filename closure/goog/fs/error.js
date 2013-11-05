@@ -34,6 +34,7 @@ goog.require('goog.string');
  * @param {string} action The action being undertaken when the error was raised.
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.fs.Error = function(code, action) {
   goog.base(this, goog.string.subs('Error %s: %s', action,

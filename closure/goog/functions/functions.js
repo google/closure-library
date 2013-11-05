@@ -251,7 +251,10 @@ goog.functions.not = function(f) {
  * @return {!Object} A new instance of the class given in {@code constructor}.
  */
 goog.functions.create = function(constructor, var_args) {
-  /** @constructor */
+  /**
+ * @constructor
+ * @final
+ */
   var temp = function() {};
   temp.prototype = constructor.prototype;
 
