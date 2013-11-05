@@ -44,6 +44,7 @@ goog.require('goog.ui.emoji.EmojiPaletteRenderer');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Palette}
  * @constructor
+ * @final
  */
 goog.ui.emoji.EmojiPalette = function(emoji,
                                       opt_urlPrefix,

@@ -29,6 +29,7 @@ goog.require('goog.ui.equation.TexEditor');
  * @param {string=} opt_equation Encoded equation. If not specified, starts with
  *     an empty equation.
  * @extends {goog.ui.Dialog}
+ * @final
  */
 goog.ui.equation.EquationEditorDialog = function(opt_equation) {
   goog.ui.Dialog.call(this);

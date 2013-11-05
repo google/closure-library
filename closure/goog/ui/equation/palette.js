@@ -225,6 +225,7 @@ goog.ui.equation.Palette.prototype.handleMouseOver = function(e) {
  * @param {Element=} opt_target The optional target of the event.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.ui.equation.PaletteEvent = function(type, palette, opt_target) {
   goog.events.Event.call(this, type, opt_target);

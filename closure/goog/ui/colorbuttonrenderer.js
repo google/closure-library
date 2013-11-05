@@ -31,6 +31,7 @@ goog.require('goog.ui.ColorMenuButtonRenderer');
  *
  * @constructor
  * @extends {goog.ui.ColorMenuButtonRenderer}
+ * @final
  */
 goog.ui.ColorButtonRenderer = function() {
   goog.base(this);

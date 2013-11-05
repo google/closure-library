@@ -27,6 +27,7 @@ goog.require('goog.ui.equation.TexPane');
  * @param {string} helpUrl URL pointing to help documentation.
  * @param {goog.dom.DomHelper=} opt_domHelper DomHelper to use.
  * @extends {goog.ui.Component}
+ * @final
  */
 goog.ui.equation.TexEditor = function(context, helpUrl, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);

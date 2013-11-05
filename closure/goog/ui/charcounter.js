@@ -44,6 +44,7 @@ goog.require('goog.events.InputHandler');
  * @param {goog.ui.CharCounter.Display=} opt_displayMode Display mode for this
  *     char counter. Defaults to {@link goog.ui.CharCounter.Display.REMAINING}.
  * @constructor
+ * @final
  */
 goog.ui.CharCounter = function(elInput, elCount, maxLength, opt_displayMode) {
   goog.events.EventTarget.call(this);

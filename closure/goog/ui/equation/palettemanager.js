@@ -34,6 +34,7 @@ goog.require('goog.ui.equation.SymbolPalette');
  *     document interaction.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.ui.equation.PaletteManager = function(domHelper) {
   goog.events.EventTarget.call(this);

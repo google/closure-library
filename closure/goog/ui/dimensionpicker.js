@@ -49,6 +49,7 @@ goog.require('goog.ui.registry');
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Control}
+ * @final
  */
 goog.ui.DimensionPicker = function(opt_renderer, opt_domHelper) {
   goog.ui.Control.call(this, null,

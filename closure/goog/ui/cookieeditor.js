@@ -34,6 +34,7 @@ goog.require('goog.ui.Component');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
+ * @final
  */
 goog.ui.CookieEditor = function(opt_domHelper) {
   goog.base(this, opt_domHelper);

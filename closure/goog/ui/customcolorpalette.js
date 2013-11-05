@@ -40,6 +40,7 @@ goog.require('goog.ui.Component');
  *     document interaction.
  * @constructor
  * @extends {goog.ui.ColorPalette}
+ * @final
  */
 goog.ui.CustomColorPalette = function(initColors, opt_renderer, opt_domHelper) {
   goog.ui.ColorPalette.call(this, initColors, opt_renderer, opt_domHelper);

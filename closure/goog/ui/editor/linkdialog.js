@@ -52,6 +52,7 @@ goog.require('goog.window');
  * @param {goog.editor.Link} link The target link.
  * @constructor
  * @extends {goog.ui.editor.AbstractDialog}
+ * @final
  */
 goog.ui.editor.LinkDialog = function(domHelper, link) {
   goog.base(this, domHelper);
@@ -87,6 +88,7 @@ goog.ui.editor.LinkDialog.EventType = {
  *     attribute.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.ui.editor.LinkDialog.OkEvent = function(
     linkText, linkUrl, openInNewWindow, noFollow) {
@@ -126,6 +128,7 @@ goog.inherits(goog.ui.editor.LinkDialog.OkEvent, goog.events.Event);
  * @param {string} url Url of the link being tested.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.ui.editor.LinkDialog.BeforeTestLinkEvent = function(url) {
   goog.base(this, goog.ui.editor.LinkDialog.EventType.BEFORE_TEST_LINK);

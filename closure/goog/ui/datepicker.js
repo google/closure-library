@@ -1397,6 +1397,7 @@ goog.ui.DatePicker.prototype.getKeyHandlerForElement_ = function(el) {
  * @param {goog.date.Date} date Selected date.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.ui.DatePickerEvent = function(type, target, date) {
   goog.events.Event.call(this, type, target);

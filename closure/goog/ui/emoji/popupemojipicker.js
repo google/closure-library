@@ -47,6 +47,7 @@ goog.require('goog.ui.emoji.EmojiPicker');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @extends {goog.ui.Component}
  * @constructor
+ * @final
  */
 goog.ui.emoji.PopupEmojiPicker =
     function(defaultImgUrl, opt_domHelper) {

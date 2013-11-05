@@ -40,6 +40,7 @@ goog.require('goog.ui.TabBar');
  * @param {string=} opt_caption Optional caption of the tab pane.
  * @constructor
  * @extends {goog.ui.Component}
+ * @final
  */
 goog.ui.editor.TabPane = function(dom, opt_caption) {
   goog.base(this, dom);

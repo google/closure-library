@@ -30,6 +30,7 @@ goog.require('goog.ui.equation.TexPane');
  * @param {string=} opt_helpUrl Help document URL to use in the "Learn more"
  *     link.
  * @extends {goog.ui.Component}
+ * @final
  */
 goog.ui.equation.EquationEditor = function(context, opt_domHelper,
     opt_helpUrl) {

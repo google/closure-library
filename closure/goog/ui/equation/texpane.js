@@ -37,6 +37,7 @@ goog.require('goog.ui.equation.PaletteEvent');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.equation.EditorPane}
+ * @final
  */
 goog.ui.equation.TexPane = function(
     context, helpUrl, opt_domHelper) {

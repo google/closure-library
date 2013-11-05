@@ -51,6 +51,7 @@ goog.require('goog.userAgent');
  * @constructor
  * @extends {goog.ui.MenuBase}
  * @deprecated Use goog.ui.PopupMenu.
+ * @final
  */
 goog.ui.AttachableMenu = function(opt_element) {
   goog.ui.MenuBase.call(this, opt_element);

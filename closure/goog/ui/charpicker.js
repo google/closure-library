@@ -68,6 +68,7 @@ goog.require('goog.ui.Tooltip');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
+ * @final
  */
 goog.ui.CharPicker = function(charPickerData, charNameFetcher, opt_recents,
                               opt_initCategory, opt_initSubcategory,

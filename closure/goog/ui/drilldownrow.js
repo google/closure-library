@@ -83,6 +83,7 @@ goog.require('goog.ui.Component');
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
+ * @final
  */
 goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);

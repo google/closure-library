@@ -28,6 +28,7 @@ goog.require('goog.ui.equation.PaletteRenderer');
  *     manager of the palette.
  * @extends {goog.ui.equation.Palette}
  * @constructor
+ * @final
  */
 goog.ui.equation.MenuPalette = function(paletteManager) {
   goog.ui.equation.Palette.call(this, paletteManager,
@@ -70,6 +71,7 @@ goog.ui.equation.MenuPalette.prototype.setVisible = function(
  * The renderer for menu palette.
  * @extends {goog.ui.equation.PaletteRenderer}
  * @constructor
+ * @final
  */
 goog.ui.equation.MenuPaletteRenderer = function() {
   goog.ui.PaletteRenderer.call(this);

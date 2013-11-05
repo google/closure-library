@@ -47,6 +47,7 @@ goog.require('goog.ui.registry');
  *
  * @constructor
  * @extends {goog.ui.ButtonRenderer}
+ * @final
  */
 goog.ui.Css3ButtonRenderer = function() {
   goog.ui.ButtonRenderer.call(this);

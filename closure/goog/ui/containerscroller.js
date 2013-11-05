@@ -45,6 +45,7 @@ goog.require('goog.ui.Container');
  * @param {!goog.ui.Container} container The container to attach behavior to.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.ui.ContainerScroller = function(container) {
   goog.Disposable.call(this);

@@ -41,6 +41,7 @@ goog.require('goog.ui.Component');
  *     use for this color picker.
  * @extends {goog.ui.Component}
  * @constructor
+ * @final
  */
 goog.ui.ColorPicker = function(opt_domHelper, opt_colorPalette) {
   goog.ui.Component.call(this, opt_domHelper);
