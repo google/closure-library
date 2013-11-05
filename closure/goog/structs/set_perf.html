@@ -80,10 +80,8 @@ See the COPYING file for details.
         }
       }, 'Add elements to string set without repetition');
 
-      stubs.set(goog.structs.StringSet.prototype, 'encode',
-          goog.functions.identity);
-      stubs.set(goog.structs.StringSet.prototype, 'decode',
-          goog.functions.identity);
+      stubs.replace(goog.structs.StringSet, 'encode_', goog.functions.identity);
+      stubs.replace(goog.structs.StringSet, 'decode_', goog.functions.identity);
 
       table.run(function() {
         var s = new goog.structs.StringSet();
@@ -233,10 +231,8 @@ See the COPYING file for details.
         bigStringSet.containsArray(arr);
       }, 'Membership check for each element of string set with containsArray');
 
-      stubs.set(goog.structs.StringSet.prototype, 'encode',
-          goog.functions.identity);
-      stubs.set(goog.structs.StringSet.prototype, 'decode',
-          goog.functions.identity);
+      stubs.replace(goog.structs.StringSet, 'encode_', goog.functions.identity);
+      stubs.replace(goog.structs.StringSet, 'decode_', goog.functions.identity);
 
       table.run(function() {
         for (var i = 0; i < OPS_COUNT; i++) {
