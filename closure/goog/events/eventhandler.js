@@ -125,13 +125,14 @@ goog.events.EventHandler.prototype.listen = function(
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for or array of
  *     event types.
- * @param {function(?):?|{handleEvent:function(?):?}|null|undefined} fn
- *     Optional callback function to be used as the listener or an object with
- *     handleEvent function.
+ * @param {function(this:T, ?):?|{handleEvent:function(this:T, ?):?}|
+ *     null|undefined} fn Optional callback function to be used as the
+ *     listener or an object with handleEvent function.
  * @param {boolean|undefined} capture Optional whether to use capture phase.
- * @param {Object} scope Object in whose scope to call the listener.
+ * @param {T} scope Object in whose scope to call the listener.
  * @return {goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
+ * @template T
  */
 goog.events.EventHandler.prototype.listenWithScope = function(
     src, type, fn, capture, scope) {
@@ -215,13 +216,14 @@ goog.events.EventHandler.prototype.listenOnce = function(
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for or array of
  *     event types.
- * @param {function(?):?|{handleEvent:function(?):?}|null|undefined} fn
- *     Optional callback function to be used as the listener or an object
- *     with handleEvent function.
+ * @param {function(this:T, ?):?|{handleEvent:function(this:T, ?):?}|
+ *     null|undefined} fn Optional callback function to be used as the
+ *     listener or an object with handleEvent function.
  * @param {boolean|undefined} capture Optional whether to use capture phase.
- * @param {Object} scope Object in whose scope to call the listener.
+ * @param {T} scope Object in whose scope to call the listener.
  * @return {goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
+ * @template T
  */
 goog.events.EventHandler.prototype.listenOnceWithScope = function(
     src, type, fn, capture, scope) {
@@ -304,18 +306,19 @@ goog.events.EventHandler.prototype.listenWithWrapper = function(
  * @param {EventTarget|goog.events.EventTarget} src The node to listen to
  *     events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
- * @param {function(?):?|{handleEvent:function(?):?}|null} listener Callback
- *     method, or an object with a handleEvent function.
- * @param {boolean|undefined} capt Whether to fire in capture phase
- *     (defaults to false).
- * @param {Object} scope Element in whose scope to call the listener.
+ * @param {function(this:T, ?):?|{handleEvent:function(this:T, ?):?}|null}
+ *     listener Optional callback function to be used as the
+ *     listener or an object with handleEvent function.
+ * @param {boolean|undefined} capture Optional whether to use capture phase.
+ * @param {T} scope Object in whose scope to call the listener.
  * @return {goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
+ * @template T
  */
 goog.events.EventHandler.prototype.listenWithWrapperAndScope = function(
-    src, wrapper, listener, capt, scope) {
+    src, wrapper, listener, capture, scope) {
   // TODO(user): Deprecate this function.
-  return this.listenWithWrapper_(src, wrapper, listener, capt, scope);
+  return this.listenWithWrapper_(src, wrapper, listener, capture, scope);
 };
 
 
