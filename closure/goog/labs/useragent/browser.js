@@ -210,6 +210,9 @@ goog.labs.userAgent.browser.getIEVersion_ = function(userAgent) {
           case '6.0':
             version = '10.0';
             break;
+          case '7.0':
+            version = '11.0';
+            break;
         }
       } else {
         version = '7.0';
