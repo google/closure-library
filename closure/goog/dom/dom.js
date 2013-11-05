@@ -361,14 +361,12 @@ goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
   'colspan': 'colSpan',
   'frameborder': 'frameBorder',
   'height': 'height',
-  'list': 'list',
   'maxlength': 'maxLength',
   'role': 'role',
   'rowspan': 'rowSpan',
   'type': 'type',
   'usemap': 'useMap',
   'valign': 'vAlign',
-  'value': 'value',
   'width': 'width'
 };
 
