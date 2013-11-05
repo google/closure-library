@@ -35,6 +35,7 @@ goog.require('goog.object');
  * Creates a new listener map.
  * @param {EventTarget|goog.events.Listenable} src The src object.
  * @constructor
+ * @final
  */
 goog.events.ListenerMap = function(src) {
   /** @type {EventTarget|goog.events.Listenable} */

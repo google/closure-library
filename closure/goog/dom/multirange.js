@@ -39,6 +39,7 @@ goog.require('goog.log');
  * constructor: use one of the goog.dom.Range.createFrom* methods instead.
  * @constructor
  * @extends {goog.dom.AbstractMultiRange}
+ * @final
  */
 goog.dom.MultiRange = function() {
   /**
@@ -418,6 +419,7 @@ goog.dom.DomSavedMultiRange_.prototype.disposeInternal = function() {
  * @param {goog.dom.MultiRange} range The range to traverse.
  * @constructor
  * @extends {goog.dom.RangeIterator}
+ * @final
  */
 goog.dom.MultiRangeIterator = function(range) {
   if (range) {

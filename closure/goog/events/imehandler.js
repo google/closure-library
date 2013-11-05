@@ -57,6 +57,7 @@ goog.require('goog.userAgent');
  * @param {Element} el The element to listen on.
  * @extends {goog.events.EventTarget}
  * @constructor
+ * @final
  */
 goog.events.ImeHandler = function(el) {
   goog.base(this);
@@ -123,6 +124,7 @@ goog.events.ImeHandler.EventType = {
  * @param {goog.events.BrowserEvent} reason The trigger for this event.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.events.ImeHandler.Event = function(type, reason) {
   goog.base(this, type);

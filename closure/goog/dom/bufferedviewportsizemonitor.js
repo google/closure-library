@@ -44,6 +44,7 @@ goog.require('goog.events.EventType');
  *     value defaults to {@link #RESIZE_EVENT_DELAY_MS_}.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.dom.BufferedViewportSizeMonitor = function(
     viewportSizeMonitor, opt_bufferMs) {

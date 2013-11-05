@@ -42,6 +42,7 @@ goog.require('goog.userAgent');
  * constructor: use one of the goog.dom.Range.createFrom* methods instead.
  * @constructor
  * @extends {goog.dom.AbstractMultiRange}
+ * @final
  */
 goog.dom.ControlRange = function() {
 };
@@ -393,6 +394,7 @@ goog.dom.DomSavedControlRange_.prototype.disposeInternal = function() {
  * @param {goog.dom.ControlRange?} range The range to traverse.
  * @constructor
  * @extends {goog.dom.RangeIterator}
+ * @final
  */
 goog.dom.ControlRangeIterator = function(range) {
   if (range) {

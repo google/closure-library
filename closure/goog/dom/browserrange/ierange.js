@@ -42,6 +42,7 @@ goog.require('goog.string');
  * @param {Document} doc The document the range exists in.
  * @constructor
  * @extends {goog.dom.browserrange.AbstractRange}
+ * @final
  */
 goog.dom.browserrange.IeRange = function(range, doc) {
   /**

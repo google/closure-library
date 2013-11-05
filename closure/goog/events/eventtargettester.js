@@ -197,6 +197,7 @@ var eventTargets, listeners;
  * Custom event object for testing.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 var TestEvent = function() {
   goog.base(this, EventType.A);
@@ -1025,6 +1026,7 @@ function testFiringEventBeforeDisposeInternalWorks() {
   /**
    * @extends {goog.events.EventTarget}
    * @constructor
+   * @final
    */
   var MockTarget = function() {
     goog.base(this);

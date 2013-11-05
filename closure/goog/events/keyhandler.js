@@ -124,6 +124,7 @@ goog.require('goog.userAgent');
  *     capture phase (defaults to false).
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.events.KeyHandler = function(opt_element, opt_capture) {
   goog.events.EventTarget.call(this);
@@ -527,6 +528,7 @@ goog.events.KeyHandler.prototype.disposeInternal = function() {
  * @param {Event} browserEvent Browser event object.
  * @constructor
  * @extends {goog.events.BrowserEvent}
+ * @final
  */
 goog.events.KeyEvent = function(keyCode, charCode, repeat, browserEvent) {
   goog.events.BrowserEvent.call(this, browserEvent);

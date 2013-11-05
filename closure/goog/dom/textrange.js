@@ -41,6 +41,7 @@ goog.require('goog.userAgent');
  * use one of the goog.dom.Range.createFrom* methods instead.
  * @constructor
  * @extends {goog.dom.AbstractRange}
+ * @final
  */
 goog.dom.TextRange = function() {
 };

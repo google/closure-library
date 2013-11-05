@@ -32,6 +32,7 @@ goog.provide('goog.events.EventId');
  * @template T
  * @constructor
  * @struct
+ * @final
  */
 goog.events.EventId = function(eventId) {
   /** @const */ this.id = eventId;

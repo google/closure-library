@@ -164,6 +164,7 @@ goog.dom.a11y.setActiveDescendant = function(element, activeElement) {
  * @extends {goog.Disposable}
  * @deprecated Use {@link goog.a11y.aria.Announcer} instead.
  *     This alias will be removed on 1 Apr 2013.
+ * @final
  */
 goog.dom.a11y.Announcer = goog.a11y.aria.Announcer;
 

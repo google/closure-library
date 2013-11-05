@@ -35,6 +35,7 @@ goog.require('goog.userAgent');
  * @param {Range} range The range object.
  * @constructor
  * @extends {goog.dom.browserrange.W3cRange}
+ * @final
  */
 goog.dom.browserrange.WebKitRange = function(range) {
   goog.dom.browserrange.W3cRange.call(this, range);

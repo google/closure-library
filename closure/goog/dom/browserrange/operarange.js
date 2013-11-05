@@ -32,6 +32,7 @@ goog.require('goog.dom.browserrange.W3cRange');
  * @param {Range} range The range object.
  * @constructor
  * @extends {goog.dom.browserrange.W3cRange}
+ * @final
  */
 goog.dom.browserrange.OperaRange = function(range) {
   goog.dom.browserrange.W3cRange.call(this, range);

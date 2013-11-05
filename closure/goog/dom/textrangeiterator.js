@@ -43,6 +43,7 @@ goog.require('goog.iter.StopIteration');
  * @param {boolean=} opt_reverse Whether to traverse nodes in reverse.
  * @constructor
  * @extends {goog.dom.RangeIterator}
+ * @final
  */
 goog.dom.TextRangeIterator = function(startNode, startOffset, endNode,
     endOffset, opt_reverse) {

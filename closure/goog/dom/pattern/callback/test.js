@@ -27,6 +27,7 @@ goog.require('goog.iter.StopIteration');
 /**
  * Callback class for testing for at least one match.
  * @constructor
+ * @final
  */
 goog.dom.pattern.callback.Test = function() {
 };
