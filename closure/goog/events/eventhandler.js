@@ -124,17 +124,17 @@ goog.events.EventHandler.prototype.listen = function(
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for or array of
  *     event types.
- * @param {Function|Object=} opt_fn Optional callback function to be used as the
- *    listener or an object with handleEvent function.
- * @param {boolean=} opt_capture Optional whether to use capture phase.
- * @param {Object=} opt_scope Object in whose scope to call the listener.
+ * @param {Function|Object|undefined} fn Optional callback function to be used
+ *     as the listener or an object with handleEvent function.
+ * @param {boolean|undefined} capture Optional whether to use capture phase.
+ * @param {Object} scope Object in whose scope to call the listener.
  * @return {goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
  */
 goog.events.EventHandler.prototype.listenWithScope = function(
-    src, type, opt_fn, opt_capture, opt_scope) {
+    src, type, fn, capture, scope) {
   // TODO(user): Deprecate this function.
-  return this.listen_(src, type, opt_fn, opt_capture, opt_scope);
+  return this.listen_(src, type, fn, capture, scope);
 };
 
 
@@ -211,17 +211,17 @@ goog.events.EventHandler.prototype.listenOnce = function(
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for or array of
  *     event types.
- * @param {Function|Object=} opt_fn Optional callback function to be used as the
- *    listener or an object with handleEvent function.
- * @param {boolean=} opt_capture Optional whether to use capture phase.
- * @param {Object=} opt_scope Object in whose scope to call the listener.
+ * @param {Function|Object|undefined} fn Optional callback function to be used
+ *     as the listener or an object with handleEvent function.
+ * @param {boolean|undefined} capture Optional whether to use capture phase.
+ * @param {Object} scope Object in whose scope to call the listener.
  * @return {goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
  */
 goog.events.EventHandler.prototype.listenOnceWithScope = function(
-    src, type, opt_fn, opt_capture, opt_scope) {
+    src, type, fn, capture, scope) {
   // TODO(user): Deprecate this function.
-  return this.listenOnce_(src, type, opt_fn, opt_capture, opt_scope);
+  return this.listenOnce_(src, type, fn, capture, scope);
 };
 
 
@@ -300,16 +300,16 @@ goog.events.EventHandler.prototype.listenWithWrapper = function(
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
  * @param {Function|Object} listener Callback method, or an object with a
  *     handleEvent function.
- * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
- *     false).
- * @param {Object=} opt_scope Element in whose scope to call the listener.
+ * @param {boolean|undefined} capt Whether to fire in capture phase
+ *     (defaults to false).
+ * @param {Object} scope Element in whose scope to call the listener.
  * @return {goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
  */
 goog.events.EventHandler.prototype.listenWithWrapperAndScope = function(
-    src, wrapper, listener, opt_capt, opt_scope) {
+    src, wrapper, listener, capt, scope) {
   // TODO(user): Deprecate this function.
-  return this.listenWithWrapper_(src, wrapper, listener, opt_capt, opt_scope);
+  return this.listenWithWrapper_(src, wrapper, listener, capt, scope);
 };
 
 
