@@ -23,6 +23,7 @@ goog.provide('goog.net.XmlHttp');
 goog.provide('goog.net.XmlHttp.OptionType');
 goog.provide('goog.net.XmlHttp.ReadyState');
 
+goog.require('goog.asserts');
 goog.require('goog.net.WrapperXmlHttpFactory');
 goog.require('goog.net.XmlHttpFactory');
 
@@ -124,9 +125,8 @@ goog.net.XmlHttp.factory_;
  */
 goog.net.XmlHttp.setFactory = function(factory, optionsFactory) {
   goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(
-      /** @type {function() :
-       * !(goog.net.XhrLike.OrNative|GearsHttpRequest)} */ (factory),
-      /** @type {function() : !Object} */ (optionsFactory)));
+      goog.asserts.assert(factory),
+      goog.asserts.assert(optionsFactory)));
 };
 
 
