@@ -25,12 +25,13 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.dom.iframe');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.FocusHandler');
 goog.require('goog.fx.Transition');
+goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.PopupBase');
@@ -202,7 +203,8 @@ goog.ui.ModalPopup.prototype.createDom = function() {
   goog.base(this, 'createDom');
 
   var element = this.getElement();
-  goog.dom.classes.add(element, this.getCssClass());
+  var allClasses = goog.string.trim(this.getCssClass()).split(' ');
+  goog.dom.classlist.addAll(element, allClasses);
   goog.dom.setFocusableTabIndex(element, true);
   goog.style.setElementShown(element, false);
 
@@ -306,7 +308,8 @@ goog.ui.ModalPopup.prototype.canDecorate = function(element) {
 goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
   // Decorate the modal popup area element.
   goog.base(this, 'decorateInternal', element);
-  goog.dom.classes.add(this.getElement(), this.getCssClass());
+  var allClasses = goog.string.trim(this.getCssClass()).split(' ');
+  goog.dom.classlist.addAll(this.getElement(), allClasses);
 
   // Create the background mask...
   this.manageBackgroundDom_();

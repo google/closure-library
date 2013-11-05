@@ -37,13 +37,14 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.fx.Dragger');
 goog.require('goog.math.Rect');
+goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.style');
@@ -76,6 +77,7 @@ goog.require('goog.userAgent');
  * @constructor
  * @param {string=} opt_class CSS class name for the dialog element, also used
  *     as a class name prefix for related elements; defaults to modal-dialog.
+ *     This should be a single, valid CSS class name.
  * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
  *     issue by using an iframe instead of a div for bg element.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
@@ -516,15 +518,24 @@ goog.ui.Dialog.prototype.getDraggable = function() {
  * @private.
  */
 goog.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
+  // This isn't ideal, but the quickest and easiest way to append
+  // title-draggable to the last class in the class_ string, then trim and
+  // split the string into an array (in case the dialog was set up with
+  // multiple, space-separated class names).
+  var classNames = goog.string.trim(goog.getCssName(this.class_,
+      'title-draggable')).split(' ');
+
   if (this.getElement()) {
-    goog.dom.classes.enable(this.titleEl_,
-        goog.getCssName(this.class_, 'title-draggable'), enabled);
+    if (enabled) {
+      goog.dom.classlist.addAll(this.titleEl_, classNames);
+    } else {
+      goog.dom.classlist.removeAll(this.titleEl_, classNames);
+    }
   }
 
   if (enabled && !this.dragger_) {
     this.dragger_ = this.createDragger();
-    goog.dom.classes.add(this.titleEl_,
-        goog.getCssName(this.class_, 'title-draggable'));
+    goog.dom.classlist.addAll(this.titleEl_, classNames);
     goog.events.listen(this.dragger_, goog.fx.Dragger.EventType.START,
         this.setDraggerLimits_, false, this);
   } else if (!enabled && this.dragger_) {
@@ -1257,7 +1268,7 @@ goog.ui.Dialog.ButtonSet.prototype.decorate = function(element) {
       var isCancel = button.name == goog.ui.Dialog.DefaultButtonKeys.CANCEL;
       this.set(key, caption, isDefault, isCancel);
       if (isDefault) {
-        goog.dom.classes.add(button, goog.getCssName(this.class_,
+        goog.dom.classlist.add(button, goog.getCssName(this.class_,
             'default'));
       }
     }
