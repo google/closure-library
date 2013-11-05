@@ -190,6 +190,13 @@ function testSetPropertiesDirectAttributeMap() {
 
   var res = goog.dom.setProperties(el, attrs);
   assertEquals('Should be equal', '#myMap', el.getAttribute('usemap'));
+
+  el = goog.dom.createDom('input');
+  attrs = {'value': 'TextValue', 'list': 'SomeDataList'};
+  res = goog.dom.setProperties(el, attrs);
+  assertEquals('Should be equal', 'TextValue', el.getAttribute('value'));
+  assertEquals('Should be equal', 'TextValue', el.value);
+  assertEquals('Should be equal', 'SomeDataList', el.getAttribute('list'));
 }
 
 function testSetPropertiesAria() {

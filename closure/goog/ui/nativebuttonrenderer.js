@@ -59,12 +59,18 @@ goog.ui.NativeButtonRenderer.prototype.getAriaRole = function() {
  */
 goog.ui.NativeButtonRenderer.prototype.createDom = function(button) {
   this.setUpNativeButton_(button);
-  return button.getDomHelper().createDom('button', {
+  var b = button.getDomHelper().createDom('button', {
     'class': this.getClassNames(button).join(' '),
     'disabled': !button.isEnabled(),
     'title': button.getTooltip() || '',
     'value': button.getValue() || ''
   }, button.getCaption() || '');
+  // NOTE(user): This is a fix for IE, which uses the content, rather
+  // than the value= attribute as the value of the button.
+  // See http://www.fourmilab.ch/fourmilog/archives/2007-03/000824.html
+  // for a description of the problem.
+  b.value = button.getValue();
+  return b;
 };
 
 
