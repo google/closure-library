@@ -93,7 +93,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
 
   /**
    * The XMLHttpRequest object that is being used for the transfer.
-   * @private {XMLHttpRequest|GearsHttpRequest}
+   * @private {goog.net.XhrLike.OrNative|GearsHttpRequest}
    */
   this.xhr_ = null;
 
@@ -575,7 +575,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
  * @see https://bugzilla.mozilla.org/show_bug.cgi?id=525816
  *
- * @param {!XMLHttpRequest|!GearsHttpRequest} xhr The request.
+ * @param {!goog.net.XhrLike.OrNative|!GearsHttpRequest} xhr The request.
  * @return {boolean} True if the request supports level 2 timeout.
  * @private
  */
@@ -601,7 +601,8 @@ goog.net.XhrIo.isContentTypeHeader_ = function(header) {
 
 /**
  * Creates a new XHR object.
- * @return {XMLHttpRequest|GearsHttpRequest} The newly created XHR object.
+ * @return {goog.net.XhrLike.OrNative|GearsHttpRequest} The newly created XHR
+ *     object.
  * @protected
  */
 goog.net.XhrIo.prototype.createXhr = function() {

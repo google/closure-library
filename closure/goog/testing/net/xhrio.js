@@ -405,7 +405,8 @@ goog.testing.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
 
 /**
  * Creates a new XHR object.
- * @return {XMLHttpRequest|GearsHttpRequest} The newly created XHR object.
+ * @return {goog.net.XhrLike.OrNative|GearsHttpRequest} The newly created XHR
+ *     object.
  * @protected
  */
 goog.testing.net.XhrIo.prototype.createXhr = function() {

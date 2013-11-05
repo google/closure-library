@@ -23,13 +23,15 @@ goog.provide('goog.net.XmlHttp');
 goog.provide('goog.net.XmlHttp.OptionType');
 goog.provide('goog.net.XmlHttp.ReadyState');
 
+goog.require('goog.asserts');
 goog.require('goog.net.WrapperXmlHttpFactory');
 goog.require('goog.net.XmlHttpFactory');
 
 
 /**
  * Static class for creating XMLHttpRequest objects.
- * @return {!(XMLHttpRequest|GearsHttpRequest)} A new XMLHttpRequest object.
+ * @return {!(goog.net.XhrLike.OrNative|GearsHttpRequest)} A new XMLHttpRequest
+ *     object.
  */
 goog.net.XmlHttp = function() {
   return goog.net.XmlHttp.factory_.createInstance();
@@ -123,8 +125,8 @@ goog.net.XmlHttp.factory_;
  */
 goog.net.XmlHttp.setFactory = function(factory, optionsFactory) {
   goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(
-      /** @type {function() : !(XMLHttpRequest|GearsHttpRequest)} */ (factory),
-      /** @type {function() : !Object}*/ (optionsFactory)));
+      goog.asserts.assert(factory),
+      goog.asserts.assert(optionsFactory)));
 };
 
 
