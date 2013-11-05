@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Utilities for creating functions. Loosely inspired by the
- * java classes: http://go/functions.java and http://go/predicate.java.
+ * java classes: http://goo.gl/GM0Hmu and http://goo.gl/6k7nI8.
  *
  * @author nicksantos@google.com (Nick Santos)
  */
