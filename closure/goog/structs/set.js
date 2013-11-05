@@ -46,6 +46,7 @@ goog.require('goog.structs.Map');
  * @param {Array|Object=} opt_values Initial values to start with.
  * @constructor
  * @implements {goog.structs.Collection}
+ * @final
  */
 goog.structs.Set = function(opt_values) {
   this.map_ = new goog.structs.Map;

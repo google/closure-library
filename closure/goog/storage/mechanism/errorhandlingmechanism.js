@@ -32,6 +32,7 @@ goog.require('goog.storage.mechanism.Mechanism');
  *     errorHandler An error handler.
  * @constructor
  * @extends {goog.storage.mechanism.Mechanism}
+ * @final
  */
 goog.storage.mechanism.ErrorHandlingMechanism = function(mechanism,
                                                          errorHandler) {

@@ -38,6 +38,7 @@ goog.require('goog.math.Coordinate');
  * @param {number} maxX Maximum x-value that can be held in tree.
  * @param {number} maxY Maximum y-value that can be held in tree.
  * @constructor
+ * @final
  */
 goog.structs.QuadTree = function(minX, minY, maxX, maxY) {
   /**
@@ -461,6 +462,7 @@ goog.structs.QuadTree.NodeType = {
  * @param {number} h Height of node.
  * @param {goog.structs.QuadTree.Node=} opt_parent Optional parent node.
  * @constructor
+ * @final
  */
 goog.structs.QuadTree.Node = function(x, y, w, h, opt_parent) {
   /**
@@ -545,6 +547,7 @@ goog.structs.QuadTree.Node.prototype.point = null;
  * @param {number} y The y-coordinate of the point.
  * @param {*=} opt_value Optional value associated with the point.
  * @constructor
+ * @final
  */
 goog.structs.QuadTree.Point = function(x, y, opt_value) {
   /**

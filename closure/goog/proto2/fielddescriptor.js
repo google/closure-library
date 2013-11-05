@@ -33,6 +33,7 @@ goog.require('goog.string');
  *     to construct this descriptor.
  *
  * @constructor
+ * @final
  */
 goog.proto2.FieldDescriptor = function(messageType, tag, metadata) {
   /**

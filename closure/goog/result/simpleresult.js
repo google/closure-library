@@ -88,6 +88,7 @@ goog.result.SimpleResult.HandlerEntry_;
  *
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.result.SimpleResult.StateError = function() {
   goog.base(this, 'Multiple attempts to set the state of this Result');

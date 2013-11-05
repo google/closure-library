@@ -61,6 +61,7 @@ goog.storage.RichStorage.DATA_KEY = 'data';
  *
  * @param {*} value The value to wrap.
  * @constructor
+ * @final
  */
 goog.storage.RichStorage.Wrapper = function(value) {
   this[goog.storage.RichStorage.DATA_KEY] = value;

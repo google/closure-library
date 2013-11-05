@@ -36,6 +36,7 @@ goog.provide('goog.vec.Float32Array');
  *     The length of the array, or an array to initialize the contents of the
  *     new Float32Array.
  * @constructor
+ * @final
  */
 goog.vec.Float32Array = function(p0) {
   this.length = /** @type {number} */ (p0.length || p0);

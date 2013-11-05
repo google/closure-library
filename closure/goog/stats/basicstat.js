@@ -41,6 +41,7 @@ goog.require('goog.structs.CircularBuffer');
  *
  * @param {number} interval The stat interval, in milliseconds.
  * @constructor
+ * @final
  */
 goog.stats.BasicStat = function(interval) {
   goog.asserts.assert(interval > 50);

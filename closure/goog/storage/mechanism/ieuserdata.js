@@ -40,6 +40,7 @@ goog.require('goog.userAgent');
  *     one will be created if not provided.
  * @constructor
  * @extends {goog.storage.mechanism.IterableMechanism}
+ * @final
  */
 goog.storage.mechanism.IEUserData = function(storageKey, opt_storageNodeId) {
   goog.base(this);

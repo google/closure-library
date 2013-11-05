@@ -33,6 +33,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
  * @param {string} prefix Prefix for creating an artificial namespace.
  * @constructor
  * @extends {goog.storage.mechanism.IterableMechanism}
+ * @final
  */
 goog.storage.mechanism.PrefixedMechanism = function(mechanism, prefix) {
   goog.base(this);

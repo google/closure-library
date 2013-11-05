@@ -104,6 +104,7 @@ goog.result.Result.prototype.isCanceled = function() {};
  * The value to be passed to the error handlers invoked upon cancellation.
  * @constructor
  * @extends {Error}
+ * @final
  */
 goog.result.Result.CancelError = function() {
   // Note that this does not derive from goog.debug.Error in order to prevent

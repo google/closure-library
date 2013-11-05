@@ -37,6 +37,7 @@ goog.require('goog.userAgent');
  * @param {!goog.tweak.Registry} registry The registry to render.
  * @param {goog.dom.DomHelper=} opt_domHelper The DomHelper to render with.
  * @constructor
+ * @final
  */
 goog.tweak.TweakUi = function(registry, opt_domHelper) {
   /**
@@ -375,6 +376,7 @@ goog.tweak.TweakUi.prototype.insertEntry_ = function(entry) {
  *     panel.
  * @param {goog.dom.DomHelper=} opt_domHelper The DomHelper to render with.
  * @constructor
+ * @final
  */
 goog.tweak.EntriesPanel = function(entries, opt_domHelper) {
   /**

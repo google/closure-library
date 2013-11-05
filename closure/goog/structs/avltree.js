@@ -55,6 +55,7 @@ goog.require('goog.structs.Collection');
  * @param {Function=} opt_comparator Function used to order the tree's nodes.
  * @constructor
  * @implements {goog.structs.Collection}
+ * @final
  */
 goog.structs.AvlTree = function(opt_comparator) {
   this.comparator_ = opt_comparator ||
@@ -762,6 +763,7 @@ goog.structs.AvlTree.prototype.getMaxNode_ = function(opt_rootNode) {
  * @param {*} value Value to store in the node.
  * @param {goog.structs.AvlTree.Node=} opt_parent Optional parent node.
  * @constructor
+ * @final
  */
 goog.structs.AvlTree.Node = function(value, opt_parent) {
   /**

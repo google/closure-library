@@ -36,6 +36,7 @@ goog.require('goog.structs.Heap');
  *
  * @constructor
  * @extends {goog.structs.Heap}
+ * @final
  */
 goog.structs.PriorityQueue = function() {
   goog.structs.Heap.call(this);

@@ -36,6 +36,7 @@ goog.require('goog.result.Result');
  * @param {!goog.result.Result} result A result.
  * @constructor
  * @extends {goog.async.Deferred}
+ * @final
  */
 goog.result.DeferredAdaptor = function(result) {
   goog.base(this);

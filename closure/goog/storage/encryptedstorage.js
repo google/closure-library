@@ -54,6 +54,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
  * @param {string} secret The secret key used to encrypt the storage.
  * @constructor
  * @extends {goog.storage.CollectableStorage}
+ * @final
  */
 goog.storage.EncryptedStorage = function(mechanism, secret) {
   goog.base(this, mechanism);

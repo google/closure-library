@@ -36,6 +36,7 @@ goog.require('goog.iter');
  * @param {!Array=} opt_elements Elements to add to the set. The non-string
  *     items will be converted to strings, so 15 and '15' will mean the same.
  * @constructor
+ * @final
  */
 goog.structs.StringSet = function(opt_elements) {
   /**

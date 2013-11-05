@@ -40,6 +40,7 @@ goog.require('goog.string');
  *     found on the proto when parsing the text format will be ignored.
  * @constructor
  * @extends {goog.proto2.Serializer}
+ * @final
  */
 goog.proto2.TextFormatSerializer = function(opt_ignoreMissingFields) {
   /**
@@ -502,6 +503,7 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.nextInternal_ =
 /**
  * Helper class for parsing the text format.
  * @constructor
+ * @final
  */
 goog.proto2.TextFormatSerializer.Parser = function() {
   /**
