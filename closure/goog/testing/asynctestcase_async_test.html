@@ -97,6 +97,50 @@ This tests that the AsyncTestCase can handle asynchronous behaviour in:
       assertTrue(curTestIsDone);
     }
 
+
+    var callback = function() {
+      curTestIsDone = true;
+      asyncTestCase.signal();
+    };
+    var doAsyncSignals = function() {
+      curTestIsDone = false;
+      window.setTimeout(callback, 0);
+    };
+
+    function testSignalsReturn() {
+      doAsyncSignals();
+      doAsyncSignals();
+      doAsyncSignals();
+      asyncTestCase.waitForSignals(3);
+    }
+
+    function testSignalsMixedSyncAndAsync() {
+      asyncTestCase.signal();
+      doAsyncSignals();
+      doAsyncSignals();
+      asyncTestCase.waitForSignals(3);
+    }
+
+    function testSignalsMixedSyncAndAsyncMultipleWaits() {
+      asyncTestCase.signal();
+      doAsyncSignals();
+      asyncTestCase.waitForSignals(1);
+      doAsyncSignals();
+      asyncTestCase.waitForSignals(2);
+    }
+
+    function testSignalsCallContinueTestingBeforeFinishing() {
+      doAsyncSignals();
+      asyncTestCase.waitForSignals(2);
+
+      window.setTimeout(function() {
+        var thrown = assertThrows(function() {
+          asyncTestCase.continueTesting();
+        });
+        assertEquals('Still waiting for 1 signals.', thrown.message);
+      }, 0);
+      doAsyncSignals(); // To not timeout.
+    }
   </script>
 </body>
 </html>

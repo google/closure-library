@@ -87,6 +87,32 @@ version of window.setTimeout() to eliminate all asynchronous calls.
       assertTrue(curTestIsDone);
       doAsyncStuff(5, 'test3');
     }
+    var callback = function() {
+      curTestIsDone = true;
+      asyncTestCase.signal();
+    };
+    var doAsyncSignals = function() {
+      curTestIsDone = false;
+      window.setTimeout(callback, 0);
+    };
+    function testSignalsReturn() {
+      doAsyncSignals();
+      doAsyncSignals();
+      doAsyncSignals();
+      asyncTestCase.waitForSignals(3);
+    }
+    function testSignalsCallContinueTestingBeforeFinishing() {
+      doAsyncSignals();
+      asyncTestCase.waitForSignals(2);
+
+      window.setTimeout(function() {
+        var thrown = assertThrows(function() {
+          asyncTestCase.continueTesting();
+        });
+        assertEquals('Still waiting for 1 signals.', thrown.message);
+      }, 0);
+      doAsyncSignals(); // To not timeout.
+    }
     function tearDownPage() {
       debug('tearDownPage was called.');
       assertTrue(curTestIsDone);
