@@ -38,11 +38,14 @@ goog.require('goog.string');
  * readable text format.
  * @param {boolean=} opt_ignoreMissingFields If true, then fields that cannot be
  *     found on the proto when parsing the text format will be ignored.
+ * @param {boolean=} opt_useEnumValues If true, serialization code for enums
+ *     will use enum integer values instead of human-readable symbolic names.
  * @constructor
  * @extends {goog.proto2.Serializer}
  * @final
  */
-goog.proto2.TextFormatSerializer = function(opt_ignoreMissingFields) {
+goog.proto2.TextFormatSerializer = function(
+    opt_ignoreMissingFields, opt_useEnumValues) {
   /**
    * Whether to ignore fields not defined on the proto when parsing the text
    * format.
@@ -50,6 +53,14 @@ goog.proto2.TextFormatSerializer = function(opt_ignoreMissingFields) {
    * @private
    */
   this.ignoreMissingFields_ = !!opt_ignoreMissingFields;
+
+  /**
+   * Whether to use integer enum values during enum serialization.
+   * If false, symbolic names will be used.
+   * @type {boolean}
+   * @private
+   */
+  this.useEnumValues_ = !!opt_useEnumValues;
 };
 goog.inherits(goog.proto2.TextFormatSerializer, goog.proto2.Serializer);
 
@@ -178,16 +189,18 @@ goog.proto2.TextFormatSerializer.prototype.printFieldValue_ =
       break;
 
     case goog.proto2.FieldDescriptor.FieldType.ENUM:
-      // Search the enum type for a matching key.
-      var found = false;
-      goog.object.forEach(field.getNativeType(), function(eValue, key) {
-        if (eValue == value) {
-          printer.append(key);
-          found = true;
-        }
-      });
+      if (!this.useEnumValues_) {
+        // Search the enum type for a matching key.
+        var found = false;
+        goog.object.forEach(field.getNativeType(), function(eValue, key) {
+          if (eValue == value) {
+            printer.append(key);
+            found = true;
+          }
+        });
+      }
 
-      if (!found) {
+      if (!found || this.useEnumValues_) {
         // Otherwise, just print the numeric value.
         printer.append(value.toString());
       }
@@ -689,7 +702,9 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
     case goog.proto2.FieldDescriptor.FieldType.SFIXED32:
     case goog.proto2.FieldDescriptor.FieldType.SINT32:
       var num = this.consumeNumber_();
-      if (!num) { return null; }
+      if (!num) {
+        return null;
+      }
 
       return goog.proto2.TextFormatSerializer.Parser.getNumberFromString_(num);
 
@@ -699,7 +714,9 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
     case goog.proto2.FieldDescriptor.FieldType.SFIXED64:
     case goog.proto2.FieldDescriptor.FieldType.SINT64:
       var num = this.consumeNumber_();
-      if (!num) { return null; }
+      if (!num) {
+        return null;
+      }
 
       if (field.getNativeType() == Number) {
         // 64-bit number stored as a number.
@@ -711,7 +728,9 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
 
     case goog.proto2.FieldDescriptor.FieldType.BOOL:
       var ident = this.consumeIdentifier_();
-      if (!ident) { return null; }
+      if (!ident) {
+        return null;
+      }
 
       switch (ident) {
         case 'true': return true;
@@ -723,7 +742,13 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ =
 
     case goog.proto2.FieldDescriptor.FieldType.ENUM:
       if (this.lookingAtType_(types.NUMBER)) {
-        return this.consumeNumber_();
+        var num = this.consumeNumber_();
+        if (!num) {
+          return null;
+        }
+
+        return goog.proto2.TextFormatSerializer.Parser.getNumberFromString_(
+            num);
       } else {
         // Search the enum type for a matching key.
         var name = this.consumeIdentifier_();

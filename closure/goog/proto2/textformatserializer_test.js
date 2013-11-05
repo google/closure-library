@@ -610,7 +610,6 @@ function testBidirectional() {
   assertTrue(copy.equals(message));
 }
 
-
 function testBidirectional64BitNumber() {
   var message = new proto2.TestAllTypes();
   message.setOptionalInt64Number(10000000);
@@ -626,4 +625,23 @@ function testBidirectional64BitNumber() {
 
   // Assert that the messages are structurally equivalent.
   assertTrue(copy.equals(message));
+}
+
+function testUseEnumValues() {
+  var message = new proto2.TestAllTypes();
+  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+
+  var serializer = new goog.proto2.TextFormatSerializer(false, true);
+  var textform = serializer.serialize(message);
+
+  var expected = 'optional_nested_enum: 0\n';
+
+  assertEquals(expected, textform);
+
+  var deserializedMessage = new proto2.TestAllTypes();
+  serializer.deserializeTo(deserializedMessage, textform);
+
+  assertEquals(
+      proto2.TestAllTypes.NestedEnum.FOO,
+      deserializedMessage.getOptionalNestedEnum());
 }
