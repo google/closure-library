@@ -317,15 +317,11 @@ goog.module.ModuleLoader.prototype.downloadModules_ = function(
     eventHandler.listen(
         bulkLoader,
         goog.net.EventType.SUCCESS,
-        goog.bind(this.handleSuccess_, this, bulkLoader, ids),
-        false,
-        null);
+        goog.bind(this.handleSuccess_, this, bulkLoader, ids));
     eventHandler.listen(
         bulkLoader,
         goog.net.EventType.ERROR,
-        goog.bind(this.handleError_, this, bulkLoader, ids),
-        false,
-        null);
+        goog.bind(this.handleError_, this, bulkLoader, ids));
     bulkLoader.load();
   }
 };

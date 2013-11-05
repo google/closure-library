@@ -248,7 +248,7 @@ goog.ui.equation.TexPane.prototype.enterDocument = function() {
   // Listen to the action event on the active palette.
   this.getHandler().listen(this.paletteManager_,
       goog.ui.equation.PaletteEvent.Type.ACTION,
-      this.handlePaletteAction_, false, this);
+      this.handlePaletteAction_);
 };
 
 

@@ -229,7 +229,7 @@ goog.ui.OfflineStatusComponent.prototype.setStatusCard = function(card) {
   this.card_ = card;
   this.getHandler().listen(this.card_,
       goog.ui.OfflineStatusCard.EventType.DISMISS,
-      this.performStatusAction, false, this);
+      this.performStatusAction);
   card.setStatus(this.status_);
 };
 

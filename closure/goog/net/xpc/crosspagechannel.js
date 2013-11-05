@@ -472,7 +472,7 @@ goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
   this.peerWindowDeferred_ =
       new goog.async.Deferred(undefined, this);
   var peerUri = this.getPeerUri(opt_addCfgParam);
-  this.peerLoadHandler_.listenOnce(iframeElm, 'load',
+  this.peerLoadHandler_.listenOnceWithScope(iframeElm, 'load',
       this.peerWindowDeferred_.callback, false, this.peerWindowDeferred_);
 
   if (goog.userAgent.GECKO || goog.userAgent.WEBKIT) {

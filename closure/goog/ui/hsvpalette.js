@@ -330,7 +330,7 @@ goog.ui.HsvPalette.prototype.enterDocument = function() {
 
   var handler = this.getHandler();
   handler.listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-      this.handleMouseDown, false, this);
+      this.handleMouseDown);
 
   // Cannot create InputHandler in createDom because IE throws an exception
   // on document.activeElement
@@ -339,7 +339,7 @@ goog.ui.HsvPalette.prototype.enterDocument = function() {
   }
 
   handler.listen(this.inputHandler_,
-      goog.events.InputHandler.EventType.INPUT, this.handleInput, false, this);
+      goog.events.InputHandler.EventType.INPUT, this.handleInput);
 };
 
 

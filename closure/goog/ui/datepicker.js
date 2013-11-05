@@ -765,9 +765,7 @@ goog.ui.DatePicker.prototype.addPreventDefaultClickHandler_ =
       function(e) {
         e.preventDefault();
         handlerFunction.call(this, e);
-      },
-      false,
-      this);
+      });
 };
 
 
