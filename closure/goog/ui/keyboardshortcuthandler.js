@@ -122,6 +122,14 @@ goog.ui.KeyboardShortcutHandler = function(keyTarget) {
    */
   this.modifierShortcutsAreGlobal_ = true;
 
+  /**
+   * Whether to treat space key as a shortcut when the focused element is a
+   * checkbox, radiobutton or button.
+   * @type {boolean}
+   * @private
+   */
+  this.allowSpaceKeyOnButtons_ = false;
+
   this.initializeKeyListener(keyTarget);
 };
 goog.inherits(goog.ui.KeyboardShortcutHandler, goog.events.EventTarget);
@@ -368,6 +376,18 @@ goog.ui.KeyboardShortcutHandler.prototype.setModifierShortcutsAreGlobal =
 goog.ui.KeyboardShortcutHandler.prototype.getModifierShortcutsAreGlobal =
     function() {
   return this.modifierShortcutsAreGlobal_;
+};
+
+
+/**
+ * Sets whether to treat space key as a shortcut when the focused element is a
+ * checkbox, radiobutton or button.
+ * @param {boolean} allowSpaceKeyOnButtons Whether to treat space key as a
+ *     shortcut when the focused element is a checkbox, radiobutton or button.
+ */
+goog.ui.KeyboardShortcutHandler.prototype.setAllowSpaceKeyOnButtons = function(
+    allowSpaceKeyOnButtons) {
+  this.allowSpaceKeyOnButtons_ = allowSpaceKeyOnButtons;
 };
 
 
@@ -841,7 +861,7 @@ goog.ui.KeyboardShortcutHandler.makeKey_ = function(keyCode, modifiers) {
  * @private
  */
 goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
-  if (!this.isValidShortcut(event)) {
+  if (!this.isValidShortcut_(event)) {
     return;
   }
   // For possible printable-key events, we cannot identify whether the events
@@ -944,9 +964,9 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
  * Checks if a given keypress event may be treated as a shortcut.
  * @param {goog.events.BrowserEvent} event Keypress event.
  * @return {boolean} Whether to attempt to process the event as a shortcut.
- * @protected
+ * @private
  */
-goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut = function(event) {
+goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
   var keyCode = event.keyCode;
 
   // Ignore Ctrl, Shift and ALT
@@ -988,7 +1008,13 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut = function(event) {
   }
   // Checkboxes, radiobuttons and buttons. Allow all but SPACE as shortcut.
   if (el.tagName == 'INPUT' || el.tagName == 'BUTTON') {
-    return keyCode != goog.events.KeyCodes.SPACE;
+    // TODO(gboyer): If more flexibility is needed, create protected helper
+    // methods for each case (e.g. button, input, etc).
+    if (this.allowSpaceKeyOnButtons_) {
+      return true;
+    } else {
+      return keyCode != goog.events.KeyCodes.SPACE;
+    }
   }
   // Don't allow any additional shortcut keys for textareas or selects.
   return false;
