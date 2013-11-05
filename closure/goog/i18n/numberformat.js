@@ -243,6 +243,16 @@ goog.i18n.NumberFormat.prototype.setBaseFormatting =
 
 
 /**
+ * Gets the number on which compact formatting is currently based, or null if
+ * no such number is set. See setBaseFormatting() for more information.
+ * @return {?number}
+ */
+goog.i18n.NumberFormat.prototype.getBaseFormatting = function() {
+  return this.baseFormattingNumber_;
+};
+
+
+/**
  * Apply provided pattern, result are stored in member variables.
  *
  * @param {string} pattern String pattern being applied.

@@ -982,6 +982,14 @@ function testCompactWithBaseFormattingFrench() {
 
 }
 
+function testGetBaseFormattingNumber() {
+  var fmt = new goog.i18n.NumberFormat(
+      goog.i18n.NumberFormat.Format.COMPACT_SHORT);
+  assertEquals(null, fmt.getBaseFormatting());
+  fmt.setBaseFormatting(10000);
+  assertEquals(10000, fmt.getBaseFormatting());
+}
+
 // Moved Polish, Romanian, other currencies to tier 2, check that it works now
 function testPolish() {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pl;
