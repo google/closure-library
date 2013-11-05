@@ -261,7 +261,7 @@ goog.ui.DatePicker.BASE_CSS_CLASS_ = goog.getCssName('goog-date-picker');
  */
 goog.ui.DatePicker.Events = {
   CHANGE: 'change',
-  CHANGE_ACTIVE_MONTH: 'change_active_month',
+  CHANGE_ACTIVE_MONTH: 'changeActiveMonth',
   SELECT: 'select'
 };
 
