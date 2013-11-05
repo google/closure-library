@@ -64,6 +64,7 @@ goog.require('goog.object');
  *
  * @constructor
  * @implements {goog.events.Listenable}
+ * @final
  */
 goog.labs.events.NonDisposableEventTarget = function() {
   /**

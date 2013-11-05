@@ -40,6 +40,7 @@ goog.require('goog.string');
  * @constructor
  * @struct
  * @implements {goog.labs.testing.Matcher}
+ * @final
  */
 goog.labs.testing.HasEntriesMatcher = function(entries) {
   /**
@@ -94,6 +95,7 @@ goog.labs.testing.HasEntriesMatcher.prototype.describe =
  * @constructor
  * @struct
  * @implements {goog.labs.testing.Matcher}
+ * @final
  */
 goog.labs.testing.HasEntryMatcher = function(key, value) {
   /**
@@ -147,6 +149,7 @@ goog.labs.testing.HasEntryMatcher.prototype.describe =
  * @constructor
  * @struct
  * @implements {goog.labs.testing.Matcher}
+ * @final
  */
 goog.labs.testing.HasKeyMatcher = function(key) {
   /**
@@ -188,6 +191,7 @@ goog.labs.testing.HasKeyMatcher.prototype.describe =
  * @constructor
  * @struct
  * @implements {goog.labs.testing.Matcher}
+ * @final
  */
 goog.labs.testing.HasValueMatcher = function(value) {
   /**

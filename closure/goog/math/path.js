@@ -36,6 +36,7 @@ goog.require('goog.math');
  * the {@code transform} method.
  *
  * @constructor
+ * @final
  */
 goog.math.Path = function() {
   /**

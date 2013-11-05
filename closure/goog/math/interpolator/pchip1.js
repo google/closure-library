@@ -30,6 +30,7 @@ goog.require('goog.math.interpolator.Spline1');
  * A one dimensional monotone cubic spline interpolator.
  * @extends {goog.math.interpolator.Spline1}
  * @constructor
+ * @final
  */
 goog.math.interpolator.Pchip1 = function() {
   goog.base(this);

@@ -52,6 +52,7 @@ goog.labs.testing.assertThat = function(actual, matcher, opt_reason) {
  * @param {string=} opt_message The error message.
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.labs.testing.MatcherError = function(opt_message) {
   goog.base(this, opt_message);

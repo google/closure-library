@@ -32,6 +32,7 @@ goog.require('goog.log');
  *
  * @constructor
  * @struct
+ * @final
  */
 goog.labs.net.webChannel.WebChannelDebug = function() {
   /**

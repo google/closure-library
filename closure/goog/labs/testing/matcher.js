@@ -64,6 +64,7 @@ goog.labs.testing.Matcher.makeMatcher =
   /**
    * @constructor
    * @implements {goog.labs.testing.Matcher}
+   * @final
    */
   var matcherConstructor = function() {};
 

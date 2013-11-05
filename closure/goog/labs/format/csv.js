@@ -51,6 +51,7 @@ goog.labs.format.csv.ENABLE_VERBOSE_DEBUGGING = goog.DEBUG;
  * @param {string=} opt_message A description of the violated parse expectation.
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.labs.format.csv.ParseError = function(text, index, opt_message) {
 

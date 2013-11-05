@@ -45,6 +45,7 @@ goog.require('goog.math.Coordinate');
  * @param {number} x3 X coordinate of the end point.
  * @param {number} y3 Y coordinate of the end point.
  * @constructor
+ * @final
  */
 goog.math.Bezier = function(x0, y0, x1, y1, x2, y2, x3, y3) {
   /**

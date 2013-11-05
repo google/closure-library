@@ -37,6 +37,7 @@ var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
  * @param {number=} opt_maxPoolSize The maximum pool size.
  *
  * @constructor
+ * @final
  */
 goog.labs.net.webChannel.ForwardChannelRequestPool = function(opt_maxPoolSize) {
   /**

@@ -34,17 +34,26 @@ goog.define('goog.log.ENABLED', goog.debug.LOGGING_ENABLED);
 
 
 
-/** @constructor */
+/**
+ * @constructor
+ * @final
+ */
 goog.log.Logger = goog.debug.Logger;
 
 
 
-/** @constructor */
+/**
+ * @constructor
+ * @final
+ */
 goog.log.Level = goog.debug.Logger.Level;
 
 
 
-/** @constructor */
+/**
+ * @constructor
+ * @final
+ */
 goog.log.LogRecord = goog.debug.LogRecord;
 
 

@@ -118,6 +118,7 @@ function stubSpdyCheck(spdyEnabled) {
  * Mock ChannelRequest.
  * @constructor
  * @struct
+ * @final
  */
 var MockChannelRequest = function(channel, channelDebug, opt_sessionId,
     opt_requestId, opt_retryId) {

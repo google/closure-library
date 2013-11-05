@@ -47,6 +47,7 @@ var storage = goog.labs.storage;
  * @param {number} maxItems Maximum number of items in storage.
  * @constructor
  * @extends {goog.storage.CollectableStorage}
+ * @final
  */
 storage.BoundedCollectableStorage = function(mechanism, maxItems) {
   goog.base(this, mechanism);

@@ -52,6 +52,7 @@ goog.require('goog.userAgent');
  * @param {number=} opt_retryId  The retry id for this request.
  * @constructor
  * @struct
+ * @final
  */
 goog.labs.net.webChannel.ChannelRequest = function(channel, channelDebug,
     opt_sessionId, opt_requestId, opt_retryId) {

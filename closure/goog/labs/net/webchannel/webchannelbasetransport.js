@@ -42,6 +42,7 @@ goog.require('goog.string.path');
  * @constructor
  * @struct
  * @implements {goog.net.WebChannelTransport}
+ * @final
  */
 goog.labs.net.webChannel.WebChannelBaseTransport = function() {};
 
@@ -71,6 +72,7 @@ WebChannelBaseTransport.prototype.createWebChannel = function(
  * @constructor
  * @implements {goog.net.WebChannel}
  * @extends {goog.events.EventTarget}
+ * @final
  */
 WebChannelBaseTransport.Channel = function(url, opt_options) {
   goog.base(this);
@@ -183,6 +185,7 @@ WebChannelBaseTransport.Channel.prototype.disposeInternal = function() {
  * @param {!Array} array The data array from the underlying channel.
  * @constructor
  * @extends {goog.net.WebChannel.MessageEvent}
+ * @final
  */
 WebChannelBaseTransport.Channel.MessageEvent = function(array) {
   goog.base(this);
@@ -200,6 +203,7 @@ goog.inherits(WebChannelBaseTransport.Channel.MessageEvent,
  * @param {WebChannelBase.Error} error The error code.
  * @constructor
  * @extends {goog.net.WebChannel.ErrorEvent}
+ * @final
  */
 WebChannelBaseTransport.Channel.ErrorEvent = function(error) {
   goog.base(this);
@@ -297,6 +301,7 @@ WebChannelBaseTransport.Channel.prototype.getRuntimeProperties = function() {
  *
  * @constructor
  * @implements {goog.net.WebChannel.RuntimeProperties}
+ * @final
  */
 WebChannelBaseTransport.ChannelProperties = function(channel) {
   /**

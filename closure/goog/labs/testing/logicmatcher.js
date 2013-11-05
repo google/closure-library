@@ -36,6 +36,7 @@ goog.require('goog.labs.testing.Matcher');
  * @constructor
  * @struct
  * @implements {goog.labs.testing.Matcher}
+ * @final
  */
 goog.labs.testing.AllOfMatcher = function(matchers) {
   /**
@@ -86,6 +87,7 @@ goog.labs.testing.AllOfMatcher.prototype.describe =
  * @constructor
  * @struct
  * @implements {goog.labs.testing.Matcher}
+ * @final
  */
 goog.labs.testing.AnyOfMatcher = function(matchers) {
   /**
@@ -135,6 +137,7 @@ goog.labs.testing.AnyOfMatcher.prototype.describe =
  * @constructor
  * @struct
  * @implements {goog.labs.testing.Matcher}
+ * @final
  */
 goog.labs.testing.IsNotMatcher = function(matcher) {
   /**

@@ -142,6 +142,7 @@ goog.labs.mock.formatMethodCall_ = function(methodName, opt_args) {
  * @param {!Array} args The expected arguments.
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.labs.mock.VerificationError = function(recordedCalls, methodName, args) {
   var msg = goog.labs.mock.VerificationError.getVerificationErrorMsg_(
@@ -423,7 +424,10 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   if (goog.isFunction(objOrClass)) {
     // Create a temporary subclass with a no-op constructor so that we can
     // create an instance and determine what methods it has.
-    /** @constructor */
+    /**
+ * @constructor
+ * @final
+ */
     var tempCtor = function() {};
     goog.inherits(tempCtor, objOrClass);
     obj = new tempCtor();
@@ -433,7 +437,10 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
 
   // Put the object being mocked in the prototype chain of the mock so that
   // it has all the correct properties and instanceof works.
-  /** @constructor */
+  /**
+ * @constructor
+ * @final
+ */
   var mockedItemCtor = function() {};
   mockedItemCtor.prototype = obj;
   this.mockedItem = new mockedItemCtor();

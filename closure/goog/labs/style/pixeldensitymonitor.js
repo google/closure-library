@@ -44,6 +44,7 @@ goog.require('goog.events.EventTarget');
  *     which this code is executing.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.labs.style.PixelDensityMonitor = function(opt_domHelper) {
   goog.base(this);
