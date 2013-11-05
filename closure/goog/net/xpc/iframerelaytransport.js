@@ -44,6 +44,7 @@ goog.require('goog.userAgent');
  *     the correct window.
  * @constructor
  * @extends {goog.net.xpc.Transport}
+ * @final
  */
 goog.net.xpc.IframeRelayTransport = function(channel, opt_domHelper) {
   goog.base(this, opt_domHelper);

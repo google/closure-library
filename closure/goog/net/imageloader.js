@@ -60,6 +60,7 @@ goog.require('goog.userAgent');
  *     should be used to load images.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.net.ImageLoader = function(opt_parent) {
   goog.events.EventTarget.call(this);

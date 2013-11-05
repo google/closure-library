@@ -84,6 +84,7 @@ goog.require('goog.userAgent');
  * Creates a new instance of cross domain RPC
  * @extends {goog.events.EventTarget}
  * @constructor
+ * @final
  */
 goog.net.CrossDomainRpc = function() {
   goog.events.EventTarget.call(this);

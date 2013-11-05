@@ -53,6 +53,7 @@ goog.require('goog.net.xpc.TransportTypes');
  *     transport should use.  The default is '2'.
  * @constructor
  * @extends {goog.net.xpc.Transport}
+ * @final
  */
 goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
     opt_domHelper, opt_oneSidedHandshake, opt_protocolVersion) {

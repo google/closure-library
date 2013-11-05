@@ -452,6 +452,7 @@ goog.net.WebSocket.prototype.disposeInternal = function() {
  * @param {string} message The raw message coming from the web socket.
  * @extends {goog.events.Event}
  * @constructor
+ * @final
  */
 goog.net.WebSocket.MessageEvent = function(message) {
   goog.base(this, goog.net.WebSocket.EventType.MESSAGE);
@@ -473,6 +474,7 @@ goog.inherits(goog.net.WebSocket.MessageEvent, goog.events.Event);
  * @param {string} data The error data.
  * @extends {goog.events.Event}
  * @constructor
+ * @final
  */
 goog.net.WebSocket.ErrorEvent = function(data) {
   goog.base(this, goog.net.WebSocket.EventType.ERROR);

@@ -348,6 +348,7 @@ goog.net.jsloader.ErrorCode = {
  * @param {string=} opt_message Additional message.
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.net.jsloader.Error = function(code, opt_message) {
   var msg = 'Jsloader error (code #' + code + ')';

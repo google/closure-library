@@ -410,6 +410,7 @@ goog.module.ModuleLoader.EventType = {
  * @param {Array.<string>} moduleIds The ids of the modules being evaluated.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.module.ModuleLoader.Event = function(type, moduleIds) {
   goog.base(this, type);
@@ -427,6 +428,7 @@ goog.inherits(goog.module.ModuleLoader.Event, goog.events.Event);
  * A class that keeps the state of the module during the loading process. It is
  * used to save loading information between modules download and evaluation.
  * @constructor
+ * @final
  */
 goog.module.ModuleLoader.LoadStatus = function() {
   /**

@@ -37,6 +37,7 @@ goog.require('goog.debug.Logger');
  * @param {string} serviceName The name of the logging service to use.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.messaging.LoggerClient = function(channel, serviceName) {
   if (goog.messaging.LoggerClient.instance_) {

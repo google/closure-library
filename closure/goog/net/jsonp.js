@@ -63,6 +63,7 @@ goog.require('goog.net.jsloader');
  *     specify the callback. Defaults to "callback".
  *
  * @constructor
+ * @final
  */
 goog.net.Jsonp = function(uri, opt_callbackParamName) {
   /**

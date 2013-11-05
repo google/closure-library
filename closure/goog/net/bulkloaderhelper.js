@@ -31,6 +31,7 @@ goog.require('goog.log');
  * @param {Array.<string|goog.Uri>} uris The URIs to load.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.net.BulkLoaderHelper = function(uris) {
   goog.Disposable.call(this);

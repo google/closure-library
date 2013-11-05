@@ -167,6 +167,7 @@ goog.net.IpAddress.fromUriString = function(address) {
  * @param {(string|!goog.math.Integer)} address The address to store.
  * @extends {goog.net.IpAddress}
  * @constructor
+ * @final
  */
 goog.net.Ipv4Address = function(address) {
   var ip = goog.math.Integer.ZERO;
@@ -269,6 +270,7 @@ goog.net.Ipv4Address.prototype.toUriString = function() {
  * @param {(string|!goog.math.Integer)} address The address to store.
  * @constructor
  * @extends {goog.net.IpAddress}
+ * @final
  */
 goog.net.Ipv6Address = function(address) {
   var ip = goog.math.Integer.ZERO;

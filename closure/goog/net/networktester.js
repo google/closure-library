@@ -33,6 +33,7 @@ goog.require('goog.log');
  * @param {Object=} opt_handler Handler object for the callback.
  * @param {goog.Uri=} opt_uri URI to use for testing.
  * @constructor
+ * @final
  */
 goog.net.NetworkTester = function(callback, opt_handler, opt_uri) {
   /**

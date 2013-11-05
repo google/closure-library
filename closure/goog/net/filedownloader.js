@@ -65,6 +65,7 @@ goog.require('goog.object');
  *     downloading files.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.net.FileDownloader = function(dir, opt_pool) {
   goog.base(this);
@@ -614,6 +615,7 @@ goog.net.FileDownloader.prototype.disposeInternal = function() {
  *
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.net.FileDownloader.Error = function(download, opt_fsErr) {
   goog.base(this, 'Error capturing URL ' + download.url);

@@ -43,6 +43,7 @@ goog.require('goog.messaging.MultiChannel');
  * @constructor
  * @extends {goog.Disposable}
  * @implements {goog.messaging.MessageChannel};
+ * @final
  */
 goog.messaging.BufferedChannel = function(messageChannel, opt_interval) {
   goog.Disposable.call(this);

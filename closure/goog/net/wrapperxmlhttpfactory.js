@@ -34,6 +34,7 @@ goog.require('goog.net.XmlHttpFactory');
  *     options associated with xhr objects from this factory.
  * @extends {goog.net.XmlHttpFactory}
  * @constructor
+ * @final
  */
 goog.net.WrapperXmlHttpFactory = function(xhrFactory, optionsFactory) {
   goog.net.XmlHttpFactory.call(this);

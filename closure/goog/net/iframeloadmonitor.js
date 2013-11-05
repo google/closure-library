@@ -39,6 +39,7 @@ goog.require('goog.userAgent');
  * @param {boolean=} opt_hasContent Does the loaded iframe have content.
  * @extends {goog.events.EventTarget}
  * @constructor
+ * @final
  */
 goog.net.IframeLoadMonitor = function(iframe, opt_hasContent) {
   goog.base(this);

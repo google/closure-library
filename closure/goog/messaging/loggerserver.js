@@ -38,6 +38,7 @@ goog.require('goog.log');
  *     distinguish this client's messages.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.messaging.LoggerServer = function(channel, serviceName, opt_channelName) {
   goog.base(this);

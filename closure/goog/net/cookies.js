@@ -28,6 +28,7 @@ goog.provide('goog.net.cookies');
  * A class for handling browser cookies.
  * @param {Document} context The context document to get/set cookies on.
  * @constructor
+ * @final
  */
 goog.net.Cookies = function(context) {
   /**

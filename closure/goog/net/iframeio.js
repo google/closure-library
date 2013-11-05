@@ -1354,6 +1354,7 @@ goog.net.IframeIo.prototype.testForFirefoxSilentError_ = function() {
  * @param {Object} data The data associated with the event.
  * @extends {goog.events.Event}
  * @constructor
+ * @final
  */
 goog.net.IframeIo.IncrementalDataEvent = function(data) {
   goog.events.Event.call(this, goog.net.EventType.INCREMENTAL_DATA);

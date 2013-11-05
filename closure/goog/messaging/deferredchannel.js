@@ -35,6 +35,7 @@ goog.require('goog.messaging.MessageChannel'); // interface
  * @constructor
  * @extends {goog.Disposable}
  * @implements {goog.messaging.MessageChannel}
+ * @final
  */
 goog.messaging.DeferredChannel = function(deferredChannel) {
   goog.base(this);

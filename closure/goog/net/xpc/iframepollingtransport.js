@@ -48,6 +48,7 @@ goog.require('goog.userAgent');
  *     the correct window.
  * @constructor
  * @extends {goog.net.xpc.Transport}
+ * @final
  */
 goog.net.xpc.IframePollingTransport = function(channel, opt_domHelper) {
   goog.base(this, opt_domHelper);
@@ -816,6 +817,7 @@ goog.net.xpc.IframePollingTransport.startRcvTimer_ = function() {
  * @constructor
  * @param {string} url The url the other document will use for polling.
  * @param {Object} windowObj The frame used for sending information to.
+ * @final
  */
 goog.net.xpc.IframePollingTransport.Sender = function(url, windowObj) {
   /**
@@ -884,6 +886,7 @@ goog.net.xpc.IframePollingTransport.Sender.prototype.send = function(payload) {
  * @param {Object} windowObj The window-object to poll for location-changes.
  * @param {Function} callback The callback-function to be called when
  *     location has changed.
+ * @final
  */
 goog.net.xpc.IframePollingTransport.Receiver = function(transport,
                                                         windowObj,

@@ -37,6 +37,7 @@ goog.require('goog.object');
  * the goog.module.Loader instance.
  *
  * @constructor
+ * @final
  */
 goog.module.Loader = function() {
   /**

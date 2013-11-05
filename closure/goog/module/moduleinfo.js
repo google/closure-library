@@ -36,6 +36,7 @@ goog.require('goog.module.ModuleLoadCallback');
  * @param {string} id The module's ID.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.module.ModuleInfo = function(deps, id) {
   goog.Disposable.call(this);

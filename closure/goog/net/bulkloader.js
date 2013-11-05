@@ -34,6 +34,7 @@ goog.require('goog.net.XhrIo');
  * @param {Array.<string|goog.Uri>} uris The URIs to load.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.net.BulkLoader = function(uris) {
   goog.events.EventTarget.call(this);

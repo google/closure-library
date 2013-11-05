@@ -59,6 +59,7 @@ goog.require('goog.string');
  *     worker or removing it from the DOM if it's an iframe.
  * @constructor
  * @extends {goog.messaging.AbstractChannel}
+ * @final
  */
 goog.messaging.PortChannel = function(underlyingPort) {
   goog.base(this);

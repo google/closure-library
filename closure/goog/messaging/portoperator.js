@@ -39,6 +39,7 @@ goog.require('goog.object');
  * @constructor
  * @extends {goog.Disposable}
  * @implements {goog.messaging.PortNetwork}
+ * @final
  */
 goog.messaging.PortOperator = function(name) {
   goog.base(this);

@@ -508,6 +508,7 @@ goog.net.XhrManager.prototype.disposeInternal = function() {
  * @param {goog.net.XhrIo} xhrIo The XhrIo object of the request.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.net.XhrManager.Event = function(type, target, id, xhrIo) {
   goog.events.Event.call(this, type, target);
@@ -548,6 +549,7 @@ goog.inherits(goog.net.XhrManager.Event, goog.events.Event);
  *
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.net.XhrManager.Request = function(url, xhrEventCallback, opt_method,
     opt_content, opt_headers, opt_callback, opt_maxRetries, opt_responseType) {

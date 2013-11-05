@@ -44,6 +44,7 @@ goog.require('goog.net.xpc.TransportTypes');
  *     the correct window.
  * @constructor
  * @extends {goog.net.xpc.Transport}
+ * @final
  */
 goog.net.xpc.FrameElementMethodTransport = function(channel, opt_domHelper) {
   goog.base(this, opt_domHelper);

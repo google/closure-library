@@ -54,6 +54,7 @@ goog.require('goog.reflect');
  *     the correct window.
  * @constructor
  * @extends {goog.net.xpc.Transport}
+ * @final
  */
 goog.net.xpc.NixTransport = function(channel, opt_domHelper) {
   goog.base(this, opt_domHelper);
