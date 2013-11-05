@@ -20,7 +20,6 @@
 
 goog.provide('goog.labs.net.webChannel.BaseTestChannel');
 
-goog.require('goog.json.EvalJsonProcessor');
 goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.requestStats');
@@ -53,13 +52,6 @@ goog.labs.net.webChannel.BaseTestChannel = function(channel, channelDebug) {
    * @private {!goog.labs.net.webChannel.WebChannelDebug}
    */
   this.channelDebug_ = channelDebug;
-
-  /**
-   * Parser for a response payload. Defaults to use
-   * {@code goog.json.unsafeParse}. The parser should return an array.
-   * @private {goog.string.Parser}
-   */
-  this.parser_ = new goog.json.EvalJsonProcessor(null, true);
 };
 
 
@@ -198,17 +190,6 @@ BaseTestChannel.prototype.setExtraHeaders = function(extraHeaders) {
 
 
 /**
- * Sets a new parser for the response payload. A custom parser may be set to
- * avoid using eval(), for example.
- * By default, the parser uses {@code goog.json.unsafeParse}.
- * @param {!goog.string.Parser} parser Parser.
- */
-BaseTestChannel.prototype.setParser = function(parser) {
-  this.parser_ = parser;
-};
-
-
-/**
  * Starts the test channel. This initiates connections to the server.
  *
  * @param {string} path The relative uri for the test connection.
@@ -335,7 +316,7 @@ BaseTestChannel.prototype.onRequestData = function(req, responseText) {
     }
     /** @preserveTry */
     try {
-      var respArray = this.parser_.parse(responseText);
+      var respArray = this.channel_.getWireCodec().decodeMessage(responseText);
     } catch (e) {
       this.channelDebug_.dumpException(e);
       this.channel_.testConnectionFailure(this, ChannelRequest.Error.BAD_DATA);
