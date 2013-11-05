@@ -356,6 +356,16 @@ goog.net.IframeIo.addFormInputs_ = function(form, data) {
 
 
 /**
+ * @return {boolean} Whether we can use readyState to monitor iframe loading.
+ * @private
+ */
+goog.net.IframeIo.useIeReadyStateCodePath_ = function() {
+  // ReadyState is only available on iframes up to IE10.
+  return goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('11');
+};
+
+
+/**
  * Reference to a logger for the IframeIo objects
  * @type {goog.log.Logger}
  * @private
@@ -834,9 +844,10 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
   // Make Iframe
   this.createIframe_();
 
-  if (goog.userAgent.IE) {
-    // In IE we simply create the frame, wait until it is ready, then post the
-    // form to the iframe and wait for the readystate to change to 'complete'
+  if (goog.net.IframeIo.useIeReadyStateCodePath_()) {
+    // In IE<11 we simply create the frame, wait until it is ready, then post
+    // the form to the iframe and wait for the readystate to change to
+    // 'complete'
 
     // Set the target to the iframe's name
     this.form_.target = this.iframeName_ || '';
@@ -934,7 +945,7 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
       }
     }
 
-    // Some versions of Firefox (1.5 - 1.5.07?) fail to clone the value
+    // IE and some versions of Firefox (1.5 - 1.5.07?) fail to clone the value
     // attribute for <input type="file"> nodes, which results in an empty
     // upload if the clone is submitted.  Check, and if the clone failed, submit
     // using the original form instead.
@@ -1305,9 +1316,11 @@ goog.net.IframeIo.prototype.getContentDocument_ = function() {
  */
 goog.net.IframeIo.prototype.getRequestIframe = function() {
   if (this.iframe_) {
-    return /** @type {HTMLIFrameElement} */(goog.userAgent.IE ? this.iframe_ :
-        goog.dom.getFrameContentDocument(this.iframe_).getElementById(
-            this.iframeName_ + goog.net.IframeIo.INNER_FRAME_SUFFIX));
+    return /** @type {HTMLIFrameElement} */(
+        goog.net.IframeIo.useIeReadyStateCodePath_() ?
+            this.iframe_ :
+            goog.dom.getFrameContentDocument(this.iframe_).getElementById(
+                this.iframeName_ + goog.net.IframeIo.INNER_FRAME_SUFFIX));
   }
   return null;
 };
