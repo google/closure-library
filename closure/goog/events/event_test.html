@@ -13,6 +13,7 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.events.Event');
+    goog.require('goog.events.EventId');
     goog.require('goog.events.EventTarget');
     goog.require('goog.testing.jsunit');
   </script>
@@ -60,6 +61,11 @@ See the COPYING file for details.
       assertFalse('Default action must not be prevented', e.defaultPrevented);
       e.preventDefault();
       assertTrue('Default action must be prevented', e.defaultPrevented);
+    }
+
+    function testEventId() {
+      e = new goog.events.Event(new goog.events.EventId('eventType'));
+      assertEquals('Event type must be as expected', 'eventType', e.type);
     }
   </script>
 </body>

@@ -32,7 +32,7 @@ goog.require('goog.Disposable');
  * goog.events.Event. Objects are treated as an extension of a new
  * goog.events.Event with the type property of the object being used as the type
  * of the Event.
- * @typedef {string|Object|goog.events.Event}
+ * @typedef {string|Object|goog.events.Event|goog.events.EventId}
  */
 goog.events.EventLike;
 
@@ -42,7 +42,7 @@ goog.events.EventLike;
  * A base class for event objects, so that they can support preventDefault and
  * stopPropagation.
  *
- * @param {string} type Event Type.
+ * @param {string|goog.events.EventId} type Event Type.
  * @param {Object=} opt_target Reference to the object that is the target of
  *     this event. It has to implement the {@code EventTarget} interface
  *     declared at {@link http://developer.mozilla.org/en/DOM/EventTarget}.
@@ -53,7 +53,7 @@ goog.events.Event = function(type, opt_target) {
    * Event type.
    * @type {string}
    */
-  this.type = type;
+  this.type = String(type);
 
   /**
    * Target of the event.
