@@ -76,6 +76,7 @@ function tearDown() {
  * Dummy plugin for test usage.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 function TestPlugin() {
   this.getTrogClassId = function() {

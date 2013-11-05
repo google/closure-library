@@ -551,6 +551,7 @@ goog.editor.plugins.LinkBubble.prototype.isSafeSchemeToOpen_ =
  * @param {function(string):void} actionFn Action function to run when the
  *     action is clicked.  Takes the current target URL as a parameter.
  * @constructor
+ * @final
  */
 goog.editor.plugins.LinkBubble.Action = function(spanId, linkId, message,
     toShowFn, actionFn) {

@@ -35,6 +35,7 @@ goog.require('goog.object');
  * Plugin that adds support for table creation and editing commands.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.TableEditor = function() {
   goog.base(this);

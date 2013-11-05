@@ -35,6 +35,7 @@ goog.require('goog.userAgent');
  *
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.Emoticons = function() {
   goog.base(this);

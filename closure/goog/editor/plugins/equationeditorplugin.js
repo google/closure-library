@@ -34,6 +34,7 @@ goog.require('goog.ui.equation.PaletteManager');
  * @param {string=} opt_helpUrl A URL pointing to help documentation.
  * @constructor
  * @extends {goog.editor.plugins.AbstractDialogPlugin}
+ * @final
  */
 goog.editor.plugins.EquationEditorPlugin = function(opt_helpUrl) {
   /**

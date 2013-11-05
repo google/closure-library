@@ -41,6 +41,7 @@ goog.require('goog.style');
  * Class providing high level table editing functions.
  * @param {Element} node Element that is a table or descendant of a table.
  * @constructor
+ * @final
  */
 goog.editor.Table = function(node) {
   this.element = goog.dom.getAncestorByTagNameAndClass(node,
@@ -420,6 +421,7 @@ goog.editor.Table.prototype.createEmptyTd = function() {
  * @param {Element} trElement This rows's underlying TR element.
  * @param {number} rowIndex This row's index in its parent table.
  * @constructor
+ * @final
  */
 goog.editor.TableRow = function(trElement, rowIndex) {
   this.index = rowIndex;
@@ -436,6 +438,7 @@ goog.editor.TableRow = function(trElement, rowIndex) {
  * @param {number} startRow Index of the row where this cell begins.
  * @param {number} startCol Index of the column where this cell begins.
  * @constructor
+ * @final
  */
 goog.editor.TableCell = function(td, startRow, startCol) {
   this.element = td;

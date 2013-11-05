@@ -42,6 +42,7 @@ goog.require('goog.log');
  *     blockquotes.  Defaults to 'tr_bq'.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.Blockquote = function(requiresClassNameToSplit,
     opt_className) {

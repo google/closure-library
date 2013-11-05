@@ -41,6 +41,7 @@ goog.require('goog.uri.utils.ComponentIndex');
  * @param {HTMLAnchorElement} anchor The anchor element.
  * @param {boolean} isNew Whether this is a new link.
  * @constructor
+ * @final
  */
 goog.editor.Link = function(anchor, isNew) {
   /**

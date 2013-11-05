@@ -467,6 +467,7 @@ goog.editor.range.intersectsTag = function(range, tagName) {
  * @param {Node} node The node containing the point.
  * @param {number} offset The offset of the point into the node.
  * @constructor
+ * @final
  */
 goog.editor.range.Point = function(node, offset) {
   /**

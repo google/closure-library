@@ -59,6 +59,7 @@ goog.require('goog.userAgent');
  * First Strong plugin.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.FirstStrong = function() {
   goog.base(this);

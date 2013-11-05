@@ -37,6 +37,7 @@ goog.require('goog.userAgent');
  * A plugin to handle removing formatting from selected text.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.RemoveFormatting = function() {
   goog.editor.Plugin.call(this);
