@@ -647,7 +647,8 @@ goog.ui.ac.AutoComplete.prototype.selectHilited = function() {
     if (!suppressUpdate) {
       this.dispatchEvent({
         type: goog.ui.ac.AutoComplete.EventType.UPDATE,
-        row: selectedRow
+        row: selectedRow,
+        index: index
       });
       if (this.triggerSuggestionsOnUpdate_) {
         this.selectionHandler_.update(true);
@@ -659,7 +660,8 @@ goog.ui.ac.AutoComplete.prototype.selectHilited = function() {
     this.dispatchEvent(
         {
           type: goog.ui.ac.AutoComplete.EventType.UPDATE,
-          row: null
+          row: null,
+          index: null
         });
     return false;
   }
