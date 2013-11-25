@@ -277,6 +277,12 @@ goog.ui.Dialog.prototype.setContent = function(html) {
 
 /**
  * Gets the content HTML of the content element.
+ *
+ * Note that this method returns the HTML markup that was previously set via
+ * setContent(). In particular, the HTML returned by this method does not
+ * reflect any changes to the content element's DOM that were made my means
+ * other than setContent().
+ *
  * @return {string} Content HTML.
  */
 goog.ui.Dialog.prototype.getContent = function() {
@@ -594,9 +600,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
   var contentClass = goog.getCssName(this.class_, 'content');
   this.contentEl_ = goog.dom.getElementsByTagNameAndClass(
       null, contentClass, dialogElement)[0];
-  if (this.contentEl_) {
-    this.content_ = this.contentEl_.innerHTML;
-  } else {
+  if (!this.contentEl_) {
     this.contentEl_ = this.getDomHelper().createDom('div', contentClass);
     if (this.content_) {
       this.contentEl_.innerHTML = this.content_;
