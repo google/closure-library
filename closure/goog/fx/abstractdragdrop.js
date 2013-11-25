@@ -114,7 +114,7 @@ goog.fx.AbstractDragDrop.prototype.isTarget_ = false;
 
 /**
  * Subtargeting function accepting args:
- * (Element, goog.math.Box, number, number)
+ * (goog.fx.DragDropItem, goog.math.Box, number, number)
  * @type {Function}
  * @private
  */
