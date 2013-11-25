@@ -69,7 +69,7 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
    */
   this.symbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
 
-  this.wdayNames_ = this.symbols_.SHORTWEEKDAYS;
+  this.wdayNames_ = this.symbols_.STANDALONESHORTWEEKDAYS;
 
   // The DateTimeFormat object uses the global goog.i18n.DateTimeSymbols
   // for initialization. So we save the original value, the global object,
