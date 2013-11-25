@@ -11,6 +11,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.string.linkify</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.string');
   goog.require('goog.string.linkify');
   goog.require('goog.testing.dom');
   goog.require('goog.testing.jsunit');
@@ -128,7 +129,8 @@ function testTwoUrls() {
       'Text with two URLs in it',
       'I use both http://www.google.com and http://yahoo.com, don\'t you?',
       'I use both <a href="http://www.google.com">http://www.google.com<\/a> ' +
-          'and <a href="http://yahoo.com">http://yahoo.com<\/a>, don\'t you?');
+          'and <a href="http://yahoo.com">http://yahoo.com<\/a>, ' +
+          goog.string.htmlEscape('don\'t you?'));
 }
 
 function testGetParams() {
@@ -155,7 +157,8 @@ function testUrlWithoutHttp() {
   assertLinkify(
       'URL without http protocol',
       'It\'s faster to type www.google.com without the http:// in front.',
-      'It\'s faster to type <a href="http://www.google.com">www.google.com' +
+      goog.string.htmlEscape('It\'s faster to type ') +
+          '<a href="http://www.google.com">www.google.com' +
           '<\/a> without the http:// in front.');
 }
 
@@ -220,7 +223,7 @@ function testJsInjection() {
   assertLinkify(
       'Text includes some javascript',
       'Welcome in hell <script>alert(\'this is hell\')<\/script>',
-      'Welcome in hell &lt;script&gt;alert(\'this is hell\')&lt;/script&gt;');
+      goog.string.htmlEscape('Welcome in hell <script>alert(\'this is hell\')<\/script>'));
 }
 
 function testJsInjectionDotIsBlind() {
@@ -380,7 +383,7 @@ function testEndsWithPunctuation() {
       'Link ends with punctuation',
       'Have you seen www.google.com? It\'s awesome.',
       'Have you seen <a href="http://www.google.com">www.google.com<\/a>?' +
-      ' It\'s awesome.');
+      goog.string.htmlEscape(' It\'s awesome.'));
 }
 
 function testEndsWithPunctuation_closeParen() {

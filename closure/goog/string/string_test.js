@@ -463,21 +463,19 @@ function testNewLineToBr() {
 
 // === tests for goog.string.htmlEscape and .unescapeEntities ===
 function testHtmlEscapeAndUnescapeEntities() {
-  var text = '"x1 < x2 && y2 > y1"';
-  var html = '&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;';
+  var text = '\'"x1 < x2 && y2 > y1"\'';
+  var html = '&#39;&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;&#39;';
 
-  assertEquals('Testing htmlEscape', goog.string.htmlEscape(text), html);
-  assertEquals('Testing htmlEscape', goog.string.htmlEscape(text, false), html);
-  assertEquals('Testing htmlEscape', goog.string.htmlEscape(text, true), html);
-  assertEquals('Testing unescapeEntities',
-               goog.string.unescapeEntities(html), text);
+  assertEquals('Testing htmlEscape', html, goog.string.htmlEscape(text));
+  assertEquals('Testing htmlEscape', html, goog.string.htmlEscape(text, false));
+  assertEquals('Testing htmlEscape', html, goog.string.htmlEscape(text, true));
+  assertEquals('Testing unescapeEntities', text,
+               goog.string.unescapeEntities(html));
 
-  assertEquals('escape -> unescape',
-               goog.string.unescapeEntities(goog.string.htmlEscape(text)),
-               text);
-  assertEquals('unescape -> escape',
-               goog.string.htmlEscape(goog.string.unescapeEntities(html)),
-               html);
+  assertEquals('escape -> unescape', text,
+               goog.string.unescapeEntities(goog.string.htmlEscape(text)));
+  assertEquals('unescape -> escape', html,
+               goog.string.htmlEscape(goog.string.unescapeEntities(html)));
 }
 
 function testHtmlUnescapeEntitiesWithDocument() {

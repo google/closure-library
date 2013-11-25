@@ -495,7 +495,8 @@ goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
     return str.replace(goog.string.amperRe_, '&amp;')
           .replace(goog.string.ltRe_, '&lt;')
           .replace(goog.string.gtRe_, '&gt;')
-          .replace(goog.string.quotRe_, '&quot;');
+          .replace(goog.string.quotRe_, '&quot;')
+          .replace(goog.string.singleQuoteRe_, '&#39;');
 
   } else {
     // quick test helps in the case when there are no chars to replace, in
@@ -514,6 +515,9 @@ goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
     }
     if (str.indexOf('"') != -1) {
       str = str.replace(goog.string.quotRe_, '&quot;');
+    }
+    if (str.indexOf('\'') != -1) {
+      str = str.replace(goog.string.singleQuoteRe_, '&#39;');
     }
     return str;
   }
@@ -549,7 +553,15 @@ goog.string.gtRe_ = />/g;
  * @type {RegExp}
  * @private
  */
-goog.string.quotRe_ = /\"/g;
+goog.string.quotRe_ = /"/g;
+
+
+/**
+ * Regular expression that matches a single quote, for use in escaping.
+ * @type {RegExp}
+ * @private
+ */
+goog.string.singleQuoteRe_ = /'/g;
 
 
 /**
@@ -557,7 +569,7 @@ goog.string.quotRe_ = /\"/g;
  * @type {RegExp}
  * @private
  */
-goog.string.allRe_ = /[&<>\"]/;
+goog.string.allRe_ = /[&<>"']/;
 
 
 /**
