@@ -26,8 +26,10 @@ goog.provide('goog.proto2.TextFormatSerializer');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.json');
+goog.require('goog.math');
 goog.require('goog.object');
 goog.require('goog.proto2.FieldDescriptor');
+goog.require('goog.proto2.Message');
 goog.require('goog.proto2.Serializer');
 goog.require('goog.string');
 
@@ -118,39 +120,69 @@ goog.proto2.TextFormatSerializer.prototype.serializeMessage_ =
 
   // Add the unknown fields, if any.
   message.forEachUnknown(function(tag, value) {
-    if (!value) { return; }
-
-    printer.append(tag);
-    if (goog.typeOf(value) == 'object') {
-      printer.append(' {');
-      printer.appendLine();
-      printer.indent();
-    } else {
-      printer.append(': ');
-    }
-
-    switch (goog.typeOf(value)) {
-      case 'string':
-        value = goog.string.quote(/** @type {string} */ (value));
-        printer.append(value);
-        break;
-
-      case 'object':
-        this.serializeMessage_(value, printer);
-        break;
-
-      default:
-        printer.append(value.toString());
-        break;
-    }
-
-    if (goog.typeOf(value) == 'object') {
-      printer.dedent();
-      printer.append('}');
-    } else {
-      printer.appendLine();
-    }
+    this.serializeUnknown_(tag, value, printer);
   }, this);
+};
+
+
+/**
+ * Serializes an unknown field. When parsed from the JsPb object format, this
+ * manifests as either a primitive type, an array, or a raw object with integer
+ * keys. There is no descriptor available to interpret the types of nested
+ * messages.
+ * @param {number} tag The tag for the field. Since it's unknown, this is a
+ *     number rather than a string.
+ * @param {*} value The value of the field.
+ * @param {!goog.proto2.TextFormatSerializer.Printer_} printer The printer to
+ *     which the text format will be serialized.
+ * @private
+ */
+goog.proto2.TextFormatSerializer.prototype.serializeUnknown_ =
+    function(tag, value, printer) {
+  if (!goog.isDefAndNotNull(value)) {
+    return;
+  }
+
+  if (goog.isArray(value)) {
+    goog.array.forEach(value, function(val) {
+      this.serializeUnknown_(tag, val, printer);
+    }, this);
+    return;
+  }
+
+  if (goog.isObject(value)) {
+    printer.append(tag);
+    printer.append(' {');
+    printer.appendLine();
+    printer.indent();
+    if (value instanceof goog.proto2.Message) {
+      // Note(user): This conditional is here to make the
+      // testSerializationOfUnknown unit test pass, but in practice we should
+      // never have a Message for an "unknown" field.
+      this.serializeMessage_(value, printer);
+    } else {
+      // For an unknown message, fields are keyed by positive integers. We
+      // don't have a 'length' property to use for enumeration, so go through
+      // all properties and ignore the ones that aren't legal keys.
+      for (var key in value) {
+        var keyAsNumber = goog.string.parseInt(key);
+        goog.asserts.assert(goog.math.isInt(keyAsNumber));
+        this.serializeUnknown_(keyAsNumber, value[key], printer);
+      }
+    }
+    printer.dedent();
+    printer.append('}');
+    printer.appendLine();
+    return;
+  }
+
+  if (goog.isString(value)) {
+    value = goog.string.quote(value);
+  }
+  printer.append(tag);
+  printer.append(': ');
+  printer.append(value.toString());
+  printer.appendLine();
 };
 
 

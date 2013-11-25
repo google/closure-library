@@ -20,6 +20,7 @@
 /** @suppress {extraProvide} */
 goog.provide('goog.proto2.TextFormatSerializerTest');
 
+goog.require('goog.proto2.ObjectSerializer');
 goog.require('goog.proto2.TextFormatSerializer');
 goog.require('goog.testing.jsunit');
 goog.require('proto2.TestAllTypes');
@@ -117,8 +118,44 @@ function testSerializationOfUnknown() {
       '  repeated_int32: 301\n' +
       '  repeated_int32: 302\n' +
       '  2000: 401\n' +
-      '}';
+      '}\n';
 
+  assertEquals(expected, simplified);
+}
+
+function testSerializationOfUnknownParsedFromObject() {
+  // Construct the object-serialized representation of the message constructed
+  // programmatically in the test above.
+  var serialized = {
+    1: 101,
+    31: [201, 202],
+    1000: 301,
+    1001: 302,
+    1002: {
+      31: [301, 302],
+      2000: 401
+    }
+  };
+
+  // Deserialize that representation into a TestAllTypes message.
+  var objectSerializer = new goog.proto2.ObjectSerializer();
+  var message = new proto2.TestAllTypes();
+  objectSerializer.deserializeTo(message, serialized);
+
+  // Check that the text format matches what we expect.
+  var simplified = new goog.proto2.TextFormatSerializer().serialize(message);
+  var expected = (
+      'optional_int32: 101\n' +
+      'repeated_int32: 201\n' +
+      'repeated_int32: 202\n' +
+      '1000: 301\n' +
+      '1001: 302\n' +
+      '1002 {\n' +
+      '  31: 301\n' +
+      '  31: 302\n' +
+      '  2000: 401\n' +
+      '}\n'
+      );
   assertEquals(expected, simplified);
 }
 
