@@ -872,6 +872,27 @@ function testWhenDoesntAlterOriginalChain() {
   assertEquals('There should have been 3 callbacks', 3, calls);
 }
 
+function testAssertNoErrors() {
+  var d = new Deferred();
+  d.addCallback(function() {
+    throw new Error('Foo');
+  });
+  d.callback(1);
+
+  var ex = assertThrows(function() {
+    Deferred.assertNoErrors();
+    neverHappen();
+  });
+  assertEquals('Expected to get thrown error', 'Foo', ex.message);
+
+  assertNotThrows(
+      'Calling Deferred.assertNoErrors() a second time with only one ' +
+          'scheduled error should pass.',
+      function() {
+        Deferred.assertNoErrors();
+      });
+}
+
 </script>
 </body>
 </html>
