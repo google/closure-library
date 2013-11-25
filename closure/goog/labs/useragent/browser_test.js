@@ -123,6 +123,13 @@ function testIE11() {
   assertVersionBetween('10.0', '12.0');
 }
 
+function testIE11Compatibility() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.IE_11_COMPATIBILITY);
+  assertTrue(goog.labs.userAgent.browser.isIE());
+  assertVersion('11.0');
+}
+
 function testFirefox19() {
   goog.labs.userAgent.util.setUserAgent(
       goog.labs.userAgent.testAgents.FIREFOX_19);
@@ -206,7 +213,7 @@ function testAndroidBrowser235() {
 
 function testAndroidBrowser403() {
   goog.labs.userAgent.util.setUserAgent(
-      goog.labs.userAgent.testAgents.ANDROID_BROWSER_403);
+     goog.labs.userAgent.testAgents.ANDROID_BROWSER_403);
   assertTrue(goog.labs.userAgent.browser.isAndroidBrowser());
   assertVersion('4.0');
   assertVersionBetween('3.0', '5.0');

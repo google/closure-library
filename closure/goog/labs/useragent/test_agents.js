@@ -97,6 +97,10 @@ testAgents.IE_10_COMPATIBILITY =
 testAgents.IE_11 =
     'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
 
+/** @const {string} */
+testAgents.IE_11_COMPATIBILITY =
+    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.3; Trident/7.0; ' +
+    '.NET4.0E; .NET4.0C)';
 
 /** @const {string} */
 testAgents.FIREFOX_19 =
