@@ -117,6 +117,19 @@ Author: bolinfest@google.com (Michael Bolin)
     var inputValue = inputDatePicker.getInputValue();
     assertEquals('01/01/1901', inputValue);
   }
+
+  function test_ItDoesNotClearInputOnPopupShown() {
+    // if popup does not have a date set, don't update input value
+    inputDatePicker = new goog.ui.InputDatePicker(
+        dateTimeFormatter,
+        dateTimeParser);
+
+    setPopupParentElement_(null);
+    inputDatePicker.setInputValue('i_am_not_a_date');
+    inputDatePicker.showForElement(document.body);
+    var inputValue = inputDatePicker.getInputValue();
+    assertEquals('i_am_not_a_date', inputValue);
+  }
 </script>
 
 </body>

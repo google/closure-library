@@ -318,8 +318,12 @@ goog.ui.InputDatePicker.prototype.hidePopup = function() {
  * @private
  */
 goog.ui.InputDatePicker.prototype.onPopup_ = function(e) {
-  this.setDate(this.getInputValueAsDate_());
-  this.setInputValueAsDate_(this.getDatePicker().getDate());
+  var inputValueAsDate = this.getInputValueAsDate_();
+  this.setDate(inputValueAsDate);
+  // don't overwrite the input value with empty date if input is not valid
+  if (inputValueAsDate) {
+    this.setInputValueAsDate_(this.getDatePicker().getDate());
+  }
 };
 
 
