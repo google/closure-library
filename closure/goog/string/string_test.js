@@ -22,15 +22,23 @@ goog.provide('goog.stringTest');
 goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.testing.MockControl');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 goog.setTestOnly('goog.stringTest');
 
-var stubs = new goog.testing.PropertyReplacer();
+var stubs;
+var mockControl;
+
+function setUp() {
+  stubs = new goog.testing.PropertyReplacer();
+  mockControl = new goog.testing.MockControl();
+}
 
 function tearDown() {
   stubs.reset();
+  mockControl.$tearDown();
 }
 
 
@@ -470,6 +478,24 @@ function testHtmlEscapeAndUnescapeEntities() {
   assertEquals('unescape -> escape',
                goog.string.htmlEscape(goog.string.unescapeEntities(html)),
                html);
+}
+
+function testHtmlUnescapeEntitiesWithDocument() {
+  var documentMock = {
+    createElement: mockControl.createFunctionMock('createElement')
+  };
+  var divMock = document.createElement('div');
+  documentMock.createElement('div').$returns(divMock);
+  mockControl.$replayAll();
+
+  var html = '&lt;a&b&gt;';
+  var text = '<a&b>';
+
+  assertEquals('wrong unescaped value',
+      text, goog.string.unescapeEntitiesWithDocument(html, documentMock));
+  assertNotEquals('divMock.innerHTML should have been used', '',
+      divMock.innerHTML);
+  mockControl.$verifyAll();
 }
 
 function testHtmlEscapeAndUnescapeEntitiesUsingDom() {

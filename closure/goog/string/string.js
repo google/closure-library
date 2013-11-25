@@ -583,15 +583,38 @@ goog.string.unescapeEntities = function(str) {
 
 
 /**
+ * Unescapes a HTML string using the provided document.
+ *
+ * @param {string} str The string to unescape.
+ * @param {!Document} document A document to use in escaping the string.
+ * @return {string} An unescaped copy of {@code str}.
+ */
+goog.string.unescapeEntitiesWithDocument = function(str, document) {
+  if (goog.string.contains(str, '&')) {
+    return goog.string.unescapeEntitiesUsingDom_(str, document);
+  }
+  return str;
+};
+
+
+/**
  * Unescapes an HTML string using a DOM to resolve non-XML, non-numeric
  * entities. This function is XSS-safe and whitespace-preserving.
  * @private
  * @param {string} str The string to unescape.
+ * @param {Document=} opt_document An optional document to use for creating
+ *     elements. If this is not specified then the default window.document
+ *     will be used.
  * @return {string} The unescaped {@code str} string.
  */
-goog.string.unescapeEntitiesUsingDom_ = function(str) {
+goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
   var seen = {'&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"'};
-  var div = document.createElement('div');
+  var div;
+  if (opt_document) {
+    div = opt_document.createElement('div');
+  } else {
+    div = document.createElement('div');
+  }
   // Match as many valid entity characters as possible. If the actual entity
   // happens to be shorter, it will still work as innerHTML will return the
   // trailing characters unchanged. Since the entity characters do not include
