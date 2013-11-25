@@ -432,6 +432,13 @@ goog.ui.Textarea.prototype.enterDocument = function() {
 goog.ui.Textarea.prototype.getHeight_ = function() {
   this.discoverTextareaCharacteristics_();
   var textarea = this.getElement();
+  // Because enterDocument can be called even when the component is rendered
+  // without being in a document, we may not have cached the correct paddingBox
+  // data on render(). We try to make up for this here.
+  if (isNaN(this.paddingBox_.top)) {
+    this.paddingBox_ = goog.style.getPaddingBox(textarea);
+    this.borderBox_ = goog.style.getBorderBox(textarea);
+  }
   // Accounts for a possible (though unlikely) horizontal scrollbar.
   var height = this.getElement().scrollHeight +
       this.getHorizontalScrollBarHeight_();
