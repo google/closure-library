@@ -54,7 +54,7 @@ goog.require('goog.structs.Collection');
  *
  * @param {Function=} opt_comparator Function used to order the tree's nodes.
  * @constructor
- * @implements {goog.structs.Collection}
+ * @implements {goog.structs.Collection.<T>}
  * @final
  * @template T
  */

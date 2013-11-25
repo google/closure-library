@@ -45,7 +45,7 @@ goog.require('goog.structs.Map');
  * identify objects, every object in the set will be mutated.
  * @param {Array.<T>|Object.<?,T>=} opt_values Initial values to start with.
  * @constructor
- * @implements {goog.structs.Collection}
+ * @implements {goog.structs.Collection.<T>}
  * @final
  * @template T
  */
