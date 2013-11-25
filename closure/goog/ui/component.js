@@ -71,12 +71,24 @@ goog.define('goog.ui.Component.ALLOW_DETACHED_DECORATION', false);
 goog.ui.Component.prototype.idGenerator_ = goog.ui.IdGenerator.getInstance();
 
 
+// TODO(gboyer): See if we can remove this and just check goog.i18n.bidi.IS_RTL.
+/**
+ * @define {number} Defines the default BIDI directionality.
+ *     0: Unknown.
+ *     1: Left-to-right.
+ *     -1: Right-to-left.
+ */
+goog.define('goog.ui.Component.DEFAULT_BIDI_DIR', 0);
+
+
 /**
  * The default right to left value.
  * @type {?boolean}
  * @private
  */
-goog.ui.Component.defaultRightToLeft_ = null;
+goog.ui.Component.defaultRightToLeft_ =
+    (goog.ui.Component.DEFAULT_BIDI_DIR == 1) ? false :
+    (goog.ui.Component.DEFAULT_BIDI_DIR == -1) ? true : null;
 
 
 /**
