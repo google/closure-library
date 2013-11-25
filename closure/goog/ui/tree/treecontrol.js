@@ -186,7 +186,7 @@ goog.ui.tree.TreeControl.prototype.reveal = function() {
  */
 goog.ui.tree.TreeControl.prototype.handleFocus_ = function(e) {
   this.focused_ = true;
-  goog.dom.classlist.add(this.getElement(), 'focused');
+  goog.dom.classlist.add(this.getElement(), goog.getCssName('focused'));
 
   if (this.selectedItem_) {
     this.selectedItem_.select();
@@ -201,7 +201,7 @@ goog.ui.tree.TreeControl.prototype.handleFocus_ = function(e) {
  */
 goog.ui.tree.TreeControl.prototype.handleBlur_ = function(e) {
   this.focused_ = false;
-  goog.dom.classlist.remove(this.getElement(), 'focused');
+  goog.dom.classlist.remove(this.getElement(), goog.getCssName('focused'));
 };
 
 
