@@ -13,9 +13,9 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.testing.stacktrace</title>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.functions');
   goog.require('goog.string');
   goog.require('goog.testing.ExpectedFailures');
-  goog.require('goog.testing.FunctionMock');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.StrictMock');
   goog.require('goog.testing.asserts');
@@ -332,34 +332,25 @@ function testGetStackFrameWithV8CallSites() {
   // A function to create V8 CallSites. Note that CallSite is an extern and thus
   // cannot be mocked with closure mocks.
   function createCallSite(functionName, fileName, lineNumber, colNumber) {
-    var callSite = {
-      getFunctionName: function() {
-        return functionName;
-      },
-      getFileName: function() {
-        return fileName;
-      },
-      getLineNumber: function() {
-        return lineNumber;
-      },
-      getColumnNumber: function() {
-        return colNumber;
-      }
+    return {
+      getFunctionName: goog.functions.constant(functionName),
+      getFileName: goog.functions.constant(fileName),
+      getLineNumber: goog.functions.constant(lineNumber),
+      getColumnNumber: goog.functions.constant(colNumber)
     };
-    return callSite;
   }
+
   // Mock the goog.testing.stacktrace.getStack_ function, which normally
   // triggers an exception for the purpose of reading and returning its stack
   // trace. Here, pretend that V8 provided an array of CallSites instead of the
   // string that browsers provide.
-  stubs.set(goog.testing.stacktrace, 'getNativeStack_',
-      goog.testing.createFunctionMock());
-  goog.testing.stacktrace.getNativeStack_().$returns([
-    createCallSite('fn1', 'file1', 1, 2),
-    createCallSite('fn2', 'file2', 3, 4),
-    createCallSite('fn3', 'file3', 5, 6)
-  ]);
-  goog.testing.stacktrace.getNativeStack_().$replay();
+  stubs.set(goog.testing.stacktrace, 'getNativeStack_', function() {
+    return [
+      createCallSite('fn1', 'file1', 1, 2),
+      createCallSite('fn2', 'file2', 3, 4),
+      createCallSite('fn3', 'file3', 5, 6)
+    ];
+  });
 
   // Retrieve the stacktrace. This should translate the array of CallSites into
   // a single multi-line string.
