@@ -50,13 +50,17 @@ goog.labs.net.image.load = function(uri, opt_image) {
     image = opt_image;
   }
 
-  // IE's load event on images can be buggy.  Instead, we wait for
+  // IE's load event on images can be buggy.  For older browsers, wait for
   // readystatechange events and check if readyState is 'complete'.
   // See:
   // http://msdn.microsoft.com/en-us/library/ie/ms536957(v=vs.85).aspx
   // http://msdn.microsoft.com/en-us/library/ie/ms534359(v=vs.85).aspx
-  var loadEvent = goog.userAgent.IE ? goog.net.EventType.READY_STATE_CHANGE :
-      goog.events.EventType.LOAD;
+  //
+  // Starting with IE11, start using standard 'load' events.
+  // See:
+  // http://msdn.microsoft.com/en-us/library/ie/dn467845(v=vs.85).aspx
+  var loadEvent = (goog.userAgent.IE && goog.userAgent.VERSION < 11) ?
+      goog.net.EventType.READY_STATE_CHANGE : goog.events.EventType.LOAD;
 
   var result = new goog.result.SimpleResult();
 
