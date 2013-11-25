@@ -15,6 +15,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.string');
   goog.require('goog.testing.ExpectedFailures');
+  goog.require('goog.testing.FunctionMock');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.StrictMock');
   goog.require('goog.testing.asserts');
@@ -322,6 +323,55 @@ function testParseStackFrameInIE10() {
       'eval code:150:3');
   assertObjectEquals('nested eval', expected, frame);
 }
+
+// Verifies that retrieving the stack trace works when the 'stack' field of an
+// exception contains an array of CallSites instead of a string. This is the
+// case when running in a lightweight V8 runtime (for instance, in gjstests),
+// as opposed to a browser environment.
+function testGetStackFrameWithV8CallSites() {
+  // A function to create V8 CallSites. Note that CallSite is an extern and thus
+  // cannot be mocked with closure mocks.
+  function createCallSite(functionName, fileName, lineNumber, colNumber) {
+    var callSite = {
+      getFunctionName: function() {
+        return functionName;
+      },
+      getFileName: function() {
+        return fileName;
+      },
+      getLineNumber: function() {
+        return lineNumber;
+      },
+      getColumnNumber: function() {
+        return colNumber;
+      }
+    };
+    return callSite;
+  }
+  // Mock the goog.testing.stacktrace.getStack_ function, which normally
+  // triggers an exception for the purpose of reading and returning its stack
+  // trace. Here, pretend that V8 provided an array of CallSites instead of the
+  // string that browsers provide.
+  stubs.set(goog.testing.stacktrace, 'getNativeStack_',
+      goog.testing.createFunctionMock());
+  goog.testing.stacktrace.getNativeStack_().$returns([
+    createCallSite('fn1', 'file1', 1, 2),
+    createCallSite('fn2', 'file2', 3, 4),
+    createCallSite('fn3', 'file3', 5, 6)
+  ]);
+  goog.testing.stacktrace.getNativeStack_().$replay();
+
+  // Retrieve the stacktrace. This should translate the array of CallSites into
+  // a single multi-line string.
+  var stackTrace = goog.testing.stacktrace.get();
+
+  // Make sure the stack trace was translated correctly.
+  var frames = stackTrace.split('\n');
+  assertEquals(frames[0], '> fn1 at file1:1:2');
+  assertEquals(frames[1], '> fn2 at file2:3:4');
+  assertEquals(frames[2], '> fn3 at file3:5:6');
+}
+
 </script>
 </body>
 </html>
