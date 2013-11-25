@@ -125,6 +125,27 @@ goog.structs.Trie.prototype.setAll = function(trie) {
 
 
 /**
+ * Traverse along the given path, returns the child node at ending.
+ * Returns undefined if node for the path doesn't exist.
+ * @param {string} path The path to traverse.
+ * @return {goog.structs.Trie|undefined}
+ * @private
+ */
+goog.structs.Trie.prototype.getChildNode_ = function(path) {
+  var node = this;
+  for (var characterPosition = 0; characterPosition < path.length;
+      characterPosition++) {
+    var currentCharacter = path.charAt(characterPosition);
+    node = node.childNodes_[currentCharacter];
+    if (!node) {
+      return undefined;
+    }
+  }
+  return node;
+};
+
+
+/**
  * Retrieves a value from the trie given a key.  O(L), where L is the length of
  * the key.
  * @param {string} key The key to retrieve from the trie.
@@ -132,16 +153,8 @@ goog.structs.Trie.prototype.setAll = function(trie) {
  *     not contain this key.
  */
 goog.structs.Trie.prototype.get = function(key) {
-  var node = this;
-  for (var characterPosition = 0; characterPosition < key.length;
-       characterPosition++) {
-    var currentCharacter = key.charAt(characterPosition);
-    if (!node.childNodes_[currentCharacter]) {
-      return undefined;
-    }
-    node = node.childNodes_[currentCharacter];
-  }
-  return node.value_;
+  var node = this.getChildNode_(key);
+  return node ? node.value_ : undefined;
 };
 
 
@@ -265,6 +278,21 @@ goog.structs.Trie.prototype.containsKey = function(key) {
 
 
 /**
+ * Checks to see if a certain prefix is in the trie. O(L), where L is the length
+ * of the prefix.
+ * @param {string} prefix A prefix that may be in the trie.
+ * @return {boolean} Whether any key of the trie has the prefix.
+ */
+goog.structs.Trie.prototype.containsPrefix = function(prefix) {
+  // Empty string is any key's prefix.
+  if (prefix.length == 0) {
+    return !this.isEmpty();
+  }
+  return !!this.getChildNode_(prefix);
+};
+
+
+/**
  * Checks to see if a certain value is in the trie.  Worst case is O(N) where
  * N is the number of nodes in the trie.
  * @param {*} value A value that may be in the trie.
@@ -363,5 +391,5 @@ goog.structs.Trie.prototype.getCount = function() {
  * @return {boolean} True iff this trie contains no elements.
  */
 goog.structs.Trie.prototype.isEmpty = function() {
-  return this.value_ === undefined && goog.structs.isEmpty(this.childNodes_);
+  return this.value_ === undefined && goog.object.isEmpty(this.childNodes_);
 };
