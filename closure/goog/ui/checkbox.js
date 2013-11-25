@@ -243,7 +243,11 @@ goog.ui.Checkbox.prototype.handleClickOrSpace_ = function(e) {
   var eventType = this.checked_ ? goog.ui.Component.EventType.UNCHECK :
       goog.ui.Component.EventType.CHECK;
   if (this.isEnabled() && this.dispatchEvent(eventType)) {
-    e.preventDefault();  // Prevent scrolling in Chrome if SPACE is pressed.
+    if (e.type != goog.events.EventType.CLICK) {
+      // Prevent scrolling in Chrome if SPACE is pressed. However, let
+      // default actions for click through.
+      e.preventDefault();
+    }
     this.toggle();
     this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
   }
