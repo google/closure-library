@@ -27,7 +27,7 @@ function testFieldDescriptorConstruction() {
   var fieldDescriptor = new goog.proto2.FieldDescriptor(messageType, 10, {
     name: 'test',
     repeated: true,
-    fieldType: 7,
+    fieldType: goog.proto2.FieldDescriptor.FieldType.INT32,
     type: Number
   });
 
@@ -36,29 +36,40 @@ function testFieldDescriptorConstruction() {
 
   assertEquals(true, fieldDescriptor.isRepeated());
 
-  assertEquals(7, fieldDescriptor.getFieldType());
+  assertEquals(goog.proto2.FieldDescriptor.FieldType.INT32,
+      fieldDescriptor.getFieldType());
   assertEquals(Number, fieldDescriptor.getNativeType());
   assertEquals(0, fieldDescriptor.getDefaultValue());
 }
 
-function testFieldDescriptorConstruction2() {
+function testGetDefaultValueOfString() {
   var fieldDescriptor = new goog.proto2.FieldDescriptor({}, 10, {
     name: 'test',
-    fieldType: 7,
+    fieldType: goog.proto2.FieldDescriptor.FieldType.STRING,
     type: String
   });
 
   assertEquals('', fieldDescriptor.getDefaultValue());
 }
 
-function testFieldDescriptorConstruction3() {
+function testGetDefaultValueOfBool() {
   var fieldDescriptor = new goog.proto2.FieldDescriptor({}, 10, {
     name: 'test',
-    fieldType: 7,
+    fieldType: goog.proto2.FieldDescriptor.FieldType.BOOL,
     type: Boolean
   });
 
   assertEquals(false, fieldDescriptor.getDefaultValue());
+}
+
+function testGetDefaultValueOfInt64() {
+  var fieldDescriptor = new goog.proto2.FieldDescriptor({}, 10, {
+    name: 'test',
+    fieldType: goog.proto2.FieldDescriptor.FieldType.INT64,
+    type: String
+  });
+
+  assertEquals('0', fieldDescriptor.getDefaultValue());
 }
 
 function testRepeatedField() {

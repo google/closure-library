@@ -200,7 +200,12 @@ goog.proto2.FieldDescriptor.prototype.getDefaultValue = function() {
     } else if (nativeType === Number) {
       this.defaultValue_ = 0;
     } else if (nativeType === String) {
-      this.defaultValue_ = '';
+      if (this.deserializationConversionPermitted_) {
+        // This field is a 64 bit integer represented as a string.
+        this.defaultValue_ = '0';
+      } else {
+        this.defaultValue_ = '';
+      }
     } else {
       this.defaultValue_ = new nativeType;
     }
