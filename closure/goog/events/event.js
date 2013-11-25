@@ -67,6 +67,34 @@ goog.events.Event = function(type, opt_target) {
    * @type {Object|undefined}
    */
   this.currentTarget = this.target;
+
+  /**
+   * Whether to cancel the event in internal capture/bubble processing for IE.
+   * @type {boolean}
+   * @public
+   * @suppress {underscore|visibility} Technically public, but referencing this
+   *     outside this package is strongly discouraged.
+   */
+  this.propagationStopped_ = false;
+
+  /**
+   * Whether the default action has been prevented.
+   * This is a property to match the W3C specification at
+   * {@link http://www.w3.org/TR/DOM-Level-3-Events/
+   * #events-event-type-defaultPrevented}.
+   * Must be treated as read-only outside the class.
+   * @type {boolean}
+   */
+  this.defaultPrevented = false;
+
+  /**
+   * Return value for in internal capture/bubble processing for IE.
+   * @type {boolean}
+   * @public
+   * @suppress {underscore|visibility} Technically public, but referencing this
+   *     outside this package is strongly discouraged.
+   */
+  this.returnValue_ = true;
 };
 
 
@@ -86,36 +114,6 @@ goog.events.Event.prototype.disposeInternal = function() {
  */
 goog.events.Event.prototype.dispose = function() {
 };
-
-
-/**
- * Whether to cancel the event in internal capture/bubble processing for IE.
- * @type {boolean}
- * @public
- * @suppress {underscore|visibility} Technically public, but referencing this
- *     outside this package is strongly discouraged.
- */
-goog.events.Event.prototype.propagationStopped_ = false;
-
-
-/**
- * Whether the default action has been prevented.
- * This is a property to match the W3C specification at {@link
- * http://www.w3.org/TR/DOM-Level-3-Events/#events-event-type-defaultPrevented}.
- * Must be treated as read-only outside the class.
- * @type {boolean}
- */
-goog.events.Event.prototype.defaultPrevented = false;
-
-
-/**
- * Return value for in internal capture/bubble processing for IE.
- * @type {boolean}
- * @public
- * @suppress {underscore|visibility} Technically public, but referencing this
- *     outside this package is strongly discouraged.
- */
-goog.events.Event.prototype.returnValue_ = true;
 
 
 /**
