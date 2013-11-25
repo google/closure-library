@@ -251,6 +251,13 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_ = function(
 
 
 /**
+ * A SafeHtml instance corresponding to the empty string.
+ * @const {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.EMPTY = goog.html.SafeHtml.htmlEscape('');
+
+
+/**
  * Performs an "unchecked conversion" to SafeHtml from a plain string that is
  * known to satisfy the SafeHtml type contract.
  *

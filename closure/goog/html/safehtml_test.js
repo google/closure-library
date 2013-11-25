@@ -48,6 +48,9 @@ function testSafeHtml() {
   // Interface markers are present.
   assertTrue(safeHtml.implementsGoogStringTypedString);
   assertTrue(safeHtml.implementsGoogI18nBidiDirectionalString);
+
+  // Pre-defined constant.
+  assertEquals('', goog.html.SafeHtml.unwrap(goog.html.SafeHtml.EMPTY));
 }
 
 
