@@ -21,6 +21,7 @@ goog.provide('goog.html.safeHtmlTest');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.testing');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
@@ -109,11 +110,12 @@ function testSafeHtmlFrom() {
 
 function testSafeHtmlUncheckedConversion() {
   var safeHtml =
-      goog.html.SafeHtml.potentiallyDangerousUncheckedConversionFromString(
-          goog.string.Const.from(
-              'Safe because value is constant and ends in inner HTML. ' +
-              'Security review: b/7685625.'),
-          'Hello <em>World</em>');
+      goog.html.uncheckedconversions.
+          safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from(
+                  'Safe because value is constant and ends in inner HTML. ' +
+                  'Security review: b/7685625.'),
+              'Hello <em>World</em>');
   var extracted = goog.html.SafeHtml.unwrap(safeHtml);
   assertEquals('Hello <em>World</em>', extracted);
   assertEquals('SafeHtml{Hello <em>World</em>}', String(safeHtml));

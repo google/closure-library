@@ -1,4 +1,3 @@
-
 // Copyright 2013 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +29,6 @@ goog.setTestOnly();
 
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
-goog.require('goog.string.Const');
 
 
 /**
@@ -44,13 +42,14 @@ goog.require('goog.string.Const');
  *     SafeHtml to be constructed. A null or undefined value signifies an
  *     unknown directionality.
  * @return {!goog.html.SafeHtml}
+ * @suppress {visibility} For access to SafeHtml.create...  Note that this
+ *     use is appropriate since this method is intended to be "package private"
+ *     withing goog.html.  DO NOT call SafeHtml.create... from outside this
+ *     package; use appropriate wrappers instead.
  */
 goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
-  return goog.html.SafeHtml.potentiallyDangerousUncheckedConversionFromString(
-      goog.string.Const.from('This function is TestOnly restricted, ' +
-                             'and hence can\'t result in security bugs. ' +
-                             'Security review: b/7685625.'),
-      html, opt_dir);
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+      html, opt_dir || null);
 };
 
 
@@ -62,11 +61,11 @@ goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
  *
  * @param {string} url String to wrap into a SafeUrl.
  * @return {!goog.html.SafeUrl}
+ * @suppress {visibility} For access to SafeUrl.create...  Note that this
+ *     use is appropriate since this method is intended to be "package private"
+ *     withing goog.html.  DO NOT call SafeUrl.create... from outside this
+ *     package; use appropriate wrappers instead.
  */
 goog.html.testing.newSafeUrlForTest = function(url) {
-  return goog.html.SafeUrl.potentiallyDangerousUncheckedConversionFromString(
-      goog.string.Const.from('This function is TestOnly restricted, ' +
-                             'and hence can\'t result in security bugs.' +
-                             'Security review: b/7685625.'),
-      url);
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
 };

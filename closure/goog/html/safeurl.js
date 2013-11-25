@@ -94,6 +94,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
  * IMPORTANT: In code where it is security relevant that an object's type is
  * indeed {@code SafeUrl}, use {@code goog.html.SafeUrl.unwrap} instead of this
  * method.
+ *
  * @see goog.html.SafeUrl#unwrap
  * @override
  */
@@ -123,6 +124,7 @@ goog.html.SafeUrl.prototype.getDirection = function() {
  *
  * To obtain the actual string value wrapped in a SafeUrl, use
  * {@code goog.html.SafeUrl.unwrap}.
+ *
  * @see goog.html.SafeUrl#unwrap
  * @override
  */
@@ -169,6 +171,7 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
  *
  * Compile-time constant strings are inherently program-controlled and hence
  * trusted.
+ *
  * @param {!goog.string.Const} url A compile-time-constant string from which to
  *         create a SafeUrl.
  * @return {!goog.html.SafeUrl} A SafeUrl object initialized to {@code url}.
@@ -262,7 +265,6 @@ goog.html.SafeUrl.from = function(url) {
 /**
  * Type marker for the SafeUrl type, used to implement additional run-time
  * type checking.
- *
  * @const
  * @private
  */
@@ -271,6 +273,11 @@ goog.html.SafeUrl.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 /**
  * Utility method to create SafeUrl instances.
+ *
+ * This function is considered "package private", i.e. calls (using "suppress
+ * visibility") from other files within this package are considered acceptable.
+ * DO NOT call this function from outside the goog.html package; use appropriate
+ * wrappers instead.
  *
  * @param {string} url The string to initialize the SafeUrl object with.
  * @return {!goog.html.SafeUrl} The initialized SafeUrl object.
@@ -282,63 +289,3 @@ goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_ = function(
   safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = url;
   return safeUrl;
 };
-
-
-/**
- * Performs an "unchecked conversion" to SafeUrl from a plain string that is
- * known to satisfy the SafeUrl type contract.
- *
- * IMPORTANT: Uses of this method must be carefully security reviewed to ensure
- * that the value of {@code url} satisfies the SafeUrl type contract in all
- * possible program states.
- *
- * TODO(user): Link to guidelines on appropriate uses.
- *
- * @param {!goog.string.Const} justification A constant string explaining why
- *     this use of this method is safe, such as a security review ticket number.
- * @param {string} url The string to wrap as a SafeUrl.
- *     contract.
- * @return {!goog.html.SafeUrl} The value of {@code url}, wrapped in a SafeUrl
- *     object.
- */
-goog.html.SafeUrl.safeUrlFromStringKnownToSatisfyTypeContract = function(
-    justification, url) {
-  goog.asserts.assertString(goog.string.Const.unwrap(justification),
-                            'must provide justification');
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
-};
-
-
-/**
- * Performs an "unchecked conversion" from string to SafeUrl.
- *
- * IMPORTANT: Uses of this method must be carefully security reviewed to ensure
- * that they do not create a potential for security vulnerabilites.
- *
- * Note that this method performs exactly as
- * {@code safeUrlFromStringKnownToSatisfyTypeContract} above.  The two methods
- * are provided to distinguish different scenarios in which conversion from
- * string is required.  The above method is intended for use in code that has
- * been carefully reviewed to ensure that it always produces values that adhere
- * to the SafeUrl type contract.  This method in contrast is intended for use
- * in code where security concerns do not apply (e.g., test-only code) or code
- * that has not been security reviewed (e.g., in existing legacy code that uses
- * the plain string type to represent HTML, and has not been refactored to use
- * goog.html types).
- *
- * TODO(user): Link to guidelines on appropriate uses.
- *
- * @param {!goog.string.Const} justification A constant string explaining why
- *     this use of this method is safe, such as a security review ticket number.
- * @param {string} url The string to wrap as a SafeUrl.
- *     contract.
- * @return {!goog.html.SafeUrl} The value of {@code url}, wrapped in a SafeUrl
- *     object.
- */
-goog.html.SafeUrl.potentiallyDangerousUncheckedConversionFromString = function(
-    justification, url) {
-  goog.asserts.assertString(goog.string.Const.unwrap(justification),
-                            'must provide justification');
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
-};
-

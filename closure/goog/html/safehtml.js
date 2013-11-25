@@ -24,7 +24,6 @@ goog.provide('goog.html.SafeHtml');
 goog.require('goog.asserts');
 goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.string');
-goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
 
 
@@ -107,6 +106,7 @@ goog.html.SafeHtml.prototype.implementsGoogStringTypedString = true;
  * IMPORTANT: In code where it is security-relevant that an object's type is
  * indeed {@code SafeHtml}, use {@code goog.html.SafeHtml.unwrap} instead of
  * this method.
+ *
  * @see goog.string.SafeHtml#unwrap
  * @override
  */
@@ -120,6 +120,7 @@ goog.html.SafeHtml.prototype.getTypedStringValue = function() {
  *
  * To obtain the actual string value wrapped in a SafeHtml, use
  * {@code goog.html.SafeHtml.unwrap}.
+ *
  * @see goog.string.SafeHtml#unwrap
  * @override
  */
@@ -235,6 +236,12 @@ goog.html.SafeHtml.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 /**
  * Utility method to create SafeHtml instances.
+ *
+ * This function is considered "package private", i.e. calls (using "suppress
+ * visibility") from other files within this package are considered acceptable.
+ * DO NOT call this function from outside the goog.html package; use appropriate
+ * wrappers instead.
+ *
  * @param {string} html The string to initialize the SafeHtml object with.
  * @param {?goog.i18n.bidi.Dir} dir The directionality of the SafeHtml to be
  *     constructed, or null if unknown.
@@ -255,69 +262,3 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_ = function(
  * @const {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.EMPTY = goog.html.SafeHtml.htmlEscape('');
-
-
-/**
- * Performs an "unchecked conversion" to SafeHtml from a plain string that is
- * known to satisfy the SafeHtml type contract.
- *
- * IMPORTANT: Uses of this method must be carefully security reviewed to ensure
- * that the value of {@code html} satisfies the SafeHtml type contract in all
- * possible program states.
- *
- * TODO(user): Link to guidelines on appropriate uses.
- *
- * @param {!goog.string.Const} justification A constant string explaining why
- *     this use of this method is safe, such as a security review ticket number.
- * @param {string} html A string that is claimed to adhere to the SafeHtml
- *     contract.
- * @param {?goog.i18n.bidi.Dir=} opt_dir The optional directionality of the
- *     SafeHtml to be constructed. A null or undefined value signifies an
- *     unknown directionality.
- * @return {!goog.html.SafeHtml} The value of html, wrapped in a SafeHtml
- *     object.
- */
-goog.html.SafeHtml.safeHtmlFromStringKnownToSatisfyTypeContract = function(
-    justification, html, opt_dir) {
-  goog.asserts.assertString(goog.string.Const.unwrap(justification),
-                            'must provide justification');
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
-      html, opt_dir || null);
-};
-
-
-/**
- * Performs an "unchecked conversion" from string to SafeHtml.
- *
- * IMPORTANT: Uses of this method must be carefully security reviewed to ensure
- * that they do not create a potential for security vulnerabilites.
- *
- * Note that this method performs exactly as
- * {@code safeHtmlFromStringKnownToSatisfyTypeContract} above.  The two methods
- * are provided to distinguish different scenarios in which conversion from
- * string is required.  The above method is intended for use in code that has
- * been carefully reviewed to ensure that it always produces values that adhere
- * to the SafeHtml type contract.  This method in contrast is intended for use
- * in code where security concerns do not apply (e.g., test-only code) or code
- * that has not been security reviewed (e.g., in existing legacy code that uses
- * the plain string type to represent HTML, and has not been refactored to use
- * goog.html types).
- *
- * TODO(user): Link to guidelines on appropriate uses.
- *
- * @param {!goog.string.Const} justification A constant string explaining why
- *     this use of this method is safe, such as a security review ticket number.
- * @param {string} html The string to wrap as a SafeHtml.
- * @param {?goog.i18n.bidi.Dir=} opt_dir The optional directionality of the
- *     SafeHtml to be constructed. A null or undefined value signifies an
- *     unknown directionality.
- * @return {!goog.html.SafeHtml} The value of html, wrapped in a SafeHtml
- *     object.
- */
-goog.html.SafeHtml.potentiallyDangerousUncheckedConversionFromString = function(
-    justification, html, opt_dir) {
-  goog.asserts.assertString(goog.string.Const.unwrap(justification),
-                            'must provide justification');
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
-      html, opt_dir || null);
-};
