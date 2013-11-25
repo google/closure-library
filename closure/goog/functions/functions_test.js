@@ -110,14 +110,15 @@ function testCompose() {
     return x + 2;
   };
 
-  var double = function(x) {
+  var doubleValue = function(x) {
     return x * 2;
   };
 
-  assertEquals(6, goog.functions.compose(double, add2)(1));
-  assertEquals(4, goog.functions.compose(add2, double)(1));
-  assertEquals(6, goog.functions.compose(add2, add2, double)(1));
-  assertEquals(12, goog.functions.compose(double, add2, add2, double)(1));
+  assertEquals(6, goog.functions.compose(doubleValue, add2)(1));
+  assertEquals(4, goog.functions.compose(add2, doubleValue)(1));
+  assertEquals(6, goog.functions.compose(add2, add2, doubleValue)(1));
+  assertEquals(12,
+      goog.functions.compose(doubleValue, add2, add2, doubleValue)(1));
   assertUndefined(goog.functions.compose()(1));
   assertEquals(3, goog.functions.compose(add2)(1));
 
@@ -125,7 +126,7 @@ function testCompose() {
     return x + y;
   };
   assertEquals(17, goog.functions.compose(add2Numbers)(10, 7));
-  assertEquals(34, goog.functions.compose(double, add2Numbers)(10, 7));
+  assertEquals(34, goog.functions.compose(doubleValue, add2Numbers)(10, 7));
 }
 
 function testAdd() {
