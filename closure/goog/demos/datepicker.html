@@ -19,14 +19,14 @@ See the COPYING file for details.
     goog.require('goog.i18n.DateTimeSymbols_de');
     goog.require('goog.i18n.DateTimeSymbols_ml');
     goog.require('goog.i18n.DateTimeSymbols_ar_YE');
-    goog.require('goog.i18n.DateTimeSymbols_ru');
+    goog.require('goog.i18n.DateTimeSymbols_th');
     goog.require('goog.i18n.DateTimeSymbols_ja');
     goog.require('goog.i18n.DateTimePatterns');
     goog.require('goog.i18n.DateTimePatterns_en_US');
     goog.require('goog.i18n.DateTimePatterns_de');
     goog.require('goog.i18n.DateTimePatterns_ml');
     goog.require('goog.i18n.DateTimePatterns_ar_YE');
-    goog.require('goog.i18n.DateTimePatterns_ru');
+    goog.require('goog.i18n.DateTimePatterns_th');
     goog.require('goog.i18n.DateTimePatterns_ja');
     goog.require('goog.ui.DatePicker');
   </script>
@@ -107,10 +107,10 @@ See the COPYING file for details.
   <span id="label_ar_YE"></span>
   <br><br>
 
-  <h2>Russian</h2>
-  <div id="widget_ru"></div>
+  <h2>Thai</h2>
+  <div id="widget_th"></div>
   <div style="clear: both;">&nbsp;</div>
-  <span id="label_ru"></span>
+  <span id="label_th"></span>
   <br><br>
 
   <h2>Japanese</h2>
@@ -213,19 +213,19 @@ See the COPYING file for details.
                             dp_ar_YE.getDate().toIsoString(true));
 
     // Russian
-    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ru;
-    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ru;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_th;
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_th;
 
-    var dp_ru = new goog.ui.DatePicker();
-    dp_ru.render(document.getElementById('widget_ru'));
+    var dp_th = new goog.ui.DatePicker();
+    dp_th.render(document.getElementById('widget_th'));
 
-    goog.events.listen(dp_ru, goog.ui.DatePicker.Events.CHANGE, function(event) {
-      goog.dom.setTextContent(document.getElementById('label_ru'), event.date ?
+    goog.events.listen(dp_th, goog.ui.DatePicker.Events.CHANGE, function(event) {
+      goog.dom.setTextContent(document.getElementById('label_th'), event.date ?
           event.date.toIsoString(true) : 'none');
     });
 
-    goog.dom.setTextContent(document.getElementById('label_ru'),
-                            dp_ru.getDate().toIsoString(true));
+    goog.dom.setTextContent(document.getElementById('label_th'),
+                            dp_th.getDate().toIsoString(true));
 
     // Japanese
     goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ja;
@@ -242,9 +242,9 @@ See the COPYING file for details.
     goog.dom.setTextContent(document.getElementById('label_ja'),
                             dp_ja.getDate().toIsoString(true));
 
-    // We update all pickers, for all languages 
+    // We update all pickers, for all languages
     var allPickers = [dp_iso_8601, dp_custom, dp_en_US,
-        dp_de, dp_ml, dp_ar_YE, dp_ru, dp_ja]; 
+        dp_de, dp_ml, dp_ar_YE, dp_th, dp_ja];
 
     function allShowFixedNumWeeks(enabled) {
       for (var i = 0; i < allPickers.length; ++i) {

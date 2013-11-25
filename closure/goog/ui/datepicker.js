@@ -275,6 +275,16 @@ goog.ui.DatePicker.BASE_CSS_CLASS_ = goog.getCssName('goog-date-picker');
 
 
 /**
+ * The numbers of years to show before and after the current one in the
+ * year pull-down menu. A total of YEAR_MENU_RANGE * 2 + 1 will be shown.
+ * Example: for range = 2 and year 2013 => [2011, 2012, 2013, 2014, 2015]
+ * @const {number}
+ * @private
+ */
+goog.ui.DatePicker.YEAR_MENU_RANGE_ = 5;
+
+
+/**
  * Constants for event names
  *
  * @type {Object}
@@ -1047,12 +1057,15 @@ goog.ui.DatePicker.prototype.showYearMenu_ = function(event) {
   event.stopPropagation();
 
   var list = [];
-  var year = this.activeMonth_.getFullYear() - 5;
-  for (var i = 0; i < 11; i++) {
-    list.push(String(year + i));
+  var year = this.activeMonth_.getFullYear();
+  var loopDate = this.activeMonth_.clone();
+  for (var i = -goog.ui.DatePicker.YEAR_MENU_RANGE_;
+      i <= goog.ui.DatePicker.YEAR_MENU_RANGE_; i++) {
+    loopDate.setFullYear(year + i);
+    list.push(this.i18nDateFormatterYear_.format(loopDate));
   }
   this.createMenu_(this.elYear_, list, this.handleYearMenuClick_,
-                   String(this.activeMonth_.getFullYear()));
+      this.i18nDateFormatterYear_.format(this.activeMonth_));
 };
 
 
@@ -1063,10 +1076,8 @@ goog.ui.DatePicker.prototype.showYearMenu_ = function(event) {
  * @private
  */
 goog.ui.DatePicker.prototype.handleMonthMenuClick_ = function(target) {
-  var el = target;
-  for (var i = -1; el; el = goog.dom.getPreviousElementSibling(el), i++) {}
-
-  this.activeMonth_.setMonth(i);
+  var itemIndex = Number(target.getAttribute('itemIndex'));
+  this.activeMonth_.setMonth(itemIndex);
   this.updateCalendarGrid_();
 
   if (this.elMonth_.focus) {
@@ -1083,7 +1094,12 @@ goog.ui.DatePicker.prototype.handleMonthMenuClick_ = function(target) {
  */
 goog.ui.DatePicker.prototype.handleYearMenuClick_ = function(target) {
   if (target.firstChild.nodeType == goog.dom.NodeType.TEXT) {
-    this.activeMonth_.setFullYear(Number(target.firstChild.nodeValue));
+    // We use the same technique used for months to get the position of the
+    // item in the menu, as the year is not necessarily numeric.
+    var itemIndex = Number(target.getAttribute('itemIndex'));
+    var year = this.activeMonth_.getFullYear();
+    this.activeMonth_.setFullYear(year + itemIndex -
+        goog.ui.DatePicker.YEAR_MENU_RANGE_);
     this.updateCalendarGrid_();
   }
 
@@ -1112,6 +1128,7 @@ goog.ui.DatePicker.prototype.createMenu_ = function(srcEl, items, method,
   var ul = this.dom_.createElement('ul');
   for (var i = 0; i < items.length; i++) {
     var li = this.dom_.createDom('li', null, items[i]);
+    li.setAttribute('itemIndex', i);
     if (items[i] == selected) {
       this.menuSelected_ = li;
     }
