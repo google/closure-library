@@ -25,7 +25,6 @@ goog.provide('goog.ui.DatePickerEvent');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
-goog.require('goog.date');
 goog.require('goog.date.Date');
 goog.require('goog.date.DateRange');
 goog.require('goog.date.Interval');
@@ -36,8 +35,8 @@ goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.i18n.DateTimeFormat');
+goog.require('goog.i18n.DateTimePatterns');
 goog.require('goog.i18n.DateTimeSymbols');
-goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.DefaultDatePickerRenderer');
@@ -71,6 +70,27 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
   this.symbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
 
   this.wdayNames_ = this.symbols_.SHORTWEEKDAYS;
+
+  // The DateTimeFormat object uses the global goog.i18n.DateTimeSymbols
+  // for initialization. So we save the original value, the global object,
+  // create the formatters, then restore the original value.
+  var tempSymbols = goog.i18n.DateTimeSymbols;  // save
+  goog.i18n.DateTimeSymbols = this.symbols_;
+
+  // Formatters for the various areas of the picker
+  this.i18nDateFormatterDay_ = new goog.i18n.DateTimeFormat('d');
+  this.i18nDateFormatterDay2_ = new goog.i18n.DateTimeFormat('dd');
+  this.i18nDateFormatterWeek_ = new goog.i18n.DateTimeFormat('w');
+
+  // Previous implementation did not use goog.i18n.DateTimePatterns,
+  // so it is likely most developers did not set it.
+  // This is why the fallback to a hard-coded string (just in case).
+  var patYear = goog.i18n.DateTimePatterns.YEAR_FULL || 'y';
+  this.i18nDateFormatterYear_ = new goog.i18n.DateTimeFormat(patYear);
+  var patMMMMy = goog.i18n.DateTimePatterns.YEAR_MONTH_FULL || 'MMMM y';
+  this.i18nDateFormatterMonthYear_ = new goog.i18n.DateTimeFormat(patMMMMy);
+
+  goog.i18n.DateTimeSymbols = tempSymbols;  // restore
 
   /**
    * @type {!goog.ui.DatePickerRenderer}
@@ -482,6 +502,7 @@ goog.ui.DatePicker.prototype.setShowWeekNum = function(b) {
  */
 goog.ui.DatePicker.prototype.setShowWeekdayNames = function(b) {
   this.showWeekdays_ = b;
+  this.redrawWeekdays_();
   this.redrawCalendarGrid_();
 };
 
@@ -494,8 +515,8 @@ goog.ui.DatePicker.prototype.setShowWeekdayNames = function(b) {
  * @param {boolean} b Whether to use narrow weekday names.
  */
 goog.ui.DatePicker.prototype.setUseNarrowWeekdayNames = function(b) {
-  this.wdayNames_ = b ? this.symbols_.NARROWWEEKDAYS :
-      this.symbols_.SHORTWEEKDAYS;
+  this.wdayNames_ = b ? this.symbols_.STANDALONENARROWWEEKDAYS :
+      this.symbols_.STANDALONESHORTWEEKDAYS;
   this.redrawWeekdays_();
 };
 
@@ -1217,16 +1238,15 @@ goog.ui.DatePicker.prototype.updateCalendarGrid_ = function() {
   // Show year name of select month
   if (this.elMonthYear_) {
     goog.dom.setTextContent(this.elMonthYear_,
-        goog.date.formatMonthAndYear(
-            this.symbols_.STANDALONEMONTHS[date.getMonth()],
-            date.getFullYear()));
+        this.i18nDateFormatterMonthYear_.format(date));
   }
   if (this.elMonth_) {
     goog.dom.setTextContent(this.elMonth_,
         this.symbols_.STANDALONEMONTHS[date.getMonth()]);
   }
   if (this.elYear_) {
-    goog.dom.setTextContent(this.elYear_, String(date.getFullYear()));
+    goog.dom.setTextContent(this.elYear_,
+        this.i18nDateFormatterYear_.format(date));
   }
 
   var wday = date.getWeekday();
@@ -1278,9 +1298,9 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
     // Draw week number, if enabled
     if (this.showWeekNum_) {
       goog.dom.setTextContent(this.elTable_[y + 1][0],
-                              this.grid_[y][0].getWeekNumber());
+          this.i18nDateFormatterWeek_.format(this.grid_[y][0]));
       goog.dom.classlist.set(this.elTable_[y + 1][0],
-                           goog.getCssName(this.getBaseCssClass(), 'week'));
+          goog.getCssName(this.getBaseCssClass(), 'week'));
     } else {
       goog.dom.setTextContent(this.elTable_[y + 1][0], '');
       goog.dom.classlist.set(this.elTable_[y + 1][0], '');
@@ -1340,7 +1360,8 @@ goog.ui.DatePicker.prototype.redrawCalendarGrid_ = function() {
 
         // Set cell text to the date and apply classes.
         var formatedDate = this.longDateFormat_ ?
-            goog.string.padNumber(o.getDate(), 2) : o.getDate();
+            this.i18nDateFormatterDay2_.format(o) :
+            this.i18nDateFormatterDay_.format(o);
         goog.dom.setTextContent(el, formatedDate);
         // Date belongs to previous or next month and showOtherMonths is false,
         // clear text and classes.
