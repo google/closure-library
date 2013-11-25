@@ -107,6 +107,25 @@ function testException() {
       handler.logRecord.getExceptionText().substring(0, 13));
 }
 
+function testMessageCallbacks() {
+  var root = goog.debug.LogManager.getRoot();
+  var handler = new TestHandler();
+  var f = goog.bind(handler.onPublish, handler);
+  root.addHandler(f);
+  var l3 = goog.debug.Logger.getLogger('goog.bar.foo');
+  l3.setLevel(goog.debug.Logger.Level.WARNING);
+
+  l3.log(goog.debug.Logger.Level.INFO, function() {
+    throw "Message callback shouldn't be called when below logger's level!";
+  });
+  assertNull(handler.logRecord);
+
+  l3.log(goog.debug.Logger.Level.WARNING, function() {return 'heya'});
+  assertNotNull(handler.logRecord);
+  assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
+  assertEquals('heya', handler.logRecord.getMessage());
+}
+
 function testGetPredefinedLevel() {
   assertEquals(goog.debug.Logger.Level.OFF,
       goog.debug.Logger.Level.getPredefinedLevel('OFF'));

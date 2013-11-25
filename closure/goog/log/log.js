@@ -121,7 +121,7 @@ goog.log.removeHandler = function(logger, handler) {
  * registered output Handler objects.
  * @param {goog.log.Logger} logger
  * @param {goog.log.Level} level One of the level identifiers.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error|Object=} opt_exception An exception associated with the
  *     message.
  */
@@ -137,7 +137,7 @@ goog.log.log = function(logger, level, msg, opt_exception) {
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
  * @param {goog.log.Logger} logger
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.error = function(logger, msg, opt_exception) {
@@ -152,7 +152,7 @@ goog.log.error = function(logger, msg, opt_exception) {
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
  * @param {goog.log.Logger} logger
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.warning = function(logger, msg, opt_exception) {
@@ -167,7 +167,7 @@ goog.log.warning = function(logger, msg, opt_exception) {
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
  * @param {goog.log.Logger} logger
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.info = function(logger, msg, opt_exception) {
@@ -182,7 +182,7 @@ goog.log.info = function(logger, msg, opt_exception) {
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
  * @param {goog.log.Logger} logger
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.fine = function(logger, msg, opt_exception) {

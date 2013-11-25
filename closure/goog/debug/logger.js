@@ -21,6 +21,7 @@
  */
 
 goog.provide('goog.debug.LogManager');
+goog.provide('goog.debug.Loggable');
 goog.provide('goog.debug.Logger');
 goog.provide('goog.debug.Logger.Level');
 
@@ -29,6 +30,18 @@ goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.debug.LogBuffer');
 goog.require('goog.debug.LogRecord');
+
+
+/**
+ * A message value that can be handled by a Logger.
+ *
+ * Functions are treated like callbacks, but are only called when the event's
+ * log level is enabled. This is useful for logging messages that are expensive
+ * to construct.
+ *
+ * @typedef {string|function(): string}
+ */
+goog.debug.Loggable;
 
 
 
@@ -523,13 +536,18 @@ goog.debug.Logger.prototype.isLoggable = function(level) {
  * given message level then the given message is forwarded to all the
  * registered output Handler objects.
  * @param {goog.debug.Logger.Level} level One of the level identifiers.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error|Object=} opt_exception An exception associated with the
  *     message.
  */
 goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
   // java caches the effective level, not sure it's necessary here
   if (goog.debug.LOGGING_ENABLED && this.isLoggable(level)) {
+    // Message callbacks can be useful when a log message is expensive to build.
+    if (goog.isFunction(msg)) {
+      msg = msg();
+    }
+
     this.doLogRecord_(this.getLogRecord(level, msg, opt_exception));
   }
 };
@@ -563,7 +581,7 @@ goog.debug.Logger.prototype.getLogRecord = function(level, msg, opt_exception) {
  * Logs a message at the Logger.Level.SHOUT level.
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.shout = function(msg, opt_exception) {
@@ -577,7 +595,7 @@ goog.debug.Logger.prototype.shout = function(msg, opt_exception) {
  * Logs a message at the Logger.Level.SEVERE level.
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.severe = function(msg, opt_exception) {
@@ -591,7 +609,7 @@ goog.debug.Logger.prototype.severe = function(msg, opt_exception) {
  * Logs a message at the Logger.Level.WARNING level.
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.warning = function(msg, opt_exception) {
@@ -605,7 +623,7 @@ goog.debug.Logger.prototype.warning = function(msg, opt_exception) {
  * Logs a message at the Logger.Level.INFO level.
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.info = function(msg, opt_exception) {
@@ -619,7 +637,7 @@ goog.debug.Logger.prototype.info = function(msg, opt_exception) {
  * Logs a message at the Logger.Level.CONFIG level.
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.config = function(msg, opt_exception) {
@@ -633,7 +651,7 @@ goog.debug.Logger.prototype.config = function(msg, opt_exception) {
  * Logs a message at the Logger.Level.FINE level.
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.fine = function(msg, opt_exception) {
@@ -647,7 +665,7 @@ goog.debug.Logger.prototype.fine = function(msg, opt_exception) {
  * Logs a message at the Logger.Level.FINER level.
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.finer = function(msg, opt_exception) {
@@ -661,7 +679,7 @@ goog.debug.Logger.prototype.finer = function(msg, opt_exception) {
  * Logs a message at the Logger.Level.FINEST level.
  * If the logger is currently enabled for the given message level then the
  * given message is forwarded to all the registered output Handler objects.
- * @param {string} msg The string message.
+ * @param {goog.debug.Loggable} msg The message to log.
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.finest = function(msg, opt_exception) {
