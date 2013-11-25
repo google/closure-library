@@ -45,6 +45,8 @@ goog.provide('goog.testing.FunctionCall');
 goog.provide('goog.testing.recordConstructor');
 goog.provide('goog.testing.recordFunction');
 
+goog.require('goog.testing.asserts');
+
 
 /**
  * Wraps the function into another one which calls the inner function and
