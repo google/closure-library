@@ -64,6 +64,16 @@ function testRemoveWithoutChildren() {
   waitForAsync('waiting for file removal');
 }
 
+function testRemoveRootRecursively() {
+  var root = fs.getRoot();
+  root.removeRecursively().addCallback(function() {
+    assertTrue(dir.deleted);
+    assertFalse(fs.getRoot().deleted);
+  })
+  .addBoth(continueTesting);
+  waitForAsync('waiting for testRemoveRoot');
+}
+
 function testGetFile() {
   // Advance the clock by an arbitrary but known amount.
   mockClock.tick(41);

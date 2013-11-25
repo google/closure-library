@@ -309,8 +309,11 @@ goog.testing.fs.DirectoryEntry.prototype.remove = function() {
           'removing ' + this.getFullPath()));
     }, 0, this);
     return d;
-  } else {
+  } else if (this != this.getFileSystem().getRoot()) {
     return goog.base(this, 'remove');
+  } else {
+    // Root directory, do nothing.
+    return goog.async.Deferred.succeed();
   }
 };
 
