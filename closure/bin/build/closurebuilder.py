@@ -176,6 +176,9 @@ class _PathSource(source.Source):
 
     self._path = path
 
+  def __str__(self):
+    return 'PathSource %s' % self._path
+
   def GetPath(self):
     """Returns the path."""
     return self._path

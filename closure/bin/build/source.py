@@ -56,9 +56,6 @@ class Source(object):
     self._source = source
     self._ScanSource()
 
-  def __str__(self):
-    return 'Source %s' % self._path
-
   def GetSource(self):
     """Get the source as a string."""
     return self._source
