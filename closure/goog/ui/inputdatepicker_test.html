@@ -105,6 +105,18 @@ Author: bolinfest@google.com (Michael Bolin)
     assertEquals(7, parsedDate.getMonth()); // Months start from 0
     assertEquals(9, parsedDate.getDate());
   }
+
+  function test_ItUpdatesItsValueOnPopupShown() {
+    inputDatePicker = new goog.ui.InputDatePicker(
+        dateTimeFormatter,
+        dateTimeParser);
+
+    setPopupParentElement_(null);
+    inputDatePicker.setInputValue('1/1/1');
+    inputDatePicker.showForElement(document.body);
+    var inputValue = inputDatePicker.getInputValue();
+    assertEquals('01/01/1901', inputValue);
+  }
 </script>
 
 </body>
