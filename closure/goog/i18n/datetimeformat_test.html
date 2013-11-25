@@ -20,11 +20,31 @@ See the COPYING file for details.
   goog.require('goog.i18n.DateTimeSymbols');
   goog.require('goog.i18n.DateTimeSymbols_de');
   goog.require('goog.i18n.DateTimeSymbols_sv');
+  goog.require('goog.i18n.DateTimeSymbols_bn_BD');
+  goog.require('goog.i18n.DateTimeSymbols_en_IE');
+  goog.require('goog.i18n.DateTimeSymbols_fr_DJ');
+  goog.require('goog.i18n.DateTimeSymbols_he_IL');
+  goog.require('goog.i18n.DateTimeSymbols_ar_SA');
+  goog.require('goog.i18n.DateTimeSymbols_ar_AE');
+  goog.require('goog.i18n.DateTimeSymbols_en_IN');
+  goog.require('goog.i18n.DateTimeSymbols_en_GB');
+  goog.require('goog.i18n.DateTimeSymbols_en_US');
+  goog.require('goog.i18n.DateTimeSymbols_ro_RO'); 
   goog.require('goog.testing.jsunit');
 </script>
 </head>
 <body>
 <script>
+  // Initial values
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en;
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+
+  function tearDown() {
+    // We always revert to a known state
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+  }
+
   // Helpers to make tests work regardless of the timeZone we're in.
   function timezoneString(date) {
     var timeZone = goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
@@ -250,8 +270,6 @@ See the COPYING file for details.
   function testPatternDayOfWeekMonthDayMedium() {
     date = new Date(2006, 6, 27, 13, 10, 10, 250);
 
-    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en;
-    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
     var fmt = new goog.i18n.DateTimeFormat(
         goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_MEDIUM);
     assertEquals('Thu, Jul 27', fmt.format(date));
@@ -266,8 +284,6 @@ See the COPYING file for details.
   function testPatternDayOfWeekMonthDayYearMedium() {
     date = new Date(2012, 5, 28, 13, 10, 10, 250);
 
-    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en;
-    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
     var fmt = new goog.i18n.DateTimeFormat(
         goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
     assertEquals('Thu, Jun 28, 2012', fmt.format(date));
@@ -535,7 +551,6 @@ See the COPYING file for details.
 
   // Making sure that the date-time combination is not a simple concatenation
   function test_dateTimeConcatenation() {
-    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
     var date = new Date(Date.UTC(2006, 4 - 1, 2, 2, 30, 0));
     var timeZone = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
     var fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATETIME);
@@ -549,6 +564,78 @@ See the COPYING file for details.
     assertEquals('Apr 1, 2006, 6:30:00 PM', fmt.format(date, timeZone));
     fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.SHORT_DATETIME);
     assertEquals('4/1/06, 6:30 PM', fmt.format(date, timeZone));
+  }
+
+  function testNotUsingGlobalSymbols() {
+    date = new Date(2013, 10, 15);
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fr;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
+    var fmtFr = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+    var fmtDe = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
+
+    // The two formatters should return different results (French & German) 
+    assertEquals('vendredi 15 novembre 2013', fmtFr.format(date));
+    assertEquals('Freitag, 15. November 2013', fmtDe.format(date));
+  }
+
+  function testSupportForWeekInYear() {
+    date = new Date(2013, 1, 25);
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fr;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
+    var fmt = new goog.i18n.DateTimeFormat('\'week\' w');
+    assertEquals('week 9', fmt.format(date));
+    var fmt = new goog.i18n.DateTimeFormat('\'week\' ww');
+    assertEquals('week 09', fmt.format(date));
+
+    // Make sure it uses native digits when needed
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fa;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fa;
+    var fmt = new goog.i18n.DateTimeFormat('\'week\' w');
+    assertEquals('week ۹', fmt.format(date));
+    var fmt = new goog.i18n.DateTimeFormat('\'week\' ww');
+    assertEquals('week ۰۹', fmt.format(date));
+  }
+
+  // Creates a string by concatenating the week number for 7 successive days
+  function weekInYearFor7Days() {
+    var date = new Date(2013, 0, 1); // January
+    var fmt = new goog.i18n.DateTimeFormat('w');
+    var result = '';
+    for (var i = 1; i <= 7; ++i) {
+      date.setDate(i);
+      result += fmt.format(date);
+    }
+    return result;
+  }
+
+  // Expected results from ICU4J v51. One entry will change in v52.
+  // These cover all combinations of FIRSTDAYOFWEEK / FIRSTWEEKCUTOFFDAY in use.
+  function testWeekInYearI18n() {
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bn_BD;
+    assertEquals('bn_BD', '১১১২২২২', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_IE;
+    assertEquals('en_IE', '1111122', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr_DJ;
+    assertEquals('fr_DJ', '1111222', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_he_IL;
+    assertEquals('he_IL', '1111122', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar_SA;
+    assertEquals('ar_SA', '١١١١٢٢٢', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ar_AE;
+    assertEquals('ar_AE', '١١١١٢٢٢', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_IN;
+    assertEquals('en_IN', '1111122', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_GB;
+    assertEquals('en_GB', '1111112', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_US;
+    assertEquals('en_US', '1111122', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ro_RO;
+    assertEquals('ro_RO', '1111112', weekInYearFor7Days());
   }
 
 </script>
