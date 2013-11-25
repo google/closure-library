@@ -418,9 +418,7 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     this.clientY = this.startY = e.clientY;
     this.screenX = e.screenX;
     this.screenY = e.screenY;
-    this.deltaX = this.useRightPositioningForRtl_ ?
-        goog.style.bidi.getOffsetStart(this.target) : this.target.offsetLeft;
-    this.deltaY = this.target.offsetTop;
+    this.computeInitialPosition();
     this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
 
     this.mouseDownTime_ = goog.now();
@@ -693,6 +691,18 @@ goog.fx.Dragger.prototype.limitY = function(y) {
   var maxY = top != null ? top + height : Infinity;
   var minY = top != null ? top : -Infinity;
   return Math.min(maxY, Math.max(minY, y));
+};
+
+
+/**
+ * Overridable function for computing the initial position of the target
+ * before dragging begins.
+ * @protected
+ */
+goog.fx.Dragger.prototype.computeInitialPosition = function() {
+  this.deltaX = this.useRightPositioningForRtl_ ?
+      goog.style.bidi.getOffsetStart(this.target) : this.target.offsetLeft;
+  this.deltaY = this.target.offsetTop;
 };
 
 
