@@ -273,7 +273,7 @@ goog.format.EmailAddress.isValidDomainPartSpec = function(str) {
  * Parse an email address of the form "name" &lt;address&gt; into
  * an email address.
  * @param {string} addr The address string.
- * @return {goog.format.EmailAddress} The parsed address.
+ * @return {!goog.format.EmailAddress} The parsed address.
  */
 goog.format.EmailAddress.parse = function(addr) {
   // TODO(ecattell): Strip bidi markers.
@@ -311,12 +311,17 @@ goog.format.EmailAddress.parse = function(addr) {
  * Parse a string containing email addresses of the form
  * "name" &lt;address&gt; into an array of email addresses.
  * @param {string} str The address list.
- * @return {Array.<goog.format.EmailAddress>} The parsed emails.
+ * @return {!Array.<!goog.format.EmailAddress>} The parsed emails.
  */
 goog.format.EmailAddress.parseList = function(str) {
   var result = [];
   var email = '';
   var token;
+
+  // Remove non-UNIX-style newlines that would otherwise cause getToken_ to
+  // choke. Remove multiple consecutive whitespace characters for the same
+  // reason.
+  str = goog.string.collapseWhitespace(str);
 
   for (var i = 0; i < str.length; ) {
     token = goog.format.EmailAddress.getToken_(str, i);
