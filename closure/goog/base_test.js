@@ -1187,6 +1187,87 @@ function testBaseClass() {
   assertEquals(3, (new B(1, 0)).foo);
 }
 
+function testClassBaseOnMethod() {
+  function A() {}
+  A.prototype.foo = function(x, y) {
+    return x + y;
+  };
+
+  function B() {}
+  goog.inherits(B, A);
+  B.prototype.foo = function(x, y) {
+    return 2 + B.base(this, 'foo', x, y);
+  };
+
+  function C() {}
+  goog.inherits(C, B);
+  C.prototype.foo = function(x, y) {
+    return 4 + C.base(this, 'foo', x, y);
+  };
+
+  var d = new C();
+  assertEquals(7, d.foo(1, 0));
+  assertEquals(8, d.foo(1, 1));
+  assertEquals(8, d.foo(2, 0));
+  assertEquals(3, (new B()).foo(1, 0));
+
+  delete B.prototype.foo;
+  assertEquals(5, d.foo(1, 0));
+
+  delete C.prototype.foo;
+  assertEquals(1, d.foo(1, 0));
+}
+
+function testClassBaseOnConstructor() {
+  function A(x, y) {
+    this.foo = x + y;
+  }
+
+  function B(x, y) {
+    B.base(this, 'constructor', x, y);
+    this.foo += 2;
+  }
+  goog.inherits(B, A);
+
+  function C(x, y) {
+    C.base(this, 'constructor', x, y);
+    this.foo += 4;
+  }
+  goog.inherits(C, B);
+
+  function D(x, y) {
+    D.base(this, 'constructor', x, y);
+    this.foo += 8;
+  }
+  goog.inherits(D, C);
+
+  assertEquals(15, (new D(1, 0)).foo);
+  assertEquals(16, (new D(1, 1)).foo);
+  assertEquals(16, (new D(2, 0)).foo);
+  assertEquals(7, (new C(1, 0)).foo);
+  assertEquals(3, (new B(1, 0)).foo);
+}
+
+function testClassBaseOnMethodAndBaseCtor() {
+  function A(x, y) {
+    this.foo(x, y);
+  }
+  A.prototype.foo = function(x, y) {
+    this.bar = x + y;
+  };
+
+  function B(x, y) {
+    B.base(this, 'constructor', x, y);
+  }
+  goog.inherits(B, A);
+  B.prototype.foo = function(x, y) {
+    B.base(this, 'foo', x, y);
+    this.bar = this.bar * 2;
+  };
+
+  assertEquals(14, new B(3, 4).bar);
+}
+
 function testGoogRequireCheck() {
   stubs.set(goog, 'ENABLE_DEBUG_LOADER', false);
   stubs.set(goog, 'useStrictRequires', true);
