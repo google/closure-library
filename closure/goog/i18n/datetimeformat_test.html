@@ -586,6 +586,22 @@ See the COPYING file for details.
     assertEquals('Freitag, 15. November 2013', fmtDe.format(date));
   }
 
+  function testConstructorSymbols() {
+    date = new Date(2013, 10, 15);
+
+    var fmtFr = new goog.i18n.DateTimeFormat(
+        goog.i18n.DateTimeFormat.Format.FULL_DATE,
+        goog.i18n.DateTimeSymbols_fr);
+
+    var fmtDe = new goog.i18n.DateTimeFormat(
+            goog.i18n.DateTimeFormat.Format.FULL_DATE,
+            goog.i18n.DateTimeSymbols_de);
+
+    // The two formatters should return different results (French & German)
+    assertEquals('vendredi 15 novembre 2013', fmtFr.format(date));
+    assertEquals('Freitag, 15. November 2013', fmtDe.format(date));
+  }
+
   function testSupportForWeekInYear() {
     date = new Date(2013, 1, 25);
 

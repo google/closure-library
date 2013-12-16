@@ -91,22 +91,19 @@ goog.require('goog.string');
 
 
 
-/* TODO(user): add optional locale data parameters to the constructors.
- * There are several global data structures that are now "quietly"
- * used by constructors, and it is never clear what should be set for what
- * formatter. It is fine when those are set at compile time with goog.LOCALE
- * and never change, but it is a problem when if one needs to change locales.
- */
 /**
  * Construct a DateTimeFormat object based on current locale.
  * @constructor
  * @param {string|number} pattern pattern specification or pattern type.
+ * @param {!Object=} opt_dateTimeSymbols Optional symbols to use use for this
+ *     instance rather than the global symbols.
  * @final
  */
-goog.i18n.DateTimeFormat = function(pattern) {
+goog.i18n.DateTimeFormat = function(pattern, opt_dateTimeSymbols) {
   goog.asserts.assert(goog.isDef(pattern), 'Pattern must be defined');
-  goog.asserts.assert(goog.isDef(goog.i18n.DateTimeSymbols),
-      'goog.i18n.DateTimeSymbols must be defined');
+  goog.asserts.assert(
+      goog.isDef(opt_dateTimeSymbols) || goog.isDef(goog.i18n.DateTimeSymbols),
+      'goog.i18n.DateTimeSymbols or explicit symbols must be defined');
 
   this.patternParts_ = [];
 
@@ -116,7 +113,7 @@ goog.i18n.DateTimeFormat = function(pattern) {
    * @type {!Object}
    * @private
    */
-  this.dateTimeSymbols_ = goog.i18n.DateTimeSymbols;
+  this.dateTimeSymbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
   if (typeof pattern == 'number') {
     this.applyStandardPattern_(pattern);
   } else {
