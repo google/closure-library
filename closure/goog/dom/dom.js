@@ -1245,7 +1245,7 @@ goog.dom.getPreviousNode = function(node) {
 
 /**
  * Whether the object looks like a DOM node.
- * @param {*} obj The object being tested for node likeness.
+ * @param {?} obj The object being tested for node likeness.
  * @return {boolean} Whether the object looks like a DOM node.
  */
 goog.dom.isNodeLike = function(obj) {
@@ -1255,7 +1255,7 @@ goog.dom.isNodeLike = function(obj) {
 
 /**
  * Whether the object looks like an Element.
- * @param {*} obj The object being tested for Element likeness.
+ * @param {?} obj The object being tested for Element likeness.
  * @return {boolean} Whether the object looks like an Element.
  */
 goog.dom.isElement = function(obj) {
@@ -1266,7 +1266,7 @@ goog.dom.isElement = function(obj) {
 /**
  * Returns true if the specified value is a Window object. This includes the
  * global window for HTML pages, and iframe windows.
- * @param {*} obj Variable to test.
+ * @param {?} obj Variable to test.
  * @return {boolean} Whether the variable is a window.
  */
 goog.dom.isWindow = function(obj) {
@@ -2631,7 +2631,7 @@ goog.dom.DomHelper.prototype.getPreviousNode = goog.dom.getPreviousNode;
 
 /**
  * Whether the object looks like a DOM node.
- * @param {*} obj The object being tested for node likeness.
+ * @param {?} obj The object being tested for node likeness.
  * @return {boolean} Whether the object looks like a DOM node.
  */
 goog.dom.DomHelper.prototype.isNodeLike = goog.dom.isNodeLike;
@@ -2639,7 +2639,7 @@ goog.dom.DomHelper.prototype.isNodeLike = goog.dom.isNodeLike;
 
 /**
  * Whether the object looks like an Element.
- * @param {*} obj The object being tested for Element likeness.
+ * @param {?} obj The object being tested for Element likeness.
  * @return {boolean} Whether the object looks like an Element.
  */
 goog.dom.DomHelper.prototype.isElement = goog.dom.isElement;
@@ -2648,7 +2648,7 @@ goog.dom.DomHelper.prototype.isElement = goog.dom.isElement;
 /**
  * Returns true if the specified value is a Window object. This includes the
  * global window for HTML pages, and iframe windows.
- * @param {*} obj Variable to test.
+ * @param {?} obj Variable to test.
  * @return {boolean} Whether the variable is a window.
  */
 goog.dom.DomHelper.prototype.isWindow = goog.dom.isWindow;
