@@ -79,9 +79,10 @@ function assertGoodUrl(url) {
  * @param {string|!goog.string.TypedString} url The URL to sanitize.
  */
 function assertBadUrl(url) {
-  assertThrows(function() {
-    goog.html.SafeUrl.sanitize(url);
-  });
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING,
+      goog.html.SafeUrl.unwrap(
+          goog.html.SafeUrl.sanitize(url)));
 }
 
 
@@ -114,18 +115,6 @@ function testSafeUrlSanitize() {
 }
 
 
-/** @suppress {visibility} */
-function testSanitizeWithoutAssertion() {
-  // Since assertions are enabled when this test runs and we don't want to
-  // fiddle with goog.asserts.ENABLE_ASSERTS, we instead call sanitizeInternal_
-  // with shouldThrow==false.
-  assertEquals(
-      'data:image/png;base64,zClosurez',
-      goog.html.SafeUrl.unwrap(
-          goog.html.SafeUrl.sanitizeInternal_('javascript:evil()', false)));
-}
-
-
 function testSafeUrlFrom() {
   var safeUrlIn = goog.html.SafeUrl.sanitize('http://good.com/');
   assertTrue(safeUrlIn === goog.html.SafeUrl.from(safeUrlIn));
@@ -133,9 +122,10 @@ function testSafeUrlFrom() {
   assertEquals('http://alsogood.com/',
       goog.html.SafeUrl.unwrap(goog.html.SafeUrl.from('http://alsogood.com/')));
 
-  assertThrows(function() {
-    goog.html.SafeUrl.from('javascript:evil()');
-  });
+  assertEquals(
+      goog.html.SafeUrl.INNOCUOUS_STRING,
+      goog.html.SafeUrl.unwrap(
+          goog.html.SafeUrl.sanitize('javascript:evil()')));
 }
 
 
