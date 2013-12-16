@@ -50,8 +50,9 @@ goog.array.ArrayLike;
 
 /**
  * Returns the last element in an array without removing it.
- * @param {goog.array.ArrayLike} array The array.
- * @return {*} Last item in array.
+ * @param {Array.<T>|goog.array.ArrayLike} array The array.
+ * @return {T} Last item in array.
+ * @template T
  */
 goog.array.peek = function(array) {
   return array[array.length - 1];
