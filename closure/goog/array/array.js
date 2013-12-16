@@ -662,9 +662,11 @@ goog.array.insertBefore = function(arr, obj, opt_obj2) {
 
 /**
  * Removes the first occurrence of a particular value from an array.
- * @param {goog.array.ArrayLike} arr Array from which to remove value.
- * @param {*} obj Object to remove.
+ * @param {Array.<T>|goog.array.ArrayLike} arr Array from which to remove
+ *     value.
+ * @param {T} obj Object to remove.
  * @return {boolean} True if an element was removed.
+ * @template T
  */
 goog.array.remove = function(arr, obj) {
   var i = goog.array.indexOf(arr, obj);
