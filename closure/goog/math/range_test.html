@@ -98,6 +98,34 @@ function testRangeContainsPoint() {
   assertFalse(goog.math.Range.containsPoint(r, 2));
 }
 
+function testIncludePoint() {
+  var r = new goog.math.Range(0, 2);
+  r.includePoint(0);
+  assertObjectEquals(new goog.math.Range(0, 2), r);
+  r.includePoint(1);
+  assertObjectEquals(new goog.math.Range(0, 2), r);
+  r.includePoint(2);
+  assertObjectEquals(new goog.math.Range(0, 2), r);
+  r.includePoint(-1);
+  assertObjectEquals(new goog.math.Range(-1, 2), r);
+  r.includePoint(3);
+  assertObjectEquals(new goog.math.Range(-1, 3), r);
+}
+
+function testIncludeRange() {
+  var r = new goog.math.Range(0, 4);
+  r.includeRange(r);
+  assertObjectEquals(new goog.math.Range(0, 4), r);
+  r.includeRange(new goog.math.Range(1, 3));
+  assertObjectEquals(new goog.math.Range(0, 4), r);
+  r.includeRange(new goog.math.Range(-1, 2));
+  assertObjectEquals(new goog.math.Range(-1, 4), r);
+  r.includeRange(new goog.math.Range(2, 5));
+  assertObjectEquals(new goog.math.Range(-1, 5), r);
+  r.includeRange(new goog.math.Range(-2, 6));
+  assertObjectEquals(new goog.math.Range(-2, 6), r);
+}
+
 </script>
 </body>
 </html>

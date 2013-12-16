@@ -50,6 +50,26 @@ goog.math.Range.prototype.clone = function() {
 };
 
 
+/**
+ * Extends this range to include the given point.
+ * @param {number} point
+ */
+goog.math.Range.prototype.includePoint = function(point) {
+  this.start = Math.min(this.start, point);
+  this.end = Math.max(this.end, point);
+};
+
+
+/**
+ * Extends this range to include the given range.
+ * @param {!goog.math.Range} range
+ */
+goog.math.Range.prototype.includeRange = function(range) {
+  this.start = Math.min(this.start, range.start);
+  this.end = Math.max(this.end, range.end);
+};
+
+
 if (goog.DEBUG) {
   /**
    * Returns a string representing the range.
