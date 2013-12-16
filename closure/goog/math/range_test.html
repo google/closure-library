@@ -90,6 +90,11 @@ function testRangeClone() {
   assertRangesEqual(r, r.clone());
 }
 
+function testGetLength() {
+  assertEquals(2, new goog.math.Range(1, 3).getLength());
+  assertEquals(2, new goog.math.Range(3, 1).getLength());
+}
+
 function testRangeContainsPoint() {
   var r = new goog.math.Range(0, 1);
   assert(goog.math.Range.containsPoint(r, 0));

@@ -51,6 +51,14 @@ goog.math.Range.prototype.clone = function() {
 
 
 /**
+ * @return {number} Length of the range.
+ */
+goog.math.Range.prototype.getLength = function() {
+  return this.end - this.start;
+};
+
+
+/**
  * Extends this range to include the given point.
  * @param {number} point
  */
