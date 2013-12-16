@@ -317,6 +317,33 @@ function testDateConstructor() {
 }
 
 
+function testDateConstructor_yearBelow100() {
+  var date = new goog.date.Date(14, 7, 19);
+  assertEquals("Date constructor should respect passed in full year", 14, date.getFullYear());
+
+  var copied = new goog.date.Date(date);
+  assertEquals("Copying a should return identical date", date.getTime(), copied.getTime());
+  assertEquals("Full year should be left intact by copying", 14, copied.getFullYear());
+
+  // Test boundaries.
+  assertEquals(-1, new goog.date.Date(-1, 0, 1).getFullYear());
+  assertEquals("There is no year zero, but JS dates accept it",
+      0, new goog.date.Date(0, 0, 1).getFullYear());
+  assertEquals(1, new goog.date.Date(1, 0, 1).getFullYear());
+  assertEquals(99, new goog.date.Date(99, 0, 1).getFullYear());
+  assertEquals(100, new goog.date.Date(100, 0, 1).getFullYear());
+}
+
+
+function testDateConstructor_flipOver() {
+  var date = new goog.date.Date(2012, 12, 1);
+  assertEquals('20130101', date.toIsoString());
+
+  date = new goog.date.Date(12, 12, 1);
+  assertEquals('130101', date.toIsoString());
+}
+
+
 function testDateToIsoString() {
   var d = new goog.date.Date(2006, goog.date.month.JAN, 1);
   assertEquals('1 Jan 2006 is 20060101', d.toIsoString(), '20060101');

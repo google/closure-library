@@ -750,10 +750,10 @@ goog.date.Date = function(opt_year, opt_month, opt_date) {
   this.date;
   // goog.date.DateTime assumes that only this.date is added in this ctor.
   if (goog.isNumber(opt_year)) {
-    this.date = new Date(opt_year, opt_month || 0, opt_date || 1);
+    this.date = this.buildDate_(opt_year, opt_month || 0, opt_date || 1);
     this.maybeFixDst_(opt_date || 1);
   } else if (goog.isObject(opt_year)) {
-    this.date = new Date(opt_year.getFullYear(), opt_year.getMonth(),
+    this.date = this.buildDate_(opt_year.getFullYear(), opt_year.getMonth(),
         opt_year.getDate());
     this.maybeFixDst_(opt_year.getDate());
   } else {
@@ -763,6 +763,27 @@ goog.date.Date = function(opt_year, opt_month, opt_date) {
     this.date.setSeconds(0);
     this.date.setMilliseconds(0);
   }
+};
+
+
+/**
+ * new Date(y, m, d) treats years in the interval [0, 100) as two digit years,
+ * adding 1900 to them. This method ensures that calling the date constructor
+ * as a copy constructor returns a value that is equal to the passed in
+ * date value by explicitly setting the full year.
+ * @private
+ * @param {number} fullYear The full year (including century).
+ * @param {number} month The month, from 0-11.
+ * @param {number} date The day of the month.
+ * @return {!Date} The constructed Date object.
+ */
+goog.date.Date.prototype.buildDate_ = function(fullYear, month, date) {
+  var d = new Date(fullYear, month, date);
+  if (fullYear >= 0 && fullYear < 100) {
+    // Can't just setFullYear as new Date() can flip over for e.g. month = 13.
+    d.setFullYear(d.getFullYear() - 1900);
+  }
+  return d;
 };
 
 

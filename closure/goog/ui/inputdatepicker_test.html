@@ -115,7 +115,7 @@ Author: bolinfest@google.com (Michael Bolin)
     inputDatePicker.setInputValue('1/1/1');
     inputDatePicker.showForElement(document.body);
     var inputValue = inputDatePicker.getInputValue();
-    assertEquals('01/01/1901', inputValue);
+    assertEquals('01/01/0001', inputValue);
   }
 
   function test_ItDoesNotClearInputOnPopupShown() {
