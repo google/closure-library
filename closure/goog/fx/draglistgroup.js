@@ -599,6 +599,7 @@ goog.fx.DragListGroup.prototype.cloneNode_ = function(sourceEl) {
  * @param {Element} sourceEl Drag source element.
  * @return {Element} The new drag element.
  * @protected
+ * @suppress {deprecated}
  */
 goog.fx.DragListGroup.prototype.createDragElementInternal =
     function(sourceEl) {

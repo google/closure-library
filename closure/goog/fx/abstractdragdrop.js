@@ -847,6 +847,7 @@ goog.fx.AbstractDragDrop.prototype.cloneNode_ = function(sourceEl) {
  * @param {Element} sourceEl Drag source element.
  * @return {Element} The new drag element.
  * @protected
+ * @suppress {deprecated}
  */
 goog.fx.AbstractDragDrop.prototype.createDragElementInternal =
     function(sourceEl) {
