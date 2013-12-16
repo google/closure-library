@@ -94,9 +94,9 @@ goog.labs.Promise = function(resolver, opt_context) {
   /**
    * The list of {@code onFulfilled} and {@code onRejected} callbacks added to
    * this Promise by calls to {@code then()}.
-   * @private {!Array.<goog.labs.Promise.CallbackEntry_>}
+   * @private {Array.<goog.labs.Promise.CallbackEntry_>}
    */
-  this.callbackEntries_ = [];
+  this.callbackEntries_ = null;
 
   /**
    * Whether the Promise is in the queue of Promises to execute.
@@ -483,6 +483,9 @@ goog.labs.Promise.prototype.cancelInternal_ = function(err) {
  * @private
  */
 goog.labs.Promise.prototype.cancelChild_ = function(childPromise, err) {
+  if (!this.callbackEntries_) {
+    return;
+  }
   var childCount = 0;
   var childIndex = -1;
 
@@ -525,10 +528,13 @@ goog.labs.Promise.prototype.cancelChild_ = function(childPromise, err) {
  * @private
  */
 goog.labs.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
-  if (!this.callbackEntries_.length &&
+  if ((!this.callbackEntries_ || !this.callbackEntries_.length) &&
       (this.state_ == goog.labs.Promise.State_.FULFILLED ||
        this.state_ == goog.labs.Promise.State_.REJECTED)) {
     this.scheduleCallbacks_();
+  }
+  if (!this.callbackEntries_) {
+    this.callbackEntries_ = [];
   }
   this.callbackEntries_.push(callbackEntry);
 };
@@ -750,7 +756,7 @@ goog.labs.Promise.prototype.scheduleCallbacks_ = function() {
  * @private
  */
 goog.labs.Promise.prototype.executeCallbacks_ = function() {
-  while (this.callbackEntries_.length) {
+  while (this.callbackEntries_ && this.callbackEntries_.length) {
     var entries = this.callbackEntries_;
     this.callbackEntries_ = [];
 
