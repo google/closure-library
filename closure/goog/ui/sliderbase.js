@@ -803,9 +803,15 @@ goog.ui.SliderBase.prototype.isDragging = function() {
  * - once a thumb reaches or exceeds min (or max, respectively), it stays
  * - at min (or max, respectively).
  * In case both thumbs have reached min (or max), no change event will fire.
+ * If the specified delta is smaller than the step size, it will be rounded
+ * to the step size.
  * @param {number} delta The delta by which to move the selected range.
  */
 goog.ui.SliderBase.prototype.moveThumbs = function(delta) {
+  // Assume that a small delta is supposed to be at least a step.
+  if (Math.abs(delta) < this.getStep()) {
+    delta = goog.math.sign(delta) * this.getStep();
+  }
   var newMinPos = this.getThumbPosition_(this.valueThumb) + delta;
   var newMaxPos = this.getThumbPosition_(this.extentThumb) + delta;
   // correct min / max positions to be within bounds
@@ -849,7 +855,7 @@ goog.ui.SliderBase.prototype.setThumbPosition_ = function(thumb, position) {
  * Sets the value and extent of the underlying range model. We enforce that
  * getMinimum() <= value <= getMaximum() - extent and
  * getMinExtent <= extent <= getMaximum() - getValue()
- * If this is not satisifed for the given extent, the call is ignored and no
+ * If this is not satisfied for the given extent, the call is ignored and no
  * CHANGE event fires. This is a utility method to allow setting the thumbs
  * simultaneously and ensuring that only one event fires.
  * @param {number} value The value to which to set the value.
@@ -1330,7 +1336,8 @@ goog.ui.SliderBase.prototype.setMinExtent = function(value) {
 
 
 /**
- * The amount to increment/decrement for up, down, left and right arrow keys.
+ * The amount to increment/decrement for up, down, left and right arrow keys
+ * and mouse wheel events.
  * @private
  * @type {number}
  */
@@ -1339,7 +1346,7 @@ goog.ui.SliderBase.prototype.unitIncrement_ = 1;
 
 /**
  * @return {number} The amount to increment/decrement for up, down, left and
- *     right arrow keys.
+ *     right arrow keys and mouse wheel events.
  */
 goog.ui.SliderBase.prototype.getUnitIncrement = function() {
   return this.unitIncrement_;
@@ -1348,7 +1355,7 @@ goog.ui.SliderBase.prototype.getUnitIncrement = function() {
 
 /**
  * Sets the amount to increment/decrement for up, down, left and right arrow
- * keys.
+ * keys and mouse wheel events.
  * @param {number} value  The value to set the unit increment to.
  */
 goog.ui.SliderBase.prototype.setUnitIncrement = function(value) {

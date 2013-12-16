@@ -452,6 +452,34 @@ function testKeyHandlingTests() {
   assertEquals(80, twoThumbSlider.getExtent());
 }
 
+function testKeyHandlingLargeStepSize() {
+  twoThumbSlider.setValue(0);
+  twoThumbSlider.setExtent(100);
+  twoThumbSlider.setStep(5);
+  assertEquals(0, twoThumbSlider.getValue());
+  assertEquals(100, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.RIGHT);
+  assertEquals(5, twoThumbSlider.getValue());
+  assertEquals(95, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.RIGHT);
+  assertEquals(10, twoThumbSlider.getValue());
+  assertEquals(90, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT);
+  assertEquals(5, twoThumbSlider.getValue());
+  assertEquals(90, twoThumbSlider.getExtent());
+
+  goog.testing.events.fireKeySequence(
+      twoThumbSlider.getElement(), goog.events.KeyCodes.LEFT);
+  assertEquals(0, twoThumbSlider.getValue());
+  assertEquals(90, twoThumbSlider.getExtent());
+}
+
 function testKeyHandlingRtl() {
   twoThumbSliderRtl.setValue(0);
   twoThumbSliderRtl.setExtent(100);
