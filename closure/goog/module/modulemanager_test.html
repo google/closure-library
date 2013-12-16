@@ -425,7 +425,7 @@ See the COPYING file for details.
     var e = assertThrows(function() {
       mm.load('DoesNotExist');
     });
-    assertEquals('Assertion failed: Unknown module: DoesNotExist', e.message);
+    assertEquals('Unknown module: DoesNotExist', e.message);
   }
 
   /**

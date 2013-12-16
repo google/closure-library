@@ -565,7 +565,9 @@ goog.module.ModuleManager.prototype.loadModulesOrEnqueueIfNotLoadedOrLoading_ =
   for (var i = 0; i < uniqueIds.length; i++) {
     var id = uniqueIds[i];
     var moduleInfo = this.getModuleInfo(id);
-    goog.asserts.assertObject(moduleInfo, 'Unknown module: ' + id);
+    if (!moduleInfo) {
+      throw new Error('Unknown module: ' + id);
+    }
     var d = new goog.async.Deferred();
     deferredMap[id] = d;
     if (moduleInfo.isLoaded()) {
