@@ -108,25 +108,20 @@ function testContainsControlRange() {
     var range = goog.dom.ControlRange.createFromElements(table2);
     var range2 = goog.dom.TextRange.createFromNodeContents(table2div);
     assertFalse('TextRange does not contain ControlRange',
-        range2.containsRange(range));
+            range2.containsRange(range));
     range = goog.dom.ControlRange.createFromElements(logo2);
     assertTrue('TextRange contains ControlRange',
-        range2.containsRange(range));
+            range2.containsRange(range));
     range = goog.dom.TextRange.createFromNodeContents(table2);
     range2 = goog.dom.ControlRange.createFromElements(logo, logo2);
     assertTrue('TextRange partially contains ControlRange',
-        range2.containsRange(range, true));
+            range2.containsRange(range, true));
     assertFalse('TextRange does not fully contain ControlRange',
-        range2.containsRange(range, false));
+            range2.containsRange(range, false));
   }
 }
 
-function testGetStartPosition() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
-
-  // The start node is in the top left.
-  var range = goog.dom.TextRange.createFromNodeContents(test3);
+function getTest3ElementTopLeft() {
   var topLeft = goog.style.getPageOffset(test3.firstChild);
 
   if (goog.userAgent.IE) {
@@ -139,10 +134,19 @@ function testGetStartPosition() {
       topLeft.y += 2;
     }
   }
+  return topLeft;
+}
+
+function testGetStartPosition() {
+  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+      !goog.userAgent.isVersionOrHigher('2'));
+
+  // The start node is in the top left.
+  var range = goog.dom.TextRange.createFromNodeContents(test3);
 
   try {
     var result = assertNotThrows(goog.bind(range.getStartPosition, range));
-    assertObjectEquals(topLeft, result);
+    assertObjectRoughlyEquals(getTest3ElementTopLeft(), result, 1);
   } catch (e) {
     expectedFailures.handleException(e);
   }
@@ -177,19 +181,10 @@ function testGetStartPositionReversed() {
   var lastNode = test3.lastChild.lastChild;
   var range = goog.dom.TextRange.createFromNodes(
       lastNode, lastNode.nodeValue.length, firstNode, 0);
-  var pageOffset = goog.style.getPageOffset(test3.lastChild);
-  var bottomRight = new goog.math.Coordinate(
-      pageOffset.x + test3.lastChild.offsetWidth,
-      pageOffset.y + test3.lastChild.offsetHeight);
-
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
-    bottomRight.x += 2;
-    bottomRight.y += 2;
-  }
 
   try {
     var result = assertNotThrows(goog.bind(range.getStartPosition, range));
-    assertObjectRoughlyEquals(bottomRight, result, 1);
+    assertObjectRoughlyEquals(getTest3ElementTopLeft(), result, 1);
   } catch (e) {
     expectedFailures.handleException(e);
   }
@@ -216,18 +211,13 @@ function testGetStartPositionRightToLeft() {
 
   try {
     var result = assertNotThrows(goog.bind(range.getStartPosition, range));
-    assertObjectEquals(topLeft, result);
+    assertObjectRoughlyEquals(topLeft, result, 1);
   } catch (e) {
     expectedFailures.handleException(e);
   }
 }
 
-function testGetEndPosition() {
-  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('2'));
-
-  // The end node is in the bottom right.
-  var range = goog.dom.TextRange.createFromNodeContents(test3);
+function getTest3ElementBottomRight() {
   var pageOffset = goog.style.getPageOffset(test3.lastChild);
   var bottomRight = new goog.math.Coordinate(
       pageOffset.x + test3.lastChild.offsetWidth,
@@ -237,10 +227,19 @@ function testGetEndPosition() {
     bottomRight.x += 6;
     bottomRight.y += 2;
   }
+  return bottomRight;
+}
+
+function testGetEndPosition() {
+  expectedFailures.expectFailureFor(goog.userAgent.GECKO &&
+      !goog.userAgent.isVersionOrHigher('2'));
+
+  // The end node is in the bottom right.
+  var range = goog.dom.TextRange.createFromNodeContents(test3);
 
   try {
     var result = assertNotThrows(goog.bind(range.getEndPosition, range));
-    assertObjectRoughlyEquals(bottomRight, result, 1);
+    assertObjectRoughlyEquals(getTest3ElementBottomRight(), result, 1);
   } catch (e) {
     expectedFailures.handleException(e);
   }
@@ -270,27 +269,15 @@ function testGetEndPositionReversed() {
       !goog.userAgent.isVersionOrHigher('2'));
 
   // Simulate the user selecting backwards from right-to-left.
-  // The end node is now in the top left.
+  // The end node is still in the lower right.
   var firstNode = test3.firstChild.firstChild;
   var lastNode = test3.lastChild.lastChild;
   var range = goog.dom.TextRange.createFromNodes(
       lastNode, lastNode.nodeValue.length, firstNode, 0);
-  var topLeft = goog.style.getPageOffset(test3.firstChild);
-
-  if (goog.userAgent.IE) {
-    // On IE the selection is as tall as its tallest element.
-    var logoPosition = goog.style.getPageOffset(logo3);
-    topLeft.y = logoPosition.y;
-
-    if (!goog.userAgent.isVersionOrHigher('8')) {
-      topLeft.x += 2;
-      topLeft.y += 2;
-    }
-  }
 
   try {
     var result = assertNotThrows(goog.bind(range.getEndPosition, range));
-    assertObjectEquals(topLeft, result);
+    assertObjectRoughlyEquals(getTest3ElementBottomRight(), result, 1);
   } catch (e) {
     expectedFailures.handleException(e);
   }
