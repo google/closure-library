@@ -40,6 +40,7 @@
 goog.provide('goog.dom.safe');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeUrl');
 
 
 /**
@@ -49,4 +50,35 @@ goog.require('goog.html.SafeHtml');
  */
 goog.dom.safe.setInnerHtml = function(elem, html) {
   elem.innerHTML = goog.html.SafeHtml.unwrap(html);
+};
+
+
+/**
+ * Safely assigns a URL to a Location object's href property.
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
+ * loc's href property.  If url is of type string however, it is first sanitized
+ * using goog.html.SafeUrl.sanitize.
+ *
+ * Example usage:
+ *   goog.dom.safe.setLocationHref(document.location, redirectUrl);
+ * which is a safe alternative to
+ *   document.location.href = redirectUrl;
+ * The latter can result in XSS vulnerabilities if redirectUrl is a
+ * user-/attacker-controlled value.
+ *
+ * @param {!Location} loc The Location object whose href property is to be
+ *     assigned to.
+ * @param {string|!goog.html.SafeUrl} url The URL to assign.
+ * @see goog.html.SafeUrl#sanitize
+ */
+goog.dom.safe.setLocationHref = function(loc, url) {
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitize(url);
+  }
+  loc.href = goog.html.SafeUrl.unwrap(safeUrl);
 };
