@@ -234,6 +234,36 @@ function testSelectEventFiresForUserInitiatedAction() {
       1, recordingHandler.getCallCount());
   assertFalse(select.isOpen());
 }
+
+/**
+ * Checks that if an item is selected before decorate is called, the selection
+ * is preserved after decorate.
+ */
+function testSetSelectedItemBeforeRender() {
+  select.addItem(new goog.ui.MenuItem("item 1"));
+  select.addItem(new goog.ui.MenuItem("item 2"));
+  var item3 = new goog.ui.MenuItem("item 3");
+  select.addItem(item3);
+  select.setSelectedItem(item3);
+  assertEquals(2, select.getSelectedIndex());
+
+  select.decorate(sandbox);
+  assertEquals(2, select.getSelectedIndex());
+}
+
+/**
+ * Checks that if a value is set before decorate is called, the value is
+ * preserved after decorate.
+ */
+function testSetValueBeforeRender() {
+  select.addItem(new goog.ui.MenuItem("item 1", 1));
+  select.addItem(new goog.ui.MenuItem("item 2", 2));
+  select.setValue(2);
+  assertEquals(2, select.getValue());
+
+  select.decorate(sandbox);
+  assertEquals(2, select.getValue());
+}
 </script>
 
 </body>
