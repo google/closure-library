@@ -960,7 +960,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
  *     current selection.
  * @param {string} url The url to link to.
  * @param {string=} opt_target Target for the link.
- * @return {goog.editor.Link?} The newly created link.
+ * @return {goog.editor.Link?} The newly created link, or null if the link
+ *     couldn't be created.
  * @private
  */
 goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
@@ -974,7 +975,13 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
   if (parent && parent.tagName == goog.dom.TagName.IMG) {
     return null;
   }
-  if (range && range.isCollapsed()) {
+  // If range is not present, the editable field doesn't have focus, abort
+  // creating a link.
+  if (!range) {
+    return null;
+  }
+
+  if (range.isCollapsed()) {
     var textRange = range.getTextRange(0).getBrowserRangeObject();
     if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
       anchor = this.getFieldDomHelper().createElement(goog.dom.TagName.A);

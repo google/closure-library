@@ -385,26 +385,27 @@ See the COPYING file for details.
     tearDownSubSuperTests();
   }
 
-  function setUpLinkTests(url) {
+  function setUpLinkTests(url, isEditable) {
     stubs.set(window, 'prompt', function() {
       return url;
     });
 
     ROOT.innerHTML = '12345';
     HELPER = new goog.testing.editor.TestHelper(ROOT);
-    HELPER.setUpEditableElement();
+    if (isEditable) {
+      HELPER.setUpEditableElement();
+      FIELDMOCK.execCommand(goog.editor.Command.MODAL_LINK_EDITOR,
+          goog.testing.mockmatchers.isObject).$returns(undefined);
+      FORMATTER.focusField_ = function() {
+        throw 'Field should not be re-focused';
+      }
+    }
 
     FIELDMOCK.getElement().$anyTimes().$returns(ROOT);
 
-    FIELDMOCK.execCommand(goog.editor.Command.MODAL_LINK_EDITOR,
-        goog.testing.mockmatchers.isObject).$returns(undefined);
     FIELDMOCK.setModalMode(true);
 
-    FIELDMOCK.isSelectionEditable().$anyTimes().$returns(true);
-
-    FORMATTER.focusField_ = function() {
-      throw 'Field should not be re-focused';
-    }
+    FIELDMOCK.isSelectionEditable().$anyTimes().$returns(isEditable);
   }
 
   function tearDownLinkTests() {
@@ -412,7 +413,7 @@ See the COPYING file for details.
   }
 
   function testLink() {
-    setUpLinkTests('http://www.x.com/');
+    setUpLinkTests('http://www.x.com/', true);
     FIELDMOCK.$replay();
 
     HELPER.select('12345', 3);
@@ -427,7 +428,7 @@ See the COPYING file for details.
   }
 
   function testSelectedLink() {
-    setUpLinkTests('http://www.x.com/');
+    setUpLinkTests('http://www.x.com/', true);
     FIELDMOCK.$replay();
 
     HELPER.select('12345', 1, '12345', 4);
@@ -442,7 +443,7 @@ See the COPYING file for details.
   }
 
   function testCanceledLink() {
-    setUpLinkTests(undefined);
+    setUpLinkTests(undefined, true);
     FIELDMOCK.$replay();
 
     HELPER.select('12345', 1, '12345', 4);
@@ -450,6 +451,22 @@ See the COPYING file for details.
     HELPER.assertHtmlMatches('12345');
 
     assertEquals('234', FIELDMOCK.getRange().getText());
+
+    FIELDMOCK.$verify();
+    tearDownLinkTests();
+  }
+
+  function testUnfocusedLink() {
+    FIELDMOCK.$reset();
+    FIELDMOCK.getEditableDomHelper().
+        $anyTimes().
+        $returns(goog.dom.getDomHelper(window.document));
+    setUpLinkTests(undefined, false);
+    FIELDMOCK.getRange().$anyTimes().$returns(null);
+    FIELDMOCK.$replay();
+
+    FORMATTER.execCommandInternal(goog.editor.Command.LINK);
+    HELPER.assertHtmlMatches('12345');
 
     FIELDMOCK.$verify();
     tearDownLinkTests();
