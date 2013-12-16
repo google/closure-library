@@ -100,7 +100,7 @@ goog.net.XhrManager = function(
 
   /**
    * The event handler.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.net.XhrManager>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

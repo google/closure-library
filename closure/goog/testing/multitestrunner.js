@@ -63,7 +63,7 @@ goog.testing.MultiTestRunner = function(opt_domHelper) {
 
   /**
    * An event handler for handling events.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.testing.MultiTestRunner>}
    * @private
    */
   this.eh_ = new goog.events.EventHandler(this);
@@ -1185,7 +1185,7 @@ goog.testing.MultiTestRunner.TestFrame = function(
 
   /**
    * An event handler for handling events.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.testing.MultiTestRunner.TestFrame>}
    * @private
    */
   this.eh_ = new goog.events.EventHandler(this);

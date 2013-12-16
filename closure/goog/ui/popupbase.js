@@ -49,7 +49,7 @@ goog.ui.PopupBase = function(opt_element, opt_type) {
 
   /**
    * An event handler to manage the events easily
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.ui.PopupBase>}
    * @private
    */
   this.handler_ = new goog.events.EventHandler(this);
@@ -383,8 +383,10 @@ goog.ui.PopupBase.prototype.getLastHideTime = function() {
  * this handler are removed when the tooltip is hidden. Therefore,
  * the recommended usage of this handler is to listen on events in
  * {@link #onShow_}.
- * @return {goog.events.EventHandler} Event handler for this popup.
+ * @return {goog.events.EventHandler.<T>} Event handler for this popup.
  * @protected
+ * @this T
+ * @template T
  */
 goog.ui.PopupBase.prototype.getHandler = function() {
   return this.handler_;

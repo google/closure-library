@@ -54,7 +54,7 @@ goog.events.OnlineHandler = function() {
   goog.base(this);
 
   /**
-   * @private {goog.events.EventHandler}
+   * @private {goog.events.EventHandler.<!goog.events.OnlineHandler>}
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
 

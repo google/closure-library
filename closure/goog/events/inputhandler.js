@@ -80,7 +80,7 @@ goog.events.InputHandler = function(element) {
           element.tagName == 'TEXTAREA');
 
   /**
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.events.InputHandler>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

@@ -58,7 +58,7 @@ goog.ui.equation.PaletteManager = function(domHelper) {
 
   /**
    * The event handler for managing events.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.ui.equation.PaletteManager>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

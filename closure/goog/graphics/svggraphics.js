@@ -91,7 +91,7 @@ goog.graphics.SvgGraphics = function(width, height,
 
   /**
    * Event handler.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.graphics.SvgGraphics>}
    * @private
    */
   this.handler_ = new goog.events.EventHandler(this);

@@ -48,7 +48,7 @@ goog.net.BulkLoader = function(uris) {
 
   /**
    * The handler for managing events.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.net.BulkLoader>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

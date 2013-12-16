@@ -55,7 +55,7 @@ goog.module.ModuleLoader = function() {
 
   /**
    * Event handler for managing handling events.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.module.ModuleLoader>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

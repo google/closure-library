@@ -73,7 +73,7 @@ goog.net.xpc.DirectTransport = function(channel, opt_domHelper) {
    */
   this.channel_ = channel;
 
-  /** @private {!EventHandler} */
+  /** @private {!EventHandler.<!goog.net.xpc.DirectTransport>} */
   this.eventHandler_ = new EventHandler(this);
   this.registerDisposable(this.eventHandler_);
 

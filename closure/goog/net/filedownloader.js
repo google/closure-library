@@ -93,7 +93,7 @@ goog.net.FileDownloader = function(dir, opt_pool) {
 
   /**
    * The handler for URL capturing events.
-   * @type {!goog.events.EventHandler}
+   * @type {!goog.events.EventHandler.<!goog.net.FileDownloader>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

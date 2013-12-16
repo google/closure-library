@@ -133,7 +133,7 @@ goog.ui.CharPicker = function(charPickerData, charNameFetcher, opt_recents,
 
   /**
    * Handler for events.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.ui.CharPicker>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

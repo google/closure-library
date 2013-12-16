@@ -85,7 +85,7 @@ goog.net.ImageLoader = function(opt_parent) {
   /**
    * Event handler object, used to keep track of onload and onreadystatechange
    * listeners.
-   * @type {!goog.events.EventHandler}
+   * @type {!goog.events.EventHandler.<!goog.net.ImageLoader>}
    * @private
    */
   this.handler_ = new goog.events.EventHandler(this);

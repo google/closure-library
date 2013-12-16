@@ -74,7 +74,7 @@ goog.editor.ClickToEditWrapper = function(fieldObj) {
 
   /**
    * Event handler for field related events.
-   * @type {!goog.events.EventHandler}
+   * @type {!goog.events.EventHandler.<!goog.editor.ClickToEditWrapper>}
    * @private
    */
   this.fieldEventHandler_ = new goog.events.EventHandler(this);
@@ -88,7 +88,7 @@ goog.editor.ClickToEditWrapper = function(fieldObj) {
 
   /**
    * Event handler for mouse events.
-   * @type {!goog.events.EventHandler}
+   * @type {!goog.events.EventHandler.<!goog.editor.ClickToEditWrapper>}
    * @private
    */
   this.mouseEventHandler_ = new goog.events.EventHandler(this);

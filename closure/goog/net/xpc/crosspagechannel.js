@@ -102,7 +102,7 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
 
   /**
    * An event handler used to listen for load events on peer iframes.
-   * @type {!goog.events.EventHandler}
+   * @type {!goog.events.EventHandler.<!goog.net.xpc.CrossPageChannel>}
    * @private
    */
   this.peerLoadHandler_ = new goog.events.EventHandler(this);

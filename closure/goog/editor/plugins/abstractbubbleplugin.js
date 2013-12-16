@@ -57,7 +57,8 @@ goog.editor.plugins.AbstractBubblePlugin = function() {
 
   /**
    * Place to register events the plugin listens to.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<
+   *     !goog.editor.plugins.AbstractBubblePlugin>}
    * @protected
    */
   this.eventRegister = new goog.events.EventHandler(this);

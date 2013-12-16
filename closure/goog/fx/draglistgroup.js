@@ -84,7 +84,7 @@ goog.fx.DragListGroup = function() {
 
   /**
    * The event handler for this instance.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.fx.DragListGroup>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

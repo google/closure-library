@@ -56,7 +56,7 @@ goog.db.IndexedDb = function(db) {
 
   /**
    * Internal event handler that listens to IDBDatabase events.
-   * @type {!goog.events.EventHandler}
+   * @type {!goog.events.EventHandler.<!goog.db.IndexedDb>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
