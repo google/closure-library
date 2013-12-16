@@ -54,19 +54,14 @@ function bytesToHex(b) {
 /**
  * helper to get an hmac of the given message with the given key.
  */
-function getHmac(key, message, opt_blockSize) {
+function getHmac(key, message) {
   var hasher = new goog.crypt.Sha1();
-  var hmacer = new goog.crypt.Hmac(hasher, key, opt_blockSize);
+  var hmacer = new goog.crypt.Hmac(hasher, key, 64);
   return bytesToHex(hmacer.getHmac(message));
 }
 
 function testBasicOperations() {
   var hmac = new goog.crypt.Hmac(new goog.crypt.Sha1(), 'key', 64);
-  goog.crypt.hashTester.runBasicTests(hmac);
-}
-
-function testBasicOperationsWithNoBlockSize() {
-  var hmac = new goog.crypt.Hmac(new goog.crypt.Sha1(), 'key');
   goog.crypt.hashTester.runBasicTests(hmac);
 }
 
@@ -111,16 +106,6 @@ function testHmac() {
               'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
           stringToBytes(
               'Test Using Larger Than Block-Size Key - Hash Key First')));
-
-  assertEquals('test 7 failed',
-      'b617318655057264e28bc0b6fb378c8ef146be00',
-      getHmac(hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
-          stringToBytes('Hi There'), 64));
-
-  assertEquals('test 8 failed',
-      '941f806707826395dc510add6a45ce9933db976e',
-      getHmac(hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
-          stringToBytes('Hi There'), 32));
 }
 
 </script>

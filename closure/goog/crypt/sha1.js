@@ -41,12 +41,9 @@ goog.require('goog.crypt.Hash');
  * @constructor
  * @extends {goog.crypt.Hash}
  * @final
- * @struct
  */
 goog.crypt.Sha1 = function() {
   goog.base(this);
-
-  this.blockSize = 512 / 8;
 
   /**
    * Holds the previous values of accumulated variables a-e in the compress_
@@ -79,19 +76,9 @@ goog.crypt.Sha1 = function() {
   this.pad_ = [];
 
   this.pad_[0] = 128;
-  for (var i = 1; i < this.blockSize; ++i) {
+  for (var i = 1; i < 64; ++i) {
     this.pad_[i] = 0;
   }
-
-  /**
-   * @private {number}
-   */
-  this.inbuf_ = 0;
-
-  /**
-   * @private {number}
-   */
-  this.total_ = 0;
 
   this.reset();
 };
@@ -206,7 +193,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
     opt_length = bytes.length;
   }
 
-  var lengthMinusBlock = opt_length - this.blockSize;
+  var lengthMinusBlock = opt_length - 64;
   var n = 0;
   // Using local instead of member variables gives ~5% speedup on Firefox 16.
   var buf = this.buf_;
@@ -221,7 +208,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
     if (inbuf == 0) {
       while (n <= lengthMinusBlock) {
         this.compress_(bytes, n);
-        n += this.blockSize;
+        n += 64;
       }
     }
 
@@ -230,7 +217,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
         buf[inbuf] = bytes.charCodeAt(n);
         ++inbuf;
         ++n;
-        if (inbuf == this.blockSize) {
+        if (inbuf == 64) {
           this.compress_(buf);
           inbuf = 0;
           // Jump to the outer loop so we use the full-block optimization.
@@ -242,7 +229,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
         buf[inbuf] = bytes[n];
         ++inbuf;
         ++n;
-        if (inbuf == this.blockSize) {
+        if (inbuf == 64) {
           this.compress_(buf);
           inbuf = 0;
           // Jump to the outer loop so we use the full-block optimization.
@@ -266,11 +253,11 @@ goog.crypt.Sha1.prototype.digest = function() {
   if (this.inbuf_ < 56) {
     this.update(this.pad_, 56 - this.inbuf_);
   } else {
-    this.update(this.pad_, this.blockSize - (this.inbuf_ - 56));
+    this.update(this.pad_, 64 - (this.inbuf_ - 56));
   }
 
   // Add # bits.
-  for (var i = this.blockSize - 1; i >= 56; i--) {
+  for (var i = 63; i >= 56; i--) {
     this.buf_[i] = totalBits & 255;
     totalBits /= 256; // Don't use bit-shifting here!
   }
