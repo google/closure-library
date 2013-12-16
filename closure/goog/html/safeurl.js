@@ -41,11 +41,7 @@ goog.require('goog.string.TypedString');
  * attribute), in the sense that the use will not result in a
  * Cross-Site-Scripting vulnerability.
  *
- * Note that, as documented in {@code goog.html.SafeUrl.unwrap}, this type's
- * contract does not guarantee that instances are safe to interpolate into HTML
- * without appropriate escaping.
- *
- * Note also that this type's contract does not imply any guarantees regarding
+ * Note that this type's contract does not imply any guarantees regarding
  * the resource the URL refers to.  In particular, SafeUrls are <b>not<b/>
  * safe to use in a context where the referred-to resource is interpreted as
  * trusted code, e.g., as the src of a script tag.
@@ -120,14 +116,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
  * indeed {@code SafeUrl}, use {@code goog.html.SafeUrl.unwrap} instead of this
- * method. If in doubt, assume that it's security-relevant.
- *
- * IMPORTANT: The guarantees of the SafeUrl type contract only extend to the
- * behavior of browsers when interpreting URLs. Values of SafeUrl objects MUST
- * be appropriately escaped before embedding in a HTML document. Note that the
- * required escaping is context-sensitive (e.g. a different escaping is
- * required for embedding a URL in a style property within a style
- * attribute, as opposed to embedding in a href attribute).
+ * method.
  *
  * @see goog.html.SafeUrl#unwrap
  * @override
@@ -170,18 +159,6 @@ goog.html.SafeUrl.prototype.toString = function() {
 /**
  * Performs a runtime check that the provided object is indeed a SafeUrl
  * object, and returns its value.
- *
- * IMPORTANT: The guarantees of the SafeUrl type contract only extend to the
- * behavior of  browsers when interpreting URLs. Values of SafeUrl objects MUST
- * be appropriately escaped before embedding in a HTML document. Note that the
- * required escaping is context-sensitive (e.g. a different escaping is
- * required for embedding a URL in a style property within a style
- * attribute, as opposed to embedding in a href attribute).
- *
- * Note that the returned value does not necessarily correspond to the string
- * with which the SafeUrl was constructed, since goog.html.SafeUrl.sanitize
- * will percent-encode many characters.
- *
  * @param {!goog.html.SafeUrl} safeUrl The object to extract from.
  * @return {string} The SafeUrl object's contained string, unless the run-time
  *     type check fails. In that case, {@code unwrap} returns an innocuous
@@ -260,26 +237,15 @@ goog.html.SAFE_URL_PATTERN_ = /^(?:(?:https?|mailto):|[^&:/?#]*(?:[/?#]|$))/i;
 
 
 /**
- * Creates a SafeUrl object from {@code url}. The input string is validated to
- * match a pattern of commonly used safe URLs. The string is converted to
- * UTF-8 and non-whitelisted characters are percent-encoded. The string
- * wrapped by the created SafeUrl will thus contain only ASCII printable
- * characters.
+ * Creates a SafeUrl object from {@code url}, validating that the input string
+ * matches a pattern of commonly used safe URLs.
  *
- * {@code url} may be a URL with the http, https, or mailto scheme,
- * or a relative URL (i.e., a URL without a scheme; specifically, a
+ * Specifically, {@code url} may be a URL with the http, https, or mailto
+ * scheme, or a relative URL (i.e., a URL without a scheme; specifically, a
  * scheme-relative, absolute-path-relative, or path-relative URL).
  *
- * {@code url} is converted to UTF-8 and non-whitelisted characters are
- * percent-encoded. Whitelisted characters are, from RFC 3986, unreserved
- * characters and reserved characters, with the exception of '\'', '(' and ')'.
- * This ensures the the SafeUrl contains only ASCII printable characters and
- * reduces the change of security bugs were it to be interpolated into a
- * specific context without the necessary escaping.
- *
- * If {@code url} fails validation or does not UTF-16 decode correctly
- * (JavaScript strings are UTF-16 encoded), this function returns a SafeUrl
- * object containing an innocuous string, goog.html.SafeUrl.INNOCUOUS_STRING.
+ * If {@code url} fails validation, this function returns a SafeUrl object
+ * containing an innocuous string, goog.html.SafeUrl.INNOCUOUS_STRING.
  *
  * @see http://url.spec.whatwg.org/#concept-relative-url
  * @param {string|!goog.string.TypedString} url The URL to validate.
@@ -294,62 +260,8 @@ goog.html.SafeUrl.sanitize = function(url) {
   if (!goog.html.SAFE_URL_PATTERN_.test(url)) {
     url = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
-  url = goog.html.SafeUrl.normalize_(url);
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(
       url);
-};
-
-
-/**
- * Normalizes {@code url} the UTF-8 encoding of url, using a whitelist of
- * characters. Whitelisted characters are not percent-encoded.
- * @param {string} url The URL to normalize.
- * @return {string} The normalized URL.
- * @private
- */
-goog.html.SafeUrl.normalize_ = function(url) {
-  try {
-    var normalized = encodeURI(url);
-  } catch (e) {  // Happens if url contains invalid surrogate sequences.
-    return goog.html.SafeUrl.INNOCUOUS_STRING;
-  }
-
-  return normalized.replace(
-      goog.html.SafeUrl.NORMALIZE_MATCHER_,
-      function(match) {
-        return goog.html.SafeUrl.NORMALIZE_REPLACER_MAP_[match];
-      });
-};
-
-
-/**
- * Matches characters and strings which need to be replaced in the string
- * generated by encodeURI. Specifically:
- *
- * - '\', '(' and ')' are not encoded. They are part of the reserved
- *   characters group in RFC 3986 but only appear in the obsolete mark
- *   production in Appendix D.2 of RFC 3986, so they can be encoded without
- *   changing semantics.
- * - '[' and ']' are encoded, despite being reserved characters which can
- *   be used to represent IPv6 addresses. So they need to be decoded.
- *
- * @const {!RegExp}
- * @private
- */
-goog.html.SafeUrl.NORMALIZE_MATCHER_ = /[()']|%5B|%5D/g;
-
-
-/**
- * Map of replacements to be done in string generated by encodeURI.
- * @const {!Object.<string, string>}
- * @private
- */
-goog.html.SafeUrl.NORMALIZE_REPLACER_MAP_ = {
-  '\'': '%27',
-  '(': '%28',
-  ')': '%29',
-  '%5B': '[',
-  '%5D': ']'
 };
 
 
