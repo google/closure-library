@@ -109,15 +109,22 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
 
   /**
-   * @private {Object} messageUrlParams Extra URL parameters
+   * @private {Object.<string, string>} messageUrlParams_ Extra URL parameters
    * to be added to each HTTP request.
    */
-  this.messageUrlParams = (opt_options && opt_options.messageUrlParams) || null;
+  this.messageUrlParams_ =
+      (opt_options && opt_options.messageUrlParams) || null;
 
   var messageHeaders = (opt_options && opt_options.messageHeaders) || null;
   if (messageHeaders) {
     this.channel_.setExtraHeaders(messageHeaders);
   }
+
+  /**
+   * @private {boolean} supportsCrossDomainXhr_ Whether to enable CORS.
+   */
+  this.supportsCrossDomainXhr_ =
+      (opt_options && opt_options.supportsCrossDomainXhr) || false;
 };
 goog.inherits(WebChannelBaseTransport.Channel, goog.events.EventTarget);
 
@@ -138,10 +145,13 @@ WebChannelBaseTransport.Channel.prototype.channelHandler_ = null;
  */
 WebChannelBaseTransport.Channel.prototype.open = function() {
   this.channel_.connect(this.testUrl_, this.url_,
-                        (this.messageUrlParams || undefined));
+                        (this.messageUrlParams_ || undefined));
 
   this.channelHandler_ = new WebChannelBaseTransport.Channel.Handler_(this);
   this.channel_.setHandler(this.channelHandler_);
+  if (this.supportsCrossDomainXhr_) {
+    this.channel_.setSupportsCrossDomainXhrs(true);
+  }
 };
 
 

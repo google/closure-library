@@ -66,25 +66,31 @@ goog.net.WebChannel = function() {};
  * {@link WebChannelTransport}. The configuration parameters are specified
  * when a new instance of WebChannel is created via {@link WebChannelTransport}.
  *
- * spdyRequestLimit: the maximum number of in-flight HTTP requests allowed
- *                   when SPDY is enabled. Currently we only detect SPDY
- *                   in Chrome. This parameter defaults to 10. When SPDY is
- *                   not enabled, this parameter will have no effect.
- *
- * testUrl: the test URL for detecting connectivity during the initial
- *          handshake. This parameter defaults to "/<channel_url>/test".
- *
  * messageHeaders: custom headers to be added to every message sent to the
- *                 server.
+ * server.
  *
  * messageUrlParams: custom url query parameters to be added to every message
- *                   sent to the server.
+ * sent to the server.
+ *
+ * spdyRequestLimit: the maximum number of in-flight HTTP requests allowed
+ * when SPDY is enabled. Currently we only detect SPDY in Chrome.
+ * This parameter defaults to 10. When SPDY is not enabled, this parameter
+ * will have no effect.
+ *
+ * supportsCrossDomainXhr: setting this to true to allow the use of sub-domains
+ * (as configured by the server) to send XHRs with the CORS withCredentials
+ * bit set to true.
+ *
+ * testUrl: the test URL for detecting connectivity during the initial
+ * handshake. This parameter defaults to "/<channel_url>/test".
+ *
  *
  * @typedef {{
- *   spdyRequestLimit: (number|undefined),
- *   testUrl: (string|undefined),
  *   messageHeaders: (!Object.<string, string>|undefined),
- *   messageUrlParams: (!Object.<string, string>|undefined)
+ *   messageUrlParams: (!Object.<string, string>|undefined),
+ *   spdyRequestLimit: (number|undefined),
+ *   supportsCrossDomainXhr: (boolean|undefined),
+ *   testUrl: (string|undefined)
  * }}
  */
 goog.net.WebChannel.Options;
