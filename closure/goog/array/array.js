@@ -230,8 +230,8 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
  *     result array. If it is false the element is not included.
  * @param {S=} opt_obj The object to be used as the value of 'this'
  *     within f.
- * @return {!Array} a new array in which only elements that passed the test are
- *     present.
+ * @return {!Array.<T>} a new array in which only elements that passed the test
+ *     are present.
  * @template T,S
  */
 goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
@@ -831,15 +831,16 @@ goog.array.extend = function(arr1, var_args) {
  * splice. This means that it might work on other objects similar to arrays,
  * such as the arguments object.
  *
- * @param {goog.array.ArrayLike} arr The array to modify.
+ * @param {Array.<T>|goog.array.ArrayLike} arr The array to modify.
  * @param {number|undefined} index The index at which to start changing the
  *     array. If not defined, treated as 0.
  * @param {number} howMany How many elements to remove (0 means no removal. A
  *     value below 0 is treated as zero and so is any other non number. Numbers
  *     are floored).
- * @param {...*} var_args Optional, additional elements to insert into the
+ * @param {...T} var_args Optional, additional elements to insert into the
  *     array.
- * @return {!Array} the removed elements.
+ * @return {!Array.<T>} the removed elements.
+ * @template T
  */
 goog.array.splice = function(arr, index, howMany, var_args) {
   goog.asserts.assert(arr.length != null);
