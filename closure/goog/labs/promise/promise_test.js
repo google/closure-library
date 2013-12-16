@@ -938,8 +938,6 @@ function testThenAlwaysCalledMultipleTimes() {
   p.thenAlways(function() {
     assertEquals(0, arguments.length);
     calls.push(2);
-    // TODO(brenneman): Test that this error hits the console, even
-    // though it does not affect Promise resolution.
     throw Error('thenAlways throw');
   });
   p.then(function(value) {
@@ -950,8 +948,18 @@ function testThenAlwaysCalledMultipleTimes() {
   });
   p.thenAlways(function() {
     assertArrayEquals([1, 2, 3], calls);
-    continueTesting();
   });
+  p.thenAlways(function() {
+    assertEquals(
+        'Should be one unhandled exception from the "thenAlways throw".',
+        1, unhandledRejections.getCallCount());
+    var rejectionCall = unhandledRejections.popLastCall();
+    assertEquals(1, rejectionCall.getArguments().length);
+    var err = rejectionCall.getArguments()[0];
+    assertEquals('thenAlways throw', err.message);
+    assertEquals(goog.global, rejectionCall.getThis());
+  });
+  p.thenAlways(continueTesting);
 }
 
 

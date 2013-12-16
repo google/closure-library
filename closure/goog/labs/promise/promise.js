@@ -208,11 +208,8 @@ goog.labs.Promise.State_ = {
  *
  * @typedef {{
  *   child: goog.labs.Promise,
- *   context: *,
  *   onFulfilled: function(*),
- *   onRejected: function(*),
- *   resolve: ?function(*),
- *   reject: ?function(*)
+ *   onRejected: function(*)
  * }}
  * @private
  */
@@ -345,17 +342,17 @@ goog.labs.Promise.firstFulfilled = function(promises) {
  *
  * If the Promise is rejected, the {@code onRejected} callback will be invoked
  * with the rejection reason as argument, and the child Promise will be rejected
- * with the return value of the callback or thrown value.
+ * with the return value (or thrown value) of the callback.
  *
  * @param {(function(this:THIS, TYPE):
  *          (RESULT|goog.labs.Thenable.<RESULT>|Thenable))=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise
  *     is fullfilled.
- * @param {(function(*): *)=} opt_onRejected A function that will be invoked
- *     with the rejection reason if the Promise is rejected.
+ * @param {(function(this:THIS, *): *)=} opt_onRejected A function that will be
+ *     invoked with the rejection reason if the Promise is rejected.
  * @param {THIS=} opt_context An optional context object that will be the
  *     execution context for the callbacks. By default, functions are executed
- *     with the default this.
+ *     in the default calling context.
  * @return {!goog.labs.Promise.<RESULT>} A new Promise that will receive the
  *     result of the fulfillment or rejection callback.
  * @template RESULT,THIS
@@ -364,8 +361,11 @@ goog.labs.Promise.firstFulfilled = function(promises) {
 goog.labs.Promise.prototype.then = function(
     opt_onFulfilled, opt_onRejected, opt_context) {
   this.addStackTrace_(new Error('then'));
-  return goog.asserts.assert(this.addCallbackEntry_(
-      opt_onFulfilled, opt_onRejected, opt_context));
+
+  return this.addChildPromise_(
+      goog.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
+      goog.isFunction(opt_onRejected) ? opt_onRejected : null,
+      opt_context);
 };
 goog.labs.Thenable.addImplementation(goog.labs.Promise);
 
@@ -394,9 +394,21 @@ goog.labs.Thenable.addImplementation(goog.labs.Promise);
  */
 goog.labs.Promise.prototype.thenAlways = function(onResolved, opt_context) {
   this.addStackTrace_(new Error('thenAlways'));
-  // Ensure that the result argument is never passed to onResolved.
-  var callback = function() { onResolved.call(opt_context); };
-  this.addCallbackEntry_(callback, callback, null, true);
+
+  var callback = function() {
+    try {
+      // Ensure that no arguments are passed to onResolved.
+      onResolved.call(opt_context);
+    } catch (err) {
+      goog.labs.Promise.handleRejection_.call(null, err);
+    }
+  };
+
+  this.addCallbackEntry_({
+    child: null,
+    onRejected: callback,
+    onFulfilled: callback
+  });
   return this;
 };
 
@@ -416,8 +428,7 @@ goog.labs.Promise.prototype.thenAlways = function(onResolved, opt_context) {
  */
 goog.labs.Promise.prototype.thenCatch = function(onRejected, opt_context) {
   this.addStackTrace_(new Error('thenCatch'));
-  return goog.asserts.assert(
-      this.addCallbackEntry_(undefined, onRejected, opt_context));
+  return this.addChildPromise_(null, onRejected, opt_context);
 };
 
 
@@ -505,51 +516,84 @@ goog.labs.Promise.prototype.cancelChild_ = function(childPromise, err) {
 
 
 /**
- * Adds a callback entry to the current Promise.
+ * Adds a callback entry to the current Promise, and schedules callback
+ * execution if the Promise has already been resolved.
  *
- * @param {Function=} opt_onFulfilled A function that will be invoked with the
- *     fulfillment value if the Promise is fullfilled.
- * @param {Function=} opt_onRejected A function that will be invoked with the
- *     rejection reason if the Promise is rejected.
- * @param {Object=} opt_context An optional context object that will be the
- *     execution context for the invoked callback. By default, functions are
- *     executed in the global scope.
- * @param {boolean=} opt_noChild Whether to suppress the creation of a child
- *     Promise for this callback.
- * @return {goog.labs.Promise} The newly created child Promise, or null if
- *     {@code opt_noChild} was set.
+ * @param {goog.labs.Promise.CallbackEntry_} callbackEntry Record containing
+ *     {@code onFulfilled} and {@code onRejected} callbacks to execute after
+ *     the Promise is resolved.
  * @private
  */
-goog.labs.Promise.prototype.addCallbackEntry_ = function(
-    opt_onFulfilled, opt_onRejected, opt_context, opt_noChild) {
-  // Schedule this Promise for callback execution if it has already resolved.
+goog.labs.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
   if (!this.callbackEntries_.length &&
       (this.state_ == goog.labs.Promise.State_.FULFILLED ||
        this.state_ == goog.labs.Promise.State_.REJECTED)) {
     this.scheduleCallbacks_();
   }
+  this.callbackEntries_.push(callbackEntry);
+};
+
+
+/**
+ * Creates a child Promise and adds it to the callback entry list. The result of
+ * the child Promise is determined by the state of the parent Promise and the
+ * result of the {@code onFulfilled} or {@code onRejected} callbacks as
+ * specified in the Promise resolution procedure.
+ *
+ * @see http://promisesaplus.com/#the__method
+ *
+ * @param {?function(this:THIS, TYPE):
+ *          (RESULT|goog.labs.Promise.<RESULT>|Thenable)} onFulfilled A
+ *     callback that will be invoked if the Promise is fullfilled, or null.
+ * @param {?function(this:THIS, *): *} onRejected A callback that will be
+ *     invoked if the Promise is rejected, or null.
+ * @param {THIS=} opt_context An optional execution context for the callbacks.
+ *     in the default calling context.
+ * @return {!goog.labs.Promise} The child Promise.
+ * @template RESULT,THIS
+ * @private
+ */
+goog.labs.Promise.prototype.addChildPromise_ = function(
+    onFulfilled, onRejected, opt_context) {
 
   var callbackEntry = {
     child: null,
-    onFulfilled: goog.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
-    onRejected: goog.isFunction(opt_onRejected) ? opt_onRejected : null,
-    context: opt_context,
-    resolve: null,
-    reject: null
+    onFulfilled: null,
+    onRejected: null
   };
-  this.callbackEntries_.push(callbackEntry);
 
-  if (opt_noChild) {
-    return null;
-  }
+  callbackEntry.child = new goog.labs.Promise(function(resolve, reject) {
+    // Invoke onFulfilled, or resolve with the parent's value if absent.
+    callbackEntry.onFulfilled = onFulfilled ? function(value) {
+      try {
+        var result = onFulfilled.call(opt_context, value);
+        resolve(result);
+      } catch (err) {
+        reject(err);
+      }
+    } : resolve;
 
-  var child = new goog.labs.Promise(function(resolve, reject) {
-    callbackEntry.resolve = resolve;
-    callbackEntry.reject = reject;
+    // Invoke onRejected, or reject with the parent's reason if absent.
+    callbackEntry.onRejected = onRejected ? function(reason) {
+      try {
+        var result = onRejected.call(opt_context, reason);
+        if (!goog.isDef(result) &&
+            reason instanceof goog.labs.Promise.CancellationError) {
+          // Propagate cancellation to children if no other result is returned.
+          reject(reason);
+        } else {
+          resolve(result);
+        }
+      } catch (err) {
+        reject(err);
+      }
+    } : reject;
   });
-  callbackEntry.child = child;
-  child.parent_ = this;
-  return child;
+
+  callbackEntry.child.parent_ = this;
+  this.addCallbackEntry_(
+      /** @type {goog.labs.Promise.CallbackEntry_} */ (callbackEntry));
+  return callbackEntry.child;
 };
 
 
@@ -706,7 +750,6 @@ goog.labs.Promise.prototype.scheduleCallbacks_ = function() {
  * @private
  */
 goog.labs.Promise.prototype.executeCallbacks_ = function() {
-  var callbackEntry;
   while (this.callbackEntries_.length) {
     var entries = this.callbackEntries_;
     this.callbackEntries_ = [];
@@ -724,52 +767,22 @@ goog.labs.Promise.prototype.executeCallbacks_ = function() {
 
 /**
  * Executes a pending callback for this Promise. Invokes an {@code onFulfilled}
- * or {@code onRejected} callback based on the resolved state of the Promise,
- * and resolves the step's child Promise based on the callback result.
- *
- * @see http://promisesaplus.com/#the__method
+ * or {@code onRejected} callback based on the resolved state of the Promise.
  *
  * @param {!goog.labs.Promise.CallbackEntry_} callbackEntry An entry containing
- *     the onFulfilled and/or onRejected callback information for this step.
- * @param {goog.labs.Promise.State_} originalState The resolution status of the
+ *     the onFulfilled and/or onRejected callbacks for this step.
+ * @param {goog.labs.Promise.State_} state The resolution status of the
  *     Promise, either FULFILLED or REJECTED.
- * @param {*} originalResult The resolved result of the Promise.
+ * @param {*} result The resolved result of the Promise.
  * @private
  */
 goog.labs.Promise.prototype.executeCallback_ = function(
-    callbackEntry, originalState, originalResult) {
-  var childResult;
-  var childState = originalState;
-  var func = originalState == goog.labs.Promise.State_.FULFILLED ?
-      callbackEntry.onFulfilled : callbackEntry.onRejected;
-
-  if (func) {
-    try {
-      childResult = func.call(callbackEntry.context, originalResult);
-      childState = goog.labs.Promise.State_.FULFILLED;
-      if (originalState == goog.labs.Promise.State_.REJECTED) {
-        this.removeUnhandledRejection_();
-      }
-    } catch (err) {
-      if (callbackEntry.reject) {
-        callbackEntry.reject(err);
-      }
-      return;
-    }
+    callbackEntry, state, result) {
+  if (state == goog.labs.Promise.State_.FULFILLED) {
+    callbackEntry.onFulfilled(result);
   } else {
-    childResult = originalResult;
-  }
-
-  if (callbackEntry.child) {
-    if (!goog.isDef(childResult) &&
-        originalState == goog.labs.Promise.State_.REJECTED &&
-        originalResult instanceof goog.labs.Promise.CancellationError) {
-      callbackEntry.reject(originalResult);
-    } else if (childState == goog.labs.Promise.State_.FULFILLED) {
-      callbackEntry.resolve(childResult);
-    } else if (childState == goog.labs.Promise.State_.REJECTED) {
-      callbackEntry.reject(childResult);
-    }
+    this.removeUnhandledRejection_();
+    callbackEntry.onRejected(result);
   }
 };
 
