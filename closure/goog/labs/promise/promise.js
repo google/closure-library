@@ -18,7 +18,6 @@ goog.require('goog.asserts');
 goog.require('goog.async.run');
 goog.require('goog.async.throwException');
 goog.require('goog.debug.Error');
-goog.require('goog.labs.Thenable');
 
 
 
@@ -67,7 +66,6 @@ goog.require('goog.labs.Thenable');
  * @constructor
  * @struct
  * @final
- * @implements {goog.labs.Thenable.<TYPE>}
  * @template TYPE,THIS
  */
 goog.labs.Promise = function(resolver, opt_context) {
@@ -220,7 +218,7 @@ goog.labs.Promise.CallbackEntry_;
 
 
 /**
- * @param {(TYPE|goog.labs.Thenable.<TYPE>|Thenable)=} opt_value
+ * @param {(TYPE|goog.labs.Promise.<TYPE>|Thenable)=} opt_value
  * @return {!goog.labs.Promise.<TYPE>} A new Promise that is immediately
  *     resolved with the given value.
  * @template TYPE
@@ -245,7 +243,7 @@ goog.labs.Promise.reject = function(opt_reason) {
 
 
 /**
- * @param {!Array.<!(goog.labs.Thenable.<TYPE>|Thenable)>} promises
+ * @param {!Array.<!(goog.labs.Promise.<TYPE>|Thenable)>} promises
  * @return {!goog.labs.Promise.<TYPE>} A Promise that receives the result of the
  *     first Promise (or Promise-like) input to complete.
  * @template TYPE
@@ -263,7 +261,7 @@ goog.labs.Promise.race = function(promises) {
 
 
 /**
- * @param {!Array.<!(goog.labs.Thenable.<TYPE>|Thenable)>} promises
+ * @param {!Array.<!(goog.labs.Promise.<TYPE>|Thenable)>} promises
  * @return {!goog.labs.Promise.<!Array.<TYPE>>} A Promise that receives a list
  *     of every fulfilled value once every input Promise (or Promise-like) is
  *     successfully fulfilled, or is rejected by the first rejection result.
@@ -299,7 +297,7 @@ goog.labs.Promise.all = function(promises) {
 
 
 /**
- * @param {!Array.<!(goog.labs.Thenable.<TYPE>|Thenable)>} promises
+ * @param {!Array.<!(goog.labs.Promise.<TYPE>|Thenable)>} promises
  * @return {!goog.labs.Promise.<TYPE>} A Promise that receives the value of the
  *     first input to be fulfilled, or is rejected with a list of every
  *     rejection reason if all inputs are rejected.
@@ -345,21 +343,20 @@ goog.labs.Promise.firstFulfilled = function(promises) {
  *
  * If the Promise is rejected, the {@code onRejected} callback will be invoked
  * with the rejection reason as argument, and the child Promise will be rejected
- * with the return value of the callback or thrown value.
+ * with the return value of the callback.
  *
  * @param {(function(this:THIS, TYPE):
- *          (RESULT|goog.labs.Thenable.<RESULT>|Thenable))=} opt_onFulfilled A
+ *          (RESULT|goog.labs.Promise.<RESULT>|Thenable))=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise
  *     is fullfilled.
  * @param {(function(*): *)=} opt_onRejected A function that will be invoked
  *     with the rejection reason if the Promise is rejected.
  * @param {THIS=} opt_context An optional context object that will be the
  *     execution context for the callbacks. By default, functions are executed
- *     with the default this.
+ *     in the global scope.
  * @return {!goog.labs.Promise.<RESULT>} A new Promise that will receive the
  *     result of the fulfillment or rejection callback.
  * @template RESULT,THIS
- * @override
  */
 goog.labs.Promise.prototype.then = function(
     opt_onFulfilled, opt_onRejected, opt_context) {
@@ -367,7 +364,8 @@ goog.labs.Promise.prototype.then = function(
   return goog.asserts.assert(this.addCallbackEntry_(
       opt_onFulfilled, opt_onRejected, opt_context));
 };
-goog.labs.Thenable.addImplementation(goog.labs.Promise);
+goog.exportProperty(
+    goog.labs.Promise.prototype, 'then', goog.labs.Promise.prototype.then);
 
 
 /**
@@ -605,8 +603,7 @@ goog.labs.Promise.prototype.resolve_ = function(state, x) {
     state = goog.labs.Promise.State_.REJECTED;
     x = new TypeError('Promise cannot resolve to itself');
 
-  } else if (goog.labs.Thenable.isImplementedBy(x)) {
-    x = /** @type {!goog.labs.Thenable} */ (x);
+  } else if (x instanceof goog.labs.Promise) {
     this.state_ = goog.labs.Promise.State_.BLOCKED;
     x.then(this.unblockAndFulfill_, this.unblockAndReject_, this);
     return;

@@ -26,8 +26,6 @@ goog.provide('goog.async.Deferred.CanceledError');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
-goog.require('goog.labs.Promise');
-goog.require('goog.labs.Thenable');
 
 
 
@@ -70,7 +68,6 @@ goog.require('goog.labs.Thenable');
  * @param {Object=} opt_defaultScope The default object context to call
  *     callbacks and errbacks in.
  * @constructor
- * @implements {goog.labs.Thenable.<VALUE>}
  * @template VALUE
  */
 goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
@@ -460,52 +457,6 @@ goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
 
 
 /**
- * ATTENTION: This is labs code.
- *
- * Implements {@see goog.labs.Thenable} for seamless integration with
- * {@see goog.labs.Promise}.
- * Deferred results are mutable and may represent multiple values over
- * their lifetime. Calling {@code then} on a Deferred returns a Promise
- * with the result of the Deferred at that point in its callback chain.
- * Note that if the Deferred result is never mutated, and only
- * {@code then} calls are made, the Deferred will behave like a Promise.
- *
- * @param {(function(this:THIS, VALUE):
- *          (RESULT|goog.labs.Thenable.<RESULT>|Thenable))=} opt_onFulfilled A
- *     function that will be invoked with the fulfillment value if the Promise
- *     is fullfilled.
- * @param {(function(*): *)=} opt_onRejected A function that will be invoked
- *     with the rejection reason if the Promise is rejected.
- * @param {THIS=} opt_context An optional context object that will be the
- *     execution context for the callbacks. By default, functions are executed
- *     with the default this.
- * @return {!goog.labs.Promise.<RESULT>} A new Promise that will receive the
- *     result of the fulfillment or rejection callback.
- * @template RESULT,THIS
- * @override
- */
-goog.async.Deferred.prototype.then = function(opt_onFulfilled, opt_onRejected,
-    opt_context) {
-  var resolve, reject;
-  var promise = new goog.labs.Promise(function(res, rej) {
-    // Copying resolvers to outer scope, so that they are available when the
-    // deferred callback fires (which may be synchronous).
-    resolve = res;
-    reject = rej;
-  });
-  this.addCallbacks(resolve, function(reason) {
-    if (reason instanceof goog.async.Deferred.CanceledError) {
-      promise.cancel();
-    } else {
-      reject(reason);
-    }
-  });
-  return promise.then(opt_onFulfilled, opt_onRejected, opt_context);
-};
-goog.labs.Thenable.addImplementation(goog.async.Deferred);
-
-
-/**
  * Links another Deferred to the end of this Deferred's execution sequence. The
  * result of this execution sequence will be passed as the starting result for
  * the chained Deferred, invoking either its first callback or errback.
@@ -638,19 +589,6 @@ goog.async.Deferred.prototype.fire_ = function() {
           // Bubble up the error as long as the return value hasn't changed.
           this.hadError_ = this.hadError_ && (ret == res || this.isError(ret));
           this.result_ = res = ret;
-        }
-
-        // If the result is a Promise, transform it into a Deferred so it
-        // blocks the chain.
-        if (!(res instanceof goog.async.Deferred) &&
-            goog.labs.Thenable.isImplementedBy(res)) {
-          var promise = /** @type {!goog.labs.Thenable} */ (res);
-          res = new goog.async.Deferred();
-          promise.then(function(value) {
-            res.callback(value);
-          }, function(reason) {
-            res.errback(reason);
-          });
         }
 
         if (res instanceof goog.async.Deferred) {

@@ -19,7 +19,7 @@ goog.addDependency('../../third_party/closure/goog/caja/string/html/htmlsanitize
 goog.addDependency('../../third_party/closure/goog/dojo/dom/query.js', ['goog.dom.query'], ['goog.array', 'goog.dom', 'goog.functions', 'goog.string', 'goog.userAgent']);
 goog.addDependency('../../third_party/closure/goog/jpeg_encoder/jpeg_encoder_basic.js', ['goog.crypt.JpegEncoder'], ['goog.crypt.base64']);
 goog.addDependency('../../third_party/closure/goog/loremipsum/text/loremipsum.js', ['goog.text.LoremIpsum'], ['goog.array', 'goog.math', 'goog.string', 'goog.structs.Map', 'goog.structs.Set']);
-goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.array', 'goog.asserts', 'goog.debug.Error', 'goog.labs.Promise', 'goog.labs.Thenable']);
+goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.array', 'goog.asserts', 'goog.debug.Error']);
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist.js', ['goog.async.DeferredList'], ['goog.async.Deferred']);
 goog.addDependency('../../third_party/closure/goog/osapi/osapi.js', ['goog.osapi'], []);
 goog.addDependency('../../third_party/closure/goog/svgpan/svgpan.js', ['svgpan.SvgPan'], ['goog.Disposable', 'goog.events', 'goog.events.EventType', 'goog.events.MouseWheelHandler']);
@@ -391,10 +391,9 @@ goog.addDependency('labs/net/webchanneltransport.js', ['goog.net.WebChannelTrans
 goog.addDependency('labs/net/webchanneltransportfactory.js', ['goog.net.createWebChannelTransport'], ['goog.functions', 'goog.labs.net.webChannel.WebChannelBaseTransport']);
 goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.debug.Error', 'goog.json', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.result', 'goog.result.SimpleResult', 'goog.string', 'goog.uri.utils']);
 goog.addDependency('labs/object/object.js', ['goog.labs.object'], []);
-goog.addDependency('labs/promise/promise.js', ['goog.labs.Promise'], ['goog.asserts', 'goog.async.run', 'goog.async.throwException', 'goog.debug.Error', 'goog.labs.Thenable']);
-goog.addDependency('labs/promise/promise_test.js', ['goog.labs.PromiseTest'], ['goog.functions', 'goog.labs.Promise', 'goog.labs.Thenable', 'goog.testing.AsyncTestCase', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
+goog.addDependency('labs/promise/promise.js', ['goog.labs.Promise'], ['goog.asserts', 'goog.async.run', 'goog.async.throwException', 'goog.debug.Error']);
+goog.addDependency('labs/promise/promise_test.js', ['goog.labs.PromiseTest'], ['goog.functions', 'goog.labs.Promise', 'goog.testing.AsyncTestCase', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
 goog.addDependency('labs/promise/testsuiteadapter.js', ['goog.labs.promise.testSuiteAdapter'], ['goog.labs.Promise']);
-goog.addDependency('labs/promise/thenable.js', ['goog.labs.Thenable'], []);
 goog.addDependency('labs/storage/boundedcollectablestorage.js', ['goog.labs.storage.BoundedCollectableStorage'], ['goog.array', 'goog.asserts', 'goog.iter', 'goog.storage.CollectableStorage', 'goog.storage.ErrorCode', 'goog.storage.ExpiringStorage']);
 goog.addDependency('labs/structs/map.js', ['goog.labs.structs.Map'], ['goog.array', 'goog.asserts', 'goog.labs.object', 'goog.object']);
 goog.addDependency('labs/structs/map_perf.js', ['goog.labs.structs.mapPerf'], ['goog.dom', 'goog.labs.structs.Map', 'goog.structs.Map', 'goog.testing.PerformanceTable', 'goog.testing.jsunit']);
