@@ -143,9 +143,9 @@ goog.inherits(goog.ui.DrilldownRow, goog.ui.Component);
  * these properties can be set so it doesn't emit warnings.
  */
 goog.ui.DrilldownRow.sampleProperties = {
-  'html': '<tr><td>Sample</td><td>Sample</tr>',
-  'loaded': true,
-  'decorator': function(selfObj, handler) {
+  html: '<tr><td>Sample</td><td>Sample</td></tr>',
+  loaded: true,
+  decorator: function(selfObj, handler) {
     // When the mouse is hovering, add CSS class goog-drilldown-hover.
     goog.ui.DrilldownRow.decorate(selfObj);
     var row = selfObj.getElement();
