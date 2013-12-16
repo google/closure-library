@@ -346,9 +346,14 @@ goog.i18n.DateTimeFormat.prototype.formatYear_ = function(count, date) {
   if (value < 0) {
     value = -value;
   }
-  return this.localizeNumbers(count == 2 ?
-      goog.string.padNumber(value % 100, 2) :
-      String(value));
+  if (count == 2) {
+    // See comment about special casing 'yy' at the start of the file, this
+    // matches ICU and CLDR behaviour. See also:
+    // http://icu-project.org/apiref/icu4j/com/ibm/icu/text/SimpleDateFormat.html
+    // http://www.unicode.org/reports/tr35/tr35-dates.html
+    value = value % 100;
+  }
+  return this.localizeNumbers(goog.string.padNumber(value, count));
 };
 
 
