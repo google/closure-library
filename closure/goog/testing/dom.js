@@ -37,11 +37,23 @@ goog.require('goog.userAgent');
 
 
 /**
- * A unique object to use as an end tag marker.
- * @type {Object}
+ * @return {!Node} A DIV node with a unique ID identifying the
+ *     {@code END_TAG_MARKER_}.
  * @private
  */
-goog.testing.dom.END_TAG_MARKER_ = {};
+goog.testing.dom.createEndTagMarker_ = function() {
+  var marker = goog.dom.createElement(goog.dom.TagName.DIV);
+  marker.id = goog.getUid(marker);
+  return marker;
+};
+
+
+/**
+ * A unique object to use as an end tag marker.
+ * @private {!Node}
+ * @const
+ */
+goog.testing.dom.END_TAG_MARKER_ = goog.testing.dom.createEndTagMarker_();
 
 
 /**
@@ -161,7 +173,7 @@ goog.testing.dom.checkUserAgents_ = function(userAgents) {
  * @param {Node} node The node to map.
  * @param {undefined} ignore Always undefined.
  * @param {goog.dom.TagIterator} iterator The iterator.
- * @return {Node|Object} The resulting iteration item.
+ * @return {Node} The resulting iteration item.
  * @private
  */
 goog.testing.dom.endTagMap_ = function(node, ignore, iterator) {
