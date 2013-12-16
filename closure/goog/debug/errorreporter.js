@@ -78,12 +78,6 @@ goog.debug.ErrorReporter = function(
   this.truncationLimit_ = null;
 
   /**
-   * If true, will prepend POST body size (bytes) to POST query data.
-   * @private {boolean}
-   */
-  this.enablePostBodySizeReporting_ = false;
-
-  /**
    * Additional arguments to append to URL before sending XHR.
    * @private {!Object.<string,string>}
    */
@@ -377,11 +371,6 @@ goog.debug.ErrorReporter.prototype.sendErrorReport =
     // Copy query data map into request.
     var queryData = goog.uri.utils.buildQueryDataFromMap(queryMap);
 
-    // Prepend "size" so it is guaranteed to appear first in the query string.
-    if (this.enablePostBodySizeReporting_) {
-      queryData = 'size=' + queryData.length + '&' + queryData;
-    }
-
     // Truncate if truncationLimit set.
     if (goog.isNumber(this.truncationLimit_)) {
       queryData = queryData.substring(0, this.truncationLimit_);
@@ -427,16 +416,6 @@ goog.debug.ErrorReporter.prototype.setTruncationLimit = function(limit) {
  */
 goog.debug.ErrorReporter.prototype.setAdditionalArguments = function(urlArgs) {
   this.additionalArguments_ = urlArgs;
-};
-
-
-/**
- * @param {boolean} enablePostBodySizeReporting Whether to include POST body
- * size in POST request query params.
- */
-goog.debug.ErrorReporter.prototype.setEnablePostBodySizeReporting =
-    function(enablePostBodySizeReporting) {
-  this.enablePostBodySizeReporting_ = enablePostBodySizeReporting;
 };
 
 

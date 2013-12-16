@@ -316,14 +316,6 @@ See the COPYING file for details.
     assertEquals('trace=', MockXhrIo.lastContent);
   }
 
-  function testEnablePOSTBodySizeReporting() {
-    errorReporter = new goog.debug.ErrorReporter('/log');
-    errorReporter.setEnablePostBodySizeReporting(true);
-    errorReporter.sendErrorReport(
-        'message', 'filename.js', 123, 'trace', {"foo": "bar"});
-    assertEquals('size=27&trace=trace&context.foo=bar', MockXhrIo.lastContent);
-  }
-
   function testZeroTruncationLimit() {
     errorReporter = new goog.debug.ErrorReporter('/log');
     errorReporter.setTruncationLimit(0);
