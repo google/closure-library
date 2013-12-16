@@ -11,6 +11,7 @@
 
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
+goog.require('goog.labs.Promise');
 goog.require('goog.string');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
@@ -893,6 +894,108 @@ function testAssertNoErrors() {
       });
 }
 
+function testThen() {
+  var result;
+  var result2;
+  var d = new Deferred();
+  assertEquals(d.then, d['then']);
+  d.then(function(r) {
+    return result = r;
+  }).then(function (r2) {
+    result2 = r2;
+  });
+  d.callback('done');
+  assertUndefined(result);
+  mockClock.tick();
+  assertEquals('done', result);
+  assertEquals('done', result2);
+}
+
+function testThen_reject() {
+  var result, error, error2;
+  var d = new Deferred();
+  assertEquals(d.then, d['then']);
+  d.then(function(r) {
+    result = r;
+  }, function(e) {
+    error = e;
+  });
+  d.errback(new Error('boom'));
+  assertUndefined(result);
+  mockClock.tick();
+  assertUndefined(result);
+  assertEquals('boom', error.message);
+}
+
+function testPromiseAll() {
+  var d = new Deferred();
+  var p = new goog.labs.Promise(function(resolve) {
+    resolve('promise');
+  });
+  goog.labs.Promise.all([d, p]).then(function(values) {
+    assertEquals(2, values.length);
+    assertEquals('deferred', values[0]);
+    assertEquals('promise', values[1]);
+  });
+  d.callback('deferred');
+  mockClock.tick();
+}
+
+function testPromiseBlocksDeferred() {
+  var result;
+  var d = new Deferred();
+  var p = new goog.labs.Promise(function(resolve) {
+    resolve('promise');
+  });
+  d.callback();
+  d.addCallback(function() {
+    return p;
+  });
+  d.addCallback(function(r) {
+    result = r;
+  });
+
+  assertUndefined(result);
+  mockClock.tick();
+  assertEquals('promise', result);
+}
+
+function testPromiseBlocksDeferredAndRejects() {
+  var result;
+  var d = new Deferred();
+  var p = new goog.labs.Promise(function(resolve, reject) {
+    reject(new Error('error'));
+  });
+  d.callback();
+  d.addCallback(function(r) {
+    return p;
+  });
+  d.addErrback(function(r) {
+    result = r;
+  });
+
+  assertUndefined(result);
+  mockClock.tick();
+  assertEquals('error', result.message);
+}
+
+function testPromiseFromCanceledDeferred() {
+  var result;
+  var d = new Deferred();
+  d.cancel();
+
+  var p = d.then(neverHappen, function(reason) {
+    result = reason;
+  });
+
+  mockClock.tick();
+  assertTrue(result instanceof goog.labs.Promise.CancellationError);
+}
+
+function testThenableInterface() {
+  var d = new Deferred();
+  assertTrue(goog.labs.Thenable.isImplementedBy(d));
+}
 </script>
 </body>
 </html>

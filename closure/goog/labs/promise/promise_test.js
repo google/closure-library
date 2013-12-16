@@ -16,6 +16,7 @@ goog.provide('goog.labs.PromiseTest');
 
 goog.require('goog.functions');
 goog.require('goog.labs.Promise');
+goog.require('goog.labs.Thenable');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
@@ -1341,4 +1342,30 @@ function testUnhandledRejectionDisabled() {
 
   mockClock.tick();
   assertEquals(0, unhandledRejections.getCallCount());
+}
+
+function testThenableInterface() {
+  var promise = new goog.labs.Promise(function(resolve, reject) {});
+  assertTrue(goog.labs.Thenable.isImplementedBy(promise));
+
+  assertFalse(goog.labs.Thenable.isImplementedBy({}));
+  assertFalse(goog.labs.Thenable.isImplementedBy('string'));
+  assertFalse(goog.labs.Thenable.isImplementedBy(1));
+  assertFalse(goog.labs.Thenable.isImplementedBy({then: function() {}}));
+
+  function T() {}
+  T.prototype.then = function(opt_a, opt_b, opt_c) {};
+  goog.labs.Thenable.addImplementation(T);
+  assertTrue(goog.labs.Thenable.isImplementedBy(new T));
+
+  // Test COMPILED code path.
+  try {
+    COMPIlED = true;
+    function C() {}
+    C.prototype.then = function(opt_a, opt_b, opt_c) {};
+    goog.labs.Thenable.addImplementation(C);
+    assertTrue(goog.labs.Thenable.isImplementedBy(new C));
+  } finally {
+    COMPILED = false;
+  }
 }
