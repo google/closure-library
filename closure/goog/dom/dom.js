@@ -195,7 +195,8 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
 
 
 /**
- * Returns an array of all the elements with the provided className.
+ * Returns a static, array-like list of the elements with the provided
+ * className.
  * @see {goog.dom.query}
  * @param {string} className the name of the class to look for.
  * @param {(Document|Element)=} opt_el Optional element to look in.
@@ -205,8 +206,6 @@ goog.dom.getElementsByClass = function(className, opt_el) {
   var parent = opt_el || document;
   if (goog.dom.canUseQuerySelector_(parent)) {
     return parent.querySelectorAll('.' + className);
-  } else if (parent.getElementsByClassName) {
-    return parent.getElementsByClassName(className);
   }
   return goog.dom.getElementsByTagNameAndClass_(
       document, '*', className, opt_el);
@@ -226,7 +225,8 @@ goog.dom.getElementByClass = function(className, opt_el) {
   if (goog.dom.canUseQuerySelector_(parent)) {
     retVal = parent.querySelector('.' + className);
   } else {
-    retVal = goog.dom.getElementsByClass(className, opt_el)[0];
+    retVal = goog.dom.getElementsByTagNameAndClass_(
+        document, '*', className, opt_el)[0];
   }
   return retVal || null;
 };
