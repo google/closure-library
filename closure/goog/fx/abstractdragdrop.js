@@ -783,7 +783,7 @@ goog.fx.AbstractDragDrop.prototype.setSubtargetFunction = function(f) {
  * @return {Element} The new drag element.
  */
 goog.fx.AbstractDragDrop.prototype.createDragElement = function(sourceEl) {
-  var dragEl = this.cloneNode_(sourceEl);
+  var dragEl = this.createDragElementInternal(sourceEl);
   if (this.dragClass_) {
     goog.dom.classlist.add(dragEl, this.dragClass_);
   }
@@ -835,6 +835,22 @@ goog.fx.AbstractDragDrop.prototype.getDragger = function() {
  */
 goog.fx.AbstractDragDrop.prototype.cloneNode_ = function(sourceEl) {
   return goog.fx.Dragger.cloneNode(sourceEl);
+};
+
+
+/**
+ * Generates an element to follow the cursor during dragging, given a drag
+ * source element.  The default behavior is simply to clone the source element,
+ * but this may be overridden in subclasses.  This method is called by
+ * {@code createDragElement()} before the drag class is added.
+ *
+ * @param {Element} sourceEl Drag source element.
+ * @return {Element} The new drag element.
+ * @protected
+ */
+goog.fx.AbstractDragDrop.prototype.createDragElementInternal =
+    function(sourceEl) {
+  return this.cloneNode_(sourceEl);
 };
 
 
