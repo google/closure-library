@@ -26,7 +26,7 @@ goog.provide('goog.structs.Node');
  * A generic immutable node. This can be used in various collections that
  * require a node object for its item (such as a heap).
  * @param {K} key Key.
- * @param {V} value Vaue.
+ * @param {V} value Value.
  * @constructor
  * @template K, V
  */

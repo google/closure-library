@@ -35,7 +35,7 @@ goog.require('goog.structs.Node');
  * @param {KEY} key Key.
  * @param {VALUE} value Value.
  * @constructor
- * @extends {goog.structs.Node}
+ * @extends {goog.structs.Node.<KEY, VALUE>}
  * @template KEY, VALUE
  */
 goog.structs.TreeNode = function(key, value) {
