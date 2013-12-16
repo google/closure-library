@@ -596,6 +596,13 @@ See the COPYING file for details.
           });
     }
 
+    function testAddChildAtThrowsIfNull() {
+      assertThrows('Adding a null child must throw an error',
+          function() {
+            component.addChildAt(null, 0);
+          })
+    }
+
     function testHasChildren() {
       assertFalse('Component must not have children', component.hasChildren());
 

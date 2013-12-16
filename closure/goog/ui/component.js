@@ -1024,6 +1024,8 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  * @return {void} Nada.
  */
 goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
+  goog.asserts.assert(!!child, 'Provided element must not be null.');
+
   if (child.inDocument_ && (opt_render || !this.inDocument_)) {
     // Adding a child that's already in the document is an error, except if the
     // parent is also in the document and opt_render is false (e.g. decorate()).
