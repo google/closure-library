@@ -804,7 +804,7 @@ function testSimpleCompactGerman() {
   // supposed to be interpreted as 'leave the number as-is'.
   // (The number itself will still be formatted with the '.', but no rounding)
   var str = fmt.format(1234);
-  assertEquals('1.234', str);
+  assertEquals('1,2\u00A0Tsd', str);
 }
 
 function testSimpleCompact1() {
@@ -1010,7 +1010,7 @@ function testCompactWithBaseFormattingFrench() {
       goog.i18n.NumberFormat.Format.COMPACT_SHORT);
   assertEquals('123\u00A0M', fmt.format(123400000));
   fmt.setBaseFormatting(1000);
-  assertEquals('123\u00A0400\u00A0K', fmt.format(123400000));
+  assertEquals('123\u00A0400\u00A0k', fmt.format(123400000));
 
 }
 

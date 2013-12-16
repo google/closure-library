@@ -344,9 +344,9 @@ goog.i18n.MessageFormat.prototype.formatSelectBlock_ = function(
  * @param {!Object} parsedPattern JSON object containing plural block info.
  * @param {!Object} namedParameters Parameters that either influence
  *     the formatting or are used as actual data.
- * @param {!function(number):string} pluralSelector  A select function from
- *     goog.i18n.pluralRules or goog.i18n.ordinalRules which determines which
- *     plural/ordinal form to use based on the input number's cardinality.
+ * @param {!function(number, number=):string} pluralSelector  A select function
+ *     from goog.i18n.pluralRules or goog.i18n.ordinalRules which determines
+ *     which plural/ordinal form to use based on the input number's cardinality.
  * @param {boolean} ignorePound If true, treat '#' in plural messages as a
  *     literary character, else treat it as an ICU syntax character, resolving
  *     to the number (plural_variable - offset).
@@ -370,8 +370,15 @@ goog.i18n.MessageFormat.prototype.formatPluralOrdinalBlock_ = function(
   var option = parsedPattern[namedParameters[argumentIndex]];
   if (!goog.isDef(option)) {
     goog.asserts.assert(diff >= 0, 'Argument index smaller than offset.');
-
-    var item = pluralSelector(diff);
+    var item;
+    if (this.numberFormatter_.getMinimumFractionDigits) { // number formatter?
+      // If we know the number of fractional digits we can make better decisions
+      // We can decide (for instance) between "1 dollar" and "1.00 dollars".
+      item = pluralSelector(diff,
+          this.numberFormatter_.getMinimumFractionDigits());
+    } else {
+      item = pluralSelector(diff);
+    }
     goog.asserts.assertString(item, 'Invalid plural key.');
 
     option = parsedPattern[item];
