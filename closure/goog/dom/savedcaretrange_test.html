@@ -90,7 +90,7 @@ See the COPYING file for details.
 
     var range = goog.dom.Range.createFromNodes(
         def.firstChild, 1, jkl.firstChild, 2);
-    assertFalse(range.isReversed())
+    assertFalse(range.isReversed());
     range.select();
 
     var saved = range.saveUsingCarets();

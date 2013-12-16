@@ -21,6 +21,7 @@
 goog.provide('goog.dom.TagIterator');
 goog.provide('goog.dom.TagWalkType');
 
+goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.iter.Iterator');
 goog.require('goog.iter.StopIteration');
@@ -94,7 +95,7 @@ goog.dom.TagWalkType = {
  *     the end of the node for reverse iterators.
  * @param {number=} opt_depth The starting tree depth.
  * @constructor
- * @extends {goog.iter.Iterator}
+ * @extends {goog.iter.Iterator.<Node>}
  */
 goog.dom.TagIterator = function(opt_node, opt_reversed,
     opt_unconstrained, opt_tagType, opt_depth) {

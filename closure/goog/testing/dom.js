@@ -172,7 +172,7 @@ goog.testing.dom.checkUserAgents_ = function(userAgents) {
  * Map function that converts end tags to a specific object.
  * @param {Node} node The node to map.
  * @param {undefined} ignore Always undefined.
- * @param {goog.dom.TagIterator} iterator The iterator.
+ * @param {!goog.iter.Iterator.<Node>} iterator The iterator.
  * @return {Node} The resulting iteration item.
  * @private
  */
@@ -249,7 +249,7 @@ goog.testing.dom.describeNode_ = function(node) {
  * expected to show up in that user agent and expected not to show up in
  * others.
  * @param {string} htmlPattern The pattern to match.
- * @param {!Element} actual The element to check: its contents are matched
+ * @param {!Node} actual The element to check: its contents are matched
  *     against the HTML pattern.
  * @param {boolean=} opt_strictAttributes If false, attributes that appear in
  *     htmlPattern must be in actual, but actual can have attributes not
