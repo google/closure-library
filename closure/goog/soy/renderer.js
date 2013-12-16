@@ -39,9 +39,11 @@ goog.provide('goog.soy.Renderer');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.soy');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
+goog.require('goog.string.Const');
 
 
 
@@ -213,6 +215,35 @@ goog.soy.Renderer.prototype.renderStrict = function(
   this.saveTemplateRender_(template, opt_templateData);
   this.handleRender();
   return result;
+};
+
+
+/**
+ * Renders a strict Soy template of kind="html" and returns the result as
+ * a goog.html.SafeHtml object.
+ *
+ * Rendering a template that is not a strict template of kind="html" results in
+ * a runtime error.
+ *
+ * @param {function(Object.<string, *>, (null|undefined), Object.<string, *>):
+ *     goog.soy.data.SanitizedContent} template The Soy template to render.
+ * @param {Object=} opt_templateData The data for the template.
+ * @return {!goog.html.SafeHtml}
+ */
+goog.soy.Renderer.prototype.renderSafeHtml = function(
+    template, opt_templateData) {
+  var result = this.renderStrict(template, opt_templateData);
+  if (result.contentKind !== goog.soy.data.SanitizedContentKind.HTML) {
+    throw Error(
+        'Template rendered was not strict template of kind="html".');
+  } else {
+    return goog.html.uncheckedconversions.
+        safeHtmlFromStringKnownToSatisfyTypeContract(
+            goog.string.Const.from(
+                'Soy strict templates of kind="html" produce ' +
+                    'SafeHtml-contract-compliant values.'),
+            String(result), result.contentDir);
+  }
 };
 
 

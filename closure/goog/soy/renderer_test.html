@@ -15,6 +15,7 @@ See the COPYING file for details.
   <script>
     goog.require('goog.dom');
     goog.require('goog.dom.TagName');
+    goog.require('goog.html.SafeHtml');
     goog.require('goog.soy.Renderer');
     goog.require('goog.soy.testHelper');
     goog.require('goog.string');
@@ -197,6 +198,13 @@ function testRenderText() {
         renderer.renderText(example.sanitizedHtmlTemplate, {})
       }).message);
   handleRender.assertCallCount(1);
+}
+
+function testRenderSafeHtml() {
+  var renderer = new goog.soy.Renderer(dataSupplier);
+  var result = renderer.renderSafeHtml(example.sanitizedHtmlTemplate);
+  assertEquals('Hello World', goog.html.SafeHtml.unwrap(result));
+  assertEquals(goog.i18n.bidi.Dir.LTR, result.getDirection());
 }
 
 </script>

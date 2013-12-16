@@ -21,11 +21,13 @@ goog.provide('goog.soy.testHelper');
 goog.setTestOnly('goog.soy.testHelper');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
+goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
 goog.require('goog.string');
 goog.require('goog.userAgent');
-goog.require('goog.dom.TagName');
+
 
 
 /**
@@ -34,6 +36,7 @@ goog.require('goog.dom.TagName');
  * This is a spoof for sanitized content that isn't robust enough to get
  * through Soy's escaping functions but is good enough for the checks here.
  *
+ * @constructor
  * @param {string} content The text.
  * @param {goog.soy.data.SanitizedContentKind} kind The kind of safe content.
  * @extends {goog.soy.data.SanitizedContent}
@@ -98,8 +101,10 @@ example.noDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
 
 example.sanitizedHtmlTemplate = function(opt_data, opt_sb, opt_injectedData) {
   // Test the SanitizedContent constructor.
-  return makeSanitizedContent('Hello World',
+  var sanitized = makeSanitizedContent('Hello World',
       goog.soy.data.SanitizedContentKind.HTML);
+  sanitized.contentDir = goog.i18n.bidi.Dir.LTR;
+  return sanitized;
 };
 
 
