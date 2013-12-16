@@ -276,7 +276,6 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   if (e.defaultPrevented) {
     this.preventDefault();
   }
-  delete this.propagationStopped_;
 };
 
 
