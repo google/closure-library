@@ -165,13 +165,14 @@ goog.events.listenerCountEstimate_ = 0;
  * @param {EventTarget|goog.events.Listenable} src The node to listen
  *     to events on.
  * @param {string|Array.<string>} type Event type or array of event types.
- * @param {function(?):?|{handleEvent:function(?):?}|null} listener Callback
- *     method, or an object with a handleEvent function. WARNING: passing an
- *     Object is now softly deprecated.
+ * @param {function(this:T, ?):?|{handleEvent:function(?):?}|null} listener
+ *     Callback method, or an object with a handleEvent function.
+ *     WARNING: passing an Object is now softly deprecated.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
- * @param {Object=} opt_handler Element in whose scope to call the listener.
+ * @param {T=} opt_handler Element in whose scope to call the listener.
  * @return {goog.events.Key} Unique key for the listener.
+ * @template T
  */
 goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
   if (goog.isArray(type)) {
@@ -310,11 +311,12 @@ goog.events.getProxy = function() {
  * @param {EventTarget|goog.events.Listenable} src The node to listen
  *     to events on.
  * @param {string|Array.<string>} type Event type or array of event types.
- * @param {function(?):?|{handleEvent:function(?):?}|null} listener Callback
- *     method.
+ * @param {function(this:T, ?):?|{handleEvent:function(?):?}|null} listener
+ *     Callback method.
  * @param {boolean=} opt_capt Fire in capture phase?.
- * @param {Object=} opt_handler Element in whose scope to call the listener.
+ * @param {T=} opt_handler Element in whose scope to call the listener.
  * @return {goog.events.Key} Unique key for the listener.
+ * @template T
  */
 goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
   if (goog.isArray(type)) {
@@ -344,11 +346,12 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
  * @param {EventTarget|goog.events.Listenable} src The target to
  *     listen to events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
- * @param {function(?):?|{handleEvent:function(?):?}|null} listener Callback
- *     method, or an object with a handleEvent function.
+ * @param {function(this:T, ?):?|{handleEvent:function(?):?}|null} listener
+ *     Callback method, or an object with a handleEvent function.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
- * @param {Object=} opt_handler Element in whose scope to call the listener.
+ * @param {T=} opt_handler Element in whose scope to call the listener.
+ * @template T
  */
 goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt,
     opt_handler) {

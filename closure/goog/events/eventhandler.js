@@ -67,9 +67,10 @@ goog.require('goog.object');
  * Super class for objects that want to easily manage a number of event
  * listeners.  It allows a short cut to listen and also provides a quick way
  * to remove all events listeners belonging to this object.
- * @param {Object=} opt_scope Object in whose scope to call the listeners.
+ * @param {SCOPE=} opt_scope Object in whose scope to call the listeners.
  * @constructor
  * @extends {goog.Disposable}
+ * @template SCOPE
  */
 goog.events.EventHandler = function(opt_scope) {
   goog.Disposable.call(this);
@@ -103,8 +104,8 @@ goog.events.EventHandler.typeArray_ = [];
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for or array of
  *     event types.
- * @param {function(?):?|{handleEvent:function(?):?}|null=} opt_fn Optional
- *    callback function to be used as the listener or an object with 
+ * @param {function(this:SCOPE, ?):?|{handleEvent:function(?):?}|null=} opt_fn
+ *    Optional callback function to be used as the listener or an object with
  *    handleEvent function.
  * @param {boolean=} opt_capture Optional whether to use capture phase.
  * @return {goog.events.EventHandler} This object, allowing for chaining of
@@ -189,8 +190,8 @@ goog.events.EventHandler.prototype.listen_ = function(src, type, opt_fn,
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array.<string>} type Event type to listen for or array of
  *     event types.
- * @param {function(?):?|{handleEvent:function(?):?}|null=} opt_fn Optional
- *    callback function to be used as the listener or an object with
+ * @param {function(this:SCOPE, ?):?|{handleEvent:function(?):?}|null=} opt_fn
+ *    Optional callback function to be used as the listener or an object with
  *    handleEvent function.
  * @param {boolean=} opt_capture Optional whether to use capture phase.
  * @return {goog.events.EventHandler} This object, allowing for chaining of
@@ -278,8 +279,8 @@ goog.events.EventHandler.prototype.listenOnce_ = function(
  * @param {EventTarget|goog.events.EventTarget} src The node to listen to
  *     events on.
  * @param {goog.events.EventWrapper} wrapper Event wrapper to use.
- * @param {function(?):?|{handleEvent:function(?):?}|null} listener Callback
- *     method, or an object with a handleEvent function.
+ * @param {function(this:SCOPE, ?):?|{handleEvent:function(?):?}|null} listener
+ *     Callback method, or an object with a handleEvent function.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
  * @return {goog.events.EventHandler} This object, allowing for chaining of
