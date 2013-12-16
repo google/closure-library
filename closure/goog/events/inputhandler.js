@@ -125,6 +125,14 @@ goog.events.InputHandler.prototype.timer_ = null;
  */
 goog.events.InputHandler.prototype.handleEvent = function(e) {
   if (e.type == 'input') {
+    // http://stackoverflow.com/questions/18389732/changing-placeholder-triggers-input-event-in-ie-10
+    // IE 10+ fires an input event when there are inputs with placeholders.
+    // It fires the event with keycode 0, so if we detect it we don't
+    // propagate the input event.
+    if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher(10) &&
+        e.keyCode == 0 && e.charCode == 0) {
+      return;
+    }
     // This event happens after all the other events we listen to, so cancel
     // an asynchronous event dispatch if we have it queued up.  Otherwise, we
     // will end up firing an extra event.
