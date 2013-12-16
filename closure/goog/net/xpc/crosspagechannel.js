@@ -633,7 +633,7 @@ goog.net.xpc.CrossPageChannel.prototype.notifyConnected = function(opt_delay) {
   this.state_ = goog.net.xpc.ChannelStates.CONNECTED;
   goog.log.info(goog.net.xpc.logger, 'Channel "' + this.name + '" connected');
   goog.dispose(this.connectionDelay_);
-  if (opt_delay) {
+  if (goog.isDef(opt_delay)) {
     this.connectionDelay_ =
         new goog.async.Delay(this.connectCb_, opt_delay);
     this.connectionDelay_.start();

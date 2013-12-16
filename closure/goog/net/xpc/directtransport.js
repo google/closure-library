@@ -26,6 +26,7 @@ goog.require('goog.async.Deferred');
 goog.require('goog.events.EventHandler');
 goog.require('goog.log');
 goog.require('goog.net.xpc');
+goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
 goog.require('goog.net.xpc.TransportTypes');
@@ -33,6 +34,7 @@ goog.require('goog.object');
 
 
 goog.scope(function() {
+var CfgFields = goog.net.xpc.CfgFields;
 var CrossPageChannelRole = goog.net.xpc.CrossPageChannelRole;
 var Deferred = goog.async.Deferred;
 var EventHandler = goog.events.EventHandler;
@@ -171,6 +173,16 @@ var DirectTransport = goog.net.xpc.DirectTransport;
  * @const
  */
 DirectTransport.CONNECTION_ATTEMPT_INTERVAL_MS_ = 100;
+
+
+/**
+ * The delay to notify the xpc of a successful connection. This is used
+ * to allow both parties to be connected if one party's connection callback
+ * invokes an immediate send.
+ * @private {number}
+ * @const
+ */
+DirectTransport.CONNECTION_DELAY_INTERVAL_MS_ = 0;
 
 
 /**
@@ -405,7 +417,7 @@ DirectTransport.prototype.maybeAttemptToConnect_ = function() {
 
 
 /**
- * Sends a message.
+ * Prepares to send a message.
  * @param {string} service The name of the service the message is to be
  *     delivered to.
  * @param {string} payload The message content.
@@ -425,20 +437,27 @@ DirectTransport.prototype.send = function(service, payload) {
       service,
       payload);
 
-  // Note: goog.async.nextTick doesn't support cancelling or disposal so leaving
-  // as 0ms timer, though this may have performance implications.
-  this.asyncSendsMap_[goog.getUid(message)] =
-      Timer.callOnce(goog.bind(this.executeScheduledSend_, this, message), 0);
+  if (this.channel_.getConfig()[CfgFields.DIRECT_TRANSPORT_SYNC_MODE]) {
+    this.executeScheduledSend_(message);
+  } else {
+    // Note: goog.async.nextTick doesn't support cancelling or disposal so
+    // leaving as 0ms timer, though this may have performance implications.
+    this.asyncSendsMap_[goog.getUid(message)] =
+        Timer.callOnce(goog.bind(this.executeScheduledSend_, this, message), 0);
+  }
 };
 
 
 /**
- * Sends the message asyncronously.
+ * Sends the message.
  * @param {!DirectTransport.Message_} message The message to send.
  * @private
  */
 DirectTransport.prototype.executeScheduledSend_ = function(message) {
-  delete this.asyncSendsMap_[goog.getUid(message)];
+  var messageId = goog.getUid(message);
+  if (this.asyncSendsMap_[messageId]) {
+    delete this.asyncSendsMap_[messageId];
+  }
 
   /** @preserveTry */
   try {
@@ -495,7 +514,11 @@ DirectTransport.prototype.getPeerRole_ = function() {
  * @private
  */
 DirectTransport.prototype.notifyConnected_ = function() {
-  this.channel_.notifyConnected();
+  // Add a delay as the connection callback will break if this transport is
+  // synchronous and the callback invokes send() immediately.
+  this.channel_.notifyConnected(
+      this.channel_.getConfig()[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] ?
+      DirectTransport.CONNECTION_DELAY_INTERVAL_MS_ : 0);
 };
 
 

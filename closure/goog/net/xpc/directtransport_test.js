@@ -76,6 +76,7 @@ var outerXpc;
 var innerXpc;
 var peerIframe;
 var channelName;
+var messageIsSync = false;
 
 function setUpPage() {
   CfgFields = goog.net.xpc.CfgFields;
@@ -111,6 +112,7 @@ function tearDown() {
   }
   window.iframeLoadHandler = null;
   channelName = null;
+  messageIsSync = false;
 }
 
 
@@ -227,4 +229,54 @@ function getConfiguration(role, opt_peerFrameId) {
   cfg[CfgFields.CHANNEL_NAME] = channelName;
   cfg[CfgFields.ROLE] = role;
   return cfg;
+}
+
+
+/**
+ * Tests 2 same domain frames using direct transport using sync mode.
+ */
+function testSyncMode() {
+  createIframe();
+  channelName = goog.net.xpc.getRandomString(10);
+
+  var cfg = getConfiguration(CrossPageChannelRole.OUTER, PEER_IFRAME_ID);
+  cfg[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] = true;
+
+  outerXpc = new CrossPageChannel(cfg);
+  // Outgoing service.
+  outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
+  // Incoming service.
+  outerXpc.registerService(
+      RESPONSE_SERVICE_NAME,
+      responseMessageHandler_testSyncMode);
+  asyncTestCase.waitForAsync('Waiting for xpc connect.');
+  outerXpc.connect(onConnect_testSyncMode);
+  // inner_peer.html calls this method at end of html.
+  window.iframeLoadHandler = onIframeLoaded_testSyncMode;
+  peerIframe.src = 'testdata/inner_peer.html';
+}
+
+
+function onIframeLoaded_testSyncMode() {
+  var cfg = getConfiguration(CrossPageChannelRole.INNER);
+  cfg[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] = true;
+  peerIframe.contentWindow.instantiateChannel(cfg);
+}
+
+
+function onConnect_testSyncMode() {
+  assertTrue('XPC over direct channel is connected', outerXpc.isConnected());
+  messageIsSync = true;
+  outerXpc.send(ECHO_SERVICE_NAME, MESSAGE_PAYLOAD_1);
+  messageIsSync = false;
+}
+
+
+function responseMessageHandler_testSyncMode(message) {
+  assertTrue('The message response was syncronous', messageIsSync);
+  assertEquals(
+      'Received payload is equal to sent payload.',
+      message,
+      MESSAGE_PAYLOAD_1);
+  asyncTestCase.continueTesting();
 }
