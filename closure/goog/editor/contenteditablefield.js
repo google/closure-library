@@ -49,7 +49,6 @@ goog.require('goog.log');
  *     id can be found in.
  * @constructor
  * @extends {goog.editor.Field}
- * @final
  */
 goog.editor.ContentEditableField = function(id, opt_doc) {
   goog.editor.Field.call(this, id, opt_doc);
