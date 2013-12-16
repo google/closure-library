@@ -34,7 +34,6 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
-goog.require('goog.fx.Dragger.EventType');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
@@ -831,22 +830,11 @@ goog.fx.AbstractDragDrop.prototype.getDragger = function() {
  *
  * @param {Element} sourceEl Element to copy.
  * @return {Element} The clone of {@code sourceEl}.
+ * @deprecated Use goog.fx.Dragger.cloneNode().
  * @private
  */
 goog.fx.AbstractDragDrop.prototype.cloneNode_ = function(sourceEl) {
-  var clonedEl = /** @type {Element} */ (sourceEl.cloneNode(true));
-  switch (sourceEl.tagName.toLowerCase()) {
-    case 'tr':
-      return goog.dom.createDom(
-          'table', null, goog.dom.createDom('tbody', null, clonedEl));
-    case 'td':
-    case 'th':
-      return goog.dom.createDom(
-          'table', null, goog.dom.createDom('tbody', null, goog.dom.createDom(
-          'tr', null, clonedEl)));
-    default:
-      return clonedEl;
-  }
+  return goog.fx.Dragger.cloneNode(sourceEl);
 };
 
 

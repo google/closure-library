@@ -444,6 +444,23 @@ function testBlur() {
   }
 }
 
+function testCloneNode() {
+  var element = goog.dom.createDom('div');
+  element.innerHTML =
+    '<input type="hidden" value="v0">' +
+    '<textarea>v1</textarea>' +
+    '<textarea>v2</textarea>';
+  element.childNodes[0].value = '\'new\'\n"value"'
+  element.childNodes[1].value = '<' + '/textarea>&lt;3';
+  element.childNodes[2].value = '<script>\n\talert("oops!");<' + '/script>';
+  var clone = goog.fx.Dragger.cloneNode(element);
+  assertEquals(element.childNodes[0].value, clone.childNodes[0].value);
+  assertEquals(element.childNodes[1].value, clone.childNodes[1].value);
+  assertEquals(element.childNodes[2].value, clone.childNodes[2].value);
+  clone = goog.fx.Dragger.cloneNode(element.childNodes[2]);
+  assertEquals(element.childNodes[2].value, clone.value);
+}
+
 </script>
 </body>
 </html>

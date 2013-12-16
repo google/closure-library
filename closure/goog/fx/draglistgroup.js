@@ -28,14 +28,13 @@ goog.provide('goog.fx.DragListGroupEvent');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classlist');
+goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.fx.Dragger');
-goog.require('goog.fx.Dragger.EventType');
 goog.require('goog.math.Coordinate');
 goog.require('goog.string');
 goog.require('goog.style');
@@ -537,7 +536,7 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
   var uid = goog.getUid(/** @type {Node} */ (e.currentTarget));
   this.currDragItem_ = /** @type {Element} */ (this.dragItemForHandle_[uid]);
 
-  this.draggerEl_ = this.cloneNode_(this.currDragItem_);
+  this.draggerEl_ = goog.fx.Dragger.cloneNode(this.currDragItem_);
   if (this.draggerElClasses_) {
     // Add CSS class for the clone, if any.
     goog.dom.classlist.addAll(this.draggerEl_, this.draggerElClasses_ || []);
@@ -1183,31 +1182,6 @@ goog.fx.DragListGroup.prototype.insertCurrDragItem_ = function(
     // The current drag item is not in the correct location, so we move it.
     // Note: hoverNextItem may be null, but insertBefore() still works.
     hoverList.insertBefore(this.currDragItem_, hoverNextItem);
-  }
-};
-
-
-/**
- * Note: Copied from abstractdragdrop.js. TODO(user): consolidate.
- * Creates copy of node being dragged.
- *
- * @param {Element} sourceEl Element to copy.
- * @return {Element} The clone of {@code sourceEl}.
- * @private
- */
-goog.fx.DragListGroup.prototype.cloneNode_ = function(sourceEl) {
-  var clonedEl = /** @type {Element} */ (sourceEl.cloneNode(true));
-  switch (sourceEl.tagName.toLowerCase()) {
-    case 'tr':
-      return goog.dom.createDom(
-          'table', null, goog.dom.createDom('tbody', null, clonedEl));
-    case 'td':
-    case 'th':
-      return goog.dom.createDom(
-          'table', null, goog.dom.createDom('tbody', null, goog.dom.createDom(
-          'tr', null, clonedEl)));
-    default:
-      return clonedEl;
   }
 };
 

@@ -84,6 +84,40 @@ goog.fx.Dragger.HAS_SET_CAPTURE_ =
 
 
 /**
+ * Creates copy of node being dragged.  This is a utility function to be used
+ * wherever it is inappropriate for the original source to follow the mouse
+ * cursor itself.
+ *
+ * @param {Element} sourceEl Element to copy.
+ * @return {Element} The clone of {@code sourceEl}.
+ */
+goog.fx.Dragger.cloneNode = function(sourceEl) {
+  var clonedEl = /** @type {Element} */ (sourceEl.cloneNode(true)),
+      origTexts = sourceEl.getElementsByTagName('textarea'),
+      dragTexts = clonedEl.getElementsByTagName('textarea');
+  // Cloning does not copy the current value of textarea elements, so correct
+  // this manually.
+  for (var i = 0; i < origTexts.length; i++) {
+    dragTexts[i].value = origTexts[i].value;
+  }
+  switch (sourceEl.tagName.toLowerCase()) {
+    case 'tr':
+      return goog.dom.createDom(
+          'table', null, goog.dom.createDom('tbody', null, clonedEl));
+    case 'td':
+    case 'th':
+      return goog.dom.createDom(
+          'table', null, goog.dom.createDom('tbody', null, goog.dom.createDom(
+          'tr', null, clonedEl)));
+    case 'textarea':
+      clonedEl.value = sourceEl.value;
+    default:
+      return clonedEl;
+  }
+};
+
+
+/**
  * Constants for event names.
  * @enum {string}
  */
