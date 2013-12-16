@@ -628,9 +628,9 @@ goog.ui.PopupBase.prototype.continueHidingPopup_ = function(opt_target) {
   // Hide the popup.
   if (this.type_ == goog.ui.PopupBase.Type.TOGGLE_DISPLAY) {
     if (this.shouldHideAsync_) {
-      goog.Timer.callOnce(this.hidePopupElement_, 0, this);
+      goog.Timer.callOnce(this.hidePopupElement, 0, this);
     } else {
-      this.hidePopupElement_();
+      this.hidePopupElement();
     }
   } else if (this.type_ == goog.ui.PopupBase.Type.MOVE_OFFSCREEN) {
     this.moveOffscreen_();
@@ -653,9 +653,9 @@ goog.ui.PopupBase.prototype.showPopupElement = function() {
 
 /**
  * Hides the popup element.
- * @private
+ * @protected
  */
-goog.ui.PopupBase.prototype.hidePopupElement_ = function() {
+goog.ui.PopupBase.prototype.hidePopupElement = function() {
   this.element_.style.visibility = 'hidden';
   goog.style.setElementShown(this.element_, false);
 };
