@@ -43,6 +43,7 @@ goog.require('goog.crypt.BlockCipher');
  *     The key must have lengths of 16, 24, or 32 integers for 128-,
  *     192-, or 256-bit encryption, respectively.
  * @final
+ * @struct
  */
 goog.crypt.Aes = function(key) {
   goog.crypt.Aes.assertKeyArray_(key);
