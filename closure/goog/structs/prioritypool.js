@@ -32,7 +32,8 @@ goog.require('goog.structs.PriorityQueue');
  * @param {number=} opt_minCount Min. number of objects (Default: 1).
  * @param {number=} opt_maxCount Max. number of objects (Default: 10).
  * @constructor
- * @extends {goog.structs.Pool}
+ * @extends {goog.structs.Pool.<VALUE>}
+ * @template VALUE
  */
 goog.structs.PriorityPool = function(opt_minCount, opt_maxCount) {
   /**
@@ -43,7 +44,7 @@ goog.structs.PriorityPool = function(opt_minCount, opt_maxCount) {
 
   /**
    * Queue of requests for pool objects.
-   * @private {goog.structs.PriorityQueue}
+   * @private {goog.structs.PriorityQueue.<VALUE>}
    */
   this.requestQueue_ = new goog.structs.PriorityQueue();
 
@@ -91,7 +92,7 @@ goog.structs.PriorityPool.prototype.setDelay = function(delay) {
  *     object is immediately returned if available, or undefined if not.
  * @param {number=} opt_priority The priority of the request. A smaller value
  *     means a higher priority.
- * @return {Object|undefined} The new object from the pool if there is one
+ * @return {VALUE|undefined} The new object from the pool if there is one
  *     available and a callback is not given. Otherwise, undefined.
  * @override
  */
@@ -144,7 +145,7 @@ goog.structs.PriorityPool.prototype.handleQueueRequests_ = function() {
  *
  * NOTE: This method does not remove the object from the in use collection.
  *
- * @param {Object} obj The object to add to the collection of free objects.
+ * @param {VALUE} obj The object to add to the collection of free objects.
  * @override
  */
 goog.structs.PriorityPool.prototype.addFreeObject = function(obj) {
