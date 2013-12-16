@@ -536,7 +536,7 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
   var uid = goog.getUid(/** @type {Node} */ (e.currentTarget));
   this.currDragItem_ = /** @type {Element} */ (this.dragItemForHandle_[uid]);
 
-  this.draggerEl_ = goog.fx.Dragger.cloneNode(this.currDragItem_);
+  this.draggerEl_ = this.createDragElementInternal(this.currDragItem_);
   if (this.draggerElClasses_) {
     // Add CSS class for the clone, if any.
     goog.dom.classlist.addAll(this.draggerEl_, this.draggerElClasses_ || []);
@@ -574,6 +574,35 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
   goog.events.listen(this.dragger_, goog.fx.Dragger.EventType.EARLY_CANCEL,
       this.cleanup_, false, this);
   this.dragger_.startDrag(e);
+};
+
+
+/**
+ * Creates copy of node being dragged.
+ *
+ * @param {Element} sourceEl Element to copy.
+ * @return {Element} The clone of {@code sourceEl}.
+ * @deprecated Use goog.fx.Dragger.cloneNode().
+ * @private
+ */
+goog.fx.DragListGroup.prototype.cloneNode_ = function(sourceEl) {
+  return goog.fx.Dragger.cloneNode(sourceEl);
+};
+
+
+/**
+ * Generates an element to follow the cursor during dragging, given a drag
+ * source element.  The default behavior is simply to clone the source element,
+ * but this may be overridden in subclasses.  This method is called by
+ * {@code createDragElement()} before the drag class is added.
+ *
+ * @param {Element} sourceEl Drag source element.
+ * @return {Element} The new drag element.
+ * @protected
+ */
+goog.fx.DragListGroup.prototype.createDragElementInternal =
+    function(sourceEl) {
+  return this.cloneNode_(sourceEl);
 };
 
 
