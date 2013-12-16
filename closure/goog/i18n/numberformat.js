@@ -159,6 +159,7 @@ goog.i18n.NumberFormat.isEnforceAsciiDigits = function() {
 /**
  * Sets minimum number of fraction digits.
  * @param {number} min the minimum.
+ * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
  */
 goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
   if (this.significantDigits_ > 0 && min > 0) {
@@ -166,21 +167,25 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
         'Can\'t combine significant digits and minimum fraction digits');
   }
   this.minimumFractionDigits_ = min;
+  return this;
 };
 
 
 /**
  * Sets maximum number of fraction digits.
  * @param {number} max the maximum.
+ * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
  */
 goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
   this.maximumFractionDigits_ = max;
+  return this;
 };
 
 
 /**
  * Sets number of significant digits to show. Only fractions will be rounded.
  * @param {number} number The number of significant digits to include.
+ * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
  */
 goog.i18n.NumberFormat.prototype.setSignificantDigits = function(number) {
   if (this.minimumFractionDigits_ > 0 && number >= 0) {
@@ -188,6 +193,7 @@ goog.i18n.NumberFormat.prototype.setSignificantDigits = function(number) {
         'Can\'t combine significant digits and minimum fraction digits');
   }
   this.significantDigits_ = number;
+  return this;
 };
 
 
@@ -205,10 +211,12 @@ goog.i18n.NumberFormat.prototype.getSignificantDigits = function() {
  * is positive. If this is true and significantDigits_ is 2, 1 will be formatted
  * as '1.0'.
  * @param {boolean} showTrailingZeros Whether trailing zeros should be shown.
+ * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
  */
 goog.i18n.NumberFormat.prototype.setShowTrailingZeros =
     function(showTrailingZeros) {
   this.showTrailingZeros_ = showTrailingZeros;
+  return this;
 };
 
 
@@ -227,12 +235,14 @@ goog.i18n.NumberFormat.prototype.setShowTrailingZeros =
  *
  * @param {?number} baseFormattingNumber The number to base formatting on, or
  * null if formatting should not be based on another number.
+ * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
  */
 goog.i18n.NumberFormat.prototype.setBaseFormatting =
     function(baseFormattingNumber) {
   goog.asserts.assert(goog.isNull(baseFormattingNumber) ||
       isFinite(baseFormattingNumber));
   this.baseFormattingNumber_ = baseFormattingNumber;
+  return this;
 };
 
 
