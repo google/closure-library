@@ -640,20 +640,7 @@ goog.async.Deferred.prototype.fire_ = function() {
           this.result_ = res = ret;
         }
 
-        // If the result is a Promise, transform it into a Deferred so it
-        // blocks the chain.
-        if (!(res instanceof goog.async.Deferred) &&
-            goog.labs.Thenable.isImplementedBy(res)) {
-          var promise = /** @type {!goog.labs.Thenable} */ (res);
-          res = new goog.async.Deferred();
-          promise.then(function(value) {
-            res.callback(value);
-          }, function(reason) {
-            res.errback(reason);
-          });
-        }
-
-        if (res instanceof goog.async.Deferred) {
+        if (goog.labs.Thenable.isImplementedBy(res)) {
           isNewlyBlocked = true;
           this.blocked_ = true;
         }
@@ -675,10 +662,15 @@ goog.async.Deferred.prototype.fire_ = function() {
   this.result_ = res;
 
   if (isNewlyBlocked) {
-    res.addCallbacks(
-        goog.bind(this.continue_, this, true /* isSuccess */),
-        goog.bind(this.continue_, this, false /* isSuccess */));
-    res.blocking_ = true;
+    var onCallback = goog.bind(this.continue_, this, true /* isSuccess */);
+    var onErrback = goog.bind(this.continue_, this, false /* isSuccess */);
+
+    if (res instanceof goog.async.Deferred) {
+      res.addCallbacks(onCallback, onErrback);
+      res.blocking_ = true;
+    } else {
+      res.then(onCallback, onErrback);
+    }
   } else if (goog.async.Deferred.STRICT_ERRORS && this.isError(res) &&
       !(res instanceof goog.async.Deferred.CanceledError)) {
     this.hadError_ = true;
