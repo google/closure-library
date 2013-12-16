@@ -222,10 +222,9 @@ goog.html.SafeUrl.fromConstant = function(url) {
  *     Otherwise, a colon after a double solidus (//) must be in the authority
  *     (before port).
  *
- * Finally, the pattern disallows &, used in HTML entity declarations before
- * one of the characters in [\/?#].
- * This disallows HTML entities used in the protocol name, which should never
- * happen, e.g. "h&#116;tp" for "http".
+ * The pattern disallows &, used in HTML entity declarations before
+ * one of the characters in [/?#]. This disallows HTML entities used in the
+ * protocol name, which should never happen, e.g. "h&#116;tp" for "http".
  * It also disallows HTML entities in the first path part of a relative path,
  * e.g. "foo&lt;bar/baz".  Our existing escaping functions should not produce
  * that. More importantly, it disallows masking of a colon,
@@ -234,7 +233,7 @@ goog.html.SafeUrl.fromConstant = function(url) {
  * @private
  * @const {!RegExp}
  */
-goog.html.SAFE_URL_PATTERN_ = /^(?:(?:https?|mailto):|[^&:\/?#]*(?:[\/?#]|$))/i;
+goog.html.SAFE_URL_PATTERN_ = /^(?:(?:https?|mailto):|[^&:/?#]*(?:[/?#]|$))/i;
 
 
 /**

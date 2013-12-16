@@ -87,7 +87,13 @@ function assertBadUrl(url) {
 
 
 function testSafeUrlSanitize() {
+  // Whitelisted schemes.
   assertGoodUrl('http://example.com/');
+  assertGoodUrl('https://example.com');
+  assertGoodUrl('mailto:foo@example.com');
+  // Scheme is case-insensitive
+  assertGoodUrl('HTtp://example.com/');
+  // Different URL components go through.
   assertGoodUrl('https://example.com/path?foo=bar#baz');
   // Scheme-less URL with authority.
   assertGoodUrl('//example.com/path');
@@ -99,16 +105,27 @@ function testSafeUrlSanitize() {
   assertGoodUrl('path?foo=bar#baz');
   assertGoodUrl('p//ath');
   assertGoodUrl('p//ath?foo=bar#baz');
-  // mailto:
-  assertGoodUrl('mailto:foo@examlpe.com');
+  // Restricted characters ('&', ':', \') after [/?#].
+  assertGoodUrl('/&');
+  assertGoodUrl('?:');
 
   // .sanitize() works on program constants.
   assertGoodUrl(goog.string.Const.from('http://example.com/'));
 
-
+  // Non-whitelisted schemes.
   assertBadUrl('javascript:evil();');
   assertBadUrl('javascript:evil();//\nhttp://good.com/');
   assertBadUrl('data:blah');
+  // Restricted characters before [/?#].
+  assertBadUrl('&');
+  assertBadUrl(':');
+  // '\' is not treated like '/': no restricted characters allowed after it.
+  assertBadUrl('\\:');
+  // Regex anchored to the left: doesn't match on '/:'.
+  assertBadUrl(':/:');
+  // Regex multiline not enabled: first line would match but second one
+  // wouldn't.
+  assertBadUrl('path\n:');
 
   // .sanitize() does not exempt values known to be program constants.
   assertBadUrl(goog.string.Const.from('data:blah'));
