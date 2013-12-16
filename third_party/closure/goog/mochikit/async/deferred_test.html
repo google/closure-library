@@ -960,6 +960,20 @@ function testPromiseBlocksDeferred() {
   assertEquals('promise', result);
 }
 
+function testFromPromise() {
+  var result;
+  var p = new goog.labs.Promise(function(resolve) {
+    resolve('promise');
+  });
+  var d = Deferred.fromPromise(p);
+  d.addCallback(function(value) {
+    result = value;
+  });
+  assertUndefined(result);
+  mockClock.tick();
+  assertEquals('promise', result);
+}
+
 function testPromiseBlocksDeferredAndRejects() {
   var result;
   var d = new Deferred();
