@@ -93,7 +93,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
 
   /**
    * The XMLHttpRequest object that is being used for the transfer.
-   * @private {goog.net.XhrLike.OrNative|GearsHttpRequest}
+   * @private {goog.net.XhrLike.OrNative|null}
    */
   this.xhr_ = null;
 
@@ -290,7 +290,7 @@ goog.net.XhrIo.sendInstances_ = [];
  * @param {Function=} opt_callback Callback function for when request is
  *     complete.
  * @param {string=} opt_method Send method, default: GET.
- * @param {ArrayBuffer|Blob|Document|FormData|GearsBlob|string=} opt_content
+ * @param {ArrayBuffer|Blob|Document|FormData|string=} opt_content
  *     Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
@@ -441,7 +441,7 @@ goog.net.XhrIo.prototype.getWithCredentials = function() {
  * Instance send that actually uses XMLHttpRequest to make a server call.
  * @param {string|goog.Uri} url Uri to make request to.
  * @param {string=} opt_method Send method, default: GET.
- * @param {ArrayBuffer|Blob|Document|FormData|GearsBlob|string=} opt_content
+ * @param {ArrayBuffer|Blob|Document|FormData|string=} opt_content
  *     Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
@@ -478,7 +478,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   try {
     goog.log.fine(this.logger_, this.formatMsg_('Opening Xhr'));
     this.inOpen_ = true;
-    this.xhr_.open(method, url, true);  // Always async!
+    this.xhr_.open(method, String(url), true);  // Always async!
     this.inOpen_ = false;
   } catch (err) {
     goog.log.fine(this.logger_,
@@ -575,7 +575,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
  * @see https://bugzilla.mozilla.org/show_bug.cgi?id=525816
  *
- * @param {!goog.net.XhrLike.OrNative|!GearsHttpRequest} xhr The request.
+ * @param {!goog.net.XhrLike.OrNative} xhr The request.
  * @return {boolean} True if the request supports level 2 timeout.
  * @private
  */
@@ -601,7 +601,7 @@ goog.net.XhrIo.isContentTypeHeader_ = function(header) {
 
 /**
  * Creates a new XHR object.
- * @return {goog.net.XhrLike.OrNative|GearsHttpRequest} The newly created XHR
+ * @return {goog.net.XhrLike.OrNative|null} The newly created XHR
  *     object.
  * @protected
  */
@@ -984,7 +984,7 @@ goog.net.XhrIo.prototype.getResponseText = function() {
   } catch (e) {
     // http://www.w3.org/TR/XMLHttpRequest/#the-responsetext-attribute
     // states that responseText should return '' (and responseXML null)
-    // when the state is not LOADING or DONE. Instead, IE and Gears can
+    // when the state is not LOADING or DONE. Instead, IE can
     // throw unexpected exceptions, for example when a request is aborted
     // or no data is available yet.
     goog.log.fine(this.logger_, 'Can not get responseText: ' + e.message);

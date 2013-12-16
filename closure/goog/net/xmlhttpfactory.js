@@ -42,8 +42,7 @@ goog.net.XmlHttpFactory.prototype.cachedOptions_ = null;
 
 
 /**
- * @return {!(goog.net.XhrLike.OrNative|GearsHttpRequest)} A new XhrLike
- *     instance.
+ * @return {!goog.net.XhrLike.OrNative} A new XhrLike instance.
  */
 goog.net.XmlHttpFactory.prototype.createInstance = goog.abstractMethod;
 

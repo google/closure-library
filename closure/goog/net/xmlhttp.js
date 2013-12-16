@@ -30,8 +30,7 @@ goog.require('goog.net.XmlHttpFactory');
 
 /**
  * Static class for creating XMLHttpRequest objects.
- * @return {!(goog.net.XhrLike.OrNative|GearsHttpRequest)} A new XMLHttpRequest
- *     object.
+ * @return {!goog.net.XhrLike.OrNative} A new XMLHttpRequest object.
  */
 goog.net.XmlHttp = function() {
   return goog.net.XmlHttp.factory_.createInstance();
