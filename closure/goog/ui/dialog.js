@@ -38,11 +38,14 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
+goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.fx.Dragger');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Rect');
 goog.require('goog.string');
 goog.require('goog.structs');
@@ -98,6 +101,22 @@ goog.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper) {
   this.buttons_ = goog.ui.Dialog.ButtonSet.createOkCancel();
 };
 goog.inherits(goog.ui.Dialog, goog.ui.ModalPopup);
+
+
+/**
+ * @define {boolean} Whether goog.ui.Dialog permits use of its potentially
+ * unsafe API, subject to global defines
+ * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS and
+ * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES.
+ *
+ * For details of intended use, see the fileoverview of
+ * goog.html.legacyconversions.
+ *
+ * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS
+ * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES
+ * @see goog.ui.Dialog#setContent
+ */
+goog.define('goog.ui.Dialog.ALLOW_UNSAFE_API', false);
 
 
 /**
@@ -158,10 +177,10 @@ goog.ui.Dialog.prototype.title_ = '';
 
 /**
  * Dialog's content (HTML).
- * @type {string}
+ * @type {goog.html.SafeHtml}
  * @private
  */
-goog.ui.Dialog.prototype.content_ = '';
+goog.ui.Dialog.prototype.content_ = null;
 
 
 /**
@@ -265,18 +284,30 @@ goog.ui.Dialog.prototype.getTitle = function() {
 
 /**
  * Allows arbitrary HTML to be set in the content element.
+ * TODO(user): Deprecate in favor of setSafeHtmlContent, once developer docs on
+ * using goog.html.SafeHtml are in place.
  * @param {string} html Content HTML.
  */
 goog.ui.Dialog.prototype.setContent = function(html) {
+  this.setSafeHtmlContent(goog.html.legacyconversions.safeHtmlFromString(
+      html, goog.ui.Dialog.ALLOW_UNSAFE_API));
+};
+
+
+/**
+ * Allows arbitrary HTML to be set in the content element.
+ * @param {!goog.html.SafeHtml} html Content HTML.
+ */
+goog.ui.Dialog.prototype.setSafeHtmlContent = function(html) {
   this.content_ = html;
   if (this.contentEl_) {
-    this.contentEl_.innerHTML = html;
+    goog.dom.safe.setInnerHtml(this.contentEl_, html);
   }
 };
 
 
 /**
- * Gets the content HTML of the content element.
+ * Gets the content HTML of the content element as a plain string.
  *
  * Note that this method returns the HTML markup that was previously set via
  * setContent(). In particular, the HTML returned by this method does not
@@ -286,6 +317,16 @@ goog.ui.Dialog.prototype.setContent = function(html) {
  * @return {string} Content HTML.
  */
 goog.ui.Dialog.prototype.getContent = function() {
+  return this.content_ != null ?
+      goog.html.SafeHtml.unwrap(this.content_) : '';
+};
+
+
+/**
+ * Gets the content HTML of the content element.
+ * @return {goog.html.SafeHtml} Content HTML.
+ */
+goog.ui.Dialog.prototype.getSafeHtmlContent = function() {
   return this.content_;
 };
 
@@ -577,7 +618,7 @@ goog.ui.Dialog.prototype.createDom = function() {
   // If setContent() was called before createDom(), make sure the inner HTML of
   // the content element is initialized.
   if (this.content_) {
-    this.contentEl_.innerHTML = this.content_;
+    goog.dom.safe.setInnerHtml(this.contentEl_, this.content_);
   }
   goog.style.setElementShown(this.titleCloseEl_, this.hasTitleCloseButton_);
 
@@ -603,7 +644,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
   if (!this.contentEl_) {
     this.contentEl_ = this.getDomHelper().createDom('div', contentClass);
     if (this.content_) {
-      this.contentEl_.innerHTML = this.content_;
+      goog.dom.safe.setInnerHtml(this.contentEl_, this.content_);
     }
     dialogElement.appendChild(this.contentEl_);
   }
@@ -936,7 +977,8 @@ goog.ui.Dialog.prototype.setButtonSet = function(buttons) {
     if (this.buttons_) {
       this.buttons_.attachToElement(this.buttonEl_);
     } else {
-      this.buttonEl_.innerHTML = '';
+      goog.dom.safe.setInnerHtml(
+          this.buttonEl_, goog.html.SafeHtml.EMPTY);
     }
     goog.style.setElementShown(this.buttonEl_, !!this.buttons_);
   }
@@ -1233,7 +1275,8 @@ goog.ui.Dialog.ButtonSet.prototype.attachToElement = function(el) {
  */
 goog.ui.Dialog.ButtonSet.prototype.render = function() {
   if (this.element_) {
-    this.element_.innerHTML = '';
+    goog.dom.safe.setInnerHtml(
+        this.element_, goog.html.SafeHtml.EMPTY);
     var domHelper = goog.dom.getDomHelper(this.element_);
     goog.structs.forEach(this, function(caption, key) {
       var button = domHelper.createDom('button', {'name': key}, caption);

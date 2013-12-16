@@ -17,9 +17,12 @@ See the COPYING file for details.
   goog.require('goog.a11y.aria.State');
   goog.require('goog.events');
   goog.require('goog.events.EventType');
+  goog.require('goog.html.SafeHtml');
+  goog.require('goog.html.testing');
   goog.require('goog.fx.css3');
   goog.require('goog.style');
   goog.require('goog.testing.MockClock');
+  goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.testing.recordFunction');
@@ -34,6 +37,7 @@ See the COPYING file for details.
   var decorateTarget;
   var dialog;
   var mockClock;
+  var stubs = new goog.testing.PropertyReplacer();
 
   function setUp() {
     mockClock = new goog.testing.MockClock(true);
@@ -51,6 +55,12 @@ See the COPYING file for details.
 
     decorateTarget = goog.dom.createDom('div');
     document.body.appendChild(decorateTarget);
+
+    // Reset global flags to their defaults.
+    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
+    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES',
+              false);
+    stubs.set(goog.ui.Dialog, 'ALLOW_UNSAFE_API', false);
   }
 
   function tearDown() {
@@ -180,6 +190,7 @@ See the COPYING file for details.
   }
 
   function checkEnterKeyDoesNothingOnSpecialFormElement(content, tagName) {
+    // TODO(user): Switch to setSafeHtmlContent here and elsewhere.
     dialog.setContent(content);
     var formElement = dialog.getContentElement().
         getElementsByTagName(tagName)[0];
@@ -770,6 +781,49 @@ See the COPYING file for details.
     goog.testing.events.fireClickSequence(button);
     mockClock.tick(2000);
     assertFalse(dialog.isVisible());
+  }
+
+  function testHtmlContent() {
+    dialog.setSafeHtmlContent(goog.html.testing.newSafeHtmlForTest(
+        '<span class=theSpan>Hello</span>'));
+    var spanEl =
+        goog.dom.getElementByClass('theSpan', dialog.getContentElement());
+    assertEquals('Hello', goog.dom.getTextContent(spanEl));
+    assertEquals('<span class=theSpan>Hello</span>', dialog.getContent());
+    assertEquals('<span class=theSpan>Hello</span>',
+                 goog.html.SafeHtml.unwrap(dialog.getSafeHtmlContent()));
+  }
+
+  function testSetContent_guardedByGlobalFlag() {
+    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+    assertEquals(
+        'Failure: Legacy conversion from string to SafeHtml is disabled',
+        assertThrows(function() {
+          dialog.setContent('<img src=blag onerror=evil();/>');
+        }).message);
+  }
+
+  function testSetContent_guardedByDialogApiFlag() {
+    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+    stubs.set(goog.ui.Dialog, 'ALLOW_UNSAFE_API', true);
+    // Unsafe API still fails, since ALLOW_LEGACY_CONVERSION_OVERRIDES is not
+    // set.
+    assertEquals(
+        'Failure: Legacy conversion from string to SafeHtml is disabled',
+        assertThrows(function() {
+          dialog.setContent('<img src=blag onerror=evil();/>');
+        }).message);
+  }
+
+  function testSetContent_allowedByDialogApiFlag() {
+    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES',
+              true);
+    stubs.set(goog.ui.Dialog, 'ALLOW_UNSAFE_API', true);
+    // no exception
+    dialog.setContent('<div>Trusted<' + '/div>');
+    assertEquals('<div>Trusted<' + '/div>',
+                 goog.html.SafeHtml.unwrap(dialog.getSafeHtmlContent()));
   }
 </script>
 </body>
