@@ -351,10 +351,9 @@ goog.ui.LabelInput.prototype.handleFormSubmit_ = function(e) {
 
 /**
  * Restore value after submit
- * @param {Event} e The event object passed in to the event handler.
  * @private
  */
-goog.ui.LabelInput.prototype.handleAfterSubmit_ = function(e) {
+goog.ui.LabelInput.prototype.handleAfterSubmit_ = function() {
   if (!this.hasChanged()) {
     this.getElement().value = this.label_;
   }
