@@ -74,16 +74,17 @@ goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
 
 
 /**
- * Returns the index of the first element of an array with a specified
- * value, or -1 if the element is not present in the array.
+ * Returns the index of the first element of an array with a specified value, or
+ * -1 if the element is not present in the array.
  *
  * See {@link http://tinyurl.com/developer-mozilla-org-array-indexof}
  *
- * @param {goog.array.ArrayLike} arr The array to be searched.
- * @param {*} obj The object for which we are searching.
+ * @param {Array.<T>|goog.array.ArrayLike} arr The array to be searched.
+ * @param {T} obj The object for which we are searching.
  * @param {number=} opt_fromIndex The index at which to start the search. If
  *     omitted the search starts at index 0.
  * @return {number} The index of the first matching array element.
+ * @template T
  */
 goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
                      goog.array.ARRAY_PROTOTYPE_.indexOf ?
