@@ -91,18 +91,9 @@ goog.ui.Select.prototype.decorateInternal = function(element) {
   if (caption) {
     // Initialize the default caption.
     this.setDefaultCaption(caption);
-  } else if (this.getSelectedIndex() == -1) {
-    // There is no default caption and nothing has been selected; select the
-    // first option. (If there are no items, this does nothing since the
-    // selection model doesn't exist yet.)
+  } else {
+    // There is no default caption; select the first option.
     this.setSelectedIndex(0);
-  } else if (!this.getValue()) {
-    // An item has been selected, but the control's value has not been set. This
-    // may have been due to setValue having been called before the event
-    // listeners were set up, meaning that setValue was never called on the
-    // superclass. So, do it here.
-    goog.ui.Select.superClass_.setValue.call(this,
-        this.getSelectedItem().getValue());
   }
 };
 
