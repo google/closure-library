@@ -871,17 +871,31 @@ goog.fx.AbstractDragDrop.prototype.addDragTarget_ = function(target, item) {
     var draggableElement = draggableElements[i];
 
     // Determine target position and dimension
-    var pos = goog.style.getPageOffset(draggableElement);
-    var size = goog.style.getSize(draggableElement);
-
-    var box = new goog.math.Box(pos.y, pos.x + size.width,
-                                pos.y + size.height, pos.x);
+    var box = this.getElementBox(item, draggableElement);
 
     targetList.push(
         new goog.fx.ActiveDropTarget_(box, target, item, draggableElement));
 
     this.calculateTargetBox_(box);
   }
+};
+
+
+/**
+ * Calculates the position and dimension of a draggable element.
+ *
+ * @param {goog.fx.DragDropItem} item Item that's being dragged.
+ * @param {Element} element The element to calculate the box.
+ *
+ * @return {!goog.math.Box} Box describing the position and dimension
+ *     of element.
+ * @protected
+ */
+goog.fx.AbstractDragDrop.prototype.getElementBox = function(item, element) {
+  var pos = goog.style.getPageOffset(element);
+  var size = goog.style.getSize(element);
+  return new goog.math.Box(pos.y, pos.x + size.width, pos.y + size.height,
+      pos.x);
 };
 
 
