@@ -290,8 +290,8 @@ goog.net.XhrIo.sendInstances_ = [];
  * @param {Function=} opt_callback Callback function for when request is
  *     complete.
  * @param {string=} opt_method Send method, default: GET.
- * @param {ArrayBuffer|Blob|Document|FormData|string=} opt_content
- *     Body data.
+ * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
+ *     opt_content Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  * @param {number=} opt_timeoutInterval Number of milliseconds after which an
@@ -441,8 +441,8 @@ goog.net.XhrIo.prototype.getWithCredentials = function() {
  * Instance send that actually uses XMLHttpRequest to make a server call.
  * @param {string|goog.Uri} url Uri to make request to.
  * @param {string=} opt_method Send method, default: GET.
- * @param {ArrayBuffer|Blob|Document|FormData|string=} opt_content
- *     Body data.
+ * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
+ *     opt_content Body data.
  * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
  *     request.
  */
