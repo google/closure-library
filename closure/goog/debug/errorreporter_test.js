@@ -17,6 +17,7 @@ goog.setTestOnly('goog.debug.ErrorReporterTest');
 
 goog.require('goog.debug.ErrorReporter');
 goog.require('goog.events');
+goog.require('goog.functions');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -132,6 +133,7 @@ function test_nonInternetExplorerSendErrorReport() {
 
 function test_internetExplorerSendErrorReport() {
   stubs.set(goog.userAgent, 'IE', true);
+  stubs.set(goog.userAgent, 'isVersionOrHigher', goog.functions.FALSE);
 
   // Remove test runner's onerror handler so the test doesn't fail.
   stubs.set(goog.global, 'onerror', null);
@@ -146,6 +148,7 @@ function test_internetExplorerSendErrorReport() {
 
 function test_setLoggingHeaders() {
   stubs.set(goog.userAgent, 'IE', true);
+  stubs.set(goog.userAgent, 'isVersionOrHigher', goog.functions.FALSE);
   // Remove test runner's onerror handler so the test doesn't fail.
   stubs.set(goog.global, 'onerror', null);
 
@@ -202,6 +205,7 @@ function testProtectAdditionalEntryPoint_nonIE() {
 
 function testProtectAdditionalEntryPoint_IE() {
   stubs.set(goog.userAgent, 'IE', true);
+  stubs.set(goog.userAgent, 'isVersionOrHigher', goog.functions.FALSE);
 
   errorReporter = goog.debug.ErrorReporter.install('/errorreporter');
   var fn = function() {};

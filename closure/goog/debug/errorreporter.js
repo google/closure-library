@@ -256,7 +256,7 @@ if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
    * @private
    */
   goog.debug.ErrorReporter.prototype.setup_ = function() {
-    if (goog.userAgent.IE) {
+    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
       // Use "onerror" because caught exceptions in IE don't provide line
       // number.
       goog.debug.catchErrors(
