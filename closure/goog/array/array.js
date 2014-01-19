@@ -1381,9 +1381,10 @@ goog.array.range = function(startOrEnd, opt_end, opt_step) {
 /**
  * Returns an array consisting of the given value repeated N times.
  *
- * @param {*} value The value to repeat.
+ * @param {VALUE} value The value to repeat.
  * @param {number} n The repeat count.
- * @return {!Array} An array with the repeated value.
+ * @return {!Array.<VALUE>} An array with the repeated value.
+ * @template VALUE
  */
 goog.array.repeat = function(value, n) {
   var array = [];
