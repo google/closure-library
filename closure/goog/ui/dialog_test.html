@@ -643,9 +643,9 @@ See the COPYING file for details.
 
     dialog = new goog.ui.Dialog();
     dialog.render();
-    assertTrue(!!dialog.getTitleElement().id);
+    assertTrue(!!dialog.getTitleTextElement().id);
     assertNotNull(dialog.getElement());
-    assertEquals(dialog.getTitleElement().id,
+    assertEquals(dialog.getTitleTextElement().id,
         goog.a11y.aria.getState(dialog.getElement(),
             'labelledby'));
   }
@@ -656,9 +656,9 @@ See the COPYING file for details.
     dialog = new goog.ui.Dialog();
     dialog.decorate(decorateTarget);
     dialog.setVisible(true);
-    assertTrue(!!dialog.getTitleElement().id);
+    assertTrue(!!dialog.getTitleTextElement().id);
     assertNotNull(dialog.getElement());
-    assertEquals(dialog.getTitleElement().id,
+    assertEquals(dialog.getTitleTextElement().id,
         goog.a11y.aria.getState(dialog.getElement(),
             'labelledby'));
   }

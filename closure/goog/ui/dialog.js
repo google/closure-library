@@ -220,7 +220,7 @@ goog.ui.Dialog.prototype.titleTextEl_ = null;
  * @type {?string}
  * @private
  */
-goog.ui.Dialog.prototype.titleId_ = null;
+goog.ui.Dialog.prototype.titleTextId_ = null;
 
 
 /**
@@ -599,10 +599,12 @@ goog.ui.Dialog.prototype.createDom = function() {
   goog.asserts.assert(element, 'getElement() returns null');
 
   var dom = this.getDomHelper();
-  this.titleEl_ = dom.createDom('div',
-      {'className': goog.getCssName(this.class_, 'title'), 'id': this.getId()},
+  this.titleEl_ = dom.createDom('div', goog.getCssName(this.class_, 'title'),
       this.titleTextEl_ = dom.createDom(
-          'span', goog.getCssName(this.class_, 'title-text'), this.title_),
+          'span',
+          {'className': goog.getCssName(this.class_, 'title-text'),
+            'id': this.getId()},
+          this.title_),
       this.titleCloseEl_ = dom.createDom(
           'span', goog.getCssName(this.class_, 'title-close'))),
   goog.dom.append(element, this.titleEl_,
@@ -613,16 +615,16 @@ goog.ui.Dialog.prototype.createDom = function() {
 
   // Make the close button behave correctly with screen readers. Note: this is
   // only being added if the dialog is not decorated. Decorators are expected
-  // to add aira label, role, and tab indexing in their templates.
+  // to add aria label, role, and tab indexing in their templates.
   goog.a11y.aria.setRole(this.titleCloseEl_, goog.a11y.aria.Role.BUTTON);
   goog.dom.setFocusableTabIndex(this.titleCloseEl_, true);
   goog.a11y.aria.setLabel(this.titleCloseEl_,
       goog.ui.Dialog.MSG_GOOG_UI_DIALOG_CLOSE_);
 
-  this.titleId_ = this.titleEl_.id;
+  this.titleTextId_ = this.titleTextEl_.id;
   goog.a11y.aria.setRole(element, this.getPreferredAriaRole());
   goog.a11y.aria.setState(element, goog.a11y.aria.State.LABELLEDBY,
-      this.titleId_ || '');
+      this.titleTextId_ || '');
   // If setContent() was called before createDom(), make sure the inner HTML of
   // the content element is initialized.
   if (this.content_) {
@@ -671,29 +673,28 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
         null, titleTextClass, this.titleEl_)[0];
     this.titleCloseEl_ = goog.dom.getElementsByTagNameAndClass(
         null, titleCloseClass, this.titleEl_)[0];
-    // Give the title an id if it doesn't already have one.
-    if (!this.titleEl_.id) {
-      this.titleEl_.id = this.getId();
-    }
   } else {
     // Create the title bar element and insert it before the content area.
     // This is useful if the element to decorate only includes a content area.
-    this.titleEl_ = this.getDomHelper().createDom('div',
-        {'className': titleClass, 'id': this.getId()});
+    this.titleEl_ = this.getDomHelper().createDom('div', titleClass);
     dialogElement.insertBefore(this.titleEl_, this.contentEl_);
   }
-  this.titleId_ = this.titleEl_.id;
 
   // Decorate or create the title text element.
   if (this.titleTextEl_) {
     this.title_ = goog.dom.getTextContent(this.titleTextEl_);
+    // Give the title text element an id if it doesn't already have one.
+    if (!this.titleTextEl_.id) {
+      this.titleTextEl_.id = this.getId();
+    }
   } else {
-    this.titleTextEl_ = this.getDomHelper().createDom('span', titleTextClass,
-        this.title_);
+    this.titleTextEl_ = goog.dom.createDom(
+        'span', {'className': titleTextClass, 'id': this.getId()});
     this.titleEl_.appendChild(this.titleTextEl_);
   }
+  this.titleTextId_ = this.titleTextEl_.id;
   goog.a11y.aria.setState(dialogElement, goog.a11y.aria.State.LABELLEDBY,
-      this.titleId_ || '');
+      this.titleTextId_ || '');
   // Decorate or create the title close element.
   if (!this.titleCloseEl_) {
     this.titleCloseEl_ = this.getDomHelper().createDom('span', titleCloseClass);
