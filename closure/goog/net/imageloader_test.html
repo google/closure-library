@@ -19,6 +19,7 @@ See the COPYING file for details.
     goog.require('goog.events.EventType');
     goog.require('goog.net.ImageLoader');
     goog.require('goog.object');
+    goog.require('goog.string');
     goog.require('goog.testing.AsyncTestCase');
     goog.require('goog.testing.jsunit');
     goog.require('goog.testing.recordFunction');
@@ -178,8 +179,8 @@ function assertImagesAreCorrect(results) {
  */
 function makeLoaderSynchronous(loader) {
   var originalLoadImage = loader.loadImage_;
-  loader.loadImage_ = function(src, id) {
-    originalLoadImage.call(this, src, id);
+  loader.loadImage_ = function(request, id) {
+    originalLoadImage.call(this, request, id);
 
     var event = new goog.events.Event(goog.events.EventType.LOAD);
     event.currentTarget = this.imageIdToImageMap_[id];
@@ -276,9 +277,9 @@ function testImagesRemovedAfterStart() {
   // Remove 2 images once the first image finishes loading.
   goog.events.listenOnce(loader, goog.events.EventType.LOAD, function(e) {
     loader.removeImage(
-        goog.array.peek(goog.object.getKeys(this.imageIdToUrlMap_)));
+        goog.array.peek(goog.object.getKeys(this.imageIdToRequestMap_)));
     loader.removeImage(
-        goog.array.peek(goog.object.getKeys(this.imageIdToUrlMap_)));
+        goog.array.peek(goog.object.getKeys(this.imageIdToRequestMap_)));
   });
 
   // Keep track of the total # of image loads.
@@ -295,6 +296,34 @@ function testImagesRemovedAfterStart() {
       1, completeRecordFn.getCallCount());
   assertEquals('All images should have been loaded',
       goog.object.getCount(TEST_IMAGES) - 2, loadRecordFn.getCallCount());
+}
+
+/**
+ * Verifies that the correct image attribute is set when using CORS requests.
+ */
+function testSetsCorsAttribute() {
+  // Use synchronous image loading.
+  makeLoaderSynchronous(loader);
+
+  // Verify the crossOrigin attribute of the requested images.
+  goog.events.listen(loader, goog.events.EventType.LOAD, function(e) {
+    var image = e.target;
+    if (image.id == 'cors_request') {
+      assertEquals(
+          'CORS requested image should have a crossOrigin attribute set',
+          'anonymous', image.crossOrigin);
+    } else {
+      assertTrue(
+          'Non-CORS requested images should not have a crossOrigin attribute',
+          goog.string.isEmptySafe(image.crossOrigin));
+    }
+  });
+
+  // Make a new request for one of the images, this time using CORS.
+  var srcs = goog.object.getKeys(TEST_IMAGES);
+  loader.addImage(
+      'cors_request', srcs[0], goog.net.ImageLoader.CorsRequestType.ANONYMOUS);
+  loader.start();
 }
 
 </script>
