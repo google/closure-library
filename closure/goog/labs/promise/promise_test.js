@@ -1352,6 +1352,7 @@ function testUnhandledRejectionDisabled() {
   assertEquals(0, unhandledRejections.getCallCount());
 }
 
+
 function testThenableInterface() {
   var promise = new goog.labs.Promise(function(resolve, reject) {});
   assertTrue(goog.labs.Thenable.isImplementedBy(promise));
@@ -1376,4 +1377,64 @@ function testThenableInterface() {
   } finally {
     COMPILED = false;
   }
+}
+
+
+function testCreateWithResolver_Resolved() {
+  mockClock.install();
+  var timesCalled = 0;
+
+  var resolver = goog.labs.Promise.withResolver();
+
+  resolver.promise.then(function(value) {
+    timesCalled++;
+    assertEquals(sentinel, value);
+  }, fail);
+
+  assertEquals('then() must return before callbacks are invoked.',
+      0, timesCalled);
+
+  mockClock.tick();
+
+  assertEquals('promise is not resolved until resolver is invoked.',
+      0, timesCalled);
+
+  resolver.resolve(sentinel);
+
+  assertEquals('resolution is delayed until the next tick',
+      0, timesCalled);
+
+  mockClock.tick();
+
+  assertEquals('onFulfilled must be called exactly once.', 1, timesCalled);
+}
+
+
+function testCreateWithResolver_Rejected() {
+  mockClock.install();
+  var timesCalled = 0;
+
+  var resolver = goog.labs.Promise.withResolver();
+
+  resolver.promise.then(fail, function(reason) {
+    timesCalled++;
+    assertEquals(sentinel, reason);
+  });
+
+  assertEquals('then() must return before callbacks are invoked.',
+      0, timesCalled);
+
+  mockClock.tick();
+
+  assertEquals('promise is not resolved until resolver is invoked.',
+      0, timesCalled);
+
+  resolver.reject(sentinel);
+
+  assertEquals('resolution is delayed until the next tick',
+      0, timesCalled);
+
+  mockClock.tick();
+
+  assertEquals('onFulfilled must be called exactly once.', 1, timesCalled);
 }

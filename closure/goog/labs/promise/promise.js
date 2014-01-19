@@ -18,6 +18,7 @@ goog.require('goog.asserts');
 goog.require('goog.async.run');
 goog.require('goog.async.throwException');
 goog.require('goog.debug.Error');
+goog.require('goog.labs.Resolver');
 goog.require('goog.labs.Thenable');
 
 
@@ -328,6 +329,22 @@ goog.labs.Promise.firstFulfilled = function(promises) {
       promise.then(onFulfill, goog.partial(onReject, i));
     }
   });
+};
+
+
+/**
+ * @return {!goog.labs.Resolver.<TYPE>} Resolver wrapping the promise and its
+ *     resolve / reject functions. Resolving or rejecting the resolver
+ *     resolves or rejects the promise.
+ * @template TYPE
+ */
+goog.labs.Promise.withResolver = function() {
+  var resolve, reject;
+  var promise = new goog.labs.Promise(function(rs, rj) {
+    resolve = rs;
+    reject = rj;
+  });
+  return new goog.labs.Promise.Resolver_(promise, resolve, reject);
 };
 
 
@@ -937,3 +954,28 @@ goog.inherits(goog.labs.Promise.CancellationError, goog.debug.Error);
 
 /** @override */
 goog.labs.Promise.CancellationError.prototype.name = 'cancel';
+
+
+
+/**
+ * Internal implementation of the resolver interface.
+ *
+ * @param {!goog.labs.Promise.<TYPE>} promise
+ * @param {function((TYPE|goog.labs.Promise.<TYPE>|Thenable))} resolve
+ * @param {function(*): void} reject
+ * @implements {goog.labs.Resolver.<TYPE>}
+ * @final @struct
+ * @constructor
+ * @private
+ * @template TYPE
+ */
+goog.labs.Promise.Resolver_ = function(promise, resolve, reject) {
+  /** @const */
+  this.promise = promise;
+
+  /** @const */
+  this.resolve = resolve;
+
+  /** @const */
+  this.reject = reject;
+};
