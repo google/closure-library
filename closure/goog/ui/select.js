@@ -325,8 +325,7 @@ goog.ui.Select.prototype.setValue = function(value) {
 
 
 /**
- * Gets the value associated with the currently selected option. If no value was
- * selected, returns undefined.
+ * Gets the value associated with the currently selected option (null if none).
  *
  * Note that unlike {@link goog.ui.Button#getValue} which this method overrides,
  * the "value" of a Select instance is the value of its selected menu item, not
@@ -342,7 +341,7 @@ goog.ui.Select.prototype.setValue = function(value) {
  */
 goog.ui.Select.prototype.getValue = function() {
   var selectedItem = this.getSelectedItem();
-  return selectedItem ? selectedItem.getValue() : undefined;
+  return selectedItem ? selectedItem.getValue() : null;
 };
 
 
