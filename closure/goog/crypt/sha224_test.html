@@ -1,57 +1,22 @@
 <!DOCTYPE html>
 <html>
-<!--
+ <!--
 Copyright 2012 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.crypt.sha224</title>
-<script src="../base.js"></script>
-<script>
-  goog.require('goog.crypt');
-  goog.require('goog.crypt.hashTester');
-  goog.require('goog.crypt.Sha224');
-  goog.require('goog.testing.jsunit');
-</script>
-</head>
-<body>
-<script>
-
-function testBasicOperations() {
-  var sha224 = new goog.crypt.Sha224();
-  goog.crypt.hashTester.runBasicTests(sha224);
-}
-
-function testHashing() {
-  // Test vectors from:
-  // csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf
-
-  var sha224 = new goog.crypt.Sha224();
-
-  // One block message.
-  sha224.update(goog.crypt.stringToByteArray('abc'));
-  assertElementsEquals(
-      goog.crypt.hexToByteArray(
-          '23097d223405d8228642a477bda2' +
-          '55b32aadbce4bda0b3f7e36c9da7'),
-      sha224.digest());
-
-  // Multi-block message.
-  sha224.reset();
-  sha224.update(
-      goog.crypt.stringToByteArray(
-          'abcdbcdecdefdefgefghfghighij' +
-          'hijkijkljklmklmnlmnomnopnopq'));
-  assertElementsEquals(
-      goog.crypt.hexToByteArray(
-          '75388b16512776cc5dba5da1fd89' +
-          '0150b0c6455cb4f58b1952522525'),
-      sha224.digest());
-}
-
-</script>
-</body>
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.crypt.sha224
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+    goog.require('goog.crypt.Sha224Test');
+  </script>
+ </head>
+ <body>
+ </body>
 </html>
