@@ -26,6 +26,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
+goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Dialog');
 goog.require('goog.userAgent');
@@ -66,8 +67,10 @@ goog.ui.Prompt = function(promptTitle, promptText, callback, opt_defaultValue,
   this.inputElementId_ = this.makeId('ie');
 
   this.setTitle(promptTitle);
-  this.setContent('<label for="' + this.inputElementId_ + '">' + promptText +
-      '</label><br><br>');
+  if (!goog.string.isEmpty(promptText)) {
+    this.setContent('<label for="' + this.inputElementId_ + '">' + promptText +
+        '</label><br><br>');
+  }
   this.callback_ = callback;
   this.defaultValue_ = goog.isDef(opt_defaultValue) ? opt_defaultValue : '';
 
