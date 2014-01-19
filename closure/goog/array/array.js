@@ -751,11 +751,13 @@ goog.array.concat = function(var_args) {
 
 /**
  * Converts an object to an array.
- * @param {goog.array.ArrayLike} object  The object to convert to an array.
- * @return {!Array} The object converted into an array. If object has a
+ * @param {Array.<T>|goog.array.ArrayLike} object  The object to convert to an
+ *     array.
+ * @return {!Array.<T>} The object converted into an array. If object has a
  *     length property, every property indexed with a non-negative number
  *     less than length will be included in the result. If object does not
  *     have a length property, an empty array will be returned.
+ * @template T
  */
 goog.array.toArray = function(object) {
   var length = object.length;
@@ -776,8 +778,10 @@ goog.array.toArray = function(object) {
 
 /**
  * Does a shallow copy of an array.
- * @param {goog.array.ArrayLike} arr  Array or array-like object to clone.
- * @return {!Array} Clone of the input array.
+ * @param {Array.<T>|goog.array.ArrayLike} arr  Array or array-like object to
+ *     clone.
+ * @return {!Array.<T>} Clone of the input array.
+ * @template T
  */
 goog.array.clone = goog.array.toArray;
 
