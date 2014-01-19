@@ -47,19 +47,23 @@ function testError() {
     xxxxx();
   } catch (e) {
     message = e.message;
-    stack = e.stack.split('\n');
+    if (e.stack) {
+      stack = e.stack.split('\n');
+    }
   }
 
   assertEquals('Message property should be set', 'testing', message);
 
   expectedFailures.expectFailureFor(
-      goog.userAgent.IE ||
+      (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) ||
       goog.userAgent.product.SAFARI || (
           goog.userAgent.product.CHROME &&
           !goog.userAgent.isVersionOrHigher(532)),
       'error.stack is not widely supported');
 
   try {
+    assertNotNull(stack);
+
     if (goog.userAgent.product.FIREFOX &&
         goog.userAgent.isVersionOrHigher('2.0')) {
       // Firefox 4 and greater does not have the first line that says
@@ -67,27 +71,22 @@ function testError() {
       stack.splice(0, 0, 'Error');
     }
 
-    if (Error.captureStackTrace) {
-      // captureStackTrace removes extra junk.
-      assertContains(
-          '1st line of stack should have "Error"', 'Error', stack[0]);
-      assertContains(
-          '2nd line of stack should have "zzzzz"', 'zzzzz', stack[1]);
-      assertContains(
-          '3rd line of stack should have "yyyyy"', 'yyyyy', stack[2]);
-      assertContains(
-          '4th line of stack should have "xxxxx"', 'xxxxx', stack[3]);
-    } else {
-      assertContains(
-          '1st line of stack should have "Error"', 'Error', stack[0]);
-      // 2nd line is slightly different in firefox/chrome
-      assertContains(
-          '3rd line of stack should have "zzzzz"', 'zzzzz', stack[2]);
-      assertContains(
-          '4th line of stack should have "yyyyy"', 'yyyyy', stack[3]);
-      assertContains(
-          '5th line of stack should have "xxxxx"', 'xxxxx', stack[4]);
+    // If the stack trace came from a synthetic Error object created
+    // inside the goog.debug.Error constructor, it will have an extra frame
+    // at stack[1]. If it came from captureStackTrace or was attached
+    // by IE when the error was caught, it will not.
+    if (!Error.captureStackTrace && !goog.userAgent.IE) {
+      stack.splice(1, 1);  // Remove stack[1].
     }
+
+    assertContains(
+        '1st line of stack should have "Error"', 'Error', stack[0]);
+    assertContains(
+        '2nd line of stack should have "zzzzz"', 'zzzzz', stack[1]);
+    assertContains(
+        '3rd line of stack should have "yyyyy"', 'yyyyy', stack[2]);
+    assertContains(
+        '4th line of stack should have "xxxxx"', 'xxxxx', stack[3]);
   } catch (e) {
     expectedFailures.handleException(e);
   }
