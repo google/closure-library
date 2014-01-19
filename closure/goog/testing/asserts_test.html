@@ -688,6 +688,22 @@ See the COPYING file for details.
         'Expected \'[object Object],2,3\' not to contain \'[object Object]\'');
   }
 
+  function testAssertRegExp() {
+    var a = 'I like turtles';
+    assertRegExp(/turtles$/, a);
+    assertRegExp('turtles$', a);
+    assertRegExp('Expected subject to be about turtles', /turtles$/, a);
+    assertRegExp('Expected subject to be about turtles', 'turtles$', a);
+
+    var b = 'Hello';
+    assertThrowsJsUnitException(
+        function() { assertRegExp(/turtles$/, b); },
+        'Expected \'Hello\' to match RegExp /turtles$/');
+    assertThrowsJsUnitException(
+        function() { assertRegExp('turtles$', b); },
+        'Expected \'Hello\' to match RegExp /turtles$/');
+  }
+
   function testAssertThrows() {
     var failed = false;
     try {
