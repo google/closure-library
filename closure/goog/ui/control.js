@@ -1207,7 +1207,7 @@ goog.ui.Control.isMouseEventWithinElement_ = function(e, elem) {
  * Handles mousedown events.  If the component is enabled, highlights and
  * activates it.  If the component isn't configured for keyboard access,
  * prevents it from receiving keyboard focus.  Considered protected; should
- * only be used within this package andy by subclasses.
+ * only be used within this package and by subclasses.
  * @param {goog.events.Event} e Mouse event to handle.
  */
 goog.ui.Control.prototype.handleMouseDown = function(e) {
