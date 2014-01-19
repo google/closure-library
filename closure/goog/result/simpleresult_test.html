@@ -12,6 +12,8 @@ See the COPYING file for details.
 <script>
 
 goog.require('goog.Timer');
+goog.require('goog.labs.Promise');
+goog.require('goog.labs.Thenable');
 goog.require('goog.result');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.recordFunction');
@@ -264,6 +266,108 @@ function testSetValueAfterCancel() {
   result.setError(3);
   assertTrue(result.isCanceled());
   assertTrue(result.getError() instanceof goog.result.Result.CancelError);
+}
+
+function testFromResolvedPromise() {
+  var promise = goog.labs.Promise.resolve('resolved');
+  result = goog.result.SimpleResult.fromPromise(promise);
+  assertEquals(goog.result.Result.State.PENDING, result.getState());
+  mockClock.tick();
+  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
+  assertEquals('resolved', result.getValue());
+  assertEquals(undefined, result.getError());
+}
+
+function testFromRejectedPromise() {
+  var promise = goog.labs.Promise.reject('rejected');
+  result = goog.result.SimpleResult.fromPromise(promise);
+  assertEquals(goog.result.Result.State.PENDING, result.getState());
+  mockClock.tick();
+  assertEquals(goog.result.Result.State.ERROR, result.getState());
+  assertEquals(undefined, result.getValue());
+  assertEquals('rejected', result.getError());
+}
+
+function testThen() {
+  var value1, value2;
+  result.then(function(val1) {
+    return value1 = val1;
+  }).then(function(val2) {
+    value2 = val2;
+  });
+  result.setValue('done');
+  assertUndefined(value1);
+  assertUndefined(value2);
+  mockClock.tick();
+  assertEquals('done', value1);
+  assertEquals('done', value2);
+}
+
+function testThen_reject() {
+  var value, reason;
+  result.then(
+    function(v) { value = v; },
+    function(r) { reason = r; });
+  result.setError(new Error('oops'));
+  assertUndefined(value);
+  mockClock.tick();
+  assertUndefined(value);
+  assertEquals('oops', reason.message);
+}
+
+function testPromiseAll() {
+  var promise = goog.labs.Promise.resolve('promise');
+  goog.labs.Promise.all([result, promise]).then(function(values) {
+    assertEquals(2, values.length);
+    assertEquals('result', values[0]);
+    assertEquals('promise', values[1]);
+  });
+  result.setValue('result');
+  mockClock.tick();
+}
+
+function testResolvingPromiseBlocksResult() {
+  var value;
+  goog.labs.Promise.resolve('promise').then(function(value) {
+    result.setValue(value);
+  });
+  result.wait(function(r) {
+    value = r.getValue();
+  });
+  assertUndefined(value);
+  mockClock.tick();
+  assertEquals('promise', value);
+}
+
+function testRejectingPromiseBlocksResult() {
+  var err;
+  goog.labs.Promise.reject(new Error('oops')).then(
+    undefined /* opt_onResolved */,
+    function(reason) {
+      result.setError(reason);
+    });
+  result.wait(function(r) {
+    err = r.getError();
+  });
+  assertUndefined(err);
+  mockClock.tick();
+  assertEquals('oops', err.message);
+}
+
+function testPromiseFromCanceledResult() {
+  var reason;
+  result.cancel();
+  result.then(
+    undefined /* opt_onResolved */,
+    function(r) {
+      reason = r;
+    });
+  mockClock.tick();
+  assertTrue(reason instanceof goog.labs.Promise.CancellationError);
+}
+
+function testThenableInterface() {
+  assertTrue(goog.labs.Thenable.isImplementedBy(result));
 }
 
 </script>

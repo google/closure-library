@@ -16,11 +16,12 @@
  * @fileoverview Defines an interface that represents a Result.
  *
  * NOTE: goog.result is soft deprecated - we expect to replace this and
- * goog.async.Deferred with a wrapper around W3C Promises:
- * http://dom.spec.whatwg.org/#promises.
+ * {@link goog.async.Deferred} with {@link goog.labs.Promise}.
  */
 
 goog.provide('goog.result.Result');
+
+goog.require('goog.labs.Thenable');
 
 
 
@@ -30,6 +31,7 @@ goog.provide('goog.result.Result');
  * to a 'Promise' or a 'Future' in other languages and frameworks.
  *
  * @interface
+ * @extends {goog.labs.Thenable}
  */
 goog.result.Result = function() {};
 
