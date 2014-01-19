@@ -58,6 +58,30 @@ function testUtf8ByteArrayToString() {
       goog.crypt.utf8ByteArrayToString(UTF8_RANGES_BYTE_ARRAY));
 }
 
+
+/**
+ * Same as testUtf8ByteArrayToString but with Uint8Array instead of
+ * Array.<number>.
+ */
+function testUint8ArrayToString() {
+  if (!goog.global.Uint8Array) {
+    // Uint8Array not supported.
+    return;
+  }
+
+  var arr = new Uint8Array(
+      [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100]);
+  assertEquals('ASCII', 'Hello, world', goog.crypt.utf8ByteArrayToString(arr));
+
+  arr = new Uint8Array([83, 99, 104, 195, 182, 110]);
+  assertEquals('Latin', 'Sch\u00f6n', goog.crypt.utf8ByteArrayToString(arr));
+
+  arr = new Uint8Array(UTF8_RANGES_BYTE_ARRAY);
+  assertEquals('limits of the first 3 UTF-8 character ranges',
+      UTF8_RANGES_STRING,
+      goog.crypt.utf8ByteArrayToString(arr));
+}
+
 function testByteArrayToString() {
   assertEquals('', goog.crypt.byteArrayToString([]));
   assertEquals('abc', goog.crypt.byteArrayToString([97, 98, 99]));
@@ -87,8 +111,42 @@ function testByteArrayToHex() {
       goog.crypt.byteArrayToHex([222, 173, 190, 239]));
 }
 
+
+/** Same as testByteArrayToHex but with Uint8Array instead of Array.<number>. */
+function testUint8ArrayToHex() {
+  if (!goog.isDef(goog.global.Uint8Array)) {
+    // Uint8Array not supported.
+    return;
+  }
+
+  assertEquals(
+      // Java magic number
+      'cafedead',
+      goog.crypt.byteArrayToHex(new Uint8Array([202, 254, 222, 173])));
+
+  assertEquals(
+      // IBM magic number
+      'deadbeef',
+      goog.crypt.byteArrayToHex(new Uint8Array([222, 173, 190, 239])));
+}
+
 function testXorByteArray() {
   assertElementsEquals(
       [20, 83, 96, 66],
       goog.crypt.xorByteArray([202, 254, 222, 173], [222, 173, 190, 239]));
+}
+
+
+/** Same as testXorByteArray but with Uint8Array instead of Array.<number>. */
+function testXorUint8Array() {
+  if (!goog.isDef(goog.global.Uint8Array)) {
+    // Uint8Array not supported.
+    return;
+  }
+
+  assertElementsEquals(
+      [20, 83, 96, 66],
+      goog.crypt.xorByteArray(
+          new Uint8Array([202, 254, 222, 173]),
+          new Uint8Array([222, 173, 190, 239])));
 }

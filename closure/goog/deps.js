@@ -65,7 +65,7 @@ goog.addDependency('crypt/blobhasher_test.js', ['goog.crypt.BlobHasherTest'], ['
 goog.addDependency('crypt/blockcipher.js', ['goog.crypt.BlockCipher'], []);
 goog.addDependency('crypt/cbc.js', ['goog.crypt.Cbc'], ['goog.array', 'goog.asserts', 'goog.crypt']);
 goog.addDependency('crypt/cbc_test.js', ['goog.crypt.CbcTest'], ['goog.crypt', 'goog.crypt.Aes', 'goog.crypt.Cbc', 'goog.testing.jsunit']);
-goog.addDependency('crypt/crypt.js', ['goog.crypt'], ['goog.array']);
+goog.addDependency('crypt/crypt.js', ['goog.crypt'], ['goog.array', 'goog.asserts']);
 goog.addDependency('crypt/crypt_test.js', ['goog.cryptTest'], ['goog.crypt', 'goog.testing.jsunit']);
 goog.addDependency('crypt/hash.js', ['goog.crypt.Hash'], []);
 goog.addDependency('crypt/hash32.js', ['goog.crypt.hash32'], ['goog.crypt']);

@@ -19,6 +19,7 @@
 goog.provide('goog.crypt');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 
 
 /**
@@ -56,7 +57,8 @@ goog.crypt.byteArrayToString = function(array) {
 /**
  * Turns an array of numbers into the hex string given by the concatenation of
  * the hex values to which the numbers correspond.
- * @param {Array} array Array of numbers representing characters.
+ * @param {Uint8Array|Int8Array|Array.<number>} array Array of numbers
+ *     representing characters.
  * @return {string} Hex string.
  */
 goog.crypt.byteArrayToHex = function(array) {
@@ -112,7 +114,7 @@ goog.crypt.stringToUtf8ByteArray = function(str) {
 
 /**
  * Converts a UTF-8 byte array to JavaScript's 16-bit Unicode.
- * @param {Array.<number>} bytes UTF-8 byte array.
+ * @param {Uint8Array|Int8Array|Array.<number>} bytes UTF-8 byte array.
  * @return {string} 16-bit Unicode string.
  */
 goog.crypt.utf8ByteArrayToString = function(bytes) {
@@ -138,8 +140,8 @@ goog.crypt.utf8ByteArrayToString = function(bytes) {
 
 /**
  * XOR two byte arrays.
- * @param {!Array.<number>} bytes1 Byte array 1.
- * @param {!Array.<number>} bytes2 Byte array 2.
+ * @param {!ArrayBufferView|!Array.<number>} bytes1 Byte array 1.
+ * @param {!ArrayBufferView|!Array.<number>} bytes2 Byte array 2.
  * @return {!Array.<number>} Resulting XOR of the two byte arrays.
  */
 goog.crypt.xorByteArray = function(bytes1, bytes2) {
