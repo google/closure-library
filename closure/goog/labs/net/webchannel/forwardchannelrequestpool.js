@@ -16,7 +16,7 @@
  * @fileoverview A pool of forward channel requests to enable real-time
  * messaging from the client to server.
  *
- * @visibility {//visibility:private}
+ * @visibility {:internal}
  */
 
 

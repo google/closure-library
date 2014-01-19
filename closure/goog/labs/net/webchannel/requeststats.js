@@ -16,7 +16,7 @@
  * @fileoverview Static utilities for collecting stats associated with
  * ChannelRequest.
  *
- * @visibility {//visibility:private}
+ * @visibility {:internal}
  */
 
 

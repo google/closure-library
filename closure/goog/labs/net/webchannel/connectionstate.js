@@ -19,7 +19,7 @@
  * e.g. the initial handshake state, in order to save one RTT when a channel
  * has to be reestablished. TODO(user).
  *
- * @visibility {//visibility:private}
+ * @visibility {:internal}
  */
 
 

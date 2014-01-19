@@ -16,7 +16,7 @@
  * @fileoverview Utility functions for managing networking, such as
  * testing network connectivity.
  *
- * @visibility {//visibility:private}
+ * @visibility {:internal}
  */
 
 

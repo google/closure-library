@@ -18,7 +18,7 @@
  * binary encoding. Such support will require an interface class, which
  * will be added later.
  *
- * @visibility {//visibility:private}
+ * @visibility {:internal}
  */
 
 

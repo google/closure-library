@@ -15,7 +15,7 @@
 /**
  * @fileoverview A shared interface for WebChannelBase and BaseTestChannel.
  *
- * @visibility {//visibility:private}
+ * @visibility {:internal}
  */
 
 

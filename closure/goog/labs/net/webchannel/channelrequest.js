@@ -20,7 +20,7 @@
  * XMLHTTP, Trident ActiveX (ie only), and Image request. It provides timeout
  * detection.
  *
- * @visibility {//visibility:private}
+ * @visibility {:internal}
  */
 
 
