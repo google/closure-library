@@ -268,9 +268,9 @@ goog.ui.HsvaPalette.prototype.handleInput = function(e) {
  * @private
  */
 goog.ui.HsvaPalette.parseUserInput_ = function(value) {
-  if (/^#[0-9a-f]{8}$/i.test(value)) {
+  if (/^#?[0-9a-f]{8}$/i.test(value)) {
     return goog.ui.HsvaPalette.parseColorRgbaHex_(value);
-  } else if (/^#[0-9a-f]{6}$/i.test(value)) {
+  } else if (/^#?[0-9a-f]{6}$/i.test(value)) {
     return [value, 1];
   }
   return null;

@@ -81,6 +81,9 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
       var color = '#abcdef';
       samplePalette.setColor(color);
       assertEquals(color, goog.color.parse(samplePalette.getColor()).hex);
+      color = 'abcdef';
+      samplePalette.setColor(color);
+      assertEquals('#' + color, goog.color.parse(samplePalette.getColor()).hex);
     }
 
     function testChangeEvent() {

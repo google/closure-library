@@ -499,7 +499,7 @@ goog.ui.HsvPalette.prototype.handleMouseUp = function(e) {
  * @protected
  */
 goog.ui.HsvPalette.prototype.handleInput = function(e) {
-  if (/^#[0-9a-f]{6}$/i.test(this.inputElement.value)) {
+  if (/^#?[0-9a-f]{6}$/i.test(this.inputElement.value)) {
     this.setColor(this.inputElement.value);
   }
 };
