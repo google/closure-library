@@ -32,7 +32,6 @@ goog.provide('goog.net.XhrManager');
 goog.provide('goog.net.XhrManager.Event');
 goog.provide('goog.net.XhrManager.Request');
 
-goog.require('goog.Disposable');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
@@ -548,13 +547,10 @@ goog.inherits(goog.net.XhrManager.Event, goog.events.Event);
  *     this request; defaults to goog.net.XhrIo.ResponseType.DEFAULT.
  *
  * @constructor
- * @extends {goog.Disposable}
  * @final
  */
 goog.net.XhrManager.Request = function(url, xhrEventCallback, opt_method,
     opt_content, opt_headers, opt_callback, opt_maxRetries, opt_responseType) {
-  goog.Disposable.call(this);
-
   /**
    * Uri to make the request too.
    * @type {string}
@@ -613,7 +609,7 @@ goog.net.XhrManager.Request = function(url, xhrEventCallback, opt_method,
 
   /**
    * Callback attached to the events of the XhrIo object.
-   * @type {Function|undefined}
+   * @type {Function}
    * @private
    */
   this.xhrEventCallback_ = xhrEventCallback;
@@ -639,7 +635,6 @@ goog.net.XhrManager.Request = function(url, xhrEventCallback, opt_method,
   this.xhrIo = null;
 
 };
-goog.inherits(goog.net.XhrManager.Request, goog.Disposable);
 
 
 /**
@@ -753,7 +748,7 @@ goog.net.XhrManager.Request.prototype.getAborted = function() {
 
 /**
  * Gets the callback attached to the events of the XhrIo object.
- * @return {Function|undefined} The callback attached to the events of the
+ * @return {Function} The callback attached to the events of the
  *     XhrIo object.
  */
 goog.net.XhrManager.Request.prototype.getXhrEventCallback = function() {
@@ -778,12 +773,4 @@ goog.net.XhrManager.Request.prototype.getCompleteCallback = function() {
  */
 goog.net.XhrManager.Request.prototype.getResponseType = function() {
   return this.responseType_;
-};
-
-
-/** @override */
-goog.net.XhrManager.Request.prototype.disposeInternal = function() {
-  goog.net.XhrManager.Request.superClass_.disposeInternal.call(this);
-  delete this.xhrEventCallback_;
-  delete this.completeCallback_;
 };
