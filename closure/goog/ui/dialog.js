@@ -891,6 +891,17 @@ goog.ui.Dialog.prototype.setDraggerLimits_ = function(e) {
  * @private
  */
 goog.ui.Dialog.prototype.onTitleCloseClick_ = function(e) {
+  this.handleTitleClose_();
+};
+
+
+/**
+ * Performs the action of closing the dialog in response to the title close
+ * button being interacted with. General purpose method to be called by click
+ * and button event handlers.
+ * @private
+ */
+goog.ui.Dialog.prototype.handleTitleClose_ = function() {
   if (!this.hasTitleCloseButton_) {
     return;
   }
@@ -1086,6 +1097,9 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
       // If the target is a button and it's enabled, we can fire that button's
       // handler.
       key = target.name;
+    } else if (target == this.titleCloseEl_) {
+      // if the title 'close' button is in focus, close the dialog
+      this.handleTitleClose_();
     } else if (buttonSet) {
       // Try to fire the default button's handler (if one exists), but only if
       // the button is enabled.
@@ -1106,6 +1120,10 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
       close = this.dispatchEvent(
           new goog.ui.Dialog.Event(key, String(buttonSet.get(key))));
     }
+  } else if (target == this.titleCloseEl_ &&
+      e.keyCode == goog.events.KeyCodes.SPACE) {
+    // if the title 'close' button is in focus on 'SPACE,' close the dialog
+    this.handleTitleClose_();
   }
 
   if (close || hasHandler) {
