@@ -68,7 +68,8 @@ goog.testing.LooseExpectationCollection.prototype.getExpectations = function() {
  * result, it won't throw exceptions until verify() is called. The only
  * exception is that if a method is called that has no expectations, then an
  * exception will be thrown.
- * @param {Object} objectToMock The object to mock.
+ * @param {Object|Function} objectToMock The object that should be mocked, or
+ *    the constructor of an object to mock.
  * @param {boolean=} opt_ignoreUnexpectedCalls Whether to ignore unexpected
  *     calls.
  * @param {boolean=} opt_mockStaticMethods An optional argument denoting that

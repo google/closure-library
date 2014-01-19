@@ -32,7 +32,6 @@ goog.provide('goog.testing.MockControl');
 goog.require('goog.array');
 goog.require('goog.testing');
 goog.require('goog.testing.LooseMock');
-goog.require('goog.testing.MockInterface');
 goog.require('goog.testing.StrictMock');
 
 
@@ -112,7 +111,8 @@ goog.testing.MockControl.prototype.$tearDown = function() {
 /**
  * Creates a controlled StrictMock.  Passes its arguments through to the
  * StrictMock constructor.
- * @param {Object} objectToMock The object to mock.
+ * @param {Object|Function} objectToMock The object that should be mocked, or
+ *    the constructor of an object to mock.
  * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
  *     a mock should be constructed from the static functions of a class.
  * @param {boolean=} opt_createProxy An optional argument denoting that
@@ -131,7 +131,8 @@ goog.testing.MockControl.prototype.createStrictMock = function(
 /**
  * Creates a controlled LooseMock.  Passes its arguments through to the
  * LooseMock constructor.
- * @param {Object} objectToMock The object to mock.
+ * @param {Object|Function} objectToMock The object that should be mocked, or
+ *    the constructor of an object to mock.
  * @param {boolean=} opt_ignoreUnexpectedCalls Whether to ignore unexpected
  *     calls.
  * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
