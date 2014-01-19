@@ -794,8 +794,10 @@ goog.array.clone = goog.array.toArray;
  * goog.array.extend(a, 2);
  * a; // [0, 1, 2]
  *
- * @param {Array} arr1  The array to modify.
- * @param {...*} var_args The elements or arrays of elements to add to arr1.
+ * @param {Array.<VALUE>} arr1  The array to modify.
+ * @param {...(Array.<VALUE>|VALUE)} var_args The elements or arrays of elements
+ *     to add to arr1.
+ * @template VALUE
  */
 goog.array.extend = function(arr1, var_args) {
   for (var i = 1; i < arguments.length; i++) {
