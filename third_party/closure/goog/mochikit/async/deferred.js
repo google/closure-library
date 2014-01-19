@@ -845,29 +845,19 @@ goog.async.Deferred.CanceledError.prototype.name = 'CanceledError';
 /**
  * Wrapper around errors that are scheduled to be thrown by failing deferreds
  * after a timeout.
- * @param {number} id Id of this error.
- * @param {*} error Error from a failing deferred.
  *
+ * @param {*} error Error from a failing deferred.
  * @constructor
  * @final
  * @private
  * @struct
  */
-goog.async.Deferred.Error_ = function(id, error) {
-  /**
-   * @const
-   * @private
-   */
-  this.id_ = id;
+goog.async.Deferred.Error_ = function(error) {
+  /** @private @const */
+  this.id_ = goog.global.setTimeout(goog.bind(this.throwError, this), 0);
 
-  /**
-   * @const
-   * @private
-   */
+  /** @private @const */
   this.error_ = error;
-
-  /** @private {number} */
-  this.timeoutId_ = goog.global.setTimeout(goog.bind(this.throwError, this), 0);
 };
 
 
@@ -887,22 +877,15 @@ goog.async.Deferred.Error_.prototype.throwError = function() {
  * Resets the error throw timer.
  */
 goog.async.Deferred.Error_.prototype.resetTimer = function() {
-  goog.global.clearTimeout(this.timeoutId_);
+  goog.global.clearTimeout(this.id_);
 };
 
 
 /**
- * @type {!Object.<string|goog.async.Deferred.Error_>}
- * @private
+ * Map of unhandled errors scheduled to be rethrown in a future timestep.
+ * @private {!Object.<number|string, goog.async.Deferred.Error_>}
  */
 goog.async.Deferred.errorMap_ = {};
-
-
-/**
- * @type {number}
- * @private
- */
-goog.async.Deferred.errorCounter_ = 0;
 
 
 /**
@@ -912,9 +895,9 @@ goog.async.Deferred.errorCounter_ = 0;
  * @private
  */
 goog.async.Deferred.scheduleError_ = function(error) {
-  var id = ++goog.async.Deferred.errorCounter_;
-  goog.async.Deferred.errorMap_[id] = new goog.async.Deferred.Error_(id, error);
-  return id;
+  var deferredError = new goog.async.Deferred.Error_(error);
+  goog.async.Deferred.errorMap_[deferredError.id_] = deferredError;
+  return deferredError.id_;
 };
 
 
