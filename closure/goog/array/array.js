@@ -1194,16 +1194,19 @@ goog.array.compare = function(arr1, arr2, opt_equalsFn) {
 
 /**
  * 3-way array compare function.
- * @param {!goog.array.ArrayLike} arr1 The first array to compare.
- * @param {!goog.array.ArrayLike} arr2 The second array to compare.
- * @param {?function(?, ?): number=} opt_compareFn Optional comparison function
- *     by which the array is to be ordered. Should take 2 arguments to compare,
- *     and return a negative number, zero, or a positive number depending on
- *     whether the first argument is less than, equal to, or greater than the
- *     second.
+ * @param {!Array.<VALUE>|!goog.array.ArrayLike} arr1 The first array to
+ *     compare.
+ * @param {!Array.<VALUE>|!goog.array.ArrayLike} arr2 The second array to
+ *     compare.
+ * @param {function(VALUE, VALUE): number=} opt_compareFn Optional comparison
+ *     function by which the array is to be ordered. Should take 2 arguments to
+ *     compare, and return a negative number, zero, or a positive number
+ *     depending on whether the first argument is less than, equal to, or
+ *     greater than the second.
  * @return {number} Negative number, zero, or a positive number depending on
  *     whether the first argument is less than, equal to, or greater than the
  *     second.
+ * @template VALUE
  */
 goog.array.compare3 = function(arr1, arr2, opt_compareFn) {
   var compare = opt_compareFn || goog.array.defaultCompare;
@@ -1221,10 +1224,11 @@ goog.array.compare3 = function(arr1, arr2, opt_compareFn) {
 /**
  * Compares its two arguments for order, using the built in < and >
  * operators.
- * @param {*} a The first object to be compared.
- * @param {*} b The second object to be compared.
+ * @param {VALUE} a The first object to be compared.
+ * @param {VALUE} b The second object to be compared.
  * @return {number} A negative number, zero, or a positive number as the first
  *     argument is less than, equal to, or greater than the second.
+ * @template VALUE
  */
 goog.array.defaultCompare = function(a, b) {
   return a > b ? 1 : a < b ? -1 : 0;
