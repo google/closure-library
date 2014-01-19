@@ -93,7 +93,7 @@ goog.net.XhrManager = function(
 
   /**
    * Map of ID's to requests.
-   * @type {goog.structs.Map}
+   * @type {goog.structs.Map.<string, !goog.net.XhrManager.Request>}
    * @private
    */
   this.requests_ = new goog.structs.Map();
