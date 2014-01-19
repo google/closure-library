@@ -210,6 +210,24 @@ function testMouseClickBeforeHilite() {
   assertEquals('the.mice@magrathea.com', select.selectedRow);
 }
 
+function testMouseClickOnFirstRowBeforeHilite() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var select = new MockSelect();
+  var ac = new goog.ui.ac.AutoComplete(ds, rend, select);
+  ac.setAutoHilite(false);
+  ac.setMaxMatches(4);
+  ac.setToken('the');
+
+  // Click the first row before highlighting it, to simulate mouse getting ahead
+  // of focus.
+  var targetRowDiv = rend.getRowDiv(0);
+  goog.testing.events.fireClickEvent(targetRowDiv);
+
+  assertEquals('"Zaphod Beeblebrox" <theprez@universe.gov>', select.selectedRow);
+}
+
+
 /*
  * Send AutoComplete a SELECT event with empty string for the row. We can't
  * simulate with a simple mouse click, so we dispatch the event directly.

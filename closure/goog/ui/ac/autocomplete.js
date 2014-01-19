@@ -386,17 +386,21 @@ goog.ui.ac.AutoComplete.prototype.handleEvent = function(e) {
         break;
 
       case goog.ui.ac.AutoComplete.EventType.SELECT:
-        // e.row can be either a valid row number or empty.
-        var rowId = /** @type {number} */ (e.row);
-        var index = this.getIndexOfId(rowId);
-        var row = this.rows_[index];
+        var rowDisabled = false;
 
-        // Make sure the row selected is not a disabled row.
-        var rowDisabled = !!row && this.matcher_.isRowDisabled &&
-            this.matcher_.isRowDisabled(row);
-        if (rowId && row && !rowDisabled && this.hiliteId_ != rowId) {
-          // Event target row not currently highlighted - fix the mismatch.
-          this.hiliteId(rowId);
+        // e.row can be either a valid row id or empty.
+        if (goog.isNumber(e.row)) {
+          var rowId = e.row;
+          var index = this.getIndexOfId(rowId);
+          var row = this.rows_[index];
+
+          // Make sure the row selected is not a disabled row.
+          rowDisabled = !!row && this.matcher_.isRowDisabled &&
+              this.matcher_.isRowDisabled(row);
+          if (row && !rowDisabled && this.hiliteId_ != rowId) {
+            // Event target row not currently highlighted - fix the mismatch.
+            this.hiliteId(rowId);
+          }
         }
         if (!rowDisabled) {
           // Note that rowDisabled can be false even if e.row does not
