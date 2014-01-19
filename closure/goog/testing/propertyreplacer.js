@@ -19,6 +19,8 @@
 
 goog.provide('goog.testing.PropertyReplacer');
 
+/** @suppress {extraRequire} Needed for some tests to compile. */
+goog.require('goog.testing.ObjectPropertyString');
 goog.require('goog.userAgent');
 
 

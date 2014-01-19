@@ -707,7 +707,7 @@ goog.addDependency('testing/net/xhriopool.js', ['goog.testing.net.XhrIoPool'], [
 goog.addDependency('testing/objectpropertystring.js', ['goog.testing.ObjectPropertyString'], []);
 goog.addDependency('testing/performancetable.js', ['goog.testing.PerformanceTable'], ['goog.dom', 'goog.testing.PerformanceTimer']);
 goog.addDependency('testing/performancetimer.js', ['goog.testing.PerformanceTimer', 'goog.testing.PerformanceTimer.Task'], ['goog.array', 'goog.async.Deferred', 'goog.math']);
-goog.addDependency('testing/propertyreplacer.js', ['goog.testing.PropertyReplacer'], ['goog.userAgent']);
+goog.addDependency('testing/propertyreplacer.js', ['goog.testing.PropertyReplacer'], ['goog.testing.ObjectPropertyString', 'goog.userAgent']);
 goog.addDependency('testing/proto2/proto2.js', ['goog.testing.proto2'], ['goog.proto2.Message', 'goog.proto2.ObjectSerializer', 'goog.testing.asserts']);
 goog.addDependency('testing/pseudorandom.js', ['goog.testing.PseudoRandom'], ['goog.Disposable']);
 goog.addDependency('testing/recordfunction.js', ['goog.testing.FunctionCall', 'goog.testing.recordConstructor', 'goog.testing.recordFunction'], ['goog.testing.asserts']);
