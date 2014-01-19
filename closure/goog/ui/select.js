@@ -91,8 +91,10 @@ goog.ui.Select.prototype.decorateInternal = function(element) {
   if (caption) {
     // Initialize the default caption.
     this.setDefaultCaption(caption);
-  } else {
-    // There is no default caption; select the first option.
+  } else if (!this.getSelectedItem()) {
+    // If there is no default caption and no selected item, select the first
+    // option (this is technically an arbitrary choice, but what most people
+    // would expect to happen).
     this.setSelectedIndex(0);
   }
 };
@@ -319,6 +321,28 @@ goog.ui.Select.prototype.setValue = function(value) {
   }
 
   this.setSelectedItem(null);
+};
+
+
+/**
+ * Gets the value associated with the currently selected option. If no value was
+ * selected, returns undefined.
+ *
+ * Note that unlike {@link goog.ui.Button#getValue} which this method overrides,
+ * the "value" of a Select instance is the value of its selected menu item, not
+ * its own value. This makes a difference because the "value" of a Button is
+ * reset to the value of the element it decorates when it's added to the DOM
+ * (via ButtonRenderer), whereas the value of the selected item is unaffected.
+ * So while setValue() has no effect on a Button before it is added to the DOM,
+ * it will make a persistent change to a Select instance (which is consistent
+ * with any changes made by {@link goog.ui.Select#setSelectedItem} and
+ * {@link goog.ui.Select#setSelectedIndex}).
+ *
+ * @override
+ */
+goog.ui.Select.prototype.getValue = function() {
+  var selectedItem = this.getSelectedItem();
+  return selectedItem ? selectedItem.getValue() : undefined;
 };
 
 
