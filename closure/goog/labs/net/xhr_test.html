@@ -14,6 +14,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.labs.net.xhr');
+  goog.require('goog.labs.Promise');
   goog.require('goog.result');
   goog.require('goog.string');
   goog.require('goog.testing.AsyncTestCase');
@@ -100,153 +101,111 @@ See the COPYING file for details.
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('simpleRequest');
-    var result = xhr.send('GET', 'testdata/xhr_test_text.data');
-    goog.result.waitOnSuccess(result,
-        function(xhr) {
-          assertEquals('Just some data.', xhr.responseText);
-          assertEquals(200, xhr.status);
-          testCase.continueTesting();
-        });
-    goog.result.waitOnError(result, fail);
+    xhr.send('GET', 'testdata/xhr_test_text.data').then(function(xhr) {
+      assertEquals('Just some data.', xhr.responseText);
+      assertEquals(200, xhr.status);
+      testCase.continueTesting();
+    }, fail /* opt_onRejected */);
   }
 
   function testGetText() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('getText');
-    var result = xhr.get('testdata/xhr_test_text.data');
-    goog.result.waitOnSuccess(result, function(content) {
-      assertEquals('Just some data.', content);
+    xhr.get('testdata/xhr_test_text.data').then(function(responseText) {
+      assertEquals('Just some data.', responseText);
       testCase.continueTesting();
-    });
-    goog.result.waitOnError(result, fail);
+    }, fail /* opt_onRejected */);
   }
 
   function testGetTextWithJson() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('getTextWithJson');
-    var result = xhr.get('testdata/xhr_test_json.data');
-    goog.result.waitOnSuccess(result, function(content) {
-      assertEquals('while(1);\n{"stat":"ok","count":12345}\n', content);
+    xhr.get('testdata/xhr_test_json.data').then(function(responseText) {
+      assertEquals('while(1);\n{"stat":"ok","count":12345}\n', responseText);
       testCase.continueTesting();
-    });
-    goog.result.waitOnError(result, fail);
+    }, fail /* opt_onRejected */);
   }
 
   function testPostText() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('postText');
-    var result = xhr.post('testdata/xhr_test_text.data', 'post-data');
-    goog.result.waitOnSuccess(result, function(content) {
-      // No good way to test post-data gets transported.
-      assertEquals('Just some data.', content);
-      testCase.continueTesting();
-    });
-    goog.result.waitOnError(result, fail);
+    xhr.post('testdata/xhr_test_text.data', 'post-data').then(
+      function(responseText) {
+        // No good way to test post-data gets transported.
+        assertEquals('Just some data.', responseText);
+        testCase.continueTesting();
+      }, fail /* opt_onRejected */);
   }
 
   function testGetJson() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('getJson');
-    xhr.getJson('testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'}).
-        addCallback(function(content) {
-          assertEquals('ok', content['stat']);
-          assertEquals(12345, content['count']);
-          testCase.continueTesting();
-        }).
-        addErrback(fail);
+    xhr.getJson('testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'}).then(
+      function(responseObj) {
+        assertEquals('ok', responseObj['stat']);
+        assertEquals(12345, responseObj['count']);
+        testCase.continueTesting();
+      }, fail /* opt_onRejected */);
   }
 
   function testSerialRequests() {
     if (shouldRunLocally) return;
 
-    var result = xhr.get('testdata/xhr_test_text.data');
-    var chainedResult = goog.result.chain(result, function(result) {
-      return xhr.getJson(
+    xhr.get('testdata/xhr_test_text.data').
+      then(function(response) {
+        return xhr.getJson(
           'testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'});
-    });
-
-    // Data that comes through to callbacks should be from the 2nd request.
-    goog.result.waitOnSuccess(chainedResult, function(json) {
-      assertEquals('ok', json['stat']);
-      assertEquals(12345, json['count']);
-      testCase.continueTesting();
-    });
-    goog.result.waitOnError(chainedResult, fail);
-  }
-
-  function testParallelRequest() {
-    if (shouldRunLocally) return;
-
-    var textData, jsonData;
-    function loadText(response) {
-      textData = response;
-    }
-    function loadJson(response) {
-      jsonData = response;
-    }
-
-    var fetchTextResult = xhr.get('testdata/xhr_test_text.data');
-    var textDataResult = goog.result.transform(fetchTextResult, loadText);
-
-    var fetchJsonResult = xhr.getJson('testdata/xhr_test_json.data',
-                                      {xssiPrefix: 'while(1);\n'});
-    var jsonDataResult = goog.result.transform(fetchJsonResult, loadJson);
-
-    var combinedResult = goog.result.combine(textDataResult,
-                                                 jsonDataResult);
-
-    goog.result.waitOnSuccess(combinedResult, function() {
-      assertEquals('Just some data.', textData);
-      assertEquals('ok', jsonData['stat']);
-      testCase.continueTesting();
-    });
-    goog.result.waitOnError(combinedResult, fail);
+    }).then(function(responseObj) {
+        // Data that comes through to callbacks should be from the 2nd request.
+        assertEquals('ok', responseObj['stat']);
+        assertEquals(12345, responseObj['count']);
+        testCase.continueTesting();
+      }, fail /* opt_onRejected */);
   }
 
   function testBadUrlDetectedAsError() {
     if (shouldRunLocally) return;
 
     testCase.waitForAsync('badUrl');
-    var result = xhr.getJson('unknown-file.dat');
-    goog.result.waitOnSuccess(result, fail);
-    goog.result.waitOnError(result, function(err, result) {
-      assertTrue('Error should be an HTTP error',
-          err instanceof xhr.HttpError);
-      assertEquals(404, err.status);
-      assertNotNull(err.xhr);
-      testCase.continueTesting();
+    xhr.getJson('unknown-file.dat').then(
+      fail /* opt_onFulfilled */,
+      function(err) {
+        assertTrue(
+          'Error should be an HTTP error', err instanceof xhr.HttpError);
+        assertEquals(404, err.status);
+        assertNotNull(err.xhr);
+        testCase.continueTesting();
     });
   }
 
   function testBadOriginTriggersOnErrorHandler() {
     testCase.waitForAsync('badOrigin');
-    var result = xhr.get('http://www.google.com');
-    goog.result.waitOnSuccess(result, fail);
-    goog.result.waitOnError(result, function(err, result) {
-      // In IE this will be a goog.labs.net.xhr.Error since it is thrown
-      //  when calling xhr.open(), other browsers will raise an HttpError.
-      assertTrue('Error should be an xhr error',
-          err instanceof xhr.Error);
-      assertNotNull(err.xhr);
-      testCase.continueTesting();
+    xhr.get('http://www.google.com').then(
+      fail /* opt_onFulfilled */,
+      function(err) {
+        // In IE this will be a goog.labs.net.xhr.Error since it is thrown
+        //  when calling xhr.open(), other browsers will raise an HttpError.
+        assertTrue('Error should be an xhr error', err instanceof xhr.Error);
+        assertNotNull(err.xhr);
+        testCase.continueTesting();
     });
   }
 
   function testAbortRequest() {
     if (shouldRunLocally) return;
 
-    var err;
-    var result = xhr.send('GET', 'test-url', null);
-    goog.result.waitOnSuccess(result, fail);
-    goog.result.waitOnError(result, function(error, result) {
-      err = error;
+    testCase.waitForAsync('abortRequest');
+    var promise = xhr.send('GET', 'test-url', null).then(
+      fail /* opt_onFulfilled */,
+      function(error, result) {
+        assertTrue(error instanceof goog.labs.Promise.CancellationError);
+        testCase.continueTesting();
     });
-    result.cancel();
-    assertTrue(err instanceof goog.result.Result.CancelError);
+    promise.cancel();
   }
 
   //============================================================================
@@ -256,30 +215,29 @@ See the COPYING file for details.
   function testSendNoOptions() {
     var stubXhr = setupStubXMLHttpRequest();
     var called = false;
-    var result = xhr.send('GET', 'test-url', null);
-    goog.result.waitOnSuccess(result, function(xhr) {
+    xhr.send('GET', 'test-url', null).then(function(xhr) {
       called = true;
       assertEquals('Objects should be equal', xhr, stubXhr);
-    });
-    goog.result.waitOnError(result, fail);
+    }, fail /* opt_onRejected */);
 
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertFalse('Callback should not yet have been called', called);
 
     stubXhr.load(200);
+    mockClock.tick();
 
     assertTrue('Callback should have been called', called);
-
     assertEquals('GET', stubXhr.method);
     assertEquals('test-url', stubXhr.url);
   }
 
   function testSendPostSetsDefaultHeader() {
     var stubXhr = setupStubXMLHttpRequest();
-    var result = xhr.send('POST', 'test-url', null);
-    goog.result.waitOnError(result, fail);
+    xhr.send('POST', 'test-url', null).
+      then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
 
     stubXhr.load(200);
+    mockClock.tick();
 
     assertEquals('POST', stubXhr.method);
     assertEquals('test-url', stubXhr.url);
@@ -289,12 +247,12 @@ See the COPYING file for details.
 
   function testSendPostHeaders() {
     var stubXhr = setupStubXMLHttpRequest();
-    var result = xhr.send('POST', 'test-url', null, {
+    xhr.send('POST', 'test-url', null, {
       headers: {'Content-Type': 'text/plain', 'X-Made-Up': 'FooBar'}
-      });
-    goog.result.waitOnError(result, fail);
+    }).then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
 
     stubXhr.load(200);
+    mockClock.tick();
 
     assertEquals('POST', stubXhr.method);
     assertEquals('test-url', stubXhr.url);
@@ -304,19 +262,24 @@ See the COPYING file for details.
 
   function testSendWithCredentials() {
     var stubXhr = setupStubXMLHttpRequest();
-    var result = xhr.send('POST', 'test-url', null, {withCredentials: true});
-    goog.result.waitOnError(result, fail);
+    xhr.send('POST', 'test-url', null, {withCredentials: true}).
+      then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
+
     stubXhr.load(200);
+    mockClock.tick();
+
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertTrue(stubXhr.withCredentials);
   }
 
   function testSendWithMimeType() {
     var stubXhr = setupStubXMLHttpRequest();
-    var result = xhr.send('POST', 'test-url', null, {mimeType: 'text/plain'});
-    goog.result.waitOnError(result, fail);
+    xhr.send('POST', 'test-url', null, {mimeType: 'text/plain'}).
+      then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
 
     stubXhr.load(200);
+    mockClock.tick();
+
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertEquals('text/plain', stubXhr.mimeType);
   }
@@ -324,13 +287,12 @@ See the COPYING file for details.
   function testSendWithHttpError() {
     var stubXhr = setupStubXMLHttpRequest();
     var err;
-    var result = xhr.send('POST', 'test-url', null);
-    goog.result.waitOnSuccess(result, fail);
-    goog.result.waitOnError(result, function(error, result) {
-      err = error;
-    });
+    xhr.send('POST', 'test-url', null).then(
+      fail /* opt_onResolved */,
+      function(error) { err = error; } /* opt_onRejected */);
 
     stubXhr.load(500);
+    mockClock.tick();
 
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertTrue(err instanceof xhr.HttpError);
@@ -346,8 +308,8 @@ See the COPYING file for details.
 
     var stubXhr = setupStubXMLHttpRequest();
     var err;
-    var result = xhr.send('POST', 'test-url', null, {timeoutMs: 1500});
-    goog.result.waitOnError(result, fail);
+    xhr.send('POST', 'test-url', null, {timeoutMs: 1500}).
+      then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
     assertTrue(mockClock.getTimeoutsMade() > 0);
     mockClock.tick(1400);
     stubXhr.load(200);
@@ -359,21 +321,9 @@ See the COPYING file for details.
   function testSendWithTimeoutHit() {
     var stubXhr = setupStubXMLHttpRequest();
     var err;
-    var result = xhr.send('POST', 'test-url', null, {timeoutMs: 50});
-    goog.result.waitOnSuccess(result, fail);
-    goog.result.waitOnError(result, function(error) { err = error; });
-    assertTrue(mockClock.getTimeoutsMade() > 0);
-    mockClock.tick(50);
-    assertTrue('XHR should have been sent', stubXhr.sent);
-    assertTrue('XHR should have been aborted', stubXhr.aborted);
-    assertTrue(err instanceof xhr.TimeoutError);
-  }
-
-  function testSendWithTimeoutWithoutDeferreds() {
-    var stubXhr = setupStubXMLHttpRequest();
-    var err;
-    xhr.makeRequest('POST', 'test-url', null, {timeoutMs: 50}, fail,
-        function(e) { err = e; });
+    xhr.send('POST', 'test-url', null, {timeoutMs: 50}).then(
+      fail /* opt_onResolved */,
+      function(error) { err = error; } /* opt_onRejected */);
     assertTrue(mockClock.getTimeoutsMade() > 0);
     mockClock.tick(50);
     assertTrue('XHR should have been sent', stubXhr.sent);
@@ -384,31 +334,33 @@ See the COPYING file for details.
   function testCancelRequest() {
     var stubXhr = setupStubXMLHttpRequest();
     var err;
-    var result = xhr.send('GET', 'test-url', null, {timeoutMs: 50});
-    goog.result.waitOnSuccess(result, fail);
-    goog.result.waitOnError(result, function(error) {
-      err = error;
+    var promise = xhr.send('GET', 'test-url', null, {timeoutMs: 50}).then(
+      fail /* opt_onResolved */,
+      function(error) {
+        err = error;
+        if (error instanceof goog.labs.Promise.CancellationError) {
+          stubXhr.abort();
+        }
     });
-    result.cancel();
+    promise.cancel();
     stubXhr.load(0);  // Call load anyway, shoudn't make a difference.
     mockClock.tick(100);  // Timeout should never be called.
 
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertTrue('XHR should have been aborted', stubXhr.aborted);
-    assertTrue(err instanceof goog.result.Result.CancelError);
+    assertTrue(err instanceof goog.labs.Promise.CancellationError);
   }
 
   function testGetJson() {
     var stubXhr = setupStubXMLHttpRequest();
     var responseData;
-    var result = xhr.getJson('test-url');
-    goog.result.waitOnSuccess(result, function(data) {
-      responseData = data;
-    });
-    goog.result.waitOnError(result, fail);
+    xhr.getJson('test-url').then(function(responseObj) {
+      responseData = responseObj;
+    }, fail /* opt_onRejected */);
 
     stubXhr.responseText = '{"a": 1, "b": 2}';
     stubXhr.load(200);
+    mockClock.tick();
 
     assertObjectEquals({a: 1, b: 2}, responseData);
   }
@@ -416,14 +368,13 @@ See the COPYING file for details.
   function testGetJsonWithXssiPrefix() {
     var stubXhr = setupStubXMLHttpRequest();
     var responseData;
-    var result = xhr.getJson('test-url', {xssiPrefix: 'while(1);\n'});
-    goog.result.waitOnSuccess(result, function(data) {
-      responseData = data;
-    });
-    goog.result.waitOnError(result, fail);
+    xhr.getJson('test-url', {xssiPrefix: 'while(1);\n'}).then(
+      function(responseObj) { responseData = responseObj; },
+      fail /* opt_onRejected */);
 
     stubXhr.responseText = 'while(1);\n{"a": 1, "b": 2}';
     stubXhr.load(200);
+    mockClock.tick();
 
     assertObjectEquals({a: 1, b: 2}, responseData);
   }
@@ -434,13 +385,12 @@ See the COPYING file for details.
       throw new Error('CORS XHR with file:// schemas not allowed.');
     };
     var err;
-    var result = xhr.send('POST', 'file://test-url', null);
-    goog.result.waitOnSuccess(result, fail);
-    goog.result.waitOnError(result, function(error) {
-      err = error;
-    });
+    xhr.send('POST', 'file://test-url', null).then(
+      fail /* opt_onResolved */,
+      function(error) { err = error; } /* opt_onRejected */);
 
     stubXhr.load(0);
+    mockClock.tick();
 
     assertFalse('XHR should not have been sent', stubXhr.sent);
     assertTrue(err instanceof Error);
