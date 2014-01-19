@@ -257,16 +257,16 @@ goog.debug.ErrorHandler.prototype.protectWindowRequestAnimationFrame =
   for (var i = 0; i < fnNames.length; i++) {
     var fnName = fnNames[i];
     if (fnNames[i] in win) {
-      win[fnName] = this.protectEntryPoint(win[fnName]);
+      this.protectWindowFunctionsHelper_(fnName);
     }
   }
 };
 
 
 /**
- * Helper function for protecting setTimeout/setInterval.
- * @param {string} fnName The name of the function we're protecting. Must
- *     be setTimeout or setInterval.
+ * Helper function for protecting a function that causes a function to be
+ * asynchronously called, for example setTimeout or requestAnimationFrame.
+ * @param {string} fnName The name of the function to protect.
  * @private
  */
 goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ =

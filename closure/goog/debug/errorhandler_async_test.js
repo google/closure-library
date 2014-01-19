@@ -28,10 +28,16 @@ testCase.setUpPage = function() {
 
   this.oldTimeout = window.setTimeout;
   this.oldInterval = window.setInterval;
+  this.oldRequestAnimationFrame = window.requestAnimationFrame;
+
+  // Whether requestAnimationFrame is available for testing.
+  this.testingReqAnimFrame = !!window.requestAnimationFrame;
+
   this.handler = new goog.debug.ErrorHandler(
       goog.bind(this.onException, this));
   this.handler.protectWindowSetTimeout();
   this.handler.protectWindowSetInterval();
+  this.handler.protectWindowRequestAnimationFrame();
   this.exceptions = [];
   this.errors = 0;
 
@@ -40,18 +46,24 @@ testCase.setUpPage = function() {
   this.oldWindowOnError = window.onerror;
   window.onerror = goog.bind(this.onError, this);
 
-  this.timeoutId = window.setTimeout(goog.bind(this.timeOut, this), 10);
+  window.setTimeout(goog.bind(this.timeOut, this), 10);
   this.intervalId = window.setInterval(goog.bind(this.interval, this), 20);
+
+  if (this.testingReqAnimFrame) {
+    window.requestAnimationFrame(goog.bind(this.animFrame, this));
+  }
 };
 
 testCase.tearDownPage = function() {
   window.setTimeout = this.oldTimeout;
   window.setInterval = this.oldInterval;
+  window.requestAnimationFrame = this.oldRequestAnimationFrame;
 };
 
 testCase.onException = function(e) {
   this.exceptions.push(e);
-  if (this.timeoutHit && this.intervalHit) {
+  if (this.timeoutHit && this.intervalHit &&
+      (!this.testingReqAnimFrame || this.animFrameHit)) {
     this.continueTesting();
   }
 };
@@ -72,24 +84,36 @@ testCase.interval = function() {
   throw arguments.callee;
 };
 
+testCase.animFrame = function() {
+  this.animFrameHit = true;
+  throw arguments.callee;
+};
+
 testCase.addNewTest('testResults', function() {
-  var timeoutHit, intervalHit;
+  var timeoutHit, intervalHit, animFrameHit;
 
   for (var i = 0; i < this.exceptions.length; ++i) {
     switch (this.exceptions[i]) {
       case this.timeOut: timeoutHit = true; break;
       case this.interval: intervalHit = true; break;
+      case this.animFrame: animFrameHit = true; break;
     }
   }
 
   assertTrue('timeout exception not received', timeoutHit);
-  assertTrue('interval exception not received', intervalHit);
   assertTrue('timeout not called', this.timeoutHit);
+  assertTrue('interval exception not received', intervalHit);
   assertTrue('interval not called', this.intervalHit);
+  if (this.testingReqAnimFrame) {
+    assertTrue('anim frame exception not received', animFrameHit);
+    assertTrue('animFrame not called', this.animFrameHit);
+  }
 
   if (!goog.userAgent.WEBKIT) {
-    assertEquals('2 exceptions should have been caught and rethrown',
-        2, this.errors);
+    var expectedRethrownCount = this.testingReqAnimFrame ? 3 : 2;
+    assertEquals(
+        expectedRethrownCount + ' exceptions should have been rethrown',
+        expectedRethrownCount, this.errors);
   }
 });
 
