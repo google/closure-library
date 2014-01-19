@@ -33,10 +33,21 @@ goog.fx.easing.easeIn = function(t) {
 /**
  * Ease out - Start fastest and slows to a stop.
  * @param {number} t Input between 0 and 1.
+ * @param {number=} opt_exponent Ease exponent.  If undefined, defaults to 3.
  * @return {number} Output between 0 and 1.
  */
-goog.fx.easing.easeOut = function(t) {
-  return 1 - Math.pow(1 - t, 3);
+goog.fx.easing.easeOut = function(t, opt_exponent) {
+  return 1 - Math.pow(1 - t, goog.isDef(opt_exponent) ? opt_exponent : 3);
+};
+
+
+/**
+ * Ease out long - Start fastest and slows to a stop with a long ease.
+ * @param {number} t Input between 0 and 1.
+ * @return {number} Output between 0 and 1.
+ */
+goog.fx.easing.easeOutLong = function(t) {
+  return goog.fx.easing.easeOut(t, 4);
 };
 
 
