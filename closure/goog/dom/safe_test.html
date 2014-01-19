@@ -11,44 +11,9 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.dom.safe</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.dom.safe');
-  goog.require('goog.html.SafeHtml');
-  goog.require('goog.html.SafeUrl');
-  goog.require('goog.html.testing');
-  goog.require('goog.string.Const');
-  goog.require('goog.testing.jsunit');
+  goog.require('goog.dom.safeTest');
 </script>
 </head>
 <body>
-<script>
-  function testSetInnerHtml() {
-    var mockElement = {
-      'innerHTML': 'blarg'
-    };
-    var html = '<script>somethingTrusted();<' + '/script>';
-    var safeHtml = goog.html.testing.newSafeHtmlForTest(html);
-    goog.dom.safe.setInnerHtml(mockElement, safeHtml);
-    assertEquals(html, mockElement.innerHTML);
-  }
-
-
-  function testSetLocationHref() {
-    var mockLoc = {
-      'href': 'blarg'
-    };
-    goog.dom.safe.setLocationHref(mockLoc, 'javascript:evil();');
-    assertEquals('about:invalid#zClosurez', mockLoc.href);
-
-    mockLoc = {
-      'href': 'blarg'
-    };
-    var safeUrl = goog.html.SafeUrl.fromConstant(
-        goog.string.Const.from('javascript:trusted();'));
-    goog.dom.safe.setLocationHref(mockLoc, safeUrl);
-    assertEquals('javascript:trusted();', mockLoc.href);
-
-
-  }
-</script>
 </body>
 </html>
