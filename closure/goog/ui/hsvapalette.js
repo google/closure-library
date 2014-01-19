@@ -25,7 +25,6 @@ goog.provide('goog.ui.HsvaPalette');
 
 goog.require('goog.array');
 goog.require('goog.color.alpha');
-goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -64,14 +63,6 @@ goog.ui.HsvaPalette = function(opt_domHelper, opt_color, opt_alpha, opt_class) {
    * @override
    */
   this.className = opt_class || goog.getCssName('goog-hsva-palette');
-
-  /**
-   * The document which is being listened to.
-   * type {HTMLDocument}
-   * @private
-   */
-  this.document_ = opt_domHelper ? opt_domHelper.getDocument() :
-      goog.dom.getDomHelper().getDocument();
 };
 goog.inherits(goog.ui.HsvaPalette, goog.ui.HsvPalette);
 
@@ -163,7 +154,7 @@ goog.ui.HsvaPalette.prototype.setColorAlphaHelper_ = function(color, alpha) {
   this.color_ = color;
   if (colorChange) {
     // This is to prevent multiple event dispatches.
-    goog.ui.HsvaPalette.superClass_.setColor_.call(this, color);
+    this.setColorInternal(color);
   }
   if (colorChange || alphaChange) {
     this.updateUi();
@@ -174,7 +165,7 @@ goog.ui.HsvaPalette.prototype.setColorAlphaHelper_ = function(color, alpha) {
 
 /** @override */
 goog.ui.HsvaPalette.prototype.createDom = function() {
-  goog.ui.HsvaPalette.superClass_.createDom.call(this);
+  goog.base(this, 'createDom');
 
   var dom = this.getDomHelper();
   this.aImageEl_ = dom.createDom(
@@ -183,15 +174,16 @@ goog.ui.HsvaPalette.prototype.createDom = function() {
       goog.dom.TagName.DIV, goog.getCssName(this.className, 'a-handle'));
   this.swatchBackdropEl_ = dom.createDom(
       goog.dom.TagName.DIV, goog.getCssName(this.className, 'swatch-backdrop'));
-  dom.appendChild(this.element_, this.aImageEl_);
-  dom.appendChild(this.element_, this.aHandleEl_);
-  dom.appendChild(this.element_, this.swatchBackdropEl_);
+  var element = this.getElement();
+  dom.appendChild(element, this.aImageEl_);
+  dom.appendChild(element, this.aHandleEl_);
+  dom.appendChild(element, this.swatchBackdropEl_);
 };
 
 
 /** @override */
 goog.ui.HsvaPalette.prototype.disposeInternal = function() {
-  goog.ui.HsvaPalette.superClass_.disposeInternal.call(this);
+  goog.base(this, 'disposeInternal');
 
   delete this.aImageEl_;
   delete this.aHandleEl_;
@@ -230,10 +222,12 @@ goog.ui.HsvaPalette.prototype.handleMouseDown = function(e) {
     // Setup value change listeners
     var b = goog.style.getBounds(this.valueBackgroundImageElement);
     this.handleMouseMoveA_(b, e);
-    this.mouseMoveListener_ = goog.events.listen(this.document_,
+    this.mouseMoveListener_ = goog.events.listen(
+        this.getDomHelper().getDocument(),
         goog.events.EventType.MOUSEMOVE,
         goog.bind(this.handleMouseMoveA_, this, b));
-    this.mouseUpListener_ = goog.events.listen(this.document_,
+    this.mouseUpListener_ = goog.events.listen(
+        this.getDomHelper().getDocument(),
         goog.events.EventType.MOUSEUP, this.handleMouseUp, false, this);
   }
 };

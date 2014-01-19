@@ -53,7 +53,7 @@ goog.require('goog.userAgent');
 goog.ui.HsvPalette = function(opt_domHelper, opt_color, opt_class) {
   goog.ui.Component.call(this, opt_domHelper);
 
-  this.setColor_(opt_color || '#f00');
+  this.setColorInternal(opt_color || '#f00');
 
   /**
    * The base class name for the component.
@@ -189,7 +189,7 @@ goog.ui.HsvPalette.prototype.updateInput = function() {
  */
 goog.ui.HsvPalette.prototype.setColor = function(color) {
   if (color != this.color_) {
-    this.setColor_(color);
+    this.setColorInternal(color);
     this.updateUi();
     this.dispatchEvent(goog.ui.Component.EventType.ACTION);
   }
@@ -199,9 +199,9 @@ goog.ui.HsvPalette.prototype.setColor = function(color) {
 /**
  * Sets which color is selected.
  * @param {string} color The selected color.
- * @private
+ * @protected
  */
-goog.ui.HsvPalette.prototype.setColor_ = function(color) {
+goog.ui.HsvPalette.prototype.setColorInternal = function(color) {
   var rgbHex = goog.color.parse(color).hex;
   var rgbArray = goog.color.hexToRgb(rgbHex);
   this.hsv_ = goog.color.rgbArrayToHsv(rgbArray);
