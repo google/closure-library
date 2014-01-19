@@ -23,6 +23,7 @@
 goog.provide('goog.crypt.Cbc');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.crypt');
 
 
@@ -37,6 +38,7 @@ goog.require('goog.crypt');
  *     Defaults to 16 bytes.
  * @constructor
  * @final
+ * @struct
  */
 goog.crypt.Cbc = function(cipher, opt_blockSize) {
 
