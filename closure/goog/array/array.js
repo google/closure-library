@@ -264,16 +264,15 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
  *
  * See {@link http://tinyurl.com/developer-mozilla-org-array-map}
  *
- * @param {Array.<T>|goog.array.ArrayLike} arr Array or array
- *     like object over which to iterate.
- * @param {?function(this:S, T, number, ?):?} f The function to call for every
- *     element. This function
- *     takes 3 arguments (the element, the index and the array) and should
- *     return something. The result will be inserted into a new array.
- * @param {S=} opt_obj The object to be used as the value of 'this'
- *     within f.
- * @return {!Array} a new array with the results from f.
- * @template T,S
+ * @param {Array.<VALUE>|goog.array.ArrayLike} arr Array or array like object
+ *     over which to iterate.
+ * @param {function(this:THIS, VALUE, number, ?): RESULT} f The function to call
+ *     for every element. This function takes 3 arguments (the element,
+ *     the index and the array) and should return something. The result will be
+ *     inserted into a new array.
+ * @param {THIS=} opt_obj The object to be used as the value of 'this' within f.
+ * @return {!Array.<RESULT>} a new array with the results from f.
+ * @template THIS, VALUE, RESULT
  */
 goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
                  goog.array.ARRAY_PROTOTYPE_.map ?
