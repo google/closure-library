@@ -191,14 +191,24 @@ goog.labs.userAgent.browser.isVersionOrHigher = function(version) {
  * @private
  */
 goog.labs.userAgent.browser.getIEVersion_ = function(userAgent) {
+  // IE11 may identify itself as MSIE 9.0 or MSIE 10.0 due to an IE 11 upgrade
+  // bug. Example UA:
+  // Mozilla/5.0 (MSIE 9.0; Windows NT 6.1; WOW64; Trident/7.0; rv:11.0)
+  // like Gecko.
+  // See http://www.whatismybrowser.com/developers/unknown-user-agent-fragments.
+  var rv = /rv: *([\d\.]*)/.exec(userAgent);
+  if (rv && rv[1]) {
+    return rv[1];
+  }
+
   var version = '';
-  var arr = /\b(?:MSIE|rv)[: ]([^\);]+)(?:\)|;)/.exec(userAgent);
-  if (arr && arr[1]) {
+  var msie = /MSIE +([\d\.]+)/.exec(userAgent);
+  if (msie && msie[1]) {
     // IE in compatibility mode usually identifies itself as MSIE 7.0; in this
     // case, use the Trident version to determine the version of IE. For more
     // details, see the links above.
     var tridentVersion = /Trident\/(\d.\d)/.exec(userAgent);
-    if (arr[1] == '7.0') {
+    if (msie[1] == '7.0') {
       if (tridentVersion && tridentVersion[1]) {
         switch (tridentVersion[1]) {
           case '4.0':
@@ -217,15 +227,8 @@ goog.labs.userAgent.browser.getIEVersion_ = function(userAgent) {
       } else {
         version = '7.0';
       }
-    } else if (tridentVersion && tridentVersion[1] == '7.0' &&
-               (arr[1] == '9.0' || arr[1] == '10.0')) {
-      // IE11 binary may identify itself as MSIE 9.0 or MSIE 10.0 due to an IE
-      // 11 upgrade bug. Example UA: Mozilla/5.0 (MSIE 9.0; Windows NT 6.1;
-      // WOW64; Trident/7.0; rv:11.0) like Gecko. See more at
-      // http://www.whatismybrowser.com/developers/unknown-user-agent-fragments
-      version = '11.0';
     } else {
-      version = arr[1];
+      version = msie[1];
     }
   }
   return version;
