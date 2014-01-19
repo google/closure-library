@@ -17,6 +17,8 @@
  * should not be used outside of goog.labs.userAgent.*.
  *
  * @visibility {//closure/goog/bin/sizetests:__pkg__}
+ * @visibility {//closure/goog/testing:__pkg__}
+ *
  * @author nnaze@google.com (Nathan Naze)
  */
 
