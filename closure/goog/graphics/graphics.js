@@ -27,6 +27,7 @@
 
 goog.provide('goog.graphics');
 
+goog.require('goog.dom');
 goog.require('goog.graphics.CanvasGraphics');
 goog.require('goog.graphics.SvgGraphics');
 goog.require('goog.graphics.VmlGraphics');
@@ -54,7 +55,13 @@ goog.require('goog.userAgent');
 goog.graphics.createGraphics = function(width, height, opt_coordWidth,
     opt_coordHeight, opt_domHelper) {
   var graphics;
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
+  // On IE9 and above, SVG is available, except in compatibility mode.
+  // We check createElementNS on document object that is not exist in
+  // compatibility mode.
+  if (goog.userAgent.IE &&
+      (!goog.userAgent.isVersionOrHigher('9') ||
+       !(opt_domHelper || goog.dom.getDomHelper()).
+           getDocument().createElementNS)) {
     graphics = new goog.graphics.VmlGraphics(width, height,
         opt_coordWidth, opt_coordHeight, opt_domHelper);
   } else if (goog.userAgent.WEBKIT &&
