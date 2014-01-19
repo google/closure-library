@@ -486,7 +486,7 @@ goog.addDependency('labs/net/webchannel/wirev8.js', ['goog.labs.net.webChannel.W
 goog.addDependency('labs/net/webchannel/wirev8_test.js', ['goog.labs.net.webChannel.WireV8Test'], ['goog.labs.net.webChannel.WireV8', 'goog.testing.jsunit']);
 goog.addDependency('labs/net/webchanneltransport.js', ['goog.net.WebChannelTransport'], []);
 goog.addDependency('labs/net/webchanneltransportfactory.js', ['goog.net.createWebChannelTransport'], ['goog.functions', 'goog.labs.net.webChannel.WebChannelBaseTransport']);
-goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.debug.Error', 'goog.json', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.result', 'goog.result.SimpleResult', 'goog.string', 'goog.uri.utils']);
+goog.addDependency('labs/net/xhr.js', ['goog.labs.net.xhr', 'goog.labs.net.xhr.Error', 'goog.labs.net.xhr.HttpError', 'goog.labs.net.xhr.TimeoutError'], ['goog.debug.Error', 'goog.json', 'goog.labs.Promise', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.string', 'goog.uri.utils']);
 goog.addDependency('labs/object/object.js', ['goog.labs.object'], []);
 goog.addDependency('labs/promise/promise.js', ['goog.labs.Promise'], ['goog.asserts', 'goog.async.run', 'goog.async.throwException', 'goog.debug.Error', 'goog.labs.Resolver', 'goog.labs.Thenable']);
 goog.addDependency('labs/promise/promise_test.js', ['goog.labs.PromiseTest'], ['goog.functions', 'goog.labs.Promise', 'goog.labs.Thenable', 'goog.testing.AsyncTestCase', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
