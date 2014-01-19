@@ -151,6 +151,10 @@ function assertSanitizeEscapesTo(url, expected) {
 
 
 function testSafeUrlSanitize_escapesUrl() {
+  // '%' is preserved.
+  assertSanitizeEscapesTo('%', '%');
+  assertSanitizeEscapesTo('%2F', '%2F');
+
   // Unreserved characters, RFC 3986.
   assertSanitizeEscapesTo('aA1-._~', 'aA1-._~');
 
