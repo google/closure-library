@@ -268,6 +268,7 @@ if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
 
       this.errorHandler_.protectWindowSetTimeout();
       this.errorHandler_.protectWindowSetInterval();
+      this.errorHandler_.protectWindowRequestAnimationFrame();
       goog.debug.entryPointRegistry.monitorAll(this.errorHandler_);
     }
   };
