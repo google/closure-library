@@ -25,6 +25,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.userAgent.product');
   goog.require('goog.userAgent.product.isVersion');
+  goog.require('goog.userAgentTestUtil');
 </script>
 </head>
 <body>
@@ -45,20 +46,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   }
 
   function updateUserAgentUtils() {
-    goog.userAgent.init_();
-
-    // Unfortunately we can't isolate the useragent setting in a function
-    // we can call, because things rely on it compiling to nothing when
-    // one of the ASSUME flags is set, and the compiler isn't smart enough
-    // to do that when the setting is done inside a function that's inlined.
-    goog.userAgent.OPERA = goog.userAgent.detectedOpera_;
-    goog.userAgent.IE = goog.userAgent.detectedIe_;
-    goog.userAgent.GECKO = goog.userAgent.detectedGecko_;
-    goog.userAgent.WEBKIT = goog.userAgent.detectedWebkit_;
-    goog.userAgent.MOBILE = goog.userAgent.detectedMobile_;
-    goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
-
-    goog.userAgent.VERSION = goog.userAgent.determineVersion_();
+    goog.userAgentTestUtil.reinitializeUserAgent();
 
     goog.userAgent.product.init_();
     // In an ideal world, this assignment would be just a function in
