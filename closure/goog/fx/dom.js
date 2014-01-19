@@ -280,7 +280,7 @@ goog.inherits(goog.fx.dom.Scroll, goog.fx.dom.PredefinedEffect);
 
 
 /**
- * Animation event handler that will set the scroll posiiton of an element
+ * Animation event handler that will set the scroll position of an element.
  * @protected
  * @override
  */
