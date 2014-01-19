@@ -86,7 +86,7 @@ function assertBadUrl(url) {
 }
 
 
-function testSafeUrlSanitize() {
+function testSafeUrlSanitize_validatesUrl() {
   // Whitelisted schemes.
   assertGoodUrl('http://example.com/');
   assertGoodUrl('https://example.com');
@@ -129,6 +129,55 @@ function testSafeUrlSanitize() {
 
   // .sanitize() does not exempt values known to be program constants.
   assertBadUrl(goog.string.Const.from('data:blah'));
+}
+
+
+/**
+ * Asserts that goog.html.SafeUrl.unwrap returns the expected string when the
+ * SafeUrl has been constructed by passing the given url to
+ * goog.html.SafeUrl.sanitize.
+ * @param {string} url The string to pass to goog.html.SafeUrl.sanitize.
+ * @param {string} expected The string representation that
+ *         goog.html.SafeUrl.unwrap should return.
+ */
+function assertSanitizeEscapesTo(url, expected) {
+  var safeUrl = goog.html.SafeUrl.sanitize(url);
+  var actual = goog.html.SafeUrl.unwrap(safeUrl);
+  assertEquals(
+      'SafeUrl.sanitize().unwrap() doesn\'t return expected URL-escaped string',
+      expected,
+      actual);
+}
+
+
+function testSafeUrlSanitize_escapesUrl() {
+  // Unreserved characters, RFC 3986.
+  assertSanitizeEscapesTo('aA1-._~', 'aA1-._~');
+
+  // Reserved characters, RFC 3986. Only '\'', '(' and ')' are escaped.
+  assertSanitizeEscapesTo('/:?#[]@!$&\'()*+,;=', '/:?#[]@!$&%27%28%29*+,;=');
+
+
+  // Other ASCII characters, printable and non-printable.
+  assertSanitizeEscapesTo('^"`\x00\n\r\x7f', '%5E%22%60%00%0A%0D%7F');
+
+  // Codepoints which UTF-8 encode to 2 bytes.
+  assertSanitizeEscapesTo('\u0080\u07ff', '%C2%80%DF%BF');
+
+  // Highest codepoint which can be UTF-16 encoded using two bytes
+  // (one code unit). Highest codepoint in basic multilingual plane and highest
+  // that JavaScript can represent using \u.
+  assertSanitizeEscapesTo('\uffff', '%EF%BF%BF');
+
+  // Supplementary plane codepoint which UTF-16 and UTF-8 encode to 4 bytes.
+  // Valid surrogate sequence.
+  assertSanitizeEscapesTo('\ud800\udc00', '%F0%90%80%80');
+
+  // Invalid lead/high surrogate.
+  assertSanitizeEscapesTo('\udc00', goog.html.SafeUrl.INNOCUOUS_STRING);
+
+  // Invalid trail/low surrogate.
+  assertSanitizeEscapesTo('\ud800\ud800', goog.html.SafeUrl.INNOCUOUS_STRING);
 }
 
 
