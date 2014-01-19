@@ -280,14 +280,15 @@ goog.iter.join = function(iterable, deliminator) {
  * @param {!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} iterable The
  *     iterator to iterate over.
  * @param {
- *     function(this:THIS,VALUE,undefined,!goog.iter.Iterator.<VALUE>):?} f The
- *     function to call for every element.  This function takes 3 arguments (the
- *     element, undefined, and the iterator) and should return a new value.
+ *     function(this:THIS,VALUE,undefined,!goog.iter.Iterator.<VALUE>):RESULT} f
+ *     The function to call for every element.  This function takes 3 arguments
+ *     (the element, undefined, and the iterator) and should return a new value.
  * @param {THIS=} opt_obj The object to be used as the value of 'this' within
  *     {@code f}.
- * @return {!goog.iter.Iterator.<?>} A new iterator that returns the results
- *     of applying the function to each element in the original iterator.
- * @template THIS, VALUE
+ * @return {!goog.iter.Iterator.<RESULT>} A new iterator that returns the
+ *     results of applying the function to each element in the original
+ *     iterator.
+ * @template THIS, VALUE, RESULT
  */
 goog.iter.map = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
