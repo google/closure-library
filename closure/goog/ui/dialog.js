@@ -611,13 +611,6 @@ goog.ui.Dialog.prototype.createDom = function() {
       this.buttonEl_ = dom.createDom('div',
           goog.getCssName(this.class_, 'buttons')));
 
-  // Make the close button behave correctly with screen readers. Note: this is
-  // only being added if the dialog is not decorated. Decorators are expected
-  // to add aira label, role, and tab indexing in their templates.
-  goog.a11y.aria.setRole(this.titleCloseEl_, goog.a11y.aria.Role.BUTTON);
-  goog.dom.setFocusableTabIndex(this.titleCloseEl_, true);
-  goog.a11y.aria.setLabel(this.titleCloseEl_, goog.ui.Dialog.MSG_DIALOG_CLOSE);
-
   this.titleId_ = this.titleEl_.id;
   goog.a11y.aria.setRole(element, this.getPreferredAriaRole());
   goog.a11y.aria.setState(element, goog.a11y.aria.State.LABELLEDBY,
@@ -1491,12 +1484,6 @@ goog.ui.Dialog.MSG_DIALOG_SAVE_ = goog.getMsg('Save');
  * @private
  */
 goog.ui.Dialog.MSG_DIALOG_CONTINUE_ = goog.getMsg('Continue');
-
-
-/**
- * @desc Standard label for the dialog 'X' (close) button.
- */
-goog.ui.Dialog.MSG_DIALOG_CLOSE = goog.getMsg('Close');
 
 
 /**
