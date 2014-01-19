@@ -907,7 +907,8 @@ goog.testing.MultiTestRunner.prototype.drawRunTimePie_ = function() {
   }
   var loadTime = totalTime - runTime;
   var pie = new goog.ui.ServerChart(
-      goog.ui.ServerChart.ChartType.PIE, 500, 250);
+      goog.ui.ServerChart.ChartType.PIE, 500, 250, null,
+      goog.ui.ServerChart.CHART_SERVER_HTTPS_URI);
   pie.setMinValue(0);
   pie.setMaxValue(totalTime);
   pie.addDataSet([runTime, loadTime], 'ff9900');
