@@ -22,14 +22,16 @@
 
 goog.provide('goog.labs.userAgent.util');
 
-goog.require('goog.functions');
 goog.require('goog.string');
 
 
 /**
- * @return {string} The User-Agent string.
+ * A possible override for applications which wish to not check
+ * navigator.userAgent but use a specified value for detection instead.
+ * @private {string}
  */
-goog.labs.userAgent.util.getUserAgent;
+goog.labs.userAgent.util.userAgent_ =
+    goog.global['navigator'] ? goog.global['navigator'].userAgent : '';
 
 
 /**
@@ -39,11 +41,16 @@ goog.labs.userAgent.util.getUserAgent;
  * @param {?string} userAgent the User-Agent override
  */
 goog.labs.userAgent.util.setUserAgent = function(userAgent) {
-  var userAgentFunction = goog.isNull(userAgent) ?
-      goog.labs.userAgent.util.getUserAgentStringFromNavigator_ :
-      goog.functions.constant(userAgent);
+  goog.labs.userAgent.util.userAgent_ = userAgent ||
+      (goog.global['navigator'] ? goog.global['navigator'].userAgent : '');
+};
 
-  goog.labs.userAgent.util.setGetUserAgentFunction_(userAgentFunction);
+
+/**
+ * @return {string} The user agent string.
+ */
+goog.labs.userAgent.util.getUserAgent = function() {
+  return goog.labs.userAgent.util.userAgent_;
 };
 
 
@@ -98,32 +105,3 @@ goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {
   return data;
 };
 
-
-/**
- * Gives the User-Agent string as specified by the navigator object.
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Window.navigator
- * @return {string}
- * @private
- */
-goog.labs.userAgent.util.getUserAgentStringFromNavigator_ = function() {
-  var navigator = goog.global['navigator'];
-  return navigator ? navigator.userAgent : '';
-};
-
-
-/**
- * Sets the function to be used as the getUserAgent function. The return value
- * will be cached when first accessed.
- * @param {function():string} userAgentFunction Function that gives the
- *     userAgent string.
- * @private
- */
-goog.labs.userAgent.util.setGetUserAgentFunction_ = function(
-    userAgentFunction) {
-  goog.labs.userAgent.util.getUserAgent =
-      goog.functions.cacheReturnValue(userAgentFunction);
-};
-
-// Set the default getUserAgent function to use the navigator object.
-goog.labs.userAgent.util.setGetUserAgentFunction_(
-    goog.labs.userAgent.util.getUserAgentStringFromNavigator_);
