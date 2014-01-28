@@ -973,6 +973,7 @@ goog.testing.MultiTestRunner.prototype.drawWorstTestsTable_ = function() {
  */
 goog.testing.MultiTestRunner.prototype.clearStats_ = function() {
   goog.dom.removeChildren(this.statsEl_);
+  this.tableSorter_.exitDocument();
 };
 
 
