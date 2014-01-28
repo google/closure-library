@@ -1544,8 +1544,6 @@ goog.inherits = function(childCtor, parentCtor) {
   childCtor.prototype.constructor = childCtor;
 
   /**
-   * WARNING: DO NOT USE YET! JSCOMPILER SUPPORT HAS NOT BEEN IMPLEMENTED YET.
-   *
    * Calls superclass constructor/method.
    *
    * This function is only available if you use goog.inherits to
