@@ -29,6 +29,7 @@ goog.setTestOnly();
 
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 
 
 /**
@@ -44,7 +45,7 @@ goog.require('goog.html.SafeUrl');
  * @return {!goog.html.SafeHtml}
  * @suppress {visibility} For access to SafeHtml.create...  Note that this
  *     use is appropriate since this method is intended to be "package private"
- *     withing goog.html.  DO NOT call SafeHtml.create... from outside this
+ *     within goog.html.  DO NOT call SafeHtml.create... from outside this
  *     package; use appropriate wrappers instead.
  */
 goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
@@ -63,9 +64,30 @@ goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
  * @return {!goog.html.SafeUrl}
  * @suppress {visibility} For access to SafeUrl.create...  Note that this
  *     use is appropriate since this method is intended to be "package private"
- *     withing goog.html.  DO NOT call SafeUrl.create... from outside this
+ *     within goog.html.  DO NOT call SafeUrl.create... from outside this
  *     package; use appropriate wrappers instead.
  */
 goog.html.testing.newSafeUrlForTest = function(url) {
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
+};
+
+
+/**
+ * Creates a TrustedResourceUrl wrapping the given value. No validation is
+ * performed.
+ *
+ * This function is for use in tests only and must never be used in production
+ * code.
+ *
+ * @param {string} url String to wrap into a TrustedResourceUrl.
+ * @return {!goog.html.TrustedResourceUrl}
+ * @suppress {visibility} For access to TrustedResourceUrl.create...  Note that
+ *     this use is appropriate since this method is intended to be
+ *     "package private" within goog.html.  DO NOT call
+ *     TrustedResourceUrl.create... from outside this package; use appropriate
+ *     wrappers instead.
+ */
+goog.html.testing.newTrustedResourceUrlForTest = function(url) {
+  return goog.html.TrustedResourceUrl.
+      createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_(url);
 };
