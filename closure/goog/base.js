@@ -229,6 +229,25 @@ goog.setTestOnly = function(opt_message) {
 };
 
 
+/**
+ * Forward declares a symbol. This is an indication to the compiler that the
+ * symbol may be used in the source yet is not required and may not be provided
+ * in compilation.
+ *
+ * The most common usage of forward declaration is code that takes a type as a
+ * function parameter but does not need to require it. By forward declaring
+ * instead of requiring, no hard dependency is made, and (if not required
+ * elsewhere) the namespace may never be required and thus, not be pulled
+ * into the JavaScript binary. If it is required elsewhere, it will be type
+ * checked as normal.
+ *
+ *
+ * @param {string} name The namespace to forward declare in the form of
+ *     "goog.package.part".
+ */
+goog.forwardDeclare = function(name) {};
+
+
 if (!COMPILED) {
 
   /**
