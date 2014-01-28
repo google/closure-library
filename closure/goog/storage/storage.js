@@ -21,7 +21,6 @@
 goog.provide('goog.storage.Storage');
 
 goog.require('goog.json');
-goog.require('goog.json.Serializer');
 goog.require('goog.storage.ErrorCode');
 
 
@@ -40,13 +39,6 @@ goog.storage.Storage = function(mechanism) {
    * @protected {goog.storage.mechanism.Mechanism}
    */
   this.mechanism = mechanism;
-
-  /**
-   * The JSON serializer used to serialize values.
-   *
-   * @private {!goog.json.Serializer}
-   */
-  this.serializer_ = new goog.json.Serializer();
 };
 
 
@@ -61,7 +53,7 @@ goog.storage.Storage.prototype.set = function(key, value) {
     this.mechanism.remove(key);
     return;
   }
-  this.mechanism.set(key, this.serializer_.serialize(value));
+  this.mechanism.set(key, goog.json.serialize(value));
 };
 
 

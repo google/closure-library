@@ -114,7 +114,7 @@ function testEncryption() {
   // If the value is overwritten, it can't be decrypted.
   encryptedWrapper[goog.storage.RichStorage.DATA_KEY] = 'kaboom';
   mechanism.set(storage.hashKeyWithSecret_('first'),
-      mallory.serializer_.serialize(encryptedWrapper));
+                goog.json.serialize(encryptedWrapper));
   assertEquals(goog.storage.ErrorCode.DECRYPTION_ERROR,
                assertThrows(function() {storage.get('first')}));
 
