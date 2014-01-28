@@ -19,7 +19,6 @@
 goog.provide('goog.html.safeUrlTest');
 
 goog.require('goog.html.SafeUrl');
-goog.require('goog.html.uncheckedconversions');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
@@ -196,17 +195,4 @@ function testSafeUrlFrom() {
       goog.html.SafeUrl.INNOCUOUS_STRING,
       goog.html.SafeUrl.unwrap(
           goog.html.SafeUrl.sanitize('javascript:evil()')));
-}
-
-
-function testSafeUrlUncheckedConversion() {
-  var safeUrl =
-      goog.html.uncheckedconversions.
-          safeUrlFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from('Safe because value is constant. ' +
-                                     'Security review: b/7685625.'),
-              'javascript:trusted();');
-  var extracted = goog.html.SafeUrl.unwrap(safeUrl);
-  assertEquals('javascript:trusted();', extracted);
-  assertEquals('SafeUrl{javascript:trusted();}', String(safeUrl));
 }

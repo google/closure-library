@@ -33,6 +33,7 @@ goog.provide('goog.html.uncheckedconversions');
 goog.require('goog.asserts');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.string');
 goog.require('goog.string.Const');
 
@@ -108,4 +109,41 @@ goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract =
       goog.string.trim(goog.string.Const.unwrap(justification)).length > 0,
       'must provide non-empty justification');
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
+};
+
+
+/**
+ * Performs an "unchecked conversion" to TrustedResourceUrl from a plain string
+ * that is known to satisfy the TrustedResourceUrl type contract.
+ *
+ * IMPORTANT: Uses of this method must be carefully security-reviewed to ensure
+ * that the value of {@code url} satisfies the TrustedResourceUrl type contract
+ * in all possible program states.
+ *
+ * TODO(user): Link to guidelines on appropriate uses.
+ *
+ * @param {!goog.string.Const} justification A constant string explaining why
+ *     this use of this method is safe. May include a security review ticket
+ *     number.
+ * @param {string} url The string to wrap as a TrustedResourceUrl.
+ *     contract.
+ * @return {!goog.html.TrustedResourceUrl} The value of {@code url}, wrapped in
+ *     a TrustedResourceUrl object.
+ * @suppress {visibility} For access to TrustedResourceUrl.create...  Note that
+ *     this use is appropriate since this method is intended to be
+ *     "package private" withing goog.html.  DO NOT call SafeUrl.create... from
+ *     outside this package; use appropriate wrappers instead.
+ */
+goog.html.uncheckedconversions.
+    trustedResourceUrlFromStringKnownToSatisfyTypeContract =
+    function(justification, url) {
+  // unwrap() called inside an assert so that justification can be optimized
+  // away in production code.
+  goog.asserts.assertString(goog.string.Const.unwrap(justification),
+                            'must provide justification');
+  goog.asserts.assert(
+      goog.string.trim(goog.string.Const.unwrap(justification)).length > 0,
+      'must provide non-empty justification');
+  return goog.html.TrustedResourceUrl.
+      createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_(url);
 };

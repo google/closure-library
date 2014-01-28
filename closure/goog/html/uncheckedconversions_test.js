@@ -20,6 +20,7 @@ goog.provide('goog.html.uncheckedconversionsTest');
 
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.string.Const');
@@ -54,16 +55,38 @@ function testSafeUrlFromStringKnownToSatisfyTypeContract_ok() {
   var url = 'http://www.irrelevant.com';
   var safeUrl = goog.html.uncheckedconversions.
       safeUrlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from('Test'),
-          url);
+          goog.string.Const.from(
+              'Safe because value is constant. Security review: b/7685625.'),
+              url);
   assertEquals(url, goog.html.SafeUrl.unwrap(safeUrl));
 }
 
 
-function testsafeHtmlFromStringKnownToSatisfyTypeContract_error() {
+function testSafeUrlFromStringKnownToSatisfyTypeContract_error() {
   assertThrows(function() {
     goog.html.uncheckedconversions.
         safeUrlFromStringKnownToSatisfyTypeContract(
+            goog.string.Const.from(''),
+            'http://irrelevant.com');
+  });
+}
+
+
+function testTrustedResourceUrlFromStringKnownToSatisfyTypeContract_ok() {
+  var url = 'http://www.irrelevant.com';
+  var trustedResourceUrl = goog.html.uncheckedconversions.
+      trustedResourceUrlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Safe because value is constant. Security review: b/7685625.'),
+              url);
+  assertEquals(url, goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl));
+}
+
+
+function testTrustedResourceFromStringKnownToSatisfyTypeContract_error() {
+  assertThrows(function() {
+    goog.html.uncheckedconversions.
+        trustedResourceUrlFromStringKnownToSatisfyTypeContract(
             goog.string.Const.from(''),
             'http://irrelevant.com');
   });
