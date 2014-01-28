@@ -1186,18 +1186,6 @@ goog.array.equals = function(arr1, arr2, opt_equalsFn) {
 
 
 /**
- * @deprecated Use {@link goog.array.equals}.
- * @param {goog.array.ArrayLike} arr1 See {@link goog.array.equals}.
- * @param {goog.array.ArrayLike} arr2 See {@link goog.array.equals}.
- * @param {Function=} opt_equalsFn See {@link goog.array.equals}.
- * @return {boolean} See {@link goog.array.equals}.
- */
-goog.array.compare = function(arr1, arr2, opt_equalsFn) {
-  return goog.array.equals(arr1, arr2, opt_equalsFn);
-};
-
-
-/**
  * 3-way array compare function.
  * @param {!Array.<VALUE>|!goog.array.ArrayLike} arr1 The first array to
  *     compare.
