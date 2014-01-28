@@ -17,6 +17,7 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.functions');
+  goog.require('goog.string');
   goog.require('goog.testing.PropertyReplacer');
   goog.require('goog.testing.jsunit');
   goog.require('goog.uri.utils');
@@ -280,7 +281,7 @@ function testSameDomainNoDomain() {
 
 /**
  * Simple class with a constant toString.
- * @param {string} The result of toString.
+ * @param {string} stringValue The result of toString.
  * @constructor
  */
 function HasString(stringValue) {
@@ -288,6 +289,7 @@ function HasString(stringValue) {
 }
 
 
+/** @override */
 HasString.prototype.toString = function() {
   return this.value_;
 };
