@@ -797,7 +797,7 @@ See the COPYING file for details.
   function testSetContent_guardedByGlobalFlag() {
     stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
     assertEquals(
-        'Failure: Legacy conversion from string to SafeHtml is disabled',
+        'Error: Legacy conversion from string to goog.html types is disabled',
         assertThrows(function() {
           dialog.setContent('<img src=blag onerror=evil();/>');
         }).message);
@@ -809,7 +809,7 @@ See the COPYING file for details.
     // Unsafe API still fails, since ALLOW_LEGACY_CONVERSION_OVERRIDES is not
     // set.
     assertEquals(
-        'Failure: Legacy conversion from string to SafeHtml is disabled',
+        'Error: Legacy conversion from string to goog.html types is disabled',
         assertThrows(function() {
           dialog.setContent('<img src=blag onerror=evil();/>');
         }).message);

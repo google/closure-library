@@ -19,6 +19,8 @@
 goog.provide('goog.html.legacyconversionsTest');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -63,7 +65,7 @@ function testSafeHtmlFromString_allowedIfNotGloballyDisabled() {
 function testSafeHtmlFromString_guardedByGlobalFlag() {
   stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
   assertEquals(
-      'Failure: Legacy conversion from string to SafeHtml is disabled',
+      'Error: Legacy conversion from string to goog.html types is disabled',
       assertThrows(function() {
         goog.html.legacyconversions.safeHtmlFromString(
             'Possibly untrusted <html>');
@@ -72,7 +74,7 @@ function testSafeHtmlFromString_guardedByGlobalFlag() {
   // Conversion is disallowed if module override is set, but
   // ALLOW_LEGACY_CONVERSION_OVERRIDES is not.
   assertEquals(
-      'Failure: Legacy conversion from string to SafeHtml is disabled',
+      'Error: Legacy conversion from string to goog.html types is disabled',
       assertThrows(function() {
         goog.html.legacyconversions.safeHtmlFromString(
             'Possibly untrusted <html>', true);
@@ -89,4 +91,19 @@ function testSafeHtmlFromString_allowedByOverride() {
   var safeHtml = goog.html.legacyconversions.safeHtmlFromString(
       helloWorld, true);
   assertEquals(helloWorld, goog.html.SafeHtml.unwrap(safeHtml));
+}
+
+
+function testSafeUrlFromString() {
+  var url = 'https://www.google.com';
+  var safeUrl = goog.html.legacyconversions.safeUrlFromString(url);
+  assertEquals(url, goog.html.SafeUrl.unwrap(safeUrl));
+}
+
+
+function testTrustedResourceUrlFromString() {
+  var url = 'https://www.google.com/script.js';
+  var trustedResourceUrl =
+      goog.html.legacyconversions.trustedResourceUrlFromString(url);
+  assertEquals(url, goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl));
 }

@@ -95,6 +95,8 @@
 goog.provide('goog.html.legacyconversions');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 
 
 /**
@@ -140,15 +142,63 @@ goog.define('goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES',
  */
 goog.html.legacyconversions.safeHtmlFromString = function(
     html, opt_override) {
-  if (!goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS &&
-      !(goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES &&
-        opt_override)) {
-    throw Error(
-        'Failure: Legacy conversion from string to SafeHtml is disabled');
-  } else {
-    return goog.html.legacyconversions.
-        createSafeHtmlSecurityPrivateDoNotAccessOrElse_(html);
-  }
+  goog.html.legacyconversions.throwIfConversionDisallowed_(opt_override);
+  return goog.html.legacyconversions.
+      createSafeHtmlSecurityPrivateDoNotAccessOrElse_(html);
+};
+
+
+/**
+ * Performs an "unchecked conversion" from string to TrustedResourceUrl for
+ * legacy API purposes.
+ *
+ * Unchecked conversion will not proceed if ALLOW_LEGACY_CONVERSIONS is false,
+ * and instead this function unconditionally throws an exception.
+ *
+ * Unchecked conversion proceeds if ALLOW_LEGACY_CONVERSION_OVERRIDES and
+ * opt_override are true, even if ALLOW_LEGACY_CONVERSIONS is false.
+ * This permits per-API/package override of ALLOW_LEGACY_CONVERSIONS during
+ * migration/refactoring of large applications. See fileoverview for details.
+ *
+ * @param {string} url A string to be converted to TrustedResourceUrl.
+ * @param {boolean=} opt_override If true, allows conversion to proceed
+ *     even if ALLOW_LEGACY_CONVERSIONS is false, but only if
+ *     ALLOW_LEGACY_CONVERSION_OVERRIDES is true as well.
+ * @return {!goog.html.TrustedResourceUrl} The value of url, wrapped in a
+ *     TrustedResourceUrl object.
+ */
+goog.html.legacyconversions.trustedResourceUrlFromString = function(
+    url, opt_override) {
+  goog.html.legacyconversions.throwIfConversionDisallowed_(opt_override);
+  return goog.html.legacyconversions.
+      createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_(url);
+};
+
+
+/**
+ * Performs an "unchecked conversion" from string to SafeUrl for legacy API
+ * purposes.
+ *
+ * Unchecked conversion will not proceed if ALLOW_LEGACY_CONVERSIONS is false,
+ * and instead this function unconditionally throws an exception.
+ *
+ * Unchecked conversion proceeds if ALLOW_LEGACY_CONVERSION_OVERRIDES and
+ * opt_override are true, even if ALLOW_LEGACY_CONVERSIONS is false.
+ * This permits per-API/package override of ALLOW_LEGACY_CONVERSIONS during
+ * migration/refactoring of large applications. See fileoverview for details.
+ *
+ * @param {string} url A string to be converted to SafeUrl.
+ * @param {boolean=} opt_override If true, allows conversion to proceed
+ *     even if ALLOW_LEGACY_CONVERSIONS is false, but only if
+ *     ALLOW_LEGACY_CONVERSION_OVERRIDES is true as well.
+ * @return {!goog.html.SafeUrl} The value of url, wrapped in a SafeUrl
+ *     object.
+ */
+goog.html.legacyconversions.safeUrlFromString = function(
+    url, opt_override) {
+  goog.html.legacyconversions.throwIfConversionDisallowed_(opt_override);
+  return goog.html.legacyconversions.
+      createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
 };
 
 
@@ -160,11 +210,65 @@ goog.html.legacyconversions.safeHtmlFromString = function(
  * @private
  * @suppress {visibility} For access to SafeHtml.create...  Note that this
  *     use is appropriate since this method is intended to be "package private"
- *     withing goog.html.  DO NOT call SafeHtml.create... from outside this
+ *     within goog.html.  DO NOT call SafeHtml.create... from outside this
  *     package; use appropriate wrappers instead.
  */
 goog.html.legacyconversions.createSafeHtmlSecurityPrivateDoNotAccessOrElse_ =
     function(html) {
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
       html, null);
+};
+
+
+/**
+ * Internal wrapper for the package-private
+ * goog.html.TrustedResourceUrl.createTrustedResourceUrl... function.
+ * @param {string} url A string to be converted to TrustedResourceUrl.
+ * @return {!goog.html.TrustedResourceUrl}
+ * @private
+ * @suppress {visibility} For access to TrustedResourceUrl.create...  Note that
+ *     this use is appropriate since this method is intended to be
+ *     "package private" within goog.html.  DO NOT call
+ *     TrustedResourceUrl.create... from outside this package; use appropriate
+ *     wrappers instead.
+ */
+goog.html.legacyconversions.
+    createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_ = function(url) {
+  return goog.html.TrustedResourceUrl
+      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_(url);
+};
+
+
+/**
+ * Internal wrapper for the package-private goog.html.SafeUrl.createSafeUrl...
+ * function.
+ * @param {string} url A string to be converted to TrustedResourceUrl.
+ * @return {!goog.html.SafeUrl}
+ * @private
+ * @suppress {visibility} For access to SafeUrl.create...  Note that this use
+ *     is appropriate since this method is intended to be "package private"
+ *     within goog.html.  DO NOT call SafeUrl.create... from outside this
+ *     package; use appropriate wrappers instead.
+ */
+goog.html.legacyconversions.createSafeUrlSecurityPrivateDoNotAccessOrElse_ =
+    function(url) {
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
+};
+
+
+/**
+ * Checks whether legacy conversion is allowed. Throws an exception if not.
+ * @param {boolean=} opt_override Passed from public function. If true,
+ *     allows conversion to proceed even if ALLOW_LEGACY_CONVERSIONS is false,
+ *     but only if ALLOW_LEGACY_CONVERSION_OVERRIDES is true as well.
+ * @private
+ */
+goog.html.legacyconversions.throwIfConversionDisallowed_ = function(
+    opt_override) {
+  if (!goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS &&
+      !(goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES &&
+        opt_override)) {
+    throw Error(
+        'Error: Legacy conversion from string to goog.html types is disabled');
+  }
 };
