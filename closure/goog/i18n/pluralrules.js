@@ -534,26 +534,6 @@ goog.i18n.pluralRules.ptSelect_ = function(n, opt_precision) {
 };
 
 /**
- * Plural select rules for ru locale
- *
- * @param {number} n  The count of items.
- * @param {number=} opt_precision Precision for number formatting, if not default.
- * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
- * @private
- */
-goog.i18n.pluralRules.ruSelect_ = function(n, opt_precision) {
-  var i = n | 0;
-  var vf = goog.i18n.pluralRules.get_vf_(n, opt_precision);
-  if (vf.v == 0 && i % 10 == 1 && i % 100 != 11) {
-    return goog.i18n.pluralRules.Keyword.ONE;
-  }
-  if (vf.v == 0 && i % 10 == 0 || vf.v == 0 && i % 10 >= 5 && i % 10 <= 9 || vf.v == 0 && i % 100 >= 11 && i % 100 <= 14) {
-    return goog.i18n.pluralRules.Keyword.MANY;
-  }
-  return goog.i18n.pluralRules.Keyword.OTHER;
-};
-
-/**
  * Plural select rules for pl locale
  *
  * @param {number} n  The count of items.
@@ -577,14 +557,14 @@ goog.i18n.pluralRules.plSelect_ = function(n, opt_precision) {
 };
 
 /**
- * Plural select rules for uk locale
+ * Plural select rules for ru locale
  *
  * @param {number} n  The count of items.
  * @param {number=} opt_precision Precision for number formatting, if not default.
  * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
  * @private
  */
-goog.i18n.pluralRules.ukSelect_ = function(n, opt_precision) {
+goog.i18n.pluralRules.ruSelect_ = function(n, opt_precision) {
   var i = n | 0;
   var vf = goog.i18n.pluralRules.get_vf_(n, opt_precision);
   if (vf.v == 0 && i % 10 == 1 && i % 100 != 11) {
@@ -1038,7 +1018,7 @@ if (goog.LOCALE == 'tr') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }
 if (goog.LOCALE == 'uk') {
-  goog.i18n.pluralRules.select = goog.i18n.pluralRules.ukSelect_;
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.ruSelect_;
 }
 if (goog.LOCALE == 'ur') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
