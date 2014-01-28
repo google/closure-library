@@ -16,9 +16,11 @@ See the COPYING file for details.
   goog.require('goog.i18n.TimeZone');
   goog.require('goog.i18n.DateTimePatterns');
   goog.require('goog.i18n.DateTimePatterns_de');
+  goog.require('goog.i18n.DateTimePatterns_ja');
   goog.require('goog.i18n.DateTimePatterns_sv');
   goog.require('goog.i18n.DateTimeSymbols');
   goog.require('goog.i18n.DateTimeSymbols_de');
+  goog.require('goog.i18n.DateTimeSymbols_ja');
   goog.require('goog.i18n.DateTimeSymbols_sv');
   goog.require('goog.i18n.DateTimeSymbols_bn_BD');
   goog.require('goog.i18n.DateTimeSymbols_en_IE');
@@ -603,7 +605,7 @@ See the COPYING file for details.
   }
 
   function testSupportForWeekInYear() {
-    date = new Date(2013, 1, 25);
+    var date = new Date(2013, 1, 25);
 
     goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fr;
     goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
@@ -619,6 +621,54 @@ See the COPYING file for details.
     assertEquals('week ۹', fmt.format(date));
     var fmt = new goog.i18n.DateTimeFormat('\'week\' ww');
     assertEquals('week ۰۹', fmt.format(date));
+  }
+
+  function testSupportForYearAndEra() {
+    var date = new Date(2013, 1, 25);
+    var fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimePatterns.YEAR_FULL_WITH_ERA);
+
+    assertEquals('2013 AD', fmt.format(date));
+
+    date.setFullYear(213);
+    assertEquals('213 AD', fmt.format(date));
+
+    date.setFullYear(11);
+    assertEquals('11 AD', fmt.format(date));
+
+    date.setFullYear(-213);
+    assertEquals('213 BC', fmt.format(date));
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+    fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimePatterns.YEAR_FULL_WITH_ERA);
+
+    date.setFullYear(2013);
+    assertEquals('2013 n. Chr.', fmt.format(date));
+
+    date.setFullYear(213);
+    assertEquals('213 n. Chr.', fmt.format(date));
+
+    date.setFullYear(11);
+    assertEquals('11 n. Chr.', fmt.format(date));
+
+    date.setFullYear(-213);
+    assertEquals('213 v. Chr.', fmt.format(date));
+
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ja;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ja;
+    fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimePatterns.YEAR_FULL_WITH_ERA);
+
+    date.setFullYear(2013);
+    assertEquals('西暦2013年', fmt.format(date));
+
+    date.setFullYear(213);
+    assertEquals('西暦213年', fmt.format(date));
+
+    date.setFullYear(11);
+    assertEquals('西暦11年', fmt.format(date));
+
+    date.setFullYear(-213);
+    assertEquals('紀元前213年', fmt.format(date));
   }
 
   // Creates a string by concatenating the week number for 7 successive days
