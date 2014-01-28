@@ -168,6 +168,12 @@ function testRemoveKeyFromTrie() {
   assertTrue('get "x" should be defined', 'x' in trie.childNodes_);
   assertFalse('get "y" should be undefined',
       'y' in trie.childNodes_['x'].childNodes_);
+
+  trie.add('akey', 'value1');
+  trie.add('akey1', 'value2');
+  trie.remove('akey1');
+  assertEquals('get "akey", should be "value1"', 'value1', trie.get('akey'));
+  assertUndefined('get "akey1", should be undefined', trie.get('akey1'));
 }
 
 function testRemoveKeyFromTrieWithNulls() {
