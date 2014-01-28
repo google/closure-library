@@ -29,7 +29,7 @@ See the COPYING file for details.
   goog.require('goog.i18n.DateTimeSymbols_en_IN');
   goog.require('goog.i18n.DateTimeSymbols_en_GB');
   goog.require('goog.i18n.DateTimeSymbols_en_US');
-  goog.require('goog.i18n.DateTimeSymbols_ro_RO'); 
+  goog.require('goog.i18n.DateTimeSymbols_ro_RO');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -581,7 +581,7 @@ See the COPYING file for details.
     goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
     var fmtDe = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
 
-    // The two formatters should return different results (French & German) 
+    // The two formatters should return different results (French & German)
     assertEquals('vendredi 15 novembre 2013', fmtFr.format(date));
     assertEquals('Freitag, 15. November 2013', fmtDe.format(date));
   }
@@ -656,6 +656,37 @@ See the COPYING file for details.
     assertEquals('en_US', '1111122', weekInYearFor7Days());
     goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_ro_RO;
     assertEquals('ro_RO', '1111112', weekInYearFor7Days());
+  }
+
+  // Regression for b/11567443 (no method 'getHours' when formatting a goog.date.Date)
+  // 
+  function test_variousDateTypes() {
+    goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fr;
+    goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
+
+    var fmt = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
+
+    var date = new Date(2006, 6, 27, 13, 10, 42, 250);
+    assertEquals('27 juil. 2006 13:10:42', fmt.format(date));
+
+    var gdatetime = new goog.date.DateTime(2006, 6, 27, 13, 10, 42, 250);
+    assertEquals('27 juil. 2006 13:10:42', fmt.format(gdatetime));
+
+    var gdate = new goog.date.Date(2006, 6, 27);
+    var fmtDate = new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.MEDIUM_DATE);
+    assertEquals('27 juil. 2006', fmtDate.format(gdatetime));
+    try {
+      fmt.format(gdate);
+      fail('Should have thrown exception.');
+    } catch(e) {}
+  }
+
+  function testExceptionWhenFormattingNull() {
+    var fmt = new goog.i18n.DateTimeFormat('M/d/y');
+    try {
+      fmt.format(null);
+      fail('Should have thrown exception.');
+    } catch(e) {}
   }
 
 </script>
