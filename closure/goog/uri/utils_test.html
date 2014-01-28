@@ -83,6 +83,15 @@ function testSplitRelativeUri() {
   assertEquals('fragment', utils.getFragment(uri));
 }
 
+function testSplitBadAuthority() {
+  // This URL has a syntax error per the RFC (port number must be digits, and
+  // host cannot contain a colon except in [...]). This test is solely to
+  // 'document' the current behavior, which may affect application handling
+  // of erroneous URLs.
+  assertEquals(utils.getDomain('http://host:port/'), 'host:port');
+  assertNull(utils.getPort('http://host:port/'));
+}
+
 function testSplitIntoHostAndPath() {
   // Splitting into host and path takes care of one of the major use cases
   // of resolve, without implementing a generic algorithm that undoubtedly
