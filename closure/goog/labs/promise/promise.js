@@ -807,7 +807,7 @@ goog.labs.Promise.prototype.executeCallback_ = function(
  * @private
  */
 goog.labs.Promise.prototype.addStackTrace_ = function(err) {
-  if (goog.labs.Promise.LONG_STACK_TRACES && err.stack) {
+  if (goog.labs.Promise.LONG_STACK_TRACES && goog.isString(err.stack)) {
     // Extract the third line of the stack trace, which is the entry for the
     // user function that called into Promise code.
     var trace = err.stack.split('\n', 4)[3];
@@ -831,7 +831,7 @@ goog.labs.Promise.prototype.addStackTrace_ = function(err) {
  */
 goog.labs.Promise.prototype.appendLongStack_ = function(err) {
   if (goog.labs.Promise.LONG_STACK_TRACES &&
-      err && err.stack && this.stack_.length) {
+      err && goog.isString(err.stack) && this.stack_.length) {
     var longTrace = ['Promise trace:'];
 
     for (var promise = this; promise; promise = promise.parent_) {
