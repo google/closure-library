@@ -56,20 +56,20 @@ goog.require('goog.labs.Thenable');
  * @see http://promisesaplus.com/
  *
  * @param {function(
- *             this:THIS,
+ *             this:RESOLVER_CONTEXT,
  *             function((TYPE|goog.labs.Promise.<TYPE>|Thenable)),
  *             function(*)): void} resolver
  *     Initialization function that is invoked immediately with {@code resolve}
  *     and {@code reject} functions as arguments. The Promise is resolved or
  *     rejected with the first argument passed to either function.
- * @param {THIS=} opt_context An optional context for executing the resolver
- *     function. If unspecified, the resolver function will be executed in the
- *     default scope.
+ * @param {RESOLVER_CONTEXT=} opt_context An optional context for executing the
+ *     resolver function. If unspecified, the resolver function will be executed
+ *     in the default scope.
  * @constructor
  * @struct
  * @final
  * @implements {goog.labs.Thenable.<TYPE>}
- * @template TYPE,THIS
+ * @template TYPE,RESOLVER_CONTEXT
  */
 goog.labs.Promise = function(resolver, opt_context) {
   /**
