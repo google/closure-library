@@ -40,10 +40,15 @@ function testToString() {
 
 function testSlice() {
   var blob = new goog.testing.fs.Blob('abcdef');
-  assertEquals('bc', blob.slice(1, 2).toString());
+  assertEquals('bc', blob.slice(1, 3).toString());
   assertEquals('def', blob.slice(3, 10).toString());
+  assertEquals('abcd', blob.slice(0, -2).toString());
   assertEquals('', blob.slice(10, 1).toString());
-  assertEquals('a', blob.slice(-1, 1).toString());
+  assertEquals('b', blob.slice(-5, 2).toString());
+
+  assertEquals('abcdef', blob.slice().toString());
+  assertEquals('abc', blob.slice(/* opt_start */ undefined, 3).toString());
+  assertEquals('def', blob.slice(3).toString());
 
   assertEquals('text/plain', blob.slice(1, 2, 'text/plain').type);
 }
