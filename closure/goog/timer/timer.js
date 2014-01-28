@@ -45,7 +45,7 @@ goog.Timer = function(opt_interval, opt_timerObject) {
   this.interval_ = opt_interval || 1;
 
   /**
-   * An object that implements setTimout, setInterval, clearTimeout and
+   * An object that implements setTimeout, setInterval, clearTimeout and
    * clearInterval. We default to the window object. Changing this on
    * goog.Timer.prototype changes the object for all timer instances which can
    * be useful if your environment has some other implementation of timers than
