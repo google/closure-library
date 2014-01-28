@@ -28,50 +28,20 @@
 goog.provide('goog.dom.classes');
 
 goog.require('goog.array');
-goog.require('goog.asserts');
-goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classlist');
-
-// TODO(nnaze): Fix parameter types in this file to be non-nullable Element.
 
 
 /**
  * Sets the entire class name of an element.
- *
- * Note that element is expected to be an !Element at run time, and updating
- * the type signature is a TODO.
- *
  * @param {Node} element DOM node to set class of.
  * @param {string} className Class name(s) to apply to element.
  */
 goog.dom.classes.set = function(element, className) {
-  goog.dom.classes.assertElement_(element);
-  goog.dom.classlist.set(
-      /** @type {Element} */ (element),
-      className);
-};
-
-
-/**
- * Asserts an object to be an element.
- * @param {Object} elem
- * @private
- */
-goog.dom.classes.assertElement_ = function(elem) {
-  goog.asserts.assert(elem);
-  goog.asserts.assert(
-      goog.isObject(elem) &&
-      elem.nodeType == goog.dom.NodeType.ELEMENT,
-      'elem is expected to be an Element');
+  element.className = className;
 };
 
 
 /**
  * Gets an array of class names on an element
- *
- * Note that element is expected to be an Element at run time, and updating
- * the type signature is a TODO.
- *
  * @param {Node} element DOM node to get class of.
  * @return {!Array} Class names on {@code element}. Some browsers add extra
  *     properties to the array. Do not depend on any of these!

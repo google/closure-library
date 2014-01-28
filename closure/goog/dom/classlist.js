@@ -27,10 +27,6 @@
 goog.provide('goog.dom.classlist');
 
 goog.require('goog.array');
-goog.require('goog.asserts');
-
-
-// TODO(nnaze): Fix parameter types in this file to be non-nullable Element
 
 
 /**
@@ -46,7 +42,6 @@ goog.define('goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST', false);
  * @return {!goog.array.ArrayLike} Class names on {@code element}.
  */
 goog.dom.classlist.get = function(element) {
-  goog.asserts.assert(element);
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
     return element.classList;
   }
@@ -65,7 +60,6 @@ goog.dom.classlist.get = function(element) {
  * @param {string} className Class name(s) to apply to element.
  */
 goog.dom.classlist.set = function(element, className) {
-  goog.asserts.assert(element);
   element.className = className;
 };
 
@@ -78,7 +72,6 @@ goog.dom.classlist.set = function(element, className) {
  * @return {boolean} Whether element has the class.
  */
 goog.dom.classlist.contains = function(element, className) {
-  goog.asserts.assert(element);
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
     return element.classList.contains(className);
   }
@@ -94,7 +87,6 @@ goog.dom.classlist.contains = function(element, className) {
  * @param {string} className Class name to add.
  */
 goog.dom.classlist.add = function(element, className) {
-  goog.asserts.assert(element);
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
     element.classList.add(className);
     return;
@@ -117,7 +109,6 @@ goog.dom.classlist.add = function(element, className) {
  * or empty class names.
  */
 goog.dom.classlist.addAll = function(element, classesToAdd) {
-  goog.asserts.assert(element);
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
     goog.array.forEach(classesToAdd, function(className) {
       goog.dom.classlist.add(element, className);
@@ -155,7 +146,6 @@ goog.dom.classlist.addAll = function(element, classesToAdd) {
  * @param {string} className Class name to remove.
  */
 goog.dom.classlist.remove = function(element, className) {
-  goog.asserts.assert(element);
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
     element.classList.remove(className);
     return;
@@ -210,7 +200,6 @@ goog.dom.classlist.removeAll = function(element, classesToRemove) {
  *     false removes).
  */
 goog.dom.classlist.enable = function(element, className, enabled) {
-  goog.asserts.assert(element);
   if (enabled) {
     goog.dom.classlist.add(element, className);
   } else {
@@ -229,7 +218,6 @@ goog.dom.classlist.enable = function(element, className, enabled) {
  * @return {boolean} Whether classes were switched.
  */
 goog.dom.classlist.swap = function(element, fromClass, toClass) {
-  goog.asserts.assert(element);
   if (goog.dom.classlist.contains(element, fromClass)) {
     goog.dom.classlist.remove(element, fromClass);
     goog.dom.classlist.add(element, toClass);
@@ -250,7 +238,6 @@ goog.dom.classlist.swap = function(element, fromClass, toClass) {
  *     been called).
  */
 goog.dom.classlist.toggle = function(element, className) {
-  goog.asserts.assert(element);
   var add = !goog.dom.classlist.contains(element, className);
   goog.dom.classlist.enable(element, className, add);
   return add;
@@ -268,7 +255,6 @@ goog.dom.classlist.toggle = function(element, className) {
  * @param {string} classToAdd Class to add.
  */
 goog.dom.classlist.addRemove = function(element, classToRemove, classToAdd) {
-  goog.asserts.assert(element);
   goog.dom.classlist.remove(element, classToRemove);
   goog.dom.classlist.add(element, classToAdd);
 };
