@@ -470,18 +470,6 @@ goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
  * Note that if the Deferred result is never mutated, and only
  * {@code then} calls are made, the Deferred will behave like a Promise.
  *
- * @param {(function(this:THIS, VALUE):
- *          (RESULT|goog.labs.Thenable.<RESULT>|Thenable))=} opt_onFulfilled A
- *     function that will be invoked with the fulfillment value if the Promise
- *     is fullfilled.
- * @param {(function(*): *)=} opt_onRejected A function that will be invoked
- *     with the rejection reason if the Promise is rejected.
- * @param {THIS=} opt_context An optional context object that will be the
- *     execution context for the callbacks. By default, functions are executed
- *     with the default this.
- * @return {!goog.labs.Promise.<RESULT>} A new Promise that will receive the
- *     result of the fulfillment or rejection callback.
- * @template RESULT,THIS
  * @override
  */
 goog.async.Deferred.prototype.then = function(opt_onFulfilled, opt_onRejected,

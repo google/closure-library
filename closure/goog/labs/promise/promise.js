@@ -57,7 +57,7 @@ goog.require('goog.labs.Thenable');
  *
  * @param {function(
  *             this:RESOLVER_CONTEXT,
- *             function((TYPE|goog.labs.Promise.<TYPE>|Thenable)),
+ *             function((TYPE|IThenable.<TYPE>|Thenable)),
  *             function(*)): void} resolver
  *     Initialization function that is invoked immediately with {@code resolve}
  *     and {@code reject} functions as arguments. The Promise is resolved or
@@ -361,18 +361,6 @@ goog.labs.Promise.withResolver = function() {
  * with the rejection reason as argument, and the child Promise will be rejected
  * with the return value (or thrown value) of the callback.
  *
- * @param {(function(this:THIS, TYPE):
- *          (RESULT|goog.labs.Thenable.<RESULT>|Thenable))=} opt_onFulfilled A
- *     function that will be invoked with the fulfillment value if the Promise
- *     is fullfilled.
- * @param {(function(this:THIS, *): *)=} opt_onRejected A function that will be
- *     invoked with the rejection reason if the Promise is rejected.
- * @param {THIS=} opt_context An optional context object that will be the
- *     execution context for the callbacks. By default, functions are executed
- *     in the default calling context.
- * @return {!goog.labs.Promise.<RESULT>} A new Promise that will receive the
- *     result of the fulfillment or rejection callback.
- * @template RESULT,THIS
  * @override
  */
 goog.labs.Promise.prototype.then = function(

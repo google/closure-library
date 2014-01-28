@@ -21,6 +21,7 @@ goog.provide('goog.labs.Thenable');
  * http://promisesaplus.com for interop with {@see goog.labs.Promise}.
  *
  * @interface
+ * @extends {IThenable.<TYPE>}
  * @template TYPE
  */
 goog.labs.Thenable = function() {};
@@ -41,7 +42,7 @@ goog.labs.Thenable = function() {};
  * with the return value of the callback or thrown value.
  *
  * @param {(function(this:THIS, TYPE):
- *          (RESULT|goog.labs.Thenable.<RESULT>|Thenable))=} opt_onFulfilled A
+ *             (RESULT|IThenable.<RESULT>|Thenable))=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise
  *     is fullfilled.
  * @param {(function(*): *)=} opt_onRejected A function that will be invoked
