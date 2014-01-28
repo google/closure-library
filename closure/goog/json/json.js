@@ -25,6 +25,15 @@ goog.provide('goog.json.Serializer');
 
 
 /**
+ * @define {boolean} If true, use the native JSON parsing API.
+ * NOTE(user): EXPERIMENTAL, handle with care.  Setting this to true might
+ * break your code.  The default {@code goog.json.parse} implementation is able
+ * to handle invalid JSON, such as JSPB.
+ */
+goog.define('goog.json.USE_NATIVE_JSON', false);
+
+
+/**
  * Tests if a string is an invalid JSON string. This only ensures that we are
  * not using any invalid characters
  * @param {string} s The string to test.
@@ -84,17 +93,19 @@ goog.json.isValid_ = function(s) {
  * @throws Error if s is invalid JSON.
  * @return {Object} The object generated from the JSON string, or null.
  */
-goog.json.parse = function(s) {
-  var o = String(s);
-  if (goog.json.isValid_(o)) {
-    /** @preserveTry */
-    try {
-      return /** @type {Object} */ (eval('(' + o + ')'));
-    } catch (ex) {
-    }
-  }
-  throw Error('Invalid JSON string: ' + o);
-};
+goog.json.parse = goog.json.USE_NATIVE_JSON ?
+    /** @type {function(*):Object} */ (JSON.parse) :
+    function(s) {
+      var o = String(s);
+      if (goog.json.isValid_(o)) {
+        /** @preserveTry */
+        try {
+          return /** @type {Object} */ (eval('(' + o + ')'));
+        } catch (ex) {
+        }
+      }
+      throw Error('Invalid JSON string: ' + o);
+    };
 
 
 /**
@@ -104,9 +115,11 @@ goog.json.parse = function(s) {
  * @param {string} s The JSON string to parse.
  * @return {Object} The object generated from the JSON string.
  */
-goog.json.unsafeParse = function(s) {
-  return /** @type {Object} */ (eval('(' + s + ')'));
-};
+goog.json.unsafeParse = goog.json.USE_NATIVE_JSON ?
+    /** @type {function(string):Object} */ (JSON.parse) :
+    function(s) {
+      return /** @type {Object} */ (eval('(' + s + ')'));
+    };
 
 
 /**
@@ -140,18 +153,20 @@ goog.json.Reviver;
  * @throws Error if there are loops in the object graph.
  * @return {string} A JSON string representation of the input.
  */
-goog.json.serialize = function(object, opt_replacer) {
-  // NOTE(nicksantos): Currently, we never use JSON.stringify.
-  //
-  // The last time I evaluated this, JSON.stringify had subtle bugs and behavior
-  // differences on all browsers, and the performance win was not large enough
-  // to justify all the issues. This may change in the future as browser
-  // implementations get better.
-  //
-  // assertSerialize in json_test contains if branches for the cases
-  // that fail.
-  return new goog.json.Serializer(opt_replacer).serialize(object);
-};
+goog.json.serialize = goog.json.USE_NATIVE_JSON ?
+    /** @type {function(*, ?goog.json.Replacer=):string} */ (JSON.stringify) :
+    function(object, opt_replacer) {
+      // NOTE(nicksantos): Currently, we never use JSON.stringify.
+      //
+      // The last time I evaluated this, JSON.stringify had subtle bugs and
+      // behavior differences on all browsers, and the performance win was not
+      // large enough to justify all the issues. This may change in the future
+      // as browser implementations get better.
+      //
+      // assertSerialize in json_test contains if branches for the cases
+      // that fail.
+      return new goog.json.Serializer(opt_replacer).serialize(object);
+    };
 
 
 
