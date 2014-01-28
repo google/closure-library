@@ -57,7 +57,7 @@ goog.date.DateRange = function(startDate, endDate) {
  * The first possible day, as far as this class is concerned.
  * @type {goog.date.Date}
  */
-goog.date.DateRange.MINIMUM_DATE = new goog.date.Date(0000, 0, 1);
+goog.date.DateRange.MINIMUM_DATE = new goog.date.Date(0, 0, 1);
 
 
 /**
