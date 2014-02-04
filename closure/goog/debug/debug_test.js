@@ -62,3 +62,31 @@ function testGetFunctionName() {
 
   goog.debug.setFunctionResolver(null);
 }
+
+
+/**
+ * Asserts that a substring can be found in a specified text string.
+ *
+ * @param {string} substring The substring to search for.
+ * @param {string} text The text string to search within.
+ */
+function assertContainsSubstring(substring, text) {
+  assertNotEquals('Could not find "' + substring + '" in "' + text + '"',
+      -1, text.search(substring));
+}
+
+
+function testDeepExpose() {
+  var a = {};
+  var b = {};
+  a.ancestor = a;
+  a.otherObject = b;
+  a.otherObjectAgain = b;
+
+  var deepExpose = goog.debug.deepExpose(a);
+
+  assertContainsSubstring('ancestor = ... reference loop detected ...',
+                          deepExpose);
+
+  assertContainsSubstring('otherObjectAgain = {', deepExpose);
+}

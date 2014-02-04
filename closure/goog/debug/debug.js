@@ -141,11 +141,11 @@ goog.debug.expose = function(obj, opt_showFn) {
  * @return {string} A string representation of {@code obj}.
  */
 goog.debug.deepExpose = function(obj, opt_showFn) {
-  var previous = new goog.structs.Set();
   var str = [];
 
-  var helper = function(obj, space) {
+  var helper = function(obj, space, parentSeen) {
     var nestspace = space + '  ';
+    var seen = new goog.structs.Set(parentSeen);
 
     var indentMultiline = function(str) {
       return str.replace(/\n/g, '\n' + space);
@@ -162,12 +162,10 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
       } else if (goog.isFunction(obj)) {
         str.push(indentMultiline(String(obj)));
       } else if (goog.isObject(obj)) {
-        if (previous.contains(obj)) {
-          // TODO(user): This is a bug; it falsely detects non-loops as loops
-          // when the reference tree contains two references to the same object.
+        if (seen.contains(obj)) {
           str.push('*** reference loop detected ***');
         } else {
-          previous.add(obj);
+          seen.add(obj);
           str.push('{');
           for (var x in obj) {
             if (!opt_showFn && goog.isFunction(obj[x])) {
@@ -176,7 +174,7 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
             str.push('\n');
             str.push(nestspace);
             str.push(x + ' = ');
-            helper(obj[x], nestspace);
+            helper(obj[x], nestspace, seen);
           }
           str.push('\n' + space + '}');
         }
@@ -188,7 +186,7 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
     }
   };
 
-  helper(obj, '');
+  helper(obj, '', new goog.structs.Set());
   return str.join('');
 };
 
