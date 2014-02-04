@@ -298,7 +298,8 @@ goog.net.IframeIo.handleIncrementalData = function(win, data) {
   if (iframeIo && iframeName == iframeIo.iframeName_) {
     iframeIo.handleIncrementalData_(data);
   } else {
-    goog.log.getLogger('goog.net.IframeIo').info(
+    var logger = goog.log.getLogger('goog.net.IframeIo');
+    goog.log.info(logger,
         'Incremental iframe data routed for unknown iframe');
   }
 };
