@@ -347,13 +347,15 @@ goog.db.Error.fromRequest = function(request, message) {
  */
 goog.db.Error.fromException = function(ex, message) {
   if ('name' in ex) {
-    // Chrome 21 and before.
-    return new goog.db.Error(/** @type {!DOMError} */ (ex), message);
-  } else if ('code' in ex) {
     // Chrome 22+.
+    var errorMessage = message + ': ' + ex.message;
+    return new goog.db.Error(/** @type {!DOMError} */ (ex), errorMessage);
+  } else if ('code' in ex) {
+    // Chrome 21 and before.
     var errorName = goog.db.Error.getName(ex.code);
+    var errorMessage = message + ': ' + ex.message;
     return new goog.db.Error(
-        /** @type {!DOMError} */ ({name: errorName}), message);
+        /** @type {!DOMError} */ ({name: errorName}), errorMessage);
   } else {
     return new goog.db.Error(/** @type {!DOMError} */ (
         {name: goog.db.Error.ErrorName.UNKNOWN_ERR}), message);
