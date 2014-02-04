@@ -180,6 +180,12 @@ goog.dom.$ = goog.dom.getElement;
  * need is particular tags belonging to a single class, this function
  * is fast and sleek.
  *
+ * Note that tag names are case sensitive in the SVG namespace, and this
+ * function converts opt_tag to uppercase for comparisons. For queries in the
+ * SVG namespace you should use querySelector or querySelectorAll instead.
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=963870
+ * https://bugs.webkit.org/show_bug.cgi?id=83438
+ *
  * @see {goog.dom.query}
  *
  * @param {?string=} opt_tag Element tag name.
