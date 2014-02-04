@@ -334,7 +334,7 @@ goog.ui.ModalPopup.prototype.enterDocument = function() {
   // focus is moved out of this modal popup.
   this.getHandler().listen(
       this.focusHandler_, goog.events.FocusHandler.EventType.FOCUSIN,
-      this.onFocus_);
+      this.onFocus);
   this.setA11YDetectBackground_(false);
 };
 
@@ -654,14 +654,27 @@ goog.ui.ModalPopup.prototype.reposition = function() {
  * if the user shift-tabs past the front of the modal popup, focus wraps around
  * to the end.
  * @param {goog.events.BrowserEvent} e Browser's event object.
- * @private
+ * @protected
  */
-goog.ui.ModalPopup.prototype.onFocus_ = function(e) {
+goog.ui.ModalPopup.prototype.onFocus = function(e) {
   if (this.backwardTabWrapInProgress_) {
     this.resetBackwardTabWrap_();
   } else if (e.target == this.tabCatcherElement_) {
     goog.Timer.callOnce(this.focusElement_, 0, this);
   }
+};
+
+
+/**
+ * Returns the magic tab catcher element used to detect when the user has
+ * rolled focus off of the popup content.  It is automatically created during
+ * the createDom method() and can be used by subclasses to implement custom
+ * tab-loop behavior.
+ * @return {Element} The tab catcher element.
+ * @protected
+ */
+goog.ui.ModalPopup.prototype.getTabCatcherElement = function() {
+  return this.tabCatcherElement_;
 };
 
 
