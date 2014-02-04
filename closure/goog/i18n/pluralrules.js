@@ -65,6 +65,8 @@ goog.i18n.pluralRules.decimals_ = function(n) {
 
 /**
  * Calculates v and f as per CLDR plural rules.
+ * The short names for parameters / return match the CLDR syntax and UTS #35
+ *     (http://unicode.org/reports/tr35/tr35-numbers.html#Plural_rules_syntax)
  * @param {number} n The count of items.
  * @param {number=} opt_precision optional, precision.
  * @return {Object} The v and f.
@@ -82,11 +84,13 @@ goog.i18n.pluralRules.get_vf_ = function(n, opt_precision) {
   var base = Math.pow(10, v);
   var f = ((n * base) | 0) % base;
 
-  return {'v': v, 'f': f};
+  return {v: v, f: f};
 };
 
 /**
  * Calculates w and t as per CLDR plural rules.
+ * The short names for parameters / return match the CLDR syntax and UTS #35
+ *     (http://unicode.org/reports/tr35/tr35-numbers.html#Plural_rules_syntax)
  * @param {number} v Calculated previously.
  * @param {number} f Calculated previously.
  * @return {Object} The w and t.
@@ -94,7 +98,7 @@ goog.i18n.pluralRules.get_vf_ = function(n, opt_precision) {
  */
 goog.i18n.pluralRules.get_wt_ = function(v, f) {
   if (f === 0) {
-    return {'w': 0, 't': 0};
+    return {w: 0, t: 0};
   }
 
   while ((f % 10) === 0) {
@@ -102,7 +106,7 @@ goog.i18n.pluralRules.get_wt_ = function(v, f) {
     v--;
   }
 
-  return {'w': v, 't': f};
+  return {w: v, t: f};
 };
 
 /**
