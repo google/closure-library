@@ -399,7 +399,8 @@ goog.debug.getStacktraceHelper_ = function(fn, visited) {
   } else if (fn && visited.length < goog.debug.MAX_STACK_DEPTH) {
     sb.push(goog.debug.getFunctionName(fn) + '(');
     var args = fn.arguments;
-    for (var i = 0; i < args.length; i++) {
+    // Args may be null for some special functions such as host objects or eval.
+    for (var i = 0; args && i < args.length; i++) {
       if (i > 0) {
         sb.push(', ');
       }
