@@ -296,7 +296,7 @@ goog.debug.FancyWindow.prototype.writeOptionsToLocalStorage_ = function() {
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
   for (var i = 0; i < loggers.length; i++) {
-    var key = goog.debug.FancyWindow.LOCAL_STORE_PREFIX + loggers[i];
+    var key = goog.debug.FancyWindow.LOCAL_STORE_PREFIX + loggers[i].getName();
     var level = loggers[i].getLevel();
     if (key in storedKeys) {
       if (!level) {
