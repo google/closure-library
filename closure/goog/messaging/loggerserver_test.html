@@ -32,7 +32,7 @@ var stubs = new goog.testing.PropertyReplacer();
 function setUp() {
   mockControl = new goog.testing.MockControl();
   channel = new goog.testing.messaging.MockMessageChannel(mockControl);
-  stubs.set(goog.debug.Logger, 'getLogger',
+  stubs.set(goog.debug.LogManager, 'getLogger',
             mockControl.createFunctionMock('goog.log.getLogger'));
 }
 

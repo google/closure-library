@@ -65,45 +65,36 @@ goog.debug.Loggable;
 goog.debug.Logger = function(name) {
   /**
    * Name of the Logger. Generally a dot-separated namespace
-   * @type {string}
-   * @private
+   * @private {string}
    */
   this.name_ = name;
+
+  /**
+   * Parent Logger.
+   * @private {goog.debug.Logger}
+   */
+  this.parent_ = null;
+
+  /**
+   * Level that this logger only filters above. Null indicates it should
+   * inherit from the parent.
+   * @private {goog.debug.Logger.Level}
+   */
+  this.level_ = null;
+
+  /**
+   * Map of children loggers. The keys are the leaf names of the children and
+   * the values are the child loggers.
+   * @private {Object}
+   */
+  this.children_ = null;
+
+  /**
+   * Handlers that are listening to this logger.
+   * @private {Array.<Function>}
+   */
+  this.handlers_ = null;
 };
-
-
-/**
- * Parent Logger.
- * @type {goog.debug.Logger}
- * @private
- */
-goog.debug.Logger.prototype.parent_ = null;
-
-
-/**
- * Level that this logger only filters above. Null indicates it should
- * inherit from the parent.
- * @type {goog.debug.Logger.Level}
- * @private
- */
-goog.debug.Logger.prototype.level_ = null;
-
-
-/**
- * Map of children loggers. The keys are the leaf names of the children and
- * the values are the child loggers.
- * @type {Object}
- * @private
- */
-goog.debug.Logger.prototype.children_ = null;
-
-
-/**
- * Handlers that are listening to this logger.
- * @type {Array.<Function>}
- * @private
- */
-goog.debug.Logger.prototype.handlers_ = null;
 
 
 /**
@@ -355,6 +346,7 @@ goog.debug.Logger.Level.getPredefinedLevelByValue = function(value) {
  * name and should normally be based on the package name or class name of the
  * subsystem, such as goog.net.BrowserChannel.
  * @return {!goog.debug.Logger} The named logger.
+ * @deprecated use goog.log instead. http://go/goog-debug-logger-deprecated
  */
 goog.debug.Logger.getLogger = function(name) {
   return goog.debug.LogManager.getLogger(name);
@@ -769,7 +761,7 @@ goog.debug.LogManager = {};
 /**
  * Map of logger names to logger objects.
  *
- * @type {!Object}
+ * @type {!Object.<string, !goog.debug.Logger>}
  * @private
  */
 goog.debug.LogManager.loggers_ = {};
@@ -797,7 +789,8 @@ goog.debug.LogManager.initialize = function() {
 
 /**
  * Returns all the loggers.
- * @return {!Object} Map of logger names to logger objects.
+ * @return {!Object.<string, !goog.debug.Logger>} Map of logger names to logger
+ *     objects.
  */
 goog.debug.LogManager.getLoggers = function() {
   return goog.debug.LogManager.loggers_;

@@ -25,6 +25,7 @@ goog.provide('goog.log.LogRecord');
 goog.provide('goog.log.Logger');
 
 goog.require('goog.debug');
+goog.require('goog.debug.LogManager');
 goog.require('goog.debug.LogRecord');
 goog.require('goog.debug.Logger');
 
@@ -74,7 +75,7 @@ goog.log.LogRecord = goog.debug.LogRecord;
  */
 goog.log.getLogger = function(name, opt_level) {
   if (goog.log.ENABLED) {
-    var logger = goog.debug.Logger.getLogger(name);
+    var logger = goog.debug.LogManager.getLogger(name);
     if (opt_level && logger) {
       logger.setLevel(opt_level);
     }
