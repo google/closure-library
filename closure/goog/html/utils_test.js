@@ -37,7 +37,6 @@ function tearDown() {
 }
 
 
-
 function testStripAllHtmlTagsSingle() {
   goog.object.forEach(goog.dom.TagName, function(tag) {
     result = goog.html.utils.stripHtmlTags(makeHtml_(tag, STRIP));
@@ -73,7 +72,7 @@ function testComplex() {
       '<h2 id=\"transportation\">Transportation at Google</h2>' +
       '<p>Google provides <i>free transportation</i>.</p>' +
       // Some text with symbols to make sure that it does not get stripped
-      '<3i> -10<x<10 3cat < 3dog &amp;&lt;&gt;&quot;';
+      '<3i><x>\n-10<x<10 3cat < 3dog &amp;&lt;&gt;&quot;';
   result = goog.html.utils.stripHtmlTags(html);
   var expected = 'Life at Google ' +
       'Read and interact with the information below to learn about ' +
@@ -82,8 +81,18 @@ function testComplex() {
       'Google has the best food in the world. ' +
       'Transportation at Google ' +
       'Google provides free transportation. ' +
-      '<3i> -10<x<10 3cat < 3dog &<>\"';
+      '-10<x<10 3cat < 3dog &<>\"';
   assertEquals(FAILURE_MESSAGE, expected, result);
+}
+
+
+function testInteresting() {
+  result = goog.html.utils.stripHtmlTags(
+      '<img/src="bogus"onerror=alert(13) style="display:none">');
+  assertEquals(FAILURE_MESSAGE, '', result);
+  result = goog.html.utils.stripHtmlTags(
+      '<img o\'reilly blob src=bogus onerror=alert(1337)>');
+  assertEquals(FAILURE_MESSAGE, '', result);
 }
 
 
