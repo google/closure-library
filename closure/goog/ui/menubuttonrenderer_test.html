@@ -158,11 +158,11 @@ function checkButtonCaption(button) {
  * @param {goog.ui.Button} button A button.
  */
 function checkAriaState(button) {
-  assertEquals('menu buttons should not have default aria-expanded state', '',
+  assertEquals('menu buttons should have default aria-expanded == false', 'false',
   goog.a11y.aria.getState(button.getElement(), goog.a11y.aria.State.EXPANDED));
   button.setOpen(true);
-  assertEquals('menu buttons should not have aria-expanded state after ' +
-    'opening', '',
+  assertEquals('menu buttons should not aria-expanded == true after ' +
+    'opening', 'true',
   goog.a11y.aria.getState(button.getElement(), goog.a11y.aria.State.EXPANDED));
 }
 

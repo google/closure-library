@@ -333,7 +333,7 @@ goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
       e.keyCode == goog.events.KeyCodes.SPACE ||
       e.keyCode == goog.events.KeyCodes.ENTER) {
     // Menu is closed, and the user hit the down/up/space/enter key; open menu.
-    this.setOpen(true);
+    this.setOpen(true, e);
     return true;
   }
 
@@ -696,8 +696,7 @@ goog.ui.MenuButton.prototype.hideMenu = function() {
 /**
  * Opens or closes the attached popup menu.
  * @param {boolean} open Whether to open or close the menu.
- * @param {goog.events.Event=} opt_e Mousedown event that caused the menu to
- *     be opened.
+ * @param {goog.events.Event=} opt_e Event that caused the menu to be opened.
  * @override
  */
 goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
@@ -716,7 +715,13 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
           goog.style.getVisibleRectForElement(this.getElement());
       this.buttonRect_ = goog.style.getBounds(this.getElement());
       this.positionMenu();
-      this.menu_.setHighlightedIndex(-1);
+
+      // As per aria spec, highlight the first element in the menu when
+      // keyboarding up or down. Thus, the first menu item will be announced
+      // for screen reader users.
+      var focus = !!opt_e && (opt_e.keyCode == goog.events.KeyCodes.DOWN ||
+          opt_e.keyCode == goog.events.KeyCodes.UP);
+      this.menu_.setHighlightedIndex(focus ? 0 : -1);
     } else {
       this.setActive(false);
       this.menu_.setMouseButtonPressed(false);
@@ -726,6 +731,9 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
       if (element) {
         goog.a11y.aria.setState(element,
             goog.a11y.aria.State.ACTIVEDESCENDANT,
+            '');
+        goog.a11y.aria.setState(element,
+            goog.a11y.aria.State.OWNS,
             '');
       }
 
@@ -845,6 +853,9 @@ goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
     goog.a11y.aria.setState(element,
         goog.a11y.aria.State.ACTIVEDESCENDANT,
         e.target.getElement().id);
+    goog.a11y.aria.setState(element,
+        goog.a11y.aria.State.OWNS,
+        e.target.getElement().id);
   }
 };
 
@@ -858,8 +869,9 @@ goog.ui.MenuButton.prototype.handleUnHighlightItem = function(e) {
     var element = this.getElement();
     goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
     goog.a11y.aria.setState(element,
-        goog.a11y.aria.State.ACTIVEDESCENDANT,
-        '');
+        goog.a11y.aria.State.ACTIVEDESCENDANT, '');
+    goog.a11y.aria.setState(element,
+        goog.a11y.aria.State.OWNS, '');
   }
 };
 

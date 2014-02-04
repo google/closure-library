@@ -20,13 +20,8 @@
 
 goog.provide('goog.ui.MenuButtonRenderer');
 
-goog.require('goog.a11y.aria');
-goog.require('goog.a11y.aria.State');
-goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.string');
 goog.require('goog.style');
-goog.require('goog.ui.Component');
 goog.require('goog.ui.CustomButtonRenderer');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.Menu');
@@ -68,35 +63,6 @@ goog.ui.MenuButtonRenderer.CSS_CLASS = goog.getCssName('goog-menu-button');
 goog.ui.MenuButtonRenderer.prototype.getContentElement = function(element) {
   return goog.ui.MenuButtonRenderer.superClass_.getContentElement.call(this,
       /** @type {Element} */ (element && element.firstChild));
-};
-
-
-/**
- * Updates the menu button's ARIA (accessibility) state so that aria-expanded
- * does not appear when the button is "opened."
- * @param {Element} element Element whose ARIA state is to be updated.
- * @param {goog.ui.Component.State} state Component state being enabled or
- *     disabled.
- * @param {boolean} enable Whether the state is being enabled or disabled.
- * @protected
- * @override
- */
-goog.ui.MenuButtonRenderer.prototype.updateAriaState = function(element, state,
-    enable) {
-  // If button has OPENED state, do not assign an ARIA state. Usually
-  // aria-expanded would be assigned, which does not mean anything for a menu
-  // button.
-  goog.asserts.assert(
-      element, 'The menu button DOM element cannot be null.');
-  goog.asserts.assert(
-      goog.string.isEmpty(
-      goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED)),
-      'Menu buttons do not support the ARIA expanded attribute. ' +
-      'Please use ARIA disabled instead.' +
-      goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED).length);
-  if (state != goog.ui.Component.State.OPENED) {
-    goog.base(this, 'updateAriaState', element, state, enable);
-  }
 };
 
 
