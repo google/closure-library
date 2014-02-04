@@ -182,7 +182,7 @@ goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
     return null;
   }
 
-  listener = goog.events.wrapListener_(listener);
+  listener = goog.events.wrapListener(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
     return src.listen(
         /** @type {string} */ (type), listener, opt_capt, opt_handler);
@@ -326,7 +326,7 @@ goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
     return null;
   }
 
-  listener = goog.events.wrapListener_(listener);
+  listener = goog.events.wrapListener(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
     return src.listenOnce(
         /** @type {string} */ (type), listener, opt_capt, opt_handler);
@@ -382,7 +382,7 @@ goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
     return null;
   }
 
-  listener = goog.events.wrapListener_(listener);
+  listener = goog.events.wrapListener(listener);
   if (goog.events.Listenable.isImplementedBy(src)) {
     return src.unlisten(
         /** @type {string} */ (type), listener, opt_capt, opt_handler);
@@ -587,7 +587,7 @@ goog.events.getListeners = function(obj, type, capture) {
 goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
   // TODO(user): Change type from ?string to string, or add assertion.
   type = /** @type {string} */ (type);
-  listener = goog.events.wrapListener_(listener);
+  listener = goog.events.wrapListener(listener);
   var capture = !!opt_capt;
   if (goog.events.Listenable.isImplementedBy(src)) {
     return src.getListener(type, listener, capture, opt_handler);
@@ -960,9 +960,8 @@ goog.events.LISTENER_WRAPPER_PROP_ = '__closure_events_fn_' +
  *     calls obj.handleEvent. If the same listener is passed to this
  *     function more than once, the same function is guaranteed to be
  *     returned.
- * @private
  */
-goog.events.wrapListener_ = function(listener) {
+goog.events.wrapListener = function(listener) {
   goog.asserts.assert(listener, 'Listener can not be null.');
 
   if (goog.isFunction(listener)) {

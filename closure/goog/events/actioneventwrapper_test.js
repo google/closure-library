@@ -88,6 +88,43 @@ function testAddActionListener() {
   assertListenersExist(a, 0, false);
 }
 
+
+function testAddActionListenerForHandleEvent() {
+  var listener = {
+    handleEvent: function(e) { events.push(e); }
+  };
+  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
+
+  assertListenersExist(a, 1, false);
+
+  goog.testing.events.fireClickSequence(a);
+  assertEquals('1 event should have been dispatched', 1, events.length);
+  assertEquals('Should be an click event', 'click', events[0].type);
+
+  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+  assertEquals('2 events should have been dispatched', 2, events.length);
+  assertEquals('Should be a keypress event', 'keypress', events[1].type);
+
+  goog.a11y.aria.setRole(
+      /** @type {!Element} */ (a), goog.a11y.aria.Role.BUTTON);
+  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+  assertEquals('3 events should have been dispatched', 3, events.length);
+  assertEquals('Should be a keyup event', 'keyup', events[2].type);
+  assertTrue('Should be default prevented.', events[2].defaultPrevented);
+  goog.a11y.aria.removeRole(/** @type {!Element} */ (a));
+
+  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+  assertEquals('3 events should have been dispatched', 3, events.length);
+
+  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
+  assertEquals('3 events should have been dispatched', 3, events.length);
+
+  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
+      listener);
+  assertListenersExist(a, 0, false);
+}
+
+
 function testAddActionListenerInCaptPhase() {
   var count = 0;
   var captListener = function(e) {
