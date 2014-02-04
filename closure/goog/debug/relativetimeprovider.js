@@ -40,7 +40,15 @@ goog.debug.RelativeTimeProvider = function() {
    */
   this.relativeTimeStart_ = goog.now();
 };
-goog.addSingletonGetter(goog.debug.RelativeTimeProvider);
+
+
+/**
+ * Default instance.
+ * @type {goog.debug.RelativeTimeProvider}
+ * @private
+ */
+goog.debug.RelativeTimeProvider.defaultInstance_ =
+    new goog.debug.RelativeTimeProvider();
 
 
 /**
@@ -72,5 +80,5 @@ goog.debug.RelativeTimeProvider.prototype.get = function() {
  * @return {goog.debug.RelativeTimeProvider} The default instance.
  */
 goog.debug.RelativeTimeProvider.getDefaultInstance = function() {
-  return goog.debug.RelativeTimeProvider.getInstance();
+  return goog.debug.RelativeTimeProvider.defaultInstance_;
 };
