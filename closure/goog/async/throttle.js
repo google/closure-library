@@ -33,7 +33,7 @@ goog.require('goog.Timer');
  * once at the end of the interval.
  * @param {function(this: T)} listener Function to callback when the action is
  *     triggered.
- * @param {number} interval Interval over which to throttle. The handler can
+ * @param {number} interval Interval over which to throttle. The listener can
  *     only be called once per interval.
  * @param {T=} opt_handler Object in whose scope to call the listener.
  * @constructor
