@@ -1090,10 +1090,7 @@ goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
  */
 goog.array.sort = function(arr, opt_compareFn) {
   // TODO(arv): Update type annotation since null is not accepted.
-  goog.asserts.assert(arr.length != null);
-
-  goog.array.ARRAY_PROTOTYPE_.sort.call(
-      arr, opt_compareFn || goog.array.defaultCompare);
+  arr.sort(opt_compareFn || goog.array.defaultCompare);
 };
 
 
