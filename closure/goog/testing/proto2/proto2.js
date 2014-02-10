@@ -136,7 +136,7 @@ goog.testing.proto2.assertEquals = function(expected, actual,
  * @return {!MessageType} The deserialized protocol buffer.
  * @template MessageType
  */
-goog.testing.proto2.jsonToProto = function(messageCtor, json) {
+goog.testing.proto2.fromObject = function(messageCtor, json) {
   var serializer = new goog.proto2.ObjectSerializer(
       goog.proto2.ObjectSerializer.KeyOption.NAME);
   var message = new messageCtor;
