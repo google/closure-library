@@ -93,7 +93,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
 
   /**
    * The XMLHttpRequest object that is being used for the transfer.
-   * @private {goog.net.XhrLike.OrNative|null}
+   * @private {?goog.net.XhrLike.OrNative}
    */
   this.xhr_ = null;
 
@@ -601,8 +601,7 @@ goog.net.XhrIo.isContentTypeHeader_ = function(header) {
 
 /**
  * Creates a new XHR object.
- * @return {goog.net.XhrLike.OrNative|null} The newly created XHR
- *     object.
+ * @return {!goog.net.XhrLike.OrNative} The newly created XHR object.
  * @protected
  */
 goog.net.XhrIo.prototype.createXhr = function() {
@@ -927,7 +926,7 @@ goog.net.XhrIo.prototype.getReadyState = function() {
 goog.net.XhrIo.prototype.getStatus = function() {
   /**
    * IE doesn't like you checking status until the readystate is greater than 2
-   * (i.e. it is recieving or complete).  The try/catch is used for when the
+   * (i.e. it is receiving or complete).  The try/catch is used for when the
    * page is unloading and an ERROR_NOT_AVAILABLE may occur when accessing xhr_.
    * @preserveTry
    */
@@ -935,7 +934,6 @@ goog.net.XhrIo.prototype.getStatus = function() {
     return this.getReadyState() > goog.net.XmlHttp.ReadyState.LOADED ?
         this.xhr_.status : -1;
   } catch (e) {
-    goog.log.warning(this.logger_, 'Can not get status: ' + e.message);
     return -1;
   }
 };
