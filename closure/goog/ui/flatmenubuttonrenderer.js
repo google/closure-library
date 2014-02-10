@@ -179,9 +179,11 @@ goog.ui.FlatMenuButtonRenderer.prototype.createCaption = function(content,
  */
 goog.ui.FlatMenuButtonRenderer.prototype.createDropdown = function(dom) {
   // 00A0 is &nbsp;
-  return dom.createDom('div',
-      goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
-      goog.getCssName(this.getCssClass(), 'dropdown'), '\u00A0');
+  return dom.createDom('div', {
+    'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
+        goog.getCssName(this.getCssClass(), 'dropdown'),
+    'aria-hidden': true
+  }, '\u00A0');
 };
 
 
