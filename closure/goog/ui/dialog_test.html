@@ -79,9 +79,9 @@ See the COPYING file for details.
     var iframeWindow = goog.dom.getElement('f').contentWindow;
     var iframeInput = iframeWindow.document.getElementsByTagName('input')[0];
     dialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
-    var buttonElement = dialog.getButtonSet().getButton(0);
+    var dialogElement = dialog.getElement();
     var focusCounter = 0;
-    goog.events.listen(buttonElement, 'focus', function() {
+    goog.events.listen(dialogElement, 'focus', function() {
       focusCounter++;
     });
     iframeInput.focus();
@@ -824,6 +824,13 @@ See the COPYING file for details.
     dialog.setContent('<div>Trusted<' + '/div>');
     assertEquals('<div>Trusted<' + '/div>',
                  goog.html.SafeHtml.unwrap(dialog.getSafeHtmlContent()));
+  }
+
+  function testFocus() {
+    // Focus should go to the dialog element.
+    document.body.focus();
+    dialog.focus();
+    assertEquals(dialog.getElement(), document.activeElement);
   }
 </script>
 </body>

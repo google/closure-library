@@ -819,46 +819,6 @@ goog.ui.Dialog.prototype.onHide = function() {
 
 
 /**
- * Focuses the dialog contents and the default dialog button if there is one.
- * @override
- */
-goog.ui.Dialog.prototype.focus = function() {
-  goog.base(this, 'focus');
-
-  // Move focus to the default button (if any).
-  if (this.getButtonSet()) {
-    var defaultButton = this.getButtonSet().getDefault();
-    if (defaultButton) {
-      var doc = this.getDomHelper().getDocument();
-      var buttons = this.buttonEl_.getElementsByTagName('button');
-      for (var i = 0, button; button = buttons[i]; i++) {
-        if (button.name == defaultButton && !button.disabled) {
-          try {
-            // Reopening a dialog can cause focusing the button to fail in
-            // WebKit and Opera. Shift the focus to a temporary <input>
-            // element to make refocusing the button possible.
-            if (goog.userAgent.WEBKIT || goog.userAgent.OPERA) {
-              var temp = doc.createElement('input');
-              temp.style.cssText =
-                  'position:fixed;width:0;height:0;left:0;top:0;';
-              this.getElement().appendChild(temp);
-              temp.focus();
-              this.getElement().removeChild(temp);
-            }
-            button.focus();
-          } catch (e) {
-            // Swallow this. Could be the button is disabled
-            // and IE6 wishes to throw an error.
-          }
-          break;
-        }
-      }
-    }
-  }
-};
-
-
-/**
  * Sets dragger limits when dragging is started.
  * @param {!goog.events.Event} e goog.fx.Dragger.EventType.START event.
  * @private
