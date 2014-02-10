@@ -209,5 +209,8 @@ goog.events.EventType = {
 
   // HTML5 Page Visibility API.  See details at
   // {@code goog.labs.dom.PageVisibilityMonitor}.
-  VISIBILITYCHANGE: 'visibilitychange'
+  VISIBILITYCHANGE: 'visibilitychange',
+
+  // LocalStorage event.
+  STORAGE: 'storage'
 };
