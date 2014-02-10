@@ -205,28 +205,6 @@ goog.ui.Palette.prototype.handleMouseOver = function(e) {
 
 
 /**
- * Handles mouseout events.  Overrides {@link goog.ui.Control#handleMouseOut}
- * by determining the palette item that the mouse just left (if any), and
- * making sure it is un-highlighted.
- * @param {goog.events.BrowserEvent} e Mouse event to handle.
- * @override
- */
-goog.ui.Palette.prototype.handleMouseOut = function(e) {
-  goog.ui.Palette.superClass_.handleMouseOut.call(this, e);
-
-  var item = this.getRenderer().getContainingItem(this, e.target);
-  if (item && e.relatedTarget && goog.dom.contains(item, e.relatedTarget)) {
-    // Ignore internal mouse moves.
-    return;
-  }
-
-  if (item == this.getHighlightedItem()) {
-    this.setHighlightedItem(null);
-  }
-};
-
-
-/**
  * Handles mousedown events.  Overrides {@link goog.ui.Control#handleMouseDown}
  * by ensuring that the item on which the user moused down is highlighted.
  * @param {goog.events.Event} e Mouse event to handle.
@@ -525,6 +503,15 @@ goog.ui.Palette.prototype.highlightIndex_ = function(index, highlight) {
         this.getRenderer().highlightCell(this, items[index], highlight);
       }
     }
+  }
+};
+
+
+/** @override */
+goog.ui.Palette.prototype.setHighlighted = function(highlight) {
+  goog.base(this, 'setHighlighted', highlight);
+  if (!highlight) {
+    this.setHighlightedItem(null);
   }
 };
 
