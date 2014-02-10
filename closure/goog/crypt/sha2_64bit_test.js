@@ -95,6 +95,14 @@ var testVector = [
         '4011e3317dbf9a509cb1e5dc1e85a941bbee3d7f2afbc9b1',
     256:
         'dd9d67b371519c339ed8dbd25af90e976a1eeefd4ad3d889005e532fc5bef04d'
+  },
+  {
+    // Make sure the algorithm correctly handles long strings
+    source:
+        goog.array.repeat(0, 1000000),
+    512:
+        'ce044bc9fd43269d5bbc946cbebc3bb711341115cc4abdf2edbc3ff2c57ad4b1' +
+        '5deb699bda257fea5aef9c6e55fcf4cf9dc25a8c3ce25f2efe90908379bff7ed'
   }
 ];
 
