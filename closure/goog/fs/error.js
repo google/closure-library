@@ -21,6 +21,7 @@ goog.provide('goog.fs.Error');
 goog.provide('goog.fs.Error.ErrorCode');
 
 goog.require('goog.debug.Error');
+goog.require('goog.object');
 goog.require('goog.string');
 
 
@@ -30,16 +31,38 @@ goog.require('goog.string');
  * are less useful for identifying where errors come from, so this includes a
  * large amount of metadata in the message.
  *
- * @param {number} code The error code for the error.
+ * @param {!DOMError|number} errorOrCode Will be changed soon
+ *     to accept only DOMError, not number, so don't pass ErrorCode in new code.
  * @param {string} action The action being undertaken when the error was raised.
  * @constructor
  * @extends {goog.debug.Error}
  * @final
  */
-goog.fs.Error = function(code, action) {
-  goog.base(this, goog.string.subs('Error %s: %s', action,
-                                   goog.fs.Error.getDebugMessage(code)));
-  this.code = /** @type {goog.fs.Error.ErrorCode} */ (code);
+goog.fs.Error = function(errorOrCode, action) {
+  /** @type {string} */
+  this.name;
+
+  /**
+   * @type {goog.fs.Error.ErrorCode}
+   * @deprecated Use the 'name' or 'message' field instead.
+   */
+  this.code;
+
+  if (goog.isNumber(errorOrCode)) {
+    this.code = /** @type {goog.fs.Error.ErrorCode} */ (errorOrCode);
+    this.name = goog.fs.Error.getNameFromCode_(this.code);
+  } else {
+    /** @type {!DOMError} */
+    var error = errorOrCode;
+    if (goog.isDef(error.name)) {
+      this.name = error.name;
+      this.code = goog.fs.Error.getCodeFromName_(error.name);
+    } else {
+      this.code = error.code;
+      this.name = goog.fs.Error.getNameFromCode_(error.code);
+    }
+  }
+  goog.base(this, goog.string.subs('%s %s', this.name, action));
 };
 goog.inherits(goog.fs.Error, goog.debug.Error);
 
@@ -49,6 +72,7 @@ goog.inherits(goog.fs.Error, goog.debug.Error);
  * @see http://www.w3.org/TR/file-system-api/#idl-def-FileException
  *
  * @enum {number}
+ * @deprecated Use the 'name' or 'message' attribute instead.
  */
 goog.fs.Error.ErrorCode = {
   NOT_FOUND: 1,
@@ -70,6 +94,7 @@ goog.fs.Error.ErrorCode = {
  * @param {number} errorCode The error code for the error.
  * @return {string} A debug message for the given error code. These messages are
  *     for debugging only and are not localized.
+ * @deprecated Use the 'message' property of a goog.fs.Error object.
  */
 goog.fs.Error.getDebugMessage = function(errorCode) {
   switch (errorCode) {
@@ -100,4 +125,50 @@ goog.fs.Error.getDebugMessage = function(errorCode) {
     default:
       return 'Unrecognized error';
   }
+};
+
+
+/**
+ * @param {goog.fs.Error.ErrorCode} code
+ * @return {string} name
+ * @private
+ */
+goog.fs.Error.getNameFromCode_ = function(code) {
+  var name = goog.object.findKey(goog.fs.Error.NameToCodeMap_, function(c) {
+    return code == c;
+  });
+  if (!goog.isDef(name)) {
+    throw new Error('Invalid code: ' + code);
+  }
+  return name;
+};
+
+
+/**
+ * Returns the code that corresponds to the given name.
+ * @param {string} name
+ * @return {goog.fs.Error.ErrorCode} code
+ * @private
+ */
+goog.fs.Error.getCodeFromName_ = function(name) {
+  return goog.fs.Error.NameToCodeMap_[name];
+};
+
+
+/**
+ * Mapping from error names to values from the ErrorCode enum.
+ * @see http://www.w3.org/TR/file-system-api/#definitions.
+ * @private {!Object.<string, goog.fs.Error.ErrorCode>}
+ */
+goog.fs.Error.NameToCodeMap_ = {
+  'NotFoundError': goog.fs.Error.ErrorCode.NOT_FOUND,
+  'SecurityError': goog.fs.Error.ErrorCode.SECURITY,
+  'AbortError': goog.fs.Error.ErrorCode.ABORT,
+  'EncodingError': goog.fs.Error.ErrorCode.ENCODING,
+  'NoModificationAllowedError': goog.fs.Error.ErrorCode.NO_MODIFICATION_ALLOWED,
+  'InvalidStateError': goog.fs.Error.ErrorCode.INVALID_STATE,
+  'SyntaxError': goog.fs.Error.ErrorCode.SYNTAX,
+  'InvalidModificationError': goog.fs.Error.ErrorCode.INVALID_MODIFICATION,
+  'QuotaExceededError': goog.fs.Error.ErrorCode.QUOTA_EXCEEDED,
+  'TypeMismatchError': goog.fs.Error.ErrorCode.TYPE_MISMATCH
 };

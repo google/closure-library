@@ -207,7 +207,10 @@ goog.testing.fs.Entry.prototype.checkNotDeleted = function(action) {
   var d = new goog.async.Deferred(undefined, this);
   goog.Timer.callOnce(function() {
     if (this.deleted) {
-      d.errback(new goog.fs.Error(goog.fs.Error.ErrorCode.NOT_FOUND, action));
+      var err = new goog.fs.Error(
+          /** @type {!FileError} */ ({'name': 'NotFoundError'}),
+          action);
+      d.errback(err);
     } else {
       d.callback();
     }
@@ -305,7 +308,7 @@ goog.testing.fs.DirectoryEntry.prototype.remove = function() {
     var d = new goog.async.Deferred();
     goog.Timer.callOnce(function() {
       d.errback(new goog.fs.Error(
-          goog.fs.Error.ErrorCode.INVALID_MODIFICATION,
+          /** @type {!FileError} */ ({'name': 'InvalidModificationError'}),
           'removing ' + this.getFullPath()));
     }, 0, this);
     return d;
@@ -441,7 +444,7 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
     var subdir = dir.children[p];
     if (!subdir) {
       throw new goog.fs.Error(
-          goog.fs.Error.ErrorCode.NOT_FOUND,
+          /** @type {!FileError} */ ({'name': 'NotFoundError'}),
           'loading ' + path + ' from ' + this.getFullPath() + ' (directory ' +
           dir.getFullPath() + '/' + p + ')');
     }
@@ -454,7 +457,7 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
   if (!entry) {
     if (behavior == goog.fs.DirectoryEntry.Behavior.DEFAULT) {
       throw new goog.fs.Error(
-          goog.fs.Error.ErrorCode.NOT_FOUND,
+          /** @type {!FileError} */ ({'name': 'NotFoundError'}),
           'loading ' + path + ' from ' + this.getFullPath());
     } else {
       goog.asserts.assert(
@@ -467,11 +470,11 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
     }
   } else if (behavior == goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE) {
     throw new goog.fs.Error(
-        goog.fs.Error.ErrorCode.PATH_EXISTS,
+        /** @type {!FileError} */ ({'name': 'InvalidModificationError'}),
         'loading ' + path + ' from ' + this.getFullPath());
   } else if (entry.isFile() != isFile) {
     throw new goog.fs.Error(
-        goog.fs.Error.ErrorCode.TYPE_MISMATCH,
+        /** @type {!FileError} */ ({'name': 'TypeMismatchError'}),
         'loading ' + path + ' from ' + this.getFullPath());
   } else {
     if (behavior == goog.fs.DirectoryEntry.Behavior.CREATE) {

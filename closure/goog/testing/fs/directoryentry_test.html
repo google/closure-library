@@ -238,7 +238,7 @@ function testCreateFileThatsActuallyADirectory() {
 function testCreateExclusiveExistingFile() {
   expectError(
       dir.getFile('file', goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE),
-      goog.fs.Error.ErrorCode.PATH_EXISTS);
+      goog.fs.Error.ErrorCode.INVALID_MODIFICATION);
 }
 
 function testListEmptyDirectory() {

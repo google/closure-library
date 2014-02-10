@@ -149,7 +149,7 @@ goog.fs.FileReader.prototype.getResult = function() {
  */
 goog.fs.FileReader.prototype.getError = function() {
   return this.reader_.error &&
-      new goog.fs.Error(this.reader_.error.code, 'reading file');
+      new goog.fs.Error(this.reader_.error, 'reading file');
 };
 
 

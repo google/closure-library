@@ -22,7 +22,6 @@ goog.provide('goog.fs.FileSaver.EventType');
 goog.provide('goog.fs.FileSaver.ProgressEvent');
 goog.provide('goog.fs.FileSaver.ReadyState');
 
-goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.ProgressEvent');
@@ -146,7 +145,7 @@ goog.fs.FileSaver.prototype.getReadyState = function() {
  */
 goog.fs.FileSaver.prototype.getError = function() {
   return this.saver_.error &&
-      new goog.fs.Error(this.saver_.error.code, 'saving file');
+      new goog.fs.Error(this.saver_.error, 'saving file');
 };
 
 

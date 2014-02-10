@@ -54,7 +54,7 @@ goog.fs.get_ = function(type, size) {
   requestFileSystem(type, size, function(fs) {
     d.callback(new goog.fs.FileSystemImpl(fs));
   }, function(err) {
-    d.errback(new goog.fs.Error(err.code, 'requesting filesystem'));
+    d.errback(new goog.fs.Error(err, 'requesting filesystem'));
   });
   return d;
 };

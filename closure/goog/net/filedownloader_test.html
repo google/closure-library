@@ -231,7 +231,7 @@ function testSetBlobDuringDownload() {
             '/foo/bar', goog.testing.fs.getBlob('blob data'));
       }).
       addErrback(function(err) {
-        assertEquals(goog.fs.Error.ErrorCode.PATH_EXISTS, err.fileError.code);
+        assertEquals(goog.fs.Error.ErrorCode.INVALID_MODIFICATION, err.fileError.code);
         return download;
       }).
       addCallback(function() {
@@ -309,7 +309,7 @@ function testFailedDownloadSave() {
         assertEquals('/foo/bar', err.url);
         assertUndefined(err.xhrStatus);
         assertUndefined(err.xhrErrorCode);
-        assertEquals(goog.fs.Error.ErrorCode.PATH_EXISTS, err.fileError.code);
+        assertEquals(goog.fs.Error.ErrorCode.INVALID_MODIFICATION, err.fileError.code);
 
         asyncTestCase.continueTesting();
       });

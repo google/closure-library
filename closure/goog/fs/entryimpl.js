@@ -228,7 +228,7 @@ goog.fs.DirectoryEntryImpl.prototype.getFile = function(path, opt_behavior) {
       }, this),
       goog.bind(function(err) {
         var msg = 'loading file ' + path + ' from ' + this.getFullPath();
-        d.errback(new goog.fs.Error(err.code, msg));
+        d.errback(new goog.fs.Error(err, msg));
       }, this));
   return d;
 };
@@ -245,7 +245,7 @@ goog.fs.DirectoryEntryImpl.prototype.getDirectory =
       }, this),
       goog.bind(function(err) {
         var msg = 'loading directory ' + path + ' from ' + this.getFullPath();
-        d.errback(new goog.fs.Error(err.code, msg));
+        d.errback(new goog.fs.Error(err, msg));
       }, this));
   return d;
 };
