@@ -22,10 +22,8 @@ goog.provide('goog.db.IndexedDb');
 
 goog.require('goog.async.Deferred');
 goog.require('goog.db.Error');
-goog.require('goog.db.Error.VersionChangeBlockedError');
 goog.require('goog.db.ObjectStore');
 goog.require('goog.db.Transaction');
-goog.require('goog.db.Transaction.TransactionMode');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -76,6 +74,13 @@ goog.db.IndexedDb = function(db) {
       this.db_,
       goog.db.IndexedDb.EventType.VERSION_CHANGE,
       this.dispatchVersionChange_);
+  this.eventHandler_.listen(
+      this.db_,
+      goog.db.IndexedDb.EventType.CLOSE,
+      goog.bind(
+          this.dispatchEvent,
+          this,
+          goog.db.IndexedDb.EventType.CLOSE));
 };
 goog.inherits(goog.db.IndexedDb, goog.events.EventTarget);
 
@@ -291,6 +296,14 @@ goog.db.IndexedDb.EventType = {
    * Fired when a transaction is aborted and the event bubbles to its database.
    */
   ABORT: 'abort',
+
+  /**
+   * Fired when the database connection is forcibly closed by the browser,
+   * without an explicit call to IDBDatabase#close. This behavior is not in the
+   * spec yet but will be added since it is necessary, see
+   * https://www.w3.org/Bugs/Public/show_bug.cgi?id=22540.
+   */
+  CLOSE: 'close',
 
   /**
    * Fired when a transaction has an error.
