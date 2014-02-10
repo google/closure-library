@@ -39,7 +39,7 @@ goog.require('goog.result.Result');
  * @final
  */
 goog.result.DeferredAdaptor = function(result) {
-  goog.base(this);
+  goog.result.DeferredAdaptor.base(this, 'constructor');
   goog.result.wait(result, function(result) {
     if (this.hasFired()) {
       return;

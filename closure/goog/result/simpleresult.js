@@ -94,7 +94,8 @@ goog.result.SimpleResult.HandlerEntry_;
  * @final
  */
 goog.result.SimpleResult.StateError = function() {
-  goog.base(this, 'Multiple attempts to set the state of this Result');
+  goog.result.SimpleResult.StateError.base(this, 'constructor',
+      'Multiple attempts to set the state of this Result');
 };
 goog.inherits(goog.result.SimpleResult.StateError, goog.debug.Error);
 
