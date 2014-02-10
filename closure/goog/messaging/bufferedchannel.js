@@ -284,5 +284,5 @@ goog.messaging.BufferedChannel.prototype.setPeerReady_ = function(
 goog.messaging.BufferedChannel.prototype.disposeInternal = function() {
   goog.dispose(this.multiChannel_);
   goog.dispose(this.timer_);
-  goog.base(this, 'disposeInternal');
+  goog.messaging.BufferedChannel.base(this, 'disposeInternal');
 };

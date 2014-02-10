@@ -42,7 +42,7 @@ goog.require('goog.object');
  * @final
  */
 goog.messaging.PortOperator = function(name) {
-  goog.base(this);
+  goog.messaging.PortOperator.base(this, 'constructor');
 
   /**
    * The collection of channels for communicating with other contexts in the
@@ -194,5 +194,5 @@ goog.messaging.PortOperator.prototype.disposeInternal = function() {
   goog.object.forEach(this.connections_, goog.dispose);
   delete this.switchboard_;
   delete this.connections_;
-  goog.base(this, 'disposeInternal');
+  goog.messaging.PortOperator.base(this, 'disposeInternal');
 };

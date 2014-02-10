@@ -41,7 +41,7 @@ goog.require('goog.log');
  * @final
  */
 goog.messaging.LoggerServer = function(channel, serviceName, opt_channelName) {
-  goog.base(this);
+  goog.messaging.LoggerServer.base(this, 'constructor');
 
   /**
    * The channel that is sending the log messages.
@@ -93,7 +93,7 @@ goog.messaging.LoggerServer.prototype.log_ = function(message) {
 
 /** @override */
 goog.messaging.LoggerServer.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.messaging.LoggerServer.base(this, 'disposeInternal');
   this.channel_.registerService(this.serviceName_, goog.nullFunction, true);
   delete this.channel_;
 };

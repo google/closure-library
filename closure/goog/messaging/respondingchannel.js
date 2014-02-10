@@ -40,7 +40,7 @@ goog.require('goog.messaging.MultiChannel.VirtualChannel');
  * @extends {goog.Disposable}
  */
 goog.messaging.RespondingChannel = function(messageChannel) {
-  goog.base(this);
+  goog.messaging.RespondingChannel.base(this, 'constructor');
 
   /**
    * The message channel wrapped in a MultiChannel so we can send private and
