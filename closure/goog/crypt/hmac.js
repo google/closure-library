@@ -105,6 +105,7 @@ goog.crypt.Hmac.prototype.initialize_ = function(key) {
   if (key.length > this.blockSize) {
     this.hasher_.update(key);
     key = this.hasher_.digest();
+    this.hasher_.reset();
   }
   // Precalculate padded and xor'd keys.
   var keyByte;

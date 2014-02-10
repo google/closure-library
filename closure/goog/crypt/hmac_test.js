@@ -122,3 +122,21 @@ function testHmac() {
       getHmac(hexToBytes('0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b'),
           stringToBytes('Hi There'), 32));
 }
+
+
+/** Regression test for Bug 12863104 */
+function testUpdateWithLongKey() {
+  // Calling update() then digest() should give the same result as just
+  // calling getHmac()
+  var key = hexToBytes('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
+                       'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
+                       'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' +
+                       'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+  var message = 'Secret Message';
+  var hmac = new goog.crypt.Hmac(new goog.crypt.Sha1(), key);
+  hmac.update(message);
+  var result1 = bytesToHex(hmac.digest());
+  hmac.reset();
+  var result2 = bytesToHex(hmac.getHmac(message));
+  assertEquals('Results must be the same', result1, result2);
+}
