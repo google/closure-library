@@ -43,6 +43,14 @@ goog.define('goog.NATIVE_ARRAY_PROTOTYPES', goog.TRUSTED_SITE);
 
 
 /**
+ * @define {boolean} If true, JSCompiler will use the native implementation of
+ * array functions where appropriate (e.g., {@code Array#filter}) and remove the
+ * unused pure JS implementation.
+ */
+goog.define('goog.array.ASSUME_NATIVE_FUNCTIONS', false);
+
+
+/**
  * @typedef {Array|NodeList|Arguments|{length: number}}
  */
 goog.array.ArrayLike;
@@ -87,7 +95,8 @@ goog.array.ARRAY_PROTOTYPE_ = Array.prototype;
  * @template T
  */
 goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
-                     goog.array.ARRAY_PROTOTYPE_.indexOf ?
+                     (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                      goog.array.ARRAY_PROTOTYPE_.indexOf) ?
     function(arr, obj, opt_fromIndex) {
       goog.asserts.assert(arr.length != null);
 
@@ -128,7 +137,8 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T
  */
 goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
-                         goog.array.ARRAY_PROTOTYPE_.lastIndexOf ?
+                         (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                          goog.array.ARRAY_PROTOTYPE_.lastIndexOf) ?
     function(arr, obj, opt_fromIndex) {
       goog.asserts.assert(arr.length != null);
 
@@ -173,7 +183,8 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S
  */
 goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
-                     goog.array.ARRAY_PROTOTYPE_.forEach ?
+                     (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                      goog.array.ARRAY_PROTOTYPE_.forEach) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -235,7 +246,8 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
  * @template T,S
  */
 goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
-                    goog.array.ARRAY_PROTOTYPE_.filter ?
+                    (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                     goog.array.ARRAY_PROTOTYPE_.filter) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -275,7 +287,8 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template THIS, VALUE, RESULT
  */
 goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
-                 goog.array.ARRAY_PROTOTYPE_.map ?
+                 (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                  goog.array.ARRAY_PROTOTYPE_.map) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -319,7 +332,8 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S,R
  */
 goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
-                    goog.array.ARRAY_PROTOTYPE_.reduce ?
+                    (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                     goog.array.ARRAY_PROTOTYPE_.reduce) ?
     function(arr, f, val, opt_obj) {
       goog.asserts.assert(arr.length != null);
       if (opt_obj) {
@@ -363,7 +377,8 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S,R
  */
 goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
-                         goog.array.ARRAY_PROTOTYPE_.reduceRight ?
+                         (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                          goog.array.ARRAY_PROTOTYPE_.reduceRight) ?
     function(arr, f, val, opt_obj) {
       goog.asserts.assert(arr.length != null);
       if (opt_obj) {
@@ -398,7 +413,8 @@ goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S
  */
 goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
-                  goog.array.ARRAY_PROTOTYPE_.some ?
+                  (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                   goog.array.ARRAY_PROTOTYPE_.some) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
@@ -434,7 +450,8 @@ goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @template T,S
  */
 goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES &&
-                   goog.array.ARRAY_PROTOTYPE_.every ?
+                   (goog.array.ASSUME_NATIVE_FUNCTIONS ||
+                    goog.array.ARRAY_PROTOTYPE_.every) ?
     function(arr, f, opt_obj) {
       goog.asserts.assert(arr.length != null);
 
