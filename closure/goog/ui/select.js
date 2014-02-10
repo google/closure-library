@@ -23,7 +23,6 @@
 
 goog.provide('goog.ui.Select');
 
-goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
@@ -60,13 +59,6 @@ goog.ui.Select = function(opt_caption, opt_menu, opt_renderer, opt_domHelper) {
    * @private {goog.ui.ControlContent}
    */
   this.defaultCaption_ = this.getContent();
-
-  /**
-   * The initial value of the aria label of the content element. This will be
-   * null until the caption is first populated and will be non-null thereafter.
-   * @private {?string}
-   */
-  this.initialAriaLabel_ = null;
 };
 goog.inherits(goog.ui.Select, goog.ui.MenuButton);
 
@@ -423,16 +415,6 @@ goog.ui.Select.prototype.listenToSelectionModelEvents_ = function() {
 goog.ui.Select.prototype.updateCaption = function() {
   var item = this.getSelectedItem();
   this.setContent(item ? item.getCaption() : this.defaultCaption_);
-
-  var contentElement = this.getRenderer().getContentElement(this.getElement());
-  if (contentElement) {
-    if (this.initialAriaLabel_ == null) {
-      this.initialAriaLabel_ = goog.a11y.aria.getLabel(contentElement);
-    }
-    var itemElement = item ? item.getElement() : null;
-    goog.a11y.aria.setLabel(contentElement, itemElement ?
-        goog.a11y.aria.getLabel(itemElement) : this.initialAriaLabel_);
-  }
 };
 
 

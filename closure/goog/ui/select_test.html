@@ -265,32 +265,6 @@ function testSetValueBeforeRender() {
   select.decorate(sandbox);
   assertEquals(2, select.getValue());
 }
-
-
-function testUpdateCaption_aria() {
-  select.render(this.sandbox);
-
-  // Verify default state.
-  assertEquals(defaultCaption, select.getCaption());
-  assertFalse(
-      !!goog.a11y.aria.getLabel(select.getRenderer().getContentElement(select.getElement())));
-
-  // Add and select an item with aria-label.
-  var item1 = new goog.ui.MenuItem();
-  select.addItem(item1);
-  item1.getElement().setAttribute('aria-label', 'item1');
-  select.setSelectedIndex(0);
-  assertEquals(
-      'item1',
-      goog.a11y.aria.getLabel(select.getRenderer().getContentElement(select.getElement())));
-
-  // Add and select an item without a label.
-  var item2 = new goog.ui.MenuItem();
-  select.addItem(item2);
-  select.setSelectedIndex(1);
-  assertFalse(
-      !!goog.a11y.aria.getLabel(select.getRenderer().getContentElement(select.getElement())));
-}
 </script>
 
 </body>
