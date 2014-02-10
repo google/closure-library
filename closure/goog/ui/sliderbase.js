@@ -282,6 +282,23 @@ goog.ui.SliderBase.prototype.isHandleMouseWheel_ = true;
 
 
 /**
+ * The time the last mousedown event was received.
+ * @private
+ * @type {number}
+ */
+goog.ui.SliderBase.prototype.mouseDownTime_ = 0;
+
+
+/**
+ * The delay after mouseDownTime_ during which a click event is ignored.
+ * @private
+ * @type {number}
+ * @const
+ */
+goog.ui.SliderBase.prototype.MOUSE_DOWN_DELAY_ = 1000;
+
+
+/**
  * Whether the slider is enabled or not.
  * @private
  * @type {boolean}
@@ -424,8 +441,10 @@ goog.ui.SliderBase.prototype.enableEventHandlers_ = function(enable) {
             this.handleThumbDragStartEnd_).
         listen(this.keyHandler_, goog.events.KeyHandler.EventType.KEY,
             this.handleKeyDown_).
+        listen(this.getElement(), goog.events.EventType.CLICK,
+            this.handleMouseDownAndClick_).
         listen(this.getElement(), goog.events.EventType.MOUSEDOWN,
-            this.handleMouseDown_);
+            this.handleMouseDownAndClick_);
     if (this.isHandleMouseWheel()) {
       this.enableMouseWheelHandling_(true);
     }
@@ -443,8 +462,10 @@ goog.ui.SliderBase.prototype.enableEventHandlers_ = function(enable) {
             this.handleThumbDragStartEnd_).
         unlisten(this.keyHandler_, goog.events.KeyHandler.EventType.KEY,
             this.handleKeyDown_).
+        unlisten(this.getElement(), goog.events.EventType.CLICK,
+            this.handleMouseDownAndClick_).
         unlisten(this.getElement(), goog.events.EventType.MOUSEDOWN,
-            this.handleMouseDown_);
+            this.handleMouseDownAndClick_);
     if (this.isHandleMouseWheel()) {
       this.enableMouseWheelHandling_(false);
     }
@@ -571,11 +592,11 @@ goog.ui.SliderBase.prototype.handleKeyDown_ = function(e) {
 
 
 /**
- * Handler for the mouse down event.
+ * Handler for the mouse down event and click event.
  * @param {goog.events.Event} e  The mouse event object.
  * @private
  */
-goog.ui.SliderBase.prototype.handleMouseDown_ = function(e) {
+goog.ui.SliderBase.prototype.handleMouseDownAndClick_ = function(e) {
   if (this.getElement().focus) {
     this.getElement().focus();
   }
@@ -585,6 +606,18 @@ goog.ui.SliderBase.prototype.handleMouseDown_ = function(e) {
 
   if (!goog.dom.contains(this.valueThumb, target) &&
       !goog.dom.contains(this.extentThumb, target)) {
+    var isClick = e.type == goog.events.EventType.CLICK;
+    if (isClick && goog.now() < this.mouseDownTime_ + this.MOUSE_DOWN_DELAY_) {
+      // Ignore a click event that comes a short moment after a mousedown
+      // event.  This happens for desktop.  For devices with both a touch
+      // screen and a mouse pad we do not get a mousedown event from the mouse
+      // pad and do get a click event.
+      return;
+    }
+    if (!isClick) {
+      this.mouseDownTime_ = goog.now();
+    }
+
     if (this.moveToPointEnabled_) {
       // just set the value directly based on the position of the click
       this.animatedSetValue(this.getValueFromMousePosition(e));

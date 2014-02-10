@@ -832,6 +832,48 @@ function testValueFromMousePosition() {
 }
 
 /**
+ * Tests ignoring click event after mousedown event.
+ */
+function testClickAfterMousedown() {
+  // Get the center of the thumb at value zero.
+  oneThumbSlider.setValue(0);
+  var offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  var size = goog.style.getSize(oneThumbSlider.valueThumb);
+  offset.x += size.width / 2;
+  offset.y += size.height / 2;
+
+  var sliderElement = oneThumbSlider.getElement();
+  var width = sliderElement.clientWidth - size.width;
+  var range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
+  var offsetXAtZero = offset.x;
+
+  // Temporarily control time.
+  var theTime = goog.now();
+  var saveGoogNow = goog.now;
+  goog.now = function() { return theTime; };
+
+  // set coordinate for a particular value.
+  var valueOne = 10;
+  offset.x = offsetXAtZero + Math.round(valueOne / range * width);
+  goog.testing.events.fireMouseDownEvent(sliderElement, null, offset);
+  assertEquals(valueOne, oneThumbSlider.getValue());
+
+  // Verify a click event with another value that follows quickly is ignored.
+  theTime += oneThumbSlider.MOUSE_DOWN_DELAY_ / 2;
+  var valueTwo = 20;
+  offset.x = offsetXAtZero + Math.round(valueTwo / range * width);
+  goog.testing.events.fireClickEvent(sliderElement, null, offset);
+  assertEquals(valueOne, oneThumbSlider.getValue());
+
+  // Verify a click later in time does move the thumb.
+  theTime += oneThumbSlider.MOUSE_DOWN_DELAY_;
+  goog.testing.events.fireClickEvent(sliderElement, null, offset);
+  assertEquals(valueTwo, oneThumbSlider.getValue());
+
+  goog.now = saveGoogNow;
+}
+
+/**
  * Tests dragging events.
  */
 function testDragEvents() {
