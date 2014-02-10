@@ -75,7 +75,7 @@ WebChannelBaseTransport.prototype.createWebChannel = function(
  * @final
  */
 WebChannelBaseTransport.Channel = function(url, opt_options) {
-  goog.base(this);
+  WebChannelBaseTransport.Channel.base(this, 'constructor');
 
   /**
    * The underlying channel object.
@@ -184,7 +184,7 @@ WebChannelBaseTransport.Channel.prototype.disposeInternal = function() {
   this.channel_.disconnect();
   delete this.channel_;
 
-  goog.base(this, 'disposeInternal');
+  WebChannelBaseTransport.Channel.base(this, 'disposeInternal');
 };
 
 
@@ -198,7 +198,7 @@ WebChannelBaseTransport.Channel.prototype.disposeInternal = function() {
  * @final
  */
 WebChannelBaseTransport.Channel.MessageEvent = function(array) {
-  goog.base(this);
+  WebChannelBaseTransport.Channel.MessageEvent.base(this, 'constructor');
 
   this.data = array;
 };
@@ -216,7 +216,7 @@ goog.inherits(WebChannelBaseTransport.Channel.MessageEvent,
  * @final
  */
 WebChannelBaseTransport.Channel.ErrorEvent = function(error) {
-  goog.base(this);
+  WebChannelBaseTransport.Channel.ErrorEvent.base(this, 'constructor');
 
   /**
    * Transport specific error code is not to be propagated with the event.
@@ -238,7 +238,7 @@ goog.inherits(WebChannelBaseTransport.Channel.ErrorEvent,
  * @private
  */
 WebChannelBaseTransport.Channel.Handler_ = function(channel) {
-  goog.base(this);
+  WebChannelBaseTransport.Channel.Handler_.base(this, 'constructor');
 
   /**
    * @type {!WebChannelBaseTransport.Channel}

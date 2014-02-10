@@ -305,7 +305,7 @@ _.stripXssiPrefix_ = function(prefix, string) {
  * @constructor
  */
 _.Error = function(message, url, xhr) {
-  goog.base(this, message + ', url=' + url);
+  _.Error.base(this, 'constructor', message + ', url=' + url);
 
   /**
    * The URL that was requested.
@@ -338,7 +338,8 @@ _.Error.prototype.name = 'XhrError';
  * @final
  */
 _.HttpError = function(status, url, xhr) {
-  goog.base(this, 'Request Failed, status=' + status, url, xhr);
+  _.HttpError.base(
+      this, 'constructor', 'Request Failed, status=' + status, url, xhr);
 
   /**
    * The HTTP status code for the error.
@@ -364,7 +365,7 @@ _.HttpError.prototype.name = 'XhrHttpError';
  * @final
  */
 _.TimeoutError = function(url, xhr) {
-  goog.base(this, 'Request timed out', url, xhr);
+  _.TimeoutError.base(this, 'constructor', 'Request timed out', url, xhr);
 };
 goog.inherits(_.TimeoutError, _.Error);
 
