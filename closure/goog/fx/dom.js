@@ -38,7 +38,7 @@ goog.provide('goog.fx.dom.Swipe');
 goog.require('goog.color');
 goog.require('goog.events');
 goog.require('goog.fx.Animation');
-goog.require('goog.fx.Transition.EventType');
+goog.require('goog.fx.Transition');
 goog.require('goog.style');
 goog.require('goog.style.bidi');
 
@@ -512,7 +512,7 @@ goog.fx.dom.FadeOutAndHide.prototype.onEnd = function() {
 
 /**
  * Sets an element's display to be visible and then fades an element in from
- * completely transparent to fully opacity
+ * completely transparent to fully opaque.
  *
  * @param {Element} element Dom Node to be used in the animation.
  * @param {number} time Length of animation in milliseconds.
