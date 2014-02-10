@@ -21,9 +21,6 @@
  * To implement specific SHA-2 such as SHA-256, create a sub-class with
  * overridded reset(). See sha256.js for an example.
  *
- * TODO(user): SHA-512/384 are not currently implemented. Could be added
- * if needed.
- *
  * Some code similar to SHA1 are borrowed from sha1.js written by mschilder@.
  *
  */
@@ -206,14 +203,20 @@ goog.crypt.Sha2.prototype.update = function(message, opt_length) {
         inChunk = 0;
       }
     }
-  } else {
+  } else if (goog.isArray(message)) {
     while (n < opt_length) {
-      this.chunk[inChunk++] = message[n++];
+      var b = message[n++];
+      if (!('number' == typeof b && 0 <= b && 255 >= b && b == (b | 0))) {
+        throw Error('message must be a byte array');
+      }
+      this.chunk[inChunk++] = b;
       if (inChunk == this.blockSize) {
         this.computeChunk_(this.chunk);
         inChunk = 0;
       }
     }
+  } else {
+    throw Error('message must be string or array');
   }
 
   // Record the current bytes in chunk to support partial update.
