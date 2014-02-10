@@ -1,103 +1,23 @@
 <!DOCTYPE html>
 <html>
-<!--
+ <!--
 Copyright 2013 The Closure Library Authors. All Rights Reserved.
 
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.i18n.pluralRules</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<script src="../base.js"></script>
-<script>
-  goog.require('goog.i18n.pluralRules');
-  goog.require('goog.testing.jsunit');
-</script>
-</head>
-<body>
-<script>
-
-function testSimpleSelectEn() {
-  var funcSelect = goog.i18n.pluralRules.enSelect_;
-
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(0)); // 0 dollars
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE, funcSelect(1)); // 1 dollar
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(2)); // 2 dollars
-
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(0, 2)); // 0.00 dollars
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(1, 2)); // 1.00 dollars
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(2, 2)); // 2.00 dollars
-}
-
-function testSimpleSelectRo() {
-  var funcSelect = goog.i18n.pluralRules.roSelect_;
-
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW,   funcSelect( 0)); // 0 dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE,   funcSelect( 1)); // 1 dolar
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW,   funcSelect( 2)); // 2 dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW,   funcSelect(12)); // 12 dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(23)); // 23 de dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW,   funcSelect(1212)); // 1212 dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(1223)); // 1223 de dolari
-
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(0, 2)); // 0.00 dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(1, 2)); // 1.00 dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(2, 2)); // 2.00 dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(12, 2)); // 12.00 dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(23, 2)); // 23.00  dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(1212, 2)); // 1212.00  dolari
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(1223, 2)); // 1223.00 dolari
-}
-
-function testSimpleSelectSr() {
-  var funcSelect = goog.i18n.pluralRules.srSelect_; // Serbian
-
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE, funcSelect(1));
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE, funcSelect(31));
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE, funcSelect(0.1));
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE, funcSelect(1.1));
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE, funcSelect(2.1));
-
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(3));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(33));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(0.2));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(0.3));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(0.4));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(2.2));
-
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(2.11));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(2.12));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(2.13));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(2.14));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(2.15));
-
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(0));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(5));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(10));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(35));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(37));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(40));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(0.0, 1));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(0.5));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(0.6));
-
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(2));
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE, funcSelect(2.1));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(2.2));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(2.3));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(2.4));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(2.5));
-
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(20));
-  assertEquals(goog.i18n.pluralRules.Keyword.ONE, funcSelect(21));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(22));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(23));
-  assertEquals(goog.i18n.pluralRules.Keyword.FEW, funcSelect(24));
-  assertEquals(goog.i18n.pluralRules.Keyword.OTHER, funcSelect(25));
-}
-
-</script>
-</body>
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.i18n.pluralRules
+  </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script src="../base.js">
+  </script>
+  <script>
+    goog.require('goog.i18n.pluralRulesTest');
+  </script>
+ </head>
+ <body>
+ </body>
 </html>

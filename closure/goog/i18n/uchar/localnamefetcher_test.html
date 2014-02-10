@@ -6,57 +6,18 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <html>
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Closure Unit Tests - goog.i18n.uChar.LocalNameFetcher</title>
-    <meta charset="utf-8">
-    <script src='../../base.js'>
-    </script>
-    <script>
-      goog.require('goog.i18n.uChar.LocalNameFetcher');
-      goog.require('goog.testing.jsunit');
-      goog.require('goog.testing.recordFunction');
-    </script>
-  </head>
-  <body>
-    <script>
-var nameFetcher = null;
-
-function setUp() {
-  nameFetcher = new goog.i18n.uChar.LocalNameFetcher();
-}
-
-function testGetName_exists() {
-  var callback = goog.testing.recordFunction(function(name) {
-    assertEquals('Space', name);
-  });
-  nameFetcher.getName(' ', callback);
-  assertEquals(1, callback.getCallCount());
-}
-
-function testGetName_variationSelector() {
-  var callback = goog.testing.recordFunction(function(name) {
-    assertEquals('Variation Selector - 1', name);
-  });
-  nameFetcher.getName('\ufe00', callback);
-  assertEquals(1, callback.getCallCount());
-}
-
-function testGetName_missing() {
-  var callback = goog.testing.recordFunction(function(name) {
-    assertNull(name);
-  });
-  nameFetcher.getName('P', callback);
-  assertEquals(1, callback.getCallCount());
-}
-
-function testIsNameAvailable_withAvailableName() {
-  assertTrue(nameFetcher.isNameAvailable(' '));
-}
-
-function testIsNameAvailable_withoutAvailableName() {
-  assertFalse(nameFetcher.isNameAvailable('a'));
-}
-    </script>
-  </body>
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.i18n.uChar.LocalNameFetcher
+  </title>
+  <meta charset="utf-8" />
+  <script src="../../base.js">
+  </script>
+  <script>
+    goog.require('goog.i18n.uChar.LocalNameFetcherTest');
+  </script>
+ </head>
+ <body>
+ </body>
 </html>
