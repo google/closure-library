@@ -148,6 +148,25 @@ See the COPYING file for details.
       palette.handleKeyEvent(createKeyEvent(goog.events.KeyCodes.RIGHT));
       assertEquals(0, palette.getHighlightedIndex());
     }
+
+    function testSetHighlight() {
+      assertEquals(-1, palette.getHighlightedIndex());
+      palette.setHighlighted(true);
+      assertEquals(0, palette.getHighlightedIndex());
+
+      palette.setHighlightedIndex(3);
+      palette.setHighlighted(false);
+      assertEquals(-1, palette.getHighlightedIndex());
+      palette.setHighlighted(true);
+      assertEquals(3, palette.getHighlightedIndex());
+
+      palette.setHighlighted(false);
+      palette.setHighlightedIndex(5);
+      palette.setHighlighted(true);
+      assertEquals(5, palette.getHighlightedIndex());
+      palette.setHighlighted(true);
+      assertEquals(5, palette.getHighlightedIndex());
+    }
   </script>
 </body>
 </html>

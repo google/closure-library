@@ -67,6 +67,11 @@ goog.ui.Palette = function(items, opt_renderer, opt_domHelper) {
    */
   this.currentCellControl_ = new goog.ui.Palette.CurrentCell_();
   this.currentCellControl_.setParentEventTarget(this);
+
+  /**
+   * @private {number} The last highlighted index, or -1 if it never had one.
+   */
+  this.lastHighlightedIndex_ = -1;
 };
 goog.inherits(goog.ui.Palette, goog.ui.Control);
 
@@ -418,6 +423,7 @@ goog.ui.Palette.prototype.getHighlightedCellElement_ = function() {
 goog.ui.Palette.prototype.setHighlightedIndex = function(index) {
   if (index != this.highlightedIndex_) {
     this.highlightIndex_(this.highlightedIndex_, false);
+    this.lastHighlightedIndex_ = this.highlightedIndex_;
     this.highlightedIndex_ = index;
     this.highlightIndex_(index, true);
     this.dispatchEvent(goog.ui.Palette.EventType.AFTER_HIGHLIGHT);
@@ -510,8 +516,15 @@ goog.ui.Palette.prototype.highlightIndex_ = function(index, highlight) {
 /** @override */
 goog.ui.Palette.prototype.setHighlighted = function(highlight) {
   goog.base(this, 'setHighlighted', highlight);
-  if (!highlight) {
-    this.setHighlightedItem(null);
+  if (highlight && this.highlightedIndex_ == -1) {
+    // If there was a last highlighted index, use that. Otherwise, highlight the
+    // first cell.
+    this.setHighlightedIndex(
+        this.lastHighlightedIndex_ > -1 ?
+        this.lastHighlightedIndex_ :
+        0);
+  } else if (!highlight) {
+    this.setHighlightedIndex(-1);
   }
 };
 
