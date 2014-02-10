@@ -52,11 +52,13 @@ goog.require('goog.ui.SliderBase');
 /**
  * This creates a slider object.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {(function(number):string)=} opt_labelFn An optional function mapping
+ *     slider values to a description of the value.
  * @constructor
  * @extends {goog.ui.SliderBase}
  */
-goog.ui.Slider = function(opt_domHelper) {
-  goog.ui.SliderBase.call(this, opt_domHelper);
+goog.ui.Slider = function(opt_domHelper, opt_labelFn) {
+  goog.ui.SliderBase.call(this, opt_domHelper, opt_labelFn);
   this.rangeModel.setExtent(0);
 };
 goog.inherits(goog.ui.Slider, goog.ui.SliderBase);

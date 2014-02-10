@@ -100,7 +100,9 @@ var mockAnimation;
  * @extends {goog.ui.SliderBase}
  */
 function OneThumbSlider() {
-  goog.ui.SliderBase.call(this);
+  goog.ui.SliderBase.call(this, undefined /* domHelper */, function(value) {
+    return value > 5 ? 'A big value.' : 'A small value.';
+  });
 }
 goog.inherits(OneThumbSlider, goog.ui.SliderBase);
 
@@ -362,6 +364,26 @@ function testUpdateValueExtent() {
           goog.a11y.aria.State.VALUENOW));
   assertEquals(30, twoThumbSlider.getValue());
   assertEquals(50, twoThumbSlider.getExtent());
+}
+
+function testValueText() {
+  oneThumbSlider.setValue(10);
+  assertEquals('Setting value results in correct aria-valuetext',
+      'A big value.', goog.a11y.aria.getState(oneThumbSlider.getElement(),
+          goog.a11y.aria.State.VALUETEXT));
+  oneThumbSlider.setValue(2);
+  assertEquals('Updating value results in updated aria-valuetext',
+      'A small value.', goog.a11y.aria.getState(oneThumbSlider.getElement(),
+          goog.a11y.aria.State.VALUETEXT));
+}
+
+function testGetValueText() {
+  oneThumbSlider.setValue(10);
+  assertEquals('Getting the text value gets the correct description',
+      'A big value.', oneThumbSlider.getTextValue());
+  oneThumbSlider.setValue(2);
+  assertEquals('Getting the updated text value gets the correct updated description',
+      'A small value.', oneThumbSlider.getTextValue());
 }
 
 function testRangeListener() {

@@ -57,6 +57,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.events.MouseWheelHandler');
+goog.require('goog.functions');
 goog.require('goog.fx.AnimationParallelQueue');
 goog.require('goog.fx.Dragger');
 goog.require('goog.fx.Transition');
@@ -75,10 +76,12 @@ goog.require('goog.ui.RangeModel');
 /**
  * This creates a SliderBase object.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {(function(number):string)=} opt_labelFn An optional function mapping
+ *     slider values to a description of the value.
  * @constructor
  * @extends {goog.ui.Component}
  */
-goog.ui.SliderBase = function(opt_domHelper) {
+goog.ui.SliderBase = function(opt_domHelper, opt_labelFn) {
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
@@ -94,6 +97,12 @@ goog.ui.SliderBase = function(opt_domHelper) {
    * @type {!goog.ui.RangeModel}
    */
   this.rangeModel = new goog.ui.RangeModel;
+
+  /**
+   * A function mapping slider values to text description.
+   * @private {?function(number):string}
+   */
+  this.labelFn_ = opt_labelFn || goog.functions.NULL;
 
   // Don't use getHandler because it gets cleared in exitDocument.
   goog.events.listen(this.rangeModel, goog.ui.Component.EventType.CHANGE,
@@ -1515,6 +1524,9 @@ goog.ui.SliderBase.prototype.updateAriaStates = function() {
         this.getMaximum());
     goog.a11y.aria.setState(element, goog.a11y.aria.State.VALUENOW,
         this.getValue());
+    // Passing an empty value to setState will restore the default.
+    goog.a11y.aria.setState(element, goog.a11y.aria.State.VALUETEXT,
+        this.getTextValue() || '');
   }
 };
 
@@ -1609,6 +1621,15 @@ goog.ui.SliderBase.prototype.isEnabled = function() {
 goog.ui.SliderBase.prototype.getOffsetStart_ = function(element) {
   return this.flipForRtl_ ?
       goog.style.bidi.getOffsetStart(element) : element.offsetLeft;
+};
+
+
+/**
+ * @return {?string} The text value for the slider's current value, or null if
+ *     unavailable.
+ */
+goog.ui.SliderBase.prototype.getTextValue = function() {
+  return this.labelFn_(this.getValue());
 };
 
 
