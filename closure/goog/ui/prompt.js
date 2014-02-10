@@ -296,11 +296,6 @@ goog.ui.Prompt.prototype.createDom = function() {
   var contentEl = this.getContentElement();
   contentEl.appendChild(this.getDomHelper().createDom(
       'div', {'style': 'overflow: auto'}, this.userInputEl_));
-
-  if (this.rows_ > 1) {
-    // Set default button to null so <enter> will work properly in the textarea
-    this.getButtonSet().setDefault(null);
-  }
 };
 
 
