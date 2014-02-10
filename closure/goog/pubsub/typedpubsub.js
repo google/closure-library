@@ -26,7 +26,7 @@ goog.require('goog.pubsub.PubSub');
  * @extends {goog.Disposable}
  */
 goog.pubsub.TypedPubSub = function() {
-  goog.base(this);
+  goog.pubsub.TypedPubSub.base(this, 'constructor');
 
   this.pubSub_ = new goog.pubsub.PubSub();
   this.registerDisposable(this.pubSub_);
