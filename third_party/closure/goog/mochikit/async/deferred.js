@@ -23,11 +23,11 @@ goog.provide('goog.async.Deferred');
 goog.provide('goog.async.Deferred.AlreadyCalledError');
 goog.provide('goog.async.Deferred.CanceledError');
 
+goog.require('goog.Promise');
+goog.require('goog.Thenable');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
-goog.require('goog.labs.Promise');
-goog.require('goog.labs.Thenable');
 
 
 
@@ -70,7 +70,7 @@ goog.require('goog.labs.Thenable');
  * @param {Object=} opt_defaultScope The default object context to call
  *     callbacks and errbacks in.
  * @constructor
- * @implements {goog.labs.Thenable.<VALUE>}
+ * @implements {goog.Thenable.<VALUE>}
  * @template VALUE
  */
 goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
@@ -460,10 +460,8 @@ goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
 
 
 /**
- * ATTENTION: This is labs code.
- *
- * Implements {@see goog.labs.Thenable} for seamless integration with
- * {@see goog.labs.Promise}.
+ * Implements {@see goog.Thenable} for seamless integration with
+ * {@see goog.Promise}.
  * Deferred results are mutable and may represent multiple values over
  * their lifetime. Calling {@code then} on a Deferred returns a Promise
  * with the result of the Deferred at that point in its callback chain.
@@ -475,7 +473,7 @@ goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
 goog.async.Deferred.prototype.then = function(opt_onFulfilled, opt_onRejected,
     opt_context) {
   var resolve, reject;
-  var promise = new goog.labs.Promise(function(res, rej) {
+  var promise = new goog.Promise(function(res, rej) {
     // Copying resolvers to outer scope, so that they are available when the
     // deferred callback fires (which may be synchronous).
     resolve = res;
@@ -490,7 +488,7 @@ goog.async.Deferred.prototype.then = function(opt_onFulfilled, opt_onRejected,
   });
   return promise.then(opt_onFulfilled, opt_onRejected, opt_context);
 };
-goog.labs.Thenable.addImplementation(goog.async.Deferred);
+goog.Thenable.addImplementation(goog.async.Deferred);
 
 
 /**
@@ -628,7 +626,7 @@ goog.async.Deferred.prototype.fire_ = function() {
           this.result_ = res = ret;
         }
 
-        if (goog.labs.Thenable.isImplementedBy(res)) {
+        if (goog.Thenable.isImplementedBy(res)) {
           isNewlyBlocked = true;
           this.blocked_ = true;
         }
@@ -692,7 +690,7 @@ goog.async.Deferred.succeed = function(opt_result) {
  * Creates a Deferred that fires when the given promise resolves.
  * Use only during migration to Promises.
  *
- * @param {!goog.labs.Promise.<T>} promise
+ * @param {!goog.Promise.<T>} promise
  * @return {!goog.async.Deferred.<T>} The new Deferred.
  * @template T
  */

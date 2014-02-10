@@ -9,9 +9,10 @@
 <script src="../../../../../closure/goog/base.js"></script>
 <script>
 
+goog.require('goog.Promise');
+goog.require('goog.Thenable');
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
-goog.require('goog.labs.Promise');
 goog.require('goog.string');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
@@ -929,10 +930,10 @@ function testThen_reject() {
 
 function testPromiseAll() {
   var d = new Deferred();
-  var p = new goog.labs.Promise(function(resolve) {
+  var p = new goog.Promise(function(resolve) {
     resolve('promise');
   });
-  goog.labs.Promise.all([d, p]).then(function(values) {
+  goog.Promise.all([d, p]).then(function(values) {
     assertEquals(2, values.length);
     assertEquals('deferred', values[0]);
     assertEquals('promise', values[1]);
@@ -944,7 +945,7 @@ function testPromiseAll() {
 function testPromiseBlocksDeferred() {
   var result;
   var d = new Deferred();
-  var p = new goog.labs.Promise(function(resolve) {
+  var p = new goog.Promise(function(resolve) {
     resolve('promise');
   });
   d.callback();
@@ -962,7 +963,7 @@ function testPromiseBlocksDeferred() {
 
 function testFromPromise() {
   var result;
-  var p = new goog.labs.Promise(function(resolve) {
+  var p = new goog.Promise(function(resolve) {
     resolve('promise');
   });
   var d = Deferred.fromPromise(p);
@@ -977,7 +978,7 @@ function testFromPromise() {
 function testPromiseBlocksDeferredAndRejects() {
   var result;
   var d = new Deferred();
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     reject(new Error('error'));
   });
   d.callback();
@@ -1003,12 +1004,12 @@ function testPromiseFromCanceledDeferred() {
   });
 
   mockClock.tick();
-  assertTrue(result instanceof goog.labs.Promise.CancellationError);
+  assertTrue(result instanceof goog.Promise.CancellationError);
 }
 
 function testThenableInterface() {
   var d = new Deferred();
-  assertTrue(goog.labs.Thenable.isImplementedBy(d));
+  assertTrue(goog.Thenable.isImplementedBy(d));
 }
 </script>
 </body>

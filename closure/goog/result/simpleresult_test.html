@@ -12,8 +12,8 @@ See the COPYING file for details.
 <script>
 
 goog.require('goog.Timer');
-goog.require('goog.labs.Promise');
-goog.require('goog.labs.Thenable');
+goog.require('goog.Promise');
+goog.require('goog.Thenable');
 goog.require('goog.result');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.recordFunction');
@@ -269,7 +269,7 @@ function testSetValueAfterCancel() {
 }
 
 function testFromResolvedPromise() {
-  var promise = goog.labs.Promise.resolve('resolved');
+  var promise = goog.Promise.resolve('resolved');
   result = goog.result.SimpleResult.fromPromise(promise);
   assertEquals(goog.result.Result.State.PENDING, result.getState());
   mockClock.tick();
@@ -279,7 +279,7 @@ function testFromResolvedPromise() {
 }
 
 function testFromRejectedPromise() {
-  var promise = goog.labs.Promise.reject('rejected');
+  var promise = goog.Promise.reject('rejected');
   result = goog.result.SimpleResult.fromPromise(promise);
   assertEquals(goog.result.Result.State.PENDING, result.getState());
   mockClock.tick();
@@ -316,8 +316,8 @@ function testThen_reject() {
 }
 
 function testPromiseAll() {
-  var promise = goog.labs.Promise.resolve('promise');
-  goog.labs.Promise.all([result, promise]).then(function(values) {
+  var promise = goog.Promise.resolve('promise');
+  goog.Promise.all([result, promise]).then(function(values) {
     assertEquals(2, values.length);
     assertEquals('result', values[0]);
     assertEquals('promise', values[1]);
@@ -328,7 +328,7 @@ function testPromiseAll() {
 
 function testResolvingPromiseBlocksResult() {
   var value;
-  goog.labs.Promise.resolve('promise').then(function(value) {
+  goog.Promise.resolve('promise').then(function(value) {
     result.setValue(value);
   });
   result.wait(function(r) {
@@ -341,7 +341,7 @@ function testResolvingPromiseBlocksResult() {
 
 function testRejectingPromiseBlocksResult() {
   var err;
-  goog.labs.Promise.reject(new Error('oops')).then(
+  goog.Promise.reject(new Error('oops')).then(
     undefined /* opt_onResolved */,
     function(reason) {
       result.setError(reason);
@@ -363,11 +363,11 @@ function testPromiseFromCanceledResult() {
       reason = r;
     });
   mockClock.tick();
-  assertTrue(reason instanceof goog.labs.Promise.CancellationError);
+  assertTrue(reason instanceof goog.Promise.CancellationError);
 }
 
 function testThenableInterface() {
-  assertTrue(goog.labs.Thenable.isImplementedBy(result));
+  assertTrue(goog.Thenable.isImplementedBy(result));
 }
 
 </script>

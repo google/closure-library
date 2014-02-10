@@ -22,11 +22,11 @@
  * @see https://npmjs.org/package/promises-aplus-tests
  */
 
-goog.provide('goog.labs.promise.testSuiteAdapter');
+goog.provide('goog.promise.testSuiteAdapter');
 
-goog.require('goog.labs.Promise');
+goog.require('goog.Promise');
 
-goog.setTestOnly('goog.labs.promise.testSuiteAdapter');
+goog.setTestOnly('goog.promise.testSuiteAdapter');
 
 
 var promisesAplusTests = /** @type {function(!Object, function(*))} */ (
@@ -37,17 +37,17 @@ var promisesAplusTests = /** @type {function(!Object, function(*))} */ (
  * Adapter for specifying Promise-creating functions to the Promises test suite.
  * @type {!Object}
  */
-goog.labs.promise.testSuiteAdapter = {
-  /** @type {function(*): !goog.labs.Promise} */
-  'resolved': goog.labs.Promise.resolve,
+goog.promise.testSuiteAdapter = {
+  /** @type {function(*): !goog.Promise} */
+  'resolved': goog.Promise.resolve,
 
-  /** @type {function(*): !goog.labs.Promise} */
-  'rejected': goog.labs.Promise.reject,
+  /** @type {function(*): !goog.Promise} */
+  'rejected': goog.Promise.reject,
 
   /** @return {!Object} */
   'deferred': function() {
     var promiseObj = {};
-    promiseObj['promise'] = new goog.labs.Promise(function(resolve, reject) {
+    promiseObj['promise'] = new goog.Promise(function(resolve, reject) {
       promiseObj['resolve'] = resolve;
       promiseObj['reject'] = reject;
     });
@@ -63,11 +63,11 @@ goog.exportSymbol('setTimeout', setTimeout);
 
 // Rethrowing an error to the global scope kills Node immediately. Suppress
 // error rethrowing for running this test suite.
-goog.labs.Promise.setUnhandledRejectionHandler(goog.nullFunction);
+goog.Promise.setUnhandledRejectionHandler(goog.nullFunction);
 
 
 // Run the tests, exiting with a failure code if any of the tests fail.
-promisesAplusTests(goog.labs.promise.testSuiteAdapter, function(err) {
+promisesAplusTests(goog.promise.testSuiteAdapter, function(err) {
   if (err) {
     process.exit(1);
   }

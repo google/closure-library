@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.Resolver');
+goog.provide('goog.promise.Resolver');
 
 
 
@@ -24,25 +24,25 @@ goog.provide('goog.labs.Resolver');
  * @interface
  * @template TYPE
  */
-goog.labs.Resolver = function() {};
+goog.promise.Resolver = function() {};
 
 
 /**
  * The promise that created this resolver.
- * @const {!goog.labs.Promise.<TYPE>}
+ * @const {!goog.Promise.<TYPE>}
  */
-goog.labs.Resolver.prototype.promise;
+goog.promise.Resolver.prototype.promise;
 
 
 /**
  * Resolves this resolver with the specified value.
- * @const {function((TYPE|goog.labs.Promise.<TYPE>|Thenable))}
+ * @const {function((TYPE|goog.Promise.<TYPE>|Thenable))}
  */
-goog.labs.Resolver.prototype.resolve;
+goog.promise.Resolver.prototype.resolve;
 
 
 /**
  * Rejects this resolver with the specified reason.
  * @const {function(*): void}
  */
-goog.labs.Resolver.prototype.reject;
+goog.promise.Resolver.prototype.reject;

@@ -19,9 +19,9 @@
 
 goog.provide('goog.labs.net.image');
 
+goog.require('goog.Promise');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
-goog.require('goog.labs.Promise');
 goog.require('goog.net.EventType');
 goog.require('goog.userAgent');
 
@@ -36,11 +36,11 @@ goog.require('goog.userAgent');
  *     can be used to control exactly how Image instances are created, for
  *     example if they should be created in a particular document element, or
  *     have fields that will trigger CORS image fetches.
- * @return {!goog.labs.Promise.<!Image>} A Promise that will be resolved
- *     with the given image if the image successfully loads.
+ * @return {!goog.Promise.<!Image>} A Promise that will be resolved with the
+ *     given image if the image successfully loads.
  */
 goog.labs.net.image.load = function(uri, opt_image) {
-  return new goog.labs.Promise(function(resolve, reject) {
+  return new goog.Promise(function(resolve, reject) {
     var image;
     if (!goog.isDef(opt_image)) {
       image = new Image();

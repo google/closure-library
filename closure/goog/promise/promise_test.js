@@ -12,23 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.PromiseTest');
+goog.provide('goog.PromiseTest');
 
+goog.require('goog.Promise');
+goog.require('goog.Thenable');
 goog.require('goog.functions');
-goog.require('goog.labs.Promise');
-goog.require('goog.labs.Thenable');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
-goog.setTestOnly('goog.labs.PromiseTest');
+goog.setTestOnly('goog.PromiseTest');
 
 
 // TODO(brenneman):
-// - Add the Promises/A+ compliance test suite.
-// - Add more tests for interoperability with Promise-like Thenables.
 // - Add tests for interoperability with native Promises where available.
 // - Make most tests use the MockClock (though some tests should still verify
 //   real asynchronous behavior.
@@ -54,7 +52,7 @@ function setUpPage() {
 
 function setUp() {
   unhandledRejections = goog.testing.recordFunction();
-  goog.labs.Promise.setUnhandledRejectionHandler(unhandledRejections);
+  goog.Promise.setUnhandledRejectionHandler(unhandledRejections);
 }
 
 
@@ -91,7 +89,7 @@ function shouldNotCall(result) {
 
 
 function fulfillSoon(value, delay) {
-  return new goog.labs.Promise(function(resolve, reject) {
+  return new goog.Promise(function(resolve, reject) {
     window.setTimeout(function() {
       resolve(value);
     }, delay);
@@ -100,7 +98,7 @@ function fulfillSoon(value, delay) {
 
 
 function rejectSoon(reason, delay) {
-  return new goog.labs.Promise(function(resolve, reject) {
+  return new goog.Promise(function(resolve, reject) {
     window.setTimeout(function() {
       reject(reason);
     }, delay);
@@ -112,7 +110,7 @@ function testThenIsFulfilled() {
   asyncTestCase.waitForAsync();
   var timesCalled = 0;
 
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     resolve(sentinel);
   });
   p.then(function(value) {
@@ -131,7 +129,7 @@ function testThenIsRejected() {
   asyncTestCase.waitForAsync();
   var timesCalled = 0;
 
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     reject(sentinel);
   });
   p.then(shouldNotCall, function(value) {
@@ -149,7 +147,7 @@ function testThenIsRejected() {
 function testOptionalOnFulfilled() {
   asyncTestCase.waitForAsync();
 
-  goog.labs.Promise.resolve(sentinel).
+  goog.Promise.resolve(sentinel).
       then(null, null).
       then(null, shouldNotCall).
       then(function(value) {
@@ -162,7 +160,7 @@ function testOptionalOnFulfilled() {
 function testOptionalOnRejected() {
   asyncTestCase.waitForAsync();
 
-  goog.labs.Promise.reject(sentinel).
+  goog.Promise.reject(sentinel).
       then(null, null).
       then(shouldNotCall).
       then(null, function(reason) {
@@ -177,7 +175,7 @@ function testMultipleResolves() {
   var timesCalled = 0;
   var resolvePromise;
 
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     resolvePromise = resolve;
     resolve('foo');
     resolve('bar');
@@ -202,7 +200,7 @@ function testMultipleRejects() {
   var timesCalled = 0;
   var rejectPromise;
 
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     rejectPromise = reject;
     reject('foo');
     reject('bar');
@@ -225,7 +223,7 @@ function testMultipleRejects() {
 function testAsynchronousThenCalls() {
   asyncTestCase.waitForAsync();
   var timesCalled = [0, 0, 0, 0];
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     window.setTimeout(function() {
       resolve();
     }, 30);
@@ -264,11 +262,11 @@ function testResolveWithPromise() {
   asyncTestCase.waitForAsync();
   var resolveBlocker;
   var hasFulfilled = false;
-  var blocker = new goog.labs.Promise(function(resolve, reject) {
+  var blocker = new goog.Promise(function(resolve, reject) {
     resolveBlocker = resolve;
   });
 
-  var p = goog.labs.Promise.resolve(blocker);
+  var p = goog.Promise.resolve(blocker);
   p.then(function(value) {
     hasFulfilled = true;
     assertEquals(sentinel, value);
@@ -287,11 +285,11 @@ function testResolveWithRejectedPromise() {
   asyncTestCase.waitForAsync();
   var rejectBlocker;
   var hasRejected = false;
-  var blocker = new goog.labs.Promise(function(resolve, reject) {
+  var blocker = new goog.Promise(function(resolve, reject) {
     rejectBlocker = reject;
   });
 
-  var p = goog.labs.Promise.resolve(blocker);
+  var p = goog.Promise.resolve(blocker);
   p.then(shouldNotCall, function(reason) {
     hasRejected = true;
     assertEquals(sentinel, reason);
@@ -310,11 +308,11 @@ function testRejectWithPromise() {
   asyncTestCase.waitForAsync();
   var resolveBlocker;
   var hasFulfilled = false;
-  var blocker = new goog.labs.Promise(function(resolve, reject) {
+  var blocker = new goog.Promise(function(resolve, reject) {
     resolveBlocker = resolve;
   });
 
-  var p = goog.labs.Promise.reject(blocker);
+  var p = goog.Promise.reject(blocker);
   p.then(function(value) {
     hasFulfilled = true;
     assertEquals(sentinel, value);
@@ -333,11 +331,11 @@ function testRejectWithRejectedPromise() {
   asyncTestCase.waitForAsync();
   var rejectBlocker;
   var hasRejected = false;
-  var blocker = new goog.labs.Promise(function(resolve, reject) {
+  var blocker = new goog.Promise(function(resolve, reject) {
     rejectBlocker = reject;
   });
 
-  var p = goog.labs.Promise.reject(blocker);
+  var p = goog.Promise.reject(blocker);
   p.then(shouldNotCall, function(reason) {
     hasRejected = true;
     assertEquals(sentinel, reason);
@@ -356,7 +354,7 @@ function testResolveAndReject() {
   asyncTestCase.waitForAsync();
   var onFulfilledCalled = false;
   var onRejectedCalled = false;
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     resolve();
     reject();
   });
@@ -379,7 +377,7 @@ function testRejectAndResolve() {
   asyncTestCase.waitForAsync();
   var onFulfilledCalled = false;
   var onRejectedCalled = false;
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     reject();
     resolve();
   });
@@ -401,7 +399,7 @@ function testRejectAndResolve() {
 function testThenReturnsBeforeCallbackWithFulfill() {
   asyncTestCase.waitForAsync();
   var thenHasReturned = false;
-  var p = goog.labs.Promise.resolve();
+  var p = goog.Promise.resolve();
 
   p.then(function() {
     assertTrue(
@@ -416,7 +414,7 @@ function testThenReturnsBeforeCallbackWithFulfill() {
 function testThenReturnsBeforeCallbackWithReject() {
   asyncTestCase.waitForAsync();
   var thenHasReturned = false;
-  var p = goog.labs.Promise.reject();
+  var p = goog.Promise.reject();
 
   p.then(null, function() {
     assertTrue(thenHasReturned);
@@ -429,7 +427,7 @@ function testThenReturnsBeforeCallbackWithReject() {
 function testResolutionOrder() {
   asyncTestCase.waitForAsync();
   var callbacks = [];
-  var p = goog.labs.Promise.resolve();
+  var p = goog.Promise.resolve();
 
   p.then(function() { callbacks.push(1); }, shouldNotCall);
   p.then(function() { callbacks.push(2); }, shouldNotCall);
@@ -445,7 +443,7 @@ function testResolutionOrder() {
 function testResolutionOrderWithThrow() {
   asyncTestCase.waitForAsync();
   var callbacks = [];
-  var p = goog.labs.Promise.resolve();
+  var p = goog.Promise.resolve();
 
   p.then(function() { callbacks.push(1); }, shouldNotCall);
   var child = p.then(function() {
@@ -472,7 +470,7 @@ function testResolutionOrderWithThrow() {
 function testResolutionOrderWithNestedThen() {
   asyncTestCase.waitForAsync();
   var callbacks = [];
-  var p = goog.labs.Promise.resolve();
+  var p = goog.Promise.resolve();
 
   p.then(function() {
     callbacks.push(1);
@@ -492,7 +490,7 @@ function testResolutionOrderWithNestedThen() {
 function testRejectionOrder() {
   asyncTestCase.waitForAsync();
   var callbacks = [];
-  var p = goog.labs.Promise.reject();
+  var p = goog.Promise.reject();
 
   p.then(shouldNotCall, function() { callbacks.push(1); });
   p.then(shouldNotCall, function() { callbacks.push(2); });
@@ -508,7 +506,7 @@ function testRejectionOrder() {
 function testRejectionOrderWithThrow() {
   asyncTestCase.waitForAsync();
   var callbacks = [];
-  var p = goog.labs.Promise.reject();
+  var p = goog.Promise.reject();
 
   p.then(shouldNotCall, function() { callbacks.push(1); });
   p.then(shouldNotCall, function() {
@@ -528,7 +526,7 @@ function testRejectionOrderWithNestedThen() {
   asyncTestCase.waitForAsync();
   var callbacks = [];
 
-  var p = goog.labs.Promise.reject();
+  var p = goog.Promise.reject();
 
   p.then(shouldNotCall, function() {
     callbacks.push(1);
@@ -547,7 +545,7 @@ function testRejectionOrderWithNestedThen() {
 
 function testBranching() {
   asyncTestCase.waitForSignals(3);
-  var p = goog.labs.Promise.resolve(2);
+  var p = goog.Promise.resolve(2);
 
   p.then(function(value) {
     assertEquals('then functions should see the same value', 2, value);
@@ -576,10 +574,10 @@ function testBranching() {
 
 
 function testThenReturnsPromise() {
-  var parent = goog.labs.Promise.resolve();
+  var parent = goog.Promise.resolve();
   var child = parent.then();
 
-  assertTrue(child instanceof goog.labs.Promise);
+  assertTrue(child instanceof goog.Promise);
   assertNotEquals('The returned Promise must be different from the input.',
                   parent, child);
 }
@@ -587,12 +585,12 @@ function testThenReturnsPromise() {
 
 function testBlockingPromise() {
   asyncTestCase.waitForAsync();
-  var p = goog.labs.Promise.resolve();
+  var p = goog.Promise.resolve();
   var wasFulfilled = false;
   var wasRejected = false;
 
   var p2 = p.then(function() {
-    return new goog.labs.Promise(function(resolve, reject) {});
+    return new goog.Promise(function(resolve, reject) {});
   });
 
   p2.then(function() {
@@ -611,13 +609,13 @@ function testBlockingPromise() {
 
 function testBlockingPromiseFulfilled() {
   asyncTestCase.waitForAsync();
-  var blockingPromise = new goog.labs.Promise(function(resolve, reject) {
+  var blockingPromise = new goog.Promise(function(resolve, reject) {
     window.setTimeout(function() {
       resolve(sentinel);
     }, 0);
   });
 
-  var p = goog.labs.Promise.resolve(dummy);
+  var p = goog.Promise.resolve(dummy);
   var p2 = p.then(function(value) {
     return blockingPromise;
   });
@@ -630,13 +628,13 @@ function testBlockingPromiseFulfilled() {
 
 function testBlockingPromiseRejected() {
   asyncTestCase.waitForAsync();
-  var blockingPromise = new goog.labs.Promise(function(resolve, reject) {
+  var blockingPromise = new goog.Promise(function(resolve, reject) {
     window.setTimeout(function() {
       reject(sentinel);
     }, 0);
   });
 
-  var p = goog.labs.Promise.resolve(blockingPromise);
+  var p = goog.Promise.resolve(blockingPromise);
 
   p.then(shouldNotCall, function(reason) {
     assertEquals(sentinel, reason);
@@ -650,7 +648,7 @@ function testBlockingThenableFulfilled() {
     then: function(onFulfill, onReject) { onFulfill(sentinel); }
   };
 
-  var p = goog.labs.Promise.resolve(thenable).
+  var p = goog.Promise.resolve(thenable).
       then(function(reason) {
         assertEquals(sentinel, reason);
       }, shouldNotCall).thenAlways(continueTesting);
@@ -663,7 +661,7 @@ function testBlockingThenableRejected() {
     then: function(onFulfill, onReject) { onReject(sentinel); }
   };
 
-  var p = goog.labs.Promise.resolve(thenable).
+  var p = goog.Promise.resolve(thenable).
       then(shouldNotCall, function(reason) {
         assertEquals(sentinel, reason);
       }).thenAlways(continueTesting);
@@ -676,7 +674,7 @@ function testBlockingThenableThrows() {
     then: function(onFulfill, onReject) { throw sentinel; }
   };
 
-  var p = goog.labs.Promise.resolve(thenable).
+  var p = goog.Promise.resolve(thenable).
       then(shouldNotCall, function(reason) {
         assertEquals(sentinel, reason);
       }).thenAlways(continueTesting);
@@ -694,7 +692,7 @@ function testBlockingThenableMisbehaves() {
     }
   };
 
-  var p = goog.labs.Promise.resolve(thenable).
+  var p = goog.Promise.resolve(thenable).
       then(function(value) {
         assertEquals(
             'Only the first resolution of the Thenable should have a result.',
@@ -715,7 +713,7 @@ function testNestingThenables() {
     then: function(onFulfill, onReject) { onFulfill(thenableB); }
   };
 
-  var p = goog.labs.Promise.resolve(thenableC).
+  var p = goog.Promise.resolve(thenableC).
       then(function(value) {
         assertEquals(
             'Should resolve to the fulfillment value of thenableA',
@@ -736,7 +734,7 @@ function testNestingThenablesRejected() {
     then: function(onFulfill, onReject) { onReject(thenableB); }
   };
 
-  var p = goog.labs.Promise.reject(thenableC).
+  var p = goog.Promise.reject(thenableC).
       then(shouldNotCall, function(reason) {
         assertEquals(
             'Should resolve to rejection reason of thenableA',
@@ -748,7 +746,7 @@ function testNestingThenablesRejected() {
 function testThenCatch() {
   asyncTestCase.waitForAsync();
   var catchCalled = false;
-  var p = goog.labs.Promise.reject();
+  var p = goog.Promise.reject();
 
   var p2 = p.thenCatch(function(reason) {
     catchCalled = true;
@@ -765,7 +763,7 @@ function testThenCatch() {
 
 function testRaceWithEmptyList() {
   asyncTestCase.waitForAsync();
-  goog.labs.Promise.race([]).then(function(value) {
+  goog.Promise.race([]).then(function(value) {
     assertUndefined(value);
   }).thenAlways(continueTesting);
 }
@@ -779,7 +777,7 @@ function testRaceWithFulfill() {
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
 
-  goog.labs.Promise.race([a, b, c, d]).
+  goog.Promise.race([a, b, c, d]).
       then(function(value) {
         assertEquals('c', value);
         // Return the slowest input promise to wait for it to complete.
@@ -800,7 +798,7 @@ function testRaceWithReject() {
   var c = rejectSoon('rejected-c', 10);
   var d = rejectSoon('rejected-d', 20);
 
-  var p = goog.labs.Promise.race([a, b, c, d]).
+  var p = goog.Promise.race([a, b, c, d]).
       then(shouldNotCall, function(value) {
         assertEquals('rejected-c', value);
         return a;
@@ -814,7 +812,7 @@ function testRaceWithReject() {
 
 function testAllWithEmptyList() {
   asyncTestCase.waitForAsync();
-  goog.labs.Promise.all([]).then(function(value) {
+  goog.Promise.all([]).then(function(value) {
     assertArrayEquals([], value);
   }).thenAlways(continueTesting);
 }
@@ -828,7 +826,7 @@ function testAllWithFulfill() {
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
 
-  goog.labs.Promise.all([a, b, c, d]).then(function(value) {
+  goog.Promise.all([a, b, c, d]).then(function(value) {
     assertArrayEquals(['a', 'b', 'c', 'd'], value);
   }).thenAlways(continueTesting);
 }
@@ -842,7 +840,7 @@ function testAllWithReject() {
   var c = fulfillSoon('c', 10);
   var d = fulfillSoon('d', 20);
 
-  goog.labs.Promise.all([a, b, c, d]).
+  goog.Promise.all([a, b, c, d]).
       then(shouldNotCall, function(reason) {
         assertEquals('rejected-b', reason);
         return a;
@@ -856,7 +854,7 @@ function testAllWithReject() {
 
 function testFirstFulfilledWithEmptyList() {
   asyncTestCase.waitForAsync();
-  goog.labs.Promise.firstFulfilled([]).then(function(value) {
+  goog.Promise.firstFulfilled([]).then(function(value) {
     assertUndefined(value);
   }).thenAlways(continueTesting);
 }
@@ -870,7 +868,7 @@ function testFirstFulfilledWithFulfill() {
   var c = rejectSoon('rejected-c', 10);
   var d = fulfillSoon('d', 20);
 
-  goog.labs.Promise.firstFulfilled([a, b, c, d]).
+  goog.Promise.firstFulfilled([a, b, c, d]).
       then(function(value) {
         assertEquals('d', value);
         return c;
@@ -897,7 +895,7 @@ function testFirstFulfilledWithReject() {
   var c = rejectSoon('rejected-c', 10);
   var d = rejectSoon('rejected-d', 20);
 
-  var p = goog.labs.Promise.firstFulfilled([a, b, c, d]).
+  var p = goog.Promise.firstFulfilled([a, b, c, d]).
       then(shouldNotCall, function(reason) {
         assertArrayEquals(
             ['rejected-a', 'rejected-b', 'rejected-c', 'rejected-d'], reason);
@@ -907,7 +905,7 @@ function testFirstFulfilledWithReject() {
 
 function testThenAlwaysWithFulfill() {
   asyncTestCase.waitForAsync();
-  var p = goog.labs.Promise.resolve().
+  var p = goog.Promise.resolve().
       thenAlways(function() {
         assertEquals(0, arguments.length);
       }).
@@ -917,7 +915,7 @@ function testThenAlwaysWithFulfill() {
 
 function testThenAlwaysWithReject() {
   asyncTestCase.waitForAsync();
-  var p = goog.labs.Promise.reject().
+  var p = goog.Promise.reject().
       thenAlways(function() {
         assertEquals(0, arguments.length);
       }).
@@ -929,7 +927,7 @@ function testThenAlwaysCalledMultipleTimes() {
   asyncTestCase.waitForAsync();
   var calls = [];
 
-  var p = goog.labs.Promise.resolve(sentinel);
+  var p = goog.Promise.resolve(sentinel);
   p.then(function(value) {
     assertEquals(sentinel, value);
     calls.push(1);
@@ -965,7 +963,7 @@ function testThenAlwaysCalledMultipleTimes() {
 
 function testContextWithInit() {
   var initContext;
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     initContext = this;
   }, sentinel);
   assertEquals(sentinel, initContext);
@@ -974,7 +972,7 @@ function testContextWithInit() {
 
 function testContextWithInitDefault() {
   var initContext;
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     initContext = this;
   });
   assertEquals(
@@ -986,7 +984,7 @@ function testContextWithInitDefault() {
 function testContextWithFulfillment() {
   asyncTestCase.waitForAsync();
   var context = sentinel;
-  var p = goog.labs.Promise.resolve();
+  var p = goog.Promise.resolve();
 
   p.then(function() {
     assertEquals(
@@ -1006,7 +1004,7 @@ function testContextWithFulfillment() {
 function testContextWithRejection() {
   asyncTestCase.waitForAsync();
   var context = sentinel;
-  var p = goog.labs.Promise.reject();
+  var p = goog.Promise.reject();
 
   p.then(shouldNotCall, function() {
     assertEquals(
@@ -1028,9 +1026,9 @@ function testContextWithRejection() {
 
 function testCancel() {
   asyncTestCase.waitForAsync();
-  var p = new goog.labs.Promise(goog.nullFunction);
+  var p = new goog.Promise(goog.nullFunction);
   p.then(shouldNotCall, function(reason) {
-    assertTrue(reason instanceof goog.labs.Promise.CancellationError);
+    assertTrue(reason instanceof goog.Promise.CancellationError);
     assertEquals('cancellation message', reason.message);
     continueTesting();
   });
@@ -1040,7 +1038,7 @@ function testCancel() {
 
 function testCancelAfterResolve() {
   asyncTestCase.waitForAsync();
-  var p = goog.labs.Promise.resolve();
+  var p = goog.Promise.resolve();
   p.cancel();
   p.then(null, shouldNotCall);
   p.thenAlways(continueTesting);
@@ -1049,7 +1047,7 @@ function testCancelAfterResolve() {
 
 function testCancelAfterReject() {
   asyncTestCase.waitForAsync();
-  var p = goog.labs.Promise.reject(sentinel);
+  var p = goog.Promise.reject(sentinel);
   p.cancel();
   p.then(shouldNotCall, function(reason) {
     assertEquals(sentinel, reason);
@@ -1061,11 +1059,11 @@ function testCancelAfterReject() {
 function testCancelPropagation() {
   asyncTestCase.waitForSignals(2);
   var cancelError;
-  var p = new goog.labs.Promise(goog.nullFunction);
+  var p = new goog.Promise(goog.nullFunction);
 
   var p2 = p.then(shouldNotCall, function(reason) {
     cancelError = reason;
-    assertTrue(reason instanceof goog.labs.Promise.CancellationError);
+    assertTrue(reason instanceof goog.Promise.CancellationError);
     assertEquals('parent cancel message', reason.message);
     return sentinel;
   });
@@ -1092,10 +1090,10 @@ function testCancelPropagationUpward() {
   asyncTestCase.waitForAsync();
   var cancelError;
   var cancelCalls = [];
-  var parent = new goog.labs.Promise(goog.nullFunction);
+  var parent = new goog.Promise(goog.nullFunction);
 
   var child = parent.then(shouldNotCall, function(reason) {
-    assertTrue(reason instanceof goog.labs.Promise.CancellationError);
+    assertTrue(reason instanceof goog.Promise.CancellationError);
     assertEquals('grandChild cancel message', reason.message);
     cancelError = reason;
     cancelCalls.push('parent');
@@ -1138,7 +1136,7 @@ function testCancelPropagationUpwardWithMultipleChildren() {
   });
 
   var child = parent.then(shouldNotCall, function(reason) {
-    assertTrue(reason instanceof goog.labs.Promise.CancellationError);
+    assertTrue(reason instanceof goog.Promise.CancellationError);
     assertEquals('grandChild cancel message', reason.message);
     cancelError = reason;
     cancelCalls.push('child');
@@ -1175,7 +1173,7 @@ function testCancelRecovery() {
   });
 
   var sibling2 = parent.then(shouldNotCall, function(reason) {
-    assertTrue(reason instanceof goog.labs.Promise.CancellationError);
+    assertTrue(reason instanceof goog.Promise.CancellationError);
     cancelError = reason;
     cancelCalls.push('sibling2');
     return sentinel;
@@ -1200,9 +1198,9 @@ function testCancelRecovery() {
 
 
 function testCancellationError() {
-  var err = new goog.labs.Promise.CancellationError('cancel message');
+  var err = new goog.Promise.CancellationError('cancel message');
   assertTrue(err instanceof Error);
-  assertTrue(err instanceof goog.labs.Promise.CancellationError);
+  assertTrue(err instanceof goog.Promise.CancellationError);
   assertEquals('cancel', err.name);
   assertEquals('cancel message', err.message);
 }
@@ -1215,7 +1213,7 @@ function testMockClock() {
   var resolveB;
   var calls = [];
 
-  var p = new goog.labs.Promise(function(resolve, reject) {
+  var p = new goog.Promise(function(resolve, reject) {
     resolveA = resolve;
   });
 
@@ -1226,7 +1224,7 @@ function testMockClock() {
 
   var fulfilledChild = p.then(function(value) {
     assertEquals(sentinel, value);
-    return goog.labs.Promise.resolve(1);
+    return goog.Promise.resolve(1);
   }).then(function(value) {
     assertEquals(1, value);
     calls.push('fulfilledChild');
@@ -1235,7 +1233,7 @@ function testMockClock() {
 
   var rejectedChild = p.then(function(value) {
     assertEquals(sentinel, value);
-    return goog.labs.Promise.reject(2);
+    return goog.Promise.reject(2);
   }).then(shouldNotCall, function(reason) {
     assertEquals(2, reason);
     calls.push('rejectedChild');
@@ -1243,7 +1241,7 @@ function testMockClock() {
 
   var unresolvedChild = p.then(function(value) {
     assertEquals(sentinel, value);
-    return new goog.labs.Promise(function(r) {
+    return new goog.Promise(function(r) {
       resolveB = r;
     });
   }).then(function(value) {
@@ -1275,7 +1273,7 @@ function testMockClock() {
 
 function testHandledRejection() {
   mockClock.install();
-  goog.labs.Promise.reject(sentinel).then(shouldNotCall, function(reason) {});
+  goog.Promise.reject(sentinel).then(shouldNotCall, function(reason) {});
 
   mockClock.tick();
   assertEquals(0, unhandledRejections.getCallCount());
@@ -1284,7 +1282,7 @@ function testHandledRejection() {
 
 function testUnhandledRejection() {
   mockClock.install();
-  goog.labs.Promise.reject(sentinel);
+  goog.Promise.reject(sentinel);
 
   mockClock.tick();
   assertEquals(1, unhandledRejections.getCallCount());
@@ -1296,8 +1294,8 @@ function testUnhandledRejection() {
 
 function testUnhandledBlockingRejection() {
   mockClock.install();
-  var blocker = goog.labs.Promise.reject(sentinel);
-  goog.labs.Promise.resolve(blocker);
+  var blocker = goog.Promise.reject(sentinel);
+  goog.Promise.resolve(blocker);
 
   mockClock.tick();
   assertEquals(1, unhandledRejections.getCallCount());
@@ -1309,8 +1307,8 @@ function testUnhandledBlockingRejection() {
 
 function testHandledBlockingRejection() {
   mockClock.install();
-  var blocker = goog.labs.Promise.reject(sentinel);
-  goog.labs.Promise.resolve(blocker).then(shouldNotCall, function(reason) {});
+  var blocker = goog.Promise.reject(sentinel);
+  goog.Promise.resolve(blocker).then(shouldNotCall, function(reason) {});
 
   mockClock.tick();
   assertEquals(0, unhandledRejections.getCallCount());
@@ -1319,8 +1317,8 @@ function testHandledBlockingRejection() {
 
 function testUnhandledRejectionWithTimeout() {
   mockClock.install();
-  stubs.replace(goog.labs.Promise, 'UNHANDLED_REJECTION_DELAY', 200);
-  goog.labs.Promise.reject(sentinel);
+  stubs.replace(goog.Promise, 'UNHANDLED_REJECTION_DELAY', 200);
+  goog.Promise.reject(sentinel);
 
   mockClock.tick(199);
   assertEquals(0, unhandledRejections.getCallCount());
@@ -1332,8 +1330,8 @@ function testUnhandledRejectionWithTimeout() {
 
 function testHandledRejectionWithTimeout() {
   mockClock.install();
-  stubs.replace(goog.labs.Promise, 'UNHANDLED_REJECTION_DELAY', 200);
-  var p = goog.labs.Promise.reject(sentinel);
+  stubs.replace(goog.Promise, 'UNHANDLED_REJECTION_DELAY', 200);
+  var p = goog.Promise.reject(sentinel);
 
   mockClock.tick(199);
   p.then(shouldNotCall, function(reason) {});
@@ -1345,8 +1343,8 @@ function testHandledRejectionWithTimeout() {
 
 function testUnhandledRejectionDisabled() {
   mockClock.install();
-  stubs.replace(goog.labs.Promise, 'UNHANDLED_REJECTION_DELAY', -1);
-  goog.labs.Promise.reject(sentinel);
+  stubs.replace(goog.Promise, 'UNHANDLED_REJECTION_DELAY', -1);
+  goog.Promise.reject(sentinel);
 
   mockClock.tick();
   assertEquals(0, unhandledRejections.getCallCount());
@@ -1354,26 +1352,26 @@ function testUnhandledRejectionDisabled() {
 
 
 function testThenableInterface() {
-  var promise = new goog.labs.Promise(function(resolve, reject) {});
-  assertTrue(goog.labs.Thenable.isImplementedBy(promise));
+  var promise = new goog.Promise(function(resolve, reject) {});
+  assertTrue(goog.Thenable.isImplementedBy(promise));
 
-  assertFalse(goog.labs.Thenable.isImplementedBy({}));
-  assertFalse(goog.labs.Thenable.isImplementedBy('string'));
-  assertFalse(goog.labs.Thenable.isImplementedBy(1));
-  assertFalse(goog.labs.Thenable.isImplementedBy({then: function() {}}));
+  assertFalse(goog.Thenable.isImplementedBy({}));
+  assertFalse(goog.Thenable.isImplementedBy('string'));
+  assertFalse(goog.Thenable.isImplementedBy(1));
+  assertFalse(goog.Thenable.isImplementedBy({then: function() {}}));
 
   function T() {}
   T.prototype.then = function(opt_a, opt_b, opt_c) {};
-  goog.labs.Thenable.addImplementation(T);
-  assertTrue(goog.labs.Thenable.isImplementedBy(new T));
+  goog.Thenable.addImplementation(T);
+  assertTrue(goog.Thenable.isImplementedBy(new T));
 
   // Test COMPILED code path.
   try {
     COMPIlED = true;
     function C() {}
     C.prototype.then = function(opt_a, opt_b, opt_c) {};
-    goog.labs.Thenable.addImplementation(C);
-    assertTrue(goog.labs.Thenable.isImplementedBy(new C));
+    goog.Thenable.addImplementation(C);
+    assertTrue(goog.Thenable.isImplementedBy(new C));
   } finally {
     COMPILED = false;
   }
@@ -1384,7 +1382,7 @@ function testCreateWithResolver_Resolved() {
   mockClock.install();
   var timesCalled = 0;
 
-  var resolver = goog.labs.Promise.withResolver();
+  var resolver = goog.Promise.withResolver();
 
   resolver.promise.then(function(value) {
     timesCalled++;
@@ -1414,7 +1412,7 @@ function testCreateWithResolver_Rejected() {
   mockClock.install();
   var timesCalled = 0;
 
-  var resolver = goog.labs.Promise.withResolver();
+  var resolver = goog.Promise.withResolver();
 
   resolver.promise.then(fail, function(reason) {
     timesCalled++;

@@ -20,9 +20,9 @@
 goog.provide('goog.result.SimpleResult');
 goog.provide('goog.result.SimpleResult.StateError');
 
+goog.require('goog.Promise');
+goog.require('goog.Thenable');
 goog.require('goog.debug.Error');
-goog.require('goog.labs.Promise');
-goog.require('goog.labs.Thenable');
 goog.require('goog.result.Result');
 
 
@@ -70,7 +70,7 @@ goog.result.SimpleResult = function() {
    */
   this.error_ = undefined;
 };
-goog.labs.Thenable.addImplementation(goog.result.SimpleResult);
+goog.Thenable.addImplementation(goog.result.SimpleResult);
 
 
 /**
@@ -228,7 +228,7 @@ goog.result.SimpleResult.prototype.then = function(
   var resolve, reject;
   // Copy the resolvers to outer scope, so that they are available
   // when the callback to wait() fires (which may be synchronous).
-  var promise = new goog.labs.Promise(function(res, rej) {
+  var promise = new goog.Promise(function(res, rej) {
     resolve = res;
     reject = rej;
   });
@@ -248,7 +248,7 @@ goog.result.SimpleResult.prototype.then = function(
 /**
  * Creates a SimpleResult that fires when the given promise resolves.
  * Use only during migration to Promises.
- * @param {!goog.labs.Promise.<?>} promise
+ * @param {!goog.Promise.<?>} promise
  * @return {!goog.result.Result}
  */
 goog.result.SimpleResult.fromPromise = function(promise) {

@@ -16,12 +16,12 @@
  * @fileoverview Defines an interface that represents a Result.
  *
  * NOTE: goog.result is soft deprecated - we expect to replace this and
- * {@link goog.async.Deferred} with {@link goog.labs.Promise}.
+ * {@link goog.async.Deferred} with {@link goog.Promise}.
  */
 
 goog.provide('goog.result.Result');
 
-goog.require('goog.labs.Thenable');
+goog.require('goog.Thenable');
 
 
 
@@ -31,7 +31,7 @@ goog.require('goog.labs.Thenable');
  * to a 'Promise' or a 'Future' in other languages and frameworks.
  *
  * @interface
- * @extends {goog.labs.Thenable}
+ * @extends {goog.Thenable}
  */
 goog.result.Result = function() {};
 

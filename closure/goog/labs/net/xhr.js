@@ -24,11 +24,13 @@
 goog.provide('goog.labs.net.xhr');
 goog.provide('goog.labs.net.xhr.Error');
 goog.provide('goog.labs.net.xhr.HttpError');
+goog.provide('goog.labs.net.xhr.Options');
+goog.provide('goog.labs.net.xhr.PostData');
 goog.provide('goog.labs.net.xhr.TimeoutError');
 
+goog.require('goog.Promise');
 goog.require('goog.debug.Error');
 goog.require('goog.json');
-goog.require('goog.labs.Promise');
 goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.string');
@@ -93,8 +95,8 @@ _.FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded;charset=utf-8';
  *
  * @param {string} url The URL to request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.labs.Promise.<string>} A promise that will be resolved
- *     with the response text once the request completes.
+ * @return {!goog.Promise.<string>} A promise that will be resolved with the
+ *     response text once the request completes.
  */
 _.get = function(url, opt_options) {
   return _.send('GET', url, null, opt_options).then(function(xhr) {
@@ -110,8 +112,8 @@ _.get = function(url, opt_options) {
  * @param {string} url The URL to request.
  * @param {_.PostData} data The body of the post request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.labs.Promise.<string>} A promise that will be resolved
- *     with the response text once the request completes.
+ * @return {!goog.Promise.<string>} A promise that will be resolved with the
+ *     response text once the request completes.
  */
 _.post = function(url, data, opt_options) {
   return _.send('POST', url, data, opt_options).then(function(xhr) {
@@ -126,8 +128,8 @@ _.post = function(url, data, opt_options) {
  *
  * @param {string} url The URL to request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.labs.Promise.<Object>} A promise that will be resolved
- *     with the response JSON once the request completes.
+ * @return {!goog.Promise.<Object>} A promise that will be resolved with the
+ *     response JSON once the request completes.
  */
 _.getJson = function(url, opt_options) {
   return _.send('GET', url, null, opt_options).then(function(xhr) {
@@ -143,8 +145,8 @@ _.getJson = function(url, opt_options) {
  * @param {string} url The URL to request.
  * @param {_.PostData} data The body of the post request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.labs.Promise.<Object>} A promise that will be resolved
- *     with the response JSON once the request completes.
+ * @return {!goog.Promise.<Object>} A promise that will be resolved with the
+ *     response JSON once the request completes.
  */
 _.postJson = function(url, data, opt_options) {
   return _.send('POST', url, data, opt_options).then(function(xhr) {
@@ -161,11 +163,11 @@ _.postJson = function(url, data, opt_options) {
  * @param {string} url The URL to request.
  * @param {_.PostData} data The body of the post request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.labs.Promise.<!goog.net.XhrLike.OrNative>} A promise that will
- *     be resolved with the XHR object once the request completes.
+ * @return {!goog.Promise.<!goog.net.XhrLike.OrNative>} A promise that will be
+ *     resolved with the XHR object once the request completes.
  */
 _.send = function(method, url, data, opt_options) {
-  return new goog.labs.Promise(function(resolve, reject) {
+  return new goog.Promise(function(resolve, reject) {
     var options = opt_options || {};
     var timer;
 
