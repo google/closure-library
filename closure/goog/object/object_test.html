@@ -309,10 +309,16 @@ function testExtend() {
   assertEquals(3, o.c);
   assertTrue('c' in o);
 
+  o = {};
+  o2 = {c: 2};
+  var o3 = {c: 3};
+  goog.object.extend(o, o2, o3);
+  assertEquals(3, o.c);
+  assertTrue('c' in o);
 
   o = {};
   o2 = {a: 0, b: 1};
-  var o3 = {c: 2, d: 3};
+  o3 = {c: 2, d: 3};
   goog.object.extend(o, o2, o3);
   assertEquals(0, o.a);
   assertEquals(1, o.b);
