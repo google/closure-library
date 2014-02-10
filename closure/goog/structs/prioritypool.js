@@ -67,7 +67,7 @@ goog.structs.PriorityPool.DEFAULT_PRIORITY_ = 100;
 
 /** @override */
 goog.structs.PriorityPool.prototype.setDelay = function(delay) {
-  goog.base(this, 'setDelay', delay);
+  goog.structs.PriorityPool.base(this, 'setDelay', delay);
 
   // If the pool hasn't been accessed yet, no need to do anything.
   if (!goog.isDefAndNotNull(this.lastAccess)) {
@@ -99,7 +99,7 @@ goog.structs.PriorityPool.prototype.setDelay = function(delay) {
 goog.structs.PriorityPool.prototype.getObject = function(opt_callback,
                                                          opt_priority) {
   if (!opt_callback) {
-    var result = goog.base(this, 'getObject');
+    var result = goog.structs.PriorityPool.base(this, 'getObject');
     if (result && this.delay) {
       this.delayTimeout_ = goog.global.setTimeout(
           goog.bind(this.handleQueueRequests_, this),
