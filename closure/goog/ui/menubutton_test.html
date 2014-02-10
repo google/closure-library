@@ -72,14 +72,11 @@ goog.positioning.positionAtCoordinate = function(absolutePos, movableElement,
       goog.positioning.Overflow.IGNORE, opt_preferredSize);
 };
 
-function MyFakeEvent(keyCode, opt_eventType) {
-  this.type = opt_eventType || goog.events.KeyHandler.EventType.KEY;
+function MyFakeEvent(keyCode) {
+  this.type = goog.events.KeyHandler.EventType.KEY;
   this.keyCode = keyCode;
-  this.propagationStopped = false;
   this.preventDefault = goog.nullFunction;
-  this.stopPropagation = function() {
-    this.propagationStopped = true;
-  };
+  this.stopPropagation = goog.nullFunction;
 }
 
 function setUp() {
@@ -189,38 +186,6 @@ function testEnterOpensMenu() {
   menuButton.decorate(node);
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
   assertTrue('Menu must open after enter', menuButton.isOpen());
-}
-
-/**
- * Tests that a keydown event of the escape key propagates normally when the
- * menu is closed.
- */
-function testStopEscapePropagationMenuClosed() {
-  var node = goog.dom.getElement('demoMenuButton');
-  var fakeEvent = new MyFakeEvent(
-     goog.events.KeyCodes.ESCAPE, goog.events.EventType.KEYDOWN);
-  menuButton.decorate(node);
-  menuButton.setOpen(false);
-
-  menuButton.handleKeyDownEvent_(fakeEvent);
-  assertFalse('Event propagation was erroneously stopped.',
-      fakeEvent.propagationStopped);
-}
-
-/**
- * Tests that a keydown event of the escape key is prevented from propagating
- * when the menu is open.
- */
-function testStopEscapePropagationMenuOpen() {
-  var node = goog.dom.getElement('demoMenuButton');
-  var fakeEvent = new MyFakeEvent(
-      goog.events.KeyCodes.ESCAPE, goog.events.EventType.KEYDOWN);
-  menuButton.decorate(node);
-  menuButton.setOpen(true);
-
-  menuButton.handleKeyDownEvent_(fakeEvent);
-  assertTrue(
-      'Event propagation was not stopped.', fakeEvent.propagationStopped);
 }
 
 /**

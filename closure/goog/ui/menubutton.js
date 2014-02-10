@@ -180,7 +180,6 @@ goog.ui.MenuButton.prototype.renderMenuAsSibling_ = false;
  */
 goog.ui.MenuButton.prototype.enterDocument = function() {
   goog.ui.MenuButton.superClass_.enterDocument.call(this);
-  this.attachKeyDownEventListener_(true);
   if (this.menu_) {
     this.attachMenuEventListeners_(this.menu_, true);
   }
@@ -196,7 +195,6 @@ goog.ui.MenuButton.prototype.enterDocument = function() {
  */
 goog.ui.MenuButton.prototype.exitDocument = function() {
   goog.ui.MenuButton.superClass_.exitDocument.call(this);
-  this.attachKeyDownEventListener_(false);
   if (this.menu_) {
     this.setOpen(false);
     this.menu_.exitDocument();
@@ -845,22 +843,6 @@ goog.ui.MenuButton.prototype.attachMenuEventListeners_ = function(menu,
 
 
 /**
- * Attaches or detaches a keydown event listener to/from the given element.
- * Called each time the button enters or exits the document.
- * @param {boolean} attach Whether to attach or detach the event listener.
- * @private
- */
-goog.ui.MenuButton.prototype.attachKeyDownEventListener_ = function(attach) {
-  var handler = this.getHandler();
-  var method = attach ? handler.listen : handler.unlisten;
-
-  // Handle keydown events dispatched by the button.
-  method.call(handler, this.getElement(), goog.events.EventType.KEYDOWN,
-      this.handleKeyDownEvent_);
-};
-
-
-/**
  * Handles {@code HIGHLIGHT} events dispatched by the attached menu.
  * @param {goog.events.Event} e Highlight event to handle.
  */
@@ -874,20 +856,6 @@ goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
     goog.a11y.aria.setState(element,
         goog.a11y.aria.State.OWNS,
         e.target.getElement().id);
-  }
-};
-
-
-/**
- * Handles {@code KEYDOWN} events dispatched by the button element. When the
- * menu is present and visible, prevents the event from propagating since the
- * desired behavior is only to close the menu.
- * @param {goog.events.Event} e KeyDown event to handle.
- * @private
- */
-goog.ui.MenuButton.prototype.handleKeyDownEvent_ = function(e) {
-  if (this.menu_ && this.menu_.isVisible()) {
-    e.stopPropagation();
   }
 };
 
