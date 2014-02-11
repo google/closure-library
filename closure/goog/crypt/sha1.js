@@ -44,7 +44,7 @@ goog.require('goog.crypt.Hash');
  * @struct
  */
 goog.crypt.Sha1 = function() {
-  goog.base(this);
+  goog.crypt.Sha1.base(this, 'constructor');
 
   this.blockSize = 512 / 8;
 
