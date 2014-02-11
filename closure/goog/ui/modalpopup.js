@@ -497,15 +497,27 @@ goog.ui.ModalPopup.prototype.hide_ = function() {
   if (this.popupHideTransition_ && this.bgHideTransition_) {
     goog.events.listenOnce(
         /** @type {goog.events.EventTarget} */ (this.popupHideTransition_),
-        goog.fx.Transition.EventType.END, this.finishHiding_, false, this);
+        goog.fx.Transition.EventType.END, this.onHide, false, this);
     this.bgHideTransition_.play();
     // The transition whose END event you are listening to must be played last
     // to prevent errors when disposing on hide event, which occur on browsers
     // that do not support CSS3 transitions.
     this.popupHideTransition_.play();
   } else {
-    this.finishHiding_();
+    this.onHide();
   }
+  try {
+    var body = this.getDomHelper().getDocument().body;
+    var active = this.getDomHelper().getDocument().activeElement || body;
+    if (this.lastFocus_ && active == body && this.lastFocus_ != body) {
+      this.lastFocus_.focus();
+    }
+  } catch (e) {
+    // Swallow this. IE can throw an error if the element can not be focused.
+  }
+  // Explicitly want to null this out even if there was an error focusing to
+  // avoid bleed over between dialog invocations.
+  this.lastFocus_ = null;
 };
 
 
@@ -533,30 +545,6 @@ goog.ui.ModalPopup.prototype.showPopupElement_ = function(visible) {
  */
 goog.ui.ModalPopup.prototype.onShow = function() {
   this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
-};
-
-
-/**
- * Called after the popup is hidden. If there is a transition, this
- * will be called after the transition completed or stopped.
- * @private
- */
-goog.ui.ModalPopup.prototype.finishHiding_ = function() {
-  // First restore focus to the last focused element. This is done before
-  // onHide so subclasses can override it to focus other elements.
-  try {
-    var body = this.getDomHelper().getDocument().body;
-    if (this.lastFocus_ && this.lastFocus_ != body) {
-      this.lastFocus_.focus();
-    }
-  } catch (e) {
-    // Swallow this. IE can throw an error if the element can not be focused.
-  }
-  // Explicitly want to null this out even if there was an error focusing to
-  // avoid bleed over between dialog invocations.
-  this.lastFocus_ = null;
-
-  this.onHide();
 };
 
 

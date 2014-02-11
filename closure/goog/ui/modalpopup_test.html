@@ -29,7 +29,7 @@ See the COPYING file for details.
 </script>
 </head>
 <body>
-<div id="main" tabindex=0></div>
+<div id="main"></div>
 <script>
 
 
@@ -393,49 +393,6 @@ function testSetupBackwardTabWrapResetsFlagAfterTimeout() {
   mockClock.tick(1);
   assertFalse('Backward tab wrap flag should be reset after delay',
       popup.backwardTabWrapInProgress_);
-}
-
-
-function testLastFocusedElement() {
-  // Start with 'main' focused.
-  main.focus();
-
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-
-  popup.setVisible(true);
-  assertNotEquals('Focus should be moved to the popup',
-      main, document.activeElement);
-
-  popup.setVisible(false);
-  assertEquals('Focus should be restored after the popup is hidden',
-      main, document.activeElement);
-}
-
-
-function testLastFocusedElementWithTransition() {
-  // Start with 'main' focused.
-  main.focus();
-
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-
-  var popupHideTransition =
-      goog.fx.css3.fadeIn(popup.getBackgroundElement(), 1);
-  popup.setTransition(
-      goog.fx.css3.fadeIn(popup.getElement(), 1),
-      popupHideTransition,
-      goog.fx.css3.fadeOut(popup.getElement(), 1),
-      goog.fx.css3.fadeOut(popup.getBackgroundElement(), 1));
-
-  popup.setVisible(true);
-  assertNotEquals('Focus should be moved to the popup',
-      main, document.activeElement);
-
-  popup.setVisible(false);
-  popupHideTransition.dispatchEvent(goog.fx.Transition.EventType.END);
-  assertEquals('Focus should be restored after the popup is hidden',
-      main, document.activeElement);
 }
 
 
