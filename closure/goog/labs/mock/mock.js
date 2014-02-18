@@ -27,12 +27,15 @@
 
 
 goog.provide('goog.labs.mock');
+goog.provide('goog.labs.mock.VerificationError');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.debug.Error');
 goog.require('goog.functions');
 goog.require('goog.json');
+goog.require('goog.object');
 
 
 /**

@@ -6,84 +6,17 @@ Copyright 2006 The Closure Library Authors. All Rights Reserved.
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.labs.events.EventTarget</title>
-<script src="../../base.js"></script>
-<script>
-  goog.require('goog.events.Listenable');
-  goog.require('goog.events');
-  goog.require('goog.events.eventTargetTester');
-  goog.require('goog.events.eventTargetTester.KeyType');
-  goog.require('goog.events.eventTargetTester.UnlistenReturnType');
-  goog.require('goog.labs.events.NonDisposableEventTarget');
-  goog.require('goog.object');
-  goog.require('goog.testing.jsunit');
-</script>
-</head>
-<body>
-<script>
-
-function setUp() {
-  var newListenableFn = function() {
-    return new goog.labs.events.NonDisposableEventTarget();
-  };
-  var unlistenByKeyFn = function(src, key) {
-    return goog.events.unlistenByKey(key);
-  };
-  goog.events.eventTargetTester.setUp(
-      newListenableFn, goog.events.listen, goog.events.unlisten, unlistenByKeyFn,
-      goog.events.listenOnce, goog.events.dispatchEvent,
-      goog.events.removeAll, goog.events.getListeners,
-      goog.events.getListener, goog.events.hasListener,
-      goog.events.eventTargetTester.KeyType.NUMBER,
-      goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN, true);
-}
-
-function tearDown() {
-  goog.events.eventTargetTester.tearDown();
-}
-
-function testUnlistenProperCleanup() {
-  goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
-  goog.events.unlisten(eventTargets[0], EventType.A, listeners[0]);
-
-  assertEquals(0, goog.object.getCount(goog.events.listeners_))
-
-  goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
-  eventTargets[0].unlisten(EventType.A, listeners[0]);
-
-  assertEquals(0, goog.object.getCount(goog.events.listeners_))
-}
-
-function testUnlistenByKeyProperCleanup() {
-  var keyNum = goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
-  goog.events.unlistenByKey(keyNum);
-
-  assertEquals(0, goog.object.getCount(goog.events.listeners_))
-}
-
-function testListenOnceProperCleanup() {
-  goog.events.listenOnce(eventTargets[0], EventType.A, listeners[0]);
-  eventTargets[0].dispatchEvent(EventType.A);
-  assertEquals(0, goog.object.getCount(goog.events.listeners_))
-}
-
-function testListenWithObject() {
-  var obj = {};
-  obj.handleEvent = goog.testing.recordFunction();
-  goog.events.listen(eventTargets[0], EventType.A, obj);
-  eventTargets[0].dispatchEvent(EventType.A);
-  assertEquals(1, obj.handleEvent.getCallCount());
-}
-
-function testListenWithObjectHandleEventReturningFalse() {
-  var obj = {};
-  obj.handleEvent = function() { return false; };
-  goog.events.listen(eventTargets[0], EventType.A, obj);
-  assertFalse(eventTargets[0].dispatchEvent(EventType.A));
-}
-
-</script>
-</body>
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.labs.events.EventTarget
+  </title>
+  <script src="../../base.js">
+  </script>
+  <script>
+  goog.require('goog.labs.events.NonDisposableEventTargetGoogEventsTest');
+  </script>
+ </head>
+ <body>
+ </body>
 </html>
