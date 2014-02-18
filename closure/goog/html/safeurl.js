@@ -293,8 +293,9 @@ goog.html.SafeUrl.sanitize = function(url) {
   }
   if (!goog.html.SAFE_URL_PATTERN_.test(url)) {
     url = goog.html.SafeUrl.INNOCUOUS_STRING;
+  } else {
+    url = goog.html.SafeUrl.normalize_(url);
   }
-  url = goog.html.SafeUrl.normalize_(url);
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(
       url);
 };
