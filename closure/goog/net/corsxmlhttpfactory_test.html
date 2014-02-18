@@ -6,42 +6,17 @@ Copyright 2013 The Closure Library Authors. All Rights Reserved.
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.net.CorsXmlHttpFactory</title>
-<script src="../base.js"></script>
-<script>
-  goog.require('goog.net.CorsXmlHttpFactory');
-  goog.require('goog.net.IeCorsXhrAdapter');
-  goog.require('goog.testing.jsunit');
-  goog.require('goog.userAgent');
-</script>
-<script>
-
-function testBrowserSupport() {
-  var requestFactory = new goog.net.CorsXmlHttpFactory();
-  if (goog.userAgent.IE) {
-    if (goog.userAgent.isVersionOrHigher('10')) {
-      // Continue: IE10 supports CORS requests using native XMLHttpRequest.
-    } else if (goog.userAgent.isVersionOrHigher('8')) {
-      assertTrue(requestFactory.createInstance() instanceof goog.net.IeCorsXhrAdapter);
-      return;
-    } else {
-      try {
-        requestFactory.createInstance();
-        fail('Error expected.');
-      } catch (e) {
-        assertEquals('Unsupported browser', e.message);
-        return;
-      }
-    }
-  }
-  // All other browsers support CORS requests using native XMLHttpRequest.
-  assertTrue(requestFactory.createInstance() instanceof XMLHttpRequest);
-}
-
-</script>
-</head>
-<body>
-</body>
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.net.CorsXmlHttpFactory
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+   goog.require('goog.net.CorsXmlHttpFactoryTest');
+  </script>
+ </head>
+ <body>
+ </body>
 </html>
