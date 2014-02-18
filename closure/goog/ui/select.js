@@ -29,6 +29,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.MenuItem');
+goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.SelectionModel');
 goog.require('goog.ui.registry');
 
@@ -50,11 +51,16 @@ goog.require('goog.ui.registry');
  *     decorate the control; defaults to {@link goog.ui.MenuButtonRenderer}.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
  *     document interaction.
+ * @param {!goog.ui.MenuRenderer=} opt_menuRenderer Renderer used to render or
+ *     decorate the menu; defaults to {@link goog.ui.MenuRenderer}.
  * @constructor
  * @extends {goog.ui.MenuButton}
  */
-goog.ui.Select = function(opt_caption, opt_menu, opt_renderer, opt_domHelper) {
-  goog.base(this, opt_caption, opt_menu, opt_renderer, opt_domHelper);
+goog.ui.Select = function(opt_caption, opt_menu, opt_renderer, opt_domHelper,
+    opt_menuRenderer) {
+  goog.base(this, opt_caption, opt_menu, opt_renderer, opt_domHelper,
+      opt_menuRenderer ||
+          new goog.ui.MenuRenderer(goog.a11y.aria.Role.LISTBOX));
   /**
    * Default caption to show when no option is selected.
    * @private {goog.ui.ControlContent}
