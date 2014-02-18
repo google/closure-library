@@ -65,7 +65,7 @@ var Transport = goog.net.xpc.Transport;
  * @extends {Transport}
  */
 goog.net.xpc.DirectTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
+  goog.net.xpc.DirectTransport.base(this, 'constructor', opt_domHelper);
 
   /**
    * The channel this transport belongs to.
@@ -557,7 +557,7 @@ DirectTransport.prototype.disposeInternal = function() {
     delete this.connected_;
   }
 
-  goog.base(this, 'disposeInternal');
+  DirectTransport.base(this, 'disposeInternal');
 };
 
 

@@ -47,7 +47,8 @@ goog.require('goog.net.xpc.TransportTypes');
  * @final
  */
 goog.net.xpc.FrameElementMethodTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
+  goog.net.xpc.FrameElementMethodTransport.base(
+      this, 'constructor', opt_domHelper);
 
   /**
    * The channel this transport belongs to.

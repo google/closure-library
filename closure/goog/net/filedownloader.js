@@ -68,7 +68,7 @@ goog.require('goog.object');
  * @final
  */
 goog.net.FileDownloader = function(dir, opt_pool) {
-  goog.base(this);
+  goog.net.FileDownloader.base(this, 'constructor');
 
   /**
    * The directory in which the downloaded files are stored.
@@ -600,7 +600,7 @@ goog.net.FileDownloader.prototype.disposeInternal = function() {
   goog.dispose(this.pool_);
   delete this.pool_;
 
-  goog.base(this, 'disposeInternal');
+  goog.net.FileDownloader.base(this, 'disposeInternal');
 };
 
 
@@ -618,7 +618,8 @@ goog.net.FileDownloader.prototype.disposeInternal = function() {
  * @final
  */
 goog.net.FileDownloader.Error = function(download, opt_fsErr) {
-  goog.base(this, 'Error capturing URL ' + download.url);
+  goog.net.FileDownloader.Error.base(
+      this, 'constructor', 'Error capturing URL ' + download.url);
 
   /**
    * The URL the event relates to.
@@ -672,7 +673,7 @@ goog.net.FileDownloader.Error.prototype.fileError;
  * @private
  */
 goog.net.FileDownloader.Download_ = function(url, downloader) {
-  goog.base(this);
+  goog.net.FileDownloader.Download_.base(this, 'constructor');
 
   /**
    * The URL for the file being downloaded.
@@ -741,5 +742,5 @@ goog.net.FileDownloader.Download_.prototype.disposeInternal = function() {
     this.writer.abort();
   }
 
-  goog.base(this, 'disposeInternal');
+  goog.net.FileDownloader.Download_.base(this, 'disposeInternal');
 };

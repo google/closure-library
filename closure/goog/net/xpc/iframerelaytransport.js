@@ -47,7 +47,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.net.xpc.IframeRelayTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
+  goog.net.xpc.IframeRelayTransport.base(this, 'constructor', opt_domHelper);
 
   /**
    * The channel this transport belongs to.
@@ -393,7 +393,7 @@ goog.net.xpc.IframeRelayTransport.iframeLoadHandler_ = function() {
 
 /** @override */
 goog.net.xpc.IframeRelayTransport.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.net.xpc.IframeRelayTransport.base(this, 'disposeInternal');
   if (goog.userAgent.WEBKIT) {
     goog.net.xpc.IframeRelayTransport.cleanup_(0);
   }

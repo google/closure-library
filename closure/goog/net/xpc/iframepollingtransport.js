@@ -51,7 +51,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.net.xpc.IframePollingTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
+  goog.net.xpc.IframePollingTransport.base(this, 'constructor', opt_domHelper);
 
   /**
    * The channel this transport belongs to.
@@ -691,7 +691,7 @@ goog.net.xpc.IframePollingTransport.prototype.send =
 
 /** @override */
 goog.net.xpc.IframePollingTransport.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.net.xpc.IframePollingTransport.base(this, 'disposeInternal');
 
   var receivers = goog.net.xpc.IframePollingTransport.receivers_;
   goog.array.remove(receivers, this.msgReceiver_);

@@ -68,7 +68,7 @@ goog.require('goog.userAgent');
  * @extends {goog.events.EventTarget}
  */
 goog.net.XhrIo = function(opt_xmlHttpFactory) {
-  goog.base(this);
+  goog.net.XhrIo.base(this, 'constructor');
 
   /**
    * Map of default headers to add to every request, use:
@@ -706,7 +706,7 @@ goog.net.XhrIo.prototype.disposeInternal = function() {
     this.cleanUpXhr_(true);
   }
 
-  goog.base(this, 'disposeInternal');
+  goog.net.XhrIo.base(this, 'disposeInternal');
 };
 
 

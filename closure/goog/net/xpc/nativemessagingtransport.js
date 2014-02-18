@@ -57,7 +57,8 @@ goog.require('goog.net.xpc.TransportTypes');
  */
 goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
     opt_domHelper, opt_oneSidedHandshake, opt_protocolVersion) {
-  goog.base(this, opt_domHelper);
+  goog.net.xpc.NativeMessagingTransport.base(
+      this, 'constructor', opt_domHelper);
 
   /**
    * The channel this transport belongs to.
@@ -623,7 +624,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
   // this.channel_.peerWindowObject_.
   delete this.send;
 
-  goog.base(this, 'disposeInternal');
+  goog.net.xpc.NativeMessagingTransport.base(this, 'disposeInternal');
 };
 
 

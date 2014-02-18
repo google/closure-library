@@ -355,7 +355,7 @@ goog.net.jsloader.Error = function(code, opt_message) {
   if (opt_message) {
     msg += ': ' + opt_message;
   }
-  goog.base(this, msg);
+  goog.net.jsloader.Error.base(this, 'constructor', msg);
 
   /**
    * The code for this error.
