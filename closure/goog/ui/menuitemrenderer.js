@@ -126,6 +126,7 @@ goog.ui.MenuItemRenderer.prototype.createDom = function(item) {
       item.isSupportedState(goog.ui.Component.State.SELECTED) ||
       item.isSupportedState(goog.ui.Component.State.CHECKED));
   this.setAriaStates(item, element);
+  this.correctAriaRole(item, element);
   return element;
 };
 
@@ -357,4 +358,20 @@ goog.ui.MenuItemRenderer.prototype.getStateFromClass = function(className) {
 /** @override */
 goog.ui.MenuItemRenderer.prototype.getCssClass = function() {
   return goog.ui.MenuItemRenderer.CSS_CLASS;
+};
+
+
+/**
+ * Corrects the ARIA role based on checkable and selectable.
+ * @param {goog.ui.Control} item The owner menu item.
+ * @param {Element} element The element.
+ */
+goog.ui.MenuItemRenderer.prototype.correctAriaRole = function(item, element) {
+  if (item.isSupportedState(goog.ui.Component.State.SELECTED) ||
+      item.isSupportedState(goog.ui.Component.State.CHECKED)) {
+    this.setAriaRole(element,
+        item.isSupportedState(goog.ui.Component.State.CHECKED) ?
+        goog.a11y.aria.Role.MENU_ITEM_CHECKBOX :
+        goog.a11y.aria.Role.MENU_ITEM_RADIO);
+  }
 };

@@ -14,6 +14,8 @@ Author: attila@google.com (Attila Bodis)
   <title>Closure Unit Tests - goog.ui.MenuItem</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.Role');
     goog.require('goog.array');
     goog.require('goog.dom');
     goog.require('goog.dom.NodeType');
@@ -196,6 +198,9 @@ Author: attila@google.com (Attila Bodis)
       item.createDom();
       assertTrue('Item must have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
+      assertEquals('Element must have ARIA role menuitemcheckbox',
+      goog.a11y.aria.Role.MENU_ITEM_CHECKBOX,
+      goog.a11y.aria.getRole(item.getElement()));
       item.setCheckable(false);
       assertFalse('Item must no longer have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
@@ -206,6 +211,9 @@ Author: attila@google.com (Attila Bodis)
       item.setSelectable(true);
       assertTrue('Item must have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));
+      assertEquals('Element must have ARIA role menuitemradio',
+      goog.a11y.aria.Role.MENU_ITEM_RADIO,
+      goog.a11y.aria.getRole(item.getElement()));
       item.setSelectable(false);
       assertFalse('Item must no longer have checkbox structure',
           item.getRenderer().hasCheckBoxStructure(item.getElement()));

@@ -14,6 +14,8 @@ Author: attila@google.com (Attila Bodis)
   <title>Closure Unit Tests - goog.ui.MenuItemRenderer</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.a11y.aria');
+    goog.require('goog.a11y.aria.Role');
     goog.require('goog.a11y.aria.State');
     goog.require('goog.dom');
     goog.require('goog.dom.classlist');
@@ -72,6 +74,9 @@ Author: attila@google.com (Attila Bodis)
       assertSameElements('Element must have the expected class names',
           ['goog-menuitem', 'goog-option'],
           goog.dom.classlist.get(element));
+      assertEquals('Element must have ARIA role menuitemcheckbox',
+      goog.a11y.aria.Role.MENU_ITEM_CHECKBOX,
+      goog.a11y.aria.getRole(element));
       assertHTMLEquals('Child element must have the expected structure',
           '<div class="goog-menuitem-content">' +
               '<div class="goog-menuitem-checkbox"></div>Hello</div>',
@@ -95,6 +100,9 @@ Author: attila@google.com (Attila Bodis)
       assertSameElements('Element must have the expected class names',
           ['goog-menuitem', 'goog-option'],
           goog.dom.classlist.get(element));
+      assertEquals('Element must have ARIA role menuitemradio',
+      goog.a11y.aria.Role.MENU_ITEM_RADIO,
+      goog.a11y.aria.getRole(element));
       assertHTMLEquals('Child element must have the expected structure',
           '<div class="goog-menuitem-content">' +
               '<div class="goog-menuitem-checkbox"></div>Hello</div>',
