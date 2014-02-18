@@ -22,6 +22,7 @@
 goog.provide('goog.ui.ControlRenderer');
 
 goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -146,14 +147,33 @@ goog.ui.ControlRenderer.IE6_CLASS_COMBINATIONS = [];
 
 
 /**
- * Map of component states to corresponding ARIA states.  Since the mapping of
- * component states to ARIA states is neither component- nor renderer-specific,
- * this is a static property of the renderer class, and is initialized on first
- * use.
- * @type {Object}
+ * Map of component states to corresponding ARIA attributes.  Since the mapping
+ * of component states to ARIA attributes is neither component- nor
+ * renderer-specific, this is a static property of the renderer class, and is
+ * initialized on first use.
+ * @type {Object.<goog.ui.Component.State, goog.a11y.aria.State>}
  * @private
+ * @const
  */
-goog.ui.ControlRenderer.ARIA_STATE_MAP_;
+goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_;
+
+
+/**
+ * Map of certain ARIA states to ARIA roles that support them. Used for checked
+ * and selected Component states because they are used on Components with ARIA
+ * roles that do not support the corresponding ARIA state.
+ * @private {!Object.<goog.a11y.aria.Role, goog.a11y.aria.State>}
+ * @const
+ */
+goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_ = goog.object.create(
+    goog.a11y.aria.Role.BUTTON, goog.a11y.aria.State.PRESSED,
+    goog.a11y.aria.Role.CHECKBOX, goog.a11y.aria.State.CHECKED,
+    goog.a11y.aria.Role.MENU_ITEM, goog.a11y.aria.State.SELECTED,
+    goog.a11y.aria.Role.MENU_ITEM_CHECKBOX, goog.a11y.aria.State.CHECKED,
+    goog.a11y.aria.Role.MENU_ITEM_RADIO, goog.a11y.aria.State.CHECKED,
+    goog.a11y.aria.Role.RADIO, goog.a11y.aria.State.CHECKED,
+    goog.a11y.aria.Role.TAB, goog.a11y.aria.State.SELECTED,
+    goog.a11y.aria.Role.TREEITEM, goog.a11y.aria.State.SELECTED);
 
 
 /**
@@ -164,6 +184,20 @@ goog.ui.ControlRenderer.ARIA_STATE_MAP_;
 goog.ui.ControlRenderer.prototype.getAriaRole = function() {
   // By default, the ARIA role is unspecified.
   return undefined;
+};
+
+
+/**
+ * Allows for permanently overriding the ARIA role for the renderer for when a
+ * subclass requires a different role from the superclass (e.g., menubutton and
+ * select) or for when a class could have more than one role (e.g.,
+ * menuitem/menuitemcheckbox/menuitemradio).
+ * @param {!goog.a11y.aria.Role} newRole The new ARIA role.
+ */
+goog.ui.ControlRenderer.prototype.changeAriaRole = function(newRole) {
+  this.getAriaRole = function() {
+    return newRole;
+  };
 };
 
 
@@ -381,9 +415,10 @@ goog.ui.ControlRenderer.prototype.setAriaRole = function(element,
 
 
 /**
- * Sets the element's ARIA states. An element does not need an ARIA role in
- * order to have an ARIA state. Only states which are initialized to be true
- * will be set.
+ * Sets the element's ARIA attributes, including distinguishing between
+ * universally supported ARIA properties and ARIA states that are only
+ * supported by certain ARIA roles. Only attributes which are initialized to be
+ * true will be set.
  * @param {!goog.ui.Control} control Control whose ARIA state will be updated.
  * @param {!Element} element Element whose ARIA state is to be updated.
  */
@@ -531,7 +566,9 @@ goog.ui.ControlRenderer.prototype.setState = function(control, state, enable) {
 
 
 /**
- * Updates the element's ARIA (accessibility) state.
+ * Updates the element's ARIA (accessibility) attributes , including
+ * distinguishing between universally supported ARIA properties and ARIA states
+ * that are only supported by certain ARIA roles.
  * @param {Element} element Element whose ARIA state is to be updated.
  * @param {goog.ui.Component.State} state Component state being enabled or
  *     disabled.
@@ -540,20 +577,55 @@ goog.ui.ControlRenderer.prototype.setState = function(control, state, enable) {
  */
 goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
     enable) {
-  // Ensure the ARIA state map exists.
-  if (!goog.ui.ControlRenderer.ARIA_STATE_MAP_) {
-    goog.ui.ControlRenderer.ARIA_STATE_MAP_ = goog.object.create(
+  // Ensure the ARIA attribute map exists.
+  if (!goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_) {
+    goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_ = goog.object.create(
         goog.ui.Component.State.DISABLED, goog.a11y.aria.State.DISABLED,
         goog.ui.Component.State.SELECTED, goog.a11y.aria.State.SELECTED,
         goog.ui.Component.State.CHECKED, goog.a11y.aria.State.CHECKED,
         goog.ui.Component.State.OPENED, goog.a11y.aria.State.EXPANDED);
   }
-  var ariaState = goog.ui.ControlRenderer.ARIA_STATE_MAP_[state];
-  if (ariaState) {
-    goog.asserts.assert(element,
-        'The element passed as a first parameter cannot be null.');
-    goog.a11y.aria.setState(element, ariaState, enable);
+  goog.asserts.assert(element,
+      'The element passed as a first parameter cannot be null.');
+  var ariaAttr = goog.ui.ControlRenderer.getAriaStateForAriaRole_(
+      element, goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_[state]);
+  if (ariaAttr) {
+    goog.a11y.aria.setState(element, ariaAttr, enable);
   }
+};
+
+
+/**
+ * Returns the appropriate ARIA attribute based on ARIA role if the ARIA
+ * attribute is an ARIA state.
+ * @param {!Element} element The element from which to get the ARIA role for
+ * matching ARIA state.
+ * @param {goog.a11y.aria.State} attr The ARIA attribute to check to see if it
+ * can be applied to the given ARIA role.
+ * @return {goog.a11y.aria.State} An ARIA attribute that can be applied to the
+ * given ARIA role.
+ * @private
+ */
+goog.ui.ControlRenderer.getAriaStateForAriaRole_ = function(element, attr) {
+  var role = goog.a11y.aria.getRole(element);
+  if (!role) {
+    return attr;
+  }
+  role = /** @type {goog.a11y.aria.Role}*/ (role);
+  var matchAttr = goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_[role] || attr;
+  return goog.ui.ControlRenderer.isAriaState_(attr) ? matchAttr : attr;
+};
+
+
+/**
+ * Determines if the given ARIA attribute is an ARIA property or ARIA state.
+ * @param {goog.a11y.aria.State} attr The ARIA attribute to classify.
+ * @return {boolean} If the ARIA attribute is an ARIA state.
+ * @private
+ */
+goog.ui.ControlRenderer.isAriaState_ = function(attr) {
+  return attr == goog.a11y.aria.State.CHECKED ||
+      attr == goog.a11y.aria.State.SELECTED;
 };
 
 
