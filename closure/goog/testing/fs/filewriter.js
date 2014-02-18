@@ -38,7 +38,7 @@ goog.require('goog.testing.fs.ProgressEvent');
  * @final
  */
 goog.testing.fs.FileWriter = function(fileEntry) {
-  goog.base(this);
+  goog.testing.fs.FileWriter.base(this, 'constructor');
 
   /**
    * The file entry to which to write.

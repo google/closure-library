@@ -41,7 +41,7 @@ goog.testing.net.XhrIoPool = function(opt_xhr) {
   this.xhr_ = opt_xhr || new goog.testing.net.XhrIo();
 
   // Run this after setting xhr_ because xhr_ is used to initialize the pool.
-  goog.base(this, undefined, 1, 1);
+  goog.testing.net.XhrIoPool.base(this, 'constructor', undefined, 1, 1);
 };
 goog.inherits(goog.testing.net.XhrIoPool, goog.net.XhrIoPool);
 

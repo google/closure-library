@@ -42,7 +42,8 @@ goog.require('goog.testing.events');
  */
 goog.testing.messaging.MockMessageEvent = function(
     data, opt_origin, opt_lastEventId, opt_source, opt_ports) {
-  goog.base(this, goog.events.EventType.MESSAGE);
+  goog.testing.messaging.MockMessageEvent.base(
+      this, 'constructor', goog.events.EventType.MESSAGE);
 
   /**
    * The data of the message.

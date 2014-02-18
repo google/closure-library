@@ -236,7 +236,8 @@ goog.testing.fs.Entry.prototype.checkNotDeleted = function(action) {
  * @final
  */
 goog.testing.fs.DirectoryEntry = function(fs, parent, name, children) {
-  goog.base(this, fs, parent || this, name);
+  goog.testing.fs.DirectoryEntry.base(
+      this, 'constructor', fs, parent || this, name);
 
   /**
    * The map of child names to entry objects.
@@ -313,7 +314,7 @@ goog.testing.fs.DirectoryEntry.prototype.remove = function() {
     }, 0, this);
     return d;
   } else if (this != this.getFileSystem().getRoot()) {
-    return goog.base(this, 'remove');
+    return goog.testing.fs.DirectoryEntry.base(this, 'remove');
   } else {
     // Root directory, do nothing.
     return goog.async.Deferred.succeed();
@@ -541,7 +542,7 @@ goog.testing.fs.DirectoryEntry.prototype.createPath =
  * @final
  */
 goog.testing.fs.FileEntry = function(fs, parent, name, data) {
-  goog.base(this, fs, parent, name);
+  goog.testing.fs.FileEntry.base(this, 'constructor', fs, parent, name);
 
   /**
    * The internal file blob referenced by this file entry.

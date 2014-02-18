@@ -173,5 +173,5 @@ goog.testing.editor.TestHelper.prototype.disposeInternal = function() {
     this.tearDownEditableElement();
   }
   delete this.root_;
-  goog.base(this, 'disposeInternal');
+  goog.testing.editor.TestHelper.base(this, 'disposeInternal');
 };

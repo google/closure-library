@@ -139,5 +139,5 @@ goog.testing.MockUserAgent.prototype.disposeInternal = function() {
   this.uninstall();
   delete this.propertyReplacer_;
   delete this.navigator_;
-  goog.base(this, 'disposeInternal');
+  goog.testing.MockUserAgent.base(this, 'disposeInternal');
 };
