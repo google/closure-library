@@ -100,7 +100,7 @@ function testRepeatedMoveTo() {
 }
 
 
-function testSimpleLineTo() {
+function testSimpleLineTo_fromArgs() {
   var path = new goog.math.Path();
   var e = assertThrows(function() {
     path.lineTo(30, 50);
@@ -114,7 +114,21 @@ function testSimpleLineTo() {
 }
 
 
-function testMultiArgLineTo() {
+function testSimpleLineTo_fromArray() {
+  var path = new goog.math.Path();
+  var e = assertThrows(function() {
+    path.lineToFromArray([30, 50]);
+  });
+  assertEquals('Path cannot start with lineTo', e.message);
+  path.moveTo(0, 0);
+  path.lineToFromArray([30, 50]);
+  assertTrue(path.isSimple());
+  assertObjectEquals([30, 50], path.getCurrentPoint());
+  assertPathEquals(['M', 0, 0, 'L', 30, 50], path);
+}
+
+
+function testMultiArgLineTo_fromArgs() {
   var path = new goog.math.Path();
   path.moveTo(0, 0);
   path.lineTo(30, 50, 40 , 60);
@@ -124,7 +138,17 @@ function testMultiArgLineTo() {
 }
 
 
-function testRepeatedLineTo() {
+function testMultiArgLineTo_fromArray() {
+  var path = new goog.math.Path();
+  path.moveTo(0, 0);
+  path.lineToFromArray([30, 50, 40 , 60]);
+  assertTrue(path.isSimple());
+  assertObjectEquals([40, 60], path.getCurrentPoint());
+  assertPathEquals(['M', 0, 0, 'L', 30, 50, 40, 60], path);
+}
+
+
+function testRepeatedLineTo_fromArgs() {
   var path = new goog.math.Path();
   path.moveTo(0, 0);
   path.lineTo(30, 50);
@@ -135,7 +159,18 @@ function testRepeatedLineTo() {
 }
 
 
-function testSimpleCurveTo() {
+function testRepeatedLineTo_fromArray() {
+  var path = new goog.math.Path();
+  path.moveTo(0, 0);
+  path.lineToFromArray([30, 50]);
+  path.lineToFromArray([40, 60]);
+  assertTrue(path.isSimple());
+  assertObjectEquals([40, 60], path.getCurrentPoint());
+  assertPathEquals(['M', 0, 0, 'L', 30, 50, 40, 60], path);
+}
+
+
+function testSimpleCurveTo_fromArgs() {
   var path = new goog.math.Path();
   var e = assertThrows(function() {
     path.curveTo(10, 20, 30, 40, 50, 60);
@@ -149,7 +184,21 @@ function testSimpleCurveTo() {
 }
 
 
-function testMultiCurveTo() {
+function testSimpleCurveTo_fromArray() {
+  var path = new goog.math.Path();
+  var e = assertThrows(function() {
+    path.curveToFromArray([10, 20, 30, 40, 50, 60]);
+  });
+  assertEquals('Path cannot start with curve', e.message);
+  path.moveTo(0, 0);
+  path.curveToFromArray([10, 20, 30, 40, 50, 60]);
+  assertTrue(path.isSimple());
+  assertObjectEquals([50, 60], path.getCurrentPoint());
+  assertPathEquals(['M', 0, 0, 'C', 10, 20, 30, 40, 50, 60], path);
+}
+
+
+function testMultiCurveTo_fromArgs() {
   var path = new goog.math.Path();
   path.moveTo(0, 0);
   path.curveTo(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120);
@@ -161,11 +210,36 @@ function testMultiCurveTo() {
 }
 
 
-function testRepeatedCurveTo() {
+function testMultiCurveTo_fromArray() {
+  var path = new goog.math.Path();
+  path.moveTo(0, 0);
+  path.curveToFromArray([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]);
+  assertTrue(path.isSimple());
+  assertObjectEquals([110, 120], path.getCurrentPoint());
+  assertPathEquals(
+      ['M', 0, 0, 'C', 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+      path);
+}
+
+
+function testRepeatedCurveTo_fromArgs() {
   var path = new goog.math.Path();
   path.moveTo(0, 0);
   path.curveTo(10, 20, 30, 40, 50, 60);
   path.curveTo(70, 80, 90, 100, 110, 120);
+  assertTrue(path.isSimple());
+  assertObjectEquals([110, 120], path.getCurrentPoint());
+  assertPathEquals(
+      ['M', 0, 0, 'C', 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+      path);
+}
+
+
+function testRepeatedCurveTo_fromArray() {
+  var path = new goog.math.Path();
+  path.moveTo(0, 0);
+  path.curveToFromArray([10, 20, 30, 40, 50, 60]);
+  path.curveToFromArray([70, 80, 90, 100, 110, 120]);
   assertTrue(path.isSimple());
   assertObjectEquals([110, 120], path.getCurrentPoint());
   assertPathEquals(
