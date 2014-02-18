@@ -53,7 +53,7 @@ goog.require('goog.userAgent');
  * @extends {goog.editor.Plugin}
  */
 goog.editor.plugins.AbstractBubblePlugin = function() {
-  goog.base(this);
+  goog.editor.plugins.AbstractBubblePlugin.base(this, 'constructor');
 
   /**
    * Place to register events the plugin listens to.

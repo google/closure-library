@@ -141,7 +141,7 @@ goog.editor.plugins.EquationEditorPlugin.prototype.getEquationFromSelection_ =
 /** @override */
 goog.editor.plugins.EquationEditorPlugin.prototype.enable =
     function(fieldObject) {
-  goog.base(this, 'enable', fieldObject);
+  goog.editor.plugins.EquationEditorPlugin.base(this, 'enable', fieldObject);
   if (this.isEnabled(fieldObject)) {
     this.dblClickKey_ = goog.events.listen(fieldObject.getElement(),
         goog.events.EventType.DBLCLICK,
@@ -153,7 +153,7 @@ goog.editor.plugins.EquationEditorPlugin.prototype.enable =
 /** @override */
 goog.editor.plugins.EquationEditorPlugin.prototype.disable =
     function(fieldObject) {
-  goog.base(this, 'disable', fieldObject);
+  goog.editor.plugins.EquationEditorPlugin.base(this, 'disable', fieldObject);
   if (!this.isEnabled(fieldObject)) {
     goog.events.unlistenByKey(this.dblClickKey_);
   }

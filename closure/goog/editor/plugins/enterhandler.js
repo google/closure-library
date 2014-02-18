@@ -73,7 +73,7 @@ goog.editor.plugins.EnterHandler.prototype.getTrogClassId = function() {
 
 /** @override */
 goog.editor.plugins.EnterHandler.prototype.enable = function(fieldObject) {
-  goog.base(this, 'enable', fieldObject);
+  goog.editor.plugins.EnterHandler.base(this, 'enable', fieldObject);
 
   if (goog.editor.BrowserFeature.SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND &&
       (this.tag == goog.dom.TagName.P || this.tag == goog.dom.TagName.DIV)) {

@@ -38,7 +38,7 @@ goog.require('goog.object');
  * @final
  */
 goog.editor.plugins.TableEditor = function() {
-  goog.base(this);
+  goog.editor.plugins.TableEditor.base(this, 'constructor');
 
   /**
    * The array of functions that decide whether a table element could be
@@ -112,7 +112,7 @@ goog.editor.plugins.TableEditor.prototype.isSupportedCommand =
 
 /** @override */
 goog.editor.plugins.TableEditor.prototype.enable = function(fieldObject) {
-  goog.base(this, 'enable', fieldObject);
+  goog.editor.plugins.TableEditor.base(this, 'enable', fieldObject);
 
   // enableObjectResizing is supported only for Gecko.
   // You can refer to http://qooxdoo.org/contrib/project/htmlarea/html_editing

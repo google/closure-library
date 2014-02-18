@@ -42,7 +42,8 @@ goog.require('goog.uri.utils');
  * @extends {goog.editor.plugins.AbstractDialogPlugin}
  */
 goog.editor.plugins.LinkDialogPlugin = function() {
-  goog.base(this, goog.editor.Command.MODAL_LINK_EDITOR);
+  goog.editor.plugins.LinkDialogPlugin.base(
+      this, 'constructor', goog.editor.Command.MODAL_LINK_EDITOR);
 
   /**
    * Event handler for this object.
@@ -233,7 +234,8 @@ goog.editor.plugins.LinkDialogPlugin.prototype.setEmailWarning = function(
 goog.editor.plugins.LinkDialogPlugin.prototype.execCommandInternal = function(
     command, opt_arg) {
   this.currentLink_ = /** @type {goog.editor.Link} */(opt_arg);
-  return goog.base(this, 'execCommandInternal', command, opt_arg);
+  return goog.editor.plugins.LinkDialogPlugin.base(
+      this, 'execCommandInternal', command, opt_arg);
 };
 
 
@@ -244,7 +246,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.execCommandInternal = function(
  * @protected
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.handleAfterHide = function(e) {
-  goog.base(this, 'handleAfterHide', e);
+  goog.editor.plugins.LinkDialogPlugin.base(this, 'handleAfterHide', e);
   this.currentLink_ = null;
 };
 
@@ -305,7 +307,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
 
 /** @override */
 goog.editor.plugins.LinkDialogPlugin.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.editor.plugins.LinkDialogPlugin.base(this, 'disposeInternal');
   this.eventHandler_.dispose();
 };
 
