@@ -28,6 +28,7 @@ goog.require('goog.promise.Resolver');
  *
  * @see goog.Promise
  *
+ * @deprecated Use goog.Promise instead.
  * @param {function(
  *             this:RESOLVER_CONTEXT,
  *             function((TYPE|IThenable.<TYPE>|Thenable)),
@@ -47,6 +48,7 @@ goog.labs.Promise = goog.Promise;
  * Alias for the {@code goog.promise.Resolver} interface. This alias will be
  * removed once existing users have had a chance to migrate to the new name.
  *
+ * @deprecated Use goog.promise.Resolver instead.
  * @interface
  * @template TYPE
  */
