@@ -365,7 +365,10 @@ goog.Promise.withResolver = function() {
  */
 goog.Promise.prototype.then = function(
     opt_onFulfilled, opt_onRejected, opt_context) {
-  this.addStackTrace_(new Error('then'));
+
+  if (goog.Promise.LONG_STACK_TRACES) {
+    this.addStackTrace_(new Error('then'));
+  }
 
   return this.addChildPromise_(
       goog.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
@@ -397,7 +400,9 @@ goog.Thenable.addImplementation(goog.Promise);
  * @template THIS
  */
 goog.Promise.prototype.thenAlways = function(onResolved, opt_context) {
-  this.addStackTrace_(new Error('thenAlways'));
+  if (goog.Promise.LONG_STACK_TRACES) {
+    this.addStackTrace_(new Error('thenAlways'));
+  }
 
   var callback = function() {
     try {
@@ -431,7 +436,9 @@ goog.Promise.prototype.thenAlways = function(onResolved, opt_context) {
  * @template THIS
  */
 goog.Promise.prototype.thenCatch = function(onRejected, opt_context) {
-  this.addStackTrace_(new Error('thenCatch'));
+  if (goog.Promise.LONG_STACK_TRACES) {
+    this.addStackTrace_(new Error('thenCatch'));
+  }
   return this.addChildPromise_(null, onRejected, opt_context);
 };
 
