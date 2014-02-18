@@ -14,7 +14,7 @@ See the COPYING file for details.
 <script src="../../base.js"></script>
 <script>
   goog.require('goog.labs.net.xhr');
-  goog.require('goog.labs.Promise');
+  goog.require('goog.Promise');
   goog.require('goog.string');
   goog.require('goog.testing.AsyncTestCase');
   goog.require('goog.testing.MockClock');
@@ -201,7 +201,7 @@ See the COPYING file for details.
     var promise = xhr.send('GET', 'test-url', null).then(
       fail /* opt_onFulfilled */,
       function(error, result) {
-        assertTrue(error instanceof goog.labs.Promise.CancellationError);
+        assertTrue(error instanceof goog.Promise.CancellationError);
         testCase.continueTesting();
     });
     promise.cancel();
@@ -337,7 +337,7 @@ See the COPYING file for details.
       fail /* opt_onResolved */,
       function(error) {
         err = error;
-        if (error instanceof goog.labs.Promise.CancellationError) {
+        if (error instanceof goog.Promise.CancellationError) {
           stubXhr.abort();
         }
     });
@@ -347,7 +347,7 @@ See the COPYING file for details.
 
     assertTrue('XHR should have been sent', stubXhr.sent);
     assertTrue('XHR should have been aborted', stubXhr.aborted);
-    assertTrue(err instanceof goog.labs.Promise.CancellationError);
+    assertTrue(err instanceof goog.Promise.CancellationError);
   }
 
   function testGetJson() {
