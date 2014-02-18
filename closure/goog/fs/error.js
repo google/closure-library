@@ -69,6 +69,31 @@ goog.inherits(goog.fs.Error, goog.debug.Error);
 
 
 /**
+ * Names of errors that may be thrown by the File API, the File System API, or
+ * the File Writer API.
+ *
+ * @see http://dev.w3.org/2006/webapi/FileAPI/#ErrorAndException
+ * @see http://www.w3.org/TR/file-system-api/#definitions
+ * @see http://dev.w3.org/2009/dap/file-system/file-writer.html#definitions
+ * @enum {string}
+ */
+goog.fs.Error.ErrorName = {
+  ABORT: 'AbortError',
+  ENCODING: 'EncodingError',
+  INVALID_MODIFICATION: 'InvalidModificationError',
+  INVALID_STATE: 'InvalidStateError',
+  NOT_FOUND: 'NotFoundError',
+  NOT_READABLE: 'NotReadableError',
+  NO_MODIFICATION_ALLOWED: 'NoModificationAllowedError',
+  PATH_EXISTS: 'PathExistsError',
+  QUOTA_EXCEEDED: 'QuotaExceededError',
+  SECURITY: 'SecurityError',
+  SYNTAX: 'SyntaxError',
+  TYPE_MISMATCH: 'TypeMismatchError'
+};
+
+
+/**
  * Error codes for file errors.
  * @see http://www.w3.org/TR/file-system-api/#idl-def-FileException
  *
@@ -161,15 +186,39 @@ goog.fs.Error.getCodeFromName_ = function(name) {
  * @see http://www.w3.org/TR/file-system-api/#definitions.
  * @private {!Object.<string, goog.fs.Error.ErrorCode>}
  */
-goog.fs.Error.NameToCodeMap_ = {
-  'NotFoundError': goog.fs.Error.ErrorCode.NOT_FOUND,
-  'SecurityError': goog.fs.Error.ErrorCode.SECURITY,
-  'AbortError': goog.fs.Error.ErrorCode.ABORT,
-  'EncodingError': goog.fs.Error.ErrorCode.ENCODING,
-  'NoModificationAllowedError': goog.fs.Error.ErrorCode.NO_MODIFICATION_ALLOWED,
-  'InvalidStateError': goog.fs.Error.ErrorCode.INVALID_STATE,
-  'SyntaxError': goog.fs.Error.ErrorCode.SYNTAX,
-  'InvalidModificationError': goog.fs.Error.ErrorCode.INVALID_MODIFICATION,
-  'QuotaExceededError': goog.fs.Error.ErrorCode.QUOTA_EXCEEDED,
-  'TypeMismatchError': goog.fs.Error.ErrorCode.TYPE_MISMATCH
-};
+goog.fs.Error.NameToCodeMap_ = goog.object.create(
+    goog.fs.Error.ErrorName.ABORT,
+    goog.fs.Error.ErrorCode.ABORT,
+
+    goog.fs.Error.ErrorName.ENCODING,
+    goog.fs.Error.ErrorCode.ENCODING,
+
+    goog.fs.Error.ErrorName.INVALID_MODIFICATION,
+    goog.fs.Error.ErrorCode.INVALID_MODIFICATION,
+
+    goog.fs.Error.ErrorName.INVALID_STATE,
+    goog.fs.Error.ErrorCode.INVALID_STATE,
+
+    goog.fs.Error.ErrorName.NOT_FOUND,
+    goog.fs.Error.ErrorCode.NOT_FOUND,
+
+    goog.fs.Error.ErrorName.NOT_READABLE,
+    goog.fs.Error.ErrorCode.NOT_READABLE,
+
+    goog.fs.Error.ErrorName.NO_MODIFICATION_ALLOWED,
+    goog.fs.Error.ErrorCode.NO_MODIFICATION_ALLOWED,
+
+    goog.fs.Error.ErrorName.PATH_EXISTS,
+    goog.fs.Error.ErrorCode.PATH_EXISTS,
+
+    goog.fs.Error.ErrorName.QUOTA_EXCEEDED,
+    goog.fs.Error.ErrorCode.QUOTA_EXCEEDED,
+
+    goog.fs.Error.ErrorName.SECURITY,
+    goog.fs.Error.ErrorCode.SECURITY,
+
+    goog.fs.Error.ErrorName.SYNTAX,
+    goog.fs.Error.ErrorCode.SYNTAX,
+
+    goog.fs.Error.ErrorName.TYPE_MISMATCH,
+    goog.fs.Error.ErrorCode.TYPE_MISMATCH);
