@@ -42,7 +42,7 @@ goog.require('goog.events.EventTarget');
  * @final
  */
 goog.db.IndexedDb = function(db) {
-  goog.base(this);
+  goog.db.IndexedDb.base(this, 'constructor');
 
   /**
    * Underlying IndexedDB database object.
@@ -280,7 +280,7 @@ goog.db.IndexedDb.prototype.createTransaction = function(storeNames, opt_mode) {
 
 /** @override */
 goog.db.IndexedDb.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.db.IndexedDb.base(this, 'disposeInternal');
   this.eventHandler_.dispose();
 };
 
@@ -335,7 +335,8 @@ goog.db.IndexedDb.EventType = {
  * @final
  */
 goog.db.IndexedDb.VersionChangeEvent = function(oldVersion, newVersion) {
-  goog.base(this, goog.db.IndexedDb.EventType.VERSION_CHANGE);
+  goog.db.IndexedDb.VersionChangeEvent.base(
+      this, 'constructor', goog.db.IndexedDb.EventType.VERSION_CHANGE);
 
   /**
    * The previous version of the database.

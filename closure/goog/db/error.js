@@ -69,7 +69,7 @@ goog.db.Error = function(error, context, opt_message) {
   if (opt_message) {
     msg += ', ' + opt_message;
   }
-  goog.base(this, msg);
+  goog.db.Error.base(this, 'constructor', msg);
 };
 goog.inherits(goog.db.Error, goog.debug.Error);
 
@@ -93,7 +93,8 @@ goog.db.Error.prototype.getName = function()  {
  * @final
  */
 goog.db.Error.VersionChangeBlockedError = function() {
-  goog.base(this, 'Version change blocked');
+  goog.db.Error.VersionChangeBlockedError.base(
+      this, 'constructor', 'Version change blocked');
 };
 goog.inherits(goog.db.Error.VersionChangeBlockedError, goog.debug.Error);
 
