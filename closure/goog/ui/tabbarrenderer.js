@@ -42,7 +42,7 @@ goog.require('goog.ui.ContainerRenderer');
  * @extends {goog.ui.ContainerRenderer}
  */
 goog.ui.TabBarRenderer = function() {
-  goog.ui.ContainerRenderer.call(this);
+  goog.ui.ContainerRenderer.call(this, goog.a11y.aria.Role.TAB_LIST);
 };
 goog.inherits(goog.ui.TabBarRenderer, goog.ui.ContainerRenderer);
 goog.addSingletonGetter(goog.ui.TabBarRenderer);
@@ -64,17 +64,6 @@ goog.ui.TabBarRenderer.CSS_CLASS = goog.getCssName('goog-tab-bar');
  */
 goog.ui.TabBarRenderer.prototype.getCssClass = function() {
   return goog.ui.TabBarRenderer.CSS_CLASS;
-};
-
-
-/**
- * Returns the ARIA role to be applied to the tab bar element.
- * See http://wiki/Main/ARIA for more info.
- * @return {goog.a11y.aria.Role} ARIA role.
- * @override
- */
-goog.ui.TabBarRenderer.prototype.getAriaRole = function() {
-  return goog.a11y.aria.Role.TAB_LIST;
 };
 
 

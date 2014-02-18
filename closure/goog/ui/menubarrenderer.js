@@ -33,7 +33,7 @@ goog.require('goog.ui.ContainerRenderer');
  * @final
  */
 goog.ui.MenuBarRenderer = function() {
-  goog.base(this);
+  goog.base(this, goog.a11y.aria.Role.MENUBAR);
 };
 goog.inherits(goog.ui.MenuBarRenderer, goog.ui.ContainerRenderer);
 goog.addSingletonGetter(goog.ui.MenuBarRenderer);
@@ -45,14 +45,6 @@ goog.addSingletonGetter(goog.ui.MenuBarRenderer);
  * @type {string}
  */
 goog.ui.MenuBarRenderer.CSS_CLASS = goog.getCssName('goog-menubar');
-
-
-/**
- * @override
- */
-goog.ui.MenuBarRenderer.prototype.getAriaRole = function() {
-  return goog.a11y.aria.Role.MENUBAR;
-};
 
 
 /**
