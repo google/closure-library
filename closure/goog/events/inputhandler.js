@@ -57,7 +57,7 @@ goog.require('goog.userAgent');
  * @extends {goog.events.EventTarget}
  */
 goog.events.InputHandler = function(element) {
-  goog.base(this);
+  goog.events.InputHandler.base(this, 'constructor');
 
   /**
    * The element that you want to listen for input events on.
@@ -214,7 +214,7 @@ goog.events.InputHandler.prototype.createInputEvent_ = function(be) {
 
 /** @override */
 goog.events.InputHandler.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.events.InputHandler.base(this, 'disposeInternal');
   this.eventHandler_.dispose();
   this.cancelTimerIfSet_();
   delete this.element_;

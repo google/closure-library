@@ -51,7 +51,7 @@ goog.require('goog.userAgent');
  * @implements {goog.net.NetworkStatusMonitor}
  */
 goog.events.OnlineHandler = function() {
-  goog.base(this);
+  goog.events.OnlineHandler.base(this, 'constructor');
 
   /**
    * @private {goog.events.EventHandler.<!goog.events.OnlineHandler>}
@@ -152,7 +152,7 @@ goog.events.OnlineHandler.prototype.handleChange_ = function(e) {
 
 /** @override */
 goog.events.OnlineHandler.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.events.OnlineHandler.base(this, 'disposeInternal');
   this.eventHandler_.dispose();
   this.eventHandler_ = null;
   if (this.timer_) {
