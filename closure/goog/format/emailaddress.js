@@ -114,11 +114,10 @@ goog.format.EmailAddress.LOCAL_PART_REGEXP_STR_ =
 
 /**
  * A string representing the RegExp for the domain part of an email address.
- * Domains with just one label (i.e., just a top level domain) are accepted.
  * @private {string}
  */
 goog.format.EmailAddress.DOMAIN_PART_REGEXP_STR_ =
-    '([a-zA-Z0-9-]+\\.)*[a-zA-Z0-9]{2,63}';
+    '([a-zA-Z0-9-]+\\.)+[a-zA-Z0-9]{2,6}';
 
 
 /**
