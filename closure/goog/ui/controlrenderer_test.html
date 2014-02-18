@@ -19,7 +19,6 @@ Author: attila@google.com (Attila Bodis)
     goog.require('goog.a11y.aria.Role');
     goog.require('goog.a11y.aria.State');
     goog.require('goog.dom.classes');
-    goog.require('goog.object');
     goog.require('goog.style');
     goog.require('goog.testing.ExpectedFailures');
     goog.require('goog.testing.jsunit');
@@ -789,79 +788,6 @@ Author: attila@google.com (Attila Bodis)
         goog.a11y.aria.getState(element, goog.a11y.aria.State.EXPANDED));
     }
 
-    function testSetAriaStateRoleNotInMap() {
-      sandbox.innerHTML = '<div id="foo" role=\"option\">Hello, world!</div>';
-      control.setRenderer(controlRenderer);
-      control.setSupportedState(goog.ui.Component.State.CHECKED, true);
-      var element = goog.dom.getElement('foo');
-      control.decorate(element);
-      assertEquals('Element should have ARIA role option.',
-          goog.a11y.aria.Role.OPTION, goog.a11y.aria.getRole(element));
-      control.setStateInternal(goog.ui.Component.State.DISABLED, true);
-      controlRenderer.setAriaStates(control, element);
-      assertEquals('Element should have aria-disabled true', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.DISABLED));
-      control.setStateInternal(goog.ui.Component.State.CHECKED, true);
-      controlRenderer.setAriaStates(control, element);
-      assertEquals('Element should have aria-checked true', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
-    }
-
-    function testSetAriaStateRoleInMapMatches() {
-      sandbox.innerHTML = '<div id="foo" role=\"checkbox\">Hello, world!</div>';
-      control.setRenderer(controlRenderer);
-      control.setSupportedState(goog.ui.Component.State.CHECKED, true);
-      var element = goog.dom.getElement('foo');
-      control.decorate(element);
-      assertEquals('Element should have ARIA role checkbox.',
-          goog.a11y.aria.Role.CHECKBOX, goog.a11y.aria.getRole(element));
-      control.setStateInternal(goog.ui.Component.State.DISABLED, true);
-      controlRenderer.setAriaStates(control, element);
-      assertEquals('Element should have aria-disabled true', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.DISABLED));
-      control.setStateInternal(goog.ui.Component.State.CHECKED, true);
-      controlRenderer.setAriaStates(control, element);
-      assertEquals('Element should have aria-checked true', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
-    }
-
-    function testSetAriaStateRoleInMapNotMatches() {
-      sandbox.innerHTML = '<div id="foo" role=\"button\">Hello, world!</div>';
-      control.setRenderer(controlRenderer);
-      control.setSupportedState(goog.ui.Component.State.CHECKED, true);
-      var element = goog.dom.getElement('foo');
-      control.decorate(element);
-      assertEquals('Element should have ARIA role button.',
-          goog.a11y.aria.Role.BUTTON, goog.a11y.aria.getRole(element));
-      control.setStateInternal(goog.ui.Component.State.DISABLED, true);
-      controlRenderer.setAriaStates(control, element);
-      assertEquals('Element should have aria-disabled true', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.DISABLED));
-      control.setStateInternal(goog.ui.Component.State.CHECKED, true);
-      controlRenderer.setAriaStates(control, element);
-      assertEquals('Element should have aria-pressed true', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
-      assertEquals('Element should not have aria-checked', '',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
-    }
-
-    function testToggleAriaStateMap() {
-      var map = goog.object.create(
-          goog.a11y.aria.Role.BUTTON, goog.a11y.aria.State.PRESSED,
-          goog.a11y.aria.Role.CHECKBOX, goog.a11y.aria.State.CHECKED,
-          goog.a11y.aria.Role.MENU_ITEM, goog.a11y.aria.State.SELECTED,
-          goog.a11y.aria.Role.MENU_ITEM_CHECKBOX, goog.a11y.aria.State.CHECKED,
-          goog.a11y.aria.Role.MENU_ITEM_RADIO, goog.a11y.aria.State.CHECKED,
-          goog.a11y.aria.Role.RADIO, goog.a11y.aria.State.CHECKED,
-          goog.a11y.aria.Role.TAB, goog.a11y.aria.State.SELECTED,
-          goog.a11y.aria.Role.TREEITEM, goog.a11y.aria.State.SELECTED);
-      for (var key in map) {
-        assertTrue('Toggle ARIA state map incorrect.',
-            key in goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_);
-        assertEquals('Toggle ARIA state map incorrect.', map[key],
-            goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_[key]);
-      }
-    }
     function testSetContent() {
       sandbox.innerHTML = 'Hello, world!';
       controlRenderer.setContent(sandbox, 'Not so fast!');
