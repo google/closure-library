@@ -1292,6 +1292,24 @@ function testGoogRequireCheck() {
   assertObjectEquals({'far': true}, goog.implicitNamespaces_);
   assertTrue(goog.isProvided_('far.out'));
 
+  goog.global.far.out = 42;
+  assertEquals(42, goog.getObjectByName('far.out'));
+  assertTrue(goog.isProvided_('far.out'));
+
+  // Empty string should be allowed.
+  goog.global.far.out = '';
+  assertEquals('', goog.getObjectByName('far.out'));
+  assertTrue(goog.isProvided_('far.out'));
+
+  // Null or undefined are not allowed.
+  goog.global.far.out = null;
+  assertNull(goog.getObjectByName('far.out'));
+  assertFalse(goog.isProvided_('far.out'));
+
+  goog.global.far.out = undefined;
+  assertNull(goog.getObjectByName('far.out'));
+  assertFalse(goog.isProvided_('far.out'));
+
   stubs.reset();
   delete far;
 }

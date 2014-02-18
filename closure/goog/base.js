@@ -178,7 +178,8 @@ goog.define('goog.TRUSTED_SITE', true);
 /**
  * Creates object stubs for a namespace.  The presence of one or more
  * goog.provide() calls indicate that the file defines the given
- * objects/namespaces.  Build tools also scan for provide/require statements
+ * objects/namespaces.  Provided objects must not be null or undefined.
+ * Build tools also scan for provide/require statements
  * to discern dependencies, build dependency files (see deps.js), etc.
  * @see goog.require
  * @param {string} name Namespace provided by this file in the form
@@ -258,7 +259,8 @@ if (!COMPILED) {
    * @private
    */
   goog.isProvided_ = function(name) {
-    return !goog.implicitNamespaces_[name] && !!goog.getObjectByName(name);
+    return !goog.implicitNamespaces_[name] &&
+        goog.isDefAndNotNull(goog.getObjectByName(name));
   };
 
   /**
@@ -274,9 +276,10 @@ if (!COMPILED) {
 
 
 /**
- * Returns an object based on its fully qualified external name.  If you are
- * using a compilation pass that renames property names beware that using this
- * function will not find renamed properties.
+ * Returns an object based on its fully qualified external name.  The object
+ * is not found if null or undefined.  If you are using a compilation pass that
+ * renames property names beware that using this function will not find renamed
+ * properties.
  *
  * @param {string} name The fully qualified name.
  * @param {Object=} opt_obj The object within which to look; default is
