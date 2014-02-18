@@ -40,7 +40,6 @@ goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButtonRenderer');
-goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -58,13 +57,11 @@ goog.require('goog.userAgent.product');
  *     decorate the menu button; defaults to {@link goog.ui.MenuButtonRenderer}.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
  *     document interaction.
- * @param {!goog.ui.MenuRenderer=} opt_menuRenderer Renderer used to render or
- *     decorate the menu; defaults to {@link goog.ui.MenuRenderer}.
  * @constructor
  * @extends {goog.ui.Button}
  */
 goog.ui.MenuButton = function(opt_content, opt_menu, opt_renderer,
-    opt_domHelper, opt_menuRenderer) {
+    opt_domHelper) {
   goog.ui.Button.call(this, opt_content, opt_renderer ||
       goog.ui.MenuButtonRenderer.getInstance(), opt_domHelper);
 
@@ -94,9 +91,6 @@ goog.ui.MenuButton = function(opt_content, opt_menu, opt_renderer,
     // before the menu button click can be processed.
     this.setFocusablePopupMenu(true);
   }
-
-  /** @private {!goog.ui.MenuRenderer} */
-  this.menuRenderer_ = opt_menuRenderer || goog.ui.MenuRenderer.getInstance();
 };
 goog.inherits(goog.ui.MenuButton, goog.ui.Button);
 
@@ -398,7 +392,7 @@ goog.ui.MenuButton.prototype.handleBlur = function(e) {
  */
 goog.ui.MenuButton.prototype.getMenu = function() {
   if (!this.menu_) {
-    this.setMenu(new goog.ui.Menu(this.getDomHelper(), this.menuRenderer_));
+    this.setMenu(new goog.ui.Menu(this.getDomHelper()));
   }
   return this.menu_ || null;
 };
