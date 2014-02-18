@@ -49,8 +49,9 @@ goog.fs.Error = function(errorOrCode, action) {
   this.code;
 
   if (goog.isNumber(errorOrCode)) {
-    this.code = /** @type {goog.fs.Error.ErrorCode} */ (errorOrCode);
-    this.name = goog.fs.Error.getNameFromCode_(this.code);
+    var code = /** @type {goog.fs.Error.ErrorCode} */ (errorOrCode);
+    this.code = code;
+    this.name = goog.fs.Error.getNameFromCode_(code);
   } else {
     /** @type {!DOMError} */
     var error = errorOrCode;
