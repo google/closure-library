@@ -41,11 +41,11 @@ goog.Thenable = function() {};
  * with the rejection reason as argument, and the child Promise will be rejected
  * with the return value of the callback or thrown value.
  *
- * @param {(function(this:THIS, TYPE):
+ * @param {?(function(this:THIS, TYPE):
  *             (RESULT|IThenable.<RESULT>|Thenable))=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise
  *     is fullfilled.
- * @param {(function(*): *)=} opt_onRejected A function that will be invoked
+ * @param {?(function(*): *)=} opt_onRejected A function that will be invoked
  *     with the rejection reason if the Promise is rejected.
  * @param {THIS=} opt_context An optional context object that will be the
  *     execution context for the callbacks. By default, functions are executed
