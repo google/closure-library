@@ -177,7 +177,7 @@ goog.ui.Checkbox.prototype.toggle = function() {
 
 /** @override */
 goog.ui.Checkbox.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
+  goog.ui.Checkbox.base(this, 'enterDocument');
   if (this.isHandleMouseEvents()) {
     var handler = this.getHandler();
     // Listen to the label, if it was set.
@@ -225,7 +225,7 @@ goog.ui.Checkbox.prototype.enterDocument = function() {
  * @override
  */
 goog.ui.Checkbox.prototype.setEnabled = function(enabled) {
-  goog.base(this, 'setEnabled', enabled);
+  goog.ui.Checkbox.base(this, 'setEnabled', enabled);
   var el = this.getElement();
   if (el) {
     el.tabIndex = this.isEnabled() ? 0 : -1;

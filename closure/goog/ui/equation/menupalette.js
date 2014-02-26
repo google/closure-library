@@ -62,7 +62,7 @@ goog.ui.equation.MenuPalette.CSS_CLASS = 'ee-menu-palette';
  */
 goog.ui.equation.MenuPalette.prototype.setVisible = function(
     visible, opt_force) {
-  return goog.base(this, 'setVisible', true, opt_force);
+  return goog.ui.equation.MenuPalette.base(this, 'setVisible', true, opt_force);
 };
 
 

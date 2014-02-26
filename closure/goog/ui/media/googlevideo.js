@@ -140,7 +140,7 @@ goog.ui.media.GoogleVideo.CSS_CLASS =
  */
 goog.ui.media.GoogleVideo.prototype.createDom = function(c) {
   var control = /** @type {goog.ui.media.Media} */ (c);
-  var div = goog.base(this, 'createDom', control);
+  var div = goog.ui.media.GoogleVideo.base(this, 'createDom', control);
 
   var dataModel =
       /** @type {goog.ui.media.GoogleVideoModel} */ (control.getDataModel());

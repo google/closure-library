@@ -78,7 +78,7 @@ goog.ui.equation.EquationEditorDialog.prototype.okButton_;
 
 /** @override */
 goog.ui.equation.EquationEditorDialog.prototype.setVisible = function(visible) {
-  goog.base(this, 'setVisible', visible);
+  goog.ui.equation.EquationEditorDialog.base(this, 'setVisible', visible);
   this.equationEditor_.setVisible(visible);
 };
 

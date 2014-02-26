@@ -59,7 +59,7 @@ goog.ui.equation.TexEditor.prototype.texPane_ = null;
 
 /** @override */
 goog.ui.equation.TexEditor.prototype.createDom = function() {
-  goog.base(this, 'createDom');
+  goog.ui.equation.TexEditor.base(this, 'createDom');
   this.createDom_();
 };
 
@@ -137,6 +137,6 @@ goog.ui.equation.TexEditor.prototype.disposeInternal = function() {
     this.texPane_.dispose();
   }
   this.context_ = null;
-  goog.base(this, 'disposeInternal');
+  goog.ui.equation.TexEditor.base(this, 'disposeInternal');
 };
 

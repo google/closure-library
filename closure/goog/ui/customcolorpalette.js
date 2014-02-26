@@ -59,7 +59,7 @@ goog.ui.CustomColorPalette.prototype.createColorNodes = function() {
   /** @desc Hover caption for the button that allows the user to add a color. */
   var MSG_CLOSURE_CUSTOM_COLOR_BUTTON = goog.getMsg('Add a color');
 
-  var nl = goog.base(this, 'createColorNodes');
+  var nl = goog.ui.CustomColorPalette.base(this, 'createColorNodes');
   nl.push(goog.dom.createDom('div', {
     'class': goog.getCssName('goog-palette-customcolor'),
     'title': MSG_CLOSURE_CUSTOM_COLOR_BUTTON

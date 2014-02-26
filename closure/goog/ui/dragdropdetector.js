@@ -47,7 +47,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.ui.DragDropDetector = function(opt_filePath) {
-  goog.base(this);
+  goog.ui.DragDropDetector.base(this, 'constructor');
 
   var iframe = goog.dom.createDom(goog.dom.TagName.IFRAME, {
     'frameborder': 0
@@ -560,7 +560,7 @@ goog.ui.DragDropDetector.prototype.handleNodeInserted_ = function(e) {
 
 /** @override */
 goog.ui.DragDropDetector.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.ui.DragDropDetector.base(this, 'disposeInternal');
   this.handler_.dispose();
   this.handler_ = null;
 };
@@ -577,7 +577,8 @@ goog.ui.DragDropDetector.prototype.disposeInternal = function() {
  * @final
  */
 goog.ui.DragDropDetector.ImageDropEvent = function(url, position) {
-  goog.base(this, goog.ui.DragDropDetector.EventType.IMAGE_DROPPED);
+  goog.ui.DragDropDetector.ImageDropEvent.base(this, 'constructor',
+      goog.ui.DragDropDetector.EventType.IMAGE_DROPPED);
 
   /**
    * The url of the image that was dropped.
@@ -624,7 +625,8 @@ goog.ui.DragDropDetector.ImageDropEvent.prototype.getPosition = function() {
  * @final
  */
 goog.ui.DragDropDetector.LinkDropEvent = function(url) {
-  goog.base(this, goog.ui.DragDropDetector.EventType.LINK_DROPPED);
+  goog.ui.DragDropDetector.LinkDropEvent.base(this, 'constructor',
+      goog.ui.DragDropDetector.EventType.LINK_DROPPED);
 
   /**
    * The url of the link that was dropped.

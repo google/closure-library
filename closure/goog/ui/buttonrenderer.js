@@ -95,7 +95,8 @@ goog.ui.ButtonRenderer.prototype.updateAriaState = function(element, state,
     default:
     case goog.ui.Component.State.OPENED:
     case goog.ui.Component.State.DISABLED:
-      goog.base(this, 'updateAriaState', element, state, enable);
+      goog.ui.ButtonRenderer.base(
+          this, 'updateAriaState', element, state, enable);
       break;
   }
 };
@@ -103,7 +104,7 @@ goog.ui.ButtonRenderer.prototype.updateAriaState = function(element, state,
 
 /** @override */
 goog.ui.ButtonRenderer.prototype.createDom = function(button) {
-  var element = goog.base(this, 'createDom', button);
+  var element = goog.ui.ButtonRenderer.base(this, 'createDom', button);
   this.setTooltip(element, button.getTooltip());
 
   var value = button.getValue();

@@ -198,7 +198,7 @@ goog.ui.equation.PaletteManager.prototype.getDomHelper = function() {
 
 /** @override */
 goog.ui.equation.PaletteManager.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.ui.equation.PaletteManager.base(this, 'disposeInternal');
   this.activePalette_ = null;
   this.paletteMap_ = null;
 };

@@ -56,7 +56,7 @@ goog.require('goog.userAgent');
  * @extends {goog.events.EventTarget}
  */
 goog.ui.editor.Bubble = function(parent, zIndex) {
-  goog.base(this);
+  goog.ui.editor.Bubble.base(this, 'constructor');
 
   /**
    * Dom helper for the document the bubble should be shown in.
@@ -166,7 +166,7 @@ goog.ui.editor.Bubble.prototype.logger =
 
 /** @override */
 goog.ui.editor.Bubble.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.ui.editor.Bubble.base(this, 'disposeInternal');
 
   goog.dom.removeNode(this.bubbleContainer_);
   this.bubbleContainer_ = null;

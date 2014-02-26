@@ -43,7 +43,7 @@ goog.require('goog.ui.SplitBehavior');
  * @final
  */
 goog.ui.ColorSplitBehavior = function(colorButton, opt_domHelper) {
-  goog.base(this, colorButton,
+  goog.ui.ColorSplitBehavior.base(this, 'constructor', colorButton,
       new goog.ui.ColorMenuButton(goog.ui.ColorSplitBehavior.ZERO_WIDTH_SPACE_),
       goog.ui.SplitBehavior.DefaultHandlers.VALUE,
       undefined,
