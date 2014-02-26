@@ -58,7 +58,7 @@ goog.require('goog.style');
  */
 goog.ui.Zippy = function(header, opt_content, opt_expanded,
     opt_expandedHeader, opt_domHelper) {
-  goog.base(this);
+  goog.ui.Zippy.base(this, 'constructor');
 
   /**
    * DomHelper used to interact with the document, allowing components to be
@@ -171,7 +171,7 @@ goog.ui.Zippy.prototype.handleKeyEvents_ = true;
 
 /** @override */
 goog.ui.Zippy.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.ui.Zippy.base(this, 'disposeInternal');
   goog.dispose(this.keyboardEventHandler_);
   goog.dispose(this.mouseEventHandler_);
 };
@@ -435,7 +435,7 @@ goog.ui.Zippy.prototype.dispatchActionEvent_ = function() {
  * @final
  */
 goog.ui.ZippyEvent = function(type, target, expanded) {
-  goog.base(this, type, target);
+  goog.ui.ZippyEvent.base(this, 'constructor', type, target);
 
   /**
    * The expanded state.

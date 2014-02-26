@@ -394,7 +394,7 @@ goog.ui.Textarea.prototype.restorePlaceholder_ = function() {
 
 /** @override **/
 goog.ui.Textarea.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
+  goog.ui.Textarea.base(this, 'enterDocument');
   var textarea = this.getElement();
 
   // Eliminates the vertical scrollbar and changes the box-sizing mode for the

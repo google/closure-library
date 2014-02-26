@@ -65,7 +65,7 @@ goog.ui.ScrollFloater = function(opt_parentElement, opt_domHelper) {
   var domHelper = opt_parentElement ?
       goog.dom.getDomHelper(opt_parentElement) : opt_domHelper;
 
-  goog.base(this, domHelper);
+  goog.ui.ScrollFloater.base(this, 'constructor', domHelper);
 
   /**
    * The element to which the scroll-floated element will be attached
@@ -226,7 +226,7 @@ goog.ui.ScrollFloater.CSS_CLASS_ = goog.getCssName('goog-scrollfloater');
  * @override
  */
 goog.ui.ScrollFloater.prototype.createDom = function() {
-  goog.base(this, 'createDom');
+  goog.ui.ScrollFloater.base(this, 'createDom');
 
   this.decorateInternal(this.getElement());
 };
@@ -238,7 +238,7 @@ goog.ui.ScrollFloater.prototype.createDom = function() {
  * @override
  */
 goog.ui.ScrollFloater.prototype.decorateInternal = function(element) {
-  goog.base(this, 'decorateInternal', element);
+  goog.ui.ScrollFloater.base(this, 'decorateInternal', element);
 
   goog.dom.classlist.add(element, goog.ui.ScrollFloater.CSS_CLASS_);
 };
@@ -246,7 +246,7 @@ goog.ui.ScrollFloater.prototype.decorateInternal = function(element) {
 
 /** @override */
 goog.ui.ScrollFloater.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
+  goog.ui.ScrollFloater.base(this, 'enterDocument');
 
   if (!this.placeholder_) {
     this.placeholder_ =
@@ -287,7 +287,7 @@ goog.ui.ScrollFloater.prototype.update = function() {
 
 /** @override */
 goog.ui.ScrollFloater.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.ui.ScrollFloater.base(this, 'disposeInternal');
 
   this.placeholder_ = null;
 };

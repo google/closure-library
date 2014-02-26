@@ -55,7 +55,7 @@ goog.require('goog.ui.SelectionModel');
  * @extends {goog.ui.Control}
  */
 goog.ui.Palette = function(items, opt_renderer, opt_domHelper) {
-  goog.base(this, items,
+  goog.ui.Palette.base(this, 'constructor', items,
       opt_renderer || goog.ui.PaletteRenderer.getInstance(), opt_domHelper);
   this.setAutoStates(goog.ui.Component.State.CHECKED |
       goog.ui.Component.State.SELECTED | goog.ui.Component.State.OPENED, false);
@@ -241,7 +241,7 @@ goog.ui.Palette.prototype.performActionInternal = function(e) {
   var item = this.getHighlightedItem();
   if (item) {
     this.setSelectedItem(item);
-    return goog.base(this, 'performActionInternal', e);
+    return goog.ui.Palette.base(this, 'performActionInternal', e);
   }
   return false;
 };
@@ -585,7 +585,7 @@ goog.ui.Palette.prototype.adjustSize_ = function() {
  * @private
  */
 goog.ui.Palette.CurrentCell_ = function() {
-  goog.base(this, null);
+  goog.ui.Palette.CurrentCell_.base(this, 'constructor', null);
   this.setDispatchTransitionEvents(goog.ui.Component.State.HOVER, true);
 };
 goog.inherits(goog.ui.Palette.CurrentCell_, goog.ui.Control);

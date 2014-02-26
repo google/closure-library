@@ -484,7 +484,7 @@ goog.ui.SliderBase.prototype.enableEventHandlers_ = function(enable) {
 
 /** @override */
 goog.ui.SliderBase.prototype.exitDocument = function() {
-  goog.base(this, 'exitDocument');
+  goog.ui.SliderBase.base(this, 'exitDocument');
   goog.disposeAll(this.valueDragger_, this.extentDragger_, this.keyHandler_,
                   this.mouseWheelHandler_);
 };

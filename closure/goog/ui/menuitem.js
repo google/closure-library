@@ -193,7 +193,7 @@ goog.ui.MenuItem.prototype.handleMouseUp = function(e) {
     }
   }
 
-  goog.base(this, 'handleMouseUp', e);
+  goog.ui.MenuItem.base(this, 'handleMouseUp', e);
 };
 
 
@@ -202,7 +202,7 @@ goog.ui.MenuItem.prototype.handleKeyEventInternal = function(e) {
   if (e.keyCode == this.getMnemonic() && this.performActionInternal(e)) {
     return true;
   } else {
-    return goog.base(this, 'handleKeyEventInternal', e);
+    return goog.ui.MenuItem.base(this, 'handleKeyEventInternal', e);
   }
 };
 
