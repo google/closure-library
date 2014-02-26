@@ -7,54 +7,17 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 
 -->
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Closure Unit Tests - goog.storage.mechanism.HTML5LocalStorage</title>
-<script src="../../base.js"></script>
-<script>
-  goog.require('goog.storage.mechanism.iterableMechanismTester');
-  goog.require('goog.storage.mechanism.mechanismSharingTester');
-  goog.require('goog.storage.mechanism.mechanismTester');
-  goog.require('goog.storage.mechanism.HTML5LocalStorage');
-  goog.require('goog.testing.jsunit');
-  goog.require('goog.userAgent');
-</script>
-</head>
-<body>
-<script>
-
-function setUp() {
-  var localStorage = new goog.storage.mechanism.HTML5LocalStorage();
-  if (localStorage.isAvailable()) {
-    mechanism = localStorage;
-    // There should be at least 2 MiB.
-    minimumQuota = 2 * 1024 * 1024;
-    mechanism_shared = new goog.storage.mechanism.HTML5LocalStorage();
-  }
-}
-
-function tearDown() {
-  if (!!mechanism) {
-    mechanism.clear();
-    mechanism = null;
-  }
-  if (!!mechanism_shared) {
-    mechanism_shared.clear();
-    mechanism_shared = null;
-  }
-}
-
-function testAvailability() {
-  if (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('532.5') ||
-      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.1') ||
-      goog.userAgent.IE && goog.userAgent.isVersionOrHigher('8')) {
-    assertNotNull(mechanism);
-    assertTrue(mechanism.isAvailable());
-    assertNotNull(mechanism_shared);
-    assertTrue(mechanism_shared.isAvailable());
-  }
-}
-
-</script>
-</body>
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.storage.mechanism.HTML5LocalStorage
+  </title>
+  <script src="../../base.js">
+  </script>
+  <script>
+    goog.require('goog.storage.mechanism.HTML5LocalStorageTest');
+  </script>
+ </head>
+ <body>
+ </body>
 </html>
