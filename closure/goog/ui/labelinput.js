@@ -516,8 +516,8 @@ goog.ui.LabelInput.prototype.check_ = function() {
 
 
 /**
- * This method focuses the input and if selects all the text. If the value
- * hasn't changed it will set the value to the label so that the label text is
+ * This method focuses the input and selects all the text. If the value hasn't
+ * changed it will set the value to the label so that the label text is
  * selected.
  */
 goog.ui.LabelInput.prototype.focusAndSelect = function() {
