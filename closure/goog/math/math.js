@@ -370,6 +370,28 @@ goog.math.isFiniteNumber = function(num) {
 
 
 /**
+ * Returns the precise value of floor(log10(num)).
+ * Simpler implementations didn't work because of floating point rounding
+ * errors. For example
+ * <ul>
+ * <li>Math.floor(Math.log(num) / Math.LN10) is off by one for num == 1e+3.
+ * <li>Math.floor(Math.log(num) * Math.LOG10E) is off by one for num == 1e+15.
+ * <li>Math.floor(Math.log10(num)) is off by one for num == 1e+15 - 1.
+ * </ul>
+ * @param {number} num A floating point number.
+ * @return {number} Its logarithm to base 10 rounded down to the nearest
+ *     integer if num > 0. -Infinity if num == 0. NaN if num < 0.
+ */
+goog.math.log10Floor = function(num) {
+  if (num > 0) {
+    var x = Math.round(Math.log(num) * Math.LOG10E);
+    return x - (Math.pow(10, x) > num);
+  }
+  return num == 0 ? -Infinity : NaN;
+};
+
+
+/**
  * A tweaked variant of {@code Math.floor} which tolerates if the passed number
  * is infinitesimally smaller than the closest integer. It often happens with
  * the results of floating point calculations because of the finite precision

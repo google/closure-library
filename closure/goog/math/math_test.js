@@ -276,6 +276,18 @@ function testIsFiniteNumber() {
   assertTrue(goog.math.isFiniteNumber(Math.PI));
 }
 
+function testLog10Floor() {
+  // The greatest floating point number that is less than 1.
+  var oneMinusEpsilon = 1 - Math.pow(2, -53);
+  for (var i = -20; i <= 20; i++) {
+    assertEquals(i, goog.math.log10Floor(Math.pow(10, i)));
+    assertEquals(i - 1,
+        goog.math.log10Floor(Math.pow(10, i) * oneMinusEpsilon));
+  }
+  assertEquals(-Infinity, goog.math.log10Floor(0));
+  assertTrue(isNaN(goog.math.log10Floor(-1)));
+}
+
 function testSafeFloor() {
   assertEquals(0, goog.math.safeFloor(0));
   assertEquals(0, goog.math.safeFloor(1e-15));
