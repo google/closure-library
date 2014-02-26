@@ -918,7 +918,7 @@ function testMakeSingleton() {
 //=== tests for now ===
 
 function testNow() {
-  var toleranceMilliseconds = 10;
+  var toleranceMilliseconds = 20;  // 10 ms was not enough for IE7.
   var now1 = new Date().getTime();
   var now2 = goog.now();
   assertTrue(Math.abs(now1 - now2) < toleranceMilliseconds);
