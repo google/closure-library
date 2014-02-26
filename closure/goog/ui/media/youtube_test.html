@@ -66,6 +66,14 @@ See the COPYING file for details.
     assertExtractsCorrectly(
         'uddeBVmKTqE',
         'https://m.youtube.com/watch?v=uddeBVmKTqE');
+    // a simple short link
+    assertExtractsCorrectly(
+        'uddeBVmKTqE',
+        'http://youtu.be/watch?v=uddeBVmKTqE');
+    // a secure short link
+    assertExtractsCorrectly(
+        'uddeBVmKTqE',
+        'https://youtu.be/watch?v=uddeBVmKTqE');
     // a channel link
     assertExtractsCorrectly(
         '4Pb9e1uu3EQ',

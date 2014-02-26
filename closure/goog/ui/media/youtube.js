@@ -251,7 +251,7 @@ goog.ui.media.YoutubeModel.MATCHER_ = new RegExp(
     // Watch URL prefix.  This should handle new URLs of the form:
     // http://www.youtube.com/watch#!v=jqxENMKaeCU&feature=related
     // where the parameters appear after "#!" instead of "?".
-    '(?:youtube\\.com/watch)' +
+    '(?:youtube\\.com/watch|youtu\\.be/watch)' +
     // Get the video id:
     // The video ID is a parameter v=[videoid] either right after the "?"
     // or after some other parameters.
