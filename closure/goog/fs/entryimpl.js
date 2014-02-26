@@ -205,7 +205,7 @@ goog.fs.EntryImpl.prototype.getParent = function() {
  * @final
  */
 goog.fs.DirectoryEntryImpl = function(fs, dir) {
-  goog.base(this, fs, dir);
+  goog.fs.DirectoryEntryImpl.base(this, 'constructor', fs, dir);
 
   /**
    * The underlying DirectoryEntry object.
@@ -362,7 +362,7 @@ goog.fs.DirectoryEntryImpl.prototype.getOptions_ = function(opt_behavior) {
  * @final
  */
 goog.fs.FileEntryImpl = function(fs, file) {
-  goog.base(this, fs, file);
+  goog.fs.FileEntryImpl.base(this, 'constructor', fs, file);
 
   /**
    * The underlying FileEntry object.

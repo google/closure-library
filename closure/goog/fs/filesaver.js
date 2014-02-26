@@ -41,7 +41,7 @@ goog.require('goog.fs.ProgressEvent');
  * @extends {goog.events.EventTarget}
  */
 goog.fs.FileSaver = function(fileSaver) {
-  goog.base(this);
+  goog.fs.FileSaver.base(this, 'constructor');
 
   /**
    * The underlying FileSaver object.
@@ -163,7 +163,7 @@ goog.fs.FileSaver.prototype.dispatchProgressEvent_ = function(event) {
 /** @override */
 goog.fs.FileSaver.prototype.disposeInternal = function() {
   delete this.saver_;
-  goog.base(this, 'disposeInternal');
+  goog.fs.FileSaver.base(this, 'disposeInternal');
 };
 
 

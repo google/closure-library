@@ -40,7 +40,7 @@ goog.require('goog.fs.FileSaver');
  * @final
  */
 goog.fs.FileWriter = function(writer) {
-  goog.base(this, writer);
+  goog.fs.FileWriter.base(this, 'constructor', writer);
 
   /**
    * The underlying FileWriter object.
