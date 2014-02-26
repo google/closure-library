@@ -31,14 +31,13 @@ goog.require('goog.string');
  * are less useful for identifying where errors come from, so this includes a
  * large amount of metadata in the message.
  *
- * @param {!DOMError|number} errorOrCode Will be changed soon
- *     to accept only DOMError, not number, so don't pass ErrorCode in new code.
+ * @param {!DOMError} error
  * @param {string} action The action being undertaken when the error was raised.
  * @constructor
  * @extends {goog.debug.Error}
  * @final
  */
-goog.fs.Error = function(errorOrCode, action) {
+goog.fs.Error = function(error, action) {
   /** @type {string} */
   this.name;
 
@@ -48,20 +47,12 @@ goog.fs.Error = function(errorOrCode, action) {
    */
   this.code;
 
-  if (goog.isNumber(errorOrCode)) {
-    var code = /** @type {goog.fs.Error.ErrorCode} */ (errorOrCode);
-    this.code = code;
-    this.name = goog.fs.Error.getNameFromCode_(code);
+  if (goog.isDef(error.name)) {
+    this.name = error.name;
+    this.code = goog.fs.Error.getCodeFromName_(error.name);
   } else {
-    /** @type {!DOMError} */
-    var error = errorOrCode;
-    if (goog.isDef(error.name)) {
-      this.name = error.name;
-      this.code = goog.fs.Error.getCodeFromName_(error.name);
-    } else {
-      this.code = error.code;
-      this.name = goog.fs.Error.getNameFromCode_(error.code);
-    }
+    this.code = error.code;
+    this.name = goog.fs.Error.getNameFromCode_(error.code);
   }
   goog.base(this, goog.string.subs('%s %s', this.name, action));
 };
@@ -113,44 +104,6 @@ goog.fs.Error.ErrorCode = {
   QUOTA_EXCEEDED: 10,
   TYPE_MISMATCH: 11,
   PATH_EXISTS: 12
-};
-
-
-/**
- * @param {number} errorCode The error code for the error.
- * @return {string} A debug message for the given error code. These messages are
- *     for debugging only and are not localized.
- * @deprecated Use the 'message' property of a goog.fs.Error object.
- */
-goog.fs.Error.getDebugMessage = function(errorCode) {
-  switch (errorCode) {
-    case goog.fs.Error.ErrorCode.NOT_FOUND:
-      return 'File or directory not found';
-    case goog.fs.Error.ErrorCode.SECURITY:
-      return 'Insecure or disallowed operation';
-    case goog.fs.Error.ErrorCode.ABORT:
-      return 'Operation aborted';
-    case goog.fs.Error.ErrorCode.NOT_READABLE:
-      return 'File or directory not readable';
-    case goog.fs.Error.ErrorCode.ENCODING:
-      return 'Invalid encoding';
-    case goog.fs.Error.ErrorCode.NO_MODIFICATION_ALLOWED:
-      return 'Cannot modify file or directory';
-    case goog.fs.Error.ErrorCode.INVALID_STATE:
-      return 'Invalid state';
-    case goog.fs.Error.ErrorCode.SYNTAX:
-      return 'Invalid line-ending specifier';
-    case goog.fs.Error.ErrorCode.INVALID_MODIFICATION:
-      return 'Invalid modification';
-    case goog.fs.Error.ErrorCode.QUOTA_EXCEEDED:
-      return 'Quota exceeded';
-    case goog.fs.Error.ErrorCode.TYPE_MISMATCH:
-      return 'Invalid filetype';
-    case goog.fs.Error.ErrorCode.PATH_EXISTS:
-      return 'File or directory already exists at specified path';
-    default:
-      return 'Unrecognized error';
-  }
 };
 
 

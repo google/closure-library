@@ -123,7 +123,7 @@ goog.fs.FileReader.prototype.abort = function() {
   try {
     this.reader_.abort();
   } catch (e) {
-    throw new goog.fs.Error(e.code, 'aborting read');
+    throw new goog.fs.Error(e, 'aborting read');
   }
 };
 

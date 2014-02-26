@@ -104,7 +104,7 @@ goog.fs.EntryImpl.prototype.getMetadata = function() {
       function(metadata) { d.callback(metadata); },
       goog.bind(function(err) {
         var msg = 'retrieving metadata for ' + this.getFullPath();
-        d.errback(new goog.fs.Error(err.code, msg));
+        d.errback(new goog.fs.Error(err, msg));
       }, this));
   return d;
 };
@@ -120,7 +120,7 @@ goog.fs.EntryImpl.prototype.moveTo = function(parent, opt_newName) {
         var msg = 'moving ' + this.getFullPath() + ' into ' +
             parent.getFullPath() +
             (opt_newName ? ', renaming to ' + opt_newName : '');
-        d.errback(new goog.fs.Error(err.code, msg));
+        d.errback(new goog.fs.Error(err, msg));
       }, this));
   return d;
 };
@@ -136,7 +136,7 @@ goog.fs.EntryImpl.prototype.copyTo = function(parent, opt_newName) {
         var msg = 'copying ' + this.getFullPath() + ' into ' +
             parent.getFullPath() +
             (opt_newName ? ', renaming to ' + opt_newName : '');
-        d.errback(new goog.fs.Error(err.code, msg));
+        d.errback(new goog.fs.Error(err, msg));
       }, this));
   return d;
 };
@@ -168,7 +168,7 @@ goog.fs.EntryImpl.prototype.remove = function() {
       goog.bind(d.callback, d, true /* result */),
       goog.bind(function(err) {
         var msg = 'removing ' + this.getFullPath();
-        d.errback(new goog.fs.Error(err.code, msg));
+        d.errback(new goog.fs.Error(err, msg));
       }, this));
   return d;
 };
@@ -183,7 +183,7 @@ goog.fs.EntryImpl.prototype.getParent = function() {
       }, this),
       goog.bind(function(err) {
         var msg = 'getting parent of ' + this.getFullPath();
-        d.errback(new goog.fs.Error(err.code, msg));
+        d.errback(new goog.fs.Error(err, msg));
       }, this));
   return d;
 };
