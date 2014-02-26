@@ -156,3 +156,15 @@ function testCoordinateScaleFactor() {
   assertEquals(c, c.scale(2));
   assertObjectEquals(new goog.math.Coordinate(20, 30), c);
 }
+
+function testCoordinateRotateRadians() {
+  var c = new goog.math.Coordinate(15, 75);
+  c.rotateRadians(Math.PI / 2, new goog.math.Coordinate(10, 70));
+  assertObjectEquals(new goog.math.Coordinate(5, 75), c);
+}
+
+function testCoordinateRotateDegrees() {
+  var c = new goog.math.Coordinate(15, 75);
+  c.rotateDegrees(90, new goog.math.Coordinate(10, 70));
+  assertObjectEquals(new goog.math.Coordinate(5, 75), c);
+}
