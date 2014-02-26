@@ -22,6 +22,7 @@ goog.require('goog.crypt.Sha512');
 goog.require('goog.crypt.Sha512_256');
 goog.require('goog.crypt.hashTester');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
 
 /**
@@ -141,7 +142,10 @@ function hashGoldenTester(hasher, key) {
 
 /** Test that Sha512() returns the published values */
 function testHashing512() {
-  hashGoldenTester(new goog.crypt.Sha512(), '512');
+  // This test tends to time out on IE7.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('8')) {
+    hashGoldenTester(new goog.crypt.Sha512(), '512');
+  }
 }
 
 
