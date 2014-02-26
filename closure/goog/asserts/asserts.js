@@ -108,10 +108,11 @@ goog.asserts.doAssertFailure_ =
 /**
  * Checks if the condition evaluates to true if goog.asserts.ENABLE_ASSERTS is
  * true.
- * @param {*} condition The condition to check.
+ * @template T
+ * @param {T} condition The condition to check.
  * @param {string=} opt_message Error message in case of failure.
  * @param {...*} var_args The items to substitute into the failure message.
- * @return {*} The value of the condition.
+ * @return {T} The value of the condition.
  * @throws {goog.asserts.AssertionError} When the condition evaluates to false.
  */
 goog.asserts.assert = function(condition, opt_message, var_args) {
