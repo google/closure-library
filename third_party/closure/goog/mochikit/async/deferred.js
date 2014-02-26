@@ -839,10 +839,10 @@ goog.async.Deferred.CanceledError.prototype.name = 'CanceledError';
  * @struct
  */
 goog.async.Deferred.Error_ = function(error) {
-  /** @private @const */
+  /** @const @private {number} */
   this.id_ = goog.global.setTimeout(goog.bind(this.throwError, this), 0);
 
-  /** @private @const */
+  /** @const @private {*} */
   this.error_ = error;
 };
 
