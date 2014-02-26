@@ -165,10 +165,10 @@ function testIsValid() {
     'e@b.eu', '<a.b+foo@c.com>', 'eric <e@b.com>', '"e" <e@b.com>',
     'a@FOO.MUSEUM', 'bla@b.co.ac.uk', 'bla@a.b.com', 'o\'hara@gm.com',
     'plus+is+allowed@gmail.com', '!/#$%&\'*+-=~|`{}?^_@expample.com',
-    'confirm-bhk=modulo.org@yahoogroups.com'];
+    'aaa@gmail', 'confirm-bhk=modulo.org@yahoogroups.com'];
   var invalid = [
     'e', '', 'e @c.com', 'a@b', 'foo.com', 'foo@c..com', 'test@gma=il.com',
-    'aaa@gmail', 'has some spaces@gmail.com', 'has@three@at@signs.com',
+    'has some spaces@gmail.com', 'has@three@at@signs.com',
     '@no-local-part.com'];
   doIsValidTest(goog.format.EmailAddress.isValidAddress, valid, invalid);
 }
@@ -185,9 +185,9 @@ function testIsValidLocalPart() {
 
 function testIsValidDomainPart() {
   var valid = [
-    'example.com', 'dept.example.org', 'long.domain.with.lots.of.dots'];
-  var invalid = ['', '@has.an.at.sign', '..has.leading.dots', 'gma=il.com',
+    'example.com', 'dept.example.org', 'long.domain.with.lots.of.dots',
     'DoesNotHaveADot'];
+  var invalid = ['', '@has.an.at.sign', '..has.leading.dots', 'gma=il.com'];
   doIsValidTest(goog.format.EmailAddress.isValidDomainPartSpec, valid, invalid);
 }
 
