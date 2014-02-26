@@ -36,7 +36,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
  * @final
  */
 goog.storage.mechanism.PrefixedMechanism = function(mechanism, prefix) {
-  goog.base(this);
+  goog.storage.mechanism.PrefixedMechanism.base(this, 'constructor');
   this.mechanism_ = mechanism;
   this.prefix_ = prefix + '::';
 };

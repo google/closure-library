@@ -36,7 +36,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
  * @extends {goog.storage.mechanism.IterableMechanism}
  */
 goog.storage.mechanism.HTML5WebStorage = function(storage) {
-  goog.base(this);
+  goog.storage.mechanism.HTML5WebStorage.base(this, 'constructor');
 
   /**
    * The web storage object (window.localStorage or window.sessionStorage).
