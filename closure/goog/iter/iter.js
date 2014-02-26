@@ -294,10 +294,8 @@ goog.iter.map = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
   var newIter = new goog.iter.Iterator;
   newIter.next = function() {
-    while (true) {
-      var val = iterator.next();
-      return f.call(opt_obj, val, undefined, iterator);
-    }
+    var val = iterator.next();
+    return f.call(opt_obj, val, undefined, iterator);
   };
   return newIter;
 };
