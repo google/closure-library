@@ -86,7 +86,7 @@ goog.events.ListenerMap.prototype.getListenerCount = function() {
  * if any. On the other hand a normal listener will change existing
  * one-off listener to become a normal listener.
  *
- * @param {string} type The listener event type.
+ * @param {string|!goog.events.EventId} type The listener event type.
  * @param {!Function} listener This listener callback method.
  * @param {boolean} callOnce Whether the listener is a one-off
  *     listener.
@@ -97,9 +97,10 @@ goog.events.ListenerMap.prototype.getListenerCount = function() {
  */
 goog.events.ListenerMap.prototype.add = function(
     type, listener, callOnce, opt_useCapture, opt_listenerScope) {
-  var listenerArray = this.listeners[type];
+  var typeStr = type.toString();
+  var listenerArray = this.listeners[typeStr];
   if (!listenerArray) {
-    listenerArray = this.listeners[type] = [];
+    listenerArray = this.listeners[typeStr] = [];
     this.typeCount_++;
   }
 
@@ -115,7 +116,7 @@ goog.events.ListenerMap.prototype.add = function(
     }
   } else {
     listenerObj = new goog.events.Listener(
-        listener, null, this.src, type, !!opt_useCapture, opt_listenerScope);
+        listener, null, this.src, typeStr, !!opt_useCapture, opt_listenerScope);
     listenerObj.callOnce = callOnce;
     listenerArray.push(listenerObj);
   }
@@ -125,7 +126,7 @@ goog.events.ListenerMap.prototype.add = function(
 
 /**
  * Removes a matching listener.
- * @param {string} type The listener event type.
+ * @param {string|!goog.events.EventId} type The listener event type.
  * @param {!Function} listener This listener callback method.
  * @param {boolean=} opt_useCapture The capture mode of the listener.
  * @param {Object=} opt_listenerScope Object in whose scope to call the
@@ -134,11 +135,12 @@ goog.events.ListenerMap.prototype.add = function(
  */
 goog.events.ListenerMap.prototype.remove = function(
     type, listener, opt_useCapture, opt_listenerScope) {
-  if (!(type in this.listeners)) {
+  var typeStr = type.toString();
+  if (!(typeStr in this.listeners)) {
     return false;
   }
 
-  var listenerArray = this.listeners[type];
+  var listenerArray = this.listeners[typeStr];
   var index = goog.events.ListenerMap.findListenerIndex_(
       listenerArray, listener, opt_useCapture, opt_listenerScope);
   if (index > -1) {
@@ -146,7 +148,7 @@ goog.events.ListenerMap.prototype.remove = function(
     listenerObj.markAsRemoved();
     goog.array.removeAt(listenerArray, index);
     if (listenerArray.length == 0) {
-      delete this.listeners[type];
+      delete this.listeners[typeStr];
       this.typeCount_--;
     }
     return true;
@@ -181,13 +183,14 @@ goog.events.ListenerMap.prototype.removeByKey = function(listener) {
 /**
  * Removes all listeners from this map. If opt_type is provided, only
  * listeners that match the given type are removed.
- * @param {string=} opt_type Type of event to remove.
+ * @param {string|!goog.events.EventId=} opt_type Type of event to remove.
  * @return {number} Number of listeners removed.
  */
 goog.events.ListenerMap.prototype.removeAll = function(opt_type) {
+  var typeStr = opt_type && opt_type.toString();
   var count = 0;
   for (var type in this.listeners) {
-    if (!opt_type || type == opt_type) {
+    if (!typeStr || type == typeStr) {
       var listenerArray = this.listeners[type];
       for (var i = 0; i < listenerArray.length; i++) {
         ++count;
@@ -204,13 +207,14 @@ goog.events.ListenerMap.prototype.removeAll = function(opt_type) {
 /**
  * Gets all listeners that match the given type and capture mode. The
  * returned array is a copy (but the listener objects are not).
- * @param {string} type The type of the listeners to retrieve.
+ * @param {string|!goog.events.EventId} type The type of the listeners
+ *     to retrieve.
  * @param {boolean} capture The capture mode of the listeners to retrieve.
  * @return {!Array.<goog.events.ListenableKey>} An array of matching
  *     listeners.
  */
 goog.events.ListenerMap.prototype.getListeners = function(type, capture) {
-  var listenerArray = this.listeners[type];
+  var listenerArray = this.listeners[type.toString()];
   var rv = [];
   if (listenerArray) {
     for (var i = 0; i < listenerArray.length; ++i) {
@@ -228,7 +232,8 @@ goog.events.ListenerMap.prototype.getListeners = function(type, capture) {
  * Gets the goog.events.ListenableKey for the event or null if no such
  * listener is in use.
  *
- * @param {string} type The type of the listener to retrieve.
+ * @param {string|!goog.events.EventId} type The type of the listener
+ *     to retrieve.
  * @param {!Function} listener The listener function to get.
  * @param {boolean} capture Whether the listener is a capturing listener.
  * @param {Object=} opt_listenerScope Object in whose scope to call the
@@ -237,7 +242,7 @@ goog.events.ListenerMap.prototype.getListeners = function(type, capture) {
  */
 goog.events.ListenerMap.prototype.getListener = function(
     type, listener, capture, opt_listenerScope) {
-  var listenerArray = this.listeners[type];
+  var listenerArray = this.listeners[type.toString()];
   var i = -1;
   if (listenerArray) {
     i = goog.events.ListenerMap.findListenerIndex_(
@@ -252,7 +257,7 @@ goog.events.ListenerMap.prototype.getListener = function(
  * parameters are unspecified, the function will match on the
  * remaining criteria.
  *
- * @param {string=} opt_type The type of the listener.
+ * @param {string|!goog.events.EventId=} opt_type The type of the listener.
  * @param {boolean=} opt_capture The capture mode of the listener.
  * @return {boolean} Whether there is an active listener matching
  *     the requested type and/or capture phase.
@@ -260,12 +265,13 @@ goog.events.ListenerMap.prototype.getListener = function(
 goog.events.ListenerMap.prototype.hasListener = function(
     opt_type, opt_capture) {
   var hasType = goog.isDef(opt_type);
+  var typeStr = hasType ? opt_type.toString() : '';
   var hasCapture = goog.isDef(opt_capture);
 
   return goog.object.some(
       this.listeners, function(listenerArray, type) {
         for (var i = 0; i < listenerArray.length; ++i) {
-          if ((!hasType || listenerArray[i].type == opt_type) &&
+          if ((!hasType || listenerArray[i].type == typeStr) &&
               (!hasCapture || listenerArray[i].capture == opt_capture)) {
             return true;
           }
