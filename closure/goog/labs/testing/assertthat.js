@@ -55,6 +55,6 @@ goog.labs.testing.assertThat = function(actual, matcher, opt_reason) {
  * @final
  */
 goog.labs.testing.MatcherError = function(opt_message) {
-  goog.base(this, opt_message);
+  goog.labs.testing.MatcherError.base(this, 'constructor', opt_message);
 };
 goog.inherits(goog.labs.testing.MatcherError, goog.debug.Error);

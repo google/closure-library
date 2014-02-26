@@ -47,7 +47,7 @@ goog.require('goog.events.EventTarget');
  * @final
  */
 goog.labs.style.PixelDensityMonitor = function(opt_domHelper) {
-  goog.base(this);
+  goog.labs.style.PixelDensityMonitor.base(this, 'constructor');
 
   /**
    * @type {Window}
@@ -175,5 +175,5 @@ goog.labs.style.PixelDensityMonitor.prototype.disposeInternal = function() {
   if (this.mediaQueryList_) {
     this.mediaQueryList_.removeListener(this.listener_);
   }
-  goog.base(this, 'disposeInternal');
+  goog.labs.style.PixelDensityMonitor.base(this, 'disposeInternal');
 };

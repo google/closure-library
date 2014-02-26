@@ -83,7 +83,7 @@ goog.labs.format.csv.ParseError = function(text, index, opt_message) {
     }
   }
 
-  goog.base(this, message);
+  goog.labs.format.csv.ParseError.base(this, 'constructor', message);
 };
 goog.inherits(goog.labs.format.csv.ParseError, goog.debug.Error);
 

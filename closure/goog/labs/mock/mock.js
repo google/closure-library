@@ -150,7 +150,7 @@ goog.labs.mock.formatMethodCall_ = function(methodName, opt_args) {
 goog.labs.mock.VerificationError = function(recordedCalls, methodName, args) {
   var msg = goog.labs.mock.VerificationError.getVerificationErrorMsg_(
       recordedCalls, methodName, args);
-  goog.base(this, msg);
+  goog.labs.mock.VerificationError.base(this, 'constructor', msg);
 };
 goog.inherits(goog.labs.mock.VerificationError, goog.debug.Error);
 
@@ -404,7 +404,7 @@ goog.labs.mock.MockManager_.prototype.verifyInvocation =
  * @private
  */
 goog.labs.mock.MockObjectManager_ = function(objOrClass) {
-  goog.base(this);
+  goog.labs.mock.MockObjectManager_.base(this, 'constructor');
 
   /**
    * Proxies the calls to establish the first step of the stub bindings (object
@@ -495,7 +495,7 @@ goog.inherits(goog.labs.mock.MockObjectManager_,
  * @private
  */
 goog.labs.mock.MockSpyManager_ = function(obj) {
-  goog.base(this, obj);
+  goog.labs.mock.MockSpyManager_.base(this, 'constructor', obj);
 };
 goog.inherits(goog.labs.mock.MockSpyManager_,
               goog.labs.mock.MockObjectManager_);
@@ -510,7 +510,8 @@ goog.inherits(goog.labs.mock.MockSpyManager_,
  */
 goog.labs.mock.MockSpyManager_.prototype.findBinding =
     function(methodName, args) {
-  var stub = goog.base(this, 'findBinding', methodName, args);
+  var stub = goog.labs.mock.MockSpyManager_.base(
+      this, 'findBinding', methodName, args);
 
   if (!stub) {
     stub = goog.bind(this.mockee[methodName], this.mockee);
@@ -534,7 +535,7 @@ goog.labs.mock.MockSpyManager_.prototype.findBinding =
  * @private
  */
 goog.labs.mock.MockFunctionManager_ = function(func) {
-  goog.base(this);
+  goog.labs.mock.MockFunctionManager_.base(this, 'constructor');
 
   this.func_ = func;
 
