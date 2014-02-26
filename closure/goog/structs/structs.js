@@ -169,6 +169,8 @@ goog.structs.clear = function(col) {
  * @param {T=} opt_obj The object to be used as the value of 'this'
  *     within {@code f}.
  * @template T,S
+ * @deprecated Use a more specific method (e.g. goog.array.forEach,
+ *     goog.object.forEach, etc.)
  */
 goog.structs.forEach = function(col, f, opt_obj) {
   if (typeof col.forEach == 'function') {
