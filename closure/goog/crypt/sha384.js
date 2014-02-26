@@ -29,7 +29,7 @@ goog.require('goog.crypt.Sha2_64bit');
 
 
 /**
- * SHA-384 cryptographic hash constructor.
+ * Constructs a SHA-384 cryptographic hash.
  *
  * @constructor
  * @extends {goog.crypt.Sha2_64bit}

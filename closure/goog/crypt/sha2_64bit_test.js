@@ -43,6 +43,7 @@ function testBasicOperations() {
  * Each object in the test vector array is a source text and one or more
  * hashes of that source text.  The source text is either a string or a
  * byte array.
+ * <p>
  * All hash values, except for the empty string, are from public sources:
  *   csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf
  *   csrc.nist.gov/groups/ST/toolkit/documents/Examples/SHA384.pdf
@@ -112,8 +113,12 @@ var testVector = [
  * hash to specific published values.
  *
  * Each item in the vector has a "source" and one or more additional keys.
- * If the item has a key matching the key passed as an argument to this
+ * If the item has a key matching the key argument passed to this
  * function, it is the expected value of the hash function.
+ *
+ * @param {goog.crypt.Sha2_64bit} hasher The hasher to test
+ * @param {string} key The key in testVector whose value represents the
+ *     expected result of this hash on the source.
  */
 function hashGoldenTester(hasher, key) {
   count = 0;
@@ -127,30 +132,32 @@ function hashGoldenTester(hasher, key) {
       count++;
     }
   });
+  // There must be a typo if no tests are run.  This assertion assures that
+  // the test code is correct.
   assertTrue('Error in testing.  At least one test should be run',
       count > 0);
 }
 
 
-/** Test that Sha512() returns expected values */
+/** Test that Sha512() returns the published values */
 function testHashing512() {
   hashGoldenTester(new goog.crypt.Sha512(), '512');
 }
 
 
-/** Test that Sha384 returns expected values */
+/** Test that Sha384 returns the published values */
 function testHashing384() {
   hashGoldenTester(new goog.crypt.Sha384(), '384');
 }
 
 
-/** Test that Sha512_256 returns expected values */
+/** Test that Sha512_256 returns the published values */
 function testHashing256() {
   hashGoldenTester(new goog.crypt.Sha512_256(), '256');
 }
 
 
-/** Check that the code checks for bad input */
+/** Check that the code throws an error for bad input */
 function testBadInput() {
   assertThrows('Bad input', function() {
     new goog.crypt.Sha512().update({});

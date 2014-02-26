@@ -20,7 +20,7 @@
  * should bear no relationship to each other.
  *
  * Please be careful before using this hash function.
- *
+ * <p>
  * Usage:
  *   var sha512_256 = new goog.crypt.Sha512_256();
  *   sha512_256.update(bytes);
@@ -35,7 +35,7 @@ goog.require('goog.crypt.Sha2_64bit');
 
 
 /**
- * SHA-512/256 cryptographic hash constructor.
+ * Constructs a SHA-512/256 cryptographic hash.
  *
  * @constructor
  * @extends {goog.crypt.Sha2_64bit}
