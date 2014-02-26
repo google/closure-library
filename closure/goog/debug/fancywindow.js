@@ -48,7 +48,7 @@ goog.require('goog.userAgent');
  */
 goog.debug.FancyWindow = function(opt_identifier, opt_prefix) {
   this.readOptionsFromLocalStorage_();
-  goog.base(this, opt_identifier, opt_prefix);
+  goog.debug.FancyWindow.base(this, 'constructor', opt_identifier, opt_prefix);
 };
 goog.inherits(goog.debug.FancyWindow, goog.debug.DebugWindow);
 
@@ -233,7 +233,7 @@ goog.debug.FancyWindow.prototype.exit_ = function(e) {
 
 /** @override */
 goog.debug.FancyWindow.prototype.getStyleRules = function() {
-  return goog.base(this, 'getStyleRules') +
+  return goog.debug.FancyWindow.base(this, 'getStyleRules') +
       'html,body{height:100%;width:100%;margin:0px;padding:0px;' +
       'background-color:#FFF;overflow:hidden}' +
       '*{}' +

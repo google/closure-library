@@ -38,7 +38,7 @@ goog.require('goog.ui.Component');
  * @final
  */
 goog.debug.FpsDisplay = function(opt_domHelper) {
-  goog.base(this, opt_domHelper);
+  goog.debug.FpsDisplay.base(this, 'constructor', opt_domHelper);
 };
 goog.inherits(goog.debug.FpsDisplay, goog.ui.Component);
 
@@ -72,7 +72,7 @@ goog.debug.FpsDisplay.prototype.createDom = function() {
 
 /** @override */
 goog.debug.FpsDisplay.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
+  goog.debug.FpsDisplay.base(this, 'enterDocument');
   this.animation_ = new goog.debug.FpsDisplay.FpsAnimation_(this.getElement());
   this.delay_ = new goog.async.AnimationDelay(
       this.handleDelay_, this.getDomHelper().getWindow(), this);
@@ -94,7 +94,7 @@ goog.debug.FpsDisplay.prototype.handleDelay_ = function(now) {
 
 /** @override */
 goog.debug.FpsDisplay.prototype.exitDocument = function() {
-  goog.base(this, 'exitDocument');
+  goog.debug.FpsDisplay.base(this, 'exitDocument');
   this.animation_ = null;
   goog.dispose(this.delay_);
 };

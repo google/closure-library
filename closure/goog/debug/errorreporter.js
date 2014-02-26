@@ -55,7 +55,7 @@ goog.require('goog.userAgent');
  */
 goog.debug.ErrorReporter = function(
     handlerUrl, opt_contextProvider, opt_noAutoProtect) {
-  goog.base(this);
+  goog.debug.ErrorReporter.base(this, 'constructor');
 
   /**
    * Context provider, if one was provided.
@@ -425,5 +425,5 @@ goog.debug.ErrorReporter.prototype.disposeInternal = function() {
   if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
     goog.dispose(this.errorHandler_);
   }
-  goog.base(this, 'disposeInternal');
+  goog.debug.ErrorReporter.base(this, 'disposeInternal');
 };
