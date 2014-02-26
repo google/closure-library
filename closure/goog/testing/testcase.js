@@ -856,7 +856,7 @@ goog.testing.TestCase.prototype.cycleTests = function() {
     if (this.currentTestPointer_ < this.tests_.length &&
         this.now() - this.batchTime_ > goog.testing.TestCase.MAX_RUN_TIME) {
       this.saveMessage('Breaking async');
-      this.timeout(goog.bind(this.cycleTests, this), 100);
+      this.timeout(goog.bind(this.cycleTests, this), 0);
       return;
     }
   }
