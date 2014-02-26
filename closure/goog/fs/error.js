@@ -54,7 +54,8 @@ goog.fs.Error = function(error, action) {
     this.code = error.code;
     this.name = goog.fs.Error.getNameFromCode_(error.code);
   }
-  goog.base(this, goog.string.subs('%s %s', this.name, action));
+  goog.fs.Error.base(this, 'constructor',
+      goog.string.subs('%s %s', this.name, action));
 };
 goog.inherits(goog.fs.Error, goog.debug.Error);
 

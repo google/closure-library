@@ -515,7 +515,7 @@ goog.ui.Palette.prototype.highlightIndex_ = function(index, highlight) {
 
 /** @override */
 goog.ui.Palette.prototype.setHighlighted = function(highlight) {
-  goog.base(this, 'setHighlighted', highlight);
+  goog.ui.Palette.base(this, 'setHighlighted', highlight);
   if (highlight && this.highlightedIndex_ == -1) {
     // If there was a last highlighted index, use that. Otherwise, highlight the
     // first cell.

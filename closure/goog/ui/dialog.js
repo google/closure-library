@@ -88,7 +88,7 @@ goog.require('goog.userAgent');
  * @extends {goog.ui.ModalPopup}
  */
 goog.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper) {
-  goog.base(this, opt_useIframeMask, opt_domHelper);
+  goog.ui.Dialog.base(this, 'constructor', opt_useIframeMask, opt_domHelper);
 
   /**
    * CSS class name for the dialog element, also used as a class name prefix for
@@ -444,7 +444,7 @@ goog.ui.Dialog.prototype.getDialogElement = function() {
  */
 goog.ui.Dialog.prototype.getBackgroundElement = function() {
   this.renderIfNoDom_();
-  return goog.base(this, 'getBackgroundElement');
+  return goog.ui.Dialog.base(this, 'getBackgroundElement');
 };
 
 
@@ -594,7 +594,7 @@ goog.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
 
 /** @override */
 goog.ui.Dialog.prototype.createDom = function() {
-  goog.base(this, 'createDom');
+  goog.ui.Dialog.base(this, 'createDom');
   var element = this.getElement();
   goog.asserts.assert(element, 'getElement() returns null');
 
@@ -643,7 +643,7 @@ goog.ui.Dialog.prototype.createDom = function() {
 
 /** @override */
 goog.ui.Dialog.prototype.decorateInternal = function(element) {
-  goog.base(this, 'decorateInternal', element);
+  goog.ui.Dialog.base(this, 'decorateInternal', element);
   var dialogElement = this.getElement();
   goog.asserts.assert(dialogElement,
       'The DOM element for dialog cannot be null.');
@@ -726,7 +726,7 @@ goog.ui.Dialog.prototype.decorateInternal = function(element) {
 
 /** @override */
 goog.ui.Dialog.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
+  goog.ui.Dialog.base(this, 'enterDocument');
 
   // Listen for keyboard events while the dialog is visible.
   this.getHandler().
@@ -775,7 +775,7 @@ goog.ui.Dialog.prototype.exitDocument = function() {
   // Remove drag support.
   this.setDraggingEnabled_(false);
 
-  goog.base(this, 'exitDocument');
+  goog.ui.Dialog.base(this, 'exitDocument');
 };
 
 
@@ -797,20 +797,20 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
     this.render();
   }
 
-  goog.base(this, 'setVisible', visible);
+  goog.ui.Dialog.base(this, 'setVisible', visible);
 };
 
 
 /** @override */
 goog.ui.Dialog.prototype.onShow = function() {
-  goog.base(this, 'onShow');
+  goog.ui.Dialog.base(this, 'onShow');
   this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_SHOW);
 };
 
 
 /** @override */
 goog.ui.Dialog.prototype.onHide = function() {
-  goog.base(this, 'onHide');
+  goog.ui.Dialog.base(this, 'onHide');
   this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_HIDE);
   if (this.disposeOnHide_) {
     this.dispose();
@@ -942,7 +942,7 @@ goog.ui.Dialog.prototype.getDisposeOnHide = function() {
 goog.ui.Dialog.prototype.disposeInternal = function() {
   this.titleCloseEl_ = null;
   this.buttonEl_ = null;
-  goog.base(this, 'disposeInternal');
+  goog.ui.Dialog.base(this, 'disposeInternal');
 };
 
 

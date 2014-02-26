@@ -239,6 +239,6 @@ goog.ui.registry.setDecoratorByClassName(goog.ui.MenuItemRenderer.CSS_CLASS,
  * @override
  */
 goog.ui.MenuItem.prototype.createDom = function() {
-  goog.base(this, 'createDom');
+  goog.ui.MenuItem.base(this, 'createDom');
   this.getRenderer().correctAriaRole(this, this.getElement());
 };
