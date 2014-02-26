@@ -6,106 +6,16 @@ Copyright 2010 The Closure Library Authors. All Rights Reserved.
 Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
-<head>
-<title>Closure Unit Tests - goog.string.path</title>
-<script src="../base.js"></script>
-<script>
-  goog.require('goog.string.path');
-  goog.require('goog.testing.jsunit');
-</script>
-</head>
-<body>
-<script>
-
-// Some test data comes from Python's posixpath tests.
-// See http://svn.python.org/view/python/trunk/Lib/test/test_posixpath.py
-
-function testBasename() {
-  assertEquals('bar', goog.string.path.baseName('/foo/bar'));
-  assertEquals('', goog.string.path.baseName('/'));
-  assertEquals('foo', goog.string.path.baseName('foo'));
-  assertEquals('foo', goog.string.path.baseName('////foo'));
-  assertEquals('bar', goog.string.path.baseName('//foo//bar'));
-}
-
-function testDirname() {
-  assertEquals('/foo', goog.string.path.dirname('/foo/bar'));
-  assertEquals('/', goog.string.path.dirname('/'));
-  assertEquals('', goog.string.path.dirname('foo'));
-  assertEquals('////', goog.string.path.dirname('////foo'));
-  assertEquals('//foo', goog.string.path.dirname('//foo//bar'));
-}
-
-function testJoin() {
-  assertEquals('/bar/baz',
-              goog.string.path.join('/foo', 'bar', '/bar', 'baz'));
-  assertEquals('/foo/bar/baz',
-              goog.string.path.join('/foo', 'bar', 'baz'));
-  assertEquals('/foo/bar/baz',
-              goog.string.path.join('/foo/', 'bar', 'baz'))
-  assertEquals('/foo/bar/baz/',
-              goog.string.path.join('/foo/', 'bar/', 'baz/'))
-}
-
-function testNormalizePath() {
-  assertEquals('.', goog.string.path.normalizePath(''));
-  assertEquals('.', goog.string.path.normalizePath('./'));
-  assertEquals('/', goog.string.path.normalizePath('/'));
-  assertEquals('//', goog.string.path.normalizePath('//'));
-  assertEquals('/', goog.string.path.normalizePath('///'));
-  assertEquals('/foo/bar',
-               goog.string.path.normalizePath('///foo/.//bar//'));
-  assertEquals('/foo/baz',
-               goog.string.path.normalizePath('///foo/.//bar//.//..//.//baz'));
-  assertEquals('/foo/bar',
-               goog.string.path.normalizePath('///..//./foo/.//bar'));
-  assertEquals('../../cat/dog',
-               goog.string.path.normalizePath('../../cat/dog/'));
-  assertEquals('../dog',
-               goog.string.path.normalizePath('../cat/../dog/'));
-  assertEquals('/cat/dog',
-               goog.string.path.normalizePath('/../cat/dog/'));
-  assertEquals('/dog',
-               goog.string.path.normalizePath('/../cat/../dog'));
-  assertEquals('/dog',
-               goog.string.path.normalizePath('/../../../dog'));
-}
-
-function testSplit() {
-  assertArrayEquals(['/foo', 'bar'], goog.string.path.split('/foo/bar'));
-  assertArrayEquals(['/', ''], goog.string.path.split('/'));
-  assertArrayEquals(['', 'foo'], goog.string.path.split('foo'));
-  assertArrayEquals(['////', 'foo'], goog.string.path.split('////foo'));
-  assertArrayEquals(['//foo', 'bar'], goog.string.path.split('//foo//bar'));
-}
-
-function testExtension() {
-  assertEquals('jpg', goog.string.path.extension('././foo/bar/baz.jpg'));
-  assertEquals('jpg', goog.string.path.extension('././foo bar/baz.jpg'));
-  assertEquals('jpg', goog.string.path.extension(
-      'foo/bar/baz/blah blah.jpg'));
-  assertEquals('', goog.string.path.extension('../../foo/bar/baz baz'));
-  assertEquals('', goog.string.path.extension('../../foo bar/baz baz'));
-  assertEquals('', goog.string.path.extension('foo/bar/.'));
-  assertEquals('', goog.string.path.extension('  '));
-  assertEquals('', goog.string.path.extension(''));
-  assertEquals('', goog.string.path.extension('/home/username/.bashrc'));
-
-  // Tests cases taken from python os.path.splitext().
-  assertEquals("bar", goog.string.path.extension("foo.bar"));
-  assertEquals("bar", goog.string.path.extension("foo.boo.bar"));
-  assertEquals("bar", goog.string.path.extension("foo.boo.biff.bar"));
-  assertEquals("rc", goog.string.path.extension(".csh.rc"));
-  assertEquals("", goog.string.path.extension("nodots"));
-  assertEquals("", goog.string.path.extension(".cshrc"));
-  assertEquals("", goog.string.path.extension("...manydots"));
-  assertEquals("ext", goog.string.path.extension("...manydots.ext"));
-  assertEquals("", goog.string.path.extension("."));
-  assertEquals("", goog.string.path.extension(".."));
-  assertEquals("", goog.string.path.extension("........"));
-  assertEquals("", goog.string.path.extension(""));
-}
-
-</script>
-</body>
+ <head>
+  <title>
+   Closure Unit Tests - goog.string.path
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+    goog.require('goog.string.pathTest');
+  </script>
+ </head>
+ <body>
+ </body>
 </html>
