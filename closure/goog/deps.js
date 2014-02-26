@@ -832,8 +832,10 @@ goog.addDependency('proto2/textformatserializer.js', ['goog.proto2.TextFormatSer
 goog.addDependency('proto2/textformatserializer_test.js', ['goog.proto2.TextFormatSerializerTest'], ['goog.proto2.ObjectSerializer', 'goog.proto2.TextFormatSerializer', 'goog.testing.jsunit', 'proto2.TestAllTypes']);
 goog.addDependency('proto2/util.js', ['goog.proto2.Util'], ['goog.asserts']);
 goog.addDependency('pubsub/pubsub.js', ['goog.pubsub.PubSub'], ['goog.Disposable', 'goog.array']);
+goog.addDependency('pubsub/pubsub_test.js', ['goog.pubsub.PubSubTest'], ['goog.array', 'goog.pubsub.PubSub', 'goog.testing.jsunit']);
 goog.addDependency('pubsub/topicid.js', ['goog.pubsub.TopicId'], []);
 goog.addDependency('pubsub/typedpubsub.js', ['goog.pubsub.TypedPubSub'], ['goog.Disposable', 'goog.pubsub.PubSub']);
+goog.addDependency('pubsub/typedpubsub_test.js', ['goog.pubsub.TypedPubSubTest'], ['goog.array', 'goog.pubsub.TopicId', 'goog.pubsub.TypedPubSub', 'goog.testing.jsunit']);
 goog.addDependency('reflect/reflect.js', ['goog.reflect'], []);
 goog.addDependency('result/deferredadaptor.js', ['goog.result.DeferredAdaptor'], ['goog.async.Deferred', 'goog.result', 'goog.result.Result']);
 goog.addDependency('result/dependentresult.js', ['goog.result.DependentResult'], ['goog.result.Result']);
