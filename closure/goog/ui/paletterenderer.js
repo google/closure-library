@@ -172,6 +172,8 @@ goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
         goog.ui.PaletteRenderer.cellId_++
   }, node);
   goog.a11y.aria.setRole(cell, goog.a11y.aria.Role.GRIDCELL);
+  // Initialize to an unselected state.
+  goog.a11y.aria.setState(cell, goog.a11y.aria.State.SELECTED, false);
 
   if (!goog.dom.getTextContent(cell) && !goog.a11y.aria.getLabel(cell)) {
     var ariaLabelForCell = this.findAriaLabelForCell_(cell);
@@ -357,6 +359,7 @@ goog.ui.PaletteRenderer.prototype.selectCell = function(palette, node, select) {
     goog.dom.classlist.enable(cell,
         goog.getCssName(this.getCssClass(), 'cell-selected'),
         select);
+    goog.a11y.aria.setState(cell, goog.a11y.aria.State.SELECTED, select);
   }
 };
 
