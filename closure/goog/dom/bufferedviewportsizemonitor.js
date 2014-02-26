@@ -48,7 +48,7 @@ goog.require('goog.events.EventType');
  */
 goog.dom.BufferedViewportSizeMonitor = function(
     viewportSizeMonitor, opt_bufferMs) {
-  goog.base(this);
+  goog.dom.BufferedViewportSizeMonitor.base(this, 'constructor');
 
   /**
    * The underlying viewport size monitor.
@@ -119,7 +119,7 @@ goog.dom.BufferedViewportSizeMonitor.RESIZE_EVENT_DELAY_MS_ = 100;
 goog.dom.BufferedViewportSizeMonitor.prototype.disposeInternal =
     function() {
   goog.events.unlistenByKey(this.listenerKey_);
-  goog.base(this, 'disposeInternal');
+  goog.dom.BufferedViewportSizeMonitor.base(this, 'disposeInternal');
 };
 
 
