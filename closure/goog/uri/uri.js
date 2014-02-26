@@ -339,7 +339,7 @@ goog.Uri.prototype.resolve = function(relativeUri) {
 
 /**
  * Clones the URI instance.
- * @return {!goog.Uri} New instance of the URI objcet.
+ * @return {!goog.Uri} New instance of the URI object.
  */
 goog.Uri.prototype.clone = function() {
   return new goog.Uri(this);
