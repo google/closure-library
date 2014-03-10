@@ -34,14 +34,14 @@ function testSafeHtml() {
   // TODO(user): Consider using SafeHtmlBuilder instead of newSafeHtmlForTest,
   // when available.
   var safeHtml = goog.html.testing.newSafeHtmlForTest('Hello <em>World</em>');
-  assertEquals('Hello <em>World</em>', goog.html.SafeHtml.unwrap(safeHtml));
+  assertSameHtml('Hello <em>World</em>', safeHtml);
   assertEquals('Hello <em>World</em>', safeHtml.getTypedStringValue());
   assertEquals('SafeHtml{Hello <em>World</em>}', String(safeHtml));
   assertNull(safeHtml.getDirection());
 
   safeHtml = goog.html.testing.newSafeHtmlForTest(
       'World <em>Hello</em>', goog.i18n.bidi.Dir.RTL);
-  assertEquals('World <em>Hello</em>', goog.html.SafeHtml.unwrap(safeHtml));
+  assertSameHtml('World <em>Hello</em>', safeHtml);
   assertEquals('World <em>Hello</em>', safeHtml.getTypedStringValue());
   assertEquals('SafeHtml{World <em>Hello</em>}', String(safeHtml));
   assertEquals(goog.i18n.bidi.Dir.RTL, safeHtml.getDirection());
@@ -51,7 +51,7 @@ function testSafeHtml() {
   assertTrue(safeHtml.implementsGoogI18nBidiDirectionalString);
 
   // Pre-defined constant.
-  assertEquals('', goog.html.SafeHtml.unwrap(goog.html.SafeHtml.EMPTY));
+  assertSameHtml('', goog.html.SafeHtml.EMPTY);
 }
 
 
@@ -73,8 +73,7 @@ function testSafeHtmlFromEscapedText() {
   // TODO(user): goog.string.htmlEscape currently doesn't escape single-quotes.
   // It should.  Include that in the test once it does.
   var safeHtml = goog.html.SafeHtml.htmlEscape('Hello <em>"&World</em>');
-  var extracted = goog.html.SafeHtml.unwrap(safeHtml);
-  assertEquals('Hello &lt;em&gt;&quot;&amp;World&lt;/em&gt;', extracted);
+  assertSameHtml('Hello &lt;em&gt;&quot;&amp;World&lt;/em&gt;', safeHtml);
   assertEquals('SafeHtml{Hello &lt;em&gt;&quot;&amp;World&lt;/em&gt;}',
       String(safeHtml));
 }
@@ -86,25 +85,22 @@ function testSafeHtmlFrom() {
   assertTrue(safeHtmlIn === goog.html.SafeHtml.from(safeHtmlIn));
 
   // Plain strings are escaped.
-  assertEquals('this &amp; that',
-      goog.html.SafeHtml.unwrap(goog.html.SafeHtml.from('this & that')));
+  assertSameHtml('this &amp; that', goog.html.SafeHtml.from('this & that'));
 
   // Creating from a SafeUrl escapes and retains the known direction (which is
   // fixed to RTL for URLs).
   var safeUrl = goog.html.SafeUrl.fromConstant(
       goog.string.Const.from('http://example.com/?foo&bar'));
   var escapedUrl = goog.html.SafeHtml.from(safeUrl);
-  assertEquals('http://example.com/?foo&amp;bar',
-      goog.html.SafeHtml.unwrap(escapedUrl));
+  assertSameHtml('http://example.com/?foo&amp;bar', escapedUrl);
   assertEquals(goog.i18n.bidi.Dir.LTR, escapedUrl.getDirection());
 
   // Creating SafeHtml from a goog.string.Const escapes as well (i.e., the
   // value is treated like any other string). To create HTML markup from
   // program literals, SafeHtmlBuilder should be used.
-  assertEquals('this &amp; that',
-      goog.html.SafeHtml.unwrap(
-          goog.html.SafeHtml.from(
-              goog.string.Const.from('this & that'))));
+  assertSameHtml('this &amp; that',
+      goog.html.SafeHtml.from(
+          goog.string.Const.from('this & that')));
 }
 
 
@@ -116,7 +112,90 @@ function testSafeHtmlUncheckedConversion() {
                   'Safe because value is constant and ends in inner HTML. ' +
                   'Security review: b/7685625.'),
               'Hello <em>World</em>');
-  var extracted = goog.html.SafeHtml.unwrap(safeHtml);
-  assertEquals('Hello <em>World</em>', extracted);
+  assertSameHtml('Hello <em>World</em>', safeHtml);
   assertEquals('SafeHtml{Hello <em>World</em>}', String(safeHtml));
+}
+
+
+function testSafeHtmlCreate() {
+  var br = goog.html.SafeHtml.create('br');
+
+  assertSameHtml('<br>', br);
+
+  assertSameHtml('<span title="&quot;"></span>',
+      goog.html.SafeHtml.create('span', {title: '"'}));
+
+  assertSameHtml('<span>&lt;</span>',
+      goog.html.SafeHtml.create('span', {}, '<'));
+
+  assertSameHtml('<span><br></span>',
+      goog.html.SafeHtml.create('span', {}, br));
+
+  assertSameHtml('<span></span>', goog.html.SafeHtml.create('span', {}, []));
+
+  assertSameHtml('<span></span>',
+      goog.html.SafeHtml.create('span', {title: null, 'class': undefined}));
+
+  assertSameHtml('<span>x<br>y</span>',
+      goog.html.SafeHtml.create('span', {}, ['x', br, 'y']));
+
+  var onclick = goog.string.Const.from('alert(/"/)');
+  assertSameHtml('<span onclick="alert(/&quot;/)"></span>',
+      goog.html.SafeHtml.create('span', {onclick: onclick}));
+
+  var href = goog.html.testing.newSafeUrlForTest('?a&b');
+  assertSameHtml('<a href="?a&amp;b"></a>',
+      goog.html.SafeHtml.create('a', {href: href}));
+
+  assertNull(goog.html.SafeHtml.create('span').getDirection());
+  assertNull(goog.html.SafeHtml.create('span', {dir: 'auto'}).getDirection());
+  assertEquals(goog.i18n.bidi.Dir.LTR,
+      goog.html.SafeHtml.create('span', {dir: 'ltr'}).getDirection());
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('script');
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('br', {}, 'x');
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('img', {onerror: ''});
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('a', {href: 'javascript:alert(1)'});
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('a href=""');
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('a', {'title="" href': ''});
+  });
+}
+
+
+function testSafeHtmlConcat() {
+  var html = goog.html.SafeHtml.htmlEscape('Hello ');
+  var append = goog.html.testing.newSafeHtmlForTest('<em>World</em>');
+  assertSameHtml('Hello <em>World</em>',
+      goog.html.SafeHtml.concat(html, append));
+
+  assertSameHtml('', goog.html.SafeHtml.concat());
+
+  var ltr = goog.html.testing.newSafeHtmlForTest('', goog.i18n.bidi.Dir.LTR);
+  var rtl = goog.html.testing.newSafeHtmlForTest('', goog.i18n.bidi.Dir.RTL);
+  assertEquals(goog.i18n.bidi.Dir.LTR,
+      goog.html.SafeHtml.concat(ltr, ltr).getDirection());
+  assertNull(goog.html.SafeHtml.concat(ltr, goog.html.SafeHtml.EMPTY)
+      .getDirection());
+  assertNull(goog.html.SafeHtml.concat(ltr, rtl).getDirection());
+}
+
+
+function assertSameHtml(expected, html) {
+  assertEquals(expected, goog.html.SafeHtml.unwrap(html));
 }
