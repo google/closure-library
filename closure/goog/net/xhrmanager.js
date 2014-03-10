@@ -40,7 +40,6 @@ goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XhrIoPool');
-goog.require('goog.structs');
 goog.require('goog.structs.Map');
 
 // TODO(user): Add some time in between retries.
@@ -486,12 +485,7 @@ goog.net.XhrManager.prototype.disposeInternal = function() {
   this.eventHandler_.dispose();
   this.eventHandler_ = null;
 
-  // Call dispose on each request.
-  var requests = this.requests_;
-  goog.structs.forEach(requests, function(value, key) {
-    value.dispose();
-  });
-  requests.clear();
+  this.requests_.clear();
   this.requests_ = null;
 };
 
