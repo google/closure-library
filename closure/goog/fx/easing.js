@@ -26,41 +26,18 @@ goog.provide('goog.fx.easing');
  * @return {number} Output between 0 and 1.
  */
 goog.fx.easing.easeIn = function(t) {
-  return goog.fx.easing.easeInInternal_(t, 3);
-};
-
-
-/**
- * Ease in with specifiable exponent.
- * @param {number} t Input between 0 and 1.
- * @param {number} exp Ease exponent.
- * @return {number} Output between 0 and 1.
- * @private
- */
-goog.fx.easing.easeInInternal_ = function(t, exp) {
-  return Math.pow(t, exp);
+  return t * t * t;
 };
 
 
 /**
  * Ease out - Start fastest and slows to a stop.
  * @param {number} t Input between 0 and 1.
+ * @param {number=} opt_exponent Ease exponent.  If undefined, defaults to 3.
  * @return {number} Output between 0 and 1.
  */
-goog.fx.easing.easeOut = function(t) {
-  return goog.fx.easing.easeOutInternal_(t, 3);
-};
-
-
-/**
- * Ease out with specifiable exponent.
- * @param {number} t Input between 0 and 1.
- * @param {number} exp Ease exponent.
- * @return {number} Output between 0 and 1.
- * @private
- */
-goog.fx.easing.easeOutInternal_ = function(t, exp) {
-  return 1 - goog.fx.easing.easeInInternal_(t, exp);
+goog.fx.easing.easeOut = function(t, opt_exponent) {
+  return 1 - Math.pow(1 - t, goog.isDef(opt_exponent) ? opt_exponent : 3);
 };
 
 
@@ -70,7 +47,7 @@ goog.fx.easing.easeOutInternal_ = function(t, exp) {
  * @return {number} Output between 0 and 1.
  */
 goog.fx.easing.easeOutLong = function(t) {
-  return goog.fx.easing.easeOutInternal_(t, 4);
+  return goog.fx.easing.easeOut(t, 4);
 };
 
 
