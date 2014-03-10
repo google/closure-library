@@ -161,6 +161,9 @@ goog.structs.clear = function(col) {
  * Calls a function for each value in a collection. The function takes
  * three arguments; the value, the key and the collection.
  *
+ * NOTE: This will be deprecated soon! Please use a more specific method if
+ * possible, e.g. goog.array.forEach, goog.object.forEach, etc.
+ *
  * @param {S} col The collection-like object.
  * @param {function(this:T,?,?,S):?} f The function to call for every value.
  *     This function takes
@@ -169,8 +172,6 @@ goog.structs.clear = function(col) {
  * @param {T=} opt_obj The object to be used as the value of 'this'
  *     within {@code f}.
  * @template T,S
- * @deprecated Use a more specific method (e.g. goog.array.forEach,
- *     goog.object.forEach, etc.)
  */
 goog.structs.forEach = function(col, f, opt_obj) {
   if (typeof col.forEach == 'function') {
