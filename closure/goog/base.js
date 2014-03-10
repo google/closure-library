@@ -50,11 +50,32 @@ goog.global = this;
 /**
  * A hook for overriding the define values in uncompiled mode.
  *
- * In uncompiled mode, {@code CLOSURE_DEFINES} may be defined before loading
- * base.js.  If a key is defined in {@code CLOSURE_DEFINES}, {@code goog.define}
- * will use the value instead of the default value.  This allows flags to be
- * overwritten without compilation (this is normally accomplished with the
- * compiler's "define" flag).
+ * In uncompiled mode, {@code CLOSURE_UNCOMPILED_DEFINES} may be defined before
+ * loading base.js.  If a key is defined in {@code CLOSURE_UNCOMPILED_DEFINES},
+ * {@code goog.define} will use the value instead of the default value.  This
+ * allows flags to be overwritten without compilation (this is normally
+ * accomplished with the compiler's "define" flag).
+ *
+ * Example:
+ * <pre>
+ *   var CLOSURE_UNCOMPILED_DEFINES = {'goog.DEBUG': false};
+ * </pre>
+ *
+ * @type {Object.<string, (string|number|boolean)>|undefined}
+ */
+goog.global.CLOSURE_UNCOMPILED_DEFINES;
+
+
+/**
+ * A hook for overriding the define values in uncompiled or compiled mode,
+ * like CLOSURE_UNCOMPILED_DEFINES but effective in compiled code.  In
+ * uncompiled code CLOSURE_UNCOMPILED_DEFINES takes precedence.
+ *
+ * Also unlike CLOSURE_UNCOMPILED_DEFINES the values must be number, boolean or
+ * string literals or the compiler will emit an error.
+ *
+ * While any @define value may be set, only those set with goog.define will be
+ * effective for uncompiled code.
  *
  * Example:
  * <pre>
@@ -109,9 +130,10 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
 
 /**
  * Defines a named value. In uncompiled mode, the value is retreived from
- * CLOSURE_DEFINES if the object is defined and has the property specified,
- * and otherwise used the defined defaultValue. When compiled, the default
- * can be overridden using compiler command-line options.
+ * CLOSURE_DEFINES or CLOSURE_UNCOMPILED_DEFINES if the object is defined and
+ * has the property specified, and otherwise used the defined defaultValue.
+ * When compiled, the default can be overridden using compiler command-line
+ * options.
  *
  * @param {string} name The distinguished name to provide.
  * @param {string|number|boolean} defaultValue
@@ -119,8 +141,13 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
 goog.define = function(name, defaultValue) {
   var value = defaultValue;
   if (!COMPILED) {
-    if (goog.global.CLOSURE_DEFINES && Object.prototype.hasOwnProperty.call(
-        goog.global.CLOSURE_DEFINES, name)) {
+    if (goog.global.CLOSURE_UNCOMPILED_DEFINES &&
+        Object.prototype.hasOwnProperty.call(
+            goog.global.CLOSURE_UNCOMPILED_DEFINES, name)) {
+      value = goog.global.CLOSURE_UNCOMPILED_DEFINES[name];
+    } else if (goog.global.CLOSURE_DEFINES &&
+        Object.prototype.hasOwnProperty.call(
+            goog.global.CLOSURE_DEFINES, name)) {
       value = goog.global.CLOSURE_DEFINES[name];
     }
   }
