@@ -232,7 +232,6 @@ function testOpera() {
 }
 
 function testUnknownBrowser() {
-  debugger;
   assertUserAgent([], 'MyWebBrowser');
   assertUserAgent([], undefined);
 }
