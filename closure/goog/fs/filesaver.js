@@ -127,7 +127,7 @@ goog.fs.FileSaver.prototype.abort = function() {
   try {
     this.saver_.abort();
   } catch (e) {
-    throw new goog.fs.Error(e.code, 'aborting save');
+    throw new goog.fs.Error(e, 'aborting save');
   }
 };
 
