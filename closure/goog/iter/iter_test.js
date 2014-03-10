@@ -133,8 +133,36 @@ function testFilter() {
   });
 
   assertEquals('68', goog.iter.join(evens2, ''));
-  // Not the order here. The next calls are done lazily
+  // Note the order here. The next calls are done lazily.
   assertEquals('a0b0a1a2b2a3a4b4a5a6b6a7a8b8a9', sb.join(''));
+
+}
+
+function testFilterFalse() {
+  var iter = goog.iter.range(5);
+  var iter2 = goog.iter.filterFalse(iter, function(val, index, iter3) {
+    assertEquals(iter, iter3);
+    assertEquals('index should be undefined', 'undefined', typeof index);
+    return val < 2;
+  });
+
+  assertEquals('234', goog.iter.join(iter2, ''));
+
+  // Chaining filters
+  iter = goog.iter.range(10);
+  var sb = [];
+  var odds = goog.iter.filterFalse(iter, function(v) {
+    sb.push('a' + v);
+    return v % 2 == 0;
+  });
+  var odds2 = goog.iter.filterFalse(odds, function(v) {
+    sb.push('b' + v);
+    return v <= 5;
+  });
+
+  assertEquals('79', goog.iter.join(odds2, ''));
+  // Note the order here. The next calls are done lazily.
+  assertEquals('a0a1b1a2a3b3a4a5b5a6a7b7a8a9b9', sb.join(''));
 
 }
 

@@ -194,7 +194,7 @@ goog.iter.forEach = function(iterable, f, opt_obj) {
  *     function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>):boolean} f
  *     The function to call for every element. This function takes 3 arguments
  *     (the element, undefined, and the iterator) and should return a boolean.
- *     If the return value is true the element will be included  in the returned
+ *     If the return value is true the element will be included in the returned
  *     iterator.  If it is false the element is not included.
  * @param {THIS=} opt_obj The object to be used as the value of 'this' within
  *     {@code f}.
@@ -214,6 +214,29 @@ goog.iter.filter = function(iterable, f, opt_obj) {
     }
   };
   return newIter;
+};
+
+
+/**
+ * Calls a function for every element in the iterator, and if the function
+ * returns false adds the element to a new iterator.
+ *
+ * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable The iterator
+ *     to iterate over.
+ * @param {
+ *     function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>):boolean} f
+ *     The function to call for every element. This function takes 3 arguments
+ *     (the element, undefined, and the iterator) and should return a boolean.
+ *     If the return value is false the element will be included in the returned
+ *     iterator.  If it is true the element is not included.
+ * @param {THIS=} opt_obj The object to be used as the value of 'this' within
+ *     {@code f}.
+ * @return {!goog.iter.Iterator.<VALUE>} A new iterator in which only elements
+ *     that did not pass the test are present.
+ * @template THIS, VALUE
+ */
+goog.iter.filterFalse = function(iterable, f, opt_obj) {
+  return goog.iter.filter(iterable, goog.functions.not(f), opt_obj);
 };
 
 
