@@ -64,14 +64,14 @@ function testIndent() {
   tree.expandAll();
 
   var node = tree.getChildren()[0].getChildren()[0];
-  assertEquals(node.html_,'AAA');
+  assertEquals('AAA', node.getHtml());
   assertNotNull(node.getElement());
   assertEquals('19px', node.getRowElement().style.paddingLeft);
 
   assertEquals(2, node.getDepth());
 
   var newParent = node.getNextSibling();
-  assertEquals('AAB', newParent.html_);
+  assertEquals('AAB', newParent.getHtml());
   assertEquals(2, newParent.getDepth());
 
   newParent.add(node);
@@ -90,14 +90,14 @@ function testOutdent() {
   tree.expandAll();
 
   var node = tree.getChildren()[0].getChildren()[0];
-  assertEquals(node.html_,'AAA');
+  assertEquals('AAA', node.getHtml());
   assertNotNull(node.getElement());
   assertEquals('19px', node.getRowElement().style.paddingLeft);
 
   assertEquals(2, node.getDepth());
 
   var newParent = tree;
-  assertEquals('A', newParent.html_);
+  assertEquals('A', newParent.getHtml());
   assertEquals(0, newParent.getDepth());
 
   newParent.add(node);

@@ -31,7 +31,7 @@ goog.require('goog.ui.tree.BaseNode');
 
 /**
  * A single node in the tree.
- * @param {string} html The html content of the node label.
+ * @param {string|!goog.html.SafeHtml} html The html content of the node label.
  * @param {Object=} opt_config The configuration for the tree. See
  *    goog.ui.tree.TreeControl.defaultConfig. If not specified, a default config
  *    will be used.

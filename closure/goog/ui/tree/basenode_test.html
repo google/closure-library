@@ -17,6 +17,9 @@ See the COPYING file for details.
 
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
+goog.require('goog.html.legacyconversions');
+goog.require('goog.html.testing');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.tree.BaseNode');
@@ -28,6 +31,16 @@ goog.require('goog.ui.tree.TreeNode');
 </head>
 <body>
 <script>
+
+var stubs = new goog.testing.PropertyReplacer();
+
+function setUp() {
+  // Reset global flags to their defaults.
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES',
+      false);
+  stubs.set(goog.ui.tree.BaseNode, 'ALLOW_UNSAFE_API', false);
+}
 
 function testAdd() {
   var node1 = new goog.ui.tree.TreeNode('node1');
@@ -226,6 +239,57 @@ function testInvisibleNodesInRenderedTree() {
   assertContains('Node should be rendered.', 'a', textContent);
   assertContains('Expanded node child should be rendered.', 'b', textContent);
   tree.dispose();
+}
+
+function testConstructor() {
+  var tree = new goog.ui.tree.TreeControl('tree');
+  assertEquals('tree', tree.getHtml());
+
+  tree = new goog.ui.tree.TreeControl(
+      goog.html.testing.newSafeHtmlForTest('tree'));
+  assertEquals('tree', tree.getHtml());
+}
+
+function testSetHtml() {
+  var tree = new goog.ui.tree.TreeControl('');
+  tree.setHtml('<b>tree</b>');
+  assertEquals('<b>tree</b>', tree.getHtml());
+
+  tree = new goog.ui.tree.TreeControl('');
+  tree.setSafeHtml(goog.html.testing.newSafeHtmlForTest('<b>tree</b>'));
+  assertEquals('<b>tree</b>', tree.getHtml());
+}
+
+function testSetHtml_guardedByGlobalFlag() {
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+  assertEquals(
+      'Error: Legacy conversion from string to goog.html types is disabled',
+      assertThrows(function() {
+        new goog.ui.tree.TreeControl('<img src=blag onerror=evil();/>');
+      }).message);
+}
+
+function testSetHtml_guardedByDialogApiFlag() {
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES',
+      true);
+  stubs.set(goog.ui.tree.BaseNode, 'ALLOW_UNSAFE_API', false);
+  assertEquals(
+      'Error: Legacy conversion from string to goog.html types is disabled',
+      assertThrows(function() {
+        var tree = new goog.ui.tree.TreeControl('');
+        tree.setHtml('<img src=blag onerror=evil();/>');
+      }).message);
+}
+
+function testSetHtml_allowedByTreeApiFlag() {
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES',
+      true);
+  stubs.set(goog.ui.tree.BaseNode, 'ALLOW_UNSAFE_API', true);
+  // no exception
+  var tree = new goog.ui.tree.TreeControl('<div>Trusted<' + '/div>');
+  assertEquals('<div>Trusted<' + '/div>', tree.getHtml());
 }
 
 </script>

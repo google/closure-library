@@ -65,17 +65,17 @@ function testJumpToLabel() {
   // Test the case when only one matching entry exists.
   var handled = typeAhead.jumpToLabel_('level1');
   var selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.html_ == 'level1');
+  assertTrue(handled && selectedItem.getHtml() == 'level1');
 
   // Test the case when more than one matching entry exists.
   handled = typeAhead.jumpToLabel_('eve');
   selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.html_ == 'eve');
+  assertTrue(handled && selectedItem.getHtml() == 'eve');
 
   // Test the case when the matching entry is at a deeper level.
   handled = typeAhead.jumpToLabel_('eve3');
   selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.html_ == 'eve3');
+  assertTrue(handled && selectedItem.getHtml() == 'eve3');
 };
 
 /**
@@ -90,7 +90,7 @@ function testJumpTo() {
   var handled = typeAhead.jumpToLabel_('eve') &&
                 typeAhead.jumpTo_(goog.ui.tree.TypeAhead.Offset.DOWN);
   var selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.html_ == 'eve');
+  assertTrue(handled && selectedItem.getHtml() == 'eve');
 
   // Simulate a DOWN key on the tree, now the selection should be on 'eve3'
   var e = new Object();
@@ -98,7 +98,7 @@ function testJumpTo() {
   e.preventDefault = function() {};
   handled = tree.handleKeyEvent(e);
   selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.html_ == 'eve3');
+  assertTrue(handled && selectedItem.getHtml() == 'eve3');
 };
 
 

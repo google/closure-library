@@ -30,7 +30,10 @@ goog.provide('goog.ui.tree.BaseNode.EventType');
 goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
+goog.require('goog.dom.safe');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
@@ -42,7 +45,7 @@ goog.require('goog.userAgent');
 /**
  * An abstract base class for a node in the tree.
  *
- * @param {string} html The html content of the node label.
+ * @param {string|!goog.html.SafeHtml} html The html content of the node label.
  * @param {Object=} opt_config The configuration for the tree. See
  *    {@link goog.ui.tree.TreeControl.defaultConfig}. If not specified the
  *    default config will be used.
@@ -62,12 +65,31 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
 
   /**
    * HTML content of the node label.
-   * @type {string}
+   * @type {!goog.html.SafeHtml}
    * @private
    */
-  this.html_ = html;
+  this.html_ = (html instanceof goog.html.SafeHtml ? html :
+      goog.html.legacyconversions.safeHtmlFromString(html,
+          goog.ui.tree.BaseNode.ALLOW_UNSAFE_API));
 };
 goog.inherits(goog.ui.tree.BaseNode, goog.ui.Component);
+
+
+/**
+ * @define {boolean} Whether goog.ui.tree.BaseNode permits use of its
+ * potentially unsafe API, subject to global defines
+ * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS and
+ * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES.
+ *
+ * For details of intended use, see the fileoverview of
+ * goog.html.legacyconversions.
+ *
+ * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS
+ * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES
+ * @see goog.ui.tree.BaseNode#setHtml
+ * @see goog.ui.tree.BaseNode#setAfterLabelHtml
+ */
+goog.define('goog.ui.tree.BaseNode.ALLOW_UNSAFE_API', false);
 
 
 /**
@@ -118,10 +140,10 @@ goog.ui.tree.BaseNode.prototype.toolTip_ = null;
 
 /**
  * HTML that can appear after the label (so not inside the anchor).
- * @type {string}
+ * @type {!goog.html.SafeHtml}
  * @private
  */
-goog.ui.tree.BaseNode.prototype.afterLabelHtml_ = '';
+goog.ui.tree.BaseNode.prototype.afterLabelHtml_ = goog.html.SafeHtml.EMPTY;
 
 
 /**
@@ -872,20 +894,43 @@ goog.ui.tree.BaseNode.prototype.getLabelHtml = function() {
  * @return {string} The html.
  */
 goog.ui.tree.BaseNode.prototype.getAfterLabelHtml = function() {
+  return goog.html.SafeHtml.unwrap(this.afterLabelHtml_);
+};
+
+
+/**
+ * Returns the html that appears after the label. This is useful if you want to
+ * put extra UI on the row of the label but not inside the anchor tag.
+ * @return {goog.html.SafeHtml} The html.
+ */
+goog.ui.tree.BaseNode.prototype.getAfterLabelSafeHtml = function() {
   return this.afterLabelHtml_;
 };
 
 
+// TODO(user): Deprecate in favor of setSafeHtml, once developer docs on
+// using goog.html.SafeHtml are in place.
 /**
  * Sets the html that appears after the label. This is useful if you want to
  * put extra UI on the row of the label but not inside the anchor tag.
  * @param {string} html The html.
  */
 goog.ui.tree.BaseNode.prototype.setAfterLabelHtml = function(html) {
+  this.setAfterLabelSafeHtml(goog.html.legacyconversions.safeHtmlFromString(
+      html, goog.ui.tree.BaseNode.ALLOW_UNSAFE_API));
+};
+
+
+/**
+ * Sets the html that appears after the label. This is useful if you want to
+ * put extra UI on the row of the label but not inside the anchor tag.
+ * @param {!goog.html.SafeHtml} html The html.
+ */
+goog.ui.tree.BaseNode.prototype.setAfterLabelSafeHtml = function(html) {
   this.afterLabelHtml_ = html;
   var el = this.getAfterLabelElement();
   if (el) {
-    el.innerHTML = html;
+    goog.dom.safe.setInnerHtml(el, html);
   }
 };
 
@@ -1136,7 +1181,7 @@ goog.ui.tree.BaseNode.prototype.getExpandedIconClass = function() {
  * @param {string} s The plain text of the label.
  */
 goog.ui.tree.BaseNode.prototype.setText = function(s) {
-  this.setHtml(goog.string.htmlEscape(s));
+  this.setSafeHtml(goog.html.SafeHtml.htmlEscape(s));
 };
 
 
@@ -1146,19 +1191,31 @@ goog.ui.tree.BaseNode.prototype.setText = function(s) {
  * @return {string} The plain text of the label.
  */
 goog.ui.tree.BaseNode.prototype.getText = function() {
-  return goog.string.unescapeEntities(this.getHtml());
+  return goog.string.unescapeEntities(goog.html.SafeHtml.unwrap(this.html_));
 };
 
 
+// TODO(user): Deprecate in favor of setSafeHtml, once developer docs on
+// using goog.html.SafeHtml are in place.
 /**
  * Sets the html of the label.
  * @param {string} s The html string for the label.
  */
 goog.ui.tree.BaseNode.prototype.setHtml = function(s) {
-  this.html_ = s;
+  this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(s,
+      goog.ui.tree.BaseNode.ALLOW_UNSAFE_API));
+};
+
+
+/**
+ * Sets the HTML of the label.
+ * @param {!goog.html.SafeHtml} html The HTML object for the label.
+ */
+goog.ui.tree.BaseNode.prototype.setSafeHtml = function(html) {
+  this.html_ = html;
   var el = this.getLabelElement();
   if (el) {
-    el.innerHTML = s;
+    goog.dom.safe.setInnerHtml(el, html);
   }
   var tree = this.getTree();
   if (tree) {
@@ -1173,6 +1230,15 @@ goog.ui.tree.BaseNode.prototype.setHtml = function(s) {
  * @return {string} The html string of the label.
  */
 goog.ui.tree.BaseNode.prototype.getHtml = function() {
+  return goog.html.SafeHtml.unwrap(this.html_);
+};
+
+
+/**
+ * Returns the html of the label.
+ * @return {goog.html.SafeHtml} The html string of the label.
+ */
+goog.ui.tree.BaseNode.prototype.getSafeHtml = function() {
   return this.html_;
 };
 
