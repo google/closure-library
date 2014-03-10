@@ -65,7 +65,7 @@ goog.html.SafeHtml = function() {
 
   /**
    * A type marker used to implement additional run-time type checking.
-   * @see goog.string.SafeHtml#unwrap
+   * @see goog.html.SafeHtml#unwrap
    * @const
    * @private
    */
@@ -107,7 +107,7 @@ goog.html.SafeHtml.prototype.implementsGoogStringTypedString = true;
  * indeed {@code SafeHtml}, use {@code goog.html.SafeHtml.unwrap} instead of
  * this method.
  *
- * @see goog.string.SafeHtml#unwrap
+ * @see goog.html.SafeHtml#unwrap
  * @override
  */
 goog.html.SafeHtml.prototype.getTypedStringValue = function() {
@@ -121,7 +121,7 @@ goog.html.SafeHtml.prototype.getTypedStringValue = function() {
  * To obtain the actual string value wrapped in a SafeHtml, use
  * {@code goog.html.SafeHtml.unwrap}.
  *
- * @see goog.string.SafeHtml#unwrap
+ * @see goog.html.SafeHtml#unwrap
  * @override
  */
 goog.html.SafeHtml.prototype.toString = function() {
