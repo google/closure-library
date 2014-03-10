@@ -174,6 +174,20 @@ function testReturnValue() {
   mock.$verify();
 }
 
+function testMultipleReturnValues() {
+  mock.a().$returns(3);
+  mock.a().$returns(2);
+  mock.a().$returns(1);
+
+  mock.$replay();
+
+  assertArrayEquals('Mock should return the right value sequence',
+      [3, 2, 1],
+      [mock.a(), mock.a(), mock.a()]);
+
+  mock.$verify();
+}
+
 
 function testAtMostOnce() {
   // Zero times SUCCESS.
