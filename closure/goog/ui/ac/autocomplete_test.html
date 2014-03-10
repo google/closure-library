@@ -227,6 +227,25 @@ function testMouseClickOnFirstRowBeforeHilite() {
   assertEquals('"Zaphod Beeblebrox" <theprez@universe.gov>', select.selectedRow);
 }
 
+function testMouseClickOnRowAfterBlur() {
+  var ds = new MockDS();
+  var rend = new TestRend();
+  var ih = new goog.ui.ac.InputHandler();
+  ih.attachInput(inputElement);
+
+  var ac = new goog.ui.ac.AutoComplete(ds, rend, ih);
+  goog.testing.events.fireFocusEvent(inputElement);
+  ac.setToken('the');
+  var targetRowDiv = rend.getRowDiv(0);
+
+  // Simulate the user clicking on an autocomplete row in the short time between blur
+  // and autocomplete dismissal.
+  goog.testing.events.fireBlurEvent(inputElement);
+  assertNotThrows(function() {
+    goog.testing.events.fireClickEvent(targetRowDiv);
+  });
+}
+
 
 /*
  * Send AutoComplete a SELECT event with empty string for the row. We can't

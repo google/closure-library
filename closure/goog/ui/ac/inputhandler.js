@@ -515,7 +515,9 @@ goog.ui.ac.InputHandler.prototype.detachInputs = function(var_args) {
  * @return {boolean} Whether to suppress the update event.
  */
 goog.ui.ac.InputHandler.prototype.selectRow = function(row, opt_multi) {
-  this.setTokenText(row.toString(), opt_multi);
+  if (this.activeElement_) {
+    this.setTokenText(row.toString(), opt_multi);
+  }
   return false;
 };
 
