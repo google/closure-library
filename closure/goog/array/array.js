@@ -767,6 +767,18 @@ goog.array.concat = function(var_args) {
 
 
 /**
+ * Returns a new array that contains the contents of all the arrays passed.
+ * @param {...!Array.<T>} var_args
+ * @return {!Array.<T>}
+ * @template T
+ */
+goog.array.join = function(var_args) {
+  return goog.array.ARRAY_PROTOTYPE_.concat.apply(
+      goog.array.ARRAY_PROTOTYPE_, arguments);
+};
+
+
+/**
  * Converts an object to an array.
  * @param {Array.<T>|goog.array.ArrayLike} object  The object to convert to an
  *     array.
