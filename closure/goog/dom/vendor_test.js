@@ -17,17 +17,32 @@ goog.setTestOnly('goog.dom.vendorTest');
 
 goog.require('goog.array');
 goog.require('goog.dom.vendor');
+goog.require('goog.labs.userAgent.util');
+goog.require('goog.testing.MockUserAgent');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
+goog.require('goog.userAgentTestUtil');
 
 var documentMode;
+var mockUserAgent;
+var propertyReplacer = new goog.testing.PropertyReplacer();
+
+function setUp() {
+  mockUserAgent = new goog.testing.MockUserAgent();
+  mockUserAgent.install();
+}
+
+function tearDown() {
+  goog.dispose(mockUserAgent);
+  documentMode = undefined;
+  propertyReplacer.reset();
+}
+
 goog.userAgent.getDocumentMode_ = function() {
   return documentMode;
 };
 
-
-var propertyReplacer = new goog.testing.PropertyReplacer();
 
 var UserAgents = {
   GECKO: 'GECKO',
@@ -38,35 +53,6 @@ var UserAgents = {
 
 
 /**
- * Rerun the initialization code to set all of the goog.userAgent constants.
- */
-function reinitializeUserAgent() {
-  goog.userAgent.init_();
-
-  // Unfortunately we can't isolate the useragent setting in a function
-  // we can call, because things rely on it compiling to nothing when
-  // one of the ASSUME flags is set, and the compiler isn't smart enough
-  // to do that when the setting is done inside a function that's inlined.
-  goog.userAgent.OPERA = goog.userAgent.detectedOpera_;
-  goog.userAgent.IE = goog.userAgent.detectedIe_;
-  goog.userAgent.GECKO = goog.userAgent.detectedGecko_;
-  goog.userAgent.WEBKIT = goog.userAgent.detectedWebkit_;
-  goog.userAgent.MOBILE = goog.userAgent.detectedMobile_;
-  goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
-
-  goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
-  goog.userAgent.initPlatform_();
-
-  goog.userAgent.VERSION = goog.userAgent.determineVersion_();
-}
-
-function tearDown() {
-  documentMode = undefined;
-  propertyReplacer.reset();
-}
-
-
-/**
  * Return whether a given user agent has been detected.
  * @param {number} agent Value in UserAgents.
  * @return {boolean} Whether the user agent has been detected.
@@ -74,13 +60,13 @@ function tearDown() {
 function getUserAgentDetected_(agent) {
   switch (agent) {
     case UserAgents.GECKO:
-      return goog.userAgent.detectedGecko_;
+      return goog.userAgent.GECKO;
     case UserAgents.IE:
-      return goog.userAgent.detectedIe_;
+      return goog.userAgent.IE;
     case UserAgents.OPERA:
-      return goog.userAgent.detectedOpera_;
+      return goog.userAgent.OPERA;
     case UserAgents.WEBKIT:
-      return goog.userAgent.detectedWebkit_;
+      return goog.userAgent.WEBKIT;
   }
   return null;
 }
@@ -94,15 +80,18 @@ function getUserAgentDetected_(agent) {
  * @param {string=} opt_vendor Navigator vendor string.
  */
 function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
-  var mockGlobal = {
-    'navigator': {
-      'userAgent': uaString,
-      'product': opt_product,
-      'vendor': opt_vendor
-    }
+  var mockNavigator = {
+    'userAgent': uaString,
+    'product': opt_product,
+    'vendor': opt_vendor
   };
-  propertyReplacer.set(goog, 'global', mockGlobal);
-  reinitializeUserAgent();
+
+  mockUserAgent.setNavigator(mockNavigator);
+  mockUserAgent.setUserAgentString(uaString);
+
+  // Force reread of navigator.userAgent;
+  goog.labs.userAgent.util.setUserAgent(null);
+  goog.userAgentTestUtil.reinitializeUserAgent();
   for (var ua in UserAgents) {
     var isExpected = goog.array.contains(expectedAgents, UserAgents[ua]);
     assertEquals(isExpected, getUserAgentDetected_(UserAgents[ua]));

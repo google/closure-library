@@ -22,6 +22,9 @@
 
 goog.provide('goog.userAgent');
 
+goog.require('goog.labs.userAgent.browser');
+goog.require('goog.labs.userAgent.engine');
+goog.require('goog.labs.userAgent.util');
 goog.require('goog.string');
 
 
@@ -85,91 +88,20 @@ goog.userAgent.BROWSER_KNOWN_ =
  * @return {?string} The userAgent string or null if there is none.
  */
 goog.userAgent.getUserAgentString = function() {
-  return goog.global['navigator'] ? goog.global['navigator'].userAgent : null;
+  return goog.labs.userAgent.util.getUserAgent();
 };
 
 
 /**
+ * TODO(nnaze): Change type to "Navigator" and update compilation targets.
  * @return {Object} The native navigator object.
  */
 goog.userAgent.getNavigator = function() {
   // Need a local navigator reference instead of using the global one,
   // to avoid the rare case where they reference different objects.
   // (in a WorkerPool, for example).
-  return goog.global['navigator'];
+  return goog.global['navigator'] || null;
 };
-
-
-/**
- * Initializer for goog.userAgent.
- *
- * This is a named function so that it can be stripped via the jscompiler
- * option for stripping types.
- * @private
- */
-goog.userAgent.init_ = function() {
-  /**
-   * Whether the user agent string denotes Opera.
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.detectedOpera_ = false;
-
-  /**
-   * Whether the user agent string denotes Internet Explorer. This includes
-   * other browsers using Trident as its rendering engine. For example AOL
-   * and Netscape 8
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.detectedIe_ = false;
-
-  /**
-   * Whether the user agent string denotes WebKit. WebKit is the rendering
-   * engine that Safari, Android and others use.
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.detectedWebkit_ = false;
-
-  /**
-   * Whether the user agent string denotes a mobile device.
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.detectedMobile_ = false;
-
-  /**
-   * Whether the user agent string denotes Gecko. Gecko is the rendering
-   * engine used by Mozilla, Mozilla Firefox, Camino and many more.
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.detectedGecko_ = false;
-
-  var ua;
-  if (!goog.userAgent.BROWSER_KNOWN_ &&
-      (ua = goog.userAgent.getUserAgentString())) {
-    var navigator = goog.userAgent.getNavigator();
-    goog.userAgent.detectedOpera_ = goog.string.startsWith(ua, 'Opera');
-    goog.userAgent.detectedIe_ = !goog.userAgent.detectedOpera_ &&
-        (goog.string.contains(ua, 'MSIE') ||
-         goog.string.contains(ua, 'Trident'));
-    goog.userAgent.detectedWebkit_ = !goog.userAgent.detectedOpera_ &&
-        goog.string.contains(ua, 'WebKit');
-    // WebKit also gives navigator.product string equal to 'Gecko'.
-    goog.userAgent.detectedMobile_ = goog.userAgent.detectedWebkit_ &&
-        goog.string.contains(ua, 'Mobile');
-    goog.userAgent.detectedGecko_ = !goog.userAgent.detectedOpera_ &&
-        !goog.userAgent.detectedWebkit_ && !goog.userAgent.detectedIe_ &&
-        navigator.product == 'Gecko';
-  }
-};
-
-
-if (!goog.userAgent.BROWSER_KNOWN_) {
-  goog.userAgent.init_();
-}
 
 
 /**
@@ -177,26 +109,27 @@ if (!goog.userAgent.BROWSER_KNOWN_) {
  * @type {boolean}
  */
 goog.userAgent.OPERA = goog.userAgent.BROWSER_KNOWN_ ?
-    goog.userAgent.ASSUME_OPERA : goog.userAgent.detectedOpera_;
+    goog.userAgent.ASSUME_OPERA :
+    goog.labs.userAgent.browser.isOpera();
 
 
 /**
- * Whether the user agent is Internet Explorer. This includes other browsers
- * using Trident as its rendering engine. For example AOL and Netscape 8
+ * Whether the user agent is Internet Explorer.
  * @type {boolean}
  */
 goog.userAgent.IE = goog.userAgent.BROWSER_KNOWN_ ?
-    goog.userAgent.ASSUME_IE : goog.userAgent.detectedIe_;
+    goog.userAgent.ASSUME_IE :
+    goog.labs.userAgent.browser.isIE();
 
 
 /**
  * Whether the user agent is Gecko. Gecko is the rendering engine used by
- * Mozilla, Mozilla Firefox, Camino and many more.
+ * Mozilla, Firefox, and others.
  * @type {boolean}
  */
 goog.userAgent.GECKO = goog.userAgent.BROWSER_KNOWN_ ?
     goog.userAgent.ASSUME_GECKO :
-    goog.userAgent.detectedGecko_;
+    goog.labs.userAgent.engine.isGecko();
 
 
 /**
@@ -206,15 +139,35 @@ goog.userAgent.GECKO = goog.userAgent.BROWSER_KNOWN_ ?
  */
 goog.userAgent.WEBKIT = goog.userAgent.BROWSER_KNOWN_ ?
     goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_MOBILE_WEBKIT :
-    goog.userAgent.detectedWebkit_;
+    goog.labs.userAgent.engine.isWebKit();
 
 
 /**
  * Whether the user agent is running on a mobile device.
+ *
+ * This is a separate function so that the logic can be tested.
+ *
+ * TODO(nnaze): Investigate swapping in goog.labs.userAgent.device.isMobile().
+ *
+ * @return {boolean} Whether the user agent is running on a mobile device.
+ * @private
+ */
+goog.userAgent.isMobile_ = function() {
+  return goog.userAgent.WEBKIT &&
+         goog.labs.userAgent.util.matchUserAgent('Mobile');
+};
+
+
+/**
+ * Whether the user agent is running on a mobile device.
+ *
+ * TODO(nnaze): Consider deprecating MOBILE when labs.userAgent
+ *   is promoted as the gecko/webkit logic is likely inaccurate.
+ *
  * @type {boolean}
  */
 goog.userAgent.MOBILE = goog.userAgent.ASSUME_MOBILE_WEBKIT ||
-                        goog.userAgent.detectedMobile_;
+                        goog.userAgent.isMobile_();
 
 
 /**
@@ -449,21 +402,23 @@ goog.userAgent.determineVersion_ = function() {
 
   if (goog.userAgent.OPERA && goog.global['opera']) {
     var operaVersion = goog.global['opera'].version;
-    version = typeof operaVersion == 'function' ? operaVersion() : operaVersion;
-  } else {
-    if (goog.userAgent.GECKO) {
-      re = /rv\:([^\);]+)(\)|;)/;
-    } else if (goog.userAgent.IE) {
-      re = /\b(?:MSIE|rv)[: ]([^\);]+)(\)|;)/;
-    } else if (goog.userAgent.WEBKIT) {
-      // WebKit/125.4
-      re = /WebKit\/(\S+)/;
-    }
-    if (re) {
-      var arr = re.exec(goog.userAgent.getUserAgentString());
-      version = arr ? arr[1] : '';
-    }
+    return goog.isFunction(operaVersion) ? operaVersion() : operaVersion;
   }
+
+  if (goog.userAgent.GECKO) {
+    re = /rv\:([^\);]+)(\)|;)/;
+  } else if (goog.userAgent.IE) {
+    re = /\b(?:MSIE|rv)[: ]([^\);]+)(\)|;)/;
+  } else if (goog.userAgent.WEBKIT) {
+    // WebKit/125.4
+    re = /WebKit\/(\S+)/;
+  }
+
+  if (re) {
+    var arr = re.exec(goog.userAgent.getUserAgentString());
+    version = arr ? arr[1] : '';
+  }
+
   if (goog.userAgent.IE) {
     // IE9 can be in document mode 9 but be reporting an inconsistent user agent
     // version.  If it is identifying as a version lower than 9 we take the
@@ -475,6 +430,7 @@ goog.userAgent.determineVersion_ = function() {
       return String(docMode);
     }
   }
+
   return version;
 };
 
