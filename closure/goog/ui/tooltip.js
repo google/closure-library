@@ -27,8 +27,10 @@ goog.provide('goog.ui.Tooltip.State');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.positioning');
@@ -94,6 +96,22 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
   }
 };
 goog.inherits(goog.ui.Tooltip, goog.ui.Popup);
+
+
+/**
+ * @define {boolean} Whether goog.ui.Tooltip permits use of its potentially
+ * unsafe API, subject to global defines
+ * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS and
+ * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES.
+ *
+ * For details of intended use, see the fileoverview of
+ * goog.html.legacyconversions.
+ *
+ * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS
+ * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES
+ * @see goog.ui.Tooltip#setHtml
+ */
+goog.define('goog.ui.Tooltip.ALLOW_UNSAFE_API', false);
 
 
 /**
@@ -365,13 +383,28 @@ goog.ui.Tooltip.prototype.setText = function(str) {
 };
 
 
+// TODO(user): Deprecate in favor of setSafeHtml, once developer docs on.
 /**
  * Sets tooltip message as HTML markup.
+ * using goog.html.SafeHtml are in place.
  *
  * @param {string} str HTML message to display in tooltip.
  */
 goog.ui.Tooltip.prototype.setHtml = function(str) {
-  this.getElement().innerHTML = str;
+  this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(
+      str, goog.ui.Tooltip.ALLOW_UNSAFE_API));
+};
+
+
+/**
+ * Sets tooltip message as HTML markup.
+ * @param {!goog.html.SafeHtml} html HTML message to display in tooltip.
+ */
+goog.ui.Tooltip.prototype.setSafeHtml = function(html) {
+  var element = this.getElement();
+  if (element) {
+    goog.dom.safe.setInnerHtml(element, html);
+  }
 };
 
 
@@ -403,7 +436,7 @@ goog.ui.Tooltip.prototype.getText = function() {
 
 
 /**
- * @return {string} The tooltip message as HTML.
+ * @return {string} The tooltip message as HTML as plain string.
  */
 goog.ui.Tooltip.prototype.getHtml = function() {
   return this.getElement().innerHTML;

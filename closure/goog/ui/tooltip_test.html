@@ -17,10 +17,13 @@ See the COPYING file for details.
     goog.require('goog.events.Event');
     goog.require('goog.events.EventHandler');
     goog.require('goog.events.EventType');
+    goog.require('goog.html.SafeHtml');
+    goog.require('goog.html.testing');
     goog.require('goog.positioning.AbsolutePosition');
     goog.require('goog.style');
     goog.require('goog.ui.Tooltip');
     goog.require('goog.testing.MockClock');
+    goog.require('goog.testing.PropertyReplacer');
     goog.require('goog.testing.TestQueue');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
@@ -32,6 +35,9 @@ See the COPYING file for details.
           src="blank_test_helper.html">
   </iframe>
   <script>
+    var stubs = new goog.testing.PropertyReplacer();
+
+
     /**
      * A subclass of Tooltip that overrides {@code getPositioningStrategy}
      * for testing purposes.
@@ -82,6 +88,12 @@ See the COPYING file for details.
       handler = new goog.events.EventHandler(eventQueue);
       handler.listen(tt, goog.ui.PopupBase.EventType.SHOW, eventQueue.enqueue);
       handler.listen(tt, goog.ui.PopupBase.EventType.HIDE, eventQueue.enqueue);
+
+      // Reset global flags to their defaults.
+      stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
+      stubs.set(goog.html.legacyconversions,
+                'ALLOW_LEGACY_CONVERSION_OVERRIDES', false);
+      stubs.set(goog.ui.Tooltip, 'ALLOW_UNSAFE_API', false);
     }
 
     function tearDown() {
@@ -364,6 +376,45 @@ See the COPYING file for details.
       assertEquals('Tooltip should be at absolute position', '(13, 17)',
           goog.style.getPageOffset(tooltip.getElement()).toString());
       tooltip.dispose();
+    }
+
+    function testHtmlContent() {
+      tt.setSafeHtml(goog.html.testing.newSafeHtmlForTest(
+          '<span class="theSpan">Hello</span>'));
+      var spanEl =
+          goog.dom.getElementByClass('theSpan', tt.getElement());
+      assertEquals('Hello', goog.dom.getTextContent(spanEl));
+    }
+
+    function testSetContent_guardedByGlobalFlag() {
+      stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+      assertEquals(
+          'Error: Legacy conversion from string to goog.html types is disabled',
+          assertThrows(function() {
+            tt.setHtml('<img src=blag onerror=evil();/>');
+          }).message);
+    }
+
+    function testSetContent_guardedByTooltipApiFlag() {
+      stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+      stubs.set(goog.ui.Tooltip, 'ALLOW_UNSAFE_API', true);
+      // Unsafe API still fails, since ALLOW_LEGACY_CONVERSION_OVERRIDES is not
+      // set.
+      assertEquals(
+          'Error: Legacy conversion from string to goog.html types is disabled',
+          assertThrows(function() {
+            tt.setHtml('<img src=blag onerror=evil();/>');
+          }).message);
+    }
+
+    function testSetContent_allowedByTooltipApiFlag() {
+      stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+      stubs.set(goog.html.legacyconversions,
+                'ALLOW_LEGACY_CONVERSION_OVERRIDES', true);
+      stubs.set(goog.ui.Tooltip, 'ALLOW_UNSAFE_API', true);
+      // no exception
+      tt.setHtml('<div>Trusted</div>');
+      tt.getHtml();
     }
   </script>
 </body>
