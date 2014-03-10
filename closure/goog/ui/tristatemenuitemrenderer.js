@@ -63,19 +63,16 @@ goog.ui.TriStateMenuItemRenderer.CSS_CLASS =
 goog.ui.TriStateMenuItemRenderer.prototype.decorate = function(item, element) {
   element = goog.ui.TriStateMenuItemRenderer.superClass_.decorate.call(this,
       item, element);
-  this.setCheckable(item, element, true);
+  this.setSelectable(item, element, true);
 
   if (goog.dom.classlist.contains(element,
       goog.getCssName(this.getCssClass(), 'fully-checked'))) {
-    item.setCheckedState(/** @suppress {missingRequire} */
-        goog.ui.TriStateMenuItem.State.FULLY_CHECKED);
+    item.setCheckedState(goog.ui.TriStateMenuItem.State.FULLY_CHECKED);
   } else if (goog.dom.classlist.contains(element,
       goog.getCssName(this.getCssClass(), 'partially-checked'))) {
-    item.setCheckedState(/** @suppress {missingRequire} */
-        goog.ui.TriStateMenuItem.State.PARTIALLY_CHECKED);
+    item.setCheckedState(goog.ui.TriStateMenuItem.State.PARTIALLY_CHECKED);
   } else {
-    item.setCheckedState(/** @suppress {missingRequire} */
-        goog.ui.TriStateMenuItem.State.NOT_CHECKED);
+    item.setCheckedState(goog.ui.TriStateMenuItem.State.NOT_CHECKED);
   }
 
   return element;
