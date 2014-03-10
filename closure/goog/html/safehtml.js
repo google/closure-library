@@ -40,8 +40,8 @@ goog.require('goog.string.TypedString');
  * a HTML template in HTML PC_DATA context, in the sense that the use will not
  * result in a Cross-Site-Scripting vulnerability.
  *
- * Instances of this type must be created via its factory methods
- * ({@code goog.html.SafeHtml.from}, {@code goog.html.SafeHtml.htmlEscape}, etc
+ * Instances of this type must be created via the factory methods
+ * ({@code goog.html.SafeHtml.from}, {@code goog.html.SafeHtml.htmlEscape}), etc
  * and not by invoking its constructor.  The constructor intentionally takes no
  * parameters and the type is immutable; hence only a default instance
  * corresponding to the empty string can be obtained via constructor invocation.
@@ -69,8 +69,8 @@ goog.html.SafeHtml = function() {
    * @const
    * @private
    */
-  this.SAFE_HTML_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ =
-      goog.html.SafeHtml.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_;
+  this.SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
+      goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
 
   /**
    * This SafeHtml's directionality, or null if unknown.
@@ -115,18 +115,21 @@ goog.html.SafeHtml.prototype.getTypedStringValue = function() {
 };
 
 
-/**
- * Returns a debug string-representation of this value.
- *
- * To obtain the actual string value wrapped in a SafeHtml, use
- * {@code goog.html.SafeHtml.unwrap}.
- *
- * @see goog.html.SafeHtml#unwrap
- * @override
- */
-goog.html.SafeHtml.prototype.toString = function() {
-  return 'SafeHtml{' + this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ + '}';
-};
+if (goog.DEBUG) {
+  /**
+   * Returns a debug string-representation of this value.
+   *
+   * To obtain the actual string value wrapped in a SafeHtml, use
+   * {@code goog.html.SafeHtml.unwrap}.
+   *
+   * @see goog.html.SafeHtml#unwrap
+   * @override
+   */
+  goog.html.SafeHtml.prototype.toString = function() {
+    return 'SafeHtml{' + this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ +
+        '}';
+  };
+}
 
 
 /**
@@ -150,8 +153,8 @@ goog.html.SafeHtml.unwrap = function(safeHtml) {
   // to stand out in code reviews.
   if (safeHtml instanceof goog.html.SafeHtml &&
       safeHtml.constructor === goog.html.SafeHtml &&
-      safeHtml.SAFE_HTML_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ ===
-          goog.html.SafeHtml.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_) {
+      safeHtml.SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ ===
+          goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeHtml.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
   } else {
     goog.asserts.fail('expected object of type SafeHtml, got \'' +
@@ -231,7 +234,7 @@ goog.html.SafeHtml.from = function(textOrHtml) {
  * @const
  * @private
  */
-goog.html.SafeHtml.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 
 /**

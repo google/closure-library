@@ -50,8 +50,8 @@ goog.require('goog.string.TypedString');
  * safe to use in a context where the referred-to resource is interpreted as
  * trusted code, e.g., as the src of a script tag.
  *
- * Instances of this type must be created via its factory methods
- * ({@code goog.html.SafeUrl.from}, {@code goog.html.SafeUrl.sanitize}, etc and
+ * Instances of this type must be created via the factory methods
+ * ({@code goog.html.SafeUrl.from}, {@code goog.html.SafeUrl.sanitize}), etc and
  * not by invoking its constructor.  The constructor intentionally takes no
  * parameters and the type is immutable; hence only a default instance
  * corresponding to the empty string can be obtained via constructor invocation.
@@ -80,8 +80,8 @@ goog.html.SafeUrl = function() {
    * @const
    * @private
    */
-  this.SAFE_URL_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ =
-      goog.html.SafeUrl.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_;
+  this.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
+      goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
 };
 
 
@@ -153,18 +153,21 @@ goog.html.SafeUrl.prototype.getDirection = function() {
 };
 
 
-/**
- * Returns a debug string-representation of this value.
- *
- * To obtain the actual string value wrapped in a SafeUrl, use
- * {@code goog.html.SafeUrl.unwrap}.
- *
- * @see goog.html.SafeUrl#unwrap
- * @override
- */
-goog.html.SafeUrl.prototype.toString = function() {
-  return 'SafeUrl{' + this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ + '}';
-};
+if (goog.DEBUG) {
+  /**
+   * Returns a debug string-representation of this value.
+   *
+   * To obtain the actual string value wrapped in a SafeUrl, use
+   * {@code goog.html.SafeUrl.unwrap}.
+   *
+   * @see goog.html.SafeUrl#unwrap
+   * @override
+   */
+  goog.html.SafeUrl.prototype.toString = function() {
+    return 'SafeUrl{' + this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ +
+        '}';
+  };
+}
 
 
 /**
@@ -200,8 +203,8 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
   // to stand out in code reviews.
   if (safeUrl instanceof goog.html.SafeUrl &&
       safeUrl.constructor === goog.html.SafeUrl &&
-      safeUrl.SAFE_URL_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ ===
-          goog.html.SafeUrl.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_) {
+      safeUrl.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ ===
+          goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
   } else {
     goog.asserts.fail('expected object of type SafeUrl, got \'' +
@@ -388,7 +391,7 @@ goog.html.SafeUrl.from = function(url) {
  * @const
  * @private
  */
-goog.html.SafeUrl.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 
 /**

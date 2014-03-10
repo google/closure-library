@@ -39,7 +39,7 @@ goog.require('goog.string.TypedString');
  * stricter validation could prevent some applications from being able to use
  * this type.
  *
- * Instances of this type must be created via its factory method,
+ * Instances of this type must be created via the factory method,
  * ({@code goog.html.TrustedResourceUrl.fromConstant}), and not by invoking its
  * constructor. The constructor intentionally takes no parameters and the type
  * is immutable; hence only a default instance corresponding to the empty
@@ -67,8 +67,8 @@ goog.html.TrustedResourceUrl = function() {
    * @const
    * @private
    */
-  this.TRUSTED_RESOURCE_URL_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ =
-      goog.html.TrustedResourceUrl.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_;
+  this.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
+      goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
 };
 
 
@@ -112,19 +112,21 @@ goog.html.TrustedResourceUrl.prototype.getDirection = function() {
 };
 
 
-/**
- * Returns a debug string-representation of this value.
- *
- * To obtain the actual string value wrapped in a TrustedResourceUrl, use
- * {@code goog.html.TrustedResourceUrl.unwrap}.
- *
- * @see goog.html.TrustedResourceUrl#unwrap
- * @override
- */
-goog.html.TrustedResourceUrl.prototype.toString = function() {
-  return 'TrustedResourceUrl{' +
-      this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ + '}';
-};
+if (goog.DEBUG) {
+  /**
+   * Returns a debug string-representation of this value.
+   *
+   * To obtain the actual string value wrapped in a TrustedResourceUrl, use
+   * {@code goog.html.TrustedResourceUrl.unwrap}.
+   *
+   * @see goog.html.TrustedResourceUrl#unwrap
+   * @override
+   */
+  goog.html.TrustedResourceUrl.prototype.toString = function() {
+    return 'TrustedResourceUrl{' +
+        this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ + '}';
+  };
+}
 
 
 /**
@@ -152,9 +154,9 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
   if (trustedResourceUrl instanceof goog.html.TrustedResourceUrl &&
       trustedResourceUrl.constructor === goog.html.TrustedResourceUrl &&
       trustedResourceUrl
-          .TRUSTED_RESOURCE_URL_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ ===
+          .TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ ===
               goog.html.TrustedResourceUrl
-                  .TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_) {
+                  .TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
     return trustedResourceUrl
         .privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_;
   } else {
@@ -190,7 +192,7 @@ goog.html.TrustedResourceUrl.fromConstant = function(url) {
  * @const
  * @private
  */
-goog.html.TrustedResourceUrl.TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 
 /**

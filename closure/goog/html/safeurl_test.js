@@ -47,9 +47,9 @@ function testSafeUrl() {
 /** @suppress {checkTypes} */
 function testUnwrap() {
   var evil = {};
-  evil.safeUrlValueWithSecurityContract__googHtmlSecurityPrivate_ =
+  evil.safeUrlValueWithSecurityContract_googHtmlSecurityPrivate_ =
       '<script>evil()</script';
-  evil.SAFE_URL_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
   var exception = assertThrows(function() {
     goog.html.SafeUrl.unwrap(evil);

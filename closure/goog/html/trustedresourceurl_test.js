@@ -48,9 +48,9 @@ function testTrustedResourceUrl() {
 /** @suppress {checkTypes} */
 function testUnwrap() {
   var evil = {};
-  evil.trustedResourceUrlValueWithSecurityContract__googHtmlSecurityPrivate_ =
+  evil.trustedResourceUrlValueWithSecurityContract_googHtmlSecurityPrivate_ =
       '<script>evil()</script';
-  evil.TRUSTED_RESOURCE_URL_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
   var exception = assertThrows(function() {
     goog.html.TrustedResourceUrl.unwrap(evil);

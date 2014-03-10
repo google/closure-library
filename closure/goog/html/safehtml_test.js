@@ -60,7 +60,7 @@ function testUnwrap() {
   var evil = {};
   evil.safeHtmlValueWithSecurityContract__googHtmlSecurityPrivate_ =
       '<script>evil()</script';
-  evil.SAFE_HTML_TYPE_MARKER__GOOG_HTML_SECURITY_PRIVATE_ = {};
+  evil.SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
   var exception = assertThrows(function() {
     goog.html.SafeHtml.unwrap(evil);
