@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.MockControlTest');
-goog.setTestOnly('goog.testing.MockControlTest');
+goog.provide('goog.testing.async.MockControlTest');
+goog.setTestOnly('goog.testing.async.MockControlTest');
 
 goog.require('goog.async.Deferred');
 goog.require('goog.testing.MockControl');
