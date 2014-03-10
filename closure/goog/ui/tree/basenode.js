@@ -31,6 +31,7 @@ goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
 goog.require('goog.dom.safe');
+goog.require('goog.events.Event');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.legacyconversions');
@@ -38,7 +39,6 @@ goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
-goog.require('goog.userAgent');
 
 
 
@@ -71,6 +71,27 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
   this.html_ = (html instanceof goog.html.SafeHtml ? html :
       goog.html.legacyconversions.safeHtmlFromString(html,
           goog.ui.tree.BaseNode.ALLOW_UNSAFE_API));
+
+  /** @private {string} */
+  this.iconClass_;
+
+  /** @private {string} */
+  this.expandedIconClass_;
+
+  /** @protected {goog.ui.tree.TreeControl} */
+  this.tree;
+
+  /** @private {goog.ui.tree.BaseNode} */
+  this.previousSibling_;
+
+  /** @private {goog.ui.tree.BaseNode} */
+  this.nextSibling_;
+
+  /** @private {goog.ui.tree.BaseNode} */
+  this.firstChild_;
+
+  /** @private {goog.ui.tree.BaseNode} */
+  this.lastChild_;
 };
 goog.inherits(goog.ui.tree.BaseNode, goog.ui.Component);
 
@@ -166,9 +187,9 @@ goog.ui.tree.BaseNode.prototype.depth_ = -1;
 /** @override */
 goog.ui.tree.BaseNode.prototype.disposeInternal = function() {
   goog.ui.tree.BaseNode.superClass_.disposeInternal.call(this);
-  if (this.tree_) {
-    this.tree_.removeNode(this);
-    this.tree_ = null;
+  if (this.tree) {
+    this.tree.removeNode(this);
+    this.tree = null;
   }
   this.setElementInternal(null);
 };
@@ -258,6 +279,7 @@ goog.ui.tree.BaseNode.prototype.exitDocument = function() {
 goog.ui.tree.BaseNode.prototype.addChildAt = function(child, index,
     opt_render) {
   goog.asserts.assert(!child.getParent());
+  goog.asserts.assertInstanceof(child, goog.ui.tree.BaseNode);
   var prevNode = this.getChildAt(index - 1);
   var nextNode = this.getChildAt(index);
 
@@ -374,7 +396,7 @@ goog.ui.tree.BaseNode.prototype.removeChild =
 
   var wasLast = child.isLastSibling();
 
-  child.tree_ = null;
+  child.tree = null;
   child.depth_ = -1;
 
   if (tree) {
@@ -1513,8 +1535,8 @@ goog.ui.tree.BaseNode.prototype.getConfig = function() {
  * @param {goog.ui.tree.TreeControl} tree The tree control.
  */
 goog.ui.tree.BaseNode.prototype.setTreeInternal = function(tree) {
-  if (this.tree_ != tree) {
-    this.tree_ = tree;
+  if (this.tree != tree) {
+    this.tree = tree;
     // Add new node to the type ahead node map.
     tree.setNode(this);
     this.forEachChild(function(child) {

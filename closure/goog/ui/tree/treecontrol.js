@@ -271,11 +271,13 @@ goog.ui.tree.TreeControl.prototype.getRowClassName = function() {
  */
 goog.ui.tree.TreeControl.prototype.getCalculatedIconClass = function() {
   var expanded = this.getExpanded();
-  if (expanded && this.expandedIconClass_) {
-    return this.expandedIconClass_;
+  var expandedIconClass = this.getExpandedIconClass();
+  if (expanded && expandedIconClass) {
+    return expandedIconClass;
   }
-  if (!expanded && this.iconClass_) {
-    return this.iconClass_;
+  var iconClass = this.getIconClass();
+  if (!expanded && iconClass) {
+    return iconClass;
   }
 
   // fall back on default icons
