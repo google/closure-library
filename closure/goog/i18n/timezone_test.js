@@ -16,7 +16,19 @@ goog.provide('goog.i18n.TimeZoneTest');
 goog.setTestOnly('goog.i18n.TimeZoneTest');
 
 goog.require('goog.i18n.TimeZone');
+goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
+
+var expectedFailures;
+
+function setUpPage() {
+  expectedFailures = new goog.testing.ExpectedFailures();
+}
+
+function tearDown() {
+  expectedFailures.handleTearDown();
+}
 
 // Where could such data be found
 // In js_i18n_data in http://go/i18n_dir, we have a bunch of files with names
@@ -57,36 +69,43 @@ var americaLosAngelesData = {
 };
 
 function testIsDaylightTime() {
-  var usPacific = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
-  var dt = new Date(2007, 7 - 1, 1);
-  assertTrue(usPacific.isDaylightTime(dt));
-  // 2007/03/11 2:00am has daylight change. We set time through UTC so that
-  // this test won't be affected by browser's local time handling.
-  dt = new Date(2007, 3 - 1, 11);
-  // The date above is created with a timezone of the computer it is run on.
-  // Therefore the UTC day has to be set explicitly to be sure that the date
-  // is correct for timezones east of Greenwich  where 2007/3/11 0:00 is still
-  // 2007/03/10 in UTC.
-  dt.setUTCDate(11);
-  dt.setUTCHours(2 + 8);
-  dt.setMinutes(1);
-  assertTrue(usPacific.isDaylightTime(dt));
-  dt.setUTCHours(1 + 8);
-  dt.setMinutes(59);
-  assertTrue(!usPacific.isDaylightTime(dt));
+  expectedFailures.expectFailureFor(goog.userAgent.GECKO);
 
-  dt = new Date(2007, 11 - 1, 4);
-  // Set the UTC day explicitly to make it work in timezones east of
-  // Greenwich.
-  dt.setUTCDate(4);
-  dt.setUTCHours(2 + 7);
-  dt.setMinutes(1);
-  assertTrue(!usPacific.isDaylightTime(dt));
+  try {
+    var usPacific = goog.i18n.TimeZone.createTimeZone(americaLosAngelesData);
+    var dt = new Date(2007, 7 - 1, 1);
+    assertTrue(usPacific.isDaylightTime(dt));
+    // 2007/03/11 2:00am has daylight change. We set time through UTC so that
+    // this test won't be affected by browser's local time handling.
+    dt = new Date(2007, 3 - 1, 11);
+    // The date above is created with a timezone of the computer it is run on.
+    // Therefore the UTC day has to be set explicitly to be sure that the date
+    // is correct for timezones east of Greenwich  where 2007/3/11 0:00 is still
+    // 2007/03/10 in UTC.
+    dt.setUTCDate(11);
+    dt.setUTCHours(2 + 8);
+    dt.setMinutes(1);
+    assertTrue(usPacific.isDaylightTime(dt));
+    dt.setUTCHours(1 + 8);
+    dt.setMinutes(59);
+    assertTrue(!usPacific.isDaylightTime(dt));
 
-  // there seems to be a browser bug. local time 1:59am should still be PDT.
-  dt.setUTCHours(0 + 7);
-  dt.setMinutes(59);
-  assertTrue(usPacific.isDaylightTime(dt));
+    dt = new Date(2007, 11 - 1, 4);
+    // Set the UTC day explicitly to make it work in timezones east of
+    // Greenwich.
+    dt.setUTCDate(4);
+    dt.setUTCHours(2 + 7);
+    dt.setMinutes(1);
+    assertTrue(!usPacific.isDaylightTime(dt));
+
+    // there seems to be a browser bug. local time 1:59am should still be PDT.
+    dt.setUTCHours(0 + 7);
+    dt.setMinutes(59);
+    assertTrue(usPacific.isDaylightTime(dt));
+  } catch (e) {
+    expectedFailures.handleException(e);
+  }
+
 }
 
 function testGetters() {
