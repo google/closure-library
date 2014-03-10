@@ -1318,3 +1318,4 @@ goog.addDependency('vec/vec4d.js', ['goog.vec.vec4d', 'goog.vec.vec4d.Type'], ['
 goog.addDependency('vec/vec4f.js', ['goog.vec.vec4f', 'goog.vec.vec4f.Type'], ['goog.vec']);
 goog.addDependency('webgl/webgl.js', ['goog.webgl'], []);
 goog.addDependency('window/window.js', ['goog.window'], ['goog.string', 'goog.userAgent']);
+goog.addDependency('window/window_test.js', ['goog.windowTest'], ['goog.dom', 'goog.events', 'goog.string', 'goog.testing.AsyncTestCase', 'goog.testing.jsunit', 'goog.window']);
