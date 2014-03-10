@@ -520,7 +520,7 @@ goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
   }
 
   // Add the headers to the Xhr object
-  goog.structs.forEach(headers, function(value, key) {
+  headers.forEach(function(value, key) {
     this.xhr_.setRequestHeader(key, value);
   }, this);
 

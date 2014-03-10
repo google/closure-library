@@ -77,7 +77,7 @@ Channel.prototype.createXhrIo = goog.abstractMethod;
 
 /**
  * Callback from ChannelRequest that indicates a request has completed.
- * @param {goog.labs.net.webChannel.ChannelRequest} request
+ * @param {!goog.labs.net.webChannel.ChannelRequest} request
  *     The request object.
  */
 Channel.prototype.onRequestComplete = goog.abstractMethod;

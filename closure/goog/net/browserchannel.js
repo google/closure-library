@@ -55,6 +55,7 @@ goog.require('goog.net.ChannelDebug');
 goog.require('goog.net.ChannelRequest');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.tmpnetwork');
+goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.CircularBuffer');
@@ -1552,7 +1553,7 @@ goog.net.BrowserChannel.prototype.addAdditionalParams_ = function(uri) {
   if (this.handler_) {
     var params = this.handler_.getAdditionalParams(this);
     if (params) {
-      goog.structs.forEach(params, function(value, key, coll) {
+      goog.object.forEach(params, function(value, key) {
         uri.setParameterValue(key, value);
       });
     }
@@ -2361,7 +2362,7 @@ goog.net.BrowserChannel.prototype.createDataUri =
   }
 
   if (this.extraParams_) {
-    goog.structs.forEach(this.extraParams_, function(value, key, coll) {
+    goog.object.forEach(this.extraParams_, function(value, key) {
       uri.setParameterValue(key, value);
     });
   }

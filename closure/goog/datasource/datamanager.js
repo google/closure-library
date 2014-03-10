@@ -30,6 +30,7 @@ goog.provide('goog.ds.DataManager');
 goog.require('goog.ds.BasicNodeList');
 goog.require('goog.ds.DataNode');
 goog.require('goog.ds.Expr');
+goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
@@ -477,7 +478,7 @@ goog.ds.DataManager.prototype.removeListenersByFunction_ = function(
  */
 goog.ds.DataManager.prototype.getListenerCount = function() {
   var count = 0;
-  goog.structs.forEach(this.listenerMap_, function(matchingListeners) {
+  goog.object.forEach(this.listenerMap_, function(matchingListeners) {
     count += goog.structs.getCount(matchingListeners);
   });
   return count;

@@ -334,6 +334,22 @@ goog.structs.Map.prototype.addAll = function(map) {
 
 
 /**
+ * Calls the given function on each entry in the map.
+ * @param {function(this:T, V, K, goog.structs.Map.<K,V>)} f
+ * @param {T=} opt_obj The value of "this" inside f.
+ * @template T
+ */
+goog.structs.Map.prototype.forEach = function(f, opt_obj) {
+  var keys = this.getKeys();
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var value = this.get(key);
+    f.call(opt_obj, value, key, this);
+  }
+};
+
+
+/**
  * Clones a map and returns a new map.
  * @return {!goog.structs.Map} A new map with the same key-value pairs.
  */

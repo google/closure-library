@@ -48,11 +48,9 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.math.Rect');
 goog.require('goog.string');
-goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.style');
 goog.require('goog.ui.ModalPopup');
-goog.require('goog.userAgent');
 
 
 
@@ -1265,7 +1263,7 @@ goog.ui.Dialog.ButtonSet.prototype.render = function() {
     goog.dom.safe.setInnerHtml(
         this.element_, goog.html.SafeHtml.EMPTY);
     var domHelper = goog.dom.getDomHelper(this.element_);
-    goog.structs.forEach(this, function(caption, key) {
+    this.forEach(function(caption, key) {
       var button = domHelper.createDom('button', {'name': key}, caption);
       if (key == this.defaultButton_) {
         button.className = goog.getCssName(this.class_, 'default');

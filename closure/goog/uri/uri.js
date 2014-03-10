@@ -1138,7 +1138,7 @@ goog.Uri.QueryData.createFromKeysValues = function(
  * We need to use a Map because we cannot guarantee that the key names will
  * not be problematic for IE.
  *
- * @type {goog.structs.Map}
+ * @type {goog.structs.Map.<string, Array>}
  * @private
  */
 goog.Uri.QueryData.prototype.keyMap_ = null;
@@ -1417,9 +1417,8 @@ goog.Uri.QueryData.prototype.invalidateCache_ = function() {
  */
 goog.Uri.QueryData.prototype.filterKeys = function(keys) {
   this.ensureKeyMapInitialized_();
-  goog.structs.forEach(this.keyMap_,
-      /** @this {goog.Uri.QueryData} */
-      function(value, key, map) {
+  this.keyMap_.forEach(
+      function(value, key) {
         if (!goog.array.contains(keys, key)) {
           this.remove(key);
         }
@@ -1470,8 +1469,7 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
   if (resetKeys) {
     this.ensureKeyMapInitialized_();
     this.invalidateCache_();
-    goog.structs.forEach(this.keyMap_,
-        /** @this {goog.Uri.QueryData} */
+    this.keyMap_.forEach(
         function(value, key) {
           var lowerCase = key.toLowerCase();
           if (key != lowerCase) {

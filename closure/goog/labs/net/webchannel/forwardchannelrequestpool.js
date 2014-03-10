@@ -22,7 +22,7 @@
 
 goog.provide('goog.labs.net.webChannel.ForwardChannelRequestPool');
 
-goog.require('goog.structs');
+goog.require('goog.array');
 goog.require('goog.structs.Set');
 
 goog.scope(function() {
@@ -59,7 +59,7 @@ goog.labs.net.webChannel.ForwardChannelRequestPool = function(opt_maxPoolSize) {
   /**
    * The container for all the pending request objects.
    *
-   * @private {goog.structs.Set}
+   * @private {goog.structs.Set.<ChannelRequest>}
    */
   this.requestPool_ = null;
 
@@ -200,7 +200,7 @@ ForwardChannelRequestPool.prototype.cancel = function() {
   }
 
   if (this.requestPool_ && !this.requestPool_.isEmpty()) {
-    goog.structs.forEach(this.requestPool_, function(val, key, col) {
+    goog.array.forEach(this.requestPool_.getValues(), function(val) {
       val.cancel();
     });
     this.requestPool_.clear();
@@ -223,7 +223,7 @@ ForwardChannelRequestPool.prototype.hasPendingRequest = function() {
  * Need go through the standard onRequestComplete logic to expose the max-retry
  * failure in the standard way.
  *
- * @param {!function(ChannelRequest)} onComplete The completion callback.
+ * @param {!function(!ChannelRequest)} onComplete The completion callback.
  * @return {boolean} true if any request has been forced to complete.
  */
 ForwardChannelRequestPool.prototype.forceComplete = function(onComplete) {
@@ -234,8 +234,8 @@ ForwardChannelRequestPool.prototype.forceComplete = function(onComplete) {
   }
 
   if (this.requestPool_ && !this.requestPool_.isEmpty()) {
-    goog.structs.forEach(this.requestPool_,
-        function(/** !ChannelRequest */ val, key, col) {
+    goog.array.forEach(this.requestPool_.getValues(),
+        function(val) {
           val.cancel();
           onComplete(val);
         });
