@@ -28,6 +28,7 @@ goog.provide('goog.html.testing');
 goog.setTestOnly();
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 
@@ -51,6 +52,25 @@ goog.require('goog.html.TrustedResourceUrl');
 goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
       html, opt_dir || null);
+};
+
+
+/**
+ * Creates a SafeStyle wrapping the given value. No validation is performed.
+ *
+ * This function is for use in tests only and must never be used in production
+ * code.
+ *
+ * @param {string} style String to wrap into a SafeStyle.
+ * @return {!goog.html.SafeStyle}
+ * @suppress {visibility} For access to SafeStyle.create...  Note that this
+ *     use is appropriate since this method is intended to be "package private"
+ *     within goog.html.  DO NOT call SafeStyle.create... from outside this
+ *     package; use appropriate wrappers instead.
+ */
+goog.html.testing.newSafeStyleForTest = function(style) {
+  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+      style);
 };
 
 
