@@ -82,6 +82,20 @@ function testNearlyEquals() {
              goog.math.nearlyEquals(87, 85, 3));
 }
 
+function testStandardAngleInRadians() {
+  assertRoughlyEquals(0, goog.math.standardAngleInRadians(2 * Math.PI), 1e-10);
+  assertRoughlyEquals(
+      Math.PI, goog.math.standardAngleInRadians(Math.PI), 1e-10);
+  assertRoughlyEquals(
+      Math.PI, goog.math.standardAngleInRadians(-1 * Math.PI), 1e-10);
+  assertRoughlyEquals(
+      Math.PI / 2, goog.math.standardAngleInRadians(-1.5 * Math.PI), 1e-10);
+  assertRoughlyEquals(
+      Math.PI, goog.math.standardAngleInRadians(5 * Math.PI), 1e-10);
+  assertEquals(0.01, goog.math.standardAngleInRadians(0.01));
+  assertEquals(0, goog.math.standardAngleInRadians(0));
+}
+
 function testStandardAngle() {
   assertEquals(359.5, goog.math.standardAngle(-360.5));
   assertEquals(0, goog.math.standardAngle(-360));

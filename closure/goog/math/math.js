@@ -105,14 +105,27 @@ goog.math.nearlyEquals = function(a, b, opt_tolerance) {
 };
 
 
+// TODO(user): Rename to normalizeAngle, retaining old name as deprecated
+// alias.
 /**
- * Standardizes an angle to be in range [0-360). Negative angles become
- * positive, and values greater than 360 are returned modulo 360.
+ * Normalizes an angle to be in range [0-360). Angles outside this range will
+ * be normalized to be the equivalent angle with that range.
  * @param {number} angle Angle in degrees.
  * @return {number} Standardized angle.
  */
 goog.math.standardAngle = function(angle) {
   return goog.math.modulo(angle, 360);
+};
+
+
+/**
+ * Normalizes an angle to be in range [0-2*PI). Angles outside this range will
+ * be normalized to be the equivalent angle with that range.
+ * @param {number} angle Angle in radians.
+ * @return {number} Standardized angle.
+ */
+goog.math.standardAngleInRadians = function(angle) {
+  return goog.math.modulo(angle, 2 * Math.PI);
 };
 
 
