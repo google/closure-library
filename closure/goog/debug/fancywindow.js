@@ -31,6 +31,8 @@ goog.require('goog.debug.DebugWindow');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.safe');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
@@ -136,7 +138,7 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
  */
 goog.debug.FancyWindow.prototype.openOptions_ = function() {
   var el = this.dh_.getElement('optionsarea');
-  el.innerHTML = '';
+  goog.dom.safe.setInnerHtml(el, goog.html.SafeHtml.EMPTY);
 
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var dh = this.dh_;
