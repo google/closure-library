@@ -932,13 +932,24 @@ goog.string.toMap = function(s) {
 
 
 /**
- * Checks whether a string contains a given substring.
- * @param {string} s The string to test.
- * @param {string} ss The substring to test for.
- * @return {boolean} True if {@code s} contains {@code ss}.
+ * Determines whether a string contains a substring.
+ * @param {string} str The string to search.
+ * @param {string} subString The substring to search for.
+ * @return {boolean} Whether {@code str} contains {@code subString}.
  */
-goog.string.contains = function(s, ss) {
-  return s.indexOf(ss) != -1;
+goog.string.contains = function(str, subString) {
+  return str.indexOf(subString) != -1;
+};
+
+
+/**
+ * Determines whether a string contains a substring, ignoring case.
+ * @param {string} str The string to search.
+ * @param {string} subString The substring to search for.
+ * @return {boolean} Whether {@code str} contains {@code subString}.
+ */
+goog.string.caseInsensitiveContains = function(str, subString) {
+  return goog.string.contains(str.toLowerCase(), subString.toLowerCase());
 };
 
 

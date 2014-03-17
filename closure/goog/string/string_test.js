@@ -1195,3 +1195,16 @@ function testSplitLimit() {
       goog.string.splitLimit('bababaababaaabb', '', 10));
 }
 
+function testContains() {
+  assertTrue(goog.string.contains('moot', 'moo'));
+  assertFalse(goog.string.contains('moo', 'moot'));
+  assertFalse(goog.string.contains('Moot', 'moo'));
+  assertTrue(goog.string.contains('moo', 'moo'));
+}
+
+function testCaseInsensitiveContains() {
+  assertTrue(goog.string.caseInsensitiveContains('moot', 'moo'));
+  assertFalse(goog.string.caseInsensitiveContains('moo', 'moot'));
+  assertTrue(goog.string.caseInsensitiveContains('Moot', 'moo'));
+  assertTrue(goog.string.caseInsensitiveContains('moo', 'moo'));
+}
