@@ -49,6 +49,9 @@ goog.fs.Error = function(error, action) {
 
   if (goog.isDef(error.name)) {
     this.name = error.name;
+    // TODO(user): Remove warning suppression after JSCompiler stops
+    // firing a spurious warning here.
+    /** @suppress {deprecated} */
     this.code = goog.fs.Error.getCodeFromName_(error.name);
   } else {
     this.code = error.code;
