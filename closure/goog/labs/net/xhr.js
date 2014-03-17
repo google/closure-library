@@ -194,6 +194,9 @@ _.send = function(method, url, data, opt_options) {
         }
       }
     };
+    xhr.onerror = function() {
+      reject(new _.Error('Network error', url, xhr));
+    };
 
     // Set the headers.
     var contentTypeIsSet = false;
