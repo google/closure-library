@@ -133,17 +133,17 @@ goog.ui.HsvPalette.prototype.inputHandler_;
 /**
  * Listener key for the mousemove event (during a drag operation).
  * @type {goog.events.Key}
- * @private
+ * @protected
  */
-goog.ui.HsvPalette.prototype.mouseMoveListener_;
+goog.ui.HsvPalette.prototype.mouseMoveListener;
 
 
 /**
  * Listener key for the mouseup event (during a drag operation).
  * @type {goog.events.Key}
- * @private
+ * @protected
  */
-goog.ui.HsvPalette.prototype.mouseUpListener_;
+goog.ui.HsvPalette.prototype.mouseUpListener;
 
 
 /**
@@ -357,8 +357,8 @@ goog.ui.HsvPalette.prototype.disposeInternal = function() {
     this.inputHandler_.dispose();
     delete this.inputHandler_;
   }
-  goog.events.unlistenByKey(this.mouseMoveListener_);
-  goog.events.unlistenByKey(this.mouseUpListener_);
+  goog.events.unlistenByKey(this.mouseMoveListener);
+  goog.events.unlistenByKey(this.mouseUpListener);
 };
 
 
@@ -422,19 +422,19 @@ goog.ui.HsvPalette.prototype.handleMouseDown = function(e) {
     // Setup value change listeners
     var b = goog.style.getBounds(this.valueBackgroundImageElement);
     this.handleMouseMoveV_(b, e);
-    this.mouseMoveListener_ = goog.events.listen(this.document_,
+    this.mouseMoveListener = goog.events.listen(this.document_,
         goog.events.EventType.MOUSEMOVE,
         goog.bind(this.handleMouseMoveV_, this, b));
-    this.mouseUpListener_ = goog.events.listen(this.document_,
+    this.mouseUpListener = goog.events.listen(this.document_,
         goog.events.EventType.MOUSEUP, this.handleMouseUp, false, this);
   } else if (e.target == this.hsImageEl_ || e.target == this.hsHandleEl_) {
     // Setup hue/saturation change listeners
     var b = goog.style.getBounds(this.hsImageEl_);
     this.handleMouseMoveHs_(b, e);
-    this.mouseMoveListener_ = goog.events.listen(this.document_,
+    this.mouseMoveListener = goog.events.listen(this.document_,
         goog.events.EventType.MOUSEMOVE,
         goog.bind(this.handleMouseMoveHs_, this, b));
-    this.mouseUpListener_ = goog.events.listen(this.document_,
+    this.mouseUpListener = goog.events.listen(this.document_,
         goog.events.EventType.MOUSEUP, this.handleMouseUp, false, this);
   }
 };
@@ -488,8 +488,8 @@ goog.ui.HsvPalette.prototype.handleMouseMoveHs_ = function(b, e) {
  * @protected
  */
 goog.ui.HsvPalette.prototype.handleMouseUp = function(e) {
-  goog.events.unlistenByKey(this.mouseMoveListener_);
-  goog.events.unlistenByKey(this.mouseUpListener_);
+  goog.events.unlistenByKey(this.mouseMoveListener);
+  goog.events.unlistenByKey(this.mouseUpListener);
 };
 
 

@@ -223,11 +223,11 @@ goog.ui.HsvaPalette.prototype.handleMouseDown = function(e) {
     // Setup value change listeners
     var b = goog.style.getBounds(this.valueBackgroundImageElement);
     this.handleMouseMoveA_(b, e);
-    this.mouseMoveListener_ = goog.events.listen(
+    this.mouseMoveListener = goog.events.listen(
         this.getDomHelper().getDocument(),
         goog.events.EventType.MOUSEMOVE,
         goog.bind(this.handleMouseMoveA_, this, b));
-    this.mouseUpListener_ = goog.events.listen(
+    this.mouseUpListener = goog.events.listen(
         this.getDomHelper().getDocument(),
         goog.events.EventType.MOUSEUP, this.handleMouseUp, false, this);
   }
