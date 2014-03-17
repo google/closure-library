@@ -123,7 +123,7 @@ function testSafeHtmlCreate() {
   assertSameHtml('<br>', br);
 
   assertSameHtml('<span title="&quot;"></span>',
-      goog.html.SafeHtml.create('span', {title: '"'}));
+      goog.html.SafeHtml.create('span', {'title': '"'}));
 
   assertSameHtml('<span>&lt;</span>',
       goog.html.SafeHtml.create('span', {}, '<'));
@@ -134,23 +134,23 @@ function testSafeHtmlCreate() {
   assertSameHtml('<span></span>', goog.html.SafeHtml.create('span', {}, []));
 
   assertSameHtml('<span></span>',
-      goog.html.SafeHtml.create('span', {title: null, 'class': undefined}));
+      goog.html.SafeHtml.create('span', {'title': null, 'class': undefined}));
 
   assertSameHtml('<span>x<br>y</span>',
       goog.html.SafeHtml.create('span', {}, ['x', br, 'y']));
 
   var onclick = goog.string.Const.from('alert(/"/)');
   assertSameHtml('<span onclick="alert(/&quot;/)"></span>',
-      goog.html.SafeHtml.create('span', {onclick: onclick}));
+      goog.html.SafeHtml.create('span', {'onclick': onclick}));
 
   var href = goog.html.testing.newSafeUrlForTest('?a&b');
   assertSameHtml('<a href="?a&amp;b"></a>',
-      goog.html.SafeHtml.create('a', {href: href}));
+      goog.html.SafeHtml.create('a', {'href': href}));
 
   assertNull(goog.html.SafeHtml.create('span').getDirection());
-  assertNull(goog.html.SafeHtml.create('span', {dir: 'auto'}).getDirection());
+  assertNull(goog.html.SafeHtml.create('span', {'dir': 'auto'}).getDirection());
   assertEquals(goog.i18n.bidi.Dir.LTR,
-      goog.html.SafeHtml.create('span', {dir: 'ltr'}).getDirection());
+      goog.html.SafeHtml.create('span', {'dir': 'ltr'}).getDirection());
 
   assertThrows(function() {
     goog.html.SafeHtml.create('script');
@@ -161,11 +161,11 @@ function testSafeHtmlCreate() {
   });
 
   assertThrows(function() {
-    goog.html.SafeHtml.create('img', {onerror: ''});
+    goog.html.SafeHtml.create('img', {'onerror': ''});
   });
 
   assertThrows(function() {
-    goog.html.SafeHtml.create('a', {href: 'javascript:alert(1)'});
+    goog.html.SafeHtml.create('a', {'href': 'javascript:alert(1)'});
   });
 
   assertThrows(function() {
