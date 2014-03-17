@@ -194,19 +194,19 @@ goog.json.Serializer = function(opt_replacer) {
  */
 goog.json.Serializer.prototype.serialize = function(object) {
   var sb = [];
-  this.serialize_(object, sb);
+  this.serializeInternal(object, sb);
   return sb.join('');
 };
 
 
 /**
  * Serializes a generic value to a JSON string
- * @private
+ * @protected
  * @param {*} object The object to serialize.
  * @param {Array} sb Array used as a string builder.
  * @throws Error if there are loops in the object graph.
  */
-goog.json.Serializer.prototype.serialize_ = function(object, sb) {
+goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
   switch (typeof object) {
     case 'string':
       this.serializeString_(/** @type {string} */ (object), sb);
@@ -329,7 +329,7 @@ goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
     sb.push(sep);
 
     var value = arr[i];
-    this.serialize_(
+    this.serializeInternal(
         this.replacer_ ? this.replacer_.call(arr, String(i), value) : value,
         sb);
 
@@ -358,7 +358,7 @@ goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
         this.serializeString_(key, sb);
         sb.push(':');
 
-        this.serialize_(
+        this.serializeInternal(
             this.replacer_ ? this.replacer_.call(obj, key, value) : value,
             sb);
 

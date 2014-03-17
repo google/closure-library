@@ -62,7 +62,7 @@ goog.proto.Serializer.prototype.serializeArray = function(arr, sb) {
         emptySlots = 0;
       }
       sb.push(sep);
-      this.serialize_(arr[i], sb);
+      this.serializeInternal(arr[i], sb);
       sep = ',';
     }
   }
