@@ -536,6 +536,11 @@ goog.testing.stacktrace.canonicalize = function(stack) {
  * @private
  */
 goog.testing.stacktrace.getNativeStack_ = function() {
+  var tmpError = new Error();
+  if (tmpError.stack) {
+    return tmpError.stack;
+  }
+
   // IE10 will only create a stack trace when the Error is thrown.
   // We use null.x() to throw an exception because the closure compiler may
   // replace "throw" with a function call in an attempt to minimize the binary
