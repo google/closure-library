@@ -23,7 +23,6 @@ goog.provide('goog.testing.TestQueue');
 /**
  * Generic queue for writing unit tests
  * @constructor
- * @final
  */
 goog.testing.TestQueue = function() {
   /**
