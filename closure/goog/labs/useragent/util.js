@@ -31,12 +31,42 @@ goog.require('goog.string');
 
 
 /**
+ * Gets the native userAgent string from navigator if it exists.
+ * If navigator or navigator.userAgent string is missing, returns an empty
+ * string.
+ * @return {string}
+ * @private
+ */
+goog.labs.userAgent.util.getNativeUserAgentString_ = function() {
+  var navigator = goog.labs.userAgent.util.getNavigator_();
+  if (navigator) {
+    var userAgent = navigator.userAgent;
+    if (userAgent) {
+      return userAgent;
+    }
+  }
+  return '';
+};
+
+
+/**
+ * Getter for the native navigator.
+ * This is a separate function so it can be stubbed out in testing.
+ * @return {Navigator}
+ * @private
+ */
+goog.labs.userAgent.util.getNavigator_ = function() {
+  return goog.global.navigator;
+};
+
+
+/**
  * A possible override for applications which wish to not check
  * navigator.userAgent but use a specified value for detection instead.
  * @private {string}
  */
 goog.labs.userAgent.util.userAgent_ =
-    goog.global['navigator'] ? goog.global['navigator'].userAgent : '';
+    goog.labs.userAgent.util.getNativeUserAgentString_();
 
 
 /**
@@ -47,7 +77,7 @@ goog.labs.userAgent.util.userAgent_ =
  */
 goog.labs.userAgent.util.setUserAgent = function(opt_userAgent) {
   goog.labs.userAgent.util.userAgent_ = opt_userAgent ||
-      (goog.global['navigator'] && goog.global['navigator'].userAgent || '');
+      goog.labs.userAgent.util.getNativeUserAgentString_();
 };
 
 
