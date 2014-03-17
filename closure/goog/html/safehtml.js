@@ -24,6 +24,7 @@ goog.provide('goog.html.SafeHtml');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.tags');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
@@ -270,12 +271,19 @@ goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet('link',
 
 
 /**
+ * @private
+ * @typedef {string|goog.string.Const|goog.html.SafeUrl|goog.html.SafeStyle}
+ */
+goog.html.SafeHtml.AttributeValue_;
+
+
+/**
  * Creates a SafeHtml content consisting of a tag with optional attributes and
  * optional content.
  * @param {string} tagName The name of the tag. Only tag names consisting of
  *     [a-zA-Z0-9-] are allowed. <link>, <script> and <style> tags are not
  *     supported.
- * @param {!Object.<string, string|goog.string.Const|goog.html.SafeUrl>=}
+ * @param {!Object.<string, goog.html.SafeHtml.AttributeValue_>=}
  *     opt_attributes Mapping from attribute names to their values. Only
  *     attribute names consisting of [a-zA-Z0-9-] are allowed. Attributes with
  *     a special meaning (e.g. on*) require goog.string.Const value, attributes
@@ -324,8 +332,13 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
         throw Error('Attribute "' + name +
             '" requires goog.string.Const or goog.html.SafeUrl value, "' +
             value + '" given.');
+      } else if (value instanceof goog.html.SafeStyle) {
+        // TODO(user): Allow "style" only with SafeStyle when it supports
+        // dynamic construction.
+        goog.asserts.assert(name.toLowerCase() == 'style',
+            'goog.html.SafeStyle is only supported in "style" attribute.');
+        value = goog.html.SafeStyle.unwrap(value);
       }
-      // TODO(user): Allow "style" only with SafeStyle.
       result += ' ' + name + '="' + goog.string.htmlEscape(value) + '"';
     }
   }

@@ -147,6 +147,10 @@ function testSafeHtmlCreate() {
   assertSameHtml('<a href="?a&amp;b"></a>',
       goog.html.SafeHtml.create('a', {'href': href}));
 
+  var style = goog.html.testing.newSafeStyleForTest('border: /* " */ 0;');
+  assertSameHtml('<hr style="border: /* &quot; */ 0;">',
+      goog.html.SafeHtml.create('hr', {'style': style}));
+
   assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
       goog.html.SafeHtml.create('span').getDirection());
   assertNull(goog.html.SafeHtml.create('span', {'dir': 'auto'}).getDirection());
@@ -167,6 +171,10 @@ function testSafeHtmlCreate() {
 
   assertThrows(function() {
     goog.html.SafeHtml.create('a', {'href': 'javascript:alert(1)'});
+  });
+
+  assertThrows(function() {
+    goog.html.SafeHtml.create('hr', {'class': style});
   });
 
   assertThrows(function() {
