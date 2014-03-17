@@ -69,8 +69,7 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
    * @private
    */
   this.html_ = (html instanceof goog.html.SafeHtml ? html :
-      goog.html.legacyconversions.safeHtmlFromString(html,
-          goog.ui.tree.BaseNode.ALLOW_UNSAFE_API));
+      goog.ui.tree.BaseNode.convertToSafeHtml_(html));
 
   /** @private {string} */
   this.iconClass_;
@@ -822,10 +821,20 @@ goog.ui.tree.BaseNode.prototype.isUserCollapsible = function() {
 
 
 /**
- * Returns the html for the node.
+ * Appends the html for the node.
  * @param {goog.string.StringBuffer} sb A string buffer to append the HTML to.
  */
 goog.ui.tree.BaseNode.prototype.toHtml = function(sb) {
+  var html = this.toSafeHtml();
+  sb.append(goog.html.SafeHtml.unwrap(html));
+};
+
+
+/**
+ * Creates HTML for the node.
+ * @return {!goog.html.SafeHtml}
+ */
+goog.ui.tree.BaseNode.prototype.toSafeHtml = function() {
   var tree = this.getTree();
   var hideLines = !tree.getShowLines() ||
       tree == this.getParent() && !tree.getShowRootLines();
@@ -835,22 +844,28 @@ goog.ui.tree.BaseNode.prototype.toHtml = function(sb) {
 
   var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
 
-  sb.append('<div class="', this.config_.cssItem, '" id="', this.getId(), '">',
-      this.getRowHtml(),
-      '<div class="', childClass, '" style="',
-      this.getLineStyle(),
-      (nonEmptyAndExpanded ? '' : 'display:none;'),
-      '">');
+  var attributes = {
+    'class': childClass,
+    'style': this.getLineStyle() + (nonEmptyAndExpanded ? '' : 'display:none;')
+  };
 
+  var content = [];
   if (nonEmptyAndExpanded) {
     // children
+    var sb = new goog.string.StringBuffer();
     this.forEachChild(function(child) {
+      // TODO(user): Use toSafeHtml() once overrides are converted.
       child.toHtml(sb);
     });
+    content = goog.ui.tree.BaseNode.convertToSafeHtml_(sb.toString());
   }
 
-  // and tags
-  sb.append('</div></div>');
+  var children = goog.html.SafeHtml.create('div', attributes, content);
+
+  return goog.html.SafeHtml.create('div',
+      {'class': this.config_.cssItem, 'id': this.getId()},
+      // TODO(user): Use getRowSafeHtml() once overrides are converted.
+      [goog.ui.tree.BaseNode.convertToSafeHtml_(this.getRowHtml()), children]);
 };
 
 
@@ -868,15 +883,27 @@ goog.ui.tree.BaseNode.prototype.getPixelIndent_ = function() {
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getRowHtml = function() {
-  var sb = new goog.string.StringBuffer();
-  sb.append('<div class="', this.getRowClassName(), '" style="padding-',
-      this.isRightToLeft() ? 'right:' : 'left:',
-      this.getPixelIndent_(), 'px">',
-      this.getExpandIconHtml(),
-      this.getIconHtml(),
-      this.getLabelHtml(),
-      '</div>');
-  return sb.toString();
+  return goog.html.SafeHtml.unwrap(this.getRowSafeHtml());
+};
+
+
+/**
+ * @return {!goog.html.SafeHtml} The html for the row.
+ * @protected
+ */
+goog.ui.tree.BaseNode.prototype.getRowSafeHtml = function() {
+  var paddingKey = 'padding-' + (this.isRightToLeft() ? 'right:' : 'left:');
+  var attributes = {
+    'class': this.getRowClassName(),
+    'style': paddingKey + this.getPixelIndent_() + 'px'
+  };
+  var content = [
+    // TODO(user): Use get*SafeHtml() once overrides are converted.
+    goog.ui.tree.BaseNode.convertToSafeHtml_(this.getExpandIconHtml()),
+    goog.ui.tree.BaseNode.convertToSafeHtml_(this.getIconHtml()),
+    goog.ui.tree.BaseNode.convertToSafeHtml_(this.getLabelHtml())
+  ];
+  return goog.html.SafeHtml.create('div', attributes, content);
 };
 
 
@@ -900,13 +927,26 @@ goog.ui.tree.BaseNode.prototype.getRowClassName = function() {
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getLabelHtml = function() {
-  var toolTip = this.getToolTip();
-  var sb = new goog.string.StringBuffer();
-  sb.append('<span class="', this.config_.cssItemLabel, '"',
-      (toolTip ? ' title="' + goog.string.htmlEscape(toolTip) + '"' : ''),
-      '>', this.getHtml(), '</span>',
-      '<span>', this.getAfterLabelHtml(), '</span>');
-  return sb.toString();
+  return goog.html.SafeHtml.unwrap(this.getLabelSafeHtml());
+};
+
+
+/**
+ * @return {!goog.html.SafeHtml} The html for the label.
+ * @protected
+ */
+goog.ui.tree.BaseNode.prototype.getLabelSafeHtml = function() {
+  var html = goog.html.SafeHtml.create('span',
+      {
+        'class': this.config_.cssItemLabel,
+        'title': this.getToolTip() || null
+      },
+      // TODO(user): Use getSafeHtml() once overrides are converted.
+      goog.ui.tree.BaseNode.convertToSafeHtml_(this.getHtml()));
+  var afterLabel = goog.html.SafeHtml.create('span', {},
+      // TODO(user): Use get*SafeHtml() once overrides are converted.
+      goog.ui.tree.BaseNode.convertToSafeHtml_(this.getAfterLabelHtml()));
+  return goog.html.SafeHtml.concat(html, afterLabel);
 };
 
 
@@ -916,14 +956,14 @@ goog.ui.tree.BaseNode.prototype.getLabelHtml = function() {
  * @return {string} The html.
  */
 goog.ui.tree.BaseNode.prototype.getAfterLabelHtml = function() {
-  return goog.html.SafeHtml.unwrap(this.afterLabelHtml_);
+  return goog.html.SafeHtml.unwrap(this.getAfterLabelSafeHtml());
 };
 
 
 /**
  * Returns the html that appears after the label. This is useful if you want to
  * put extra UI on the row of the label but not inside the anchor tag.
- * @return {goog.html.SafeHtml} The html.
+ * @return {!goog.html.SafeHtml} The html.
  */
 goog.ui.tree.BaseNode.prototype.getAfterLabelSafeHtml = function() {
   return this.afterLabelHtml_;
@@ -962,8 +1002,19 @@ goog.ui.tree.BaseNode.prototype.setAfterLabelSafeHtml = function(html) {
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getIconHtml = function() {
-  return '<span style="display:inline-block" class="' +
-      this.getCalculatedIconClass() + '"></span>';
+  return goog.html.SafeHtml.unwrap(this.getIconSafeHtml());
+};
+
+
+/**
+ * @return {!goog.html.SafeHtml} The html for the icon.
+ * @protected
+ */
+goog.ui.tree.BaseNode.prototype.getIconSafeHtml = function() {
+  return goog.html.SafeHtml.create('span', {
+    'style': 'display:inline-block',
+    'class': this.getCalculatedIconClass()
+  });
 };
 
 
@@ -979,8 +1030,32 @@ goog.ui.tree.BaseNode.prototype.getCalculatedIconClass = goog.abstractMethod;
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getExpandIconHtml = function() {
-  return '<span type="expand" style="display:inline-block" class="' +
-      this.getExpandIconClass() + '"></span>';
+  return goog.html.SafeHtml.unwrap(this.getExpandIconSafeHtml());
+};
+
+
+/**
+ * @return {!goog.html.SafeHtml} The source for the icon.
+ * @protected
+ */
+goog.ui.tree.BaseNode.prototype.getExpandIconSafeHtml = function() {
+  return goog.html.SafeHtml.create('span', {
+    'type': 'expand',
+    'style': 'display:inline-block',
+    'class': this.getExpandIconClass()
+  });
+};
+
+
+/**
+ * Helper function to convert HTML string to SafeHtml.
+ * @param {string} html
+ * @return {!goog.html.SafeHtml}
+ * @private
+ */
+goog.ui.tree.BaseNode.convertToSafeHtml_ = function(html) {
+  return goog.html.legacyconversions.safeHtmlFromString(
+      html, goog.ui.tree.BaseNode.ALLOW_UNSAFE_API);
 };
 
 
@@ -1252,13 +1327,13 @@ goog.ui.tree.BaseNode.prototype.setSafeHtml = function(html) {
  * @return {string} The html string of the label.
  */
 goog.ui.tree.BaseNode.prototype.getHtml = function() {
-  return goog.html.SafeHtml.unwrap(this.html_);
+  return goog.html.SafeHtml.unwrap(this.getSafeHtml());
 };
 
 
 /**
  * Returns the html of the label.
- * @return {goog.html.SafeHtml} The html string of the label.
+ * @return {!goog.html.SafeHtml} The html string of the label.
  */
 goog.ui.tree.BaseNode.prototype.getSafeHtml = function() {
   return this.html_;

@@ -32,6 +32,7 @@ goog.provide('goog.ui.tree.TreeControl');
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
 goog.require('goog.dom.classlist');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.events.EventType');
 goog.require('goog.events.FocusHandler');
 goog.require('goog.events.KeyHandler');
@@ -231,9 +232,9 @@ goog.ui.tree.TreeControl.prototype.setExpanded = function(expanded) {
 
 
 /** @override */
-goog.ui.tree.TreeControl.prototype.getExpandIconHtml = function() {
+goog.ui.tree.TreeControl.prototype.getExpandIconSafeHtml = function() {
   // no expand icon for root element
-  return '';
+  return goog.html.SafeHtml.EMPTY;
 };
 
 
