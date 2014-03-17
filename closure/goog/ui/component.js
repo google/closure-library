@@ -48,7 +48,7 @@ goog.ui.Component = function(opt_domHelper) {
   goog.events.EventTarget.call(this);
   this.dom_ = opt_domHelper || goog.dom.getDomHelper();
 
-  // Set the defalt right to left value.
+  // Set the default right to left value.
   this.rightToLeft_ = goog.ui.Component.defaultRightToLeft_;
 };
 goog.inherits(goog.ui.Component, goog.events.EventTarget);
