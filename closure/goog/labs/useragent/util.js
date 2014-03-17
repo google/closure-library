@@ -18,6 +18,7 @@
  *
  * @visibility {//closure/goog/bin/sizetests:__pkg__}
  * @visibility {//closure/goog/testing:__pkg__}
+ * @visibility {//testing/puppet/modules:__pkg__} *
  *
  * @author nnaze@google.com (Nathan Naze)
  */
