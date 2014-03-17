@@ -505,7 +505,7 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
     this.hilitedRow_ = index;
     if (rowDiv) {
       goog.dom.classlist.addAll(rowDiv, [this.activeClassName,
-          this.legacyActiveClassName_]);
+        this.legacyActiveClassName_]);
       if (this.target_) {
         goog.a11y.aria.setActiveDescendant(this.target_, rowDiv);
       }
@@ -766,7 +766,7 @@ goog.ui.ac.Renderer.prototype.disposeInternal = function() {
  */
 goog.ui.ac.Renderer.prototype.renderRowContents_ =
     function(row, token, node) {
-  node.innerHTML = goog.string.htmlEscape(row.data.toString());
+  goog.dom.setTextContent(node, row.data.toString());
 };
 
 

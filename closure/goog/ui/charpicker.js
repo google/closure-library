@@ -24,6 +24,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -419,14 +420,14 @@ goog.ui.CharPicker.prototype.decorateInternal = function(element) {
     var trigger = self.hc_.getAnchorElement();
     var ch = self.getChar_(trigger);
     if (ch) {
-      self.zoomEl_.innerHTML = self.displayChar_(ch);
-      self.unicodeEl_.innerHTML = goog.i18n.uChar.toHexString(ch);
+      goog.dom.setTextContent(self.zoomEl_, self.displayChar_(ch));
+      goog.dom.setTextContent(self.unicodeEl_, goog.i18n.uChar.toHexString(ch));
       // Clear the character name since we don't want to show old data because
       // it is retrieved asynchronously and the DOM object is re-used
-      self.charNameEl_.innerHTML = '';
+      goog.dom.setTextContent(self.charNameEl_, '');
       self.charNameFetcher_.getName(ch, function(charName) {
         if (charName) {
-          self.charNameEl_.innerHTML = charName;
+          goog.dom.setTextContent(self.charNameEl_, charName);
         }
       });
     }
@@ -611,10 +612,9 @@ goog.ui.CharPicker.prototype.handleSelectedItem_ = function(e) {
 goog.ui.CharPicker.prototype.handleInput_ = function(e) {
   var ch = this.getInputChar();
   if (ch) {
-    var unicode = goog.i18n.uChar.toHexString(ch);
-    this.zoomEl_.innerHTML = ch;
-    this.unicodeEl_.innerHTML = unicode;
-    this.charNameEl_.innerHTML = '';
+    goog.dom.setTextContent(this.zoomEl_, ch);
+    goog.dom.setTextContent(this.unicodeEl_, goog.i18n.uChar.toHexString(ch));
+    goog.dom.setTextContent(this.charNameEl_, '');
     var coord =
         new goog.ui.Tooltip.ElementTooltipPosition(this.input_.getElement());
     this.hc_.setPosition(coord);
@@ -755,8 +755,9 @@ goog.ui.CharPicker.prototype.updateGrid_ = function(grid, items) {
     var MSG_PLEASE_HOVER =
         goog.getMsg('Please hover over each cell for the character name.');
 
-    this.notice_.getElement().innerHTML =
-        this.charNameFetcher_.isNameAvailable(items[0]) ? MSG_PLEASE_HOVER : '';
+    goog.dom.setTextContent(this.notice_.getElement(),
+        this.charNameFetcher_.isNameAvailable(
+            items[0]) ? MSG_PLEASE_HOVER : '');
     this.items = items;
     if (this.stickwrap_.offsetHeight > 0) {
       this.stick_.style.height =
@@ -836,7 +837,7 @@ goog.ui.CharPicker.prototype.populateGridWithButtons_ = function(grid) {
 goog.ui.CharPicker.prototype.modifyCharNode_ = function(button, ch) {
   var text = this.displayChar_(ch);
   var buttonEl = button.getElement();
-  buttonEl.innerHTML = text;
+  goog.dom.setTextContent(buttonEl, text);
   buttonEl.setAttribute('char', ch);
   button.setVisible(true);
 };
