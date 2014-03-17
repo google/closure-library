@@ -60,15 +60,26 @@ goog.define('goog.i18n.bidi.FORCE_RTL', false);
  * TODO(user): write a test that checks that this is a compile-time constant.
  */
 goog.i18n.bidi.IS_RTL = goog.i18n.bidi.FORCE_RTL ||
-    (goog.LOCALE.substring(0, 2).toLowerCase() == 'ar' ||
-     goog.LOCALE.substring(0, 2).toLowerCase() == 'fa' ||
-     goog.LOCALE.substring(0, 2).toLowerCase() == 'he' ||
-     goog.LOCALE.substring(0, 2).toLowerCase() == 'iw' ||
-     goog.LOCALE.substring(0, 2).toLowerCase() == 'ur' ||
-     goog.LOCALE.substring(0, 2).toLowerCase() == 'yi') &&
-    (goog.LOCALE.length == 2 ||
-     goog.LOCALE.substring(2, 3) == '-' ||
-     goog.LOCALE.substring(2, 3) == '_');
+    (
+        (goog.LOCALE.substring(0, 2).toLowerCase() == 'ar' ||
+         goog.LOCALE.substring(0, 2).toLowerCase() == 'fa' ||
+         goog.LOCALE.substring(0, 2).toLowerCase() == 'he' ||
+         goog.LOCALE.substring(0, 2).toLowerCase() == 'iw' ||
+         goog.LOCALE.substring(0, 2).toLowerCase() == 'ps' ||
+         goog.LOCALE.substring(0, 2).toLowerCase() == 'sd' ||
+         goog.LOCALE.substring(0, 2).toLowerCase() == 'ug' ||
+         goog.LOCALE.substring(0, 2).toLowerCase() == 'ur' ||
+         goog.LOCALE.substring(0, 2).toLowerCase() == 'yi') &&
+        (goog.LOCALE.length == 2 ||
+         goog.LOCALE.substring(2, 3) == '-' ||
+         goog.LOCALE.substring(2, 3) == '_')
+    ) || (
+        goog.LOCALE.length >= 3 &&
+        goog.LOCALE.substring(0, 3).toLowerCase() == 'ckb' &&
+        (goog.LOCALE.length == 3 ||
+         goog.LOCALE.substring(3, 4) == '-' ||
+         goog.LOCALE.substring(3, 4) == '_')
+    );
 
 
 /**
@@ -506,7 +517,8 @@ goog.i18n.bidi.isRtlExitText = goog.i18n.bidi.endsWithRtl;
  * @private
  */
 goog.i18n.bidi.rtlLocalesRe_ = new RegExp(
-    '^(ar|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Arab|Hebr|Thaa|Nkoo|Tfng))' +
+    '^(ar|ckb|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|' +
+    '.*[-_](Arab|Hebr|Thaa|Nkoo|Tfng))' +
     '(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)',
     'i');
 
@@ -527,7 +539,7 @@ goog.i18n.bidi.rtlLocalesRe_ = new RegExp(
  * The languages usually written in a right-to-left script are taken as those
  * with Suppress-Script: Hebr|Arab|Thaa|Nkoo|Tfng  in
  * http://www.iana.org/assignments/language-subtag-registry,
- * as well as Sindhi (sd) and Uyghur (ug).
+ * as well as Central (or Sorani) Kurdish (ckb), Sindhi (sd) and Uyghur (ug).
  * Other subtags of the language code, e.g. regions like EG (Egypt), are
  * ignored.
  * @param {string} lang BCP 47 (a.k.a III) language code.
