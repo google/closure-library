@@ -17,12 +17,16 @@
  * range by dragging a thumb. The selected value is exposed through getValue().
  *
  * To decorate, the slider should be bound to an element with the class name
- * 'goog-slider-[vertical / horizontal]' containing a child with the classname
- * 'goog-slider-thumb', whose position is set to relative.
+ * 'goog-slider' containing a child with the class name 'goog-slider-thumb',
+ * whose position is set to relative.
  * Note that you won't be able to see these elements unless they are styled.
  *
+ * Slider orientation is horizontal by default.
+ * Use setOrientation(goog.ui.Slider.Orientation.VERTICAL) for a vertical
+ * slider.
+ *
  * Decorate Example:
- * <div id="slider" class="goog-slider-horizontal">
+ * <div id="slider" class="goog-slider">
  *   <div class="goog-slider-thumb"></div>
  * </div>
  *
