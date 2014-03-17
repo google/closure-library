@@ -20,8 +20,6 @@
 goog.provide('goog.userAgentTestUtil');
 goog.provide('goog.userAgentTestUtil.UserAgents');
 
-goog.require('goog.labs.userAgent.browser');
-goog.require('goog.labs.userAgent.engine');
 goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.userAgentTestUtil');
@@ -33,16 +31,19 @@ goog.setTestOnly('goog.userAgentTestUtil');
  */
 goog.userAgentTestUtil.reinitializeUserAgent = function() {
 
+  goog.userAgent.init_();
+
   // Unfortunately we can't isolate the useragent setting in a function
   // we can call, because things rely on it compiling to nothing when
   // one of the ASSUME flags is set, and the compiler isn't smart enough
   // to do that when the setting is done inside a function that's inlined.
-  goog.userAgent.OPERA = goog.labs.userAgent.browser.isOpera();
-  goog.userAgent.IE = goog.labs.userAgent.browser.isIE();
-  goog.userAgent.GECKO = goog.labs.userAgent.engine.isGecko();
-  goog.userAgent.WEBKIT = goog.labs.userAgent.engine.isWebKit();
-  goog.userAgent.MOBILE = goog.userAgent.isMobile_();
+  goog.userAgent.OPERA = goog.userAgent.detectedOpera_;
+  goog.userAgent.IE = goog.userAgent.detectedIe_;
+  goog.userAgent.GECKO = goog.userAgent.detectedGecko_;
+  goog.userAgent.WEBKIT = goog.userAgent.detectedWebkit_;
+  goog.userAgent.MOBILE = goog.userAgent.detectedMobile_;
   goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
+
 
   goog.userAgent.initPlatform_();
   goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();

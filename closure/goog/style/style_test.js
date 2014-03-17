@@ -23,7 +23,6 @@ goog.require('goog.array');
 goog.require('goog.color');
 goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
-goog.require('goog.labs.userAgent.util');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
@@ -32,7 +31,7 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
-goog.require('goog.testing.MockUserAgent');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -50,7 +49,8 @@ var isBorderBox = goog.dom.isCss1CompatMode() ?
 var EPSILON = 2;
 var expectedFailures = new goog.testing.ExpectedFailures();
 var $ = goog.dom.getElement;
-var mockUserAgent;
+var propertyReplacer = new goog.testing.PropertyReplacer();
+
 
 function setUpPage() {
   var viewportSize = goog.dom.getViewportSize();
@@ -68,9 +68,6 @@ function setUpPage() {
 
 function setUp() {
   window.scrollTo(0, 0);
-  goog.userAgentTestUtil.reinitializeUserAgent();
-  mockUserAgent = new goog.testing.MockUserAgent();
-  mockUserAgent.install();
 }
 
 function tearDown() {
@@ -81,7 +78,8 @@ function tearDown() {
   var testViewport = goog.dom.getElement('test-viewport');
   testViewport.setAttribute('style', '');
   testViewport.innerHTML = '';
-  goog.dispose(mockUserAgent);
+  propertyReplacer.reset();
+  goog.userAgentTestUtil.reinitializeUserAgent();
 }
 
 function testSetStyle() {
@@ -2143,18 +2141,14 @@ function testGetsTranslation() {
  * @param {string=} opt_vendor Navigator vendor string.
  */
 function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
-
-  var mockNavigator = {
-    'userAgent': uaString,
-    'product': opt_product,
-    'vendor': opt_vendor
+  var mockGlobal = {
+    'navigator': {
+      'userAgent': uaString,
+      'product': opt_product,
+      'vendor': opt_vendor
+    }
   };
-
-  mockUserAgent.setNavigator(mockNavigator);
-  mockUserAgent.setUserAgentString(uaString);
-
-  // Force User-Agent lib to reread the global userAgent.
-  goog.labs.userAgent.util.setUserAgent(null);
+  propertyReplacer.set(goog, 'global', mockGlobal);
 
   goog.userAgentTestUtil.reinitializeUserAgent();
   for (var ua in goog.userAgentTestUtil.UserAgents) {

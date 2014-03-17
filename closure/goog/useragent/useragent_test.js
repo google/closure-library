@@ -16,12 +16,10 @@ goog.provide('goog.userAgentTest');
 goog.setTestOnly('goog.userAgentTest');
 
 goog.require('goog.array');
-goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgentTestUtil');
-
 
 var documentMode;
 goog.userAgent.getDocumentMode_ = function() {
@@ -61,9 +59,6 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
     }
   };
   propertyReplacer.set(goog, 'global', mockGlobal);
-
-  goog.labs.userAgent.util.setUserAgent(null);
-
   goog.userAgentTestUtil.reinitializeUserAgent();
   for (var ua in UserAgents) {
     var isExpected = goog.array.contains(expectedAgents, UserAgents[ua]);
@@ -73,36 +68,22 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
 }
 
 function testOperaInit() {
-  var mockOpera = {
-    'version': function() {
-      return '9.20';
-    }
-  };
-
-  var mockGlobal = {
-    'navigator': {
-      'userAgent': 'Opera/9.20 (Windows NT 5.1; U; de),gzip(gfe)'
-    },
-    'opera': mockOpera
-  };
-  propertyReplacer.set(goog, 'global', mockGlobal);
-
   propertyReplacer.set(goog.userAgent, 'getUserAgentString', function() {
     return 'Opera/9.20 (Windows NT 5.1; U; de),gzip(gfe)';
   });
 
-  goog.labs.userAgent.util.setUserAgent(null);
+  goog.global['opera'] = {
+    version: function() {
+      return '9.20';
+    }
+  };
   goog.userAgentTestUtil.reinitializeUserAgent();
-  assertTrue(goog.userAgent.OPERA);
+  assertTrue(goog.userAgent.detectedOpera_);
   assertEquals('9.20', goog.userAgent.VERSION);
 
   // What if 'opera' global has been overwritten?
   // We must degrade gracefully (rather than throwing JS errors).
-  propertyReplacer.set(goog.global, 'opera', 'bobloblaw');
-
-  // NOTE(nnaze): window.opera is now ignored with the migration to
-  // goog.labs.userAgent.*. Version is expected to should stay the same.
-  goog.labs.userAgent.util.setUserAgent(null);
+  goog.global['opera'] = 'bobloblaw';
   goog.userAgentTestUtil.reinitializeUserAgent();
   assertUndefined(goog.userAgent.VERSION);
 }
@@ -126,7 +107,6 @@ function testCompare() {
 }
 
 function testGecko() {
-
   assertGecko('Mozilla/5.0 (Windows; U; Windows NT 5.1; nl-NL; rv:1.7.5)' +
       'Gecko/20041202 Gecko/1.0', '1.7.5');
   assertGecko('Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.7.6)' +
@@ -203,7 +183,7 @@ function testIeDocumentModeOverride() {
 
   documentMode = 8;
   assertIe('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/5.0',
-           '8.0');
+      '8.0');
 }
 
 function testDocumentModeInStandardsMode() {
@@ -217,6 +197,9 @@ function testOpera() {
   var assertOpera = function(uaString) {
     assertUserAgent([UserAgents.OPERA], uaString);
   };
+  var assertIe = function(uaString) {
+    assertUserAgent([UserAgents.IE], uaString);
+  };
   assertOpera('Opera/7.23 (Windows 98; U) [en]');
   assertOpera('Opera/8.00 (Windows NT 5.1; U; en)');
   assertOpera('Opera/8.0 (X11; Linux i686; U; cs)');
@@ -229,6 +212,15 @@ function testOpera() {
   assertOpera('Opera/9.00 (Windows NT 5.1; U; en)');
   assertOpera('Opera/9.00 (Windows NT 5.2; U; en)');
   assertOpera('Opera/9.00 (Windows NT 6.0; U; en)');
+  // Test Opera spoofing as IE.  Currently detected as IE.
+  assertIe('Mozilla/4.0 (compatible; MSIE 5.0; Windows 2000) Opera 6.03' +
+      '[en]');
+  assertIe('Mozilla/4.0 (compatible; MSIE 5.0; Mac_PowerPC) Opera 6.0' +
+      '[en]');
+  assertIe('Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; en) Opera' +
+      '8.50');
+  assertIe('Mozilla/4.0 (compatible; MSIE 6.0; Symbian OS; Nokia' +
+      '6630/4.03.38; 6937) Opera 8.50 [es]');
 }
 
 function testUnknownBrowser() {
@@ -240,7 +232,6 @@ function testNoNavigator() {
   // global object has no "navigator" property.
   var mockGlobal = {};
   propertyReplacer.set(goog, 'global', mockGlobal);
-  goog.labs.userAgent.util.setUserAgent(null);
   goog.userAgentTestUtil.reinitializeUserAgent();
 
   assertEquals('Platform should be the empty string', '',

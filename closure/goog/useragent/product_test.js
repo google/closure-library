@@ -16,7 +16,6 @@ goog.provide('goog.userAgent.productTest');
 goog.setTestOnly('goog.userAgent.productTest');
 
 goog.require('goog.array');
-goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.MockUserAgent');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -41,7 +40,6 @@ function tearDown() {
 }
 
 function updateUserAgentUtils() {
-  goog.labs.userAgent.util.setUserAgent(null);
   goog.userAgentTestUtil.reinitializeUserAgent();
 
   goog.userAgent.product.init_();
