@@ -73,7 +73,17 @@ function testSetUserAgent() {
   goog.labs.userAgent.util.setUserAgent(ua);
   assertEquals(ua, goog.labs.userAgent.util.getUserAgent());
   assertTrue(goog.labs.userAgent.util.matchUserAgent('Punch'));
+  assertFalse(goog.labs.userAgent.util.matchUserAgent('punch'));
   assertFalse(goog.labs.userAgent.util.matchUserAgent('Mozilla'));
+}
+
+function testSetUserAgentIgnoreCase() {
+  var ua = 'Five Finger Death Punch';
+  goog.labs.userAgent.util.setUserAgent(ua);
+  assertEquals(ua, goog.labs.userAgent.util.getUserAgent());
+  assertTrue(goog.labs.userAgent.util.matchUserAgentIgnoreCase('Punch'));
+  assertTrue(goog.labs.userAgent.util.matchUserAgentIgnoreCase('punch'));
+  assertFalse(goog.labs.userAgent.util.matchUserAgentIgnoreCase('Mozilla'));
 }
 
 function testNoNavigator() {
