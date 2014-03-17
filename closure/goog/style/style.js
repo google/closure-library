@@ -321,6 +321,18 @@ goog.style.getComputedCursor = function(element) {
 
 
 /**
+ * Retrieves the computed value of the CSS transform attribute.
+ * @param {Element} element The element to get the transform of.
+ * @return {string} The computed string representation of the transform matrix.
+ */
+goog.style.getComputedTransform = function(element) {
+  var property = goog.style.getVendorStyleName_(element, 'transform');
+  return goog.style.getStyle_(element, property) ||
+      goog.style.getStyle_(element, 'transform');
+};
+
+
+/**
  * Sets the top/left values of an element.  If no unit is specified in the
  * argument then it will add px. The second argument is required if the first
  * argument is a string or number and is ignored if the first argument
@@ -2078,23 +2090,7 @@ goog.style.MATRIX_TRANSLATION_REGEX_ =
  * @return {!goog.math.Coordinate} The CSS translation of the element in px.
  */
 goog.style.getCssTranslation = function(element) {
-  var property;
-  if (goog.userAgent.IE) {
-    property = '-ms-transform';
-  } else if (goog.userAgent.WEBKIT) {
-    property = '-webkit-transform';
-  } else if (goog.userAgent.OPERA) {
-    property = '-o-transform';
-  } else if (goog.userAgent.GECKO) {
-    property = '-moz-transform';
-  }
-  var transform;
-  if (property) {
-    transform = goog.style.getStyle_(element, property);
-  }
-  if (!transform) {
-    transform = goog.style.getStyle_(element, 'transform');
-  }
+  var transform = goog.style.getComputedTransform(element);
   if (!transform) {
     return new goog.math.Coordinate(0, 0);
   }
