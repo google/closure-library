@@ -51,7 +51,7 @@ goog.require('goog.html.TrustedResourceUrl');
  */
 goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
-      html, opt_dir || null);
+      html, (opt_dir == undefined ? null : opt_dir));
 };
 
 

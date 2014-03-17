@@ -147,7 +147,8 @@ function testSafeHtmlCreate() {
   assertSameHtml('<a href="?a&amp;b"></a>',
       goog.html.SafeHtml.create('a', {'href': href}));
 
-  assertNull(goog.html.SafeHtml.create('span').getDirection());
+  assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
+      goog.html.SafeHtml.create('span').getDirection());
   assertNull(goog.html.SafeHtml.create('span', {'dir': 'auto'}).getDirection());
   assertEquals(goog.i18n.bidi.Dir.LTR,
       goog.html.SafeHtml.create('span', {'dir': 'ltr'}).getDirection());
@@ -179,20 +180,33 @@ function testSafeHtmlCreate() {
 
 
 function testSafeHtmlConcat() {
-  var html = goog.html.SafeHtml.htmlEscape('Hello ');
-  var append = goog.html.testing.newSafeHtmlForTest('<em>World</em>');
-  assertSameHtml('Hello <em>World</em>',
-      goog.html.SafeHtml.concat(html, append));
+  var br = goog.html.testing.newSafeHtmlForTest('<br>');
+
+  var html = goog.html.SafeHtml.htmlEscape('Hello');
+  assertSameHtml('Hello<br>', goog.html.SafeHtml.concat(html, br));
 
   assertSameHtml('', goog.html.SafeHtml.concat());
+  assertSameHtml('', goog.html.SafeHtml.concat([]));
+
+  assertSameHtml('a<br>c', goog.html.SafeHtml.concat('a', br, 'c'));
+  assertSameHtml('a<br>c', goog.html.SafeHtml.concat(['a', br, 'c']));
+  assertSameHtml('a<br>c', goog.html.SafeHtml.concat('a', [br, 'c']));
+  assertSameHtml('a<br>c', goog.html.SafeHtml.concat(['a'], br, ['c']));
 
   var ltr = goog.html.testing.newSafeHtmlForTest('', goog.i18n.bidi.Dir.LTR);
   var rtl = goog.html.testing.newSafeHtmlForTest('', goog.i18n.bidi.Dir.RTL);
+  var neutral = goog.html.testing.newSafeHtmlForTest('',
+      goog.i18n.bidi.Dir.NEUTRAL);
+  var unknown = goog.html.testing.newSafeHtmlForTest('');
+  assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
+      goog.html.SafeHtml.concat().getDirection());
   assertEquals(goog.i18n.bidi.Dir.LTR,
       goog.html.SafeHtml.concat(ltr, ltr).getDirection());
-  assertNull(goog.html.SafeHtml.concat(ltr, goog.html.SafeHtml.EMPTY)
-      .getDirection());
+  assertEquals(goog.i18n.bidi.Dir.LTR,
+      goog.html.SafeHtml.concat(ltr, neutral, ltr).getDirection());
+  assertNull(goog.html.SafeHtml.concat(ltr, unknown).getDirection());
   assertNull(goog.html.SafeHtml.concat(ltr, rtl).getDirection());
+  assertNull(goog.html.SafeHtml.concat(ltr, [rtl]).getDirection());
 }
 
 

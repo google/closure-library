@@ -21,6 +21,7 @@
 
 goog.provide('goog.html.SafeHtml');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.tags');
 goog.require('goog.html.SafeUrl');
@@ -341,7 +342,7 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
         'Void tag <' + tagName + '> does not allow content.');
     result += '>';
   } else {
-    var html = goog.html.SafeHtml.concat.apply(null, content);
+    var html = goog.html.SafeHtml.concat(content);
     result += '>' + goog.html.SafeHtml.unwrap(html) + '</' + tagName + '>';
     dir = html.getDirection();
   }
@@ -364,26 +365,35 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
 
 /**
  * Creates a new SafeHtml object by concatenating the values.
- * @param {...!goog.html.SafeHtml.TextOrHtml_} var_args
+ * @param {...!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
+ *     arguments would be processed recursively.
  * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.concat = function(var_args) {
-  var dir = null;
+  var dir = goog.i18n.bidi.Dir.NEUTRAL;
   var content = '';
-  for (var i = 0; i < arguments.length; i++) {
-    var argument = arguments[i];
-    if (argument instanceof goog.html.SafeHtml) {
-      content += goog.html.SafeHtml.unwrap(argument);
-      if (i == 0) {
-        dir = argument.getDirection();
-      } else if (dir != argument.getDirection()) {
+
+  /**
+   * @param {!goog.html.SafeHtml.TextOrHtml_|
+   *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} argument
+   */
+  var addArgument = function(argument) {
+    if (goog.isArray(argument)) {
+      goog.array.forEach(argument, addArgument);
+    } else {
+      var html = goog.html.SafeHtml.from(argument);
+      content += goog.html.SafeHtml.unwrap(html);
+      var htmlDir = html.getDirection();
+      if (dir == goog.i18n.bidi.Dir.NEUTRAL) {
+        dir = htmlDir;
+      } else if (htmlDir != goog.i18n.bidi.Dir.NEUTRAL && dir != htmlDir) {
         dir = null;
       }
-    } else {
-      content += goog.string.htmlEscape(argument);
-      dir = null;
     }
-  }
+  };
+
+  goog.array.forEach(arguments, addArgument);
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
       content, dir);
 };
