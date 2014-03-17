@@ -97,8 +97,17 @@ goog.style.transform.setTranslation = function(element, x, y) {
  */
 goog.style.transform.matrixConstructor_ =
     goog.functions.cacheReturnValue(function() {
-  return goog.global.WebKitCSSMatrix ||
-      goog.global.MSCSSMatrix ||
-      goog.global.CSSMatrix ||
-      null;
+  // TODO(user): Unless these are accessed from the default namespace the
+  // compiler will rename them. A better way is to use goog.global and prevent
+  // renaming.
+  if (typeof WebKitCSSMatrix !== undefined) {
+    return WebKitCSSMatrix;
+  }
+  if (typeof MSCSSMatrix !== undefined) {
+    return MSCSSMatrix;
+  }
+  if (typeof CSSMatrix !== undefined) {
+    return CSSMatrix;
+  }
+  return null;
 });
