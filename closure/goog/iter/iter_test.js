@@ -685,6 +685,29 @@ function testGroupByKeyFunc() {
   assertEquals(goog.iter.StopIteration, ex);
 }
 
+function testStarMap() {
+  var iter = goog.iter.starMap([[2, 5], [3, 2], [10, 3]], Math.pow);
+  assertEquals(32, iter.next());
+  assertEquals(9, iter.next());
+  assertEquals(1000, iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
+function testStarMapExtraArgs() {
+  var func = function(string, radix, undef, iterator) {
+    assertEquals('undef should be undefined', 'undefined', typeof undef);
+    assertTrue(iterator instanceof goog.iter.Iterator);
+    return parseInt(string, radix);
+  };
+  var iter = goog.iter.starMap([['42', 10], ['0xFF', 16], ['101', 2]], func);
+  assertEquals(42, iter.next());
+  assertEquals(255, iter.next());
+  assertEquals(5, iter.next());
+  var ex = assertThrows(function() { iter.next() });
+  assertEquals(goog.iter.StopIteration, ex);
+}
+
 function testTeeArray() {
   var iters = goog.iter.tee('ABC'.split(''));
   assertEquals(2, iters.length);
