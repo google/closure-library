@@ -178,7 +178,17 @@ goog.html.SafeStyle.fromConstant = function(style) {
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
  * indeed {@code SafeStyle}, use {@code goog.html.SafeStyle.unwrap} instead of
- * this method. If in doubt, assume that it's security-relevant.
+ * this method. If in doubt, assume that it's security relevant. In particular,
+ * note that goog.html functions which return a goog.html type do not guarantee
+ * the returned instance is of the right type. For example:
+ *
+ * <pre>
+ * var fakeSafeHtml = new String('fake');
+ * fakeSafeHtml.__proto__ = goog.html.SafeHtml.prototype;
+ * var newSafeHtml = goog.html.SafeHtml.from(fakeSafeHtml);
+ * // newSafeHtml is just an alias for fakeSafeHtml, it's passed through by
+ * // goog.html.SafeHtml.from() as fakeSafeHtml instanceof goog.html.SafeHtml.
+ * </pre>
  *
  * @see goog.html.SafeStyle#unwrap
  * @override

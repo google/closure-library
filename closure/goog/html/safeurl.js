@@ -120,7 +120,17 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
  * indeed {@code SafeUrl}, use {@code goog.html.SafeUrl.unwrap} instead of this
- * method. If in doubt, assume that it's security-relevant.
+ * method. If in doubt, assume that it's security relevant. In particular, note
+ * that goog.html functions which return a goog.html type do not guarantee that
+ * the returned instance is of the right type. For example:
+ *
+ * <pre>
+ * var fakeSafeHtml = new String('fake');
+ * fakeSafeHtml.__proto__ = goog.html.SafeHtml.prototype;
+ * var newSafeHtml = goog.html.SafeHtml.from(fakeSafeHtml);
+ * // newSafeHtml is just an alias for fakeSafeHtml, it's passed through by
+ * // goog.html.SafeHtml.from() as fakeSafeHtml instanceof goog.html.SafeHtml.
+ * </pre>
  *
  * IMPORTANT: The guarantees of the SafeUrl type contract only extend to the
  * behavior of browsers when interpreting URLs. Values of SafeUrl objects MUST
@@ -263,10 +273,11 @@ goog.html.SAFE_URL_PATTERN_ = /^(?:(?:https?|mailto):|[^&:/?#]*(?:[/?#]|$))/i;
 
 
 /**
- * Creates a SafeUrl object from {@code url}. The input string is validated to
- * match a pattern of commonly used safe URLs. The string is converted to
- * UTF-8 and non-whitelisted characters are percent-encoded. The string
- * wrapped by the created SafeUrl will thus contain only ASCII printable
+ * Creates a SafeUrl object from {@code url}. If {@code url} is a
+ * goog.html.SafeUrl then it is simply returned. Otherwise the input string is
+ * validated to match a pattern of commonly used safe URLs. The string is
+ * converted to UTF-8 and non-whitelisted characters are percent-encoded. The
+ * string wrapped by the created SafeUrl will thus contain only ASCII printable
  * characters.
  *
  * {@code url} may be a URL with the http, https, or mailto scheme,
@@ -289,7 +300,10 @@ goog.html.SAFE_URL_PATTERN_ = /^(?:(?:https?|mailto):|[^&:/?#]*(?:[/?#]|$))/i;
  * @return {!goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl.
  */
 goog.html.SafeUrl.sanitize = function(url) {
-  if (url.implementsGoogStringTypedString) {
+  if (url instanceof goog.html.SafeUrl) {
+    return url;
+  }
+  else if (url.implementsGoogStringTypedString) {
     url = url.getTypedStringValue();
   } else {
     url = String(url);
@@ -361,27 +375,6 @@ goog.html.SafeUrl.NORMALIZE_REPLACER_MAP_ = {
   '%5B': '[',
   '%5D': ']',
   '%25': '%'
-};
-
-
-/**
- * Coerces an arbitrary object into a SafeUrl object.
- *
- * If {@code url} is already of type {@code goog.html.SafeUrl}, the same object
- * is returned. Otherwise, url is coerced to string, and passed through
- * {@code goog.html.SafeUrl.sanitize}.
- *
- * @see goog.html.SafeUrl#sanitize
- * @param {!goog.html.SafeUrl|string|!goog.string.TypedString} url The text
- *     or SafeUrl to coerce.
- * @return {!goog.html.SafeUrl} The resulting SafeUrl object.
- */
-goog.html.SafeUrl.from = function(url) {
-  if (url instanceof goog.html.SafeUrl) {
-    return url;
-  } else {
-    return goog.html.SafeUrl.sanitize(url);
-  }
 };
 
 

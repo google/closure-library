@@ -185,15 +185,17 @@ function testSafeUrlSanitize_percentEncodesUrl() {
 }
 
 
-function testSafeUrlFrom() {
-  var safeUrlIn = goog.html.SafeUrl.sanitize('http://good.com/');
-  assertTrue(safeUrlIn === goog.html.SafeUrl.from(safeUrlIn));
-
-  assertEquals('http://alsogood.com/',
-      goog.html.SafeUrl.unwrap(goog.html.SafeUrl.from('http://alsogood.com/')));
-
+function testSafeUrlSanitize_idempotentForSafeUrlArgument() {
+  // This goes through percent-encoding.
+  var safeUrl = goog.html.SafeUrl.sanitize('%11"');
+  var safeUrl2 = goog.html.SafeUrl.sanitize(safeUrl);
   assertEquals(
-      goog.html.SafeUrl.INNOCUOUS_STRING,
-      goog.html.SafeUrl.unwrap(
-          goog.html.SafeUrl.sanitize('javascript:evil()')));
+      goog.html.SafeUrl.unwrap(safeUrl), goog.html.SafeUrl.unwrap(safeUrl2));
+
+  // This doesn't match the safe prefix, getting converted into an innocuous
+  // string.
+  safeUrl = goog.html.SafeUrl.sanitize('disallowed:foo');
+  safeUrl2 = goog.html.SafeUrl.sanitize(safeUrl);
+  assertEquals(
+      goog.html.SafeUrl.unwrap(safeUrl), goog.html.SafeUrl.unwrap(safeUrl2));
 }
