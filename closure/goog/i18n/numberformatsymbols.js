@@ -172,6 +172,7 @@ goog.provide('goog.i18n.NumberFormatSymbols_nb_SJ');
 goog.provide('goog.i18n.NumberFormatSymbols_nl');
 goog.provide('goog.i18n.NumberFormatSymbols_nl_NL');
 goog.provide('goog.i18n.NumberFormatSymbols_no');
+goog.provide('goog.i18n.NumberFormatSymbols_no_NO');
 goog.provide('goog.i18n.NumberFormatSymbols_or');
 goog.provide('goog.i18n.NumberFormatSymbols_or_IN');
 goog.provide('goog.i18n.NumberFormatSymbols_pl');
@@ -2088,6 +2089,13 @@ goog.i18n.NumberFormatSymbols_no = {
   CURRENCY_PATTERN: '\u00A4\u00A0#,##0.00',
   DEF_CURRENCY_CODE: 'NOK'
 };
+
+
+/**
+ * Number formatting symbols for locale no_NO.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_no_NO = goog.i18n.NumberFormatSymbols_no;
 
 
 /**
