@@ -38,5 +38,5 @@ goog.dom.tags.VOID_TAGS_ = goog.object.createSet(('area,base,br,col,command,' +
  * @return {boolean}
  */
 goog.dom.tags.isVoidTag = function(tagName) {
-  return tagName in goog.dom.tags.VOID_TAGS_;
+  return goog.dom.tags.VOID_TAGS_[tagName] === true;
 };

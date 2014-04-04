@@ -22,4 +22,5 @@ goog.require('goog.testing.jsunit');
 function testIsVoidTag() {
   assertTrue(goog.dom.tags.isVoidTag('br'));
   assertFalse(goog.dom.tags.isVoidTag('a'));
+  assertFalse(goog.dom.tags.isVoidTag('constructor'));
 }
