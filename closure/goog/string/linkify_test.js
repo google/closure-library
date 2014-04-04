@@ -162,6 +162,15 @@ function testUrlWithoutHttp() {
           '<\/a> without the http:// in front.');
 }
 
+function testUrlWithCapitalsWithoutHttp() {
+  assertLinkify(
+      'URL with capital letters without http protocol',
+      'It\'s faster to type Www.google.com without the http:// in front.',
+      goog.string.htmlEscape('It\'s faster to type ') +
+          '<a href="http://Www.google.com">Www.google.com' +
+          '<\/a> without the http:// in front.');
+}
+
 function testUrlHashBang() {
   assertLinkify(
       'URL with #!',

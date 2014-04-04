@@ -39,7 +39,9 @@ goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
   // does.
   if (text.indexOf('@') == -1 &&
       text.indexOf('://') == -1 &&
-      text.indexOf('www.') == -1) {
+      text.indexOf('www.') == -1 &&
+      text.indexOf('Www.') == -1 &&
+      text.indexOf('WWW.') == -1) {
     return goog.string.htmlEscape(text);
   }
 
@@ -241,5 +243,5 @@ goog.string.linkify.FIND_LINKS_RE_ = new RegExp(
     '\\b' + goog.string.linkify.EMAIL_ + '|' +
     // Match url after a workd break.
     '\\b' + goog.string.linkify.URL_ + '|$)',
-    'g');
+    'gi');
 
