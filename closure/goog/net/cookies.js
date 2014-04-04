@@ -157,9 +157,9 @@ goog.net.Cookies.prototype.set = function(
   if (opt_maxAge < 0) {
     expiresStr = '';
 
-  // Case 2: Expire the cookie.
+  // Case 2: Remove the cookie.
   // Note: We don't tell people about this option in the function doc because
-  // we prefer people to use ExpireCookie() to expire cookies.
+  // we prefer people to use remove() to remove cookies.
   } else if (opt_maxAge == 0) {
     // Note: Don't use Jan 1, 1970 for date because NS 4.76 will try to convert
     // it to local time, and if the local time is before Jan 1, 1970, then the
