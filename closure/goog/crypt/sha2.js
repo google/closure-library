@@ -98,6 +98,16 @@ goog.crypt.Sha2 = function() {
    */
   this.numHashBlocks = 0;
 
+  /**
+   * Temporary array used in chunk computation.  Allocate here as a
+   * member rather than as a local within computeChunk_() as a
+   * performance optimization to reduce the number of allocations and
+   * reduce garbage collection.
+   * @type {!Array.<number>}
+   * @private
+   */
+  this.w_ = [];
+
   this.reset();
 };
 goog.inherits(goog.crypt.Sha2, goog.crypt.Hash);
@@ -116,7 +126,7 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(chunk) {
   goog.asserts.assert(chunk.length == this.blockSize);
 
   // Divide the chunk into 16 32-bit-words.
-  var w = [];
+  var w = this.w_;
   var index = 0;
   var offset = 0;
   while (offset < chunk.length) {

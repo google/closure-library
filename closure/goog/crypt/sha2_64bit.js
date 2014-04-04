@@ -94,6 +94,16 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
   this.numHashBlocks_ = numHashBlocks;
 
   /**
+   * Temporary array used in chunk computation.  Allocate here as a
+   * member rather than as a local within computeChunk_() as a
+   * performance optimization to reduce the number of allocations and
+   * reduce garbage collection.
+   * @type {!Array.<!goog.math.Long>}
+   * @private
+   */
+  this.w_ = [];
+
+  /**
    * The value to which {@code this.hash_} should be reset when this
    * Hasher is reset.
    * @private {!Array.<!goog.math.Long>}
@@ -133,7 +143,7 @@ goog.crypt.Sha2_64bit.prototype.computeChunk_ = function(chunk) {
   var k = goog.crypt.Sha2_64bit.K_;
 
   // Divide the chunk into 16 64-bit-words.
-  var w = [];
+  var w = this.w_;
   var index = 0;
   var offset = 0;
   while (offset < chunk.length) {
@@ -488,4 +498,3 @@ goog.crypt.Sha2_64bit.K_ = (function() {
     int64(0x5fcb6fab, 0x3ad6faec), int64(0x6c44198c, 0x4a475817)
   ];
 })();
-
