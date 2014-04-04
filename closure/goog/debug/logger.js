@@ -540,7 +540,8 @@ goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
       msg = msg();
     }
 
-    this.doLogRecord_(this.getLogRecord(level, msg, opt_exception));
+    this.doLogRecord_(this.getLogRecord(
+        level, msg, opt_exception, goog.debug.Logger.prototype.log));
   }
 };
 
@@ -551,9 +552,13 @@ goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
  * @param {string} msg The string message.
  * @param {Error|Object=} opt_exception An exception associated with the
  *     message.
+ * @param {Function=} opt_fnStackContext A function to use as the base
+ *     of the stack trace used in the log record.
  * @return {!goog.debug.LogRecord} A log record.
+ * @suppress {es5Strict}
  */
-goog.debug.Logger.prototype.getLogRecord = function(level, msg, opt_exception) {
+goog.debug.Logger.prototype.getLogRecord = function(
+    level, msg, opt_exception, opt_fnStackContext) {
   if (goog.debug.LogBuffer.isBufferingEnabled()) {
     var logRecord =
         goog.debug.LogBuffer.getInstance().addRecord(level, msg, this.name_);
@@ -561,9 +566,17 @@ goog.debug.Logger.prototype.getLogRecord = function(level, msg, opt_exception) {
     logRecord = new goog.debug.LogRecord(level, String(msg), this.name_);
   }
   if (opt_exception) {
+    var context;
+    if (goog.STRICT_MODE_COMPATIBLE) {
+      context = opt_fnStackContext || goog.debug.Logger.prototype.getLogRecord;
+    } else {
+      context = opt_fnStackContext || arguments.callee.caller;
+    }
+
     logRecord.setException(opt_exception);
     logRecord.setExceptionText(
-        goog.debug.exposeException(opt_exception, arguments.callee.caller));
+        goog.debug.exposeException(opt_exception,
+            opt_fnStackContext || goog.debug.Logger.prototype.getLogRecord));
   }
   return logRecord;
 };
