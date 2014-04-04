@@ -261,7 +261,7 @@ function testGetDeterminant() {
   var tx = goog.math.AffineTransform.getScaleInstance(2, 3);
   tx.translate(5, 10);
   tx.rotate(Math.PI / 4, 5, 10);
-  assertEquals(6, tx.getDeterminant());
+  assertRoughlyEquals(6, tx.getDeterminant(), 0.001);
 }
 
 function testIsInvertible() {
