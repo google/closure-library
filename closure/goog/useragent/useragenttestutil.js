@@ -47,7 +47,6 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.MOBILE = goog.userAgent.isMobile_();
   goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
 
-
   // Platform in goog.userAgent.
   goog.userAgent.initPlatform_();
   goog.userAgent.MAC = goog.userAgent.detectedMac_;
@@ -55,6 +54,8 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.LINUX = goog.userAgent.detectedLinux_;
   goog.userAgent.X11 = goog.userAgent.detectedX11_;
   goog.userAgent.ANDROID = goog.userAgent.detectedAndroid_;
+  goog.userAgent.IPAD = goog.userAgent.detectedIPad_;
+  goog.userAgent.IPHONE = goog.userAgent.detectedIPhone_;
   goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
   goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 
