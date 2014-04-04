@@ -101,7 +101,7 @@ example.noDataTemplate = function(opt_data, opt_sb, opt_injectedData) {
 
 example.sanitizedHtmlTemplate = function(opt_data, opt_sb, opt_injectedData) {
   // Test the SanitizedContent constructor.
-  var sanitized = makeSanitizedContent('Hello World',
+  var sanitized = makeSanitizedContent('Hello <b>World</b>',
       goog.soy.data.SanitizedContentKind.HTML);
   sanitized.contentDir = goog.i18n.bidi.Dir.LTR;
   return sanitized;

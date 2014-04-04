@@ -108,7 +108,7 @@ function testRenderAsElementWithNoTemplateData() {
 function testRenderConvertsToString() {
   var renderer = new goog.soy.Renderer(dataSupplier);
   assertEquals('Output should be a string',
-      'Hello World', renderer.render(example.sanitizedHtmlTemplate));
+      'Hello <b>World</b>', renderer.render(example.sanitizedHtmlTemplate));
   assertUndefined(handleRender.getLastCall().getArguments()[0]);
   handleRender.assertCallCount(1);
 }
@@ -130,7 +130,7 @@ function testRenderRejectsNonHtmlStrictTemplates() {
 function testRenderStrictDoesNotConvertToString() {
   var renderer = new goog.soy.Renderer(dataSupplier);
   var result = renderer.renderStrict(example.sanitizedHtmlTemplate);
-  assertEquals('Hello World', result.content);
+  assertEquals('Hello <b>World</b>', result.content);
   assertEquals(goog.soy.data.SanitizedContentKind.HTML, result.contentKind);
   assertUndefined(handleRender.getLastCall().getArguments()[0]);
   handleRender.assertCallCount(1);
@@ -204,6 +204,6 @@ function testRenderText() {
 function testRenderSafeHtml() {
   var renderer = new goog.soy.Renderer(dataSupplier);
   var result = renderer.renderSafeHtml(example.sanitizedHtmlTemplate);
-  assertEquals('Hello World', goog.html.SafeHtml.unwrap(result));
+  assertEquals('Hello <b>World</b>', goog.html.SafeHtml.unwrap(result));
   assertEquals(goog.i18n.bidi.Dir.LTR, result.getDirection());
 }
