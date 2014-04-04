@@ -56,8 +56,8 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.LINUX = goog.userAgent.detectedLinux_;
   goog.userAgent.X11 = goog.userAgent.detectedX11_;
   goog.userAgent.ANDROID = goog.userAgent.detectedAndroid_;
-  goog.userAgent.IPAD = goog.userAgent.detectedIpad_;
-  goog.userAgent.IPHONE = goog.userAgent.detectedIphone_;
+  goog.userAgent.IPAD = goog.userAgent.detectedIPad_;
+  goog.userAgent.IPHONE = goog.userAgent.detectedIPhone_;
   goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 
   // Platform in goog.userAgent.platform.
@@ -114,4 +114,3 @@ goog.userAgentTestUtil.getUserAgentDetected = function(agent) {
 
   throw Error('Unrecognized user agent');
 };
-
