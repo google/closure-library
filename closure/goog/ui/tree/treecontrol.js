@@ -596,15 +596,12 @@ goog.ui.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
 
 /**
  * Creates a new tree node using the same config as the root.
- * @param {string} html The html content of the node label.
- * @return {goog.ui.tree.TreeNode} The new item.
+ * @param {string=} opt_html The HTML content of the node label.
+ * @return {!goog.ui.tree.TreeNode} The new item.
  */
-goog.ui.tree.TreeControl.prototype.createNode = function(html) {
-  // Some projects call createNode without arguments which causes failure.
-  // See http://goto/misuse-createnode
-  // TODO(user): Fix them and remove the html || '' workaround.
-  return new goog.ui.tree.TreeNode(html || '', this.getConfig(),
-      this.getDomHelper());
+goog.ui.tree.TreeControl.prototype.createNode = function(opt_html) {
+  return new goog.ui.tree.TreeNode(opt_html || goog.html.SafeHtml.EMPTY,
+      this.getConfig(), this.getDomHelper());
 };
 
 
