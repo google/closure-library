@@ -34,6 +34,15 @@ function createRange(a) {
   return a ? new goog.math.Range(a[0], a[1]) : null;
 }
 
+function testFromPair() {
+  var range = goog.math.Range.fromPair([1, 2]);
+  assertEquals(1, range.start);
+  assertEquals(2, range.end);
+  range = goog.math.Range.fromPair([2, 1]);
+  assertEquals(1, range.start);
+  assertEquals(2, range.end);
+}
+
 function testRangeIntersection() {
   var tests = [[[1, 2], [3, 4], null],
                [[1, 3], [2, 4], [2, 3]],

@@ -19,6 +19,8 @@
 
 goog.provide('goog.math.Range');
 
+goog.require('goog.asserts');
+
 
 
 /**
@@ -39,6 +41,17 @@ goog.math.Range = function(a, b) {
    * @type {number}
    */
   this.end = a < b ? b : a;
+};
+
+
+/**
+ * Creates a goog.math.Range from an array of two numbers.
+ * @param {!Array.<number>} pair
+ * @return {!goog.math.Range}
+ */
+goog.math.Range.fromPair = function(pair) {
+  goog.asserts.assert(pair.length == 2);
+  return new goog.math.Range(pair[0], pair[1]);
 };
 
 
