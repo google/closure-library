@@ -53,6 +53,13 @@ testAgents.ANDROID_BROWSER_403 =
 
 
 /** @const {string} */
+// User agent retrieved from dremel queries for cases matching b/13222688
+testAgents.ANDROID_BROWSER_403_ALT =
+    'Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K)' +
+    ' AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';
+
+
+/** @const {string} */
 testAgents.IE_6 =
     'Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1;' +
     '.NET CLR 2.0.50727)';

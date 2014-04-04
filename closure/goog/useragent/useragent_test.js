@@ -16,6 +16,7 @@ goog.provide('goog.userAgentTest');
 goog.setTestOnly('goog.userAgentTest');
 
 goog.require('goog.array');
+goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -231,6 +232,12 @@ function testOpera() {
   assertOpera('Opera/9.00 (Windows NT 6.0; U; en)');
 }
 
+function testWebkit() {
+  var testAgents = goog.labs.userAgent.testAgents;
+  assertWebkit(testAgents.ANDROID_BROWSER_403);
+  assertWebkit(testAgents.ANDROID_BROWSER_403_ALT);
+}
+
 function testUnknownBrowser() {
   assertUserAgent([], 'MyWebBrowser');
   assertUserAgent([], undefined);
@@ -263,4 +270,8 @@ function assertGecko(uaString, expectedVersion) {
       expectedVersion + ' but had ' + goog.userAgent.VERSION,
       expectedVersion,
       goog.userAgent.VERSION);
+}
+
+function assertWebkit(uaString) {
+  assertUserAgent([UserAgents.WEBKIT], uaString, 'WebKit');
 }

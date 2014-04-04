@@ -92,6 +92,12 @@ function testWebKit() {
   assertVersion('533.1');
   assertLowAndHighVersions('533.0', '534.0');
 
+  goog.labs.userAgent.util.setUserAgent(testAgents.ANDROID_BROWSER_403_ALT);
+  assertTrue(goog.labs.userAgent.engine.isWebKit());
+  assertFalse(goog.labs.userAgent.engine.isGecko());
+  assertVersion('534.30');
+  assertLowAndHighVersions('533.0', '535.0');
+
   goog.labs.userAgent.util.setUserAgent(testAgents.CHROME_25);
   assertTrue(goog.labs.userAgent.engine.isWebKit());
   assertFalse(goog.labs.userAgent.engine.isGecko());

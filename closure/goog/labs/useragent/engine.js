@@ -49,7 +49,7 @@ goog.labs.userAgent.engine.isTrident = function() {
  * @return {boolean} Whether the rendering engine is WebKit.
  */
 goog.labs.userAgent.engine.isWebKit = function() {
-  return goog.labs.userAgent.util.matchUserAgent('WebKit');
+  return goog.labs.userAgent.util.matchUserAgentIgnoreCase('WebKit');
 };
 
 
