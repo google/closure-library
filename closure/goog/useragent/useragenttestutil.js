@@ -23,6 +23,10 @@ goog.provide('goog.userAgentTestUtil.UserAgents');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.platform');
+goog.require('goog.userAgent.product');
+/** @suppress {extraRequire} */
+goog.require('goog.userAgent.product.isVersion');
 
 goog.setTestOnly('goog.userAgentTestUtil');
 
@@ -32,7 +36,6 @@ goog.setTestOnly('goog.userAgentTestUtil');
  * @suppress {accessControls}
  */
 goog.userAgentTestUtil.reinitializeUserAgent = function() {
-
   // Unfortunately we can't isolate the useragent setting in a function
   // we can call, because things rely on it compiling to nothing when
   // one of the ASSUME flags is set, and the compiler isn't smart enough
@@ -44,9 +47,33 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.MOBILE = goog.userAgent.isMobile_();
   goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
 
+
+  // Platform in goog.userAgent.
   goog.userAgent.initPlatform_();
+  goog.userAgent.MAC = goog.userAgent.detectedMac_;
+  goog.userAgent.WINDOWS = goog.userAgent.detectedWindows_;
+  goog.userAgent.LINUX = goog.userAgent.detectedLinux_;
+  goog.userAgent.X11 = goog.userAgent.detectedX11_;
+  goog.userAgent.ANDROID = goog.userAgent.detectedAndroid_;
   goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
   goog.userAgent.VERSION = goog.userAgent.determineVersion_();
+
+  // Platform in goog.userAgent.platform.
+  goog.userAgent.platform.VERSION = goog.userAgent.platform.determineVersion_();
+
+  // goog.userAgent.product
+  goog.userAgent.product.init_();
+  goog.userAgent.product.OPERA = goog.userAgent.OPERA;
+  goog.userAgent.product.IE = goog.userAgent.IE;
+  goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
+  goog.userAgent.product.CAMINO = goog.userAgent.product.detectedCamino_;
+  goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
+  goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
+  goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
+  goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
+  goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
+
+  goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
 };
 
 
