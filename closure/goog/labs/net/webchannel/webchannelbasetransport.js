@@ -320,6 +320,14 @@ WebChannelBaseTransport.ChannelProperties = function(channel) {
    * @private {!WebChannelBase}
    */
   this.channel_ = channel;
+
+  /**
+   * The flag to turn on/off server-side flow control.
+   *
+   * @private {boolean}
+   */
+  this.serverFlowControlEnabled_ = false;
+
 };
 
 
@@ -330,4 +338,18 @@ WebChannelBaseTransport.ChannelProperties.prototype.getSpdyRequestLimit =
     function() {
   return this.channel_.getForwardChannelRequestPool().getMaxSize();
 };
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.setServerFlowControl =
+    goog.abstractMethod;
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.getNonAckedMessageCount =
+    goog.abstractMethod;
 });  // goog.scope

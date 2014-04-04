@@ -228,3 +228,25 @@ goog.net.WebChannel.RuntimeProperties = function() {};
  */
 goog.net.WebChannel.RuntimeProperties.prototype.getSpdyRequestLimit =
     goog.abstractMethod;
+
+
+/**
+ * This method may be used by the application to stop ack of received messages
+ * as a means of enabling or disabling flow-control on the server-side.
+ *
+ * @param {boolean} enabled If true, enable flow-control behavior on the
+ * server side. Setting it to false will cancel ay previous enabling action.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.setServerFlowControl =
+    goog.abstractMethod;
+
+
+/**
+ * This method may be used by the application to throttle the rate of outgoing
+ * messages, as a means of sender initiated flow-control.
+ *
+ * @return {number} The total number of messages that have not received
+ * ack from the server and therefore remain in the buffer.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
+    goog.abstractMethod;
