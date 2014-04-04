@@ -15,6 +15,7 @@ See the COPYING file for details.
   <script src="../deps.js"></script>
   <script>
     goog.require('goog.dom.TagName');
+    goog.require('goog.dom.classlist');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.CustomColorPalette');
   </script>
@@ -45,7 +46,7 @@ See the COPYING file for details.
                    goog.dom.TagName.DIV, elem.tagName);
 
       assertTrue('The custom color palette should have the right class name',
-                 goog.dom.classes.has(elem, 'goog-palette'));
+                 goog.dom.classlist.contains(elem, 'goog-palette'));
     }
 
     function testSetColors() {

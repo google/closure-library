@@ -13,6 +13,7 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.dom.classlist');
     goog.require('goog.testing.jsunit');
     goog.require('goog.testing.events');
     goog.require('goog.ui.TableSorter');
@@ -94,7 +95,8 @@ See the COPYING file for details.
     function testForwardAlpha() {
       goog.testing.events.fireClickEvent(alphaHeader);
       assertOrder(['A', '10', 'B', '0', 'C', '10', 'C', '17', 'C', '3']);
-      assertTrue(goog.dom.classes.has(alphaHeader, 'goog-tablesorter-sorted'));
+      assertTrue(goog.dom.classlist.contains(alphaHeader,
+          'goog-tablesorter-sorted'));
       assertEquals(0, tableSorter.getSortColumn());
       assertFalse(tableSorter.isSortReversed());
     }
@@ -103,8 +105,9 @@ See the COPYING file for details.
       goog.testing.events.fireClickEvent(alphaHeader);
       goog.testing.events.fireClickEvent(alphaHeader);
       assertOrder(['C', '10', 'C', '17', 'C', '3', 'B', '0', 'A', '10']);
-      assertFalse(goog.dom.classes.has(alphaHeader, 'goog-tablesorter-sorted'));
-      assertTrue(goog.dom.classes.has(alphaHeader,
+      assertFalse(goog.dom.classlist.contains(alphaHeader,
+          'goog-tablesorter-sorted'));
+      assertTrue(goog.dom.classlist.contains(alphaHeader,
           'goog-tablesorter-sorted-reverse'));
       assertEquals(0, tableSorter.getSortColumn());
       assertTrue(tableSorter.isSortReversed());
@@ -113,7 +116,8 @@ See the COPYING file for details.
     function testForwardNumeric() {
       goog.testing.events.fireClickEvent(numberHeader);
       assertOrder(['B', '0', 'C', '3', 'C', '10', 'A', '10', 'C', '17']);
-      assertTrue(goog.dom.classes.has(numberHeader, 'goog-tablesorter-sorted'));
+      assertTrue(goog.dom.classlist.contains(numberHeader,
+         'goog-tablesorter-sorted'));
       assertEquals(1, tableSorter.getSortColumn());
       assertFalse(tableSorter.isSortReversed());
     }
@@ -122,7 +126,7 @@ See the COPYING file for details.
       goog.testing.events.fireClickEvent(numberHeader);
       goog.testing.events.fireClickEvent(numberHeader);
       assertOrder(['C', '17', 'C', '10', 'A', '10', 'C', '3', 'B', '0']);
-      assertTrue(goog.dom.classes.has(numberHeader,
+      assertTrue(goog.dom.classlist.contains(numberHeader,
           'goog-tablesorter-sorted-reverse'));
       assertEquals(1, tableSorter.getSortColumn());
       assertTrue(tableSorter.isSortReversed());
@@ -132,14 +136,15 @@ See the COPYING file for details.
       testForwardAlpha();
       goog.testing.events.fireClickEvent(numberHeader);
       assertOrder(['B', '0', 'C', '3', 'A', '10', 'C', '10', 'C', '17']);
-      assertFalse(goog.dom.classes.has(alphaHeader, 'goog-tablesorter-sorted'));
+      assertFalse(goog.dom.classlist.contains(alphaHeader,
+          'goog-tablesorter-sorted'));
       assertEquals(1, tableSorter.getSortColumn());
       assertFalse(tableSorter.isSortReversed());
     }
 
     function testNotSortableUnchanged() {
       goog.testing.events.fireClickEvent(notSortableHeader);
-      assertEquals(0, goog.dom.classes.get(notSortableHeader).length);
+      assertEquals(0, goog.dom.classlist.get(notSortableHeader).length);
       assertEquals(-1, tableSorter.getSortColumn());
     }
 

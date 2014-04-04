@@ -16,6 +16,7 @@ Author: attila@google.com (Attila Bodis)
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.testing.events');
     goog.require('goog.testing.jsunit');
@@ -111,7 +112,7 @@ Author: attila@google.com (Attila Bodis)
       button.render(sandbox);
       assertSameElements('Button element must have the start side collapsed',
           ['goog-button', 'goog-button-collapse-left'],
-          goog.dom.classes.get(button.getElement()));
+          goog.dom.classlist.get(button.getElement()));
       button.setCollapsed(goog.ui.ButtonSide.BOTH);
       assertSameElements('Button must have both sides collapsed',
           ['goog-button-collapse-left', 'goog-button-collapse-right'],
@@ -120,7 +121,7 @@ Author: attila@google.com (Attila Bodis)
         'goog-button',
         'goog-button-collapse-left',
         'goog-button-collapse-right'
-      ], goog.dom.classes.get(button.getElement()));
+      ], goog.dom.classlist.get(button.getElement()));
     }
 
     function testDispose() {
