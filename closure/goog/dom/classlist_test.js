@@ -190,6 +190,30 @@ function testEnableNotAddingMultiples() {
   assertEquals('A B', el.className);
 }
 
+function testEnableAllRemove() {
+  var elem = document.createElement('div');
+  elem.className = 'foo bar baz';
+
+  // Test removing some classes (some not present).
+  goog.dom.classlist.enableAll(elem, ['a', 'bar'], false /* enable */);
+  assertTrue(goog.dom.classlist.contains(elem, 'foo'));
+  assertFalse(goog.dom.classlist.contains(elem, 'bar'));
+  assertTrue(goog.dom.classlist.contains(elem, 'baz'));
+  assertFalse(goog.dom.classlist.contains(elem, 'a'));
+}
+
+function testEnableAllAdd() {
+  var elem = document.createElement('div');
+  elem.className = 'foo bar';
+
+  // Test adding some classes (some duplicate).
+  goog.dom.classlist.enableAll(elem, ['a', 'bar', 'baz'], true /* enable */);
+  assertTrue(goog.dom.classlist.contains(elem, 'foo'));
+  assertTrue(goog.dom.classlist.contains(elem, 'bar'));
+  assertTrue(goog.dom.classlist.contains(elem, 'baz'));
+  assertTrue(goog.dom.classlist.contains(elem, 'a'));
+}
+
 function testSwap() {
   var el = goog.dom.getElement('p1');
   classlist.set(el, 'SOMECLASS FIRST');
