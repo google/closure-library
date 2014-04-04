@@ -125,7 +125,7 @@ goog.ui.Menu.prototype.openingCoords;
 
 
 /**
- * Whether the menu can move the focus to it's key event target when it is
+ * Whether the menu can move the focus to its key event target when it is
  * shown.  Default = true
  * @type {boolean}
  * @private
