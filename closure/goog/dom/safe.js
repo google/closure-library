@@ -54,6 +54,47 @@ goog.dom.safe.setInnerHtml = function(elem, html) {
 
 
 /**
+ * Writes known-safe HTML to a document.
+ * @param {!Document} doc The document to be written to.
+ * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.
+ */
+goog.dom.safe.documentWrite = function(doc, html) {
+  doc.write(goog.html.SafeHtml.unwrap(html));
+};
+
+
+/**
+ * Safely assigns a URL to an anchor element's href property.
+ *
+ * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
+ * anchor's href property.  If url is of type string however, it is first
+ * sanitized using goog.html.SafeUrl.sanitize.
+ *
+ * Example usage:
+ *   goog.dom.safe.setAnchorHref(anchorEl, url);
+ * which is a safe alternative to
+ *   anchorEl.href = url;
+ * The latter can result in XSS vulnerabilities if url is a
+ * user-/attacker-controlled value.
+ *
+ * @param {!HTMLAnchorElement} anchor The anchor element whose href property
+ *     is to be assigned to.
+ * @param {string|!goog.html.SafeUrl} url The URL to assign.
+ * @see goog.html.SafeUrl#sanitize
+ */
+goog.dom.safe.setAnchorHref = function(anchor, url) {
+  /** @type {!goog.html.SafeUrl} */
+  var safeUrl;
+  if (url instanceof goog.html.SafeUrl) {
+    safeUrl = url;
+  } else {
+    safeUrl = goog.html.SafeUrl.sanitize(url);
+  }
+  anchor.href = goog.html.SafeUrl.unwrap(safeUrl);
+};
+
+
+/**
  * Safely assigns a URL to a Location object's href property.
  *
  * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to

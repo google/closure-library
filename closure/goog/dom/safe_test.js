@@ -32,6 +32,20 @@ function testSetInnerHtml() {
 }
 
 
+function testDocumentWrite() {
+  var mockDoc = {
+    'html': null,
+    'write': function(html) {
+      this['html'] = html;
+    }
+  };
+  var html = '<script>somethingTrusted();<' + '/script>';
+  var safeHtml = goog.html.testing.newSafeHtmlForTest(html);
+  goog.dom.safe.documentWrite(mockDoc, safeHtml);
+  assertEquals(html, mockDoc.html);
+}
+
+
 function testSetLocationHref() {
   var mockLoc = {
     'href': 'blarg'
@@ -46,4 +60,21 @@ function testSetLocationHref() {
       goog.string.Const.from('javascript:trusted();'));
   goog.dom.safe.setLocationHref(mockLoc, safeUrl);
   assertEquals('javascript:trusted();', mockLoc.href);
+}
+
+
+function testSetAnchorHref() {
+  var mockAnchor = {
+    'href': 'blarg'
+  };
+  goog.dom.safe.setAnchorHref(mockAnchor, 'javascript:evil();');
+  assertEquals('about:invalid#zClosurez', mockAnchor.href);
+
+  mockAnchor = {
+    'href': 'blarg'
+  };
+  var safeUrl = goog.html.SafeUrl.fromConstant(
+      goog.string.Const.from('javascript:trusted();'));
+  goog.dom.safe.setAnchorHref(mockAnchor, safeUrl);
+  assertEquals('javascript:trusted();', mockAnchor.href);
 }
