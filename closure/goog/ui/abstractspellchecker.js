@@ -645,9 +645,7 @@ goog.ui.AbstractSpellChecker.prototype.initSuggestionsMenu = function() {
   this.menu_.addChild(this.menuEdit_, true);
   this.menu_.render();
 
-  var menuElement = this.menu_.getElement();
-  goog.asserts.assert(menuElement);
-  goog.dom.classlist.add(menuElement,
+  goog.dom.classlist.add(this.menu_.getElement(),
       this.suggestionsMenuClassName);
 
   goog.events.listen(this.menu_, goog.ui.Component.EventType.ACTION,

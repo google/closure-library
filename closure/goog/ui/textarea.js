@@ -385,8 +385,7 @@ goog.ui.Textarea.prototype.restorePlaceholder_ = function() {
       !this.hasFocusForPlaceholder_) {
     // We only want to set the value + placeholder CSS if we actually have
     // some placeholder text to show.
-    goog.dom.classlist.add(
-        goog.asserts.assert(this.getElement()),
+    goog.dom.classlist.add(this.getElement(),
         goog.ui.Textarea.TEXTAREA_PLACEHOLDER_CLASS);
     this.getElement().value = this.placeholderText_;
   }

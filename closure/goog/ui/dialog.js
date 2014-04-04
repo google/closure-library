@@ -576,17 +576,15 @@ goog.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
 
   if (this.getElement()) {
     if (enabled) {
-      goog.dom.classlist.addAll(
-          goog.asserts.assert(this.titleEl_), classNames);
+      goog.dom.classlist.addAll(this.titleEl_, classNames);
     } else {
-      goog.dom.classlist.removeAll(
-          goog.asserts.assert(this.titleEl_), classNames);
+      goog.dom.classlist.removeAll(this.titleEl_, classNames);
     }
   }
 
   if (enabled && !this.dragger_) {
     this.dragger_ = this.createDragger();
-    goog.dom.classlist.addAll(goog.asserts.assert(this.titleEl_), classNames);
+    goog.dom.classlist.addAll(this.titleEl_, classNames);
     goog.events.listen(this.dragger_, goog.fx.Dragger.EventType.START,
         this.setDraggerLimits_, false, this);
   } else if (!enabled && this.dragger_) {

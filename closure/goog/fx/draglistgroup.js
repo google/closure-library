@@ -539,8 +539,7 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
   this.draggerEl_ = this.createDragElementInternal(this.currDragItem_);
   if (this.draggerElClasses_) {
     // Add CSS class for the clone, if any.
-    goog.dom.classlist.addAll(
-        goog.asserts.assert(this.draggerEl_), this.draggerElClasses_ || []);
+    goog.dom.classlist.addAll(this.draggerEl_, this.draggerElClasses_ || []);
   }
 
   // Place the clone (i.e. draggerEl) at the same position as the actual
@@ -632,8 +631,7 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   // If there's a CSS class specified for the current drag item, add it.
   // Otherwise, make the actual current drag item hidden (takes up space).
   if (this.currDragItemClasses_) {
-    goog.dom.classlist.addAll(
-        goog.asserts.assert(this.currDragItem_),
+    goog.dom.classlist.addAll(this.currDragItem_,
         this.currDragItemClasses_ || []);
   } else {
     this.currDragItem_.style.visibility = 'hidden';
@@ -710,8 +708,7 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     this.currDragItem_.style.display = '';
     // Add drag list's hover class (if any).
     if (hoverList.dlgDragHoverClass_) {
-      goog.dom.classlist.add(
-          goog.asserts.assert(hoverList), hoverList.dlgDragHoverClass_);
+      goog.dom.classlist.add(hoverList, hoverList.dlgDragHoverClass_);
     }
 
   } else {
@@ -725,8 +722,7 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     for (var i = 0, n = this.dragLists_.length; i < n; i++) {
       var dragList = this.dragLists_[i];
       if (dragList.dlgDragHoverClass_) {
-        goog.dom.classlist.remove(
-            goog.asserts.assert(dragList), dragList.dlgDragHoverClass_);
+        goog.dom.classlist.remove(dragList, dragList.dlgDragHoverClass_);
       }
     }
   }
@@ -840,8 +836,7 @@ goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
   // If there's a CSS class specified for the current drag item, remove it.
   // Otherwise, make the current drag item visible (instead of empty space).
   if (this.currDragItemClasses_ && this.currDragItem_) {
-    goog.dom.classlist.removeAll(
-        goog.asserts.assert(this.currDragItem_),
+    goog.dom.classlist.removeAll(this.currDragItem_,
         this.currDragItemClasses_ || []);
   } else if (this.currDragItem_) {
     this.currDragItem_.style.visibility = 'visible';
@@ -851,8 +846,7 @@ goog.fx.DragListGroup.prototype.cleanupDragDom_ = function() {
   for (var i = 0, n = this.dragLists_.length; i < n; i++) {
     var dragList = this.dragLists_[i];
     if (dragList.dlgDragHoverClass_) {
-      goog.dom.classlist.remove(
-          goog.asserts.assert(dragList), dragList.dlgDragHoverClass_);
+      goog.dom.classlist.remove(dragList, dragList.dlgDragHoverClass_);
     }
   }
 };

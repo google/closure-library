@@ -157,9 +157,9 @@ goog.ui.MenuItem.prototype.getCaption = function() {
     var mnemonicWrapClass = goog.ui.MenuItem.MNEMONIC_WRAPPER_CLASS_;
     var caption = goog.array.map(content, function(node) {
       if (goog.dom.isElement(node) &&
-          (goog.dom.classlist.contains(/** @type {!Element} */ (node),
+          (goog.dom.classlist.contains(/** @type {Element} */ (node),
               acceleratorClass) ||
-          goog.dom.classlist.contains(/** @type {!Element} */ (node),
+          goog.dom.classlist.contains(/** @type {Element} */ (node),
               mnemonicWrapClass))) {
         return '';
       } else {

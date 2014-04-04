@@ -22,7 +22,6 @@ goog.provide('goog.ui.SplitBehavior');
 goog.provide('goog.ui.SplitBehavior.DefaultHandlers');
 
 goog.require('goog.Disposable');
-goog.require('goog.asserts');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
@@ -249,7 +248,6 @@ goog.ui.SplitBehavior.prototype.decorate = function(element, opt_activate) {
  * @return {goog.ui.SplitBehavior} A split behavior.
  */
 goog.ui.SplitBehavior.prototype.render = function(element, opt_activate) {
-  goog.asserts.assert(element);
   goog.dom.classlist.add(element, goog.ui.SplitBehavior.CSS_CLASS);
   this.first_.render(element);
   this.second_.render(element);

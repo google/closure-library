@@ -22,7 +22,6 @@
 
 goog.provide('goog.ui.PopupColorPicker');
 
-goog.require('goog.asserts');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.positioning.AnchoredPosition');
@@ -143,8 +142,7 @@ goog.ui.PopupColorPicker.prototype.createDom = function() {
   goog.ui.PopupColorPicker.superClass_.createDom.call(this);
   this.popup_ = new goog.ui.Popup(this.getElement());
   this.popup_.setPinnedCorner(this.pinnedCorner_);
-  goog.dom.classlist.set(
-      goog.asserts.assert(this.getElement()),
+  goog.dom.classlist.set(this.getElement(),
       goog.getCssName('goog-popupcolorpicker'));
   this.getElement().unselectable = 'on';
 };

@@ -514,7 +514,6 @@ goog.ui.SplitPane.prototype.setUpHandle_ = function() {
  * @protected
  */
 goog.ui.SplitPane.prototype.setOrientationClassForHandle = function() {
-  goog.asserts.assert(this.splitpaneHandle_);
   if (this.isVertical()) {
     goog.dom.classlist.swap(this.splitpaneHandle_,
         goog.ui.SplitPane.HANDLE_CLASS_NAME_HORIZONTAL_,
@@ -574,6 +573,7 @@ goog.ui.SplitPane.prototype.getOrientation = function() {
  * @private
  */
 goog.ui.SplitPane.prototype.moveAndSize_ = function(element, rect) {
+
   goog.style.setPosition(element, rect.left, rect.top);
   // TODO(user): Add a goog.math.Size.max call for below.
   goog.style.setBorderBoxSize(element,

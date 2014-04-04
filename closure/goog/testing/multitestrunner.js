@@ -25,7 +25,6 @@ goog.provide('goog.testing.MultiTestRunner.TestFrame');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
-goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
@@ -1073,33 +1072,28 @@ goog.testing.MultiTestRunner.prototype.trimFileName_ = function(name) {
  */
 goog.testing.MultiTestRunner.prototype.showTab_ = function(tab) {
   var activeTabCssClass = goog.getCssName('goog-testrunner-activetab');
-
-  var logTabElement = goog.asserts.assert(this.logTabEl_);
-  var reportTabElement = goog.asserts.assert(this.reportTabEl_);
-  var statsTabElement = goog.asserts.assert(this.statsTabEl_);
-
   if (tab == 0) {
     this.logEl_.style.display = '';
-    goog.dom.classlist.add(logTabElement, activeTabCssClass);
+    goog.dom.classlist.add(this.logTabEl_, activeTabCssClass);
   } else {
     this.logEl_.style.display = 'none';
-    goog.dom.classlist.remove(logTabElement, activeTabCssClass);
+    goog.dom.classlist.remove(this.logTabEl_, activeTabCssClass);
   }
 
   if (tab == 1) {
     this.reportEl_.style.display = '';
-    goog.dom.classlist.add(reportTabElement, activeTabCssClass);
+    goog.dom.classlist.add(this.reportTabEl_, activeTabCssClass);
   } else {
     this.reportEl_.style.display = 'none';
-    goog.dom.classlist.remove(reportTabElement, activeTabCssClass);
+    goog.dom.classlist.remove(this.reportTabEl_, activeTabCssClass);
   }
 
   if (tab == 2) {
     this.statsEl_.style.display = '';
-    goog.dom.classlist.add(statsTabElement, activeTabCssClass);
+    goog.dom.classlist.add(this.statsTabEl_, activeTabCssClass);
   } else {
     this.statsEl_.style.display = 'none';
-    goog.dom.classlist.remove(statsTabElement, activeTabCssClass);
+    goog.dom.classlist.remove(this.statsTabEl_, activeTabCssClass);
   }
 };
 

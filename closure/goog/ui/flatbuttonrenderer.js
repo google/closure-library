@@ -21,7 +21,6 @@
 goog.provide('goog.ui.FlatButtonRenderer');
 
 goog.require('goog.a11y.aria.Role');
-goog.require('goog.asserts');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.ButtonRenderer');
@@ -108,7 +107,6 @@ goog.ui.FlatButtonRenderer.prototype.canDecorate = function(element) {
  * @override
  */
 goog.ui.FlatButtonRenderer.prototype.decorate = function(button, element) {
-  goog.asserts.assert(element);
   goog.dom.classlist.add(element, goog.ui.INLINE_BLOCK_CLASSNAME);
   return goog.ui.FlatButtonRenderer.superClass_.decorate.call(this, button,
       element);

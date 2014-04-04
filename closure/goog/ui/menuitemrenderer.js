@@ -22,7 +22,6 @@ goog.provide('goog.ui.MenuItemRenderer');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
-goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.Component');
@@ -148,7 +147,6 @@ goog.ui.MenuItemRenderer.prototype.getContentElement = function(element) {
  * @override
  */
 goog.ui.MenuItemRenderer.prototype.decorate = function(item, element) {
-  goog.asserts.assert(element);
   if (!this.hasContentStructure(element)) {
     element.appendChild(
         this.createContent(element.childNodes, item.getDomHelper()));
@@ -285,7 +283,6 @@ goog.ui.MenuItemRenderer.prototype.hasCheckBoxStructure = function(element) {
  */
 goog.ui.MenuItemRenderer.prototype.setEnableCheckBoxStructure = function(item,
     element, enable) {
-  goog.asserts.assert(element);
   if (enable != this.hasCheckBoxStructure(element)) {
     goog.dom.classlist.enable(element, goog.getCssName('goog-option'), enable);
     var contentElement = this.getContentElement(element);
