@@ -87,7 +87,11 @@ goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
           }
           var splitEndingPunctuation =
               original.match(goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_);
-          if (splitEndingPunctuation) {
+          // An open paren in the link will often be matched with a close paren
+          // at the end, so skip cutting off ending punctuation if there's an
+          // open paren. For example:
+          // http://en.wikipedia.org/wiki/Titanic_(1997_film)
+          if (splitEndingPunctuation && !goog.string.contains(original, '(')) {
             linkText = splitEndingPunctuation[1];
             afterLink = splitEndingPunctuation[2];
           } else {

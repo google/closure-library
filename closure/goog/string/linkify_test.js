@@ -401,6 +401,11 @@ function testEndsWithPunctuation_closeParen() {
       'Link inside parentheses',
       '(For more info see www.googl.com)',
       '(For more info see <a href="http://www.googl.com">www.googl.com<\/a>)');
+  assertLinkify(
+      'Parentheses inside link',
+      'http://en.wikipedia.org/wiki/Titanic_(1997_film)',
+      '<a href="http://en.wikipedia.org/wiki/Titanic_(1997_film)">' +
+          'http://en.wikipedia.org/wiki/Titanic_(1997_film)<\/a>');
 }
 
 function testEndsWithPunctuation_openParen() {
