@@ -72,7 +72,8 @@ goog.async.DeferredList = function(
     list, opt_fireOnOneCallback, opt_fireOnOneErrback, opt_consumeErrors,
     opt_canceler, opt_defaultScope) {
 
-  goog.base(this, opt_canceler, opt_defaultScope);
+  goog.async.DeferredList.base(this, 'constructor',
+      opt_canceler, opt_defaultScope);
 
   /**
    * The list of Deferred objects to wait for.
@@ -172,7 +173,7 @@ goog.async.DeferredList.prototype.handleCallback_ = function(
 
 /** @override */
 goog.async.DeferredList.prototype.errback = function(res) {
-  goog.base(this, 'errback', res);
+  goog.async.DeferredList.base(this, 'errback', res);
 
   // On error, cancel any pending requests.
   for (var i = 0; i < this.list_.length; i++) {
