@@ -319,7 +319,7 @@ goog.testing.MultiTestRunner.prototype.runTimeStatsBucketSize_ = 500;
 /**
  * Sets the name for the test suite.
  * @param {string} name The suite's name.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.setName = function(name) {
   this.name_ = name;
@@ -339,7 +339,7 @@ goog.testing.MultiTestRunner.prototype.getName = function() {
 /**
  * Sets the basepath that tests added using addTests are resolved with.
  * @param {string} path The relative basepath.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.setBasePath = function(path) {
   this.basePath_ = path;
@@ -361,7 +361,7 @@ goog.testing.MultiTestRunner.prototype.getBasePath = function() {
  * Sets whether the report should contain verbose information for tests that
  * pass.
  * @param {boolean} verbose Whether report should be verbose.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.setVerbosePasses = function(verbose) {
   this.verbosePasses_ = verbose;
@@ -384,7 +384,7 @@ goog.testing.MultiTestRunner.prototype.getVerbosePasses = function() {
  * Sets whether the report should contain passing tests at all, makes
  * setVerbosePasses obsolete.
  * @param {boolean} hide Whether report should not contain passing tests.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.setHidePasses = function(hide) {
   this.hidePasses_ = hide;
@@ -407,7 +407,7 @@ goog.testing.MultiTestRunner.prototype.getHidePasses = function() {
  * Sets the bucket sizes for the histograms.
  * @param {number} f Bucket size for num files loaded histogram.
  * @param {number} t Bucket size for run time histogram.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.setStatsBucketSizes = function(f, t) {
   this.numFilesStatsBucketSize_ = f;
@@ -420,7 +420,7 @@ goog.testing.MultiTestRunner.prototype.setStatsBucketSizes = function(f, t) {
  * Sets the number of milliseconds to wait for the page to load, initialize and
  * run the tests.
  * @param {number} timeout Time in milliseconds.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.setTimeout = function(timeout) {
   this.timeoutMs_ = timeout;
@@ -443,7 +443,7 @@ goog.testing.MultiTestRunner.prototype.getTimeout = function() {
  * Sets the number of tests that can be run at the same time. This only improves
  * performance due to the amount of time spent loading the tests.
  * @param {number} size The number of tests to run at a time.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.setPoolSize = function(size) {
   this.poolSize_ = size;
@@ -467,7 +467,7 @@ goog.testing.MultiTestRunner.prototype.getPoolSize = function() {
  * Sets a filter function. Only test paths that match the filter function
  * will be executed.
  * @param {function(string): boolean} filterFn Filters test paths.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.setFilterFunction = function(filterFn) {
   this.filterFn_ = filterFn;
@@ -490,7 +490,7 @@ goog.testing.MultiTestRunner.prototype.getFilterFunction = function() {
 /**
  * Adds an array of tests to the tests that the test runner should execute.
  * @param {Array.<string>} tests Adds tests to the test runner.
- * @return {goog.testing.MultiTestRunner} Instance for chaining.
+ * @return {!goog.testing.MultiTestRunner} Instance for chaining.
  */
 goog.testing.MultiTestRunner.prototype.addTests = function(tests) {
   goog.array.extend(this.allTests_, tests);
@@ -509,7 +509,7 @@ goog.testing.MultiTestRunner.prototype.getAllTests = function() {
 
 /**
  * Returns the list of tests that will be run when start() is called.
- * @return {Array.<string>} The list of tests that will be run when start() is
+ * @return {!Array.<string>} The list of tests that will be run when start() is
  *     called.
  */
 goog.testing.MultiTestRunner.prototype.getTestsToRun = function() {
@@ -519,8 +519,8 @@ goog.testing.MultiTestRunner.prototype.getTestsToRun = function() {
 
 /**
  * Returns a list of tests from runner that have been marked as failed.
- * @return {Array.<string>} A list of tests from runner that have been marked as
- *     failed.
+ * @return {!Array.<string>} A list of tests from runner that have been marked
+ *     as failed.
  */
 goog.testing.MultiTestRunner.prototype.getTestsThatFailed = function() {
   var stats = this.stats_;
@@ -1339,7 +1339,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.getTestFile = function() {
 
 
 /**
- * @return {Object} Stats about the test run.
+ * @return {!Object} Stats about the test run.
  */
 goog.testing.MultiTestRunner.TestFrame.prototype.getStats = function() {
   return {

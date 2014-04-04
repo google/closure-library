@@ -289,7 +289,7 @@ goog.testing.PerformanceTimer.prototype.handleOptionalDeferred_ = function(
  * Creates a performance timer results object by analyzing a given array of
  * sample timings.
  * @param {Array.<number>} samples The samples to analyze.
- * @return {Object} Object containing performance stats.
+ * @return {!Object} Object containing performance stats.
  */
 goog.testing.PerformanceTimer.createResults = function(samples) {
   return {
@@ -367,7 +367,7 @@ goog.testing.PerformanceTimer.Task.prototype.getTest = function() {
  * function.
  * @param {goog.testing.PerformanceTimer.TestFunction} setUp The set up
  *     function.
- * @return {goog.testing.PerformanceTimer.Task} This task.
+ * @return {!goog.testing.PerformanceTimer.Task} This task.
  */
 goog.testing.PerformanceTimer.Task.prototype.withSetUp = function(setUp) {
   this.setUp_ = setUp;
@@ -389,7 +389,7 @@ goog.testing.PerformanceTimer.Task.prototype.getSetUp = function() {
  * test function.
  * @param {goog.testing.PerformanceTimer.TestFunction} tearDown The tear down
  *     function.
- * @return {goog.testing.PerformanceTimer.Task} This task.
+ * @return {!goog.testing.PerformanceTimer.Task} This task.
  */
 goog.testing.PerformanceTimer.Task.prototype.withTearDown = function(tearDown) {
   this.tearDown_ = tearDown;

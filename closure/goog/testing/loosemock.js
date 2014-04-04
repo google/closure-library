@@ -113,7 +113,7 @@ goog.inherits(goog.testing.LooseMock, goog.testing.Mock);
 /**
  * A setter for the ignoreUnexpectedCalls field.
  * @param {boolean} ignoreUnexpectedCalls Whether to ignore unexpected calls.
- * @return {goog.testing.LooseMock} This mock object.
+ * @return {!goog.testing.LooseMock} This mock object.
  */
 goog.testing.LooseMock.prototype.$setIgnoreUnexpectedCalls = function(
     ignoreUnexpectedCalls) {

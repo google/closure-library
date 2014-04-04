@@ -101,7 +101,7 @@ goog.testing.fs.Blob.prototype.toString = function() {
 
 
 /**
- * @return {ArrayBuffer} The string data encapsulated by the blob as an
+ * @return {!ArrayBuffer} The string data encapsulated by the blob as an
  *     ArrayBuffer.
  */
 goog.testing.fs.Blob.prototype.toArrayBuffer = function() {

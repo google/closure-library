@@ -64,7 +64,7 @@ goog.testing.FunctionMock = function(opt_functionName, opt_strictness) {
  * @param {string} functionName The name of the function we're going to mock.
  * @param {number=} opt_strictness One of goog.testing.Mock.LOOSE or
  *     goog.testing.Mock.STRICT. The default is STRICT.
- * @return {goog.testing.MockInterface} The mocked method.
+ * @return {!goog.testing.MockInterface} The mocked method.
  */
 goog.testing.MethodMock = function(scope, functionName, opt_strictness) {
   if (!(functionName in scope)) {

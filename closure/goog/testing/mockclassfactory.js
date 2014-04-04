@@ -295,7 +295,7 @@ goog.testing.MockClassFactory.prototype.classHasMock_ = function(className) {
  * @param {string} className The name of the class.
  * @param {Function} mockFinder A bound function that returns the mock
  *     associated with a class given the constructor's argument list.
- * @return {Function} A proxy constructor.
+ * @return {!Function} A proxy constructor.
  * @private
  */
 goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(className,
@@ -317,7 +317,7 @@ goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(className,
  * be used with bind since "this" must refer to the scope of the proxy
  * constructor.
  * @param {string} fnName The name of the function that should be proxied.
- * @return {Function} A proxy function.
+ * @return {!Function} A proxy function.
  * @private
  */
 goog.testing.MockClassFactory.prototype.getProxyFunction_ = function(fnName) {
@@ -394,7 +394,7 @@ goog.testing.MockClassFactory.prototype.createProxy_ = function(namespace,
  * @param {boolean} isStrict Whether or not the mock should be strict.
  * @param {goog.array.ArrayLike} ctorArgs The arguments associated with this
  *     instance's constructor.
- * @return {goog.testing.StrictMock|goog.testing.LooseMock} The mock created
+ * @return {!goog.testing.StrictMock|!goog.testing.LooseMock} The mock created
  *     for the provided class.
  * @private
  */
@@ -467,7 +467,7 @@ goog.testing.MockClassFactory.prototype.getLooseMockClass =
  * @param {string} className The name of the class.
  * @param {Function} proxy The proxy that will replace the original class.
  * @param {boolean} isStrict Whether or not the mock should be strict.
- * @return {goog.testing.StrictMock|goog.testing.LooseMock} The mock created
+ * @return {!goog.testing.StrictMock|!goog.testing.LooseMock} The mock created
  *     for the static functions of the provided class.
  * @private
  */

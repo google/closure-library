@@ -363,7 +363,7 @@ goog.testing.ContinuationTestCase.prototype.waitForCondition = function(
  * Creates a new asynchronous test step which will be added to the current test
  * phase.
  * @param {Function} func The test function that will be executed for this step.
- * @return {goog.testing.ContinuationTestCase.Step} A new test step.
+ * @return {!goog.testing.ContinuationTestCase.Step} A new test step.
  * @private
  */
 goog.testing.ContinuationTestCase.prototype.addStep_ = function(func) {

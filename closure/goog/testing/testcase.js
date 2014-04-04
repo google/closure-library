@@ -325,7 +325,7 @@ goog.testing.TestCase.prototype.setTests = function(tests) {
 
 /**
  * Gets the tests.
- * @return {Array.<goog.testing.TestCase.Test>} The test array.
+ * @return {!Array.<goog.testing.TestCase.Test>} The test array.
  * @protected
  */
 goog.testing.TestCase.prototype.getTests = function() {
@@ -726,7 +726,7 @@ goog.testing.TestCase.prototype.setBatchTime = function(batchTime) {
  *     function.
  * @param {string} name The name of the function.
  * @param {function() : void} ref The auto-discovered function.
- * @return {goog.testing.TestCase.Test} The newly created test.
+ * @return {!goog.testing.TestCase.Test} The newly created test.
  * @protected
  */
 goog.testing.TestCase.prototype.createTestFromAutoDiscoveredFunction =
@@ -1007,7 +1007,7 @@ goog.testing.TestCase.prototype.doError = function(test, opt_e) {
  * @param {string} name Failed test name.
  * @param {*=} opt_e The exception object associated with the
  *     failure or a string.
- * @return {goog.testing.TestCase.Error} Error object.
+ * @return {!goog.testing.TestCase.Error} Error object.
  */
 goog.testing.TestCase.prototype.logError = function(name, opt_e) {
   var errMsg = null;

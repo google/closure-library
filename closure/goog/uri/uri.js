@@ -571,7 +571,7 @@ goog.Uri.prototype.getDecodedQuery = function() {
 
 /**
  * Returns the query data.
- * @return {goog.Uri.QueryData} QueryData object.
+ * @return {!goog.Uri.QueryData} QueryData object.
  */
 goog.Uri.prototype.getQueryData = function() {
   return this.queryData_;
@@ -635,7 +635,7 @@ goog.Uri.prototype.setParameterValues = function(key, values) {
  * Returns the value<b>s</b> for a given cgi parameter as a list of decoded
  * query parameter values.
  * @param {string} name The parameter to get values for.
- * @return {Array} The values for a given cgi parameter as a list of
+ * @return {!Array} The values for a given cgi parameter as a list of
  *     decoded query parameter values.
  */
 goog.Uri.prototype.getParameterValues = function(name) {
