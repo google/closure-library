@@ -29,6 +29,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
@@ -880,6 +881,13 @@ goog.ui.ControlRenderer.prototype.getStateFromClass = function(className) {
  */
 goog.ui.ControlRenderer.prototype.createClassByStateMap_ = function() {
   var baseClass = this.getStructuralCssClass();
+
+  // This ensures space-separated css classnames are not allowed, which some
+  // ControlRenderers had been doing.  See http://b/13694665.
+  var isValidClassName = !goog.string.contains(
+      goog.string.normalizeWhitespace(baseClass), ' ');
+  goog.asserts.assert(isValidClassName,
+      'ControlRenderer has an invalid css class: \'' + baseClass + '\'');
 
   /**
    * Map of component states to state-specific structural class names,
