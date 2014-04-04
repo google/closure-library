@@ -48,14 +48,17 @@ goog.require('goog.userAgent');
 /**
  * A ComboBox control.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
- * @param {goog.ui.Menu=} opt_menu Optional menu.
+ * @param {goog.ui.Menu=} opt_menu Optional menu component.
+ *     This menu is disposed of by this control.
+ * @param {goog.ui.LabelInput=} opt_labelInput Optional label input.
+ *     This label input is disposed of by this control.
  * @extends {goog.ui.Component}
  * @constructor
  */
-goog.ui.ComboBox = function(opt_domHelper, opt_menu) {
+goog.ui.ComboBox = function(opt_domHelper, opt_menu, opt_labelInput) {
   goog.ui.Component.call(this, opt_domHelper);
 
-  this.labelInput_ = new goog.ui.LabelInput();
+  this.labelInput_ = opt_labelInput || new goog.ui.LabelInput();
   this.enabled_ = true;
 
   // TODO(user): Allow lazy creation of menus/menu items
