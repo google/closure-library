@@ -508,6 +508,9 @@ goog.ui.Dialog.prototype.setModalInternal_ = function(modal) {
       dom.removeNode(bg);
     }
   }
+  if (this.isVisible()) {
+    this.setA11YDetectBackground(modal);
+  }
 };
 
 

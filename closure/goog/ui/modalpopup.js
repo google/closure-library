@@ -335,7 +335,7 @@ goog.ui.ModalPopup.prototype.enterDocument = function() {
   this.getHandler().listen(
       this.focusHandler_, goog.events.FocusHandler.EventType.FOCUSIN,
       this.onFocus);
-  this.setA11YDetectBackground_(false);
+  this.setA11YDetectBackground(false);
 };
 
 
@@ -373,7 +373,7 @@ goog.ui.ModalPopup.prototype.setVisible = function(visible) {
   if (this.bgHideTransition_) this.bgHideTransition_.stop();
 
   if (this.isInDocument()) {
-    this.setA11YDetectBackground_(visible);
+    this.setA11YDetectBackground(visible);
   }
   if (visible) {
     this.show_();
@@ -402,9 +402,9 @@ goog.ui.ModalPopup.setAriaHidden_ = function(element, hide) {
 /**
  * Sets aria-hidden of the rest of the page to restrict keyboard focus.
  * @param {boolean} hide Whether to hide or show the rest of the page.
- * @private
+ * @protected
  */
-goog.ui.ModalPopup.prototype.setA11YDetectBackground_ = function(hide) {
+goog.ui.ModalPopup.prototype.setA11YDetectBackground = function(hide) {
   for (var child = this.getDomHelper().getDocument().body.firstChild; child;
       child = child.nextSibling) {
     if (child.nodeType == goog.dom.NodeType.ELEMENT) {

@@ -34,6 +34,7 @@ See the COPYING file for details.
 <body>
 <iframe id="f" src="javascript:'<input>'"></iframe>
 <script>
+  var bodyChildElement;
   var decorateTarget;
   var dialog;
   var mockClock;
@@ -41,6 +42,8 @@ See the COPYING file for details.
 
   function setUp() {
     mockClock = new goog.testing.MockClock(true);
+    bodyChildElement = document.createElement('div');
+    document.body.appendChild(bodyChildElement);
     dialog = new goog.ui.Dialog();
     var buttons = new goog.ui.Dialog.ButtonSet();
     buttons.set(goog.ui.Dialog.DefaultButtonKeys.CANCEL,
@@ -65,6 +68,7 @@ See the COPYING file for details.
 
   function tearDown() {
     dialog.dispose();
+    goog.dom.removeNode(bodyChildElement);
     goog.dom.removeNode(decorateTarget);
     mockClock.dispose();
   }
@@ -544,7 +548,9 @@ See the COPYING file for details.
     dialog.dispose();
     dialog = new goog.ui.Dialog(null, true /* iframe mask */);
     dialog.setModal(false);
+    assertAriaHidden(false);
     dialog.setVisible(true);
+    assertAriaHidden(true);
 
     var iframes =
         goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME);
@@ -556,14 +562,18 @@ See the COPYING file for details.
   function testSwapModalForOpenDialog() {
     dialog.dispose();
     dialog = new goog.ui.Dialog(null, true /* iframe mask */);
+    assertAriaHidden(false);
     dialog.setVisible(true);
+    assertAriaHidden(true);
     dialog.setModal(false);
+    assertAriaHidden(false);
     assertFalse('IFrame bg element should not be in dom',
         goog.dom.contains(document.body, dialog.getBackgroundIframe()));
     assertFalse('bg element should not be in dom',
         goog.dom.contains(document.body, dialog.getBackgroundElement()));
 
     dialog.setModal(true);
+    assertAriaHidden(true);
     assertTrue('IFrame bg element should be in dom',
         goog.dom.contains(document.body, dialog.getBackgroundIframe()));
     assertTrue('bg element should be in dom',
@@ -831,6 +841,15 @@ See the COPYING file for details.
     document.body.focus();
     dialog.focus();
     assertEquals(dialog.getElement(), document.activeElement);
+  }
+
+  // Asserts that a test element which is a child of the document body has the
+  // aria property 'hidden' set on it, or not.
+  function assertAriaHidden(expectedHidden) {
+    var expectedString = expectedHidden ? 'true' : '';
+    assertEquals(expectedString,
+        goog.a11y.aria.getState(bodyChildElement,
+            goog.a11y.aria.State.HIDDEN));
   }
 </script>
 </body>
