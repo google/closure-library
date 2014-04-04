@@ -49,12 +49,11 @@
 
 goog.provide('goog.cssom.iframe.style');
 
-goog.require('goog.asserts');
 goog.require('goog.cssom');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classlist');
+goog.require('goog.dom.classes');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.userAgent');
@@ -526,7 +525,7 @@ goog.cssom.iframe.style.NodeAncestry_ = function(el) {
     var className = node.className;
     var classNamesLookup = {};
     if (className) {
-      var classNames = goog.dom.classlist.get(goog.asserts.assertElement(node));
+      var classNames = goog.dom.classes.get(node);
       for (var i = 0; i < classNames.length; i++) {
         classNamesLookup[classNames[i]] = 1;
       }

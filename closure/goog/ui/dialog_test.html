@@ -12,7 +12,6 @@ See the COPYING file for details.
 <script src="../base.js"></script>
 <script>
   goog.require('goog.dom');
-  goog.require('goog.dom.classlist');
   goog.require('goog.a11y.aria');
   goog.require('goog.a11y.aria.Role');
   goog.require('goog.a11y.aria.State');
@@ -734,10 +733,10 @@ See the COPYING file for details.
   }
 
   function testDraggableStyle() {
-    assertTrue('draggable CSS class is set', goog.dom.classlist.contains(
+    assertTrue('draggable CSS class is set', goog.dom.classes.has(
         dialog.titleEl_, 'modal-dialog-title-draggable'));
     dialog.setDraggable(false);
-    assertFalse('draggable CSS class is removed', goog.dom.classlist.contains(
+    assertFalse('draggable CSS class is removed', goog.dom.classes.has(
         dialog.titleEl_, 'modal-dialog-title-draggable'));
   }
 

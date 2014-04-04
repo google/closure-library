@@ -27,7 +27,7 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.classlist');
+goog.require('goog.dom.classes');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
@@ -232,17 +232,16 @@ goog.ui.ControlRenderer.prototype.enableClassName = function(control,
   var element = /** @type {Element} */ (
       control.getElement ? control.getElement() : control);
   if (element) {
-    goog.asserts.assert(element);
     // For IE6, we need to enable any combined classes involving this class
     // as well.
     if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
       var combinedClasses = this.getAppliedCombinedClassNames_(
-          goog.dom.classlist.get(element), className);
+          goog.dom.classes.get(element), className);
       combinedClasses.push(className);
-      var f = enable ? goog.dom.classlist.add : goog.dom.classlist.remove;
+      var f = enable ? goog.dom.classes.add : goog.dom.classes.remove;
       goog.partial(f, element).apply(null, combinedClasses);
     } else {
-      goog.dom.classlist.enable(element, className, enable);
+      goog.dom.classes.enable(element, className, enable);
     }
   }
 };
@@ -307,8 +306,7 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
   var hasRendererClassName = false;
   var hasStructuralClassName = false;
   var hasCombinedClassName = false;
-  goog.asserts.assert(element);
-  var classNames = goog.array.toArray(goog.dom.classlist.get(element));
+  var classNames = goog.dom.classes.get(element);
   goog.array.forEach(classNames, function(className) {
     if (!hasRendererClassName && className == rendererClassName) {
       hasRendererClassName = true;
@@ -353,7 +351,7 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
   // Only write to the DOM if new class names had to be added to the element.
   if (!hasRendererClassName || !hasStructuralClassName ||
       extraClassNames || hasCombinedClassName) {
-    goog.dom.classlist.set(element, classNames.join(' '));
+    goog.dom.classes.set(element, classNames.join(' '));
   }
 
   this.setAriaStates(control, element);
@@ -788,8 +786,8 @@ goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
  * If opt_includedClass is provided, return only the combined classes that have
  * all members contained in classes AND include opt_includedClass as well.
  * opt_includedClass is added to classes as well.
- * @param {Array.<string>|goog.array.ArrayLike} classes Array of classes to
- *     return matching combined classes for.
+ * @param {Array.<string>} classes Array of classes to return matching combined
+ *     classes for.
  * @param {?string=} opt_includedClass If provided, get only the combined
  *     classes that include this one.
  * @return {Array.<string>} Array of combined class names that should be

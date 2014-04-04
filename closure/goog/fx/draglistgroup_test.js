@@ -17,7 +17,7 @@ goog.setTestOnly('goog.fx.DragListGroupTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
-goog.require('goog.dom.classlist');
+goog.require('goog.dom.classes');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.BrowserFeature');
@@ -114,13 +114,13 @@ function testSettersAfterInit() {
       ['blue_bg', 'opacity_40']));
 
   assertFalse('Should have no cursor_move class after init',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_move'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_move'));
   assertFalse('Should have no cursor_pointer class after init',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_pointer'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_pointer'));
   assertFalse('Should have no opacity_40 class after init',
-      goog.dom.classlist.contains(event.currentTarget, 'opacity_40'));
+      goog.dom.classes.has(event.currentTarget, 'opacity_40'));
   assertFalse('Should not have blue_bg class after init',
-      goog.dom.classlist.contains(event.currentTarget, 'blue_bg'));
+      goog.dom.classes.has(event.currentTarget, 'blue_bg'));
 }
 
 
@@ -134,26 +134,26 @@ function testAddDragItemHoverClasses() {
   dlg.handleDragItemMouseover_(event);
 
   assertTrue('Should have cursor_move class after MOUSEOVER',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_move'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_move'));
   assertTrue('Should have opacity_40 class after MOUSEOVER',
-      goog.dom.classlist.contains(event.currentTarget, 'opacity_40'));
+      goog.dom.classes.has(event.currentTarget, 'opacity_40'));
   assertFalse('Should not have cursor_pointer class after MOUSEOVER',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_pointer'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_pointer'));
   assertFalse('Should not have blue_bg class after MOUSEOVER',
-      goog.dom.classlist.contains(event.currentTarget, 'blue_bg'));
+      goog.dom.classes.has(event.currentTarget, 'blue_bg'));
 }
 
 function testAddDragItemHandleHoverClasses() {
   dlg.handleDragItemHandleMouseover_(event);
 
   assertFalse('Should not have cursor_move class after MOUSEOVER',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_move'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_move'));
   assertTrue('Should have opacity_40 class after MOUSEOVER',
-      goog.dom.classlist.contains(event.currentTarget, 'opacity_40'));
+      goog.dom.classes.has(event.currentTarget, 'opacity_40'));
   assertTrue('Should have cursor_pointer class after MOUSEOVER',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_pointer'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_pointer'));
   assertFalse('Should not have blue_bg class after MOUSEOVER',
-      goog.dom.classlist.contains(event.currentTarget, 'blue_bg'));
+      goog.dom.classes.has(event.currentTarget, 'blue_bg'));
 }
 
 
@@ -168,13 +168,13 @@ function testRemoveDragItemHoverClasses() {
   dlg.handleDragItemMouseout_(event);
 
   assertFalse('Should have no cursor_move class after MOUSEOUT',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_move'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_move'));
   assertFalse('Should have no cursor_pointer class after MOUSEOUT',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_pointer'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_pointer'));
   assertFalse('Should have no opacity_40 class after MOUSEOUT',
-      goog.dom.classlist.contains(event.currentTarget, 'opacity_40'));
+      goog.dom.classes.has(event.currentTarget, 'opacity_40'));
   assertFalse('Should have no blue_bg class after MOUSEOUT',
-      goog.dom.classlist.contains(event.currentTarget, 'blue_bg'));
+      goog.dom.classes.has(event.currentTarget, 'blue_bg'));
 }
 
 function testRemoveDragItemHandleHoverClasses() {
@@ -182,13 +182,13 @@ function testRemoveDragItemHandleHoverClasses() {
   dlg.handleDragItemHandleMouseout_(event);
 
   assertFalse('Should have no cursor_move class after MOUSEOUT',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_move'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_move'));
   assertFalse('Should have no cursor_pointer class after MOUSEOUT',
-      goog.dom.classlist.contains(event.currentTarget, 'cursor_pointer'));
+      goog.dom.classes.has(event.currentTarget, 'cursor_pointer'));
   assertFalse('Should have no opacity_40 class after MOUSEOUT',
-      goog.dom.classlist.contains(event.currentTarget, 'opacity_40'));
+      goog.dom.classes.has(event.currentTarget, 'opacity_40'));
   assertFalse('Should have no blue_bg class after MOUSEOUT',
-      goog.dom.classlist.contains(event.currentTarget, 'blue_bg'));
+      goog.dom.classes.has(event.currentTarget, 'blue_bg'));
 }
 
 
@@ -209,13 +209,13 @@ function testAddCurrentDragItemClasses() {
   dlg.handlePotentialDragStart_(event);
 
   assertFalse('Should have no cursor_move class after MOUSEDOWN',
-      goog.dom.classlist.contains(dlg.currDragItem_, 'cursor_move'));
+      goog.dom.classes.has(dlg.currDragItem_, 'cursor_move'));
   assertFalse('Should have no cursor_pointer class after MOUSEDOWN',
-      goog.dom.classlist.contains(dlg.currDragItem_, 'cursor_pointer'));
+      goog.dom.classes.has(dlg.currDragItem_, 'cursor_pointer'));
   assertTrue('Should have opacity_40 class after MOUSEDOWN',
-      goog.dom.classlist.contains(dlg.currDragItem_, 'opacity_40'));
+      goog.dom.classes.has(dlg.currDragItem_, 'opacity_40'));
   assertTrue('Should have blue_bg class after MOUSEDOWN',
-      goog.dom.classlist.contains(dlg.currDragItem_, 'blue_bg'));
+      goog.dom.classes.has(dlg.currDragItem_, 'blue_bg'));
 }
 
 
@@ -250,13 +250,13 @@ function testRemoveCurrentDragItemClasses() {
   dragger.dispose();
 
   assertFalse('Should have no cursor_move class after MOUSEUP',
-      goog.dom.classlist.contains(currDragItem, 'cursor_move'));
+      goog.dom.classes.has(currDragItem, 'cursor_move'));
   assertFalse('Should have no cursor_pointer class after MOUSEUP',
-      goog.dom.classlist.contains(currDragItem, 'cursor_pointer'));
+      goog.dom.classes.has(currDragItem, 'cursor_pointer'));
   assertFalse('Should have no opacity_40 class after MOUSEUP',
-      goog.dom.classlist.contains(currDragItem, 'opacity_40'));
+      goog.dom.classes.has(currDragItem, 'opacity_40'));
   assertFalse('Should have no blue_bg class after MOUSEUP',
-      goog.dom.classlist.contains(currDragItem, 'blue_bg'));
+      goog.dom.classes.has(currDragItem, 'blue_bg'));
 }
 
 

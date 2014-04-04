@@ -18,11 +18,10 @@ Author: attila@google.com (Attila Bodis)
     goog.require('goog.a11y.aria');
     goog.require('goog.a11y.aria.Role');
     goog.require('goog.a11y.aria.State');
-    goog.require('goog.dom.classlist');
+    goog.require('goog.dom.classes');
     goog.require('goog.object');
     goog.require('goog.style');
     goog.require('goog.testing.ExpectedFailures');
-    goog.require('goog.testing.PropertyReplacer');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.Component.State');
     goog.require('goog.ui.Control');
@@ -33,7 +32,7 @@ Author: attila@google.com (Attila Bodis)
 <body>
   <div id="sandbox"></div>
   <script>
-    var control, controlRenderer, testRenderer, propertyReplacer;
+    var control, controlRenderer, testRenderer;
     var sandbox = goog.dom.getElement('sandbox');
     var expectedFailures = new goog.testing.ExpectedFailures();
 
@@ -97,11 +96,9 @@ Author: attila@google.com (Attila Bodis)
       control = new goog.ui.Control('Hello');
       controlRenderer = goog.ui.ControlRenderer.getInstance();
       testRenderer = TestRenderer.getInstance();
-      propertyReplacer = new goog.testing.PropertyReplacer();
     }
 
     function tearDown() {
-      propertyReplacer.reset();
       control.dispose();
       expectedFailures.handleTearDown();
       control = null;
@@ -157,19 +154,19 @@ Author: attila@google.com (Attila Bodis)
 
       controlRenderer.enableExtraClassName(control, 'foo', true);
       assertSameElements('Extra class name must have been added',
-          ['goog-control', 'foo'], goog.dom.classlist.get(element));
+          ['goog-control', 'foo'], goog.dom.classes.get(element));
 
       controlRenderer.enableExtraClassName(control, 'foo', true);
       assertSameElements('Enabling existing extra class name must be a no-op',
-          ['goog-control', 'foo'], goog.dom.classlist.get(element));
+          ['goog-control', 'foo'], goog.dom.classes.get(element));
 
       controlRenderer.enableExtraClassName(control, 'bar', false);
       assertSameElements('Disabling nonexistent class name must be a no-op',
-          ['goog-control', 'foo'], goog.dom.classlist.get(element));
+          ['goog-control', 'foo'], goog.dom.classes.get(element));
 
       controlRenderer.enableExtraClassName(control, 'foo', false);
       assertSameElements('Extra class name must have been removed',
-          ['goog-control'], goog.dom.classlist.get(element));
+          ['goog-control'], goog.dom.classes.get(element));
     }
 
     function testCanDecorate() {
@@ -192,7 +189,7 @@ Author: attila@google.com (Attila Bodis)
       assertEquals('Decorated control\'s state must be as expected', 0x00,
           control.getState());
       assertSameElements('Decorated element\'s classes must be as expected',
-          ['goog-control'], goog.dom.classlist.get(element));
+          ['goog-control'], goog.dom.classes.get(element));
     }
 
     function testDecorateComplexDom() {
@@ -210,7 +207,7 @@ Author: attila@google.com (Attila Bodis)
       assertEquals('Decorated control\'s state must be as expected', 0x00,
           control.getState());
       assertSameElements('Decorated element\'s classes must be as expected',
-          ['goog-control'], goog.dom.classlist.get(element));
+          ['goog-control'], goog.dom.classes.get(element));
     }
 
     function testDecorateWithClasses() {
@@ -236,31 +233,35 @@ Author: attila@google.com (Attila Bodis)
         'goog-base-disabled',
         'goog-base-hover',
         'goog-button'
-      ], goog.dom.classlist.get(element));
+      ], goog.dom.classes.get(element));
     }
 
     function testDecorateOptimization() {
-      // Temporarily replace goog.dom.classlist.set().
-      propertyReplacer.set(goog.dom.classlist, 'set', function() {
-        fail('goog.dom.classlist.set() must not be called');
-      });
+      // Temporarily replace goog.dom.classes.set().
+      var goog$dom$classes$set = goog.dom.classes.set;
+      goog.dom.classes.set = function() {
+        fail('goog.dom.classes.set() must not be called');
+      };
 
-      // Since foo has all required classes, goog.dom.classlist.set() must not be
+      // Since foo has all required classes, goog.dom.classes.set() must not be
       // called at all.
       sandbox.innerHTML = '<div id="foo" class="goog-control">Foo</div>';
       controlRenderer.decorate(control, goog.dom.getElement('foo'));
 
-      // Since bar has all required classes, goog.dom.classlist.set() must not be
+      // Since bar has all required classes, goog.dom.classes.set() must not be
       // called at all.
       sandbox.innerHTML = '<div id="bar" class="goog-base goog-button">Bar' +
           '</div>';
       testRenderer.decorate(control, goog.dom.getElement('bar'));
 
-      // Since baz has all required classes, goog.dom.classlist.set() must not be
+      // Since baz has all required classes, goog.dom.classes.set() must not be
       // called at all.
       sandbox.innerHTML = '<div id="baz" class="goog-base goog-button ' +
           'goog-button-disabled">Baz</div>';
       testRenderer.decorate(control, goog.dom.getElement('baz'));
+
+      // Restore goog.dom.classes.set().
+      goog.dom.classes.set = goog$dom$classes$set;
     }
 
     function testInitializeDom() {
@@ -334,7 +335,7 @@ Author: attila@google.com (Attila Bodis)
       // be applied.
       assertSameElements('BiDi control must have right-to-left class',
           ['goog-control', 'goog-control-disabled', 'goog-control-rtl'],
-          goog.dom.classlist.get(control.getElement()));
+          goog.dom.classes.get(control.getElement()));
     }
 
     function testInitializeDomDisabledBiDiDecorated() {
@@ -359,7 +360,7 @@ Author: attila@google.com (Attila Bodis)
       // be applied.
       assertSameElements('BiDi control must have right-to-left class',
           ['goog-control', 'goog-control-disabled', 'goog-control-rtl'],
-          goog.dom.classlist.get(control.getElement()));
+          goog.dom.classes.get(control.getElement()));
     }
 
     function testSetAriaRole() {
@@ -494,18 +495,18 @@ Author: attila@google.com (Attila Bodis)
       var foo = goog.dom.getElement('foo');
       controlRenderer.setRightToLeft(foo, true);
       assertSameElements('Element must have right-to-left class applied',
-          ['goog-control-rtl'], goog.dom.classlist.get(foo));
+          ['goog-control-rtl'], goog.dom.classes.get(foo));
       controlRenderer.setRightToLeft(foo, false);
       assertSameElements('Element must not have right-to-left class applied',
-          [], goog.dom.classlist.get(foo));
+          [], goog.dom.classes.get(foo));
 
       var bar = goog.dom.getElement('bar');
       testRenderer.setRightToLeft(bar, true);
       assertSameElements('Element must have right-to-left class applied',
-          ['goog-base-rtl'], goog.dom.classlist.get(bar));
+          ['goog-base-rtl'], goog.dom.classes.get(bar));
       testRenderer.setRightToLeft(bar, false);
       assertSameElements('Element must not have right-to-left class applied',
-          [], goog.dom.classlist.get(bar));
+          [], goog.dom.classes.get(bar));
     }
 
     function testIsFocusable() {
@@ -583,7 +584,7 @@ Author: attila@google.com (Attila Bodis)
       var element = control.getElement();
       assertNotNull(element);
       assertSameElements('Control must have expected class names',
-          ['goog-button', 'goog-base'], goog.dom.classlist.get(element));
+          ['goog-button', 'goog-base'], goog.dom.classes.get(element));
       assertEquals('Control must not have disabled ARIA state', '',
           goog.a11y.aria.getState(element,
               goog.a11y.aria.State.DISABLED));
@@ -591,14 +592,14 @@ Author: attila@google.com (Attila Bodis)
       testRenderer.setState(control, goog.ui.Component.State.DISABLED, true);
       assertSameElements('Control must have disabled class name',
           ['goog-button', 'goog-base', 'goog-base-disabled'],
-          goog.dom.classlist.get(element));
+          goog.dom.classes.get(element));
       assertEquals('Control must have disabled ARIA state', 'true',
           goog.a11y.aria.getState(element,
               goog.a11y.aria.State.DISABLED));
 
       testRenderer.setState(control, goog.ui.Component.State.DISABLED, false);
       assertSameElements('Control must no longer have disabled class name',
-          ['goog-button', 'goog-base'], goog.dom.classlist.get(element));
+          ['goog-button', 'goog-base'], goog.dom.classes.get(element));
       assertEquals('Control must not have disabled ARIA state',
           'false',
           goog.a11y.aria.getState(element,
@@ -606,7 +607,7 @@ Author: attila@google.com (Attila Bodis)
 
       testRenderer.setState(control, 0xFFFFFF, true);
       assertSameElements('Class names must be unchanged for invalid state',
-          ['goog-button', 'goog-base'], goog.dom.classlist.get(element));
+          ['goog-button', 'goog-base'], goog.dom.classes.get(element));
     }
 
     function testUpdateAriaStateDisabled() {
@@ -1099,10 +1100,10 @@ Author: attila@google.com (Attila Bodis)
       if (isIe6()) {
         assertSameElements('IE6 and lower should have one combined class',
             expectedClasses.concat(['combined_goog-base-disabled_goog-button']),
-            goog.dom.classlist.get(element));
+            goog.dom.classes.get(element));
       } else {
         assertSameElements('Non IE6 browsers should not have a combined class',
-            expectedClasses, goog.dom.classlist.get(element));
+            expectedClasses, goog.dom.classes.get(element));
       }
 
       testRenderer.setState(control, goog.ui.Component.State.DISABLED, false);
@@ -1116,10 +1117,10 @@ Author: attila@google.com (Attila Bodis)
       if (isIe6()) {
         assertSameElements('IE6 and lower should have one combined class',
             expectedClasses.concat(['combined_goog-base-hover_goog-button']),
-            goog.dom.classlist.get(element));
+            goog.dom.classes.get(element));
       } else {
         assertSameElements('Non IE6 browsers should not have a combined class',
-            expectedClasses, goog.dom.classlist.get(element));
+            expectedClasses, goog.dom.classes.get(element));
       }
 
       testRenderer.setRightToLeft(element, true);
@@ -1137,10 +1138,10 @@ Author: attila@google.com (Attila Bodis)
             expectedClasses.concat([
               'combined_goog-base-hover_goog-button',
               'combined_combined2_goog-base-hover_goog-base-rtl_goog-button'
-            ]), goog.dom.classlist.get(element));
+            ]), goog.dom.classes.get(element));
       } else {
         assertSameElements('Non IE6 browsers should not have a combined class',
-            expectedClasses, goog.dom.classlist.get(element));
+            expectedClasses, goog.dom.classes.get(element));
       }
 
     }
@@ -1161,10 +1162,10 @@ Author: attila@google.com (Attila Bodis)
       if (isIe6()) {
         assertSameElements('IE6 and lower should have one combined class',
             expectedClasses.concat(['combined_goog-base-hover_goog-button']),
-            goog.dom.classlist.get(element));
+            goog.dom.classes.get(element));
       } else {
         assertSameElements('Non IE6 browsers should not have a combined class',
-            expectedClasses, goog.dom.classlist.get(element));
+            expectedClasses, goog.dom.classes.get(element));
       }
 
     }
