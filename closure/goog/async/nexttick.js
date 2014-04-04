@@ -69,6 +69,15 @@ goog.async.nextTick.setImmediate_;
  * @private
  */
 goog.async.nextTick.getSetImmediateEmulator_ = function() {
+  // If native Promises are available in the browser, just schedule the callback
+  // on a fulfilled promise, which is specified to be async, but as fast as
+  // possible.
+  if (goog.global.Promise && goog.global.Promise.resolve) {
+    var promise = goog.global.Promise.resolve();
+    return function(cb) {
+      promise.then(cb);
+    };
+  }
   // Create a private message channel and use it to postMessage empty messages
   // to ourselves.
   var Channel = goog.global['MessageChannel'];
