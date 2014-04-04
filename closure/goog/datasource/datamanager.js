@@ -64,7 +64,7 @@ goog.inherits(goog.ds.DataManager, goog.ds.DataNode);
 
 /**
  * Get the global instance
- * @return {goog.ds.DataManager} The data manager singleton.
+ * @return {!goog.ds.DataManager} The data manager singleton.
  */
 goog.ds.DataManager.getInstance = function() {
   if (!goog.ds.DataManager.instance_) {

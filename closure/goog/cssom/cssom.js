@@ -112,7 +112,7 @@ goog.cssom.getCssRulesFromStyleSheet = function(styleSheet) {
  * @param {(CSSStyleSheet|StyleSheetList)=} opt_styleSheet A CSSStyleSheet.
  * @param {boolean=} opt_includeDisabled If true, includes disabled stylesheets,
  *    defaults to false.
- * @return {Array.<CSSStyleSheet>} A list of CSSStyleSheet objects.
+ * @return {!Array.<CSSStyleSheet>} A list of CSSStyleSheet objects.
  */
 goog.cssom.getAllCssStyleSheets = function(opt_styleSheet,
     opt_includeDisabled) {
@@ -348,7 +348,7 @@ goog.cssom.removeCssRule = function(cssStyleSheet, index) {
  * @param {string} cssText CSS to add to the end of the document.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper user for
  *     document interactions.
- * @return {Element} The newly created STYLE element.
+ * @return {!Element} The newly created STYLE element.
  */
 goog.cssom.addCssText = function(cssText, opt_domHelper) {
   var document = opt_domHelper ? opt_domHelper.getDocument() :
@@ -398,7 +398,7 @@ goog.cssom.getFileNameFromStyleSheet = function(styleSheet) {
  * Recursively gets all CSS text or rules.
  * @param {CSSStyleSheet|StyleSheetList} styleSheet The CSSStyleSheet.
  * @param {boolean} isTextOutput If true, output is cssText, otherwise cssRules.
- * @return {string|Array.<CSSRule>} cssText or cssRules.
+ * @return {string|!Array.<CSSRule>} cssText or cssRules.
  * @private
  */
 goog.cssom.getAllCss_ = function(styleSheet, isTextOutput) {

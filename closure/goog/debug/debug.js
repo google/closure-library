@@ -238,7 +238,7 @@ goog.debug.exposeException = function(err, opt_fn) {
 /**
  * Normalizes the error/exception object between browsers.
  * @param {Object} err Raw error object.
- * @return {Object} Normalized error object.
+ * @return {!Object} Normalized error object.
  */
 goog.debug.normalizeErrorObject = function(err) {
   var href = goog.getObjectByName('window.location.href');
@@ -300,7 +300,7 @@ goog.debug.normalizeErrorObject = function(err) {
  * @param {Error|string} err  the original thrown object or string.
  * @param {string=} opt_message  optional additional message to add to the
  *     error.
- * @return {Error} If err is a string, it is used to create a new Error,
+ * @return {!Error} If err is a string, it is used to create a new Error,
  *     which is enhanced and returned.  Otherwise err itself is enhanced
  *     and returned.
  */

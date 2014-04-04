@@ -192,7 +192,7 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.setSelectorsFromString =
 
 /**
  * Make a copy of this ruleset.
- * @return {goog.cssom.iframe.style.CssRuleSet_} A new CssRuleSet containing
+ * @return {!goog.cssom.iframe.style.CssRuleSet_} A new CssRuleSet containing
  *     the same data as this one.
  */
 goog.cssom.iframe.style.CssRuleSet_.prototype.clone = function() {
@@ -567,7 +567,7 @@ goog.cssom.iframe.style.resetDomCache = function() {
 /**
  * Inspects a document and returns all active rule sets
  * @param {Document} doc The document from which to read CSS rules.
- * @return {Array.<goog.cssom.iframe.style.CssRuleSet_>} An array of CssRuleSet
+ * @return {!Array.<goog.cssom.iframe.style.CssRuleSet_>} An array of CssRuleSet
  *     objects representing all the active rule sets in the document.
  * @private
  */
@@ -623,7 +623,7 @@ goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument = function(doc) {
  * Retrieves the array of css rulesets for this document. A cached
  * version will be used when possible.
  * @param {Document} doc The document for which to get rulesets.
- * @return {Array.<goog.cssom.iframe.style.CssRuleSet_>} An array of CssRuleSet
+ * @return {!Array.<goog.cssom.iframe.style.CssRuleSet_>} An array of CssRuleSet
  *     objects representing the css rule sets in the supplied document.
  */
 goog.cssom.iframe.style.ruleSetCache_.getRuleSetsForDocument = function(doc) {
@@ -923,7 +923,7 @@ goog.cssom.iframe.style.getBackgroundXYValues_ = function(styleObject) {
  * has a transparent background what you're going to see through it is its
  * ancestors.
  * @param {Element} element The element from which to copy background styles.
- * @return {Object} Object containing background* properties.
+ * @return {!Object} Object containing background* properties.
  */
 goog.cssom.iframe.style.getBackgroundContext = function(element) {
   var propertyValues = {

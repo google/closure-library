@@ -196,7 +196,7 @@ goog.debug.ErrorReporter.logger_ =
  *     onerror and to protect entry points.  If apps have other error reporting
  *     facilities, it may make sense for them to set these up themselves and use
  *     the ErrorReporter just for transmission of reports.
- * @return {goog.debug.ErrorReporter} The error reporter.
+ * @return {!goog.debug.ErrorReporter} The error reporter.
  */
 goog.debug.ErrorReporter.install = function(
     loggingUrl, opt_contextProvider, opt_noAutoProtect) {

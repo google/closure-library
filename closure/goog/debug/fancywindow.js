@@ -337,7 +337,7 @@ goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
 /**
  * Helper function to create a list of locally stored keys. Used to avoid
  * expensive localStorage.getItem() calls.
- * @return {Object} List of keys.
+ * @return {!Object} List of keys.
  * @private
  */
 goog.debug.FancyWindow.getStoredKeys_ = function() {

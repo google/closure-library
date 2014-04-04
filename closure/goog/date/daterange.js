@@ -96,7 +96,7 @@ goog.date.DateRange.prototype.contains = function(date) {
 
 
 /**
- * @return {goog.iter.Iterator} An iterator over the date range.
+ * @return {!goog.iter.Iterator} An iterator over the date range.
  */
 goog.date.DateRange.prototype.iterator = function() {
   return new goog.date.DateRange.Iterator(this);
@@ -128,7 +128,7 @@ goog.date.DateRange.equals = function(a, b) {
  * input.
  * @param {goog.date.Date} date The input date.
  * @param {number} offset Number of days.
- * @return {goog.date.Date} The date that is |offset| days after |date|.
+ * @return {!goog.date.Date} The date that is |offset| days after |date|.
  * @private
  */
 goog.date.DateRange.offsetInDays_ = function(date, offset) {
@@ -142,7 +142,7 @@ goog.date.DateRange.offsetInDays_ = function(date, offset) {
  * Calculates the Monday before a date. If the input is a Monday, returns the
  * input. Does not modify its input.
  * @param {goog.date.Date} date The input date.
- * @return {goog.date.Date} If |date| is a Monday, return |date|; otherwise
+ * @return {!goog.date.Date} If |date| is a Monday, return |date|; otherwise
  *     return the Monday before |date|.
  * @private
  */
@@ -159,7 +159,7 @@ goog.date.DateRange.currentOrLastMonday_ = function(date) {
  * month that contains its input. Does not modify its input.
  * @param {goog.date.Date} date The input date.
  * @param {number} offset Number of months.
- * @return {goog.date.Date} The date that is |offset| months after the first
+ * @return {!goog.date.Date} The date that is |offset| months after the first
  *     day in the month that contains |date|.
  * @private
  */
@@ -175,7 +175,7 @@ goog.date.DateRange.offsetInMonths_ = function(date, offset) {
  * Returns the range from yesterday to yesterday.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that includes only yesterday.
+ * @return {!goog.date.DateRange} The range that includes only yesterday.
  */
 goog.date.DateRange.yesterday = function(opt_today) {
   var today = goog.date.DateRange.cloneOrCreate_(opt_today);
@@ -188,7 +188,7 @@ goog.date.DateRange.yesterday = function(opt_today) {
  * Returns the range from today to today.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that includes only today.
+ * @return {!goog.date.DateRange} The range that includes only today.
  */
 goog.date.DateRange.today = function(opt_today) {
   var today = goog.date.DateRange.cloneOrCreate_(opt_today);
@@ -200,7 +200,7 @@ goog.date.DateRange.today = function(opt_today) {
  * Returns the range that includes the seven days that end yesterday.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that includes the seven days that
+ * @return {!goog.date.DateRange} The range that includes the seven days that
  *     end yesterday.
  */
 goog.date.DateRange.last7Days = function(opt_today) {
@@ -216,7 +216,7 @@ goog.date.DateRange.last7Days = function(opt_today) {
  * of this month.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that starts the first of this month
+ * @return {!goog.date.DateRange} The range that starts the first of this month
  *     and ends the last day of this month.
  */
 goog.date.DateRange.thisMonth = function(opt_today) {
@@ -234,7 +234,7 @@ goog.date.DateRange.thisMonth = function(opt_today) {
  * of last month.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that starts the first of last month
+ * @return {!goog.date.DateRange} The range that starts the first of last month
  *     and ends the last day of last month.
  */
 goog.date.DateRange.lastMonth = function(opt_today) {
@@ -252,7 +252,7 @@ goog.date.DateRange.lastMonth = function(opt_today) {
  * (see {@link goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK}) on or before today.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that starts the Monday on or before
+ * @return {!goog.date.DateRange} The range that starts the Monday on or before
  *     today and ends the Sunday on or after today.
  */
 goog.date.DateRange.thisWeek = function(opt_today) {
@@ -272,7 +272,7 @@ goog.date.DateRange.thisWeek = function(opt_today) {
  * contains today.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that starts seven days before the
+ * @return {!goog.date.DateRange} The range that starts seven days before the
  *     Monday on or before today and ends the Sunday on or before yesterday.
  */
 goog.date.DateRange.lastWeek = function(opt_today) {
@@ -288,7 +288,7 @@ goog.date.DateRange.lastWeek = function(opt_today) {
  * today and ends the Friday before today.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that starts seven days before the
+ * @return {!goog.date.DateRange} The range that starts seven days before the
  *     Monday on or before today and ends the Friday before today.
  */
 goog.date.DateRange.lastBusinessWeek = function(opt_today) {
@@ -306,7 +306,7 @@ goog.date.DateRange.lastBusinessWeek = function(opt_today) {
  * December 31, 9999.
  * @param {goog.date.Date=} opt_today The date to consider today.
  *     Defaults to today.
- * @return {goog.date.DateRange} The range that includes all days between
+ * @return {!goog.date.DateRange} The range that includes all days between
  *     January 1, 1900 and December 31, 9999.
  */
 goog.date.DateRange.allTime = function(opt_today) {

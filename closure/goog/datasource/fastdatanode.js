@@ -148,7 +148,7 @@ goog.ds.FastDataNode.prototype.extendWith = function(object) {
  *     node from.
  * @param {string} dataName Name of data node.
  * @param {goog.ds.DataNode=} opt_parent Parent of data node.
- * @return {goog.ds.AbstractFastDataNode} Data node representing object.
+ * @return {!goog.ds.AbstractFastDataNode} Data node representing object.
  */
 goog.ds.FastDataNode.fromJs = function(object, dataName, opt_parent) {
   if (goog.isArray(object)) {
@@ -280,7 +280,7 @@ goog.ds.FastDataNode.prototype.isList = function() {
 /**
  * Returns a javascript object representation of this data node. You should
  * not modify the object returned by this function.
- * @return {Object} Javascript object representation of this data node.
+ * @return {!Object} Javascript object representation of this data node.
  */
 goog.ds.FastDataNode.prototype.getJsObject = function() {
   var result = {};
@@ -547,7 +547,7 @@ goog.ds.FastListNode.prototype.set = function(value) {
 /**
  * Returns child nodes of this data node. Currently, only supports
  * returning all children.
- * @return {goog.ds.DataNodeList} List of child nodes.
+ * @return {!goog.ds.DataNodeList} List of child nodes.
  * @override
  */
 goog.ds.FastListNode.prototype.getChildNodes = function() {
@@ -676,7 +676,7 @@ goog.ds.FastListNode.prototype.isList = function() {
 /**
  * Returns a javascript object representation of this data node. You should
  * not modify the object returned by this function.
- * @return {Object} Javascript object representation of this data node.
+ * @return {!Object} Javascript object representation of this data node.
  */
 goog.ds.FastListNode.prototype.getJsObject = function() {
   var result = [];

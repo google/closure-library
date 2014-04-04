@@ -228,8 +228,8 @@ goog.debug.DevCss.prototype.getVersionNumberFromSelectorText_ = function(
  * value needed to determine if we have a match or not.
  * @param {CSSRule} cssRule The rule to test against.
  * @param {string} token The match token to test against the rule.
- * @return {Array|undefined} A tuple with the result of the compareVersions call
- *     and the matched ruleVersion.
+ * @return {!Array|undefined} A tuple with the result of the compareVersions
+ *     call and the matched ruleVersion.
  * @private
  */
 goog.debug.DevCss.prototype.getRuleVersionAndCompare_ = function(cssRule,

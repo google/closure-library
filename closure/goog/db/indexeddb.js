@@ -178,7 +178,7 @@ goog.db.IndexedDb.prototype.getObjectStoreNames = function() {
  *     whether the object store should automatically generate keys for stored
  *     objects. If keyPath is not provided and autoIncrement is false, then all
  *     insert operations must provide a key as a parameter.
- * @return {goog.db.ObjectStore} The newly created object store.
+ * @return {!goog.db.ObjectStore} The newly created object store.
  * @throws {goog.db.Error} If there's a problem creating the object store.
  */
 goog.db.IndexedDb.prototype.createObjectStore = function(name, opt_params) {
