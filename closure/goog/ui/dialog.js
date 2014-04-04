@@ -113,6 +113,7 @@ goog.inherits(goog.ui.Dialog, goog.ui.ModalPopup);
  * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS
  * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES
  * @see goog.ui.Dialog#setContent
+ * @see goog.ui.Prompt
  */
 goog.define('goog.ui.Dialog.ALLOW_UNSAFE_API', false);
 
