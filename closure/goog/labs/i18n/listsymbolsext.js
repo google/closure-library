@@ -71,7 +71,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_as');
 goog.provide('goog.labs.i18n.ListFormatSymbols_as_IN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_asa');
 goog.provide('goog.labs.i18n.ListFormatSymbols_asa_TZ');
-goog.provide('goog.labs.i18n.ListFormatSymbols_az');
 goog.provide('goog.labs.i18n.ListFormatSymbols_az_Cyrl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_az_Cyrl_AZ');
 goog.provide('goog.labs.i18n.ListFormatSymbols_az_Latn');
@@ -321,7 +320,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_hi_IN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_hr_BA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_hr_HR');
 goog.provide('goog.labs.i18n.ListFormatSymbols_hu_HU');
-goog.provide('goog.labs.i18n.ListFormatSymbols_hy');
 goog.provide('goog.labs.i18n.ListFormatSymbols_hy_AM');
 goog.provide('goog.labs.i18n.ListFormatSymbols_id_ID');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ig');
@@ -337,7 +335,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_jgo');
 goog.provide('goog.labs.i18n.ListFormatSymbols_jgo_CM');
 goog.provide('goog.labs.i18n.ListFormatSymbols_jmc');
 goog.provide('goog.labs.i18n.ListFormatSymbols_jmc_TZ');
-goog.provide('goog.labs.i18n.ListFormatSymbols_ka');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ka_GE');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kab');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kab_DZ');
@@ -351,7 +348,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_khq');
 goog.provide('goog.labs.i18n.ListFormatSymbols_khq_ML');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ki');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ki_KE');
-goog.provide('goog.labs.i18n.ListFormatSymbols_kk');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kk_Cyrl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kk_Cyrl_KZ');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kkj');
@@ -360,7 +356,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_kl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kl_GL');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kln');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kln_KE');
-goog.provide('goog.labs.i18n.ListFormatSymbols_km');
 goog.provide('goog.labs.i18n.ListFormatSymbols_km_KH');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kn_IN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ko_KP');
@@ -376,7 +371,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_ksf');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ksf_CM');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kw');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kw_GB');
-goog.provide('goog.labs.i18n.ListFormatSymbols_ky');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ky_Cyrl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ky_Cyrl_KG');
 goog.provide('goog.labs.i18n.ListFormatSymbols_lag');
@@ -389,7 +383,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_ln_AO');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ln_CD');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ln_CF');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ln_CG');
-goog.provide('goog.labs.i18n.ListFormatSymbols_lo');
 goog.provide('goog.labs.i18n.ListFormatSymbols_lo_LA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_lt_LT');
 goog.provide('goog.labs.i18n.ListFormatSymbols_lu');
@@ -412,10 +405,8 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_mgh');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mgh_MZ');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mgo');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mgo_CM');
-goog.provide('goog.labs.i18n.ListFormatSymbols_mk');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mk_MK');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ml_IN');
-goog.provide('goog.labs.i18n.ListFormatSymbols_mn');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mn_Cyrl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mn_Cyrl_MN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mr_IN');
@@ -426,7 +417,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_ms_Latn_SG');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mt_MT');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mua');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mua_CM');
-goog.provide('goog.labs.i18n.ListFormatSymbols_my');
 goog.provide('goog.labs.i18n.ListFormatSymbols_my_MM');
 goog.provide('goog.labs.i18n.ListFormatSymbols_naq');
 goog.provide('goog.labs.i18n.ListFormatSymbols_naq_NA');
@@ -434,7 +424,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_nb_NO');
 goog.provide('goog.labs.i18n.ListFormatSymbols_nb_SJ');
 goog.provide('goog.labs.i18n.ListFormatSymbols_nd');
 goog.provide('goog.labs.i18n.ListFormatSymbols_nd_ZW');
-goog.provide('goog.labs.i18n.ListFormatSymbols_ne');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ne_IN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ne_NP');
 goog.provide('goog.labs.i18n.ListFormatSymbols_nl_AW');
@@ -458,7 +447,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_om');
 goog.provide('goog.labs.i18n.ListFormatSymbols_om_ET');
 goog.provide('goog.labs.i18n.ListFormatSymbols_om_KE');
 goog.provide('goog.labs.i18n.ListFormatSymbols_or_IN');
-goog.provide('goog.labs.i18n.ListFormatSymbols_pa');
 goog.provide('goog.labs.i18n.ListFormatSymbols_pa_Arab');
 goog.provide('goog.labs.i18n.ListFormatSymbols_pa_Arab_PK');
 goog.provide('goog.labs.i18n.ListFormatSymbols_pa_Guru');
@@ -506,7 +494,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_shi_Latn');
 goog.provide('goog.labs.i18n.ListFormatSymbols_shi_Latn_MA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_shi_Tfng');
 goog.provide('goog.labs.i18n.ListFormatSymbols_shi_Tfng_MA');
-goog.provide('goog.labs.i18n.ListFormatSymbols_si');
 goog.provide('goog.labs.i18n.ListFormatSymbols_si_LK');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sk_SK');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sl_SI');
@@ -562,7 +549,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_tzm_Latn_MA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_uk_UA');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ur_IN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ur_PK');
-goog.provide('goog.labs.i18n.ListFormatSymbols_uz');
 goog.provide('goog.labs.i18n.ListFormatSymbols_uz_Arab');
 goog.provide('goog.labs.i18n.ListFormatSymbols_uz_Arab_AF');
 goog.provide('goog.labs.i18n.ListFormatSymbols_uz_Cyrl');
@@ -1065,18 +1051,6 @@ goog.labs.i18n.ListFormatSymbols_asa_TZ = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
-};
-
-
-/**
- * List formatting symbols for locale az.
- */
-goog.labs.i18n.ListFormatSymbols_az = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} və {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} və {1}'
 };
 
 
@@ -4069,18 +4043,6 @@ goog.labs.i18n.ListFormatSymbols_hu_HU = {
 
 
 /**
- * List formatting symbols for locale hy.
- */
-goog.labs.i18n.ListFormatSymbols_hy = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} և {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} և {1}'
-};
-
-
-/**
  * List formatting symbols for locale hy_AM.
  */
 goog.labs.i18n.ListFormatSymbols_hy_AM = {
@@ -4261,18 +4223,6 @@ goog.labs.i18n.ListFormatSymbols_jmc_TZ = {
 
 
 /**
- * List formatting symbols for locale ka.
- */
-goog.labs.i18n.ListFormatSymbols_ka = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} და {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} და {1}'
-};
-
-
-/**
  * List formatting symbols for locale ka_GE.
  */
 goog.labs.i18n.ListFormatSymbols_ka_GE = {
@@ -4429,18 +4379,6 @@ goog.labs.i18n.ListFormatSymbols_ki_KE = {
 
 
 /**
- * List formatting symbols for locale kk.
- */
-goog.labs.i18n.ListFormatSymbols_kk = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0}, {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, {1}'
-};
-
-
-/**
  * List formatting symbols for locale kk_Cyrl.
  */
 goog.labs.i18n.ListFormatSymbols_kk_Cyrl = {
@@ -4530,18 +4468,6 @@ goog.labs.i18n.ListFormatSymbols_kln = {
 goog.labs.i18n.ListFormatSymbols_kln_KE = {
   GENDER_STYLE: 0,
   LIST_TWO: '{0}, {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, {1}'
-};
-
-
-/**
- * List formatting symbols for locale km.
- */
-goog.labs.i18n.ListFormatSymbols_km = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} និង {1}',
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
@@ -4729,18 +4655,6 @@ goog.labs.i18n.ListFormatSymbols_kw_GB = {
 
 
 /**
- * List formatting symbols for locale ky.
- */
-goog.labs.i18n.ListFormatSymbols_ky = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} жана {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} жана {1}'
-};
-
-
-/**
  * List formatting symbols for locale ky_Cyrl.
  */
 goog.labs.i18n.ListFormatSymbols_ky_Cyrl = {
@@ -4878,18 +4792,6 @@ goog.labs.i18n.ListFormatSymbols_ln_CF = {
 goog.labs.i18n.ListFormatSymbols_ln_CG = {
   GENDER_STYLE: 0,
   LIST_TWO: '{0}, {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, {1}'
-};
-
-
-/**
- * List formatting symbols for locale lo.
- */
-goog.labs.i18n.ListFormatSymbols_lo = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} ແລະ {1}',
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
@@ -5161,18 +5063,6 @@ goog.labs.i18n.ListFormatSymbols_mgo_CM = {
 
 
 /**
- * List formatting symbols for locale mk.
- */
-goog.labs.i18n.ListFormatSymbols_mk = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0}, {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, {1}'
-};
-
-
-/**
  * List formatting symbols for locale mk_MK.
  */
 goog.labs.i18n.ListFormatSymbols_mk_MK = {
@@ -5193,18 +5083,6 @@ goog.labs.i18n.ListFormatSymbols_ml_IN = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1} എന്നിവ'
-};
-
-
-/**
- * List formatting symbols for locale mn.
- */
-goog.labs.i18n.ListFormatSymbols_mn = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0}, {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, {1}'
 };
 
 
@@ -5329,18 +5207,6 @@ goog.labs.i18n.ListFormatSymbols_mua_CM = {
 
 
 /**
- * List formatting symbols for locale my.
- */
-goog.labs.i18n.ListFormatSymbols_my = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0}နှင့်{1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, နှင့်{1}'
-};
-
-
-/**
  * List formatting symbols for locale my_MM.
  */
 goog.labs.i18n.ListFormatSymbols_my_MM = {
@@ -5421,18 +5287,6 @@ goog.labs.i18n.ListFormatSymbols_nd_ZW = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
-};
-
-
-/**
- * List formatting symbols for locale ne.
- */
-goog.labs.i18n.ListFormatSymbols_ne = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} र {1}',
-  LIST_START: '{0} र {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} र {1}'
 };
 
 
@@ -5709,18 +5563,6 @@ goog.labs.i18n.ListFormatSymbols_or_IN = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
-};
-
-
-/**
- * List formatting symbols for locale pa.
- */
-goog.labs.i18n.ListFormatSymbols_pa = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} ਅਤੇ {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} ਅਤੇ {1}'
 };
 
 
@@ -6285,18 +6127,6 @@ goog.labs.i18n.ListFormatSymbols_shi_Tfng_MA = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
-};
-
-
-/**
- * List formatting symbols for locale si.
- */
-goog.labs.i18n.ListFormatSymbols_si = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} සහ {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, සහ {1}'
 };
 
 
@@ -6961,18 +6791,6 @@ goog.labs.i18n.ListFormatSymbols_ur_PK = {
 
 
 /**
- * List formatting symbols for locale uz.
- */
-goog.labs.i18n.ListFormatSymbols_uz = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0} va {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} va {1}'
-};
-
-
-/**
  * List formatting symbols for locale uz_Arab.
  */
 goog.labs.i18n.ListFormatSymbols_uz_Arab = {
@@ -7525,10 +7343,6 @@ if (goog.LOCALE == 'asa') {
 
 if (goog.LOCALE == 'asa_TZ' || goog.LOCALE == 'asa-TZ') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_asa_TZ;
-}
-
-if (goog.LOCALE == 'az') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_az;
 }
 
 if (goog.LOCALE == 'az_Cyrl' || goog.LOCALE == 'az-Cyrl') {
@@ -8527,10 +8341,6 @@ if (goog.LOCALE == 'hu_HU' || goog.LOCALE == 'hu-HU') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_hu_HU;
 }
 
-if (goog.LOCALE == 'hy') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_hy;
-}
-
 if (goog.LOCALE == 'hy_AM' || goog.LOCALE == 'hy-AM') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_hy_AM;
 }
@@ -8591,10 +8401,6 @@ if (goog.LOCALE == 'jmc_TZ' || goog.LOCALE == 'jmc-TZ') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_jmc_TZ;
 }
 
-if (goog.LOCALE == 'ka') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ka;
-}
-
 if (goog.LOCALE == 'ka_GE' || goog.LOCALE == 'ka-GE') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ka_GE;
 }
@@ -8647,10 +8453,6 @@ if (goog.LOCALE == 'ki_KE' || goog.LOCALE == 'ki-KE') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ki_KE;
 }
 
-if (goog.LOCALE == 'kk') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_kk;
-}
-
 if (goog.LOCALE == 'kk_Cyrl' || goog.LOCALE == 'kk-Cyrl') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_kk_Cyrl;
 }
@@ -8681,10 +8483,6 @@ if (goog.LOCALE == 'kln') {
 
 if (goog.LOCALE == 'kln_KE' || goog.LOCALE == 'kln-KE') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_kln_KE;
-}
-
-if (goog.LOCALE == 'km') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_km;
 }
 
 if (goog.LOCALE == 'km_KH' || goog.LOCALE == 'km-KH') {
@@ -8747,10 +8545,6 @@ if (goog.LOCALE == 'kw_GB' || goog.LOCALE == 'kw-GB') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_kw_GB;
 }
 
-if (goog.LOCALE == 'ky') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ky;
-}
-
 if (goog.LOCALE == 'ky_Cyrl' || goog.LOCALE == 'ky-Cyrl') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ky_Cyrl;
 }
@@ -8797,10 +8591,6 @@ if (goog.LOCALE == 'ln_CF' || goog.LOCALE == 'ln-CF') {
 
 if (goog.LOCALE == 'ln_CG' || goog.LOCALE == 'ln-CG') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ln_CG;
-}
-
-if (goog.LOCALE == 'lo') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_lo;
 }
 
 if (goog.LOCALE == 'lo_LA' || goog.LOCALE == 'lo-LA') {
@@ -8891,20 +8681,12 @@ if (goog.LOCALE == 'mgo_CM' || goog.LOCALE == 'mgo-CM') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_mgo_CM;
 }
 
-if (goog.LOCALE == 'mk') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_mk;
-}
-
 if (goog.LOCALE == 'mk_MK' || goog.LOCALE == 'mk-MK') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_mk_MK;
 }
 
 if (goog.LOCALE == 'ml_IN' || goog.LOCALE == 'ml-IN') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ml_IN;
-}
-
-if (goog.LOCALE == 'mn') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_mn;
 }
 
 if (goog.LOCALE == 'mn_Cyrl' || goog.LOCALE == 'mn-Cyrl') {
@@ -8947,10 +8729,6 @@ if (goog.LOCALE == 'mua_CM' || goog.LOCALE == 'mua-CM') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_mua_CM;
 }
 
-if (goog.LOCALE == 'my') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_my;
-}
-
 if (goog.LOCALE == 'my_MM' || goog.LOCALE == 'my-MM') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_my_MM;
 }
@@ -8977,10 +8755,6 @@ if (goog.LOCALE == 'nd') {
 
 if (goog.LOCALE == 'nd_ZW' || goog.LOCALE == 'nd-ZW') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_nd_ZW;
-}
-
-if (goog.LOCALE == 'ne') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ne;
 }
 
 if (goog.LOCALE == 'ne_IN' || goog.LOCALE == 'ne-IN') {
@@ -9073,10 +8847,6 @@ if (goog.LOCALE == 'om_KE' || goog.LOCALE == 'om-KE') {
 
 if (goog.LOCALE == 'or_IN' || goog.LOCALE == 'or-IN') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_or_IN;
-}
-
-if (goog.LOCALE == 'pa') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_pa;
 }
 
 if (goog.LOCALE == 'pa_Arab' || goog.LOCALE == 'pa-Arab') {
@@ -9265,10 +9035,6 @@ if (goog.LOCALE == 'shi_Tfng' || goog.LOCALE == 'shi-Tfng') {
 
 if (goog.LOCALE == 'shi_Tfng_MA' || goog.LOCALE == 'shi-Tfng-MA') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_shi_Tfng_MA;
-}
-
-if (goog.LOCALE == 'si') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_si;
 }
 
 if (goog.LOCALE == 'si_LK' || goog.LOCALE == 'si-LK') {
@@ -9489,10 +9255,6 @@ if (goog.LOCALE == 'ur_IN' || goog.LOCALE == 'ur-IN') {
 
 if (goog.LOCALE == 'ur_PK' || goog.LOCALE == 'ur-PK') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ur_PK;
-}
-
-if (goog.LOCALE == 'uz') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_uz;
 }
 
 if (goog.LOCALE == 'uz_Arab' || goog.LOCALE == 'uz-Arab') {

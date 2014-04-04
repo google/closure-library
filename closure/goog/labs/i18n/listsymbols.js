@@ -35,6 +35,7 @@ goog.provide('goog.labs.i18n.ListFormatSymbols');
 goog.provide('goog.labs.i18n.ListFormatSymbols_af');
 goog.provide('goog.labs.i18n.ListFormatSymbols_am');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ar');
+goog.provide('goog.labs.i18n.ListFormatSymbols_az');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bg');
 goog.provide('goog.labs.i18n.ListFormatSymbols_bn');
 goog.provide('goog.labs.i18n.ListFormatSymbols_br');
@@ -74,32 +75,46 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_he');
 goog.provide('goog.labs.i18n.ListFormatSymbols_hi');
 goog.provide('goog.labs.i18n.ListFormatSymbols_hr');
 goog.provide('goog.labs.i18n.ListFormatSymbols_hu');
+goog.provide('goog.labs.i18n.ListFormatSymbols_hy');
 goog.provide('goog.labs.i18n.ListFormatSymbols_id');
 goog.provide('goog.labs.i18n.ListFormatSymbols_in');
 goog.provide('goog.labs.i18n.ListFormatSymbols_is');
 goog.provide('goog.labs.i18n.ListFormatSymbols_it');
 goog.provide('goog.labs.i18n.ListFormatSymbols_iw');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ja');
+goog.provide('goog.labs.i18n.ListFormatSymbols_ka');
+goog.provide('goog.labs.i18n.ListFormatSymbols_kk');
+goog.provide('goog.labs.i18n.ListFormatSymbols_km');
 goog.provide('goog.labs.i18n.ListFormatSymbols_kn');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ko');
+goog.provide('goog.labs.i18n.ListFormatSymbols_ky');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ln');
+goog.provide('goog.labs.i18n.ListFormatSymbols_lo');
 goog.provide('goog.labs.i18n.ListFormatSymbols_lt');
 goog.provide('goog.labs.i18n.ListFormatSymbols_lv');
+goog.provide('goog.labs.i18n.ListFormatSymbols_mk');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ml');
+goog.provide('goog.labs.i18n.ListFormatSymbols_mn');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mo');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mr');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ms');
 goog.provide('goog.labs.i18n.ListFormatSymbols_mt');
+goog.provide('goog.labs.i18n.ListFormatSymbols_my');
 goog.provide('goog.labs.i18n.ListFormatSymbols_nb');
+goog.provide('goog.labs.i18n.ListFormatSymbols_ne');
 goog.provide('goog.labs.i18n.ListFormatSymbols_nl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_no');
+goog.provide('goog.labs.i18n.ListFormatSymbols_no_NO');
 goog.provide('goog.labs.i18n.ListFormatSymbols_or');
+goog.provide('goog.labs.i18n.ListFormatSymbols_pa');
 goog.provide('goog.labs.i18n.ListFormatSymbols_pl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_pt');
 goog.provide('goog.labs.i18n.ListFormatSymbols_pt_BR');
 goog.provide('goog.labs.i18n.ListFormatSymbols_pt_PT');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ro');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ru');
+goog.provide('goog.labs.i18n.ListFormatSymbols_sh');
+goog.provide('goog.labs.i18n.ListFormatSymbols_si');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sk');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_sq');
@@ -113,6 +128,7 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_tl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_tr');
 goog.provide('goog.labs.i18n.ListFormatSymbols_uk');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ur');
+goog.provide('goog.labs.i18n.ListFormatSymbols_uz');
 goog.provide('goog.labs.i18n.ListFormatSymbols_vi');
 goog.provide('goog.labs.i18n.ListFormatSymbols_zh');
 goog.provide('goog.labs.i18n.ListFormatSymbols_zh_CN');
@@ -154,6 +170,18 @@ goog.labs.i18n.ListFormatSymbols_ar = {
   LIST_START: '{0}، {1}',
   LIST_MIDDLE: '{0}، {1}',
   LIST_END: '{0}، و {1}'
+};
+
+
+/**
+ * List formatting symbols for locale az.
+ */
+goog.labs.i18n.ListFormatSymbols_az = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} və {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} və {1}'
 };
 
 
@@ -626,6 +654,18 @@ goog.labs.i18n.ListFormatSymbols_hu = {
 
 
 /**
+ * List formatting symbols for locale hy.
+ */
+goog.labs.i18n.ListFormatSymbols_hy = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} և {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} և {1}'
+};
+
+
+/**
  * List formatting symbols for locale id.
  */
 goog.labs.i18n.ListFormatSymbols_id = {
@@ -698,6 +738,42 @@ goog.labs.i18n.ListFormatSymbols_ja = {
 
 
 /**
+ * List formatting symbols for locale ka.
+ */
+goog.labs.i18n.ListFormatSymbols_ka = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} და {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} და {1}'
+};
+
+
+/**
+ * List formatting symbols for locale kk.
+ */
+goog.labs.i18n.ListFormatSymbols_kk = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0}, {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0}, {1}'
+};
+
+
+/**
+ * List formatting symbols for locale km.
+ */
+goog.labs.i18n.ListFormatSymbols_km = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} និង {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0}, {1}'
+};
+
+
+/**
  * List formatting symbols for locale kn.
  */
 goog.labs.i18n.ListFormatSymbols_kn = {
@@ -722,11 +798,35 @@ goog.labs.i18n.ListFormatSymbols_ko = {
 
 
 /**
+ * List formatting symbols for locale ky.
+ */
+goog.labs.i18n.ListFormatSymbols_ky = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} жана {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} жана {1}'
+};
+
+
+/**
  * List formatting symbols for locale ln.
  */
 goog.labs.i18n.ListFormatSymbols_ln = {
   GENDER_STYLE: 0,
   LIST_TWO: '{0}, {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0}, {1}'
+};
+
+
+/**
+ * List formatting symbols for locale lo.
+ */
+goog.labs.i18n.ListFormatSymbols_lo = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} ແລະ {1}',
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
@@ -758,6 +858,18 @@ goog.labs.i18n.ListFormatSymbols_lv = {
 
 
 /**
+ * List formatting symbols for locale mk.
+ */
+goog.labs.i18n.ListFormatSymbols_mk = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0}, {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0}, {1}'
+};
+
+
+/**
  * List formatting symbols for locale ml.
  */
 goog.labs.i18n.ListFormatSymbols_ml = {
@@ -766,6 +878,18 @@ goog.labs.i18n.ListFormatSymbols_ml = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1} എന്നിവ'
+};
+
+
+/**
+ * List formatting symbols for locale mn.
+ */
+goog.labs.i18n.ListFormatSymbols_mn = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0}, {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0}, {1}'
 };
 
 
@@ -818,6 +942,18 @@ goog.labs.i18n.ListFormatSymbols_mt = {
 
 
 /**
+ * List formatting symbols for locale my.
+ */
+goog.labs.i18n.ListFormatSymbols_my = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0}နှင့်{1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0}, နှင့်{1}'
+};
+
+
+/**
  * List formatting symbols for locale nb.
  */
 goog.labs.i18n.ListFormatSymbols_nb = {
@@ -826,6 +962,18 @@ goog.labs.i18n.ListFormatSymbols_nb = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0} og {1}'
+};
+
+
+/**
+ * List formatting symbols for locale ne.
+ */
+goog.labs.i18n.ListFormatSymbols_ne = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} र {1}',
+  LIST_START: '{0} र {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} र {1}'
 };
 
 
@@ -854,6 +1002,18 @@ goog.labs.i18n.ListFormatSymbols_no = {
 
 
 /**
+ * List formatting symbols for locale no_NO.
+ */
+goog.labs.i18n.ListFormatSymbols_no_NO = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} og {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} og {1}'
+};
+
+
+/**
  * List formatting symbols for locale or.
  */
 goog.labs.i18n.ListFormatSymbols_or = {
@@ -862,6 +1022,18 @@ goog.labs.i18n.ListFormatSymbols_or = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0}, {1}'
+};
+
+
+/**
+ * List formatting symbols for locale pa.
+ */
+goog.labs.i18n.ListFormatSymbols_pa = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} ਅਤੇ {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} ਅਤੇ {1}'
 };
 
 
@@ -934,6 +1106,30 @@ goog.labs.i18n.ListFormatSymbols_ru = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0} и {1}'
+};
+
+
+/**
+ * List formatting symbols for locale sh.
+ */
+goog.labs.i18n.ListFormatSymbols_sh = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} i {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} i {1}'
+};
+
+
+/**
+ * List formatting symbols for locale si.
+ */
+goog.labs.i18n.ListFormatSymbols_si = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} සහ {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0}, සහ {1}'
 };
 
 
@@ -1094,6 +1290,18 @@ goog.labs.i18n.ListFormatSymbols_ur = {
 
 
 /**
+ * List formatting symbols for locale uz.
+ */
+goog.labs.i18n.ListFormatSymbols_uz = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0} va {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0} va {1}'
+};
+
+
+/**
  * List formatting symbols for locale vi.
  */
 goog.labs.i18n.ListFormatSymbols_vi = {
@@ -1184,6 +1392,10 @@ if (goog.LOCALE == 'am') {
 
 if (goog.LOCALE == 'ar') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ar;
+}
+
+if (goog.LOCALE == 'az') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_az;
 }
 
 if (goog.LOCALE == 'bg') {
@@ -1342,6 +1554,10 @@ if (goog.LOCALE == 'hu') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_hu;
 }
 
+if (goog.LOCALE == 'hy') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_hy;
+}
+
 if (goog.LOCALE == 'id') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_id;
 }
@@ -1366,6 +1582,18 @@ if (goog.LOCALE == 'ja') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ja;
 }
 
+if (goog.LOCALE == 'ka') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ka;
+}
+
+if (goog.LOCALE == 'kk') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_kk;
+}
+
+if (goog.LOCALE == 'km') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_km;
+}
+
 if (goog.LOCALE == 'kn') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_kn;
 }
@@ -1374,8 +1602,16 @@ if (goog.LOCALE == 'ko') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ko;
 }
 
+if (goog.LOCALE == 'ky') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ky;
+}
+
 if (goog.LOCALE == 'ln') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ln;
+}
+
+if (goog.LOCALE == 'lo') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_lo;
 }
 
 if (goog.LOCALE == 'lt') {
@@ -1386,8 +1622,16 @@ if (goog.LOCALE == 'lv') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_lv;
 }
 
+if (goog.LOCALE == 'mk') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_mk;
+}
+
 if (goog.LOCALE == 'ml') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ml;
+}
+
+if (goog.LOCALE == 'mn') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_mn;
 }
 
 if (goog.LOCALE == 'mo') {
@@ -1406,8 +1650,16 @@ if (goog.LOCALE == 'mt') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_mt;
 }
 
+if (goog.LOCALE == 'my') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_my;
+}
+
 if (goog.LOCALE == 'nb') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_nb;
+}
+
+if (goog.LOCALE == 'ne') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ne;
 }
 
 if (goog.LOCALE == 'nl') {
@@ -1418,8 +1670,16 @@ if (goog.LOCALE == 'no') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_no;
 }
 
+if (goog.LOCALE == 'no_NO' || goog.LOCALE == 'no-NO') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_no_NO;
+}
+
 if (goog.LOCALE == 'or') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_or;
+}
+
+if (goog.LOCALE == 'pa') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_pa;
 }
 
 if (goog.LOCALE == 'pl') {
@@ -1444,6 +1704,14 @@ if (goog.LOCALE == 'ro') {
 
 if (goog.LOCALE == 'ru') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ru;
+}
+
+if (goog.LOCALE == 'sh') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_sh;
+}
+
+if (goog.LOCALE == 'si') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_si;
 }
 
 if (goog.LOCALE == 'sk') {
@@ -1496,6 +1764,10 @@ if (goog.LOCALE == 'uk') {
 
 if (goog.LOCALE == 'ur') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ur;
+}
+
+if (goog.LOCALE == 'uz') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_uz;
 }
 
 if (goog.LOCALE == 'vi') {

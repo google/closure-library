@@ -793,6 +793,9 @@ if (goog.LOCALE == 'am') {
 if (goog.LOCALE == 'ar') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.arSelect_;
 }
+if (goog.LOCALE == 'az') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+}
 if (goog.LOCALE == 'bg') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }
@@ -910,6 +913,9 @@ if (goog.LOCALE == 'hr') {
 if (goog.LOCALE == 'hu') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }
+if (goog.LOCALE == 'hy') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.frSelect_;
+}
 if (goog.LOCALE == 'id') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
 }
@@ -928,14 +934,29 @@ if (goog.LOCALE == 'iw') {
 if (goog.LOCALE == 'ja') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
 }
+if (goog.LOCALE == 'ka') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+}
+if (goog.LOCALE == 'kk') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+}
+if (goog.LOCALE == 'km') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
+}
 if (goog.LOCALE == 'kn') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.hiSelect_;
 }
 if (goog.LOCALE == 'ko') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
 }
+if (goog.LOCALE == 'ky') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+}
 if (goog.LOCALE == 'ln') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.akSelect_;
+}
+if (goog.LOCALE == 'lo') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
 }
 if (goog.LOCALE == 'lt') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.ltSelect_;
@@ -943,7 +964,13 @@ if (goog.LOCALE == 'lt') {
 if (goog.LOCALE == 'lv') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.lvSelect_;
 }
+if (goog.LOCALE == 'mk') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.mkSelect_;
+}
 if (goog.LOCALE == 'ml') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+}
+if (goog.LOCALE == 'mn') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }
 if (goog.LOCALE == 'mo') {
@@ -958,7 +985,13 @@ if (goog.LOCALE == 'ms') {
 if (goog.LOCALE == 'mt') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.mtSelect_;
 }
+if (goog.LOCALE == 'my') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
+}
 if (goog.LOCALE == 'nb') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+}
+if (goog.LOCALE == 'ne') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }
 if (goog.LOCALE == 'nl') {
@@ -967,8 +1000,14 @@ if (goog.LOCALE == 'nl') {
 if (goog.LOCALE == 'no') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }
+if (goog.LOCALE == 'no_NO' || goog.LOCALE == 'no-NO') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+}
 if (goog.LOCALE == 'or') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+}
+if (goog.LOCALE == 'pa') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.akSelect_;
 }
 if (goog.LOCALE == 'pl') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.plSelect_;
@@ -987,6 +1026,12 @@ if (goog.LOCALE == 'ro') {
 }
 if (goog.LOCALE == 'ru') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.ruSelect_;
+}
+if (goog.LOCALE == 'sh') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.srSelect_;
+}
+if (goog.LOCALE == 'si') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.siSelect_;
 }
 if (goog.LOCALE == 'sk') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.csSelect_;
@@ -1026,6 +1071,9 @@ if (goog.LOCALE == 'uk') {
 }
 if (goog.LOCALE == 'ur') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
+}
+if (goog.LOCALE == 'uz') {
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }
 if (goog.LOCALE == 'vi') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
