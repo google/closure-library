@@ -457,7 +457,7 @@ goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
 /**
  * Breaks pattern into strings and top level {...} blocks.
  * @param {string} pattern (sub)Pattern to be broken.
- * @return {Array.<Object>} Each item is {type, value}.
+ * @return {!Array.<Object>} Each item is {type, value}.
  * @private
  */
 goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
@@ -623,7 +623,7 @@ goog.i18n.MessageFormat.prototype.parseBlock_ = function(pattern) {
 /**
  * Parses a select type of a block and produces JSON object for it.
  * @param {string} pattern Subpattern that needs to be parsed as select pattern.
- * @return {Object} Object with select block info.
+ * @return {!Object} Object with select block info.
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
@@ -665,7 +665,7 @@ goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
 /**
  * Parses a plural type of a block and produces JSON object for it.
  * @param {string} pattern Subpattern that needs to be parsed as plural pattern.
- * @return {Object} Object with select block info.
+ * @return {!Object} Object with select block info.
  * @private
  */
 goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
@@ -723,7 +723,7 @@ goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
  *   other: [ { type: 4, value: 'Message B' } ]
  * }
  * @param {string} pattern Subpattern that needs to be parsed as plural pattern.
- * @return {Object} Object with select block info.
+ * @return {!Object} Object with select block info.
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseOrdinalBlock_ = function(pattern) {
