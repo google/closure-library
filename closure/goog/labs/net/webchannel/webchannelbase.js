@@ -492,7 +492,7 @@ WebChannelBase.prototype.getWireCodec = function() {
 /**
  * Returns the logger.
  *
- * @return {WebChannelDebug} The channel debug object.
+ * @return {!WebChannelDebug} The channel debug object.
  */
 WebChannelBase.prototype.getChannelDebug = function() {
   return this.channelDebug_;
@@ -2036,7 +2036,7 @@ WebChannelBase.Handler.prototype.channelClosed =
  * Gets any parameters that should be added at the time another connection is
  * made to the server.
  * @param {WebChannelBase} channel The channel.
- * @return {Object} Extra parameter keys and values to add to the
+ * @return {!Object} Extra parameter keys and values to add to the
  *                  requests.
  */
 WebChannelBase.Handler.prototype.getAdditionalParams = function(channel) {
