@@ -1046,7 +1046,11 @@ goog.net.IframeIo.prototype.onIframeLoaded_ = function(e) {
   }
   goog.events.unlisten(this.getRequestIframe(),
       goog.events.EventType.LOAD, this.onIframeLoaded_, false, this);
-  this.handleLoad_(this.getContentDocument_());
+  try {
+    this.handleLoad_(this.getContentDocument_());
+  } catch (ex) {
+    this.handleError_(goog.net.ErrorCode.ACCESS_DENIED);
+  }
 };
 
 
