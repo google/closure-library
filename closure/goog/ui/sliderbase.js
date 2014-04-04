@@ -399,6 +399,7 @@ goog.ui.SliderBase.DISABLED_CSS_CLASS_ =
 /** @override */
 goog.ui.SliderBase.prototype.decorateInternal = function(element) {
   goog.ui.SliderBase.superClass_.decorateInternal.call(this, element);
+  goog.asserts.assert(element);
   goog.dom.classlist.add(element, this.getCssClass(this.orientation_));
   this.createThumbs();
   this.setAriaRoles();
@@ -531,7 +532,7 @@ goog.ui.SliderBase.prototype.handleBeforeDrag_ = function(e) {
  */
 goog.ui.SliderBase.prototype.handleThumbDragStartEnd_ = function(e) {
   var isDragStart = e.type == goog.fx.Dragger.EventType.START;
-  goog.dom.classlist.enable(this.getElement(),
+  goog.dom.classlist.enable(goog.asserts.assertElement(this.getElement()),
       goog.ui.SliderBase.SLIDER_DRAGGING_CSS_CLASS_, isDragStart);
   goog.dom.classlist.enable(goog.asserts.assertElement(e.target.handle),
       goog.ui.SliderBase.THUMB_DRAGGING_CSS_CLASS_, isDragStart);
@@ -1287,7 +1288,8 @@ goog.ui.SliderBase.prototype.setOrientation = function(orient) {
 
     // Update the DOM
     if (this.getElement()) {
-      goog.dom.classlist.swap(this.getElement(), oldCss, newCss);
+      goog.dom.classlist.swap(goog.asserts.assert(this.getElement()),
+                              oldCss, newCss);
       // we need to reset the left and top, plus range highlight
       var pos = (this.flipForRtl_ && this.isRightToLeft()) ? 'right' : 'left';
       this.valueThumb.style[pos] = this.valueThumb.style.top = '';
@@ -1598,7 +1600,8 @@ goog.ui.SliderBase.prototype.setEnabled = function(enable) {
       // handlers be appropriately unlistened.
       this.stopBlockIncrementing_();
     }
-    goog.dom.classlist.enable(this.getElement(),
+    goog.dom.classlist.enable(
+        goog.asserts.assert(this.getElement()),
         goog.ui.SliderBase.DISABLED_CSS_CLASS_, !enable);
   }
 };

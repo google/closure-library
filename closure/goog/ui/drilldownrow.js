@@ -60,6 +60,7 @@
 
 goog.provide('goog.ui.DrilldownRow');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.Component');
@@ -300,9 +301,11 @@ goog.ui.DrilldownRow.prototype.isExpanded = function() {
 goog.ui.DrilldownRow.prototype.setExpanded = function(expanded) {
   if (expanded != this.expanded_) {
     this.expanded_ = expanded;
-    goog.dom.classlist.toggle(this.getElement(),
+    var elem = this.getElement();
+    goog.asserts.assert(elem);
+    goog.dom.classlist.toggle(elem,
         goog.getCssName('goog-drilldown-expanded'));
-    goog.dom.classlist.toggle(this.getElement(),
+    goog.dom.classlist.toggle(elem,
         goog.getCssName('goog-drilldown-collapsed'));
     if (this.isVisible_()) {
       this.forEachChild(function(child) {
@@ -353,6 +356,7 @@ goog.ui.DrilldownRow.prototype.getDepth = function() {
 goog.ui.DrilldownRow.decorate = function(selfObj) {
   var depth = selfObj.getDepth();
   var row = selfObj.getElement();
+  goog.asserts.assert(row);
   if (!row.cells) {
     throw Error('No cells');
   }

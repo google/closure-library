@@ -24,6 +24,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeIterator');
 goog.require('goog.dom.NodeType');
@@ -302,7 +303,7 @@ goog.ui.PaletteRenderer.prototype.getContainingItem = function(palette, node) {
   var root = palette.getElement();
   while (node && node.nodeType == goog.dom.NodeType.ELEMENT && node != root) {
     if (node.tagName == goog.dom.TagName.TD && goog.dom.classlist.contains(
-        /** @type {Element} */ (node),
+        /** @type {!Element} */ (node),
         goog.getCssName(this.getCssClass(), 'cell'))) {
       return node.firstChild;
     }
@@ -326,6 +327,7 @@ goog.ui.PaletteRenderer.prototype.highlightCell = function(palette,
                                                            highlight) {
   if (node) {
     var cell = this.getCellForItem(node);
+    goog.asserts.assert(cell);
     goog.dom.classlist.enable(cell,
         goog.getCssName(this.getCssClass(), 'cell-hover'), highlight);
     // See http://www.w3.org/TR/2006/WD-aria-state-20061220/#activedescendent

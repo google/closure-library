@@ -24,6 +24,7 @@ goog.provide('goog.ui.TabPane.TabLocation');
 goog.provide('goog.ui.TabPane.TabPage');
 goog.provide('goog.ui.TabPaneEvent');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
@@ -167,24 +168,26 @@ goog.ui.TabPane.prototype.create_ = function() {
       this.dom_.createDom('div', goog.getCssName('goog-tabpane-cont'));
   this.el_.appendChild(this.elContent_);
 
+  var element = goog.asserts.assertElement(this.el_);
+
   switch (this.tabLocation_) {
     case goog.ui.TabPane.TabLocation.TOP:
-      this.el_.insertBefore(this.elButtonBar_, this.elContent_);
-      this.el_.insertBefore(this.createClear_(), this.elContent_);
-      goog.dom.classlist.add(this.el_, goog.getCssName('goog-tabpane-top'));
+      element.insertBefore(this.elButtonBar_, this.elContent_);
+      element.insertBefore(this.createClear_(), this.elContent_);
+      goog.dom.classlist.add(element, goog.getCssName('goog-tabpane-top'));
       break;
     case goog.ui.TabPane.TabLocation.BOTTOM:
-      this.el_.appendChild(this.elButtonBar_);
-      this.el_.appendChild(this.createClear_());
-      goog.dom.classlist.add(this.el_, goog.getCssName('goog-tabpane-bottom'));
+      element.appendChild(this.elButtonBar_);
+      element.appendChild(this.createClear_());
+      goog.dom.classlist.add(element, goog.getCssName('goog-tabpane-bottom'));
       break;
     case goog.ui.TabPane.TabLocation.LEFT:
-      this.el_.insertBefore(this.elButtonBar_, this.elContent_);
-      goog.dom.classlist.add(this.el_, goog.getCssName('goog-tabpane-left'));
+      element.insertBefore(this.elButtonBar_, this.elContent_);
+      goog.dom.classlist.add(element, goog.getCssName('goog-tabpane-left'));
       break;
     case goog.ui.TabPane.TabLocation.RIGHT:
-      this.el_.insertBefore(this.elButtonBar_, this.elContent_);
-      goog.dom.classlist.add(this.el_, goog.getCssName('goog-tabpane-right'));
+      element.insertBefore(this.elButtonBar_, this.elContent_);
+      goog.dom.classlist.add(element, goog.getCssName('goog-tabpane-right'));
       break;
     default:
       throw Error('Invalid tab location');

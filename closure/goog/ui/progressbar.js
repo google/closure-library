@@ -163,8 +163,9 @@ goog.ui.ProgressBar.prototype.detachEvents_ = function() {
  */
 goog.ui.ProgressBar.prototype.decorateInternal = function(element) {
   goog.ui.ProgressBar.superClass_.decorateInternal.call(this, element);
-  goog.dom.classlist.add(this.getElement(), goog.ui.ProgressBar.
-      ORIENTATION_TO_CSS_NAME_[this.orientation_]);
+  goog.dom.classlist.add(
+      goog.asserts.assert(this.getElement()),
+      goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_[this.orientation_]);
 
   // find thumb
   var thumb = goog.dom.getElementsByTagNameAndClass(
@@ -356,8 +357,9 @@ goog.ui.ProgressBar.prototype.setOrientation = function(orient) {
     this.orientation_ = orient;
 
     // Update the DOM
-    if (this.getElement()) {
-      goog.dom.classlist.swap(this.getElement(), oldCss, newCss);
+    var element = this.getElement();
+    if (element) {
+      goog.dom.classlist.swap(element, oldCss, newCss);
       this.initializeUi_();
       this.updateUi_();
     }

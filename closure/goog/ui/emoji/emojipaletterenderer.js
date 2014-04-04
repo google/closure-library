@@ -20,6 +20,7 @@
 goog.provide('goog.ui.emoji.EmojiPaletteRenderer');
 
 goog.require('goog.a11y.aria');
+goog.require('goog.asserts');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classlist');
 goog.require('goog.style');
@@ -116,7 +117,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.updateAnimatedPaletteItem =
   // items we're modifying.
 
   var inner = /** @type {Element} */ (item.firstChild);
-
+  goog.asserts.assert(inner);
   // The first case is a palette item with a CSS class representing the sprite,
   // and an animated emoji.
   var classes = goog.dom.classlist.get(inner);

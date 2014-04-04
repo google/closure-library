@@ -22,6 +22,7 @@ goog.provide('goog.ui.editor.AbstractDialog');
 goog.provide('goog.ui.editor.AbstractDialog.Builder');
 goog.provide('goog.ui.editor.AbstractDialog.EventType');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventTarget');
@@ -218,7 +219,8 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addButton =
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.addClassName =
     function(className) {
-  goog.dom.classlist.add(this.wrappedDialog_.getDialogElement(), className);
+  goog.dom.classlist.add(
+      goog.asserts.assert(this.wrappedDialog_.getDialogElement()), className);
   return this;
 };
 

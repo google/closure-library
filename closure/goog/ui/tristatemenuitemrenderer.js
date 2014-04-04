@@ -20,6 +20,7 @@
 
 goog.provide('goog.ui.TriStateMenuItemRenderer');
 
+goog.require('goog.asserts');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.MenuItemRenderer');
 
@@ -64,6 +65,8 @@ goog.ui.TriStateMenuItemRenderer.prototype.decorate = function(item, element) {
   element = goog.ui.TriStateMenuItemRenderer.superClass_.decorate.call(this,
       item, element);
   this.setCheckable(item, element, true);
+
+  goog.asserts.assert(element);
 
   if (goog.dom.classlist.contains(element,
       goog.getCssName(this.getCssClass(), 'fully-checked'))) {
