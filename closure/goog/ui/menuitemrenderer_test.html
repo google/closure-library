@@ -114,8 +114,8 @@ Author: attila@google.com (Attila Bodis)
       assertSameElements('Selected item must have the expected class names',
           ['goog-menuitem', 'goog-option', 'goog-option-selected'],
           goog.dom.classlist.get(element));
-      assertEquals('Item must have checked ARIA state', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
+      assertEquals('Item must have selected ARIA state', 'true',
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
     }
 
     function testGetContentElement() {

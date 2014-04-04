@@ -693,10 +693,6 @@ Author: attila@google.com (Attila Bodis)
     }
 
     function testDecorateAriaStateSelected() {
-      var storeFunc = testRenderer.getAriaRole;
-      testRenderer.getAriaRole = function() {
-        return goog.a11y.aria.Role.OPTION;
-      }
       control.setSupportedState(goog.ui.Component.State.SELECTED, true);
 
       sandbox.innerHTML =
@@ -708,7 +704,6 @@ Author: attila@google.com (Attila Bodis)
       assertTrue('Control must be selected', control.isSelected());
       assertEquals('Control must have selected ARIA state', 'true',
         goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
-        testRenderer.getAriaRole = storeFunc;
     }
 
     function testUpdateAriaStateChecked() {
@@ -740,10 +735,6 @@ Author: attila@google.com (Attila Bodis)
     }
 
     function testDecorateAriaStateChecked() {
-      var storeFunc = testRenderer.getAriaRole;
-      testRenderer.getAriaRole = function() {
-        return goog.a11y.aria.Role.RADIO;
-      }
       sandbox.innerHTML =
           '<div id="foo" class="app goog-base-checked"></div>';
       var foo = goog.dom.getElement('foo');
@@ -754,7 +745,6 @@ Author: attila@google.com (Attila Bodis)
       assertTrue('Control must be checked', control.isChecked());
       assertEquals('Control must have checked ARIA state', 'true',
         goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
-        testRenderer.getAriaRole = storeFunc;
     }
 
     function testUpdateAriaStateOpened() {
