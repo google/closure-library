@@ -23,6 +23,7 @@ goog.provide('goog.userAgentTestUtil.UserAgents');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
 goog.require('goog.userAgent');
+goog.require('goog.userAgent.keyboard');
 goog.require('goog.userAgent.platform');
 goog.require('goog.userAgent.product');
 /** @suppress {extraRequire} */
@@ -48,15 +49,15 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
 
   // Platform in goog.userAgent.
+  goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
   goog.userAgent.initPlatform_();
   goog.userAgent.MAC = goog.userAgent.detectedMac_;
   goog.userAgent.WINDOWS = goog.userAgent.detectedWindows_;
   goog.userAgent.LINUX = goog.userAgent.detectedLinux_;
   goog.userAgent.X11 = goog.userAgent.detectedX11_;
   goog.userAgent.ANDROID = goog.userAgent.detectedAndroid_;
-  goog.userAgent.IPAD = goog.userAgent.detectedIPad_;
-  goog.userAgent.IPHONE = goog.userAgent.detectedIPhone_;
-  goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
+  goog.userAgent.IPAD = goog.userAgent.detectedIpad_;
+  goog.userAgent.IPHONE = goog.userAgent.detectedIphone_;
   goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 
   // Platform in goog.userAgent.platform.
@@ -75,6 +76,10 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
 
   goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
+
+  // goog.userAgent.keyboard
+  goog.userAgent.keyboard.MAC_KEYBOARD =
+      goog.userAgent.keyboard.determineMacKeyboard_();
 };
 
 
@@ -109,3 +114,4 @@ goog.userAgentTestUtil.getUserAgentDetected = function(agent) {
 
   throw Error('Unrecognized user agent');
 };
+
