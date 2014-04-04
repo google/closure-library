@@ -21,6 +21,7 @@
 
 goog.provide('goog.ui.MenuItem');
 
+goog.require('goog.a11y.aria.Role');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
@@ -241,4 +242,18 @@ goog.ui.registry.setDecoratorByClassName(goog.ui.MenuItemRenderer.CSS_CLASS,
 goog.ui.MenuItem.prototype.createDom = function() {
   goog.ui.MenuItem.base(this, 'createDom');
   this.getRenderer().correctAriaRole(this, this.getElement());
+};
+
+
+/**
+ * @override
+ */
+goog.ui.MenuItem.prototype.getPreferredAriaRole = function() {
+  if (this.isSupportedState(goog.ui.Component.State.CHECKED)) {
+    return goog.a11y.aria.Role.MENU_ITEM_CHECKBOX;
+  }
+  if (this.isSupportedState(goog.ui.Component.State.SELECTED)) {
+    return goog.a11y.aria.Role.MENU_ITEM_RADIO;
+  }
+  return goog.ui.MenuItem.base(this, 'getPreferredAriaRole');
 };
