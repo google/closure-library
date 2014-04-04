@@ -220,6 +220,15 @@ goog.ui.editor.Bubble.prototype.handleWindowResize_ = function() {
 
 
 /**
+ * Sets whether the bubble dismisses itself when the user clicks outside of it.
+ * @param {boolean} autoHide Whether to autohide on an external click.
+ */
+goog.ui.editor.Bubble.prototype.setAutoHide = function(autoHide) {
+  this.popup_.setAutoHide(autoHide);
+};
+
+
+/**
  * Returns whether there is already a panel of the given type.
  * @param {string} type Type of panel to check.
  * @return {boolean} Whether there is already a panel of the given type.
