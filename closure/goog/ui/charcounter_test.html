@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2014 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Closure Unit Tests - goog.ui.CharCounter</title>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.dom');
+    goog.require('goog.testing.asserts');
+    goog.require('goog.testing.jsunit');
+    goog.require('goog.ui.CharCounter');
+    goog.require('goog.ui.CharCounter.Display');
+    goog.require('goog.userAgent');
+  </script>
+</head>
+<body>
+  <textarea id="test-textarea-id"></textarea>
+  <div>
+      Characters remaining: <span class="char-count"></span>
+  </div>
+
+  <script type="text/javascript">
+    var countElement, charCounter, inputElement;
+    var incremental = goog.ui.CharCounter.Display.INCREMENTAL;
+    var remaining = goog.ui.CharCounter.Display.REMAINING;
+    var maxLength = 25;
+
+    function setUp() {
+      inputElement = goog.dom.getElement('test-textarea-id');
+      inputElement.value='';
+      countElement = goog.dom.getElementByClass('char-count');
+      goog.dom.setTextContent(countElement, '');
+      charCounter =
+          new goog.ui.CharCounter(inputElement, countElement, maxLength);
+    }
+
+    function tearDown() {
+      charCounter.dispose();
+    }
+
+    function setupCheckLength(content, mode) {
+      inputElement.value = content;
+      charCounter.setDisplayMode(mode);
+      charCounter.checkLength();
+    }
+
+    function testConstructor() {
+      assertNotNull('Character counter can not be null', charCounter);
+      assertEquals(maxLength.toString(), goog.dom.getTextContent(countElement));
+    }
+
+    function testSetMaxLength() {
+      charCounter.setMaxLength(10);
+      assertEquals('10', goog.dom.getTextContent(countElement));
+
+      var tooLongContent = 'This is too long text content';
+      inputElement.value = tooLongContent;
+      charCounter.setMaxLength(10);
+      assertEquals('0', goog.dom.getTextContent(countElement));
+      assertEquals('This is to', inputElement.value);
+    }
+
+    function testGetMaxLength() {
+      assertEquals(maxLength, charCounter.getMaxLength());
+    }
+
+    function testSetDisplayMode() {
+      // Test counter to be in incremental mode
+      charCounter.setDisplayMode(incremental);
+      assertEquals('0', goog.dom.getTextContent(countElement));
+
+      // Test counter to be in remaining mode
+      charCounter.setDisplayMode(remaining);
+      assertEquals(maxLength.toString(), goog.dom.getTextContent(countElement));
+    }
+
+    function testGetDisplayMode() {
+      assertEquals(remaining, charCounter.getDisplayMode());
+
+      var incrementalCharCounter = new goog.ui.CharCounter(
+          inputElement, countElement, maxLength, incremental);
+      assertEquals(incremental, incrementalCharCounter.getDisplayMode());
+    }
+
+    function testCheckLength() {
+      // Test the characters remaining in DOM
+      setupCheckLength('', remaining);
+      assertEquals(maxLength.toString(), goog.dom.getTextContent(countElement));
+
+      // Test the characters incremental in DOM
+      setupCheckLength('', incremental);
+      assertEquals('0', goog.dom.getTextContent(countElement));
+    }
+
+    function testCheckLength_limitedContent() {
+      var limitedContent = 'Limited text content';
+      var limitedContentLength = limitedContent.length;
+      var remainingLimitedContentLength = maxLength - limitedContentLength;
+
+      // Set some content and test the characters remaining in DOM
+      setupCheckLength(limitedContent, remaining);
+
+      assertEquals(limitedContent, inputElement.value);
+      assertEquals(remainingLimitedContentLength.toString(),
+          goog.dom.getTextContent(countElement));
+
+      // Test the characters incremented in DOM with limited content
+      charCounter.setDisplayMode(incremental);
+      charCounter.checkLength();
+
+      assertEquals(limitedContent, inputElement.value);
+      assertEquals(limitedContentLength.toString(),
+          goog.dom.getTextContent(countElement));
+    }
+
+    function testCheckLength_overflowContent() {
+      var tooLongContent = 'This is too long text content';
+      var truncatedContent = 'This is too long text con';
+
+      // Set content longer than the maxLength and test the characters remaining
+      // in DOM with overflowing content
+      setupCheckLength(tooLongContent, remaining);
+
+      assertEquals(truncatedContent, inputElement.value);
+      assertEquals('0', goog.dom.getTextContent(countElement));
+
+      // Set content longer than the maxLength and test the characters
+      // incremented in DOM with overflowing content
+      setupCheckLength(tooLongContent, incremental);
+
+      assertEquals(truncatedContent, inputElement.value);
+      assertEquals(maxLength.toString(), goog.dom.getTextContent(countElement));
+    }
+
+    function testCheckLength_newLineContent() {
+      var newLineContent = 'New\nline';
+      var newLineContentLength = newLineContent.length;
+      var remainingNewLineContentLength = maxLength - newLineContentLength;
+
+      var carriageReturnContent = 'New\r\nline';
+      var carriageReturnContentLength = carriageReturnContent.length;
+      var remainingCarriageReturnContentLength =
+          maxLength - carriageReturnContentLength;
+
+      // Set some content with new line characters and test the characters
+      // remaining in DOM
+      setupCheckLength(newLineContent, remaining);
+
+      // Test for IE 7,8 which appends \r to \n
+      if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9.0')) {
+        assertEquals(carriageReturnContent, inputElement.value);
+        assertEquals(remainingCarriageReturnContentLength.toString(),
+            goog.dom.getTextContent(countElement));
+      } else {
+        assertEquals(newLineContent, inputElement.value);
+        assertEquals(remainingNewLineContentLength.toString(),
+            goog.dom.getTextContent(countElement));
+      }
+
+      // Set some content with new line characters and test the characters
+      // incremental in DOM
+      setupCheckLength(newLineContent, incremental);
+
+      // Test for IE 7,8 which appends \r to \n
+      if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9.0')) {
+        assertEquals(carriageReturnContent, inputElement.value);
+        assertEquals(carriageReturnContentLength.toString(),
+            goog.dom.getTextContent(countElement));
+      } else {
+        assertEquals(newLineContent, inputElement.value);
+        assertEquals(newLineContentLength.toString(),
+            goog.dom.getTextContent(countElement));
+      }
+    }
+
+    function testCheckLength_carriageReturnContent() {
+      var newLineContent = 'New\nline';
+      var newLineContentLength = newLineContent.length;
+      var remainingNewLineContentLength = maxLength - newLineContentLength;
+
+      var carriageReturnContent = 'New\r\nline';
+      var carriageReturnContentLength = carriageReturnContent.length;
+      var remainingCarriageReturnContentLength =
+          maxLength - carriageReturnContentLength;
+
+      // Set some content with carriage return characters and test the
+      // characters remaining in DOM
+      setupCheckLength(carriageReturnContent, remaining);
+
+      // Test for IE 7,8
+      if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9.0')) {
+        assertEquals(carriageReturnContent, inputElement.value);
+        assertEquals(remainingCarriageReturnContentLength.toString(),
+            goog.dom.getTextContent(countElement));
+      } else {
+        // Others replace \r\n with \n
+        assertEquals(newLineContent, inputElement.value);
+        assertEquals(remainingNewLineContentLength.toString(),
+            goog.dom.getTextContent(countElement));
+      }
+
+      // Set some content with carriage return characters and test the
+      // characters incremental in DOM
+      setupCheckLength(carriageReturnContent, incremental);
+
+      // Test for IE 7,8
+      if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9.0')) {
+        assertEquals(carriageReturnContent, inputElement.value);
+        assertEquals(carriageReturnContentLength.toString(),
+            goog.dom.getTextContent(countElement));
+      } else {
+        // Others replace \r\n with \n
+        assertEquals(newLineContent, inputElement.value);
+        assertEquals(newLineContentLength.toString(),
+            goog.dom.getTextContent(countElement));
+      }
+    }
+  </script>
+</body>
+</html>
