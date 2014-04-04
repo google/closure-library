@@ -26,6 +26,7 @@ goog.provide('goog.fx.AbstractDragDrop.EventType');
 goog.provide('goog.fx.DragDropEvent');
 goog.provide('goog.fx.DragDropItem');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
@@ -301,12 +302,14 @@ goog.fx.AbstractDragDrop.prototype.initItem = function(item) {
     goog.events.listen(item.element, goog.events.EventType.MOUSEDOWN,
                        item.mouseDown_, false, item);
     if (this.sourceClass_) {
-      goog.dom.classlist.add(item.element, this.sourceClass_);
+      goog.dom.classlist.add(
+          goog.asserts.assert(item.element), this.sourceClass_);
     }
   }
 
   if (this.isTarget_ && this.targetClass_) {
-    goog.dom.classlist.add(item.element, this.targetClass_);
+    goog.dom.classlist.add(
+        goog.asserts.assert(item.element), this.targetClass_);
   }
 };
 
@@ -322,11 +325,13 @@ goog.fx.AbstractDragDrop.prototype.disposeItem = function(item) {
     goog.events.unlisten(item.element, goog.events.EventType.MOUSEDOWN,
                          item.mouseDown_, false, item);
     if (this.sourceClass_) {
-      goog.dom.classlist.remove(item.element, this.sourceClass_);
+      goog.dom.classlist.remove(
+          goog.asserts.assert(item.element), this.sourceClass_);
     }
   }
   if (this.isTarget_ && this.targetClass_) {
-    goog.dom.classlist.remove(item.element, this.targetClass_);
+    goog.dom.classlist.remove(
+        goog.asserts.assert(item.element), this.targetClass_);
   }
   item.dispose();
 };
@@ -784,6 +789,7 @@ goog.fx.AbstractDragDrop.prototype.setSubtargetFunction = function(f) {
  */
 goog.fx.AbstractDragDrop.prototype.createDragElement = function(sourceEl) {
   var dragEl = this.createDragElementInternal(sourceEl);
+  goog.asserts.assert(dragEl);
   if (this.dragClass_) {
     goog.dom.classlist.add(dragEl, this.dragClass_);
   }

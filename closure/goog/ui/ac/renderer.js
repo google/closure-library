@@ -25,6 +25,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
@@ -520,7 +521,8 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
  */
 goog.ui.ac.Renderer.prototype.hiliteNone = function() {
   if (this.hilitedRow_ >= 0) {
-    goog.dom.classlist.removeAll(this.rowDivs_[this.hilitedRow_],
+    goog.dom.classlist.removeAll(
+        goog.asserts.assert(this.rowDivs_[this.hilitedRow_]),
         [this.activeClassName, this.legacyActiveClassName_]);
   }
 };
@@ -548,13 +550,14 @@ goog.ui.ac.Renderer.prototype.hiliteId = function(id) {
 /**
  * Sets CSS classes on autocomplete conatainer element.
  *
- * @param {Element} elt The container element.
+ * @param {Element} elem The container element.
  * @private
  */
-goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elt) {
+goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elem) {
+  goog.asserts.assert(elem);
   // Legacy clients may set the renderer's className to a space-separated list
   // or even have a trailing space.
-  goog.dom.classlist.addAll(elt, goog.string.trim(this.className).split(' '));
+  goog.dom.classlist.addAll(elem, goog.string.trim(this.className).split(' '));
 };
 
 
@@ -1043,11 +1046,11 @@ goog.ui.ac.Renderer.CustomRenderer = function() {
  * Renders the autocomplete box. May be set to null.
  * @type {function(goog.ui.ac.Renderer, Element, Array, string)|
  *        null|undefined}
- * param {goog.ui.ac.Renderer} renderer The autocomplete renderer.
- * param {Element} element The main element that controls the rendered
+ * @param {goog.ui.ac.Renderer} renderer The autocomplete renderer.
+ * @param {Element} element The main element that controls the rendered
  *     autocomplete.
- * param {Array} rows The current set of rows being displayed.
- * param {string} token The current token that has been entered.
+ * @param {Array} rows The current set of rows being displayed.
+ * @param {string} token The current token that has been entered.
  */
 goog.ui.ac.Renderer.CustomRenderer.prototype.render = function(
     renderer, element, rows, token) {

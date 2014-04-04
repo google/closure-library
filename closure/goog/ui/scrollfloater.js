@@ -38,6 +38,7 @@ goog.provide('goog.ui.ScrollFloater');
 goog.provide('goog.ui.ScrollFloater.EventType');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
@@ -239,7 +240,7 @@ goog.ui.ScrollFloater.prototype.createDom = function() {
  */
 goog.ui.ScrollFloater.prototype.decorateInternal = function(element) {
   goog.ui.ScrollFloater.base(this, 'decorateInternal', element);
-
+  goog.asserts.assert(element);
   goog.dom.classlist.add(element, goog.ui.ScrollFloater.CSS_CLASS_);
 };
 

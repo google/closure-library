@@ -836,7 +836,7 @@ goog.ui.DatePicker.prototype.updateFooterRow_ = function() {
 /** @override */
 goog.ui.DatePicker.prototype.decorateInternal = function(el) {
   goog.ui.DatePicker.superClass_.decorateInternal.call(this, el);
-
+  goog.asserts.assert(el);
   goog.dom.classlist.add(el, this.getBaseCssClass());
 
   var table = this.dom_.createElement('table');

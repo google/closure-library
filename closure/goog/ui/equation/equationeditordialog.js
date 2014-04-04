@@ -14,6 +14,7 @@
 
 goog.provide('goog.ui.equation.EquationEditorDialog');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.Dialog');
@@ -63,7 +64,8 @@ goog.ui.equation.EquationEditorDialog = function(opt_equation) {
   this.equationEditor_.render(this.getContentElement());
   this.setEquation(opt_equation || '');
 
-  goog.dom.classlist.add(this.getDialogElement(), 'ee-modal-dialog');
+  goog.dom.classlist.add(
+      goog.asserts.assert(this.getDialogElement()), 'ee-modal-dialog');
 };
 goog.inherits(goog.ui.equation.EquationEditorDialog, goog.ui.Dialog);
 

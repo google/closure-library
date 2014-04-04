@@ -203,6 +203,7 @@ goog.ui.ModalPopup.prototype.createDom = function() {
   goog.ui.ModalPopup.base(this, 'createDom');
 
   var element = this.getElement();
+  goog.asserts.assert(element);
   var allClasses = goog.string.trim(this.getCssClass()).split(' ');
   goog.dom.classlist.addAll(element, allClasses);
   goog.dom.setFocusableTabIndex(element, true);
@@ -309,7 +310,10 @@ goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
   // Decorate the modal popup area element.
   goog.ui.ModalPopup.base(this, 'decorateInternal', element);
   var allClasses = goog.string.trim(this.getCssClass()).split(' ');
-  goog.dom.classlist.addAll(this.getElement(), allClasses);
+
+  goog.dom.classlist.addAll(
+      goog.asserts.assert(this.getElement()),
+      allClasses);
 
   // Create the background mask...
   this.manageBackgroundDom_();
