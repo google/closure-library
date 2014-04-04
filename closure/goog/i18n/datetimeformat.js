@@ -295,11 +295,23 @@ goog.i18n.DateTimeFormat.prototype.applyStandardPattern_ =
  * @return {string} localized string, potentially using native digits.
  */
 goog.i18n.DateTimeFormat.prototype.localizeNumbers = function(input) {
-  // TODO(user): fix date/duration.js and date/relative.js.
-  // They call goog.i18n.DateTimeFormat.prototype.localizeNumbers directly,
-  // without calling a constructor.
-  if (this.dateTimeSymbols_ === undefined ||
-      this.dateTimeSymbols_.ZERODIGIT === undefined) {
+  return goog.i18n.DateTimeFormat.localizeNumbers(input, this.dateTimeSymbols_);
+};
+
+
+/**
+ * Localizes a string potentially containing numbers, replacing ASCII digits
+ * with native digits if specified so by the locale. Leaves other characters.
+ * @param {number|string} input the string to be localized, using ASCII digits.
+ * @param {!Object=} opt_dateTimeSymbols Optional symbols to use use rather than
+ *     the global symbols.
+ * @return {string} localized string, potentially using native digits.
+ */
+goog.i18n.DateTimeFormat.localizeNumbers =
+    function(input, opt_dateTimeSymbols) {
+  input = String(input);
+  var dateTimeSymbols = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
+  if (dateTimeSymbols.ZERODIGIT === undefined) {
     return input;
   }
 
@@ -307,7 +319,7 @@ goog.i18n.DateTimeFormat.prototype.localizeNumbers = function(input) {
   for (var i = 0; i < input.length; i++) {
     var c = input.charCodeAt(i);
     parts.push((0x30 <= c && c <= 0x39) ? // '0' <= c <= '9'
-        String.fromCharCode(this.dateTimeSymbols_.ZERODIGIT + c - 0x30) :
+        String.fromCharCode(dateTimeSymbols.ZERODIGIT + c - 0x30) :
         input.charAt(i));
   }
   return parts.join('');

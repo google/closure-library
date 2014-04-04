@@ -124,6 +124,5 @@ function testFormatRelativeForFutureDatesBengaliDigits() {
 function localizeNumber(value) {
   // Quick conversion to national digits, to increase readability of the
   // tests above.
-  var dateTimeFormat = new goog.i18n.DateTimeFormat('y MMMM dd');
-  return dateTimeFormat.localizeNumbers('' + value);
+  return goog.i18n.DateTimeFormat.localizeNumbers(value);
 }

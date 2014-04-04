@@ -99,7 +99,7 @@ function testFormatDurationPersianDigits() {
   assertEquals(localizeNumber(1) + ' minute', duration(MINUTE_MS));
   // ۲ minutes
   assertEquals(localizeNumber(2) + ' minutes', duration(2 * MINUTE_MS));
-  // ۱۰ minutes
+  // ۱۰ hours
   assertEquals(localizeNumber(10) + ' hours', duration(10 * HOUR_MS));
   // ۲۳ days
   assertEquals(localizeNumber(23) + ' days', duration(23 * DAY_MS));
@@ -115,7 +115,7 @@ function testFormatDurationBengaliDigits() {
   assertEquals(localizeNumber(1) + ' minute', duration(MINUTE_MS));
   // ২ minutes
   assertEquals(localizeNumber(2) + ' minutes', duration(2 * MINUTE_MS));
-  // ১০ minutes
+  // ১০ hours
   assertEquals(localizeNumber(10) + ' hours', duration(10 * HOUR_MS));
   // ২৩ days
   assertEquals(localizeNumber(23) + ' days', duration(23 * DAY_MS));
@@ -126,6 +126,6 @@ function testFormatDurationBengaliDigits() {
 
 function localizeNumber(value) {
   // Quick conversion to national digits, to increase readability of the
-  // tests below.
-  return goog.i18n.DateTimeFormat.prototype.localizeNumbers('' + value);
+  // tests above.
+  return goog.i18n.DateTimeFormat.localizeNumbers(value);
 }

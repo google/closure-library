@@ -75,12 +75,9 @@ goog.date.duration.format = function(durationMs) {
   var minutes = Math.floor(ms / goog.date.duration.MINUTE_MS_);
 
   // Localized number representations.
-  var daysText = goog.i18n.DateTimeFormat.prototype.localizeNumbers(
-      String(days));
-  var hoursText = goog.i18n.DateTimeFormat.prototype.localizeNumbers(
-      String(hours));
-  var minutesText = goog.i18n.DateTimeFormat.prototype.localizeNumbers(
-      String(minutes));
+  var daysText = goog.i18n.DateTimeFormat.localizeNumbers(days);
+  var hoursText = goog.i18n.DateTimeFormat.localizeNumbers(hours);
+  var minutesText = goog.i18n.DateTimeFormat.localizeNumbers(minutes);
 
   // We need a space after the days if there are hours or minutes to come.
   var daysSeparator = days * (hours + minutes) ? ' ' : '';
