@@ -126,8 +126,8 @@ goog.ui.MenuItemRenderer.prototype.createDom = function(item) {
   this.setEnableCheckBoxStructure(item, element,
       item.isSupportedState(goog.ui.Component.State.SELECTED) ||
       item.isSupportedState(goog.ui.Component.State.CHECKED));
-  this.setAriaStates(item, element);
   this.correctAriaRole(item, element);
+  this.setAriaStates(item, element);
   return element;
 };
 

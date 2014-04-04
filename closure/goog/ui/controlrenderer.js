@@ -577,6 +577,10 @@ goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
   }
   goog.asserts.assert(element,
       'The element passed as a first parameter cannot be null.');
+  var role = goog.a11y.aria.getRole(element);
+  if (!role && this.getAriaRole()) {
+    this.setAriaRole(element);
+  }
   var ariaAttr = goog.ui.ControlRenderer.getAriaStateForAriaRole_(
       element, goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_[state]);
   if (ariaAttr) {
