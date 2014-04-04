@@ -720,7 +720,7 @@ goog.graphics.ext.Element.Position_ = function(element, horizontal) {
 
 
 /**
- * @return {Object} The coordinate value computation cache.
+ * @return {!Object} The coordinate value computation cache.
  * @private
  */
 goog.graphics.ext.Element.Position_.prototype.getCoordinateCache_ = function() {

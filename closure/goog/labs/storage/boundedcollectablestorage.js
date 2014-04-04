@@ -73,7 +73,7 @@ storage.BoundedCollectableStorage.KEY_LIST_KEY_ = 'bounded-collectable-storage';
 /**
  * Recreates a list of keys in order of creation.
  *
- * @return {Array.<string>} a list of unexpired keys.
+ * @return {!Array.<string>} a list of unexpired keys.
  * @private
  */
 storage.BoundedCollectableStorage.prototype.rebuildIndex_ = function() {

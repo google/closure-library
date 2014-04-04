@@ -89,7 +89,7 @@ goog.fx.Dragger.HAS_SET_CAPTURE_ =
  * cursor itself.
  *
  * @param {Element} sourceEl Element to copy.
- * @return {Element} The clone of {@code sourceEl}.
+ * @return {!Element} The clone of {@code sourceEl}.
  */
 goog.fx.Dragger.cloneNode = function(sourceEl) {
   var clonedEl = /** @type {Element} */ (sourceEl.cloneNode(true)),
@@ -650,7 +650,7 @@ goog.fx.Dragger.prototype.handleMove_ = function(e) {
  *
  * @param {number} dx The horizontal movement delta.
  * @param {number} dy The vertical movement delta.
- * @return {goog.math.Coordinate} The newly calculated drag element position.
+ * @return {!goog.math.Coordinate} The newly calculated drag element position.
  * @private
  */
 goog.fx.Dragger.prototype.calculatePosition_ = function(dx, dy) {

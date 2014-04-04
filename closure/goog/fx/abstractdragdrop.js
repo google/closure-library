@@ -472,7 +472,7 @@ goog.fx.AbstractDragDrop.prototype.recalculateScrollableContainers =
  * @param {Element} sourceEl Drag source element.
  * @param {Element} el the element created by createDragElement().
  * @param {goog.events.BrowserEvent} event Mouse down event for start of drag.
- * @return {goog.fx.Dragger} The new Dragger.
+ * @return {!goog.fx.Dragger} The new Dragger.
  * @protected
  */
 goog.fx.AbstractDragDrop.prototype.createDraggerFor =
@@ -804,7 +804,7 @@ goog.fx.AbstractDragDrop.prototype.createDragElement = function(sourceEl) {
  * @param {Element} el Drag source element.
  * @param {Element} dragEl The dragged element created by createDragElement().
  * @param {goog.events.BrowserEvent} event Mouse down event for start of drag.
- * @return {goog.math.Coordinate} The position for the drag element.
+ * @return {!goog.math.Coordinate} The position for the drag element.
  */
 goog.fx.AbstractDragDrop.prototype.getDragElementPosition =
     function(el, dragEl, event) {
@@ -1124,7 +1124,7 @@ goog.fx.AbstractDragDrop.prototype.isInside = function(x, y, box) {
 /**
  * Gets the scroll distance as a coordinate object, using
  * the window of the current drag element's dom.
- * @return {goog.math.Coordinate} Object with scroll offsets 'x' and 'y'.
+ * @return {!goog.math.Coordinate} Object with scroll offsets 'x' and 'y'.
  * @protected
  */
 goog.fx.AbstractDragDrop.prototype.getScrollPos = function() {
@@ -1341,7 +1341,7 @@ goog.fx.DragDropItem.prototype.getCurrentDragElement = function() {
 /**
  * Gets all the elements of this item that are potentially draggable/
  *
- * @return {Array.<Element>} The draggable elements.
+ * @return {!Array.<Element>} The draggable elements.
  */
 goog.fx.DragDropItem.prototype.getDraggableElements = function() {
   return [this.element];

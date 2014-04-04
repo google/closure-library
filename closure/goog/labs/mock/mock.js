@@ -602,7 +602,7 @@ goog.inherits(goog.labs.mock.MockSpyManager_,
  * Return a stub, if defined, for the method and arguments passed in. If we lack
  * a stub, instead look for a call record that matches the method and arguments.
  *
- * @return {Function} The stub or the invocation logger, if defined.
+ * @return {!Function} The stub or the invocation logger, if defined.
  * @override
  */
 goog.labs.mock.MockSpyManager_.prototype.findBinding =
