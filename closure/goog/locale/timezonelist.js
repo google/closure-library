@@ -102,7 +102,7 @@ goog.locale.getTimeZoneAllLongNames = function() {
  *    for which this language is defacto official is considered. If it is
  *    undefined, current locale is used to extract this information.
  *
- * @return {Array.<Object>} Localized and relevant list of timezone names
+ * @return {!Array.<Object>} Localized and relevant list of timezone names
  *    and ids.
  * @private
  */
