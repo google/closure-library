@@ -20,8 +20,6 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.Link');
-goog.require('goog.html.SafeUrl');
-goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
@@ -78,17 +76,6 @@ function testSetText() {
   assertEquals('Should point to http://docs.google.com/',
       'http://docs.google.com/', anchor.href);
   assertEquals('Should have correct text', 'Text', link.getCurrentText());
-}
-
-function testSetTextAndSafeUrl() {
-  var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com',
-      '_blank');
-  assertEquals('Should be empty', '', link.getCurrentText());
-  var safeUrl = goog.html.SafeUrl.fromConstant(
-      goog.string.Const.from('javascript:trusted();'));
-  link.setTextAndUrl('Text', safeUrl);
-  assertEquals('URL is specified SafeURL',
-      'javascript:trusted();', anchor.href);
 }
 
 function testSetBoldText() {

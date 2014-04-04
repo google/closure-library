@@ -25,7 +25,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.safe');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.node');
@@ -115,13 +114,10 @@ goog.editor.Link.prototype.isNew = function() {
 
 /**
  * Set the url without affecting the isNew() status of the link.
- * @param {string|!goog.html.SafeUrl} url A URL.
+ * @param {string} url A URL.
  */
 goog.editor.Link.prototype.initializeUrl = function(url) {
-  var anchor = this.getAnchor();
-  if (anchor) {
-    goog.dom.safe.setAnchorHref(anchor, url);
-  }
+  this.getAnchor().href = url;
 };
 
 
@@ -144,13 +140,11 @@ goog.editor.Link.prototype.removeLink = function() {
  *     text in one descendent, newText will only replace the text in that
  *     one node. Otherwise, we'll change the innerHTML of the whole
  *     link to newText.
- * @param {string|!goog.html.SafeUrl} newUrl A new URL.
+ * @param {string} newUrl A new URL.
  */
 goog.editor.Link.prototype.setTextAndUrl = function(newText, newUrl) {
   var anchor = this.getAnchor();
-  if (anchor) {
-    goog.dom.safe.setAnchorHref(anchor, newUrl);
-  }
+  anchor.href = newUrl;
 
   // If the text did not change, don't update link text.
   var currentText = this.getCurrentText();
