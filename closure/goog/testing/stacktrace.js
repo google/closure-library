@@ -285,6 +285,7 @@ goog.testing.stacktrace.IE_STACK_FRAME_REGEXP_ = new RegExp('^   at ' +
  * {@link goog.debug.getStacktrace}.
  * @return {!Array.<!goog.testing.stacktrace.Frame>} Stack frames.
  * @private
+ * @suppress {es5Strict}
  */
 goog.testing.stacktrace.followCallChain_ = function() {
   var frames = [];
