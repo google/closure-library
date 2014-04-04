@@ -99,22 +99,6 @@ goog.inherits(goog.ui.Tooltip, goog.ui.Popup);
 
 
 /**
- * @define {boolean} Whether goog.ui.Tooltip permits use of its potentially
- * unsafe API, subject to global defines
- * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS and
- * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES.
- *
- * For details of intended use, see the fileoverview of
- * goog.html.legacyconversions.
- *
- * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS
- * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES
- * @see goog.ui.Tooltip#setHtml
- */
-goog.define('goog.ui.Tooltip.ALLOW_UNSAFE_API', false);
-
-
-/**
  * List of active (open) tooltip widgets. Used to prevent multiple tooltips
  * from appearing at once.
  *
@@ -391,8 +375,7 @@ goog.ui.Tooltip.prototype.setText = function(str) {
  * @param {string} str HTML message to display in tooltip.
  */
 goog.ui.Tooltip.prototype.setHtml = function(str) {
-  this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(
-      str, goog.ui.Tooltip.ALLOW_UNSAFE_API));
+  this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(str));
 };
 
 

@@ -24,12 +24,9 @@
  *
  * IMPORTANT: No new code should use the conversion functions in this file.
  *
- * The conversion functions in this file are guarded with global and
- * API-specific define flags.  The global flag
- * (goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS), if set to false,
+ * The conversion functions in this file are guarded with global flag
+ * (goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS). If set to false, it
  * effectively "locks in" an entire application to only use HTML-type-safe APIs.
- * API-specific flags permit the global flag to be overridden; doing so is
- * primarily intended during migrations.
  *
  * Intended use of the functions in this file are as follows:
  *
@@ -42,10 +39,11 @@
  *
  * Widgets such as goog.ui.Dialog are being augmented to expose safe APIs
  * expressed in terms of goog.html types.  For instance, goog.ui.Dialog has a
- * method setHtmlContent that consumes an object of type goog.html.SafeHtml, a
- * type whose contract guarantees that its value is safe to use in HTML context,
- * i.e. can be safely assigned to .innerHTML. An application that only uses this
- * API is forced to only supply values of this type, i.e. values that are safe.
+ * method setSafeHtmlContent that consumes an object of type goog.html.SafeHtml,
+ * a type whose contract guarantees that its value is safe to use in HTML
+ * context, i.e. can be safely assigned to .innerHTML. An application that only
+ * uses this API is forced to only supply values of this type, i.e. values that
+ * are safe.
  *
  * However, the legacy method setContent cannot (for the time being) be removed
  * from goog.ui.Dialog, due to a large number of existing callers.  The
@@ -66,25 +64,14 @@
  *
  * To establish correctness with confidence, application code should be
  * refactored to use SafeHtml instead of plain string to represent HTML markup,
- * and to use goog.html-typed APIs (e.g., goog.ui.Dialog#setHtmlContent instead
- * of goog.ui.Dialog#setContent).
+ * and to use goog.html-typed APIs (e.g., goog.ui.Dialog#setSafeHtmlContent
+ * instead of goog.ui.Dialog#setContent).
  *
  * To prevent introduction of new vulnerabilities, application owners can
  * effectively disable unsafe legacy APIs by compiling with the define
  * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS set to false.  When
  * set, this define causes the conversion methods in this file to
  * unconditionally throw an exception.
- *
- * To support partial lock-in into safe APIs during migration of large
- * application codebases, packages/APIs can provide package/API-specific
- * overrides of this behavior.  API-specific overrides are only available if
- * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES is set. Then,
- * API-specific overrides (e.g., goog.ui.Dialog.ALLOW_UNSAFE_API) can be used to
- * disable safe-API enforcement for callers of specific APIs.  This permits
- * development teams to prevent the introduction of new call sites of unsafe
- * methods of classes whose use has already been migrated to safe APIs, while
- * uses of potentially unsafe methods of other classes are still present (not
- * yet refactored).
  *
  * Note that new code should always be compiled with
  * ALLOW_LEGACY_CONVERSIONS=false.  At some future point, the default for this
@@ -104,21 +91,9 @@ goog.require('goog.html.TrustedResourceUrl');
  * legacy API purposes is permitted.
  *
  * If false, the conversion functions in this file unconditionally throw an
- * exception; except if per-API overrides are enabled (see fileoverview).
+ * exception.
  */
 goog.define('goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS', true);
-
-
-/**
- * @define {boolean} Whether ALLOW_LEGACY_CONVERSIONS can be overridden on a
- * per-API/package basis.
- *
- * If true, the opt_override parameter of the conversion functions in
- * this file is respected, otherwise it is ignored.  See fileoverview for
- * details and intended use.
- */
-goog.define('goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES',
-            false);
 
 
 /**
@@ -128,21 +103,12 @@ goog.define('goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES',
  * Unchecked conversion will not proceed if ALLOW_LEGACY_CONVERSIONS is false,
  * and instead this function unconditionally throws an exception.
  *
- * Unchecked conversion proceeds if ALLOW_LEGACY_CONVERSION_OVERRIDES and
- * opt_override are true, even if ALLOW_LEGACY_CONVERSIONS is false.
- * This permits per-API/package override of ALLOW_LEGACY_CONVERSIONS during
- * migration/refactoring of large applications. See fileoverview for details.
- *
  * @param {string} html A string to be converted to SafeHtml.
- * @param {boolean=} opt_override If true, allows conversion to proceed
- *     even if ALLOW_LEGACY_CONVERSIONS is false, but only if
- *     ALLOW_LEGACY_CONVERSION_OVERRIDES is true as well.
  * @return {!goog.html.SafeHtml} The value of html, wrapped in a SafeHtml
  *     object.
  */
-goog.html.legacyconversions.safeHtmlFromString = function(
-    html, opt_override) {
-  goog.html.legacyconversions.throwIfConversionDisallowed_(opt_override);
+goog.html.legacyconversions.safeHtmlFromString = function(html) {
+  goog.html.legacyconversions.throwIfConversionDisallowed_();
   return goog.html.legacyconversions.
       createSafeHtmlSecurityPrivateDoNotAccessOrElse_(html);
 };
@@ -155,21 +121,12 @@ goog.html.legacyconversions.safeHtmlFromString = function(
  * Unchecked conversion will not proceed if ALLOW_LEGACY_CONVERSIONS is false,
  * and instead this function unconditionally throws an exception.
  *
- * Unchecked conversion proceeds if ALLOW_LEGACY_CONVERSION_OVERRIDES and
- * opt_override are true, even if ALLOW_LEGACY_CONVERSIONS is false.
- * This permits per-API/package override of ALLOW_LEGACY_CONVERSIONS during
- * migration/refactoring of large applications. See fileoverview for details.
- *
  * @param {string} url A string to be converted to TrustedResourceUrl.
- * @param {boolean=} opt_override If true, allows conversion to proceed
- *     even if ALLOW_LEGACY_CONVERSIONS is false, but only if
- *     ALLOW_LEGACY_CONVERSION_OVERRIDES is true as well.
  * @return {!goog.html.TrustedResourceUrl} The value of url, wrapped in a
  *     TrustedResourceUrl object.
  */
-goog.html.legacyconversions.trustedResourceUrlFromString = function(
-    url, opt_override) {
-  goog.html.legacyconversions.throwIfConversionDisallowed_(opt_override);
+goog.html.legacyconversions.trustedResourceUrlFromString = function(url) {
+  goog.html.legacyconversions.throwIfConversionDisallowed_();
   return goog.html.legacyconversions.
       createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_(url);
 };
@@ -182,21 +139,12 @@ goog.html.legacyconversions.trustedResourceUrlFromString = function(
  * Unchecked conversion will not proceed if ALLOW_LEGACY_CONVERSIONS is false,
  * and instead this function unconditionally throws an exception.
  *
- * Unchecked conversion proceeds if ALLOW_LEGACY_CONVERSION_OVERRIDES and
- * opt_override are true, even if ALLOW_LEGACY_CONVERSIONS is false.
- * This permits per-API/package override of ALLOW_LEGACY_CONVERSIONS during
- * migration/refactoring of large applications. See fileoverview for details.
- *
  * @param {string} url A string to be converted to SafeUrl.
- * @param {boolean=} opt_override If true, allows conversion to proceed
- *     even if ALLOW_LEGACY_CONVERSIONS is false, but only if
- *     ALLOW_LEGACY_CONVERSION_OVERRIDES is true as well.
  * @return {!goog.html.SafeUrl} The value of url, wrapped in a SafeUrl
  *     object.
  */
-goog.html.legacyconversions.safeUrlFromString = function(
-    url, opt_override) {
-  goog.html.legacyconversions.throwIfConversionDisallowed_(opt_override);
+goog.html.legacyconversions.safeUrlFromString = function(url) {
+  goog.html.legacyconversions.throwIfConversionDisallowed_();
   return goog.html.legacyconversions.
       createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
 };
@@ -258,16 +206,10 @@ goog.html.legacyconversions.createSafeUrlSecurityPrivateDoNotAccessOrElse_ =
 
 /**
  * Checks whether legacy conversion is allowed. Throws an exception if not.
- * @param {boolean=} opt_override Passed from public function. If true,
- *     allows conversion to proceed even if ALLOW_LEGACY_CONVERSIONS is false,
- *     but only if ALLOW_LEGACY_CONVERSION_OVERRIDES is true as well.
  * @private
  */
-goog.html.legacyconversions.throwIfConversionDisallowed_ = function(
-    opt_override) {
-  if (!goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS &&
-      !(goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES &&
-        opt_override)) {
+goog.html.legacyconversions.throwIfConversionDisallowed_ = function() {
+  if (!goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS) {
     throw Error(
         'Error: Legacy conversion from string to goog.html types is disabled');
   }

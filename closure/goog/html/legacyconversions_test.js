@@ -35,8 +35,6 @@ var stubs = new goog.testing.PropertyReplacer();
 function setUp() {
   // Reset goog.html.legacyconveresions global defines for each test case.
   stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
-  stubs.set(
-      goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES', false);
 }
 
 
@@ -45,20 +43,6 @@ function testSafeHtmlFromString_allowedIfNotGloballyDisabled() {
   var safeHtml = goog.html.legacyconversions.safeHtmlFromString(helloWorld);
   assertEquals(helloWorld, goog.html.SafeHtml.unwrap(safeHtml));
   assertNull(safeHtml.getDirection());
-
-  // Also allowed if module override is set.
-  safeHtml = goog.html.legacyconversions.safeHtmlFromString(helloWorld, true);
-  assertEquals(helloWorld, goog.html.SafeHtml.unwrap(safeHtml));
-
-  // As well if global override flag is set.
-  stubs.set(
-      goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES', true);
-  safeHtml = goog.html.legacyconversions.safeHtmlFromString(helloWorld, false);
-  assertEquals(helloWorld, goog.html.SafeHtml.unwrap(safeHtml));
-
-  // Or both.
-  safeHtml = goog.html.legacyconversions.safeHtmlFromString(helloWorld, true);
-  assertEquals(helloWorld, goog.html.SafeHtml.unwrap(safeHtml));
 }
 
 
@@ -70,27 +54,6 @@ function testSafeHtmlFromString_guardedByGlobalFlag() {
         goog.html.legacyconversions.safeHtmlFromString(
             'Possibly untrusted <html>');
       }).message);
-
-  // Conversion is disallowed if module override is set, but
-  // ALLOW_LEGACY_CONVERSION_OVERRIDES is not.
-  assertEquals(
-      'Error: Legacy conversion from string to goog.html types is disabled',
-      assertThrows(function() {
-        goog.html.legacyconversions.safeHtmlFromString(
-            'Possibly untrusted <html>', true);
-      }).message);
-}
-
-
-function testSafeHtmlFromString_allowedByOverride() {
-  var helloWorld = 'Hello <em>World</em>';
-  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-  stubs.set(
-      goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES', true);
-
-  var safeHtml = goog.html.legacyconversions.safeHtmlFromString(
-      helloWorld, true);
-  assertEquals(helloWorld, goog.html.SafeHtml.unwrap(safeHtml));
 }
 
 

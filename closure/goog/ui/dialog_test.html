@@ -62,9 +62,6 @@ See the COPYING file for details.
 
     // Reset global flags to their defaults.
     stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
-    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES',
-              false);
-    stubs.set(goog.ui.Dialog, 'ALLOW_UNSAFE_API', false);
   }
 
   function tearDown() {
@@ -812,29 +809,6 @@ See the COPYING file for details.
         assertThrows(function() {
           dialog.setContent('<img src=blag onerror=evil();/>');
         }).message);
-  }
-
-  function testSetContent_guardedByDialogApiFlag() {
-    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-    stubs.set(goog.ui.Dialog, 'ALLOW_UNSAFE_API', true);
-    // Unsafe API still fails, since ALLOW_LEGACY_CONVERSION_OVERRIDES is not
-    // set.
-    assertEquals(
-        'Error: Legacy conversion from string to goog.html types is disabled',
-        assertThrows(function() {
-          dialog.setContent('<img src=blag onerror=evil();/>');
-        }).message);
-  }
-
-  function testSetContent_allowedByDialogApiFlag() {
-    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
-    stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSION_OVERRIDES',
-              true);
-    stubs.set(goog.ui.Dialog, 'ALLOW_UNSAFE_API', true);
-    // no exception
-    dialog.setContent('<div>Trusted<' + '/div>');
-    assertEquals('<div>Trusted<' + '/div>',
-                 goog.html.SafeHtml.unwrap(dialog.getSafeHtmlContent()));
   }
 
   function testFocus() {

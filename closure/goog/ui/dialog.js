@@ -102,23 +102,6 @@ goog.inherits(goog.ui.Dialog, goog.ui.ModalPopup);
 
 
 /**
- * @define {boolean} Whether goog.ui.Dialog permits use of its potentially
- * unsafe API, subject to global defines
- * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS and
- * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES.
- *
- * For details of intended use, see the fileoverview of
- * goog.html.legacyconversions.
- *
- * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS
- * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES
- * @see goog.ui.Dialog#setContent
- * @see goog.ui.Prompt
- */
-goog.define('goog.ui.Dialog.ALLOW_UNSAFE_API', false);
-
-
-/**
  * Button set.  Default to Ok/Cancel.
  * @type {goog.ui.Dialog.ButtonSet}
  * @private
@@ -288,8 +271,7 @@ goog.ui.Dialog.prototype.getTitle = function() {
  * @param {string} html Content HTML.
  */
 goog.ui.Dialog.prototype.setContent = function(html) {
-  this.setSafeHtmlContent(goog.html.legacyconversions.safeHtmlFromString(
-      html, goog.ui.Dialog.ALLOW_UNSAFE_API));
+  this.setSafeHtmlContent(goog.html.legacyconversions.safeHtmlFromString(html));
 };
 
 

@@ -69,8 +69,7 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
    * @private
    */
   this.html_ = (html instanceof goog.html.SafeHtml ? html :
-      goog.html.legacyconversions.safeHtmlFromString(html,
-          goog.ui.tree.BaseNode.ALLOW_UNSAFE_API));
+      goog.html.legacyconversions.safeHtmlFromString(html));
 
   /** @private {string} */
   this.iconClass_;
@@ -94,23 +93,6 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
   this.lastChild_;
 };
 goog.inherits(goog.ui.tree.BaseNode, goog.ui.Component);
-
-
-/**
- * @define {boolean} Whether goog.ui.tree.BaseNode permits use of its
- * potentially unsafe API, subject to global defines
- * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS and
- * goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES.
- *
- * For details of intended use, see the fileoverview of
- * goog.html.legacyconversions.
- *
- * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS
- * @see goog.html.legacyconversions.ALLOW_LEGACY_CONVERSION_OVERRIDES
- * @see goog.ui.tree.BaseNode#setHtml
- * @see goog.ui.tree.BaseNode#setAfterLabelHtml
- */
-goog.define('goog.ui.tree.BaseNode.ALLOW_UNSAFE_API', false);
 
 
 /**
@@ -946,7 +928,7 @@ goog.ui.tree.BaseNode.prototype.getAfterLabelSafeHtml = function() {
  */
 goog.ui.tree.BaseNode.prototype.setAfterLabelHtml = function(html) {
   this.setAfterLabelSafeHtml(goog.html.legacyconversions.safeHtmlFromString(
-      html, goog.ui.tree.BaseNode.ALLOW_UNSAFE_API));
+      html));
 };
 
 
@@ -1236,8 +1218,7 @@ goog.ui.tree.BaseNode.prototype.getText = function() {
  * @param {string} s The html string for the label.
  */
 goog.ui.tree.BaseNode.prototype.setHtml = function(s) {
-  this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(s,
-      goog.ui.tree.BaseNode.ALLOW_UNSAFE_API));
+  this.setSafeHtml(goog.html.legacyconversions.safeHtmlFromString(s));
 };
 
 
