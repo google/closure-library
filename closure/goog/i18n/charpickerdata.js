@@ -1,4 +1,3 @@
-
 // Copyright 2010 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,17 +84,6 @@ goog.i18n.CharPickerData.MSG_CP_CONTROL_PICTURES =
  * @type {string}
  */
 goog.i18n.CharPickerData.MSG_CP_CURRENCY = goog.getMsg('Currency');
-
-
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
-goog.i18n.CharPickerData.MSG_CP_EMOJI = goog.getMsg('Emoji');
 
 
 /**
@@ -324,6 +312,121 @@ goog.i18n.CharPickerData.MSG_CP_COMPATIBILITY = goog.getMsg('Compatibility');
  *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
  * @type {string}
  */
+goog.i18n.CharPickerData.MSG_CP_EMOJI = goog.getMsg('Emoji');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_PEOPLE_AND_EMOTIONS =
+    goog.getMsg('People and Emotions');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_ANIMALS_PLANTS_AND_FOOD =
+    goog.getMsg('Animals, Plants and Food');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_OBJECTS = goog.getMsg('Objects');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_SPORTS_CELEBRATIONS_AND_ACTIVITIES =
+    goog.getMsg('Sports, Celebrations and Activities');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_TRANSPORT_MAPS_AND_SIGNAGE =
+    goog.getMsg('Transport, Maps and Signage');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_WEATHER_SCENES_AND_ZODIAC_SIGNS =
+    goog.getMsg('Weather, Scenes and Zodiac signs');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_ENCLOSED = goog.getMsg('Enclosed');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_MARKS = goog.getMsg('Marks');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
+goog.i18n.CharPickerData.MSG_CP_SYMBOLS = goog.getMsg('Symbols');
+
+
+/**
+ * @desc Name for a symbol or character category. Used in a pull-down list
+ *   shown to a  document editing user trying to insert a special character.
+ *   Newlines are not allowed; translation should be a noun and as consise as
+ *   possible. More details:
+ *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
+ * @type {string}
+ */
 goog.i18n.CharPickerData.MSG_CP_PUNCTUATION = goog.getMsg('Punctuation');
 
 
@@ -527,17 +630,6 @@ goog.i18n.CharPickerData.MSG_CP_LATIN = goog.getMsg('Latin');
  * @type {string}
  */
 goog.i18n.CharPickerData.MSG_CP_COMMON = goog.getMsg('Common');
-
-
-/**
- * @desc Name for a symbol or character category. Used in a pull-down list
- *   shown to a  document editing user trying to insert a special character.
- *   Newlines are not allowed; translation should be a noun and as consise as
- *   possible. More details:
- *   docs/fileview?id=0B8NbxddKsFtwYjExMGJjNzgtYjkzOS00NjdiLTlmOGQtOGVhZDkyZDU5YjM4.
- * @type {string}
- */
-goog.i18n.CharPickerData.MSG_CP_ENCLOSED = goog.getMsg('Enclosed');
 
 
 /**
@@ -1917,6 +2009,7 @@ goog.i18n.CharPickerData.MSG_CP_IDEOGRAPHIC_DESCRIPTION =
  */
 goog.i18n.CharPickerData.prototype.categories = [
   goog.i18n.CharPickerData.MSG_CP_SYMBOL,
+  goog.i18n.CharPickerData.MSG_CP_EMOJI,
   goog.i18n.CharPickerData.MSG_CP_PUNCTUATION,
   goog.i18n.CharPickerData.MSG_CP_NUMBER,
   goog.i18n.CharPickerData.MSG_CP_FORMAT_WHITESPACE,
@@ -1956,7 +2049,6 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_SYMBOL = [
   goog.i18n.CharPickerData.MSG_CP_BRAILLE,
   goog.i18n.CharPickerData.MSG_CP_CONTROL_PICTURES,
   goog.i18n.CharPickerData.MSG_CP_CURRENCY,
-  goog.i18n.CharPickerData.MSG_CP_EMOJI,
   goog.i18n.CharPickerData.MSG_CP_EMOTICONS,
   goog.i18n.CharPickerData.MSG_CP_GAME_PIECES,
   goog.i18n.CharPickerData.MSG_CP_GENDER_AND_GENEALOGICAL,
@@ -1991,7 +2083,6 @@ goog.i18n.CharPickerData.CHARLIST_OF_SYMBOL = [
   ';oA0FN',
   '(j90d3',
   'H3XBMQQ10HB(2106uPM]N:qol202S20V2I:Z0^xM0:91E]J6O6',
-  ';O906vIMOG%I9UGOun294v1O%1916$6n16]1]1u68WGWGGUGG88:48WE891X4EH2f@695^O1091vs8g0U1nE6916P1G,P9692:1G!]16HH]26G68#18M8-3W#191N3888]1M8|f2EG68Gt18#188738cGt58sGt4G8U868Mmm?8EeF1GM$Mv1|fE@18E8U8E8@2W?X4GE88GG8E8886u868kWOGc8',
   ';(i1-5W?',
   'Q6A06f5#1H2,]4MeEY[W1@3W}891N1GF1GN18N1P%k',
   '2JA0sOc',
@@ -2011,6 +2102,45 @@ goog.i18n.CharPickerData.CHARLIST_OF_SYMBOL = [
   'w8A0sf7c2WA0#5A>E1-7',
   'I{)0%4!P7|%4}3A,$0dA',
   '(PD0M(ZU16H1-3e!u6'
+];
+
+
+/**
+ * Names of subcategories. Each message this array is the
+ * name for the corresponding subcategory specified in
+ * {@code goog.i18n.CharPickerData.subcategories}.
+ * @type {Array.<string>}
+ */
+goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_EMOJI = [
+  goog.i18n.CharPickerData.MSG_CP_PEOPLE_AND_EMOTIONS,
+  goog.i18n.CharPickerData.MSG_CP_ANIMALS_PLANTS_AND_FOOD,
+  goog.i18n.CharPickerData.MSG_CP_OBJECTS,
+  goog.i18n.CharPickerData.MSG_CP_SPORTS_CELEBRATIONS_AND_ACTIVITIES,
+  goog.i18n.CharPickerData.MSG_CP_TRANSPORT_MAPS_AND_SIGNAGE,
+  goog.i18n.CharPickerData.MSG_CP_WEATHER_SCENES_AND_ZODIAC_SIGNS,
+  goog.i18n.CharPickerData.MSG_CP_ENCLOSED,
+  goog.i18n.CharPickerData.MSG_CP_MARKS,
+  goog.i18n.CharPickerData.MSG_CP_SYMBOLS
+];
+
+
+/**
+ * List of characters in base88 encoding scheme. Each base88 encoded
+ * charater string represents corresponding subcategory specified in
+ * {@code goog.i18n.CharPickerData.subcategories}. Encoding
+ * scheme is described in {@code goog.i18n.CharListDecompressor}.
+ * @type {Array.<string>}
+ */
+goog.i18n.CharPickerData.CHARLIST_OF_EMOJI = [
+  '^6A0n2:IE]7Y>X18N1%1-28EOO8871G|%U-5W?',
+  'I6A0A_X1c8N6eXBt5',
+  ';O906PJG]m1C1Amew)X16:It1]2W68E8X168[8d68MP171P1!1372',
+  '2DA0s%76o]W1@3nAN1GF1GN18N1Xzd191N38U9I',
+  '(DA0v1O]2694t1m72$2>X1d1%DvXUvBN6',
+  'Q4A0F1mv4|HAUe98(rX1@2]k',
+  'Y#90;v308ICU1d2W-3H9EH1-3e!u6',
+  ';5A09M9188:48WE8n5EH2',
+  'Y%C0(wV1P7N3[EP1M'
 ];
 
 
@@ -2103,7 +2233,7 @@ goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_FORMAT_WHITESPACE = [
  * @type {Array.<string>}
  */
 goog.i18n.CharPickerData.CHARLIST_OF_FORMAT_WHITESPACE = [
-  'vF;Z10UvJf4Yr60UX2Uf4Ugn#0;`o0sbwt0vME',
+  'vF;Z10U92fHf4gh40;920UX2Uf4U8M2n#0;`o0sbwt0vME',
   ']=oY506%7E^$zA#LDF1AV1',
   'fEIH602920,H3P4wB40;#s0',
   'w-10f4^#206IV10(970ols0',
@@ -3470,6 +3600,7 @@ goog.i18n.CharPickerData.CHARLIST_OF_HAN_OTHER = [
  */
 goog.i18n.CharPickerData.prototype.subcategories = [
   goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_SYMBOL,
+  goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_EMOJI,
   goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_PUNCTUATION,
   goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_NUMBER,
   goog.i18n.CharPickerData.SUBCATEGORY_NAMES_OF_FORMAT_WHITESPACE,
@@ -3507,6 +3638,7 @@ goog.i18n.CharPickerData.prototype.subcategories = [
  */
 goog.i18n.CharPickerData.prototype.charList = [
   goog.i18n.CharPickerData.CHARLIST_OF_SYMBOL,
+  goog.i18n.CharPickerData.CHARLIST_OF_EMOJI,
   goog.i18n.CharPickerData.CHARLIST_OF_PUNCTUATION,
   goog.i18n.CharPickerData.CHARLIST_OF_NUMBER,
   goog.i18n.CharPickerData.CHARLIST_OF_FORMAT_WHITESPACE,
