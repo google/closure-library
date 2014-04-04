@@ -151,7 +151,7 @@ goog.ui.IframeMask.prototype.hideMask = function() {
 /**
  * Gets the iframe to use as a mask. Creates a new one if one has not been
  * created yet.
- * @return {HTMLIFrameElement} The iframe.
+ * @return {!HTMLIFrameElement} The iframe.
  * @private
  */
 goog.ui.IframeMask.prototype.getIframe_ = function() {

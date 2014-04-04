@@ -120,7 +120,7 @@ goog.ui.ImagelessMenuButtonRenderer.prototype.canDecorate = function(element) {
  * @param {goog.ui.ControlContent} content Text caption or DOM structure to wrap
  *     in a box.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Pseudo-rounded-corner box containing the content.
+ * @return {!Element} Pseudo-rounded-corner box containing the content.
  * @override
  */
 goog.ui.ImagelessMenuButtonRenderer.prototype.createButton = function(content,

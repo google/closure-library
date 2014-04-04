@@ -476,7 +476,7 @@ goog.ui.editor.LinkDialog.prototype.stopReferrerLeaks_ = false;
 
 /**
  * Creates contents of this dialog.
- * @return {Element} Contents of the dialog as a DOM element.
+ * @return {!Element} Contents of the dialog as a DOM element.
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.createDialogContent_ = function() {
@@ -515,7 +515,7 @@ goog.ui.editor.LinkDialog.prototype.createDialogContent_ = function() {
 
 /**
  * Builds and returns the text to display section of the edit link dialog.
- * @return {Element} A div element to be appended into the dialog div.
+ * @return {!Element} A div element to be appended into the dialog div.
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.buildTextToDisplayDiv_ = function() {
@@ -551,7 +551,7 @@ goog.ui.editor.LinkDialog.prototype.buildTextToDisplayDiv_ = function() {
 /**
  * Builds and returns the "checkbox to open the link in a new window" section of
  * the edit link dialog.
- * @return {Element} A div element to be appended into the dialog div.
+ * @return {!Element} A div element to be appended into the dialog div.
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.buildOpenInNewWindowDiv_ = function() {
@@ -566,7 +566,7 @@ goog.ui.editor.LinkDialog.prototype.buildOpenInNewWindowDiv_ = function() {
 
 /**
  * Creates a DIV with a checkbox for {@code rel=nofollow} option.
- * @return {Element} Newly created DIV element.
+ * @return {!Element} Newly created DIV element.
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.buildRelNoFollowDiv_ = function() {
@@ -590,7 +590,7 @@ goog.ui.editor.LinkDialog.prototype.buildRelNoFollowDiv_ = function() {
 
 /**
 * Builds and returns the div containing the tab "On the web".
-* @return {Element} The div element containing the tab.
+* @return {!Element} The div element containing the tab.
 * @private
 */
 goog.ui.editor.LinkDialog.prototype.buildTabOnTheWeb_ = function() {
@@ -647,7 +647,7 @@ goog.ui.editor.LinkDialog.prototype.buildTabOnTheWeb_ = function() {
 
 /**
  * Builds and returns the div containing the tab "Email address".
- * @return {Element} the div element containing the tab.
+ * @return {!Element} the div element containing the tab.
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.buildTabEmailAddress_ = function() {
@@ -975,7 +975,7 @@ goog.ui.editor.LinkDialog.prototype.disableAutogenFlag_ = function(autogen) {
 /**
  * Creates an OK event from the text to display input and the specified link.
  * If text to display input is empty, then generate the auto value for it.
- * @return {goog.ui.editor.LinkDialog.OkEvent} The event object to be used when
+ * @return {!goog.ui.editor.LinkDialog.OkEvent} The event object to be used when
  *     dispatching the OK event to listeners.
  * @param {string} url Url the target element should point to.
  * @private

@@ -40,7 +40,7 @@ goog.ui.GaugeTheme = function() {
 
 /**
  * Returns the stroke for the external border of the gauge.
- * @return {goog.graphics.Stroke} The stroke to use.
+ * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getExternalBorderStroke = function() {
   return new goog.graphics.Stroke(1, '#333333');
@@ -52,7 +52,7 @@ goog.ui.GaugeTheme.prototype.getExternalBorderStroke = function() {
  * @param {number} cx X coordinate of the center of the gauge.
  * @param {number} cy Y coordinate of the center of the gauge.
  * @param {number} r Radius of the gauge.
- * @return {goog.graphics.Fill} The fill to use.
+ * @return {!goog.graphics.Fill} The fill to use.
  */
 goog.ui.GaugeTheme.prototype.getExternalBorderFill = function(cx, cy, r) {
   return new goog.graphics.LinearGradient(cx + r, cy - r, cx - r, cy + r,
@@ -62,7 +62,7 @@ goog.ui.GaugeTheme.prototype.getExternalBorderFill = function(cx, cy, r) {
 
 /**
  * Returns the stroke for the internal border of the gauge.
- * @return {goog.graphics.Stroke} The stroke to use.
+ * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getInternalBorderStroke = function() {
   return new goog.graphics.Stroke(2, '#e0e0e0');
@@ -74,7 +74,7 @@ goog.ui.GaugeTheme.prototype.getInternalBorderStroke = function() {
  * @param {number} cx X coordinate of the center of the gauge.
  * @param {number} cy Y coordinate of the center of the gauge.
  * @param {number} r Radius of the gauge.
- * @return {goog.graphics.Fill} The fill to use.
+ * @return {!goog.graphics.Fill} The fill to use.
  */
 goog.ui.GaugeTheme.prototype.getInternalBorderFill = function(cx, cy, r) {
   return new goog.graphics.SolidFill('#f7f7f7');
@@ -83,7 +83,7 @@ goog.ui.GaugeTheme.prototype.getInternalBorderFill = function(cx, cy, r) {
 
 /**
  * Returns the stroke for the major ticks of the gauge.
- * @return {goog.graphics.Stroke} The stroke to use.
+ * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getMajorTickStroke = function() {
   return new goog.graphics.Stroke(2, '#333333');
@@ -92,7 +92,7 @@ goog.ui.GaugeTheme.prototype.getMajorTickStroke = function() {
 
 /**
  * Returns the stroke for the minor ticks of the gauge.
- * @return {goog.graphics.Stroke} The stroke to use.
+ * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getMinorTickStroke = function() {
   return new goog.graphics.Stroke(1, '#666666');
@@ -101,7 +101,7 @@ goog.ui.GaugeTheme.prototype.getMinorTickStroke = function() {
 
 /**
  * Returns the stroke for the hinge at the center of the gauge.
- * @return {goog.graphics.Stroke} The stroke to use.
+ * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getHingeStroke = function() {
   return new goog.graphics.Stroke(1, '#666666');
@@ -113,7 +113,7 @@ goog.ui.GaugeTheme.prototype.getHingeStroke = function() {
  * @param {number} cx  X coordinate of the center of the gauge.
  * @param {number} cy  Y coordinate of the center of the gauge.
  * @param {number} r  Radius of the hinge.
- * @return {goog.graphics.Fill} The fill to use.
+ * @return {!goog.graphics.Fill} The fill to use.
  */
 goog.ui.GaugeTheme.prototype.getHingeFill = function(cx, cy, r) {
   return new goog.graphics.LinearGradient(cx + r, cy - r, cx - r, cy + r,
@@ -123,7 +123,7 @@ goog.ui.GaugeTheme.prototype.getHingeFill = function(cx, cy, r) {
 
 /**
  * Returns the stroke for the gauge needle.
- * @return {goog.graphics.Stroke} The stroke to use.
+ * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getNeedleStroke = function() {
   return new goog.graphics.Stroke(1, '#c63310');
@@ -135,7 +135,7 @@ goog.ui.GaugeTheme.prototype.getNeedleStroke = function() {
  * @param {number} cx X coordinate of the center of the gauge.
  * @param {number} cy Y coordinate of the center of the gauge.
  * @param {number} r Radius of the gauge.
- * @return {goog.graphics.Fill} The fill to use.
+ * @return {!goog.graphics.Fill} The fill to use.
  */
 goog.ui.GaugeTheme.prototype.getNeedleFill = function(cx, cy, r) {
   // Make needle a bit transparent so that text underneeth is still visible.

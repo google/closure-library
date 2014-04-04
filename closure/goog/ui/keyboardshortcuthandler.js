@@ -556,7 +556,7 @@ goog.ui.KeyboardShortcutHandler.prototype.setGlobalKeys = function(keys) {
 
 
 /**
- * @return {Array.<string>} The global keys, i.e. keys that are safe to always
+ * @return {!Array.<string>} The global keys, i.e. keys that are safe to always
  *     regard as shortcuts, even if entered in a textarea or input field.
  */
 goog.ui.KeyboardShortcutHandler.prototype.getGlobalKeys = function() {
@@ -587,7 +587,7 @@ goog.ui.KeyboardShortcutHandler.prototype.getEventType =
 /**
  * Builds stroke array from string representation of shortcut.
  * @param {string} s String representation of shortcut.
- * @return {Array.<Object>} The stroke array.
+ * @return {!Array.<Object>} The stroke array.
  */
 goog.ui.KeyboardShortcutHandler.parseStringShortcut = function(s) {
   // Normalize whitespace and force to lower case.

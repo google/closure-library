@@ -69,7 +69,7 @@ goog.ui.FlatMenuButtonRenderer.CSS_CLASS =
  *    </div>
  * Overrides {@link goog.ui.FlatButtonRenderer#createDom}.
  * @param {goog.ui.Control} control Button to render.
- * @return {Element} Root element for the button.
+ * @return {!Element} Root element for the button.
  * @override
  */
 goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(control) {
@@ -175,7 +175,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.createCaption = function(content,
  *      &nbsp;
  *    </div>
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Dropdown element.
+ * @return {!Element} Dropdown element.
  */
 goog.ui.FlatMenuButtonRenderer.prototype.createDropdown = function(dom) {
   // 00A0 is &nbsp;

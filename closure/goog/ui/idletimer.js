@@ -138,7 +138,7 @@ goog.ui.IdleTimer.Event = {
 /**
  * Gets the default activity monitor used by this class. If a default has not
  * been created yet, then a new one will be created.
- * @return {goog.ui.ActivityMonitor} The default activity monitor.
+ * @return {!goog.ui.ActivityMonitor} The default activity monitor.
  * @private
  */
 goog.ui.IdleTimer.prototype.getDefaultActivityMonitor_ = function() {

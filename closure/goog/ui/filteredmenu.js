@@ -310,7 +310,7 @@ goog.ui.FilteredMenu.prototype.getFilterFromIndex = function() {
 
 /**
  * Gets a list of items entered in the search box.
- * @return {Array.<string>} The entered items.
+ * @return {!Array.<string>} The entered items.
  */
 goog.ui.FilteredMenu.prototype.getEnteredItems = function() {
   return this.enteredItems_ || [];

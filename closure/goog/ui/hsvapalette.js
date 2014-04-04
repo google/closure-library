@@ -281,7 +281,7 @@ goog.ui.HsvaPalette.parseUserInput_ = function(value) {
 /**
  * Parses a #rrggbbaa color string.
  * @param {string} color The color and alpha in #rrggbbaa format.
- * @return {Array} A two element array [color, alpha], where color is #rrggbb
+ * @return {!Array} A two element array [color, alpha], where color is #rrggbb
  *     and alpha is in [0, 1].
  * @private
  */

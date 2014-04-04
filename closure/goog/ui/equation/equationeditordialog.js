@@ -87,7 +87,7 @@ goog.ui.equation.EquationEditorDialog.prototype.setVisible = function(visible) {
 
 /**
  * Populates the context of this dialog.
- * @return {Object} The context that this dialog runs in.
+ * @return {!Object} The context that this dialog runs in.
  * @private
  */
 goog.ui.equation.EquationEditorDialog.prototype.populateContext_ = function() {

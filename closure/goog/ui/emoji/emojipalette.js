@@ -135,7 +135,7 @@ goog.ui.emoji.EmojiPalette.prototype.imageLoader_;
  * centering the inner div).
  *
  * @param {Object} emojiGroup The group of emoji for this page.
- * @return {Array.<HTMLDivElement>} The emoji items.
+ * @return {!Array.<!HTMLDivElement>} The emoji items.
  * @private
  */
 goog.ui.emoji.EmojiPalette.prototype.getEmojiArrayFromProperties_ =
