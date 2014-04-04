@@ -104,6 +104,18 @@ See the COPYING file for details.
     assertElementsEquals([-1, -2], v0);
   }
 
+  function testAbs() {
+    var v0 = goog.vec.Vec2.createFloat32FromValues(-1, -2);
+    var v1 = goog.vec.Vec2.createFloat32();
+
+    goog.vec.Vec2.abs(v0, v1);
+    assertElementsEquals([1, 2], v1);
+    assertElementsEquals([-1, -2], v0);
+
+    goog.vec.Vec2.abs(v0, v0);
+    assertElementsEquals([1, 2], v0);
+  }
+
   function testScale() {
     var v0 = goog.vec.Vec2.createFloat32FromArray([1, 2]);
     var v1 = goog.vec.Vec2.createFloat32();
@@ -197,6 +209,32 @@ See the COPYING file for details.
     assertElementsEquals([10, 20], v2);
     goog.vec.Vec2.lerp(v0, v1, .5, v2);
     assertElementsEquals([5.5, 11], v2);
+  }
+
+  function testMax() {
+    var v0 = goog.vec.Vec2.createFloat32FromValues(10, 20);
+    var v1 = goog.vec.Vec2.createFloat32FromValues(5, 25);
+    var v2 = goog.vec.Vec2.createFloat32();
+
+    goog.vec.Vec2.max(v0, v1, v2);
+    assertElementsEquals([10, 25], v2);
+    goog.vec.Vec2.max(v1, v0, v1);
+    assertElementsEquals([10, 25], v1);
+    goog.vec.Vec2.max(v2, 20, v2);
+    assertElementsEquals([20, 25], v2);
+  }
+
+  function testMin() {
+    var v0 = goog.vec.Vec2.createFloat32FromValues(10, 20);
+    var v1 = goog.vec.Vec2.createFloat32FromValues(5, 25);
+    var v2 = goog.vec.Vec2.createFloat32();
+
+    goog.vec.Vec2.min(v0, v1, v2);
+    assertElementsEquals([5, 20], v2);
+    goog.vec.Vec2.min(v1, v0, v1);
+    assertElementsEquals([5, 20], v1);
+    goog.vec.Vec2.min(v2, 10, v2);
+    assertElementsEquals([5, 10], v2);
   }
 
   function testEquals() {

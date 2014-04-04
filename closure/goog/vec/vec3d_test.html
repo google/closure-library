@@ -96,6 +96,18 @@ See the COPYING file for details.
     assertElementsEquals([-1, -2, -3], v0);
   }
 
+  function testAbs() {
+    var v0 = goog.vec.vec3d.setFromArray(goog.vec.vec3d.create(), [-1, -2, -3]);
+    var v1 = goog.vec.vec3d.create();
+
+    goog.vec.vec3d.abs(v0, v1);
+    assertElementsEquals([1, 2, 3], v1);
+    assertElementsEquals([-1, -2, -3], v0);
+
+    goog.vec.vec3d.abs(v0, v0);
+    assertElementsEquals([1, 2, 3], v0);
+  }
+
   function testScale() {
     var v0 = goog.vec.vec3d.setFromArray(goog.vec.vec3d.create(), [1, 2, 3]);
     var v1 = goog.vec.vec3d.create();
@@ -209,6 +221,32 @@ See the COPYING file for details.
     assertElementsEquals([10, 20, 30], v2);
     goog.vec.vec3d.lerp(v0, v1, .5, v2);
     assertElementsEquals([5.5, 11, 16.5], v2);
+  }
+
+  function testMax() {
+    var v0 = goog.vec.vec3d.setFromValues(goog.vec.vec3d.create(), 10, 20, 30);
+    var v1 = goog.vec.vec3d.setFromValues(goog.vec.vec3d.create(), 5, 25, 35);
+    var v2 = goog.vec.vec3d.create();
+
+    goog.vec.vec3d.max(v0, v1, v2);
+    assertElementsEquals([10, 25, 35], v2);
+    goog.vec.vec3d.max(v1, v0, v1);
+    assertElementsEquals([10, 25, 35], v1);
+    goog.vec.vec3d.max(v2, 20, v2);
+    assertElementsEquals([20, 25, 35], v2);
+  }
+
+  function testMin() {
+    var v0 = goog.vec.vec3d.setFromValues(goog.vec.vec3d.create(), 10, 20, 30);
+    var v1 = goog.vec.vec3d.setFromValues(goog.vec.vec3d.create(), 5, 25, 35);
+    var v2 = goog.vec.vec3d.create();
+
+    goog.vec.vec3d.min(v0, v1, v2);
+    assertElementsEquals([5, 20, 30], v2);
+    goog.vec.vec3d.min(v1, v0, v1);
+    assertElementsEquals([5, 20, 30], v1);
+    goog.vec.vec3d.min(v2, 20, v2);
+    assertElementsEquals([5, 20, 20], v2);
   }
 
   function testEquals() {

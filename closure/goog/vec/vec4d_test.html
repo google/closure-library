@@ -85,6 +85,18 @@ See the COPYING file for details.
     assertElementsEquals([-1, -2, -3, -4], v0);
   }
 
+  function testAbs() {
+    var v0 = goog.vec.vec4d.setFromArray(goog.vec.vec4d.create(), [-1, -2, -3, -4]);
+    var v1 = goog.vec.vec4d.create();
+
+    goog.vec.vec4d.abs(v0, v1);
+    assertElementsEquals([1, 2, 3, 4], v1);
+    assertElementsEquals([-1, -2, -3, -4], v0);
+
+    goog.vec.vec4d.abs(v0, v0);
+    assertElementsEquals([1, 2, 3, 4], v0);
+  }
+
   function testScale() {
     var v0 = goog.vec.vec4d.setFromArray(goog.vec.vec4d.create(), [1, 2, 3, 4]);
     var v1 = goog.vec.vec4d.create();
@@ -141,6 +153,32 @@ See the COPYING file for details.
     assertElementsEquals([10, 20, 30, 40], v2);
     goog.vec.vec4d.lerp(v0, v1, .5, v2);
     assertElementsEquals([5.5, 11, 16.5, 22], v2);
+  }
+
+  function testMax() {
+    var v0 = goog.vec.vec4d.setFromValues(goog.vec.vec4d.create(), 10, 20, 30, 40);
+    var v1 = goog.vec.vec4d.setFromValues(goog.vec.vec4d.create(), 5, 25, 35, 30);
+    var v2 = goog.vec.vec4d.create();
+
+    goog.vec.vec4d.max(v0, v1, v2);
+    assertElementsEquals([10, 25, 35, 40], v2);
+    goog.vec.vec4d.max(v1, v0, v1);
+    assertElementsEquals([10, 25, 35, 40], v1);
+    goog.vec.vec4d.max(v2, 20, v2);
+    assertElementsEquals([20, 25, 35, 40], v2);
+  }
+
+  function testMin() {
+    var v0 = goog.vec.vec4d.setFromValues(goog.vec.vec4d.create(), 10, 20, 30, 40);
+    var v1 = goog.vec.vec4d.setFromValues(goog.vec.vec4d.create(), 5, 25, 35, 30);
+    var v2 = goog.vec.vec4d.create();
+
+    goog.vec.vec4d.min(v0, v1, v2);
+    assertElementsEquals([5, 20, 30, 30], v2);
+    goog.vec.vec4d.min(v1, v0, v1);
+    assertElementsEquals([5, 20, 30, 30], v1);
+    goog.vec.vec4d.min(v2, 20, v2);
+    assertElementsEquals([5, 20, 20, 20], v2);
   }
 
   function testEquals() {
