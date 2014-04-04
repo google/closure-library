@@ -15,7 +15,7 @@ Author: attila@google.com (Attila Bodis)
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
-    goog.require('goog.dom.classes');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.events.BrowserEvent.MouseButton');
     goog.require('goog.events.KeyCodes');
@@ -312,49 +312,49 @@ Author: attila@google.com (Attila Bodis)
       control.createDom();
       assertSameElements('Control\'s element must have expected class names',
           ['goog-control', 'foo'],
-          goog.dom.classes.get(control.getElement()));
+          goog.dom.classlist.get(control.getElement()));
 
       control.addClassName('bar');
       assertArrayEquals('Control must have expected extra class names',
           ['foo', 'bar'], control.getExtraClassNames());
       assertSameElements('Control\'s element must have expected class names',
           ['goog-control', 'foo', 'bar'],
-          goog.dom.classes.get(control.getElement()));
+          goog.dom.classlist.get(control.getElement()));
 
       control.addClassName('bar');
       assertArrayEquals('Adding the same class name again must be a no-op',
           ['foo', 'bar'], control.getExtraClassNames());
       assertSameElements('Adding the same class name again must be a no-op',
           ['goog-control', 'foo', 'bar'],
-          goog.dom.classes.get(control.getElement()));
+          goog.dom.classlist.get(control.getElement()));
 
       control.addClassName(null);
       assertArrayEquals('Adding null class name must be a no-op',
           ['foo', 'bar'], control.getExtraClassNames());
       assertSameElements('Adding null class name must be a no-op',
           ['goog-control', 'foo', 'bar'],
-          goog.dom.classes.get(control.getElement()));
+          goog.dom.classlist.get(control.getElement()));
 
       control.removeClassName(null);
       assertArrayEquals('Removing null class name must be a no-op',
           ['foo', 'bar'], control.getExtraClassNames());
       assertSameElements('Removing null class name must be a no-op',
           ['goog-control', 'foo', 'bar'],
-          goog.dom.classes.get(control.getElement()));
+          goog.dom.classlist.get(control.getElement()));
 
       control.removeClassName('foo');
       assertArrayEquals('Control must have expected extra class names',
           ['bar'], control.getExtraClassNames());
       assertSameElements('Control\'s element must have expected class names',
           ['goog-control', 'bar'],
-          goog.dom.classes.get(control.getElement()));
+          goog.dom.classlist.get(control.getElement()));
 
       control.removeClassName('bar');
       assertNull('Control must not have any extra class names',
           control.getExtraClassNames());
       assertSameElements('Control\'s element must have expected class names',
           ['goog-control'],
-          goog.dom.classes.get(control.getElement()));
+          goog.dom.classlist.get(control.getElement()));
     }
 
     /**
@@ -741,10 +741,12 @@ Author: attila@google.com (Attila Bodis)
     function testSetRightToLeft() {
       control.createDom();
       assertFalse('Control\'s element must not have right-to-left class',
-          goog.dom.classes.has(control.getElement(), 'goog-control-rtl'));
+          goog.dom.classlist.contains(control.getElement(),
+              'goog-control-rtl'));
       control.setRightToLeft(true);
       assertTrue('Control\'s element must have right-to-left class',
-          goog.dom.classes.has(control.getElement(), 'goog-control-rtl'));
+          goog.dom.classlist.contains(control.getElement(),
+              'goog-control-rtl'));
       control.render(sandbox);
       assertThrows('Changing the render direction of a control already in ' +
           'the document is an error',
@@ -1412,13 +1414,15 @@ Author: attila@google.com (Attila Bodis)
       assertTrue('Control must be active',
           control.hasState(goog.ui.Component.State.ACTIVE));
       assertTrue('Control must have the active CSS style',
-          goog.dom.classes.has(control.getElement(), 'goog-control-active'));
+          goog.dom.classlist.contains(control.getElement(),
+              'goog-control-active'));
 
       control.setState(goog.ui.Component.State.ACTIVE, true);
       assertTrue('Control must still be active',
           control.hasState(goog.ui.Component.State.ACTIVE));
       assertTrue('Control must still have the active CSS style',
-          goog.dom.classes.has(control.getElement(), 'goog-control-active'));
+          goog.dom.classlist.contains(control.getElement(),
+              'goog-control-active'));
 
       assertTrue('No events must have been dispatched', noEventsDispatched());
     }

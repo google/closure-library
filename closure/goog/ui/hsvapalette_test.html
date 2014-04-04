@@ -15,6 +15,7 @@ See the COPYING file for details.
   <script src="../deps.js"></script>
   <script>
     goog.require('goog.color.alpha');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.math.Rect');
     goog.require('goog.style');
@@ -58,8 +59,8 @@ See the COPYING file for details.
       var customClassPalette =
           new goog.ui.HsvaPalette(null, null, null, customClassName);
       customClassPalette.createDom();
-      assertTrue(goog.dom.classes.has(customClassPalette.getElement(),
-                                      customClassName));
+      assertTrue(goog.dom.classlist.contains(customClassPalette.getElement(),
+          customClassName));
     }
 
     function testSetColor() {
@@ -85,7 +86,7 @@ See the COPYING file for details.
       if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
         assertSameElements('On IE6, the noalpha class must be present',
             ['goog-hsva-palette', 'goog-hsva-palette-noalpha'],
-            goog.dom.classes.get(elem));
+            goog.dom.classlist.get(elem));
       } else {
         assertEquals('The noalpha class must not be present',
            'goog-hsva-palette', elem.className);

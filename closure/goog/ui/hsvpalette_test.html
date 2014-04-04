@@ -19,6 +19,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
   <script src="../deps.js"></script>
   <script>
     goog.require('goog.color');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.math.Rect');
     goog.require('goog.style');
@@ -69,8 +70,8 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
       var customClassPalette =
           new goog.ui.HsvPalette(null, null, customClassName);
       customClassPalette.createDom();
-      assertTrue(goog.dom.classes.has(customClassPalette.getElement(),
-                                      customClassName));
+      assertTrue(goog.dom.classlist.contains(customClassPalette.getElement(),
+          customClassName));
     }
 
     function testCannotDecorate() {
@@ -125,7 +126,7 @@ This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
       if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
         assertSameElements('On IE6, the noalpha class must be present',
             ['goog-hsv-palette', 'goog-hsv-palette-noalpha'],
-            goog.dom.classes.get(elem));
+            goog.dom.classlist.get(elem));
       } else {
         assertEquals('The noalpha class must not be present',
            'goog-hsv-palette', elem.className);

@@ -15,6 +15,7 @@ Author: attila@google.com (Attila Bodis)
   <script src="../base.js"></script>
   <script>
     goog.require('goog.dom');
+    goog.require('goog.dom.classlist');
     goog.require('goog.events');
     goog.require('goog.testing.ExpectedFailures');
     goog.require('goog.testing.events');
@@ -58,7 +59,7 @@ Author: attila@google.com (Attila Bodis)
       assertNotNull('Element must not be null', element);
       assertEquals('Element must be a button', 'BUTTON', element.tagName);
       assertSameElements('Button element must have expected class name',
-          ['goog-button'], goog.dom.classes.get(element));
+          ['goog-button'], goog.dom.classlist.get(element));
       assertFalse('Button element must be enabled', element.disabled);
       assertEquals('Button element must have expected title', 'Hello, world!',
           element.title);
@@ -133,7 +134,7 @@ Author: attila@google.com (Attila Bodis)
       assertFalse('Decorated button must be disabled', button.isEnabled());
       assertSameElements('Decorated button must have expected class names',
           ['goog-button', 'goog-button-disabled'],
-          goog.dom.classes.get(element));
+          goog.dom.classlist.get(element));
       // Expected to fail on IE.
       expectedFailures.expectFailureFor(goog.userAgent.IE);
       try {
