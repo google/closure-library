@@ -37,6 +37,7 @@ goog.require('goog.result.Result');
  * @constructor
  * @extends {goog.async.Deferred}
  * @final
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
 goog.result.DeferredAdaptor = function(result) {
   goog.result.DeferredAdaptor.base(this, 'constructor');

@@ -36,6 +36,7 @@ goog.require('goog.result.Result');
  *
  * @constructor
  * @implements {goog.result.Result}
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
 goog.result.SimpleResult = function() {
   /**
@@ -92,6 +93,7 @@ goog.result.SimpleResult.HandlerEntry_;
  * @constructor
  * @extends {goog.debug.Error}
  * @final
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
 goog.result.SimpleResult.StateError = function() {
   goog.result.SimpleResult.StateError.base(this, 'constructor',

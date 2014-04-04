@@ -32,6 +32,7 @@ goog.require('goog.Thenable');
  *
  * @interface
  * @extends {goog.Thenable}
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
 goog.result.Result = function() {};
 
@@ -53,6 +54,7 @@ goog.result.Result.prototype.wait = function(handler, opt_scope) {};
  * The States this object can be in.
  *
  * @enum {string}
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
 goog.result.Result.State = {
   /** The operation was a success and the value is available. */
@@ -107,6 +109,7 @@ goog.result.Result.prototype.isCanceled = function() {};
  * @constructor
  * @extends {Error}
  * @final
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
 goog.result.Result.CancelError = function() {
   // Note that this does not derive from goog.debug.Error in order to prevent
