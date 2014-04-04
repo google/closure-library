@@ -39,11 +39,9 @@ goog.provide('goog.soy.Renderer');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.html.uncheckedconversions');
 goog.require('goog.soy');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
-goog.require('goog.string.Const');
 
 
 
@@ -244,17 +242,7 @@ goog.soy.Renderer.prototype.renderStrict = function(
 goog.soy.Renderer.prototype.renderSafeHtml = function(
     template, opt_templateData) {
   var result = this.renderStrict(template, opt_templateData);
-  if (result.contentKind !== goog.soy.data.SanitizedContentKind.HTML) {
-    throw Error(
-        'Template rendered was not strict template of kind="html".');
-  } else {
-    return goog.html.uncheckedconversions.
-        safeHtmlFromStringKnownToSatisfyTypeContract(
-            goog.string.Const.from(
-                'Soy strict templates of kind="html" produce ' +
-                    'SafeHtml-contract-compliant values.'),
-            String(result), result.contentDir);
-  }
+  return result.toSafeHtml();
 };
 
 

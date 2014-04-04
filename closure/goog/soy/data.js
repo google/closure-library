@@ -25,7 +25,8 @@ goog.provide('goog.soy.data');
 goog.provide('goog.soy.data.SanitizedContent');
 goog.provide('goog.soy.data.SanitizedContentKind');
 
-goog.require('goog.i18n.bidi.Dir');
+goog.require('goog.html.uncheckedconversions');
+goog.require('goog.string.Const');
 
 
 /**
@@ -139,4 +140,23 @@ goog.soy.data.SanitizedContent.prototype.content;
 /** @override */
 goog.soy.data.SanitizedContent.prototype.toString = function() {
   return this.content;
+};
+
+
+/**
+ * Converts HTML sanitized content to SafeHtml which is used by the rest of
+ * Closure.
+ * @return {!goog.html.SafeHtml}
+ * @throws {Error} when the content kind is not HTML.
+ */
+goog.soy.data.SanitizedContent.prototype.toSafeHtml = function() {
+  if (this.contentKind !== goog.soy.data.SanitizedContentKind.HTML) {
+    throw Error('Sanitized content was not of kind HTML.');
+  }
+  return goog.html.uncheckedconversions.
+      safeHtmlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy SanitizedContent of kind HTML produces ' +
+                  'SafeHtml-contract-compliant value.'),
+          this.toString(), this.contentDir);
 };
