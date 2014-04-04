@@ -267,7 +267,7 @@ goog.editor.Link.prototype.finishLinkCreation = function(field) {
  * @param {string=} opt_target The target.
  * @param {Array.<HTMLAnchorElement>=} opt_extraAnchors Extra anchors created
  *     by the browser when parsing a selection.
- * @return {goog.editor.Link} The link.
+ * @return {!goog.editor.Link} The link.
  */
 goog.editor.Link.createNewLink = function(anchor, url, opt_target,
     opt_extraAnchors) {

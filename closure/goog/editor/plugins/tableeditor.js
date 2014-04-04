@@ -379,7 +379,7 @@ goog.editor.plugins.TableEditor.CellSelection_ =
 /**
  * Returns the EditableTable object of which this selection's cells are a
  * subset.
- * @return {goog.editor.Table?} the table.
+ * @return {!goog.editor.Table} the table.
  */
 goog.editor.plugins.TableEditor.CellSelection_.prototype.getTable =
     function() {
@@ -429,7 +429,7 @@ goog.editor.plugins.TableEditor.CellSelection_.prototype.getLastColumnIndex =
 
 /**
  * Returns the cells in this selection.
- * @return {Array.<Element>} Cells in this selection.
+ * @return {!Array.<Element>} Cells in this selection.
  */
 goog.editor.plugins.TableEditor.CellSelection_.prototype.getCells = function() {
   return this.cells_;

@@ -130,7 +130,7 @@ goog.editor.Table.prototype.refresh = function() {
 /**
  * Returns all child elements of a TR element that are of type TD or TH.
  * @param {Element} tr TR element in which to find children.
- * @return {Array.<Element>} array of child cell elements.
+ * @return {!Array.<Element>} array of child cell elements.
  */
 goog.editor.Table.getChildCellElements = function(tr) {
   var cells = [];
@@ -150,7 +150,7 @@ goog.editor.Table.getChildCellElements = function(tr) {
  * be extended.
  * @param {number=} opt_rowIndex Index at which to insert the row. If
  *     this is omitted the row will be appended to the end of the table.
- * @return {Element} The new row.
+ * @return {!Element} The new row.
  */
 goog.editor.Table.prototype.insertRow = function(opt_rowIndex) {
   var rowIndex = goog.isDefAndNotNull(opt_rowIndex) ?
@@ -196,7 +196,7 @@ goog.editor.Table.prototype.insertRow = function(opt_rowIndex) {
  * @param {number=} opt_colIndex Index at which to insert the column. If
  *     this is omitted the column will be appended to the right side of
  *     the table.
- * @return {Array.<Element>} Array of new cell elements that were created
+ * @return {!Array.<Element>} Array of new cell elements that were created
  *     to populate the new column.
  */
 goog.editor.Table.prototype.insertColumn = function(opt_colIndex) {
@@ -354,7 +354,7 @@ goog.editor.Table.prototype.mergeCells = function(
  * Splits a cell with colspans or rowspans into multiple descrete cells.
  * @param {number} rowIndex y coordinate of the cell to split.
  * @param {number} colIndex x coordinate of the cell to split.
- * @return {Array.<Element>} Array of new cell elements created by splitting
+ * @return {!Array.<Element>} Array of new cell elements created by splitting
  *     the cell.
  */
 // TODO(user): support splitting only horizontally or vertically,
@@ -405,7 +405,7 @@ goog.editor.Table.prototype.insertCellElement = function(
 /**
  * Creates an empty TD element and fill it with some empty content so it will
  * show up with borders even in IE pre-7 or if empty-cells is set to 'hide'
- * @return {Element} a new TD element.
+ * @return {!Element} a new TD element.
  */
 goog.editor.Table.prototype.createEmptyTd = function() {
   // TODO(user): more cross-browser testing to determine best
@@ -526,7 +526,7 @@ goog.editor.Table.DEFAULT_BORDER_COLOR = '#888';
  * @param {number} rows Number of rows in the table.
  * @param {Object=} opt_tableStyle Object containing borderWidth and borderColor
  *    properties, used to set the inital style of the table.
- * @return {Element} a table element.
+ * @return {!Element} a table element.
  */
 goog.editor.Table.createDomTable = function(
     doc, columns, rows, opt_tableStyle) {

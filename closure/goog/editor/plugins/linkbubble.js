@@ -415,7 +415,7 @@ goog.editor.plugins.LinkBubble.prototype.isInvalidUrl = goog.functions.FALSE;
 
 /**
  * Gets the text to display for a link, based on the type of link
- * @return {Object} Returns an object of the form:
+ * @return {!Object} Returns an object of the form:
  *     {linkText: displayTextForLinkTarget, valid: ifTheLinkIsValid}.
  * @private
  */

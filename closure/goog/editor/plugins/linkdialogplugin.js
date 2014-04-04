@@ -276,7 +276,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.getCurrentLink = function() {
  * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
  *     create the dialog.
  * @param {*=} opt_link The target link (should be a goog.editor.Link).
- * @return {goog.ui.editor.LinkDialog} The dialog.
+ * @return {!goog.ui.editor.LinkDialog} The dialog.
  * @override
  * @protected
  */

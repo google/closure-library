@@ -347,7 +347,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.disable = function(field) {
 
 
 /**
- * @return {goog.ui.editor.Bubble} The shared bubble object for the field this
+ * @return {!goog.ui.editor.Bubble} The shared bubble object for the field this
  *     plugin is registered on.  Creates it if necessary.
  * @private
  */

@@ -105,7 +105,7 @@ goog.editor.plugins.EquationEditorPlugin.prototype.createDialog =
  * Populates the context that this plugin runs in.
  * @param {!goog.dom.DomHelper} domHelper The dom helper to be used for the
  *     palette manager.
- * @return {Object} The context that this plugin runs in.
+ * @return {!Object} The context that this plugin runs in.
  * @private
  */
 goog.editor.plugins.EquationEditorPlugin.prototype.populateContext_ =
