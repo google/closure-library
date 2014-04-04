@@ -212,5 +212,14 @@ goog.events.EventType = {
   VISIBILITYCHANGE: 'visibilitychange',
 
   // LocalStorage event.
-  STORAGE: 'storage'
+  STORAGE: 'storage',
+
+  // DOM Level 2 mutation events (deprecated).
+  DOMSUBTREEMODIFIED: 'DOMSubtreeModified',
+  DOMNODEINSERTED: 'DOMNodeInserted',
+  DOMNODEREMOVED: 'DOMNodeRemoved',
+  DOMNODEREMOVEDFROMDOCUMENT: 'DOMNodeRemovedFromDocument',
+  DOMNODEINSERTEDINTODOCUMENT: 'DOMNodeInsertedIntoDocument',
+  DOMATTRMODIFIED: 'DOMAttrModified',
+  DOMCHARACTERDATAMODIFIED: 'DOMCharacterDataModified'
 };
