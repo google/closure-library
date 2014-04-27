@@ -77,7 +77,7 @@ goog.structs.LinkedMap = function(opt_maxCount, opt_cache) {
 
   /**
    * @private {!goog.structs.Map<string,
-   *     goog.structs.LinkedMap.Node_.<string, VALUE>>}
+   *     goog.structs.LinkedMap.Node_<string,VALUE>>}
    */
   this.map_ = new goog.structs.Map();
 
@@ -89,7 +89,7 @@ goog.structs.LinkedMap = function(opt_maxCount, opt_cache) {
 /**
  * Finds a node and updates it to be the most recently used.
  * @param {string} key The key of the node.
- * @return {goog.structs.LinkedMap.Node_} The node or null if not found.
+ * @return {goog.structs.LinkedMap.Node_<string,VALUE>} The node or null if not found.
  * @private
  */
 goog.structs.LinkedMap.prototype.findAndMoveToTop_ = function(key) {
@@ -207,7 +207,7 @@ goog.structs.LinkedMap.prototype.remove = function(key) {
 /**
  * Removes a node from the {@code LinkedMap}. It can be overridden to do
  * further cleanup such as disposing of the node value.
- * @param {!goog.structs.LinkedMap.Node_} node The node to remove.
+ * @param {!goog.structs.LinkedMap.Node_<string,VALUE>} node The node to remove.
  * @protected
  */
 goog.structs.LinkedMap.prototype.removeNode = function(node) {
@@ -394,7 +394,7 @@ goog.structs.LinkedMap.prototype.every = function(f, opt_obj) {
  * the head of the list, otherwise they are appended to the tail. If there is a
  * maximum size, the list will be truncated if necessary.
  *
- * @param {goog.structs.LinkedMap.Node_} node The item to insert.
+ * @param {goog.structs.LinkedMap.Node_<string,VALUE>} node The item to insert.
  * @private
  */
 goog.structs.LinkedMap.prototype.insert_ = function(node) {
@@ -435,7 +435,7 @@ goog.structs.LinkedMap.prototype.truncate_ = function(count) {
 /**
  * Removes the node from the LinkedMap if it is not the head, and returns
  * the node's value.
- * @param {!goog.structs.LinkedMap.Node_} node The item to remove.
+ * @param {!goog.structs.LinkedMap.Node_<string,VALUE>} node The item to remove.
  * @return {VALUE} The value of the popped node.
  * @private
  */
@@ -464,14 +464,14 @@ goog.structs.LinkedMap.Node_ = function(key, value) {
 
 /**
  * The next node in the list.
- * @type {!goog.structs.LinkedMap.Node_}
+ * @type {!goog.structs.LinkedMap.Node_<KEY,VALUE>}
  */
 goog.structs.LinkedMap.Node_.prototype.next;
 
 
 /**
  * The previous node in the list.
- * @type {!goog.structs.LinkedMap.Node_}
+ * @type {!goog.structs.LinkedMap.Node_<KEY,VALUE>}
  */
 goog.structs.LinkedMap.Node_.prototype.prev;
 
