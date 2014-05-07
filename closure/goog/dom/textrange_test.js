@@ -321,3 +321,13 @@ function testGetEndPositionRightToLeft() {
     expectedFailures.handleException(e);
   }
 }
+
+function testCloneRangeDeep() {
+  var range = goog.dom.TextRange.createFromNodeContents(logo);
+  assertFalse(range.isCollapsed());
+
+  var cloned = range.clone();
+  cloned.collapse();
+  assertTrue(cloned.isCollapsed());
+  assertFalse(range.isCollapsed());
+}

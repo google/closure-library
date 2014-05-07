@@ -212,7 +212,8 @@ goog.dom.TextRange.prototype.isReversed_ = false;
  */
 goog.dom.TextRange.prototype.clone = function() {
   var range = new goog.dom.TextRange();
-  range.browserRangeWrapper_ = this.browserRangeWrapper_;
+  range.browserRangeWrapper_ =
+      this.browserRangeWrapper_ && this.browserRangeWrapper_.clone();
   range.startNode_ = this.startNode_;
   range.startOffset_ = this.startOffset_;
   range.endNode_ = this.endNode_;
