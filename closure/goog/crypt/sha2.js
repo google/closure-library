@@ -103,10 +103,10 @@ goog.crypt.Sha2 = function() {
    * member rather than as a local within computeChunk_() as a
    * performance optimization to reduce the number of allocations and
    * reduce garbage collection.
-   * @type {!Array.<number>}
+   * @type {!Uint32Array|!Array.<number>}
    * @private
    */
-  this.w_ = [];
+  this.w_ = goog.global['Uint32Array'] ? new Uint32Array(64) : [];
 
   this.reset();
 };
@@ -124,6 +124,7 @@ goog.crypt.Sha2.prototype.reset = goog.abstractMethod;
  */
 goog.crypt.Sha2.prototype.computeChunk_ = function(chunk) {
   goog.asserts.assert(chunk.length == this.blockSize);
+  var rounds = 64;
 
   // Divide the chunk into 16 32-bit-words.
   var w = this.w_;
@@ -137,27 +138,29 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(chunk) {
     offset = index * 4;
   }
 
-  // Expand to 64 32-bit-words
-  for (var i = 16; i < this.blockSize; i++) {
-    var s0 = ((w[i - 15] >>> 7) | (w[i - 15] << 25)) ^
-             ((w[i - 15] >>> 18) | (w[i - 15] << 14)) ^
-             (w[i - 15] >>> 3);
-    var s1 = ((w[i - 2] >>> 17) | (w[i - 2] << 15)) ^
-             ((w[i - 2] >>> 19) | (w[i - 2] << 13)) ^
-             (w[i - 2] >>> 10);
+  // Extend the w[] array to be the number of rounds.
+  for (var i = 16; i < rounds; i++) {
+    var w_15 = w[i - 15] & 0xffffffff;
+    var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
+             ((w_15 >>> 18) | (w_15 << 14)) ^
+             (w_15 >>> 3);
+    var w_2 = w[i - 2] & 0xffffffff;
+    var s1 = ((w_2 >>> 17) | (w_2 << 15)) ^
+             ((w_2 >>> 19) | (w_2 << 13)) ^
+             (w_2 >>> 10);
     w[i] = (w[i - 16] + s0 + w[i - 7] + s1) & 0xffffffff;
   }
 
-  var a = this.hash[0];
-  var b = this.hash[1];
-  var c = this.hash[2];
-  var d = this.hash[3];
-  var e = this.hash[4];
-  var f = this.hash[5];
-  var g = this.hash[6];
-  var h = this.hash[7];
+  var a = this.hash[0] & 0xffffffff;
+  var b = this.hash[1] & 0xffffffff;
+  var c = this.hash[2] & 0xffffffff;
+  var d = this.hash[3] & 0xffffffff;
+  var e = this.hash[4] & 0xffffffff;
+  var f = this.hash[5] & 0xffffffff;
+  var g = this.hash[6] & 0xffffffff;
+  var h = this.hash[7] & 0xffffffff;
 
-  for (var i = 0; i < this.blockSize; i++) {
+  for (var i = 0; i < rounds; i++) {
     var S0 = ((a >>> 2) | (a << 30)) ^
              ((a >>> 13) | (a << 19)) ^
              ((a >>> 22) | (a << 10));
