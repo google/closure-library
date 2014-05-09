@@ -46,11 +46,27 @@ goog.crypt.stringToByteArray = function(str) {
 /**
  * Turns an array of numbers into the string given by the concatenation of the
  * characters to which the numbers correspond.
- * @param {Array} array Array of numbers representing characters.
+ * @param {Array} bytes Array of numbers representing characters.
  * @return {string} Stringification of the array.
  */
-goog.crypt.byteArrayToString = function(array) {
-  return String.fromCharCode.apply(null, array);
+goog.crypt.byteArrayToString = function(bytes) {
+  var CHUNK_SIZE = 8192;
+
+  // Special-case the simple case for speed's sake.
+  if (bytes.length < CHUNK_SIZE) {
+    return String.fromCharCode.apply(null, bytes);
+  }
+
+  // The remaining logic splits conversion by chunks since
+  // Function#apply() has a maximum parameter count.
+  // See discussion: http://goo.gl/LrWmZ9
+
+  var str = '';
+  for (var i = 0; i < bytes.length; i += CHUNK_SIZE) {
+    var chunk = goog.array.slice(bytes, i, i + CHUNK_SIZE);
+    str += String.fromCharCode.apply(null, chunk);
+  }
+  return str;
 };
 
 

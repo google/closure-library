@@ -16,6 +16,7 @@ goog.provide('goog.cryptTest');
 goog.setTestOnly('goog.cryptTest');
 
 goog.require('goog.crypt');
+goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 
 var UTF8_RANGES_BYTE_ARRAY = [
@@ -149,4 +150,20 @@ function testXorUint8Array() {
       goog.crypt.xorByteArray(
           new Uint8Array([202, 254, 222, 173]),
           new Uint8Array([222, 173, 190, 239])));
+}
+
+
+// Tests a one-megabyte byte array conversion to string.
+// This would break on many JS implementations unless byteArrayToString
+// split the input up.
+// See discussion and bug report: http://goo.gl/LrWmZ9
+function testByteArrayToStringCallStack() {
+  // One megabyte is 2 to the 20th.
+  var count = Math.pow(2, 20);
+  var bytes = [];
+  for (var i = 0; i < count; i++) {
+    bytes.push('A'.charCodeAt(0));
+  }
+  var str = goog.crypt.byteArrayToString(bytes);
+  assertEquals(goog.string.repeat('A', count), str);
 }
