@@ -20,7 +20,6 @@ goog.require('goog.labs.html.Sanitizer');
 goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.labs.html.SanitizerTest');
 
@@ -29,7 +28,7 @@ var JENNYS_PHONE_NUMBER = goog.html.SafeUrl.fromConstant(
     goog.string.Const.from('tel:867-5309'));
 
 
-var sanitizer = !goog.userAgent.IE && new goog.labs.html.Sanitizer()
+var sanitizer = new goog.labs.html.Sanitizer()
     .allowElements(
         'a', 'b', 'i', 'p', 'font', 'hr', 'br', 'span',
         'ol', 'ul', 'li',
@@ -65,10 +64,6 @@ var sanitizer = !goog.userAgent.IE && new goog.labs.html.Sanitizer()
 
 
 function run(input, golden, desc) {
-  // HACK(user): Known failure on IE <= 8.
-  if (goog.userAgent.IE) {
-    return;
-  }
   var actual = sanitizer.sanitize(input);
   assertEquals(desc, golden, actual);
 }

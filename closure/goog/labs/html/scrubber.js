@@ -23,6 +23,7 @@
 
 goog.provide('goog.labs.html.scrubber');
 
+goog.require('goog.array');
 goog.require('goog.dom.tags');
 goog.require('goog.labs.html.attributeRewriterPresubmitWorkaround');
 goog.require('goog.string');
@@ -636,7 +637,7 @@ goog.labs.html.scrubber.pickElementsToClose_ =
         }
       }
     } else {
-      topMost = openElementStack.lastIndexOf(lowerCaseTagName);
+      topMost = goog.array.lastIndexOf(openElementStack, lowerCaseTagName);
     }
     if (topMost >= 0) {
       var blockers = goog.labs.html.scrubber.ALL_SCOPES_ &

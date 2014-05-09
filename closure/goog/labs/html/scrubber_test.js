@@ -19,7 +19,6 @@ goog.require('goog.labs.html.scrubber');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.html.ScrubberTest');
 
@@ -59,10 +58,6 @@ var attrWhitelist = {
 
 
 function run(input, golden, desc) {
-  // HACK(user): Known failure on IE <= 8.
-  if (goog.userAgent.IE) {
-    return;
-  }
   var actual = goog.labs.html.scrubber.scrub(
       tagWhitelist, attrWhitelist, input);
   assertEquals(desc, golden, actual);
