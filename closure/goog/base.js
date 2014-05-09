@@ -88,6 +88,21 @@ goog.global.CLOSURE_DEFINES;
 
 
 /**
+ * Returns true if the specified value is not undefined.
+ * WARNING: Do not use this to test if an object has a property. Use the in
+ * operator instead.
+ *
+ * @param {?} val Variable to test.
+ * @return {boolean} Whether variable is defined.
+ */
+goog.isDef = function(val) {
+  // void 0 always evaluates to undefined and hence we do not need to depend on
+  // the definition of the global variable named 'undefined'.
+  return val !== void 0;
+};
+
+
+/**
  * Builds an object structure for the provided namespace path, ensuring that
  * names that already exist are not overwritten. For example:
  * "a.b.c" -> a = {};a.b={};a.b.c={};
@@ -116,7 +131,7 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
 
   // Parentheses added to eliminate strict JS warning in Firefox.
   for (var part; parts.length && (part = parts.shift());) {
-    if (!parts.length && opt_object !== undefined) {
+    if (!parts.length && goog.isDef(opt_object)) {
       // last part and we have an object; use it
       cur[part] = opt_object;
     } else if (cur[part]) {
@@ -875,19 +890,6 @@ goog.typeOf = function(value) {
     return 'object';
   }
   return s;
-};
-
-
-/**
- * Returns true if the specified value is not undefined.
- * WARNING: Do not use this to test if an object has a property. Use the in
- * operator instead.  Additionally, this function assumes that the global
- * undefined variable has not been redefined.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is defined.
- */
-goog.isDef = function(val) {
-  return val !== undefined;
 };
 
 
