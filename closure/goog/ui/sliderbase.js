@@ -76,7 +76,7 @@ goog.require('goog.ui.RangeModel');
 /**
  * This creates a SliderBase object.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
- * @param {(function(number):string)=} opt_labelFn An optional function mapping
+ * @param {(function(number):?string)=} opt_labelFn An optional function mapping
  *     slider values to a description of the value.
  * @constructor
  * @extends {goog.ui.Component}
@@ -100,7 +100,7 @@ goog.ui.SliderBase = function(opt_domHelper, opt_labelFn) {
 
   /**
    * A function mapping slider values to text description.
-   * @private {?function(number):string}
+   * @private {function(number):?string}
    */
   this.labelFn_ = opt_labelFn || goog.functions.NULL;
 

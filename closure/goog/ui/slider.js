@@ -56,7 +56,7 @@ goog.require('goog.ui.SliderBase');
 /**
  * This creates a slider object.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
- * @param {(function(number):string)=} opt_labelFn An optional function mapping
+ * @param {(function(number):?string)=} opt_labelFn An optional function mapping
  *     slider values to a description of the value.
  * @constructor
  * @extends {goog.ui.SliderBase}
