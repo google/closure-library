@@ -682,6 +682,15 @@ function testGetOwnerDocument() {
   assertEquals(goog.dom.getOwnerDocument(document.documentElement), document);
 }
 
+// Tests the breakages resulting in rollback cl/64715474
+function testGetOwnerDocumentNonNodeInput() {
+  // We should fail on null.
+  assertThrows(function() {
+    goog.dom.getOwnerDocument(null);
+  });
+  assertEquals(document, goog.dom.getOwnerDocument(window));
+}
+
 function testDomHelper() {
   var x = new goog.dom.DomHelper(window.frames['frame'].document);
   assertTrue('Should have some HTML',
