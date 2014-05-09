@@ -34,7 +34,7 @@ class JsCompilerTestCase(unittest.TestCase):
     jscompiler._JavaSupports32BitMode = lambda: False
     args = jscompiler._GetJsCompilerArgs(
         'path/to/jscompiler.jar',
-        (1, 6),
+        (1, 7),
         ['path/to/src1.js', 'path/to/src2.js'],
         ['--test_jvm_flag'],
         ['--test_compiler_flag']
@@ -67,7 +67,7 @@ class JsCompilerTestCase(unittest.TestCase):
     jscompiler._JavaSupports32BitMode = lambda: True
     args = jscompiler._GetJsCompilerArgs(
         'path/to/jscompiler.jar',
-        (1, 6),
+        (1, 7),
         ['path/to/src1.js', 'path/to/src2.js'],
         ['--test_jvm_flag'],
         ['--test_compiler_flag'])
@@ -85,7 +85,7 @@ class JsCompilerTestCase(unittest.TestCase):
     jscompiler._JavaSupports32BitMode = lambda: False
     args = jscompiler._GetJsCompilerArgs(
         'path/to/jscompiler.jar',
-        (1, 6),
+        (1, 7),
         ['path/to/src1.js', 'path/to/src2.js'],
         ['--test_jvm_flag'],
         ['--test_compiler_flag'])
