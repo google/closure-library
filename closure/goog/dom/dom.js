@@ -1508,9 +1508,11 @@ goog.dom.findCommonAncestor = function(var_args) {
  * @return {!Document} The document owning the node.
  */
 goog.dom.getOwnerDocument = function(node) {
+  // TODO(arv): Remove IE5 code.
+  // IE5 uses document instead of ownerDocument
   return /** @type {!Document} */ (
-      node.nodeType == goog.dom.NodeType.DOCUMENT ? node : node.ownerDocument);
-
+      node.nodeType == goog.dom.NodeType.DOCUMENT ? node :
+      node.ownerDocument || node.document);
 };
 
 
