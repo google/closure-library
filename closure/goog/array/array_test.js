@@ -21,6 +21,18 @@ goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
+function testArrayLast() {
+  assertEquals(goog.array.last([1, 2, 3]), 3);
+  assertEquals(goog.array.last([1]), 1);
+  assertUndefined(goog.array.last([]));
+}
+
+function testArrayLastWhenDeleted() {
+  var a = [1, 2, 3];
+  delete a[2];
+  assertUndefined(goog.array.last(a));
+}
+
 function testArrayIndexOf() {
   assertEquals(goog.array.indexOf([0, 1, 2, 3], 1), 1);
   assertEquals(goog.array.indexOf([0, 1, 1, 1], 1), 1);
