@@ -296,7 +296,7 @@ goog.editor.range.rangePreservingNormalize = function(node, range) {
  *
  * @param {goog.dom.AbstractRange} range A range.
  * @param {boolean} atStart True for the start point, false for the end point.
- * @return {goog.editor.range.Point} The end point, expressed as a node
+ * @return {!goog.editor.range.Point} The end point, expressed as a node
  *    and an offset.
  */
 goog.editor.range.getDeepEndPoint = function(range, atStart) {
