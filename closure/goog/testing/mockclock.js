@@ -328,7 +328,7 @@ goog.testing.MockClock.prototype.runFunctionsWithinRange_ = function(
   var adjustedEndTime = endTime - this.timeoutDelay_;
 
   // Repeatedly pop off the last item since the queue is always sorted.
-  while (this.queue_.length &&
+  while (this.queue_ && this.queue_.length &&
       this.queue_[this.queue_.length - 1].runAtMillis <= adjustedEndTime) {
     var timeout = this.queue_.pop();
 
