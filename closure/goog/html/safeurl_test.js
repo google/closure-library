@@ -163,7 +163,7 @@ function testSafeUrlSanitize_percentEncodesUrl() {
 
 
   // Other ASCII characters, printable and non-printable.
-  assertSanitizeEncodesTo('^"`\x00\n\r\x7f', '%5E%22%60%00%0A%0D%7F');
+  assertSanitizeEncodesTo('^"\\`\x00\n\r\x7f', '%5E%22%5C%60%00%0A%0D%7F');
 
   // Codepoints which UTF-8 encode to 2 bytes.
   assertSanitizeEncodesTo('\u0080\u07ff', '%C2%80%DF%BF');
