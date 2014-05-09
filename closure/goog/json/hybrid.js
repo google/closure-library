@@ -35,18 +35,20 @@ goog.require('goog.json');
  * @param {!Object} obj JavaScript object to serialize to JSON.
  * @return {string} Resulting JSON string.
  */
-goog.json.hybrid.stringify = function(obj) {
-  if (goog.global.JSON) {
-    try {
-      return goog.global.JSON.stringify(obj);
-    } catch (e) {
-      // Native serialization failed.  Fall through to retry with
-      // goog.json.serialize.
-    }
-  }
+goog.json.hybrid.stringify = goog.json.USE_NATIVE_JSON ?
+    goog.global['JSON']['stringify'] :
+    function(obj) {
+      if (goog.global.JSON) {
+        try {
+          return goog.global.JSON.stringify(obj);
+        } catch (e) {
+          // Native serialization failed.  Fall through to retry with
+          // goog.json.serialize.
+        }
+      }
 
-  return goog.json.serialize(obj);
-};
+      return goog.json.serialize(obj);
+    };
 
 
 /**
@@ -81,9 +83,11 @@ goog.json.hybrid.parse_ = function(jsonString, fallbackParser) {
  * @param {string} jsonString JSON string to parse.
  * @return {!Object} Resulting JSON object.
  */
-goog.json.hybrid.parse = function(jsonString) {
-  return goog.json.hybrid.parse_(jsonString, goog.json.parse);
-};
+goog.json.hybrid.parse = goog.json.USE_NATIVE_JSON ?
+    goog.global['JSON']['parse'] :
+    function(jsonString) {
+      return goog.json.hybrid.parse_(jsonString, goog.json.parse);
+    };
 
 
 /**
@@ -92,6 +96,8 @@ goog.json.hybrid.parse = function(jsonString) {
  * @param {string} jsonString JSON string to parse.
  * @return {!Object} Resulting JSON object.
  */
-goog.json.hybrid.unsafeParse = function(jsonString) {
-  return goog.json.hybrid.parse_(jsonString, goog.json.unsafeParse);
-};
+goog.json.hybrid.unsafeParse = goog.json.USE_NATIVE_JSON ?
+    goog.global['JSON']['parse'] :
+    function(jsonString) {
+      return goog.json.hybrid.parse_(jsonString, goog.json.unsafeParse);
+    };
