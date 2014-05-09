@@ -94,6 +94,7 @@ function populateObject(obj, numProperties, depth) {
         break;
     }
   }
+  return obj;
 }
 
 
