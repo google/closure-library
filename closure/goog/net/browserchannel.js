@@ -835,7 +835,7 @@ goog.net.BrowserChannel.OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF = 37500;
 /**
  * Returns the browserchannel logger.
  *
- * @return {goog.net.ChannelDebug} The channel debug object.
+ * @return {!goog.net.ChannelDebug} The channel debug object.
  */
 goog.net.BrowserChannel.prototype.getChannelDebug = function() {
   return this.channelDebug_;
@@ -906,7 +906,7 @@ goog.net.BrowserChannel.endExecutionHook_ = function() { };
  * @param {string=} opt_sessionId  The session id for the channel.
  * @param {string|number=} opt_requestId  The request id for this request.
  * @param {number=} opt_retryId  The retry id for this request.
- * @return {goog.net.ChannelRequest} The created channel request.
+ * @return {!goog.net.ChannelRequest} The created channel request.
  */
 goog.net.BrowserChannel.createChannelRequest = function(channel, channelDebug,
     opt_sessionId, opt_requestId, opt_retryId) {
@@ -2335,7 +2335,7 @@ goog.net.BrowserChannel.prototype.getBackChannelUri =
  * @param {?string} hostPrefix The host prefix.
  * @param {string} path The path on the host (may be absolute or relative).
  * @param {number=} opt_overridePort Optional override port.
- * @return {goog.Uri} The data URI.
+ * @return {!goog.Uri} The data URI.
  */
 goog.net.BrowserChannel.prototype.createDataUri =
     function(hostPrefix, path, opt_overridePort) {

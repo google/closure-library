@@ -163,7 +163,7 @@ goog.net.Jsonp.prototype.getRequestTimeout = function() {
  *     opt_callbackParamValue, only the last call will work whenever the
  *     response comes back.
  *
- * @return {Object} A request descriptor that may be used to cancel this
+ * @return {!Object} A request descriptor that may be used to cancel this
  *     transmission, or null, if the message may not be cancelled.
  */
 goog.net.Jsonp.prototype.send = function(opt_payload,
@@ -255,7 +255,7 @@ goog.net.Jsonp.newErrorHandler_ = function(id,
  *
  * @param {string} id The id of the script node.
  * @param {Function} replyCallback The function called on reply.
- * @return {Function} A reply callback function.
+ * @return {!Function} A reply callback function.
  * @private
  */
 goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {

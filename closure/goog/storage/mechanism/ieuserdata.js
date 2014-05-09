@@ -274,7 +274,7 @@ goog.storage.mechanism.IEUserData.prototype.saveNode_ = function() {
 /**
  * Returns the storage node.
  *
- * @return {Element} Storage DOM Element.
+ * @return {!Element} Storage DOM Element.
  * @private
  */
 goog.storage.mechanism.IEUserData.prototype.getNode_ = function() {

@@ -396,7 +396,7 @@ goog.net.xpc.CrossPageChannel.prototype.getTransportName = function() {
 
 
 /**
- * @return {Object} Configuration-object to be used by the peer to
+ * @return {!Object} Configuration-object to be used by the peer to
  *     initialize the channel.
  */
 goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {

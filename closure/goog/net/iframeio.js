@@ -317,7 +317,7 @@ goog.net.IframeIo.getNextName_ = function() {
 /**
  * Gets a static form, one for all instances of IframeIo since IE6 leaks form
  * nodes that are created/removed from the document.
- * @return {HTMLFormElement} The static form.
+ * @return {!HTMLFormElement} The static form.
  * @private
  */
 goog.net.IframeIo.getForm_ = function() {

@@ -64,7 +64,7 @@ goog.net.xpc.Transport.prototype.getType = function() {
 
 /**
  * Returns the window associated with this transport instance.
- * @return {Window} The window to use.
+ * @return {!Window} The window to use.
  */
 goog.net.xpc.Transport.prototype.getWindow = function() {
   return this.domHelper_.getWindow();

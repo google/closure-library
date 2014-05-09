@@ -128,7 +128,7 @@ goog.structs.Trie.prototype.setAll = function(trie) {
  * Traverse along the given path, returns the child node at ending.
  * Returns undefined if node for the path doesn't exist.
  * @param {string} path The path to traverse.
- * @return {goog.structs.Trie.<VALUE>|undefined}
+ * @return {!goog.structs.Trie.<VALUE>|undefined}
  * @private
  */
 goog.structs.Trie.prototype.getChildNode_ = function(path) {

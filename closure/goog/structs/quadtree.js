@@ -161,7 +161,7 @@ goog.structs.QuadTree.prototype.clear = function() {
 
 /**
  * Returns an array containing the coordinates of each point stored in the tree.
- * @return {Array.<goog.math.Coordinate?>} Array of coordinates.
+ * @return {!Array.<goog.math.Coordinate?>} Array of coordinates.
  */
 goog.structs.QuadTree.prototype.getKeys = function() {
   var arr = [];
@@ -174,7 +174,7 @@ goog.structs.QuadTree.prototype.getKeys = function() {
 
 /**
  * Returns an array containing all values stored within the tree.
- * @return {Array.<Object>} The values stored within the tree.
+ * @return {!Array.<Object>} The values stored within the tree.
  */
 goog.structs.QuadTree.prototype.getValues = function() {
   var arr = [];
@@ -188,7 +188,7 @@ goog.structs.QuadTree.prototype.getValues = function() {
 
 /**
  * Clones the quad-tree and returns the new instance.
- * @return {goog.structs.QuadTree} A clone of the tree.
+ * @return {!goog.structs.QuadTree} A clone of the tree.
  */
 goog.structs.QuadTree.prototype.clone = function() {
   var x1 = this.root_.x;

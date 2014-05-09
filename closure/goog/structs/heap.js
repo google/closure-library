@@ -246,7 +246,7 @@ goog.structs.Heap.prototype.getParentIndex_ = function(index) {
 
 /**
  * Gets the values of the heap.
- * @return {Array.<V>} The values in the heap.
+ * @return {!Array.<V>} The values in the heap.
  */
 goog.structs.Heap.prototype.getValues = function() {
   var nodes = this.nodes_;
@@ -261,7 +261,7 @@ goog.structs.Heap.prototype.getValues = function() {
 
 /**
  * Gets the keys of the heap.
- * @return {Array.<K>} The keys in the heap.
+ * @return {!Array.<K>} The keys in the heap.
  */
 goog.structs.Heap.prototype.getKeys = function() {
   var nodes = this.nodes_;
@@ -300,7 +300,7 @@ goog.structs.Heap.prototype.containsKey = function(key) {
 
 /**
  * Clones a heap and returns a new heap
- * @return {goog.structs.Heap} A new goog.structs.Heap with the same key-value
+ * @return {!goog.structs.Heap} A new goog.structs.Heap with the same key-value
  *     pairs.
  */
 goog.structs.Heap.prototype.clone = function() {

@@ -200,7 +200,7 @@ goog.net.xpc.IframePollingTransport.prototype.getPeerFrames_ = function() {
 /**
  * Safely retrieves the peer frame with the specified name.
  * @param {string} frameName The name of the peer frame to retrieve.
- * @return {Window} The peer frame with the specified name.
+ * @return {!Window} The peer frame with the specified name.
  * @private
  */
 goog.net.xpc.IframePollingTransport.prototype.getPeerFrame_ = function(
@@ -251,7 +251,7 @@ goog.net.xpc.IframePollingTransport.prototype.constructSenderFrames_ =
 /**
  * Constructs a sending frame the the given id.
  * @param {string} id The id.
- * @return {Element} The constructed frame.
+ * @return {!Element} The constructed frame.
  * @private
  */
 goog.net.xpc.IframePollingTransport.prototype.constructSenderFrame_ =

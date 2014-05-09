@@ -151,7 +151,7 @@ goog.structs.Queue.prototype.remove = function(obj) {
 
 /**
  * Returns all the values in the queue.
- * @return {Array.<T>} An array of the values in the queue.
+ * @return {!Array.<T>} An array of the values in the queue.
  */
 goog.structs.Queue.prototype.getValues = function() {
   return this.elements_.slice(this.head_, this.tail_);

@@ -182,7 +182,7 @@ goog.net.XhrManager.prototype.getOutstandingRequestIds = function() {
  *     should be retried.
  * @param {goog.net.XhrIo.ResponseType=} opt_responseType The response type of
  *     this request; defaults to goog.net.XhrIo.ResponseType.DEFAULT.
- * @return {goog.net.XhrManager.Request} The queued request object.
+ * @return {!goog.net.XhrManager.Request} The queued request object.
  */
 goog.net.XhrManager.prototype.send = function(
     id,

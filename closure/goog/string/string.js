@@ -918,7 +918,7 @@ goog.string.escapeChar = function(c) {
  * characters in the string. The value for the key is set to true. You can
  * then use goog.object.map or goog.array.map to change the values.
  * @param {string} s The string to build the map from.
- * @return {Object} The map of characters used.
+ * @return {!Object} The map of characters used.
  */
 // TODO(arv): It seems like we should have a generic goog.array.toMap. But do
 //            we want a dependency on goog.array in goog.string?

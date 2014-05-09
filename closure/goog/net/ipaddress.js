@@ -401,7 +401,7 @@ goog.net.Ipv6Address.prototype.toUriString = function() {
  * compressed form.
  * @private
  * @param {!Array.<string>} address An IPv6 address split around '::'.
- * @return {Array.<string>} The expanded version of the IPv6.
+ * @return {!Array.<string>} The expanded version of the IPv6.
  */
 goog.net.Ipv6Address.explode_ = function(address) {
   var basePart = address[0].split(':');
@@ -434,7 +434,7 @@ goog.net.Ipv6Address.explode_ = function(address) {
  * This method is in charge of compressing an expanded IPv6 array of hextets.
  * @private
  * @param {!Array.<string>} hextets The array of hextet.
- * @return {Array.<string>} The compressed version of this array.
+ * @return {!Array.<string>} The compressed version of this array.
  */
 goog.net.Ipv6Address.compress_ = function(hextets) {
   var bestStart = -1;
@@ -477,7 +477,7 @@ goog.net.Ipv6Address.compress_ = function(hextets) {
  * For instance, 1.2.3.4 will be converted to ['0102', '0304'].
  * @private
  * @param {string} quads An IPv4 as a string.
- * @return {Array.<string>} A list of 2 hextets.
+ * @return {!Array.<string>} A list of 2 hextets.
  */
 goog.net.Ipv6Address.dottedQuadtoHextets_ = function(quads) {
   var ip4 = new goog.net.Ipv4Address(quads).toInteger();

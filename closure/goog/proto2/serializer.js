@@ -80,7 +80,7 @@ goog.proto2.Serializer.prototype.getSerializedValue = function(field, value) {
  *     to be created.
  * @param {*} data The data of the message.
  *
- * @return {goog.proto2.Message} The message created.
+ * @return {!goog.proto2.Message} The message created.
  */
 goog.proto2.Serializer.prototype.deserialize = function(descriptor, data) {
   var message = descriptor.createMessageInstance();
