@@ -91,7 +91,7 @@ goog.html.SafeUrl = function() {
  *
  * about:invalid is registered in
  * http://www.w3.org/TR/css3-values/#about-invalid.
- * http://tools.ietf.org/html/rfc6694#section-2.2.1 permits about URLs to
+ * http://tools.ietf.org/html/rfc6694#section-2.1 permits about URLs to
  * contain a fragment, which is not to be considered when determining if an
  * about URL is well-known.
  *
