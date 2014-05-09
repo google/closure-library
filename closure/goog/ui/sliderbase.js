@@ -1069,7 +1069,7 @@ goog.ui.SliderBase.prototype.calculateRangeHighlightPositioning_ = function(
 /**
  * Returns the position to move the handle to for a given value
  * @param {number} val  The value to get the coordinate for.
- * @return {goog.math.Coordinate} Coordinate with either x or y set.
+ * @return {!goog.math.Coordinate} Coordinate with either x or y set.
  */
 goog.ui.SliderBase.prototype.getThumbCoordinateForValue = function(val) {
   var coord = new goog.math.Coordinate;

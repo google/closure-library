@@ -58,7 +58,7 @@ goog.ui.TriStateMenuItemRenderer.CSS_CLASS =
  * extra styling indicating that it should be.
  * @param {goog.ui.Control} item goog.ui.MenuItem to decorate the element.
  * @param {Element} element Element to decorate.
- * @return {Element} Decorated element.
+ * @return {!Element} Decorated element.
  * @override
  */
 goog.ui.TriStateMenuItemRenderer.prototype.decorate = function(item, element) {

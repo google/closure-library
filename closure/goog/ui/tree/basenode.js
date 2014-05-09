@@ -322,7 +322,7 @@ goog.ui.tree.BaseNode.prototype.addChildAt = function(child, index,
  * @param {goog.ui.tree.BaseNode=} opt_before If specified, the new child is
  *    added as a child before this one. If not specified, it's appended to the
  *    end.
- * @return {goog.ui.tree.BaseNode} The added child.
+ * @return {!goog.ui.tree.BaseNode} The added child.
  */
 goog.ui.tree.BaseNode.prototype.add = function(child, opt_before) {
   goog.asserts.assert(!opt_before || opt_before.getParent() == this,
@@ -341,7 +341,7 @@ goog.ui.tree.BaseNode.prototype.add = function(child, opt_before) {
  * @param {goog.ui.Component|string} childNode The child to remove. Must be a
  *     {@link goog.ui.tree.BaseNode}.
  * @param {boolean=} opt_unrender Unused. The child will always be unrendered.
- * @return {goog.ui.tree.BaseNode} The child that was removed.
+ * @return {!goog.ui.tree.BaseNode} The child that was removed.
  * @override
  */
 goog.ui.tree.BaseNode.prototype.removeChild =

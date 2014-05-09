@@ -73,7 +73,7 @@ goog.ui.SubMenuRenderer.CSS_CLASS_SUBMENU_ =
  * and passes the element to {@link goog.ui.SubMenuItemRenderer#addArrow_}
  * to add an child element that can be styled to show an arrow.
  * @param {goog.ui.Control} control goog.ui.SubMenu to render.
- * @return {Element} Root element for the item.
+ * @return {!Element} Root element for the item.
  * @override
  */
 goog.ui.SubMenuRenderer.prototype.createDom = function(control) {
@@ -97,7 +97,7 @@ goog.ui.SubMenuRenderer.prototype.createDom = function(control) {
  * decorate the child element, and passes that menu to subMenu.setMenu.
  * @param {goog.ui.Control} control goog.ui.SubMenu to render.
  * @param {Element} element Element to decorate.
- * @return {Element} Root element for the item.
+ * @return {!Element} Root element for the item.
  * @override
  */
 goog.ui.SubMenuRenderer.prototype.decorate = function(control, element) {

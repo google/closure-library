@@ -582,7 +582,7 @@ goog.ui.SubMenu.prototype.getItems = function() {
 
 /**
  * Gets a reference to the submenu's actual menu.
- * @return {goog.ui.Menu} Reference to the object representing the sub menu.
+ * @return {!goog.ui.Menu} Reference to the object representing the sub menu.
  */
 goog.ui.SubMenu.prototype.getMenu = function() {
   if (!this.subMenu_) {

@@ -585,7 +585,7 @@ goog.ui.RichTextSpellChecker.prototype.restoreNode_ = function(node) {
  * Returns desired element properties for the specified status.
  *
  * @param {goog.spell.SpellCheck.WordStatus} status Status of the word.
- * @return {Object} Properties to apply to word element.
+ * @return {!Object} Properties to apply to word element.
  * @protected
  * @override
  */

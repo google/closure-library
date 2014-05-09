@@ -639,7 +639,7 @@ goog.ui.ServerChart.prototype.setBackgroundFill = function(fill) {
 /**
  * Returns the background fill.
  *
- * @return {Array.<Object>} An array of background fill specifications.
+ * @return {!Array.<Object>} An array of background fill specifications.
  *     If the fill specification string is in an unsupported format, the method
  *    returns an empty array.
  */
@@ -721,7 +721,7 @@ goog.ui.ServerChart.prototype.setSize = function(opt_width, opt_height) {
 /**
  * Returns the chart size.
  *
- * @return {Array.<string>} [Width, Height].
+ * @return {!Array.<string>} [Width, Height].
  */
 goog.ui.ServerChart.prototype.getSize = function() {
   var sizeStr = this.uri_.getParameterValue(goog.ui.ServerChart.UriParam.SIZE);

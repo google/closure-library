@@ -211,7 +211,7 @@ goog.ui.TabPane.prototype.create_ = function() {
  * Creates the HTML node for the clearing div, and associated style in
  * the <HEAD>.
  *
- * @return {Element} Reference to a DOM div node.
+ * @return {!Element} Reference to a DOM div node.
  * @private
  */
 goog.ui.TabPane.prototype.createClear_ = function() {
@@ -239,7 +239,7 @@ goog.ui.TabPane.prototype.disposeInternal = function() {
 
 
 /**
- * @return {Array.<Element>} The element child nodes of tab pane container.
+ * @return {!Array.<Element>} The element child nodes of tab pane container.
  * @private
  */
 goog.ui.TabPane.prototype.getChildNodes_ = function() {
