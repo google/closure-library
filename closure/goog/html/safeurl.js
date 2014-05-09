@@ -46,7 +46,7 @@ goog.require('goog.string.TypedString');
  * without appropriate escaping.
  *
  * Note also that this type's contract does not imply any guarantees regarding
- * the resource the URL refers to.  In particular, SafeUrls are <b>not<b/>
+ * the resource the URL refers to.  In particular, SafeUrls are <b>not</b>
  * safe to use in a context where the referred-to resource is interpreted as
  * trusted code, e.g., as the src of a script tag.
  *
@@ -91,7 +91,7 @@ goog.html.SafeUrl = function() {
  *
  * about:invalid is registered in
  * http://www.w3.org/TR/css3-values/#about-invalid.
- * http://tools.ietf.org/html/rfc6694#section-2.1 permits about URLs to
+ * http://tools.ietf.org/html/rfc6694#section-2.2.1 permits about URLs to
  * contain a fragment, which is not to be considered when determining if an
  * about URL is well-known.
  *
