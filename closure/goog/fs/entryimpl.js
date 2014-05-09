@@ -333,7 +333,7 @@ goog.fs.DirectoryEntryImpl.prototype.removeRecursively = function() {
  *
  * @param {goog.fs.DirectoryEntry.Behavior=} opt_behavior The behavior for
  *     existing files.
- * @return {Object.<boolean>} The options object expected by the File API.
+ * @return {!Object.<boolean>} The options object expected by the File API.
  * @private
  */
 goog.fs.DirectoryEntryImpl.prototype.getOptions_ = function(opt_behavior) {

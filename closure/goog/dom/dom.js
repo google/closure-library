@@ -618,7 +618,7 @@ goog.dom.getDocumentScrollElement = function() {
 /**
  * Helper for {@code getDocumentScrollElement}.
  * @param {!Document} doc The document to get the scroll element for.
- * @return {Element} Scrolling element.
+ * @return {!Element} Scrolling element.
  * @private
  */
 goog.dom.getDocumentScrollElement_ = function(doc) {

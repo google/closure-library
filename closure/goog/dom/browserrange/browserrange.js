@@ -56,7 +56,7 @@ goog.dom.browserrange.Error = {
 /**
  * Static method that returns the proper type of browser range.
  * @param {Range|TextRange} range A browser range object.
- * @return {goog.dom.browserrange.AbstractRange} A wrapper object.
+ * @return {!goog.dom.browserrange.AbstractRange} A wrapper object.
  */
 goog.dom.browserrange.createRange = function(range) {
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {

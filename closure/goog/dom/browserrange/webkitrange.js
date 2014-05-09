@@ -47,7 +47,7 @@ goog.inherits(goog.dom.browserrange.WebKitRange,
 /**
  * Creates a range object that selects the given node's text.
  * @param {Node} node The node to select.
- * @return {goog.dom.browserrange.WebKitRange} A WebKit range wrapper object.
+ * @return {!goog.dom.browserrange.WebKitRange} A WebKit range wrapper object.
  */
 goog.dom.browserrange.WebKitRange.createFromNodeContents = function(node) {
   return new goog.dom.browserrange.WebKitRange(
@@ -61,7 +61,7 @@ goog.dom.browserrange.WebKitRange.createFromNodeContents = function(node) {
  * @param {number} startOffset The offset within the start node.
  * @param {Node} endNode The node to end with.
  * @param {number} endOffset The offset within the end node.
- * @return {goog.dom.browserrange.WebKitRange} A wrapper object.
+ * @return {!goog.dom.browserrange.WebKitRange} A wrapper object.
  */
 goog.dom.browserrange.WebKitRange.createFromNodes = function(startNode,
     startOffset, endNode, endOffset) {

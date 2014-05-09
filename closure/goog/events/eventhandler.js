@@ -344,7 +344,7 @@ goog.events.EventHandler.prototype.listenWithWrapperAndScope = function(
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
  * @param {Object=} opt_scope Element in whose scope to call the listener.
- * @return {goog.events.EventHandler} This object, allowing for chaining of
+ * @return {!goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
  * @private
  */
@@ -419,7 +419,7 @@ goog.events.EventHandler.prototype.unlisten = function(src, type, opt_fn,
  *     whether the listener is fired during the capture or bubble phase of the
  *     event.
  * @param {Object=} opt_scope Element in whose scope to call the listener.
- * @return {goog.events.EventHandler} This object, allowing for chaining of
+ * @return {!goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
  */
 goog.events.EventHandler.prototype.unlistenWithWrapper = function(src, wrapper,

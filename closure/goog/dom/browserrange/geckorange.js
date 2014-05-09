@@ -44,7 +44,7 @@ goog.inherits(goog.dom.browserrange.GeckoRange, goog.dom.browserrange.W3cRange);
 /**
  * Creates a range object that selects the given node's text.
  * @param {Node} node The node to select.
- * @return {goog.dom.browserrange.GeckoRange} A Gecko range wrapper object.
+ * @return {!goog.dom.browserrange.GeckoRange} A Gecko range wrapper object.
  */
 goog.dom.browserrange.GeckoRange.createFromNodeContents = function(node) {
   return new goog.dom.browserrange.GeckoRange(
@@ -58,7 +58,7 @@ goog.dom.browserrange.GeckoRange.createFromNodeContents = function(node) {
  * @param {number} startOffset The offset within the node to start.
  * @param {Node} endNode The node to end with.
  * @param {number} endOffset The offset within the node to end.
- * @return {goog.dom.browserrange.GeckoRange} A wrapper object.
+ * @return {!goog.dom.browserrange.GeckoRange} A wrapper object.
  */
 goog.dom.browserrange.GeckoRange.createFromNodes = function(startNode,
     startOffset, endNode, endOffset) {

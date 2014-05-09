@@ -234,7 +234,7 @@ goog.dom.TextRangeIterator.prototype.copyFrom = function(other) {
 
 
 /**
- * @return {goog.dom.TextRangeIterator} An identical iterator.
+ * @return {!goog.dom.TextRangeIterator} An identical iterator.
  * @override
  */
 goog.dom.TextRangeIterator.prototype.clone = function() {

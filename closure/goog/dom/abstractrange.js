@@ -157,7 +157,7 @@ goog.dom.AbstractRange.prototype.getTextRange = goog.abstractMethod;
 /**
  * Gets an array of all text ranges this range is comprised of.  For non-multi
  * ranges, returns a single element array containing this.
- * @return {Array.<goog.dom.TextRange>} Array of text ranges.
+ * @return {!Array.<goog.dom.TextRange>} Array of text ranges.
  */
 goog.dom.AbstractRange.prototype.getTextRanges = function() {
   var output = [];
@@ -276,7 +276,7 @@ goog.dom.AbstractRange.prototype.isReversed = function() {
 
 
 /**
- * @return {Document} The document this selection is a part of.
+ * @return {!Document} The document this selection is a part of.
  */
 goog.dom.AbstractRange.prototype.getDocument = function() {
   // Using start node in IE was crashing the browser in some cases so use
@@ -289,7 +289,7 @@ goog.dom.AbstractRange.prototype.getDocument = function() {
 
 
 /**
- * @return {Window} The window this selection is a part of.
+ * @return {!Window} The window this selection is a part of.
  */
 goog.dom.AbstractRange.prototype.getWindow = function() {
   return goog.dom.getWindow(this.getDocument());

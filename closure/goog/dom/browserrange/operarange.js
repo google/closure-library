@@ -43,7 +43,7 @@ goog.inherits(goog.dom.browserrange.OperaRange, goog.dom.browserrange.W3cRange);
 /**
  * Creates a range object that selects the given node's text.
  * @param {Node} node The node to select.
- * @return {goog.dom.browserrange.OperaRange} A Opera range wrapper object.
+ * @return {!goog.dom.browserrange.OperaRange} A Opera range wrapper object.
  */
 goog.dom.browserrange.OperaRange.createFromNodeContents = function(node) {
   return new goog.dom.browserrange.OperaRange(
@@ -57,7 +57,7 @@ goog.dom.browserrange.OperaRange.createFromNodeContents = function(node) {
  * @param {number} startOffset The offset within the node to start.
  * @param {Node} endNode The node to end with.
  * @param {number} endOffset The offset within the node to end.
- * @return {goog.dom.browserrange.OperaRange} A wrapper object.
+ * @return {!goog.dom.browserrange.OperaRange} A wrapper object.
  */
 goog.dom.browserrange.OperaRange.createFromNodes = function(startNode,
     startOffset, endNode, endOffset) {

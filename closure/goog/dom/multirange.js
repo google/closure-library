@@ -77,7 +77,7 @@ goog.inherits(goog.dom.MultiRange, goog.dom.AbstractMultiRange);
  * Creates a new range wrapper from the given browser selection object.  Do not
  * use this method directly - please use goog.dom.Range.createFrom* instead.
  * @param {Selection} selection The browser selection object.
- * @return {goog.dom.MultiRange} A range wrapper object.
+ * @return {!goog.dom.MultiRange} A range wrapper object.
  */
 goog.dom.MultiRange.createFromBrowserSelection = function(selection) {
   var range = new goog.dom.MultiRange();
@@ -92,7 +92,7 @@ goog.dom.MultiRange.createFromBrowserSelection = function(selection) {
  * Creates a new range wrapper from the given browser ranges.  Do not
  * use this method directly - please use goog.dom.Range.createFrom* instead.
  * @param {Array.<Range>} browserRanges The browser ranges.
- * @return {goog.dom.MultiRange} A range wrapper object.
+ * @return {!goog.dom.MultiRange} A range wrapper object.
  */
 goog.dom.MultiRange.createFromBrowserRanges = function(browserRanges) {
   var range = new goog.dom.MultiRange();
@@ -105,7 +105,7 @@ goog.dom.MultiRange.createFromBrowserRanges = function(browserRanges) {
  * Creates a new range wrapper from the given goog.dom.TextRange objects.  Do
  * not use this method directly - please use goog.dom.Range.createFrom* instead.
  * @param {Array.<goog.dom.TextRange>} textRanges The text range objects.
- * @return {goog.dom.MultiRange} A range wrapper object.
+ * @return {!goog.dom.MultiRange} A range wrapper object.
  */
 goog.dom.MultiRange.createFromTextRanges = function(textRanges) {
   var range = new goog.dom.MultiRange();
@@ -204,7 +204,7 @@ goog.dom.MultiRange.prototype.getContainer = function() {
 
 
 /**
- * @return {Array.<goog.dom.TextRange>} An array of sub-ranges, sorted by start
+ * @return {!Array.<goog.dom.TextRange>} An array of sub-ranges, sorted by start
  *     point.
  */
 goog.dom.MultiRange.prototype.getSortedRanges = function() {
@@ -511,7 +511,7 @@ goog.dom.MultiRangeIterator.prototype.copyFrom = function(other) {
 
 
 /**
- * @return {goog.dom.MultiRangeIterator} An identical iterator.
+ * @return {!goog.dom.MultiRangeIterator} An identical iterator.
  * @override
  */
 goog.dom.MultiRangeIterator.prototype.clone = function() {

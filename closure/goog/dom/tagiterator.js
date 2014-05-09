@@ -207,7 +207,7 @@ goog.dom.TagIterator.prototype.copyFrom = function(other) {
 
 
 /**
- * @return {goog.dom.TagIterator} A copy of this iterator.
+ * @return {!goog.dom.TagIterator} A copy of this iterator.
  */
 goog.dom.TagIterator.prototype.clone = function() {
   return new goog.dom.TagIterator(this.node, this.reversed,

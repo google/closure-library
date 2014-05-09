@@ -55,7 +55,7 @@ goog.format.HtmlPrettyPrinter.instance_ = null;
 
 /**
  * Singleton lazy initializer.
- * @return {goog.format.HtmlPrettyPrinter} Singleton.
+ * @return {!goog.format.HtmlPrettyPrinter} Singleton.
  * @private
  */
 goog.format.HtmlPrettyPrinter.getInstance_ = function() {

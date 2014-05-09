@@ -182,7 +182,7 @@ goog.dom.SavedCaretRange.prototype.disposeInternal = function() {
  * Creates a caret element.
  * @param {boolean} start If true, creates the start caret. Otherwise,
  *     creates the end caret.
- * @return {Element} The new caret element.
+ * @return {!Element} The new caret element.
  * @private
  */
 goog.dom.SavedCaretRange.prototype.createCaret_ = function(start) {

@@ -202,7 +202,7 @@ goog.events.InputHandler.prototype.cancelTimerIfSet_ = function() {
 /**
  * Creates an input event from the browser event.
  * @param {goog.events.BrowserEvent} be A browser event.
- * @return {goog.events.BrowserEvent} An input event.
+ * @return {!goog.events.BrowserEvent} An input event.
  * @private
  */
 goog.events.InputHandler.prototype.createInputEvent_ = function(be) {

@@ -276,7 +276,7 @@ goog.events.listen_ = function(
 
 /**
  * Helper function for returning a proxy function.
- * @return {Function} A new or reused function object.
+ * @return {!Function} A new or reused function object.
  */
 goog.events.getProxy = function() {
   var proxyCallbackFunction = goog.events.handleBrowserEvent_;
