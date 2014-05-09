@@ -187,10 +187,10 @@ goog.ui.media.FlashObject.FLASH_CSS_CLASS =
 
 
 /**
- * Template for the object tag for IE.
+ * Template for the object tag for IE prior to version 11.
  *
- * @type {string}
- * @private
+ * @private {string}
+ * @const
  */
 goog.ui.media.FlashObject.IE_HTML_ =
     '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"' +
@@ -210,21 +210,21 @@ goog.ui.media.FlashObject.IE_HTML_ =
 
 
 /**
- * Template for the wmode param for IE.
+ * Template for the wmode param for IE prior to version 11.
  *
- * @type {string}
- * @private
+ * @private {string}
+ * @const
  */
 goog.ui.media.FlashObject.IE_WMODE_PARAMS_ = '<param name="wmode" value="%s"/>';
 
 
 /**
- * Template for the embed tag for FF.
+ * Embed tag template for most browsers.
  *
- * @type {string}
- * @private
+ * @private {string}
+ * @const
  */
-goog.ui.media.FlashObject.FF_HTML_ =
+goog.ui.media.FlashObject.EMBED_HTML_ =
     '<embed quality="high"' +
     ' id="%s"' +
     ' name="%s"' +
@@ -242,12 +242,12 @@ goog.ui.media.FlashObject.FF_HTML_ =
 
 
 /**
- * Template for the wmode param for Firefox.
+ * Template for the wmode param for most browsers.
  *
- * @type {string}
- * @private
+ * @private {string}
+ * @const
  */
-goog.ui.media.FlashObject.FF_WMODE_PARAMS_ = 'wmode=%s';
+goog.ui.media.FlashObject.WMODE_PARAMS_ = 'wmode=%s';
 
 
 /**
@@ -556,12 +556,13 @@ goog.ui.media.FlashObject.prototype.createDom = function() {
  * @private
  */
 goog.ui.media.FlashObject.prototype.generateSwfTag_ = function() {
-  var template = goog.userAgent.IE ? goog.ui.media.FlashObject.IE_HTML_ :
-      goog.ui.media.FlashObject.FF_HTML_;
+  var template = goog.ui.media.FlashObject.EMBED_HTML_;
+  var params = goog.ui.media.FlashObject.WMODE_PARAMS_;
 
-  var params = goog.userAgent.IE ? goog.ui.media.FlashObject.IE_WMODE_PARAMS_ :
-      goog.ui.media.FlashObject.FF_WMODE_PARAMS_;
-
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(11)) {
+    template = goog.ui.media.FlashObject.IE_HTML_;
+    params = goog.ui.media.FlashObject.IE_WMODE_PARAMS_;
+  }
   params = goog.string.subs(params, this.wmode_);
 
   var keys = this.flashVars_.getKeys();
