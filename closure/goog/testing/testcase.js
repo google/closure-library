@@ -161,7 +161,7 @@ goog.testing.TestCase.prototype.getName = function() {
  * potentially hurting the Selenium test harness.
  * @type {number}
  */
-goog.testing.TestCase.MAX_RUN_TIME = 200;
+goog.testing.TestCase.maxRunTime = 200;
 
 
 /**
@@ -258,7 +258,7 @@ goog.testing.TestCase.prototype.startTime_ = 0;
 
 /**
  * Time since the last batch of tests was started, if batchTime exceeds
- * {@link #MAX_RUN_TIME} a timeout will be used to stop the tests blocking the
+ * {@link #maxRunTime} a timeout will be used to stop the tests blocking the
  * browser and a new batch will be started.
  * @type {number}
  * @private
@@ -814,7 +814,7 @@ goog.testing.TestCase.prototype.maybeFailTestEarly = function(testCase) {
 
 /**
  * Cycles through the tests, breaking out using a setTimeout if the execution
- * time has execeeded {@link #MAX_RUN_TIME}.
+ * time has execeeded {@link #maxRunTime}.
  */
 goog.testing.TestCase.prototype.cycleTests = function() {
   this.saveMessage('Start');
@@ -854,7 +854,7 @@ goog.testing.TestCase.prototype.cycleTests = function() {
     // If the max run time is exceeded call this function again async so as not
     // to block the browser.
     if (this.currentTestPointer_ < this.tests_.length &&
-        this.now() - this.batchTime_ > goog.testing.TestCase.MAX_RUN_TIME) {
+        this.now() - this.batchTime_ > goog.testing.TestCase.maxRunTime) {
       this.saveMessage('Breaking async');
       this.timeout(goog.bind(this.cycleTests, this), 0);
       return;
