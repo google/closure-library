@@ -1411,6 +1411,16 @@ function testGetFontFamily() {
   assertEquals('An element with nested content should be unaffected.',
                'Arial',
                tmpFont);
+  // IE raises an 'Invalid Argument' error when using the moveToElementText
+  // method from the TextRange object with an element that is not attached to
+  // a document.
+  var element = goog.dom.createDom('span',
+      {style: 'font-family:Times,sans-serif;'}, 'some text');
+  tmpFont = goog.style.getFontFamily(element);
+  assertEquals('Font should be correctly retrieved for element not attached' +
+               ' to a document',
+               'Times',
+               tmpFont);
 }
 
 function testGetFontSize() {

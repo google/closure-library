@@ -1843,7 +1843,9 @@ goog.style.getBorderBox = function(element) {
 goog.style.getFontFamily = function(el) {
   var doc = goog.dom.getOwnerDocument(el);
   var font = '';
-  if (doc.body.createTextRange) {
+  // The moveToElementText method from the TextRange only works if the element
+  // is attached to the owner document.
+  if (doc.body.createTextRange && goog.dom.contains(doc, el)) {
     var range = doc.body.createTextRange();
     range.moveToElementText(el);
     /** @preserveTry */
