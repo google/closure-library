@@ -218,6 +218,18 @@ function testSafeHtmlConcat() {
 }
 
 
+function testHtmlEscapePreservingNewlines() {
+  assertSameHtml('a<br>c',
+      goog.html.SafeHtml.htmlEscapePreservingNewlines('a\nc'));
+  assertSameHtml('&lt;<br>',
+      goog.html.SafeHtml.htmlEscapePreservingNewlines('<\n'));
+  assertSameHtml('<br>',
+      goog.html.SafeHtml.htmlEscapePreservingNewlines('\r\n'));
+  assertSameHtml('<br>', goog.html.SafeHtml.htmlEscapePreservingNewlines('\r'));
+  assertSameHtml('', goog.html.SafeHtml.htmlEscapePreservingNewlines(''));
+}
+
+
 function assertSameHtml(expected, html) {
   assertEquals(expected, goog.html.SafeHtml.unwrap(html));
 }

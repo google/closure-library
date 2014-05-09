@@ -227,6 +227,19 @@ goog.html.SafeHtml.htmlEscape = function(text) {
 
 
 /**
+ * Returns HTML-escaped text as a SafeHtml object with newlines changed to <br>.
+ * @param {!goog.html.SafeHtml.StringLike_} text The string to escape.
+ * @return {!goog.html.SafeHtml} The escaped string, wrapped as a SafeHtml.
+ */
+goog.html.SafeHtml.htmlEscapePreservingNewlines = function(text) {
+  var html = goog.html.SafeHtml.htmlEscape(text);
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+      goog.string.newLineToBr(goog.html.SafeHtml.unwrap(html)),
+      html.getDirection());
+};
+
+
+/**
  * Coerces an arbitrary object into a SafeHtml object.
  *
  * If {@code textOrHtml} is already of type {@code goog.html.SafeHtml}, the same
