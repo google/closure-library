@@ -140,7 +140,7 @@ goog.editor.plugins.AbstractBubblePlugin.setBubbleFactory = function(
 
 /**
  * Map from field id to shared bubble object.
- * @type {Object.<goog.ui.editor.Bubble>}
+ * @type {!Object.<goog.ui.editor.Bubble>}
  * @private
  */
 goog.editor.plugins.AbstractBubblePlugin.bubbleMap_ = {};
@@ -209,6 +209,16 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.enableKeyboardNavigation =
 goog.editor.plugins.AbstractBubblePlugin.prototype.setBubbleParent = function(
     bubbleParent) {
   this.bubbleParent_ = bubbleParent;
+};
+
+
+/**
+ * Returns the bubble map.  Subclasses may override to use a separate map.
+ * @return {!Object.<goog.ui.editor.Bubble>}
+ * @protected
+ */
+goog.editor.plugins.AbstractBubblePlugin.prototype.getBubbleMap = function() {
+  return goog.editor.plugins.AbstractBubblePlugin.bubbleMap_;
 };
 
 
@@ -337,10 +347,11 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.disable = function(field) {
   // because the next time the field is made editable again it may be in
   // a different document / iframe.
   if (field.isUneditable()) {
-    var bubble = goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[field.id];
+    var bubbleMap = this.getBubbleMap();
+    var bubble = bubbleMap[field.id];
     if (bubble) {
       bubble.dispose();
-      delete goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[field.id];
+      delete bubbleMap[field.id];
     }
   }
 };
@@ -357,15 +368,14 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.getSharedBubble_ =
       this.getFieldObject().getAppWindow().document.body);
   this.dom_ = goog.dom.getDomHelper(bubbleParent);
 
-  var bubble = goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[
-      this.getFieldObject().id];
+  var bubbleMap = this.getBubbleMap();
+  var bubble = bubbleMap[this.getFieldObject().id];
   if (!bubble) {
     var factory = this.bubbleFactory_ ||
         goog.editor.plugins.AbstractBubblePlugin.globalBubbleFactory_;
     bubble = factory.call(null, bubbleParent,
         this.getFieldObject().getBaseZindex());
-    goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[
-        this.getFieldObject().id] = bubble;
+    bubbleMap[this.getFieldObject().id] = bubble;
   }
   return bubble;
 };
