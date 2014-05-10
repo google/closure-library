@@ -207,7 +207,7 @@ goog.proto2.FieldDescriptor.prototype.getDefaultValue = function() {
         this.defaultValue_ = '';
       }
     } else {
-      this.defaultValue_ = new nativeType;
+      return new nativeType;
     }
   }
 

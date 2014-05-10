@@ -112,7 +112,7 @@ function testOptionalField() {
 
 function testContaingType() {
   var MessageType = function() {
-    goog.base(this);
+    MessageType.base(this, 'constructor');
   };
   goog.inherits(MessageType, goog.proto2.Message);
 

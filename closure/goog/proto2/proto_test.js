@@ -688,11 +688,10 @@ function testReflection() {
       message.arrayOf(repeatedInt64)[1]);
 }
 
-function testDefaultValuesForMessages_actualBehavior() {
+function testDefaultValuesForMessages() {
   var message = new proto2.TestDefaultParent();
-  // The default child message is shared between all TestDefaultParent messges.
   // Ideally this object would be immutable, but the current API does not
-  // enforce that behavior.
+  // enforce that behavior, so get**OrDefault returns a new instance every time.
   var child = message.getChildOrDefault();
   child.setFoo(false);
   // Changing the value returned by get**OrDefault does not actually change
@@ -703,43 +702,11 @@ function testDefaultValuesForMessages_actualBehavior() {
   var message2 = new proto2.TestDefaultParent();
   var child2 = message2.getChildOrDefault();
   assertNull(message2.getChild());
-  // The parent message returns the same default object
-  assertEquals(child, child2);
-  // You've changed the value of the underlying default message
-  // So changes will be reflected.
-  assertTrue(child2.hasFoo());
-  assertFalse(child2.getFooOrDefault());
-}
 
-function testDefaultValues_bestPractice() {
-  var message = new proto2.TestDefaultParent();
-  // If you're unsure whether or not a message field has
-  // been set this is the best way to get the message.
-  var child = message.hasChild() ? message.getChild() :
-      new proto2.TestDefaultChild();
-  child.setFoo(false);
-  assertFalse(message.hasChild());
-  assertNull(message.getChild());
-  message.setChild(child);
-  assertFalse(message.getChildOrDefault().getFoo());
-
-  var message2 = new proto2.TestDefaultParent();
-  var child2 = message2.getChildOrDefault();
+  // The parent message returns a different object for the default.
   assertNotEquals(child, child2);
+
+  // You've only changed the value of child, so child2 should be unaffected.
+  assertFalse(child2.hasFoo());
   assertTrue(child2.getFooOrDefault());
-}
-
-function testDefaultValuesForMessages_worstPractice() {
-  var message = new proto2.TestDefaultParent();
-  var child = message.getChildOrDefault();
-
-  // This is a terrible idea
-  message.setChild(child);
-  message.getChild().setFoo(false);
-  // Because changes to this message now sync across all default messages
-  var message2 = new proto2.TestDefaultParent();
-  assertFalse(message2.getChildOrDefault().getFooOrDefault());
-  message.getChild().setFoo(true);
-  assertTrue(message2.getChildOrDefault().getFooOrDefault());
-  assertEquals(message.getChild(), message2.getChildOrDefault());
 }
