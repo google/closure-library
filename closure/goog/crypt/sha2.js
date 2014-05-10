@@ -140,56 +140,68 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(chunk) {
 
   // Extend the w[] array to be the number of rounds.
   for (var i = 16; i < rounds; i++) {
-    var w_15 = w[i - 15] & 0xffffffff;
+    var w_15 = w[i - 15] | 0;
     var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
              ((w_15 >>> 18) | (w_15 << 14)) ^
              (w_15 >>> 3);
-    var w_2 = w[i - 2] & 0xffffffff;
+    var w_2 = w[i - 2] | 0;
     var s1 = ((w_2 >>> 17) | (w_2 << 15)) ^
              ((w_2 >>> 19) | (w_2 << 13)) ^
              (w_2 >>> 10);
-    w[i] = (w[i - 16] + s0 + w[i - 7] + s1) & 0xffffffff;
+
+    // As a performance optimization, construct the sum a pair at a time
+    // with casting to integer (bitwise OR) to eliminate unnecessary
+    // double<->integer conversions.
+    var partialSum1 = ((w[i - 16] | 0) + s0) | 0;
+    var partialSum2 = ((w[i - 7] | 0) + s1) | 0;
+    w[i] = (partialSum1 + partialSum2) | 0;
   }
 
-  var a = this.hash[0] & 0xffffffff;
-  var b = this.hash[1] & 0xffffffff;
-  var c = this.hash[2] & 0xffffffff;
-  var d = this.hash[3] & 0xffffffff;
-  var e = this.hash[4] & 0xffffffff;
-  var f = this.hash[5] & 0xffffffff;
-  var g = this.hash[6] & 0xffffffff;
-  var h = this.hash[7] & 0xffffffff;
-
+  var a = this.hash[0] | 0;
+  var b = this.hash[1] | 0;
+  var c = this.hash[2] | 0;
+  var d = this.hash[3] | 0;
+  var e = this.hash[4] | 0;
+  var f = this.hash[5] | 0;
+  var g = this.hash[6] | 0;
+  var h = this.hash[7] | 0;
   for (var i = 0; i < rounds; i++) {
     var S0 = ((a >>> 2) | (a << 30)) ^
              ((a >>> 13) | (a << 19)) ^
              ((a >>> 22) | (a << 10));
     var maj = ((a & b) ^ (a & c) ^ (b & c));
-    var t2 = (S0 + maj) & 0xffffffff;
+    var t2 = (S0 + maj) | 0;
     var S1 = ((e >>> 6) | (e << 26)) ^
              ((e >>> 11) | (e << 21)) ^
              ((e >>> 25) | (e << 7));
     var ch = ((e & f) ^ ((~ e) & g));
-    var t1 = (h + S1 + ch + goog.crypt.Sha2.K_[i] + w[i]) & 0xffffffff;
+
+    // As a performance optimization, construct the sum a pair at a time
+    // with casting to integer (bitwise OR) to eliminate unnecessary
+    // double<->integer conversions.
+    var partialSum1 = (h + S1) | 0;
+    var partialSum2 = (ch + (goog.crypt.Sha2.K_[i] | 0)) | 0;
+    var partialSum3 = (partialSum2 + (w[i] | 0)) | 0;
+    var t1 = (partialSum1 + partialSum3) | 0;
 
     h = g;
     g = f;
     f = e;
-    e = (d + t1) & 0xffffffff;
+    e = (d + t1) | 0;
     d = c;
     c = b;
     b = a;
-    a = (t1 + t2) & 0xffffffff;
+    a = (t1 + t2) | 0;
   }
 
-  this.hash[0] = (this.hash[0] + a) & 0xffffffff;
-  this.hash[1] = (this.hash[1] + b) & 0xffffffff;
-  this.hash[2] = (this.hash[2] + c) & 0xffffffff;
-  this.hash[3] = (this.hash[3] + d) & 0xffffffff;
-  this.hash[4] = (this.hash[4] + e) & 0xffffffff;
-  this.hash[5] = (this.hash[5] + f) & 0xffffffff;
-  this.hash[6] = (this.hash[6] + g) & 0xffffffff;
-  this.hash[7] = (this.hash[7] + h) & 0xffffffff;
+  this.hash[0] = (this.hash[0] + a) | 0;
+  this.hash[1] = (this.hash[1] + b) | 0;
+  this.hash[2] = (this.hash[2] + c) | 0;
+  this.hash[3] = (this.hash[3] + d) | 0;
+  this.hash[4] = (this.hash[4] + e) | 0;
+  this.hash[5] = (this.hash[5] + f) | 0;
+  this.hash[6] = (this.hash[6] + g) | 0;
+  this.hash[7] = (this.hash[7] + h) | 0;
 };
 
 
