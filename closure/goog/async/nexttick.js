@@ -20,9 +20,23 @@
  */
 
 goog.provide('goog.async.nextTick');
+goog.provide('goog.async.throwException');
 
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.functions');
+
+
+/**
+ * Throw an item without interrupting the current execution context.  For
+ * example, if processing a group of items in a loop, sometimes it is useful
+ * to report an error while still allowing the rest of the batch to be
+ * processed.
+ * @param {*} exception
+ */
+goog.async.throwException = function(exception) {
+  // Each throw needs to be in its own context.
+  goog.global.setTimeout(function() { throw exception; }, 0);
+};
 
 
 /**
@@ -82,7 +96,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
           // If there is an error in the callback, make sure it is reported,
           // since there is no chance to attach an error-handler to the
           // promise used here.
-          goog.global.setTimeout(goog.functions.fail(e), 0);
+          goog.async.throwException(e);
         }
       });
     };
