@@ -497,20 +497,6 @@ goog.testing.net.XhrIo.prototype.simulateReady = function() {
 
 
 /**
- * Simulates the Xhr progress event.
- * @param {ProgressEvent} progressEvent The progress event to fire.
- */
-goog.testing.net.XhrIo.prototype.simulateProgress = function(progressEvent) {
-  var xhrProgressEvent = new ProgressEvent(goog.net.EventType.PROGRESS, {
-    lengthComputable: progressEvent.lengthComputable,
-    loaded: progressEvent.loaded,
-    total: progressEvent.total
-  });
-  this.dispatchEvent(xhrProgressEvent);
-};
-
-
-/**
  * @return {boolean} Whether there is an active request.
  */
 goog.testing.net.XhrIo.prototype.isActive = function() {
