@@ -459,6 +459,28 @@ goog.testing.Mock.prototype.$atLeastOnce = function() {
 
 
 /**
+ * Allows the expectation to be called exactly once.
+ * @return {!goog.testing.Mock} This mock object.
+ */
+goog.testing.Mock.prototype.$once = function() {
+  this.$pendingExpectation.minCalls = 1;
+  this.$pendingExpectation.maxCalls = 1;
+  return this;
+};
+
+
+/**
+ * Disallows the expectation from being called.
+ * @return {!goog.testing.Mock} This mock object.
+ */
+goog.testing.Mock.prototype.$never = function() {
+  this.$pendingExpectation.minCalls = 0;
+  this.$pendingExpectation.maxCalls = 0;
+  return this;
+};
+
+
+/**
  * Allows the expectation to be called any number of times.
  * @return {!goog.testing.Mock} This mock object.
  */
