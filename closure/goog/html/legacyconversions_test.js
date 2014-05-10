@@ -57,6 +57,29 @@ function testSafeHtmlFromString_guardedByGlobalFlag() {
 }
 
 
+function testSafeHtmlFromString_reports() {
+  var reported = false;
+  goog.html.legacyconversions.setReportCallback(function() {
+    reported = true;
+  });
+  goog.html.legacyconversions.safeHtmlFromString('<html>');
+  assertTrue('Expected legacy conversion to be reported.', reported);
+
+  reported = false;
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', false);
+  try {
+    goog.html.legacyconversions.safeHtmlFromString('<html>');
+  } catch (expected) {
+  }
+  assertFalse('Expected legacy conversion to not be reported.', reported);
+
+  stubs.set(goog.html.legacyconversions, 'ALLOW_LEGACY_CONVERSIONS', true);
+  goog.html.legacyconversions.setReportCallback(goog.nullFunction);
+  goog.html.legacyconversions.safeHtmlFromString('<html>');
+  assertFalse('Expected legacy conversion to not be reported.', reported);
+}
+
+
 function testSafeUrlFromString() {
   var url = 'https://www.google.com';
   var safeUrl = goog.html.legacyconversions.safeUrlFromString(url);

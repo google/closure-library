@@ -151,6 +151,24 @@ goog.html.legacyconversions.safeUrlFromString = function(url) {
 
 
 /**
+ * @private {function(): undefined}
+ */
+goog.html.legacyconversions.reportCallback_ = goog.nullFunction;
+
+
+/**
+ * Sets a function that will be called every time a legacy conversion is
+ * performed. The function is called with no parameters but it can use
+ * goog.debug.getStacktrace to get a stacktrace.
+ *
+ * @param {function(): undefined} callback Error callback as defined above.
+ */
+goog.html.legacyconversions.setReportCallback = function(callback) {
+  goog.html.legacyconversions.reportCallback_ = callback;
+};
+
+
+/**
  * Internal wrapper for the package-private
  * goog.html.SafeHtml.createSafeHtml... function.
  * @param {string} html A string to be converted to SafeHtml.
@@ -213,4 +231,5 @@ goog.html.legacyconversions.throwIfConversionDisallowed_ = function() {
     throw Error(
         'Error: Legacy conversion from string to goog.html types is disabled');
   }
+  goog.html.legacyconversions.reportCallback_();
 };
