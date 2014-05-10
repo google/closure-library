@@ -1286,6 +1286,7 @@ goog.dom.isWindow = function(obj) {
  * @return {Element} The parent, or null if not an Element.
  */
 goog.dom.getParentElement = function(element) {
+  var parent;
   if (goog.dom.BrowserFeature.CAN_USE_PARENT_ELEMENT_PROPERTY) {
     var isIe9 = goog.userAgent.IE &&
         goog.userAgent.isVersionOrHigher('9') &&
@@ -1294,10 +1295,13 @@ goog.dom.getParentElement = function(element) {
     // goog.global['SVGElement'] is not defined in IE9 quirks mode.
     if (!(isIe9 && goog.global['SVGElement'] &&
         element instanceof goog.global['SVGElement'])) {
-      return element.parentElement;
+      parent = element.parentElement;
+      if (parent) {
+        return parent;
+      }
     }
   }
-  var parent = element.parentNode;
+  parent = element.parentNode;
   return goog.dom.isElement(parent) ? /** @type {!Element} */ (parent) : null;
 };
 
