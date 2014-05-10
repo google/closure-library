@@ -507,7 +507,8 @@ goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
           .replace(goog.string.LT_RE_, '&lt;')
           .replace(goog.string.GT_RE_, '&gt;')
           .replace(goog.string.QUOT_RE_, '&quot;')
-          .replace(goog.string.SINGLE_QUOTE_RE_, '&#39;');
+          .replace(goog.string.SINGLE_QUOTE_RE_, '&#39;')
+          .replace(goog.string.NULL_RE_, '&#0;');
     if (goog.string.DETECT_DOUBLE_ESCAPING) {
       str = str.replace(goog.string.E_RE_, '&#101;');
     }
@@ -533,6 +534,9 @@ goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
     }
     if (str.indexOf('\'') != -1) {
       str = str.replace(goog.string.SINGLE_QUOTE_RE_, '&#39;');
+    }
+    if (str.indexOf('\x00') != -1) {
+      str = str.replace(goog.string.NULL_RE_, '&#0;');
     }
     if (goog.string.DETECT_DOUBLE_ESCAPING && str.indexOf('e') != -1) {
       str = str.replace(goog.string.E_RE_, '&#101;');
@@ -583,6 +587,14 @@ goog.string.SINGLE_QUOTE_RE_ = /'/g;
 
 
 /**
+ * Regular expression that matches null character, for use in escaping.
+ * @const {!RegExp}
+ * @private
+ */
+goog.string.NULL_RE_ = /\x00/g;
+
+
+/**
  * Regular expression that matches a lowercase letter "e", for use in escaping.
  * @const {!RegExp}
  * @private
@@ -596,8 +608,8 @@ goog.string.E_RE_ = /e/g;
  * @private
  */
 goog.string.ALL_RE_ = (goog.string.DETECT_DOUBLE_ESCAPING ?
-    /[&<>"'e]/ :
-    /[&<>"']/);
+    /[\x00&<>"'e]/ :
+    /[\x00&<>"']/);
 
 
 /**

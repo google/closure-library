@@ -257,7 +257,7 @@ function testJsInjectionWithIgnorableNonTagChar() {
       'Angle brackets are normalized even when followed by an ignorable ' +
           'non-tag character.',
       '<\u0000img onerror=alert(1337) src=\n>',
-      '&lt;\u0000img onerror=alert(1337) src=\n&gt;');
+      '&lt;&#0;img onerror=alert(1337) src=\n&gt;');
 }
 
 function testJsInjectionWithTextarea() {

@@ -538,6 +538,13 @@ function testHtmlEscapeDetectDoubleEscaping() {
   assertEquals('&#101; &lt; pi', goog.string.htmlEscape('e < pi', true));
 }
 
+function testHtmlEscapeNullByte() {
+  assertEquals('&#0;', goog.string.htmlEscape('\x00'));
+  assertEquals('&#0;', goog.string.htmlEscape('\x00', true));
+  assertEquals('\\x00', goog.string.htmlEscape('\\x00'));
+  assertEquals('\\x00', goog.string.htmlEscape('\\x00', true));
+}
+
 var globalXssVar = 0;
 
 function testXssUnescapeEntities() {
