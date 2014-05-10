@@ -45,8 +45,8 @@ goog.Thenable = function() {};
  *             (RESULT|IThenable.<RESULT>|Thenable))=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise
  *     is fullfilled.
- * @param {?(function(*): *)=} opt_onRejected A function that will be invoked
- *     with the rejection reason if the Promise is rejected.
+ * @param {?(function(this:THIS, *): *)=} opt_onRejected A function that will
+ *     be invoked with the rejection reason if the Promise is rejected.
  * @param {THIS=} opt_context An optional context object that will be the
  *     execution context for the callbacks. By default, functions are executed
  *     with the default this.
