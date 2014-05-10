@@ -75,7 +75,16 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   if (goog.global.Promise && goog.global.Promise.resolve) {
     var promise = goog.global.Promise.resolve();
     return function(cb) {
-      promise.then(cb);
+      promise.then(function() {
+        try {
+          cb();
+        } catch (e) {
+          // If there is an error in the callback, make sure it is reported,
+          // since there is no chance to attach an error-handler to the
+          // promise used here.
+          goog.global.setTimeout(goog.functions.fail(e), 0);
+        }
+      });
     };
   }
   // Create a private message channel and use it to postMessage empty messages

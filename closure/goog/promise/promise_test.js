@@ -1292,6 +1292,28 @@ function testUnhandledRejection() {
 }
 
 
+function testUnhandledRejection_asyncTestCase() {
+  goog.Promise.reject(sentinel);
+
+  goog.Promise.setUnhandledRejectionHandler(function(error) {
+    assertEquals(sentinel, error);
+    asyncTestCase.continueTesting();
+  });
+}
+
+
+function testUnhandledThrow_asyncTestCase() {
+  goog.Promise.resolve().then(function() {
+    throw sentinel;
+  });
+
+  goog.Promise.setUnhandledRejectionHandler(function(error) {
+    assertEquals(sentinel, error);
+    asyncTestCase.continueTesting();
+  });
+}
+
+
 function testUnhandledBlockingRejection() {
   mockClock.install();
   var blocker = goog.Promise.reject(sentinel);

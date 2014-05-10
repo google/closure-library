@@ -98,6 +98,27 @@ function testNextTickMockClock() {
 }
 
 
+function testNextTickDoesntSwallowError() {
+  var before = window.onerror;
+  var sentinel = 'sentinel';
+  window.onerror = function(e) {
+    e = '' + e;
+    // Don't test for contents in IE7, which does not preserve the exception
+    // message.
+    if (e.indexOf('Exception thrown and not caught') == -1) {
+      assertContains(sentinel, e);
+    }
+    window.onerror = before;
+    asyncTestCase.continueTesting();
+    return false;
+  };
+  goog.async.nextTick(function() {
+    throw sentinel;
+  });
+  asyncTestCase.waitForAsync('Wait for error');
+}
+
+
 function testNextTickProtectEntryPoint() {
   var errorHandlerCallbackCalled = false;
   var errorHandler = new goog.debug.ErrorHandler(function() {
