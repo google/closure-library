@@ -680,6 +680,74 @@ function testBrowserSupportsObjectUrls() {
 
   assertTrue(goog.fs.browserSupportsObjectUrls());
   assertEquals(objectUrl, goog.fs.createObjectUrl());
+
+  stubs.reset();
+}
+
+
+function testGetBlobThrowsError() {
+  stubs.remove(goog.global, 'BlobBuilder');
+  stubs.remove(goog.global, 'WebKitBlobBuilder');
+  stubs.remove(goog.global, 'Blob');
+
+  try {
+    goog.fs.getBlob();
+    fail();
+  } catch (e) {
+    assertEquals('This browser doesn\'t seem to support creating Blobs',
+        e.message);
+  }
+
+  stubs.reset();
+}
+
+
+function testGetBlobWithProperties() {
+  // Skip test if browser doesn't support Blob API.
+  if (typeof(goog.global.Blob) != 'function') {
+    return;
+  }
+
+  var blob = goog.fs.getBlobWithProperties(['test'], 'text/test', 'native');
+  assertEquals('text/test', blob.type);
+}
+
+
+function testGetBlobWithPropertiesThrowsError() {
+  stubs.remove(goog.global, 'BlobBuilder');
+  stubs.remove(goog.global, 'WebKitBlobBuilder');
+  stubs.remove(goog.global, 'Blob');
+
+  try {
+    goog.fs.getBlobWithProperties();
+    fail();
+  } catch (e) {
+    assertEquals('This browser doesn\'t seem to support creating Blobs',
+        e.message);
+  }
+
+  stubs.reset();
+}
+
+
+function testGetBlobWithPropertiesUsingBlobBuilder() {
+  function BlobBuilder() {
+    this.parts = [];
+    this.append = function(value, endings) {
+      this.parts.push({value: value, endings: endings});
+    };
+    this.getBlob = function(type) {
+      return {type: type, builder: this};
+    };
+  }
+  stubs.set(goog.global, 'BlobBuilder', BlobBuilder);
+
+  var blob = goog.fs.getBlobWithProperties(['test'], 'text/test', 'native');
+  assertEquals('text/test', blob.type);
+  assertEquals('test', blob.builder.parts[0].value);
+  assertEquals('native', blob.builder.parts[0].endings);
+
+  stubs.reset();
 }
 
 
