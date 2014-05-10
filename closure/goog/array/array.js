@@ -512,7 +512,7 @@ goog.array.count = function(arr, f, opt_obj) {
  *     for every element. This function takes 3 arguments (the element, the
  *     index and the array) and should return a boolean.
  * @param {S=} opt_obj An optional "this" context for the function.
- * @return {T} The first array element that passes the test, or null if no
+ * @return {?T} The first array element that passes the test, or null if no
  *     element is found.
  * @template T,S
  */
@@ -558,7 +558,7 @@ goog.array.findIndex = function(arr, f, opt_obj) {
  *     takes 3 arguments (the element, the index and the array) and should
  *     return a boolean.
  * @param {S=} opt_obj An optional "this" context for the function.
- * @return {T} The last array element that passes the test, or null if no
+ * @return {?T} The last array element that passes the test, or null if no
  *     element is found.
  * @template T,S
  */
