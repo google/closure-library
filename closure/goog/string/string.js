@@ -25,6 +25,13 @@ goog.provide('goog.string.Unicode');
 
 
 /**
+ * @define {boolean} Enables HTML escaping of lowercase letter "e" which helps
+ * with detection of double-escaping as this letter is frequently used.
+ */
+goog.define('goog.string.DETECT_DOUBLE_ESCAPING', false);
+
+
+/**
  * Common Unicode string characters.
  * @enum {string}
  */
@@ -450,12 +457,16 @@ goog.string.newLineToBr = function(str, opt_xml) {
 
 
 /**
- * Escape double quote '"' characters in addition to '&', '<', and '>' so that a
- * string can be included in an HTML tag attribute value within double quotes.
+ * Escapes double quote '"' and single quote '\'' characters in addition to
+ * '&', '<', and '>' so that a string can be included in an HTML tag attribute
+ * value within double or single quotes.
  *
  * It should be noted that > doesn't need to be escaped for the HTML or XML to
  * be valid, but it has been decided to escape it for consistency with other
  * implementations.
+ *
+ * With goog.string.DETECT_DOUBLE_ESCAPING, this function escapes also the
+ * lowercase letter "e".
  *
  * NOTE(user):
  * HtmlEscape is often called during the generation of large blocks of HTML.
@@ -492,11 +503,15 @@ goog.string.newLineToBr = function(str, opt_xml) {
 goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
 
   if (opt_isLikelyToContainHtmlChars) {
-    return str.replace(goog.string.AMP_RE_, '&amp;')
+    str = str.replace(goog.string.AMP_RE_, '&amp;')
           .replace(goog.string.LT_RE_, '&lt;')
           .replace(goog.string.GT_RE_, '&gt;')
           .replace(goog.string.QUOT_RE_, '&quot;')
           .replace(goog.string.SINGLE_QUOTE_RE_, '&#39;');
+    if (goog.string.DETECT_DOUBLE_ESCAPING) {
+      str = str.replace(goog.string.E_RE_, '&#101;');
+    }
+    return str;
 
   } else {
     // quick test helps in the case when there are no chars to replace, in
@@ -518,6 +533,9 @@ goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
     }
     if (str.indexOf('\'') != -1) {
       str = str.replace(goog.string.SINGLE_QUOTE_RE_, '&#39;');
+    }
+    if (goog.string.DETECT_DOUBLE_ESCAPING && str.indexOf('e') != -1) {
+      str = str.replace(goog.string.E_RE_, '&#101;');
     }
     return str;
   }
@@ -565,11 +583,21 @@ goog.string.SINGLE_QUOTE_RE_ = /'/g;
 
 
 /**
+ * Regular expression that matches a lowercase letter "e", for use in escaping.
+ * @const {!RegExp}
+ * @private
+ */
+goog.string.E_RE_ = /e/g;
+
+
+/**
  * Regular expression that matches any character that needs to be escaped.
  * @const {!RegExp}
  * @private
  */
-goog.string.ALL_RE_ = /[&<>"']/;
+goog.string.ALL_RE_ = (goog.string.DETECT_DOUBLE_ESCAPING ?
+    /[&<>"'e]/ :
+    /[&<>"']/);
 
 
 /**

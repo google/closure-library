@@ -532,6 +532,12 @@ function testHtmlEscapeAndUnescapePureXmlEntities_() {
                    goog.string.unescapePureXmlEntities_(html)), html);
 }
 
+function testHtmlEscapeDetectDoubleEscaping() {
+  stubs.set(goog.string, 'DETECT_DOUBLE_ESCAPING', true);
+  assertEquals('&#101; &lt; pi', goog.string.htmlEscape('e < pi'));
+  assertEquals('&#101; &lt; pi', goog.string.htmlEscape('e < pi', true));
+}
+
 var globalXssVar = 0;
 
 function testXssUnescapeEntities() {
