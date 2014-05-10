@@ -358,8 +358,8 @@ goog.Promise.withResolver = function() {
  * exception, the child Promise will be rejected with the thrown value instead.
  *
  * If the Promise is rejected, the {@code onRejected} callback will be invoked
- * with the rejection reason as argument, and the child Promise will be rejected
- * with the return value (or thrown value) of the callback.
+ * with the rejection reason as argument, and the child Promise will be resolved
+ * with the return value or rejected with the thrown value of the callback.
  *
  * @override
  */
