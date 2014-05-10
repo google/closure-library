@@ -238,6 +238,14 @@ goog.ui.ComboBox.prototype.setEnabled = function(enabled) {
 };
 
 
+/**
+ * @return {boolean} Whether the menu item is enabled.
+ */
+goog.ui.ComboBox.prototype.isEnabled = function() {
+  return this.enabled_;
+};
+
+
 /** @override */
 goog.ui.ComboBox.prototype.enterDocument = function() {
   goog.ui.ComboBox.superClass_.enterDocument.call(this);

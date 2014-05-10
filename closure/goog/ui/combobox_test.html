@@ -189,7 +189,9 @@ function testSetEnabled() {
   assertFalse('Menu initially becomes invisible after document click',
       comboBox.getMenu().isVisible());
 
+  assertTrue(comboBox.isEnabled());
   comboBox.setEnabled(false);
+  assertFalse(comboBox.isEnabled());
   assertTrue('Text input should be disabled after being disabled',
       input.disabled);
   assertTrue('Text input should appear disabled after being disabled',
@@ -204,6 +206,7 @@ function testSetEnabled() {
       comboBox.getMenu().isVisible());
 
   comboBox.setEnabled(true);
+  assertTrue(comboBox.isEnabled());
   assertFalse('Text input should not be disabled after being re-enabled',
       input.disabled);
   assertFalse('Text input should not appear disabled after being re-enabled',
