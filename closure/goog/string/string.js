@@ -492,32 +492,32 @@ goog.string.newLineToBr = function(str, opt_xml) {
 goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
 
   if (opt_isLikelyToContainHtmlChars) {
-    return str.replace(goog.string.amperRe_, '&amp;')
-          .replace(goog.string.ltRe_, '&lt;')
-          .replace(goog.string.gtRe_, '&gt;')
-          .replace(goog.string.quotRe_, '&quot;')
-          .replace(goog.string.singleQuoteRe_, '&#39;');
+    return str.replace(goog.string.AMP_RE_, '&amp;')
+          .replace(goog.string.LT_RE_, '&lt;')
+          .replace(goog.string.GT_RE_, '&gt;')
+          .replace(goog.string.QUOT_RE_, '&quot;')
+          .replace(goog.string.SINGLE_QUOTE_RE_, '&#39;');
 
   } else {
     // quick test helps in the case when there are no chars to replace, in
     // worst case this makes barely a difference to the time taken
-    if (!goog.string.allRe_.test(str)) return str;
+    if (!goog.string.ALL_RE_.test(str)) return str;
 
     // str.indexOf is faster than regex.test in this case
     if (str.indexOf('&') != -1) {
-      str = str.replace(goog.string.amperRe_, '&amp;');
+      str = str.replace(goog.string.AMP_RE_, '&amp;');
     }
     if (str.indexOf('<') != -1) {
-      str = str.replace(goog.string.ltRe_, '&lt;');
+      str = str.replace(goog.string.LT_RE_, '&lt;');
     }
     if (str.indexOf('>') != -1) {
-      str = str.replace(goog.string.gtRe_, '&gt;');
+      str = str.replace(goog.string.GT_RE_, '&gt;');
     }
     if (str.indexOf('"') != -1) {
-      str = str.replace(goog.string.quotRe_, '&quot;');
+      str = str.replace(goog.string.QUOT_RE_, '&quot;');
     }
     if (str.indexOf('\'') != -1) {
-      str = str.replace(goog.string.singleQuoteRe_, '&#39;');
+      str = str.replace(goog.string.SINGLE_QUOTE_RE_, '&#39;');
     }
     return str;
   }
@@ -526,50 +526,50 @@ goog.string.htmlEscape = function(str, opt_isLikelyToContainHtmlChars) {
 
 /**
  * Regular expression that matches an ampersand, for use in escaping.
- * @type {RegExp}
+ * @const {!RegExp}
  * @private
  */
-goog.string.amperRe_ = /&/g;
+goog.string.AMP_RE_ = /&/g;
 
 
 /**
  * Regular expression that matches a less than sign, for use in escaping.
- * @type {RegExp}
+ * @const {!RegExp}
  * @private
  */
-goog.string.ltRe_ = /</g;
+goog.string.LT_RE_ = /</g;
 
 
 /**
  * Regular expression that matches a greater than sign, for use in escaping.
- * @type {RegExp}
+ * @const {!RegExp}
  * @private
  */
-goog.string.gtRe_ = />/g;
+goog.string.GT_RE_ = />/g;
 
 
 /**
  * Regular expression that matches a double quote, for use in escaping.
- * @type {RegExp}
+ * @const {!RegExp}
  * @private
  */
-goog.string.quotRe_ = /"/g;
+goog.string.QUOT_RE_ = /"/g;
 
 
 /**
  * Regular expression that matches a single quote, for use in escaping.
- * @type {RegExp}
+ * @const {!RegExp}
  * @private
  */
-goog.string.singleQuoteRe_ = /'/g;
+goog.string.SINGLE_QUOTE_RE_ = /'/g;
 
 
 /**
  * Regular expression that matches any character that needs to be escaped.
- * @type {RegExp}
+ * @const {!RegExp}
  * @private
  */
-goog.string.allRe_ = /[&<>"']/;
+goog.string.ALL_RE_ = /[&<>"']/;
 
 
 /**
