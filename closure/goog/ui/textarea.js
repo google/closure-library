@@ -485,6 +485,7 @@ goog.ui.Textarea.prototype.setHeightToEstimate_ = function() {
   textarea.style.height = 'auto';
   var newlines = textarea.value.match(/\n/g) || [];
   textarea.rows = newlines.length + 1;
+  this.height_ = 0;
 };
 
 

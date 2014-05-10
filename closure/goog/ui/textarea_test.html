@@ -18,6 +18,7 @@ See the COPYING file for details.
     goog.require('goog.events');
     goog.require('goog.log');
     goog.require('goog.object');
+    goog.require('goog.style');
     goog.require('goog.testing.ExpectedFailures');
     goog.require('goog.testing.events');
     goog.require('goog.testing.events.EventObserver');
@@ -359,6 +360,29 @@ See the COPYING file for details.
       } catch (e) {
         expectedFailures.handleException(e);
       }
+    }
+
+    function testSetValueWhenInvisible() {
+      textarea.render(sandbox);
+      var content = 'Lorem ipsum dolor sit amet, consectetuer  ' +
+          'elit. Aenean sollicitudin ultrices urna. Proin vehicula mauris ac ' +
+          'est. Ut scelerisque, risus ut facilisis dictum, est massa lacinia ' +
+          'lorem, in fermentum purus ligula quis nunc.';
+      textarea.setValue(content);
+      var height = textarea.getHeight_();
+      var elementHeight = goog.style.getStyle(textarea.getElement(), 'height');
+      assertEquals(height + 'px', elementHeight);
+
+      // Hide the element, height_ should be invalidate when setValue().
+      goog.style.setElementShown(textarea.getElement(), false);
+      textarea.setValue(content);
+
+      // Show the element again.
+      goog.style.setElementShown(textarea.getElement(), true);
+      textarea.setValue(content);
+      height = textarea.getHeight_();
+      elementHeight = goog.style.getStyle(textarea.getElement(), 'height');
+      assertEquals(height + 'px', elementHeight);
     }
 
   </script>
