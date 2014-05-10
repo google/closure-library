@@ -1002,19 +1002,19 @@ goog.ui.ac.InputHandler.prototype.handleBlur = function(opt_e) {
     // In order to fix the bug, we set a timeout to process the blur event, so
     // that any pending selection event can be processed first.
     this.activeTimeoutId_ =
-        window.setTimeout(goog.bind(this.processBlur_, this), 0);
+        window.setTimeout(goog.bind(this.processBlur, this), 0);
     return;
   } else {
-    this.processBlur_();
+    this.processBlur();
   }
 };
 
 
 /**
  * Helper function that does the logic to handle an element blurring.
- * @private
+ * @protected
  */
-goog.ui.ac.InputHandler.prototype.processBlur_ = function() {
+goog.ui.ac.InputHandler.prototype.processBlur = function() {
   // it's possible that a blur event could fire when there's no active element,
   // in the case where attachInput was called on an input that already had
   // the focus
