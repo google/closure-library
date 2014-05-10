@@ -139,9 +139,9 @@ function testSafeHtmlCreate() {
 
   assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
       goog.html.SafeHtml.create('span').getDirection());
-  assertNull(goog.html.SafeHtml.create('span', {'dir': 'auto'}).getDirection());
-  assertEquals(goog.i18n.bidi.Dir.LTR,
-      goog.html.SafeHtml.create('span', {'dir': 'ltr'}).getDirection());
+  assertNull(goog.html.SafeHtml.create('span', {'dir': 'x'}).getDirection());
+  assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
+      goog.html.SafeHtml.create('span', {'dir': 'ltr'}, 'a').getDirection());
 
   assertThrows(function() {
     goog.html.SafeHtml.create('script');
@@ -170,6 +170,13 @@ function testSafeHtmlCreate() {
   assertThrows(function() {
     goog.html.SafeHtml.create('a', {'title="" href': ''});
   });
+}
+
+
+function testSafeHtmlCreateWithDir() {
+  var ltr = goog.i18n.bidi.Dir.LTR;
+
+  assertEquals(ltr, goog.html.SafeHtml.createWithDir(ltr, 'br').getDirection());
 }
 
 
@@ -213,6 +220,19 @@ function testHtmlEscapePreservingNewlines() {
       goog.html.SafeHtml.htmlEscapePreservingNewlines('\r\n'));
   assertSameHtml('<br>', goog.html.SafeHtml.htmlEscapePreservingNewlines('\r'));
   assertSameHtml('', goog.html.SafeHtml.htmlEscapePreservingNewlines(''));
+}
+
+
+function testSafeHtmlConcatWithDir() {
+  var ltr = goog.i18n.bidi.Dir.LTR;
+  var rtl = goog.i18n.bidi.Dir.RTL;
+  var br = goog.html.testing.newSafeHtmlForTest('<br>');
+
+  assertEquals(ltr, goog.html.SafeHtml.concatWithDir(ltr).getDirection());
+  assertEquals(ltr, goog.html.SafeHtml.concatWithDir(ltr,
+      goog.html.testing.newSafeHtmlForTest('', rtl)).getDirection());
+
+  assertSameHtml('a<br>c', goog.html.SafeHtml.concatWithDir(ltr, 'a', br, 'c'));
 }
 
 

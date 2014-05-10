@@ -385,10 +385,10 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
 
   var dirAttribute = opt_attributes && opt_attributes['dir'];
   if (dirAttribute) {
-    if (dirAttribute.toLowerCase() == 'ltr') {
-      dir = goog.i18n.bidi.Dir.LTR;
-    } else if (dirAttribute.toLowerCase() == 'rtl') {
-      dir = goog.i18n.bidi.Dir.RTL;
+    if (/^(ltr|rtl|auto)$/i.test(dirAttribute)) {
+      // If the tag has the "dir" attribute specified then its direction is
+      // neutral because it can be safely used in any context.
+      dir = goog.i18n.bidi.Dir.NEUTRAL;
     } else {
       dir = null;
     }
@@ -396,6 +396,24 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
 
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
       result, dir);
+};
+
+
+/**
+ * Creates a SafeHtml content with known directionality consisting of a tag with
+ * optional attributes and optional content.
+ * @param {!goog.i18n.bidi.Dir} dir Directionality.
+ * @param {string} tagName
+ * @param {!Object.<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
+ * @param {!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array.<!goog.html.SafeHtml.TextOrHtml_>=} opt_content
+ * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
+ */
+goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes,
+    opt_content) {
+  var html = goog.html.SafeHtml.create(tagName, opt_attributes, opt_content);
+  html.dir_ = dir;
+  return html;
 };
 
 
@@ -432,6 +450,22 @@ goog.html.SafeHtml.concat = function(var_args) {
   goog.array.forEach(arguments, addArgument);
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
       content, dir);
+};
+
+
+/**
+ * Creates a new SafeHtml object with known directionality by concatenating the
+ * values.
+ * @param {!goog.i18n.bidi.Dir} dir Directionality.
+ * @param {...!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
+ *     arguments would be processed recursively.
+ * @return {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.concatWithDir = function(dir, var_args) {
+  var html = goog.html.SafeHtml.concat(goog.array.slice(arguments, 1));
+  html.dir_ = dir;
+  return html;
 };
 
 
