@@ -443,7 +443,7 @@ goog.ui.PlainTextSpellChecker.prototype.resume = function() {
  * Returns desired element properties for the specified status.
  *
  * @param {goog.spell.SpellCheck.WordStatus} status Status of word.
- * @return {Object} Properties to apply to word element.
+ * @return {!Object} Properties to apply to word element.
  * @override
  */
 goog.ui.PlainTextSpellChecker.prototype.getElementProperties =

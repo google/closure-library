@@ -87,7 +87,7 @@ goog.ui.PaletteRenderer.CSS_CLASS = goog.getCssName('goog-palette');
  * renderer's own CSS class and additional state-specific classes applied to
  * it.
  * @param {goog.ui.Control} palette goog.ui.Palette to render.
- * @return {Element} Root element for the palette.
+ * @return {!Element} Root element for the palette.
  * @override
  */
 goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
@@ -131,7 +131,7 @@ goog.ui.PaletteRenderer.prototype.createGrid = function(items, size, dom) {
  * Returns a table element (or equivalent) that wraps the given rows.
  * @param {Array.<Element>} rows Array of row elements.
  * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
- * @return {Element} Palette table element.
+ * @return {!Element} Palette table element.
  */
 goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
   var table = dom.createDom(goog.dom.TagName.TABLE,
@@ -148,7 +148,7 @@ goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
  * Returns a table row element (or equivalent) that wraps the given cells.
  * @param {Array.<Element>} cells Array of cell elements.
  * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
- * @return {Element} Row element.
+ * @return {!Element} Row element.
  */
 goog.ui.PaletteRenderer.prototype.createRow = function(cells, dom) {
   var row = dom.createDom(goog.dom.TagName.TR,
@@ -163,7 +163,7 @@ goog.ui.PaletteRenderer.prototype.createRow = function(cells, dom) {
  * item (which must be a DOM node).
  * @param {Node|string} node Palette item.
  * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
- * @return {Element} Cell element.
+ * @return {!Element} Cell element.
  */
 goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
   var cell = dom.createDom(goog.dom.TagName.TD, {

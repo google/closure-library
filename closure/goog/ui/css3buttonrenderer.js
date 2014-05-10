@@ -86,7 +86,7 @@ goog.ui.Css3ButtonRenderer.prototype.getContentElement = function(element) {
  *    </div>
  * Overrides {@link goog.ui.ButtonRenderer#createDom}.
  * @param {goog.ui.Control} control goog.ui.Button to render.
- * @return {Element} Root element for the button.
+ * @return {!Element} Root element for the button.
  * @override
  */
 goog.ui.Css3ButtonRenderer.prototype.createDom = function(control) {

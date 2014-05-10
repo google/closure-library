@@ -290,7 +290,7 @@ goog.ui.Control.prototype.getKeyEventTarget = function() {
  * Returns the keyboard event handler for this component, lazily created the
  * first time this method is called.  Considered protected; should only be
  * used within this package and by subclasses.
- * @return {goog.events.KeyHandler} Keyboard event handler for this component.
+ * @return {!goog.events.KeyHandler} Keyboard event handler for this component.
  * @protected
  */
 goog.ui.Control.prototype.getKeyHandler = function() {

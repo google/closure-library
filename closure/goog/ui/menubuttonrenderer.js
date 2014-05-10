@@ -152,7 +152,7 @@ goog.ui.MenuButtonRenderer.prototype.createCaption = function(content, dom) {
  *     to wrap in a box.
  * @param {string} cssClass The CSS class for the renderer.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Caption element.
+ * @return {!Element} Caption element.
  */
 goog.ui.MenuButtonRenderer.wrapCaption = function(content, cssClass, dom) {
   return dom.createDom(

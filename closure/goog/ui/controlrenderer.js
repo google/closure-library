@@ -743,7 +743,7 @@ goog.ui.ControlRenderer.prototype.getStructuralCssClass = function() {
  * method is guaranteed to return an array of at least one element.
  * @param {goog.ui.Control} control Control whose CSS classes are to be
  *     returned.
- * @return {Array.<string>} Array of CSS class names applicable to the control.
+ * @return {!Array.<string>} Array of CSS class names applicable to the control.
  * @protected
  */
 goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
@@ -792,7 +792,7 @@ goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
  *     return matching combined classes for.
  * @param {?string=} opt_includedClass If provided, get only the combined
  *     classes that include this one.
- * @return {Array.<string>} Array of combined class names that should be
+ * @return {!Array.<string>} Array of combined class names that should be
  *     applied.
  * @private
  */

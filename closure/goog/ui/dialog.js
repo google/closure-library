@@ -1370,7 +1370,7 @@ goog.ui.Dialog.ButtonSet.prototype.getButton = function(key) {
 
 /**
  * Returns all the HTML Button elements in the button set container.
- * @return {NodeList} A live NodeList of the buttons.
+ * @return {!NodeList} A live NodeList of the buttons.
  */
 goog.ui.Dialog.ButtonSet.prototype.getAllButtons = function() {
   return this.element_.getElementsByTagName(goog.dom.TagName.BUTTON);

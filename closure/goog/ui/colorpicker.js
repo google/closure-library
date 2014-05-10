@@ -307,7 +307,7 @@ goog.ui.ColorPicker.prototype.createColorPalette_ = function(colors) {
  * Returns an unrendered instance of the color picker.  The colors and layout
  * are a simple color grid, the same as the old Gmail color picker.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
- * @return {goog.ui.ColorPicker} The unrendered instance.
+ * @return {!goog.ui.ColorPicker} The unrendered instance.
  */
 goog.ui.ColorPicker.createSimpleColorGrid = function(opt_domHelper) {
   var cp = new goog.ui.ColorPicker(opt_domHelper);

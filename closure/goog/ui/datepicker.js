@@ -654,7 +654,7 @@ goog.ui.DatePicker.prototype.selectNone = function() {
 
 
 /**
- * @return {goog.date.Date} The active month displayed.
+ * @return {!goog.date.Date} The active month displayed.
  */
 goog.ui.DatePicker.prototype.getActiveMonth = function() {
   return this.activeMonth_.clone();

@@ -186,7 +186,7 @@ goog.ui.DefaultDatePickerRenderer.prototype.renderFooterRow =
  * @param {string=} opt_className Class name for button, which will be used
  *    in addition to "goog-date-picker-btn".
  * @private
- * @return {Element} The created button element.
+ * @return {!Element} The created button element.
  */
 goog.ui.DefaultDatePickerRenderer.prototype.createButton_ =
     function(parentNode, label, opt_className) {
