@@ -320,6 +320,56 @@ function testShowAndDismissSubMenu() {
   ], handleEvent);
 }
 
+function testDismissWhenSubMenuNotVisible() {
+  var openEventDispatched = false;
+  var closeEventDispatched = false;
+
+  function handleEvent(e) {
+    switch (e.type) {
+      case goog.ui.Component.EventType.OPEN:
+        openEventDispatched = true;
+        break;
+      case goog.ui.Component.EventType.CLOSE:
+        closeEventDispatched = true;
+        break;
+      default:
+        fail('Invalid event type: ' + e.type);
+    }
+  }
+
+  menu.decorate(goog.dom.getElement('demoMenu'));
+  var subMenu = menu.getChildAt(1);
+  subMenu.setHighlighted(true);
+
+  goog.events.listen(subMenu, [
+    goog.ui.Component.EventType.OPEN,
+    goog.ui.Component.EventType.CLOSE
+  ], handleEvent);
+
+  assertFalse('Submenu must not have "-open" CSS class',
+      goog.dom.classlist.contains(subMenu.getElement(), 'goog-submenu-open'));
+  assertFalse('Popup menu must not be visible',
+      subMenu.getMenu().isVisible());
+  assertFalse('No OPEN event must have been dispatched', openEventDispatched);
+  assertFalse('No CLOSE event must have been dispatched', closeEventDispatched);
+
+  subMenu.showSubMenu();
+  subMenu.getMenu().setVisible(false);
+
+  subMenu.dismissSubMenu();
+  assertFalse('Submenu must not have "-open" CSS class',
+      goog.dom.classlist.contains(subMenu.getElement(), 'goog-submenu-open'));
+  assertFalse(subMenu.menuIsVisible_);
+  assertFalse('Popup menu must not be visible',
+      subMenu.getMenu().isVisible());
+  assertTrue('CLOSE event must have been dispatched', closeEventDispatched);
+
+  goog.events.unlisten(subMenu, [
+    goog.ui.Component.EventType.OPEN,
+    goog.ui.Component.EventType.CLOSE
+  ], handleEvent);
+}
+
 function testLazyInstantiateSubMenu() {
   menu.decorate(goog.dom.getElement('demoMenu'));
   var subMenu = menu.getChildAt(1);
