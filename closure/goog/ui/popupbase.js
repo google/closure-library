@@ -22,6 +22,7 @@ goog.provide('goog.ui.PopupBase.EventType');
 goog.provide('goog.ui.PopupBase.Type');
 
 goog.require('goog.Timer');
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
@@ -87,6 +88,14 @@ goog.ui.PopupBase.prototype.element_ = null;
  * @private
  */
 goog.ui.PopupBase.prototype.autoHide_ = true;
+
+
+/**
+ * Mouse events without auto hide partner elements will not dismiss the popup.
+ * @type {Array.<Element>}
+ * @private
+ */
+goog.ui.PopupBase.prototype.autoHidePartners_ = null;
 
 
 /**
@@ -282,6 +291,31 @@ goog.ui.PopupBase.prototype.getAutoHide = function() {
 goog.ui.PopupBase.prototype.setAutoHide = function(autoHide) {
   this.ensureNotVisible_();
   this.autoHide_ = autoHide;
+};
+
+
+/**
+ * Mouse events that occur within an autoHide partner will not hide a popup
+ * set to autoHide.
+ * @param {!Element} partner The auto hide partner element.
+ */
+goog.ui.PopupBase.prototype.addAutoHidePartner = function(partner) {
+  if (!this.autoHidePartners_) {
+    this.autoHidePartners_ = [];
+  }
+
+  goog.array.insert(this.autoHidePartners_, partner);
+};
+
+
+/**
+ * Removes a previously registered auto hide partner.
+ * @param {!Element} partner The auto hide partner element.
+ */
+goog.ui.PopupBase.prototype.removeAutoHidePartner = function(partner) {
+  if (this.autoHidePartners_) {
+    goog.array.remove(this.autoHidePartners_, partner);
+  }
 };
 
 
@@ -739,11 +773,13 @@ goog.ui.PopupBase.prototype.onHide_ = function(opt_target) {
  */
 goog.ui.PopupBase.prototype.onDocumentMouseDown_ = function(e) {
   var target = /** @type {Node} */ (e.target);
+
   if (!goog.dom.contains(this.element_, target) &&
-      (!this.autoHideRegion_ || goog.dom.contains(
-      this.autoHideRegion_, target)) &&
+      !this.isOrWithinAutoHidePartner_(target) &&
+      this.isWithinAutoHideRegion_(target) &&
       !this.shouldDebounce_()) {
-    // Mouse click was outside popup, so hide.
+
+    // Mouse click was outside popup and partners, so hide.
     this.hide_(target);
   }
 };
@@ -805,6 +841,32 @@ goog.ui.PopupBase.prototype.onDocumentBlur_ = function(e) {
 
 
 /**
+ * @param {Node} element The element to inspect.
+ * @return {boolean} Returns true if the given element is one of the auto hide
+ *     partners or is a child of an auto hide partner.
+ * @private
+ */
+goog.ui.PopupBase.prototype.isOrWithinAutoHidePartner_ = function(element) {
+  return goog.array.some(this.autoHidePartners_ || [], function(partner) {
+    return element === partner || goog.dom.contains(partner, element);
+  });
+};
+
+
+/**
+ * @param {Node} element The element to inspect.
+ * @return {boolean} Returns true if the element is contained within
+ *     the autohide region. If unset, the autohide region is the entire
+ *     entire document.
+ * @private
+ */
+goog.ui.PopupBase.prototype.isWithinAutoHideRegion_ = function(element) {
+  return this.autoHideRegion_ ?
+      goog.dom.contains(this.autoHideRegion_, element) : true;
+};
+
+
+/**
  * @return {boolean} Whether the time since last show is less than the debounce
  *     delay.
  * @private
@@ -822,4 +884,5 @@ goog.ui.PopupBase.prototype.disposeInternal = function() {
   goog.dispose(this.hideTransition_);
   delete this.element_;
   delete this.handler_;
+  delete this.autoHidePartners_;
 };

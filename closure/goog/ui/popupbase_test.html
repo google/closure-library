@@ -40,6 +40,9 @@ See the COPYING file for details.
   <div id="targetDiv">
     Mouse and key target
   </div>
+  <div id="partnerDiv">
+    Auto-hide partner
+  </div>
 
   <div id="popupDiv" style="visibility:hidden">
     Popup Contents Here.
@@ -53,6 +56,7 @@ See the COPYING file for details.
 
 var targetDiv = goog.dom.getElement('targetDiv');
 var popupDiv = goog.dom.getElement('popupDiv');
+var partnerDiv = goog.dom.getElement('partnerDiv');
 var clock;
 var popup;
 
@@ -176,6 +180,23 @@ function testAutoHideCanBeDisabled() {
 
 function testAutoHideEnabledByDefault() {
   assertTrue(popup.getAutoHide());
+}
+
+function testAutoHideWithPartners() {
+  popup.setAutoHide(true);
+  popup.setVisible(true);
+  popup.addAutoHidePartner(targetDiv);
+  popup.addAutoHidePartner(partnerDiv);
+  clock.tick(1000); // avoid bouncing
+
+  goog.testing.events.fireClickSequence(targetDiv);
+  assertTrue(popup.isVisible());
+  goog.testing.events.fireClickSequence(partnerDiv);
+  assertTrue(popup.isVisible());
+
+  popup.removeAutoHidePartner(partnerDiv);
+  goog.testing.events.fireClickSequence(partnerDiv);
+  assertFalse(popup.isVisible());
 }
 
 function testCanAddElementDuringBeforeShow() {
@@ -463,7 +484,7 @@ function testOnDocumentBlurShouldHideBubbleWithDelay() {
  * @extends {goog.events.EventTarget}
  */
 var MockTransition = function() {
-  goog.base(this);
+  MockTransition.base(this, 'constructor');
   this.wasPlayed = false;
 };
 goog.inherits(MockTransition, goog.events.EventTarget);
