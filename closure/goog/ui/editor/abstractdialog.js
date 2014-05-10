@@ -317,7 +317,7 @@ goog.ui.editor.AbstractDialog.prototype.dom;
 /**
  * Creates and returns the goog.ui.Dialog control that is being wrapped
  * by this object.
- * @return {goog.ui.Dialog} Created Dialog control.
+ * @return {!goog.ui.Dialog} Created Dialog control.
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.createDialogControl =

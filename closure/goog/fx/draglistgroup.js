@@ -582,7 +582,7 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
  * Creates copy of node being dragged.
  *
  * @param {Element} sourceEl Element to copy.
- * @return {Element} The clone of {@code sourceEl}.
+ * @return {!Element} The clone of {@code sourceEl}.
  * @deprecated Use goog.fx.Dragger.cloneNode().
  * @private
  */
@@ -598,7 +598,7 @@ goog.fx.DragListGroup.prototype.cloneNode_ = function(sourceEl) {
  * {@code createDragElement()} before the drag class is added.
  *
  * @param {Element} sourceEl Drag source element.
- * @return {Element} The new drag element.
+ * @return {!Element} The new drag element.
  * @protected
  * @suppress {deprecated}
  */

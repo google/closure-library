@@ -349,7 +349,7 @@ goog.testing.MockClassFactory.prototype.findMockInstance_ = function(className,
  * @param {Object} namespace A javascript namespace (e.g. goog.testing).
  * @param {Function} classToMock The class that will be proxied.
  * @param {string} className The name of the class.
- * @return {Function} The proxy for provided class.
+ * @return {!Function} The proxy for provided class.
  * @private
  */
 goog.testing.MockClassFactory.prototype.createProxy_ = function(namespace,

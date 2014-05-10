@@ -227,7 +227,7 @@ goog.ui.SplitBehavior.prototype.setEventType = function(eventType) {
  * @param {Element} element An element to decorate.
  * @param {boolean=} opt_activate Whether to activate the behavior
  *     (default=true).
- * @return {goog.ui.SplitBehavior} A split behavior.
+ * @return {!goog.ui.SplitBehavior} A split behavior.
  */
 goog.ui.SplitBehavior.prototype.decorate = function(element, opt_activate) {
   if (this.first_ || this.second_) {
@@ -246,7 +246,7 @@ goog.ui.SplitBehavior.prototype.decorate = function(element, opt_activate) {
  * @param {Element} element An element to decorate.
  * @param {boolean=} opt_activate Whether to activate the behavior
  *     (default=true).
- * @return {goog.ui.SplitBehavior} A split behavior.
+ * @return {!goog.ui.SplitBehavior} A split behavior.
  */
 goog.ui.SplitBehavior.prototype.render = function(element, opt_activate) {
   goog.asserts.assert(element);

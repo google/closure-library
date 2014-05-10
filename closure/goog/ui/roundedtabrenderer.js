@@ -123,7 +123,7 @@ goog.ui.RoundedTabRenderer.prototype.decorate = function(tab, element) {
  *     to display as the tab's caption.
  * @param {goog.ui.TabBar.Location} location Tab bar location relative to the
  *     tab contents.
- * @return {Element} Table implementing a rounded corner tab.
+ * @return {!Element} Table implementing a rounded corner tab.
  * @protected
  */
 goog.ui.RoundedTabRenderer.prototype.createTab = function(dom, caption,
@@ -153,7 +153,7 @@ goog.ui.RoundedTabRenderer.prototype.createTab = function(dom, caption,
  * @param {goog.dom.DomHelper} dom DOM helper to use for element construction.
  * @param {goog.ui.ControlContent} caption Text caption or DOM structure
  *     to display as the tab's caption.
- * @return {Element} Tab caption table row.
+ * @return {!Element} Tab caption table row.
  * @protected
  */
 goog.ui.RoundedTabRenderer.prototype.createCaption = function(dom, caption) {
@@ -169,7 +169,7 @@ goog.ui.RoundedTabRenderer.prototype.createCaption = function(dom, caption) {
  * Creates a table row implementing a rounded tab edge.
  * @param {goog.dom.DomHelper} dom DOM helper to use for element construction.
  * @param {boolean} isTopEdge Whether to create a top or bottom edge.
- * @return {Element} Rounded tab edge table row.
+ * @return {!Element} Rounded tab edge table row.
  * @protected
  */
 goog.ui.RoundedTabRenderer.prototype.createEdge = function(dom, isTopEdge) {

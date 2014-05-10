@@ -296,7 +296,7 @@ goog.events.EventHandler.prototype.listenOnce_ = function(
  *     Callback method, or an object with a handleEvent function.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
- * @return {goog.events.EventHandler} This object, allowing for chaining of
+ * @return {!goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
  */
 goog.events.EventHandler.prototype.listenWithWrapper = function(
@@ -320,7 +320,7 @@ goog.events.EventHandler.prototype.listenWithWrapper = function(
  *     listener or an object with handleEvent function.
  * @param {boolean|undefined} capture Optional whether to use capture phase.
  * @param {T} scope Object in whose scope to call the listener.
- * @return {goog.events.EventHandler} This object, allowing for chaining of
+ * @return {!goog.events.EventHandler} This object, allowing for chaining of
  *     calls.
  * @template T
  */

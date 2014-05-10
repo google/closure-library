@@ -109,7 +109,7 @@ goog.dom.AbstractRange.isNativeControlRange = function(range) {
 
 
 /**
- * @return {goog.dom.AbstractRange} A clone of this range.
+ * @return {!goog.dom.AbstractRange} A clone of this range.
  */
 goog.dom.AbstractRange.prototype.clone = goog.abstractMethod;
 
@@ -386,7 +386,7 @@ goog.dom.AbstractRange.prototype.getPastableHtml = goog.abstractMethod;
  * Returns a RangeIterator over the contents of the range.  Regardless of the
  * direction of the range, the iterator will move in document order.
  * @param {boolean=} opt_keys Unused for this iterator.
- * @return {goog.dom.RangeIterator} An iterator over tags in the range.
+ * @return {!goog.dom.RangeIterator} An iterator over tags in the range.
  */
 goog.dom.AbstractRange.prototype.__iterator__ = goog.abstractMethod;
 
@@ -448,7 +448,7 @@ goog.dom.AbstractRange.prototype.surroundWithNodes = goog.abstractMethod;
 /**
  * Saves the range so that if the start and end nodes are left alone, it can
  * be restored.
- * @return {goog.dom.SavedRange} A range representation that can be restored
+ * @return {!goog.dom.SavedRange} A range representation that can be restored
  *     as long as the endpoint nodes of the selection are not modified.
  */
 goog.dom.AbstractRange.prototype.saveUsingDom = goog.abstractMethod;

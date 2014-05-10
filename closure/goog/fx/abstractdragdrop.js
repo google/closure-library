@@ -835,7 +835,7 @@ goog.fx.AbstractDragDrop.prototype.getDragger = function() {
  * Creates copy of node being dragged.
  *
  * @param {Element} sourceEl Element to copy.
- * @return {Element} The clone of {@code sourceEl}.
+ * @return {!Element} The clone of {@code sourceEl}.
  * @deprecated Use goog.fx.Dragger.cloneNode().
  * @private
  */
@@ -1135,7 +1135,7 @@ goog.fx.AbstractDragDrop.prototype.getScrollPos = function() {
 /**
  * Get the position of a drag event.
  * @param {goog.fx.DragEvent} event Drag event.
- * @return {goog.math.Coordinate} Position of the event.
+ * @return {!goog.math.Coordinate} Position of the event.
  * @protected
  */
 goog.fx.AbstractDragDrop.prototype.getEventPosition = function(event) {

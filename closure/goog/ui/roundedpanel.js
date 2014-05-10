@@ -49,7 +49,7 @@ goog.require('goog.userAgent');
  *     to all square corners if not specified.
  * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
- * @return {goog.ui.BaseRoundedPanel} An instance of a
+ * @return {!goog.ui.BaseRoundedPanel} An instance of a
  *     goog.ui.BaseRoundedPanel subclass.
  */
 goog.ui.RoundedPanel.create = function(radius,

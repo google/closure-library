@@ -37,7 +37,7 @@ goog.require('goog.locale');
  *    this parameter is not speficied, current locale is used to
  *    extract this information.
  *
- * @return {Array.<Object>} Localized and relevant list of timezone names
+ * @return {!Array.<Object>} Localized and relevant list of timezone names
  *    and ids.
  */
 goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
@@ -60,7 +60,7 @@ goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
  *    this parameter is not speficied, current locale is used to
  *    extract this information.
  *
- * @return {Array.<Object>} Localized and relevant list of timezone names
+ * @return {!Array.<Object>} Localized and relevant list of timezone names
  *    and ids.
  */
 goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {

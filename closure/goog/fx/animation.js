@@ -522,7 +522,7 @@ goog.inherits(goog.fx.AnimationEvent, goog.events.Event);
 
 /**
  * Returns the coordinates as integers (rounded to nearest integer).
- * @return {Array.<number>} An array of the coordinates rounded to
+ * @return {!Array.<number>} An array of the coordinates rounded to
  *     the nearest integer.
  */
 goog.fx.AnimationEvent.prototype.coordsAsInts = function() {

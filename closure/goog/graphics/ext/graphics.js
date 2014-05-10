@@ -111,7 +111,7 @@ goog.graphics.ext.Graphics.prototype.setCoordOrigin = function(left, top) {
 
 
 /**
- * @return {goog.math.Coordinate} The coordinate system position.
+ * @return {!goog.math.Coordinate} The coordinate system position.
  */
 goog.graphics.ext.Graphics.prototype.getCoordOrigin = function() {
   return this.implementation_.getCoordOrigin();

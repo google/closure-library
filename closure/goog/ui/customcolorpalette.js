@@ -52,7 +52,7 @@ goog.inherits(goog.ui.CustomColorPalette, goog.ui.ColorPalette);
 /**
  * Returns an array of DOM nodes for each color, and an additional cell with a
  * '+'.
- * @return {Array.<Node>} Array of div elements.
+ * @return {!Array.<Node>} Array of div elements.
  * @override
  */
 goog.ui.CustomColorPalette.prototype.createColorNodes = function() {

@@ -142,7 +142,7 @@ goog.dom.MultiRange.prototype.clearCachedValues_ = function() {
 
 
 /**
- * @return {goog.dom.MultiRange} A clone of this range.
+ * @return {!goog.dom.MultiRange} A clone of this range.
  * @override
  */
 goog.dom.MultiRange.prototype.clone = function() {
@@ -386,7 +386,7 @@ goog.inherits(goog.dom.DomSavedMultiRange_, goog.dom.SavedRange);
 
 
 /**
- * @return {goog.dom.MultiRange} The restored range.
+ * @return {!goog.dom.MultiRange} The restored range.
  * @override
  */
 goog.dom.DomSavedMultiRange_.prototype.restoreInternal = function() {

@@ -106,7 +106,7 @@ goog.addSingletonGetter(goog.ui.media.GoogleVideo);
  * @param {goog.ui.media.GoogleVideoModel} dataModel The GoogleVideo data model.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
- * @return {goog.ui.media.Media} A Control binded to the GoogleVideo renderer.
+ * @return {!goog.ui.media.Media} A Control binded to the GoogleVideo renderer.
  */
 goog.ui.media.GoogleVideo.newControl = function(dataModel, opt_domHelper) {
   var control = new goog.ui.media.Media(
@@ -135,7 +135,7 @@ goog.ui.media.GoogleVideo.CSS_CLASS =
  * basically a the flash object pointing to a GoogleVideo video player.
  *
  * @param {goog.ui.Control} c The media control.
- * @return {Element} The DOM structure that represents this control.
+ * @return {!Element} The DOM structure that represents this control.
  * @override
  */
 goog.ui.media.GoogleVideo.prototype.createDom = function(c) {
@@ -224,7 +224,7 @@ goog.ui.media.GoogleVideoModel.MATCHER_ =
  * @param {string=} opt_description An optional description of the GoogleVideo
  *     video.
  * @param {boolean=} opt_autoplay Whether to autoplay video.
- * @return {goog.ui.media.GoogleVideoModel} The data model that represents the
+ * @return {!goog.ui.media.GoogleVideoModel} The data model that represents the
  *     GoogleVideo URL.
  * @see goog.ui.media.GoogleVideoModel.getVideoId()
  * @throws Error in case the parsing fails.

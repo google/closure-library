@@ -92,7 +92,7 @@ goog.ui.ac.ArrayMatcher.getMatchesForRows =
  * Matches the token against the start of words in the row.
  * @param {string} token Token to match.
  * @param {number} maxMatches Max number of matches to return.
- * @return {Array} Rows that match.
+ * @return {!Array} Rows that match.
  */
 goog.ui.ac.ArrayMatcher.prototype.getPrefixMatches =
     function(token, maxMatches) {
@@ -133,7 +133,7 @@ goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows =
  * terms.
  * @param {string} token Token to match.
  * @param {number} maxMatches Max number of matches to return.
- * @return {Array} The best maxMatches rows.
+ * @return {!Array} The best maxMatches rows.
  */
 goog.ui.ac.ArrayMatcher.prototype.getSimilarRows = function(token, maxMatches) {
   return goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows(token, maxMatches,

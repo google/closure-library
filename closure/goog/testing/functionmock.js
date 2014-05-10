@@ -96,7 +96,7 @@ goog.testing.MethodMock.$tearDown = function() {
  * @param {string} functionName The name of the function we're going to mock.
  * @param {number=} opt_strictness One of goog.testing.Mock.LOOSE or
  *     goog.testing.Mock.STRICT. The default is STRICT.
- * @return {goog.testing.MockInterface} The mocked global function.
+ * @return {!goog.testing.MockInterface} The mocked global function.
  */
 goog.testing.GlobalFunctionMock = function(functionName, opt_strictness) {
   return goog.testing.MethodMock(goog.global, functionName, opt_strictness);
@@ -122,7 +122,7 @@ goog.testing.createFunctionMock = function(opt_functionName, opt_strictness) {
  * @param {string} functionName The name of the function we're going to mock.
  * @param {number=} opt_strictness One of goog.testing.Mock.LOOSE or
  *     goog.testing.Mock.STRICT. The default is STRICT.
- * @return {goog.testing.MockInterface} The mocked global function.
+ * @return {!goog.testing.MockInterface} The mocked global function.
  */
 goog.testing.createMethodMock = function(scope, functionName, opt_strictness) {
   return goog.testing.MethodMock(scope, functionName, opt_strictness);
@@ -142,7 +142,7 @@ goog.testing.createMethodMock = function(scope, functionName, opt_strictness) {
  *     mock.
  * @param {number=} opt_strictness One of goog.testing.Mock.LOOSE or
  *     goog.testing.Mock.STRICT. The default is STRICT.
- * @return {goog.testing.MockInterface} The mocked constructor.
+ * @return {!goog.testing.MockInterface} The mocked constructor.
  */
 goog.testing.createConstructorMock = function(scope, constructorName,
                                               opt_strictness) {

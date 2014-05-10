@@ -87,7 +87,7 @@ goog.editor.plugins.RemoveFormatting.appendNewline_ = function(sb) {
  *    range as the beginning of the new range.
  * @param {goog.dom.AbstractRange} endRange Use the end point of this
  *    range as the end of the new range.
- * @return {goog.dom.AbstractRange} The new range.
+ * @return {!goog.dom.AbstractRange} The new range.
  * @private
  */
 goog.editor.plugins.RemoveFormatting.createRangeDelimitedByRanges_ = function(

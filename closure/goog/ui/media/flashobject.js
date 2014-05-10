@@ -320,7 +320,7 @@ goog.ui.media.FlashObject.prototype.allowScriptAccess_ =
  * Sets the flash movie Wmode.
  *
  * @param {goog.ui.media.FlashObject.Wmodes} wmode the flash movie Wmode.
- * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setWmode = function(wmode) {
   this.wmode_ = wmode;
@@ -340,7 +340,7 @@ goog.ui.media.FlashObject.prototype.getWmode = function() {
  * Adds flash variables.
  *
  * @param {goog.structs.Map|Object} map A key-value map of variables.
- * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.addFlashVars = function(map) {
   this.flashVars_.addAll(map);
@@ -353,7 +353,7 @@ goog.ui.media.FlashObject.prototype.addFlashVars = function(map) {
  *
  * @param {string} key The name of the flash variable.
  * @param {string} value The value of the flash variable.
- * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setFlashVar = function(key, value) {
   this.flashVars_.set(key, value);
@@ -372,7 +372,7 @@ goog.ui.media.FlashObject.prototype.setFlashVar = function(key, value) {
  *    as a goog.structs.Map or an Object literal) or a key to the optional
  *    {@code opt_value}.
  * @param {string=} opt_value The optional value for the flashVar key.
- * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setFlashVars = function(flashVar,
                                                             opt_value) {
@@ -401,7 +401,7 @@ goog.ui.media.FlashObject.prototype.getFlashVars = function() {
  * Sets the background color of the movie.
  *
  * @param {string} color The new color to be set.
- * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setBackgroundColor = function(color) {
   this.backgroundColor_ = color;
@@ -421,7 +421,7 @@ goog.ui.media.FlashObject.prototype.getBackgroundColor = function() {
  * Sets the allowScriptAccess setting of the movie.
  *
  * @param {string} value The new value to be set.
- * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setAllowScriptAccess = function(value) {
   this.allowScriptAccess_ = value;
@@ -442,7 +442,7 @@ goog.ui.media.FlashObject.prototype.getAllowScriptAccess = function() {
  *
  * @param {number|string} width The width of the movie.
  * @param {number|string} height The height of the movie.
- * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setSize = function(width, height) {
   this.width_ = goog.isString(width) ? width : Math.round(width) + 'px';
@@ -467,7 +467,7 @@ goog.ui.media.FlashObject.prototype.getRequiredVersion = function() {
  *
  * @param {?string} version The minimum required version for this movie to work,
  *     or null if you want to unset it.
- * @return {goog.ui.media.FlashObject} The flash object instance for chaining.
+ * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setRequiredVersion = function(version) {
   this.requiredVersion_ = version;

@@ -166,7 +166,7 @@ goog.module.ModuleInfo.prototype.setModuleConstructor = function(
  *    is the module context.
  * @param {Object=} opt_handler Optional handler under whose scope to execute
  *     the callback.
- * @return {goog.module.ModuleLoadCallback} Reference to the callback
+ * @return {!goog.module.ModuleLoadCallback} Reference to the callback
  *     object.
  */
 goog.module.ModuleInfo.prototype.registerEarlyCallback = function(
@@ -181,7 +181,7 @@ goog.module.ModuleInfo.prototype.registerEarlyCallback = function(
  *    is the module context.
  * @param {Object=} opt_handler Optional handler under whose scope to execute
  *     the callback.
- * @return {goog.module.ModuleLoadCallback} Reference to the callback
+ * @return {!goog.module.ModuleLoadCallback} Reference to the callback
  *     object.
  */
 goog.module.ModuleInfo.prototype.registerCallback = function(
@@ -196,7 +196,7 @@ goog.module.ModuleInfo.prototype.registerCallback = function(
  *    is the failure type.
  * @param {Object=} opt_handler Optional handler under whose scope to execute
  *     the callback.
- * @return {goog.module.ModuleLoadCallback} Reference to the callback
+ * @return {!goog.module.ModuleLoadCallback} Reference to the callback
  *     object.
  */
 goog.module.ModuleInfo.prototype.registerErrback = function(

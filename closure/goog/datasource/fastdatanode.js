@@ -165,7 +165,7 @@ goog.ds.FastDataNode.fromJs = function(object, dataName, opt_parent) {
 
 /**
  * Static instance of an empty list.
- * @type {goog.ds.EmptyNodeList}
+ * @type {!goog.ds.EmptyNodeList}
  * @private
  */
 goog.ds.FastDataNode.emptyList_ = new goog.ds.EmptyNodeList();
@@ -443,7 +443,7 @@ goog.ds.PrimitiveFastDataNode.prototype.set = function(value) {
 /**
  * Returns child nodes of this data node. Always returns an unmodifiable,
  * empty list.
- * @return {goog.ds.DataNodeList} (Empty) list of child nodes.
+ * @return {!goog.ds.DataNodeList} (Empty) list of child nodes.
  * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.getChildNodes = function() {

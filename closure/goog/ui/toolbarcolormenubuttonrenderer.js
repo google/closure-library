@@ -52,7 +52,7 @@ goog.addSingletonGetter(goog.ui.ToolbarColorMenuButtonRenderer);
  *   </div>
  * @param {goog.ui.ControlContent} content Text caption or DOM structure.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Caption element.
+ * @return {!Element} Caption element.
  * @see goog.ui.ToolbarColorMenuButtonRenderer#createColorIndicator
  * @override
  */

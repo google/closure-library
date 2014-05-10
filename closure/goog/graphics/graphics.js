@@ -95,7 +95,7 @@ goog.graphics.createGraphics = function(width, height, opt_coordWidth,
  *     same as height.
  * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
  *     document we want to render in.
- * @return {goog.graphics.AbstractGraphics} The created instance.
+ * @return {!goog.graphics.AbstractGraphics} The created instance.
  * @deprecated goog.graphics is deprecated. It existed to abstract over browser
  *     differences before the canvas tag was widely supported.  See
  *     http://en.wikipedia.org/wiki/Canvas_element for details.

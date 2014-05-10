@@ -169,7 +169,7 @@ goog.ds.DataManager.prototype.getDataSource = function(name) {
 
 /**
  * Get the value of the node
- * @return {Object} The value of the node, or null if no value.
+ * @return {!Object} The value of the node.
  * @override
  */
 goog.ds.DataManager.prototype.get = function() {

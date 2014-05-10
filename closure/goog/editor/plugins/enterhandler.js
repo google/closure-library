@@ -526,7 +526,7 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
 
 /**
  * Deletes the content at the current cursor position.
- * @return {Node|Object} Something representing the current cursor position.
+ * @return {!Node|!Object} Something representing the current cursor position.
  *    See deleteCursorSelectionIE_ and deleteCursorSelectionW3C_ for details.
  *    Should be passed to releasePositionObject_ when no longer in use.
  * @private
@@ -573,7 +573,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionIE_ =
 /**
  * Delete the selection at the current cursor position, then returns the node
  * at the current position.
- * @return {goog.editor.range.Point} The current cursor position. Note that
+ * @return {!goog.editor.range.Point} The current cursor position. Note that
  *    unlike simulateEnterIE_, this should not be removed from the DOM.
  * @private
  */

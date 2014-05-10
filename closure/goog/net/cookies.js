@@ -314,7 +314,7 @@ goog.net.Cookies.prototype.setCookie_ = function(s) {
 /**
  * Private helper function to allow testing cookies without depending on the
  * browser. IE6 can return null here.
- * @return {?string} Returns the {@code document.cookie}.
+ * @return {string} Returns the {@code document.cookie}.
  * @private
  */
 goog.net.Cookies.prototype.getCookie_ = function() {

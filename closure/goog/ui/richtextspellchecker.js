@@ -474,7 +474,7 @@ goog.ui.RichTextSpellChecker.prototype.processRange = function(node, text) {
 goog.ui.RichTextSpellChecker.prototype.createWordElement = function(
     word, status) {
   var parameters = this.getElementProperties(status);
-  var el = /** @type {HTMLSpanElement} */ (this.editorDom_.createDom('span',
+  var el = /** @type {!HTMLSpanElement} */ (this.editorDom_.createDom('span',
       parameters, word));
   this.registerWordElement(word, el);
   return el;

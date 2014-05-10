@@ -690,7 +690,7 @@ goog.ui.CharPicker.prototype.getChar_ = function(e) {
  * Creates a menu entry for either the category listing or subcategory listing.
  * @param {number} id Id to be used for the entry.
  * @param {string} caption Text displayed for the menu item.
- * @return {goog.ui.MenuItem} Menu item to be added to the menu listing.
+ * @return {!goog.ui.MenuItem} Menu item to be added to the menu listing.
  * @private
  */
 goog.ui.CharPicker.prototype.createMenuItem_ = function(id, caption) {

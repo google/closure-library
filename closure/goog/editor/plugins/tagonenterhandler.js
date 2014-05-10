@@ -659,7 +659,7 @@ goog.editor.plugins.TagOnEnterHandler.splitDom_ = function(
  *     empty element, the dom will be split at that element, with positionNode
  *     ending up in the second half.  positionOffset must be 0 in this case.
  * @param {Node} node Node to split.
- * @return {Node} The node containing the second half of the tree.
+ * @return {!Node} The node containing the second half of the tree.
  * @private
  */
 goog.editor.plugins.TagOnEnterHandler.splitDomAndAppend_ = function(

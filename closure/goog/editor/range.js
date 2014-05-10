@@ -84,7 +84,7 @@ goog.editor.range.narrow = function(range, el) {
  * nodes as the foo text node, return the li.
  * @param {goog.dom.AbstractRange} range The range.
  * @param {Node=} opt_stopNode Optional node to stop expanding past.
- * @return {goog.dom.AbstractRange} The expanded range.
+ * @return {!goog.dom.AbstractRange} The expanded range.
  */
 goog.editor.range.expand = function(range, opt_stopNode) {
   // Expand the start out to the common container.
@@ -126,7 +126,7 @@ goog.editor.range.expand = function(range, opt_stopNode) {
  * @param {goog.dom.AbstractRange} range The range to expand.
  * @param {goog.dom.RangeEndpoint} endpoint The endpoint to expand.
  * @param {Node=} opt_stopNode Optional node to stop expanding past.
- * @return {goog.dom.AbstractRange} The expanded range.
+ * @return {!goog.dom.AbstractRange} The expanded range.
  * @private
  */
 goog.editor.range.expandEndPointToContainer_ = function(range, endpoint,

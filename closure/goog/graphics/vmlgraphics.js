@@ -430,7 +430,7 @@ goog.graphics.VmlGraphics.setPositionAndSize = function(
  * Creates an element spanning the surface.
  *
  * @param {string} type The type of element to create.
- * @return {Element} The created, positioned, and sized element.
+ * @return {!Element} The created, positioned, and sized element.
  * @private
  */
 goog.graphics.VmlGraphics.prototype.createFullSizeElement_ = function(type) {

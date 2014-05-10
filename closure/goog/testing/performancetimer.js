@@ -136,7 +136,7 @@ goog.testing.PerformanceTimer.prototype.isDiscardOutliers = function() {
  *
  * @param {Function} testFn Test function whose performance is to
  *     be measured.
- * @return {Object} Object containing performance stats.
+ * @return {!Object} Object containing performance stats.
  */
 goog.testing.PerformanceTimer.prototype.run = function(testFn) {
   return this.runTask(new goog.testing.PerformanceTimer.Task(
@@ -151,7 +151,7 @@ goog.testing.PerformanceTimer.prototype.run = function(testFn) {
  * @see goog.testing.PerformanceTimer#run
  * @param {goog.testing.PerformanceTimer.Task} task A task describing the test
  *     function to invoke.
- * @return {Object} Object containing performance stats.
+ * @return {!Object} Object containing performance stats.
  */
 goog.testing.PerformanceTimer.prototype.runTask = function(task) {
   var samples = [];
@@ -181,7 +181,7 @@ goog.testing.PerformanceTimer.prototype.runTask = function(task) {
  * Finishes the run of a task by creating a result object from samples, in the
  * format described in {@code run}.
  * @see goog.testing.PerformanceTimer#run
- * @return {Object} Object containing performance stats.
+ * @return {!Object} Object containing performance stats.
  * @private
  */
 goog.testing.PerformanceTimer.prototype.finishTask_ = function(samples) {

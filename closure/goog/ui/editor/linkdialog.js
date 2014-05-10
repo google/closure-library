@@ -322,7 +322,7 @@ goog.ui.editor.LinkDialog.prototype.createDialogControl = function() {
  * Creates and returns the event object to be used when dispatching the OK
  * event to listeners based on which tab is currently selected and the contents
  * of the input fields of that tab.
- * @return {goog.ui.editor.LinkDialog.OkEvent} The event object to be used when
+ * @return {!goog.ui.editor.LinkDialog.OkEvent} The event object to be used when
  *     dispatching the OK event to listeners.
  * @protected
  * @override
@@ -824,7 +824,7 @@ goog.ui.editor.LinkDialog.prototype.onTextToDisplayEdit_ = function() {
 
 /**
  * The function called when hitting OK with the "On the web" tab current.
- * @return {goog.ui.editor.LinkDialog.OkEvent} The event object to be used when
+ * @return {!goog.ui.editor.LinkDialog.OkEvent} The event object to be used when
  *     dispatching the OK event to listeners.
  * @private
  */
@@ -848,7 +848,7 @@ goog.ui.editor.LinkDialog.prototype.createOkEventFromWebTab_ = function() {
 /**
  * The function called when hitting OK with the "email address" tab current.
  * @param {string=} opt_inputId Id of an alternate input to check.
- * @return {goog.ui.editor.LinkDialog.OkEvent} The event object to be used when
+ * @return {!goog.ui.editor.LinkDialog.OkEvent} The event object to be used when
  *     dispatching the OK event to listeners.
  * @private
  */

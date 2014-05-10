@@ -195,7 +195,7 @@ goog.inherits(goog.ui.media.MediaRenderer, goog.ui.ControlRenderer);
  * specific renderers can hide/show the caption as desired.
  *
  * @param {goog.ui.Control} control The control instance.
- * @return {Element} The DOM structure that represents control.
+ * @return {!Element} The DOM structure that represents control.
  * @override
  */
 goog.ui.media.MediaRenderer.prototype.createDom = function(control) {

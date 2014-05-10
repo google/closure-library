@@ -68,7 +68,7 @@ goog.ds.DataNode.prototype.set = goog.abstractMethod;
  * Gets all of the child nodes of the current node.
  * Should return an empty DataNode list if no child nodes.
  * @param {string=} opt_selector String selector to choose child nodes.
- * @return {goog.ds.DataNodeList} The child nodes.
+ * @return {!goog.ds.DataNodeList} The child nodes.
  */
 goog.ds.DataNode.prototype.getChildNodes = goog.abstractMethod;
 

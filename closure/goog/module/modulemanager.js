@@ -551,8 +551,8 @@ goog.module.ModuleManager.prototype.addLoadModule_ = function(id, d) {
  *
  * @param {Array.<string>} ids The id of the module to load.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {!Object.<!goog.async.Deferred>} A mapping from id (String) to
- *     deferred objects that will callback or errback when the load for that
+ * @return {!Object.<string, !goog.async.Deferred>} A mapping from id (String)
+ *     to deferred objects that will callback or errback when the load for that
  *     id is finished.
  * @private
  */
@@ -979,8 +979,8 @@ goog.module.ModuleManager.prototype.load = function(
  *
  * @param {Array.<string>} moduleIds A list of module ids.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {Object.<!goog.async.Deferred>} A mapping from id (String) to
- *     deferred objects that will callback or errback when the load for that
+ * @return {!Object.<string, !goog.async.Deferred>} A mapping from id (String)
+ *     to deferred objects that will callback or errback when the load for that
  *     id is finished.
  */
 goog.module.ModuleManager.prototype.loadMultiple = function(
