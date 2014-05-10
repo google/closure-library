@@ -103,10 +103,10 @@ class JsCompilerTestCase(unittest.TestCase):
   def testGetJavaVersion(self):
 
     def assertVersion(expected, version_string):
-      self.assertEquals(expected, version_string)
+      self.assertEquals(expected, jscompiler._ParseJavaVersion(version_string))
 
-      assertVersion((1, 7), _TEST_JAVA_VERSION_STRING)
-      assertVersion((1, 4), 'java version "1.4.0_03-ea"')
+    assertVersion((1, 7), _TEST_JAVA_VERSION_STRING)
+    assertVersion((1, 4), 'java version "1.4.0_03-ea"')
 
 
 _TEST_JAVA_VERSION_STRING = """\
