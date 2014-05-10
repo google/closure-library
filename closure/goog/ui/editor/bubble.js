@@ -34,6 +34,7 @@ goog.require('goog.editor.style');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.functions');
 goog.require('goog.log');
 goog.require('goog.math.Box');
 goog.require('goog.object');
@@ -399,6 +400,16 @@ goog.ui.editor.Bubble.MARGIN_BOX_ = new goog.math.Box(
 
 
 /**
+ * Returns the margin box.
+ * @return {goog.math.Box}
+ * @protected
+ */
+goog.ui.editor.Bubble.prototype.getMarginBox = function() {
+  return goog.ui.editor.Bubble.MARGIN_BOX_;
+};
+
+
+/**
  * Positions and displays this bubble below its targetElement. Assumes that
  * the bubbleContainer is already contained in the document object it applies
  * to.
@@ -482,8 +493,17 @@ goog.ui.editor.Bubble.prototype.positionAtAnchor_ = function(
   }
   return goog.positioning.positionAtAnchor(
       targetElement, targetCorner, this.bubbleContainer_,
-      bubbleCorner, null, goog.ui.editor.Bubble.MARGIN_BOX_, overflow);
+      bubbleCorner, null, this.getMarginBox(), overflow,
+      null, this.getViewportBox());
 };
+
+
+/**
+ * Returns the viewport box to use when positioning the bubble.
+ * @return {goog.math.Box}
+ * @protected
+ */
+goog.ui.editor.Bubble.prototype.getViewportBox = goog.functions.NULL;
 
 
 
@@ -526,7 +546,7 @@ goog.ui.editor.Bubble.Panel_ = function(dom, id, type, title, targetElement,
       {className: goog.getCssName('tr_bubble_panel'), id: id},
       dom.createDom(goog.dom.TagName.DIV,
           {className: goog.getCssName('tr_bubble_panel_title')},
-          title + ':'), // TODO(robbyw): Does this work properly in bidi?
+          title ? title + ':' : ''), // TODO(robbyw): Does this work in bidi?
       dom.createDom(goog.dom.TagName.DIV,
           {className: goog.getCssName('tr_bubble_panel_content')}));
 };
