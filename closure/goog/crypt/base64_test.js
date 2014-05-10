@@ -59,6 +59,28 @@ function testOddLengthByteArrayEncoding() {
   }
 }
 
+// Tests that decoding a string where the length is not a multiple of 4 does
+// not produce spurious trailing zeroes.  This is a regression test for
+// cl/65120705, which fixes a bug that was introduced when support for
+// non-padded base64 encoding was added in cl/20209336.
+function testOddLengthByteArrayDecoding() {
+  // The base-64 encoding of the bytes [97, 98, 99, 100], with no padding.
+  // The padded version would be "YWJjZA==" (length 8), or "YWJjZA.." if
+  // web-safe.
+  var encodedBuffer = 'YWJjZA';
+  var decodedBuffer1 = goog.crypt.base64.decodeStringToByteArray(encodedBuffer);
+  assertEquals(4, decodedBuffer1.length);
+  // Note that byteArrayToString ignores any trailing zeroes because
+  // String.fromCharCode(0) is ''.
+  assertEquals('abcd', goog.crypt.byteArrayToString(decodedBuffer1));
+
+  // Repeat the test in web-safe decoding mode.
+  var decodedBuffer2 = goog.crypt.base64.decodeStringToByteArray(encodedBuffer,
+      true  /* web-safe */);
+  assertEquals(4, decodedBuffer2.length);
+  assertEquals('abcd', goog.crypt.byteArrayToString(decodedBuffer2));
+}
+
 function testShortcutPathEncoding() {
   // Test the higher-level API (tests the btoa/atob shortcut path)
   for (var i = 0; i < tests.length; i += 2) {
