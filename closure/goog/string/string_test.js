@@ -22,6 +22,7 @@ goog.provide('goog.stringTest');
 goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Unicode');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -206,7 +207,7 @@ function testCanonicalizeNewlines() {
 
 
 // === tests for goog.string.normalizeWhitespace ===
-function testWhitespace() {
+function testNormalizeWhitespace() {
   assertEquals('All whitespace chars should be replaced with a normal space',
                goog.string.normalizeWhitespace('\xa0 \n\t \xa0 \n\t'),
                '         ');
@@ -623,12 +624,27 @@ function testUnescapeEntitiesPreservesWhitespace() {
 
 
 // === tests for goog.string.whitespaceEscape ===
-function testWhiteSpaceEscape() {
+function testWhitespaceEscape() {
   assertEquals('Should be the same',
       goog.string.whitespaceEscape('one two  three   four    five     '),
       'one two &#160;three &#160; four &#160; &#160;five &#160; &#160; ');
 }
 
+
+// === tests for goog.string.preserveSpaces ===
+function testPreserveSpaces() {
+  var nbsp = goog.string.Unicode.NBSP;
+  assertEquals('', goog.string.preserveSpaces(''));
+  assertEquals(nbsp + 'a', goog.string.preserveSpaces(' a'));
+  assertEquals(nbsp + ' a', goog.string.preserveSpaces('  a'));
+  assertEquals(nbsp + ' ' + nbsp + 'a', goog.string.preserveSpaces('   a'));
+  assertEquals('a ' + nbsp + 'b', goog.string.preserveSpaces('a  b'));
+  assertEquals('a\n' + nbsp + 'b', goog.string.preserveSpaces('a\n b'));
+
+  // We don't care about trailing spaces.
+  assertEquals('a ', goog.string.preserveSpaces('a '));
+  assertEquals('a \n' + nbsp + 'b', goog.string.preserveSpaces('a \n b'));
+}
 
 
 // === tests for goog.string.stripQuotes ===
