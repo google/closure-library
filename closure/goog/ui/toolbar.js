@@ -44,3 +44,11 @@ goog.ui.Toolbar = function(opt_renderer, opt_orientation, opt_domHelper) {
       goog.ui.ToolbarRenderer.getInstance(), opt_domHelper);
 };
 goog.inherits(goog.ui.Toolbar, goog.ui.Container);
+
+
+/** @override */
+goog.ui.Toolbar.prototype.handleFocus = function(e) {
+  goog.ui.Toolbar.base(this, 'handleFocus', e);
+  // Highlight the first highlightable item for ARIA spec compliance.
+  this.highlightFirst();
+};
