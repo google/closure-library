@@ -625,7 +625,7 @@ goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
   if (opt_document) {
     div = opt_document.createElement('div');
   } else {
-    div = document.createElement('div');
+    div = goog.global.document.createElement('div');
   }
   // Match as many valid entity characters as possible. If the actual entity
   // happens to be shorter, it will still work as innerHTML will return the
