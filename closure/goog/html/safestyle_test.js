@@ -79,3 +79,8 @@ function testFromConstant_throwsIfNoColon() {
     goog.html.SafeStyle.fromConstant(goog.string.Const.from('width= 1em;'));
   });
 }
+
+
+function testEmpty() {
+  assertEquals('', goog.html.SafeStyle.unwrap(goog.html.SafeStyle.EMPTY));
+}

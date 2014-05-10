@@ -138,6 +138,15 @@ goog.html.SafeStyle.prototype.implementsGoogStringTypedString = true;
 
 
 /**
+ * Type marker for the SafeStyle type, used to implement additional
+ * run-time type checking.
+ * @const
+ * @private
+ */
+goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
+
+
+/**
  * Creates a SafeStyle object from a compile-time constant string.
  *
  * {@code style} should be in the format
@@ -275,12 +284,3 @@ goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_ =
  */
 goog.html.SafeStyle.EMPTY =
     goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_('');
-
-
-/**
- * Type marker for the SafeStyle type, used to implement additional
- * run-time type checking.
- * @const
- * @private
- */
-goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
