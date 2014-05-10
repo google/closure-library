@@ -2185,13 +2185,13 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
 function testGetVendorStyleNameWebkit() {
   var mockElement = {
     'style': {
-      'WebkitTransform': ''
+      'WebkitTransformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
-  assertEquals('-webkit-transform',
-      goog.style.getVendorStyleName_(mockElement, 'transform'));
+  assertEquals('-webkit-transform-origin',
+      goog.style.getVendorStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2202,15 +2202,15 @@ function testGetVendorStyleNameWebkit() {
 function testGetVendorStyleNameWebkitNoPrefix() {
   var mockElement = {
     'style': {
-      'WebkitTransform': '',
-      'transform': ''
+      'WebkitTransformOrigin': '',
+      'transformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   assertEquals(
-      'transform',
-      goog.style.getVendorStyleName_(mockElement, 'transform'));
+      'transform-origin',
+      goog.style.getVendorStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2221,13 +2221,13 @@ function testGetVendorStyleNameWebkitNoPrefix() {
 function testGetVendorStyleNameGecko() {
   var mockElement = {
     'style': {
-      'MozTransform': ''
+      'MozTransformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
-  assertEquals('-moz-transform',
-      goog.style.getVendorStyleName_(mockElement, 'transform'));
+  assertEquals('-moz-transform-origin',
+      goog.style.getVendorStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2238,15 +2238,15 @@ function testGetVendorStyleNameGecko() {
 function testGetVendorStyleNameGeckoNoPrefix() {
   var mockElement = {
     'style': {
-      'MozTransform': '',
-      'transform': ''
+      'MozTransformOrigin': '',
+      'transformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   assertEquals(
-      'transform',
-      goog.style.getVendorStyleName_(mockElement, 'transform'));
+      'transform-origin',
+      goog.style.getVendorStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2257,13 +2257,13 @@ function testGetVendorStyleNameGeckoNoPrefix() {
 function testGetVendorStyleNameIE() {
   var mockElement = {
     'style': {
-      'msTransform': ''
+      'msTransformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
-  assertEquals('-ms-transform',
-      goog.style.getVendorStyleName_(mockElement, 'transform'));
+  assertEquals('-ms-transform-origin',
+      goog.style.getVendorStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2274,15 +2274,15 @@ function testGetVendorStyleNameIE() {
 function testGetVendorStyleNameIENoPrefix() {
   var mockElement = {
     'style': {
-      'msTransform': '',
-      'transform': ''
+      'msTransformOrigin': '',
+      'transformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals(
-      'transform',
-      goog.style.getVendorStyleName_(mockElement, 'transform'));
+      'transform-origin',
+      goog.style.getVendorStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2293,13 +2293,13 @@ function testGetVendorStyleNameIENoPrefix() {
 function testGetVendorStyleNameOpera() {
   var mockElement = {
     'style': {
-      'OTransform': ''
+      'OTransformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
-  assertEquals('-o-transform',
-      goog.style.getVendorStyleName_(mockElement, 'transform'));
+  assertEquals('-o-transform-origin',
+      goog.style.getVendorStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2310,15 +2310,15 @@ function testGetVendorStyleNameOpera() {
 function testGetVendorStyleNameOperaNoPrefix() {
   var mockElement = {
     'style': {
-      'OTransform': '',
-      'transform': ''
+      'OTransformOrigin': '',
+      'transformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals(
-      'transform',
-      goog.style.getVendorStyleName_(mockElement, 'transform'));
+      'transform-origin',
+      goog.style.getVendorStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2329,13 +2329,13 @@ function testGetVendorStyleNameOperaNoPrefix() {
 function testGetVendorJsStyleNameWebkit() {
   var mockElement = {
     'style': {
-      'WebkitTransform': ''
+      'WebkitTransformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
-  assertEquals('WebkitTransform',
-      goog.style.getVendorJsStyleName_(mockElement, 'transform'));
+  assertEquals('WebkitTransformOrigin',
+      goog.style.getVendorJsStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2346,15 +2346,15 @@ function testGetVendorJsStyleNameWebkit() {
 function testGetVendorJsStyleNameWebkitNoPrefix() {
   var mockElement = {
     'style': {
-      'WebkitTransform': '',
-      'transform': ''
+      'WebkitTransformOrigin': '',
+      'transformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   assertEquals(
-      'transform',
-      goog.style.getVendorJsStyleName_(mockElement, 'transform'));
+      'transformOrigin',
+      goog.style.getVendorJsStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2365,13 +2365,13 @@ function testGetVendorJsStyleNameWebkitNoPrefix() {
 function testGetVendorJsStyleNameGecko() {
   var mockElement = {
     'style': {
-      'MozTransform': ''
+      'MozTransformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
-  assertEquals('MozTransform',
-      goog.style.getVendorJsStyleName_(mockElement, 'transform'));
+  assertEquals('MozTransformOrigin',
+      goog.style.getVendorJsStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2382,15 +2382,15 @@ function testGetVendorJsStyleNameGecko() {
 function testGetVendorJsStyleNameGeckoNoPrefix() {
   var mockElement = {
     'style': {
-      'MozTransform': '',
-      'transform': ''
+      'MozTransformOrigin': '',
+      'transformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   assertEquals(
-      'transform',
-      goog.style.getVendorJsStyleName_(mockElement, 'transform'));
+      'transformOrigin',
+      goog.style.getVendorJsStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2401,13 +2401,13 @@ function testGetVendorJsStyleNameGeckoNoPrefix() {
 function testGetVendorJsStyleNameIE() {
   var mockElement = {
     'style': {
-      'msTransform': ''
+      'msTransformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
-  assertEquals('msTransform',
-      goog.style.getVendorJsStyleName_(mockElement, 'transform'));
+  assertEquals('msTransformOrigin',
+      goog.style.getVendorJsStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2418,15 +2418,15 @@ function testGetVendorJsStyleNameIE() {
 function testGetVendorJsStyleNameIENoPrefix() {
   var mockElement = {
     'style': {
-      'msTransform': '',
-      'transform': ''
+      'msTransformOrigin': '',
+      'transformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals(
-      'transform',
-      goog.style.getVendorJsStyleName_(mockElement, 'transform'));
+      'transformOrigin',
+      goog.style.getVendorJsStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2437,13 +2437,13 @@ function testGetVendorJsStyleNameIENoPrefix() {
 function testGetVendorJsStyleNameOpera() {
   var mockElement = {
     'style': {
-      'OTransform': ''
+      'OTransformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
-  assertEquals('OTransform',
-      goog.style.getVendorJsStyleName_(mockElement, 'transform'));
+  assertEquals('OTransformOrigin',
+      goog.style.getVendorJsStyleName_(mockElement, 'transform-origin'));
 }
 
 
@@ -2454,15 +2454,15 @@ function testGetVendorJsStyleNameOpera() {
 function testGetVendorJsStyleNameOperaNoPrefix() {
   var mockElement = {
     'style': {
-      'OTransform': '',
-      'transform': ''
+      'OTransformOrigin': '',
+      'transformOrigin': ''
     }
   };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals(
-      'transform',
-      goog.style.getVendorJsStyleName_(mockElement, 'transform'));
+      'transformOrigin',
+      goog.style.getVendorJsStyleName_(mockElement, 'transform-origin'));
 }
 
 

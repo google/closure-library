@@ -101,7 +101,7 @@ goog.style.getVendorJsStyleName_ = function(element, style) {
 
   if (element.style[camelStyle] === undefined) {
     var prefixedStyle = goog.dom.vendor.getVendorJsPrefix() +
-        goog.string.toTitleCase(style);
+        goog.string.toTitleCase(camelStyle);
 
     if (element.style[prefixedStyle] !== undefined) {
       return prefixedStyle;
@@ -126,7 +126,7 @@ goog.style.getVendorStyleName_ = function(element, style) {
 
   if (element.style[camelStyle] === undefined) {
     var prefixedStyle = goog.dom.vendor.getVendorJsPrefix() +
-        goog.string.toTitleCase(style);
+        goog.string.toTitleCase(camelStyle);
 
     if (element.style[prefixedStyle] !== undefined) {
       return goog.dom.vendor.getVendorPrefix() + '-' + style;
