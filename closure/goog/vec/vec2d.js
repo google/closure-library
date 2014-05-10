@@ -153,6 +153,42 @@ goog.vec.vec2d.subtract = function(vec0, vec1, resultVec) {
 
 
 /**
+ * Multiplies each component of vec0 with the matching element of vec0
+ * storing the products into resultVec.
+ *
+ * @param {!goog.vec.vec2d.Type} vec0 The first vector.
+ * @param {!goog.vec.vec2d.Type} vec1 The second vector.
+ * @param {!goog.vec.vec2d.Type} resultVec The vector to
+ *     receive the result. May be vec0.
+ * @return {!goog.vec.vec2d.Type} Return resultVec so that operations can be
+ *     chained together.
+ */
+goog.vec.vec2d.componentMultiply = function(vec0, vec1, resultVec) {
+  resultVec[0] = vec0[0] * vec1[0];
+  resultVec[1] = vec0[1] * vec1[1];
+  return resultVec;
+};
+
+
+/**
+ * Divides each component of vec0 with the matching element of vec0
+ * storing the divisor into resultVec.
+ *
+ * @param {!goog.vec.vec2d.Type} vec0 The first vector.
+ * @param {!goog.vec.vec2d.Type} vec1 The second vector.
+ * @param {!goog.vec.vec2d.Type} resultVec The vector to
+ *     receive the result. May be vec0.
+ * @return {!goog.vec.vec2d.Type} Return resultVec so that operations can be
+ *     chained together.
+ */
+goog.vec.vec2d.componentDivide = function(vec0, vec1, resultVec) {
+  resultVec[0] = vec0[0] / vec1[0];
+  resultVec[1] = vec0[1] / vec1[1];
+  return resultVec;
+};
+
+
+/**
  * Negates vec0, storing the result into resultVec.
  *
  * @param {goog.vec.vec2d.Type} vec0 The vector to negate.
