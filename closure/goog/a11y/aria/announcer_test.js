@@ -18,6 +18,7 @@ goog.setTestOnly('goog.a11y.aria.AnnouncerTest');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Announcer');
 goog.require('goog.a11y.aria.LivePriority');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.iframe');
@@ -78,7 +79,25 @@ function testAnnouncerInIframe() {
   goog.dispose(announcer);
 }
 
-function checkLiveRegionContains(text, priority, opt_domHelper) {
+function testAnnouncerWithAriaHidden() {
+  var text = 'test content1';
+  var text2 = 'test content2';
+  var announcer = new goog.a11y.aria.Announcer(goog.dom.getDomHelper());
+  announcer.say(text);
+  // Set aria-hidden attribute on the live region (simulates a modal dialog
+  // being opened).
+  var liveRegion = getLiveRegion('polite');
+  goog.a11y.aria.setState(liveRegion, goog.a11y.aria.State.HIDDEN, true);
+
+  // Announce a new message and make sure that the aria-hidden was removed.
+  announcer.say(text2);
+  checkLiveRegionContains(text2, 'polite');
+  assertEquals('',
+      goog.a11y.aria.getState(liveRegion, goog.a11y.aria.State.HIDDEN));
+  goog.dispose(announcer);
+}
+
+function getLiveRegion(priority, opt_domHelper) {
   var dom = opt_domHelper || goog.dom.getDomHelper();
   var divs = dom.getElementsByTagNameAndClass('div', null);
   var liveRegions = [];
@@ -88,5 +107,10 @@ function checkLiveRegionContains(text, priority, opt_domHelper) {
     }
   });
   assertEquals(1, liveRegions.length);
-  assertEquals(text, goog.dom.getTextContent(liveRegions[0]));
+  return liveRegions[0];
+}
+
+function checkLiveRegionContains(text, priority, opt_domHelper) {
+  var liveRegion = getLiveRegion(priority, opt_domHelper);
+  assertEquals(text, goog.dom.getTextContent(liveRegion));
 }
