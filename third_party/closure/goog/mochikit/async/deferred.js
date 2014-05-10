@@ -514,10 +514,15 @@ goog.async.Deferred.prototype.chainDeferred = function(otherDeferred) {
  * but doesn't prevent additional callbacks from being added to
  * {@code otherDeferred}.
  *
- * @param {!goog.async.Deferred} otherDeferred The Deferred to wait for.
+ * @param {!goog.async.Deferred|!goog.Thenable} otherDeferred The Deferred
+ *     to wait for.
  * @return {!goog.async.Deferred} This Deferred.
  */
 goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
+  if (!(otherDeferred instanceof goog.async.Deferred)) {
+    // The Thenable case.
+    return this.addCallback(goog.bind(otherDeferred.then, otherDeferred));
+  }
   return this.addCallback(goog.bind(otherDeferred.branch, otherDeferred));
 };
 

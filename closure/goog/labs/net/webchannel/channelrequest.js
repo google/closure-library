@@ -1211,6 +1211,16 @@ ChannelRequest.prototype.getPostData = function() {
 
 
 /**
+ * Returns the XhrIo request object.
+ *
+ * @return {?goog.net.XhrIo} Any XhrIo request created for this object.
+ */
+ChannelRequest.prototype.getXhr = function() {
+  return this.xmlHttp_;
+};
+
+
+/**
  * Returns the time that the request started, if it has started.
  *
  * @return {?number} The time the request started, as returned by goog.now().

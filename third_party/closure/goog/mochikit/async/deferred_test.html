@@ -553,6 +553,60 @@ function testAwaitDeferred() {
   assertEquals('awbcdxyz', results.join(''));
 }
 
+function testAwaitDeferred_withPromise() {
+
+  var results = [];
+
+  function fn(x) {
+    return function() {
+      results.push(x);
+    };
+  }
+
+  var resolver = new goog.Promise.withResolver();
+  resolver.promise.then(fn('b'));
+
+  // d1 -> a -> (wait for promise) -> c
+  var d1 = new Deferred();
+  d1.addCallback(fn('a'));
+  d1.awaitDeferred(resolver.promise);
+  d1.addCallback(fn('c'));
+
+  // calls 'a' then yields for promise.
+  d1.callback(null);
+
+  // will get called after promise.
+  d1.addCallback(fn('d'));
+
+  assertEquals('a', results.join(''));
+
+  // d3 -> w -> (wait for promise) -> x
+  var d3 = new Deferred();
+  d3.addCallback(fn('w'));
+  d3.awaitDeferred(resolver.promise);
+  d3.addCallback(fn('x'));
+
+  // calls 'w', then yields for promise.
+  d3.callback();
+
+
+  // will get called after promise.
+  d3.addCallback(fn('y'));
+
+  assertEquals('aw', results.join(''));
+
+  // d1 calls 'd', d3 calls 'y'
+  resolver.resolve();
+  mockClock.tick();
+
+  assertEquals('awbcdxy', results.join(''));
+
+  // d3 and promise already called, so 'z' called immediately.
+  d3.addCallback(fn('z'));
+
+  assertEquals('awbcdxyz', results.join(''));
+}
+
 function testAwaitDeferredWithErrors() {
   var results = [];
 

@@ -57,7 +57,7 @@ goog.require('goog.promise.Resolver');
  *
  * @param {function(
  *             this:RESOLVER_CONTEXT,
- *             function((TYPE|IThenable.<TYPE>|Thenable)),
+ *             function((TYPE|IThenable.<TYPE>|Thenable)=),
  *             function(*)): void} resolver
  *     Initialization function that is invoked immediately with {@code resolve}
  *     and {@code reject} functions as arguments. The Promise is resolved or
@@ -365,6 +365,16 @@ goog.Promise.withResolver = function() {
  */
 goog.Promise.prototype.then = function(
     opt_onFulfilled, opt_onRejected, opt_context) {
+
+  if (opt_onFulfilled != null) {
+    goog.asserts.assertFunction(opt_onFulfilled,
+        'opt_onFulfilled should be a function.');
+  }
+  if (opt_onRejected != null) {
+    goog.asserts.assertFunction(opt_onRejected,
+        'opt_onRejected should be a function. Did you pass opt_context ' +
+        'as the second argument instead of the third?');
+  }
 
   if (goog.Promise.LONG_STACK_TRACES) {
     this.addStackTrace_(new Error('then'));

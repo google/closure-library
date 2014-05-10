@@ -93,3 +93,27 @@ function testSpdyNotEnabled() {
   pool.addRequest(req);
   assertTrue(pool.isFull());
 }
+
+
+function testApplyClientProtocol() {
+  stubSpdyCheck(false);
+
+  var pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
+  assertEquals(1, pool.getMaxSize());
+  pool.applyClientProtocol('spdy/3');
+  assertTrue(pool.getMaxSize() > 1);
+  pool.applyClientProtocol('foo-bar');   // no effect
+  assertTrue(pool.getMaxSize() > 1);
+
+  pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
+  assertEquals(1, pool.getMaxSize());
+  pool.applyClientProtocol('quic/x');
+  assertTrue(pool.getMaxSize() > 1);
+
+  stubSpdyCheck(true);
+
+  pool = new goog.labs.net.webChannel.ForwardChannelRequestPool();
+  assertTrue(pool.getMaxSize() > 1);
+  pool.applyClientProtocol('foo/3');  // no effect
+  assertTrue(pool.getMaxSize() > 1);
+}

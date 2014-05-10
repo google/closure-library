@@ -143,6 +143,20 @@ function testThenIsRejected() {
                0, timesCalled);
 }
 
+function testThenAsserts() {
+  var p = goog.Promise.resolve();
+
+  var m = assertThrows(function() {
+    p.then({});
+  });
+  assertContains('opt_onFulfilled should be a function.', m.message);
+
+  m = assertThrows(function() {
+    p.then(function() {}, {});
+  });
+  assertContains('opt_onRejected should be a function.', m.message);
+}
+
 
 function testOptionalOnFulfilled() {
   asyncTestCase.waitForAsync();

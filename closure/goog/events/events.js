@@ -55,7 +55,6 @@ goog.provide('goog.events.CaptureSimulationMode');
 goog.provide('goog.events.Key');
 goog.provide('goog.events.ListenableType');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events.BrowserEvent');
@@ -531,7 +530,7 @@ goog.events.removeAll = function(opt_obj, opt_type) {
     if (!typeStr || type == typeStr) {
       // Clone so that we don't need to worry about unlistenByKey
       // changing the content of the ListenerMap.
-      var listeners = goog.array.clone(listenerMap.listeners[type]);
+      var listeners = listenerMap.listeners[type].concat();
       for (var i = 0; i < listeners.length; ++i) {
         if (goog.events.unlistenByKey(listeners[i])) {
           ++count;
@@ -720,7 +719,7 @@ goog.events.fireListeners_ = function(obj, type, capture, eventObject) {
     // listenerMap.getListeners(type, capture) instead, which is simpler.
     var listenerArray = listenerMap.listeners[type.toString()];
     if (listenerArray) {
-      listenerArray = goog.array.clone(listenerArray);
+      listenerArray = listenerArray.concat();
       for (var i = 0; i < listenerArray.length; i++) {
         var listener = listenerArray[i];
         // We might not have a listener if the listener was removed.

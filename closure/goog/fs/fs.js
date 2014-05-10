@@ -107,6 +107,7 @@ goog.fs.getPersistent = function(size) {
 
 /**
  * Creates a blob URL for a blob object.
+ * Throws an error if the browser does not support Object Urls.
  *
  * @param {!Blob} blob The object for which to create the URL.
  * @return {string} The URL for the object.
@@ -118,6 +119,7 @@ goog.fs.createObjectUrl = function(blob) {
 
 /**
  * Revokes a URL created by {@link goog.fs.createObjectUrl}.
+ * Throws an error if the browser does not support Object Urls.
  *
  * @param {string} url The URL to revoke.
  */
@@ -128,7 +130,7 @@ goog.fs.revokeObjectUrl = function(url) {
 
 /**
  * @typedef {!{createObjectURL: (function(!Blob): string),
- *             revokeObjectURL: function(string): void}}
+ *            revokeObjectURL: function(string): void}}
  */
 goog.fs.UrlObject_;
 
@@ -141,6 +143,24 @@ goog.fs.UrlObject_;
  * @private
  */
 goog.fs.getUrlObject_ = function() {
+  var urlObject = goog.fs.findUrlObject_();
+  if (urlObject != null) {
+    return urlObject;
+  } else {
+    throw Error('This browser doesn\'t seem to support blob URLs');
+  }
+};
+
+
+/**
+ * Finds the object that has the createObjectURL and revokeObjectURL functions
+ * for this browser.
+ *
+ * @return {?goog.fs.UrlObject_} The object for this browser or null if the
+ *     browser does not support Object Urls.
+ * @private
+ */
+goog.fs.findUrlObject_ = function() {
   // This is what the spec says to do
   // http://dev.w3.org/2006/webapi/FileAPI/#dfn-createObjectURL
   if (goog.isDef(goog.global.URL) &&
@@ -154,8 +174,19 @@ goog.fs.getUrlObject_ = function() {
   } else if (goog.isDef(goog.global.createObjectURL)) {
     return /** @type {goog.fs.UrlObject_} */ (goog.global);
   } else {
-    throw Error('This browser doesn\'t seem to support blob URLs');
+    return null;
   }
+};
+
+
+/**
+ * Checks whether this browser supports Object Urls. If not, calls to
+ * createObjectUrl and revokeObjectUrl will result in an error.
+ *
+ * @return {boolean} True if this browser supports Object Urls.
+ */
+goog.fs.browserSupportsObjectUrls = function() {
+  return goog.fs.findUrlObject_() != null;
 };
 
 

@@ -202,6 +202,10 @@ MockChannelRequest.prototype.getRequestStartTime = function() {
   return this.requestStartTime_;
 };
 
+MockChannelRequest.prototype.getXhr = function() {
+  return null;
+};
+
 
 /**
  * @suppress {invalidCasts} The cast from MockChannelRequest to
@@ -402,17 +406,17 @@ function completeTestConnection() {
 
 function completeForwardTestConnection() {
   channel.connectionTest_.onRequestData(
-      channel.connectionTest_,
+      channel.connectionTest_.request_,
       '["b"]');
   channel.connectionTest_.onRequestComplete(
-      channel.connectionTest_);
+      channel.connectionTest_.request_);
   mockClock.tick(0);
 }
 
 
 function completeBackTestConnection() {
   channel.connectionTest_.onRequestData(
-      channel.connectionTest_,
+      channel.connectionTest_.request_,
       '11111');
   mockClock.tick(0);
 }
@@ -1491,7 +1495,7 @@ function testSpdyLimitOption() {
       webChannelDefault.getRuntimeProperties().getConcurrentRequestLimit());
   assertTrue(webChannelDefault.getRuntimeProperties().isSpdyEnabled());
 
-  var options = {'spdyRequestLimit': 100};
+  var options = {'concurrentRequestLimit': 100};
 
   stubSpdyCheck(false);
   var webChannelDisabled = webChannelTransport.createWebChannel(

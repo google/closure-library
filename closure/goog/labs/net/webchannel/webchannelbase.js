@@ -325,7 +325,7 @@ goog.labs.net.webChannel.WebChannelBase = function(opt_options,
    * @private {!ForwardChannelRequestPool}
    */
   this.forwardChannelRequestPool_ = new ForwardChannelRequestPool(
-      opt_options && opt_options.spdyRequestLimit);
+      opt_options && opt_options.concurrentRequestLimit);
 
   /**
    * The V8 codec.
@@ -1014,7 +1014,7 @@ WebChannelBase.prototype.startForwardChannel_ = function(
     if (this.forwardChannelRequestPool_.isFull()) {
       // Should be impossible to be called in this state.
       this.channelDebug_.severe('startForwardChannel_ returned: ' +
-                                    'connection already in progress');
+          'connection already in progress');
       return;
     }
 
@@ -1262,8 +1262,15 @@ WebChannelBase.prototype.testConnectionFinished =
     function(testChannel, useChunked) {
   this.channelDebug_.debug('Test Connection Finished');
 
+  // Forward channel will not be used prior to this method is called
+  var clientProtocol = testChannel.getClientProtocol();
+  if (clientProtocol) {
+    this.forwardChannelRequestPool_.applyClientProtocol(clientProtocol);
+  }
+
   this.useChunked_ = this.allowChunkedMode_ && useChunked;
   this.lastStatusCode_ = testChannel.getLastStatusCode();
+
   this.connectChannel_();
 };
 
