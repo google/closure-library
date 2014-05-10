@@ -618,7 +618,8 @@ function testResizeOnItemAddOrRemoveWithScrollOnOverflow() {
 }
 
 /**
- * Try rendering the menu as a sibling rather than as a child of the dom.
+ * Try rendering the menu as a sibling rather than as a child of the dom. This
+ * tests the case when the button is rendered, rather than decorated.
  */
 function testRenderMenuAsSibling() {
   menuButton.setRenderMenuAsSibling(true);
@@ -633,6 +634,33 @@ function testRenderMenuAsSibling() {
   assertEquals(
       menuButton.getElement().parentNode,
       menuButton.getMenu().getElement().parentNode);
+}
+
+/**
+ * Check that we render the menu as a sibling of the menu button, immediately
+ * after the menu button.
+ */
+function testRenderMenuAsSiblingForDecoratedButton() {
+  var menu = new goog.ui.Menu();
+  menu.addChild(new goog.ui.MenuItem('Menu item 1'), true /* render */);
+  menu.addChild(new goog.ui.MenuItem('Menu item 2'), true /* render */);
+  menu.addChild(new goog.ui.MenuItem('Menu item 3'), true /* render */);
+
+  var menuButton = new goog.ui.MenuButton();
+  menuButton.setMenu(menu);
+  menuButton.setRenderMenuAsSibling(true);
+  var node = goog.dom.getElement('button1');
+  menuButton.decorate(node);
+
+  menuButton.setOpen(true);
+
+  assertEquals('The menu should be rendered immediately after the menu button',
+      goog.dom.getNextElementSibling(menuButton.getElement()),
+      menu.getElement());
+
+  assertEquals('The menu should be rendered immediately before the next button',
+      goog.dom.getNextElementSibling(menu.getElement()),
+      goog.dom.getElement('button2'));
 }
 
 function testAlignToStartSetter() {
@@ -666,7 +694,8 @@ function testScrollOnOverflowSetter() {
     <div id='menuItem3' class="goog-menuitem">Enemies List.txt</div>
   </div>
 </div>
-
+<div id="button1" class="goog-menu-button"></div>
+<div id="button2" class="goog-menu-button"></div>
 <div id="footer"></div>
 </body>
 </html>

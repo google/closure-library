@@ -713,8 +713,18 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
     if (open) {
       if (!this.menu_.isInDocument()) {
         if (this.renderMenuAsSibling_) {
-          this.menu_.render(/** @type {Element} */ (
-              this.getElement().parentNode));
+          // When we render the menu in the same parent as this button, we
+          // prefer to add it immediately after the button. This way, the screen
+          // readers will go to the menu on the very next element after the
+          // button is read.
+          var nextElementSibling =
+              goog.dom.getNextElementSibling(this.getElement());
+          if (nextElementSibling) {
+            this.menu_.renderBefore(nextElementSibling);
+          } else {
+            this.menu_.render(/** @type {Element} */ (
+                this.getElement().parentNode));
+          }
         } else {
           this.menu_.render();
         }
