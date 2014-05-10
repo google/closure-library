@@ -845,7 +845,8 @@ goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
     dir = goog.i18n.bidi.toDir(dir);
     if (dir) {
       element.style.textAlign =
-          dir == goog.i18n.bidi.Dir.RTL ? 'right' : 'left';
+          dir == goog.i18n.bidi.Dir.RTL ?
+          goog.i18n.bidi.RIGHT : goog.i18n.bidi.LEFT;
       element.dir = dir == goog.i18n.bidi.Dir.RTL ? 'rtl' : 'ltr';
     }
   }
