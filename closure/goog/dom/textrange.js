@@ -304,7 +304,9 @@ goog.dom.TextRange.prototype.getStartOffset = function() {
 
 /** @override */
 goog.dom.TextRange.prototype.getStartPosition = function() {
-  return this.getBrowserRangeWrapper_().getStartPosition();
+  return this.isReversed() ?
+      this.getBrowserRangeWrapper_().getEndPosition() :
+      this.getBrowserRangeWrapper_().getStartPosition();
 };
 
 
@@ -324,7 +326,9 @@ goog.dom.TextRange.prototype.getEndOffset = function() {
 
 /** @override */
 goog.dom.TextRange.prototype.getEndPosition = function() {
-  return this.getBrowserRangeWrapper_().getEndPosition();
+  return this.isReversed() ?
+      this.getBrowserRangeWrapper_().getStartPosition() :
+      this.getBrowserRangeWrapper_().getEndPosition();
 };
 
 
