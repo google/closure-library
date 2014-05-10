@@ -452,6 +452,30 @@ function testStrictParse() {
   assertTrue(parser.strictParse('01/02/29', date) == 0);
 }
 
+function testPartialParses() {
+  var date = new Date(0);
+  var parser = new goog.i18n.DateTimeParse('h:mma');
+  assertTrue(parser.parse('5:', date) > 0);
+  assertEquals(5, date.getHours());
+  assertEquals(0, date.getMinutes());
+
+  date = new Date(0);
+  assertTrue(parser.parse('5:44pm', date) > 0);
+  assertEquals(17, date.getHours());
+  assertEquals(44, date.getMinutes());
+
+  date = new Date(0);
+  assertTrue(parser.parse('5:44ym', date) > 0);
+  assertEquals(5, date.getHours());
+  assertEquals(44, date.getMinutes());
+
+  parser = new goog.i18n.DateTimeParse('mm:ss');
+  date = new Date(0);
+  assertTrue(parser.parse('15:', date) > 0);
+  assertEquals(15, date.getMinutes());
+  assertEquals(0, date.getSeconds());
+}
+
 function testEnglishQuarter() {
   var date = new Date();
   var parser = new goog.i18n.DateTimeParse('QQQQ yyyy');
