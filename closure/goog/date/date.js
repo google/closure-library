@@ -1339,6 +1339,17 @@ goog.inherits(goog.date.DateTime, goog.date.Date);
 
 
 /**
+ * @param {number} timestamp Number of milliseconds since Epoch.
+ * @return {!goog.date.DateTime}
+ */
+goog.date.DateTime.fromTimestamp = function(timestamp) {
+  var date = new goog.date.DateTime();
+  date.setTime(timestamp);
+  return date;
+};
+
+
+/**
  * Creates a DateTime from a datetime string expressed in RFC 822 format.
  *
  * @param {string} formatted A date or datetime expressed in RFC 822 format.

@@ -59,6 +59,17 @@ goog.inherits(goog.date.UtcDateTime, goog.date.DateTime);
 
 
 /**
+ * @param {number} timestamp Number of milliseconds since Epoch.
+ * @return {!goog.date.UtcDateTime}
+ */
+goog.date.UtcDateTime.fromTimestamp = function(timestamp) {
+  var date = new goog.date.UtcDateTime();
+  date.setTime(timestamp);
+  return date;
+};
+
+
+/**
  * Creates a DateTime from a UTC datetime string expressed in ISO 8601 format.
  *
  * @param {string} formatted A date or datetime expressed in ISO 8601 format.

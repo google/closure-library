@@ -366,6 +366,12 @@ function testDateToIsoString() {
 }
 
 
+function testDateTimeFromTimestamp() {
+  assertEquals(0, goog.date.DateTime.fromTimestamp(0).getTime());
+  assertEquals(1234, goog.date.DateTime.fromTimestamp(1234).getTime());
+}
+
+
 function testRfc822StringToDate() {
   var date = goog.date.DateTime.fromRfc822String('October 2, 2002 8:00:00');
   assertNotNull(date);

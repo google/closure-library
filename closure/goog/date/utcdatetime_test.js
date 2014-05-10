@@ -120,3 +120,8 @@ function testIsMidnight() {
   assertTrue(new goog.date.UtcDateTime(2000, 0, 1).isMidnight());
   assertFalse(new goog.date.UtcDateTime(2000, 0, 1, 0, 0, 0, 1).isMidnight());
 }
+
+function testFromTimestamp() {
+  assertEquals(0, goog.date.UtcDateTime.fromTimestamp(0).getTime());
+  assertEquals(1234, goog.date.UtcDateTime.fromTimestamp(1234).getTime());
+}
