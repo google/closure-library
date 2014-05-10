@@ -32,6 +32,9 @@ See the COPYING file for details.
 </style>
 <script src="../base.js"></script>
 <script>
+  goog.require('goog.a11y.aria');
+  goog.require('goog.a11y.aria.AutoCompleteValues');
+  goog.require('goog.a11y.aria.State');
   goog.require('goog.dom');
   goog.require('goog.events');
   goog.require('goog.events.Event');
@@ -290,6 +293,40 @@ function testEscapeKeyHandling() {
       goog.events.KeyCodes.ESC);
   assertFalse('ESC key should not propagate out to parent', gotKeyCode);
 }
+
+
+function testAriaRoles() {
+  menu = new goog.ui.FilteredMenu();
+  menu.addItem(new goog.ui.MenuItem('Item 1'));
+  menu.render(sandbox);
+
+  var input = menu.getFilterInputElement();
+  assertEquals(goog.a11y.aria.AutoCompleteValues.LIST,
+      goog.a11y.aria.getState(input, goog.a11y.aria.State.AUTOCOMPLETE));
+  assertEquals(menu.getContentElement().id,
+      goog.a11y.aria.getState(input, goog.a11y.aria.State.OWNS));
+  assertEquals('true',
+      goog.a11y.aria.getState(input, goog.a11y.aria.State.EXPANDED));
+}
+
+
+function testInputActiveDecendant() {
+  menu = new goog.ui.FilteredMenu();
+  var menuItem1 = new goog.ui.MenuItem('Item 1');
+  var menuItem2 = new goog.ui.MenuItem('Item 2');
+  menu.addItem(menuItem1);
+  menu.addItem(menuItem2);
+  menu.render(sandbox);
+
+  assertNull(goog.a11y.aria.getActiveDescendant(menu.getFilterInputElement()));
+  menu.setHighlightedIndex(0);
+  assertEquals(menuItem1.getElementStrict(),
+      goog.a11y.aria.getActiveDescendant(menu.getFilterInputElement()));
+  menu.setHighlightedIndex(1);
+  assertEquals(menuItem2.getElementStrict(),
+      goog.a11y.aria.getActiveDescendant(menu.getFilterInputElement()));
+}
+
 
 function isHighlightedVisible(menu) {
   var contRect = goog.style.getBounds(menu.getContentElement());
