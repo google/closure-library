@@ -207,7 +207,42 @@ goog.fs.getBlob = function(var_args) {
     }
     return bb.getBlob();
   } else {
-    return new Blob(goog.array.toArray(arguments));
+    return goog.fs.getBlobWithProperties(goog.array.toArray(arguments));
+  }
+};
+
+
+/**
+ * Creates a blob with the given properties.
+ * See https://developer.mozilla.org/en-US/docs/Web/API/Blob for more details.
+ *
+ * @param {Array.<string|!Blob>} parts The values that will make up the
+ *     resulting blob.
+ * @param {string=} opt_type The MIME type of the Blob.
+ * @param {string=} opt_endings Specifies how strings containing newlines are to
+ *     be written out.
+ * @return {!Blob} The blob.
+ */
+goog.fs.getBlobWithProperties = function(parts, opt_type, opt_endings) {
+  var BlobBuilder = goog.global.BlobBuilder || goog.global.WebKitBlobBuilder;
+
+  if (goog.isDef(BlobBuilder)) {
+    var bb = new BlobBuilder();
+    for (var i = 0; i < parts.length; i++) {
+      bb.append(parts[i], opt_endings);
+    }
+    return bb.getBlob(opt_type);
+  } else if (goog.isDef(goog.global.Blob)) {
+    var properties = {};
+    if (opt_type) {
+      properties['type'] = opt_type;
+    }
+    if (opt_endings) {
+      properties['endings'] = opt_endings;
+    }
+    return new Blob(parts, properties);
+  } else {
+    throw Error('This browser doesn\'t seem to support creating Blobs');
   }
 };
 
