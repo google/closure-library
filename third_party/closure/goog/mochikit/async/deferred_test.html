@@ -573,7 +573,7 @@ function testAwaitDeferred_withPromise() {
   d1.addCallback(fn('c'));
 
   // calls 'a' then yields for promise.
-  d1.callback(null);
+  d1.callback(1);
 
   // will get called after promise.
   d1.addCallback(fn('d'));
@@ -587,7 +587,7 @@ function testAwaitDeferred_withPromise() {
   d3.addCallback(fn('x'));
 
   // calls 'w', then yields for promise.
-  d3.callback();
+  d3.callback(2);
 
 
   // will get called after promise.

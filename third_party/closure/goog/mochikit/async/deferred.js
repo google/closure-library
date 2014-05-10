@@ -521,7 +521,9 @@ goog.async.Deferred.prototype.chainDeferred = function(otherDeferred) {
 goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
   if (!(otherDeferred instanceof goog.async.Deferred)) {
     // The Thenable case.
-    return this.addCallback(goog.bind(otherDeferred.then, otherDeferred));
+    return this.addCallback(function() {
+      return otherDeferred;
+    });
   }
   return this.addCallback(goog.bind(otherDeferred.branch, otherDeferred));
 };
