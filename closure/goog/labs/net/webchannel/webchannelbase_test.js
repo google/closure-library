@@ -1488,7 +1488,8 @@ function testSpdyLimitOption() {
   stubSpdyCheck(true);
   var webChannelDefault = webChannelTransport.createWebChannel('/foo');
   assertEquals(10,
-      webChannelDefault.getRuntimeProperties().getSpdyRequestLimit());
+      webChannelDefault.getRuntimeProperties().getConcurrentRequestLimit());
+  assertTrue(webChannelDefault.getRuntimeProperties().isSpdyEnabled());
 
   var options = {'spdyRequestLimit': 100};
 
@@ -1496,10 +1497,12 @@ function testSpdyLimitOption() {
   var webChannelDisabled = webChannelTransport.createWebChannel(
       '/foo', options);
   assertEquals(1,
-      webChannelDisabled.getRuntimeProperties().getSpdyRequestLimit());
+      webChannelDisabled.getRuntimeProperties().getConcurrentRequestLimit());
+  assertFalse(webChannelDisabled.getRuntimeProperties().isSpdyEnabled());
 
   stubSpdyCheck(true);
   var webChannelEnabled = webChannelTransport.createWebChannel('/foo', options);
   assertEquals(100,
-      webChannelEnabled.getRuntimeProperties().getSpdyRequestLimit());
+      webChannelEnabled.getRuntimeProperties().getConcurrentRequestLimit());
+  assertTrue(webChannelEnabled.getRuntimeProperties().isSpdyEnabled());
 }

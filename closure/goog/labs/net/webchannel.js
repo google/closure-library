@@ -224,9 +224,27 @@ goog.net.WebChannel.RuntimeProperties = function() {};
 
 
 /**
- * @return {number} The effective request limit for the channel.
+ * @return {number} The effective limit for the number of concurrent HTTP
+ * requests that are allowed to be made for sending messages from the client
+ * to the server. When SPDY is not enabled, this limit will be one.
  */
-goog.net.WebChannel.RuntimeProperties.prototype.getSpdyRequestLimit =
+goog.net.WebChannel.RuntimeProperties.prototype.getConcurrentRequestLimit =
+    goog.abstractMethod;
+
+
+/**
+ * For applications that need support multiple channels (e.g. from
+ * different tabs) to the same origin, use this method to decide if SPDY is
+ * enabled and therefore it is safe to open multiple channels.
+ *
+ * If SPDY is disabled, the application may choose to limit the number of active
+ * channels to one or use other means such as sub-domains to work around
+ * the browser connection limit.
+ *
+ * @return {boolean} Whether SPDY is enabled for the origin against which
+ * the channel is created.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.isSpdyEnabled =
     goog.abstractMethod;
 
 

@@ -334,9 +334,18 @@ WebChannelBaseTransport.ChannelProperties = function(channel) {
 /**
  * @override
  */
-WebChannelBaseTransport.ChannelProperties.prototype.getSpdyRequestLimit =
+WebChannelBaseTransport.ChannelProperties.prototype.getConcurrentRequestLimit =
     function() {
   return this.channel_.getForwardChannelRequestPool().getMaxSize();
+};
+
+
+/**
+ * @override
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.isSpdyEnabled =
+    function() {
+  return this.getConcurrentRequestLimit() > 1;
 };
 
 
