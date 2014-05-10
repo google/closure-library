@@ -820,7 +820,7 @@ goog.ui.tree.BaseNode.prototype.toSafeHtml = function() {
 
   var attributes = {
     'class': childClass,
-    'style': this.getLineStyle() + (nonEmptyAndExpanded ? '' : 'display:none;')
+    'style': this.getLineStyle()
   };
 
   var content = [];
@@ -1062,7 +1062,9 @@ goog.ui.tree.BaseNode.prototype.getExpandIconClass = function() {
  * @return {string} The line style.
  */
 goog.ui.tree.BaseNode.prototype.getLineStyle = function() {
-  return 'background-position:' + this.getLineStyle2() + ';';
+  var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
+  return 'background-position:' + this.getLineStyle2() + ';' +
+      (nonEmptyAndExpanded ? '' : 'display:none;');
 };
 
 
