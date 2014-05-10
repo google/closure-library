@@ -95,14 +95,7 @@ goog.dom.browserrange.AbstractRange.prototype.getStartOffset =
  *     and offset.
  */
 goog.dom.browserrange.AbstractRange.prototype.getStartPosition = function() {
-  goog.asserts.assert(this.range_.getClientRects,
-      'Getting selection coordinates is not supported.');
-
-  var rects = this.range_.getClientRects();
-  if (rects.length) {
-    return new goog.math.Coordinate(rects[0]['left'], rects[0]['top']);
-  }
-  return null;
+  return this.getPosition_(true);
 };
 
 
@@ -129,13 +122,27 @@ goog.dom.browserrange.AbstractRange.prototype.getEndOffset =
  *     and offset.
  */
 goog.dom.browserrange.AbstractRange.prototype.getEndPosition = function() {
+  return this.getPosition_(false);
+};
+
+
+/**
+ * @param {boolean} start Whether to get the position of the start or end.
+ * @return {goog.math.Coordinate} The coordinate of the selection point.
+ * @private
+ */
+goog.dom.browserrange.AbstractRange.prototype.getPosition_ = function(start) {
   goog.asserts.assert(this.range_.getClientRects,
       'Getting selection coordinates is not supported.');
 
-  var rects = this.range_.getClientRects();
+  var clone = this.clone();
+  clone.collapse(start);
+  var rects = clone.range_.getClientRects();
   if (rects.length) {
-    var lastRect = goog.array.peek(rects);
-    return new goog.math.Coordinate(lastRect['right'], lastRect['bottom']);
+    var r = rects[0]
+    return new goog.math.Coordinate(
+        start ? r.left : r.right,
+        start ? r.top : r.bottom);
   }
   return null;
 };
