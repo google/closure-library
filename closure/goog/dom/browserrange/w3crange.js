@@ -245,13 +245,21 @@ goog.dom.browserrange.W3cRange.prototype.select = function(reverse) {
  * @param {*} reverse Whether to select this range in reverse.
  * @protected
  */
-goog.dom.browserrange.W3cRange.prototype.selectInternal = function(selection,
-                                                                   reverse) {
-  // Browser-specific tricks are needed to create reversed selections
-  // programatically. For this generic W3C codepath, ignore the reverse
-  // parameter.
-  selection.removeAllRanges();
-  selection.addRange(this.range_);
+goog.dom.browserrange.W3cRange.prototype.selectInternal = function(selection, reverse) {
+  if (!reverse || this.isCollapsed()) {
+    // This implementation for select() is more robust, and works fine for
+    // collapsed and forward ranges.  This works around
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=773137, and is tested by
+    // range_test.html's testFocusedElementDisappears.
+    selection.removeAllRanges();
+    selection.addRange(this.range_);
+  } else {
+    // Reversed selection -- start with a caret on the end node, and extend it
+    // back to the start.  Unfortunately, collapse() fails when focus is
+    // invalid.
+    selection.collapse(this.getEndNode(), this.getEndOffset());
+    selection.extend(this.getStartNode(), this.getStartOffset());
+  }
 };
 
 
